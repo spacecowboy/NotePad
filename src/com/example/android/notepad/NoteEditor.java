@@ -493,8 +493,20 @@ public class NoteEditor extends Activity {
 			text = mText.getText().toString();
 			shareNote(text);
 			break;
+		case R.id.menu_copy:
+			text = mText.getText().toString();
+			copyText(text);
+			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	private void copyText(String text) {
+		ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+		//ICS style
+		clipboard.setPrimaryClip(ClipData.newPlainText("Note", text));
+		//Gingerbread style.
+		//clipboard.setText(text);
 	}
 
 	private void shareNote(String text) {

@@ -450,19 +450,7 @@ public class NotesList extends ListActivity {
 			return true;
 
 		case R.id.context_copy:
-			// Gets a handle to the clipboard service.
-			ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-
-			// Copies the notes URI to the clipboard. In effect, this copies the
-			// note itself
-			clipboard.setPrimaryClip(ClipData.newUri( // new clipboard item
-														// holding a URI
-					getContentResolver(), // resolver to retrieve URI info
-					"Note", // label for the clip
-					noteUri) // the URI
-					);
-
-			// Returns to the caller and skips further processing.
+			copyNote(noteUri);
 			return true;
 
 		case R.id.context_delete:
@@ -486,8 +474,8 @@ public class NotesList extends ListActivity {
 			return super.onContextItemSelected(item);
 		}
 	}
-
-	private void shareNote(Uri mUri) {
+	
+	private String readNote(Uri mUri) {
 		/*
 		 * Using the URI passed in with the triggering Intent, gets the note or
 		 * notes in the provider. Note: This is being done on the UI thread. It
@@ -521,13 +509,29 @@ public class NotesList extends ListActivity {
 		// the text cursor's position.
 		int colNoteIndex = mCursor
 				.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
-		String note = mCursor.getString(colNoteIndex);
+		return mCursor.getString(colNoteIndex);
+	}
+
+	private void shareNote(Uri mUri) {
+		String note = readNote(mUri);
 
 		Intent share = new Intent(Intent.ACTION_SEND);
 		share.setType("text/plain");
 		share.putExtra(Intent.EXTRA_TEXT, note);
 		startActivity(Intent.createChooser(share, "Share note"));
-
+	}
+	
+	private void copyNote(Uri mUri) {
+		String note = readNote(mUri);
+		copyText(note);
+	}
+	
+	private void copyText(String text) {
+		ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+		//ICS style
+		clipboard.setPrimaryClip(ClipData.newPlainText("Note", text));
+		//Gingerbread style.
+		//clipboard.setText(text);
 	}
 
 	/**
