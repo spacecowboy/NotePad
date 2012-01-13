@@ -18,7 +18,9 @@ package com.example.android.notepad;
 
 import com.example.android.notepad.NotePad;
 
+import android.app.ActionBar;
 import android.app.ListActivity;
+import android.app.SearchManager;
 import android.content.ClipboardManager;
 import android.content.ClipData;
 import android.content.ComponentName;
@@ -37,6 +39,9 @@ import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.SearchView;
+import android.widget.SearchView.OnCloseListener;
+import android.widget.SearchView.OnQueryTextListener;
 import android.widget.SimpleCursorAdapter;
 
 /**
@@ -50,7 +55,7 @@ import android.widget.SimpleCursorAdapter;
  * {@link android.content.AsyncQueryHandler} or {@link android.os.AsyncTask}
  * object to perform operations asynchronously on a separate thread.
  */
-public class NotesList extends ListActivity {
+public class NotesList extends ListActivity implements OnCloseListener, OnQueryTextListener {
 
 	// For logging and debugging
 	private static final String TAG = "NotesList";
@@ -61,10 +66,15 @@ public class NotesList extends ListActivity {
 	private static final String[] PROJECTION = new String[] {
 			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
 			NotePad.Notes.COLUMN_NAME_NOTE,
-			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE};
+			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
 
 	/** The index of the title column */
 	private static final int COLUMN_INDEX_TITLE = 1;
+	
+	private SearchView searchView;
+	private static final int LIST = 0;
+	private static final int SEARCH = 1;
+	private int state = LIST;
 
 	/**
 	 * onCreate is called when Android starts this Activity from scratch.
@@ -99,6 +109,120 @@ public class NotesList extends ListActivity {
 		 */
 		getListView().setOnCreateContextMenuListener(this);
 
+		handleIntent(intent);
+	}
+
+	@Override
+	protected void onNewIntent(Intent intent) {
+		// Because this activity has set launchMode="singleTop", the system
+		// calls this method
+		// to deliver the intent if this actvity is currently the foreground
+		// activity when
+		// invoked again (when the user executes a search from this activity, we
+		// don't create
+		// a new instance of this activity, so the system delivers the search
+		// intent here)
+		setIntent(intent);
+		handleIntent(intent);
+	}
+
+	private void handleIntent(Intent intent) {
+		// Gets the action that triggered the intent filter for this Activity
+		final String action = intent.getAction();
+
+		if (Intent.ACTION_SEARCH.equals(action)) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			showResults(query);
+		}
+		// else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+		// // handles a click on a search suggestion; launches activity to show
+		// word
+		// Intent wordIntent = new Intent(this, WordActivity.class);
+		// wordIntent.setData(intent.getData());
+		// startActivity(wordIntent);
+		// finish();
+		// }
+		else {
+			listAllNotes(intent.getData());
+		}
+	}
+	
+	private void setStateSearch(String title) {
+		state = SEARCH;
+		setTitle(title);
+	}
+
+	private void showResults(String query) {
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
+		setStateSearch(query);
+		
+		// Cursor cursors = managedQuery(NotePad.Notes.CONTENT_URI, null, null,
+		// new String[] { query }, null);
+		Log.d(TAG, ("query : " + query));
+		Cursor cursor = managedQuery(NotePad.Notes.CONTENT_URI, // Use the
+																// default
+																// content URI
+																// for the
+																// provider.
+				PROJECTION, // Return the note ID, title and text for each note.
+				null, // No where clause, return all records.
+				new String[] { query }, // Only these column values
+				NotePad.Notes.DEFAULT_SORT_ORDER); // Use the default sort
+													// order.
+
+		if (cursor == null) {
+			// There are no results
+		} else {
+			// Display the number of results
+			// int count = cursor.getCount();
+			// String countString = getResources().getQuantityString(
+			// R.plurals.search_results, count,
+			// new Object[] { count, query });
+			// mTextView.setText(countString);
+
+			// The names of the cursor columns to display in the view,
+			// initialized
+			// to the title column
+			String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE,
+					NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
+
+			// The view IDs that will display the cursor columns, initialized to
+			// the
+			// TextView in
+			// noteslist_item.xml
+			int[] viewIDs = { R.id.itemTitle, R.id.itemDate };
+
+			// Creates the backing adapter for the ListView.
+			SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, // The
+																		// Context
+																		// for
+																		// the
+																		// ListView
+					R.layout.noteslist_item, // Points to the XML for a list
+												// item
+					cursor, // The cursor to get items from
+					dataColumns, viewIDs);
+
+			// Sets the ListView's adapter to be the cursor adapter that was
+			// just
+			// created.
+			setListAdapter(adapter);
+		}
+	}
+	
+	private void listAllNotes() {
+		listAllNotes(NotePad.Notes.CONTENT_URI);
+	}
+
+	private void setStateDefault() {
+		state = LIST;
+		setTitle(R.string.app_name);
+	}
+	private void listAllNotes(Uri contentUri) {
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(false);
+		setStateDefault();
 		/*
 		 * Performs a managed query. The Activity handles closing and requerying
 		 * the cursor when needed.
@@ -106,9 +230,9 @@ public class NotesList extends ListActivity {
 		 * Please see the introductory note about performing provider operations
 		 * on the UI thread.
 		 */
-		Cursor cursor = managedQuery(getIntent().getData(), // Use the default
-															// content URI for
-															// the provider.
+		Cursor cursor = managedQuery(contentUri, // Use the default
+													// content URI for
+													// the provider.
 				PROJECTION, // Return the note ID and title for each note.
 				null, // No where clause, return all records.
 				null, // No where clause, therefore no where column values.
@@ -126,7 +250,8 @@ public class NotesList extends ListActivity {
 
 		// The names of the cursor columns to display in the view, initialized
 		// to the title column
-		String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
+		String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE,
+				NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
 
 		// The view IDs that will display the cursor columns, initialized to the
 		// TextView in
@@ -170,6 +295,17 @@ public class NotesList extends ListActivity {
 		// Inflate menu from XML resource
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.list_options_menu, menu);
+
+		// Get the SearchView and set the searchable configuration
+		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+		searchView = (SearchView) menu.findItem(R.id.list_search)
+				.getActionView();
+		searchView.setSearchableInfo(searchManager
+				.getSearchableInfo(getComponentName()));
+		searchView.setIconifiedByDefault(true); // Do iconify the widget; Don't expand by default
+		searchView.setSubmitButtonEnabled(false);
+		searchView.setOnCloseListener(this);
+		searchView.setOnQueryTextListener(this);
 
 		// Generate any additional actions that can be performed on the
 		// overall list. In a normal install, there are no additional
@@ -292,6 +428,13 @@ public class NotesList extends ListActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case android.R.id.home:
+            if (SEARCH == state) {
+            	//close searchView widget and clear
+            	searchView.setIconified(true);
+            	listAllNotes();
+            }
+            return true;
 		case R.id.menu_add:
 			/*
 			 * Launches a new Activity using an Intent. The intent filter for
@@ -311,6 +454,9 @@ public class NotesList extends ListActivity {
 			 */
 			startActivity(new Intent(Intent.ACTION_PASTE, getIntent().getData()));
 			return true;
+		case R.id.list_search:
+			// Launches the search window
+			return onSearchRequested();
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -474,7 +620,7 @@ public class NotesList extends ListActivity {
 			return super.onContextItemSelected(item);
 		}
 	}
-	
+
 	private String readNote(Uri mUri) {
 		/*
 		 * Using the URI passed in with the triggering Intent, gets the note or
@@ -520,18 +666,18 @@ public class NotesList extends ListActivity {
 		share.putExtra(Intent.EXTRA_TEXT, note);
 		startActivity(Intent.createChooser(share, "Share note"));
 	}
-	
+
 	private void copyNote(Uri mUri) {
 		String note = readNote(mUri);
 		copyText(note);
 	}
-	
+
 	private void copyText(String text) {
 		ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-		//ICS style
+		// ICS style
 		clipboard.setPrimaryClip(ClipData.newPlainText("Note", text));
-		//Gingerbread style.
-		//clipboard.setText(text);
+		// Gingerbread style.
+		// clipboard.setText(text);
 	}
 
 	/**
@@ -552,10 +698,6 @@ public class NotesList extends ListActivity {
 	 */
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-
-		// Constructs a new URI from the incoming URI and the row ID
-		Uri uri = ContentUris.withAppendedId(getIntent().getData(), id);
-
 		// Gets the action from the incoming Intent
 		String action = getIntent().getAction();
 
@@ -566,13 +708,51 @@ public class NotesList extends ListActivity {
 			// Sets the result to return to the component that called this
 			// Activity. The
 			// result contains the new URI
+			// Constructs a new URI from the incoming URI and the row ID
+			Uri uri = ContentUris.withAppendedId(getIntent().getData(), id);
+			Log.d(TAG, action);
+			Log.d(TAG, uri.toString());
+
 			setResult(RESULT_OK, new Intent().setData(uri));
 		} else {
+			// Build the Intent used to open WordActivity with a specific word
+			// Uri
+			Intent notesIntent = new Intent(getApplicationContext(),
+					NoteEditor.class);
+			Uri data = Uri.withAppendedPath(NotePad.Notes.CONTENT_URI,
+					String.valueOf(id));
+			notesIntent.setData(data);
+			startActivity(notesIntent);
 
 			// Sends out an Intent to start an Activity that can handle
 			// ACTION_EDIT. The
 			// Intent's data is the note ID URI. The effect is to call NoteEdit.
-			startActivity(new Intent(Intent.ACTION_EDIT, uri));
+			// startActivity(new Intent(Intent.ACTION_EDIT, uri));
 		}
+	}
+
+	public boolean onClose() {
+		// User closed the search window. List all notes again.
+		if (state != LIST)
+			listAllNotes();
+		//searchView.onActionViewCollapsed();
+		return false;
+	}
+
+	public boolean onQueryTextChange(String query) {
+		if (query == "")
+			listAllNotes();
+		else
+			showResults(query);
+		return true;
+	}
+
+	public boolean onQueryTextSubmit(String query) {
+		searchView.setIconified(true);
+		if (query == "")
+			listAllNotes();
+		else
+			showResults(query);
+		return true;
 	}
 }

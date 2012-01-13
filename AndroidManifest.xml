@@ -26,14 +26,16 @@
 
     <application android:icon="@drawable/app_notes"
         android:label="@string/app_name"
-    >
+        >
+         <!-- android:uiOptions="splitActionBarWhenNarrow" -->
+    
         <provider android:name="NotePadProvider"
             android:authorities="com.google.provider.NotePad"
             android:exported="false">
             <grant-uri-permission android:pathPattern=".*" />
         </provider>
 
-        <activity android:name="NotesList" android:label="@string/title_notes_list" android:theme="@android:style/Theme.Holo">
+        <activity android:name="NotesList" android:label="@string/title_notes_list" android:theme="@android:style/Theme.Holo" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -50,6 +52,11 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.item/vnd.google.note" />
             </intent-filter>
+            <intent-filter>
+	            <action android:name="android.intent.action.SEARCH" />
+	        </intent-filter>
+	        <meta-data android:name="android.app.searchable"
+	                   android:resource="@xml/list_searchable"/>
         </activity>
 
         <activity android:name="NoteEditor"
@@ -77,8 +84,20 @@
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="vnd.android.cursor.dir/vnd.google.note" />
             </intent-filter>
+            
+            <!-- enable the search dialog to send searches to SearchableActivity -->
+        	<!-- <meta-data android:name="android.app.default_searchable"
+                   android:value="Searcher" /> -->
 
         </activity>
+        
+        <!-- <activity android:name="Searcher" >
+	        <intent-filter>
+	            <action android:name="android.intent.action.SEARCH" />
+	        </intent-filter>
+	        <meta-data android:name="android.app.searchable"
+	                   android:resource="@xml/list_searchable"/>
+    	</activity> -->
 
         <!-- <activity android:name="TitleEditor"
             android:label="@string/title_edit_title"

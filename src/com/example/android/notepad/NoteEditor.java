@@ -18,6 +18,7 @@ package com.example.android.notepad;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.SearchManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
@@ -36,6 +37,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
+import android.widget.SearchView;
 
 /**
  * This Activity handles "editing" a note, where editing is responding to
@@ -165,15 +167,16 @@ public class NoteEditor extends Activity {
 		final String action = intent.getAction();
 
 		// For an edit action:
-		if (Intent.ACTION_EDIT.equals(action)) {
-
-			// Sets the Activity state to EDIT, and gets the URI for the data to
-			// be edited.
-			mState = STATE_EDIT;
-			mUri = intent.getData();
-
-			// For an insert or paste action:
-		} else if (Intent.ACTION_INSERT.equals(action)
+		// if (Intent.ACTION_EDIT.equals(action)) {
+		//
+		// // Sets the Activity state to EDIT, and gets the URI for the data to
+		// // be edited.
+		// mState = STATE_EDIT;
+		// mUri = intent.getData();
+		//
+		// // For an insert or paste action:
+		// } else
+		if (Intent.ACTION_INSERT.equals(action)
 				|| Intent.ACTION_PASTE.equals(action)) {
 
 			// Sets the Activity state to INSERT, gets the general note URI, and
@@ -206,13 +209,17 @@ public class NoteEditor extends Activity {
 
 			// If the action was other than EDIT or INSERT:
 		} else {
+			// Sets the Activity state to EDIT, and gets the URI for the data to
+			// be edited.
+			mState = STATE_EDIT;
+			mUri = intent.getData();
 
 			// Logs an error that the action was not understood, finishes the
 			// Activity, and
 			// returns RESULT_CANCELED to an originating Activity.
-			Log.e(TAG, "Unknown action, exiting");
-			finish();
-			return;
+			// Log.e(TAG, "Unknown action, exiting");
+			// finish();
+			// return;
 		}
 
 		/*
@@ -428,6 +435,15 @@ public class NoteEditor extends Activity {
 		MenuInflater inflater = getMenuInflater();
 		inflater.inflate(R.menu.editor_options_menu, menu);
 
+		// Get the SearchView and set the searchable configuration
+		// SearchManager searchManager = (SearchManager)
+		// getSystemService(Context.SEARCH_SERVICE);
+		// SearchView searchView = (SearchView)
+		// menu.findItem(R.id.menu_search).getActionView();
+		// searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+		// searchView.setIconifiedByDefault(false); // Do not iconify the
+		// widget; expand it by default
+
 		// Only add extra menu items for a saved note
 		if (mState == STATE_EDIT) {
 			// Append to the
@@ -500,13 +516,13 @@ public class NoteEditor extends Activity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	private void copyText(String text) {
 		ClipboardManager clipboard = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
-		//ICS style
+		// ICS style
 		clipboard.setPrimaryClip(ClipData.newPlainText("Note", text));
-		//Gingerbread style.
-		//clipboard.setText(text);
+		// Gingerbread style.
+		// clipboard.setText(text);
 	}
 
 	private void shareNote(String text) {
@@ -533,7 +549,7 @@ public class NoteEditor extends Activity {
 		if (clip != null) {
 
 			String text = null;
-			
+
 			// Gets the first item from the clipboard data
 			ClipData.Item item = clip.getItemAt(0);
 
@@ -702,5 +718,16 @@ public class NoteEditor extends Activity {
 			getContentResolver().delete(mUri, null, null);
 			mText.setText("");
 		}
+	}
+
+	/**
+	 * Adds the note uri to the search query
+	 */
+	@Override
+	public boolean onSearchRequested() {
+		Bundle appData = new Bundle();
+		appData.putString(NotePad.NOTEURI, mUri.toString());
+		startSearch(null, false, appData, false);
+		return true;
 	}
 }

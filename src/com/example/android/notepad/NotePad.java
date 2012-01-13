@@ -16,6 +16,7 @@
 
 package com.example.android.notepad;
 
+import android.app.SearchManager;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
@@ -27,6 +28,7 @@ import android.provider.BaseColumns;
  */
 public final class NotePad {
     public static final String AUTHORITY = "com.google.provider.NotePad";
+    public static final String NOTEURI = "noteuri";
 
     // This class cannot be instantiated
     private NotePad() {
@@ -44,6 +46,7 @@ public final class NotePad {
          * The table name offered by this provider
          */
         public static final String TABLE_NAME = "notes";
+        public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
 
         /*
          * URI definitions

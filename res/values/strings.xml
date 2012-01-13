@@ -41,4 +41,6 @@
     <string name="error_message">Error loading note</string>
     <string name="nothing_to_save">There is nothing to save</string>
     <string name="menu_share">Share</string>
+    
+    <string name="search_hint">Search</string>
 </resources>
