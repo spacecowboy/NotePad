@@ -1,0 +1,9 @@
+A Notes app based on the Google Sample project available in the SDK.
+
+I wanted a couple of stuff which wasn't available in the original sample (which someone put on the market and I downloaded.)
+
+1. Share functionality.
+2. Dark background (sample uses light theme for editing)
+3. Holo theme (app I was using was an earlier version built for pre-Honeycomb)
+4. Change the way the posts got their title. Now it is the first line in the file, always.
+5. Get rid of the stupid lines in the editor. Don't mimic reality, make it better! (e.g. no lines)
