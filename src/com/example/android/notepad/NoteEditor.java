@@ -16,6 +16,7 @@
 
 package com.example.android.notepad;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -139,6 +140,10 @@ public class NoteEditor extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Set up navigation (adds nice arrow to icon)
+        ActionBar actionBar = getActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
         /*
          * Creates an Intent to use when the Activity object's result is sent back to the
@@ -435,6 +440,7 @@ public class NoteEditor extends Activity {
     	String text;
         // Handle all of the possible menu actions.
         switch (item.getItemId()) {
+        case android.R.id.home:
         case R.id.menu_save:
             text = mText.getText().toString();
             updateNote(text);
