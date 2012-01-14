@@ -1,4 +1,4 @@
-package com.example.android.notepad;
+package com.nononsenseapps.notepad;
 
 import java.util.Calendar;
 import java.util.Date;

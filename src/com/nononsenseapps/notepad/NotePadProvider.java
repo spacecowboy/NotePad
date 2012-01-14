@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.example.android.notepad;
+package com.nononsenseapps.notepad;
 
-import com.example.android.notepad.NotePad;
+import com.nononsenseapps.notepad.NotePad;
 
 import android.content.ClipDescription;
 import android.content.ContentProvider;
@@ -227,8 +227,8 @@ public class NotePadProvider extends ContentProvider implements
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 
 			// Logs that the database is being upgraded
-			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-					+ newVersion + ", which will destroy all old data");
+//			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
+//					+ newVersion + ", which will destroy all old data");
 
 			// Kills the table and existing data
 			db.execSQL("DROP TABLE IF EXISTS notes");
@@ -328,10 +328,6 @@ public class NotePadProvider extends ContentProvider implements
 		// done.
 		SQLiteDatabase db = mOpenHelper.getReadableDatabase();
 
-		if (selectionArgs != null)
-			Log.d(TAG,
-					("selection : " + selection + ", selectionArgs[0] :" + selectionArgs[0]));
-
 		/*
 		 * Performs the query. If no problems occur trying to read the database,
 		 * then a Cursor object is returned; otherwise, the cursor variable
@@ -349,10 +345,10 @@ public class NotePadProvider extends ContentProvider implements
 					orderBy // The sort order
 			);
 		} else {
-			Log.d(TAG,
-					("SELECT " + projection[0] + ", " + projection[1] + ", " + projection[2] + ", " + projection[3]
-							+ " FROM " + NotePad.Notes.TABLE_NAME + " WHERE " + projection[2]
-									+ " LIKE " + "%" + selectionArgs[0] + "%"));
+//			Log.d(TAG,
+//					("SELECT " + projection[0] + ", " + projection[1] + ", " + projection[2] + ", " + projection[3]
+//							+ " FROM " + NotePad.Notes.TABLE_NAME + " WHERE " + projection[2]
+//									+ " LIKE " + "%" + selectionArgs[0] + "%"));
 			c = db.rawQuery("SELECT " + projection[0] + ", " + projection[1] + ", " + projection[2] + ", " + projection[3]
 					+ " FROM " + NotePad.Notes.TABLE_NAME + " WHERE " + projection[2]
 					+ " LIKE ? ORDER BY modified DESC", new String[] { "%" + selectionArgs[0] + "%" });
@@ -533,7 +529,7 @@ public class NotePadProvider extends ContentProvider implements
 			pw.println("");
 			pw.println(c.getString(READ_NOTE_NOTE_INDEX));
 		} catch (UnsupportedEncodingException e) {
-			Log.w(TAG, "Ooops", e);
+//			Log.w(TAG, "Ooops", e);
 		} finally {
 			c.close();
 			if (pw != null) {

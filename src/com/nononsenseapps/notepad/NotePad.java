@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.example.android.notepad;
+package com.nononsenseapps.notepad;
 
 import android.app.SearchManager;
 import android.net.Uri;
@@ -27,7 +27,7 @@ import android.provider.BaseColumns;
  * URIs. A well-written client depends only on the constants in the contract.
  */
 public final class NotePad {
-    public static final String AUTHORITY = "com.google.provider.NotePad";
+    public static final String AUTHORITY = "com.nononsenseapps.NotePad";
     public static final String NOTEURI = "noteuri";
 
     // This class cannot be instantiated
@@ -113,13 +113,13 @@ public final class NotePad {
         /**
          * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
          */
-        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.google.note";
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps.note";
 
         /**
          * The MIME type of a {@link #CONTENT_URI} sub-directory of a single
          * note.
          */
-        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.google.note";
+        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps.note";
 
         /**
          * The default sort order for this table

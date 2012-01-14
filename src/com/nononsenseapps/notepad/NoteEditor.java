@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
-package com.example.android.notepad;
+package com.nononsenseapps.notepad;
 
 import android.app.ActionBar;
 import android.app.Activity;
-import android.app.SearchManager;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
@@ -32,12 +31,11 @@ import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.AttributeSet;
-import android.util.Log;
+//import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.SearchView;
 
 /**
  * This Activity handles "editing" a note, where editing is responding to
@@ -194,8 +192,8 @@ public class NoteEditor extends Activity {
 
 				// Writes the log identifier, a message, and the URI that
 				// failed.
-				Log.e(TAG, "Failed to insert new note into "
-						+ getIntent().getData());
+//				Log.e(TAG, "Failed to insert new note into "
+//						+ getIntent().getData());
 
 				// Closes the activity.
 				finish();

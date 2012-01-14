@@ -20,7 +20,8 @@
      own application, the package name must be changed from "com.example.*"
      to come from a domain that you own or have control over. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.android.notepad" >
+    package="com.nononsenseapps.notepad" 
+    android:versionCode="1" android:versionName="1.0">
 
     <uses-sdk android:minSdkVersion="11" />
 
@@ -29,8 +30,8 @@
         >
          <!-- android:uiOptions="splitActionBarWhenNarrow" -->
     
-        <provider android:name="NotePadProvider"
-            android:authorities="com.google.provider.NotePad"
+        <provider android:name=".NotePadProvider"
+            android:authorities="com.nononsenseapps.NotePad"
             android:exported="false">
             <grant-uri-permission android:pathPattern=".*" />
         </provider>
@@ -45,12 +46,12 @@
                 <action android:name="android.intent.action.EDIT" />
                 <action android:name="android.intent.action.PICK" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.dir/vnd.google.note" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.nononsenseapps.note" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.GET_CONTENT" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.item/vnd.google.note" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
             </intent-filter>
             <intent-filter>
 	            <action android:name="android.intent.action.SEARCH" />
@@ -71,7 +72,7 @@
                 <action android:name="android.intent.action.EDIT" />
                 <action android:name="com.android.notepad.action.EDIT_NOTE" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.item/vnd.google.note" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
             </intent-filter>
 
             <!-- This filter says that we can create a new note inside
@@ -82,7 +83,7 @@
                 <action android:name="android.intent.action.INSERT" />
                 <action android:name="android.intent.action.PASTE" />
                 <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.dir/vnd.google.note" />
+                <data android:mimeType="vnd.android.cursor.dir/vnd.nononsenseapps.note" />
             </intent-filter>
             
             <!-- enable the search dialog to send searches to SearchableActivity -->
@@ -90,43 +91,8 @@
                    android:value="Searcher" /> -->
 
         </activity>
-        
-        <!-- <activity android:name="Searcher" >
-	        <intent-filter>
-	            <action android:name="android.intent.action.SEARCH" />
-	        </intent-filter>
-	        <meta-data android:name="android.app.searchable"
-	                   android:resource="@xml/list_searchable"/>
-    	</activity> -->
 
-        <!-- <activity android:name="TitleEditor"
-            android:label="@string/title_edit_title"
-            android:icon="@drawable/ic_menu_edit"
-            android:theme="@android:style/Theme.Holo.Dialog"
-            android:windowSoftInputMode="stateVisible">
-            This activity implements an alternative action that can be
-                 performed on notes: editing their title.  It can be used as
-                 a default operation if the user invokes this action, and is
-                 available as an alternative action for any note data.
-            <intent-filter android:label="@string/resolve_title">
-                This is the action we perform.  It is a custom action we
-                     define for our application, not a generic VIEW or EDIT
-                     action since we are not a general note viewer/editor.
-                <action android:name="com.android.notepad.action.EDIT_TITLE" />
-                DEFAULT: execute if being directly invoked.
-                <category android:name="android.intent.category.DEFAULT" />
-                ALTERNATIVE: show as an alternative action when the user is
-                     working with this type of data.
-                <category android:name="android.intent.category.ALTERNATIVE" />
-                SELECTED_ALTERNATIVE: show as an alternative action the user
-                     can perform when selecting this type of data.
-                <category android:name="android.intent.category.SELECTED_ALTERNATIVE" />
-                This is the data type we operate on.
-                <data android:mimeType="vnd.android.cursor.item/vnd.google.note" />
-            </intent-filter>
-        </activity> -->
-
-        <activity android:name="NotesLiveFolder" android:label="@string/live_folder_name"
+        <activity android:name=".NotesLiveFolder" android:label="@string/live_folder_name"
             android:icon="@drawable/live_folder_notes"  android:theme="@android:style/Theme.Holo">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_LIVE_FOLDER" />

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package com.example.android.notepad;
+package com.nononsenseapps.notepad;
 
-import com.example.android.notepad.NotePad;
+import com.nononsenseapps.notepad.NotePad;
 
 import android.app.ActionBar;
 import android.app.ListActivity;
@@ -30,7 +30,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
+//import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -159,7 +159,7 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 		
 		// Cursor cursors = managedQuery(NotePad.Notes.CONTENT_URI, null, null,
 		// new String[] { query }, null);
-		Log.d(TAG, ("query : " + query));
+//		Log.d(TAG, ("query : " + query));
 		Cursor cursor = managedQuery(NotePad.Notes.CONTENT_URI, // Use the
 																// default
 																// content URI
@@ -494,7 +494,7 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 			info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 		} catch (ClassCastException e) {
 			// If the menu object can't be cast, logs an error.
-			Log.e(TAG, "bad menuInfo", e);
+//			Log.e(TAG, "bad menuInfo", e);
 			return;
 		}
 
@@ -572,7 +572,7 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 		} catch (ClassCastException e) {
 
 			// If the object can't be cast, logs an error
-			Log.e(TAG, "bad menuInfo", e);
+//			Log.e(TAG, "bad menuInfo", e);
 
 			// Triggers default processing of the menu item.
 			return false;
@@ -710,8 +710,8 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 			// result contains the new URI
 			// Constructs a new URI from the incoming URI and the row ID
 			Uri uri = ContentUris.withAppendedId(getIntent().getData(), id);
-			Log.d(TAG, action);
-			Log.d(TAG, uri.toString());
+//			Log.d(TAG, action);
+//			Log.d(TAG, uri.toString());
 
 			setResult(RESULT_OK, new Intent().setData(uri));
 		} else {
