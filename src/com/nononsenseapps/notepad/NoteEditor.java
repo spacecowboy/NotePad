@@ -491,7 +491,7 @@ public class NoteEditor extends Activity {
 		// Handle all of the possible menu actions.
 		switch (item.getItemId()) {
 		case android.R.id.home:
-		case R.id.menu_save:
+//		case R.id.menu_save:
 			text = mText.getText().toString();
 			updateNote(text);
 			finish();
