@@ -43,4 +43,19 @@
     <string name="menu_share">Share</string>
     
     <string name="search_hint">Search</string>
+    <string name="settings_light_theme">Use light theme</string>
+    <string name="menu_preferences">Settings</string>
+    <string name="settings_cat_theme">Theme</string>
+    <string name="settings_cat_sorting">Sorting</string>
+    <string name="settings_sorting_type">Sort on</string>
+    <string name="settings_sorting_order">Order</string>
+    
+    <string name="ascending">Ascending</string>
+    <string name="descending">Descending</string>
+    <string name="modification">Modification</string>
+    <string name="alphabetic">Title</string>
+    <string name="settings_summary_sort_type_alphabetic">Title</string>
+    <string name="settings_summary_sort_type_modified">Modification</string>
+    <string name="settings_summary_sort_order_asc">Ascending</string>
+    <string name="settings_summary_sort_order_desc">Descending</string>
 </resources>

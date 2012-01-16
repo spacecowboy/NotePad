@@ -318,7 +318,7 @@ public class NotePadProvider extends ContentProvider implements
 		String orderBy;
 		// If no sort order is specified, uses the default
 		if (TextUtils.isEmpty(sortOrder)) {
-			orderBy = NotePad.Notes.DEFAULT_SORT_ORDER;
+			orderBy = NotePad.Notes.SORT_ORDER;
 		} else {
 			// otherwise, uses the incoming sort order
 			orderBy = sortOrder;
@@ -351,7 +351,7 @@ public class NotePadProvider extends ContentProvider implements
 //									+ " LIKE " + "%" + selectionArgs[0] + "%"));
 			c = db.rawQuery("SELECT " + projection[0] + ", " + projection[1] + ", " + projection[2] + ", " + projection[3]
 					+ " FROM " + NotePad.Notes.TABLE_NAME + " WHERE " + projection[2]
-					+ " LIKE ? ORDER BY modified DESC", new String[] { "%" + selectionArgs[0] + "%" });
+					+ " LIKE ? ORDER BY " + NotePad.Notes.SORT_ORDER, new String[] { "%" + selectionArgs[0] + "%" });
 		}
 
 		// Tells the Cursor what URI to watch, so it knows when its source data

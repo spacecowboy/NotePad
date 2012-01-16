@@ -21,7 +21,7 @@
      to come from a domain that you own or have control over. -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nononsenseapps.notepad" 
-    android:versionCode="1" android:versionName="1.0">
+    android:versionCode="2" android:versionName="1.1">
 
     <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="15"/>
 
@@ -36,7 +36,7 @@
             <grant-uri-permission android:pathPattern=".*" />
         </provider>
 
-        <activity android:name="NotesList" android:label="@string/title_notes_list" android:theme="@android:style/Theme.Holo" android:launchMode="singleTop">
+        <activity android:name="NotesList" android:label="@string/title_notes_list" android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -61,7 +61,6 @@
         </activity>
 
         <activity android:name="NoteEditor"
-            android:theme="@android:style/Theme.Holo"
             android:screenOrientation="sensor"
             android:configChanges="keyboardHidden|orientation"
         >
@@ -98,6 +97,13 @@
                 <action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
+        </activity>
+        
+        <activity android:name=".Settings"
+            android:theme="@android:style/Theme.Holo"
+            android:screenOrientation="sensor"
+            android:configChanges="keyboardHidden|orientation" >
+            
         </activity>
 
     </application>

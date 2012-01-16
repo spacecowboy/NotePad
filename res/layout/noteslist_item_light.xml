@@ -12,16 +12,20 @@
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
-     limitations under the License.
+     limitations under the License.
+
+
 -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/noteItem"
+    android:theme="@android:style/Theme.Holo.Light"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:paddingLeft="16dp"
     android:paddingRight="16dp" >
-
+
+
     <TextView
         android:id="@+id/itemTitle"
         android:layout_width="0dp"
@@ -30,7 +34,8 @@
         android:gravity="center_vertical"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceLarge" />
-
+
+
     <view xmlns:android="http://schemas.android.com/apk/res/android"
     class="com.nononsenseapps.notepad.DateView"
         android:id="@+id/itemDate"

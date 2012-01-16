@@ -16,4 +16,9 @@
           android:icon="@drawable/ic_menu_compose"
           android:title="@string/menu_paste"
           android:alphabeticShortcut='p' android:orderInCategory="2"/>
+    <item android:id="@+id/menu_preferences"
+          android:icon="@drawable/ic_menu_settings_holo_dark"
+          android:title="@string/menu_preferences"
+          android:showAsAction="never"
+          android:alphabeticShortcut='p' android:orderInCategory="3"/>
 </menu>

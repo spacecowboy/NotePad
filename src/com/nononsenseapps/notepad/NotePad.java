@@ -121,10 +121,7 @@ public final class NotePad {
          */
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps.note";
 
-        /**
-         * The default sort order for this table
-         */
-        public static final String DEFAULT_SORT_ORDER = "modified DESC";
+        
 
         /*
          * Column definitions
@@ -153,5 +150,14 @@ public final class NotePad {
          * <P>Type: INTEGER (long from System.curentTimeMillis())</P>
          */
         public static final String COLUMN_NAME_MODIFICATION_DATE = "modified";
+        
+        /**
+         * The default sort order for this table
+         */
+        public static final String DEFAULT_SORT_TYPE = COLUMN_NAME_MODIFICATION_DATE;
+        public static final String DEFAULT_SORT_ORDERING = "DESC";
+        public static final String MODIFIED_DESC_ORDER = COLUMN_NAME_MODIFICATION_DATE + " DESC";
+        
+        public static String SORT_ORDER = MODIFIED_DESC_ORDER;
     }
 }

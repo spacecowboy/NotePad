@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <PreferenceCategory
+            android:title="@string/settings_cat_theme">
+
+        <CheckBoxPreference
+                android:key="key_theme"
+                android:title="@string/settings_light_theme"
+                android:summary="" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+            android:title="@string/settings_cat_sorting">
+
+        <!-- <EditTextPreference
+                android:key="edittext_preference"
+                android:title="title_edittext_preference"
+                android:summary="summary_edittext_preference"
+                android:dialogTitle="dialog_title_edittext_preference" /> -->
+
+        <ListPreference
+                android:key="key_sort_type"
+                android:title="@string/settings_sorting_type"
+                android:summary="Selected option should be here"
+                android:entries="@array/sorting_preference"
+                android:entryValues="@array/sortingvalues_preference"
+                android:defaultValue="modified"
+                android:dialogTitle="@string/settings_sorting_type" />
+        
+        <ListPreference
+                android:key="key_sort_order"
+                android:title="@string/settings_sorting_order"
+                android:summary="Selected option should be here"
+                android:entries="@array/sorting_order_preference"
+                android:entryValues="@array/sorting_ordervalues_preference"
+                android:defaultValue="DESC"
+                android:dialogTitle="@string/settings_sorting_order" />
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

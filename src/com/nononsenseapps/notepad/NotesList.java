@@ -27,10 +27,13 @@ import android.content.ComponentName;
 import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 //import android.util.Log;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -55,7 +58,8 @@ import android.widget.SimpleCursorAdapter;
  * {@link android.content.AsyncQueryHandler} or {@link android.os.AsyncTask}
  * object to perform operations asynchronously on a separate thread.
  */
-public class NotesList extends ListActivity implements OnCloseListener, OnQueryTextListener {
+public class NotesList extends ListActivity implements OnCloseListener,
+		OnQueryTextListener {
 
 	// For logging and debugging
 	private static final String TAG = "NotesList";
@@ -70,17 +74,24 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 
 	/** The index of the title column */
 	private static final int COLUMN_INDEX_TITLE = 1;
-	
+
 	private SearchView searchView;
 	private static final int LIST = 0;
 	private static final int SEARCH = 1;
 	private int state = LIST;
+
+	private static boolean lightTheme = false;
+	private static String sortOrder;
+
+	private static boolean refresh = false;
 
 	/**
 	 * onCreate is called when Android starts this Activity from scratch.
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		Log.d("NotesList", "OnCreate called");
+		readAndSetSettings();
 		super.onCreate(savedInstanceState);
 
 		// The user does not need to hold down the key to use menu shortcuts.
@@ -94,13 +105,6 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 		// Gets the intent that started this Activity.
 		Intent intent = getIntent();
 
-		// If there is no data associated with the Intent, sets the data to the
-		// default URI, which
-		// accesses a list of notes.
-		if (intent.getData() == null) {
-			intent.setData(NotePad.Notes.CONTENT_URI);
-		}
-
 		/*
 		 * Sets the callback for context menu activation for the ListView. The
 		 * listener is set to be this Activity. The effect is that context menus
@@ -110,6 +114,31 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 		getListView().setOnCreateContextMenuListener(this);
 
 		handleIntent(intent);
+	}
+
+	private void readAndSetSettings() {
+		// Read settings and set
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		lightTheme = prefs.getBoolean(Settings.KEY_THEME, false);
+		setTypeOfTheme();
+
+		String sortType = prefs.getString(Settings.KEY_SORT_TYPE,
+				NotePad.Notes.DEFAULT_SORT_TYPE);
+		String sortOrder = prefs.getString(Settings.KEY_SORT_ORDER,
+				NotePad.Notes.DEFAULT_SORT_ORDERING);
+
+		NotePad.Notes.SORT_ORDER = sortType + " " + sortOrder;
+		Log.d("ReadingSettings", "sortOrder is: " + NotePad.Notes.SORT_ORDER);
+	}
+
+	private void setTypeOfTheme() {
+		if (lightTheme) {
+			setTheme(android.R.style.Theme_Holo_Light);
+		} else {
+			setTheme(android.R.style.Theme_Holo);
+		}
+
 	}
 
 	@Override
@@ -126,7 +155,31 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 		handleIntent(intent);
 	}
 
+	@Override
+	protected void onResume() {
+		Log.d("NotesList", "onResume called");
+		if (refresh) {
+			Log.d("NotesList", "Should refresh");
+			refresh = false;
+			Intent intent = getIntent();
+			overridePendingTransition(0, 0);
+			intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+			finish();
+			overridePendingTransition(0, 0);
+			startActivity(intent);
+			// getListView().invalidate();
+			// onNewIntent(getIntent());
+		}
+		super.onResume();
+	}
+
 	private void handleIntent(Intent intent) {
+		// If there is no data associated with the Intent, sets the data to the
+		// default URI, which
+		// accesses a list of notes.
+		if (intent.getData() == null) {
+			intent.setData(NotePad.Notes.CONTENT_URI);
+		}
 		// Gets the action that triggered the intent filter for this Activity
 		final String action = intent.getAction();
 
@@ -146,7 +199,7 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 			listAllNotes(intent.getData());
 		}
 	}
-	
+
 	private void setStateSearch(String title) {
 		state = SEARCH;
 		setTitle(title);
@@ -156,10 +209,10 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 		setStateSearch(query);
-		
+
 		// Cursor cursors = managedQuery(NotePad.Notes.CONTENT_URI, null, null,
 		// new String[] { query }, null);
-//		Log.d(TAG, ("query : " + query));
+		// Log.d(TAG, ("query : " + query));
 		Cursor cursor = managedQuery(NotePad.Notes.CONTENT_URI, // Use the
 																// default
 																// content URI
@@ -168,41 +221,13 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 				PROJECTION, // Return the note ID, title and text for each note.
 				null, // No where clause, return all records.
 				new String[] { query }, // Only these column values
-				NotePad.Notes.DEFAULT_SORT_ORDER); // Use the default sort
-													// order.
+				NotePad.Notes.SORT_ORDER); // Use the default sort
+											// order.
 
 		if (cursor == null) {
 			// There are no results
 		} else {
-			// Display the number of results
-			// int count = cursor.getCount();
-			// String countString = getResources().getQuantityString(
-			// R.plurals.search_results, count,
-			// new Object[] { count, query });
-			// mTextView.setText(countString);
-
-			// The names of the cursor columns to display in the view,
-			// initialized
-			// to the title column
-			String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE,
-					NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
-
-			// The view IDs that will display the cursor columns, initialized to
-			// the
-			// TextView in
-			// noteslist_item.xml
-			int[] viewIDs = { R.id.itemTitle, R.id.itemDate };
-
-			// Creates the backing adapter for the ListView.
-			SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, // The
-																		// Context
-																		// for
-																		// the
-																		// ListView
-					R.layout.noteslist_item, // Points to the XML for a list
-												// item
-					cursor, // The cursor to get items from
-					dataColumns, viewIDs);
+			SimpleCursorAdapter adapter = getThemedAdapter(cursor);
 
 			// Sets the ListView's adapter to be the cursor adapter that was
 			// just
@@ -210,7 +235,49 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 			setListAdapter(adapter);
 		}
 	}
-	
+
+	private SimpleCursorAdapter getThemedAdapter(Cursor cursor) {
+		// The names of the cursor columns to display in the view,
+		// initialized
+		// to the title column
+		String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE,
+				NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
+
+		// The view IDs that will display the cursor columns, initialized to
+		// the
+		// TextView in
+		// noteslist_item.xml
+		int[] viewIDs = { R.id.itemTitle, R.id.itemDate };
+
+		SimpleCursorAdapter adapter;
+		if (lightTheme) {
+			// Creates the backing adapter for the ListView.
+			adapter = new SimpleCursorAdapter(this, // The
+													// Context
+													// for
+													// the
+													// ListView
+					R.layout.noteslist_item_light, // Points to the XML for a
+													// list
+													// item
+					cursor, // The cursor to get items from
+					dataColumns, viewIDs);
+		} else {
+			// Creates the backing adapter for the ListView.
+			adapter = new SimpleCursorAdapter(this, // The
+													// Context
+													// for
+													// the
+													// ListView
+					R.layout.noteslist_item_dark, // Points to the XML for a
+													// list
+													// item
+					cursor, // The cursor to get items from
+					dataColumns, viewIDs);
+		}
+		return adapter;
+	}
+
 	private void listAllNotes() {
 		listAllNotes(NotePad.Notes.CONTENT_URI);
 	}
@@ -219,6 +286,7 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 		state = LIST;
 		setTitle(R.string.app_name);
 	}
+
 	private void listAllNotes(Uri contentUri) {
 		ActionBar actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(false);
@@ -236,7 +304,7 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 				PROJECTION, // Return the note ID and title for each note.
 				null, // No where clause, return all records.
 				null, // No where clause, therefore no where column values.
-				NotePad.Notes.DEFAULT_SORT_ORDER // Use the default sort order.
+				NotePad.Notes.SORT_ORDER // Use the default sort order.
 		);
 
 		/*
@@ -248,24 +316,7 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 		 * will appear in the ListView.
 		 */
 
-		// The names of the cursor columns to display in the view, initialized
-		// to the title column
-		String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE,
-				NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
-
-		// The view IDs that will display the cursor columns, initialized to the
-		// TextView in
-		// noteslist_item.xml
-		int[] viewIDs = { R.id.itemTitle, R.id.itemDate };
-
-		// Creates the backing adapter for the ListView.
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(this, // The
-																	// Context
-																	// for the
-																	// ListView
-				R.layout.noteslist_item, // Points to the XML for a list item
-				cursor, // The cursor to get items from
-				dataColumns, viewIDs);
+		SimpleCursorAdapter adapter = getThemedAdapter(cursor);
 
 		// Sets the ListView's adapter to be the cursor adapter that was just
 		// created.
@@ -294,7 +345,10 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate menu from XML resource
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.list_options_menu, menu);
+		if (lightTheme)
+			inflater.inflate(R.menu.list_options_menu_light, menu);
+		else
+			inflater.inflate(R.menu.list_options_menu_dark, menu);
 
 		// Get the SearchView and set the searchable configuration
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -302,7 +356,8 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 				.getActionView();
 		searchView.setSearchableInfo(searchManager
 				.getSearchableInfo(getComponentName()));
-		searchView.setIconifiedByDefault(true); // Do iconify the widget; Don't expand by default
+		searchView.setIconifiedByDefault(true); // Do iconify the widget; Don't
+												// expand by default
 		searchView.setSubmitButtonEnabled(false);
 		searchView.setOnCloseListener(this);
 		searchView.setOnQueryTextListener(this);
@@ -429,12 +484,12 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-            if (SEARCH == state) {
-            	//close searchView widget and clear
-            	searchView.setIconified(true);
-            	listAllNotes();
-            }
-            return true;
+			if (SEARCH == state) {
+				// close searchView widget and clear
+				searchView.setIconified(true);
+				listAllNotes();
+			}
+			return true;
 		case R.id.menu_add:
 			/*
 			 * Launches a new Activity using an Intent. The intent filter for
@@ -457,6 +512,11 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 		case R.id.list_search:
 			// Launches the search window
 			return onSearchRequested();
+		case R.id.menu_preferences:
+			Intent settingsIntent = new Intent(getApplicationContext(),
+					Settings.class);
+			startActivity(settingsIntent);
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -494,7 +554,7 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 			info = (AdapterView.AdapterContextMenuInfo) menuInfo;
 		} catch (ClassCastException e) {
 			// If the menu object can't be cast, logs an error.
-//			Log.e(TAG, "bad menuInfo", e);
+			// Log.e(TAG, "bad menuInfo", e);
 			return;
 		}
 
@@ -572,7 +632,7 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 		} catch (ClassCastException e) {
 
 			// If the object can't be cast, logs an error
-//			Log.e(TAG, "bad menuInfo", e);
+			// Log.e(TAG, "bad menuInfo", e);
 
 			// Triggers default processing of the menu item.
 			return false;
@@ -710,8 +770,8 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 			// result contains the new URI
 			// Constructs a new URI from the incoming URI and the row ID
 			Uri uri = ContentUris.withAppendedId(getIntent().getData(), id);
-//			Log.d(TAG, action);
-//			Log.d(TAG, uri.toString());
+			// Log.d(TAG, action);
+			// Log.d(TAG, uri.toString());
 
 			setResult(RESULT_OK, new Intent().setData(uri));
 		} else {
@@ -735,7 +795,7 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 		// User closed the search window. List all notes again.
 		if (state != LIST)
 			listAllNotes();
-		//searchView.onActionViewCollapsed();
+		// searchView.onActionViewCollapsed();
 		return false;
 	}
 
@@ -754,5 +814,9 @@ public class NotesList extends ListActivity implements OnCloseListener, OnQueryT
 		else
 			showResults(query);
 		return true;
+	}
+
+	public static void onPreferenceChanged() {
+		refresh = true;
 	}
 }

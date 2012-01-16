@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="sorting_preference">
+        <item>Modification</item>
+        <item>Title</item>
+    </string-array>
+
+    <string-array name="sortingvalues_preference">
+        <item>modified</item>
+        <item>title COLLATE NOCASE</item>
+    </string-array>
+    
+    <string-array name="sorting_order_preference">
+        <item>Ascending</item>
+        <item>Descending</item>
+    </string-array>
+
+    <string-array name="sorting_ordervalues_preference">
+        <item>ASC</item>
+        <item>DESC</item>
+    </string-array>
+
+</resources>

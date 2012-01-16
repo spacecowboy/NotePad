@@ -25,11 +25,13 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.AttributeSet;
 //import android.util.Log;
 import android.view.Menu;
@@ -77,6 +79,8 @@ public class NoteEditor extends Activity {
 	private Cursor mCursor;
 	private EditText mText;
 	private String mOriginalContent;
+
+	private boolean lightTheme;
 
 	/**
 	 * Defines a custom EditText View that draws lines between each line of text
@@ -144,6 +148,7 @@ public class NoteEditor extends Activity {
 	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		readAndSetSettings();
 		super.onCreate(savedInstanceState);
 
 		// Set up navigation (adds nice arrow to icon)
@@ -248,7 +253,10 @@ public class NoteEditor extends Activity {
 		}
 
 		// Sets the layout for this Activity. See res/layout/note_editor.xml
-		setContentView(R.layout.note_editor);
+		if (lightTheme)
+			setContentView(R.layout.note_editor_light);
+		else
+			setContentView(R.layout.note_editor_dark);
 
 		// Gets a handle to the EditText in the the layout.
 		mText = (EditText) findViewById(R.id.note);
@@ -261,6 +269,21 @@ public class NoteEditor extends Activity {
 		if (savedInstanceState != null) {
 			mOriginalContent = savedInstanceState.getString(ORIGINAL_CONTENT);
 		}
+	}
+	
+	private void setTypeOfTheme() {
+		if (lightTheme) {
+			setTheme(android.R.style.Theme_Holo_Light);
+		} else {
+			setTheme(android.R.style.Theme_Holo);
+		}
+	}
+	
+	private void readAndSetSettings() {
+		/// Read settings and set
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		lightTheme = prefs.getBoolean(Settings.KEY_THEME, false);
+		setTypeOfTheme();
 	}
 
 	/**
@@ -431,7 +454,10 @@ public class NoteEditor extends Activity {
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate menu from XML resource
 		MenuInflater inflater = getMenuInflater();
-		inflater.inflate(R.menu.editor_options_menu, menu);
+		if (lightTheme)
+			inflater.inflate(R.menu.editor_options_menu_light, menu);
+		else
+			inflater.inflate(R.menu.editor_options_menu_dark, menu);
 
 		// Get the SearchView and set the searchable configuration
 		// SearchManager searchManager = (SearchManager)
