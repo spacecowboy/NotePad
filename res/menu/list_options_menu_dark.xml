@@ -6,14 +6,14 @@
           android:showAsAction="ifRoom"
           android:actionViewClass="android.widget.SearchView" android:orderInCategory="0"/>
     <item android:id="@+id/menu_add"
-          android:icon="@drawable/ic_menu_compose"
+          android:icon="@drawable/ic_action_compose_dark"
           android:title="@string/menu_add"
           android:alphabeticShortcut='a'
           android:showAsAction="ifRoom" android:orderInCategory="1"/>
     <!--  If there is currently data in the clipboard, this adds a PASTE menu item to the menu
           so that the user can paste in the data.. -->
     <item android:id="@+id/menu_paste"
-          android:icon="@drawable/ic_menu_compose"
+          android:icon="@drawable/ic_menu_paste_holo_dark"
           android:title="@string/menu_paste"
           android:alphabeticShortcut='p' android:orderInCategory="2"/>
     <item android:id="@+id/menu_preferences"
