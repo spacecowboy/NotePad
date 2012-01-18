@@ -138,7 +138,6 @@ public class NotesList extends ListActivity implements OnCloseListener,
 		} else {
 			setTheme(android.R.style.Theme_Holo);
 		}
-
 	}
 
 	@Override
@@ -352,7 +351,7 @@ public class NotesList extends ListActivity implements OnCloseListener,
 
 		// Get the SearchView and set the searchable configuration
 		SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-		searchView = (SearchView) menu.findItem(R.id.list_search)
+		/*searchView = (SearchView) menu.findItem(R.id.list_search)
 				.getActionView();
 		searchView.setSearchableInfo(searchManager
 				.getSearchableInfo(getComponentName()));
@@ -360,7 +359,7 @@ public class NotesList extends ListActivity implements OnCloseListener,
 												// expand by default
 		searchView.setSubmitButtonEnabled(false);
 		searchView.setOnCloseListener(this);
-		searchView.setOnQueryTextListener(this);
+		searchView.setOnQueryTextListener(this);*/
 
 		// Generate any additional actions that can be performed on the
 		// overall list. In a normal install, there are no additional
@@ -377,20 +376,6 @@ public class NotesList extends ListActivity implements OnCloseListener,
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
-
-		// The paste menu item is enabled if there is data on the clipboard.
-		ClipboardManager clipboard = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
-
-		MenuItem mPasteItem = menu.findItem(R.id.menu_paste);
-
-		// If the clipboard contains an item, enables the Paste option on the
-		// menu.
-		if (clipboard.hasPrimaryClip()) {
-			mPasteItem.setEnabled(true);
-		} else {
-			// If the clipboard is empty, disables the menu's Paste option.
-			mPasteItem.setEnabled(false);
-		}
 
 		// Gets the number of notes currently being displayed.
 		final boolean haveItems = getListAdapter().getCount() > 0;
@@ -500,18 +485,6 @@ public class NotesList extends ListActivity implements OnCloseListener,
 			startActivity(new Intent(Intent.ACTION_INSERT, getIntent()
 					.getData()));
 			return true;
-		case R.id.menu_paste:
-			/*
-			 * Launches a new Activity using an Intent. The intent filter for
-			 * the Activity has to have action ACTION_PASTE. No category is set,
-			 * so DEFAULT is assumed. In effect, this starts the NoteEditor
-			 * Activity in NotePad.
-			 */
-			startActivity(new Intent(Intent.ACTION_PASTE, getIntent().getData()));
-			return true;
-		case R.id.list_search:
-			// Launches the search window
-			return onSearchRequested();
 		case R.id.menu_preferences:
 			Intent settingsIntent = new Intent(getApplicationContext(),
 					Settings.class);
