@@ -13,8 +13,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<view xmlns:android="http://schemas.android.com/apk/res/android"
-    class="com.nononsenseapps.notepad.NoteEditor$LinedEditText"
+<EditText xmlns:android="http://schemas.android.com/apk/res/android"
     android:theme="@android:style/Theme.Holo.Light"
     android:id="@+id/note"
     android:layout_width="match_parent"
