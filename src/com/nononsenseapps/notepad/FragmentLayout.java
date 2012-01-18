@@ -18,6 +18,9 @@ import android.view.MenuItem;
 public class FragmentLayout extends Activity implements OnSharedPreferenceChangeListener {
 	public static boolean lightTheme = false;
 	public static boolean shouldRestart = false;
+	
+	private NotesListFragment list;
+	private NotesEditorFragment editor;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,28 @@ public class FragmentLayout extends Activity implements OnSharedPreferenceChange
 			setTheme(android.R.style.Theme_Holo);
 		}
 	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// both list and editor should be notified
+		NotesListFragment list = (NotesListFragment) getFragmentManager().findFragmentById(R.id.noteslistfragment);
+		NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager().findFragmentById(R.id.editor);
+		switch (item.getItemId()) {
+		case R.id.menu_delete:
+		case R.id.menu_add:
+			if (list != null && editor != null) {
+				Log.d("FragmentLayout","onShared, passing on!");
+				// Order is important. Always editor before list
+				editor.onSharedItemSelected(item);
+				list.onSharedItemSelected(item);
+			}
+			else {
+				Log.d("FragmentLayout","onShared, but was null!");
+			}
+			break;
+		}
+		return super.onOptionsItemSelected(item);
+	}
 
 	/**
 	 * This is a secondary activity, to show what the user has selected when the
@@ -132,7 +157,7 @@ public class FragmentLayout extends Activity implements OnSharedPreferenceChange
 			case R.id.menu_delete:
 				setResult(Activity.RESULT_CANCELED);
 				finish();
-				break;
+				return true;
 			case R.id.menu_revert:
 				setResult(Activity.RESULT_CANCELED);
 				finish();

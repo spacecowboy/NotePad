@@ -27,6 +27,7 @@ public class NotesListFragment extends ListFragment implements
 	int mCurCheckPosition = 0;
 
 	public static final String SELECTEDIDKEY = "selectedid";
+	public static final String SEARCHQUERYKEY = "searchqueryid";
 
 	// For logging and debugging
 	private static final String TAG = "NotesListFragment";
@@ -52,7 +53,7 @@ public class NotesListFragment extends ListFragment implements
 
 		mSearchView = (SearchView) getActivity().findViewById(R.id.search_view);
 		setupSearchView();
-		//getListView().setTextFilterEnabled(true);
+		// getListView().setTextFilterEnabled(true);
 
 		// Populate list
 		listAllNotes();
@@ -63,13 +64,7 @@ public class NotesListFragment extends ListFragment implements
 		mDualPane = detailsFrame != null
 				&& detailsFrame.getVisibility() == View.VISIBLE;
 
-		if (savedInstanceState != null && !getListAdapter().isEmpty()) {
-			// Restore last state for checked position.
-			mCurCheckPosition = savedInstanceState.getInt("curChoice", -1);
-			mCurId = savedInstanceState.getLong("curId", -1);
-			Log.d("NotesListFragment", "Getting data from saved state: "
-					+ mCurCheckPosition + ", " + mCurId);
-		} else if (getListAdapter().isEmpty()) {
+		if (getListAdapter().isEmpty()) {
 			// -1 will display a new note
 			mCurCheckPosition = -1;
 			mCurId = -1;
@@ -78,6 +73,11 @@ public class NotesListFragment extends ListFragment implements
 		} else {
 			mCurId = PreferenceManager.getDefaultSharedPreferences(
 					getActivity()).getLong(SELECTEDIDKEY, -1);
+			String query = PreferenceManager.getDefaultSharedPreferences(
+					getActivity()).getString(SEARCHQUERYKEY, "");
+			mSearchView.setQuery(query); // Should call the listener right?
+
+			// If there was a query
 			if (mCurId == -1) {
 				mCurCheckPosition = 0;
 				mCurId = getListAdapter().getItemId(0);
@@ -86,8 +86,7 @@ public class NotesListFragment extends ListFragment implements
 			}
 
 			Log.d("NotesListFragment", "Setting data not empty: "
-					+ mCurCheckPosition + ", " + mCurId + ", saved: "
-					+ savedInstanceState);
+					+ mCurCheckPosition + ", " + mCurId + ", query = " + query);
 		}
 
 		if (mDualPane) {
@@ -155,19 +154,41 @@ public class NotesListFragment extends ListFragment implements
 	public void onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
 	}
+	
+	public void onSharedItemSelected(MenuItem item) {
+		// Handle all of the possible menu actions.
+		switch (item.getItemId()) {
+		case R.id.menu_delete:
+			Log.d("NotesListFragment", "onSharedSelection del");
+			int pos = mCurCheckPosition;
+			while (mCurCheckPosition >= getListAdapter().getCount()) {
+				pos = pos - 1;
+			}
+			showNote(pos, getListAdapter().getItemId(pos));
+			break;
+		case R.id.menu_add:
+			Log.d("NotesListFragment", "onSharedSelection add");
+			showNote(-1, -1);
+			break;
+		}
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		Log.d("NotesListFragment", "onOptionsSelection ");
 		switch (item.getItemId()) {
 		case R.id.menu_add:
-			Log.d("NotesListFragment", "onOptionsSelection add");
-			showNote(-1, -1);
-			return true;
+			//Handled in shared elsewhere
+			//Log.d("NotesListFragment", "onOptionsSelection add");
+			//showNote(-1, -1);
+			return false;
 		case R.id.menu_preferences:
 			Log.d("NotesListFragment", "onOptionsSelection pref");
 			showPrefs();
 			return true;
+		case R.id.menu_delete:
+			//Handled in shared elsewhere
+			return false;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -201,6 +222,7 @@ public class NotesListFragment extends ListFragment implements
 		SharedPreferences.Editor prefEditor = PreferenceManager
 				.getDefaultSharedPreferences(getActivity()).edit();
 		prefEditor.putLong(SELECTEDIDKEY, mCurId);
+		prefEditor.putString(SEARCHQUERYKEY, mSearchView.getQuery());
 		prefEditor.commit();
 	}
 
@@ -251,17 +273,18 @@ public class NotesListFragment extends ListFragment implements
 		// created.
 		setListAdapter(adapter);
 	}
-	
+
 	private void showResults(String query) {
 
 		// Cursor cursors = managedQuery(NotePad.Notes.CONTENT_URI, null, null,
 		// new String[] { query }, null);
 		// Log.d(TAG, ("query : " + query));
-		Cursor cursor = getActivity().managedQuery(NotePad.Notes.CONTENT_URI, // Use the
-																// default
-																// content URI
-																// for the
-																// provider.
+		Cursor cursor = getActivity().managedQuery(NotePad.Notes.CONTENT_URI, // Use
+																				// the
+				// default
+				// content URI
+				// for the
+				// provider.
 				PROJECTION, // Return the note ID, title and text for each note.
 				null, // No where clause, return all records.
 				new String[] { query }, // Only these column values
@@ -284,10 +307,23 @@ public class NotesListFragment extends ListFragment implements
 	 * Helper function to show the details of a selected item, either by
 	 * displaying a fragment in-place in the current UI, or starting a whole new
 	 * activity in which it is displayed.
+	 * 
+	 * If id is not -1, index is ignored! if id is -1, index is used. If both are -1, then a new note is created.
 	 */
 	void showNote(int index, long id) {
-		mCurCheckPosition = index;
-		mCurId = id;
+		if (id != -1) {
+			mCurCheckPosition = getPosOfId(id);
+			mCurId = id;
+		}
+		else if (index != -1) {
+			mCurCheckPosition = index;
+			mCurId = getListAdapter().getItemId(index);
+		}
+		else {
+			//Both are -1, show new note
+			mCurCheckPosition = index;
+			mCurId = id;
+		}
 
 		if (mDualPane) {
 			Log.d("NotesLIstFragmenT", "It is dualPane!");

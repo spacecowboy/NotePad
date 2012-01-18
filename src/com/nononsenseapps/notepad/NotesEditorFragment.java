@@ -76,10 +76,7 @@ public class NotesEditorFragment extends Fragment {
 	 * @return -1 if new note
 	 */
 	public long getShownId() {
-		if (getArguments().containsKey("noteid"))
-			return getArguments().getLong("noteid");
-		else
-			return -1;
+		return getArguments().getLong("noteid", -1);
 	}
 	
 	private Uri getUriFrom(long id) {
@@ -381,14 +378,29 @@ public class NotesEditorFragment extends Fragment {
 		}
 	}
 	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		String text;
+	public void onSharedItemSelected(MenuItem item) {
+		Log.d("NotesEditorFragment", "onSharedSelection");
 		// Handle all of the possible menu actions.
 		switch (item.getItemId()) {
 		case R.id.menu_delete:
 			deleteNote();
 			break;
+		case R.id.menu_add:
+			updateNote(mText.getText().toString());
+			break;
+		}
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		String text;
+		// Handle all of the possible menu actions.
+		switch (item.getItemId()) {
+		case R.id.menu_add:
+		case R.id.menu_delete:
+			//Handled in shared elsewhere
+			//deleteNote();
+			return false;
 		case R.id.menu_revert:
 			cancelNote();
 			break;
