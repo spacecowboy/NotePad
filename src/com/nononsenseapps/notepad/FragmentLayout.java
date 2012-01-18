@@ -129,6 +129,14 @@ public class FragmentLayout extends Activity implements OnSharedPreferenceChange
 			case android.R.id.home:
 				finish();
 				break;
+			case R.id.menu_delete:
+				setResult(Activity.RESULT_CANCELED);
+				finish();
+				break;
+			case R.id.menu_revert:
+				setResult(Activity.RESULT_CANCELED);
+				finish();
+				break;
 			}
 			return super.onOptionsItemSelected(item);
 		}

@@ -272,8 +272,6 @@ public class NotesEditorFragment extends Fragment {
 				deleteNote();
 			}
 		}
-		getActivity().setResult(Activity.RESULT_CANCELED);
-		getActivity().finish();
 	}
 
 	/**
@@ -390,7 +388,6 @@ public class NotesEditorFragment extends Fragment {
 		switch (item.getItemId()) {
 		case R.id.menu_delete:
 			deleteNote();
-			getActivity().finish();
 			break;
 		case R.id.menu_revert:
 			cancelNote();
