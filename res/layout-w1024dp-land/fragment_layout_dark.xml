@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:theme="@android:style/Theme.Holo" >
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical" >
+
+        <SearchView
+            android:id="@+id/search_view"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <fragment
+            android:id="@+id/noteslistfragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            class="com.nononsenseapps.notepad.NotesListFragment" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/editor"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3" >
+    </FrameLayout>
+
+</LinearLayout>

@@ -27,7 +27,7 @@
 
     <application android:icon="@drawable/app_notes"
         android:label="@string/app_name"
-        >
+        android:hardwareAccelerated="true">
          <!-- android:uiOptions="splitActionBarWhenNarrow" -->
     
         <provider android:name=".NotePadProvider"
@@ -35,35 +35,19 @@
             android:exported="false">
             <grant-uri-permission android:pathPattern=".*" />
         </provider>
-
-        <activity android:name="NotesList" android:label="@string/title_notes_list" android:launchMode="singleTop">
+        
+        <activity android:name="FragmentLayout"
+                android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-                <action android:name="android.intent.action.PICK" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.dir/vnd.nononsenseapps.note" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.GET_CONTENT" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
-            </intent-filter>
-            <intent-filter>
-	            <action android:name="android.intent.action.SEARCH" />
-	        </intent-filter>
-	        <meta-data android:name="android.app.searchable"
-	                   android:resource="@xml/list_searchable"/>
         </activity>
-
-        <activity android:name="NoteEditor"
-            android:screenOrientation="sensor"
-            android:configChanges="keyboardHidden|orientation"
-        >
+        
+        <activity android:name="FragmentLayout$NotesEditorActivity"
+            android:screenOrientation="sensor" >
+            <!-- android:configChanges="keyboardHidden|orientation" > -->
+        
             <!-- This filter says that we can view or edit the data of
                  a single note -->
             <intent-filter android:label="@string/resolve_edit">
@@ -99,10 +83,9 @@
             </intent-filter>
         </activity>
         
-        <activity android:name=".Settings"
-            android:theme="@android:style/Theme.Holo"
-            android:screenOrientation="sensor"
-            android:configChanges="keyboardHidden|orientation" >
+        <activity android:name="FragmentLayout$NotesPreferencesDialog"
+            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
+            android:screenOrientation="sensor" >
             
         </activity>
 

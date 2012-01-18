@@ -35,10 +35,9 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.provider.BaseColumns;
 import android.provider.LiveFolders;
 import android.text.TextUtils;
-import android.util.Log;
-
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -152,7 +151,7 @@ public class NotePadProvider extends ContentProvider implements
 		sNotesProjectionMap = new HashMap<String, String>();
 
 		// Maps the string "_ID" to the column name "_ID"
-		sNotesProjectionMap.put(NotePad.Notes._ID, NotePad.Notes._ID);
+		sNotesProjectionMap.put(BaseColumns._ID, BaseColumns._ID);
 
 		// Maps "title" to "title"
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_TITLE,
@@ -178,8 +177,8 @@ public class NotePadProvider extends ContentProvider implements
 		sLiveFolderProjectionMap = new HashMap<String, String>();
 
 		// Maps "_ID" to "_ID AS _ID" for a live folder
-		sLiveFolderProjectionMap.put(LiveFolders._ID, NotePad.Notes._ID
-				+ " AS " + LiveFolders._ID);
+		sLiveFolderProjectionMap.put(BaseColumns._ID, BaseColumns._ID
+				+ " AS " + BaseColumns._ID);
 
 		// Maps "NAME" to "title AS NAME"
 		sLiveFolderProjectionMap.put(LiveFolders.NAME,
@@ -208,7 +207,7 @@ public class NotePadProvider extends ContentProvider implements
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + NotePad.Notes.TABLE_NAME + " ("
-					+ NotePad.Notes._ID + " INTEGER PRIMARY KEY,"
+					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
 					+ NotePad.Notes.COLUMN_NAME_TITLE + " TEXT,"
 					+ NotePad.Notes.COLUMN_NAME_NOTE + " TEXT,"
 					+ NotePad.Notes.COLUMN_NAME_CREATE_DATE + " INTEGER,"
@@ -296,7 +295,7 @@ public class NotePadProvider extends ContentProvider implements
 		 */
 		case NOTE_ID:
 			qb.setProjectionMap(sNotesProjectionMap);
-			qb.appendWhere(NotePad.Notes._ID + // the name of the ID column
+			qb.appendWhere(BaseColumns._ID + // the name of the ID column
 					"=" +
 					// the position of the note ID itself in the incoming URI
 					uri.getPathSegments().get(
@@ -684,7 +683,7 @@ public class NotePadProvider extends ContentProvider implements
 			 * Starts a final WHERE clause by restricting it to the desired note
 			 * ID.
 			 */
-			finalWhere = NotePad.Notes._ID + // The ID column name
+			finalWhere = BaseColumns._ID + // The ID column name
 					" = " + // test for equality
 					uri.getPathSegments(). // the incoming note ID
 							get(NotePad.Notes.NOTE_ID_PATH_POSITION);
@@ -787,7 +786,7 @@ public class NotePadProvider extends ContentProvider implements
 			 * Starts creating the final WHERE clause by restricting it to the
 			 * incoming note ID.
 			 */
-			finalWhere = NotePad.Notes._ID + // The ID column name
+			finalWhere = BaseColumns._ID + // The ID column name
 					" = " + // test for equality
 					uri.getPathSegments(). // the incoming note ID
 							get(NotePad.Notes.NOTE_ID_PATH_POSITION);
