@@ -64,13 +64,13 @@ public class NoteEditor extends Activity {
 			NotePad.Notes.COLUMN_NAME_NOTE };
 
 	// A label for the saved state of the activity
-	private static final String ORIGINAL_CONTENT = "origContent";
+	public static final String ORIGINAL_CONTENT = "origContent";
 
 	// This Activity can be started by more than one action. Each action is
 	// represented
 	// as a "state" constant
-	private static final int STATE_EDIT = 0;
-	private static final int STATE_INSERT = 1;
+	public static final int STATE_EDIT = 0;
+	public static final int STATE_INSERT = 1;
 	// private static final int STATE_SHARE = 2;
 
 	// Global mutable variables
