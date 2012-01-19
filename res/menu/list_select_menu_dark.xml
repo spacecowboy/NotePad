@@ -12,8 +12,8 @@
         android:showAsAction="always"
         android:icon="@drawable/ic_menu_copy_holo_dark"
           android:title="@string/menu_copy" />
-    <item android:id="@+id/modal_delete"
+    <!-- <item android:id="@+id/modal_delete"
         android:showAsAction="always"
         android:icon="@drawable/ic_action_delete_dark"
-          android:title="@string/menu_delete" />
+          android:title="@string/menu_delete" /> -->
 </menu>
