@@ -12,7 +12,6 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.BaseColumns;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -33,6 +32,10 @@ public class NotesEditorFragment extends Fragment {
 	// A label for the saved state of the activity
 	public static final String ORIGINAL_CONTENT = "origContent";
 
+	// Argument keys
+	public static final String KEYID = "noteid";
+	public static final String KEYPOS = "index";
+
 	// This Activity can be started by more than one action. Each action is
 	// represented
 	// as a "state" constant
@@ -46,6 +49,10 @@ public class NotesEditorFragment extends Fragment {
 	private EditText mText;
 	private String mOriginalContent;
 
+	private boolean mDualPane;
+
+	private boolean timeToDie;
+
 	/**
 	 * Create a new instance of DetailsFragment, initialized to show the text at
 	 * 'index'.
@@ -54,10 +61,11 @@ public class NotesEditorFragment extends Fragment {
 		NotesEditorFragment f = new NotesEditorFragment();
 
 		// Supply index input as an argument.
-		Log.d("NotesEditorFragment", "Creating Fragment, args: " + index + ", " + id);
+		Log.d("NotesEditorFragment", "Creating Fragment, args: " + index + ", "
+				+ id);
 		Bundle args = new Bundle();
-		args.putInt("index", index);
-		args.putLong("noteid", id);
+		args.putInt(KEYPOS, index);
+		args.putLong(KEYID, id);
 		f.setArguments(args);
 
 		return f;
@@ -68,40 +76,46 @@ public class NotesEditorFragment extends Fragment {
 	 * @return -1 if new note
 	 */
 	public int getShownIndex() {
-		return getArguments().getInt("index", -1);
+		return getArguments().getInt(KEYPOS, -1);
 	}
-	
+
 	/**
 	 * 
 	 * @return -1 if new note
 	 */
 	public long getShownId() {
-		return getArguments().getLong("noteid", -1);
+		return getArguments().getLong(KEYID, -1);
 	}
-	
+
 	private Uri getUriFrom(long id) {
 		return Uri.withAppendedPath(NotePad.Notes.CONTENT_URI,
 				String.valueOf(id));
 	}
-	
+
 	/**
-	 * If we are supposed to open a new note, the arguments will contain "content".
-	 * @param savedInstanceState 
+	 * If we are supposed to open a new note, the arguments will contain
+	 * "content".
+	 * 
+	 * @param savedInstanceState
 	 */
 	private void openNote(Bundle savedInstanceState) {
+		Log.d("NotesEditorFragment", "Does argument have id? "
+				+ getArguments().containsKey(KEYID));
 		long id = getShownId();
-		Log.d("NotesEditorFragment", "Does argument have id? " + getArguments().containsKey("noteid"));
 		Log.d("NotesEditorFragment", "OpenNOTe: Id is " + id);
 		if (id != -1) {
 			// Existing note
 			mState = STATE_EDIT;
 			mUri = getUriFrom(id);
+			Log.d("NotesEditorFragment",
+					"Editing existing note, uri = " + mUri.toString());
 		} else {
 			// New note
 			mState = STATE_INSERT;
-			mUri = getActivity().getContentResolver().insert(NotePad.Notes.CONTENT_URI, null);
-			Log.d("NotesEditorFragment", "Inserting new note, uri = " + mUri.toString());
-			
+			mUri = getActivity().getContentResolver().insert(
+					NotePad.Notes.CONTENT_URI, null);
+			Log.d("NotesEditorFragment",
+					"Inserting new note, uri = " + mUri.toString());
 			/*
 			 * If the attempt to insert the new note fails, shuts down this
 			 * Activity. The originating Activity receives back RESULT_CANCELED
@@ -121,15 +135,24 @@ public class NotesEditorFragment extends Fragment {
 		 * will be momentary, but in a real app you should use
 		 * android.content.AsyncQueryHandler or android.os.AsyncTask.
 		 */
-		mCursor = getActivity().managedQuery(mUri, // The URI that gets multiple notes from
-										// the provider.
+		mCursor = getActivity().managedQuery(mUri, // The URI that gets multiple
+													// notes from
+				// the provider.
 				PROJECTION, // A projection that returns the note ID and note
 							// content for each note.
 				null, // No "where" clause selection criteria.
 				null, // No "where" clause selection values.
 				null // Use the default sort order (modification date,
 						// descending)
-		);
+				);
+
+		Log.d("NotesEditorFragment", "mDualPane: " + mDualPane);
+		if (mState == STATE_INSERT && mDualPane) {
+			long newId = getIdFromUri(mUri);
+			Log.d("NotesEditorFragment", "Id to report is:" + newId);
+			((NotesListFragment) getFragmentManager().findFragmentById(
+					R.id.noteslistfragment)).selectNewId(newId);
+		}
 
 		// For a paste, initializes the data from clipboard.
 		// (Must be done after mCursor is initialized.)
@@ -139,20 +162,29 @@ public class NotesEditorFragment extends Fragment {
 		}
 		// Switches the state to EDIT so the title can be modified.
 		mState = STATE_EDIT;
-		
+
 		if (savedInstanceState != null) {
 			mOriginalContent = savedInstanceState.getString(ORIGINAL_CONTENT);
 		}
-		
-		// If the cursor is after last NOW, it means we were given an invalid ID. (Happens you click on the title in list of "unnamed note" while
-		// editing it already and list doesn't have access to right id in editor. Fixed that though.
+
+		// If the cursor is after last NOW, it means we were given an invalid
+		// ID. (Happens you click on the title in list of "unnamed note" while
+		// editing it already and list doesn't have access to right id in
+		// editor. Fixed that though.
 		if (mCursor.isAfterLast()) {
-			Log.d("NotesSHOULDNEVERHAPPEN", "Cursor is after last, recreating a new note!");
+			Log.d("NotesSHOULDNEVERHAPPEN",
+					"Cursor is after last, recreating a new note!");
 			setShownId(-1);
 			openNote(savedInstanceState);
 		}
 	}
-	
+
+	public long getIdFromUri(Uri uri) {
+		String newId = uri.getPathSegments().get(
+				NotePad.Notes.NOTE_ID_PATH_POSITION);
+		return Long.parseLong(newId);
+	}
+
 	/**
 	 * Replaces the current note contents with the text and title provided as
 	 * arguments.
@@ -206,8 +238,9 @@ public class NotesEditorFragment extends Fragment {
 			 */
 			Log.d("NotesEditorFragment", "URI: " + mUri);
 			Log.d("NotesEditorFragment", "values: " + values.toString());
-			getActivity().getContentResolver().update(mUri, // The URI for the record to
-												// update.
+			getActivity().getContentResolver().update(mUri, // The URI for the
+															// record to
+					// update.
 					values, // The map of column names and new values to apply
 							// to
 							// them.
@@ -219,8 +252,11 @@ public class NotesEditorFragment extends Fragment {
 					);
 		}
 
+		// Set the shown ID of the note
+		long id = getIdFromUri(mUri);
+		setShownId(id);
 	}
-	
+
 	private String makeTitle(String text) {
 		String title = null;
 		// Get the note's length
@@ -250,7 +286,7 @@ public class NotesEditorFragment extends Fragment {
 		}
 		return title;
 	}
-	
+
 	/**
 	 * This helper method cancels the work done on a note. It deletes the note
 	 * if it was newly created, or reverts to the original text of the note i
@@ -263,7 +299,8 @@ public class NotesEditorFragment extends Fragment {
 				mCursor = null;
 				ContentValues values = new ContentValues();
 				values.put(NotePad.Notes.COLUMN_NAME_NOTE, mOriginalContent);
-				getActivity().getContentResolver().update(mUri, values, null, null);
+				getActivity().getContentResolver().update(mUri, values, null,
+						null);
 			} else if (mState == STATE_INSERT) {
 				// We inserted an empty note, make sure to delete it
 				deleteNote();
@@ -283,16 +320,17 @@ public class NotesEditorFragment extends Fragment {
 			mText.setText("");
 		}
 	}
-	
+
 	private void copyText(String text) {
 		getActivity();
-		ClipboardManager clipboard = (ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE);
+		ClipboardManager clipboard = (ClipboardManager) getActivity()
+				.getSystemService(Context.CLIPBOARD_SERVICE);
 		// ICS style
 		clipboard.setPrimaryClip(ClipData.newPlainText("Note", text));
 		// Gingerbread style.
 		// clipboard.setText(text);
 	}
-	
+
 	private void shareNote(String text) {
 		Intent share = new Intent(Intent.ACTION_SEND);
 		share.setType("text/plain");
@@ -319,6 +357,7 @@ public class NotesEditorFragment extends Fragment {
 			// just run the code below, where we would create and return
 			// the view hierarchy; it would just never be used.
 			Log.d("NotesEditorFragment", "Should return null");
+			timeToDie = true;
 			return null;
 		}
 
@@ -329,55 +368,86 @@ public class NotesEditorFragment extends Fragment {
 
 		// Gets a handle to the EditText in the the layout.
 		mText = (EditText) inflater.inflate(layout, container, false);
-		Log.d("NotesEditorFragment", "onCreateView openNote, should be the only call!");
-		openNote(savedInstanceState);
+		Log.d("NotesEditorFragment",
+				"onCreateView openNote, should be the only call!");
 		return mText;
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		// Inflate menu from XML resource
-		if (FragmentLayout.lightTheme)
-			inflater.inflate(R.menu.editor_options_menu_light, menu);
-		else
-			inflater.inflate(R.menu.editor_options_menu_dark, menu);
+	public void onActivityCreated(Bundle saves) {
+		super.onActivityCreated(saves);
+		// if Time to Die, do absolutely nothing since this fragment will go bye
+		// bye
+		if (timeToDie) {
+			Log.d("NotesEditorFragment",
+					"onActivityCreated, but it is time to die so doing nothing...");
+		} else {
+			// Need to know if this is shown in dualpane mode
+			View editorFrame = getActivity().findViewById(R.id.editor);
+			mDualPane = editorFrame != null
+					&& editorFrame.getVisibility() == View.VISIBLE;
 
-		// Only add extra menu items for a saved note
-		if (mState == STATE_EDIT) {
-			// Append to the
-			// menu items for any other activities that can do stuff with it
-			// as well. This does a query on the system for any activities that
-			// implement the ALTERNATIVE_ACTION for our data, adding a menu item
-			// for each one that is found.
-			Intent intent = new Intent(null, mUri);
-			intent.addCategory(Intent.CATEGORY_ALTERNATIVE);
-			menu.addIntentOptions(
-					Menu.CATEGORY_ALTERNATIVE,
-					0,
-					0,
-					new ComponentName(getActivity(), NotesEditorFragment.class),
-					null, intent, 0, null);
+			openNote(saves);
+			showTheNote();
+		}
+	}
+
+	@Override
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		Log.d("NotesEditorFragment", "onCreateOptions");
+		if (timeToDie) {
+			Log.d("NotesEditorFragment",
+					"onCreateOptions, but it is time to die so doing nothing...");
+		} else {
+			// Inflate menu from XML resource
+			if (FragmentLayout.lightTheme)
+				inflater.inflate(R.menu.editor_options_menu_light, menu);
+			else
+				inflater.inflate(R.menu.editor_options_menu_dark, menu);
+
+			// Only add extra menu items for a saved note
+			if (mState == STATE_EDIT) {
+				// Append to the
+				// menu items for any other activities that can do stuff with it
+				// as well. This does a query on the system for any activities
+				// that
+				// implement the ALTERNATIVE_ACTION for our data, adding a menu
+				// item
+				// for each one that is found.
+				Intent intent = new Intent(null, mUri);
+				intent.addCategory(Intent.CATEGORY_ALTERNATIVE);
+				menu.addIntentOptions(Menu.CATEGORY_ALTERNATIVE, 0, 0,
+						new ComponentName(getActivity(),
+								NotesEditorFragment.class), null, intent, 0,
+						null);
+			}
 		}
 	}
 
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-		// Check if note has changed and enable/disable the revert option
-		if (mCursor != null) {
-			int colNoteIndex = mCursor
-					.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
-			String savedNote = mCursor.getString(colNoteIndex);
-			String currentNote = mText.getText().toString();
-			if (savedNote.equals(currentNote)) {
-				menu.findItem(R.id.menu_revert).setVisible(false);
-			} else {
-				menu.findItem(R.id.menu_revert).setVisible(true);
-			}
+		if (timeToDie) {
+			Log.d("NotesEditorFragment",
+					"onPrepareOptionsMenu, but it is time to die so doing nothing...");
 		} else {
-			menu.findItem(R.id.menu_revert).setVisible(false);
+			// Check if note has changed and enable/disable the revert option
+			if (mCursor != null) {
+				int colNoteIndex = mCursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
+				// if (colNoteIndex != -1)
+				String savedNote = mCursor.getString(colNoteIndex);
+				String currentNote = mText.getText().toString();
+				if (savedNote.equals(currentNote)) {
+					menu.findItem(R.id.menu_revert).setVisible(false);
+				} else {
+					menu.findItem(R.id.menu_revert).setVisible(true);
+				}
+			} else {
+				menu.findItem(R.id.menu_revert).setVisible(false);
+			}
 		}
 	}
-	
+
 	public void onSharedItemSelected(MenuItem item) {
 		Log.d("NotesEditorFragment", "onSharedSelection");
 		// Handle all of the possible menu actions.
@@ -390,7 +460,7 @@ public class NotesEditorFragment extends Fragment {
 			break;
 		}
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		String text;
@@ -398,8 +468,8 @@ public class NotesEditorFragment extends Fragment {
 		switch (item.getItemId()) {
 		case R.id.menu_add:
 		case R.id.menu_delete:
-			//Handled in shared elsewhere
-			//deleteNote();
+			// Handled in shared elsewhere
+			// deleteNote();
 			return false;
 		case R.id.menu_revert:
 			cancelNote();
@@ -415,7 +485,7 @@ public class NotesEditorFragment extends Fragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	@Override
 	public void onResume() {
 		super.onResume();
@@ -426,6 +496,10 @@ public class NotesEditorFragment extends Fragment {
 		 * any running process. This tests that it's not null, since it should
 		 * always contain data.
 		 */
+		showTheNote();
+	}
+
+	private void showTheNote() {
 		if (mCursor != null) {
 			// Requery in case something changed while paused (such as the
 			// title)
@@ -438,7 +512,7 @@ public class NotesEditorFragment extends Fragment {
 			 * pointing to a "place" immediately before the first record.
 			 */
 			mCursor.moveToFirst();
-			
+
 			// Modifies the window title for the Activity according to the
 			// current Activity state.
 			if (mState == STATE_EDIT) {
@@ -454,9 +528,7 @@ public class NotesEditorFragment extends Fragment {
 			} else if (mState == STATE_INSERT) {
 				getActivity().setTitle(getText(R.string.title_create));
 				// Set the shown ID of the note
-				int colIdIndex = mCursor
-						.getColumnIndex(BaseColumns._ID);
-				long id = mCursor.getLong(colIdIndex);
+				long id = getIdFromUri(mUri);
 				setShownId(id);
 			}
 
@@ -488,13 +560,18 @@ public class NotesEditorFragment extends Fragment {
 			 */
 		} else {
 			getActivity().setTitle(getText(R.string.error_title));
-			mText.setText(getText(R.string.error_message));
+			if (mText != null)
+				mText.setText(getText(R.string.error_message));
+		}
+		// Request focus if dual pane
+		if (mDualPane) {
+			getActivity().findViewById(R.id.editor).requestFocus();
 		}
 	}
-	
+
 	private void setShownId(long id) {
-		getArguments().remove("noteid");
-		getArguments().putLong("noteid", id);
+		getArguments().remove(KEYID);
+		getArguments().putLong(KEYID, id);
 	}
 
 	/**
@@ -548,7 +625,7 @@ public class NotesEditorFragment extends Fragment {
 			 * edited, the assumption being that the user wanted to "clear out"
 			 * (delete) the note.
 			 */
-			//if (isFinishing() && (length == 0)) {
+			// if (isFinishing() && (length == 0)) {
 			if (text.isEmpty()) {
 				getActivity().setResult(Activity.RESULT_CANCELED);
 				deleteNote();
