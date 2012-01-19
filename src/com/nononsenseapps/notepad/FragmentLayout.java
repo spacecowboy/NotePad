@@ -87,7 +87,7 @@ public class FragmentLayout extends Activity implements
 
 	private void setTypeOfTheme() {
 		if (lightTheme) {
-			setTheme(android.R.style.Theme_Holo_Light);
+			setTheme(android.R.style.Theme_Holo_Light_DarkActionBar);
 		} else {
 			setTheme(android.R.style.Theme_Holo);
 		}
@@ -136,7 +136,7 @@ public class FragmentLayout extends Activity implements
 			Log.d("NotesEditorActivity", "onCreate");
 
 			if (FragmentLayout.lightTheme) {
-				setTheme(android.R.style.Theme_Holo_Light);
+				setTheme(android.R.style.Theme_Holo_Light_DarkActionBar);
 			} else {
 				setTheme(android.R.style.Theme_Holo);
 			}

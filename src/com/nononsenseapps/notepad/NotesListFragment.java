@@ -1,28 +1,41 @@
 package com.nononsenseapps.notepad;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+
 import com.nononsenseapps.notepad.FragmentLayout.NotesEditorActivity;
 import com.nononsenseapps.notepad.FragmentLayout.NotesPreferencesDialog;
 
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AbsListView;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.SearchView;
+import android.widget.ShareActionProvider;
+import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 public class NotesListFragment extends ListFragment implements
-		SearchView.OnQueryTextListener {
+		SearchView.OnQueryTextListener, OnItemLongClickListener {
 	boolean mDualPane;
 	int mCurCheckPosition = 0;
 
@@ -40,6 +53,9 @@ public class NotesListFragment extends ListFragment implements
 			NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
 	public static final String SHOWLISTKEY = "showList";
+	private static final int CHECK_SINGLE = 1;
+	private static final int CHECK_MULTI = 2;
+	private static final int CHECK_SINGLE_FUTURE = 3;
 
 	private long mCurId;
 
@@ -48,6 +64,11 @@ public class NotesListFragment extends ListFragment implements
 	private static String SAVEDPOS = "curPos";
 	private static String SAVEDID = "curId";
 	private String currentQuery = "";
+	private int checkMode = CHECK_SINGLE;
+
+	private ModeCallback modeCallback;
+
+	private ListView lv;
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -55,8 +76,8 @@ public class NotesListFragment extends ListFragment implements
 
 		mSearchView = (SearchView) getActivity().findViewById(R.id.search_view);
 		setupSearchView();
-		// getListView().setTextFilterEnabled(true);
 
+		lv = getListView();
 		// Populate list
 		listAllNotes();
 
@@ -96,10 +117,10 @@ public class NotesListFragment extends ListFragment implements
 					+ mCurCheckPosition + ", " + mCurId + ", query = " + query);
 		}
 
-		if (mDualPane) {
-			// In dual-pane mode, the list view highlights the selected item.
-			getListView().setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-		}
+		// if (mDualPane) {
+		// In dual-pane mode, the list view highlights the selected item.
+		setSingleCheck(mCurCheckPosition);
+		// }
 		if (!getListAdapter().isEmpty() && (mDualPane || !showList)) {
 			// Only display note in singlepane if user had one showing
 			showNote(mCurCheckPosition, mCurId);
@@ -132,10 +153,10 @@ public class NotesListFragment extends ListFragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// Inflate menu from XML resource
-		if (FragmentLayout.lightTheme)
-			inflater.inflate(R.menu.list_options_menu_light, menu);
-		else
-			inflater.inflate(R.menu.list_options_menu_dark, menu);
+		// if (FragmentLayout.lightTheme)
+		// inflater.inflate(R.menu.list_options_menu_light, menu);
+		// else
+		inflater.inflate(R.menu.list_options_menu_dark, menu);
 
 		// Get the SearchView and set the searchable configuration
 		// SearchManager searchManager = (SearchManager)
@@ -224,6 +245,8 @@ public class NotesListFragment extends ListFragment implements
 		super.onCreate(savedInstanceState);
 		// To get the call back to add items to the menu
 		setHasOptionsMenu(true);
+
+		modeCallback = new ModeCallback(this);
 
 		if (savedInstanceState != null) {
 			Log.d("NotesListFragment", "onCreate saved not null");
@@ -494,10 +517,267 @@ public class NotesListFragment extends ListFragment implements
 	}
 
 	private void selectPos(int pos) {
-		getListView().setItemChecked(pos, true);
-		mCurCheckPosition = pos;
-		mCurId = getListAdapter().getItemId(mCurCheckPosition);
-		Log.d("NotesListFragment", "Selected the new note: mCurId " + mCurId
-				+ ", mCurCheckPosition " + mCurCheckPosition);
+		if (checkMode == CHECK_SINGLE_FUTURE) {
+			setSingleCheck(pos); // Will call me back
+		} else {
+			getListView().setItemChecked(pos, true);
+			mCurCheckPosition = pos;
+			// O(1) perfomance on getID from pos
+			mCurId = getListAdapter().getItemId(mCurCheckPosition);
+			Log.d("NotesListFragment", "Selected the new note: mCurId "
+					+ mCurId + ", mCurCheckPosition " + mCurCheckPosition);
+		}
+	}
+
+	public void setSingleCheck() {
+		setSingleCheck(mCurCheckPosition);
+	}
+
+	public void setSingleCheck(int pos) {
+		Log.d(TAG, "setSingleCheck: " + pos);
+		checkMode = CHECK_SINGLE;
+		// ListView lv = getListView();
+		lv.setLongClickable(true);
+		lv.setOnItemLongClickListener(this);
+		if (mDualPane) {
+			// Fix the selection before releasing that
+			//lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+			lv.setChoiceMode(ListView.CHOICE_MODE_NONE);
+		} else {
+			// Not nice to show selected item in list when no editor is showing
+			lv.setChoiceMode(ListView.CHOICE_MODE_NONE);
+		}
+		// lv.setMultiChoiceModeListener(null);
+
+		// Select the note
+		if (pos != -1) {
+			// -1, new note, handled by editor callback
+			selectPos(pos);
+		}
+	}
+
+	public void setFutureSingleCheck() {
+		// REsponsible for disabling the modal selector in the future.
+		// can't do it now because it has to destroy itself etc...
+		checkMode = CHECK_SINGLE_FUTURE;
+	}
+
+	public void setMultiCheck(int pos) {
+		Log.d(TAG, "setMutliCheck: " + pos);
+		// Do this on long press
+		checkMode = CHECK_MULTI;
+		// ListView lv = getListView();
+		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		lv.setMultiChoiceModeListener(modeCallback);
+		lv.setItemChecked(pos, true);
+	}
+
+	/**
+	 * {@inheritDoc}
+	 */
+	public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+			int position, long id) {
+		Log.d(TAG, "onLongClick");
+		if (checkMode == CHECK_SINGLE) {
+			// Disable long-clicking temporarliy
+			getListView().setLongClickable(false);
+			// get the position which was selected
+			Log.d("NotesListFragment", "onLongClick, selected item pos: "
+					+ position + ", id: " + id);
+			// change to multiselect mode and select that item
+			setMultiCheck(position);
+		} else {
+			// Should never happen
+			// Let modal listener handle it
+		}
+		return true;
+	}
+
+	private class ModeCallback implements ListView.MultiChoiceModeListener,
+			OnShareTargetSelectedListener {
+
+		private NotesListFragment list;
+
+		private HashMap<Long, String> textToShare;
+
+		public ModeCallback(NotesListFragment list) {
+			textToShare = new HashMap<Long, String>();
+			this.list = list;
+		}
+
+		private Intent createShareIntent(String text) {
+			Intent shareIntent = new Intent(Intent.ACTION_SEND);
+			shareIntent.setType("text/plain");
+			shareIntent.putExtra(Intent.EXTRA_TEXT, text);
+
+			return shareIntent;
+		}
+
+		private Intent createShareIntent() {
+			return createShareIntent("");
+		}
+
+		private void addTextToShare(long id) {
+			// Read note
+			Uri uri = NotesEditorFragment.getUriFrom(id);
+			Cursor cursor = openNote(uri);
+
+			if (cursor != null) {
+				// Requery in case something changed while paused (such as the
+				// title)
+				// cursor.requery();
+
+				/*
+				 * Moves to the first record. Always call moveToFirst() before
+				 * accessing data in a Cursor for the first time. The semantics
+				 * of using a Cursor are that when it is created, its internal
+				 * index is pointing to a "place" immediately before the first
+				 * record.
+				 */
+				cursor.moveToFirst();
+
+				// Modifies the window title for the Activity according to the
+				// current Activity state.
+				// Set the title of the Activity to include the note title
+				int colNoteIndex = cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
+				String note = cursor.getString(colNoteIndex);
+				// Put in hash
+				textToShare.put(id, note);
+			}
+		}
+
+		private void delTextToShare(long id) {
+			textToShare.remove(id);
+		}
+
+		private String buildTextToShare() {
+			String text = "";
+			ArrayList<String> notes = new ArrayList<String>(
+					textToShare.values());
+			if (!notes.isEmpty()) {
+				text = text + notes.remove(0);
+				while (!notes.isEmpty()) {
+					text = text + "\n\n" + notes.remove(0);
+				}
+			}
+			return text;
+		}
+
+		public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+			MenuInflater inflater = getActivity().getMenuInflater();
+			inflater.inflate(R.menu.list_select_menu_dark, menu);
+			mode.setTitle("Select Items");
+
+			// Set file with share history to the provider and set the share
+			// intent.
+			MenuItem actionItem = menu
+					.findItem(R.id.menu_item_share_action_provider_action_bar);
+			ShareActionProvider actionProvider = (ShareActionProvider) actionItem
+					.getActionProvider();
+			actionProvider
+					.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+			// Note that you can set/change the intent any time,
+			// say when the user has selected an image.
+			actionProvider.setShareIntent(createShareIntent());
+
+			actionProvider.setOnShareTargetSelectedListener(this);
+
+			return true;
+		}
+
+		public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+			return true;
+		}
+
+		public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			switch (item.getItemId()) {
+			case R.id.modal_share:
+				Toast.makeText(
+						getActivity(),
+						"Shared " + getListView().getCheckedItemCount()
+								+ " items\n\n" + buildTextToShare(),
+						Toast.LENGTH_SHORT).show();
+				mode.finish();
+				break;
+			case R.id.modal_copy:
+				ClipboardManager clipboard = (ClipboardManager) getActivity()
+						.getSystemService(Context.CLIPBOARD_SERVICE);
+				// ICS style
+				clipboard.setPrimaryClip(ClipData.newPlainText("Note",
+						buildTextToShare()));
+				Toast.makeText(
+						getActivity(),
+						"Copied " + getListView().getCheckedItemCount()
+								+ " notes to clipboard",
+						Toast.LENGTH_SHORT).show();
+				mode.finish();
+				break;
+			default:
+				Toast.makeText(getActivity(), "Clicked " + item.getTitle(),
+						Toast.LENGTH_SHORT).show();
+				break;
+			}
+			return true;
+		}
+
+		public void onDestroyActionMode(ActionMode mode) {
+			Log.d("modeCallback", "onDestroyActionMode: " + mode.toString()
+					+ ", " + mode.getMenu().toString());
+			list.setFutureSingleCheck();
+		}
+
+		public void onItemCheckedStateChanged(ActionMode mode, int position,
+				long id, boolean checked) {
+			// Set the share intent with updated text
+			if (checked) {
+				addTextToShare(id);
+			} else {
+				delTextToShare(id);
+			}
+			final int checkedCount = getListView().getCheckedItemCount();
+			switch (checkedCount) {
+			case 0:
+				mode.setSubtitle(null);
+				break;
+			case 1:
+				mode.setSubtitle("One item selected");
+				break;
+			default:
+				mode.setSubtitle("" + checkedCount + " items selected");
+				break;
+			}
+		}
+
+		public Cursor openNote(Uri uri) {
+			/*
+			 * Using the URI passed in with the triggering Intent, gets the note
+			 * or notes in the provider. Note: This is being done on the UI
+			 * thread. It will block the thread until the query completes. In a
+			 * sample app, going against a simple provider based on a local
+			 * database, the block will be momentary, but in a real app you
+			 * should use android.content.AsyncQueryHandler or
+			 * android.os.AsyncTask.
+			 */
+			return getActivity().managedQuery(uri, // The URI that gets multiple
+													// notes from
+					// the provider.
+					PROJECTION, // A projection that returns the note ID and
+								// note
+								// content for each note.
+					null, // No "where" clause selection criteria.
+					null, // No "where" clause selection values.
+					null // Use the default sort order (modification date,
+							// descending)
+					);
+		}
+
+		public boolean onShareTargetSelected(ShareActionProvider source,
+				Intent intent) {
+			// Just add the text
+			intent.putExtra(Intent.EXTRA_TEXT, buildTextToShare());
+			return false;
+		}
+
 	}
 }

@@ -20,8 +20,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ShareActionProvider;
+import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
+import android.widget.Toast;
 
-public class NotesEditorFragment extends Fragment {
+public class NotesEditorFragment extends Fragment implements OnShareTargetSelectedListener {
 	/*
 	 * Creates a projection that returns the note ID and the note contents.
 	 */
@@ -87,7 +90,7 @@ public class NotesEditorFragment extends Fragment {
 		return getArguments().getLong(KEYID, -1);
 	}
 
-	private Uri getUriFrom(long id) {
+	public static Uri getUriFrom(long id) {
 		return Uri.withAppendedPath(NotePad.Notes.CONTENT_URI,
 				String.valueOf(id));
 	}
@@ -301,6 +304,8 @@ public class NotesEditorFragment extends Fragment {
 				values.put(NotePad.Notes.COLUMN_NAME_NOTE, mOriginalContent);
 				getActivity().getContentResolver().update(mUri, values, null,
 						null);
+				openNote(null);
+				showTheNote();
 			} else if (mState == STATE_INSERT) {
 				// We inserted an empty note, make sure to delete it
 				deleteNote();
@@ -322,20 +327,12 @@ public class NotesEditorFragment extends Fragment {
 	}
 
 	private void copyText(String text) {
-		getActivity();
 		ClipboardManager clipboard = (ClipboardManager) getActivity()
 				.getSystemService(Context.CLIPBOARD_SERVICE);
 		// ICS style
 		clipboard.setPrimaryClip(ClipData.newPlainText("Note", text));
 		// Gingerbread style.
 		// clipboard.setText(text);
-	}
-
-	private void shareNote(String text) {
-		Intent share = new Intent(Intent.ACTION_SEND);
-		share.setType("text/plain");
-		share.putExtra(Intent.EXTRA_TEXT, text);
-		startActivity(Intent.createChooser(share, "Share note"));
 	}
 
 	@Override
@@ -400,10 +397,28 @@ public class NotesEditorFragment extends Fragment {
 					"onCreateOptions, but it is time to die so doing nothing...");
 		} else {
 			// Inflate menu from XML resource
-			if (FragmentLayout.lightTheme)
-				inflater.inflate(R.menu.editor_options_menu_light, menu);
-			else
-				inflater.inflate(R.menu.editor_options_menu_dark, menu);
+			// if (FragmentLayout.lightTheme)
+			// inflater.inflate(R.menu.editor_options_menu_light, menu);
+			// else
+			inflater.inflate(R.menu.editor_options_menu_dark, menu);
+
+			// Set file with share history to the provider and set the share
+			// intent.
+			MenuItem actionItem = menu
+					.findItem(R.id.editor_share_action_provider_action_bar);
+			ShareActionProvider actionProvider = (ShareActionProvider) actionItem
+					.getActionProvider();
+			actionProvider
+					.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+			// Note that you can set/change the intent any time,
+			// say when the user has selected an image.
+			Intent share = new Intent(Intent.ACTION_SEND);
+			share.setType("text/plain");
+			share.putExtra(Intent.EXTRA_TEXT, "");
+			
+			actionProvider.setShareIntent(share);
+
+			actionProvider.setOnShareTargetSelectedListener(this);
 
 			// Only add extra menu items for a saved note
 			if (mState == STATE_EDIT) {
@@ -473,14 +488,18 @@ public class NotesEditorFragment extends Fragment {
 			return false;
 		case R.id.menu_revert:
 			cancelNote();
+			Toast.makeText(getActivity(), "Reverted changes",
+					Toast.LENGTH_SHORT).show();
 			break;
-		case R.id.menu_share:
-			text = mText.getText().toString();
-			shareNote(text);
-			break;
+//		case R.id.menu_share:
+//			text = mText.getText().toString();
+//			shareNote(text);
+//			break;
 		case R.id.menu_copy:
 			text = mText.getText().toString();
 			copyText(text);
+			Toast.makeText(getActivity(), "Note placed in clipboard",
+					Toast.LENGTH_SHORT).show();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -554,6 +573,11 @@ public class NotesEditorFragment extends Fragment {
 				mOriginalContent = note;
 			}
 
+			// Request focus, will not open keyboard
+			if (mDualPane) {
+				getActivity().findViewById(R.id.editor).requestFocus();
+			}
+
 			/*
 			 * Something is wrong. The Cursor should always contain data. Report
 			 * an error in the note.
@@ -562,10 +586,6 @@ public class NotesEditorFragment extends Fragment {
 			getActivity().setTitle(getText(R.string.error_title));
 			if (mText != null)
 				mText.setText(getText(R.string.error_message));
-		}
-		// Request focus if dual pane
-		if (mDualPane) {
-			getActivity().findViewById(R.id.editor).requestFocus();
 		}
 	}
 
@@ -645,5 +665,11 @@ public class NotesEditorFragment extends Fragment {
 				mState = STATE_EDIT;
 			}
 		}
+	}
+
+	public boolean onShareTargetSelected(ShareActionProvider source,
+			Intent intent) {
+		intent.putExtra(Intent.EXTRA_TEXT, mText.getText().toString());
+		return false;
 	}
 }

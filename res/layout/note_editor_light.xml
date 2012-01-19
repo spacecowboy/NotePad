@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 <EditText xmlns:android="http://schemas.android.com/apk/res/android"
-    android:theme="@android:style/Theme.Holo.Light"
+    android:theme="@android:style/Theme.Holo.Light.DarkActionBar"
     android:id="@+id/note"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
