@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- True if running under IceCreamSandwich or later. -->
+    <bool name="atLeastIceCreamSandwich">true</bool>
+
+</resources>

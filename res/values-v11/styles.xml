@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!--
+         This is a theme that will adjust itself depending on the API version.
+         The default definition is the safe one, using a theme that has always
+         been defined.  Look at values-11/styles.xml for a variation that is
+         selected when the holographic theme is available.
+    -->
+    <!-- <style name="ThemeHolo" parent="@android:style/Theme.Holo"></style> -->
+    <style name="ThemeHolo" parent="@style/Theme.Sherlock"></style>
+
+    <style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.Holo.Dialog.NoActionBar"></style>
+
+    <!-- <style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light"></style> -->
+
+    <style name="ThemeHoloLightDarkActonBar" parent="@style/Theme.Sherlock.Light"></style>
+
+</resources>

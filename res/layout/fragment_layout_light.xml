@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:theme="@android:style/Theme.Holo.Light.DarkActionBar" >
+    android:theme="@style/ThemeHoloLightDarkActonBar" >
     
     <SearchView
             android:id="@+id/search_view"
@@ -16,10 +16,10 @@
         android:layout_weight="1" >
 
         <fragment
+            class="com.nononsenseapps.notepad.NotesListFragment"
             android:id="@+id/noteslistfragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            class="com.nononsenseapps.notepad.NotesListFragment" />
+            android:layout_height="match_parent" />
     </FrameLayout>
 
 </LinearLayout>

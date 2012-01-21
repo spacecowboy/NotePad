@@ -4,11 +4,13 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceFragment;
+import android.preference.PreferenceActivity;
 import android.util.Log;
+import android.view.MenuItem;
 
-public class NotesPreferenceFragment extends PreferenceFragment implements
+public class NotesPreferenceActivity extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
+
 	public static final String KEY_THEME = "key_theme";
 	public static final String KEY_SORT_ORDER = "key_sort_order";
 	public static final String KEY_SORT_TYPE = "key_sort_type";
@@ -20,8 +22,14 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	public String SUMMARY_SORT_ORDER;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		if (FragmentLayout.lightTheme) {
+			setTheme(R.style.ThemeHoloDialogNoActionBar);
+		} else {
+			setTheme(R.style.ThemeHoloDialogNoActionBar);
+		}
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.main_preferences);
@@ -43,10 +51,16 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		// Set summaries
 		setTypeSummary(sharedPrefs);
 		setOrderSummary(sharedPrefs);
+	}
 
-		// Set up navigation (adds nice arrow to icon)
-		// ActionBar actionBar = getActionBar();
-		// actionBar.setDisplayHomeAsUpEnabled(true);
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
@@ -91,10 +105,4 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		prefSortType.setSummary(summary);
 	}
 
-	/*
-	 * @Override public boolean onOptionsItemSelected(MenuItem item) { // Handle
-	 * all of the possible menu actions. switch (item.getItemId()) { case
-	 * android.R.id.home: Log.d("Settings", "Go back!"); finish(); break; }
-	 * return super.onOptionsItemSelected(item); }
-	 */
 }

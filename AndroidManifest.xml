@@ -23,7 +23,7 @@
     package="com.nononsenseapps.notepad" 
     android:versionCode="3" android:versionName="1.1">
 
-    <uses-sdk android:minSdkVersion="14" android:targetSdkVersion="15"/>
+    <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="13"/>
 
     <application android:icon="@drawable/app_notes"
         android:label="@string/app_name"
@@ -83,8 +83,8 @@
             </intent-filter>
         </activity>
         
-        <activity android:name="FragmentLayout$NotesPreferencesDialog"
-            android:theme="@android:style/Theme.Holo.Dialog.NoActionBar"
+        <activity android:name="NotesPreferenceActivity"
+            android:theme="@style/ThemeHoloDialogNoActionBar"
             android:screenOrientation="sensor" >
             
         </activity>

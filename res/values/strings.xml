@@ -18,28 +18,18 @@
     <string name="app_name">Notes</string>
     <string name="live_folder_name">Notes</string>
 
-    <string name="title_edit_title">Note title:</string>
     <string name="title_create">New note</string>
     <string name="title_edit">Edit: %1$s</string>
-    <string name="title_notes_list">Notes</string>
 
     <string name="menu_add">New note</string>
-    <string name="menu_save">Save</string>
     <string name="menu_delete">Delete</string>
-    <string name="menu_open">Open</string>
     <string name="menu_revert">Revert changes</string>
     <string name="menu_copy">Copy note</string>
-    <string name="menu_paste">Paste</string>
-
-    <string name="button_ok">OK</string>
-    <string name="text_title">Title:</string>
 
     <string name="resolve_edit">Edit note</string>
-    <string name="resolve_title">Edit title</string>
 
     <string name="error_title">Error</string>
     <string name="error_message">Error loading note</string>
-    <string name="nothing_to_save">There is nothing to save</string>
     <string name="menu_share">Share</string>
     
     <string name="search_hint">Search</string>
@@ -50,10 +40,6 @@
     <string name="settings_sorting_type">Sort on</string>
     <string name="settings_sorting_order">Order</string>
     
-    <string name="ascending">Ascending</string>
-    <string name="descending">Descending</string>
-    <string name="modification">Modification</string>
-    <string name="alphabetic">Title</string>
     <string name="settings_summary_sort_type_alphabetic">Title</string>
     <string name="settings_summary_sort_type_modified">Modification</string>
     <string name="settings_summary_sort_order_asc">Ascending</string>

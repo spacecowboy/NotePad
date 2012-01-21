@@ -6,14 +6,14 @@
         <!-- android:actionProviderClass="android.widget.ShareActionProvider" /> -->
     <item android:id="@+id/modal_share"
         android:showAsAction="never"
-        android:icon="@drawable/ic_menu_share_holo_dark"
+        android:icon="@drawable/ic_menu_share_holo_light"
           android:title="@string/menu_share" />
     <item android:id="@+id/modal_copy"
         android:showAsAction="always"
-        android:icon="@drawable/ic_menu_copy_holo_dark"
+        android:icon="@drawable/ic_menu_copy_holo_light"
           android:title="@string/menu_copy" />
     <!-- <item android:id="@+id/modal_delete"
         android:showAsAction="always"
-        android:icon="@drawable/ic_action_delete_dark"
+        android:icon="@drawable/ic_action_delete_light"
           android:title="@string/menu_delete" /> -->
 </menu>

@@ -1,7 +1,5 @@
 package com.nononsenseapps.notepad;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
@@ -12,19 +10,20 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.SupportActivity;
+import android.support.v4.view.Menu;
+import android.support.v4.view.MenuItem;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.ShareActionProvider;
-import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.widget.Toast;
 
-public class NotesEditorFragment extends Fragment implements OnShareTargetSelectedListener {
+public class NotesEditorFragment extends Fragment {
 	/*
 	 * Creates a projection that returns the note ID and the note contents.
 	 */
@@ -37,7 +36,6 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 
 	// Argument keys
 	public static final String KEYID = "noteid";
-	public static final String KEYPOS = "index";
 
 	// This Activity can be started by more than one action. Each action is
 	// represented
@@ -52,42 +50,40 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 	private EditText mText;
 	private String mOriginalContent;
 
-	private boolean mDualPane;
+	private boolean doSave = true;
+
+	private long id;
 
 	private boolean timeToDie;
+
+	private SupportActivity activity;
+
+	private onNewNoteCreatedListener onNewNoteListener = null;
+	
+	@Override
+	public void onAttach(SupportActivity activity) {
+		super.onAttach(activity);
+		this.activity = activity;
+	}
+	
+	public void setOnNewNoteCreatedListener(onNewNoteCreatedListener listener) {
+		this.onNewNoteListener = listener;
+	}
 
 	/**
 	 * Create a new instance of DetailsFragment, initialized to show the text at
 	 * 'index'.
 	 */
-	public static NotesEditorFragment newInstance(int index, long id) {
+	public static NotesEditorFragment newInstance(long id) {
 		NotesEditorFragment f = new NotesEditorFragment();
 
 		// Supply index input as an argument.
-		Log.d("NotesEditorFragment", "Creating Fragment, args: " + index + ", "
-				+ id);
+		Log.d("NotesEditorFragment", "Creating Fragment, args: " + id);
 		Bundle args = new Bundle();
-		args.putInt(KEYPOS, index);
 		args.putLong(KEYID, id);
 		f.setArguments(args);
 
 		return f;
-	}
-
-	/**
-	 * 
-	 * @return -1 if new note
-	 */
-	public int getShownIndex() {
-		return getArguments().getInt(KEYPOS, -1);
-	}
-
-	/**
-	 * 
-	 * @return -1 if new note
-	 */
-	public long getShownId() {
-		return getArguments().getLong(KEYID, -1);
 	}
 
 	public static Uri getUriFrom(long id) {
@@ -104,7 +100,6 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 	private void openNote(Bundle savedInstanceState) {
 		Log.d("NotesEditorFragment", "Does argument have id? "
 				+ getArguments().containsKey(KEYID));
-		long id = getShownId();
 		Log.d("NotesEditorFragment", "OpenNOTe: Id is " + id);
 		if (id != -1) {
 			// Existing note
@@ -115,7 +110,7 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 		} else {
 			// New note
 			mState = STATE_INSERT;
-			mUri = getActivity().getContentResolver().insert(
+			mUri = activity.getContentResolver().insert(
 					NotePad.Notes.CONTENT_URI, null);
 			Log.d("NotesEditorFragment",
 					"Inserting new note, uri = " + mUri.toString());
@@ -126,9 +121,13 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 			 */
 			if (mUri == null) {
 				// Closes the activity.
-				getActivity().finish();
+				activity.finish();
 				return;
 			}
+			
+			// Notify list of the new note
+			if (onNewNoteListener != null)
+				onNewNoteListener.onNewNoteCreated(getIdFromUri(mUri));
 		}
 		/*
 		 * Using the URI passed in with the triggering Intent, gets the note or
@@ -138,7 +137,7 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 		 * will be momentary, but in a real app you should use
 		 * android.content.AsyncQueryHandler or android.os.AsyncTask.
 		 */
-		mCursor = getActivity().managedQuery(mUri, // The URI that gets multiple
+		mCursor = activity.managedQuery(mUri, // The URI that gets multiple
 													// notes from
 				// the provider.
 				PROJECTION, // A projection that returns the note ID and note
@@ -148,14 +147,6 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 				null // Use the default sort order (modification date,
 						// descending)
 				);
-
-		Log.d("NotesEditorFragment", "mDualPane: " + mDualPane);
-		if (mState == STATE_INSERT && mDualPane) {
-			long newId = getIdFromUri(mUri);
-			Log.d("NotesEditorFragment", "Id to report is:" + newId);
-			((NotesListFragment) getFragmentManager().findFragmentById(
-					R.id.noteslistfragment)).selectNewId(newId);
-		}
 
 		// For a paste, initializes the data from clipboard.
 		// (Must be done after mCursor is initialized.)
@@ -169,20 +160,9 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 		if (savedInstanceState != null) {
 			mOriginalContent = savedInstanceState.getString(ORIGINAL_CONTENT);
 		}
-
-		// If the cursor is after last NOW, it means we were given an invalid
-		// ID. (Happens you click on the title in list of "unnamed note" while
-		// editing it already and list doesn't have access to right id in
-		// editor. Fixed that though.
-		if (mCursor.isAfterLast()) {
-			Log.d("NotesSHOULDNEVERHAPPEN",
-					"Cursor is after last, recreating a new note!");
-			setShownId(-1);
-			openNote(savedInstanceState);
-		}
 	}
 
-	public long getIdFromUri(Uri uri) {
+	private static long getIdFromUri(Uri uri) {
 		String newId = uri.getPathSegments().get(
 				NotePad.Notes.NOTE_ID_PATH_POSITION);
 		return Long.parseLong(newId);
@@ -196,7 +176,7 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 	 *            The new note contents to use.
 	 */
 	private final void updateNote(String text) {
-
+		
 		// Only updates if the text is different from original content
 		if (text.equals(mOriginalContent)) {
 			Log.d("NotesEditorFragment", "Updating (not) note");
@@ -241,7 +221,7 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 			 */
 			Log.d("NotesEditorFragment", "URI: " + mUri);
 			Log.d("NotesEditorFragment", "values: " + values.toString());
-			getActivity().getContentResolver().update(mUri, // The URI for the
+			activity.getContentResolver().update(mUri, // The URI for the
 															// record to
 					// update.
 					values, // The map of column names and new values to apply
@@ -254,10 +234,6 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 							// necessary.
 					);
 		}
-
-		// Set the shown ID of the note
-		long id = getIdFromUri(mUri);
-		setShownId(id);
 	}
 
 	private String makeTitle(String text) {
@@ -302,7 +278,7 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 				mCursor = null;
 				ContentValues values = new ContentValues();
 				values.put(NotePad.Notes.COLUMN_NAME_NOTE, mOriginalContent);
-				getActivity().getContentResolver().update(mUri, values, null,
+				activity.getContentResolver().update(mUri, values, null,
 						null);
 				openNote(null);
 				showTheNote();
@@ -321,13 +297,13 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 		if (mCursor != null) {
 			mCursor.close();
 			mCursor = null;
-			getActivity().getContentResolver().delete(mUri, null, null);
-			mText.setText("");
+			activity.getContentResolver().delete(mUri, null, null);
+			//mText.setText("");
 		}
 	}
 
 	private void copyText(String text) {
-		ClipboardManager clipboard = (ClipboardManager) getActivity()
+		ClipboardManager clipboard = (ClipboardManager) activity
 				.getSystemService(Context.CLIPBOARD_SERVICE);
 		// ICS style
 		clipboard.setPrimaryClip(ClipData.newPlainText("Note", text));
@@ -337,9 +313,12 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.d("NotesEditorFragment", "onCreate");
 		super.onCreate(savedInstanceState);
 		// To get the call back to add items to the menu
 		setHasOptionsMenu(true);
+		
+		id = getArguments().getLong(KEYID);
 	}
 
 	@Override
@@ -379,11 +358,6 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 			Log.d("NotesEditorFragment",
 					"onActivityCreated, but it is time to die so doing nothing...");
 		} else {
-			// Need to know if this is shown in dualpane mode
-			View editorFrame = getActivity().findViewById(R.id.editor);
-			mDualPane = editorFrame != null
-					&& editorFrame.getVisibility() == View.VISIBLE;
-
 			openNote(saves);
 			showTheNote();
 		}
@@ -397,28 +371,10 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 					"onCreateOptions, but it is time to die so doing nothing...");
 		} else {
 			// Inflate menu from XML resource
-			// if (FragmentLayout.lightTheme)
-			// inflater.inflate(R.menu.editor_options_menu_light, menu);
-			// else
-			inflater.inflate(R.menu.editor_options_menu_dark, menu);
-
-			// Set file with share history to the provider and set the share
-			// intent.
-			MenuItem actionItem = menu
-					.findItem(R.id.editor_share_action_provider_action_bar);
-			ShareActionProvider actionProvider = (ShareActionProvider) actionItem
-					.getActionProvider();
-			actionProvider
-					.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
-			// Note that you can set/change the intent any time,
-			// say when the user has selected an image.
-			Intent share = new Intent(Intent.ACTION_SEND);
-			share.setType("text/plain");
-			share.putExtra(Intent.EXTRA_TEXT, "");
-			
-			actionProvider.setShareIntent(share);
-
-			actionProvider.setOnShareTargetSelectedListener(this);
+			if (FragmentLayout.lightTheme)
+				inflater.inflate(R.menu.editor_options_menu_light, menu);
+			else
+				inflater.inflate(R.menu.editor_options_menu_dark, menu);
 
 			// Only add extra menu items for a saved note
 			if (mState == STATE_EDIT) {
@@ -432,7 +388,7 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 				Intent intent = new Intent(null, mUri);
 				intent.addCategory(Intent.CATEGORY_ALTERNATIVE);
 				menu.addIntentOptions(Menu.CATEGORY_ALTERNATIVE, 0, 0,
-						new ComponentName(getActivity(),
+						new ComponentName(activity.getApplicationContext(),
 								NotesEditorFragment.class), null, intent, 0,
 						null);
 			}
@@ -463,42 +419,20 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 		}
 	}
 
-	public void onSharedItemSelected(MenuItem item) {
-		Log.d("NotesEditorFragment", "onSharedSelection");
-		// Handle all of the possible menu actions.
-		switch (item.getItemId()) {
-		case R.id.menu_delete:
-			deleteNote();
-			break;
-		case R.id.menu_add:
-			updateNote(mText.getText().toString());
-			break;
-		}
-	}
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		String text;
 		// Handle all of the possible menu actions.
 		switch (item.getItemId()) {
-		case R.id.menu_add:
-		case R.id.menu_delete:
-			// Handled in shared elsewhere
-			// deleteNote();
-			return false;
 		case R.id.menu_revert:
 			cancelNote();
-			Toast.makeText(getActivity(), "Reverted changes",
+			Toast.makeText(activity.getApplicationContext(), "Reverted changes",
 					Toast.LENGTH_SHORT).show();
 			break;
-//		case R.id.menu_share:
-//			text = mText.getText().toString();
-//			shareNote(text);
-//			break;
 		case R.id.menu_copy:
 			text = mText.getText().toString();
 			copyText(text);
-			Toast.makeText(getActivity(), "Note placed in clipboard",
+			Toast.makeText(activity.getApplicationContext(), "Note placed in clipboard",
 					Toast.LENGTH_SHORT).show();
 			break;
 		}
@@ -509,12 +443,7 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 	public void onResume() {
 		super.onResume();
 		Log.d("NotesEditorFragment", "onResume");
-
-		/*
-		 * mCursor is initialized, since onCreate() always precedes onResume for
-		 * any running process. This tests that it's not null, since it should
-		 * always contain data.
-		 */
+		
 		showTheNote();
 	}
 
@@ -542,13 +471,10 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 				Resources res = getResources();
 				String text = String.format(res.getString(R.string.title_edit),
 						title);
-				getActivity().setTitle(text);
+				activity.setTitle(text);
 				// Sets the title to "create" for inserts
 			} else if (mState == STATE_INSERT) {
-				getActivity().setTitle(getText(R.string.title_create));
-				// Set the shown ID of the note
-				long id = getIdFromUri(mUri);
-				setShownId(id);
+				activity.setTitle(getText(R.string.title_create));
 			}
 
 			/*
@@ -574,8 +500,8 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 			}
 
 			// Request focus, will not open keyboard
-			if (mDualPane) {
-				getActivity().findViewById(R.id.editor).requestFocus();
+			if (FragmentLayout.LANDSCAPE_MODE) {
+				activity.findViewById(R.id.editor).requestFocus();
 			}
 
 			/*
@@ -583,15 +509,10 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 			 * an error in the note.
 			 */
 		} else {
-			getActivity().setTitle(getText(R.string.error_title));
+			activity.setTitle(getText(R.string.error_title));
 			if (mText != null)
 				mText.setText(getText(R.string.error_message));
 		}
-	}
-
-	private void setShownId(long id) {
-		getArguments().remove(KEYID);
-		getArguments().putLong(KEYID, id);
 	}
 
 	/**
@@ -633,7 +554,8 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 		 * The Cursor object will exist, even if no records were returned,
 		 * unless the query failed because of some exception or error.
 		 */
-		if (mCursor != null) {
+		if (doSave && mCursor != null) {
+			Log.d("NotesEditorFragment", "onPause Saving/Deleting Note");
 
 			// Get the current note text.
 			String text = mText.getText().toString();
@@ -647,8 +569,10 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 			 */
 			// if (isFinishing() && (length == 0)) {
 			if (text.isEmpty()) {
-				getActivity().setResult(Activity.RESULT_CANCELED);
+				activity.setResult(FragmentActivity.RESULT_CANCELED);
 				deleteNote();
+				// Tell list to reselect after deletion
+				this.onNewNoteListener.onNewNoteDeleted(getIdFromUri(mUri));
 
 				/*
 				 * Writes the edits to the provider. The note has been edited if
@@ -667,9 +591,14 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 		}
 	}
 
-	public boolean onShareTargetSelected(ShareActionProvider source,
-			Intent intent) {
-		intent.putExtra(Intent.EXTRA_TEXT, mText.getText().toString());
-		return false;
+	/**
+	 * Prevents this Fragment from saving the note on exit
+	 */
+	public void setNoSave() {
+		doSave = false;
+		if (mCursor != null) {
+			mCursor.close();
+			mCursor = null;
+		}
 	}
 }

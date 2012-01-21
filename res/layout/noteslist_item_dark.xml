@@ -17,7 +17,7 @@
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/noteItem"
-    android:theme="@android:style/Theme.Holo"
+    android:theme="@style/ThemeHolo"
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:paddingLeft="16dp"
