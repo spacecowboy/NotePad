@@ -25,5 +25,4 @@
     android:gravity="top"
     android:textSize="22sp"
     android:capitalize="sentences"
-    android:inputType="textLongMessage"
 />

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/editor_share_action_provider_action_bar"
+    <item android:id="@+id/menu_share"
         android:showAsAction="always"
         android:title="@string/menu_share"
         android:orderInCategory="1" />
-        <!-- android:actionProviderClass="android.widget.ShareActionProvider" /> -->
+
     <item android:id="@+id/menu_delete"
           android:icon="@drawable/ic_action_delete_dark"
           android:title="@string/menu_delete"

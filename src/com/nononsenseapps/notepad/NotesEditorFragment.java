@@ -435,8 +435,18 @@ public class NotesEditorFragment extends Fragment {
 			Toast.makeText(activity.getApplicationContext(), "Note placed in clipboard",
 					Toast.LENGTH_SHORT).show();
 			break;
+		case R.id.menu_share:
+			shareNote();
+			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	private void shareNote() {
+		Intent share = new Intent(Intent.ACTION_SEND);
+		share.setType("text/plain");
+		share.putExtra(Intent.EXTRA_TEXT, mText.getText().toString());
+		startActivity(Intent.createChooser(share, "Share note"));
 	}
 
 	@Override

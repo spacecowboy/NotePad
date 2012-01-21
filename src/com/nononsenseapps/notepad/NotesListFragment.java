@@ -1,7 +1,9 @@
 package com.nononsenseapps.notepad;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import com.nononsenseapps.notepad.FragmentLayout.NotesEditorActivity;
 
@@ -28,6 +30,7 @@ import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.ShareActionProvider;
@@ -38,7 +41,7 @@ import android.widget.Toast;
 
 public class NotesListFragment extends ListFragment implements
 		SearchView.OnQueryTextListener, OnItemLongClickListener,
-		onNewNoteCreatedListener {
+		onNewNoteCreatedListener, OnModalDeleteListener {
 	int mCurCheckPosition = 0;
 
 	public static final String SELECTEDIDKEY = "selectedid";
@@ -68,13 +71,15 @@ public class NotesListFragment extends ListFragment implements
 	private String currentQuery = "";
 	private int checkMode = CHECK_SINGLE;
 
-	private ModeCallback modeCallback;
+	private ModeCallbackHC modeCallback;
 
 	private ListView lv;
 
 	private SupportActivity activity;
 
 	private OnEditorDeleteListener onDeleteListener;
+
+	private long postDeleteId;
 
 	@Override
 	public void onAttach(SupportActivity activity) {
@@ -130,7 +135,7 @@ public class NotesListFragment extends ListFragment implements
 
 		// if (mDualPane) {
 		// In dual-pane mode, the list view highlights the selected item.
-		setSingleCheck(mCurCheckPosition);
+		setSingleCheck();
 		// }
 		if (!getListAdapter().isEmpty()
 				&& (FragmentLayout.LANDSCAPE_MODE || !showList)) {
@@ -218,7 +223,13 @@ public class NotesListFragment extends ListFragment implements
 		// To get the call back to add items to the menu
 		setHasOptionsMenu(true);
 
-		modeCallback = new ModeCallback(this);
+		if (FragmentLayout.AT_LEAST_ICS) {
+			// Share action provider
+			modeCallback = new ModeCallbackICS(this);
+		} else if (FragmentLayout.AT_LEAST_HC) {
+			// Share button
+			modeCallback = new ModeCallbackHC(this);
+		}
 
 		if (savedInstanceState != null) {
 			Log.d("NotesListFragment", "onCreate saved not null");
@@ -342,6 +353,7 @@ public class NotesListFragment extends ListFragment implements
 		while (index >= getListAdapter().getCount()) {
 			index = index - 1;
 		}
+		Log.d(TAG, "showNote valid index to show is: " + index);
 		if (index == -1 && !currentQuery.isEmpty()) {
 			// Empty search, do NOT display new note.
 			mCurCheckPosition = 0;
@@ -425,6 +437,7 @@ public class NotesListFragment extends ListFragment implements
 	 */
 	public void reSelectId() {
 		int pos = getPosOfId(mCurId);
+		Log.d(TAG, "reSelectId id pos: " + mCurId + " " + pos);
 		// This happens in a search. Don't destroy id information in selectPos
 		// when it is invalid
 		if (pos != -1) {
@@ -505,18 +518,13 @@ public class NotesListFragment extends ListFragment implements
 
 	private void selectPos(int pos) {
 		if (checkMode == CHECK_SINGLE_FUTURE) {
-			setSingleCheck(pos);
+			setSingleCheck();
 		}
 		Log.d(TAG, "selectPos: " + pos);
 		getListView().setItemChecked(pos, true);
 	}
-
+	
 	public void setSingleCheck() {
-		setSingleCheck(mCurCheckPosition);
-	}
-
-	public void setSingleCheck(int pos) {
-		Log.d(TAG, "setSingleCheck: " + pos);
 		checkMode = CHECK_SINGLE;
 		// ListView lv = getListView();
 		lv.setLongClickable(true);
@@ -578,15 +586,26 @@ public class NotesListFragment extends ListFragment implements
 		selectPos(mCurCheckPosition);
 	}
 
-	private class ModeCallback implements MultiChoiceModeListener {
+	private class ModeCallbackHC implements MultiChoiceModeListener {
 
 		protected NotesListFragment list;
 
 		protected HashMap<Long, String> textToShare;
 
-		public ModeCallback(NotesListFragment list) {
+		protected OnModalDeleteListener onDeleteListener;
+
+		protected HashSet<Integer> notesToDelete;
+
+		public ModeCallbackHC(NotesListFragment list) {
 			textToShare = new HashMap<Long, String>();
+			notesToDelete = new HashSet<Integer>();
 			this.list = list;
+		}
+
+		public void setDeleteListener(
+				OnModalDeleteListener onDeleteListener) {
+			this.onDeleteListener = onDeleteListener;
+
 		}
 
 		protected Intent createShareIntent(String text) {
@@ -658,21 +677,6 @@ public class NotesListFragment extends ListFragment implements
 				inflater.inflate(R.menu.list_select_menu_dark, menu);
 			mode.setTitle("Select Items");
 
-			// Set file with share history to the provider and set the share
-			// intent.
-			android.view.MenuItem actionItem = menu
-					.findItem(R.id.menu_item_share_action_provider_action_bar);
-			// ShareActionProvider actionProvider = (ShareActionProvider)
-			// actionItem
-			// .getActionProvider();
-			// actionProvider
-			// .setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
-			// Note that you can set/change the intent any time,
-			// say when the user has selected an image.
-			// actionProvider.setShareIntent(createShareIntent());
-			//
-			// actionProvider.setOnShareTargetSelectedListener(this);
-
 			return true;
 		}
 
@@ -687,11 +691,7 @@ public class NotesListFragment extends ListFragment implements
 				android.view.MenuItem item) {
 			switch (item.getItemId()) {
 			case R.id.modal_share:
-				Toast.makeText(
-						activity.getApplicationContext(),
-						"Shared " + getListView().getCheckedItemCount()
-								+ " items\n\n" + buildTextToShare(),
-						Toast.LENGTH_SHORT).show();
+				shareNote(buildTextToShare());
 				mode.finish();
 				break;
 			case R.id.modal_copy:
@@ -705,6 +705,18 @@ public class NotesListFragment extends ListFragment implements
 						"Copied " + getListView().getCheckedItemCount()
 								+ " notes to clipboard", Toast.LENGTH_SHORT)
 						.show();
+				mode.finish();
+				break;
+			case R.id.modal_delete:
+				int num = notesToDelete.size();
+				if (onDeleteListener != null) {
+					for (int pos : notesToDelete) {
+						Log.d(TAG, "Deleting key: " + pos);
+					}
+					onDeleteListener.onModalDelete(notesToDelete);
+				}
+				Toast.makeText(activity.getApplicationContext(),
+						"Deleted " + num + " items", Toast.LENGTH_SHORT).show();
 				mode.finish();
 				break;
 			default:
@@ -729,8 +741,10 @@ public class NotesListFragment extends ListFragment implements
 			// Set the share intent with updated text
 			if (checked) {
 				addTextToShare(id);
+				this.notesToDelete.add(position);
 			} else {
 				delTextToShare(id);
+				this.notesToDelete.remove(position);
 			}
 			final int checkedCount = getListView().getCheckedItemCount();
 			switch (checkedCount) {
@@ -744,6 +758,13 @@ public class NotesListFragment extends ListFragment implements
 				mode.setSubtitle("" + checkedCount + " items selected");
 				break;
 			}
+		}
+
+		private void shareNote(String text) {
+			Intent share = new Intent(Intent.ACTION_SEND);
+			share.setType("text/plain");
+			share.putExtra(Intent.EXTRA_TEXT, text);
+			startActivity(Intent.createChooser(share, "Share note"));
 		}
 
 		public Cursor openNote(Uri uri) {
@@ -771,8 +792,36 @@ public class NotesListFragment extends ListFragment implements
 
 	}
 
-	private class ModeCallbackICS extends ModeCallback implements
+	private class ModeCallbackICS extends ModeCallbackHC implements
 			OnShareTargetSelectedListener {
+
+		@Override
+		public boolean onCreateActionMode(android.view.ActionMode mode,
+				android.view.Menu menu) {
+			MenuInflater inflater = activity.getMenuInflater();
+			if (FragmentLayout.lightTheme)
+				inflater.inflate(R.menu.list_select_menu_light, menu);
+			else
+				inflater.inflate(R.menu.list_select_menu_dark, menu);
+			mode.setTitle("Select Items");
+
+			// Set file with share history to the provider and set the share
+			// intent.
+			android.view.MenuItem actionItem = menu
+					.findItem(R.id.modal_item_share_action_provider_action_bar);
+
+			ShareActionProvider actionProvider = (ShareActionProvider) actionItem
+					.getActionProvider();
+			actionProvider
+					.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+			// Note that you can set/change the intent any time,
+			// say when the user has selected an image.
+			actionProvider.setShareIntent(createShareIntent());
+
+			actionProvider.setOnShareTargetSelectedListener(this);
+
+			return true;
+		}
 
 		public ModeCallbackICS(NotesListFragment list) {
 			super(list);
@@ -785,11 +834,12 @@ public class NotesListFragment extends ListFragment implements
 			intent.putExtra(Intent.EXTRA_TEXT, buildTextToShare());
 			return false;
 		}
-
 	}
 
 	public void setOnDeleteListener(OnEditorDeleteListener fragmentLayout) {
 		this.onDeleteListener = fragmentLayout;
+		if (modeCallback != null)
+			modeCallback.setDeleteListener(this);
 	}
 
 	@Override
@@ -799,4 +849,35 @@ public class NotesListFragment extends ListFragment implements
 		reSelectId();
 	}
 
+	@Override
+	public void onModalDelete(Collection<Integer> positions) {
+		Log.d(TAG, "onModalDelete");
+		if (positions.contains(mCurCheckPosition)) {
+			Log.d(TAG, "onModalDelete contained");
+			//showNote(mCurCheckPosition);
+		}
+		else {
+			// We must recalculate the positions index of the current note
+			Log.d(TAG, "onModalDelete not contained, saving future id");
+			postDeleteId = mCurId;
+			//reSelectId();
+		}
+		
+		if (onDeleteListener != null) {
+			HashSet<Long> ids = new HashSet<Long>();
+			for (int pos: positions) {
+				Log.d(TAG, "onModalDelete pos: " + pos);
+				ids.add(getListAdapter().getItemId(pos));
+			}
+			onDeleteListener.onMultiDelete(ids, mCurId);
+		}
+		//reListNotes();
+		// Set single check to be able to select properly. Otherwise this might delete the note
+		//setSingleCheck();
+		
+		//selectPos(mCurCheckPosition);
+		//getListView().setItemChecked(mCurCheckPosition, true);
+	}
+
+	
 }

@@ -34,6 +34,7 @@
         android:layout_weight="1"
         android:gravity="center_vertical"
         android:singleLine="true"
+        android:theme="@style/ThemeHoloLightDarkActonBar"
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
 
@@ -44,6 +45,7 @@
         android:layout_height="fill_parent"
         android:gravity="center_vertical"
         android:paddingLeft="8dp"
+        android:theme="@style/ThemeHoloLightDarkActonBar"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 
 </LinearLayout>

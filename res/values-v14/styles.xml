@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- This theme doesn't exist in honeycomb -->
-    <!-- <style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light.DarkActionBar"></style> -->
-    <style name="ThemeHoloLightDarkActonBar" parent="@style/Theme.Sherlock.Light"></style>
+    <style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light.DarkActionBar"></style>
+    <!-- <style name="ThemeHoloLightDarkActonBar" parent="@style/Theme.Sherlock.Light"></style> -->
 </resources>

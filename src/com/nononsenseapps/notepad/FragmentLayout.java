@@ -1,6 +1,7 @@
 package com.nononsenseapps.notepad;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -24,6 +25,8 @@ public class FragmentLayout extends FragmentActivity implements
 	public static boolean lightTheme = false;
 	public static boolean shouldRestart = false;
 	public static boolean LANDSCAPE_MODE;
+	public static boolean AT_LEAST_ICS;
+	public static boolean AT_LEAST_HC;
 	
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
 
@@ -33,6 +36,8 @@ public class FragmentLayout extends FragmentActivity implements
 		super.onCreate(savedInstanceState);
 		
 		LANDSCAPE_MODE = getResources().getBoolean(R.bool.useLandscapeView);
+		AT_LEAST_ICS = getResources().getBoolean(R.bool.atLeastIceCreamSandwich);
+		AT_LEAST_HC = getResources().getBoolean(R.bool.atLeastHoneycomb);
 
 		// Setting theme here
 		readAndSetSettings();
@@ -268,6 +273,19 @@ public class FragmentLayout extends FragmentActivity implements
 		for(long id:ids) {
 			resolver.delete(NotesEditorFragment.getUriFrom(id), null, null);
 		}
+	}
+	
+	@Override
+	public void onMultiDelete(Collection<Long> ids, long curId) {
+		if (ids.contains(curId)) {
+			Log.d("FragmentLayout", "id was contained in multidelete, setting no save first");
+			NotesEditorFragment editor = (NotesEditorFragment) getSupportFragmentManager()
+					.findFragmentById(R.id.editor);
+			if (editor != null) {
+				editor.setNoSave();
+			}
+		}
+		deleteNotes(getContentResolver(), ids);
 	}
 	
 
