@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import com.nononsenseapps.notepad.FragmentLayout.NotesEditorActivity;
+import com.nononsenseapps.notepad.interfaces.Refresher;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -41,7 +42,7 @@ import android.widget.Toast;
 
 public class NotesListFragment extends ListFragment implements
 		SearchView.OnQueryTextListener, OnItemLongClickListener,
-		onNewNoteCreatedListener, OnModalDeleteListener {
+		onNewNoteCreatedListener, OnModalDeleteListener, Refresher {
 	int mCurCheckPosition = 0;
 
 	public static final String SELECTEDIDKEY = "selectedid";
@@ -64,6 +65,9 @@ public class NotesListFragment extends ListFragment implements
 
 	private long mCurId;
 
+	private boolean idInvalid = false;
+	private boolean posInvalid = false;
+
 	private SearchView mSearchView;
 
 	private static String SAVEDPOS = "curPos";
@@ -78,8 +82,6 @@ public class NotesListFragment extends ListFragment implements
 	private SupportActivity activity;
 
 	private OnEditorDeleteListener onDeleteListener;
-
-	private long postDeleteId;
 
 	@Override
 	public void onAttach(SupportActivity activity) {
@@ -523,7 +525,7 @@ public class NotesListFragment extends ListFragment implements
 		Log.d(TAG, "selectPos: " + pos);
 		getListView().setItemChecked(pos, true);
 	}
-	
+
 	public void setSingleCheck() {
 		checkMode = CHECK_SINGLE;
 		// ListView lv = getListView();
@@ -602,8 +604,7 @@ public class NotesListFragment extends ListFragment implements
 			this.list = list;
 		}
 
-		public void setDeleteListener(
-				OnModalDeleteListener onDeleteListener) {
+		public void setDeleteListener(OnModalDeleteListener onDeleteListener) {
 			this.onDeleteListener = onDeleteListener;
 
 		}
@@ -853,31 +854,47 @@ public class NotesListFragment extends ListFragment implements
 	public void onModalDelete(Collection<Integer> positions) {
 		Log.d(TAG, "onModalDelete");
 		if (positions.contains(mCurCheckPosition)) {
-			Log.d(TAG, "onModalDelete contained");
-			//showNote(mCurCheckPosition);
-		}
-		else {
+			Log.d(TAG, "onModalDelete contained setting id invalid");
+			idInvalid = true;
+		} else {
 			// We must recalculate the positions index of the current note
-			Log.d(TAG, "onModalDelete not contained, saving future id");
-			postDeleteId = mCurId;
-			//reSelectId();
+			Log.d(TAG, "onModalDelete not contained, setting pos invalid");
+			posInvalid = true;
 		}
-		
+
 		if (onDeleteListener != null) {
 			HashSet<Long> ids = new HashSet<Long>();
-			for (int pos: positions) {
+			for (int pos : positions) {
 				Log.d(TAG, "onModalDelete pos: " + pos);
 				ids.add(getListAdapter().getItemId(pos));
 			}
 			onDeleteListener.onMultiDelete(ids, mCurId);
 		}
-		//reListNotes();
-		// Set single check to be able to select properly. Otherwise this might delete the note
-		//setSingleCheck();
 		
-		//selectPos(mCurCheckPosition);
-		//getListView().setItemChecked(mCurCheckPosition, true);
+		// Need to refresh
+		Intent intent = activity.getIntent();
+		//intent.addFlags(activity.FLAG_ACTIVITY_SINGLE_TOP);
+		
+		//overridePendingTransition(0, 0);
+		//intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		//finish();
+		//overridePendingTransition(0, 0);
+		Log.d(TAG, "Launching intent: " + intent);
+		startActivity(intent);
 	}
 
-	
+	@Override
+	public void refresh() {
+		Log.d(TAG, "refresh time!. Is list updated?");
+		// recaLCULATE using posInvalid or idInvalid bools
+		
+		// reListNotes();
+		// Set single check to be able to select properly. Otherwise this might
+		// delete the note
+		// setSingleCheck();
+
+		// selectPos(mCurCheckPosition);
+		// getListView().setItemChecked(mCurCheckPosition, true);
+	}
+
 }

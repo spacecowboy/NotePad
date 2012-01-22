@@ -3,6 +3,8 @@ package com.nononsenseapps.notepad;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.nononsenseapps.notepad.interfaces.Refresher;
+
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -29,6 +31,8 @@ public class FragmentLayout extends FragmentActivity implements
 	public static boolean AT_LEAST_HC;
 	
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
+	
+	private Refresher list;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -55,8 +59,19 @@ public class FragmentLayout extends FragmentActivity implements
 				.findFragmentById(R.id.noteslistfragment);
 		
 		list.setOnDeleteListener(this);
+		
+		this.list = list;
 		// So editor can access it
 		ONDELETELISTENER = this;
+	}
+	
+	@Override
+	protected void onNewIntent(Intent intent) {
+		Log.d("FragmentLayout", "On New Intent list: " + list);
+		if (this.list != null) {
+			Log.d("FragmentLayout", "Calling refresh");
+			list.refresh();
+		}
 	}
 
 	@Override
@@ -285,6 +300,7 @@ public class FragmentLayout extends FragmentActivity implements
 				editor.setNoSave();
 			}
 		}
+		Log.d("FragmentLayout", "deleting notes...");
 		deleteNotes(getContentResolver(), ids);
 	}
 	
