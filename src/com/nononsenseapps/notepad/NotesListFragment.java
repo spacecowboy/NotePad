@@ -106,7 +106,7 @@ public class NotesListFragment extends ListFragment implements
 		listAllNotes();
 
 		boolean showList = PreferenceManager.getDefaultSharedPreferences(
-				activity.getApplicationContext())
+				activity)
 				.getBoolean(SHOWLISTKEY, false);
 
 		if (getListAdapter().isEmpty()) {
@@ -117,10 +117,10 @@ public class NotesListFragment extends ListFragment implements
 					+ ", " + mCurId);
 		} else {
 			mCurId = PreferenceManager.getDefaultSharedPreferences(
-					activity.getApplicationContext())
+					activity)
 					.getLong(SELECTEDIDKEY, -1);
 			String query = PreferenceManager.getDefaultSharedPreferences(
-					activity.getApplicationContext()).getString(SEARCHQUERYKEY,
+					activity).getString(SEARCHQUERYKEY,
 					"");
 			mSearchView.setQuery(query, false); // "true" should call the
 												// listener
@@ -257,7 +257,7 @@ public class NotesListFragment extends ListFragment implements
 		super.onPause();
 		Log.d("NotesListFragment", "onPause");
 		SharedPreferences.Editor prefEditor = PreferenceManager
-				.getDefaultSharedPreferences(activity.getApplicationContext())
+				.getDefaultSharedPreferences(activity)
 				.edit();
 		prefEditor.putLong(SELECTEDIDKEY, mCurId);
 		prefEditor.putString(SEARCHQUERYKEY, mSearchView.getQuery().toString());
@@ -411,7 +411,7 @@ public class NotesListFragment extends ListFragment implements
 				// Otherwise we need to launch a new activity to display
 				// the dialog fragment with selected text.
 				Intent intent = new Intent();
-				intent.setClass(activity.getApplicationContext(),
+				intent.setClass(activity,
 						NotesEditorActivity.class);
 				intent.putExtra(NotesEditorFragment.KEYID, mCurId);
 				startActivity(intent);
@@ -473,7 +473,7 @@ public class NotesListFragment extends ListFragment implements
 
 		// Creates the backing adapter for the ListView.
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-				activity.getApplicationContext(), themed_item, cursor,
+				activity, themed_item, cursor,
 				dataColumns, viewIDs);
 
 		return adapter;
@@ -677,7 +677,6 @@ public class NotesListFragment extends ListFragment implements
 		public boolean onCreateActionMode(android.view.ActionMode mode,
 				android.view.Menu menu) {
 			// Clear data!
-			Log.d("MODALCALLBACK", "onCreateAction del-size: " + notesToDelete.size());
 			this.textToShare.clear();
 			this.notesToDelete.clear();
 			
@@ -712,7 +711,7 @@ public class NotesListFragment extends ListFragment implements
 				clipboard.setPrimaryClip(ClipData.newPlainText("Note",
 						buildTextToShare()));
 				Toast.makeText(
-						activity.getApplicationContext(),
+						activity,
 						"Copied " + getListView().getCheckedItemCount()
 								+ " notes to clipboard", Toast.LENGTH_SHORT)
 						.show();
@@ -726,12 +725,12 @@ public class NotesListFragment extends ListFragment implements
 					}
 					onDeleteListener.onModalDelete(notesToDelete);
 				}
-				Toast.makeText(activity.getApplicationContext(),
+				Toast.makeText(activity,
 						"Deleted " + num + " items", Toast.LENGTH_SHORT).show();
 				mode.finish();
 				break;
 			default:
-				Toast.makeText(activity.getApplicationContext(),
+				Toast.makeText(activity,
 						"Clicked " + item.getTitle(), Toast.LENGTH_SHORT)
 						.show();
 				break;
@@ -744,10 +743,6 @@ public class NotesListFragment extends ListFragment implements
 			Log.d("modeCallback", "onDestroyActionMode: " + mode.toString()
 					+ ", " + mode.getMenu().toString());
 			list.setFutureSingleCheck();
-			
-			// Make sure to clear these
-			this.textToShare.clear();
-			this.notesToDelete.clear();
 		}
 
 		@Override
@@ -813,7 +808,6 @@ public class NotesListFragment extends ListFragment implements
 		@Override
 		public boolean onCreateActionMode(android.view.ActionMode mode,
 				android.view.Menu menu) {
-			Log.d("MODALCALLBACK", "onCreateAction del-size: " + notesToDelete.size());
 			this.textToShare.clear();
 			this.notesToDelete.clear();
 			
@@ -899,7 +893,7 @@ public class NotesListFragment extends ListFragment implements
 		//overridePendingTransition(0, 0);
 		//startActivity(intent);
 		
-		Intent intent = new Intent(activity.getApplicationContext(),
+		Intent intent = new Intent(activity,
 				FragmentLayout.class);
 		
 		//intent.setData(data);
