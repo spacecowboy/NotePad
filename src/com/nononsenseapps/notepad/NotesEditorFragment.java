@@ -10,11 +10,12 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.SupportActivity;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
+
+import android.app.Activity;
+import android.app.Fragment;
+import android.view.Menu;
+import android.view.MenuItem;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -56,12 +57,12 @@ public class NotesEditorFragment extends Fragment {
 
 	private boolean timeToDie;
 
-	private SupportActivity activity;
+	private Activity activity;
 
 	private onNewNoteCreatedListener onNewNoteListener = null;
 	
 	@Override
-	public void onAttach(SupportActivity activity) {
+	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		this.activity = activity;
 	}
@@ -579,7 +580,7 @@ public class NotesEditorFragment extends Fragment {
 			 */
 			// if (isFinishing() && (length == 0)) {
 			if (text.isEmpty()) {
-				activity.setResult(FragmentActivity.RESULT_CANCELED);
+				activity.setResult(Activity.RESULT_CANCELED);
 				deleteNote();
 				// Tell list to reselect after deletion
 				this.onNewNoteListener.onNewNoteDeleted(getIdFromUri(mUri));

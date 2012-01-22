@@ -17,13 +17,17 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.app.ListFragment;
-import android.support.v4.app.SupportActivity;
-import android.support.v4.view.ActionMode;
-import android.support.v4.view.Menu;
-import android.support.v4.view.MenuItem;
-import android.support.v4.widget.SimpleCursorAdapter;
+
+import android.app.ActionBar;
+import android.app.Activity;
+import android.app.Fragment;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.app.ListFragment;
+import android.widget.SimpleCursorAdapter;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -79,12 +83,12 @@ public class NotesListFragment extends ListFragment implements
 
 	private ListView lv;
 
-	private SupportActivity activity;
+	private Activity activity;
 
 	private OnEditorDeleteListener onDeleteListener;
 
 	@Override
-	public void onAttach(SupportActivity activity) {
+	public void onAttach(Activity activity) {
 		Log.d(TAG, "onAttach");
 		super.onAttach(activity);
 		this.activity = activity;
@@ -553,6 +557,7 @@ public class NotesListFragment extends ListFragment implements
 		checkMode = CHECK_MULTI;
 		// ListView lv = getListView();
 		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		lv.clearChoices();
 		lv.setMultiChoiceModeListener(modeCallback);
 		lv.setItemChecked(pos, true);
 	}
@@ -671,6 +676,11 @@ public class NotesListFragment extends ListFragment implements
 		@Override
 		public boolean onCreateActionMode(android.view.ActionMode mode,
 				android.view.Menu menu) {
+			// Clear data!
+			Log.d("MODALCALLBACK", "onCreateAction del-size: " + notesToDelete.size());
+			this.textToShare.clear();
+			this.notesToDelete.clear();
+			
 			MenuInflater inflater = activity.getMenuInflater();
 			if (FragmentLayout.lightTheme)
 				inflater.inflate(R.menu.list_select_menu_light, menu);
@@ -734,6 +744,10 @@ public class NotesListFragment extends ListFragment implements
 			Log.d("modeCallback", "onDestroyActionMode: " + mode.toString()
 					+ ", " + mode.getMenu().toString());
 			list.setFutureSingleCheck();
+			
+			// Make sure to clear these
+			this.textToShare.clear();
+			this.notesToDelete.clear();
 		}
 
 		@Override
@@ -799,6 +813,10 @@ public class NotesListFragment extends ListFragment implements
 		@Override
 		public boolean onCreateActionMode(android.view.ActionMode mode,
 				android.view.Menu menu) {
+			Log.d("MODALCALLBACK", "onCreateAction del-size: " + notesToDelete.size());
+			this.textToShare.clear();
+			this.notesToDelete.clear();
+			
 			MenuInflater inflater = activity.getMenuInflater();
 			if (FragmentLayout.lightTheme)
 				inflater.inflate(R.menu.list_select_menu_light, menu);
@@ -872,13 +890,19 @@ public class NotesListFragment extends ListFragment implements
 		}
 		
 		// Need to refresh
-		Intent intent = activity.getIntent();
+		//Intent intent = activity.getIntent();
 		//intent.addFlags(activity.FLAG_ACTIVITY_SINGLE_TOP);
 		
 		//overridePendingTransition(0, 0);
 		//intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
 		//finish();
 		//overridePendingTransition(0, 0);
+		//startActivity(intent);
+		
+		Intent intent = new Intent(activity.getApplicationContext(),
+				FragmentLayout.class);
+		
+		//intent.setData(data);
 		Log.d(TAG, "Launching intent: " + intent);
 		startActivity(intent);
 	}
@@ -886,7 +910,19 @@ public class NotesListFragment extends ListFragment implements
 	@Override
 	public void refresh() {
 		Log.d(TAG, "refresh time!. Is list updated?");
-		// recaLCULATE using posInvalid or idInvalid bools
+		// reList first so we don't select deletid ids
+		reListNotes();
+		
+		if (posInvalid) {
+			posInvalid = false;
+			// Position is invalid, but editor is showing a valid note still. Recalculate its position
+			reSelectId();
+		}
+		else if (idInvalid) {
+			idInvalid = false;
+			// Note is invalid, so display the note at position closest to where we were
+			showNote(mCurCheckPosition);
+		}
 		
 		// reListNotes();
 		// Set single check to be able to select properly. Otherwise this might

@@ -5,24 +5,21 @@ import java.util.Collection;
 
 import com.nononsenseapps.notepad.interfaces.Refresher;
 
+import android.app.ActionBar;
+import android.app.Activity;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBar;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.MenuItem;
 import android.util.Log;
-import android.widget.TextView.OnEditorActionListener;
+import android.view.MenuItem;
 
 /**
  * Showing a single fragment in an activity.
  */
-public class FragmentLayout extends FragmentActivity implements
+public class FragmentLayout extends Activity implements
 		OnSharedPreferenceChangeListener, OnEditorDeleteListener {
 	public static boolean lightTheme = false;
 	public static boolean shouldRestart = false;
@@ -46,16 +43,16 @@ public class FragmentLayout extends FragmentActivity implements
 		// Setting theme here
 		readAndSetSettings();
 
-		Log.d("FragmentActivity", "onCreate before");
+		Log.d("Activity", "onCreate before");
 		// XML makes sure notes list is displayed. And editor too in landscape
 		if (lightTheme)
 			setContentView(R.layout.fragment_layout_light);
 		else
 			setContentView(R.layout.fragment_layout_dark);
-		Log.d("FragmentActivity", "onCreate after");
+		Log.d("Activity", "onCreate after");
 		
 		// Set this as delete listener
-		NotesListFragment list = (NotesListFragment) getSupportFragmentManager()
+		NotesListFragment list = (NotesListFragment) getFragmentManager()
 				.findFragmentById(R.id.noteslistfragment);
 		
 		list.setOnDeleteListener(this);
@@ -137,9 +134,9 @@ public class FragmentLayout extends FragmentActivity implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// both list and editor should be notified
-		NotesListFragment list = (NotesListFragment) getSupportFragmentManager()
+		NotesListFragment list = (NotesListFragment) getFragmentManager()
 				.findFragmentById(R.id.noteslistfragment);
-		NotesEditorFragment editor = (NotesEditorFragment) getSupportFragmentManager()
+		NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
 				.findFragmentById(R.id.editor);
 		switch (item.getItemId()) {
 		case R.id.menu_delete:
@@ -169,7 +166,7 @@ public class FragmentLayout extends FragmentActivity implements
 	 * This is a secondary activity, to show what the user has selected when the
 	 * screen is not large enough to show it all in one activity.
 	 */
-	public static class NotesEditorActivity extends FragmentActivity implements onNewNoteCreatedListener {
+	public static class NotesEditorActivity extends Activity implements onNewNoteCreatedListener {
 		private NotesEditorFragment editorFragment;
 		private long currentId = -1;
 
@@ -187,7 +184,7 @@ public class FragmentLayout extends FragmentActivity implements
 			}
 
 			// Set up navigation (adds nice arrow to icon)
-			ActionBar actionBar = getSupportActionBar();
+			ActionBar actionBar = getActionBar();
 			actionBar.setDisplayHomeAsUpEnabled(true);
 
 			if (LANDSCAPE_MODE ) {
@@ -205,7 +202,7 @@ public class FragmentLayout extends FragmentActivity implements
 			editorFragment = new NotesEditorFragment();
 			editorFragment.setOnNewNoteCreatedListener(this);
 			editorFragment.setArguments(getIntent().getExtras());
-			getSupportFragmentManager().beginTransaction()
+			getFragmentManager().beginTransaction()
 					.add(android.R.id.content, editorFragment).commit();
 			// }
 		}
@@ -219,11 +216,11 @@ public class FragmentLayout extends FragmentActivity implements
 			case R.id.menu_delete:
 				editorFragment.setNoSave();
 				FragmentLayout.deleteNote(getContentResolver(), currentId);
-				setResult(FragmentActivity.RESULT_CANCELED);
+				setResult(Activity.RESULT_CANCELED);
 				finish();
 				return true;
 			case R.id.menu_revert:
-				setResult(FragmentActivity.RESULT_CANCELED);
+				setResult(Activity.RESULT_CANCELED);
 				finish();
 				break;
 			}
@@ -294,7 +291,7 @@ public class FragmentLayout extends FragmentActivity implements
 	public void onMultiDelete(Collection<Long> ids, long curId) {
 		if (ids.contains(curId)) {
 			Log.d("FragmentLayout", "id was contained in multidelete, setting no save first");
-			NotesEditorFragment editor = (NotesEditorFragment) getSupportFragmentManager()
+			NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
 					.findFragmentById(R.id.editor);
 			if (editor != null) {
 				editor.setNoSave();
@@ -305,7 +302,7 @@ public class FragmentLayout extends FragmentActivity implements
 	}
 	
 
-//	public static class NotesPreferencesDialog extends FragmentActivity {
+//	public static class NotesPreferencesDialog extends Activity {
 //		@Override
 //		protected void onCreate(Bundle savedInstanceState) {
 //			super.onCreate(savedInstanceState);
@@ -317,7 +314,7 @@ public class FragmentLayout extends FragmentActivity implements
 //			}
 //
 //			// Display the fragment as the main content.
-//			FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//			FragmentTransaction ft = getFragmentManager().beginTransaction();
 //			ft.replace(android.R.id.content, new NotesPreferenceActivity());
 //			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 //			ft.commit();

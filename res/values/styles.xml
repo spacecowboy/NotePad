@@ -7,15 +7,9 @@
          been defined.  Look at values-11/styles.xml for a variation that is
          selected when the holographic theme is available.
     -->
-    <!-- <style name="ThemeHolo" parent="@android:style/Theme"></style>
+    <style name="ThemeHolo" parent="@android:style/Theme"></style>
 
-    
-
-    <style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Light"></style> -->
-    
-    <style name="ThemeHolo" parent="@style/Theme.Sherlock"></style>
-
-    <style name="ThemeHoloLightDarkActonBar" parent="@style/Theme.Sherlock.Light"></style>
+    <style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Light"></style>
     
     <style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.Dialog"></style>
 
