@@ -1,4 +1,4 @@
-package com.nononsenseapps.notepad;
+package com.nononsenseapps.notepad.interfaces;
 
 public interface onNewNoteCreatedListener {
 	public void onNewNoteCreated(long id);

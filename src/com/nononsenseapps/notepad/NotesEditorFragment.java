@@ -1,5 +1,7 @@
 package com.nononsenseapps.notepad;
 
+import com.nononsenseapps.notepad.interfaces.onNewNoteCreatedListener;
+
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
@@ -456,14 +458,17 @@ public class NotesEditorFragment extends Fragment {
 	@Override
 	public void onResume() {
 		super.onResume();
-		Log.d("NotesEditorFragment", "onResume");
+		if (!timeToDie) {
+			Log.d("NotesEditorFragment", "onResume");
 
-		// Closed with new note being only note. That was deleted. Requery and
-		// start new note.
-		if (mCursor == null || mCursor.isClosed()) {
-			openNote(null);
-		} 
-		showTheNote();
+			// Closed with new note being only note. That was deleted. Requery
+			// and
+			// start new note.
+			if (mCursor == null || mCursor.isClosed()) {
+				openNote(null);
+			}
+			showTheNote();
+		}
 	}
 
 	private void showTheNote() {

@@ -1,4 +1,4 @@
-package com.nononsenseapps.notepad;
+package com.nononsenseapps.notepad.interfaces;
 
 import java.util.Collection;
 

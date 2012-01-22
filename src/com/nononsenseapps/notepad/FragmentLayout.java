@@ -3,7 +3,9 @@ package com.nononsenseapps.notepad;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.Refresher;
+import com.nononsenseapps.notepad.interfaces.onNewNoteCreatedListener;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -26,18 +28,19 @@ public class FragmentLayout extends Activity implements
 	public static boolean LANDSCAPE_MODE;
 	public static boolean AT_LEAST_ICS;
 	public static boolean AT_LEAST_HC;
-	
+
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
-	
+
 	private Refresher list;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// Must set theme before this
 		super.onCreate(savedInstanceState);
-		
+
 		LANDSCAPE_MODE = getResources().getBoolean(R.bool.useLandscapeView);
-		AT_LEAST_ICS = getResources().getBoolean(R.bool.atLeastIceCreamSandwich);
+		AT_LEAST_ICS = getResources()
+				.getBoolean(R.bool.atLeastIceCreamSandwich);
 		AT_LEAST_HC = getResources().getBoolean(R.bool.atLeastHoneycomb);
 
 		// Setting theme here
@@ -50,18 +53,18 @@ public class FragmentLayout extends Activity implements
 		else
 			setContentView(R.layout.fragment_layout_dark);
 		Log.d("Activity", "onCreate after");
-		
+
 		// Set this as delete listener
 		NotesListFragment list = (NotesListFragment) getFragmentManager()
 				.findFragmentById(R.id.noteslistfragment);
-		
+
 		list.setOnDeleteListener(this);
-		
+
 		this.list = list;
 		// So editor can access it
 		ONDELETELISTENER = this;
 	}
-	
+
 	@Override
 	protected void onNewIntent(Intent intent) {
 		Log.d("FragmentLayout", "On New Intent list: " + list);
@@ -142,10 +145,10 @@ public class FragmentLayout extends Activity implements
 		case R.id.menu_delete:
 			if (editor != null)
 				editor.setNoSave();
-			//delete note
+			// delete note
 			if (list != null)
 				list.onDelete();
-			
+
 			break;
 		case R.id.menu_preferences:
 			Log.d("NotesListFragment", "onOptionsSelection pref");
@@ -154,7 +157,7 @@ public class FragmentLayout extends Activity implements
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	private void showPrefs() {
 		// launch a new activity to display the dialog
 		Intent intent = new Intent();
@@ -166,7 +169,8 @@ public class FragmentLayout extends Activity implements
 	 * This is a secondary activity, to show what the user has selected when the
 	 * screen is not large enough to show it all in one activity.
 	 */
-	public static class NotesEditorActivity extends Activity implements onNewNoteCreatedListener {
+	public static class NotesEditorActivity extends Activity implements
+			onNewNoteCreatedListener {
 		private NotesEditorFragment editorFragment;
 		private long currentId = -1;
 
@@ -187,7 +191,7 @@ public class FragmentLayout extends Activity implements
 			ActionBar actionBar = getActionBar();
 			actionBar.setDisplayHomeAsUpEnabled(true);
 
-			if (LANDSCAPE_MODE ) {
+			if (getResources().getBoolean(R.bool.useLandscapeView)) {
 				// If the screen is now in landscape mode, we can show the
 				// dialog in-line with the list so we don't need this activity.
 				Log.d("NotesEditorActivity",
@@ -232,28 +236,32 @@ public class FragmentLayout extends Activity implements
 			super.onPause();
 			Log.d("NotesEditorActivity", "onPause");
 			if (isFinishing()) {
-				Log.d("NotesEditorActivity",
-						"onPause, telling list to display list");
-				SharedPreferences.Editor prefEditor = PreferenceManager
-						.getDefaultSharedPreferences(this).edit();
-				prefEditor.putBoolean(NotesListFragment.SHOWLISTKEY, true);
-				prefEditor.commit();
+//				Log.d("NotesEditorActivity",
+//						"onPause, telling list to display list");
+//				SharedPreferences.Editor prefEditor = PreferenceManager
+//						.getDefaultSharedPreferences(this).edit();
+//				prefEditor.putBoolean(NotesListFragment.SHOWLISTKEY, true);
+//				prefEditor.commit();
 			}
 		}
 
 		@Override
 		public void onResume() {
 			super.onResume();
-			Log.d("NotesEditorActivity", "onResume telling list to display me");
-			SharedPreferences.Editor prefEditor = PreferenceManager
-					.getDefaultSharedPreferences(this).edit();
-			prefEditor.putBoolean(NotesListFragment.SHOWLISTKEY, false);
-			prefEditor.commit();
+			if (getResources().getBoolean(R.bool.useLandscapeView)) {
+//				Log.d("NotesEditorActivity",
+//						"onResume telling list to display me");
+//				SharedPreferences.Editor prefEditor = PreferenceManager
+//						.getDefaultSharedPreferences(this).edit();
+//				prefEditor.putBoolean(NotesListFragment.SHOWLISTKEY, false);
+//				prefEditor.commit();
+				finish();
+			}
 		}
 
 		@Override
 		public void onNewNoteCreated(long id) {
-			this.currentId  = id;
+			this.currentId = id;
 		}
 
 		@Override
@@ -266,9 +274,10 @@ public class FragmentLayout extends Activity implements
 	public void onEditorDelete(long id) {
 		deleteNote(getContentResolver(), id);
 	}
-	
+
 	/**
 	 * Calls deleteNotes wrapped in ArrayList
+	 * 
 	 * @param id
 	 */
 	public static void deleteNote(ContentResolver resolver, long id) {
@@ -276,21 +285,23 @@ public class FragmentLayout extends Activity implements
 		idList.add(id);
 		deleteNotes(resolver, idList);
 	}
-	
+
 	/**
 	 * Delete all notes given from database
+	 * 
 	 * @param ids
 	 */
 	public static void deleteNotes(ContentResolver resolver, Iterable<Long> ids) {
-		for(long id:ids) {
+		for (long id : ids) {
 			resolver.delete(NotesEditorFragment.getUriFrom(id), null, null);
 		}
 	}
-	
+
 	@Override
 	public void onMultiDelete(Collection<Long> ids, long curId) {
 		if (ids.contains(curId)) {
-			Log.d("FragmentLayout", "id was contained in multidelete, setting no save first");
+			Log.d("FragmentLayout",
+					"id was contained in multidelete, setting no save first");
 			NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
 					.findFragmentById(R.id.editor);
 			if (editor != null) {
@@ -300,34 +311,33 @@ public class FragmentLayout extends Activity implements
 		Log.d("FragmentLayout", "deleting notes...");
 		deleteNotes(getContentResolver(), ids);
 	}
-	
 
-//	public static class NotesPreferencesDialog extends Activity {
-//		@Override
-//		protected void onCreate(Bundle savedInstanceState) {
-//			super.onCreate(savedInstanceState);
-//
-//			if (FragmentLayout.lightTheme) {
-//				setTheme(R.style.ThemeHoloDialogNoActionBar);
-//			} else {
-//				setTheme(R.style.ThemeHoloDialogNoActionBar);
-//			}
-//
-//			// Display the fragment as the main content.
-//			FragmentTransaction ft = getFragmentManager().beginTransaction();
-//			ft.replace(android.R.id.content, new NotesPreferenceActivity());
-//			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-//			ft.commit();
-//		}
-//
-//		@Override
-//		public boolean onOptionsItemSelected(MenuItem item) {
-//			switch (item.getItemId()) {
-//			case android.R.id.home:
-//				finish();
-//				break;
-//			}
-//			return super.onOptionsItemSelected(item);
-//		}
-//	}
+	// public static class NotesPreferencesDialog extends Activity {
+	// @Override
+	// protected void onCreate(Bundle savedInstanceState) {
+	// super.onCreate(savedInstanceState);
+	//
+	// if (FragmentLayout.lightTheme) {
+	// setTheme(R.style.ThemeHoloDialogNoActionBar);
+	// } else {
+	// setTheme(R.style.ThemeHoloDialogNoActionBar);
+	// }
+	//
+	// // Display the fragment as the main content.
+	// FragmentTransaction ft = getFragmentManager().beginTransaction();
+	// ft.replace(android.R.id.content, new NotesPreferenceActivity());
+	// ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+	// ft.commit();
+	// }
+	//
+	// @Override
+	// public boolean onOptionsItemSelected(MenuItem item) {
+	// switch (item.getItemId()) {
+	// case android.R.id.home:
+	// finish();
+	// break;
+	// }
+	// return super.onOptionsItemSelected(item);
+	// }
+	// }
 }

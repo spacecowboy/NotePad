@@ -6,7 +6,10 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import com.nononsenseapps.notepad.FragmentLayout.NotesEditorActivity;
+import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
+import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
 import com.nononsenseapps.notepad.interfaces.Refresher;
+import com.nononsenseapps.notepad.interfaces.onNewNoteCreatedListener;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -49,7 +52,7 @@ public class NotesListFragment extends ListFragment implements
 		onNewNoteCreatedListener, OnModalDeleteListener, Refresher {
 	int mCurCheckPosition = 0;
 
-	public static final String SELECTEDIDKEY = "selectedid";
+	public static final String SELECTEDPOS = "selectedpos";
 	public static final String SEARCHQUERYKEY = "searchqueryid";
 
 	// For logging and debugging
@@ -62,7 +65,6 @@ public class NotesListFragment extends ListFragment implements
 			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
 			NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
-	public static final String SHOWLISTKEY = "showList";
 	private static final int CHECK_SINGLE = 1;
 	private static final int CHECK_MULTI = 2;
 	private static final int CHECK_SINGLE_FUTURE = 3;
@@ -105,8 +107,8 @@ public class NotesListFragment extends ListFragment implements
 		// Populate list
 		listAllNotes();
 
-		boolean showList = PreferenceManager.getDefaultSharedPreferences(
-				activity).getBoolean(SHOWLISTKEY, false);
+		// boolean showList = PreferenceManager.getDefaultSharedPreferences(
+		// activity).getBoolean(SHOWLISTKEY, false);
 
 		if (getListAdapter().isEmpty()) {
 			// -1 will display a new note
@@ -115,13 +117,20 @@ public class NotesListFragment extends ListFragment implements
 			Log.d("NotesListFragment", "Setting data: " + mCurCheckPosition
 					+ ", " + mCurId);
 		} else {
-			mCurId = PreferenceManager.getDefaultSharedPreferences(activity)
-					.getLong(SELECTEDIDKEY, -1);
+			Log.d("NotesListFragment", "Setting data not empty first: "
+					+ mCurCheckPosition + ", " + mCurId);
+			mCurCheckPosition = PreferenceManager.getDefaultSharedPreferences(
+					activity).getInt(SELECTEDPOS, -1);
+			mCurId = -1;
+
+			setSingleCheck();
+
 			String query = PreferenceManager.getDefaultSharedPreferences(
 					activity).getString(SEARCHQUERYKEY, "");
 			mSearchView.setQuery(query, false); // "true" should call the
 												// listener
-			onQueryTextChange(query);
+
+			// onQueryTextChange(query);
 
 			// This should not be needed
 			// If there was a query
@@ -138,16 +147,10 @@ public class NotesListFragment extends ListFragment implements
 
 		// if (mDualPane) {
 		// In dual-pane mode, the list view highlights the selected item.
-		setSingleCheck();
-		Log.d("NotesListFragment",
-				"result for showNote: "
-						+ (!getListAdapter().isEmpty() && (FragmentLayout.LANDSCAPE_MODE || !showList))
-						+ !getListAdapter().isEmpty()
-						+ FragmentLayout.LANDSCAPE_MODE + !showList);
+
 		// }
-		if (!getListAdapter().isEmpty()
-				&& (FragmentLayout.LANDSCAPE_MODE || !showList)) {
-			// Only display note in singlepane if user had one showing
+		if (!getListAdapter().isEmpty()) {
+			// && (FragmentLayout.LANDSCAPE_MODE)) {
 			showNote(mCurCheckPosition);
 		}
 	}
@@ -241,8 +244,8 @@ public class NotesListFragment extends ListFragment implements
 
 		if (savedInstanceState != null) {
 			Log.d("NotesListFragment", "onCreate saved not null");
-			mCurCheckPosition = savedInstanceState.getInt(SAVEDPOS);
-			mCurId = savedInstanceState.getLong(SAVEDID);
+			// mCurCheckPosition = savedInstanceState.getInt(SAVEDPOS);
+			// mCurId = savedInstanceState.getLong(SAVEDID);
 		}
 	}
 
@@ -260,12 +263,8 @@ public class NotesListFragment extends ListFragment implements
 		Log.d("NotesListFragment", "onPause");
 		SharedPreferences.Editor prefEditor = PreferenceManager
 				.getDefaultSharedPreferences(activity).edit();
-		prefEditor.putLong(SELECTEDIDKEY, mCurId);
+		prefEditor.putInt(SELECTEDPOS, mCurCheckPosition);
 		prefEditor.putString(SEARCHQUERYKEY, mSearchView.getQuery().toString());
-		if (FragmentLayout.LANDSCAPE_MODE) {
-			// No editor activity to do this
-			prefEditor.putBoolean(NotesListFragment.SHOWLISTKEY, false);
-		}
 		prefEditor.commit();
 	}
 
@@ -282,7 +281,7 @@ public class NotesListFragment extends ListFragment implements
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Log.d("NotesListFragment", "Clicked: " + position + ", " + id);
-		if (position != mCurCheckPosition) {
+		if (position != mCurCheckPosition || !FragmentLayout.LANDSCAPE_MODE) {
 			showNote(position);
 		}
 		// Remove focus from search window
@@ -345,7 +344,7 @@ public class NotesListFragment extends ListFragment implements
 											// order.
 		// Or Honeycomb will crash
 		activity.stopManagingCursor(cursor);
-		
+
 		if (cursor == null) {
 			// There are no results
 		} else {
@@ -791,8 +790,9 @@ public class NotesListFragment extends ListFragment implements
 			 * should use android.content.AsyncQueryHandler or
 			 * android.os.AsyncTask.
 			 */
-			Cursor cursor = activity.managedQuery(uri, // The URI that gets multiple
-												// notes from
+			Cursor cursor = activity.managedQuery(uri, // The URI that gets
+														// multiple
+					// notes from
 					// the provider.
 					PROJECTION, // A projection that returns the note ID and
 								// note
