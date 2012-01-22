@@ -106,8 +106,7 @@ public class NotesListFragment extends ListFragment implements
 		listAllNotes();
 
 		boolean showList = PreferenceManager.getDefaultSharedPreferences(
-				activity)
-				.getBoolean(SHOWLISTKEY, false);
+				activity).getBoolean(SHOWLISTKEY, false);
 
 		if (getListAdapter().isEmpty()) {
 			// -1 will display a new note
@@ -116,12 +115,10 @@ public class NotesListFragment extends ListFragment implements
 			Log.d("NotesListFragment", "Setting data: " + mCurCheckPosition
 					+ ", " + mCurId);
 		} else {
-			mCurId = PreferenceManager.getDefaultSharedPreferences(
-					activity)
+			mCurId = PreferenceManager.getDefaultSharedPreferences(activity)
 					.getLong(SELECTEDIDKEY, -1);
 			String query = PreferenceManager.getDefaultSharedPreferences(
-					activity).getString(SEARCHQUERYKEY,
-					"");
+					activity).getString(SEARCHQUERYKEY, "");
 			mSearchView.setQuery(query, false); // "true" should call the
 												// listener
 			onQueryTextChange(query);
@@ -142,6 +139,11 @@ public class NotesListFragment extends ListFragment implements
 		// if (mDualPane) {
 		// In dual-pane mode, the list view highlights the selected item.
 		setSingleCheck();
+		Log.d("NotesListFragment",
+				"result for showNote: "
+						+ (!getListAdapter().isEmpty() && (FragmentLayout.LANDSCAPE_MODE || !showList))
+						+ !getListAdapter().isEmpty()
+						+ FragmentLayout.LANDSCAPE_MODE + !showList);
 		// }
 		if (!getListAdapter().isEmpty()
 				&& (FragmentLayout.LANDSCAPE_MODE || !showList)) {
@@ -257,8 +259,7 @@ public class NotesListFragment extends ListFragment implements
 		super.onPause();
 		Log.d("NotesListFragment", "onPause");
 		SharedPreferences.Editor prefEditor = PreferenceManager
-				.getDefaultSharedPreferences(activity)
-				.edit();
+				.getDefaultSharedPreferences(activity).edit();
 		prefEditor.putLong(SELECTEDIDKEY, mCurId);
 		prefEditor.putString(SEARCHQUERYKEY, mSearchView.getQuery().toString());
 		if (FragmentLayout.LANDSCAPE_MODE) {
@@ -274,6 +275,8 @@ public class NotesListFragment extends ListFragment implements
 		Log.d("NotesListFragment", "onResume");
 		// Remove focus from search window
 		activity.findViewById(R.id.search_view).clearFocus();
+		// Titles might have changed so re-list and select notes
+
 	}
 
 	@Override
@@ -305,6 +308,8 @@ public class NotesListFragment extends ListFragment implements
 				null, // No where clause, therefore no where column values.
 				NotePad.Notes.SORT_ORDER // Use the default sort order.
 				);
+		// Or Honeycomb will crash
+		activity.stopManagingCursor(cursor);
 
 		/*
 		 * The following two arrays create a "map" between columns in the cursor
@@ -338,12 +343,13 @@ public class NotesListFragment extends ListFragment implements
 				new String[] { query }, // Only these column values
 				NotePad.Notes.SORT_ORDER); // Use the default sort
 											// order.
-
+		// Or Honeycomb will crash
+		activity.stopManagingCursor(cursor);
+		
 		if (cursor == null) {
 			// There are no results
 		} else {
 			SimpleCursorAdapter adapter = getThemedAdapter(cursor);
-
 			// Sets the ListView's adapter to be the cursor adapter that was
 			// just
 			// created.
@@ -411,8 +417,7 @@ public class NotesListFragment extends ListFragment implements
 				// Otherwise we need to launch a new activity to display
 				// the dialog fragment with selected text.
 				Intent intent = new Intent();
-				intent.setClass(activity,
-						NotesEditorActivity.class);
+				intent.setClass(activity, NotesEditorActivity.class);
 				intent.putExtra(NotesEditorFragment.KEYID, mCurId);
 				startActivity(intent);
 			}
@@ -431,6 +436,7 @@ public class NotesListFragment extends ListFragment implements
 	 * original
 	 */
 	public void onDelete() {
+		Log.d(TAG, "onDelete");
 		if (onDeleteListener != null) {
 			onDeleteListener.onEditorDelete(mCurId);
 		}
@@ -472,9 +478,8 @@ public class NotesListFragment extends ListFragment implements
 			themed_item = R.layout.noteslist_item_dark;
 
 		// Creates the backing adapter for the ListView.
-		SimpleCursorAdapter adapter = new SimpleCursorAdapter(
-				activity, themed_item, cursor,
-				dataColumns, viewIDs);
+		SimpleCursorAdapter adapter = new SimpleCursorAdapter(activity,
+				themed_item, cursor, dataColumns, viewIDs);
 
 		return adapter;
 	}
@@ -679,7 +684,7 @@ public class NotesListFragment extends ListFragment implements
 			// Clear data!
 			this.textToShare.clear();
 			this.notesToDelete.clear();
-			
+
 			MenuInflater inflater = activity.getMenuInflater();
 			if (FragmentLayout.lightTheme)
 				inflater.inflate(R.menu.list_select_menu_light, menu);
@@ -725,14 +730,13 @@ public class NotesListFragment extends ListFragment implements
 					}
 					onDeleteListener.onModalDelete(notesToDelete);
 				}
-				Toast.makeText(activity,
-						"Deleted " + num + " items", Toast.LENGTH_SHORT).show();
+				Toast.makeText(activity, "Deleted " + num + " items",
+						Toast.LENGTH_SHORT).show();
 				mode.finish();
 				break;
 			default:
-				Toast.makeText(activity,
-						"Clicked " + item.getTitle(), Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(activity, "Clicked " + item.getTitle(),
+						Toast.LENGTH_SHORT).show();
 				break;
 			}
 			return true;
@@ -787,7 +791,7 @@ public class NotesListFragment extends ListFragment implements
 			 * should use android.content.AsyncQueryHandler or
 			 * android.os.AsyncTask.
 			 */
-			return activity.managedQuery(uri, // The URI that gets multiple
+			Cursor cursor = activity.managedQuery(uri, // The URI that gets multiple
 												// notes from
 					// the provider.
 					PROJECTION, // A projection that returns the note ID and
@@ -798,6 +802,9 @@ public class NotesListFragment extends ListFragment implements
 					null // Use the default sort order (modification date,
 							// descending)
 					);
+			// Or Honeycomb will crash
+			activity.stopManagingCursor(cursor);
+			return cursor;
 		}
 
 	}
@@ -810,7 +817,7 @@ public class NotesListFragment extends ListFragment implements
 				android.view.Menu menu) {
 			this.textToShare.clear();
 			this.notesToDelete.clear();
-			
+
 			MenuInflater inflater = activity.getMenuInflater();
 			if (FragmentLayout.lightTheme)
 				inflater.inflate(R.menu.list_select_menu_light, menu);
@@ -858,8 +865,8 @@ public class NotesListFragment extends ListFragment implements
 	@Override
 	public void onNewNoteDeleted(long id) {
 		Log.d(TAG, "onNewNoteDeleted");
-		reListNotes();
-		reSelectId();
+		// reListNotes();
+		// reSelectId();
 	}
 
 	@Override
@@ -882,21 +889,20 @@ public class NotesListFragment extends ListFragment implements
 			}
 			onDeleteListener.onMultiDelete(ids, mCurId);
 		}
-		
+
 		// Need to refresh
-		//Intent intent = activity.getIntent();
-		//intent.addFlags(activity.FLAG_ACTIVITY_SINGLE_TOP);
-		
-		//overridePendingTransition(0, 0);
-		//intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-		//finish();
-		//overridePendingTransition(0, 0);
-		//startActivity(intent);
-		
-		Intent intent = new Intent(activity,
-				FragmentLayout.class);
-		
-		//intent.setData(data);
+		// Intent intent = activity.getIntent();
+		// intent.addFlags(activity.FLAG_ACTIVITY_SINGLE_TOP);
+
+		// overridePendingTransition(0, 0);
+		// intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		// finish();
+		// overridePendingTransition(0, 0);
+		// startActivity(intent);
+
+		Intent intent = new Intent(activity, FragmentLayout.class);
+
+		// intent.setData(data);
 		Log.d(TAG, "Launching intent: " + intent);
 		startActivity(intent);
 	}
@@ -906,18 +912,19 @@ public class NotesListFragment extends ListFragment implements
 		Log.d(TAG, "refresh time!. Is list updated?");
 		// reList first so we don't select deletid ids
 		reListNotes();
-		
+
 		if (posInvalid) {
 			posInvalid = false;
-			// Position is invalid, but editor is showing a valid note still. Recalculate its position
+			// Position is invalid, but editor is showing a valid note still.
+			// Recalculate its position
 			reSelectId();
-		}
-		else if (idInvalid) {
+		} else if (idInvalid) {
 			idInvalid = false;
-			// Note is invalid, so display the note at position closest to where we were
+			// Note is invalid, so display the note at position closest to where
+			// we were
 			showNote(mCurCheckPosition);
 		}
-		
+
 		// reListNotes();
 		// Set single check to be able to select properly. Otherwise this might
 		// delete the note

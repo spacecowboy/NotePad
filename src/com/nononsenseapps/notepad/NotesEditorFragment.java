@@ -60,13 +60,13 @@ public class NotesEditorFragment extends Fragment {
 	private Activity activity;
 
 	private onNewNoteCreatedListener onNewNoteListener = null;
-	
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		this.activity = activity;
 	}
-	
+
 	public void setOnNewNoteCreatedListener(onNewNoteCreatedListener listener) {
 		this.onNewNoteListener = listener;
 	}
@@ -125,7 +125,7 @@ public class NotesEditorFragment extends Fragment {
 				activity.finish();
 				return;
 			}
-			
+
 			// Notify list of the new note
 			if (onNewNoteListener != null)
 				onNewNoteListener.onNewNoteCreated(getIdFromUri(mUri));
@@ -139,7 +139,7 @@ public class NotesEditorFragment extends Fragment {
 		 * android.content.AsyncQueryHandler or android.os.AsyncTask.
 		 */
 		mCursor = activity.managedQuery(mUri, // The URI that gets multiple
-													// notes from
+												// notes from
 				// the provider.
 				PROJECTION, // A projection that returns the note ID and note
 							// content for each note.
@@ -148,6 +148,8 @@ public class NotesEditorFragment extends Fragment {
 				null // Use the default sort order (modification date,
 						// descending)
 				);
+		// Or Honeycomb will crash
+		activity.stopManagingCursor(mCursor);
 
 		// For a paste, initializes the data from clipboard.
 		// (Must be done after mCursor is initialized.)
@@ -177,7 +179,7 @@ public class NotesEditorFragment extends Fragment {
 	 *            The new note contents to use.
 	 */
 	private final void updateNote(String text) {
-		
+
 		// Only updates if the text is different from original content
 		if (text.equals(mOriginalContent)) {
 			Log.d("NotesEditorFragment", "Updating (not) note");
@@ -223,7 +225,7 @@ public class NotesEditorFragment extends Fragment {
 			Log.d("NotesEditorFragment", "URI: " + mUri);
 			Log.d("NotesEditorFragment", "values: " + values.toString());
 			activity.getContentResolver().update(mUri, // The URI for the
-															// record to
+														// record to
 					// update.
 					values, // The map of column names and new values to apply
 							// to
@@ -279,7 +281,7 @@ public class NotesEditorFragment extends Fragment {
 				mCursor = null;
 				ContentValues values = new ContentValues();
 				values.put(NotePad.Notes.COLUMN_NAME_NOTE, mOriginalContent);
-				activity.getContentResolver().update(mUri, values, null,
+				getActivity().getContentResolver().update(mUri, values, null,
 						null);
 				openNote(null);
 				showTheNote();
@@ -296,10 +298,11 @@ public class NotesEditorFragment extends Fragment {
 	private final void deleteNote() {
 		Log.d("NotesEditorFragment", "Deleting note");
 		if (mCursor != null) {
+			this.id = -1;
 			mCursor.close();
 			mCursor = null;
-			activity.getContentResolver().delete(mUri, null, null);
-			//mText.setText("");
+			getActivity().getContentResolver().delete(mUri, null, null);
+			mText.setText("");
 		}
 	}
 
@@ -318,7 +321,7 @@ public class NotesEditorFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		// To get the call back to add items to the menu
 		setHasOptionsMenu(true);
-		
+
 		id = getArguments().getLong(KEYID);
 	}
 
@@ -427,14 +430,14 @@ public class NotesEditorFragment extends Fragment {
 		switch (item.getItemId()) {
 		case R.id.menu_revert:
 			cancelNote();
-			Toast.makeText(activity.getApplicationContext(), "Reverted changes",
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(activity.getApplicationContext(),
+					"Reverted changes", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.menu_copy:
 			text = mText.getText().toString();
 			copyText(text);
-			Toast.makeText(activity.getApplicationContext(), "Note placed in clipboard",
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(activity.getApplicationContext(),
+					"Note placed in clipboard", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.menu_share:
 			shareNote();
@@ -442,7 +445,7 @@ public class NotesEditorFragment extends Fragment {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	private void shareNote() {
 		Intent share = new Intent(Intent.ACTION_SEND);
 		share.setType("text/plain");
@@ -454,12 +457,17 @@ public class NotesEditorFragment extends Fragment {
 	public void onResume() {
 		super.onResume();
 		Log.d("NotesEditorFragment", "onResume");
-		
+
+		// Closed with new note being only note. That was deleted. Requery and
+		// start new note.
+		if (mCursor == null || mCursor.isClosed()) {
+			openNote(null);
+		} 
 		showTheNote();
 	}
 
 	private void showTheNote() {
-		if (mCursor != null) {
+		if (mCursor != null && !mCursor.isClosed()) {
 			// Requery in case something changed while paused (such as the
 			// title)
 			mCursor.requery();
