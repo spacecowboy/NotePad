@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="ic_action_compose" format="reference|drawable" />
+    <attr name="ic_action_delete" format="drawable" />
+    <attr name="ic_menu_copy_holo" format="drawable" />
+    <attr name="ic_menu_search_holo" format="drawable" />
+    <attr name="ic_menu_settings_holo" format="drawable" />
+    <attr name="ic_menu_share_holo" format="drawable" />
+    <attr name="ic_menu_paste_holo" format="drawable" />
+</resources>

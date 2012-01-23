@@ -25,6 +25,7 @@
     <string name="menu_delete">Delete</string>
     <string name="menu_revert">Revert changes</string>
     <string name="menu_copy">Copy note</string>
+    <string name="menu_cancel">Cancel</string>
 
     <string name="resolve_edit">Edit note</string>
 

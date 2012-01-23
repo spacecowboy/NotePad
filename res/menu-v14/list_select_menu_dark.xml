@@ -9,8 +9,7 @@
         android:showAsAction="ifRoom"
         android:icon="@drawable/ic_menu_copy_holo_dark"
           android:title="@string/menu_copy" />
-    <item android:id="@+id/modal_delete"
-        android:showAsAction="ifRoom"
-        android:icon="@drawable/ic_action_delete_dark"
-          android:title="@string/menu_delete" />
+    <item android:id="@+id/modal_delete" android:showAsAction="ifRoom"
+		android:icon="?ic_action_delete" android:title="@string/menu_delete"
+		android:actionProviderClass="com.nononsenseapps.notepad.DeleteActionProvider" />
 </menu>
