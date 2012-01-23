@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import com.nononsenseapps.notepad.FragmentLayout.NotesEditorActivity;
+import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
 import com.nononsenseapps.notepad.interfaces.Refresher;
@@ -32,6 +33,7 @@ import android.app.ListFragment;
 import android.widget.SimpleCursorAdapter;
 
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
@@ -261,7 +263,8 @@ public class NotesListFragment extends ListFragment implements
 				.getDefaultSharedPreferences(activity).edit();
 		prefEditor.putInt(SELECTEDPOS, mCurCheckPosition);
 		prefEditor.putLong(SELECTEDID, mCurId);
-		//prefEditor.putString(SEARCHQUERYKEY, mSearchView.getQuery().toString());
+		// prefEditor.putString(SEARCHQUERYKEY,
+		// mSearchView.getQuery().toString());
 		prefEditor.commit();
 	}
 
@@ -617,7 +620,8 @@ public class NotesListFragment extends ListFragment implements
 		selectPos(mCurCheckPosition);
 	}
 
-	private class ModeCallbackHC implements MultiChoiceModeListener {
+	private class ModeCallbackHC implements MultiChoiceModeListener,
+			DeleteActionListener {
 
 		protected NotesListFragment list;
 
@@ -626,6 +630,8 @@ public class NotesListFragment extends ListFragment implements
 		protected OnModalDeleteListener onDeleteListener;
 
 		protected HashSet<Integer> notesToDelete;
+
+		protected ActionMode mode;
 
 		public ModeCallbackHC(NotesListFragment list) {
 			textToShare = new HashMap<Long, String>();
@@ -700,6 +706,7 @@ public class NotesListFragment extends ListFragment implements
 		@Override
 		public boolean onCreateActionMode(android.view.ActionMode mode,
 				android.view.Menu menu) {
+			Log.d("MODALMAN", "onCreateActionMode mode: " + mode);
 			// Clear data!
 			this.textToShare.clear();
 			this.notesToDelete.clear();
@@ -710,6 +717,17 @@ public class NotesListFragment extends ListFragment implements
 			else
 				inflater.inflate(R.menu.list_select_menu_dark, menu);
 			mode.setTitle("Select Items");
+
+			this.mode = mode;
+
+			// Set delete listener to this
+			android.view.MenuItem actionItem = menu
+					.findItem(R.id.modal_delete);
+
+			DeleteActionProvider actionProvider = (DeleteActionProvider) actionItem
+					.getActionProvider();
+			
+			actionProvider.setDeleteActionListener(this);
 
 			return true;
 		}
@@ -723,6 +741,7 @@ public class NotesListFragment extends ListFragment implements
 		@Override
 		public boolean onActionItemClicked(android.view.ActionMode mode,
 				android.view.MenuItem item) {
+			Log.d("MODALMAN", "onActionItemClicked mode: " + mode);
 			switch (item.getItemId()) {
 			case R.id.modal_share:
 				shareNote(buildTextToShare());
@@ -742,16 +761,7 @@ public class NotesListFragment extends ListFragment implements
 				mode.finish();
 				break;
 			case R.id.modal_delete:
-				int num = notesToDelete.size();
-				if (onDeleteListener != null) {
-					for (int pos : notesToDelete) {
-						Log.d(TAG, "Deleting key: " + pos);
-					}
-					onDeleteListener.onModalDelete(notesToDelete);
-				}
-				Toast.makeText(activity, "Deleted " + num + " items",
-						Toast.LENGTH_SHORT).show();
-				mode.finish();
+				onDeleteAction();
 				break;
 			default:
 				Toast.makeText(activity, "Clicked " + item.getTitle(),
@@ -827,6 +837,20 @@ public class NotesListFragment extends ListFragment implements
 			return cursor;
 		}
 
+		@Override
+		public void onDeleteAction() {
+			int num = notesToDelete.size();
+			if (onDeleteListener != null) {
+				for (int pos : notesToDelete) {
+					Log.d(TAG, "Deleting key: " + pos);
+				}
+				onDeleteListener.onModalDelete(notesToDelete);
+			}
+			Toast.makeText(activity, "Deleted " + num + " items",
+					Toast.LENGTH_SHORT).show();
+			mode.finish();
+		}
+
 	}
 
 	private class ModeCallbackICS extends ModeCallbackHC implements
@@ -844,6 +868,8 @@ public class NotesListFragment extends ListFragment implements
 			else
 				inflater.inflate(R.menu.list_select_menu_dark, menu);
 			mode.setTitle("Select Items");
+			
+			this.mode = mode;
 
 			// Set file with share history to the provider and set the share
 			// intent.
@@ -941,9 +967,9 @@ public class NotesListFragment extends ListFragment implements
 		} else if (idInvalid) {
 			idInvalid = false;
 			// Note is invalid, so recalculate a valid position and index
-			reCalculateValidValuesAfterDelete()
+			reCalculateValidValuesAfterDelete();
 		}
-		
+
 		// Now both position and id are valid.
 		// Only open the "current" note if we are in landscape mode.
 		if (FragmentLayout.LANDSCAPE_MODE) {

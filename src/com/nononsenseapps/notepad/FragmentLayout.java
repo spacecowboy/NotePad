@@ -3,12 +3,14 @@ package com.nononsenseapps.notepad;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.Refresher;
 import com.nononsenseapps.notepad.interfaces.onNewNoteCreatedListener;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -22,7 +24,8 @@ import android.view.MenuItem;
  * Showing a single fragment in an activity.
  */
 public class FragmentLayout extends Activity implements
-		OnSharedPreferenceChangeListener, OnEditorDeleteListener {
+		OnSharedPreferenceChangeListener, OnEditorDeleteListener,
+		DeleteActionListener {
 	public static boolean lightTheme = false;
 	public static boolean shouldRestart = false;
 	public static boolean LANDSCAPE_MODE;
@@ -136,19 +139,9 @@ public class FragmentLayout extends Activity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// both list and editor should be notified
-		NotesListFragment list = (NotesListFragment) getFragmentManager()
-				.findFragmentById(R.id.noteslistfragment);
-		NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
-				.findFragmentById(R.id.editor);
 		switch (item.getItemId()) {
 		case R.id.menu_delete:
-			if (editor != null)
-				editor.setNoSave();
-			// delete note
-			if (list != null)
-				list.onDelete();
-
+			onDeleteAction();
 			break;
 		case R.id.menu_preferences:
 			Log.d("NotesListFragment", "onOptionsSelection pref");
@@ -170,7 +163,7 @@ public class FragmentLayout extends Activity implements
 	 * screen is not large enough to show it all in one activity.
 	 */
 	public static class NotesEditorActivity extends Activity implements
-			onNewNoteCreatedListener {
+			onNewNoteCreatedListener, DeleteActionListener {
 		private NotesEditorFragment editorFragment;
 		private long currentId = -1;
 
@@ -218,10 +211,7 @@ public class FragmentLayout extends Activity implements
 				finish();
 				break;
 			case R.id.menu_delete:
-				editorFragment.setNoSave();
-				FragmentLayout.deleteNote(getContentResolver(), currentId);
-				setResult(Activity.RESULT_CANCELED);
-				finish();
+				onDeleteAction();
 				return true;
 			case R.id.menu_revert:
 				setResult(Activity.RESULT_CANCELED);
@@ -236,12 +226,12 @@ public class FragmentLayout extends Activity implements
 			super.onPause();
 			Log.d("NotesEditorActivity", "onPause");
 			if (isFinishing()) {
-//				Log.d("NotesEditorActivity",
-//						"onPause, telling list to display list");
-//				SharedPreferences.Editor prefEditor = PreferenceManager
-//						.getDefaultSharedPreferences(this).edit();
-//				prefEditor.putBoolean(NotesListFragment.SHOWLISTKEY, true);
-//				prefEditor.commit();
+				// Log.d("NotesEditorActivity",
+				// "onPause, telling list to display list");
+				// SharedPreferences.Editor prefEditor = PreferenceManager
+				// .getDefaultSharedPreferences(this).edit();
+				// prefEditor.putBoolean(NotesListFragment.SHOWLISTKEY, true);
+				// prefEditor.commit();
 			}
 		}
 
@@ -249,12 +239,12 @@ public class FragmentLayout extends Activity implements
 		public void onResume() {
 			super.onResume();
 			if (getResources().getBoolean(R.bool.useLandscapeView)) {
-//				Log.d("NotesEditorActivity",
-//						"onResume telling list to display me");
-//				SharedPreferences.Editor prefEditor = PreferenceManager
-//						.getDefaultSharedPreferences(this).edit();
-//				prefEditor.putBoolean(NotesListFragment.SHOWLISTKEY, false);
-//				prefEditor.commit();
+				// Log.d("NotesEditorActivity",
+				// "onResume telling list to display me");
+				// SharedPreferences.Editor prefEditor = PreferenceManager
+				// .getDefaultSharedPreferences(this).edit();
+				// prefEditor.putBoolean(NotesListFragment.SHOWLISTKEY, false);
+				// prefEditor.commit();
 				finish();
 			}
 		}
@@ -267,6 +257,14 @@ public class FragmentLayout extends Activity implements
 		@Override
 		public void onNewNoteDeleted(long id) {
 			// We don't care about this here
+		}
+
+		@Override
+		public void onDeleteAction() {
+			editorFragment.setNoSave();
+			FragmentLayout.deleteNote(getContentResolver(), currentId);
+			setResult(Activity.RESULT_CANCELED);
+			finish();
 		}
 	}
 
@@ -339,5 +337,19 @@ public class FragmentLayout extends Activity implements
 			}
 			return super.onOptionsItemSelected(item);
 		}
+	}
+
+	@Override
+	public void onDeleteAction() {
+		// both list and editor should be notified
+		NotesListFragment list = (NotesListFragment) getFragmentManager()
+				.findFragmentById(R.id.noteslistfragment);
+		NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
+				.findFragmentById(R.id.editor);
+		if (editor != null)
+			editor.setNoSave();
+		// delete note
+		if (list != null)
+			list.onDelete();
 	}
 }
