@@ -383,14 +383,16 @@ public class NotesEditorFragment extends Fragment {
 			else
 				inflater.inflate(R.menu.editor_options_menu_dark, menu);
 
-			// Set delete listener to this
-			android.view.MenuItem actionItem = menu.findItem(R.id.modal_delete);
+			if (FragmentLayout.AT_LEAST_ICS) {
+				// Set delete listener to this
+				android.view.MenuItem actionItem = menu.findItem(R.id.modal_delete);
 
-			DeleteActionProvider actionProvider = (DeleteActionProvider) actionItem
-					.getActionProvider();
+				DeleteActionProvider actionProvider = (DeleteActionProvider) actionItem
+						.getActionProvider();
 
-			// Make sure containing activity implements listner interface
-			actionProvider.setDeleteActionListener((DeleteActionListener) activity);
+				// Make sure containing activity implements listner interface
+				actionProvider.setDeleteActionListener((DeleteActionListener) activity);
+			}
 
 			// Only add extra menu items for a saved note
 			if (mState == STATE_EDIT) {

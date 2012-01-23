@@ -6,6 +6,5 @@
 	<item android:id="@+id/modal_copy" android:showAsAction="ifRoom"
 		android:icon="@drawable/ic_menu_copy_holo_light" android:title="@string/menu_copy" />
 	<item android:id="@+id/modal_delete" android:showAsAction="ifRoom"
-		android:icon="?ic_action_delete" android:title="@string/menu_delete"
-		android:actionProviderClass="com.nononsenseapps.notepad.DeleteActionProvider" />
+		android:icon="?ic_action_delete" android:title="@string/menu_delete" />
 </menu>

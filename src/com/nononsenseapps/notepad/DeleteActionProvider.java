@@ -64,7 +64,7 @@ public class DeleteActionProvider extends ActionProvider implements
 				.setOnMenuItemClickListener(this);
 
 		// Add cancel button
-		subMenu.add(Menu.NONE, R.id.menu_cancel, 0, R.string.menu_cancel)
+		subMenu.add(Menu.NONE, Menu.NONE, 0, R.string.menu_cancel)
 				.setOnMenuItemClickListener(this);
 	}
 

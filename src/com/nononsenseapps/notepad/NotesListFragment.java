@@ -707,15 +707,6 @@ public class NotesListFragment extends ListFragment implements
 
 			this.mode = mode;
 
-			// Set delete listener to this
-			android.view.MenuItem actionItem = menu
-					.findItem(R.id.modal_delete);
-
-			DeleteActionProvider actionProvider = (DeleteActionProvider) actionItem
-					.getActionProvider();
-			
-			actionProvider.setDeleteActionListener(this);
-
 			return true;
 		}
 
