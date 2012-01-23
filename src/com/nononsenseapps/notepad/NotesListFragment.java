@@ -53,7 +53,9 @@ public class NotesListFragment extends ListFragment implements
 	int mCurCheckPosition = 0;
 
 	public static final String SELECTEDPOS = "selectedpos";
-	public static final String SEARCHQUERYKEY = "searchqueryid";
+	public static final String SELECTEDID = "selectedid";
+	// Don't support this functionality.
+	// public static final String SEARCHQUERYKEY = "searchqueryid";
 
 	// For logging and debugging
 	private static final String TAG = "NotesListFragment";
@@ -112,7 +114,7 @@ public class NotesListFragment extends ListFragment implements
 
 		if (getListAdapter().isEmpty()) {
 			// -1 will display a new note
-			mCurCheckPosition = -1;
+			mCurCheckPosition = 0;
 			mCurId = -1;
 			Log.d("NotesListFragment", "Setting data: " + mCurCheckPosition
 					+ ", " + mCurId);
@@ -121,37 +123,30 @@ public class NotesListFragment extends ListFragment implements
 					+ mCurCheckPosition + ", " + mCurId);
 			mCurCheckPosition = PreferenceManager.getDefaultSharedPreferences(
 					activity).getInt(SELECTEDPOS, -1);
-			mCurId = -1;
+			mCurId = PreferenceManager.getDefaultSharedPreferences(activity)
+					.getLong(SELECTEDID, -1);
 
 			setSingleCheck();
 
-			String query = PreferenceManager.getDefaultSharedPreferences(
-					activity).getString(SEARCHQUERYKEY, "");
-			mSearchView.setQuery(query, false); // "true" should call the
-												// listener
-
-			// onQueryTextChange(query);
-
-			// This should not be needed
-			// If there was a query
-			// if (mCurId == -1) {
-			// mCurCheckPosition = 0;
-			// mCurId = getListAdapter().getItemId(0);
-			// } else {
-			// mCurCheckPosition = getPosOfId(mCurId);
-			// }
-
 			Log.d("NotesListFragment", "Setting data not empty: "
-					+ mCurCheckPosition + ", " + mCurId + ", query = " + query);
+					+ mCurCheckPosition + ", " + mCurId);
 		}
 
-		// if (mDualPane) {
-		// In dual-pane mode, the list view highlights the selected item.
-
-		// }
-		if (!getListAdapter().isEmpty()) {
-			// && (FragmentLayout.LANDSCAPE_MODE)) {
-			showNote(mCurCheckPosition);
+		// Now we have listed the notes we should have
+		// Position is valid for this list and might be -1 in case we had an
+		// empty search in portrait.
+		// Id might not be valid if we are coming from portrait to landscape
+		if (FragmentLayout.LANDSCAPE_MODE) {
+			// Always display note in landscape mode
+			// Opens a new note if necessary
+			showNote(mCurCheckPosition, true);
+		} else if (mCurId > -1) {
+			// In portrait mode, only display an existing note. And that could
+			// have been selected during a search
+			// so recacalculate just in case
+			mCurCheckPosition = getPosOfId(mCurId);
+			// don't open a new note if none exists
+			showNote(mCurCheckPosition, false);
 		}
 	}
 
@@ -172,7 +167,8 @@ public class NotesListFragment extends ListFragment implements
 			}
 		}
 		if (position == length) {
-			// Just in case
+			// Happens both if list is empty
+			// and if id is -1
 			position = -1;
 		}
 		return position;
@@ -217,7 +213,7 @@ public class NotesListFragment extends ListFragment implements
 		switch (item.getItemId()) {
 		case R.id.menu_add:
 			// Log.d("NotesListFragment", "onOptionsSelection add");
-			showNote(-1);
+			showNote(-1, true);
 			// Open a fragment with a new note
 			// Fragment should report back when it has added it to the database
 			// with the interface: onNewNoteListener
@@ -264,7 +260,8 @@ public class NotesListFragment extends ListFragment implements
 		SharedPreferences.Editor prefEditor = PreferenceManager
 				.getDefaultSharedPreferences(activity).edit();
 		prefEditor.putInt(SELECTEDPOS, mCurCheckPosition);
-		prefEditor.putString(SEARCHQUERYKEY, mSearchView.getQuery().toString());
+		prefEditor.putLong(SELECTEDID, mCurId);
+		//prefEditor.putString(SEARCHQUERYKEY, mSearchView.getQuery().toString());
 		prefEditor.commit();
 	}
 
@@ -282,7 +279,7 @@ public class NotesListFragment extends ListFragment implements
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Log.d("NotesListFragment", "Clicked: " + position + ", " + id);
 		if (position != mCurCheckPosition || !FragmentLayout.LANDSCAPE_MODE) {
-			showNote(position);
+			showNote(position, false);
 		}
 		// Remove focus from search window
 		activity.findViewById(R.id.search_view).clearFocus();
@@ -360,7 +357,7 @@ public class NotesListFragment extends ListFragment implements
 	 * Larger values than the list contains are re-calculated to valid positions
 	 * -1 will create new note.
 	 */
-	void showNote(int index) {
+	private void showNote(int index, boolean createIfEmpty) {
 		while (index >= getListAdapter().getCount()) {
 			index = index - 1;
 		}
@@ -383,42 +380,48 @@ public class NotesListFragment extends ListFragment implements
 				mCurId = -1;
 			}
 
-			if (FragmentLayout.LANDSCAPE_MODE) {
-				Log.d("NotesLIstFragmenT", "It is dualPane!");
-				// We can display everything in-place with fragments, so update
-				// the list to highlight the selected item and show the data.
-				Log.d("NotesListFragment", "Showing note: " + mCurId + ", "
-						+ mCurCheckPosition);
+			if (mCurId > -1 || createIfEmpty) {
+				if (FragmentLayout.LANDSCAPE_MODE) {
+					Log.d("NotesLIstFragmenT", "It is dualPane!");
+					// We can display everything in-place with fragments, so
+					// update
+					// the list to highlight the selected item and show the
+					// data.
+					Log.d("NotesListFragment", "Showing note: " + mCurId + ", "
+							+ mCurCheckPosition);
 
-				// Check what fragment is currently shown, replace if needed.
-				// NotesEditorFragment editor = (NotesEditorFragment)
-				// getSupportFragmentManager()
-				// .findFragmentById(R.id.editor);
+					// Check what fragment is currently shown, replace if
+					// needed.
+					// NotesEditorFragment editor = (NotesEditorFragment)
+					// getSupportFragmentManager()
+					// .findFragmentById(R.id.editor);
 
-				// Make new fragment to show this selection.
-				NotesEditorFragment editor = NotesEditorFragment
-						.newInstance(mCurId);
-				editor.setOnNewNoteCreatedListener(this);
+					// Make new fragment to show this selection.
+					NotesEditorFragment editor = NotesEditorFragment
+							.newInstance(mCurId);
+					editor.setOnNewNoteCreatedListener(this);
 
-				// Execute a transaction, replacing any existing fragment
-				// with this one inside the frame.
-				FragmentTransaction ft = getFragmentManager()
-						.beginTransaction();
-				ft.replace(R.id.editor, editor);
-				ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-				Log.d("NotesListFragment",
-						"Commiting transaction, opening fragment now");
-				ft.commit();
+					// Execute a transaction, replacing any existing fragment
+					// with this one inside the frame.
+					FragmentTransaction ft = getFragmentManager()
+							.beginTransaction();
+					ft.replace(R.id.editor, editor);
+					ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+					Log.d("NotesListFragment",
+							"Commiting transaction, opening fragment now");
+					ft.commit();
 
-			} else {
-				Log.d("NotesListFragment", "Showing note in SinglePane: id "
-						+ mCurId + ", pos: " + mCurCheckPosition);
-				// Otherwise we need to launch a new activity to display
-				// the dialog fragment with selected text.
-				Intent intent = new Intent();
-				intent.setClass(activity, NotesEditorActivity.class);
-				intent.putExtra(NotesEditorFragment.KEYID, mCurId);
-				startActivity(intent);
+				} else {
+					Log.d("NotesListFragment",
+							"Showing note in SinglePane: id " + mCurId
+									+ ", pos: " + mCurCheckPosition);
+					// Otherwise we need to launch a new activity to display
+					// the dialog fragment with selected text.
+					Intent intent = new Intent();
+					intent.setClass(activity, NotesEditorActivity.class);
+					intent.putExtra(NotesEditorFragment.KEYID, mCurId);
+					startActivity(intent);
+				}
 			}
 		}
 	}
@@ -440,7 +443,36 @@ public class NotesListFragment extends ListFragment implements
 			onDeleteListener.onEditorDelete(mCurId);
 		}
 		reListNotes();
-		showNote(mCurCheckPosition);
+		if (FragmentLayout.LANDSCAPE_MODE) {
+			showNote(mCurCheckPosition, true);
+		} else {
+			// Get the id of the currently "selected" note
+			// This matters if we switch to landscape mode
+			reCalculateValidValuesAfterDelete();
+		}
+	}
+
+	private void reCalculateValidValuesAfterDelete() {
+		int index = mCurCheckPosition;
+		while (index >= getListAdapter().getCount()) {
+			index = index - 1;
+		}
+
+		Log.d(TAG, "ReCalculate valid index is: " + index);
+		if (index == -1 && !currentQuery.isEmpty()) {
+			// Empty search, do NOT display new note.
+			// Instead display the first note when search is cancelled (or
+			// changed)
+			mCurCheckPosition = 0;
+			mCurId = -1;
+		} else if (index == -1) {
+			// Completely empty list. We should display a new note
+			mCurCheckPosition = 0;
+			mCurId = -1;
+		} else { // if (index != -1) {
+			mCurCheckPosition = index;
+			mCurId = getListAdapter().getItemId(index);
+		}
 	}
 
 	/**
@@ -488,34 +520,22 @@ public class NotesListFragment extends ListFragment implements
 		if (!currentQuery.equals(query)) {
 			Log.d("NotesListFragment", "this is a new query");
 			currentQuery = query;
+
 			if (query.equals("")) {
-				Log.d("NotesListFragment", "empty query even");
 				listAllNotes();
-				if (FragmentLayout.LANDSCAPE_MODE && mCurCheckPosition > -1) {
-					if (getListAdapter().isEmpty()) {
-						mCurCheckPosition = -1;
-						mCurId = -1; // Just in case here
-					}
-					if (mCurId == -1) {
-						Log.d("NotesListFragment",
-								"We are returning from an empty search, display the first note in editor window");
-						// We are returning from an empty search, display the
-						// first note in editor window
-						// A specific example is if you have a search goign, and
-						// the user deletes all notes in the search (editor
-						// displays nothing now)
-						// On returning here, select and show the first note (or
-						// a new note if list is empty)
-						showNote(mCurCheckPosition);
-					} else {
-						// A note must be showing, select it in the list
-						reSelectId();
-					}
-				}
 			} else {
 				showResults(query);
-				// Reselect current note in list, if posssible
-				reSelectId();
+			}
+			// Reselect current note in list, if possible
+			// Will be -1 if list is empty or id is -1
+			reSelectId();
+			// Now both id and position are valid for this list
+			// (they might both be -1)
+
+			// If search is over, and no valid note is showing. display one.
+			if (query.isEmpty() && mCurId == -1
+					&& FragmentLayout.LANDSCAPE_MODE) {
+				showNote(mCurCheckPosition, true);
 			}
 		}
 		return true;
@@ -920,18 +940,14 @@ public class NotesListFragment extends ListFragment implements
 			reSelectId();
 		} else if (idInvalid) {
 			idInvalid = false;
-			// Note is invalid, so display the note at position closest to where
-			// we were
-			showNote(mCurCheckPosition);
+			// Note is invalid, so recalculate a valid position and index
+			reCalculateValidValuesAfterDelete()
 		}
-
-		// reListNotes();
-		// Set single check to be able to select properly. Otherwise this might
-		// delete the note
-		// setSingleCheck();
-
-		// selectPos(mCurCheckPosition);
-		// getListView().setItemChecked(mCurCheckPosition, true);
+		
+		// Now both position and id are valid.
+		// Only open the "current" note if we are in landscape mode.
+		if (FragmentLayout.LANDSCAPE_MODE) {
+			showNote(mCurCheckPosition, true);
+		}
 	}
-
 }

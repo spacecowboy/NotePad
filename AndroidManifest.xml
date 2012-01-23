@@ -83,7 +83,7 @@
             </intent-filter>
         </activity>
         
-        <activity android:name="NotesPreferenceActivity"
+        <activity android:name="FragmentLayout$NotesPreferencesDialog"
             android:theme="@style/ThemeHoloDialogNoActionBar"
             android:screenOrientation="sensor" >
             

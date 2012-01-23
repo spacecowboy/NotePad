@@ -98,9 +98,9 @@ public class FragmentLayout extends Activity implements
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		// Need to restart to allow themes and such to go into effect
-		if (key.equals(NotesPreferenceActivity.KEY_SORT_ORDER)
-				|| key.equals(NotesPreferenceActivity.KEY_SORT_TYPE)
-				|| key.equals(NotesPreferenceActivity.KEY_THEME)) {
+		if (key.equals(NotesPreferenceFragment.KEY_SORT_ORDER)
+				|| key.equals(NotesPreferenceFragment.KEY_SORT_TYPE)
+				|| key.equals(NotesPreferenceFragment.KEY_THEME)) {
 			shouldRestart = true;
 		}
 	}
@@ -109,14 +109,14 @@ public class FragmentLayout extends Activity implements
 		// Read settings and set
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		lightTheme = prefs.getBoolean(NotesPreferenceActivity.KEY_THEME, false);
+		lightTheme = prefs.getBoolean(NotesPreferenceFragment.KEY_THEME, false);
 		setTypeOfTheme();
 
 		String sortType = prefs.getString(
-				NotesPreferenceActivity.KEY_SORT_TYPE,
+				NotesPreferenceFragment.KEY_SORT_TYPE,
 				NotePad.Notes.DEFAULT_SORT_TYPE);
 		String sortOrder = prefs.getString(
-				NotesPreferenceActivity.KEY_SORT_ORDER,
+				NotesPreferenceFragment.KEY_SORT_ORDER,
 				NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 		NotePad.Notes.SORT_ORDER = sortType + " " + sortOrder;
@@ -161,7 +161,7 @@ public class FragmentLayout extends Activity implements
 	private void showPrefs() {
 		// launch a new activity to display the dialog
 		Intent intent = new Intent();
-		intent.setClass(this, NotesPreferenceActivity.class);
+		intent.setClass(this, NotesPreferencesDialog.class);
 		startActivity(intent);
 	}
 
@@ -312,32 +312,32 @@ public class FragmentLayout extends Activity implements
 		deleteNotes(getContentResolver(), ids);
 	}
 
-	// public static class NotesPreferencesDialog extends Activity {
-	// @Override
-	// protected void onCreate(Bundle savedInstanceState) {
-	// super.onCreate(savedInstanceState);
-	//
-	// if (FragmentLayout.lightTheme) {
-	// setTheme(R.style.ThemeHoloDialogNoActionBar);
-	// } else {
-	// setTheme(R.style.ThemeHoloDialogNoActionBar);
-	// }
-	//
-	// // Display the fragment as the main content.
-	// FragmentTransaction ft = getFragmentManager().beginTransaction();
-	// ft.replace(android.R.id.content, new NotesPreferenceActivity());
-	// ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-	// ft.commit();
-	// }
-	//
-	// @Override
-	// public boolean onOptionsItemSelected(MenuItem item) {
-	// switch (item.getItemId()) {
-	// case android.R.id.home:
-	// finish();
-	// break;
-	// }
-	// return super.onOptionsItemSelected(item);
-	// }
-	// }
+	public static class NotesPreferencesDialog extends Activity {
+		@Override
+		protected void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+
+			if (FragmentLayout.lightTheme) {
+				setTheme(android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
+			} else {
+				setTheme(android.R.style.Theme_Holo_Dialog_NoActionBar);
+			}
+
+			// Display the fragment as the main content.
+			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			ft.replace(android.R.id.content, new NotesPreferenceFragment());
+			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			ft.commit();
+		}
+
+		@Override
+		public boolean onOptionsItemSelected(MenuItem item) {
+			switch (item.getItemId()) {
+			case android.R.id.home:
+				finish();
+				break;
+			}
+			return super.onOptionsItemSelected(item);
+		}
+	}
 }
