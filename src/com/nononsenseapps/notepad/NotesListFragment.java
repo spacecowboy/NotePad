@@ -22,10 +22,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-import android.app.ActionBar;
 import android.app.Activity;
-import android.app.Fragment;
-import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -34,19 +31,15 @@ import android.widget.SimpleCursorAdapter;
 
 import android.util.Log;
 import android.view.ActionMode;
-import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.ShareActionProvider;
 import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
-//import android.widget.ShareActionProvider;
-//import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.widget.Toast;
 
 public class NotesListFragment extends ListFragment implements
@@ -56,8 +49,6 @@ public class NotesListFragment extends ListFragment implements
 
 	public static final String SELECTEDPOS = "selectedpos";
 	public static final String SELECTEDID = "selectedid";
-	// Don't support this functionality.
-	// public static final String SEARCHQUERYKEY = "searchqueryid";
 
 	// For logging and debugging
 	private static final String TAG = "NotesListFragment";
@@ -80,8 +71,6 @@ public class NotesListFragment extends ListFragment implements
 
 	private SearchView mSearchView;
 
-	private static String SAVEDPOS = "curPos";
-	private static String SAVEDID = "curId";
 	private String currentQuery = "";
 	private int checkMode = CHECK_SINGLE;
 
@@ -263,8 +252,6 @@ public class NotesListFragment extends ListFragment implements
 				.getDefaultSharedPreferences(activity).edit();
 		prefEditor.putInt(SELECTEDPOS, mCurCheckPosition);
 		prefEditor.putLong(SELECTEDID, mCurId);
-		// prefEditor.putString(SEARCHQUERYKEY,
-		// mSearchView.getQuery().toString());
 		prefEditor.commit();
 	}
 

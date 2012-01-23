@@ -5,12 +5,11 @@ import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import android.content.Context;
 import android.util.Log;
 import android.view.ActionProvider;
-import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MenuItem.OnMenuItemClickListener;
 import android.view.SubMenu;
 import android.view.View;
-import android.widget.Toast;
 
 public class DeleteActionProvider extends ActionProvider implements
 		OnMenuItemClickListener {
@@ -60,18 +59,17 @@ public class DeleteActionProvider extends ActionProvider implements
 		subMenu.clear();
 
 		// Add delete button
-		subMenu.add(subMenu.NONE, R.id.menu_delete, 0, R.string.menu_delete)
+		subMenu.add(Menu.NONE, R.id.menu_delete, 0, R.string.menu_delete)
 				//.setIcon()
 				.setOnMenuItemClickListener(this);
 
 		// Add cancel button
-		subMenu.add(subMenu.NONE, R.id.menu_cancel, 0, R.string.menu_cancel)
+		subMenu.add(Menu.NONE, R.id.menu_cancel, 0, R.string.menu_cancel)
 				.setOnMenuItemClickListener(this);
 	}
 
 	@Override
 	public boolean onMenuItemClick(MenuItem item) {
-		Toast.makeText(context, item.getTitle(), Toast.LENGTH_SHORT).show();
 			switch (item.getItemId()) {
 			case R.id.menu_delete:
 				if (listener != null) {

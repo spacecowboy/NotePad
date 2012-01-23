@@ -101,7 +101,7 @@ public class FragmentLayout extends Activity implements
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		// Need to restart to allow themes and such to go into effect
-		if (key.equals(NotesPreferenceFragment.KEY_SORT_ORDER)
+		if (key.equals(NotesPreferenceFragment.KEY_THEME)
 				|| key.equals(NotesPreferenceFragment.KEY_SORT_TYPE)
 				|| key.equals(NotesPreferenceFragment.KEY_THEME)) {
 			shouldRestart = true;
@@ -192,6 +192,8 @@ public class FragmentLayout extends Activity implements
 				finish();
 				return;
 			}
+			
+			this.currentId = getIntent().getExtras().getLong(NotesEditorFragment.KEYID);
 
 			Log.d("NotesEditorActivity", "Time to show the note!");
 			// if (savedInstanceState == null) {
@@ -261,6 +263,7 @@ public class FragmentLayout extends Activity implements
 
 		@Override
 		public void onDeleteAction() {
+			Log.d("NotesEditorActivity", "onDeleteAction");
 			editorFragment.setNoSave();
 			FragmentLayout.deleteNote(getContentResolver(), currentId);
 			setResult(Activity.RESULT_CANCELED);
