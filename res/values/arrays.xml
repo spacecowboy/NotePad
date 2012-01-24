@@ -20,5 +20,15 @@
         <item>ASC</item>
         <item>DESC</item>
     </string-array>
+    
+    <string-array name="theme_preference">
+        <item>Dark</item>
+        <item>Light</item>
+    </string-array>
+
+    <string-array name="themevalues_preference">
+        <item>dark</item>
+        <item>light</item>
+    </string-array>
 
 </resources>

@@ -168,10 +168,10 @@ public class NotesListFragment extends ListFragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// Inflate menu from XML resource
-		if (FragmentLayout.lightTheme)
-			inflater.inflate(R.menu.list_options_menu_light, menu);
-		else
-			inflater.inflate(R.menu.list_options_menu_dark, menu);
+//		if (FragmentLayout.lightTheme)
+//			inflater.inflate(R.menu.list_options_menu_light, menu);
+//		else
+		inflater.inflate(R.menu.list_options_menu, menu);
 
 		// Get the SearchView and set the searchable configuration
 		// SearchManager searchManager = (SearchManager)
@@ -493,10 +493,10 @@ public class NotesListFragment extends ListFragment implements
 		int[] viewIDs = { R.id.itemTitle, R.id.itemDate };
 
 		int themed_item;
-		if (FragmentLayout.lightTheme)
-			themed_item = R.layout.noteslist_item_light;
-		else
-			themed_item = R.layout.noteslist_item_dark;
+//		if (FragmentLayout.lightTheme)
+//			themed_item = R.layout.noteslist_item_light;
+//		else
+		themed_item = R.layout.noteslist_item;
 
 		// Creates the backing adapter for the ListView.
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(activity,
@@ -631,7 +631,7 @@ public class NotesListFragment extends ListFragment implements
 
 		}
 
-		protected Intent createShareIntent(String text) {
+		public static Intent createShareIntent(String text) {
 			Intent shareIntent = new Intent(Intent.ACTION_SEND);
 			shareIntent.setType("text/plain");
 			shareIntent.putExtra(Intent.EXTRA_TEXT, text);
@@ -639,7 +639,7 @@ public class NotesListFragment extends ListFragment implements
 			return shareIntent;
 		}
 
-		protected Intent createShareIntent() {
+		public static Intent createShareIntent() {
 			return createShareIntent("");
 		}
 
@@ -699,10 +699,10 @@ public class NotesListFragment extends ListFragment implements
 			this.notesToDelete.clear();
 
 			MenuInflater inflater = activity.getMenuInflater();
-			if (FragmentLayout.lightTheme)
-				inflater.inflate(R.menu.list_select_menu_light, menu);
-			else
-				inflater.inflate(R.menu.list_select_menu_dark, menu);
+//			if (FragmentLayout.lightTheme)
+//				inflater.inflate(R.menu.list_select_menu_light, menu);
+//			else
+			inflater.inflate(R.menu.list_select_menu, menu);
 			mode.setTitle("Select Items");
 
 			this.mode = mode;
@@ -841,10 +841,10 @@ public class NotesListFragment extends ListFragment implements
 			this.notesToDelete.clear();
 
 			MenuInflater inflater = activity.getMenuInflater();
-			if (FragmentLayout.lightTheme)
-				inflater.inflate(R.menu.list_select_menu_light, menu);
-			else
-				inflater.inflate(R.menu.list_select_menu_dark, menu);
+//			if (FragmentLayout.lightTheme)
+//				inflater.inflate(R.menu.list_select_menu_light, menu);
+//			else
+			inflater.inflate(R.menu.list_select_menu, menu);
 			mode.setTitle("Select Items");
 			
 			this.mode = mode;

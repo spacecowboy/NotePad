@@ -15,19 +15,15 @@
 		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_dark</item>
 		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_dark</item>
 
-		<!--<bitmap xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:src="@drawable/ic_action_compose_dark" android:id="ic_action_compose" 
-			/> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" android:src="@drawable/ic_action_delete_dark" 
-			android:id="ic_action_delete" /> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:src="@drawable/ic_menu_copy_holo_dark" android:id="ic_menu_copy_holo" 
-			/> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" android:src="@drawable/ic_menu_search_holo_dark" 
-			android:id="ic_menu_search_holo" /> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:src="@drawable/ic_menu_settings_holo_dark" android:id="ic_menu_settings_holo" 
-			/> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" android:src="@drawable/ic_menu_share_holo_dark" 
-			android:id="ic_menu_share_holo" /> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:src="@drawable/ic_menu_paste_holo_dark" android:id="ic_menu_paste_holo" 
-			/> -->
-
+	</style>
+	
+	<style name="ThemeHoloLight" parent="@android:style/Theme.Holo.Light">
+		<item name="ic_action_delete">@drawable/ic_action_delete_light</item>
+		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_light</item>
+		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_light</item>
+		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_light</item>
+		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_light</item>
+		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
 	</style>
 
 	<style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.Holo.Dialog.NoActionBar">
@@ -39,19 +35,6 @@
 		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_dark</item>
 		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_dark</item>
 
-		<!--<bitmap xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:src="@drawable/ic_action_compose_dark" android:id="ic_action_compose" 
-			/> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" android:src="@drawable/ic_action_delete_dark" 
-			android:id="ic_action_delete" /> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:src="@drawable/ic_menu_copy_holo_dark" android:id="ic_menu_copy_holo" 
-			/> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" android:src="@drawable/ic_menu_search_holo_dark" 
-			android:id="ic_menu_search_holo" /> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:src="@drawable/ic_menu_settings_holo_dark" android:id="ic_menu_settings_holo" 
-			/> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" android:src="@drawable/ic_menu_share_holo_dark" 
-			android:id="ic_menu_share_holo" /> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:src="@drawable/ic_menu_paste_holo_dark" android:id="ic_menu_paste_holo" 
-			/> -->
-
 	</style>
 
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light">
@@ -62,22 +45,6 @@
 		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_light</item>
 		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_light</item>
 		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
-
-
-
-		<!--<bitmap xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:src="@drawable/ic_action_compose_light" android:id="ic_action_compose" 
-			/> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" android:src="@drawable/ic_action_delete_light" 
-			android:id="ic_action_delete" /> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:src="@drawable/ic_menu_copy_holo_light" android:id="ic_menu_copy_holo" 
-			/> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" android:src="@drawable/ic_menu_search_holo_light" 
-			android:id="ic_menu_search_holo" /> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:src="@drawable/ic_menu_settings_holo_light" android:id="ic_menu_settings_holo" 
-			/> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" android:src="@drawable/ic_menu_share_holo_light" 
-			android:id="ic_menu_share_holo" /> <bitmap xmlns:android="http://schemas.android.com/apk/res/android" 
-			android:src="@drawable/ic_menu_paste_holo_light" android:id="ic_menu_paste_holo" 
-			/> -->
-
 
 	</style>
 

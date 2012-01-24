@@ -27,7 +27,9 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class NotesEditorFragment extends Fragment {
+import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
+
+public class NotesEditorFragment extends Fragment implements OnShareTargetSelectedListener {
 	/*
 	 * Creates a projection that returns the note ID and the note contents.
 	 */
@@ -344,10 +346,10 @@ public class NotesEditorFragment extends Fragment {
 			return null;
 		}
 
-		int layout = R.layout.note_editor_dark;
-		if (FragmentLayout.lightTheme) {
-			layout = R.layout.note_editor_light;
-		}
+		int layout = R.layout.note_editor;
+//		if (FragmentLayout.lightTheme) {
+//			layout = R.layout.note_editor_light;
+//		}
 
 		// Gets a handle to the EditText in the the layout.
 		mText = (EditText) inflater.inflate(layout, container, false);
@@ -378,10 +380,10 @@ public class NotesEditorFragment extends Fragment {
 					"onCreateOptions, but it is time to die so doing nothing...");
 		} else {
 			// Inflate menu from XML resource
-			if (FragmentLayout.lightTheme)
-				inflater.inflate(R.menu.editor_options_menu_light, menu);
-			else
-				inflater.inflate(R.menu.editor_options_menu_dark, menu);
+//			if (FragmentLayout.lightTheme)
+//				inflater.inflate(R.menu.editor_options_menu_light, menu);
+//			else
+			inflater.inflate(R.menu.editor_options_menu, menu);
 
 			if (FragmentLayout.AT_LEAST_ICS) {
 				// Set delete listener to this
@@ -392,6 +394,26 @@ public class NotesEditorFragment extends Fragment {
 
 				// Make sure containing activity implements listner interface
 				actionProvider.setDeleteActionListener((DeleteActionListener) activity);
+				
+				// Set default intent on ShareProvider and set shareListener to this so 
+				// we can update with current note
+				// Set file with share history to the provider and set the share
+				// intent.
+				android.view.MenuItem actionItem = menu
+						.findItem(R.id.editor_share_action_provider_action_bar);
+
+				ShareActionProvider actionProvider = (ShareActionProvider) actionItem
+						.getActionProvider();
+				actionProvider
+						.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+				// Note that you can set/change the intent any time,
+				// say when the user has selected an image.
+				Intent share = new Intent(Intent.ACTION_SEND);
+				share.setType("text/plain");
+				share.putExtra(Intent.EXTRA_TEXT, "");
+				actionProvider.setShareIntent(share);
+
+				actionProvider.setOnShareTargetSelectedListener(this);
 			}
 
 			// Only add extra menu items for a saved note
@@ -458,6 +480,14 @@ public class NotesEditorFragment extends Fragment {
 			break;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+	
+	@Override
+	public boolean onShareTargetSelected(ShareActionProvider source,
+			Intent intent) {
+		// Just add the text
+		intent.putExtra(Intent.EXTRA_TEXT, mText.getText().toString());
+		return false;
 	}
 
 	private void shareNote() {

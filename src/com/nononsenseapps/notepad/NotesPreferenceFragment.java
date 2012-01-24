@@ -12,12 +12,18 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	public static final String KEY_THEME = "key_theme";
 	public static final String KEY_SORT_ORDER = "key_sort_order";
 	public static final String KEY_SORT_TYPE = "key_sort_type";
+	
+	public static final String THEME_DARK = "dark";
+	public static final String THEME_LIGHT = "light";
+	public static final String THEME_LIGHT_ICS_AB = "light_ab";
 
 	private Preference prefSortOrder;
 	private Preference prefSortType;
+	private Preference prefTheme;
 
 	public String SUMMARY_SORT_TYPE;
 	public String SUMMARY_SORT_ORDER;
+	public String SUMMARY_THEME;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -31,9 +37,13 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 
 		SUMMARY_SORT_ORDER = getText(R.string.settings_summary_sort_order_desc)
 				.toString();
+		
+		SUMMARY_THEME = getText(R.string.settings_summary_theme_dark)
+		.toString();
 
 		prefSortOrder = getPreferenceScreen().findPreference(KEY_SORT_ORDER);
 		prefSortType = getPreferenceScreen().findPreference(KEY_SORT_TYPE);
+		prefTheme = getPreferenceScreen().findPreference(KEY_THEME);
 
 		SharedPreferences sharedPrefs = getPreferenceScreen()
 				.getSharedPreferences();
@@ -43,6 +53,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		// Set summaries
 		setTypeSummary(sharedPrefs);
 		setOrderSummary(sharedPrefs);
+		setThemeSummary(sharedPrefs);
 
 		// Set up navigation (adds nice arrow to icon)
 		// ActionBar actionBar = getActionBar();
@@ -53,6 +64,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 			String key) {
 		if (KEY_THEME.equals(key)) {
 			Log.d("settings", "Theme changed!");
+			setThemeSummary(sharedPreferences);
 		} else if (KEY_SORT_TYPE.equals(key)) {
 			Log.d("settings", "Sort type changed!");
 			setTypeSummary(sharedPreferences);
@@ -89,6 +101,24 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 					.toString();
 		SUMMARY_SORT_TYPE = summary;
 		prefSortType.setSummary(summary);
+	}
+	
+	private void setTypeSummary(SharedPreferences sharedPreferences) {
+		// Dark theme is default
+		String value = sharedPreferences.getString(KEY_THEME,
+				THEME_DARK);
+		String summary;
+		if (THEME_DARK.equals(value))
+			summary = getText(R.string.settings_summary_theme_dark)
+					.toString();
+		else if (THEME_LIGHT.equals(value))
+			summary = getText(R.string.settings_summary_theme_light)
+			.toString();
+		else
+			summary = getText(R.string.settings_summary_theme_light_dark_ab)
+			.toString();
+		SUMMARY_THEME = summary;
+		prefTheme.setSummary(summary);
 	}
 
 	/*

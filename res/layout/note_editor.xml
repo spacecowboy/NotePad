@@ -14,7 +14,7 @@
      limitations under the License.
 -->
 <EditText xmlns:android="http://schemas.android.com/apk/res/android"
-    android:theme="@style/ThemeHolo"
+    
     android:id="@+id/note"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -26,3 +26,4 @@
     android:textSize="22sp"
     android:capitalize="sentences"
 />
+<!-- android:theme="@style/ThemeHolo"  -->

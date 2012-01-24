@@ -8,7 +8,7 @@
         android:title="@string/menu_share"/>
     <item
         android:id="@+id/modal_copy"
-        android:icon="@drawable/ic_menu_copy_holo_light"
+        android:icon="?ic_menu_copy_holo"
         android:showAsAction="ifRoom"
         android:title="@string/menu_copy"/>
     <item
