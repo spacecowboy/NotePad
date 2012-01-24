@@ -14,34 +14,44 @@
 		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_dark</item>
 		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_dark</item>
 		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_dark</item>
+		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 
 	</style>
 	
 	<style name="ThemeHoloLight" parent="@android:style/Theme.Light">
+	    <item name="ic_action_compose">@drawable/ic_action_compose_light</item>
 		<item name="ic_action_delete">@drawable/ic_action_delete_light</item>
 		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_light</item>
 		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_light</item>
 		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_light</item>
 		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_light</item>
 		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
+		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 	</style>
 
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Light">
+	    <item name="ic_action_compose">@drawable/ic_action_compose_light</item>
 		<item name="ic_action_delete">@drawable/ic_action_delete_light</item>
 		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_light</item>
 		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_light</item>
 		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_light</item>
 		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_light</item>
 		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
+		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 	</style>
 
 	<style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.Dialog">
-		<item name="ic_action_delete">@drawable/ic_action_delete_light</item>
-		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_light</item>
-		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_light</item>
-		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_light</item>
-		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_light</item>
-		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
+		<item name="ic_action_compose">@drawable/ic_action_compose_dark</item>
+		<item name="ic_action_delete">@drawable/ic_action_delete_dark</item>
+		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_dark</item>
+		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_dark</item>
+		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_dark</item>
+		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_dark</item>
+		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_dark</item>
+		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
+	</style>
+	
+	<style name="ThemeHoloLightDialogNoActionBar" parent="ThemeHoloDialogNoActionBar">
 	</style>
 
 </resources>

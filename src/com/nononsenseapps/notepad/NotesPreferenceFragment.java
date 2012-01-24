@@ -9,7 +9,7 @@ import android.util.Log;
 
 public class NotesPreferenceFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
-	public static final String KEY_THEME = "key_theme";
+	public static final String KEY_THEME = "key_current_theme";
 	public static final String KEY_SORT_ORDER = "key_sort_order";
 	public static final String KEY_SORT_TYPE = "key_sort_type";
 	
@@ -103,7 +103,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		prefSortType.setSummary(summary);
 	}
 	
-	private void setTypeSummary(SharedPreferences sharedPreferences) {
+	private void setThemeSummary(SharedPreferences sharedPreferences) {
 		// Dark theme is default
 		String value = sharedPreferences.getString(KEY_THEME,
 				THEME_DARK);

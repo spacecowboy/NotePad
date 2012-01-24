@@ -19,17 +19,18 @@ import android.app.Fragment;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
-import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
-
-public class NotesEditorFragment extends Fragment implements OnShareTargetSelectedListener {
+public class NotesEditorFragment extends Fragment implements TextWatcher {
 	/*
 	 * Creates a projection that returns the note ID and the note contents.
 	 */
@@ -61,6 +62,8 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 	private long id;
 
 	private boolean timeToDie;
+	
+	private Object shareActionProvider; // Must be object otherwise HC will crash
 
 	private Activity activity;
 
@@ -345,6 +348,7 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 			timeToDie = true;
 			return null;
 		}
+		Log.d("NotesEditorFragment", "onCreateView");
 
 		int layout = R.layout.note_editor;
 //		if (FragmentLayout.lightTheme) {
@@ -353,8 +357,8 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 
 		// Gets a handle to the EditText in the the layout.
 		mText = (EditText) inflater.inflate(layout, container, false);
-		Log.d("NotesEditorFragment",
-				"onCreateView openNote, should be the only call!");
+		mText.addTextChangedListener(this);
+		Log.d("NotesEditorFragment", "onCreateView mText: " + mText);
 		return mText;
 	}
 
@@ -387,7 +391,7 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 
 			if (FragmentLayout.AT_LEAST_ICS) {
 				// Set delete listener to this
-				android.view.MenuItem actionItem = menu.findItem(R.id.action_delete);
+				MenuItem actionItem = menu.findItem(R.id.action_delete);
 
 				DeleteActionProvider actionProvider = (DeleteActionProvider) actionItem
 						.getActionProvider();
@@ -399,21 +403,21 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 				// we can update with current note
 				// Set file with share history to the provider and set the share
 				// intent.
-				android.view.MenuItem actionItem = menu
+				MenuItem shareItem = menu
 						.findItem(R.id.editor_share_action_provider_action_bar);
 
-				ShareActionProvider actionProvider = (ShareActionProvider) actionItem
+				ShareActionProvider shareProvider = (ShareActionProvider) shareItem
 						.getActionProvider();
-				actionProvider
+				shareProvider
 						.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
 				// Note that you can set/change the intent any time,
 				// say when the user has selected an image.
 				Intent share = new Intent(Intent.ACTION_SEND);
 				share.setType("text/plain");
-				share.putExtra(Intent.EXTRA_TEXT, "");
-				actionProvider.setShareIntent(share);
-
-				actionProvider.setOnShareTargetSelectedListener(this);
+				share.putExtra(Intent.EXTRA_TEXT, mText.getText().toString());
+				shareProvider.setShareIntent(share);
+				
+				this.shareActionProvider = shareProvider;
 			}
 
 			// Only add extra menu items for a saved note
@@ -428,7 +432,7 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 				Intent intent = new Intent(null, mUri);
 				intent.addCategory(Intent.CATEGORY_ALTERNATIVE);
 				menu.addIntentOptions(Menu.CATEGORY_ALTERNATIVE, 0, 0,
-						new ComponentName(activity.getApplicationContext(),
+						new ComponentName(activity,
 								NotesEditorFragment.class), null, intent, 0,
 						null);
 			}
@@ -466,13 +470,13 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 		switch (item.getItemId()) {
 		case R.id.menu_revert:
 			cancelNote();
-			Toast.makeText(activity.getApplicationContext(),
+			Toast.makeText(activity,
 					"Reverted changes", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.menu_copy:
 			text = mText.getText().toString();
 			copyText(text);
-			Toast.makeText(activity.getApplicationContext(),
+			Toast.makeText(activity,
 					"Note placed in clipboard", Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.menu_share:
@@ -482,13 +486,13 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 		return super.onOptionsItemSelected(item);
 	}
 	
-	@Override
-	public boolean onShareTargetSelected(ShareActionProvider source,
-			Intent intent) {
+	//@Override
+	public boolean onShareTargetSelectedHC(Intent intent) {
 		// Just add the text
 		intent.putExtra(Intent.EXTRA_TEXT, mText.getText().toString());
 		return false;
 	}
+	
 
 	private void shareNote() {
 		Intent share = new Intent(Intent.ACTION_SEND);
@@ -567,7 +571,7 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 
 			// Request focus, will not open keyboard
 			if (FragmentLayout.LANDSCAPE_MODE) {
-				activity.findViewById(R.id.editor).requestFocus();
+				activity.findViewById(R.id.editor_container).requestFocus();
 			}
 
 			/*
@@ -666,5 +670,29 @@ public class NotesEditorFragment extends Fragment implements OnShareTargetSelect
 			mCursor.close();
 			mCursor = null;
 		}
+	}
+
+	@Override
+	public void afterTextChanged(Editable s) {
+		if (FragmentLayout.AT_LEAST_ICS && shareActionProvider != null) {
+			Intent share = new Intent(Intent.ACTION_SEND);
+			share.setType("text/plain");
+			share.putExtra(Intent.EXTRA_TEXT, s.toString());
+			
+			((ShareActionProvider) shareActionProvider).setShareIntent(share);
+		}
+	}
+
+	@Override
+	public void beforeTextChanged(CharSequence s, int start, int count,
+			int after) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void onTextChanged(CharSequence s, int start, int before, int count) {
+		// TODO Auto-generated method stub
+		
 	}
 }

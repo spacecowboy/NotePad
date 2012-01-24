@@ -39,7 +39,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.ShareActionProvider;
-import android.widget.ShareActionProvider.OnShareTargetSelectedListener;
 import android.widget.Toast;
 
 public class NotesListFragment extends ListFragment implements
@@ -395,10 +394,11 @@ public class NotesListFragment extends ListFragment implements
 					// with this one inside the frame.
 					FragmentTransaction ft = getFragmentManager()
 							.beginTransaction();
-					ft.replace(R.id.editor, editor);
+					ft.replace(R.id.editor_container, editor);
 					ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 					Log.d("NotesListFragment",
 							"Commiting transaction, opening fragment now");
+					
 					ft.commit();
 
 				} else {
@@ -631,16 +631,12 @@ public class NotesListFragment extends ListFragment implements
 
 		}
 
-		public static Intent createShareIntent(String text) {
+		protected Intent createShareIntent(String text) {
 			Intent shareIntent = new Intent(Intent.ACTION_SEND);
 			shareIntent.setType("text/plain");
 			shareIntent.putExtra(Intent.EXTRA_TEXT, text);
 
 			return shareIntent;
-		}
-
-		public static Intent createShareIntent() {
-			return createShareIntent("");
 		}
 
 		protected void addTextToShare(long id) {
@@ -831,8 +827,20 @@ public class NotesListFragment extends ListFragment implements
 
 	}
 
-	private class ModeCallbackICS extends ModeCallbackHC implements
-			OnShareTargetSelectedListener {
+	private class ModeCallbackICS extends ModeCallbackHC {
+		
+		protected ShareActionProvider actionProvider;
+		
+		@Override
+		public void onItemCheckedStateChanged(android.view.ActionMode mode,
+				int position, long id, boolean checked) {
+			super.onItemCheckedStateChanged(mode, position, id, checked);
+			
+			if (actionProvider != null) {
+				actionProvider.setShareIntent(createShareIntent(buildTextToShare()));
+			}
+			
+		}
 
 		@Override
 		public boolean onCreateActionMode(android.view.ActionMode mode,
@@ -854,15 +862,13 @@ public class NotesListFragment extends ListFragment implements
 			android.view.MenuItem actionItem = menu
 					.findItem(R.id.modal_item_share_action_provider_action_bar);
 
-			ShareActionProvider actionProvider = (ShareActionProvider) actionItem
+			actionProvider = (ShareActionProvider) actionItem
 					.getActionProvider();
 			actionProvider
 					.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
 			// Note that you can set/change the intent any time,
 			// say when the user has selected an image.
-			actionProvider.setShareIntent(createShareIntent());
-
-			actionProvider.setOnShareTargetSelectedListener(this);
+			actionProvider.setShareIntent(createShareIntent(buildTextToShare()));
 
 			return true;
 		}
@@ -870,14 +876,7 @@ public class NotesListFragment extends ListFragment implements
 		public ModeCallbackICS(NotesListFragment list) {
 			super(list);
 		}
-
-		@Override
-		public boolean onShareTargetSelected(ShareActionProvider source,
-				Intent intent) {
-			// Just add the text
-			intent.putExtra(Intent.EXTRA_TEXT, buildTextToShare());
-			return false;
-		}
+		
 	}
 
 	public void setOnDeleteListener(OnEditorDeleteListener fragmentLayout) {

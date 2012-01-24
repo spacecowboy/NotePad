@@ -104,7 +104,7 @@ public class FragmentLayout extends Activity implements
 		// Need to restart to allow themes and such to go into effect
 		if (key.equals(NotesPreferenceFragment.KEY_THEME)
 				|| key.equals(NotesPreferenceFragment.KEY_SORT_TYPE)
-				|| key.equals(NotesPreferenceFragment.KEY_THEME)) {
+				|| key.equals(NotesPreferenceFragment.KEY_SORT_ORDER)) {
 			shouldRestart = true;
 		}
 	}
@@ -326,7 +326,7 @@ public class FragmentLayout extends Activity implements
 			Log.d("FragmentLayout",
 					"id was contained in multidelete, setting no save first");
 			NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
-					.findFragmentById(R.id.editor);
+					.findFragmentById(R.id.editor_container);
 			if (editor != null) {
 				editor.setNoSave();
 			}
@@ -341,9 +341,9 @@ public class FragmentLayout extends Activity implements
 			super.onCreate(savedInstanceState);
 			
 			if (NotesPreferenceFragment.THEME_DARK.equals(FragmentLayout.currentTheme)) {
-				setTheme(R.style.Theme_Holo_Dialog_NoActionBar);
+				setTheme(R.style.ThemeHoloDialogNoActionBar);
 			} else {
-				setTheme(R.style.Theme_Holo_Light_Dialog_NoActionBar);
+				setTheme(R.style.ThemeHoloLightDialogNoActionBar);
 			}
 
 //			if (FragmentLayout.lightTheme) {
@@ -376,7 +376,7 @@ public class FragmentLayout extends Activity implements
 		NotesListFragment list = (NotesListFragment) getFragmentManager()
 				.findFragmentById(R.id.noteslistfragment);
 		NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
-				.findFragmentById(R.id.editor);
+				.findFragmentById(R.id.editor_container);
 		if (editor != null)
 			editor.setNoSave();
 		// delete note

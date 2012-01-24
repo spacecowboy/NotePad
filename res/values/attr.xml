@@ -7,4 +7,5 @@
     <attr name="ic_menu_settings_holo" format="reference" />
     <attr name="ic_menu_share_holo" format="reference" />
     <attr name="ic_menu_paste_holo" format="reference" />
+    <attr name="ic_menu_revert" format="reference" />
 </resources>

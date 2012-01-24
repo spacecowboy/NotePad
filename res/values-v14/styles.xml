@@ -10,6 +10,7 @@
 		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_dark</item>
 		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_dark</item>
 		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_dark</item>
+		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 		
 	</style>
 </resources>

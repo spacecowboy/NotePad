@@ -6,7 +6,7 @@
 		<!--<CheckBoxPreference android:key="key_theme" android:title="@string/settings_light_theme" 
 			android:summary="" /> -->
 
-		<ListPreference android:key="key_theme" android:title="@string/settings_theme"
+		<ListPreference android:key="key_current_theme" android:title="@string/settings_theme"
 			android:summary="Selected option should be here" android:entries="@array/theme_preference"
 			android:entryValues="@array/themevalues_preference"
 			android:defaultValue="dark" android:dialogTitle="@string/settings_theme_dialog" />
