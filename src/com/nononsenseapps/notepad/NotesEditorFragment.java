@@ -385,7 +385,7 @@ public class NotesEditorFragment extends Fragment {
 
 			if (FragmentLayout.AT_LEAST_ICS) {
 				// Set delete listener to this
-				android.view.MenuItem actionItem = menu.findItem(R.id.modal_delete);
+				android.view.MenuItem actionItem = menu.findItem(R.id.action_delete);
 
 				DeleteActionProvider actionProvider = (DeleteActionProvider) actionItem
 						.getActionProvider();
