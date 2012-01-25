@@ -72,7 +72,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 			String key) {
 		try {
 			if (activity.isFinishing()) {
-				Log.d("settings", "isFinishing, should no update summaries");
+				Log.d("settings", "isFinishing, should not update summaries");
 				// Setting the summary now would crash it with
 				// IllegalStateException since we are not attached to a view
 			} else {
