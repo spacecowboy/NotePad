@@ -10,6 +10,9 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.util.Log;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class NotesPreferenceFragment extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
@@ -40,7 +43,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	
 	private TextPreviewPreference textPreview = null;
 	private SeekBarPreference prefFontSizeEditor;
-
+	
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -72,7 +75,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		textPreview = (TextPreviewPreference) getPreferenceScreen().findPreference(KEY_TEXT_PREVIEW);
 		prefFontSizeEditor = (SeekBarPreference) getPreferenceScreen().findPreference(KEY_FONT_SIZE_EDITOR);
 		//prefFontSizeEditor.setOnPreferenceChangeListener(this);
-		prefFontSizeEditor.setPersistent(true);
+		//prefFontSizeEditor.setPersistent(true);
 
 		SharedPreferences sharedPrefs = getPreferenceScreen()
 				.getSharedPreferences();
@@ -84,10 +87,14 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		setOrderSummary(sharedPrefs);
 		setThemeSummary(sharedPrefs);
 		setEditorFontTypeSummary(sharedPrefs);
-
+		// Set font type
+		//updatePreviewFontType(sharedPrefs);
+		// Set font size
+		//updatePreviewFontSize(sharedPrefs);
 		// Set up navigation (adds nice arrow to icon)
 		// ActionBar actionBar = getActionBar();
 		// actionBar.setDisplayHomeAsUpEnabled(true);
+		
 	}
 
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
@@ -110,10 +117,10 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 				} else if (KEY_FONT_TYPE_EDITOR.equals(key)) {
 					Log.d("settings", "font type changed!");
 					setEditorFontTypeSummary(sharedPreferences);
-					updatePreviewFontType(sharedPreferences);
+					//updatePreviewFontType(sharedPreferences);
 				} else if (KEY_FONT_SIZE_EDITOR.equals(key)) {
 					Log.d("settings", "font size changed!");
-					updatePreviewFontSize(sharedPreferences);
+					//updatePreviewFontSize(sharedPreferences);
 				}
 				else
 					Log.d("settings", "Somethign changed!");
@@ -131,14 +138,22 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	private void updatePreviewFontSize(SharedPreferences sharedPreferences) {
 		int size = sharedPreferences.getInt(KEY_FONT_SIZE_EDITOR, 22);
 		if (textPreview != null) {
+			Log.d("settings", "updatePreviewFontSize textPreview");
 			textPreview.setTextSize(size);
+		}
+		else {
+			Log.d("settings", "updatePreviewFontSize textPreview was null!");
 		}
 	}
 
 	private void updatePreviewFontType(SharedPreferences sharedPreferences) {
 		String type = sharedPreferences.getString(KEY_FONT_TYPE_EDITOR, SANS);
 		if (textPreview != null) {
+			Log.d("settings", "updatePreviewFontType textPreview!");
 			textPreview.setTextType(type);
+		}
+		else {
+			Log.d("settings", "updatePreviewFontType textPreview was null!");
 		}
 	}
 
@@ -189,23 +204,10 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	private void setEditorFontTypeSummary(SharedPreferences sharedPreferences) {
 		// Dark theme is default
 		String value = sharedPreferences.getString(KEY_FONT_TYPE_EDITOR, SANS);
-//		String summary;
-//		if (THEME_DARK.equals(value))
-//			summary = getText(R.string.settings_summary_theme_dark).toString();
-//		else if (THEME_LIGHT.equals(value))
-//			summary = getText(R.string.settings_summary_theme_light).toString();
-//		else
-//			summary = getText(R.string.settings_summary_theme_light_dark_ab)
-//					.toString();
-		//SUMMARY_THEME = summary;
+		
 		Log.d("setFontSummary", value);
 		prefFontType.setSummary(value);
 	}
 
-	/*
-	 * @Override public boolean onOptionsItemSelected(MenuItem item) { // Handle
-	 * all of the possible menu actions. switch (item.getItemId()) { case
-	 * android.R.id.home: Log.d("Settings", "Go back!"); finish(); break; }
-	 * return super.onOptionsItemSelected(item); }
-	 */
+	
 }

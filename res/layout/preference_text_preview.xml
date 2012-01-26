@@ -42,8 +42,7 @@
             android:layout_below="@android:id/title"
             android:background="@android:color/background_light"
             android:textColor="@android:color/black"
-            android:text="@string/preference_preview_text"
-            android:textSize="22sp" />
+            android:text="@string/preference_preview_text" />
     </RelativeLayout>
 
 </LinearLayout>

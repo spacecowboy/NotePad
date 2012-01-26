@@ -168,17 +168,16 @@ public class SeekBarPreference extends Preference implements
 		Log.d(TAG, "onProgressChanged new value: " + newValue);
 
 		// change rejected, revert to the previous value
-		if (!callChangeListener(newValue)) {
-			Log.d(TAG, "Rejected change. resetting.");
-			seekBar.setProgress(mCurrentValue - mMinValue);
-			return;
-		}
+//		if (!callChangeListener(newValue)) {
+//			Log.d(TAG, "Rejected change. resetting.");
+//			seekBar.setProgress(mCurrentValue - mMinValue);
+//			return;
+//		}
 
 		// change accepted, store it
 		mCurrentValue = newValue;
 		Log.d(TAG, "onProgressChanged mCurrentvalue: " + mCurrentValue);
 		mStatusText.setText(String.valueOf(newValue));
-		mStatusText.invalidate(); // makes it redraw
 		persistInt(newValue);
 	}
 
