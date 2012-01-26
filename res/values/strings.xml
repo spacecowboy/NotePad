@@ -60,4 +60,6 @@
     <string name="settings_font_type">Font</string>
     <string name="settings_font_type_dialog">Select a font</string>
     <string name="settings_font_size">Font size</string>
+    <string name="preference_preview_text">This how the editor text will appear</string>
+    <string name="settings_text_preview_title">Preview</string>
 </resources>

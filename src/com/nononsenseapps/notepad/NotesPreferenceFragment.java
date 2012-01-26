@@ -1,5 +1,8 @@
 package com.nononsenseapps.notepad;
 
+import com.nononsenseapps.ui.TextPreviewPreference;
+import com.robobunny.SeekBarPreference;
+
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -13,7 +16,14 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	public static final String KEY_THEME = "key_current_theme";
 	public static final String KEY_SORT_ORDER = "key_sort_order";
 	public static final String KEY_SORT_TYPE = "key_sort_type";
+	public static final String KEY_FONT_TYPE_EDITOR = "key_font_type_editor";
+	public static final String KEY_FONT_SIZE_EDITOR = "key_font_size_editor";
+	private static final CharSequence KEY_TEXT_PREVIEW = "key_text_preview";
 
+	public static final String SANS = "sans";
+	public static final String SERIF = "serif";
+	public static final String MONOSPACE = "monospace";
+	
 	public static final String THEME_DARK = "dark";
 	public static final String THEME_LIGHT = "light";
 	public static final String THEME_LIGHT_ICS_AB = "light_ab";
@@ -21,11 +31,15 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	private Preference prefSortOrder;
 	private Preference prefSortType;
 	private Preference prefTheme;
+	private Preference prefFontType;
 
 	public String SUMMARY_SORT_TYPE;
 	public String SUMMARY_SORT_ORDER;
 	public String SUMMARY_THEME;
 	private Activity activity;
+	
+	private TextPreviewPreference textPreview = null;
+	private SeekBarPreference prefFontSizeEditor;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -36,6 +50,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.main_preferences);
@@ -48,10 +63,16 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 
 		SUMMARY_THEME = getText(R.string.settings_summary_theme_dark)
 				.toString();
+		
 
 		prefSortOrder = getPreferenceScreen().findPreference(KEY_SORT_ORDER);
 		prefSortType = getPreferenceScreen().findPreference(KEY_SORT_TYPE);
 		prefTheme = getPreferenceScreen().findPreference(KEY_THEME);
+		prefFontType = getPreferenceScreen().findPreference(KEY_FONT_TYPE_EDITOR);
+		textPreview = (TextPreviewPreference) getPreferenceScreen().findPreference(KEY_TEXT_PREVIEW);
+		prefFontSizeEditor = (SeekBarPreference) getPreferenceScreen().findPreference(KEY_FONT_SIZE_EDITOR);
+		//prefFontSizeEditor.setOnPreferenceChangeListener(this);
+		prefFontSizeEditor.setPersistent(true);
 
 		SharedPreferences sharedPrefs = getPreferenceScreen()
 				.getSharedPreferences();
@@ -62,6 +83,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		setTypeSummary(sharedPrefs);
 		setOrderSummary(sharedPrefs);
 		setThemeSummary(sharedPrefs);
+		setEditorFontTypeSummary(sharedPrefs);
 
 		// Set up navigation (adds nice arrow to icon)
 		// ActionBar actionBar = getActionBar();
@@ -85,7 +107,15 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 				} else if (KEY_SORT_ORDER.equals(key)) {
 					Log.d("settings", "Sort order changed!");
 					setOrderSummary(sharedPreferences);
-				} else
+				} else if (KEY_FONT_TYPE_EDITOR.equals(key)) {
+					Log.d("settings", "font type changed!");
+					setEditorFontTypeSummary(sharedPreferences);
+					updatePreviewFontType(sharedPreferences);
+				} else if (KEY_FONT_SIZE_EDITOR.equals(key)) {
+					Log.d("settings", "font size changed!");
+					updatePreviewFontSize(sharedPreferences);
+				}
+				else
 					Log.d("settings", "Somethign changed!");
 			}
 		} catch (IllegalStateException e) {
@@ -95,6 +125,20 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 			// This catch prevents the app from crashing if we do something
 			// stupid
 			Log.d("settings", "Exception was caught: " + e.getMessage());
+		}
+	}
+
+	private void updatePreviewFontSize(SharedPreferences sharedPreferences) {
+		int size = sharedPreferences.getInt(KEY_FONT_SIZE_EDITOR, 22);
+		if (textPreview != null) {
+			textPreview.setTextSize(size);
+		}
+	}
+
+	private void updatePreviewFontType(SharedPreferences sharedPreferences) {
+		String type = sharedPreferences.getString(KEY_FONT_TYPE_EDITOR, SANS);
+		if (textPreview != null) {
+			textPreview.setTextType(type);
 		}
 	}
 
@@ -140,6 +184,22 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		SUMMARY_THEME = summary;
 		Log.d("setThemeSummary", "Setting summary now");
 		prefTheme.setSummary(summary);
+	}
+	
+	private void setEditorFontTypeSummary(SharedPreferences sharedPreferences) {
+		// Dark theme is default
+		String value = sharedPreferences.getString(KEY_FONT_TYPE_EDITOR, SANS);
+//		String summary;
+//		if (THEME_DARK.equals(value))
+//			summary = getText(R.string.settings_summary_theme_dark).toString();
+//		else if (THEME_LIGHT.equals(value))
+//			summary = getText(R.string.settings_summary_theme_light).toString();
+//		else
+//			summary = getText(R.string.settings_summary_theme_light_dark_ab)
+//					.toString();
+		//SUMMARY_THEME = summary;
+		Log.d("setFontSummary", value);
+		prefFontType.setSummary(value);
 	}
 
 	/*

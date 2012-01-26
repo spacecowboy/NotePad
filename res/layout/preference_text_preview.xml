@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:key="preference_text_preview_holder"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:paddingBottom="4dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="?android:attr/scrollbarSize"
+    android:paddingTop="8dp" >
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginRight="8dip"
+        android:layout_marginTop="0dp"
+        android:layout_weight="1" >
+
+        <TextView
+            android:id="@+android:id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:singleLine="true"
+            android:text="Title"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <TextView
+            android:id="@+id/prefTextPreview"
+            android:layout_width="fill_parent"
+            android:layout_height="90dp"
+            android:paddingLeft="8dp"
+            android:paddingTop="8dp"
+            android:paddingBottom="0dp"
+            android:paddingRight="8dp"
+            android:ellipsize="marquee"
+            android:fadingEdge="horizontal"
+            android:layout_alignLeft="@android:id/title"
+            android:layout_below="@android:id/title"
+            android:background="@android:color/background_light"
+            android:textColor="@android:color/black"
+            android:text="@string/preference_preview_text"
+            android:textSize="22sp" />
+    </RelativeLayout>
+
+</LinearLayout>

@@ -178,8 +178,8 @@ public class SeekBarPreference extends Preference implements
 		mCurrentValue = newValue;
 		Log.d(TAG, "onProgressChanged mCurrentvalue: " + mCurrentValue);
 		mStatusText.setText(String.valueOf(newValue));
+		mStatusText.invalidate(); // makes it redraw
 		persistInt(newValue);
-
 	}
 
 	@Override

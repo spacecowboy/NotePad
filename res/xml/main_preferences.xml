@@ -29,11 +29,15 @@
             android:summary="Selected option should be here"
             android:title="@string/settings_theme" />
         
+        <com.nononsenseapps.ui.TextPreviewPreference
+            android:title="@string/settings_text_preview_title"
+            android:key="key_text_preview" />
+        
                 <com.robobunny.SeekBarPreference
                     android:defaultValue="22"
                     android:key="key_font_size_editor"
                     android:max="30"
-                    robobunny:min="1"
+                    robobunny:min="8"
                     android:title="@string/settings_font_size"
                     robobunny:unitsLeft=""
                     robobunny:unitsRight="sp" />
