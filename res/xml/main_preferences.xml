@@ -37,7 +37,7 @@
                     android:defaultValue="22"
                     android:key="key_font_size_editor"
                     android:max="30"
-                    robobunny:min="8"
+                    robobunny:min="12"
                     android:title="@string/settings_font_size"
                     robobunny:unitsLeft=""
                     robobunny:unitsRight="sp" />
