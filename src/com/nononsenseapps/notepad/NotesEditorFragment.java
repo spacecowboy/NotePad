@@ -62,8 +62,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 	private long id;
 
 	private boolean timeToDie;
-	
-	private Object shareActionProvider; // Must be object otherwise HC will crash
+
+	private Object shareActionProvider = null; // Must be object otherwise HC
+												// will crash
 
 	private Activity activity;
 
@@ -351,9 +352,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 		Log.d("NotesEditorFragment", "onCreateView");
 
 		int layout = R.layout.note_editor;
-//		if (FragmentLayout.lightTheme) {
-//			layout = R.layout.note_editor_light;
-//		}
+		// if (FragmentLayout.lightTheme) {
+		// layout = R.layout.note_editor_light;
+		// }
 
 		// Gets a handle to the EditText in the the layout.
 		mText = (EditText) inflater.inflate(layout, container, false);
@@ -373,6 +374,19 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 		} else {
 			openNote(saves);
 			showTheNote();
+			if (shareActionProvider != null) {
+				// Set initial share intent, will only be non-null on ICS
+				// Note that you can set/change the intent any time,
+				// say when the user has selected an image.
+				Intent share = new Intent(Intent.ACTION_SEND);
+				share.setType("text/plain");
+				String shareText = "";
+				if (mText != null)
+					shareText = mText.getText().toString();
+				share.putExtra(Intent.EXTRA_TEXT, shareText);
+				((ShareActionProvider) shareActionProvider)
+						.setShareIntent(share);
+			}
 		}
 	}
 
@@ -384,9 +398,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 					"onCreateOptions, but it is time to die so doing nothing...");
 		} else {
 			// Inflate menu from XML resource
-//			if (FragmentLayout.lightTheme)
-//				inflater.inflate(R.menu.editor_options_menu_light, menu);
-//			else
+			// if (FragmentLayout.lightTheme)
+			// inflater.inflate(R.menu.editor_options_menu_light, menu);
+			// else
 			inflater.inflate(R.menu.editor_options_menu, menu);
 
 			if (FragmentLayout.AT_LEAST_ICS) {
@@ -397,9 +411,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 						.getActionProvider();
 
 				// Make sure containing activity implements listner interface
-				actionProvider.setDeleteActionListener((DeleteActionListener) activity);
-				
-				// Set default intent on ShareProvider and set shareListener to this so 
+				actionProvider
+						.setDeleteActionListener((DeleteActionListener) activity);
+
+				// Set default intent on ShareProvider and set shareListener to
+				// this so
 				// we can update with current note
 				// Set file with share history to the provider and set the share
 				// intent.
@@ -414,9 +430,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 				// say when the user has selected an image.
 				Intent share = new Intent(Intent.ACTION_SEND);
 				share.setType("text/plain");
-				share.putExtra(Intent.EXTRA_TEXT, mText.getText().toString());
+				share.putExtra(Intent.EXTRA_TEXT, "");
 				shareProvider.setShareIntent(share);
-				
+
 				this.shareActionProvider = shareProvider;
 			}
 
@@ -432,9 +448,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 				Intent intent = new Intent(null, mUri);
 				intent.addCategory(Intent.CATEGORY_ALTERNATIVE);
 				menu.addIntentOptions(Menu.CATEGORY_ALTERNATIVE, 0, 0,
-						new ComponentName(activity,
-								NotesEditorFragment.class), null, intent, 0,
-						null);
+						new ComponentName(activity, NotesEditorFragment.class),
+						null, intent, 0, null);
 			}
 		}
 	}
@@ -470,14 +485,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 		switch (item.getItemId()) {
 		case R.id.menu_revert:
 			cancelNote();
-			Toast.makeText(activity,
-					"Reverted changes", Toast.LENGTH_SHORT).show();
+			Toast.makeText(activity, "Reverted changes", Toast.LENGTH_SHORT)
+					.show();
 			break;
 		case R.id.menu_copy:
 			text = mText.getText().toString();
 			copyText(text);
-			Toast.makeText(activity,
-					"Note placed in clipboard", Toast.LENGTH_SHORT).show();
+			Toast.makeText(activity, "Note placed in clipboard",
+					Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.menu_share:
 			shareNote();
@@ -485,14 +500,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
-	//@Override
+
+	// @Override
 	public boolean onShareTargetSelectedHC(Intent intent) {
 		// Just add the text
 		intent.putExtra(Intent.EXTRA_TEXT, mText.getText().toString());
 		return false;
 	}
-	
 
 	private void shareNote() {
 		Intent share = new Intent(Intent.ACTION_SEND);
@@ -678,7 +692,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 			Intent share = new Intent(Intent.ACTION_SEND);
 			share.setType("text/plain");
 			share.putExtra(Intent.EXTRA_TEXT, s.toString());
-			
+
 			((ShareActionProvider) shareActionProvider).setShareIntent(share);
 		}
 	}
@@ -687,12 +701,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 	public void beforeTextChanged(CharSequence s, int start, int count,
 			int after) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }
