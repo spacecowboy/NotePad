@@ -52,4 +52,12 @@
     <string name="settings_summary_theme_dark">Dark</string>
     <string name="settings_summary_theme_light">Light</string>
     <string name="settings_summary_theme_light_dark_ab">Light, dark action bar</string>
+    
+    <string name="settings_cat_appearance">Appearance</string>
+    <string name="settings_font_screen">Font settings</string>
+    <string name="settings_font_screen_summary">You can change the type and size of the fonts</string>
+    <string name="settings_cat_font_editor">Editor</string>
+    <string name="settings_font_type">Font</string>
+    <string name="settings_font_type_dialog">Select a font</string>
+    <string name="settings_font_size">Font size</string>
 </resources>

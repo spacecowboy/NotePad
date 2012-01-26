@@ -1,35 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:robobunny="http://robobunny.com" android:key="preference_screen">
 
-	<PreferenceCategory android:title="@string/settings_cat_theme">
+    <PreferenceCategory android:title="@string/settings_cat_sorting" >
+        <ListPreference
+            android:defaultValue="modified"
+            android:dialogTitle="@string/settings_sorting_type_dialog"
+            android:entries="@array/sorting_preference"
+            android:entryValues="@array/sortingvalues_preference"
+            android:key="key_sort_type"
+            android:summary="Selected option should be here"
+            android:title="@string/settings_sorting_type" />
+        <ListPreference
+            android:defaultValue="DESC"
+            android:dialogTitle="@string/settings_sorting_order_dialog"
+            android:entries="@array/sorting_order_preference"
+            android:entryValues="@array/sorting_ordervalues_preference"
+            android:key="key_sort_order"
+            android:summary="Selected option should be here"
+            android:title="@string/settings_sorting_order" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_cat_appearance" >
+        <ListPreference
+            android:defaultValue="dark"
+            android:dialogTitle="@string/settings_theme_dialog"
+            android:entries="@array/theme_preference"
+            android:entryValues="@array/themevalues_preference"
+            android:key="key_current_theme"
+            android:summary="Selected option should be here"
+            android:title="@string/settings_theme" />
+        
+                <com.robobunny.SeekBarPreference
+                    android:defaultValue="22"
+                    android:key="key_font_size_editor"
+                    android:max="30"
+                    robobunny:min="1"
+                    android:title="@string/settings_font_size"
+                    robobunny:unitsLeft=""
+                    robobunny:unitsRight="sp" />
 
-		<!--<CheckBoxPreference android:key="key_theme" android:title="@string/settings_light_theme" 
-			android:summary="" /> -->
-
-		<ListPreference android:key="key_current_theme" android:title="@string/settings_theme"
-			android:summary="Selected option should be here" android:entries="@array/theme_preference"
-			android:entryValues="@array/themevalues_preference"
-			android:defaultValue="dark" android:dialogTitle="@string/settings_theme_dialog" />
-
-	</PreferenceCategory>
-
-	<PreferenceCategory android:title="@string/settings_cat_sorting">
-
-		<!-- <EditTextPreference android:key="edittext_preference" android:title="title_edittext_preference" 
-			android:summary="summary_edittext_preference" android:dialogTitle="dialog_title_edittext_preference" 
-			/> -->
-
-		<ListPreference android:key="key_sort_type"
-			android:title="@string/settings_sorting_type" android:summary="Selected option should be here"
-			android:entries="@array/sorting_preference" android:entryValues="@array/sortingvalues_preference"
-			android:defaultValue="modified" android:dialogTitle="@string/settings_sorting_type_dialog" />
-
-		<ListPreference android:key="key_sort_order"
-			android:title="@string/settings_sorting_order" android:summary="Selected option should be here"
-			android:entries="@array/sorting_order_preference"
-			android:entryValues="@array/sorting_ordervalues_preference"
-			android:defaultValue="DESC" android:dialogTitle="@string/settings_sorting_order_dialog" />
-
-	</PreferenceCategory>
+                <ListPreference
+                    android:defaultValue="sans"
+                    android:dialogTitle="@string/settings_font_type_dialog"
+                    android:entries="@array/font_type_preference"
+                    android:entryValues="@array/font_typevalues_preference"
+                    android:key="key_font_type_editor"
+                    android:summary="Selected option should be here"
+                    android:title="@string/settings_font_type" />
+    </PreferenceCategory>
 
 </PreferenceScreen>

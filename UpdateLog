@@ -1,0 +1,5 @@
+Since latest
+* Fixed my secon crash report. mtext was null in setting share intent in noteseditorfragment. moved to onactivitycreated and enclosed in null-checks
+
+
+v2.1
