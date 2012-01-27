@@ -351,6 +351,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 		}
 		Log.d("NotesEditorFragment", "onCreateView");
 
+
 		int layout = R.layout.note_editor;
 		// if (FragmentLayout.lightTheme) {
 		// layout = R.layout.note_editor_light;
@@ -359,7 +360,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 		// Gets a handle to the EditText in the the layout.
 		mText = (EditText) inflater.inflate(layout, container, false);
 		mText.addTextChangedListener(this);
-		Log.d("NotesEditorFragment", "onCreateView mText: " + mText);
+		// set characteristics from settings
+		mText.setTextSize(getSharedPreferences().getInt(NotesPreferenceFragment.KEY_FONT_SIZE_EDITOR, NotesPreferenceFragment.DEFAULT_EDITOR_FONT_SIZE));
+		mText.setTypeface(NotesPreferenceFragment.getTypeface(getSharedPreferences().getString(NotesPreferenceFragment.KEY_FONT_TYPE_EDITOR, NotesPreferenceFragment.SANS)));		
+
+Log.d("NotesEditorFragment", "onCreateView mText: " + mText);
 		return mText;
 	}
 
