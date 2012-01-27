@@ -2,6 +2,7 @@ package com.nononsenseapps.notepad;
 
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.onNewNoteCreatedListener;
+import com.nononsenseapps.ui.TextPreviewPreference;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -13,6 +14,7 @@ import android.content.res.Resources;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 
 import android.app.Activity;
 import android.app.Fragment;
@@ -351,7 +353,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 		}
 		Log.d("NotesEditorFragment", "onCreateView");
 
-
 		int layout = R.layout.note_editor;
 		// if (FragmentLayout.lightTheme) {
 		// layout = R.layout.note_editor_light;
@@ -360,12 +361,24 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 		// Gets a handle to the EditText in the the layout.
 		mText = (EditText) inflater.inflate(layout, container, false);
 		mText.addTextChangedListener(this);
-		// set characteristics from settings
-		mText.setTextSize(getSharedPreferences().getInt(NotesPreferenceFragment.KEY_FONT_SIZE_EDITOR, R.integer.default_editor_font_size));
-		mText.setTypeface(NotesPreferenceFragment.getTypeface(getSharedPreferences().getString(NotesPreferenceFragment.KEY_FONT_TYPE_EDITOR, NotesPreferenceFragment.SANS)));		
 
-Log.d("NotesEditorFragment", "onCreateView mText: " + mText);
+		Log.d("NotesEditorFragment", "onCreateView mText: " + mText);
 		return mText;
+	}
+
+	private void setFontSettings() {
+		if (mText != null) {
+			// set characteristics from settings
+			mText.setTextSize(PreferenceManager.getDefaultSharedPreferences(
+					getActivity()).getInt(
+					NotesPreferenceFragment.KEY_FONT_SIZE_EDITOR,
+					R.integer.default_editor_font_size));
+			mText.setTypeface(TextPreviewPreference
+					.getTypeface(PreferenceManager.getDefaultSharedPreferences(
+							getActivity()).getString(
+							NotesPreferenceFragment.KEY_FONT_TYPE_EDITOR,
+							NotesPreferenceFragment.SANS)));
+		}
 	}
 
 	@Override
@@ -526,6 +539,8 @@ Log.d("NotesEditorFragment", "onCreateView mText: " + mText);
 		if (!timeToDie) {
 			Log.d("NotesEditorFragment", "onResume");
 
+			// Settings might have been changed
+			setFontSettings();
 			// Closed with new note being only note. That was deleted. Requery
 			// and
 			// start new note.

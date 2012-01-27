@@ -63,20 +63,25 @@ public class TextPreviewPreference extends Preference {
 
 		//mText = (TextView) view.findViewById(R.id.prefTextPreview);
 	}
+	
+	public static Typeface getTypeface(String type) {
+		Typeface font;
+		if (NotesPreferenceFragment.MONOSPACE.equals(type)) {
+			font = Typeface.MONOSPACE;
+		} else if (NotesPreferenceFragment.SERIF.equals(type)) {
+			font = Typeface.SERIF;
+		} else {
+			font = Typeface.SANS_SERIF;
+		}
+		return font;
+	}
 
 	public void setTextType(String type) {
 		Log.d(TAG, "setTextType");
 		if (mText != null) {
 			Log.d(TAG, "mText type was not null: " + type);
-			Typeface font;
-			if (NotesPreferenceFragment.MONOSPACE.equals(type)) {
-				font = Typeface.MONOSPACE;
-			} else if (NotesPreferenceFragment.SERIF.equals(type)) {
-				font = Typeface.SERIF;
-			} else {
-				font = Typeface.SANS_SERIF;
-			}
-			mText.setTypeface(font);
+			
+			mText.setTypeface(getTypeface(type));
 //			mText.post(new Runnable() {
 //
 //				@Override

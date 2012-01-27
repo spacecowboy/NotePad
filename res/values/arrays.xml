@@ -38,9 +38,9 @@
     </string-array>
 
     <string-array name="font_typevalues_preference">
-        <item>sans</item>
-        <item>serif</item>
-        <item>monospace</item>
+        <item>Sans</item>
+        <item>Serif</item>
+        <item>Monospace</item>
     </string-array>
 
 </resources>

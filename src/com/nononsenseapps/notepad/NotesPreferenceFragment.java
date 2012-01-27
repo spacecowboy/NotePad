@@ -23,9 +23,9 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	public static final String KEY_FONT_SIZE_EDITOR = "key_font_size_editor";
 	private static final CharSequence KEY_TEXT_PREVIEW = "key_text_preview";
 
-	public static final String SANS = "sans";
-	public static final String SERIF = "serif";
-	public static final String MONOSPACE = "monospace";
+	public static final String SANS = "Sans";
+	public static final String SERIF = "Serif";
+	public static final String MONOSPACE = "Monospace";
 	
 	public static final String THEME_DARK = "dark";
 	public static final String THEME_LIGHT = "light";
@@ -136,7 +136,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	}
 
 	private void updatePreviewFontSize(SharedPreferences sharedPreferences) {
-		int size = sharedPreferences.getInt(KEY_FONT_SIZE_EDITOR, 22);
+		int size = sharedPreferences.getInt(KEY_FONT_SIZE_EDITOR, R.integer.default_editor_font_size);
 		if (textPreview != null) {
 			Log.d("settings", "updatePreviewFontSize textPreview");
 			textPreview.setTextSize(size);
