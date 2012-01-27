@@ -361,7 +361,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 		mText = (EditText) inflater.inflate(layout, container, false);
 		mText.addTextChangedListener(this);
 		// set characteristics from settings
-		mText.setTextSize(getSharedPreferences().getInt(NotesPreferenceFragment.KEY_FONT_SIZE_EDITOR, NotesPreferenceFragment.DEFAULT_EDITOR_FONT_SIZE));
+		mText.setTextSize(getSharedPreferences().getInt(NotesPreferenceFragment.KEY_FONT_SIZE_EDITOR, R.integer.default_editor_font_size));
 		mText.setTypeface(NotesPreferenceFragment.getTypeface(getSharedPreferences().getString(NotesPreferenceFragment.KEY_FONT_TYPE_EDITOR, NotesPreferenceFragment.SANS)));		
 
 Log.d("NotesEditorFragment", "onCreateView mText: " + mText);
@@ -643,7 +643,7 @@ Log.d("NotesEditorFragment", "onCreateView mText: " + mText);
 		 * The Cursor object will exist, even if no records were returned,
 		 * unless the query failed because of some exception or error.
 		 */
-		if (doSave && mCursor != null) {
+		if (doSave && mCursor != null && mText != null) {
 			Log.d("NotesEditorFragment", "onPause Saving/Deleting Note");
 
 			// Get the current note text.
