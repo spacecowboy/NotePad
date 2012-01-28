@@ -30,8 +30,8 @@
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:minHeight="?android:attr/listPreferredItemHeight"
-    android:paddingRight="?android:attr/scrollbarSize"
-    android:paddingLeft="8dp"
+    android:paddingLeft="@dimen/preference_screen_side_margin"
+    android:paddingRight="@dimen/preference_screen_side_margin"
     android:paddingTop="8dp"
     android:paddingBottom="4dp"
     android:key="preference_screen" >
