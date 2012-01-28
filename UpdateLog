@@ -1,4 +1,7 @@
-Since latest
+v
+* Fixed the delete menu for multiselect in the list. Would delete before menu option was selected.
+
+v2.2
 * Fixed my secon crash report. mtext was null in setting share intent in noteseditorfragment. moved to onactivitycreated and enclosed in null-checks
 
 
