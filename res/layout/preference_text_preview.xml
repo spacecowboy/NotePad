@@ -10,10 +10,6 @@
     android:paddingBottom="4dp"
     
     android:key="preference_text_preview_holder" >
-    <!-- android:paddingBottom="4dp"
-    android:paddingLeft="8dp"
-    android:paddingRight="?android:attr/scrollbarSize"
-    android:paddingTop="8dp" -->
 
     <RelativeLayout
         android:layout_width="wrap_content"
