@@ -738,8 +738,8 @@ public class NotesListFragment extends ListFragment implements
 				onDeleteAction();
 				break;
 			default:
-				Toast.makeText(activity, "Clicked " + item.getTitle(),
-						Toast.LENGTH_SHORT).show();
+//				Toast.makeText(activity, "Clicked " + item.getTitle(),
+//						Toast.LENGTH_SHORT).show();
 				break;
 			}
 			return true;
@@ -869,6 +869,17 @@ public class NotesListFragment extends ListFragment implements
 			// Note that you can set/change the intent any time,
 			// say when the user has selected an image.
 			actionProvider.setShareIntent(createShareIntent(buildTextToShare()));
+			
+			// Now the delete action provider
+			// Set delete listener to this
+			actionItem = menu.findItem(R.id.modal_action_delete);
+
+			DeleteActionProvider deleteProvider = (DeleteActionProvider) actionItem
+					.getActionProvider();
+
+			// Make sure containing activity implements listener interface
+			deleteProvider
+					.setDeleteActionListener(this);
 
 			return true;
 		}
