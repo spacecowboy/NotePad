@@ -16,7 +16,8 @@
 		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_dark</item>
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 		
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
+		<item name="my_list_selector">@drawable/solid_list_selector</item>
 
 	</style>
 	
@@ -30,7 +31,8 @@
 		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 		
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
+		<item name="my_list_selector">@drawable/solid_list_selector</item>
 	</style>
 
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Light">
@@ -43,7 +45,8 @@
 		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 		
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
+		<item name="my_list_selector">@drawable/solid_list_selector</item>
 	</style>
 
 	<style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.Dialog">
@@ -56,11 +59,13 @@
 		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_dark</item>
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 		
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
+		<item name="my_list_selector">@drawable/solid_list_selector</item>
 	</style>
 	
 	<style name="ThemeHoloLightDialogNoActionBar" parent="ThemeHoloDialogNoActionBar">
-	    <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+	    <!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
+		<item name="my_list_selector">@drawable/solid_list_selector</item>
 	</style>
 
 </resources>

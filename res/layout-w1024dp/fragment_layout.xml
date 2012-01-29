@@ -12,7 +12,9 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:orientation="vertical" >
+        android:paddingRight="0dp"
+        android:orientation="vertical"
+        android:background="@drawable/list_read_holo" >
 
         <SearchView
             android:id="@+id/search_view"

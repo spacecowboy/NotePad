@@ -15,4 +15,7 @@
     <item
         android:drawable="@drawable/list_arrow_selected_holo"
         android:state_selected="true" />
+    
+    <item
+        android:drawable="@drawable/list_read_holo" />
 </selector>
