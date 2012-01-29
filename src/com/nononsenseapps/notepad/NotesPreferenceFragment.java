@@ -186,8 +186,8 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	}
 
 	private void setThemeSummary(SharedPreferences sharedPreferences) {
-		// Dark theme is default
-		String value = sharedPreferences.getString(KEY_THEME, THEME_DARK);
+		// Light theme is default
+		String value = sharedPreferences.getString(KEY_THEME, THEME_LIGHT);
 		String summary;
 		if (THEME_DARK.equals(value))
 			summary = getText(R.string.settings_summary_theme_dark).toString();

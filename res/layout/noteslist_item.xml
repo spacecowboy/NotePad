@@ -22,7 +22,7 @@
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:background="?android:attr/activatedBackgroundIndicator" >
+    android:background="?my_list_selector" >
 
     <TextView
         android:id="@+id/itemTitle"

@@ -27,7 +27,7 @@ public class FragmentLayout extends Activity implements
 		OnSharedPreferenceChangeListener, OnEditorDeleteListener,
 		DeleteActionListener {
 	//public static boolean lightTheme = false;
-	public static String currentTheme = NotesPreferenceFragment.THEME_DARK;
+	public static String currentTheme = NotesPreferenceFragment.THEME_LIGHT;
 	public static boolean shouldRestart = false;
 	public static boolean LANDSCAPE_MODE;
 	public static boolean AT_LEAST_ICS;
@@ -117,7 +117,7 @@ public class FragmentLayout extends Activity implements
 		
 		currentTheme = prefs.getString(
 				NotesPreferenceFragment.KEY_THEME,
-				NotesPreferenceFragment.THEME_DARK);
+				NotesPreferenceFragment.THEME_LIGHT);
 		
 		setTypeOfTheme();
 

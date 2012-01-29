@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="ThemeHoloLight" parent="@android:style/Theme.Holo.Light">
+        <item name="ic_action_compose">@drawable/ic_action_compose_light</item>
+		<item name="ic_action_delete">@drawable/ic_action_delete_light</item>
+		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_light</item>
+		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_light</item>
+		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_light</item>
+		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_light</item>
+		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
+		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
+		
+        <item name="my_list_selector">@drawable/jonas_list_selector</item>
+	</style>
+	<!-- This theme doesn't exist in honeycomb -->
+	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light">
+	    
+	    <item name="ic_action_compose">@drawable/ic_action_compose_light</item>
+		<item name="ic_action_delete">@drawable/ic_action_delete_light</item>
+		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_light</item>
+		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_light</item>
+		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_light</item>
+		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_light</item>
+		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
+		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
+
+		<item name="my_list_selector">@drawable/jonas_list_selector</item>
+		
+	</style>
+</resources>

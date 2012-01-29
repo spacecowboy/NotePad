@@ -2,8 +2,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 	<!-- This theme doesn't exist in honeycomb -->
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light.DarkActionBar">
-
-		<item name="ic_action_compose">@drawable/ic_action_compose_dark</item>
+	    
+	    <item name="ic_action_compose">@drawable/ic_action_compose_dark</item>
 		<item name="ic_action_delete">@drawable/ic_action_delete_dark</item>
 		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_dark</item>
 		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_dark</item>
@@ -11,8 +11,8 @@
 		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_dark</item>
 		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_dark</item>
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
-		
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+
+		<item name="my_list_selector">@drawable/jonas_list_selector</item>
 		
 	</style>
 </resources>
