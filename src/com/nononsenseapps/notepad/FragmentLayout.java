@@ -204,7 +204,9 @@ public class FragmentLayout extends Activity implements
 
 			// Set up navigation (adds nice arrow to icon)
 			ActionBar actionBar = getActionBar();
-			actionBar.setDisplayHomeAsUpEnabled(true);
+			if (actionBar != null) {
+				actionBar.setDisplayHomeAsUpEnabled(true);
+			}
 
 			if (getResources().getBoolean(R.bool.useLandscapeView)) {
 				// If the screen is now in landscape mode, we can show the
