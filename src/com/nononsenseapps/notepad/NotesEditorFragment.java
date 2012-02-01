@@ -400,6 +400,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		id = getArguments().getLong(KEYID);
 
 		noteDueDate = new Time(Time.getCurrentTimezone());
+		
+		Calendar c = Calendar.getInstance();
+		year = c.get(Calendar.YEAR);
+		month = c.get(Calendar.MONTH);
+		day = c.get(Calendar.DAY_OF_MONTH);
 	}
 
 	@Override
