@@ -50,7 +50,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	
 	// Two ways of expressing: "Mon, 16 Jan"
 	public final static String ANDROIDTIME_FORMAT = "%a, %e %b";
-	public final static String DATEFORMAT_FORMAT = "E, dd MMM";
+	public final static String DATEFORMAT_FORMAT = "E, d MMM";
 	/*
 	 * Creates a projection that returns the note ID and the note contents.
 	 */
