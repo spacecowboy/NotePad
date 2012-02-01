@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.app.ListFragment;
 import android.widget.SimpleCursorAdapter;
 
+import android.text.format.Time;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.MenuInflater;
@@ -45,6 +46,11 @@ public class NotesListFragment extends ListFragment implements
 		SearchView.OnQueryTextListener, OnItemLongClickListener,
 		onNewNoteCreatedListener, OnModalDeleteListener, Refresher {
 	int mCurCheckPosition = 0;
+	
+	private static final String[] PROJECTION = new String[] {
+		NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
+		NotePad.Notes.COLUMN_NAME_NOTE,
+		NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
 
 	public static final String SELECTEDPOS = "selectedpos";
 	public static final String SELECTEDID = "selectedid";
@@ -52,13 +58,6 @@ public class NotesListFragment extends ListFragment implements
 	// For logging and debugging
 	private static final String TAG = "NotesListFragment";
 
-	/**
-	 * The columns needed by the cursor adapter
-	 */
-	private static final String[] PROJECTION = new String[] {
-			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
-			NotePad.Notes.COLUMN_NAME_NOTE,
-			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
 	private static final int CHECK_SINGLE = 1;
 	private static final int CHECK_MULTI = 2;
 	private static final int CHECK_SINGLE_FUTURE = 3;
@@ -657,13 +656,32 @@ public class NotesListFragment extends ListFragment implements
 				 * record.
 				 */
 				cursor.moveToFirst();
+				String note = "";
+				
+				int colTitleIndex = cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
 
-				// Modifies the window title for the Activity according to the
-				// current Activity state.
-				// Set the title of the Activity to include the note title
+				if (colTitleIndex > -1)
+					note = cursor.getString(colTitleIndex) + "\n";
+				
+				int colDueIndex = cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
+				String due = "";
+				if (colDueIndex > -1)
+					due = cursor.getString(colDueIndex);
+				
+				if (due != null && !due.isEmpty()) {
+					Time date = new Time(Time.getCurrentTimezone());
+					date.parse3339(due);
+					note = note + "due date: " + date.format(NotesEditorFragment.ANDROIDTIME_FORMAT) + "\n";
+				}
+				
 				int colNoteIndex = cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
-				String note = cursor.getString(colNoteIndex);
+
+				if (colNoteIndex > -1)
+					note = note + "\n" + cursor.getString(colNoteIndex);
+				
 				// Put in hash
 				textToShare.put(id, note);
 			}
@@ -798,7 +816,7 @@ public class NotesListFragment extends ListFragment implements
 														// multiple
 					// notes from
 					// the provider.
-					PROJECTION, // A projection that returns the note ID and
+					NotesEditorFragment.PROJECTION, // A projection that returns the note ID and
 								// note
 								// content for each note.
 					null, // No "where" clause selection criteria.

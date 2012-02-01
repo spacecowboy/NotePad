@@ -47,17 +47,17 @@ import com.nononsenseapps.ui.TextPreviewPreference;
 
 public class NotesEditorFragment extends Fragment implements TextWatcher,
 		OnDateSetListener, OnClickListener {
-	
+
 	// Two ways of expressing: "Mon, 16 Jan"
 	public final static String ANDROIDTIME_FORMAT = "%a, %e %b";
 	public final static String DATEFORMAT_FORMAT = "E, d MMM";
 	/*
 	 * Creates a projection that returns the note ID and the note contents.
 	 */
-	private static final String[] PROJECTION = new String[] {
-			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
-			NotePad.Notes.COLUMN_NAME_NOTE, NotePad.Notes.COLUMN_NAME_DUE_DATE,
-			NotePad.Notes.COLUMN_NAME_GTASKS_ID};
+	public static final String[] PROJECTION = new String[] { NotePad.Notes._ID,
+			NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE,
+			NotePad.Notes.COLUMN_NAME_DUE_DATE,
+			NotePad.Notes.COLUMN_NAME_GTASKS_ID };
 
 	// A label for the saved state of the activity
 	public static final String ORIGINAL_NOTE = "origContent";
@@ -85,7 +85,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	// This object is used to save the correct date in the database.
 	private Time noteDueDate;
 	private boolean dueDateSet = false;
-	
+
 	// gTask ID
 	private String gTaskID = null;
 
@@ -215,7 +215,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mOriginalNote = savedInstanceState.getString(ORIGINAL_NOTE);
 			mOriginalDueDate = savedInstanceState.getString(ORIGINAL_DUE);
 			mOriginalTitle = savedInstanceState.getString(ORIGINAL_TITLE);
-			mOriginalDueState = savedInstanceState.getBoolean(ORIGINAL_DUE_STATE);
+			mOriginalDueState = savedInstanceState
+					.getBoolean(ORIGINAL_DUE_STATE);
 		}
 	}
 
@@ -236,8 +237,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		// Only updates if the text is different from original content
 		// Only compare dates if there actually is a previous date to compare
-		if (text.equals(mOriginalNote) && title.equals(mOriginalTitle) && dueDateSet == mOriginalDueState &&  
-				(!dueDateSet || (dueDateSet && due.equals(mOriginalDueDate)))) {
+		if (text.equals(mOriginalNote)
+				&& title.equals(mOriginalTitle)
+				&& dueDateSet == mOriginalDueState
+				&& (!dueDateSet || (dueDateSet && due.equals(mOriginalDueDate)))) {
 			Log.d("NotesEditorFragment", "Updating (not) note");
 			// Do Nothing in this case.
 		} else {
@@ -249,7 +252,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			// Sets up a map to contain values to be updated in the provider.
 			ContentValues values = new ContentValues();
-			
+
 			// Add new modification time
 			values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
 					System.currentTimeMillis());
@@ -273,14 +276,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			// This puts the desired notes text into the map.
 			values.put(NotePad.Notes.COLUMN_NAME_NOTE, text);
-			
+
 			// Put the due-date in
 			if (dueDateSet) {
 				values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, due);
 			} else {
 				values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
 			}
-			
+
 			// Put gTasks id in
 			if (gTaskID != null && !gTaskID.isEmpty()) {
 				values.put(NotePad.Notes.COLUMN_NAME_GTASKS_ID, gTaskID);
@@ -355,9 +358,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				// Put the original note text back into the database
 				mCursor.close();
 				mCursor = null;
-				//ContentValues values = new ContentValues();
-				//values.put(NotePad.Notes.COLUMN_NAME_NOTE, mOriginalContent);
-				//getActivity().getContentResolver().update(mUri, values, null, null);
+				// ContentValues values = new ContentValues();
+				// values.put(NotePad.Notes.COLUMN_NAME_NOTE, mOriginalContent);
+				// getActivity().getContentResolver().update(mUri, values, null,
+				// null);
 				openNote(null);
 				showTheNote();
 			} else if (mState == STATE_INSERT) {
@@ -400,7 +404,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		id = getArguments().getLong(KEYID);
 
 		noteDueDate = new Time(Time.getCurrentTimezone());
-		
+
 		Calendar c = Calendar.getInstance();
 		year = c.get(Calendar.YEAR);
 		month = c.get(Calendar.MONTH);
@@ -458,12 +462,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		return theView;
 	}
-	
 
 	private void clearDueDate() {
 		if (mDueDate != null) {
 			mDueDate.setText(getText(R.string.editor_due_date_hint));
-			// TODO
 			// set year, month, day variables to today
 			Calendar c = Calendar.getInstance();
 			year = c.get(Calendar.YEAR);
@@ -471,6 +473,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			day = c.get(Calendar.DAY_OF_MONTH);
 		}
 		dueDateSet = false;
+		
+		// Remember to update share intent
+		setActionShareIntent();
 	}
 
 	private void setFontSettings() {
@@ -504,19 +509,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		} else {
 			openNote(saves);
 			showTheNote();
-			if (shareActionProvider != null) {
-				// Set initial share intent, will only be non-null on ICS
-				// Note that you can set/change the intent any time,
-				// say when the user has selected an image.
-				Intent share = new Intent(Intent.ACTION_SEND);
-				share.setType("text/plain");
-				String shareText = "";
-				if (mText != null)
-					shareText = mText.getText().toString();
-				share.putExtra(Intent.EXTRA_TEXT, shareText);
-				((ShareActionProvider) shareActionProvider)
-						.setShareIntent(share);
-			}
 		}
 	}
 
@@ -556,14 +548,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 						.getActionProvider();
 				shareProvider
 						.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
-				// Note that you can set/change the intent any time,
-				// say when the user has selected an image.
-				Intent share = new Intent(Intent.ACTION_SEND);
-				share.setType("text/plain");
-				share.putExtra(Intent.EXTRA_TEXT, "");
-				shareProvider.setShareIntent(share);
 
 				this.shareActionProvider = shareProvider;
+				
+				// Note that you can set/change the intent any time,
+				// say when the user has selected an image.
+				setActionShareIntent();
 			}
 
 			// Only add extra menu items for a saved note
@@ -610,7 +600,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		String text;
 		// Handle all of the possible menu actions.
 		switch (item.getItemId()) {
 		case R.id.menu_revert:
@@ -619,8 +608,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					.show();
 			break;
 		case R.id.menu_copy:
-			text = mText.getText().toString();
-			copyText(text);
+			copyText(makeShareText());
 			Toast.makeText(activity, "Note placed in clipboard",
 					Toast.LENGTH_SHORT).show();
 			break;
@@ -631,17 +619,26 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		return super.onOptionsItemSelected(item);
 	}
 
-	// @Override
-	public boolean onShareTargetSelectedHC(Intent intent) {
-		// Just add the text
-		intent.putExtra(Intent.EXTRA_TEXT, mText.getText().toString());
-		return false;
+	private String makeShareText() {
+		String note = "";
+
+		note = mTitle.getText().toString() + "\n";
+
+		if (dueDateSet && noteDueDate != null) {
+			note = note + "due date: "
+					+ noteDueDate.format(NotesEditorFragment.ANDROIDTIME_FORMAT)
+					+ "\n";
+		}
+
+		note = note + "\n" + mText.getText().toString();
+
+		return note;
 	}
 
 	private void shareNote() {
 		Intent share = new Intent(Intent.ACTION_SEND);
 		share.setType("text/plain");
-		share.putExtra(Intent.EXTRA_TEXT, mText.getText().toString());
+		share.putExtra(Intent.EXTRA_TEXT, makeShareText());
 		startActivity(Intent.createChooser(share, "Share note"));
 	}
 
@@ -679,19 +676,19 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			// Modifies the window title for the Activity according to the
 			// current Activity state.
-//			if (mState == STATE_EDIT) {
-//				// Set the title of the Activity to include the note title
-//				int colTitleIndex = mCursor
-//						.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
-//				String title = mCursor.getString(colTitleIndex);
-//				Resources res = getResources();
-//				String text = String.format(res.getString(R.string.title_edit),
-//						title);
-//				activity.setTitle(text);
-//				// Sets the title to "create" for inserts
-//			} else if (mState == STATE_INSERT) {
-//				activity.setTitle(getText(R.string.title_create));
-//			}
+			// if (mState == STATE_EDIT) {
+			// // Set the title of the Activity to include the note title
+			// int colTitleIndex = mCursor
+			// .getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
+			// String title = mCursor.getString(colTitleIndex);
+			// Resources res = getResources();
+			// String text = String.format(res.getString(R.string.title_edit),
+			// title);
+			// activity.setTitle(text);
+			// // Sets the title to "create" for inserts
+			// } else if (mState == STATE_INSERT) {
+			// activity.setTitle(getText(R.string.title_create));
+			// }
 
 			/*
 			 * onResume() may have been called after the Activity lost focus
@@ -714,11 +711,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
 			String note = mCursor.getString(colNoteIndex);
 			mText.setText(note);
-			
+
 			int colDueIndex = mCursor
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
 			String due = mCursor.getString(colDueIndex);
-			
+
 			// update year, month, day here from database instead if they exist
 			if (due == null || due.isEmpty()) {
 				clearDueDate();
@@ -854,32 +851,31 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mCursor = null;
 		}
 	}
-
-	@Override
-	public void afterTextChanged(Editable s) {
+	
+	private void setActionShareIntent() {
 		if (FragmentLayout.AT_LEAST_ICS && shareActionProvider != null) {
 			Intent share = new Intent(Intent.ACTION_SEND);
 			share.setType("text/plain");
-			share.putExtra(Intent.EXTRA_TEXT, s.toString());
-
-			// TODO
-			// add title and note together
+			share.putExtra(Intent.EXTRA_TEXT, makeShareText());
 
 			((ShareActionProvider) shareActionProvider).setShareIntent(share);
 		}
 	}
 
 	@Override
+	public void afterTextChanged(Editable s) {
+		setActionShareIntent();
+	}
+
+	@Override
 	public void beforeTextChanged(CharSequence s, int start, int count,
 			int after) {
-		// TODO Auto-generated method stub
-
+		// Don't care
 	}
 
 	@Override
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
-		// TODO Auto-generated method stub
-
+		// Don't care
 	}
 
 	/**
@@ -900,6 +896,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		noteDueDate.set(dayOfMonth, monthOfYear, year);
 		dueDateSet = true;
+		
+		// Remember to update share intent
+		setActionShareIntent();
 
 		final CharSequence timeToShow = DateFormat.format(DATEFORMAT_FORMAT, c);
 
@@ -914,33 +913,34 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		});
 	}
-	
+
 	@Override
 	public void onClick(View v) {
 
-		//activity.showDialog(DATE_DIALOG_ID);
+		// activity.showDialog(DATE_DIALOG_ID);
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
-	    Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-	    if (prev != null) {
-	        ft.remove(prev);
-	    }
-	    ft.addToBackStack(null);
+		Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
 
-	    // Create and show the dialog.
-	    DatePickerDialogFragment newFragment = new DatePickerDialogFragment(this);
-	    newFragment.show(ft, "dialog");
+		// Create and show the dialog.
+		DatePickerDialogFragment newFragment = new DatePickerDialogFragment(
+				this);
+		newFragment.show(ft, "dialog");
 	}
-	
+
 	public class DatePickerDialogFragment extends DialogFragment {
-	    private NotesEditorFragment mFragment;
+		private NotesEditorFragment mFragment;
 
-	    public DatePickerDialogFragment(NotesEditorFragment callback) {
-	        mFragment = callback;
-	    }
+		public DatePickerDialogFragment(NotesEditorFragment callback) {
+			mFragment = callback;
+		}
 
-	     public Dialog onCreateDialog(Bundle savedInstanceState) {
-	    	 return new DatePickerDialog(getActivity(), mFragment, mFragment.year,
-	    			 mFragment.month, mFragment.day);
-	     }
+		public Dialog onCreateDialog(Bundle savedInstanceState) {
+			return new DatePickerDialog(getActivity(), mFragment,
+					mFragment.year, mFragment.month, mFragment.day);
+		}
 	}
 }
