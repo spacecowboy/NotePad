@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:padding="16dp" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,14 +13,15 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true" >
+            android:layout_alignParentTop="true"
+            android:paddingBottom="4dp" >
 
             <EditText
                 android:id="@+id/titleBox"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentBottom="true"
+                android:layout_alignParentTop="true"
                 android:hint="@string/editor_title_hint"
                 android:inputType="textShortMessage"
                 android:maxWidth="400dp"
@@ -33,9 +35,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentBottom="true"
+                android:layout_alignParentTop="true"
                 android:orientation="horizontal"
-                android:minWidth="150dp" >
+                android:minWidth="150dp"
+                android:padding="4dp" >
 
                 <Button
                     android:id="@+id/dueDateBox"
@@ -67,7 +70,7 @@
             android:inputType="textMultiLine"
             android:padding="5dp" >
 
-            <!-- <requestFocus />  -->
+            <requestFocus />
         </EditText>
     </RelativeLayout>
 

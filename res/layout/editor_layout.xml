@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent"
+    android:padding="16dp" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -12,7 +13,8 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true" >
+            android:layout_alignParentTop="true"
+            android:paddingBottom="4dp" >
 
             <EditText
                 android:id="@+id/titleBox"
@@ -67,7 +69,7 @@
             android:inputType="textMultiLine"
             android:padding="5dp" >
 
-            <!-- <requestFocus />  -->
+            <requestFocus />
         </EditText>
     </RelativeLayout>
 
