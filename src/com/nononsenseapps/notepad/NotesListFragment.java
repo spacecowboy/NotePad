@@ -19,6 +19,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
@@ -109,8 +110,7 @@ public class NotesListFragment extends ListFragment implements
 
 		if (savedInstanceState != null) {
 			currentState = savedInstanceState.getInt(SAVEDSTATE, STATE_LIST);
-		}
-		else {
+		} else {
 			currentState = STATE_LIST;
 		}
 
@@ -124,8 +124,8 @@ public class NotesListFragment extends ListFragment implements
 			// In landscape, this will display a new note
 			if (FragmentLayout.LANDSCAPE_MODE && currentState == STATE_LIST) {
 				currentState = STATE_NEW_NOTE;
-			}
-			else if (!FragmentLayout.LANDSCAPE_MODE && currentState == STATE_NEW_NOTE) {
+			} else if (!FragmentLayout.LANDSCAPE_MODE
+					&& currentState == STATE_NEW_NOTE) {
 				// Don't display a new note automatically in portrait mode
 				currentState = STATE_LIST;
 			}
@@ -146,12 +146,12 @@ public class NotesListFragment extends ListFragment implements
 			// -1);
 			mCurCheckPosition = 0;
 			mCurId = -1;
-			
+
 			if (savedInstanceState != null) {
 				mCurCheckPosition = savedInstanceState.getInt(SAVEDPOS, 0);
 				mCurId = savedInstanceState.getLong(SAVEDID, -1);
 			}
-			
+
 			if (FragmentLayout.LANDSCAPE_MODE && currentState == STATE_LIST) {
 				currentState = STATE_EXISTING_NOTE;
 			}
@@ -166,20 +166,20 @@ public class NotesListFragment extends ListFragment implements
 		// Position is valid for this list and might be -1 in case we had an
 		// empty search in portrait.
 		// Id might not be valid if we are coming from portrait to landscape
-		if (STATE_EXISTING_NOTE == currentState ||
-				STATE_NEW_NOTE == currentState) {
+		if (STATE_EXISTING_NOTE == currentState
+				|| STATE_NEW_NOTE == currentState) {
 			// Always display note in landscape mode
 			// Opens a new note if necessary
 			showNote(mCurCheckPosition, true);
-		} 
-//		else if (mCurId > -1) {
-//			// In portrait mode, only display an existing note. And that could
-//			// have been selected during a search
-//			// so recacalculate just in case
-//			mCurCheckPosition = getPosOfId(mCurId);
-//			// don't open a new note if none exists
-//			showNote(mCurCheckPosition, false);
-//		}
+		}
+		// else if (mCurId > -1) {
+		// // In portrait mode, only display an existing note. And that could
+		// // have been selected during a search
+		// // so recacalculate just in case
+		// mCurCheckPosition = getPosOfId(mCurId);
+		// // don't open a new note if none exists
+		// showNote(mCurCheckPosition, false);
+		// }
 	}
 
 	private void setupSearchView() {
@@ -596,8 +596,6 @@ public class NotesListFragment extends ListFragment implements
 	public void setSingleCheck() {
 		checkMode = CHECK_SINGLE;
 		// ListView lv = getListView();
-		lv.setLongClickable(true);
-		lv.setOnItemLongClickListener(this);
 		if (FragmentLayout.LANDSCAPE_MODE) {
 			// Fix the selection before releasing that
 			lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
@@ -606,12 +604,23 @@ public class NotesListFragment extends ListFragment implements
 			// Not nice to show selected item in list when no editor is showing
 			lv.setChoiceMode(ListView.CHOICE_MODE_NONE);
 		}
+		lv.setLongClickable(true);
+		lv.setOnItemLongClickListener(this);
 	}
 
 	public void setFutureSingleCheck() {
+		// TODO maek this shit work and reselect current
 		// REsponsible for disabling the modal selector in the future.
 		// can't do it now because it has to destroy itself etc...
-		checkMode = CHECK_SINGLE_FUTURE;
+		if (checkMode == CHECK_MULTI) {
+			checkMode = CHECK_SINGLE_FUTURE;
+			
+			Intent intent = new Intent(activity, FragmentLayout.class);
+
+			// the mother activity will refresh the list for us
+			Log.d(TAG, "Launching intent: " + intent);
+			startActivity(intent);
+		}
 	}
 
 	public void setMultiCheck(int pos) {
@@ -809,8 +818,8 @@ public class NotesListFragment extends ListFragment implements
 				onDeleteAction();
 				break;
 			default:
-				// Toast.makeText(activity, "Clicked " + item.getTitle(),
-				// Toast.LENGTH_SHORT).show();
+				//Toast.makeText(activity, "Clicked " + item.getTitle(),
+				//Toast.LENGTH_SHORT).show();
 				break;
 			}
 			return true;
@@ -918,6 +927,7 @@ public class NotesListFragment extends ListFragment implements
 		@Override
 		public boolean onCreateActionMode(android.view.ActionMode mode,
 				android.view.Menu menu) {
+			Log.d("modeCallBack", "onCreateActionMode " + mode);
 			this.textToShare.clear();
 			this.notesToDelete.clear();
 
@@ -1007,11 +1017,11 @@ public class NotesListFragment extends ListFragment implements
 		// overridePendingTransition(0, 0);
 		// startActivity(intent);
 
-		Intent intent = new Intent(activity, FragmentLayout.class);
-
-		// intent.setData(data);
-		Log.d(TAG, "Launching intent: " + intent);
-		startActivity(intent);
+		// This is called in onDestroyActionMode instead so it happens for all events
+		// and only once
+		//Intent intent = new Intent(activity, FragmentLayout.class);
+		//Log.d(TAG, "Launching intent: " + intent);
+		//startActivity(intent);
 	}
 
 	@Override
