@@ -34,7 +34,7 @@
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
-		<item name="my_list_selector">@drawable/solid_list_selector</item>
+		<item name="my_list_selector">@android:color/transparent</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
 	</style>
 
@@ -49,7 +49,7 @@
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
-		<item name="my_list_selector">@drawable/solid_list_selector</item>
+		<item name="my_list_selector">@android:color/transparent</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
 	</style>
 
@@ -64,13 +64,13 @@
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
-		<item name="my_list_selector">@drawable/solid_list_selector</item>
+		<item name="my_list_selector">@android:color/transparent</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
 	</style>
 	
 	<style name="ThemeHoloLightDialogNoActionBar" parent="ThemeHoloDialogNoActionBar">
 	    <!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
-		<item name="my_list_selector">@drawable/solid_list_selector</item>
+		<item name="my_list_selector">@android:color/transparent</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
 	</style>
 
