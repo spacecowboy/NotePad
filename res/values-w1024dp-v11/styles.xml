@@ -11,6 +11,7 @@
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 		
         <item name="my_list_selector">@drawable/arrow_list_selector</item>
+        <item name="my_list_background">@drawable/list_read_holo</item>
 	</style>
 	<!-- This theme doesn't exist in honeycomb -->
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light">
@@ -25,6 +26,7 @@
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 
 		<item name="my_list_selector">@drawable/arrow_list_selector</item>
+		<item name="my_list_background">@drawable/list_read_holo</item>
 		
 	</style>
 </resources>

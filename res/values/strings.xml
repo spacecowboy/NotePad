@@ -26,6 +26,10 @@
     <string name="menu_revert">Revert changes</string>
     <string name="menu_copy">Copy note</string>
     <string name="menu_cancel">Cancel</string>
+    
+    <string name="editor_due_date_hint">Due date</string>
+    <string name="editor_title_hint">Title</string>
+    <string name="editor_note_hint">Note</string>
 
     <string name="resolve_edit">Edit note</string>
 

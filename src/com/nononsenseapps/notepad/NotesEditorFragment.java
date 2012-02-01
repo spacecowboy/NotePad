@@ -1,9 +1,14 @@
 package com.nononsenseapps.notepad;
 
-import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
-import com.nononsenseapps.notepad.interfaces.onNewNoteCreatedListener;
-import com.nononsenseapps.ui.TextPreviewPreference;
+import java.util.Calendar;
 
+import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.DatePickerDialog.OnDateSetListener;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
@@ -12,36 +17,53 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
+import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
-import android.app.Activity;
-import android.app.Fragment;
-import android.view.Menu;
-import android.view.MenuItem;
-
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
+import android.text.format.Time;
 import android.util.Log;
+import android.util.TimeFormatException;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
-public class NotesEditorFragment extends Fragment implements TextWatcher {
+import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
+import com.nononsenseapps.notepad.interfaces.onNewNoteCreatedListener;
+import com.nononsenseapps.ui.TextPreviewPreference;
+
+public class NotesEditorFragment extends Fragment implements TextWatcher,
+		OnDateSetListener, OnClickListener {
+	
+	// Two ways of expressing: "Mon, 16 Jan"
+	public final static String ANDROIDTIME_FORMAT = "%a, %e %b";
+	public final static String DATEFORMAT_FORMAT = "E, dd MMM";
 	/*
 	 * Creates a projection that returns the note ID and the note contents.
 	 */
 	private static final String[] PROJECTION = new String[] {
 			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
-			NotePad.Notes.COLUMN_NAME_NOTE };
+			NotePad.Notes.COLUMN_NAME_NOTE, NotePad.Notes.COLUMN_NAME_DUE_DATE,
+			NotePad.Notes.COLUMN_NAME_GTASKS_ID};
 
 	// A label for the saved state of the activity
-	public static final String ORIGINAL_CONTENT = "origContent";
+	public static final String ORIGINAL_NOTE = "origContent";
+	public static final String ORIGINAL_TITLE = "origTitle";
+	public static final String ORIGINAL_DUE = "origDue";
+	public static final String ORIGINAL_DUE_STATE = "origDueState";
 
 	// Argument keys
 	public static final String KEYID = "noteid";
@@ -52,12 +74,29 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 	public static final int STATE_EDIT = 0;
 	public static final int STATE_INSERT = 1;
 
+	protected static final int DATE_DIALOG_ID = 999;
+
+	// These fields are strictly used for the date picker dialog. They should
+	// not be used to get the notes due date!
+	public int year;
+	public int month;
+	public int day;
+
+	// This object is used to save the correct date in the database.
+	private Time noteDueDate;
+	private boolean dueDateSet = false;
+	
+	// gTask ID
+	private String gTaskID = null;
+
 	// Global mutable variables
 	private int mState;
 	private Uri mUri;
 	private Cursor mCursor;
 	private EditText mText;
-	private String mOriginalContent;
+	private String mOriginalNote;
+	private String mOriginalTitle;
+	private String mOriginalDueDate;
 
 	private boolean doSave = true;
 
@@ -71,6 +110,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 	private Activity activity;
 
 	private onNewNoteCreatedListener onNewNoteListener = null;
+
+	private View theView;
+
+	private EditText mTitle;
+
+	private Button mDueDate;
+	private boolean mOriginalDueState;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -162,17 +208,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 		// Or Honeycomb will crash
 		activity.stopManagingCursor(mCursor);
 
-		// For a paste, initializes the data from clipboard.
-		// (Must be done after mCursor is initialized.)
-		if (mState == STATE_INSERT && getArguments().containsKey("content")) {
-			// Does the paste
-			updateNote(getArguments().getString("content"));
-		}
 		// Switches the state to EDIT so the title can be modified.
 		mState = STATE_EDIT;
 
 		if (savedInstanceState != null) {
-			mOriginalContent = savedInstanceState.getString(ORIGINAL_CONTENT);
+			mOriginalNote = savedInstanceState.getString(ORIGINAL_NOTE);
+			mOriginalDueDate = savedInstanceState.getString(ORIGINAL_DUE);
+			mOriginalTitle = savedInstanceState.getString(ORIGINAL_TITLE);
+			mOriginalDueState = savedInstanceState.getBoolean(ORIGINAL_DUE_STATE);
 		}
 	}
 
@@ -189,37 +232,53 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 	 * @param text
 	 *            The new note contents to use.
 	 */
-	private final void updateNote(String text) {
+	private final void updateNote(String title, String text, String due) {
 
 		// Only updates if the text is different from original content
-		if (text.equals(mOriginalContent)) {
+		if (text.equals(mOriginalNote) && title.equals(mOriginalTitle) && due.equals(mOriginalDueDate) && dueDateSet == mOriginalDueState) {
 			Log.d("NotesEditorFragment", "Updating (not) note");
 			// Do Nothing in this case.
 		} else {
 			Log.d("NotesEditorFragment", "Updating note");
-			String title = null;
+
 			// Sets up a map to contain values to be updated in the provider.
 			ContentValues values = new ContentValues();
+			
+			// Add new modification time
 			values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
 					System.currentTimeMillis());
 
 			// If no title was provided as an argument, create one from the note
 			// text.
-			title = makeTitle(text);
+			if (title.isEmpty()) {
+				title = makeTitle(text);
+			}
 
 			// If the action is to insert a new note, this creates an initial
 			// title
 			// for it.
-			if (mState == STATE_INSERT) {
-				// In the values map, sets the value of the title
-				values.put(NotePad.Notes.COLUMN_NAME_TITLE, title);
-			} else if (title != null) {
-				// In the values map, sets the value of the title
-				values.put(NotePad.Notes.COLUMN_NAME_TITLE, title);
-			}
+			// if (mState == STATE_INSERT) {
+			// In the values map, sets the value of the title
+			// values.put(NotePad.Notes.COLUMN_NAME_TITLE, title);
+			// } else if (title != null) {
+			// In the values map, sets the value of the title
+			values.put(NotePad.Notes.COLUMN_NAME_TITLE, title);
+			// }
 
 			// This puts the desired notes text into the map.
 			values.put(NotePad.Notes.COLUMN_NAME_NOTE, text);
+			
+			// Put the due-date in
+			if (dueDateSet) {
+				values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, due);
+			} else {
+				values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
+			}
+			
+			// Put gTasks id in
+			if (gTaskID != null && !gTaskID.isEmpty()) {
+				values.put(NotePad.Notes.COLUMN_NAME_GTASKS_ID, gTaskID);
+			}
 
 			/*
 			 * Updates the provider with the new values in the map. The ListView
@@ -290,10 +349,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 				// Put the original note text back into the database
 				mCursor.close();
 				mCursor = null;
-				ContentValues values = new ContentValues();
-				values.put(NotePad.Notes.COLUMN_NAME_NOTE, mOriginalContent);
-				getActivity().getContentResolver().update(mUri, values, null,
-						null);
+				//ContentValues values = new ContentValues();
+				//values.put(NotePad.Notes.COLUMN_NAME_NOTE, mOriginalContent);
+				//getActivity().getContentResolver().update(mUri, values, null, null);
 				openNote(null);
 				showTheNote();
 			} else if (mState == STATE_INSERT) {
@@ -334,6 +392,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 		setHasOptionsMenu(true);
 
 		id = getArguments().getLong(KEYID);
+
+		noteDueDate = new Time(Time.getCurrentTimezone());
 	}
 
 	@Override
@@ -353,31 +413,71 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 		}
 		Log.d("NotesEditorFragment", "onCreateView");
 
-		int layout = R.layout.note_editor;
+		int layout = R.layout.editor_layout;
 		// if (FragmentLayout.lightTheme) {
 		// layout = R.layout.note_editor_light;
 		// }
 
 		// Gets a handle to the EditText in the the layout.
-		mText = (EditText) inflater.inflate(layout, container, false);
+		theView = inflater.inflate(layout, container, false);
+		// Main note edit text
+		mText = (EditText) theView.findViewById(R.id.noteBox);
 		mText.addTextChangedListener(this);
+		// Title edit text
+		mTitle = (EditText) theView.findViewById(R.id.titleBox);
+		mTitle.addTextChangedListener(this);
+		// dueDate button
+		mDueDate = (Button) theView.findViewById(R.id.dueDateBox);
+		mDueDate.setOnClickListener(this);
 
-		Log.d("NotesEditorFragment", "onCreateView mText: " + mText);
-		return mText;
+		ImageButton cancelButton = (ImageButton) theView
+				.findViewById(R.id.dueCancelButton);
+		cancelButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+
+				// TODO
+				// Run on UI thread?
+				clearDueDate();
+
+			}
+
+		});
+
+		return theView;
+	}
+	
+
+	private void clearDueDate() {
+		if (mDueDate != null) {
+			mDueDate.setText(getText(R.string.editor_due_date_hint));
+			// TODO
+			// set year, month, day variables to today
+			Calendar c = Calendar.getInstance();
+			year = c.get(Calendar.YEAR);
+			month = c.get(Calendar.MONTH);
+			day = c.get(Calendar.DAY_OF_MONTH);
+		}
+		dueDateSet = false;
 	}
 
 	private void setFontSettings() {
 		if (mText != null) {
 			// set characteristics from settings
-			mText.setTextSize(PreferenceManager.getDefaultSharedPreferences(
+			float size = PreferenceManager.getDefaultSharedPreferences(
 					getActivity()).getInt(
 					NotesPreferenceFragment.KEY_FONT_SIZE_EDITOR,
-					R.integer.default_editor_font_size));
-			mText.setTypeface(TextPreviewPreference
-					.getTypeface(PreferenceManager.getDefaultSharedPreferences(
-							getActivity()).getString(
+					R.integer.default_editor_font_size);
+			Typeface tf = TextPreviewPreference.getTypeface(PreferenceManager
+					.getDefaultSharedPreferences(getActivity()).getString(
 							NotesPreferenceFragment.KEY_FONT_TYPE_EDITOR,
-							NotesPreferenceFragment.SANS)));
+							NotesPreferenceFragment.SANS));
+
+			mText.setTextSize(size);
+			mText.setTypeface(tf);
+			mTitle.setTextSize(size);
+			mTitle.setTypeface(tf);
 		}
 	}
 
@@ -386,6 +486,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 		super.onActivityCreated(saves);
 		// if Time to Die, do absolutely nothing since this fragment will go bye
 		// bye
+
 		if (timeToDie) {
 			Log.d("NotesEditorFragment",
 					"onActivityCreated, but it is time to die so doing nothing...");
@@ -596,11 +697,41 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
 			String note = mCursor.getString(colNoteIndex);
 			mText.setTextKeepState(note);
+			
+			int colTitleIndex = mCursor
+					.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
+			String title = mCursor.getString(colTitleIndex);
+			mTitle.setTextKeepState(title);
+			
+			int colDueIndex = mCursor
+					.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
+			String due = mCursor.getString(colDueIndex);
+			
+			// update year, month, day here from database instead if they exist
+			if (due == null || due.isEmpty()) {
+				clearDueDate();
+			} else {
+				try {
+					noteDueDate.parse3339(due);
+					dueDateSet = true;
+					mDueDate.setText(noteDueDate.format(ANDROIDTIME_FORMAT));
+				} catch (TimeFormatException e) {
+					noteDueDate.setToNow();
+					dueDateSet = false;
+				}
+			}
 
 			// Stores the original note text, to allow the user to revert
 			// changes.
-			if (mOriginalContent == null) {
-				mOriginalContent = note;
+			if (mOriginalNote == null) {
+				mOriginalNote = note;
+			}
+			if (mOriginalDueDate == null) {
+				mOriginalDueDate = due;
+				mOriginalDueState = dueDateSet;
+			}
+			if (mOriginalTitle == null) {
+				mOriginalTitle = title;
 			}
 
 			// Request focus, will not open keyboard
@@ -631,7 +762,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 	public void onSaveInstanceState(Bundle outState) {
 		// Save away the original text, so we still have it if the activity
 		// needs to be killed while paused.
-		outState.putString(ORIGINAL_CONTENT, mOriginalContent);
+		outState.putString(ORIGINAL_NOTE, mOriginalNote);
+		outState.putString(ORIGINAL_DUE, noteDueDate.format3339(false));
+		outState.putBoolean(ORIGINAL_DUE_STATE, mOriginalDueState);
+		outState.putString(ORIGINAL_TITLE, mOriginalTitle);
 	}
 
 	/**
@@ -658,11 +792,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 		 * The Cursor object will exist, even if no records were returned,
 		 * unless the query failed because of some exception or error.
 		 */
-		if (doSave && mCursor != null && mText != null) {
+		if (doSave && mCursor != null && mText != null && mTitle != null) {
 			Log.d("NotesEditorFragment", "onPause Saving/Deleting Note");
 
 			// Get the current note text.
 			String text = mText.getText().toString();
+
+			// Get title text
+			String title = mTitle.getText().toString();
 
 			/*
 			 * If the Activity is in the midst of finishing and there is no text
@@ -672,7 +809,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 			 * (delete) the note.
 			 */
 			// if (isFinishing() && (length == 0)) {
-			if (text.isEmpty()) {
+			if (text.isEmpty() && title.isEmpty()) {
 				activity.setResult(Activity.RESULT_CANCELED);
 				deleteNote();
 				// Tell list to reselect after deletion
@@ -687,9 +824,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 				 */
 			} else if (mState == STATE_EDIT) {
 				// Creates a map to contain the new values for the columns
-				updateNote(text);
+				updateNote(title, text, noteDueDate.format3339(false));
 			} else if (mState == STATE_INSERT) {
-				updateNote(text);
+				updateNote(title, text, noteDueDate.format3339(false));
 				mState = STATE_EDIT;
 			}
 		}
@@ -713,6 +850,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 			share.setType("text/plain");
 			share.putExtra(Intent.EXTRA_TEXT, s.toString());
 
+			// TODO
+			// add title and note together
+
 			((ShareActionProvider) shareActionProvider).setShareIntent(share);
 		}
 	}
@@ -728,5 +868,67 @@ public class NotesEditorFragment extends Fragment implements TextWatcher {
 	public void onTextChanged(CharSequence s, int start, int before, int count) {
 		// TODO Auto-generated method stub
 
+	}
+
+	/**
+	 * Once the user picks a date from the dialog, the date is received here and
+	 * fields are updated, button text changed.
+	 */
+	@Override
+	public void onDateSet(DatePicker view, int year, int monthOfYear,
+			int dayOfMonth) {
+		// Update variables and set the button text
+		this.year = year;
+		this.month = monthOfYear;
+		this.day = dayOfMonth;
+
+		Calendar c = Calendar.getInstance();
+
+		c.set(year, monthOfYear, dayOfMonth);
+
+		noteDueDate.set(dayOfMonth, monthOfYear, year);
+		dueDateSet = true;
+
+		final CharSequence timeToShow = DateFormat.format(DATEFORMAT_FORMAT, c);
+
+		activity.runOnUiThread(new Runnable() {
+
+			@Override
+			public void run() {
+				if (mDueDate != null) {
+					mDueDate.setText(timeToShow);
+				}
+			}
+
+		});
+	}
+	
+	@Override
+	public void onClick(View v) {
+
+		//activity.showDialog(DATE_DIALOG_ID);
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+	    Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+	    if (prev != null) {
+	        ft.remove(prev);
+	    }
+	    ft.addToBackStack(null);
+
+	    // Create and show the dialog.
+	    DatePickerDialogFragment newFragment = new DatePickerDialogFragment(this);
+	    newFragment.show(ft, "dialog");
+	}
+	
+	public class DatePickerDialogFragment extends DialogFragment {
+	    private NotesEditorFragment mFragment;
+
+	    public DatePickerDialogFragment(NotesEditorFragment callback) {
+	        mFragment = callback;
+	    }
+
+	     public Dialog onCreateDialog(Bundle savedInstanceState) {
+	    	 return new DatePickerDialog(getActivity(), mFragment, mFragment.year,
+	    			 mFragment.month, mFragment.day);
+	     }
 	}
 }

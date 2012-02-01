@@ -14,7 +14,7 @@
         android:layout_weight="1"
         android:paddingRight="0dp"
         android:orientation="vertical"
-        android:background="@drawable/list_read_holo" >
+        android:background="?my_list_background" >
 
         <SearchView
             android:id="@+id/search_view"

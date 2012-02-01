@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:paddingRight="0dp"
-    android:background="@drawable/list_read_holo" >
+    android:background="?my_list_background" >
     
     <!--
     

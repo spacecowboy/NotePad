@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+
+        <RelativeLayout
+            android:id="@+id/taskStuffContainer"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentTop="true" >
+
+            <EditText
+                android:id="@+id/titleBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentBottom="true"
+                android:hint="@string/editor_title_hint"
+                android:inputType="textShortMessage"
+                android:maxWidth="400dp"
+                android:minWidth="400dp"
+                android:padding="5dp"
+                android:textStyle="bold" >
+            </EditText>
+
+            <LinearLayout
+                android:id="@+id/dateContainer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal"
+                android:minWidth="150dp" >
+
+                <Button
+                    android:id="@+id/dueDateBox"
+                    style="@android:style/Widget.Holo.Light.Spinner"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/editor_due_date_hint" />
+
+                <ImageButton
+                    android:id="@+id/dueCancelButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@android:color/transparent"
+                    android:contentDescription="TODO"
+                    android:src="@drawable/ic_cancel_holo_light" />
+            </LinearLayout>
+        </RelativeLayout>
+
+        <EditText
+            android:id="@+id/noteBox"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@+id/taskStuffContainer"
+            android:capitalize="sentences"
+            android:hint="@string/editor_note_hint"
+            android:inputType="textMultiLine"
+            android:padding="5dp" >
+
+            <!-- <requestFocus />  -->
+        </EditText>
+    </RelativeLayout>
+
+</ScrollView>

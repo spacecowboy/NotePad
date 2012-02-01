@@ -38,6 +38,8 @@ import android.os.ParcelFileDescriptor;
 import android.provider.BaseColumns;
 import android.provider.LiveFolders;
 import android.text.TextUtils;
+import android.util.Log;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -61,9 +63,9 @@ public class NotePadProvider extends ContentProvider implements
 	private static final String DATABASE_NAME = "note_pad.db";
 
 	/**
-	 * The database version
+	 * The database version 2 was original 3 added gtask-columns
 	 */
-	private static final int DATABASE_VERSION = 2;
+	private static final int DATABASE_VERSION = 3;
 
 	/**
 	 * A projection map used to select columns from the database
@@ -169,6 +171,15 @@ public class NotePadProvider extends ContentProvider implements
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
 				NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE);
 
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_DUE_DATE,
+				NotePad.Notes.COLUMN_NAME_DUE_DATE);
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_GTASKS_ID,
+				NotePad.Notes.COLUMN_NAME_GTASKS_ID);
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
+				NotePad.Notes.COLUMN_NAME_GTASKS_STATUS);
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_GTASKS_UPDATED,
+				NotePad.Notes.COLUMN_NAME_GTASKS_UPDATED);
+
 		/*
 		 * Creates an initializes a projection map for handling Live Folders
 		 */
@@ -177,8 +188,8 @@ public class NotePadProvider extends ContentProvider implements
 		sLiveFolderProjectionMap = new HashMap<String, String>();
 
 		// Maps "_ID" to "_ID AS _ID" for a live folder
-		sLiveFolderProjectionMap.put(BaseColumns._ID, BaseColumns._ID
-				+ " AS " + BaseColumns._ID);
+		sLiveFolderProjectionMap.put(BaseColumns._ID, BaseColumns._ID + " AS "
+				+ BaseColumns._ID);
 
 		// Maps "NAME" to "title AS NAME"
 		sLiveFolderProjectionMap.put(LiveFolders.NAME,
@@ -197,6 +208,7 @@ public class NotePadProvider extends ContentProvider implements
 			// calls the super constructor, requesting the default cursor
 			// factory.
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
+			Log.d("DataBaseHelper", "Constructor");
 		}
 
 		/**
@@ -206,12 +218,17 @@ public class NotePadProvider extends ContentProvider implements
 		 */
 		@Override
 		public void onCreate(SQLiteDatabase db) {
+			Log.d("DataBaseHelper", "onCreate");
 			db.execSQL("CREATE TABLE " + NotePad.Notes.TABLE_NAME + " ("
 					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
 					+ NotePad.Notes.COLUMN_NAME_TITLE + " TEXT,"
 					+ NotePad.Notes.COLUMN_NAME_NOTE + " TEXT,"
 					+ NotePad.Notes.COLUMN_NAME_CREATE_DATE + " INTEGER,"
 					+ NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " INTEGER"
+					+ NotePad.Notes.COLUMN_NAME_DUE_DATE + " TEXT,"
+					+ NotePad.Notes.COLUMN_NAME_GTASKS_ID + " TEXT,"
+					+ NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " TEXT,"
+					+ NotePad.Notes.COLUMN_NAME_GTASKS_UPDATED + " TEXT,"
 					+ ");");
 		}
 
@@ -224,18 +241,41 @@ public class NotePadProvider extends ContentProvider implements
 		 */
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			Log.d("DataBaseHelper", "onUpgrade "
+					+ "Upgrading database from version " + oldVersion + " to "
+					+ newVersion);
 
-			// Logs that the database is being upgraded
-//			Log.w(TAG, "Upgrading database from version " + oldVersion + " to "
-//					+ newVersion + ", which will destroy all old data");
+			if (oldVersion < 3) {
+				// gTask tables were added in database version 3
+				String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
+						+ " ADD COLUMN ";
+				// Don't want null values. Prefer empty String
+				String postName = " TEXT NOT NULL DEFAULT ''";
+				// Add Columns
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_DUE_DATE
+						+ postName);
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_GTASKS_ID
+						+ postName);
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_GTASKS_STATUS
+						+ postName);
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_GTASKS_UPDATED
+						+ postName);
+			}
 
 			// Kills the table and existing data
-			db.execSQL("DROP TABLE IF EXISTS notes");
+			// db.execSQL("DROP TABLE IF EXISTS notes");
 
 			// Recreates the database with a new version
-			onCreate(db);
+			// onCreate(db);
+		}
+		
+		@Override
+		public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+			// This should be allright to do. Can only see this happening in test
 		}
 	}
+	
+
 
 	/**
 	 * 
@@ -245,6 +285,7 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	@Override
 	public boolean onCreate() {
+		Log.d(TAG, "onCreate");
 
 		// Creates a new helper object. Note that the database itself isn't
 		// opened until
@@ -270,6 +311,7 @@ public class NotePadProvider extends ContentProvider implements
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
+		Log.d(TAG, "query");
 
 		// Constructs a new query builder and sets its table name
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
@@ -344,13 +386,16 @@ public class NotePadProvider extends ContentProvider implements
 					orderBy // The sort order
 			);
 		} else {
-//			Log.d(TAG,
-//					("SELECT " + projection[0] + ", " + projection[1] + ", " + projection[2] + ", " + projection[3]
-//							+ " FROM " + NotePad.Notes.TABLE_NAME + " WHERE " + projection[2]
-//									+ " LIKE " + "%" + selectionArgs[0] + "%"));
-			c = db.rawQuery("SELECT " + projection[0] + ", " + projection[1] + ", " + projection[2] + ", " + projection[3]
-					+ " FROM " + NotePad.Notes.TABLE_NAME + " WHERE " + projection[2]
-					+ " LIKE ? ORDER BY " + NotePad.Notes.SORT_ORDER, new String[] { "%" + selectionArgs[0] + "%" });
+			// Log.d(TAG,
+			// ("SELECT " + projection[0] + ", " + projection[1] + ", " +
+			// projection[2] + ", " + projection[3]
+			// + " FROM " + NotePad.Notes.TABLE_NAME + " WHERE " + projection[2]
+			// + " LIKE " + "%" + selectionArgs[0] + "%"));
+			c = db.rawQuery("SELECT " + projection[0] + ", " + projection[1]
+					+ ", " + projection[2] + ", " + projection[3] + " FROM "
+					+ NotePad.Notes.TABLE_NAME + " WHERE " + projection[2]
+					+ " LIKE ? ORDER BY " + NotePad.Notes.SORT_ORDER,
+					new String[] { "%" + selectionArgs[0] + "%" });
 		}
 
 		// Tells the Cursor what URI to watch, so it knows when its source data
@@ -528,7 +573,7 @@ public class NotePadProvider extends ContentProvider implements
 			pw.println("");
 			pw.println(c.getString(READ_NOTE_NOTE_INDEX));
 		} catch (UnsupportedEncodingException e) {
-//			Log.w(TAG, "Ooops", e);
+			// Log.w(TAG, "Ooops", e);
 		} finally {
 			c.close();
 			if (pw != null) {
@@ -601,6 +646,28 @@ public class NotePadProvider extends ContentProvider implements
 		// empty string.
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_NOTE) == false) {
 			values.put(NotePad.Notes.COLUMN_NAME_NOTE, "");
+		}
+
+		// If the values map doesn't contain, sets the value to an
+		// empty string.
+		if (values.containsKey(NotePad.Notes.COLUMN_NAME_DUE_DATE) == false) {
+			values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
+		}
+		// If the values map doesn't contain, sets the value to an
+		// empty string.
+		if (values.containsKey(NotePad.Notes.COLUMN_NAME_GTASKS_ID) == false) {
+			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_ID, "");
+		}
+		// If the values map doesn't contain, sets the value to an
+		// empty string.
+		if (values.containsKey(NotePad.Notes.COLUMN_NAME_GTASKS_UPDATED) == false) {
+			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_UPDATED, "");
+		}
+		// If the values map doesn't contain, sets the value to an
+		// empty string.
+		if (values.containsKey(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS) == false) {
+			// TODO use string resources: R.string.gtask_status_uncompleted)
+			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, "needsAction");
 		}
 
 		// Opens the database object in "write" mode.

@@ -152,6 +152,26 @@ public final class NotePad {
         public static final String COLUMN_NAME_MODIFICATION_DATE = "modified";
         
         /**
+         * Due date of the task (as an RFC 3339 timestamp) formatted as String.
+         */
+        public static final String COLUMN_NAME_DUE_DATE = "duedate";
+        
+        /**
+         * ID of the gtasks, string
+         */
+        public static final String COLUMN_NAME_GTASKS_ID = "gtaskid";
+        
+        /**
+         * Time of last update, as reported by gtasks. RFC 3339 timestamp in string
+         */
+        public static final String COLUMN_NAME_GTASKS_UPDATED = "gtaskupdated";
+        
+        /**
+         * Status of task, such as "completed"
+         */
+        public static final String COLUMN_NAME_GTASKS_STATUS = "gtaskstatus";
+        
+        /**
          * The default sort order for this table
          */
         public static final String DEFAULT_SORT_TYPE = COLUMN_NAME_MODIFICATION_DATE;

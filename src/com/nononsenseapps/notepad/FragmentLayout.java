@@ -1,6 +1,7 @@
 package com.nononsenseapps.notepad;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
@@ -10,6 +11,8 @@ import com.nononsenseapps.notepad.interfaces.onNewNoteCreatedListener;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.ContentResolver;
 import android.content.Intent;
@@ -26,7 +29,7 @@ import android.view.MenuItem;
 public class FragmentLayout extends Activity implements
 		OnSharedPreferenceChangeListener, OnEditorDeleteListener,
 		DeleteActionListener {
-	//public static boolean lightTheme = false;
+	// public static boolean lightTheme = false;
 	public static String currentTheme = NotesPreferenceFragment.THEME_LIGHT;
 	public static boolean shouldRestart = false;
 	public static boolean LANDSCAPE_MODE;
@@ -52,10 +55,10 @@ public class FragmentLayout extends Activity implements
 
 		Log.d("Activity", "onCreate before");
 		// XML makes sure notes list is displayed. And editor too in landscape
-		//if (lightTheme)
-		//	setContentView(R.layout.fragment_layout_light);
-		//else
-			setContentView(R.layout.fragment_layout);
+		// if (lightTheme)
+		// setContentView(R.layout.fragment_layout_light);
+		// else
+		setContentView(R.layout.fragment_layout);
 		Log.d("Activity", "onCreate after");
 
 		// Set this as delete listener
@@ -113,12 +116,12 @@ public class FragmentLayout extends Activity implements
 		// Read settings and set
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		//lightTheme = prefs.getBoolean(NotesPreferenceFragment.KEY_THEME, false);
-		
-		currentTheme = prefs.getString(
-				NotesPreferenceFragment.KEY_THEME,
+		// lightTheme = prefs.getBoolean(NotesPreferenceFragment.KEY_THEME,
+		// false);
+
+		currentTheme = prefs.getString(NotesPreferenceFragment.KEY_THEME,
 				NotesPreferenceFragment.THEME_LIGHT);
-		
+
 		setTypeOfTheme();
 
 		String sortType = prefs.getString(
@@ -138,13 +141,13 @@ public class FragmentLayout extends Activity implements
 	private void setTypeOfTheme() {
 		if (NotesPreferenceFragment.THEME_LIGHT_ICS_AB.equals(currentTheme)) {
 			setTheme(R.style.ThemeHoloLightDarkActonBar);
-			//lightTheme = true;
+			// lightTheme = true;
 		} else if (NotesPreferenceFragment.THEME_LIGHT.equals(currentTheme)) {
 			setTheme(R.style.ThemeHoloLight);
-			//lightTheme = true;
+			// lightTheme = true;
 		} else {
 			setTheme(R.style.ThemeHolo);
-			//lightTheme = false;
+			// lightTheme = false;
 		}
 	}
 
@@ -184,23 +187,25 @@ public class FragmentLayout extends Activity implements
 			super.onCreate(savedInstanceState);
 
 			Log.d("NotesEditorActivity", "onCreate");
-			
-			if (NotesPreferenceFragment.THEME_LIGHT_ICS_AB.equals(FragmentLayout.currentTheme)) {
+
+			if (NotesPreferenceFragment.THEME_LIGHT_ICS_AB
+					.equals(FragmentLayout.currentTheme)) {
 				setTheme(R.style.ThemeHoloLightDarkActonBar);
-				//lightTheme = true;
-			} else if (NotesPreferenceFragment.THEME_LIGHT.equals(FragmentLayout.currentTheme)) {
+				// lightTheme = true;
+			} else if (NotesPreferenceFragment.THEME_LIGHT
+					.equals(FragmentLayout.currentTheme)) {
 				setTheme(R.style.ThemeHoloLight);
-				//lightTheme = true;
+				// lightTheme = true;
 			} else {
 				setTheme(R.style.ThemeHolo);
-				//lightTheme = false;
+				// lightTheme = false;
 			}
 
-//			if (FragmentLayout.lightTheme) {
-//				setTheme(R.style.ThemeHoloLightDarkActonBar);
-//			} else {
-//				setTheme(R.style.ThemeHolo);
-//			}
+			// if (FragmentLayout.lightTheme) {
+			// setTheme(R.style.ThemeHoloLightDarkActonBar);
+			// } else {
+			// setTheme(R.style.ThemeHolo);
+			// }
 
 			// Set up navigation (adds nice arrow to icon)
 			ActionBar actionBar = getActionBar();
@@ -216,8 +221,9 @@ public class FragmentLayout extends Activity implements
 				finish();
 				return;
 			}
-			
-			this.currentId = getIntent().getExtras().getLong(NotesEditorFragment.KEYID);
+
+			this.currentId = getIntent().getExtras().getLong(
+					NotesEditorFragment.KEYID);
 
 			Log.d("NotesEditorActivity", "Time to show the note!");
 			// if (savedInstanceState == null) {
@@ -341,18 +347,19 @@ public class FragmentLayout extends Activity implements
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
-			
-			if (NotesPreferenceFragment.THEME_DARK.equals(FragmentLayout.currentTheme)) {
+
+			if (NotesPreferenceFragment.THEME_DARK
+					.equals(FragmentLayout.currentTheme)) {
 				setTheme(R.style.ThemeHoloDialogNoActionBar);
 			} else {
 				setTheme(R.style.ThemeHoloLightDialogNoActionBar);
 			}
 
-//			if (FragmentLayout.lightTheme) {
-//				setTheme(android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
-//			} else {
-//				setTheme(android.R.style.Theme_Holo_Dialog_NoActionBar);
-//			}
+			// if (FragmentLayout.lightTheme) {
+			// setTheme(android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
+			// } else {
+			// setTheme(android.R.style.Theme_Holo_Dialog_NoActionBar);
+			// }
 
 			// Display the fragment as the main content.
 			FragmentTransaction ft = getFragmentManager().beginTransaction();

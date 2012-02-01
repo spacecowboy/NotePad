@@ -14,6 +14,7 @@
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">@drawable/solid_list_selector</item>
+		<item name="my_list_background">@drawable/list_read_holo</item>
 		
 	</style>
 </resources>
