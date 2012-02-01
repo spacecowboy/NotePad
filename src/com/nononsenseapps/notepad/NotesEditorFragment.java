@@ -225,6 +225,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				NotePad.Notes.NOTE_ID_PATH_POSITION);
 		return Long.parseLong(newId);
 	}
+	
+	private boolean hasNoteChanged() {
+		return !(mText.getText().toString().equals(mOriginalNote)
+				&& mTitle.getText().toString().equals(mOriginalTitle)
+				&& dueDateSet == mOriginalDueState
+				&& (!dueDateSet || (dueDateSet && noteDueDate.format3339(false).equals(mOriginalDueDate))));
+	}
 
 	/**
 	 * Replaces the current note contents with the text and title provided as
@@ -237,10 +244,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		// Only updates if the text is different from original content
 		// Only compare dates if there actually is a previous date to compare
-		if (text.equals(mOriginalNote)
-				&& title.equals(mOriginalTitle)
-				&& dueDateSet == mOriginalDueState
-				&& (!dueDateSet || (dueDateSet && due.equals(mOriginalDueDate)))) {
+		if (!hasNoteChanged()) {
 			Log.d("NotesEditorFragment", "Updating (not) note");
 			// Do Nothing in this case.
 		} else {
@@ -587,7 +591,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				// if (colNoteIndex != -1)
 				String savedNote = mCursor.getString(colNoteIndex);
 				String currentNote = mText.getText().toString();
-				if (savedNote.equals(currentNote)) {
+				if (!hasNoteChanged()) {
 					menu.findItem(R.id.menu_revert).setVisible(false);
 				} else {
 					menu.findItem(R.id.menu_revert).setVisible(true);
