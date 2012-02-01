@@ -668,19 +668,19 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			// Modifies the window title for the Activity according to the
 			// current Activity state.
-			if (mState == STATE_EDIT) {
-				// Set the title of the Activity to include the note title
-				int colTitleIndex = mCursor
-						.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
-				String title = mCursor.getString(colTitleIndex);
-				Resources res = getResources();
-				String text = String.format(res.getString(R.string.title_edit),
-						title);
-				activity.setTitle(text);
-				// Sets the title to "create" for inserts
-			} else if (mState == STATE_INSERT) {
-				activity.setTitle(getText(R.string.title_create));
-			}
+//			if (mState == STATE_EDIT) {
+//				// Set the title of the Activity to include the note title
+//				int colTitleIndex = mCursor
+//						.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
+//				String title = mCursor.getString(colTitleIndex);
+//				Resources res = getResources();
+//				String text = String.format(res.getString(R.string.title_edit),
+//						title);
+//				activity.setTitle(text);
+//				// Sets the title to "create" for inserts
+//			} else if (mState == STATE_INSERT) {
+//				activity.setTitle(getText(R.string.title_create));
+//			}
 
 			/*
 			 * onResume() may have been called after the Activity lost focus
@@ -690,18 +690,19 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			 * This helps the user to continue editing or entering.
 			 */
 
-			// Gets the note text from the Cursor and puts it in the TextView,
-			// but doesn't change
-			// the text cursor's position.
-			int colNoteIndex = mCursor
-					.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
-			String note = mCursor.getString(colNoteIndex);
-			mText.setTextKeepState(note);
-			
 			int colTitleIndex = mCursor
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
 			String title = mCursor.getString(colTitleIndex);
-			mTitle.setTextKeepState(title);
+			if (!title.equals(getString(android.R.string.untitled))) {
+				mTitle.setText(title);
+			}
+			// Gets the note text from the Cursor and puts it in the TextView,
+			// but doesn't change
+			// the text cursor's position. setTextKeepState
+			int colNoteIndex = mCursor
+					.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
+			String note = mCursor.getString(colNoteIndex);
+			mText.setText(note);
 			
 			int colDueIndex = mCursor
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
