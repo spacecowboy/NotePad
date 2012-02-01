@@ -2,7 +2,9 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="16dp" >
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp" >
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -21,7 +23,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
-            	android:layout_alignParentTop="true"
+                android:layout_alignParentTop="true"
                 android:hint="@string/editor_title_hint"
                 android:inputType="textShortMessage"
                 android:maxWidth="400dp"
@@ -35,9 +37,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-            	android:layout_below="@id/titleBox"
-                android:orientation="horizontal"
-                android:minWidth="150dp" >
+                android:layout_below="@id/titleBox"
+                android:minWidth="150dp"
+                android:orientation="horizontal" >
 
                 <Button
                     android:id="@+id/dueDateBox"
@@ -67,7 +69,9 @@
             android:capitalize="sentences"
             android:hint="@string/editor_note_hint"
             android:inputType="textMultiLine"
-            android:padding="5dp" >
+            android:paddingLeft="5dp"
+            android:paddingRight="5dp"
+            android:paddingTop="5dp" >
         </EditText>
     </RelativeLayout>
 
