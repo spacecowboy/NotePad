@@ -626,7 +626,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private String makeShareText() {
 		String note = "";
 
-		note = mTitle.getText().toString() + "\n";
+		if (mTitle != null)
+			note = mTitle.getText().toString() + "\n";
 
 		if (dueDateSet && noteDueDate != null) {
 			note = note + "due date: "
@@ -634,7 +635,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					+ "\n";
 		}
 
-		note = note + "\n" + mText.getText().toString();
+		if (mText != null)
+			note = note + "\n" + mText.getText().toString();
 
 		return note;
 	}
@@ -746,10 +748,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			if (mOriginalTitle == null) {
 				mOriginalTitle = title;
 			}
+			
+			// TODO
+			// Set share intent on action provider in ICS
+			//setActionShareIntent();
 
 			// Request focus, will not open keyboard
 			if (FragmentLayout.LANDSCAPE_MODE) {
-				activity.findViewById(R.id.editor_container).requestFocus();
+				activity.findViewById(R.id.noteBox).requestFocus();
 			}
 
 			/*
