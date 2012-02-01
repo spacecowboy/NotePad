@@ -69,8 +69,6 @@
             android:hint="@string/editor_note_hint"
             android:inputType="textMultiLine"
             android:padding="5dp" >
-
-            <requestFocus />
         </EditText>
     </RelativeLayout>
 

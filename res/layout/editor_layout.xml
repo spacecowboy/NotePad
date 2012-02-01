@@ -69,7 +69,7 @@
             android:inputType="textMultiLine"
             android:padding="5dp" >
 
-            <requestFocus />
+            <!-- <requestFocus /> -->
         </EditText>
     </RelativeLayout>
 
