@@ -46,14 +46,14 @@ public class NotesListFragment extends ListFragment implements
 		SearchView.OnQueryTextListener, OnItemLongClickListener,
 		onNewNoteCreatedListener, OnModalDeleteListener, Refresher {
 	int mCurCheckPosition = 0;
-	
-	private static final String[] PROJECTION = new String[] {
-		NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
-		NotePad.Notes.COLUMN_NAME_NOTE,
-		NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
 
-	public static final String SELECTEDPOS = "selectedpos";
-	public static final String SELECTEDID = "selectedid";
+	private static final String[] PROJECTION = new String[] {
+			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
+			NotePad.Notes.COLUMN_NAME_NOTE,
+			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
+
+	// public static final String SELECTEDPOS = "selectedpos";
+	// public static final String SELECTEDID = "selectedid";
 
 	// For logging and debugging
 	private static final String TAG = "NotesListFragment";
@@ -61,6 +61,15 @@ public class NotesListFragment extends ListFragment implements
 	private static final int CHECK_SINGLE = 1;
 	private static final int CHECK_MULTI = 2;
 	private static final int CHECK_SINGLE_FUTURE = 3;
+
+	private static final int STATE_NEW_NOTE = 1;
+	private static final int STATE_EXISTING_NOTE = 2;
+	private static final int STATE_LIST = 3;
+	private int currentState = STATE_LIST;
+
+	private static final String SAVEDPOS = "savedpos";
+	private static final String SAVEDID = "savedid";
+	private static final String SAVEDSTATE = "savedstate";
 
 	private long mCurId;
 
@@ -98,22 +107,54 @@ public class NotesListFragment extends ListFragment implements
 		// Populate list
 		listAllNotes();
 
+		if (savedInstanceState != null) {
+			currentState = savedInstanceState.getInt(SAVEDSTATE, STATE_LIST);
+		}
+		else {
+			currentState = STATE_LIST;
+		}
+
 		// boolean showList = PreferenceManager.getDefaultSharedPreferences(
 		// activity).getBoolean(SHOWLISTKEY, false);
 
 		if (getListAdapter().isEmpty()) {
-			// -1 will display a new note
 			mCurCheckPosition = 0;
 			mCurId = -1;
+
+			// In landscape, this will display a new note
+			if (FragmentLayout.LANDSCAPE_MODE && currentState == STATE_LIST) {
+				currentState = STATE_NEW_NOTE;
+			}
+			else if (!FragmentLayout.LANDSCAPE_MODE && currentState == STATE_NEW_NOTE) {
+				// Don't display a new note automatically in portrait mode
+				currentState = STATE_LIST;
+			}
+
 			Log.d("NotesListFragment", "Setting data: " + mCurCheckPosition
 					+ ", " + mCurId);
 		} else {
 			Log.d("NotesListFragment", "Setting data not empty first: "
 					+ mCurCheckPosition + ", " + mCurId);
-			mCurCheckPosition = PreferenceManager.getDefaultSharedPreferences(
-					activity).getInt(SELECTEDPOS, -1);
-			mCurId = PreferenceManager.getDefaultSharedPreferences(activity)
-					.getLong(SELECTEDID, -1);
+
+			// TODO
+			// Read saved bundle here
+			// mCurCheckPosition =
+			// PreferenceManager.getDefaultSharedPreferences(activity).getInt(SELECTEDPOS,
+			// -1);
+			// mCurId =
+			// PreferenceManager.getDefaultSharedPreferences(activity).getLong(SELECTEDID,
+			// -1);
+			mCurCheckPosition = 0;
+			mCurId = -1;
+			
+			if (savedInstanceState != null) {
+				mCurCheckPosition = savedInstanceState.getInt(SAVEDPOS, 0);
+				mCurId = savedInstanceState.getLong(SAVEDID, -1);
+			}
+			
+			if (FragmentLayout.LANDSCAPE_MODE && currentState == STATE_LIST) {
+				currentState = STATE_EXISTING_NOTE;
+			}
 
 			setSingleCheck();
 
@@ -125,18 +166,20 @@ public class NotesListFragment extends ListFragment implements
 		// Position is valid for this list and might be -1 in case we had an
 		// empty search in portrait.
 		// Id might not be valid if we are coming from portrait to landscape
-		if (FragmentLayout.LANDSCAPE_MODE) {
+		if (STATE_EXISTING_NOTE == currentState ||
+				STATE_NEW_NOTE == currentState) {
 			// Always display note in landscape mode
 			// Opens a new note if necessary
 			showNote(mCurCheckPosition, true);
-		} else if (mCurId > -1) {
-			// In portrait mode, only display an existing note. And that could
-			// have been selected during a search
-			// so recacalculate just in case
-			mCurCheckPosition = getPosOfId(mCurId);
-			// don't open a new note if none exists
-			showNote(mCurCheckPosition, false);
-		}
+		} 
+//		else if (mCurId > -1) {
+//			// In portrait mode, only display an existing note. And that could
+//			// have been selected during a search
+//			// so recacalculate just in case
+//			mCurCheckPosition = getPosOfId(mCurId);
+//			// don't open a new note if none exists
+//			showNote(mCurCheckPosition, false);
+//		}
 	}
 
 	private void setupSearchView() {
@@ -166,9 +209,9 @@ public class NotesListFragment extends ListFragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		// Inflate menu from XML resource
-//		if (FragmentLayout.lightTheme)
-//			inflater.inflate(R.menu.list_options_menu_light, menu);
-//		else
+		// if (FragmentLayout.lightTheme)
+		// inflater.inflate(R.menu.list_options_menu_light, menu);
+		// else
 		inflater.inflate(R.menu.list_options_menu, menu);
 
 		// Get the SearchView and set the searchable configuration
@@ -238,19 +281,21 @@ public class NotesListFragment extends ListFragment implements
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		Log.d("NotesListFragment", "onSaveInstanceState");
-		// outState.putInt(SAVEDPOS, mCurCheckPosition);
-		// outState.putLong(SAVEDID, mCurId);
+		outState.putInt(SAVEDPOS, mCurCheckPosition);
+		outState.putLong(SAVEDID, mCurId);
+		outState.putInt(SAVEDSTATE, currentState);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
 		Log.d("NotesListFragment", "onPause");
-		SharedPreferences.Editor prefEditor = PreferenceManager
-				.getDefaultSharedPreferences(activity).edit();
-		prefEditor.putInt(SELECTEDPOS, mCurCheckPosition);
-		prefEditor.putLong(SELECTEDID, mCurId);
-		prefEditor.commit();
+		// TODO delete
+		// SharedPreferences.Editor prefEditor = PreferenceManager
+		// .getDefaultSharedPreferences(activity).edit();
+		// prefEditor.putInt(SELECTEDPOS, mCurCheckPosition);
+		// prefEditor.putLong(SELECTEDID, mCurId);
+		// prefEditor.commit();
 	}
 
 	@Override
@@ -259,13 +304,17 @@ public class NotesListFragment extends ListFragment implements
 		Log.d("NotesListFragment", "onResume");
 		// Remove focus from search window
 		activity.findViewById(R.id.search_view).clearFocus();
-		// Titles might have changed so re-list and select notes
+
+		if (!FragmentLayout.LANDSCAPE_MODE) {
+			currentState = STATE_LIST;
+		}
 
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Log.d("NotesListFragment", "Clicked: " + position + ", " + id);
+		currentState = STATE_EXISTING_NOTE;
 		if (position != mCurCheckPosition || !FragmentLayout.LANDSCAPE_MODE) {
 			showNote(position, false);
 		}
@@ -397,7 +446,7 @@ public class NotesListFragment extends ListFragment implements
 					ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 					Log.d("NotesListFragment",
 							"Commiting transaction, opening fragment now");
-					
+
 					ft.commit();
 
 				} else {
@@ -432,6 +481,7 @@ public class NotesListFragment extends ListFragment implements
 			onDeleteListener.onEditorDelete(mCurId);
 		}
 		reListNotes();
+		currentState = STATE_LIST;
 		if (FragmentLayout.LANDSCAPE_MODE) {
 			showNote(mCurCheckPosition, true);
 		} else {
@@ -492,9 +542,9 @@ public class NotesListFragment extends ListFragment implements
 		int[] viewIDs = { R.id.itemTitle, R.id.itemDate };
 
 		int themed_item;
-//		if (FragmentLayout.lightTheme)
-//			themed_item = R.layout.noteslist_item_light;
-//		else
+		// if (FragmentLayout.lightTheme)
+		// themed_item = R.layout.noteslist_item_light;
+		// else
 		themed_item = R.layout.noteslist_item;
 
 		// Creates the backing adapter for the ListView.
@@ -657,31 +707,34 @@ public class NotesListFragment extends ListFragment implements
 				 */
 				cursor.moveToFirst();
 				String note = "";
-				
+
 				int colTitleIndex = cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
 
 				if (colTitleIndex > -1)
 					note = cursor.getString(colTitleIndex) + "\n";
-				
+
 				int colDueIndex = cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
 				String due = "";
 				if (colDueIndex > -1)
 					due = cursor.getString(colDueIndex);
-				
+
 				if (due != null && !due.isEmpty()) {
 					Time date = new Time(Time.getCurrentTimezone());
 					date.parse3339(due);
-					note = note + "due date: " + date.format(NotesEditorFragment.ANDROIDTIME_FORMAT) + "\n";
+					note = note
+							+ "due date: "
+							+ date.format(NotesEditorFragment.ANDROIDTIME_FORMAT)
+							+ "\n";
 				}
-				
+
 				int colNoteIndex = cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
 
 				if (colNoteIndex > -1)
 					note = note + "\n" + cursor.getString(colNoteIndex);
-				
+
 				// Put in hash
 				textToShare.put(id, note);
 			}
@@ -713,9 +766,9 @@ public class NotesListFragment extends ListFragment implements
 			this.notesToDelete.clear();
 
 			MenuInflater inflater = activity.getMenuInflater();
-//			if (FragmentLayout.lightTheme)
-//				inflater.inflate(R.menu.list_select_menu_light, menu);
-//			else
+			// if (FragmentLayout.lightTheme)
+			// inflater.inflate(R.menu.list_select_menu_light, menu);
+			// else
 			inflater.inflate(R.menu.list_select_menu, menu);
 			mode.setTitle("Select Items");
 
@@ -756,8 +809,8 @@ public class NotesListFragment extends ListFragment implements
 				onDeleteAction();
 				break;
 			default:
-//				Toast.makeText(activity, "Clicked " + item.getTitle(),
-//						Toast.LENGTH_SHORT).show();
+				// Toast.makeText(activity, "Clicked " + item.getTitle(),
+				// Toast.LENGTH_SHORT).show();
 				break;
 			}
 			return true;
@@ -816,9 +869,10 @@ public class NotesListFragment extends ListFragment implements
 														// multiple
 					// notes from
 					// the provider.
-					NotesEditorFragment.PROJECTION, // A projection that returns the note ID and
-								// note
-								// content for each note.
+					NotesEditorFragment.PROJECTION, // A projection that returns
+													// the note ID and
+					// note
+					// content for each note.
 					null, // No "where" clause selection criteria.
 					null, // No "where" clause selection values.
 					null // Use the default sort order (modification date,
@@ -846,18 +900,19 @@ public class NotesListFragment extends ListFragment implements
 	}
 
 	private class ModeCallbackICS extends ModeCallbackHC {
-		
+
 		protected ShareActionProvider actionProvider;
-		
+
 		@Override
 		public void onItemCheckedStateChanged(android.view.ActionMode mode,
 				int position, long id, boolean checked) {
 			super.onItemCheckedStateChanged(mode, position, id, checked);
-			
+
 			if (actionProvider != null) {
-				actionProvider.setShareIntent(createShareIntent(buildTextToShare()));
+				actionProvider
+						.setShareIntent(createShareIntent(buildTextToShare()));
 			}
-			
+
 		}
 
 		@Override
@@ -867,12 +922,12 @@ public class NotesListFragment extends ListFragment implements
 			this.notesToDelete.clear();
 
 			MenuInflater inflater = activity.getMenuInflater();
-//			if (FragmentLayout.lightTheme)
-//				inflater.inflate(R.menu.list_select_menu_light, menu);
-//			else
+			// if (FragmentLayout.lightTheme)
+			// inflater.inflate(R.menu.list_select_menu_light, menu);
+			// else
 			inflater.inflate(R.menu.list_select_menu, menu);
 			mode.setTitle("Select Items");
-			
+
 			this.mode = mode;
 
 			// Set file with share history to the provider and set the share
@@ -886,8 +941,9 @@ public class NotesListFragment extends ListFragment implements
 					.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
 			// Note that you can set/change the intent any time,
 			// say when the user has selected an image.
-			actionProvider.setShareIntent(createShareIntent(buildTextToShare()));
-			
+			actionProvider
+					.setShareIntent(createShareIntent(buildTextToShare()));
+
 			// Now the delete action provider
 			// Set delete listener to this
 			actionItem = menu.findItem(R.id.modal_action_delete);
@@ -896,8 +952,7 @@ public class NotesListFragment extends ListFragment implements
 					.getActionProvider();
 
 			// Make sure containing activity implements listener interface
-			deleteProvider
-					.setDeleteActionListener(this);
+			deleteProvider.setDeleteActionListener(this);
 
 			return true;
 		}
@@ -905,7 +960,7 @@ public class NotesListFragment extends ListFragment implements
 		public ModeCallbackICS(NotesListFragment list) {
 			super(list);
 		}
-		
+
 	}
 
 	public void setOnDeleteListener(OnEditorDeleteListener fragmentLayout) {
