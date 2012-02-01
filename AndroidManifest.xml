@@ -38,7 +38,7 @@
         
         <activity android:name="FragmentLayout"
                 android:label="@string/app_name" android:launchMode="singleTop"
-                android:screenOrientation="sensor" android:theme="@style/ThemeHoloLight" >
+                android:screenOrientation="sensor" android:theme="@style/ThemeHolo" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

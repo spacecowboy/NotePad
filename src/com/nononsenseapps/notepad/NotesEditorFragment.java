@@ -235,11 +235,17 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private final void updateNote(String title, String text, String due) {
 
 		// Only updates if the text is different from original content
-		if (text.equals(mOriginalNote) && title.equals(mOriginalTitle) && due.equals(mOriginalDueDate) && dueDateSet == mOriginalDueState) {
+		// Only compare dates if there actually is a previous date to compare
+		if (text.equals(mOriginalNote) && title.equals(mOriginalTitle) && dueDateSet == mOriginalDueState &&  
+				(!dueDateSet || (dueDateSet && due.equals(mOriginalDueDate)))) {
 			Log.d("NotesEditorFragment", "Updating (not) note");
 			// Do Nothing in this case.
 		} else {
 			Log.d("NotesEditorFragment", "Updating note");
+			Log.d("NotesEditorFragment", "" + text.equals(mOriginalNote));
+			Log.d("NotesEditorFragment", "" + title.equals(mOriginalTitle));
+			Log.d("NotesEditorFragment", "" + due + " " + mOriginalDueDate);
+			Log.d("NotesEditorFragment", "" + (dueDateSet == mOriginalDueState));
 
 			// Sets up a map to contain values to be updated in the provider.
 			ContentValues values = new ContentValues();
