@@ -15,7 +15,7 @@ import android.widget.TextView;
  */
 public class DateView extends TextView {
 	private static final int SECONDS_PER_DAY = 3600;
-	private String day = "dd MMM yyyy";
+	private String day = "E, d MMM";
 	private String time = "kk:mm";
 
 	public DateView(Context context) {
