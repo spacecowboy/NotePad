@@ -9,7 +9,9 @@
 	<item android:id="@+id/modal_delete" android:showAsAction="ifRoom"
 		android:icon="?ic_action_delete" android:title="@string/menu_delete" />
 
-	<!--<item android:id="@+id/modal_delete" android:showAsAction="ifRoom" android:icon="@drawable/ic_action_delete_dark" 
-		android:title="@string/menu_delete" /> -->
+	<item android:id="@+id/modal_setcompleted" android:showAsAction="never"
+		android:icon="?ic_menu_mark" android:title="@string/menu_setcompleted" />
+    <item android:id="@+id/modal_move_to_list" android:showAsAction="never"
+		android:title="@string/menu_move_to_list" />
 
 </menu>

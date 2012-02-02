@@ -9,6 +9,8 @@
 		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_light</item>
 		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
+		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
+		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
 		
         <item name="my_list_selector">@drawable/arrow_list_selector</item>
         <item name="my_list_background">@drawable/list_read_holo</item>
@@ -24,6 +26,8 @@
 		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_light</item>
 		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
+		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
+		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
 
 		<item name="my_list_selector">@drawable/arrow_list_selector</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
