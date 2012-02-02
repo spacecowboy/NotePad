@@ -27,6 +27,7 @@ import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.Log;
 import android.util.TimeFormatException;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -876,7 +877,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public void afterTextChanged(Editable s) {
 		setActionShareIntent();
 	}
-
+	
 	@Override
 	public void beforeTextChanged(CharSequence s, int start, int count,
 			int after) {

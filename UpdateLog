@@ -1,6 +1,7 @@
 v
 * Fixed the delete menu for multiselect in the list. Would delete before menu option was selected.
 * Fixed crash report: v2.2 Jan 30, 2012 3:23:50 PM with an if != null block
+* TABS will insert tabs in the text now
 
 v2.2
 * Fixed my secon crash report. mtext was null in setting share intent in noteseditorfragment. moved to onactivitycreated and enclosed in null-checks

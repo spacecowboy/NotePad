@@ -61,7 +61,7 @@
             </LinearLayout>
         </RelativeLayout>
 
-        <EditText
+        <com.nononsenseapps.ui.TabbingEditText
             android:id="@+id/noteBox"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -73,7 +73,7 @@
             android:paddingLeft="5dp"
             android:paddingRight="5dp"
             android:paddingTop="5dp" >
-        </EditText>
+        </com.nononsenseapps.ui.TabbingEditText>
     </RelativeLayout>
 
 </ScrollView>
