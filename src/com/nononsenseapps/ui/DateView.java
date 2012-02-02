@@ -1,4 +1,4 @@
-package com.nononsenseapps.notepad;
+package com.nononsenseapps.ui;
 
 import java.util.Calendar;
 import java.util.Date;

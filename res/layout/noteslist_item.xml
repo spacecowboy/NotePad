@@ -34,7 +34,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge" />
 
     <view xmlns:android="http://schemas.android.com/apk/res/android"
-    class="com.nononsenseapps.notepad.DateView"
+    class="com.nononsenseapps.ui.DateView"
         android:id="@+id/itemDate"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
