@@ -32,6 +32,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
@@ -39,6 +40,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ScrollView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
@@ -111,8 +113,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private Activity activity;
 
 	private onNewNoteCreatedListener onNewNoteListener = null;
-
-	private View theView;
 
 	private EditText mTitle;
 
@@ -439,7 +439,19 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		// }
 
 		// Gets a handle to the EditText in the the layout.
-		theView = inflater.inflate(layout, container, false);
+		ScrollView theView = (ScrollView) inflater.inflate(layout, container, false);
+		// This is to prevent the view from setting focus (and bringing up the keyboard)
+		theView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
+		theView.setFocusable(true);
+		theView.setFocusableInTouchMode(true);
+		theView.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				v.requestFocusFromTouch();
+				return false;
+			}
+	    });
+		
 		// Main note edit text
 		mText = (EditText) theView.findViewById(R.id.noteBox);
 		mText.addTextChangedListener(this);
@@ -718,6 +730,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
 			String note = mCursor.getString(colNoteIndex);
 			mText.setText(note);
+			// Sets cursor at the end
+			//mText.setSelection(note.length());
 
 			int colDueIndex = mCursor
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
