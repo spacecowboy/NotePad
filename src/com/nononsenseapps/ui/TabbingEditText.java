@@ -2,7 +2,6 @@ package com.nononsenseapps.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.EditText;
 
@@ -11,7 +10,10 @@ import android.widget.EditText;
  *
  */
 public class TabbingEditText extends EditText {
-	private static final String TAB = "\t";
+	// Unfortunately, this doesn't work so well
+	//private static final String TAB = "\t";
+	// Which is why I use spaces instead
+	private static final String TAB = "    ";
 	
 	public TabbingEditText(Context context) {
 		super(context);
