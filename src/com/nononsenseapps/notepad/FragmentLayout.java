@@ -232,7 +232,7 @@ public class FragmentLayout extends Activity implements
 			editorFragment.setOnNewNoteCreatedListener(this);
 			editorFragment.setArguments(getIntent().getExtras());
 			getFragmentManager().beginTransaction()
-					.add(android.R.id.content, editorFragment).commit();
+					.replace(android.R.id.content, editorFragment).commit();
 			// }
 		}
 
