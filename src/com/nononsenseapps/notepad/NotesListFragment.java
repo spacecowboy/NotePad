@@ -93,7 +93,7 @@ public class NotesListFragment extends ListFragment implements
 
 	private SimpleCursorAdapter mAdapter;
 
-	private boolean showFirstNote = false;
+	private boolean autoOpenNote = false;
 	private NotesEditorFragment landscapeEditor;
 
 	@Override
@@ -108,7 +108,7 @@ public class NotesListFragment extends ListFragment implements
 		super.onActivityCreated(savedInstanceState);
 
 		if (FragmentLayout.LANDSCAPE_MODE) {
-			showFirstNote = true;
+			autoOpenNote = true;
 			landscapeEditor = (NotesEditorFragment) getFragmentManager().findFragmentById(R.id.editor_container);
 			landscapeEditor.setOnNewNoteCreatedListener(this);
 			/*
@@ -165,7 +165,7 @@ public class NotesListFragment extends ListFragment implements
 		getLoaderManager().initLoader(0, null, this);
 	}
 
-	private void showFirstNote() {
+	private void showFirstBestNote() {
 		if (getListAdapter().isEmpty()) {
 			currentState = STATE_NEW_NOTE;
 			Log.d("NotesListFragment", "Setting data: " + mCurCheckPosition
@@ -177,7 +177,7 @@ public class NotesListFragment extends ListFragment implements
 		}
 
 		// Create new note if necessary
-		showNote(0, true);
+		showNote(mCurCheckPosition, true);
 	}
 
 	private void setupSearchView() {
@@ -418,10 +418,16 @@ public class NotesListFragment extends ListFragment implements
 		if (onDeleteListener != null) {
 			onDeleteListener.onEditorDelete(mCurId);
 		}
-		reListNotes();
-		currentState = STATE_LIST;
 		if (FragmentLayout.LANDSCAPE_MODE) {
-			showNote(mCurCheckPosition, true);
+			autoOpenNote = true;
+		}
+		currentState = STATE_LIST;
+		
+		reListNotes();
+		
+		// TODO consider the recalculation bit
+		if (FragmentLayout.LANDSCAPE_MODE) {
+			//showNote(mCurCheckPosition, true);
 		} else {
 			// Get the id of the currently "selected" note
 			// This matters if we switch to landscape mode
@@ -1038,9 +1044,10 @@ public class NotesListFragment extends ListFragment implements
 			setListShownNoAnimation(true);
 		}
 		// Open first note if this is first start
-		if (showFirstNote) {
-			showFirstNote = false;
-			showFirstNote();
+		// or if one was opened previously
+		if (autoOpenNote) {
+			autoOpenNote = false;
+			showFirstBestNote();
 		}
 
 		// Reselect current note in list, if possible

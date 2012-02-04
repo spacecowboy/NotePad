@@ -362,8 +362,15 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			Log.d("NotesEditorFragment", "Deleting note");
 			this.id = -1;
 			getActivity().getContentResolver().delete(mUri, null, null);
-			mText.setText("");
+			clearFields();
 		}
+	}
+	
+	private void clearFields() {
+		mText.setText("");
+		mTitle.setText("");
+		mDueDate.setText("");
+		dueDateSet = false;
 	}
 
 	private void copyText(String text) {
@@ -651,6 +658,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			// Settings might have been changed
 			setFontSettings();
+			openNote(null);
 			// Redisplay from database. If a new note was showing, that was
 			// deleted in onPause. Then the state was changed back to insert
 			// if (mState == STATE_INSERT)
@@ -822,7 +830,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		 * unless the query failed because of some exception or error.
 		 */
 		saveNote();
-
+		// TODO do this?
+		clearFields();
 	}
 
 	private void saveNote() {
