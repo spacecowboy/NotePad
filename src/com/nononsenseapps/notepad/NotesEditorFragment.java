@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.LoaderManager;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
@@ -14,7 +15,9 @@ import android.content.ClipboardManager;
 import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -45,11 +48,12 @@ import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
-import com.nononsenseapps.notepad.interfaces.onNewNoteCreatedListener;
+import com.nononsenseapps.notepad.interfaces.OnNoteOpenedListener;
 import com.nononsenseapps.ui.TextPreviewPreference;
 
 public class NotesEditorFragment extends Fragment implements TextWatcher,
-		OnDateSetListener, OnClickListener {
+		OnDateSetListener, OnClickListener,
+		LoaderManager.LoaderCallbacks<Cursor> {
 
 	// Two ways of expressing: "Mon, 16 Jan"
 	public final static String ANDROIDTIME_FORMAT = "%a, %e %b";
@@ -76,6 +80,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	// as a "state" constant
 	public static final int STATE_EDIT = 0;
 	public static final int STATE_INSERT = 1;
+	public static final int STATE_UNCLEAR = 2;
 
 	protected static final int DATE_DIALOG_ID = 999;
 
@@ -95,7 +100,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	// Global mutable variables
 	private int mState;
 	private Uri mUri;
-	private Cursor mCursor;
+
 	private EditText mText;
 	private String mOriginalNote;
 	private String mOriginalTitle;
@@ -103,7 +108,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	private boolean doSave = true;
 
-	private long id;
+	private long id = -1;
 
 	private boolean timeToDie;
 
@@ -112,7 +117,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	private Activity activity;
 
-	private onNewNoteCreatedListener onNewNoteListener = null;
+	private OnNoteOpenedListener onNoteOpenedListener = null;
 
 	private EditText mTitle;
 
@@ -125,8 +130,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		this.activity = activity;
 	}
 
-	public void setOnNewNoteCreatedListener(onNewNoteCreatedListener listener) {
-		this.onNewNoteListener = listener;
+	public void setOnNewNoteCreatedListener(OnNoteOpenedListener listener) {
+		this.onNoteOpenedListener = listener;
 	}
 
 	/**
@@ -157,8 +162,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 * @param savedInstanceState
 	 */
 	private void openNote(Bundle savedInstanceState) {
-		Log.d("NotesEditorFragment", "Does argument have id? "
-				+ getArguments().containsKey(KEYID));
 		Log.d("NotesEditorFragment", "OpenNOTe: Id is " + id);
 		if (id != -1) {
 			// Existing note
@@ -166,9 +169,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mUri = getUriFrom(id);
 			Log.d("NotesEditorFragment",
 					"Editing existing note, uri = " + mUri.toString());
-		} else {
+		} else if (mState != STATE_UNCLEAR) {
 			// New note
 			mState = STATE_INSERT;
+
 			mUri = activity.getContentResolver().insert(
 					NotePad.Notes.CONTENT_URI, null);
 			Log.d("NotesEditorFragment",
@@ -183,35 +187,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				activity.finish();
 				return;
 			}
-
-			// Notify list of the new note
-			if (onNewNoteListener != null)
-				onNewNoteListener.onNewNoteCreated(getIdFromUri(mUri));
 		}
-		/*
-		 * Using the URI passed in with the triggering Intent, gets the note or
-		 * notes in the provider. Note: This is being done on the UI thread. It
-		 * will block the thread until the query completes. In a sample app,
-		 * going against a simple provider based on a local database, the block
-		 * will be momentary, but in a real app you should use
-		 * android.content.AsyncQueryHandler or android.os.AsyncTask.
-		 */
-		mCursor = activity.managedQuery(mUri, // The URI that gets multiple
-												// notes from
-				// the provider.
-				PROJECTION, // A projection that returns the note ID and note
-							// content for each note.
-				null, // No "where" clause selection criteria.
-				null, // No "where" clause selection values.
-				null // Use the default sort order (modification date,
-						// descending)
-				);
-		// Or Honeycomb will crash
-		activity.stopManagingCursor(mCursor);
 
-		// Switches the state to EDIT so the title can be modified.
-		mState = STATE_EDIT;
-
+		// Load original data if exists
 		if (savedInstanceState != null) {
 			mOriginalNote = savedInstanceState.getString(ORIGINAL_NOTE);
 			mOriginalDueDate = savedInstanceState.getString(ORIGINAL_DUE);
@@ -219,6 +197,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mOriginalDueState = savedInstanceState
 					.getBoolean(ORIGINAL_DUE_STATE);
 		}
+
+		// Prepare the loader. Either re-connect with an existing one,
+		// or start a new one. Will open the note
+		getLoaderManager().initLoader(0, null, this);
 	}
 
 	private static long getIdFromUri(Uri uri) {
@@ -226,12 +208,17 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				NotePad.Notes.NOTE_ID_PATH_POSITION);
 		return Long.parseLong(newId);
 	}
-	
+
 	private boolean hasNoteChanged() {
-		return !(mText.getText().toString().equals(mOriginalNote)
-				&& mTitle.getText().toString().equals(mOriginalTitle)
-				&& dueDateSet == mOriginalDueState
-				&& (!dueDateSet || (dueDateSet && noteDueDate.format3339(false).equals(mOriginalDueDate))));
+		if (mOriginalNote == null || mOriginalTitle == null
+				|| mOriginalDueDate == null) {
+			return false;
+		} else {
+			return !(mText.getText().toString().equals(mOriginalNote)
+					&& mTitle.getText().toString().equals(mOriginalTitle)
+					&& dueDateSet == mOriginalDueState && (!dueDateSet || (dueDateSet && noteDueDate
+					.format3339(false).equals(mOriginalDueDate))));
+		}
 	}
 
 	/**
@@ -358,21 +345,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 * if it was newly created, or reverts to the original text of the note i
 	 */
 	private final void cancelNote() {
-		if (mCursor != null) {
-			if (mState == STATE_EDIT) {
-				// Put the original note text back into the database
-				mCursor.close();
-				mCursor = null;
-				// ContentValues values = new ContentValues();
-				// values.put(NotePad.Notes.COLUMN_NAME_NOTE, mOriginalContent);
-				// getActivity().getContentResolver().update(mUri, values, null,
-				// null);
-				openNote(null);
-				showTheNote();
-			} else if (mState == STATE_INSERT) {
-				// We inserted an empty note, make sure to delete it
-				deleteNote();
-			}
+		if (mState == STATE_EDIT) {
+			// Just requery with loader
+			getLoaderManager().restartLoader(0, null, this);
+		} else if (mState == STATE_INSERT) {
+			// We inserted an empty note, make sure to delete it
+			deleteNote();
 		}
 	}
 
@@ -381,13 +359,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 */
 	private final void deleteNote() {
 		Log.d("NotesEditorFragment", "Deleting note");
-		if (mCursor != null) {
-			this.id = -1;
-			mCursor.close();
-			mCursor = null;
-			getActivity().getContentResolver().delete(mUri, null, null);
-			mText.setText("");
-		}
+		this.id = -1;
+		getActivity().getContentResolver().delete(mUri, null, null);
+		mText.setText("");
 	}
 
 	private void copyText(String text) {
@@ -406,8 +380,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		// To get the call back to add items to the menu
 		setHasOptionsMenu(true);
 
-		// TODO this is not safe, key might not exist
-		id = getArguments().getLong(KEYID);
+		if (getArguments() != null && getArguments().containsKey(KEYID)) {
+			id = getArguments().getLong(KEYID);
+			mState = STATE_EDIT; // This will be overwritten later, just want to
+									// be sure its not "unclear"
+		} else {
+			id = -1;
+			mState = STATE_UNCLEAR; // Will NOT be overwritten
+		}
 
 		noteDueDate = new Time(Time.getCurrentTimezone());
 
@@ -440,8 +420,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		// }
 
 		// Gets a handle to the EditText in the the layout.
-		ScrollView theView = (ScrollView) inflater.inflate(layout, container, false);
-		// This is to prevent the view from setting focus (and bringing up the keyboard)
+		ScrollView theView = (ScrollView) inflater.inflate(layout, container,
+				false);
+		// This is to prevent the view from setting focus (and bringing up the
+		// keyboard)
 		theView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
 		theView.setFocusable(true);
 		theView.setFocusableInTouchMode(true);
@@ -451,8 +433,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				v.requestFocusFromTouch();
 				return false;
 			}
-	    });
-		
+		});
+
 		// Main note edit text
 		mText = (EditText) theView.findViewById(R.id.noteBox);
 		mText.addTextChangedListener(this);
@@ -491,7 +473,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			day = c.get(Calendar.DAY_OF_MONTH);
 		}
 		dueDateSet = false;
-		
+
 		// Remember to update share intent
 		setActionShareIntent();
 	}
@@ -525,11 +507,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			Log.d("NotesEditorFragment",
 					"onActivityCreated, but it is time to die so doing nothing...");
 		} else {
-			// TODO if this is created from xml, we should load the first note we can find or display a new note.
+			// TODO if this is created from xml, we should load the first note
+			// we can find or display a new note.
 			// find first note through: SELECT * FROM Table_Name LIMIT 1;
 			// Use the same select statement the list is using
 			openNote(saves);
-			showTheNote();
 		}
 	}
 
@@ -571,7 +553,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 						.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
 
 				this.shareActionProvider = shareProvider;
-				
+
 				// Note that you can set/change the intent any time,
 				// say when the user has selected an image.
 				setActionShareIntent();
@@ -602,19 +584,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					"onPrepareOptionsMenu, but it is time to die so doing nothing...");
 		} else {
 			// Check if note has changed and enable/disable the revert option
-			if (mCursor != null) {
-				int colNoteIndex = mCursor
-						.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
-				// if (colNoteIndex != -1)
-				String savedNote = mCursor.getString(colNoteIndex);
-				String currentNote = mText.getText().toString();
-				if (!hasNoteChanged()) {
-					menu.findItem(R.id.menu_revert).setVisible(false);
-				} else {
-					menu.findItem(R.id.menu_revert).setVisible(true);
-				}
-			} else {
+			if (!hasNoteChanged()) {
 				menu.findItem(R.id.menu_revert).setVisible(false);
+			} else {
+				menu.findItem(R.id.menu_revert).setVisible(true);
 			}
 		}
 	}
@@ -647,8 +620,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			note = mTitle.getText().toString() + "\n";
 
 		if (dueDateSet && noteDueDate != null) {
-			note = note + "due date: "
-					+ noteDueDate.format(NotesEditorFragment.ANDROIDTIME_FORMAT)
+			note = note
+					+ "due date: "
+					+ noteDueDate
+							.format(NotesEditorFragment.ANDROIDTIME_FORMAT)
 					+ "\n";
 		}
 
@@ -673,22 +648,23 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			// Settings might have been changed
 			setFontSettings();
+			// Redisplay from database. If a new note was showing, that was
+			// deleted in onPause. Then the state was changed back to insert
+			//if (mState == STATE_INSERT)
+			//	openNote(null);
+			// TODO delete
 			// Closed with new note being only note. That was deleted. Requery
 			// and
 			// start new note.
-			if (mCursor == null || mCursor.isClosed()) {
-				openNote(null);
-			}
-			showTheNote();
+			// if (mCursor == null || mCursor.isClosed()) {
+			// openNote(null);
+			// }
+			// showTheNote();
 		}
 	}
 
-	private void showTheNote() {
-		if (mCursor != null && !mCursor.isClosed()) {
-			// Requery in case something changed while paused (such as the
-			// title)
-			mCursor.requery();
-
+	private void showNote(Cursor mCursor) {
+		if (mCursor != null && !mCursor.isClosed() && !mCursor.isAfterLast()) {
 			/*
 			 * Moves to the first record. Always call moveToFirst() before
 			 * accessing data in a Cursor for the first time. The semantics of
@@ -735,7 +711,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			String note = mCursor.getString(colNoteIndex);
 			mText.setText(note);
 			// Sets cursor at the end
-			//mText.setSelection(note.length());
+			// mText.setSelection(note.length());
 
 			int colDueIndex = mCursor
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
@@ -767,10 +743,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			if (mOriginalTitle == null) {
 				mOriginalTitle = title;
 			}
-			
+
 			// TODO
 			// Set share intent on action provider in ICS
-			//setActionShareIntent();
+			// setActionShareIntent();
 
 			// Request focus, will not open keyboard
 			if (FragmentLayout.LANDSCAPE_MODE) {
@@ -782,7 +758,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			 * an error in the note.
 			 */
 		} else {
-			activity.setTitle(getText(R.string.error_title));
 			if (mText != null)
 				mText.setText(getText(R.string.error_message));
 		}
@@ -830,7 +805,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		 * The Cursor object will exist, even if no records were returned,
 		 * unless the query failed because of some exception or error.
 		 */
-		if (doSave && mCursor != null && mText != null && mTitle != null) {
+		if (doSave && mText != null && mTitle != null) {
 			Log.d("NotesEditorFragment", "onPause Saving/Deleting Note");
 
 			// Get the current note text.
@@ -851,7 +826,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				activity.setResult(Activity.RESULT_CANCELED);
 				deleteNote();
 				// Tell list to reselect after deletion
-				this.onNewNoteListener.onNewNoteDeleted(getIdFromUri(mUri));
+				this.onNoteOpenedListener.onNewNoteDeleted(getIdFromUri(mUri));
+				mState = STATE_INSERT;
 
 				/*
 				 * Writes the edits to the provider. The note has been edited if
@@ -875,12 +851,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 */
 	public void setNoSave() {
 		doSave = false;
-		if (mCursor != null) {
-			mCursor.close();
-			mCursor = null;
-		}
 	}
-	
+
 	private void setActionShareIntent() {
 		if (FragmentLayout.AT_LEAST_ICS && shareActionProvider != null) {
 			Intent share = new Intent(Intent.ACTION_SEND);
@@ -895,7 +867,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public void afterTextChanged(Editable s) {
 		setActionShareIntent();
 	}
-	
+
 	@Override
 	public void beforeTextChanged(CharSequence s, int start, int count,
 			int after) {
@@ -925,7 +897,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		noteDueDate.set(dayOfMonth, monthOfYear, year);
 		dueDateSet = true;
-		
+
 		// Remember to update share intent
 		setActionShareIntent();
 
@@ -971,5 +943,49 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			return new DatePickerDialog(getActivity(), mFragment,
 					mFragment.year, mFragment.month, mFragment.day);
 		}
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		// TODO Auto-generated method stub
+		// This is called when a new Loader needs to be created.
+
+		// Now create and return a CursorLoader that will take care of
+		// creating a Cursor for the data being displayed.
+
+		if (mState == STATE_UNCLEAR) {
+			// In this case, we don't yet know what to show.
+			// Check the database if the list has any notes already
+			
+			
+
+			// No notes existed in the database. We'll have to insert a new one.
+
+			mState = STATE_INSERT;
+
+			mUri = activity.getContentResolver().insert(
+					NotePad.Notes.CONTENT_URI, null);
+
+		}
+
+		return new CursorLoader(getActivity(), mUri, PROJECTION, null, null,
+				null);
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		showNote(data);
+
+		// Notify list of the note's id
+		if (onNoteOpenedListener != null)
+			onNoteOpenedListener.onNoteOpened(getIdFromUri(mUri),
+					mState == STATE_INSERT);
+
+		mState = STATE_EDIT;
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader) {
+		// Make sure you're not using the loader
 	}
 }

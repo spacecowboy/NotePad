@@ -10,7 +10,7 @@ import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
 import com.nononsenseapps.notepad.interfaces.Refresher;
-import com.nononsenseapps.notepad.interfaces.onNewNoteCreatedListener;
+import com.nononsenseapps.notepad.interfaces.OnNoteOpenedListener;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -45,7 +45,7 @@ import android.widget.Toast;
 
 public class NotesListFragment extends ListFragment implements
 		SearchView.OnQueryTextListener, OnItemLongClickListener,
-		onNewNoteCreatedListener, OnModalDeleteListener, Refresher,
+		OnNoteOpenedListener, OnModalDeleteListener, Refresher,
 		LoaderManager.LoaderCallbacks<Cursor> {
 	int mCurCheckPosition = 0;
 
@@ -103,6 +103,23 @@ public class NotesListFragment extends ListFragment implements
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+
+		if (FragmentLayout.LANDSCAPE_MODE) {
+			// Make new fragment to show this selection.
+			NotesEditorFragment editor = new NotesEditorFragment();
+			editor.setOnNewNoteCreatedListener(this);
+
+			// Execute a transaction, replacing any existing fragment
+			// with this one inside the frame.
+			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			ft.replace(R.id.editor_container, editor);
+			// ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			Log.d("NotesListFragment",
+					"Commiting transaction, opening fragment now");
+
+			ft.commit();
+
+		}
 
 		mSearchView = (SearchView) activity.findViewById(R.id.search_view);
 		setupSearchView();
@@ -388,10 +405,10 @@ public class NotesListFragment extends ListFragment implements
 
 	private void reListNotes() {
 		getLoaderManager().restartLoader(0, null, this);
-		//if (currentQuery.isEmpty())
-			//listAllNotes();
-		//else
-			//showResults(currentQuery);
+		// if (currentQuery.isEmpty())
+		// listAllNotes();
+		// else
+		// showResults(currentQuery);
 	}
 
 	/**
@@ -564,13 +581,18 @@ public class NotesListFragment extends ListFragment implements
 	}
 
 	@Override
-	public void onNewNoteCreated(long id) {
-		reListNotes();
+	public void onNoteOpened(long id, boolean created) {
+		Log.d(TAG, "onNoteOpened: id " + id + "created " + created);
+		// Re list if a new note was created.
+		// TODO is it necessary to relist them?
 
 		mCurId = id;
-		mCurCheckPosition = getPosOfId(id);
-
-		selectPos(mCurCheckPosition);
+		if (created)
+			reListNotes();
+		else {
+			mCurCheckPosition = getPosOfId(id);
+			selectPos(mCurCheckPosition);
+		}
 	}
 
 	private class ModeCallbackHC implements MultiChoiceModeListener,
@@ -984,7 +1006,7 @@ public class NotesListFragment extends ListFragment implements
 		// creating a Cursor for the data being displayed.
 
 		// TODO include title field in search
-		return new CursorLoader(getActivity(), baseUri, PROJECTION, 
+		return new CursorLoader(getActivity(), baseUri, PROJECTION,
 				NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?", // Where the note
 															// contains the
 															// query

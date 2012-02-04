@@ -7,7 +7,7 @@ import java.util.Collection;
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.Refresher;
-import com.nononsenseapps.notepad.interfaces.onNewNoteCreatedListener;
+import com.nononsenseapps.notepad.interfaces.OnNoteOpenedListener;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -177,7 +177,7 @@ public class FragmentLayout extends Activity implements
 	 * screen is not large enough to show it all in one activity.
 	 */
 	public static class NotesEditorActivity extends Activity implements
-			onNewNoteCreatedListener, DeleteActionListener {
+			OnNoteOpenedListener, DeleteActionListener {
 		private NotesEditorFragment editorFragment;
 		private long currentId = -1;
 
@@ -282,7 +282,7 @@ public class FragmentLayout extends Activity implements
 		}
 
 		@Override
-		public void onNewNoteCreated(long id) {
+		public void onNoteOpened(long id, boolean created) {
 			this.currentId = id;
 		}
 
