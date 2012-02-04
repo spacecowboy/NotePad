@@ -200,7 +200,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		// Prepare the loader. Either re-connect with an existing one,
 		// or start a new one. Will open the note
-		getLoaderManager().initLoader(0, null, this);
+		getLoaderManager().restartLoader(0, null, this);
 	}
 
 	private static long getIdFromUri(Uri uri) {
@@ -358,10 +358,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 * Take care of deleting a note. Simply deletes the entry.
 	 */
 	private final void deleteNote() {
-		Log.d("NotesEditorFragment", "Deleting note");
-		this.id = -1;
-		getActivity().getContentResolver().delete(mUri, null, null);
-		mText.setText("");
+		if (mUri != null) {
+			Log.d("NotesEditorFragment", "Deleting note");
+			this.id = -1;
+			getActivity().getContentResolver().delete(mUri, null, null);
+			mText.setText("");
+		}
 	}
 
 	private void copyText(String text) {
@@ -400,7 +402,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		if (container == null) {
+		// TODO delete this
+		if (container == null && false) {
 			// We have different layouts, and in one of them this
 			// fragment's containing frame doesn't exist. The fragment
 			// may still be created from its saved state, but there is
@@ -506,7 +509,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		if (timeToDie) {
 			Log.d("NotesEditorFragment",
 					"onActivityCreated, but it is time to die so doing nothing...");
-		} else {
+		} else if (saves != null) {
 			// TODO if this is created from xml, we should load the first note
 			// we can find or display a new note.
 			// find first note through: SELECT * FROM Table_Name LIMIT 1;
@@ -650,8 +653,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			setFontSettings();
 			// Redisplay from database. If a new note was showing, that was
 			// deleted in onPause. Then the state was changed back to insert
-			//if (mState == STATE_INSERT)
-			//	openNote(null);
+			// if (mState == STATE_INSERT)
+			// openNote(null);
 			// TODO delete
 			// Closed with new note being only note. That was deleted. Requery
 			// and
@@ -661,6 +664,19 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// }
 			// showTheNote();
 		}
+	}
+
+	/**
+	 * Will save existing note (except if empty new note)
+	 * 
+	 * @param id
+	 */
+	public void displayNote(long id) {
+		Log.d("NotesEditorFragment", "Display note: " + id);
+		saveNote();
+		mState = STATE_EDIT;
+		this.id = id;
+		openNote(null);
 	}
 
 	private void showNote(Cursor mCursor) {
@@ -805,6 +821,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		 * The Cursor object will exist, even if no records were returned,
 		 * unless the query failed because of some exception or error.
 		 */
+		saveNote();
+
+	}
+
+	private void saveNote() {
 		if (doSave && mText != null && mTitle != null) {
 			Log.d("NotesEditorFragment", "onPause Saving/Deleting Note");
 
@@ -823,10 +844,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			 */
 			// if (isFinishing() && (length == 0)) {
 			if (text.isEmpty() && title.isEmpty()) {
-				activity.setResult(Activity.RESULT_CANCELED);
+				// TODO should I set this?
+				//activity.setResult(Activity.RESULT_CANCELED);
 				deleteNote();
 				// Tell list to reselect after deletion
-				this.onNoteOpenedListener.onNewNoteDeleted(getIdFromUri(mUri));
+				if (this.onNoteOpenedListener != null && mUri != null)
+					this.onNoteOpenedListener
+							.onNewNoteDeleted(getIdFromUri(mUri));
 				mState = STATE_INSERT;
 
 				/*
@@ -956,8 +980,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		if (mState == STATE_UNCLEAR) {
 			// In this case, we don't yet know what to show.
 			// Check the database if the list has any notes already
-			
-			
 
 			// No notes existed in the database. We'll have to insert a new one.
 

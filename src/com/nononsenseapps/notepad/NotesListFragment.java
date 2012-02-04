@@ -93,6 +93,9 @@ public class NotesListFragment extends ListFragment implements
 
 	private SimpleCursorAdapter mAdapter;
 
+	private boolean showFirstNote = false;
+	private NotesEditorFragment landscapeEditor;
+
 	@Override
 	public void onAttach(Activity activity) {
 		Log.d(TAG, "onAttach");
@@ -105,6 +108,10 @@ public class NotesListFragment extends ListFragment implements
 		super.onActivityCreated(savedInstanceState);
 
 		if (FragmentLayout.LANDSCAPE_MODE) {
+			showFirstNote = true;
+			landscapeEditor = (NotesEditorFragment) getFragmentManager().findFragmentById(R.id.editor_container);
+			landscapeEditor.setOnNewNoteCreatedListener(this);
+			/*
 			// Make new fragment to show this selection.
 			NotesEditorFragment editor = new NotesEditorFragment();
 			editor.setOnNewNoteCreatedListener(this);
@@ -118,7 +125,10 @@ public class NotesListFragment extends ListFragment implements
 					"Commiting transaction, opening fragment now");
 
 			ft.commit();
-
+			*/
+		}
+		else {
+			landscapeEditor = null;
 		}
 
 		mSearchView = (SearchView) activity.findViewById(R.id.search_view);
@@ -155,38 +165,19 @@ public class NotesListFragment extends ListFragment implements
 		getLoaderManager().initLoader(0, null, this);
 	}
 
-	private void showNewNoteIfNecessary() {
+	private void showFirstNote() {
 		if (getListAdapter().isEmpty()) {
-			// In landscape, this will display a new note
-			if (FragmentLayout.LANDSCAPE_MODE && currentState == STATE_LIST) {
-				currentState = STATE_NEW_NOTE;
-			} else if (!FragmentLayout.LANDSCAPE_MODE
-					&& currentState == STATE_NEW_NOTE) {
-				// Don't display a new note automatically in portrait mode
-				currentState = STATE_LIST;
-			}
-
+			currentState = STATE_NEW_NOTE;
 			Log.d("NotesListFragment", "Setting data: " + mCurCheckPosition
 					+ ", " + mCurId);
 		} else {
+			currentState = STATE_EXISTING_NOTE;
 			Log.d("NotesListFragment", "Setting data not empty first: "
 					+ mCurCheckPosition + ", " + mCurId);
-
-			if (FragmentLayout.LANDSCAPE_MODE && currentState == STATE_LIST) {
-				currentState = STATE_EXISTING_NOTE;
-			}
 		}
 
-		// Now we have listed the notes we should have
-		// Position is valid for this list and might be -1 in case we had an
-		// empty search in portrait.
-		// Id might not be valid if we are coming from portrait to landscape
-		if (STATE_EXISTING_NOTE == currentState
-				|| STATE_NEW_NOTE == currentState) {
-			// Always display note in landscape mode
-			// Opens a new note if necessary
-			showNote(mCurCheckPosition, true);
-		}
+		// Create new note if necessary
+		showNote(0, true);
 	}
 
 	private void setupSearchView() {
@@ -371,8 +362,15 @@ public class NotesListFragment extends ListFragment implements
 					// NotesEditorFragment editor = (NotesEditorFragment)
 					// getSupportFragmentManager()
 					// .findFragmentById(R.id.editor);
+					if (landscapeEditor != null) {
+						Log.d("NotesListFragment", "Would open note here: " + mCurId);
+						landscapeEditor.displayNote(mCurId);
+					}
+					
+					// TODO delete this
 
 					// Make new fragment to show this selection.
+					/*
 					NotesEditorFragment editor = NotesEditorFragment
 							.newInstance(mCurId);
 					editor.setOnNewNoteCreatedListener(this);
@@ -387,7 +385,7 @@ public class NotesListFragment extends ListFragment implements
 							"Commiting transaction, opening fragment now");
 
 					ft.commit();
-
+					*/
 				} else {
 					Log.d("NotesListFragment",
 							"Showing note in SinglePane: id " + mCurId
@@ -1038,6 +1036,11 @@ public class NotesListFragment extends ListFragment implements
 			setListShown(true);
 		} else {
 			setListShownNoAnimation(true);
+		}
+		// Open first note if this is first start
+		if (showFirstNote) {
+			showFirstNote = false;
+			showFirstNote();
 		}
 
 		// Reselect current note in list, if possible
