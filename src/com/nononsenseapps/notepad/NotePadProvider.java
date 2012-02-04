@@ -376,7 +376,7 @@ public class NotePadProvider extends ContentProvider implements
 		 * empty, and Cursor.getCount() returns 0.
 		 */
 		Cursor c;
-		if (selectionArgs == null) {
+		//if (selectionArgs == null) {
 			c = qb.query(db, // The database to query
 					projection, // The columns to return from the query
 					selection, // The columns for the where clause
@@ -385,7 +385,7 @@ public class NotePadProvider extends ContentProvider implements
 					null, // don't filter by row groups
 					orderBy // The sort order
 			);
-		} else {
+		/*} else {
 			// Log.d(TAG,
 			// ("SELECT " + projection[0] + ", " + projection[1] + ", " +
 			// projection[2] + ", " + projection[3]
@@ -396,7 +396,7 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.Notes.TABLE_NAME + " WHERE " + projection[2]
 					+ " LIKE ? ORDER BY " + NotePad.Notes.SORT_ORDER,
 					new String[] { "%" + selectionArgs[0] + "%" });
-		}
+		}*/
 
 		// Tells the Cursor what URI to watch, so it knows when its source data
 		// changes

@@ -15,16 +15,16 @@ import com.nononsenseapps.notepad.interfaces.onNewNoteCreatedListener;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.SharedPreferences;
+import android.content.Loader;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import android.app.Activity;
 import android.app.FragmentTransaction;
+import android.app.LoaderManager;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.app.ListFragment;
@@ -45,7 +45,8 @@ import android.widget.Toast;
 
 public class NotesListFragment extends ListFragment implements
 		SearchView.OnQueryTextListener, OnItemLongClickListener,
-		onNewNoteCreatedListener, OnModalDeleteListener, Refresher {
+		onNewNoteCreatedListener, OnModalDeleteListener, Refresher,
+		LoaderManager.LoaderCallbacks<Cursor> {
 	int mCurCheckPosition = 0;
 
 	private static final String[] PROJECTION = new String[] {
@@ -90,6 +91,8 @@ public class NotesListFragment extends ListFragment implements
 
 	private OnEditorDeleteListener onDeleteListener;
 
+	private SimpleCursorAdapter mAdapter;
+
 	@Override
 	public void onAttach(Activity activity) {
 		Log.d(TAG, "onAttach");
@@ -106,21 +109,37 @@ public class NotesListFragment extends ListFragment implements
 
 		lv = getListView();
 		// Populate list
-		listAllNotes();
+		mAdapter = getThemedAdapter(null);
+		setListAdapter(mAdapter);
+
+		// Start out with a progress indicator.
+		setListShown(false);
+
+		// Set list preferences
+		setSingleCheck();
 
 		if (savedInstanceState != null) {
 			currentState = savedInstanceState.getInt(SAVEDSTATE, STATE_LIST);
+			mCurCheckPosition = savedInstanceState.getInt(SAVEDPOS, 0);
+			mCurId = savedInstanceState.getLong(SAVEDID, -1);
 		} else {
-			currentState = STATE_LIST;
-		}
+			// Only display note in landscape
+			if (FragmentLayout.LANDSCAPE_MODE)
+				currentState = STATE_EXISTING_NOTE;
+			else
+				currentState = STATE_LIST;
 
-		// boolean showList = PreferenceManager.getDefaultSharedPreferences(
-		// activity).getBoolean(SHOWLISTKEY, false);
-
-		if (getListAdapter().isEmpty()) {
 			mCurCheckPosition = 0;
 			mCurId = -1;
+		}
 
+		// Prepare the loader. Either re-connect with an existing one,
+		// or start a new one. Will list all notes
+		getLoaderManager().initLoader(0, null, this);
+	}
+
+	private void showNewNoteIfNecessary() {
+		if (getListAdapter().isEmpty()) {
 			// In landscape, this will display a new note
 			if (FragmentLayout.LANDSCAPE_MODE && currentState == STATE_LIST) {
 				currentState = STATE_NEW_NOTE;
@@ -136,30 +155,9 @@ public class NotesListFragment extends ListFragment implements
 			Log.d("NotesListFragment", "Setting data not empty first: "
 					+ mCurCheckPosition + ", " + mCurId);
 
-			// TODO
-			// Read saved bundle here
-			// mCurCheckPosition =
-			// PreferenceManager.getDefaultSharedPreferences(activity).getInt(SELECTEDPOS,
-			// -1);
-			// mCurId =
-			// PreferenceManager.getDefaultSharedPreferences(activity).getLong(SELECTEDID,
-			// -1);
-			mCurCheckPosition = 0;
-			mCurId = -1;
-
-			if (savedInstanceState != null) {
-				mCurCheckPosition = savedInstanceState.getInt(SAVEDPOS, 0);
-				mCurId = savedInstanceState.getLong(SAVEDID, -1);
-			}
-
 			if (FragmentLayout.LANDSCAPE_MODE && currentState == STATE_LIST) {
 				currentState = STATE_EXISTING_NOTE;
 			}
-
-			setSingleCheck();
-
-			Log.d("NotesListFragment", "Setting data not empty: "
-					+ mCurCheckPosition + ", " + mCurId);
 		}
 
 		// Now we have listed the notes we should have
@@ -172,14 +170,6 @@ public class NotesListFragment extends ListFragment implements
 			// Opens a new note if necessary
 			showNote(mCurCheckPosition, true);
 		}
-		// else if (mCurId > -1) {
-		// // In portrait mode, only display an existing note. And that could
-		// // have been selected during a search
-		// // so recacalculate just in case
-		// mCurCheckPosition = getPosOfId(mCurId);
-		// // don't open a new note if none exists
-		// showNote(mCurCheckPosition, false);
-		// }
 	}
 
 	private void setupSearchView() {
@@ -290,12 +280,6 @@ public class NotesListFragment extends ListFragment implements
 	public void onPause() {
 		super.onPause();
 		Log.d("NotesListFragment", "onPause");
-		// TODO delete
-		// SharedPreferences.Editor prefEditor = PreferenceManager
-		// .getDefaultSharedPreferences(activity).edit();
-		// prefEditor.putInt(SELECTEDPOS, mCurCheckPosition);
-		// prefEditor.putLong(SELECTEDID, mCurId);
-		// prefEditor.commit();
 	}
 
 	@Override
@@ -320,74 +304,6 @@ public class NotesListFragment extends ListFragment implements
 		}
 		// Remove focus from search window
 		activity.findViewById(R.id.search_view).clearFocus();
-	}
-
-	private void listAllNotes() {
-		Uri contentUri = NotePad.Notes.CONTENT_URI;
-
-		/*
-		 * Performs a managed query. The Activity handles closing and requerying
-		 * the cursor when needed.
-		 * 
-		 * Please see the introductory note about performing provider operations
-		 * on the UI thread.
-		 */
-		Cursor cursor = activity.managedQuery(contentUri, // Use the
-															// default
-				// content URI for
-				// the provider.
-				PROJECTION, // Return the note ID and title for each note.
-				null, // No where clause, return all records.
-				null, // No where clause, therefore no where column values.
-				NotePad.Notes.SORT_ORDER // Use the default sort order.
-				);
-		// Or Honeycomb will crash
-		activity.stopManagingCursor(cursor);
-
-		/*
-		 * The following two arrays create a "map" between columns in the cursor
-		 * and view IDs for items in the ListView. Each element in the
-		 * dataColumns array represents a column name; each element in the
-		 * viewID array represents the ID of a View. The SimpleCursorAdapter
-		 * maps them in ascending order to determine where each column value
-		 * will appear in the ListView.
-		 */
-
-		SimpleCursorAdapter adapter = getThemedAdapter(cursor);
-
-		// Sets the ListView's adapter to be the cursor adapter that was just
-		// created.
-		setListAdapter(adapter);
-	}
-
-	private void showResults(String query) {
-
-		// Cursor cursors = managedQuery(NotePad.Notes.CONTENT_URI, null, null,
-		// new String[] { query }, null);
-		// Log.d(TAG, ("query : " + query));
-		Cursor cursor = activity.managedQuery(NotePad.Notes.CONTENT_URI, // Use
-																			// the
-				// default
-				// content URI
-				// for the
-				// provider.
-				PROJECTION, // Return the note ID, title and text for each note.
-				null, // No where clause, return all records.
-				new String[] { query }, // Only these column values
-				NotePad.Notes.SORT_ORDER); // Use the default sort
-											// order.
-		// Or Honeycomb will crash
-		activity.stopManagingCursor(cursor);
-
-		if (cursor == null) {
-			// There are no results
-		} else {
-			SimpleCursorAdapter adapter = getThemedAdapter(cursor);
-			// Sets the ListView's adapter to be the cursor adapter that was
-			// just
-			// created.
-			setListAdapter(adapter);
-		}
 	}
 
 	/**
@@ -418,6 +334,12 @@ public class NotesListFragment extends ListFragment implements
 			}
 
 			if (mCurId > -1 || createIfEmpty) {
+				// Just make sure
+				if (mCurId < 0)
+					currentState = STATE_NEW_NOTE;
+				else
+					currentState = STATE_EXISTING_NOTE;
+
 				if (FragmentLayout.LANDSCAPE_MODE) {
 					Log.d("NotesLIstFragmenT", "It is dualPane!");
 					// We can display everything in-place with fragments, so
@@ -465,10 +387,11 @@ public class NotesListFragment extends ListFragment implements
 	}
 
 	private void reListNotes() {
-		if (currentQuery.isEmpty())
-			listAllNotes();
-		else
-			showResults(currentQuery);
+		getLoaderManager().restartLoader(0, null, this);
+		//if (currentQuery.isEmpty())
+			//listAllNotes();
+		//else
+			//showResults(currentQuery);
 	}
 
 	/**
@@ -560,29 +483,14 @@ public class NotesListFragment extends ListFragment implements
 			Log.d("NotesListFragment", "this is a new query");
 			currentQuery = query;
 
-			if (query.equals("")) {
-				listAllNotes();
-			} else {
-				showResults(query);
-			}
-			// Reselect current note in list, if possible
-			// Will be -1 if list is empty or id is -1
-			reSelectId();
-			// Now both id and position are valid for this list
-			// (they might both be -1)
-
-			// If search is over, and no valid note is showing. display one.
-			if (query.isEmpty() && mCurId == -1
-					&& FragmentLayout.LANDSCAPE_MODE) {
-				showNote(mCurCheckPosition, true);
-			}
+			getLoaderManager().restartLoader(0, null, this);
 		}
 		return true;
 	}
 
 	public boolean onQueryTextSubmit(String query) {
-		Log.d("NotesListFragment", "onQueryTextChange: " + query);
-		return false;
+		// Don't care
+		return true;
 	}
 
 	private void selectPos(int pos) {
@@ -609,16 +517,16 @@ public class NotesListFragment extends ListFragment implements
 	}
 
 	public void setFutureSingleCheck() {
-		// TODO maek this shit work and reselect current
 		// REsponsible for disabling the modal selector in the future.
 		// can't do it now because it has to destroy itself etc...
 		if (checkMode == CHECK_MULTI) {
 			checkMode = CHECK_SINGLE_FUTURE;
-			
+
 			Intent intent = new Intent(activity, FragmentLayout.class);
 
 			// the mother activity will refresh the list for us
 			Log.d(TAG, "Launching intent: " + intent);
+			// SingleTop, so will not launch a new instance
 			startActivity(intent);
 		}
 	}
@@ -818,8 +726,8 @@ public class NotesListFragment extends ListFragment implements
 				onDeleteAction();
 				break;
 			default:
-				//Toast.makeText(activity, "Clicked " + item.getTitle(),
-				//Toast.LENGTH_SHORT).show();
+				// Toast.makeText(activity, "Clicked " + item.getTitle(),
+				// Toast.LENGTH_SHORT).show();
 				break;
 			}
 			return true;
@@ -1017,11 +925,12 @@ public class NotesListFragment extends ListFragment implements
 		// overridePendingTransition(0, 0);
 		// startActivity(intent);
 
-		// This is called in onDestroyActionMode instead so it happens for all events
+		// This is called in onDestroyActionMode instead so it happens for all
+		// events
 		// and only once
-		//Intent intent = new Intent(activity, FragmentLayout.class);
-		//Log.d(TAG, "Launching intent: " + intent);
-		//startActivity(intent);
+		// Intent intent = new Intent(activity, FragmentLayout.class);
+		// Log.d(TAG, "Launching intent: " + intent);
+		// startActivity(intent);
 	}
 
 	@Override
@@ -1046,5 +955,78 @@ public class NotesListFragment extends ListFragment implements
 		if (FragmentLayout.LANDSCAPE_MODE) {
 			showNote(mCurCheckPosition, true);
 		}
+	}
+
+	private CursorLoader getAllNotesLoader() {
+		// This is called when a new Loader needs to be created. This
+		// sample only has one Loader, so we don't care about the ID.
+		Uri baseUri = NotePad.Notes.CONTENT_URI;
+		// Now create and return a CursorLoader that will take care of
+		// creating a Cursor for the data being displayed.
+
+		return new CursorLoader(getActivity(), baseUri, PROJECTION, // Return
+																	// the note
+																	// ID and
+																	// title for
+																	// each
+																	// note.
+				null, // No where clause, return all records.
+				null, // No where clause, therefore no where column values.
+				NotePad.Notes.SORT_ORDER // Use the default sort order.
+		);
+	}
+
+	private CursorLoader getSearchNotesLoader() {
+		// This is called when a new Loader needs to be created. This
+		// sample only has one Loader, so we don't care about the ID.
+		Uri baseUri = NotePad.Notes.CONTENT_URI;
+		// Now create and return a CursorLoader that will take care of
+		// creating a Cursor for the data being displayed.
+
+		// TODO include title field in search
+		return new CursorLoader(getActivity(), baseUri, PROJECTION, 
+				NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?", // Where the note
+															// contains the
+															// query
+				new String[] { "%" + currentQuery + "%" }, // We don't care how
+															// it occurs in the
+															// note
+				NotePad.Notes.SORT_ORDER // Use the default sort order.
+		);
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		if (currentQuery != null && !currentQuery.isEmpty()) {
+			return getSearchNotesLoader();
+		} else {
+			return getAllNotesLoader();
+		}
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		// Swap the new cursor in. (The framework will take care of closing the
+		// old cursor once we return.)
+
+		mAdapter.swapCursor(data);
+
+		// The list should now be shown.
+		if (isResumed()) {
+			setListShown(true);
+		} else {
+			setListShownNoAnimation(true);
+		}
+
+		// Reselect current note in list, if possible
+		reSelectId();
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader) {
+		// This is called when the last Cursor provided to onLoadFinished()
+		// above is about to be closed. We need to make sure we are no
+		// longer using it.
+		mAdapter.swapCursor(null);
 	}
 }

@@ -406,6 +406,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		// To get the call back to add items to the menu
 		setHasOptionsMenu(true);
 
+		// TODO this is not safe, key might not exist
 		id = getArguments().getLong(KEYID);
 
 		noteDueDate = new Time(Time.getCurrentTimezone());
@@ -524,6 +525,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			Log.d("NotesEditorFragment",
 					"onActivityCreated, but it is time to die so doing nothing...");
 		} else {
+			// TODO if this is created from xml, we should load the first note we can find or display a new note.
+			// find first note through: SELECT * FROM Table_Name LIMIT 1;
+			// Use the same select statement the list is using
 			openNote(saves);
 			showTheNote();
 		}
