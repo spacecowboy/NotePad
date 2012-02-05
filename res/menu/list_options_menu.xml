@@ -7,21 +7,23 @@
         android:orderInCategory="0"
         android:showAsAction="ifRoom"
         android:title="@string/menu_add"/>
-    <!--
-          If there is currently data in the clipboard, this adds a PASTE menu item to the menu
-          so that the user can paste in the data..
-    -->
+    
+    <item
+        android:id="@+id/menu_sync"
+        android:orderInCategory="1"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_sync"/>
 
     <item
         android:id="@+id/menu_deletelist"
         android:icon="?ic_menu_clear_playlist"
-        android:orderInCategory="1"
+        android:orderInCategory="2"
         android:showAsAction="never"
         android:title="@string/menu_deletelist"/>
     <item
         android:id="@+id/menu_preferences"
         android:icon="?ic_menu_settings_holo"
-        android:orderInCategory="2"
+        android:orderInCategory="3"
         android:showAsAction="never"
         android:title="@string/menu_preferences"/>
 

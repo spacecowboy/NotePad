@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<!--
+     Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -14,82 +15,134 @@
      limitations under the License.
 -->
 
-<!-- Declare the contents of this Android application.  The namespace
+<!--
+     Declare the contents of this Android application.  The namespace
      attribute brings in the Android platform namespace, and the package
      supplies a unique name for the application.  When writing your
      own application, the package name must be changed from "com.example.*"
-     to come from a domain that you own or have control over. -->
+     to come from a domain that you own or have control over.
+-->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nononsenseapps.notepad" 
-    android:versionCode="7" android:versionName="2.2">
+    package="com.nononsenseapps.notepad"
+    android:versionCode="7"
+    android:versionName="2.2" >
 
-    <uses-sdk android:minSdkVersion="11" android:targetSdkVersion="15"/>
+    <uses-sdk
+        android:minSdkVersion="11"
+        android:targetSdkVersion="15" />
 
-    <application android:icon="@drawable/app_icon"
-        android:label="@string/app_name"
-        android:hardwareAccelerated="true">
-         <!-- android:uiOptions="splitActionBarWhenNarrow" -->
-    
-        <provider android:name=".NotePadProvider"
+    <uses-permission android:name="android.permission.INTERNET" />
+    <!-- For Google account -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.USE_CREDENTIALS" />
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+
+    <!-- For syncing -->
+    <uses-permission android:name="android.permission.READ_SYNC_STATS" />
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+
+    <application
+        android:hardwareAccelerated="true"
+        android:icon="@drawable/app_icon"
+        android:label="@string/app_name" >
+
+        <!-- android:uiOptions="splitActionBarWhenNarrow" -->
+
+        <provider
+            android:name=".NotePadProvider"
             android:authorities="com.nononsenseapps.NotePad"
-            android:exported="false">
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:syncable="true" >
             <grant-uri-permission android:pathPattern=".*" />
         </provider>
-        
-        <activity android:name="FragmentLayout"
-                android:label="@string/app_name" android:launchMode="singleTop"
-                android:screenOrientation="sensor" android:theme="@style/ThemeHolo" >
+
+        <activity
+            android:name="FragmentLayout"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:screenOrientation="sensor"
+            android:theme="@style/ThemeHolo" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        
-        <activity android:name="FragmentLayout$NotesEditorActivity"
+        <activity
+            android:name="FragmentLayout$NotesEditorActivity"
             android:screenOrientation="sensor" >
+
             <!-- android:configChanges="keyboardHidden|orientation" > -->
-        
-            <!-- This filter says that we can view or edit the data of
-                 a single note -->
-            <intent-filter android:label="@string/resolve_edit">
+
+
+            <!--
+                 This filter says that we can view or edit the data of
+                 a single note
+            -->
+            <intent-filter android:label="@string/resolve_edit" >
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
                 <action android:name="com.android.notepad.action.EDIT_NOTE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
             </intent-filter>
 
-            <!-- This filter says that we can create a new note inside
+            <!--
+                 This filter says that we can create a new note inside
                  of a directory of notes.  The INSERT action creates an
                  empty note; the PASTE action initializes a new note from
-                 the current contents of the clipboard. -->
+                 the current contents of the clipboard.
+            -->
             <intent-filter>
                 <action android:name="android.intent.action.INSERT" />
                 <action android:name="android.intent.action.PASTE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="vnd.android.cursor.dir/vnd.nononsenseapps.note" />
             </intent-filter>
-            
+
             <!-- enable the search dialog to send searches to SearchableActivity -->
-        	<!-- <meta-data android:name="android.app.default_searchable"
-                   android:value="Searcher" /> -->
+            <!--
+                 <meta-data android:name="android.app.default_searchable"
+                   android:value="Searcher" />
+            -->
 
         </activity>
-
-        <activity android:name=".NotesLiveFolder" android:label="@string/live_folder_name"
-            android:icon="@drawable/live_folder_notes"  android:theme="@android:style/Theme.Holo">
+        <activity
+            android:name=".NotesLiveFolder"
+            android:icon="@drawable/live_folder_notes"
+            android:label="@string/live_folder_name"
+            android:theme="@android:style/Theme.Holo" >
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
+
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        
-        <activity android:name="FragmentLayout$NotesPreferencesDialog"
-            android:theme="@style/ThemeHoloDialogNoActionBar"
-            android:screenOrientation="sensor" >
-            
+        <activity
+            android:name="FragmentLayout$NotesPreferencesDialog"
+            android:screenOrientation="sensor"
+            android:theme="@style/ThemeHoloDialogNoActionBar" >
         </activity>
 
+        <service
+            android:name=".sync.SyncService"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.content.SyncAdapter"
+                android:resource="@xml/syncadapter" />
+        </service>
     </application>
 
 </manifest>

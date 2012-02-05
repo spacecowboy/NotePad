@@ -4,4 +4,7 @@
 	<integer name="default_editor_font_size">18</integer>
 	<string name="gtask_status_uncompleted">needsAction</string>
 	<string name="gtask_status_completed">completed</string>
+	<string name="clientid">36138346719.apps.googleusercontent.com</string>
+	<string name="clientsecret">yQkwchxwrCsscbs9-4WNVds-</string>
+	<string name="redirecturl">urn:ietf:wg:oauth:2.0:oob</string>
 </resources>

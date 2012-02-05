@@ -1,10 +1,12 @@
 package com.nononsenseapps.notepad;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.notepad.FragmentLayout.NotesEditorActivity;
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
@@ -14,14 +16,23 @@ import com.nononsenseapps.notepad.interfaces.OnNoteOpenedListener;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.LoaderManager;
@@ -96,6 +107,8 @@ public class NotesListFragment extends ListFragment implements
 	private boolean autoOpenNote = false;
 	private NotesEditorFragment landscapeEditor;
 
+	private ListWatcher watcher;
+
 	@Override
 	public void onAttach(Activity activity) {
 		Log.d(TAG, "onAttach");
@@ -109,25 +122,25 @@ public class NotesListFragment extends ListFragment implements
 
 		if (FragmentLayout.LANDSCAPE_MODE) {
 			autoOpenNote = true;
-			landscapeEditor = (NotesEditorFragment) getFragmentManager().findFragmentById(R.id.editor_container);
+			landscapeEditor = (NotesEditorFragment) getFragmentManager()
+					.findFragmentById(R.id.editor_container);
 			landscapeEditor.setOnNewNoteCreatedListener(this);
 			/*
-			// Make new fragment to show this selection.
-			NotesEditorFragment editor = new NotesEditorFragment();
-			editor.setOnNewNoteCreatedListener(this);
-
-			// Execute a transaction, replacing any existing fragment
-			// with this one inside the frame.
-			FragmentTransaction ft = getFragmentManager().beginTransaction();
-			ft.replace(R.id.editor_container, editor);
-			// ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			Log.d("NotesListFragment",
-					"Commiting transaction, opening fragment now");
-
-			ft.commit();
-			*/
-		}
-		else {
+			 * // Make new fragment to show this selection. NotesEditorFragment
+			 * editor = new NotesEditorFragment();
+			 * editor.setOnNewNoteCreatedListener(this);
+			 * 
+			 * // Execute a transaction, replacing any existing fragment // with
+			 * this one inside the frame. FragmentTransaction ft =
+			 * getFragmentManager().beginTransaction();
+			 * ft.replace(R.id.editor_container, editor); //
+			 * ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+			 * Log.d("NotesListFragment",
+			 * "Commiting transaction, opening fragment now");
+			 * 
+			 * ft.commit();
+			 */
+		} else {
 			landscapeEditor = null;
 		}
 
@@ -149,6 +162,9 @@ public class NotesListFragment extends ListFragment implements
 			currentState = savedInstanceState.getInt(SAVEDSTATE, STATE_LIST);
 			mCurCheckPosition = savedInstanceState.getInt(SAVEDPOS, 0);
 			mCurId = savedInstanceState.getLong(SAVEDID, -1);
+			// If in portrait and we were editing a note, open it
+			if (currentState == STATE_EXISTING_NOTE)
+				autoOpenNote = true;
 		} else {
 			// Only display note in landscape
 			if (FragmentLayout.LANDSCAPE_MODE)
@@ -249,6 +265,34 @@ public class NotesListFragment extends ListFragment implements
 			// with the interface: onNewNoteListener
 			// onNewNote will here update the list, mCurId and mCurPos in turn.
 			return true;
+		case R.id.menu_sync:
+			Log.d("NotesListFragment", "Sync");
+			// Select the account we should use in APP preferences
+			// Do this, don't bother with saving the token. Just need to authorize my app. This cannot be done in the background.
+            Account[] accounts = AccountManager.get(activity).getAccountsByType("com.google");
+            if (accounts.length > 0) {
+            	AccountManager.get(activity).getAuthToken(accounts[0], SyncAdapter.AUTH_TOKEN_TYPE, null, activity, new AccountManagerCallback<Bundle>() {
+            	    public void run(AccountManagerFuture<Bundle> future) {
+            	      try {
+            	        // If the user has authorized your application to use the tasks API
+            	        // a token is available.
+            	        String token = future.getResult().getString(AccountManager.KEY_AUTHTOKEN);
+            	        // Now you can use the Tasks API...
+            	        Log.d(TAG, "Callback, this is my token: " + token);
+            	        //useTasksAPI(token);
+            	      } catch (OperationCanceledException e) {
+            	        // TODO: The user has denied you access to the API, you should handle that
+            	    	  Log.d(TAG, "Callback, denied access to API");
+            	      } catch (Exception e)  {
+            	    	  Log.d(TAG, "Callback, other exception");
+            	      }
+            	    }
+            	  }, null);
+            	Log.d("NotesListFragment", "Got account, requesting sync");
+            	ContentResolver.setIsSyncable(accounts[0], NotePad.AUTHORITY, 1);
+				ContentResolver.requestSync(accounts[0], NotePad.AUTHORITY, new Bundle());
+            }
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -257,6 +301,8 @@ public class NotesListFragment extends ListFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		watcher = new ListWatcher(new Handler());
+
 		// To get the call back to add items to the menu
 		setHasOptionsMenu(true);
 
@@ -288,6 +334,11 @@ public class NotesListFragment extends ListFragment implements
 	public void onPause() {
 		super.onPause();
 		Log.d("NotesListFragment", "onPause");
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
 	}
 
 	@Override
@@ -363,29 +414,31 @@ public class NotesListFragment extends ListFragment implements
 					// getSupportFragmentManager()
 					// .findFragmentById(R.id.editor);
 					if (landscapeEditor != null) {
-						Log.d("NotesListFragment", "Would open note here: " + mCurId);
+						// We want to know about changes here
+						Log.d("NotesListFragment", "Would open note here: "
+								+ mCurId);
 						landscapeEditor.displayNote(mCurId);
 					}
-					
+
 					// TODO delete this
 
 					// Make new fragment to show this selection.
 					/*
-					NotesEditorFragment editor = NotesEditorFragment
-							.newInstance(mCurId);
-					editor.setOnNewNoteCreatedListener(this);
-
-					// Execute a transaction, replacing any existing fragment
-					// with this one inside the frame.
-					FragmentTransaction ft = getFragmentManager()
-							.beginTransaction();
-					ft.replace(R.id.editor_container, editor);
-					ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-					Log.d("NotesListFragment",
-							"Commiting transaction, opening fragment now");
-
-					ft.commit();
-					*/
+					 * NotesEditorFragment editor = NotesEditorFragment
+					 * .newInstance(mCurId);
+					 * editor.setOnNewNoteCreatedListener(this);
+					 * 
+					 * // Execute a transaction, replacing any existing fragment
+					 * // with this one inside the frame. FragmentTransaction ft
+					 * = getFragmentManager() .beginTransaction();
+					 * ft.replace(R.id.editor_container, editor);
+					 * ft.setTransition
+					 * (FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+					 * Log.d("NotesListFragment",
+					 * "Commiting transaction, opening fragment now");
+					 * 
+					 * ft.commit();
+					 */
 				} else {
 					Log.d("NotesListFragment",
 							"Showing note in SinglePane: id " + mCurId
@@ -416,18 +469,19 @@ public class NotesListFragment extends ListFragment implements
 	public void onDelete() {
 		Log.d(TAG, "onDelete");
 		if (onDeleteListener != null) {
+			// Tell fragment to delete the current note
 			onDeleteListener.onEditorDelete(mCurId);
 		}
 		if (FragmentLayout.LANDSCAPE_MODE) {
 			autoOpenNote = true;
 		}
 		currentState = STATE_LIST;
-		
+
 		reListNotes();
-		
+
 		// TODO consider the recalculation bit
 		if (FragmentLayout.LANDSCAPE_MODE) {
-			//showNote(mCurCheckPosition, true);
+			// showNote(mCurCheckPosition, true);
 		} else {
 			// Get the id of the currently "selected" note
 			// This matters if we switch to landscape mode
@@ -1060,5 +1114,42 @@ public class NotesListFragment extends ListFragment implements
 		// above is about to be closed. We need to make sure we are no
 		// longer using it.
 		mAdapter.swapCursor(null);
+	}
+
+	private void registerObserverOpenedNote(long id) {
+		Log.d(TAG, "registering observer");
+		// First unregister for any previous uri
+		activity.getContentResolver().unregisterContentObserver(watcher);
+		// Register for current
+		activity.getContentResolver().registerContentObserver(
+				NotesEditorFragment.getUriFrom(id), false, watcher);
+	}
+
+	// TODO delete if not needed
+	private static class ListWatcher extends ContentObserver {
+
+		private static final String TAG = "ListWatcher";
+
+		public ListWatcher(Handler handler) {
+			super(handler);
+		}
+
+		@Override
+		public boolean deliverSelfNotifications() {
+			return true;
+		}
+
+		@Override
+		public void onChange(boolean selfChange) {
+			Log.d(TAG, "MyContentObserver.onChange( " + selfChange + ")");
+			super.onChange(selfChange);
+			// Only two things can happen
+			// 1. Note was modified. It must have been changed on server and
+			// synced.
+
+			// 2. Note was deleted. This could have been done on server, or
+			// simply by the user.
+		}
+
 	}
 }

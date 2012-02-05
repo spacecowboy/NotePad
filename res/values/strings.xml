@@ -30,6 +30,7 @@
     <string name="menu_setuncompleted">Mark as not done</string>
     <string name="menu_move_to_list">Move to list</string>
     <string name="menu_deletelist">Delete list</string>
+    <string name="menu_sync">Sync</string>
     
     <string name="delete_list_warning">Are you sure you want to delete the list? The list will be permanently deleted.</string>
     

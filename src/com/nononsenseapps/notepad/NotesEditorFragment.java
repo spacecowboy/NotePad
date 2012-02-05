@@ -19,10 +19,12 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.res.Resources;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -83,6 +85,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public static final int STATE_UNCLEAR = 2;
 
 	protected static final int DATE_DIALOG_ID = 999;
+	private static final String TAG = "NotesEditorFragment";
 
 	// These fields are strictly used for the date picker dialog. They should
 	// not be used to get the notes due date!
@@ -123,6 +126,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	private Button mDueDate;
 	private boolean mOriginalDueState;
+	private boolean opened = false;
+	private NoteWatcher watcher;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -163,6 +168,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 */
 	private void openNote(Bundle savedInstanceState) {
 		Log.d("NotesEditorFragment", "OpenNOTe: Id is " + id);
+		opened = true;
 		if (id != -1) {
 			// Existing note
 			mState = STATE_EDIT;
@@ -358,6 +364,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 * Take care of deleting a note. Simply deletes the entry.
 	 */
 	private final void deleteNote() {
+		clearFields();
 		if (mUri != null) {
 			Log.d("NotesEditorFragment", "Deleting note");
 			this.id = -1;
@@ -365,7 +372,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			clearFields();
 		}
 	}
-	
+
 	private void clearFields() {
 		mText.setText("");
 		mTitle.setText("");
@@ -404,6 +411,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		year = c.get(Calendar.YEAR);
 		month = c.get(Calendar.MONTH);
 		day = c.get(Calendar.DAY_OF_MONTH);
+
+		watcher = new NoteWatcher(new Handler(), this);
 	}
 
 	@Override
@@ -516,7 +525,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		if (timeToDie) {
 			Log.d("NotesEditorFragment",
 					"onActivityCreated, but it is time to die so doing nothing...");
-		} else if (saves != null) {
+		} else if (saves != null || mState != STATE_UNCLEAR) {
 			// TODO if this is created from xml, we should load the first note
 			// we can find or display a new note.
 			// find first note through: SELECT * FROM Table_Name LIMIT 1;
@@ -658,7 +667,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			// Settings might have been changed
 			setFontSettings();
-			openNote(null);
+			// We don't want to do this the first time
+			if (opened)
+				openNote(null);
 			// Redisplay from database. If a new note was showing, that was
 			// deleted in onPause. Then the state was changed back to insert
 			// if (mState == STATE_INSERT)
@@ -681,7 +692,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 */
 	public void displayNote(long id) {
 		Log.d("NotesEditorFragment", "Display note: " + id);
+
 		saveNote();
+		doSave = true;
+		clearFields();
 		mState = STATE_EDIT;
 		this.id = id;
 		openNote(null);
@@ -782,6 +796,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			 * an error in the note.
 			 */
 		} else {
+			// TODO This can actually happen if we call openNote from contentChangedListener,
+			// and note was deleted by the listview (or server). Might not be nice to display
+			// error message then.
+			doSave = false;
 			if (mText != null)
 				mText.setText(getText(R.string.error_message));
 		}
@@ -823,20 +841,21 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public void onPause() {
 		super.onPause();
 		Log.d("NotesEditorFragment", "onPause");
-
-		/*
-		 * Tests to see that the query operation didn't fail (see onCreate()).
-		 * The Cursor object will exist, even if no records were returned,
-		 * unless the query failed because of some exception or error.
-		 */
+		
+		//activity.getContentResolver().unregisterContentObserver(watcher);
 		saveNote();
-		// TODO do this?
-		clearFields();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		// Just make sure we are unregistered
+		activity.getContentResolver().unregisterContentObserver(watcher);
 	}
 
 	private void saveNote() {
 		if (doSave && mText != null && mTitle != null) {
-			Log.d("NotesEditorFragment", "onPause Saving/Deleting Note");
+			Log.d("NotesEditorFragment", "Saving/Deleting Note");
 
 			// Get the current note text.
 			String text = mText.getText().toString();
@@ -854,7 +873,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// if (isFinishing() && (length == 0)) {
 			if (text.isEmpty() && title.isEmpty()) {
 				// TODO should I set this?
-				//activity.setResult(Activity.RESULT_CANCELED);
+				// activity.setResult(Activity.RESULT_CANCELED);
 				deleteNote();
 				// Tell list to reselect after deletion
 				if (this.onNoteOpenedListener != null && mUri != null)
@@ -999,6 +1018,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		}
 
+		Log.d(TAG, "registering observer");
+		// FIrst unregister for any previous uri
+		activity.getContentResolver().unregisterContentObserver(watcher);
+		// Register for current
+		activity.getContentResolver().registerContentObserver(mUri, false,
+				watcher);
+
 		return new CursorLoader(getActivity(), mUri, PROJECTION, null, null,
 				null);
 	}
@@ -1017,6 +1043,30 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
-		// Make sure you're not using the loader
+	}
+
+	private static class NoteWatcher extends ContentObserver {
+
+		private static final String TAG = "NoteWatcher";
+		private NotesEditorFragment editor;
+
+		public NoteWatcher(Handler handler, NotesEditorFragment editor) {
+			super(handler);
+			this.editor = editor;
+		}
+
+		@Override
+		public boolean deliverSelfNotifications() {
+			return true;
+		}
+
+		@Override
+		public void onChange(boolean selfChange) {
+			Log.d(TAG, "MyContentObserver.onChange( " + selfChange + ")");
+			super.onChange(selfChange);
+			// It was changed! Reopen!
+			editor.openNote(null);
+		}
+
 	}
 }
