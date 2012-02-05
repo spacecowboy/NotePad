@@ -224,11 +224,11 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.Notes.COLUMN_NAME_TITLE + " TEXT,"
 					+ NotePad.Notes.COLUMN_NAME_NOTE + " TEXT,"
 					+ NotePad.Notes.COLUMN_NAME_CREATE_DATE + " INTEGER,"
-					+ NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " INTEGER"
+					+ NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " INTEGER,"
 					+ NotePad.Notes.COLUMN_NAME_DUE_DATE + " TEXT,"
 					+ NotePad.Notes.COLUMN_NAME_GTASKS_ID + " TEXT,"
 					+ NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " TEXT,"
-					+ NotePad.Notes.COLUMN_NAME_GTASKS_UPDATED + " TEXT,"
+					+ NotePad.Notes.COLUMN_NAME_GTASKS_UPDATED + " TEXT"
 					+ ");");
 		}
 
@@ -692,7 +692,7 @@ public class NotePadProvider extends ContentProvider implements
 
 			// Notifies observers registered against this provider that the data
 			// changed.
-			getContext().getContentResolver().notifyChange(noteUri, null);
+			getContext().getContentResolver().notifyChange(noteUri, null, true);
 			return noteUri;
 		}
 
@@ -781,7 +781,7 @@ public class NotePadProvider extends ContentProvider implements
 		 * along to the resolver framework, and observers that have registered
 		 * themselves for the provider are notified.
 		 */
-		getContext().getContentResolver().notifyChange(uri, null);
+		getContext().getContentResolver().notifyChange(uri, null, true);
 
 		// Returns the number of rows deleted.
 		return count;
@@ -886,7 +886,7 @@ public class NotePadProvider extends ContentProvider implements
 		 * along to the resolver framework, and observers that have registered
 		 * themselves for the provider are notified.
 		 */
-		getContext().getContentResolver().notifyChange(uri, null);
+		getContext().getContentResolver().notifyChange(uri, null, true);
 
 		// Returns the number of rows updated.
 		return count;
