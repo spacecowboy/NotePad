@@ -2,6 +2,7 @@
 <resources>
 	<attr name="ic_action_compose" format="reference" />
 	<attr name="ic_action_delete" format="reference" />
+	<attr name="ic_action_refresh" format="reference" />
 	<attr name="ic_menu_copy_holo" format="reference" />
 	<attr name="ic_menu_search_holo" format="reference" />
 	<attr name="ic_menu_settings_holo" format="reference" />

@@ -17,6 +17,7 @@
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
 		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
+		<item name="ic_action_refresh">@drawable/ic_action_refresh_dark</item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
@@ -36,6 +37,7 @@
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
 		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
+		<item name="ic_action_refresh">@drawable/ic_action_refresh_light</item>
 		
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
@@ -52,6 +54,7 @@
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
 		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
+		<item name="ic_action_refresh">@drawable/ic_action_refresh_dark</item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
@@ -70,6 +73,7 @@
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
 		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
+		<item name="ic_action_refresh">@drawable/ic_action_refresh_light</item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
@@ -88,6 +92,7 @@
 		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
 		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
 		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
+		<item name="ic_action_refresh">@drawable/ic_action_refresh_light</item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>

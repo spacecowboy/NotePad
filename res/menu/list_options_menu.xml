@@ -10,6 +10,7 @@
     
     <item
         android:id="@+id/menu_sync"
+        android:icon="?ic_action_refresh"
         android:orderInCategory="1"
         android:showAsAction="ifRoom"
         android:title="@string/menu_sync"/>

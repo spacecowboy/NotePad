@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import com.nononsenseapps.notepad.FragmentLayout.NotesEditorActivity;
+import com.nononsenseapps.notepad.FragmentLayout.NotesPreferencesDialog;
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
@@ -290,7 +291,7 @@ public class NotesListFragment extends ListFragment implements
 			boolean syncEnabled = PreferenceManager
 					.getDefaultSharedPreferences(activity).getBoolean(
 							NotesPreferenceFragment.KEY_SYNC_ENABLE, false);
-			if (accountName != null && syncEnabled) {
+			if (accountName != null && !accountName.equals("") && syncEnabled) {
 				Account account = NotesPreferenceFragment.getAccount(
 						AccountManager.get(activity), accountName);
 				// Don't start a new sync if one is already going
@@ -298,6 +299,12 @@ public class NotesListFragment extends ListFragment implements
 					ContentResolver.requestSync(account, NotePad.AUTHORITY,
 							new Bundle());
 				}
+			}
+			else {
+				// The user might want to enable syncing. Open preferences
+				Intent intent = new Intent();
+				intent.setClass(activity, NotesPreferencesDialog.class);
+				startActivity(intent);
 			}
 			return true;
 		default:
