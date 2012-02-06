@@ -1,12 +1,10 @@
 package com.nononsenseapps.notepad;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 
-import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.notepad.FragmentLayout.NotesEditorActivity;
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
@@ -21,7 +19,7 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
+import android.content.SyncStatusObserver;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -31,12 +29,7 @@ import android.preference.PreferenceManager;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +39,7 @@ import android.widget.SimpleCursorAdapter;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.ActionMode;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
@@ -110,6 +104,11 @@ public class NotesListFragment extends ListFragment implements
 	private NotesEditorFragment landscapeEditor;
 
 	private ListWatcher watcher;
+
+	private Menu mOptionsMenu;
+	private View mRefreshIndeterminateProgressView = null;
+
+	protected boolean refreshing = false;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -181,6 +180,21 @@ public class NotesListFragment extends ListFragment implements
 		// Prepare the loader. Either re-connect with an existing one,
 		// or start a new one. Will list all notes
 		getLoaderManager().initLoader(0, null, this);
+		
+
+        ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE, new SyncStatusObserver() {
+			@Override
+			public void onStatusChanged(int which) {
+				refreshing = !refreshing;
+				Log.d("SyncObserver", "Sync status changed");
+				activity.runOnUiThread(new Runnable() {
+					@Override
+					public void run() {
+						setRefreshActionItemState(refreshing);
+					}
+				});
+			}
+        });
 	}
 
 	private void showFirstBestNote() {
@@ -228,6 +242,7 @@ public class NotesListFragment extends ListFragment implements
 		// if (FragmentLayout.lightTheme)
 		// inflater.inflate(R.menu.list_options_menu_light, menu);
 		// else
+		mOptionsMenu = menu;
 		inflater.inflate(R.menu.list_options_menu, menu);
 
 		// Get the SearchView and set the searchable configuration
@@ -644,6 +659,31 @@ public class NotesListFragment extends ListFragment implements
 			selectPos(mCurCheckPosition);
 		}
 	}
+	
+    public void setRefreshActionItemState(boolean refreshing) {
+        // On Honeycomb, we can set the state of the refresh button by giving it a custom
+        // action view.
+        if (mOptionsMenu == null) {
+            return;
+        }
+
+        final MenuItem refreshItem = mOptionsMenu.findItem(R.id.menu_sync);
+        if (refreshItem != null) {
+            if (refreshing) {
+                if (mRefreshIndeterminateProgressView == null) {
+                    LayoutInflater inflater = (LayoutInflater)
+                            activity.getSystemService(
+                                    Context.LAYOUT_INFLATER_SERVICE);
+                    mRefreshIndeterminateProgressView = inflater.inflate(
+                            R.layout.actionbar_indeterminate_progress, null);
+                }
+
+                refreshItem.setActionView(mRefreshIndeterminateProgressView);
+            } else {
+                refreshItem.setActionView(null);
+            }
+        }
+    }
 
 	private class ModeCallbackHC implements MultiChoiceModeListener,
 			DeleteActionListener {
