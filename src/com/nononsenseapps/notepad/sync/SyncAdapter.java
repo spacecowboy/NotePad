@@ -62,7 +62,8 @@ import java.util.List;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 	private static final String TAG = "SyncAdapter";
-	public static final String AUTH_TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/tasks";
+	//public static final String AUTH_TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/tasks";
+	public static final String AUTH_TOKEN_TYPE = "Manage your tasks"; // Alias for above
 	private static final String SYNC_MARKER_KEY = "com.nononsenseapps.notepad.sync.marker";
 	public static final boolean NOTIFY_AUTH_FAILURE = false;
 
