@@ -1,32 +1,39 @@
 package com.nononsenseapps.notepad;
 
-import com.nononsenseapps.ui.TextPreviewPreference;
-import com.robobunny.SeekBarPreference;
+import com.nononsenseapps.notepad.sync.SyncAdapter;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.OperationCanceledException;
 import android.app.Activity;
+import android.content.ContentResolver;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.util.Log;
-import android.widget.SeekBar;
-import android.widget.TextView;
-import android.widget.SeekBar.OnSeekBarChangeListener;
 
 public class NotesPreferenceFragment extends PreferenceFragment implements
-		OnSharedPreferenceChangeListener {
+		OnSharedPreferenceChangeListener, AccountManagerCallback<Bundle> {
 	public static final String KEY_THEME = "key_current_theme";
 	public static final String KEY_SORT_ORDER = "key_sort_order";
 	public static final String KEY_SORT_TYPE = "key_sort_type";
 	public static final String KEY_FONT_TYPE_EDITOR = "key_font_type_editor";
 	public static final String KEY_FONT_SIZE_EDITOR = "key_font_size_editor";
-	private static final CharSequence KEY_TEXT_PREVIEW = "key_text_preview";
+	public static final String KEY_TEXT_PREVIEW = "key_text_preview";
+
+	public static final String KEY_SYNC_ENABLE = "syncEnablePref";
+	public static final String KEY_ACCOUNT = "accountPref";
+	public static final String KEY_SYNC_FREQ = "syncFreq";
 
 	public static final String SANS = "Sans";
 	public static final String SERIF = "Serif";
 	public static final String MONOSPACE = "Monospace";
-	
+
 	public static final String THEME_DARK = "dark";
 	public static final String THEME_LIGHT = "light";
 	public static final String THEME_LIGHT_ICS_AB = "light_ab";
@@ -40,10 +47,11 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	public String SUMMARY_SORT_ORDER;
 	public String SUMMARY_THEME;
 	private Activity activity;
-	
-	private TextPreviewPreference textPreview = null;
-	private SeekBarPreference prefFontSizeEditor;
-	
+
+	private Account account;
+	private Preference prefAccount;
+	private Preference prefSyncFreq;
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
@@ -53,7 +61,6 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
 
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.main_preferences);
@@ -66,16 +73,15 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 
 		SUMMARY_THEME = getText(R.string.settings_summary_theme_dark)
 				.toString();
-		
 
 		prefSortOrder = getPreferenceScreen().findPreference(KEY_SORT_ORDER);
 		prefSortType = getPreferenceScreen().findPreference(KEY_SORT_TYPE);
 		prefTheme = getPreferenceScreen().findPreference(KEY_THEME);
-		prefFontType = getPreferenceScreen().findPreference(KEY_FONT_TYPE_EDITOR);
-		textPreview = (TextPreviewPreference) getPreferenceScreen().findPreference(KEY_TEXT_PREVIEW);
-		prefFontSizeEditor = (SeekBarPreference) getPreferenceScreen().findPreference(KEY_FONT_SIZE_EDITOR);
-		//prefFontSizeEditor.setOnPreferenceChangeListener(this);
-		//prefFontSizeEditor.setPersistent(true);
+		prefFontType = getPreferenceScreen().findPreference(
+				KEY_FONT_TYPE_EDITOR);
+
+		prefAccount = getPreferenceScreen().findPreference(KEY_ACCOUNT);
+		prefSyncFreq = getPreferenceScreen().findPreference(KEY_SYNC_FREQ);
 
 		SharedPreferences sharedPrefs = getPreferenceScreen()
 				.getSharedPreferences();
@@ -87,14 +93,34 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		setOrderSummary(sharedPrefs);
 		setThemeSummary(sharedPrefs);
 		setEditorFontTypeSummary(sharedPrefs);
-		// Set font type
-		//updatePreviewFontType(sharedPrefs);
-		// Set font size
-		//updatePreviewFontSize(sharedPrefs);
-		// Set up navigation (adds nice arrow to icon)
-		// ActionBar actionBar = getActionBar();
-		// actionBar.setDisplayHomeAsUpEnabled(true);
-		
+
+		setAccountTitle(sharedPrefs);
+		setFreqSummary(sharedPrefs);
+
+		Preference accountPref = (Preference) findPreference("accountPref");
+		accountPref
+				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
+					public boolean onPreferenceClick(Preference preference) {
+						// Show dialog
+						activity.showDialog(FragmentLayout.NotesPreferencesDialog.DIALOG_ACCOUNTS);
+						return true;
+					}
+				});
+	}
+
+	/**
+	 * Called from the activity, since that one builds the dialog
+	 * 
+	 * @param account
+	 */
+	public void accountSelected(Account account) {
+		if (account != null) {
+			this.account = account;
+			// Request user's permission
+			AccountManager.get(activity).getAuthToken(account,
+					SyncAdapter.AUTH_TOKEN_TYPE, null, activity, this, null);
+			// work continues in callback, method run()
+		}
 	}
 
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
@@ -106,23 +132,23 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 				// IllegalStateException since we are not attached to a view
 			} else {
 				if (KEY_THEME.equals(key)) {
-					Log.d("settings", "Theme changed!");
 					setThemeSummary(sharedPreferences);
 				} else if (KEY_SORT_TYPE.equals(key)) {
-					Log.d("settings", "Sort type changed!");
 					setTypeSummary(sharedPreferences);
 				} else if (KEY_SORT_ORDER.equals(key)) {
-					Log.d("settings", "Sort order changed!");
 					setOrderSummary(sharedPreferences);
 				} else if (KEY_FONT_TYPE_EDITOR.equals(key)) {
-					Log.d("settings", "font type changed!");
 					setEditorFontTypeSummary(sharedPreferences);
-					//updatePreviewFontType(sharedPreferences);
+					// updatePreviewFontType(sharedPreferences);
 				} else if (KEY_FONT_SIZE_EDITOR.equals(key)) {
-					Log.d("settings", "font size changed!");
-					//updatePreviewFontSize(sharedPreferences);
-				}
-				else
+					// updatePreviewFontSize(sharedPreferences);
+				} else if (KEY_SYNC_ENABLE.equals(key)) {
+					Log.d("settings", "Toggled sync");
+					toggleSync(sharedPreferences);
+				} else if (KEY_SYNC_FREQ.equals(key)) {
+					setSyncInterval(sharedPreferences);
+					setFreqSummary(sharedPreferences);
+				} else
 					Log.d("settings", "Somethign changed!");
 			}
 		} catch (IllegalStateException e) {
@@ -135,13 +161,74 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		}
 	}
 
+	/**
+	 * Finds and returns the account of the name given
+	 * 
+	 * @param accountName
+	 * @return
+	 */
+	public static Account getAccount(AccountManager manager, String accountName) {
+		Account[] accounts = manager.getAccountsByType("com.google");
+		for (Account account : accounts) {
+			if (account.name.equals(accountName)) {
+				return account;
+			}
+		}
+		return null;
+	}
+
+	private void setSyncInterval(SharedPreferences sharedPreferences) {
+		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
+		String sFreqMins = sharedPreferences.getString(KEY_SYNC_FREQ, "0");
+		int freqMins = 0;
+		try {
+			freqMins = Integer.parseInt(sFreqMins);
+		} catch (NumberFormatException e) {
+			// Debugging error because of a mistake...
+		}
+		if (accountName == "") {
+			// Something is very wrong if this happens
+		} else if (freqMins == 0) {
+			// Disable periodic syncing
+			ContentResolver.removePeriodicSync(
+					getAccount(AccountManager.get(activity), accountName),
+					NotePad.AUTHORITY, new Bundle());
+		} else {
+			// Convert from minutes to seconds
+			long pollFrequency = freqMins * 60;
+			// Set periodic syncing
+			ContentResolver.addPeriodicSync(
+					getAccount(AccountManager.get(activity), accountName),
+					NotePad.AUTHORITY, new Bundle(), pollFrequency);
+		}
+	}
+
+	private void toggleSync(SharedPreferences sharedPreferences) {
+		boolean enabled = sharedPreferences.getBoolean(KEY_SYNC_ENABLE, false);
+		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
+		if (accountName.equals("")) {
+			// do nothing yet
+		} else if (enabled) {
+			// set syncable
+			ContentResolver.setIsSyncable(
+					getAccount(AccountManager.get(activity), accountName),
+					NotePad.AUTHORITY, 1);
+		} else {
+			// set unsyncable
+			ContentResolver.setIsSyncable(
+					getAccount(AccountManager.get(activity), accountName),
+					NotePad.AUTHORITY, 0);
+		}
+	}
+
+	/*
 	private void updatePreviewFontSize(SharedPreferences sharedPreferences) {
-		int size = sharedPreferences.getInt(KEY_FONT_SIZE_EDITOR, R.integer.default_editor_font_size);
+		int size = sharedPreferences.getInt(KEY_FONT_SIZE_EDITOR,
+				R.integer.default_editor_font_size);
 		if (textPreview != null) {
 			Log.d("settings", "updatePreviewFontSize textPreview");
 			textPreview.setTextSize(size);
-		}
-		else {
+		} else {
 			Log.d("settings", "updatePreviewFontSize textPreview was null!");
 		}
 	}
@@ -151,11 +238,10 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		if (textPreview != null) {
 			Log.d("settings", "updatePreviewFontType textPreview!");
 			textPreview.setTextType(type);
-		}
-		else {
+		} else {
 			Log.d("settings", "updatePreviewFontType textPreview was null!");
 		}
-	}
+	}*/
 
 	private void setOrderSummary(SharedPreferences sharedPreferences) {
 		String value = sharedPreferences.getString(KEY_SORT_ORDER,
@@ -200,14 +286,77 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		Log.d("setThemeSummary", "Setting summary now");
 		prefTheme.setSummary(summary);
 	}
-	
+
 	private void setEditorFontTypeSummary(SharedPreferences sharedPreferences) {
 		// Dark theme is default
 		String value = sharedPreferences.getString(KEY_FONT_TYPE_EDITOR, SANS);
-		
+
 		Log.d("setFontSummary", value);
 		prefFontType.setSummary(value);
 	}
 
+	private void setAccountTitle(SharedPreferences sharedPreferences) {
+		//boolean enabled = sharedPreferences.getBoolean(KEY_SYNC_ENABLE, false);
+		String account = sharedPreferences.getString(KEY_ACCOUNT, "");
+		
+		if (!account.equals("")) {
+			prefAccount.setTitle(account);
+			prefAccount.setSummary(R.string.settings_account_summary);
+		}
+		
+	}
 	
+	private void setFreqSummary(SharedPreferences sharedPreferences) {
+		String sFreqMins = sharedPreferences.getString(KEY_SYNC_FREQ, "0");
+		int freq = 0;
+		try {
+			freq = Integer.parseInt(sFreqMins);
+		} catch (NumberFormatException e) {
+			// Debugging error because of a mistake...
+		}
+		if (freq == 0)
+			prefSyncFreq.setSummary(R.string.manual);
+		else if (freq == 60)
+			prefSyncFreq.setSummary(R.string.onehour);
+		else if (freq == 1440)
+			prefSyncFreq.setSummary(R.string.oneday);
+		else if (freq > 60)
+			prefSyncFreq.setSummary("" + freq/60 + " " + getText(R.string.hours).toString());
+		else
+			prefSyncFreq.setSummary("" + freq + " " + getText(R.string.minutes).toString());
+	}
+
+	@Override
+	public void run(AccountManagerFuture<Bundle> future) {
+		try {
+			// If the user has authorized
+			// your application to use the
+			// tasks API
+			// a token is available.
+			String token = future.getResult().getString(
+					AccountManager.KEY_AUTHTOKEN);
+			// Now you can use the Tasks
+			// API...
+			Log.d("PreferenceAccount", "Callback, this is my token: " + token);
+			// useTasksAPI(token);
+			if (token != null && account != null) {
+				SharedPreferences customSharedPreference = getPreferenceScreen()
+						.getSharedPreferences();
+				SharedPreferences.Editor editor = customSharedPreference.edit();
+				editor.putString(KEY_ACCOUNT, account.name);
+				editor.commit();
+
+				prefAccount.setTitle(account.name);
+				prefAccount.setSummary(R.string.settings_account_summary);
+
+				// Set it syncable
+				ContentResolver.setIsSyncable(account, NotePad.AUTHORITY, 1);
+			}
+		} catch (OperationCanceledException e) {
+			// TODO: The user has denied you
+			// access to the API, you should
+			// handle that
+		} catch (Exception e) {
+		}
+	}
 }

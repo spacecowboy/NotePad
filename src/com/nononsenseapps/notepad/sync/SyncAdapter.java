@@ -115,9 +115,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 				// Setting up the Tasks API Service
 				  HttpTransport transport = AndroidHttp.newCompatibleTransport();
 				  AccessProtectedResource accessProtectedResource = new GoogleAccessProtectedResource(authToken);
+
 				  Tasks service = new Tasks(transport, accessProtectedResource, new JacksonFactory());
 				  service.setKey(API_KEY);
-				  //service.accessKey = API_KEY;
 				  service.setApplicationName("HoloNotes");
 
 				  // TODO: now use the service to query the Tasks API

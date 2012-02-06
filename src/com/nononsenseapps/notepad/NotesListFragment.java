@@ -21,11 +21,13 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -267,31 +269,21 @@ public class NotesListFragment extends ListFragment implements
 			return true;
 		case R.id.menu_sync:
 			Log.d("NotesListFragment", "Sync");
-			// Select the account we should use in APP preferences
-			// Do this, don't bother with saving the token. Just need to authorize my app. This cannot be done in the background.
-            Account[] accounts = AccountManager.get(activity).getAccountsByType("com.google");
-            if (accounts.length > 0) {
-            	AccountManager.get(activity).getAuthToken(accounts[0], SyncAdapter.AUTH_TOKEN_TYPE, null, activity, new AccountManagerCallback<Bundle>() {
-            	    public void run(AccountManagerFuture<Bundle> future) {
-            	      try {
-            	        // If the user has authorized your application to use the tasks API
-            	        // a token is available.
-            	        String token = future.getResult().getString(AccountManager.KEY_AUTHTOKEN);
-            	        // Now you can use the Tasks API...
-            	        Log.d(TAG, "Callback, this is my token: " + token);
-            	        //useTasksAPI(token);
-            	      } catch (OperationCanceledException e) {
-            	        // TODO: The user has denied you access to the API, you should handle that
-            	    	  Log.d(TAG, "Callback, denied access to API");
-            	      } catch (Exception e)  {
-            	    	  Log.d(TAG, "Callback, other exception");
-            	      }
-            	    }
-            	  }, null);
-            	Log.d("NotesListFragment", "Got account, requesting sync");
-            	ContentResolver.setIsSyncable(accounts[0], NotePad.AUTHORITY, 1);
-				ContentResolver.requestSync(accounts[0], NotePad.AUTHORITY, new Bundle());
-            }
+			String accountName = PreferenceManager.getDefaultSharedPreferences(
+					activity)
+					.getString(NotesPreferenceFragment.KEY_ACCOUNT, "");
+			boolean syncEnabled = PreferenceManager
+					.getDefaultSharedPreferences(activity).getBoolean(
+							NotesPreferenceFragment.KEY_SYNC_ENABLE, false);
+			if (accountName != null && syncEnabled) {
+				Account account = NotesPreferenceFragment.getAccount(
+						AccountManager.get(activity), accountName);
+				// Don't start a new sync if one is already going
+				if (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) {
+					ContentResolver.requestSync(account, NotePad.AUTHORITY,
+							new Bundle());
+				}
+			}
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);

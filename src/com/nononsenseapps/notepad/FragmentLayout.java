@@ -9,12 +9,16 @@ import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.Refresher;
 import com.nononsenseapps.notepad.interfaces.OnNoteOpenedListener;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.ContentResolver;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -345,6 +349,9 @@ public class FragmentLayout extends Activity implements
 	}
 
 	public static class NotesPreferencesDialog extends Activity {
+		public static final int DIALOG_ACCOUNTS = 23;
+		private NotesPreferenceFragment prefFragment;
+
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
@@ -363,8 +370,9 @@ public class FragmentLayout extends Activity implements
 			// }
 
 			// Display the fragment as the main content.
+			prefFragment = new NotesPreferenceFragment();
 			FragmentTransaction ft = getFragmentManager().beginTransaction();
-			ft.replace(android.R.id.content, new NotesPreferenceFragment());
+			ft.replace(android.R.id.content, prefFragment);
 			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
 			ft.commit();
 		}
@@ -377,6 +385,29 @@ public class FragmentLayout extends Activity implements
 				break;
 			}
 			return super.onOptionsItemSelected(item);
+		}
+		
+		@Override
+		protected Dialog onCreateDialog(int id) {
+		  switch (id) {
+		    case DIALOG_ACCOUNTS:
+		      AlertDialog.Builder builder = new AlertDialog.Builder(this);
+		      builder.setTitle("Select a Google account");
+		      final Account[] accounts = AccountManager.get(this).getAccountsByType("com.google");
+		      final int size = accounts.length;
+		      String[] names = new String[size];
+		      for (int i = 0; i < size; i++) {
+		        names[i] = accounts[i].name;
+		      }
+		      builder.setItems(names, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) {
+		          // Stuff to do when the account is selected by the user
+		          prefFragment.accountSelected(accounts[which]);
+		        }
+		      });
+		      return builder.create();
+		  }
+		  return null;
 		}
 	}
 

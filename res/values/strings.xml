@@ -77,4 +77,16 @@
     <string name="monospace">Monospace</string>
     <string name="sans">Sans</string>
     <string name="serif">Serif</string>
+    <string name="settings_sync_freq_title">Sync interval</string>
+    <string name="settings_account_title">Select an account</string>
+    <string name="settings_account_summary">Click to switch account</string>
+    <string name="settings_sync_enable_title">Sync with Google Tasks</string>
+    <string name="settings_sync_enable_summary"></string>
+    <string name="settings_cat_syncing">Synchronization</string>
+    
+    <string name="manual">Manual</string>
+    <string name="minutes">minutes</string>
+    <string name="hours">hours</string>
+    <string name="onehour">One hour</string>
+    <string name="oneday">One day</string>
 </resources>

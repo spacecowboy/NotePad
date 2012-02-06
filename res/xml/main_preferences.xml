@@ -1,6 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" xmlns:robobunny="http://robobunny.com" android:key="preference_screen">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:robobunny="http://robobunny.com"
+    android:key="preference_screen" >
 
+    <PreferenceCategory android:title="@string/settings_cat_syncing" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="syncEnablePref"
+            android:summary="@string/settings_sync_enable_summary"
+            android:title="@string/settings_sync_enable_title" />
+
+        <Preference
+            android:dependency="syncEnablePref"
+            android:key="accountPref"
+            android:summary=""
+            android:title="@string/settings_account_title" />
+
+        <ListPreference
+            android:dependency="syncEnablePref"
+            android:defaultValue="0"
+            android:dialogTitle="@string/settings_sync_freq_title"
+            android:entries="@array/sync_freq_preference"
+            android:entryValues="@array/sync_freqvalues_preference"
+            android:key="syncFreq"
+            android:summary="Selected frequency should be here"
+            android:title="@string/settings_sync_freq_title" />
+    </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_cat_sorting" >
         <ListPreference
             android:defaultValue="modified"
@@ -28,28 +53,28 @@
             android:key="key_current_theme"
             android:summary="Selected option should be here"
             android:title="@string/settings_theme" />
-        
-        <com.nononsenseapps.ui.TextPreviewPreference
-            android:title="@string/settings_text_preview_title"
-            android:key="key_text_preview" />
-        
-                <com.robobunny.SeekBarPreference
-                    android:defaultValue="22"
-                    android:key="key_font_size_editor"
-                    android:max="30"
-                    robobunny:min="12"
-                    android:title="@string/settings_font_size"
-                    robobunny:unitsLeft=""
-                    robobunny:unitsRight="sp" />
 
-                <ListPreference
-                    android:defaultValue="sans"
-                    android:dialogTitle="@string/settings_font_type_dialog"
-                    android:entries="@array/font_type_preference"
-                    android:entryValues="@array/font_typevalues_preference"
-                    android:key="key_font_type_editor"
-                    android:summary="Selected option should be here"
-                    android:title="@string/settings_font_type" />
+        <com.nononsenseapps.ui.TextPreviewPreference
+            android:key="key_text_preview"
+            android:title="@string/settings_text_preview_title" />
+
+        <com.robobunny.SeekBarPreference
+            android:defaultValue="22"
+            android:key="key_font_size_editor"
+            android:max="30"
+            robobunny:min="12"
+            android:title="@string/settings_font_size"
+            robobunny:unitsLeft=""
+            robobunny:unitsRight="sp" />
+
+        <ListPreference
+            android:defaultValue="sans"
+            android:dialogTitle="@string/settings_font_type_dialog"
+            android:entries="@array/font_type_preference"
+            android:entryValues="@array/font_typevalues_preference"
+            android:key="key_font_type_editor"
+            android:summary="Selected option should be here"
+            android:title="@string/settings_font_type" />
     </PreferenceCategory>
 
 </PreferenceScreen>
