@@ -63,9 +63,10 @@ public class NotePadProvider extends ContentProvider implements
 	private static final String DATABASE_NAME = "note_pad.db";
 
 	/**
-	 * The database version 2 was original 3 added gtask-columns
+	 * The database version 2 was original 3 added gtask-columns 4 was the final
+	 * gtask version. 3 was never released and should be considered unsafe.
 	 */
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 4;
 
 	/**
 	 * A projection map used to select columns from the database
@@ -100,8 +101,14 @@ public class NotePadProvider extends ContentProvider implements
 	// The incoming URI matches the Note ID URI pattern
 	private static final int NOTE_ID = 2;
 
-	// The incoming URI matches the Live Folder URI pattern
-	private static final int LIVE_FOLDER_NOTES = 3;
+	private static final int LISTS = 3;
+	private static final int LISTS_ID = 4;
+	
+	private static final int GTASKS = 5;
+	private static final int GTASKS_ID = 6;
+	
+	private static final int GTASKLISTS = 7;
+	private static final int GTASKLISTS_ID = 8;
 
 	// private static final int SEARCH = 4;
 
@@ -133,11 +140,16 @@ public class NotePadProvider extends ContentProvider implements
 		// to a note ID operation
 		sUriMatcher.addURI(NotePad.AUTHORITY, "notes/#", NOTE_ID);
 
-		// Add a pattern that routes URIs terminated with live_folders/notes to
-		// a
-		// live folder operation
-		sUriMatcher.addURI(NotePad.AUTHORITY, "live_folders/notes",
-				LIVE_FOLDER_NOTES);
+		sUriMatcher.addURI(NotePad.AUTHORITY, "lists", LISTS);
+		sUriMatcher.addURI(NotePad.AUTHORITY, "lists/#", LISTS_ID);
+		
+		sUriMatcher.addURI(NotePad.AUTHORITY, "gtasks", GTASKS);
+		sUriMatcher.addURI(NotePad.AUTHORITY, "gtasks/#", GTASKS_ID);
+		
+		sUriMatcher.addURI(NotePad.AUTHORITY, "gtasklists", GTASKLISTS);
+		sUriMatcher.addURI(NotePad.AUTHORITY, "gtasklists/#", GTASKLISTS_ID);
+
+		
 
 		// Add a pattern that routes URIs terminated with "notes" plus an
 		// integer
@@ -173,27 +185,47 @@ public class NotePadProvider extends ContentProvider implements
 
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_DUE_DATE,
 				NotePad.Notes.COLUMN_NAME_DUE_DATE);
-		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_GTASKS_ID,
-				NotePad.Notes.COLUMN_NAME_GTASKS_ID);
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_MODIFIED,
+				NotePad.Notes.COLUMN_NAME_MODIFIED);
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
 				NotePad.Notes.COLUMN_NAME_GTASKS_STATUS);
-		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_GTASKS_UPDATED,
-				NotePad.Notes.COLUMN_NAME_GTASKS_UPDATED);
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_DELETED,
+				NotePad.Notes.COLUMN_NAME_DELETED);
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LIST,
+				NotePad.Notes.COLUMN_NAME_LIST);
 
 		/*
-		 * Creates an initializes a projection map for handling Live Folders
+		 * Creates an initializes a projection map for handling Lists
 		 */
 
 		// Creates a new projection map instance
-		sLiveFolderProjectionMap = new HashMap<String, String>();
+		sListsProjectionMap = new HashMap<String, String>();
 
-		// Maps "_ID" to "_ID AS _ID" for a live folder
-		sLiveFolderProjectionMap.put(BaseColumns._ID, BaseColumns._ID + " AS "
-				+ BaseColumns._ID);
+		sListsProjectionMap.put(BaseColumns._ID, BaseColumns._ID);
+		sListsProjectionMap.put(NotePad.Lists.COLUMN_NAME_TITLE,
+				NotePad.Lists.COLUMN_NAME_TITLE);
+		sListsProjectionMap.put(NotePad.Lists.COLUMN_NAME_DELETED,
+				NotePad.Lists.COLUMN_NAME_DELETED);
+		sListsProjectionMap.put(NotePad.Lists.COLUMN_NAME_MODIFIED,
+				NotePad.Lists.COLUMN_NAME_MODIFIED);
+		
+		/*
+		 * Gtasks stuff
+		 */
+		sGTasksProjectionMap = new HashMap<String, String>();
+		sGTasksProjectionMap.put(BaseColumns._ID, BaseColumns._ID);
+		sGTasksProjectionMap.put(NotePad.GTasks.COLUMN_NAME_GTASKS_ID, NotePad.GTasks.COLUMN_NAME_GTASKS_ID);
+		sGTasksProjectionMap.put(NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT, NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT);
+		sGTasksProjectionMap.put(NotePad.GTasks.COLUMN_NAME_ETAG, NotePad.GTasks.COLUMN_NAME_ETAG);
+		sGTasksProjectionMap.put(NotePad.GTasks.COLUMN_NAME_DB_ID, NotePad.GTasks.COLUMN_NAME_DB_ID);
+		
+		sGTaskListsProjectionMap = new HashMap<String, String>();
+		sGTaskListsProjectionMap.put(BaseColumns._ID, BaseColumns._ID);
+		sGTaskListsProjectionMap.put(NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID, NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID);
+		sGTaskListsProjectionMap.put(NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT, NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT);
+		sGTaskListsProjectionMap.put(NotePad.GTaskLists.COLUMN_NAME_ETAG, NotePad.GTaskLists.COLUMN_NAME_ETAG);
+		sGTaskListsProjectionMap.put(NotePad.GTaskLists.COLUMN_NAME_DB_ID, NotePad.GTaskLists.COLUMN_NAME_DB_ID);
 
-		// Maps "NAME" to "title AS NAME"
-		sLiveFolderProjectionMap.put(LiveFolders.NAME,
-				NotePad.Notes.COLUMN_NAME_TITLE + " AS " + LiveFolders.NAME);
 	}
 
 	/**
@@ -219,6 +251,27 @@ public class NotePadProvider extends ContentProvider implements
 		@Override
 		public void onCreate(SQLiteDatabase db) {
 			Log.d("DataBaseHelper", "onCreate");
+			createNotesTable(db);
+			createListsTable(db);
+			createGTasksTable(db);
+			createGListsTable(db);
+			
+			insertDefaultList(db);
+		}
+		
+		private long insertDefaultList(SQLiteDatabase db) {
+			ContentValues values = new ContentValues();
+			values.put(NotePad.Lists.COLUMN_NAME_TITLE, NotePad.Lists.DEFAULT_LIST_NAME);
+			values.put(NotePad.Lists.COLUMN_NAME_MODIFIED, 1);
+			values.put(NotePad.Lists.COLUMN_NAME_DELETED, 0);
+			
+			return db.insert(NotePad.Lists.TABLE_NAME, null, values);
+		}
+		
+		/**
+		 * This is where notes are stored. Links to List_table and GTasks_table.
+		 */
+		private void createNotesTable(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + NotePad.Notes.TABLE_NAME + " ("
 					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
 					+ NotePad.Notes.COLUMN_NAME_TITLE + " TEXT,"
@@ -226,11 +279,48 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.Notes.COLUMN_NAME_CREATE_DATE + " INTEGER,"
 					+ NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " INTEGER,"
 					+ NotePad.Notes.COLUMN_NAME_DUE_DATE + " TEXT,"
-					+ NotePad.Notes.COLUMN_NAME_GTASKS_ID + " TEXT,"
+					+ NotePad.Notes.COLUMN_NAME_LIST + " INTEGER,"
 					+ NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " TEXT,"
-					+ NotePad.Notes.COLUMN_NAME_GTASKS_UPDATED + " TEXT"
-					+ ");");
+					+ NotePad.Notes.COLUMN_NAME_MODIFIED + " INTEGER,"
+					+ NotePad.Notes.COLUMN_NAME_DELETED + " INTEGER" + ");");
 		}
+		
+		private void createListsTable(SQLiteDatabase db) {
+			db.execSQL("CREATE TABLE " + NotePad.Lists.TABLE_NAME + " ("
+					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
+					+ NotePad.Lists.COLUMN_NAME_TITLE + " TEXT,"
+					+ NotePad.Lists.COLUMN_NAME_MODIFIED + " INTEGER,"
+					+ NotePad.Lists.COLUMN_NAME_DELETED + " INTEGER" + ");");
+		}
+		
+		private void createGTasksTable(SQLiteDatabase db) {
+			db.execSQL("CREATE TABLE " + NotePad.GTasks.TABLE_NAME + " ("
+					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
+					+ NotePad.GTasks.COLUMN_NAME_DB_ID + " TEXT,"
+					+ NotePad.GTasks.COLUMN_NAME_GTASKS_ID + " INTEGER,"
+					+ NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT + " INTEGER,"
+					+ NotePad.GTasks.COLUMN_NAME_ETAG + " INTEGER" + ");");
+		}
+		
+		private void createGTaskListsTable(SQLiteDatabase db) {
+			db.execSQL("CREATE TABLE " + NotePad.GTaskLists.TABLE_NAME + " ("
+					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
+					+ NotePad.GTaskLists.COLUMN_NAME_DB_ID + " TEXT,"
+					+ NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID + " INTEGER,"
+					+ NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT + " INTEGER,"
+					+ NotePad.GTaskLists.COLUMN_NAME_ETAG + " INTEGER" + ");");
+		}
+		
+		private void insertDefaultList(SQLiteDatabase db) {
+			//NotePad.Lists.DEFAULT_LIST_NAME
+			db.execSQL("CREATE TABLE " + NotePad.GTaskLists.TABLE_NAME + " ("
+					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
+					+ NotePad.GTaskLists.COLUMN_NAME_DB_ID + " TEXT,"
+					+ NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID + " INTEGER,"
+					+ NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT + " INTEGER,"
+					+ NotePad.GTaskLists.COLUMN_NAME_ETAG + " INTEGER" + ");");
+		}
+		
 
 		/**
 		 * 
@@ -245,37 +335,63 @@ public class NotePadProvider extends ContentProvider implements
 					+ "Upgrading database from version " + oldVersion + " to "
 					+ newVersion);
 
-			if (oldVersion < 3) {
-				// gTask tables were added in database version 3
-				String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
-						+ " ADD COLUMN ";
-				// Don't want null values. Prefer empty String
-				String postName = " TEXT NOT NULL DEFAULT ''";
-				// Add Columns
-				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_DUE_DATE
-						+ postName);
-				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_GTASKS_ID
-						+ postName);
-				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_GTASKS_STATUS
-						+ postName);
-				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_GTASKS_UPDATED
-						+ postName);
+			// Version 3 was never released to the public
+			if (oldVersion == 3) {
+				// Kills the table and existing data
+				db.execSQL("DROP TABLE IF EXISTS notes");
+
+				// Recreates the database with a new version
+				onCreate(db);
+			} else {
+				if (oldVersion < 4) {
+					// FIrst add columns to Notes table
+					
+					String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
+							+ " ADD COLUMN ";
+					// Don't want null values. Prefer empty String
+					String postName = " TEXT NOT NULL DEFAULT ''";
+					String postNameInt = " INTEGER NOT NULL DEFAULT 1";
+					// Add Columns to Notes DB
+					db.execSQL(preName + NotePad.Notes.COLUMN_NAME_LIST
+							+ postNameInt);
+					db.execSQL(preName + NotePad.Notes.COLUMN_NAME_DUE_DATE
+							+ postName);
+					db.execSQL(preName
+							+ NotePad.Notes.COLUMN_NAME_GTASKS_STATUS
+							+ postName);
+					db.execSQL(preName
+							+ NotePad.Notes.COLUMN_NAME_MODIFIED
+							+ postNameInt);
+					db.execSQL(preName
+							+ NotePad.Notes.COLUMN_NAME_DELETED
+							+ postNameInt);
+					
+					// Then create the 3 missing tables
+					createListsTable(db);
+					createGTasksTable(db);
+					createGListsTable(db);
+					
+					// Now insert a default list
+					long listId = insertDefaultList(db);
+					
+					// Place all existing notes in this list
+					ContentValues values = new ContentValues();
+					values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
+					values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
+					values.put(NotePad.Notes.COLUMN_NAME_DELETED, 0);
+					
+					db.update(NotePad.Notes.TABLE_NAME, values, null, null);
+				}
 			}
-
-			// Kills the table and existing data
-			// db.execSQL("DROP TABLE IF EXISTS notes");
-
-			// Recreates the database with a new version
-			// onCreate(db);
 		}
-		
+
 		@Override
-		public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-			// This should be allright to do. Can only see this happening in test
+		public void onDowngrade(SQLiteDatabase db, int oldVersion,
+				int newVersion) {
+			// This should be allright to do. Can only see this happening in
+			// testing
 		}
 	}
-	
-
 
 	/**
 	 * 
@@ -315,7 +431,8 @@ public class NotePadProvider extends ContentProvider implements
 
 		// Constructs a new query builder and sets its table name
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
-		qb.setTables(NotePad.Notes.TABLE_NAME);
+		
+		String orderBy;
 
 		/**
 		 * Choose the projection and adjust the "where" clause based on URI
@@ -324,8 +441,9 @@ public class NotePadProvider extends ContentProvider implements
 		switch (sUriMatcher.match(uri)) {
 		// If the incoming URI is for notes, chooses the Notes projection
 		case NOTES:
+			qb.setTables(NotePad.Notes.TABLE_NAME);
 			qb.setProjectionMap(sNotesProjectionMap);
-			if (selectionArgs != null) {
+			if (selectionArgs != null && (selection == null || selection.equals(""))) {
 				selection = NotePad.Notes.COLUMN_NAME_NOTE + " MATCH ?";
 			}
 			break;
@@ -336,6 +454,7 @@ public class NotePadProvider extends ContentProvider implements
 		 * where clause, so that it selects that single note
 		 */
 		case NOTE_ID:
+			qb.setTables(NotePad.Notes.TABLE_NAME);
 			qb.setProjectionMap(sNotesProjectionMap);
 			qb.appendWhere(BaseColumns._ID + // the name of the ID column
 					"=" +
@@ -344,22 +463,47 @@ public class NotePadProvider extends ContentProvider implements
 							NotePad.Notes.NOTE_ID_PATH_POSITION));
 			break;
 
-		case LIVE_FOLDER_NOTES:
-			// If the incoming URI is from a live folder, chooses the live
-			// folder projection.
-			qb.setProjectionMap(sLiveFolderProjectionMap);
+		case LISTS_ID:
+			qb.appendWhere(BaseColumns._ID + // the name of the ID column
+					"=" +
+					// the position of the note ID itself in the incoming URI
+					uri.getPathSegments().get(
+							NotePad.Lists.ID_PATH_POSITION));
+		case LISTS:
+			orderBy = NotePad.Lists.SORT_ORDER;
+			qb.setTables(NotePad.Lists.TABLE_NAME);
+			qb.setProjectionMap(sListsProjectionMap);
 			break;
-
+		case GTASKS_ID:
+			qb.appendWhere(BaseColumns._ID + // the name of the ID column
+					"=" +
+					// the position of the note ID itself in the incoming URI
+					uri.getPathSegments().get(
+							NotePad.GTasks.ID_PATH_POSITION));
+		case GTASKS:
+			qb.setTables(NotePad.GTasks.TABLE_NAME);
+			qb.setProjectionMap(sGTasksProjectionMap);
+			break;
+		case GTASKLISTS_ID:
+			qb.appendWhere(BaseColumns._ID + // the name of the ID column
+					"=" +
+					// the position of the note ID itself in the incoming URI
+					uri.getPathSegments().get(
+							NotePad.GTaskLists.ID_PATH_POSITION));
+		case GTASKLISTS:
+			qb.setTables(NotePad.GTaskLists.TABLE_NAME);
+			qb.setProjectionMap(sGTaskListsProjectionMap);
+			break;
 		default:
 			// If the URI doesn't match any of the known patterns, throw an
 			// exception.
 			throw new IllegalArgumentException("Unknown URI " + uri);
 		}
 
-		String orderBy;
+		
 		// If no sort order is specified, uses the default
 		if (TextUtils.isEmpty(sortOrder)) {
-			orderBy = NotePad.Notes.SORT_ORDER;
+			// hanlded in switch
 		} else {
 			// otherwise, uses the incoming sort order
 			orderBy = sortOrder;
@@ -376,27 +520,25 @@ public class NotePadProvider extends ContentProvider implements
 		 * empty, and Cursor.getCount() returns 0.
 		 */
 		Cursor c;
-		//if (selectionArgs == null) {
-			c = qb.query(db, // The database to query
-					projection, // The columns to return from the query
-					selection, // The columns for the where clause
-					selectionArgs, // The values for the where clause
-					null, // don't group the rows
-					null, // don't filter by row groups
-					orderBy // The sort order
-			);
-		/*} else {
-			// Log.d(TAG,
-			// ("SELECT " + projection[0] + ", " + projection[1] + ", " +
-			// projection[2] + ", " + projection[3]
-			// + " FROM " + NotePad.Notes.TABLE_NAME + " WHERE " + projection[2]
-			// + " LIKE " + "%" + selectionArgs[0] + "%"));
-			c = db.rawQuery("SELECT " + projection[0] + ", " + projection[1]
-					+ ", " + projection[2] + ", " + projection[3] + " FROM "
-					+ NotePad.Notes.TABLE_NAME + " WHERE " + projection[2]
-					+ " LIKE ? ORDER BY " + NotePad.Notes.SORT_ORDER,
-					new String[] { "%" + selectionArgs[0] + "%" });
-		}*/
+		// if (selectionArgs == null) {
+		c = qb.query(db, // The database to query
+				projection, // The columns to return from the query
+				selection, // The columns for the where clause
+				selectionArgs, // The values for the where clause
+				null, // don't group the rows
+				null, // don't filter by row groups
+				orderBy // The sort order
+		);
+		/*
+		 * } else { // Log.d(TAG, // ("SELECT " + projection[0] + ", " +
+		 * projection[1] + ", " + // projection[2] + ", " + projection[3] // +
+		 * " FROM " + NotePad.Notes.TABLE_NAME + " WHERE " + projection[2] // +
+		 * " LIKE " + "%" + selectionArgs[0] + "%")); c = db.rawQuery("SELECT "
+		 * + projection[0] + ", " + projection[1] + ", " + projection[2] + ", "
+		 * + projection[3] + " FROM " + NotePad.Notes.TABLE_NAME + " WHERE " +
+		 * projection[2] + " LIKE ? ORDER BY " + NotePad.Notes.SORT_ORDER, new
+		 * String[] { "%" + selectionArgs[0] + "%" }); }
+		 */
 
 		// Tells the Cursor what URI to watch, so it knows when its source data
 		// changes
@@ -427,12 +569,25 @@ public class NotePadProvider extends ContentProvider implements
 		// If the pattern is for notes or live folders, returns the general
 		// content type.
 		case NOTES:
-		case LIVE_FOLDER_NOTES:
 			return NotePad.Notes.CONTENT_TYPE;
-
 			// If the pattern is for note IDs, returns the note ID content type.
 		case NOTE_ID:
 			return NotePad.Notes.CONTENT_ITEM_TYPE;
+			
+		case LISTS:
+			return NotePad.Lists.CONTENT_TYPE;
+		case LIST_ID:
+			return NotePad.Lists.CONTENT_ITEM_TYPE;
+			
+		case GTASKS:
+			return NotePad.GTasks.CONTENT_TYPE;
+		case GTASKS_ID:
+			return NotePad.GTasks.CONTENT_ITEM_TYPE;
+			
+		case GTASKLISTS:
+			return NotePad.GTaskLists.CONTENT_TYPE;
+		case GTASKLISTS_ID:
+			return NotePad.GTaskLists.CONTENT_ITEM_TYPE;
 
 			// If the URI pattern doesn't match any permitted patterns, throws
 			// an exception.
@@ -474,7 +629,12 @@ public class NotePadProvider extends ContentProvider implements
 		// streams are not
 		// supported for this type of URI.
 		case NOTES:
-		case LIVE_FOLDER_NOTES:
+		case LISTS:
+		case LISTS_ID:
+		case GTASKLISTS:
+		case GTASKLISTS_ID:
+		case GTASKS:
+		case GTASKS_ID:
 			return null;
 
 			// If the pattern is for note IDs and the MIME filter is text/plain,
@@ -602,10 +762,21 @@ public class NotePadProvider extends ContentProvider implements
 
 		// Validates the incoming URI. Only the full provider URI is allowed for
 		// inserts.
-		if (sUriMatcher.match(uri) != NOTES) {
+		switch (sUriMatcher.match(uri)) {
+		case NOTES:
+			return insertNote(uri, initialValues);
+		case LISTS:
+			return insertList(uri, initialValues);
+		case GTASKS:
+			return insertGTask(uri, initialValues);
+		case GTASKLISTS:
+			return insertGTaskList(uri, initialValues);
+		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
 		}
-
+	}
+	
+	private Uri insertNote(Uri uri, ContentValues initialValues) {
 		// A map to hold the new record's values.
 		ContentValues values;
 
@@ -653,21 +824,18 @@ public class NotePadProvider extends ContentProvider implements
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_DUE_DATE) == false) {
 			values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
 		}
-		// If the values map doesn't contain, sets the value to an
-		// empty string.
-		if (values.containsKey(NotePad.Notes.COLUMN_NAME_GTASKS_ID) == false) {
-			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_ID, "");
-		}
-		// If the values map doesn't contain, sets the value to an
-		// empty string.
-		if (values.containsKey(NotePad.Notes.COLUMN_NAME_GTASKS_UPDATED) == false) {
-			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_UPDATED, "");
-		}
+		
 		// If the values map doesn't contain, sets the value to an
 		// empty string.
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS) == false) {
-			// TODO use string resources: R.string.gtask_status_uncompleted)
 			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, "needsAction");
+		}
+		
+		values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
+		values.put(NotePad.Notes.COLUMN_NAME_DELETED, 0);
+		
+		if (values.containsKey(NotePad.Notes.COLUMN_NAME_LIST) == false) {
+			values.put(NotePad.Notes.COLUMN_NAME_LIST, 0);
 		}
 
 		// Opens the database object in "write" mode.
@@ -764,6 +932,83 @@ public class NotePadProvider extends ContentProvider implements
 
 			// Performs the delete.
 			count = db.delete(NotePad.Notes.TABLE_NAME, // The database table
+														// name.
+					finalWhere, // The final WHERE clause
+					whereArgs // The incoming where clause values.
+					);
+			break;
+			
+		case LISTS:
+			count = db.delete(NotePad.Lists.TABLE_NAME, // The database table
+														// name
+					where, // The incoming where clause column names
+					whereArgs // The incoming where clause values
+					);
+			break;
+		case LISTS_ID:
+			finalWhere = BaseColumns._ID + // The ID column name
+					" = " + // test for equality
+					uri.getPathSegments(). // the incoming note ID
+							get(NotePad.Lists.ID_PATH_POSITION);
+
+			
+			if (where != null) {
+				finalWhere = finalWhere + " AND " + where;
+			}
+
+			// Performs the delete.
+			count = db.delete(NotePad.Lists.TABLE_NAME, // The database table
+														// name.
+					finalWhere, // The final WHERE clause
+					whereArgs // The incoming where clause values.
+					);
+			break;
+			
+		case GTASKS:
+			count = db.delete(NotePad.GTasks.TABLE_NAME, // The database table
+														// name
+					where, // The incoming where clause column names
+					whereArgs // The incoming where clause values
+					);
+			break;
+		case GTASKS_ID:
+			finalWhere = BaseColumns._ID + // The ID column name
+					" = " + // test for equality
+					uri.getPathSegments(). // the incoming note ID
+							get(NotePad.GTasks.ID_PATH_POSITION);
+
+			
+			if (where != null) {
+				finalWhere = finalWhere + " AND " + where;
+			}
+
+			// Performs the delete.
+			count = db.delete(NotePad.GTasks.TABLE_NAME, // The database table
+														// name.
+					finalWhere, // The final WHERE clause
+					whereArgs // The incoming where clause values.
+					);
+			break;
+		case GTASKLISTS:
+			count = db.delete(NotePad.GTaskLists.TABLE_NAME, // The database table
+														// name
+					where, // The incoming where clause column names
+					whereArgs // The incoming where clause values
+					);
+			break;
+		case GTASKLISTS_ID:
+			finalWhere = BaseColumns._ID + // The ID column name
+					" = " + // test for equality
+					uri.getPathSegments(). // the incoming note ID
+							get(NotePad.GTaskLists.ID_PATH_POSITION);
+
+			
+			if (where != null) {
+				finalWhere = finalWhere + " AND " + where;
+			}
+
+			// Performs the delete.
+			count = db.delete(NotePad.GTaskLists.TABLE_NAME, // The database table
 														// name.
 					finalWhere, // The final WHERE clause
 					whereArgs // The incoming where clause values.
@@ -867,6 +1112,108 @@ public class NotePadProvider extends ContentProvider implements
 
 			// Does the update and returns the number of rows updated.
 			count = db.update(NotePad.Notes.TABLE_NAME, // The database table
+														// name.
+					values, // A map of column names and new values to use.
+					finalWhere, // The final WHERE clause to use
+								// placeholders for whereArgs
+					whereArgs // The where clause column values to select on, or
+								// null if the values are in the where argument.
+					);
+			break;
+			
+		case LISTS:
+			// Does the update and returns the number of rows updated.
+			count = db.update(NotePad.Lists.TABLE_NAME, // The database table
+														// name.
+					values, // A map of column names and new values to use.
+					where, // The where clause column names.
+					whereArgs // The where clause column values to select on.
+					);
+			break;
+		case LISTS_ID:
+			// From the incoming URI, get the note ID
+			String noteId = uri.getPathSegments().get(
+					NotePad.Lists.ID_PATH_POSITION);
+
+			finalWhere = BaseColumns._ID + // The ID column name
+					" = " + // test for equality
+					uri.getPathSegments(). // the incoming note ID
+							get(NotePad.Lists.ID_PATH_POSITION);
+
+			if (where != null) {
+				finalWhere = finalWhere + " AND " + where;
+			}
+
+			// Does the update and returns the number of rows updated.
+			count = db.update(NotePad.Lists.TABLE_NAME, // The database table
+														// name.
+					values, // A map of column names and new values to use.
+					finalWhere, // The final WHERE clause to use
+								// placeholders for whereArgs
+					whereArgs // The where clause column values to select on, or
+								// null if the values are in the where argument.
+					);
+			break;
+			
+		case GTASKS:
+			// Does the update and returns the number of rows updated.
+			count = db.update(NotePad.GTasks.TABLE_NAME, // The database table
+														// name.
+					values, // A map of column names and new values to use.
+					where, // The where clause column names.
+					whereArgs // The where clause column values to select on.
+					);
+			break;
+		case GTASKS_ID:
+			// From the incoming URI, get the note ID
+			String noteId = uri.getPathSegments().get(
+					NotePad.GTasks.ID_PATH_POSITION);
+
+			finalWhere = BaseColumns._ID + // The ID column name
+					" = " + // test for equality
+					uri.getPathSegments(). // the incoming note ID
+							get(NotePad.GTasks.ID_PATH_POSITION);
+
+			if (where != null) {
+				finalWhere = finalWhere + " AND " + where;
+			}
+
+			// Does the update and returns the number of rows updated.
+			count = db.update(NotePad.GTasks.TABLE_NAME, // The database table
+														// name.
+					values, // A map of column names and new values to use.
+					finalWhere, // The final WHERE clause to use
+								// placeholders for whereArgs
+					whereArgs // The where clause column values to select on, or
+								// null if the values are in the where argument.
+					);
+			break;
+			
+		case GTASKLISTS:
+			// Does the update and returns the number of rows updated.
+			count = db.update(NotePad.GTaskLists.TABLE_NAME, // The database table
+														// name.
+					values, // A map of column names and new values to use.
+					where, // The where clause column names.
+					whereArgs // The where clause column values to select on.
+					);
+			break;
+		case GTASKLISTS_ID:
+			// From the incoming URI, get the note ID
+			String noteId = uri.getPathSegments().get(
+					NotePad.GTaskLists.ID_PATH_POSITION);
+
+			finalWhere = BaseColumns._ID + // The ID column name
+					" = " + // test for equality
+					uri.getPathSegments(). // the incoming note ID
+							get(NotePad.GTaskLists.ID_PATH_POSITION);
+
+			if (where != null) {
+				finalWhere = finalWhere + " AND " + where;
+			}
+
+			// Does the update and returns the number of rows updated.
+			count = db.update(NotePad.GTaskLists.TABLE_NAME, // The database table
 														// name.
 					values, // A map of column names and new values to use.
 					finalWhere, // The final WHERE clause to use

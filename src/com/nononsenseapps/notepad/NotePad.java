@@ -77,34 +77,23 @@ public final class NotePad {
         public static final int NOTE_ID_PATH_POSITION = 1;
 
         /**
-         * Path part for the Live Folder URI
-         */
-        private static final String PATH_LIVE_FOLDER = "/live_folders/notes";
-
-        /**
          * The content:// style URL for this table
          */
         public static final Uri CONTENT_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_NOTES);
-
+        
         /**
          * The content URI base for a single note. Callers must
          * append a numeric note id to this Uri to retrieve a note
          */
         public static final Uri CONTENT_ID_URI_BASE
             = Uri.parse(SCHEME + AUTHORITY + PATH_NOTE_ID);
-
+        
         /**
          * The content URI match pattern for a single note, specified by its ID. Use this to match
          * incoming URIs or to construct an Intent.
          */
         public static final Uri CONTENT_ID_URI_PATTERN
             = Uri.parse(SCHEME + AUTHORITY + PATH_NOTE_ID + "/#");
-
-        /**
-         * The content Uri pattern for a notes listing for live folders
-         */
-        public static final Uri LIVE_FOLDER_URI
-            = Uri.parse(SCHEME + AUTHORITY + PATH_LIVE_FOLDER);
 
         /*
          * MIME type definitions
@@ -157,19 +146,24 @@ public final class NotePad {
         public static final String COLUMN_NAME_DUE_DATE = "duedate";
         
         /**
-         * ID of the gtasks, string
-         */
-        public static final String COLUMN_NAME_GTASKS_ID = "gtaskid";
-        
-        /**
-         * Time of last update, as reported by gtasks. RFC 3339 timestamp in string
-         */
-        public static final String COLUMN_NAME_GTASKS_UPDATED = "gtaskupdated";
-        
-        /**
          * Status of task, such as "completed"
          */
         public static final String COLUMN_NAME_GTASKS_STATUS = "gtaskstatus";
+        
+        /**
+         * INTEGER, id of entry in lists table
+         */
+        public static final String COLUMN_NAME_LIST = "list";
+        
+        /**
+         * Deleted flag
+         */
+        public static final String COLUMN_NAME_DELETED = "deleted";
+        
+        /**
+         * Modified flag
+         */
+        public static final String COLUMN_NAME_MODIFIED = "modifiedflag";
         
         /**
          * The default sort order for this table
@@ -179,5 +173,324 @@ public final class NotePad {
         public static final String MODIFIED_DESC_ORDER = COLUMN_NAME_MODIFICATION_DATE + " DESC";
         
         public static String SORT_ORDER = MODIFIED_DESC_ORDER;
+    }
+    
+    /**
+     * Lists table contract
+     */
+    public static final class Lists implements BaseColumns {
+
+        // This class cannot be instantiated
+        private Lists() {}
+        
+        public static final String DEFAULT_LIST_NAME = "Notes";
+
+        /**
+         * The table name offered by this provider
+         */
+        public static final String TABLE_NAME = "lists";
+        public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
+
+        /*
+         * URI definitions
+         */
+
+        /**
+         * The scheme part for this provider's URI
+         */
+        private static final String SCHEME = "content://";
+
+        /**
+         * Path parts for the URIs
+         */
+        
+        /**
+         * Path part for the Lists URI
+         */
+        private static final String PATH_LISTS = "/lists";
+
+        /**
+         * Path part for the List ID URI
+         */
+        private static final String PATH_LIST_ID = "/lists/";
+
+        /**
+         * 0-relative position of a ID segment in the path part of a ID URI
+         */
+        public static final int ID_PATH_POSITION = 1;
+
+        /**
+         * The content:// style URL for this table
+         */
+        public static final Uri CONTENT_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_LISTS);
+
+        /**
+         * The content URI base for a single note. Callers must
+         * append a numeric note id to this Uri to retrieve a note
+         */
+        public static final Uri CONTENT_ID_URI_BASE
+        = Uri.parse(SCHEME + AUTHORITY + PATH_LISTS_ID);
+
+        /**
+         * The content URI match pattern for a single note, specified by its ID. Use this to match
+         * incoming URIs or to construct an Intent.
+         */
+        public static final Uri CONTENT_ID_URI_PATTERN
+        = Uri.parse(SCHEME + AUTHORITY + PATH_LISTS_ID + "/#");
+
+
+        /*
+         * MIME type definitions
+         */
+
+        /**
+         * The MIME type of {@link #CONTENT_URI} providing a directory.
+         */
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps.list";
+
+        /**
+         * The MIME type of a {@link #CONTENT_URI} sub-directory of a single
+         * item.
+         */
+        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps.list";
+
+        
+
+        /*
+         * Column definitions
+         */
+
+        /**
+         * Column name for the title of the note
+         * <P>Type: TEXT</P>
+         */
+        public static final String COLUMN_NAME_TITLE = "title";
+        
+        /**
+         * Deleted flag
+         */
+        public static final String COLUMN_NAME_DELETED = "deleted";
+        
+        /**
+         * Modified flag
+         */
+        public static final String COLUMN_NAME_MODIFIED = "modifiedflag";
+        
+        /**
+         * The default sort order for this table
+         */
+        public static final String DEFAULT_SORT_TYPE = COLUMN_NAME_TITLE;
+        public static final String DEFAULT_SORT_ORDERING = "ASC";
+        public static final String ALPHABETIC_ASC_ORDER = COLUMN_NAME_TITLE + " ASC";
+        
+        public static String SORT_ORDER = ALPHABETIC_ASC_ORDER;
+    }
+    
+    /**
+     * GoogleTasks table contract
+     */
+    public static final class GTasks implements BaseColumns {
+
+        // This class cannot be instantiated
+        private GTasks() {}
+
+        /**
+         * The table name offered by this provider
+         */
+        public static final String TABLE_NAME = "gtasks";
+        public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
+
+        /*
+         * URI definitions
+         */
+
+        /**
+         * The scheme part for this provider's URI
+         */
+        private static final String SCHEME = "content://";
+
+        /**
+         * Path parts for the URIs
+         */
+        
+        /**
+         * Path part for the Lists URI
+         */
+        private static final String PATH = "/gtasks";
+
+        /**
+         * Path part for the List ID URI
+         */
+        private static final String PATH_ID = "/gtasks/";
+
+        /**
+         * 0-relative position of a note ID segment in the path part of a note ID URI
+         */
+        public static final int ID_PATH_POSITION = 1;
+
+        /**
+         * The content:// style URL for this table
+         */
+        public static final Uri CONTENT_URI =  Uri.parse(SCHEME + AUTHORITY + PATH);
+
+        /**
+         * The content URI base for a single note. Callers must
+         * append a numeric note id to this Uri to retrieve a note
+         */
+        public static final Uri CONTENT_ID_URI_BASE
+            = Uri.parse(SCHEME + AUTHORITY + PATH_ID);
+
+        /**
+         * The content URI match pattern for a single note, specified by its ID. Use this to match
+         * incoming URIs or to construct an Intent.
+         */
+        public static final Uri CONTENT_ID_URI_PATTERN
+            = Uri.parse(SCHEME + AUTHORITY + PATH_ID + "/#");
+
+
+        /*
+         * MIME type definitions
+         */
+
+        /**
+         * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
+         */
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps.gtask";
+
+        /**
+         * The MIME type of a {@link #CONTENT_URI} sub-directory of a single
+         * note.
+         */
+        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps.gtask";
+
+        
+
+        /*
+         * Column definitions
+         */
+
+        /**
+         * <P>Type: INTEGER, database ID</P>
+         */
+        public static final String COLUMN_NAME_DB_ID = "dbid";
+
+        /**
+         * <P>Type: TEXT</P>
+         */
+        public static final String COLUMN_NAME_GTASKS_ID = "googleid";
+        
+        /**
+         * <P>Type: TEXT</P>
+         */
+        public static final String COLUMN_NAME_GOOGLE_ACCOUNT = "googleaccount";
+        
+        /**
+         * <P>Type: TEXT</P>
+         */
+        public static final String COLUMN_NAME_ETAG = "etag";
+    }
+    
+    /**
+     * GoogleTaskLists table contract
+     */
+    public static final class GTaskLists implements BaseColumns {
+
+        // This class cannot be instantiated
+        private GTaskLists() {}
+
+        /**
+         * The table name offered by this provider
+         */
+        public static final String TABLE_NAME = "gtasklists";
+        public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
+
+        /*
+         * URI definitions
+         */
+
+        /**
+         * The scheme part for this provider's URI
+         */
+        private static final String SCHEME = "content://";
+
+        /**
+         * Path parts for the URIs
+         */
+        
+        /**
+         * Path part for the Lists URI
+         */
+        private static final String PATH = "/gtasklists";
+
+        /**
+         * Path part for the List ID URI
+         */
+        private static final String PATH_ID = "/gtasklists/";
+
+        /**
+         * 0-relative position of a note ID segment in the path part of a note ID URI
+         */
+        public static final int ID_PATH_POSITION = 1;
+
+        /**
+         * The content:// style URL for this table
+         */
+        public static final Uri CONTENT_URI =  Uri.parse(SCHEME + AUTHORITY + PATH);
+
+        /**
+         * The content URI base for a single note. Callers must
+         * append a numeric note id to this Uri to retrieve a note
+         */
+        public static final Uri CONTENT_ID_URI_BASE
+            = Uri.parse(SCHEME + AUTHORITY + PATH_ID);
+
+        /**
+         * The content URI match pattern for a single note, specified by its ID. Use this to match
+         * incoming URIs or to construct an Intent.
+         */
+        public static final Uri CONTENT_ID_URI_PATTERN
+            = Uri.parse(SCHEME + AUTHORITY + PATH_ID + "/#");
+
+
+        /*
+         * MIME type definitions
+         */
+
+        /**
+         * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
+         */
+        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps.gtasklist";
+
+        /**
+         * The MIME type of a {@link #CONTENT_URI} sub-directory of a single
+         * note.
+         */
+        public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps.gtasklist";
+
+        
+
+        /*
+         * Column definitions
+         */
+
+        /**
+         * <P>Type: INTEGER, database ID</P>
+         */
+        public static final String COLUMN_NAME_DB_ID = "dbid";
+
+        /**
+         * <P>Type: TEXT</P>
+         */
+        public static final String COLUMN_NAME_GTASKS_ID = "googleid";
+        
+        /**
+         * <P>Type: TEXT</P>
+         */
+        public static final String COLUMN_NAME_GOOGLE_ACCOUNT = "googleaccount";
+        
+        /**
+         * <P>Type: TEXT</P>
+         */
+        public static final String COLUMN_NAME_ETAG = "etag";
     }
 }

@@ -299,7 +299,7 @@ public class FragmentLayout extends Activity implements
 		public void onDeleteAction() {
 			Log.d("NotesEditorActivity", "onDeleteAction");
 			// TODO delete setNoSave as it serves no purpose if fragment listens to changes on note itself
-			editorFragment.setNoSave();
+			//editorFragment.setNoSave();
 			FragmentLayout.deleteNote(getContentResolver(), currentId);
 			setResult(Activity.RESULT_CANCELED);
 			finish();
@@ -416,11 +416,11 @@ public class FragmentLayout extends Activity implements
 		// both list and editor should be notified
 		NotesListFragment list = (NotesListFragment) getFragmentManager()
 				.findFragmentById(R.id.noteslistfragment);
-		NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
-				.findFragmentById(R.id.editor_container);
+		//NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
+		//		.findFragmentById(R.id.editor_container);
 		// TODO unnecessary to tell editor this, it already knows when it is deleted.
-		if (editor != null)
-			editor.setNoSave();
+		//if (editor != null)
+		//	editor.setNoSave();
 		// delete note
 		if (list != null)
 			list.onDelete();
