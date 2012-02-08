@@ -2,17 +2,27 @@ package com.nononsenseapps.notepad.sync.googleapi;
 
 import java.util.ArrayList;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 public class GoogleTaskList {
 
 	public String id = null;
 	public String etag = null;
 	public String title = null;
-	public String selfLink = null;
+	//public String selfLink = null;
+	public JSONObject json = null;
 	
-	private GoogleAPITalker api;
+	//private GoogleAPITalker api;
 
-	public GoogleTaskList(GoogleAPITalker api) {
-		this.api = api;
+	public GoogleTaskList(JSONObject jsonList) throws JSONException {
+		//this.api = ;
+		
+		id = jsonList.getString("id");
+		etag = jsonList.getString("etag");
+		title = jsonList.getString("title");
+		
+		json = jsonList;
 	}
 
 	/*

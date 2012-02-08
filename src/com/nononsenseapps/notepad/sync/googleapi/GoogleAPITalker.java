@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -59,6 +60,26 @@ public class GoogleAPITalker {
 		}
 
 	}
+	
+	public static class NotModifiedException extends Exception {
+		private static final long serialVersionUID = -6736829980184373286L;
+
+		public NotModifiedException() {
+		}
+
+		public NotModifiedException(String detailMessage) {
+			super(detailMessage);
+		}
+
+		public NotModifiedException(Throwable throwable) {
+			super(throwable);
+		}
+
+		public NotModifiedException(String detailMessage, Throwable throwable) {
+			super(detailMessage, throwable);
+		}
+
+	}
 
 	protected static final String APIKEY = "AIzaSyBCQyr-OSPQsMwU2tyCIKZG86Wb3WM1upw";// jonas@kalderstam.se
 	protected static final String APIKEY_URL_END = "&key=" + APIKEY;
@@ -81,7 +102,7 @@ public class GoogleAPITalker {
 	}
 	
 	public static String getAuthToken(AccountManager accountManager, Account account, String authTokenType, boolean notifyAuthFailure) {
-		authToken = "";
+		String authToken = "";
 		try {
 			authToken = accountManager.blockingGetAuthToken(
 					account, authTokenType, notifyAuthFailure);
@@ -166,7 +187,7 @@ public class GoogleAPITalker {
 		return value;
 	}
     
-    public static String getJSONResponse(DefaultHttpClient client, String URL, String postJSON) throws PreconditionException {
+    public static String getJSONResponse(DefaultHttpClient client, String URL, String postJSON) throws PreconditionException, NotModifiedException {
 		String response = null;
 		HttpPost httppost = new HttpPost(URL);
 		StringEntity se = null;
@@ -188,7 +209,7 @@ public class GoogleAPITalker {
 		return response;
 	}
     
-    public static Document getXMLResponse(DefaultHttpClient client, String authToken, String URL, String post) throws PreconditionException {
+    public static Document getXMLResponse(DefaultHttpClient client, String authToken, String URL, String post) throws PreconditionException, NotModifiedException {
 		HttpPost httppost = new HttpPost(URL);
 
 		StringEntity se = null;
@@ -212,7 +233,7 @@ public class GoogleAPITalker {
 		return doc;
 	}
     
-    public static Document getXMLResponse(DefaultHttpClient client, String authToken, String URL) throws PreconditionException {
+    public static Document getXMLResponse(DefaultHttpClient client, String authToken, String URL) throws PreconditionException, NotModifiedException {
 		HttpGet request = new HttpGet(URL);
 		request.setHeader("Authorization", "GoogleLogin auth=" + authToken);
 
@@ -228,7 +249,7 @@ public class GoogleAPITalker {
 		return doc;
 	}
     
-    public static String parseResponse(HttpResponse response) throws PreconditionException {
+    public static String parseResponse(HttpResponse response) throws PreconditionException, NotModifiedException {
 		String page = "";
 		BufferedReader in = null;
 		
@@ -238,6 +259,9 @@ public class GoogleAPITalker {
 		else if (response.getStatusLine().getStatusCode() == 412) {
 			// Precondition failed. Object has been modified on server, can't do partial update
 			throw new PreconditionException();
+		}
+		else if (response.getStatusLine().getStatusCode() == 304) {
+			throw new NotModifiedException();
 		}
 		else {
 

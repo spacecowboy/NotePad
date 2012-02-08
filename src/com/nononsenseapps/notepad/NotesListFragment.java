@@ -79,6 +79,7 @@ public class NotesListFragment extends ListFragment implements
 
 	private static final String SAVEDPOS = "savedpos";
 	private static final String SAVEDID = "savedid";
+	private static final String SAVEDLISTID = "savedstate";
 	private static final String SAVEDSTATE = "savedstate";
 
 	private long mCurId;
@@ -92,6 +93,8 @@ public class NotesListFragment extends ListFragment implements
 	private int checkMode = CHECK_SINGLE;
 
 	private ModeCallbackHC modeCallback;
+	
+	private long mCurListId;
 
 	private ListView lv;
 
@@ -162,6 +165,7 @@ public class NotesListFragment extends ListFragment implements
 
 		if (savedInstanceState != null) {
 			currentState = savedInstanceState.getInt(SAVEDSTATE, STATE_LIST);
+			mCurListId = savedInstanceState.getInt(SAVEDLISTID, -1);
 			mCurCheckPosition = savedInstanceState.getInt(SAVEDPOS, 0);
 			mCurId = savedInstanceState.getLong(SAVEDID, -1);
 			// If in portrait and we were editing a note, open it
@@ -342,6 +346,7 @@ public class NotesListFragment extends ListFragment implements
 		outState.putInt(SAVEDPOS, mCurCheckPosition);
 		outState.putLong(SAVEDID, mCurId);
 		outState.putInt(SAVEDSTATE, currentState);
+		outState.putLong(SAVEDLISTID, mCurListId);
 	}
 
 	@Override
@@ -491,7 +496,7 @@ public class NotesListFragment extends ListFragment implements
 		}
 		currentState = STATE_LIST;
 
-		reListNotes();
+		//reListNotes();
 
 		// TODO consider the recalculation bit
 		if (FragmentLayout.LANDSCAPE_MODE) {
@@ -659,9 +664,9 @@ public class NotesListFragment extends ListFragment implements
 		// TODO is it necessary to relist them?
 
 		mCurId = id;
-		if (created)
-			reListNotes();
-		else {
+		if (created) {
+			//reListNotes();
+		} else {
 			mCurCheckPosition = getPosOfId(id);
 			selectPos(mCurCheckPosition);
 		}
@@ -1056,7 +1061,7 @@ public class NotesListFragment extends ListFragment implements
 	public void refresh() {
 		Log.d(TAG, "refresh time!. Is list updated?");
 		// reList first so we don't select deletid ids
-		reListNotes();
+		//reListNotes();
 
 		if (posInvalid) {
 			posInvalid = false;
@@ -1089,7 +1094,7 @@ public class NotesListFragment extends ListFragment implements
 																	// title for
 																	// each
 																	// note.
-				null, // No where clause, return all records.
+				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1", // return un-deleted records.
 				null, // No where clause, therefore no where column values.
 				NotePad.Notes.SORT_ORDER // Use the default sort order.
 		);
@@ -1104,7 +1109,7 @@ public class NotesListFragment extends ListFragment implements
 
 		// TODO include title field in search
 		return new CursorLoader(getActivity(), baseUri, PROJECTION,
-				NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?", // Where the note
+				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND " + NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?", // Where the note
 															// contains the
 															// query
 				new String[] { "%" + currentQuery + "%" }, // We don't care how

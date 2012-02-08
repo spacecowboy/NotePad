@@ -23,6 +23,11 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.tasks.Tasks;
 import com.google.api.services.tasks.model.Task;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleDBTalker;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
@@ -70,42 +75,48 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 	public void onPerformSync(Account account, Bundle extras, String authority,
 			ContentProviderClient provider, SyncResult syncResult) {
 		// Initialize necessary stuff
-		GoogleDBTalker dbTalker = new GoogleDBTalker(account.getAccountName(), provider, syncResult);
+		GoogleDBTalker dbTalker = new GoogleDBTalker(account.name, provider, syncResult);
 		GoogleAPITalker apiTalker = GoogleAPITalker.getInstance();
 		
 		boolean connected = apiTalker.initialize(accountManager, account, AUTH_TOKEN_TYPE, NOTIFY_AUTH_FAILURE);
 		
 		if (connected) {
+			Log.d(TAG, "We got an authToken atleast");
+			
 			// Upload local changes
-			List<GoogleTask> modifiedTasks = dbTalker.getModifiedTasks();
-			List<GoogleTaskList> modifiedLists = dbTalker.getModifiedLists(true);
+			//List<GoogleTask> modifiedTasks = dbTalker.getModifiedTasks();
+			//List<GoogleTaskList> modifiedLists = dbTalker.getModifiedLists(true);
 			
-			for (GoogleTask task: modifiedTasks) {
-				if (apiTalker.uploadTask(task))
-					dbTalker.uploaded(task);
-				else
-					handleConflict(dbTalker, apiTalker, task);
-			}
+//			for (GoogleTask task: modifiedTasks) {
+//				GoogleTask result = apiTalker.uploadTask(task);
+//				if (result != null)
+//					dbTalker.uploaded(result);
+//				else
+//					handleConflict(dbTalker, apiTalker, task);
+//			}
 			
-			for (GoogleTaskList list: modifiedLists) {
-				if (apiTalker.uploadList(list))
-					dbTalker.uploaded(list);
-				else
-					handleConflict(dbTalker, apiTalker, list);
-			}
+//			for (GoogleTaskList list: modifiedLists) {
+//				GoogleTaskList result = apiTalker.uploadList(list);
+//				if (result != null)
+//					dbTalker.uploaded(result);
+//				else
+//					handleConflict(dbTalker, apiTalker, list);
+//			}
 			
 			// Save remote changes
-			modifiedTasks = apiTalker.getModifiedTasks();
-			for (GoogleTask task: modifiedTasks) {
-				dbTalker.saveToDatabase(task);
-			}
-			modifiedLists = apiTalker.getModifiedLists();
-			for (GoogleTaskList list: modifiedLists) {
-				dbTalker.saveToDatabase(list);
-			}
+//			modifiedTasks = apiTalker.getModifiedTasks("ETAG here");
+//			for (GoogleTask task: modifiedTasks) {
+//				dbTalker.SaveToDatabase(task);
+//			}
+//			modifiedLists = apiTalker.getModifiedLists("ETAG here");
+//			for (GoogleTaskList list: modifiedLists) {
+//				dbTalker.SaveToDatabase(list);
+//			}
 			
 			// Erase deleted stuff
-			dbTalker.clearDeleted();
+			//dbTalker.clearDeleted();
+			
+			//-----------------------------------
 
 //		} catch (final AuthenticatorException e) {
 //			Log.e(TAG, "AuthenticatorException", e);
@@ -135,24 +146,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		}
 	}
 
-	/*
-	 * private void gotAccount(final Account account) {
-	 * accountManager.manager.getAuthToken(account, AUTH_TOKEN_TYPE, true, new
-	 * AccountManagerCallback<Bundle>() {
-	 * 
-	 * public void run(AccountManagerFuture<Bundle> future) { try { Bundle
-	 * bundle = future.getResult(); if
-	 * (bundle.containsKey(AccountManager.KEY_INTENT)) { Log.d(TAG,
-	 * "future key intent");
-	 * 
-	 * Intent intent = bundle .getParcelable(AccountManager.KEY_INTENT);
-	 * intent.setFlags(intent.getFlags() & ~Intent.FLAG_ACTIVITY_NEW_TASK);
-	 * mContext.startActivity(intent); //startActivityForResult(intent,0); }
-	 * else if (bundle .containsKey(AccountManager.KEY_AUTHTOKEN)) { Log.d(TAG,
-	 * "future key authtoken"); accessProtectedResource .setAccessToken(bundle
-	 * .getString(AccountManager.KEY_AUTHTOKEN)); String
-	 * authToken=bundle.getString(AccountManager.KEY_AUTHTOKEN).toString();
-	 * Log.d("TAG", "Auth Token ="+authToken); //onAuthToken(); } } catch
-	 * (Exception e) { Log.d(TAG, "future exception"); } } }, null); }
-	 */
+	private void handleConflict(GoogleDBTalker dbTalker,
+			GoogleAPITalker apiTalker, GoogleTask task) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	private void handleConflict(GoogleDBTalker dbTalker,
+			GoogleAPITalker apiTalker, GoogleTaskList list) {
+		// TODO Auto-generated method stub
+		
+	}
 }

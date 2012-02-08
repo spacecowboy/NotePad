@@ -65,8 +65,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 */
 	public static final String[] PROJECTION = new String[] { NotePad.Notes._ID,
 			NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE,
-			NotePad.Notes.COLUMN_NAME_DUE_DATE,
-			NotePad.Notes.COLUMN_NAME_GTASKS_ID };
+			NotePad.Notes.COLUMN_NAME_DUE_DATE };
 
 	// A label for the saved state of the activity
 	public static final String ORIGINAL_NOTE = "origContent";
@@ -96,9 +95,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	// This object is used to save the correct date in the database.
 	private Time noteDueDate;
 	private boolean dueDateSet = false;
-
-	// gTask ID
-	private String gTaskID = null;
 
 	// Global mutable variables
 	private int mState;
@@ -165,6 +161,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 * "content".
 	 * 
 	 * @param savedInstanceState
+	 * @param createNew if True, will create new if the id is -1
 	 */
 	private void openNote(Bundle savedInstanceState) {
 		Log.d("NotesEditorFragment", "OpenNOTe: Id is " + id);
@@ -206,7 +203,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		// Prepare the loader. Either re-connect with an existing one,
 		// or start a new one. Will open the note
-		getLoaderManager().restartLoader(0, null, this);
+		if (mUri != null)
+			getLoaderManager().restartLoader(0, null, this);
 	}
 
 	private static long getIdFromUri(Uri uri) {
@@ -280,11 +278,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, due);
 			} else {
 				values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
-			}
-
-			// Put gTasks id in
-			if (gTaskID != null && !gTaskID.isEmpty()) {
-				values.put(NotePad.Notes.COLUMN_NAME_GTASKS_ID, gTaskID);
 			}
 
 			/*

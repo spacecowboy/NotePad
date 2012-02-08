@@ -229,14 +229,14 @@ public final class NotePad {
          * append a numeric note id to this Uri to retrieve a note
          */
         public static final Uri CONTENT_ID_URI_BASE
-        = Uri.parse(SCHEME + AUTHORITY + PATH_LISTS_ID);
+        = Uri.parse(SCHEME + AUTHORITY + PATH_LIST_ID);
 
         /**
          * The content URI match pattern for a single note, specified by its ID. Use this to match
          * incoming URIs or to construct an Intent.
          */
         public static final Uri CONTENT_ID_URI_PATTERN
-        = Uri.parse(SCHEME + AUTHORITY + PATH_LISTS_ID + "/#");
+        = Uri.parse(SCHEME + AUTHORITY + PATH_LIST_ID + "/#");
 
 
         /*

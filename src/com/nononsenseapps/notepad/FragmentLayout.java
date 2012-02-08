@@ -18,6 +18,7 @@ import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -329,7 +330,10 @@ public class FragmentLayout extends Activity implements
 	 */
 	public static void deleteNotes(ContentResolver resolver, Iterable<Long> ids) {
 		for (long id : ids) {
-			resolver.delete(NotesEditorFragment.getUriFrom(id), null, null);
+			ContentValues values = new ContentValues();
+			values.put(NotePad.Notes.COLUMN_NAME_DELETED, "1");
+			resolver.update(NotesEditorFragment.getUriFrom(id), values, null, null);
+			//resolver.delete(NotesEditorFragment.getUriFrom(id), null, null);
 		}
 	}
 

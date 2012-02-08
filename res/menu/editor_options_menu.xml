@@ -17,11 +17,4 @@
           android:icon="?ic_menu_revert"
           android:showAsAction="never"
           android:title="@string/menu_revert" android:orderInCategory="4"/>
-    
-    <item android:id="@+id/menu_setcompleted" android:showAsAction="ifRoom"
-		android:icon="?ic_menu_mark" android:title="@string/menu_setcompleted"
-		android:orderInCategory="5" />
-    <item android:id="@+id/menu_move_to_list" android:showAsAction="never"
-		android:title="@string/menu_move_to_list"
-		android:orderInCategory="6" />
 </menu>

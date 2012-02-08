@@ -25,7 +25,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.nononsenseapps.notepad"
     android:versionCode="7"
-    android:versionName="2.2" >
+    android:versionName="2.2"
+    android:installLocation="auto"
+     >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -115,17 +117,7 @@
             -->
 
         </activity>
-        <activity
-            android:name=".NotesLiveFolder"
-            android:icon="@drawable/live_folder_notes"
-            android:label="@string/live_folder_name"
-            android:theme="@android:style/Theme.Holo" >
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_LIVE_FOLDER" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
+        
         <activity
             android:name="FragmentLayout$NotesPreferencesDialog"
             android:screenOrientation="sensor"
