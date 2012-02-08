@@ -16,14 +16,12 @@
 package com.nononsenseapps.notepad.sync;
 
 import org.apache.http.ParseException;
-import com.google.api.client.auth.oauth2.draft10.AccessProtectedResource;
-import com.google.api.client.extensions.android2.AndroidHttp;
-import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.jackson.JacksonFactory;
-import com.google.api.services.tasks.Tasks;
-import com.google.api.services.tasks.model.Task;
+import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
+
 import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker.NotModifiedException;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker.PreconditionException;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleDBTalker;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
@@ -83,6 +81,22 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		if (connected) {
 			Log.d(TAG, "We got an authToken atleast");
 			
+			try {
+				for (GoogleTaskList list: apiTalker.getAllLists()) {
+					Log.d(TAG, list.json.toString());
+				}
+			} catch (ClientProtocolException e) {
+				Log.d(TAG, "ClientProtocolException: " + e.getLocalizedMessage());
+			} catch (JSONException e) {
+				Log.d(TAG, "JSONException: " + e.getLocalizedMessage());
+			} catch (PreconditionException e) {
+				Log.d(TAG, "PreconditionException");
+			} catch (NotModifiedException e) {
+				Log.d(TAG, "NotModifiedException");
+			} catch (IOException e) {
+				Log.d(TAG, "IOException: " + e.getLocalizedMessage());
+			}
+			
 			// Upload local changes
 			//List<GoogleTask> modifiedTasks = dbTalker.getModifiedTasks();
 			//List<GoogleTaskList> modifiedLists = dbTalker.getModifiedLists(true);
@@ -104,7 +118,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 //			}
 			
 			// Save remote changes
-//			modifiedTasks = apiTalker.getModifiedTasks("ETAG here");
+//			modifiedTasks = apiTalker.getModifiedTasks("List ETAG here");
 //			for (GoogleTask task: modifiedTasks) {
 //				dbTalker.SaveToDatabase(task);
 //			}

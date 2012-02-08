@@ -12,12 +12,18 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.http.HttpResponse;
+import org.apache.http.HttpVersion;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.params.BasicHttpParams;
+import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -32,15 +38,17 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+import android.util.Log;
 
 /**
  * Helper class that sorts out all XML, JSON, HTTP bullshit for other classes.
  * Also keeps track of APIKEY and AuthToken
+ * 
  * @author Jonas
- *
+ * 
  */
 public class GoogleAPITalker {
-	
+
 	public static class PreconditionException extends Exception {
 		private static final long serialVersionUID = 7317567246857384353L;
 
@@ -60,7 +68,7 @@ public class GoogleAPITalker {
 		}
 
 	}
-	
+
 	public static class NotModifiedException extends Exception {
 		private static final long serialVersionUID = -6736829980184373286L;
 
@@ -82,99 +90,160 @@ public class GoogleAPITalker {
 	}
 
 	protected static final String APIKEY = "AIzaSyBCQyr-OSPQsMwU2tyCIKZG86Wb3WM1upw";// jonas@kalderstam.se
-	protected static final String APIKEY_URL_END = "&key=" + APIKEY;
+	protected static final String AUTH_URL_END = "key=" + APIKEY;
 	protected static final String BASE_URL = "https://www.googleapis.com/tasks/v1/users/@me/lists";
-	//protected static final String LISTS = "/lists"; 
-	protected static final String TASKS = "/tasks"; // Must be preceeded by list-id
-	
-	// A URL is alwasy constructed as: BASE_URL + ["/" + LISTID [+ TASKS [+ "/" + TASKID]]]
+	// protected static final String LISTS = "/lists";
+	protected static final String TASKS = "/tasks"; // Must be preceeded by
+													// list-id
+	private static final String TAG = "GoogleAPITalker";
+
+	// A URL is alwasy constructed as: BASE_URL + ["/" + LISTID [+ TASKS [+ "/"
+	// + TASKID]]] + "?" + [POSSIBLE FIELDS + "&"] + AUTH_URL_END
 	// Where each enclosing parenthesis is optional
-	
+
 	protected String authToken;
-	
+
+	protected HttpClient client;
+
 	private static GoogleAPITalker instance;
-	
+
 	public static GoogleAPITalker getInstance() {
 		if (instance == null) {
 			instance = new GoogleAPITalker();
 		}
 		return instance;
 	}
-	
-	public static String getAuthToken(AccountManager accountManager, Account account, String authTokenType, boolean notifyAuthFailure) {
+
+	public static String getAuthToken(AccountManager accountManager,
+			Account account, String authTokenType, boolean notifyAuthFailure) {
 		String authToken = "";
 		try {
-			authToken = accountManager.blockingGetAuthToken(
-					account, authTokenType, notifyAuthFailure);
+			// Might be invalid in the cache
+			//authToken = accountManager.blockingGetAuthToken(account,authTokenType, notifyAuthFailure);
+			//accountManager.invalidateAuthToken("com.google", authToken);
+			
+			authToken = accountManager.blockingGetAuthToken(account,
+					authTokenType, notifyAuthFailure);
 		} catch (OperationCanceledException e) {
 		} catch (AuthenticatorException e) {
 		} catch (IOException e) {
 		}
 		return authToken;
 	}
-	
-	public boolean initialize(AccountManager accountManager, Account account, String authTokenType, boolean notifyAuthFailure) {
-		authToken = getAuthToken(accountManager, account, authTokenType, notifyAuthFailure);
-		
+
+	public boolean initialize(AccountManager accountManager, Account account,
+			String authTokenType, boolean notifyAuthFailure) {
+		HttpParams params = new BasicHttpParams();
+		params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
+				HttpVersion.HTTP_1_1);
+		client = new DefaultHttpClient(params);
+
+		authToken = getAuthToken(accountManager, account, authTokenType,
+				notifyAuthFailure);
+
 		if (authToken != null && !authToken.equals("")) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
 	/*
 	 * User methods
 	 */
-	
+
+	public ArrayList<GoogleTaskList> getAllLists()
+			throws ClientProtocolException, JSONException,
+			PreconditionException, NotModifiedException, IOException {
+		ArrayList<GoogleTaskList> list = new ArrayList<GoogleTaskList>();
+
+		HttpGet httpget = new HttpGet(BASE_URL + "?" + AUTH_URL_END);
+		httpget.setHeader("Authorization", "OAuth " + authToken);
+		Log.d(TAG, "request: " +BASE_URL + "?" + AUTH_URL_END);
+
+		JSONObject jsonResponse = (JSONObject) new JSONTokener(
+				parseResponse(client.execute(httpget))).nextValue();
+		Log.d(TAG, jsonResponse.toString());
+
+		JSONArray lists = jsonResponse.getJSONArray("items");
+
+		int size = lists.length();
+		int i;
+
+		// All lists will not carry etags, must fetch them individually
+		for (i = 0; i < size; i++) {
+			JSONObject jsonList = lists.getJSONObject(i);
+			list.add(getList(jsonList.getString("id")));
+		}
+
+		return list;
+	}
+
+	private GoogleTaskList getList(String listID)
+			throws ClientProtocolException, JSONException,
+			PreconditionException, NotModifiedException, IOException {
+		GoogleTaskList result = null;
+		HttpGet httpget = new HttpGet(BASE_URL + "/" + listID + "?" + AUTH_URL_END);
+		httpget.setHeader("Authorization", "OAuth " + authToken);
+		Log.d(TAG, "request: " +BASE_URL + "?" + AUTH_URL_END);
+
+		JSONObject jsonResponse = (JSONObject) new JSONTokener(
+				parseResponse(client.execute(httpget))).nextValue();
+		Log.d(TAG, jsonResponse.toString());
+		result = new GoogleTaskList(jsonResponse);
+
+		return result;
+	}
+
 	// TODO fix this comment to what works
 	/**
-	 * Because Google Tasks API does not return etags for every list, if there is a change we'll
-	 * have to check each individually.
+	 * Because Google Tasks API does not return etags for every list, if there
+	 * is a change we'll have to check each individually.
 	 * 
 	 */
 	public ArrayList<GoogleTaskList> getModifiedLists(String etag) {
 		// Use a header as:
 		// If-None-Match: W/"D08FQn8-eil7ImA9WxZbFEw."
-		
-		//ArrayList<GoogleTaskList> localUnmodifiedLists = dbTalker.getModifiedLists(false);
-		
+
+		// ArrayList<GoogleTaskList> localUnmodifiedLists =
+		// dbTalker.getModifiedLists(false);
+
 		return null;
 	}
-	
+
 	/**
 	 * Given a time, will fetch all tasks which were modified afterwards
 	 */
 	public ArrayList<GoogleTask> getModifiedTasks(String etag) {
 		// Use a header as:
+		// W/ indicates a weak match (semantically equal, compared to byte-to-byte equal)
 		// If-None-Match: W/"D08FQn8-eil7ImA9WxZbFEw."
-		
+
 		// Remember to set true in showDeleted
 		// Make updatedMin URL friendly
 		return null;
 	}
-	
+
 	/**
-	 * Returns an object if all went well.
-	 * Returns null if a conflict was detected.
+	 * Returns an object if all went well. Returns null if a conflict was
+	 * detected.
 	 */
 	public GoogleTask uploadTask(GoogleTask task) {
 		return null;
 	}
-	
+
 	/**
-	 * Returns an object if all went well.
-	 * Returns null if a conflict was detected.
+	 * Returns an object if all went well. Returns null if a conflict was
+	 * detected.
 	 */
 	public GoogleTaskList uploadList(GoogleTaskList list) {
 		return null;
 	}
-	
-	
+
 	/*
 	 * Communication methods
 	 */
-	
+
 	public static String getValueFromJSON(String response, String key) {
 		String value = null;
 		JSONObject object;
@@ -186,8 +255,9 @@ public class GoogleAPITalker {
 
 		return value;
 	}
-    
-    public static String getJSONResponse(DefaultHttpClient client, String URL, String postJSON) throws PreconditionException, NotModifiedException {
+
+	public static String getJSONResponse(DefaultHttpClient client, String URL,
+			String postJSON) throws PreconditionException, NotModifiedException {
 		String response = null;
 		HttpPost httppost = new HttpPost(URL);
 		StringEntity se = null;
@@ -208,8 +278,10 @@ public class GoogleAPITalker {
 
 		return response;
 	}
-    
-    public static Document getXMLResponse(DefaultHttpClient client, String authToken, String URL, String post) throws PreconditionException, NotModifiedException {
+
+	public static Document getXMLResponse(DefaultHttpClient client,
+			String authToken, String URL, String post)
+			throws PreconditionException, NotModifiedException {
 		HttpPost httppost = new HttpPost(URL);
 
 		StringEntity se = null;
@@ -232,8 +304,10 @@ public class GoogleAPITalker {
 
 		return doc;
 	}
-    
-    public static Document getXMLResponse(DefaultHttpClient client, String authToken, String URL) throws PreconditionException, NotModifiedException {
+
+	public static Document getXMLResponse(DefaultHttpClient client,
+			String authToken, String URL) throws PreconditionException,
+			NotModifiedException {
 		HttpGet request = new HttpGet(URL);
 		request.setHeader("Authorization", "GoogleLogin auth=" + authToken);
 
@@ -241,29 +315,30 @@ public class GoogleAPITalker {
 		try {
 			doc = XMLfromString(parseResponse(client.execute(request)));
 		} catch (ClientProtocolException e) {
-			
+
 		} catch (IOException e) {
-			
+
 		}
 
 		return doc;
 	}
-    
-    public static String parseResponse(HttpResponse response) throws PreconditionException, NotModifiedException {
+
+	public static String parseResponse(HttpResponse response)
+			throws PreconditionException, NotModifiedException,
+			ClientProtocolException {
 		String page = "";
 		BufferedReader in = null;
-		
+
 		if (response.getStatusLine().getStatusCode() == 403) {
 			// Invalid authtoken
-		}
-		else if (response.getStatusLine().getStatusCode() == 412) {
-			// Precondition failed. Object has been modified on server, can't do partial update
+			throw new ClientProtocolException("Status: 403, Invalid authcode");
+		} else if (response.getStatusLine().getStatusCode() == 412) {
+			// Precondition failed. Object has been modified on server, can't do
+			// partial update
 			throw new PreconditionException();
-		}
-		else if (response.getStatusLine().getStatusCode() == 304) {
+		} else if (response.getStatusLine().getStatusCode() == 304) {
 			throw new NotModifiedException();
-		}
-		else {
+		} else {
 
 			try {
 				in = new BufferedReader(new InputStreamReader(response
@@ -291,8 +366,8 @@ public class GoogleAPITalker {
 
 		return page;
 	}
-    
-    public static Document XMLfromString(String xml) {
+
+	public static Document XMLfromString(String xml) {
 
 		Document doc = null;
 
@@ -306,21 +381,22 @@ public class GoogleAPITalker {
 			doc = db.parse(is);
 
 		} catch (ParserConfigurationException e) {
-			//System.out.println("XML parse error: " + e.getMessage());
+			// System.out.println("XML parse error: " + e.getMessage());
 			return null;
 		} catch (SAXException e) {
-			//System.out.println("Wrong XML file structure: " + e.getMessage());
+			// System.out.println("Wrong XML file structure: " +
+			// e.getMessage());
 			return null;
 		} catch (IOException e) {
-			//System.out.println("I/O exeption: " + e.getMessage());
+			// System.out.println("I/O exeption: " + e.getMessage());
 			return null;
 		}
 
 		return doc;
 
 	}
-    
-    /**
+
+	/**
 	 * Returns element value
 	 * 
 	 * @param elem
@@ -341,8 +417,8 @@ public class GoogleAPITalker {
 		}
 		return "";
 	}
-    
-    public static String getValue(Element item, String str) {
+
+	public static String getValue(Element item, String str) {
 		NodeList n = item.getElementsByTagName(str);
 		return getElementValue(n.item(0));
 	}
