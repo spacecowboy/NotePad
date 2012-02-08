@@ -12,28 +12,37 @@ import com.nononsenseapps.notepad.interfaces.OnNoteOpenedListener;
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.ActionBar;
+import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
+import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
+import android.widget.SimpleCursorAdapter;
 
 /**
  * Showing a single fragment in an activity.
  */
 public class FragmentLayout extends Activity implements
 		OnSharedPreferenceChangeListener, OnEditorDeleteListener,
-		DeleteActionListener {
+		DeleteActionListener, OnNavigationListener,
+		LoaderManager.LoaderCallbacks<Cursor> {
+	private static final String TAG = "FragmentLayout";
 	// public static boolean lightTheme = false;
 	public static String currentTheme = NotesPreferenceFragment.THEME_LIGHT;
 	public static boolean shouldRestart = false;
@@ -44,6 +53,9 @@ public class FragmentLayout extends Activity implements
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
 
 	private Refresher list;
+	
+	private SimpleCursorAdapter mSpinnerAdapter;
+	private long currentList;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +69,20 @@ public class FragmentLayout extends Activity implements
 
 		// Setting theme here
 		readAndSetSettings();
+
+		// Set up dropdown navigation
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayShowTitleEnabled(false);
+		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
+
+		// Will set cursor in Loader
+		mSpinnerAdapter = new SimpleCursorAdapter(this,
+				android.R.layout.simple_spinner_dropdown_item, null,
+				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
+				new int[] { android.R.id.text1 });
+		// This will listen for navigation callbacks
+		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
+		getLoaderManager().initLoader(0, null, this);
 
 		Log.d("Activity", "onCreate before");
 		// XML makes sure notes list is displayed. And editor too in landscape
@@ -216,6 +242,7 @@ public class FragmentLayout extends Activity implements
 			ActionBar actionBar = getActionBar();
 			if (actionBar != null) {
 				actionBar.setDisplayHomeAsUpEnabled(true);
+				actionBar.setDisplayShowTitleEnabled(false);
 			}
 
 			if (getResources().getBoolean(R.bool.useLandscapeView)) {
@@ -299,8 +326,9 @@ public class FragmentLayout extends Activity implements
 		@Override
 		public void onDeleteAction() {
 			Log.d("NotesEditorActivity", "onDeleteAction");
-			// TODO delete setNoSave as it serves no purpose if fragment listens to changes on note itself
-			//editorFragment.setNoSave();
+			// TODO delete setNoSave as it serves no purpose if fragment listens
+			// to changes on note itself
+			// editorFragment.setNoSave();
 			FragmentLayout.deleteNote(getContentResolver(), currentId);
 			setResult(Activity.RESULT_CANCELED);
 			finish();
@@ -332,8 +360,9 @@ public class FragmentLayout extends Activity implements
 		for (long id : ids) {
 			ContentValues values = new ContentValues();
 			values.put(NotePad.Notes.COLUMN_NAME_DELETED, "1");
-			resolver.update(NotesEditorFragment.getUriFrom(id), values, null, null);
-			//resolver.delete(NotesEditorFragment.getUriFrom(id), null, null);
+			resolver.update(NotesEditorFragment.getUriFrom(id), values, null,
+					null);
+			// resolver.delete(NotesEditorFragment.getUriFrom(id), null, null);
 		}
 	}
 
@@ -390,28 +419,29 @@ public class FragmentLayout extends Activity implements
 			}
 			return super.onOptionsItemSelected(item);
 		}
-		
+
 		@Override
 		protected Dialog onCreateDialog(int id) {
-		  switch (id) {
-		    case DIALOG_ACCOUNTS:
-		      AlertDialog.Builder builder = new AlertDialog.Builder(this);
-		      builder.setTitle("Select a Google account");
-		      final Account[] accounts = AccountManager.get(this).getAccountsByType("com.google");
-		      final int size = accounts.length;
-		      String[] names = new String[size];
-		      for (int i = 0; i < size; i++) {
-		        names[i] = accounts[i].name;
-		      }
-		      builder.setItems(names, new DialogInterface.OnClickListener() {
-		        public void onClick(DialogInterface dialog, int which) {
-		          // Stuff to do when the account is selected by the user
-		          prefFragment.accountSelected(accounts[which]);
-		        }
-		      });
-		      return builder.create();
-		  }
-		  return null;
+			switch (id) {
+			case DIALOG_ACCOUNTS:
+				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+				builder.setTitle("Select a Google account");
+				final Account[] accounts = AccountManager.get(this)
+						.getAccountsByType("com.google");
+				final int size = accounts.length;
+				String[] names = new String[size];
+				for (int i = 0; i < size; i++) {
+					names[i] = accounts[i].name;
+				}
+				builder.setItems(names, new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int which) {
+						// Stuff to do when the account is selected by the user
+						prefFragment.accountSelected(accounts[which]);
+					}
+				});
+				return builder.create();
+			}
+			return null;
 		}
 	}
 
@@ -420,13 +450,56 @@ public class FragmentLayout extends Activity implements
 		// both list and editor should be notified
 		NotesListFragment list = (NotesListFragment) getFragmentManager()
 				.findFragmentById(R.id.noteslistfragment);
-		//NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
-		//		.findFragmentById(R.id.editor_container);
-		// TODO unnecessary to tell editor this, it already knows when it is deleted.
-		//if (editor != null)
-		//	editor.setNoSave();
+		// NotesEditorFragment editor = (NotesEditorFragment)
+		// getFragmentManager()
+		// .findFragmentById(R.id.editor_container);
+		// TODO unnecessary to tell editor this, it already knows when it is
+		// deleted.
+		// if (editor != null)
+		// editor.setNoSave();
 		// delete note
 		if (list != null)
 			list.onDelete();
+	}
+
+	@Override
+	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
+		// TODO Auto-generated method stub
+		Log.d(TAG, "onNavigationItemSelected");
+
+		// Change the active list
+		currentList = itemId;
+		// Display list
+		return true;
+	}
+
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		// TODO Auto-generated method stub
+
+		// This is called when a new Loader needs to be created. This
+		// sample only has one Loader, so we don't care about the ID.
+		Uri baseUri = NotePad.Lists.CONTENT_URI;
+		// Now create and return a CursorLoader that will take care of
+		// creating a Cursor for the data being displayed.
+
+		return new CursorLoader(this, baseUri, new String[] {
+				NotePad.Lists._ID, NotePad.Lists.COLUMN_NAME_TITLE },
+				NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1", // un-deleted records.
+				null,
+				NotePad.Lists.SORT_ORDER // Use the default sort order.
+		);
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		mSpinnerAdapter.swapCursor(data);
+		// TODO
+		// is possible we have to show the list here
+	}
+
+	@Override
+	public void onLoaderReset(Loader<Cursor> loader) {
+		mSpinnerAdapter.swapCursor(null);
 	}
 }

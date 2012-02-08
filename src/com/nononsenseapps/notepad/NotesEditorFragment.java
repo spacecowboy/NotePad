@@ -124,6 +124,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private boolean mOriginalDueState;
 	private boolean opened = false;
 	private NoteWatcher watcher;
+	public boolean selfAction = false;;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -165,6 +166,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 */
 	private void openNote(Bundle savedInstanceState) {
 		Log.d("NotesEditorFragment", "OpenNOTe: Id is " + id);
+		selfAction = false;
 		opened = true;
 		if (id != -1) {
 			// Existing note
@@ -176,6 +178,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// New note
 			mState = STATE_INSERT;
 
+			Log.d("InsertError", "openNote");
 			mUri = activity.getContentResolver().insert(
 					NotePad.Notes.CONTENT_URI, null);
 			Log.d("NotesEditorFragment",
@@ -203,8 +206,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		// Prepare the loader. Either re-connect with an existing one,
 		// or start a new one. Will open the note
-		if (mUri != null)
+		if (mUri != null) {
+			id = getIdFromUri(mUri);
 			getLoaderManager().restartLoader(0, null, this);
+		}
 	}
 
 	private static long getIdFromUri(Uri uri) {
@@ -523,6 +528,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// we can find or display a new note.
 			// find first note through: SELECT * FROM Table_Name LIMIT 1;
 			// Use the same select statement the list is using
+			Log.d("InsertError", "onActivityCreated Editor");
 			openNote(saves);
 		}
 	}
@@ -661,8 +667,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// Settings might have been changed
 			setFontSettings();
 			// We don't want to do this the first time
-			if (opened)
+			if (opened) {
+				Log.d("InsertError", "onResume Editor");
 				openNote(null);
+			}
 			// Redisplay from database. If a new note was showing, that was
 			// deleted in onPause. Then the state was changed back to insert
 			// if (mState == STATE_INSERT)
@@ -691,6 +699,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		clearFields();
 		mState = STATE_EDIT;
 		this.id = id;
+		Log.d("insertError", "displayNote");
 		openNote(null);
 	}
 
@@ -835,7 +844,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		super.onPause();
 		Log.d("NotesEditorFragment", "onPause");
 		
-		//activity.getContentResolver().unregisterContentObserver(watcher);
+		activity.getContentResolver().unregisterContentObserver(watcher);
 		saveNote();
 	}
 
@@ -849,6 +858,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private void saveNote() {
 		if (doSave && mText != null && mTitle != null) {
 			Log.d("NotesEditorFragment", "Saving/Deleting Note");
+			
+			selfAction  = true;
 
 			// Get the current note text.
 			String text = mText.getText().toString();
@@ -1006,6 +1017,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			mState = STATE_INSERT;
 
+			Log.d("InsertError", "onCreateLoader");
 			mUri = activity.getContentResolver().insert(
 					NotePad.Notes.CONTENT_URI, null);
 
@@ -1058,7 +1070,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			Log.d(TAG, "MyContentObserver.onChange( " + selfChange + ")");
 			super.onChange(selfChange);
 			// It was changed! Reopen!
-			editor.openNote(null);
+			Log.d("insertError", "MyContentObserver.onChange( " + editor.selfAction + ")");
+			if (!editor.selfAction)
+				editor.openNote(null);
 		}
 
 	}

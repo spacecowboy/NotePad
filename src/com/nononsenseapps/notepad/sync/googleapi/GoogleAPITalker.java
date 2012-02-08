@@ -119,8 +119,8 @@ public class GoogleAPITalker {
 		String authToken = "";
 		try {
 			// Might be invalid in the cache
-			//authToken = accountManager.blockingGetAuthToken(account,authTokenType, notifyAuthFailure);
-			//accountManager.invalidateAuthToken("com.google", authToken);
+			authToken = accountManager.blockingGetAuthToken(account,authTokenType, notifyAuthFailure);
+			accountManager.invalidateAuthToken("com.google", authToken);
 			
 			authToken = accountManager.blockingGetAuthToken(account,
 					authTokenType, notifyAuthFailure);
