@@ -679,14 +679,19 @@ public class NotesListFragment extends ListFragment implements
 		// On Honeycomb, we can set the state of the refresh button by giving it
 		// a custom
 		// action view.
+		Log.d(TAG, "setRefreshActionState");
 		if (mOptionsMenu == null) {
+			Log.d(TAG, "setRefreshActionState: menu is null, returning");
 			return;
 		}
 
 		final MenuItem refreshItem = mOptionsMenu.findItem(R.id.menu_sync);
+		Log.d(TAG, "setRefreshActionState: refreshItem not null? " + Boolean.toString(refreshItem != null));
 		if (refreshItem != null) {
 			if (refreshing) {
+				Log.d(TAG, "setRefreshActionState: refreshing: " + Boolean.toString(refreshing));
 				if (mRefreshIndeterminateProgressView == null) {
+					Log.d(TAG, "setRefreshActionState: mRefreshIndeterminateProgressView was null, inflating one...");
 					LayoutInflater inflater = (LayoutInflater) activity
 							.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 					mRefreshIndeterminateProgressView = inflater.inflate(
@@ -695,6 +700,7 @@ public class NotesListFragment extends ListFragment implements
 
 				refreshItem.setActionView(mRefreshIndeterminateProgressView);
 			} else {
+				Log.d(TAG, "setRefreshActionState: setting null actionview");
 				refreshItem.setActionView(null);
 			}
 		}

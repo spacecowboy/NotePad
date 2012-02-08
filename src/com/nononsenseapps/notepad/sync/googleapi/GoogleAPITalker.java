@@ -268,6 +268,8 @@ public class GoogleAPITalker {
 			boolean retrieved = false;
 			for (GoogleTaskList localList: allLocalLists) {
 				if (gimpedList.id.equals(localList.id)) {
+					// Remove from list as well. any that remains do not exist on server, and hence should be deleted
+					allLocalLists.remove(localList);
 					// For any that exist in localList, use if-none-match header to get
 					try {
 						// Locallist contains the ETAG, and the DBID
@@ -290,6 +292,13 @@ public class GoogleAPITalker {
 					// Even if it did, it would mean we should do nothing here
 				}
 			}
+		}
+		
+		// Any lists that remain in the original allLocalLists, could not be found on server. Hence
+		// they must have been deleted. Set them as deleted and add to modified list
+		for (GoogleTaskList deletedList: allLocalLists) {
+			deletedList.deleted = 1;
+			modifiedLists.add(deletedList);
 		}
 
 		return modifiedLists;

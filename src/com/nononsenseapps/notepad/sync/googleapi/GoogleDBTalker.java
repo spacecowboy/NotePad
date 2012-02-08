@@ -188,7 +188,8 @@ public class GoogleDBTalker {
 			provider.update(NotePad.GTaskLists.CONTENT_URI, list.toGTaskListsContentValues(accountName), NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS " + list.dbId + " AND " + NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT + " IS '" + accountName + "'", null);
 			syncResult.stats.numUpdates++;
 		} else if (list.dbId > -1 && list.deleted == 1) {
-			// TODO sort this out. API doesnt support retrieval of deleted lists
+			provider.delete(Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE, Long.toString(list.dbId)), null, null);
+			provider.delete(NotePad.GTaskLists.CONTENT_URI, NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS " + list.dbId, null);
 			syncResult.stats.numDeletes++;
 		} else {
 			Log.d(TAG, "Inserting list");
