@@ -15,8 +15,11 @@ import org.apache.http.HttpResponse;
 import org.apache.http.HttpVersion;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
@@ -92,6 +95,7 @@ public class GoogleAPITalker {
 	protected static final String APIKEY = "AIzaSyBCQyr-OSPQsMwU2tyCIKZG86Wb3WM1upw";// jonas@kalderstam.se
 	protected static final String AUTH_URL_END = "key=" + APIKEY;
 	protected static final String BASE_URL = "https://www.googleapis.com/tasks/v1/users/@me/lists";
+	protected static final String BASE_LIST = BASE_URL + "/";
 	// protected static final String LISTS = "/lists";
 	protected static final String TASKS = "/tasks"; // Must be preceeded by
 													// list-id
@@ -116,12 +120,14 @@ public class GoogleAPITalker {
 
 	public static String getAuthToken(AccountManager accountManager,
 			Account account, String authTokenType, boolean notifyAuthFailure) {
+		Log.d(TAG, "getAuthToken");
 		String authToken = "";
 		try {
 			// Might be invalid in the cache
-			authToken = accountManager.blockingGetAuthToken(account,authTokenType, notifyAuthFailure);
+			authToken = accountManager.blockingGetAuthToken(account,
+					authTokenType, notifyAuthFailure);
 			accountManager.invalidateAuthToken("com.google", authToken);
-			
+
 			authToken = accountManager.blockingGetAuthToken(account,
 					authTokenType, notifyAuthFailure);
 		} catch (OperationCanceledException e) {
@@ -133,6 +139,7 @@ public class GoogleAPITalker {
 
 	public boolean initialize(AccountManager accountManager, Account account,
 			String authTokenType, boolean notifyAuthFailure) {
+		Log.d(TAG, "initialize");
 		HttpParams params = new BasicHttpParams();
 		params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
 				HttpVersion.HTTP_1_1);
@@ -159,7 +166,7 @@ public class GoogleAPITalker {
 
 		HttpGet httpget = new HttpGet(BASE_URL + "?" + AUTH_URL_END);
 		httpget.setHeader("Authorization", "OAuth " + authToken);
-		Log.d(TAG, "request: " +BASE_URL + "?" + AUTH_URL_END);
+		Log.d(TAG, "request: " + BASE_URL + "?" + AUTH_URL_END);
 
 		JSONObject jsonResponse = (JSONObject) new JSONTokener(
 				parseResponse(client.execute(httpget))).nextValue();
@@ -179,13 +186,14 @@ public class GoogleAPITalker {
 		return list;
 	}
 
-	private GoogleTaskList getList(String listID)
+	public GoogleTaskList getList(String listID)
 			throws ClientProtocolException, JSONException,
 			PreconditionException, NotModifiedException, IOException {
 		GoogleTaskList result = null;
-		HttpGet httpget = new HttpGet(BASE_URL + "/" + listID + "?" + AUTH_URL_END);
+		HttpGet httpget = new HttpGet(BASE_URL + "/" + listID + "?"
+				+ AUTH_URL_END);
 		httpget.setHeader("Authorization", "OAuth " + authToken);
-		Log.d(TAG, "request: " +BASE_URL + "?" + AUTH_URL_END);
+		Log.d(TAG, "request: " + BASE_URL + "?" + AUTH_URL_END);
 
 		JSONObject jsonResponse = (JSONObject) new JSONTokener(
 				parseResponse(client.execute(httpget))).nextValue();
@@ -216,7 +224,8 @@ public class GoogleAPITalker {
 	 */
 	public ArrayList<GoogleTask> getModifiedTasks(String etag) {
 		// Use a header as:
-		// W/ indicates a weak match (semantically equal, compared to byte-to-byte equal)
+		// W/ indicates a weak match (semantically equal, compared to
+		// byte-to-byte equal)
 		// If-None-Match: W/"D08FQn8-eil7ImA9WxZbFEw."
 
 		// Remember to set true in showDeleted
@@ -235,14 +244,108 @@ public class GoogleAPITalker {
 	/**
 	 * Returns an object if all went well. Returns null if a conflict was
 	 * detected.
+	 * If the list has deleted set to 1, will call the server and delete the list instead of updating it.
+	 * @throws IOException 
+	 * @throws NotModifiedException 
+	 * @throws PreconditionException 
+	 * @throws JSONException 
+	 * @throws ClientProtocolException 
 	 */
-	public GoogleTaskList uploadList(GoogleTaskList list) {
-		return null;
+	public GoogleTaskList uploadList(GoogleTaskList list) throws ClientProtocolException, JSONException, PreconditionException, NotModifiedException, IOException {
+		HttpUriRequest httppost;
+		if (list.id != null) {
+			if (list.deleted == 1) {
+				httppost = new HttpDelete(BASE_LIST + list.id + "?" + AUTH_URL_END);
+			} else {
+				httppost = new HttpPut(BASE_LIST + list.id + "?" + AUTH_URL_END);
+			}
+		} else {
+			httppost = new HttpPost(BASE_URL + "?" + AUTH_URL_END);
+		}
+		
+		if (list.etag != null)
+			setHeaderStrongEtag(httppost, list.etag);
+		
+		if (list.deleted != 1) {
+			setPostBody(httppost, list);
+		}
+
+		String stringResponse = parseResponse(client.execute(httppost));
+		// If we deleted the note, we will get an empty response. Return the same element back.
+		if (list.deleted == 1) {
+			Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
+		}
+		else {
+			JSONObject jsonResponse = new JSONObject(
+					);
+			Log.d(TAG, jsonResponse.toString());
+	
+			// Will return a list, containing id and etag. always update fields
+			list.etag = jsonResponse.getString("etag");
+			list.id = jsonResponse.getString("id");
+			list.title = jsonResponse.getString("title");
+		}
+
+		return list;
 	}
 
 	/*
 	 * Communication methods
 	 */
+
+	/**
+	 * Sets the authorization header
+	 * @param url
+	 * @return
+	 */
+	private void setAuthHeader(HttpUriRequest request) {
+		if (request != null)
+			request.setHeader("Authorization", "OAuth " + authToken);
+	}
+	
+	/**
+	 * Does nothing if etag is null or ""
+	 * Sets an if-match header for strong etag comparisons.
+	 * @param etag
+	 */
+	private void setHeaderStrongEtag(HttpUriRequest httppost, String etag) {
+		if (etag !=null && !etag.equals("")) {
+			httppost.setHeader("If-Match", etag);
+			Log.d(TAG, "If-Match: " + etag);
+		}
+	}
+	
+	/**
+	 * Does nothing if etag is null or ""
+	 * Sets an if-none-match header for weak etag comparisons.
+	 * @param etag
+	 */
+	private void setHeaderWeakEtag(HttpUriRequest httpget, String etag) {
+		if (etag !=null && !etag.equals("")) {
+			httpget.setHeader("If-None-Match", "W/" + etag);
+			Log.d(TAG, "If-None-Match: " + "W/" + etag);
+		}
+	}
+
+	/**
+	 * SUpports Post and Put. Anything else will not have any effect
+	 * @param httppost
+	 * @param list
+	 */
+	private void setPostBody(HttpUriRequest httppost, GoogleTaskList list) {
+		StringEntity se = null;
+		try {
+			se = new StringEntity(list.toJSON(), HTTP.UTF_8);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		se.setContentType("application/json");
+		if (httppost instanceof HttpPost)
+			((HttpPost) httppost).setEntity(se);
+		else if (httppost instanceof HttpPut)
+			((HttpPut) httppost).setEntity(se);
+	}
 
 	public static String getValueFromJSON(String response, String key) {
 		String value = null;
@@ -293,7 +396,7 @@ public class GoogleAPITalker {
 		se.setContentType("text/xml");
 		httppost.setEntity(se);
 
-		httppost.setHeader("Authorization", "GoogleLogin auth=" + authToken);
+		httppost.setHeader("Authorization", "OAuth " + authToken);
 
 		Document doc = null;
 		try {
@@ -309,7 +412,7 @@ public class GoogleAPITalker {
 			String authToken, String URL) throws PreconditionException,
 			NotModifiedException {
 		HttpGet request = new HttpGet(URL);
-		request.setHeader("Authorization", "GoogleLogin auth=" + authToken);
+		request.setHeader("Authorization", "OAuth " + authToken);
 
 		Document doc = null;
 		try {
@@ -333,12 +436,12 @@ public class GoogleAPITalker {
 			// Invalid authtoken
 			throw new ClientProtocolException("Status: 403, Invalid authcode");
 		} else if (response.getStatusLine().getStatusCode() == 412) {
-			// Precondition failed. Object has been modified on server, can't do
-			// partial update
-			throw new PreconditionException();
+			// Precondition failed. Object has been modified on server, can't do update
+			throw new PreconditionException("Etags don't match, can not perform update. Resolv the conflict then update withou etag");
 		} else if (response.getStatusLine().getStatusCode() == 304) {
 			throw new NotModifiedException();
-		} else {
+		}  
+		else {
 
 			try {
 				in = new BufferedReader(new InputStreamReader(response

@@ -17,6 +17,8 @@ package com.nononsenseapps.notepad.sync;
 
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 
 import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker;
@@ -35,10 +37,13 @@ import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
+import android.text.format.Time;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -51,8 +56,8 @@ import java.util.List;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 	private static final String TAG = "SyncAdapter";
-	//public static final String AUTH_TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/tasks";
-	public static final String AUTH_TOKEN_TYPE = "Manage your tasks"; // Alias for above
+	public static final String AUTH_TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/tasks";
+	//public static final String AUTH_TOKEN_TYPE = "Manage your tasks"; // Alias for above
 	private static final String SYNC_MARKER_KEY = "com.nononsenseapps.notepad.sync.marker";
 	public static final boolean NOTIFY_AUTH_FAILURE = false;
 
@@ -72,6 +77,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 	@Override
 	public void onPerformSync(Account account, Bundle extras, String authority,
 			ContentProviderClient provider, SyncResult syncResult) {
+		Log.d(TAG, "onPerformSync");
 		// Initialize necessary stuff
 		GoogleDBTalker dbTalker = new GoogleDBTalker(account.name, provider, syncResult);
 		GoogleAPITalker apiTalker = GoogleAPITalker.getInstance();
@@ -82,9 +88,47 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 			Log.d(TAG, "We got an authToken atleast");
 			
 			try {
-				for (GoogleTaskList list: apiTalker.getAllLists()) {
-					Log.d(TAG, list.json.toString());
+//				apiTalker.getAllLists();
+//				for (GoogleTaskList list: dbTalker.getAllLists()) {
+//					Log.d("GOOGLETASKLIST", list.toString());
+//				}
+//				for (GoogleTaskList list: dbTalker.getModifiedLists()) {
+//					Log.d("GOOGLETASKLIST", list.toString());
+//				}
+				
+				// Upload local changes
+				//List<GoogleTask> modifiedTasks = dbTalker.getModifiedTasks();
+				
+//				for (GoogleTask task: modifiedTasks) {
+//					GoogleTask result = apiTalker.uploadTask(task);
+//					if (result != null)
+//						dbTalker.uploaded(result);
+//					else
+//						handleConflict(dbTalker, apiTalker, task);
+//				}
+				
+				for (GoogleTaskList list: dbTalker.getModifiedLists()) {
+					GoogleTaskList result = apiTalker.uploadList(list);
+					if (result != null)
+						dbTalker.uploaded(result);
+					else
+						handleConflict(dbTalker, apiTalker, list);
 				}
+				
+				// Save remote changes
+//				modifiedTasks = apiTalker.getModifiedTasks("List ETAG here");
+//				for (GoogleTask task: modifiedTasks) {
+//					dbTalker.SaveToDatabase(task);
+//				}
+//				modifiedLists = apiTalker.getModifiedLists("ETAG here");
+//				for (GoogleTaskList list: modifiedLists) {
+//					dbTalker.SaveToDatabase(list);
+//				}
+				
+				// Erase deleted stuff
+				//dbTalker.clearDeleted();
+				
+				
 			} catch (ClientProtocolException e) {
 				Log.d(TAG, "ClientProtocolException: " + e.getLocalizedMessage());
 			} catch (JSONException e) {
@@ -95,40 +139,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 				Log.d(TAG, "NotModifiedException");
 			} catch (IOException e) {
 				Log.d(TAG, "IOException: " + e.getLocalizedMessage());
+			} catch (RemoteException e) {
+				Log.d(TAG, "RemoteException: " + e.getLocalizedMessage());
 			}
 			
-			// Upload local changes
-			//List<GoogleTask> modifiedTasks = dbTalker.getModifiedTasks();
-			//List<GoogleTaskList> modifiedLists = dbTalker.getModifiedLists(true);
 			
-//			for (GoogleTask task: modifiedTasks) {
-//				GoogleTask result = apiTalker.uploadTask(task);
-//				if (result != null)
-//					dbTalker.uploaded(result);
-//				else
-//					handleConflict(dbTalker, apiTalker, task);
-//			}
-			
-//			for (GoogleTaskList list: modifiedLists) {
-//				GoogleTaskList result = apiTalker.uploadList(list);
-//				if (result != null)
-//					dbTalker.uploaded(result);
-//				else
-//					handleConflict(dbTalker, apiTalker, list);
-//			}
-			
-			// Save remote changes
-//			modifiedTasks = apiTalker.getModifiedTasks("List ETAG here");
-//			for (GoogleTask task: modifiedTasks) {
-//				dbTalker.SaveToDatabase(task);
-//			}
-//			modifiedLists = apiTalker.getModifiedLists("ETAG here");
-//			for (GoogleTaskList list: modifiedLists) {
-//				dbTalker.SaveToDatabase(list);
-//			}
-			
-			// Erase deleted stuff
-			//dbTalker.clearDeleted();
 			
 			//-----------------------------------
 
@@ -167,8 +182,27 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 	}
 
 	private void handleConflict(GoogleDBTalker dbTalker,
-			GoogleAPITalker apiTalker, GoogleTaskList list) {
-		// TODO Auto-generated method stub
-		
+			GoogleAPITalker apiTalker, GoogleTaskList localList) throws ClientProtocolException, JSONException, PreconditionException, NotModifiedException, IOException {
+		GoogleTaskList remoteList = apiTalker.getList(localList.id);
+		// Last updated one wins
+		Time local = new Time();
+		local.parse3339(localList.updated);
+		Time remote = new Time();
+		remote.parse3339(remoteList.updated);
+		if (Time.compare(remote, local) >= 0) {
+			Log.d(TAG, "Handling conflict: remote was newer");
+			// remote is greater than local (or equal), save that to database
+			remoteList.dbId = localList.dbId;
+			dbTalker.SaveToDatabase(remoteList);
+		} else {
+			Log.d(TAG, "Handling conflict: local was newer");
+			// Local is greater than remote, upload it.
+			localList.etag = null;
+			long dbId = localList.dbId;
+			localList = apiTalker.uploadList(localList);
+			localList.dbId = dbId;
+			// Save new etag etc to db
+			dbTalker.SaveToDatabase(localList);
+		}
 	}
 }

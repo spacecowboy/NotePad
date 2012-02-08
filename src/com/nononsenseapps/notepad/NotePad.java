@@ -388,6 +388,10 @@ public final class NotePad {
          * <P>Type: TEXT</P>
          */
         public static final String COLUMN_NAME_ETAG = "etag";
+        /**
+         * <P>Type: TEXT</P>
+         */
+        public static final String COLUMN_NAME_UPDATED = "updated";
     }
     
     /**
@@ -492,5 +496,9 @@ public final class NotePad {
          * <P>Type: TEXT</P>
          */
         public static final String COLUMN_NAME_ETAG = "etag";
+        /**
+         * <P>Type: TEXT</P>
+         */
+        public static final String COLUMN_NAME_UPDATED = "updated";
     }
 }

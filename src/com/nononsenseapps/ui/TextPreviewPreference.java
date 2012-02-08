@@ -7,7 +7,6 @@ import android.content.Context;
 import android.graphics.Typeface;
 import android.preference.Preference;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,18 +20,15 @@ public class TextPreviewPreference extends Preference {
 
 	public TextPreviewPreference(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		Log.d(TAG, "Constructor1");
 	}
 
 	public TextPreviewPreference(Context context, AttributeSet attrs,
 			int defStyle) {
 		super(context, attrs, defStyle);
-		Log.d(TAG, "Cosntructor2");
 	}
 
 	@Override
 	protected View onCreateView(ViewGroup parent) {
-		Log.d(TAG, "onCreateView");
 
 		View layout = null;
 
@@ -43,7 +39,7 @@ public class TextPreviewPreference extends Preference {
 			layout = mInflater.inflate(R.layout.preference_text_preview,
 					parent, false);
 		} catch (Exception e) {
-			Log.e(TAG, "Error creating seek bar preference", e);
+			//Log.e(TAG, "Error creating seek bar preference", e);
 		}
 		
 		mText = (TextView) layout.findViewById(R.id.prefTextPreview);
@@ -59,7 +55,6 @@ public class TextPreviewPreference extends Preference {
 	@Override
 	public void onBindView(View view) {
 		super.onBindView(view);
-		Log.d(TAG, "onBindView");
 
 		//mText = (TextView) view.findViewById(R.id.prefTextPreview);
 	}
@@ -77,9 +72,7 @@ public class TextPreviewPreference extends Preference {
 	}
 
 	public void setTextType(String type) {
-		Log.d(TAG, "setTextType");
 		if (mText != null) {
-			Log.d(TAG, "mText type was not null: " + type);
 			
 			mText.setTypeface(getTypeface(type));
 //			mText.post(new Runnable() {
@@ -96,15 +89,12 @@ public class TextPreviewPreference extends Preference {
 	}
 
 	public void setTextSize(float size) {
-		Log.d(TAG, "setTextSize");
 		if (mText != null) {
-			Log.d(TAG, "mText size was not null: " + size);
 			final float mySize = size;
 			mText.post(new Runnable() {
 
 				@Override
 				public void run() {
-					Log.d(TAG, "Runnablesize: getText: " + mText.getText().toString());
 					mText.setTextSize(mySize);
 					mText.setText("Size changed in runnable");
 				}

@@ -65,7 +65,7 @@ public class NotePadProvider extends ContentProvider implements
 	 * The database version 2 was original 3 added gtask-columns 4 was the final
 	 * gtask version. 3 was never released and should be considered unsafe.
 	 */
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 5;
 
 	/**
 	 * A projection map used to select columns from the database
@@ -218,6 +218,8 @@ public class NotePadProvider extends ContentProvider implements
 				NotePad.GTasks.COLUMN_NAME_ETAG);
 		sGTasksProjectionMap.put(NotePad.GTasks.COLUMN_NAME_DB_ID,
 				NotePad.GTasks.COLUMN_NAME_DB_ID);
+		sGTasksProjectionMap.put(NotePad.GTasks.COLUMN_NAME_UPDATED,
+				NotePad.GTasks.COLUMN_NAME_UPDATED);
 
 		sGTaskListsProjectionMap = new HashMap<String, String>();
 		sGTaskListsProjectionMap.put(BaseColumns._ID, BaseColumns._ID);
@@ -230,6 +232,8 @@ public class NotePadProvider extends ContentProvider implements
 				NotePad.GTaskLists.COLUMN_NAME_ETAG);
 		sGTaskListsProjectionMap.put(NotePad.GTaskLists.COLUMN_NAME_DB_ID,
 				NotePad.GTaskLists.COLUMN_NAME_DB_ID);
+		sGTaskListsProjectionMap.put(NotePad.GTaskLists.COLUMN_NAME_UPDATED,
+				NotePad.GTaskLists.COLUMN_NAME_UPDATED);
 
 	}
 
@@ -305,6 +309,7 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.GTasks.COLUMN_NAME_DB_ID + " TEXT,"
 					+ NotePad.GTasks.COLUMN_NAME_GTASKS_ID + " INTEGER,"
 					+ NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT + " INTEGER,"
+					+ NotePad.GTasks.COLUMN_NAME_UPDATED + " TEXT,"
 					+ NotePad.GTasks.COLUMN_NAME_ETAG + " TEXT" + ");");
 		}
 
@@ -314,7 +319,8 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.GTaskLists.COLUMN_NAME_DB_ID + " TEXT,"
 					+ NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID + " INTEGER,"
 					+ NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT
-					+ " INTEGER," + NotePad.GTaskLists.COLUMN_NAME_ETAG
+					+ " INTEGER," + NotePad.GTaskLists.COLUMN_NAME_UPDATED + " TEXT,"
+					+ NotePad.GTaskLists.COLUMN_NAME_ETAG
 					+ " TEXT" + ");");
 		}
 
@@ -331,15 +337,18 @@ public class NotePadProvider extends ContentProvider implements
 					+ "Upgrading database from version " + oldVersion + " to "
 					+ newVersion);
 
-			// Version 3 was never released to the public
-			if (oldVersion == 3) {
+			// Version 3 or 4 were never released to the public
+			if (oldVersion == 4) {
 				// Kills the table and existing data
-				db.execSQL("DROP TABLE IF EXISTS notes");
+				db.execSQL("DROP TABLE IF EXISTS " + NotePad.Notes.TABLE_NAME);
+				db.execSQL("DROP TABLE IF EXISTS " + NotePad.Lists.TABLE_NAME);
+				db.execSQL("DROP TABLE IF EXISTS " + NotePad.GTaskLists.TABLE_NAME);
+				db.execSQL("DROP TABLE IF EXISTS " + NotePad.GTasks.TABLE_NAME);
 
 				// Recreates the database with a new version
 				onCreate(db);
 			} else {
-				if (oldVersion < 4) {
+				if (oldVersion < 5) {
 					// FIrst add columns to Notes table
 
 					String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
@@ -833,8 +842,10 @@ public class NotePadProvider extends ContentProvider implements
 			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 0);
 		}
 
-		if (values.containsKey(NotePad.Notes.COLUMN_NAME_LIST) == false) {
-			values.put(NotePad.Notes.COLUMN_NAME_LIST, 0);
+		if (values.containsKey(NotePad.Notes.COLUMN_NAME_LIST) == false ||
+				values.getAsLong(NotePad.Notes.COLUMN_NAME_LIST) < 0) {
+			Log.d(TAG, "Forgot to include note in a list");
+			throw new SQLException("A note must always belong to a list!");
 		}
 
 		// Opens the database object in "write" mode.

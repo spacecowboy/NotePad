@@ -7,8 +7,12 @@ import android.accounts.OperationCanceledException;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.SyncResult;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.RemoteException;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -23,10 +27,17 @@ import com.nononsenseapps.notepad.NotePad;
  */
 public class GoogleDBTalker {
 
-	// private static final String[] NOTE_PROJECTION = new String[] {
-	// NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
-	// NotePad.Notes.COLUMN_NAME_NOTE,
-	// NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
+	private static final String[] LIST_PROJECTION = new String[] {
+			NotePad.Lists._ID, NotePad.Lists.COLUMN_NAME_TITLE,
+			NotePad.Lists.COLUMN_NAME_DELETED,
+			NotePad.Lists.COLUMN_NAME_MODIFIED };
+	private static final String[] GTASKLIST_PROJECTION = new String[] {
+			NotePad.GTaskLists._ID, NotePad.GTaskLists.COLUMN_NAME_DB_ID,
+			NotePad.GTaskLists.COLUMN_NAME_ETAG,
+			NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT,
+			NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID,
+			NotePad.GTaskLists.COLUMN_NAME_UPDATED};
+	private static final String TAG = "GoogleDBTalker";
 
 	protected String accountName;
 	protected ContentProviderClient provider;
@@ -38,6 +49,7 @@ public class GoogleDBTalker {
 	 */
 	public GoogleDBTalker(String accountName, ContentProviderClient provider,
 			SyncResult syncResult) {
+		Log.d(TAG, "constructor");
 		this.accountName = accountName;
 		this.provider = provider;
 		this.syncResult = syncResult;
@@ -54,10 +66,57 @@ public class GoogleDBTalker {
 	/**
 	 * Gets all lists with a modified flag set to the specified value in the
 	 * database
+	 * @throws RemoteException 
 	 */
-	public ArrayList<GoogleTaskList> getModifiedLists(boolean modified) {
-		return null;
-		// TODO
+	public ArrayList<GoogleTaskList> getModifiedLists() throws RemoteException {
+		ArrayList<GoogleTaskList> bigList = new ArrayList<GoogleTaskList>();
+		// NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1"
+		Cursor cursor = provider.query(NotePad.Lists.CONTENT_URI,
+				LIST_PROJECTION, NotePad.Lists.COLUMN_NAME_MODIFIED + " IS 1", null, null);
+		
+		populateWithLists(cursor, bigList);
+		cursor.close();
+		
+		return bigList;
+	}
+
+	public ArrayList<GoogleTaskList> getAllLists() throws RemoteException {
+		ArrayList<GoogleTaskList> bigList = new ArrayList<GoogleTaskList>();
+		// NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1"
+		Cursor cursor = provider.query(NotePad.Lists.CONTENT_URI,
+				LIST_PROJECTION, null, null, null);
+		
+		populateWithLists(cursor, bigList);
+		cursor.close();
+		
+		return bigList;
+	}
+	
+	private void populateWithLists(Cursor cursor, ArrayList<GoogleTaskList> bigList) throws RemoteException {
+		if (cursor != null && !cursor.isAfterLast()) {
+			while (cursor.moveToNext()) {
+				GoogleTaskList list = new GoogleTaskList();
+				list.dbId = cursor.getLong(cursor.getColumnIndex(NotePad.Lists._ID));
+				list.title = cursor.getString(cursor.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
+				list.deleted = cursor.getInt(cursor.getColumnIndex(NotePad.Lists.COLUMN_NAME_DELETED));
+				
+				// get etag and remote id
+				Cursor remoteCursor = provider.query(NotePad.GTaskLists.CONTENT_URI,
+						GTASKLIST_PROJECTION, NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS " + list.dbId + " AND " +  NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT + " IS '" + accountName + "'", null, null);
+				
+				// Will only be one, if any
+				if (remoteCursor != null && !remoteCursor.isAfterLast()) {
+					remoteCursor.moveToFirst();
+					
+					list.etag = remoteCursor.getString(remoteCursor.getColumnIndex(NotePad.GTaskLists.COLUMN_NAME_ETAG));
+					list.id = remoteCursor.getString(remoteCursor.getColumnIndex(NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID));
+					list.updated = remoteCursor.getString(remoteCursor.getColumnIndex(NotePad.GTaskLists.COLUMN_NAME_UPDATED));
+				}
+				remoteCursor.close();
+				
+				bigList.add(list);
+			}
+		}
 	}
 
 	/**
@@ -68,8 +127,21 @@ public class GoogleDBTalker {
 		// TODO
 	}
 
-	public void uploaded(GoogleTaskList result) {
-		// TODO
+	/**
+	 * Save list to database and clear the modified flags
+	 * @param result
+	 * @throws RemoteException 
+	 */
+	public void uploaded(GoogleTaskList result) throws RemoteException {
+		if (result.deleted == 1) {
+			// Server is notified of the delete. Remove it from database
+			provider.delete(Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE, Long.toString(result.dbId)), null, null);
+			provider.delete(NotePad.GTaskLists.CONTENT_URI, NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS " + result.dbId, null);
+		}
+		else {
+			provider.update(Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE, Long.toString(result.dbId)), result.toListsContentValues(0), null, null);
+			provider.update(NotePad.GTaskLists.CONTENT_URI, result.toGTaskListsContentValues(accountName), NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS " + result.dbId + " AND " + NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT + " IS '" + accountName + "'", null);
+		}
 	}
 
 	/**

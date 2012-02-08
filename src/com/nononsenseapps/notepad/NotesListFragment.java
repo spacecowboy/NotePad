@@ -43,6 +43,7 @@ import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -93,8 +94,8 @@ public class NotesListFragment extends ListFragment implements
 	private int checkMode = CHECK_SINGLE;
 
 	private ModeCallbackHC modeCallback;
-	
-	private long mCurListId;
+
+	private long mCurListId = -1;
 
 	private ListView lv;
 
@@ -126,7 +127,7 @@ public class NotesListFragment extends ListFragment implements
 		super.onActivityCreated(savedInstanceState);
 
 		if (FragmentLayout.LANDSCAPE_MODE) {
-			autoOpenNote = true;
+			// autoOpenNote = true;
 			landscapeEditor = (NotesEditorFragment) getFragmentManager()
 					.findFragmentById(R.id.editor_container);
 			landscapeEditor.setOnNewNoteCreatedListener(this);
@@ -153,7 +154,8 @@ public class NotesListFragment extends ListFragment implements
 		setupSearchView();
 
 		lv = getListView();
-		// Populate list
+
+		// Set adapter
 		mAdapter = getThemedAdapter(null);
 		setListAdapter(mAdapter);
 
@@ -169,8 +171,8 @@ public class NotesListFragment extends ListFragment implements
 			mCurCheckPosition = savedInstanceState.getInt(SAVEDPOS, 0);
 			mCurId = savedInstanceState.getLong(SAVEDID, -1);
 			// If in portrait and we were editing a note, open it
-			if (currentState == STATE_EXISTING_NOTE)
-				autoOpenNote = true;
+			// if (currentState == STATE_EXISTING_NOTE)
+			// autoOpenNote = true;
 		} else {
 			// Only display note in landscape
 			if (FragmentLayout.LANDSCAPE_MODE)
@@ -185,21 +187,22 @@ public class NotesListFragment extends ListFragment implements
 		// Prepare the loader. Either re-connect with an existing one,
 		// or start a new one. Will list all notes
 		getLoaderManager().initLoader(0, null, this);
-		
 
-        ContentResolver.addStatusChangeListener(ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE, new SyncStatusObserver() {
-			@Override
-			public void onStatusChanged(int which) {
-				refreshing = !refreshing;
-				Log.d("SyncObserver", "Sync status changed");
-				activity.runOnUiThread(new Runnable() {
+		ContentResolver.addStatusChangeListener(
+				ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE,
+				new SyncStatusObserver() {
 					@Override
-					public void run() {
-						setRefreshActionItemState(refreshing);
+					public void onStatusChanged(int which) {
+						refreshing = !refreshing;
+						Log.d("SyncObserver", "Sync status changed");
+						activity.runOnUiThread(new Runnable() {
+							@Override
+							public void run() {
+								setRefreshActionItemState(refreshing);
+							}
+						});
 					}
 				});
-			}
-        });
 	}
 
 	private void showFirstBestNote() {
@@ -303,8 +306,7 @@ public class NotesListFragment extends ListFragment implements
 					ContentResolver.requestSync(account, NotePad.AUTHORITY,
 							new Bundle());
 				}
-			}
-			else {
+			} else {
 				// The user might want to enable syncing. Open preferences
 				Intent intent = new Intent();
 				intent.setClass(activity, NotesPreferencesDialog.class);
@@ -436,7 +438,7 @@ public class NotesListFragment extends ListFragment implements
 						// We want to know about changes here
 						Log.d("NotesListFragment", "Would open note here: "
 								+ mCurId);
-						landscapeEditor.displayNote(mCurId);
+						landscapeEditor.displayNote(mCurId, mCurListId);
 					}
 
 					// TODO delete this
@@ -467,6 +469,7 @@ public class NotesListFragment extends ListFragment implements
 					Intent intent = new Intent();
 					intent.setClass(activity, NotesEditorActivity.class);
 					intent.putExtra(NotesEditorFragment.KEYID, mCurId);
+					intent.putExtra(NotesEditorFragment.LISTID, mCurListId);
 					startActivity(intent);
 				}
 			}
@@ -496,7 +499,7 @@ public class NotesListFragment extends ListFragment implements
 		}
 		currentState = STATE_LIST;
 
-		//reListNotes();
+		// reListNotes();
 
 		// TODO consider the recalculation bit
 		if (FragmentLayout.LANDSCAPE_MODE) {
@@ -665,37 +668,37 @@ public class NotesListFragment extends ListFragment implements
 
 		mCurId = id;
 		if (created) {
-			//reListNotes();
+			// reListNotes();
 		} else {
 			mCurCheckPosition = getPosOfId(id);
 			selectPos(mCurCheckPosition);
 		}
 	}
-	
-    public void setRefreshActionItemState(boolean refreshing) {
-        // On Honeycomb, we can set the state of the refresh button by giving it a custom
-        // action view.
-        if (mOptionsMenu == null) {
-            return;
-        }
 
-        final MenuItem refreshItem = mOptionsMenu.findItem(R.id.menu_sync);
-        if (refreshItem != null) {
-            if (refreshing) {
-                if (mRefreshIndeterminateProgressView == null) {
-                    LayoutInflater inflater = (LayoutInflater)
-                            activity.getSystemService(
-                                    Context.LAYOUT_INFLATER_SERVICE);
-                    mRefreshIndeterminateProgressView = inflater.inflate(
-                            R.layout.actionbar_indeterminate_progress, null);
-                }
+	public void setRefreshActionItemState(boolean refreshing) {
+		// On Honeycomb, we can set the state of the refresh button by giving it
+		// a custom
+		// action view.
+		if (mOptionsMenu == null) {
+			return;
+		}
 
-                refreshItem.setActionView(mRefreshIndeterminateProgressView);
-            } else {
-                refreshItem.setActionView(null);
-            }
-        }
-    }
+		final MenuItem refreshItem = mOptionsMenu.findItem(R.id.menu_sync);
+		if (refreshItem != null) {
+			if (refreshing) {
+				if (mRefreshIndeterminateProgressView == null) {
+					LayoutInflater inflater = (LayoutInflater) activity
+							.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+					mRefreshIndeterminateProgressView = inflater.inflate(
+							R.layout.actionbar_indeterminate_progress, null);
+				}
+
+				refreshItem.setActionView(mRefreshIndeterminateProgressView);
+			} else {
+				refreshItem.setActionView(null);
+			}
+		}
+	}
 
 	private class ModeCallbackHC implements MultiChoiceModeListener,
 			DeleteActionListener {
@@ -1061,7 +1064,7 @@ public class NotesListFragment extends ListFragment implements
 	public void refresh() {
 		Log.d(TAG, "refresh time!. Is list updated?");
 		// reList first so we don't select deletid ids
-		//reListNotes();
+		// reListNotes();
 
 		if (posInvalid) {
 			posInvalid = false;
@@ -1080,6 +1083,13 @@ public class NotesListFragment extends ListFragment implements
 			showNote(mCurCheckPosition, true);
 		}
 	}
+	
+	public void showList(long id) {
+		Log.d(TAG, "showList id " + id);
+		mCurListId = id;
+		//getLoaderManager().initLoader(0, null, this);
+		getLoaderManager().restartLoader(0, null, this);
+	}
 
 	private CursorLoader getAllNotesLoader() {
 		// This is called when a new Loader needs to be created. This
@@ -1087,14 +1097,16 @@ public class NotesListFragment extends ListFragment implements
 		Uri baseUri = NotePad.Notes.CONTENT_URI;
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
-
+		
 		return new CursorLoader(getActivity(), baseUri, PROJECTION, // Return
 																	// the note
 																	// ID and
 																	// title for
 																	// each
 																	// note.
-				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1", // return un-deleted records.
+				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND " + NotePad.Notes.COLUMN_NAME_LIST + " IS " + mCurListId, // return
+																	// un-deleted
+																	// records.
 				null, // No where clause, therefore no where column values.
 				NotePad.Notes.SORT_ORDER // Use the default sort order.
 		);
@@ -1109,9 +1121,12 @@ public class NotesListFragment extends ListFragment implements
 
 		// TODO include title field in search
 		return new CursorLoader(getActivity(), baseUri, PROJECTION,
-				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND " + NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?", // Where the note
-															// contains the
-															// query
+				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND " + NotePad.Notes.COLUMN_NAME_LIST + " IS " + mCurListId
+						+ " AND " + NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?", // Where
+																		// the
+																		// note
+				// contains the
+				// query
 				new String[] { "%" + currentQuery + "%" }, // We don't care how
 															// it occurs in the
 															// note
@@ -1121,6 +1136,7 @@ public class NotesListFragment extends ListFragment implements
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		Log.d(TAG, "onCreateLoader");
 		if (currentQuery != null && !currentQuery.isEmpty()) {
 			return getSearchNotesLoader();
 		} else {
@@ -1132,6 +1148,7 @@ public class NotesListFragment extends ListFragment implements
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		// Swap the new cursor in. (The framework will take care of closing the
 		// old cursor once we return.)
+		Log.d(TAG, "onLoadFinished");
 
 		mAdapter.swapCursor(data);
 
@@ -1157,6 +1174,7 @@ public class NotesListFragment extends ListFragment implements
 		// This is called when the last Cursor provided to onLoadFinished()
 		// above is about to be closed. We need to make sure we are no
 		// longer using it.
+		Log.d(TAG, "onLoaderReset");
 		mAdapter.swapCursor(null);
 	}
 

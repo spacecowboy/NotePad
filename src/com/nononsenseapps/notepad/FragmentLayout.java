@@ -44,7 +44,7 @@ public class FragmentLayout extends Activity implements
 		LoaderManager.LoaderCallbacks<Cursor> {
 	private static final String TAG = "FragmentLayout";
 	// public static boolean lightTheme = false;
-	public static String currentTheme = NotesPreferenceFragment.THEME_LIGHT;
+	public static String currentTheme = NotesPreferenceFragment.THEME_DARK;
 	public static boolean shouldRestart = false;
 	public static boolean LANDSCAPE_MODE;
 	public static boolean AT_LEAST_ICS;
@@ -52,7 +52,7 @@ public class FragmentLayout extends Activity implements
 
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
 
-	private Refresher list;
+	private NotesListFragment list;
 	
 	private SimpleCursorAdapter mSpinnerAdapter;
 	private long currentList;
@@ -151,7 +151,7 @@ public class FragmentLayout extends Activity implements
 		// false);
 
 		currentTheme = prefs.getString(NotesPreferenceFragment.KEY_THEME,
-				NotesPreferenceFragment.THEME_LIGHT);
+				NotesPreferenceFragment.THEME_DARK);
 
 		setTypeOfTheme();
 
@@ -465,11 +465,12 @@ public class FragmentLayout extends Activity implements
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 		// TODO Auto-generated method stub
-		Log.d(TAG, "onNavigationItemSelected");
+		Log.d(TAG, "onNavigationItemSelected pos: " + itemPosition + " id: " + itemId);
 
 		// Change the active list
 		currentList = itemId;
-		// Display list
+		// Display list'
+		list.showList(itemId);
 		return true;
 	}
 

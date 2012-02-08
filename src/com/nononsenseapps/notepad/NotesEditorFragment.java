@@ -30,6 +30,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.text.format.Time;
+import android.text.method.KeyListener;
 import android.util.Log;
 import android.util.TimeFormatException;
 import android.view.KeyEvent;
@@ -75,6 +76,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	// Argument keys
 	public static final String KEYID = "noteid";
+	public static final String LISTID = "listid";
 
 	// This Activity can be started by more than one action. Each action is
 	// represented
@@ -85,6 +87,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	protected static final int DATE_DIALOG_ID = 999;
 	private static final String TAG = "NotesEditorFragment";
+	
 
 	// These fields are strictly used for the date picker dialog. They should
 	// not be used to get the notes due date!
@@ -108,6 +111,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private boolean doSave = true;
 
 	private long id = -1;
+	private long listId = -1;
 
 	private boolean timeToDie;
 
@@ -124,7 +128,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private boolean mOriginalDueState;
 	private boolean opened = false;
 	private NoteWatcher watcher;
-	public boolean selfAction = false;;
+	public boolean selfAction = false;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -140,13 +144,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 * Create a new instance of DetailsFragment, initialized to show the text at
 	 * 'index'.
 	 */
-	public static NotesEditorFragment newInstance(long id) {
+	public static NotesEditorFragment newInstance(long id, long listId) {
 		NotesEditorFragment f = new NotesEditorFragment();
 
 		// Supply index input as an argument.
 		Log.d("NotesEditorFragment", "Creating Fragment, args: " + id);
 		Bundle args = new Bundle();
 		args.putLong(KEYID, id);
+		args.putLong(LISTID, listId);
 		f.setArguments(args);
 
 		return f;
@@ -179,8 +184,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mState = STATE_INSERT;
 
 			Log.d("InsertError", "openNote");
+			ContentValues values = new ContentValues();
+			// Must always include list
+			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
 			mUri = activity.getContentResolver().insert(
-					NotePad.Notes.CONTENT_URI, null);
+					NotePad.Notes.CONTENT_URI, values);
 			Log.d("NotesEditorFragment",
 					"Inserting new note, uri = " + mUri.toString());
 			/*
@@ -277,6 +285,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			// This puts the desired notes text into the map.
 			values.put(NotePad.Notes.COLUMN_NAME_NOTE, text);
+			
+			// Add list
+			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
 
 			// Put the due-date in
 			if (dueDateSet) {
@@ -394,12 +405,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		// To get the call back to add items to the menu
 		setHasOptionsMenu(true);
 
-		if (getArguments() != null && getArguments().containsKey(KEYID)) {
+		if (getArguments() != null && getArguments().containsKey(KEYID) && getArguments().containsKey(LISTID)) {
 			id = getArguments().getLong(KEYID);
+			listId = getArguments().getLong(LISTID);
 			mState = STATE_EDIT; // This will be overwritten later, just want to
 									// be sure its not "unclear"
 		} else {
 			id = -1;
+			listId = -1;
 			mState = STATE_UNCLEAR; // Will NOT be overwritten
 		}
 
@@ -690,15 +703,18 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 * Will save existing note (except if empty new note)
 	 * 
 	 * @param id
+	 * @param mCurListId 
 	 */
-	public void displayNote(long id) {
+	public void displayNote(long id, long listid) {
 		Log.d("NotesEditorFragment", "Display note: " + id);
 
+		// TODO make the fragment be a progress bar like the list here until it is opened
 		saveNote();
 		doSave = true;
 		clearFields();
 		mState = STATE_EDIT;
 		this.id = id;
+		this.listId = listid;
 		Log.d("insertError", "displayNote");
 		openNote(null);
 	}
@@ -1014,12 +1030,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// Check the database if the list has any notes already
 
 			// No notes existed in the database. We'll have to insert a new one.
+			
+			//TODO think this through. Must have a valid list id and that can only come externally
 
-			mState = STATE_INSERT;
-
-			Log.d("InsertError", "onCreateLoader");
-			mUri = activity.getContentResolver().insert(
-					NotePad.Notes.CONTENT_URI, null);
+//			mState = STATE_INSERT;
+//
+//			Log.d("InsertError", "onCreateLoader");
+//			mUri = activity.getContentResolver().insert(
+//					NotePad.Notes.CONTENT_URI, null);
 
 		}
 
