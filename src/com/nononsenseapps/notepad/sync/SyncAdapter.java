@@ -56,8 +56,8 @@ import java.util.List;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 	private static final String TAG = "SyncAdapter";
-	public static final String AUTH_TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/tasks";
-	//public static final String AUTH_TOKEN_TYPE = "Manage your tasks"; // Alias for above
+	//public static final String AUTH_TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/tasks";
+	public static final String AUTH_TOKEN_TYPE = "Manage your tasks"; // Alias for above
 	private static final String SYNC_MARKER_KEY = "com.nononsenseapps.notepad.sync.marker";
 	public static final boolean NOTIFY_AUTH_FAILURE = false;
 
@@ -120,10 +120,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 //				for (GoogleTask task: modifiedTasks) {
 //					dbTalker.SaveToDatabase(task);
 //				}
-//				modifiedLists = apiTalker.getModifiedLists("ETAG here");
-//				for (GoogleTaskList list: modifiedLists) {
-//					dbTalker.SaveToDatabase(list);
-//				}
+				for (GoogleTaskList list: apiTalker.getModifiedLists(dbTalker.getAllLists())) {
+					Log.d(TAG, "Saving modified: " + list.toJSON());
+					dbTalker.SaveToDatabase(list);
+				}
 				
 				// Erase deleted stuff
 				//dbTalker.clearDeleted();
@@ -182,8 +182,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 	}
 
 	private void handleConflict(GoogleDBTalker dbTalker,
-			GoogleAPITalker apiTalker, GoogleTaskList localList) throws ClientProtocolException, JSONException, PreconditionException, NotModifiedException, IOException {
-		GoogleTaskList remoteList = apiTalker.getList(localList.id);
+			GoogleAPITalker apiTalker, GoogleTaskList localList) throws ClientProtocolException, JSONException, PreconditionException, NotModifiedException, IOException, RemoteException {
+		localList.etag = null; // Set this to null so we dont do any if-none-match gets
+		GoogleTaskList remoteList = apiTalker.getList(localList);
 		// Last updated one wins
 		Time local = new Time();
 		local.parse3339(localList.updated);

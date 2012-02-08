@@ -21,6 +21,8 @@ public class GoogleTaskList {
 	// public String selfLink = null;
 	public JSONObject json = null;
 	public String updated = null;
+	
+	public boolean didRemoteInsert = false;
 
 	// private GoogleAPITalker api;
 
@@ -28,9 +30,12 @@ public class GoogleTaskList {
 		// this.api = ;
 
 		id = jsonList.getString("id");
-		etag = jsonList.getString("etag");
 		title = jsonList.getString("title");
 		updated = jsonList.getString("updated");
+		
+		// Inital listing of lists does not contain etags
+		if (jsonList.has("etag"))
+			etag = jsonList.getString("etag");
 
 		json = jsonList;
 	}
@@ -66,8 +71,20 @@ public class GoogleTaskList {
 	}
 
 	public String toString() {
-		String res = "{\n" + "etag: " + etag + ",\n" + "id: " + id + ",\n"
-				+ "title: " + title + ",\n" + "dbId: " + dbId  + ",\n" + "updated: " + updated + ",\ndeleted: " + deleted + "}";
+		String res = "";
+		JSONObject json = new JSONObject();
+		try {
+			json.put("title", title);
+			json.put("id", id);
+			json.put("etag", etag);
+			json.put("dbid", dbId);
+			json.put("deleted", deleted);
+			json.put("updated", updated);
+		
+		res =  json.toString(2);
+		} catch (JSONException e) {
+			Log.d(TAG, e.getLocalizedMessage());
+		}
 		return res;
 	}
 
@@ -76,14 +93,22 @@ public class GoogleTaskList {
 	 * and id if not null
 	 * 
 	 * @return
+	 * @throws JSONException 
 	 */
 	public String toJSON() {
-		String jsonBody = "{ \"title\": \"" + title + "\"";
+		JSONObject json = new JSONObject();
+		try {
+			json.put("title", title);
+		
 		if (id != null)
-			jsonBody += ", \"id\": \"" + id + "\"";
-		jsonBody += "}";
-		Log.d(TAG, jsonBody);
-		return jsonBody;
+			json.put("id", id);
+		
+		Log.d(TAG, json.toString(2));
+		} catch (JSONException e) {
+			Log.d(TAG, e.getLocalizedMessage());
+		}
+		
+		return json.toString();
 	}
 	
 	/**

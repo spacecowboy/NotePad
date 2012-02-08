@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.NotePadProvider;
 
 /**
  * Helper class which talks to the database and converts the responses into Task
@@ -101,6 +102,7 @@ public class GoogleDBTalker {
 				list.deleted = cursor.getInt(cursor.getColumnIndex(NotePad.Lists.COLUMN_NAME_DELETED));
 				
 				// get etag and remote id
+				Log.d(TAG, "Getting remote info: " + NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS " + list.dbId + " AND " +  NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT + " IS '" + accountName + "'");
 				Cursor remoteCursor = provider.query(NotePad.GTaskLists.CONTENT_URI,
 						GTASKLIST_PROJECTION, NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS " + list.dbId + " AND " +  NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT + " IS '" + accountName + "'", null, null);
 				
@@ -140,7 +142,10 @@ public class GoogleDBTalker {
 		}
 		else {
 			provider.update(Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE, Long.toString(result.dbId)), result.toListsContentValues(0), null, null);
-			provider.update(NotePad.GTaskLists.CONTENT_URI, result.toGTaskListsContentValues(accountName), NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS " + result.dbId + " AND " + NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT + " IS '" + accountName + "'", null);
+			if (result.didRemoteInsert)
+				provider.insert(NotePad.GTaskLists.CONTENT_URI, result.toGTaskListsContentValues(accountName));
+			else
+				provider.update(NotePad.GTaskLists.CONTENT_URI, result.toGTaskListsContentValues(accountName), NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS " + result.dbId + " AND " + NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT + " IS '" + accountName + "'", null);
 		}
 	}
 
@@ -173,15 +178,28 @@ public class GoogleDBTalker {
 	 * update it. If it can not find it in the db, it will insert it.
 	 * 
 	 * Will clear the modified flag.
+	 * @throws RemoteException 
 	 */
-	public void SaveToDatabase(GoogleTaskList list) {
-		// if exists
-		syncResult.stats.numUpdates++;
-		// else
-		syncResult.stats.numInserts++;
-
-		syncResult.stats.numEntries++;
-		// TODO
+	public void SaveToDatabase(GoogleTaskList list) throws RemoteException {
+		// Remember to do both Lists and GTASKLists tables
+		if (list.dbId > -1 && list.deleted != 1) {
+			Log.d(TAG, "Updating list");
+			provider.update(Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE, Long.toString(list.dbId)), list.toListsContentValues(0), null, null);
+			provider.update(NotePad.GTaskLists.CONTENT_URI, list.toGTaskListsContentValues(accountName), NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS " + list.dbId + " AND " + NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT + " IS '" + accountName + "'", null);
+			syncResult.stats.numUpdates++;
+		} else if (list.dbId > -1 && list.deleted == 1) {
+			// TODO sort this out. API doesnt support retrieval of deleted lists
+			syncResult.stats.numDeletes++;
+		} else {
+			Log.d(TAG, "Inserting list");
+			Uri newUri = provider.insert(NotePad.Lists.CONTENT_URI, list.toListsContentValues(0));
+			long newId = Long.parseLong(newUri.getPathSegments().get(NotePad.Lists.ID_PATH_POSITION));
+			// Set the id we just got in the other table
+			list.dbId = newId;
+			provider.insert(NotePad.GTaskLists.CONTENT_URI, list.toGTaskListsContentValues(accountName));
+			
+			syncResult.stats.numInserts++;
+		}
 	}
 
 	/**
