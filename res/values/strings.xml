@@ -16,7 +16,6 @@
 
 <resources>
     <string name="app_name">Notes</string>
-    <string name="live_folder_name">Notes</string>
 
     <string name="title_create">New note</string>
     <string name="title_edit">Edit: %1$s</string>
@@ -26,11 +25,12 @@
     <string name="menu_revert">Revert changes</string>
     <string name="menu_copy">Copy note</string>
     <string name="menu_cancel">Cancel</string>
-    <string name="menu_setcompleted">Mark as done</string>
-    <string name="menu_setuncompleted">Mark as not done</string>
-    <string name="menu_move_to_list">Move to list</string>
+    <string name="menu_setcompleted">Set done</string>
+    <string name="menu_setuncompleted">Set not done</string>
     <string name="menu_deletelist">Delete list</string>
-    <string name="menu_sync">Sync</string>
+    <string name="menu_sync">Refresh</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_preferences">Settings</string>
     
     <string name="delete_list_warning">Are you sure you want to delete the list? The list will be permanently deleted.</string>
     
@@ -42,12 +42,10 @@
 
     <string name="error_title">Error</string>
     <string name="error_message">Error loading note</string>
-    <string name="menu_share">Share</string>
     
     <string name="search_hint">Search</string>
     <string name="settings_theme">Current theme</string>
     <string name="settings_theme_dialog">Use theme</string>
-    <string name="menu_preferences">Settings</string>
     <string name="settings_cat_theme">Theme</string>
     <string name="settings_cat_sorting">Sorting</string>
     <string name="settings_sorting_type">Sorting on</string>
@@ -77,7 +75,7 @@
     <string name="monospace">Monospace</string>
     <string name="sans">Sans</string>
     <string name="serif">Serif</string>
-    <string name="settings_sync_freq_title">Sync interval</string>
+    <string name="settings_sync_freq_title">Sync frequency</string>
     <string name="settings_account_title">Select an account</string>
     <string name="settings_account_summary">Click to switch account</string>
     <string name="settings_sync_enable_title">Sync with Google Tasks</string>
