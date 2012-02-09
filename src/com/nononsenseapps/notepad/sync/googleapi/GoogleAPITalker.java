@@ -560,7 +560,13 @@ public class GoogleAPITalker {
 					"Etags don't match, can not perform update. Resolv the conflict then update without etag");
 		} else if (response.getStatusLine().getStatusCode() == 304) {
 			throw new NotModifiedException();
-		} else {
+		} else if (response.getStatusLine().getStatusCode() == 400) {
+			// This happens if you try to delete the default list.
+			// Resolv it by considering the delete successful. List will still exist on server, but all tasks will be deleted from it.
+			// A successful delete returns an empty response.
+			return "";
+		}
+		else {
 
 			try {
 				in = new BufferedReader(new InputStreamReader(response
