@@ -108,7 +108,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private String mOriginalTitle;
 	private String mOriginalDueDate;
 
-	private boolean doSave = true;
+	private boolean doSave = false;
 
 	private long id = -1;
 	private long listId = -1;
@@ -172,6 +172,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private void openNote(Bundle savedInstanceState) {
 		Log.d("NotesEditorFragment", "OpenNOTe: Id is " + id);
 		selfAction = false;
+		doSave = true;
 		opened = true;
 		if (id != -1) {
 			// Existing note
@@ -382,13 +383,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		}
 	}
 
-	private void clearFields() {
-		mText.setText("");
-		mTitle.setText("");
-		mDueDate.setText("");
-		dueDateSet = false;
-	}
-
 	private void copyText(String text) {
 		ClipboardManager clipboard = (ClipboardManager) activity
 				.getSystemService(Context.CLIPBOARD_SERVICE);
@@ -536,12 +530,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		if (timeToDie) {
 			Log.d("NotesEditorFragment",
 					"onActivityCreated, but it is time to die so doing nothing...");
-		} else if (saves != null || mState != STATE_UNCLEAR) {
-			// TODO if this is created from xml, we should load the first note
-			// we can find or display a new note.
-			// find first note through: SELECT * FROM Table_Name LIMIT 1;
-			// Use the same select statement the list is using
-			Log.d("InsertError", "onActivityCreated Editor");
+		} else if (saves != null) {
 			openNote(saves);
 		}
 	}
@@ -684,18 +673,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				Log.d("InsertError", "onResume Editor");
 				openNote(null);
 			}
-			// Redisplay from database. If a new note was showing, that was
-			// deleted in onPause. Then the state was changed back to insert
-			// if (mState == STATE_INSERT)
-			// openNote(null);
-			// TODO delete
-			// Closed with new note being only note. That was deleted. Requery
-			// and
-			// start new note.
-			// if (mCursor == null || mCursor.isClosed()) {
-			// openNote(null);
-			// }
-			// showTheNote();
 		}
 	}
 
@@ -709,9 +686,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		Log.d("NotesEditorFragment", "Display note: " + id);
 
 		// TODO make the fragment be a progress bar like the list here until it is opened
+		// Not sure if it is necessary with the fixes to selfAction.
+		// If i'm going to do it, use a ViewSwitcher
 		saveNote();
 		doSave = true;
-		clearFields();
+		selfAction = false;
 		mState = STATE_EDIT;
 		this.id = id;
 		this.listId = listid;
@@ -758,7 +737,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			String title = mCursor.getString(colTitleIndex);
 			if (!title.equals(getString(android.R.string.untitled))) {
 				mTitle.setText(title);
+			} else {
+				mTitle.setText("");
 			}
+
+			
 			// Gets the note text from the Cursor and puts it in the TextView,
 			// but doesn't change
 			// the text cursor's position. setTextKeepState
@@ -800,10 +783,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				mOriginalTitle = title;
 			}
 
-			// TODO
-			// Set share intent on action provider in ICS
-			// setActionShareIntent();
-
 			// Request focus, will not open keyboard
 			if (FragmentLayout.LANDSCAPE_MODE) {
 				activity.findViewById(R.id.noteBox).requestFocus();
@@ -814,13 +793,15 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			 * an error in the note.
 			 */
 		} else {
-			// TODO This can actually happen if we call openNote from contentChangedListener,
-			// and note was deleted by the listview (or server). Might not be nice to display
-			// error message then.
+			// This WILL happen if the note is deleted by the server.
 			doSave = false;
+			selfAction = false;
 			if (mText != null)
 				mText.setText(getText(R.string.error_message));
 		}
+		
+		// Regardless, set the share intent
+		setActionShareIntent();
 	}
 
 	/**
@@ -872,10 +853,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	}
 
 	private void saveNote() {
+		selfAction  = true; // Don't try to reload the note
 		if (doSave && mText != null && mTitle != null) {
 			Log.d("NotesEditorFragment", "Saving/Deleting Note");
-			
-			selfAction  = true;
 
 			// Get the current note text.
 			String text = mText.getText().toString();
@@ -921,8 +901,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	/**
 	 * Prevents this Fragment from saving the note on exit
 	 */
-	public void setNoSave() {
-		doSave = false;
+	public void setSelfAction() {
+		selfAction = true;
 	}
 
 	private void setActionShareIntent() {
@@ -1080,7 +1060,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		@Override
 		public boolean deliverSelfNotifications() {
-			return true;
+			return false;
 		}
 
 		@Override
@@ -1091,6 +1071,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			Log.d("insertError", "MyContentObserver.onChange( " + editor.selfAction + ")");
 			if (!editor.selfAction)
 				editor.openNote(null);
+			// Only one event is allowed to be ignored
+			editor.selfAction = false;
 		}
 
 	}
