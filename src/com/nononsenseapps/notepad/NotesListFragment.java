@@ -21,6 +21,8 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.SyncStatusObserver;
 import android.database.Cursor;
 import android.net.Uri;
@@ -54,7 +56,7 @@ import android.widget.Toast;
 public class NotesListFragment extends ListFragment implements
 		SearchView.OnQueryTextListener, OnItemLongClickListener,
 		OnNoteOpenedListener, OnModalDeleteListener, Refresher,
-		LoaderManager.LoaderCallbacks<Cursor> {
+		LoaderManager.LoaderCallbacks<Cursor>, OnSharedPreferenceChangeListener {
 	private int mCurCheckPosition = 0;
 
 	private static final String[] PROJECTION = new String[] {
@@ -208,7 +210,8 @@ public class NotesListFragment extends ListFragment implements
 		} else {
 			currentState = STATE_EXISTING_NOTE;
 			if (mCurId < 0) {
-				// Came from portrait mode where a new note was created. Select first instead.
+				// Came from portrait mode where a new note was created. Select
+				// first instead.
 				mCurCheckPosition = 0;
 			}
 			Log.d("NotesListFragment", "Setting data not empty first: "
@@ -302,8 +305,10 @@ public class NotesListFragment extends ListFragment implements
 				// Don't start a new sync if one is already going
 				if (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) {
 					Bundle options = new Bundle();
-					// This will force a sync regardless of what the setting is in
-					// accounts manager. Only use it here where the user has manually
+					// This will force a sync regardless of what the setting is
+					// in
+					// accounts manager. Only use it here where the user has
+					// manually
 					// desired a sync to happen NOW.
 					options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
 					ContentResolver.requestSync(account, NotePad.AUTHORITY,
@@ -327,6 +332,10 @@ public class NotesListFragment extends ListFragment implements
 
 		// To get the call back to add items to the menu
 		setHasOptionsMenu(true);
+
+		// Listen to changes to sort order
+		PreferenceManager.getDefaultSharedPreferences(activity)
+				.registerOnSharedPreferenceChangeListener(this);
 
 		if (FragmentLayout.AT_LEAST_ICS) {
 			// Share action provider
@@ -473,7 +482,7 @@ public class NotesListFragment extends ListFragment implements
 					intent.setClass(activity, NotesEditorActivity.class);
 					intent.putExtra(NotesEditorFragment.KEYID, mCurId);
 					intent.putExtra(NotesEditorFragment.LISTID, mCurListId);
-					
+
 					startActivity(intent);
 				}
 			}
@@ -665,13 +674,13 @@ public class NotesListFragment extends ListFragment implements
 		// Re list if a new note was created.
 
 		mCurId = id;
-		//if (created) {
-		//	mCurCheckPosition = getPosOfId(id);
-		//	selectPos(mCurCheckPosition);
-		//} else {
-			mCurCheckPosition = getPosOfId(id);
-			selectPos(mCurCheckPosition);
-		//}
+		// if (created) {
+		// mCurCheckPosition = getPosOfId(id);
+		// selectPos(mCurCheckPosition);
+		// } else {
+		mCurCheckPosition = getPosOfId(id);
+		selectPos(mCurCheckPosition);
+		// }
 	}
 
 	public void setRefreshActionItemState(boolean refreshing) {
@@ -777,13 +786,14 @@ public class NotesListFragment extends ListFragment implements
 				if (due != null && !due.isEmpty()) {
 					Time date = new Time(Time.getCurrentTimezone());
 					date.parse3339(due);
-					
+
 					Calendar c = Calendar.getInstance();
 					c.setTimeInMillis(date.toMillis(false));
-					
+
 					note = note
 							+ "due date: "
-							+ DateFormat.format(NotesEditorFragment.DATEFORMAT_FORMAT, c)
+							+ DateFormat.format(
+									NotesEditorFragment.DATEFORMAT_FORMAT, c)
 							+ "\n";
 				}
 
@@ -1109,22 +1119,31 @@ public class NotesListFragment extends ListFragment implements
 		// This is called when a new Loader needs to be created. This
 		// sample only has one Loader, so we don't care about the ID.
 		Uri baseUri = NotePad.Notes.CONTENT_URI;
+
+		// Get current sort order or assemble the default one.
+		String sortOrder = PreferenceManager.getDefaultSharedPreferences(
+				activity).getString(NotesPreferenceFragment.KEY_SORT_TYPE,
+				NotePad.Notes.DEFAULT_SORT_TYPE)
+				+ " "
+				+ PreferenceManager.getDefaultSharedPreferences(activity)
+						.getString(NotesPreferenceFragment.KEY_SORT_ORDER,
+								NotePad.Notes.DEFAULT_SORT_ORDERING);
+
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
 
 		return new CursorLoader(activity, baseUri, PROJECTION, // Return
-																	// the note
-																	// ID and
-																	// title for
-																	// each
-																	// note.
+																// the note
+																// ID and
+																// title for
+																// each
+																// note.
 				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
 						+ NotePad.Notes.COLUMN_NAME_LIST + " IS " + mCurListId, // return
 				// un-deleted
 				// records.
 				null, // No where clause, therefore no where column values.
-				NotePad.Notes.SORT_ORDER // Use the default sort order.
-		);
+				sortOrder);
 	}
 
 	private CursorLoader getSearchNotesLoader() {
@@ -1133,28 +1152,26 @@ public class NotesListFragment extends ListFragment implements
 		Uri baseUri = NotePad.Notes.CONTENT_URI;
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
-		
+
 		// Get current sort order or assemble the default one.
 		String sortOrder = PreferenceManager.getDefaultSharedPreferences(
-				activity).getString(NotesPreferenceFragment.KEY_SORT_TYPE, NotePad.Notes.DEFAULT_SORT_TYPE) + " " + 
-				PreferenceManager.getDefaultSharedPreferences(
-						activity).getString(NotesPreferenceFragment.KEY_SORT_ORDER, NotePad.Notes.DEFAULT_SORT_ORDERING);
+				activity).getString(NotesPreferenceFragment.KEY_SORT_TYPE,
+				NotePad.Notes.DEFAULT_SORT_TYPE)
+				+ " "
+				+ PreferenceManager.getDefaultSharedPreferences(activity)
+						.getString(NotesPreferenceFragment.KEY_SORT_ORDER,
+								NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 		// TODO include title field in search
-		// I am not restricting the lists on purpose here. Search should be global
+		// I am not restricting the lists on purpose here. Search should be
+		// global
 		return new CursorLoader(activity, baseUri, PROJECTION,
 				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
-						//+ NotePad.Notes.COLUMN_NAME_LIST + " IS " + mCurListId
-						+ " AND " + NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?", // Where
-				// the
-				// note
-				// contains the
-				// query
+						+ NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?",
 				new String[] { "%" + currentQuery + "%" }, // We don't care how
 															// it occurs in the
 															// note
-				sortOrder
-		);
+				sortOrder);
 	}
 
 	@Override
@@ -1199,5 +1216,33 @@ public class NotesListFragment extends ListFragment implements
 		// longer using it.
 		Log.d(TAG, "onLoaderReset");
 		mAdapter.swapCursor(null);
+	}
+
+	/**
+	 * Re list notes when sorting changes
+	 * 
+	 */
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
+		try {
+			if (activity.isFinishing()) {
+				Log.d(TAG, "isFinishing, should not update");
+				// Setting the summary now would crash it with
+				// IllegalStateException since we are not attached to a view
+			} else {
+				if (NotesPreferenceFragment.KEY_SORT_TYPE.equals(key)
+						|| NotesPreferenceFragment.KEY_SORT_ORDER.equals(key)) {
+					getLoaderManager().restartLoader(0, null, this);
+				}
+			}
+		} catch (IllegalStateException e) {
+			// This is just in case the "isFinishing" wouldn't be enough
+			// The isFinishing will try to prevent us from doing something
+			// stupid
+			// This catch prevents the app from crashing if we do something
+			// stupid
+			Log.d(TAG, "Exception was caught: " + e.getMessage());
+		}
 	}
 }
