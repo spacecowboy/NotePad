@@ -13,6 +13,7 @@ import android.app.FragmentTransaction;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
+import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
@@ -513,7 +514,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			float size = PreferenceManager.getDefaultSharedPreferences(
 					activity).getInt(
 					NotesPreferenceFragment.KEY_FONT_SIZE_EDITOR,
-					R.integer.default_editor_font_size);
+					getResources().getInteger(R.integer.default_editor_font_size));
 			Typeface tf = TextPreviewPreference.getTypeface(PreferenceManager
 					.getDefaultSharedPreferences(activity).getString(
 							NotesPreferenceFragment.KEY_FONT_TYPE_EDITOR,
