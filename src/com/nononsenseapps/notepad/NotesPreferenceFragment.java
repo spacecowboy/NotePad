@@ -213,6 +213,8 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 			ContentResolver.setIsSyncable(
 					getAccount(AccountManager.get(activity), accountName),
 					NotePad.AUTHORITY, 1);
+			// Also set sync frequency
+			setSyncInterval(sharedPreferences);
 		} else {
 			// set unsyncable
 			ContentResolver.setIsSyncable(
