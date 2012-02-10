@@ -93,22 +93,37 @@ public class GoogleAPITalker {
 
 	}
 
-	protected static final String APIKEY = "AIzaSyBCQyr-OSPQsMwU2tyCIKZG86Wb3WM1upw";// jonas@kalderstam.se
-	protected static final String AUTH_URL_END = "key=" + APIKEY;
-	protected static final String BASE_URL = "https://www.googleapis.com/tasks/v1/users/@me/lists";
-	protected static final String BASE_LIST = BASE_URL + "/";
-	// protected static final String LISTS = "/lists";
-	protected static final String TASKS = "/tasks"; // Must be preceeded by
-													// list-id
+	public static final String APIKEY = "AIzaSyBCQyr-OSPQsMwU2tyCIKZG86Wb3WM1upw";// jonas@kalderstam.se
+	public static final String AUTH_URL_END = "key=" + APIKEY;
+	public static final String BASE_URL = "https://www.googleapis.com/tasks/v1/users/@me/lists";
+	public static final String ALL_LISTS = BASE_URL + "?" + AUTH_URL_END;
+	public static String ListURL(String id) {
+		return BASE_URL + "/" + id + "?"+ AUTH_URL_END;
+	}
+	// public static final String LISTS = "/lists";
+	public static final String TASKS = "/tasks"; // Must be preceeded by
+				
+	// only retrieve the fields we will save in the database or use
+	//https://www.googleapis.com/tasks/v1/lists/MDIwMzMwNjA0MjM5MzQ4MzIzMjU6MDow/tasks?showDeleted=true&showHidden=true&pp=1&key={YOUR_API_KEY}
+	//updatedMin=2012-02-07T14%3A59%3A05.000Z
+	public static String AllTasks(String listId) {
+		return BASE_URL + "/" + listId + TASKS + "?"+ "showDeleted=true&showHidden=true&" + AUTH_URL_END;
+	}
+	public static String TaskURL(String taskId, String listId) {
+		return BASE_URL + "/" + listId + TASKS + "/" + taskId + "?"+ AUTH_URL_END;
+	}
+	// Tasks URL which inludes deleted tasks: /tasks?showDeleted=true
+	// Also do showHidden=true?
+	// Tasks returnerd will have deleted = true or no deleted field at all. Same case for hidden.
 	private static final String TAG = "GoogleAPITalker";
 
 	// A URL is alwasy constructed as: BASE_URL + ["/" + LISTID [+ TASKS [+ "/"
 	// + TASKID]]] + "?" + [POSSIBLE FIELDS + "&"] + AUTH_URL_END
 	// Where each enclosing parenthesis is optional
 
-	protected String authToken;
+	public String authToken;
 
-	protected HttpClient client;
+	public HttpClient client;
 
 	private static GoogleAPITalker instance;
 
@@ -186,9 +201,9 @@ public class GoogleAPITalker {
 	private ArrayList<GoogleTaskList> getListOfLists() throws ClientProtocolException, JSONException, IOException {
 		ArrayList<GoogleTaskList> list = new ArrayList<GoogleTaskList>();
 
-		HttpGet httpget = new HttpGet(BASE_URL + "?" + AUTH_URL_END);
+		HttpGet httpget = new HttpGet(ALL_LISTS);
 		httpget.setHeader("Authorization", "OAuth " + authToken);
-		Log.d(TAG, "request: " + BASE_URL + "?" + AUTH_URL_END);
+		Log.d(TAG, "request: " + ALL_LISTS);
 
 		JSONObject jsonResponse;
 		try {
@@ -230,11 +245,10 @@ public class GoogleAPITalker {
 	public GoogleTaskList getList(GoogleTaskList gimpedList)
 			throws ClientProtocolException, JSONException, NotModifiedException, IOException {
 		GoogleTaskList result = null;
-		HttpGet httpget = new HttpGet(BASE_URL + "/" + gimpedList.id + "?"
-				+ AUTH_URL_END);
+		HttpGet httpget = new HttpGet(ListURL(gimpedList.id));
 		setAuthHeader(httpget);
 		setHeaderWeakEtag(httpget, gimpedList.etag);
-		Log.d(TAG, "request: " + BASE_URL + "?" + AUTH_URL_END);
+		Log.d(TAG, "request: " + ListURL(gimpedList.id));
 
 		JSONObject jsonResponse;
 		try {
@@ -250,13 +264,14 @@ public class GoogleAPITalker {
 		return result;
 	}
 
-	// TODO fix this comment to what works
 	/**
-	 * Because Google Tasks API does not return etags for every list, 
-	 * we'll have to check each individually.
-	 * @throws IOException 
-	 * @throws NotModifiedException 
-	 * @throws PreconditionException 
+	 * Because Google Tasks API does not return etags in its list of lists, we'll have to download each individually.
+	 * Use our local lists' etags to only download lists which have changed (and new ones of course).
+	 * 
+	 * Also, because the API does not support deleted flags on lists, we have to compare with the local list to find 
+	 * missing (deleted) lists.
+	 * 
+	 * @throws IOException
 	 * @throws JSONException 
 	 * @throws ClientProtocolException 
 	 * 
@@ -342,17 +357,17 @@ public class GoogleAPITalker {
 			NotModifiedException, IOException {
 		HttpUriRequest httppost;
 		if (list.id != null) {
-			Log.d(TAG, "ID is not NULL!! " + BASE_LIST + list.id + "?"
-					+ AUTH_URL_END);
+			Log.d(TAG, "ID is not NULL!! " + ListURL(list.id));
 			if (list.deleted == 1) {
-				httppost = new HttpDelete(BASE_LIST + list.id + "?"
-						+ AUTH_URL_END);
+				httppost = new HttpDelete(ListURL(list.id));
 			} else {
-				httppost = new HttpPut(BASE_LIST + list.id + "?" + AUTH_URL_END);
+				httppost = new HttpPost(ListURL(list.id));
+				// apache does not include PATCH requests, but we can force a post to be a PATCH request
+				httppost.setHeader("X-HTTP-Method-Override", "PATCH");
 			}
 		} else {
-			Log.d(TAG, "ID IS NULL: " + BASE_URL + "?" + AUTH_URL_END);
-			httppost = new HttpPost(BASE_URL + "?" + AUTH_URL_END);
+			Log.d(TAG, "ID IS NULL: " + ALL_LISTS);
+			httppost = new HttpPost(ALL_LISTS);
 			list.didRemoteInsert = true; // Need this later
 		}
 		setAuthHeader(httppost);
@@ -541,6 +556,9 @@ public class GoogleAPITalker {
 		return doc;
 	}
 
+	/**
+	 * Parses a httpresponse and returns the string body of it. Throws exceptions for select status codes.
+	 */
 	public static String parseResponse(HttpResponse response)
 			throws PreconditionException, NotModifiedException,
 			ClientProtocolException {
@@ -561,9 +579,12 @@ public class GoogleAPITalker {
 		} else if (response.getStatusLine().getStatusCode() == 304) {
 			throw new NotModifiedException();
 		} else if (response.getStatusLine().getStatusCode() == 400) {
+			// Warning: can happen for a legitimate case
 			// This happens if you try to delete the default list.
 			// Resolv it by considering the delete successful. List will still exist on server, but all tasks will be deleted from it.
 			// A successful delete returns an empty response.
+			// Make a log entry about it anyway though
+			Log.d(TAG, "Response was 400. Either we deleted the default list in app or did something really bad");
 			return "";
 		}
 		else {

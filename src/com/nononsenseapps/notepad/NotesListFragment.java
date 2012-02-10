@@ -56,7 +56,7 @@ public class NotesListFragment extends ListFragment implements
 		SearchView.OnQueryTextListener, OnItemLongClickListener,
 		OnNoteOpenedListener, OnModalDeleteListener, Refresher,
 		LoaderManager.LoaderCallbacks<Cursor> {
-	int mCurCheckPosition = 0;
+	private int mCurCheckPosition = 0;
 
 	private static final String[] PROJECTION = new String[] {
 			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
@@ -127,7 +127,7 @@ public class NotesListFragment extends ListFragment implements
 		super.onActivityCreated(savedInstanceState);
 
 		if (FragmentLayout.LANDSCAPE_MODE) {
-			// autoOpenNote = true;
+			autoOpenNote = true;
 			landscapeEditor = (NotesEditorFragment) getFragmentManager()
 					.findFragmentById(R.id.editor_container);
 			landscapeEditor.setOnNewNoteCreatedListener(this);
@@ -184,10 +184,6 @@ public class NotesListFragment extends ListFragment implements
 			mCurId = -1;
 		}
 
-		// Prepare the loader. Either re-connect with an existing one,
-		// or start a new one. Will list all notes
-		getLoaderManager().initLoader(0, null, this);
-
 		ContentResolver.addStatusChangeListener(
 				ContentResolver.SYNC_OBSERVER_TYPE_ACTIVE,
 				new SyncStatusObserver() {
@@ -210,14 +206,19 @@ public class NotesListFragment extends ListFragment implements
 			currentState = STATE_NEW_NOTE;
 			Log.d("NotesListFragment", "Setting data: " + mCurCheckPosition
 					+ ", " + mCurId);
+			// Create new note if necessary
+			showNote(mCurCheckPosition, true);
 		} else {
 			currentState = STATE_EXISTING_NOTE;
+			if (mCurId < 0) {
+				// Came from portrait mode where a new note was created. Select first instead.
+				mCurCheckPosition = 0;
+			}
 			Log.d("NotesListFragment", "Setting data not empty first: "
 					+ mCurCheckPosition + ", " + mCurId);
+			// Don't show new note
+			showNote(mCurCheckPosition, false);
 		}
-
-		// Create new note if necessary
-		showNote(mCurCheckPosition, true);
 	}
 
 	private void setupSearchView() {
@@ -379,9 +380,10 @@ public class NotesListFragment extends ListFragment implements
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		Log.d("NotesListFragment", "Clicked: " + position + ", " + id);
 		currentState = STATE_EXISTING_NOTE;
-		if (position != mCurCheckPosition || !FragmentLayout.LANDSCAPE_MODE) {
-			showNote(position, false);
-		}
+		// if (position != mCurCheckPosition || !FragmentLayout.LANDSCAPE_MODE)
+		// {
+		showNote(position, false);
+		// }
 		// Remove focus from search window
 		activity.findViewById(R.id.search_view).clearFocus();
 	}
@@ -470,6 +472,7 @@ public class NotesListFragment extends ListFragment implements
 					intent.setClass(activity, NotesEditorActivity.class);
 					intent.putExtra(NotesEditorFragment.KEYID, mCurId);
 					intent.putExtra(NotesEditorFragment.LISTID, mCurListId);
+					
 					startActivity(intent);
 				}
 			}
@@ -490,24 +493,27 @@ public class NotesListFragment extends ListFragment implements
 	 */
 	public void onDelete() {
 		Log.d(TAG, "onDelete");
-		if (onDeleteListener != null) {
-			// Tell fragment to delete the current note
-			onDeleteListener.onEditorDelete(mCurId);
-		}
-		if (FragmentLayout.LANDSCAPE_MODE) {
-			autoOpenNote = true;
-		}
-		currentState = STATE_LIST;
+		// Only do anything if id is valid!
+		if (mCurId > -1) {
+			if (onDeleteListener != null) {
+				// Tell fragment to delete the current note
+				onDeleteListener.onEditorDelete(mCurId);
+			}
+			if (FragmentLayout.LANDSCAPE_MODE) {
+				autoOpenNote = true;
+			}
+			currentState = STATE_LIST;
 
-		// reListNotes();
+			// reListNotes();
 
-		// TODO consider the recalculation bit
-		if (FragmentLayout.LANDSCAPE_MODE) {
-			// showNote(mCurCheckPosition, true);
-		} else {
-			// Get the id of the currently "selected" note
-			// This matters if we switch to landscape mode
-			reCalculateValidValuesAfterDelete();
+			// TODO consider the recalculation bit
+			if (FragmentLayout.LANDSCAPE_MODE) {
+				// showNote(mCurCheckPosition, true);
+			} else {
+				// Get the id of the currently "selected" note
+				// This matters if we switch to landscape mode
+				reCalculateValidValuesAfterDelete();
+			}
 		}
 	}
 
@@ -664,15 +670,15 @@ public class NotesListFragment extends ListFragment implements
 	public void onNoteOpened(long id, boolean created) {
 		Log.d(TAG, "onNoteOpened: id " + id + "created " + created);
 		// Re list if a new note was created.
-		// TODO is it necessary to relist them?
 
 		mCurId = id;
-		if (created) {
-			// reListNotes();
-		} else {
+		//if (created) {
+		//	mCurCheckPosition = getPosOfId(id);
+		//	selectPos(mCurCheckPosition);
+		//} else {
 			mCurCheckPosition = getPosOfId(id);
 			selectPos(mCurCheckPosition);
-		}
+		//}
 	}
 
 	public void setRefreshActionItemState(boolean refreshing) {
@@ -686,12 +692,17 @@ public class NotesListFragment extends ListFragment implements
 		}
 
 		final MenuItem refreshItem = mOptionsMenu.findItem(R.id.menu_sync);
-		Log.d(TAG, "setRefreshActionState: refreshItem not null? " + Boolean.toString(refreshItem != null));
+		Log.d(TAG,
+				"setRefreshActionState: refreshItem not null? "
+						+ Boolean.toString(refreshItem != null));
 		if (refreshItem != null) {
 			if (refreshing) {
-				Log.d(TAG, "setRefreshActionState: refreshing: " + Boolean.toString(refreshing));
+				Log.d(TAG,
+						"setRefreshActionState: refreshing: "
+								+ Boolean.toString(refreshing));
 				if (mRefreshIndeterminateProgressView == null) {
-					Log.d(TAG, "setRefreshActionState: mRefreshIndeterminateProgressView was null, inflating one...");
+					Log.d(TAG,
+							"setRefreshActionState: mRefreshIndeterminateProgressView was null, inflating one...");
 					LayoutInflater inflater = (LayoutInflater) activity
 							.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 					mRefreshIndeterminateProgressView = inflater.inflate(
@@ -1022,7 +1033,7 @@ public class NotesListFragment extends ListFragment implements
 
 	@Override
 	public void onNewNoteDeleted(long id) {
-		Log.d(TAG, "onNewNoteDeleted");
+		Log.d(TAG, "onNewNoteDeleted, should I do something?");
 		// reListNotes();
 		// reSelectId();
 	}
@@ -1089,11 +1100,11 @@ public class NotesListFragment extends ListFragment implements
 			showNote(mCurCheckPosition, true);
 		}
 	}
-	
+
 	public void showList(long id) {
 		Log.d(TAG, "showList id " + id);
 		mCurListId = id;
-		//getLoaderManager().initLoader(0, null, this);
+		// Will create one if necessary
 		getLoaderManager().restartLoader(0, null, this);
 	}
 
@@ -1103,16 +1114,17 @@ public class NotesListFragment extends ListFragment implements
 		Uri baseUri = NotePad.Notes.CONTENT_URI;
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
-		
+
 		return new CursorLoader(getActivity(), baseUri, PROJECTION, // Return
 																	// the note
 																	// ID and
 																	// title for
 																	// each
 																	// note.
-				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND " + NotePad.Notes.COLUMN_NAME_LIST + " IS " + mCurListId, // return
-																	// un-deleted
-																	// records.
+				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
+						+ NotePad.Notes.COLUMN_NAME_LIST + " IS " + mCurListId, // return
+				// un-deleted
+				// records.
 				null, // No where clause, therefore no where column values.
 				NotePad.Notes.SORT_ORDER // Use the default sort order.
 		);
@@ -1127,10 +1139,11 @@ public class NotesListFragment extends ListFragment implements
 
 		// TODO include title field in search
 		return new CursorLoader(getActivity(), baseUri, PROJECTION,
-				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND " + NotePad.Notes.COLUMN_NAME_LIST + " IS " + mCurListId
+				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
+						+ NotePad.Notes.COLUMN_NAME_LIST + " IS " + mCurListId
 						+ " AND " + NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?", // Where
-																		// the
-																		// note
+				// the
+				// note
 				// contains the
 				// query
 				new String[] { "%" + currentQuery + "%" }, // We don't care how
@@ -1169,10 +1182,10 @@ public class NotesListFragment extends ListFragment implements
 		if (autoOpenNote) {
 			autoOpenNote = false;
 			showFirstBestNote();
+		} else {
+			// Reselect current note in list, if possible
+			reSelectId();
 		}
-
-		// Reselect current note in list, if possible
-		reSelectId();
 	}
 
 	@Override

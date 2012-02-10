@@ -43,6 +43,7 @@ public class FragmentLayout extends Activity implements
 		DeleteActionListener, OnNavigationListener,
 		LoaderManager.LoaderCallbacks<Cursor> {
 	private static final String TAG = "FragmentLayout";
+	private static final String CURRENT_LIST = "currentlistid";
 	// public static boolean lightTheme = false;
 	public static String currentTheme = NotesPreferenceFragment.THEME_DARK;
 	public static boolean shouldRestart = false;
@@ -53,7 +54,7 @@ public class FragmentLayout extends Activity implements
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
 
 	private NotesListFragment list;
-	
+
 	private SimpleCursorAdapter mSpinnerAdapter;
 	private long currentList;
 
@@ -66,6 +67,12 @@ public class FragmentLayout extends Activity implements
 		AT_LEAST_ICS = getResources()
 				.getBoolean(R.bool.atLeastIceCreamSandwich);
 		AT_LEAST_HC = getResources().getBoolean(R.bool.atLeastHoneycomb);
+
+		if (savedInstanceState != null) {
+			// TODO this will get overwritten in the onNavigationClick callback.
+			// We don't want that
+			currentList = savedInstanceState.getLong(CURRENT_LIST);
+		}
 
 		// Setting theme here
 		readAndSetSettings();
@@ -101,6 +108,13 @@ public class FragmentLayout extends Activity implements
 		this.list = list;
 		// So editor can access it
 		ONDELETELISTENER = this;
+	}
+
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
+		// Save current list
+		outState.putLong(CURRENT_LIST, currentList);
 	}
 
 	@Override
@@ -209,6 +223,7 @@ public class FragmentLayout extends Activity implements
 	 */
 	public static class NotesEditorActivity extends Activity implements
 			OnNoteOpenedListener, DeleteActionListener {
+		private static final String TAG = "NotesEditorActivity";
 		private NotesEditorFragment editorFragment;
 		private long currentId = -1;
 
@@ -254,18 +269,23 @@ public class FragmentLayout extends Activity implements
 				return;
 			}
 
+			setContentView(R.layout.note_editor_activity);
+
 			this.currentId = getIntent().getExtras().getLong(
 					NotesEditorFragment.KEYID);
+			long listId = getIntent().getExtras().getLong(
+					NotesEditorFragment.LISTID);
 
 			Log.d("NotesEditorActivity", "Time to show the note!");
 			// if (savedInstanceState == null) {
 			// During initial setup, plug in the details fragment.
-			editorFragment = new NotesEditorFragment();
-			editorFragment.setOnNewNoteCreatedListener(this);
-			editorFragment.setArguments(getIntent().getExtras());
-			getFragmentManager().beginTransaction()
-					.replace(android.R.id.content, editorFragment).commit();
-			// }
+			// Set this as delete listener
+			editorFragment = (NotesEditorFragment) getFragmentManager()
+					.findFragmentById(R.id.portrait_editor);
+			if (editorFragment != null) {
+				editorFragment.setOnNewNoteCreatedListener(this);
+				editorFragment.setValues(currentId, listId);
+			}
 		}
 
 		@Override
@@ -302,7 +322,9 @@ public class FragmentLayout extends Activity implements
 		@Override
 		public void onResume() {
 			super.onResume();
+			Log.d("NotesEditorActivity", "onResume");
 			if (getResources().getBoolean(R.bool.useLandscapeView)) {
+				Log.d("NotesEditorActivity", "onResume, killing myself");
 				// Log.d("NotesEditorActivity",
 				// "onResume telling list to display me");
 				// SharedPreferences.Editor prefEditor = PreferenceManager
@@ -315,6 +337,7 @@ public class FragmentLayout extends Activity implements
 
 		@Override
 		public void onNoteOpened(long id, boolean created) {
+			Log.d(TAG, "onNoteOpened id: " + id);
 			this.currentId = id;
 		}
 
@@ -325,7 +348,9 @@ public class FragmentLayout extends Activity implements
 
 		@Override
 		public void onDeleteAction() {
-			editorFragment.setSelfAction(); // Don't try to reload the deleted note
+			Log.d(TAG, "onDeleteAction");
+			editorFragment.setSelfAction(); // Don't try to reload the deleted
+											// note
 			FragmentLayout.deleteNote(getContentResolver(), currentId);
 			setResult(Activity.RESULT_CANCELED);
 			finish();
@@ -343,9 +368,13 @@ public class FragmentLayout extends Activity implements
 	 * @param id
 	 */
 	public static void deleteNote(ContentResolver resolver, long id) {
-		ArrayList<Long> idList = new ArrayList<Long>();
-		idList.add(id);
-		deleteNotes(resolver, idList);
+		Log.d(TAG, "deleteNote: " + id);
+		// Only do this for valid id
+		if (id > -1) {
+			ArrayList<Long> idList = new ArrayList<Long>();
+			idList.add(id);
+			deleteNotes(resolver, idList);
+		}
 	}
 
 	/**
@@ -371,7 +400,7 @@ public class FragmentLayout extends Activity implements
 			NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
 					.findFragmentById(R.id.editor_container);
 			if (editor != null) {
-				editor.setNoSave();
+				editor.setSelfAction();
 			}
 		}
 		Log.d("FragmentLayout", "deleting notes...");
@@ -447,11 +476,8 @@ public class FragmentLayout extends Activity implements
 		// both list and editor should be notified
 		NotesListFragment list = (NotesListFragment) getFragmentManager()
 				.findFragmentById(R.id.noteslistfragment);
-		// NotesEditorFragment editor = (NotesEditorFragment)
-		// getFragmentManager()
-		// .findFragmentById(R.id.editor_container);
-		// TODO unnecessary to tell editor this, it already knows when it is
-		// deleted.
+		NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
+				.findFragmentById(R.id.editor_container);
 		if (editor != null)
 			editor.setSelfAction();
 		// delete note
@@ -462,7 +488,8 @@ public class FragmentLayout extends Activity implements
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 		// TODO Auto-generated method stub
-		Log.d(TAG, "onNavigationItemSelected pos: " + itemPosition + " id: " + itemId);
+		Log.d(TAG, "onNavigationItemSelected pos: " + itemPosition + " id: "
+				+ itemId);
 
 		// Change the active list
 		currentList = itemId;
@@ -483,9 +510,9 @@ public class FragmentLayout extends Activity implements
 
 		return new CursorLoader(this, baseUri, new String[] {
 				NotePad.Lists._ID, NotePad.Lists.COLUMN_NAME_TITLE },
-				NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1", // un-deleted records.
-				null,
-				NotePad.Lists.SORT_ORDER // Use the default sort order.
+				NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1", // un-deleted
+																	// records.
+				null, NotePad.Lists.SORT_ORDER // Use the default sort order.
 		);
 	}
 

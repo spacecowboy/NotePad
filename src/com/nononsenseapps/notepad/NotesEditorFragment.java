@@ -75,15 +75,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public static final String ORIGINAL_DUE_STATE = "origDueState";
 
 	// Argument keys
-	public static final String KEYID = "noteid";
-	public static final String LISTID = "listid";
+	public static final String KEYID = "com.nononsenseapps.notepad.NoteId";
+	public static final String LISTID = "com.nononsenseapps.notepad.ListId";
 
 	// This Activity can be started by more than one action. Each action is
 	// represented
 	// as a "state" constant
 	public static final int STATE_EDIT = 0;
 	public static final int STATE_INSERT = 1;
-	public static final int STATE_UNCLEAR = 2;
 
 	protected static final int DATE_DIALOG_ID = 999;
 	private static final String TAG = "NotesEditorFragment";
@@ -137,6 +136,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	}
 
 	public void setOnNewNoteCreatedListener(OnNoteOpenedListener listener) {
+		Log.d(TAG, "setOnNewNoteCreatedListener: " + listener.getClass());
 		this.onNoteOpenedListener = listener;
 	}
 
@@ -180,7 +180,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mUri = getUriFrom(id);
 			Log.d("NotesEditorFragment",
 					"Editing existing note, uri = " + mUri.toString());
-		} else if (mState != STATE_UNCLEAR) {
+		} else  {
 			// New note
 			mState = STATE_INSERT;
 
@@ -211,6 +211,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mOriginalTitle = savedInstanceState.getString(ORIGINAL_TITLE);
 			mOriginalDueState = savedInstanceState
 					.getBoolean(ORIGINAL_DUE_STATE);
+		} else {
+			// If null, will set to current values in showNote
+			mOriginalNote = null;
+			mOriginalDueDate = null;
+			mOriginalTitle = null;
+			mOriginalDueState = false;
 		}
 
 		// Prepare the loader. Either re-connect with an existing one,
@@ -251,7 +257,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		// Only updates if the text is different from original content
 		// Only compare dates if there actually is a previous date to compare
 		if (!hasNoteChanged()) {
-			Log.d("NotesEditorFragment", "Updating (not) note");
+			Log.d("NotesEditorFragment", "Note has not changed, won't save");
 			// Do Nothing in this case.
 		} else {
 			Log.d("NotesEditorFragment", "Updating note");
@@ -372,14 +378,15 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	/**
 	 * Take care of deleting a note. Simply deletes the entry.
+	 * Is only called when a new note was created and we are changing windows.
 	 */
 	private final void deleteNote() {
-		clearFields();
+		//clearFields();
 		if (mUri != null) {
 			Log.d("NotesEditorFragment", "Deleting note");
 			this.id = -1;
 			getActivity().getContentResolver().delete(mUri, null, null);
-			clearFields();
+			//clearFields();
 		}
 	}
 
@@ -398,16 +405,17 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		super.onCreate(savedInstanceState);
 		// To get the call back to add items to the menu
 		setHasOptionsMenu(true);
+		
+		Log.d("NotesEditorFragment", "Value: " + Boolean.toString(getArguments() != null && getArguments().containsKey(KEYID) && getArguments().containsKey(LISTID)));
 
 		if (getArguments() != null && getArguments().containsKey(KEYID) && getArguments().containsKey(LISTID)) {
+			Log.d(TAG, "Should never happen right");
 			id = getArguments().getLong(KEYID);
 			listId = getArguments().getLong(LISTID);
-			mState = STATE_EDIT; // This will be overwritten later, just want to
-									// be sure its not "unclear"
 		} else {
+			Log.d(TAG, "onCreate, no valid values in arguments");
 			id = -1;
 			listId = -1;
-			mState = STATE_UNCLEAR; // Will NOT be overwritten
 		}
 
 		noteDueDate = new Time(Time.getCurrentTimezone());
@@ -423,7 +431,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		// TODO delete this
+		//TODO delete this
 		if (container == null && false) {
 			// We have different layouts, and in one of them this
 			// fragment's containing frame doesn't exist. The fragment
@@ -439,9 +447,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		Log.d("NotesEditorFragment", "onCreateView");
 
 		int layout = R.layout.editor_layout;
-		// if (FragmentLayout.lightTheme) {
-		// layout = R.layout.note_editor_light;
-		// }
 
 		// Gets a handle to the EditText in the the layout.
 		ScrollView theView = (ScrollView) inflater.inflate(layout, container,
@@ -526,13 +531,31 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		super.onActivityCreated(saves);
 		// if Time to Die, do absolutely nothing since this fragment will go bye
 		// bye
-
+		Log.d(TAG, "onActivityCreated");
 		if (timeToDie) {
 			Log.d("NotesEditorFragment",
 					"onActivityCreated, but it is time to die so doing nothing...");
-		} else if (saves != null) {
+		} else if (saves != null && saves.containsKey(KEYID) && saves.containsKey(LISTID)) {
+			Log.d(TAG, "onActivityCrated, saves are not null!");
 			openNote(saves);
+		} else if (listId > -1) {
+			Log.d(TAG, "onActivityCreated, got valid list id atleast. Displaying note...");
+			// in activity
+			//displayNote(id, listId);
+			openNote(null);
+		} else {
+			Log.d(TAG, "onActivityCreated, could not find valid values. Maybe I should die now?");
 		}
+	}
+	
+	/**
+	 * Should only be called by notes editor activity!!!!!!
+	 * @param id
+	 * @param listId
+	 */
+	public void setValues(long id, long listId) {
+		this.id = id;
+		this.listId = listId;
 	}
 
 	@Override
@@ -843,6 +866,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		
 		activity.getContentResolver().unregisterContentObserver(watcher);
 		saveNote();
+		// clear fields, reload onResume
+		mText.setText("");
+		mTitle.setText("");
+		clearDueDate();
 	}
 
 	@Override
@@ -900,9 +927,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	/**
 	 * Prevents this Fragment from saving the note on exit
+	 * Intended for deletion of notes.
+	 * Also disables monitoring of this note.
 	 */
 	public void setSelfAction() {
+		Log.d(TAG, "setSelfAction");
 		selfAction = true;
+		activity.getContentResolver().unregisterContentObserver(watcher);
 	}
 
 	private void setActionShareIntent() {
@@ -1005,22 +1036,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
 
-		if (mState == STATE_UNCLEAR) {
-			// In this case, we don't yet know what to show.
-			// Check the database if the list has any notes already
-
-			// No notes existed in the database. We'll have to insert a new one.
-			
-			//TODO think this through. Must have a valid list id and that can only come externally
-
-//			mState = STATE_INSERT;
-//
-//			Log.d("InsertError", "onCreateLoader");
-//			mUri = activity.getContentResolver().insert(
-//					NotePad.Notes.CONTENT_URI, null);
-
-		}
-
 		Log.d(TAG, "registering observer");
 		// FIrst unregister for any previous uri
 		activity.getContentResolver().unregisterContentObserver(watcher);
@@ -1036,6 +1051,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		showNote(data);
 
+		Log.d(TAG,"onLoadFinished, note is showing. Tell listener");
 		// Notify list of the note's id
 		if (onNoteOpenedListener != null)
 			onNoteOpenedListener.onNoteOpened(getIdFromUri(mUri),
