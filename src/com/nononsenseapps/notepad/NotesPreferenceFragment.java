@@ -115,8 +115,11 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	 * @param account
 	 */
 	public void accountSelected(Account account) {
+		Log.d(TAG, "accountSelected: " + account);
+		
 		if (account != null) {
 			this.account = account;
+			Log.d(TAG, "Trying to get permission");
 			// Request user's permission
 			AccountManager.get(activity).getAuthToken(account,
 					SyncAdapter.AUTH_TOKEN_TYPE, null, activity, this, null);

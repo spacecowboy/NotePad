@@ -13,13 +13,11 @@ import android.app.FragmentTransaction;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ComponentName;
-import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.res.Resources;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.Typeface;
@@ -31,10 +29,8 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.text.format.Time;
-import android.text.method.KeyListener;
 import android.util.Log;
 import android.util.TimeFormatException;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -60,7 +56,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		LoaderManager.LoaderCallbacks<Cursor> {
 
 	// Two ways of expressing: "Mon, 16 Jan"
-	public final static String ANDROIDTIME_FORMAT = "%a, %e %b";
+	// Time is not stable, will always claim it's Sunday
+	//public final static String ANDROIDTIME_FORMAT = "%a, %e %b";
 	public final static String DATEFORMAT_FORMAT = "E, d MMM";
 	/*
 	 * Creates a projection that returns the note ID and the note contents.
@@ -432,19 +429,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		//TODO delete this
-		if (container == null && false) {
-			// We have different layouts, and in one of them this
-			// fragment's containing frame doesn't exist. The fragment
-			// may still be created from its saved state, but there is
-			// no reason to try to create its view hierarchy because it
-			// won't be displayed. Note this is not needed -- we could
-			// just run the code below, where we would create and return
-			// the view hierarchy; it would just never be used.
-			Log.d("NotesEditorFragment", "Should return null");
-			timeToDie = true;
-			return null;
-		}
 		Log.d("NotesEditorFragment", "onCreateView");
 
 		int layout = R.layout.editor_layout;
@@ -664,10 +648,15 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			note = mTitle.getText().toString() + "\n";
 
 		if (dueDateSet && noteDueDate != null) {
+
+			Calendar c = Calendar.getInstance();
+			c.setTimeInMillis(noteDueDate.toMillis(false));
+
+			dueDateSet = true;
+			
 			note = note
-					+ "due date: "
-					+ noteDueDate
-							.format(NotesEditorFragment.ANDROIDTIME_FORMAT)
+					+ getText(R.string.editor_due_date_hint) + ": "
+					+ DateFormat.format(DATEFORMAT_FORMAT, c)
 					+ "\n";
 		}
 
@@ -785,9 +774,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				clearDueDate();
 			} else {
 				try {
+					Log.d(TAG, "due: " + due);
 					noteDueDate.parse3339(due);
 					dueDateSet = true;
-					mDueDate.setText(noteDueDate.format(ANDROIDTIME_FORMAT));
+					Calendar c = Calendar.getInstance();
+					c.setTimeInMillis(noteDueDate.toMillis(false));
+					
+					mDueDate.setText(DateFormat.format(DATEFORMAT_FORMAT, c));
 				} catch (TimeFormatException e) {
 					noteDueDate.setToNow();
 					dueDateSet = false;
@@ -868,9 +861,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		activity.getContentResolver().unregisterContentObserver(watcher);
 		saveNote();
 		// clear fields, reload onResume
-		mText.setText("");
-		mTitle.setText("");
-		clearDueDate();
+		//mText.setText("");
+		//mTitle.setText("");
+		//clearDueDate();
 	}
 
 	@Override
@@ -976,14 +969,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		this.day = dayOfMonth;
 
 		Calendar c = Calendar.getInstance();
-
 		c.set(year, monthOfYear, dayOfMonth);
 
 		noteDueDate.set(dayOfMonth, monthOfYear, year);
 		dueDateSet = true;
-
-		// Remember to update share intent
-		setActionShareIntent();
 
 		final CharSequence timeToShow = DateFormat.format(DATEFORMAT_FORMAT, c);
 
@@ -994,6 +983,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				if (mDueDate != null) {
 					mDueDate.setText(timeToShow);
 				}
+				// Remember to update share intent
+				setActionShareIntent();
 			}
 
 		});

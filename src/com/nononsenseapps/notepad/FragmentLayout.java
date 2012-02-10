@@ -1,12 +1,10 @@
 package com.nononsenseapps.notepad;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
-import com.nononsenseapps.notepad.interfaces.Refresher;
 import com.nononsenseapps.notepad.interfaces.OnNoteOpenedListener;
 
 import android.accounts.Account;
@@ -15,7 +13,6 @@ import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.LoaderManager;

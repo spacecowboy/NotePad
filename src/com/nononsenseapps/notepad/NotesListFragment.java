@@ -1,6 +1,7 @@
 package com.nononsenseapps.notepad;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -21,11 +22,9 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SyncStatusObserver;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 
 import android.accounts.Account;
@@ -37,13 +36,13 @@ import android.view.MenuItem;
 import android.app.ListFragment;
 import android.widget.SimpleCursorAdapter;
 
+import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -107,8 +106,6 @@ public class NotesListFragment extends ListFragment implements
 
 	private boolean autoOpenNote = false;
 	private NotesEditorFragment landscapeEditor;
-
-	private ListWatcher watcher;
 
 	private Menu mOptionsMenu;
 	private View mRefreshIndeterminateProgressView = null;
@@ -327,7 +324,6 @@ public class NotesListFragment extends ListFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		watcher = new ListWatcher(new Handler());
 
 		// To get the call back to add items to the menu
 		setHasOptionsMenu(true);
@@ -482,14 +478,6 @@ public class NotesListFragment extends ListFragment implements
 				}
 			}
 		}
-	}
-
-	private void reListNotes() {
-		getLoaderManager().restartLoader(0, null, this);
-		// if (currentQuery.isEmpty())
-		// listAllNotes();
-		// else
-		// showResults(currentQuery);
 	}
 
 	/**
@@ -789,9 +777,13 @@ public class NotesListFragment extends ListFragment implements
 				if (due != null && !due.isEmpty()) {
 					Time date = new Time(Time.getCurrentTimezone());
 					date.parse3339(due);
+					
+					Calendar c = Calendar.getInstance();
+					c.setTimeInMillis(date.toMillis(false));
+					
 					note = note
 							+ "due date: "
-							+ date.format(NotesEditorFragment.ANDROIDTIME_FORMAT)
+							+ DateFormat.format(NotesEditorFragment.DATEFORMAT_FORMAT, c)
 							+ "\n";
 				}
 
@@ -1141,11 +1133,18 @@ public class NotesListFragment extends ListFragment implements
 		Uri baseUri = NotePad.Notes.CONTENT_URI;
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
+		
+		// Get current sort order or assemble the default one.
+		String sortOrder = PreferenceManager.getDefaultSharedPreferences(
+				activity).getString(NotesPreferenceFragment.KEY_SORT_TYPE, NotePad.Notes.DEFAULT_SORT_TYPE) + " " + 
+				PreferenceManager.getDefaultSharedPreferences(
+						activity).getString(NotesPreferenceFragment.KEY_SORT_ORDER, NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 		// TODO include title field in search
+		// I am not restricting the lists on purpose here. Search should be global
 		return new CursorLoader(activity, baseUri, PROJECTION,
 				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
-						+ NotePad.Notes.COLUMN_NAME_LIST + " IS " + mCurListId
+						//+ NotePad.Notes.COLUMN_NAME_LIST + " IS " + mCurListId
 						+ " AND " + NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?", // Where
 				// the
 				// note
@@ -1154,7 +1153,7 @@ public class NotesListFragment extends ListFragment implements
 				new String[] { "%" + currentQuery + "%" }, // We don't care how
 															// it occurs in the
 															// note
-				NotePad.Notes.SORT_ORDER // Use the default sort order.
+				sortOrder
 		);
 	}
 
@@ -1200,42 +1199,5 @@ public class NotesListFragment extends ListFragment implements
 		// longer using it.
 		Log.d(TAG, "onLoaderReset");
 		mAdapter.swapCursor(null);
-	}
-
-	private void registerObserverOpenedNote(long id) {
-		Log.d(TAG, "registering observer");
-		// First unregister for any previous uri
-		activity.getContentResolver().unregisterContentObserver(watcher);
-		// Register for current
-		activity.getContentResolver().registerContentObserver(
-				NotesEditorFragment.getUriFrom(id), false, watcher);
-	}
-
-	// TODO delete if not needed
-	private static class ListWatcher extends ContentObserver {
-
-		private static final String TAG = "ListWatcher";
-
-		public ListWatcher(Handler handler) {
-			super(handler);
-		}
-
-		@Override
-		public boolean deliverSelfNotifications() {
-			return true;
-		}
-
-		@Override
-		public void onChange(boolean selfChange) {
-			Log.d(TAG, "MyContentObserver.onChange( " + selfChange + ")");
-			super.onChange(selfChange);
-			// Only two things can happen
-			// 1. Note was modified. It must have been changed on server and
-			// synced.
-
-			// 2. Note was deleted. This could have been done on server, or
-			// simply by the user.
-		}
-
 	}
 }
