@@ -328,6 +328,10 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 			prefSyncFreq.setSummary("" + freq + " " + getText(R.string.minutes).toString());
 	}
 
+	/**
+	 * User wants to select an account to sync with. If we get an approval, activate sync and set
+	 * periodicity also.
+	 */
 	@Override
 	public void run(AccountManagerFuture<Bundle> future) {
 		try {
@@ -337,10 +341,8 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 			// a token is available.
 			String token = future.getResult().getString(
 					AccountManager.KEY_AUTHTOKEN);
-			// Now you can use the Tasks
-			// API...
-			Log.d("PreferenceAccount", "Callback, this is my token: " + token);
-			// useTasksAPI(token);
+			// Now we are authorized by the user.
+
 			if (token != null && account != null) {
 				SharedPreferences customSharedPreference = getPreferenceScreen()
 						.getSharedPreferences();
@@ -351,8 +353,11 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 				prefAccount.setTitle(account.name);
 				prefAccount.setSummary(R.string.settings_account_summary);
 
+				Log.d(TAG, "Setting syncable and setting frequency");
 				// Set it syncable
 				ContentResolver.setIsSyncable(account, NotePad.AUTHORITY, 1);
+				// Set sync frequency
+				setSyncInterval(getPreferenceScreen().getSharedPreferences());
 			}
 		} catch (OperationCanceledException e) {
 			// TODO: The user has denied you
