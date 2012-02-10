@@ -37,6 +37,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	public static final String THEME_DARK = "dark";
 	public static final String THEME_LIGHT = "light";
 	public static final String THEME_LIGHT_ICS_AB = "light_ab";
+	private static final String TAG = "NotesPreferenceFragment";
 
 	private Preference prefSortOrder;
 	private Preference prefSortType;
@@ -342,8 +343,9 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 			String token = future.getResult().getString(
 					AccountManager.KEY_AUTHTOKEN);
 			// Now we are authorized by the user.
+			Log.d(TAG, "So token is: " + token);
 
-			if (token != null && account != null) {
+			if (token != null && !token.equals("") && account != null) {
 				SharedPreferences customSharedPreference = getPreferenceScreen()
 						.getSharedPreferences();
 				SharedPreferences.Editor editor = customSharedPreference.edit();

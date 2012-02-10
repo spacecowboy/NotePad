@@ -987,7 +987,7 @@ public class NotePadProvider extends ContentProvider implements
 
 			// Notifies observers registered against this provider that the data
 			// changed.
-			getContext().getContentResolver().notifyChange(noteUri, null, true);
+			getContext().getContentResolver().notifyChange(noteUri, null, false);
 			return noteUri;
 		}
 
@@ -1042,7 +1042,7 @@ public class NotePadProvider extends ContentProvider implements
 
 			// Notifies observers registered against this provider that the data
 			// changed.
-			getContext().getContentResolver().notifyChange(noteUri, null, true);
+			getContext().getContentResolver().notifyChange(noteUri, null, false);
 			return noteUri;
 		}
 

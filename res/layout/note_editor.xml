@@ -18,10 +18,11 @@
     android:id="@+id/note"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
     android:padding="5dp"
     android:scrollbars="vertical"
     android:fadingEdge="vertical"
     android:gravity="top"
     android:capitalize="sentences"
 />
+
+<!-- Try and see how it looks without transparent editor. android:background="@android:color/transparent" -->

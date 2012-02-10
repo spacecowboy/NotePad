@@ -304,8 +304,13 @@ public class NotesListFragment extends ListFragment implements
 						AccountManager.get(activity), accountName);
 				// Don't start a new sync if one is already going
 				if (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) {
+					Bundle options = new Bundle();
+					// This will force a sync regardless of what the setting is in
+					// accounts manager. Only use it here where the user has manually
+					// desired a sync to happen NOW.
+					options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
 					ContentResolver.requestSync(account, NotePad.AUTHORITY,
-							new Bundle());
+							options);
 				}
 			} else {
 				// The user might want to enable syncing. Open preferences
@@ -1115,7 +1120,7 @@ public class NotesListFragment extends ListFragment implements
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
 
-		return new CursorLoader(getActivity(), baseUri, PROJECTION, // Return
+		return new CursorLoader(activity, baseUri, PROJECTION, // Return
 																	// the note
 																	// ID and
 																	// title for
@@ -1138,7 +1143,7 @@ public class NotesListFragment extends ListFragment implements
 		// creating a Cursor for the data being displayed.
 
 		// TODO include title field in search
-		return new CursorLoader(getActivity(), baseUri, PROJECTION,
+		return new CursorLoader(activity, baseUri, PROJECTION,
 				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
 						+ NotePad.Notes.COLUMN_NAME_LIST + " IS " + mCurListId
 						+ " AND " + NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?", // Where

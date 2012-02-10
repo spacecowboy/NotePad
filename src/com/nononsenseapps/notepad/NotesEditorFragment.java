@@ -385,7 +385,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		if (mUri != null) {
 			Log.d("NotesEditorFragment", "Deleting note");
 			this.id = -1;
-			getActivity().getContentResolver().delete(mUri, null, null);
+			activity.getContentResolver().delete(mUri, null, null);
 			//clearFields();
 		}
 	}
@@ -508,14 +508,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	}
 
 	private void setFontSettings() {
-		if (mText != null) {
+		if (mText != null && mTitle != null) {
 			// set characteristics from settings
 			float size = PreferenceManager.getDefaultSharedPreferences(
-					getActivity()).getInt(
+					activity).getInt(
 					NotesPreferenceFragment.KEY_FONT_SIZE_EDITOR,
 					R.integer.default_editor_font_size);
 			Typeface tf = TextPreviewPreference.getTypeface(PreferenceManager
-					.getDefaultSharedPreferences(getActivity()).getString(
+					.getDefaultSharedPreferences(activity).getString(
 							NotesPreferenceFragment.KEY_FONT_TYPE_EDITOR,
 							NotesPreferenceFragment.SANS));
 
@@ -1023,7 +1023,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		}
 
 		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			return new DatePickerDialog(getActivity(), mFragment,
+			return new DatePickerDialog(activity, mFragment,
 					mFragment.year, mFragment.month, mFragment.day);
 		}
 	}
@@ -1043,7 +1043,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		activity.getContentResolver().registerContentObserver(mUri, false,
 				watcher);
 
-		return new CursorLoader(getActivity(), mUri, PROJECTION, null, null,
+		return new CursorLoader(activity, mUri, PROJECTION, null, null,
 				null);
 	}
 

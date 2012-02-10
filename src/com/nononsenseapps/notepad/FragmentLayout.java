@@ -161,8 +161,6 @@ public class FragmentLayout extends Activity implements
 		// Read settings and set
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		// lightTheme = prefs.getBoolean(NotesPreferenceFragment.KEY_THEME,
-		// false);
 
 		currentTheme = prefs.getString(NotesPreferenceFragment.KEY_THEME,
 				NotesPreferenceFragment.THEME_DARK);
@@ -186,13 +184,10 @@ public class FragmentLayout extends Activity implements
 	private void setTypeOfTheme() {
 		if (NotesPreferenceFragment.THEME_LIGHT_ICS_AB.equals(currentTheme)) {
 			setTheme(R.style.ThemeHoloLightDarkActonBar);
-			// lightTheme = true;
 		} else if (NotesPreferenceFragment.THEME_LIGHT.equals(currentTheme)) {
 			setTheme(R.style.ThemeHoloLight);
-			// lightTheme = true;
 		} else {
 			setTheme(R.style.ThemeHolo);
-			// lightTheme = false;
 		}
 	}
 
@@ -237,14 +232,11 @@ public class FragmentLayout extends Activity implements
 			if (NotesPreferenceFragment.THEME_LIGHT_ICS_AB
 					.equals(FragmentLayout.currentTheme)) {
 				setTheme(R.style.ThemeHoloLightDarkActonBar);
-				// lightTheme = true;
 			} else if (NotesPreferenceFragment.THEME_LIGHT
 					.equals(FragmentLayout.currentTheme)) {
 				setTheme(R.style.ThemeHoloLight);
-				// lightTheme = true;
 			} else {
 				setTheme(R.style.ThemeHolo);
-				// lightTheme = false;
 			}
 
 			// if (FragmentLayout.lightTheme) {
@@ -422,12 +414,6 @@ public class FragmentLayout extends Activity implements
 				setTheme(R.style.ThemeHoloLightDialogNoActionBar);
 			}
 
-			// if (FragmentLayout.lightTheme) {
-			// setTheme(android.R.style.Theme_Holo_Light_Dialog_NoActionBar);
-			// } else {
-			// setTheme(android.R.style.Theme_Holo_Dialog_NoActionBar);
-			// }
-
 			// Display the fragment as the main content.
 			prefFragment = new NotesPreferenceFragment();
 			FragmentTransaction ft = getFragmentManager().beginTransaction();
@@ -459,6 +445,8 @@ public class FragmentLayout extends Activity implements
 				for (int i = 0; i < size; i++) {
 					names[i] = accounts[i].name;
 				}
+				// TODO
+				// Could add a clear alternative here
 				builder.setItems(names, new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int which) {
 						// Stuff to do when the account is selected by the user
@@ -487,7 +475,6 @@ public class FragmentLayout extends Activity implements
 
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		// TODO Auto-generated method stub
 		Log.d(TAG, "onNavigationItemSelected pos: " + itemPosition + " id: "
 				+ itemId);
 
@@ -500,7 +487,6 @@ public class FragmentLayout extends Activity implements
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		// TODO Auto-generated method stub
 
 		// This is called when a new Loader needs to be created. This
 		// sample only has one Loader, so we don't care about the ID.
@@ -519,8 +505,6 @@ public class FragmentLayout extends Activity implements
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		mSpinnerAdapter.swapCursor(data);
-		// TODO
-		// is possible we have to show the list here
 	}
 
 	@Override

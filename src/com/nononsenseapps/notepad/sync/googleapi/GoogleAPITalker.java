@@ -164,6 +164,7 @@ public class GoogleAPITalker {
 		authToken = getAuthToken(accountManager, account, authTokenType,
 				notifyAuthFailure);
 
+		Log.d(TAG, "authToken: " + authToken);
 		if (authToken != null && !authToken.equals("")) {
 			return true;
 		} else {

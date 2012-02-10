@@ -63,7 +63,7 @@
         </provider>
 
         <activity
-            android:name="FragmentLayout"
+            android:name=".FragmentLayout"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="sensor"
@@ -75,7 +75,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="FragmentLayout$NotesEditorActivity"
+            android:name=".FragmentLayout$NotesEditorActivity"
             android:screenOrientation="sensor" >
 
             <!-- android:configChanges="keyboardHidden|orientation" > -->
@@ -119,14 +119,15 @@
         </activity>
         
         <activity
-            android:name="FragmentLayout$NotesPreferencesDialog"
+            android:name=".FragmentLayout$NotesPreferencesDialog"
             android:screenOrientation="sensor"
             android:theme="@style/ThemeHoloDialogNoActionBar" >
         </activity>
 
         <service
             android:name=".sync.SyncService"
-            android:exported="true" >
+            android:exported="true"
+            android:process=":sync">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
