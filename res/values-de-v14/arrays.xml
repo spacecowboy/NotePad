@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="theme_preference">
+        <item>Dunkel</item>
+        <item>Licht</item>
+        <item>Licht, dunklen Rahmen</item>
+    </string-array>
+
+    <string-array name="themevalues_preference">
+        <item>dark</item>
+        <item>light</item>
+        <item>light_ab</item>
+    </string-array>
+
+</resources>

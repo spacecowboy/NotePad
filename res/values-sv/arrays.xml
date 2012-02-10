@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="theme_preference">
+        <item>Mörk</item>
+        <item>Ljus</item>
+    </string-array>
+
+    <string-array name="themevalues_preference">
+        <item>dark</item>
+        <item>light</item>
+    </string-array>
+    
+    <string-array name="sorting_preference">
+        <item>Ändringstid</item>
+        <item>Titel</item>
+    </string-array>
+
+    <string-array name="sortingvalues_preference">
+        <item>modified</item>
+        <item>title COLLATE NOCASE</item>
+    </string-array>
+    
+    <string-array name="sorting_order_preference">
+        <item>Normal</item>
+        <item>Omvänd</item>
+    </string-array>
+
+    <string-array name="sorting_ordervalues_preference">
+        <item>ASC</item>
+        <item>DESC</item>
+    </string-array>
+    
+    <string-array name="font_type_preference">
+        <item>Sans</item>
+        <item>Serif</item>
+        <item>Monospace</item>
+    </string-array>
+
+    <string-array name="font_typevalues_preference">
+        <item>Sans</item>
+        <item>Serif</item>
+        <item>Monospace</item>
+    </string-array>
+    <string-array name="sync_freq_preference">
+        <item>Manuell</item>
+        <item>5 minuter</item>
+        <item>15 minuter</item>
+        <item>30 minuter</item>
+        <item>1 timme</item>
+        <item>2 timmar</item>
+        <item>4 timmar</item>
+        <item>8 timmar</item>
+        <item>1 dag</item>
+	</string-array>
+	<string-array name="sync_freqvalues_preference">
+	    <item>0</item>
+        <item>5</item>
+        <item>15</item>
+        <item>30</item>
+        <item>60</item>
+        <item>120</item>
+        <item>240</item>
+        <item>480</item>
+        <item>1440</item>
+	</string-array>
+
+</resources>
