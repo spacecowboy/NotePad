@@ -17,7 +17,7 @@
 <resources>
     <string name="app_name">Notizen</string>
 
-    <string name="title_create">Neue notiz</string>
+    <string name="title_create">Neue Notiz</string>
     <string name="title_edit">Bearbeiten: %1$s</string>
 
     <string name="menu_add">Notiz hinzufügen</string>
@@ -26,13 +26,13 @@
     <string name="menu_copy">Notiz kopieren</string>
     <string name="menu_cancel">Abbrechen</string>
     <string name="menu_setcompleted">Set erledigt</string>
-    <string name="menu_setuncompleted">Set Nicht erledigt</string>
+    <string name="menu_setuncompleted">Set nicht erledigt</string>
     <string name="menu_deletelist">Liste löschen</string>
     <string name="menu_sync">Aktualisieren</string>
     <string name="menu_share">Teilen</string>
     <string name="menu_preferences">Einstellungen</string>
     
-    <string name="delete_list_warning">Sind Sie sicher, dass Sie die Liste löschen? Die Liste wird permanent gelöscht werden.</string>
+    <string name="delete_list_warning">Die Liste wird unwiderruflich gelöscht. Sicher?</string>
     
     <string name="editor_due_date_hint">Fälligkeitsdatum</string>
     <string name="editor_title_hint">Titel</string>
@@ -40,8 +40,8 @@
 
     <string name="resolve_edit">Notiz bearbeiten</string>
 
-    <string name="error_title">Error</string>
-    <string name="error_message">Error loading note</string>
+    <string name="error_title">Fehler</string>
+    <string name="error_message">Fehler beim Laden der Notiz</string>
     
     <string name="search_hint">Suche</string>
     <string name="settings_theme">Aktuellen Thema</string>
@@ -54,32 +54,32 @@
     <string name="settings_sorting_order_dialog">Ordnen nach</string>
     
     <string name="settings_summary_sort_type_alphabetic">Titel</string>
-    <string name="settings_summary_sort_type_modified">Zeitpunkt der letzten Änderung</string>
-    <string name="settings_summary_sort_order_asc">Normal</string>
-    <string name="settings_summary_sort_order_desc">Rückwärts</string>
+    <string name="settings_summary_sort_type_modified">Änderungsdatum</string>
+    <string name="settings_summary_sort_order_asc">Aufsteigend</string>
+    <string name="settings_summary_sort_order_desc">Absteigend</string>
     
     <string name="settings_summary_theme_dark">Dunkel</string>
-    <string name="settings_summary_theme_light">Licht</string>
-    <string name="settings_summary_theme_light_dark_ab">Licht, dunklen Rahmen</string>
+    <string name="settings_summary_theme_light">Hell</string>
+    <string name="settings_summary_theme_light_dark_ab">Hell, dunkle Aktionsleiste</string>
     
     <string name="settings_cat_appearance">Aussehen</string>
-    <string name="settings_font_screen">Einstellungen für die Schriftart</string>
-    <string name="settings_font_screen_summary">Sie können die Größe und Art der Schrift ändern</string>
+    <string name="settings_font_screen">Schriftart</string>
+    <string name="settings_font_screen_summary">Schriftart und Schriftgröße bearbeiten</string>
     <string name="settings_cat_font_editor">Editor</string>
     <string name="settings_font_type">Schriftart</string>
-    <string name="settings_font_type_dialog">Wählen Sie eine Schriftart</string>
+    <string name="settings_font_type_dialog">Schriftart auswählen</string>
     <string name="settings_font_size">Schriftgrößen</string>
-    <string name="preference_preview_text">Dies ist, wie der Text wird erscheint</string>
+    <string name="preference_preview_text">So wird der Text im Editor dargestellt</string>
     <string name="settings_text_preview_title">Vorschau</string>
     
     <string name="monospace">Monospace</string>
     <string name="sans">Sans</string>
     <string name="serif">Serif</string>
-    <string name="settings_sync_freq_title">Synchronisationsfrequenz</string>
-    <string name="settings_account_title">Wählen Sie ein Konto</string>
-    <string name="settings_account_summary">Klicken Sie auf Konto wechseln</string>
-    <string name="settings_sync_enable_title">Sync mit Google Tasks</string>
-    <string name="settings_sync_enable_summary"></string>
+    <string name="settings_sync_freq_title">Aktualisierungsintervall</string>
+    <string name="settings_account_title">Account wählen</string>
+    <string name="settings_account_summary">Anderen Account auswählen</string>
+    <string name="settings_sync_enable_title">Google Tasks Sync</string>
+    <string name="settings_sync_enable_summary">Notizen mit Google Aufgaben synchronisieren</string>
     <string name="settings_cat_syncing">Synchronisation</string>
     
     <string name="manual">Manuell</string>
