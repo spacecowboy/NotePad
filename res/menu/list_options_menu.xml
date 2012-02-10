@@ -16,15 +16,25 @@
         android:title="@string/menu_sync"/>
 
     <item
+        android:id="@+id/menu_createlist"
+        android:orderInCategory="5"
+        android:showAsAction="never"
+        android:title="@string/menu_createlist"/>
+    <item
+        android:id="@+id/menu_renamelist"
+        android:orderInCategory="6"
+        android:showAsAction="never"
+        android:title="@string/menu_renamelist"/>
+    <item
         android:id="@+id/menu_deletelist"
         android:icon="?ic_menu_clear_playlist"
-        android:orderInCategory="2"
+        android:orderInCategory="7"
         android:showAsAction="never"
         android:title="@string/menu_deletelist"/>
     <item
         android:id="@+id/menu_preferences"
         android:icon="?ic_menu_settings_holo"
-        android:orderInCategory="3"
+        android:orderInCategory="8"
         android:showAsAction="never"
         android:title="@string/menu_preferences"/>
 

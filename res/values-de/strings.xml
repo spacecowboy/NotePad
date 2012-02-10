@@ -31,6 +31,8 @@
     <string name="menu_sync">Aktualisieren</string>
     <string name="menu_share">Teilen</string>
     <string name="menu_preferences">Einstellungen</string>
+    <string name="menu_renamelist">Liste umbenennen</string>
+    <string name="menu_createlist">Liste erstellen</string>
     
     <string name="delete_list_warning">Die Liste wird unwiderruflich gelöscht. Sicher?</string>
     
@@ -87,4 +89,7 @@
     <string name="hours">Stunden</string>
     <string name="onehour">Eine Stunde</string>
     <string name="oneday">Einen Tag</string>
+    
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
 </resources>

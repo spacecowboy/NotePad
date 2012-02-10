@@ -31,6 +31,8 @@
     <string name="menu_sync">Uppdatera</string>
     <string name="menu_share">Dela</string>
     <string name="menu_preferences">Inställningar</string>
+    <string name="menu_renamelist">Byt namn på lista</string>
+    <string name="menu_createlist">Skapa lista</string>
     
     <string name="delete_list_warning">Är du säker på att du vill ta bort listan? Listan kommer att tas bort permanent.</string>
     
@@ -87,4 +89,7 @@
     <string name="hours">timmar</string>
     <string name="onehour">En timme</string>
     <string name="oneday">En dag</string>
+    
+    <string name="yes">Ja</string>
+    <string name="no">Nej</string>
 </resources>

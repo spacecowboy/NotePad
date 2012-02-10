@@ -31,6 +31,8 @@
     <string name="menu_sync">Refresh</string>
     <string name="menu_share">Share</string>
     <string name="menu_preferences">Settings</string>
+    <string name="menu_renamelist">Rename list</string>
+    <string name="menu_createlist">Create list</string>
     
     <string name="delete_list_warning">Are you sure you want to delete the list? The list will be permanently deleted.</string>
     
@@ -87,4 +89,7 @@
     <string name="hours">hours</string>
     <string name="onehour">One hour</string>
     <string name="oneday">One day</string>
+    
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
 </resources>

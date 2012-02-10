@@ -16,6 +16,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.FragmentTransaction;
 import android.app.LoaderManager;
+import android.content.ContentProvider;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.CursorLoader;
@@ -30,6 +31,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 
 /**
@@ -41,6 +46,9 @@ public class FragmentLayout extends Activity implements
 		LoaderManager.LoaderCallbacks<Cursor> {
 	private static final String TAG = "FragmentLayout";
 	private static final String CURRENT_LIST = "currentlistid";
+	private static final int CREATE_LIST = 0;
+	private static final int RENAME_LIST = 1;
+	private static final int DELETE_LIST = 2;
 	// public static boolean lightTheme = false;
 	public static String currentTheme = NotesPreferenceFragment.THEME_DARK;
 	public static boolean shouldRestart = false;
@@ -132,6 +140,146 @@ public class FragmentLayout extends Activity implements
 		}
 		super.onResume();
 	}
+	
+	@Override
+	protected Dialog onCreateDialog(int id) {
+		switch (id) {
+		case DELETE_LIST:
+//			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//			builder.setMessage(R.string.delete_list_warning)
+//			       .setCancelable(false)
+//			       .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+//			           public void onClick(DialogInterface dialog, int id) {
+//			                deleteCurrentList();
+//			           }
+//			       })
+//			       .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+//			           public void onClick(DialogInterface dialog, int id) {
+//			                dialog.cancel();
+//			           }
+//			       });
+//			
+//			return builder.create();
+			
+			final Dialog deleteDialog = new Dialog(this);
+			deleteDialog.setContentView(R.layout.delete_list_dialog);
+			deleteDialog.setTitle(R.string.menu_deletelist);
+			
+			Button dYesButton = (Button) deleteDialog.findViewById(R.id.d_dialog_yes);
+			dYesButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					deleteCurrentList();
+					deleteDialog.dismiss();
+				}
+			});
+
+			Button dNoButton = (Button) deleteDialog.findViewById(R.id.d_dialog_no);
+			dNoButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					deleteDialog.cancel();
+				}
+			});
+			return deleteDialog;
+		case CREATE_LIST:
+			final Dialog dialog = new Dialog(this);
+			dialog.setContentView(R.layout.create_list_dialog);
+			dialog.setTitle(R.string.menu_createlist);
+			
+			final EditText title = (EditText) dialog.findViewById(R.id.editTitle);
+			title.setText("");
+			
+			Button yesButton = (Button) dialog.findViewById(R.id.dialog_yes);
+			yesButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					createList(title.getText().toString());
+					dialog.dismiss();
+				}
+			});
+
+			Button noButton = (Button) dialog.findViewById(R.id.dialog_no);
+			noButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					dialog.cancel();
+				}
+			});
+			return dialog;
+		case RENAME_LIST:
+			final Dialog renameDialog = new Dialog(this);
+			renameDialog.setContentView(R.layout.rename_list_dialog);
+			renameDialog.setTitle(R.string.menu_renamelist);
+			
+			final EditText renameTitle = (EditText) renameDialog.findViewById(R.id.renameTitle);
+			renameTitle.setText("");
+			
+			Button rYesButton = (Button) renameDialog.findViewById(R.id.r_dialog_yes);
+			rYesButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					renameList(renameTitle.getText().toString());
+					renameDialog.dismiss();
+				}
+			});
+
+			Button rNoButton = (Button) renameDialog.findViewById(R.id.r_dialog_no);
+			rNoButton.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					renameDialog.cancel();
+				}
+			});
+			return renameDialog;
+			
+		default:
+			Log.d(TAG, "Wanted to create some dialog: " + id);
+			return null;
+		}
+	}
+
+	protected void createList(String title) {
+		Log.d(TAG, "Create list: " + title);
+		// I will not allow empty names for lists
+		if (!title.equals("")) {
+			ContentValues values = new ContentValues();
+			values.put(NotePad.Lists.COLUMN_NAME_TITLE, title);
+			// Add list
+			getContentResolver().insert(NotePad.Lists.CONTENT_URI, values);
+		}
+	}
+	
+	protected void renameList(String title) {
+		Log.d(TAG, "Rename list: " + title);
+		// I will not allow empty names for lists
+		// Also must have a valid id
+		if (!title.equals("") && currentList > -1) {
+			ContentValues values = new ContentValues();
+			values.put(NotePad.Lists.COLUMN_NAME_TITLE, title);
+			// Update list
+			getContentResolver().update(Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE, Long.toString(currentList)), values, null, null);
+		}
+	}
+
+	/**
+	 * Marks the current list and all the tasks contained in it as deleted in the database.
+	 * Will be deleted on next sync.
+	 */
+	protected void deleteCurrentList() {
+		Log.d(TAG, "Delete current list");
+		// Only if id is valid
+		if (currentList > -1) {
+			ContentValues values = new ContentValues();
+			values.put(NotePad.Lists.COLUMN_NAME_DELETED, 1);
+			// Mark list as deleted
+			getContentResolver().update(Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE, Long.toString(currentList)), values, null, null);
+			// Mark tasks as deleted
+			values = new ContentValues();
+			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
+			getContentResolver().update(NotePad.Notes.CONTENT_URI, values, NotePad.Notes.COLUMN_NAME_LIST + " IS " + currentList, null);
+		}
+	}
 
 	public void restartAndRefresh() {
 		Log.d("FragmentLayout", "Should restart and refresh");
@@ -195,6 +343,21 @@ public class FragmentLayout extends Activity implements
 		case R.id.menu_preferences:
 			Log.d("NotesListFragment", "onOptionsSelection pref");
 			showPrefs();
+			return true;
+		case R.id.menu_createlist:
+			// Create dialog
+			Log.d(TAG,"menu_createlist");
+			showDialog(CREATE_LIST);
+			return true;
+		case R.id.menu_renamelist:
+			// Create dialog
+			Log.d(TAG,"menu_renamelist");
+			showDialog(RENAME_LIST);
+			return true;
+		case R.id.menu_deletelist:
+			// Create dialog
+			Log.d(TAG,"menu_deletelist");
+			showDialog(DELETE_LIST);
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
