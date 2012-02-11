@@ -101,16 +101,24 @@ public class GoogleAPITalker {
 		return BASE_URL + "/" + id + "?"+ AUTH_URL_END;
 	}
 	// public static final String LISTS = "/lists";
+	public static final String BASE_TASK_URL = "https://www.googleapis.com/tasks/v1/lists";
 	public static final String TASKS = "/tasks"; // Must be preceeded by
 				
 	// only retrieve the fields we will save in the database or use
 	//https://www.googleapis.com/tasks/v1/lists/MDIwMzMwNjA0MjM5MzQ4MzIzMjU6MDow/tasks?showDeleted=true&showHidden=true&pp=1&key={YOUR_API_KEY}
 	//updatedMin=2012-02-07T14%3A59%3A05.000Z
 	public static String AllTasks(String listId) {
-		return BASE_URL + "/" + listId + TASKS + "?"+ "showDeleted=true&showHidden=true&" + AUTH_URL_END;
+		return BASE_TASK_URL + "/" + listId + TASKS + "?"+ "showDeleted=true&showHidden=true&" + AUTH_URL_END;
 	}
+	public static String AllTasksInsert(String listId) {
+		return BASE_TASK_URL + "/" + listId + TASKS + "?"+ AUTH_URL_END;
+	}
+	
 	public static String TaskURL(String taskId, String listId) {
-		return BASE_URL + "/" + listId + TASKS + "/" + taskId + "?"+ AUTH_URL_END;
+		return BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId + "?"+ AUTH_URL_END;
+	}
+	public static String TaskURL_ETAG_ID(String taskId, String listId) {
+		return BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId + "?fields=id,etag&"+ AUTH_URL_END;
 	}
 	// Tasks URL which inludes deleted tasks: /tasks?showDeleted=true
 	// Also do showHidden=true?
@@ -231,6 +239,39 @@ public class GoogleAPITalker {
 
 		return list;
 	}
+	
+	/**
+	 * If etag is present, will make a if-none-match request.
+	 * Expects only id and possibly etag to be present in the object
+	 * 
+	 * @param gimpedTask
+	 * @return
+	 * @throws IOException 
+	 * @throws NotModifiedException 
+	 * @throws JSONException 
+	 * @throws ClientProtocolException 
+	 */
+	public GoogleTask getTask(GoogleTask gimpedTask, GoogleTaskList list) throws ClientProtocolException, JSONException, NotModifiedException, IOException {
+		GoogleTask result = null;
+		HttpGet httpget = new HttpGet(TaskURL(gimpedTask.id, list.id));
+		setAuthHeader(httpget);
+		setHeaderWeakEtag(httpget, gimpedTask.etag);
+		Log.d(TAG, "request: " + TaskURL(gimpedTask.id, list.id));
+
+		JSONObject jsonResponse;
+		try {
+			jsonResponse = (JSONObject) new JSONTokener(
+					parseResponse(client.execute(httpget))).nextValue();
+		
+		Log.d(TAG, jsonResponse.toString());
+		result = new GoogleTask(jsonResponse);
+		} catch (PreconditionException e) {
+			// Can not happen since we are not doing a PUT/POST
+		}
+
+		result.listdbid = list.dbId;
+		return result;
+	}
 
 	/**
 	 * Takes a list object because the etag is optional here.
@@ -336,10 +377,63 @@ public class GoogleAPITalker {
 
 	/**
 	 * Returns an object if all went well. Returns null if a conflict was
-	 * detected.
+	 * detected. Will return a partial result containing only id and etag
 	 */
-	public GoogleTask uploadTask(GoogleTask task) {
-		return null;
+	public GoogleTask uploadTask(GoogleTask task, GoogleTaskList pList) throws ClientProtocolException, JSONException,
+	NotModifiedException, IOException {
+		
+		HttpUriRequest httppost;
+		if (task.id != null) {
+			Log.d(TAG, "ID is not NULL!! " + TaskURL_ETAG_ID(task.id, pList.id));
+			if (task.deleted == 1) {
+				httppost = new HttpDelete(TaskURL_ETAG_ID(task.id, pList.id));
+			} else {
+				httppost = new HttpPost(TaskURL_ETAG_ID(task.id, pList.id));
+				// apache does not include PATCH requests, but we can force a post to be a PATCH request
+				httppost.setHeader("X-HTTP-Method-Override", "PATCH");
+			}
+		} else {
+			Log.d(TAG, "ID IS NULL: " + AllTasksInsert(pList.id));
+			httppost = new HttpPost(AllTasksInsert(pList.id));
+			task.didRemoteInsert = true; // Need this later
+		}
+		setAuthHeader(httppost);
+
+		if (task.etag != null)
+			setHeaderStrongEtag(httppost, task.etag);
+
+		Log.d(TAG, httppost.getRequestLine().toString());
+		for (Header header : httppost.getAllHeaders()) {
+			Log.d(TAG, header.getName() + ": " + header.getValue());
+		}
+
+		if (task.deleted != 1) {
+			setPostBody(httppost, task);
+		}
+
+		String stringResponse;
+		try {
+			stringResponse = parseResponse(client.execute(httppost));
+
+			// If we deleted the note, we will get an empty response. Return the
+			// same element back.
+			if (task.deleted == 1) {
+				Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
+			} else {
+				JSONObject jsonResponse = new JSONObject(stringResponse);
+				Log.d(TAG, jsonResponse.toString());
+
+				// Will return a task, containing id and etag. always update
+				// fields
+				task.etag = jsonResponse.getString("etag");
+				task.id = jsonResponse.getString("id");
+			}
+		} catch (PreconditionException e) {
+			// There was a conflict, return null in that case
+			return null;
+		}
+
+		return task;
 	}
 
 	/**
@@ -464,6 +558,26 @@ public class GoogleAPITalker {
 		StringEntity se = null;
 		try {
 			se = new StringEntity(list.toJSON(), HTTP.UTF_8);
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+
+		se.setContentType("application/json");
+		if (httppost instanceof HttpPost)
+			((HttpPost) httppost).setEntity(se);
+		else if (httppost instanceof HttpPut)
+			((HttpPut) httppost).setEntity(se);
+	}
+	/**
+	 * SUpports Post and Put. Anything else will not have any effect
+	 * 
+	 * @param httppost
+	 * @param list
+	 */
+	private void setPostBody(HttpUriRequest httppost, GoogleTask task) {
+		StringEntity se = null;
+		try {
+			se = new StringEntity(task.toJSON(), HTTP.UTF_8);
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

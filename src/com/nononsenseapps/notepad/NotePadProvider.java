@@ -204,6 +204,8 @@ public class NotePadProvider extends ContentProvider implements
 				NotePad.Lists.COLUMN_NAME_DELETED);
 		sListsProjectionMap.put(NotePad.Lists.COLUMN_NAME_MODIFIED,
 				NotePad.Lists.COLUMN_NAME_MODIFIED);
+		sListsProjectionMap.put(NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE,
+				NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE);
 
 		/*
 		 * Gtasks stuff
@@ -300,6 +302,7 @@ public class NotePadProvider extends ContentProvider implements
 					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
 					+ NotePad.Lists.COLUMN_NAME_TITLE + " TEXT,"
 					+ NotePad.Lists.COLUMN_NAME_MODIFIED + " INTEGER,"
+					+ NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE + " INTEGER,"
 					+ NotePad.Lists.COLUMN_NAME_DELETED + " INTEGER" + ");");
 		}
 
@@ -319,9 +322,9 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.GTaskLists.COLUMN_NAME_DB_ID + " TEXT,"
 					+ NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID + " INTEGER,"
 					+ NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT
-					+ " INTEGER," + NotePad.GTaskLists.COLUMN_NAME_UPDATED + " TEXT,"
-					+ NotePad.GTaskLists.COLUMN_NAME_ETAG
-					+ " TEXT" + ");");
+					+ " INTEGER," + NotePad.GTaskLists.COLUMN_NAME_UPDATED
+					+ " TEXT," + NotePad.GTaskLists.COLUMN_NAME_ETAG + " TEXT"
+					+ ");");
 		}
 
 		/**
@@ -342,7 +345,8 @@ public class NotePadProvider extends ContentProvider implements
 				// Kills the table and existing data
 				db.execSQL("DROP TABLE IF EXISTS " + NotePad.Notes.TABLE_NAME);
 				db.execSQL("DROP TABLE IF EXISTS " + NotePad.Lists.TABLE_NAME);
-				db.execSQL("DROP TABLE IF EXISTS " + NotePad.GTaskLists.TABLE_NAME);
+				db.execSQL("DROP TABLE IF EXISTS "
+						+ NotePad.GTaskLists.TABLE_NAME);
 				db.execSQL("DROP TABLE IF EXISTS " + NotePad.GTasks.TABLE_NAME);
 
 				// Recreates the database with a new version
@@ -842,8 +846,8 @@ public class NotePadProvider extends ContentProvider implements
 			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 0);
 		}
 
-		if (values.containsKey(NotePad.Notes.COLUMN_NAME_LIST) == false ||
-				values.getAsLong(NotePad.Notes.COLUMN_NAME_LIST) < 0) {
+		if (values.containsKey(NotePad.Notes.COLUMN_NAME_LIST) == false
+				|| values.getAsLong(NotePad.Notes.COLUMN_NAME_LIST) < 0) {
 			Log.d(TAG, "Forgot to include note in a list");
 			throw new SQLException("A note must always belong to a list!");
 		}
@@ -870,7 +874,8 @@ public class NotePadProvider extends ContentProvider implements
 
 			// Notifies observers registered against this provider that the data
 			// changed.
-			getContext().getContentResolver().notifyChange(noteUri, null, true);
+			getContext().getContentResolver()
+					.notifyChange(noteUri, null, false);
 			return noteUri;
 		}
 
@@ -878,7 +883,7 @@ public class NotePadProvider extends ContentProvider implements
 		// exception.
 		throw new SQLException("Failed to insert row into " + uri);
 	}
-	
+
 	private Uri insertList(Uri uri, ContentValues initialValues) {
 		Log.d(TAG, "insertList");
 		// A map to hold the new record's values.
@@ -893,7 +898,6 @@ public class NotePadProvider extends ContentProvider implements
 			values = new ContentValues();
 		}
 
-		
 		// If the values map doesn't contain a title, sets the value to the
 		// default title.
 		if (values.containsKey(NotePad.Lists.COLUMN_NAME_TITLE) == false) {
@@ -910,6 +914,16 @@ public class NotePadProvider extends ContentProvider implements
 			values.put(NotePad.Lists.COLUMN_NAME_DELETED, 0);
 		}
 
+		// Gets the current system time in milliseconds
+		Long now = Long.valueOf(System.currentTimeMillis());
+
+		// If the values map doesn't contain the modification date, sets the
+		// value to the current
+		// time.
+		if (values.containsKey(NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE) == false) {
+			values.put(NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE, now);
+		}
+
 		// Opens the database object in "write" mode.
 		SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
@@ -917,8 +931,8 @@ public class NotePadProvider extends ContentProvider implements
 		long rowId = db.insert(NotePad.Lists.TABLE_NAME, // The table to insert
 															// into.
 				NotePad.Lists.COLUMN_NAME_TITLE, // A hack, SQLite sets this
-												// column value to null
-												// if values is empty.
+													// column value to null
+													// if values is empty.
 				values // A map of column names, and the values to insert
 						// into the columns.
 				);
@@ -932,7 +946,8 @@ public class NotePadProvider extends ContentProvider implements
 
 			// Notifies observers registered against this provider that the data
 			// changed.
-			getContext().getContentResolver().notifyChange(noteUri, null, true);
+			getContext().getContentResolver()
+					.notifyChange(noteUri, null, false);
 			return noteUri;
 		}
 
@@ -940,7 +955,7 @@ public class NotePadProvider extends ContentProvider implements
 		// exception.
 		throw new SQLException("Failed to insert row into " + uri);
 	}
-	
+
 	private Uri insertGTask(Uri uri, ContentValues initialValues) {
 		Log.d(TAG, "insertGTask");
 		// A map to hold the new record's values.
@@ -955,14 +970,15 @@ public class NotePadProvider extends ContentProvider implements
 			values = new ContentValues();
 		}
 
-		
 		// If the values map doesn't contain a title, sets the value to the
 		// default title.
-		if (values.containsKey(NotePad.GTasks.COLUMN_NAME_DB_ID) == false ||
-				values.containsKey(NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT) == false ||
-				values.containsKey(NotePad.GTasks.COLUMN_NAME_GTASKS_ID) == false ||
-				values.containsKey(NotePad.GTasks.COLUMN_NAME_ETAG) == false) {
-			throw new SQLException("Must always include a valid values when creating a GTask. They are provided by the server");
+		if (values.containsKey(NotePad.GTasks.COLUMN_NAME_DB_ID) == false
+				|| values
+						.containsKey(NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT) == false
+				|| values.containsKey(NotePad.GTasks.COLUMN_NAME_GTASKS_ID) == false
+				|| values.containsKey(NotePad.GTasks.COLUMN_NAME_ETAG) == false) {
+			throw new SQLException(
+					"Must always include a valid values when creating a GTask. They are provided by the server");
 		}
 
 		// Opens the database object in "write" mode.
@@ -972,8 +988,8 @@ public class NotePadProvider extends ContentProvider implements
 		long rowId = db.insert(NotePad.GTasks.TABLE_NAME, // The table to insert
 															// into.
 				NotePad.GTasks.COLUMN_NAME_DB_ID, // A hack, SQLite sets this
-												// column value to null
-												// if values is empty.
+													// column value to null
+													// if values is empty.
 				values // A map of column names, and the values to insert
 						// into the columns.
 				);
@@ -987,7 +1003,8 @@ public class NotePadProvider extends ContentProvider implements
 
 			// Notifies observers registered against this provider that the data
 			// changed.
-			getContext().getContentResolver().notifyChange(noteUri, null, false);
+			getContext().getContentResolver()
+					.notifyChange(noteUri, null, false);
 			return noteUri;
 		}
 
@@ -995,7 +1012,7 @@ public class NotePadProvider extends ContentProvider implements
 		// exception.
 		throw new SQLException("Failed to insert row into " + uri);
 	}
-	
+
 	private Uri insertGTaskList(Uri uri, ContentValues initialValues) {
 		Log.d(TAG, "insertGTaskList");
 		// A map to hold the new record's values.
@@ -1010,25 +1027,28 @@ public class NotePadProvider extends ContentProvider implements
 			values = new ContentValues();
 		}
 
-		
 		// If the values map doesn't contain a title, sets the value to the
 		// default title.
-		if (values.containsKey(NotePad.GTaskLists.COLUMN_NAME_DB_ID) == false ||
-				values.containsKey(NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT) == false ||
-				values.containsKey(NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID) == false ||
-				values.containsKey(NotePad.GTaskLists.COLUMN_NAME_ETAG) == false) {
-			throw new SQLException("Must always include a valid values when creating a GTaskList. They are provided by the server");
+		if (values.containsKey(NotePad.GTaskLists.COLUMN_NAME_DB_ID) == false
+				|| values
+						.containsKey(NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT) == false
+				|| values.containsKey(NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID) == false
+				|| values.containsKey(NotePad.GTaskLists.COLUMN_NAME_ETAG) == false) {
+			throw new SQLException(
+					"Must always include a valid values when creating a GTaskList. They are provided by the server");
 		}
 
 		// Opens the database object in "write" mode.
 		SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 
 		// Performs the insert and returns the ID of the new note.
-		long rowId = db.insert(NotePad.GTaskLists.TABLE_NAME, // The table to insert
-															// into.
-				NotePad.GTaskLists.COLUMN_NAME_DB_ID, // A hack, SQLite sets this
-												// column value to null
-												// if values is empty.
+		long rowId = db.insert(NotePad.GTaskLists.TABLE_NAME, // The table to
+																// insert
+																// into.
+				NotePad.GTaskLists.COLUMN_NAME_DB_ID, // A hack, SQLite sets
+														// this
+				// column value to null
+				// if values is empty.
 				values // A map of column names, and the values to insert
 						// into the columns.
 				);
@@ -1042,7 +1062,8 @@ public class NotePadProvider extends ContentProvider implements
 
 			// Notifies observers registered against this provider that the data
 			// changed.
-			getContext().getContentResolver().notifyChange(noteUri, null, false);
+			getContext().getContentResolver()
+					.notifyChange(noteUri, null, false);
 			return noteUri;
 		}
 
@@ -1281,7 +1302,7 @@ public class NotePadProvider extends ContentProvider implements
 		 * along to the resolver framework, and observers that have registered
 		 * themselves for the provider are notified.
 		 */
-		getContext().getContentResolver().notifyChange(uri, null, true);
+		getContext().getContentResolver().notifyChange(uri, null, false);
 
 		// Returns the number of rows deleted.
 		return count;
@@ -1323,6 +1344,9 @@ public class NotePadProvider extends ContentProvider implements
 		SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 		int count;
 		String finalWhere;
+		
+		// Gets the current system time in milliseconds
+				Long now = Long.valueOf(System.currentTimeMillis());
 
 		// Does the update based on the incoming URI pattern
 		switch (sUriMatcher.match(uri)) {
@@ -1334,6 +1358,12 @@ public class NotePadProvider extends ContentProvider implements
 
 			if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFIED) == false) {
 				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
+			}
+			// If the values map doesn't contain the modification date, sets the
+			// value to the current
+			// time.
+			if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE) == false) {
+				values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, now);
 			}
 
 			// Does the update and returns the number of rows updated.
@@ -1352,6 +1382,12 @@ public class NotePadProvider extends ContentProvider implements
 		case NOTE_ID:
 			if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFIED) == false) {
 				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
+			}
+			// If the values map doesn't contain the modification date, sets the
+			// value to the current
+			// time.
+			if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE) == false) {
+				values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, now);
 			}
 
 			/*
@@ -1385,6 +1421,13 @@ public class NotePadProvider extends ContentProvider implements
 			if (values.containsKey(NotePad.Lists.COLUMN_NAME_MODIFIED) == false) {
 				values.put(NotePad.Lists.COLUMN_NAME_MODIFIED, 1);
 			}
+			// If the values map doesn't contain the modification date, sets the
+			// value to the current
+			// time.
+			if (values.containsKey(NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE) == false) {
+				values.put(NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE, now);
+			}
+			
 			// Does the update and returns the number of rows updated.
 			count = db.update(NotePad.Lists.TABLE_NAME, // The database table
 														// name.
@@ -1396,6 +1439,12 @@ public class NotePadProvider extends ContentProvider implements
 		case LISTS_ID:
 			if (values.containsKey(NotePad.Lists.COLUMN_NAME_MODIFIED) == false) {
 				values.put(NotePad.Lists.COLUMN_NAME_MODIFIED, 1);
+			}
+			// If the values map doesn't contain the modification date, sets the
+			// value to the current
+			// time.
+			if (values.containsKey(NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE) == false) {
+				values.put(NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE, now);
 			}
 
 			finalWhere = BaseColumns._ID + // The ID column name
@@ -1490,7 +1539,7 @@ public class NotePadProvider extends ContentProvider implements
 		 * along to the resolver framework, and observers that have registered
 		 * themselves for the provider are notified.
 		 */
-		getContext().getContentResolver().notifyChange(uri, null, true);
+		getContext().getContentResolver().notifyChange(uri, null, false);
 
 		// Returns the number of rows updated.
 		return count;

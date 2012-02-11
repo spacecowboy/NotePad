@@ -327,6 +327,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					null // No where columns are used, so no where arguments are
 							// necessary.
 					);
+			
+			// Also set modified on the list
+			ContentValues listValues = new ContentValues();
+			// This isn't necessary actually, but do it anyway
+			listValues.put(NotePad.Lists.COLUMN_NAME_MODIFIED, 1);
+			// Update list
+			activity.getContentResolver().update(Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE, Long.toString(listId)), listValues, null, null);
 		}
 	}
 

@@ -187,13 +187,14 @@ public class FragmentLayout extends Activity implements
 			dialog.setContentView(R.layout.create_list_dialog);
 			dialog.setTitle(R.string.menu_createlist);
 			
-			final EditText title = (EditText) dialog.findViewById(R.id.editTitle);
+			EditText title = (EditText) dialog.findViewById(R.id.editTitle);
 			title.setText("");
 			
 			Button yesButton = (Button) dialog.findViewById(R.id.dialog_yes);
 			yesButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					EditText title = (EditText) dialog.findViewById(R.id.editTitle);
 					createList(title.getText().toString());
 					dialog.dismiss();
 				}
@@ -212,13 +213,14 @@ public class FragmentLayout extends Activity implements
 			renameDialog.setContentView(R.layout.rename_list_dialog);
 			renameDialog.setTitle(R.string.menu_renamelist);
 			
-			final EditText renameTitle = (EditText) renameDialog.findViewById(R.id.renameTitle);
+			EditText renameTitle = (EditText) renameDialog.findViewById(R.id.renameTitle);
 			renameTitle.setText("");
 			
 			Button rYesButton = (Button) renameDialog.findViewById(R.id.r_dialog_yes);
 			rYesButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					EditText renameTitle = (EditText) renameDialog.findViewById(R.id.renameTitle);
 					renameList(renameTitle.getText().toString());
 					renameDialog.dismiss();
 				}
@@ -529,6 +531,7 @@ public class FragmentLayout extends Activity implements
 
 	/**
 	 * Delete all notes given from database
+	 * Only marks them as deleted actually
 	 * 
 	 * @param ids
 	 */

@@ -108,6 +108,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 //				}
 				
 				for (GoogleTaskList list: dbTalker.getModifiedLists()) {
+					// First upload the modified tasks within.
+					list.uploadModifiedTasks(apiTalker, dbTalker);
 					GoogleTaskList result = apiTalker.uploadList(list);
 					if (result != null)
 						dbTalker.uploaded(result);
@@ -121,8 +123,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 //					dbTalker.SaveToDatabase(task);
 //				}
 				for (GoogleTaskList list: apiTalker.getModifiedLists(dbTalker.getAllLists())) {
+					// TODO
+					// Download modified tasks
 					Log.d(TAG, "Saving modified: " + list.toJSON());
 					dbTalker.SaveToDatabase(list);
+					// Also save any modified tasks contained in that list
+					list.downloadModifiedTasks(apiTalker, dbTalker);
 				}
 				
 				// Erase deleted stuff
@@ -176,13 +182,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 	}
 
 	private void handleConflict(GoogleDBTalker dbTalker,
-			GoogleAPITalker apiTalker, GoogleTask task) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	private void handleConflict(GoogleDBTalker dbTalker,
 			GoogleAPITalker apiTalker, GoogleTaskList localList) throws ClientProtocolException, JSONException, PreconditionException, NotModifiedException, IOException, RemoteException {
+		// TODO
+		// Download new tasks here first
+		
+		
 		localList.etag = null; // Set this to null so we dont do any if-none-match gets
 		GoogleTaskList remoteList = apiTalker.getList(localList);
 		// Last updated one wins

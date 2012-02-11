@@ -277,6 +277,12 @@ public final class NotePad {
         public static final String COLUMN_NAME_MODIFIED = "modifiedflag";
         
         /**
+         * Column name for the modification timestamp
+         * <P>Type: INTEGER (long from System.curentTimeMillis())</P>
+         */
+        public static final String COLUMN_NAME_MODIFICATION_DATE = "modified";
+        
+        /**
          * The default sort order for this table
          */
         public static final String DEFAULT_SORT_TYPE = COLUMN_NAME_TITLE;
