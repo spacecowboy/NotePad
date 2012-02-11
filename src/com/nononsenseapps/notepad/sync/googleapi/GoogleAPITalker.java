@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -120,6 +121,18 @@ public class GoogleAPITalker {
 	public static String TaskURL_ETAG_ID(String taskId, String listId) {
 		return BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId + "?fields=id,etag&"+ AUTH_URL_END;
 	}
+	public static String AllTasksCompletedMin(String listId, String timestamp) {
+		if (timestamp == null)
+			return BASE_TASK_URL + "/" + listId + TASKS + "?showDeleted=true&showHidden=true&fields=items&" + AUTH_URL_END;
+		else {
+			try {
+				return BASE_TASK_URL + "/" + listId + TASKS + "?showDeleted=true&showHidden=true&fields=items&updatedMin=" + URLEncoder.encode(timestamp, "UTF-8") + "&" + AUTH_URL_END;
+			} catch (UnsupportedEncodingException e) {
+				Log.d(TAG, "Malformed timestamp: " + e.getLocalizedMessage());
+				return BASE_TASK_URL + "/" + listId + TASKS + "?showDeleted=true&showHidden=true&fields=items&" + AUTH_URL_END;
+			}
+		}
+		}
 	// Tasks URL which inludes deleted tasks: /tasks?showDeleted=true
 	// Also do showHidden=true?
 	// Tasks returnerd will have deleted = true or no deleted field at all. Same case for hidden.
@@ -363,16 +376,52 @@ public class GoogleAPITalker {
 
 	/**
 	 * Given a time, will fetch all tasks which were modified afterwards
+	 * @param googleTaskList 
 	 */
-	public ArrayList<GoogleTask> getModifiedTasks(String etag) {
-		// Use a header as:
-		// W/ indicates a weak match (semantically equal, compared to
-		// byte-to-byte equal)
-		// If-None-Match: W/"D08FQn8-eil7ImA9WxZbFEw."
-
-		// Remember to set true in showDeleted
+	public ArrayList<GoogleTask> getModifiedTasks(String lastUpdated, GoogleTaskList list) {
+		ArrayList<GoogleTask> moddedList = new ArrayList<GoogleTask>();
+		// Use lastUpdated string to get all tasks which were updated after that date
+		// TODO me
 		// Make updatedMin URL friendly
-		return null;
+		
+		HttpGet httpget = new HttpGet(AllTasksCompletedMin(list.id, lastUpdated));
+		setAuthHeader(httpget);
+		
+		Log.d(TAG, httpget.getRequestLine().toString());
+		for (Header header : httpget.getAllHeaders()) {
+			Log.d(TAG, header.getName() + ": " + header.getValue());
+		}
+		
+		String stringResponse;
+		try {
+			stringResponse = parseResponse(client.execute(httpget));
+			
+				JSONObject jsonResponse = new JSONObject(stringResponse);
+				Log.d(TAG, jsonResponse.toString());
+				// Will be an array of items
+				JSONArray items = jsonResponse.getJSONArray("items");
+				
+				int i;
+				int length = items.length();
+				for(i = 0; i < length; i++) {
+					JSONObject jsonTask = items.getJSONObject(i);
+					moddedList.add(new GoogleTask(jsonTask));
+				}
+		} catch (PreconditionException e) {
+			// Can't happen
+			return null;
+		} catch (ClientProtocolException e) {
+			Log.d(TAG, e.getLocalizedMessage());
+		} catch (NotModifiedException e) {
+			Log.d(TAG, e.getLocalizedMessage());
+		} catch (IOException e) {
+			Log.d(TAG, e.getLocalizedMessage());
+		} catch (JSONException e) {
+			// Item list must have been empty
+			Log.d(TAG, e.getLocalizedMessage());
+		}
+		
+		return moddedList;
 	}
 
 	/**

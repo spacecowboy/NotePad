@@ -107,6 +107,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 //						handleConflict(dbTalker, apiTalker, task);
 //				}
 				
+				// FIrst of all, we need the latest updated time later. So save that for now.
+				String lastUpdated = dbTalker.getLastUpdated();
+				
 				for (GoogleTaskList list: dbTalker.getModifiedLists()) {
 					// First upload the modified tasks within.
 					list.uploadModifiedTasks(apiTalker, dbTalker);
@@ -123,12 +126,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 //					dbTalker.SaveToDatabase(task);
 //				}
 				for (GoogleTaskList list: apiTalker.getModifiedLists(dbTalker.getAllLists())) {
-					// TODO
-					// Download modified tasks
+					// Also save any modified tasks contained in that list
+					list.downloadModifiedTasks(apiTalker, dbTalker, lastUpdated);
+					
 					Log.d(TAG, "Saving modified: " + list.toJSON());
 					dbTalker.SaveToDatabase(list);
-					// Also save any modified tasks contained in that list
-					list.downloadModifiedTasks(apiTalker, dbTalker);
 				}
 				
 				// Erase deleted stuff

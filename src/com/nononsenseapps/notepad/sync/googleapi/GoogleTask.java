@@ -49,6 +49,10 @@ public class GoogleTask {
 		json = jsonTask;
 	}
 
+	/**
+	 * Special tricks because google api actually want 'null' while JSONObject doesnt allow them.
+	 * @return
+	 */
 	public String toJSON() {
 		String returnString = "";
 		try {

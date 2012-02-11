@@ -149,13 +149,12 @@ public class GoogleTaskList {
 		}
 	}
 
-	public void downloadModifiedTasks(GoogleAPITalker apiTalker, GoogleDBTalker dbTalker) {
-//		for (GoogleTaskList list: apiTalker.getModifiedLists(dbTalker.getAllLists())) {
-//			Log.d(TAG, "Saving modified: " + list.toJSON());
-//			dbTalker.SaveToDatabase(list);
-//			// Also save any modified tasks contained in that list
-//			list.downloadModifiedTasks(apiTalker, dbTalker);
-//		}
+	public void downloadModifiedTasks(GoogleAPITalker apiTalker, GoogleDBTalker dbTalker, String lastUpdated) throws RemoteException {
+		Log.d(TAG, "DownloadModifiedTasks, last date: " + lastUpdated);
+		for (GoogleTask task: apiTalker.getModifiedTasks(lastUpdated, this)) {
+			Log.d(TAG, "Saving modified: " + task.toJSON());
+			dbTalker.SaveToDatabase(task, this);
+		}
 	}
 	
 	private void handleConflict(GoogleDBTalker dbTalker,
