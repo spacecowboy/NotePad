@@ -98,44 +98,64 @@ public class GoogleAPITalker {
 	public static final String AUTH_URL_END = "key=" + APIKEY;
 	public static final String BASE_URL = "https://www.googleapis.com/tasks/v1/users/@me/lists";
 	public static final String ALL_LISTS = BASE_URL + "?" + AUTH_URL_END;
+
 	public static String ListURL(String id) {
-		return BASE_URL + "/" + id + "?"+ AUTH_URL_END;
+		return BASE_URL + "/" + id + "?" + AUTH_URL_END;
 	}
+
 	// public static final String LISTS = "/lists";
 	public static final String BASE_TASK_URL = "https://www.googleapis.com/tasks/v1/lists";
 	public static final String TASKS = "/tasks"; // Must be preceeded by
-				
+
 	// only retrieve the fields we will save in the database or use
-	//https://www.googleapis.com/tasks/v1/lists/MDIwMzMwNjA0MjM5MzQ4MzIzMjU6MDow/tasks?showDeleted=true&showHidden=true&pp=1&key={YOUR_API_KEY}
-	//updatedMin=2012-02-07T14%3A59%3A05.000Z
+	// https://www.googleapis.com/tasks/v1/lists/MDIwMzMwNjA0MjM5MzQ4MzIzMjU6MDow/tasks?showDeleted=true&showHidden=true&pp=1&key={YOUR_API_KEY}
+	// updatedMin=2012-02-07T14%3A59%3A05.000Z
 	public static String AllTasks(String listId) {
-		return BASE_TASK_URL + "/" + listId + TASKS + "?"+ "showDeleted=true&showHidden=true&" + AUTH_URL_END;
+		return BASE_TASK_URL + "/" + listId + TASKS + "?"
+				+ "showDeleted=true&showHidden=true&" + AUTH_URL_END;
 	}
+
 	public static String AllTasksInsert(String listId) {
-		return BASE_TASK_URL + "/" + listId + TASKS + "?"+ AUTH_URL_END;
+		return BASE_TASK_URL + "/" + listId + TASKS + "?" + AUTH_URL_END;
 	}
-	
+
 	public static String TaskURL(String taskId, String listId) {
-		return BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId + "?"+ AUTH_URL_END;
+		return BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId + "?"
+				+ AUTH_URL_END;
 	}
+
 	public static String TaskURL_ETAG_ID(String taskId, String listId) {
-		return BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId + "?fields=id,etag&"+ AUTH_URL_END;
+		return BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId
+				+ "?fields=id,etag&" + AUTH_URL_END;
 	}
+
 	public static String AllTasksCompletedMin(String listId, String timestamp) {
 		if (timestamp == null)
-			return BASE_TASK_URL + "/" + listId + TASKS + "?showDeleted=true&showHidden=true&fields=items&" + AUTH_URL_END;
+			return BASE_TASK_URL + "/" + listId + TASKS
+					+ "?showDeleted=true&showHidden=true&fields=items&"
+					+ AUTH_URL_END;
 		else {
 			try {
-				return BASE_TASK_URL + "/" + listId + TASKS + "?showDeleted=true&showHidden=true&fields=items&updatedMin=" + URLEncoder.encode(timestamp, "UTF-8") + "&" + AUTH_URL_END;
+				return BASE_TASK_URL
+						+ "/"
+						+ listId
+						+ TASKS
+						+ "?showDeleted=true&showHidden=true&fields=items&updatedMin="
+						+ URLEncoder.encode(timestamp, "UTF-8") + "&"
+						+ AUTH_URL_END;
 			} catch (UnsupportedEncodingException e) {
 				Log.d(TAG, "Malformed timestamp: " + e.getLocalizedMessage());
-				return BASE_TASK_URL + "/" + listId + TASKS + "?showDeleted=true&showHidden=true&fields=items&" + AUTH_URL_END;
+				return BASE_TASK_URL + "/" + listId + TASKS
+						+ "?showDeleted=true&showHidden=true&fields=items&"
+						+ AUTH_URL_END;
 			}
 		}
-		}
+	}
+
 	// Tasks URL which inludes deleted tasks: /tasks?showDeleted=true
 	// Also do showHidden=true?
-	// Tasks returnerd will have deleted = true or no deleted field at all. Same case for hidden.
+	// Tasks returnerd will have deleted = true or no deleted field at all. Same
+	// case for hidden.
 	private static final String TAG = "GoogleAPITalker";
 
 	// A URL is alwasy constructed as: BASE_URL + ["/" + LISTID [+ TASKS [+ "/"
@@ -203,24 +223,26 @@ public class GoogleAPITalker {
 		ArrayList<GoogleTaskList> list = new ArrayList<GoogleTaskList>();
 
 		// Lists will not carry etags, must fetch them individually
-		for (GoogleTaskList gimpedList: getListOfLists()) {
+		for (GoogleTaskList gimpedList : getListOfLists()) {
 			list.add(getList(gimpedList));
 		}
 
 		return list;
 	}
-	
+
 	/**
-	 * The entries in this does only one net-call, and such the list items do not contain e-tags.
-	 * useful to get an id-list.
+	 * The entries in this does only one net-call, and such the list items do
+	 * not contain e-tags. useful to get an id-list.
+	 * 
 	 * @return
-	 * @throws IOException 
-	 * @throws NotModifiedException 
-	 * @throws PreconditionException 
-	 * @throws JSONException 
-	 * @throws ClientProtocolException 
+	 * @throws IOException
+	 * @throws NotModifiedException
+	 * @throws PreconditionException
+	 * @throws JSONException
+	 * @throws ClientProtocolException
 	 */
-	private ArrayList<GoogleTaskList> getListOfLists() throws ClientProtocolException, JSONException, IOException {
+	private ArrayList<GoogleTaskList> getListOfLists()
+			throws ClientProtocolException, JSONException, IOException {
 		ArrayList<GoogleTaskList> list = new ArrayList<GoogleTaskList>();
 
 		HttpGet httpget = new HttpGet(ALL_LISTS);
@@ -231,19 +253,19 @@ public class GoogleAPITalker {
 		try {
 			jsonResponse = (JSONObject) new JSONTokener(
 					parseResponse(client.execute(httpget))).nextValue();
-		
-		Log.d(TAG, jsonResponse.toString());
 
-		JSONArray lists = jsonResponse.getJSONArray("items");
+			Log.d(TAG, jsonResponse.toString());
 
-		int size = lists.length();
-		int i;
+			JSONArray lists = jsonResponse.getJSONArray("items");
 
-		// All lists will not carry etags, must fetch them individually
-		for (i = 0; i < size; i++) {
-			JSONObject jsonList = lists.getJSONObject(i);
-			list.add(new GoogleTaskList(jsonList));
-		}
+			int size = lists.length();
+			int i;
+
+			// All lists will not carry etags, must fetch them individually
+			for (i = 0; i < size; i++) {
+				JSONObject jsonList = lists.getJSONObject(i);
+				list.add(new GoogleTaskList(jsonList));
+			}
 		} catch (PreconditionException e) {
 			// Can not happen in this case since we don't have any etag!
 		} catch (NotModifiedException e) {
@@ -252,19 +274,21 @@ public class GoogleAPITalker {
 
 		return list;
 	}
-	
+
 	/**
-	 * If etag is present, will make a if-none-match request.
-	 * Expects only id and possibly etag to be present in the object
+	 * If etag is present, will make a if-none-match request. Expects only id
+	 * and possibly etag to be present in the object
 	 * 
 	 * @param gimpedTask
 	 * @return
-	 * @throws IOException 
-	 * @throws NotModifiedException 
-	 * @throws JSONException 
-	 * @throws ClientProtocolException 
+	 * @throws IOException
+	 * @throws NotModifiedException
+	 * @throws JSONException
+	 * @throws ClientProtocolException
 	 */
-	public GoogleTask getTask(GoogleTask gimpedTask, GoogleTaskList list) throws ClientProtocolException, JSONException, NotModifiedException, IOException {
+	public GoogleTask getTask(GoogleTask gimpedTask, GoogleTaskList list)
+			throws ClientProtocolException, JSONException,
+			NotModifiedException, IOException {
 		GoogleTask result = null;
 		HttpGet httpget = new HttpGet(TaskURL(gimpedTask.id, list.id));
 		setAuthHeader(httpget);
@@ -275,9 +299,9 @@ public class GoogleAPITalker {
 		try {
 			jsonResponse = (JSONObject) new JSONTokener(
 					parseResponse(client.execute(httpget))).nextValue();
-		
-		Log.d(TAG, jsonResponse.toString());
-		result = new GoogleTask(jsonResponse);
+
+			Log.d(TAG, jsonResponse.toString());
+			result = new GoogleTask(jsonResponse);
 		} catch (PreconditionException e) {
 			// Can not happen since we are not doing a PUT/POST
 		}
@@ -287,8 +311,9 @@ public class GoogleAPITalker {
 	}
 
 	/**
-	 * Takes a list object because the etag is optional here.
-	 * If one is present, will make a if-none-match request.
+	 * Takes a list object because the etag is optional here. If one is present,
+	 * will make a if-none-match request.
+	 * 
 	 * @param gimpedList
 	 * @return
 	 * @throws ClientProtocolException
@@ -298,7 +323,8 @@ public class GoogleAPITalker {
 	 * @throws IOException
 	 */
 	public GoogleTaskList getList(GoogleTaskList gimpedList)
-			throws ClientProtocolException, JSONException, NotModifiedException, IOException {
+			throws ClientProtocolException, JSONException,
+			NotModifiedException, IOException {
 		GoogleTaskList result = null;
 		HttpGet httpget = new HttpGet(ListURL(gimpedList.id));
 		setAuthHeader(httpget);
@@ -309,9 +335,9 @@ public class GoogleAPITalker {
 		try {
 			jsonResponse = (JSONObject) new JSONTokener(
 					parseResponse(client.execute(httpget))).nextValue();
-		
-		Log.d(TAG, jsonResponse.toString());
-		result = new GoogleTaskList(jsonResponse);
+
+			Log.d(TAG, jsonResponse.toString());
+			result = new GoogleTaskList(jsonResponse);
 		} catch (PreconditionException e) {
 			// Can not happen since we are not doing a PUT/POST
 		}
@@ -320,27 +346,32 @@ public class GoogleAPITalker {
 	}
 
 	/**
-	 * Because Google Tasks API does not return etags in its list of lists, we'll have to download each individually.
-	 * Use our local lists' etags to only download lists which have changed (and new ones of course).
+	 * Because Google Tasks API does not return etags in its list of lists,
+	 * we'll have to download each individually. Use our local lists' etags to
+	 * only download lists which have changed (and new ones of course).
 	 * 
-	 * Also, because the API does not support deleted flags on lists, we have to compare with the local list to find 
-	 * missing (deleted) lists.
+	 * Also, because the API does not support deleted flags on lists, we have to
+	 * compare with the local list to find missing (deleted) lists.
 	 * 
 	 * @throws IOException
-	 * @throws JSONException 
-	 * @throws ClientProtocolException 
+	 * @throws JSONException
+	 * @throws ClientProtocolException
 	 * 
 	 */
-	public ArrayList<GoogleTaskList> getModifiedLists(ArrayList<GoogleTaskList> allLocalLists) throws ClientProtocolException, JSONException, IOException {
+	public ArrayList<GoogleTaskList> getModifiedLists(
+			ArrayList<GoogleTaskList> allLocalLists)
+			throws ClientProtocolException, JSONException, IOException {
 		ArrayList<GoogleTaskList> modifiedLists = new ArrayList<GoogleTaskList>();
 		// Get list of lists
-		for (GoogleTaskList gimpedList: getListOfLists()) {
+		for (GoogleTaskList gimpedList : getListOfLists()) {
 			boolean retrieved = false;
-			for (GoogleTaskList localList: allLocalLists) {
+			for (GoogleTaskList localList : allLocalLists) {
 				if (gimpedList.id.equals(localList.id)) {
-					// Remove from list as well. any that remains do not exist on server, and hence should be deleted
+					// Remove from list as well. any that remains do not exist
+					// on server, and hence should be deleted
 					allLocalLists.remove(localList);
-					// For any that exist in localList, use if-none-match header to get
+					// For any that exist in localList, use if-none-match header
+					// to get
 					try {
 						// Locallist contains the ETAG, and the DBID
 						GoogleTaskList updatedList = getList(localList);
@@ -363,10 +394,12 @@ public class GoogleAPITalker {
 				}
 			}
 		}
-		
-		// Any lists that remain in the original allLocalLists, could not be found on server. Hence
-		// they must have been deleted. Set them as deleted and add to modified list
-		for (GoogleTaskList deletedList: allLocalLists) {
+
+		// Any lists that remain in the original allLocalLists, could not be
+		// found on server. Hence
+		// they must have been deleted. Set them as deleted and add to modified
+		// list
+		for (GoogleTaskList deletedList : allLocalLists) {
 			deletedList.deleted = 1;
 			modifiedLists.add(deletedList);
 		}
@@ -376,37 +409,41 @@ public class GoogleAPITalker {
 
 	/**
 	 * Given a time, will fetch all tasks which were modified afterwards
-	 * @param googleTaskList 
+	 * 
+	 * @param googleTaskList
 	 */
-	public ArrayList<GoogleTask> getModifiedTasks(String lastUpdated, GoogleTaskList list) {
+	public ArrayList<GoogleTask> getModifiedTasks(String lastUpdated,
+			GoogleTaskList list) {
 		ArrayList<GoogleTask> moddedList = new ArrayList<GoogleTask>();
-		// Use lastUpdated string to get all tasks which were updated after that date
+		// Use lastUpdated string to get all tasks which were updated after that
+		// date
 		// TODO me
 		// Make updatedMin URL friendly
-		
-		HttpGet httpget = new HttpGet(AllTasksCompletedMin(list.id, lastUpdated));
+
+		HttpGet httpget = new HttpGet(
+				AllTasksCompletedMin(list.id, lastUpdated));
 		setAuthHeader(httpget);
-		
+
 		Log.d(TAG, httpget.getRequestLine().toString());
 		for (Header header : httpget.getAllHeaders()) {
 			Log.d(TAG, header.getName() + ": " + header.getValue());
 		}
-		
+
 		String stringResponse;
 		try {
 			stringResponse = parseResponse(client.execute(httpget));
-			
-				JSONObject jsonResponse = new JSONObject(stringResponse);
-				Log.d(TAG, jsonResponse.toString());
-				// Will be an array of items
-				JSONArray items = jsonResponse.getJSONArray("items");
-				
-				int i;
-				int length = items.length();
-				for(i = 0; i < length; i++) {
-					JSONObject jsonTask = items.getJSONObject(i);
-					moddedList.add(new GoogleTask(jsonTask));
-				}
+
+			JSONObject jsonResponse = new JSONObject(stringResponse);
+			Log.d(TAG, jsonResponse.toString());
+			// Will be an array of items
+			JSONArray items = jsonResponse.getJSONArray("items");
+
+			int i;
+			int length = items.length();
+			for (i = 0; i < length; i++) {
+				JSONObject jsonTask = items.getJSONObject(i);
+				moddedList.add(new GoogleTask(jsonTask));
+			}
 		} catch (PreconditionException e) {
 			// Can't happen
 			return null;
@@ -420,7 +457,7 @@ public class GoogleAPITalker {
 			// Item list must have been empty
 			Log.d(TAG, e.getLocalizedMessage());
 		}
-		
+
 		return moddedList;
 	}
 
@@ -428,9 +465,10 @@ public class GoogleAPITalker {
 	 * Returns an object if all went well. Returns null if a conflict was
 	 * detected. Will return a partial result containing only id and etag
 	 */
-	public GoogleTask uploadTask(GoogleTask task, GoogleTaskList pList) throws ClientProtocolException, JSONException,
-	NotModifiedException, IOException {
-		
+	public GoogleTask uploadTask(GoogleTask task, GoogleTaskList pList)
+			throws ClientProtocolException, JSONException,
+			NotModifiedException, IOException {
+
 		HttpUriRequest httppost;
 		if (task.id != null) {
 			Log.d(TAG, "ID is not NULL!! " + TaskURL_ETAG_ID(task.id, pList.id));
@@ -438,7 +476,8 @@ public class GoogleAPITalker {
 				httppost = new HttpDelete(TaskURL_ETAG_ID(task.id, pList.id));
 			} else {
 				httppost = new HttpPost(TaskURL_ETAG_ID(task.id, pList.id));
-				// apache does not include PATCH requests, but we can force a post to be a PATCH request
+				// apache does not include PATCH requests, but we can force a
+				// post to be a PATCH request
 				httppost.setHeader("X-HTTP-Method-Override", "PATCH");
 			}
 		} else {
@@ -506,7 +545,8 @@ public class GoogleAPITalker {
 				httppost = new HttpDelete(ListURL(list.id));
 			} else {
 				httppost = new HttpPost(ListURL(list.id));
-				// apache does not include PATCH requests, but we can force a post to be a PATCH request
+				// apache does not include PATCH requests, but we can force a
+				// post to be a PATCH request
 				httppost.setHeader("X-HTTP-Method-Override", "PATCH");
 			}
 		} else {
@@ -586,7 +626,7 @@ public class GoogleAPITalker {
 	 * Does nothing if etag is null or "" Sets an if-none-match header for weak
 	 * etag comparisons.
 	 * 
-	 *  If-None-Match: W/"D08FQn8-eil7ImA9WxZbFEw."
+	 * If-None-Match: W/"D08FQn8-eil7ImA9WxZbFEw."
 	 * 
 	 * @param etag
 	 */
@@ -617,6 +657,7 @@ public class GoogleAPITalker {
 		else if (httppost instanceof HttpPut)
 			((HttpPut) httppost).setEntity(se);
 	}
+
 	/**
 	 * SUpports Post and Put. Anything else will not have any effect
 	 * 
@@ -721,7 +762,8 @@ public class GoogleAPITalker {
 	}
 
 	/**
-	 * Parses a httpresponse and returns the string body of it. Throws exceptions for select status codes.
+	 * Parses a httpresponse and returns the string body of it. Throws
+	 * exceptions for select status codes.
 	 */
 	public static String parseResponse(HttpResponse response)
 			throws PreconditionException, NotModifiedException,
@@ -745,26 +787,35 @@ public class GoogleAPITalker {
 		} else if (response.getStatusLine().getStatusCode() == 400) {
 			// Warning: can happen for a legitimate case
 			// This happens if you try to delete the default list.
-			// Resolv it by considering the delete successful. List will still exist on server, but all tasks will be deleted from it.
+			// Resolv it by considering the delete successful. List will still
+			// exist on server, but all tasks will be deleted from it.
 			// A successful delete returns an empty response.
 			// Make a log entry about it anyway though
-			Log.d(TAG, "Response was 400. Either we deleted the default list in app or did something really bad");
+			Log.d(TAG,
+					"Response was 400. Either we deleted the default list in app or did something really bad");
 			return "";
-		}
-		else {
+		} else if (response.getStatusLine().getStatusCode() == 204) {
+			// Successful delete of a tasklist. return empty string as that is
+			// expected from delete
+			Log.d(TAG, "Response was 204: Successful delete");
+			return "";
+		} else {
 
 			try {
-				in = new BufferedReader(new InputStreamReader(response
-						.getEntity().getContent()));
-				StringBuffer sb = new StringBuffer("");
-				String line = "";
-				String NL = System.getProperty("line.separator");
-				while ((line = in.readLine()) != null) {
-					sb.append(line + NL);
+				if (response.getEntity() != null
+						&& response.getEntity().getContent() != null) {
+					in = new BufferedReader(new InputStreamReader(response
+							.getEntity().getContent()));
+					StringBuffer sb = new StringBuffer("");
+					String line = "";
+					String NL = System.getProperty("line.separator");
+					while ((line = in.readLine()) != null) {
+						sb.append(line + NL);
+					}
+					in.close();
+					page = sb.toString();
+					System.out.println(page);
 				}
-				in.close();
-				page = sb.toString();
-				System.out.println(page);
 			} catch (IOException e) {
 			} finally {
 				if (in != null) {

@@ -71,14 +71,13 @@ public class GoogleTask {
 			json.put("status", status);
 			if (status != null && status.equals("needsAction")) {
 				// We must reset this also in this case
-				nullAppendage += ", \"completed\": null}";
+				nullAppendage += ", \"completed\": null";
 			}
 			
 			nullAppendage += "}";
-				
 			
-			returnString = json.toString();
-			returnString = returnString.substring(0, returnString.length()-1) + nullAppendage;
+			String jsonString = json.toString();
+			returnString = jsonString.substring(0, jsonString.length()-1) + nullAppendage;
 
 			Log.d(TAG, returnString);
 		} catch (JSONException e) {
@@ -97,13 +96,21 @@ public class GoogleTask {
 	 */
 	public ContentValues toNotesContentValues(int modified, long listId) {
 		ContentValues values = new ContentValues();
-		values.put(NotePad.Notes.COLUMN_NAME_TITLE, title);
-		values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, dueDate);
-		values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, status);
-		values.put(NotePad.Notes.COLUMN_NAME_NOTE, notes);
+		if (title != null)
+			values.put(NotePad.Notes.COLUMN_NAME_TITLE, title);
+		if (dueDate != null)
+			values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, dueDate);
+		if (status != null)
+			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, status);
+		if (notes != null)
+			values.put(NotePad.Notes.COLUMN_NAME_NOTE, notes);
+		
+		if (dbId > -1)
+			values.put(NotePad.Notes._ID, dbId);
 
 		values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
 		values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, modified);
+		values.put(NotePad.Notes.COLUMN_NAME_DELETED, deleted);
 		return values;
 	}
 

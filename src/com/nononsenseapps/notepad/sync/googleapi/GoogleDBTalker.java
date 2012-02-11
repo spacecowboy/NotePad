@@ -350,39 +350,46 @@ public class GoogleDBTalker {
 	 */
 	public void SaveToDatabase(GoogleTask task, GoogleTaskList plist)
 			throws RemoteException {
-		// Remember to do both Lists and GTASKLists tables
-		if (task.dbId > -1 && task.deleted != 1) {
-			Log.d(TAG, "Updating task");
-			provider.update(
-					Uri.withAppendedPath(NotePad.Notes.CONTENT_ID_URI_BASE,
-							Long.toString(task.dbId)), task
-							.toNotesContentValues(0, plist.dbId), null, null);
-			provider.update(NotePad.GTasks.CONTENT_URI,
-					task.toGTasksContentValues(accountName),
-					NotePad.GTasks.COLUMN_NAME_DB_ID + " IS " + task.dbId
-							+ " AND "
-							+ NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT
-							+ " IS '" + accountName + "'", null);
-			syncResult.stats.numUpdates++;
-		} else if (task.dbId > -1 && task.deleted == 1) {
-			provider.delete(
-					Uri.withAppendedPath(NotePad.Notes.CONTENT_ID_URI_BASE,
-							Long.toString(task.dbId)), null, null);
-			provider.delete(NotePad.GTasks.CONTENT_URI,
-					NotePad.GTasks.COLUMN_NAME_DB_ID + " IS " + task.dbId, null);
-			syncResult.stats.numDeletes++;
-		} else {
-			Log.d(TAG, "Inserting task");
-			Uri newUri = provider.insert(NotePad.Notes.CONTENT_URI,
-					task.toNotesContentValues(0, plist.dbId));
-			long newId = Long.parseLong(newUri.getPathSegments().get(
-					NotePad.Notes.NOTE_ID_PATH_POSITION));
-			// Set the id we just got in the other table
-			task.dbId = newId;
-			provider.insert(NotePad.GTasks.CONTENT_URI,
-					task.toGTasksContentValues(accountName));
+		// Only if list id is valid!
+		if (plist.dbId > -1) {
+			// Remember to do both Lists and GTASKLists tables
+			if (task.dbId > -1 && task.deleted != 1) {
+				Log.d(TAG, "Updating task");
+				provider.update(Uri.withAppendedPath(
+						NotePad.Notes.CONTENT_ID_URI_BASE,
+						Long.toString(task.dbId)), task.toNotesContentValues(0,
+						plist.dbId), null, null);
+				provider.update(NotePad.GTasks.CONTENT_URI,
+						task.toGTasksContentValues(accountName),
+						NotePad.GTasks.COLUMN_NAME_DB_ID + " IS " + task.dbId
+								+ " AND "
+								+ NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT
+								+ " IS '" + accountName + "'", null);
+				syncResult.stats.numUpdates++;
+			} else if (task.dbId > -1 && task.deleted == 1) {
+				provider.delete(Uri.withAppendedPath(
+						NotePad.Notes.CONTENT_ID_URI_BASE,
+						Long.toString(task.dbId)), null, null);
+				provider.delete(NotePad.GTasks.CONTENT_URI,
+						NotePad.GTasks.COLUMN_NAME_DB_ID + " IS " + task.dbId,
+						null);
+				syncResult.stats.numDeletes++;
+			} else {
+				Log.d(TAG, "Inserting task");
+				Uri newUri = provider.insert(NotePad.Notes.CONTENT_URI,
+						task.toNotesContentValues(0, plist.dbId));
+				long newId = Long.parseLong(newUri.getPathSegments().get(
+						NotePad.Notes.NOTE_ID_PATH_POSITION));
+				// Set the id we just got in the other table
+				task.dbId = newId;
+				provider.insert(NotePad.GTasks.CONTENT_URI,
+						task.toGTasksContentValues(accountName));
 
-			syncResult.stats.numInserts++;
+				syncResult.stats.numInserts++;
+			}
+		} else {
+			Log.d(TAG,
+					"ListID was not valid. Make sure you are saving tasks only for lists that exist in the database");
 		}
 	}
 
@@ -391,6 +398,8 @@ public class GoogleDBTalker {
 	 * update it. If it can not find it in the db, it will insert it.
 	 * 
 	 * Will clear the modified flag.
+	 * 
+	 * The list will have a database id after this function has returned.
 	 * 
 	 * @throws RemoteException
 	 */
@@ -455,24 +464,45 @@ public class GoogleDBTalker {
 	 * 
 	 * @return
 	 */
-	public String getLastUpdated() {
+	public String getLastUpdated(String accountName) {
 		Time lastDate = null;
 		try {
-			Cursor cursor = provider
-					.query(NotePad.Lists.CONTENT_URI,
-							new String[] { NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE },
-							null, null, null);
+			// Only interested in times for those items which have been uploaded
+			// also
+			Cursor cursor = provider.query(NotePad.Lists.CONTENT_URI,
+					new String[] { NotePad.Lists._ID,
+							NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE },
+					null, null, null);
 			if (cursor != null && !cursor.isClosed() && !cursor.isAfterLast()) {
 				while (cursor.moveToNext()) {
 					long date = cursor
 							.getLong(cursor
 									.getColumnIndex(NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE));
-					Time thisDate = new Time(Time.getCurrentTimezone());
-					thisDate.set(date);
-					if (lastDate == null
-							|| Time.compare(thisDate, lastDate) >= 0) {
-						lastDate = thisDate;
+					long id = cursor.getLong(cursor
+							.getColumnIndex(NotePad.Lists._ID));
+					// Get the entry in GTAsksLists. If no entry exists, then
+					// the modification time doesn't count.
+					Cursor gCursor = provider.query(
+							NotePad.GTaskLists.CONTENT_URI, new String[] {
+									NotePad.GTaskLists._ID,
+									NotePad.GTaskLists.COLUMN_NAME_UPDATED },
+							NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT
+									+ " IS ? AND "
+									+ NotePad.GTaskLists.COLUMN_NAME_DB_ID
+									+ " IS " + id, new String[] {accountName}, null);
+
+					if (gCursor != null && !gCursor.isClosed()
+							&& !gCursor.isAfterLast()) {
+						// I don't actually care about the information, just want to know that there is an entry
+						Time thisDate = new Time(Time.getCurrentTimezone());
+						thisDate.set(date);
+						if (lastDate == null
+								|| Time.compare(thisDate, lastDate) >= 0) {
+							lastDate = thisDate;
+						}
 					}
+
+					gCursor.close();
 				}
 			}
 			cursor.close();

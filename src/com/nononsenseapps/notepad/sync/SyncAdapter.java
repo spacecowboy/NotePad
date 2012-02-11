@@ -108,16 +108,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 //				}
 				
 				// FIrst of all, we need the latest updated time later. So save that for now.
-				String lastUpdated = dbTalker.getLastUpdated();
+				String lastUpdated = dbTalker.getLastUpdated(account.name);
 				
 				for (GoogleTaskList list: dbTalker.getModifiedLists()) {
-					// First upload the modified tasks within.
-					list.uploadModifiedTasks(apiTalker, dbTalker);
 					GoogleTaskList result = apiTalker.uploadList(list);
-					if (result != null)
+					if (result != null) {
 						dbTalker.uploaded(result);
-					else
+					}
+					else {
 						handleConflict(dbTalker, apiTalker, list);
+					}
+					// List must exist on server before we can upload tasks inside
+					list.uploadModifiedTasks(apiTalker, dbTalker);
 				}
 				
 				// Save remote changes
@@ -126,11 +128,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 //					dbTalker.SaveToDatabase(task);
 //				}
 				for (GoogleTaskList list: apiTalker.getModifiedLists(dbTalker.getAllLists())) {
-					// Also save any modified tasks contained in that list
-					list.downloadModifiedTasks(apiTalker, dbTalker, lastUpdated);
-					
 					Log.d(TAG, "Saving modified: " + list.toJSON());
 					dbTalker.SaveToDatabase(list);
+					
+					// Also save any modified tasks contained in that list
+					// It is vital that this is done after we saved the list to database
+					// or inserts here will fail for new lists.
+					list.downloadModifiedTasks(apiTalker, dbTalker, lastUpdated);
 				}
 				
 				// Erase deleted stuff
@@ -187,6 +191,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 			GoogleAPITalker apiTalker, GoogleTaskList localList) throws ClientProtocolException, JSONException, PreconditionException, NotModifiedException, IOException, RemoteException {
 		// TODO
 		// Download new tasks here first
+		//localList.downloadModifiedTasks(apiTalker, dbTalker, lastUpdated);
 		
 		
 		localList.etag = null; // Set this to null so we dont do any if-none-match gets
