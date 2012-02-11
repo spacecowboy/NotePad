@@ -460,56 +460,30 @@ public class GoogleDBTalker {
 
 	/**
 	 * Returns a 3339-formatted timestamp which is the latest time that we
-	 * synced. If no sync has been done before, null will be returned
+	 * synced. If no sync has been done before, null will be returned Finds the
+	 * latest update-stamp in the GTasks table
 	 * 
 	 * @return
+	 * @throws RemoteException
 	 */
-	public String getLastUpdated(String accountName) {
+	public String getLastUpdated(String accountName) throws RemoteException {
 		Time lastDate = null;
-		try {
-			// Only interested in times for those items which have been uploaded
-			// also
-			Cursor cursor = provider.query(NotePad.Lists.CONTENT_URI,
-					new String[] { NotePad.Lists._ID,
-							NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE },
-					null, null, null);
-			if (cursor != null && !cursor.isClosed() && !cursor.isAfterLast()) {
-				while (cursor.moveToNext()) {
-					long date = cursor
-							.getLong(cursor
-									.getColumnIndex(NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE));
-					long id = cursor.getLong(cursor
-							.getColumnIndex(NotePad.Lists._ID));
-					// Get the entry in GTAsksLists. If no entry exists, then
-					// the modification time doesn't count.
-					Cursor gCursor = provider.query(
-							NotePad.GTaskLists.CONTENT_URI, new String[] {
-									NotePad.GTaskLists._ID,
-									NotePad.GTaskLists.COLUMN_NAME_UPDATED },
-							NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT
-									+ " IS ? AND "
-									+ NotePad.GTaskLists.COLUMN_NAME_DB_ID
-									+ " IS " + id, new String[] {accountName}, null);
-
-					if (gCursor != null && !gCursor.isClosed()
-							&& !gCursor.isAfterLast()) {
-						// I don't actually care about the information, just want to know that there is an entry
-						Time thisDate = new Time(Time.getCurrentTimezone());
-						thisDate.set(date);
-						if (lastDate == null
-								|| Time.compare(thisDate, lastDate) >= 0) {
-							lastDate = thisDate;
-						}
-					}
-
-					gCursor.close();
+		Cursor cursor = provider.query(NotePad.GTasks.CONTENT_URI,
+				new String[] { NotePad.GTasks.COLUMN_NAME_UPDATED },
+				NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT + " IS ?",
+				new String[] { accountName }, null);
+		if (cursor != null && !cursor.isClosed() && !cursor.isAfterLast()) {
+			while (cursor.moveToNext()) {
+				String updated = cursor.getString(cursor
+						.getColumnIndex(NotePad.GTasks.COLUMN_NAME_UPDATED));
+				Time thisDate = new Time(Time.getCurrentTimezone());
+				thisDate.parse3339(updated);
+				if (lastDate == null || Time.compare(thisDate, lastDate) >= 0) {
+					lastDate = thisDate;
 				}
 			}
-			cursor.close();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
+		cursor.close();
 
 		if (lastDate == null)
 			return null;

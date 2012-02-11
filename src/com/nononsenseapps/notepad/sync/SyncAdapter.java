@@ -88,28 +88,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 			Log.d(TAG, "We got an authToken atleast");
 			
 			try {
-//				apiTalker.getAllLists();
-//				for (GoogleTaskList list: dbTalker.getAllLists()) {
-//					Log.d("GOOGLETASKLIST", list.toString());
-//				}
-//				for (GoogleTaskList list: dbTalker.getModifiedLists()) {
-//					Log.d("GOOGLETASKLIST", list.toString());
-//				}
-				
-				// Upload local changes
-				//List<GoogleTask> modifiedTasks = dbTalker.getModifiedTasks();
-				
-//				for (GoogleTask task: modifiedTasks) {
-//					GoogleTask result = apiTalker.uploadTask(task);
-//					if (result != null)
-//						dbTalker.uploaded(result);
-//					else
-//						handleConflict(dbTalker, apiTalker, task);
-//				}
-				
 				// FIrst of all, we need the latest updated time later. So save that for now.
 				String lastUpdated = dbTalker.getLastUpdated(account.name);
 				
+				// Upload locally modified objects
 				for (GoogleTaskList list: dbTalker.getModifiedLists()) {
 					GoogleTaskList result = apiTalker.uploadList(list);
 					if (result != null) {
@@ -122,11 +104,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					list.uploadModifiedTasks(apiTalker, dbTalker);
 				}
 				
-				// Save remote changes
-//				modifiedTasks = apiTalker.getModifiedTasks("List ETAG here");
-//				for (GoogleTask task: modifiedTasks) {
-//					dbTalker.SaveToDatabase(task);
-//				}
+				// Download remotely modified objects
 				for (GoogleTaskList list: apiTalker.getModifiedLists(dbTalker.getAllLists())) {
 					Log.d(TAG, "Saving modified: " + list.toJSON());
 					dbTalker.SaveToDatabase(list);
@@ -139,6 +117,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 				
 				// Erase deleted stuff
 				//dbTalker.clearDeleted();
+				
+				Log.d(TAG, "Sync Complete!");
 				
 				
 			} catch (ClientProtocolException e) {

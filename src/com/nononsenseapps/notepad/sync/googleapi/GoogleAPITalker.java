@@ -2,6 +2,7 @@ package com.nononsenseapps.notepad.sync.googleapi;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
@@ -415,10 +416,6 @@ public class GoogleAPITalker {
 	public ArrayList<GoogleTask> getModifiedTasks(String lastUpdated,
 			GoogleTaskList list) {
 		ArrayList<GoogleTask> moddedList = new ArrayList<GoogleTask>();
-		// Use lastUpdated string to get all tasks which were updated after that
-		// date
-		// TODO me
-		// Make updatedMin URL friendly
 
 		HttpGet httpget = new HttpGet(
 				AllTasksCompletedMin(list.id, lastUpdated));
@@ -802,19 +799,21 @@ public class GoogleAPITalker {
 		} else {
 
 			try {
-				if (response.getEntity() != null
-						&& response.getEntity().getContent() != null) {
-					in = new BufferedReader(new InputStreamReader(response
-							.getEntity().getContent()));
-					StringBuffer sb = new StringBuffer("");
-					String line = "";
-					String NL = System.getProperty("line.separator");
-					while ((line = in.readLine()) != null) {
-						sb.append(line + NL);
+				if (response.getEntity() != null) {
+					// Only call getContent ONCE
+					InputStream content = response.getEntity().getContent();
+					if (content != null) {
+						in = new BufferedReader(new InputStreamReader(content));
+						StringBuffer sb = new StringBuffer("");
+						String line = "";
+						String NL = System.getProperty("line.separator");
+						while ((line = in.readLine()) != null) {
+							sb.append(line + NL);
+						}
+						in.close();
+						page = sb.toString();
+						System.out.println(page);
 					}
-					in.close();
-					page = sb.toString();
-					System.out.println(page);
 				}
 			} catch (IOException e) {
 			} finally {
