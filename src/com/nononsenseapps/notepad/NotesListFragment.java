@@ -48,6 +48,7 @@ import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.CheckBox;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.ShareActionProvider;
@@ -62,7 +63,9 @@ public class NotesListFragment extends ListFragment implements
 	private static final String[] PROJECTION = new String[] {
 			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
 			NotePad.Notes.COLUMN_NAME_NOTE,
-			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
+			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
+			NotePad.Notes.COLUMN_NAME_DUE_DATE,
+			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS};
 
 	// public static final String SELECTEDPOS = "selectedpos";
 	// public static final String SELECTEDID = "selectedid";
@@ -560,24 +563,41 @@ public class NotesListFragment extends ListFragment implements
 		// The names of the cursor columns to display in the view,
 		// initialized
 		// to the title column
-		String[] dataColumns = { NotePad.Notes.COLUMN_NAME_TITLE,
-				NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
+		String[] dataColumns = { NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
+				NotePad.Notes.COLUMN_NAME_TITLE,
+				NotePad.Notes.COLUMN_NAME_DUE_DATE
+				};
 
 		// The view IDs that will display the cursor columns, initialized to
-		// the
-		// TextView in
-		// noteslist_item.xml
-		int[] viewIDs = { R.id.itemTitle, R.id.itemDate };
+		// the TextView in noteslist_item.xml
+		// My hacked adapter allows the boolean to be set if the string matches
+		// gtasks string values for them.
+		int[] viewIDs = { R.id.itemDone,  R.id.itemTitle, R.id.itemDate };
 
-		int themed_item;
-		// if (FragmentLayout.lightTheme)
-		// themed_item = R.layout.noteslist_item_light;
-		// else
-		themed_item = R.layout.noteslist_item;
+		int themed_item = R.layout.noteslist_item;
 
 		// Creates the backing adapter for the ListView.
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(activity,
 				themed_item, cursor, dataColumns, viewIDs);
+		
+		// In order to set the checked state in the checkbox
+		adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+		    public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+		        if(columnIndex == cursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS)) {
+		                CheckBox cb = (CheckBox) view;
+		                String text = cursor.getString(cursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS));
+		                if (text.toString().equals(getText(R.string.gtask_status_completed))) {
+		                	cb.setChecked(true);
+		                }
+		                else {
+		                	cb.setChecked(false);
+		                }
+		                //cb.setOnCheckedChangeListener();
+		                return true;
+		        }
+		        return false;
+		    }
+		});
 
 		return adapter;
 	}

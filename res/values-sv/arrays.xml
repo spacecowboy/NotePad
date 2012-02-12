@@ -11,13 +11,13 @@
     </string-array>
     
     <string-array name="sorting_preference">
-        <item>Ändringstid</item>
         <item>Titel</item>
+        <item>Förfallodatum</item>
     </string-array>
 
     <string-array name="sortingvalues_preference">
-        <item>modified</item>
         <item>title COLLATE NOCASE</item>
+        <item>duedate</item>
     </string-array>
     
     <string-array name="sorting_order_preference">

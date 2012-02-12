@@ -11,6 +11,15 @@ import android.util.Log;
 public class GoogleTask {
 
 	private static final String TAG = "GoogleTask";
+	private static final String ID = "id";
+	private static final String TITLE = "title";
+	private static final String UPDATED = "updated";
+	private static final String NOTES = "notes";
+	private static final String STATUS = "status";
+	private static final String DUE = "due";
+	private static final String DELETED = "deleted";
+	private static final String COMPLETED = "completed";
+	private static final Object NEEDSACTION = "needsAction";
 	public String id = null;
 	public String etag = null;
 	public String title = null;
@@ -30,16 +39,16 @@ public class GoogleTask {
 	}
 
 	public GoogleTask(JSONObject jsonTask) throws JSONException {
-		id = jsonTask.getString("id");
-		title = jsonTask.getString("title");
-		updated = jsonTask.getString("updated");
+		id = jsonTask.getString(ID);
+		title = jsonTask.getString(TITLE);
+		updated = jsonTask.getString(UPDATED);
 		etag = jsonTask.getString("etag");
-		if (jsonTask.has("notes"))
-			notes = jsonTask.getString("notes");
-		status  = jsonTask.getString("status");
-		if (jsonTask.has("dueDate"))
-			dueDate = jsonTask.getString("dueDate");
-		if (jsonTask.has("deleted") && jsonTask.getBoolean("deleted"))
+		if (jsonTask.has(NOTES))
+			notes = jsonTask.getString(NOTES);
+		status  = jsonTask.getString(STATUS);
+		if (jsonTask.has(DUE))
+			dueDate = jsonTask.getString(DUE);
+		if (jsonTask.has(DELETED) && jsonTask.getBoolean(DELETED))
 			deleted = 1;
 		else
 			deleted = 0;
@@ -59,19 +68,19 @@ public class GoogleTask {
 			JSONObject json = new JSONObject();
 			String nullAppendage = "";
 			if (id != null)
-				json.put("id", id);
+				json.put(ID, id);
 
-			json.put("title", title);
-			json.put("notes", notes);
+			json.put(TITLE, title);
+			json.put(NOTES, notes);
 			if (dueDate != null && !dueDate.equals(""))
-				json.put("due", dueDate);
+				json.put(DUE, dueDate);
 			else
-				nullAppendage += ", \"due\": null";
+				nullAppendage += ", \"" + DUE + "\": null";
 
-			json.put("status", status);
-			if (status != null && status.equals("needsAction")) {
+			json.put(STATUS, status);
+			if (status != null && status.equals(NEEDSACTION)) {
 				// We must reset this also in this case
-				nullAppendage += ", \"completed\": null";
+				nullAppendage += ", \"" + COMPLETED + "\": null";
 			}
 			
 			nullAppendage += "}";

@@ -56,7 +56,8 @@
     <string name="settings_sorting_order_dialog">Order by</string>
     
     <string name="settings_summary_sort_type_alphabetic">Title</string>
-    <string name="settings_summary_sort_type_modified">Modification</string>
+    <!-- <string name="settings_summary_sort_type_modified">Modification</string> -->
+    <string name="settings_summary_sort_type_duedate">Due date</string>
     <string name="settings_summary_sort_order_asc">Ascending</string>
     <string name="settings_summary_sort_order_desc">Descending</string>
     

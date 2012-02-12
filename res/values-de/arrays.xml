@@ -11,18 +11,18 @@
     </string-array>
     
     <string-array name="sorting_preference">
-        <item>Zeitpunkt der letzten Änderung</item>
         <item>Titel</item>
+        <item>Fälligkeitsdatum</item>
     </string-array>
 
     <string-array name="sortingvalues_preference">
-        <item>modified</item>
         <item>title COLLATE NOCASE</item>
+        <item>duedate</item>
     </string-array>
     
     <string-array name="sorting_order_preference">
-        <item>Normal</item>
-        <item>Rückwärts</item>
+        <item>Aufsteigend</item>
+        <item>Absteigend</item>
     </string-array>
 
     <string-array name="sorting_ordervalues_preference">

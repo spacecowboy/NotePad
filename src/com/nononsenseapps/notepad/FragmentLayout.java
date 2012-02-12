@@ -62,6 +62,8 @@ public class FragmentLayout extends Activity implements
 
 	private SimpleCursorAdapter mSpinnerAdapter;
 	private long currentList;
+	
+	private int prevNumberOfLists = -1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -297,7 +299,9 @@ public class FragmentLayout extends Activity implements
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		// Need to restart to allow themes and such to go into effect
-		if (key.equals(NotesPreferenceFragment.KEY_THEME)) {
+		if (key.equals(NotesPreferenceFragment.KEY_THEME)
+				|| key.equals(NotesPreferenceFragment.KEY_SORT_ORDER)
+				|| key.equals(NotesPreferenceFragment.KEY_SORT_TYPE)) {
 			shouldRestart = true;
 		}
 	}
@@ -666,6 +670,16 @@ public class FragmentLayout extends Activity implements
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		mSpinnerAdapter.swapCursor(data);
+		
+		if (prevNumberOfLists == -1) {
+			prevNumberOfLists = mSpinnerAdapter.getCount();
+		}
+		else if (prevNumberOfLists < mSpinnerAdapter.getCount()) {
+			// User created a list, we want to display it
+			prevNumberOfLists = mSpinnerAdapter.getCount();
+			// Now select it. Using modified desc, will always be first item.
+			getActionBar().setSelectedNavigationItem(0);
+		}
 	}
 
 	@Override

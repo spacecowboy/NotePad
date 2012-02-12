@@ -56,13 +56,14 @@
     <string name="settings_sorting_order_dialog">Ordna efter</string>
     
     <string name="settings_summary_sort_type_alphabetic">Titel</string>
-    <string name="settings_summary_sort_type_modified">Ändringstid</string>
+    <!-- <string name="settings_summary_sort_type_modified">Ändringstid</string> -->
+    <string name="settings_summary_sort_type_duedate">Förfallodatum</string>
     <string name="settings_summary_sort_order_asc">Normal</string>
     <string name="settings_summary_sort_order_desc">Omvänd</string>
     
     <string name="settings_summary_theme_dark">Mörk</string>
     <string name="settings_summary_theme_light">Ljus</string>
-    <string name="settings_summary_theme_light_dark_ab">Ljus, mörk ram</string>
+    <string name="settings_summary_theme_light_dark_ab">Ljus, mörk action bar</string>
     
     <string name="settings_cat_appearance">Utseende</string>
     <string name="settings_font_screen">Typsnittsinställningar</string>
@@ -80,7 +81,7 @@
     <string name="settings_sync_freq_title">Synkroniseringsfrekvens</string>
     <string name="settings_account_title">Välj ett konto</string>
     <string name="settings_account_summary">Tryck för att ändra konto</string>
-    <string name="settings_sync_enable_title">Synkronisera med Google Tasks</string>
+    <string name="settings_sync_enable_title">Synka med Google Tasks</string>
     <string name="settings_sync_enable_summary"></string>
     <string name="settings_cat_syncing">Synkronisering</string>
     

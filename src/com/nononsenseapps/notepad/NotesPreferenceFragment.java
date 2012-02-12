@@ -268,10 +268,10 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 				NotePad.Notes.DEFAULT_SORT_TYPE);
 		String summary;
 		if (NotePad.Notes.DEFAULT_SORT_TYPE.equals(value))
-			summary = getText(R.string.settings_summary_sort_type_modified)
+			summary = getText(R.string.settings_summary_sort_type_alphabetic)
 					.toString();
 		else
-			summary = getText(R.string.settings_summary_sort_type_alphabetic)
+			summary = getText(R.string.settings_summary_sort_type_duedate)
 					.toString();
 		SUMMARY_SORT_TYPE = summary;
 		prefSortType.setSummary(summary);

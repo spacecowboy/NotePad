@@ -56,7 +56,8 @@
     <string name="settings_sorting_order_dialog">Ordnen nach</string>
     
     <string name="settings_summary_sort_type_alphabetic">Titel</string>
-    <string name="settings_summary_sort_type_modified">Änderungsdatum</string>
+    <!-- <string name="settings_summary_sort_type_modified">Änderungsdatum</string>  -->
+    <string name="settings_summary_sort_type_duedate">Fälligkeitsdatum</string>
     <string name="settings_summary_sort_order_asc">Aufsteigend</string>
     <string name="settings_summary_sort_order_desc">Absteigend</string>
     

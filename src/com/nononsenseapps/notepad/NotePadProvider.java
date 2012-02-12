@@ -267,7 +267,8 @@ public class NotePadProvider extends ContentProvider implements
 			createGTasksTable(db);
 			createGTaskListsTable(db);
 
-			insertDefaultList(db);
+			long listId = insertDefaultList(db);
+			insertDefaultNote(db, listId);
 		}
 
 		private long insertDefaultList(SQLiteDatabase db) {
@@ -278,6 +279,18 @@ public class NotePadProvider extends ContentProvider implements
 			values.put(NotePad.Lists.COLUMN_NAME_DELETED, 0);
 
 			return db.insert(NotePad.Lists.TABLE_NAME, null, values);
+		}
+		
+		private long insertDefaultNote(SQLiteDatabase db, long listId) {
+			ContentValues values = new ContentValues();
+			values.put(NotePad.Notes.COLUMN_NAME_TITLE,
+					NotePad.Notes.DEFAULT_NAME);
+			values.put(NotePad.Notes.COLUMN_NAME_NOTE,
+					NotePad.Notes.DEFAULT_NAME);
+			values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
+			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 0);
+
+			return db.insert(NotePad.Notes.TABLE_NAME, null, values);
 		}
 
 		/**
@@ -813,11 +826,12 @@ public class NotePadProvider extends ContentProvider implements
 		}
 
 		// If the values map doesn't contain a title, sets the value to the
-		// default title.
+		// empty string.
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_TITLE) == false) {
-			Resources r = Resources.getSystem();
-			values.put(NotePad.Notes.COLUMN_NAME_TITLE,
-					r.getString(android.R.string.untitled));
+			values.put(NotePad.Notes.COLUMN_NAME_TITLE, "");
+//			Resources r = Resources.getSystem();
+//			values.put(NotePad.Notes.COLUMN_NAME_TITLE,
+//					r.getString(android.R.string.untitled));
 		}
 
 		// If the values map doesn't contain note text, sets the value to an

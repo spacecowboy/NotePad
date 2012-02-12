@@ -22,9 +22,15 @@
     android:layout_height="?android:attr/listPreferredItemHeight"
     android:paddingLeft="16dp"
     android:paddingRight="16dp"
-    android:background="?my_list_selector" >
-
-    <TextView
+    android:background="?my_list_selector" >
+    <CheckBox 
+        android:id="@+id/itemDone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:focusable="false"
+        android:focusableInTouchMode="false" />
+    <TextView 
         android:id="@+id/itemTitle"
         android:layout_width="0dp"
         android:layout_height="fill_parent"

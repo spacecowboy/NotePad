@@ -27,7 +27,8 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:hint="@string/editor_title_hint"
-                android:inputType="textShortMessage"
+                android:inputType="textCapSentences"
+        		android:singleLine="true"
                 android:maxWidth="400dp"
                 android:minWidth="400dp"
                 android:padding="5dp"
@@ -57,8 +58,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:background="@android:color/transparent"
-                    android:contentDescription="TODO"
-                    android:src="@drawable/ic_cancel_holo_light" />
+                    android:src="@drawable/ic_cancel_holo_light"
+                    android:contentDescription="Cancel button"/>
             </LinearLayout>
         </RelativeLayout>
 
