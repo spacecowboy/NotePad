@@ -48,33 +48,6 @@ public class GoogleTaskList {
 	public GoogleTaskList() {
 	}
 
-	/*
-	 * Tasks
-	 */
-	private ArrayList<GoogleTask> getTasks() {
-		return null;
-	}
-
-	private GoogleTask getTask() {
-		return null;
-	}
-
-	private GoogleTask insertTask(GoogleTask task) {
-		return null;
-	}
-
-	private GoogleTask updateTask(GoogleTask task) {
-		return null;
-	}
-
-	private void deleteTask(GoogleTask task) {
-
-	}
-
-	private void move(GoogleTask task, GoogleTask newParent) {
-
-	}
-
 	public String toString() {
 		String res = "";
 		JSONObject json = new JSONObject();
@@ -151,7 +124,20 @@ public class GoogleTaskList {
 
 	public void downloadModifiedTasks(GoogleAPITalker apiTalker, GoogleDBTalker dbTalker, String lastUpdated) throws RemoteException {
 		Log.d(TAG, "DownloadModifiedTasks, last date: " + lastUpdated);
+		// Compare with local tasks, if the tasks have the same remote id, then they are the same. Use the existing db-id
+		// to avoid creating duplicates
+		ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(this);
 		for (GoogleTask task: apiTalker.getModifiedTasks(lastUpdated, this)) {
+			for (GoogleTask localTask: allTasks) {
+				if (localTask.id.equals(task.id)){
+					// We found it!
+					task.dbId = localTask.dbId;
+					// and remove it from the list so we don't iterate over it again when we don't need to
+					allTasks.remove(localTask);
+					// Move on to next task
+					break;
+				}
+			}
 			Log.d(TAG, "Saving modified: " + task.toJSON());
 			dbTalker.SaveToDatabase(task, this);
 		}

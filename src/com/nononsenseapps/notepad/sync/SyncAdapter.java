@@ -15,36 +15,27 @@
  */
 package com.nononsenseapps.notepad.sync;
 
-import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.protocol.HTTP;
 import org.json.JSONException;
 
 import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker.NotModifiedException;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker.PreconditionException;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleDBTalker;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.os.RemoteException;
-import android.text.TextUtils;
 import android.util.Log;
 import android.text.format.Time;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.util.List;
 
 /**
  * SyncAdapter implementation for syncing sample SyncAdapter contacts to the
@@ -58,10 +49,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 	private static final String TAG = "SyncAdapter";
 	//public static final String AUTH_TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/tasks";
 	public static final String AUTH_TOKEN_TYPE = "Manage your tasks"; // Alias for above
-	private static final String SYNC_MARKER_KEY = "com.nononsenseapps.notepad.sync.marker";
 	public static final boolean NOTIFY_AUTH_FAILURE = false;
-
-	private static final String API_KEY = "AIzaSyBCQyr-OSPQsMwU2tyCIKZG86Wb3WM1upw";// jonas@kalderstam.se
 
 	private final AccountManager accountManager;
 
@@ -102,6 +90,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					}
 					// List must exist on server before we can upload tasks inside
 					list.uploadModifiedTasks(apiTalker, dbTalker);
+					// Uploading the tasks will have changed the list's etag.
+					// That means it will be included in the remotely modified download, so we'll get it there.
 				}
 				
 				// Download remotely modified objects
@@ -169,11 +159,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 	private void handleConflict(GoogleDBTalker dbTalker,
 			GoogleAPITalker apiTalker, GoogleTaskList localList) throws ClientProtocolException, JSONException, PreconditionException, NotModifiedException, IOException, RemoteException {
-		// TODO
-		// Download new tasks here first
-		//localList.downloadModifiedTasks(apiTalker, dbTalker, lastUpdated);
-		
-		
 		localList.etag = null; // Set this to null so we dont do any if-none-match gets
 		GoogleTaskList remoteList = apiTalker.getList(localList);
 		// Last updated one wins

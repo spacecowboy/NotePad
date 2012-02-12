@@ -1358,6 +1358,8 @@ public class NotePadProvider extends ContentProvider implements
 
 			if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFIED) == false) {
 				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
+				// Also set modified on the list that owns this/these note(s)
+				updateListId(uri, where, whereArgs);
 			}
 			// If the values map doesn't contain the modification date, sets the
 			// value to the current
@@ -1382,6 +1384,8 @@ public class NotePadProvider extends ContentProvider implements
 		case NOTE_ID:
 			if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFIED) == false) {
 				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
+				// Also set modified on the list that owns this note
+				updateListId(uri, where, whereArgs);
 			}
 			// If the values map doesn't contain the modification date, sets the
 			// value to the current
@@ -1556,5 +1560,21 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	DatabaseHelper getOpenHelperForTest() {
 		return mOpenHelper;
+	}
+	
+	private void updateListId(Uri noteUri, String where, String[] args) {
+		ContentValues listValues = new ContentValues();
+		listValues.put(NotePad.Lists.COLUMN_NAME_MODIFIED, 1);
+		
+		Cursor cursor = query(noteUri, new String[] {NotePad.Notes.COLUMN_NAME_LIST}, where, args, null);
+		if (cursor != null && !cursor.isClosed() && !cursor.isAfterLast()) {
+			while (cursor.moveToNext()) {
+				String listId = cursor.getString(cursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
+				// Update list
+				update(Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE, listId), listValues, null, null);
+			}
+		}
+		
+		cursor.close();
 	}
 }

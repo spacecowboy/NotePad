@@ -1,27 +1,17 @@
 package com.nononsenseapps.notepad.sync.googleapi;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
-import android.content.AbstractThreadedSyncAdapter;
+
 import android.content.ContentProviderClient;
-import android.content.Context;
-import android.content.CursorLoader;
 import android.content.SyncResult;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.RemoteException;
-import android.text.TextUtils;
 import android.text.format.Time;
 import android.util.Log;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.NotePadProvider;
 
 /**
  * Helper class which talks to the database and converts the responses into Task
@@ -87,7 +77,7 @@ public class GoogleDBTalker {
 		Cursor cursor = provider.query(NotePad.Notes.CONTENT_URI,
 				NOTES_PROJECTION, NotePad.Notes.COLUMN_NAME_MODIFIED
 						+ " IS 1 AND " + NotePad.Notes.COLUMN_NAME_LIST
-						+ " IS " + list.dbId, null, null);
+						+ " IS ?", new String[] {Long.toString(list.dbId)}, null);
 
 		populateWithTasks(cursor, modifiedTasks);
 		cursor.close();
@@ -333,14 +323,6 @@ public class GoogleDBTalker {
 	}
 
 	/**
-	 * Clears modified flag and saves the new fields
-	 */
-	public void clearModifiedFlag(GoogleTaskList list) {
-
-		// TODO
-	}
-
-	/**
 	 * Given a task, it will find the corresponding one in the database and
 	 * update it. If it can not find it in the db, it will insert it.
 	 * 
@@ -442,23 +424,6 @@ public class GoogleDBTalker {
 	}
 
 	/**
-	 * Will erase items marked as deleted in the database. Make sure you synced
-	 * with the server before calling this or the server will never know that
-	 * they were deleted.
-	 * 
-	 * Erases both tasks and lists.
-	 */
-	public void clearDeleted() {
-		// For all tasks
-		// Erase Task
-		// Erase account entries
-		// For all lists
-		// Erase List
-		// Erase account entries
-		// TODO
-	}
-
-	/**
 	 * Returns a 3339-formatted timestamp which is the latest time that we
 	 * synced. If no sync has been done before, null will be returned Finds the
 	 * latest update-stamp in the GTasks table
@@ -491,4 +456,16 @@ public class GoogleDBTalker {
 			return lastDate.format3339(false);
 	}
 
+	public ArrayList<GoogleTask> getAllTasks(GoogleTaskList list) throws RemoteException {
+		ArrayList<GoogleTask> tasks = new ArrayList<GoogleTask>();
+		
+		Cursor cursor = provider.query(NotePad.Notes.CONTENT_URI,
+				NOTES_PROJECTION, NotePad.Notes.COLUMN_NAME_LIST
+						+ " IS ?", new String[] {Long.toString(list.dbId)}, null);
+
+		populateWithTasks(cursor, tasks);
+		cursor.close();
+		
+		return tasks;
+	}
 }

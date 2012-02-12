@@ -4,14 +4,9 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
@@ -33,12 +28,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -470,7 +459,7 @@ public class GoogleAPITalker {
 		if (task.id != null) {
 			Log.d(TAG, "ID is not NULL!! " + TaskURL_ETAG_ID(task.id, pList.id));
 			if (task.deleted == 1) {
-				httppost = new HttpDelete(TaskURL_ETAG_ID(task.id, pList.id));
+				httppost = new HttpDelete(TaskURL(task.id, pList.id));
 			} else {
 				httppost = new HttpPost(TaskURL_ETAG_ID(task.id, pList.id));
 				// apache does not include PATCH requests, but we can force a
@@ -676,88 +665,6 @@ public class GoogleAPITalker {
 			((HttpPut) httppost).setEntity(se);
 	}
 
-	public static String getValueFromJSON(String response, String key) {
-		String value = null;
-		JSONObject object;
-		try {
-			object = (JSONObject) new JSONTokener(response).nextValue();
-			value = object.getString(key);
-		} catch (JSONException e) {
-		}
-
-		return value;
-	}
-
-	private static String getJSONResponse(DefaultHttpClient client, String URL,
-			String postJSON) throws PreconditionException, NotModifiedException {
-		String response = null;
-		HttpPost httppost = new HttpPost(URL);
-		StringEntity se = null;
-		try {
-			se = new StringEntity(postJSON, HTTP.UTF_8);
-		} catch (UnsupportedEncodingException e) {
-		}
-
-		se.setContentType("application/json");
-		httppost.setEntity(se);
-		httppost.setHeader("Content-Type", "application/json");
-
-		try {
-			response = parseResponse(client.execute(httppost));
-			Log.d(TAG, "JSONRESPONSE: " + response);
-		} catch (ClientProtocolException e) {
-			Log.d(TAG, "JSONRESPONSE: ClientProtocolException");
-		} catch (IOException e) {
-			Log.d(TAG, "JSONRESPONSE: IOException");
-		}
-
-		return response;
-	}
-
-	public static Document getXMLResponse(DefaultHttpClient client,
-			String authToken, String URL, String post)
-			throws PreconditionException, NotModifiedException {
-		HttpPost httppost = new HttpPost(URL);
-
-		StringEntity se = null;
-		try {
-			se = new StringEntity(post, HTTP.UTF_8);
-		} catch (UnsupportedEncodingException e) {
-		}
-
-		se.setContentType("text/xml");
-		httppost.setEntity(se);
-
-		httppost.setHeader("Authorization", "OAuth " + authToken);
-
-		Document doc = null;
-		try {
-			doc = XMLfromString(parseResponse(client.execute(httppost)));
-		} catch (ClientProtocolException e) {
-		} catch (IOException e) {
-		}
-
-		return doc;
-	}
-
-	public static Document getXMLResponse(DefaultHttpClient client,
-			String authToken, String URL) throws PreconditionException,
-			NotModifiedException {
-		HttpGet request = new HttpGet(URL);
-		request.setHeader("Authorization", "OAuth " + authToken);
-
-		Document doc = null;
-		try {
-			doc = XMLfromString(parseResponse(client.execute(request)));
-		} catch (ClientProtocolException e) {
-
-		} catch (IOException e) {
-
-		}
-
-		return doc;
-	}
-
 	/**
 	 * Parses a httpresponse and returns the string body of it. Throws
 	 * exceptions for select status codes.
@@ -828,66 +735,5 @@ public class GoogleAPITalker {
 		}
 
 		return page;
-	}
-
-	public static Document XMLfromString(String xml) {
-
-		Document doc = null;
-
-		DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-		try {
-
-			DocumentBuilder db = dbf.newDocumentBuilder();
-
-			InputSource is = new InputSource();
-			is.setCharacterStream(new StringReader(xml));
-			doc = db.parse(is);
-
-		} catch (ParserConfigurationException e) {
-			// System.out.println("XML parse error: " + e.getMessage());
-			return null;
-		} catch (SAXException e) {
-			// System.out.println("Wrong XML file structure: " +
-			// e.getMessage());
-			return null;
-		} catch (IOException e) {
-			// System.out.println("I/O exeption: " + e.getMessage());
-			return null;
-		}
-
-		return doc;
-
-	}
-
-	/**
-	 * Returns element value
-	 * 
-	 * @param elem
-	 *            element (it is XML tag)
-	 * @return Element value otherwise empty String
-	 */
-	private final static String getElementValue(Node elem) {
-		Node kid;
-		if (elem != null) {
-			if (elem.hasChildNodes()) {
-				for (kid = elem.getFirstChild(); kid != null; kid = kid
-						.getNextSibling()) {
-					if (kid.getNodeType() == Node.TEXT_NODE) {
-						return kid.getNodeValue();
-					}
-				}
-			}
-		}
-		return "";
-	}
-
-	public static String getValue(Element item, String str) {
-		NodeList n = item.getElementsByTagName(str);
-		return getElementValue(n.item(0));
-	}
-
-	public static String getAttribute(Element item, String tag, String attr) {
-		return ((Element) item.getElementsByTagName(tag).item(0))
-				.getAttribute(attr);
 	}
 }
