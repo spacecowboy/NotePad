@@ -254,10 +254,10 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 				NotePad.Notes.DEFAULT_SORT_ORDERING);
 		String summary;
 		if (NotePad.Notes.DEFAULT_SORT_ORDERING.equals(value))
-			summary = getText(R.string.settings_summary_sort_order_desc)
+			summary = getText(R.string.settings_summary_sort_order_asc)
 					.toString();
 		else
-			summary = getText(R.string.settings_summary_sort_order_asc)
+			summary = getText(R.string.settings_summary_sort_order_desc)
 					.toString();
 		SUMMARY_SORT_ORDER = summary;
 		prefSortOrder.setSummary(summary);
