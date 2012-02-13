@@ -19,7 +19,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.params.BasicHttpParams;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.params.HttpParams;
@@ -34,6 +33,7 @@ import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.util.Log;
+import android.net.http.AndroidHttpClient; // Supports GZIP, apache's doesn't
 
 /**
  * Helper class that sorts out all XML, JSON, HTTP bullshit for other classes.
@@ -147,6 +147,8 @@ public class GoogleAPITalker {
 	// Tasks returnerd will have deleted = true or no deleted field at all. Same
 	// case for hidden.
 	private static final String TAG = "GoogleAPITalker";
+	
+	private static final String USERAGENT = "HoloNotes (gzip)";
 
 	// A URL is alwasy constructed as: BASE_URL + ["/" + LISTID [+ TASKS [+ "/"
 	// + TASKID]]] + "?" + [POSSIBLE FIELDS + "&"] + AUTH_URL_END
@@ -187,10 +189,11 @@ public class GoogleAPITalker {
 	public boolean initialize(AccountManager accountManager, Account account,
 			String authTokenType, boolean notifyAuthFailure) {
 		Log.d(TAG, "initialize");
-		HttpParams params = new BasicHttpParams();
-		params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
-				HttpVersion.HTTP_1_1);
-		client = new DefaultHttpClient(params);
+		//HttpParams params = new BasicHttpParams();
+		//params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
+		//		HttpVersion.HTTP_1_1);
+		//client = new AndroidHttpClientHttpClient(params);
+		client = AndroidHttpClient.newInstance(USERAGENT);
 
 		authToken = getAuthToken(accountManager, account, authTokenType,
 				notifyAuthFailure);
@@ -238,6 +241,7 @@ public class GoogleAPITalker {
 		HttpGet httpget = new HttpGet(ALL_LISTS);
 		httpget.setHeader("Authorization", "OAuth " + authToken);
 		Log.d(TAG, "request: " + ALL_LISTS);
+		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
 		JSONObject jsonResponse;
 		try {
@@ -283,6 +287,7 @@ public class GoogleAPITalker {
 		HttpGet httpget = new HttpGet(TaskURL(gimpedTask.id, list.id));
 		setAuthHeader(httpget);
 		setHeaderWeakEtag(httpget, gimpedTask.etag);
+		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 		Log.d(TAG, "request: " + TaskURL(gimpedTask.id, list.id));
 
 		JSONObject jsonResponse;
@@ -319,6 +324,7 @@ public class GoogleAPITalker {
 		HttpGet httpget = new HttpGet(ListURL(gimpedList.id));
 		setAuthHeader(httpget);
 		setHeaderWeakEtag(httpget, gimpedList.etag);
+		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 		Log.d(TAG, "request: " + ListURL(gimpedList.id));
 
 		JSONObject jsonResponse;
@@ -409,6 +415,7 @@ public class GoogleAPITalker {
 		HttpGet httpget = new HttpGet(
 				AllTasksCompletedMin(list.id, lastUpdated));
 		setAuthHeader(httpget);
+		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
 		Log.d(TAG, httpget.getRequestLine().toString());
 		for (Header header : httpget.getAllHeaders()) {
@@ -472,6 +479,7 @@ public class GoogleAPITalker {
 			task.didRemoteInsert = true; // Need this later
 		}
 		setAuthHeader(httppost);
+		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
 
 		if (task.etag != null)
 			setHeaderStrongEtag(httppost, task.etag);
@@ -541,6 +549,7 @@ public class GoogleAPITalker {
 			list.didRemoteInsert = true; // Need this later
 		}
 		setAuthHeader(httppost);
+		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
 
 		if (list.etag != null)
 			setHeaderStrongEtag(httppost, list.etag);
@@ -708,7 +717,7 @@ public class GoogleAPITalker {
 			try {
 				if (response.getEntity() != null) {
 					// Only call getContent ONCE
-					InputStream content = response.getEntity().getContent();
+					InputStream content = AndroidHttpClient.getUngzippedContent(response.getEntity());
 					if (content != null) {
 						in = new BufferedReader(new InputStreamReader(content));
 						StringBuffer sb = new StringBuffer("");
