@@ -299,9 +299,7 @@ public class FragmentLayout extends Activity implements
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		// Need to restart to allow themes and such to go into effect
-		if (key.equals(NotesPreferenceFragment.KEY_THEME)
-				|| key.equals(NotesPreferenceFragment.KEY_SORT_ORDER)
-				|| key.equals(NotesPreferenceFragment.KEY_SORT_TYPE)) {
+		if (key.equals(NotesPreferenceFragment.KEY_THEME)) {
 			shouldRestart = true;
 		}
 	}
