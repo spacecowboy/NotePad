@@ -156,16 +156,7 @@ public class GoogleAPITalker {
 
 	public String authToken;
 
-	public HttpClient client;
-
-	private static GoogleAPITalker instance;
-
-	public static GoogleAPITalker getInstance() {
-		if (instance == null) {
-			instance = new GoogleAPITalker();
-		}
-		return instance;
-	}
+	public AndroidHttpClient client;
 
 	public static String getAuthToken(AccountManager accountManager,
 			Account account, String authTokenType, boolean notifyAuthFailure) {
@@ -203,6 +194,12 @@ public class GoogleAPITalker {
 			return true;
 		} else {
 			return false;
+		}
+	}
+	
+	public void closeClient() {
+		if (client != null) {
+			client.close();
 		}
 	}
 

@@ -68,7 +68,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		Log.d(TAG, "onPerformSync");
 		// Initialize necessary stuff
 		GoogleDBTalker dbTalker = new GoogleDBTalker(account.name, provider, syncResult);
-		GoogleAPITalker apiTalker = GoogleAPITalker.getInstance();
+		GoogleAPITalker apiTalker = new GoogleAPITalker();
 		
 		boolean connected = apiTalker.initialize(accountManager, account, AUTH_TOKEN_TYPE, NOTIFY_AUTH_FAILURE);
 		
@@ -106,6 +106,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 				}
 				
 				// Erase deleted stuff
+				// Already done
 				//dbTalker.clearDeleted();
 				
 				Log.d(TAG, "Sync Complete!");
@@ -126,34 +127,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 			}
 			
 			
-			
-			//-----------------------------------
-
-//		} catch (final AuthenticatorException e) {
-//			Log.e(TAG, "AuthenticatorException", e);
-//			syncResult.stats.numParseExceptions++;
-//		} catch (final OperationCanceledException e) {
-//			Log.e(TAG, "OperationCanceledExcetpion", e);
-//		} catch (final IOException e) {
-//			Log.e(TAG, "IOException", e);
-//			syncResult.stats.numIoExceptions++;
-//		}
-//		// catch (final AuthenticationException e) {
-//		// Log.e(TAG, "AuthenticationException", e);
-//		// syncResult.stats.numAuthExceptions++;
-//		// }
-//		catch (final ParseException e) {
-//			Log.e(TAG, "ParseException", e);
-//			syncResult.stats.numParseExceptions++;
-//		}
-//		// catch (final JSONException e) {
-//		// Log.e(TAG, "JSONException", e);
-//		// syncResult.stats.numParseExceptions++;
-//		// }
 		}
 		else {
 			// return real failure
 			syncResult.stats.numAuthExceptions++;
+		}
+		
+		// This must always be called or we will leak resources
+		if (apiTalker != null) {
+			apiTalker.closeClient();
 		}
 	}
 
