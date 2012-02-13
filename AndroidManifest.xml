@@ -70,8 +70,13 @@
             android:theme="@style/ThemeHolo" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+            <action android:name="android.intent.action.SEND" />
+            <category android:name="android.intent.category.DEFAULT" />
+            <data android:mimeType="text/*" />
+            <!-- <data android:mimeType="text/*" android:path="*.txt" />  Would like to be able to open files in future-->
             </intent-filter>
         </activity>
         <activity
