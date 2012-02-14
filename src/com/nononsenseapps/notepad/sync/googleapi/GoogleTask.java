@@ -20,7 +20,10 @@ public class GoogleTask {
 	private static final String DUE = "due";
 	private static final String DELETED = "deleted";
 	private static final String COMPLETED = "completed";
-	private static final Object NEEDSACTION = "needsAction";
+	private static final String NEEDSACTION = "needsAction";
+	private static final String PARENT = "parent";
+	private static final String POSITION = "position";
+	private static final String HIDDEN = "hidden";
 	public String id = null;
 	public String etag = null;
 	public String title = null;
@@ -28,9 +31,12 @@ public class GoogleTask {
 	public String notes = null;
 	public String status = null;
 	public String dueDate = null;
+	public String parent = null;
+	public String position = null;
 
 	public long dbId = -1;
 	public int deleted = 0;
+	public int hidden = 0;
 	public long listdbid = -1;
 	public boolean didRemoteInsert = false;
 	
@@ -47,12 +53,19 @@ public class GoogleTask {
 		if (jsonTask.has(NOTES))
 			notes = jsonTask.getString(NOTES);
 		status  = jsonTask.getString(STATUS);
+		if (jsonTask.has(PARENT))
+			parent  = jsonTask.getString(PARENT);
+		position  = jsonTask.getString(POSITION);
 		if (jsonTask.has(DUE))
 			dueDate = jsonTask.getString(DUE);
 		if (jsonTask.has(DELETED) && jsonTask.getBoolean(DELETED))
 			deleted = 1;
 		else
 			deleted = 0;
+		if (jsonTask.has(HIDDEN) && jsonTask.getBoolean(HIDDEN))
+			hidden = 1;
+		else
+			hidden = 0;
 		
 		
 
@@ -61,6 +74,7 @@ public class GoogleTask {
 
 	/**
 	 * Special tricks because google api actually want 'null' while JSONObject doesnt allow them.
+	 * do not include read-only fields
 	 * @return
 	 */
 	public String toJSON() {
@@ -121,6 +135,9 @@ public class GoogleTask {
 		values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
 		values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, modified);
 		values.put(NotePad.Notes.COLUMN_NAME_DELETED, deleted);
+		values.put(NotePad.Notes.COLUMN_NAME_POSITION, position);
+		values.put(NotePad.Notes.COLUMN_NAME_PARENT, parent);
+		values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, hidden);
 		return values;
 	}
 

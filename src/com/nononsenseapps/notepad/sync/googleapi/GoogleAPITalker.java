@@ -97,31 +97,29 @@ public class GoogleAPITalker {
 	// only retrieve the fields we will save in the database or use
 	// https://www.googleapis.com/tasks/v1/lists/MDIwMzMwNjA0MjM5MzQ4MzIzMjU6MDow/tasks?showDeleted=true&showHidden=true&pp=1&key={YOUR_API_KEY}
 	// updatedMin=2012-02-07T14%3A59%3A05.000Z
-	public static String AllTasks(String listId) {
-		return BASE_TASK_URL + "/" + listId + TASKS + "?"
-				+ "showDeleted=true&showHidden=true&" + AUTH_URL_END;
-	}
-
-	public static String AllTasksInsert(String listId) {
+	private static String AllTasksInsert(String listId) {
 		return BASE_TASK_URL + "/" + listId + TASKS + "?" + AUTH_URL_END;
 	}
 
-	public static String TaskURL(String taskId, String listId) {
+	private static String TaskURL(String taskId, String listId) {
 		return BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId + "?"
 				+ AUTH_URL_END;
 	}
 
-	public static String TaskURL_ETAG_ID(String taskId, String listId) {
+	private static String TaskURL_ETAG_ID(String taskId, String listId) {
 		return BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId
 				+ "?fields=id,etag&" + AUTH_URL_END;
 	}
 
-	public static String AllTasksCompletedMin(String listId, String timestamp) {
+	private static String AllTasksCompletedMin(String listId, String timestamp) {
+		// showDeleted=true&showHidden=true
+		// don't want deleted and hidden as this is the first sync
 		if (timestamp == null)
 			return BASE_TASK_URL + "/" + listId + TASKS
-					+ "?showDeleted=true&showHidden=true&fields=items&"
+					+ "?fields=items&"
 					+ AUTH_URL_END;
 		else {
+			// In this case, we want deleted and hidden items in order to update our own database
 			try {
 				return BASE_TASK_URL
 						+ "/"

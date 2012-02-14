@@ -23,14 +23,14 @@
     android:paddingLeft="16dp"
     android:paddingRight="16dp" >
 
-    <CheckBox 
+    <view xmlns:android="http://schemas.android.com/apk/res/android"
+    	class="com.nononsenseapps.ui.NoteCheckBox" 
         android:id="@+id/itemDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:enabled="false" />
+        android:focusableInTouchMode="false" />
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

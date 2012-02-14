@@ -39,7 +39,10 @@ public class GoogleDBTalker {
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
 			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
 			NotePad.Notes.COLUMN_NAME_LIST,
-			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE };
+			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
+			NotePad.Notes.COLUMN_NAME_PARENT,
+			NotePad.Notes.COLUMN_NAME_POSITION,
+			NotePad.Notes.COLUMN_NAME_HIDDEN};
 	private static final String[] GTASK_PROJECTION = new String[] {
 			NotePad.GTasks._ID, NotePad.GTasks.COLUMN_NAME_DB_ID,
 			NotePad.GTasks.COLUMN_NAME_ETAG,
@@ -137,6 +140,13 @@ public class GoogleDBTalker {
 								.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS));
 				task.listdbid = cursor.getLong(cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
+				
+				task.parent = cursor.getString(cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_PARENT));
+				task.position = cursor.getString(cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_POSITION));
+				task.hidden = cursor.getInt(cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_HIDDEN));
 				// Task is assembled, move on
 
 				// convert modification time to timestamp

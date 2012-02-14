@@ -165,6 +165,12 @@ public final class NotePad {
          */
         public static final String COLUMN_NAME_MODIFIED = "modifiedflag";
         
+        //parent position hidden
+        
+        public static final String COLUMN_NAME_PARENT = "gtasks_parent";
+        public static final String COLUMN_NAME_POSITION = "gtasks_position";
+        public static final String COLUMN_NAME_HIDDEN = "hiddenflag";
+        
         /**
          * The default sort order for this table
          */

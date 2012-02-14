@@ -13,11 +13,13 @@ import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
 import com.nononsenseapps.notepad.interfaces.Refresher;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
+import com.nononsenseapps.ui.NoteCheckBox;
 
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -51,6 +53,8 @@ import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.ShareActionProvider;
@@ -67,7 +71,7 @@ public class NotesListFragment extends ListFragment implements
 			NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
-			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
+			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS};
 
 	// public static final String SELECTEDPOS = "selectedpos";
 	// public static final String SELECTEDID = "selectedid";
@@ -529,7 +533,7 @@ public class NotesListFragment extends ListFragment implements
 		// The view IDs that will display the cursor columns, initialized to
 		// the TextView in noteslist_item.xml
 		// My hacked adapter allows the boolean to be set if the string matches
-		// gtasks string values for them.
+		// gtasks string values for them. Needs id as well (set after first)
 		int[] viewIDs = { R.id.itemDone, R.id.itemTitle, R.id.itemNote,
 				R.id.itemDate };
 
@@ -537,7 +541,24 @@ public class NotesListFragment extends ListFragment implements
 
 		// Creates the backing adapter for the ListView.
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(activity,
-				themed_item, cursor, dataColumns, viewIDs);
+				themed_item, cursor, dataColumns, viewIDs, 0);
+		
+		final OnCheckedChangeListener listener = new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,boolean checked) {
+				ContentValues values = new ContentValues();
+				String status = getText(R.string.gtask_status_uncompleted).toString();
+				if (checked)
+					status = getText(R.string.gtask_status_completed).toString();
+				values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
+						status);
+				// TODO, change to getcontext?
+				
+				long id = ((NoteCheckBox) buttonView).getNoteId();
+				if (id > -1)
+					activity.getContentResolver().update(NotesEditorFragment.getUriFrom(id), values, null, null);
+			}
+		};
 
 		// In order to set the checked state in the checkbox
 		adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
@@ -545,18 +566,26 @@ public class NotesListFragment extends ListFragment implements
 					int columnIndex) {
 				if (columnIndex == cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS)) {
-					CheckBox cb = (CheckBox) view;
+					NoteCheckBox cb = (NoteCheckBox) view;
+					cb.setOnCheckedChangeListener(null);
+					long id = cursor.getLong(cursor
+							.getColumnIndex(NotePad.Notes._ID));
+					cb.setNoteId(id);
 					String text = cursor.getString(cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS));
-					if (text.toString().equals(
+					
+					if (text.equals(
 							getText(R.string.gtask_status_completed))) {
 						cb.setChecked(true);
 					} else {
 						cb.setChecked(false);
 					}
-					// cb.setOnCheckedChangeListener();
+					
+					// Set a simple on change listener that updates the note on changes.
+					cb.setOnCheckedChangeListener(listener);
+					
 					return true;
-				}
+				} 
 				return false;
 			}
 		});
@@ -1127,6 +1156,7 @@ public class NotesListFragment extends ListFragment implements
 																// each
 																// note.
 				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
+				+ NotePad.Notes.COLUMN_NAME_HIDDEN + " IS NOT 1 AND "
 						+ NotePad.Notes.COLUMN_NAME_LIST + " IS " + mCurListId, // return
 				// un-deleted
 				// records.
@@ -1155,6 +1185,7 @@ public class NotesListFragment extends ListFragment implements
 		// global
 		return new CursorLoader(activity, baseUri, PROJECTION,
 				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
+				+ NotePad.Notes.COLUMN_NAME_HIDDEN + " IS NOT 1 AND "
 						+ NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?",
 				new String[] { "%" + currentQuery + "%" }, // We don't care how
 															// it occurs in the

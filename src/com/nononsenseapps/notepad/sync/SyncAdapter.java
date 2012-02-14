@@ -48,7 +48,7 @@ import java.io.IOException;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 	private static final String TAG = "SyncAdapter";
-	public static boolean SYNC_DEBUG_PRINTS = false;
+	public static boolean SYNC_DEBUG_PRINTS = true;
 	
 	//public static final String AUTH_TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/tasks";
 	public static final String AUTH_TOKEN_TYPE = "Manage your tasks"; // Alias for above

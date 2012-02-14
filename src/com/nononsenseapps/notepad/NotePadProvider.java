@@ -61,7 +61,7 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	private static final String DATABASE_NAME = "note_pad.db";
 
-	private static final int DATABASE_VERSION = 3;
+	private static final int DATABASE_VERSION = 4;
 
 	/**
 	 * A projection map used to select columns from the database
@@ -185,6 +185,13 @@ public class NotePadProvider extends ContentProvider implements
 				NotePad.Notes.COLUMN_NAME_DELETED);
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LIST,
 				NotePad.Notes.COLUMN_NAME_LIST);
+		
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_PARENT,
+				NotePad.Notes.COLUMN_NAME_PARENT);
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_POSITION,
+				NotePad.Notes.COLUMN_NAME_POSITION);
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_HIDDEN,
+				NotePad.Notes.COLUMN_NAME_HIDDEN);
 
 		/*
 		 * Creates an initializes a projection map for handling Lists
@@ -302,6 +309,9 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.Notes.COLUMN_NAME_DUE_DATE + " TEXT,"
 					+ NotePad.Notes.COLUMN_NAME_LIST + " INTEGER,"
 					+ NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " TEXT,"
+					+ NotePad.Notes.COLUMN_NAME_PARENT + " TEXT,"
+					+ NotePad.Notes.COLUMN_NAME_POSITION + " TEXT,"
+					+ NotePad.Notes.COLUMN_NAME_HIDDEN + " INTEGER,"
 					+ NotePad.Notes.COLUMN_NAME_MODIFIED + " INTEGER,"
 					+ NotePad.Notes.COLUMN_NAME_DELETED + " INTEGER" + ");");
 		}
@@ -400,6 +410,30 @@ public class NotePadProvider extends ContentProvider implements
 					values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, "needsAction");
 
 					db.update(NotePad.Notes.TABLE_NAME, values, NotePad.Notes.COLUMN_NAME_LIST + " IS NOT ?", new String[] {Long.toString(listId)});
+				}
+				if (oldVersion < 4) {
+				// + NotePad.Notes.COLUMN_NAME_PARENT + " TEXT,"
+				// + NotePad.Notes.COLUMN_NAME_POSITION + " TEXT,"
+				// + NotePad.Notes.COLUMN_NAME_HIDDEN + " INTEGER,"
+							
+							String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
+							+ " ADD COLUMN ";
+					String postText = " TEXT";
+					String postNameInt = " INTEGER";
+					// Add Columns to Notes DB
+					db.execSQL(preName + NotePad.Notes.COLUMN_NAME_PARENT
+							+ postText);
+					db.execSQL(preName + NotePad.Notes.COLUMN_NAME_POSITION
+							+ postText);
+					db.execSQL(preName + NotePad.Notes.COLUMN_NAME_HIDDEN
+							+ postNameInt);
+					
+					// Give all notes sensible values
+					ContentValues values = new ContentValues();
+					values.put(NotePad.Notes.COLUMN_NAME_PARENT, "");
+					values.put(NotePad.Notes.COLUMN_NAME_POSITION, "");
+					values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, 0);
+					db.update(NotePad.Notes.TABLE_NAME, values, NotePad.Notes.COLUMN_NAME_HIDDEN + " IS NOT ?", new String[] {"0"});
 				}
 		}
 
@@ -1379,6 +1413,9 @@ public class NotePadProvider extends ContentProvider implements
 			if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE) == false) {
 				values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, now);
 			}
+			if (values.containsKey(NotePad.Notes.COLUMN_NAME_HIDDEN) == false) {
+				values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, 0);
+			}
 
 			// Does the update and returns the number of rows updated.
 			count = db.update(NotePad.Notes.TABLE_NAME, // The database table
@@ -1398,6 +1435,9 @@ public class NotePadProvider extends ContentProvider implements
 				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
 				// Also set modified on the list that owns this note
 				updateListId(uri, where, whereArgs);
+			}
+			if (values.containsKey(NotePad.Notes.COLUMN_NAME_HIDDEN) == false) {
+				values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, 0);
 			}
 			// If the values map doesn't contain the modification date, sets the
 			// value to the current
