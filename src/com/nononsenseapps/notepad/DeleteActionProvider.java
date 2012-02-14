@@ -29,7 +29,7 @@ public class DeleteActionProvider extends ActionProvider implements
 
 	@Override
 	public View onCreateActionView() {
-		Log.d(this.getClass().getSimpleName(), "onCreateActionView");
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(this.getClass().getSimpleName(), "onCreateActionView");
 
 		// Inflate the action view to be shown on the action bar.
 		// LayoutInflater layoutInflater = LayoutInflater.from( );
@@ -40,21 +40,21 @@ public class DeleteActionProvider extends ActionProvider implements
 
 	@Override
 	public boolean onPerformDefaultAction() {
-		Log.d(this.getClass().getSimpleName(), "onPerformDefaultAction");
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(this.getClass().getSimpleName(), "onPerformDefaultAction");
 
 		return super.onPerformDefaultAction();
 	}
 
 	@Override
 	public boolean hasSubMenu() {
-		Log.d(this.getClass().getSimpleName(), "hasSubMenu");
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(this.getClass().getSimpleName(), "hasSubMenu");
 
 		return true;
 	}
 
 	@Override
 	public void onPrepareSubMenu(SubMenu subMenu) {
-		Log.d(this.getClass().getSimpleName(), "onPrepareSubMenu");
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(this.getClass().getSimpleName(), "onPrepareSubMenu");
 
 		subMenu.clear();
 

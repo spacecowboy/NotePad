@@ -115,11 +115,11 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	 * @param account
 	 */
 	public void accountSelected(Account account) {
-		Log.d(TAG, "accountSelected: " + account);
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "accountSelected: " + account);
 		
 		if (account != null) {
 			this.account = account;
-			Log.d(TAG, "Trying to get permission");
+			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Trying to get permission");
 			// Request user's permission
 			AccountManager.get(activity).getAuthToken(account,
 					SyncAdapter.AUTH_TOKEN_TYPE, null, activity, this, null);
@@ -131,7 +131,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 			String key) {
 		try {
 			if (activity.isFinishing()) {
-				Log.d("settings", "isFinishing, should not update summaries");
+				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("settings", "isFinishing, should not update summaries");
 				// Setting the summary now would crash it with
 				// IllegalStateException since we are not attached to a view
 			} else {
@@ -147,13 +147,13 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 				} else if (KEY_FONT_SIZE_EDITOR.equals(key)) {
 					// updatePreviewFontSize(sharedPreferences);
 				} else if (KEY_SYNC_ENABLE.equals(key)) {
-					Log.d("settings", "Toggled sync");
+					if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("settings", "Toggled sync");
 					toggleSync(sharedPreferences);
 				} else if (KEY_SYNC_FREQ.equals(key)) {
 					setSyncInterval(sharedPreferences);
 					setFreqSummary(sharedPreferences);
 				} else
-					Log.d("settings", "Somethign changed!");
+					if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("settings", "Somethign changed!");
 			}
 		} catch (IllegalStateException e) {
 			// This is just in case the "isFinishing" wouldn't be enough
@@ -161,7 +161,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 			// stupid
 			// This catch prevents the app from crashing if we do something
 			// stupid
-			Log.d("settings", "Exception was caught: " + e.getMessage());
+			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("settings", "Exception was caught: " + e.getMessage());
 		}
 	}
 
@@ -232,20 +232,20 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		int size = sharedPreferences.getInt(KEY_FONT_SIZE_EDITOR,
 				R.integer.default_editor_font_size);
 		if (textPreview != null) {
-			Log.d("settings", "updatePreviewFontSize textPreview");
+			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("settings", "updatePreviewFontSize textPreview");
 			textPreview.setTextSize(size);
 		} else {
-			Log.d("settings", "updatePreviewFontSize textPreview was null!");
+			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("settings", "updatePreviewFontSize textPreview was null!");
 		}
 	}
 
 	private void updatePreviewFontType(SharedPreferences sharedPreferences) {
 		String type = sharedPreferences.getString(KEY_FONT_TYPE_EDITOR, SANS);
 		if (textPreview != null) {
-			Log.d("settings", "updatePreviewFontType textPreview!");
+			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("settings", "updatePreviewFontType textPreview!");
 			textPreview.setTextType(type);
 		} else {
-			Log.d("settings", "updatePreviewFontType textPreview was null!");
+			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("settings", "updatePreviewFontType textPreview was null!");
 		}
 	}*/
 
@@ -289,7 +289,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 			summary = getText(R.string.settings_summary_theme_light_dark_ab)
 					.toString();
 		SUMMARY_THEME = summary;
-		Log.d("setThemeSummary", "Setting summary now");
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("setThemeSummary", "Setting summary now");
 		prefTheme.setSummary(summary);
 	}
 
@@ -297,7 +297,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		// Dark theme is default
 		String value = sharedPreferences.getString(KEY_FONT_TYPE_EDITOR, SANS);
 
-		Log.d("setFontSummary", value);
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("setFontSummary", value);
 		prefFontType.setSummary(value);
 	}
 
@@ -346,7 +346,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 			String token = future.getResult().getString(
 					AccountManager.KEY_AUTHTOKEN);
 			// Now we are authorized by the user.
-			Log.d(TAG, "So token is: " + token);
+			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "So token is: " + token);
 
 			if (token != null && !token.equals("") && account != null) {
 				SharedPreferences customSharedPreference = getPreferenceScreen()
@@ -358,7 +358,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 				prefAccount.setTitle(account.name);
 				prefAccount.setSummary(R.string.settings_account_summary);
 
-				Log.d(TAG, "Setting syncable and setting frequency");
+				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Setting syncable and setting frequency");
 				// Set it syncable
 				ContentResolver.setIsSyncable(account, NotePad.AUTHORITY, 1);
 				// Set sync frequency

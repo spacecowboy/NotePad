@@ -4,6 +4,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.sync.SyncAdapter;
 
 import android.content.ContentValues;
 import android.util.Log;
@@ -88,9 +89,9 @@ public class GoogleTask {
 			String jsonString = json.toString();
 			returnString = jsonString.substring(0, jsonString.length()-1) + nullAppendage;
 
-			Log.d(TAG, returnString);
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, returnString);
 		} catch (JSONException e) {
-			Log.d(TAG, e.getLocalizedMessage());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, e.getLocalizedMessage());
 		}
 
 		return returnString;

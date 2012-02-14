@@ -8,6 +8,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker.NotModifiedException;
 
 import android.content.ContentValues;
@@ -61,7 +62,7 @@ public class GoogleTaskList {
 		
 		res =  json.toString(2);
 		} catch (JSONException e) {
-			Log.d(TAG, e.getLocalizedMessage());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, e.getLocalizedMessage());
 		}
 		return res;
 	}
@@ -81,9 +82,9 @@ public class GoogleTaskList {
 		if (id != null)
 			json.put("id", id);
 		
-		Log.d(TAG, json.toString(2));
+		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, json.toString(2));
 		} catch (JSONException e) {
-			Log.d(TAG, e.getLocalizedMessage());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, e.getLocalizedMessage());
 		}
 		
 		return json.toString();
@@ -123,7 +124,7 @@ public class GoogleTaskList {
 	}
 
 	public void downloadModifiedTasks(GoogleAPITalker apiTalker, GoogleDBTalker dbTalker, String lastUpdated) throws RemoteException {
-		Log.d(TAG, "DownloadModifiedTasks, last date: " + lastUpdated);
+		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "DownloadModifiedTasks, last date: " + lastUpdated);
 		// Compare with local tasks, if the tasks have the same remote id, then they are the same. Use the existing db-id
 		// to avoid creating duplicates
 		ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(this);
@@ -138,7 +139,7 @@ public class GoogleTaskList {
 					break;
 				}
 			}
-			Log.d(TAG, "Saving modified: " + task.toJSON());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Saving modified: " + task.toJSON());
 			dbTalker.SaveToDatabase(task, this);
 		}
 	}
@@ -153,12 +154,12 @@ public class GoogleTaskList {
 		Time remote = new Time();
 		remote.parse3339(remoteTask.updated);
 		if (Time.compare(remote, local) >= 0) {
-			Log.d(TAG, "Handling conflict: remote was newer");
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Handling conflict: remote was newer");
 			// remote is greater than local (or equal), save that to database
 			remoteTask.dbId = localTask.dbId;
 			dbTalker.SaveToDatabase(remoteTask, this);
 		} else {
-			Log.d(TAG, "Handling conflict: local was newer");
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Handling conflict: local was newer");
 			// Local is greater than remote, upload it.
 			localTask.etag = null;
 			GoogleTask partialTask = apiTalker.uploadTask(localTask, this);

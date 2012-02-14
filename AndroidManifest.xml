@@ -23,11 +23,10 @@
      to come from a domain that you own or have control over.
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.nononsenseapps.notepad"
-    android:versionCode="7"
-    android:versionName="2.2"
     android:installLocation="auto"
-     >
+    package="com.nononsenseapps.notepad"
+    android:versionCode="8"
+    android:versionName="3.0" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -70,14 +69,23 @@
             android:theme="@style/ThemeHolo" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <!-- <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/*" />
+                <data android:mimeType="text/*" android:path="*.txt" />  Would like to be able to open files in future
+            </intent-filter> -->
             <intent-filter>
-            <action android:name="android.intent.action.SEND" />
-            <category android:name="android.intent.category.DEFAULT" />
-            <data android:mimeType="text/*" />
-            <!-- <data android:mimeType="text/*" android:path="*.txt" />  Would like to be able to open files in future-->
+                <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity
             android:name=".FragmentLayout$NotesEditorActivity"
@@ -122,7 +130,6 @@
             -->
 
         </activity>
-        
         <activity
             android:name=".FragmentLayout$NotesPreferencesDialog"
             android:screenOrientation="sensor"
@@ -132,7 +139,7 @@
         <service
             android:name=".sync.SyncService"
             android:exported="true"
-            android:process=":sync">
+            android:process=":sync" >
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>

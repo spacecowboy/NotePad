@@ -61,11 +61,7 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	private static final String DATABASE_NAME = "note_pad.db";
 
-	/**
-	 * The database version 2 was original 3 added gtask-columns 4 was the final
-	 * gtask version. 3 was never released and should be considered unsafe.
-	 */
-	private static final int DATABASE_VERSION = 5;
+	private static final int DATABASE_VERSION = 3;
 
 	/**
 	 * A projection map used to select columns from the database
@@ -251,7 +247,7 @@ public class NotePadProvider extends ContentProvider implements
 			// calls the super constructor, requesting the default cursor
 			// factory.
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
-			Log.d("DataBaseHelper", "Constructor");
+			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("DataBaseHelper", "Constructor");
 		}
 
 		/**
@@ -261,7 +257,7 @@ public class NotePadProvider extends ContentProvider implements
 		 */
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			Log.d("DataBaseHelper", "onCreate");
+			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("DataBaseHelper", "onCreate");
 			createNotesTable(db);
 			createListsTable(db);
 			createGTasksTable(db);
@@ -353,34 +349,34 @@ public class NotePadProvider extends ContentProvider implements
 					+ "Upgrading database from version " + oldVersion + " to "
 					+ newVersion);
 
-			// Version 3 or 4 were never released to the public
-			if (oldVersion == 4) {
-				// Kills the table and existing data
-				db.execSQL("DROP TABLE IF EXISTS " + NotePad.Notes.TABLE_NAME);
-				db.execSQL("DROP TABLE IF EXISTS " + NotePad.Lists.TABLE_NAME);
-				db.execSQL("DROP TABLE IF EXISTS "
-						+ NotePad.GTaskLists.TABLE_NAME);
-				db.execSQL("DROP TABLE IF EXISTS " + NotePad.GTasks.TABLE_NAME);
-
-				// Recreates the database with a new version
-				onCreate(db);
-			} else {
-				if (oldVersion < 5) {
+			// These lines must never be active in market versions!
+//			if (oldVersion == 4) {
+//				// Kills the table and existing data
+//				db.execSQL("DROP TABLE IF EXISTS " + NotePad.Notes.TABLE_NAME);
+//				db.execSQL("DROP TABLE IF EXISTS " + NotePad.Lists.TABLE_NAME);
+//				db.execSQL("DROP TABLE IF EXISTS "
+//						+ NotePad.GTaskLists.TABLE_NAME);
+//				db.execSQL("DROP TABLE IF EXISTS " + NotePad.GTasks.TABLE_NAME);
+//
+//				// Recreates the database with a new version
+//				onCreate(db);
+//			} else {
+				if (oldVersion < 3) {
 					// FIrst add columns to Notes table
 
 					String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
 							+ " ADD COLUMN ";
 					// Don't want null values. Prefer empty String
-					String postName = " TEXT NOT NULL DEFAULT ''";
-					String postNameInt = " INTEGER NOT NULL DEFAULT 1";
+					String postText = " TEXT";
+					String postNameInt = " INTEGER";
 					// Add Columns to Notes DB
 					db.execSQL(preName + NotePad.Notes.COLUMN_NAME_LIST
 							+ postNameInt);
 					db.execSQL(preName + NotePad.Notes.COLUMN_NAME_DUE_DATE
-							+ postName);
+							+ postText);
 					db.execSQL(preName
 							+ NotePad.Notes.COLUMN_NAME_GTASKS_STATUS
-							+ postName);
+							+ postText);
 					db.execSQL(preName + NotePad.Notes.COLUMN_NAME_MODIFIED
 							+ postNameInt);
 					db.execSQL(preName + NotePad.Notes.COLUMN_NAME_DELETED
@@ -395,14 +391,16 @@ public class NotePadProvider extends ContentProvider implements
 					long listId = insertDefaultList(db);
 
 					// Place all existing notes in this list
+					// And give them sensible values in the new columns
 					ContentValues values = new ContentValues();
 					values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
 					values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
 					values.put(NotePad.Notes.COLUMN_NAME_DELETED, 0);
+					values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
+					values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, "needsAction");
 
-					db.update(NotePad.Notes.TABLE_NAME, values, null, null);
+					db.update(NotePad.Notes.TABLE_NAME, values, NotePad.Notes.COLUMN_NAME_LIST + " IS NOT ?", new String[] {Long.toString(listId)});
 				}
-			}
 		}
 
 		@Override
@@ -421,7 +419,7 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	@Override
 	public boolean onCreate() {
-		Log.d(TAG, "onCreate");
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onCreate");
 
 		// Creates a new helper object. Note that the database itself isn't
 		// opened until
@@ -447,7 +445,7 @@ public class NotePadProvider extends ContentProvider implements
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
-		Log.d(TAG, "query");
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "query");
 
 		// Constructs a new query builder and sets its table name
 		SQLiteQueryBuilder qb = new SQLiteQueryBuilder();
@@ -777,7 +775,7 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	@Override
 	public Uri insert(Uri uri, ContentValues initialValues) {
-		Log.d(TAG, "insert");
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "insert");
 
 		// Validates the incoming URI. Only the full provider URI is allowed for
 		// inserts.
@@ -796,7 +794,7 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	private Uri insertNote(Uri uri, ContentValues initialValues) {
-		Log.d(TAG, "insertNote");
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "insertNote");
 		// A map to hold the new record's values.
 		ContentValues values;
 
@@ -862,7 +860,7 @@ public class NotePadProvider extends ContentProvider implements
 
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_LIST) == false
 				|| values.getAsLong(NotePad.Notes.COLUMN_NAME_LIST) < 0) {
-			Log.d(TAG, "Forgot to include note in a list");
+			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Forgot to include note in a list");
 			throw new SQLException("A note must always belong to a list!");
 		}
 
@@ -899,7 +897,7 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	private Uri insertList(Uri uri, ContentValues initialValues) {
-		Log.d(TAG, "insertList");
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "insertList");
 		// A map to hold the new record's values.
 		ContentValues values;
 
@@ -971,7 +969,7 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	private Uri insertGTask(Uri uri, ContentValues initialValues) {
-		Log.d(TAG, "insertGTask");
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "insertGTask");
 		// A map to hold the new record's values.
 		ContentValues values;
 
@@ -1028,7 +1026,7 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	private Uri insertGTaskList(Uri uri, ContentValues initialValues) {
-		Log.d(TAG, "insertGTaskList");
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "insertGTaskList");
 		// A map to hold the new record's values.
 		ContentValues values;
 
@@ -1106,7 +1104,7 @@ public class NotePadProvider extends ContentProvider implements
 	@Override
 	public int delete(Uri uri, String where, String[] whereArgs) {
 
-		Log.d(TAG, "delete");
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "delete");
 		// Opens the database object in "write" mode.
 		SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 		String finalWhere;
@@ -1352,7 +1350,7 @@ public class NotePadProvider extends ContentProvider implements
 	@Override
 	public int update(Uri uri, ContentValues values, String where,
 			String[] whereArgs) {
-		Log.d(TAG, "update");
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "update");
 
 		// Opens the database object in "write" mode.
 		SQLiteDatabase db = mOpenHelper.getWritableDatabase();

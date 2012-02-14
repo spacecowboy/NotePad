@@ -58,7 +58,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:background="@android:color/transparent"
-                    android:contentDescription="TODO"
+                    android:contentDescription="Clear due date"
                     android:src="@drawable/ic_cancel_holo_light" />
             </LinearLayout>
         </RelativeLayout>

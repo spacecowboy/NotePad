@@ -14,31 +14,52 @@
      See the License for the specific language governing permissions and
      limitations under the License.android:theme="@style/ThemeHolo"
 -->
-
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/noteItem"
-    
     android:layout_width="match_parent"
     android:layout_height="?android:attr/listPreferredItemHeight"
+    android:background="?my_list_selector"
+    android:orientation="horizontal"
     android:paddingLeft="16dp"
-    android:paddingRight="16dp"
-    android:background="?my_list_selector" >
+    android:paddingRight="16dp" >
+
     <CheckBox 
         android:id="@+id/itemDone"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:focusable="false"
-        android:focusableInTouchMode="false" />
-    <TextView 
-        android:id="@+id/itemTitle"
+        android:focusableInTouchMode="false"
+        android:enabled="false" />
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/title_note_container"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_vertical" >
+
+    <TextView 
+        android:id="@+id/itemTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:singleLine="true"
-        android:ellipsize="none"
-        android:textAppearance="?android:attr/textAppearanceLarge" />
+        android:ellipsize="marquee"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorPrimary" />
+    <TextView 
+        android:id="@+id/itemNote"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textColor="?android:attr/textColorSecondary" />
+    </LinearLayout>
 
     <view xmlns:android="http://schemas.android.com/apk/res/android"
     class="com.nononsenseapps.ui.DateView"

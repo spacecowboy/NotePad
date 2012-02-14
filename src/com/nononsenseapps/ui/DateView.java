@@ -7,7 +7,6 @@ import android.content.Context;
 import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.widget.TextView;
 
 /**
@@ -42,8 +41,6 @@ public class DateView extends TextView {
 	}
 	
 	public CharSequence toDate(String time3339) {
-		Log.d("DATEVIEW", "3339 time string: " + time3339);
-		Log.d("DATEVIEW", "3339 length:" + time3339.length());
 		Time time = new Time(Time.getCurrentTimezone());
 		time.parse3339(time3339);
 		
@@ -55,13 +52,6 @@ public class DateView extends TextView {
 
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(msecs);
-//		Date mod = c.getTime();
-//		//dt = cal.toLocaleString();
-//		
-//		Date now = Calendar.getInstance().getTime();
-//
-//		if (daysBetween(mod, now) == 0)
-//			format = time;
 		
 		return DateFormat.format(format, c);
 	}

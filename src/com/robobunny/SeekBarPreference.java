@@ -6,6 +6,7 @@ package com.robobunny;
  * A great thank you to Kirk Baucom for posting it online for others to use!
  */
 
+import com.nononsenseapps.notepad.FragmentLayout;
 import com.nononsenseapps.notepad.R;
 
 import android.content.Context;
@@ -165,18 +166,18 @@ public class SeekBarPreference extends Preference implements
 		else if (mInterval != 1 && newValue % mInterval != 0)
 			newValue = Math.round(((float) newValue) / mInterval) * mInterval;
 		
-		Log.d(TAG, "onProgressChanged new value: " + newValue);
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onProgressChanged new value: " + newValue);
 
 		// change rejected, revert to the previous value
 //		if (!callChangeListener(newValue)) {
-//			Log.d(TAG, "Rejected change. resetting.");
+//			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Rejected change. resetting.");
 //			seekBar.setProgress(mCurrentValue - mMinValue);
 //			return;
 //		}
 
 		// change accepted, store it
 		mCurrentValue = newValue;
-		Log.d(TAG, "onProgressChanged mCurrentvalue: " + mCurrentValue);
+		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onProgressChanged mCurrentvalue: " + mCurrentValue);
 		mStatusText.setText(String.valueOf(newValue));
 		persistInt(newValue);
 	}

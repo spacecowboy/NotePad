@@ -12,6 +12,7 @@ import android.util.Log;
 import java.util.ArrayList;
 
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.sync.SyncAdapter;
 
 /**
  * Helper class which talks to the database and converts the responses into Task
@@ -58,7 +59,7 @@ public class GoogleDBTalker {
 	 */
 	public GoogleDBTalker(String accountName, ContentProviderClient provider,
 			SyncResult syncResult) {
-		Log.d(TAG, "constructor");
+		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "constructor");
 		this.accountName = accountName;
 		this.provider = provider;
 		this.syncResult = syncResult;
@@ -76,8 +77,8 @@ public class GoogleDBTalker {
 
 		Cursor cursor = provider.query(NotePad.Notes.CONTENT_URI,
 				NOTES_PROJECTION, NotePad.Notes.COLUMN_NAME_MODIFIED
-						+ " IS 1 AND " + NotePad.Notes.COLUMN_NAME_LIST
-						+ " IS ?", new String[] {Long.toString(list.dbId)}, null);
+						+ " IS ? AND " + NotePad.Notes.COLUMN_NAME_LIST
+						+ " IS ?", new String[] {"1", Long.toString(list.dbId)}, null);
 
 		populateWithTasks(cursor, modifiedTasks);
 		cursor.close();
@@ -149,7 +150,7 @@ public class GoogleDBTalker {
 				task.updated = localTime.format3339(false);
 
 				// get etag and remote id
-				Log.d(TAG, "Getting remote info: "
+				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Getting remote info: "
 						+ NotePad.GTasks.COLUMN_NAME_DB_ID + " IS " + task.dbId
 						+ " AND " + NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT
 						+ " IS '" + accountName + "'");
@@ -336,7 +337,7 @@ public class GoogleDBTalker {
 		if (plist.dbId > -1) {
 			// Remember to do both Lists and GTASKLists tables
 			if (task.dbId > -1 && task.deleted != 1) {
-				Log.d(TAG, "Updating task");
+				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Updating task");
 				provider.update(Uri.withAppendedPath(
 						NotePad.Notes.CONTENT_ID_URI_BASE,
 						Long.toString(task.dbId)), task.toNotesContentValues(0,
@@ -356,8 +357,11 @@ public class GoogleDBTalker {
 						NotePad.GTasks.COLUMN_NAME_DB_ID + " IS " + task.dbId,
 						null);
 				syncResult.stats.numDeletes++;
-			} else {
-				Log.d(TAG, "Inserting task");
+			} else if (task.deleted == 1) {
+				// This must be a task which we ourselves deleted earlier. Ignore them
+			}
+			else {
+				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Inserting task");
 				Uri newUri = provider.insert(NotePad.Notes.CONTENT_URI,
 						task.toNotesContentValues(0, plist.dbId));
 				long newId = Long.parseLong(newUri.getPathSegments().get(
@@ -388,7 +392,7 @@ public class GoogleDBTalker {
 	public void SaveToDatabase(GoogleTaskList list) throws RemoteException {
 		// Remember to do both Lists and GTASKLists tables
 		if (list.dbId > -1 && list.deleted != 1) {
-			Log.d(TAG, "Updating list");
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Updating list");
 			provider.update(
 					Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
 							Long.toString(list.dbId)), list
@@ -409,7 +413,7 @@ public class GoogleDBTalker {
 					null);
 			syncResult.stats.numDeletes++;
 		} else {
-			Log.d(TAG, "Inserting list");
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Inserting list");
 			Uri newUri = provider.insert(NotePad.Lists.CONTENT_URI,
 					list.toListsContentValues(0));
 			long newId = Long.parseLong(newUri.getPathSegments().get(

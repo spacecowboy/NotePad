@@ -1,42 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
-
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:divider="?android:attr/dividerVertical"
+    android:dividerPadding="0dip"
+    android:showDividers="middle" >
+
     <TextView
         android:id="@+id/warning_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:text="@string/delete_list_warning"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:paddingLeft="16dp"
-        android:paddingRight="16dp" />
-
+        android:paddingRight="16dp"
+        android:paddingTop="8dp"
+        android:text="@string/delete_list_warning"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
     <LinearLayout
         android:id="@+id/button_container"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/warning_label"
-        android:orientation="horizontal" >
-
+        android:divider="?android:attr/dividerHorizontal"
+        android:dividerPadding="0dip"
+        android:orientation="horizontal"
+        android:showDividers="middle" >
+
         <Button
             android:id="@+id/d_dialog_no"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/no" />
-
+
         <Button
             android:id="@+id/d_dialog_yes"
+            style="?android:attr/buttonBarButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/yes" />
-
     </LinearLayout>
 
-</RelativeLayout>
+</LinearLayout>

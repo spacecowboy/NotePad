@@ -79,7 +79,7 @@ public class TextPreviewPreference extends Preference {
 //
 //				@Override
 //				public void run() {
-//					Log.d(TAG, "Runnabletype: getText: " + mText.getText().toString());
+//					if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Runnabletype: getText: " + mText.getText().toString());
 //					mText.setTypeface(font);
 //					mText.setText("Font changed in runnable");
 //				}

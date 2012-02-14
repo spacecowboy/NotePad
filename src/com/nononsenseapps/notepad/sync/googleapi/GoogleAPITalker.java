@@ -10,23 +10,20 @@ import java.util.ArrayList;
 
 import org.apache.http.Header;
 import org.apache.http.HttpResponse;
-import org.apache.http.HttpVersion;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpPut;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
-import org.apache.http.params.BasicHttpParams;
-import org.apache.http.params.CoreProtocolPNames;
-import org.apache.http.params.HttpParams;
 import org.apache.http.protocol.HTTP;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
+
+import com.nononsenseapps.notepad.sync.SyncAdapter;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -134,7 +131,7 @@ public class GoogleAPITalker {
 						+ URLEncoder.encode(timestamp, "UTF-8") + "&"
 						+ AUTH_URL_END;
 			} catch (UnsupportedEncodingException e) {
-				Log.d(TAG, "Malformed timestamp: " + e.getLocalizedMessage());
+				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Malformed timestamp: " + e.getLocalizedMessage());
 				return BASE_TASK_URL + "/" + listId + TASKS
 						+ "?showDeleted=true&showHidden=true&fields=items&"
 						+ AUTH_URL_END;
@@ -160,7 +157,7 @@ public class GoogleAPITalker {
 
 	public static String getAuthToken(AccountManager accountManager,
 			Account account, String authTokenType, boolean notifyAuthFailure) {
-		Log.d(TAG, "getAuthToken");
+		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "getAuthToken");
 		String authToken = "";
 		try {
 			// Might be invalid in the cache
@@ -179,7 +176,7 @@ public class GoogleAPITalker {
 
 	public boolean initialize(AccountManager accountManager, Account account,
 			String authTokenType, boolean notifyAuthFailure) {
-		Log.d(TAG, "initialize");
+		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "initialize");
 		//HttpParams params = new BasicHttpParams();
 		//params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
 		//		HttpVersion.HTTP_1_1);
@@ -189,7 +186,7 @@ public class GoogleAPITalker {
 		authToken = getAuthToken(accountManager, account, authTokenType,
 				notifyAuthFailure);
 
-		Log.d(TAG, "authToken: " + authToken);
+		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "authToken: " + authToken);
 		if (authToken != null && !authToken.equals("")) {
 			return true;
 		} else {
@@ -237,7 +234,7 @@ public class GoogleAPITalker {
 
 		HttpGet httpget = new HttpGet(ALL_LISTS);
 		httpget.setHeader("Authorization", "OAuth " + authToken);
-		Log.d(TAG, "request: " + ALL_LISTS);
+		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "request: " + ALL_LISTS);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
 		JSONObject jsonResponse;
@@ -245,7 +242,7 @@ public class GoogleAPITalker {
 			jsonResponse = (JSONObject) new JSONTokener(
 					parseResponse(client.execute(httpget))).nextValue();
 
-			Log.d(TAG, jsonResponse.toString());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, jsonResponse.toString());
 
 			JSONArray lists = jsonResponse.getJSONArray("items");
 
@@ -285,14 +282,14 @@ public class GoogleAPITalker {
 		setAuthHeader(httpget);
 		setHeaderWeakEtag(httpget, gimpedTask.etag);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
-		Log.d(TAG, "request: " + TaskURL(gimpedTask.id, list.id));
+		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "request: " + TaskURL(gimpedTask.id, list.id));
 
 		JSONObject jsonResponse;
 		try {
 			jsonResponse = (JSONObject) new JSONTokener(
 					parseResponse(client.execute(httpget))).nextValue();
 
-			Log.d(TAG, jsonResponse.toString());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, jsonResponse.toString());
 			result = new GoogleTask(jsonResponse);
 		} catch (PreconditionException e) {
 			// Can not happen since we are not doing a PUT/POST
@@ -322,14 +319,14 @@ public class GoogleAPITalker {
 		setAuthHeader(httpget);
 		setHeaderWeakEtag(httpget, gimpedList.etag);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
-		Log.d(TAG, "request: " + ListURL(gimpedList.id));
+		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "request: " + ListURL(gimpedList.id));
 
 		JSONObject jsonResponse;
 		try {
 			jsonResponse = (JSONObject) new JSONTokener(
 					parseResponse(client.execute(httpget))).nextValue();
 
-			Log.d(TAG, jsonResponse.toString());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, jsonResponse.toString());
 			result = new GoogleTaskList(jsonResponse);
 		} catch (PreconditionException e) {
 			// Can not happen since we are not doing a PUT/POST
@@ -414,9 +411,9 @@ public class GoogleAPITalker {
 		setAuthHeader(httpget);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
-		Log.d(TAG, httpget.getRequestLine().toString());
+		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, httpget.getRequestLine().toString());
 		for (Header header : httpget.getAllHeaders()) {
-			Log.d(TAG, header.getName() + ": " + header.getValue());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, header.getName() + ": " + header.getValue());
 		}
 
 		String stringResponse;
@@ -424,7 +421,7 @@ public class GoogleAPITalker {
 			stringResponse = parseResponse(client.execute(httpget));
 
 			JSONObject jsonResponse = new JSONObject(stringResponse);
-			Log.d(TAG, jsonResponse.toString());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, jsonResponse.toString());
 			// Will be an array of items
 			JSONArray items = jsonResponse.getJSONArray("items");
 
@@ -438,14 +435,14 @@ public class GoogleAPITalker {
 			// Can't happen
 			return null;
 		} catch (ClientProtocolException e) {
-			Log.d(TAG, e.getLocalizedMessage());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, e.getLocalizedMessage());
 		} catch (NotModifiedException e) {
-			Log.d(TAG, e.getLocalizedMessage());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, e.getLocalizedMessage());
 		} catch (IOException e) {
-			Log.d(TAG, e.getLocalizedMessage());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, e.getLocalizedMessage());
 		} catch (JSONException e) {
 			// Item list must have been empty
-			Log.d(TAG, e.getLocalizedMessage());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, e.getLocalizedMessage());
 		}
 
 		return moddedList;
@@ -461,9 +458,9 @@ public class GoogleAPITalker {
 
 		HttpUriRequest httppost;
 		if (task.id != null) {
-			Log.d(TAG, "ID is not NULL!! " + TaskURL_ETAG_ID(task.id, pList.id));
 			if (task.deleted == 1) {
-				httppost = new HttpDelete(TaskURL(task.id, pList.id));
+				httppost = new HttpPost(TaskURL(task.id, pList.id));
+				httppost.setHeader("X-HTTP-Method-Override", "DELETE");
 			} else {
 				httppost = new HttpPost(TaskURL_ETAG_ID(task.id, pList.id));
 				// apache does not include PATCH requests, but we can force a
@@ -471,7 +468,7 @@ public class GoogleAPITalker {
 				httppost.setHeader("X-HTTP-Method-Override", "PATCH");
 			}
 		} else {
-			Log.d(TAG, "ID IS NULL: " + AllTasksInsert(pList.id));
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "ID IS NULL: " + AllTasksInsert(pList.id));
 			httppost = new HttpPost(AllTasksInsert(pList.id));
 			task.didRemoteInsert = true; // Need this later
 		}
@@ -481,9 +478,9 @@ public class GoogleAPITalker {
 		if (task.etag != null)
 			setHeaderStrongEtag(httppost, task.etag);
 
-		Log.d(TAG, httppost.getRequestLine().toString());
+		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, httppost.getRequestLine().toString());
 		for (Header header : httppost.getAllHeaders()) {
-			Log.d(TAG, header.getName() + ": " + header.getValue());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, header.getName() + ": " + header.getValue());
 		}
 
 		if (task.deleted != 1) {
@@ -497,10 +494,10 @@ public class GoogleAPITalker {
 			// If we deleted the note, we will get an empty response. Return the
 			// same element back.
 			if (task.deleted == 1) {
-				Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
+				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
 			} else {
 				JSONObject jsonResponse = new JSONObject(stringResponse);
-				Log.d(TAG, jsonResponse.toString());
+				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, jsonResponse.toString());
 
 				// Will return a task, containing id and etag. always update
 				// fields
@@ -531,7 +528,7 @@ public class GoogleAPITalker {
 			NotModifiedException, IOException {
 		HttpUriRequest httppost;
 		if (list.id != null) {
-			Log.d(TAG, "ID is not NULL!! " + ListURL(list.id));
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "ID is not NULL!! " + ListURL(list.id));
 			if (list.deleted == 1) {
 				httppost = new HttpDelete(ListURL(list.id));
 			} else {
@@ -541,7 +538,7 @@ public class GoogleAPITalker {
 				httppost.setHeader("X-HTTP-Method-Override", "PATCH");
 			}
 		} else {
-			Log.d(TAG, "ID IS NULL: " + ALL_LISTS);
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "ID IS NULL: " + ALL_LISTS);
 			httppost = new HttpPost(ALL_LISTS);
 			list.didRemoteInsert = true; // Need this later
 		}
@@ -551,9 +548,9 @@ public class GoogleAPITalker {
 		if (list.etag != null)
 			setHeaderStrongEtag(httppost, list.etag);
 
-		Log.d(TAG, httppost.getRequestLine().toString());
+		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, httppost.getRequestLine().toString());
 		for (Header header : httppost.getAllHeaders()) {
-			Log.d(TAG, header.getName() + ": " + header.getValue());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, header.getName() + ": " + header.getValue());
 		}
 
 		if (list.deleted != 1) {
@@ -567,10 +564,10 @@ public class GoogleAPITalker {
 			// If we deleted the note, we will get an empty response. Return the
 			// same element back.
 			if (list.deleted == 1) {
-				Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
+				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
 			} else {
 				JSONObject jsonResponse = new JSONObject(stringResponse);
-				Log.d(TAG, jsonResponse.toString());
+				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, jsonResponse.toString());
 
 				// Will return a list, containing id and etag. always update
 				// fields
@@ -610,7 +607,7 @@ public class GoogleAPITalker {
 	private void setHeaderStrongEtag(HttpUriRequest httppost, String etag) {
 		if (etag != null && !etag.equals("")) {
 			httppost.setHeader("If-Match", etag);
-			Log.d(TAG, "If-Match: " + etag);
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "If-Match: " + etag);
 		}
 	}
 
@@ -625,7 +622,7 @@ public class GoogleAPITalker {
 	private void setHeaderWeakEtag(HttpUriRequest httpget, String etag) {
 		if (etag != null && !etag.equals("")) {
 			httpget.setHeader("If-None-Match", etag);
-			Log.d(TAG, "If-None-Match: " + etag);
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "If-None-Match: " + etag);
 		}
 	}
 
@@ -681,7 +678,7 @@ public class GoogleAPITalker {
 		String page = "";
 		BufferedReader in = null;
 
-		Log.d(TAG, "HTTP Response Code: "
+		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "HTTP Response Code: "
 				+ response.getStatusLine().getStatusCode());
 
 		if (response.getStatusLine().getStatusCode() == 403) {
@@ -707,7 +704,7 @@ public class GoogleAPITalker {
 		} else if (response.getStatusLine().getStatusCode() == 204) {
 			// Successful delete of a tasklist. return empty string as that is
 			// expected from delete
-			Log.d(TAG, "Response was 204: Successful delete");
+			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Response was 204: Successful delete");
 			return "";
 		} else {
 
@@ -725,7 +722,7 @@ public class GoogleAPITalker {
 						}
 						in.close();
 						page = sb.toString();
-						System.out.println(page);
+						if (SyncAdapter.SYNC_DEBUG_PRINTS) System.out.println(page);
 					}
 				}
 			} catch (IOException e) {

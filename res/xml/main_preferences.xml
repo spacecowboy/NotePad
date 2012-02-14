@@ -28,7 +28,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_cat_sorting" >
         <ListPreference
-            android:defaultValue="modified"
+            android:defaultValue="title COLLATE NOCASE"
             android:dialogTitle="@string/settings_sorting_type_dialog"
             android:entries="@array/sorting_preference"
             android:entryValues="@array/sortingvalues_preference"
@@ -36,7 +36,7 @@
             android:summary="Selected option should be here"
             android:title="@string/settings_sorting_type" />
         <ListPreference
-            android:defaultValue="DESC"
+            android:defaultValue="ASC"
             android:dialogTitle="@string/settings_sorting_order_dialog"
             android:entries="@array/sorting_order_preference"
             android:entryValues="@array/sorting_ordervalues_preference"
@@ -46,7 +46,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_cat_appearance" >
         <ListPreference
-            android:defaultValue="dark"
+            android:defaultValue="light"
             android:dialogTitle="@string/settings_theme_dialog"
             android:entries="@array/theme_preference"
             android:entryValues="@array/themevalues_preference"

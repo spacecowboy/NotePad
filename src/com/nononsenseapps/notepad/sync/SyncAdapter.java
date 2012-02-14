@@ -29,6 +29,7 @@ import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SyncResult;
 import android.os.Bundle;
 import android.os.RemoteException;
@@ -47,9 +48,13 @@ import java.io.IOException;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 	private static final String TAG = "SyncAdapter";
+	public static boolean SYNC_DEBUG_PRINTS = false;
+	
 	//public static final String AUTH_TOKEN_TYPE = "oauth2:https://www.googleapis.com/auth/tasks";
 	public static final String AUTH_TOKEN_TYPE = "Manage your tasks"; // Alias for above
 	public static final boolean NOTIFY_AUTH_FAILURE = false;
+	public static final String SYNC_STARTED = "com.nononsenseapps.notepad.sync.SYNC_STARTED";
+	public static final String SYNC_FINISHED = "com.nononsenseapps.notepad.sync.SYNC_FINISHED";
 
 	private final AccountManager accountManager;
 
@@ -65,7 +70,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 	@Override
 	public void onPerformSync(Account account, Bundle extras, String authority,
 			ContentProviderClient provider, SyncResult syncResult) {
-		Log.d(TAG, "onPerformSync");
+		if (SYNC_DEBUG_PRINTS) Log.d(TAG, "onPerformSync");
+		Intent i = new Intent(SYNC_STARTED);
+		mContext.sendBroadcast(i);
 		// Initialize necessary stuff
 		GoogleDBTalker dbTalker = new GoogleDBTalker(account.name, provider, syncResult);
 		GoogleAPITalker apiTalker = new GoogleAPITalker();
@@ -73,7 +80,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		boolean connected = apiTalker.initialize(accountManager, account, AUTH_TOKEN_TYPE, NOTIFY_AUTH_FAILURE);
 		
 		if (connected) {
-			Log.d(TAG, "We got an authToken atleast");
+			if (SYNC_DEBUG_PRINTS) Log.d(TAG, "We got an authToken atleast");
 			
 			try {
 				// FIrst of all, we need the latest updated time later. So save that for now.
@@ -102,28 +109,28 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					// Also save any modified tasks contained in that list
 					// It is vital that this is done after we saved the list to database
 					// or inserts here will fail for new lists.
+					// Note that items that were deleted by us will be downloaded here.
 					list.downloadModifiedTasks(apiTalker, dbTalker, lastUpdated);
 				}
 				
 				// Erase deleted stuff
-				// Already done
 				//dbTalker.clearDeleted();
 				
-				Log.d(TAG, "Sync Complete!");
+				if (SYNC_DEBUG_PRINTS) Log.d(TAG, "Sync Complete!");
 				
 				
 			} catch (ClientProtocolException e) {
-				Log.d(TAG, "ClientProtocolException: " + e.getLocalizedMessage());
+				if (SYNC_DEBUG_PRINTS) Log.d(TAG, "ClientProtocolException: " + e.getLocalizedMessage());
 			} catch (JSONException e) {
-				Log.d(TAG, "JSONException: " + e.getLocalizedMessage());
+				if (SYNC_DEBUG_PRINTS) Log.d(TAG, "JSONException: " + e.getLocalizedMessage());
 			} catch (PreconditionException e) {
-				Log.d(TAG, "PreconditionException");
+				if (SYNC_DEBUG_PRINTS) Log.d(TAG, "PreconditionException");
 			} catch (NotModifiedException e) {
-				Log.d(TAG, "NotModifiedException");
+				if (SYNC_DEBUG_PRINTS) Log.d(TAG, "NotModifiedException");
 			} catch (IOException e) {
-				Log.d(TAG, "IOException: " + e.getLocalizedMessage());
+				if (SYNC_DEBUG_PRINTS) Log.d(TAG, "IOException: " + e.getLocalizedMessage());
 			} catch (RemoteException e) {
-				Log.d(TAG, "RemoteException: " + e.getLocalizedMessage());
+				if (SYNC_DEBUG_PRINTS) Log.d(TAG, "RemoteException: " + e.getLocalizedMessage());
 			}
 			
 			
@@ -137,6 +144,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		if (apiTalker != null) {
 			apiTalker.closeClient();
 		}
+		Intent j = new Intent(SYNC_FINISHED);
+		mContext.sendBroadcast(j);
 	}
 
 	private void handleConflict(GoogleDBTalker dbTalker,
@@ -149,12 +158,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		Time remote = new Time();
 		remote.parse3339(remoteList.updated);
 		if (Time.compare(remote, local) >= 0) {
-			Log.d(TAG, "Handling conflict: remote was newer");
+			if (SYNC_DEBUG_PRINTS) Log.d(TAG, "Handling conflict: remote was newer");
 			// remote is greater than local (or equal), save that to database
 			remoteList.dbId = localList.dbId;
 			dbTalker.SaveToDatabase(remoteList);
 		} else {
-			Log.d(TAG, "Handling conflict: local was newer");
+			if (SYNC_DEBUG_PRINTS) Log.d(TAG, "Handling conflict: local was newer");
 			// Local is greater than remote, upload it.
 			localList.etag = null;
 			long dbId = localList.dbId;

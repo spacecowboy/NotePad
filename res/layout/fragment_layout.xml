@@ -1,31 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/list_background_frame"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+    android:background="?my_list_background"
     android:paddingRight="0dp"
-    android:background="?my_list_background" >
-    
-    <!--
-    
-    android:theme="@style/ThemeHolo" >-->
-    
-    <SearchView
-            android:id="@+id/search_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+    android:orientation="vertical" >
 
-    <FrameLayout
+    <fragment
+        android:id="@+id/noteslistfragment"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1" >
+        android:layout_height="match_parent"
+        class="com.nononsenseapps.notepad.NotesListFragment" />
 
-        <fragment
-            class="com.nononsenseapps.notepad.NotesListFragment"
-            android:id="@+id/noteslistfragment"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-             />
-    </FrameLayout>
-
-</LinearLayout>
+</FrameLayout>

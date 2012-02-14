@@ -20,4 +20,5 @@
 		<item name="my_list_background">@drawable/list_read_holo</item>
 		
 	</style>
+	
 </resources>
