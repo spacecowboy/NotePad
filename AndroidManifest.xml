@@ -25,19 +25,19 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
     package="com.nononsenseapps.notepad"
-    android:versionCode="9"
-    android:versionName="3.0.1" >
+    android:versionCode="10"
+    android:versionName="3.0.2" >
 
     <uses-sdk
         android:minSdkVersion="11"
         android:targetSdkVersion="15" />
 
+    <!-- For connection -->
     <uses-permission android:name="android.permission.INTERNET" />
-    <!-- For Google account -->
+    <!-- For getting Google account -->
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <!-- For getting Google account auth token -->
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
-    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
 
     <!-- For syncing -->
     <uses-permission android:name="android.permission.READ_SYNC_STATS" />
