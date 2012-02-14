@@ -50,8 +50,8 @@
     <string name="settings_theme_dialog">Thema verwenden</string>
     <string name="settings_cat_theme">Thema</string>
     <string name="settings_cat_sorting">Sortierung</string>
-    <string name="settings_sorting_type">Sortiere von</string>
-    <string name="settings_sorting_type_dialog">Sortieren von</string>
+    <string name="settings_sorting_type">Sortiere nach</string>
+    <string name="settings_sorting_type_dialog">Sortieren nach</string>
     <string name="settings_sorting_order">Sortierreihenfolge</string>
     <string name="settings_sorting_order_dialog">Ordnen nach</string>
     
