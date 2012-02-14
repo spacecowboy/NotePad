@@ -8,17 +8,19 @@
         android:showAsAction="ifRoom"
         android:title="@string/menu_add"/>
     
+    <item
+        android:id="@+id/menu_sync"
+        android:icon="?ic_action_refresh"
+        android:orderInCategory="1"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_sync"/>
+    
     <item android:id="@+id/menu_search"
           android:title="@string/search_hint"
           android:icon="?ic_menu_search_holo"
           android:showAsAction="ifRoom|collapseActionView"
-          android:actionViewClass="android.widget.SearchView" android:orderInCategory="1"/> 
-    <item
-        android:id="@+id/menu_sync"
-        android:icon="?ic_action_refresh"
-        android:orderInCategory="2"
-        android:showAsAction="ifRoom"
-        android:title="@string/menu_sync"/>
+          android:actionViewClass="android.widget.SearchView"
+          android:orderInCategory="2"/> 
     
    <!--  Here editor options should be displayed in landscape mode. Hence the drastic increase in order index -->
 

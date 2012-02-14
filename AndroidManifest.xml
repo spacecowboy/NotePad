@@ -25,8 +25,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
     package="com.nononsenseapps.notepad"
-    android:versionCode="8"
-    android:versionName="3.0" >
+    android:versionCode="9"
+    android:versionName="3.0.1" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -122,12 +122,6 @@
 
                 <data android:mimeType="vnd.android.cursor.dir/vnd.nononsenseapps.note" />
             </intent-filter>
-
-            <!-- enable the search dialog to send searches to SearchableActivity -->
-            <!--
-                 <meta-data android:name="android.app.default_searchable"
-                   android:value="Searcher" />
-            -->
 
         </activity>
         <activity

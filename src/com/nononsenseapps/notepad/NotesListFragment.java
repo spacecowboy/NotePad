@@ -57,7 +57,8 @@ import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 public class NotesListFragment extends ListFragment implements
-		SearchView.OnQueryTextListener, OnItemLongClickListener,OnModalDeleteListener, Refresher,
+		SearchView.OnQueryTextListener, OnItemLongClickListener,
+		OnModalDeleteListener, Refresher,
 		LoaderManager.LoaderCallbacks<Cursor>, OnSharedPreferenceChangeListener {
 	private int mCurCheckPosition = 0;
 
@@ -141,7 +142,8 @@ public class NotesListFragment extends ListFragment implements
 
 	@Override
 	public void onAttach(Activity activity) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onAttach");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "onAttach");
 		super.onAttach(activity);
 		this.activity = activity;
 	}
@@ -175,9 +177,6 @@ public class NotesListFragment extends ListFragment implements
 			mCurListId = savedInstanceState.getLong(SAVEDLISTID, -1);
 			mCurCheckPosition = savedInstanceState.getInt(SAVEDPOS, 0);
 			mCurId = savedInstanceState.getLong(SAVEDID, -1);
-			// If in portrait and we were editing a note, open it
-			if (currentState == STATE_EXISTING_NOTE)
-				autoOpenNote = true;
 		} else {
 			// Only display note in landscape
 			if (FragmentLayout.LANDSCAPE_MODE)
@@ -191,7 +190,8 @@ public class NotesListFragment extends ListFragment implements
 	}
 
 	/**
-	 * Will try to open the previously open note, but will default to first note if none was open
+	 * Will try to open the previously open note, but will default to first note
+	 * if none was open
 	 */
 	private void showFirstBestNote() {
 		if (getListAdapter().isEmpty()) {
@@ -204,11 +204,14 @@ public class NotesListFragment extends ListFragment implements
 	}
 
 	private void setupSearchView() {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesListFragment", "setup search view");
-		mSearchView.setIconifiedByDefault(true);
-		mSearchView.setOnQueryTextListener(this);
-		mSearchView.setSubmitButtonEnabled(false);
-		mSearchView.setQueryHint(getString(R.string.search_hint));
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("NotesListFragment", "setup search view");
+		if (mSearchView != null) {
+			mSearchView.setIconifiedByDefault(true);
+			mSearchView.setOnQueryTextListener(this);
+			mSearchView.setSubmitButtonEnabled(false);
+			mSearchView.setQueryHint(getString(R.string.search_hint));
+		}
 	}
 
 	private int getPosOfId(long id) {
@@ -241,8 +244,9 @@ public class NotesListFragment extends ListFragment implements
 				.getSystemService(Context.SEARCH_SERVICE);
 		mSearchItem = menu.findItem(R.id.menu_search);
 		mSearchView = (SearchView) mSearchItem.getActionView();
-		mSearchView.setSearchableInfo(searchManager.getSearchableInfo(activity
-				.getComponentName()));
+		if (mSearchView != null)
+			mSearchView.setSearchableInfo(searchManager
+					.getSearchableInfo(activity.getComponentName()));
 		// searchView.setIconifiedByDefault(true); // Do iconify the widget;
 		// Don't
 		// // expand by default
@@ -262,7 +266,7 @@ public class NotesListFragment extends ListFragment implements
 	public void onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
 	}
-	
+
 	public static int getNoteIdFromUri(Uri noteUri) {
 		return Integer.parseInt(noteUri.getPathSegments().get(
 				NotePad.Notes.NOTE_ID_PATH_POSITION));
@@ -274,13 +278,14 @@ public class NotesListFragment extends ListFragment implements
 		case R.id.menu_add:
 			Uri noteUri = FragmentLayout.createNote(
 					activity.getContentResolver(), mCurListId);
-			
+
 			newNoteIdToOpen = getNoteIdFromUri(noteUri);
-			//showNote(getNoteIdFromUri(noteUri));
-			
+			// showNote(getNoteIdFromUri(noteUri));
+
 			return true;
 		case R.id.menu_sync:
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesListFragment", "Sync");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesListFragment", "Sync");
 			String accountName = PreferenceManager.getDefaultSharedPreferences(
 					activity)
 					.getString(NotesPreferenceFragment.KEY_ACCOUNT, "");
@@ -334,7 +339,8 @@ public class NotesListFragment extends ListFragment implements
 		}
 
 		if (savedInstanceState != null) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesListFragment", "onCreate saved not null");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesListFragment", "onCreate saved not null");
 			// mCurCheckPosition = savedInstanceState.getInt(SAVEDPOS);
 			// mCurId = savedInstanceState.getLong(SAVEDID);
 		}
@@ -343,7 +349,8 @@ public class NotesListFragment extends ListFragment implements
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesListFragment", "onSaveInstanceState");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("NotesListFragment", "onSaveInstanceState");
 		outState.putInt(SAVEDPOS, mCurCheckPosition);
 		outState.putLong(SAVEDID, mCurId);
 		outState.putInt(SAVEDSTATE, currentState);
@@ -364,7 +371,8 @@ public class NotesListFragment extends ListFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesListFragment", "onResume");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("NotesListFragment", "onResume");
 
 		if (!FragmentLayout.LANDSCAPE_MODE) {
 			currentState = STATE_LIST;
@@ -393,7 +401,8 @@ public class NotesListFragment extends ListFragment implements
 		while (index >= getListAdapter().getCount()) {
 			index = index - 1;
 		}
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "showNote valid index to show is: " + index);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "showNote valid index to show is: " + index);
 
 		if (index > -1) {
 			mCurCheckPosition = index;
@@ -403,13 +412,15 @@ public class NotesListFragment extends ListFragment implements
 			currentState = STATE_EXISTING_NOTE;
 
 			if (FragmentLayout.LANDSCAPE_MODE) {
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesLIstFragmenT", "It is dualPane!");
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d("NotesLIstFragmenT", "It is dualPane!");
 				// We can display everything in-place with fragments, so
 				// update
 				// the list to highlight the selected item and show the
 				// data.
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesListFragment", "Showing note: " + mCurId + ", "
-						+ mCurCheckPosition);
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d("NotesListFragment", "Showing note: " + mCurId + ", "
+							+ mCurCheckPosition);
 
 				// Check what fragment is currently shown, replace if
 				// needed.
@@ -418,14 +429,17 @@ public class NotesListFragment extends ListFragment implements
 				// .findFragmentById(R.id.editor);
 				if (landscapeEditor != null) {
 					// We want to know about changes here
-					if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesListFragment", "Would open note here: "
-							+ mCurId);
+					if (FragmentLayout.UI_DEBUG_PRINTS)
+						Log.d("NotesListFragment", "Would open note here: "
+								+ mCurId);
 					landscapeEditor.displayNote(mCurId, mCurListId);
 				}
 
 			} else {
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesListFragment", "Showing note in SinglePane: id "
-						+ mCurId + ", pos: " + mCurCheckPosition);
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d("NotesListFragment",
+							"Showing note in SinglePane: id " + mCurId
+									+ ", pos: " + mCurCheckPosition);
 				// Otherwise we need to launch a new activity to display
 				// the dialog fragment with selected text.
 				Intent intent = new Intent();
@@ -448,7 +462,8 @@ public class NotesListFragment extends ListFragment implements
 	 * original
 	 */
 	public void onDelete() {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onDelete");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "onDelete");
 		// Only do anything if id is valid!
 		if (mCurId > -1) {
 			if (onDeleteListener != null) {
@@ -475,7 +490,8 @@ public class NotesListFragment extends ListFragment implements
 			index = index - 1;
 		}
 
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "ReCalculate valid index is: " + index);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "ReCalculate valid index is: " + index);
 		if (index == -1) {
 			// Completely empty list. We should display a new note
 			mCurCheckPosition = 0;
@@ -491,7 +507,8 @@ public class NotesListFragment extends ListFragment implements
 	 */
 	public void reSelectId() {
 		int pos = getPosOfId(mCurId);
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "reSelectId id pos: " + mCurId + " " + pos);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "reSelectId id pos: " + mCurId + " " + pos);
 		// This happens in a search. Don't destroy id information in selectPos
 		// when it is invalid
 		if (pos != -1) {
@@ -548,9 +565,11 @@ public class NotesListFragment extends ListFragment implements
 	}
 
 	public boolean onQueryTextChange(String query) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesListFragment", "onQueryTextChange: " + query);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("NotesListFragment", "onQueryTextChange: " + query);
 		if (!currentQuery.equals(query)) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesListFragment", "this is a new query");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesListFragment", "this is a new query");
 			currentQuery = query;
 
 			getLoaderManager().restartLoader(0, null, this);
@@ -559,20 +578,22 @@ public class NotesListFragment extends ListFragment implements
 	}
 
 	public boolean onQueryTextSubmit(String query) {
-		// Don't care
-		return true;
+		// Just do what we do on text change
+		return onQueryTextChange(query);
 	}
 
 	private void selectPos(int pos) {
 		if (checkMode == CHECK_SINGLE_FUTURE) {
 			setSingleCheck();
 		}
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "selectPos: " + pos);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "selectPos: " + pos);
 		getListView().setItemChecked(pos, true);
 	}
 
 	public void setSingleCheck() {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "setSingleCheck");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "setSingleCheck");
 		checkMode = CHECK_SINGLE;
 		// ListView lv = getListView();
 		if (FragmentLayout.LANDSCAPE_MODE) {
@@ -596,14 +617,16 @@ public class NotesListFragment extends ListFragment implements
 			Intent intent = new Intent(activity, FragmentLayout.class);
 
 			// the mother activity will refresh the list for us
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Launching intent: " + intent);
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "Launching intent: " + intent);
 			// SingleTop, so will not launch a new instance
 			startActivity(intent);
 		}
 	}
 
 	public void setMultiCheck(int pos) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "setMutliCheck: " + pos);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "setMutliCheck: " + pos);
 		// Do this on long press
 		checkMode = CHECK_MULTI;
 		// ListView lv = getListView();
@@ -618,13 +641,15 @@ public class NotesListFragment extends ListFragment implements
 	 */
 	public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 			int position, long id) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onLongClick");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "onLongClick");
 		if (checkMode == CHECK_SINGLE) {
 			// Disable long-clicking temporarliy
 			getListView().setLongClickable(false);
 			// get the position which was selected
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesListFragment", "onLongClick, selected item pos: "
-					+ position + ", id: " + id);
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesListFragment", "onLongClick, selected item pos: "
+						+ position + ", id: " + id);
 			// change to multiselect mode and select that item
 			setMultiCheck(position);
 		} else {
@@ -638,24 +663,28 @@ public class NotesListFragment extends ListFragment implements
 		// On Honeycomb, we can set the state of the refresh button by giving it
 		// a custom
 		// action view.
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "setRefreshActionState");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "setRefreshActionState");
 		if (mOptionsMenu == null) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "setRefreshActionState: menu is null, returning");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "setRefreshActionState: menu is null, returning");
 			return;
 		}
 
 		final MenuItem refreshItem = mOptionsMenu.findItem(R.id.menu_sync);
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG,
-				"setRefreshActionState: refreshItem not null? "
-						+ Boolean.toString(refreshItem != null));
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "setRefreshActionState: refreshItem not null? "
+					+ Boolean.toString(refreshItem != null));
 		if (refreshItem != null) {
 			if (refreshing) {
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG,
-						"setRefreshActionState: refreshing: "
-								+ Boolean.toString(refreshing));
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d(TAG,
+							"setRefreshActionState: refreshing: "
+									+ Boolean.toString(refreshing));
 				if (mRefreshIndeterminateProgressView == null) {
-					if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG,
-							"setRefreshActionState: mRefreshIndeterminateProgressView was null, inflating one...");
+					if (FragmentLayout.UI_DEBUG_PRINTS)
+						Log.d(TAG,
+								"setRefreshActionState: mRefreshIndeterminateProgressView was null, inflating one...");
 					LayoutInflater inflater = (LayoutInflater) activity
 							.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 					mRefreshIndeterminateProgressView = inflater.inflate(
@@ -664,7 +693,8 @@ public class NotesListFragment extends ListFragment implements
 
 				refreshItem.setActionView(mRefreshIndeterminateProgressView);
 			} else {
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "setRefreshActionState: setting null actionview");
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d(TAG, "setRefreshActionState: setting null actionview");
 				refreshItem.setActionView(null);
 			}
 		}
@@ -780,7 +810,8 @@ public class NotesListFragment extends ListFragment implements
 		@Override
 		public boolean onCreateActionMode(android.view.ActionMode mode,
 				android.view.Menu menu) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("MODALMAN", "onCreateActionMode mode: " + mode);
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("MODALMAN", "onCreateActionMode mode: " + mode);
 			// Clear data!
 			this.textToShare.clear();
 			this.notesToDelete.clear();
@@ -806,7 +837,8 @@ public class NotesListFragment extends ListFragment implements
 		@Override
 		public boolean onActionItemClicked(android.view.ActionMode mode,
 				android.view.MenuItem item) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("MODALMAN", "onActionItemClicked mode: " + mode);
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("MODALMAN", "onActionItemClicked mode: " + mode);
 			switch (item.getItemId()) {
 			case R.id.modal_share:
 				shareNote(buildTextToShare());
@@ -838,8 +870,9 @@ public class NotesListFragment extends ListFragment implements
 
 		@Override
 		public void onDestroyActionMode(android.view.ActionMode mode) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("modeCallback", "onDestroyActionMode: " + mode.toString()
-					+ ", " + mode.getMenu().toString());
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("modeCallback", "onDestroyActionMode: " + mode.toString()
+						+ ", " + mode.getMenu().toString());
 			list.setFutureSingleCheck();
 		}
 
@@ -909,7 +942,8 @@ public class NotesListFragment extends ListFragment implements
 			int num = notesToDelete.size();
 			if (onDeleteListener != null) {
 				for (int pos : notesToDelete) {
-					if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Deleting key: " + pos);
+					if (FragmentLayout.UI_DEBUG_PRINTS)
+						Log.d(TAG, "Deleting key: " + pos);
 				}
 				onDeleteListener.onModalDelete(notesToDelete);
 			}
@@ -939,7 +973,8 @@ public class NotesListFragment extends ListFragment implements
 		@Override
 		public boolean onCreateActionMode(android.view.ActionMode mode,
 				android.view.Menu menu) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("modeCallBack", "onCreateActionMode " + mode);
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("modeCallBack", "onCreateActionMode " + mode);
 			this.textToShare.clear();
 			this.notesToDelete.clear();
 
@@ -993,20 +1028,24 @@ public class NotesListFragment extends ListFragment implements
 
 	@Override
 	public void onModalDelete(Collection<Integer> positions) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onModalDelete");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "onModalDelete");
 		if (positions.contains(mCurCheckPosition)) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onModalDelete contained setting id invalid");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "onModalDelete contained setting id invalid");
 			idInvalid = true;
 		} else {
 			// We must recalculate the positions index of the current note
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onModalDelete not contained, setting pos invalid");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "onModalDelete not contained, setting pos invalid");
 			posInvalid = true;
 		}
 
 		if (onDeleteListener != null) {
 			HashSet<Long> ids = new HashSet<Long>();
 			for (int pos : positions) {
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onModalDelete pos: " + pos);
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d(TAG, "onModalDelete pos: " + pos);
 				ids.add(getListAdapter().getItemId(pos));
 			}
 			onDeleteListener.onMultiDelete(ids, mCurId);
@@ -1026,13 +1065,15 @@ public class NotesListFragment extends ListFragment implements
 		// events
 		// and only once
 		// Intent intent = new Intent(activity, FragmentLayout.class);
-		// if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Launching intent: " + intent);
+		// if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Launching intent: " +
+		// intent);
 		// startActivity(intent);
 	}
 
 	@Override
 	public void refresh() {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "refresh time!. Is list updated?");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "refresh time!. Is list updated?");
 		// reList first so we don't select deletid ids
 		// reListNotes();
 
@@ -1055,7 +1096,8 @@ public class NotesListFragment extends ListFragment implements
 	}
 
 	public void showList(long id) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "showList id " + id);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "showList id " + id);
 		mCurListId = id;
 		// Will create one if necessary
 		getLoaderManager().restartLoader(0, null, this);
@@ -1122,7 +1164,8 @@ public class NotesListFragment extends ListFragment implements
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onCreateLoader");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "onCreateLoader");
 		if (currentQuery != null && !currentQuery.isEmpty()) {
 			return getSearchNotesLoader();
 		} else {
@@ -1134,7 +1177,8 @@ public class NotesListFragment extends ListFragment implements
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		// Swap the new cursor in. (The framework will take care of closing the
 		// old cursor once we return.)
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onLoadFinished");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "onLoadFinished");
 
 		mAdapter.swapCursor(data);
 
@@ -1144,11 +1188,12 @@ public class NotesListFragment extends ListFragment implements
 		} else {
 			setListShownNoAnimation(true);
 		}
-		
+
 		// If a note was created, it will be set in this variable
 		if (newNoteIdToOpen > -1) {
 			showNote(getPosOfId(newNoteIdToOpen));
-			newNoteIdToOpen = -1; // Should only be set to anything else on create
+			newNoteIdToOpen = -1; // Should only be set to anything else on
+									// create
 		}
 		// Open first note if this is first start
 		// or if one was opened previously
@@ -1166,7 +1211,8 @@ public class NotesListFragment extends ListFragment implements
 		// This is called when the last Cursor provided to onLoadFinished()
 		// above is about to be closed. We need to make sure we are no
 		// longer using it.
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onLoaderReset");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "onLoaderReset");
 		mAdapter.swapCursor(null);
 	}
 
@@ -1179,7 +1225,8 @@ public class NotesListFragment extends ListFragment implements
 			String key) {
 		try {
 			if (activity.isFinishing()) {
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "isFinishing, should not update");
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d(TAG, "isFinishing, should not update");
 				// Setting the summary now would crash it with
 				// IllegalStateException since we are not attached to a view
 			} else {
@@ -1194,7 +1241,8 @@ public class NotesListFragment extends ListFragment implements
 			// stupid
 			// This catch prevents the app from crashing if we do something
 			// stupid
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Exception was caught: " + e.getMessage());
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "Exception was caught: " + e.getMessage());
 		}
 	}
 

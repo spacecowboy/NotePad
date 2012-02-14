@@ -118,6 +118,13 @@ public class FragmentLayout extends Activity implements
 		this.list = list;
 		// So editor can access it
 		ONDELETELISTENER = this;
+		
+		// Get the intent, verify the action and get the query
+	    Intent intent = getIntent();
+	    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+	      String query = intent.getStringExtra(SearchManager.QUERY);
+	      list.onQueryTextSubmit(query);
+	    }
 	}
 	
 	/**
@@ -125,10 +132,18 @@ public class FragmentLayout extends Activity implements
 	 */
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_SEARCH) {
+		switch (keyCode) {
+		case KeyEvent.KEYCODE_SEARCH:
 			if (list != null && list.mSearchItem != null) {
 				list.mSearchItem.expandActionView();
 			}
+			else if (list != null) {
+				onSearchRequested();
+			}
+			return true;
+		case KeyEvent.KEYCODE_BACK:
+			// Exit app
+			finish();
 			return true;
 		}
 		return false;
@@ -149,8 +164,11 @@ public class FragmentLayout extends Activity implements
 	    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 	      String query = intent.getStringExtra(SearchManager.QUERY);
 	      //list.onQueryTextChange(query);
-	      if (list != null)
+	      if (list != null && list.mSearchView != null) {
 	    	  list.mSearchView.setQuery(query, false);
+	      } else if (list!= null) {
+	  	      list.onQueryTextSubmit(query);
+	      }
 	    } else {
 		if (this.list != null) {
 			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("FragmentLayout", "Calling refresh");
@@ -389,9 +407,15 @@ public class FragmentLayout extends Activity implements
 			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG,"menu_deletelist");
 			showDialog(DELETE_LIST);
 			return true;
-//		case R.id.menu_search:
-//			// Launches the search window
-//			return onSearchRequested();
+		case R.id.menu_search:
+			if (list != null && list.mSearchItem != null) {
+				list.mSearchItem.expandActionView();
+			}
+			else if (list != null) {
+				// Launches the search window
+				onSearchRequested();
+			}
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -674,7 +698,7 @@ public class FragmentLayout extends Activity implements
 
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		Log.d(TAG, "onNavigationItemSelected pos: " + itemPosition + " id: "
+		if (UI_DEBUG_PRINTS) Log.d(TAG, "onNavigationItemSelected pos: " + itemPosition + " id: "
 				+ itemId);
 
 		// Change the active list
