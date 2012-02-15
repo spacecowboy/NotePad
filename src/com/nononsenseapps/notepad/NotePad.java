@@ -177,11 +177,18 @@ public final class NotePad {
         
         public static final String DEFAULT_NAME = "";
 		
-      public static final String DEFAULT_SORT_TYPE = COLUMN_NAME_TITLE + " COLLATE NOCASE";
+      //public static final String DEFAULT_SORT_TYPE = COLUMN_NAME_TITLE + " COLLATE NOCASE";
+      public static final String DEFAULT_SORT_TYPE = COLUMN_NAME_POSITION;
+      public static final String ALPHABETIC_SORT_TYPE = COLUMN_NAME_TITLE + " COLLATE NOCASE";
+      public static final String DUEDATE_SORT_TYPE = COLUMN_NAME_DUE_DATE;
+      public static final String POSITION_SORT_TYPE = COLUMN_NAME_POSITION;
       public static final String DEFAULT_SORT_ORDERING = "ASC";
+      public static final String ASCENDING_SORT_ORDERING = "ASC";
+      public static final String DESCENDING_SORT_ORDERING = "DESC";
       public static final String ALPHABETIC_ASC_ORDER = COLUMN_NAME_TITLE + " COLLATE NOCASE ASC";
+      public static final String POSITION_ASC_ORDER = COLUMN_NAME_POSITION + " ASC";
       
-      public static String SORT_ORDER = ALPHABETIC_ASC_ORDER;
+      public static String SORT_ORDER = POSITION_ASC_ORDER;
     }
     
     /**

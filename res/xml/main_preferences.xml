@@ -28,7 +28,7 @@
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/settings_cat_sorting" >
         <ListPreference
-            android:defaultValue="title COLLATE NOCASE"
+            android:defaultValue="gtasks_position"
             android:dialogTitle="@string/settings_sorting_type_dialog"
             android:entries="@array/sorting_preference"
             android:entryValues="@array/sortingvalues_preference"

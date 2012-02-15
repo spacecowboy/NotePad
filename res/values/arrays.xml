@@ -13,11 +13,13 @@
     <string-array name="sorting_preference">
         <item>Title</item>
         <item>Due date</item>
+        <item>Server position</item>
     </string-array>
 
     <string-array name="sortingvalues_preference">
         <item>title COLLATE NOCASE</item>
         <item>duedate</item>
+        <item>gtasks_position</item>
     </string-array>
     
     <string-array name="sorting_order_preference">

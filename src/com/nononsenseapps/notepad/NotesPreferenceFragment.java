@@ -67,9 +67,9 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		addPreferencesFromResource(R.xml.main_preferences);
 
 		SUMMARY_SORT_TYPE = getText(
-				R.string.settings_summary_sort_type_alphabetic).toString();
+				R.string.settings_summary_sort_type_serverposition).toString();
 
-		SUMMARY_SORT_ORDER = getText(R.string.settings_summary_sort_order_desc)
+		SUMMARY_SORT_ORDER = getText(R.string.settings_summary_sort_order_asc)
 				.toString();
 
 		SUMMARY_THEME = getText(R.string.settings_summary_theme_dark)
@@ -252,11 +252,11 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	private void setOrderSummary(SharedPreferences sharedPreferences) {
 		String value = sharedPreferences.getString(KEY_SORT_ORDER,
 				NotePad.Notes.DEFAULT_SORT_ORDERING);
-		String summary;
-		if (NotePad.Notes.DEFAULT_SORT_ORDERING.equals(value))
+		String summary = "";
+		if (NotePad.Notes.ASCENDING_SORT_ORDERING.equals(value))
 			summary = getText(R.string.settings_summary_sort_order_asc)
 					.toString();
-		else
+		else if (NotePad.Notes.DESCENDING_SORT_ORDERING.equals(value))
 			summary = getText(R.string.settings_summary_sort_order_desc)
 					.toString();
 		SUMMARY_SORT_ORDER = summary;
@@ -266,13 +266,15 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	private void setTypeSummary(SharedPreferences sharedPreferences) {
 		String value = sharedPreferences.getString(KEY_SORT_TYPE,
 				NotePad.Notes.DEFAULT_SORT_TYPE);
-		String summary;
-		if (NotePad.Notes.DEFAULT_SORT_TYPE.equals(value))
+		String summary = "";
+		if (NotePad.Notes.ALPHABETIC_SORT_TYPE.equals(value))
 			summary = getText(R.string.settings_summary_sort_type_alphabetic)
 					.toString();
-		else
+		else if (NotePad.Notes.DUEDATE_SORT_TYPE.equals(value))
 			summary = getText(R.string.settings_summary_sort_type_duedate)
 					.toString();
+		else if (NotePad.Notes.POSITION_SORT_TYPE.equals(value))
+			summary = getText(R.string.settings_summary_sort_type_serverposition).toString();
 		SUMMARY_SORT_TYPE = summary;
 		prefSortType.setSummary(summary);
 	}
