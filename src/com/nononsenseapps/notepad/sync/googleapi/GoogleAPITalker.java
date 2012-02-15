@@ -106,9 +106,9 @@ public class GoogleAPITalker {
 				+ AUTH_URL_END;
 	}
 
-	private static String TaskURL_ETAG_ID(String taskId, String listId) {
+	private static String TaskURL_ETAG_ID_UPDATED(String taskId, String listId) {
 		return BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId
-				+ "?fields=id,etag&" + AUTH_URL_END;
+				+ "?fields=id,etag,updated&" + AUTH_URL_END;
 	}
 
 	private static String AllTasksCompletedMin(String listId, String timestamp) {
@@ -460,7 +460,7 @@ public class GoogleAPITalker {
 				httppost = new HttpPost(TaskURL(task.id, pList.id));
 				httppost.setHeader("X-HTTP-Method-Override", "DELETE");
 			} else {
-				httppost = new HttpPost(TaskURL_ETAG_ID(task.id, pList.id));
+				httppost = new HttpPost(TaskURL_ETAG_ID_UPDATED(task.id, pList.id));
 				// apache does not include PATCH requests, but we can force a
 				// post to be a PATCH request
 				httppost.setHeader("X-HTTP-Method-Override", "PATCH");
@@ -501,6 +501,7 @@ public class GoogleAPITalker {
 				// fields
 				task.etag = jsonResponse.getString("etag");
 				task.id = jsonResponse.getString("id");
+				task.updated = jsonResponse.getString("updated");
 			}
 		} catch (PreconditionException e) {
 			// There was a conflict, return null in that case
