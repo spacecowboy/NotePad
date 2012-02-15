@@ -28,6 +28,7 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
+import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -52,12 +53,12 @@ import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.ShareActionProvider;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class NotesListFragment extends ListFragment implements
@@ -585,7 +586,27 @@ public class NotesListFragment extends ListFragment implements
 					cb.setOnCheckedChangeListener(listener);
 					
 					return true;
-				} 
+				}
+				else if (columnIndex == cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE) ||
+						columnIndex == cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE)) {
+					TextView tv = (TextView) view;
+					// Set strike through on completed tasks
+					String text = cursor.getString(cursor
+							.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS));
+					if (text.equals(
+							getText(R.string.gtask_status_completed))) {
+						// Set appropriate BITMASK
+						tv.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+					} else {
+						// Will clear strike-through. Just a BITMASK
+						tv.setPaintFlags(0);
+					}
+					
+					// Return false so the normal call is used to set the text
+					return false;
+				}
 				return false;
 			}
 		});
