@@ -19,6 +19,7 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -472,6 +473,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mText.setTypeface(tf);
 			mTitle.setTextSize(size);
 			mTitle.setTypeface(tf);
+			mTitle.setPaintFlags(mTitle.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
 		}
 	}
 
