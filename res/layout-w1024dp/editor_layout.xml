@@ -4,32 +4,30 @@
     android:layout_height="match_parent"
     android:fillViewport="true" >
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingTop="16dp"
         android:paddingBottom="0dp"
         android:paddingLeft="16dp"
-    	android:paddingRight="16dp" >
+    	android:paddingRight="16dp"
+    	android:orientation="vertical">
 
         <RelativeLayout
             android:id="@+id/taskStuffContainer"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
             android:paddingBottom="4dp" >
 
             <EditText
                 android:id="@+id/titleBox"
-                android:layout_width="wrap_content"
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:hint="@string/editor_title_hint"
-                android:inputType="textShortMessage"
-                android:maxWidth="400dp"
-                android:minWidth="400dp"
+                android:capitalize="sentences"
+                android:inputType="textMultiLine"
                 android:padding="5dp"
                 android:textStyle="bold" >
             </EditText>
@@ -41,8 +39,7 @@
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
                 android:minWidth="150dp"
-                android:orientation="horizontal"
-                android:padding="4dp" >
+                android:orientation="horizontal" >
 
                 <Button
                     android:id="@+id/dueDateBox"
@@ -66,14 +63,13 @@
         <com.nononsenseapps.ui.TabbingEditText
             android:id="@+id/noteBox"
             android:layout_width="fill_parent"
-            android:layout_height="fill_parent"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@+id/taskStuffContainer"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:gravity="top"
             android:capitalize="sentences"
             android:hint="@string/editor_note_hint"
             android:inputType="textMultiLine" >
         </com.nononsenseapps.ui.TabbingEditText>
-    </RelativeLayout>
+    </LinearLayout>
 
 </ScrollView>
