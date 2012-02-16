@@ -367,6 +367,9 @@ public class NotesListFragment extends ListFragment implements
 	public void onPause() {
 		super.onPause();
 		activity.unregisterReceiver(syncFinishedReceiver);
+		// Since we just unregistered ourselves, we might not know when the sync is finished.
+		// So we have to turn off the sync-animation or it might spin forever!
+		setRefreshActionItemState(false);
 	}
 
 	@Override
