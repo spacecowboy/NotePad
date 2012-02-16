@@ -17,7 +17,8 @@
 */
 -->
 <resources>
-    <dimen name="preference_screen_side_margin">112dp</dimen>
+    <!-- <dimen name="preference_screen_side_margin">112dp</dimen> -->
+    <dimen name="preference_screen_side_margin">64dp</dimen>
     
     <dimen name="preference_widget_width">64dp</dimen>
     <!-- Preference fragment padding, bottom -->

@@ -21,7 +21,7 @@
     android:background="?my_list_selector"
     android:orientation="horizontal"
     android:paddingLeft="8dp"
-    android:paddingRight="12dp" >
+    android:paddingRight="16dp" >
 
     <LinearLayout
         android:id="@+id/datecheckcontainer"

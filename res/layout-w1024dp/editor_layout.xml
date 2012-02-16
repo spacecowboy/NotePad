@@ -26,7 +26,6 @@
                 android:hint="@string/editor_title_hint"
                 android:capitalize="sentences"
                 android:inputType="textMultiLine"
-                android:padding="5dp"
                 android:textStyle="bold" >
             </EditText>
 

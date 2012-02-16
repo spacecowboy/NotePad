@@ -299,6 +299,14 @@ public class NotePadProvider extends ContentProvider implements
 					NotePad.Notes.DEFAULT_NAME);
 			values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
 			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 0);
+			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
+			
+			// Gets the current system time in milliseconds
+			Long now = Long.valueOf(System.currentTimeMillis());
+			values.put(NotePad.Notes.COLUMN_NAME_CREATE_DATE, now);
+			values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, now);
+			values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
+			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, "needsAction");
 
 			return db.insert(NotePad.Notes.TABLE_NAME, null, values);
 		}

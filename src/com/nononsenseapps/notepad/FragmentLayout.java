@@ -230,24 +230,6 @@ public class FragmentLayout extends Activity implements
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case DELETE_LIST:
-			// AlertDialog.Builder builder = new AlertDialog.Builder(this);
-			// builder.setMessage(R.string.delete_list_warning)
-			// .setCancelable(false)
-			// .setPositiveButton(R.string.yes, new
-			// DialogInterface.OnClickListener() {
-			// public void onClick(DialogInterface dialog, int id) {
-			// deleteCurrentList();
-			// }
-			// })
-			// .setNegativeButton(R.string.no, new
-			// DialogInterface.OnClickListener() {
-			// public void onClick(DialogInterface dialog, int id) {
-			// dialog.cancel();
-			// }
-			// });
-			//
-			// return builder.create();
-
 			final Dialog deleteDialog = new Dialog(this);
 			deleteDialog.setContentView(R.layout.delete_list_dialog);
 			deleteDialog.setTitle(R.string.menu_deletelist);
@@ -286,6 +268,7 @@ public class FragmentLayout extends Activity implements
 					EditText title = (EditText) dialog
 							.findViewById(R.id.editTitle);
 					createList(title.getText().toString());
+					title.setText("");
 					dialog.dismiss();
 				}
 			});
@@ -315,6 +298,7 @@ public class FragmentLayout extends Activity implements
 					EditText renameTitle = (EditText) renameDialog
 							.findViewById(R.id.renameTitle);
 					renameList(renameTitle.getText().toString());
+					renameTitle.setText("");
 					renameDialog.dismiss();
 				}
 			});
