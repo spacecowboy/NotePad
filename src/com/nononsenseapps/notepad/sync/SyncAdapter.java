@@ -87,30 +87,31 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 				String lastUpdated = dbTalker.getLastUpdated(account.name);
 				
 				// TODO begin rewrite syncing process
+				// ActionLists
+				// List stuffToSaveToDB
+				// List StuffToUpload
 				
 				// LISTS DOWNLOAD
 				// download all lists.
 				// get modified lists from db
-				// if user modified the name of the list locally, add that change to uploadLists-list, if only changed name remotely add that to lists save locally list
+				// if user modified the name of the list locally, add that change to StuffToUpload, if only changed name remotely add that to stuffToSaveToDB
 				
 				
 				// TASKS DOWNLOAD
 				// for all lists, download tasks that have been modified since lastUpdated
-				
 				// for all lists, get modified tasks from db
 				// handle possible conflicts, add to correct action list
 				
 				// UPLOAD
-				
-				// upload modified lists, add result to local lists to be saved (make sure title is same as on server)
-				// upload modified tasks, add results to local tasks to be saved (need position and parent value)
+				// upload (lists) StuffToUpload, add result to stuffToSaveToDB (make sure title is same as on server)
+				// upload (tasks) StuffToUpload, add results to stuffToSaveToDB (need position and parent value)
 				
 				// Set sorting values on tasks that are about to be saved to the database
 				
 				// SAVE TO DATABASE
 				
-				// save local lists
-				// save local tasks
+				// save lists stuffToSaveToDB
+				// save tasks stuffToSaveToDB
 				
 				
 				

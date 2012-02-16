@@ -25,11 +25,14 @@ import android.content.Loader;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -55,16 +58,17 @@ public class FragmentLayout extends Activity implements
 	public static boolean LANDSCAPE_MODE;
 	public static boolean AT_LEAST_ICS;
 	public static boolean AT_LEAST_HC;
-	
-	public static boolean UI_DEBUG_PRINTS = false;
+
+	public static boolean UI_DEBUG_PRINTS = true;
 
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
 
 	private NotesListFragment list;
+	private Menu optionsMenu;
 
 	private SimpleCursorAdapter mSpinnerAdapter;
 	private long currentList;
-	
+
 	private int prevNumberOfLists = -1;
 
 	@Override
@@ -96,18 +100,20 @@ public class FragmentLayout extends Activity implements
 				android.R.layout.simple_spinner_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
 				new int[] { android.R.id.text1 });
-		
+
 		// This will listen for navigation callbacks
 		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
 		getLoaderManager().initLoader(0, null, this);
 
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("Activity", "onCreate before");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("Activity", "onCreate before");
 		// XML makes sure notes list is displayed. And editor too in landscape
 		// if (lightTheme)
 		// setContentView(R.layout.fragment_layout_light);
 		// else
 		setContentView(R.layout.fragment_layout);
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("Activity", "onCreate after");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("Activity", "onCreate after");
 
 		// Set this as delete listener
 		NotesListFragment list = (NotesListFragment) getFragmentManager()
@@ -118,31 +124,48 @@ public class FragmentLayout extends Activity implements
 		this.list = list;
 		// So editor can access it
 		ONDELETELISTENER = this;
-		
+
 		// Get the intent, verify the action and get the query
-	    Intent intent = getIntent();
-	    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-	      String query = intent.getStringExtra(SearchManager.QUERY);
-	      list.onQueryTextSubmit(query);
-	    }
-	}
-	
-	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		super.onPrepareOptionsMenu(menu);
-		MenuItem createNote = menu.findItem(R.id.menu_add);
-		if (createNote != null) {
-			// Only show this button if there is a list to create it in
-			if (mSpinnerAdapter.getCount() == 0) {
-				createNote.setVisible(false);
-			} else {
-				createNote.setVisible(true);
-			}
+		Intent intent = getIntent();
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			list.onQueryTextSubmit(query);
 		}
 	}
-	
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		optionsMenu = menu;
+		return super.onCreateOptionsMenu(menu);
+	}
+
+	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		MenuItem deleteList = menu.findItem(R.id.menu_deletelist);
+		if (deleteList != null) {
+			// Only show this button if there is a list to create it in
+			if (mSpinnerAdapter.getCount() == 0) {
+				deleteList.setVisible(false);
+			} else {
+				deleteList.setVisible(true);
+			}
+		}
+		MenuItem renameList = menu.findItem(R.id.menu_renamelist);
+		if (renameList != null) {
+			// Only show this button if there is a list to create it in
+			if (mSpinnerAdapter.getCount() == 0) {
+				renameList.setVisible(false);
+			} else {
+				renameList.setVisible(true);
+			}
+		}
+
+		return super.onPrepareOptionsMenu(menu);
+	}
+
 	/**
-	 * If the user has a search button, ideally he should be able to use it. Expand the search provider in that case
+	 * If the user has a search button, ideally he should be able to use it.
+	 * Expand the search provider in that case
 	 */
 	@Override
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
@@ -150,8 +173,7 @@ public class FragmentLayout extends Activity implements
 		case KeyEvent.KEYCODE_SEARCH:
 			if (list != null && list.mSearchItem != null) {
 				list.mSearchItem.expandActionView();
-			}
-			else if (list != null) {
+			} else if (list != null) {
 				onSearchRequested();
 			}
 			return true;
@@ -172,60 +194,66 @@ public class FragmentLayout extends Activity implements
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("FragmentLayout", "On New Intent list: " + list);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("FragmentLayout", "On New Intent list: " + list);
 		// Get the intent, verify the action and get the query
-	    //Intent intent = getIntent();
-	    if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-	      String query = intent.getStringExtra(SearchManager.QUERY);
-	      //list.onQueryTextChange(query);
-	      if (list != null && list.mSearchView != null) {
-	    	  list.mSearchView.setQuery(query, false);
-	      } else if (list!= null) {
-	  	      list.onQueryTextSubmit(query);
-	      }
-	    } else {
-		if (this.list != null) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("FragmentLayout", "Calling refresh");
-			list.refresh();
+		// Intent intent = getIntent();
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			String query = intent.getStringExtra(SearchManager.QUERY);
+			// list.onQueryTextChange(query);
+			if (list != null && list.mSearchView != null) {
+				list.mSearchView.setQuery(query, false);
+			} else if (list != null) {
+				list.onQueryTextSubmit(query);
+			}
+		} else {
+			if (this.list != null) {
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d("FragmentLayout", "Calling refresh");
+				list.refresh();
+			}
 		}
-	    }
 	}
 
 	@Override
 	protected void onResume() {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("FragmentLayout", "onResume");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("FragmentLayout", "onResume");
 		if (shouldRestart) {
 			Log.d("FragmentLayout", "Should refresh");
 			restartAndRefresh();
 		}
 		super.onResume();
 	}
-	
+
 	@Override
 	protected Dialog onCreateDialog(int id) {
 		switch (id) {
 		case DELETE_LIST:
-//			AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//			builder.setMessage(R.string.delete_list_warning)
-//			       .setCancelable(false)
-//			       .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
-//			           public void onClick(DialogInterface dialog, int id) {
-//			                deleteCurrentList();
-//			           }
-//			       })
-//			       .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-//			           public void onClick(DialogInterface dialog, int id) {
-//			                dialog.cancel();
-//			           }
-//			       });
-//			
-//			return builder.create();
-			
+			// AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			// builder.setMessage(R.string.delete_list_warning)
+			// .setCancelable(false)
+			// .setPositiveButton(R.string.yes, new
+			// DialogInterface.OnClickListener() {
+			// public void onClick(DialogInterface dialog, int id) {
+			// deleteCurrentList();
+			// }
+			// })
+			// .setNegativeButton(R.string.no, new
+			// DialogInterface.OnClickListener() {
+			// public void onClick(DialogInterface dialog, int id) {
+			// dialog.cancel();
+			// }
+			// });
+			//
+			// return builder.create();
+
 			final Dialog deleteDialog = new Dialog(this);
 			deleteDialog.setContentView(R.layout.delete_list_dialog);
 			deleteDialog.setTitle(R.string.menu_deletelist);
-			
-			Button dYesButton = (Button) deleteDialog.findViewById(R.id.d_dialog_yes);
+
+			Button dYesButton = (Button) deleteDialog
+					.findViewById(R.id.d_dialog_yes);
 			dYesButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -234,7 +262,8 @@ public class FragmentLayout extends Activity implements
 				}
 			});
 
-			Button dNoButton = (Button) deleteDialog.findViewById(R.id.d_dialog_no);
+			Button dNoButton = (Button) deleteDialog
+					.findViewById(R.id.d_dialog_no);
 			dNoButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -246,15 +275,16 @@ public class FragmentLayout extends Activity implements
 			final Dialog dialog = new Dialog(this);
 			dialog.setContentView(R.layout.create_list_dialog);
 			dialog.setTitle(R.string.menu_createlist);
-			
+
 			EditText title = (EditText) dialog.findViewById(R.id.editTitle);
 			title.setText("");
-			
+
 			Button yesButton = (Button) dialog.findViewById(R.id.dialog_yes);
 			yesButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					EditText title = (EditText) dialog.findViewById(R.id.editTitle);
+					EditText title = (EditText) dialog
+							.findViewById(R.id.editTitle);
 					createList(title.getText().toString());
 					dialog.dismiss();
 				}
@@ -272,21 +302,25 @@ public class FragmentLayout extends Activity implements
 			final Dialog renameDialog = new Dialog(this);
 			renameDialog.setContentView(R.layout.rename_list_dialog);
 			renameDialog.setTitle(R.string.menu_renamelist);
-			
-			EditText renameTitle = (EditText) renameDialog.findViewById(R.id.renameTitle);
+
+			EditText renameTitle = (EditText) renameDialog
+					.findViewById(R.id.renameTitle);
 			renameTitle.setText("");
-			
-			Button rYesButton = (Button) renameDialog.findViewById(R.id.r_dialog_yes);
+
+			Button rYesButton = (Button) renameDialog
+					.findViewById(R.id.r_dialog_yes);
 			rYesButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					EditText renameTitle = (EditText) renameDialog.findViewById(R.id.renameTitle);
+					EditText renameTitle = (EditText) renameDialog
+							.findViewById(R.id.renameTitle);
 					renameList(renameTitle.getText().toString());
 					renameDialog.dismiss();
 				}
 			});
 
-			Button rNoButton = (Button) renameDialog.findViewById(R.id.r_dialog_no);
+			Button rNoButton = (Button) renameDialog
+					.findViewById(R.id.r_dialog_no);
 			rNoButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -294,63 +328,98 @@ public class FragmentLayout extends Activity implements
 				}
 			});
 			return renameDialog;
-			
+
 		default:
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Wanted to create some dialog: " + id);
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "Wanted to create some dialog: " + id);
 			return null;
 		}
 	}
 
 	protected void createList(String title) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Create list: " + title);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "Create list: " + title);
 		// I will not allow empty names for lists
 		if (!title.equals("")) {
 			ContentValues values = new ContentValues();
 			values.put(NotePad.Lists.COLUMN_NAME_TITLE, title);
 			// Add list
-			Uri listUri = getContentResolver().insert(NotePad.Lists.CONTENT_URI, values);
+			Uri listUri = getContentResolver().insert(
+					NotePad.Lists.CONTENT_URI, values);
 			// Also create an empty note in it
 			if (listUri != null) {
-				Uri noteUri = createNote(ContentResolver resolver, Long.parseLong(listUri.getPathSegments().get(
-						NotePad.List.ID_PATH_POSITION)));
-				// TODO open this note
+				createNote(
+						getContentResolver(),
+						Long.parseLong(listUri.getPathSegments().get(
+								NotePad.Lists.ID_PATH_POSITION)));
+				getActionBar()
+						.setSelectedNavigationItem(
+								getPosOfId(Long.parseLong(listUri
+										.getLastPathSegment())));
 			}
 		}
 	}
-	
+
+	private int getPosOfId(long id) {
+		int length = mSpinnerAdapter.getCount();
+		int position;
+		for (position = 0; position < length; position++) {
+			if (id == mSpinnerAdapter.getItemId(position)) {
+				break;
+			}
+		}
+		if (position == length) {
+			// Happens both if list is empty
+			// and if id is -1
+			position = -1;
+		}
+		return position;
+	}
+
 	protected void renameList(String title) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Rename list: " + title);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "Rename list: " + title);
 		// I will not allow empty names for lists
 		// Also must have a valid id
 		if (!title.equals("") && currentList > -1) {
 			ContentValues values = new ContentValues();
 			values.put(NotePad.Lists.COLUMN_NAME_TITLE, title);
 			// Update list
-			getContentResolver().update(Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE, Long.toString(currentList)), values, null, null);
+			getContentResolver().update(
+					Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
+							Long.toString(currentList)), values, null, null);
 		}
 	}
 
 	/**
-	 * Marks the current list and all the tasks contained in it as deleted in the database.
-	 * Will be deleted on next sync.
+	 * Marks the current list and all the tasks contained in it as deleted in
+	 * the database. Will be deleted on next sync.
 	 */
 	protected void deleteCurrentList() {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Delete current list");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "Delete current list");
 		// Only if id is valid
 		if (currentList > -1) {
 			ContentValues values = new ContentValues();
 			values.put(NotePad.Lists.COLUMN_NAME_DELETED, 1);
 			// Mark list as deleted
-			getContentResolver().update(Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE, Long.toString(currentList)), values, null, null);
+			getContentResolver().update(
+					Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
+							Long.toString(currentList)), values, null, null);
 			// Mark tasks as deleted
 			values = new ContentValues();
 			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
-			getContentResolver().update(NotePad.Notes.CONTENT_URI, values, NotePad.Notes.COLUMN_NAME_LIST + " IS " + currentList, null);
+			getContentResolver()
+					.update(NotePad.Notes.CONTENT_URI,
+							values,
+							NotePad.Notes.COLUMN_NAME_LIST + " IS "
+									+ currentList, null);
 		}
 	}
 
 	public void restartAndRefresh() {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("FragmentLayout", "Should restart and refresh");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("FragmentLayout", "Should restart and refresh");
 		shouldRestart = false;
 		Intent intent = getIntent();
 		overridePendingTransition(0, 0);
@@ -386,7 +455,9 @@ public class FragmentLayout extends Activity implements
 				NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 		NotePad.Notes.SORT_ORDER = sortType + " " + sortOrder;
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("ReadingSettings", "sortOrder is: " + NotePad.Notes.SORT_ORDER);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("ReadingSettings", "sortOrder is: "
+					+ NotePad.Notes.SORT_ORDER);
 
 		// We want to be notified of future changes
 		prefs.registerOnSharedPreferenceChangeListener(this);
@@ -409,29 +480,32 @@ public class FragmentLayout extends Activity implements
 			onDeleteAction();
 			break;
 		case R.id.menu_preferences:
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesListFragment", "onOptionsSelection pref");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesListFragment", "onOptionsSelection pref");
 			showPrefs();
 			return true;
 		case R.id.menu_createlist:
 			// Create dialog
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG,"menu_createlist");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "menu_createlist");
 			showDialog(CREATE_LIST);
 			return true;
 		case R.id.menu_renamelist:
 			// Create dialog
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG,"menu_renamelist");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "menu_renamelist");
 			showDialog(RENAME_LIST);
 			return true;
 		case R.id.menu_deletelist:
 			// Create dialog
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG,"menu_deletelist");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "menu_deletelist");
 			showDialog(DELETE_LIST);
 			return true;
 		case R.id.menu_search:
 			if (list != null && list.mSearchItem != null) {
 				list.mSearchItem.expandActionView();
-			}
-			else if (list != null) {
+			} else if (list != null) {
 				// Launches the search window
 				onSearchRequested();
 			}
@@ -462,7 +536,8 @@ public class FragmentLayout extends Activity implements
 			// Make sure to set themes before this
 			super.onCreate(savedInstanceState);
 
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorActivity", "onCreate");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesEditorActivity", "onCreate");
 
 			if (NotesPreferenceFragment.THEME_LIGHT_ICS_AB
 					.equals(FragmentLayout.currentTheme)) {
@@ -503,7 +578,8 @@ public class FragmentLayout extends Activity implements
 			long listId = getIntent().getExtras().getLong(
 					NotesEditorFragment.LISTID);
 
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorActivity", "Time to show the note!");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesEditorActivity", "Time to show the note!");
 			// if (savedInstanceState == null) {
 			// During initial setup, plug in the details fragment.
 			// Set this as delete listener
@@ -534,7 +610,8 @@ public class FragmentLayout extends Activity implements
 		@Override
 		public void onPause() {
 			super.onPause();
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorActivity", "onPause");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesEditorActivity", "onPause");
 			if (isFinishing()) {
 				// Log.d("NotesEditorActivity",
 				// "onPause, telling list to display list");
@@ -548,9 +625,11 @@ public class FragmentLayout extends Activity implements
 		@Override
 		public void onResume() {
 			super.onResume();
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorActivity", "onResume");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesEditorActivity", "onResume");
 			if (getResources().getBoolean(R.bool.useLandscapeView)) {
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorActivity", "onResume, killing myself");
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d("NotesEditorActivity", "onResume, killing myself");
 				// Log.d("NotesEditorActivity",
 				// "onResume telling list to display me");
 				// SharedPreferences.Editor prefEditor = PreferenceManager
@@ -563,10 +642,12 @@ public class FragmentLayout extends Activity implements
 
 		@Override
 		public void onDeleteAction() {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onDeleteAction");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "onDeleteAction");
 			editorFragment.setSelfAction(); // Don't try to reload the deleted
 											// note
-			FragmentLayout.deleteNote(getContentResolver(), editorFragment.getCurrentNoteId());
+			FragmentLayout.deleteNote(getContentResolver(),
+					editorFragment.getCurrentNoteId());
 			setResult(Activity.RESULT_CANCELED);
 			finish();
 		}
@@ -583,7 +664,8 @@ public class FragmentLayout extends Activity implements
 	 * @param id
 	 */
 	public static void deleteNote(ContentResolver resolver, long id) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "deleteNote: " + id);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "deleteNote: " + id);
 		// Only do this for valid id
 		if (id > -1) {
 			ArrayList<Long> idList = new ArrayList<Long>();
@@ -593,8 +675,7 @@ public class FragmentLayout extends Activity implements
 	}
 
 	/**
-	 * Delete all notes given from database
-	 * Only marks them as deleted actually
+	 * Delete all notes given from database Only marks them as deleted actually
 	 * 
 	 * @param ids
 	 */
@@ -607,9 +688,10 @@ public class FragmentLayout extends Activity implements
 			// resolver.delete(NotesEditorFragment.getUriFrom(id), null, null);
 		}
 	}
-	
+
 	/**
 	 * Inserts a new note in the designated list
+	 * 
 	 * @param resolver
 	 * @param listId
 	 * @return
@@ -620,14 +702,14 @@ public class FragmentLayout extends Activity implements
 			// Must always include list
 			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
 			try {
-				return resolver.insert(
-					NotePad.Notes.CONTENT_URI, values);
+				return resolver.insert(NotePad.Notes.CONTENT_URI, values);
 			} catch (SQLException e) {
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Failed to insert note. Sure there is a list to insert into?");
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d(TAG,
+							"Failed to insert note. Sure there is a list to insert into?");
 				return null;
 			}
-		}
-		else {
+		} else {
 			return null;
 		}
 	}
@@ -643,7 +725,8 @@ public class FragmentLayout extends Activity implements
 				editor.setSelfAction();
 			}
 		}
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("FragmentLayout", "deleting notes...");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("FragmentLayout", "deleting notes...");
 		deleteNotes(getContentResolver(), ids);
 	}
 
@@ -723,13 +806,20 @@ public class FragmentLayout extends Activity implements
 
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
-		if (UI_DEBUG_PRINTS) Log.d(TAG, "onNavigationItemSelected pos: " + itemPosition + " id: "
-				+ itemId);
+		if (UI_DEBUG_PRINTS)
+			Log.d(TAG, "onNavigationItemSelected pos: " + itemPosition
+					+ " id: " + itemId);
 
 		// Change the active list
 		currentList = itemId;
 		// Display list'
-		list.showList(itemId);
+		if (list != null) {
+			list.showList(itemId);
+			// If landscape, also open the first note
+			if (LANDSCAPE_MODE) {
+				// TODO slight asynchronous issue because of content loader
+			}
+		}
 		return true;
 	}
 
@@ -753,15 +843,23 @@ public class FragmentLayout extends Activity implements
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		mSpinnerAdapter.swapCursor(data);
-		
+
 		if (prevNumberOfLists == -1) {
-//			prevNumberOfLists = mSpinnerAdapter.getCount();
-		}
-		else if (prevNumberOfLists < mSpinnerAdapter.getCount()) {
+			prevNumberOfLists = mSpinnerAdapter.getCount();
+		} else if (prevNumberOfLists < mSpinnerAdapter.getCount()) {
 			// User created a list, we want to display it
 			prevNumberOfLists = mSpinnerAdapter.getCount();
 			// Now select it. Using modified desc, will always be first item.
 			getActionBar().setSelectedNavigationItem(0);
+		}
+		MenuItem createNote = optionsMenu.findItem(R.id.menu_add);
+		if (createNote != null) {
+			// Only show this button if there is a list to create notes in
+			if (mSpinnerAdapter.getCount() == 0) {
+				createNote.setVisible(false);
+			} else {
+				createNote.setVisible(true);
+			}
 		}
 	}
 

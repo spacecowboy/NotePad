@@ -93,6 +93,8 @@ public class NotesListFragment extends ListFragment implements
 	private static final String SAVEDLISTID = "listSavedListId";
 	private static final String SAVEDSTATE = "listSavedState";
 
+	private static final String SHOULD_OPEN_NOTE = "shouldOpenNote";
+
 	private long mCurId;
 
 	private boolean idInvalid = false;
@@ -320,6 +322,12 @@ public class NotesListFragment extends ListFragment implements
 				startActivity(intent);
 			}
 			return true;
+		case R.id.menu_clearcompleted:
+			ContentValues values = new ContentValues();
+			values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, -1); // -1 anything that isnt 0 or 1 indicates that we dont want to change the current value
+			values.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN, 1);
+			activity.getContentResolver().update(NotePad.Notes.CONTENT_URI, values, NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?", new String[] {getText(R.string.gtask_status_completed).toString()});
+			return true;
 		default:
 			return super.onOptionsItemSelected(item);
 		}
@@ -399,8 +407,8 @@ public class NotesListFragment extends ListFragment implements
 	}
 
 	/**
-	 * Larger values than the list contains are re-calculated to valid positions
-	 * -1 will create new note.
+	 * Larger values than the list contains are re-calculated to valid positions.
+	 * If list is empty, no note is opened.
 	 */
 	private void showNote(int index) {
 		// if it's -1 to start with, we try with zero
@@ -602,10 +610,11 @@ public class NotesListFragment extends ListFragment implements
 					if (text.equals(
 							getText(R.string.gtask_status_completed))) {
 						// Set appropriate BITMASK
-						tv.setPaintFlags(Paint.STRIKE_THRU_TEXT_FLAG);
+						tv.setPaintFlags(tv.getPaintFlags() | Paint.STRIKE_THRU_TEXT_FLAG);
 					} else {
-						// Will clear strike-through. Just a BITMASK
-						tv.setPaintFlags(0);
+						// Will clear strike-through. Just a BITMASK so do some magic
+						if (Paint.STRIKE_THRU_TEXT_FLAG == (tv.getPaintFlags() & Paint.STRIKE_THRU_TEXT_FLAG))
+							tv.setPaintFlags(tv.getPaintFlags() - Paint.STRIKE_THRU_TEXT_FLAG);
 					}
 					
 					// Return false so the normal call is used to set the text
@@ -627,6 +636,17 @@ public class NotesListFragment extends ListFragment implements
 			currentQuery = query;
 
 			getLoaderManager().restartLoader(0, null, this);
+			
+			// hide the clear completed option until search is over
+			MenuItem clearCompleted = mOptionsMenu.findItem(R.id.menu_clearcompleted);
+			if (clearCompleted != null) {
+				// Only show this button if there is a list to create notes in
+				if ("".equals(query)) {
+					clearCompleted.setVisible(true);
+				} else {
+					clearCompleted.setVisible(false);
+				}
+			}
 		}
 		return true;
 	}
@@ -1154,7 +1174,11 @@ public class NotesListFragment extends ListFragment implements
 			Log.d(TAG, "showList id " + id);
 		mCurListId = id;
 		// Will create one if necessary
-		getLoaderManager().restartLoader(0, null, this);
+		Bundle args = new Bundle();
+		if (FragmentLayout.LANDSCAPE_MODE)
+			args.putBoolean(SHOULD_OPEN_NOTE, true);
+		getLoaderManager().restartLoader(0, args, this);
+		// TODO this should always open the first note in that list in Landscape mode
 	}
 
 	private CursorLoader getAllNotesLoader() {
@@ -1182,6 +1206,7 @@ public class NotesListFragment extends ListFragment implements
 																// note.
 				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
 				+ NotePad.Notes.COLUMN_NAME_HIDDEN + " IS NOT 1 AND "
+				+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS NOT 1 AND "
 						+ NotePad.Notes.COLUMN_NAME_LIST + " IS " + mCurListId, // return
 				// un-deleted
 				// records.
@@ -1211,6 +1236,7 @@ public class NotesListFragment extends ListFragment implements
 		return new CursorLoader(activity, baseUri, PROJECTION,
 				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
 				+ NotePad.Notes.COLUMN_NAME_HIDDEN + " IS NOT 1 AND "
+				+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS NOT 1 AND "
 						+ NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?",
 				new String[] { "%" + currentQuery + "%" }, // We don't care how
 															// it occurs in the
@@ -1222,6 +1248,12 @@ public class NotesListFragment extends ListFragment implements
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 		if (FragmentLayout.UI_DEBUG_PRINTS)
 			Log.d(TAG, "onCreateLoader");
+		
+		if (args != null) {
+			if (args.containsKey(SHOULD_OPEN_NOTE) && args.getBoolean(SHOULD_OPEN_NOTE)) {
+				autoOpenNote = true;
+			}
+		}
 		if (currentQuery != null && !currentQuery.isEmpty()) {
 			return getSearchNotesLoader();
 		} else {
@@ -1301,5 +1333,4 @@ public class NotesListFragment extends ListFragment implements
 				Log.d(TAG, "Exception was caught: " + e.getMessage());
 		}
 	}
-
 }

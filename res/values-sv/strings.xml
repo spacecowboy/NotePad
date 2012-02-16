@@ -42,8 +42,8 @@
 
     <string name="resolve_edit">Ändra anteckning</string>
 
-    <string name="error_title">Error</string>
-    <string name="error_message">Error loading note</string>
+    <string name="error_title">Kunde inte hitta anteckningen</string>
+    <string name="error_message">Kunde inte hitta den aktuella anteckningen.</string>
     
     <string name="search_hint">Sök</string>
     <string name="settings_theme">Nuvarande tema</string>
@@ -94,4 +94,5 @@
     
     <string name="yes">Ja</string>
     <string name="no">Nej</string>
+    <string name="ok">OK</string>
 </resources>

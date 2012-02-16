@@ -1429,6 +1429,11 @@ public class NotePadProvider extends ContentProvider implements
 				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
 				// Also set modified on the list that owns this/these note(s)
 				updateListId(uri, where, whereArgs);
+			} else if (values.getAsInteger(NotePad.Notes.COLUMN_NAME_MODIFIED) < 0 ||
+					values.getAsInteger(NotePad.Notes.COLUMN_NAME_MODIFIED) > 1 ) {
+				// Indicates that we do not want to override whatever this field is in the data base.
+				// Local operation that should not be synced
+				values.remove(NotePad.Notes.COLUMN_NAME_MODIFIED);
 			}
 			// If the values map doesn't contain the modification date, sets the
 			// value to the current

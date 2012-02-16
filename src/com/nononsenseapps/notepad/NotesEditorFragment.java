@@ -62,7 +62,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 */
 	public static final String[] PROJECTION = new String[] { NotePad.Notes._ID,
 			NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE,
-			NotePad.Notes.COLUMN_NAME_DUE_DATE };
+			NotePad.Notes.COLUMN_NAME_DUE_DATE,
+			NotePad.Notes.COLUMN_NAME_DELETED };
 
 	// A label for the saved state of the activity
 	public static final String ORIGINAL_NOTE = "origContent";
@@ -134,7 +135,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		NotesEditorFragment f = new NotesEditorFragment();
 
 		// Supply index input as an argument.
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "Creating Fragment, args: " + id);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("NotesEditorFragment", "Creating Fragment, args: " + id);
 		Bundle args = new Bundle();
 		args.putLong(KEYID, id);
 		args.putLong(LISTID, listId);
@@ -157,14 +159,17 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 *            if True, will create new if the id is -1
 	 */
 	private void openNote(Bundle savedInstanceState) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "OpenNOTe: Id is " + id);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("NotesEditorFragment", "OpenNOTe: Id is " + id);
 		selfAction = false;
 		doSave = true;
 		opened = true;
 		if (id != -1) {
 			// Existing note
 			mUri = getUriFrom(id);
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment","Editing existing note, uri = " + mUri.toString());
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesEditorFragment", "Editing existing note, uri = "
+						+ mUri.toString());
 		}
 		// Just in case mUri failed some how...
 		if (id == -1 || mUri == null) {
@@ -230,14 +235,25 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// Only compare dates if there actually is a previous date to
 			// compare
 			if (!hasNoteChanged()) {
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "Note has not changed, won't save");
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d("NotesEditorFragment",
+							"Note has not changed, won't save");
 				// Do Nothing in this case.
 			} else {
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "Updating note");
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "" + text.equals(mOriginalNote));
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "" + title.equals(mOriginalTitle));
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "" + due + " " + mOriginalDueDate);
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", ""+ (dueDateSet == mOriginalDueState));
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d("NotesEditorFragment", "Updating note");
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d("NotesEditorFragment",
+							"" + text.equals(mOriginalNote));
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d("NotesEditorFragment",
+							"" + title.equals(mOriginalTitle));
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d("NotesEditorFragment", "" + due + " "
+							+ mOriginalDueDate);
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d("NotesEditorFragment", ""
+							+ (dueDateSet == mOriginalDueState));
 
 				// Sets up a map to contain values to be updated in the
 				// provider.
@@ -291,8 +307,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				 * the block will be momentary, but in a real app you should use
 				 * android.content.AsyncQueryHandler or android.os.AsyncTask.
 				 */
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "URI: " + mUri);
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "values: " + values.toString());
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d("NotesEditorFragment", "URI: " + mUri);
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d("NotesEditorFragment", "values: " + values.toString());
 				activity.getContentResolver().update(mUri, // The URI for the
 															// record to
 						// update.
@@ -367,20 +385,28 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "onCreate");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("NotesEditorFragment", "onCreate");
 		super.onCreate(savedInstanceState);
 		// To get the call back to add items to the menu
 		setHasOptionsMenu(true);
 
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment","Value: "+ Boolean.toString(getArguments() != null&& getArguments().containsKey(KEYID)&& getArguments().containsKey(LISTID)));
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("NotesEditorFragment",
+					"Value: "
+							+ Boolean.toString(getArguments() != null
+									&& getArguments().containsKey(KEYID)
+									&& getArguments().containsKey(LISTID)));
 
 		if (getArguments() != null && getArguments().containsKey(KEYID)
 				&& getArguments().containsKey(LISTID)) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Should never happen right");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "Should never happen right");
 			id = getArguments().getLong(KEYID);
 			listId = getArguments().getLong(LISTID);
 		} else {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onCreate, no valid values in arguments");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "onCreate, no valid values in arguments");
 			id = -1;
 			listId = -1;
 		}
@@ -396,7 +422,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "onCreateView");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("NotesEditorFragment", "onCreateView");
 
 		int layout = R.layout.editor_layout;
 
@@ -473,7 +500,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mText.setTypeface(tf);
 			mTitle.setTextSize(size);
 			mTitle.setTypeface(tf);
-			mTitle.setPaintFlags(mTitle.getPaintFlags() | Paint.FAKE_BOLD_TEXT_FLAG);
+			mTitle.setPaintFlags(mTitle.getPaintFlags()
+					| Paint.FAKE_BOLD_TEXT_FLAG);
 		}
 	}
 
@@ -482,20 +510,28 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		super.onActivityCreated(saves);
 		// if Time to Die, do absolutely nothing since this fragment will go bye
 		// bye
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onActivityCreated");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d(TAG, "onActivityCreated");
 		if (timeToDie) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment","onActivityCreated, but it is time to die so doing nothing...");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesEditorFragment",
+						"onActivityCreated, but it is time to die so doing nothing...");
 		} else if (saves != null && saves.containsKey(KEYID)
 				&& saves.containsKey(LISTID)) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "onActivityCrated, saves are not null!");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "onActivityCrated, saves are not null!");
 			openNote(saves);
 		} else if (listId > -1) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG,"onActivityCreated, got valid list id atleast. Displaying note...");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG,
+						"onActivityCreated, got valid list id atleast. Displaying note...");
 			// in activity
 			// displayNote(id, listId);
 			openNote(null);
 		} else {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG,"onActivityCreated, could not find valid values. Maybe I should die now?");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG,
+						"onActivityCreated, could not find valid values. Maybe I should die now?");
 		}
 	}
 
@@ -512,9 +548,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "onCreateOptions");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("NotesEditorFragment", "onCreateOptions");
 		if (timeToDie) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment","onCreateOptions, but it is time to die so doing nothing...");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesEditorFragment",
+						"onCreateOptions, but it is time to die so doing nothing...");
 		} else {
 			// Inflate menu from XML resource
 			// if (FragmentLayout.lightTheme)
@@ -571,7 +610,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		if (timeToDie) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment","onPrepareOptionsMenu, but it is time to die so doing nothing...");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesEditorFragment",
+						"onPrepareOptionsMenu, but it is time to die so doing nothing...");
 		} else {
 			// Check if note has changed and enable/disable the revert option
 			if (!hasNoteChanged()) {
@@ -640,13 +681,15 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public void onResume() {
 		super.onResume();
 		if (!timeToDie) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "onResume");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesEditorFragment", "onResume");
 
 			// Settings might have been changed
 			setFontSettings();
 			// We don't want to do this the first time
 			if (opened) {
-				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("InsertError", "onResume Editor");
+				if (FragmentLayout.UI_DEBUG_PRINTS)
+					Log.d("InsertError", "onResume Editor");
 				openNote(null);
 			}
 		}
@@ -659,7 +702,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 * @param mCurListId
 	 */
 	public void displayNote(long id, long listid) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "Display note: " + id);
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("NotesEditorFragment", "Display note: " + id);
 
 		// TODO make the fragment be a progress bar like the list here until it
 		// is opened
@@ -670,11 +714,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		selfAction = false;
 		this.id = id;
 		this.listId = listid;
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("insertError", "displayNote");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("insertError", "displayNote");
 		openNote(null);
 	}
 
 	private void showNote(Cursor mCursor) {
+		boolean lockdown = false;
 		if (mCursor != null && !mCursor.isClosed() && !mCursor.isAfterLast()) {
 			/*
 			 * Moves to the first record. Always call moveToFirst() before
@@ -684,22 +730,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			 */
 			mCursor.moveToFirst();
 
-			// Modifies the window title for the Activity according to the
-			// current Activity state.
-			// if (mState == STATE_EDIT) {
-			// // Set the title of the Activity to include the note title
-			// int colTitleIndex = mCursor
-			// .getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
-			// String title = mCursor.getString(colTitleIndex);
-			// Resources res = getResources();
-			// String text = String.format(res.getString(R.string.title_edit),
-			// title);
-			// activity.setTitle(text);
-			// // Sets the title to "create" for inserts
-			// } else if (mState == STATE_INSERT) {
-			// activity.setTitle(getText(R.string.title_create));
-			// }
-
 			/*
 			 * onResume() may have been called after the Activity lost focus
 			 * (was paused). The user was either editing or creating a note when
@@ -708,46 +738,54 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			 * This helps the user to continue editing or entering.
 			 */
 
-			int colTitleIndex = mCursor
-					.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
-			String title = mCursor.getString(colTitleIndex);
-			mTitle.setText(title);
-			mTitle.setEnabled(true);
+			// CHeck if note was deleted
+			if (1 == mCursor.getInt(mCursor
+					.getColumnIndex(NotePad.Notes.COLUMN_NAME_DELETED))) {
+				lockdown = true;
+			} else {
 
-			// Gets the note text from the Cursor and puts it in the TextView,
-			// but doesn't change
-			// the text cursor's position. setTextKeepState
-			int colNoteIndex = mCursor
-					.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
-			String note = mCursor.getString(colNoteIndex);
-			mText.setText(note);
-			mText.setEnabled(true);
-			// Sets cursor at the end
-			// mText.setSelection(note.length());
+				int colTitleIndex = mCursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
+				String title = mCursor.getString(colTitleIndex);
+				mTitle.setText(title);
+				mTitle.setEnabled(true);
 
-			int colDueIndex = mCursor
-					.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
-			String due = mCursor.getString(colDueIndex);
+				// Gets the note text from the Cursor and puts it in the
+				// TextView,
+				// but doesn't change
+				// the text cursor's position. setTextKeepState
+				int colNoteIndex = mCursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
+				String note = mCursor.getString(colNoteIndex);
+				mText.setText(note);
+				mText.setEnabled(true);
+				// Sets cursor at the end
+				// mText.setSelection(note.length());
 
-			setDueDate(due);
-			mDueDate.setEnabled(true);
+				int colDueIndex = mCursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
+				String due = mCursor.getString(colDueIndex);
 
-			// Stores the original note text, to allow the user to revert
-			// changes.
-			if (mOriginalNote == null) {
-				mOriginalNote = note;
-			}
-			if (mOriginalDueDate == null) {
-				mOriginalDueDate = due;
-				mOriginalDueState = dueDateSet;
-			}
-			if (mOriginalTitle == null) {
-				mOriginalTitle = title;
-			}
+				setDueDate(due);
+				mDueDate.setEnabled(true);
 
-			// Request focus, will not open keyboard
-			if (FragmentLayout.LANDSCAPE_MODE) {
-				activity.findViewById(R.id.noteBox).requestFocus();
+				// Stores the original note text, to allow the user to revert
+				// changes.
+				if (mOriginalNote == null) {
+					mOriginalNote = note;
+				}
+				if (mOriginalDueDate == null) {
+					mOriginalDueDate = due;
+					mOriginalDueState = dueDateSet;
+				}
+				if (mOriginalTitle == null) {
+					mOriginalTitle = title;
+				}
+
+				// Request focus, will not open keyboard
+				if (FragmentLayout.LANDSCAPE_MODE) {
+					activity.findViewById(R.id.noteBox).requestFocus();
+				}
 			}
 
 			/*
@@ -755,6 +793,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			 * an error in the note.
 			 */
 		} else {
+			// Can also be set inside the loading if deleted flag is true
+			lockdown = true;
+		}
+
+		if (lockdown) {
 			// This WILL happen if the note is deleted by the server.
 			mUri = null;
 			// id = -1;
@@ -845,7 +888,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private void saveNote() {
 		selfAction = true; // Don't try to reload the note
 		if (doSave && mText != null && mTitle != null) {
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("NotesEditorFragment", "Saving/Deleting Note");
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d("NotesEditorFragment", "Saving/Deleting Note");
 
 			// Get the current note text.
 			String text = mText.getText().toString();
@@ -979,7 +1023,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		if (FragmentLayout.UI_DEBUG_PRINTS) Log.d("notewa" + TAG, "onLoadFinished");
+		if (FragmentLayout.UI_DEBUG_PRINTS)
+			Log.d("notewa" + TAG, "onLoadFinished");
 		if (!selfAction) {
 			// This note has changed, re-open it.
 			// As a special case, we will not re-open it if that is
@@ -991,10 +1036,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// to begin with.
 			// Note the "NOT" in the beginning.
 			boolean reload = true;
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "title field: " + mOriginalTitle);
-			if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "text field: " + mOriginalNote);
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "title field: " + mOriginalTitle);
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "text field: " + mOriginalNote);
 			if (mOriginalTitle != null && mOriginalNote != null) {
-				if (mOriginalNote.isEmpty() && mOriginalTitle.isEmpty() && !mText.getText().toString().isEmpty()) {
+				if (mOriginalNote.isEmpty() && mOriginalTitle.isEmpty()
+						&& !mText.getText().toString().isEmpty()) {
 					// In this case, don't reload.
 					reload = false;
 				}

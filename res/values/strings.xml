@@ -33,6 +33,7 @@
     <string name="menu_preferences">Settings</string>
     <string name="menu_renamelist">Rename list</string>
     <string name="menu_createlist">Create list</string>
+    <string name="menu_clearcompleted">Clear completed</string>
     
     <string name="delete_list_warning">Are you sure you want to delete the list? The list will be permanently deleted.</string>
     
@@ -94,4 +95,5 @@
     
     <string name="yes">Yes</string>
     <string name="no">No</string>
+    <string name="ok">OK</string>
 </resources>

@@ -178,8 +178,8 @@ public class GoogleTaskList {
 	public void setSortingValues(ArrayList<GoogleTask> modifiedTasks, ArrayList<GoogleTask> allTasks) {
 		// First clear all the position values as we will do a recursive recalculation on these objects
 		for (GoogleTask task: modifiedTasks) {
-			task.abcSort = "";
-			task.posSort ="";
+			task.abcsort = "";
+			task.possort ="";
 		}
 		// Now, set the sorting values for these objects
 		for (GoogleTask task: modifiedTasks) {
@@ -192,8 +192,8 @@ public class GoogleTaskList {
 	/**
 	 * This will write the position value if none exist
 	 */
-	private String getPosSort(task, ArrayList<GoogleTask> allTasks) {
-		if (task.posSort.isEmpty()) {
+	private String getPosSort(GoogleTask task, ArrayList<GoogleTask> allTasks) {
+		if (task.possort.isEmpty()) {
 			String sortingValue = "";
 			if (task.parent != null && !task.parent.isEmpty()) {
 				GoogleTask parent = getTaskWithRemoteId(task.parent, allTasks);
@@ -206,16 +206,16 @@ public class GoogleTaskList {
 			}
 			sortingValue += ".";
 			
-			task.posSort = sortingValue;
+			task.possort = sortingValue;
 		}
-		return task.posSort;
+		return task.possort;
 	}
 	
 	/**
 	 * This will write the position value if none exist
 	 */
-	private String getAbcSort(task, ArrayList<GoogleTask> allTasks) {
-		if (task.abcSort.isEmpty()) {
+	private String getAbcSort(GoogleTask task, ArrayList<GoogleTask> allTasks) {
+		if (task.abcsort.isEmpty()) {
 			String sortingValue = "";
 			if (task.parent != null && !task.parent.isEmpty()) {
 				GoogleTask parent = getTaskWithRemoteId(task.parent, allTasks);
@@ -228,9 +228,9 @@ public class GoogleTaskList {
 			}
 			sortingValue += ".";
 			
-			task.abcSort = sortingValue;
+			task.abcsort = sortingValue;
 		}
-		return task.abcSort;
+		return task.abcsort;
 	}
 	
 	private GoogleTask getTaskWithRemoteId(String id, ArrayList<GoogleTask> tasks) {
