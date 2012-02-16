@@ -1,6 +1,7 @@
 package com.nononsenseapps.notepad;
 
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
+import com.nononsenseapps.notepad_donate.R;
 
 import android.content.Context;
 import android.util.Log;

@@ -1,7 +1,7 @@
 package com.nononsenseapps.ui;
 
 import com.nononsenseapps.notepad.NotesPreferenceFragment;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad_donate.R;
 
 import android.content.Context;
 import android.graphics.Typeface;

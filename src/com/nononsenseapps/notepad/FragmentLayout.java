@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
+import com.nononsenseapps.notepad_donate.R;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;

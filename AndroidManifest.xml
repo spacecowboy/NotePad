@@ -24,7 +24,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
-    package="com.nononsenseapps.notepad"
+    package="com.nononsenseapps.notepad_donate"
     android:versionCode="13"
     android:versionName="3.0.4" >
 
@@ -49,11 +49,10 @@
         android:icon="@drawable/app_icon"
         android:label="@string/app_name" >
 
-        <!-- android:uiOptions="splitActionBarWhenNarrow" -->
 
         <provider
-            android:name=".NotePadProvider"
-            android:authorities="com.nononsenseapps.NotePad"
+            android:name="com.nononsenseapps.notepad.NotePadProvider"
+            android:authorities="com.nononsenseapps.donate.NotePad"
             android:enabled="true"
             android:exported="true"
             android:label="@string/app_name"
@@ -62,7 +61,7 @@
         </provider>
 
         <activity
-            android:name=".FragmentLayout"
+            android:name="com.nononsenseapps.notepad.FragmentLayout"
             android:label="@string/app_name"
             android:launchMode="singleTop"
             android:screenOrientation="sensor"
@@ -89,7 +88,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name=".FragmentLayout$NotesEditorActivity"
+            android:name="com.nononsenseapps.notepad.FragmentLayout$NotesEditorActivity"
             android:screenOrientation="sensor" >
 
             <!-- android:configChanges="keyboardHidden|orientation" > -->
@@ -126,13 +125,13 @@
 
         </activity>
         <activity
-            android:name=".FragmentLayout$NotesPreferencesDialog"
+            android:name="com.nononsenseapps.notepad.FragmentLayout$NotesPreferencesDialog"
             android:screenOrientation="sensor"
             android:theme="@style/ThemeHoloDialogNoActionBar" >
         </activity>
 
         <service
-            android:name=".sync.SyncService"
+            android:name="com.nononsenseapps.notepad.sync.SyncService"
             android:exported="true"
             android:process=":sync" >
             <intent-filter>

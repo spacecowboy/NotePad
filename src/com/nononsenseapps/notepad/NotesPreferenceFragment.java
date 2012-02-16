@@ -1,6 +1,7 @@
 package com.nononsenseapps.notepad;
 
 import com.nononsenseapps.notepad.sync.SyncAdapter;
+import com.nononsenseapps.notepad_donate.R;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;

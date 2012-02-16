@@ -13,6 +13,7 @@ import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
 import com.nononsenseapps.notepad.interfaces.Refresher;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
+import com.nononsenseapps.notepad_donate.R;
 import com.nononsenseapps.ui.NoteCheckBox;
 
 import android.content.BroadcastReceiver;

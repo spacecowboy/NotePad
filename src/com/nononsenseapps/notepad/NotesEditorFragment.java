@@ -47,6 +47,7 @@ import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
+import com.nononsenseapps.notepad_donate.R;
 import com.nononsenseapps.ui.TextPreviewPreference;
 
 public class NotesEditorFragment extends Fragment implements TextWatcher,
