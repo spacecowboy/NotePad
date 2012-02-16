@@ -40,6 +40,10 @@ public class GoogleTask {
 	public long listdbid = -1;
 	public boolean didRemoteInsert = false;
 	
+	// These are local values and not synced
+	public String abcsort = "";
+	public String possort = "";
+	
 	public JSONObject json = null;
 
 	public GoogleTask() {
@@ -118,7 +122,7 @@ public class GoogleTask {
 	 * 
 	 * @return
 	 */
-	public ContentValues toNotesContentValues(int modified, long listId) {
+	public ContentValues toNotesContentValues(int modified, GoogleTaskList list) {
 		ContentValues values = new ContentValues();
 		if (title != null)
 			values.put(NotePad.Notes.COLUMN_NAME_TITLE, title);
@@ -132,12 +136,23 @@ public class GoogleTask {
 		if (dbId > -1)
 			values.put(NotePad.Notes._ID, dbId);
 
-		values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
+		values.put(NotePad.Notes.COLUMN_NAME_LIST, list.dbId);
 		values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, modified);
 		values.put(NotePad.Notes.COLUMN_NAME_DELETED, deleted);
 		values.put(NotePad.Notes.COLUMN_NAME_POSITION, position);
 		values.put(NotePad.Notes.COLUMN_NAME_PARENT, parent);
 		values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, hidden);
+		
+		// These values are used to sort it like the server does. Takes some transformation to do this properly.
+		String abcsort = "";
+		String possort = "";
+		if (parent != null && !parent.isEmpty()) {
+			
+		}
+		if (position != null && !position.isEmpty()) {
+			
+		}
+		
 		return values;
 	}
 

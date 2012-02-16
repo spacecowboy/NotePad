@@ -171,7 +171,10 @@ public final class NotePad {
         public static final String COLUMN_NAME_POSITION = "gtasks_position";
         public static final String COLUMN_NAME_HIDDEN = "hiddenflag";
         
-        //
+        // server side sorting and local hiding
+        public static final String COLUMN_NAME_ABCSUBSORT = "abcsubsort";
+        public static final String COLUMN_NAME_POSSUBSORT = "possubsort";
+        public static final String COLUMN_NAME_LOCALHIDDEN = "localhidden";
         
         /**
          * The default sort order for this table

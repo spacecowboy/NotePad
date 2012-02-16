@@ -169,4 +169,76 @@ public class GoogleTaskList {
 			dbTalker.SaveToDatabase(localTask, this);
 		}
 	}
+	
+	/**
+	 * This will set the sorting values correctly for these tasks. This must be called last when all other changes have been made to the
+	 * tasks as it requires all parents etc to be present.
+	 * Also make sure that it is the same objects that are present in both lists and not copies!
+	 */
+	public void setSortingValues(ArrayList<GoogleTask> modifiedTasks, ArrayList<GoogleTask> allTasks) {
+		// First clear all the position values as we will do a recursive recalculation on these objects
+		for (GoogleTask task: modifiedTasks) {
+			task.abcSort = "";
+			task.posSort ="";
+		}
+		// Now, set the sorting values for these objects
+		for (GoogleTask task: modifiedTasks) {
+			getAbcSort(task, allTasks);
+			getPosSort(task, allTasks);
+		}
+		// All sort values are set. It is OK to save now.
+	}
+	
+	/**
+	 * This will write the position value if none exist
+	 */
+	private String getPosSort(task, ArrayList<GoogleTask> allTasks) {
+		if (task.posSort.isEmpty()) {
+			String sortingValue = "";
+			if (task.parent != null && !task.parent.isEmpty()) {
+				GoogleTask parent = getTaskWithRemoteId(task.parent, allTasks);
+				if (parent != null) {
+					sortingValue += getPosSort(parent, allTasks);
+				}
+			}
+			if (task.position != null) {
+				sortingValue += task.position;
+			}
+			sortingValue += ".";
+			
+			task.posSort = sortingValue;
+		}
+		return task.posSort;
+	}
+	
+	/**
+	 * This will write the position value if none exist
+	 */
+	private String getAbcSort(task, ArrayList<GoogleTask> allTasks) {
+		if (task.abcSort.isEmpty()) {
+			String sortingValue = "";
+			if (task.parent != null && !task.parent.isEmpty()) {
+				GoogleTask parent = getTaskWithRemoteId(task.parent, allTasks);
+				if (parent != null) {
+					sortingValue += getAbcSort(parent, allTasks);
+				}
+			}
+			if (task.title != null) {
+				sortingValue += task.title;
+			}
+			sortingValue += ".";
+			
+			task.abcSort = sortingValue;
+		}
+		return task.abcSort;
+	}
+	
+	private GoogleTask getTaskWithRemoteId(String id, ArrayList<GoogleTask> tasks) {
+		for (GoogleTask task: tasks) {
+			if (task.id.equals(id)) {
+				return task;
+			}
+		}
+		return null;
+	}
 }

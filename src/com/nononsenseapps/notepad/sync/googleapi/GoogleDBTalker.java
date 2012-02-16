@@ -285,7 +285,7 @@ public class GoogleDBTalker {
 			provider.update(Uri.withAppendedPath(
 					NotePad.Notes.CONTENT_ID_URI_BASE,
 					Long.toString(result.dbId)), result.toNotesContentValues(0,
-					list.dbId), null, null);
+					list), null, null);
 			if (result.didRemoteInsert)
 				provider.insert(NotePad.GTasks.CONTENT_URI,
 						result.toGTasksContentValues(accountName));
@@ -351,7 +351,7 @@ public class GoogleDBTalker {
 				provider.update(Uri.withAppendedPath(
 						NotePad.Notes.CONTENT_ID_URI_BASE,
 						Long.toString(task.dbId)), task.toNotesContentValues(0,
-						plist.dbId), null, null);
+						plist), null, null);
 				provider.update(NotePad.GTasks.CONTENT_URI,
 						task.toGTasksContentValues(accountName),
 						NotePad.GTasks.COLUMN_NAME_DB_ID + " IS " + task.dbId
@@ -373,7 +373,7 @@ public class GoogleDBTalker {
 			else {
 				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Inserting task");
 				Uri newUri = provider.insert(NotePad.Notes.CONTENT_URI,
-						task.toNotesContentValues(0, plist.dbId));
+						task.toNotesContentValues(0, plist));
 				long newId = Long.parseLong(newUri.getPathSegments().get(
 						NotePad.Notes.NOTE_ID_PATH_POSITION));
 				// Set the id we just got in the other table

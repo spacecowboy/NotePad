@@ -61,7 +61,7 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	private static final String DATABASE_NAME = "note_pad.db";
 
-	private static final int DATABASE_VERSION = 4;
+	private static final int DATABASE_VERSION = 5;
 
 	/**
 	 * A projection map used to select columns from the database
@@ -192,6 +192,13 @@ public class NotePadProvider extends ContentProvider implements
 				NotePad.Notes.COLUMN_NAME_POSITION);
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_HIDDEN,
 				NotePad.Notes.COLUMN_NAME_HIDDEN);
+		
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_ABCSUBSORT,
+				NotePad.Notes.COLUMN_NAME_ABCSUBSORT);
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT,
+				NotePad.Notes.COLUMN_NAME_POSSUBSORT);
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN,
+				NotePad.Notes.COLUMN_NAME_LOCALHIDDEN);
 
 		/*
 		 * Creates an initializes a projection map for handling Lists
@@ -313,6 +320,11 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.Notes.COLUMN_NAME_POSITION + " TEXT,"
 					+ NotePad.Notes.COLUMN_NAME_HIDDEN + " INTEGER,"
 					+ NotePad.Notes.COLUMN_NAME_MODIFIED + " INTEGER,"
+					
+					+ NotePad.Notes.COLUMN_NAME_ABCSUBSORT + " TEXT DEFAULT '',"
+					+ NotePad.Notes.COLUMN_NAME_POSSUBSORT + " TEXT DEFAULT '',"
+					+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " INTEGER DEFAULT 0,"
+					
 					+ NotePad.Notes.COLUMN_NAME_DELETED + " INTEGER" + ");");
 		}
 
@@ -412,9 +424,6 @@ public class NotePadProvider extends ContentProvider implements
 					db.update(NotePad.Notes.TABLE_NAME, values, NotePad.Notes.COLUMN_NAME_LIST + " IS NOT ?", new String[] {Long.toString(listId)});
 				}
 				if (oldVersion < 4) {
-				// + NotePad.Notes.COLUMN_NAME_PARENT + " TEXT,"
-				// + NotePad.Notes.COLUMN_NAME_POSITION + " TEXT,"
-				// + NotePad.Notes.COLUMN_NAME_HIDDEN + " INTEGER,"
 							
 							String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
 							+ " ADD COLUMN ";
@@ -434,6 +443,20 @@ public class NotePadProvider extends ContentProvider implements
 					values.put(NotePad.Notes.COLUMN_NAME_POSITION, "");
 					values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, 0);
 					db.update(NotePad.Notes.TABLE_NAME, values, NotePad.Notes.COLUMN_NAME_HIDDEN + " IS NOT ?", new String[] {"0"});
+				}
+				if (oldVersion < 5) {
+					
+					String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
+					+ " ADD COLUMN ";
+				String postText = " TEXT DEFAULT ''";
+				String postNameInt = " INTEGER DEFAULT 0";
+				// Add Columns to Notes DB
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_ABCSUBSORT
+						+ postText);
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_POSSUBSORT
+						+ postText);
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
+						+ postNameInt);
 				}
 		}
 
