@@ -308,7 +308,13 @@ public class FragmentLayout extends Activity implements
 			ContentValues values = new ContentValues();
 			values.put(NotePad.Lists.COLUMN_NAME_TITLE, title);
 			// Add list
-			getContentResolver().insert(NotePad.Lists.CONTENT_URI, values);
+			Uri listUri = getContentResolver().insert(NotePad.Lists.CONTENT_URI, values);
+			// Also create an empty note in it
+			if (listUri != null) {
+				Uri noteUri = createNote(ContentResolver resolver, Long.parseLong(listUri.getPathSegments().get(
+						NotePad.List.ID_PATH_POSITION)));
+				// TODO open this note
+			}
 		}
 	}
 	
