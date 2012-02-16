@@ -127,6 +127,20 @@ public class FragmentLayout extends Activity implements
 	    }
 	}
 	
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		super.onPrepareOptionsMenu(menu);
+		MenuItem createNote = menu.findItem(R.id.menu_add);
+		if (createNote != null) {
+			// Only show this button if there is a list to create it in
+			if (mSpinnerAdapter.getCount() == 0) {
+				createNote.setVisible(false);
+			} else {
+				createNote.setVisible(true);
+			}
+		}
+	}
+	
 	/**
 	 * If the user has a search button, ideally he should be able to use it. Expand the search provider in that case
 	 */
@@ -596,11 +610,16 @@ public class FragmentLayout extends Activity implements
 	 */
 	public static Uri createNote(ContentResolver resolver, long listId) {
 		if (listId > -1) {
-		ContentValues values = new ContentValues();
-		// Must always include list
-		values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
-		return resolver.insert(
-				NotePad.Notes.CONTENT_URI, values);
+			ContentValues values = new ContentValues();
+			// Must always include list
+			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
+			try {
+				return resolver.insert(
+					NotePad.Notes.CONTENT_URI, values);
+			} catch (SQLException e) {
+				if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Failed to insert note. Sure there is a list to insert into?");
+				return null;
+			}
 		}
 		else {
 			return null;
@@ -730,7 +749,7 @@ public class FragmentLayout extends Activity implements
 		mSpinnerAdapter.swapCursor(data);
 		
 		if (prevNumberOfLists == -1) {
-			prevNumberOfLists = mSpinnerAdapter.getCount();
+//			prevNumberOfLists = mSpinnerAdapter.getCount();
 		}
 		else if (prevNumberOfLists < mSpinnerAdapter.getCount()) {
 			// User created a list, we want to display it

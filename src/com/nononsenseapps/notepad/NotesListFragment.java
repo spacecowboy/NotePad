@@ -284,8 +284,9 @@ public class NotesListFragment extends ListFragment implements
 			Uri noteUri = FragmentLayout.createNote(
 					activity.getContentResolver(), mCurListId);
 
-			newNoteIdToOpen = getNoteIdFromUri(noteUri);
-			// showNote(getNoteIdFromUri(noteUri));
+			if (noteUri != null) {
+				newNoteIdToOpen = getNoteIdFromUri(noteUri);
+			}
 
 			return true;
 		case R.id.menu_sync:
