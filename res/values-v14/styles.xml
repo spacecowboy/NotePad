@@ -18,6 +18,7 @@
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
+		<item name="editorBackgroundColor">@android:color/white</item>
 		
 	</style>
 	

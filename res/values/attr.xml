@@ -13,4 +13,5 @@
 	<attr name="ic_menu_clear_playlist" format="reference" />
 	<attr name="my_list_selector" format="reference" />
 	<attr name="my_list_background" format="reference" />
+	<attr name="editorBackgroundColor" format="reference" />
 </resources>

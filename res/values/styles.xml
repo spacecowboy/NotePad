@@ -23,6 +23,7 @@
 		<!--  activated state doesnt exist before honeycomb -->
 		<item name="my_list_selector">@android:color/transparent</item>
 		<item name="my_list_background">@android:color/transparent</item>
+		<item name="editorBackgroundColor">@android:color/transparent</item>
 
 	</style>
 	
@@ -42,6 +43,7 @@
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">@android:color/transparent</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
+		<item name="editorBackgroundColor">@android:color/white</item>
 	</style>
 
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Light">
@@ -60,6 +62,7 @@
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">@android:color/transparent</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
+		<item name="editorBackgroundColor">@android:color/white</item>
 	</style>
 
 	<style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.Dialog">
@@ -78,6 +81,7 @@
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">@android:color/transparent</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
+		<item name="editorBackgroundColor">@android:color/transparent</item>
 	</style>
 	
 	<style name="ThemeHoloLightDialogNoActionBar" parent="ThemeHoloDialogNoActionBar">

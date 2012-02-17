@@ -23,6 +23,7 @@
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		
 		<item name="my_list_background">@android:color/transparent</item>
+		<item name="editorBackgroundColor">@android:color/transparent</item>
 
 	</style>
 	
@@ -41,6 +42,7 @@
 		
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
+		<item name="editorBackgroundColor">@android:color/white</item>
 	</style>
 
 	<style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.Holo.Dialog.NoActionBar">
@@ -59,6 +61,7 @@
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="my_list_background">@android:color/transparent</item>
+		<item name="editorBackgroundColor">@android:color/transparent</item>
 
 	</style>
 	
@@ -78,6 +81,7 @@
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
+		<item name="editorBackgroundColor">@android:color/white</item>
 	</style>
 
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light">
@@ -97,6 +101,7 @@
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
+		<item name="editorBackgroundColor">@android:color/white</item>
 
 	</style>
 
