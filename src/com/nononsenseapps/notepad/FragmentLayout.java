@@ -836,13 +836,15 @@ public class FragmentLayout extends Activity implements
 			// Now select it. Using modified desc, will always be first item.
 			getActionBar().setSelectedNavigationItem(0);
 		}
-		MenuItem createNote = optionsMenu.findItem(R.id.menu_add);
-		if (createNote != null) {
-			// Only show this button if there is a list to create notes in
-			if (mSpinnerAdapter.getCount() == 0) {
-				createNote.setVisible(false);
-			} else {
-				createNote.setVisible(true);
+		if (optionsMenu != null) {
+			MenuItem createNote = optionsMenu.findItem(R.id.menu_add);
+			if (createNote != null) {
+				// Only show this button if there is a list to create notes in
+				if (mSpinnerAdapter.getCount() == 0) {
+					createNote.setVisible(false);
+				} else {
+					createNote.setVisible(true);
+				}
 			}
 		}
 	}
