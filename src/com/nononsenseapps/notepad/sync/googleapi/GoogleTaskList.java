@@ -27,7 +27,7 @@ public class GoogleTaskList {
 	// public String selfLink = null;
 	public JSONObject json = null;
 	public String updated = null;
-	
+
 	public boolean didRemoteInsert = false;
 
 	// private GoogleAPITalker api;
@@ -38,7 +38,7 @@ public class GoogleTaskList {
 		id = jsonList.getString("id");
 		title = jsonList.getString("title");
 		updated = jsonList.getString("updated");
-		
+
 		// Inital listing of lists does not contain etags
 		if (jsonList.has("etag"))
 			etag = jsonList.getString("etag");
@@ -59,40 +59,45 @@ public class GoogleTaskList {
 			json.put("dbid", dbId);
 			json.put("deleted", deleted);
 			json.put("updated", updated);
-		
-		res =  json.toString(2);
+
+			res = json.toString(2);
 		} catch (JSONException e) {
-			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, e.getLocalizedMessage());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS)
+				Log.d(TAG, e.getLocalizedMessage());
 		}
 		return res;
 	}
 
 	/**
-	 * Returns a JSON formatted version of this list. Includes title
-	 * and id if not null
+	 * Returns a JSON formatted version of this list. Includes title and id if
+	 * not null
 	 * 
 	 * @return
-	 * @throws JSONException 
+	 * @throws JSONException
 	 */
 	public String toJSON() {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("title", title);
-		
-		if (id != null)
-			json.put("id", id);
-		
-		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, json.toString(2));
+
+			if (id != null)
+				json.put("id", id);
+
+			if (SyncAdapter.SYNC_DEBUG_PRINTS)
+				Log.d(TAG, json.toString(2));
 		} catch (JSONException e) {
-			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, e.getLocalizedMessage());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS)
+				Log.d(TAG, e.getLocalizedMessage());
 		}
-		
+
 		return json.toString();
 	}
-	
+
 	/**
-	 * Returns a ContentValues hashmap suitable for database insertion in the Lists table
-	 * Includes Title and modified flag as specified in the arguments
+	 * Returns a ContentValues hashmap suitable for database insertion in the
+	 * Lists table Includes Title and modified flag as specified in the
+	 * arguments
+	 * 
 	 * @return
 	 */
 	public ContentValues toListsContentValues(int modified) {
@@ -112,8 +117,11 @@ public class GoogleTaskList {
 		return values;
 	}
 
-	public void uploadModifiedTasks(GoogleAPITalker apiTalker, GoogleDBTalker dbTalker) throws RemoteException, ClientProtocolException, JSONException, NotModifiedException, IOException {
-		for (GoogleTask task: dbTalker.getModifiedTasks(this)) {
+	public void uploadModifiedTasks(GoogleAPITalker apiTalker,
+			GoogleDBTalker dbTalker) throws RemoteException,
+			ClientProtocolException, JSONException, NotModifiedException,
+			IOException {
+		for (GoogleTask task : dbTalker.getModifiedTasks(this)) {
 			// First upload the modified tasks within.
 			GoogleTask result = apiTalker.uploadTask(task, this);
 			if (result != null)
@@ -123,30 +131,41 @@ public class GoogleTaskList {
 		}
 	}
 
-	public void downloadModifiedTasks(GoogleAPITalker apiTalker, GoogleDBTalker dbTalker, String lastUpdated) throws RemoteException {
-		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "DownloadModifiedTasks, last date: " + lastUpdated);
-		// Compare with local tasks, if the tasks have the same remote id, then they are the same. Use the existing db-id
+	public void downloadModifiedTasks(GoogleAPITalker apiTalker,
+			GoogleDBTalker dbTalker, String lastUpdated) throws RemoteException {
+		if (SyncAdapter.SYNC_DEBUG_PRINTS)
+			Log.d(TAG, "DownloadModifiedTasks, last date: " + lastUpdated);
+		// Compare with local tasks, if the tasks have the same remote id, then
+		// they are the same. Use the existing db-id
 		// to avoid creating duplicates
 		ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(this);
-		for (GoogleTask task: apiTalker.getModifiedTasks(lastUpdated, this)) {
-			for (GoogleTask localTask: allTasks) {
-				if (localTask.id.equals(task.id)){
-					// We found it!
-					task.dbId = localTask.dbId;
-					// and remove it from the list so we don't iterate over it again when we don't need to
-					allTasks.remove(localTask);
-					// Move on to next task
-					break;
+		for (GoogleTask task : apiTalker.getModifiedTasks(lastUpdated, this)) {
+			for (GoogleTask localTask : allTasks) {
+				if (task.id != null) {
+					// Just null pointer paranoia
+					if (task.id.equals(localTask.id)) {
+						// We found it!
+						task.dbId = localTask.dbId;
+						// and remove it from the list so we don't iterate over
+						// it again when we don't need to
+						allTasks.remove(localTask);
+						// Move on to next task
+						break;
+					}
 				}
 			}
-			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Saving modified: " + task.toJSON());
+			if (SyncAdapter.SYNC_DEBUG_PRINTS)
+				Log.d(TAG, "Saving modified: " + task.toJSON());
 			dbTalker.SaveToDatabase(task, this);
 		}
 	}
-	
+
 	private void handleConflict(GoogleDBTalker dbTalker,
-			GoogleAPITalker apiTalker, GoogleTask localTask) throws RemoteException, ClientProtocolException, JSONException, NotModifiedException, IOException {
-		localTask.etag = null; // Set this to null so we dont do any if-none-match gets
+			GoogleAPITalker apiTalker, GoogleTask localTask)
+			throws RemoteException, ClientProtocolException, JSONException,
+			NotModifiedException, IOException {
+		localTask.etag = null; // Set this to null so we dont do any
+								// if-none-match gets
 		GoogleTask remoteTask = apiTalker.getTask(localTask, this);
 		// Last updated one wins
 		Time local = new Time();
@@ -154,12 +173,14 @@ public class GoogleTaskList {
 		Time remote = new Time();
 		remote.parse3339(remoteTask.updated);
 		if (Time.compare(remote, local) >= 0) {
-			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Handling conflict: remote was newer");
+			if (SyncAdapter.SYNC_DEBUG_PRINTS)
+				Log.d(TAG, "Handling conflict: remote was newer");
 			// remote is greater than local (or equal), save that to database
 			remoteTask.dbId = localTask.dbId;
 			dbTalker.SaveToDatabase(remoteTask, this);
 		} else {
-			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Handling conflict: local was newer");
+			if (SyncAdapter.SYNC_DEBUG_PRINTS)
+				Log.d(TAG, "Handling conflict: local was newer");
 			// Local is greater than remote, upload it.
 			localTask.etag = null;
 			GoogleTask partialTask = apiTalker.uploadTask(localTask, this);
@@ -169,26 +190,29 @@ public class GoogleTaskList {
 			dbTalker.SaveToDatabase(localTask, this);
 		}
 	}
-	
+
 	/**
-	 * This will set the sorting values correctly for these tasks. This must be called last when all other changes have been made to the
-	 * tasks as it requires all parents etc to be present.
-	 * Also make sure that it is the same objects that are present in both lists and not copies!
+	 * This will set the sorting values correctly for these tasks. This must be
+	 * called last when all other changes have been made to the tasks as it
+	 * requires all parents etc to be present. Also make sure that it is the
+	 * same objects that are present in both lists and not copies!
 	 */
-	public void setSortingValues(ArrayList<GoogleTask> modifiedTasks, ArrayList<GoogleTask> allTasks) {
-		// First clear all the position values as we will do a recursive recalculation on these objects
-		for (GoogleTask task: modifiedTasks) {
+	public void setSortingValues(ArrayList<GoogleTask> modifiedTasks,
+			ArrayList<GoogleTask> allTasks) {
+		// First clear all the position values as we will do a recursive
+		// recalculation on these objects
+		for (GoogleTask task : modifiedTasks) {
 			task.abcsort = "";
-			task.possort ="";
+			task.possort = "";
 		}
 		// Now, set the sorting values for these objects
-		for (GoogleTask task: modifiedTasks) {
+		for (GoogleTask task : modifiedTasks) {
 			getAbcSort(task, allTasks);
 			getPosSort(task, allTasks);
 		}
 		// All sort values are set. It is OK to save now.
 	}
-	
+
 	/**
 	 * This will write the position value if none exist
 	 */
@@ -205,12 +229,12 @@ public class GoogleTaskList {
 				sortingValue += task.position;
 			}
 			sortingValue += ".";
-			
+
 			task.possort = sortingValue;
 		}
 		return task.possort;
 	}
-	
+
 	/**
 	 * This will write the position value if none exist
 	 */
@@ -227,14 +251,15 @@ public class GoogleTaskList {
 				sortingValue += task.title;
 			}
 			sortingValue += ".";
-			
+
 			task.abcsort = sortingValue;
 		}
 		return task.abcsort;
 	}
-	
-	private GoogleTask getTaskWithRemoteId(String id, ArrayList<GoogleTask> tasks) {
-		for (GoogleTask task: tasks) {
+
+	private GoogleTask getTaskWithRemoteId(String id,
+			ArrayList<GoogleTask> tasks) {
+		for (GoogleTask task : tasks) {
 			if (task.id.equals(id)) {
 				return task;
 			}
