@@ -415,6 +415,14 @@ public class NotesListFragment extends ListFragment implements
 				SyncAdapter.SYNC_FINISHED));
 		activity.registerReceiver(syncFinishedReceiver, new IntentFilter(
 				SyncAdapter.SYNC_STARTED));
+
+		String accountName = PreferenceManager.getDefaultSharedPreferences(
+				activity).getString(NotesPreferenceFragment.KEY_ACCOUNT, "");
+		if (accountName != null && !accountName.isEmpty())
+			setRefreshActionItemState(ContentResolver.isSyncActive(
+					NotesPreferenceFragment.getAccount(
+							AccountManager.get(activity), accountName),
+					NotePad.AUTHORITY));
 	}
 
 	@Override

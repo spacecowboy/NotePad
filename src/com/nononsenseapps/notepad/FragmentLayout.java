@@ -390,9 +390,10 @@ public class FragmentLayout extends Activity implements
 			getContentResolver().update(
 					Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
 							Long.toString(currentList)), values, null, null);
-			// Mark tasks as deleted
+			// Mark tasks as hidden locally. They are deleted with the list in the sync
 			values = new ContentValues();
 			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
+			values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 0); // Yes zero, we don't want to sync tasks in deleted lists
 			getContentResolver()
 					.update(NotePad.Notes.CONTENT_URI,
 							values,

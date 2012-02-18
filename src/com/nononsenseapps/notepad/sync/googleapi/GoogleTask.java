@@ -25,7 +25,7 @@ public class GoogleTask {
 	private static final String POSITION = "position";
 	private static final String HIDDEN = "hidden";
 	public String id = null;
-	public String etag = null;
+	public String etag = "";
 	public String title = null;
 	public String updated = null;
 	public String notes = null;
@@ -53,7 +53,7 @@ public class GoogleTask {
 		id = jsonTask.getString(ID);
 		title = jsonTask.getString(TITLE);
 		updated = jsonTask.getString(UPDATED);
-		etag = jsonTask.getString("etag");
+		//etag = jsonTask.getString("etag");
 		if (jsonTask.has(NOTES))
 			notes = jsonTask.getString(NOTES);
 		status  = jsonTask.getString(STATUS);
@@ -143,15 +143,8 @@ public class GoogleTask {
 		values.put(NotePad.Notes.COLUMN_NAME_PARENT, parent);
 		values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, hidden);
 		
-		// These values are used to sort it like the server does. Takes some transformation to do this properly.
-		String abcsort = "";
-		String possort = "";
-		if (parent != null && !parent.isEmpty()) {
-			
-		}
-		if (position != null && !position.isEmpty()) {
-			
-		}
+		values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, possort);
+		values.put(NotePad.Notes.COLUMN_NAME_ABCSUBSORT, abcsort);
 		
 		return values;
 	}
@@ -164,5 +157,24 @@ public class GoogleTask {
 		values.put(NotePad.GTasks.COLUMN_NAME_GTASKS_ID, id);
 		values.put(NotePad.GTasks.COLUMN_NAME_UPDATED, updated);
 		return values;
+	}
+	
+	/**
+	 * Returns true if the task has the same remote id or same database id.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		boolean equal = false;
+		if (GoogleTask.class.isInstance(o)) {
+			// It's a list!
+			GoogleTask task = (GoogleTask) o;
+			if (dbId != -1 && dbId == task.dbId) {
+				equal = true;
+			}
+			if (id != null && id.equals(task.id)) {
+				equal = true;
+			}
+		}
+		return equal;
 	}
 }
