@@ -1,6 +1,7 @@
 package com.nononsenseapps.notepad;
 
 import java.util.Calendar;
+import java.util.TimeZone;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
@@ -413,7 +414,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		noteDueDate = new Time(Time.getCurrentTimezone());
 
-		Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		year = c.get(Calendar.YEAR);
 		month = c.get(Calendar.MONTH);
 		day = c.get(Calendar.DAY_OF_MONTH);
@@ -472,7 +473,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		if (mDueDate != null) {
 			mDueDate.setText(getText(R.string.editor_due_date_hint));
 			// set year, month, day variables to today
-			Calendar c = Calendar.getInstance();
+			Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 			year = c.get(Calendar.YEAR);
 			month = c.get(Calendar.MONTH);
 			day = c.get(Calendar.DAY_OF_MONTH);
@@ -652,7 +653,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		if (dueDateSet && noteDueDate != null) {
 
-			Calendar c = Calendar.getInstance();
+			Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 			c.setTimeInMillis(noteDueDate.toMillis(false));
 
 			dueDateSet = true;
@@ -829,7 +830,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			try {
 				noteDueDate.parse3339(due);
 				dueDateSet = true;
-				Calendar c = Calendar.getInstance();
+				Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 				c.setTimeInMillis(noteDueDate.toMillis(false));
 
 				mDueDate.setText(DateFormat.format(DATEFORMAT_FORMAT, c));
@@ -960,7 +961,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		this.month = monthOfYear;
 		this.day = dayOfMonth;
 
-		Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.set(year, monthOfYear, dayOfMonth);
 
 		noteDueDate.set(dayOfMonth, monthOfYear, year);

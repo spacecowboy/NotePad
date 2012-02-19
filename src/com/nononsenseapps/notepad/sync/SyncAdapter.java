@@ -175,12 +175,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 							}
 						}
 					}
-					// Now only resolved items are left
-					if (SYNC_DEBUG_PRINTS)
-						Log.d(TAG,
-								"List id " + list.dbId
-										+ ", tasks to upload then: "
-										+ moddedTasks.size());
 				}
 
 				if (SYNC_DEBUG_PRINTS)

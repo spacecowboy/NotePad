@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.TimeZone;
 
 import com.nononsenseapps.notepad.FragmentLayout.NotesEditorActivity;
 import com.nononsenseapps.notepad.FragmentLayout.NotesPreferencesDialog;
@@ -873,7 +874,7 @@ public class NotesListFragment extends ListFragment implements
 					Time date = new Time(Time.getCurrentTimezone());
 					date.parse3339(due);
 
-					Calendar c = Calendar.getInstance();
+					Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 					c.setTimeInMillis(date.toMillis(false));
 
 					note = note

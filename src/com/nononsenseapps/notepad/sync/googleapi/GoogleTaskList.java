@@ -70,8 +70,7 @@ public class GoogleTaskList {
 	}
 
 	/**
-	 * Returns a JSON formatted version of this list. Includes title and id if
-	 * not null
+	 * Returns a JSON formatted version of this list. Includes title and not id
 	 * 
 	 * @return
 	 * @throws JSONException
@@ -81,8 +80,8 @@ public class GoogleTaskList {
 		try {
 			json.put("title", title);
 
-			if (id != null)
-				json.put("id", id);
+//			if (id != null)
+//				json.put("id", id);
 
 			if (SyncAdapter.SYNC_DEBUG_PRINTS)
 				Log.d(TAG, json.toString(2));

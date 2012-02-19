@@ -86,8 +86,8 @@ public class GoogleTask {
 		try {
 			JSONObject json = new JSONObject();
 			String nullAppendage = "";
-			if (id != null)
-				json.put(ID, id);
+//			if (id != null)
+//				json.put(ID, id);
 
 			json.put(TITLE, title);
 			json.put(NOTES, notes);

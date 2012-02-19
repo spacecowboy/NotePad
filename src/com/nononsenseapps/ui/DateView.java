@@ -2,6 +2,7 @@ package com.nononsenseapps.ui;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import android.content.Context;
 import android.text.format.DateFormat;
@@ -51,7 +52,7 @@ public class DateView extends TextView {
 	public CharSequence toDate(long msecs) {
 		String format = day;
 
-		Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTimeInMillis(msecs);
 		
 		return DateFormat.format(format, c);
