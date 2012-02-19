@@ -874,13 +874,9 @@ public class NotesListFragment extends ListFragment implements
 					Time date = new Time(Time.getCurrentTimezone());
 					date.parse3339(due);
 
-					Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-					c.setTimeInMillis(date.toMillis(false));
-
 					note = note
 							+ "due date: "
-							+ DateFormat.format(
-									NotesEditorFragment.DATEFORMAT_FORMAT, c)
+							+ date.format3339(true)
 							+ "\n";
 				}
 
