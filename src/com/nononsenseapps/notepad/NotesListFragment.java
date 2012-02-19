@@ -1,11 +1,9 @@
 package com.nononsenseapps.notepad;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
-import java.util.TimeZone;
 
 import com.nononsenseapps.notepad.FragmentLayout.NotesEditorActivity;
 import com.nononsenseapps.notepad.FragmentLayout.NotesPreferencesDialog;
@@ -44,7 +42,6 @@ import android.view.MenuItem;
 import android.app.ListFragment;
 import android.widget.SimpleCursorAdapter;
 
-import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.ActionMode;
