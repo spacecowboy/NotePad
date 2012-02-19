@@ -312,8 +312,9 @@ public final class NotePad {
         public static final String DEFAULT_SORT_TYPE = COLUMN_NAME_MODIFICATION_DATE;
         public static final String DEFAULT_SORT_ORDERING = "DESC";
         public static final String MODIFIED_DESC_ORDER = COLUMN_NAME_MODIFICATION_DATE + " DESC";
+        public static final String ALPHABETIC_ASC_ORDER = COLUMN_NAME_TITLE + " COLLATE NOCASE ASC";
         
-        public static String SORT_ORDER = MODIFIED_DESC_ORDER;
+        public static String SORT_ORDER = ALPHABETIC_ASC_ORDER;
     }
     
     /**

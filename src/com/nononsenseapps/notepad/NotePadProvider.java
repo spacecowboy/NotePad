@@ -21,9 +21,12 @@ import com.nononsenseapps.notepad.sync.SyncAdapter;
 
 import android.content.ClipDescription;
 import android.content.ContentProvider;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.OperationApplicationException;
 import android.content.UriMatcher;
 import android.content.ContentProvider.PipeDataWriter;
 import android.content.res.AssetFileDescriptor;
@@ -46,6 +49,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -1654,6 +1658,7 @@ public class NotePadProvider extends ContentProvider implements
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
 		}
+		
 
 		/*
 		 * Gets a handle to the content resolver object for the current context,
@@ -1665,6 +1670,36 @@ public class NotePadProvider extends ContentProvider implements
 
 		// Returns the number of rows updated.
 		return count;
+	}
+	
+	/**
+	 * Performs the work provided in a single transaction
+	 */
+	@Override
+	public ContentProviderResult[] applyBatch (ArrayList<ContentProviderOperation> operations) {
+		ContentProviderResult[] result = new ContentProviderResult[operations.size()];
+		int i = 0;
+		// Opens the database object in "write" mode.
+		SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+		// Begin a transaction
+		db.beginTransaction();
+		try {
+			for (ContentProviderOperation operation: operations) {
+				// Chain the result for back references
+				result[i++] = operation.apply(this, result, i);
+			}
+			
+			db.setTransactionSuccessful();
+		} catch (OperationApplicationException e) {
+			Log.d(TAG, "batch failed: " + e.getLocalizedMessage());
+		}
+		finally {
+			db.endTransaction();
+		}
+		
+		// TODO do this?
+		//db.close();
+		return result;
 	}
 
 	/**

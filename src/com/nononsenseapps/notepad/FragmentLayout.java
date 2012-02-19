@@ -47,7 +47,8 @@ public class FragmentLayout extends Activity implements
 		DeleteActionListener, OnNavigationListener,
 		LoaderManager.LoaderCallbacks<Cursor> {
 	private static final String TAG = "FragmentLayout";
-	private static final String CURRENT_LIST = "currentlistid";
+	private static final String CURRENT_LIST_ID = "currentlistid";
+	private static final String CURRENT_LIST_POS = "currentlistpos";
 	private static final int CREATE_LIST = 0;
 	private static final int RENAME_LIST = 1;
 	private static final int DELETE_LIST = 2;
@@ -66,7 +67,9 @@ public class FragmentLayout extends Activity implements
 	private Menu optionsMenu;
 
 	private SimpleCursorAdapter mSpinnerAdapter;
-	private long currentList;
+	private long currentListId = -1;
+	private int currentListPos = 0;
+	private boolean unSelected = true; // Indicates that no list has been selected yet. Only used on first start up
 
 	private int prevNumberOfLists = -1;
 
@@ -83,7 +86,9 @@ public class FragmentLayout extends Activity implements
 		if (savedInstanceState != null) {
 			// TODO this will get overwritten in the onNavigationClick callback.
 			// We don't want that
-			currentList = savedInstanceState.getLong(CURRENT_LIST);
+			Log.d(TAG, "Reloading state");
+			currentListId = savedInstanceState.getLong(CURRENT_LIST_ID);
+			currentListPos = savedInstanceState.getInt(CURRENT_LIST_POS);
 		}
 
 		// Setting theme here
@@ -184,7 +189,9 @@ public class FragmentLayout extends Activity implements
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		// Save current list
-		outState.putLong(CURRENT_LIST, currentList);
+		Log.d(TAG, "Saving state");
+		outState.putLong(CURRENT_LIST_ID, currentListId);
+		outState.putInt(CURRENT_LIST_POS, currentListPos);
 	}
 
 	@Override
@@ -360,13 +367,13 @@ public class FragmentLayout extends Activity implements
 			Log.d(TAG, "Rename list: " + title);
 		// I will not allow empty names for lists
 		// Also must have a valid id
-		if (!title.equals("") && currentList > -1) {
+		if (!title.equals("") && currentListId > -1) {
 			ContentValues values = new ContentValues();
 			values.put(NotePad.Lists.COLUMN_NAME_TITLE, title);
 			// Update list
 			getContentResolver().update(
 					Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
-							Long.toString(currentList)), values, null, null);
+							Long.toString(currentListId)), values, null, null);
 		}
 	}
 
@@ -378,13 +385,13 @@ public class FragmentLayout extends Activity implements
 		if (UI_DEBUG_PRINTS)
 			Log.d(TAG, "Delete current list");
 		// Only if id is valid
-		if (currentList > -1) {
+		if (currentListId > -1) {
 			ContentValues values = new ContentValues();
 			values.put(NotePad.Lists.COLUMN_NAME_DELETED, 1);
 			// Mark list as deleted
 			getContentResolver().update(
 					Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
-							Long.toString(currentList)), values, null, null);
+							Long.toString(currentListId)), values, null, null);
 			// Mark tasks as hidden locally. They are deleted with the list in the sync
 			values = new ContentValues();
 			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
@@ -393,7 +400,7 @@ public class FragmentLayout extends Activity implements
 					.update(NotePad.Notes.CONTENT_URI,
 							values,
 							NotePad.Notes.COLUMN_NAME_LIST + " IS "
-									+ currentList, null);
+									+ currentListId, null);
 		}
 	}
 
@@ -791,7 +798,8 @@ public class FragmentLayout extends Activity implements
 					+ " id: " + itemId);
 
 		// Change the active list
-		currentList = itemId;
+		currentListId = itemId;
+		currentListPos = itemPosition;
 		// Display list'
 		if (list != null) {
 			list.showList(itemId);
@@ -826,12 +834,18 @@ public class FragmentLayout extends Activity implements
 
 		if (prevNumberOfLists == -1) {
 			prevNumberOfLists = mSpinnerAdapter.getCount();
+			// First start. Also check if we should auto-open a list
+			if (unSelected && currentListPos < prevNumberOfLists) {
+				unSelected = false;
+				getActionBar().setSelectedNavigationItem(currentListPos);
+			}
 		} else if (prevNumberOfLists < mSpinnerAdapter.getCount()) {
 			// User created a list, we want to display it
 			prevNumberOfLists = mSpinnerAdapter.getCount();
 			// Now select it. Using modified desc, will always be first item.
 			getActionBar().setSelectedNavigationItem(0);
 		}
+		
 		if (optionsMenu != null) {
 			MenuItem createNote = optionsMenu.findItem(R.id.menu_add);
 			if (createNote != null) {
