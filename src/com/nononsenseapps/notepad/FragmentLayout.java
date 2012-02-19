@@ -59,7 +59,7 @@ public class FragmentLayout extends Activity implements
 	public static boolean AT_LEAST_ICS;
 	public static boolean AT_LEAST_HC;
 
-	public final static boolean UI_DEBUG_PRINTS = true;
+	public final static boolean UI_DEBUG_PRINTS = false;
 
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
 

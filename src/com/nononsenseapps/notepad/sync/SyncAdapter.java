@@ -50,7 +50,7 @@ import java.util.HashMap;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 	private static final String TAG = "SyncAdapter";
-	public final static boolean SYNC_DEBUG_PRINTS = true;
+	public final static boolean SYNC_DEBUG_PRINTS = false;
 
 	// public static final String AUTH_TOKEN_TYPE =
 	// "oauth2:https://www.googleapis.com/auth/tasks";
