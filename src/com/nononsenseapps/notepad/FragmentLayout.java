@@ -189,7 +189,6 @@ public class FragmentLayout extends Activity implements
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
 		// Save current list
-		Log.d(TAG, "Saving state");
 		outState.putLong(CURRENT_LIST_ID, currentListId);
 		outState.putInt(CURRENT_LIST_POS, currentListPos);
 	}
