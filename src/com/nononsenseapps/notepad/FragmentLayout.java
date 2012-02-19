@@ -32,7 +32,6 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -105,15 +104,11 @@ public class FragmentLayout extends Activity implements
 		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
 		getLoaderManager().initLoader(0, null, this);
 
-		if (UI_DEBUG_PRINTS)
-			Log.d("Activity", "onCreate before");
 		// XML makes sure notes list is displayed. And editor too in landscape
 		// if (lightTheme)
 		// setContentView(R.layout.fragment_layout_light);
 		// else
 		setContentView(R.layout.fragment_layout);
-		if (UI_DEBUG_PRINTS)
-			Log.d("Activity", "onCreate after");
 
 		// Set this as delete listener
 		NotesListFragment list = (NotesListFragment) getFragmentManager()

@@ -388,10 +388,6 @@ public class NotesListFragment extends ListFragment implements
 	public void onPause() {
 		super.onPause();
 		activity.unregisterReceiver(syncFinishedReceiver);
-		// Since we just unregistered ourselves, we might not know when the sync
-		// is finished.
-		// So we have to turn off the sync-animation or it might spin forever!
-		setRefreshActionItemState(false);
 	}
 
 	@Override
@@ -416,6 +412,7 @@ public class NotesListFragment extends ListFragment implements
 
 		String accountName = PreferenceManager.getDefaultSharedPreferences(
 				activity).getString(NotesPreferenceFragment.KEY_ACCOUNT, "");
+		// Sync state might have changed, make sure we're spinning when we should
 		if (accountName != null && !accountName.isEmpty())
 			setRefreshActionItemState(ContentResolver.isSyncActive(
 					NotesPreferenceFragment.getAccount(
