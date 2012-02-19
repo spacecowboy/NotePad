@@ -59,7 +59,7 @@ public class FragmentLayout extends Activity implements
 	public static boolean AT_LEAST_ICS;
 	public static boolean AT_LEAST_HC;
 
-	public static boolean UI_DEBUG_PRINTS = true;
+	public final static boolean UI_DEBUG_PRINTS = true;
 
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
 
@@ -105,14 +105,14 @@ public class FragmentLayout extends Activity implements
 		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
 		getLoaderManager().initLoader(0, null, this);
 
-		if (FragmentLayout.UI_DEBUG_PRINTS)
+		if (UI_DEBUG_PRINTS)
 			Log.d("Activity", "onCreate before");
 		// XML makes sure notes list is displayed. And editor too in landscape
 		// if (lightTheme)
 		// setContentView(R.layout.fragment_layout_light);
 		// else
 		setContentView(R.layout.fragment_layout);
-		if (FragmentLayout.UI_DEBUG_PRINTS)
+		if (UI_DEBUG_PRINTS)
 			Log.d("Activity", "onCreate after");
 
 		// Set this as delete listener
@@ -194,7 +194,7 @@ public class FragmentLayout extends Activity implements
 
 	@Override
 	protected void onNewIntent(Intent intent) {
-		if (FragmentLayout.UI_DEBUG_PRINTS)
+		if (UI_DEBUG_PRINTS)
 			Log.d("FragmentLayout", "On New Intent list: " + list);
 		// Get the intent, verify the action and get the query
 		// Intent intent = getIntent();
@@ -208,7 +208,7 @@ public class FragmentLayout extends Activity implements
 			}
 		} else {
 			if (this.list != null) {
-				if (FragmentLayout.UI_DEBUG_PRINTS)
+				if (UI_DEBUG_PRINTS)
 					Log.d("FragmentLayout", "Calling refresh");
 				list.refresh();
 			}
@@ -217,7 +217,7 @@ public class FragmentLayout extends Activity implements
 
 	@Override
 	protected void onResume() {
-		if (FragmentLayout.UI_DEBUG_PRINTS)
+		if (UI_DEBUG_PRINTS)
 			Log.d("FragmentLayout", "onResume");
 		if (shouldRestart) {
 			Log.d("FragmentLayout", "Should refresh");
@@ -314,14 +314,14 @@ public class FragmentLayout extends Activity implements
 			return renameDialog;
 
 		default:
-			if (FragmentLayout.UI_DEBUG_PRINTS)
+			if (UI_DEBUG_PRINTS)
 				Log.d(TAG, "Wanted to create some dialog: " + id);
 			return null;
 		}
 	}
 
 	protected void createList(String title) {
-		if (FragmentLayout.UI_DEBUG_PRINTS)
+		if (UI_DEBUG_PRINTS)
 			Log.d(TAG, "Create list: " + title);
 		// I will not allow empty names for lists
 		if (!title.equals("")) {
@@ -361,7 +361,7 @@ public class FragmentLayout extends Activity implements
 	}
 
 	protected void renameList(String title) {
-		if (FragmentLayout.UI_DEBUG_PRINTS)
+		if (UI_DEBUG_PRINTS)
 			Log.d(TAG, "Rename list: " + title);
 		// I will not allow empty names for lists
 		// Also must have a valid id
@@ -380,7 +380,7 @@ public class FragmentLayout extends Activity implements
 	 * the database. Will be deleted on next sync.
 	 */
 	protected void deleteCurrentList() {
-		if (FragmentLayout.UI_DEBUG_PRINTS)
+		if (UI_DEBUG_PRINTS)
 			Log.d(TAG, "Delete current list");
 		// Only if id is valid
 		if (currentList > -1) {
@@ -403,7 +403,7 @@ public class FragmentLayout extends Activity implements
 	}
 
 	public void restartAndRefresh() {
-		if (FragmentLayout.UI_DEBUG_PRINTS)
+		if (UI_DEBUG_PRINTS)
 			Log.d("FragmentLayout", "Should restart and refresh");
 		shouldRestart = false;
 		Intent intent = getIntent();
@@ -440,7 +440,7 @@ public class FragmentLayout extends Activity implements
 				NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 		NotePad.Notes.SORT_ORDER = sortType + " " + sortOrder;
-		if (FragmentLayout.UI_DEBUG_PRINTS)
+		if (UI_DEBUG_PRINTS)
 			Log.d("ReadingSettings", "sortOrder is: "
 					+ NotePad.Notes.SORT_ORDER);
 
@@ -465,25 +465,25 @@ public class FragmentLayout extends Activity implements
 			onDeleteAction();
 			break;
 		case R.id.menu_preferences:
-			if (FragmentLayout.UI_DEBUG_PRINTS)
+			if (UI_DEBUG_PRINTS)
 				Log.d("NotesListFragment", "onOptionsSelection pref");
 			showPrefs();
 			return true;
 		case R.id.menu_createlist:
 			// Create dialog
-			if (FragmentLayout.UI_DEBUG_PRINTS)
+			if (UI_DEBUG_PRINTS)
 				Log.d(TAG, "menu_createlist");
 			showDialog(CREATE_LIST);
 			return true;
 		case R.id.menu_renamelist:
 			// Create dialog
-			if (FragmentLayout.UI_DEBUG_PRINTS)
+			if (UI_DEBUG_PRINTS)
 				Log.d(TAG, "menu_renamelist");
 			showDialog(RENAME_LIST);
 			return true;
 		case R.id.menu_deletelist:
 			// Create dialog
-			if (FragmentLayout.UI_DEBUG_PRINTS)
+			if (UI_DEBUG_PRINTS)
 				Log.d(TAG, "menu_deletelist");
 			showDialog(DELETE_LIST);
 			return true;
@@ -521,7 +521,7 @@ public class FragmentLayout extends Activity implements
 			// Make sure to set themes before this
 			super.onCreate(savedInstanceState);
 
-			if (FragmentLayout.UI_DEBUG_PRINTS)
+			if (UI_DEBUG_PRINTS)
 				Log.d("NotesEditorActivity", "onCreate");
 
 			if (NotesPreferenceFragment.THEME_LIGHT_ICS_AB
@@ -563,7 +563,7 @@ public class FragmentLayout extends Activity implements
 			long listId = getIntent().getExtras().getLong(
 					NotesEditorFragment.LISTID);
 
-			if (FragmentLayout.UI_DEBUG_PRINTS)
+			if (UI_DEBUG_PRINTS)
 				Log.d("NotesEditorActivity", "Time to show the note!");
 			// if (savedInstanceState == null) {
 			// During initial setup, plug in the details fragment.
@@ -595,7 +595,7 @@ public class FragmentLayout extends Activity implements
 		@Override
 		public void onPause() {
 			super.onPause();
-			if (FragmentLayout.UI_DEBUG_PRINTS)
+			if (UI_DEBUG_PRINTS)
 				Log.d("NotesEditorActivity", "onPause");
 			if (isFinishing()) {
 				// Log.d("NotesEditorActivity",
@@ -610,10 +610,10 @@ public class FragmentLayout extends Activity implements
 		@Override
 		public void onResume() {
 			super.onResume();
-			if (FragmentLayout.UI_DEBUG_PRINTS)
+			if (UI_DEBUG_PRINTS)
 				Log.d("NotesEditorActivity", "onResume");
 			if (getResources().getBoolean(R.bool.useLandscapeView)) {
-				if (FragmentLayout.UI_DEBUG_PRINTS)
+				if (UI_DEBUG_PRINTS)
 					Log.d("NotesEditorActivity", "onResume, killing myself");
 				// Log.d("NotesEditorActivity",
 				// "onResume telling list to display me");
@@ -627,7 +627,7 @@ public class FragmentLayout extends Activity implements
 
 		@Override
 		public void onDeleteAction() {
-			if (FragmentLayout.UI_DEBUG_PRINTS)
+			if (UI_DEBUG_PRINTS)
 				Log.d(TAG, "onDeleteAction");
 			editorFragment.setSelfAction(); // Don't try to reload the deleted
 											// note
@@ -649,7 +649,7 @@ public class FragmentLayout extends Activity implements
 	 * @param id
 	 */
 	public static void deleteNote(ContentResolver resolver, long id) {
-		if (FragmentLayout.UI_DEBUG_PRINTS)
+		if (UI_DEBUG_PRINTS)
 			Log.d(TAG, "deleteNote: " + id);
 		// Only do this for valid id
 		if (id > -1) {
@@ -689,7 +689,7 @@ public class FragmentLayout extends Activity implements
 			try {
 				return resolver.insert(NotePad.Notes.CONTENT_URI, values);
 			} catch (SQLException e) {
-				if (FragmentLayout.UI_DEBUG_PRINTS)
+				if (UI_DEBUG_PRINTS)
 					Log.d(TAG,
 							"Failed to insert note. Sure there is a list to insert into?");
 				return null;
@@ -710,7 +710,7 @@ public class FragmentLayout extends Activity implements
 				editor.setSelfAction();
 			}
 		}
-		if (FragmentLayout.UI_DEBUG_PRINTS)
+		if (UI_DEBUG_PRINTS)
 			Log.d("FragmentLayout", "deleting notes...");
 		deleteNotes(getContentResolver(), ids);
 	}

@@ -53,7 +53,7 @@ import java.util.HashMap;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 	private static final String TAG = "SyncAdapter";
-	public static boolean SYNC_DEBUG_PRINTS = true;
+	public final static boolean SYNC_DEBUG_PRINTS = true;
 
 	// public static final String AUTH_TOKEN_TYPE =
 	// "oauth2:https://www.googleapis.com/auth/tasks";
@@ -108,19 +108,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 				ArrayList<GoogleTaskList> listsToSaveToDB = new ArrayList<GoogleTaskList>();
 				HashMap<GoogleTaskList, ArrayList<GoogleTask>> tasksInListToSaveToDB = new HashMap<GoogleTaskList, ArrayList<GoogleTask>>();
 
-				ArrayList<GoogleTaskList> allLocalLists = dbTalker
-						.getAllLists();
-
+				HashMap<Long, ArrayList<GoogleTask>> tasksInListToUpload = dbTalker.getAllModifiedTasks();
+				ArrayList<GoogleTaskList> listsToUpload = new ArrayList<GoogleTaskList>();
+				ArrayList<GoogleTaskList> allLocalLists = new ArrayList<GoogleTaskList>();
+				dbTalker.getAllLists(allLocalLists, listsToUpload);
+				
 				// Get the current hash value on the server and all remote lists
 				String serverEtag = apiTalker.getModifiedLists(localEtag,
 						allLocalLists, listsToSaveToDB);
-				if (SYNC_DEBUG_PRINTS)
-					Log.d(TAG, "localEtag: " + localEtag);
-				if (SYNC_DEBUG_PRINTS)
-					Log.d(TAG, "remoteEtag: " + serverEtag);
-
-				if (SYNC_DEBUG_PRINTS)
-					Log.d(TAG, "listsToSaveToDB: " + listsToSaveToDB.size());
 
 				// IF the tags match, then nothing has changed on server.
 				if (localEtag.equals(serverEtag)) {
@@ -147,15 +142,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 				// Get stuff we would like to upload to server
 				// In case of lists, locally modified versions always wins in
 				// conflict, so nothing more to do
-				ArrayList<GoogleTaskList> listsToUpload = dbTalker
-						.getModifiedLists();
-
-				HashMap<GoogleTaskList, ArrayList<GoogleTask>> tasksInListToUpload = new HashMap<GoogleTaskList, ArrayList<GoogleTask>>();
 
 				for (GoogleTaskList list : allLocalLists) {
-					ArrayList<GoogleTask> moddedTasks = dbTalker
-							.getModifiedTasks(list);
-					if (!moddedTasks.isEmpty()) {
+					ArrayList<GoogleTask> moddedTasks = tasksInListToUpload.get(list.dbId);
+					if (moddedTasks != null && !moddedTasks.isEmpty()) {
 						// There are some tasks here which we want to upload
 						if (SYNC_DEBUG_PRINTS)
 							Log.d(TAG, "List id " + list.dbId
@@ -191,7 +181,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 								"List id " + list.dbId
 										+ ", tasks to upload then: "
 										+ moddedTasks.size());
-					tasksInListToUpload.put(list, moddedTasks);
 				}
 
 				if (SYNC_DEBUG_PRINTS)
@@ -226,7 +215,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 				// Right, now upload tasks
 				for (GoogleTaskList list : allLocalLists) {
 					ArrayList<GoogleTask> tasksToUpload = tasksInListToUpload
-							.get(list);
+							.get(list.dbId);
 					if (tasksToUpload != null) {
 						for (GoogleTask task : tasksToUpload) {
 							apiTalker.uploadTask(task, list);
@@ -241,7 +230,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 				}
 				
 				// Finally, get the updated etag from the server and save.
-				// Only worht doing if we actually uploaded anything
+				// Only worth doing if we actually uploaded anything
 				String currentEtag = serverEtag;
 				if (uploadedStuff) {
 					currentEtag = apiTalker.getEtag();
