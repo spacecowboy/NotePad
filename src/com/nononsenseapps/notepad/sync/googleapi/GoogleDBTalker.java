@@ -2,7 +2,6 @@ package com.nononsenseapps.notepad.sync.googleapi;
 
 
 import android.content.ContentProviderClient;
-import android.content.SyncResult;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
@@ -10,6 +9,7 @@ import android.text.format.Time;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
@@ -54,18 +54,15 @@ public class GoogleDBTalker {
 
 	protected String accountName;
 	protected ContentProviderClient provider;
-	protected SyncResult syncResult;
 
 	/**
 	 * Needs the accountName of the currently active sync account because it in
 	 * essence supports several
 	 */
-	public GoogleDBTalker(String accountName, ContentProviderClient provider,
-			SyncResult syncResult) {
+	public GoogleDBTalker(String accountName, ContentProviderClient provider) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "constructor");
 		this.accountName = accountName;
 		this.provider = provider;
-		this.syncResult = syncResult;
 	}
 
 	/**
@@ -95,29 +92,25 @@ public class GoogleDBTalker {
 	 * 
 	 * @throws RemoteException
 	 */
-	public ArrayList<GoogleTaskList> getModifiedLists() throws RemoteException {
-		ArrayList<GoogleTaskList> bigList = new ArrayList<GoogleTaskList>();
-		// NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1"
-		Cursor cursor = provider.query(NotePad.Lists.CONTENT_URI,
-				LIST_PROJECTION, NotePad.Lists.COLUMN_NAME_MODIFIED + " IS 1",
-				null, null);
+//	public ArrayList<GoogleTaskList> getModifiedLists() throws RemoteException {
+//		ArrayList<GoogleTaskList> bigList = new ArrayList<GoogleTaskList>();
+//		Cursor cursor = provider.query(NotePad.Lists.CONTENT_URI,
+//				LIST_PROJECTION, NotePad.Lists.COLUMN_NAME_MODIFIED + " IS 1",
+//				null, null);
+//
+//		populateWithLists(cursor, bigList);
+//		cursor.close();
+//
+//		return bigList;
+//	}
 
-		populateWithLists(cursor, bigList);
-		cursor.close();
-
-		return bigList;
-	}
-
-	public ArrayList<GoogleTaskList> getAllLists() throws RemoteException {
-		ArrayList<GoogleTaskList> bigList = new ArrayList<GoogleTaskList>();
+	public void getAllLists(ArrayList<GoogleTaskList> allLists, ArrayList<GoogleTaskList> modifiedLists) throws RemoteException {
 		// NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1"
 		Cursor cursor = provider.query(NotePad.Lists.CONTENT_URI,
 				LIST_PROJECTION, null, null, null);
 
-		populateWithLists(cursor, bigList);
+		populateWithLists(cursor, allLists, modifiedLists);
 		cursor.close();
-
-		return bigList;
 	}
 
 	private void populateWithTasks(Cursor cursor, ArrayList<GoogleTask> bigList)
@@ -160,10 +153,10 @@ public class GoogleDBTalker {
 				task.updated = localTime.format3339(false);
 
 				// get etag and remote id
-				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Getting remote info: "
-						+ NotePad.GTasks.COLUMN_NAME_DB_ID + " IS " + task.dbId
-						+ " AND " + NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT
-						+ " IS '" + accountName + "'");
+//				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Getting remote info: "
+//						+ NotePad.GTasks.COLUMN_NAME_DB_ID + " IS " + task.dbId
+//						+ " AND " + NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT
+//						+ " IS '" + accountName + "'");
 				Cursor remoteCursor = provider.query(
 						NotePad.GTasks.CONTENT_URI, GTASK_PROJECTION,
 						NotePad.GTasks.COLUMN_NAME_DB_ID + " IS " + task.dbId
@@ -175,8 +168,8 @@ public class GoogleDBTalker {
 				if (remoteCursor != null && !remoteCursor.isAfterLast()) {
 					remoteCursor.moveToFirst();
 
-					task.etag = remoteCursor.getString(remoteCursor
-							.getColumnIndex(NotePad.GTasks.COLUMN_NAME_ETAG));
+//					task.etag = remoteCursor.getString(remoteCursor
+//							.getColumnIndex(NotePad.GTasks.COLUMN_NAME_ETAG));
 					task.id = remoteCursor
 							.getString(remoteCursor
 									.getColumnIndex(NotePad.GTasks.COLUMN_NAME_GTASKS_ID));
@@ -201,7 +194,7 @@ public class GoogleDBTalker {
 	}
 
 	private void populateWithLists(Cursor cursor,
-			ArrayList<GoogleTaskList> bigList) throws RemoteException {
+			ArrayList<GoogleTaskList> allLists, ArrayList<GoogleTaskList> modifiedLists) throws RemoteException {
 		if (cursor != null && !cursor.isAfterLast()) {
 			while (cursor.moveToNext()) {
 				GoogleTaskList list = new GoogleTaskList();
@@ -211,6 +204,9 @@ public class GoogleDBTalker {
 						.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
 				list.deleted = cursor.getInt(cursor
 						.getColumnIndex(NotePad.Lists.COLUMN_NAME_DELETED));
+				
+				list.modified = cursor.getInt(cursor
+						.getColumnIndex(NotePad.Lists.COLUMN_NAME_MODIFIED));
 
 				// convert modification time to timestamp
 				long modTime = cursor
@@ -223,11 +219,11 @@ public class GoogleDBTalker {
 				list.updated = localTime.format3339(false);
 
 				// get etag and remote id
-				Log.d(TAG, "Getting remote info: "
-						+ NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS "
-						+ list.dbId + " AND "
-						+ NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT
-						+ " IS '" + accountName + "'");
+//				Log.d(TAG, "Getting remote info: "
+//						+ NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS "
+//						+ list.dbId + " AND "
+//						+ NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT
+//						+ " IS '" + accountName + "'");
 				Cursor remoteCursor = provider.query(
 						NotePad.GTaskLists.CONTENT_URI, GTASKLIST_PROJECTION,
 						NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS "
@@ -239,9 +235,9 @@ public class GoogleDBTalker {
 				if (remoteCursor != null && !remoteCursor.isAfterLast()) {
 					remoteCursor.moveToFirst();
 
-					list.etag = remoteCursor
-							.getString(remoteCursor
-									.getColumnIndex(NotePad.GTaskLists.COLUMN_NAME_ETAG));
+//					list.etag = remoteCursor
+//							.getString(remoteCursor
+//									.getColumnIndex(NotePad.GTaskLists.COLUMN_NAME_ETAG));
 					list.id = remoteCursor
 							.getString(remoteCursor
 									.getColumnIndex(NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID));
@@ -261,7 +257,9 @@ public class GoogleDBTalker {
 				}
 				remoteCursor.close();
 
-				bigList.add(list);
+				allLists.add(list);
+				if (list.modified == 1)
+					modifiedLists.add(list);
 			}
 		}
 	}
@@ -358,16 +356,16 @@ public class GoogleDBTalker {
 								+ " AND "
 								+ NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT
 								+ " IS '" + accountName + "'", null);
-				syncResult.stats.numUpdates++;
 			} else if (task.dbId > -1 && task.deleted == 1) {
+				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Deleting task");
 				provider.delete(Uri.withAppendedPath(
 						NotePad.Notes.CONTENT_ID_URI_BASE,
 						Long.toString(task.dbId)), null, null);
 				provider.delete(NotePad.GTasks.CONTENT_URI,
 						NotePad.GTasks.COLUMN_NAME_DB_ID + " IS " + task.dbId,
 						null);
-				syncResult.stats.numDeletes++;
 			} else if (task.deleted == 1) {
+				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Delete task with no dbId? Madness!");
 				// This must be a task which we ourselves deleted earlier. Ignore them
 			}
 			else {
@@ -381,7 +379,6 @@ public class GoogleDBTalker {
 				provider.insert(NotePad.GTasks.CONTENT_URI,
 						task.toGTasksContentValues(accountName));
 
-				syncResult.stats.numInserts++;
 			}
 		} else {
 			Log.d(TAG,
@@ -413,7 +410,6 @@ public class GoogleDBTalker {
 							+ " AND "
 							+ NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT
 							+ " IS '" + accountName + "'", null);
-			syncResult.stats.numUpdates++;
 		} else if (list.dbId > -1 && list.deleted == 1) {
 			provider.delete(
 					Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
@@ -421,7 +417,6 @@ public class GoogleDBTalker {
 			provider.delete(NotePad.GTaskLists.CONTENT_URI,
 					NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS " + list.dbId,
 					null);
-			syncResult.stats.numDeletes++;
 		} else {
 			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Inserting list");
 			Uri newUri = provider.insert(NotePad.Lists.CONTENT_URI,
@@ -433,7 +428,6 @@ public class GoogleDBTalker {
 			provider.insert(NotePad.GTaskLists.CONTENT_URI,
 					list.toGTaskListsContentValues(accountName));
 
-			syncResult.stats.numInserts++;
 		}
 	}
 
@@ -481,5 +475,100 @@ public class GoogleDBTalker {
 		cursor.close();
 		
 		return tasks;
+	}
+
+	public HashMap<Long, ArrayList<GoogleTask>> getAllModifiedTasks() throws RemoteException {
+		HashMap<Long, ArrayList<GoogleTask>> map = new HashMap<Long, ArrayList<GoogleTask>>();
+
+		Cursor cursor = provider.query(NotePad.Notes.CONTENT_URI,
+				NOTES_PROJECTION, NotePad.Notes.COLUMN_NAME_MODIFIED
+						+ " IS ?", new String[] {"1"}, null);
+
+		populateWithTasks(cursor, map);
+		cursor.close();
+
+		return map;
+	}
+	
+	private void populateWithTasks(Cursor cursor, HashMap<Long, ArrayList<GoogleTask>> map)
+			throws RemoteException {
+		if (cursor != null && !cursor.isAfterLast()) {
+			while (cursor.moveToNext()) {
+				GoogleTask task = new GoogleTask();
+				task.dbId = cursor.getLong(cursor
+						.getColumnIndex(NotePad.Notes._ID));
+				task.title = cursor.getString(cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE));
+				task.deleted = cursor.getInt(cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_DELETED));
+				task.notes = cursor.getString(cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE));
+				task.dueDate = cursor.getString(cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE));
+				task.status = cursor
+						.getString(cursor
+								.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS));
+				task.listdbid = cursor.getLong(cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
+				
+				task.parent = cursor.getString(cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_PARENT));
+				task.position = cursor.getString(cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_POSITION));
+				task.hidden = cursor.getInt(cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_HIDDEN));
+				// Task is assembled, move on
+
+				// convert modification time to timestamp
+				long modTime = cursor
+						.getLong(cursor
+								.getColumnIndex(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE));
+
+				Time localTime = new Time(Time.getCurrentTimezone());
+				localTime.set(modTime);
+
+				task.updated = localTime.format3339(false);
+
+				// get etag and remote id
+//				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Getting remote info: "
+//						+ NotePad.GTasks.COLUMN_NAME_DB_ID + " IS " + task.dbId
+//						+ " AND " + NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT
+//						+ " IS '" + accountName + "'");
+				Cursor remoteCursor = provider.query(
+						NotePad.GTasks.CONTENT_URI, GTASK_PROJECTION,
+						NotePad.GTasks.COLUMN_NAME_DB_ID + " IS " + task.dbId
+								+ " AND "
+								+ NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT
+								+ " IS '" + accountName + "'", null, null);
+
+				// Will only be one, if any
+				if (remoteCursor != null && !remoteCursor.isAfterLast()) {
+					remoteCursor.moveToFirst();
+
+//					task.etag = remoteCursor.getString(remoteCursor
+//							.getColumnIndex(NotePad.GTasks.COLUMN_NAME_ETAG));
+					task.id = remoteCursor
+							.getString(remoteCursor
+									.getColumnIndex(NotePad.GTasks.COLUMN_NAME_GTASKS_ID));
+					// Compare with the modification time in the object, select
+					// the newest timestamp
+					String updTime = remoteCursor
+							.getString(remoteCursor
+									.getColumnIndex(NotePad.GTasks.COLUMN_NAME_UPDATED));
+					Time remoteTime = new Time(Time.getCurrentTimezone());
+					remoteTime.parse3339(updTime);
+
+					if (Time.compare(localTime, remoteTime) < 0) {
+						// remoteTime is greater
+						task.updated = updTime;
+					} // else we already did that before
+				}
+				remoteCursor.close();
+
+				if (null == map.get(task.listdbid))
+					map.put(task.listdbid, new ArrayList<GoogleTask>());
+				map.get(task.listdbid).add(task);
+			}
+		}
 	}
 }

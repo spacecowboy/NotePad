@@ -1,7 +1,6 @@
 package com.nononsenseapps.notepad;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -44,7 +43,6 @@ import android.view.MenuItem;
 import android.app.ListFragment;
 import android.widget.SimpleCursorAdapter;
 
-import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.Log;
 import android.view.ActionMode;
@@ -391,10 +389,6 @@ public class NotesListFragment extends ListFragment implements
 	public void onPause() {
 		super.onPause();
 		activity.unregisterReceiver(syncFinishedReceiver);
-		// Since we just unregistered ourselves, we might not know when the sync
-		// is finished.
-		// So we have to turn off the sync-animation or it might spin forever!
-		setRefreshActionItemState(false);
 	}
 
 	@Override
@@ -416,6 +410,15 @@ public class NotesListFragment extends ListFragment implements
 				SyncAdapter.SYNC_FINISHED));
 		activity.registerReceiver(syncFinishedReceiver, new IntentFilter(
 				SyncAdapter.SYNC_STARTED));
+
+		String accountName = PreferenceManager.getDefaultSharedPreferences(
+				activity).getString(NotesPreferenceFragment.KEY_ACCOUNT, "");
+		// Sync state might have changed, make sure we're spinning when we should
+		if (accountName != null && !accountName.isEmpty())
+			setRefreshActionItemState(ContentResolver.isSyncActive(
+					NotesPreferenceFragment.getAccount(
+							AccountManager.get(activity), accountName),
+					NotePad.AUTHORITY));
 	}
 
 	@Override
@@ -866,13 +869,9 @@ public class NotesListFragment extends ListFragment implements
 					Time date = new Time(Time.getCurrentTimezone());
 					date.parse3339(due);
 
-					Calendar c = Calendar.getInstance();
-					c.setTimeInMillis(date.toMillis(false));
-
 					note = note
 							+ "due date: "
-							+ DateFormat.format(
-									NotesEditorFragment.DATEFORMAT_FORMAT, c)
+							+ date.format3339(true)
 							+ "\n";
 				}
 

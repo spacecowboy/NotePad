@@ -25,8 +25,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
     package="com.nononsenseapps.notepad_donate"
-    android:versionCode="14"
-    android:versionName="3.0.4" >
+    android:versionCode="16"
+    android:versionName="3.0.5" >
 
     <uses-sdk
         android:minSdkVersion="11"
@@ -64,7 +64,6 @@
             android:name="com.nononsenseapps.notepad.FragmentLayout"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:screenOrientation="sensor"
             android:uiOptions="splitActionBarWhenNarrow"
             android:theme="@style/ThemeHolo" >
             <intent-filter>
@@ -88,8 +87,7 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name="com.nononsenseapps.notepad.FragmentLayout$NotesEditorActivity"
-            android:screenOrientation="sensor" >
+            android:name="com.nononsenseapps.notepad.FragmentLayout$NotesEditorActivity" >
 
             <!-- android:configChanges="keyboardHidden|orientation" > -->
 
@@ -126,7 +124,6 @@
         </activity>
         <activity
             android:name="com.nononsenseapps.notepad.FragmentLayout$NotesPreferencesDialog"
-            android:screenOrientation="sensor"
             android:theme="@style/ThemeHoloDialogNoActionBar" >
         </activity>
 

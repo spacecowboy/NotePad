@@ -69,7 +69,8 @@
             android:gravity="top"
             android:capitalize="sentences"
             android:hint="@string/editor_note_hint"
-            android:inputType="textMultiLine" >
+            android:inputType="textMultiLine"
+            android:autoLink="web|email|map" >
         </com.nononsenseapps.ui.TabbingEditText>
     </LinearLayout>
 
