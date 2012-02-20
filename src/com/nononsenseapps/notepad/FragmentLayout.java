@@ -532,18 +532,7 @@ public class FragmentLayout extends Activity implements
 		case R.id.menu_preferences:
 			if (UI_DEBUG_PRINTS)
 				Log.d("NotesListFragment", "onOptionsSelection pref");
-			// showPrefs();
-			// DEBUG
-			// TODO
-			Intent intent = new Intent();
-			intent.setData(Uri.withAppendedPath(NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE, "124"));
-			//intent.setType(getContentResolver().getType(NotePad.Notes.CONTENT_VISIBLE));
-			intent.setAction(Intent.ACTION_EDIT);
-			//intent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, (long) 15);
-			intent.putExtra("title", "note title");
-			intent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, (long) 15);
-			startActivity(intent);
-			// END DEBUG
+			showPrefs();
 			return true;
 		case R.id.menu_createlist:
 			// Create dialog
