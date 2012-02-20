@@ -59,7 +59,7 @@ public class FragmentLayout extends Activity implements
 	public static boolean AT_LEAST_ICS;
 	public static boolean AT_LEAST_HC;
 
-	public final static boolean UI_DEBUG_PRINTS = false;
+	public final static boolean UI_DEBUG_PRINTS = true;
 
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
 
@@ -74,6 +74,7 @@ public class FragmentLayout extends Activity implements
 										// start up
 
 	private int prevNumberOfLists = -1;
+	private long createdListId = -1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -127,19 +128,19 @@ public class FragmentLayout extends Activity implements
 		// So editor can access it
 		ONDELETELISTENER = this;
 
-		//handleIntent();
+		// handleIntent();
 		onNewIntent(getIntent());
 	}
 
-//	private void handleIntent() {
-//		// TODO
-//		// Get the intent, verify the action and get the query
-//		Intent intent = getIntent();
-//		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-//			String query = intent.getStringExtra(SearchManager.QUERY);
-//			list.onQueryTextSubmit(query);
-//		} 
-//	}
+	// private void handleIntent() {
+	// // TODO
+	// // Get the intent, verify the action and get the query
+	// Intent intent = getIntent();
+	// if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+	// String query = intent.getStringExtra(SearchManager.QUERY);
+	// list.onQueryTextSubmit(query);
+	// }
+	// }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -217,7 +218,7 @@ public class FragmentLayout extends Activity implements
 			}
 		} else if (Intent.ACTION_EDIT.equals(intent.getAction())
 				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
-			if (intent.getType().equals(NotePad.Lists.CONTENT_TYPE)) {
+			if (intent.getData() != null && intent.getData().equals(NotePad.Lists.CONTENT_VISIBLE_ID_URI_PATTERN)) {
 				// Get id to display
 				long listId = intent.getExtras().getLong(NotePad.Lists._ID, -1);
 				int pos = getPosOfId(listId);
@@ -227,23 +228,45 @@ public class FragmentLayout extends Activity implements
 					if (ab != null)
 						ab.setSelectedNavigationItem(pos);
 				}
-			} else if (intent.getType().equals(NotePad.Notes.CONTENT_TYPE)) {
+			} else if (intent.getData() != null && intent.getData().equals(NotePad.Notes.CONTENT_TYPE)) {
 				if (list != null) {
-					list.handleNoteIntent(intent);
+					long listId = intent.getExtras().getLong(
+							NotePad.Notes.COLUMN_NAME_LIST, -1);
+					int pos = getPosOfId(listId);
+					if (pos > -1) {
+						// select it
+						ActionBar ab = getActionBar();
+						if (ab != null) {
+							ab.setSelectedNavigationItem(pos);
+							list.handleNoteIntent(intent);
+						}
+					}
 				}
 			}
 		} else if (Intent.ACTION_INSERT.equals(intent.getAction())) {
-			if (intent.getType().equals(NotePad.Lists.CONTENT_TYPE)) {
+			if (intent.getType() != null && intent.getType().equals(NotePad.Lists.CONTENT_TYPE)
+					|| intent.getData() != null && intent.getData().equals(NotePad.Lists.CONTENT_VISIBLE_URI)) {
 				// get Title
-				String title = intent.getExtras().getString(NotePad.Lists.COLUMN_NAME_TITLE, "");
+				String title = intent.getExtras().getString(
+						NotePad.Lists.COLUMN_NAME_TITLE, "");
 				createList(title);
-			} else if (intent.getType().equals(NotePad.Notes.CONTENT_TYPE)) {
+			} else if (intent.getType() != null && intent.getType().equals(NotePad.Notes.CONTENT_TYPE)
+					|| intent.getData() != null && intent.getData().equals(NotePad.Notes.CONTENT_VISIBLE_URI)) {
 				if (list != null) {
-					list.handleNoteIntent(intent);
+					long listId = intent.getExtras().getLong(
+							NotePad.Notes.COLUMN_NAME_LIST, -1);
+					int pos = getPosOfId(listId);
+					if (pos > -1) {
+						// select it
+						ActionBar ab = getActionBar();
+						if (ab != null) {
+							ab.setSelectedNavigationItem(pos);
+							list.handleNoteIntent(intent);
+						}
+					}
 				}
 			}
-		}
-		else {
+		} else {
 			if (this.list != null) {
 				if (UI_DEBUG_PRINTS)
 					Log.d("FragmentLayout", "Calling refresh");
@@ -373,10 +396,11 @@ public class FragmentLayout extends Activity implements
 						getContentResolver(),
 						Long.parseLong(listUri.getPathSegments().get(
 								NotePad.Lists.ID_PATH_POSITION)));
-				getActionBar()
-						.setSelectedNavigationItem(
-								getPosOfId(Long.parseLong(listUri
+				// Select list
+				Log.d(TAG, "id: " + listUri + ", pos: " + getPosOfId(Long.parseLong(listUri
 										.getLastPathSegment())));
+				createdListId = Long.parseLong(listUri
+						.getLastPathSegment());
 			}
 		}
 	}
@@ -506,7 +530,16 @@ public class FragmentLayout extends Activity implements
 		case R.id.menu_preferences:
 			if (UI_DEBUG_PRINTS)
 				Log.d("NotesListFragment", "onOptionsSelection pref");
-			showPrefs();
+			// showPrefs();
+			// DEBUG
+			// TODO
+			Intent intent = new Intent();
+			//intent.setData(NotePad.Lists.CONTENT_VISIBLE_URI);
+			intent.setType(getContentResolver().getType(NotePad.Lists.CONTENT_VISIBLE_URI));
+			intent.setAction(Intent.ACTION_INSERT);
+			intent.putExtra("title", "this is my title2");
+			startActivity(intent);
+			// END DEBUG
 			return true;
 		case R.id.menu_createlist:
 			// Create dialog
@@ -839,15 +872,6 @@ public class FragmentLayout extends Activity implements
 		currentListPos = itemPosition;
 		// Display list'
 		if (list != null) {
-			// DEBUG
-			// TODO
-			Intent intent = new Intent();
-			intent.setData(NotePad.Lists.CONTENT_VISIBLE_URI);
-			//intent.setType(getContentResolver().getType(NotePad.Lists.CONTENT_VISIBLE_URI));
-			intent.setAction(Intent.ACTION_INSERT);
-			intent.putExtra("title", "this is my title");
-			startActivity(intent);
-			// END DEBUG
 			list.showList(itemId);
 			// If landscape, also open the first note
 			if (LANDSCAPE_MODE) {
@@ -888,8 +912,14 @@ public class FragmentLayout extends Activity implements
 		} else if (prevNumberOfLists < mSpinnerAdapter.getCount()) {
 			// User created a list, we want to display it
 			prevNumberOfLists = mSpinnerAdapter.getCount();
-			// Now select it. Using modified desc, will always be first item.
-			getActionBar().setSelectedNavigationItem(0);
+			// Now select it.
+			if (createdListId > -1) {
+				getActionBar().setSelectedNavigationItem(getPosOfId(createdListId));
+				createdListId = -1;
+			}
+		} else {
+			// Deleted a list maybe
+			prevNumberOfLists = mSpinnerAdapter.getCount();
 		}
 
 		if (optionsMenu != null) {

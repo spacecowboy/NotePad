@@ -34,6 +34,7 @@ import android.preference.PreferenceManager;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.app.SearchManager;
@@ -193,9 +194,29 @@ public class NotesListFragment extends ListFragment implements
 			mCurId = -1;
 		}
 	}
-	
+
 	public void handleNoteIntent(Intent intent) {
-		
+		if (Intent.ACTION_EDIT.equals(intent.getAction())
+				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
+			long noteId = intent.getExtras().getLong(NotePad.Notes._ID, -1);
+			int notePos = getPosOfId(noteId);
+			if (notePos > -1) {
+				showNote(notePos);
+			}
+		} else if (Intent.ACTION_INSERT.equals(intent.getAction())) {
+			// Get list to create note in first
+			long listId = intent.getExtras().getLong(
+					NotePad.Notes.COLUMN_NAME_LIST, -1);
+
+			if (listId > -1) {
+				Uri noteUri = FragmentLayout.createNote(
+						activity.getContentResolver(), mCurListId);
+
+				if (noteUri != null) {
+					newNoteIdToOpen = getNoteIdFromUri(noteUri);
+				}
+			}
+		}
 	}
 
 	/**
@@ -416,7 +437,8 @@ public class NotesListFragment extends ListFragment implements
 
 		String accountName = PreferenceManager.getDefaultSharedPreferences(
 				activity).getString(NotesPreferenceFragment.KEY_ACCOUNT, "");
-		// Sync state might have changed, make sure we're spinning when we should
+		// Sync state might have changed, make sure we're spinning when we
+		// should
 		if (accountName != null && !accountName.isEmpty())
 			setRefreshActionItemState(ContentResolver.isSyncActive(
 					NotesPreferenceFragment.getAccount(
@@ -872,10 +894,7 @@ public class NotesListFragment extends ListFragment implements
 					Time date = new Time(Time.getCurrentTimezone());
 					date.parse3339(due);
 
-					note = note
-							+ "due date: "
-							+ date.format3339(true)
-							+ "\n";
+					note = note + "due date: " + date.format3339(true) + "\n";
 				}
 
 				int colNoteIndex = cursor
