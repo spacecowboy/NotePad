@@ -196,8 +196,10 @@ public class NotesListFragment extends ListFragment implements
 	}
 
 	public void handleNoteIntent(Intent intent) {
+		Log.d(TAG, "handling intent");
 		if (Intent.ACTION_EDIT.equals(intent.getAction())
 				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
+			Log.d(TAG, "Selecting note");
 			long noteId = intent.getExtras().getLong(NotePad.Notes._ID, -1);
 			int notePos = getPosOfId(noteId);
 			if (notePos > -1) {
@@ -210,7 +212,7 @@ public class NotesListFragment extends ListFragment implements
 
 			if (listId > -1) {
 				Uri noteUri = FragmentLayout.createNote(
-						activity.getContentResolver(), mCurListId);
+						activity.getContentResolver(), listId);
 
 				if (noteUri != null) {
 					newNoteIdToOpen = getNoteIdFromUri(noteUri);

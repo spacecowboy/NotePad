@@ -535,9 +535,10 @@ public class FragmentLayout extends Activity implements
 			// TODO
 			Intent intent = new Intent();
 			//intent.setData(NotePad.Lists.CONTENT_VISIBLE_URI);
-			intent.setType(getContentResolver().getType(NotePad.Lists.CONTENT_VISIBLE_URI));
+			intent.setType(getContentResolver().getType(NotePad.Notes.CONTENT_VISIBLE_URI));
 			intent.setAction(Intent.ACTION_INSERT);
-			intent.putExtra("title", "this is my title2");
+			intent.putExtra("title", "note title");
+			intent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, (long) 15);
 			startActivity(intent);
 			// END DEBUG
 			return true;
