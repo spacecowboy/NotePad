@@ -218,9 +218,15 @@ public class FragmentLayout extends Activity implements
 			}
 		} else if (Intent.ACTION_EDIT.equals(intent.getAction())
 				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
-			if (intent.getData() != null && intent.getData().equals(NotePad.Lists.CONTENT_VISIBLE_ID_URI_PATTERN)) {
+			Log.d(TAG, "Intent: " + intent.getDataString());
+			Log.d(TAG, "Intent: " + intent.getData().getAuthority());
+			Log.d(TAG, "Intent: " + intent.getData().getPath());
+			if (intent.getData() != null && intent.getData().getPath().startsWith(NotePad.Lists.PATH_VISIBLE_LIST_ID)) {
 				// Get id to display
-				long listId = intent.getExtras().getLong(NotePad.Lists._ID, -1);
+				String newId = intent.getData().getPathSegments().get(
+						NotePad.Lists.ID_PATH_POSITION);
+				long listId = Long.parseLong(newId);
+				//long listId = intent.getExtras().getLong(NotePad.Lists._ID, -1);
 				int pos = getPosOfId(listId);
 				if (pos > -1) {
 					// select it
@@ -228,7 +234,7 @@ public class FragmentLayout extends Activity implements
 					if (ab != null)
 						ab.setSelectedNavigationItem(pos);
 				}
-			} else if (intent.getData() != null && intent.getData().equals(NotePad.Notes.CONTENT_TYPE)) {
+			} else if (intent.getData() != null && intent.getData().getPath().startsWith(NotePad.Notes.PATH_VISIBLE_NOTE_ID)) {
 				if (list != null) {
 					long listId = intent.getExtras().getLong(
 							NotePad.Notes.COLUMN_NAME_LIST, -1);
@@ -534,9 +540,10 @@ public class FragmentLayout extends Activity implements
 			// DEBUG
 			// TODO
 			Intent intent = new Intent();
-			//intent.setData(NotePad.Lists.CONTENT_VISIBLE_URI);
-			intent.setType(getContentResolver().getType(NotePad.Notes.CONTENT_VISIBLE_URI));
-			intent.setAction(Intent.ACTION_INSERT);
+			intent.setData(Uri.withAppendedPath(NotePad.Lists.CONTENT_VISIBLE_ID_URI_BASE, "15"));
+			//intent.setType(getContentResolver().getType(NotePad.Notes.CONTENT_VISIBLE));
+			intent.setAction(Intent.ACTION_EDIT);
+			//intent.putExtra(NotePad.Lists._ID, (long) 15);
 			intent.putExtra("title", "note title");
 			intent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, (long) 15);
 			startActivity(intent);
