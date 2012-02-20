@@ -28,7 +28,6 @@ import android.provider.BaseColumns;
  */
 public final class NotePad {
     public static final String AUTHORITY = "com.nononsenseapps.NotePad";
-    public static final String NOTEURI = "noteuri";
 
     // This class cannot be instantiated
     private NotePad() {
@@ -65,11 +64,14 @@ public final class NotePad {
          * Path part for the Notes URI
          */
         private static final String PATH_NOTES = "/notes";
+        // Visible notes
+        private static final String PATH_VISIBLE_NOTES = "/visiblenotes";
 
         /**
          * Path part for the Note ID URI
          */
         private static final String PATH_NOTE_ID = "/notes/";
+        private static final String PATH_VISIBLE_NOTE_ID = "/visiblenotes/";
 
         /**
          * 0-relative position of a note ID segment in the path part of a note ID URI
@@ -80,6 +82,7 @@ public final class NotePad {
          * The content:// style URL for this table
          */
         public static final Uri CONTENT_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_NOTES);
+        public static final Uri CONTENT_VISIBLE_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_VISIBLE_NOTES);
         
         /**
          * The content URI base for a single note. Callers must
@@ -87,6 +90,8 @@ public final class NotePad {
          */
         public static final Uri CONTENT_ID_URI_BASE
             = Uri.parse(SCHEME + AUTHORITY + PATH_NOTE_ID);
+        public static final Uri CONTENT_VISIBLE_ID_URI_BASE
+        = Uri.parse(SCHEME + AUTHORITY + PATH_VISIBLE_NOTE_ID);
         
         /**
          * The content URI match pattern for a single note, specified by its ID. Use this to match
@@ -94,6 +99,8 @@ public final class NotePad {
          */
         public static final Uri CONTENT_ID_URI_PATTERN
             = Uri.parse(SCHEME + AUTHORITY + PATH_NOTE_ID + "/#");
+        public static final Uri CONTENT_VISIBLE_ID_URI_PATTERN
+        = Uri.parse(SCHEME + AUTHORITY + PATH_VISIBLE_NOTE_ID + "/#");
 
         /*
          * MIME type definitions
@@ -231,11 +238,13 @@ public final class NotePad {
          * Path part for the Lists URI
          */
         private static final String PATH_LISTS = "/lists";
+        private static final String PATH_VISIBLE_LISTS = "/visiblelists";
 
         /**
          * Path part for the List ID URI
          */
         private static final String PATH_LIST_ID = "/lists/";
+        private static final String PATH_VISIBLE_LIST_ID = "/visiblelists/";
 
         /**
          * 0-relative position of a ID segment in the path part of a ID URI
@@ -246,6 +255,7 @@ public final class NotePad {
          * The content:// style URL for this table
          */
         public static final Uri CONTENT_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_LISTS);
+        public static final Uri CONTENT_VISIBLE_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_VISIBLE_LISTS);
 
         /**
          * The content URI base for a single note. Callers must
@@ -253,6 +263,8 @@ public final class NotePad {
          */
         public static final Uri CONTENT_ID_URI_BASE
         = Uri.parse(SCHEME + AUTHORITY + PATH_LIST_ID);
+        public static final Uri CONTENT_VISIBLE_ID_URI_BASE
+        = Uri.parse(SCHEME + AUTHORITY + PATH_VISIBLE_LIST_ID);
 
         /**
          * The content URI match pattern for a single note, specified by its ID. Use this to match
@@ -260,6 +272,8 @@ public final class NotePad {
          */
         public static final Uri CONTENT_ID_URI_PATTERN
         = Uri.parse(SCHEME + AUTHORITY + PATH_LIST_ID + "/#");
+        public static final Uri CONTENT_VISIBLE_ID_URI_PATTERN
+        = Uri.parse(SCHEME + AUTHORITY + PATH_VISIBLE_LIST_ID + "/#");
 
 
         /*
