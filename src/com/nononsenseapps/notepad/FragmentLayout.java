@@ -59,7 +59,7 @@ public class FragmentLayout extends Activity implements
 	public static boolean AT_LEAST_ICS;
 	public static boolean AT_LEAST_HC;
 
-	public final static boolean UI_DEBUG_PRINTS = true;
+	public final static boolean UI_DEBUG_PRINTS = false;
 
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
 
@@ -128,19 +128,8 @@ public class FragmentLayout extends Activity implements
 		// So editor can access it
 		ONDELETELISTENER = this;
 
-		// handleIntent();
 		onNewIntent(getIntent());
 	}
-
-	// private void handleIntent() {
-	// // TODO
-	// // Get the intent, verify the action and get the query
-	// Intent intent = getIntent();
-	// if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-	// String query = intent.getStringExtra(SearchManager.QUERY);
-	// list.onQueryTextSubmit(query);
-	// }
-	// }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -866,10 +855,6 @@ public class FragmentLayout extends Activity implements
 		// Display list'
 		if (list != null) {
 			list.showList(itemId);
-			// If landscape, also open the first note
-			if (LANDSCAPE_MODE) {
-				// TODO slight asynchronous issue because of content loader
-			}
 		}
 		return true;
 	}
