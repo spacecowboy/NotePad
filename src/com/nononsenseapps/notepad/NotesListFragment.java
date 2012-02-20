@@ -118,7 +118,7 @@ public class NotesListFragment extends ListFragment implements
 	private SimpleCursorAdapter mAdapter;
 
 	private boolean autoOpenNote = false;
-	private int newNoteIdToOpen = -1;
+	private long newNoteIdToOpen = -1;
 	private NotesEditorFragment landscapeEditor;
 
 	private Menu mOptionsMenu;
@@ -200,10 +200,11 @@ public class NotesListFragment extends ListFragment implements
 		if (Intent.ACTION_EDIT.equals(intent.getAction())
 				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
 			Log.d(TAG, "Selecting note");
-			long noteId = intent.getExtras().getLong(NotePad.Notes._ID, -1);
-			int notePos = getPosOfId(noteId);
-			if (notePos > -1) {
-				showNote(notePos);
+			String newId = intent.getData().getPathSegments().get(
+					NotePad.Lists.ID_PATH_POSITION);
+			long noteId = Long.parseLong(newId);
+			if (noteId > -1) {
+				newNoteIdToOpen = noteId;
 			}
 		} else if (Intent.ACTION_INSERT.equals(intent.getAction())) {
 			// Get list to create note in first
