@@ -109,13 +109,15 @@ public final class NotePad {
         /**
          * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
          */
-        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps.note";
+        //public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps.note";
 
         /**
          * The MIME type of a {@link #CONTENT_URI} sub-directory of a single
          * note.
          */
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps.note";
+        
+        public static final String CONTENT_TYPE = CONTENT_ITEM_TYPE;
 
         
 
@@ -283,7 +285,7 @@ public final class NotePad {
         /**
          * The MIME type of {@link #CONTENT_URI} providing a directory.
          */
-        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps.list";
+        //public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps.list";
 
         /**
          * The MIME type of a {@link #CONTENT_URI} sub-directory of a single
@@ -291,6 +293,7 @@ public final class NotePad {
          */
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps.list";
 
+        public static final String CONTENT_TYPE = CONTENT_ITEM_TYPE;
         
 
         /*

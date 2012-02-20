@@ -86,6 +86,30 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <!--
+                 This filter says that we can view or edit the data of
+                 a single note
+            -->
+            <intent-filter android:label="@string/resolve_edit" >
+                <action android:name="android.intent.action.INSERT" />
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                
+                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
+            </intent-filter>
+            
+            <intent-filter android:label="@string/resolve_edit" >
+                <action android:name="android.intent.action.INSERT" />
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.list" />
+            </intent-filter>
+            
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -104,38 +128,20 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity android:name=".FragmentLayout$NotesEditorActivity" >
-
-            <!-- android:configChanges="keyboardHidden|orientation" > -->
-
-
-            <!--
-                 This filter says that we can view or edit the data of
-                 a single note
-            -->
-            <intent-filter android:label="@string/resolve_edit" >
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-                <action android:name="com.android.notepad.action.EDIT_NOTE" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
-            </intent-filter>
-
             <!--
                  This filter says that we can create a new note inside
                  of a directory of notes.  The INSERT action creates an
                  empty note; the PASTE action initializes a new note from
                  the current contents of the clipboard.
             -->
-            <intent-filter>
+            <!-- <intent-filter>
                 <action android:name="android.intent.action.INSERT" />
                 <action android:name="android.intent.action.PASTE" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="vnd.android.cursor.dir/vnd.nononsenseapps.note" />
-            </intent-filter>
+            </intent-filter> -->
         </activity>
         <activity
             android:name=".FragmentLayout$NotesPreferencesDialog"

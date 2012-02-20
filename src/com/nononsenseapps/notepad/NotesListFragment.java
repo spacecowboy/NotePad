@@ -193,6 +193,10 @@ public class NotesListFragment extends ListFragment implements
 			mCurId = -1;
 		}
 	}
+	
+	public void handleNoteIntent(Intent intent) {
+		
+	}
 
 	/**
 	 * Will try to open the previously open note, but will default to first note
