@@ -108,6 +108,12 @@ public class NotePadProvider extends ContentProvider implements
 
 	private static final int GTASKLISTS = 7;
 	private static final int GTASKLISTS_ID = 8;
+	
+	// Convenience URIs
+	private static final int VISIBLE_NOTES = 9;
+	private static final int VISIBLE_NOTE_ID = 10;
+	private static final int VISIBLE_LISTS = 11;
+	private static final int VISIBLE_LIST_ID = 12;
 
 	// private static final int SEARCH = 4;
 
@@ -148,10 +154,11 @@ public class NotePadProvider extends ContentProvider implements
 		sUriMatcher.addURI(NotePad.AUTHORITY, "gtasklists", GTASKLISTS);
 		sUriMatcher.addURI(NotePad.AUTHORITY, "gtasklists/#", GTASKLISTS_ID);
 
-		// Add a pattern that routes URIs terminated with "notes" plus an
-		// integer
-		// to a note ID operation
-		// sUriMatcher.addURI(NotePad.AUTHORITY, "notes/#", NOTE_ID);
+		// Convenience URIs
+		sUriMatcher.addURI(NotePad.AUTHORITY, "visiblenotes", VISIBLE_NOTES);
+		sUriMatcher.addURI(NotePad.AUTHORITY, "visiblenotes/#", VISIBLE_NOTE_ID);
+		sUriMatcher.addURI(NotePad.AUTHORITY, "visiblelists", VISIBLE_LISTS);
+		sUriMatcher.addURI(NotePad.AUTHORITY, "visiblelists/#", VISIBLE_LIST_ID);
 
 		/*
 		 * Creates and initializes a projection map that returns all columns
@@ -539,6 +546,11 @@ public class NotePadProvider extends ContentProvider implements
 		 */
 		switch (sUriMatcher.match(uri)) {
 		// If the incoming URI is for notes, chooses the Notes projection
+		case VISIBLE_NOTES:
+			// Add a selection criteria, but then fall through for normal note handling.
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS 0");
 		case NOTES:
 			qb.setTables(NotePad.Notes.TABLE_NAME);
 			qb.setProjectionMap(sNotesProjectionMap);
@@ -553,6 +565,11 @@ public class NotePadProvider extends ContentProvider implements
 		 * chooses the note ID projection, and appends "_ID = <noteID>" to the
 		 * where clause, so that it selects that single note
 		 */
+		case VISIBLE_NOTE_ID:
+			// Add a selection criteria, but then fall through for normal note handling.
+						qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0");
+						qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0");
+						qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS 0");
 		case NOTE_ID:
 			qb.setTables(NotePad.Notes.TABLE_NAME);
 			qb.setProjectionMap(sNotesProjectionMap);
@@ -562,12 +579,21 @@ public class NotePadProvider extends ContentProvider implements
 					uri.getPathSegments().get(
 							NotePad.Notes.NOTE_ID_PATH_POSITION));
 			break;
-
+		case VISIBLE_LIST_ID:
+			// Add a selection criteria, but then fall through for normal handling.
+			qb.appendWhere(NotePad.Lists.COLUMN_NAME_DELETED + " IS 0");
 		case LISTS_ID:
 			qb.appendWhere(BaseColumns._ID + // the name of the ID column
 					"=" +
 					// the position of the note ID itself in the incoming URI
 					uri.getPathSegments().get(NotePad.Lists.ID_PATH_POSITION));
+			orderBy = NotePad.Lists.SORT_ORDER;
+			qb.setTables(NotePad.Lists.TABLE_NAME);
+			qb.setProjectionMap(sListsProjectionMap);
+			break;
+		case VISIBLE_LISTS:
+			// Add a selection criteria, but then fall through for normal handling.
+			qb.appendWhere(NotePad.Lists.COLUMN_NAME_DELETED + " IS 0");
 		case LISTS:
 			orderBy = NotePad.Lists.SORT_ORDER;
 			qb.setTables(NotePad.Lists.TABLE_NAME);
@@ -666,14 +692,18 @@ public class NotePadProvider extends ContentProvider implements
 		// If the pattern is for notes or live folders, returns the general
 		// content type.
 		case NOTES:
+		case VISIBLE_NOTES:
 			return NotePad.Notes.CONTENT_TYPE;
 			// If the pattern is for note IDs, returns the note ID content type.
 		case NOTE_ID:
+		case VISIBLE_NOTE_ID:
 			return NotePad.Notes.CONTENT_ITEM_TYPE;
 
 		case LISTS:
+		case VISIBLE_LISTS:
 			return NotePad.Lists.CONTENT_TYPE;
 		case LISTS_ID:
+		case VISIBLE_LIST_ID:
 			return NotePad.Lists.CONTENT_ITEM_TYPE;
 
 		case GTASKS:
@@ -726,6 +756,9 @@ public class NotePadProvider extends ContentProvider implements
 		// streams are not
 		// supported for this type of URI.
 		case NOTES:
+		case VISIBLE_NOTES:
+		case VISIBLE_LISTS:
+		case VISIBLE_LIST_ID:
 		case LISTS:
 		case LISTS_ID:
 		case GTASKLISTS:
@@ -737,6 +770,7 @@ public class NotePadProvider extends ContentProvider implements
 			// If the pattern is for note IDs and the MIME filter is text/plain,
 			// then return
 			// text/plain
+		case VISIBLE_NOTE_ID:
 		case NOTE_ID:
 			return NOTE_STREAM_TYPES.filterMimeTypes(mimeTypeFilter);
 
@@ -862,8 +896,10 @@ public class NotePadProvider extends ContentProvider implements
 		// Validates the incoming URI. Only the full provider URI is allowed for
 		// inserts.
 		switch (sUriMatcher.match(uri)) {
+		case VISIBLE_NOTES:
 		case NOTES:
 			return insertNote(uri, initialValues);
+		case VISIBLE_LISTS:
 		case LISTS:
 			return insertList(uri, initialValues);
 		case GTASKS:
@@ -1206,6 +1242,7 @@ public class NotePadProvider extends ContentProvider implements
 		// If the incoming pattern matches the general pattern for notes, does a
 		// delete
 		// based on the incoming "where" columns and arguments.
+		case VISIBLE_NOTES:
 		case NOTES:
 			// get the IDs that are about to be deleted
 			cursor = db.query(NotePad.Notes.TABLE_NAME,
@@ -1236,6 +1273,7 @@ public class NotePadProvider extends ContentProvider implements
 		// on the
 		// incoming data, but modifies the where clause to restrict it to the
 		// particular note ID.
+		case VISIBLE_NOTE_ID:
 		case NOTE_ID:
 			/*
 			 * Starts a final WHERE clause by restricting it to the desired note
@@ -1279,6 +1317,7 @@ public class NotePadProvider extends ContentProvider implements
 					);
 			break;
 
+		case VISIBLE_LISTS:
 		case LISTS:
 			// get the IDs that are about to be deleted
 			cursor = db.query(NotePad.Lists.TABLE_NAME,
@@ -1310,6 +1349,7 @@ public class NotePadProvider extends ContentProvider implements
 					);
 
 			break;
+		case VISIBLE_LIST_ID:
 		case LISTS_ID:
 			finalWhere = BaseColumns._ID + // The ID column name
 					" = " + // test for equality
@@ -1461,6 +1501,7 @@ public class NotePadProvider extends ContentProvider implements
 		// If the incoming URI matches the general notes pattern, does the
 		// update based on
 		// the incoming data.
+		case VISIBLE_NOTES:
 		case NOTES:
 
 			if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFIED) == false) {
@@ -1495,6 +1536,7 @@ public class NotePadProvider extends ContentProvider implements
 		// on the incoming
 		// data, but modifies the where clause to restrict it to the particular
 		// note ID.
+		case VISIBLE_NOTE_ID:
 		case NOTE_ID:
 			if (values.containsKey(NotePad.Notes.COLUMN_NAME_MODIFIED) == false) {
 				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
@@ -1543,6 +1585,7 @@ public class NotePadProvider extends ContentProvider implements
 					);
 			break;
 
+		case VISIBLE_LISTS:
 		case LISTS:
 			if (values.containsKey(NotePad.Lists.COLUMN_NAME_MODIFIED) == false) {
 				values.put(NotePad.Lists.COLUMN_NAME_MODIFIED, 1);
@@ -1562,6 +1605,7 @@ public class NotePadProvider extends ContentProvider implements
 					whereArgs // The where clause column values to select on.
 					);
 			break;
+		case VISIBLE_LIST_ID:
 		case LISTS_ID:
 			if (values.containsKey(NotePad.Lists.COLUMN_NAME_MODIFIED) == false) {
 				values.put(NotePad.Lists.COLUMN_NAME_MODIFIED, 1);
