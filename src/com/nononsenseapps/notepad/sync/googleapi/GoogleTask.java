@@ -33,6 +33,8 @@ public class GoogleTask {
 	public String dueDate = null;
 	public String parent = null;
 	public String position = null;
+	
+	public int modified = 0;
 
 	public long dbId = -1;
 	public int deleted = 0;

@@ -490,6 +490,37 @@ public class GoogleDBTalker {
 		return map;
 	}
 	
+	/**
+	 * Fetches all tasks with a single query from the database and populates the arguments
+	 * with all tasks and only modified tasks respectively
+	 * 
+	 * Will clear both hashmaps initially.
+	 * @param allTasks
+	 * @param modifiedTasks
+	 * @throws RemoteException 
+	 */
+	public void getAllTasks(HashMap<Long, ArrayList<GoogleTask>> allTasks, HashMap<Long, ArrayList<GoogleTask>> modifiedTasks) throws RemoteException {
+		allTasks.clear();
+		modifiedTasks.clear();
+		
+		Cursor cursor = provider.query(NotePad.Notes.CONTENT_URI,
+				NOTES_PROJECTION, null,null, null);
+		
+		populateWithTasks(cursor, allTasks);
+		cursor.close();
+		// Now populate the modified ones
+		for (long listId: allTasks.keySet()) {
+			ArrayList<GoogleTask> modList = new ArrayList<GoogleTask>();
+			for (GoogleTask task: allTasks.get(listId)) {
+				if (task.modified == 1) {
+					modList.add(task);
+				}
+			}
+			modifiedTasks.put(listId, modList);
+		}
+	}
+	
+	// TODO remove the query inside here. Should use join instead.
 	private void populateWithTasks(Cursor cursor, HashMap<Long, ArrayList<GoogleTask>> map)
 			throws RemoteException {
 		if (cursor != null && !cursor.isAfterLast()) {
@@ -518,6 +549,8 @@ public class GoogleDBTalker {
 				task.hidden = cursor.getInt(cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_HIDDEN));
 				// Task is assembled, move on
+				task.modified = cursor.getInt(cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_MODIFIED));
 
 				// convert modification time to timestamp
 				long modTime = cursor

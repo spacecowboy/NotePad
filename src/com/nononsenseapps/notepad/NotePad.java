@@ -66,6 +66,8 @@ public final class NotePad {
         private static final String PATH_NOTES = "/notes";
         // Visible notes
         private static final String PATH_VISIBLE_NOTES = "/visiblenotes";
+        // Complete note entry including stuff in GTasks table
+        private static final String PATH_JOINED_NOTES = "/joinednotes";
 
         /**
          * Path part for the Note ID URI
@@ -241,6 +243,8 @@ public final class NotePad {
          */
         private static final String PATH_LISTS = "/lists";
         private static final String PATH_VISIBLE_LISTS = "/visiblelists";
+        // Complete entry gotten with a join with GTasksLists table
+        private static final String PATH_JOINED_LISTS = "/joinedlists";
 
         /**
          * Path part for the List ID URI

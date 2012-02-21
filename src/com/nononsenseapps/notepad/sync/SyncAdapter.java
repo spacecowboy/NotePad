@@ -73,6 +73,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		accountManager = AccountManager.get(context);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void onPerformSync(Account account, Bundle extras, String authority,
 			ContentProviderClient provider, SyncResult syncResult) {
@@ -110,10 +111,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					ArrayList<GoogleTaskList> listsToSaveToDB = new ArrayList<GoogleTaskList>();
 					HashMap<GoogleTaskList, ArrayList<GoogleTask>> tasksInListToSaveToDB = new HashMap<GoogleTaskList, ArrayList<GoogleTask>>();
 
-					HashMap<Long, ArrayList<GoogleTask>> tasksInListToUpload = dbTalker
-							.getAllModifiedTasks();
+					HashMap<Long, ArrayList<GoogleTask>> tasksInListToUpload = new HashMap<Long, ArrayList<GoogleTask>>();
+					HashMap<Long, ArrayList<GoogleTask>> allTasksInList = new HashMap<Long, ArrayList<GoogleTask>>();
+					// gets all tasks in one query
+					dbTalker.getAllTasks(allTasksInList, tasksInListToUpload);
+					
 					ArrayList<GoogleTaskList> listsToUpload = new ArrayList<GoogleTaskList>();
 					ArrayList<GoogleTaskList> allLocalLists = new ArrayList<GoogleTaskList>();
+					// gets all lists in one query
 					dbTalker.getAllLists(allLocalLists, listsToUpload);
 
 					// Get the current hash value on the server and all remote
@@ -165,7 +170,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 							// downloaded them
 							// For any task which exists in stuffToSaveToDB, we
 							// should not upload it
-							for (GoogleTask moddedTask : moddedTasks) {
+							// Iterate over a clone to avoid concurrency problems since we will be modifying
+							// the list during iteration
+							for (GoogleTask moddedTask : (ArrayList<GoogleTask>) moddedTasks.clone()) {
 								ArrayList<GoogleTask> tasksToBeSaved = tasksInListToSaveToDB
 										.get(list);
 								if (tasksToBeSaved != null

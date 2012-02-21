@@ -51,6 +51,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
  * Provides access to a database of notes. Each note has a title, the note
@@ -76,6 +77,9 @@ public class NotePadProvider extends ContentProvider implements
 	private static HashMap<String, String> sListsProjectionMap;
 	private static HashMap<String, String> sGTasksProjectionMap;
 	private static HashMap<String, String> sGTaskListsProjectionMap;
+	
+	private static HashMap<String, String> sJoinedNotesProjectionMap;
+	private static HashMap<String, String> sJoinedListsProjectionMap;
 
 	/**
 	 * Standard projection for the interesting columns of a normal note.
@@ -108,12 +112,16 @@ public class NotePadProvider extends ContentProvider implements
 
 	private static final int GTASKLISTS = 7;
 	private static final int GTASKLISTS_ID = 8;
-	
+
 	// Convenience URIs
 	private static final int VISIBLE_NOTES = 9;
 	private static final int VISIBLE_NOTE_ID = 10;
 	private static final int VISIBLE_LISTS = 11;
 	private static final int VISIBLE_LIST_ID = 12;
+
+	// For joined queries
+	private static final int JOINED_NOTES = 13;
+	private static final int JOINED_LISTS = 14;
 
 	// private static final int SEARCH = 4;
 
@@ -156,9 +164,15 @@ public class NotePadProvider extends ContentProvider implements
 
 		// Convenience URIs
 		sUriMatcher.addURI(NotePad.AUTHORITY, "visiblenotes", VISIBLE_NOTES);
-		sUriMatcher.addURI(NotePad.AUTHORITY, "visiblenotes/#", VISIBLE_NOTE_ID);
+		sUriMatcher
+				.addURI(NotePad.AUTHORITY, "visiblenotes/#", VISIBLE_NOTE_ID);
 		sUriMatcher.addURI(NotePad.AUTHORITY, "visiblelists", VISIBLE_LISTS);
-		sUriMatcher.addURI(NotePad.AUTHORITY, "visiblelists/#", VISIBLE_LIST_ID);
+		sUriMatcher
+				.addURI(NotePad.AUTHORITY, "visiblelists/#", VISIBLE_LIST_ID);
+
+		// Joined queries
+		sUriMatcher.addURI(NotePad.AUTHORITY, "joinedlists", JOINED_LISTS);
+		sUriMatcher.addURI(NotePad.AUTHORITY, "joinednotes", JOINED_NOTES);
 
 		/*
 		 * Creates and initializes a projection map that returns all columns
@@ -258,6 +272,23 @@ public class NotePadProvider extends ContentProvider implements
 				NotePad.GTaskLists.COLUMN_NAME_DB_ID);
 		sGTaskListsProjectionMap.put(NotePad.GTaskLists.COLUMN_NAME_UPDATED,
 				NotePad.GTaskLists.COLUMN_NAME_UPDATED);
+		
+		// Joined projection maps
+		sJoinedNotesProjectionMap = new HashMap<String, String>();
+		for (Entry<String, String> notesEntry: sNotesProjectionMap.entrySet()) {
+			sJoinedNotesProjectionMap.put(notesEntry.getKey(), notesEntry.getValue());
+		}
+		for (Entry<String, String> gtasksEntry: sGTasksProjectionMap.entrySet()) {
+			sJoinedNotesProjectionMap.put(gtasksEntry.getKey(), gtasksEntry.getValue());
+		}
+		
+		sJoinedListsProjectionMap = new HashMap<String, String>();
+		for (Entry<String, String> listsEntry: sListsProjectionMap.entrySet()) {
+			sJoinedNotesProjectionMap.put(listsEntry.getKey(), listsEntry.getValue());
+		}
+		for (Entry<String, String> gtasklistsEntry: sGTaskListsProjectionMap.entrySet()) {
+			sJoinedNotesProjectionMap.put(gtasklistsEntry.getKey(), gtasklistsEntry.getValue());
+		}
 
 	}
 
@@ -559,6 +590,17 @@ public class NotePadProvider extends ContentProvider implements
 				selection = NotePad.Notes.COLUMN_NAME_NOTE + " MATCH ?";
 			}
 			break;
+		/*
+		 * Retrieve the complete note entry join with Gtasks table through join statement.
+		 */
+		case JOINED_NOTES:
+			qb.setTables(NotePad.Notes.TABLE_NAME + "LEFT JOIN " + NotePad.GTasks.TABLE_NAME
+					+ " ON (" + NotePad.Notes.TABLE_NAME + "." + NotePad.Notes._ID + " = " 
+					+ NotePad.GTasks.TABLE_NAME + "." + NotePad.GTasks.COLUMN_NAME_DB_ID + ")");
+			// TODO
+			// set projection map
+			qb.setProjectionMap(sJoinedNotesProjectionMap);
+			break;
 
 		/*
 		 * If the incoming URI is for a single note identified by its ID,
@@ -598,6 +640,15 @@ public class NotePadProvider extends ContentProvider implements
 			orderBy = NotePad.Lists.SORT_ORDER;
 			qb.setTables(NotePad.Lists.TABLE_NAME);
 			qb.setProjectionMap(sListsProjectionMap);
+			break;
+		case JOINED_LISTS:
+			orderBy = NotePad.Lists.SORT_ORDER;
+			qb.setTables(NotePad.Lists.TABLE_NAME + "LEFT JOIN " + NotePad.GTaskLists.TABLE_NAME
+					+ " ON (" + NotePad.Lists.TABLE_NAME + "." + NotePad.Lists._ID + " = " 
+					+ NotePad.GTaskLists.TABLE_NAME + "." + NotePad.GTaskLists.COLUMN_NAME_DB_ID + ")");
+			// TODO
+			// set projection map
+			qb.setProjectionMap(sJoinedListsProjectionMap);
 			break;
 		case GTASKS_ID:
 			qb.appendWhere(BaseColumns._ID + // the name of the ID column
@@ -643,7 +694,7 @@ public class NotePadProvider extends ContentProvider implements
 		 * empty, and Cursor.getCount() returns 0.
 		 */
 		Cursor c;
-		// if (selectionArgs == null) {
+
 		c = qb.query(db, // The database to query
 				projection, // The columns to return from the query
 				selection, // The columns for the where clause
@@ -652,16 +703,6 @@ public class NotePadProvider extends ContentProvider implements
 				null, // don't filter by row groups
 				orderBy // The sort order
 		);
-		/*
-		 * } else { // Log.d(TAG, // ("SELECT " + projection[0] + ", " +
-		 * projection[1] + ", " + // projection[2] + ", " + projection[3] // +
-		 * " FROM " + NotePad.Notes.TABLE_NAME + " WHERE " + projection[2] // +
-		 * " LIKE " + "%" + selectionArgs[0] + "%")); c = db.rawQuery("SELECT "
-		 * + projection[0] + ", " + projection[1] + ", " + projection[2] + ", "
-		 * + projection[3] + " FROM " + NotePad.Notes.TABLE_NAME + " WHERE " +
-		 * projection[2] + " LIKE ? ORDER BY " + NotePad.Notes.SORT_ORDER, new
-		 * String[] { "%" + selectionArgs[0] + "%" }); }
-		 */
 
 		// Tells the Cursor what URI to watch, so it knows when its source data
 		// changes
@@ -1547,7 +1588,7 @@ public class NotePadProvider extends ContentProvider implements
 				// Local operation that should not be synced
 				values.remove(NotePad.Notes.COLUMN_NAME_MODIFIED);
 			}
-			
+
 			if (values.containsKey(NotePad.Notes.COLUMN_NAME_HIDDEN) == false) {
 				values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, 0);
 			}
@@ -1702,7 +1743,6 @@ public class NotePadProvider extends ContentProvider implements
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
 		}
-		
 
 		/*
 		 * Gets a handle to the content resolver object for the current context,
@@ -1715,34 +1755,35 @@ public class NotePadProvider extends ContentProvider implements
 		// Returns the number of rows updated.
 		return count;
 	}
-	
+
 	/**
 	 * Performs the work provided in a single transaction
 	 */
 	@Override
-	public ContentProviderResult[] applyBatch (ArrayList<ContentProviderOperation> operations) {
-		ContentProviderResult[] result = new ContentProviderResult[operations.size()];
+	public ContentProviderResult[] applyBatch(
+			ArrayList<ContentProviderOperation> operations) {
+		ContentProviderResult[] result = new ContentProviderResult[operations
+				.size()];
 		int i = 0;
 		// Opens the database object in "write" mode.
 		SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 		// Begin a transaction
 		db.beginTransaction();
 		try {
-			for (ContentProviderOperation operation: operations) {
+			for (ContentProviderOperation operation : operations) {
 				// Chain the result for back references
 				result[i++] = operation.apply(this, result, i);
 			}
-			
+
 			db.setTransactionSuccessful();
 		} catch (OperationApplicationException e) {
 			Log.d(TAG, "batch failed: " + e.getLocalizedMessage());
-		}
-		finally {
+		} finally {
 			db.endTransaction();
 		}
-		
+
 		// TODO do this?
-		//db.close();
+		// db.close();
 		return result;
 	}
 
