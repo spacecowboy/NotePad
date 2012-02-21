@@ -116,7 +116,21 @@ public class GoogleTaskList {
 		values.put(NotePad.GTaskLists.COLUMN_NAME_UPDATED, updated);
 		return values;
 	}
+	
+	/**
+	 * Needs the result index, the index of the operation where the list is inserted in the database
+	 * This will take precedence over the value in the other method
+	 * @param accountName
+	 * @param resultIndex
+	 * @return
+	 */
+	public ContentValues toGTaskListsBackRefContentValues(String accountName, int resultIndex) {
+		ContentValues values = new ContentValues();
+		values.put(NotePad.GTaskLists.COLUMN_NAME_DB_ID, resultIndex);
+		return values;
+	}
 
+	/*
 	private void uploadModifiedTasks(GoogleAPITalker apiTalker,
 			GoogleDBTalker dbTalker) throws RemoteException,
 			ClientProtocolException, JSONException, IOException {
@@ -136,10 +150,10 @@ public class GoogleTaskList {
 				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "uploadModifiedTasks: " + e.getLocalizedMessage());
 			}
 		}
-	}
+	}*/
 
 	public ArrayList<GoogleTask> downloadModifiedTasks(GoogleAPITalker apiTalker,
-			GoogleDBTalker dbTalker, String lastUpdated) throws RemoteException {
+			ArrayList<GoogleTask> allTasks, String lastUpdated) throws RemoteException {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "DownloadModifiedTasks, last date: " + lastUpdated);
 		// Compare with local tasks, if the tasks have the same remote id, then
@@ -148,7 +162,7 @@ public class GoogleTaskList {
 		// Also, we handle conflicts here directly by comparing the update timestamp on
 		// both items
 		ArrayList<GoogleTask> moddedTasks = new ArrayList<GoogleTask>();
-		ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(this);
+		//ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(this);
 		for (GoogleTask task : apiTalker.getModifiedTasks(lastUpdated, this)) {
 			GoogleTask localVersion = null;
 			for (GoogleTask localTask : allTasks) {
@@ -190,6 +204,7 @@ public class GoogleTaskList {
 		return moddedTasks;
 	}
 
+	/*
 	private void handleConflict(GoogleDBTalker dbTalker,
 			GoogleAPITalker apiTalker, GoogleTask localTask)
 			throws RemoteException, ClientProtocolException, JSONException,
@@ -219,7 +234,7 @@ public class GoogleTaskList {
 			// Save new etag etc to db
 			dbTalker.SaveToDatabase(localTask, this);
 		}
-	}
+	}*/
 
 	/**
 	 * This will set the sorting values correctly for these tasks. This must be

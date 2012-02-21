@@ -274,20 +274,21 @@ public class NotePadProvider extends ContentProvider implements
 				NotePad.GTaskLists.COLUMN_NAME_UPDATED);
 		
 		// Joined projection maps
+		// Prepend the table name here
 		sJoinedNotesProjectionMap = new HashMap<String, String>();
 		for (Entry<String, String> notesEntry: sNotesProjectionMap.entrySet()) {
-			sJoinedNotesProjectionMap.put(notesEntry.getKey(), notesEntry.getValue());
+			sJoinedNotesProjectionMap.put(notesEntry.getKey(), NotePad.Notes.TABLE_NAME + "." + notesEntry.getValue());
 		}
 		for (Entry<String, String> gtasksEntry: sGTasksProjectionMap.entrySet()) {
-			sJoinedNotesProjectionMap.put(gtasksEntry.getKey(), gtasksEntry.getValue());
+			sJoinedNotesProjectionMap.put(gtasksEntry.getKey(), NotePad.GTasks.TABLE_NAME + "." + gtasksEntry.getValue());
 		}
 		
 		sJoinedListsProjectionMap = new HashMap<String, String>();
 		for (Entry<String, String> listsEntry: sListsProjectionMap.entrySet()) {
-			sJoinedNotesProjectionMap.put(listsEntry.getKey(), listsEntry.getValue());
+			sJoinedListsProjectionMap.put(listsEntry.getKey(), NotePad.Lists.TABLE_NAME + "." + listsEntry.getValue());
 		}
 		for (Entry<String, String> gtasklistsEntry: sGTaskListsProjectionMap.entrySet()) {
-			sJoinedNotesProjectionMap.put(gtasklistsEntry.getKey(), gtasklistsEntry.getValue());
+			sJoinedListsProjectionMap.put(gtasklistsEntry.getKey(), NotePad.GTaskLists.TABLE_NAME + "." + gtasklistsEntry.getValue());
 		}
 
 	}
@@ -594,7 +595,7 @@ public class NotePadProvider extends ContentProvider implements
 		 * Retrieve the complete note entry join with Gtasks table through join statement.
 		 */
 		case JOINED_NOTES:
-			qb.setTables(NotePad.Notes.TABLE_NAME + "LEFT JOIN " + NotePad.GTasks.TABLE_NAME
+			qb.setTables(NotePad.Notes.TABLE_NAME + " LEFT JOIN " + NotePad.GTasks.TABLE_NAME
 					+ " ON (" + NotePad.Notes.TABLE_NAME + "." + NotePad.Notes._ID + " = " 
 					+ NotePad.GTasks.TABLE_NAME + "." + NotePad.GTasks.COLUMN_NAME_DB_ID + ")");
 			// TODO
@@ -643,7 +644,7 @@ public class NotePadProvider extends ContentProvider implements
 			break;
 		case JOINED_LISTS:
 			orderBy = NotePad.Lists.SORT_ORDER;
-			qb.setTables(NotePad.Lists.TABLE_NAME + "LEFT JOIN " + NotePad.GTaskLists.TABLE_NAME
+			qb.setTables(NotePad.Lists.TABLE_NAME + " LEFT JOIN " + NotePad.GTaskLists.TABLE_NAME
 					+ " ON (" + NotePad.Lists.TABLE_NAME + "." + NotePad.Lists._ID + " = " 
 					+ NotePad.GTaskLists.TABLE_NAME + "." + NotePad.GTaskLists.COLUMN_NAME_DB_ID + ")");
 			// TODO

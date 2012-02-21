@@ -85,6 +85,7 @@ public final class NotePad {
          */
         public static final Uri CONTENT_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_NOTES);
         public static final Uri CONTENT_VISIBLE_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_VISIBLE_NOTES);
+        public static final Uri CONTENT_JOINED_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_JOINED_NOTES);
         
         /**
          * The content URI base for a single note. Callers must
@@ -262,6 +263,7 @@ public final class NotePad {
          */
         public static final Uri CONTENT_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_LISTS);
         public static final Uri CONTENT_VISIBLE_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_VISIBLE_LISTS);
+        public static final Uri CONTENT_JOINED_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_JOINED_LISTS);
 
         /**
          * The content URI base for a single note. Callers must

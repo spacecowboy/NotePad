@@ -200,8 +200,8 @@ public class NotesListFragment extends ListFragment implements
 		if (Intent.ACTION_EDIT.equals(intent.getAction())
 				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
 			Log.d(TAG, "Selecting note");
-			String newId = intent.getData().getPathSegments().get(
-					NotePad.Lists.ID_PATH_POSITION);
+			String newId = intent.getData().getPathSegments()
+					.get(NotePad.Lists.ID_PATH_POSITION);
 			long noteId = Long.parseLong(newId);
 			if (noteId > -1) {
 				newNoteIdToOpen = noteId;
@@ -463,62 +463,64 @@ public class NotesListFragment extends ListFragment implements
 		if (index < 0) {
 			index = 0;
 		}
-		while (index >= getListAdapter().getCount()) {
-			index = index - 1;
-		}
-		if (FragmentLayout.UI_DEBUG_PRINTS)
-			Log.d(TAG, "showNote valid index to show is: " + index);
-
-		if (index > -1) {
-			mCurCheckPosition = index;
-			selectPos(mCurCheckPosition);
-			mCurId = getListAdapter().getItemId(index);
-
-			currentState = STATE_EXISTING_NOTE;
-
-			if (FragmentLayout.LANDSCAPE_MODE) {
-				if (FragmentLayout.UI_DEBUG_PRINTS)
-					Log.d("NotesLIstFragmenT", "It is dualPane!");
-				// We can display everything in-place with fragments, so
-				// update
-				// the list to highlight the selected item and show the
-				// data.
-				if (FragmentLayout.UI_DEBUG_PRINTS)
-					Log.d("NotesListFragment", "Showing note: " + mCurId + ", "
-							+ mCurCheckPosition);
-
-				// Check what fragment is currently shown, replace if
-				// needed.
-				// NotesEditorFragment editor = (NotesEditorFragment)
-				// getSupportFragmentManager()
-				// .findFragmentById(R.id.editor);
-				if (landscapeEditor != null) {
-					// We want to know about changes here
-					if (FragmentLayout.UI_DEBUG_PRINTS)
-						Log.d("NotesListFragment", "Would open note here: "
-								+ mCurId);
-					landscapeEditor.displayNote(mCurId, mCurListId);
-				}
-
-			} else {
-				if (FragmentLayout.UI_DEBUG_PRINTS)
-					Log.d("NotesListFragment",
-							"Showing note in SinglePane: id " + mCurId
-									+ ", pos: " + mCurCheckPosition);
-				// Otherwise we need to launch a new activity to display
-				// the dialog fragment with selected text.
-				Intent intent = new Intent();
-				intent.setClass(activity, NotesEditorActivity.class);
-				intent.putExtra(NotesEditorFragment.KEYID, mCurId);
-				intent.putExtra(NotesEditorFragment.LISTID, mCurListId);
-
-				startActivity(intent);
+		if (getListAdapter() != null) {
+			while (index >= getListAdapter().getCount()) {
+				index = index - 1;
 			}
-		} else {
-			// Empty search, do NOT display new note.
-			mCurCheckPosition = 0;
-			mCurId = -1;
-			// Default show first note when search is cancelled.
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "showNote valid index to show is: " + index);
+
+			if (index > -1) {
+				mCurCheckPosition = index;
+				selectPos(mCurCheckPosition);
+				mCurId = getListAdapter().getItemId(index);
+
+				currentState = STATE_EXISTING_NOTE;
+
+				if (FragmentLayout.LANDSCAPE_MODE) {
+					if (FragmentLayout.UI_DEBUG_PRINTS)
+						Log.d("NotesLIstFragmenT", "It is dualPane!");
+					// We can display everything in-place with fragments, so
+					// update
+					// the list to highlight the selected item and show the
+					// data.
+					if (FragmentLayout.UI_DEBUG_PRINTS)
+						Log.d("NotesListFragment", "Showing note: " + mCurId
+								+ ", " + mCurCheckPosition);
+
+					// Check what fragment is currently shown, replace if
+					// needed.
+					// NotesEditorFragment editor = (NotesEditorFragment)
+					// getSupportFragmentManager()
+					// .findFragmentById(R.id.editor);
+					if (landscapeEditor != null) {
+						// We want to know about changes here
+						if (FragmentLayout.UI_DEBUG_PRINTS)
+							Log.d("NotesListFragment", "Would open note here: "
+									+ mCurId);
+						landscapeEditor.displayNote(mCurId, mCurListId);
+					}
+
+				} else {
+					if (FragmentLayout.UI_DEBUG_PRINTS)
+						Log.d("NotesListFragment",
+								"Showing note in SinglePane: id " + mCurId
+										+ ", pos: " + mCurCheckPosition);
+					// Otherwise we need to launch a new activity to display
+					// the dialog fragment with selected text.
+					Intent intent = new Intent();
+					intent.setClass(activity, NotesEditorActivity.class);
+					intent.putExtra(NotesEditorFragment.KEYID, mCurId);
+					intent.putExtra(NotesEditorFragment.LISTID, mCurListId);
+
+					startActivity(intent);
+				}
+			} else {
+				// Empty search, do NOT display new note.
+				mCurCheckPosition = 0;
+				mCurId = -1;
+				// Default show first note when search is cancelled.
+			}
 		}
 	}
 
