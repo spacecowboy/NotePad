@@ -20,6 +20,8 @@
 		<item name="my_list_background">@drawable/list_read_holo</item>
 		<item name="editorBackgroundColor">@android:color/white</item>
 		
+		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
+		
 	</style>
 	
 </resources>

@@ -104,7 +104,7 @@ public class FragmentLayout extends Activity implements
 
 		// Will set cursor in Loader
 		mSpinnerAdapter = new SimpleCursorAdapter(this,
-				android.R.layout.simple_spinner_dropdown_item, null,
+				R.layout.actionbar_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
 				new int[] { android.R.id.text1 });
 

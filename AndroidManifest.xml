@@ -152,8 +152,10 @@
                 <category android:name="android.intent.category.PREFERENCE" >
                 </category>
 
-                <action android:name="android.intent.action.MAIN" >
-                </action>
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.EDIT" />
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.settings.SETTINGS" />
             </intent-filter>
         </activity>
 

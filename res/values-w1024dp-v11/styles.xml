@@ -16,6 +16,8 @@
         <item name="my_list_selector">@drawable/arrow_list_selector</item>
         <item name="my_list_background">@drawable/list_read_holo</item>
         <item name="editorBackgroundColor">@android:color/white</item>
+        
+        <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
 	</style>
 	<!-- This theme doesn't exist in honeycomb -->
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light">
@@ -35,6 +37,8 @@
 		<item name="my_list_selector">@drawable/arrow_list_selector</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
 		<item name="editorBackgroundColor">@android:color/white</item>
+		
+		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
 		
 	</style>
 </resources>
