@@ -350,7 +350,7 @@ public class NotesListFragment extends ListFragment implements
 				intent.setClass(activity, NotesPreferencesDialog.class);
 				startActivity(intent);
 			}
-			return true;
+			return false; // Editor will listen for this also and saves when it receives it
 		case R.id.menu_clearcompleted:
 			ContentValues values = new ContentValues();
 			values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, -1); // -1 anything

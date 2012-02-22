@@ -645,6 +645,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		case R.id.menu_share:
 			shareNote();
 			break;
+		case R.id.menu_sync:
+			// Save note!
+			saveNote();
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
