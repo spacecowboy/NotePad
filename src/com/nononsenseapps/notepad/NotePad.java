@@ -28,7 +28,6 @@ import android.provider.BaseColumns;
  */
 public final class NotePad {
     public static final String AUTHORITY = "com.nononsenseapps.donate.NotePad";
-    public static final String NOTEURI = "noteuri";
 
     // This class cannot be instantiated
     private NotePad() {
@@ -65,11 +64,16 @@ public final class NotePad {
          * Path part for the Notes URI
          */
         private static final String PATH_NOTES = "/notes";
+        // Visible notes
+        private static final String PATH_VISIBLE_NOTES = "/visiblenotes";
+        // Complete note entry including stuff in GTasks table
+        private static final String PATH_JOINED_NOTES = "/joinednotes";
 
         /**
          * Path part for the Note ID URI
          */
         private static final String PATH_NOTE_ID = "/notes/";
+        public static final String PATH_VISIBLE_NOTE_ID = "/visiblenotes/";
 
         /**
          * 0-relative position of a note ID segment in the path part of a note ID URI
@@ -80,6 +84,8 @@ public final class NotePad {
          * The content:// style URL for this table
          */
         public static final Uri CONTENT_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_NOTES);
+        public static final Uri CONTENT_VISIBLE_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_VISIBLE_NOTES);
+        public static final Uri CONTENT_JOINED_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_JOINED_NOTES);
         
         /**
          * The content URI base for a single note. Callers must
@@ -87,6 +93,8 @@ public final class NotePad {
          */
         public static final Uri CONTENT_ID_URI_BASE
             = Uri.parse(SCHEME + AUTHORITY + PATH_NOTE_ID);
+        public static final Uri CONTENT_VISIBLE_ID_URI_BASE
+        = Uri.parse(SCHEME + AUTHORITY + PATH_VISIBLE_NOTE_ID);
         
         /**
          * The content URI match pattern for a single note, specified by its ID. Use this to match
@@ -94,6 +102,8 @@ public final class NotePad {
          */
         public static final Uri CONTENT_ID_URI_PATTERN
             = Uri.parse(SCHEME + AUTHORITY + PATH_NOTE_ID + "/#");
+        public static final Uri CONTENT_VISIBLE_ID_URI_PATTERN
+        = Uri.parse(SCHEME + AUTHORITY + PATH_VISIBLE_NOTE_ID + "/#");
 
         /*
          * MIME type definitions
@@ -102,13 +112,15 @@ public final class NotePad {
         /**
          * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
          */
-        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps.note";
+        //public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps.note";
 
         /**
          * The MIME type of a {@link #CONTENT_URI} sub-directory of a single
          * note.
          */
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps.note";
+        
+        public static final String CONTENT_TYPE = CONTENT_ITEM_TYPE;
 
         
 
@@ -231,11 +243,15 @@ public final class NotePad {
          * Path part for the Lists URI
          */
         private static final String PATH_LISTS = "/lists";
+        private static final String PATH_VISIBLE_LISTS = "/visiblelists";
+        // Complete entry gotten with a join with GTasksLists table
+        private static final String PATH_JOINED_LISTS = "/joinedlists";
 
         /**
          * Path part for the List ID URI
          */
         private static final String PATH_LIST_ID = "/lists/";
+        public static final String PATH_VISIBLE_LIST_ID = "/visiblelists/";
 
         /**
          * 0-relative position of a ID segment in the path part of a ID URI
@@ -246,6 +262,8 @@ public final class NotePad {
          * The content:// style URL for this table
          */
         public static final Uri CONTENT_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_LISTS);
+        public static final Uri CONTENT_VISIBLE_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_VISIBLE_LISTS);
+        public static final Uri CONTENT_JOINED_URI =  Uri.parse(SCHEME + AUTHORITY + PATH_JOINED_LISTS);
 
         /**
          * The content URI base for a single note. Callers must
@@ -253,6 +271,8 @@ public final class NotePad {
          */
         public static final Uri CONTENT_ID_URI_BASE
         = Uri.parse(SCHEME + AUTHORITY + PATH_LIST_ID);
+        public static final Uri CONTENT_VISIBLE_ID_URI_BASE
+        = Uri.parse(SCHEME + AUTHORITY + PATH_VISIBLE_LIST_ID);
 
         /**
          * The content URI match pattern for a single note, specified by its ID. Use this to match
@@ -260,6 +280,8 @@ public final class NotePad {
          */
         public static final Uri CONTENT_ID_URI_PATTERN
         = Uri.parse(SCHEME + AUTHORITY + PATH_LIST_ID + "/#");
+        public static final Uri CONTENT_VISIBLE_ID_URI_PATTERN
+        = Uri.parse(SCHEME + AUTHORITY + PATH_VISIBLE_LIST_ID + "/#");
 
 
         /*
@@ -269,7 +291,7 @@ public final class NotePad {
         /**
          * The MIME type of {@link #CONTENT_URI} providing a directory.
          */
-        public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps.list";
+        //public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps.list";
 
         /**
          * The MIME type of a {@link #CONTENT_URI} sub-directory of a single
@@ -277,6 +299,7 @@ public final class NotePad {
          */
         public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps.list";
 
+        public static final String CONTENT_TYPE = CONTENT_ITEM_TYPE;
         
 
         /*

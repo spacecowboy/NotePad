@@ -29,7 +29,7 @@
     android:versionName="3.0.5" >
 
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="14"
         android:targetSdkVersion="15" />
 
     <!-- For connection -->
@@ -44,11 +44,24 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
+    <!-- Define my permissions for the provider -->
+    <permission
+        android:name="com.nononsenseapps.notepad.permissions.read"
+        android:description="@string/permission_read_desc"
+        android:label="@string/permission_read_label"
+        android:permissionGroup="android.permission-group.PERSONAL_INFO"
+        android:protectionLevel="normal" />
+    <permission
+        android:name="com.nononsenseapps.notepad.permissions.write"
+        android:description="@string/permission_write_desc"
+        android:label="@string/permission_write_label"
+        android:permissionGroup="android.permission-group.PERSONAL_INFO"
+        android:protectionLevel="normal" />
+
     <application
         android:hardwareAccelerated="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name" >
-
 
         <provider
             android:name="com.nononsenseapps.notepad.NotePadProvider"
@@ -56,7 +69,9 @@
             android:enabled="true"
             android:exported="true"
             android:label="@string/app_name"
-            android:syncable="true" >
+            android:readPermission="com.nononsenseapps.notepad.permissions.read"
+            android:syncable="true"
+            android:writePermission="com.nononsenseapps.notepad.permissions.write" >
             <grant-uri-permission android:pathPattern=".*" />
         </provider>
 
@@ -64,47 +79,57 @@
             android:name="com.nononsenseapps.notepad.FragmentLayout"
             android:label="@string/app_name"
             android:launchMode="singleTop"
-            android:uiOptions="splitActionBarWhenNarrow"
-            android:theme="@style/ThemeHolo" >
+            android:theme="@style/ThemeHolo"
+            android:uiOptions="splitActionBarWhenNarrow" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!-- <intent-filter>
+            <!--
+                 This filter says that we can view or edit the data of
+                 a single note
+            -->
+            <intent-filter android:label="@string/resolve_edit" >
+                <action android:name="android.intent.action.INSERT" />
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
+            </intent-filter>
+            <intent-filter android:label="@string/resolve_edit" >
+                <action android:name="android.intent.action.INSERT" />
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.list" />
+            </intent-filter>
+
+            <!--
+            <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="text/*" />
                 <data android:mimeType="text/*" android:path="*.txt" />  Would like to be able to open files in future
-            </intent-filter> -->
+            </intent-filter>
+            -->
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+        
         <activity
             android:name="com.nononsenseapps.notepad.FragmentLayout$NotesEditorActivity" >
-
-            <!-- android:configChanges="keyboardHidden|orientation" > -->
-
-
-            <!--
-                 This filter says that we can view or edit the data of
-                 a single note
-            -->
-            <intent-filter android:label="@string/resolve_edit" >
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-                <action android:name="com.android.notepad.action.EDIT_NOTE" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
-            </intent-filter>
 
             <!--
                  This filter says that we can create a new note inside
@@ -112,6 +137,7 @@
                  empty note; the PASTE action initializes a new note from
                  the current contents of the clipboard.
             -->
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.INSERT" />
                 <action android:name="android.intent.action.PASTE" />
@@ -120,17 +146,28 @@
 
                 <data android:mimeType="vnd.android.cursor.dir/vnd.nononsenseapps.note" />
             </intent-filter>
-
+            -->
         </activity>
         <activity
             android:name="com.nononsenseapps.notepad.FragmentLayout$NotesPreferencesDialog"
             android:theme="@style/ThemeHoloDialogNoActionBar" >
+            <intent-filter>
+                <category android:name="android.intent.category.PREFERENCE" >
+                </category>
+
+                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.EDIT" />
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.settings.SETTINGS" />
+            </intent-filter>
         </activity>
 
         <service
             android:name="com.nononsenseapps.notepad.sync.SyncService"
-            android:exported="true"
-            android:process=":sync" >
+            android:exported="true" >
+
+            <!-- android:process=":sync" -->
+
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>

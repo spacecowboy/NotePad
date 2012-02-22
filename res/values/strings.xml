@@ -34,6 +34,7 @@
     <string name="menu_renamelist">Rename list</string>
     <string name="menu_createlist">Create list</string>
     <string name="menu_clearcompleted">Clear completed</string>
+    <string name="menu_setdefaultlist">Set as default list</string>
     
     <string name="delete_list_warning">Are you sure you want to delete the list? The list will be permanently deleted.</string>
     
@@ -96,4 +97,9 @@
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="ok">OK</string>
+    
+    <string name="permission_read_label">read notes and lists</string>
+    <string name="permission_read_desc">Allows the application to read your notes and related lists.</string>
+    <string name="permission_write_label">modify notes and lists</string>
+    <string name="permission_write_desc">Allows the application to insert, update and delete notes and lists.</string>
 </resources>

@@ -14,4 +14,5 @@
 	<attr name="my_list_selector" format="reference" />
 	<attr name="my_list_background" format="reference" />
 	<attr name="editorBackgroundColor" format="reference" />
+	<attr name="ActionBarDropDownItem" format="reference" />
 </resources>

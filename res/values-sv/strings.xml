@@ -34,6 +34,7 @@
     <string name="menu_renamelist">Byt namn på listan</string>
     <string name="menu_createlist">Skapa lista</string>
     <string name="menu_clearcompleted">Ta bort slutförda uppgifter</string>
+    <string name="menu_setdefaultlist">Välj som standardlista</string>
     
     <string name="delete_list_warning">Är du säker på att du vill ta bort listan? Listan kommer att tas bort permanent.</string>
     

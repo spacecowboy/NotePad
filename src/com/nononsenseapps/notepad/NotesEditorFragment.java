@@ -328,6 +328,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 								// are
 								// necessary.
 						);
+				// This will trigger a sync at an appropriate time
+				// TODO
+				// Is this a good idea?
+				//activity.getContentResolver().notifyChange(mUri, null, true);
 			}
 		}
 	}
@@ -642,6 +646,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		case R.id.menu_share:
 			shareNote();
 			break;
+		case R.id.menu_sync:
+			// Save note!
+			saveNote();
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -723,14 +731,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	private void showNote(Cursor mCursor) {
 		boolean lockdown = false;
-		if (mCursor != null && !mCursor.isClosed() && !mCursor.isAfterLast()) {
+		if (mCursor != null && !mCursor.isClosed() && mCursor.moveToFirst()) {
 			/*
 			 * Moves to the first record. Always call moveToFirst() before
 			 * accessing data in a Cursor for the first time. The semantics of
 			 * using a Cursor are that when it is created, its internal index is
 			 * pointing to a "place" immediately before the first record.
 			 */
-			mCursor.moveToFirst();
 
 			/*
 			 * onResume() may have been called after the Activity lost focus

@@ -1,5 +1,92 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="ThemeHolo" parent="@android:style/Theme.Holo">
+
+		<item name="ic_action_compose">@drawable/ic_action_compose_dark</item>
+		<item name="ic_action_delete">@drawable/ic_action_delete_dark</item>
+		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_dark</item>
+		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_dark</item>
+		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_dark</item>
+		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_dark</item>
+		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_dark</item>
+		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
+		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
+		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
+		<item name="ic_action_refresh">@drawable/ic_action_refresh_dark</item>
+		
+		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
+		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+		
+		<item name="my_list_background">@android:color/transparent</item>
+		<item name="editorBackgroundColor">@android:color/transparent</item>
+		
+		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
+
+	</style>
+	
+	<style name="ThemeHoloLight" parent="@android:style/Theme.Holo.Light">
+	    <item name="ic_action_compose">@drawable/ic_action_compose_light</item>
+		<item name="ic_action_delete">@drawable/ic_action_delete_light</item>
+		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_light</item>
+		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_light</item>
+		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_light</item>
+		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_light</item>
+		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
+		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
+		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
+		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
+		<item name="ic_action_refresh">@drawable/ic_action_refresh_light</item>
+		
+		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+		<item name="my_list_background">@drawable/list_read_holo</item>
+		<item name="editorBackgroundColor">@android:color/white</item>
+		
+		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
+	</style>
+
+	<style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.Holo.Dialog.NoActionBar">
+		<item name="ic_action_compose">@drawable/ic_action_compose_dark</item>
+		<item name="ic_action_delete">@drawable/ic_action_delete_dark</item>
+		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_dark</item>
+		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_dark</item>
+		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_dark</item>
+		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_dark</item>
+		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_dark</item>
+		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
+		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
+		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
+		<item name="ic_action_refresh">@drawable/ic_action_refresh_dark</item>
+		
+		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
+		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+		<item name="my_list_background">@android:color/transparent</item>
+		<item name="editorBackgroundColor">@android:color/transparent</item>
+		
+		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
+
+	</style>
+	
+	<style name="ThemeHoloLightDialogNoActionBar" parent="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
+	    <item name="ic_action_compose">@drawable/ic_action_compose_light</item>
+	    <item name="ic_action_delete">@drawable/ic_action_delete_light</item>
+		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_light</item>
+		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_light</item>
+		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_light</item>
+		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_light</item>
+		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
+		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
+		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
+		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
+		<item name="ic_action_refresh">@drawable/ic_action_refresh_light</item>
+		
+		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
+		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+		<item name="my_list_background">@drawable/list_read_holo</item>
+		<item name="editorBackgroundColor">@android:color/white</item>
+		
+		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
+	</style>
+	
 	<!-- This theme doesn't exist in honeycomb -->
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light.DarkActionBar">
 
@@ -20,6 +107,15 @@
 		<item name="my_list_background">@drawable/list_read_holo</item>
 		<item name="editorBackgroundColor">@android:color/white</item>
 		
+		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
+		
+	</style>
+	
+	<style name="ActionBarDropDownItem.Dark" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+	    <item name="android:textColor">#FFFFFF</item>
+	</style>
+	<style name="ActionBarDropDownItem.Light" parent="@android:style/Widget.Holo.Light.DropDownItem.Spinner">
+	    <item name="android:textColor">#000000</item>
 	</style>
 	
 </resources>

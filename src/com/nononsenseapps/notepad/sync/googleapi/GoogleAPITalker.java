@@ -399,13 +399,15 @@ public class GoogleAPITalker {
 		else {
 		
 		// Get list of lists
+		@SuppressWarnings("unchecked")
+		ArrayList<GoogleTaskList> deletedLists = (ArrayList<GoogleTaskList>) allLocalLists.clone();
 		for (GoogleTaskList gimpedList : allRemoteLists) {
 			boolean retrieved = false;
 			for (GoogleTaskList localList : allLocalLists) {
 				if (gimpedList.equals(localList)) {
 					// Remove from list as well. any that remains do not exist
 					// on server, and hence should be deleted
-					allLocalLists.remove(localList);
+					deletedLists.remove(localList);
 					// Compare. If the list was modified locally, it wins
 					// Otherwise, use remote info
 					if (localList.modified != 1) {
@@ -423,13 +425,17 @@ public class GoogleAPITalker {
 			}
 		}
 
-		// Any lists that remain in the original allLocalLists, could not be
+		// Any lists that remain in the deletedLists, could not be
 		// found on server. Hence
 		// they must have been deleted. Set them as deleted and add to modified
-		// list
-		for (GoogleTaskList deletedList : allLocalLists) {
-			deletedList.deleted = 1;
-			modifiedLists.add(deletedList);
+		// list.
+		// This is though only true if it existed on the server in the first place
+		for (GoogleTaskList possiblyDeletedList : deletedLists) {
+			if (possiblyDeletedList.id != null && !possiblyDeletedList.id.isEmpty()) {
+				possiblyDeletedList.deleted = 1;
+				if (!modifiedLists.contains(possiblyDeletedList))
+					modifiedLists.add(possiblyDeletedList);
+			}
 		}
 
 		return newestEtag;
@@ -500,6 +506,11 @@ public class GoogleAPITalker {
 	 */
 	public GoogleTask uploadTask(GoogleTask task, GoogleTaskList pList)
 			throws ClientProtocolException, JSONException, IOException {
+		
+		if (pList.id == null || pList.id.isEmpty()) {
+			Log.d(TAG, "Invalid list ID found for uploadTask");
+			return task; // Invalid list id
+		}
 
 		HttpUriRequest httppost;
 		if (task.id != null) {
@@ -514,6 +525,9 @@ public class GoogleAPITalker {
 				httppost.setHeader("X-HTTP-Method-Override", "PATCH");
 			}
 		} else {
+			if (task.deleted == 1) {
+				return task; // Don't sync deleted items which do not exist on the server
+			}
 			if (SyncAdapter.SYNC_DEBUG_PRINTS)
 				Log.d(TAG, "ID IS NULL: " + AllTasksInsert(pList.id));
 			httppost = new HttpPost(AllTasksInsert(pList.id));

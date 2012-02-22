@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <style name="ThemeHoloLight" parent="@android:style/Theme.Holo.Light">
+    <style name="ThemeHoloLight" parent="@android:style/Theme.DeviceDefault.Light">
         <item name="ic_action_compose">@drawable/ic_action_compose_light</item>
 		<item name="ic_action_delete">@drawable/ic_action_delete_light</item>
 		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_light</item>
@@ -16,9 +16,11 @@
         <item name="my_list_selector">@drawable/arrow_list_selector</item>
         <item name="my_list_background">@drawable/list_read_holo</item>
         <item name="editorBackgroundColor">@android:color/white</item>
+        
+        <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
 	</style>
 	<!-- This theme doesn't exist in honeycomb -->
-	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light">
+	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.DeviceDefault.Light">
 	    
 	    <item name="ic_action_compose">@drawable/ic_action_compose_light</item>
 		<item name="ic_action_delete">@drawable/ic_action_delete_light</item>
@@ -35,6 +37,8 @@
 		<item name="my_list_selector">@drawable/arrow_list_selector</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
 		<item name="editorBackgroundColor">@android:color/white</item>
+		
+		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
 		
 	</style>
 </resources>

@@ -10,7 +10,6 @@ import com.nononsenseapps.notepad.FragmentLayout.NotesPreferencesDialog;
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
-import com.nononsenseapps.notepad.interfaces.Refresher;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.notepad_donate.R;
 import com.nononsenseapps.ui.NoteCheckBox;
@@ -62,7 +61,7 @@ import android.widget.Toast;
 
 public class NotesListFragment extends ListFragment implements
 		SearchView.OnQueryTextListener, OnItemLongClickListener,
-		OnModalDeleteListener, Refresher,
+		OnModalDeleteListener,
 		LoaderManager.LoaderCallbacks<Cursor>, OnSharedPreferenceChangeListener {
 	private int mCurCheckPosition = 0;
 
@@ -97,7 +96,6 @@ public class NotesListFragment extends ListFragment implements
 	private long mCurId;
 
 	private boolean idInvalid = false;
-	private boolean posInvalid = false;
 
 	public SearchView mSearchView;
 	public MenuItem mSearchItem;
@@ -118,7 +116,7 @@ public class NotesListFragment extends ListFragment implements
 	private SimpleCursorAdapter mAdapter;
 
 	private boolean autoOpenNote = false;
-	private int newNoteIdToOpen = -1;
+	private long newNoteIdToOpen = -1;
 	private NotesEditorFragment landscapeEditor;
 
 	private Menu mOptionsMenu;
@@ -195,17 +193,46 @@ public class NotesListFragment extends ListFragment implements
 		}
 	}
 
+	public void handleNoteIntent(Intent intent) {
+		Log.d(TAG, "handling intent");
+		if (Intent.ACTION_EDIT.equals(intent.getAction())
+				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
+			Log.d(TAG, "Selecting note");
+			String newId = intent.getData().getPathSegments()
+					.get(NotePad.Lists.ID_PATH_POSITION);
+			long noteId = Long.parseLong(newId);
+			if (noteId > -1) {
+				newNoteIdToOpen = noteId;
+			}
+		} else if (Intent.ACTION_INSERT.equals(intent.getAction())) {
+			// Get list to create note in first
+			long listId = intent.getExtras().getLong(
+					NotePad.Notes.COLUMN_NAME_LIST, -1);
+
+			if (listId > -1) {
+				Uri noteUri = FragmentLayout.createNote(
+						activity.getContentResolver(), listId);
+
+				if (noteUri != null) {
+					newNoteIdToOpen = getNoteIdFromUri(noteUri);
+				}
+			}
+		}
+	}
+
 	/**
 	 * Will try to open the previously open note, but will default to first note
 	 * if none was open
 	 */
 	private void showFirstBestNote() {
-		if (getListAdapter().isEmpty()) {
-			// DOn't do shit
-		} else {
-			currentState = STATE_EXISTING_NOTE;
+		if (mAdapter != null) {
+			if (mAdapter.isEmpty()) {
+				// DOn't do shit
+			} else {
+				currentState = STATE_EXISTING_NOTE;
 
-			showNote(mCurCheckPosition);
+				showNote(mCurCheckPosition);
+			}
 		}
 	}
 
@@ -221,10 +248,10 @@ public class NotesListFragment extends ListFragment implements
 	}
 
 	private int getPosOfId(long id) {
-		int length = getListAdapter().getCount();
+		int length = mAdapter.getCount();
 		int position;
 		for (position = 0; position < length; position++) {
-			if (id == getListAdapter().getItemId(position)) {
+			if (id == mAdapter.getItemId(position)) {
 				break;
 			}
 		}
@@ -323,7 +350,8 @@ public class NotesListFragment extends ListFragment implements
 				intent.setClass(activity, NotesPreferencesDialog.class);
 				startActivity(intent);
 			}
-			return true;
+			return false; // Editor will listen for this also and saves when it
+							// receives it
 		case R.id.menu_clearcompleted:
 			ContentValues values = new ContentValues();
 			values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, -1); // -1 anything
@@ -413,7 +441,8 @@ public class NotesListFragment extends ListFragment implements
 
 		String accountName = PreferenceManager.getDefaultSharedPreferences(
 				activity).getString(NotesPreferenceFragment.KEY_ACCOUNT, "");
-		// Sync state might have changed, make sure we're spinning when we should
+		// Sync state might have changed, make sure we're spinning when we
+		// should
 		if (accountName != null && !accountName.isEmpty())
 			setRefreshActionItemState(ContentResolver.isSyncActive(
 					NotesPreferenceFragment.getAccount(
@@ -435,62 +464,64 @@ public class NotesListFragment extends ListFragment implements
 		if (index < 0) {
 			index = 0;
 		}
-		while (index >= getListAdapter().getCount()) {
-			index = index - 1;
-		}
-		if (FragmentLayout.UI_DEBUG_PRINTS)
-			Log.d(TAG, "showNote valid index to show is: " + index);
-
-		if (index > -1) {
-			mCurCheckPosition = index;
-			selectPos(mCurCheckPosition);
-			mCurId = getListAdapter().getItemId(index);
-
-			currentState = STATE_EXISTING_NOTE;
-
-			if (FragmentLayout.LANDSCAPE_MODE) {
-				if (FragmentLayout.UI_DEBUG_PRINTS)
-					Log.d("NotesLIstFragmenT", "It is dualPane!");
-				// We can display everything in-place with fragments, so
-				// update
-				// the list to highlight the selected item and show the
-				// data.
-				if (FragmentLayout.UI_DEBUG_PRINTS)
-					Log.d("NotesListFragment", "Showing note: " + mCurId + ", "
-							+ mCurCheckPosition);
-
-				// Check what fragment is currently shown, replace if
-				// needed.
-				// NotesEditorFragment editor = (NotesEditorFragment)
-				// getSupportFragmentManager()
-				// .findFragmentById(R.id.editor);
-				if (landscapeEditor != null) {
-					// We want to know about changes here
-					if (FragmentLayout.UI_DEBUG_PRINTS)
-						Log.d("NotesListFragment", "Would open note here: "
-								+ mCurId);
-					landscapeEditor.displayNote(mCurId, mCurListId);
-				}
-
-			} else {
-				if (FragmentLayout.UI_DEBUG_PRINTS)
-					Log.d("NotesListFragment",
-							"Showing note in SinglePane: id " + mCurId
-									+ ", pos: " + mCurCheckPosition);
-				// Otherwise we need to launch a new activity to display
-				// the dialog fragment with selected text.
-				Intent intent = new Intent();
-				intent.setClass(activity, NotesEditorActivity.class);
-				intent.putExtra(NotesEditorFragment.KEYID, mCurId);
-				intent.putExtra(NotesEditorFragment.LISTID, mCurListId);
-
-				startActivity(intent);
+		if (mAdapter != null) {
+			while (index >= mAdapter.getCount()) {
+				index = index - 1;
 			}
-		} else {
-			// Empty search, do NOT display new note.
-			mCurCheckPosition = 0;
-			mCurId = -1;
-			// Default show first note when search is cancelled.
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "showNote valid index to show is: " + index);
+
+			if (index > -1) {
+				mCurCheckPosition = index;
+				selectPos(mCurCheckPosition);
+				mCurId = mAdapter.getItemId(index);
+
+				currentState = STATE_EXISTING_NOTE;
+
+				if (FragmentLayout.LANDSCAPE_MODE) {
+					if (FragmentLayout.UI_DEBUG_PRINTS)
+						Log.d("NotesLIstFragmenT", "It is dualPane!");
+					// We can display everything in-place with fragments, so
+					// update
+					// the list to highlight the selected item and show the
+					// data.
+					if (FragmentLayout.UI_DEBUG_PRINTS)
+						Log.d("NotesListFragment", "Showing note: " + mCurId
+								+ ", " + mCurCheckPosition);
+
+					// Check what fragment is currently shown, replace if
+					// needed.
+					// NotesEditorFragment editor = (NotesEditorFragment)
+					// getSupportFragmentManager()
+					// .findFragmentById(R.id.editor);
+					if (landscapeEditor != null) {
+						// We want to know about changes here
+						if (FragmentLayout.UI_DEBUG_PRINTS)
+							Log.d("NotesListFragment", "Would open note here: "
+									+ mCurId);
+						landscapeEditor.displayNote(mCurId, mCurListId);
+					}
+
+				} else {
+					if (FragmentLayout.UI_DEBUG_PRINTS)
+						Log.d("NotesListFragment",
+								"Showing note in SinglePane: id " + mCurId
+										+ ", pos: " + mCurCheckPosition);
+					// Otherwise we need to launch a new activity to display
+					// the dialog fragment with selected text.
+					Intent intent = new Intent();
+					intent.setClass(activity, NotesEditorActivity.class);
+					intent.putExtra(NotesEditorFragment.KEYID, mCurId);
+					intent.putExtra(NotesEditorFragment.LISTID, mCurListId);
+
+					startActivity(intent);
+				}
+			} else {
+				// Empty search, do NOT display new note.
+				mCurCheckPosition = 0;
+				mCurId = -1;
+				// Default show first note when search is cancelled.
+			}
 		}
 	}
 
@@ -523,19 +554,21 @@ public class NotesListFragment extends ListFragment implements
 
 	private void reCalculateValidValuesAfterDelete() {
 		int index = mCurCheckPosition;
-		while (index >= getListAdapter().getCount()) {
-			index = index - 1;
-		}
+		if (mAdapter != null) {
+			while (index >= mAdapter.getCount()) {
+				index = index - 1;
+			}
 
-		if (FragmentLayout.UI_DEBUG_PRINTS)
-			Log.d(TAG, "ReCalculate valid index is: " + index);
-		if (index == -1) {
-			// Completely empty list. We should display a new note
-			mCurCheckPosition = 0;
-			mCurId = -1;
-		} else { // if (index != -1) {
-			mCurCheckPosition = index;
-			mCurId = getListAdapter().getItemId(index);
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "ReCalculate valid index is: " + index);
+			if (index == -1) {
+				// Completely empty list.
+				mCurCheckPosition = 0;
+				mCurId = -1;
+			} else { // if (index != -1) {
+				mCurCheckPosition = index;
+				mCurId = mAdapter.getItemId(index);
+			}
 		}
 	}
 
@@ -587,7 +620,6 @@ public class NotesListFragment extends ListFragment implements
 					status = getText(R.string.gtask_status_completed)
 							.toString();
 				values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, status);
-				// TODO, change to getcontext?
 
 				long id = ((NoteCheckBox) buttonView).getNoteId();
 				if (id > -1)
@@ -714,13 +746,13 @@ public class NotesListFragment extends ListFragment implements
 		if (checkMode == CHECK_MULTI) {
 			checkMode = CHECK_SINGLE_FUTURE;
 
-			Intent intent = new Intent(activity, FragmentLayout.class);
+			// Intent intent = new Intent(activity, FragmentLayout.class);
 
 			// the mother activity will refresh the list for us
-			if (FragmentLayout.UI_DEBUG_PRINTS)
-				Log.d(TAG, "Launching intent: " + intent);
+			// if (FragmentLayout.UI_DEBUG_PRINTS)
+			// Log.d(TAG, "Launching intent: " + intent);
 			// SingleTop, so will not launch a new instance
-			startActivity(intent);
+			// startActivity(intent);
 		}
 	}
 
@@ -838,7 +870,7 @@ public class NotesListFragment extends ListFragment implements
 			Uri uri = NotesEditorFragment.getUriFrom(id);
 			Cursor cursor = openNote(uri);
 
-			if (cursor != null) {
+			if (cursor != null && !cursor.isClosed() && cursor.moveToFirst()) {
 				// Requery in case something changed while paused (such as the
 				// title)
 				// cursor.requery();
@@ -850,7 +882,6 @@ public class NotesListFragment extends ListFragment implements
 				 * index is pointing to a "place" immediately before the first
 				 * record.
 				 */
-				cursor.moveToFirst();
 				String note = "";
 
 				int colTitleIndex = cursor
@@ -869,10 +900,7 @@ public class NotesListFragment extends ListFragment implements
 					Time date = new Time(Time.getCurrentTimezone());
 					date.parse3339(due);
 
-					note = note
-							+ "due date: "
-							+ date.format3339(true)
-							+ "\n";
+					note = note + "due date: " + date.format3339(true) + "\n";
 				}
 
 				int colNoteIndex = cursor
@@ -1132,9 +1160,7 @@ public class NotesListFragment extends ListFragment implements
 			idInvalid = true;
 		} else {
 			// We must recalculate the positions index of the current note
-			if (FragmentLayout.UI_DEBUG_PRINTS)
-				Log.d(TAG, "onModalDelete not contained, setting pos invalid");
-			posInvalid = true;
+			// This is always done when content changes
 		}
 
 		if (onDeleteListener != null) {
@@ -1142,52 +1168,9 @@ public class NotesListFragment extends ListFragment implements
 			for (int pos : positions) {
 				if (FragmentLayout.UI_DEBUG_PRINTS)
 					Log.d(TAG, "onModalDelete pos: " + pos);
-				ids.add(getListAdapter().getItemId(pos));
+				ids.add(mAdapter.getItemId(pos));
 			}
 			onDeleteListener.onMultiDelete(ids, mCurId);
-		}
-
-		// Need to refresh
-		// Intent intent = activity.getIntent();
-		// intent.addFlags(activity.FLAG_ACTIVITY_SINGLE_TOP);
-
-		// overridePendingTransition(0, 0);
-		// intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
-		// finish();
-		// overridePendingTransition(0, 0);
-		// startActivity(intent);
-
-		// This is called in onDestroyActionMode instead so it happens for all
-		// events
-		// and only once
-		// Intent intent = new Intent(activity, FragmentLayout.class);
-		// if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Launching intent: " +
-		// intent);
-		// startActivity(intent);
-	}
-
-	@Override
-	public void refresh() {
-		if (FragmentLayout.UI_DEBUG_PRINTS)
-			Log.d(TAG, "refresh time!. Is list updated?");
-		// reList first so we don't select deletid ids
-		// reListNotes();
-
-		if (posInvalid) {
-			posInvalid = false;
-			// Position is invalid, but editor is showing a valid note still.
-			// Recalculate its position
-			reSelectId();
-		} else if (idInvalid) {
-			idInvalid = false;
-			// Note is invalid, so recalculate a valid position and index
-			reCalculateValidValuesAfterDelete();
-		}
-
-		// Now both position and id are valid.
-		// Only open the "current" note if we are in landscape mode.
-		if (FragmentLayout.LANDSCAPE_MODE) {
-			showNote(mCurCheckPosition);
 		}
 	}
 
@@ -1306,6 +1289,17 @@ public class NotesListFragment extends ListFragment implements
 			setListShownNoAnimation(true);
 		}
 
+		// Reselect current note in list, if possible
+		// This happens in delete
+		if (idInvalid) {
+			idInvalid = false;
+			// Note is invalid, so recalculate a valid position and index
+			reCalculateValidValuesAfterDelete();
+			reSelectId();
+			if (FragmentLayout.LANDSCAPE_MODE)
+				autoOpenNote = true;
+		}
+
 		// If a note was created, it will be set in this variable
 		if (newNoteIdToOpen > -1) {
 			showNote(getPosOfId(newNoteIdToOpen));
@@ -1318,7 +1312,6 @@ public class NotesListFragment extends ListFragment implements
 			autoOpenNote = false;
 			showFirstBestNote();
 		} else {
-			// Reselect current note in list, if possible
 			reSelectId();
 		}
 	}

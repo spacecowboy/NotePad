@@ -4,7 +4,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.sync.SyncAdapter;
 
 import android.content.ContentValues;
 import android.util.Log;
@@ -33,6 +32,8 @@ public class GoogleTask {
 	public String dueDate = null;
 	public String parent = null;
 	public String position = null;
+	
+	public int modified = 0;
 
 	public long dbId = -1;
 	public int deleted = 0;
@@ -107,9 +108,8 @@ public class GoogleTask {
 			String jsonString = json.toString();
 			returnString = jsonString.substring(0, jsonString.length()-1) + nullAppendage;
 
-			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, returnString);
 		} catch (JSONException e) {
-			if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, e.getLocalizedMessage());
+			Log.d(TAG, e.getLocalizedMessage());
 		}
 
 		return returnString;
@@ -122,7 +122,7 @@ public class GoogleTask {
 	 * 
 	 * @return
 	 */
-	public ContentValues toNotesContentValues(int modified, GoogleTaskList list) {
+	public ContentValues toNotesContentValues(int modified, long listDbId) {
 		ContentValues values = new ContentValues();
 		if (title != null)
 			values.put(NotePad.Notes.COLUMN_NAME_TITLE, title);
@@ -136,7 +136,7 @@ public class GoogleTask {
 		if (dbId > -1)
 			values.put(NotePad.Notes._ID, dbId);
 
-		values.put(NotePad.Notes.COLUMN_NAME_LIST, list.dbId);
+		values.put(NotePad.Notes.COLUMN_NAME_LIST, listDbId);
 		values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, modified);
 		values.put(NotePad.Notes.COLUMN_NAME_DELETED, deleted);
 		values.put(NotePad.Notes.COLUMN_NAME_POSITION, position);
@@ -148,6 +148,12 @@ public class GoogleTask {
 		
 		return values;
 	}
+	
+	public ContentValues toNotesBackRefContentValues(int listIdIndex) {
+		ContentValues values = new ContentValues();
+		values.put(NotePad.Notes.COLUMN_NAME_LIST, listIdIndex);
+		return values;
+	}
 
 	public ContentValues toGTasksContentValues(String accountName) {
 		ContentValues values = new ContentValues();
@@ -156,6 +162,12 @@ public class GoogleTask {
 		values.put(NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT, accountName);
 		values.put(NotePad.GTasks.COLUMN_NAME_GTASKS_ID, id);
 		values.put(NotePad.GTasks.COLUMN_NAME_UPDATED, updated);
+		return values;
+	}
+	
+	public ContentValues toGTasksBackRefContentValues(int pos) {
+		ContentValues values = new ContentValues();
+		values.put(NotePad.GTasks.COLUMN_NAME_DB_ID, pos);
 		return values;
 	}
 	
@@ -177,4 +189,6 @@ public class GoogleTask {
 		}
 		return equal;
 	}
+
+	
 }

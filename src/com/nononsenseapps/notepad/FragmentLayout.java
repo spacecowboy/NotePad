@@ -60,7 +60,8 @@ public class FragmentLayout extends Activity implements
 	public static boolean AT_LEAST_ICS;
 	public static boolean AT_LEAST_HC;
 
-	public final static boolean UI_DEBUG_PRINTS = false;
+	public final static boolean UI_DEBUG_PRINTS = true;
+	private static final String DEFAULTLIST = "standardListId";
 
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
 
@@ -70,9 +71,12 @@ public class FragmentLayout extends Activity implements
 	private SimpleCursorAdapter mSpinnerAdapter;
 	private long currentListId = -1;
 	private int currentListPos = 0;
-	private boolean unSelected = true; // Indicates that no list has been selected yet. Only used on first start up
+	private boolean unSelected = true; // Indicates that no list has been
+										// selected yet. Only used on first
+										// start up
 
 	private int prevNumberOfLists = -1;
+	private long createdListId = -1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -102,7 +106,7 @@ public class FragmentLayout extends Activity implements
 
 		// Will set cursor in Loader
 		mSpinnerAdapter = new SimpleCursorAdapter(this,
-				android.R.layout.simple_spinner_dropdown_item, null,
+				R.layout.actionbar_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
 				new int[] { android.R.id.text1 });
 
@@ -126,12 +130,7 @@ public class FragmentLayout extends Activity implements
 		// So editor can access it
 		ONDELETELISTENER = this;
 
-		// Get the intent, verify the action and get the query
-		Intent intent = getIntent();
-		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-			String query = intent.getStringExtra(SearchManager.QUERY);
-			list.onQueryTextSubmit(query);
-		}
+		onNewIntent(getIntent());
 	}
 
 	@Override
@@ -208,11 +207,57 @@ public class FragmentLayout extends Activity implements
 			} else if (list != null) {
 				list.onQueryTextSubmit(query);
 			}
-		} else {
-			if (this.list != null) {
-				if (UI_DEBUG_PRINTS)
-					Log.d("FragmentLayout", "Calling refresh");
-				list.refresh();
+		} else if (Intent.ACTION_EDIT.equals(intent.getAction())
+				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
+			if (intent.getData() != null && intent.getData().getPath().startsWith(NotePad.Lists.PATH_VISIBLE_LIST_ID)) {
+				// Get id to display
+				String newId = intent.getData().getPathSegments().get(
+						NotePad.Lists.ID_PATH_POSITION);
+				long listId = Long.parseLong(newId);
+				int pos = getPosOfId(listId);
+				if (pos > -1) {
+					// select it
+					ActionBar ab = getActionBar();
+					if (ab != null)
+						ab.setSelectedNavigationItem(pos);
+				}
+			} else if (intent.getData() != null && intent.getData().getPath().startsWith(NotePad.Notes.PATH_VISIBLE_NOTE_ID)) {
+				if (list != null) {
+					long listId = intent.getExtras().getLong(
+							NotePad.Notes.COLUMN_NAME_LIST, -1);
+					int pos = getPosOfId(listId);
+					if (pos > -1) {
+						// select it
+						ActionBar ab = getActionBar();
+						if (ab != null) {
+							ab.setSelectedNavigationItem(pos);
+							list.handleNoteIntent(intent);
+						}
+					}
+				}
+			}
+		} else if (Intent.ACTION_INSERT.equals(intent.getAction())) {
+			if (intent.getType() != null && intent.getType().equals(NotePad.Lists.CONTENT_TYPE)
+					|| intent.getData() != null && intent.getData().equals(NotePad.Lists.CONTENT_VISIBLE_URI)) {
+				// get Title
+				String title = intent.getExtras().getString(
+						NotePad.Lists.COLUMN_NAME_TITLE, "");
+				createList(title);
+			} else if (intent.getType() != null && intent.getType().equals(NotePad.Notes.CONTENT_TYPE)
+					|| intent.getData() != null && intent.getData().equals(NotePad.Notes.CONTENT_VISIBLE_URI)) {
+				if (list != null) {
+					long listId = intent.getExtras().getLong(
+							NotePad.Notes.COLUMN_NAME_LIST, -1);
+					int pos = getPosOfId(listId);
+					if (pos > -1) {
+						// select it
+						ActionBar ab = getActionBar();
+						if (ab != null) {
+							ab.setSelectedNavigationItem(pos);
+							list.handleNoteIntent(intent);
+						}
+					}
+				}
 			}
 		}
 	}
@@ -338,10 +383,11 @@ public class FragmentLayout extends Activity implements
 						getContentResolver(),
 						Long.parseLong(listUri.getPathSegments().get(
 								NotePad.Lists.ID_PATH_POSITION)));
-				getActionBar()
-						.setSelectedNavigationItem(
-								getPosOfId(Long.parseLong(listUri
+				// Select list
+				Log.d(TAG, "id: " + listUri + ", pos: " + getPosOfId(Long.parseLong(listUri
 										.getLastPathSegment())));
+				createdListId = Long.parseLong(listUri
+						.getLastPathSegment());
 			}
 		}
 	}
@@ -392,15 +438,21 @@ public class FragmentLayout extends Activity implements
 			getContentResolver().update(
 					Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
 							Long.toString(currentListId)), values, null, null);
-			// Mark tasks as hidden locally. They are deleted with the list in the sync
+			// Mark tasks as hidden locally. They are deleted with the list in
+			// the sync
 			values = new ContentValues();
 			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
-			values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 0); // Yes zero, we don't want to sync tasks in deleted lists
-			getContentResolver()
-					.update(NotePad.Notes.CONTENT_URI,
-							values,
-							NotePad.Notes.COLUMN_NAME_LIST + " IS "
-									+ currentListId, null);
+			values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 0); // Yes zero, we
+																// don't want to
+																// sync tasks in
+																// deleted lists
+			getContentResolver().update(NotePad.Notes.CONTENT_URI, values,
+					NotePad.Notes.COLUMN_NAME_LIST + " IS " + currentListId,
+					null);
+			// This will trigger a sync at an appropriate time
+			// TODO
+			// Is this a good idea?
+			//getContentResolver().notifyChange(NotePad.Notes.CONTENT_URI, null, true);
 		}
 	}
 
@@ -488,6 +540,12 @@ public class FragmentLayout extends Activity implements
 			if (UI_DEBUG_PRINTS)
 				Log.d(TAG, "menu_deletelist");
 			showDialog(DELETE_LIST);
+			return true;
+		case R.id.menu_setdefaultlist:
+			SharedPreferences.Editor prefEditor = PreferenceManager
+			.getDefaultSharedPreferences(this).edit();
+			prefEditor.putLong(DEFAULTLIST, currentListId);
+			prefEditor.commit();
 			return true;
 		case R.id.menu_search:
 			if (list != null && list.mSearchItem != null) {
@@ -672,8 +730,10 @@ public class FragmentLayout extends Activity implements
 			values.put(NotePad.Notes.COLUMN_NAME_DELETED, "1");
 			resolver.update(NotesEditorFragment.getUriFrom(id), values, null,
 					null);
+			
 			// resolver.delete(NotesEditorFragment.getUriFrom(id), null, null);
 		}
+		//resolver.notifyChange(NotePad.Notes.CONTENT_URI, null, true);
 	}
 
 	/**
@@ -803,10 +863,6 @@ public class FragmentLayout extends Activity implements
 		// Display list'
 		if (list != null) {
 			list.showList(itemId);
-			// If landscape, also open the first note
-			if (LANDSCAPE_MODE) {
-				// TODO slight asynchronous issue because of content loader
-			}
 		}
 		return true;
 	}
@@ -835,6 +891,22 @@ public class FragmentLayout extends Activity implements
 		if (prevNumberOfLists == -1) {
 			prevNumberOfLists = mSpinnerAdapter.getCount();
 			// First start. Also check if we should auto-open a list
+			if (unSelected && currentListId < 0) {
+				currentListId = PreferenceManager.getDefaultSharedPreferences(this).getLong(DEFAULTLIST, -1);
+				if (currentListId > -1) {
+					int position = getPosOfId(currentListId);
+					if (position > -1) {
+						currentListPos = position;
+					}
+					else {
+						// User must have deleted that list. Remove knowledge of default list
+						SharedPreferences.Editor prefEditor = PreferenceManager
+								.getDefaultSharedPreferences(this).edit();
+								prefEditor.remove(DEFAULTLIST);
+								prefEditor.commit();
+					}
+				}
+			}
 			if (unSelected && currentListPos < prevNumberOfLists) {
 				unSelected = false;
 				getActionBar().setSelectedNavigationItem(currentListPos);
@@ -842,10 +914,16 @@ public class FragmentLayout extends Activity implements
 		} else if (prevNumberOfLists < mSpinnerAdapter.getCount()) {
 			// User created a list, we want to display it
 			prevNumberOfLists = mSpinnerAdapter.getCount();
-			// Now select it. Using modified desc, will always be first item.
-			getActionBar().setSelectedNavigationItem(0);
+			// Now select it.
+			if (createdListId > -1) {
+				getActionBar().setSelectedNavigationItem(getPosOfId(createdListId));
+				createdListId = -1;
+			}
+		} else {
+			// Deleted a list maybe
+			prevNumberOfLists = mSpinnerAdapter.getCount();
 		}
-		
+
 		if (optionsMenu != null) {
 			MenuItem createNote = optionsMenu.findItem(R.id.menu_add);
 			if (createNote != null) {
