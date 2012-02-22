@@ -428,10 +428,14 @@ public class GoogleAPITalker {
 		// Any lists that remain in the deletedLists, could not be
 		// found on server. Hence
 		// they must have been deleted. Set them as deleted and add to modified
-		// list
-		for (GoogleTaskList deletedList : deletedLists) {
-			deletedList.deleted = 1;
-			modifiedLists.add(deletedList);
+		// list.
+		// This is though only true if it existed on the server in the first place
+		for (GoogleTaskList possiblyDeletedList : deletedLists) {
+			if (possiblyDeletedList.id != null && !possiblyDeletedList.id.isEmpty()) {
+				possiblyDeletedList.deleted = 1;
+				if (!modifiedLists.contains(possiblyDeletedList))
+					modifiedLists.add(possiblyDeletedList);
+			}
 		}
 
 		return newestEtag;
