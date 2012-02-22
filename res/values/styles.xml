@@ -5,7 +5,7 @@
 		The default definition is the safe one, using a theme that has always been 
 		defined. Look at values-11/styles.xml for a variation that is selected when 
 		the holographic theme is available. -->
-	<style name="ThemeHolo" parent="@android:style/Theme">
+	<style name="ThemeHolo" parent="@android:style/Theme.DeviceDefault">
 
 		<item name="ic_action_compose">@drawable/ic_action_compose_dark</item>
 		<item name="ic_action_delete">@drawable/ic_action_delete_dark</item>
@@ -29,7 +29,7 @@
 
 	</style>
 	
-	<style name="ThemeHoloLight" parent="@android:style/Theme.Light">
+	<style name="ThemeHoloLight" parent="@android:style/Theme.DeviceDefault.Light">
 	    <item name="ic_action_compose">@drawable/ic_action_compose_light</item>
 		<item name="ic_action_delete">@drawable/ic_action_delete_light</item>
 		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_light</item>
@@ -50,7 +50,7 @@
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
 	</style>
 
-	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Light">
+	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.DeviceDefault.Light">
 	    <item name="ic_action_compose">@drawable/ic_action_compose_light</item>
 		<item name="ic_action_delete">@drawable/ic_action_delete_light</item>
 		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_light</item>
@@ -71,7 +71,7 @@
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
 	</style>
 
-	<style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.Dialog">
+	<style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.DeviceDefault.Dialog">
 		<item name="ic_action_compose">@drawable/ic_action_compose_dark</item>
 		<item name="ic_action_delete">@drawable/ic_action_delete_dark</item>
 		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_dark</item>
@@ -100,10 +100,10 @@
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
 	</style>
 	
-	<style name="ActionBarDropDownItem.Dark" parent="@android:style/Widget.DropDownItem.Spinner">
+	<style name="ActionBarDropDownItem.Dark" parent="@android:style/Widget.DeviceDefault.DropDownItem.Spinner">
 	    <item name="android:textColor">#FFFFFF</item>
 	</style>
-	<style name="ActionBarDropDownItem.Light" parent="@android:style/Widget.DropDownItem.Spinner">
+	<style name="ActionBarDropDownItem.Light" parent="@android:style/Widget.DeviceDefault.Light.DropDownItem.Spinner">
 	    <item name="android:textColor">#000000</item>
 	</style>
 
