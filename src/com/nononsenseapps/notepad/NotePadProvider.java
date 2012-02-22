@@ -1816,7 +1816,6 @@ public class NotePadProvider extends ContentProvider implements
 		db.beginTransaction();
 		try {
 			for (ContentProviderOperation operation : operations) {
-				Log.d("JONASBATCH", "applying operation: " + i);
 				// Chain the result for back references
 				result[i++] = operation.apply(this, result, i);
 			}
