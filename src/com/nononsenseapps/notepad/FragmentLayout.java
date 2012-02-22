@@ -59,7 +59,7 @@ public class FragmentLayout extends Activity implements
 	public static boolean AT_LEAST_ICS;
 	public static boolean AT_LEAST_HC;
 
-	public final static boolean UI_DEBUG_PRINTS = false;
+	public final static boolean UI_DEBUG_PRINTS = true;
 
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
 
@@ -256,12 +256,6 @@ public class FragmentLayout extends Activity implements
 						}
 					}
 				}
-			}
-		} else {
-			if (this.list != null) {
-				if (UI_DEBUG_PRINTS)
-					Log.d("FragmentLayout", "Calling refresh");
-				list.refresh();
 			}
 		}
 	}
