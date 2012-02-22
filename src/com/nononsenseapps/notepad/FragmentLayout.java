@@ -453,6 +453,10 @@ public class FragmentLayout extends Activity implements
 			getContentResolver().update(NotePad.Notes.CONTENT_URI, values,
 					NotePad.Notes.COLUMN_NAME_LIST + " IS " + currentListId,
 					null);
+			// This will trigger a sync at an appropriate time
+			// TODO
+			// Is this a good idea?
+			//getContentResolver().notifyChange(NotePad.Notes.CONTENT_URI, null, true);
 		}
 	}
 
@@ -724,8 +728,10 @@ public class FragmentLayout extends Activity implements
 			values.put(NotePad.Notes.COLUMN_NAME_DELETED, "1");
 			resolver.update(NotesEditorFragment.getUriFrom(id), values, null,
 					null);
+			
 			// resolver.delete(NotesEditorFragment.getUriFrom(id), null, null);
 		}
+		//resolver.notifyChange(NotePad.Notes.CONTENT_URI, null, true);
 	}
 
 	/**

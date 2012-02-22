@@ -68,7 +68,7 @@
             android:enabled="true"
             android:exported="true"
             android:label="@string/app_name"
-            android:syncable="false"
+            android:syncable="true"
             android:readPermission="com.nononsenseapps.notepad.permissions.read"
             android:writePermission="com.nononsenseapps.notepad.permissions.write" >
             <grant-uri-permission android:pathPattern=".*" />

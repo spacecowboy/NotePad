@@ -1,15 +1,11 @@
 package com.nononsenseapps.notepad.sync.googleapi;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
-import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.sync.SyncAdapter;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker.NotModifiedException;
 
 import android.content.ContentValues;
 import android.os.RemoteException;
@@ -63,8 +59,7 @@ public class GoogleTaskList {
 
 			res = json.toString(2);
 		} catch (JSONException e) {
-			if (SyncAdapter.SYNC_DEBUG_PRINTS)
-				Log.d(TAG, e.getLocalizedMessage());
+			Log.d(TAG, e.getLocalizedMessage());
 		}
 		return res;
 	}
@@ -83,11 +78,8 @@ public class GoogleTaskList {
 //			if (id != null)
 //				json.put("id", id);
 
-			if (SyncAdapter.SYNC_DEBUG_PRINTS)
-				Log.d(TAG, json.toString(2));
 		} catch (JSONException e) {
-			if (SyncAdapter.SYNC_DEBUG_PRINTS)
-				Log.d(TAG, e.getLocalizedMessage());
+			Log.d(TAG, e.getLocalizedMessage());
 		}
 
 		return json.toString();
@@ -100,10 +92,10 @@ public class GoogleTaskList {
 	 * 
 	 * @return
 	 */
-	public ContentValues toListsContentValues(int modified) {
+	public ContentValues toListsContentValues() {
 		ContentValues values = new ContentValues();
 		values.put(NotePad.Lists.COLUMN_NAME_TITLE, title);
-		values.put(NotePad.Lists.COLUMN_NAME_MODIFIED, modified);
+		values.put(NotePad.Lists.COLUMN_NAME_MODIFIED, 0);
 		return values;
 	}
 
@@ -154,8 +146,6 @@ public class GoogleTaskList {
 
 	public ArrayList<GoogleTask> downloadModifiedTasks(GoogleAPITalker apiTalker,
 			ArrayList<GoogleTask> allTasks, String lastUpdated) throws RemoteException {
-		if (SyncAdapter.SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "DownloadModifiedTasks, last date: " + lastUpdated);
 		// Compare with local tasks, if the tasks have the same remote id, then
 		// they are the same. Use the existing db-id
 		// to avoid creating duplicates
@@ -169,9 +159,6 @@ public class GoogleTaskList {
 				if (task.equals(localTask)) {
 						// We found it!
 						task.dbId = localTask.dbId;
-						// and remove it from the list so we don't iterate over
-						// it again when we don't need to
-						allTasks.remove(localTask);
 						// Save it until later
 						localVersion = localTask;
 						// Move on to next task
@@ -190,16 +177,15 @@ public class GoogleTaskList {
 				Time remote = new Time();
 				remote.parse3339(task.updated);
 				if (Time.compare(remote, local) >= 0) {
-					if (SyncAdapter.SYNC_DEBUG_PRINTS)
-						Log.d(TAG, "Handling conflict: remote was newer");
+					Log.d(TAG, "Handling conflict: remote was newer: " + task.title);
 					// Add to list only if remote is newer
 					moddedTasks.add(task);
 				}
+				else {
+					Log.d(TAG, "Handling conflict: local was newer: " + localVersion.title);
+				}
 			}
 		}
-		
-		if (SyncAdapter.SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "list.id " + dbId + ", moddedTasks length: " + moddedTasks.size());
 		
 		return moddedTasks;
 	}

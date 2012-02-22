@@ -40,6 +40,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 /**
  * SyncAdapter implementation for syncing sample SyncAdapter contacts to the
@@ -96,7 +97,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 				try {
 					// TODO use transactions to speed stuff up
-					
+
 					// FIrst of all, we need the latest updated time later. So
 					// save
 					// that for now.
@@ -110,23 +111,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 					// Prepare lists for items
 					ArrayList<GoogleTaskList> listsToSaveToDB = new ArrayList<GoogleTaskList>();
-					HashMap<GoogleTaskList, ArrayList<GoogleTask>> tasksInListToSaveToDB = new HashMap<GoogleTaskList, ArrayList<GoogleTask>>();
+					HashMap<String, ArrayList<GoogleTask>> tasksInListToSaveToDB = new HashMap<String, ArrayList<GoogleTask>>();
 
 					HashMap<Long, ArrayList<GoogleTask>> tasksInListToUpload = new HashMap<Long, ArrayList<GoogleTask>>();
 					HashMap<Long, ArrayList<GoogleTask>> allTasksInList = new HashMap<Long, ArrayList<GoogleTask>>();
+
 					// gets all tasks in one query
-					// TODO
-					Log.d("JONASJOIN", "Getting all tasks in join...");
-					ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(allTasksInList, tasksInListToUpload);
-					Log.d("JONASJOIN", "task join done");
-					
+					ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(
+							allTasksInList, tasksInListToUpload);
+
 					ArrayList<GoogleTaskList> listsToUpload = new ArrayList<GoogleTaskList>();
 					ArrayList<GoogleTaskList> allLocalLists = new ArrayList<GoogleTaskList>();
+
 					// gets all lists in one query
-					// TODO
-					Log.d("JONASJOIN", "Getting all lists with join...");
 					dbTalker.getAllLists(allLocalLists, listsToUpload);
-					Log.d("JONASJOIN", "list join done: allLists: " + allLocalLists.size() + ", modLists: " + listsToUpload.size());
 
 					// Get the current hash value on the server and all remote
 					// lists
@@ -137,11 +135,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					if (localEtag.equals(serverEtag)) {
 						if (SYNC_DEBUG_PRINTS)
 							Log.d(TAG, "Etags match, nothing to download");
-						// Don't have to download anything, insert empty lists
-						// for (GoogleTaskList list : allLocalLists) {
-						// tasksInListToSaveToDB.put(list,
-						// new ArrayList<GoogleTask>());
-						// }
 					} else {
 						if (SYNC_DEBUG_PRINTS)
 							Log.d(TAG,
@@ -149,10 +142,18 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						// Download tasks which have been updated since last
 						// time
 						for (GoogleTaskList list : listsToSaveToDB) {
-							tasksInListToSaveToDB.put(list, list
-									.downloadModifiedTasks(apiTalker, allTasks,
-											lastUpdated));
+							if (list.id != null && !list.id.isEmpty()) {
+								Log.d(TAG, "Saving remote modified tasks for: " + list.id);
+								tasksInListToSaveToDB.put(list.id, list
+										.downloadModifiedTasks(apiTalker,
+												allTasks, lastUpdated));
+							}
 						}
+					}
+					
+					Log.d(TAG, "What should we save from server:");
+					for (Entry<String, ArrayList<GoogleTask>> entry: tasksInListToSaveToDB.entrySet()) {
+						Log.d(TAG, "Key: " + entry.getKey() + ", value size: " + entry.getValue().size());
 					}
 
 					if (SYNC_DEBUG_PRINTS)
@@ -177,11 +178,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 							// downloaded them
 							// For any task which exists in stuffToSaveToDB, we
 							// should not upload it
-							// Iterate over a clone to avoid concurrency problems since we will be modifying
+							// Iterate over a clone to avoid concurrency
+							// problems since we will be modifying
 							// the list during iteration
-							for (GoogleTask moddedTask : (ArrayList<GoogleTask>) moddedTasks.clone()) {
+							for (GoogleTask moddedTask : (ArrayList<GoogleTask>) moddedTasks
+									.clone()) {
 								ArrayList<GoogleTask> tasksToBeSaved = tasksInListToSaveToDB
-										.get(list);
+										.get(list.id);
 								if (tasksToBeSaved != null
 										&& tasksToBeSaved.contains(moddedTask)) {
 									if (SYNC_DEBUG_PRINTS)
@@ -195,8 +198,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 								// We should definitely not sync it. Only delete
 								// it later
 								if (moddedTask.deleted == 1
-										&& (moddedTask.id == null || moddedTask.id
-												.equals(""))) {
+										&& (moddedTask.id == null || moddedTask.id.isEmpty())) {
 									moddedTasks.remove(moddedTask);
 								}
 							}
@@ -212,22 +214,24 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					for (GoogleTaskList list : listsToUpload) {
 						GoogleTaskList result = apiTalker.uploadList(list);
 						uploadedStuff = true;
+						Log.d(TAG, "Uploaded a list..");
 						if (result != null) {
-							boolean found = false;
+							//boolean found = false;
 							// Make sure that local version is the same as
 							// server's
-							for (GoogleTaskList localList : listsToSaveToDB) {
+							for (GoogleTaskList localList : allLocalLists) {
 								if (result.equals(localList)) {
 									localList.title = result.title;
 									localList.id = result.id;
-									found = true;
+									result.dbId = localList.dbId;
+									//found = true;
 									break;
 								}
 							}
-							if (!found) {
-								// DBID is preserved in upload method
-								listsToSaveToDB.add(result);
-							}
+							//if (!found) {
+							// DBID is preserved in upload method
+							listsToSaveToDB.add(result);
+							//}
 						}
 					}
 
@@ -239,16 +243,22 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 								.get(list.dbId);
 						if (tasksToUpload != null) {
 							for (GoogleTask task : tasksToUpload) {
-								apiTalker.uploadTask(task, list);
+								GoogleTask result = apiTalker.uploadTask(task, list);
 								uploadedStuff = true;
+								Log.d(TAG, "Uploaded task..");
 								// Task now has relevant fields set. Add to
 								// DB-list
-								if (tasksInListToSaveToDB.get(list) == null)
-									tasksInListToSaveToDB.put(list,
+								if (tasksInListToSaveToDB.get(list.id) == null)
+									tasksInListToSaveToDB.put(list.id,
 											new ArrayList<GoogleTask>());
-								tasksInListToSaveToDB.get(list).add(task);
+								tasksInListToSaveToDB.get(list.id).add(result);
 							}
 						}
+					}
+					
+					Log.d(TAG, "2What should we save from server:");
+					for (Entry<String, ArrayList<GoogleTask>> entry: tasksInListToSaveToDB.entrySet()) {
+						Log.d(TAG, "Key: " + entry.getKey() + ", value size: " + entry.getValue().size());
 					}
 
 					// Finally, get the updated etag from the server and save.
@@ -261,58 +271,46 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					editor.putString(PREFS_LAST_SYNC_ETAG, currentEtag);
 					editor.commit();
 
-					// Commit to database. 
-					// TODO use transactions to speed this up
-					
+					// Save to database in a single transaction
 					if (SYNC_DEBUG_PRINTS)
 						Log.d(TAG, "Save stuff to DB");
-					dbTalker.SaveToDatabase(listsToSaveToDB, tasksInListToSaveToDB);
-					
+					dbTalker.SaveToDatabase(listsToSaveToDB,
+							tasksInListToSaveToDB);
 					// Commit it
 					dbTalker.apply();
-					
-					
-					// At last, now just remaining stuff to DB.
-//					for (GoogleTaskList list : listsToSaveToDB) {
-//						if (SYNC_DEBUG_PRINTS)
-//							Log.d(TAG, "Save list to DB: " + list.dbId);
-//						dbTalker.SaveToDatabase(list);
-//					}
 
-					// Commit to database. 
+					// At last, now just remaining stuff to DB.
+					// for (GoogleTaskList list : listsToSaveToDB) {
+					// if (SYNC_DEBUG_PRINTS)
+					// Log.d(TAG, "Save list to DB: " + list.dbId);
+					// dbTalker.SaveToDatabase(list);
+					// }
+
+					// Commit to database.
 					// TODO use transactions to speed this up
 					/*
-					for (GoogleTaskList list : tasksInListToSaveToDB.keySet()) {
-						ArrayList<GoogleTask> tasksToSave = tasksInListToSaveToDB
-								.get(list);
-						if (tasksToSave != null) {
-							for (GoogleTask task : tasksToSave) {
-								if (SYNC_DEBUG_PRINTS)
-									Log.d(TAG, "Save Task to DB: " + task.dbId);
-								dbTalker.SaveToDatabase(task, list);
-							}
-						}
-					}*/
-					
+					 * for (GoogleTaskList list :
+					 * tasksInListToSaveToDB.keySet()) { ArrayList<GoogleTask>
+					 * tasksToSave = tasksInListToSaveToDB .get(list); if
+					 * (tasksToSave != null) { for (GoogleTask task :
+					 * tasksToSave) { if (SYNC_DEBUG_PRINTS) Log.d(TAG,
+					 * "Save Task to DB: " + task.dbId);
+					 * dbTalker.SaveToDatabase(task, list); } } }
+					 */
+
 					// TODO, get rid of database calls here
 					// Now, set sorting values.
 					/*
-					for (GoogleTaskList list : tasksInListToSaveToDB.keySet()) {
-						if (SYNC_DEBUG_PRINTS)
-							Log.d(TAG, "Setting position values in: "
-									+ list.dbId);
-						ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
-								.get(list);
-						if (tasks != null) {
-							if (SYNC_DEBUG_PRINTS)
-								Log.d(TAG,
-										"Setting position values for #tasks: "
-												+ tasks.size());
-							ArrayList<GoogleTask> allTasks = dbTalker
-									.getAllTasks(list);
-							list.setSortingValues(tasks, allTasks);
-						}
-					}*/
+					 * for (GoogleTaskList list :
+					 * tasksInListToSaveToDB.keySet()) { if (SYNC_DEBUG_PRINTS)
+					 * Log.d(TAG, "Setting position values in: " + list.dbId);
+					 * ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
+					 * .get(list); if (tasks != null) { if (SYNC_DEBUG_PRINTS)
+					 * Log.d(TAG, "Setting position values for #tasks: " +
+					 * tasks.size()); ArrayList<GoogleTask> allTasks = dbTalker
+					 * .getAllTasks(list); list.setSortingValues(tasks,
+					 * allTasks); } }
+					 */
 
 					if (SYNC_DEBUG_PRINTS)
 						Log.d(TAG, "Sync Complete!");
@@ -334,7 +332,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						Log.d(TAG,
 								"RemoteException: " + e.getLocalizedMessage());
 				} catch (OperationApplicationException e) {
-					Log.d(TAG, "Joined operation failed: " + e.getLocalizedMessage());
+					Log.d(TAG,
+							"Joined operation failed: "
+									+ e.getLocalizedMessage());
 				}
 
 			} else {

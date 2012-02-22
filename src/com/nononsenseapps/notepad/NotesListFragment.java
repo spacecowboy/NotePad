@@ -868,7 +868,7 @@ public class NotesListFragment extends ListFragment implements
 			Uri uri = NotesEditorFragment.getUriFrom(id);
 			Cursor cursor = openNote(uri);
 
-			if (cursor != null) {
+			if (cursor != null && !cursor.isClosed() && cursor.moveToFirst()) {
 				// Requery in case something changed while paused (such as the
 				// title)
 				// cursor.requery();
@@ -880,7 +880,6 @@ public class NotesListFragment extends ListFragment implements
 				 * index is pointing to a "place" immediately before the first
 				 * record.
 				 */
-				cursor.moveToFirst();
 				String note = "";
 
 				int colTitleIndex = cursor
