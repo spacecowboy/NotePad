@@ -60,6 +60,7 @@ public class FragmentLayout extends Activity implements
 	public static boolean AT_LEAST_HC;
 
 	public final static boolean UI_DEBUG_PRINTS = true;
+	private static final String DEFAULTLIST = "standardListId";
 
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
 
@@ -539,6 +540,12 @@ public class FragmentLayout extends Activity implements
 				Log.d(TAG, "menu_deletelist");
 			showDialog(DELETE_LIST);
 			return true;
+		case R.id.menu_setdefaultlist:
+			SharedPreferences.Editor prefEditor = PreferenceManager
+			.getDefaultSharedPreferences(this).edit();
+			prefEditor.putLong(DEFAULTLIST, currentListId);
+			prefEditor.commit();
+			return true;
 		case R.id.menu_search:
 			if (list != null && list.mSearchItem != null) {
 				list.mSearchItem.expandActionView();
@@ -883,6 +890,22 @@ public class FragmentLayout extends Activity implements
 		if (prevNumberOfLists == -1) {
 			prevNumberOfLists = mSpinnerAdapter.getCount();
 			// First start. Also check if we should auto-open a list
+			if (unSelected && currentListId < 0) {
+				currentListId = PreferenceManager.getDefaultSharedPreferences(this).getLong(DEFAULTLIST, -1);
+				if (currentListId > -1) {
+					int position = getPosOfId(currentListId);
+					if (position > -1) {
+						currentListPos = position;
+					}
+					else {
+						// User must have deleted that list. Remove knowledge of default list
+						SharedPreferences.Editor prefEditor = PreferenceManager
+								.getDefaultSharedPreferences(this).edit();
+								prefEditor.remove(DEFAULTLIST);
+								prefEditor.commit();
+					}
+				}
+			}
 			if (unSelected && currentListPos < prevNumberOfLists) {
 				unSelected = false;
 				getActionBar().setSelectedNavigationItem(currentListPos);
