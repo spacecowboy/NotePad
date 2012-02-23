@@ -18,6 +18,7 @@ package com.nononsenseapps.notepad.sync;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
+import com.nononsenseapps.notepad.NotesPreferenceFragment;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleDBTalker;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
@@ -42,37 +43,39 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
- * This adapter syncs with GoogleTasks API. Each sync is an incremental sync from
- * our last sync. This is accomplished with a combinatinon of etags and last updated
- * time stamp. The API returns a "global" e-tag (hash-value of all content). If this
- * is the same as the etag we have, then nothing has changed on server. Hence, we
- * can know that there is nothing to download. If the etag has changed, the adapter
- * requests, for all lists, all tasks which have been updated since the latest
- * synced task in the database.
- * Possible conflicts with locally modified tasks is resolved by always choosing the
- * latests modified task as the winner.
+ * This adapter syncs with GoogleTasks API. Each sync is an incremental sync
+ * from our last sync. This is accomplished with a combinatinon of etags and
+ * last updated time stamp. The API returns a "global" e-tag (hash-value of all
+ * content). If this is the same as the etag we have, then nothing has changed
+ * on server. Hence, we can know that there is nothing to download. If the etag
+ * has changed, the adapter requests, for all lists, all tasks which have been
+ * updated since the latest synced task in the database. Possible conflicts with
+ * locally modified tasks is resolved by always choosing the latests modified
+ * task as the winner.
  * 
- * Before any changes are committed either way, we should have two DISJOINT sets:
+ * Before any changes are committed either way, we should have two DISJOINT
+ * sets:
  * 
  * TasksFromServer and TasksToServer.
  * 
- * Due to the conflict resolution, no task should exist in both sets. We then upload
- * TasksToServer. For each upload the server will return the current state of the task
- * with some fields updated. These changes we want to save of course, so we add them to
- * TasksFromServer. Which means that after uploading we have a single set:
+ * Due to the conflict resolution, no task should exist in both sets. We then
+ * upload TasksToServer. For each upload the server will return the current
+ * state of the task with some fields updated. These changes we want to save of
+ * course, so we add them to TasksFromServer. Which means that after uploading
+ * we have a single set:
  * 
  * TasksFromServer
  * 
- * Which now contains all tasks that were modified either locally or remotely. In other words,
- * this set is now the union of the two initially disjoint sets, with some fields updated by
- * the server.
+ * Which now contains all tasks that were modified either locally or remotely.
+ * In other words, this set is now the union of the two initially disjoint sets,
+ * with some fields updated by the server.
  * 
  * These tasks are then committed to the database in a single transaction.
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 	private static final String TAG = "SyncAdapter";
-	public final static boolean SYNC_DEBUG_PRINTS = true;
+	public final static boolean SYNC_DEBUG_PRINTS = false;
 
 	// public static final String AUTH_TOKEN_TYPE =
 	// "oauth2:https://www.googleapis.com/auth/tasks";
@@ -99,245 +102,286 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 	@Override
 	public void onPerformSync(Account account, Bundle extras, String authority,
 			ContentProviderClient provider, SyncResult syncResult) {
-		if (SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "onPerformSync");
-		Intent i = new Intent(SYNC_STARTED);
-		mContext.sendBroadcast(i);
-		// Initialize necessary stuff
-		GoogleDBTalker dbTalker = new GoogleDBTalker(account.name, provider);
-		GoogleAPITalker apiTalker = new GoogleAPITalker();
+		final SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(mContext);
 
-		try {
-			boolean connected = apiTalker.initialize(accountManager, account,
-					AUTH_TOKEN_TYPE, NOTIFY_AUTH_FAILURE);
-
-			if (connected) {
-				if (SYNC_DEBUG_PRINTS)
-					Log.d(TAG, "We got an authToken atleast");
-
-				try {
-					// FIrst of all, we need the latest updated time later. So
-					// save
-					// that for now.
-					// This is the latest time we synced
-					String lastUpdated = dbTalker.getLastUpdated(account.name);
-					// Get the latest hash value we saw on the server
-					final SharedPreferences settings = PreferenceManager
-							.getDefaultSharedPreferences(mContext);
-					String localEtag = settings.getString(PREFS_LAST_SYNC_ETAG,
-							"");
-
-					// Prepare lists for items
-					ArrayList<GoogleTaskList> listsToSaveToDB = new ArrayList<GoogleTaskList>();
-					HashMap<String, ArrayList<GoogleTask>> tasksInListToSaveToDB = new HashMap<String, ArrayList<GoogleTask>>();
-
-					HashMap<Long, ArrayList<GoogleTask>> tasksInListToUpload = new HashMap<Long, ArrayList<GoogleTask>>();
-					HashMap<Long, ArrayList<GoogleTask>> allTasksInList = new HashMap<Long, ArrayList<GoogleTask>>();
-
-					// gets all tasks in one query
-					ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(
-							allTasksInList, tasksInListToUpload);
-
-					ArrayList<GoogleTaskList> listsToUpload = new ArrayList<GoogleTaskList>();
-					ArrayList<GoogleTaskList> allLocalLists = new ArrayList<GoogleTaskList>();
-
-					// gets all lists in one query
-					dbTalker.getAllLists(allLocalLists, listsToUpload);
-
-					// Get the current hash value on the server and all remote
-					// lists
-					String serverEtag = apiTalker.getModifiedLists(localEtag,
-							allLocalLists, listsToSaveToDB);
-
-					// IF the tags match, then nothing has changed on server.
-					if (localEtag.equals(serverEtag)) {
-						if (SYNC_DEBUG_PRINTS)
-							Log.d(TAG, "Etags match, nothing to download");
-					} else {
-						if (SYNC_DEBUG_PRINTS)
-							Log.d(TAG,
-									"Etags dont match, downloading new tasks");
-						// Download tasks which have been updated since last
-						// time
-						for (GoogleTaskList list : listsToSaveToDB) {
-							if (list.id != null && !list.id.isEmpty()) {
-								if (SYNC_DEBUG_PRINTS)
-									Log.d(TAG, "Saving remote modified tasks for: " + list.id);
-								tasksInListToSaveToDB.put(list.id, list
-										.downloadModifiedTasks(apiTalker,
-												allTasks, lastUpdated));
-							}
-						}
-					}
-
-					if (SYNC_DEBUG_PRINTS)
-						Log.d(TAG, "Getting stuff we want to upload");
-					// Get stuff we would like to upload to server
-					// In case of lists, locally modified versions always wins
-					// in
-					// conflict, so nothing more to do
-
-					for (GoogleTaskList list : allLocalLists) {
-						ArrayList<GoogleTask> moddedTasks = tasksInListToUpload
-								.get(list.dbId);
-						if (moddedTasks != null && !moddedTasks.isEmpty()) {
-							// There are some tasks here which we want to upload
-							if (SYNC_DEBUG_PRINTS)
-								Log.d(TAG, "List id " + list.dbId
-										+ ", Locally modified tasks found: "
-										+ moddedTasks.size());
-
-							// Now we need to handle possible conflicts in the
-							// tasks. But this has already been sorted when we
-							// downloaded them
-							// For any task which exists in stuffToSaveToDB, we
-							// should not upload it
-							// Iterate over a clone to avoid concurrency
-							// problems since we will be modifying
-							// the list during iteration
-							for (GoogleTask moddedTask : (ArrayList<GoogleTask>) moddedTasks
-									.clone()) {
-								ArrayList<GoogleTask> tasksToBeSaved = tasksInListToSaveToDB
-										.get(list.id);
-								if (tasksToBeSaved != null
-										&& tasksToBeSaved.contains(moddedTask)) {
-									if (SYNC_DEBUG_PRINTS)
-										Log.d(TAG,
-												"This modified task was newer on server, removing from upload list: "
-														+ moddedTask.title);
-									moddedTasks.remove(moddedTask);
-								}
-								// In the case that a task has been deleted
-								// before it was synced the first time
-								// We should definitely not sync it. Only delete
-								// it later
-								if (moddedTask.deleted == 1
-										&& (moddedTask.id == null || moddedTask.id.isEmpty())) {
-									moddedTasks.remove(moddedTask);
-								}
-							}
-						}
-					}
-
-					if (SYNC_DEBUG_PRINTS)
-						Log.d(TAG, "Uploading lists");
-					// First thing we want to do is upload stuff, because some
-					// values are updated then
-					boolean uploadedStuff = false;
-					// Start with lists
-					for (GoogleTaskList list : listsToUpload) {
-						GoogleTaskList result = apiTalker.uploadList(list);
-						uploadedStuff = true;
-						if (result != null) {
-							// Make sure that local version is the same as
-							// server's
-							for (GoogleTaskList localList : allLocalLists) {
-								if (result.equals(localList)) {
-									localList.title = result.title;
-									localList.id = result.id;
-									result.dbId = localList.dbId;
-									break;
-								}
-							}
-							listsToSaveToDB.add(result);
-						}
-					}
-
-					if (SYNC_DEBUG_PRINTS)
-						Log.d(TAG, "Uploading tasks");
-					// Right, now upload tasks
-					for (GoogleTaskList list : allLocalLists) {
-						ArrayList<GoogleTask> tasksToUpload = tasksInListToUpload
-								.get(list.dbId);
-						if (tasksToUpload != null) {
-							for (GoogleTask task : tasksToUpload) {
-								GoogleTask result = apiTalker.uploadTask(task, list);
-								uploadedStuff = true;
-								// Task now has relevant fields set. Add to
-								// DB-list
-								if (tasksInListToSaveToDB.get(list.id) == null)
-									tasksInListToSaveToDB.put(list.id,
-											new ArrayList<GoogleTask>());
-								tasksInListToSaveToDB.get(list.id).add(result);
-							}
-						}
-					}
-
-					// Finally, get the updated etag from the server and save.
-					// Only worth doing if we actually uploaded anything
-					String currentEtag = serverEtag;
-					if (uploadedStuff) {
-						currentEtag = apiTalker.getEtag();
-					}
-					final SharedPreferences.Editor editor = settings.edit();
-					editor.putString(PREFS_LAST_SYNC_ETAG, currentEtag);
-					editor.commit();
-
-					// Save to database in a single transaction
-					if (SYNC_DEBUG_PRINTS)
-						Log.d(TAG, "Save stuff to DB");
-					dbTalker.SaveToDatabase(listsToSaveToDB,
-							tasksInListToSaveToDB);
-					// Commit it
-					dbTalker.apply();
-
-					// TODO, get rid of database calls here
-					// Now, set sorting values.
-					/*
-					 * for (GoogleTaskList list :
-					 * tasksInListToSaveToDB.keySet()) { if (SYNC_DEBUG_PRINTS)
-					 * Log.d(TAG, "Setting position values in: " + list.dbId);
-					 * ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
-					 * .get(list); if (tasks != null) { if (SYNC_DEBUG_PRINTS)
-					 * Log.d(TAG, "Setting position values for #tasks: " +
-					 * tasks.size()); ArrayList<GoogleTask> allTasks = dbTalker
-					 * .getAllTasks(list); list.setSortingValues(tasks,
-					 * allTasks); } }
-					 */
-
-					if (SYNC_DEBUG_PRINTS)
-						Log.d(TAG, "Sync Complete!");
-
-				} catch (ClientProtocolException e) {
-					if (SYNC_DEBUG_PRINTS)
-						Log.d(TAG,
-								"ClientProtocolException: "
-										+ e.getLocalizedMessage());
-				} catch (JSONException e) {
-					if (SYNC_DEBUG_PRINTS)
-						Log.d(TAG, "JSONException: " + e.getLocalizedMessage());
-				} catch (IOException e) {
-					syncResult.stats.numIoExceptions++;
-					if (SYNC_DEBUG_PRINTS)
-						Log.d(TAG, "IOException: " + e.getLocalizedMessage());
-				} catch (RemoteException e) {
-					if (SYNC_DEBUG_PRINTS)
-						Log.d(TAG,
-								"RemoteException: " + e.getLocalizedMessage());
-				} catch (OperationApplicationException e) {
-					Log.d(TAG,
-							"Joined operation failed: "
-									+ e.getLocalizedMessage());
-				}
-
-			} else {
-				// return real failure
-				if (SYNC_DEBUG_PRINTS)
-					Log.d(TAG,
-							"Could not get authToken. Reporting authException");
-				syncResult.stats.numAuthExceptions++;
-			}
-
-		} finally {
-			// This must always be called or we will leak resources
-			if (apiTalker != null) {
-				apiTalker.closeClient();
-			}
-			Intent j = new Intent(SYNC_FINISHED);
-			mContext.sendBroadcast(j);
+		// Only sync if it has been enabled by the user, and account is selected
+		// Issue on reinstall where account approval is remembered by system
+		if (settings.getBoolean(NotesPreferenceFragment.KEY_SYNC_ENABLE, false)
+				&& !settings.getString(NotesPreferenceFragment.KEY_ACCOUNT, "")
+						.isEmpty()
+				&& account.name.equals(settings.getString(
+						NotesPreferenceFragment.KEY_ACCOUNT, ""))) {
 
 			if (SYNC_DEBUG_PRINTS)
-				Log.d(TAG, "SyncResult: " + syncResult.toDebugString());
+				Log.d(TAG, "onPerformSync");
+			Intent i = new Intent(SYNC_STARTED);
+			mContext.sendBroadcast(i);
+			// Initialize necessary stuff
+			GoogleDBTalker dbTalker = new GoogleDBTalker(account.name, provider);
+			GoogleAPITalker apiTalker = new GoogleAPITalker();
+
+			try {
+				boolean connected = apiTalker.initialize(accountManager,
+						account, AUTH_TOKEN_TYPE, NOTIFY_AUTH_FAILURE);
+
+				if (connected) {
+					if (SYNC_DEBUG_PRINTS)
+						Log.d(TAG, "We got an authToken atleast");
+
+					try {
+						// FIrst of all, we need the latest updated time later.
+						// So
+						// save
+						// that for now.
+						// This is the latest time we synced
+						String lastUpdated = dbTalker
+								.getLastUpdated(account.name);
+						// Get the latest hash value we saw on the server
+						String localEtag = settings.getString(
+								PREFS_LAST_SYNC_ETAG, "");
+
+						// Prepare lists for items
+						ArrayList<GoogleTaskList> listsToSaveToDB = new ArrayList<GoogleTaskList>();
+						HashMap<String, ArrayList<GoogleTask>> tasksInListToSaveToDB = new HashMap<String, ArrayList<GoogleTask>>();
+
+						HashMap<Long, ArrayList<GoogleTask>> tasksInListToUpload = new HashMap<Long, ArrayList<GoogleTask>>();
+						HashMap<Long, ArrayList<GoogleTask>> allTasksInList = new HashMap<Long, ArrayList<GoogleTask>>();
+
+						// gets all tasks in one query
+						ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(
+								allTasksInList, tasksInListToUpload);
+
+						ArrayList<GoogleTaskList> listsToUpload = new ArrayList<GoogleTaskList>();
+						ArrayList<GoogleTaskList> allLocalLists = new ArrayList<GoogleTaskList>();
+
+						// gets all lists in one query
+						dbTalker.getAllLists(allLocalLists, listsToUpload);
+
+						// Get the current hash value on the server and all
+						// remote
+						// lists
+						String serverEtag = apiTalker.getModifiedLists(
+								localEtag, allLocalLists, listsToSaveToDB);
+
+						// IF the tags match, then nothing has changed on
+						// server.
+						if (localEtag.equals(serverEtag)) {
+							if (SYNC_DEBUG_PRINTS)
+								Log.d(TAG, "Etags match, nothing to download");
+						} else {
+							if (SYNC_DEBUG_PRINTS)
+								Log.d(TAG,
+										"Etags dont match, downloading new tasks");
+							// Download tasks which have been updated since last
+							// time
+							for (GoogleTaskList list : listsToSaveToDB) {
+								if (list.id != null && !list.id.isEmpty()) {
+									if (SYNC_DEBUG_PRINTS)
+										Log.d(TAG,
+												"Saving remote modified tasks for: "
+														+ list.id);
+									tasksInListToSaveToDB.put(list.id, list
+											.downloadModifiedTasks(apiTalker,
+													allTasks, lastUpdated));
+								}
+							}
+						}
+
+						if (SYNC_DEBUG_PRINTS)
+							Log.d(TAG, "Getting stuff we want to upload");
+						// Get stuff we would like to upload to server
+						// In case of lists, locally modified versions always
+						// wins
+						// in
+						// conflict, so nothing more to do
+
+						for (GoogleTaskList list : allLocalLists) {
+							ArrayList<GoogleTask> moddedTasks = tasksInListToUpload
+									.get(list.dbId);
+							if (moddedTasks != null && !moddedTasks.isEmpty()) {
+								// There are some tasks here which we want to
+								// upload
+								if (SYNC_DEBUG_PRINTS)
+									Log.d(TAG,
+											"List id "
+													+ list.dbId
+													+ ", Locally modified tasks found: "
+													+ moddedTasks.size());
+
+								// Now we need to handle possible conflicts in
+								// the
+								// tasks. But this has already been sorted when
+								// we
+								// downloaded them
+								// For any task which exists in stuffToSaveToDB,
+								// we
+								// should not upload it
+								// Iterate over a clone to avoid concurrency
+								// problems since we will be modifying
+								// the list during iteration
+								for (GoogleTask moddedTask : (ArrayList<GoogleTask>) moddedTasks
+										.clone()) {
+									ArrayList<GoogleTask> tasksToBeSaved = tasksInListToSaveToDB
+											.get(list.id);
+									if (tasksToBeSaved != null
+											&& tasksToBeSaved
+													.contains(moddedTask)) {
+										if (SYNC_DEBUG_PRINTS)
+											Log.d(TAG,
+													"This modified task was newer on server, removing from upload list: "
+															+ moddedTask.title);
+										moddedTasks.remove(moddedTask);
+									}
+									// In the case that a task has been deleted
+									// before it was synced the first time
+									// We should definitely not sync it. Only
+									// delete
+									// it later
+									if (moddedTask.deleted == 1
+											&& (moddedTask.id == null || moddedTask.id
+													.isEmpty())) {
+										moddedTasks.remove(moddedTask);
+									}
+								}
+							}
+						}
+
+						if (SYNC_DEBUG_PRINTS)
+							Log.d(TAG, "Uploading lists");
+						// First thing we want to do is upload stuff, because
+						// some
+						// values are updated then
+						boolean uploadedStuff = false;
+						// Start with lists
+						for (GoogleTaskList list : listsToUpload) {
+							GoogleTaskList result = apiTalker.uploadList(list);
+							uploadedStuff = true;
+							if (result != null) {
+								// Make sure that local version is the same as
+								// server's
+								for (GoogleTaskList localList : allLocalLists) {
+									if (result.equals(localList)) {
+										localList.title = result.title;
+										localList.id = result.id;
+										result.dbId = localList.dbId;
+										break;
+									}
+								}
+								listsToSaveToDB.add(result);
+							}
+						}
+
+						if (SYNC_DEBUG_PRINTS)
+							Log.d(TAG, "Uploading tasks");
+						// Right, now upload tasks
+						for (GoogleTaskList list : allLocalLists) {
+							ArrayList<GoogleTask> tasksToUpload = tasksInListToUpload
+									.get(list.dbId);
+							if (tasksToUpload != null) {
+								for (GoogleTask task : tasksToUpload) {
+									GoogleTask result = apiTalker.uploadTask(
+											task, list);
+									uploadedStuff = true;
+									// Task now has relevant fields set. Add to
+									// DB-list
+									if (tasksInListToSaveToDB.get(list.id) == null)
+										tasksInListToSaveToDB.put(list.id,
+												new ArrayList<GoogleTask>());
+									tasksInListToSaveToDB.get(list.id).add(
+											result);
+								}
+							}
+						}
+
+						// Finally, get the updated etag from the server and
+						// save.
+						// Only worth doing if we actually uploaded anything
+						String currentEtag = serverEtag;
+						if (uploadedStuff) {
+							currentEtag = apiTalker.getEtag();
+						}
+						// final SharedPreferences.Editor editor =
+						// settings.edit();
+						// editor.putString(PREFS_LAST_SYNC_ETAG, currentEtag);
+						// editor.commit();
+						settings.edit()
+								.putString(PREFS_LAST_SYNC_ETAG, currentEtag)
+								.commit();
+
+						// Now, set sorting values.
+						// TODO
+//						for (String listId : tasksInListToSaveToDB.keySet()) {
+//							if (SYNC_DEBUG_PRINTS)
+//								Log.d(TAG, "Setting position values in: "
+//										+ listId);
+//							ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
+//									.get(listId);
+//							if (tasks != null) {
+//								if (SYNC_DEBUG_PRINTS)
+//									Log.d(TAG,
+//											"Setting position values for #tasks: "
+//													+ tasks.size());
+//								ArrayList<GoogleTask> allTasks = allTasksInList(task.)
+//								list.setSortingValues(tasks, allTasks);
+//							}
+//						}
+
+						// Save to database in a single transaction
+						if (SYNC_DEBUG_PRINTS)
+							Log.d(TAG, "Save stuff to DB");
+						dbTalker.SaveToDatabase(listsToSaveToDB,
+								tasksInListToSaveToDB);
+						// Commit it
+						dbTalker.apply();
+
+						if (SYNC_DEBUG_PRINTS)
+							Log.d(TAG, "Sync Complete!");
+
+					} catch (ClientProtocolException e) {
+						if (SYNC_DEBUG_PRINTS)
+							Log.d(TAG,
+									"ClientProtocolException: "
+											+ e.getLocalizedMessage());
+					} catch (JSONException e) {
+						if (SYNC_DEBUG_PRINTS)
+							Log.d(TAG,
+									"JSONException: " + e.getLocalizedMessage());
+					} catch (IOException e) {
+						syncResult.stats.numIoExceptions++;
+						if (SYNC_DEBUG_PRINTS)
+							Log.d(TAG,
+									"IOException: " + e.getLocalizedMessage());
+					} catch (RemoteException e) {
+						if (SYNC_DEBUG_PRINTS)
+							Log.d(TAG,
+									"RemoteException: "
+											+ e.getLocalizedMessage());
+					} catch (OperationApplicationException e) {
+						Log.d(TAG,
+								"Joined operation failed: "
+										+ e.getLocalizedMessage());
+					}
+
+				} else {
+					// return real failure
+					if (SYNC_DEBUG_PRINTS)
+						Log.d(TAG,
+								"Could not get authToken. Reporting authException");
+					syncResult.stats.numAuthExceptions++;
+				}
+
+			} finally {
+				// This must always be called or we will leak resources
+				if (apiTalker != null) {
+					apiTalker.closeClient();
+				}
+				Intent j = new Intent(SYNC_FINISHED);
+				mContext.sendBroadcast(j);
+
+				if (SYNC_DEBUG_PRINTS)
+					Log.d(TAG, "SyncResult: " + syncResult.toDebugString());
+			}
 		}
 	}
 }

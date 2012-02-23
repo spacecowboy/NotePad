@@ -604,6 +604,9 @@ public class GoogleAPITalker {
 				httppost.setHeader("X-HTTP-Method-Override", "PATCH");
 			}
 		} else {
+			if (list.deleted == 1) {
+				return list; // Don't sync deleted items which do not exist on the server
+			}
 			if (SyncAdapter.SYNC_DEBUG_PRINTS)
 				Log.d(TAG, "ID IS NULL: " + ALL_LISTS);
 			httppost = new HttpPost(ALL_LISTS);
