@@ -25,8 +25,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
     package="com.nononsenseapps.notepad_donate"
-    android:versionCode="16"
-    android:versionName="3.0.5" >
+    android:versionCode="17"
+    android:versionName="3.0.6" >
 
     <uses-sdk
         android:minSdkVersion="14"
