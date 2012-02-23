@@ -365,9 +365,10 @@ public class NotesListFragment extends ListFragment implements
 			activity.getContentResolver().update(
 					NotePad.Notes.CONTENT_URI,
 					values,
-					NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?",
+					NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ? AND "
+					+ NotePad.Notes.COLUMN_NAME_LIST + " IS ?",
 					new String[] { getText(R.string.gtask_status_completed)
-							.toString() });
+							.toString(), Long.toString(mCurListId) });
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
