@@ -60,7 +60,7 @@ public class FragmentLayout extends Activity implements
 	public static boolean AT_LEAST_ICS;
 	public static boolean AT_LEAST_HC;
 
-	public final static boolean UI_DEBUG_PRINTS = true;
+	public final static boolean UI_DEBUG_PRINTS = false;
 	private static final String DEFAULTLIST = "standardListId";
 
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
@@ -89,9 +89,8 @@ public class FragmentLayout extends Activity implements
 		AT_LEAST_HC = getResources().getBoolean(R.bool.atLeastHoneycomb);
 
 		if (savedInstanceState != null) {
-			// TODO this will get overwritten in the onNavigationClick callback.
-			// We don't want that
-			Log.d(TAG, "Reloading state");
+			if (UI_DEBUG_PRINTS)
+				Log.d(TAG, "Reloading state");
 			currentListId = savedInstanceState.getLong(CURRENT_LIST_ID);
 			currentListPos = savedInstanceState.getInt(CURRENT_LIST_POS);
 		}
@@ -277,7 +276,8 @@ public class FragmentLayout extends Activity implements
 		if (UI_DEBUG_PRINTS)
 			Log.d("FragmentLayout", "onResume");
 		if (shouldRestart) {
-			Log.d("FragmentLayout", "Should refresh");
+			if (UI_DEBUG_PRINTS)
+				Log.d("FragmentLayout", "Should refresh");
 			restartAndRefresh();
 		}
 		super.onResume();
@@ -394,12 +394,6 @@ public class FragmentLayout extends Activity implements
 						Long.parseLong(listUri.getPathSegments().get(
 								NotePad.Lists.ID_PATH_POSITION)));
 				// Select list
-				Log.d(TAG,
-						"id: "
-								+ listUri
-								+ ", pos: "
-								+ getPosOfId(Long.parseLong(listUri
-										.getLastPathSegment())));
 				createdListId = Long.parseLong(listUri.getLastPathSegment());
 			}
 		}
@@ -490,11 +484,6 @@ public class FragmentLayout extends Activity implements
 								values,
 								NotePad.Notes.COLUMN_NAME_LIST + " IS "
 										+ currentListId, null);
-				// This will trigger a sync at an appropriate time
-				// TODO
-				// Is this a good idea?
-				// getContentResolver().notifyChange(NotePad.Notes.CONTENT_URI,
-				// null, true);
 			} else {
 				// Delete for real
 				getContentResolver().delete(
@@ -817,7 +806,8 @@ public class FragmentLayout extends Activity implements
 	@Override
 	public void onMultiDelete(Collection<Long> ids, long curId) {
 		if (ids.contains(curId)) {
-			Log.d("FragmentLayout",
+			if (UI_DEBUG_PRINTS)
+				Log.d("FragmentLayout",
 					"id was contained in multidelete, setting no save first");
 			NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
 					.findFragmentById(R.id.editor_container);

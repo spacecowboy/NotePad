@@ -75,7 +75,7 @@ import java.util.HashMap;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 	private static final String TAG = "SyncAdapter";
-	public final static boolean SYNC_DEBUG_PRINTS = true;
+	public final static boolean SYNC_DEBUG_PRINTS = false;
 
 	// public static final String AUTH_TOKEN_TYPE =
 	// "oauth2:https://www.googleapis.com/auth/tasks";
@@ -109,7 +109,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		// Issue on reinstall where account approval is remembered by system
 		if (settings.getBoolean(NotesPreferenceFragment.KEY_SYNC_ENABLE, false)
 				&& !settings.getString(NotesPreferenceFragment.KEY_ACCOUNT, "")
-						.isEmpty() && account.name.equals(settings.getString(NotesPreferenceFragment.KEY_ACCOUNT, ""))) {
+						.isEmpty()
+				&& account.name.equals(settings.getString(
+						NotesPreferenceFragment.KEY_ACCOUNT, ""))) {
 
 			if (SYNC_DEBUG_PRINTS)
 				Log.d(TAG, "onPerformSync");
@@ -299,10 +301,31 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						if (uploadedStuff) {
 							currentEtag = apiTalker.getEtag();
 						}
-//						final SharedPreferences.Editor editor = settings.edit();
-//						editor.putString(PREFS_LAST_SYNC_ETAG, currentEtag);
-//						editor.commit();
-						settings.edit().putString(PREFS_LAST_SYNC_ETAG, currentEtag).commit();
+						// final SharedPreferences.Editor editor =
+						// settings.edit();
+						// editor.putString(PREFS_LAST_SYNC_ETAG, currentEtag);
+						// editor.commit();
+						settings.edit()
+								.putString(PREFS_LAST_SYNC_ETAG, currentEtag)
+								.commit();
+
+						// Now, set sorting values.
+						// TODO
+//						for (String listId : tasksInListToSaveToDB.keySet()) {
+//							if (SYNC_DEBUG_PRINTS)
+//								Log.d(TAG, "Setting position values in: "
+//										+ listId);
+//							ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
+//									.get(listId);
+//							if (tasks != null) {
+//								if (SYNC_DEBUG_PRINTS)
+//									Log.d(TAG,
+//											"Setting position values for #tasks: "
+//													+ tasks.size());
+//								ArrayList<GoogleTask> allTasks = allTasksInList(task.)
+//								list.setSortingValues(tasks, allTasks);
+//							}
+//						}
 
 						// Save to database in a single transaction
 						if (SYNC_DEBUG_PRINTS)
@@ -311,22 +334,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 								tasksInListToSaveToDB);
 						// Commit it
 						dbTalker.apply();
-
-						// TODO, get rid of database calls here
-						// Now, set sorting values.
-						/*
-						 * for (GoogleTaskList list :
-						 * tasksInListToSaveToDB.keySet()) { if
-						 * (SYNC_DEBUG_PRINTS) Log.d(TAG,
-						 * "Setting position values in: " + list.dbId);
-						 * ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
-						 * .get(list); if (tasks != null) { if
-						 * (SYNC_DEBUG_PRINTS) Log.d(TAG,
-						 * "Setting position values for #tasks: " +
-						 * tasks.size()); ArrayList<GoogleTask> allTasks =
-						 * dbTalker .getAllTasks(list);
-						 * list.setSortingValues(tasks, allTasks); } }
-						 */
 
 						if (SYNC_DEBUG_PRINTS)
 							Log.d(TAG, "Sync Complete!");

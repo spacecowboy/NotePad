@@ -1334,7 +1334,8 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	private static int deleteListFromDb(SQLiteDatabase db, String id,
 			String where, String[] whereArgs) {
-		Log.d(TAG, "Deleting list from DB: " + id);
+		if (FragmentLayout.UI_DEBUG_PRINTS || SyncAdapter.SYNC_DEBUG_PRINTS)
+			Log.d(TAG, "Deleting list from DB: " + id);
 		
 		String finalWhere = BaseColumns._ID + " = " + id;
 
@@ -1395,7 +1396,8 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	private static int deleteNoteFromDb(SQLiteDatabase db, String id,
 			String where, String[] whereArgs) {
-		Log.d(TAG, "Deleting note from DB: " + id);
+		if (FragmentLayout.UI_DEBUG_PRINTS || SyncAdapter.SYNC_DEBUG_PRINTS)
+			Log.d(TAG, "Deleting note from DB: " + id);
 		
 		String finalWhere = BaseColumns._ID + " = " + id;
 
