@@ -109,7 +109,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		// Issue on reinstall where account approval is remembered by system
 		if (settings.getBoolean(NotesPreferenceFragment.KEY_SYNC_ENABLE, false)
 				&& !settings.getString(NotesPreferenceFragment.KEY_ACCOUNT, "")
-						.isEmpty()) {
+						.isEmpty() && account.name.equals(settings.getString(NotesPreferenceFragment.KEY_ACCOUNT, ""))) {
 
 			if (SYNC_DEBUG_PRINTS)
 				Log.d(TAG, "onPerformSync");
