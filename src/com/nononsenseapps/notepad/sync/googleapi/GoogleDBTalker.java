@@ -332,13 +332,9 @@ public class GoogleDBTalker {
 									NotePad.Lists.CONTENT_ID_URI_BASE,
 									Long.toString(list.dbId))).build());
 
-					operations.add(ContentProviderOperation
-							.newDelete(NotePad.GTaskLists.CONTENT_URI)
-							.withSelection(
-									NotePad.GTaskLists.COLUMN_NAME_DB_ID
-											+ " IS ?",
-									new String[] { Long.toString(list.dbId) })
-							.build());
+					// GTaskslists table handled by provider
+					// As well as any notes contained in list
+
 				} else {
 					// Update record
 					operations.add(ContentProviderOperation
@@ -420,7 +416,6 @@ public class GoogleDBTalker {
 			int listIdIndex, long listDbId) {
 		int noteIdIndex;
 		for (GoogleTask task : tasks) {
-			// Remember to do both Lists and GTASks tables
 			if (task.dbId > -1 && task.deleted != 1) {
 				if (SyncAdapter.SYNC_DEBUG_PRINTS)
 					Log.d(TAG, "Updating task");
@@ -464,18 +459,13 @@ public class GoogleDBTalker {
 						Uri.withAppendedPath(NotePad.Notes.CONTENT_ID_URI_BASE,
 								Long.toString(task.dbId))).build());
 
-				operations.add(ContentProviderOperation
-						.newDelete(NotePad.GTasks.CONTENT_URI)
-						.withSelection(
-								NotePad.GTasks.COLUMN_NAME_DB_ID + " IS ?",
-								new String[] { Long.toString(task.dbId) })
-						.build());
+				// GTasks table Handled by the provider
 
 			} else if (task.deleted == 1) {
 				if (SyncAdapter.SYNC_DEBUG_PRINTS)
 					Log.d(TAG, "Delete task with no dbId? Madness!");
 				// This must be a task which we ourselves deleted earlier.
-				// Ignore them
+				// Ignore them as they can't exist in the DB
 			} else {
 				if (SyncAdapter.SYNC_DEBUG_PRINTS)
 					Log.d(TAG, "Inserting task");

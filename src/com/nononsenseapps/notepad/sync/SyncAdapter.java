@@ -299,9 +299,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						if (uploadedStuff) {
 							currentEtag = apiTalker.getEtag();
 						}
-						final SharedPreferences.Editor editor = settings.edit();
-						editor.putString(PREFS_LAST_SYNC_ETAG, currentEtag);
-						editor.commit();
+//						final SharedPreferences.Editor editor = settings.edit();
+//						editor.putString(PREFS_LAST_SYNC_ETAG, currentEtag);
+//						editor.commit();
+						settings.edit().putString(PREFS_LAST_SYNC_ETAG, currentEtag).commit();
 
 						// Save to database in a single transaction
 						if (SYNC_DEBUG_PRINTS)

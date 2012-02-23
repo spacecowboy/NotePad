@@ -18,6 +18,7 @@ import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -208,10 +209,12 @@ public class FragmentLayout extends Activity implements
 			}
 		} else if (Intent.ACTION_EDIT.equals(intent.getAction())
 				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
-			if (intent.getData() != null && intent.getData().getPath().startsWith(NotePad.Lists.PATH_VISIBLE_LIST_ID)) {
+			if (intent.getData() != null
+					&& intent.getData().getPath()
+							.startsWith(NotePad.Lists.PATH_VISIBLE_LIST_ID)) {
 				// Get id to display
-				String newId = intent.getData().getPathSegments().get(
-						NotePad.Lists.ID_PATH_POSITION);
+				String newId = intent.getData().getPathSegments()
+						.get(NotePad.Lists.ID_PATH_POSITION);
 				long listId = Long.parseLong(newId);
 				int pos = getPosOfId(listId);
 				if (pos > -1) {
@@ -220,7 +223,9 @@ public class FragmentLayout extends Activity implements
 					if (ab != null)
 						ab.setSelectedNavigationItem(pos);
 				}
-			} else if (intent.getData() != null && intent.getData().getPath().startsWith(NotePad.Notes.PATH_VISIBLE_NOTE_ID)) {
+			} else if (intent.getData() != null
+					&& intent.getData().getPath()
+							.startsWith(NotePad.Notes.PATH_VISIBLE_NOTE_ID)) {
 				if (list != null) {
 					long listId = intent.getExtras().getLong(
 							NotePad.Notes.COLUMN_NAME_LIST, -1);
@@ -236,14 +241,20 @@ public class FragmentLayout extends Activity implements
 				}
 			}
 		} else if (Intent.ACTION_INSERT.equals(intent.getAction())) {
-			if (intent.getType() != null && intent.getType().equals(NotePad.Lists.CONTENT_TYPE)
-					|| intent.getData() != null && intent.getData().equals(NotePad.Lists.CONTENT_VISIBLE_URI)) {
+			if (intent.getType() != null
+					&& intent.getType().equals(NotePad.Lists.CONTENT_TYPE)
+					|| intent.getData() != null
+					&& intent.getData().equals(
+							NotePad.Lists.CONTENT_VISIBLE_URI)) {
 				// get Title
 				String title = intent.getExtras().getString(
 						NotePad.Lists.COLUMN_NAME_TITLE, "");
 				createList(title);
-			} else if (intent.getType() != null && intent.getType().equals(NotePad.Notes.CONTENT_TYPE)
-					|| intent.getData() != null && intent.getData().equals(NotePad.Notes.CONTENT_VISIBLE_URI)) {
+			} else if (intent.getType() != null
+					&& intent.getType().equals(NotePad.Notes.CONTENT_TYPE)
+					|| intent.getData() != null
+					&& intent.getData().equals(
+							NotePad.Notes.CONTENT_VISIBLE_URI)) {
 				if (list != null) {
 					long listId = intent.getExtras().getLong(
 							NotePad.Notes.COLUMN_NAME_LIST, -1);
@@ -383,10 +394,13 @@ public class FragmentLayout extends Activity implements
 						Long.parseLong(listUri.getPathSegments().get(
 								NotePad.Lists.ID_PATH_POSITION)));
 				// Select list
-				Log.d(TAG, "id: " + listUri + ", pos: " + getPosOfId(Long.parseLong(listUri
+				Log.d(TAG,
+						"id: "
+								+ listUri
+								+ ", pos: "
+								+ getPosOfId(Long.parseLong(listUri
 										.getLastPathSegment())));
-				createdListId = Long.parseLong(listUri
-						.getLastPathSegment());
+				createdListId = Long.parseLong(listUri.getLastPathSegment());
 			}
 		}
 	}
@@ -423,6 +437,24 @@ public class FragmentLayout extends Activity implements
 	}
 
 	/**
+	 * Returns true if user has activated sync and there is a valid account name
+	 * selected (not "")
+	 * 
+	 * @return
+	 */
+	public static boolean shouldMarkAsDeleted(Context context) {
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		if (settings == null)
+			return false;
+		else
+			return (settings.getBoolean(
+					NotesPreferenceFragment.KEY_SYNC_ENABLE, false) && !settings
+					.getString(NotesPreferenceFragment.KEY_ACCOUNT, "")
+					.isEmpty());
+	}
+
+	/**
 	 * Marks the current list and all the tasks contained in it as deleted in
 	 * the database. Will be deleted on next sync.
 	 */
@@ -431,27 +463,44 @@ public class FragmentLayout extends Activity implements
 			Log.d(TAG, "Delete current list");
 		// Only if id is valid
 		if (currentListId > -1) {
-			ContentValues values = new ContentValues();
-			values.put(NotePad.Lists.COLUMN_NAME_DELETED, 1);
-			// Mark list as deleted
-			getContentResolver().update(
-					Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
-							Long.toString(currentListId)), values, null, null);
-			// Mark tasks as hidden locally. They are deleted with the list in
-			// the sync
-			values = new ContentValues();
-			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
-			values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 0); // Yes zero, we
-																// don't want to
-																// sync tasks in
-																// deleted lists
-			getContentResolver().update(NotePad.Notes.CONTENT_URI, values,
-					NotePad.Notes.COLUMN_NAME_LIST + " IS " + currentListId,
-					null);
-			// This will trigger a sync at an appropriate time
-			// TODO
-			// Is this a good idea?
-			//getContentResolver().notifyChange(NotePad.Notes.CONTENT_URI, null, true);
+			// Only mark as deleted so it is synced
+			if (shouldMarkAsDeleted(this)) {
+				ContentValues values = new ContentValues();
+				values.put(NotePad.Lists.COLUMN_NAME_DELETED, 1);
+				// Mark list as deleted
+				getContentResolver().update(
+						Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
+								Long.toString(currentListId)), values, null,
+						null);
+				// Mark tasks as hidden locally. They are deleted with the list
+				// in
+				// the sync
+				values = new ContentValues();
+				values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
+				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 0); // Yes zero,
+																	// we
+																	// don't
+																	// want to
+																	// sync
+																	// tasks in
+																	// deleted
+																	// lists
+				getContentResolver()
+						.update(NotePad.Notes.CONTENT_URI,
+								values,
+								NotePad.Notes.COLUMN_NAME_LIST + " IS "
+										+ currentListId, null);
+				// This will trigger a sync at an appropriate time
+				// TODO
+				// Is this a good idea?
+				// getContentResolver().notifyChange(NotePad.Notes.CONTENT_URI,
+				// null, true);
+			} else {
+				// Delete for real
+				getContentResolver().delete(
+						Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
+								Long.toString(currentListId)), null, null);
+			}
 		}
 	}
 
@@ -542,7 +591,7 @@ public class FragmentLayout extends Activity implements
 			return true;
 		case R.id.menu_setdefaultlist:
 			SharedPreferences.Editor prefEditor = PreferenceManager
-			.getDefaultSharedPreferences(this).edit();
+					.getDefaultSharedPreferences(this).edit();
 			prefEditor.putLong(DEFAULTLIST, currentListId);
 			prefEditor.commit();
 			return true;
@@ -690,7 +739,7 @@ public class FragmentLayout extends Activity implements
 				Log.d(TAG, "onDeleteAction");
 			editorFragment.setSelfAction(); // Don't try to reload the deleted
 											// note
-			FragmentLayout.deleteNote(getContentResolver(),
+			FragmentLayout.deleteNote(this,
 					editorFragment.getCurrentNoteId());
 			setResult(Activity.RESULT_CANCELED);
 			finish();
@@ -699,7 +748,7 @@ public class FragmentLayout extends Activity implements
 
 	@Override
 	public void onEditorDelete(long id) {
-		deleteNote(getContentResolver(), id);
+		deleteNote(this, id);
 	}
 
 	/**
@@ -707,32 +756,37 @@ public class FragmentLayout extends Activity implements
 	 * 
 	 * @param id
 	 */
-	public static void deleteNote(ContentResolver resolver, long id) {
+	public static void deleteNote(Context context, long id) {
 		if (UI_DEBUG_PRINTS)
 			Log.d(TAG, "deleteNote: " + id);
 		// Only do this for valid id
 		if (id > -1) {
 			ArrayList<Long> idList = new ArrayList<Long>();
 			idList.add(id);
-			deleteNotes(resolver, idList);
+			deleteNotes(context, idList);
 		}
 	}
 
 	/**
-	 * Delete all notes given from database Only marks them as deleted actually
+	 * Delete all notes given from database Only marks them as deleted if sync
+	 * is enabled
 	 * 
 	 * @param ids
 	 */
-	public static void deleteNotes(ContentResolver resolver, Iterable<Long> ids) {
+	public static void deleteNotes(Context context,
+			Iterable<Long> ids) {
+		ContentResolver resolver = context.getContentResolver();
+		boolean shouldMark = shouldMarkAsDeleted(context);
 		for (long id : ids) {
-			ContentValues values = new ContentValues();
-			values.put(NotePad.Notes.COLUMN_NAME_DELETED, "1");
-			resolver.update(NotesEditorFragment.getUriFrom(id), values, null,
-					null);
-			
-			// resolver.delete(NotesEditorFragment.getUriFrom(id), null, null);
+			if (shouldMark) {
+				ContentValues values = new ContentValues();
+				values.put(NotePad.Notes.COLUMN_NAME_DELETED, "1");
+				resolver.update(NotesEditorFragment.getUriFrom(id), values,
+						null, null);
+			} else {
+				resolver.delete(NotesEditorFragment.getUriFrom(id), null, null);
+			}
 		}
-		//resolver.notifyChange(NotePad.Notes.CONTENT_URI, null, true);
 	}
 
 	/**
@@ -773,7 +827,7 @@ public class FragmentLayout extends Activity implements
 		}
 		if (UI_DEBUG_PRINTS)
 			Log.d("FragmentLayout", "deleting notes...");
-		deleteNotes(getContentResolver(), ids);
+		deleteNotes(this, ids);
 	}
 
 	public static class NotesPreferencesDialog extends Activity {
@@ -891,18 +945,19 @@ public class FragmentLayout extends Activity implements
 			prevNumberOfLists = mSpinnerAdapter.getCount();
 			// First start. Also check if we should auto-open a list
 			if (unSelected && currentListId < 0) {
-				currentListId = PreferenceManager.getDefaultSharedPreferences(this).getLong(DEFAULTLIST, -1);
+				currentListId = PreferenceManager.getDefaultSharedPreferences(
+						this).getLong(DEFAULTLIST, -1);
 				if (currentListId > -1) {
 					int position = getPosOfId(currentListId);
 					if (position > -1) {
 						currentListPos = position;
-					}
-					else {
-						// User must have deleted that list. Remove knowledge of default list
+					} else {
+						// User must have deleted that list. Remove knowledge of
+						// default list
 						SharedPreferences.Editor prefEditor = PreferenceManager
 								.getDefaultSharedPreferences(this).edit();
-								prefEditor.remove(DEFAULTLIST);
-								prefEditor.commit();
+						prefEditor.remove(DEFAULTLIST);
+						prefEditor.commit();
 					}
 				}
 			}
@@ -915,7 +970,8 @@ public class FragmentLayout extends Activity implements
 			prevNumberOfLists = mSpinnerAdapter.getCount();
 			// Now select it.
 			if (createdListId > -1) {
-				getActionBar().setSelectedNavigationItem(getPosOfId(createdListId));
+				getActionBar().setSelectedNavigationItem(
+						getPosOfId(createdListId));
 				createdListId = -1;
 			}
 		} else {

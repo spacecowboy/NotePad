@@ -77,7 +77,7 @@ public class NotePadProvider extends ContentProvider implements
 	private static HashMap<String, String> sListsProjectionMap;
 	private static HashMap<String, String> sGTasksProjectionMap;
 	private static HashMap<String, String> sGTaskListsProjectionMap;
-	
+
 	private static HashMap<String, String> sJoinedNotesProjectionMap;
 	private static HashMap<String, String> sJoinedListsProjectionMap;
 
@@ -272,28 +272,35 @@ public class NotePadProvider extends ContentProvider implements
 				NotePad.GTaskLists.COLUMN_NAME_DB_ID);
 		sGTaskListsProjectionMap.put(NotePad.GTaskLists.COLUMN_NAME_UPDATED,
 				NotePad.GTaskLists.COLUMN_NAME_UPDATED);
-		
+
 		// Joined projection maps
 		// Prepend the table name here
 		// Order is important since _ID column is the same
 		sJoinedNotesProjectionMap = new HashMap<String, String>();
-		for (Entry<String, String> gtasksEntry: sGTasksProjectionMap.entrySet()) {
-			sJoinedNotesProjectionMap.put(gtasksEntry.getKey(), NotePad.GTasks.TABLE_NAME + "." + gtasksEntry.getValue());
+		for (Entry<String, String> gtasksEntry : sGTasksProjectionMap
+				.entrySet()) {
+			sJoinedNotesProjectionMap.put(gtasksEntry.getKey(),
+					NotePad.GTasks.TABLE_NAME + "." + gtasksEntry.getValue());
 		}
-		for (Entry<String, String> notesEntry: sNotesProjectionMap.entrySet()) {
-			sJoinedNotesProjectionMap.put(notesEntry.getKey(), NotePad.Notes.TABLE_NAME + "." + notesEntry.getValue());
+		for (Entry<String, String> notesEntry : sNotesProjectionMap.entrySet()) {
+			sJoinedNotesProjectionMap.put(notesEntry.getKey(),
+					NotePad.Notes.TABLE_NAME + "." + notesEntry.getValue());
 		}
-		
-		
+
 		sJoinedListsProjectionMap = new HashMap<String, String>();
-		// Order is important. _ID column will be the same, so I want that to be the list, hence it must be last
-		for (Entry<String, String> gtasklistsEntry: sGTaskListsProjectionMap.entrySet()) {
-			sJoinedListsProjectionMap.put(gtasklistsEntry.getKey(), NotePad.GTaskLists.TABLE_NAME + "." + gtasklistsEntry.getValue());
+		// Order is important. _ID column will be the same, so I want that to be
+		// the list, hence it must be last
+		for (Entry<String, String> gtasklistsEntry : sGTaskListsProjectionMap
+				.entrySet()) {
+			sJoinedListsProjectionMap.put(
+					gtasklistsEntry.getKey(),
+					NotePad.GTaskLists.TABLE_NAME + "."
+							+ gtasklistsEntry.getValue());
 		}
-		for (Entry<String, String> listsEntry: sListsProjectionMap.entrySet()) {
-			sJoinedListsProjectionMap.put(listsEntry.getKey(), NotePad.Lists.TABLE_NAME + "." + listsEntry.getValue());
+		for (Entry<String, String> listsEntry : sListsProjectionMap.entrySet()) {
+			sJoinedListsProjectionMap.put(listsEntry.getKey(),
+					NotePad.Lists.TABLE_NAME + "." + listsEntry.getValue());
 		}
-		
 
 	}
 
@@ -583,7 +590,8 @@ public class NotePadProvider extends ContentProvider implements
 		switch (sUriMatcher.match(uri)) {
 		// If the incoming URI is for notes, chooses the Notes projection
 		case VISIBLE_NOTES:
-			// Add a selection criteria, but then fall through for normal note handling.
+			// Add a selection criteria, but then fall through for normal note
+			// handling.
 			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0");
 			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0");
 			qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS 0");
@@ -596,18 +604,23 @@ public class NotePadProvider extends ContentProvider implements
 			}
 			break;
 		/*
-		 * Retrieve the complete note entry join with Gtasks table through join statement.
+		 * Retrieve the complete note entry join with Gtasks table through join
+		 * statement.
 		 */
 		case JOINED_NOTES:
-			// Can not use where because null values in right table is not returned then
+			// Can not use where because null values in right table is not
+			// returned then
 			// Must bake it into the join statement
-			qb.setTables(NotePad.Notes.TABLE_NAME + " LEFT OUTER JOIN " + NotePad.GTasks.TABLE_NAME
-					+ " ON (" + NotePad.Notes.TABLE_NAME + "." + NotePad.Notes._ID + " = " 
-					+ NotePad.GTasks.TABLE_NAME + "." + NotePad.GTasks.COLUMN_NAME_DB_ID
-					+ " AND " + NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT + " IS '" + selectionArgs[0] + "')");
+			qb.setTables(NotePad.Notes.TABLE_NAME + " LEFT OUTER JOIN "
+					+ NotePad.GTasks.TABLE_NAME + " ON ("
+					+ NotePad.Notes.TABLE_NAME + "." + NotePad.Notes._ID
+					+ " = " + NotePad.GTasks.TABLE_NAME + "."
+					+ NotePad.GTasks.COLUMN_NAME_DB_ID + " AND "
+					+ NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT + " IS '"
+					+ selectionArgs[0] + "')");
 			selection = null;
 			selectionArgs = null;
-			
+
 			// set projection map
 			qb.setProjectionMap(sJoinedNotesProjectionMap);
 			break;
@@ -618,10 +631,11 @@ public class NotePadProvider extends ContentProvider implements
 		 * where clause, so that it selects that single note
 		 */
 		case VISIBLE_NOTE_ID:
-			// Add a selection criteria, but then fall through for normal note handling.
-						qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0");
-						qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0");
-						qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS 0");
+			// Add a selection criteria, but then fall through for normal note
+			// handling.
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS 0");
 		case NOTE_ID:
 			qb.setTables(NotePad.Notes.TABLE_NAME);
 			qb.setProjectionMap(sNotesProjectionMap);
@@ -632,7 +646,8 @@ public class NotePadProvider extends ContentProvider implements
 							NotePad.Notes.NOTE_ID_PATH_POSITION));
 			break;
 		case VISIBLE_LIST_ID:
-			// Add a selection criteria, but then fall through for normal handling.
+			// Add a selection criteria, but then fall through for normal
+			// handling.
 			qb.appendWhere(NotePad.Lists.COLUMN_NAME_DELETED + " IS 0");
 		case LISTS_ID:
 			qb.appendWhere(BaseColumns._ID + // the name of the ID column
@@ -644,7 +659,8 @@ public class NotePadProvider extends ContentProvider implements
 			qb.setProjectionMap(sListsProjectionMap);
 			break;
 		case VISIBLE_LISTS:
-			// Add a selection criteria, but then fall through for normal handling.
+			// Add a selection criteria, but then fall through for normal
+			// handling.
 			qb.appendWhere(NotePad.Lists.COLUMN_NAME_DELETED + " IS 0");
 		case LISTS:
 			orderBy = NotePad.Lists.SORT_ORDER;
@@ -652,13 +668,17 @@ public class NotePadProvider extends ContentProvider implements
 			qb.setProjectionMap(sListsProjectionMap);
 			break;
 		case JOINED_LISTS:
-			// Can not use where because null values in right table is not returned then
+			// Can not use where because null values in right table is not
+			// returned then
 			// Must bake it into the join statement
 			orderBy = NotePad.Lists.SORT_ORDER;
-			qb.setTables(NotePad.Lists.TABLE_NAME + " LEFT OUTER JOIN " + NotePad.GTaskLists.TABLE_NAME
-					+ " ON (" + NotePad.Lists.TABLE_NAME + "." + NotePad.Lists._ID + " = " 
-					+ NotePad.GTaskLists.TABLE_NAME + "." + NotePad.GTaskLists.COLUMN_NAME_DB_ID
-					+ " AND " + NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT + " IS '" + selectionArgs[0] + "')");
+			qb.setTables(NotePad.Lists.TABLE_NAME + " LEFT OUTER JOIN "
+					+ NotePad.GTaskLists.TABLE_NAME + " ON ("
+					+ NotePad.Lists.TABLE_NAME + "." + NotePad.Lists._ID
+					+ " = " + NotePad.GTaskLists.TABLE_NAME + "."
+					+ NotePad.GTaskLists.COLUMN_NAME_DB_ID + " AND "
+					+ NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT + " IS '"
+					+ selectionArgs[0] + "')");
 			selection = null;
 			selectionArgs = null;
 
@@ -1264,6 +1284,145 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	/**
+	 * Calls deleteListFromDb on all ids fetched from cursor.
+	 * @param db
+	 * @param cursor
+	 */
+	private static int deleteListsFromDb(SQLiteDatabase db, Cursor cursor) {
+		int count = 0;
+		while (cursor != null && !cursor.isClosed() && !cursor.isAfterLast()) {
+			if (!cursor.moveToNext())
+				break;
+
+			long id = cursor
+					.getLong(cursor.getColumnIndex((NotePad.Lists._ID)));
+
+			count += deleteListFromDb(db, Long.toString(id), null, null);
+		}
+		
+		return count;
+	}
+
+	/**
+	 * Performs a query: WHERE listId IS ?, listId then does deleteNotesFromDb
+	 * on the cursor
+	 * 
+	 * @param db
+	 * @param listId
+	 */
+	private static int deleteNotesInListFromDb(SQLiteDatabase db, String listId) {
+		int count = 0;
+		Cursor cursor = db.query(NotePad.Notes.TABLE_NAME,
+				new String[] { NotePad.Notes._ID },
+				NotePad.Notes.COLUMN_NAME_LIST + " IS ?",
+				new String[] { listId }, null, null, null);
+
+		count = deleteNotesFromDb(db, cursor);
+
+		cursor.close();
+		
+		return count;
+	}
+
+	/**
+	 * Also deletes from gtasklists table and calls deleteNotesInListFromDb
+	 * @param db
+	 * @param id
+	 * @param where
+	 * @param whereArgs
+	 * @return
+	 */
+	private static int deleteListFromDb(SQLiteDatabase db, String id,
+			String where, String[] whereArgs) {
+		Log.d(TAG, "Deleting list from DB: " + id);
+		
+		String finalWhere = BaseColumns._ID + " = " + id;
+
+		// If there were additional selection criteria, append them to the
+		// final
+		// WHERE clause
+		if (where != null) {
+			finalWhere = finalWhere + " AND " + where;
+		}
+
+		int count = db.delete(NotePad.Lists.TABLE_NAME, finalWhere, whereArgs);
+
+		// Also delete from GTaskLists table
+		if (count > 0) {
+			db.delete(NotePad.GTaskLists.TABLE_NAME,
+					NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS ?",
+					new String[] { id });
+		}
+		
+		// And notes in this list
+		deleteNotesInListFromDb(db, id);
+
+		return count;
+	}
+
+	/**
+	 * Expects cursor to contain _ID columns of notes. Will then call
+	 * deleteNoteFromDB for every one.
+	 * 
+	 * @param db
+	 * @param cursor
+	 * @param where
+	 * @param whereArgs
+	 * @return
+	 */
+	private static int deleteNotesFromDb(SQLiteDatabase db, Cursor cursor) {
+		int count = 0;
+		while (cursor != null && !cursor.isClosed() && !cursor.isAfterLast()) {
+			if (!cursor.moveToNext())
+				break;
+
+			long id = cursor
+					.getLong(cursor.getColumnIndex((NotePad.Notes._ID)));
+
+			count += deleteNoteFromDb(db, Long.toString(id), null, null);
+		}
+		return count;
+	}
+
+	/**
+	 * Deletes a single note and its accompanying gtasks entry
+	 * 
+	 * @param db
+	 * @param id
+	 * @param where
+	 * @param whereArgs
+	 * @return
+	 */
+	private static int deleteNoteFromDb(SQLiteDatabase db, String id,
+			String where, String[] whereArgs) {
+		Log.d(TAG, "Deleting note from DB: " + id);
+		
+		String finalWhere = BaseColumns._ID + " = " + id;
+
+		// If there were additional selection criteria, append them to the
+		// final
+		// WHERE clause
+		if (where != null) {
+			finalWhere = finalWhere + " AND " + where;
+		}
+
+		int count = db.delete(NotePad.Notes.TABLE_NAME, // The database table
+				// name
+				finalWhere, // The incoming where clause column names
+				whereArgs // The incoming where clause values
+				);
+
+		// Also delete from GTasks table
+		if (count > 0) {
+			db.delete(NotePad.GTasks.TABLE_NAME,
+					NotePad.GTasks.COLUMN_NAME_DB_ID + " IS ?",
+					new String[] { id });
+		}
+
+		return count;
+	}
+
+	/**
 	 * This is called when a client calls
 	 * {@link android.content.ContentResolver#delete(Uri, String, String[])}.
 	 * Deletes records from the database. If the incoming URI matches the note
@@ -1300,36 +1459,15 @@ public class NotePadProvider extends ContentProvider implements
 		// based on the incoming "where" columns and arguments.
 		case VISIBLE_NOTES:
 		case NOTES:
-			Log.d(TAG, "Deleting notes...");
-			/*
-			// get the IDs that are about to be deleted
+			// Need to do it like this to be able to delete from the gtasks
+			// table at the same time
 			cursor = db.query(NotePad.Notes.TABLE_NAME,
 					new String[] { NotePad.Notes._ID }, where, whereArgs, null,
 					null, null);
-			while (cursor != null && !cursor.isClosed() && !cursor.isAfterLast()) {
-				if (cursor.isBeforeFirst()) {
-					if (!cursor.moveToFirst())
-						break;
-				} else {
-					cursor.moveToNext();
-				}
 
-				long id = cursor.getLong(cursor
-						.getColumnIndex((NotePad.Notes._ID)));
-				Log.d(TAG, "Deleting from GTasks table also...");
-				// Delete this from the GTAsks table also
-				delete(NotePad.GTasks.CONTENT_URI,
-						NotePad.GTasks.COLUMN_NAME_DB_ID + " IS ?", new String[] {Long.toString(id)});
-			}
+			count = deleteNotesFromDb(db, cursor);
+
 			cursor.close();
-			*/
-
-			Log.d(TAG, "Deleting note for real now...");
-			count = db.delete(NotePad.Notes.TABLE_NAME, // The database table
-														// name
-					where, // The incoming where clause column names
-					whereArgs // The incoming where clause values
-					);
 			break;
 
 		// If the incoming URI matches a single note ID, does the delete based
@@ -1338,137 +1476,28 @@ public class NotePadProvider extends ContentProvider implements
 		// particular note ID.
 		case VISIBLE_NOTE_ID:
 		case NOTE_ID:
-			/*
-			 * Starts a final WHERE clause by restricting it to the desired note
-			 * ID.
-			 */
-			finalWhere = BaseColumns._ID + // The ID column name
-					" = " + // test for equality
-					uri.getPathSegments(). // the incoming note ID
-							get(NotePad.Notes.NOTE_ID_PATH_POSITION);
-
-			// If there were additional selection criteria, append them to the
-			// final
-			// WHERE clause
-			if (where != null) {
-				finalWhere = finalWhere + " AND " + where;
-			}
-
-			/*
-			// get the IDs that are about to be deleted
-			cursor = db.query(NotePad.Notes.TABLE_NAME,
-					new String[] { NotePad.Notes._ID }, finalWhere, whereArgs,
-					null, null, null);
-			while (cursor != null && !cursor.isClosed() && !cursor.isAfterLast()) {
-				if (cursor.isBeforeFirst()) {
-					if (!cursor.moveToFirst())
-						break;
-				} else {
-					cursor.moveToNext();
-				}
-
-				long id = cursor.getLong(cursor
-						.getColumnIndex((NotePad.Notes._ID)));
-				// Delete this from the GTAsks table also
-				delete(NotePad.GTasks.CONTENT_URI,
-						NotePad.GTasks.COLUMN_NAME_DB_ID + " IS ?", new String[] { Long.toString(id)});
-			}
-			cursor.close();
-			*/
-
-			// Performs the delete.
-			count = db.delete(NotePad.Notes.TABLE_NAME, // The database table
-														// name.
-					finalWhere, // The final WHERE clause
-					whereArgs // The incoming where clause values.
-					);
+			count = deleteNoteFromDb(
+					db,
+					uri.getPathSegments().get(
+							NotePad.Notes.NOTE_ID_PATH_POSITION), where,
+					whereArgs);
 			break;
 
 		case VISIBLE_LISTS:
 		case LISTS:
-			/*
-			// get the IDs that are about to be deleted
+
+			// get the IDs that are about to be deleted cursor =
 			cursor = db.query(NotePad.Lists.TABLE_NAME,
 					new String[] { NotePad.Lists._ID }, where, whereArgs, null,
 					null, null);
-			while (cursor != null && !cursor.isClosed() && !cursor.isAfterLast()) {
-				if (cursor.isBeforeFirst()) {
-					if (!cursor.moveToFirst())
-						break;
-				} else {
-					cursor.moveToNext();
-				}
-
-				long id = cursor.getLong(cursor
-						.getColumnIndex((NotePad.Lists._ID)));
-				// Delete this from the GTAsks table also
-				delete(NotePad.GTaskLists.CONTENT_URI,
-						NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS ?",
-						new String[] { Long.toString(id) });
-
-				// And delete all notes in that list as well.
-				delete(NotePad.Notes.CONTENT_URI,
-						NotePad.Notes.COLUMN_NAME_LIST + " IS ?",
-						new String[] { Long.toString(id) });
-			}
-			cursor.close();*/
-
-			count = db.delete(NotePad.Lists.TABLE_NAME, // The database table
-														// name
-					where, // The incoming where clause column names
-					whereArgs // The incoming where clause values
-					);
+			
+			count = deleteListsFromDb(db, cursor);
+			cursor.close();
 
 			break;
 		case VISIBLE_LIST_ID:
 		case LISTS_ID:
-			Log.d(TAG, "Deleting list in provider!: " + uri.toString());
-			finalWhere = BaseColumns._ID + // The ID column name
-					" = " + // test for equality
-					uri.getPathSegments(). // the incoming note ID
-							get(NotePad.Lists.ID_PATH_POSITION);
-
-			if (where != null) {
-				finalWhere = finalWhere + " AND " + where;
-			}
-
-			/*
-			// get the IDs that are about to be deleted
-			cursor = db.query(NotePad.Lists.TABLE_NAME,
-					new String[] { NotePad.Lists._ID }, finalWhere, whereArgs,
-					null, null, null);
-			while (cursor != null && !cursor.isClosed() && !cursor.isAfterLast()) {
-				if (cursor.isBeforeFirst()) {
-					if (!cursor.moveToFirst())
-						break;
-				}
-				else {
-					cursor.moveToNext();
-				}
-
-				long id = cursor.getLong(cursor
-						.getColumnIndex((NotePad.Lists._ID)));
-				Log.d(TAG, "Delete from GTaskLists table also...");
-				// Delete this from the GTAsks table also
-				delete(NotePad.GTaskLists.CONTENT_URI,
-						NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS ?", new String[] { Long.toString(id) });
-				// And delete all notes in that list as well.
-				Log.d(TAG, "Delete form Notes table also...");
-				delete(NotePad.Notes.CONTENT_URI,
-						NotePad.Notes.COLUMN_NAME_LIST + " IS ?",
-						new String[] { Long.toString(id) });
-				
-			}
-			cursor.close();
-			*/
-
-			Log.d(TAG, "Doing actual delete now");
-			// Performs the delete.
-			count = db.delete(NotePad.Lists.TABLE_NAME, // The database table
-														// name.
-					finalWhere, // The final WHERE clause
-					whereArgs // The incoming where clause values.
-					);
+			count = deleteListFromDb(db, uri.getPathSegments().get(NotePad.Lists.ID_PATH_POSITION), where, whereArgs);
 			break;
 
 		case GTASKS:
@@ -1801,8 +1830,7 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	/**
-	 * Performs the work provided in a single transaction.
-	 * Done on sync
+	 * Performs the work provided in a single transaction. Done on sync
 	 */
 	@Override
 	public ContentProviderResult[] applyBatch(
@@ -1826,7 +1854,7 @@ public class NotePadProvider extends ContentProvider implements
 		} finally {
 			db.endTransaction();
 		}
-		
+
 		return result;
 	}
 
