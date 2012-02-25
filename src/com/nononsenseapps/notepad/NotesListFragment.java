@@ -672,7 +672,7 @@ public class NotesListFragment extends ListFragment implements
 					String text = cursor.getString(cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS));
 
-					if (text.equals(getText(R.string.gtask_status_completed))) {
+					if (text != null && text.equals(getText(R.string.gtask_status_completed))) {
 						cb.setChecked(true);
 					} else {
 						cb.setChecked(false);
@@ -691,7 +691,7 @@ public class NotesListFragment extends ListFragment implements
 					// Set strike through on completed tasks
 					String text = cursor.getString(cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS));
-					if (text.equals(getText(R.string.gtask_status_completed))) {
+					if (text != null && text.equals(getText(R.string.gtask_status_completed))) {
 						// Set appropriate BITMASK
 						tv.setPaintFlags(tv.getPaintFlags()
 								| Paint.STRIKE_THRU_TEXT_FLAG);
