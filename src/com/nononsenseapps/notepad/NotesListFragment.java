@@ -510,7 +510,7 @@ public class NotesListFragment extends ListFragment implements
 						if (FragmentLayout.UI_DEBUG_PRINTS)
 							Log.d("NotesListFragment", "Would open note here: "
 									+ mCurId);
-						landscapeEditor.displayNote(mCurId, mCurListId);
+						landscapeEditor.displayNote(mCurId);
 					}
 
 				} else {
@@ -523,7 +523,7 @@ public class NotesListFragment extends ListFragment implements
 					Intent intent = new Intent();
 					intent.setClass(activity, NotesEditorActivity.class);
 					intent.putExtra(NotesEditorFragment.KEYID, mCurId);
-					intent.putExtra(NotesEditorFragment.LISTID, mCurListId);
+					//intent.putExtra(NotesEditorFragment.LISTID, mCurListId);
 
 					startActivity(intent);
 				}

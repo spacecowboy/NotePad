@@ -644,13 +644,7 @@ public class FragmentLayout extends Activity implements
 			} else {
 				setTheme(R.style.ThemeHolo);
 			}
-
-			// if (FragmentLayout.lightTheme) {
-			// setTheme(R.style.ThemeHoloLightDarkActonBar);
-			// } else {
-			// setTheme(R.style.ThemeHolo);
-			// }
-
+			
 			// Set up navigation (adds nice arrow to icon)
 			ActionBar actionBar = getActionBar();
 			if (actionBar != null) {
@@ -671,8 +665,6 @@ public class FragmentLayout extends Activity implements
 
 			this.currentId = getIntent().getExtras().getLong(
 					NotesEditorFragment.KEYID);
-			long listId = getIntent().getExtras().getLong(
-					NotesEditorFragment.LISTID);
 
 			if (UI_DEBUG_PRINTS)
 				Log.d("NotesEditorActivity", "Time to show the note!");
@@ -682,7 +674,7 @@ public class FragmentLayout extends Activity implements
 			editorFragment = (NotesEditorFragment) getFragmentManager()
 					.findFragmentById(R.id.portrait_editor);
 			if (editorFragment != null) {
-				editorFragment.setValues(currentId, listId);
+				editorFragment.setValues(currentId);
 			}
 		}
 
