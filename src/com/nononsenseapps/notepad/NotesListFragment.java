@@ -61,8 +61,8 @@ import android.widget.Toast;
 
 public class NotesListFragment extends ListFragment implements
 		SearchView.OnQueryTextListener, OnItemLongClickListener,
-		OnModalDeleteListener,
-		LoaderManager.LoaderCallbacks<Cursor>, OnSharedPreferenceChangeListener {
+		OnModalDeleteListener, LoaderManager.LoaderCallbacks<Cursor>,
+		OnSharedPreferenceChangeListener {
 	private int mCurCheckPosition = 0;
 
 	private static final String[] PROJECTION = new String[] {
@@ -312,8 +312,25 @@ public class NotesListFragment extends ListFragment implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_add:
-			Uri noteUri = FragmentLayout.createNote(
+			Uri noteUri = null;
+			if (mCurListId != FragmentLayout.ALL_NOTES_ID) {
+				noteUri = FragmentLayout.createNote(
 					activity.getContentResolver(), mCurListId);
+			} // Try the default list
+			else {
+				long defaultListId = PreferenceManager.getDefaultSharedPreferences(
+						activity).getLong(FragmentLayout.DEFAULTLIST, -1);
+				if (defaultListId > -1) {
+					noteUri = FragmentLayout.createNote(
+							activity.getContentResolver(), defaultListId);
+				} else {
+					// No default note set. Don't know what to do. Alert the user to this fact.
+					Toast.makeText(
+							activity,
+							getText(R.string.default_list_needed_warning), Toast.LENGTH_LONG)
+							.show();
+				}
+			}
 
 			if (noteUri != null) {
 				newNoteIdToOpen = getNoteIdFromUri(noteUri);
@@ -363,13 +380,24 @@ public class NotesListFragment extends ListFragment implements
 																// change the
 																// current value
 			values.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN, 1);
-			activity.getContentResolver().update(
-					NotePad.Notes.CONTENT_URI,
+			// Handle all notes showing
+			String inList;
+			String[] args;
+			if (mCurListId == FragmentLayout.ALL_NOTES_ID) {
+				inList = "";
+				args = new String[] { getText(R.string.gtask_status_completed)
+						.toString() };
+			} else {
+				inList = " AND " + NotePad.Notes.COLUMN_NAME_LIST + " IS ?";
+				args = new String[] {
+						getText(R.string.gtask_status_completed).toString(),
+						Long.toString(mCurListId) };
+			}
+
+			activity.getContentResolver().update(NotePad.Notes.CONTENT_URI,
 					values,
-					NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ? AND "
-					+ NotePad.Notes.COLUMN_NAME_LIST + " IS ?",
-					new String[] { getText(R.string.gtask_status_completed)
-							.toString(), Long.toString(mCurListId) });
+					NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?" + inList,
+					args);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -500,7 +528,7 @@ public class NotesListFragment extends ListFragment implements
 						if (FragmentLayout.UI_DEBUG_PRINTS)
 							Log.d("NotesListFragment", "Would open note here: "
 									+ mCurId);
-						landscapeEditor.displayNote(mCurId, mCurListId);
+						landscapeEditor.displayNote(mCurId);
 					}
 
 				} else {
@@ -513,7 +541,7 @@ public class NotesListFragment extends ListFragment implements
 					Intent intent = new Intent();
 					intent.setClass(activity, NotesEditorActivity.class);
 					intent.putExtra(NotesEditorFragment.KEYID, mCurId);
-					intent.putExtra(NotesEditorFragment.LISTID, mCurListId);
+					//intent.putExtra(NotesEditorFragment.LISTID, mCurListId);
 
 					startActivity(intent);
 				}
@@ -1074,7 +1102,7 @@ public class NotesListFragment extends ListFragment implements
 				}
 				onDeleteListener.onModalDelete(notesToDelete);
 			}
-			Toast.makeText(activity, "Deleted " + num + " items",
+			Toast.makeText(activity, getString(R.string.deleted)+" " + num + " " + getString(R.string.items),
 					Toast.LENGTH_SHORT).show();
 			mode.finish();
 		}
@@ -1181,7 +1209,7 @@ public class NotesListFragment extends ListFragment implements
 		if (FragmentLayout.UI_DEBUG_PRINTS)
 			Log.d(TAG, "showList id " + id);
 		mCurListId = id;
-		// Will create one if necessary
+		// Will show note if necessary
 		Bundle args = new Bundle();
 		if (FragmentLayout.LANDSCAPE_MODE)
 			args.putBoolean(SHOULD_OPEN_NOTE, true);
@@ -1205,21 +1233,23 @@ public class NotesListFragment extends ListFragment implements
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
 
-		return new CursorLoader(activity, baseUri, PROJECTION, // Return
-																// the note
-																// ID and
-																// title for
-																// each
-																// note.
-				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
-						+ NotePad.Notes.COLUMN_NAME_HIDDEN + " IS NOT 1 AND "
-						+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
-						+ " IS NOT 1 AND " + NotePad.Notes.COLUMN_NAME_LIST
-						+ " IS " + mCurListId, // return
-				// un-deleted
-				// records.
-				null, // No where clause, therefore no where column values.
-				sortOrder);
+		if (mCurListId == FragmentLayout.ALL_NOTES_ID) {
+			return new CursorLoader(activity, baseUri, PROJECTION,
+					NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
+							+ NotePad.Notes.COLUMN_NAME_HIDDEN
+							+ " IS NOT 1 AND "
+							+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
+							+ " IS NOT 1", null, sortOrder);
+		} else {
+			return new CursorLoader(activity, baseUri, PROJECTION,
+					NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
+							+ NotePad.Notes.COLUMN_NAME_HIDDEN
+							+ " IS NOT 1 AND "
+							+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
+							+ " IS NOT 1 AND " + NotePad.Notes.COLUMN_NAME_LIST
+							+ " IS ?",
+					new String[] { Long.toString(mCurListId) }, sortOrder);
+		}
 	}
 
 	private CursorLoader getSearchNotesLoader() {

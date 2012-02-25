@@ -97,4 +97,11 @@
     <string name="yes">Ja</string>
     <string name="no">Nej</string>
     <string name="ok">OK</string>
+    
+    <string name="show_from_all_lists">Alla listor</string>
+    <string name="default_list_needed_warning">Välj en standardlista först</string>
+    <string name="reverted">Återställde ändringar</string>
+    <string name="notecopied">Kopierad</string>
+    <string name="deleted">Tog bort</string>
+    <string name="items">anteckningar</string>
 </resources>

@@ -65,7 +65,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public static final String[] PROJECTION = new String[] { NotePad.Notes._ID,
 			NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
-			NotePad.Notes.COLUMN_NAME_DELETED };
+			NotePad.Notes.COLUMN_NAME_DELETED,
+			NotePad.Notes.COLUMN_NAME_LIST};
 
 	// A label for the saved state of the activity
 	public static final String ORIGINAL_NOTE = "origContent";
@@ -133,7 +134,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 * Create a new instance of DetailsFragment, initialized to show the text at
 	 * 'index'.
 	 */
-	public static NotesEditorFragment newInstance(long id, long listId) {
+	public static NotesEditorFragment newInstance(long id) {
 		NotesEditorFragment f = new NotesEditorFragment();
 
 		// Supply index input as an argument.
@@ -141,7 +142,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			Log.d("NotesEditorFragment", "Creating Fragment, args: " + id);
 		Bundle args = new Bundle();
 		args.putLong(KEYID, id);
-		args.putLong(LISTID, listId);
 		f.setArguments(args);
 
 		return f;
@@ -409,12 +409,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			if (FragmentLayout.UI_DEBUG_PRINTS)
 				Log.d(TAG, "Should never happen right");
 			id = getArguments().getLong(KEYID);
-			listId = getArguments().getLong(LISTID);
+			//listId = getArguments().getLong(LISTID);
 		} else {
 			if (FragmentLayout.UI_DEBUG_PRINTS)
 				Log.d(TAG, "onCreate, no valid values in arguments");
 			id = -1;
-			listId = -1;
+			//listId = -1;
 		}
 
 		noteDueDate = new Time(Time.getCurrentTimezone());
@@ -527,10 +527,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			if (FragmentLayout.UI_DEBUG_PRINTS)
 				Log.d(TAG, "onActivityCrated, saves are not null!");
 			openNote(saves);
-		} else if (listId > -1) {
+		} else if (id > -1) {
 			if (FragmentLayout.UI_DEBUG_PRINTS)
 				Log.d(TAG,
-						"onActivityCreated, got valid list id atleast. Displaying note...");
+						"onActivityCreated, got valid id atleast. Displaying note...");
 			// in activity
 			// displayNote(id, listId);
 			openNote(null);
@@ -547,9 +547,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 * @param id
 	 * @param listId
 	 */
-	public void setValues(long id, long listId) {
+	public void setValues(long id) {
 		this.id = id;
-		this.listId = listId;
 	}
 
 	@Override
@@ -635,12 +634,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		switch (item.getItemId()) {
 		case R.id.menu_revert:
 			cancelNote();
-			Toast.makeText(activity, "Reverted changes", Toast.LENGTH_SHORT)
+			Toast.makeText(activity, getString(R.string.reverted), Toast.LENGTH_SHORT)
 					.show();
 			break;
 		case R.id.menu_copy:
 			copyText(makeShareText());
-			Toast.makeText(activity, "Note placed in clipboard",
+			Toast.makeText(activity, getString(R.string.notecopied),
 					Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.menu_share:
@@ -711,7 +710,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 * @param id
 	 * @param mCurListId
 	 */
-	public void displayNote(long id, long listid) {
+	public void displayNote(long id) {
 		if (FragmentLayout.UI_DEBUG_PRINTS)
 			Log.d("NotesEditorFragment", "Display note: " + id);
 
@@ -723,7 +722,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		doSave = true;
 		selfAction = false;
 		this.id = id;
-		this.listId = listid;
+		//this.listId = listid;
 		if (FragmentLayout.UI_DEBUG_PRINTS)
 			Log.d("insertError", "displayNote");
 		openNote(null);
@@ -758,6 +757,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				String title = mCursor.getString(colTitleIndex);
 				mTitle.setText(title);
 				mTitle.setEnabled(true);
+				
+				// Set list ID
+				listId = mCursor.getLong(mCursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
 
 				// Gets the note text from the Cursor and puts it in the
 				// TextView,

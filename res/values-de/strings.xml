@@ -97,4 +97,11 @@
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="ok">OK</string>
+    
+    <string name="show_from_all_lists">Alle listen</string>
+    <string name="default_list_needed_warning">Set eine Standard-Liste zuerst</string>
+    <string name="reverted">Änderungen rückgängig gemacht</string>
+    <string name="notecopied">Kopierte</string>
+    <string name="deleted">Gelöscht</string>
+    <string name="items">Notizen</string>
 </resources>

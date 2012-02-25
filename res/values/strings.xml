@@ -98,6 +98,13 @@
     <string name="no">No</string>
     <string name="ok">OK</string>
     
+    <string name="show_from_all_lists">All lists</string>
+    <string name="default_list_needed_warning">Set a default list first</string>
+    <string name="reverted">Reverted changes</string>
+    <string name="notecopied">Copied</string>
+    <string name="deleted">Deleted</string>
+    <string name="items">notes</string>
+    
     <string name="permission_read_label">read notes and lists</string>
     <string name="permission_read_desc">Allows the application to read your notes and related lists.</string>
     <string name="permission_write_label">modify notes and lists</string>

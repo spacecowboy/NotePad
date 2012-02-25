@@ -18,6 +18,7 @@ package com.nononsenseapps.notepad;
 
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
+import com.nononsenseapps.notepad_donate.R;
 
 import android.content.ClipDescription;
 import android.content.ContentProvider;
@@ -310,6 +311,7 @@ public class NotePadProvider extends ContentProvider implements
 	 * package visibility for testing purposes.
 	 */
 	static class DatabaseHelper extends SQLiteOpenHelper {
+		Context context;
 
 		DatabaseHelper(Context context) {
 
@@ -318,6 +320,7 @@ public class NotePadProvider extends ContentProvider implements
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
 			if (FragmentLayout.UI_DEBUG_PRINTS || SyncAdapter.SYNC_DEBUG_PRINTS)
 				Log.d("DataBaseHelper", "Constructor");
+			this.context = context;
 		}
 
 		/**
@@ -341,7 +344,7 @@ public class NotePadProvider extends ContentProvider implements
 		private long insertDefaultList(SQLiteDatabase db) {
 			ContentValues values = new ContentValues();
 			values.put(NotePad.Lists.COLUMN_NAME_TITLE,
-					NotePad.Lists.DEFAULT_LIST_NAME);
+					context.getString(R.string.app_name));
 			values.put(NotePad.Lists.COLUMN_NAME_MODIFIED, 1);
 			values.put(NotePad.Lists.COLUMN_NAME_DELETED, 0);
 
