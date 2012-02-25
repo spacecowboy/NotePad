@@ -64,6 +64,9 @@ public class FragmentLayout extends Activity implements
 
 	public final static boolean UI_DEBUG_PRINTS = false;
 	private static final String DEFAULTLIST = "standardListId";
+	
+	// For my special dropdown navigation item
+	public static final int ALL_NOTES_ID = -2;
 
 	public static OnEditorDeleteListener ONDELETELISTENER = null;
 
@@ -112,9 +115,10 @@ public class FragmentLayout extends Activity implements
 //				new int[] { android.R.id.text1 }, new int[] { -9, -8 },
 //				new int[] { R.string.show_from_all_lists, R.string.error_title });
 		mSpinnerAdapter = new ExtrasCursorAdapter(this, R.layout.actionbar_dropdown_item, null,
-//				new int[] {}, new int[] {});
-				new int[] { -9, -8 },
-				new int[] { R.string.show_from_all_lists, R.string.error_title });
+				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
+				new int[] { android.R.id.text1 },
+				new int[] { ALL_NOTES_ID },
+				new int[] { R.string.show_from_all_lists });
 		
 		mSpinnerAdapter.setDropDownViewResource(R.layout.actionbar_dropdown_item);
 		

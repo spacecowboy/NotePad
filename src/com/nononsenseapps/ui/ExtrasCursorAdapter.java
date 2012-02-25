@@ -1,26 +1,25 @@
 package com.nononsenseapps.ui;
 
-import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.R;
-
 import android.content.Context;
 import android.database.Cursor;
-import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CursorAdapter;
 import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
+/**
+ * Mimics the SimpleCursorAdapter, but also allows extra items to be injected at
+ * the end. When asked for id for the extra items, the defined ids are returned.
+ * Make sure to set them to negative values in order not to confuse them with
+ * database IDs.
+ * 
+ * @author Jonas
+ * 
+ */
 public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	private static final String TAG = "ExtrasCursorAdapter";
 
 	private Cursor cursor;
-	private LayoutInflater mInflater;
-
-	protected int layout;
-	protected int dropDownLayout;
 	protected Context context;
 
 	protected int[] extraIds;
@@ -38,14 +37,14 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	 * resources to use as labels.
 	 */
 	public ExtrasCursorAdapter(Context context, int layout, Cursor c,
-			int[] extraIds, int[] extraLabels) {
+			String[] from, int[] to, int[] extraIds, int[] extraLabels) {
 		super(context, layout, c);
 		this.cursor = c;
-		mInflater = LayoutInflater.from(context);
-		this.layout = layout;
 		this.extraIds = extraIds;
 		this.extraLabels = extraLabels;
 		this.context = context;
+		this.from = from;
+		this.to = to;
 	}
 
 	/**
@@ -55,14 +54,15 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	 * resources to use as labels.
 	 */
 	public ExtrasCursorAdapter(Context context, int layout, Cursor c,
-			boolean autoRequery, int[] extraIds, int[] extraLabels) {
+			boolean autoRequery, String[] from, int[] to, int[] extraIds,
+			int[] extraLabels) {
 		super(context, layout, c, autoRequery);
 		this.cursor = c;
-		mInflater = LayoutInflater.from(context);
-		this.layout = layout;
 		this.extraIds = extraIds;
 		this.extraLabels = extraLabels;
 		this.context = context;
+		this.from = from;
+		this.to = to;
 	}
 
 	/**
@@ -72,74 +72,58 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	 * resources to use as labels.
 	 */
 	public ExtrasCursorAdapter(Context context, int layout, Cursor c,
-			int flags, int[] extraIds, int[] extraLabels) {
+			int flags, String[] from, int[] to, int[] extraIds,
+			int[] extraLabels) {
 		super(context, layout, c, flags);
 		this.cursor = c;
-		mInflater = LayoutInflater.from(context);
-		this.layout = layout;
 		this.extraIds = extraIds;
 		this.extraLabels = extraLabels;
 		this.context = context;
+		this.from = from;
+		this.to = to;
 	}
 
-	@Override
-	public void setDropDownViewResource(int dropDownLayout) {
-		this.dropDownLayout = dropDownLayout;
-		super.setDropDownViewResource(dropDownLayout);
-	}
-
-	@Override
-	public void setViewResource(int layout) {
-		this.layout = layout;
-		super.setViewResource(layout);
-	}
-
-	/*
-	 * (non-Javadoc)
+	/**
 	 * 
-	 * @see android.widget.CursorAdapter#bindView(android.view.View,
-	 * android.content.Context, android.database.Cursor)
 	 */
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
-		Log.d(TAG, "bindView");
-		// Dont need to do anything here
+		int i;
 		ViewHolder viewHolder = (ViewHolder) view.getTag();
 		if (viewHolder == null) {
-			viewHolder = new ViewHolder();
-			viewHolder.text = (TextView) view.findViewById(android.R.id.text1);
-			view.setTag(viewHolder);
+			viewHolder = setViewHolder(view);
 		}
 		// Fetch from database
-		// this.cursor.moveToPosition(position);
-		viewHolder.text.setText(cursor.getString(cursor
-				.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE)));
+		for (i = 0; i < from.length; i++) {
+			viewHolder.texts[i].setText(cursor.getString(cursor
+					.getColumnIndex(from[i])));
+		}
 	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see android.widget.CursorAdapter#newView(android.content.Context,
-	 * android.database.Cursor, android.view.ViewGroup)
+	
+	/**
+	 * Initializes the viewholder according to the specified from/to arrays.
+	 * @param view
+	 * @return
 	 */
-	@Override
-	public View newView(Context context, Cursor cursor, ViewGroup parent) {
-		Log.d(TAG, "newView");
-		// Dont need to do anything here either
-		// return null;
-		return super.newView(context, cursor, parent);
+	private ViewHolder setViewHolder(View view) {
+		ViewHolder viewHolder = new ViewHolder();
+		viewHolder.texts = new TextView[from.length];
+		int i;
+		for (i = 0; i < from.length; i++) {
+			viewHolder.texts[i] = (TextView) view.findViewById(to[i]);
+		}
+		view.setTag(viewHolder);
+		return viewHolder;
 	}
 
 	@Override
 	public Cursor swapCursor(Cursor newCursor) {
-		Log.d(TAG, "swapCursor");
 		this.cursor = newCursor;
 		return super.swapCursor(newCursor);
 	}
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		Log.d(TAG, "getView: " + position);
 		if (cursor == null || position < numOfItems)
 			return super.getView(position, convertView, parent);
 
@@ -152,12 +136,9 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 		if (viewHolder == null) {
-			viewHolder = new ViewHolder();
-			viewHolder.text = (TextView) convertView
-					.findViewById(android.R.id.text1);
-			convertView.setTag(viewHolder);
+			viewHolder = setViewHolder(convertView);
 		}
-		viewHolder.text.setText(context.getText(extraLabels[position
+		viewHolder.texts[0].setText(context.getText(extraLabels[position
 				- numOfItems]));
 
 		return convertView;
@@ -165,12 +146,29 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 
 	@Override
 	public View getDropDownView(int position, View convertView, ViewGroup parent) {
-		return getView(position, convertView, parent);
+		if (cursor == null || position < numOfItems)
+			return super.getDropDownView(position, convertView, parent);
+
+		ViewHolder viewHolder = null;
+		if (convertView == null) {
+			// Make a new view
+			cursor.moveToFirst();
+			convertView = super.newDropDownView(parent.getContext(), cursor,
+					parent);
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
+		if (viewHolder == null) {
+			viewHolder = setViewHolder(convertView);
+		}
+		viewHolder.texts[0].setText(context.getText(extraLabels[position
+				- numOfItems]));
+
+		return convertView;
 	}
 
 	@Override
 	public long getItemId(int position) {
-		Log.d(TAG, "getItemId: " + position);
 		if (numOfItems < 1 || position < numOfItems) {
 			return super.getItemId(position);
 		} else {
@@ -188,6 +186,6 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	}
 
 	static class ViewHolder {
-		TextView text;
+		TextView[] texts;
 	}
 }
