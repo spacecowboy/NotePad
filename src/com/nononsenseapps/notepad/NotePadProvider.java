@@ -341,7 +341,7 @@ public class NotePadProvider extends ContentProvider implements
 		private long insertDefaultList(SQLiteDatabase db) {
 			ContentValues values = new ContentValues();
 			values.put(NotePad.Lists.COLUMN_NAME_TITLE,
-					NotePad.Lists.DEFAULT_LIST_NAME);
+					R.string.app_name);
 			values.put(NotePad.Lists.COLUMN_NAME_MODIFIED, 1);
 			values.put(NotePad.Lists.COLUMN_NAME_DELETED, 0);
 
