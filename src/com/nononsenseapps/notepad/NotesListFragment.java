@@ -1101,7 +1101,7 @@ public class NotesListFragment extends ListFragment implements
 				}
 				onDeleteListener.onModalDelete(notesToDelete);
 			}
-			Toast.makeText(activity, "Deleted " + num + " items",
+			Toast.makeText(activity, getString(R.string.deleted)+" " + num + " " + getString(R.string.items),
 					Toast.LENGTH_SHORT).show();
 			mode.finish();
 		}

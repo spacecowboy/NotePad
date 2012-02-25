@@ -633,12 +633,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		switch (item.getItemId()) {
 		case R.id.menu_revert:
 			cancelNote();
-			Toast.makeText(activity, "Reverted changes", Toast.LENGTH_SHORT)
+			Toast.makeText(activity, getString(R.string.reverted), Toast.LENGTH_SHORT)
 					.show();
 			break;
 		case R.id.menu_copy:
 			copyText(makeShareText());
-			Toast.makeText(activity, "Note placed in clipboard",
+			Toast.makeText(activity, getString(R.string.notecopied),
 					Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.menu_share:
