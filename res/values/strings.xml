@@ -99,6 +99,7 @@
     <string name="ok">OK</string>
     
     <string name="show_from_all_lists">Show from all lists</string>
+    <string name="default_list_needed_warning">You need to set a default list first</string>
     
     <string name="permission_read_label">read notes and lists</string>
     <string name="permission_read_desc">Allows the application to read your notes and related lists.</string>

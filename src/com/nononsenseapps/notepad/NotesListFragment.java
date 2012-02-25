@@ -311,8 +311,25 @@ public class NotesListFragment extends ListFragment implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_add:
-			Uri noteUri = FragmentLayout.createNote(
+			Uri noteUri = null;
+			if (mCurListId != FragmentLayout.ALL_NOTES_ID) {
+				noteUri = FragmentLayout.createNote(
 					activity.getContentResolver(), mCurListId);
+			} // Try the default list
+			else {
+				long defaultListId = PreferenceManager.getDefaultSharedPreferences(
+						activity).getLong(FragmentLayout.DEFAULTLIST, -1);
+				if (defaultListId > -1) {
+					noteUri = FragmentLayout.createNote(
+							activity.getContentResolver(), defaultListId);
+				} else {
+					// No default note set. Don't know what to do. Alert the user to this fact.
+					Toast.makeText(
+							activity,
+							getText(R.string.default_list_needed_warning), Toast.LENGTH_LONG)
+							.show();
+				}
+			}
 
 			if (noteUri != null) {
 				newNoteIdToOpen = getNoteIdFromUri(noteUri);

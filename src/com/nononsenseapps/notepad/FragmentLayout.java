@@ -63,8 +63,8 @@ public class FragmentLayout extends Activity implements
 	public static boolean AT_LEAST_HC;
 
 	public final static boolean UI_DEBUG_PRINTS = false;
-	private static final String DEFAULTLIST = "standardListId";
-	
+	public static final String DEFAULTLIST = "standardListId";
+
 	// For my special dropdown navigation item
 	public static final int ALL_NOTES_ID = -2;
 
@@ -109,19 +109,19 @@ public class FragmentLayout extends Activity implements
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
 		// Will set cursor in Loader
-//		mSpinnerAdapter = new ExtrasCursorAdapter(this,
-//				R.layout.actionbar_dropdown_item, null,
-//				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
-//				new int[] { android.R.id.text1 }, new int[] { -9, -8 },
-//				new int[] { R.string.show_from_all_lists, R.string.error_title });
-		mSpinnerAdapter = new ExtrasCursorAdapter(this, R.layout.actionbar_dropdown_item, null,
+		// mSpinnerAdapter = new ExtrasCursorAdapter(this,
+		// R.layout.actionbar_dropdown_item, null,
+		// new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
+		// new int[] { android.R.id.text1 }, new int[] { -9, -8 },
+		// new int[] { R.string.show_from_all_lists, R.string.error_title });
+		mSpinnerAdapter = new ExtrasCursorAdapter(this,
+				R.layout.actionbar_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
-				new int[] { android.R.id.text1 },
-				new int[] { ALL_NOTES_ID },
+				new int[] { android.R.id.text1 }, new int[] { ALL_NOTES_ID },
 				new int[] { R.string.show_from_all_lists });
-		
-		mSpinnerAdapter.setDropDownViewResource(R.layout.actionbar_dropdown_item);
-		
+
+		mSpinnerAdapter
+				.setDropDownViewResource(R.layout.actionbar_dropdown_item);
 
 		// This will listen for navigation callbacks
 		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
@@ -157,7 +157,7 @@ public class FragmentLayout extends Activity implements
 		MenuItem deleteList = menu.findItem(R.id.menu_deletelist);
 		if (deleteList != null) {
 			// Only show this button if there is a list to create it in
-			if (mSpinnerAdapter.getCount() == 0) {
+			if (mSpinnerAdapter.getCount() == 0  || currentListId < 0) {
 				deleteList.setVisible(false);
 			} else {
 				deleteList.setVisible(true);
@@ -166,10 +166,19 @@ public class FragmentLayout extends Activity implements
 		MenuItem renameList = menu.findItem(R.id.menu_renamelist);
 		if (renameList != null) {
 			// Only show this button if there is a list to create it in
-			if (mSpinnerAdapter.getCount() == 0) {
+			if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
 				renameList.setVisible(false);
 			} else {
 				renameList.setVisible(true);
+			}
+		}
+		MenuItem defaultList = menu.findItem(R.id.menu_setdefaultlist);
+		if (defaultList != null) {
+			// Only show this button if there is a proper list showing
+			if (mSpinnerAdapter.getCount() == 0  || currentListId < 0) {
+				defaultList.setVisible(false);
+			} else {
+				defaultList.setVisible(true);
 			}
 		}
 
@@ -504,6 +513,17 @@ public class FragmentLayout extends Activity implements
 						Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
 								Long.toString(currentListId)), null, null);
 			}
+
+			// Remove default setting if this is the default list
+			long defaultListId = PreferenceManager.getDefaultSharedPreferences(
+					this).getLong(DEFAULTLIST, -1);
+			if (currentListId == defaultListId) {
+				// Remove knowledge of default list
+				SharedPreferences.Editor prefEditor = PreferenceManager
+						.getDefaultSharedPreferences(this).edit();
+				prefEditor.remove(DEFAULTLIST);
+				prefEditor.commit();
+			}
 		}
 	}
 
@@ -593,10 +613,12 @@ public class FragmentLayout extends Activity implements
 			showDialog(DELETE_LIST);
 			return true;
 		case R.id.menu_setdefaultlist:
-			SharedPreferences.Editor prefEditor = PreferenceManager
-					.getDefaultSharedPreferences(this).edit();
-			prefEditor.putLong(DEFAULTLIST, currentListId);
-			prefEditor.commit();
+			if (currentListId >= 0) {
+				SharedPreferences.Editor prefEditor = PreferenceManager
+						.getDefaultSharedPreferences(this).edit();
+				prefEditor.putLong(DEFAULTLIST, currentListId);
+				prefEditor.commit();
+			}
 			return true;
 		case R.id.menu_search:
 			if (list != null && list.mSearchItem != null) {
@@ -644,7 +666,7 @@ public class FragmentLayout extends Activity implements
 			} else {
 				setTheme(R.style.ThemeHolo);
 			}
-			
+
 			// Set up navigation (adds nice arrow to icon)
 			ActionBar actionBar = getActionBar();
 			if (actionBar != null) {
