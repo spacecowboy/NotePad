@@ -70,7 +70,7 @@ public class FragmentLayout extends Activity implements
 	private NotesListFragment list;
 	private Menu optionsMenu;
 
-	private CursorAdapter mSpinnerAdapter;
+	private ExtrasCursorAdapter mSpinnerAdapter;
 	private long currentListId = -1;
 	private int currentListPos = 0;
 	private boolean unSelected = true; // Indicates that no list has been
@@ -106,11 +106,18 @@ public class FragmentLayout extends Activity implements
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
 		// Will set cursor in Loader
-		mSpinnerAdapter = new ExtrasCursorAdapter(this,
-				R.layout.actionbar_dropdown_item, null,
-				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
-				new int[] { android.R.id.text1 }, new int[] { -9, -8 },
+//		mSpinnerAdapter = new ExtrasCursorAdapter(this,
+//				R.layout.actionbar_dropdown_item, null,
+//				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
+//				new int[] { android.R.id.text1 }, new int[] { -9, -8 },
+//				new int[] { R.string.show_from_all_lists, R.string.error_title });
+		mSpinnerAdapter = new ExtrasCursorAdapter(this, R.layout.actionbar_dropdown_item, null,
+//				new int[] {}, new int[] {});
+				new int[] { -9, -8 },
 				new int[] { R.string.show_from_all_lists, R.string.error_title });
+		
+		mSpinnerAdapter.setDropDownViewResource(R.layout.actionbar_dropdown_item);
+		
 
 		// This will listen for navigation callbacks
 		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);

@@ -1,37 +1,47 @@
 package com.nononsenseapps.ui;
 
+import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.R;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.SimpleCursorAdapter;
+import android.widget.CursorAdapter;
+import android.widget.ResourceCursorAdapter;
 import android.widget.TextView;
 
-public class ExtrasCursorAdapter extends SimpleCursorAdapter {
-
+public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	private static final String TAG = "ExtrasCursorAdapter";
-	protected Context context;
-	protected String[] from;
-	protected int[] to;
+
+	private Cursor cursor;
+	private LayoutInflater mInflater;
+
 	protected int layout;
+	protected int dropDownLayout;
+	protected Context context;
+
 	protected int[] extraIds;
 	protected int[] extraLabels;
 
-	//private int currentExtraItem = -1;
+	protected String[] from;
+	protected int[] to;
+
 	private int numOfItems = 0;
 
-
 	/**
-	 * Same as a simplecursoradapter except two extra arrays are taken. The first is an array of what IDs you want to assign your items
-	 * so you can identify them later. Second is an array of ids to the String resources to use as labels.
+	 * Same as a cursoradapter except two extra arrays are taken (and a layout).
+	 * The first is an array of what IDs you want to assign your items so you
+	 * can identify them later. Second is an array of ids to the String
+	 * resources to use as labels.
 	 */
 	public ExtrasCursorAdapter(Context context, int layout, Cursor c,
-			String[] from, int[] to, int[] extraIds, int[] extraLabels) {
-		super(context, layout, c, from, to);
-		this.from = from;
-		this.to = to;
+			int[] extraIds, int[] extraLabels) {
+		super(context, layout, c);
+		this.cursor = c;
+		mInflater = LayoutInflater.from(context);
 		this.layout = layout;
 		this.extraIds = extraIds;
 		this.extraLabels = extraLabels;
@@ -39,80 +49,145 @@ public class ExtrasCursorAdapter extends SimpleCursorAdapter {
 	}
 
 	/**
-	 * Same as a simplecursoradapter except two extra arrays are taken. The first is an array of what IDs you want to assign your items
-	 * so you can identify them later. Second is an array of ids to the String resources to use as labels.
+	 * Same as a cursoradapter except two extra arrays are taken (and a layout).
+	 * The first is an array of what IDs you want to assign your items so you
+	 * can identify them later. Second is an array of ids to the String
+	 * resources to use as labels.
 	 */
 	public ExtrasCursorAdapter(Context context, int layout, Cursor c,
-			String[] from, int[] to, int flags, int[] extraIds, int[] extraLabels) {
-		super(context, layout, c, from, to, flags);
-		this.from = from;
-		this.to = to;
+			boolean autoRequery, int[] extraIds, int[] extraLabels) {
+		super(context, layout, c, autoRequery);
+		this.cursor = c;
+		mInflater = LayoutInflater.from(context);
 		this.layout = layout;
 		this.extraIds = extraIds;
 		this.extraLabels = extraLabels;
 		this.context = context;
 	}
-	
-	protected View getExtrasView(int extraIndex, ViewGroup parent) {
-		final LayoutInflater inflater = LayoutInflater.from(context);
-		View view = inflater.inflate(layout, parent, false);
-		TextView text = (TextView) view.findViewById(android.R.id.text1);
-		if (text != null) {
-			text.setText(context.getText(extraLabels[extraIndex]));
-			view.setId(extraIds[extraIndex]);
-		}
-		return view;
+
+	/**
+	 * Same as a cursoradapter except two extra arrays are taken (and a layout).
+	 * The first is an array of what IDs you want to assign your items so you
+	 * can identify them later. Second is an array of ids to the String
+	 * resources to use as labels.
+	 */
+	public ExtrasCursorAdapter(Context context, int layout, Cursor c,
+			int flags, int[] extraIds, int[] extraLabels) {
+		super(context, layout, c, flags);
+		this.cursor = c;
+		mInflater = LayoutInflater.from(context);
+		this.layout = layout;
+		this.extraIds = extraIds;
+		this.extraLabels = extraLabels;
+		this.context = context;
 	}
-	
+
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		if (position >= numOfItems) {
-			Log.d(TAG, "getView Extra: " + (position - numOfItems));
-			return getExtrasView(position - numOfItems, parent);
-		}
-		else {
-			Log.d(TAG, "getView before: " + (position - numOfItems));
-			return super.getView(position, convertView, parent);
-		}
+	public void setDropDownViewResource(int dropDownLayout) {
+		this.dropDownLayout = dropDownLayout;
+		super.setDropDownViewResource(dropDownLayout);
 	}
-	
+
 	@Override
-	public long getItemId(int position) {
-		if (position >= numOfItems) {
-			Log.d(TAG, "getItemId: " + (position - numOfItems));
-			return extraIds[position - numOfItems];
-		}
-		return super.getItemId(position);
+	public void setViewResource(int layout) {
+		this.layout = layout;
+		super.setViewResource(layout);
 	}
-	
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.widget.CursorAdapter#bindView(android.view.View,
+	 * android.content.Context, android.database.Cursor)
+	 */
+	@Override
+	public void bindView(View view, Context context, Cursor cursor) {
+		Log.d(TAG, "bindView");
+		// Dont need to do anything here
+		ViewHolder viewHolder = (ViewHolder) view.getTag();
+		if (viewHolder == null) {
+			viewHolder = new ViewHolder();
+			viewHolder.text = (TextView) view.findViewById(android.R.id.text1);
+			view.setTag(viewHolder);
+		}
+		// Fetch from database
+		// this.cursor.moveToPosition(position);
+		viewHolder.text.setText(cursor.getString(cursor
+				.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE)));
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see android.widget.CursorAdapter#newView(android.content.Context,
+	 * android.database.Cursor, android.view.ViewGroup)
+	 */
 	@Override
 	public View newView(Context context, Cursor cursor, ViewGroup parent) {
-		Log.d(TAG, "newView: " + cursor.getPosition());
-		//return getExtrasView(0, parent);
+		Log.d(TAG, "newView");
+		// Dont need to do anything here either
+		// return null;
 		return super.newView(context, cursor, parent);
 	}
-	
+
+	@Override
+	public Cursor swapCursor(Cursor newCursor) {
+		Log.d(TAG, "swapCursor");
+		this.cursor = newCursor;
+		return super.swapCursor(newCursor);
+	}
+
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent) {
+		Log.d(TAG, "getView: " + position);
+		if (cursor == null || position < numOfItems)
+			return super.getView(position, convertView, parent);
+
+		ViewHolder viewHolder = null;
+		if (convertView == null) {
+			// Make a new view
+			cursor.moveToFirst();
+			convertView = super.newView(parent.getContext(), cursor, parent);
+		} else {
+			viewHolder = (ViewHolder) convertView.getTag();
+		}
+		if (viewHolder == null) {
+			viewHolder = new ViewHolder();
+			viewHolder.text = (TextView) convertView
+					.findViewById(android.R.id.text1);
+			convertView.setTag(viewHolder);
+		}
+		viewHolder.text.setText(context.getText(extraLabels[position
+				- numOfItems]));
+
+		return convertView;
+	}
+
 	@Override
 	public View getDropDownView(int position, View convertView, ViewGroup parent) {
-		if (position >= numOfItems) {
-			Log.d(TAG, "getDropDownView Extra: " + (position - numOfItems));
-			return getExtrasView(position - numOfItems, parent);
-		}
-		else {
-			Log.d(TAG, "getDropDownView before: " + (position - numOfItems));
-			return super.getDropDownView(position, convertView, parent);
+		return getView(position, convertView, parent);
+	}
+
+	@Override
+	public long getItemId(int position) {
+		Log.d(TAG, "getItemId: " + position);
+		if (numOfItems < 1 || position < numOfItems) {
+			return super.getItemId(position);
+		} else {
+			return extraIds[position - numOfItems];
 		}
 	}
 
 	@Override
 	public int getCount() {
-		//Log.d(TAG, "Returning false count");
 		numOfItems = super.getCount();
-		Log.d(TAG, "NumOfItems: " +numOfItems);
-		if (numOfItems > 0) {
+		if (numOfItems > 0 && extraIds != null)
 			return numOfItems + extraIds.length;
-		} else {
+		else
 			return numOfItems;
-		}
+	}
+
+	static class ViewHolder {
+		TextView text;
 	}
 }

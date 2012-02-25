@@ -20,7 +20,7 @@
 <!-- DOES NOT EXIST IN HONEYCOMB? android:layout_height="?android:attr/listPreferredItemHeightSmall" -->
 <CheckedTextView xmlns:android="http://schemas.android.com/apk/res/android" 
     android:id="@android:id/text1"
-    style="?attr/ActionBarDropDownItem"
+    style="?ActionBarDropDownItem"
     android:singleLine="true"
     android:layout_width="match_parent"
     android:layout_height="48dp"
