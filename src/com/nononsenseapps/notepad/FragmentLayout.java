@@ -109,7 +109,8 @@ public class FragmentLayout extends Activity implements
 		mSpinnerAdapter = new ExtrasCursorAdapter(this,
 				R.layout.actionbar_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
-				new int[] { android.R.id.text1 });
+				new int[] { android.R.id.text1 }, new int[] { -9, -8 },
+				new int[] { R.string.show_from_all_lists, R.string.error_title });
 
 		// This will listen for navigation callbacks
 		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
@@ -730,8 +731,7 @@ public class FragmentLayout extends Activity implements
 				Log.d(TAG, "onDeleteAction");
 			editorFragment.setSelfAction(); // Don't try to reload the deleted
 											// note
-			FragmentLayout.deleteNote(this,
-					editorFragment.getCurrentNoteId());
+			FragmentLayout.deleteNote(this, editorFragment.getCurrentNoteId());
 			setResult(Activity.RESULT_CANCELED);
 			finish();
 		}
@@ -764,8 +764,7 @@ public class FragmentLayout extends Activity implements
 	 * 
 	 * @param ids
 	 */
-	public static void deleteNotes(Context context,
-			Iterable<Long> ids) {
+	public static void deleteNotes(Context context, Iterable<Long> ids) {
 		ContentResolver resolver = context.getContentResolver();
 		boolean shouldMark = shouldMarkAsDeleted(context);
 		for (long id : ids) {
@@ -810,7 +809,7 @@ public class FragmentLayout extends Activity implements
 		if (ids.contains(curId)) {
 			if (UI_DEBUG_PRINTS)
 				Log.d("FragmentLayout",
-					"id was contained in multidelete, setting no save first");
+						"id was contained in multidelete, setting no save first");
 			NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
 					.findFragmentById(R.id.editor_container);
 			if (editor != null) {
