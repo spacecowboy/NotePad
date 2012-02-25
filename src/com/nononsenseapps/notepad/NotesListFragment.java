@@ -913,6 +913,8 @@ public class NotesListFragment extends ListFragment implements
 				// Put in hash
 				textToShare.put(id, note);
 			}
+			if (cursor != null)
+				cursor.close();
 		}
 
 		protected void delTextToShare(long id) {
