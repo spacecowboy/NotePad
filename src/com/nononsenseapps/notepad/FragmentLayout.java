@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
+import com.nononsenseapps.ui.ExtrasCursorAdapter;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -37,6 +38,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.CursorAdapter;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
 
@@ -68,7 +70,7 @@ public class FragmentLayout extends Activity implements
 	private NotesListFragment list;
 	private Menu optionsMenu;
 
-	private SimpleCursorAdapter mSpinnerAdapter;
+	private CursorAdapter mSpinnerAdapter;
 	private long currentListId = -1;
 	private int currentListPos = 0;
 	private boolean unSelected = true; // Indicates that no list has been
@@ -104,7 +106,7 @@ public class FragmentLayout extends Activity implements
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
 		// Will set cursor in Loader
-		mSpinnerAdapter = new SimpleCursorAdapter(this,
+		mSpinnerAdapter = new ExtrasCursorAdapter(this,
 				R.layout.actionbar_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
 				new int[] { android.R.id.text1 });
