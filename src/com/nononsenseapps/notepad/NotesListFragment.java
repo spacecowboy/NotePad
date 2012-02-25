@@ -362,16 +362,24 @@ public class NotesListFragment extends ListFragment implements
 																// change the
 																// current value
 			values.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN, 1);
-			activity.getContentResolver()
-					.update(NotePad.Notes.CONTENT_URI,
-							values,
-							NotePad.Notes.COLUMN_NAME_GTASKS_STATUS
-									+ " IS ? AND "
-									+ NotePad.Notes.COLUMN_NAME_LIST + " IS ?",
-							new String[] {
-									getText(R.string.gtask_status_completed)
-											.toString(),
-									Long.toString(mCurListId) });
+			// Handle all notes showing
+			String inList;
+			String[] args;
+			if (mCurListId == FragmentLayout.ALL_NOTES_ID) {
+				inList = "";
+				args = new String[] { getText(R.string.gtask_status_completed)
+						.toString() };
+			} else {
+				inList = " AND " + NotePad.Notes.COLUMN_NAME_LIST + " IS ?";
+				args = new String[] {
+						getText(R.string.gtask_status_completed).toString(),
+						Long.toString(mCurListId) };
+			}
+
+			activity.getContentResolver().update(NotePad.Notes.CONTENT_URI,
+					values,
+					NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?" + inList,
+					args);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
