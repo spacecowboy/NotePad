@@ -48,7 +48,7 @@
     <string name="error_message">Fehler beim Laden der Notiz</string>
     
     <string name="search_hint">Suche</string>
-    <string name="settings_theme">Aktuellen Thema</string>
+    <string name="settings_theme">Aktuelles Thema</string>
     <string name="settings_theme_dialog">Thema verwenden</string>
     <string name="settings_cat_theme">Thema</string>
     <string name="settings_cat_sorting">Sortierung</string>
