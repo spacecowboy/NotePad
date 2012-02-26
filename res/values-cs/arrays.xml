@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="theme_preference">
+        <item>Tmavé</item>
+        <item>Světlé</item>
+    </string-array>
+
+    <string-array name="themevalues_preference">
+        <item>dark</item>
+        <item>light</item>
+    </string-array>
+    
+    <string-array name="sorting_preference">
+        <item>Název</item>
+        <item>Termín dokončení</item>
+        <!-- <item>Server order</item>
+        <item>ABCSort</item> -->
+    </string-array>
+
+    <string-array name="sortingvalues_preference">
+        <item>title COLLATE NOCASE</item>
+        <item>duedate</item>
+       <!--  <item>possubsort</item>
+        <item>abcsubsort</item> -->
+    </string-array>
+    
+    <string-array name="sorting_order_preference">
+        <item>Vzestupně</item>
+        <item>Sestupně</item>
+    </string-array>
+
+    <string-array name="sorting_ordervalues_preference">
+        <item>ASC</item>
+        <item>DESC</item>
+    </string-array>
+    
+    <string-array name="font_type_preference">
+        <item>Sans</item>
+        <item>Serif</item>
+        <item>Monospace</item>
+    </string-array>
+
+    <string-array name="font_typevalues_preference">
+        <item>Sans</item>
+        <item>Serif</item>
+        <item>Monospace</item>
+    </string-array>
+    <string-array name="sync_freq_preference">
+        <item>Ručně</item>
+        <!-- <item>1 hour</item>
+        <item>2 hours</item>
+        <item>4 hours</item>
+        <item>8 hours</item> -->
+        <item>1 den</item>
+	</string-array>
+	<string-array name="sync_freqvalues_preference">
+	    <item>0</item>
+        <!-- <item>60</item>
+        <item>120</item>
+        <item>240</item>
+        <item>480</item> -->
+        <item>1440</item>
+	</string-array>
+
+</resources>
