@@ -20,16 +20,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.NotePadProvider;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.NotePad.Notes;
+import com.nononsenseapps.notepad.R.id;
+import com.nononsenseapps.notepad.R.layout;
 import com.nononsenseapps.ui.DateView;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ContentUris;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -38,6 +45,7 @@ import android.widget.RemoteViewsService;
  * This is the service that provides the factory to be bound to the collection service.
  */
 public class ListWidgetService extends RemoteViewsService {
+	
     @Override
     public RemoteViewsFactory onGetViewFactory(Intent intent) {
         return new StackRemoteViewsFactory(this.getApplicationContext(), intent);
@@ -52,6 +60,8 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     private Cursor mCursor;
     private int mAppWidgetId;
     
+    private ListChecker observer;
+    
     private static final String[] PROJECTION = new String[] {
 		NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
 		NotePad.Notes.COLUMN_NAME_NOTE,
@@ -62,24 +72,25 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     public StackRemoteViewsFactory(Context context, Intent intent) {
         mContext = context;
+        observer = new ListChecker(null);
         mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
     }
 
     public void onCreate() {
-    	Log.d(TAG, "onCreate");
+    	mContext.getContentResolver().registerContentObserver(NotePad.Notes.CONTENT_URI, true, observer);
         // Since we reload the cursor in onDataSetChanged() which gets called immediately after
         // onCreate(), we do nothing here.
     }
 
     public void onDestroy() {
+    	mContext.getContentResolver().unregisterContentObserver(observer);
         if (mCursor != null) {
             mCursor.close();
         }
     }
 
     public int getCount() {
-    	Log.d(TAG, "getCount: " + mCursor.getCount());
         return mCursor.getCount();
     }
 
@@ -107,10 +118,6 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     		}
         }
 
-        
-//        final String formatStr = mContext.getResources().getString(R.string.item_format_string);
-//        final int itemId = (position % 2 == 0 ? R.layout.light_widget_item
-//                : R.layout.dark_widget_item);
         final int itemId =  R.layout.widgetlist_item;
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), itemId);
         rv.setTextViewText(R.id.widget_itemTitle, title);
@@ -132,7 +139,6 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
     }
 
     public int getViewTypeCount() {
-        // Technically, we have two types of views (the dark and light background views)
         return 1;
     }
 
@@ -150,7 +156,22 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         if (mCursor != null) {
             mCursor.close();
         }
-        mCursor = mContext.getContentResolver().query(NotePad.Notes.CONTENT_VISIBLE_URI, PROJECTION, null,
+        
+        mCursor = mContext.getContentResolver().query(ListDBProvider.CONTENT_VISIBLE_URI, PROJECTION, null,
                 null, NotePad.Notes.ALPHABETIC_ASC_ORDER);
+    }
+    
+    private class ListChecker extends ContentObserver {
+
+		public ListChecker(Handler handler) {
+			super(handler);
+		}
+    	
+		@Override
+		public void onChange(boolean selfchange) {
+			Log.d("Observer", "onChange");
+			// Refresh the widget
+			AppWidgetManager.getInstance(mContext).notifyAppWidgetViewDataChanged(mAppWidgetId, R.id.notes_list);
+		}
     }
 }

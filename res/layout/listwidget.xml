@@ -18,14 +18,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/widget_margin"
-    android:orientation="vertical"
-    android:layout_gravity="top" >
+    android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:orientation="horizontal"
-        android:layout_gravity="center"
         android:paddingLeft="4dp"
         android:paddingRight="8dp"
         android:paddingTop="8dp"
@@ -55,7 +53,7 @@
             android:layout_marginRight="8dp"
             android:singleLine="true"
             android:text="List title here will come"
-            android:textColor="#000000"
+            android:textColor="@android:color/primary_text_light"
             android:textSize="20sp"
             android:textStyle="normal" />
 
@@ -74,7 +72,6 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:layout_gravity="center"
         android:background="@drawable/gradient_bg_gmail_widget_holo">
         <ListView
             android:id="@+id/notes_list"
@@ -86,8 +83,8 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:visibility="gone"
-            android:textColor="#ffffff"
-            android:text="I am empty"
+            android:textColor="@android:color/primary_text_light"
+            android:text="Loading..."
             android:textSize="20sp" />
     </FrameLayout>
 

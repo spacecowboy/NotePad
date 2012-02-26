@@ -57,7 +57,7 @@
         android:label="@string/permission_write_label"
         android:permissionGroup="android.permission-group.PERSONAL_INFO"
         android:protectionLevel="normal" />
-    
+
     <uses-permission android:name="com.nononsenseapps.notepad.permissions.read" />
     <uses-permission android:name="com.nononsenseapps.notepad.permissions.write" />
     <uses-permission android:name="android.permission.BIND_REMOTEVIEWS" />
@@ -71,11 +71,11 @@
             android:authorities="com.nononsenseapps.NotePad"
             android:enabled="true"
             android:exported="true"
+            android:grantUriPermissions="true"
             android:label="@string/app_name"
-            
+            android:readPermission="com.nononsenseapps.notepad.permissions.read"
             android:syncable="true"
             android:writePermission="com.nononsenseapps.notepad.permissions.write" >
-            <grant-uri-permission android:pathPattern=".*" />
         </provider>
         <!-- temp remove android:readPermission="com.nononsenseapps.notepad.permissions.read" -->
 
@@ -167,7 +167,6 @@
         <service
             android:name=".sync.SyncService"
             android:exported="true" >
-
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -176,20 +175,36 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
-        
+
         <!-- List Widget -->
         <receiver android:name="com.nononsenseapps.notepad.widget.ListWidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
-            <meta-data android:name="android.appwidget.provider"
+
+            <meta-data
+                android:name="android.appwidget.provider"
                 android:resource="@xml/listwidgetinfo" />
-            
         </receiver>
 
-        <service android:name="com.nononsenseapps.notepad.widget.ListWidgetService"
-            android:permission="android.permission.BIND_REMOTEVIEWS"
-            android:exported="false" />
+        <service
+            android:name="com.nononsenseapps.notepad.widget.ListWidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <!--
+        This is a limited version of the real provider. Widgets do NOT have read permission,
+        hence the code duplication...
+        To not get a SecurityException on a Widget, you must have exported=true and not require
+        any read permissions.
+        -->
+        <provider
+            android:name="com.nononsenseapps.notepad.widget.ListDBProvider"
+            android:authorities="com.nononsenseapps.NotePad.widget"
+            android:enabled="true"
+            android:exported="true"
+            android:label="@string/app_name" >
+        </provider>
     </application>
 
 </manifest>

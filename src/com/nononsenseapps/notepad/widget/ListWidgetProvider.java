@@ -38,6 +38,9 @@ import java.util.Random;
 
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.NotePad.Notes;
+import com.nononsenseapps.notepad.R.id;
+import com.nononsenseapps.notepad.R.layout;
 
 /**
  * Our data observer just notifies an update for all weather widgets when it detects a change.
@@ -153,6 +156,8 @@ public class ListWidgetProvider extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
     	Log.d(TAG, "onUpdate");
+    	// This is not called on start up if we are using a configuration activity
+    	
         // Update each of the widgets with the remote adapter
         for (int i = 0; i < appWidgetIds.length; ++i) {
             // Specify the service to provide data for the collection widget.  Note that we need to

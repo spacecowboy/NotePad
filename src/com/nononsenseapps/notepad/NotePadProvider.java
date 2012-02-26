@@ -72,7 +72,7 @@ public class NotePadProvider extends ContentProvider implements
 	/**
 	 * A projection map used to select columns from the database
 	 */
-	private static HashMap<String, String> sNotesProjectionMap;
+	public static HashMap<String, String> sNotesProjectionMap;
 
 	private static HashMap<String, String> sListsProjectionMap;
 	private static HashMap<String, String> sGTasksProjectionMap;
@@ -309,10 +309,10 @@ public class NotePadProvider extends ContentProvider implements
 	 * This class helps open, create, and upgrade the database file. Set to
 	 * package visibility for testing purposes.
 	 */
-	static class DatabaseHelper extends SQLiteOpenHelper {
+	public static class DatabaseHelper extends SQLiteOpenHelper {
 		Context context;
 
-		DatabaseHelper(Context context) {
+		public DatabaseHelper(Context context) {
 
 			// calls the super constructor, requesting the default cursor
 			// factory.
@@ -550,9 +550,6 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	@Override
 	public boolean onCreate() {
-		if (FragmentLayout.UI_DEBUG_PRINTS || SyncAdapter.SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "onCreate");
-
 		// Creates a new helper object. Note that the database itself isn't
 		// opened until
 		// something tries to access it, and it's only created if it doesn't
