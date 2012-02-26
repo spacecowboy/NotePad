@@ -61,10 +61,11 @@
             android:id="@+id/createNoteButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@android:color/transparent"
+            android:scaleType="fitCenter"
             android:paddingLeft="4dp"
             android:paddingBottom="8dp"
             android:layout_gravity="center"
+            android:background="@android:color/transparent"
             android:src="@drawable/ic_action_compose_light" />
     </LinearLayout>
 
