@@ -13,4 +13,7 @@
     <dimen name="preference_item_padding_inner">8dip</dimen>
     <dimen name="preference_child_padding_side">16dip</dimen>
     
+    <!-- For widget -->
+    <dimen name="widget_margin">8dp</dimen>
+    
 </resources>

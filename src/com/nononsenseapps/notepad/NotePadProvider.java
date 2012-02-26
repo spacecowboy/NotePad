@@ -594,8 +594,8 @@ public class NotePadProvider extends ContentProvider implements
 		case VISIBLE_NOTES:
 			// Add a selection criteria, but then fall through for normal note
 			// handling.
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0");
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0 AND ");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0 AND ");
 			qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS 0");
 		case NOTES:
 			qb.setTables(NotePad.Notes.TABLE_NAME);
@@ -635,9 +635,9 @@ public class NotePadProvider extends ContentProvider implements
 		case VISIBLE_NOTE_ID:
 			// Add a selection criteria, but then fall through for normal note
 			// handling.
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0");
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0");
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS 0");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0 AND ");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0 AND ");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS 0 AND ");
 		case NOTE_ID:
 			qb.setTables(NotePad.Notes.TABLE_NAME);
 			qb.setProjectionMap(sNotesProjectionMap);
@@ -650,7 +650,7 @@ public class NotePadProvider extends ContentProvider implements
 		case VISIBLE_LIST_ID:
 			// Add a selection criteria, but then fall through for normal
 			// handling.
-			qb.appendWhere(NotePad.Lists.COLUMN_NAME_DELETED + " IS 0");
+			qb.appendWhere(NotePad.Lists.COLUMN_NAME_DELETED + " IS 0 AND ");
 		case LISTS_ID:
 			qb.appendWhere(BaseColumns._ID + // the name of the ID column
 					"=" +

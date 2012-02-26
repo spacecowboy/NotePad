@@ -57,6 +57,10 @@
         android:label="@string/permission_write_label"
         android:permissionGroup="android.permission-group.PERSONAL_INFO"
         android:protectionLevel="normal" />
+    
+    <uses-permission android:name="com.nononsenseapps.notepad.permissions.read" />
+    <uses-permission android:name="com.nononsenseapps.notepad.permissions.write" />
+    <uses-permission android:name="android.permission.BIND_REMOTEVIEWS" />
 
     <application
         android:hardwareAccelerated="true"
@@ -68,11 +72,12 @@
             android:enabled="true"
             android:exported="true"
             android:label="@string/app_name"
-            android:readPermission="com.nononsenseapps.notepad.permissions.read"
+            
             android:syncable="true"
             android:writePermission="com.nononsenseapps.notepad.permissions.write" >
             <grant-uri-permission android:pathPattern=".*" />
         </provider>
+        <!-- temp remove android:readPermission="com.nononsenseapps.notepad.permissions.read" -->
 
         <activity
             android:name=".FragmentLayout"
@@ -163,7 +168,6 @@
             android:name=".sync.SyncService"
             android:exported="true" >
 
-            <!-- android:process=":sync" -->
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -172,6 +176,20 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
+        
+        <!-- List Widget -->
+        <receiver android:name="com.nononsenseapps.notepad.widget.ListWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+            <meta-data android:name="android.appwidget.provider"
+                android:resource="@xml/listwidgetinfo" />
+            
+        </receiver>
+
+        <service android:name="com.nononsenseapps.notepad.widget.ListWidgetService"
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            android:exported="false" />
     </application>
 
 </manifest>
