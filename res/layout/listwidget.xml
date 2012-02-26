@@ -18,23 +18,30 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/widget_margin"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:layout_gravity="top" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="48dp"
         android:orientation="horizontal"
-        android:layout_gravity="top" >
+        android:layout_gravity="center"
+        android:paddingLeft="4dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp"
+        android:background="@drawable/header_bg_gmail_widget_holo" >
 
-        <ImageButton
+        <ImageView
             android:id="@+id/openAppButton"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:paddingRight="4dp"
+            android:paddingBottom="8dp"
             android:background="@android:color/transparent"
-            android:padding="4dp"
             android:src="@drawable/app_icon" />
 
-        <Button
+        <TextView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/titleButton"
             android:layout_width="0dp"
@@ -42,27 +49,33 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
-            android:padding="4dp"
-            android:text="List title here"
-            android:textColor="#ffffff"
+            android:paddingLeft="4dp"
+            android:paddingRight="4dp"
+            android:paddingBottom="8dp"
+            android:layout_marginRight="8dp"
+            android:singleLine="true"
+            android:text="List title here will come"
+            android:textColor="#000000"
             android:textSize="20sp"
-            android:textStyle="bold" />
+            android:textStyle="normal" />
 
         <ImageButton
             android:id="@+id/createNoteButton"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
-            android:padding="4dp"
-            android:src="@drawable/ic_action_compose_dark" />
+            android:paddingLeft="4dp"
+            android:paddingBottom="8dp"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_action_compose_light" />
     </LinearLayout>
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="0dp"
         android:layout_weight="1"
         android:layout_gravity="center"
-        android:background="@android:color/transparent">
+        android:background="@drawable/gradient_bg_gmail_widget_holo">
         <ListView
             android:id="@+id/notes_list"
             android:layout_width="match_parent"
@@ -77,5 +90,12 @@
             android:text="I am empty"
             android:textSize="20sp" />
     </FrameLayout>
+
+    <ImageView
+        android:id="@+id/bottomBlue"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scaleType="fitXY"
+        android:src="@drawable/list_div_top_btm_gmail_widget_holo" />
 
 </LinearLayout>

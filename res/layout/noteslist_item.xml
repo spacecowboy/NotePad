@@ -31,7 +31,8 @@
         android:paddingBottom="4dp"
         android:paddingLeft="0dp"
         android:paddingRight="4dp"
-        android:paddingTop="8dp" >
+        android:paddingTop="8dp"
+        android:minWidth="44dp" >
 
         <view
             xmlns:android="http://schemas.android.com/apk/res/android"

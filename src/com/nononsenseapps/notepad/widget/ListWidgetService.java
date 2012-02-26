@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.ui.DateView;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -86,9 +87,11 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         // Get the data for this position from the content provider
         String title = "";
         String note = "";
+        CharSequence dueDate = "";
         long noteId = -1;
         if (mCursor.moveToPosition(position)) {
             final int titleIndex = mCursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
+            final int dateIndex = mCursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
             final int noteIndex = mCursor.getColumnIndex(
             		NotePad.Notes.COLUMN_NAME_NOTE);
             final int idIndex = mCursor.getColumnIndex(
@@ -96,6 +99,12 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
             title = mCursor.getString(titleIndex);
             note = mCursor.getString(noteIndex);
             noteId = mCursor.getLong(idIndex);
+            String date = mCursor.getString(dateIndex);
+            if (date == null || date.length() == 0)
+            	dueDate = "";
+    		else {
+    			dueDate = DateView.toDate(date);
+    		}
         }
 
         
@@ -106,6 +115,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), itemId);
         rv.setTextViewText(R.id.widget_itemTitle, title);
         rv.setTextViewText(R.id.widget_itemNote, note);
+        rv.setTextViewText(R.id.widget_itemDate, dueDate);
 
         // Set the click intent so that we can handle it and show a toast message
         final Intent fillInIntent = new Intent();

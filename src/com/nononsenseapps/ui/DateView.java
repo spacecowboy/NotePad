@@ -18,8 +18,8 @@ import android.widget.TextView;
 public class DateView extends TextView {
 	private static final int SECONDS_PER_DAY = 3600;
 	//private String day = "E, d MMM";
-	private String day = "d MMM";
-	private String time = "kk:mm";
+	public static final String day = "d MMM";
+	public static final String time = "kk:mm";
 
 	public DateView(Context context) {
 		super(context);
@@ -42,15 +42,15 @@ public class DateView extends TextView {
 		}
 	}
 	
-	public CharSequence toDate(String time3339) {
+	public static CharSequence toDate(String time3339) {
 		Time time = new Time(Time.getCurrentTimezone());
 		time.parse3339(time3339);
 		
-		return toDate(time.toMillis(false));
+		return toDate(day, time.toMillis(false));
 	}
 
-	public CharSequence toDate(long msecs) {
-		String format = day;
+	public static CharSequence toDate(String format, long msecs) {
+		//String format = day;
 
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTimeInMillis(msecs);
