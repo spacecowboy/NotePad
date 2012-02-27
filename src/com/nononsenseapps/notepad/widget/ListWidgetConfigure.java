@@ -1,5 +1,6 @@
 package com.nononsenseapps.notepad.widget;
 
+import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 
 import android.app.Activity;
@@ -97,7 +98,7 @@ public class ListWidgetConfigure extends Activity {
 
 	private void configDone() {
 		// Save values to preferences
-		getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE).edit().putString(LIST_WHERE, "").putString(SORT_ON, "duedate").commit();
+		getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE).edit().putString(LIST_WHERE, "").putString(SORT_ON, NotePad.Notes.DUEDATE_SORT_TYPE).commit();
 		
 		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
 		appWidgetManager.updateAppWidget(appWidgetId, ListWidgetProvider.buildRemoteViews(this, appWidgetId));

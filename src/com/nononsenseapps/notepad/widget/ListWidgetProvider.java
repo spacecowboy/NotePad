@@ -71,7 +71,6 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			// TODO set list ID
 			// appIntent.addExtras(NotePad.Notes.COLUMN_NAME_LIST, listId);
 			context.startActivity(appIntent);
-			Toast.makeText(context, "CreateAction", Toast.LENGTH_SHORT).show();
 
 		} else if (action.equals(CLICK_ACTION)) {
 			final long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
@@ -84,8 +83,6 @@ public class ListWidgetProvider extends AppWidgetProvider {
 				appIntent.setAction(Intent.ACTION_EDIT);
 				context.startActivity(appIntent);
 			}
-			Toast.makeText(context, "NoteId = " + noteId, Toast.LENGTH_SHORT)
-					.show();
 		}
 
 		super.onReceive(context, intent);
