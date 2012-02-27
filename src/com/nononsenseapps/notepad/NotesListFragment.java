@@ -198,7 +198,7 @@ public class NotesListFragment extends ListFragment implements
 				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
 			Log.d(TAG, "Selecting note");
 			String newId = intent.getData().getPathSegments()
-					.get(NotePad.Lists.ID_PATH_POSITION);
+					.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
 			long noteId = Long.parseLong(newId);
 			if (noteId > -1) {
 				newNoteIdToOpen = noteId;
@@ -481,6 +481,18 @@ public class NotesListFragment extends ListFragment implements
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		showNote(position);
+	}
+	
+	public void openNote(Intent intent) {
+		if (intent != null) {
+			String newId = intent.getData().getPathSegments()
+					.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
+			long noteId = Long.parseLong(newId);
+			int pos = getPosOfId(noteId);
+			if (pos > -1) {
+				showNote(pos);
+			}
+		}
 	}
 
 	/**

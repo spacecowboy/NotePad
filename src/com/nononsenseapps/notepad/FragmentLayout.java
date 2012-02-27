@@ -155,7 +155,7 @@ public class FragmentLayout extends Activity implements
 		MenuItem deleteList = menu.findItem(R.id.menu_deletelist);
 		if (deleteList != null) {
 			// Only show this button if there is a list to create it in
-			if (mSpinnerAdapter.getCount() == 0  || currentListId < 0) {
+			if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
 				deleteList.setVisible(false);
 			} else {
 				deleteList.setVisible(true);
@@ -173,7 +173,7 @@ public class FragmentLayout extends Activity implements
 		MenuItem defaultList = menu.findItem(R.id.menu_setdefaultlist);
 		if (defaultList != null) {
 			// Only show this button if there is a proper list showing
-			if (mSpinnerAdapter.getCount() == 0  || currentListId < 0) {
+			if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
 				defaultList.setVisible(false);
 			} else {
 				defaultList.setVisible(true);
@@ -216,7 +216,7 @@ public class FragmentLayout extends Activity implements
 	@Override
 	protected void onNewIntent(Intent intent) {
 		if (UI_DEBUG_PRINTS)
-			Log.d("FragmentLayout", "On New Intent list: " + list);
+			Log.d("FragmentLayout", "On New Intent");
 		// Get the intent, verify the action and get the query
 		// Intent intent = getIntent();
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -229,6 +229,8 @@ public class FragmentLayout extends Activity implements
 			}
 		} else if (Intent.ACTION_EDIT.equals(intent.getAction())
 				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
+			if (UI_DEBUG_PRINTS)
+				Log.d("FragmentLayout", "On New Intent EDIT");
 			if (intent.getData() != null
 					&& intent.getData().getPath()
 							.startsWith(NotePad.Lists.PATH_VISIBLE_LIST_ID)) {
@@ -244,6 +246,7 @@ public class FragmentLayout extends Activity implements
 						ab.setSelectedNavigationItem(pos);
 				}
 			} else if (intent.getData() != null
+					&& intent.getExtras() != null
 					&& intent.getData().getPath()
 							.startsWith(NotePad.Notes.PATH_VISIBLE_NOTE_ID)) {
 				if (list != null) {
@@ -254,28 +257,36 @@ public class FragmentLayout extends Activity implements
 						// select it
 						ActionBar ab = getActionBar();
 						if (ab != null) {
-							ab.setSelectedNavigationItem(pos);
-							list.handleNoteIntent(intent);
+							if (ab.getSelectedNavigationIndex() != pos) {
+								ab.setSelectedNavigationItem(pos);
+								list.handleNoteIntent(intent);
+							} else {
+								list.openNote(intent);
+							}
 						}
 					}
 				}
 			}
 		} else if (Intent.ACTION_INSERT.equals(intent.getAction())) {
+			if (UI_DEBUG_PRINTS)
+				Log.d("FragmentLayout", "On New Intent INSERT");
 			if (intent.getType() != null
 					&& intent.getType().equals(NotePad.Lists.CONTENT_TYPE)
 					|| intent.getData() != null
 					&& intent.getData().equals(
 							NotePad.Lists.CONTENT_VISIBLE_URI)) {
 				// get Title
-				String title = intent.getExtras().getString(
-						NotePad.Lists.COLUMN_NAME_TITLE, "");
-				createList(title);
+				if (intent.getExtras() != null) {
+					String title = intent.getExtras().getString(
+							NotePad.Lists.COLUMN_NAME_TITLE, "");
+					createList(title);
+				}
 			} else if (intent.getType() != null
 					&& intent.getType().equals(NotePad.Notes.CONTENT_TYPE)
 					|| intent.getData() != null
 					&& intent.getData().equals(
 							NotePad.Notes.CONTENT_VISIBLE_URI)) {
-				if (list != null) {
+				if (list != null && intent.getExtras() != null) {
 					long listId = intent.getExtras().getLong(
 							NotePad.Notes.COLUMN_NAME_LIST, -1);
 					int pos = getPosOfId(listId);

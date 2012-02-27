@@ -192,6 +192,12 @@
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
+        <activity android:name="com.nononsenseapps.notepad.widget.ListWidgetConfigure" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
+
         <!--
         This is a limited version of the real provider. Widgets do NOT have read permission,
         hence the code duplication...

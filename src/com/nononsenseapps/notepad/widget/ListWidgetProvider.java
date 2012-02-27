@@ -28,6 +28,7 @@ import android.widget.RemoteViews;
 import android.widget.Toast;
 
 import com.nononsenseapps.notepad.FragmentLayout;
+import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 
 /**
@@ -39,6 +40,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
     public static String OPEN_ACTION = "com.nononsenseapps.notepad.widget.OPENAPP";
     public static String CREATE_ACTION = "com.nononsenseapps.notepad.widget.CREATE";
     public static String EXTRA_NOTE_ID = "com.nononsenseapps.notepad.widget.note_id";
+    public static String EXTRA_LIST_ID = "com.nononsenseapps.notepad.widget.list_id";
 
     public ListWidgetProvider() {
     }
@@ -54,52 +56,28 @@ public class ListWidgetProvider extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
-        //if (action.equals(REFRESH_ACTION)) {
+        Intent appIntent = new Intent();
+    	appIntent.setClass(context, FragmentLayout.class);
+    	appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         if (action.equals(OPEN_ACTION)) {
-        	Intent appIntent = new Intent();
-        	appIntent.setClass(context, FragmentLayout.class);
-        	appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         	context.startActivity(appIntent);
         } else if (action.equals(CREATE_ACTION)) {
+        	appIntent.setData(NotePad.Notes.CONTENT_VISIBLE_URI);
+        	appIntent.setAction(Intent.ACTION_INSERT);
+        	// TODO set list ID
+        	//appIntent.addExtras(NotePad.Notes.COLUMN_NAME_LIST, listId);
+        	context.startActivity(appIntent);
         	Toast.makeText(context, "CreateAction", Toast.LENGTH_SHORT).show();
         	
-            // BroadcastReceivers have a limited amount of time to do work, so for this sample, we
-            // are triggering an update of the data on another thread.  In practice, this update
-            // can be triggered from a background service, or perhaps as a result of user actions
-            // inside the main application.
-//            final Context context = ctx;
-//            sWorkerQueue.removeMessages(0);
-//            sWorkerQueue.post(new Runnable() {
-//                @Override
-//                public void run() {
-//                    final ContentResolver r = context.getContentResolver();
-//                    final Cursor c = r.query(NotePad.Notes.CONTENT_URI, null, null, null, 
-//                            null);
-//                    final int count = c.getCount();
-//                    final int maxDegrees = 96;
-//
-//                    // We disable the data changed observer temporarily since each of the updates
-//                    // will trigger an onChange() in our data observer.
-//                    r.unregisterContentObserver(sDataObserver);
-//                    for (int i = 0; i < count; ++i) {
-//                        final Uri uri = ContentUris.withAppendedId(NotePad.Notes.CONTENT_URI, i);
-//                        final ContentValues values = new ContentValues();
-//                        values.put(WeatherDataProvider.Columns.TEMPERATURE,
-//                                new Random().nextInt(maxDegrees));
-//                        r.update(uri, values, null, null);
-//                    }
-//                    r.registerContentObserver(NotePad.Notes.CONTENT_URI, true, sDataObserver);
-//
-//                    final AppWidgetManager mgr = AppWidgetManager.getInstance(context);
-//                    final ComponentName cn = new ComponentName(context, ListWidgetProvider.class);
-//                    mgr.notifyAppWidgetViewDataChanged(mgr.getAppWidgetIds(cn), R.id.weather_list);
-//                }
-//            });
         } else if (action.equals(CLICK_ACTION)) {
-            // Show a toast
-            final int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                    AppWidgetManager.INVALID_APPWIDGET_ID);
-            final long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
+        	final long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
+        	final long listId = intent.getLongExtra(EXTRA_LIST_ID, -1);
+        	if (noteId > -1 && listId > -1) {
+	        	appIntent.setData(Uri.withAppendedPath(NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE, Long.toString(noteId)));
+	        	appIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
+	        	appIntent.setAction(Intent.ACTION_EDIT);
+	        	context.startActivity(appIntent);
+        	}
             Toast.makeText(context, "NoteId = " + noteId, Toast.LENGTH_SHORT).show();
         }
 

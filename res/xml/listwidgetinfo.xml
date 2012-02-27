@@ -6,7 +6,8 @@
     android:minHeight="110dp"
     android:updatePeriodMillis="86400000"
     android:initialLayout="@layout/listwidget"
-    android:resizeMode="horizontal|vertical" >
+    android:resizeMode="horizontal|vertical"
+    android:configure="com.nononsenseapps.notepad.widget.ListWidgetConfigure" >
 </appwidget-provider>
 <!-- TODO android:previewImage="@drawable/preview" -->
 <!-- TODO android:configure="com.example.android.ExampleAppWidgetConfigure" -->

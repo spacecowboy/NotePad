@@ -31,147 +31,173 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ContentUris;
+import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
 /**
- * This is the service that provides the factory to be bound to the collection service.
+ * This is the service that provides the factory to be bound to the collection
+ * service.
  */
 public class ListWidgetService extends RemoteViewsService {
-	
-    @Override
-    public RemoteViewsFactory onGetViewFactory(Intent intent) {
-        return new StackRemoteViewsFactory(this.getApplicationContext(), intent);
-    }
+
+	@Override
+	public RemoteViewsFactory onGetViewFactory(Intent intent) {
+		return new StackRemoteViewsFactory(this.getApplicationContext(), intent);
+	}
 }
 
 /**
  * This is the factory that will provide data to the collection widget.
  */
 class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
-    private Context mContext;
-    private Cursor mCursor;
-    private int mAppWidgetId;
-    
-    private ListChecker observer;
-    
-    private static final String[] PROJECTION = new String[] {
-		NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
-		NotePad.Notes.COLUMN_NAME_NOTE,
-		NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
-		NotePad.Notes.COLUMN_NAME_DUE_DATE,
-		NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
+	private Context mContext;
+	private Cursor mCursor;
+	private int mAppWidgetId;
+
+	private ListChecker observer;
+	private long listId = -1;
+
+	private static final String[] PROJECTION = new String[] {
+			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
+			NotePad.Notes.COLUMN_NAME_NOTE,
+			NotePad.Notes.COLUMN_NAME_LIST,
+			NotePad.Notes.COLUMN_NAME_DUE_DATE,
+			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
 	private static final String TAG = "FACTORY";
 
-    public StackRemoteViewsFactory(Context context, Intent intent) {
-        mContext = context;
-        observer = new ListChecker(null);
-        mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-                AppWidgetManager.INVALID_APPWIDGET_ID);
-    }
+	public StackRemoteViewsFactory(Context context, Intent intent) {
+		mContext = context;
+		observer = new ListChecker(null);
+		mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
+				AppWidgetManager.INVALID_APPWIDGET_ID);
+	}
 
-    public void onCreate() {
-    	mContext.getContentResolver().registerContentObserver(NotePad.Notes.CONTENT_URI, true, observer);
-        // Since we reload the cursor in onDataSetChanged() which gets called immediately after
-        // onCreate(), we do nothing here.
-    }
+	public void onCreate() {
+		mContext.getContentResolver().registerContentObserver(
+				NotePad.Notes.CONTENT_URI, true, observer);
+		// Since we reload the cursor in onDataSetChanged() which gets called
+		// immediately after
+		// onCreate(), we do nothing here.
+	}
 
-    public void onDestroy() {
-    	mContext.getContentResolver().unregisterContentObserver(observer);
-        if (mCursor != null) {
-            mCursor.close();
-        }
-    }
+	public void onDestroy() {
+		mContext.getContentResolver().unregisterContentObserver(observer);
+		if (mCursor != null) {
+			mCursor.close();
+		}
+	}
 
-    public int getCount() {
-        return mCursor.getCount();
-    }
+	public int getCount() {
+		return mCursor.getCount();
+	}
 
-    public RemoteViews getViewAt(int position) {
-        // Get the data for this position from the content provider
-        String title = "";
-        String note = "";
-        CharSequence dueDate = "";
-        long noteId = -1;
-        if (mCursor.moveToPosition(position)) {
-            final int titleIndex = mCursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
-            final int dateIndex = mCursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
-            final int noteIndex = mCursor.getColumnIndex(
-            		NotePad.Notes.COLUMN_NAME_NOTE);
-            final int idIndex = mCursor.getColumnIndex(
-            		NotePad.Notes._ID);
-            title = mCursor.getString(titleIndex);
-            note = mCursor.getString(noteIndex);
-            noteId = mCursor.getLong(idIndex);
-            String date = mCursor.getString(dateIndex);
-            if (date == null || date.length() == 0)
-            	dueDate = "";
-    		else {
-    			dueDate = DateView.toDate(date);
-    		}
-        }
+	public RemoteViews getViewAt(int position) {
+		// Get the data for this position from the content provider
+		String title = "";
+		String note = "";
+		CharSequence dueDate = "";
+		long noteId = -1;
+		long localListId = -1;
+		if (mCursor.moveToPosition(position)) {
+			final int titleIndex = mCursor
+					.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
+			final int dateIndex = mCursor
+					.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
+			final int noteIndex = mCursor
+					.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
+			final int listIndex = mCursor
+					.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST);
+			final int idIndex = mCursor.getColumnIndex(NotePad.Notes._ID);
+			title = mCursor.getString(titleIndex);
+			note = mCursor.getString(noteIndex);
+			noteId = mCursor.getLong(idIndex);
+			localListId = mCursor.getLong(listIndex);
+			String date = mCursor.getString(dateIndex);
+			if (date == null || date.length() == 0)
+				dueDate = "";
+			else {
+				dueDate = DateView.toDate(date);
+			}
+		}
 
-        final int itemId =  R.layout.widgetlist_item;
-        RemoteViews rv = new RemoteViews(mContext.getPackageName(), itemId);
-        rv.setTextViewText(R.id.widget_itemTitle, title);
-        rv.setTextViewText(R.id.widget_itemNote, note);
-        rv.setTextViewText(R.id.widget_itemDate, dueDate);
+		final int itemId = R.layout.widgetlist_item;
+		RemoteViews rv = new RemoteViews(mContext.getPackageName(), itemId);
+		rv.setTextViewText(R.id.widget_itemTitle, title);
+		rv.setTextViewText(R.id.widget_itemNote, note);
+		rv.setTextViewText(R.id.widget_itemDate, dueDate);
 
-        // Set the click intent so that we can handle it and show a toast message
-        final Intent fillInIntent = new Intent();
-        final Bundle extras = new Bundle();
-        extras.putLong(ListWidgetProvider.EXTRA_NOTE_ID, noteId);
-        fillInIntent.putExtras(extras);
-        rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
+		// Set the click intent so that we can handle it and show a toast
+		// message
+		final Intent fillInIntent = new Intent();
+		final Bundle extras = new Bundle();
+		extras.putLong(ListWidgetProvider.EXTRA_NOTE_ID, noteId);
+		extras.putLong(ListWidgetProvider.EXTRA_LIST_ID, localListId);
+		fillInIntent.putExtras(extras);
+		rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
 
-        return rv;
-    }
-    public RemoteViews getLoadingView() {
-        // We aren't going to return a default loading view in this sample
-        return null;
-    }
+		return rv;
+	}
 
-    public int getViewTypeCount() {
-        return 1;
-    }
+	public RemoteViews getLoadingView() {
+		// We aren't going to return a default loading view in this sample
+		return null;
+	}
 
-    public long getItemId(int position) {
-        return position;
-    }
+	public int getViewTypeCount() {
+		return 1;
+	}
 
-    public boolean hasStableIds() {
-        return true;
-    }
+	public long getItemId(int position) {
+		return position;
+	}
 
-    public void onDataSetChanged() {
-    	Log.d(TAG, "onDataSetChanged");
-        // Refresh the cursor
-        if (mCursor != null) {
-            mCursor.close();
-        }
-        
-        mCursor = mContext.getContentResolver().query(ListDBProvider.CONTENT_VISIBLE_URI, PROJECTION, null,
-                null, NotePad.Notes.ALPHABETIC_ASC_ORDER);
-    }
-    
-    private class ListChecker extends ContentObserver {
+	public boolean hasStableIds() {
+		return true;
+	}
+
+	public void onDataSetChanged() {
+		Log.d(TAG, "onDataSetChanged");
+		// Refresh the cursor
+		if (mCursor != null) {
+			mCursor.close();
+		}
+
+		// Get widget settings
+		SharedPreferences settings = mContext.getSharedPreferences(
+				ListWidgetConfigure.getSharedPrefsFile(mAppWidgetId),
+				mContext.MODE_PRIVATE);
+		if (settings != null) {
+			String listWhere = settings.getString(ListWidgetConfigure.LIST_WHERE, null);
+			listId  = settings.getLong(ListWidgetConfigure.LIST_ID, -1);
+
+			mCursor = mContext.getContentResolver().query(
+					ListDBProvider.CONTENT_VISIBLE_URI, PROJECTION, listWhere, null,
+					NotePad.Notes.ALPHABETIC_ASC_ORDER);
+		}
+	}
+
+	private class ListChecker extends ContentObserver {
 
 		public ListChecker(Handler handler) {
 			super(handler);
 		}
-    	
+
 		@Override
 		public void onChange(boolean selfchange) {
 			Log.d("Observer", "onChange");
 			// Refresh the widget
-			AppWidgetManager.getInstance(mContext).notifyAppWidgetViewDataChanged(mAppWidgetId, R.id.notes_list);
+			AppWidgetManager.getInstance(mContext)
+					.notifyAppWidgetViewDataChanged(mAppWidgetId,
+							R.id.notes_list);
 		}
-    }
+	}
 }
