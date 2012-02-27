@@ -34,7 +34,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:paddingRight="4dp"
+            android:paddingRight="0dp"
             android:paddingBottom="8dp"
             android:background="@android:color/transparent"
             android:src="@drawable/app_icon" />
@@ -47,15 +47,13 @@
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:gravity="center_vertical"
-            android:paddingLeft="4dp"
+            android:paddingLeft="0dp"
             android:paddingRight="4dp"
             android:paddingBottom="8dp"
             android:layout_marginRight="8dp"
             android:singleLine="true"
             android:text="List title here will come"
-            android:textColor="@android:color/primary_text_light"
-            android:textSize="20sp"
-            android:textStyle="normal" />
+            android:textAppearance="@style/WidgetTitleStyle" />
 
         <ImageButton
             android:id="@+id/createNoteButton"
