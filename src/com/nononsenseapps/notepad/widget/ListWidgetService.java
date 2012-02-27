@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotePadProvider;
+import com.nononsenseapps.notepad.NotesPreferenceFragment;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.NotePad.Notes;
 import com.nononsenseapps.notepad.R.id;
@@ -178,11 +179,22 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		if (settings != null) {
 			String listWhere = settings.getString(ListWidgetConfigure.LIST_WHERE, null);
 			listId  = settings.getLong(ListWidgetConfigure.LIST_ID, -1);
-			String sortOn = settings.getString(ListWidgetConfigure.SORT_ON, NotePad.Notes.ALPHABETIC_ASC_ORDER);
+			String sortChoice = settings.getString(NotesPreferenceFragment.KEY_SORT_TYPE, "");
+			String sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
+
+			if (NotesPreferenceFragment.DUEDATESORT.equals(sortChoice)) {
+				sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
+			} else if (NotesPreferenceFragment.TITLESORT.equals(sortChoice)) {
+				sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
+			}
+
+			sortOrder += " "
+					+ settings.getString(NotesPreferenceFragment.KEY_SORT_ORDER,
+									NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 			mCursor = mContext.getContentResolver().query(
 					ListDBProvider.CONTENT_VISIBLE_URI, PROJECTION, listWhere, null,
-					sortOn);
+					sortOrder);
 		}
 	}
 

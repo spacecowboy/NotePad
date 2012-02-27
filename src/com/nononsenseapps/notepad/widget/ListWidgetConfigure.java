@@ -1,6 +1,7 @@
 package com.nononsenseapps.notepad.widget;
 
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.NotesPreferenceFragment;
 import com.nononsenseapps.notepad.R;
 
 import android.app.Activity;
@@ -20,12 +21,11 @@ public class ListWidgetConfigure extends Activity {
 	private Spinner listSpinner;
 	private Spinner sortTypeSpinner;
 	private Spinner sortOrderSpinner;
-	
+
 	public static final String SHARED_PREFS_BASE = "prefs_widget_";
 	public static final String LIST_WHERE = "listWhere";
-	public static final String SORT_ON = "sortOn";
 	public static final String LIST_ID = "listId";
-	
+
 	public static String getSharedPrefsFile(int widgetId) {
 		return SHARED_PREFS_BASE + widgetId;
 	}
@@ -98,13 +98,20 @@ public class ListWidgetConfigure extends Activity {
 
 	private void configDone() {
 		// Save values to preferences
-		getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE).edit().putString(LIST_WHERE, "").putString(SORT_ON, NotePad.Notes.DUEDATE_SORT_TYPE).commit();
-		
+		getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
+				.edit()
+				.putString(LIST_WHERE, "")
+				.putString(NotesPreferenceFragment.KEY_SORT_TYPE,
+						NotesPreferenceFragment.DUEDATESORT)
+				.putString(NotesPreferenceFragment.KEY_SORT_ORDER, NotePad.Notes.DEFAULT_SORT_ORDERING)
+				.commit();
+
 		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-		appWidgetManager.updateAppWidget(appWidgetId, ListWidgetProvider.buildRemoteViews(this, appWidgetId));
-//		AppWidgetManager.getInstance(mContext)
-//		.notifyAppWidgetViewDataChanged(mAppWidgetId,
-//				R.id.notes_list);
+		appWidgetManager.updateAppWidget(appWidgetId,
+				ListWidgetProvider.buildRemoteViews(this, appWidgetId));
+		// AppWidgetManager.getInstance(mContext)
+		// .notifyAppWidgetViewDataChanged(mAppWidgetId,
+		// R.id.notes_list);
 		Intent resultValue = new Intent();
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		setResult(RESULT_OK, resultValue);

@@ -306,12 +306,12 @@ public class NotesListFragment extends ListFragment implements
 		else
 			return -1;
 	}
-	
+
 	private void handleNoteCreation(long listId) {
 		Uri noteUri = null;
 		if (listId != FragmentLayout.ALL_NOTES_ID) {
-			noteUri = FragmentLayout.createNote(
-				activity.getContentResolver(), listId);
+			noteUri = FragmentLayout.createNote(activity.getContentResolver(),
+					listId);
 		} // Try the default list
 		else {
 			long defaultListId = PreferenceManager.getDefaultSharedPreferences(
@@ -320,11 +320,11 @@ public class NotesListFragment extends ListFragment implements
 				noteUri = FragmentLayout.createNote(
 						activity.getContentResolver(), defaultListId);
 			} else {
-				// No default note set. Don't know what to do. Alert the user to this fact.
-				Toast.makeText(
-						activity,
-						getText(R.string.default_list_needed_warning), Toast.LENGTH_LONG)
-						.show();
+				// No default note set. Don't know what to do. Alert the user to
+				// this fact.
+				Toast.makeText(activity,
+						getText(R.string.default_list_needed_warning),
+						Toast.LENGTH_LONG).show();
 			}
 		}
 
@@ -486,7 +486,7 @@ public class NotesListFragment extends ListFragment implements
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		showNote(position);
 	}
-	
+
 	public void openNote(Intent intent) {
 		if (intent != null) {
 			String newId = intent.getData().getPathSegments()
@@ -556,7 +556,7 @@ public class NotesListFragment extends ListFragment implements
 					Intent intent = new Intent();
 					intent.setClass(activity, NotesEditorActivity.class);
 					intent.putExtra(NotesEditorFragment.KEYID, mCurId);
-					//intent.putExtra(NotesEditorFragment.LISTID, mCurListId);
+					// intent.putExtra(NotesEditorFragment.LISTID, mCurListId);
 
 					startActivity(intent);
 				}
@@ -687,7 +687,8 @@ public class NotesListFragment extends ListFragment implements
 					String text = cursor.getString(cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS));
 
-					if (text != null && text.equals(getText(R.string.gtask_status_completed))) {
+					if (text != null
+							&& text.equals(getText(R.string.gtask_status_completed))) {
 						cb.setChecked(true);
 					} else {
 						cb.setChecked(false);
@@ -706,7 +707,8 @@ public class NotesListFragment extends ListFragment implements
 					// Set strike through on completed tasks
 					String text = cursor.getString(cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS));
-					if (text != null && text.equals(getText(R.string.gtask_status_completed))) {
+					if (text != null
+							&& text.equals(getText(R.string.gtask_status_completed))) {
 						// Set appropriate BITMASK
 						tv.setPaintFlags(tv.getPaintFlags()
 								| Paint.STRIKE_THRU_TEXT_FLAG);
@@ -1117,8 +1119,11 @@ public class NotesListFragment extends ListFragment implements
 				}
 				onDeleteListener.onModalDelete(notesToDelete);
 			}
-			Toast.makeText(activity, getString(R.string.deleted)+" " + num + " " + getString(R.string.items),
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(
+					activity,
+					getString(R.string.deleted) + " " + num + " "
+							+ getString(R.string.items), Toast.LENGTH_SHORT)
+					.show();
 			mode.finish();
 		}
 
@@ -1237,10 +1242,18 @@ public class NotesListFragment extends ListFragment implements
 		Uri baseUri = NotePad.Notes.CONTENT_URI;
 
 		// Get current sort order or assemble the default one.
-		String sortOrder = PreferenceManager.getDefaultSharedPreferences(
-				activity).getString(NotesPreferenceFragment.KEY_SORT_TYPE,
-				NotePad.Notes.DEFAULT_SORT_TYPE)
-				+ " "
+		String sortChoice = PreferenceManager.getDefaultSharedPreferences(
+				activity).getString(NotesPreferenceFragment.KEY_SORT_TYPE, "");
+
+		String sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
+
+		if (NotesPreferenceFragment.DUEDATESORT.equals(sortChoice)) {
+			sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
+		} else if (NotesPreferenceFragment.TITLESORT.equals(sortChoice)) {
+			sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
+		}
+
+		sortOrder += " "
 				+ PreferenceManager.getDefaultSharedPreferences(activity)
 						.getString(NotesPreferenceFragment.KEY_SORT_ORDER,
 								NotePad.Notes.DEFAULT_SORT_ORDERING);

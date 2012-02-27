@@ -38,6 +38,9 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	public static final String THEME_LIGHT = "light";
 	public static final String THEME_LIGHT_ICS_AB = "light_ab";
 	private static final String TAG = "NotesPreferenceFragment";
+	
+	public static final String DUEDATESORT ="duedate";
+	public static final String TITLESORT ="title COLLATE NOCASE";
 
 	private Preference prefSortOrder;
 	private Preference prefSortType;
@@ -265,16 +268,16 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 
 	private void setTypeSummary(SharedPreferences sharedPreferences) {
 		String value = sharedPreferences.getString(KEY_SORT_TYPE,
-				NotePad.Notes.DEFAULT_SORT_TYPE);
+				TITLESORT);
 		String summary = "";
-		if (NotePad.Notes.ALPHABETIC_SORT_TYPE.equals(value))
+		if (TITLESORT.equals(value))
 			summary = getText(R.string.settings_summary_sort_type_alphabetic)
 					.toString();
-		else if (NotePad.Notes.DUEDATE_SORT_TYPE.equals(value))
+		else if (DUEDATESORT.equals(value))
 			summary = getText(R.string.settings_summary_sort_type_duedate)
 					.toString();
-		else if (NotePad.Notes.POSITION_SORT_TYPE.equals(value))
-			summary = getText(R.string.settings_summary_sort_type_serverposition).toString();
+//		else if (NotePad.Notes.POSITION_SORT_TYPE.equals(value))
+//			summary = getText(R.string.settings_summary_sort_type_serverposition).toString();
 		SUMMARY_SORT_TYPE = summary;
 		prefSortType.setSummary(summary);
 	}
