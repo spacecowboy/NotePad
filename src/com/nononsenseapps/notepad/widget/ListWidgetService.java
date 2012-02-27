@@ -178,10 +178,11 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		if (settings != null) {
 			String listWhere = settings.getString(ListWidgetConfigure.LIST_WHERE, null);
 			listId  = settings.getLong(ListWidgetConfigure.LIST_ID, -1);
+			String sortOn = settings.getString(ListWidgetConfigure.SORT_ON, NotePad.Notes.ALPHABETIC_ASC_ORDER);
 
 			mCursor = mContext.getContentResolver().query(
 					ListDBProvider.CONTENT_VISIBLE_URI, PROJECTION, listWhere, null,
-					NotePad.Notes.ALPHABETIC_ASC_ORDER);
+					sortOn);
 		}
 	}
 

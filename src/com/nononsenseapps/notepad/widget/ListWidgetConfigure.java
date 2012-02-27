@@ -96,6 +96,9 @@ public class ListWidgetConfigure extends Activity {
 	}
 
 	private void configDone() {
+		// Save values to preferences
+		getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE).edit().putString(LIST_WHERE, "").putString(SORT_ON, "duedate").commit();
+		
 		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
 		appWidgetManager.updateAppWidget(appWidgetId, ListWidgetProvider.buildRemoteViews(this, appWidgetId));
 //		AppWidgetManager.getInstance(mContext)
