@@ -97,9 +97,10 @@ public class ListWidgetConfigure extends Activity {
 
 	private void configDone() {
 		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-		RemoteViews views = new RemoteViews(getPackageName(),
-				R.layout.listwidget);
-		appWidgetManager.updateAppWidget(appWidgetId, views);
+		appWidgetManager.updateAppWidget(appWidgetId, ListWidgetProvider.buildRemoteViews(this, appWidgetId));
+//		AppWidgetManager.getInstance(mContext)
+//		.notifyAppWidgetViewDataChanged(mAppWidgetId,
+//				R.id.notes_list);
 		Intent resultValue = new Intent();
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		setResult(RESULT_OK, resultValue);
