@@ -237,13 +237,16 @@ public class FragmentLayout extends Activity implements
 				// Get id to display
 				String newId = intent.getData().getPathSegments()
 						.get(NotePad.Lists.ID_PATH_POSITION);
+				Log.d("FragmentLayout", "id: " + newId);
 				long listId = Long.parseLong(newId);
 				int pos = getPosOfId(listId);
+				Log.d("FragmentLayout", "pos: " + pos);
 				if (pos > -1) {
 					// select it
 					ActionBar ab = getActionBar();
-					if (ab != null)
+					if (ab != null && ab.getSelectedNavigationIndex() != pos) {
 						ab.setSelectedNavigationItem(pos);
+					}
 				}
 			} else if (intent.getData() != null
 					&& intent.getExtras() != null
@@ -286,17 +289,20 @@ public class FragmentLayout extends Activity implements
 					|| intent.getData() != null
 					&& intent.getData().equals(
 							NotePad.Notes.CONTENT_VISIBLE_URI)) {
+				Log.d("FragmentLayout", "INSERT NOTE");
 				if (list != null && intent.getExtras() != null) {
 					long listId = intent.getExtras().getLong(
 							NotePad.Notes.COLUMN_NAME_LIST, -1);
+					Log.d("FragmentLayout", "listid: " + listId);
 					int pos = getPosOfId(listId);
+					Log.d("FragmentLayout", "listpos: " + pos);
 					if (pos > -1) {
 						// select it
 						ActionBar ab = getActionBar();
-						if (ab != null) {
+						if (ab.getSelectedNavigationIndex() != pos) {
 							ab.setSelectedNavigationItem(pos);
-							list.handleNoteIntent(intent);
-						}
+						} 
+						list.handleNoteIntent(intent);
 					}
 				}
 			}

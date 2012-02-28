@@ -33,7 +33,7 @@ import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 
 /**
- * The weather widget's AppWidgetProvider.
+ * Thewidget's AppWidgetProvider.
  */
 public class ListWidgetProvider extends AppWidgetProvider {
 	private static final String TAG = "WIDGETPROVIDER";
@@ -65,12 +65,15 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		appIntent.setClass(context, FragmentLayout.class);
 		appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		if (action.equals(OPEN_ACTION)) {
+			appIntent.setAction(Intent.ACTION_VIEW);
+			appIntent.setData(Uri.withAppendedPath(
+					NotePad.Lists.CONTENT_VISIBLE_ID_URI_BASE,
+					Long.toString(intent.getLongExtra(NotePad.Notes.COLUMN_NAME_LIST, -1))));
 			context.startActivity(appIntent);
 		} else if (action.equals(CREATE_ACTION)) {
 			appIntent.setData(NotePad.Notes.CONTENT_VISIBLE_URI);
 			appIntent.setAction(Intent.ACTION_INSERT);
-			// TODO set list ID
-			// appIntent.addExtras(NotePad.Notes.COLUMN_NAME_LIST, listId);
+			appIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, intent.getLongExtra(NotePad.Notes.COLUMN_NAME_LIST, -1));
 			context.startActivity(appIntent);
 
 		} else if (action.equals(CLICK_ACTION)) {
@@ -125,6 +128,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 				Context.MODE_PRIVATE);
 		String listTitle = settings.getString(ListWidgetConfigure.KEY_LIST_TITLE, "Title not found");
 		rv.setCharSequence(R.id.titleButton, "setText", listTitle);
+		long listId = Long.parseLong(settings.getString(ListWidgetConfigure.KEY_LIST, Integer.toString(FragmentLayout.ALL_NOTES_ID)));
 
 		// Bind a click listener template for the contents of the weather list.
 		// Note that we
@@ -146,6 +150,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		final Intent openAppIntent = new Intent(context,
 				ListWidgetProvider.class);
 		openAppIntent.setAction(ListWidgetProvider.OPEN_ACTION);
+		openAppIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
 		final PendingIntent openAppPendingIntent = PendingIntent.getBroadcast(
 				context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		rv.setOnClickPendingIntent(R.id.openAppButton, openAppPendingIntent);
@@ -155,6 +160,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		final Intent createIntent = new Intent(context,
 				ListWidgetProvider.class);
 		createIntent.setAction(ListWidgetProvider.CREATE_ACTION);
+		createIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
 		final PendingIntent createPendingIntent = PendingIntent.getBroadcast(
 				context, 0, createIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		rv.setOnClickPendingIntent(R.id.createNoteButton, createPendingIntent);

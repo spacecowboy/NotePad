@@ -208,6 +208,7 @@ public class NotesListFragment extends ListFragment implements
 			long listId = intent.getExtras().getLong(
 					NotePad.Notes.COLUMN_NAME_LIST, -1);
 
+			Log.d(TAG, "list to create in: " + listId);
 			if (listId > -1) {
 				Uri noteUri = FragmentLayout.createNote(
 						activity.getContentResolver(), listId);
