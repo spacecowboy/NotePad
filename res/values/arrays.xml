@@ -46,7 +46,7 @@
         <item>Monospace</item>
     </string-array>
     <string-array name="sync_freq_preference">
-        <item>Manual</item>
+        <item>Manually</item>
         <!-- <item>1 hour</item>
         <item>2 hours</item>
         <item>4 hours</item>

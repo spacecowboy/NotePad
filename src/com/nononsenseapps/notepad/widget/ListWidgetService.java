@@ -19,6 +19,7 @@ package com.nononsenseapps.notepad.widget;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nononsenseapps.notepad.FragmentLayout;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotePadProvider;
 import com.nononsenseapps.notepad.NotesPreferenceFragment;
@@ -175,10 +176,9 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		// Get widget settings
 		SharedPreferences settings = mContext.getSharedPreferences(
 				ListWidgetConfigure.getSharedPrefsFile(mAppWidgetId),
-				mContext.MODE_PRIVATE);
+				Context.MODE_PRIVATE);
 		if (settings != null) {
-			String listWhere = settings.getString(ListWidgetConfigure.LIST_WHERE, null);
-			listId  = settings.getLong(ListWidgetConfigure.LIST_ID, -1);
+			listId  = Long.parseLong(settings.getString(ListWidgetConfigure.KEY_LIST, Integer.toString(FragmentLayout.ALL_NOTES_ID)));
 			String sortChoice = settings.getString(NotesPreferenceFragment.KEY_SORT_TYPE, "");
 			String sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
 
@@ -191,9 +191,21 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			sortOrder += " "
 					+ settings.getString(NotesPreferenceFragment.KEY_SORT_ORDER,
 									NotePad.Notes.DEFAULT_SORT_ORDERING);
+			
+			String listWhere = null;
+			String[] listArg = null;
+			if (listId > -1) {
+				listWhere = NotePad.Notes.COLUMN_NAME_LIST + " IS ?";
+				listArg = new String[] {Long.toString(listId)};
+				Log.d(TAG, "Using clause: " + listWhere + " with " + listArg[0]);
+			}
+			
+			Log.d(TAG, "widgetId: " + mAppWidgetId);
+			
+			Log.d(TAG, "Using clause: " + listWhere);
 
 			mCursor = mContext.getContentResolver().query(
-					ListDBProvider.CONTENT_VISIBLE_URI, PROJECTION, listWhere, null,
+					ListDBProvider.CONTENT_VISIBLE_URI, PROJECTION, listWhere, listArg,
 					sortOrder);
 		}
 	}
