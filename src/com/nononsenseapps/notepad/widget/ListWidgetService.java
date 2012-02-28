@@ -179,7 +179,8 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				Context.MODE_PRIVATE);
 		if (settings != null) {
 			listId  = Long.parseLong(settings.getString(ListWidgetConfigure.KEY_LIST, Integer.toString(FragmentLayout.ALL_NOTES_ID)));
-			String sortChoice = settings.getString(NotesPreferenceFragment.KEY_SORT_TYPE, "");
+			
+			String sortChoice = settings.getString(ListWidgetConfigure.KEY_SORT_TYPE, "");
 			String sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
 
 			if (NotesPreferenceFragment.DUEDATESORT.equals(sortChoice)) {
@@ -189,7 +190,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			}
 
 			sortOrder += " "
-					+ settings.getString(NotesPreferenceFragment.KEY_SORT_ORDER,
+					+ settings.getString(ListWidgetConfigure.KEY_SORT_ORDER,
 									NotePad.Notes.DEFAULT_SORT_ORDERING);
 			
 			String listWhere = null;

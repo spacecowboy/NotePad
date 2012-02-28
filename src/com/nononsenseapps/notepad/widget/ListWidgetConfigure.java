@@ -48,6 +48,7 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	public static final String LIST_ID = "listId";
 
 	public static final String KEY_LIST = "widget_key_list";
+	public static final String KEY_LIST_TITLE = "widget_key_list_title";
 	public static final String KEY_SORT_TYPE = "widget_key_sort_type";
 	public static final String KEY_SORT_ORDER = "widget_key_sort_order";
 	public static final String KEY_THEME = "widget_key_current_theme";
@@ -179,10 +180,16 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	/**
 	 * This fragment shows the preferences for the first header.
 	 */
-	public static class ListFragment extends PreferenceFragment {
+	public static class ListFragment extends PreferenceFragment implements OnPreferenceChangeListener {
 		private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 		private SharedPreferences settings;
+		private Activity activity;
 
+		@Override
+		public void onAttach(Activity activity) {
+			super.onAttach(activity);
+			this.activity = activity;
+		}
 		@Override
 		public void onCreate(Bundle saves) {
 			super.onCreate(saves);
@@ -208,6 +215,7 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			ListPreference listSpinner = (ListPreference) findPreference(KEY_LIST);
 			if (listSpinner != null) {
 				setEntries(listSpinner);
+				listSpinner.setOnPreferenceChangeListener(this);
 			}
 		}
 
@@ -255,6 +263,16 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 				listSpinner.setEntryValues(values
 						.toArray(new CharSequence[values.size()]));
 			}
+		}
+
+		@Override
+		public boolean onPreferenceChange(Preference preference, Object newValue) {
+			// Must also write the list Name to the prefs
+			// Only registered as listener on the list spinner
+			activity.getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
+			.edit().putString(KEY_LIST_TITLE, ((ListPreference) preference).getEntry().toString())
+			.apply();
+			return true;
 		}
 	}
 

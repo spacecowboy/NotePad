@@ -22,6 +22,7 @@ import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
 import android.content.ContentResolver;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.util.Log;
 import android.widget.RemoteViews;
@@ -117,6 +118,13 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		// must be a sibling
 		// view of the collection view.
 		rv.setEmptyView(R.id.notes_list, R.id.empty_view);
+		
+		// set list title
+		SharedPreferences settings = context.getSharedPreferences(
+				ListWidgetConfigure.getSharedPrefsFile(appWidgetId),
+				Context.MODE_PRIVATE);
+		String listTitle = settings.getString(ListWidgetConfigure.KEY_LIST_TITLE, "Title not found");
+		rv.setCharSequence(R.id.titleButton, "setText", listTitle);
 
 		// Bind a click listener template for the contents of the weather list.
 		// Note that we
