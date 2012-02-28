@@ -180,16 +180,21 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	/**
 	 * This fragment shows the preferences for the first header.
 	 */
-	public static class ListFragment extends PreferenceFragment implements OnPreferenceChangeListener {
+	public static class ListFragment extends PreferenceFragment implements
+			OnSharedPreferenceChangeListener {
 		private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 		private SharedPreferences settings;
 		private Activity activity;
+		private ListPreference listSpinner;
 
 		@Override
 		public void onAttach(Activity activity) {
 			super.onAttach(activity);
 			this.activity = activity;
+			settings = PreferenceManager.getDefaultSharedPreferences(activity);
+			settings.registerOnSharedPreferenceChangeListener(this);
 		}
+
 		@Override
 		public void onCreate(Bundle saves) {
 			super.onCreate(saves);
@@ -212,11 +217,16 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			addPreferencesFromResource(R.xml.widget_pref_list);
 
 			// Populate list options
-			ListPreference listSpinner = (ListPreference) findPreference(KEY_LIST);
+			listSpinner = (ListPreference) findPreference(KEY_LIST);
 			if (listSpinner != null) {
 				setEntries(listSpinner);
-				listSpinner.setOnPreferenceChangeListener(this);
 			}
+		}
+
+		@Override
+		public void onDestroy() {
+			super.onDestroy();
+			settings.unregisterOnSharedPreferenceChangeListener(this);
 		}
 
 		/**
@@ -266,13 +276,15 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		}
 
 		@Override
-		public boolean onPreferenceChange(Preference preference, Object newValue) {
+		public void onSharedPreferenceChanged(
+				SharedPreferences sharedPreferences, String key) {
+			if (key.equals(KEY_LIST)) {
 			// Must also write the list Name to the prefs
 			// Only registered as listener on the list spinner
 			activity.getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
-			.edit().putString(KEY_LIST_TITLE, ((ListPreference) preference).getEntry().toString())
+			.edit().putString(KEY_LIST_TITLE, listSpinner.getEntry().toString())
 			.apply();
-			return true;
+			}
 		}
 	}
 
