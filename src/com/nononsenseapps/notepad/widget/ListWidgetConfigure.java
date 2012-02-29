@@ -38,10 +38,6 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
 
 	public int appWidgetId;
-	private Spinner listSpinner;
-	private Spinner sortTypeSpinner;
-	private Spinner sortOrderSpinner;
-
 	private SharedPreferences settings;
 
 	public static final String SHARED_PREFS_BASE = "prefs_widget_";
@@ -77,7 +73,6 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		Log.d("PrefsActivity", "appWidgetId: " + appWidgetId);
 
 		settings = PreferenceManager.getDefaultSharedPreferences(this);
-		settings.registerOnSharedPreferenceChangeListener(this);
 
 		// Create OK button
 		// Button okButton = new Button(context, attrs, defStyle)
@@ -96,38 +91,6 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		});
 
 		setListFooter(okButton);
-
-		// /////////////////
-		// Inflate UI
-		// setContentView(R.layout.list_widget_configure);
-		//
-		// // Get spinners
-		// listSpinner = (Spinner) findViewById(R.id.list_widget_config_list);
-		// sortTypeSpinner = (Spinner)
-		// findViewById(R.id.list_widget_config_sort_type);
-		// sortOrderSpinner = (Spinner)
-		// findViewById(R.id.list_widget_config_sort_order);
-		//
-		// // Populate list spinner with the list titles
-		// populateListSpinner();
-		//
-		// // Set button listeners
-		//
-		// findViewById(R.id.list_widget_config_cancel).setOnClickListener(
-		// new OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// configCancel();
-		// }
-		// });
-		//
-		// findViewById(R.id.list_widget_config_ok).setOnClickListener(
-		// new OnClickListener() {
-		// @Override
-		// public void onClick(View v) {
-		// configDone();
-		// }
-		// });
 	}
 
 	/**
@@ -139,80 +102,92 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	}
 
 	@Override
-	public void switchToHeader(PreferenceActivity.Header header) {
-		Log.d("prefsActivity", "Wrong SwitchToHeader called");
-		super.switchToHeader(header);
+	protected void onResume() {
+		super.onResume();
+		if (settings != null) {
+			settings.registerOnSharedPreferenceChangeListener(this);
+		}
 	}
 
 	@Override
-	public void switchToHeader(String fragmentName, Bundle args) {
-		Log.d("prefsActivity", "Correct SwitchToHeader called");
-		if (args == null)
-			args = new Bundle();
-		if (!args.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID))
-			args.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		super.switchToHeader(fragmentName, args);
+	protected void onPause() {
+		super.onPause();
+		if (settings != null) {
+			settings.unregisterOnSharedPreferenceChangeListener(this);
+		}
+	}
+
+	private void configCancel() {
+		// Not much else to do
+		finish();
+	}
+
+	private void configDone() {
+		// Save values to preferences
+		// getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
+		// .edit()
+		// .putString(LIST_WHERE, "")
+		// .putString(NotesPreferenceFragment.KEY_SORT_TYPE,
+		// NotesPreferenceFragment.DUEDATESORT)
+		// .putString(NotesPreferenceFragment.KEY_SORT_ORDER,
+		// NotePad.Notes.DEFAULT_SORT_ORDERING).commit();
+
+		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
+		appWidgetManager.updateAppWidget(appWidgetId,
+				ListWidgetProvider.buildRemoteViews(this, appWidgetId));
+		// AppWidgetManager.getInstance(mContext)
+		// .notifyAppWidgetViewDataChanged(mAppWidgetId,
+		// R.id.notes_list);
+		Intent resultValue = new Intent();
+		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+		setResult(RESULT_OK, resultValue);
+		finish();
 	}
 
 	@Override
-	public void startWithFragment(String fragmentName, Bundle args,
-			Fragment resultTo, int resultRequestCode) {
-		if (args == null)
-			args = new Bundle();
-		if (!args.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID))
-			args.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		super.startWithFragment(fragmentName, args, resultTo, resultRequestCode);
-	}
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+			String key) {
+		Log.d("prefsActivity", "onSharedChanged!: " + key);
+		Log.d("prefsActivity", "onSharedChanged, app_WidgetId: " + appWidgetId);
 
-	@Override
-	public void startWithFragment(String fragmentName, Bundle args,
-			Fragment resultTo, int resultRequestCode, int titleRes,
-			int shortTitleRes) {
-		Log.d("PrefsActivity", "startWithFragment");
-		if (args == null)
-			args = new Bundle();
-		if (!args.containsKey(AppWidgetManager.EXTRA_APPWIDGET_ID))
-			args.putInt(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		super.startWithFragment(fragmentName, args, resultTo,
-				resultRequestCode, titleRes, shortTitleRes);
-	}
+		if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID
+				&& key.equals(KEY_LIST)) {
+			getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
+					.edit()
+					.putString(key, sharedPreferences.getString(key, null))
+					.apply();
+		}
 
+		if (key.equals(KEY_LIST)) {
+			Log.d("prefsList", "KEY_LIST changed");
+		} else if (key.equals(KEY_LIST_TITLE)) {
+			Log.d("prefsList", "KEY_LIST_TITLE changed");
+		} else if (key.equals(KEY_SORT_ORDER)) {
+			Log.d("prefsList", "KEY_SORT_ORDER changed");
+		} else if (key.equals(KEY_SORT_TYPE)) {
+			Log.d("prefsList", "KEY_SORT_TYPE changed");
+		} else if (key.equals(KEY_THEME)) {
+			Log.d("prefsList", "KEY_THEME changed");
+		}
+	}
+	
 	/**
 	 * This fragment shows the preferences for the first header.
 	 */
 	public static class ListFragment extends PreferenceFragment implements
 			OnSharedPreferenceChangeListener {
-		private int appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-		private SharedPreferences settings;
-		private Activity activity;
+		private SharedPreferences lSettings;
 		private ListPreference listSpinner;
 
 		@Override
 		public void onAttach(Activity activity) {
 			super.onAttach(activity);
-			this.activity = activity;
-			settings = PreferenceManager.getDefaultSharedPreferences(activity);
-			settings.registerOnSharedPreferenceChangeListener(this);
+			lSettings = PreferenceManager.getDefaultSharedPreferences(activity);
 		}
 
 		@Override
 		public void onCreate(Bundle saves) {
 			super.onCreate(saves);
-
-			Bundle args = getArguments();
-			if (args != null) {
-				appWidgetId = args.getInt(AppWidgetManager.EXTRA_APPWIDGET_ID,
-						AppWidgetManager.INVALID_APPWIDGET_ID);
-
-				// Set our custom prefs file. This doesn't work because Android
-				// is retarded sometimes...
-				// getPreferenceManager().setSharedPreferencesName(
-				// getSharedPrefsFile(appWidgetId));
-
-				Log.d("prefsList", "Got it from bundle!! yeah: " + appWidgetId);
-			}
-			Log.d("prefsList", "List appWidgetId: " + appWidgetId);
-
 			// Load the preferences from an XML resource
 			addPreferencesFromResource(R.xml.widget_pref_list);
 
@@ -222,11 +197,19 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 				setEntries(listSpinner);
 			}
 		}
+		
+		@Override
+		public void onResume() {
+			super.onResume();
+			if (lSettings != null)
+				lSettings.registerOnSharedPreferenceChangeListener(this);
+		}
 
 		@Override
-		public void onDestroy() {
-			super.onDestroy();
-			settings.unregisterOnSharedPreferenceChangeListener(this);
+		public void onPause() {
+			super.onPause();
+			if (lSettings != null)
+				lSettings.unregisterOnSharedPreferenceChangeListener(this);
 		}
 
 		/**
@@ -236,7 +219,6 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		 * @return
 		 */
 		private void setEntries(ListPreference listSpinner) {
-			Log.d("prefsList", "appWidgetId: " + appWidgetId);
 
 			ArrayList<CharSequence> entries = new ArrayList<CharSequence>();
 			ArrayList<CharSequence> values = new ArrayList<CharSequence>();
@@ -279,11 +261,10 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		public void onSharedPreferenceChanged(
 				SharedPreferences sharedPreferences, String key) {
 			if (key.equals(KEY_LIST)) {
-			// Must also write the list Name to the prefs
-			// Only registered as listener on the list spinner
-			activity.getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
-			.edit().putString(KEY_LIST_TITLE, listSpinner.getEntry().toString())
-			.apply();
+				// Must also write the list Name to the prefs
+				sharedPreferences.edit()
+						.putString(KEY_LIST_TITLE,
+								listSpinner.getEntry().toString()).apply();
 			}
 		}
 	}
@@ -305,70 +286,6 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 
 			// Load the preferences from an XML resource
 			addPreferencesFromResource(R.xml.widget_pref_theme);
-		}
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-	}
-
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		if (settings != null) {
-			settings.unregisterOnSharedPreferenceChangeListener(this);
-		}
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-	}
-
-	private void configCancel() {
-		// Not much else to do
-		finish();
-	}
-
-	private void configDone() {
-		// Save values to preferences
-		// getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
-		// .edit()
-		// .putString(LIST_WHERE, "")
-		// .putString(NotesPreferenceFragment.KEY_SORT_TYPE,
-		// NotesPreferenceFragment.DUEDATESORT)
-		// .putString(NotesPreferenceFragment.KEY_SORT_ORDER,
-		// NotePad.Notes.DEFAULT_SORT_ORDERING).commit();
-
-		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
-		appWidgetManager.updateAppWidget(appWidgetId,
-				ListWidgetProvider.buildRemoteViews(this, appWidgetId));
-		// AppWidgetManager.getInstance(mContext)
-		// .notifyAppWidgetViewDataChanged(mAppWidgetId,
-		// R.id.notes_list);
-		Intent resultValue = new Intent();
-		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		setResult(RESULT_OK, resultValue);
-		finish();
-	}
-
-	@Override
-	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-			String key) {
-		Log.d("prefsActivity", "onSharedChanged!: " + key);
-		getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
-				.edit().putString(key, sharedPreferences.getString(key, null))
-				.apply();
-
-		if (key.equals(KEY_LIST)) {
-			Log.d("prefsList", "List changed");
-		} else if (key.equals(KEY_SORT_ORDER)) {
-			Log.d("prefsList", "KEY_SORT_ORDER changed");
-		} else if (key.equals(KEY_SORT_TYPE)) {
-			Log.d("prefsList", "KEY_SORT_TYPE changed");
-		} else if (key.equals(KEY_THEME)) {
-			Log.d("prefsList", "KEY_THEME changed");
 		}
 	}
 }

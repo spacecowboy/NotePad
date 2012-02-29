@@ -246,28 +246,10 @@ public class FragmentLayout extends Activity implements
 				// Get id to display
 				String newId = intent.getData().getPathSegments()
 						.get(NotePad.Lists.ID_PATH_POSITION);
-				Log.d("FragmentLayout", "id: " + newId);
 				long listId = Long.parseLong(newId);
 				// Handle it differently depending on if the app has already
 				// loaded or not.
-				if (beforeBoot) {
-					// Set the variable to be selected after the loader has
-					// finished its query
-					listIdToSelect = listId;
-					Log.d(TAG, "beforeBoot setting future id");
-				} else {
-					// Select the list directly since the loader is done
-					int pos = getPosOfId(listId);
-					Log.d("FragmentLayout", "pos: " + pos);
-					if (pos > -1) {
-						// select it
-						ActionBar ab = getActionBar();
-						if (ab != null
-								&& ab.getSelectedNavigationIndex() != pos) {
-							ab.setSelectedNavigationItem(pos);
-						}
-					}
-				}
+				openListFromIntent(listId);
 			} else if (intent.getData() != null
 					&& intent.getExtras() != null
 					&& intent.getData().getPath()
@@ -275,18 +257,15 @@ public class FragmentLayout extends Activity implements
 				if (list != null) {
 					long listId = intent.getExtras().getLong(
 							NotePad.Notes.COLUMN_NAME_LIST, -1);
-					int pos = getPosOfId(listId);
-					if (pos > -1) {
-						// select it
-						ActionBar ab = getActionBar();
-						if (ab != null) {
-							if (ab.getSelectedNavigationIndex() != pos) {
-								ab.setSelectedNavigationItem(pos);
-								list.handleNoteIntent(intent);
-							} else {
-								list.openNote(intent);
-							}
-						}
+					// Open the containing list if we have to. No need to change
+					// lists
+					// if we are already displaying all notes.
+					if (listId != -1 && currentListId != ALL_NOTES_ID
+							&& currentListId != listId) {
+						openListFromIntent(listId);
+					}
+					if (listId != -1) {
+						list.handleNoteIntent(intent);
 					}
 				}
 			}
@@ -313,17 +292,44 @@ public class FragmentLayout extends Activity implements
 				if (list != null && intent.getExtras() != null) {
 					long listId = intent.getExtras().getLong(
 							NotePad.Notes.COLUMN_NAME_LIST, -1);
-					Log.d("FragmentLayout", "listid: " + listId);
-					int pos = getPosOfId(listId);
-					Log.d("FragmentLayout", "listpos: " + pos);
-					if (pos > -1) {
-						// select it
-						ActionBar ab = getActionBar();
-						if (ab.getSelectedNavigationIndex() != pos) {
-							ab.setSelectedNavigationItem(pos);
-						}
+					// Open the containing list if we have to. No need to change
+					// lists
+					// if we are already displaying all notes.
+					if (listId != -1 && currentListId != ALL_NOTES_ID
+							&& currentListId != listId) {
+						openListFromIntent(listId);
+					}
+					if (listId != -1) {
 						list.handleNoteIntent(intent);
 					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * This is meant to be called from the intent handling. It handles the two
+	 * possible cases that this app was already running when it received the
+	 * intent or it was started fresh with the intent meaning we have to handle
+	 * the opening asynchronously.
+	 * 
+	 * @param listId
+	 */
+	private void openListFromIntent(long listId) {
+		if (beforeBoot) {
+			// Set the variable to be selected after the loader has
+			// finished its query
+			listIdToSelect = listId;
+			Log.d(TAG, "beforeBoot setting future id");
+		} else {
+			// Select the list directly since the loader is done
+			int pos = getPosOfId(listId);
+			Log.d("FragmentLayout", "pos: " + pos);
+			if (pos > -1) {
+				// select it
+				ActionBar ab = getActionBar();
+				if (ab != null && ab.getSelectedNavigationIndex() != pos) {
+					ab.setSelectedNavigationItem(pos);
 				}
 			}
 		}
@@ -997,7 +1003,7 @@ public class FragmentLayout extends Activity implements
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		mSpinnerAdapter.swapCursor(data);
-		
+
 		if (listIdToSelect > -1 || listIdToSelect == ALL_NOTES_ID) {
 			int position = getPosOfId(listIdToSelect);
 			if (position > -1) {

@@ -71,6 +71,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 					Long.toString(intent.getLongExtra(NotePad.Notes.COLUMN_NAME_LIST, -1))));
 			context.startActivity(appIntent);
 		} else if (action.equals(CREATE_ACTION)) {
+			Log.d("WidgetProvider", "CREATE ACTION listId: " + intent.getLongExtra(NotePad.Notes.COLUMN_NAME_LIST, -1));
 			appIntent.setData(NotePad.Notes.CONTENT_VISIBLE_URI);
 			appIntent.setAction(Intent.ACTION_INSERT);
 			appIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, intent.getLongExtra(NotePad.Notes.COLUMN_NAME_LIST, -1));
@@ -126,11 +127,11 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		SharedPreferences settings = context.getSharedPreferences(
 				ListWidgetConfigure.getSharedPrefsFile(appWidgetId),
 				Context.MODE_PRIVATE);
-		String listTitle = settings.getString(ListWidgetConfigure.KEY_LIST_TITLE, "Title not found");
+		String listTitle = settings.getString(ListWidgetConfigure.KEY_LIST_TITLE, context.getText(R.string.show_from_all_lists).toString());
 		rv.setCharSequence(R.id.titleButton, "setText", listTitle);
 		long listId = Long.parseLong(settings.getString(ListWidgetConfigure.KEY_LIST, Integer.toString(FragmentLayout.ALL_NOTES_ID)));
 
-		// Bind a click listener template for the contents of the weather list.
+		// Bind a click listener template for the contents of the list.
 		// Note that we
 		// need to update the intent's data if we set an extra, since the extras
 		// will be

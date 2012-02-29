@@ -196,19 +196,27 @@ public class NotesListFragment extends ListFragment implements
 		Log.d(TAG, "handling intent");
 		if (Intent.ACTION_EDIT.equals(intent.getAction())
 				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
-			Log.d(TAG, "Selecting note");
-			String newId = intent.getData().getPathSegments()
-					.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
-			long noteId = Long.parseLong(newId);
-			if (noteId > -1) {
-				newNoteIdToOpen = noteId;
+			// Are we displaying the correct list already?
+			long listId = intent.getExtras().getLong(
+					NotePad.Notes.COLUMN_NAME_LIST, -1);
+			if (listId == mCurListId
+					|| mCurListId == FragmentLayout.ALL_NOTES_ID) {
+				// Just open it
+				openNote(intent);
+			} else {
+				// it's something we have to handle once the list has been loaded
+				String newId = intent.getData().getPathSegments()
+						.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
+				long noteId = Long.parseLong(newId);
+				if (noteId > -1) {
+					newNoteIdToOpen = noteId;
+				}
 			}
 		} else if (Intent.ACTION_INSERT.equals(intent.getAction())) {
 			// Get list to create note in first
 			long listId = intent.getExtras().getLong(
 					NotePad.Notes.COLUMN_NAME_LIST, -1);
 
-			Log.d(TAG, "list to create in: " + listId);
 			if (listId > -1) {
 				Uri noteUri = FragmentLayout.createNote(
 						activity.getContentResolver(), listId);
@@ -488,7 +496,7 @@ public class NotesListFragment extends ListFragment implements
 		showNote(position);
 	}
 
-	public void openNote(Intent intent) {
+	private void openNote(Intent intent) {
 		if (intent != null) {
 			String newId = intent.getData().getPathSegments()
 					.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
