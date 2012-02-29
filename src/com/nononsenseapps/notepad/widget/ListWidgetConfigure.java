@@ -9,30 +9,18 @@ import com.nononsenseapps.notepad.NotesPreferenceFragment;
 import com.nononsenseapps.notepad.R;
 
 import android.app.Activity;
-import android.app.Fragment;
 import android.appwidget.AppWidgetManager;
-import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
-import android.media.audiofx.BassBoost.Settings;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.ListPreference;
-import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.PreferenceScreen;
 import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.RemoteViews;
-import android.widget.Spinner;
 
 public class ListWidgetConfigure extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
@@ -48,6 +36,9 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	public static final String KEY_SORT_TYPE = "widget_key_sort_type";
 	public static final String KEY_SORT_ORDER = "widget_key_sort_order";
 	public static final String KEY_THEME = "widget_key_current_theme";
+
+	public static final String THEME_LIGHT = "widget_light";
+	public static final String THEME_DARK = "widget_dark";
 
 	public static String getSharedPrefsFile(int widgetId) {
 		return SHARED_PREFS_BASE + widgetId;
@@ -65,34 +56,34 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 		}
 
-		// Do this in case users backs out
+		// Set valid result from start
 		Intent resultValue = new Intent();
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		setResult(RESULT_CANCELED, resultValue);
+		setResult(RESULT_OK, resultValue);
 
-		Log.d("PrefsActivity", "appWidgetId: " + appWidgetId);
-
+		setDefaultSharedPreferenceValues();
 		settings = PreferenceManager.getDefaultSharedPreferences(this);
-		// TODO must set default settings in this settings file
-		// BUT also in the widget-specific one
+	}
 
-		// Create OK button
-		// Button okButton = new Button(context, attrs, defStyle)
-		/*
-		 * android:id="@+id/list_widget_config_ok"
-		 * style="?android:attr/buttonBarButtonStyle" android:layout_width="0dp"
-		 * android:layout_height="wrap_content" android:layout_weight="1"
-		 */
-		Button okButton = new Button(this);
-		okButton.setText(R.string.ok);
-		okButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				configDone();
-			}
-		});
-
-		setListFooter(okButton);
+	/**
+	 * The goal of this method is to set the default values of the widget
+	 * preferences. The only reason we do this, and the reason we do it on this
+	 * preference object, is that the UI will otherwise reflect the settings of
+	 * the last widget that was added which most likely is different from the
+	 * default values, meaning possible nonconsistency between UI and internal
+	 * values.
+	 * 
+	 * We do not need to set the default values on the widget's own shared
+	 * preferences because they are implicitly set since we defined them when we
+	 * try to retrieve the values later.
+	 */
+	private void setDefaultSharedPreferenceValues() {
+		SharedPreferences.Editor edit = PreferenceManager
+				.getDefaultSharedPreferences(this).edit();
+		edit.putString(KEY_LIST, Integer.toString(FragmentLayout.ALL_NOTES_ID))
+				.putString(KEY_SORT_ORDER, NotesPreferenceFragment.DUEDATESORT)
+				.putString(KEY_SORT_TYPE, NotePad.Notes.ASCENDING_SORT_ORDERING)
+				.commit();
 	}
 
 	/**
@@ -119,38 +110,24 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		}
 	}
 
-	private void configCancel() {
-		// Not much else to do
-		finish();
-	}
-
-	private void configDone() {
-		// Save values to preferences
-		// getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
-		// .edit()
-		// .putString(LIST_WHERE, "")
-		// .putString(NotesPreferenceFragment.KEY_SORT_TYPE,
-		// NotesPreferenceFragment.DUEDATESORT)
-		// .putString(NotesPreferenceFragment.KEY_SORT_ORDER,
-		// NotePad.Notes.DEFAULT_SORT_ORDERING).commit();
-
+	@Override
+	protected void onDestroy() {
+		Log.d("prefsActivity", "onDestroy");
+		// Initiate the widget!
 		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
 		appWidgetManager.updateAppWidget(appWidgetId,
 				ListWidgetProvider.buildRemoteViews(this, appWidgetId));
-		// AppWidgetManager.getInstance(mContext)
-		// .notifyAppWidgetViewDataChanged(mAppWidgetId,
-		// R.id.notes_list);
-		Intent resultValue = new Intent();
-		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		setResult(RESULT_OK, resultValue);
-		finish();
+		// Then kill the config
+		super.onDestroy();
 	}
 
+	/**
+	 * We need to set the changes done in the fragments on the global file in
+	 * the widget specific file.
+	 */
 	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
-		Log.d("prefsActivity", "onSharedChanged!: " + key);
-		Log.d("prefsActivity", "onSharedChanged, app_WidgetId: " + appWidgetId);
 
 		if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
 			getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
@@ -159,18 +136,22 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 					.apply();
 		}
 	}
-	
+
 	/**
-	 * This fragment shows the preferences for the first header.
+	 * This fragment shows the preferences for list options.
 	 */
 	public static class ListFragment extends PreferenceFragment implements
 			OnSharedPreferenceChangeListener {
 		private SharedPreferences lSettings;
 		private ListPreference listSpinner;
+		private ListPreference sortType;
+		private ListPreference sortOrder;
+		private Activity activity;
 
 		@Override
 		public void onAttach(Activity activity) {
 			super.onAttach(activity);
+			this.activity = activity;
 			lSettings = PreferenceManager.getDefaultSharedPreferences(activity);
 		}
 
@@ -185,8 +166,17 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			if (listSpinner != null) {
 				setEntries(listSpinner);
 			}
+			
+			sortType = (ListPreference) findPreference(KEY_SORT_TYPE);
+			sortOrder = (ListPreference) findPreference(KEY_SORT_ORDER);
+			
+			// Also set the summaries
+			sortOrder.setValue(NotePad.Notes.ASCENDING_SORT_ORDERING);
+			sortOrder.setSummary(sortOrder.getEntry());
+			sortType.setValue(NotesPreferenceFragment.DUEDATESORT);
+			sortType.setSummary(sortType.getEntry());
 		}
-		
+
 		@Override
 		public void onResume() {
 			super.onResume();
@@ -243,23 +233,41 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 						.size()]));
 				listSpinner.setEntryValues(values
 						.toArray(new CharSequence[values.size()]));
+				
+				listSpinner.setSummary(listSpinner.getEntry());
 			}
 		}
 
+		/**
+		 * Sets the list name in the preferences as well but also sets
+		 * the list summaries depending on the selected value.
+		 */
 		@Override
 		public void onSharedPreferenceChanged(
 				SharedPreferences sharedPreferences, String key) {
 			if (key.equals(KEY_LIST)) {
 				// Must also write the list Name to the prefs
-				sharedPreferences.edit()
+				sharedPreferences
+						.edit()
 						.putString(KEY_LIST_TITLE,
 								listSpinner.getEntry().toString()).apply();
 			}
+			if (!activity.isFinishing()) {
+				if (key.equals(KEY_LIST)) {
+				// Also set the summary to this text
+				listSpinner.setSummary(listSpinner.getEntry());
+			}
+			else if (key.equals(KEY_SORT_ORDER)) {
+				sortOrder.setSummary(sortOrder.getEntry());
+			} else if (key.equals(KEY_SORT_TYPE)) {
+				sortType.setSummary(sortType.getEntry());
+			}
+		}
 		}
 	}
 
 	/**
-	 * This fragment shows the preferences for the first header.
+	 * This fragment shows the preferences for the theme settings.
 	 */
 	public static class ThemeFragment extends PreferenceFragment {
 

@@ -4,18 +4,17 @@
 
     <PreferenceCategory android:title="@string/settings_cat_sorting" >
         <ListPreference
-            android:dialogTitle="Select the list to display"
+            android:dialogTitle="@string/settings_list_dialog"
             android:key="widget_key_list"
-            android:summary="Selected list should be here"
-            android:title="Selected list" />
+            android:summary="@string/settings_list_summary"
+            android:title="@string/settings_list" />
         
         <ListPreference
-            android:defaultValue="title COLLATE NOCASE"
+            android:defaultValue="duedate"
             android:dialogTitle="@string/settings_sorting_type_dialog"
             android:entries="@array/sorting_preference"
             android:entryValues="@array/sortingvalues_preference"
             android:key="widget_key_sort_type"
-            android:summary="Selected option should be here"
             android:title="@string/settings_sorting_type" />
         <ListPreference
             android:defaultValue="ASC"
@@ -23,7 +22,6 @@
             android:entries="@array/sorting_order_preference"
             android:entryValues="@array/sorting_ordervalues_preference"
             android:key="widget_key_sort_order"
-            android:summary="Selected option should be here"
             android:title="@string/settings_sorting_order" />
     </PreferenceCategory>
 
