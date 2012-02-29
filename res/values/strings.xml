@@ -120,5 +120,4 @@
     <string name="settings_list">List</string>
     <string name="settings_list_summary"></string>
     <string name="automatic">Automatically</string>
-    <string name="manually">Manually</string>
 </resources>

@@ -109,4 +109,15 @@
     <string name="permission_read_desc">Povolit aplikaci čtení vašich poznámek a souvisejících seznamů.</string>
     <string name="permission_write_label">upravovat poznámky a seznamy</string>
     <string name="permission_write_desc">Povolit aplikaci vkládat, upravovat a odstraňovat poznámky a seznamy.</string>
+    
+    <string name="settings_header_list">Seznam nastavení</string>
+    <string name="settings_header_list_summary"></string>
+    <string name="settings_header_appearance">@string/settings_cat_appearance</string>
+    <string name="settings_header_appearance_summary"></string>
+    <string name="settings_header_sync">@string/settings_cat_syncing</string>
+    <string name="settings_header_sync_summary"></string>
+    <string name="settings_list_dialog">Vyberte seznam</string>
+    <string name="settings_list">Seznam</string>
+    <string name="settings_list_summary"></string>
+    <string name="automatic">Automaticky</string>
 </resources>

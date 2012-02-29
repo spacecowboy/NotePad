@@ -49,7 +49,8 @@
         <item>2 Stunden</item>
         <item>4 Stunden</item>
         <item>8 Stunden</item> -->
-        <item>1 Tag</item>
+        <!-- <item>1 Tag</item> -->
+        <item>Automatisch</item>
 	</string-array>
 	<string-array name="sync_freqvalues_preference">
 	    <item>0</item>

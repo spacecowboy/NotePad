@@ -49,6 +49,7 @@
         <item>2 timmar</item>
         <item>4 timmar</item>
         <item>8 timmar</item> -->
+        <!-- <item>1 dag</item> -->
         <item>Automatiskt</item>
 	</string-array>
 	<string-array name="sync_freqvalues_preference">

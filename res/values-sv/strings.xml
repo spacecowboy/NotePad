@@ -104,4 +104,20 @@
     <string name="notecopied">Kopierad</string>
     <string name="deleted">Tog bort</string>
     <string name="items">anteckningar</string>
+    
+    <string name="permission_read_label">read notes and lists</string>
+    <string name="permission_read_desc">Allows the application to read your notes and related lists.</string>
+    <string name="permission_write_label">modify notes and lists</string>
+    <string name="permission_write_desc">Allows the application to insert, update and delete notes and lists.</string>
+    
+    <string name="settings_header_list">Listinställningar</string>
+    <string name="settings_header_list_summary"></string>
+    <string name="settings_header_appearance">@string/settings_cat_appearance</string>
+    <string name="settings_header_appearance_summary"></string>
+    <string name="settings_header_sync">@string/settings_cat_syncing</string>
+    <string name="settings_header_sync_summary"></string>
+    <string name="settings_list_dialog">Välj en lista</string>
+    <string name="settings_list">Lista</string>
+    <string name="settings_list_summary"></string>
+    <string name="automatic">Automatiskt</string>
 </resources>
