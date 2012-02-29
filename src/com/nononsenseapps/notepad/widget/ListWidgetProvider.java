@@ -37,11 +37,11 @@ import com.nononsenseapps.notepad.R;
  */
 public class ListWidgetProvider extends AppWidgetProvider {
 	private static final String TAG = "WIDGETPROVIDER";
-	public static String CLICK_ACTION = "com.nononsenseapps.notepad.widget.CLICK";
-	public static String OPEN_ACTION = "com.nononsenseapps.notepad.widget.OPENAPP";
-	public static String CREATE_ACTION = "com.nononsenseapps.notepad.widget.CREATE";
-	public static String EXTRA_NOTE_ID = "com.nononsenseapps.notepad.widget.note_id";
-	public static String EXTRA_LIST_ID = "com.nononsenseapps.notepad.widget.list_id";
+	public static final String CLICK_ACTION = "com.nononsenseapps.notepad.widget.CLICK";
+	public static final String OPEN_ACTION = "com.nononsenseapps.notepad.widget.OPENAPP";
+	public static final String CREATE_ACTION = "com.nononsenseapps.notepad.widget.CREATE";
+	public static final String EXTRA_NOTE_ID = "com.nononsenseapps.notepad.widget.note_id";
+	public static final String EXTRA_LIST_ID = "com.nononsenseapps.notepad.widget.list_id";
 
 	public ListWidgetProvider() {
 	}
@@ -60,26 +60,31 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		final String action = intent.getAction();
+		String action = intent.getAction();
 		Intent appIntent = new Intent();
 		appIntent.setClass(context, FragmentLayout.class);
 		appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		if (action.equals(OPEN_ACTION)) {
 			appIntent.setAction(Intent.ACTION_VIEW);
 			appIntent.setData(Uri.withAppendedPath(
-					NotePad.Lists.CONTENT_VISIBLE_ID_URI_BASE,
-					Long.toString(intent.getLongExtra(NotePad.Notes.COLUMN_NAME_LIST, -1))));
+					NotePad.Lists.CONTENT_VISIBLE_ID_URI_BASE, Long
+							.toString(intent.getLongExtra(
+									NotePad.Notes.COLUMN_NAME_LIST, -1))));
 			context.startActivity(appIntent);
 		} else if (action.equals(CREATE_ACTION)) {
-			Log.d("WidgetProvider", "CREATE ACTION listId: " + intent.getLongExtra(NotePad.Notes.COLUMN_NAME_LIST, -1));
+			Log.d("WidgetProvider",
+					"CREATE ACTION listId: "
+							+ intent.getLongExtra(
+									NotePad.Notes.COLUMN_NAME_LIST, -1));
 			appIntent.setData(NotePad.Notes.CONTENT_VISIBLE_URI);
 			appIntent.setAction(Intent.ACTION_INSERT);
-			appIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, intent.getLongExtra(NotePad.Notes.COLUMN_NAME_LIST, -1));
+			appIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST,
+					intent.getLongExtra(NotePad.Notes.COLUMN_NAME_LIST, -1));
 			context.startActivity(appIntent);
 
 		} else if (action.equals(CLICK_ACTION)) {
-			final long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
-			final long listId = intent.getLongExtra(EXTRA_LIST_ID, -1);
+			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
+			long listId = intent.getLongExtra(EXTRA_LIST_ID, -1);
 			if (noteId > -1 && listId > -1) {
 				appIntent.setData(Uri.withAppendedPath(
 						NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,
@@ -108,13 +113,19 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	}
 
 	public static RemoteViews buildRemoteViews(Context context, int appWidgetId) {
+		// Hack: We must set this widget's id in the URI to prevent the
+		// situation
+		// where the last widget added will be used for everything
+		Uri data = Uri.withAppendedPath(Uri.parse("STUPIDWIDGETS"
+				+ "://widget/id/"), String.valueOf(appWidgetId));
+
 		// Specify the service to provide data for the collection widget. Note
 		// that we need to
 		// embed the appWidgetId via the data otherwise it will be ignored.
-		final Intent intent = new Intent(context, ListWidgetService.class);
+		Intent intent = new Intent(context, ListWidgetService.class);
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-		final RemoteViews rv = new RemoteViews(context.getPackageName(),
+		RemoteViews rv = new RemoteViews(context.getPackageName(),
 				R.layout.listwidget);
 		rv.setRemoteAdapter(appWidgetId, R.id.notes_list, intent);
 
@@ -122,50 +133,55 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		// must be a sibling
 		// view of the collection view.
 		rv.setEmptyView(R.id.notes_list, R.id.empty_view);
-		
+
 		// set list title
 		SharedPreferences settings = context.getSharedPreferences(
 				ListWidgetConfigure.getSharedPrefsFile(appWidgetId),
 				Context.MODE_PRIVATE);
-		String listTitle = settings.getString(ListWidgetConfigure.KEY_LIST_TITLE, context.getText(R.string.show_from_all_lists).toString());
+		String listTitle = settings.getString(
+				ListWidgetConfigure.KEY_LIST_TITLE,
+				context.getText(R.string.show_from_all_lists).toString());
 		rv.setCharSequence(R.id.titleButton, "setText", listTitle);
-		long listId = Long.parseLong(settings.getString(ListWidgetConfigure.KEY_LIST, Integer.toString(FragmentLayout.ALL_NOTES_ID)));
+		long listId = Long.parseLong(settings.getString(
+				ListWidgetConfigure.KEY_LIST,
+				Integer.toString(FragmentLayout.ALL_NOTES_ID)));
+		Log.d("WidgetProvider", "buildRemoteviews appId: " + appWidgetId
+				+ ", listId: " + listId);
 
 		// Bind a click listener template for the contents of the list.
 		// Note that we
 		// need to update the intent's data if we set an extra, since the extras
 		// will be
 		// ignored otherwise.
-		final Intent onClickIntent = new Intent(context,
-				ListWidgetProvider.class);
+		Intent onClickIntent = new Intent(context, ListWidgetProvider.class);
 		onClickIntent.setAction(ListWidgetProvider.CLICK_ACTION);
 		onClickIntent
 				.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		onClickIntent.setData(Uri.parse(onClickIntent
-				.toUri(Intent.URI_INTENT_SCHEME)));
-		final PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(
+		onClickIntent.setData(data);
+
+		PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(
 				context, 0, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		rv.setPendingIntentTemplate(R.id.notes_list, onClickPendingIntent);
 
 		// Bind the click intent for the button on the widget
-		final Intent openAppIntent = new Intent(context,
-				ListWidgetProvider.class);
+		Intent openAppIntent = new Intent(context, ListWidgetProvider.class);
 		openAppIntent.setAction(ListWidgetProvider.OPEN_ACTION);
 		openAppIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
-		final PendingIntent openAppPendingIntent = PendingIntent.getBroadcast(
+		openAppIntent.setData(data);
+		PendingIntent openAppPendingIntent = PendingIntent.getBroadcast(
 				context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		rv.setOnClickPendingIntent(R.id.openAppButton, openAppPendingIntent);
 		// Bind the click intent for the button on the widget
 		rv.setOnClickPendingIntent(R.id.titleButton, openAppPendingIntent);
 		// Create button
-		final Intent createIntent = new Intent(context,
-				ListWidgetProvider.class);
+		Intent createIntent = new Intent(context, ListWidgetProvider.class);
 		createIntent.setAction(ListWidgetProvider.CREATE_ACTION);
 		createIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
-		final PendingIntent createPendingIntent = PendingIntent.getBroadcast(
-				context, 0, createIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		createIntent.setData(data);
+		PendingIntent createPendingIntent = PendingIntent.getBroadcast(context,
+				0, createIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		rv.setOnClickPendingIntent(R.id.createNoteButton, createPendingIntent);
-		
+
 		return rv;
 	}
 }

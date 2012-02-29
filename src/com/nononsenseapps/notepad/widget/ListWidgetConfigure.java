@@ -73,6 +73,8 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		Log.d("PrefsActivity", "appWidgetId: " + appWidgetId);
 
 		settings = PreferenceManager.getDefaultSharedPreferences(this);
+		// TODO must set default settings in this settings file
+		// BUT also in the widget-specific one
 
 		// Create OK button
 		// Button okButton = new Button(context, attrs, defStyle)
@@ -150,24 +152,11 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		Log.d("prefsActivity", "onSharedChanged!: " + key);
 		Log.d("prefsActivity", "onSharedChanged, app_WidgetId: " + appWidgetId);
 
-		if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID
-				&& key.equals(KEY_LIST)) {
+		if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
 			getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
 					.edit()
 					.putString(key, sharedPreferences.getString(key, null))
 					.apply();
-		}
-
-		if (key.equals(KEY_LIST)) {
-			Log.d("prefsList", "KEY_LIST changed");
-		} else if (key.equals(KEY_LIST_TITLE)) {
-			Log.d("prefsList", "KEY_LIST_TITLE changed");
-		} else if (key.equals(KEY_SORT_ORDER)) {
-			Log.d("prefsList", "KEY_SORT_ORDER changed");
-		} else if (key.equals(KEY_SORT_TYPE)) {
-			Log.d("prefsList", "KEY_SORT_TYPE changed");
-		} else if (key.equals(KEY_THEME)) {
-			Log.d("prefsList", "KEY_THEME changed");
 		}
 	}
 	
