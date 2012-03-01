@@ -16,7 +16,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
@@ -61,8 +60,8 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		setResult(RESULT_OK, resultValue);
 
-		setDefaultSharedPreferenceValues();
 		settings = PreferenceManager.getDefaultSharedPreferences(this);
+		settings.registerOnSharedPreferenceChangeListener(this);
 	}
 
 	/**
@@ -78,11 +77,12 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	 * try to retrieve the values later.
 	 */
 	private void setDefaultSharedPreferenceValues() {
+		Log.d("prefsActivity", "Settings defaults");
 		SharedPreferences.Editor edit = PreferenceManager
 				.getDefaultSharedPreferences(this).edit();
 		edit.putString(KEY_LIST, Integer.toString(FragmentLayout.ALL_NOTES_ID))
-				.putString(KEY_SORT_ORDER, NotesPreferenceFragment.DUEDATESORT)
-				.putString(KEY_SORT_TYPE, NotePad.Notes.ASCENDING_SORT_ORDERING)
+				.putString(KEY_SORT_ORDER, NotePad.Notes.ASCENDING_SORT_ORDERING)
+				.putString(KEY_SORT_TYPE, NotesPreferenceFragment.DUEDATESORT)
 				.commit();
 	}
 
@@ -92,27 +92,14 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	@Override
 	public void onBuildHeaders(List<Header> target) {
 		loadHeadersFromResource(R.xml.widget_pref_headers, target);
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if (settings != null) {
-			settings.registerOnSharedPreferenceChangeListener(this);
-		}
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-		if (settings != null) {
-			settings.unregisterOnSharedPreferenceChangeListener(this);
-		}
+		setDefaultSharedPreferenceValues();
 	}
 
 	@Override
 	protected void onDestroy() {
-		Log.d("prefsActivity", "onDestroy");
+		if (settings != null) {
+			settings.unregisterOnSharedPreferenceChangeListener(this);
+		}
 		// Initiate the widget!
 		AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(this);
 		appWidgetManager.updateAppWidget(appWidgetId,
@@ -130,10 +117,12 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			String key) {
 
 		if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
+//			Log.d("prefsActivity", "changed key: " + key);
+//			Log.d("prefsActivity","commiting: " + sharedPreferences.getString(key, null));
 			getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
 					.edit()
 					.putString(key, sharedPreferences.getString(key, null))
-					.apply();
+					.commit();
 		}
 	}
 
@@ -171,9 +160,13 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			sortOrder = (ListPreference) findPreference(KEY_SORT_ORDER);
 			
 			// Also set the summaries
-			sortOrder.setValue(NotePad.Notes.ASCENDING_SORT_ORDERING);
+			Log.d("prefsList", "order: " + sortOrder.getValue());
+			if (sortOrder.getValue() == null)
+				sortOrder.setValue(NotePad.Notes.ASCENDING_SORT_ORDERING);
 			sortOrder.setSummary(sortOrder.getEntry());
-			sortType.setValue(NotesPreferenceFragment.DUEDATESORT);
+			Log.d("prefsList", "type: " + sortType.getValue());
+			if (sortType.getValue() == null)
+				sortType.setValue(NotesPreferenceFragment.DUEDATESORT);
 			sortType.setSummary(sortType.getEntry());
 		}
 
@@ -250,7 +243,7 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 				sharedPreferences
 						.edit()
 						.putString(KEY_LIST_TITLE,
-								listSpinner.getEntry().toString()).apply();
+								listSpinner.getEntry().toString()).commit();
 			}
 			if (!activity.isFinishing()) {
 				if (key.equals(KEY_LIST)) {
