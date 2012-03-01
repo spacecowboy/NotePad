@@ -13,6 +13,7 @@
     <string-array name="sorting_preference">
         <item>Title</item>
         <item>Due date</item>
+        <item>Latest modified</item>
         <!-- <item>Server order</item>
         <item>ABCSort</item> -->
     </string-array>
@@ -20,6 +21,7 @@
     <string-array name="sortingvalues_preference">
         <item>title COLLATE NOCASE</item>
         <item>duedate</item>
+        <item>modified</item>
        <!--  <item>possubsort</item>
         <item>abcsubsort</item> -->
     </string-array>

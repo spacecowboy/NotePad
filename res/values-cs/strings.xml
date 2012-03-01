@@ -58,7 +58,7 @@
     <string name="settings_sorting_order_dialog">Způsob řazení</string>
     
     <string name="settings_summary_sort_type_alphabetic">Název</string>
-    <!-- <string name="settings_summary_sort_type_modified">Modification</string> -->
+    <string name="settings_summary_sort_type_modified">Poslední upravené</string>
     <string name="settings_summary_sort_type_duedate">Termín dokončení</string>
     <string name="settings_summary_sort_type_serverposition">Pozice na serveru</string>
     <string name="settings_summary_sort_order_asc">Vzestupně</string>

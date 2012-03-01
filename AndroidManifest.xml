@@ -28,8 +28,9 @@
     android:versionCode="19"
     android:versionName="3.0.7" >
 
+    <!-- App crashes on 3.0. No one uses 3.1. So minimum version is set to 3.2 now -->
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="13"
         android:targetSdkVersion="15" />
 
     <!-- For connection -->

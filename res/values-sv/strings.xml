@@ -58,7 +58,7 @@
     <string name="settings_sorting_order_dialog">Ordna efter</string>
     
     <string name="settings_summary_sort_type_alphabetic">Titel</string>
-    <!-- <string name="settings_summary_sort_type_modified">Ändringstid</string> -->
+    <string name="settings_summary_sort_type_modified">Senast modifierad</string>
     <string name="settings_summary_sort_type_duedate">Förfallodatum</string>
     <string name="settings_summary_sort_type_serverposition">Serverposition</string>
     <string name="settings_summary_sort_order_asc">Normal</string>

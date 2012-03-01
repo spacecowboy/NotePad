@@ -41,6 +41,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	
 	public static final String DUEDATESORT ="duedate";
 	public static final String TITLESORT ="title COLLATE NOCASE";
+	public static final String MODIFIEDSORT ="modified";
 
 	private Preference prefSortOrder;
 	private Preference prefSortType;
@@ -70,7 +71,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		addPreferencesFromResource(R.xml.main_preferences);
 
 		SUMMARY_SORT_TYPE = getText(
-				R.string.settings_summary_sort_type_serverposition).toString();
+				R.string.settings_summary_sort_type_duedate).toString();
 
 		SUMMARY_SORT_ORDER = getText(R.string.settings_summary_sort_order_asc)
 				.toString();
@@ -276,8 +277,9 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		else if (DUEDATESORT.equals(value))
 			summary = getText(R.string.settings_summary_sort_type_duedate)
 					.toString();
-//		else if (NotePad.Notes.POSITION_SORT_TYPE.equals(value))
-//			summary = getText(R.string.settings_summary_sort_type_serverposition).toString();
+		else if (MODIFIEDSORT.equals(value))
+			summary = getText(R.string.settings_summary_sort_type_modified)
+			.toString();
 		SUMMARY_SORT_TYPE = summary;
 		prefSortType.setSummary(summary);
 	}

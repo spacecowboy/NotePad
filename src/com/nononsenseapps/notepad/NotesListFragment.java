@@ -1260,6 +1260,8 @@ public class NotesListFragment extends ListFragment implements
 			sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
 		} else if (NotesPreferenceFragment.TITLESORT.equals(sortChoice)) {
 			sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
+		} else if (NotesPreferenceFragment.MODIFIEDSORT.equals(sortChoice)) {
+			sortOrder = NotePad.Notes.MODIFICATION_SORT_TYPE;
 		}
 
 		sortOrder += " "
