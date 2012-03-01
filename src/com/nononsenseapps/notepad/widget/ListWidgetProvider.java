@@ -106,6 +106,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 		// Update each of the widgets with the remote adapter
 		for (int i = 0; i < appWidgetIds.length; ++i) {
+			Log.d(TAG, "onUpdate: " + appWidgetIds[i]);
 			appWidgetManager.updateAppWidget(appWidgetIds[i],
 					buildRemoteViews(context, appWidgetIds[i]));
 		}

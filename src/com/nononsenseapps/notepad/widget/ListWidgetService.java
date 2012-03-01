@@ -65,7 +65,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	private Cursor mCursor;
 	private int mAppWidgetId;
 
-	private ListChecker observer;
+	//private ListChecker observer;
 	private long listId = -1;
 
 	private static final String[] PROJECTION = new String[] {
@@ -80,17 +80,17 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		mContext = context;
 		mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 				AppWidgetManager.INVALID_APPWIDGET_ID);
-		observer = new ListChecker(null, mAppWidgetId);
+		//observer = new ListChecker(null, mAppWidgetId);
 	}
 
 	public void onCreate() {
 		Log.d(TAG, "onCreate");
-		mContext.getContentResolver().registerContentObserver(
-				NotePad.Notes.CONTENT_URI, true, observer);
+//		mContext.getContentResolver().registerContentObserver(
+//				NotePad.Notes.CONTENT_URI, true, observer);
 	}
 
 	public void onDestroy() {
-		mContext.getContentResolver().unregisterContentObserver(observer);
+//		mContext.getContentResolver().unregisterContentObserver(observer);
 		if (mCursor != null) {
 			mCursor.close();
 		}
@@ -217,22 +217,22 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		}
 	}
 
-	private class ListChecker extends ContentObserver {
-
-		private int appWidgetId;
-
-		public ListChecker(Handler handler, int appWidgetId) {
-			super(handler);
-			this.appWidgetId = appWidgetId;
-		}
-
-		@Override
-		public void onChange(boolean selfchange) {
-			Log.d("FACTORYObserver", "onChange");
-			// Refresh the widget
-			AppWidgetManager.getInstance(mContext)
-					.notifyAppWidgetViewDataChanged(appWidgetId,
-							R.id.notes_list);
-		}
-	}
+//	private class ListChecker extends ContentObserver {
+//
+//		private int appWidgetId;
+//
+//		public ListChecker(Handler handler, int appWidgetId) {
+//			super(handler);
+//			this.appWidgetId = appWidgetId;
+//		}
+//
+//		@Override
+//		public void onChange(boolean selfchange) {
+//			Log.d("FACTORYObserver", "onChange");
+//			// Refresh the widget
+//			AppWidgetManager.getInstance(mContext)
+//					.notifyAppWidgetViewDataChanged(appWidgetId,
+//							R.id.notes_list);
+//		}
+//	}
 }

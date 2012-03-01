@@ -18,8 +18,12 @@ package com.nononsenseapps.notepad;
 
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
+import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 
+import android.appwidget.AppWidgetManager;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.ClipDescription;
+import android.content.ComponentName;
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
@@ -51,6 +55,7 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map.Entry;
 
 /**
@@ -1083,6 +1088,8 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// And update widgets
+			updateAllWidgets();
 			return noteUri;
 		}
 
@@ -1156,6 +1163,8 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// And update widgets
+						updateAllWidgets();
 			return noteUri;
 		}
 
@@ -1214,6 +1223,8 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// And update widgets
+						updateAllWidgets();
 			return noteUri;
 		}
 
@@ -1274,6 +1285,8 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// And update widgets
+						updateAllWidgets();
 			return noteUri;
 		}
 
@@ -1564,6 +1577,8 @@ public class NotePadProvider extends ContentProvider implements
 		 * themselves for the provider are notified.
 		 */
 		getContext().getContentResolver().notifyChange(uri, null, false);
+		// And update widgets
+					updateAllWidgets();
 
 		// Returns the number of rows deleted.
 		return count;
@@ -1825,6 +1840,8 @@ public class NotePadProvider extends ContentProvider implements
 		 * themselves for the provider are notified.
 		 */
 		getContext().getContentResolver().notifyChange(uri, null, false);
+		// And update widgets
+					updateAllWidgets();
 
 		// Returns the number of rows updated.
 		return count;
@@ -1857,6 +1874,20 @@ public class NotePadProvider extends ContentProvider implements
 		}
 
 		return result;
+	}
+	
+	/**
+	 * Instead of doing this in a service which might be killed, simply call this whenever something is changed in here
+	 * 
+	 * Update all widgets's views as this database has changed somehow
+	 */
+	private void updateAllWidgets(){
+	    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext().getApplicationContext());
+	    int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getApplicationContext(), ListWidgetProvider.class));
+	    Log.d(TAG, "updateAllWidgets before: " + appWidgetIds.length);
+	    if (appWidgetIds.length > 0) {
+	        new ListWidgetProvider().onUpdate(getContext(), appWidgetManager, appWidgetIds);
+	    }
 	}
 
 	/**
