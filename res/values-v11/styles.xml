@@ -7,17 +7,17 @@
 		the holographic theme is available. -->
 	<style name="ThemeHolo" parent="@android:style/Theme.Holo">
 
-		<item name="ic_action_compose">@drawable/ic_action_compose_dark</item>
-		<item name="ic_action_delete">@drawable/ic_action_delete_dark</item>
-		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_dark</item>
-		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_dark</item>
-		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_dark</item>
-		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_dark</item>
-		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_dark</item>
-		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
-		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
-		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
-		<item name="ic_action_refresh">@drawable/ic_action_refresh_dark</item>
+		<item name="1_navigation_refresh">@drawable/1_navigation_refresh_dark </item>
+        <item name="2_action_search">@drawable/2_action_search_dark </item>
+        <item name="2_action_settings">@drawable/2_action_settings_dark </item>
+        <item name="5_content_new">@drawable/5_content_new_dark </item>
+        <item name="5_content_new_event">@drawable/5_content_new_event_dark </item>
+        <item name="5_content_discard">@drawable/5_content_discard_dark </item>
+        <item name="5_content_copy">@drawable/5_content_copy_dark </item>
+        <item name="5_content_paste">@drawable/5_content_paste_dark </item>
+        <item name="5_content_undo">@drawable/5_content_undo_dark </item>
+        <item name="5_content_remove">@drawable/5_content_remove_dark </item>
+        <item name="6_social_share">@drawable/6_social_share_dark </item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
@@ -30,17 +30,17 @@
 	</style>
 	
 	<style name="ThemeHoloLight" parent="@android:style/Theme.Holo.Light">
-	    <item name="ic_action_compose">@drawable/ic_action_compose_light</item>
-		<item name="ic_action_delete">@drawable/ic_action_delete_light</item>
-		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_light</item>
-		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_light</item>
-		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_light</item>
-		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_light</item>
-		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
-		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
-		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
-		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
-		<item name="ic_action_refresh">@drawable/ic_action_refresh_light</item>
+	    <item name="1_navigation_refresh">@drawable/1_navigation_refresh_light </item>
+        <item name="2_action_search">@drawable/2_action_search_light </item>
+        <item name="2_action_settings">@drawable/2_action_settings_light </item>
+        <item name="5_content_new">@drawable/5_content_new_light </item>
+        <item name="5_content_new_event">@drawable/5_content_new_event_light </item>
+        <item name="5_content_discard">@drawable/5_content_discard_light </item>
+        <item name="5_content_copy">@drawable/5_content_copy_light </item>
+        <item name="5_content_paste">@drawable/5_content_paste_light </item>
+        <item name="5_content_undo">@drawable/5_content_undo_light </item>
+        <item name="5_content_remove">@drawable/5_content_remove_light </item>
+        <item name="6_social_share">@drawable/6_social_share_light </item>
 		
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
@@ -50,17 +50,17 @@
 	</style>
 
 	<style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.Holo.Dialog.NoActionBar">
-		<item name="ic_action_compose">@drawable/ic_action_compose_dark</item>
-		<item name="ic_action_delete">@drawable/ic_action_delete_dark</item>
-		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_dark</item>
-		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_dark</item>
-		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_dark</item>
-		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_dark</item>
-		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_dark</item>
-		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
-		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
-		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
-		<item name="ic_action_refresh">@drawable/ic_action_refresh_dark</item>
+		<item name="1_navigation_refresh">@drawable/1_navigation_refresh_dark </item>
+        <item name="2_action_search">@drawable/2_action_search_dark </item>
+        <item name="2_action_settings">@drawable/2_action_settings_dark </item>
+        <item name="5_content_new">@drawable/5_content_new_dark </item>
+        <item name="5_content_new_event">@drawable/5_content_new_event_dark </item>
+        <item name="5_content_discard">@drawable/5_content_discard_dark </item>
+        <item name="5_content_copy">@drawable/5_content_copy_dark </item>
+        <item name="5_content_paste">@drawable/5_content_paste_dark </item>
+        <item name="5_content_undo">@drawable/5_content_undo_dark </item>
+        <item name="5_content_remove">@drawable/5_content_remove_dark </item>
+        <item name="6_social_share">@drawable/6_social_share_dark </item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
@@ -72,17 +72,17 @@
 	</style>
 	
 	<style name="ThemeHoloLightDialogNoActionBar" parent="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
-	    <item name="ic_action_compose">@drawable/ic_action_compose_light</item>
-	    <item name="ic_action_delete">@drawable/ic_action_delete_light</item>
-		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_light</item>
-		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_light</item>
-		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_light</item>
-		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_light</item>
-		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
-		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
-		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
-		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
-		<item name="ic_action_refresh">@drawable/ic_action_refresh_light</item>
+	    <item name="1_navigation_refresh">@drawable/1_navigation_refresh_light </item>
+        <item name="2_action_search">@drawable/2_action_search_light </item>
+        <item name="2_action_settings">@drawable/2_action_settings_light </item>
+        <item name="5_content_new">@drawable/5_content_new_light </item>
+        <item name="5_content_new_event">@drawable/5_content_new_event_light </item>
+        <item name="5_content_discard">@drawable/5_content_discard_light </item>
+        <item name="5_content_copy">@drawable/5_content_copy_light </item>
+        <item name="5_content_paste">@drawable/5_content_paste_light </item>
+        <item name="5_content_undo">@drawable/5_content_undo_light </item>
+        <item name="5_content_remove">@drawable/5_content_remove_light </item>
+        <item name="6_social_share">@drawable/6_social_share_light </item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
@@ -94,17 +94,17 @@
 
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light">
 
-	    <item name="ic_action_compose">@drawable/ic_action_compose_light</item>
-		<item name="ic_action_delete">@drawable/ic_action_delete_light</item>
-		<item name="ic_menu_copy_holo">@drawable/ic_menu_copy_holo_light</item>
-		<item name="ic_menu_search_holo">@drawable/ic_menu_search_holo_light</item>
-		<item name="ic_menu_settings_holo">@drawable/ic_menu_settings_holo_light</item>
-		<item name="ic_menu_share_holo">@drawable/ic_menu_share_holo_light</item>
-		<item name="ic_menu_paste_holo">@drawable/ic_menu_paste_holo_light</item>
-		<item name="ic_menu_revert">@drawable/ic_menu_revert</item>
-		<item name="ic_menu_mark">@drawable/ic_menu_mark</item>
-		<item name="ic_menu_clear_playlist">@drawable/ic_menu_clear_playlist</item>
-		<item name="ic_action_refresh">@drawable/ic_action_refresh_light</item>
+	    <item name="1_navigation_refresh">@drawable/1_navigation_refresh_light </item>
+        <item name="2_action_search">@drawable/2_action_search_light </item>
+        <item name="2_action_settings">@drawable/2_action_settings_light </item>
+        <item name="5_content_new">@drawable/5_content_new_light </item>
+        <item name="5_content_new_event">@drawable/5_content_new_event_light </item>
+        <item name="5_content_discard">@drawable/5_content_discard_light </item>
+        <item name="5_content_copy">@drawable/5_content_copy_light </item>
+        <item name="5_content_paste">@drawable/5_content_paste_light </item>
+        <item name="5_content_undo">@drawable/5_content_undo_light </item>
+        <item name="5_content_remove">@drawable/5_content_remove_light </item>
+        <item name="6_social_share">@drawable/6_social_share_light </item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
