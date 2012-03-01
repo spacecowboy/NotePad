@@ -78,17 +78,15 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 	public StackRemoteViewsFactory(Context context, Intent intent) {
 		mContext = context;
-		observer = new ListChecker(null);
 		mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 				AppWidgetManager.INVALID_APPWIDGET_ID);
+		observer = new ListChecker(null, mAppWidgetId);
 	}
 
 	public void onCreate() {
+		Log.d(TAG, "onCreate");
 		mContext.getContentResolver().registerContentObserver(
 				NotePad.Notes.CONTENT_URI, true, observer);
-		// Since we reload the cursor in onDataSetChanged() which gets called
-		// immediately after
-		// onCreate(), we do nothing here.
 	}
 
 	public void onDestroy() {
@@ -180,7 +178,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		if (settings != null) {
 			listId  = Long.parseLong(settings.getString(ListWidgetConfigure.KEY_LIST, Integer.toString(FragmentLayout.ALL_NOTES_ID)));
 			
-			String sortChoice = settings.getString(ListWidgetConfigure.KEY_SORT_TYPE, "");
+			String sortChoice = settings.getString(ListWidgetConfigure.KEY_SORT_TYPE, NotesPreferenceFragment.DUEDATESORT);
 			String sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
 
 			if (NotesPreferenceFragment.DUEDATESORT.equals(sortChoice)) {
@@ -196,33 +194,42 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			String listWhere = null;
 			String[] listArg = null;
 			if (listId > -1) {
-				listWhere = NotePad.Notes.COLUMN_NAME_LIST + " IS ?";
-				listArg = new String[] {Long.toString(listId)};
+				listWhere = NotePad.Notes.COLUMN_NAME_LIST + " IS ? AND " + NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?";
+				listArg = new String[] {Long.toString(listId), mContext.getText(R.string.gtask_status_uncompleted).toString()};
 				Log.d(TAG, "Using clause: " + listWhere + " with " + listArg[0]);
+			} else {
+				listWhere = NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?";
+				listArg = new String[] {mContext.getText(R.string.gtask_status_uncompleted).toString()};
 			}
 			
 			Log.d(TAG, "widgetId: " + mAppWidgetId);
 			
 			Log.d(TAG, "Using clause: " + listWhere);
 
+//			mCursor = mContext.getContentResolver().query(
+//					ListDBProvider.CONTENT_VISIBLE_URI, PROJECTION, listWhere, listArg,
+//					sortOrder);
 			mCursor = mContext.getContentResolver().query(
-					ListDBProvider.CONTENT_VISIBLE_URI, PROJECTION, listWhere, listArg,
+					NotePad.Notes.CONTENT_VISIBLE_URI, PROJECTION, listWhere, listArg,
 					sortOrder);
 		}
 	}
 
 	private class ListChecker extends ContentObserver {
 
-		public ListChecker(Handler handler) {
+		private int appWidgetId;
+
+		public ListChecker(Handler handler, int appWidgetId) {
 			super(handler);
+			this.appWidgetId = appWidgetId;
 		}
 
 		@Override
 		public void onChange(boolean selfchange) {
-			Log.d("Observer", "onChange");
+			Log.d("FACTORYObserver", "onChange");
 			// Refresh the widget
 			AppWidgetManager.getInstance(mContext)
-					.notifyAppWidgetViewDataChanged(mAppWidgetId,
+					.notifyAppWidgetViewDataChanged(appWidgetId,
 							R.id.notes_list);
 		}
 	}

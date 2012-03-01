@@ -66,6 +66,11 @@
         android:hardwareAccelerated="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name" >
+        <!--
+        Widgets do NOT have read permission, hence the removal of the permission...
+        To not get a SecurityException on a Widget, you must have exported=true and not require
+        any read permissions.
+        -->
         <provider
             android:name=".NotePadProvider"
             android:authorities="com.nononsenseapps.NotePad"
@@ -73,11 +78,10 @@
             android:exported="true"
             android:grantUriPermissions="true"
             android:label="@string/app_name"
-            android:readPermission="com.nononsenseapps.notepad.permissions.read"
             android:syncable="true"
             android:writePermission="com.nononsenseapps.notepad.permissions.write" >
         </provider>
-        <!-- temp remove android:readPermission="com.nononsenseapps.notepad.permissions.read" -->
+        <!-- removed android:readPermission="com.nononsenseapps.notepad.permissions.read" -->
 
         <activity
             android:name=".FragmentLayout"
@@ -197,20 +201,6 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-
-        <!--
-        This is a limited version of the real provider. Widgets do NOT have read permission,
-        hence the code duplication...
-        To not get a SecurityException on a Widget, you must have exported=true and not require
-        any read permissions.
-        -->
-        <provider
-            android:name="com.nononsenseapps.notepad.widget.ListDBProvider"
-            android:authorities="com.nononsenseapps.NotePad.widget"
-            android:enabled="true"
-            android:exported="true"
-            android:label="@string/app_name" >
-        </provider>
     </application>
 
 </manifest>
