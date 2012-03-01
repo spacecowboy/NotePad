@@ -1886,7 +1886,9 @@ public class NotePadProvider extends ContentProvider implements
 	    int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getApplicationContext(), ListWidgetProvider.class));
 	    Log.d(TAG, "updateAllWidgets before: " + appWidgetIds.length);
 	    if (appWidgetIds.length > 0) {
-	        new ListWidgetProvider().onUpdate(getContext(), appWidgetManager, appWidgetIds);
+	    	// Tell the widgets that the list items should be invalidate and refreshed!
+	    	// Will call onDatasetChanged in ListWidgetService, doing a new requery
+	    	appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.notes_list);
 	    }
 	}
 

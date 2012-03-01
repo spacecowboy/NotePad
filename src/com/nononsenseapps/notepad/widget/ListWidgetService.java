@@ -53,14 +53,14 @@ public class ListWidgetService extends RemoteViewsService {
 
 	@Override
 	public RemoteViewsFactory onGetViewFactory(Intent intent) {
-		return new StackRemoteViewsFactory(this.getApplicationContext(), intent);
+		return new ListRemoteViewsFactory(this.getApplicationContext(), intent);
 	}
 }
 
 /**
  * This is the factory that will provide data to the collection widget.
  */
-class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	private Context mContext;
 	private Cursor mCursor;
 	private int mAppWidgetId;
@@ -76,7 +76,7 @@ class StackRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
 	private static final String TAG = "FACTORY";
 
-	public StackRemoteViewsFactory(Context context, Intent intent) {
+	public ListRemoteViewsFactory(Context context, Intent intent) {
 		mContext = context;
 		mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 				AppWidgetManager.INVALID_APPWIDGET_ID);
