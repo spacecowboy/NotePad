@@ -3,21 +3,21 @@
 
     <item
         android:id="@+id/menu_add"
-        android:icon="?5_content_new_event"
+        android:icon="?content_new_event"
         android:orderInCategory="0"
         android:showAsAction="ifRoom"
         android:title="@string/menu_add"/>
     
     <item
         android:id="@+id/menu_sync"
-        android:icon="?1_navigation_refresh"
+        android:icon="?navigation_refresh"
         android:orderInCategory="1"
         android:showAsAction="ifRoom"
         android:title="@string/menu_sync"/>
     
     <item android:id="@+id/menu_search"
           android:title="@string/search_hint"
-          android:icon="?2_action_search"
+          android:icon="?action_search"
           android:showAsAction="ifRoom|collapseActionView"
           android:actionViewClass="android.widget.SearchView"
           android:orderInCategory="2"/> 
@@ -51,7 +51,7 @@
         android:title="@string/menu_setdefaultlist"/>
     <item
         android:id="@+id/menu_preferences"
-        android:icon="?2_action_settings"
+        android:icon="?action_settings"
         android:orderInCategory="15"
         android:showAsAction="never"
         android:title="@string/menu_preferences"/>

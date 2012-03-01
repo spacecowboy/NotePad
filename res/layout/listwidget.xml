@@ -65,7 +65,7 @@
             android:paddingTop="8dp"
             android:layout_gravity="center"
             android:background="@android:color/transparent"
-            android:src="@drawable/5_content_new_event_light" />
+            android:src="@drawable/content_new_event_light" />
     </LinearLayout>
 
     <FrameLayout

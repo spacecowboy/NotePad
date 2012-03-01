@@ -8,17 +8,17 @@
 		the holographic theme is available.
     -->
     <style name="ThemeHolo" parent="@android:style/Theme.DeviceDefault">
-        <item name="1_navigation_refresh">@drawable/1_navigation_refresh_dark </item>
-        <item name="2_action_search">@drawable/2_action_search_dark </item>
-        <item name="2_action_settings">@drawable/2_action_settings_dark </item>
-        <item name="5_content_new">@drawable/5_content_new_dark </item>
-        <item name="5_content_new_event">@drawable/5_content_new_event_dark </item>
-        <item name="5_content_discard">@drawable/5_content_discard_dark </item>
-        <item name="5_content_copy">@drawable/5_content_copy_dark </item>
-        <item name="5_content_paste">@drawable/5_content_paste_dark </item>
-        <item name="5_content_undo">@drawable/5_content_undo_dark </item>
-        <item name="5_content_remove">@drawable/5_content_remove_dark </item>
-        <item name="6_social_share">@drawable/6_social_share_dark </item>
+        <item name="navigation_refresh">@drawable/navigation_refresh_dark </item>
+        <item name="action_search">@drawable/action_search_dark </item>
+        <item name="action_settings">@drawable/action_settings_dark </item>
+        <item name="content_new">@drawable/content_new_dark </item>
+        <item name="content_new_event">@drawable/content_new_event_dark </item>
+        <item name="content_discard">@drawable/content_discard_dark </item>
+        <item name="content_copy">@drawable/content_copy_dark </item>
+        <item name="content_paste">@drawable/content_paste_dark </item>
+        <item name="content_undo">@drawable/content_undo_dark </item>
+        <item name="content_remove">@drawable/content_remove_dark </item>
+        <item name="social_share">@drawable/social_share_dark </item>
 
         <!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
         <!-- activated state doesnt exist before honeycomb -->
@@ -29,17 +29,17 @@
     </style>
 
     <style name="ThemeHoloLight" parent="@android:style/Theme.DeviceDefault.Light">
-        <item name="1_navigation_refresh">@drawable/1_navigation_refresh_light </item>
-        <item name="2_action_search">@drawable/2_action_search_light </item>
-        <item name="2_action_settings">@drawable/2_action_settings_light </item>
-        <item name="5_content_new">@drawable/5_content_new_light </item>
-        <item name="5_content_new_event">@drawable/5_content_new_event_light </item>
-        <item name="5_content_discard">@drawable/5_content_discard_light </item>
-        <item name="5_content_copy">@drawable/5_content_copy_light </item>
-        <item name="5_content_paste">@drawable/5_content_paste_light </item>
-        <item name="5_content_undo">@drawable/5_content_undo_light </item>
-        <item name="5_content_remove">@drawable/5_content_remove_light </item>
-        <item name="6_social_share">@drawable/6_social_share_light </item>
+        <item name="navigation_refresh">@drawable/navigation_refresh_light </item>
+        <item name="action_search">@drawable/action_search_light </item>
+        <item name="action_settings">@drawable/action_settings_light </item>
+        <item name="content_new">@drawable/content_new_light </item>
+        <item name="content_new_event">@drawable/content_new_event_light </item>
+        <item name="content_discard">@drawable/content_discard_light </item>
+        <item name="content_copy">@drawable/content_copy_light </item>
+        <item name="content_paste">@drawable/content_paste_light </item>
+        <item name="content_undo">@drawable/content_undo_light </item>
+        <item name="content_remove">@drawable/content_remove_light </item>
+        <item name="social_share">@drawable/social_share_light </item>
 
         <!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
         <item name="my_list_selector">@android:color/transparent</item>
@@ -49,17 +49,17 @@
     </style>
 
     <style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.DeviceDefault.Light">
-        <item name="1_navigation_refresh">@drawable/1_navigation_refresh_light </item>
-        <item name="2_action_search">@drawable/2_action_search_light </item>
-        <item name="2_action_settings">@drawable/2_action_settings_light </item>
-        <item name="5_content_new">@drawable/5_content_new_light </item>
-        <item name="5_content_new_event">@drawable/5_content_new_event_light </item>
-        <item name="5_content_discard">@drawable/5_content_discard_light </item>
-        <item name="5_content_copy">@drawable/5_content_copy_light </item>
-        <item name="5_content_paste">@drawable/5_content_paste_light </item>
-        <item name="5_content_undo">@drawable/5_content_undo_light </item>
-        <item name="5_content_remove">@drawable/5_content_remove_light </item>
-        <item name="6_social_share">@drawable/6_social_share_light </item>
+        <item name="navigation_refresh">@drawable/navigation_refresh_light </item>
+        <item name="action_search">@drawable/action_search_light </item>
+        <item name="action_settings">@drawable/action_settings_light </item>
+        <item name="content_new">@drawable/content_new_light </item>
+        <item name="content_new_event">@drawable/content_new_event_light </item>
+        <item name="content_discard">@drawable/content_discard_light </item>
+        <item name="content_copy">@drawable/content_copy_light </item>
+        <item name="content_paste">@drawable/content_paste_light </item>
+        <item name="content_undo">@drawable/content_undo_light </item>
+        <item name="content_remove">@drawable/content_remove_light </item>
+        <item name="social_share">@drawable/social_share_light </item>
 
         <!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
         <item name="my_list_selector">@android:color/transparent</item>
@@ -69,17 +69,17 @@
     </style>
 
     <style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.DeviceDefault.Dialog">
-        <item name="1_navigation_refresh">@drawable/1_navigation_refresh_dark </item>
-        <item name="2_action_search">@drawable/2_action_search_dark </item>
-        <item name="2_action_settings">@drawable/2_action_settings_dark </item>
-        <item name="5_content_new">@drawable/5_content_new_dark </item>
-        <item name="5_content_new_event">@drawable/5_content_new_event_dark </item>
-        <item name="5_content_discard">@drawable/5_content_discard_dark </item>
-        <item name="5_content_copy">@drawable/5_content_copy_dark </item>
-        <item name="5_content_paste">@drawable/5_content_paste_dark </item>
-        <item name="5_content_undo">@drawable/5_content_undo_dark </item>
-        <item name="5_content_remove">@drawable/5_content_remove_dark </item>
-        <item name="6_social_share">@drawable/6_social_share_dark </item>
+        <item name="navigation_refresh">@drawable/navigation_refresh_dark </item>
+        <item name="action_search">@drawable/action_search_dark </item>
+        <item name="action_settings">@drawable/action_settings_dark </item>
+        <item name="content_new">@drawable/content_new_dark </item>
+        <item name="content_new_event">@drawable/content_new_event_dark </item>
+        <item name="content_discard">@drawable/content_discard_dark </item>
+        <item name="content_copy">@drawable/content_copy_dark </item>
+        <item name="content_paste">@drawable/content_paste_dark </item>
+        <item name="content_undo">@drawable/content_undo_dark </item>
+        <item name="content_remove">@drawable/content_remove_dark </item>
+        <item name="social_share">@drawable/social_share_dark </item>
 
         <!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
         <item name="my_list_selector">@android:color/transparent</item>

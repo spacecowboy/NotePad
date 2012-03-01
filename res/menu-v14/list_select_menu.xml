@@ -8,13 +8,13 @@
         android:title="@string/menu_share"/>
     <item
         android:id="@+id/modal_copy"
-        android:icon="?5_content_copy"
+        android:icon="?content_copy"
         android:showAsAction="ifRoom"
         android:title="@string/menu_copy"/>
     <item
         android:id="@+id/modal_action_delete"
         android:actionProviderClass="com.nononsenseapps.notepad.DeleteActionProvider"
-        android:icon="?5_content_discard"
+        android:icon="?content_discard"
         android:showAsAction="ifRoom"
         android:title="@string/menu_delete"/>
 

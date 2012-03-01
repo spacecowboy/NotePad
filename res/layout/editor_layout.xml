@@ -56,7 +56,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:background="@android:color/transparent"
-                    android:src="?5_content_remove"
+                    android:src="?content_remove"
                     android:contentDescription="Clear due date"/>
             </LinearLayout>
         </RelativeLayout>
