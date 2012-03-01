@@ -327,16 +327,14 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		}
 		if (freq == 0)
 			prefSyncFreq.setSummary(R.string.manual);
+		else if (freq == 60)
+			prefSyncFreq.setSummary(R.string.onehour);
+		else if (freq == 1440)
+			prefSyncFreq.setSummary(R.string.oneday);
+		else if (freq > 60)
+			prefSyncFreq.setSummary("" + freq/60 + " " + getText(R.string.hours).toString());
 		else
-			prefSyncFreq.setSummary(R.string.automatic);
-//		else if (freq == 60)
-//			prefSyncFreq.setSummary(R.string.onehour);
-//		else if (freq == 1440)
-//			prefSyncFreq.setSummary(R.string.oneday);
-//		else if (freq > 60)
-//			prefSyncFreq.setSummary("" + freq/60 + " " + getText(R.string.hours).toString());
-//		else
-//			prefSyncFreq.setSummary("" + freq + " " + getText(R.string.minutes).toString());
+			prefSyncFreq.setSummary("" + freq + " " + getText(R.string.minutes).toString());
 	}
 
 	/**
