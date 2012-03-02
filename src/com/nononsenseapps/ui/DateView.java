@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2012 Jonas Kalderstam
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.nononsenseapps.ui;
 
 import java.util.Calendar;
@@ -18,8 +34,8 @@ import android.widget.TextView;
 public class DateView extends TextView {
 	private static final int SECONDS_PER_DAY = 3600;
 	//private String day = "E, d MMM";
-	private String day = "d MMM";
-	private String time = "kk:mm";
+	public static final String day = "MMM d";
+	public static final String time = "kk:mm";
 
 	public DateView(Context context) {
 		super(context);
@@ -42,15 +58,15 @@ public class DateView extends TextView {
 		}
 	}
 	
-	public CharSequence toDate(String time3339) {
+	public static CharSequence toDate(String time3339) {
 		Time time = new Time(Time.getCurrentTimezone());
 		time.parse3339(time3339);
 		
-		return toDate(time.toMillis(false));
+		return toDate(day, time.toMillis(false));
 	}
 
-	public CharSequence toDate(long msecs) {
-		String format = day;
+	public static CharSequence toDate(String format, long msecs) {
+		//String format = day;
 
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTimeInMillis(msecs);

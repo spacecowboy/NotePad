@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2012 Jonas Kalderstam
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.nononsenseapps.notepad;
 
 import java.util.ArrayList;
@@ -75,17 +91,17 @@ public class FragmentLayout extends Activity implements
 	private ExtrasCursorAdapter mSpinnerAdapter;
 	private long currentListId = -1;
 	private int currentListPos = 0;
-	private boolean unSelected = true; // Indicates that no list has been
-										// selected yet. Only used on first
-										// start up
 
-	private int prevNumberOfLists = -1;
-	private long createdListId = -1;
+	private long listIdToSelect = -1;
+	private boolean beforeBoot = false; // Used to indicate the intent handling
+										// how to select items
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// Must set theme before this
 		super.onCreate(savedInstanceState);
+
+		Log.d(TAG, "onCreate");
 
 		LANDSCAPE_MODE = getResources().getBoolean(R.bool.useLandscapeView);
 		AT_LEAST_ICS = getResources()
@@ -124,7 +140,6 @@ public class FragmentLayout extends Activity implements
 
 		// This will listen for navigation callbacks
 		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
-		getLoaderManager().initLoader(0, null, this);
 
 		// XML makes sure notes list is displayed. And editor too in landscape
 		// if (lightTheme)
@@ -142,7 +157,15 @@ public class FragmentLayout extends Activity implements
 		// So editor can access it
 		ONDELETELISTENER = this;
 
+		// Set a default list to open if one is set
+		listIdToSelect = PreferenceManager.getDefaultSharedPreferences(this)
+				.getLong(DEFAULTLIST, -1);
+
+		// Handle the intent first, so we know what to possibly select once the
+		// loader is finished
+		beforeBoot = true;
 		onNewIntent(getIntent());
+		getLoaderManager().initLoader(0, null, this);
 	}
 
 	@Override
@@ -156,7 +179,7 @@ public class FragmentLayout extends Activity implements
 		MenuItem deleteList = menu.findItem(R.id.menu_deletelist);
 		if (deleteList != null) {
 			// Only show this button if there is a list to create it in
-			if (mSpinnerAdapter.getCount() == 0  || currentListId < 0) {
+			if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
 				deleteList.setVisible(false);
 			} else {
 				deleteList.setVisible(true);
@@ -174,7 +197,7 @@ public class FragmentLayout extends Activity implements
 		MenuItem defaultList = menu.findItem(R.id.menu_setdefaultlist);
 		if (defaultList != null) {
 			// Only show this button if there is a proper list showing
-			if (mSpinnerAdapter.getCount() == 0  || currentListId < 0) {
+			if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
 				defaultList.setVisible(false);
 			} else {
 				defaultList.setVisible(true);
@@ -217,9 +240,9 @@ public class FragmentLayout extends Activity implements
 	@Override
 	protected void onNewIntent(Intent intent) {
 		if (UI_DEBUG_PRINTS)
-			Log.d("FragmentLayout", "On New Intent list: " + list);
-		// Get the intent, verify the action and get the query
-		// Intent intent = getIntent();
+			Log.d("FragmentLayout", "On New Intent");
+
+		// Search
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			String query = intent.getStringExtra(SearchManager.QUERY);
 			// list.onQueryTextChange(query);
@@ -228,8 +251,12 @@ public class FragmentLayout extends Activity implements
 			} else if (list != null) {
 				list.onQueryTextSubmit(query);
 			}
+			// Edit or View a list or a note.
 		} else if (Intent.ACTION_EDIT.equals(intent.getAction())
 				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
+			if (UI_DEBUG_PRINTS)
+				Log.d("FragmentLayout", "On New Intent EDIT");
+			// First, if we should display a list
 			if (intent.getData() != null
 					&& intent.getData().getPath()
 							.startsWith(NotePad.Lists.PATH_VISIBLE_LIST_ID)) {
@@ -237,57 +264,89 @@ public class FragmentLayout extends Activity implements
 				String newId = intent.getData().getPathSegments()
 						.get(NotePad.Lists.ID_PATH_POSITION);
 				long listId = Long.parseLong(newId);
-				int pos = getPosOfId(listId);
-				if (pos > -1) {
-					// select it
-					ActionBar ab = getActionBar();
-					if (ab != null)
-						ab.setSelectedNavigationItem(pos);
-				}
+				// Handle it differently depending on if the app has already
+				// loaded or not.
+				openListFromIntent(listId);
 			} else if (intent.getData() != null
+					&& intent.getExtras() != null
 					&& intent.getData().getPath()
 							.startsWith(NotePad.Notes.PATH_VISIBLE_NOTE_ID)) {
 				if (list != null) {
 					long listId = intent.getExtras().getLong(
 							NotePad.Notes.COLUMN_NAME_LIST, -1);
-					int pos = getPosOfId(listId);
-					if (pos > -1) {
-						// select it
-						ActionBar ab = getActionBar();
-						if (ab != null) {
-							ab.setSelectedNavigationItem(pos);
-							list.handleNoteIntent(intent);
-						}
+					// Open the containing list if we have to. No need to change
+					// lists
+					// if we are already displaying all notes.
+					if (listId != -1 && currentListId != ALL_NOTES_ID
+							&& currentListId != listId) {
+						openListFromIntent(listId);
+					}
+					if (listId != -1) {
+						list.handleNoteIntent(intent);
 					}
 				}
 			}
 		} else if (Intent.ACTION_INSERT.equals(intent.getAction())) {
+			if (UI_DEBUG_PRINTS)
+				Log.d("FragmentLayout", "On New Intent INSERT");
 			if (intent.getType() != null
 					&& intent.getType().equals(NotePad.Lists.CONTENT_TYPE)
 					|| intent.getData() != null
 					&& intent.getData().equals(
 							NotePad.Lists.CONTENT_VISIBLE_URI)) {
 				// get Title
-				String title = intent.getExtras().getString(
-						NotePad.Lists.COLUMN_NAME_TITLE, "");
-				createList(title);
+				if (intent.getExtras() != null) {
+					String title = intent.getExtras().getString(
+							NotePad.Lists.COLUMN_NAME_TITLE, "");
+					createList(title);
+				}
 			} else if (intent.getType() != null
 					&& intent.getType().equals(NotePad.Notes.CONTENT_TYPE)
 					|| intent.getData() != null
 					&& intent.getData().equals(
 							NotePad.Notes.CONTENT_VISIBLE_URI)) {
-				if (list != null) {
+				Log.d("FragmentLayout", "INSERT NOTE");
+				if (list != null && intent.getExtras() != null) {
 					long listId = intent.getExtras().getLong(
 							NotePad.Notes.COLUMN_NAME_LIST, -1);
-					int pos = getPosOfId(listId);
-					if (pos > -1) {
-						// select it
-						ActionBar ab = getActionBar();
-						if (ab != null) {
-							ab.setSelectedNavigationItem(pos);
-							list.handleNoteIntent(intent);
-						}
+					// Open the containing list if we have to. No need to change
+					// lists
+					// if we are already displaying all notes.
+					if (listId != -1 && currentListId != ALL_NOTES_ID
+							&& currentListId != listId) {
+						openListFromIntent(listId);
 					}
+					if (listId != -1) {
+						list.handleNoteIntent(intent);
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * This is meant to be called from the intent handling. It handles the two
+	 * possible cases that this app was already running when it received the
+	 * intent or it was started fresh with the intent meaning we have to handle
+	 * the opening asynchronously.
+	 * 
+	 * @param listId
+	 */
+	private void openListFromIntent(long listId) {
+		if (beforeBoot) {
+			// Set the variable to be selected after the loader has
+			// finished its query
+			listIdToSelect = listId;
+			Log.d(TAG, "beforeBoot setting future id");
+		} else {
+			// Select the list directly since the loader is done
+			int pos = getPosOfId(listId);
+			Log.d("FragmentLayout", "pos: " + pos);
+			if (pos > -1) {
+				// select it
+				ActionBar ab = getActionBar();
+				if (ab != null && ab.getSelectedNavigationIndex() != pos) {
+					ab.setSelectedNavigationItem(pos);
 				}
 			}
 		}
@@ -416,7 +475,7 @@ public class FragmentLayout extends Activity implements
 						Long.parseLong(listUri.getPathSegments().get(
 								NotePad.Lists.ID_PATH_POSITION)));
 				// Select list
-				createdListId = Long.parseLong(listUri.getLastPathSegment());
+				listIdToSelect = Long.parseLong(listUri.getLastPathSegment());
 			}
 		}
 	}
@@ -920,6 +979,12 @@ public class FragmentLayout extends Activity implements
 	}
 
 	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		Log.d(TAG, "onDestroy");
+	}
+
+	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 		if (UI_DEBUG_PRINTS)
 			Log.d(TAG, "onNavigationItemSelected pos: " + itemPosition
@@ -956,42 +1021,14 @@ public class FragmentLayout extends Activity implements
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		mSpinnerAdapter.swapCursor(data);
 
-		if (prevNumberOfLists == -1) {
-			prevNumberOfLists = mSpinnerAdapter.getCount();
-			// First start. Also check if we should auto-open a list
-			if (unSelected && currentListId < 0) {
-				currentListId = PreferenceManager.getDefaultSharedPreferences(
-						this).getLong(DEFAULTLIST, -1);
-				if (currentListId > -1) {
-					int position = getPosOfId(currentListId);
-					if (position > -1) {
-						currentListPos = position;
-					} else {
-						// User must have deleted that list. Remove knowledge of
-						// default list
-						SharedPreferences.Editor prefEditor = PreferenceManager
-								.getDefaultSharedPreferences(this).edit();
-						prefEditor.remove(DEFAULTLIST);
-						prefEditor.commit();
-					}
-				}
+		if (listIdToSelect > -1 || listIdToSelect == ALL_NOTES_ID) {
+			int position = getPosOfId(listIdToSelect);
+			if (position > -1) {
+				currentListPos = position;
+				currentListId = listIdToSelect;
+				getActionBar().setSelectedNavigationItem(position);
 			}
-			if (unSelected && currentListPos < prevNumberOfLists) {
-				unSelected = false;
-				getActionBar().setSelectedNavigationItem(currentListPos);
-			}
-		} else if (prevNumberOfLists < mSpinnerAdapter.getCount()) {
-			// User created a list, we want to display it
-			prevNumberOfLists = mSpinnerAdapter.getCount();
-			// Now select it.
-			if (createdListId > -1) {
-				getActionBar().setSelectedNavigationItem(
-						getPosOfId(createdListId));
-				createdListId = -1;
-			}
-		} else {
-			// Deleted a list maybe
-			prevNumberOfLists = mSpinnerAdapter.getCount();
+			listIdToSelect = -1;
 		}
 
 		if (optionsMenu != null) {
@@ -1005,6 +1042,7 @@ public class FragmentLayout extends Activity implements
 				}
 			}
 		}
+		beforeBoot = false; // Need to do it here
 	}
 
 	@Override

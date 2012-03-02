@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (C) 2012 Jonas Kalderstam
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -196,7 +196,10 @@ public final class NotePad {
 		
       //public static final String DEFAULT_SORT_TYPE = COLUMN_NAME_TITLE + " COLLATE NOCASE";
       public static final String ALPHABETIC_SORT_TYPE = COLUMN_NAME_TITLE + " COLLATE NOCASE";
-      public static final String DUEDATE_SORT_TYPE = COLUMN_NAME_DUE_DATE;
+      // We want items with no due dates to be placed at the end, hence the sql magic
+      // Coalesce returns the first non-null argument
+      public static final String MODIFICATION_SORT_TYPE = COLUMN_NAME_MODIFICATION_DATE;
+      public static final String DUEDATE_SORT_TYPE = "CASE WHEN "+ COLUMN_NAME_DUE_DATE + " IS NULL OR "+ COLUMN_NAME_DUE_DATE + " IS '' THEN 1 ELSE 0 END, " + COLUMN_NAME_DUE_DATE;
       public static final String POSITION_SORT_TYPE = COLUMN_NAME_POSITION;
       
       public static final String ASCENDING_SORT_ORDERING = "ASC";

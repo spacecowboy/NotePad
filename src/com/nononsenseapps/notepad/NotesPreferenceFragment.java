@@ -1,3 +1,19 @@
+/*
+ * Copyright (C) 2012 Jonas Kalderstam
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.nononsenseapps.notepad;
 
 import com.nononsenseapps.notepad.sync.SyncAdapter;
@@ -39,6 +55,10 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 	public static final String THEME_LIGHT = "light";
 	public static final String THEME_LIGHT_ICS_AB = "light_ab";
 	private static final String TAG = "NotesPreferenceFragment";
+	
+	public static final String DUEDATESORT ="duedate";
+	public static final String TITLESORT ="title COLLATE NOCASE";
+	public static final String MODIFIEDSORT ="modified";
 
 	private Preference prefSortOrder;
 	private Preference prefSortType;
@@ -68,7 +88,7 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		addPreferencesFromResource(R.xml.main_preferences);
 
 		SUMMARY_SORT_TYPE = getText(
-				R.string.settings_summary_sort_type_serverposition).toString();
+				R.string.settings_summary_sort_type_duedate).toString();
 
 		SUMMARY_SORT_ORDER = getText(R.string.settings_summary_sort_order_asc)
 				.toString();
@@ -266,16 +286,17 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 
 	private void setTypeSummary(SharedPreferences sharedPreferences) {
 		String value = sharedPreferences.getString(KEY_SORT_TYPE,
-				NotePad.Notes.DEFAULT_SORT_TYPE);
+				TITLESORT);
 		String summary = "";
-		if (NotePad.Notes.ALPHABETIC_SORT_TYPE.equals(value))
+		if (TITLESORT.equals(value))
 			summary = getText(R.string.settings_summary_sort_type_alphabetic)
 					.toString();
-		else if (NotePad.Notes.DUEDATE_SORT_TYPE.equals(value))
+		else if (DUEDATESORT.equals(value))
 			summary = getText(R.string.settings_summary_sort_type_duedate)
 					.toString();
-		else if (NotePad.Notes.POSITION_SORT_TYPE.equals(value))
-			summary = getText(R.string.settings_summary_sort_type_serverposition).toString();
+		else if (MODIFIEDSORT.equals(value))
+			summary = getText(R.string.settings_summary_sort_type_modified)
+			.toString();
 		SUMMARY_SORT_TYPE = summary;
 		prefSortType.setSummary(summary);
 	}
@@ -325,14 +346,16 @@ public class NotesPreferenceFragment extends PreferenceFragment implements
 		}
 		if (freq == 0)
 			prefSyncFreq.setSummary(R.string.manual);
-		else if (freq == 60)
-			prefSyncFreq.setSummary(R.string.onehour);
-		else if (freq == 1440)
-			prefSyncFreq.setSummary(R.string.oneday);
-		else if (freq > 60)
-			prefSyncFreq.setSummary("" + freq/60 + " " + getText(R.string.hours).toString());
 		else
-			prefSyncFreq.setSummary("" + freq + " " + getText(R.string.minutes).toString());
+			prefSyncFreq.setSummary(R.string.automatic);
+//		else if (freq == 60)
+//			prefSyncFreq.setSummary(R.string.onehour);
+//		else if (freq == 1440)
+//			prefSyncFreq.setSummary(R.string.oneday);
+//		else if (freq > 60)
+//			prefSyncFreq.setSummary("" + freq/60 + " " + getText(R.string.hours).toString());
+//		else
+//			prefSyncFreq.setSummary("" + freq + " " + getText(R.string.minutes).toString());
 	}
 
 	/**

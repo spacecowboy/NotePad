@@ -13,12 +13,14 @@
     <string-array name="sorting_preference">
         <item>Titel</item>
         <item>Fälligkeitsdatum</item>
+        <item>Änderungsdatum</item>
        <!--  <item>Serverposition</item> -->
     </string-array>
 
     <string-array name="sortingvalues_preference">
         <item>title COLLATE NOCASE</item>
         <item>duedate</item>
+        <item>modified</item>
        <!--  <item>gtasks_position</item> -->
     </string-array>
     
@@ -49,7 +51,8 @@
         <item>2 Stunden</item>
         <item>4 Stunden</item>
         <item>8 Stunden</item> -->
-        <item>1 Tag</item>
+        <!-- <item>1 Tag</item> -->
+        <item>Automatisch</item>
 	</string-array>
 	<string-array name="sync_freqvalues_preference">
 	    <item>0</item>

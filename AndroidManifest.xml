@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2007 The Android Open Source Project
+     Copyright (C) 2012 Jonas Kalderstam
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -24,12 +24,13 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
-    package="com.nononsenseapps.notepad_donate"
-    android:versionCode="19"
-    android:versionName="3.0.7" >
+    package="com.nononsenseapps.notepad"
+    android:versionCode="20"
+    android:versionName="3.1" >
 
+    <!-- App crashes on 3.0. No one uses 3.1. So minimum version is set to 3.2 now -->
     <uses-sdk
-        android:minSdkVersion="11"
+        android:minSdkVersion="13"
         android:targetSdkVersion="15" />
 
     <!-- For connection -->
@@ -58,22 +59,30 @@
         android:permissionGroup="android.permission-group.PERSONAL_INFO"
         android:protectionLevel="normal" />
 
+    <uses-permission android:name="com.nononsenseapps.notepad.permissions.read" />
+    <uses-permission android:name="com.nononsenseapps.notepad.permissions.write" />
+    <uses-permission android:name="android.permission.BIND_REMOTEVIEWS" />
+
     <application
         android:hardwareAccelerated="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name" >
-
+        <!--
+        Widgets do NOT have read permission, hence the removal of the permission...
+        To not get a SecurityException on a Widget, you must have exported=true and not require
+        any read permissions.
+        -->
         <provider
             android:name="com.nononsenseapps.notepad.NotePadProvider"
             android:authorities="com.nononsenseapps.donate.NotePad"
             android:enabled="true"
             android:exported="true"
+            android:grantUriPermissions="true"
             android:label="@string/app_name"
-            android:readPermission="com.nononsenseapps.notepad.permissions.read"
             android:syncable="true"
             android:writePermission="com.nononsenseapps.notepad.permissions.write" >
-            <grant-uri-permission android:pathPattern=".*" />
         </provider>
+        <!-- removed android:readPermission="com.nononsenseapps.notepad.permissions.read" -->
 
         <activity
             android:name="com.nononsenseapps.notepad.FragmentLayout"
@@ -166,8 +175,6 @@
             android:name="com.nononsenseapps.notepad.sync.SyncService"
             android:exported="true" >
 
-            <!-- android:process=":sync" -->
-
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -176,6 +183,28 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
+
+        <!-- List Widget -->
+        <receiver android:name="com.nononsenseapps.notepad.widget.ListWidgetProvider" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/listwidgetinfo" />
+        </receiver>
+
+        <service
+            android:name="com.nononsenseapps.notepad.widget.ListWidgetService"
+            android:exported="false"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
+
+        <activity android:name="com.nononsenseapps.notepad.widget.ListWidgetConfigure" android:theme="@style/ThemeHolo">
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>

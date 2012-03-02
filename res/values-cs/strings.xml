@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+    <string name="app_name">Poznámky</string>
+
+    <string name="title_create">Nová poznámka</string>
+    <string name="title_edit">Upravit: %1$s</string>
+
+    <string name="menu_add">Nová poznámka</string>
+    <string name="menu_delete">Odstranit</string>
+    <string name="menu_revert">Vrátit změny</string>
+    <string name="menu_copy">Kopírovat poznámku</string>
+    <string name="menu_cancel">Zrušit</string>
+    <string name="menu_setcompleted">Označit dokončeno</string>
+    <string name="menu_setuncompleted">Označit nedokončeno</string>
+    <string name="menu_deletelist">Odstranit seznam</string>
+    <string name="menu_sync">Obnovit</string>
+    <string name="menu_share">Sdílet</string>
+    <string name="menu_preferences">Nastavení</string>
+    <string name="menu_renamelist">Přejmenovat seznam</string>
+    <string name="menu_createlist">Vytvořit seznam</string>
+    <string name="menu_clearcompleted">Odstranit dokončené</string>
+    <string name="menu_setdefaultlist">Nastavit jako výchozí seznam</string>
+    
+    <string name="delete_list_warning">Opravdu chcete odstranit tento seznam? Seznam bude nevratně odstraněn.</string>
+    
+    <string name="editor_due_date_hint">Termín dokončení</string>
+    <string name="editor_title_hint">Název</string>
+    <string name="editor_note_hint">Poznámka</string>
+
+    <string name="resolve_edit">Upravit poznámku</string>
+
+    <string name="error_title">Chyba</string>
+    <string name="error_message">Chyba při načítání poznámky</string>
+    
+    <string name="search_hint">Hledat</string>
+    <string name="settings_theme">Aktuální téma</string>
+    <string name="settings_theme_dialog">Zvolte téma</string>
+    <string name="settings_cat_theme">Téma</string>
+    <string name="settings_cat_sorting">Řazení</string>
+    <string name="settings_sorting_type">Řadit podle</string>
+    <string name="settings_sorting_type_dialog">Řadit podle</string>
+    <string name="settings_sorting_order">Pořadí</string>
+    <string name="settings_sorting_order_dialog">Způsob řazení</string>
+    
+    <string name="settings_summary_sort_type_alphabetic">Název</string>
+    <string name="settings_summary_sort_type_modified">Poslední upravené</string>
+    <string name="settings_summary_sort_type_duedate">Termín dokončení</string>
+    <string name="settings_summary_sort_type_serverposition">Pozice na serveru</string>
+    <string name="settings_summary_sort_order_asc">Vzestupně</string>
+    <string name="settings_summary_sort_order_desc">Sestupně</string>
+    
+    <string name="settings_summary_theme_dark">Tmavé</string>
+    <string name="settings_summary_theme_light">Světlé</string>
+    <string name="settings_summary_theme_light_dark_ab">Světlé, tmavý panel akcí</string>
+    
+    <string name="settings_cat_appearance">Vzhled</string>
+    <string name="settings_font_screen">Nastavení písma</string>
+    <string name="settings_font_screen_summary">Můžete změnit vzhled a velikost písma</string>
+    <string name="settings_cat_font_editor">Editor</string>
+    <string name="settings_font_type">Písmo</string>
+    <string name="settings_font_type_dialog">Zvolte písmo</string>
+    <string name="settings_font_size">Velikost písma</string>
+    <string name="preference_preview_text">Takhle bude vypadat písmo v editoru</string>
+    <string name="settings_text_preview_title">Náhled</string>
+    
+    <string name="monospace">Monospace</string>
+    <string name="sans">Sans</string>
+    <string name="serif">Serif</string>
+    <string name="settings_sync_freq_title">Interval synchronizace</string>
+    <string name="settings_account_title">Zvolte účet</string>
+    <string name="settings_account_summary">Zvolte účet pro synchronizaci</string>
+    <string name="settings_sync_enable_title">Synchronizovat s Google Úkoly</string>
+    <string name="settings_sync_enable_summary">Synchronizovat poznámky s vaším Google účtem</string>
+    <string name="settings_cat_syncing">Synchronizace</string>
+    
+    <string name="manual">Ručně</string>
+    <string name="minutes">minuty</string>
+    <string name="hours">hodiny</string>
+    <string name="onehour">1 hodina</string>
+    <string name="oneday">1 den</string>
+    
+    <string name="yes">Ano</string>
+    <string name="no">Ne</string>
+    <string name="ok">OK</string>
+    
+    <string name="show_from_all_lists">Všechny seznamy</string>
+    <string name="default_list_needed_warning">Nejprve zvolte výchozí seznam</string>
+    <string name="reverted">Změny vráceny</string>
+    <string name="notecopied">Zkopírováno</string>
+    <string name="deleted">Odstraněno</string>
+    <string name="items">poznámek</string>
+    
+    <string name="permission_read_label">číst poznámky a seznamy</string>
+    <string name="permission_read_desc">Povolit aplikaci čtení vašich poznámek a souvisejících seznamů.</string>
+    <string name="permission_write_label">upravovat poznámky a seznamy</string>
+    <string name="permission_write_desc">Povolit aplikaci vkládat, upravovat a odstraňovat poznámky a seznamy.</string>
+    
+    <string name="settings_header_list">Seznam nastavení</string>
+    <string name="settings_header_list_summary"></string>
+    <string name="settings_header_appearance">@string/settings_cat_appearance</string>
+    <string name="settings_header_appearance_summary"></string>
+    <string name="settings_header_sync">@string/settings_cat_syncing</string>
+    <string name="settings_header_sync_summary"></string>
+    <string name="settings_list_dialog">Vyberte seznam</string>
+    <string name="settings_list">Seznam</string>
+    <string name="settings_list_summary"></string>
+    <string name="automatic">Automaticky</string>
+</resources>

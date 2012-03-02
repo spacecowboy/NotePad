@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (C) 2012 Jonas Kalderstam
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,11 @@ package com.nononsenseapps.notepad;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.notepad_donate.R;
+import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 
+import android.appwidget.AppWidgetManager;
 import android.content.ClipDescription;
+import android.content.ComponentName;
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
@@ -73,7 +76,7 @@ public class NotePadProvider extends ContentProvider implements
 	/**
 	 * A projection map used to select columns from the database
 	 */
-	private static HashMap<String, String> sNotesProjectionMap;
+	public static HashMap<String, String> sNotesProjectionMap;
 
 	private static HashMap<String, String> sListsProjectionMap;
 	private static HashMap<String, String> sGTasksProjectionMap;
@@ -310,10 +313,10 @@ public class NotePadProvider extends ContentProvider implements
 	 * This class helps open, create, and upgrade the database file. Set to
 	 * package visibility for testing purposes.
 	 */
-	static class DatabaseHelper extends SQLiteOpenHelper {
+	public static class DatabaseHelper extends SQLiteOpenHelper {
 		Context context;
 
-		DatabaseHelper(Context context) {
+		public DatabaseHelper(Context context) {
 
 			// calls the super constructor, requesting the default cursor
 			// factory.
@@ -551,9 +554,6 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	@Override
 	public boolean onCreate() {
-		if (FragmentLayout.UI_DEBUG_PRINTS || SyncAdapter.SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "onCreate");
-
 		// Creates a new helper object. Note that the database itself isn't
 		// opened until
 		// something tries to access it, and it's only created if it doesn't
@@ -595,8 +595,8 @@ public class NotePadProvider extends ContentProvider implements
 		case VISIBLE_NOTES:
 			// Add a selection criteria, but then fall through for normal note
 			// handling.
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0");
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0 AND ");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0 AND ");
 			qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS 0");
 		case NOTES:
 			qb.setTables(NotePad.Notes.TABLE_NAME);
@@ -636,9 +636,9 @@ public class NotePadProvider extends ContentProvider implements
 		case VISIBLE_NOTE_ID:
 			// Add a selection criteria, but then fall through for normal note
 			// handling.
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0");
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0");
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS 0");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0 AND ");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0 AND ");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS 0 AND ");
 		case NOTE_ID:
 			qb.setTables(NotePad.Notes.TABLE_NAME);
 			qb.setProjectionMap(sNotesProjectionMap);
@@ -651,7 +651,7 @@ public class NotePadProvider extends ContentProvider implements
 		case VISIBLE_LIST_ID:
 			// Add a selection criteria, but then fall through for normal
 			// handling.
-			qb.appendWhere(NotePad.Lists.COLUMN_NAME_DELETED + " IS 0");
+			qb.appendWhere(NotePad.Lists.COLUMN_NAME_DELETED + " IS 0 AND ");
 		case LISTS_ID:
 			qb.appendWhere(BaseColumns._ID + // the name of the ID column
 					"=" +
@@ -1087,6 +1087,8 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// And update widgets
+			updateAllWidgets();
 			return noteUri;
 		}
 
@@ -1160,6 +1162,8 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// And update widgets
+			updateAllWidgets();
 			return noteUri;
 		}
 
@@ -1218,6 +1222,8 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// And update widgets
+			updateAllWidgets();
 			return noteUri;
 		}
 
@@ -1278,6 +1284,8 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// And update widgets
+			updateAllWidgets();
 			return noteUri;
 		}
 
@@ -1288,6 +1296,7 @@ public class NotePadProvider extends ContentProvider implements
 
 	/**
 	 * Calls deleteListFromDb on all ids fetched from cursor.
+	 * 
 	 * @param db
 	 * @param cursor
 	 */
@@ -1302,7 +1311,7 @@ public class NotePadProvider extends ContentProvider implements
 
 			count += deleteListFromDb(db, Long.toString(id), null, null);
 		}
-		
+
 		return count;
 	}
 
@@ -1323,12 +1332,13 @@ public class NotePadProvider extends ContentProvider implements
 		count = deleteNotesFromDb(db, cursor);
 
 		cursor.close();
-		
+
 		return count;
 	}
 
 	/**
 	 * Also deletes from gtasklists table and calls deleteNotesInListFromDb
+	 * 
 	 * @param db
 	 * @param id
 	 * @param where
@@ -1339,7 +1349,7 @@ public class NotePadProvider extends ContentProvider implements
 			String where, String[] whereArgs) {
 		if (FragmentLayout.UI_DEBUG_PRINTS || SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "Deleting list from DB: " + id);
-		
+
 		String finalWhere = BaseColumns._ID + " = " + id;
 
 		// If there were additional selection criteria, append them to the
@@ -1357,7 +1367,7 @@ public class NotePadProvider extends ContentProvider implements
 					NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS ?",
 					new String[] { id });
 		}
-		
+
 		// And notes in this list
 		deleteNotesInListFromDb(db, id);
 
@@ -1401,7 +1411,7 @@ public class NotePadProvider extends ContentProvider implements
 			String where, String[] whereArgs) {
 		if (FragmentLayout.UI_DEBUG_PRINTS || SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "Deleting note from DB: " + id);
-		
+
 		String finalWhere = BaseColumns._ID + " = " + id;
 
 		// If there were additional selection criteria, append them to the
@@ -1495,14 +1505,16 @@ public class NotePadProvider extends ContentProvider implements
 			cursor = db.query(NotePad.Lists.TABLE_NAME,
 					new String[] { NotePad.Lists._ID }, where, whereArgs, null,
 					null, null);
-			
+
 			count = deleteListsFromDb(db, cursor);
 			cursor.close();
 
 			break;
 		case VISIBLE_LIST_ID:
 		case LISTS_ID:
-			count = deleteListFromDb(db, uri.getPathSegments().get(NotePad.Lists.ID_PATH_POSITION), where, whereArgs);
+			count = deleteListFromDb(db,
+					uri.getPathSegments().get(NotePad.Lists.ID_PATH_POSITION),
+					where, whereArgs);
 			break;
 
 		case GTASKS:
@@ -1568,6 +1580,8 @@ public class NotePadProvider extends ContentProvider implements
 		 * themselves for the provider are notified.
 		 */
 		getContext().getContentResolver().notifyChange(uri, null, false);
+		// And update widgets
+		updateAllWidgets();
 
 		// Returns the number of rows deleted.
 		return count;
@@ -1829,6 +1843,8 @@ public class NotePadProvider extends ContentProvider implements
 		 * themselves for the provider are notified.
 		 */
 		getContext().getContentResolver().notifyChange(uri, null, false);
+		// And update widgets
+		updateAllWidgets();
 
 		// Returns the number of rows updated.
 		return count;
@@ -1861,6 +1877,29 @@ public class NotePadProvider extends ContentProvider implements
 		}
 
 		return result;
+	}
+
+	/**
+	 * Instead of doing this in a service which might be killed, simply call
+	 * this whenever something is changed in here
+	 * 
+	 * Update all widgets's views as this database has changed somehow
+	 */
+	private void updateAllWidgets() {
+		AppWidgetManager appWidgetManager = AppWidgetManager
+				.getInstance(getContext().getApplicationContext());
+		int[] appWidgetIds = appWidgetManager
+				.getAppWidgetIds(new ComponentName(getContext()
+						.getApplicationContext(), ListWidgetProvider.class));
+		Log.d(TAG, "updateAllWidgets before: " + appWidgetIds.length);
+		if (appWidgetIds.length > 0) {
+			// Tell the widgets that the list items should be invalidated and
+			// refreshed!
+			// Will call onDatasetChanged in ListWidgetService, doing a new
+			// requery
+			appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds,
+					R.id.notes_list);
+		}
 	}
 
 	/**

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- For widget, handled by Android in ICS -->
+    <dimen name="widget_margin">0dp</dimen>
+
+</resources>

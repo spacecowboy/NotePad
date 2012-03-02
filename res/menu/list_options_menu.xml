@@ -3,21 +3,21 @@
 
     <item
         android:id="@+id/menu_add"
-        android:icon="?ic_action_compose"
+        android:icon="?content_new_event"
         android:orderInCategory="0"
         android:showAsAction="ifRoom"
         android:title="@string/menu_add"/>
     
     <item
         android:id="@+id/menu_sync"
-        android:icon="?ic_action_refresh"
+        android:icon="?navigation_refresh"
         android:orderInCategory="1"
         android:showAsAction="ifRoom"
         android:title="@string/menu_sync"/>
     
     <item android:id="@+id/menu_search"
           android:title="@string/search_hint"
-          android:icon="?ic_menu_search_holo"
+          android:icon="?action_search"
           android:showAsAction="ifRoom|collapseActionView"
           android:actionViewClass="android.widget.SearchView"
           android:orderInCategory="2"/> 
@@ -36,7 +36,6 @@
         android:title="@string/menu_renamelist"/>
     <item
         android:id="@+id/menu_deletelist"
-        android:icon="?ic_menu_clear_playlist"
         android:orderInCategory="12"
         android:showAsAction="never"
         android:title="@string/menu_deletelist"/>
@@ -52,7 +51,7 @@
         android:title="@string/menu_setdefaultlist"/>
     <item
         android:id="@+id/menu_preferences"
-        android:icon="?ic_menu_settings_holo"
+        android:icon="?action_settings"
         android:orderInCategory="15"
         android:showAsAction="never"
         android:title="@string/menu_preferences"/>
