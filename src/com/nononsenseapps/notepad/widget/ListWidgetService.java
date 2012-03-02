@@ -16,32 +16,18 @@
 
 package com.nononsenseapps.notepad.widget;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.nononsenseapps.notepad.FragmentLayout;
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.NotePadProvider;
 import com.nononsenseapps.notepad.NotesPreferenceFragment;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.NotePad.Notes;
-import com.nononsenseapps.notepad.R.id;
-import com.nononsenseapps.notepad.R.layout;
 import com.nononsenseapps.ui.DateView;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ContentUris;
 import android.content.SharedPreferences;
-import android.database.ContentObserver;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
-import android.preference.PreferenceManager;
-import android.util.Log;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
@@ -65,32 +51,24 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	private Cursor mCursor;
 	private int mAppWidgetId;
 
-	//private ListChecker observer;
 	private long listId = -1;
 
 	private static final String[] PROJECTION = new String[] {
 			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
-			NotePad.Notes.COLUMN_NAME_NOTE,
-			NotePad.Notes.COLUMN_NAME_LIST,
+			NotePad.Notes.COLUMN_NAME_NOTE, NotePad.Notes.COLUMN_NAME_LIST,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
 			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
-	private static final String TAG = "FACTORY";
 
 	public ListRemoteViewsFactory(Context context, Intent intent) {
 		mContext = context;
 		mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 				AppWidgetManager.INVALID_APPWIDGET_ID);
-		//observer = new ListChecker(null, mAppWidgetId);
 	}
 
 	public void onCreate() {
-		Log.d(TAG, "onCreate");
-//		mContext.getContentResolver().registerContentObserver(
-//				NotePad.Notes.CONTENT_URI, true, observer);
 	}
 
 	public void onDestroy() {
-//		mContext.getContentResolver().unregisterContentObserver(observer);
 		if (mCursor != null) {
 			mCursor.close();
 		}
@@ -165,7 +143,6 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	}
 
 	public void onDataSetChanged() {
-		Log.d(TAG, "onDataSetChanged");
 		// Refresh the cursor
 		if (mCursor != null) {
 			mCursor.close();
@@ -176,9 +153,13 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				ListWidgetConfigure.getSharedPrefsFile(mAppWidgetId),
 				Context.MODE_PRIVATE);
 		if (settings != null) {
-			listId  = Long.parseLong(settings.getString(ListWidgetConfigure.KEY_LIST, Integer.toString(FragmentLayout.ALL_NOTES_ID)));
-			
-			String sortChoice = settings.getString(ListWidgetConfigure.KEY_SORT_TYPE, NotesPreferenceFragment.DUEDATESORT);
+			listId = Long.parseLong(settings.getString(
+					ListWidgetConfigure.KEY_LIST,
+					Integer.toString(FragmentLayout.ALL_NOTES_ID)));
+
+			String sortChoice = settings.getString(
+					ListWidgetConfigure.KEY_SORT_TYPE,
+					NotesPreferenceFragment.DUEDATESORT);
 			String sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
 
 			if (NotesPreferenceFragment.DUEDATESORT.equals(sortChoice)) {
@@ -191,48 +172,26 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 			sortOrder += " "
 					+ settings.getString(ListWidgetConfigure.KEY_SORT_ORDER,
-									NotePad.Notes.DEFAULT_SORT_ORDERING);
-			
+							NotePad.Notes.DEFAULT_SORT_ORDERING);
+
 			String listWhere = null;
 			String[] listArg = null;
 			if (listId > -1) {
-				listWhere = NotePad.Notes.COLUMN_NAME_LIST + " IS ? AND " + NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?";
-				listArg = new String[] {Long.toString(listId), mContext.getText(R.string.gtask_status_uncompleted).toString()};
-				Log.d(TAG, "Using clause: " + listWhere + " with " + listArg[0]);
+				listWhere = NotePad.Notes.COLUMN_NAME_LIST + " IS ? AND "
+						+ NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?";
+				listArg = new String[] {
+						Long.toString(listId),
+						mContext.getText(R.string.gtask_status_uncompleted)
+								.toString() };
 			} else {
 				listWhere = NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?";
-				listArg = new String[] {mContext.getText(R.string.gtask_status_uncompleted).toString()};
+				listArg = new String[] { mContext.getText(
+						R.string.gtask_status_uncompleted).toString() };
 			}
-			
-			Log.d(TAG, "widgetId: " + mAppWidgetId);
-			
-			Log.d(TAG, "Using clause: " + listWhere);
 
-//			mCursor = mContext.getContentResolver().query(
-//					ListDBProvider.CONTENT_VISIBLE_URI, PROJECTION, listWhere, listArg,
-//					sortOrder);
 			mCursor = mContext.getContentResolver().query(
-					NotePad.Notes.CONTENT_VISIBLE_URI, PROJECTION, listWhere, listArg,
-					sortOrder);
+					NotePad.Notes.CONTENT_VISIBLE_URI, PROJECTION, listWhere,
+					listArg, sortOrder);
 		}
 	}
-
-//	private class ListChecker extends ContentObserver {
-//
-//		private int appWidgetId;
-//
-//		public ListChecker(Handler handler, int appWidgetId) {
-//			super(handler);
-//			this.appWidgetId = appWidgetId;
-//		}
-//
-//		@Override
-//		public void onChange(boolean selfchange) {
-//			Log.d("FACTORYObserver", "onChange");
-//			// Refresh the widget
-//			AppWidgetManager.getInstance(mContext)
-//					.notifyAppWidgetViewDataChanged(appWidgetId,
-//							R.id.notes_list);
-//		}
-//	}
 }

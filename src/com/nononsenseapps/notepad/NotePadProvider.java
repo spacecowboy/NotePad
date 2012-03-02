@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2007 The Android Open Source Project
+ * Copyright (C) 2012 Jonas Kalderstam
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@ import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 
 import android.appwidget.AppWidgetManager;
-import android.appwidget.AppWidgetProviderInfo;
 import android.content.ClipDescription;
 import android.content.ComponentName;
 import android.content.ContentProvider;
@@ -55,7 +54,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map.Entry;
 
 /**
@@ -1164,7 +1162,7 @@ public class NotePadProvider extends ContentProvider implements
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
 			// And update widgets
-						updateAllWidgets();
+			updateAllWidgets();
 			return noteUri;
 		}
 
@@ -1224,7 +1222,7 @@ public class NotePadProvider extends ContentProvider implements
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
 			// And update widgets
-						updateAllWidgets();
+			updateAllWidgets();
 			return noteUri;
 		}
 
@@ -1286,7 +1284,7 @@ public class NotePadProvider extends ContentProvider implements
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
 			// And update widgets
-						updateAllWidgets();
+			updateAllWidgets();
 			return noteUri;
 		}
 
@@ -1297,6 +1295,7 @@ public class NotePadProvider extends ContentProvider implements
 
 	/**
 	 * Calls deleteListFromDb on all ids fetched from cursor.
+	 * 
 	 * @param db
 	 * @param cursor
 	 */
@@ -1311,7 +1310,7 @@ public class NotePadProvider extends ContentProvider implements
 
 			count += deleteListFromDb(db, Long.toString(id), null, null);
 		}
-		
+
 		return count;
 	}
 
@@ -1332,12 +1331,13 @@ public class NotePadProvider extends ContentProvider implements
 		count = deleteNotesFromDb(db, cursor);
 
 		cursor.close();
-		
+
 		return count;
 	}
 
 	/**
 	 * Also deletes from gtasklists table and calls deleteNotesInListFromDb
+	 * 
 	 * @param db
 	 * @param id
 	 * @param where
@@ -1348,7 +1348,7 @@ public class NotePadProvider extends ContentProvider implements
 			String where, String[] whereArgs) {
 		if (FragmentLayout.UI_DEBUG_PRINTS || SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "Deleting list from DB: " + id);
-		
+
 		String finalWhere = BaseColumns._ID + " = " + id;
 
 		// If there were additional selection criteria, append them to the
@@ -1366,7 +1366,7 @@ public class NotePadProvider extends ContentProvider implements
 					NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS ?",
 					new String[] { id });
 		}
-		
+
 		// And notes in this list
 		deleteNotesInListFromDb(db, id);
 
@@ -1410,7 +1410,7 @@ public class NotePadProvider extends ContentProvider implements
 			String where, String[] whereArgs) {
 		if (FragmentLayout.UI_DEBUG_PRINTS || SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "Deleting note from DB: " + id);
-		
+
 		String finalWhere = BaseColumns._ID + " = " + id;
 
 		// If there were additional selection criteria, append them to the
@@ -1504,14 +1504,16 @@ public class NotePadProvider extends ContentProvider implements
 			cursor = db.query(NotePad.Lists.TABLE_NAME,
 					new String[] { NotePad.Lists._ID }, where, whereArgs, null,
 					null, null);
-			
+
 			count = deleteListsFromDb(db, cursor);
 			cursor.close();
 
 			break;
 		case VISIBLE_LIST_ID:
 		case LISTS_ID:
-			count = deleteListFromDb(db, uri.getPathSegments().get(NotePad.Lists.ID_PATH_POSITION), where, whereArgs);
+			count = deleteListFromDb(db,
+					uri.getPathSegments().get(NotePad.Lists.ID_PATH_POSITION),
+					where, whereArgs);
 			break;
 
 		case GTASKS:
@@ -1578,7 +1580,7 @@ public class NotePadProvider extends ContentProvider implements
 		 */
 		getContext().getContentResolver().notifyChange(uri, null, false);
 		// And update widgets
-					updateAllWidgets();
+		updateAllWidgets();
 
 		// Returns the number of rows deleted.
 		return count;
@@ -1841,7 +1843,7 @@ public class NotePadProvider extends ContentProvider implements
 		 */
 		getContext().getContentResolver().notifyChange(uri, null, false);
 		// And update widgets
-					updateAllWidgets();
+		updateAllWidgets();
 
 		// Returns the number of rows updated.
 		return count;
@@ -1875,21 +1877,28 @@ public class NotePadProvider extends ContentProvider implements
 
 		return result;
 	}
-	
+
 	/**
-	 * Instead of doing this in a service which might be killed, simply call this whenever something is changed in here
+	 * Instead of doing this in a service which might be killed, simply call
+	 * this whenever something is changed in here
 	 * 
 	 * Update all widgets's views as this database has changed somehow
 	 */
-	private void updateAllWidgets(){
-	    AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext().getApplicationContext());
-	    int[] appWidgetIds = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getApplicationContext(), ListWidgetProvider.class));
-	    Log.d(TAG, "updateAllWidgets before: " + appWidgetIds.length);
-	    if (appWidgetIds.length > 0) {
-	    	// Tell the widgets that the list items should be invalidated and refreshed!
-	    	// Will call onDatasetChanged in ListWidgetService, doing a new requery
-	    	appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.notes_list);
-	    }
+	private void updateAllWidgets() {
+		AppWidgetManager appWidgetManager = AppWidgetManager
+				.getInstance(getContext().getApplicationContext());
+		int[] appWidgetIds = appWidgetManager
+				.getAppWidgetIds(new ComponentName(getContext()
+						.getApplicationContext(), ListWidgetProvider.class));
+		Log.d(TAG, "updateAllWidgets before: " + appWidgetIds.length);
+		if (appWidgetIds.length > 0) {
+			// Tell the widgets that the list items should be invalidated and
+			// refreshed!
+			// Will call onDatasetChanged in ListWidgetService, doing a new
+			// requery
+			appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds,
+					R.id.notes_list);
+		}
 	}
 
 	/**

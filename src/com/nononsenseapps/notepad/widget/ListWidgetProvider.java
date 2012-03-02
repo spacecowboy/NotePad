@@ -21,12 +21,9 @@ import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ContentResolver;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.util.Log;
 import android.widget.RemoteViews;
-import android.widget.Toast;
 
 import com.nononsenseapps.notepad.FragmentLayout;
 import com.nononsenseapps.notepad.NotePad;
@@ -36,7 +33,7 @@ import com.nononsenseapps.notepad.R;
  * Thewidget's AppWidgetProvider.
  */
 public class ListWidgetProvider extends AppWidgetProvider {
-	private static final String TAG = "WIDGETPROVIDER";
+	//private static final String TAG = "WIDGETPROVIDER";
 	public static final String CLICK_ACTION = "com.nononsenseapps.notepad.widget.CLICK";
 	public static final String OPEN_ACTION = "com.nononsenseapps.notepad.widget.OPENAPP";
 	public static final String CREATE_ACTION = "com.nononsenseapps.notepad.widget.CREATE";
@@ -72,10 +69,6 @@ public class ListWidgetProvider extends AppWidgetProvider {
 									NotePad.Notes.COLUMN_NAME_LIST, -1))));
 			context.startActivity(appIntent);
 		} else if (action.equals(CREATE_ACTION)) {
-			Log.d("WidgetProvider",
-					"CREATE ACTION listId: "
-							+ intent.getLongExtra(
-									NotePad.Notes.COLUMN_NAME_LIST, -1));
 			appIntent.setData(NotePad.Notes.CONTENT_VISIBLE_URI);
 			appIntent.setAction(Intent.ACTION_INSERT);
 			appIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST,
@@ -106,7 +99,6 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 		// Update each of the widgets with the remote adapter
 		for (int i = 0; i < appWidgetIds.length; ++i) {
-			Log.d(TAG, "onUpdate: " + appWidgetIds[i]);
 			appWidgetManager.updateAppWidget(appWidgetIds[i],
 					buildRemoteViews(context, appWidgetIds[i]));
 		}
@@ -146,8 +138,6 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		long listId = Long.parseLong(settings.getString(
 				ListWidgetConfigure.KEY_LIST,
 				Integer.toString(FragmentLayout.ALL_NOTES_ID)));
-		Log.d("WidgetProvider", "buildRemoteviews appId: " + appWidgetId
-				+ ", listId: " + listId);
 
 		// Bind a click listener template for the contents of the list.
 		// Note that we
