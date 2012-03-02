@@ -24,7 +24,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:installLocation="auto"
-    package="com.nononsenseapps.notepad"
+    package="com.nononsenseapps.notepad_donate"
     android:versionCode="20"
     android:versionName="3.1" >
 
