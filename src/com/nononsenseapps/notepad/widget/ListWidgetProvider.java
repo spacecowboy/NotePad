@@ -27,7 +27,7 @@ import android.widget.RemoteViews;
 
 import com.nononsenseapps.notepad.FragmentLayout;
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad_donate.R;
 
 /**
  * Thewidget's AppWidgetProvider.

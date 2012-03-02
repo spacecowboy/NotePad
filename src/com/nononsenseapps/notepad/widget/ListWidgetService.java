@@ -19,7 +19,7 @@ package com.nononsenseapps.notepad.widget;
 import com.nononsenseapps.notepad.FragmentLayout;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotesPreferenceFragment;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad_donate.R;
 import com.nononsenseapps.ui.DateView;
 
 import android.appwidget.AppWidgetManager;
