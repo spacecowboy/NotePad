@@ -19,7 +19,7 @@ package com.nononsenseapps.notepad;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.notepad_donate.R;
-import com.nononsenseapps.notepad.widget.ListWidgetProvider;
+import com.nononsenseapps.notepad_donate.widget.ListWidgetProvider;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ClipDescription;

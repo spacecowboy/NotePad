@@ -185,7 +185,7 @@
         </service>
 
         <!-- List Widget -->
-        <receiver android:name="com.nononsenseapps.notepad.widget.ListWidgetProvider" >
+        <receiver android:name=".widget.ListWidgetProvider" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>

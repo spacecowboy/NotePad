@@ -23,6 +23,7 @@ import com.nononsenseapps.notepad.FragmentLayout;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotesPreferenceFragment;
 import com.nononsenseapps.notepad_donate.R;
+import com.nononsenseapps.notepad_donate.widget.ListWidgetProvider;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;

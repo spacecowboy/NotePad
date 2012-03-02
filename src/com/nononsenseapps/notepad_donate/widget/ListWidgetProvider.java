@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.nononsenseapps.notepad.widget;
+package com.nononsenseapps.notepad_donate.widget;
 
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
@@ -27,6 +27,8 @@ import android.widget.RemoteViews;
 
 import com.nononsenseapps.notepad.FragmentLayout;
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.widget.ListWidgetConfigure;
+import com.nononsenseapps.notepad.widget.ListWidgetService;
 import com.nononsenseapps.notepad_donate.R;
 
 /**
