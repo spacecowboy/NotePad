@@ -1,9 +1,15 @@
-A Notes app based on the Google Sample project available in the SDK.
+A notepad and to do app with both phone and tablet UI. Syncs with your existing Google account to keep your notes and tasks backed up in the cloud without requiring you to input any passwords!
 
-I wanted a couple of stuff which wasn't available in the original sample (which someone put on the market and I downloaded.)
+Features:
+* Widget, resizeable and configurable
+* Tablet optimization
+* Holo theme so it matches the rest of Android 4 Ice Cream Sandwich
+* Synchronization with Google Tasks
+* Integration with Android Agenda Widget
+* Search all your notes (not just titles)
+* Share
+* Select sorting method based on title or due date, ascending or descending order
+* Select between three themes (two if you're running Android 3 Honeycomb)
+* Change the font and text size!
 
-1. Share functionality.
-2. Dark background (sample uses light theme for editing)
-3. Holo theme (app I was using was an earlier version built for pre-Honeycomb)
-4. Change the way the posts got their title. Now it is the first line in the file, always.
-5. Get rid of the stupid lines in the editor. Don't mimic reality, make it better! (e.g. no lines)
+If you are developing an app of your own and have any questions on how the implementation details here, don't hesitate to drop me an e-mail or something!
