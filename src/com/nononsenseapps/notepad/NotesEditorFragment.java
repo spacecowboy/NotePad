@@ -64,6 +64,7 @@ import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.TextPreviewPreference;
 
 public class NotesEditorFragment extends Fragment implements TextWatcher,
@@ -505,13 +506,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// set characteristics from settings
 			float size = PreferenceManager
 					.getDefaultSharedPreferences(activity).getInt(
-							NotesPreferenceFragment.KEY_FONT_SIZE_EDITOR,
+							MainPrefs.KEY_FONT_SIZE_EDITOR,
 							getResources().getInteger(
 									R.integer.default_editor_font_size));
 			Typeface tf = TextPreviewPreference.getTypeface(PreferenceManager
 					.getDefaultSharedPreferences(activity).getString(
-							NotesPreferenceFragment.KEY_FONT_TYPE_EDITOR,
-							NotesPreferenceFragment.SANS));
+							MainPrefs.KEY_FONT_TYPE_EDITOR,
+							MainPrefs.SANS));
 
 			mText.setTextSize(size);
 			mText.setTypeface(tf);

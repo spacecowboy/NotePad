@@ -21,6 +21,9 @@ import java.util.Collection;
 
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.PrefsActivity;
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.ui.ExtrasCursorAdapter;
 
 import android.accounts.Account;
@@ -70,7 +73,7 @@ public class FragmentLayout extends Activity implements
 	private static final int RENAME_LIST = 1;
 	private static final int DELETE_LIST = 2;
 	// public static boolean lightTheme = false;
-	public static String currentTheme = NotesPreferenceFragment.THEME_LIGHT;
+	public static String currentTheme = MainPrefs.THEME_LIGHT;
 	public static boolean shouldRestart = false;
 	public static boolean LANDSCAPE_MODE;
 	public static boolean AT_LEAST_ICS;
@@ -523,8 +526,8 @@ public class FragmentLayout extends Activity implements
 			return false;
 		else
 			return (settings.getBoolean(
-					NotesPreferenceFragment.KEY_SYNC_ENABLE, false) && !settings
-					.getString(NotesPreferenceFragment.KEY_ACCOUNT, "")
+					SyncPrefs.KEY_SYNC_ENABLE, false) && !settings
+					.getString(SyncPrefs.KEY_ACCOUNT, "")
 					.isEmpty());
 	}
 
@@ -599,7 +602,7 @@ public class FragmentLayout extends Activity implements
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		// Need to restart to allow themes and such to go into effect
-		if (key.equals(NotesPreferenceFragment.KEY_THEME)) {
+		if (key.equals(MainPrefs.KEY_THEME)) {
 			shouldRestart = true;
 		}
 	}
@@ -609,16 +612,16 @@ public class FragmentLayout extends Activity implements
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 
-		currentTheme = prefs.getString(NotesPreferenceFragment.KEY_THEME,
+		currentTheme = prefs.getString(MainPrefs.KEY_THEME,
 				currentTheme);
 
 		setTypeOfTheme();
 
 		String sortType = prefs.getString(
-				NotesPreferenceFragment.KEY_SORT_TYPE,
+				MainPrefs.KEY_SORT_TYPE,
 				NotePad.Notes.DEFAULT_SORT_TYPE);
 		String sortOrder = prefs.getString(
-				NotesPreferenceFragment.KEY_SORT_ORDER,
+				MainPrefs.KEY_SORT_ORDER,
 				NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 		NotePad.Notes.SORT_ORDER = sortType + " " + sortOrder;
@@ -631,9 +634,9 @@ public class FragmentLayout extends Activity implements
 	}
 
 	private void setTypeOfTheme() {
-		if (NotesPreferenceFragment.THEME_LIGHT_ICS_AB.equals(currentTheme)) {
+		if (MainPrefs.THEME_LIGHT_ICS_AB.equals(currentTheme)) {
 			setTheme(R.style.ThemeHoloLightDarkActonBar);
-		} else if (NotesPreferenceFragment.THEME_LIGHT.equals(currentTheme)) {
+		} else if (MainPrefs.THEME_LIGHT.equals(currentTheme)) {
 			setTheme(R.style.ThemeHoloLight);
 		} else {
 			setTheme(R.style.ThemeHolo);
@@ -692,7 +695,7 @@ public class FragmentLayout extends Activity implements
 	private void showPrefs() {
 		// launch a new activity to display the dialog
 		Intent intent = new Intent();
-		intent.setClass(this, NotesPreferencesDialog.class);
+		intent.setClass(this, PrefsActivity.class);
 		startActivity(intent);
 	}
 
@@ -714,10 +717,10 @@ public class FragmentLayout extends Activity implements
 			if (UI_DEBUG_PRINTS)
 				Log.d("NotesEditorActivity", "onCreate");
 
-			if (NotesPreferenceFragment.THEME_LIGHT_ICS_AB
+			if (MainPrefs.THEME_LIGHT_ICS_AB
 					.equals(FragmentLayout.currentTheme)) {
 				setTheme(R.style.ThemeHoloLightDarkActonBar);
-			} else if (NotesPreferenceFragment.THEME_LIGHT
+			} else if (MainPrefs.THEME_LIGHT
 					.equals(FragmentLayout.currentTheme)) {
 				setTheme(R.style.ThemeHoloLight);
 			} else {
@@ -905,13 +908,13 @@ public class FragmentLayout extends Activity implements
 
 	public static class NotesPreferencesDialog extends Activity {
 		public static final int DIALOG_ACCOUNTS = 23;
-		private NotesPreferenceFragment prefFragment;
+		private MainPrefs prefFragment;
 
 		@Override
 		protected void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 
-			if (NotesPreferenceFragment.THEME_DARK
+			if (MainPrefs.THEME_DARK
 					.equals(FragmentLayout.currentTheme)) {
 				setTheme(R.style.ThemeHoloDialogNoActionBar);
 			} else {
@@ -919,7 +922,7 @@ public class FragmentLayout extends Activity implements
 			}
 
 			// Display the fragment as the main content.
-			prefFragment = new NotesPreferenceFragment();
+			prefFragment = new MainPrefs();
 			FragmentTransaction ft = getFragmentManager().beginTransaction();
 			ft.replace(android.R.id.content, prefFragment);
 			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
@@ -935,32 +938,32 @@ public class FragmentLayout extends Activity implements
 			}
 			return super.onOptionsItemSelected(item);
 		}
+//		@Override
+//		protected Dialog onCreateDialog(int id) {
+//			switch (id) {
+//			case DIALOG_ACCOUNTS:
+//				AlertDialog.Builder builder = new AlertDialog.Builder(this);
+//				builder.setTitle("Select a Google account");
+//				final Account[] accounts = AccountManager.get(this)
+//						.getAccountsByType("com.google");
+//				final int size = accounts.length;
+//				String[] names = new String[size];
+//				for (int i = 0; i < size; i++) {
+//					names[i] = accounts[i].name;
+//				}
+//				// TODO
+//				// Could add a clear alternative here
+//				builder.setItems(names, new DialogInterface.OnClickListener() {
+//					public void onClick(DialogInterface dialog, int which) {
+//						// Stuff to do when the account is selected by the user
+//						prefFragment.accountSelected(accounts[which]);
+//					}
+//				});
+//				return builder.create();
+//			}
+//			return null;
+//		}
 
-		@Override
-		protected Dialog onCreateDialog(int id) {
-			switch (id) {
-			case DIALOG_ACCOUNTS:
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle("Select a Google account");
-				final Account[] accounts = AccountManager.get(this)
-						.getAccountsByType("com.google");
-				final int size = accounts.length;
-				String[] names = new String[size];
-				for (int i = 0; i < size; i++) {
-					names[i] = accounts[i].name;
-				}
-				// TODO
-				// Could add a clear alternative here
-				builder.setItems(names, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						// Stuff to do when the account is selected by the user
-						prefFragment.accountSelected(accounts[which]);
-					}
-				});
-				return builder.create();
-			}
-			return null;
-		}
 	}
 
 	@Override

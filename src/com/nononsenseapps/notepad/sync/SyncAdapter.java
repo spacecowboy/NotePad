@@ -19,7 +19,8 @@ package com.nononsenseapps.notepad.sync;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
-import com.nononsenseapps.notepad.NotesPreferenceFragment;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleDBTalker;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
@@ -108,11 +109,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 		// Only sync if it has been enabled by the user, and account is selected
 		// Issue on reinstall where account approval is remembered by system
-		if (settings.getBoolean(NotesPreferenceFragment.KEY_SYNC_ENABLE, false)
-				&& !settings.getString(NotesPreferenceFragment.KEY_ACCOUNT, "")
+		if (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)
+				&& !settings.getString(SyncPrefs.KEY_ACCOUNT, "")
 						.isEmpty()
 				&& account.name.equals(settings.getString(
-						NotesPreferenceFragment.KEY_ACCOUNT, ""))) {
+						SyncPrefs.KEY_ACCOUNT, ""))) {
 
 			if (SYNC_DEBUG_PRINTS)
 				Log.d(TAG, "onPerformSync");

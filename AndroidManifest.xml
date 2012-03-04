@@ -156,8 +156,8 @@
             -->
         </activity>
         <activity
-            android:name=".FragmentLayout$NotesPreferencesDialog"
-            android:theme="@style/ThemeHoloDialogNoActionBar" >
+            android:name=".prefs.PrefsActivity"
+            android:theme="@style/ThemeHolo" >
             <intent-filter>
                 <category android:name="android.intent.category.PREFERENCE" >
                 </category>

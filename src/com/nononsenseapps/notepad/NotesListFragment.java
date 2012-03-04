@@ -26,6 +26,8 @@ import com.nononsenseapps.notepad.FragmentLayout.NotesPreferencesDialog;
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.ui.NoteCheckBox;
 
@@ -370,12 +372,12 @@ public class NotesListFragment extends ListFragment implements
 				Log.d("NotesListFragment", "Sync");
 			String accountName = PreferenceManager.getDefaultSharedPreferences(
 					activity)
-					.getString(NotesPreferenceFragment.KEY_ACCOUNT, "");
+					.getString(SyncPrefs.KEY_ACCOUNT, "");
 			boolean syncEnabled = PreferenceManager
 					.getDefaultSharedPreferences(activity).getBoolean(
-							NotesPreferenceFragment.KEY_SYNC_ENABLE, false);
+							SyncPrefs.KEY_SYNC_ENABLE, false);
 			if (accountName != null && !accountName.equals("") && syncEnabled) {
-				Account account = NotesPreferenceFragment.getAccount(
+				Account account = SyncPrefs.getAccount(
 						AccountManager.get(activity), accountName);
 				// Don't start a new sync if one is already going
 				if (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) {
@@ -497,12 +499,12 @@ public class NotesListFragment extends ListFragment implements
 				SyncAdapter.SYNC_STARTED));
 
 		String accountName = PreferenceManager.getDefaultSharedPreferences(
-				activity).getString(NotesPreferenceFragment.KEY_ACCOUNT, "");
+				activity).getString(SyncPrefs.KEY_ACCOUNT, "");
 		// Sync state might have changed, make sure we're spinning when we
 		// should
 		if (accountName != null && !accountName.isEmpty())
 			setRefreshActionItemState(ContentResolver.isSyncActive(
-					NotesPreferenceFragment.getAccount(
+					SyncPrefs.getAccount(
 							AccountManager.get(activity), accountName),
 					NotePad.AUTHORITY));
 	}
@@ -1268,21 +1270,21 @@ public class NotesListFragment extends ListFragment implements
 
 		// Get current sort order or assemble the default one.
 		String sortChoice = PreferenceManager.getDefaultSharedPreferences(
-				activity).getString(NotesPreferenceFragment.KEY_SORT_TYPE, "");
+				activity).getString(MainPrefs.KEY_SORT_TYPE, "");
 
 		String sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
 
-		if (NotesPreferenceFragment.DUEDATESORT.equals(sortChoice)) {
+		if (MainPrefs.DUEDATESORT.equals(sortChoice)) {
 			sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
-		} else if (NotesPreferenceFragment.TITLESORT.equals(sortChoice)) {
+		} else if (MainPrefs.TITLESORT.equals(sortChoice)) {
 			sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
-		} else if (NotesPreferenceFragment.MODIFIEDSORT.equals(sortChoice)) {
+		} else if (MainPrefs.MODIFIEDSORT.equals(sortChoice)) {
 			sortOrder = NotePad.Notes.MODIFICATION_SORT_TYPE;
 		}
 
 		sortOrder += " "
 				+ PreferenceManager.getDefaultSharedPreferences(activity)
-						.getString(NotesPreferenceFragment.KEY_SORT_ORDER,
+						.getString(MainPrefs.KEY_SORT_ORDER,
 								NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 		// Now create and return a CursorLoader that will take care of
@@ -1316,11 +1318,11 @@ public class NotesListFragment extends ListFragment implements
 
 		// Get current sort order or assemble the default one.
 		String sortOrder = PreferenceManager.getDefaultSharedPreferences(
-				activity).getString(NotesPreferenceFragment.KEY_SORT_TYPE,
+				activity).getString(MainPrefs.KEY_SORT_TYPE,
 				NotePad.Notes.DEFAULT_SORT_TYPE)
 				+ " "
 				+ PreferenceManager.getDefaultSharedPreferences(activity)
-						.getString(NotesPreferenceFragment.KEY_SORT_ORDER,
+						.getString(MainPrefs.KEY_SORT_ORDER,
 								NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 		// TODO include title field in search
@@ -1428,8 +1430,8 @@ public class NotesListFragment extends ListFragment implements
 				// Setting the summary now would crash it with
 				// IllegalStateException since we are not attached to a view
 			} else {
-				if (NotesPreferenceFragment.KEY_SORT_TYPE.equals(key)
-						|| NotesPreferenceFragment.KEY_SORT_ORDER.equals(key)) {
+				if (MainPrefs.KEY_SORT_TYPE.equals(key)
+						|| MainPrefs.KEY_SORT_ORDER.equals(key)) {
 					getLoaderManager().restartLoader(0, null, this);
 				}
 			}

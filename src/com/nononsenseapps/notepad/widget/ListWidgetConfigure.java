@@ -21,8 +21,8 @@ import java.util.List;
 
 import com.nononsenseapps.notepad.FragmentLayout;
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.NotesPreferenceFragment;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
 
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
@@ -95,9 +95,9 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		SharedPreferences.Editor edit = PreferenceManager
 				.getDefaultSharedPreferences(this).edit();
 		edit.putString(KEY_LIST, Integer.toString(FragmentLayout.ALL_NOTES_ID))
-				.putString(KEY_SORT_ORDER, NotePad.Notes.ASCENDING_SORT_ORDERING)
-				.putString(KEY_SORT_TYPE, NotesPreferenceFragment.DUEDATESORT)
-				.commit();
+				.putString(KEY_SORT_ORDER,
+						NotePad.Notes.ASCENDING_SORT_ORDERING)
+				.putString(KEY_SORT_TYPE, MainPrefs.DUEDATESORT).commit();
 	}
 
 	/**
@@ -131,8 +131,9 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			String key) {
 
 		if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-//			Log.d("prefsActivity", "changed key: " + key);
-//			Log.d("prefsActivity","commiting: " + sharedPreferences.getString(key, null));
+			// Log.d("prefsActivity", "changed key: " + key);
+			// Log.d("prefsActivity","commiting: " +
+			// sharedPreferences.getString(key, null));
 			getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
 					.edit()
 					.putString(key, sharedPreferences.getString(key, null))
@@ -169,16 +170,16 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			if (listSpinner != null) {
 				setEntries(listSpinner);
 			}
-			
+
 			sortType = (ListPreference) findPreference(KEY_SORT_TYPE);
 			sortOrder = (ListPreference) findPreference(KEY_SORT_ORDER);
-			
+
 			// Also set the summaries
 			if (sortOrder.getValue() == null)
 				sortOrder.setValue(NotePad.Notes.ASCENDING_SORT_ORDERING);
 			sortOrder.setSummary(sortOrder.getEntry());
 			if (sortType.getValue() == null)
-				sortType.setValue(NotesPreferenceFragment.DUEDATESORT);
+				sortType.setValue(MainPrefs.DUEDATESORT);
 			sortType.setSummary(sortType.getEntry());
 		}
 
@@ -238,14 +239,14 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 						.size()]));
 				listSpinner.setEntryValues(values
 						.toArray(new CharSequence[values.size()]));
-				
+
 				listSpinner.setSummary(listSpinner.getEntry());
 			}
 		}
 
 		/**
-		 * Sets the list name in the preferences as well but also sets
-		 * the list summaries depending on the selected value.
+		 * Sets the list name in the preferences as well but also sets the list
+		 * summaries depending on the selected value.
 		 */
 		@Override
 		public void onSharedPreferenceChanged(
@@ -259,15 +260,14 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			}
 			if (!activity.isFinishing()) {
 				if (key.equals(KEY_LIST)) {
-				// Also set the summary to this text
-				listSpinner.setSummary(listSpinner.getEntry());
+					// Also set the summary to this text
+					listSpinner.setSummary(listSpinner.getEntry());
+				} else if (key.equals(KEY_SORT_ORDER)) {
+					sortOrder.setSummary(sortOrder.getEntry());
+				} else if (key.equals(KEY_SORT_TYPE)) {
+					sortType.setSummary(sortType.getEntry());
+				}
 			}
-			else if (key.equals(KEY_SORT_ORDER)) {
-				sortOrder.setSummary(sortOrder.getEntry());
-			} else if (key.equals(KEY_SORT_TYPE)) {
-				sortType.setSummary(sortType.getEntry());
-			}
-		}
 		}
 	}
 

@@ -16,8 +16,8 @@
 
 package com.nononsenseapps.ui;
 
-import com.nononsenseapps.notepad.NotesPreferenceFragment;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
 
 import android.content.Context;
 import android.graphics.Typeface;
@@ -61,8 +61,8 @@ public class TextPreviewPreference extends Preference {
 		mText = (TextView) layout.findViewById(R.id.prefTextPreview);
 		
 		// Retrieve settings here and set them on the text
-		mText.setTextSize(getSharedPreferences().getInt(NotesPreferenceFragment.KEY_FONT_SIZE_EDITOR, 22));
-		setTextType(getSharedPreferences().getString(NotesPreferenceFragment.KEY_FONT_TYPE_EDITOR, NotesPreferenceFragment.SANS));
+		mText.setTextSize(getSharedPreferences().getInt(MainPrefs.KEY_FONT_SIZE_EDITOR, 22));
+		setTextType(getSharedPreferences().getString(MainPrefs.KEY_FONT_TYPE_EDITOR, MainPrefs.SANS));
 
 		return layout;
 
@@ -77,9 +77,9 @@ public class TextPreviewPreference extends Preference {
 	
 	public static Typeface getTypeface(String type) {
 		Typeface font;
-		if (NotesPreferenceFragment.MONOSPACE.equals(type)) {
+		if (MainPrefs.MONOSPACE.equals(type)) {
 			font = Typeface.MONOSPACE;
-		} else if (NotesPreferenceFragment.SERIF.equals(type)) {
+		} else if (MainPrefs.SERIF.equals(type)) {
 			font = Typeface.SERIF;
 		} else {
 			font = Typeface.SANS_SERIF;

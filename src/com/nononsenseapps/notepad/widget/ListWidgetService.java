@@ -18,8 +18,8 @@ package com.nononsenseapps.notepad.widget;
 
 import com.nononsenseapps.notepad.FragmentLayout;
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.NotesPreferenceFragment;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.DateView;
 
 import android.appwidget.AppWidgetManager;
@@ -159,14 +159,14 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 			String sortChoice = settings.getString(
 					ListWidgetConfigure.KEY_SORT_TYPE,
-					NotesPreferenceFragment.DUEDATESORT);
+					MainPrefs.DUEDATESORT);
 			String sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
 
-			if (NotesPreferenceFragment.DUEDATESORT.equals(sortChoice)) {
+			if (MainPrefs.DUEDATESORT.equals(sortChoice)) {
 				sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
-			} else if (NotesPreferenceFragment.TITLESORT.equals(sortChoice)) {
+			} else if (MainPrefs.TITLESORT.equals(sortChoice)) {
 				sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
-			} else if (NotesPreferenceFragment.MODIFIEDSORT.equals(sortChoice)) {
+			} else if (MainPrefs.MODIFIEDSORT.equals(sortChoice)) {
 				sortOrder = NotePad.Notes.MODIFICATION_SORT_TYPE;
 			}
 

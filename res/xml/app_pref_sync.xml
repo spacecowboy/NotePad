@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:robobunny="http://robobunny.com"
+    android:key="app_preference_screen_sync" >
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="syncEnablePref"
+            android:summary="@string/settings_sync_enable_summary"
+            android:title="@string/settings_sync_enable_title" />
+
+        <Preference
+            android:dependency="syncEnablePref"
+            android:key="accountPref"
+            android:summary=""
+            android:title="@string/settings_account_title" />
+
+        <ListPreference
+            android:dependency="syncEnablePref"
+            android:defaultValue="0"
+            android:dialogTitle="@string/settings_sync_freq_title"
+            android:entries="@array/sync_freq_preference"
+            android:entryValues="@array/sync_freqvalues_preference"
+            android:key="syncFreq"
+            android:summary="Selected frequency should be here"
+            android:title="@string/settings_sync_freq_title" />
+
+</PreferenceScreen>

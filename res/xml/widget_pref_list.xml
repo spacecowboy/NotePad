@@ -2,7 +2,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="widget_list_preference_screen" >
 
-    <PreferenceCategory android:title="@string/settings_cat_sorting" >
         <ListPreference
             android:dialogTitle="@string/settings_list_dialog"
             android:key="widget_key_list"
@@ -23,6 +22,5 @@
             android:entryValues="@array/sorting_ordervalues_preference"
             android:key="widget_key_sort_order"
             android:title="@string/settings_sorting_order" />
-    </PreferenceCategory>
 
 </PreferenceScreen>

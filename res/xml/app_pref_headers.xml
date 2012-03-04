@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers
+        xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <header android:fragment="com.nononsenseapps.notepad.prefs.MainPrefs"
+    android:icon="@drawable/device_access_brightness_medium_dark"
+            android:title="@string/settings_cat_appearance"
+            android:summary="" />
+            
+    <header android:fragment="com.nononsenseapps.notepad.prefs.SyncPrefs"
+    android:icon="@drawable/navigation_refresh_dark"
+    android:title="@string/settings_cat_syncing"
+    android:summary="" />
+
+    <!-- <header android:fragment="com.nononsenseapps.notepad.widget.ListWidgetConfigure$ThemeFragment"
+            android:title="Appereance"
+            android:summary="Set the theme and background transparency">
+        Arbitrary key/value pairs can be included with a header as
+             arguments to its fragment.
+        <extra android:name="someKey" android:value="someHeaderValue" />
+    </header> -->
+
+</preference-headers>
