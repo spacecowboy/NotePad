@@ -16,15 +16,28 @@
 
 package com.nononsenseapps.notepad.prefs;
 
+import java.io.IOException;
+
 import com.nononsenseapps.notepad.FragmentLayout;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.sync.SyncAdapter;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -62,7 +75,8 @@ public class SyncPrefs extends PreferenceFragment implements
 		prefAccount = findPreference(KEY_ACCOUNT);
 		prefSyncFreq = findPreference(KEY_SYNC_FREQ);
 
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+		SharedPreferences sharedPrefs = PreferenceManager
+				.getDefaultSharedPreferences(activity);
 		// Set up a listener whenever a key changes
 		sharedPrefs.registerOnSharedPreferenceChangeListener(this);
 
@@ -75,16 +89,33 @@ public class SyncPrefs extends PreferenceFragment implements
 				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
 					public boolean onPreferenceClick(Preference preference) {
 						// Show dialog
-						activity.showDialog(PrefsActivity.DIALOG_ACCOUNTS);
+						showAccountDialog();
 						return true;
 					}
 				});
 	}
-	
+
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		PreferenceManager.getDefaultSharedPreferences(activity).unregisterOnSharedPreferenceChangeListener(this);
+		PreferenceManager.getDefaultSharedPreferences(activity)
+				.unregisterOnSharedPreferenceChangeListener(this);
+	}
+
+	private void showAccountDialog() {
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		Fragment prev = getFragmentManager().findFragmentByTag("accountdialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		// Create and show the dialog.
+		// Bundle args = new Bundle();
+		// args.putString(KEY_ACCOUNT, newPassword);
+		DialogFragment newFragment = new AccountDialog();
+		// newFragment.setArguments(args);
+		newFragment.show(ft, "accountdialog");
 	}
 
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
@@ -217,4 +248,110 @@ public class SyncPrefs extends PreferenceFragment implements
 		// getText(R.string.minutes).toString());
 	}
 
+	public static class AccountDialog extends DialogFragment implements
+			AccountManagerCallback<Bundle> {
+		private Activity activity;
+		private Account account;
+
+		@Override
+		public void onAttach(Activity activity) {
+			super.onAttach(activity);
+			this.activity = activity;
+		}
+
+		@Override
+		public void onCreate(Bundle savedInstanceState) {
+			super.onCreate(savedInstanceState);
+			// Bundle args = getArguments();
+			// if (args != null) {
+			// this.args = args;
+			// } else {
+			// this.args = new Bundle();
+			// }
+		}
+
+		@Override
+		public Dialog onCreateDialog(Bundle args) {
+			AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+			// TODO resource
+			builder.setTitle("Select a Google account");
+			final Account[] accounts = AccountManager.get(activity)
+					.getAccountsByType("com.google");
+			final int size = accounts.length;
+			String[] names = new String[size];
+			for (int i = 0; i < size; i++) {
+				names[i] = accounts[i].name;
+			}
+			// TODO
+			// Could add a clear alternative here
+			builder.setItems(names, new DialogInterface.OnClickListener() {
+				public void onClick(DialogInterface dialog, int which) {
+					// Stuff to do when the account is selected by the user
+					accountSelected(accounts[which]);
+				}
+			});
+			return builder.create();
+		}
+
+		/**
+		 * Called from the activity, since that one builds the dialog
+		 * 
+		 * @param account
+		 */
+		public void accountSelected(Account account) {
+			if (account != null) {
+				Log.d("prefsActivity", "step one");
+				this.account = account;
+				// Request user's permission
+				AccountManager.get(activity)
+						.getAuthToken(account, SyncAdapter.AUTH_TOKEN_TYPE,
+								null, activity, this, null);
+				// work continues in callback, method run()
+			}
+		}
+
+		/**
+		 * User wants to select an account to sync with. If we get an approval,
+		 * activate sync and set periodicity also.
+		 */
+		@Override
+		public void run(AccountManagerFuture<Bundle> future) {
+			try {
+				Log.d("prefsActivity", "step two");
+				// If the user has authorized
+				// your application to use the
+				// tasks API
+				// a token is available.
+				String token = future.getResult().getString(
+						AccountManager.KEY_AUTHTOKEN);
+				// Now we are authorized by the user.
+
+				if (token != null && !token.equals("") && account != null) {
+					Log.d("prefsActivity", "step three: " + account.name);
+					SharedPreferences customSharedPreference = PreferenceManager
+							.getDefaultSharedPreferences(activity);
+					SharedPreferences.Editor editor = customSharedPreference
+							.edit();
+					editor.putString(SyncPrefs.KEY_ACCOUNT, account.name);
+					editor.commit();
+
+					// Set it syncable
+					ContentResolver
+							.setIsSyncable(account, NotePad.AUTHORITY, 1);
+					// Set sync frequency
+					SyncPrefs.setSyncInterval(activity, customSharedPreference);
+				}
+			} catch (OperationCanceledException e) {
+				// if the request was canceled for any reason
+			} catch (AuthenticatorException e) {
+				// if there was an error communicating with the authenticator or
+				// if the authenticator returned an invalid response
+			} catch (IOException e) {
+				// if the authenticator returned an error response that
+				// indicates that it encountered an IOException while
+				// communicating with the authentication server
+			}
+
+		}
+	}
 }
