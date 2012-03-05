@@ -74,7 +74,6 @@ public class PasswordPrefs extends PreferenceFragment {
 		View layout = inflater.inflate(R.layout.app_pref_password_layout,
 				container, false);
 
-		// TODO
 		// Set click listeners for the button here
 		password1 = (EditText) layout.findViewById(R.id.tempPassword1);
 		password2 = (EditText) layout.findViewById(R.id.tempPassword2);
@@ -121,8 +120,6 @@ public class PasswordPrefs extends PreferenceFragment {
 			} else {
 				// confirm with existing password first
 				showPasswordDialog(password1.getText().toString());
-				// args.putString(KEY_PASSWORD, password1.getText().toString());
-				// activity.showDialog(PrefsActivity.DIALOG_PASSWORD_SET, args);
 			}
 
 		} else {
@@ -137,8 +134,22 @@ public class PasswordPrefs extends PreferenceFragment {
 	}
 
 	private void clearPassword() {
-		Toast.makeText(activity, "Confirm then clear", Toast.LENGTH_SHORT)
-				.show();
+		SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(activity);
+		String currentPassword = settings.getString(KEY_PASSWORD, "");
+
+		if ("".equals(currentPassword)) {
+			// Save the password directly
+			settings.edit()
+					.putString(KEY_PASSWORD, "")
+					.commit();
+			// TODO resource
+			Toast.makeText(activity, "Password cleared string",
+					Toast.LENGTH_SHORT).show();
+		} else {
+			// confirm with existing password first
+			showPasswordDialog("");
+		}
 	}
 
 	private void showPasswordDialog(String newPassword) {
@@ -187,7 +198,6 @@ public class PasswordPrefs extends PreferenceFragment {
 					container, false);
 			// TODO resource
 			getDialog().setTitle("Password required string");
-			// setTitle("Password required string");
 
 			passwordText = (EditText) v.findViewById(R.id.editTitle);
 
@@ -223,7 +233,7 @@ public class PasswordPrefs extends PreferenceFragment {
 							.commit();
 					// TODO resource
 					Toast.makeText(activity,
-							"Password set string " + newPassword,
+							("".equals(newPassword)) ? "Password cleared string" : "Password set string ",
 							Toast.LENGTH_SHORT).show();
 				} else {
 					// Confirm that correct password was set to activity
