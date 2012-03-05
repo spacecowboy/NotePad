@@ -260,17 +260,6 @@ public class SyncPrefs extends PreferenceFragment implements
 		}
 
 		@Override
-		public void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
-			// Bundle args = getArguments();
-			// if (args != null) {
-			// this.args = args;
-			// } else {
-			// this.args = new Bundle();
-			// }
-		}
-
-		@Override
 		public Dialog onCreateDialog(Bundle args) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(activity);
 			// TODO resource
