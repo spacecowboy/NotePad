@@ -906,66 +906,6 @@ public class FragmentLayout extends Activity implements
 		deleteNotes(this, ids);
 	}
 
-	public static class NotesPreferencesDialog extends Activity {
-		public static final int DIALOG_ACCOUNTS = 23;
-		private MainPrefs prefFragment;
-
-		@Override
-		protected void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
-
-			if (MainPrefs.THEME_DARK
-					.equals(FragmentLayout.currentTheme)) {
-				setTheme(R.style.ThemeHoloDialogNoActionBar);
-			} else {
-				setTheme(R.style.ThemeHoloLightDialogNoActionBar);
-			}
-
-			// Display the fragment as the main content.
-			prefFragment = new MainPrefs();
-			FragmentTransaction ft = getFragmentManager().beginTransaction();
-			ft.replace(android.R.id.content, prefFragment);
-			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			ft.commit();
-		}
-
-		@Override
-		public boolean onOptionsItemSelected(MenuItem item) {
-			switch (item.getItemId()) {
-			case android.R.id.home:
-				finish();
-				break;
-			}
-			return super.onOptionsItemSelected(item);
-		}
-//		@Override
-//		protected Dialog onCreateDialog(int id) {
-//			switch (id) {
-//			case DIALOG_ACCOUNTS:
-//				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//				builder.setTitle("Select a Google account");
-//				final Account[] accounts = AccountManager.get(this)
-//						.getAccountsByType("com.google");
-//				final int size = accounts.length;
-//				String[] names = new String[size];
-//				for (int i = 0; i < size; i++) {
-//					names[i] = accounts[i].name;
-//				}
-//				// TODO
-//				// Could add a clear alternative here
-//				builder.setItems(names, new DialogInterface.OnClickListener() {
-//					public void onClick(DialogInterface dialog, int which) {
-//						// Stuff to do when the account is selected by the user
-//						prefFragment.accountSelected(accounts[which]);
-//					}
-//				});
-//				return builder.create();
-//			}
-//			return null;
-//		}
-
-	}
-
 	@Override
 	public void onDeleteAction() {
 		// both list and editor should be notified

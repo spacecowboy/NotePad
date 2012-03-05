@@ -58,10 +58,11 @@ public class PrefsActivity extends PreferenceActivity implements AccountManagerC
 	}
 	
 	@Override
-	protected Dialog onCreateDialog(int id) {
+	protected Dialog onCreateDialog(int id, Bundle args) {
 		switch (id) {
 		case DIALOG_ACCOUNTS:
 			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			// TODO resource
 			builder.setTitle("Select a Google account");
 			final Account[] accounts = AccountManager.get(this)
 					.getAccountsByType("com.google");

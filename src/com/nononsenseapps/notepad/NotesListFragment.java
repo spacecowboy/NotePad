@@ -22,11 +22,11 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import com.nononsenseapps.notepad.FragmentLayout.NotesEditorActivity;
-import com.nononsenseapps.notepad.FragmentLayout.NotesPreferencesDialog;
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.ui.NoteCheckBox;
@@ -394,7 +394,7 @@ public class NotesListFragment extends ListFragment implements
 			} else {
 				// The user might want to enable syncing. Open preferences
 				Intent intent = new Intent();
-				intent.setClass(activity, NotesPreferencesDialog.class);
+				intent.setClass(activity, PrefsActivity.class);
 				startActivity(intent);
 			}
 			return false; // Editor will listen for this also and saves when it

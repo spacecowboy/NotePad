@@ -11,6 +11,11 @@
     android:icon="@drawable/navigation_refresh_dark"
     android:title="@string/settings_cat_syncing"
     android:summary="" />
+    
+    <header android:fragment="com.nononsenseapps.notepad.prefs.PasswordPrefs"
+    android:icon="@drawable/device_access_secure_dark"
+    android:title="Password header"
+    android:summary="" />
 
     <!-- <header android:fragment="com.nononsenseapps.notepad.widget.ListWidgetConfigure$ThemeFragment"
             android:title="Appereance"
