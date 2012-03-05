@@ -50,6 +50,7 @@ public class GoogleDBTalker {
 			NotePad.Notes.COLUMN_NAME_PARENT,
 			NotePad.Notes.COLUMN_NAME_POSITION,
 			NotePad.Notes.COLUMN_NAME_HIDDEN, NotePad.GTasks.COLUMN_NAME_DB_ID,
+			NotePad.Notes.COLUMN_NAME_POSSUBSORT, NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
 			NotePad.GTasks.COLUMN_NAME_ETAG,
 			NotePad.GTasks.COLUMN_NAME_GTASKS_ID,
 			NotePad.GTasks.COLUMN_NAME_UPDATED };
@@ -299,6 +300,9 @@ public class GoogleDBTalker {
 				// Task is assembled, move on
 				task.modified = cursor.getInt(cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_MODIFIED));
+				
+				task.indentLevel = cursor.getInt(cursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL));
+				task.possort = cursor.getString(cursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_POSSUBSORT));
 
 				// convert modification time to timestamp
 				long modTime = cursor
@@ -334,10 +338,10 @@ public class GoogleDBTalker {
 	}
 
 	public void SaveToDatabase(ArrayList<GoogleTaskList> listsToSaveToDB,
-			HashMap<String, ArrayList<GoogleTask>> tasksInListToSaveToDB) {
+			HashMap<GoogleTaskList, ArrayList<GoogleTask>> tasksInListToSaveToDB) {
 		int listIdIndex = -1;
 
-		Set<String> listIdsWithTasks = tasksInListToSaveToDB.keySet();
+		Set<GoogleTaskList> listIdsWithTasks = tasksInListToSaveToDB.keySet();
 		for (GoogleTaskList list : listsToSaveToDB) {
 			if (list.dbId > -1) {
 				// Exists in database, update that record
@@ -406,20 +410,20 @@ public class GoogleDBTalker {
 								.build());
 			}
 			// Now do any possible tasks
-			ArrayList<GoogleTask> tasks = tasksInListToSaveToDB.get(list.id);
+			ArrayList<GoogleTask> tasks = tasksInListToSaveToDB.get(list);
 			if (tasks != null && !tasks.isEmpty()) {
 				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Found some tasks to save in: " + list.id);
 				SaveNoteToDatabase(tasks, listIdIndex, list.dbId);
 			}
 			// Remove it from the keyset, will affect the hashmap as well
 			if (list.id != null) {
-				listIdsWithTasks.remove(list.id);
+				listIdsWithTasks.remove(list);
 			}
 		}
 		// If any lists are left, that means only the tasks and not the lists were modified.
 		// Upload potential items here as well.
-		for (String listId: listIdsWithTasks) {
-			ArrayList<GoogleTask> tasks = tasksInListToSaveToDB.get(listId);
+		for (GoogleTaskList list: listIdsWithTasks) {
+			ArrayList<GoogleTask> tasks = tasksInListToSaveToDB.get(list);
 			if (tasks != null && !tasks.isEmpty()) {
 				long listDbId = tasks.get(0).listdbid;
 				if (SyncAdapter.SYNC_DEBUG_PRINTS) Log.d(TAG, "Saving tasks for: " + listDbId);

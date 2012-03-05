@@ -70,7 +70,7 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	private static final String DATABASE_NAME = "note_pad.db";
 
-	private static final int DATABASE_VERSION = 5;
+	private static final int DATABASE_VERSION = 6;
 
 	/**
 	 * A projection map used to select columns from the database
@@ -222,12 +222,15 @@ public class NotePadProvider extends ContentProvider implements
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_HIDDEN,
 				NotePad.Notes.COLUMN_NAME_HIDDEN);
 
-		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_ABCSUBSORT,
-				NotePad.Notes.COLUMN_NAME_ABCSUBSORT);
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
+				NotePad.Notes.COLUMN_NAME_INDENTLEVEL);
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT,
 				NotePad.Notes.COLUMN_NAME_POSSUBSORT);
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN,
 				NotePad.Notes.COLUMN_NAME_LOCALHIDDEN);
+		
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LOCKED,
+				NotePad.Notes.COLUMN_NAME_LOCKED);
 
 		/*
 		 * Creates an initializes a projection map for handling Lists
@@ -369,6 +372,9 @@ public class NotePadProvider extends ContentProvider implements
 			values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, now);
 			values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
 			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, "needsAction");
+			
+			values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, "");
+			values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
 
 			return db.insert(NotePad.Notes.TABLE_NAME, null, values);
 		}
@@ -391,11 +397,14 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.Notes.COLUMN_NAME_HIDDEN + " INTEGER,"
 					+ NotePad.Notes.COLUMN_NAME_MODIFIED + " INTEGER,"
 
-					+ NotePad.Notes.COLUMN_NAME_ABCSUBSORT
-					+ " TEXT DEFAULT '',"
+					+ NotePad.Notes.COLUMN_NAME_INDENTLEVEL
+					+ " INTEGER DEFAULT 0,"
 					+ NotePad.Notes.COLUMN_NAME_POSSUBSORT
 					+ " TEXT DEFAULT '',"
 					+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
+					+ " INTEGER DEFAULT 0,"
+					
+					+ NotePad.Notes.COLUMN_NAME_LOCKED
 					+ " INTEGER DEFAULT 0,"
 
 					+ NotePad.Notes.COLUMN_NAME_DELETED + " INTEGER" + ");");
@@ -527,12 +536,19 @@ public class NotePadProvider extends ContentProvider implements
 						+ " ADD COLUMN ";
 				String postText = " TEXT DEFAULT ''";
 				String postNameInt = " INTEGER DEFAULT 0";
-				// Add Columns to Notes DB
-				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_ABCSUBSORT
-						+ postText);
 				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_POSSUBSORT
 						+ postText);
 				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
+						+ postNameInt);
+			}
+			if (oldVersion < 6) {
+				// Add Columns to Notes DB
+				String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
+						+ " ADD COLUMN ";
+				String postNameInt = " INTEGER DEFAULT 0";
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_INDENTLEVEL
+						+ postNameInt);
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_LOCKED
 						+ postNameInt);
 			}
 		}
@@ -1053,6 +1069,13 @@ public class NotePadProvider extends ContentProvider implements
 
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_DELETED) == false) {
 			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 0);
+		}
+		
+		if (values.containsKey(NotePad.Notes.COLUMN_NAME_INDENTLEVEL) == false) {
+			values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
+		}
+		if (values.containsKey(NotePad.Notes.COLUMN_NAME_LOCKED) == false) {
+			values.put(NotePad.Notes.COLUMN_NAME_LOCKED, 0);
 		}
 
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_LIST) == false

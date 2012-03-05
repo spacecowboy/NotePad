@@ -82,11 +82,13 @@ public class NotesListFragment extends ListFragment implements
 		OnSharedPreferenceChangeListener {
 	private int mCurCheckPosition = 0;
 
+	// TODO limit the length of notes and titles retrieved
 	private static final String[] PROJECTION = new String[] {
 			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
 			NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
+			NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
 			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
 
 	// public static final String SELECTEDPOS = "selectedpos";
@@ -222,7 +224,8 @@ public class NotesListFragment extends ListFragment implements
 				// Just open it
 				openNote(intent);
 			} else {
-				// it's something we have to handle once the list has been loaded
+				// it's something we have to handle once the list has been
+				// loaded
 				String newId = intent.getData().getPathSegments()
 						.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
 				long noteId = Long.parseLong(newId);
@@ -371,8 +374,7 @@ public class NotesListFragment extends ListFragment implements
 			if (FragmentLayout.UI_DEBUG_PRINTS)
 				Log.d("NotesListFragment", "Sync");
 			String accountName = PreferenceManager.getDefaultSharedPreferences(
-					activity)
-					.getString(SyncPrefs.KEY_ACCOUNT, "");
+					activity).getString(SyncPrefs.KEY_ACCOUNT, "");
 			boolean syncEnabled = PreferenceManager
 					.getDefaultSharedPreferences(activity).getBoolean(
 							SyncPrefs.KEY_SYNC_ENABLE, false);
@@ -503,9 +505,8 @@ public class NotesListFragment extends ListFragment implements
 		// Sync state might have changed, make sure we're spinning when we
 		// should
 		if (accountName != null && !accountName.isEmpty())
-			setRefreshActionItemState(ContentResolver.isSyncActive(
-					SyncPrefs.getAccount(
-							AccountManager.get(activity), accountName),
+			setRefreshActionItemState(ContentResolver.isSyncActive(SyncPrefs
+					.getAccount(AccountManager.get(activity), accountName),
 					NotePad.AUTHORITY));
 	}
 
@@ -662,7 +663,8 @@ public class NotesListFragment extends ListFragment implements
 		// The names of the cursor columns to display in the view,
 		// initialized
 		// to the title column
-		String[] dataColumns = { NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
+		String[] dataColumns = {
+				NotePad.Notes.COLUMN_NAME_INDENTLEVEL, NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
 				NotePad.Notes.COLUMN_NAME_TITLE,
 				NotePad.Notes.COLUMN_NAME_NOTE,
 				NotePad.Notes.COLUMN_NAME_DUE_DATE };
@@ -671,8 +673,7 @@ public class NotesListFragment extends ListFragment implements
 		// the TextView in noteslist_item.xml
 		// My hacked adapter allows the boolean to be set if the string matches
 		// gtasks string values for them. Needs id as well (set after first)
-		int[] viewIDs = { R.id.itemDone, R.id.itemTitle, R.id.itemNote,
-				R.id.itemDate };
+		int[] viewIDs = {R.id.itemIndent,  R.id.itemDone, R.id.itemTitle, R.id.itemNote, R.id.itemDate };
 
 		int themed_item = R.layout.noteslist_item;
 
@@ -1280,6 +1281,8 @@ public class NotesListFragment extends ListFragment implements
 			sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
 		} else if (MainPrefs.MODIFIEDSORT.equals(sortChoice)) {
 			sortOrder = NotePad.Notes.MODIFICATION_SORT_TYPE;
+		} else if (MainPrefs.POSSUBSORT.equals(sortChoice)) {
+			sortOrder = NotePad.Notes.POSSUBSORT_SORT_TYPE;
 		}
 
 		sortOrder += " "

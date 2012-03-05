@@ -30,6 +30,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
+import android.content.ContentProviderResult;
 import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
@@ -77,7 +78,7 @@ import java.util.HashMap;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 	private static final String TAG = "SyncAdapter";
-	public final static boolean SYNC_DEBUG_PRINTS = false;
+	public final static boolean SYNC_DEBUG_PRINTS = true;
 
 	// public static final String AUTH_TOKEN_TYPE =
 	// "oauth2:https://www.googleapis.com/auth/tasks";
@@ -145,7 +146,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 						// Prepare lists for items
 						ArrayList<GoogleTaskList> listsToSaveToDB = new ArrayList<GoogleTaskList>();
-						HashMap<String, ArrayList<GoogleTask>> tasksInListToSaveToDB = new HashMap<String, ArrayList<GoogleTask>>();
+						HashMap<GoogleTaskList, ArrayList<GoogleTask>> tasksInListToSaveToDB = new HashMap<GoogleTaskList, ArrayList<GoogleTask>>();
 
 						HashMap<Long, ArrayList<GoogleTask>> tasksInListToUpload = new HashMap<Long, ArrayList<GoogleTask>>();
 						HashMap<Long, ArrayList<GoogleTask>> allTasksInList = new HashMap<Long, ArrayList<GoogleTask>>();
@@ -183,7 +184,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 										Log.d(TAG,
 												"Saving remote modified tasks for: "
 														+ list.id);
-									tasksInListToSaveToDB.put(list.id, list
+									tasksInListToSaveToDB.put(list, list
 											.downloadModifiedTasks(apiTalker,
 													allTasks, lastUpdated));
 								}
@@ -225,7 +226,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 								for (GoogleTask moddedTask : (ArrayList<GoogleTask>) moddedTasks
 										.clone()) {
 									ArrayList<GoogleTask> tasksToBeSaved = tasksInListToSaveToDB
-											.get(list.id);
+											.get(list);
 									if (tasksToBeSaved != null
 											&& tasksToBeSaved
 													.contains(moddedTask)) {
@@ -287,10 +288,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 									uploadedStuff = true;
 									// Task now has relevant fields set. Add to
 									// DB-list
-									if (tasksInListToSaveToDB.get(list.id) == null)
-										tasksInListToSaveToDB.put(list.id,
+									if (tasksInListToSaveToDB.get(list) == null)
+										tasksInListToSaveToDB.put(list,
 												new ArrayList<GoogleTask>());
-									tasksInListToSaveToDB.get(list.id).add(
+									tasksInListToSaveToDB.get(list).add(
 											result);
 								}
 							}
@@ -310,21 +311,21 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 						// Now, set sorting values.
 						// TODO
-//						for (String listId : tasksInListToSaveToDB.keySet()) {
-//							if (SYNC_DEBUG_PRINTS)
-//								Log.d(TAG, "Setting position values in: "
-//										+ listId);
-//							ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
-//									.get(listId);
-//							if (tasks != null) {
-//								if (SYNC_DEBUG_PRINTS)
-//									Log.d(TAG,
-//											"Setting position values for #tasks: "
-//													+ tasks.size());
-//								ArrayList<GoogleTask> allTasks = allTasksInList(task.)
-//								list.setSortingValues(tasks, allTasks);
-//							}
-//						}
+						for (GoogleTaskList list : tasksInListToSaveToDB.keySet()) {
+							if (SYNC_DEBUG_PRINTS)
+								Log.d(TAG, "Setting position values in: "
+										+ list.id);
+							ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
+									.get(list);
+							if (tasks != null) {
+								if (SYNC_DEBUG_PRINTS)
+									Log.d(TAG,
+											"Setting position values for #tasks: "
+													+ tasks.size());
+								ArrayList<GoogleTask> allListTasks = allTasksInList.get(list.dbId);
+								list.setSortingValues(tasks, allListTasks);
+							}
+						}
 
 						// Save to database in a single transaction
 						if (SYNC_DEBUG_PRINTS)
@@ -332,7 +333,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						dbTalker.SaveToDatabase(listsToSaveToDB,
 								tasksInListToSaveToDB);
 						// Commit it
-						dbTalker.apply();
+						 ContentProviderResult[] result = dbTalker.apply();
+						 Log.d(TAG, "Batched items: " + result.length);
 
 						if (SYNC_DEBUG_PRINTS)
 							Log.d(TAG, "Sync Complete!");

@@ -48,6 +48,7 @@ public class MainPrefs extends PreferenceFragment implements
 	public static final String DUEDATESORT = "duedate";
 	public static final String TITLESORT = "title COLLATE NOCASE";
 	public static final String MODIFIEDSORT = "modified";
+	public static final String POSSUBSORT = "possubsort";
 
 	private ListPreference prefSortOrder;
 	private ListPreference prefSortType;

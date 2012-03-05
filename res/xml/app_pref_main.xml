@@ -26,7 +26,7 @@
             robobunny:unitsRight="sp" />
 
         <ListPreference
-            android:defaultValue="sans"
+            android:defaultValue="Sans"
             android:dialogTitle="@string/settings_font_type_dialog"
             android:entries="@array/font_type_preference"
             android:entryValues="@array/font_typevalues_preference"

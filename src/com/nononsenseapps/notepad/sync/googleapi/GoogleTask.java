@@ -58,8 +58,8 @@ public class GoogleTask {
 	public boolean didRemoteInsert = false;
 	
 	// These are local values and not synced
-	public String abcsort = "";
 	public String possort = "";
+	public int indentLevel = 0;
 	
 	public JSONObject json = null;
 
@@ -160,7 +160,10 @@ public class GoogleTask {
 		values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, hidden);
 		
 		values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, possort);
-		values.put(NotePad.Notes.COLUMN_NAME_ABCSUBSORT, abcsort);
+		values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, indentLevel);
+		
+		// TODO add indent level here when it exists in database
+		//values.put(NotePad.Notes.COLUMN_NAME_ABCSUBSORT, abcsort);
 		
 		return values;
 	}
