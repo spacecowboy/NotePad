@@ -550,6 +550,11 @@ public class NotePadProvider extends ContentProvider implements
 						+ postNameInt);
 				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_LOCKED
 						+ postNameInt);
+				
+				// Mark all notes as modified to ensure we set the indents on next sync
+				ContentValues values = new ContentValues();
+				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
+				db.update(NotePad.Notes.TABLE_NAME, values,null, null);
 			}
 		}
 

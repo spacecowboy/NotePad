@@ -21,6 +21,13 @@
     android:orientation="horizontal"
     android:paddingLeft="16dp"
     android:paddingRight="8dp" >
+    
+    <TextView
+            android:id="@+id/widget_itemIndent"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"

@@ -163,6 +163,8 @@ public class NotesListFragment extends ListFragment implements
 		}
 	};
 
+	private static String sortType = NotePad.Notes.DUEDATE_SORT_TYPE;
+
 	@Override
 	public void onAttach(Activity activity) {
 		if (FragmentLayout.UI_DEBUG_PRINTS)
@@ -663,8 +665,8 @@ public class NotesListFragment extends ListFragment implements
 		// The names of the cursor columns to display in the view,
 		// initialized
 		// to the title column
-		String[] dataColumns = {
-				NotePad.Notes.COLUMN_NAME_INDENTLEVEL, NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
+		String[] dataColumns = { NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
+				NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
 				NotePad.Notes.COLUMN_NAME_TITLE,
 				NotePad.Notes.COLUMN_NAME_NOTE,
 				NotePad.Notes.COLUMN_NAME_DUE_DATE };
@@ -673,7 +675,8 @@ public class NotesListFragment extends ListFragment implements
 		// the TextView in noteslist_item.xml
 		// My hacked adapter allows the boolean to be set if the string matches
 		// gtasks string values for them. Needs id as well (set after first)
-		int[] viewIDs = {R.id.itemIndent,  R.id.itemDone, R.id.itemTitle, R.id.itemNote, R.id.itemDate };
+		int[] viewIDs = { R.id.itemIndent, R.id.itemDone, R.id.itemTitle,
+				R.id.itemNote, R.id.itemDate };
 
 		int themed_item = R.layout.noteslist_item;
 
@@ -703,6 +706,8 @@ public class NotesListFragment extends ListFragment implements
 
 		// In order to set the checked state in the checkbox
 		adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
+			static final String indent = "      ";
+
 			public boolean setViewValue(View view, Cursor cursor,
 					int columnIndex) {
 				if (columnIndex == cursor
@@ -750,6 +755,26 @@ public class NotesListFragment extends ListFragment implements
 
 					// Return false so the normal call is used to set the text
 					return false;
+				} else if (columnIndex == cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL)) {
+					// Should only set this on the sort options where it is
+					// expected
+					TextView indentView = (TextView) view;
+
+					int level = cursor.getInt(cursor
+							.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL));
+
+					// Now set the width
+					String width = "";
+					if (sortType.equals(NotePad.Notes.POSSUBSORT_SORT_TYPE)) {
+						int l;
+						for (l = 0; l < level; l++) {
+							width += indent;
+						}
+					}
+					Log.d("Spacer", "Width." + width + ".");
+					indentView.setText(width);
+					return true;
 				}
 				return false;
 			}
@@ -1284,6 +1309,8 @@ public class NotesListFragment extends ListFragment implements
 		} else if (MainPrefs.POSSUBSORT.equals(sortChoice)) {
 			sortOrder = NotePad.Notes.POSSUBSORT_SORT_TYPE;
 		}
+
+		this.sortType = sortOrder;
 
 		sortOrder += " "
 				+ PreferenceManager.getDefaultSharedPreferences(activity)

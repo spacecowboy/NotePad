@@ -51,12 +51,15 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	private Cursor mCursor;
 	private int mAppWidgetId;
 
+	private static final String indent = "    ";
+
 	private long listId = -1;
 
 	private static final String[] PROJECTION = new String[] {
 			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
 			NotePad.Notes.COLUMN_NAME_NOTE, NotePad.Notes.COLUMN_NAME_LIST,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
+			NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
 			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
 
 	public ListRemoteViewsFactory(Context context, Intent intent) {
@@ -82,6 +85,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		// Get the data for this position from the content provider
 		String title = "";
 		String note = "";
+		String space = "";
 		CharSequence dueDate = "";
 		long noteId = -1;
 		long localListId = -1;
@@ -94,12 +98,32 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
 			final int listIndex = mCursor
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST);
+			final int indentIndex = mCursor
+					.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL);
 			final int idIndex = mCursor.getColumnIndex(NotePad.Notes._ID);
 			title = mCursor.getString(titleIndex);
 			note = mCursor.getString(noteIndex);
 			noteId = mCursor.getLong(idIndex);
 			localListId = mCursor.getLong(listIndex);
 			String date = mCursor.getString(dateIndex);
+
+			// Get widget settings
+			SharedPreferences settings = mContext.getSharedPreferences(
+					ListWidgetConfigure.getSharedPrefsFile(mAppWidgetId),
+					Context.MODE_PRIVATE);
+			if (settings != null) {
+				String sortChoice = settings.getString(
+						ListWidgetConfigure.KEY_SORT_TYPE,
+						MainPrefs.DUEDATESORT);
+				if (sortChoice.equals(MainPrefs.POSSUBSORT)) {
+					int indentLevel = mCursor.getInt(indentIndex);
+					int l;
+					for (l = 0; l < indentLevel; l++) {
+						space += indent;
+					}
+				}
+			}
+
 			if (date == null || date.length() == 0)
 				dueDate = "";
 			else {
@@ -112,6 +136,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		rv.setTextViewText(R.id.widget_itemTitle, title);
 		rv.setTextViewText(R.id.widget_itemNote, note);
 		rv.setTextViewText(R.id.widget_itemDate, dueDate);
+		rv.setTextViewText(R.id.widget_itemIndent, space);
 
 		// Set the click intent so that we can handle it and show a toast
 		// message
@@ -158,8 +183,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 					Integer.toString(FragmentLayout.ALL_NOTES_ID)));
 
 			String sortChoice = settings.getString(
-					ListWidgetConfigure.KEY_SORT_TYPE,
-					MainPrefs.DUEDATESORT);
+					ListWidgetConfigure.KEY_SORT_TYPE, MainPrefs.DUEDATESORT);
 			String sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
 
 			if (MainPrefs.DUEDATESORT.equals(sortChoice)) {
@@ -168,6 +192,8 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
 			} else if (MainPrefs.MODIFIEDSORT.equals(sortChoice)) {
 				sortOrder = NotePad.Notes.MODIFICATION_SORT_TYPE;
+			} else if (MainPrefs.POSSUBSORT.equals(sortChoice)) {
+				sortOrder = NotePad.Notes.POSSUBSORT_SORT_TYPE;
 			}
 
 			sortOrder += " "
