@@ -30,11 +30,15 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class ListWidgetConfigure extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
@@ -134,6 +138,7 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			// Log.d("prefsActivity", "changed key: " + key);
 			// Log.d("prefsActivity","commiting: " +
 			// sharedPreferences.getString(key, null));
+			Log.d("config", "setting real values: " + key);
 			getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
 					.edit()
 					.putString(key, sharedPreferences.getString(key, null))
@@ -252,11 +257,16 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		public void onSharedPreferenceChanged(
 				SharedPreferences sharedPreferences, String key) {
 			if (key.equals(KEY_LIST)) {
+				Log.d("config", "writing title");
 				// Must also write the list Name to the prefs
-				sharedPreferences
-						.edit()
-						.putString(KEY_LIST_TITLE,
-								listSpinner.getEntry().toString()).commit();
+//				lSettings
+//						.edit()
+//						.putString(KEY_LIST_TITLE,
+//								listSpinner.getEntry().toString()).apply();
+				TitleWriter task2 = new TitleWriter(activity);
+				task2.execute(new String[] {"Please report title bug"});
+				TitleWriter task = new TitleWriter(activity);
+				task.execute(new String[] {listSpinner.getEntry().toString()});
 			}
 			if (!activity.isFinishing()) {
 				if (key.equals(KEY_LIST)) {
@@ -268,6 +278,33 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 					sortType.setSummary(sortType.getEntry());
 				}
 			}
+		}
+		
+		private class TitleWriter extends AsyncTask<String, Void, Void> {
+			
+			private Activity activity;
+
+			public TitleWriter(Activity activity) {
+				super();
+				this.activity = activity;
+			}
+
+			@Override
+			protected Void doInBackground(String... titles) {
+				if (titles != null) {
+					try {
+						// Make sure preferences are updated first
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						//e.printStackTrace();
+					}
+					for (String title: titles) {
+						PreferenceManager.getDefaultSharedPreferences(activity).edit().putString(KEY_LIST_TITLE, title).commit();
+					}
+				}
+				return null;
+			}
+			
 		}
 	}
 
