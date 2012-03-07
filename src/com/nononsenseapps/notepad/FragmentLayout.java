@@ -764,17 +764,38 @@ public class FragmentLayout extends Activity implements
 		public boolean onOptionsItemSelected(MenuItem item) {
 			switch (item.getItemId()) {
 			case android.R.id.home:
-				finish();
+				goUp();
 				break;
 			case R.id.menu_delete:
 				onDeleteAction();
 				return true;
 			case R.id.menu_revert:
-				setResult(Activity.RESULT_CANCELED);
-				finish();
+				goUp();
 				break;
 			}
 			return super.onOptionsItemSelected(item);
+		}
+		
+		/**
+		 * Launches the main activity with Flag CLEAR TOP
+		 */
+		private void goUp() {
+			Intent intent = new Intent();
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.setClass(this, FragmentLayout.class);
+
+			startActivity(intent);
+		}
+		
+		@Override
+		public boolean onKeyUp(int keyCode, KeyEvent event) {
+			switch (keyCode) {
+			case KeyEvent.KEYCODE_BACK:
+				// Exit app
+				goUp();
+				return true;
+			}
+			return false;
 		}
 
 		@Override
@@ -817,8 +838,7 @@ public class FragmentLayout extends Activity implements
 			editorFragment.setSelfAction(); // Don't try to reload the deleted
 											// note
 			FragmentLayout.deleteNote(this, editorFragment.getCurrentNoteId());
-			setResult(Activity.RESULT_CANCELED);
-			finish();
+			goUp();
 		}
 	}
 
