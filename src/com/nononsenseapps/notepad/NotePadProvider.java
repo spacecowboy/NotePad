@@ -228,7 +228,7 @@ public class NotePadProvider extends ContentProvider implements
 				NotePad.Notes.COLUMN_NAME_POSSUBSORT);
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN,
 				NotePad.Notes.COLUMN_NAME_LOCALHIDDEN);
-		
+
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LOCKED,
 				NotePad.Notes.COLUMN_NAME_LOCKED);
 
@@ -372,7 +372,7 @@ public class NotePadProvider extends ContentProvider implements
 			values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, now);
 			values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
 			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, "needsAction");
-			
+
 			values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, "");
 			values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
 
@@ -403,9 +403,8 @@ public class NotePadProvider extends ContentProvider implements
 					+ " TEXT DEFAULT '',"
 					+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
 					+ " INTEGER DEFAULT 0,"
-					
-					+ NotePad.Notes.COLUMN_NAME_LOCKED
-					+ " INTEGER DEFAULT 0,"
+
+					+ NotePad.Notes.COLUMN_NAME_LOCKED + " INTEGER DEFAULT 0,"
 
 					+ NotePad.Notes.COLUMN_NAME_DELETED + " INTEGER" + ");");
 		}
@@ -550,11 +549,12 @@ public class NotePadProvider extends ContentProvider implements
 						+ postNameInt);
 				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_LOCKED
 						+ postNameInt);
-				
-				// Mark all notes as modified to ensure we set the indents on next sync
+
+				// Mark all notes as modified to ensure we set the indents on
+				// next sync
 				ContentValues values = new ContentValues();
 				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
-				db.update(NotePad.Notes.TABLE_NAME, values,null, null);
+				db.update(NotePad.Notes.TABLE_NAME, values, null, null);
 			}
 		}
 
@@ -1075,12 +1075,18 @@ public class NotePadProvider extends ContentProvider implements
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_DELETED) == false) {
 			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 0);
 		}
-		
+
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_INDENTLEVEL) == false) {
 			values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
 		}
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_LOCKED) == false) {
 			values.put(NotePad.Notes.COLUMN_NAME_LOCKED, 0);
+		}
+
+		// Set a default sort position so it matches where new tasks are added
+		// in gmail
+		if (values.containsKey(NotePad.Notes.COLUMN_NAME_POSSUBSORT) == false) {
+			values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, "z.");
 		}
 
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_LIST) == false

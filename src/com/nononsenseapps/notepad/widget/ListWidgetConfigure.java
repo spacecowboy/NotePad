@@ -263,8 +263,10 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 //						.edit()
 //						.putString(KEY_LIST_TITLE,
 //								listSpinner.getEntry().toString()).apply();
+				// This seems stupid and it is. The first time this is called, it won't be written
+				// to the shared preferences file! Do it twice to ensure it is always written...
 				TitleWriter task2 = new TitleWriter(activity);
-				task2.execute(new String[] {"Please report title bug"});
+				task2.execute(new String[] {listSpinner.getEntry().toString()});
 				TitleWriter task = new TitleWriter(activity);
 				task.execute(new String[] {listSpinner.getEntry().toString()});
 			}
