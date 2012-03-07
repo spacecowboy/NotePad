@@ -65,6 +65,7 @@ import android.widget.Toast;
 
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.ui.DeleteActionProvider;
 import com.nononsenseapps.ui.TextPreviewPreference;
 
 public class NotesEditorFragment extends Fragment implements TextWatcher,
@@ -138,6 +139,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private boolean mOriginalDueState;
 	private boolean opened = false;
 	public boolean selfAction = false;
+
+	private NoteAttributes noteAttrs;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -229,7 +232,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				|| mOriginalDueDate == null) {
 			return false;
 		} else {
-			return !(mText.getText().toString().equals(mOriginalNote)
+			return !(noteAttrs.getFullNote(mText.getText().toString()).equals(mOriginalNote)
 					&& mTitle.getText().toString().equals(mOriginalTitle)
 					&& dueDateSet == mOriginalDueState && (!dueDateSet || (dueDateSet && noteDueDate
 					.format3339(false).equals(mOriginalDueDate))));
@@ -385,7 +388,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		if (mOriginalTitle != null && mTitle != null)
 			mTitle.setText(mOriginalTitle);
 		if (mOriginalNote != null && mText != null)
-			mText.setText(mOriginalNote);
+			mText.setText(noteAttrs.parseNote(mOriginalNote));
 		if (mOriginalDueDate != null && mDueDate != null) {
 			setDueDate(mOriginalDueDate);
 		}
@@ -434,6 +437,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		year = c.get(Calendar.YEAR);
 		month = c.get(Calendar.MONTH);
 		day = c.get(Calendar.DAY_OF_MONTH);
+		
+		noteAttrs = new NoteAttributes(); // Just a precaution
 	}
 
 	@Override
@@ -779,8 +784,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				int colNoteIndex = mCursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
 				String note = mCursor.getString(colNoteIndex);
-				mText.setText(note);
-				mText.setEnabled(true);
+				noteAttrs = new NoteAttributes();
+				if (noteAttrs.locked) {
+					// TODO
+					// Need password confirmation
+				} else {
+					mText.setText(noteAttrs.parseNote(note));
+					mText.setEnabled(true);
+				}
 				// Sets cursor at the end
 				// mText.setSelection(note.length());
 
@@ -794,7 +805,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				// Stores the original note text, to allow the user to revert
 				// changes.
 				if (mOriginalNote == null) {
-					mOriginalNote = note;
+					mOriginalNote = note; // Save original text here
 				}
 				if (mOriginalDueDate == null) {
 					mOriginalDueDate = due;
@@ -914,7 +925,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				Log.d("NotesEditorFragment", "Saving/Deleting Note");
 
 			// Get the current note text.
-			String text = mText.getText().toString();
+			String text = noteAttrs.getFullNote(mText.getText().toString());
 
 			// Get title text
 			String title = mTitle.getText().toString();

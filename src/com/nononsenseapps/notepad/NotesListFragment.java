@@ -29,6 +29,7 @@ import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
+import com.nononsenseapps.ui.DeleteActionProvider;
 import com.nononsenseapps.ui.NoteCheckBox;
 
 import android.content.BroadcastReceiver;

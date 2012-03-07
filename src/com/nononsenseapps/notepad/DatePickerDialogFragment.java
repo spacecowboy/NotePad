@@ -24,17 +24,6 @@ import android.os.Bundle;
 public class DatePickerDialogFragment extends DialogFragment {
 	private NotesEditorFragment mFragment = null;
 
-//	public DatePickerDialogFragment() {
-//		super();
-//		// This will result in an immediate finish. Only here to avoid
-//		// crashes by the system on restarts
-//	}
-//
-//	public DatePickerDialogFragment(NotesEditorFragment callback) {
-//		super();
-//		mFragment = callback;
-//	}
-	
 	public void setCallback(NotesEditorFragment fragment) {
 		mFragment = fragment;
 	}

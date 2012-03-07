@@ -13,7 +13,7 @@
         android:title="@string/menu_copy"/>
     <item
         android:id="@+id/modal_action_delete"
-        android:actionProviderClass="com.nononsenseapps.notepad.DeleteActionProvider"
+        android:actionProviderClass="com.nononsenseapps.ui.DeleteActionProvider"
         android:icon="?content_discard"
         android:showAsAction="ifRoom"
         android:title="@string/menu_delete"/>

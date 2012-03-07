@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-package com.nononsenseapps.notepad;
+package com.nononsenseapps.ui;
 
+import com.nononsenseapps.notepad.FragmentLayout;
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.R.id;
+import com.nononsenseapps.notepad.R.string;
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 
 import android.content.Context;

@@ -8,7 +8,7 @@
     <item android:id="@+id/action_delete" android:showAsAction="ifRoom"
 		android:icon="?content_discard" android:title="@string/menu_delete"
 		android:orderInCategory="4"
-		android:actionProviderClass="com.nononsenseapps.notepad.DeleteActionProvider" />
+		android:actionProviderClass="com.nononsenseapps.ui.DeleteActionProvider" />
     <item android:id="@+id/menu_copy"
           android:icon="?content_copy"
           android:title="@string/menu_copy"
