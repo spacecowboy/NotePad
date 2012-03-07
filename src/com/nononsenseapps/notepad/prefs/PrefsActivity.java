@@ -4,14 +4,21 @@ import java.util.List;
 
 import com.nononsenseapps.notepad.FragmentLayout;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.interfaces.PasswordChecker;
 
 import android.app.ActionBar;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.view.MenuItem;
+import android.widget.Toast;
 
-public class PrefsActivity extends PreferenceActivity {
+public class PrefsActivity extends PreferenceActivity implements
+		PasswordChecker {
+
+	private String pendingNewPassword = "";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -21,7 +28,7 @@ public class PrefsActivity extends PreferenceActivity {
 		ActionBar actionBar = getActionBar();
 		if (actionBar != null) {
 			actionBar.setDisplayHomeAsUpEnabled(true);
-			//actionBar.setDisplayShowTitleEnabled(false);
+			// actionBar.setDisplayShowTitleEnabled(false);
 		}
 	}
 
@@ -42,7 +49,7 @@ public class PrefsActivity extends PreferenceActivity {
 		}
 		return super.onOptionsItemSelected(item);
 	}
-	
+
 	/**
 	 * Launches the main activity with Flag CLEAR TOP
 	 */
@@ -52,5 +59,27 @@ public class PrefsActivity extends PreferenceActivity {
 		intent.setClass(this, FragmentLayout.class);
 
 		startActivity(intent);
+	}
+
+	public void setPendingNewPassword(String newPassword) {
+		this.pendingNewPassword = newPassword;
+	}
+
+	@Override
+	public void PasswordVerified(boolean result) {
+		if (result) {
+			SharedPreferences settings = PreferenceManager
+					.getDefaultSharedPreferences(this);
+			// Set new password
+			settings.edit()
+					.putString(PasswordPrefs.KEY_PASSWORD, pendingNewPassword)
+					.commit();
+			// TODO resource
+			Toast.makeText(
+					this,
+					("".equals(pendingNewPassword)) ? "Password cleared string"
+							: "Password set string ", Toast.LENGTH_SHORT)
+					.show();
+		}
 	}
 }

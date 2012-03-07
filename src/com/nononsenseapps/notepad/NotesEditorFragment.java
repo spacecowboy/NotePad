@@ -35,11 +35,13 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -65,6 +67,7 @@ import android.widget.Toast;
 
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 import com.nononsenseapps.ui.DeleteActionProvider;
 import com.nononsenseapps.ui.TextPreviewPreference;
 
@@ -141,6 +144,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public boolean selfAction = false;
 
 	private NoteAttributes noteAttrs;
+	private Handler mHandler = new Handler();
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -232,7 +236,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				|| mOriginalDueDate == null) {
 			return false;
 		} else {
-			return !(noteAttrs.getFullNote(mText.getText().toString()).equals(mOriginalNote)
+			return !(noteAttrs.getFullNote(mText.getText().toString()).equals(
+					mOriginalNote)
 					&& mTitle.getText().toString().equals(mOriginalTitle)
 					&& dueDateSet == mOriginalDueState && (!dueDateSet || (dueDateSet && noteDueDate
 					.format3339(false).equals(mOriginalDueDate))));
@@ -303,7 +308,18 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				// }
 
 				// This puts the desired notes text into the map.
-				values.put(NotePad.Notes.COLUMN_NAME_NOTE, text);
+				if (mText.isEnabled()) {
+					// the field will only be enabled if the password was
+					// successfully inputted (if one exists. Otherwise, don't
+					// change the text
+					values.put(NotePad.Notes.COLUMN_NAME_NOTE,
+							noteAttrs.getFullNote(text));
+				}
+				if (noteAttrs.locked) {
+					values.put(NotePad.Notes.COLUMN_NAME_LOCKED, 1);
+				} else {
+					values.put(NotePad.Notes.COLUMN_NAME_LOCKED, 0);
+				}
 
 				// Add list
 				values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
@@ -437,7 +453,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		year = c.get(Calendar.YEAR);
 		month = c.get(Calendar.MONTH);
 		day = c.get(Calendar.DAY_OF_MONTH);
-		
+
 		noteAttrs = new NoteAttributes(); // Just a precaution
 	}
 
@@ -784,12 +800,26 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				int colNoteIndex = mCursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
 				String note = mCursor.getString(colNoteIndex);
+				
+				SharedPreferences settings = PreferenceManager
+						.getDefaultSharedPreferences(activity);
+				String currentPassword = settings.getString(PasswordPrefs.KEY_PASSWORD, "");
+
 				noteAttrs = new NoteAttributes();
-				if (noteAttrs.locked) {
+				noteAttrs.parseNote(note);
+				// Don't care about locks if no password is set
+				if (noteAttrs.locked && !"".equals(currentPassword)) {
 					// TODO
 					// Need password confirmation
+					//PasswordDialog.showPasswordDialog();
+					mHandler.post(new Runnable() {
+			            @Override
+			            public void run() {
+			                showPasswordDialog();
+			            }
+			        });
 				} else {
-					mText.setText(noteAttrs.parseNote(note));
+					mText.setText(noteAttrs.getNoteText());
 					mText.setEnabled(true);
 				}
 				// Sets cursor at the end
@@ -925,7 +955,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				Log.d("NotesEditorFragment", "Saving/Deleting Note");
 
 			// Get the current note text.
-			String text = noteAttrs.getFullNote(mText.getText().toString());
+			String text = mText.getText().toString();
 
 			// Get title text
 			String title = mTitle.getText().toString();
@@ -1082,4 +1112,25 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public long getCurrentNoteId() {
 		return id;
 	}
+	
+	private void showPasswordDialog() {
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		Fragment prev = getFragmentManager().findFragmentByTag("newpassdialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		// Create and show the dialog.
+		DialogFragment newFragment = new PasswordDialog();
+		newFragment.show(ft, "newpassdialog");
+	}
+
+	public void OnPasswordVerified(boolean result) {
+		if (result && mText != null && noteAttrs != null) {
+			mText.setText(noteAttrs.getNoteText());
+			mText.setEnabled(true);
+		}
+	}
+	
 }

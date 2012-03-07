@@ -18,7 +18,9 @@ package com.nononsenseapps.notepad.prefs;
 
 import com.nononsenseapps.notepad.FragmentLayout;
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.PasswordDialog;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.interfaces.PasswordChecker;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -153,6 +155,7 @@ public class PasswordPrefs extends PreferenceFragment {
 	}
 
 	private void showPasswordDialog(String newPassword) {
+		((PrefsActivity) activity).setPendingNewPassword(newPassword);
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		Fragment prev = getFragmentManager().findFragmentByTag("newpassdialog");
 		if (prev != null) {
@@ -161,91 +164,7 @@ public class PasswordPrefs extends PreferenceFragment {
 		ft.addToBackStack(null);
 
 		// Create and show the dialog.
-		Bundle args = new Bundle();
-		args.putString(KEY_PASSWORD, newPassword);
 		DialogFragment newFragment = new PasswordDialog();
-		newFragment.setArguments(args);
 		newFragment.show(ft, "newpassdialog");
-	}
-
-	public static class PasswordDialog extends DialogFragment implements
-			OnClickListener {
-		Bundle args;
-		private Activity activity;
-		private EditText passwordText;
-
-		@Override
-		public void onAttach(Activity activity) {
-			super.onAttach(activity);
-			this.activity = activity;
-		}
-
-		@Override
-		public void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
-			Bundle args = getArguments();
-			if (args != null) {
-				this.args = args;
-			} else {
-				this.args = new Bundle();
-			}
-		}
-
-		@Override
-		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
-			View v = inflater.inflate(R.layout.confirm_password_dialog,
-					container, false);
-			// TODO resource
-			getDialog().setTitle("Password required string");
-
-			passwordText = (EditText) v.findViewById(R.id.editTitle);
-
-			Button yesButton = (Button) v.findViewById(R.id.dialog_yes);
-			yesButton.setOnClickListener(this);
-
-			Button noButton = (Button) v.findViewById(R.id.dialog_no);
-			noButton.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					dismiss();
-				}
-			});
-
-			return v;
-		}
-
-		@Override
-		public void onClick(View v) {
-			SharedPreferences settings = PreferenceManager
-					.getDefaultSharedPreferences(activity);
-			String currentPassword = settings.getString(
-					PasswordPrefs.KEY_PASSWORD, "");
-			String enteredPassword = passwordText.getText().toString();
-			String newPassword = args.getString(KEY_PASSWORD);
-
-			if ("".equals(currentPassword)
-					|| currentPassword.equals(enteredPassword)) {
-				if (newPassword != null) {
-					// Set new password
-					settings.edit()
-							.putString(PasswordPrefs.KEY_PASSWORD, newPassword)
-							.commit();
-					// TODO resource
-					Toast.makeText(activity,
-							("".equals(newPassword)) ? "Password cleared string" : "Password set string ",
-							Toast.LENGTH_SHORT).show();
-				} else {
-					// Confirm that correct password was set to activity
-				}
-				dismiss();
-			} else {
-				Animation shake = AnimationUtils.loadAnimation(activity,
-						R.anim.shake);
-				passwordText.startAnimation(shake);
-				Toast.makeText(activity, "Password incorrect string",
-						Toast.LENGTH_SHORT).show();
-			}
-		}
 	}
 }

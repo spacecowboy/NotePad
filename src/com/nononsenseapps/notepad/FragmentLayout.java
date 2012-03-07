@@ -21,6 +21,7 @@ import java.util.Collection;
 
 import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
+import com.nononsenseapps.notepad.interfaces.PasswordChecker;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
@@ -33,6 +34,8 @@ import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.app.SearchManager;
@@ -65,7 +68,7 @@ import android.widget.EditText;
 public class FragmentLayout extends Activity implements
 		OnSharedPreferenceChangeListener, OnEditorDeleteListener,
 		DeleteActionListener, OnNavigationListener,
-		LoaderManager.LoaderCallbacks<Cursor> {
+		LoaderManager.LoaderCallbacks<Cursor>, PasswordChecker {
 	private static final String TAG = "FragmentLayout";
 	private static final String CURRENT_LIST_ID = "currentlistid";
 	private static final String CURRENT_LIST_POS = "currentlistpos";
@@ -642,6 +645,15 @@ public class FragmentLayout extends Activity implements
 			setTheme(R.style.ThemeHolo);
 		}
 	}
+	
+	@Override
+	public void PasswordVerified(boolean result) {
+		NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
+				.findFragmentById(R.id.editor_container);
+		if (editor != null) {
+			editor.OnPasswordVerified(result);
+		}
+	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
@@ -704,7 +716,7 @@ public class FragmentLayout extends Activity implements
 	 * screen is not large enough to show it all in one activity.
 	 */
 	public static class NotesEditorActivity extends Activity implements
-			DeleteActionListener {
+			DeleteActionListener, PasswordChecker {
 		private static final String TAG = "NotesEditorActivity";
 		private NotesEditorFragment editorFragment;
 		private long currentId = -1;
@@ -839,6 +851,13 @@ public class FragmentLayout extends Activity implements
 											// note
 			FragmentLayout.deleteNote(this, editorFragment.getCurrentNoteId());
 			goUp();
+		}
+
+		@Override
+		public void PasswordVerified(boolean result) {
+			if (editorFragment != null) {
+				editorFragment.OnPasswordVerified(result);
+			}
 		}
 	}
 
