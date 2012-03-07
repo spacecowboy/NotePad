@@ -24,6 +24,7 @@ import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
@@ -39,6 +40,7 @@ import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.MenuItem;
 
 public class ListWidgetConfigure extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
@@ -72,6 +74,13 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 					AppWidgetManager.INVALID_APPWIDGET_ID);
 		} else {
 			appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
+		}
+
+		// Set up navigation (adds nice arrow to icon)
+		ActionBar actionBar = getActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			// actionBar.setDisplayShowTitleEnabled(false);
 		}
 
 		// Set valid result from start
@@ -111,6 +120,16 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	public void onBuildHeaders(List<Header> target) {
 		loadHeadersFromResource(R.xml.widget_pref_headers, target);
 		setDefaultSharedPreferenceValues();
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -259,16 +278,18 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			if (key.equals(KEY_LIST)) {
 				Log.d("config", "writing title");
 				// Must also write the list Name to the prefs
-//				lSettings
-//						.edit()
-//						.putString(KEY_LIST_TITLE,
-//								listSpinner.getEntry().toString()).apply();
-				// This seems stupid and it is. The first time this is called, it won't be written
-				// to the shared preferences file! Do it twice to ensure it is always written...
+				// lSettings
+				// .edit()
+				// .putString(KEY_LIST_TITLE,
+				// listSpinner.getEntry().toString()).apply();
+				// This seems stupid and it is. The first time this is called,
+				// it won't be written
+				// to the shared preferences file! Do it twice to ensure it is
+				// always written...
 				TitleWriter task2 = new TitleWriter(activity);
-				task2.execute(new String[] {listSpinner.getEntry().toString()});
+				task2.execute(new String[] { listSpinner.getEntry().toString() });
 				TitleWriter task = new TitleWriter(activity);
-				task.execute(new String[] {listSpinner.getEntry().toString()});
+				task.execute(new String[] { listSpinner.getEntry().toString() });
 			}
 			if (!activity.isFinishing()) {
 				if (key.equals(KEY_LIST)) {
@@ -281,9 +302,9 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 				}
 			}
 		}
-		
+
 		private class TitleWriter extends AsyncTask<String, Void, Void> {
-			
+
 			private Activity activity;
 
 			public TitleWriter(Activity activity) {
@@ -298,15 +319,17 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 						// Make sure preferences are updated first
 						Thread.sleep(100);
 					} catch (InterruptedException e) {
-						//e.printStackTrace();
+						// e.printStackTrace();
 					}
-					for (String title: titles) {
-						PreferenceManager.getDefaultSharedPreferences(activity).edit().putString(KEY_LIST_TITLE, title).commit();
+					for (String title : titles) {
+						PreferenceManager.getDefaultSharedPreferences(activity)
+								.edit().putString(KEY_LIST_TITLE, title)
+								.commit();
 					}
 				}
 				return null;
 			}
-			
+
 		}
 	}
 

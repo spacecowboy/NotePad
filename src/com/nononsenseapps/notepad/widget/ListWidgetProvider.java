@@ -60,7 +60,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		String action = intent.getAction();
 		Intent appIntent = new Intent();
 		appIntent.setClass(context, FragmentLayout.class);
-		appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		if (action.equals(OPEN_ACTION)) {
 			appIntent.setAction(Intent.ACTION_VIEW);
 			appIntent.setData(Uri.withAppendedPath(
