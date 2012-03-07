@@ -81,8 +81,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public static final String[] PROJECTION = new String[] { NotePad.Notes._ID,
 			NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
-			NotePad.Notes.COLUMN_NAME_DELETED,
-			NotePad.Notes.COLUMN_NAME_LIST};
+			NotePad.Notes.COLUMN_NAME_DELETED, NotePad.Notes.COLUMN_NAME_LIST };
 
 	// A label for the saved state of the activity
 	public static final String ORIGINAL_NOTE = "origContent";
@@ -421,12 +420,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			if (FragmentLayout.UI_DEBUG_PRINTS)
 				Log.d(TAG, "Should never happen right");
 			id = getArguments().getLong(KEYID);
-			//listId = getArguments().getLong(LISTID);
+			// listId = getArguments().getLong(LISTID);
 		} else {
 			if (FragmentLayout.UI_DEBUG_PRINTS)
 				Log.d(TAG, "onCreate, no valid values in arguments");
 			id = -1;
-			//listId = -1;
+			// listId = -1;
 		}
 
 		noteDueDate = new Time(Time.getCurrentTimezone());
@@ -511,8 +510,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 									R.integer.default_editor_font_size));
 			Typeface tf = TextPreviewPreference.getTypeface(PreferenceManager
 					.getDefaultSharedPreferences(activity).getString(
-							MainPrefs.KEY_FONT_TYPE_EDITOR,
-							MainPrefs.SANS));
+							MainPrefs.KEY_FONT_TYPE_EDITOR, MainPrefs.SANS));
 
 			mText.setTextSize(size);
 			mText.setTypeface(tf);
@@ -646,8 +644,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		switch (item.getItemId()) {
 		case R.id.menu_revert:
 			cancelNote();
-			Toast.makeText(activity, getString(R.string.reverted), Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(activity, getString(R.string.reverted),
+					Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.menu_copy:
 			copyText(makeShareText());
@@ -734,7 +732,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		doSave = true;
 		selfAction = false;
 		this.id = id;
-		//this.listId = listid;
+		// this.listId = listid;
 		if (FragmentLayout.UI_DEBUG_PRINTS)
 			Log.d("insertError", "displayNote");
 		openNote(null);
@@ -769,9 +767,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				String title = mCursor.getString(colTitleIndex);
 				mTitle.setText(title);
 				mTitle.setEnabled(true);
-				
+
 				// Set list ID
-				listId = mCursor.getLong(mCursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
+				listId = mCursor.getLong(mCursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
 
 				// Gets the note text from the Cursor and puts it in the
 				// TextView,
@@ -1017,22 +1016,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		ft.addToBackStack(null);
 
 		// Create and show the dialog.
-		DatePickerDialogFragment newFragment = new DatePickerDialogFragment(
-				this);
+		DatePickerDialogFragment newFragment = new DatePickerDialogFragment();
+		newFragment.setCallback(this);
 		newFragment.show(ft, "dialog");
-	}
-
-	public class DatePickerDialogFragment extends DialogFragment {
-		private NotesEditorFragment mFragment;
-
-		public DatePickerDialogFragment(NotesEditorFragment callback) {
-			mFragment = callback;
-		}
-
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			return new DatePickerDialog(activity, mFragment, mFragment.year,
-					mFragment.month, mFragment.day);
-		}
 	}
 
 	@Override
