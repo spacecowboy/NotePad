@@ -3,6 +3,7 @@ package com.nononsenseapps.notepad.prefs;
 import java.util.List;
 
 import com.nononsenseapps.notepad.FragmentLayout;
+import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.interfaces.PasswordChecker;
 
@@ -66,8 +67,8 @@ public class PrefsActivity extends PreferenceActivity implements
 	}
 
 	@Override
-	public void PasswordVerified(boolean result) {
-		if (result) {
+	public void PasswordVerified(ActionResult result) {
+		if (result.result) {
 			SharedPreferences settings = PreferenceManager
 					.getDefaultSharedPreferences(this);
 			// Set new password

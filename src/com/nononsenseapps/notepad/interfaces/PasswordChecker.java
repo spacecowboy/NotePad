@@ -16,11 +16,13 @@
 
 package com.nononsenseapps.notepad.interfaces;
 
+import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
+
 /**
  * A class which can ask for password verification
  * @author Jonas
  *
  */
 public interface PasswordChecker {
-	public void PasswordVerified(boolean result);
+	public void PasswordVerified(ActionResult result);
 }

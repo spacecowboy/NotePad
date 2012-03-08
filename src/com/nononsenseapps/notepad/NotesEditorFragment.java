@@ -63,6 +63,7 @@ import android.widget.ScrollView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 import com.nononsenseapps.ui.TextPreviewPreference;
@@ -101,6 +102,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	protected static final int DATE_DIALOG_ID = 999;
 	private static final String TAG = "NotesEditorFragment";
+	protected static final int SHOW_NOTE = 10;
+	protected static final int LOCK_NOTE = 11;
+	protected static final int UNLOCK_NOTE = 12;
 
 	// These fields are strictly used for the date picker dialog. They should
 	// not be used to get the notes due date!
@@ -642,6 +646,16 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			} else {
 				menu.findItem(R.id.menu_revert).setVisible(true);
 			}
+			// Lock items
+			if (noteAttrs != null) {
+				if (noteAttrs.locked) {
+					menu.findItem(R.id.menu_lock).setVisible(false);
+					menu.findItem(R.id.menu_unlock).setVisible(true);
+				} else {
+					menu.findItem(R.id.menu_lock).setVisible(true);
+					menu.findItem(R.id.menu_unlock).setVisible(false);
+				}
+			}
 		}
 	}
 
@@ -665,6 +679,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		case R.id.menu_sync:
 			// Save note!
 			saveNote();
+			break;
+		case R.id.menu_lock:
+			// Lock note
+			showPasswordDialog(LOCK_NOTE);
+			break;
+		case R.id.menu_unlock:
+			// Unlock note
+			showPasswordDialog(UNLOCK_NOTE);
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -786,10 +808,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				int colNoteIndex = mCursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
 				String note = mCursor.getString(colNoteIndex);
-				
+
 				SharedPreferences settings = PreferenceManager
 						.getDefaultSharedPreferences(activity);
-				String currentPassword = settings.getString(PasswordPrefs.KEY_PASSWORD, "");
+				String currentPassword = settings.getString(
+						PasswordPrefs.KEY_PASSWORD, "");
 
 				noteAttrs = new NoteAttributes();
 				noteAttrs.parseNote(note);
@@ -799,15 +822,17 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				// Don't care about locks if no password is set
 				if (noteAttrs.locked && !"".equals(currentPassword)) {
 					// Need password confirmation
-					// This is called in onLoadFinished and you are not allowed to
-					// make fragment transactions there. Hence, we bypass that by
+					// This is called in onLoadFinished and you are not allowed
+					// to
+					// make fragment transactions there. Hence, we bypass that
+					// by
 					// opening it through the handler instead.
 					mHandler.post(new Runnable() {
-			            @Override
-			            public void run() {
-			                showPasswordDialog();
-			            }
-			        });
+						@Override
+						public void run() {
+							showPasswordDialog(SHOW_NOTE);
+						}
+					});
 				} else {
 					mText.setText(noteAttrs.getNoteText());
 					mText.setEnabled(true);
@@ -1102,8 +1127,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public long getCurrentNoteId() {
 		return id;
 	}
-	
-	private void showPasswordDialog() {
+
+	private void showPasswordDialog(int actionId) {
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		Fragment prev = getFragmentManager().findFragmentByTag("newpassdialog");
 		if (prev != null) {
@@ -1112,15 +1137,36 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		ft.addToBackStack(null);
 
 		// Create and show the dialog.
-		DialogFragment newFragment = new PasswordDialog();
+		PasswordDialog newFragment = new PasswordDialog();
+		newFragment.setAction(actionId);
 		newFragment.show(ft, "newpassdialog");
 	}
 
-	public void OnPasswordVerified(boolean result) {
-		if (result && mText != null && noteAttrs != null) {
-			mText.setText(noteAttrs.getNoteText());
-			mText.setEnabled(true);
+	public void OnPasswordVerified(ActionResult result) {
+		if (result != null && result.result && mText != null
+				&& noteAttrs != null) {
+			switch (result.actionId) {
+			case LOCK_NOTE:
+				noteAttrs.locked = true;
+				// TODO resource
+				Toast.makeText(activity,"Locked",
+						Toast.LENGTH_SHORT).show();
+				break;
+			case UNLOCK_NOTE:
+				noteAttrs.locked = false;
+				// TODO resource
+				Toast.makeText(activity,"Unlocked",
+						Toast.LENGTH_SHORT).show();
+				// Fall through and show the note as well
+			case SHOW_NOTE:
+				mText.setText(noteAttrs.getNoteText());
+				mText.setEnabled(true);
+				break;
+			default:
+				// Dont do anything without proper key
+				break;
+			}
 		}
 	}
-	
+
 }

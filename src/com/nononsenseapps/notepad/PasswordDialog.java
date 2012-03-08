@@ -18,10 +18,7 @@ package com.nononsenseapps.notepad;
 
 import android.app.Activity;
 import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
@@ -41,6 +38,7 @@ import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 public class PasswordDialog extends DialogFragment implements OnClickListener {
 	private Activity activity;
 	private EditText passwordText;
+	private int actionId = -1;
 	
 //	public static void showPasswordDialog() {
 //		// Create and show the dialog.
@@ -83,7 +81,7 @@ public class PasswordDialog extends DialogFragment implements OnClickListener {
 		noButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				((PasswordChecker) activity).PasswordVerified(false);
+				((PasswordChecker) activity).PasswordVerified(getResult(false));
 				dismiss();
 			}
 		});
@@ -107,7 +105,7 @@ public class PasswordDialog extends DialogFragment implements OnClickListener {
 	private void checkPassword(String enteredPassword, String currentPassword) {
 		if ("".equals(currentPassword)
 				|| currentPassword.equals(enteredPassword)) {
-			((PasswordChecker) activity).PasswordVerified(true);
+			((PasswordChecker) activity).PasswordVerified(getResult(true));
 			dismiss();
 		} else {
 			Animation shake = AnimationUtils.loadAnimation(activity,
@@ -115,6 +113,30 @@ public class PasswordDialog extends DialogFragment implements OnClickListener {
 			passwordText.startAnimation(shake);
 			Toast.makeText(activity, "Password incorrect string",
 					Toast.LENGTH_SHORT).show();
+		}
+	}
+	
+	/**
+	 * To be able to tell what it is we are verifying later
+	 * @param actionId
+	 */
+	public void setAction(int actionId) {
+		this.actionId = actionId;
+	}
+	
+	public ActionResult getResult(boolean verified) {
+		ActionResult result = new ActionResult(actionId);
+		result.result = verified;
+		return result;
+	}
+	
+	public static class ActionResult {
+		public boolean result = false;
+		public int actionId = -1;
+		public ActionResult() {
+		}
+		public ActionResult(int actionId) {
+			this.actionId = actionId;
 		}
 	}
 }

@@ -120,4 +120,8 @@
     <string name="settings_list">List</string>
     <string name="settings_list_summary"></string>
     <string name="automatic">Automatically</string>
+    
+    <!-- Un-translated yet -->
+    <string name="lock_note">Lock note</string>
+    <string name="unlock_note">Unlock note</string>
 </resources>

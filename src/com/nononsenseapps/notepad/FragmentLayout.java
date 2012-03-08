@@ -19,6 +19,7 @@ package com.nononsenseapps.notepad;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.PasswordChecker;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
@@ -642,7 +643,7 @@ public class FragmentLayout extends Activity implements
 	}
 	
 	@Override
-	public void PasswordVerified(boolean result) {
+	public void PasswordVerified(ActionResult result) {
 		NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
 				.findFragmentById(R.id.editor_container);
 		if (editor != null) {
@@ -847,7 +848,7 @@ public class FragmentLayout extends Activity implements
 		}
 
 		@Override
-		public void PasswordVerified(boolean result) {
+		public void PasswordVerified(ActionResult result) {
 			if (editorFragment != null) {
 				editorFragment.OnPasswordVerified(result);
 			}

@@ -214,7 +214,6 @@ public class NotesListFragment extends ListFragment implements
 	}
 
 	public void handleNoteIntent(Intent intent) {
-		Log.d(TAG, "handling intent");
 		if (Intent.ACTION_EDIT.equals(intent.getAction())
 				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
 			// Are we displaying the correct list already?
@@ -772,7 +771,6 @@ public class NotesListFragment extends ListFragment implements
 							width += indent;
 						}
 					}
-					Log.d("Spacer", "Width." + width + ".");
 					indentView.setText(width);
 					return true;
 				}

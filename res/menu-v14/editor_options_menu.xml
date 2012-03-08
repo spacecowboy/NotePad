@@ -36,5 +36,17 @@
         android:orderInCategory="6"
         android:showAsAction="never"
         android:title="@string/menu_revert"/>
+    <item
+        android:id="@+id/menu_lock"
+        android:icon="?device_access_secure"
+        android:orderInCategory="7"
+        android:showAsAction="never"
+        android:title="@string/lock_note"/>
+    <item
+        android:id="@+id/menu_unlock"
+        android:icon="?device_access_not_secure"
+        android:orderInCategory="8"
+        android:showAsAction="never"
+        android:title="@string/unlock_note"/>
 
 </menu>
