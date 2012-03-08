@@ -77,6 +77,11 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	public static HashMap<String, String> sNotesProjectionMap;
 
+	// THis projection map is intended for list displays only
+	// A substring of the title is returned and a substring of the
+	// note text is only returned if note is not locked.
+	public static HashMap<String, String> sFastVisibleNotesProjectionMap;
+
 	private static HashMap<String, String> sListsProjectionMap;
 	private static HashMap<String, String> sGTasksProjectionMap;
 	private static HashMap<String, String> sGTaskListsProjectionMap;
@@ -232,6 +237,21 @@ public class NotePadProvider extends ContentProvider implements
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LOCKED,
 				NotePad.Notes.COLUMN_NAME_LOCKED);
 
+		// This is a special map. A locked note will note return its text in
+		// this projection.
+		// Useful for list displays, places that are not supposed to ask for
+		// passwords
+		sFastVisibleNotesProjectionMap = new HashMap<String, String>();
+		// Set all stuffs as in notes projection first
+		for (Entry<String, String> notesEntry : sNotesProjectionMap.entrySet()) {
+			sFastVisibleNotesProjectionMap.put(notesEntry.getKey(),
+					notesEntry.getValue());
+		}
+		// Now replace the title text with a substring
+		sFastVisibleNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_TITLE, substrOf(NotePad.Notes.COLUMN_NAME_TITLE, "120"));
+		// Now replace the note text with a case statement to check the lock and do substr as well
+		sFastVisibleNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_NOTE, substrOf(caseWhen(NotePad.Notes.COLUMN_NAME_LOCKED + " IS 1", "''", NotePad.Notes.COLUMN_NAME_NOTE), "60", NotePad.Notes.COLUMN_NAME_NOTE));
+
 		/*
 		 * Creates an initializes a projection map for handling Lists
 		 */
@@ -308,6 +328,23 @@ public class NotePadProvider extends ContentProvider implements
 					NotePad.Lists.TABLE_NAME + "." + listsEntry.getValue());
 		}
 
+	}
+
+	/**
+	 * substr('this is the string', 0, length)
+	 */
+	private static String substrOf(String name, String length) {
+		return substrOf(name, length, name);
+	}
+	private static String substrOf(String name, String length, String target) {
+		return "substr(" + name + ",0," + length + ") as " + target;
+	}
+	
+	/**
+	 * (case when CLAUSE then THIS else THAT end)
+	 */
+	private static String caseWhen(String clause, String cThis,String cThat) {
+		return "(case when " + clause + " then " + cThis + " else "+ cThat + " end)";
 	}
 
 	/**
@@ -618,6 +655,13 @@ public class NotePadProvider extends ContentProvider implements
 			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0 AND ");
 			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0 AND ");
 			qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS 0");
+			qb.setTables(NotePad.Notes.TABLE_NAME);
+			qb.setProjectionMap(sFastVisibleNotesProjectionMap);
+			if (selectionArgs != null
+					&& (selection == null || selection.equals(""))) {
+				selection = NotePad.Notes.COLUMN_NAME_NOTE + " MATCH ?";
+			}
+			break;
 		case NOTES:
 			qb.setTables(NotePad.Notes.TABLE_NAME);
 			qb.setProjectionMap(sNotesProjectionMap);

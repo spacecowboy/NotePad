@@ -1294,7 +1294,7 @@ public class NotesListFragment extends ListFragment implements
 	private CursorLoader getAllNotesLoader() {
 		// This is called when a new Loader needs to be created. This
 		// sample only has one Loader, so we don't care about the ID.
-		Uri baseUri = NotePad.Notes.CONTENT_URI;
+		Uri baseUri = NotePad.Notes.CONTENT_VISIBLE_URI;
 
 		// Get current sort order or assemble the default one.
 		String sortChoice = PreferenceManager.getDefaultSharedPreferences(
@@ -1323,20 +1323,11 @@ public class NotesListFragment extends ListFragment implements
 		// creating a Cursor for the data being displayed.
 
 		if (mCurListId == FragmentLayout.ALL_NOTES_ID) {
-			return new CursorLoader(activity, baseUri, PROJECTION,
-					NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
-							+ NotePad.Notes.COLUMN_NAME_HIDDEN
-							+ " IS NOT 1 AND "
-							+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
-							+ " IS NOT 1", null, sortOrder);
+			return new CursorLoader(activity, baseUri, PROJECTION, null, null,
+					sortOrder);
 		} else {
 			return new CursorLoader(activity, baseUri, PROJECTION,
-					NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
-							+ NotePad.Notes.COLUMN_NAME_HIDDEN
-							+ " IS NOT 1 AND "
-							+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
-							+ " IS NOT 1 AND " + NotePad.Notes.COLUMN_NAME_LIST
-							+ " IS ?",
+					NotePad.Notes.COLUMN_NAME_LIST + " IS ?",
 					new String[] { Long.toString(mCurListId) }, sortOrder);
 		}
 	}
@@ -1344,7 +1335,7 @@ public class NotesListFragment extends ListFragment implements
 	private CursorLoader getSearchNotesLoader() {
 		// This is called when a new Loader needs to be created. This
 		// sample only has one Loader, so we don't care about the ID.
-		Uri baseUri = NotePad.Notes.CONTENT_URI;
+		Uri baseUri = NotePad.Notes.CONTENT_VISIBLE_URI;
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
 
@@ -1361,20 +1352,8 @@ public class NotesListFragment extends ListFragment implements
 		// I am not restricting the lists on purpose here. Search should be
 		// global
 		return new CursorLoader(activity, baseUri, PROJECTION,
-				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
-						+ NotePad.Notes.COLUMN_NAME_HIDDEN + " IS NOT 1 AND "
-						+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
-						+ " IS NOT 1 AND " + NotePad.Notes.COLUMN_NAME_NOTE
-						+ " LIKE ?", new String[] { "%" + currentQuery + "%" }, // We
-																				// don't
-																				// care
-																				// how
-																				// it
-																				// occurs
-																				// in
-																				// the
-																				// note
-				sortOrder);
+				NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?", new String[] { "%"
+						+ currentQuery + "%" }, sortOrder);
 	}
 
 	@Override
