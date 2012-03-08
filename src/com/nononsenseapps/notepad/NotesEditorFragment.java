@@ -63,10 +63,8 @@ import android.widget.ScrollView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
-import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
-import com.nononsenseapps.ui.DeleteActionProvider;
 import com.nononsenseapps.ui.TextPreviewPreference;
 
 public class NotesEditorFragment extends Fragment implements TextWatcher,
@@ -596,16 +594,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			inflater.inflate(R.menu.editor_options_menu, menu);
 
 			if (FragmentLayout.AT_LEAST_ICS) {
-				// Set delete listener to this
-				MenuItem actionItem = menu.findItem(R.id.action_delete);
-
-				DeleteActionProvider actionProvider = (DeleteActionProvider) actionItem
-						.getActionProvider();
-
-				// Make sure containing activity implements listner interface
-				actionProvider
-						.setDeleteActionListener((DeleteActionListener) activity);
-
 				// Set default intent on ShareProvider and set shareListener to
 				// this so
 				// we can update with current note

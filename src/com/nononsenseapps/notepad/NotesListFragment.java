@@ -22,14 +22,12 @@ import java.util.HashMap;
 import java.util.HashSet;
 
 import com.nononsenseapps.notepad.FragmentLayout.NotesEditorActivity;
-import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
-import com.nononsenseapps.ui.DeleteActionProvider;
 import com.nononsenseapps.ui.NoteCheckBox;
 
 import android.content.BroadcastReceiver;
@@ -933,8 +931,7 @@ public class NotesListFragment extends ListFragment implements
 		}
 	}
 
-	private class ModeCallbackHC implements MultiChoiceModeListener,
-			DeleteActionListener {
+	private class ModeCallbackHC implements MultiChoiceModeListener {
 
 		protected NotesListFragment list;
 
@@ -1164,7 +1161,6 @@ public class NotesListFragment extends ListFragment implements
 			return cursor;
 		}
 
-		@Override
 		public void onDeleteAction() {
 			int num = notesToDelete.size();
 			if (onDeleteListener != null) {
@@ -1230,16 +1226,6 @@ public class NotesListFragment extends ListFragment implements
 			// say when the user has selected an image.
 			actionProvider
 					.setShareIntent(createShareIntent(buildTextToShare()));
-
-			// Now the delete action provider
-			// Set delete listener to this
-			actionItem = menu.findItem(R.id.modal_action_delete);
-
-			DeleteActionProvider deleteProvider = (DeleteActionProvider) actionItem
-					.getActionProvider();
-
-			// Make sure containing activity implements listener interface
-			deleteProvider.setDeleteActionListener(this);
 
 			return true;
 		}

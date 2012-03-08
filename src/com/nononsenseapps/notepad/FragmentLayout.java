@@ -19,7 +19,6 @@ package com.nononsenseapps.notepad;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.PasswordChecker;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
@@ -27,23 +26,16 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.ui.ExtrasCursorAdapter;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
@@ -66,8 +58,7 @@ import android.widget.EditText;
  * Showing a single fragment in an activity.
  */
 public class FragmentLayout extends Activity implements
-		OnSharedPreferenceChangeListener, OnEditorDeleteListener,
-		DeleteActionListener, OnNavigationListener,
+		OnSharedPreferenceChangeListener, OnEditorDeleteListener, OnNavigationListener,
 		LoaderManager.LoaderCallbacks<Cursor>, PasswordChecker {
 	private static final String TAG = "FragmentLayout";
 	private static final String CURRENT_LIST_ID = "currentlistid";
@@ -82,7 +73,7 @@ public class FragmentLayout extends Activity implements
 	public static boolean AT_LEAST_ICS;
 	public static boolean AT_LEAST_HC;
 
-	public final static boolean UI_DEBUG_PRINTS = false;
+	public final static boolean UI_DEBUG_PRINTS = true;
 	public static final String DEFAULTLIST = "standardListId";
 
 	// For my special dropdown navigation item
@@ -719,8 +710,7 @@ public class FragmentLayout extends Activity implements
 	 * This is a secondary activity, to show what the user has selected when the
 	 * screen is not large enough to show it all in one activity.
 	 */
-	public static class NotesEditorActivity extends Activity implements
-			DeleteActionListener, PasswordChecker {
+	public static class NotesEditorActivity extends Activity implements PasswordChecker {
 		private static final String TAG = "NotesEditorActivity";
 		private NotesEditorFragment editorFragment;
 		private long currentId = -1;
@@ -847,7 +837,6 @@ public class FragmentLayout extends Activity implements
 			}
 		}
 
-		@Override
 		public void onDeleteAction() {
 			if (UI_DEBUG_PRINTS)
 				Log.d(TAG, "onDeleteAction");
@@ -949,7 +938,6 @@ public class FragmentLayout extends Activity implements
 		deleteNotes(this, ids);
 	}
 
-	@Override
 	public void onDeleteAction() {
 		// both list and editor should be notified
 		NotesListFragment list = (NotesListFragment) getFragmentManager()

@@ -248,9 +248,16 @@ public class NotePadProvider extends ContentProvider implements
 					notesEntry.getValue());
 		}
 		// Now replace the title text with a substring
-		sFastVisibleNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_TITLE, substrOf(NotePad.Notes.COLUMN_NAME_TITLE, "124"));
-		// Now replace the note text with a case statement to check the lock and do substr as well
-		sFastVisibleNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_NOTE, substrOf(caseWhen(NotePad.Notes.COLUMN_NAME_LOCKED + " IS 1", "''", NotePad.Notes.COLUMN_NAME_NOTE), "74", NotePad.Notes.COLUMN_NAME_NOTE));
+		sFastVisibleNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_TITLE,
+				substrOf(NotePad.Notes.COLUMN_NAME_TITLE, "124"));
+		// Now replace the note text with a case statement to check the lock and
+		// do substr as well
+		sFastVisibleNotesProjectionMap.put(
+				NotePad.Notes.COLUMN_NAME_NOTE,
+				substrOf(
+						caseWhen(NotePad.Notes.COLUMN_NAME_LOCKED + " IS 1",
+								"''", NotePad.Notes.COLUMN_NAME_NOTE), "74",
+						NotePad.Notes.COLUMN_NAME_NOTE));
 
 		/*
 		 * Creates an initializes a projection map for handling Lists
@@ -336,15 +343,17 @@ public class NotePadProvider extends ContentProvider implements
 	private static String substrOf(String name, String length) {
 		return substrOf(name, length, name);
 	}
+
 	private static String substrOf(String name, String length, String target) {
 		return "substr(" + name + ",0," + length + ") as " + target;
 	}
-	
+
 	/**
 	 * (case when CLAUSE then THIS else THAT end)
 	 */
-	private static String caseWhen(String clause, String cThis,String cThat) {
-		return "(case when " + clause + " then " + cThis + " else "+ cThat + " end)";
+	private static String caseWhen(String clause, String cThis, String cThat) {
+		return "(case when " + clause + " then " + cThis + " else " + cThat
+				+ " end)";
 	}
 
 	/**
@@ -652,9 +661,9 @@ public class NotePadProvider extends ContentProvider implements
 		case VISIBLE_NOTES:
 			// Add a selection criteria, but then fall through for normal note
 			// handling.
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0 AND ");
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0 AND ");
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS 0");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS NOT 1 AND ");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS NOT 1 AND ");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1");
 			qb.setTables(NotePad.Notes.TABLE_NAME);
 			qb.setProjectionMap(sFastVisibleNotesProjectionMap);
 			if (selectionArgs != null
@@ -1164,6 +1173,9 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// Also tell lists watching the other URI
+			getContext().getContentResolver().notifyChange(
+					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
 			// And update widgets
 			updateAllWidgets();
 			return noteUri;
@@ -1239,6 +1251,9 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// Also tell lists watching the other URI
+			getContext().getContentResolver().notifyChange(
+					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
 			// And update widgets
 			updateAllWidgets();
 			return noteUri;
@@ -1299,6 +1314,9 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// Also tell lists watching the other URI
+			getContext().getContentResolver().notifyChange(
+					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
 			// And update widgets
 			updateAllWidgets();
 			return noteUri;
@@ -1361,6 +1379,9 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// Also tell lists watching the other URI
+			getContext().getContentResolver().notifyChange(
+					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
 			// And update widgets
 			updateAllWidgets();
 			return noteUri;
@@ -1657,6 +1678,9 @@ public class NotePadProvider extends ContentProvider implements
 		 * themselves for the provider are notified.
 		 */
 		getContext().getContentResolver().notifyChange(uri, null, false);
+		// Also tell lists watching the other URI
+		getContext().getContentResolver().notifyChange(
+				NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
 		// And update widgets
 		updateAllWidgets();
 
@@ -1922,7 +1946,8 @@ public class NotePadProvider extends ContentProvider implements
 		getContext().getContentResolver().notifyChange(uri, null, false);
 		// Manually send an update to the visible notes URL because lists
 		// are using this while the editor will use a different URI
-		getContext().getContentResolver().notifyChange(NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
+		getContext().getContentResolver().notifyChange(
+				NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
 		// And update widgets
 		updateAllWidgets();
 
