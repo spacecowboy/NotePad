@@ -20,8 +20,6 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.LoaderManager;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -807,11 +805,15 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 				noteAttrs = new NoteAttributes();
 				noteAttrs.parseNote(note);
+				// Clear content if this is called in onResume
+				mText.setText("");
+				mText.setEnabled(false);
 				// Don't care about locks if no password is set
 				if (noteAttrs.locked && !"".equals(currentPassword)) {
-					// TODO
 					// Need password confirmation
-					//PasswordDialog.showPasswordDialog();
+					// This is called in onLoadFinished and you are not allowed to
+					// make fragment transactions there. Hence, we bypass that by
+					// opening it through the handler instead.
 					mHandler.post(new Runnable() {
 			            @Override
 			            public void run() {
