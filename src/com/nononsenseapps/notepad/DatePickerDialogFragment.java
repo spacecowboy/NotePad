@@ -16,10 +16,17 @@
 
 package com.nononsenseapps.notepad;
 
+import java.util.Calendar;
+
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.format.Time;
+import android.widget.CalendarView;
 
 public class DatePickerDialogFragment extends DialogFragment {
 	private NotesEditorFragment mFragment = null;
@@ -38,14 +45,49 @@ public class DatePickerDialogFragment extends DialogFragment {
 			dismiss();
 		}
 	}
+	
+    
+    /**
+     * Get first day of week as android.text.format.Time constant.
+     *
+     * @return the first day of week in android.text.format.Time
+     */
+    public static int getFirstDayOfWeek(Context context) {
+
+        int startDay = Calendar.getInstance().getFirstDayOfWeek();
+
+        if (startDay == Calendar.SATURDAY) {
+            return Time.SATURDAY;
+        } else if (startDay == Calendar.MONDAY) {
+            return Time.MONDAY;
+        } else {
+            return Time.SUNDAY;
+        }
+    }
 
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		if (mFragment == null) {
 			dismiss();
 			return super.onCreateDialog(savedInstanceState);
 		}
-		else
-			return new DatePickerDialog(getActivity(), mFragment,
+		else{
+			Activity mActivity = getActivity();
+			DatePickerDialog dpd = new DatePickerDialog(mActivity, mFragment,
 					mFragment.year, mFragment.month, mFragment.day);
+			CalendarView cv = dpd.getDatePicker().getCalendarView();
+	        cv.setShowWeekNumber(true);
+	        int startOfWeek = getFirstDayOfWeek(mActivity);
+	        // Utils returns Time days while CalendarView wants Calendar days
+	        if (startOfWeek == Time.SATURDAY) {
+	            startOfWeek = Calendar.SATURDAY;
+	        } else if (startOfWeek == Time.SUNDAY) {
+	            startOfWeek = Calendar.SUNDAY;
+	        } else {
+	            startOfWeek = Calendar.MONDAY;
+	        }
+	        cv.setFirstDayOfWeek(startOfWeek);
+	        dpd.setCanceledOnTouchOutside(true);
+        	return dpd;
+		}
 	}
 }
