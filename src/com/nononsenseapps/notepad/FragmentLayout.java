@@ -273,12 +273,13 @@ public class FragmentLayout extends Activity implements
 				// loaded or not.
 				openListFromIntent(listId);
 			} else if (intent.getData() != null
-					&& intent.getExtras() != null
 					&& intent.getData().getPath()
 							.startsWith(NotePad.Notes.PATH_VISIBLE_NOTE_ID)) {
 				if (list != null) {
-					long listId = intent.getExtras().getLong(
-							NotePad.Notes.COLUMN_NAME_LIST, -1);
+					long listId = ALL_NOTES_ID;
+					if (intent.getExtras() != null) {
+						listId = intent.getExtras().getLong(NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
+					}
 					// Open the containing list if we have to. No need to change
 					// lists
 					// if we are already displaying all notes.
@@ -311,9 +312,12 @@ public class FragmentLayout extends Activity implements
 					&& intent.getData().equals(
 							NotePad.Notes.CONTENT_VISIBLE_URI)) {
 				Log.d("FragmentLayout", "INSERT NOTE");
-				if (list != null && intent.getExtras() != null) {
-					long listId = intent.getExtras().getLong(
-							NotePad.Notes.COLUMN_NAME_LIST, -1);
+				if (list != null) {
+					long listId = ALL_NOTES_ID;
+					if (intent.getExtras() != null) {
+						listId = intent.getExtras().getLong(NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
+					}
+							
 					// Open the containing list if we have to. No need to change
 					// lists
 					// if we are already displaying all notes.
