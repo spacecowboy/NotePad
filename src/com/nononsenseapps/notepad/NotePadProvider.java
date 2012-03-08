@@ -248,9 +248,9 @@ public class NotePadProvider extends ContentProvider implements
 					notesEntry.getValue());
 		}
 		// Now replace the title text with a substring
-		sFastVisibleNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_TITLE, substrOf(NotePad.Notes.COLUMN_NAME_TITLE, "120"));
+		sFastVisibleNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_TITLE, substrOf(NotePad.Notes.COLUMN_NAME_TITLE, "124"));
 		// Now replace the note text with a case statement to check the lock and do substr as well
-		sFastVisibleNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_NOTE, substrOf(caseWhen(NotePad.Notes.COLUMN_NAME_LOCKED + " IS 1", "''", NotePad.Notes.COLUMN_NAME_NOTE), "60", NotePad.Notes.COLUMN_NAME_NOTE));
+		sFastVisibleNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_NOTE, substrOf(caseWhen(NotePad.Notes.COLUMN_NAME_LOCKED + " IS 1", "''", NotePad.Notes.COLUMN_NAME_NOTE), "74", NotePad.Notes.COLUMN_NAME_NOTE));
 
 		/*
 		 * Creates an initializes a projection map for handling Lists
@@ -1920,6 +1920,9 @@ public class NotePadProvider extends ContentProvider implements
 		 * themselves for the provider are notified.
 		 */
 		getContext().getContentResolver().notifyChange(uri, null, false);
+		// Manually send an update to the visible notes URL because lists
+		// are using this while the editor will use a different URI
+		getContext().getContentResolver().notifyChange(NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
 		// And update widgets
 		updateAllWidgets();
 
