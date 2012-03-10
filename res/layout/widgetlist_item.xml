@@ -21,6 +21,13 @@
     android:orientation="horizontal"
     android:paddingLeft="16dp"
     android:paddingRight="8dp" >
+    
+    <TextView
+            android:id="@+id/widget_itemIndent"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -28,6 +35,7 @@
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="1"
+        android:paddingRight="4dp"
         android:gravity="center_vertical"
         android:orientation="vertical" >
 
@@ -38,7 +46,6 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:maxLines="2"
-            android:text="Note title here"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/primary_text_light" />
 
@@ -49,7 +56,6 @@
             android:ellipsize="end"
             android:gravity="center_vertical"
             android:singleLine="true"
-            android:text="The body of the note is long and admirable"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/secondary_text_light" />
     </LinearLayout>
@@ -58,20 +64,15 @@
         android:id="@+id/widget_datecheckcontainer"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
-        android:orientation="vertical"
-        android:paddingBottom="4dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="0dp"
-        android:paddingTop="8dp"
-        android:minWidth="44dp" >
+        android:orientation="vertical" >
 
         <TextView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/widget_itemDate"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="fill_parent"
             android:gravity="center"
-            android:text="12 sep"
+            android:text=""
             android:textColor="@android:color/secondary_text_light"
             android:textSize="12sp" />
     </LinearLayout>

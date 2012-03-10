@@ -21,21 +21,27 @@ import java.util.List;
 
 import com.nononsenseapps.notepad.FragmentLayout;
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.NotesPreferenceFragment;
-import com.nononsenseapps.notepad_donate.R;
 import com.nononsenseapps.notepad_donate.widget.ListWidgetProvider;
+import com.nononsenseapps.notepad_donate.R;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.ListPreference;
+import android.preference.Preference;
+import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.MenuItem;
 
 public class ListWidgetConfigure extends PreferenceActivity implements
 		OnSharedPreferenceChangeListener {
@@ -71,6 +77,13 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 		}
 
+		// Set up navigation (adds nice arrow to icon)
+		ActionBar actionBar = getActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			// actionBar.setDisplayShowTitleEnabled(false);
+		}
+
 		// Set valid result from start
 		Intent resultValue = new Intent();
 		resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
@@ -96,9 +109,9 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		SharedPreferences.Editor edit = PreferenceManager
 				.getDefaultSharedPreferences(this).edit();
 		edit.putString(KEY_LIST, Integer.toString(FragmentLayout.ALL_NOTES_ID))
-				.putString(KEY_SORT_ORDER, NotePad.Notes.ASCENDING_SORT_ORDERING)
-				.putString(KEY_SORT_TYPE, NotesPreferenceFragment.DUEDATESORT)
-				.commit();
+				.putString(KEY_SORT_ORDER,
+						NotePad.Notes.ASCENDING_SORT_ORDERING)
+				.putString(KEY_SORT_TYPE, MainPrefs.DUEDATESORT).commit();
 	}
 
 	/**
@@ -108,6 +121,16 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	public void onBuildHeaders(List<Header> target) {
 		loadHeadersFromResource(R.xml.widget_pref_headers, target);
 		setDefaultSharedPreferenceValues();
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			finish();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 	@Override
@@ -132,8 +155,10 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			String key) {
 
 		if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-//			Log.d("prefsActivity", "changed key: " + key);
-//			Log.d("prefsActivity","commiting: " + sharedPreferences.getString(key, null));
+			// Log.d("prefsActivity", "changed key: " + key);
+			// Log.d("prefsActivity","commiting: " +
+			// sharedPreferences.getString(key, null));
+			Log.d("config", "setting real values: " + key);
 			getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
 					.edit()
 					.putString(key, sharedPreferences.getString(key, null))
@@ -170,16 +195,16 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			if (listSpinner != null) {
 				setEntries(listSpinner);
 			}
-			
+
 			sortType = (ListPreference) findPreference(KEY_SORT_TYPE);
 			sortOrder = (ListPreference) findPreference(KEY_SORT_ORDER);
-			
+
 			// Also set the summaries
 			if (sortOrder.getValue() == null)
 				sortOrder.setValue(NotePad.Notes.ASCENDING_SORT_ORDERING);
 			sortOrder.setSummary(sortOrder.getEntry());
 			if (sortType.getValue() == null)
-				sortType.setValue(NotesPreferenceFragment.DUEDATESORT);
+				sortType.setValue(MainPrefs.DUEDATESORT);
 			sortType.setSummary(sortType.getEntry());
 		}
 
@@ -239,36 +264,73 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 						.size()]));
 				listSpinner.setEntryValues(values
 						.toArray(new CharSequence[values.size()]));
-				
+
 				listSpinner.setSummary(listSpinner.getEntry());
 			}
 		}
 
 		/**
-		 * Sets the list name in the preferences as well but also sets
-		 * the list summaries depending on the selected value.
+		 * Sets the list name in the preferences as well but also sets the list
+		 * summaries depending on the selected value.
 		 */
 		@Override
 		public void onSharedPreferenceChanged(
 				SharedPreferences sharedPreferences, String key) {
 			if (key.equals(KEY_LIST)) {
+				Log.d("config", "writing title");
 				// Must also write the list Name to the prefs
-				sharedPreferences
-						.edit()
-						.putString(KEY_LIST_TITLE,
-								listSpinner.getEntry().toString()).commit();
+				// lSettings
+				// .edit()
+				// .putString(KEY_LIST_TITLE,
+				// listSpinner.getEntry().toString()).apply();
+				// This seems stupid and it is. The first time this is called,
+				// it won't be written
+				// to the shared preferences file! Do it twice to ensure it is
+				// always written...
+				TitleWriter task2 = new TitleWriter(activity);
+				task2.execute(new String[] { listSpinner.getEntry().toString() });
+				TitleWriter task = new TitleWriter(activity);
+				task.execute(new String[] { listSpinner.getEntry().toString() });
 			}
 			if (!activity.isFinishing()) {
 				if (key.equals(KEY_LIST)) {
-				// Also set the summary to this text
-				listSpinner.setSummary(listSpinner.getEntry());
-			}
-			else if (key.equals(KEY_SORT_ORDER)) {
-				sortOrder.setSummary(sortOrder.getEntry());
-			} else if (key.equals(KEY_SORT_TYPE)) {
-				sortType.setSummary(sortType.getEntry());
+					// Also set the summary to this text
+					listSpinner.setSummary(listSpinner.getEntry());
+				} else if (key.equals(KEY_SORT_ORDER)) {
+					sortOrder.setSummary(sortOrder.getEntry());
+				} else if (key.equals(KEY_SORT_TYPE)) {
+					sortType.setSummary(sortType.getEntry());
+				}
 			}
 		}
+
+		private class TitleWriter extends AsyncTask<String, Void, Void> {
+
+			private Activity activity;
+
+			public TitleWriter(Activity activity) {
+				super();
+				this.activity = activity;
+			}
+
+			@Override
+			protected Void doInBackground(String... titles) {
+				if (titles != null) {
+					try {
+						// Make sure preferences are updated first
+						Thread.sleep(100);
+					} catch (InterruptedException e) {
+						// e.printStackTrace();
+					}
+					for (String title : titles) {
+						PreferenceManager.getDefaultSharedPreferences(activity)
+								.edit().putString(KEY_LIST_TITLE, title)
+								.commit();
+					}
+				}
+				return null;
+			}
+
 		}
 	}
 

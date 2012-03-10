@@ -184,9 +184,12 @@ public final class NotePad {
         public static final String COLUMN_NAME_HIDDEN = "hiddenflag";
         
         // server side sorting and local hiding
-        public static final String COLUMN_NAME_ABCSUBSORT = "abcsubsort";
+        public static final String COLUMN_NAME_INDENTLEVEL = "indentlevel";
         public static final String COLUMN_NAME_POSSUBSORT = "possubsort";
         public static final String COLUMN_NAME_LOCALHIDDEN = "localhidden";
+        
+        // Password locking
+        public static final String COLUMN_NAME_LOCKED = "locked";
         
         /**
          * The default sort order for this table
@@ -200,7 +203,7 @@ public final class NotePad {
       // Coalesce returns the first non-null argument
       public static final String MODIFICATION_SORT_TYPE = COLUMN_NAME_MODIFICATION_DATE;
       public static final String DUEDATE_SORT_TYPE = "CASE WHEN "+ COLUMN_NAME_DUE_DATE + " IS NULL OR "+ COLUMN_NAME_DUE_DATE + " IS '' THEN 1 ELSE 0 END, " + COLUMN_NAME_DUE_DATE;
-      public static final String POSITION_SORT_TYPE = COLUMN_NAME_POSITION;
+      public static final String POSSUBSORT_SORT_TYPE = COLUMN_NAME_POSSUBSORT;
       
       public static final String ASCENDING_SORT_ORDERING = "ASC";
       public static final String DESCENDING_SORT_ORDERING = "DESC";

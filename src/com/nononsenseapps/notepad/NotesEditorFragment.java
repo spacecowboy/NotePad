@@ -20,8 +20,6 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.LoaderManager;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -35,11 +33,13 @@ import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.graphics.Paint;
 import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -63,8 +63,10 @@ import android.widget.ScrollView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
-import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
 import com.nononsenseapps.notepad_donate.R;
+import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 import com.nononsenseapps.ui.TextPreviewPreference;
 
 public class NotesEditorFragment extends Fragment implements TextWatcher,
@@ -81,8 +83,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public static final String[] PROJECTION = new String[] { NotePad.Notes._ID,
 			NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
-			NotePad.Notes.COLUMN_NAME_DELETED,
-			NotePad.Notes.COLUMN_NAME_LIST};
+			NotePad.Notes.COLUMN_NAME_DELETED, NotePad.Notes.COLUMN_NAME_LIST };
 
 	// A label for the saved state of the activity
 	public static final String ORIGINAL_NOTE = "origContent";
@@ -102,6 +103,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	protected static final int DATE_DIALOG_ID = 999;
 	private static final String TAG = "NotesEditorFragment";
+	protected static final int SHOW_NOTE = 10;
+	protected static final int LOCK_NOTE = 11;
+	protected static final int UNLOCK_NOTE = 12;
 
 	// These fields are strictly used for the date picker dialog. They should
 	// not be used to get the notes due date!
@@ -139,6 +143,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private boolean mOriginalDueState;
 	private boolean opened = false;
 	public boolean selfAction = false;
+
+	private NoteAttributes noteAttrs;
+	private Handler mHandler = new Handler();
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -230,7 +237,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				|| mOriginalDueDate == null) {
 			return false;
 		} else {
-			return !(mText.getText().toString().equals(mOriginalNote)
+			return !(noteAttrs.getFullNote(mText.getText().toString()).equals(
+					mOriginalNote)
 					&& mTitle.getText().toString().equals(mOriginalTitle)
 					&& dueDateSet == mOriginalDueState && (!dueDateSet || (dueDateSet && noteDueDate
 					.format3339(false).equals(mOriginalDueDate))));
@@ -301,7 +309,18 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				// }
 
 				// This puts the desired notes text into the map.
-				values.put(NotePad.Notes.COLUMN_NAME_NOTE, text);
+				if (mText.isEnabled()) {
+					// the field will only be enabled if the password was
+					// successfully inputted (if one exists. Otherwise, don't
+					// change the text
+					values.put(NotePad.Notes.COLUMN_NAME_NOTE,
+							noteAttrs.getFullNote(text));
+				}
+				if (noteAttrs.locked) {
+					values.put(NotePad.Notes.COLUMN_NAME_LOCKED, 1);
+				} else {
+					values.put(NotePad.Notes.COLUMN_NAME_LOCKED, 0);
+				}
 
 				// Add list
 				values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
@@ -386,7 +405,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		if (mOriginalTitle != null && mTitle != null)
 			mTitle.setText(mOriginalTitle);
 		if (mOriginalNote != null && mText != null)
-			mText.setText(mOriginalNote);
+			mText.setText(noteAttrs.parseNote(mOriginalNote));
 		if (mOriginalDueDate != null && mDueDate != null) {
 			setDueDate(mOriginalDueDate);
 		}
@@ -421,12 +440,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			if (FragmentLayout.UI_DEBUG_PRINTS)
 				Log.d(TAG, "Should never happen right");
 			id = getArguments().getLong(KEYID);
-			//listId = getArguments().getLong(LISTID);
+			// listId = getArguments().getLong(LISTID);
 		} else {
 			if (FragmentLayout.UI_DEBUG_PRINTS)
 				Log.d(TAG, "onCreate, no valid values in arguments");
 			id = -1;
-			//listId = -1;
+			// listId = -1;
 		}
 
 		noteDueDate = new Time(Time.getCurrentTimezone());
@@ -435,6 +454,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		year = c.get(Calendar.YEAR);
 		month = c.get(Calendar.MONTH);
 		day = c.get(Calendar.DAY_OF_MONTH);
+
+		noteAttrs = new NoteAttributes(); // Just a precaution
 	}
 
 	@Override
@@ -506,13 +527,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// set characteristics from settings
 			float size = PreferenceManager
 					.getDefaultSharedPreferences(activity).getInt(
-							NotesPreferenceFragment.KEY_FONT_SIZE_EDITOR,
+							MainPrefs.KEY_FONT_SIZE_EDITOR,
 							getResources().getInteger(
 									R.integer.default_editor_font_size));
 			Typeface tf = TextPreviewPreference.getTypeface(PreferenceManager
 					.getDefaultSharedPreferences(activity).getString(
-							NotesPreferenceFragment.KEY_FONT_TYPE_EDITOR,
-							NotesPreferenceFragment.SANS));
+							MainPrefs.KEY_FONT_TYPE_EDITOR, MainPrefs.SANS));
 
 			mText.setTextSize(size);
 			mText.setTypeface(tf);
@@ -579,16 +599,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			inflater.inflate(R.menu.editor_options_menu, menu);
 
 			if (FragmentLayout.AT_LEAST_ICS) {
-				// Set delete listener to this
-				MenuItem actionItem = menu.findItem(R.id.action_delete);
-
-				DeleteActionProvider actionProvider = (DeleteActionProvider) actionItem
-						.getActionProvider();
-
-				// Make sure containing activity implements listner interface
-				actionProvider
-						.setDeleteActionListener((DeleteActionListener) activity);
-
 				// Set default intent on ShareProvider and set shareListener to
 				// this so
 				// we can update with current note
@@ -637,6 +647,16 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			} else {
 				menu.findItem(R.id.menu_revert).setVisible(true);
 			}
+			// Lock items
+			if (noteAttrs != null) {
+				if (noteAttrs.locked) {
+					menu.findItem(R.id.menu_lock).setVisible(false);
+					menu.findItem(R.id.menu_unlock).setVisible(true);
+				} else {
+					menu.findItem(R.id.menu_lock).setVisible(true);
+					menu.findItem(R.id.menu_unlock).setVisible(false);
+				}
+			}
 		}
 	}
 
@@ -646,8 +666,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		switch (item.getItemId()) {
 		case R.id.menu_revert:
 			cancelNote();
-			Toast.makeText(activity, getString(R.string.reverted), Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(activity, getString(R.string.reverted),
+					Toast.LENGTH_SHORT).show();
 			break;
 		case R.id.menu_copy:
 			copyText(makeShareText());
@@ -660,6 +680,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		case R.id.menu_sync:
 			// Save note!
 			saveNote();
+			break;
+		case R.id.menu_lock:
+			// Lock note
+			showPasswordDialog(LOCK_NOTE);
+			break;
+		case R.id.menu_unlock:
+			// Unlock note
+			showPasswordDialog(UNLOCK_NOTE);
 			break;
 		}
 		return super.onOptionsItemSelected(item);
@@ -734,7 +762,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		doSave = true;
 		selfAction = false;
 		this.id = id;
-		//this.listId = listid;
+		// this.listId = listid;
 		if (FragmentLayout.UI_DEBUG_PRINTS)
 			Log.d("insertError", "displayNote");
 		openNote(null);
@@ -769,9 +797,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				String title = mCursor.getString(colTitleIndex);
 				mTitle.setText(title);
 				mTitle.setEnabled(true);
-				
+
 				// Set list ID
-				listId = mCursor.getLong(mCursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
+				listId = mCursor.getLong(mCursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
 
 				// Gets the note text from the Cursor and puts it in the
 				// TextView,
@@ -780,8 +809,35 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				int colNoteIndex = mCursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
 				String note = mCursor.getString(colNoteIndex);
-				mText.setText(note);
-				mText.setEnabled(true);
+
+				SharedPreferences settings = PreferenceManager
+						.getDefaultSharedPreferences(activity);
+				String currentPassword = settings.getString(
+						PasswordPrefs.KEY_PASSWORD, "");
+
+				noteAttrs = new NoteAttributes();
+				noteAttrs.parseNote(note);
+				// Clear content if this is called in onResume
+				mText.setText("");
+				mText.setEnabled(false);
+				// Don't care about locks if no password is set
+				if (noteAttrs.locked && !"".equals(currentPassword)) {
+					// Need password confirmation
+					// This is called in onLoadFinished and you are not allowed
+					// to
+					// make fragment transactions there. Hence, we bypass that
+					// by
+					// opening it through the handler instead.
+					mHandler.post(new Runnable() {
+						@Override
+						public void run() {
+							showPasswordDialog(SHOW_NOTE);
+						}
+					});
+				} else {
+					mText.setText(noteAttrs.getNoteText());
+					mText.setEnabled(true);
+				}
 				// Sets cursor at the end
 				// mText.setSelection(note.length());
 
@@ -795,7 +851,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				// Stores the original note text, to allow the user to revert
 				// changes.
 				if (mOriginalNote == null) {
-					mOriginalNote = note;
+					mOriginalNote = note; // Save original text here
 				}
 				if (mOriginalDueDate == null) {
 					mOriginalDueDate = due;
@@ -1017,22 +1073,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		ft.addToBackStack(null);
 
 		// Create and show the dialog.
-		DatePickerDialogFragment newFragment = new DatePickerDialogFragment(
-				this);
+		DatePickerDialogFragment newFragment = new DatePickerDialogFragment();
+		newFragment.setCallback(this);
 		newFragment.show(ft, "dialog");
-	}
-
-	public class DatePickerDialogFragment extends DialogFragment {
-		private NotesEditorFragment mFragment;
-
-		public DatePickerDialogFragment(NotesEditorFragment callback) {
-			mFragment = callback;
-		}
-
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
-			return new DatePickerDialog(activity, mFragment, mFragment.year,
-					mFragment.month, mFragment.day);
-		}
 	}
 
 	@Override
@@ -1085,4 +1128,44 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public long getCurrentNoteId() {
 		return id;
 	}
+
+	private void showPasswordDialog(int actionId) {
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		Fragment prev = getFragmentManager().findFragmentByTag("newpassdialog");
+		if (prev != null) {
+			ft.remove(prev);
+		}
+		ft.addToBackStack(null);
+
+		// Create and show the dialog.
+		PasswordDialog newFragment = new PasswordDialog();
+		newFragment.setAction(actionId);
+		newFragment.show(ft, "newpassdialog");
+	}
+
+	public void OnPasswordVerified(ActionResult result) {
+		if (result != null && result.result && mText != null
+				&& noteAttrs != null) {
+			switch (result.actionId) {
+			case LOCK_NOTE:
+				noteAttrs.locked = true;
+				Toast.makeText(activity,getString(R.string.locked),
+						Toast.LENGTH_SHORT).show();
+				break;
+			case UNLOCK_NOTE:
+				noteAttrs.locked = false;
+				Toast.makeText(activity,getString(R.string.unlocked),
+						Toast.LENGTH_SHORT).show();
+				// Fall through and show the note as well
+			case SHOW_NOTE:
+				mText.setText(noteAttrs.getNoteText());
+				mText.setEnabled(true);
+				break;
+			default:
+				// Dont do anything without proper key
+				break;
+			}
+		}
+	}
+
 }

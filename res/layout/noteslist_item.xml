@@ -12,27 +12,34 @@
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
-     limitations under the License.android:theme="@style/ThemeHolo"
+     limitations under the License.android:theme="@style/ThemeHolo"
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/noteItem"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="70dp"
     android:background="?my_list_selector"
     android:orientation="horizontal"
     android:paddingLeft="8dp"
     android:paddingRight="16dp" >
+    
+    <TextView
+        android:id="@+id/itemIndent"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
         android:id="@+id/datecheckcontainer"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
+        android:minWidth="44dp"
         android:orientation="vertical"
         android:paddingBottom="4dp"
         android:paddingLeft="0dp"
         android:paddingRight="4dp"
-        android:paddingTop="8dp"
-        android:minWidth="44dp" >
+        android:paddingTop="8dp" >
 
         <view
             xmlns:android="http://schemas.android.com/apk/res/android"
@@ -71,17 +78,18 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:maxLength="120"
             android:gravity="center_vertical"
             android:maxLines="2"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="?android:attr/textColorPrimary" />
 
-        
-             <TextView
+        <TextView
             android:id="@+id/itemNote"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:ellipsize="end"
+            android:maxLength="70"
             android:gravity="center_vertical"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceSmall"

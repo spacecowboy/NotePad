@@ -120,4 +120,27 @@
     <string name="settings_list">Seznam</string>
     <string name="settings_list_summary"></string>
     <string name="automatic">Automaticky</string>
+    
+    <!-- Un-translated yet -->
+    <string name="lock_note">Lock note</string>
+    <string name="unlock_note">Unlock note</string>
+    <string name="locked">Locked</string>
+    <string name="unlocked">Unlocked</string>
+    <string name="password_required">Password required</string>
+    <string name="select_account">Select an account</string>
+    <string name="password">Password</string>
+    <string name="password_set">Password set</string>
+    <string name="password_cleared">Password cleared</string>
+    <string name="passwords_dont_match">Passwords do not match</string>
+    <string name="enter_password">Enter password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="confirm_new_password">Confirm new password</string>
+    <string name="apply">Apply</string>
+    <string name="clear_password">Clear password</string>
+    <string name="password_info">Setting a password will require you to input the password 
+        to show any locked notes. It will only protect the note-field so you still have unprotected
+        access to the title and due date. It does not encrypt the note in any way so it can still 
+        be viewed in Google mail/calendar. If you forget your password, sync with Google and
+        then reinstall the app.</string>
+    <string name="about">About</string>
 </resources>

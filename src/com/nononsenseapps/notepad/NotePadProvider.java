@@ -71,12 +71,17 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	private static final String DATABASE_NAME = "note_pad.db";
 
-	private static final int DATABASE_VERSION = 5;
+	private static final int DATABASE_VERSION = 6;
 
 	/**
 	 * A projection map used to select columns from the database
 	 */
 	public static HashMap<String, String> sNotesProjectionMap;
+
+	// THis projection map is intended for list displays only
+	// A substring of the title is returned and a substring of the
+	// note text is only returned if note is not locked.
+	public static HashMap<String, String> sFastVisibleNotesProjectionMap;
 
 	private static HashMap<String, String> sListsProjectionMap;
 	private static HashMap<String, String> sGTasksProjectionMap;
@@ -223,12 +228,37 @@ public class NotePadProvider extends ContentProvider implements
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_HIDDEN,
 				NotePad.Notes.COLUMN_NAME_HIDDEN);
 
-		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_ABCSUBSORT,
-				NotePad.Notes.COLUMN_NAME_ABCSUBSORT);
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
+				NotePad.Notes.COLUMN_NAME_INDENTLEVEL);
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT,
 				NotePad.Notes.COLUMN_NAME_POSSUBSORT);
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN,
 				NotePad.Notes.COLUMN_NAME_LOCALHIDDEN);
+
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LOCKED,
+				NotePad.Notes.COLUMN_NAME_LOCKED);
+
+		// This is a special map. A locked note will note return its text in
+		// this projection.
+		// Useful for list displays, places that are not supposed to ask for
+		// passwords
+		sFastVisibleNotesProjectionMap = new HashMap<String, String>();
+		// Set all stuffs as in notes projection first
+		for (Entry<String, String> notesEntry : sNotesProjectionMap.entrySet()) {
+			sFastVisibleNotesProjectionMap.put(notesEntry.getKey(),
+					notesEntry.getValue());
+		}
+		// Now replace the title text with a substring
+		sFastVisibleNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_TITLE,
+				substrOf(NotePad.Notes.COLUMN_NAME_TITLE, "124"));
+		// Now replace the note text with a case statement to check the lock and
+		// do substr as well
+		sFastVisibleNotesProjectionMap.put(
+				NotePad.Notes.COLUMN_NAME_NOTE,
+				substrOf(
+						caseWhen(NotePad.Notes.COLUMN_NAME_LOCKED + " IS 1",
+								"''", NotePad.Notes.COLUMN_NAME_NOTE), "74",
+						NotePad.Notes.COLUMN_NAME_NOTE));
 
 		/*
 		 * Creates an initializes a projection map for handling Lists
@@ -309,6 +339,25 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	/**
+	 * substr('this is the string', 0, length)
+	 */
+	private static String substrOf(String name, String length) {
+		return substrOf(name, length, name);
+	}
+
+	private static String substrOf(String name, String length, String target) {
+		return "substr(" + name + ",0," + length + ") as " + target;
+	}
+
+	/**
+	 * (case when CLAUSE then THIS else THAT end)
+	 */
+	private static String caseWhen(String clause, String cThis, String cThat) {
+		return "(case when " + clause + " then " + cThis + " else " + cThat
+				+ " end)";
+	}
+
+	/**
 	 * 
 	 * This class helps open, create, and upgrade the database file. Set to
 	 * package visibility for testing purposes.
@@ -371,6 +420,9 @@ public class NotePadProvider extends ContentProvider implements
 			values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
 			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, "needsAction");
 
+			values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, "");
+			values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
+
 			return db.insert(NotePad.Notes.TABLE_NAME, null, values);
 		}
 
@@ -392,12 +444,14 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.Notes.COLUMN_NAME_HIDDEN + " INTEGER,"
 					+ NotePad.Notes.COLUMN_NAME_MODIFIED + " INTEGER,"
 
-					+ NotePad.Notes.COLUMN_NAME_ABCSUBSORT
-					+ " TEXT DEFAULT '',"
+					+ NotePad.Notes.COLUMN_NAME_INDENTLEVEL
+					+ " INTEGER DEFAULT 0,"
 					+ NotePad.Notes.COLUMN_NAME_POSSUBSORT
 					+ " TEXT DEFAULT '',"
 					+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
 					+ " INTEGER DEFAULT 0,"
+
+					+ NotePad.Notes.COLUMN_NAME_LOCKED + " INTEGER DEFAULT 0,"
 
 					+ NotePad.Notes.COLUMN_NAME_DELETED + " INTEGER" + ");");
 		}
@@ -528,13 +582,26 @@ public class NotePadProvider extends ContentProvider implements
 						+ " ADD COLUMN ";
 				String postText = " TEXT DEFAULT ''";
 				String postNameInt = " INTEGER DEFAULT 0";
-				// Add Columns to Notes DB
-				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_ABCSUBSORT
-						+ postText);
 				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_POSSUBSORT
 						+ postText);
 				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
 						+ postNameInt);
+			}
+			if (oldVersion < 6) {
+				// Add Columns to Notes DB
+				String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
+						+ " ADD COLUMN ";
+				String postNameInt = " INTEGER DEFAULT 0";
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_INDENTLEVEL
+						+ postNameInt);
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_LOCKED
+						+ postNameInt);
+
+				// Mark all notes as modified to ensure we set the indents on
+				// next sync
+				ContentValues values = new ContentValues();
+				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
+				db.update(NotePad.Notes.TABLE_NAME, values, null, null);
 			}
 		}
 
@@ -595,9 +662,16 @@ public class NotePadProvider extends ContentProvider implements
 		case VISIBLE_NOTES:
 			// Add a selection criteria, but then fall through for normal note
 			// handling.
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS 0 AND ");
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS 0 AND ");
-			qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS 0");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_HIDDEN + " IS NOT 1 AND ");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN + " IS NOT 1 AND ");
+			qb.appendWhere(NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1");
+			qb.setTables(NotePad.Notes.TABLE_NAME);
+			qb.setProjectionMap(sFastVisibleNotesProjectionMap);
+			if (selectionArgs != null
+					&& (selection == null || selection.equals(""))) {
+				selection = NotePad.Notes.COLUMN_NAME_NOTE + " MATCH ?";
+			}
+			break;
 		case NOTES:
 			qb.setTables(NotePad.Notes.TABLE_NAME);
 			qb.setProjectionMap(sNotesProjectionMap);
@@ -1056,6 +1130,19 @@ public class NotePadProvider extends ContentProvider implements
 			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 0);
 		}
 
+		if (values.containsKey(NotePad.Notes.COLUMN_NAME_INDENTLEVEL) == false) {
+			values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
+		}
+		if (values.containsKey(NotePad.Notes.COLUMN_NAME_LOCKED) == false) {
+			values.put(NotePad.Notes.COLUMN_NAME_LOCKED, 0);
+		}
+
+		// Set a default sort position so it matches where new tasks are added
+		// in gmail
+		if (values.containsKey(NotePad.Notes.COLUMN_NAME_POSSUBSORT) == false) {
+			values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, "z.");
+		}
+
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_LIST) == false
 				|| values.getAsLong(NotePad.Notes.COLUMN_NAME_LIST) < 0) {
 			if (FragmentLayout.UI_DEBUG_PRINTS || SyncAdapter.SYNC_DEBUG_PRINTS)
@@ -1087,6 +1174,9 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// Also tell lists watching the other URI
+			getContext().getContentResolver().notifyChange(
+					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
 			// And update widgets
 			updateAllWidgets();
 			return noteUri;
@@ -1162,6 +1252,9 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// Also tell lists watching the other URI
+			getContext().getContentResolver().notifyChange(
+					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
 			// And update widgets
 			updateAllWidgets();
 			return noteUri;
@@ -1222,6 +1315,9 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// Also tell lists watching the other URI
+			getContext().getContentResolver().notifyChange(
+					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
 			// And update widgets
 			updateAllWidgets();
 			return noteUri;
@@ -1284,6 +1380,9 @@ public class NotePadProvider extends ContentProvider implements
 			// changed.
 			getContext().getContentResolver()
 					.notifyChange(noteUri, null, false);
+			// Also tell lists watching the other URI
+			getContext().getContentResolver().notifyChange(
+					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
 			// And update widgets
 			updateAllWidgets();
 			return noteUri;
@@ -1580,6 +1679,9 @@ public class NotePadProvider extends ContentProvider implements
 		 * themselves for the provider are notified.
 		 */
 		getContext().getContentResolver().notifyChange(uri, null, false);
+		// Also tell lists watching the other URI
+		getContext().getContentResolver().notifyChange(
+				NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
 		// And update widgets
 		updateAllWidgets();
 
@@ -1843,6 +1945,10 @@ public class NotePadProvider extends ContentProvider implements
 		 * themselves for the provider are notified.
 		 */
 		getContext().getContentResolver().notifyChange(uri, null, false);
+		// Manually send an update to the visible notes URL because lists
+		// are using this while the editor will use a different URI
+		getContext().getContentResolver().notifyChange(
+				NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
 		// And update widgets
 		updateAllWidgets();
 

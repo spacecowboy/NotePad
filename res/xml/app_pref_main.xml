@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:robobunny="http://robobunny.com"
+    android:key="preference_screen" >
+    
+        <ListPreference
+            android:defaultValue="light"
+            android:dialogTitle="@string/settings_theme_dialog"
+            android:entries="@array/theme_preference"
+            android:entryValues="@array/themevalues_preference"
+            android:key="key_current_theme"
+            android:summary="Selected option should be here"
+            android:title="@string/settings_theme" />
+
+        <com.nononsenseapps.ui.TextPreviewPreference
+            android:key="key_text_preview"
+            android:title="@string/settings_text_preview_title" />
+
+        <com.robobunny.SeekBarPreference
+            android:defaultValue="22"
+            android:key="key_font_size_editor"
+            android:max="30"
+            robobunny:min="12"
+            android:title="@string/settings_font_size"
+            robobunny:unitsLeft=""
+            robobunny:unitsRight="sp" />
+
+        <ListPreference
+            android:defaultValue="Sans"
+            android:dialogTitle="@string/settings_font_type_dialog"
+            android:entries="@array/font_type_preference"
+            android:entryValues="@array/font_typevalues_preference"
+            android:key="key_font_type_editor"
+            android:summary="Selected option should be here"
+            android:title="@string/settings_font_type" />
+    
+    <PreferenceCategory android:title="@string/settings_cat_sorting" >
+        <ListPreference
+            android:defaultValue="title COLLATE NOCASE"
+            android:dialogTitle="@string/settings_sorting_type_dialog"
+            android:entries="@array/sorting_preference"
+            android:entryValues="@array/sortingvalues_preference"
+            android:key="key_sort_type"
+            android:summary="Selected option should be here"
+            android:title="@string/settings_sorting_type" />
+        <ListPreference
+            android:defaultValue="ASC"
+            android:dialogTitle="@string/settings_sorting_order_dialog"
+            android:entries="@array/sorting_order_preference"
+            android:entryValues="@array/sorting_ordervalues_preference"
+            android:key="key_sort_order"
+            android:summary="Selected option should be here"
+            android:title="@string/settings_sorting_order" />
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -244,18 +244,19 @@ public class GoogleTaskList {
 	 * requires all parents etc to be present. Note that only objects in the modifiedTasks
 	 * list are modified. The other is for reference only if the parent can not be found in modifiedTasks.
 	 * If so, it is assumed to have a correct position.
+	 * 
+	 * Will also set indent levels on objects
 	 */
 	public void setSortingValues(ArrayList<GoogleTask> modifiedTasks,
 			ArrayList<GoogleTask> allTasks) {
 		// First clear all the position values as we will do a recursive
 		// recalculation on these objects
 		for (GoogleTask task : modifiedTasks) {
-			task.abcsort = "";
 			task.possort = "";
+			task.indentLevel = 0;
 		}
 		// Now, set the sorting values for these objects
 		for (GoogleTask task : modifiedTasks) {
-			getAbcSort(task, modifiedTasks, allTasks);
 			getPosSort(task, modifiedTasks, allTasks);
 		}
 		// All sort values are set. It is OK to save now.
@@ -275,6 +276,7 @@ public class GoogleTaskList {
 				}
 				if (parent != null) {
 					sortingValue += getPosSort(parent, modifiedTasks, allTasks);
+					task.indentLevel = parent.indentLevel + 1;
 				}
 			}
 			if (task.position != null) {
@@ -284,34 +286,35 @@ public class GoogleTaskList {
 
 			task.possort = sortingValue;
 		}
+		Log.d(TAG, "indent: " + task.indentLevel);
 		return task.possort;
 	}
 
 	/**
 	 * This will write the position value if none exists
 	 */
-	private String getAbcSort(GoogleTask task, ArrayList<GoogleTask> modifiedTasks, ArrayList<GoogleTask> allTasks) {
-		if (task.abcsort.isEmpty()) {
-			String sortingValue = "";
-			if (task.parent != null && !task.parent.isEmpty()) {
-				GoogleTask parent = getTaskWithRemoteId(task.parent, modifiedTasks);
-				if (parent == null) {
-					// Try all tasks instead
-					parent = getTaskWithRemoteId(task.parent, allTasks);
-				}
-				if (parent != null) {
-					sortingValue += getAbcSort(parent, modifiedTasks, allTasks);
-				}
-			}
-			if (task.title != null) {
-				sortingValue += task.title;
-			}
-			sortingValue += ".";
-
-			task.abcsort = sortingValue;
-		}
-		return task.abcsort;
-	}
+//	private String getAbcSort(GoogleTask task, ArrayList<GoogleTask> modifiedTasks, ArrayList<GoogleTask> allTasks) {
+//		if (task.abcsort.isEmpty()) {
+//			String sortingValue = "";
+//			if (task.parent != null && !task.parent.isEmpty()) {
+//				GoogleTask parent = getTaskWithRemoteId(task.parent, modifiedTasks);
+//				if (parent == null) {
+//					// Try all tasks instead
+//					parent = getTaskWithRemoteId(task.parent, allTasks);
+//				}
+//				if (parent != null) {
+//					sortingValue += getAbcSort(parent, modifiedTasks, allTasks);
+//				}
+//			}
+//			if (task.title != null) {
+//				sortingValue += task.title;
+//			}
+//			sortingValue += ".";
+//
+//			task.abcsort = sortingValue;
+//		}
+//		return task.abcsort;
+//	}
 
 	private GoogleTask getTaskWithRemoteId(String id,
 			ArrayList<GoogleTask> tasks) {

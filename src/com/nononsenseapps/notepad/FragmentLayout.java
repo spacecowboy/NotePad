@@ -19,26 +19,25 @@ package com.nononsenseapps.notepad;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import com.nononsenseapps.notepad.interfaces.DeleteActionListener;
-import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad_donate.R;
+import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
+import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
+import com.nononsenseapps.notepad.interfaces.PasswordChecker;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.PrefsActivity;
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.ui.ExtrasCursorAdapter;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.CursorLoader;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
@@ -61,9 +60,8 @@ import android.widget.EditText;
  * Showing a single fragment in an activity.
  */
 public class FragmentLayout extends Activity implements
-		OnSharedPreferenceChangeListener, OnEditorDeleteListener,
-		DeleteActionListener, OnNavigationListener,
-		LoaderManager.LoaderCallbacks<Cursor> {
+		OnSharedPreferenceChangeListener, OnEditorDeleteListener, OnNavigationListener,
+		LoaderManager.LoaderCallbacks<Cursor>, PasswordChecker {
 	private static final String TAG = "FragmentLayout";
 	private static final String CURRENT_LIST_ID = "currentlistid";
 	private static final String CURRENT_LIST_POS = "currentlistpos";
@@ -71,7 +69,7 @@ public class FragmentLayout extends Activity implements
 	private static final int RENAME_LIST = 1;
 	private static final int DELETE_LIST = 2;
 	// public static boolean lightTheme = false;
-	public static String currentTheme = NotesPreferenceFragment.THEME_LIGHT;
+	public static String currentTheme = MainPrefs.THEME_LIGHT;
 	public static boolean shouldRestart = false;
 	public static boolean LANDSCAPE_MODE;
 	public static boolean AT_LEAST_ICS;
@@ -268,12 +266,13 @@ public class FragmentLayout extends Activity implements
 				// loaded or not.
 				openListFromIntent(listId);
 			} else if (intent.getData() != null
-					&& intent.getExtras() != null
 					&& intent.getData().getPath()
 							.startsWith(NotePad.Notes.PATH_VISIBLE_NOTE_ID)) {
 				if (list != null) {
-					long listId = intent.getExtras().getLong(
-							NotePad.Notes.COLUMN_NAME_LIST, -1);
+					long listId = ALL_NOTES_ID;
+					if (intent.getExtras() != null) {
+						listId = intent.getExtras().getLong(NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
+					}
 					// Open the containing list if we have to. No need to change
 					// lists
 					// if we are already displaying all notes.
@@ -306,9 +305,12 @@ public class FragmentLayout extends Activity implements
 					&& intent.getData().equals(
 							NotePad.Notes.CONTENT_VISIBLE_URI)) {
 				Log.d("FragmentLayout", "INSERT NOTE");
-				if (list != null && intent.getExtras() != null) {
-					long listId = intent.getExtras().getLong(
-							NotePad.Notes.COLUMN_NAME_LIST, -1);
+				if (list != null) {
+					long listId = ALL_NOTES_ID;
+					if (intent.getExtras() != null) {
+						listId = intent.getExtras().getLong(NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
+					}
+							
 					// Open the containing list if we have to. No need to change
 					// lists
 					// if we are already displaying all notes.
@@ -524,8 +526,8 @@ public class FragmentLayout extends Activity implements
 			return false;
 		else
 			return (settings.getBoolean(
-					NotesPreferenceFragment.KEY_SYNC_ENABLE, false) && !settings
-					.getString(NotesPreferenceFragment.KEY_ACCOUNT, "")
+					SyncPrefs.KEY_SYNC_ENABLE, false) && !settings
+					.getString(SyncPrefs.KEY_ACCOUNT, "")
 					.isEmpty());
 	}
 
@@ -600,7 +602,7 @@ public class FragmentLayout extends Activity implements
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		// Need to restart to allow themes and such to go into effect
-		if (key.equals(NotesPreferenceFragment.KEY_THEME)) {
+		if (key.equals(MainPrefs.KEY_THEME)) {
 			shouldRestart = true;
 		}
 	}
@@ -610,16 +612,16 @@ public class FragmentLayout extends Activity implements
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 
-		currentTheme = prefs.getString(NotesPreferenceFragment.KEY_THEME,
+		currentTheme = prefs.getString(MainPrefs.KEY_THEME,
 				currentTheme);
 
 		setTypeOfTheme();
 
 		String sortType = prefs.getString(
-				NotesPreferenceFragment.KEY_SORT_TYPE,
+				MainPrefs.KEY_SORT_TYPE,
 				NotePad.Notes.DEFAULT_SORT_TYPE);
 		String sortOrder = prefs.getString(
-				NotesPreferenceFragment.KEY_SORT_ORDER,
+				MainPrefs.KEY_SORT_ORDER,
 				NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 		NotePad.Notes.SORT_ORDER = sortType + " " + sortOrder;
@@ -632,12 +634,21 @@ public class FragmentLayout extends Activity implements
 	}
 
 	private void setTypeOfTheme() {
-		if (NotesPreferenceFragment.THEME_LIGHT_ICS_AB.equals(currentTheme)) {
+		if (MainPrefs.THEME_LIGHT_ICS_AB.equals(currentTheme)) {
 			setTheme(R.style.ThemeHoloLightDarkActonBar);
-		} else if (NotesPreferenceFragment.THEME_LIGHT.equals(currentTheme)) {
+		} else if (MainPrefs.THEME_LIGHT.equals(currentTheme)) {
 			setTheme(R.style.ThemeHoloLight);
 		} else {
 			setTheme(R.style.ThemeHolo);
+		}
+	}
+	
+	@Override
+	public void PasswordVerified(ActionResult result) {
+		NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
+				.findFragmentById(R.id.editor_container);
+		if (editor != null) {
+			editor.OnPasswordVerified(result);
 		}
 	}
 
@@ -693,7 +704,7 @@ public class FragmentLayout extends Activity implements
 	private void showPrefs() {
 		// launch a new activity to display the dialog
 		Intent intent = new Intent();
-		intent.setClass(this, NotesPreferencesDialog.class);
+		intent.setClass(this, PrefsActivity.class);
 		startActivity(intent);
 	}
 
@@ -701,8 +712,7 @@ public class FragmentLayout extends Activity implements
 	 * This is a secondary activity, to show what the user has selected when the
 	 * screen is not large enough to show it all in one activity.
 	 */
-	public static class NotesEditorActivity extends Activity implements
-			DeleteActionListener {
+	public static class NotesEditorActivity extends Activity implements PasswordChecker {
 		private static final String TAG = "NotesEditorActivity";
 		private NotesEditorFragment editorFragment;
 		private long currentId = -1;
@@ -715,10 +725,10 @@ public class FragmentLayout extends Activity implements
 			if (UI_DEBUG_PRINTS)
 				Log.d("NotesEditorActivity", "onCreate");
 
-			if (NotesPreferenceFragment.THEME_LIGHT_ICS_AB
+			if (MainPrefs.THEME_LIGHT_ICS_AB
 					.equals(FragmentLayout.currentTheme)) {
 				setTheme(R.style.ThemeHoloLightDarkActonBar);
-			} else if (NotesPreferenceFragment.THEME_LIGHT
+			} else if (MainPrefs.THEME_LIGHT
 					.equals(FragmentLayout.currentTheme)) {
 				setTheme(R.style.ThemeHoloLight);
 			} else {
@@ -762,17 +772,38 @@ public class FragmentLayout extends Activity implements
 		public boolean onOptionsItemSelected(MenuItem item) {
 			switch (item.getItemId()) {
 			case android.R.id.home:
-				finish();
+				goUp();
 				break;
 			case R.id.menu_delete:
 				onDeleteAction();
 				return true;
 			case R.id.menu_revert:
-				setResult(Activity.RESULT_CANCELED);
-				finish();
+				goUp();
 				break;
 			}
 			return super.onOptionsItemSelected(item);
+		}
+		
+		/**
+		 * Launches the main activity with Flag CLEAR TOP
+		 */
+		private void goUp() {
+			Intent intent = new Intent();
+			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+			intent.setClass(this, FragmentLayout.class);
+
+			startActivity(intent);
+		}
+		
+		@Override
+		public boolean onKeyUp(int keyCode, KeyEvent event) {
+			switch (keyCode) {
+			case KeyEvent.KEYCODE_BACK:
+				// Exit app
+				goUp();
+				return true;
+			}
+			return false;
 		}
 
 		@Override
@@ -808,15 +839,20 @@ public class FragmentLayout extends Activity implements
 			}
 		}
 
-		@Override
 		public void onDeleteAction() {
 			if (UI_DEBUG_PRINTS)
 				Log.d(TAG, "onDeleteAction");
 			editorFragment.setSelfAction(); // Don't try to reload the deleted
 											// note
 			FragmentLayout.deleteNote(this, editorFragment.getCurrentNoteId());
-			setResult(Activity.RESULT_CANCELED);
-			finish();
+			goUp();
+		}
+
+		@Override
+		public void PasswordVerified(ActionResult result) {
+			if (editorFragment != null) {
+				editorFragment.OnPasswordVerified(result);
+			}
 		}
 	}
 
@@ -904,67 +940,6 @@ public class FragmentLayout extends Activity implements
 		deleteNotes(this, ids);
 	}
 
-	public static class NotesPreferencesDialog extends Activity {
-		public static final int DIALOG_ACCOUNTS = 23;
-		private NotesPreferenceFragment prefFragment;
-
-		@Override
-		protected void onCreate(Bundle savedInstanceState) {
-			super.onCreate(savedInstanceState);
-
-			if (NotesPreferenceFragment.THEME_DARK
-					.equals(FragmentLayout.currentTheme)) {
-				setTheme(R.style.ThemeHoloDialogNoActionBar);
-			} else {
-				setTheme(R.style.ThemeHoloLightDialogNoActionBar);
-			}
-
-			// Display the fragment as the main content.
-			prefFragment = new NotesPreferenceFragment();
-			FragmentTransaction ft = getFragmentManager().beginTransaction();
-			ft.replace(android.R.id.content, prefFragment);
-			ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-			ft.commit();
-		}
-
-		@Override
-		public boolean onOptionsItemSelected(MenuItem item) {
-			switch (item.getItemId()) {
-			case android.R.id.home:
-				finish();
-				break;
-			}
-			return super.onOptionsItemSelected(item);
-		}
-
-		@Override
-		protected Dialog onCreateDialog(int id) {
-			switch (id) {
-			case DIALOG_ACCOUNTS:
-				AlertDialog.Builder builder = new AlertDialog.Builder(this);
-				builder.setTitle("Select a Google account");
-				final Account[] accounts = AccountManager.get(this)
-						.getAccountsByType("com.google");
-				final int size = accounts.length;
-				String[] names = new String[size];
-				for (int i = 0; i < size; i++) {
-					names[i] = accounts[i].name;
-				}
-				// TODO
-				// Could add a clear alternative here
-				builder.setItems(names, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int which) {
-						// Stuff to do when the account is selected by the user
-						prefFragment.accountSelected(accounts[which]);
-					}
-				});
-				return builder.create();
-			}
-			return null;
-		}
-	}
-
-	@Override
 	public void onDeleteAction() {
 		// both list and editor should be notified
 		NotesListFragment list = (NotesListFragment) getFragmentManager()
