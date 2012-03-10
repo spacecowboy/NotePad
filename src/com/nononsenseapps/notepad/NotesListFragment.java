@@ -1332,12 +1332,12 @@ public class NotesListFragment extends ListFragment implements
 						.getString(MainPrefs.KEY_SORT_ORDER,
 								NotePad.Notes.DEFAULT_SORT_ORDERING);
 
-		// TODO include title field in search
-		// I am not restricting the lists on purpose here. Search should be
-		// global
+		// include title field in search
 		return new CursorLoader(activity, baseUri, PROJECTION,
-				NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?", new String[] { "%"
-						+ currentQuery + "%" }, sortOrder);
+				NotePad.Notes.COLUMN_NAME_NOTE + " LIKE ?" + " OR "
+						+ NotePad.Notes.COLUMN_NAME_TITLE + " LIKE ?",
+				new String[] { "%" + currentQuery + "%",
+						"%" + currentQuery + "%" }, sortOrder);
 	}
 
 	@Override
