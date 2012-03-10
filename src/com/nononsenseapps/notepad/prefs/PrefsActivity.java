@@ -45,7 +45,7 @@ public class PrefsActivity extends PreferenceActivity implements
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			goUp();
+			finish();
 			break;
 		}
 		return super.onOptionsItemSelected(item);
