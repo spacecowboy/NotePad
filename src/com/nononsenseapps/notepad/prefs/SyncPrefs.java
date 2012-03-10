@@ -262,8 +262,7 @@ public class SyncPrefs extends PreferenceFragment implements
 		@Override
 		public Dialog onCreateDialog(Bundle args) {
 			AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-			// TODO resource
-			builder.setTitle("Select a Google account");
+			builder.setTitle(R.string.select_account);
 			final Account[] accounts = AccountManager.get(activity)
 					.getAccountsByType("com.google");
 			final int size = accounts.length;

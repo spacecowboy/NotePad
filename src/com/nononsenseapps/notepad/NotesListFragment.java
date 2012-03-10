@@ -81,7 +81,6 @@ public class NotesListFragment extends ListFragment implements
 		OnSharedPreferenceChangeListener {
 	private int mCurCheckPosition = 0;
 
-	// TODO limit the length of notes and titles retrieved
 	private static final String[] PROJECTION = new String[] {
 			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
 			NotePad.Notes.COLUMN_NAME_NOTE,

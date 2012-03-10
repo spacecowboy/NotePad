@@ -75,11 +75,10 @@ public class PrefsActivity extends PreferenceActivity implements
 			settings.edit()
 					.putString(PasswordPrefs.KEY_PASSWORD, pendingNewPassword)
 					.commit();
-			// TODO resource
 			Toast.makeText(
 					this,
-					("".equals(pendingNewPassword)) ? "Password cleared string"
-							: "Password set string ", Toast.LENGTH_SHORT)
+					("".equals(pendingNewPassword)) ? getText(R.string.password_cleared)
+							: getText(R.string.password_set), Toast.LENGTH_SHORT)
 					.show();
 		}
 	}

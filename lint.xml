@@ -1,7 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
-    <issue id="MissingTranslation" severity="ignore">
-        <ignore path="res\values-de-v14" />
-        <ignore path="res\values-sv-v14" />
-    </issue>
+    <issue id="HardcodedText" severity="error" />
 </lint>

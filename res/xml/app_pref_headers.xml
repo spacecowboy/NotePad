@@ -14,7 +14,7 @@
     
     <header android:fragment="com.nononsenseapps.notepad.prefs.PasswordPrefs"
     android:icon="@drawable/device_access_secure_dark"
-    android:title="Password header"
+    android:title="@string/password"
     android:summary="" />
 
     <!-- <header android:fragment="com.nononsenseapps.notepad.widget.ListWidgetConfigure$ThemeFragment"

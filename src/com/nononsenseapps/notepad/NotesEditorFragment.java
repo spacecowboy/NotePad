@@ -1148,14 +1148,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			switch (result.actionId) {
 			case LOCK_NOTE:
 				noteAttrs.locked = true;
-				// TODO resource
-				Toast.makeText(activity,"Locked",
+				Toast.makeText(activity,getString(R.string.locked),
 						Toast.LENGTH_SHORT).show();
 				break;
 			case UNLOCK_NOTE:
 				noteAttrs.locked = false;
-				// TODO resource
-				Toast.makeText(activity,"Unlocked",
+				Toast.makeText(activity,getString(R.string.unlocked),
 						Toast.LENGTH_SHORT).show();
 				// Fall through and show the note as well
 			case SHOW_NOTE:

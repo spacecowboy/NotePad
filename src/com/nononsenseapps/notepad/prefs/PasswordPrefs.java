@@ -116,8 +116,7 @@ public class PasswordPrefs extends PreferenceFragment {
 				settings.edit()
 						.putString(KEY_PASSWORD, password1.getText().toString())
 						.commit();
-				// TODO resource
-				Toast.makeText(activity, "Password set string",
+				Toast.makeText(activity, getText(R.string.password_set),
 						Toast.LENGTH_SHORT).show();
 			} else {
 				// confirm with existing password first
@@ -126,11 +125,10 @@ public class PasswordPrefs extends PreferenceFragment {
 
 		} else {
 			// Show a toast so the user knows he did something wrong
-			// TODO to string resource
 			Animation shake = AnimationUtils.loadAnimation(activity,
 					R.anim.shake);
 			password2.startAnimation(shake);
-			Toast.makeText(activity, "Passwords do not match string",
+			Toast.makeText(activity, getText(R.string.passwords_dont_match),
 					Toast.LENGTH_SHORT).show();
 		}
 	}
@@ -145,8 +143,7 @@ public class PasswordPrefs extends PreferenceFragment {
 			settings.edit()
 					.putString(KEY_PASSWORD, "")
 					.commit();
-			// TODO resource
-			Toast.makeText(activity, "Password cleared string",
+			Toast.makeText(activity, getText(R.string.password_cleared),
 					Toast.LENGTH_SHORT).show();
 		} else {
 			// confirm with existing password first

@@ -51,7 +51,6 @@
             android:ellipsize="marquee"
             android:fadingEdge="horizontal"
             android:singleLine="true"
-            android:text="Title"
             android:textAppearance="?android:attr/textAppearanceMedium" />
 
         

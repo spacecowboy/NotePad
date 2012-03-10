@@ -69,8 +69,7 @@ public class PasswordDialog extends DialogFragment implements OnClickListener {
 			Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.confirm_password_dialog, container,
 				false);
-		// TODO resource
-		getDialog().setTitle("Password required string");
+		getDialog().setTitle(R.string.password_required);
 
 		passwordText = (EditText) v.findViewById(R.id.editTitle);
 
