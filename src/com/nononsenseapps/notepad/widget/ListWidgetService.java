@@ -182,6 +182,8 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 					ListWidgetConfigure.KEY_LIST,
 					Integer.toString(FragmentLayout.ALL_NOTES_ID)));
 
+			//getListTitle(settings, listId);
+
 			String sortChoice = settings.getString(
 					ListWidgetConfigure.KEY_SORT_TYPE, MainPrefs.DUEDATESORT);
 			String sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;

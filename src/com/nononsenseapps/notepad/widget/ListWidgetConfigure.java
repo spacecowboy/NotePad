@@ -275,22 +275,6 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		@Override
 		public void onSharedPreferenceChanged(
 				SharedPreferences sharedPreferences, String key) {
-			if (key.equals(KEY_LIST)) {
-				Log.d("config", "writing title");
-				// Must also write the list Name to the prefs
-				// lSettings
-				// .edit()
-				// .putString(KEY_LIST_TITLE,
-				// listSpinner.getEntry().toString()).apply();
-				// This seems stupid and it is. The first time this is called,
-				// it won't be written
-				// to the shared preferences file! Do it twice to ensure it is
-				// always written...
-				TitleWriter task2 = new TitleWriter(activity);
-				task2.execute(new String[] { listSpinner.getEntry().toString() });
-				TitleWriter task = new TitleWriter(activity);
-				task.execute(new String[] { listSpinner.getEntry().toString() });
-			}
 			if (!activity.isFinishing()) {
 				if (key.equals(KEY_LIST)) {
 					// Also set the summary to this text
@@ -301,35 +285,6 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 					sortType.setSummary(sortType.getEntry());
 				}
 			}
-		}
-
-		private class TitleWriter extends AsyncTask<String, Void, Void> {
-
-			private Activity activity;
-
-			public TitleWriter(Activity activity) {
-				super();
-				this.activity = activity;
-			}
-
-			@Override
-			protected Void doInBackground(String... titles) {
-				if (titles != null) {
-					try {
-						// Make sure preferences are updated first
-						Thread.sleep(100);
-					} catch (InterruptedException e) {
-						// e.printStackTrace();
-					}
-					for (String title : titles) {
-						PreferenceManager.getDefaultSharedPreferences(activity)
-								.edit().putString(KEY_LIST_TITLE, title)
-								.commit();
-					}
-				}
-				return null;
-			}
-
 		}
 	}
 
