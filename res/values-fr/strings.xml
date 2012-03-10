@@ -22,7 +22,7 @@
     <string name="title_edit">Editer : %1$s</string>
     <string name="menu_add">Nouvelle note</string>
     <string name="menu_delete">Supprimer</string>
-    <string name="menu_revert">Défaire les changements</string>
+    <string name="menu_revert">Annuler les changements</string>
     <string name="menu_copy">Copier la note</string>
     <string name="menu_cancel">Annuler</string>
     <string name="menu_setcompleted">Effectué</string>
@@ -33,10 +33,10 @@
     <string name="menu_preferences">Paramètres</string>
     <string name="menu_renamelist">Renommer la liste</string>
     <string name="menu_createlist">Créer une liste</string>
-    <string name="menu_clearcompleted">Effacer les tâches accomplies</string>
+    <string name="menu_clearcompleted">Effacer complétées</string>
     <string name="menu_setdefaultlist">Définir comme liste par défaut</string>
-    <string name="delete_list_warning">Êtes-vous sûr de vouloir supprimer la liste ? Elle sera définitivement effacée.</string>
-    <string name="editor_due_date_hint">Date</string>
+    <string name="delete_list_warning">Êtes-vous sûr de vouloir supprimer la liste ? Ceci est définitif.</string>
+    <string name="editor_due_date_hint">Définir la date</string>
     <string name="editor_title_hint">Titre</string>
     <string name="editor_note_hint">Note</string>
     <string name="resolve_edit">Editer la note</string>
@@ -52,14 +52,14 @@
     <string name="settings_sorting_order">Ordre</string>
     <string name="settings_sorting_order_dialog">Ordonner</string>
     <string name="settings_summary_sort_type_alphabetic">Titre</string>
-    <string name="settings_summary_sort_type_modified">Date de dmodification</string>
-    <string name="settings_summary_sort_type_duedate">Date</string>
+    <string name="settings_summary_sort_type_modified">Dernière modification</string>
+    <string name="settings_summary_sort_type_duedate">Date d'échéance</string>
     <string name="settings_summary_sort_type_serverposition">Position du serveur</string>
     <string name="settings_summary_sort_order_asc">Ascendant</string>
     <string name="settings_summary_sort_order_desc">Descendant</string>
     <string name="settings_summary_theme_dark">Sombre</string>
     <string name="settings_summary_theme_light">Clair</string>
-    <string name="settings_summary_theme_light_dark_ab">Clair + barre d\'action sombre</string>
+    <string name="settings_summary_theme_light_dark_ab">Clair, action bar sombre</string>
     <string name="settings_cat_appearance">Apparence</string>
     <string name="settings_font_screen">Paramètres de police</string>
     <string name="settings_font_screen_summary">Vous pouvez changer la police et la taille du texte</string>
@@ -68,11 +68,11 @@
     <string name="settings_font_type_dialog">Choisir une police</string>
     <string name="settings_font_size">Taille du texte</string>
     <string name="preference_preview_text">Voici comment le texte apparaîtra dans l\'éditeur</string>
-    <string name="settings_text_preview_title">Aperçu</string>
+    <string name="settings_text_preview_title">Prévisualiser</string>
     <string name="monospace">Monospace</string>
     <string name="sans">Sans</string>
     <string name="serif">Serif</string>
-    <string name="settings_sync_freq_title">Synchronisation</string>
+    <string name="settings_sync_freq_title">Sync fréquence</string>
     <string name="settings_account_title">Choisir un compte</string>
     <string name="settings_account_summary">Cliquer pour changer de compte</string>
     <string name="settings_sync_enable_title">Sync. Google Tâches</string>
@@ -122,7 +122,7 @@
     <string name="confirm_new_password">Confirmer le nouveau mot de passe</string>
     <string name="apply">Appliquer</string>
     <string name="clear_password">Effacer le mot de passe</string>
-    <string name="password_info">Après avoir défini un mot de passe, vous devrez le saisir pour voir les notes verrouillées. Le mot de passe protègera la note elle-même, mais pas le titre ni la date. La note ne sera pas cryptée donc pourra toujours être lue via Google Mail/Agenda Si vous oubliez votre mot de passe, synchronisez les notes avec Google et réinstallez l\'application.</string>
+    <string name="password_info">Après avoir défini un mot de passe, vous devrez le saisir pour voir les notes verrouillées. Le mot de passe protègera la note elle-même, mais pas le titre ni la date. La note ne sera pas cryptée donc pourra toujours être lue via Google Mail/Agenda. Si vous oubliez votre mot de passe, synchronisez les notes avec Google et réinstallez l\'application.</string>
     <string name="about">À propos</string>
 
 </resources>

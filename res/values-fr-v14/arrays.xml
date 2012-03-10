@@ -4,7 +4,7 @@
     <string-array name="theme_preference">
         <item>Sombre</item>
         <item>Clair</item>
-		<item>Clair + barre d\'action sombre</item>
+		<item>Clair, action bar sombre</item>
     </string-array>
 
 </resources>
