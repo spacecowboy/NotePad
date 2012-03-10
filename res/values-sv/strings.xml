@@ -120,4 +120,26 @@
     <string name="settings_list">Lista</string>
     <string name="settings_list_summary"></string>
     <string name="automatic">Automatiskt</string>
+    
+    <!-- Un-translated yet -->
+    <string name="lock_note">Lås anteckning</string>
+    <string name="unlock_note">Lås upp anteckning</string>
+    <string name="locked">Låst</string>
+    <string name="unlocked">Upplåst</string>
+    <string name="password_required">Lösenord krävs</string>
+    <string name="select_account">Välj ett konto</string>
+    <string name="password">Lösenord</string>
+    <string name="password_set">Lösenord sparat</string>
+    <string name="password_cleared">Lösenord togs bort</string>
+    <string name="passwords_dont_match">Lösenorden är inte likaPasswords do not match</string>
+    <string name="enter_password">Enter password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="confirm_new_password">Confirm new password</string>
+    <string name="apply">Apply</string>
+    <string name="clear_password">Clear password</string>
+    <string name="password_info">Setting a password will require you to input the password 
+        to show any locked notes. It will only protect the note-field so you still have unprotected
+        access to the title and due date. It does not encrypt the note in any way so it can still 
+        be viewed in Google mail/calendar. If you forget your password, sync with Google and
+        then reinstall the app.</string>
 </resources>

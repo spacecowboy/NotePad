@@ -7,10 +7,4 @@
 		<item>Světlé, tmavý panel akcí</item>
     </string-array>
 
-    <string-array name="themevalues_preference">
-        <item>dark</item>
-        <item>light</item>
-      	<item>light_ab</item>
-    </string-array>
-
 </resources>
