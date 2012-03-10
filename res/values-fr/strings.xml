@@ -53,7 +53,7 @@
     <string name="settings_sorting_order_dialog">Ordonner</string>
     <string name="settings_summary_sort_type_alphabetic">Titre</string>
     <string name="settings_summary_sort_type_modified">Dernière modification</string>
-    <string name="settings_summary_sort_type_duedate">Date d'échéance</string>
+    <string name="settings_summary_sort_type_duedate">Date d\'échéance</string>
     <string name="settings_summary_sort_type_serverposition">Position du serveur</string>
     <string name="settings_summary_sort_order_asc">Ascendant</string>
     <string name="settings_summary_sort_order_desc">Descendant</string>
