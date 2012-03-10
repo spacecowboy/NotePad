@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<!--
+     Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,11 +16,10 @@
 -->
 
 <resources>
-    <string name="app_name">Anteckningar</string>
 
+    <string name="app_name">Anteckningar</string>
     <string name="title_create">Ny anteckning</string>
     <string name="title_edit">Redigera: %1$s</string>
-
     <string name="menu_add">Skapa ny</string>
     <string name="menu_delete">Ta bort</string>
     <string name="menu_revert">Ångra ändringar</string>
@@ -35,18 +35,13 @@
     <string name="menu_createlist">Skapa lista</string>
     <string name="menu_clearcompleted">Ta bort slutförda uppgifter</string>
     <string name="menu_setdefaultlist">Välj som standardlista</string>
-    
     <string name="delete_list_warning">Är du säker på att du vill ta bort listan? Listan kommer att tas bort permanent.</string>
-    
     <string name="editor_due_date_hint">Förfallodatum</string>
     <string name="editor_title_hint">Titel</string>
     <string name="editor_note_hint">Anteckning</string>
-
     <string name="resolve_edit">Ändra anteckning</string>
-
     <string name="error_title">Kunde inte hitta anteckningen</string>
     <string name="error_message">Kunde inte hitta den aktuella anteckningen.</string>
-    
     <string name="search_hint">Sök</string>
     <string name="settings_theme">Nuvarande tema</string>
     <string name="settings_theme_dialog">Använd tema</string>
@@ -56,18 +51,15 @@
     <string name="settings_sorting_type_dialog">Sortera på</string>
     <string name="settings_sorting_order">Ordnar efter</string>
     <string name="settings_sorting_order_dialog">Ordna efter</string>
-    
     <string name="settings_summary_sort_type_alphabetic">Titel</string>
     <string name="settings_summary_sort_type_modified">Senast modifierad</string>
     <string name="settings_summary_sort_type_duedate">Förfallodatum</string>
     <string name="settings_summary_sort_type_serverposition">Serverposition</string>
     <string name="settings_summary_sort_order_asc">Normal</string>
     <string name="settings_summary_sort_order_desc">Omvänd</string>
-    
     <string name="settings_summary_theme_dark">Mörk</string>
     <string name="settings_summary_theme_light">Ljus</string>
     <string name="settings_summary_theme_light_dark_ab">Ljus, mörk menyrad</string>
-    
     <string name="settings_cat_appearance">Utseende</string>
     <string name="settings_font_screen">Typsnittsinställningar</string>
     <string name="settings_font_screen_summary">Du kan ändra teckensnittet och storleken på texten</string>
@@ -77,7 +69,6 @@
     <string name="settings_font_size">Teckenstorlek</string>
     <string name="preference_preview_text">Så här kommer texten att se ut</string>
     <string name="settings_text_preview_title">Förhandsgranskning</string>
-    
     <string name="monospace">Monospace</string>
     <string name="sans">Sans</string>
     <string name="serif">Serif</string>
@@ -87,29 +78,24 @@
     <string name="settings_sync_enable_title">Google Tasks synk</string>
     <string name="settings_sync_enable_summary">Synkronisera anteckningar med ditt Google konto</string>
     <string name="settings_cat_syncing">Synkronisering</string>
-    
     <string name="manual">Manuell</string>
     <string name="minutes">minuter</string>
     <string name="hours">timmar</string>
     <string name="onehour">En timme</string>
     <string name="oneday">En dag</string>
-    
     <string name="yes">Ja</string>
     <string name="no">Nej</string>
     <string name="ok">OK</string>
-    
     <string name="show_from_all_lists">Alla listor</string>
     <string name="default_list_needed_warning">Välj en standardlista först</string>
     <string name="reverted">Återställde ändringar</string>
     <string name="notecopied">Kopierad</string>
     <string name="deleted">Tog bort</string>
     <string name="items">anteckningar</string>
-    
     <string name="permission_read_label">read notes and lists</string>
     <string name="permission_read_desc">Allows the application to read your notes and related lists.</string>
     <string name="permission_write_label">modify notes and lists</string>
     <string name="permission_write_desc">Allows the application to insert, update and delete notes and lists.</string>
-    
     <string name="settings_header_list">Listinställningar</string>
     <string name="settings_header_list_summary"></string>
     <string name="settings_header_appearance">@string/settings_cat_appearance</string>
@@ -120,7 +106,7 @@
     <string name="settings_list">Lista</string>
     <string name="settings_list_summary"></string>
     <string name="automatic">Automatiskt</string>
-    
+
     <!-- Un-translated yet -->
     <string name="lock_note">Lås anteckning</string>
     <string name="unlock_note">Lås upp anteckning</string>
@@ -131,15 +117,16 @@
     <string name="password">Lösenord</string>
     <string name="password_set">Lösenord sparat</string>
     <string name="password_cleared">Lösenord togs bort</string>
-    <string name="passwords_dont_match">Lösenorden är inte likaPasswords do not match</string>
-    <string name="enter_password">Enter password</string>
-    <string name="enter_new_password">Enter new password</string>
-    <string name="confirm_new_password">Confirm new password</string>
-    <string name="apply">Apply</string>
-    <string name="clear_password">Clear password</string>
-    <string name="password_info">Setting a password will require you to input the password 
-        to show any locked notes. It will only protect the note-field so you still have unprotected
-        access to the title and due date. It does not encrypt the note in any way so it can still 
-        be viewed in Google mail/calendar. If you forget your password, sync with Google and
-        then reinstall the app.</string>
+    <string name="passwords_dont_match">Lösenorden är inte lika</string>
+    <string name="enter_password">Skriv lösenord</string>
+    <string name="enter_new_password">Nytt lösenord</string>
+    <string name="confirm_new_password">Bekräfta nytt lösenord</string>
+    <string name="apply">Ändra lösenord</string>
+    <string name="clear_password">Ta bort lösenord</string>
+    <string name="password_info">Genom att ställa in ett lösenord så kommer det krävas att du bekräftar
+        lösenordet för att öppna låsta anteckningar. Det skyddar bara anteckningsfältet så du har
+        fortfarande oskyddad tillgång till titel och datum. Detta är ingen typ av kryptering så du kan
+        fortfarande komma åt anteckningen i Google mail/kalender. Om du glömmer ditt lösenord, synka
+        med Google och installera om appen.</string>
+
 </resources>
