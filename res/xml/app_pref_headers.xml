@@ -16,6 +16,11 @@
     android:icon="@drawable/device_access_secure_dark"
     android:title="@string/password"
     android:summary="" />
+    
+    <header android:fragment="com.nononsenseapps.notepad.prefs.AboutPrefs"
+    android:icon="@drawable/action_about_dark"
+    android:title="@string/about"
+    android:summary="" />
 
     <!-- <header android:fragment="com.nononsenseapps.notepad.widget.ListWidgetConfigure$ThemeFragment"
             android:title="Appereance"
