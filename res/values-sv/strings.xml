@@ -107,7 +107,6 @@
     <string name="settings_list_summary"></string>
     <string name="automatic">Automatiskt</string>
 
-    <!-- Un-translated yet -->
     <string name="lock_note">Lås anteckning</string>
     <string name="unlock_note">Lås upp anteckning</string>
     <string name="locked">Låst</string>
