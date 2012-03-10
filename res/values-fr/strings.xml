@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <string name="app_name">Notes</string>
+    <string name="title_create">Nouvelle note</string>
+    <string name="title_edit">Editer : %1$s</string>
+    <string name="menu_add">Nouvelle note</string>
+    <string name="menu_delete">Supprimer</string>
+    <string name="menu_revert">Défaire les changements</string>
+    <string name="menu_copy">Copier la note</string>
+    <string name="menu_cancel">Annuler</string>
+    <string name="menu_setcompleted">Effectué</string>
+    <string name="menu_setuncompleted">Non effectué</string>
+    <string name="menu_deletelist">Supprimer la liste</string>
+    <string name="menu_sync">Actualiser</string>
+    <string name="menu_share">Partager</string>
+    <string name="menu_preferences">Paramètres</string>
+    <string name="menu_renamelist">Renommer la liste</string>
+    <string name="menu_createlist">Créer une liste</string>
+    <string name="menu_clearcompleted">Effacer les tâches accomplies</string>
+    <string name="menu_setdefaultlist">Définir comme liste par défaut</string>
+    <string name="delete_list_warning">Êtes-vous sûr de vouloir supprimer la liste ? Elle sera définitivement effacée.</string>
+    <string name="editor_due_date_hint">Date</string>
+    <string name="editor_title_hint">Titre</string>
+    <string name="editor_note_hint">Note</string>
+    <string name="resolve_edit">Editer la note</string>
+    <string name="error_title">Erreur</string>
+    <string name="error_message">Erreur de chargement</string>
+    <string name="search_hint">Rechercher</string>
+    <string name="settings_theme">Thème actuel</string>
+    <string name="settings_theme_dialog">Choisir un thème</string>
+    <string name="settings_cat_theme">Thème</string>
+    <string name="settings_cat_sorting">Classement</string>
+    <string name="settings_sorting_type">Classé par</string>
+    <string name="settings_sorting_type_dialog">Classer par</string>
+    <string name="settings_sorting_order">Ordre</string>
+    <string name="settings_sorting_order_dialog">Ordonner</string>
+    <string name="settings_summary_sort_type_alphabetic">Titre</string>
+    <string name="settings_summary_sort_type_modified">Date de dmodification</string>
+    <string name="settings_summary_sort_type_duedate">Date</string>
+    <string name="settings_summary_sort_type_serverposition">Position du serveur</string>
+    <string name="settings_summary_sort_order_asc">Ascendant</string>
+    <string name="settings_summary_sort_order_desc">Descendant</string>
+    <string name="settings_summary_theme_dark">Sombre</string>
+    <string name="settings_summary_theme_light">Clair</string>
+    <string name="settings_summary_theme_light_dark_ab">Clair + barre d\'action sombre</string>
+    <string name="settings_cat_appearance">Apparence</string>
+    <string name="settings_font_screen">Paramètres de police</string>
+    <string name="settings_font_screen_summary">Vous pouvez changer la police et la taille du texte</string>
+    <string name="settings_cat_font_editor">Editeur</string>
+    <string name="settings_font_type">Police</string>
+    <string name="settings_font_type_dialog">Choisir une police</string>
+    <string name="settings_font_size">Taille du texte</string>
+    <string name="preference_preview_text">Voici comment le texte apparaîtra dans l\'éditeur</string>
+    <string name="settings_text_preview_title">Aperçu</string>
+    <string name="monospace">Monospace</string>
+    <string name="sans">Sans</string>
+    <string name="serif">Serif</string>
+    <string name="settings_sync_freq_title">Synchronisation</string>
+    <string name="settings_account_title">Choisir un compte</string>
+    <string name="settings_account_summary">Cliquer pour changer de compte</string>
+    <string name="settings_sync_enable_title">Sync. Google Tâches</string>
+    <string name="settings_sync_enable_summary">Synchroniser vos notes avec votre compte Google</string>
+    <string name="settings_cat_syncing">Synchronisation</string>
+    <string name="manual">Manuelle</string>
+    <string name="minutes">minutes</string>
+    <string name="hours">heures</string>
+    <string name="onehour">Une heure</string>
+    <string name="oneday">Un jour</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="ok">OK</string>
+    <string name="show_from_all_lists">Toutes les listes</string>
+    <string name="default_list_needed_warning">Vous devez d\'abord définir une liste par défaut</string>
+    <string name="reverted">Changements annulés</string>
+    <string name="notecopied">Copié</string>
+    <string name="deleted">Supprimé</string>
+    <string name="items">notes</string>
+    <string name="permission_read_label">lire les notes et les listes</string>
+    <string name="permission_read_desc">Autorise l\'application à lire vos notes et listes.</string>
+    <string name="permission_write_label">modifier les notes et les listes</string>
+    <string name="permission_write_desc">Autorise l\'application à créer, modifier et supprimer des notes et listes.</string>
+    <string name="settings_header_list">Paramètres de la liste</string>
+    <string name="settings_header_list_summary"></string>
+    <string name="settings_header_appearance">@string/settings_cat_appearance</string>
+    <string name="settings_header_appearance_summary"></string>
+    <string name="settings_header_sync">@string/settings_cat_syncing</string>
+    <string name="settings_header_sync_summary"></string>
+    <string name="settings_list_dialog">Choisir une liste</string>
+    <string name="settings_list">Liste</string>
+    <string name="settings_list_summary"></string>
+    <string name="automatic">Automatique</string>
+
+    <string name="lock_note">Verrouiller la note</string>
+    <string name="unlock_note">Déverrouiller la note</string>
+    <string name="locked">Verrouillé</string>
+    <string name="unlocked">Déverrouillé</string>
+    <string name="password_required">Mot de passe requis</string>
+    <string name="select_account">Choisir un compte</string>
+    <string name="password">Mot de passe</string>
+    <string name="password_set">Mot de passe défini</string>
+    <string name="password_cleared">Mot de passe effacé</string>
+    <string name="passwords_dont_match">Les mots de passe ne correspondent pas</string>
+    <string name="enter_password">Entrer le mot de passe</string>
+    <string name="enter_new_password">Entrer le nouveau mot de passe</string>
+    <string name="confirm_new_password">Confirmer le nouveau mot de passe</string>
+    <string name="apply">Appliquer</string>
+    <string name="clear_password">Effacer le mot de passe</string>
+    <string name="password_info">Après avoir défini un mot de passe, vous devrez le saisir pour voir les notes verrouillées. Le mot de passe protègera la note elle-même, mais pas le titre ni la date. La note ne sera pas cryptée donc pourra toujours être lue via Google Mail/Agenda Si vous oubliez votre mot de passe, synchronisez les notes avec Google et réinstallez l\'application.</string>
+    <string name="about">About</string>
+
+</resources>

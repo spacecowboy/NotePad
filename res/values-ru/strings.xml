@@ -131,6 +131,6 @@
         access to the title and due date. It does not encrypt the note in any way so it can still 
         be viewed in Google mail/calendar. If you forget your password, sync with Google and
         then reinstall the app.</string>
-    <string name="help">Help</string>
+    <string name="about">About</string>
 
 </resources>
