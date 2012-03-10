@@ -127,5 +127,6 @@
         fortfarande oskyddad tillgång till titel och datum. Detta är ingen typ av kryptering så du kan
         fortfarande komma åt anteckningen i Google mail/kalender. Om du glömmer ditt lösenord, synka
         med Google och installera om appen.</string>
+    <string name="help">Hjälp</string>
 
 </resources>

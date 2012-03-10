@@ -128,5 +128,22 @@
         access to the title and due date. It does not encrypt the note in any way so it can still 
         be viewed in Google mail/calendar. If you forget your password, sync with Google and
         then reinstall the app.</string>
+    <string name="help">Help</string>
+
+    <!-- These should probably not be translated -->
+    <string name="about_text">Thank you for downloading my app! I try my best to make this app awesome in every way but there will always be bugs and things can always get more awesome!\n
+
+\nIf you\'ve found a bug, a translation being wrong or simply have an idea on how to make this app more awesome then I want to hear about it!
+\nYou can send me a mail: jonas@nononsenseapps.com or
+\ndrop me a line on twitter: @SciencyGuy or
+\nhead to Plus: https://plus.google.com/b/111801385015192089838/
+
+\n\nSince the project is open source you can also report stuff directly in the issue tracker on GitHub: https://github.com/spacecowboy/NotePad/issues
+Better yet, if you have mad skills you can try to fix it yourself and send me a pull request!
+
+\n\nIf you\'d like to provide a custom translation for your own language that would be awesome. Contact me!
+
+\n\nAgain, thanks for downloading my app!
+\nIf you\'d like to support the project in a less active way, you can always buy the donate version: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
 
 </resources>
