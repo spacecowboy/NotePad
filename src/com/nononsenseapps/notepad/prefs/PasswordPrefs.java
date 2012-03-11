@@ -16,39 +16,26 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import com.nononsenseapps.notepad.FragmentLayout;
-import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.PasswordDialog;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.interfaces.PasswordChecker;
 
-import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.ContentResolver;
-import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
-import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceFragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-public class PasswordPrefs extends PreferenceFragment {
+public class PasswordPrefs extends Fragment {
 
 	public static final String KEY_PASSWORD = "secretPassword";
 

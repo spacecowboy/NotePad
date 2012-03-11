@@ -18,13 +18,13 @@ package com.nononsenseapps.notepad.prefs;
 
 import com.nononsenseapps.notepad.R;
 
+import android.app.Fragment;
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class AboutPrefs extends PreferenceFragment {
+public class AboutPrefs extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -32,5 +32,8 @@ public class AboutPrefs extends PreferenceFragment {
 				container, false);
 		
 		return layout;
+	}
+	
+	public void ensureList() {
 	}
 }
