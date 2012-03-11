@@ -97,7 +97,8 @@ public class GoogleAPITalker {
 
 	}
 
-	public static final String APIKEY = "AIzaSyBCQyr-OSPQsMwU2tyCIKZG86Wb3WM1upw";// jonas@kalderstam.se
+	//public static final String APIKEY = "AIzaSyBCQyr-OSPQsMwU2tyCIKZG86Wb3WM1upw";// jonas@kalderstam.se
+	public static final String APIKEY = "AIzaSyAtpawQ5yTD0RAZCNxwN__KVCzZwYRot64";// Donate version
 	public static final String AUTH_URL_END = "key=" + APIKEY;
 	public static final String BASE_URL = "https://www.googleapis.com/tasks/v1/users/@me/lists";
 	public static final String ALL_LISTS = BASE_URL + "?" + AUTH_URL_END;
