@@ -36,7 +36,7 @@
     <string name="menu_clearcompleted">Effacer complétées</string>
     <string name="menu_setdefaultlist">Définir comme liste par défaut</string>
     <string name="delete_list_warning">Êtes-vous sûr de vouloir supprimer la liste ? Ceci est définitif.</string>
-    <string name="editor_due_date_hint">Définir la date</string>
+    <string name="editor_due_date_hint">Échéance</string>
     <string name="editor_title_hint">Titre</string>
     <string name="editor_note_hint">Note</string>
     <string name="resolve_edit">Editer la note</string>
@@ -72,7 +72,7 @@
     <string name="monospace">Monospace</string>
     <string name="sans">Sans</string>
     <string name="serif">Serif</string>
-    <string name="settings_sync_freq_title">Sync fréquence</string>
+    <string name="settings_sync_freq_title">Sync. fréquence</string>
     <string name="settings_account_title">Choisir un compte</string>
     <string name="settings_account_summary">Cliquer pour changer de compte</string>
     <string name="settings_sync_enable_title">Sync. Google Tâches</string>
@@ -118,8 +118,8 @@
     <string name="password_cleared">Mot de passe effacé</string>
     <string name="passwords_dont_match">Les mots de passe ne correspondent pas</string>
     <string name="enter_password">Entrer le mot de passe</string>
-    <string name="enter_new_password">Entrer le nouveau mot de passe</string>
-    <string name="confirm_new_password">Confirmer le nouveau mot de passe</string>
+    <string name="enter_new_password">Entrez le mot de passe</string>
+    <string name="confirm_new_password">Confirmez le mot de passe</string>
     <string name="apply">Appliquer</string>
     <string name="clear_password">Effacer le mot de passe</string>
     <string name="password_info">Après avoir défini un mot de passe, vous devrez le saisir pour voir les notes verrouillées. Le mot de passe protègera la note elle-même, mais pas le titre ni la date. La note ne sera pas cryptée donc pourra toujours être lue via Google Mail/Agenda. Si vous oubliez votre mot de passe, synchronisez les notes avec Google et réinstallez l\'application.</string>
