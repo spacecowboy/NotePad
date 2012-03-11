@@ -1,4 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
-    <issue id="HardcodedText" severity="error" />
+    <issue id="HardcodedText" severity="error">
+        <ignore path="res\layout\editor_layout.xml" />
+        <ignore path="res\layout\listwidget.xml" />
+        <ignore path="res\layout\preference_widget_seekbar.xml" />
+    </issue>
+    <issue id="MissingTranslation">
+        <ignore path="res\values-cs-v14" />
+        <ignore path="res\values-de-v14" />
+        <ignore path="res\values-fr-v14" />
+        <ignore path="res\values-ru-v14" />
+        <ignore path="res\values-sv-v14" />
+    </issue>
 </lint>

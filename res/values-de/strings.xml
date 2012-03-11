@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2007 The Android Open Source Project
+<!--
+     Copyright (C) 2007 The Android Open Source Project
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,11 +16,10 @@
 -->
 
 <resources>
-    <string name="app_name">Notizen</string>
 
+    <string name="app_name">Notizen</string>
     <string name="title_create">Neue Notiz</string>
     <string name="title_edit">Bearbeiten: %1$s</string>
-
     <string name="menu_add">Notiz hinzufügen</string>
     <string name="menu_delete">Löschen</string>
     <string name="menu_revert">Änderungen rückgängig</string>
@@ -35,18 +35,13 @@
     <string name="menu_createlist">Liste erstellen</string>
     <string name="menu_clearcompleted">Erledigte Aufgaben entfernen</string>
     <string name="menu_setdefaultlist">Als Standardliste setzen</string>
-    
     <string name="delete_list_warning">Die Liste wird unwiderruflich gelöscht. Sicher?</string>
-    
     <string name="editor_due_date_hint">Fälligkeitsdatum</string>
     <string name="editor_title_hint">Titel</string>
     <string name="editor_note_hint">Notiz</string>
-
     <string name="resolve_edit">Notiz bearbeiten</string>
-
     <string name="error_title">Fehler</string>
     <string name="error_message">Fehler beim Laden der Notiz</string>
-    
     <string name="search_hint">Suche</string>
     <string name="settings_theme">Aktuelles Thema</string>
     <string name="settings_theme_dialog">Thema verwenden</string>
@@ -56,18 +51,15 @@
     <string name="settings_sorting_type_dialog">Sortieren nach</string>
     <string name="settings_sorting_order">Sortierreihenfolge</string>
     <string name="settings_sorting_order_dialog">Ordnen nach</string>
-    
     <string name="settings_summary_sort_type_alphabetic">Titel</string>
     <string name="settings_summary_sort_type_modified">Änderungsdatum</string>
     <string name="settings_summary_sort_type_duedate">Fälligkeitsdatum</string>
     <string name="settings_summary_sort_type_serverposition">Serverposition</string>
     <string name="settings_summary_sort_order_asc">Aufsteigend</string>
     <string name="settings_summary_sort_order_desc">Absteigend</string>
-    
     <string name="settings_summary_theme_dark">Dunkel</string>
     <string name="settings_summary_theme_light">Hell</string>
     <string name="settings_summary_theme_light_dark_ab">Hell, dunkle Aktionsleiste</string>
-    
     <string name="settings_cat_appearance">Aussehen</string>
     <string name="settings_font_screen">Schriftart</string>
     <string name="settings_font_screen_summary">Schriftart und Schriftgröße bearbeiten</string>
@@ -77,7 +69,6 @@
     <string name="settings_font_size">Schriftgrößen</string>
     <string name="preference_preview_text">So wird der Text im Editor dargestellt</string>
     <string name="settings_text_preview_title">Vorschau</string>
-    
     <string name="monospace">Monospace</string>
     <string name="sans">Sans</string>
     <string name="serif">Serif</string>
@@ -87,29 +78,24 @@
     <string name="settings_sync_enable_title">Google Tasks Sync</string>
     <string name="settings_sync_enable_summary">Notizen mit Google Aufgaben synchronisieren</string>
     <string name="settings_cat_syncing">Synchronisation</string>
-    
     <string name="manual">Manuell</string>
     <string name="minutes">Minuten</string>
     <string name="hours">Stunden</string>
     <string name="onehour">Eine Stunde</string>
     <string name="oneday">Einen Tag</string>
-    
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="ok">OK</string>
-    
     <string name="show_from_all_lists">Alle Listen</string>
     <string name="default_list_needed_warning">Set eine Standard-Liste zuerst</string>
     <string name="reverted">Änderungen rückgängig gemacht</string>
     <string name="notecopied">Kopierte</string>
     <string name="deleted">Gelöscht</string>
     <string name="items">Notizen</string>
-    
     <string name="permission_read_label">read notes and lists</string>
     <string name="permission_read_desc">Allows the application to read your notes and related lists.</string>
     <string name="permission_write_label">modify notes and lists</string>
     <string name="permission_write_desc">Allows the application to insert, update and delete notes and lists.</string>
-    
     <string name="settings_header_list">Listeneinstellungen</string>
     <string name="settings_header_list_summary"></string>
     <string name="settings_header_appearance">@string/settings_cat_appearance</string>
@@ -120,27 +106,23 @@
     <string name="settings_list">Liste</string>
     <string name="settings_list_summary"></string>
     <string name="automatic">Automatisch</string>
-    
-    <!-- Un-translated yet -->
-    <string name="lock_note">Lock note</string>
-    <string name="unlock_note">Unlock note</string>
-    <string name="locked">Locked</string>
-    <string name="unlocked">Unlocked</string>
-    <string name="password_required">Password required</string>
-    <string name="select_account">Select an account</string>
-    <string name="password">Password</string>
-    <string name="password_set">Password set</string>
-    <string name="password_cleared">Password cleared</string>
-    <string name="passwords_dont_match">Passwords do not match</string>
-    <string name="enter_password">Enter password</string>
-    <string name="enter_new_password">Enter new password</string>
-    <string name="confirm_new_password">Confirm new password</string>
-    <string name="apply">Apply</string>
-    <string name="clear_password">Clear password</string>
-    <string name="password_info">Setting a password will require you to input the password 
-        to show any locked notes. It will only protect the note-field so you still have unprotected
-        access to the title and due date. It does not encrypt the note in any way so it can still 
-        be viewed in Google mail/calendar. If you forget your password, sync with Google and
-        then reinstall the app.</string>
-    <string name="about">About</string>
+
+    <string name="lock_note">Notiz sperren</string>
+    <string name="unlock_note">Notiz entsperren</string>
+    <string name="locked">Gesperrt</string>
+    <string name="unlocked">Entsperrt</string>
+    <string name="password_required">Passwort benötigt</string>
+    <string name="select_account">Wähle einen Account aus</string>
+    <string name="password">Passwort</string>
+    <string name="password_set">Passwort festgelegt</string>
+    <string name="password_cleared">Passwort gelöscht</string>
+    <string name="passwords_dont_match">Passwort stimmt nicht überein</string>
+    <string name="enter_password">Passwort eingeben</string>
+    <string name="enter_new_password">Neues Passwort eingeben</string>
+    <string name="confirm_new_password">Neues Passwort bestätigen</string>
+    <string name="apply">Anwenden</string>
+    <string name="clear_password">Passwort löschen</string>
+    <string name="password_info">Das Einstellen eines Passwortes hat zur Folge, dass man zum Anzeigen der gesperrten Notizen das Passwort eingeben muss. Es wird nur der Inhalt der Notiz geschützt; Titel und Datum sind weiterhin sichtbar. Die Notiz wird nicht Verschlüsselt und kann weiterhin in Google Mail / Kalender betrachtet werden. Sollten Sie ihr Passwort vergessen so synchronisieren sie bitte mit Google und installieren sie anschließend die App neu.</string>
+    <string name="about">Über</string>
+
 </resources>
