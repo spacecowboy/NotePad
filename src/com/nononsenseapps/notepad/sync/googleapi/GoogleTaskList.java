@@ -318,8 +318,11 @@ public class GoogleTaskList {
 
 	private GoogleTask getTaskWithRemoteId(String id,
 			ArrayList<GoogleTask> tasks) {
+		if (id == null || tasks == null)
+			return null;
+		
 		for (GoogleTask task : tasks) {
-			if (task.id.equals(id)) {
+			if (id.equals(task.id)) {
 				return task;
 			}
 		}
