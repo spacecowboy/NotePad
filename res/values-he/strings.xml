@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <string name="app_name">פתקים</string>
+    <string name="title_create">פתק חדש</string>
+    <string name="title_edit">ערוך: %1$s</string>
+    <string name="menu_add">פתק חדש</string>
+    <string name="menu_delete">מחק</string>
+    <string name="menu_revert">בטל שינויים</string>
+    <string name="menu_copy">העתק פתק</string>
+    <string name="menu_cancel">בטל</string>
+    <string name="menu_setcompleted">סמן כהושלם</string>
+    <string name="menu_setuncompleted">סמן כלא הושלם</string>
+    <string name="menu_deletelist">מחק רשימה</string>
+    <string name="menu_sync">רענן</string>
+    <string name="menu_share">שתף</string>
+    <string name="menu_preferences">הגדרות</string>
+    <string name="menu_renamelist">שנה שם רשימה</string>
+    <string name="menu_createlist">צור רשימה</string>
+    <string name="menu_clearcompleted">נקה משימות שהושלמו</string>
+    <string name="menu_setdefaultlist">קבע כרשימת ברירת מחדל</string>
+    <string name="delete_list_warning">האם אתה בטוח שברצונך למחוק את הרשימה? הרשימה תמחק לצמיתות.</string>
+    <string name="editor_due_date_hint">תאריך יעד</string>
+    <string name="editor_title_hint">כותרת</string>
+    <string name="editor_note_hint">פתק</string>
+    <string name="resolve_edit">ערוך פתק</string>
+    <string name="error_title">שגיאה</string>
+    <string name="error_message">שגיאה בטעינת פתק</string>
+    <string name="search_hint">חיפוש</string>
+    <string name="settings_theme">ערכת נושא נוכחית</string>
+    <string name="settings_theme_dialog">השתמש בערכת נושא</string>
+    <string name="settings_cat_theme">ערכת נושא</string>
+    <string name="settings_cat_sorting">מיון</string>
+    <string name="settings_sorting_type">מיון על פי</string>
+    <string name="settings_sorting_type_dialog">מיין על פי</string>
+    <string name="settings_sorting_order">סידור</string>
+    <string name="settings_sorting_order_dialog">סדר על פי</string>
+    <string name="settings_summary_sort_type_alphabetic">כותרת</string>
+    <string name="settings_summary_sort_type_modified">ששונו לאחרונה</string>
+    <string name="settings_summary_sort_type_duedate">תאריך יעד</string>
+    <string name="settings_summary_sort_type_serverposition">מיקום בשרת</string>
+    <string name="settings_summary_sort_order_asc">סדר עולה</string>
+    <string name="settings_summary_sort_order_desc">סדר יורד</string>
+    <string name="settings_summary_theme_dark">כהה</string>
+    <string name="settings_summary_theme_light">בהיר</string>
+    <string name="settings_summary_theme_light_dark_ab">בהיר, עם סרגל כהה</string>
+    <string name="settings_cat_appearance">מראה</string>
+    <string name="settings_font_screen">הגדרות גופן</string>
+    <string name="settings_font_screen_summary">ניתן לשנות את סוג וגודל הגופנים.</string>
+    <string name="settings_cat_font_editor">עורך</string>
+    <string name="settings_font_type">גופן</string>
+    <string name="settings_font_type_dialog">בחר גופן</string>
+    <string name="settings_font_size">גודל גופן</string>
+    <string name="preference_preview_text">כך הטקסט יופיע בעת עריכה.</string>
+    <string name="settings_text_preview_title">תצוגה מקדימה</string>
+    <string name="monospace">Monospace</string>
+    <string name="sans">Sans</string>
+    <string name="serif">Serif</string>
+    <string name="settings_sync_freq_title">תדירות סינכרון</string>
+    <string name="settings_account_title">בחר חשבון</string>
+    <string name="settings_account_summary">בחר להחלפת חשבון</string>
+    <string name="settings_sync_enable_title">סינכרון עם משימות Google</string>
+    <string name="settings_sync_enable_summary">סנכרן את הפתקים עם חשבון Google שלך</string>
+    <string name="settings_cat_syncing">סינכרון</string>
+    <string name="manual">ידני</string>
+    <string name="minutes">דקות</string>
+    <string name="hours">שעות</string>
+    <string name="onehour">שעה אחת</string>
+    <string name="oneday">יום אחד</string>
+    <string name="yes">כן</string>
+    <string name="no">לא</string>
+    <string name="ok">אישור</string>
+    <string name="show_from_all_lists">כל הרשימות</string>
+    <string name="default_list_needed_warning">הגדר תחילה רשימת ברירת מחדל</string>
+    <string name="reverted">שינויים ששוחזרו</string>
+    <string name="notecopied">הועתק</string>
+    <string name="deleted">נמחק</string>
+    <string name="items">פתקים</string>
+    <string name="permission_read_label">קרא פתקים ורשימות</string>
+    <string name="permission_read_desc">מאפשר ליישום לקרוא את הפתקים והרשימות הקשורות.</string>
+    <string name="permission_write_label">ערוך פתקים ורשימות</string>
+    <string name="permission_write_desc">מאפשר ליישום להוסיף, לעדכן ולמחוק פתקים ורשימות.</string>
+    <string name="settings_header_list">הגדרות רשימה</string>
+    <string name="settings_header_list_summary"></string>
+    <string name="settings_header_appearance">@string/settings_cat_appearance</string>
+    <string name="settings_header_appearance_summary"></string>
+    <string name="settings_header_sync">@string/settings_cat_syncing</string>
+    <string name="settings_header_sync_summary"></string>
+    <string name="settings_list_dialog">בחר רשימה</string>
+    <string name="settings_list">רשימה</string>
+    <string name="settings_list_summary"></string>
+    <string name="automatic">אוטומטית</string>
+
+    <string name="lock_note">נעל פתק</string>
+    <string name="unlock_note">בטל נעילת פתק</string>
+    <string name="locked">נעול</string>
+    <string name="unlocked">נעילה מבוטלת</string>
+    <string name="password_required">נדרשת סיסמא</string>
+    <string name="select_account">בחר חשבון</string>
+    <string name="password">סיסמא</string>
+    <string name="password_set">קביעת סיסמא</string>
+    <string name="password_cleared">סיסמא בוטלה</string>
+    <string name="passwords_dont_match">הסיסמאות לא תואמות</string>
+    <string name="enter_password">הזן סיסמה</string>
+    <string name="enter_new_password">הזן סיסמא חדשה</string>
+    <string name="confirm_new_password">הקש שוב את הסיסמא החדשה</string>
+    <string name="apply">החל</string>
+    <string name="clear_password">בטל סיסמא</string>
+    <string name="password_info">על ידי הגדרת סיסמה, תתבקש להזין את הסיסמה כדי להציג הערות נעולות. פתקים נעולים יציגו רק את הכותרת שלהם ואת תאריך היעד. פתקים נעולים עדיין ניתן לראות ב-Gmail וביומן Google. אם שכחת את הסיסמה שלך, סנכרן עם Google והתקן מחדש את היישום.</string>
+    <string name="about">אודות</string>
+	
+</resources>
