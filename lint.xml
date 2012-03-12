@@ -9,6 +9,8 @@
         <ignore path="res\values-cs-v14" />
         <ignore path="res\values-de-v14" />
         <ignore path="res\values-fr-v14" />
+        <ignore path="res\values-he" />
+        <ignore path="res\values-iw" />
         <ignore path="res\values-ru-v14" />
         <ignore path="res\values-sv-v14" />
     </issue>

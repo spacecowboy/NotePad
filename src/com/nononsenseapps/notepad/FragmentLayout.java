@@ -59,8 +59,9 @@ import android.widget.EditText;
  * Showing a single fragment in an activity.
  */
 public class FragmentLayout extends Activity implements
-		OnSharedPreferenceChangeListener, OnEditorDeleteListener, OnNavigationListener,
-		LoaderManager.LoaderCallbacks<Cursor>, PasswordChecker {
+		OnSharedPreferenceChangeListener, OnEditorDeleteListener,
+		OnNavigationListener, LoaderManager.LoaderCallbacks<Cursor>,
+		PasswordChecker {
 	private static final String TAG = "FragmentLayout";
 	private static final String CURRENT_LIST_ID = "currentlistid";
 	private static final String CURRENT_LIST_POS = "currentlistpos";
@@ -212,10 +213,13 @@ public class FragmentLayout extends Activity implements
 	public boolean onKeyUp(int keyCode, KeyEvent event) {
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_SEARCH:
-			if (list != null && list.mSearchItem != null) {
-				list.mSearchItem.expandActionView();
-			} else if (list != null) {
-				onSearchRequested();
+			// Ignore this in HC because it will crash there
+			if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)) {
+				if (list != null && list.mSearchItem != null) {
+					list.mSearchItem.expandActionView();
+				} else if (list != null) {
+					onSearchRequested();
+				}
 			}
 			return true;
 		case KeyEvent.KEYCODE_BACK:
@@ -270,7 +274,8 @@ public class FragmentLayout extends Activity implements
 				if (list != null) {
 					long listId = ALL_NOTES_ID;
 					if (intent.getExtras() != null) {
-						listId = intent.getExtras().getLong(NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
+						listId = intent.getExtras().getLong(
+								NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
 					}
 					// Open the containing list if we have to. No need to change
 					// lists
@@ -307,9 +312,10 @@ public class FragmentLayout extends Activity implements
 				if (list != null) {
 					long listId = ALL_NOTES_ID;
 					if (intent.getExtras() != null) {
-						listId = intent.getExtras().getLong(NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
+						listId = intent.getExtras().getLong(
+								NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
 					}
-							
+
 					// Open the containing list if we have to. No need to change
 					// lists
 					// if we are already displaying all notes.
@@ -524,10 +530,8 @@ public class FragmentLayout extends Activity implements
 		if (settings == null)
 			return false;
 		else
-			return (settings.getBoolean(
-					SyncPrefs.KEY_SYNC_ENABLE, false) && !settings
-					.getString(SyncPrefs.KEY_ACCOUNT, "")
-					.isEmpty());
+			return (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false) && !settings
+					.getString(SyncPrefs.KEY_ACCOUNT, "").isEmpty());
 	}
 
 	/**
@@ -611,16 +615,13 @@ public class FragmentLayout extends Activity implements
 		SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
 
-		currentTheme = prefs.getString(MainPrefs.KEY_THEME,
-				currentTheme);
+		currentTheme = prefs.getString(MainPrefs.KEY_THEME, currentTheme);
 
 		setTypeOfTheme();
 
-		String sortType = prefs.getString(
-				MainPrefs.KEY_SORT_TYPE,
+		String sortType = prefs.getString(MainPrefs.KEY_SORT_TYPE,
 				NotePad.Notes.DEFAULT_SORT_TYPE);
-		String sortOrder = prefs.getString(
-				MainPrefs.KEY_SORT_ORDER,
+		String sortOrder = prefs.getString(MainPrefs.KEY_SORT_ORDER,
 				NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 		NotePad.Notes.SORT_ORDER = sortType + " " + sortOrder;
@@ -641,7 +642,7 @@ public class FragmentLayout extends Activity implements
 			setTheme(R.style.ThemeHolo);
 		}
 	}
-	
+
 	@Override
 	public void PasswordVerified(ActionResult result) {
 		NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
@@ -689,11 +690,15 @@ public class FragmentLayout extends Activity implements
 			}
 			return true;
 		case R.id.menu_search:
-			if (list != null && list.mSearchItem != null) {
-				list.mSearchItem.expandActionView();
-			} else if (list != null) {
-				// Launches the search window
-				onSearchRequested();
+			// Cant do this in HC, because it will crash.
+			// Ignore search button in HC
+			if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)) {
+				if (list != null && list.mSearchItem != null) {
+					list.mSearchItem.expandActionView();
+				} else if (list != null) {
+					// Launches the search window
+					onSearchRequested();
+				}
 			}
 			return true;
 		}
@@ -711,7 +716,8 @@ public class FragmentLayout extends Activity implements
 	 * This is a secondary activity, to show what the user has selected when the
 	 * screen is not large enough to show it all in one activity.
 	 */
-	public static class NotesEditorActivity extends Activity implements PasswordChecker {
+	public static class NotesEditorActivity extends Activity implements
+			PasswordChecker {
 		private static final String TAG = "NotesEditorActivity";
 		private NotesEditorFragment editorFragment;
 		private long currentId = -1;
@@ -782,7 +788,7 @@ public class FragmentLayout extends Activity implements
 			}
 			return super.onOptionsItemSelected(item);
 		}
-		
+
 		/**
 		 * Launches the main activity with Flag CLEAR TOP
 		 */
@@ -793,7 +799,7 @@ public class FragmentLayout extends Activity implements
 
 			startActivity(intent);
 		}
-		
+
 		@Override
 		public boolean onKeyUp(int keyCode, KeyEvent event) {
 			switch (keyCode) {
