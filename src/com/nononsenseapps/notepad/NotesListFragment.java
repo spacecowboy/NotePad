@@ -64,12 +64,15 @@ import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.FrameLayout;
 import android.widget.ListView;
+import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
@@ -461,6 +464,19 @@ public class NotesListFragment extends ListFragment implements
 			// mCurId = savedInstanceState.getLong(SAVEDID);
 		}
 	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		int layout = R.layout.list_layout;
+
+		// Gets a handle to the EditText in the the layout.
+		FrameLayout fl = (FrameLayout) inflater.inflate(layout, container, false);
+		inflater.inflate(android.R.layout.list_content, fl, true);
+		
+		return fl;
+	}
+		
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {

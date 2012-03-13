@@ -31,6 +31,8 @@ import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.FragmentManager;
+import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.ContentResolver;
@@ -220,6 +222,14 @@ public class FragmentLayout extends Activity implements
 				} else if (list != null) {
 					onSearchRequested();
 				}
+			}
+			else {
+				// TODO
+				// REMOVE me, just for testing fragment stuff
+				FragmentManager fragmentManager = getFragmentManager();
+				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+				fragmentTransaction.hide(list);
+				fragmentTransaction.commit();
 			}
 			return true;
 		case KeyEvent.KEYCODE_BACK:
