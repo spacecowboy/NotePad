@@ -50,6 +50,7 @@ import android.preference.PreferenceManager;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.animation.LayoutTransition;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.app.SearchManager;

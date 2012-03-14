@@ -27,6 +27,11 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.ui.ExtrasCursorAdapter;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.LayoutTransition;
+import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
@@ -54,6 +59,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -141,10 +148,6 @@ public class FragmentLayout extends Activity implements
 		// This will listen for navigation callbacks
 		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
 
-		// XML makes sure notes list is displayed. And editor too in landscape
-		// if (lightTheme)
-		// setContentView(R.layout.fragment_layout_light);
-		// else
 		setContentView(R.layout.fragment_layout);
 
 		// Set this as delete listener
@@ -154,6 +157,7 @@ public class FragmentLayout extends Activity implements
 		list.setOnDeleteListener(this);
 
 		this.list = list;
+		
 		// So editor can access it
 		ONDELETELISTENER = this;
 
@@ -222,14 +226,39 @@ public class FragmentLayout extends Activity implements
 				} else if (list != null) {
 					onSearchRequested();
 				}
-			}
-			else {
+			} else {
 				// TODO
 				// REMOVE me, just for testing fragment stuff
-				FragmentManager fragmentManager = getFragmentManager();
-				FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-				fragmentTransaction.hide(list);
-				fragmentTransaction.commit();
+				final float listWidth = list.getView().getWidth();
+				Log.d("trans", "listwidth = " + listWidth);
+				ViewGroup container = (ViewGroup) findViewById(R.id.main_layout);
+				container.setClipChildren(false);
+				final LayoutTransition transitioner = container.getLayoutTransition();
+				transitioner.setStartDelay(transitioner.APPEARING, 0);
+				transitioner.setStartDelay(transitioner.CHANGE_DISAPPEARING, 100);
+				// Adding
+		        ObjectAnimator animIn = ObjectAnimator.ofFloat(null, "x", -listWidth, 0f).
+		                setDuration(transitioner.getDuration(LayoutTransition.CHANGE_APPEARING));
+		        transitioner.setAnimator(LayoutTransition.APPEARING, animIn);
+
+		        // Removing
+		        ObjectAnimator animOut = ObjectAnimator.ofFloat(null, "x", 0f, -listWidth)
+		        .setDuration(transitioner.getDuration(LayoutTransition.CHANGE_DISAPPEARING));
+		        transitioner.setAnimator(LayoutTransition.DISAPPEARING, animOut);
+
+				if (list.isVisible()) {
+					FragmentManager fragmentManager = getFragmentManager();
+					FragmentTransaction fragmentTransaction = fragmentManager
+							.beginTransaction();
+					fragmentTransaction.hide(list);
+					fragmentTransaction.commit();
+				} else {
+					FragmentManager fragmentManager = getFragmentManager();
+					FragmentTransaction fragmentTransaction = fragmentManager
+							.beginTransaction();
+					fragmentTransaction.show(list);
+					fragmentTransaction.commit();
+				}
 			}
 			return true;
 		case KeyEvent.KEYCODE_BACK:
