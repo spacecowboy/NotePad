@@ -19,4 +19,5 @@
 	<attr name="my_list_background" format="reference" />
 	<attr name="editorBackgroundColor" format="reference" />
 	<attr name="ActionBarDropDownItem" format="reference" />
+	<attr name="btn_default_selector" format="reference" />
 </resources>

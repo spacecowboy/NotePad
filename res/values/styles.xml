@@ -28,6 +28,7 @@
         <item name="my_list_background">@android:color/transparent</item>
         <item name="editorBackgroundColor">@android:color/transparent</item>
         <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
+        <item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
     </style>
 
     <style name="ThemeHoloLight" parent="@android:style/Theme.DeviceDefault.Light">
@@ -50,6 +51,7 @@
         <item name="my_list_background">@drawable/list_read_holo</item>
         <item name="editorBackgroundColor">@android:color/white</item>
         <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
+        <item name="btn_default_selector">@drawable/btn_default_selector_light</item>
     </style>
 
     <style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.DeviceDefault.Light">
@@ -72,6 +74,7 @@
         <item name="my_list_background">@drawable/list_read_holo</item>
         <item name="editorBackgroundColor">@android:color/white</item>
         <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
+        <item name="btn_default_selector">@drawable/btn_default_selector_light</item>
     </style>
 
     <style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.DeviceDefault.Dialog">
@@ -94,6 +97,7 @@
         <item name="my_list_background">@drawable/list_read_holo</item>
         <item name="editorBackgroundColor">@android:color/transparent</item>
         <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
+        <item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
     </style>
 
     <style name="ThemeHoloLightDialogNoActionBar" parent="ThemeHoloDialogNoActionBar">
@@ -102,6 +106,7 @@
         <item name="my_list_selector">@android:color/transparent</item>
         <item name="my_list_background">@drawable/list_read_holo</item>
         <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
+        <item name="btn_default_selector">@drawable/btn_default_selector_light</item>
     </style>
 
     <style name="ActionBarDropDownItem.Dark" parent="@android:style/Widget.DeviceDefault.DropDownItem.Spinner">

@@ -18,7 +18,7 @@
     android:id="@+id/noteItem"
     android:layout_width="match_parent"
     android:layout_height="70dp"
-    android:background="?my_list_selector"
+    style="?my_list_selector"
     android:orientation="horizontal"
     android:paddingLeft="8dp"
     android:paddingRight="16dp" >

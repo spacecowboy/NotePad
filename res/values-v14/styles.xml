@@ -1,100 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-    <style name="ThemeHolo" parent="@android:style/Theme.Holo">
-
-		<item name="navigation_refresh">@drawable/navigation_refresh_dark </item>
-        <item name="action_search">@drawable/action_search_dark </item>
-        <item name="action_settings">@drawable/action_settings_dark </item>
-        <item name="content_new">@drawable/content_new_dark </item>
-        <item name="content_new_event">@drawable/content_new_event_dark </item>
-        <item name="content_discard">@drawable/content_discard_dark </item>
-        <item name="content_copy">@drawable/content_copy_dark </item>
-        <item name="content_paste">@drawable/content_paste_dark </item>
-        <item name="content_undo">@drawable/content_undo_dark </item>
-        <item name="content_remove">@drawable/content_remove_dark </item>
-        <item name="social_share">@drawable/social_share_dark </item>
-        <item name="device_access_secure">@drawable/device_access_secure_dark</item>
-        <item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
-		
-		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
-		
-		<item name="my_list_background">@android:color/transparent</item>
-		<item name="editorBackgroundColor">@android:color/transparent</item>
-		
-		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
-
-	</style>
-	
-	<style name="ThemeHoloLight" parent="@android:style/Theme.Holo.Light">
-	    <item name="navigation_refresh">@drawable/navigation_refresh_light </item>
-        <item name="action_search">@drawable/action_search_light </item>
-        <item name="action_settings">@drawable/action_settings_light </item>
-        <item name="content_new">@drawable/content_new_light </item>
-        <item name="content_new_event">@drawable/content_new_event_light </item>
-        <item name="content_discard">@drawable/content_discard_light </item>
-        <item name="content_copy">@drawable/content_copy_light </item>
-        <item name="content_paste">@drawable/content_paste_light </item>
-        <item name="content_undo">@drawable/content_undo_light </item>
-        <item name="content_remove">@drawable/content_remove_light </item>
-        <item name="social_share">@drawable/social_share_light </item>
-        <item name="device_access_secure">@drawable/device_access_secure_light</item>
-        <item name="device_access_not_secure">@drawable/device_access_not_secure_light</item>
-		
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
-		<item name="my_list_background">@drawable/list_read_holo</item>
-		<item name="editorBackgroundColor">@android:color/white</item>
-		
-		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
-	</style>
-
-	<style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.Holo.Dialog.NoActionBar">
-		<item name="navigation_refresh">@drawable/navigation_refresh_dark </item>
-        <item name="action_search">@drawable/action_search_dark </item>
-        <item name="action_settings">@drawable/action_settings_dark </item>
-        <item name="content_new">@drawable/content_new_dark </item>
-        <item name="content_new_event">@drawable/content_new_event_dark </item>
-        <item name="content_discard">@drawable/content_discard_dark </item>
-        <item name="content_copy">@drawable/content_copy_dark </item>
-        <item name="content_paste">@drawable/content_paste_dark </item>
-        <item name="content_undo">@drawable/content_undo_dark </item>
-        <item name="content_remove">@drawable/content_remove_dark </item>
-        <item name="social_share">@drawable/social_share_dark </item>
-        <item name="device_access_secure">@drawable/device_access_secure_dark</item>
-        <item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
-		
-		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
-		<item name="my_list_background">@android:color/transparent</item>
-		<item name="editorBackgroundColor">@android:color/transparent</item>
-		
-		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
-
-	</style>
-	
-	<style name="ThemeHoloLightDialogNoActionBar" parent="@android:style/Theme.Holo.Light.Dialog.NoActionBar">
-	    <item name="navigation_refresh">@drawable/navigation_refresh_light </item>
-        <item name="action_search">@drawable/action_search_light </item>
-        <item name="action_settings">@drawable/action_settings_light </item>
-        <item name="content_new">@drawable/content_new_light </item>
-        <item name="content_new_event">@drawable/content_new_event_light </item>
-        <item name="content_discard">@drawable/content_discard_light </item>
-        <item name="content_copy">@drawable/content_copy_light </item>
-        <item name="content_paste">@drawable/content_paste_light </item>
-        <item name="content_undo">@drawable/content_undo_light </item>
-        <item name="content_remove">@drawable/content_remove_light </item>
-        <item name="social_share">@drawable/social_share_light </item>
-        <item name="device_access_secure">@drawable/device_access_secure_light</item>
-        <item name="device_access_not_secure">@drawable/device_access_not_secure_light</item>
-		
-		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
-		<item name="my_list_background">@drawable/list_read_holo</item>
-		<item name="editorBackgroundColor">@android:color/white</item>
-		
-		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
-	</style>
-	
 	<!-- This theme doesn't exist in honeycomb -->
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light.DarkActionBar">
 
@@ -113,19 +18,13 @@
         <item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+		<item name="my_list_selector">@style/ListIndicatorLight</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
 		<item name="editorBackgroundColor">@android:color/white</item>
 		
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
+		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
 		
-	</style>
-	
-	<style name="ActionBarDropDownItem.Dark" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
-	    <item name="android:textColor">#FFFFFF</item>
-	</style>
-	<style name="ActionBarDropDownItem.Light" parent="@android:style/Widget.Holo.Light.DropDownItem.Spinner">
-	    <item name="android:textColor">#000000</item>
 	</style>
 	
 </resources>

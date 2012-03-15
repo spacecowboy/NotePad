@@ -64,7 +64,7 @@
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
             android:layout_gravity="center"
-            android:background="@android:color/transparent"
+            android:background="@drawable/btn_default_selector_light"
             android:src="@drawable/content_new_event_light" />
     </LinearLayout>
 

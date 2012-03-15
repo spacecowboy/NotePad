@@ -21,13 +21,13 @@
         <item name="device_access_secure">@drawable/device_access_secure_dark</item>
         <item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
 		
-		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+		<item name="my_list_selector">@style/ListIndicatorDark</item>
 		
 		<item name="my_list_background">@android:color/transparent</item>
 		<item name="editorBackgroundColor">@android:color/transparent</item>
 		
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
+		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
 
 	</style>
 	
@@ -46,11 +46,12 @@
         <item name="device_access_secure">@drawable/device_access_secure_light</item>
         <item name="device_access_not_secure">@drawable/device_access_not_secure_light</item>
 		
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+		<item name="my_list_selector">@style/ListIndicatorLight</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
 		<item name="editorBackgroundColor">@android:color/white</item>
 		
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
+		<item name="btn_default_selector">@drawable/btn_default_selector_light</item>
 	</style>
 
 	<style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.Holo.Dialog.NoActionBar">
@@ -69,11 +70,12 @@
         <item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+		<item name="my_list_selector">@style/ListIndicatorDark</item>
 		<item name="my_list_background">@android:color/transparent</item>
 		<item name="editorBackgroundColor">@android:color/transparent</item>
 		
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
+		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
 
 	</style>
 	
@@ -93,11 +95,12 @@
         <item name="device_access_not_secure">@drawable/device_access_not_secure_light</item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+		<item name="my_list_selector">@style/ListIndicatorLight</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
 		<item name="editorBackgroundColor">@android:color/white</item>
 		
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
+		<item name="btn_default_selector">@drawable/btn_default_selector_light</item>
 	</style>
 
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light">
@@ -117,12 +120,20 @@
         <item name="device_access_not_secure">@drawable/device_access_not_secure_light</item>
 		
 		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
-		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+		<item name="my_list_selector">@style/ListIndicatorLight</item>
 		<item name="my_list_background">@drawable/list_read_holo</item>
 		<item name="editorBackgroundColor">@android:color/white</item>
 		
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
+		<item name="btn_default_selector">@drawable/btn_default_selector_light</item>
 
+	</style>
+	
+	<style name="ListIndicatorLight">
+	    <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
+	</style>
+	<style name="ListIndicatorDark">
+	    <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
 	</style>
 
 </resources>
