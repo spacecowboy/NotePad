@@ -16,20 +16,20 @@
 -->
 <resources>
     <string-array name="theme_preference">
-        <item>Mörk</item>
-        <item>Ljus</item>
+        <item>Oscuro</item>
+        <item>Claro</item>
     </string-array>
     
     <string-array name="sorting_preference">
-        <item>Titel</item>
-        <item>Förfallodatum</item>
-        <item>Senast modifierad</item>
-        <item>Användarspecificerad</item>
+        <item>Título</item>
+        <item>Fecha</item>
+        <item>Fecha de modificación</item>
+        <item>Especificado por el usuario</item>
     </string-array>
     
     <string-array name="sorting_order_preference">
-        <item>Normal</item>
-        <item>Omvänd</item>
+        <item>Ascendente</item>
+        <item>Descendente</item>
     </string-array>
     
     <string-array name="font_type_preference">
@@ -37,15 +37,15 @@
         <item>Serif</item>
         <item>Monospace</item>
     </string-array>
-    
+
     <string-array name="sync_freq_preference">
-        <item>Manuellt</item>
-        <!-- <item>1 timme</item>
-        <item>2 timmar</item>
-        <item>4 timmar</item>
-        <item>8 timmar</item> -->
-        <!-- <item>1 dag</item> -->
-        <item>Automatiskt</item>
-	</string-array>
+        <item>Manualmente</item>
+        <!-- <item>1 hora</item>
+        <item>2 horas</item>
+        <item>4 horas</item>
+        <item>8 horas</item> -->
+        <!-- <item>1 día</item> -->
+        <item>Automáticamente</item>
+  </string-array>
 
 </resources>
