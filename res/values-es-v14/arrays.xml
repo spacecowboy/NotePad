@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    
+    <string-array name="theme_preference">
+        <item>Oscuro</item>
+        <item>Claro</item>
+  	<item>Claro, barra de acciones oscura</item>
+    </string-array>
+
+</resources>
