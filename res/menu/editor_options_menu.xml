@@ -25,28 +25,28 @@
         </menu>
     </item>
     <item
+        android:id="@+id/menu_lock"
+        android:icon="?device_access_secure"
+        android:orderInCategory="5"
+        android:showAsAction="ifRoom"
+        android:title="@string/lock_note"/>
+    <item
+        android:id="@+id/menu_unlock"
+        android:icon="?device_access_not_secure"
+        android:orderInCategory="6"
+        android:showAsAction="ifRoom"
+        android:title="@string/unlock_note"/>
+    <item
         android:id="@+id/menu_copy"
         android:icon="?content_copy"
-        android:orderInCategory="5"
+        android:orderInCategory="7"
         android:showAsAction="ifRoom"
         android:title="@string/menu_copy"/>
     <item
         android:id="@+id/menu_revert"
         android:icon="?content_undo"
-        android:orderInCategory="6"
-        android:showAsAction="never"
-        android:title="@string/menu_revert"/>
-    <item
-        android:id="@+id/menu_lock"
-        android:icon="?device_access_secure"
-        android:orderInCategory="7"
-        android:showAsAction="never"
-        android:title="@string/lock_note"/>
-    <item
-        android:id="@+id/menu_unlock"
-        android:icon="?device_access_not_secure"
         android:orderInCategory="8"
         android:showAsAction="never"
-        android:title="@string/unlock_note"/>
+        android:title="@string/menu_revert"/>
 
 </menu>

@@ -890,7 +890,7 @@ public class NotesListFragment extends ListFragment implements
 			Log.d(TAG, "onLongClick");
 		if (checkMode == CHECK_SINGLE) {
 			// Disable long-clicking temporarliy
-			getListView().setLongClickable(false);
+			//getListView().setLongClickable(false);
 			// get the position which was selected
 			if (FragmentLayout.UI_DEBUG_PRINTS)
 				Log.d("NotesListFragment", "onLongClick, selected item pos: "
@@ -900,6 +900,7 @@ public class NotesListFragment extends ListFragment implements
 		} else {
 			// Should never happen
 			// Let modal listener handle it
+			return false;
 		}
 		return true;
 	}
