@@ -9,7 +9,7 @@
         <item>Titel</item>
         <item>Fälligkeitsdatum</item>
         <item>Änderungsdatum</item>
-        <item>User specified</item>
+        <item>Nutzersortierung</item>
     </string-array>
     
     <string-array name="sorting_order_preference">
