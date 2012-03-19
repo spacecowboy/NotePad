@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2012 Jonas Kalderstam
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <string name="app_name">Notes</string>
+    <string name="title_create">Új jegyzet</string>
+    <string name="title_edit">Szerkesztés: %1$s</string>
+    <string name="menu_add">Új jegyzet</string>
+    <string name="menu_delete">Törlés</string>
+    <string name="menu_revert">Változások visszavonása</string>
+    <string name="menu_copy">Jegyzet másolása</string>
+    <string name="menu_cancel">Mégse</string>
+    <string name="menu_setcompleted">Készre jelöl</string>
+    <string name="menu_setuncompleted">Kész jelölés törlése</string>
+    <string name="menu_deletelist">Lista törlése</string>
+    <string name="menu_sync">Frissítés</string>
+    <string name="menu_share">Megosztás</string>
+    <string name="menu_preferences">Beállítások</string>
+    <string name="menu_renamelist">Lista átnevezése</string>
+    <string name="menu_createlist">Lista létrehozása</string>
+    <string name="menu_clearcompleted">Kész jegyzetek törlése</string>
+    <string name="menu_setdefaultlist">Alapértelmezett listának</string>
+    <string name="delete_list_warning">Biztosan törli a teljes listát? A lista véglegesen törlődik.</string>
+    <string name="editor_due_date_hint">Határidő</string>
+    <string name="editor_title_hint">Cím</string>
+    <string name="editor_note_hint">Szöveg</string>
+    <string name="resolve_edit">Szerkesztés</string>
+    <string name="error_title">Hiba</string>
+    <string name="error_message">Hiba a jegyzet betöltésekor</string>
+    <string name="search_hint">Keresés</string>
+    <string name="settings_theme">Jelenlegi téma</string>
+    <string name="settings_theme_dialog">Téma használata</string>
+    <string name="settings_cat_theme">Téma</string>
+    <string name="settings_cat_sorting">Listázási szempontok</string>
+    <string name="settings_sorting_type">Rendezés</string>
+    <string name="settings_sorting_type_dialog">Rendezés</string>
+    <string name="settings_sorting_order">Sorrend</string>
+    <string name="settings_sorting_order_dialog">Sorrend</string>
+    <string name="settings_summary_sort_type_alphabetic">Cím/string>
+    <string name="settings_summary_sort_type_modified">Utolsó módosítás</string>
+    <string name="settings_summary_sort_type_duedate">Határidő</string>
+    <string name="settings_summary_sort_type_serverposition">Szerver pozíció</string>
+    <string name="settings_summary_sort_order_asc">Növekvő</string>
+    <string name="settings_summary_sort_order_desc">Csökkenő</string>
+    <string name="settings_summary_theme_dark">Sötét</string>
+    <string name="settings_summary_theme_light">Világos</string>
+    <string name="settings_summary_theme_light_dark_ab">Világos, sötét menüsávval</string>
+    <string name="settings_cat_appearance">Megjelenés</string>
+    <string name="settings_font_screen">Betűtípus beállítások</string>
+    <string name="settings_font_screen_summary">A betűtípus és mérete változtatható</string>
+    <string name="settings_cat_font_editor">Szerkesztő</string>
+    <string name="settings_font_type">Betűtípus</string>
+    <string name="settings_font_type_dialog">Válasszon betűtípust</string>
+    <string name="settings_font_size">Betűméret</string>
+    <string name="preference_preview_text">Így fog megjelenni a szöveg a szerkesztőben</string>
+    <string name="settings_text_preview_title">Előnézet</string>
+    <string name="monospace">Monospace</string>
+    <string name="sans">Sans</string>
+    <string name="serif">Serif</string>
+    <string name="settings_sync_freq_title">Szinkr. gyakorisága</string>
+    <string name="settings_account_title">Válasszon fiókot</string>
+    <string name="settings_account_summary">Kattintson a fiók váltásához</string>
+    <string name="settings_sync_enable_title">Google Tasks szinkr.</string>
+    <string name="settings_sync_enable_summary">Szinkronizálás a Google fiókjával</string>
+    <string name="settings_cat_syncing">Szinkronizálás</string>
+    <string name="manual">Kézi</string>
+    <string name="minutes">perc</string>
+    <string name="hours">óra</string>
+    <string name="onehour">Egy óra</string>
+    <string name="oneday">Egy nap</string>
+    <string name="yes">Igen</string>
+    <string name="no">Nem</string>
+    <string name="ok">OK</string>
+    <string name="show_from_all_lists">Összes lista</string>
+    <string name="default_list_needed_warning">Először adja meg az alapértelmezett listát</string>
+    <string name="reverted">Változások visszavonva</string>
+    <string name="notecopied">Lemásolva</string>
+    <string name="deleted">Törölve</string>
+    <string name="items">jegyzetek</string>
+    <string name="permission_read_label">listák és jegyzetek olvasása</string>
+    <string name="permission_read_desc">Engedély a jegyzetek és kapcsolódó listák olvasására</string>
+    <string name="permission_write_label">listák és jegyzetek módosítása</string>
+    <string name="permission_write_desc">Engedély a jegyzetek és listák módosítására és törlésére.</string>
+    <string name="settings_header_list">Lista beállításai</string>
+    <string name="settings_header_list_summary"></string>
+    <string name="settings_header_appearance">@string/settings_cat_appearance</string>
+    <string name="settings_header_appearance_summary"></string>
+    <string name="settings_header_sync">@string/settings_cat_syncing</string>
+    <string name="settings_header_sync_summary"></string>
+    <string name="settings_list_dialog">Válasszon egy listát</string>
+    <string name="settings_list">Lista</string>
+    <string name="settings_list_summary"></string>
+    <string name="automatic">Automatikus</string>
+
+    <string name="lock_note">Zárolás</string>
+    <string name="unlock_note">Feloldás</string>
+    <string name="locked">Zárolva</string>
+    <string name="unlocked">Feloldva</string>
+    <string name="password_required">Jelszó szükséges</string>
+    <string name="select_account">Válasszon egy fiókot</string>
+    <string name="password">Jelszó</string>
+    <string name="password_set">Jelszó megadása</string>
+    <string name="password_cleared">Jelszó törölve</string>
+    <string name="passwords_dont_match">Jelszó nem egyezik</string>
+    <string name="enter_password">Adja meg a jelszavát</string>
+    <string name="enter_new_password">Adja meg új jelszavát</string>
+    <string name="confirm_new_password">Erősítse meg új jelszavát</string>
+    <string name="apply">Alkalmaz</string>
+    <string name="clear_password">Jelszó törlése</string>
+    <string name="password_info">A jelszó megadása szükséges a zárolt jegyzetek megjelenítéséhez. 
+    Ez csak a szövegmezőt védi, így a cím és a határidő még mindig elérhető. 
+    A jelszó nem titkosítja a jegyzetet amely így látható a Google mail/calendar-ban. 
+    Ha elfelejti a jelszavát, szinkronizáljon a Google fiókjával és installálja újra az alkalmazást</string>
+	<string name="about">Névjegy</string>
+
+</resources>
