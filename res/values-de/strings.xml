@@ -25,8 +25,6 @@
     <string name="menu_revert">Änderungen rückgängig</string>
     <string name="menu_copy">Notiz kopieren</string>
     <string name="menu_cancel">Abbrechen</string>
-    <string name="menu_setcompleted">Set erledigt</string>
-    <string name="menu_setuncompleted">Set nicht erledigt</string>
     <string name="menu_deletelist">Liste löschen</string>
     <string name="menu_sync">Aktualisieren</string>
     <string name="menu_share">Teilen</string>
@@ -87,7 +85,7 @@
     <string name="no">Nein</string>
     <string name="ok">OK</string>
     <string name="show_from_all_lists">Alle Listen</string>
-    <string name="default_list_needed_warning">Set eine Standard-Liste zuerst</string>
+    <string name="default_list_needed_warning">Zuerst Standard-Liste setzen</string>
     <string name="reverted">Änderungen rückgängig gemacht</string>
     <string name="notecopied">Kopierte</string>
     <string name="deleted">Gelöscht</string>

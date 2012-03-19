@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="theme_preference">
-        <item>Dunkel</item>
-        <item>Hell</item>
+        <item>Sötét</item>
+        <item>Világos</item>
     </string-array>
     
     <string-array name="sorting_preference">
-        <item>Titel</item>
-        <item>Fälligkeitsdatum</item>
-        <item>Änderungsdatum</item>
-        <item>Nutzersortierung</item>
+        <item>Cím</item>
+        <item>Határidő</item>
+        <item>Utolsó módosítás</item>
+        <item>Felhasználó szerinti</item>
     </string-array>
     
     <string-array name="sorting_order_preference">
-        <item>Aufsteigend</item>
-        <item>Absteigend</item>
+        <item>Növekvő</item>
+        <item>Csökkenő</item>
     </string-array>
     
     <string-array name="font_type_preference">
@@ -22,15 +22,10 @@
         <item>Serif</item>
         <item>Monospace</item>
     </string-array>
-
+	
     <string-array name="sync_freq_preference">
-        <item>Manuell</item>
-        <!-- <item>1 Stunde</item>
-        <item>2 Stunden</item>
-        <item>4 Stunden</item>
-        <item>8 Stunden</item> -->
-        <!-- <item>1 Tag</item> -->
-        <item>Automatisch</item>
+        <item>Manuális</item>
+        <item>Automatikus</item>
 	</string-array>
 
 </resources>
