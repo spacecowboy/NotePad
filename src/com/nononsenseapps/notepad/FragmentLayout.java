@@ -19,6 +19,7 @@ package com.nononsenseapps.notepad;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.PasswordChecker;
@@ -67,7 +68,7 @@ import android.widget.EditText;
 /**
  * Showing a single fragment in an activity.
  */
-public class FragmentLayout extends Activity implements
+public class FragmentLayout extends DualLayoutActivity implements
 		OnSharedPreferenceChangeListener, OnEditorDeleteListener,
 		OnNavigationListener, LoaderManager.LoaderCallbacks<Cursor>,
 		PasswordChecker {
@@ -80,11 +81,10 @@ public class FragmentLayout extends Activity implements
 	// public static boolean lightTheme = false;
 	public static String currentTheme = MainPrefs.THEME_LIGHT;
 	public static boolean shouldRestart = false;
-	public static boolean LANDSCAPE_MODE;
 	public static boolean AT_LEAST_ICS;
 	public static boolean AT_LEAST_HC;
 
-	public final static boolean UI_DEBUG_PRINTS = false;
+	public final static boolean UI_DEBUG_PRINTS = true;
 	public static final String DEFAULTLIST = "standardListId";
 
 	// For my special dropdown navigation item
@@ -101,16 +101,16 @@ public class FragmentLayout extends Activity implements
 
 	private long listIdToSelect = -1;
 	private boolean beforeBoot = false; // Used to indicate the intent handling
-										// how to select items
+	private long currentId;
+
+	// how to select items
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// Must set theme before this
+		// Must set theme before calling super
+		readAndSetSettings();
 		super.onCreate(savedInstanceState);
 
-		Log.d(TAG, "onCreate");
-
-		LANDSCAPE_MODE = getResources().getBoolean(R.bool.useLandscapeView);
 		AT_LEAST_ICS = getResources()
 				.getBoolean(R.bool.atLeastIceCreamSandwich);
 		AT_LEAST_HC = getResources().getBoolean(R.bool.atLeastHoneycomb);
@@ -121,9 +121,6 @@ public class FragmentLayout extends Activity implements
 			currentListId = savedInstanceState.getLong(CURRENT_LIST_ID);
 			currentListPos = savedInstanceState.getInt(CURRENT_LIST_POS);
 		}
-
-		// Setting theme here
-		readAndSetSettings();
 
 		// Set up dropdown navigation
 		ActionBar actionBar = getActionBar();
@@ -148,28 +145,53 @@ public class FragmentLayout extends Activity implements
 		// This will listen for navigation callbacks
 		actionBar.setListNavigationCallbacks(mSpinnerAdapter, this);
 
-		setContentView(R.layout.fragment_layout);
+		// setContentView(R.layout.fragment_layout);
 
-		// Set this as delete listener
-		NotesListFragment list = (NotesListFragment) getFragmentManager()
-				.findFragmentById(R.id.noteslistfragment);
+		setUpList();
+		setUpEditor();
 
-		list.setOnDeleteListener(this);
-
-		this.list = list;
-		
 		// So editor can access it
 		ONDELETELISTENER = this;
 
+		// Set up navigation list
 		// Set a default list to open if one is set
 		listIdToSelect = PreferenceManager.getDefaultSharedPreferences(this)
 				.getLong(DEFAULTLIST, -1);
-
-		// Handle the intent first, so we know what to possibly select once the
+		// Handle the intent first, so we know what to possibly select once
+		// the
 		// loader is finished
 		beforeBoot = true;
+		// TODO intents, special list intents?
 		onNewIntent(getIntent());
+
 		getLoaderManager().initLoader(0, null, this);
+	}
+
+	private void setUpList() {
+		if (leftFragment != null) {
+			NotesListFragment list = (NotesListFragment) leftFragment;
+			list.setOnDeleteListener(this);
+
+			this.list = list;
+		}
+	}
+
+	private void setUpEditor() {
+		if (rightFragment != null) {
+			((NotesEditorFragment) rightFragment).setValues(currentId);
+		}
+	}
+
+	/**
+	 * Launches the main activity
+	 */
+	@Override
+	protected void goUp() {
+		Intent intent = new Intent();
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+		intent.setClass(this, FragmentLayout.class);
+
+		startActivity(intent);
 	}
 
 	@Override
@@ -226,39 +248,6 @@ public class FragmentLayout extends Activity implements
 				} else if (list != null) {
 					onSearchRequested();
 				}
-			} else {
-				// TODO
-				// REMOVE me, just for testing fragment stuff
-				final float listWidth = list.getView().getWidth();
-				Log.d("trans", "listwidth = " + listWidth);
-				ViewGroup container = (ViewGroup) findViewById(R.id.main_layout);
-				container.setClipChildren(false);
-				final LayoutTransition transitioner = container.getLayoutTransition();
-				transitioner.setStartDelay(transitioner.APPEARING, 0);
-				transitioner.setStartDelay(transitioner.CHANGE_DISAPPEARING, 100);
-				// Adding
-		        ObjectAnimator animIn = ObjectAnimator.ofFloat(null, "x", -listWidth, 0f).
-		                setDuration(transitioner.getDuration(LayoutTransition.CHANGE_APPEARING));
-		        transitioner.setAnimator(LayoutTransition.APPEARING, animIn);
-
-		        // Removing
-		        ObjectAnimator animOut = ObjectAnimator.ofFloat(null, "x", 0f, -listWidth)
-		        .setDuration(transitioner.getDuration(LayoutTransition.CHANGE_DISAPPEARING));
-		        transitioner.setAnimator(LayoutTransition.DISAPPEARING, animOut);
-
-				if (list.isVisible()) {
-					FragmentManager fragmentManager = getFragmentManager();
-					FragmentTransaction fragmentTransaction = fragmentManager
-							.beginTransaction();
-					fragmentTransaction.hide(list);
-					fragmentTransaction.commit();
-				} else {
-					FragmentManager fragmentManager = getFragmentManager();
-					FragmentTransaction fragmentTransaction = fragmentManager
-							.beginTransaction();
-					fragmentTransaction.show(list);
-					fragmentTransaction.commit();
-				}
 			}
 			return true;
 		case KeyEvent.KEYCODE_BACK:
@@ -275,6 +264,119 @@ public class FragmentLayout extends Activity implements
 		// Save current list
 		outState.putLong(CURRENT_LIST_ID, currentListId);
 		outState.putInt(CURRENT_LIST_POS, currentListPos);
+	}
+
+	private void handleEditIntent(Intent intent) {
+		if (UI_DEBUG_PRINTS)
+			Log.d("FragmentLayout", "On New Intent EDIT");
+		// First, if we should display a list
+		if (intent.getData() != null
+				&& (intent.getData().getPath()
+						.startsWith(NotePad.Lists.PATH_VISIBLE_LIST_ID) || intent
+						.getData().getPath()
+						.startsWith(NotePad.Lists.PATH_LIST_ID))) {
+			// Get id to display
+			String newId = intent.getData().getPathSegments()
+					.get(NotePad.Lists.ID_PATH_POSITION);
+			long listId = Long.parseLong(newId);
+			// Handle it differently depending on if the app has already
+			// loaded or not.
+			openListFromIntent(listId);
+		} else if (intent.getData() != null
+				&& (intent.getData().getPath()
+						.startsWith(NotePad.Notes.PATH_VISIBLE_NOTE_ID) || intent
+						.getData().getPath()
+						.startsWith(NotePad.Notes.PATH_NOTE_ID))) {
+			if (rightFragment != null) {
+				String newId = intent.getData().getPathSegments()
+						.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
+				long noteId = Long.parseLong(newId);
+
+				if (noteId > -1) {
+					((NotesEditorFragment) rightFragment).displayNote(noteId);
+				}
+			}
+			if (list != null) {
+				long listId = ALL_NOTES_ID;
+				if (intent.getExtras() != null) {
+					listId = intent.getExtras().getLong(
+							NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
+				}
+				// Open the containing list if we have to. No need to change
+				// lists
+				// if we are already displaying all notes.
+				if (listId != -1 && currentListId != ALL_NOTES_ID
+						&& currentListId != listId) {
+					openListFromIntent(listId);
+				}
+				// Need to highlight note in tablet mode
+				if (listId != -1) {
+					list.handleNoteIntent(intent);
+				}
+			}
+		}
+	}
+
+	private void handleInsertIntent(Intent intent) {
+		if (UI_DEBUG_PRINTS)
+			Log.d("FragmentLayout", "On New Intent INSERT");
+		if (intent.getType() != null
+				&& intent.getType().equals(NotePad.Lists.CONTENT_TYPE)
+				|| intent.getData() != null
+				&& intent.getData().equals(NotePad.Lists.CONTENT_VISIBLE_URI)) {
+			// get Title
+			if (intent.getExtras() != null) {
+				String title = intent.getExtras().getString(
+						NotePad.Lists.COLUMN_NAME_TITLE, "");
+				createList(title);
+			}
+		} else if (intent.getType() != null
+				&& intent.getType().equals(NotePad.Notes.CONTENT_TYPE)
+				|| intent.getData() != null
+				&& intent.getData().equals(NotePad.Notes.CONTENT_VISIBLE_URI)) {
+			Log.d("FragmentLayout", "INSERT NOTE");
+			// Get list to create note in first
+			if (intent.getExtras() != null) {
+				long listId = intent.getExtras().getLong(
+						NotePad.Notes.COLUMN_NAME_LIST, -1);
+
+				if (listId > -1) {
+					Uri noteUri = FragmentLayout.createNote(
+							getContentResolver(), listId);
+
+					if (noteUri != null) {
+						long newNoteIdToOpen = NotesListFragment
+								.getNoteIdFromUri(noteUri);
+
+						if (rightFragment != null) {
+							((NotesEditorFragment) rightFragment)
+									.displayNote(newNoteIdToOpen);
+						}
+
+						intent.setAction(Intent.ACTION_EDIT);
+						intent.setData(noteUri);
+					}
+				}
+			}
+			if (list != null) {
+				long listId = ALL_NOTES_ID;
+				if (intent.getExtras() != null) {
+					listId = intent.getExtras().getLong(
+							NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
+				}
+
+				// Open the containing list if we have to. No need to change
+				// lists
+				// if we are already displaying all notes.
+				if (listId != -1 && currentListId != ALL_NOTES_ID
+						&& currentListId != listId) {
+					openListFromIntent(listId);
+				}
+				if (listId != -1) {
+					list.handleNoteIntent(intent);
+				}
+			}
+		}
 	}
 
 	@Override
@@ -294,79 +396,9 @@ public class FragmentLayout extends Activity implements
 			// Edit or View a list or a note.
 		} else if (Intent.ACTION_EDIT.equals(intent.getAction())
 				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
-			if (UI_DEBUG_PRINTS)
-				Log.d("FragmentLayout", "On New Intent EDIT");
-			// First, if we should display a list
-			if (intent.getData() != null
-					&& intent.getData().getPath()
-							.startsWith(NotePad.Lists.PATH_VISIBLE_LIST_ID)) {
-				// Get id to display
-				String newId = intent.getData().getPathSegments()
-						.get(NotePad.Lists.ID_PATH_POSITION);
-				long listId = Long.parseLong(newId);
-				// Handle it differently depending on if the app has already
-				// loaded or not.
-				openListFromIntent(listId);
-			} else if (intent.getData() != null
-					&& intent.getData().getPath()
-							.startsWith(NotePad.Notes.PATH_VISIBLE_NOTE_ID)) {
-				if (list != null) {
-					long listId = ALL_NOTES_ID;
-					if (intent.getExtras() != null) {
-						listId = intent.getExtras().getLong(
-								NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
-					}
-					// Open the containing list if we have to. No need to change
-					// lists
-					// if we are already displaying all notes.
-					if (listId != -1 && currentListId != ALL_NOTES_ID
-							&& currentListId != listId) {
-						openListFromIntent(listId);
-					}
-					if (listId != -1) {
-						list.handleNoteIntent(intent);
-					}
-				}
-			}
+			handleEditIntent(intent);
 		} else if (Intent.ACTION_INSERT.equals(intent.getAction())) {
-			if (UI_DEBUG_PRINTS)
-				Log.d("FragmentLayout", "On New Intent INSERT");
-			if (intent.getType() != null
-					&& intent.getType().equals(NotePad.Lists.CONTENT_TYPE)
-					|| intent.getData() != null
-					&& intent.getData().equals(
-							NotePad.Lists.CONTENT_VISIBLE_URI)) {
-				// get Title
-				if (intent.getExtras() != null) {
-					String title = intent.getExtras().getString(
-							NotePad.Lists.COLUMN_NAME_TITLE, "");
-					createList(title);
-				}
-			} else if (intent.getType() != null
-					&& intent.getType().equals(NotePad.Notes.CONTENT_TYPE)
-					|| intent.getData() != null
-					&& intent.getData().equals(
-							NotePad.Notes.CONTENT_VISIBLE_URI)) {
-				Log.d("FragmentLayout", "INSERT NOTE");
-				if (list != null) {
-					long listId = ALL_NOTES_ID;
-					if (intent.getExtras() != null) {
-						listId = intent.getExtras().getLong(
-								NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
-					}
-
-					// Open the containing list if we have to. No need to change
-					// lists
-					// if we are already displaying all notes.
-					if (listId != -1 && currentListId != ALL_NOTES_ID
-							&& currentListId != listId) {
-						openListFromIntent(listId);
-					}
-					if (listId != -1) {
-						list.handleNoteIntent(intent);
-					}
-				}
-			}
+			handleInsertIntent(intent);
 		}
 	}
 
@@ -684,8 +716,7 @@ public class FragmentLayout extends Activity implements
 
 	@Override
 	public void PasswordVerified(ActionResult result) {
-		NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
-				.findFragmentById(R.id.editor_container);
+		NotesEditorFragment editor = (NotesEditorFragment) getRightFragment();
 		if (editor != null) {
 			editor.OnPasswordVerified(result);
 		}
@@ -749,155 +780,6 @@ public class FragmentLayout extends Activity implements
 		Intent intent = new Intent();
 		intent.setClass(this, PrefsActivity.class);
 		startActivity(intent);
-	}
-
-	/**
-	 * This is a secondary activity, to show what the user has selected when the
-	 * screen is not large enough to show it all in one activity.
-	 */
-	public static class NotesEditorActivity extends Activity implements
-			PasswordChecker {
-		private static final String TAG = "NotesEditorActivity";
-		private NotesEditorFragment editorFragment;
-		private long currentId = -1;
-
-		@Override
-		protected void onCreate(Bundle savedInstanceState) {
-			// Make sure to set themes before this
-			super.onCreate(savedInstanceState);
-
-			if (UI_DEBUG_PRINTS)
-				Log.d("NotesEditorActivity", "onCreate");
-
-			if (MainPrefs.THEME_LIGHT_ICS_AB
-					.equals(FragmentLayout.currentTheme)) {
-				setTheme(R.style.ThemeHoloLightDarkActonBar);
-			} else if (MainPrefs.THEME_LIGHT
-					.equals(FragmentLayout.currentTheme)) {
-				setTheme(R.style.ThemeHoloLight);
-			} else {
-				setTheme(R.style.ThemeHolo);
-			}
-
-			// Set up navigation (adds nice arrow to icon)
-			ActionBar actionBar = getActionBar();
-			if (actionBar != null) {
-				actionBar.setDisplayHomeAsUpEnabled(true);
-				actionBar.setDisplayShowTitleEnabled(false);
-			}
-
-			if (getResources().getBoolean(R.bool.useLandscapeView)) {
-				// If the screen is now in landscape mode, we can show the
-				// dialog in-line with the list so we don't need this activity.
-				Log.d("NotesEditorActivity",
-						"Landscape mode detected, killing myself");
-				finish();
-				return;
-			}
-
-			setContentView(R.layout.note_editor_activity);
-
-			this.currentId = getIntent().getExtras().getLong(
-					NotesEditorFragment.KEYID);
-
-			if (UI_DEBUG_PRINTS)
-				Log.d("NotesEditorActivity", "Time to show the note!");
-			// if (savedInstanceState == null) {
-			// During initial setup, plug in the details fragment.
-			// Set this as delete listener
-			editorFragment = (NotesEditorFragment) getFragmentManager()
-					.findFragmentById(R.id.portrait_editor);
-			if (editorFragment != null) {
-				editorFragment.setValues(currentId);
-			}
-		}
-
-		@Override
-		public boolean onOptionsItemSelected(MenuItem item) {
-			switch (item.getItemId()) {
-			case android.R.id.home:
-				goUp();
-				break;
-			case R.id.menu_delete:
-				onDeleteAction();
-				return true;
-			case R.id.menu_revert:
-				goUp();
-				break;
-			}
-			return super.onOptionsItemSelected(item);
-		}
-
-		/**
-		 * Launches the main activity with Flag CLEAR TOP
-		 */
-		private void goUp() {
-			Intent intent = new Intent();
-			intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-			intent.setClass(this, FragmentLayout.class);
-
-			startActivity(intent);
-		}
-
-		@Override
-		public boolean onKeyUp(int keyCode, KeyEvent event) {
-			switch (keyCode) {
-			case KeyEvent.KEYCODE_BACK:
-				// Exit app
-				goUp();
-				return true;
-			}
-			return false;
-		}
-
-		@Override
-		public void onPause() {
-			super.onPause();
-			if (UI_DEBUG_PRINTS)
-				Log.d("NotesEditorActivity", "onPause");
-			if (isFinishing()) {
-				// Log.d("NotesEditorActivity",
-				// "onPause, telling list to display list");
-				// SharedPreferences.Editor prefEditor = PreferenceManager
-				// .getDefaultSharedPreferences(this).edit();
-				// prefEditor.putBoolean(NotesListFragment.SHOWLISTKEY, true);
-				// prefEditor.commit();
-			}
-		}
-
-		@Override
-		public void onResume() {
-			super.onResume();
-			if (UI_DEBUG_PRINTS)
-				Log.d("NotesEditorActivity", "onResume");
-			if (getResources().getBoolean(R.bool.useLandscapeView)) {
-				if (UI_DEBUG_PRINTS)
-					Log.d("NotesEditorActivity", "onResume, killing myself");
-				// Log.d("NotesEditorActivity",
-				// "onResume telling list to display me");
-				// SharedPreferences.Editor prefEditor = PreferenceManager
-				// .getDefaultSharedPreferences(this).edit();
-				// prefEditor.putBoolean(NotesListFragment.SHOWLISTKEY, false);
-				// prefEditor.commit();
-				finish();
-			}
-		}
-
-		public void onDeleteAction() {
-			if (UI_DEBUG_PRINTS)
-				Log.d(TAG, "onDeleteAction");
-			editorFragment.setSelfAction(); // Don't try to reload the deleted
-											// note
-			FragmentLayout.deleteNote(this, editorFragment.getCurrentNoteId());
-			goUp();
-		}
-
-		@Override
-		public void PasswordVerified(ActionResult result) {
-			if (editorFragment != null) {
-				editorFragment.OnPasswordVerified(result);
-			}
-		}
 	}
 
 	@Override
@@ -974,7 +856,7 @@ public class FragmentLayout extends Activity implements
 				Log.d("FragmentLayout",
 						"id was contained in multidelete, setting no save first");
 			NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
-					.findFragmentById(R.id.editor_container);
+					.findFragmentById(R.id.rightFragment);
 			if (editor != null) {
 				editor.setSelfAction();
 			}
@@ -987,9 +869,9 @@ public class FragmentLayout extends Activity implements
 	public void onDeleteAction() {
 		// both list and editor should be notified
 		NotesListFragment list = (NotesListFragment) getFragmentManager()
-				.findFragmentById(R.id.noteslistfragment);
+				.findFragmentById(R.id.leftFragment);
 		NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
-				.findFragmentById(R.id.editor_container);
+				.findFragmentById(R.id.rightFragment);
 		if (editor != null)
 			editor.setSelfAction();
 		// delete note

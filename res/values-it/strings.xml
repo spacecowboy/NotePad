@@ -67,7 +67,7 @@
     <string name="settings_font_type">Carattere</string>
     <string name="settings_font_type_dialog">Seleziona carattere</string>
     <string name="settings_font_size">Dimensione carattere</string>
-    <string name="preference_preview_text">Ecco come apparirà il testo nell'editor</string>
+    <string name="preference_preview_text">Ecco come apparirà il testo nell\'editor</string>
     <string name="settings_text_preview_title">Anteprima</string>
     <string name="monospace">Monospaziato</string>
     <string name="sans">Sans</string>
@@ -81,7 +81,7 @@
     <string name="manual">Manuale</string>
     <string name="minutes">minuti</string>
     <string name="hours">ore</string>
-    <string name="onehour">Un'ora</string>
+    <string name="onehour">Un\'ora</string>
     <string name="oneday">Un giorno</string>
     <string name="yes">Si</string>
     <string name="no">No</string>
@@ -93,9 +93,9 @@
     <string name="deleted">Eliminato</string>
     <string name="items">note</string>
     <string name="permission_read_label">leggi note e liste</string>
-    <string name="permission_read_desc">Permetti all'applicazione di leggere le tue note e le relative liste.</string>
+    <string name="permission_read_desc">Permetti all\'applicazione di leggere le tue note e le relative liste.</string>
     <string name="permission_write_label">modifica note e liste</string>
-    <string name="permission_write_desc">Permetti all'applicazione di inserire, aggiornare ed eliminare note e liste.</string>
+    <string name="permission_write_desc">Permetti all\'applicazione di inserire, aggiornare ed eliminare note e liste.</string>
     <string name="settings_header_list">Impostazioni lista</string>
     <string name="settings_header_list_summary"></string>
     <string name="settings_header_appearance">@string/settings_cat_appearance</string>
@@ -126,8 +126,7 @@
 		le scadenze saranno comunque visibili. Il sistema di protezione tramite password non è in
 		grado di cifrare il contenuto delle note che saranno quindi visibili sul calendario/mail
 		di Google. Nel caso ti dimenticassi la password, sincronizza con il tuo account Google
-		e reinstalla l'applicazione.</string>
-		<string>
+		e reinstalla l\'applicazione.</string>
 	<string name="about">About</string>
-
+	
 </resources>

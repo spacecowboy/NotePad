@@ -13,7 +13,4 @@
          API level.  The default value is false; an alternative value
          for IceCreamSandwich is true. -->
     <bool name="atLeastIceCreamSandwich">false</bool>
-    
-    <!-- Indicates if we should use landscape view with dual pane -->
-    <bool name="useLandscapeView">false</bool>
 </resources>

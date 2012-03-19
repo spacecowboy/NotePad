@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="ListIndicatorLight">
+        <item name="android:background">@drawable/arrow_list_selector</item>
+    </style>
+
+</resources>

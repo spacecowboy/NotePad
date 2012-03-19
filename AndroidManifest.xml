@@ -88,7 +88,6 @@
         <activity
             android:name=".FragmentLayout"
             android:label="@string/app_name"
-            android:launchMode="singleTask"
             android:theme="@style/ThemeHolo"
             android:uiOptions="splitActionBarWhenNarrow" >
             <intent-filter>
@@ -136,25 +135,6 @@
             <meta-data
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
-        </activity>
-        <activity android:name=".FragmentLayout$NotesEditorActivity" >
-
-            <!--
-                 This filter says that we can create a new note inside
-                 of a directory of notes.  The INSERT action creates an
-                 empty note; the PASTE action initializes a new note from
-                 the current contents of the clipboard.
-            -->
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.INSERT" />
-                <action android:name="android.intent.action.PASTE" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.dir/vnd.nononsenseapps.note" />
-            </intent-filter>
-            -->
         </activity>
         <activity
             android:name=".prefs.PrefsActivity"

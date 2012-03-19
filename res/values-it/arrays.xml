@@ -9,7 +9,7 @@
         <item>Titolo</item>
         <item>Scadenza</item>
         <item>Ultima modifica</item>
-        <item>Specificato dall'utente</item>
+        <item>Specificato dall\'utente</item>
     </string-array>
     
     <string-array name="sorting_order_preference">

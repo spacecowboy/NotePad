@@ -861,9 +861,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				}
 
 				// Request focus, will not open keyboard
-				if (FragmentLayout.LANDSCAPE_MODE) {
-					activity.findViewById(R.id.noteBox).requestFocus();
-				}
+				// TODO remove or uncomment
+//				if (FragmentLayout.LANDSCAPE_MODE) {
+//					activity.findViewById(R.id.noteBox).requestFocus();
+//				}
 			}
 
 			/*

@@ -51,7 +51,7 @@
     <string name="settings_sorting_type_dialog">Rendezés</string>
     <string name="settings_sorting_order">Sorrend</string>
     <string name="settings_sorting_order_dialog">Sorrend</string>
-    <string name="settings_summary_sort_type_alphabetic">Cím/string>
+    <string name="settings_summary_sort_type_alphabetic">Cím</string>
     <string name="settings_summary_sort_type_modified">Utolsó módosítás</string>
     <string name="settings_summary_sort_type_duedate">Határidő</string>
     <string name="settings_summary_sort_type_serverposition">Szerver pozíció</string>

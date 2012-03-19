@@ -72,7 +72,7 @@ public final class NotePad {
         /**
          * Path part for the Note ID URI
          */
-        private static final String PATH_NOTE_ID = "/notes/";
+        public static final String PATH_NOTE_ID = "/notes/";
         public static final String PATH_VISIBLE_NOTE_ID = "/visiblenotes/";
 
         /**
@@ -256,7 +256,7 @@ public final class NotePad {
         /**
          * Path part for the List ID URI
          */
-        private static final String PATH_LIST_ID = "/lists/";
+        public static final String PATH_LIST_ID = "/lists/";
         public static final String PATH_VISIBLE_LIST_ID = "/visiblelists/";
 
         /**
