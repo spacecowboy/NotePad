@@ -1139,7 +1139,7 @@ public class NotePadProvider extends ContentProvider implements
 		// Set a default sort position so it matches where new tasks are added
 		// in gmail
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_POSSUBSORT) == false) {
-			values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, "z.");
+			values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, "0.");
 		}
 
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_LIST) == false
