@@ -228,7 +228,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			if (mAdapter.isEmpty()) {
 				// DOn't do shit
 			} else {
-				showNote(mCurCheckPosition);
+				showNoteAndSelect(mCurCheckPosition);
 			}
 		}
 	}
@@ -495,21 +495,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		showNote(position);
 	}
 
-	private void openNote(Intent intent) {
-		if (intent != null) {
-			String newId = intent.getData().getPathSegments()
-					.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
-			long noteId = Long.parseLong(newId);
-			int pos = getPosOfId(noteId);
-			if (pos > -1) {
-				showNote(pos);
-			}
-		}
-	}
-
 	/**
 	 * Larger values than the list contains are re-calculated to valid
 	 * positions. If list is empty, no note is opened.
+	 * 
+	 * returns position of note in list
 	 */
 	private void showNote(int index) {
 		// TODO fix this
@@ -526,7 +516,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 			if (index > -1) {
 				mCurCheckPosition = index;
-				selectPos(mCurCheckPosition);
 				mCurId = mAdapter.getItemId(index);
 
 				if (activity.getCurrentContent().equals(DualLayoutActivity.CONTENTVIEW.DUAL)) {
@@ -577,6 +566,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				// Default show first note when search is cancelled.
 			}
 		}
+	}
+	
+	private void showNoteAndSelect(int index) {
+		showNote(index);
+		selectPos(mCurCheckPosition);
 	}
 
 	/**
@@ -798,6 +792,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (FragmentLayout.UI_DEBUG_PRINTS)
 			Log.d(TAG, "selectPos: " + pos);
 		getListView().setItemChecked(pos, true);
+		getListView().setSelection(pos);
 	}
 
 	public void setSingleCheck() {
