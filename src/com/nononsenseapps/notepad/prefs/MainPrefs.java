@@ -16,7 +16,7 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import com.nononsenseapps.notepad.FragmentLayout;
+import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.R;
 
 import android.app.Activity;
@@ -98,9 +98,6 @@ public class MainPrefs extends PreferenceFragment implements
 			String key) {
 		try {
 			if (activity.isFinishing()) {
-				if (FragmentLayout.UI_DEBUG_PRINTS)
-					Log.d("settings",
-							"isFinishing, should not update summaries");
 				// Setting the summary now would crash it with
 				// IllegalStateException since we are not attached to a view
 			} else {
@@ -113,8 +110,7 @@ public class MainPrefs extends PreferenceFragment implements
 				} else if (KEY_FONT_TYPE_EDITOR.equals(key)) {
 					prefFontType.setSummary(prefFontType.getEntry());
 				} else if (KEY_FONT_SIZE_EDITOR.equals(key)) {
-				} else if (FragmentLayout.UI_DEBUG_PRINTS)
-					Log.d("settings", "Somethign changed!");
+				}
 			}
 		} catch (IllegalStateException e) {
 			// This is just in case the "isFinishing" wouldn't be enough
@@ -122,8 +118,6 @@ public class MainPrefs extends PreferenceFragment implements
 			// stupid
 			// This catch prevents the app from crashing if we do something
 			// stupid
-			if (FragmentLayout.UI_DEBUG_PRINTS)
-				Log.d("settings", "Exception was caught: " + e.getMessage());
 		}
 	}
 

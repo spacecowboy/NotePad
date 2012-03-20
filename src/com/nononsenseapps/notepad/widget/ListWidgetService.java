@@ -16,7 +16,7 @@
 
 package com.nononsenseapps.notepad.widget;
 
-import com.nononsenseapps.notepad.FragmentLayout;
+import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
@@ -180,7 +180,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		if (settings != null) {
 			listId = Long.parseLong(settings.getString(
 					ListWidgetConfigure.KEY_LIST,
-					Integer.toString(FragmentLayout.ALL_NOTES_ID)));
+					Integer.toString(MainActivity.ALL_NOTES_ID)));
 
 			//getListTitle(settings, listId);
 

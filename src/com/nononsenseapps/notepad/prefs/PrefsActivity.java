@@ -2,7 +2,7 @@ package com.nononsenseapps.notepad.prefs;
 
 import java.util.List;
 
-import com.nononsenseapps.notepad.FragmentLayout;
+import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.interfaces.PasswordChecker;
@@ -57,7 +57,7 @@ public class PrefsActivity extends PreferenceActivity implements
 	private void goUp() {
 		Intent intent = new Intent();
 		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-		intent.setClass(this, FragmentLayout.class);
+		intent.setClass(this, MainActivity.class);
 
 		startActivity(intent);
 	}

@@ -19,7 +19,7 @@ package com.nononsenseapps.notepad.widget;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nononsenseapps.notepad.FragmentLayout;
+import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
@@ -107,7 +107,7 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	private void setDefaultSharedPreferenceValues() {
 		SharedPreferences.Editor edit = PreferenceManager
 				.getDefaultSharedPreferences(this).edit();
-		edit.putString(KEY_LIST, Integer.toString(FragmentLayout.ALL_NOTES_ID))
+		edit.putString(KEY_LIST, Integer.toString(MainActivity.ALL_NOTES_ID))
 				.putString(KEY_SORT_ORDER,
 						NotePad.Notes.ASCENDING_SORT_ORDERING)
 				.putString(KEY_SORT_TYPE, MainPrefs.DUEDATESORT).commit();
@@ -234,10 +234,10 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 
 			// Start with all lists
 			entries.add(getText(R.string.show_from_all_lists));
-			values.add(Long.toString(FragmentLayout.ALL_NOTES_ID));
+			values.add(Long.toString(MainActivity.ALL_NOTES_ID));
 			// Set it as the default value also
 			listSpinner.setDefaultValue(Long
-					.toString(FragmentLayout.ALL_NOTES_ID));
+					.toString(MainActivity.ALL_NOTES_ID));
 
 			Cursor cursor = getActivity().getContentResolver().query(
 					NotePad.Lists.CONTENT_VISIBLE_URI,

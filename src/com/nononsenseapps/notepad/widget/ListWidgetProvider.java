@@ -26,7 +26,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.widget.RemoteViews;
 
-import com.nononsenseapps.notepad.FragmentLayout;
+import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 
@@ -60,7 +60,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
 		Intent appIntent = new Intent();
-		appIntent.setClass(context, FragmentLayout.class);
+		appIntent.setClass(context, MainActivity.class);
 		appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
 		if (action.equals(OPEN_ACTION)) {
 			appIntent.setAction(Intent.ACTION_VIEW);
@@ -140,7 +140,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		
 		long listId = Long.parseLong(settings.getString(
 				ListWidgetConfigure.KEY_LIST,
-				Integer.toString(FragmentLayout.ALL_NOTES_ID)));
+				Integer.toString(MainActivity.ALL_NOTES_ID)));
 		
 		String listTitle = getListTitle(context, settings, listId);
 		rv.setCharSequence(R.id.titleButton, "setText", listTitle);
@@ -187,7 +187,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		private static String getListTitle(Context mContext, SharedPreferences settings, long listId) {
 			String title = mContext.getText(R.string.show_from_all_lists)
 					.toString();
-			if (listId == FragmentLayout.ALL_NOTES_ID) {
+			if (listId == MainActivity.ALL_NOTES_ID) {
 				settings.edit()
 						.putString(
 								ListWidgetConfigure.KEY_LIST_TITLE,

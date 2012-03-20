@@ -86,7 +86,7 @@
         <!-- removed android:readPermission="com.nononsenseapps.notepad.permissions.read" -->
 
         <activity
-            android:name=".FragmentLayout"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/ThemeHolo"
             android:uiOptions="splitActionBarWhenNarrow" >
