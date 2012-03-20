@@ -80,8 +80,6 @@ public class FragmentLayout extends DualLayoutActivity implements
 	// public static boolean lightTheme = false;
 	public static String currentTheme = MainPrefs.THEME_LIGHT;
 	public static boolean shouldRestart = false;
-	public static boolean AT_LEAST_ICS;
-	public static boolean AT_LEAST_HC;
 
 	public final static boolean UI_DEBUG_PRINTS = true;
 	public static final String DEFAULTLIST = "standardListId";
@@ -106,10 +104,6 @@ public class FragmentLayout extends DualLayoutActivity implements
 		// Must set theme before calling super
 		readAndSetSettings();
 		super.onCreate(savedInstanceState);
-
-		AT_LEAST_ICS = getResources()
-				.getBoolean(R.bool.atLeastIceCreamSandwich);
-		AT_LEAST_HC = getResources().getBoolean(R.bool.atLeastHoneycomb);
 
 		if (savedInstanceState != null) {
 			if (UI_DEBUG_PRINTS)

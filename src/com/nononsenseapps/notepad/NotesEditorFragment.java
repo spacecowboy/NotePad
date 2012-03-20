@@ -597,7 +597,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// else
 			inflater.inflate(R.menu.editor_options_menu, menu);
 
-			if (FragmentLayout.AT_LEAST_ICS) {
+			if (getResources()
+					.getBoolean(R.bool.atLeastIceCreamSandwich)) {
 				// Set default intent on ShareProvider and set shareListener to
 				// this so
 				// we can update with current note
@@ -999,7 +1000,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	}
 
 	private void setActionShareIntent() {
-		if (FragmentLayout.AT_LEAST_ICS && shareActionProvider != null) {
+		if (getResources()
+				.getBoolean(R.bool.atLeastIceCreamSandwich) && shareActionProvider != null) {
 			Intent share = new Intent(Intent.ACTION_SEND);
 			share.setType("text/plain");
 			share.putExtra(Intent.EXTRA_TEXT, makeShareText());
@@ -1166,6 +1168,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				break;
 			}
 		}
+		// Invalidate the menu so it redraws and hides/shows the icons if applicable
+		getActivity().invalidateOptionsMenu();
 	}
 
 }

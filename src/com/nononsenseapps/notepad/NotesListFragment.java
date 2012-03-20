@@ -431,10 +431,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		PreferenceManager.getDefaultSharedPreferences(activity)
 				.registerOnSharedPreferenceChangeListener(this);
 
-		if (FragmentLayout.AT_LEAST_ICS) {
+		if (getResources()
+				.getBoolean(R.bool.atLeastIceCreamSandwich)) {
 			// Share action provider
 			modeCallback = new ModeCallbackICS(this);
-		} else if (FragmentLayout.AT_LEAST_HC) {
+		} else {
 			// Share button
 			modeCallback = new ModeCallbackHC(this);
 		}
@@ -823,7 +824,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	public void setMultiCheck(int pos) {
 		if (FragmentLayout.UI_DEBUG_PRINTS)
-			Log.d(TAG, "setMutliCheck: " + pos);
+			Log.d(TAG, "setMutliCheck: " + pos + " modeCallback = " + modeCallback);
 		// Do this on long press
 		checkMode = CHECK_MULTI;
 		ListView lv = getListView();
@@ -841,8 +842,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (FragmentLayout.UI_DEBUG_PRINTS)
 			Log.d(TAG, "onLongClick");
 		if (checkMode == CHECK_SINGLE) {
-			// Disable long-clicking temporarliy
-			getListView().setLongClickable(false);
 			// get the position which was selected
 			if (FragmentLayout.UI_DEBUG_PRINTS)
 				Log.d("NotesListFragment", "onLongClick, selected item pos: "
@@ -852,7 +851,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		} else {
 			// Should never happen
 			// Let modal listener handle it
-			//return false;
 		}
 		return true;
 	}

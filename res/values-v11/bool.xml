@@ -1,5 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <!-- True if running under Honeycomb or later. -->
-    <bool name="atLeastHoneycomb">true</bool>
-</resources>
