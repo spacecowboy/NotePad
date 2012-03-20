@@ -267,9 +267,9 @@ public class MainActivity extends DualLayoutActivity implements
 			openListFromIntent(listId);
 		} else if (intent.getData() != null
 				&& (intent.getData().getPath()
-						.startsWith(NotePad.Notes.PATH_VISIBLE_NOTE_ID) || intent
+						.startsWith(NotePad.Notes.PATH_VISIBLE_NOTES) || intent
 						.getData().getPath()
-						.startsWith(NotePad.Notes.PATH_NOTE_ID))) {
+						.startsWith(NotePad.Notes.PATH_NOTES))) {
 			if (rightFragment != null) {
 				String newId = intent.getData().getPathSegments()
 						.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
@@ -786,6 +786,11 @@ public class MainActivity extends DualLayoutActivity implements
 				}
 			}
 			return true;
+		case R.id.menu_revert:
+			if (currentContent.equals(CONTENTVIEW.RIGHT)) {
+				goUp();
+			}
+			break;
 		}
 		return super.onOptionsItemSelected(item);
 	}
@@ -875,6 +880,10 @@ public class MainActivity extends DualLayoutActivity implements
 		if (editor != null) {
 			editor.setSelfAction();
 			deleteNote(this, editor.getCurrentNoteId());
+		}
+		if (list == null) {
+			// this is an editor view displaying inactive data. kill it
+			finish();
 		}
 
 	}

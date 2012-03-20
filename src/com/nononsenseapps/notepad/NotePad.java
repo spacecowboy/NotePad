@@ -63,17 +63,17 @@ public final class NotePad {
         /**
          * Path part for the Notes URI
          */
-        private static final String PATH_NOTES = "/notes";
+        public static final String PATH_NOTES = "/notes";
         // Visible notes
-        private static final String PATH_VISIBLE_NOTES = "/visiblenotes";
+        public static final String PATH_VISIBLE_NOTES = "/visiblenotes";
         // Complete note entry including stuff in GTasks table
         private static final String PATH_JOINED_NOTES = "/joinednotes";
 
         /**
          * Path part for the Note ID URI
          */
-        public static final String PATH_NOTE_ID = "/notes/";
-        public static final String PATH_VISIBLE_NOTE_ID = "/visiblenotes/";
+        private static final String PATH_NOTE_ID = "/notes/";
+        private static final String PATH_VISIBLE_NOTE_ID = "/visiblenotes/";
 
         /**
          * 0-relative position of a note ID segment in the path part of a note ID URI

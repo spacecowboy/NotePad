@@ -76,9 +76,9 @@ public abstract class DualLayoutActivity extends Activity {
 			if (null != intent
 					&& null != intent.getData()
 					&& (intent.getData().getPath()
-							.startsWith(NotePad.Notes.PATH_VISIBLE_NOTE_ID) || intent
+							.startsWith(NotePad.Notes.PATH_VISIBLE_NOTES) || intent
 							.getData().getPath()
-							.startsWith(NotePad.Notes.PATH_NOTE_ID))) {
+							.startsWith(NotePad.Notes.PATH_NOTES))) {
 				currentContent = CONTENTVIEW.RIGHT;
 				// Display right fragment
 				setRightContentView();
