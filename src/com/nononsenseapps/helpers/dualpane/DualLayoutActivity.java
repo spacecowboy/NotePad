@@ -27,7 +27,6 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
@@ -88,7 +87,6 @@ public abstract class DualLayoutActivity extends Activity {
 			} else {
 				currentContent = CONTENTVIEW.LEFT;
 				// Left or Dual layout is handled automatically
-				Log.d("DUalActivity", "SetLeft");
 				setContentView(R.layout.dual_layout);
 			}
 		}
@@ -99,7 +97,6 @@ public abstract class DualLayoutActivity extends Activity {
 	 * shown alone.
 	 */
 	protected void setRightContentView() {
-		Log.d("DUalActivity", "Set Right");
 		setContentView(R.layout.right_layout);
 	}
 

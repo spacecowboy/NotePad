@@ -165,7 +165,6 @@ public class FragmentLayout extends DualLayoutActivity implements
 		// Set up navigation (adds nice arrow to icon)
 		ActionBar actionBar = getActionBar();
 		if (actionBar != null) {
-			actionBar.setDisplayHomeAsUpEnabled(true);
 			actionBar.setDisplayShowTitleEnabled(false);
 		}
 		onNewIntent(getIntent());
