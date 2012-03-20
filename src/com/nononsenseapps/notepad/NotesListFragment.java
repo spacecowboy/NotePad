@@ -23,7 +23,6 @@ import java.util.HashSet;
 
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.helpers.dualpane.NoNonsenseListFragment;
-import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
@@ -125,7 +124,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private long mCurListId = -1;
 
-	private OnEditorDeleteListener onDeleteListener;
+	//private OnEditorDeleteListener onDeleteListener;
 
 	private SimpleCursorAdapter mAdapter;
 
@@ -439,6 +438,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// Share button
 			modeCallback = new ModeCallbackHC(this);
 		}
+		if (modeCallback != null)
+			modeCallback.setDeleteListener(this);
 
 		if (savedInstanceState != null) {
 			if (FragmentLayout.UI_DEBUG_PRINTS)
@@ -582,10 +583,10 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			Log.d(TAG, "onDelete");
 		// Only do anything if id is valid!
 		if (mCurId > -1) {
-			if (onDeleteListener != null) {
-				// Tell fragment to delete the current note
-				onDeleteListener.onEditorDelete(mCurId);
-			}
+//			if (onDeleteListener != null) {
+//				// Tell fragment to delete the current note
+//				onDeleteListener.onEditorDelete(mCurId);
+//			}
 			if (activity.getCurrentContent().equals(DualLayoutActivity.CONTENTVIEW.DUAL)) {
 				autoOpenNote = true;
 			}
@@ -1202,12 +1203,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	}
 
-	public void setOnDeleteListener(OnEditorDeleteListener fragmentLayout) {
-		this.onDeleteListener = fragmentLayout;
-		if (modeCallback != null)
-			modeCallback.setDeleteListener(this);
-	}
-
 	@Override
 	public void onModalDelete(Collection<Integer> positions) {
 		if (FragmentLayout.UI_DEBUG_PRINTS)
@@ -1221,15 +1216,13 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// This is always done when content changes
 		}
 
-		if (onDeleteListener != null) {
 			HashSet<Long> ids = new HashSet<Long>();
 			for (int pos : positions) {
 				if (FragmentLayout.UI_DEBUG_PRINTS)
 					Log.d(TAG, "onModalDelete pos: " + pos);
 				ids.add(mAdapter.getItemId(pos));
 			}
-			onDeleteListener.onMultiDelete(ids, mCurId);
-		}
+			((FragmentLayout) activity).onMultiDelete(ids, mCurId);
 	}
 
 	public void showList(long id) {

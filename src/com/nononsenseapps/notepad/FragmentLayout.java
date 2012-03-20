@@ -21,7 +21,6 @@ import java.util.Collection;
 
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
-import com.nononsenseapps.notepad.interfaces.OnEditorDeleteListener;
 import com.nononsenseapps.notepad.interfaces.PasswordChecker;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
@@ -69,7 +68,7 @@ import android.widget.EditText;
  * Showing a single fragment in an activity.
  */
 public class FragmentLayout extends DualLayoutActivity implements
-		OnSharedPreferenceChangeListener, OnEditorDeleteListener,
+		OnSharedPreferenceChangeListener,
 		OnNavigationListener, LoaderManager.LoaderCallbacks<Cursor>,
 		PasswordChecker {
 	private static final String TAG = "FragmentLayout";
@@ -90,8 +89,6 @@ public class FragmentLayout extends DualLayoutActivity implements
 	// For my special dropdown navigation item
 	public static final int ALL_NOTES_ID = -2;
 
-	public static OnEditorDeleteListener ONDELETELISTENER = null;
-
 	private NotesListFragment list;
 	private Menu optionsMenu;
 
@@ -101,7 +98,6 @@ public class FragmentLayout extends DualLayoutActivity implements
 
 	private long listIdToSelect = -1;
 	private boolean beforeBoot = false; // Used to indicate the intent handling
-	private long currentId;
 
 	// how to select items
 
@@ -148,10 +144,6 @@ public class FragmentLayout extends DualLayoutActivity implements
 		// setContentView(R.layout.fragment_layout);
 
 		setUpList();
-		setUpEditor();
-
-		// So editor can access it
-		ONDELETELISTENER = this;
 
 		// Set up navigation list
 		// Set a default list to open if one is set
@@ -170,15 +162,8 @@ public class FragmentLayout extends DualLayoutActivity implements
 	private void setUpList() {
 		if (leftFragment != null) {
 			NotesListFragment list = (NotesListFragment) leftFragment;
-			list.setOnDeleteListener(this);
 
 			this.list = list;
-		}
-	}
-
-	private void setUpEditor() {
-		if (rightFragment != null) {
-			((NotesEditorFragment) rightFragment).setValues(currentId);
 		}
 	}
 
@@ -782,11 +767,6 @@ public class FragmentLayout extends DualLayoutActivity implements
 		startActivity(intent);
 	}
 
-	@Override
-	public void onEditorDelete(long id) {
-		deleteNote(this, id);
-	}
-
 	/**
 	 * Calls deleteNotes wrapped in ArrayList
 	 * 
@@ -849,7 +829,6 @@ public class FragmentLayout extends DualLayoutActivity implements
 		}
 	}
 
-	@Override
 	public void onMultiDelete(Collection<Long> ids, long curId) {
 		if (ids.contains(curId)) {
 			if (UI_DEBUG_PRINTS)
@@ -868,15 +847,16 @@ public class FragmentLayout extends DualLayoutActivity implements
 
 	public void onDeleteAction() {
 		// both list and editor should be notified
-		NotesListFragment list = (NotesListFragment) getFragmentManager()
-				.findFragmentById(R.id.leftFragment);
-		NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
-				.findFragmentById(R.id.rightFragment);
-		if (editor != null)
+		NotesListFragment list = (NotesListFragment) getLeftFragment();
+		NotesEditorFragment editor = (NotesEditorFragment) getRightFragment();
+		// tell list to do what it should
+				if (list != null)
+					list.onDelete();
+		if (editor != null) {
 			editor.setSelfAction();
-		// delete note
-		if (list != null)
-			list.onDelete();
+			deleteNote(this, editor.getCurrentNoteId());
+		}
+		
 	}
 
 	@Override
