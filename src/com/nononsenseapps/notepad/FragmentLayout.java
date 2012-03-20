@@ -68,9 +68,8 @@ import android.widget.EditText;
  * Showing a single fragment in an activity.
  */
 public class FragmentLayout extends DualLayoutActivity implements
-		OnSharedPreferenceChangeListener,
-		OnNavigationListener, LoaderManager.LoaderCallbacks<Cursor>,
-		PasswordChecker {
+		OnSharedPreferenceChangeListener, OnNavigationListener,
+		LoaderManager.LoaderCallbacks<Cursor>, PasswordChecker {
 	private static final String TAG = "FragmentLayout";
 	private static final String CURRENT_LIST_ID = "currentlistid";
 	private static final String CURRENT_LIST_POS = "currentlistpos";
@@ -105,6 +104,15 @@ public class FragmentLayout extends DualLayoutActivity implements
 		readAndSetSettings();
 		super.onCreate(savedInstanceState);
 
+		if (currentContent.equals(CONTENTVIEW.DUAL)
+				|| currentContent.equals(CONTENTVIEW.LEFT)) {
+			leftOrTabletCreate(savedInstanceState);
+		} else {
+			rightCreate();
+		}
+	}
+
+	private void leftOrTabletCreate(Bundle savedInstanceState) {
 		if (savedInstanceState != null) {
 			if (UI_DEBUG_PRINTS)
 				Log.d(TAG, "Reloading state");
@@ -147,10 +155,20 @@ public class FragmentLayout extends DualLayoutActivity implements
 		// the
 		// loader is finished
 		beforeBoot = true;
-		// TODO intents, special list intents?
+
 		onNewIntent(getIntent());
 
 		getLoaderManager().initLoader(0, null, this);
+	}
+
+	private void rightCreate() {
+		// Set up navigation (adds nice arrow to icon)
+		ActionBar actionBar = getActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+			actionBar.setDisplayShowTitleEnabled(false);
+		}
+		onNewIntent(getIntent());
 	}
 
 	private void setUpList() {
@@ -167,8 +185,9 @@ public class FragmentLayout extends DualLayoutActivity implements
 	@Override
 	protected void goUp() {
 		Intent intent = new Intent();
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
-		intent.setClass(this, FragmentLayout.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+				| Intent.FLAG_ACTIVITY_CLEAR_TASK)
+		.setClass(this, FragmentLayout.class);
 
 		startActivity(intent);
 	}
@@ -844,13 +863,13 @@ public class FragmentLayout extends DualLayoutActivity implements
 		NotesListFragment list = (NotesListFragment) getLeftFragment();
 		NotesEditorFragment editor = (NotesEditorFragment) getRightFragment();
 		// tell list to do what it should
-				if (list != null)
-					list.onDelete();
+		if (list != null)
+			list.onDelete();
 		if (editor != null) {
 			editor.setSelfAction();
 			deleteNote(this, editor.getCurrentNoteId());
 		}
-		
+
 	}
 
 	@Override

@@ -597,6 +597,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// else
 			inflater.inflate(R.menu.editor_options_menu, menu);
 
+			/* COmmented out until the bug in the platform is fixed
 			if (getResources()
 					.getBoolean(R.bool.atLeastIceCreamSandwich)) {
 				// Set default intent on ShareProvider and set shareListener to
@@ -618,6 +619,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				// say when the user has selected an image.
 				setActionShareIntent();
 			}
+			*/
 
 			// Append to the
 			// menu items for any other activities that can do stuff with it

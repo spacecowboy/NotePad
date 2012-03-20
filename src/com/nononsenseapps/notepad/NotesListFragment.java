@@ -124,7 +124,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private long mCurListId = -1;
 
-	//private OnEditorDeleteListener onDeleteListener;
+	// private OnEditorDeleteListener onDeleteListener;
 
 	private SimpleCursorAdapter mAdapter;
 
@@ -157,7 +157,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	};
 
 	private static String sortType = NotePad.Notes.DUEDATE_SORT_TYPE;
-	
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
@@ -194,7 +193,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					|| mCurListId == FragmentLayout.ALL_NOTES_ID) {
 				// Just open it
 				// TODO just highlight it instead
-				//openNote(intent);
+				// openNote(intent);
 				String newId = intent.getData().getPathSegments()
 						.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
 				long noteId = Long.parseLong(newId);
@@ -310,41 +309,34 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		intent.setData(NotePad.Notes.CONTENT_VISIBLE_URI);
 		intent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
 		intent.setClass(activity, FragmentLayout.class);
-		
+
 		// If tablet mode, deliver directly
-		if (activity.getCurrentContent().equals(DualLayoutActivity.CONTENTVIEW.DUAL)) {
+		if (activity.getCurrentContent().equals(
+				DualLayoutActivity.CONTENTVIEW.DUAL)) {
 			((FragmentLayout) activity).onNewIntent(intent);
 		}
 		// Otherwise start a new editor activity
 		else {
 			startActivity(intent);
 		}
-		
+
 		// TODO remove this
 		/*
-		if (listId != FragmentLayout.ALL_NOTES_ID) {
-			noteUri = FragmentLayout.createNote(activity.getContentResolver(),
-					listId);
-		} // Try the default list
-		else {
-			long defaultListId = PreferenceManager.getDefaultSharedPreferences(
-					activity).getLong(FragmentLayout.DEFAULTLIST, -1);
-			if (defaultListId > -1) {
-				noteUri = FragmentLayout.createNote(
-						activity.getContentResolver(), defaultListId);
-			} else {
-				// No default note set. Don't know what to do. Alert the user to
-				// this fact.
-				Toast.makeText(activity,
-						getText(R.string.default_list_needed_warning),
-						Toast.LENGTH_LONG).show();
-			}
-		}
-
-		if (noteUri != null) {
-			// TODO should only highlight
-			newNoteIdToSelect = getNoteIdFromUri(noteUri);
-		}*/
+		 * if (listId != FragmentLayout.ALL_NOTES_ID) { noteUri =
+		 * FragmentLayout.createNote(activity.getContentResolver(), listId); }
+		 * // Try the default list else { long defaultListId =
+		 * PreferenceManager.getDefaultSharedPreferences(
+		 * activity).getLong(FragmentLayout.DEFAULTLIST, -1); if (defaultListId
+		 * > -1) { noteUri = FragmentLayout.createNote(
+		 * activity.getContentResolver(), defaultListId); } else { // No default
+		 * note set. Don't know what to do. Alert the user to // this fact.
+		 * Toast.makeText(activity,
+		 * getText(R.string.default_list_needed_warning),
+		 * Toast.LENGTH_LONG).show(); } }
+		 * 
+		 * if (noteUri != null) { // TODO should only highlight
+		 * newNoteIdToSelect = getNoteIdFromUri(noteUri); }
+		 */
 	}
 
 	@Override
@@ -431,8 +423,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		PreferenceManager.getDefaultSharedPreferences(activity)
 				.registerOnSharedPreferenceChangeListener(this);
 
-		if (getResources()
-				.getBoolean(R.bool.atLeastIceCreamSandwich)) {
+		if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)) {
 			// Share action provider
 			modeCallback = new ModeCallbackICS(this);
 		} else {
@@ -449,7 +440,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// mCurId = savedInstanceState.getLong(SAVEDID);
 		}
 	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
@@ -520,7 +511,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				mCurCheckPosition = index;
 				mCurId = mAdapter.getItemId(index);
 
-				if (activity.getCurrentContent().equals(DualLayoutActivity.CONTENTVIEW.DUAL)) {
+				if (activity.getCurrentContent().equals(
+						DualLayoutActivity.CONTENTVIEW.DUAL)) {
 					if (FragmentLayout.UI_DEBUG_PRINTS)
 						Log.d("NotesLIstFragmenT", "It is dualPane!");
 					// We can display everything in-place with fragments, so
@@ -541,7 +533,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						if (FragmentLayout.UI_DEBUG_PRINTS)
 							Log.d("NotesListFragment", "Would open note here: "
 									+ mCurId);
-						((NotesEditorFragment) activity.getRightFragment()).displayNote(mCurId);
+						((NotesEditorFragment) activity.getRightFragment())
+								.displayNote(mCurId);
 					}
 
 				} else {
@@ -552,12 +545,14 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					// Otherwise we need to launch a new activity to display
 					// the dialog fragment with selected text.
 					Intent intent = new Intent();
-					//intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					intent.setClass(activity, FragmentLayout.class);
-					intent.setData(NotesEditorFragment.getUriFrom(mCurId));
-					//intent.putExtra(NotesEditorFragment.KEYID, mCurId);
-					intent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, mCurListId);
-					intent.setAction(Intent.ACTION_EDIT);
+					// intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					intent.setClass(activity, FragmentLayout.class)
+							.setData(
+									Uri.withAppendedPath(
+											NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,
+											Long.toString(mCurId)))
+							.putExtra(NotePad.Notes.COLUMN_NAME_LIST,
+									mCurListId).setAction(Intent.ACTION_EDIT);
 
 					startActivity(intent);
 				}
@@ -569,7 +564,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			}
 		}
 	}
-	
+
 	private void showNoteAndSelect(int index) {
 		showNote(index);
 		selectPos(mCurCheckPosition);
@@ -584,20 +579,21 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			Log.d(TAG, "onDelete");
 		// Only do anything if id is valid!
 		if (mCurId > -1) {
-//			if (onDeleteListener != null) {
-//				// Tell fragment to delete the current note
-//				onDeleteListener.onEditorDelete(mCurId);
-//			}
-			if (activity.getCurrentContent().equals(DualLayoutActivity.CONTENTVIEW.DUAL)) {
+			// if (onDeleteListener != null) {
+			// // Tell fragment to delete the current note
+			// onDeleteListener.onEditorDelete(mCurId);
+			// }
+			if (activity.getCurrentContent().equals(
+					DualLayoutActivity.CONTENTVIEW.DUAL)) {
 				autoOpenNote = true;
 			}
 
-//			if (FragmentLayout.LANDSCAPE_MODE) {
-//			} else {
-//				// Get the id of the currently "selected" note
-//				// This matters if we switch to landscape mode
-//				reCalculateValidValuesAfterDelete();
-//			}
+			// if (FragmentLayout.LANDSCAPE_MODE) {
+			// } else {
+			// // Get the id of the currently "selected" note
+			// // This matters if we switch to landscape mode
+			// reCalculateValidValuesAfterDelete();
+			// }
 		}
 	}
 
@@ -802,7 +798,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			Log.d(TAG, "setSingleCheck");
 		checkMode = CHECK_SINGLE;
 		ListView lv = getListView();
-		if (activity.getCurrentContent().equals(DualLayoutActivity.CONTENTVIEW.DUAL)) {
+		if (activity.getCurrentContent().equals(
+				DualLayoutActivity.CONTENTVIEW.DUAL)) {
 			// Fix the selection before releasing that
 			lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
 			// lv.setChoiceMode(ListView.CHOICE_MODE_NONE);
@@ -824,7 +821,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	public void setMultiCheck(int pos) {
 		if (FragmentLayout.UI_DEBUG_PRINTS)
-			Log.d(TAG, "setMutliCheck: " + pos + " modeCallback = " + modeCallback);
+			Log.d(TAG, "setMutliCheck: " + pos + " modeCallback = "
+					+ modeCallback);
 		// Do this on long press
 		checkMode = CHECK_MULTI;
 		ListView lv = getListView();
@@ -1214,13 +1212,13 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// This is always done when content changes
 		}
 
-			HashSet<Long> ids = new HashSet<Long>();
-			for (int pos : positions) {
-				if (FragmentLayout.UI_DEBUG_PRINTS)
-					Log.d(TAG, "onModalDelete pos: " + pos);
-				ids.add(mAdapter.getItemId(pos));
-			}
-			((FragmentLayout) activity).onMultiDelete(ids, mCurId);
+		HashSet<Long> ids = new HashSet<Long>();
+		for (int pos : positions) {
+			if (FragmentLayout.UI_DEBUG_PRINTS)
+				Log.d(TAG, "onModalDelete pos: " + pos);
+			ids.add(mAdapter.getItemId(pos));
+		}
+		((FragmentLayout) activity).onMultiDelete(ids, mCurId);
 	}
 
 	public void showList(long id) {
@@ -1229,7 +1227,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		mCurListId = id;
 		// Will show note if necessary
 		Bundle args = new Bundle();
-		if (activity.getCurrentContent().equals(DualLayoutActivity.CONTENTVIEW.DUAL))
+		if (activity.getCurrentContent().equals(
+				DualLayoutActivity.CONTENTVIEW.DUAL))
 			args.putBoolean(SHOULD_OPEN_NOTE, true);
 		getLoaderManager().restartLoader(0, args, this);
 	}
@@ -1340,7 +1339,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// Note is invalid, so recalculate a valid position and index
 			reCalculateValidValuesAfterDelete();
 			reSelectId();
-			if (activity.getCurrentContent().equals(DualLayoutActivity.CONTENTVIEW.DUAL))
+			if (activity.getCurrentContent().equals(
+					DualLayoutActivity.CONTENTVIEW.DUAL))
 				autoOpenNote = true;
 		}
 
