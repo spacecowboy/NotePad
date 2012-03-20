@@ -172,9 +172,9 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	protected void goUp() {
 		Intent intent = new Intent();
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-				| Intent.FLAG_ACTIVITY_CLEAR_TASK)
-		.setClass(this, MainActivity.class);
+		intent.addFlags(
+				Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+				.setClass(this, MainActivity.class);
 
 		startActivity(intent);
 	}
@@ -317,47 +317,108 @@ public class MainActivity extends DualLayoutActivity implements
 				&& intent.getData().equals(NotePad.Notes.CONTENT_VISIBLE_URI)) {
 			Log.d("FragmentLayout", "INSERT NOTE");
 			// Get list to create note in first
-			if (intent.getExtras() != null) {
-				long listId = intent.getExtras().getLong(
-						NotePad.Notes.COLUMN_NAME_LIST, -1);
+			long listId = getAList(intent);
+			if (listId > -1) {
+				Uri noteUri = MainActivity.createNote(getContentResolver(),
+						listId);
 
-				if (listId > -1) {
-					Uri noteUri = MainActivity.createNote(
-							getContentResolver(), listId);
+				if (noteUri != null) {
+					long newNoteIdToOpen = NotesListFragment
+							.getNoteIdFromUri(noteUri);
 
-					if (noteUri != null) {
-						long newNoteIdToOpen = NotesListFragment
-								.getNoteIdFromUri(noteUri);
-
-						if (rightFragment != null) {
-							((NotesEditorFragment) rightFragment)
-									.displayNote(newNoteIdToOpen);
-						}
-
-						intent.setAction(Intent.ACTION_EDIT);
-						intent.setData(noteUri);
+					if (rightFragment != null) {
+						((NotesEditorFragment) rightFragment)
+								.displayNote(newNoteIdToOpen);
 					}
+
+					intent.setAction(Intent.ACTION_EDIT);
+					intent.setData(noteUri);
 				}
 			}
+
+			// Open appropriate list if tablet mode
 			if (list != null) {
-				long listId = ALL_NOTES_ID;
+				long intentId = ALL_NOTES_ID;
 				if (intent.getExtras() != null) {
-					listId = intent.getExtras().getLong(
+					intentId = intent.getExtras().getLong(
 							NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
 				}
+				
+				// Change to the valid list if intent is crap
+				if (intentId != ALL_NOTES_ID && intentId != listId)
+					intentId = listId;
 
 				// Open the containing list if we have to. No need to change
 				// lists
 				// if we are already displaying all notes.
-				if (listId != -1 && currentListId != ALL_NOTES_ID
-						&& currentListId != listId) {
-					openListFromIntent(listId);
+				if (intentId != -1 && currentListId != ALL_NOTES_ID
+						&& currentListId != intentId) {
+					openListFromIntent(intentId);
 				}
-				if (listId != -1) {
+				if (intentId != -1) {
 					list.handleNoteIntent(intent);
 				}
 			}
 		}
+	}
+
+	/**
+	 * Will find a suitable list. Which is first '
+	 * If the intent contains a list or
+	 * the default list, if no valid default list then
+	 * the first list is returned. If there are no lists, then
+	 * -1 is returned.
+	 */
+	private long getAList(Intent intent) {
+		long returnList = -1;
+		long tempList = -1;
+		// First see if the intent specifies a list
+		if (intent != null && intent.getExtras() != null) {
+			long intentId = intent.getExtras().getLong(
+					NotePad.Notes.COLUMN_NAME_LIST, -1);
+
+			if (intentId > -1) {
+				tempList = intentId;
+				Log.d(TAG, "Intent list: " + intentId);
+			}
+		}
+
+		if (tempList < 0) {
+			// Then check if a default list is specified
+			tempList = PreferenceManager.getDefaultSharedPreferences(this)
+					.getLong(DEFAULTLIST, -1);
+			Log.d(TAG, "Default list: " + tempList);
+		}
+		// Not guaranteed that this is valid. Check the database even if it
+		// exists.
+		// Limit to 1 result. Returns default list if it exists
+		final String criteria = NotePad.Lists._ID + " = ?";
+		Cursor cursor;
+		if (tempList > -1) {
+			final String listString = Long.toString(tempList);
+			cursor = getContentResolver().query(
+					NotePad.Lists.CONTENT_VISIBLE_URI,
+					new String[] { NotePad.Lists._ID },
+					criteria + " OR NOT (EXISTS (SELECT NULL FROM "
+							+ NotePad.Lists.TABLE_NAME + " WHERE " + criteria
+							+ "))", new String[] { listString, listString },
+					NotePad.Lists.SORT_ORDER + " LIMIT 1");
+		} else {
+			cursor = getContentResolver().query(
+					NotePad.Lists.CONTENT_VISIBLE_URI,
+					new String[] { NotePad.Lists._ID }, null, null,
+					NotePad.Lists.SORT_ORDER + " LIMIT 1");
+		}
+		if (cursor != null && cursor.moveToFirst()) {
+			returnList = cursor.getLong(cursor
+					.getColumnIndex(NotePad.Lists._ID));
+			Log.d(TAG, "database list: " + returnList);
+		}
+		if (cursor != null)
+			cursor.close();
+
+		// Return the result, whatever it may be
+		return returnList;
 	}
 
 	@Override
@@ -845,8 +906,8 @@ public class MainActivity extends DualLayoutActivity implements
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
 
-		return new CursorLoader(this, baseUri, new String[] {
-				BaseColumns._ID, NotePad.Lists.COLUMN_NAME_TITLE },
+		return new CursorLoader(this, baseUri, new String[] { BaseColumns._ID,
+				NotePad.Lists.COLUMN_NAME_TITLE },
 				NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1", // un-deleted
 																	// records.
 				null, NotePad.Lists.SORT_ORDER // Use the default sort order.
