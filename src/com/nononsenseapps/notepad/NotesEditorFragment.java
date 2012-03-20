@@ -20,7 +20,6 @@ import java.util.Calendar;
 import java.util.TimeZone;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.app.LoaderManager;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Fragment;
@@ -862,12 +861,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				if (mOriginalTitle == null) {
 					mOriginalTitle = title;
 				}
-
-				// Request focus, will not open keyboard
-				// TODO remove or uncomment
-//				if (FragmentLayout.LANDSCAPE_MODE) {
-//					activity.findViewById(R.id.noteBox).requestFocus();
-//				}
 			}
 
 			/*

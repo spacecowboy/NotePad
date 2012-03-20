@@ -27,17 +27,9 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.ui.ExtrasCursorAdapter;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.LayoutTransition;
-import android.animation.ObjectAnimator;
-import android.animation.PropertyValuesHolder;
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
-import android.app.Activity;
 import android.app.Dialog;
-import android.app.FragmentManager;
-import android.app.FragmentTransaction;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.ContentResolver;
@@ -53,14 +45,13 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.BaseColumns;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.EditText;
 
@@ -670,6 +661,7 @@ public class FragmentLayout extends DualLayoutActivity implements
 		startActivity(intent);
 	}
 
+	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		// Need to restart to allow themes and such to go into effect
@@ -903,7 +895,7 @@ public class FragmentLayout extends DualLayoutActivity implements
 		// creating a Cursor for the data being displayed.
 
 		return new CursorLoader(this, baseUri, new String[] {
-				NotePad.Lists._ID, NotePad.Lists.COLUMN_NAME_TITLE },
+				BaseColumns._ID, NotePad.Lists.COLUMN_NAME_TITLE },
 				NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1", // un-deleted
 																	// records.
 				null, NotePad.Lists.SORT_ORDER // Use the default sort order.

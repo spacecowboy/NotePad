@@ -34,8 +34,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 
 public abstract class DualLayoutActivity extends Activity {
-	public static final String SHOWRIGHT = "showRight";
-
 	public enum CONTENTVIEW {
 		DUAL, LEFT, RIGHT
 	};

@@ -47,16 +47,14 @@ import android.graphics.Paint;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.BaseColumns;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.animation.LayoutTransition;
-import android.app.Activity;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.app.ListFragment;
 import android.widget.SimpleCursorAdapter;
 
 import android.text.format.Time;
@@ -65,15 +63,13 @@ import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.View;
-import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.FrameLayout;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.ShareActionProvider;
 import android.widget.TextView;
@@ -106,7 +102,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	private static final String SAVEDPOS = "listSavedPos";
 	private static final String SAVEDID = "listSavedId";
 	private static final String SAVEDLISTID = "listSavedListId";
-	private static final String SAVEDSTATE = "listSavedState";
 
 	private static final String SHOULD_OPEN_NOTE = "shouldOpenNote";
 
@@ -191,9 +186,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					NotePad.Notes.COLUMN_NAME_LIST, -1);
 			if (listId == mCurListId
 					|| mCurListId == FragmentLayout.ALL_NOTES_ID) {
-				// Just open it
-				// TODO just highlight it instead
-				// openNote(intent);
+				// just highlight it
 				String newId = intent.getData().getPathSegments()
 						.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
 				long noteId = Long.parseLong(newId);
@@ -210,7 +203,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
 				long noteId = Long.parseLong(newId);
 				if (noteId > -1) {
-					// TODO highlight
 					newNoteIdToSelect = noteId;
 				}
 			}
@@ -319,24 +311,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		else {
 			startActivity(intent);
 		}
-
-		// TODO remove this
-		/*
-		 * if (listId != FragmentLayout.ALL_NOTES_ID) { noteUri =
-		 * FragmentLayout.createNote(activity.getContentResolver(), listId); }
-		 * // Try the default list else { long defaultListId =
-		 * PreferenceManager.getDefaultSharedPreferences(
-		 * activity).getLong(FragmentLayout.DEFAULTLIST, -1); if (defaultListId
-		 * > -1) { noteUri = FragmentLayout.createNote(
-		 * activity.getContentResolver(), defaultListId); } else { // No default
-		 * note set. Don't know what to do. Alert the user to // this fact.
-		 * Toast.makeText(activity,
-		 * getText(R.string.default_list_needed_warning),
-		 * Toast.LENGTH_LONG).show(); } }
-		 * 
-		 * if (noteUri != null) { // TODO should only highlight
-		 * newNoteIdToSelect = getNoteIdFromUri(noteUri); }
-		 */
 	}
 
 	@Override
@@ -495,7 +469,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	 * returns position of note in list
 	 */
 	private void showNote(int index) {
-		// TODO fix this
 		// if it's -1 to start with, we try with zero
 		if (index < 0) {
 			index = 0;
@@ -525,9 +498,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 					// Check what fragment is currently shown, replace if
 					// needed.
-					// NotesEditorFragment editor = (NotesEditorFragment)
-					// getSupportFragmentManager()
-					// .findFragmentById(R.id.editor);
 					if (activity.getRightFragment() != null) {
 						// We want to know about changes here
 						if (FragmentLayout.UI_DEBUG_PRINTS)
@@ -679,6 +649,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
 			static final String indent = "      ";
 
+			@Override
 			public boolean setViewValue(View view, Cursor cursor,
 					int columnIndex) {
 				if (columnIndex == cursor
@@ -686,7 +657,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					NoteCheckBox cb = (NoteCheckBox) view;
 					cb.setOnCheckedChangeListener(null);
 					long id = cursor.getLong(cursor
-							.getColumnIndex(NotePad.Notes._ID));
+							.getColumnIndex(BaseColumns._ID));
 					cb.setNoteId(id);
 					String text = cursor.getString(cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS));
@@ -753,6 +724,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		return adapter;
 	}
 
+	@Override
 	public boolean onQueryTextChange(String query) {
 		if (FragmentLayout.UI_DEBUG_PRINTS)
 			Log.d("NotesListFragment", "onQueryTextChange: " + query);
@@ -778,6 +750,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		return true;
 	}
 
+	@Override
 	public boolean onQueryTextSubmit(String query) {
 		// Just do what we do on text change
 		return onQueryTextChange(query);
@@ -801,11 +774,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (activity.getCurrentContent().equals(
 				DualLayoutActivity.CONTENTVIEW.DUAL)) {
 			// Fix the selection before releasing that
-			lv.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
+			lv.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
 			// lv.setChoiceMode(ListView.CHOICE_MODE_NONE);
 		} else {
 			// Not nice to show selected item in list when no editor is showing
-			lv.setChoiceMode(ListView.CHOICE_MODE_NONE);
+			lv.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
 		}
 		lv.setLongClickable(true);
 		lv.setOnItemLongClickListener(this);
@@ -828,13 +801,14 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		ListView lv = getListView();
 		lv.clearChoices();
 		lv.setMultiChoiceModeListener(modeCallback);
-		lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+		lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
 		lv.setItemChecked(pos, true);
 	}
 
 	/**
 	 * {@inheritDoc}
 	 */
+	@Override
 	public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 			int position, long id) {
 		if (FragmentLayout.UI_DEBUG_PRINTS)
@@ -1254,7 +1228,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			sortOrder = NotePad.Notes.POSSUBSORT_SORT_TYPE;
 		}
 
-		this.sortType = sortOrder;
+		NotesListFragment.sortType = sortOrder;
 
 		sortOrder += " "
 				+ PreferenceManager.getDefaultSharedPreferences(activity)
