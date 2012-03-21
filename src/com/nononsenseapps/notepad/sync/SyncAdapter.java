@@ -31,6 +31,7 @@ import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
 import android.content.ContentProviderResult;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.OperationApplicationException;
@@ -107,7 +108,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 			ContentProviderClient provider, SyncResult syncResult) {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(mContext);
-
+		
 		// Only sync if it has been enabled by the user, and account is selected
 		// Issue on reinstall where account approval is remembered by system
 		if (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)
@@ -163,9 +164,15 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 						// Get the current hash value on the server and all
 						// remote
-						// lists
-						String serverEtag = apiTalker.getModifiedLists(
+						// lists if upload is not true
+
+						String serverEtag;
+						if (extras.getBoolean(ContentResolver.SYNC_EXTRAS_UPLOAD, false)) {
+							serverEtag = localEtag;
+						} else {
+						serverEtag = apiTalker.getModifiedLists(
 								localEtag, allLocalLists, listsToSaveToDB);
+						}
 
 						// IF the tags match, then nothing has changed on
 						// server.
@@ -300,8 +307,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						// Finally, get the updated etag from the server and
 						// save.
 						// Only worth doing if we actually uploaded anything
+						// Also, only do this if we are doing a full sync
 						String currentEtag = serverEtag;
-						if (uploadedStuff) {
+						if (uploadedStuff && !extras.getBoolean(ContentResolver.SYNC_EXTRAS_UPLOAD, false)) {
 							currentEtag = apiTalker.getEtag();
 						}
 
@@ -310,7 +318,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 								.commit();
 
 						// Now, set sorting values.
-						// TODO
 						for (GoogleTaskList list : tasksInListToSaveToDB.keySet()) {
 							if (SYNC_DEBUG_PRINTS)
 								Log.d(TAG, "Setting position values in: "
