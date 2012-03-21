@@ -17,6 +17,7 @@
 package com.nononsenseapps.notepad;
 
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 
@@ -42,6 +43,7 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
 import android.util.Log;
@@ -62,6 +64,14 @@ import java.util.Map.Entry;
  */
 public class NotePadProvider extends ContentProvider implements
 		PipeDataWriter<Cursor> {
+	
+	public static boolean SyncAuto(Context context) {
+		String setting = PreferenceManager
+				.getDefaultSharedPreferences(context).getString(
+						SyncPrefs.KEY_SYNC_FREQ, "0");
+		int syncAuto = Integer.parseInt(setting);
+		return syncAuto > 0;
+	}
 	// Used for debugging and logging
 	private static final String TAG = "NotePadProvider";
 
@@ -1173,7 +1183,7 @@ public class NotePadProvider extends ContentProvider implements
 			// Notifies observers registered against this provider that the data
 			// changed.
 			getContext().getContentResolver()
-					.notifyChange(noteUri, null, false);
+					.notifyChange(noteUri, null, SyncAuto(getContext()));
 			// Also tell lists watching the other URI
 			getContext().getContentResolver().notifyChange(
 					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
@@ -1251,7 +1261,7 @@ public class NotePadProvider extends ContentProvider implements
 			// Notifies observers registered against this provider that the data
 			// changed.
 			getContext().getContentResolver()
-					.notifyChange(noteUri, null, false);
+					.notifyChange(noteUri, null, SyncAuto(getContext()));
 			// Also tell lists watching the other URI
 			getContext().getContentResolver().notifyChange(
 					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
@@ -1678,7 +1688,7 @@ public class NotePadProvider extends ContentProvider implements
 		 * along to the resolver framework, and observers that have registered
 		 * themselves for the provider are notified.
 		 */
-		getContext().getContentResolver().notifyChange(uri, null, false);
+		getContext().getContentResolver().notifyChange(uri, null, SyncAuto(getContext()));
 		// Also tell lists watching the other URI
 		getContext().getContentResolver().notifyChange(
 				NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
@@ -1944,7 +1954,7 @@ public class NotePadProvider extends ContentProvider implements
 		 * along to the resolver framework, and observers that have registered
 		 * themselves for the provider are notified.
 		 */
-		getContext().getContentResolver().notifyChange(uri, null, false);
+		getContext().getContentResolver().notifyChange(uri, null, SyncAuto(getContext()));
 		// Manually send an update to the visible notes URL because lists
 		// are using this while the editor will use a different URI
 		getContext().getContentResolver().notifyChange(

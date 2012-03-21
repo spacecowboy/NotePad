@@ -324,7 +324,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			return true;
 		case R.id.menu_sync:
 
-			Log.d("NotesListFragment", "Sync");
 			String accountName = PreferenceManager.getDefaultSharedPreferences(
 					activity).getString(SyncPrefs.KEY_ACCOUNT, "");
 			boolean syncEnabled = PreferenceManager
