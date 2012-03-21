@@ -78,7 +78,10 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	}
 
 	public int getCount() {
-		return mCursor.getCount();
+		if (mCursor != null)
+			return mCursor.getCount();
+		else
+			return 0;
 	}
 
 	public RemoteViews getViewAt(int position) {
