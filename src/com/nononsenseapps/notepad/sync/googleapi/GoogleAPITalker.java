@@ -98,56 +98,40 @@ public class GoogleAPITalker {
 
 	}
 
-	public static final String[] APIKEYS = {
-			"AIzaSyBCQyr-OSPQsMwU2tyCIKZG86Wb3WM1upw",
-			"AIzaSyCL4kSSYfHX9aXfT4LQiyss_uigSCOFigI",
-			"AIzaSyD0ECFJ_f8LDk_i1gjSdfXDlPrBrXwhSvI",
-			"AIzaSyA6eViVc227F8kzAK10nDWGUvcjTrtFVMg",
-			"AIzaSyBMQQacWRpXgUQ-zfR_0pHEUDyz3YpnIb8",
-			"AIzaSyDw_cCMsHbwUzRvl8LZTWE7AkXbMJwXuzA",
-			"AIzaSyD737rzTpyj4RrCDZrinw2Yuk7tCrdX4y0",
-			"AIzaSyBLYmojvW9bIM1FVg-vIXbbF_Hb1LjJqFA",
-			"AIzaSyBm3O4nHKPU6yatEqQa5WQpq2ZJTw-0Nkc",
-			"AIzaSyCDjFNXqKZfb0f1KQUqOTdTEKlSCDLi8JM",
-			"AIzaSyBHNTuqjROS8rvplNm045ZhP-xsd8Mu6c8",
-			"AIzaSyCk9PARH3pMEm-R-86xGffWkRvZg7sIXy0",
-			"AIzaSyDtUKvktIGaX6rnmOepLcgeh1zQN6aLAUc",
-			"AIzaSyBJ4fStpl32Ttr55yJo-OYUraOap0ppZHk",
-			"AIzaSyD2QfbyujjorPiddsyIcGEmUyNdKyeYrrw",
-			"AIzaSyB19Uwi7nDdvUpVoBN3rMdbtfhGR9BtePw",
-			"AIzaSyAZ5i4GsqkVh0WI554B9lfTRaRrSQYW4Ts",
-			"AIzaSyBzl28_mC8LXLYYyhgMKDbba9QLx7ao0ZI",
-			"AIzaSyCOIj_EGFkUzciR6AZhVlEzWULFLVFn17w",
-			"AIzaSyBCFGemDwKL5ijVnGL2PULqBvn98EYUew0",
-			"AIzaSyA9PB184LIos78-SLSz-80g0Sa40UlYGIo"};
-	
+	public static final String[] APIKEYS = { "AIzaSyBCQyr-OSPQsMwU2tyCIKZG86Wb3WM1upw" };
+
 	public static Random rand = new Random();
-	
+
 	public static String ApiKey() {
 		if (null == rand)
 			rand = new Random();
-		
+
 		return APIKEYS[rand.nextInt(APIKEYS.length)];
 	}
 
-	//public static final String APIKEY = "AIzaSyBCQyr-OSPQsMwU2tyCIKZG86Wb3WM1upw";
-	
+	// public static final String APIKEY =
+	// "AIzaSyBCQyr-OSPQsMwU2tyCIKZG86Wb3WM1upw";
+
 	public static String AuthUrlEnd() {
 		return "key=" + ApiKey();
 	}
-	//public static final String AUTH_URL_END = "key=" + APIKEY;
-	
+
+	// public static final String AUTH_URL_END = "key=" + APIKEY;
+
 	public static final String BASE_URL = "https://www.googleapis.com/tasks/v1/users/@me/lists";
-	
+
 	public static String AllLists() {
 		return BASE_URL + "?" + AuthUrlEnd();
 	}
-	//public static final String ALL_LISTS = BASE_URL + "?" + AUTH_URL_END;
-	
+
+	// public static final String ALL_LISTS = BASE_URL + "?" + AUTH_URL_END;
+
 	public static String AllListsJustEtag() {
-		return BASE_URL + "?fields=etag&"+ AuthUrlEnd();
+		return BASE_URL + "?fields=etag&" + AuthUrlEnd();
 	}
-	//public static final String ALL_LISTS_JUST_ETAG = BASE_URL + "?fields=etag&"+ AUTH_URL_END;
+
+	// public static final String ALL_LISTS_JUST_ETAG = BASE_URL +
+	// "?fields=etag&"+ AUTH_URL_END;
 
 	public static String ListURL(String id) {
 		return BASE_URL + "/" + id + "?" + AuthUrlEnd();
