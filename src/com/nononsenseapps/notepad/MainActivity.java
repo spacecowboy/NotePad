@@ -174,8 +174,8 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	protected void goUp() {
 		Intent intent = new Intent();
-		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-				.setClass(this, MainActivity.class);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK).setClass(this,
+				MainActivity.class);
 
 		startActivity(intent);
 	}
@@ -189,30 +189,32 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		MenuItem deleteList = menu.findItem(R.id.menu_deletelist);
-		if (deleteList != null) {
-			// Only show this button if there is a list to create it in
-			if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
-				deleteList.setVisible(false);
-			} else {
-				deleteList.setVisible(true);
+		if (null != mSpinnerAdapter) {
+			if (deleteList != null) {
+				// Only show this button if there is a list to create it in
+				if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
+					deleteList.setVisible(false);
+				} else {
+					deleteList.setVisible(true);
+				}
 			}
-		}
-		MenuItem renameList = menu.findItem(R.id.menu_renamelist);
-		if (renameList != null) {
-			// Only show this button if there is a list to create it in
-			if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
-				renameList.setVisible(false);
-			} else {
-				renameList.setVisible(true);
+			MenuItem renameList = menu.findItem(R.id.menu_renamelist);
+			if (renameList != null) {
+				// Only show this button if there is a list to create it in
+				if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
+					renameList.setVisible(false);
+				} else {
+					renameList.setVisible(true);
+				}
 			}
-		}
-		MenuItem defaultList = menu.findItem(R.id.menu_setdefaultlist);
-		if (defaultList != null) {
-			// Only show this button if there is a proper list showing
-			if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
-				defaultList.setVisible(false);
-			} else {
-				defaultList.setVisible(true);
+			MenuItem defaultList = menu.findItem(R.id.menu_setdefaultlist);
+			if (defaultList != null) {
+				// Only show this button if there is a proper list showing
+				if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
+					defaultList.setVisible(false);
+				} else {
+					defaultList.setVisible(true);
+				}
 			}
 		}
 
@@ -340,11 +342,13 @@ public class MainActivity extends DualLayoutActivity implements
 			// Open appropriate list if tablet mode
 			if (list != null) {
 				long intentId = -1;
-				if (intent.getExtras() != null && intent.getExtras().containsKey(NotePad.Notes.COLUMN_NAME_LIST)) {
+				if (intent.getExtras() != null
+						&& intent.getExtras().containsKey(
+								NotePad.Notes.COLUMN_NAME_LIST)) {
 					intentId = intent.getExtras().getLong(
 							NotePad.Notes.COLUMN_NAME_LIST, -1);
 				}
-				
+
 				// Change to the valid list if intent is crap
 				if (intentId != ALL_NOTES_ID && intentId == -1)
 					intentId = listId;
@@ -364,11 +368,9 @@ public class MainActivity extends DualLayoutActivity implements
 	}
 
 	/**
-	 * Will find a suitable list. Which is first '
-	 * If the intent contains a list or
-	 * the default list, if no valid default list then
-	 * the first list is returned. If there are no lists, then
-	 * -1 is returned.
+	 * Will find a suitable list. Which is first ' If the intent contains a list
+	 * or the default list, if no valid default list then the first list is
+	 * returned. If there are no lists, then -1 is returned.
 	 */
 	private long getAList(Intent intent) {
 		long returnList = -1;
