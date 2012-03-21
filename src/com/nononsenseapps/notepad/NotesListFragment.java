@@ -300,7 +300,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		intent.setAction(Intent.ACTION_INSERT);
 		intent.setData(NotePad.Notes.CONTENT_VISIBLE_URI);
 		intent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
-		intent.setClass(activity, MainActivity.class);
 
 		// If tablet mode, deliver directly
 		if (activity.getCurrentContent().equals(
@@ -309,6 +308,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		}
 		// Otherwise start a new editor activity
 		else {
+			intent.setClass(activity, RightActivity.class);
 			startActivity(intent);
 		}
 	}
