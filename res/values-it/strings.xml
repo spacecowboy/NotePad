@@ -129,4 +129,19 @@
 		e reinstalla l\'applicazione.</string>
 	<string name="about">About</string>
 	
+	
+	<string name="about_text">Grazie per aver scaricato la mia app! Sto facendo del mio meglio per fare in modo che questa app sia stupenda, ma ci potranno sempre essere bug e altre cose che potrenno essere sempre migliorate!\n
+
+\nSe trovi un bug, una traduzione sbagliata o semplicemente hai una idea su come migliorare l\'app, allora voglio sentire la tua voce!
+\nMandami una mail: jonas@nononsenseapps.com
+\nContattami su Twitter: @SciencyGuy
+\n\nAggiungimi alle tue cerchie su Google+: https://plus.google.com/u/0/111801385015192089838
+
+\n\nDato che il progetto è open source puoi anche riferire qualsiasi cosa direttamente su "issue tracker" di Github: https://github.com/spacecowboy/NotePad/issues
+\nMeglio ancora, se ne hai le competenze puoi cercare di sistemare il problema e inviarmi una "pull request"!
+
+\n\nSe invece vuoi provvedere ad una traduzione per la tua lingua sarebbe veramente bello. Contattami!
+
+\n\nGrazie ancora per aver scaricato la mia app!
+\nSe vuoi supportare il progetto in una maniera meno attiva, puoi sempre comprare la versione "donate" per una piccola donazione: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>
