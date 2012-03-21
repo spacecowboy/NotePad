@@ -175,6 +175,28 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			mCurCheckPosition = 0;
 			mCurId = -1;
 		}
+
+		// Sync any possible changes from server on start here. NOT in onresumse
+		String accountName = PreferenceManager.getDefaultSharedPreferences(
+				activity).getString(SyncPrefs.KEY_ACCOUNT, "");
+
+		if (accountName != null && !accountName.equals("")
+				&& NotePadProvider.SyncAuto(activity)) {
+			Account account = SyncPrefs.getAccount(
+					AccountManager.get(activity), accountName);
+			// Don't start a new sync if one is already going
+			if (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) {
+				Bundle options = new Bundle();
+				// This will force a sync regardless of what the setting is
+				// in
+				// accounts manager. Only use it here where the user has
+				// manually
+				// desired a sync to happen NOW.
+				options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+				ContentResolver
+						.requestSync(account, NotePad.AUTHORITY, options);
+			}
+		}
 	}
 
 	public void handleNoteIntent(Intent intent) {

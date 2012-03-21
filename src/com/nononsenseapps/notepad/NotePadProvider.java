@@ -70,7 +70,12 @@ public class NotePadProvider extends ContentProvider implements
 				.getDefaultSharedPreferences(context).getString(
 						SyncPrefs.KEY_SYNC_FREQ, "0");
 		int syncAuto = Integer.parseInt(setting);
-		return syncAuto > 0;
+		
+		boolean syncEnabled = PreferenceManager
+				.getDefaultSharedPreferences(context).getBoolean(
+						SyncPrefs.KEY_SYNC_ENABLE, false);
+		
+		return syncEnabled && (syncAuto > 0);
 	}
 	// Used for debugging and logging
 	private static final String TAG = "NotePadProvider";
@@ -1183,7 +1188,7 @@ public class NotePadProvider extends ContentProvider implements
 			// Notifies observers registered against this provider that the data
 			// changed.
 			getContext().getContentResolver()
-					.notifyChange(noteUri, null, SyncAuto(getContext()));
+					.notifyChange(noteUri, null, false);
 			// Also tell lists watching the other URI
 			getContext().getContentResolver().notifyChange(
 					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
@@ -1261,7 +1266,7 @@ public class NotePadProvider extends ContentProvider implements
 			// Notifies observers registered against this provider that the data
 			// changed.
 			getContext().getContentResolver()
-					.notifyChange(noteUri, null, SyncAuto(getContext()));
+					.notifyChange(noteUri, null, false);
 			// Also tell lists watching the other URI
 			getContext().getContentResolver().notifyChange(
 					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
@@ -1688,7 +1693,7 @@ public class NotePadProvider extends ContentProvider implements
 		 * along to the resolver framework, and observers that have registered
 		 * themselves for the provider are notified.
 		 */
-		getContext().getContentResolver().notifyChange(uri, null, SyncAuto(getContext()));
+		getContext().getContentResolver().notifyChange(uri, null, false);
 		// Also tell lists watching the other URI
 		getContext().getContentResolver().notifyChange(
 				NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
@@ -1954,7 +1959,7 @@ public class NotePadProvider extends ContentProvider implements
 		 * along to the resolver framework, and observers that have registered
 		 * themselves for the provider are notified.
 		 */
-		getContext().getContentResolver().notifyChange(uri, null, SyncAuto(getContext()));
+		getContext().getContentResolver().notifyChange(uri, null, false);
 		// Manually send an update to the visible notes URL because lists
 		// are using this while the editor will use a different URI
 		getContext().getContentResolver().notifyChange(

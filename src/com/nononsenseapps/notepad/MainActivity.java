@@ -102,30 +102,6 @@ public class MainActivity extends DualLayoutActivity implements
 		} else {
 			rightCreate();
 		}
-		
-		// Sync any possible changes from server on start here. NOT in onresumse
-		String accountName = PreferenceManager.getDefaultSharedPreferences(
-				this).getString(SyncPrefs.KEY_ACCOUNT, "");
-		boolean syncEnabled = PreferenceManager
-				.getDefaultSharedPreferences(this).getBoolean(
-						SyncPrefs.KEY_SYNC_ENABLE, false);
-		
-		if (accountName != null && !accountName.equals("") && syncEnabled && NotePadProvider.SyncAuto(this)) {
-			Account account = SyncPrefs.getAccount(
-					AccountManager.get(this), accountName);
-			// Don't start a new sync if one is already going
-			if (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) {
-				Bundle options = new Bundle();
-				// This will force a sync regardless of what the setting is
-				// in
-				// accounts manager. Only use it here where the user has
-				// manually
-				// desired a sync to happen NOW.
-				options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-				ContentResolver.requestSync(account, NotePad.AUTHORITY,
-						options);
-			}
-		}
 	}
 
 	private void leftOrTabletCreate(Bundle savedInstanceState) {

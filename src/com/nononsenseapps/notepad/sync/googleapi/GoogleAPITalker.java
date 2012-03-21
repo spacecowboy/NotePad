@@ -110,7 +110,16 @@ public class GoogleAPITalker {
 			"AIzaSyBm3O4nHKPU6yatEqQa5WQpq2ZJTw-0Nkc",
 			"AIzaSyCDjFNXqKZfb0f1KQUqOTdTEKlSCDLi8JM",
 			"AIzaSyBHNTuqjROS8rvplNm045ZhP-xsd8Mu6c8",
-			"AIzaSyCk9PARH3pMEm-R-86xGffWkRvZg7sIXy0"};
+			"AIzaSyCk9PARH3pMEm-R-86xGffWkRvZg7sIXy0",
+			"AIzaSyDtUKvktIGaX6rnmOepLcgeh1zQN6aLAUc",
+			"AIzaSyBJ4fStpl32Ttr55yJo-OYUraOap0ppZHk",
+			"AIzaSyD2QfbyujjorPiddsyIcGEmUyNdKyeYrrw",
+			"AIzaSyB19Uwi7nDdvUpVoBN3rMdbtfhGR9BtePw",
+			"AIzaSyAZ5i4GsqkVh0WI554B9lfTRaRrSQYW4Ts",
+			"AIzaSyBzl28_mC8LXLYYyhgMKDbba9QLx7ao0ZI",
+			"AIzaSyCOIj_EGFkUzciR6AZhVlEzWULFLVFn17w",
+			"AIzaSyBCFGemDwKL5ijVnGL2PULqBvn98EYUew0",
+			"AIzaSyA9PB184LIos78-SLSz-80g0Sa40UlYGIo"};
 	
 	public static Random rand = new Random();
 	

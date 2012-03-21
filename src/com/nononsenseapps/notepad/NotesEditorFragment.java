@@ -359,6 +359,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 								// are
 								// necessary.
 						);
+				// We want to sync these if we should
+				activity.getContentResolver().notifyChange(mUri, null, NotePadProvider.SyncAuto(activity));
 			}
 		}
 	}
