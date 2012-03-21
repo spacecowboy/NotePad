@@ -48,7 +48,7 @@
     <string name="settings_cat_theme">Tema</string>
     <string name="settings_cat_sorting">Orden</string>
     <string name="settings_sorting_type">Orden por</string>
-    <string name="settings_sorting_type_dialog">Orden por</string>
+    <string name="settings_sorting_type_dialog">Ordenar por</string>
     <string name="settings_sorting_order">Orden</string>
     <string name="settings_sorting_order_dialog">Ordenar por</string>
     <string name="settings_summary_sort_type_alphabetic">Título</string>
@@ -61,12 +61,12 @@
     <string name="settings_summary_theme_light">Claro</string>
     <string name="settings_summary_theme_light_dark_ab">Claro, barra de acciones oscura</string>
     <string name="settings_cat_appearance">Aspecto</string>
-    <string name="settings_font_screen">Ajustes tipográficos</string>
-    <string name="settings_font_screen_summary">Puede cambiar el tipo y tamaño de la tipografía</string>
+    <string name="settings_font_screen">Ajustes del tipo de letra</string>
+    <string name="settings_font_screen_summary">Puede cambiar el tipo y tamaño de letra</string>
     <string name="settings_cat_font_editor">Editor</string>
-    <string name="settings_font_type">Tipografía</string>
-    <string name="settings_font_type_dialog">Seleccione una tipografía</string>
-    <string name="settings_font_size">Tamaño de la tipografía</string>
+    <string name="settings_font_type">Tipo de letra</string>
+    <string name="settings_font_type_dialog">Seleccione un tipo de letra</string>
+    <string name="settings_font_size">Tamaño de letra</string>
     <string name="preference_preview_text">Así es como se verá el texto en el editor</string>
     <string name="settings_text_preview_title">Previsualización</string>
     <string name="monospace">Monospace</string>
@@ -87,7 +87,7 @@
     <string name="no">No</string>
     <string name="ok">OK</string>
     <string name="show_from_all_lists">Todas las listas</string>
-    <string name="default_list_needed_warning">Seleccione primero una lista por defecto</string>
+    <string name="default_list_needed_warning">Seleccione primero una lista predeterminada</string>
     <string name="reverted">Cambios deshechos</string>
     <string name="notecopied">Copiado</string>
     <string name="deleted">Eliminado</string>

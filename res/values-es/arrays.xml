@@ -39,13 +39,13 @@
     </string-array>
 
     <string-array name="sync_freq_preference">
-        <item>Manualmente</item>
+        <item>Manual</item>
         <!-- <item>1 hora</item>
         <item>2 horas</item>
         <item>4 horas</item>
         <item>8 horas</item> -->
         <!-- <item>1 día</item> -->
-        <item>Automáticamente</item>
+        <item>Automática</item>
   </string-array>
 
 </resources>
