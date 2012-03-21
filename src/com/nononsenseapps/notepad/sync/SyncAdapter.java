@@ -19,7 +19,6 @@ package com.nononsenseapps.notepad.sync;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
-import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleDBTalker;
