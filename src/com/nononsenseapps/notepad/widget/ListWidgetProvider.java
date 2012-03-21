@@ -29,12 +29,13 @@ import android.widget.RemoteViews;
 import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.RightActivity;
 
 /**
  * Thewidget's AppWidgetProvider.
  */
 public class ListWidgetProvider extends AppWidgetProvider {
-	//private static final String TAG = "WIDGETPROVIDER";
+	// private static final String TAG = "WIDGETPROVIDER";
 	public static final String CLICK_ACTION = "com.nononsenseapps.notepad.widget.CLICK";
 	public static final String OPEN_ACTION = "com.nononsenseapps.notepad.widget.OPENAPP";
 	public static final String CREATE_ACTION = "com.nononsenseapps.notepad.widget.CREATE";
@@ -60,9 +61,10 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
 		Intent appIntent = new Intent();
-		appIntent.setClass(context, MainActivity.class);
-		appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+				| Intent.FLAG_ACTIVITY_CLEAR_TASK);
 		if (action.equals(OPEN_ACTION)) {
+			appIntent.setClass(context, MainActivity.class);
 			appIntent.setAction(Intent.ACTION_VIEW);
 			appIntent.setData(Uri.withAppendedPath(
 					NotePad.Lists.CONTENT_VISIBLE_ID_URI_BASE, Long
@@ -70,6 +72,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 									NotePad.Notes.COLUMN_NAME_LIST, -1))));
 			context.startActivity(appIntent);
 		} else if (action.equals(CREATE_ACTION)) {
+			appIntent.setClass(context, RightActivity.class);
 			appIntent.setData(NotePad.Notes.CONTENT_VISIBLE_URI);
 			appIntent.setAction(Intent.ACTION_INSERT);
 			appIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST,
@@ -77,13 +80,17 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			context.startActivity(appIntent);
 
 		} else if (action.equals(CLICK_ACTION)) {
+			appIntent.setClass(context, RightActivity.class);
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
-			long listId = intent.getLongExtra(EXTRA_LIST_ID, -1);
-			if (noteId > -1 && listId > -1) {
+			// long listId = intent.getLongExtra(EXTRA_LIST_ID, -1);
+			if (noteId > -1) {
 				appIntent.setData(Uri.withAppendedPath(
 						NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,
 						Long.toString(noteId)));
-				appIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
+				appIntent
+						.putExtra(NotePad.Notes.COLUMN_NAME_LIST, intent
+								.getLongExtra(NotePad.Notes.COLUMN_NAME_LIST,
+										-1));
 				appIntent.setAction(Intent.ACTION_EDIT);
 				context.startActivity(appIntent);
 			}
@@ -132,16 +139,16 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		SharedPreferences settings = context.getSharedPreferences(
 				ListWidgetConfigure.getSharedPrefsFile(appWidgetId),
 				Context.MODE_PRIVATE);
-//		String listTitle = settings.getString(
-//				ListWidgetConfigure.KEY_LIST_TITLE,
-//				context.getText(R.string.show_from_all_lists).toString());
-		
-		//String listTitle = context.getText(R.string.app_name).toString();
-		
+		// String listTitle = settings.getString(
+		// ListWidgetConfigure.KEY_LIST_TITLE,
+		// context.getText(R.string.show_from_all_lists).toString());
+
+		// String listTitle = context.getText(R.string.app_name).toString();
+
 		long listId = Long.parseLong(settings.getString(
 				ListWidgetConfigure.KEY_LIST,
 				Integer.toString(MainActivity.ALL_NOTES_ID)));
-		
+
 		String listTitle = getListTitle(context, settings, listId);
 		rv.setCharSequence(R.id.titleButton, "setText", listTitle);
 
@@ -151,10 +158,9 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		// will be
 		// ignored otherwise.
 		Intent onClickIntent = new Intent(context, ListWidgetProvider.class);
-		onClickIntent.setAction(ListWidgetProvider.CLICK_ACTION);
-		onClickIntent
-				.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		onClickIntent.setData(data);
+		onClickIntent.setAction(ListWidgetProvider.CLICK_ACTION)
+				.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+				.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId).setData(data);
 
 		PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(
 				context, 0, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -181,36 +187,36 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 		return rv;
 	}
-	
-	// Retrieve the list name from the database and set in shared preference
-		// file
-		private static String getListTitle(Context mContext, SharedPreferences settings, long listId) {
-			String title = mContext.getText(R.string.show_from_all_lists)
-					.toString();
-			if (listId == MainActivity.ALL_NOTES_ID) {
-				settings.edit()
-						.putString(
-								ListWidgetConfigure.KEY_LIST_TITLE,
-								title).commit();
-			} else {
-				Cursor c = mContext.getContentResolver().query(
-						NotePad.Lists.CONTENT_URI,
-						new String[] { NotePad.Lists._ID,
-								NotePad.Lists.COLUMN_NAME_TITLE },
-						NotePad.Lists._ID + " IS ?",
-						new String[] { Long.toString(listId) }, null);
 
-				if (c != null && c.moveToFirst()) {
-					title = c.getString(c
-							.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
-					settings.edit()
-							.putString(ListWidgetConfigure.KEY_LIST_TITLE, title)
-							.commit();
-				}
-				if (c != null)
-					c.close();
+	// Retrieve the list name from the database and set in shared preference
+	// file
+	private static String getListTitle(Context mContext,
+			SharedPreferences settings, long listId) {
+		String title = mContext.getText(R.string.show_from_all_lists)
+				.toString();
+		if (listId == MainActivity.ALL_NOTES_ID) {
+			settings.edit()
+					.putString(ListWidgetConfigure.KEY_LIST_TITLE, title)
+					.commit();
+		} else {
+			Cursor c = mContext.getContentResolver().query(
+					NotePad.Lists.CONTENT_URI,
+					new String[] { NotePad.Lists._ID,
+							NotePad.Lists.COLUMN_NAME_TITLE },
+					NotePad.Lists._ID + " IS ?",
+					new String[] { Long.toString(listId) }, null);
+
+			if (c != null && c.moveToFirst()) {
+				title = c.getString(c
+						.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
+				settings.edit()
+						.putString(ListWidgetConfigure.KEY_LIST_TITLE, title)
+						.commit();
 			}
-			
-			return title;
+			if (c != null)
+				c.close();
 		}
+
+		return title;
+	}
 }

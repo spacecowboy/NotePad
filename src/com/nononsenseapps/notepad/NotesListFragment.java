@@ -515,8 +515,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					// Otherwise we need to launch a new activity to display
 					// the dialog fragment with selected text.
 					Intent intent = new Intent();
-					// intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					intent.setClass(activity, MainActivity.class)
+					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+					intent.setClass(activity, RightActivity.class)
 							.setData(
 									Uri.withAppendedPath(
 											NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,

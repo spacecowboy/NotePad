@@ -172,8 +172,7 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	protected void goUp() {
 		Intent intent = new Intent();
-		intent.addFlags(
-				Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 				.setClass(this, MainActivity.class);
 
 		startActivity(intent);
@@ -338,14 +337,14 @@ public class MainActivity extends DualLayoutActivity implements
 
 			// Open appropriate list if tablet mode
 			if (list != null) {
-				long intentId = ALL_NOTES_ID;
-				if (intent.getExtras() != null) {
+				long intentId = -1;
+				if (intent.getExtras() != null && intent.getExtras().containsKey(NotePad.Notes.COLUMN_NAME_LIST)) {
 					intentId = intent.getExtras().getLong(
-							NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
+							NotePad.Notes.COLUMN_NAME_LIST, -1);
 				}
 				
 				// Change to the valid list if intent is crap
-				if (intentId != ALL_NOTES_ID && intentId != listId)
+				if (intentId != ALL_NOTES_ID && intentId == -1)
 					intentId = listId;
 
 				// Open the containing list if we have to. No need to change

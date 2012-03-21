@@ -88,7 +88,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		String space = "";
 		CharSequence dueDate = "";
 		long noteId = -1;
-		long localListId = -1;
+		//long localListId = -1;
 		if (mCursor.moveToPosition(position)) {
 			final int titleIndex = mCursor
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
@@ -96,15 +96,15 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
 			final int noteIndex = mCursor
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
-			final int listIndex = mCursor
-					.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST);
+//			final int listIndex = mCursor
+//					.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST);
 			final int indentIndex = mCursor
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL);
 			final int idIndex = mCursor.getColumnIndex(NotePad.Notes._ID);
 			title = mCursor.getString(titleIndex);
 			note = mCursor.getString(noteIndex);
 			noteId = mCursor.getLong(idIndex);
-			localListId = mCursor.getLong(listIndex);
+			//localListId = mCursor.getLong(listIndex);
 			String date = mCursor.getString(dateIndex);
 
 			// Get widget settings
@@ -140,10 +140,17 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 		// Set the click intent so that we can handle it and show a toast
 		// message
+		SharedPreferences settings = mContext.getSharedPreferences(
+				ListWidgetConfigure.getSharedPrefsFile(mAppWidgetId),
+				Context.MODE_PRIVATE);
+		long listId = Long.parseLong(settings.getString(
+				ListWidgetConfigure.KEY_LIST,
+				Integer.toString(MainActivity.ALL_NOTES_ID)));
+		
 		final Intent fillInIntent = new Intent();
 		final Bundle extras = new Bundle();
 		extras.putLong(ListWidgetProvider.EXTRA_NOTE_ID, noteId);
-		extras.putLong(ListWidgetProvider.EXTRA_LIST_ID, localListId);
+		extras.putLong(ListWidgetProvider.EXTRA_LIST_ID, listId);
 		fillInIntent.putExtras(extras);
 		rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
 

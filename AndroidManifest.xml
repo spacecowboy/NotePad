@@ -100,15 +100,7 @@
                  This filter says that we can view or edit the data of
                  a single note
             -->
-            <intent-filter android:label="@string/resolve_edit" >
-                <action android:name="android.intent.action.INSERT" />
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
-            </intent-filter>
+            
             <intent-filter android:label="@string/resolve_edit" >
                 <action android:name="android.intent.action.INSERT" />
                 <action android:name="android.intent.action.VIEW" />
@@ -137,6 +129,22 @@
                 android:name="android.app.searchable"
                 android:resource="@xml/searchable" />
         </activity>
+        <activity
+            android:name="RightActivity"
+            android:theme="@style/ThemeHolo"
+            android:noHistory="true" >
+            
+            <intent-filter android:label="@string/resolve_edit" >
+                <action android:name="android.intent.action.INSERT" />
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
+            </intent-filter>
+        </activity>
+        
         <activity
             android:name=".prefs.PrefsActivity"
             android:theme="@style/ThemeHolo" >
