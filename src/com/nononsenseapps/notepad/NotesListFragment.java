@@ -179,13 +179,15 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	public void handleNoteIntent(Intent intent) {
 		Log.d(TAG, "handleNoteIntent");
-		if (Intent.ACTION_EDIT.equals(intent.getAction())
-				|| Intent.ACTION_VIEW.equals(intent.getAction())) {
+		if (intent != null
+				&& (Intent.ACTION_EDIT.equals(intent.getAction()) || Intent.ACTION_VIEW
+						.equals(intent.getAction()))) {
 			// Are we displaying the correct list already?
-			long listId = intent.getExtras().getLong(
-					NotePad.Notes.COLUMN_NAME_LIST, -1);
-			if (listId == mCurListId
-					|| mCurListId == MainActivity.ALL_NOTES_ID) {
+			long listId = -1;
+			if (null != intent.getExtras())
+				listId = intent.getExtras().getLong(
+						NotePad.Notes.COLUMN_NAME_LIST, -1);
+			if (listId == mCurListId || mCurListId == MainActivity.ALL_NOTES_ID) {
 				// just highlight it
 				String newId = intent.getData().getPathSegments()
 						.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
@@ -224,8 +226,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	}
 
 	private void setupSearchView() {
-		
-			Log.d("NotesListFragment", "setup search view");
+
+		Log.d("NotesListFragment", "setup search view");
 		if (mSearchView != null) {
 			mSearchView.setIconifiedByDefault(true);
 			mSearchView.setOnQueryTextListener(this);
@@ -321,8 +323,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 			return true;
 		case R.id.menu_sync:
-			
-				Log.d("NotesListFragment", "Sync");
+
+			Log.d("NotesListFragment", "Sync");
 			String accountName = PreferenceManager.getDefaultSharedPreferences(
 					activity).getString(SyncPrefs.KEY_ACCOUNT, "");
 			boolean syncEnabled = PreferenceManager
@@ -408,8 +410,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			modeCallback.setDeleteListener(this);
 
 		if (savedInstanceState != null) {
-			
-				Log.d("NotesListFragment", "onCreate saved not null");
+
+			Log.d("NotesListFragment", "onCreate saved not null");
 			// mCurCheckPosition = savedInstanceState.getInt(SAVEDPOS);
 			// mCurId = savedInstanceState.getLong(SAVEDID);
 		}
@@ -418,8 +420,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-		
-			Log.d("NotesListFragment", "onSaveInstanceState");
+
+		Log.d("NotesListFragment", "onSaveInstanceState");
 		outState.putInt(SAVEDPOS, mCurCheckPosition);
 		outState.putLong(SAVEDID, mCurId);
 		outState.putLong(SAVEDLISTID, mCurListId);
@@ -439,8 +441,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
-		
-			Log.d("NotesListFragment", "onResume");
+
+		Log.d("NotesListFragment", "onResume");
 
 		activity.registerReceiver(syncFinishedReceiver, new IntentFilter(
 				SyncAdapter.SYNC_FINISHED));
@@ -477,8 +479,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			while (index >= mAdapter.getCount()) {
 				index = index - 1;
 			}
-			
-				Log.d(TAG, "showNote valid index to show is: " + index);
+
+			Log.d(TAG, "showNote valid index to show is: " + index);
 
 			if (index > -1) {
 				mCurCheckPosition = index;
@@ -486,32 +488,32 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 				if (activity.getCurrentContent().equals(
 						DualLayoutActivity.CONTENTVIEW.DUAL)) {
-					
-						Log.d("NotesLIstFragmenT", "It is dualPane!");
+
+					Log.d("NotesLIstFragmenT", "It is dualPane!");
 					// We can display everything in-place with fragments, so
 					// update
 					// the list to highlight the selected item and show the
 					// data.
-					
-						Log.d("NotesListFragment", "Showing note: " + mCurId
-								+ ", " + mCurCheckPosition);
+
+					Log.d("NotesListFragment", "Showing note: " + mCurId + ", "
+							+ mCurCheckPosition);
 
 					// Check what fragment is currently shown, replace if
 					// needed.
 					if (activity.getRightFragment() != null) {
 						// We want to know about changes here
-						
-							Log.d("NotesListFragment", "Would open note here: "
-									+ mCurId);
+
+						Log.d("NotesListFragment", "Would open note here: "
+								+ mCurId);
 						((NotesEditorFragment) activity.getRightFragment())
 								.displayNote(mCurId);
 					}
 
 				} else {
-					
-						Log.d("NotesListFragment",
-								"Showing note in SinglePane: id " + mCurId
-										+ ", pos: " + mCurCheckPosition);
+
+					Log.d("NotesListFragment",
+							"Showing note in SinglePane: id " + mCurId
+									+ ", pos: " + mCurCheckPosition);
 					// Otherwise we need to launch a new activity to display
 					// the dialog fragment with selected text.
 					Intent intent = new Intent();
@@ -545,8 +547,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	 * original
 	 */
 	public void onDelete() {
-		
-			Log.d(TAG, "onDelete");
+
+		Log.d(TAG, "onDelete");
 		// Only do anything if id is valid!
 		if (mCurId > -1) {
 			// if (onDeleteListener != null) {
@@ -574,8 +576,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				index = index - 1;
 			}
 
-			
-				Log.d(TAG, "ReCalculate valid index is: " + index);
+			Log.d(TAG, "ReCalculate valid index is: " + index);
 			if (index == -1) {
 				// Completely empty list.
 				mCurCheckPosition = 0;
@@ -592,8 +593,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	 */
 	public void reSelectId() {
 		int pos = getPosOfId(mCurId);
-		
-			Log.d(TAG, "reSelectId id pos: " + mCurId + " " + pos);
+
+		Log.d(TAG, "reSelectId id pos: " + mCurId + " " + pos);
 		// This happens in a search. Don't destroy id information in selectPos
 		// when it is invalid
 		if (pos != -1) {
@@ -726,11 +727,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	@Override
 	public boolean onQueryTextChange(String query) {
-		
-			Log.d("NotesListFragment", "onQueryTextChange: " + query);
+
+		Log.d("NotesListFragment", "onQueryTextChange: " + query);
 		if (!currentQuery.equals(query)) {
-			
-				Log.d("NotesListFragment", "this is a new query");
+
+			Log.d("NotesListFragment", "this is a new query");
 			currentQuery = query;
 
 			getLoaderManager().restartLoader(0, null, this);
@@ -760,15 +761,15 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (checkMode == CHECK_SINGLE_FUTURE) {
 			setSingleCheck();
 		}
-		
-			Log.d(TAG, "selectPos: " + pos);
+
+		Log.d(TAG, "selectPos: " + pos);
 		getListView().setItemChecked(pos, true);
 		getListView().setSelection(pos);
 	}
 
 	public void setSingleCheck() {
-		
-			Log.d(TAG, "setSingleCheck");
+
+		Log.d(TAG, "setSingleCheck");
 		checkMode = CHECK_SINGLE;
 		ListView lv = getListView();
 		if (activity.getCurrentContent().equals(
@@ -793,9 +794,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	}
 
 	public void setMultiCheck(int pos) {
-		
-			Log.d(TAG, "setMutliCheck: " + pos + " modeCallback = "
-					+ modeCallback);
+
+		Log.d(TAG, "setMutliCheck: " + pos + " modeCallback = " + modeCallback);
 		// Do this on long press
 		checkMode = CHECK_MULTI;
 		ListView lv = getListView();
@@ -811,13 +811,13 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	@Override
 	public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
 			int position, long id) {
-		
-			Log.d(TAG, "onLongClick");
+
+		Log.d(TAG, "onLongClick");
 		if (checkMode == CHECK_SINGLE) {
 			// get the position which was selected
-			
-				Log.d("NotesListFragment", "onLongClick, selected item pos: "
-						+ position + ", id: " + id);
+
+			Log.d("NotesListFragment", "onLongClick, selected item pos: "
+					+ position + ", id: " + id);
 			// change to multiselect mode and select that item
 			setMultiCheck(position);
 		} else {
@@ -831,28 +831,29 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		// On Honeycomb, we can set the state of the refresh button by giving it
 		// a custom
 		// action view.
-		
-			Log.d(TAG, "setRefreshActionState");
+
+		Log.d(TAG, "setRefreshActionState");
 		if (mOptionsMenu == null) {
-			
-				Log.d(TAG, "setRefreshActionState: menu is null, returning");
+
+			Log.d(TAG, "setRefreshActionState: menu is null, returning");
 			return;
 		}
 
 		final MenuItem refreshItem = mOptionsMenu.findItem(R.id.menu_sync);
-		
-			Log.d(TAG, "setRefreshActionState: refreshItem not null? "
-					+ Boolean.toString(refreshItem != null));
+
+		Log.d(TAG,
+				"setRefreshActionState: refreshItem not null? "
+						+ Boolean.toString(refreshItem != null));
 		if (refreshItem != null) {
 			if (refreshing) {
-				
-					Log.d(TAG,
-							"setRefreshActionState: refreshing: "
-									+ Boolean.toString(refreshing));
+
+				Log.d(TAG,
+						"setRefreshActionState: refreshing: "
+								+ Boolean.toString(refreshing));
 				if (mRefreshIndeterminateProgressView == null) {
-					
-						Log.d(TAG,
-								"setRefreshActionState: mRefreshIndeterminateProgressView was null, inflating one...");
+
+					Log.d(TAG,
+							"setRefreshActionState: mRefreshIndeterminateProgressView was null, inflating one...");
 					LayoutInflater inflater = (LayoutInflater) activity
 							.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 					mRefreshIndeterminateProgressView = inflater.inflate(
@@ -861,8 +862,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 				refreshItem.setActionView(mRefreshIndeterminateProgressView);
 			} else {
-				
-					Log.d(TAG, "setRefreshActionState: setting null actionview");
+
+				Log.d(TAG, "setRefreshActionState: setting null actionview");
 				refreshItem.setActionView(null);
 			}
 		}
@@ -971,8 +972,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		@Override
 		public boolean onCreateActionMode(android.view.ActionMode mode,
 				android.view.Menu menu) {
-			
-				Log.d("MODALMAN", "onCreateActionMode mode: " + mode);
+
+			Log.d("MODALMAN", "onCreateActionMode mode: " + mode);
 			// Clear data!
 			this.textToShare.clear();
 			this.notesToDelete.clear();
@@ -998,8 +999,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		@Override
 		public boolean onActionItemClicked(android.view.ActionMode mode,
 				android.view.MenuItem item) {
-			
-				Log.d("MODALMAN", "onActionItemClicked mode: " + mode);
+
+			Log.d("MODALMAN", "onActionItemClicked mode: " + mode);
 			switch (item.getItemId()) {
 			case R.id.modal_share:
 				shareNote(buildTextToShare());
@@ -1031,9 +1032,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 		@Override
 		public void onDestroyActionMode(android.view.ActionMode mode) {
-			
-				Log.d("modeCallback", "onDestroyActionMode: " + mode.toString()
-						+ ", " + mode.getMenu().toString());
+
+			Log.d("modeCallback", "onDestroyActionMode: " + mode.toString()
+					+ ", " + mode.getMenu().toString());
 			list.setFutureSingleCheck();
 		}
 
@@ -1102,8 +1103,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			int num = notesToDelete.size();
 			if (onDeleteListener != null) {
 				for (int pos : notesToDelete) {
-					
-						Log.d(TAG, "Deleting key: " + pos);
+
+					Log.d(TAG, "Deleting key: " + pos);
 				}
 				onDeleteListener.onModalDelete(notesToDelete);
 			}
@@ -1136,8 +1137,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		@Override
 		public boolean onCreateActionMode(android.view.ActionMode mode,
 				android.view.Menu menu) {
-			
-				Log.d("modeCallBack", "onCreateActionMode " + mode);
+
+			Log.d("modeCallBack", "onCreateActionMode " + mode);
 			this.textToShare.clear();
 			this.notesToDelete.clear();
 
@@ -1175,11 +1176,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	@Override
 	public void onModalDelete(Collection<Integer> positions) {
-		
-			Log.d(TAG, "onModalDelete");
+
+		Log.d(TAG, "onModalDelete");
 		if (positions.contains(mCurCheckPosition)) {
-			
-				Log.d(TAG, "onModalDelete contained setting id invalid");
+
+			Log.d(TAG, "onModalDelete contained setting id invalid");
 			idInvalid = true;
 		} else {
 			// We must recalculate the positions index of the current note
@@ -1188,16 +1189,16 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 		HashSet<Long> ids = new HashSet<Long>();
 		for (int pos : positions) {
-			
-				Log.d(TAG, "onModalDelete pos: " + pos);
+
+			Log.d(TAG, "onModalDelete pos: " + pos);
 			ids.add(mAdapter.getItemId(pos));
 		}
 		((MainActivity) activity).onMultiDelete(ids, mCurId);
 	}
 
 	public void showList(long id) {
-		
-			Log.d(TAG, "showList id " + id);
+
+		Log.d(TAG, "showList id " + id);
 		mCurListId = id;
 		// Will show note if necessary
 		Bundle args = new Bundle();
@@ -1274,8 +1275,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-		
-			Log.d(TAG, "onCreateLoader");
+
+		Log.d(TAG, "onCreateLoader");
 
 		if (args != null) {
 			if (args.containsKey(SHOULD_OPEN_NOTE)
@@ -1294,8 +1295,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		// Swap the new cursor in. (The framework will take care of closing the
 		// old cursor once we return.)
-		
-			Log.d(TAG, "onLoadFinished");
+
+		Log.d(TAG, "onLoadFinished");
 
 		mAdapter.swapCursor(data);
 
@@ -1339,8 +1340,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		// This is called when the last Cursor provided to onLoadFinished()
 		// above is about to be closed. We need to make sure we are no
 		// longer using it.
-		
-			Log.d(TAG, "onLoaderReset");
+
+		Log.d(TAG, "onLoaderReset");
 		mAdapter.swapCursor(null);
 	}
 
@@ -1353,8 +1354,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			String key) {
 		try {
 			if (activity.isFinishing()) {
-				
-					Log.d(TAG, "isFinishing, should not update");
+
+				Log.d(TAG, "isFinishing, should not update");
 				// Setting the summary now would crash it with
 				// IllegalStateException since we are not attached to a view
 			} else {
@@ -1369,8 +1370,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// stupid
 			// This catch prevents the app from crashing if we do something
 			// stupid
-			
-				Log.d(TAG, "Exception was caught: " + e.getMessage());
+
+			Log.d(TAG, "Exception was caught: " + e.getMessage());
 		}
 	}
 }
