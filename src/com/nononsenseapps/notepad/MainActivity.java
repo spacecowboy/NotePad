@@ -172,7 +172,7 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	protected void goUp() {
 		Intent intent = new Intent();
-		intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+		intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
 				.setClass(this, MainActivity.class);
 
 		startActivity(intent);
