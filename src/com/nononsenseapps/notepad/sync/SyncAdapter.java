@@ -79,7 +79,7 @@ import java.util.HashMap;
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 	private static final String TAG = "SyncAdapter";
-	public final static boolean SYNC_DEBUG_PRINTS = false;
+	public final static boolean SYNC_DEBUG_PRINTS = true;
 
 	// public static final String AUTH_TOKEN_TYPE =
 	// "oauth2:https://www.googleapis.com/auth/tasks";
@@ -90,6 +90,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 	public static final String SYNC_STARTED = "com.nononsenseapps.notepad.sync.SYNC_STARTED";
 	public static final String SYNC_FINISHED = "com.nononsenseapps.notepad.sync.SYNC_FINISHED";
 	private static final String PREFS_LAST_SYNC_ETAG = "lastserveretag";
+	private static final String PREFS_LAST_SYNC_DATE = "lastsyncdate";
 
 	private final AccountManager accountManager;
 
@@ -138,8 +139,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						// save
 						// that for now.
 						// This is the latest time we synced
-						String lastUpdated = dbTalker
-								.getLastUpdated(account.name);
+						//String lastUpdated = dbTalker.getLastUpdated(account.name);
+						String lastUpdate = settings.getString(PREFS_LAST_SYNC_DATE, null);
 						// Get the latest hash value we saw on the server
 						String localEtag = settings.getString(
 								PREFS_LAST_SYNC_ETAG, "");
@@ -193,7 +194,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 														+ list.id);
 									tasksInListToSaveToDB.put(list, list
 											.downloadModifiedTasks(apiTalker,
-													allTasks, lastUpdated));
+													allTasks, lastUpdate));
 								}
 							}
 						}
@@ -313,10 +314,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 										ContentResolver.SYNC_EXTRAS_UPLOAD,
 										false)) {
 							currentEtag = apiTalker.getEtag();
+							lastUpdate = dbTalker.getLastUpdated(account.name);
 						}
 
 						settings.edit()
 								.putString(PREFS_LAST_SYNC_ETAG, currentEtag)
+								.putString(PREFS_LAST_SYNC_DATE, lastUpdate)
 								.commit();
 
 						// Now, set sorting values.
