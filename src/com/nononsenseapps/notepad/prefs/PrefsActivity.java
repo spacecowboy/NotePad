@@ -52,11 +52,11 @@ public class PrefsActivity extends PreferenceActivity implements
 	}
 
 	/**
-	 * Launches the main activity with Flag CLEAR TOP
+	 * Launches the main activity
 	 */
 	private void goUp() {
 		Intent intent = new Intent();
-		intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+		intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		intent.setClass(this, MainActivity.class);
 
 		startActivity(intent);
