@@ -108,12 +108,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 			ContentProviderClient provider, SyncResult syncResult) {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(mContext);
-		
+
 		// Only sync if it has been enabled by the user, and account is selected
 		// Issue on reinstall where account approval is remembered by system
 		if (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)
-				&& !settings.getString(SyncPrefs.KEY_ACCOUNT, "")
-						.isEmpty()
+				&& !settings.getString(SyncPrefs.KEY_ACCOUNT, "").isEmpty()
 				&& account.name.equals(settings.getString(
 						SyncPrefs.KEY_ACCOUNT, ""))) {
 
@@ -167,11 +166,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						// lists if upload is not true
 
 						String serverEtag;
-						if (extras.getBoolean(ContentResolver.SYNC_EXTRAS_UPLOAD, false)) {
+						if (extras.getBoolean(
+								ContentResolver.SYNC_EXTRAS_UPLOAD, false)) {
 							serverEtag = localEtag;
 						} else {
-						serverEtag = apiTalker.getModifiedLists(
-								localEtag, allLocalLists, listsToSaveToDB);
+							serverEtag = apiTalker.getModifiedLists(localEtag,
+									allLocalLists, listsToSaveToDB);
 						}
 
 						// IF the tags match, then nothing has changed on
@@ -298,8 +298,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 									if (tasksInListToSaveToDB.get(list) == null)
 										tasksInListToSaveToDB.put(list,
 												new ArrayList<GoogleTask>());
-									tasksInListToSaveToDB.get(list).add(
-											result);
+									tasksInListToSaveToDB.get(list).add(result);
 								}
 							}
 						}
@@ -309,7 +308,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						// Only worth doing if we actually uploaded anything
 						// Also, only do this if we are doing a full sync
 						String currentEtag = serverEtag;
-						if (uploadedStuff && !extras.getBoolean(ContentResolver.SYNC_EXTRAS_UPLOAD, false)) {
+						if (uploadedStuff
+								&& !extras.getBoolean(
+										ContentResolver.SYNC_EXTRAS_UPLOAD,
+										false)) {
 							currentEtag = apiTalker.getEtag();
 						}
 
@@ -318,7 +320,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 								.commit();
 
 						// Now, set sorting values.
-						for (GoogleTaskList list : tasksInListToSaveToDB.keySet()) {
+						for (GoogleTaskList list : tasksInListToSaveToDB
+								.keySet()) {
 							if (SYNC_DEBUG_PRINTS)
 								Log.d(TAG, "Setting position values in: "
 										+ list.id);
@@ -329,7 +332,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 									Log.d(TAG,
 											"Setting position values for #tasks: "
 													+ tasks.size());
-								ArrayList<GoogleTask> allListTasks = allTasksInList.get(list.dbId);
+								ArrayList<GoogleTask> allListTasks = allTasksInList
+										.get(list.dbId);
 								list.setSortingValues(tasks, allListTasks);
 							}
 						}
@@ -340,8 +344,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						dbTalker.SaveToDatabase(listsToSaveToDB,
 								tasksInListToSaveToDB);
 						// Commit it
-						 ContentProviderResult[] result = dbTalker.apply();
-						 Log.d(TAG, "Batched items: " + result.length);
+						ContentProviderResult[] result = dbTalker.apply();
+						Log.d(TAG, "Batched items: " + result.length);
 
 						if (SYNC_DEBUG_PRINTS)
 							Log.d(TAG, "Sync Complete!");
