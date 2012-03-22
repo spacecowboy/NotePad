@@ -26,7 +26,7 @@
     <string name="menu_copy">Copiar nota</string>
     <string name="menu_cancel">Cancelar</string>
     <string name="menu_setcompleted">Hecho</string>
-    <string name="menu_setuncompleted">No echo</string>
+    <string name="menu_setuncompleted">No hecho</string>
     <string name="menu_deletelist">Eliminar lista</string>
     <string name="menu_sync">Actualizar</string>
     <string name="menu_share">Compartir</string>
@@ -34,8 +34,8 @@
     <string name="menu_renamelist">Renombrar lista</string>
     <string name="menu_createlist">Crear lista</string>
     <string name="menu_clearcompleted">Borrar completadas</string>
-    <string name="menu_setdefaultlist">Establecer como lista predeterminada</string>
-    <string name="delete_list_warning">¿Está seguro de que quiere eliminar la lista? Se borrará permanentemente.</string>
+    <string name="menu_setdefaultlist">Establecer como predeterminada</string>
+    <string name="delete_list_warning">¿Está seguro de que quiere borrar la lista? Se eliminará permanentemente.</string>
     <string name="editor_due_date_hint">Fecha</string>
     <string name="editor_title_hint">Título</string>
     <string name="editor_note_hint">Nota</string>
@@ -50,7 +50,7 @@
     <string name="settings_sorting_type">Orden por</string>
     <string name="settings_sorting_type_dialog">Ordenar por</string>
     <string name="settings_sorting_order">Orden</string>
-    <string name="settings_sorting_order_dialog">Ordenar por</string>
+    <string name="settings_sorting_order_dialog">Orden</string>
     <string name="settings_summary_sort_type_alphabetic">Título</string>
     <string name="settings_summary_sort_type_modified">Fecha de modificación</string>
     <string name="settings_summary_sort_type_duedate">Fecha</string>
@@ -75,7 +75,7 @@
     <string name="settings_sync_freq_title">Frecuencia de actualización</string>
     <string name="settings_account_title">Seleccione una cuenta</string>
     <string name="settings_account_summary">Pulse para elegir la cuenta</string>
-    <string name="settings_sync_enable_title">Sincronización con Google Tasks</string>
+    <string name="settings_sync_enable_title">Sincroniz. con Google Tasks</string>
     <string name="settings_sync_enable_summary">Sincronizar notas con su cuenta de Google</string>
     <string name="settings_cat_syncing">Sincronización</string>
     <string name="manual">Manual</string>
@@ -105,7 +105,7 @@
     <string name="settings_list_dialog">Seleccione una lista</string>
     <string name="settings_list">Lista</string>
     <string name="settings_list_summary"></string>
-    <string name="automatic">Automático</string>
+    <string name="automatic">Automática</string>
 
     <string name="lock_note">Bloquear nota</string>
     <string name="unlock_note">Desbloquear nota</string>
@@ -123,7 +123,7 @@
     <string name="apply">Aplicar</string>
     <string name="clear_password">Borrar contraseña</string>
     <string name="password_info"> Establecer una contraseña requerirá que la introduzca
-        para que se muestren las notas bloqueadas. Sólo protegerá el campo Nota, así que seguirá habiendo acceso
+        para que se muestren las notas bloqueadas. Sólo protegerá el campo Nota, por lo que seguirá habiendo acceso
         libre al título y a la fecha. No encripta la nota de ningún modo, así que se podrá seguir viendo 
         en Google mail/calendar. Si olvida la contraseña, sincronice con Google y
         después reinstale la aplicación.</string>
