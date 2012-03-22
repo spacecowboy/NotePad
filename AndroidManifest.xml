@@ -27,7 +27,7 @@
     package="com.nononsenseapps.notepad"
     
     android:versionCode="26"
-    android:versionName="3.2.3" >
+    android:versionName="3.2.3" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- App crashes on 3.0. No one uses 3.1. So minimum version is set to 3.2 now -->
     <uses-sdk
@@ -160,7 +160,8 @@
 
         <service
             android:name=".sync.SyncService"
-            android:exported="true" >
+            android:exported="true"
+            tools:ignore="ExportedService" >
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>

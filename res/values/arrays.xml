@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string-array name="theme_preference">
         <item>Dark</item>
         <item>Light</item>
     </string-array>
 
-    <string-array name="themevalues_preference">
+    <string-array name="themevalues_preference"  tools:ignore="MissingTranslation">
         <item>dark</item>
         <item>light</item>
     </string-array>
@@ -17,7 +17,7 @@
         <item>User specified</item>
     </string-array>
 
-    <string-array name="sortingvalues_preference">
+    <string-array name="sortingvalues_preference"  tools:ignore="MissingTranslation">
         <item>title COLLATE NOCASE</item>
         <item>duedate</item>
         <item>modified</item>
@@ -29,18 +29,18 @@
         <item>Descending</item>
     </string-array>
 
-    <string-array name="sorting_ordervalues_preference">
+    <string-array name="sorting_ordervalues_preference"  tools:ignore="MissingTranslation">
         <item>ASC</item>
         <item>DESC</item>
     </string-array>
     
-    <string-array name="font_type_preference">
+    <string-array name="font_type_preference" tools:ignore="MissingTranslation">
         <item>Sans</item>
         <item>Serif</item>
         <item>Monospace</item>
     </string-array>
 
-    <string-array name="font_typevalues_preference">
+    <string-array name="font_typevalues_preference"  tools:ignore="MissingTranslation">
         <item>Sans</item>
         <item>Serif</item>
         <item>Monospace</item>
@@ -54,7 +54,7 @@
         <!-- <item>1 day</item> -->
         <item>Automatically</item>
 	</string-array>
-	<string-array name="sync_freqvalues_preference">
+	<string-array name="sync_freqvalues_preference"  tools:ignore="MissingTranslation">
 	    <item>0</item>
         <!-- <item>60</item>
         <item>120</item>

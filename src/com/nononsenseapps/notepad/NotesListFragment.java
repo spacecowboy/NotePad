@@ -51,6 +51,7 @@ import android.provider.BaseColumns;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.annotation.TargetApi;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.view.Menu;
@@ -1139,6 +1140,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	}
 
+	@TargetApi(14)
 	private class ModeCallbackICS extends ModeCallbackHC {
 
 		protected ShareActionProvider actionProvider;

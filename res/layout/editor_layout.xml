@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="?editorBackgroundColor"
     android:fillViewport="true"
-    android:background="?editorBackgroundColor" >
+    tools:ignore="Overdraw" >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="16dp"
+        android:orientation="vertical"
         android:paddingBottom="0dp"
         android:paddingLeft="16dp"
-    	android:paddingRight="16dp"
-    	android:orientation="vertical">
+        android:paddingRight="16dp"
+        android:paddingTop="16dp" >
 
         <RelativeLayout
             android:id="@+id/taskStuffContainer"
@@ -27,7 +29,6 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:hint="@string/editor_title_hint"
-                android:capitalize="sentences"
                 android:inputType="textMultiLine"
                 android:padding="5dp"
                 android:textStyle="bold" >
@@ -56,8 +57,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:background="?btn_default_selector"
-                    android:src="?content_remove"
-                    android:contentDescription="Clear due date"/>
+                    android:contentDescription="Clear due date"
+                    android:src="?content_remove" />
             </LinearLayout>
         </RelativeLayout>
 
@@ -67,11 +68,10 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="top"
-            android:capitalize="sentences"
             android:hint="@string/editor_note_hint"
             android:inputType="textMultiLine" >
-            <!-- 
-            android:autoLink="web|email|map" Was bad user experience -->
+
+<!--             android:autoLink="web|email|map" Was bad user experience -->
         </com.nononsenseapps.ui.TabbingEditText>
     </LinearLayout>
 

@@ -15,6 +15,7 @@
 -->
 
 <resources>
+    <string name="app_name">Notes</string>
 
     <string name="title_create">Новая запись</string>
     <string name="title_edit">Редактировать: %1$s</string>
@@ -105,6 +106,16 @@
     <string name="permission_read_desc">Разрешить приложению читать записи и связанные списки.</string>
     <string name="permission_write_label">изменять записи и списки</string>
     <string name="permission_write_desc">Разрешить приложению добавлять, изменять и удалять записи и списки.</string>
+    
+    <string name="monospace">Monospace</string>
+    <string name="sans">Sans</string>
+    <string name="serif">Serif</string>
+    <string name="settings_header_list_summary"></string>
+    <string name="settings_header_appearance">@string/settings_cat_appearance</string>
+    <string name="settings_header_appearance_summary"></string>
+    <string name="settings_header_sync">@string/settings_cat_syncing</string>
+    <string name="settings_header_sync_summary"></string>
+    <string name="settings_list_summary"></string>
 
     <string name="settings_header_list">Настройки списков</string>
     <string name="settings_list_dialog">Выберите список</string>

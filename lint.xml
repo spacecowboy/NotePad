@@ -14,6 +14,7 @@
         <ignore path="res\values-hu-v14" />
         <ignore path="res\values-it-v14" />
         <ignore path="res\values-iw" />
+        <ignore path="res\values-pt" />
         <ignore path="res\values-ru-v14" />
         <ignore path="res\values-sv-v14" />
     </issue>

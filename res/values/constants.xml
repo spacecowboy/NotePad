@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- Provides constants and default values -->
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
 	<integer name="default_editor_font_size">18</integer>
 	<string name="gtask_status_uncompleted">needsAction</string>
 	<string name="gtask_status_completed">completed</string>

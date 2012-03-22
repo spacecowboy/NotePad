@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" >
 
     <string name="app_name">Notes</string>
     <string name="title_create">New note</string>
@@ -131,7 +131,7 @@
     <string name="about">About</string>
 
     <!-- These should probably not be translated -->
-    <string name="about_text">Thank you for downloading my app! I try my best to make this app awesome in every way but there will always be bugs and things can always get more awesome!\n
+    <string tools:ignore="MissingTranslation" name="about_text">Thank you for downloading my app! I try my best to make this app awesome in every way but there will always be bugs and things can always get more awesome!\n
 
 \nIf you\'ve found a bug, a translation being wrong or simply have an idea on how to make this app more awesome then I want to hear about it!
 \nSend me a mail: jonas@nononsenseapps.com

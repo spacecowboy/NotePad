@@ -3,49 +3,41 @@
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
+    android:key="preference_text_preview_holder"
     android:minHeight="?android:attr/listPreferredItemHeight"
+    android:paddingBottom="4dp"
     android:paddingLeft="@dimen/preference_screen_side_margin"
     android:paddingRight="@dimen/preference_screen_side_margin"
     android:paddingTop="8dp"
-    android:paddingBottom="4dp"
-    
-    android:key="preference_text_preview_holder" >
+    android:orientation="vertical" >
 
-    <RelativeLayout
+    <!--
+        android:layout_marginBottom="0dp"
+        android:layout_marginRight="8dip"
+        android:layout_marginTop="0dp"
+    -->
+
+    <TextView
+        android:id="@+android:id/title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        
-        android:layout_weight="1" >
-        
-        <!--  android:layout_marginBottom="0dp"
-        android:layout_marginRight="8dip"
-        android:layout_marginTop="0dp" -->
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
-        <TextView
-            android:id="@+android:id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:fadingEdge="horizontal"
-            android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-
-        <TextView
-            android:id="@+id/prefTextPreview"
-            android:layout_width="fill_parent"
-            android:layout_height="90dp"
-            
-            android:ellipsize="marquee"
-            android:fadingEdge="horizontal"
-            android:layout_alignLeft="@android:id/title"
-            android:layout_below="@android:id/title"
-            android:background="@android:color/background_light"
-            android:textColor="@android:color/black"
-            android:text="@string/preference_preview_text"
-            android:paddingLeft="8dp"
-            android:paddingTop="8dp"
-            android:paddingBottom="0dp"
-            android:paddingRight="8dp" />
-    </RelativeLayout>
+    <TextView
+        android:id="@+id/prefTextPreview"
+        android:layout_width="fill_parent"
+        android:layout_height="90dp"
+        android:background="@android:color/background_light"
+        android:ellipsize="marquee"
+        android:fadingEdge="horizontal"
+        android:paddingBottom="0dp"
+        android:paddingLeft="8dp"
+        android:paddingRight="8dp"
+        android:paddingTop="8dp"
+        android:text="@string/preference_preview_text"
+        android:textColor="@android:color/black" />
 
 </LinearLayout>

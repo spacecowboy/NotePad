@@ -19,6 +19,7 @@ package com.nononsenseapps.notepad;
 import java.util.Calendar;
 import java.util.TimeZone;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.LoaderManager;
 import android.app.DatePickerDialog.OnDateSetListener;
@@ -994,6 +995,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		}
 	}
 
+	@TargetApi(14)
 	private void setActionShareIntent() {
 		if (getResources()
 				.getBoolean(R.bool.atLeastIceCreamSandwich) && shareActionProvider != null) {
