@@ -12,7 +12,7 @@
         <item name="content_copy">@drawable/content_copy_dark </item>
         <item name="content_paste">@drawable/content_paste_dark </item>
         <item name="content_undo">@drawable/content_undo_dark </item>
-        <item name="content_remove">@drawable/content_remove_dark </item>
+        <item name="content_remove">@drawable/content_remove_light </item>
         <item name="social_share">@drawable/social_share_dark </item>
         <item name="device_access_secure">@drawable/device_access_secure_dark</item>
         <item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
