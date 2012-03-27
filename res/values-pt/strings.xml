@@ -106,7 +106,9 @@
     <string name="settings_list">Lista</string>
     <string name="settings_list_summary"></string>
     <string name="automatic">Automaticamente</string>
- 
+    <string name="preferences_week_start_day_title" msgid="4619489296444901622">"A semana começa em"</string>
+    <string name="preferences_week_start_day_dialog" msgid="5181634128884089113">"A semana começa em"</string>
+
     <string name="lock_note">Bloquear nota</string>
     <string name="unlock_note">Desbloquear nota</string>
     <string name="locked">Bloqueada</string>

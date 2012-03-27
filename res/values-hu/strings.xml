@@ -106,6 +106,8 @@
     <string name="settings_list">Lista</string>
     <string name="settings_list_summary"></string>
     <string name="automatic">Automatikus</string>
+    <string name="preferences_week_start_day_title" msgid="4619489296444901622">"A hét kezdőnapja"</string>
+    <string name="preferences_week_start_day_dialog" msgid="5181634128884089113">"A hét kezdőnapja"</string>
 
     <string name="lock_note">Zárolás</string>
     <string name="unlock_note">Feloldás</string>

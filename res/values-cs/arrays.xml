@@ -33,4 +33,11 @@
         <item>Automaticky</item>
 	</string-array>
 
+    <string-array name="preferences_week_start_day_labels">
+        <item msgid="986150274035512339">"Výchozí hodnota národního prostředí"</item>
+        <item msgid="134027225275475280">"Sobota"</item>
+        <item msgid="95029346069903091">"Neděle"</item>
+        <item msgid="5840983116375063739">"Pondělí"</item>
+    </string-array>
+
 </resources>

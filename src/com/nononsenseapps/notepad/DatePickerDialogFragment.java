@@ -16,6 +16,8 @@
 
 package com.nononsenseapps.notepad;
 
+import com.nononsenseapps.notepad.prefs.MainPrefs;
+
 import java.util.Calendar;
 
 import android.app.Activity;
@@ -24,6 +26,7 @@ import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.os.Bundle;
 import android.text.format.Time;
 import android.widget.CalendarView;
@@ -53,8 +56,15 @@ public class DatePickerDialogFragment extends DialogFragment {
      * @return the first day of week in android.text.format.Time
      */
     public static int getFirstDayOfWeek(Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        String pref = prefs.getString(MainPrefs.KEY_WEEK_START_DAY, MainPrefs.WEEK_START_DEFAULT);
 
-        int startDay = Calendar.getInstance().getFirstDayOfWeek();
+        int startDay;
+        if (MainPrefs.WEEK_START_DEFAULT.equals(pref)) {
+            startDay = Calendar.getInstance().getFirstDayOfWeek();
+        } else {
+            startDay = Integer.parseInt(pref);
+        }
 
         if (startDay == Calendar.SATURDAY) {
             return Time.SATURDAY;
