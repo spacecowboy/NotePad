@@ -6,4 +6,12 @@ package com.nononsenseapps.notepad;
  */
 public class RightActivity extends MainActivity {
 
+	/**
+	 * Launches the main activity
+	 */
+	@Override
+	protected void goUp() {
+		finish();
+		super.goUp();
+	}
 }
