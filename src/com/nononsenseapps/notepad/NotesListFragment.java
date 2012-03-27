@@ -141,14 +141,35 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						setRefreshActionItemState(true);
 					}
 				});
-			} else {
+			} else if (intent.getAction().equals(SyncAdapter.SYNC_FINISHED)) {
 				activity.runOnUiThread(new Runnable() {
 					@Override
 					public void run() {
 						setRefreshActionItemState(false);
 					}
 				});
+				tellUser(context, intent.getExtras().getInt(SyncAdapter.SYNC_RESULT));
 			}
+		}
+
+		private void tellUser(Context context, int result) {
+			String text = "";
+			switch (result) {
+			case SyncAdapter.ERROR:
+				text = "Sync did not succeed";
+				break;
+			case SyncAdapter.LOGIN_FAIL:
+				text = "Login failed, could not access Google Tasks";
+				break;
+			case SyncAdapter.SUCCESS:
+				//text = "Success";
+				//break;
+			default:
+				return;
+			}
+
+			Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
+			toast.show();
 		}
 	};
 

@@ -40,6 +40,7 @@ import android.os.Bundle;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -88,6 +89,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 	public static final boolean NOTIFY_AUTH_FAILURE = true;
 	public static final String SYNC_STARTED = "com.nononsenseapps.notepad.sync.SYNC_STARTED";
 	public static final String SYNC_FINISHED = "com.nononsenseapps.notepad.sync.SYNC_FINISHED";
+	
+	public static final String SYNC_RESULT = "com.nononsenseapps.notepad.sync.SYNC_RESULT";
+	public static final int SUCCESS = 0;
+	public static final int LOGIN_FAIL = 1;
+	public static final int ERROR = 2;
+	
 	private static final String PREFS_LAST_SYNC_ETAG = "lastserveretag";
 	private static final String PREFS_LAST_SYNC_DATE = "lastsyncdate";
 
@@ -120,6 +127,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 				Log.d(TAG, "onPerformSync");
 			Intent i = new Intent(SYNC_STARTED);
 			mContext.sendBroadcast(i);
+			// For later
+			Intent doneIntent = new Intent(SYNC_FINISHED);
+			doneIntent.putExtra(SYNC_RESULT, ERROR);
+			
 			// Initialize necessary stuff
 			GoogleDBTalker dbTalker = new GoogleDBTalker(account.name, provider);
 			GoogleAPITalker apiTalker = new GoogleAPITalker();
@@ -351,6 +362,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 						if (SYNC_DEBUG_PRINTS)
 							Log.d(TAG, "Sync Complete!");
+						doneIntent.putExtra(SYNC_RESULT, SUCCESS);
 
 					} catch (ClientProtocolException e) {
 						if (SYNC_DEBUG_PRINTS)
@@ -383,6 +395,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						Log.d(TAG,
 								"Could not get authToken. Reporting authException");
 					syncResult.stats.numAuthExceptions++;
+					doneIntent.putExtra(SYNC_RESULT, LOGIN_FAIL);
 				}
 
 			} finally {
@@ -390,8 +403,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 				if (apiTalker != null) {
 					apiTalker.closeClient();
 				}
-				Intent j = new Intent(SYNC_FINISHED);
-				mContext.sendBroadcast(j);
+				
+				mContext.sendBroadcast(doneIntent);
 
 				if (SYNC_DEBUG_PRINTS)
 					Log.d(TAG, "SyncResult: " + syncResult.toDebugString());
