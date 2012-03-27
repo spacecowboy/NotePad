@@ -109,7 +109,7 @@
 
     <string name="preferences_week_start_day_dialog">Week starts on</string>
     <string name="preferences_week_start_day_title">Week starts on</string>
-    <string name="preferences_week_start_day_default">-1</string>
+    <string name="preferences_week_start_day_default" tools:ignore="MissingTranslation" >-1</string>
 
     <!-- Un-translated yet -->
     <string name="lock_note">Lock note</string>
