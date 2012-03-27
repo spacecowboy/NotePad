@@ -36,6 +36,7 @@ public class MainPrefs extends PreferenceFragment implements
 	public static final String KEY_FONT_TYPE_EDITOR = "key_font_type_editor";
 	public static final String KEY_FONT_SIZE_EDITOR = "key_font_size_editor";
 	public static final String KEY_TEXT_PREVIEW = "key_text_preview";
+	public static final String KEY_WEEK_START_DAY = "preferences_week_start_day";
 
 	public static final String SANS = "Sans";
 	public static final String SERIF = "Serif";
@@ -50,10 +51,16 @@ public class MainPrefs extends PreferenceFragment implements
 	public static final String MODIFIEDSORT = "modified";
 	public static final String POSSUBSORT = "possubsort";
 
+	public static final String WEEK_START_DEFAULT = "-1";
+	public static final String WEEK_START_SATURDAY = "7";
+	public static final String WEEK_START_SUNDAY = "1";
+	public static final String WEEK_START_MONDAY = "2";
+
 	private ListPreference prefSortOrder;
 	private ListPreference prefSortType;
 	private ListPreference prefTheme;
 	private ListPreference prefFontType;
+	private ListPreference prefWeekStart;
 
 	private Activity activity;
 
@@ -74,6 +81,7 @@ public class MainPrefs extends PreferenceFragment implements
 		prefSortType = (ListPreference) findPreference(KEY_SORT_TYPE);
 		prefTheme = (ListPreference) findPreference(KEY_THEME);
 		prefFontType = (ListPreference) findPreference(KEY_FONT_TYPE_EDITOR);
+		prefWeekStart = (ListPreference) findPreference(KEY_WEEK_START_DAY);
 
 		SharedPreferences sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(activity);
@@ -85,6 +93,7 @@ public class MainPrefs extends PreferenceFragment implements
 		prefSortType.setSummary(prefSortType.getEntry());
 		prefTheme.setSummary(prefTheme.getEntry());
 		prefFontType.setSummary(prefFontType.getEntry());
+		prefWeekStart.setSummary(prefWeekStart.getEntry());
 	}
 
 	@Override
@@ -109,6 +118,8 @@ public class MainPrefs extends PreferenceFragment implements
 					prefSortOrder.setSummary(prefSortOrder.getEntry());
 				} else if (KEY_FONT_TYPE_EDITOR.equals(key)) {
 					prefFontType.setSummary(prefFontType.getEntry());
+				} else if (KEY_WEEK_START_DAY.equals(key)) {
+					prefWeekStart.setSummary(prefWeekStart.getEntry());
 				} else if (KEY_FONT_SIZE_EDITOR.equals(key)) {
 				}
 			}
