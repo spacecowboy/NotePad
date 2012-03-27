@@ -28,4 +28,11 @@
         <item>Automatique</item>
 	</string-array>
 
+    <string-array name="preferences_week_start_day_labels">
+        <item msgid="986150274035512339">"Paramètres régionaux par défaut"</item>
+        <item msgid="134027225275475280">"Samedi"</item>
+        <item msgid="95029346069903091">"Dimanche"</item>
+        <item msgid="5840983116375063739">"Lundi"</item>
+    </string-array>
+
 </resources>
