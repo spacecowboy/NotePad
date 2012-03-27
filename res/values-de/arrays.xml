@@ -33,4 +33,11 @@
         <item>Automatisch</item>
 	</string-array>
 
+    <string-array name="preferences_week_start_day_labels">
+        <item msgid="986150274035512339">"Gebietsschema - Standard"</item>
+        <item msgid="134027225275475280">"Samstag"</item>
+        <item msgid="95029346069903091">"Sonntag"</item>
+        <item msgid="5840983116375063739">"Montag"</item>
+    </string-array>
+
 </resources>

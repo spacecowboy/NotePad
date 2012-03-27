@@ -121,6 +121,8 @@
     <string name="settings_list_dialog">Выберите список</string>
     <string name="settings_list">Список</string>
     <string name="automatic">Автоматически</string>
+    <string name="preferences_week_start_day_title" msgid="4619489296444901622">"Начало недели:"</string>
+    <string name="preferences_week_start_day_dialog" msgid="5181634128884089113">"Начало недели:"</string>
 
     <string name="lock_note">Заблокировать запись</string>
     <string name="unlock_note">Разблокировать запись</string>
