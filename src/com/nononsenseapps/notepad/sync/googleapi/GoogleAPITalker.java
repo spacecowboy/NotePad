@@ -289,7 +289,7 @@ public class GoogleAPITalker {
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
 		JSONObject jsonResponse;
-		// try {
+		
 		jsonResponse = (JSONObject) new JSONTokener(
 				parseResponse(client.execute(httpget))).nextValue();
 

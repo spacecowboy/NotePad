@@ -387,6 +387,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						Log.d(TAG,
 								"Joined operation failed: "
 										+ e.getLocalizedMessage());
+					} catch (ClassCastException e) {
+						// GetListofLists will cast this if it returns a string. It should not return a string
+						// but it did...
+						Log.d(TAG, "ClassCastException: " + e.getLocalizedMessage());
 					}
 
 				} else {
