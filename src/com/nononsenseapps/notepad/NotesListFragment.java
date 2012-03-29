@@ -1051,6 +1051,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				ClipboardManager clipboard = (ClipboardManager) activity
 						.getSystemService(Context.CLIPBOARD_SERVICE);
 				// ICS style
+				// TODO remove hardcoded strings
 				clipboard.setPrimaryClip(ClipData.newPlainText("Note",
 						buildTextToShare()));
 				Toast.makeText(
@@ -1096,6 +1097,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				mode.setSubtitle(null);
 				break;
 			case 1:
+				// TODO remove hard coded strings
 				mode.setSubtitle("One item selected");
 				break;
 			default:
