@@ -181,45 +181,48 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 *            if True, will create new if the id is -1
 	 */
 	private void openNote(Bundle savedInstanceState) {
-		
-			Log.d("NotesEditorFragment", "OpenNOTe: Id is " + id);
-		selfAction = false;
-		doSave = true;
-		opened = true;
-		if (id != -1) {
-			// Existing note
-			mUri = getUriFrom(id);
-			
+		// Just make sure we are attached
+		if (!activity.isFinishing() && super.isVisible()) {
+			selfAction = false;
+			doSave = true;
+			opened = true;
+			if (id != -1) {
+				// Existing note
+				mUri = getUriFrom(id);
+
 				Log.d("NotesEditorFragment", "Editing existing note, uri = "
 						+ mUri.toString());
-		}
-		// Just in case mUri failed some how...
-		if (id == -1 || mUri == null) {
-			// Invalid id
-			// Closes the activity.
-			activity.finish();
-			return;
-		} else {
-
-			// Load original data if exists
-			if (savedInstanceState != null) {
-				mOriginalNote = savedInstanceState.getString(ORIGINAL_NOTE);
-				mOriginalDueDate = savedInstanceState.getString(ORIGINAL_DUE);
-				mOriginalTitle = savedInstanceState.getString(ORIGINAL_TITLE);
-				mOriginalDueState = savedInstanceState
-						.getBoolean(ORIGINAL_DUE_STATE);
-			} else {
-				// If null, will set to current values in showNote
-				mOriginalNote = null;
-				mOriginalDueDate = null;
-				mOriginalTitle = null;
-				mOriginalDueState = false;
 			}
+			// Just in case mUri failed some how...
+			if (id == -1 || mUri == null) {
+				// Invalid id
+				// Closes the activity.
+				activity.finish();
+				return;
+			} else {
 
-			// Prepare the loader. Either re-connect with an existing one,
-			// or start a new one. Will open the note
-			id = getIdFromUri(mUri);
-			getLoaderManager().restartLoader(0, null, this);
+				// Load original data if exists
+				if (savedInstanceState != null) {
+					mOriginalNote = savedInstanceState.getString(ORIGINAL_NOTE);
+					mOriginalDueDate = savedInstanceState
+							.getString(ORIGINAL_DUE);
+					mOriginalTitle = savedInstanceState
+							.getString(ORIGINAL_TITLE);
+					mOriginalDueState = savedInstanceState
+							.getBoolean(ORIGINAL_DUE_STATE);
+				} else {
+					// If null, will set to current values in showNote
+					mOriginalNote = null;
+					mOriginalDueDate = null;
+					mOriginalTitle = null;
+					mOriginalDueState = false;
+				}
+
+				// Prepare the loader. Either re-connect with an existing one,
+				// or start a new one. Will open the note
+				id = getIdFromUri(mUri);
+				getLoaderManager().restartLoader(0, null, this);
+			}
 		}
 	}
 
@@ -258,25 +261,21 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// Only compare dates if there actually is a previous date to
 			// compare
 			if (!hasNoteChanged()) {
-				
-					Log.d("NotesEditorFragment",
-							"Note has not changed, won't save");
+
+				Log.d("NotesEditorFragment", "Note has not changed, won't save");
 				// Do Nothing in this case.
 			} else {
-				
-					Log.d("NotesEditorFragment", "Updating note");
-				
-					Log.d("NotesEditorFragment",
-							"" + text.equals(mOriginalNote));
-				
-					Log.d("NotesEditorFragment",
-							"" + title.equals(mOriginalTitle));
-				
-					Log.d("NotesEditorFragment", "" + due + " "
-							+ mOriginalDueDate);
-				
-					Log.d("NotesEditorFragment", ""
-							+ (dueDateSet == mOriginalDueState));
+
+				Log.d("NotesEditorFragment", "Updating note");
+
+				Log.d("NotesEditorFragment", "" + text.equals(mOriginalNote));
+
+				Log.d("NotesEditorFragment", "" + title.equals(mOriginalTitle));
+
+				Log.d("NotesEditorFragment", "" + due + " " + mOriginalDueDate);
+
+				Log.d("NotesEditorFragment", ""
+						+ (dueDateSet == mOriginalDueState));
 
 				// Sets up a map to contain values to be updated in the
 				// provider.
@@ -341,10 +340,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				 * the block will be momentary, but in a real app you should use
 				 * android.content.AsyncQueryHandler or android.os.AsyncTask.
 				 */
-				
-					Log.d("NotesEditorFragment", "URI: " + mUri);
-				
-					Log.d("NotesEditorFragment", "values: " + values.toString());
+
+				Log.d("NotesEditorFragment", "URI: " + mUri);
+
+				Log.d("NotesEditorFragment", "values: " + values.toString());
 				activity.getContentResolver().update(mUri, // The URI for the
 															// record to
 						// update.
@@ -361,7 +360,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 								// necessary.
 						);
 				// We want to sync these if we should
-				activity.getContentResolver().notifyChange(mUri, null, NotePadProvider.SyncAuto(activity));
+				activity.getContentResolver().notifyChange(mUri, null,
+						NotePadProvider.SyncAuto(activity));
 			}
 		}
 	}
@@ -421,28 +421,27 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
-		
-			Log.d("NotesEditorFragment", "onCreate");
+
+		Log.d("NotesEditorFragment", "onCreate");
 		super.onCreate(savedInstanceState);
 		// To get the call back to add items to the menu
 		setHasOptionsMenu(true);
 
-		
-			Log.d("NotesEditorFragment",
-					"Value: "
-							+ Boolean.toString(getArguments() != null
-									&& getArguments().containsKey(KEYID)
-									&& getArguments().containsKey(LISTID)));
+		Log.d("NotesEditorFragment",
+				"Value: "
+						+ Boolean.toString(getArguments() != null
+								&& getArguments().containsKey(KEYID)
+								&& getArguments().containsKey(LISTID)));
 
 		if (getArguments() != null && getArguments().containsKey(KEYID)
 				&& getArguments().containsKey(LISTID)) {
-			
-				Log.d(TAG, "Should never happen right");
+
+			Log.d(TAG, "Should never happen right");
 			id = getArguments().getLong(KEYID);
 			// listId = getArguments().getLong(LISTID);
 		} else {
-			
-				Log.d(TAG, "onCreate, no valid values in arguments");
+
+			Log.d(TAG, "onCreate, no valid values in arguments");
 			id = -1;
 			// listId = -1;
 		}
@@ -460,8 +459,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
-			Log.d("NotesEditorFragment", "onCreateView");
+
+		Log.d("NotesEditorFragment", "onCreateView");
 
 		int layout = R.layout.editor_layout;
 
@@ -547,28 +546,28 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		super.onActivityCreated(saves);
 		// if Time to Die, do absolutely nothing since this fragment will go bye
 		// bye
-		
-			Log.d(TAG, "onActivityCreated");
+
+		Log.d(TAG, "onActivityCreated");
 		if (timeToDie) {
-			
-				Log.d("NotesEditorFragment",
-						"onActivityCreated, but it is time to die so doing nothing...");
+
+			Log.d("NotesEditorFragment",
+					"onActivityCreated, but it is time to die so doing nothing...");
 		} else if (saves != null && saves.containsKey(KEYID)
 				&& saves.containsKey(LISTID)) {
-			
-				Log.d(TAG, "onActivityCrated, saves are not null!");
+
+			Log.d(TAG, "onActivityCrated, saves are not null!");
 			openNote(saves);
 		} else if (id > -1) {
-			
-				Log.d(TAG,
-						"onActivityCreated, got valid id atleast. Displaying note...");
+
+			Log.d(TAG,
+					"onActivityCreated, got valid id atleast. Displaying note...");
 			// in activity
 			// displayNote(id, listId);
 			openNote(null);
 		} else {
-			
-				Log.d(TAG,
-						"onActivityCreated, could not find valid values. Maybe I should die now?");
+
+			Log.d(TAG,
+					"onActivityCreated, could not find valid values. Maybe I should die now?");
 		}
 	}
 
@@ -584,12 +583,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		
-			Log.d("NotesEditorFragment", "onCreateOptions");
+
+		Log.d("NotesEditorFragment", "onCreateOptions");
 		if (timeToDie) {
-			
-				Log.d("NotesEditorFragment",
-						"onCreateOptions, but it is time to die so doing nothing...");
+
+			Log.d("NotesEditorFragment",
+					"onCreateOptions, but it is time to die so doing nothing...");
 		} else {
 			// Inflate menu from XML resource
 			// if (FragmentLayout.lightTheme)
@@ -597,29 +596,25 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// else
 			inflater.inflate(R.menu.editor_options_menu, menu);
 
-			/* COmmented out until the bug in the platform is fixed
-			if (getResources()
-					.getBoolean(R.bool.atLeastIceCreamSandwich)) {
-				// Set default intent on ShareProvider and set shareListener to
-				// this so
-				// we can update with current note
-				// Set file with share history to the provider and set the share
-				// intent.
-				MenuItem shareItem = menu
-						.findItem(R.id.editor_share_action_provider_action_bar);
-
-				ShareActionProvider shareProvider = (ShareActionProvider) shareItem
-						.getActionProvider();
-				shareProvider
-						.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
-
-				this.shareActionProvider = shareProvider;
-
-				// Note that you can set/change the intent any time,
-				// say when the user has selected an image.
-				setActionShareIntent();
-			}
-			*/
+			/*
+			 * COmmented out until the bug in the platform is fixed if
+			 * (getResources() .getBoolean(R.bool.atLeastIceCreamSandwich)) { //
+			 * Set default intent on ShareProvider and set shareListener to //
+			 * this so // we can update with current note // Set file with share
+			 * history to the provider and set the share // intent. MenuItem
+			 * shareItem = menu
+			 * .findItem(R.id.editor_share_action_provider_action_bar);
+			 * 
+			 * ShareActionProvider shareProvider = (ShareActionProvider)
+			 * shareItem .getActionProvider(); shareProvider
+			 * .setShareHistoryFileName
+			 * (ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+			 * 
+			 * this.shareActionProvider = shareProvider;
+			 * 
+			 * // Note that you can set/change the intent any time, // say when
+			 * the user has selected an image. setActionShareIntent(); }
+			 */
 
 			// Append to the
 			// menu items for any other activities that can do stuff with it
@@ -639,9 +634,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		if (timeToDie) {
-			
-				Log.d("NotesEditorFragment",
-						"onPrepareOptionsMenu, but it is time to die so doing nothing...");
+
+			Log.d("NotesEditorFragment",
+					"onPrepareOptionsMenu, but it is time to die so doing nothing...");
 		} else {
 			// Check if note has changed and enable/disable the revert option
 			if (!hasNoteChanged()) {
@@ -732,15 +727,15 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public void onResume() {
 		super.onResume();
 		if (!timeToDie) {
-			
-				Log.d("NotesEditorFragment", "onResume");
+
+			Log.d("NotesEditorFragment", "onResume");
 
 			// Settings might have been changed
 			setFontSettings();
 			// We don't want to do this the first time
 			if (opened) {
-				
-					Log.d("InsertError", "onResume Editor");
+
+				Log.d("InsertError", "onResume Editor");
 				openNote(null);
 			}
 		}
@@ -753,8 +748,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 * @param mCurListId
 	 */
 	public void displayNote(long id) {
-		
-			Log.d("NotesEditorFragment", "Display note: " + id);
+
+		Log.d("NotesEditorFragment", "Display note: " + id);
 
 		// TODO make the fragment be a progress bar like the list here until it
 		// is opened
@@ -765,8 +760,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		selfAction = false;
 		this.id = id;
 		// this.listId = listid;
-		
-			Log.d("insertError", "displayNote");
+
+		Log.d("insertError", "displayNote");
 		openNote(null);
 	}
 
@@ -964,8 +959,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private void saveNote() {
 		selfAction = true; // Don't try to reload the note
 		if (doSave && mText != null && mTitle != null) {
-			
-				Log.d("NotesEditorFragment", "Saving/Deleting Note");
+
+			Log.d("NotesEditorFragment", "Saving/Deleting Note");
 
 			// Get the current note text.
 			String text = mText.getText().toString();
@@ -997,8 +992,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	@TargetApi(14)
 	private void setActionShareIntent() {
-		if (getResources()
-				.getBoolean(R.bool.atLeastIceCreamSandwich) && shareActionProvider != null) {
+		if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)
+				&& shareActionProvider != null) {
 			Intent share = new Intent(Intent.ACTION_SEND);
 			share.setType("text/plain");
 			share.putExtra(Intent.EXTRA_TEXT, makeShareText());
@@ -1088,8 +1083,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-		
-			Log.d("notewa" + TAG, "onLoadFinished");
+
+		Log.d("notewa" + TAG, "onLoadFinished");
 		if (!selfAction) {
 			// This note has changed, re-open it.
 			// As a special case, we will not re-open it if that is
@@ -1101,10 +1096,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// to begin with.
 			// Note the "NOT" in the beginning.
 			boolean reload = true;
-			
-				Log.d(TAG, "title field: " + mOriginalTitle);
-			
-				Log.d(TAG, "text field: " + mOriginalNote);
+
+			Log.d(TAG, "title field: " + mOriginalTitle);
+
+			Log.d(TAG, "text field: " + mOriginalNote);
 			if (mOriginalTitle != null && mOriginalNote != null) {
 				if (mOriginalNote.isEmpty() && mOriginalTitle.isEmpty()
 						&& !mText.getText().toString().isEmpty()) {
@@ -1148,12 +1143,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			switch (result.actionId) {
 			case LOCK_NOTE:
 				noteAttrs.locked = true;
-				Toast.makeText(activity,getString(R.string.locked),
+				Toast.makeText(activity, getString(R.string.locked),
 						Toast.LENGTH_SHORT).show();
 				break;
 			case UNLOCK_NOTE:
 				noteAttrs.locked = false;
-				Toast.makeText(activity,getString(R.string.unlocked),
+				Toast.makeText(activity, getString(R.string.unlocked),
 						Toast.LENGTH_SHORT).show();
 				// Fall through and show the note as well
 			case SHOW_NOTE:
@@ -1165,7 +1160,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				break;
 			}
 		}
-		// Invalidate the menu so it redraws and hides/shows the icons if applicable
+		// Invalidate the menu so it redraws and hides/shows the icons if
+		// applicable
 		getActivity().invalidateOptionsMenu();
 	}
 
