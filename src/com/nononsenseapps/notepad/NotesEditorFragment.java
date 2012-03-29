@@ -182,7 +182,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 */
 	private void openNote(Bundle savedInstanceState) {
 		// Just make sure we are attached
-		if (!activity.isFinishing() && super.isVisible()) {
+		if (!activity.isFinishing()) {
 			selfAction = false;
 			doSave = true;
 			opened = true;
