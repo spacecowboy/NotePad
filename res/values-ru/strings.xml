@@ -145,5 +145,9 @@
         Это не шифрует заметку, она попрежнему остаётся доступна в веб-приложениях Google.
         Если вы забыли свой пароль, синхронизируйтесь и переустановите приложение.</string>
     <string name="about">Помощь</string>
+    
+     <!-- Untranslated yet -->
+    <string name="sync_failed">Sync failed</string>
+    <string name="sync_login_failed">Login failed, could not connect to Google Tasks</string>
 
 </resources>

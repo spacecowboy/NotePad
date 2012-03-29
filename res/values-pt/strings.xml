@@ -130,5 +130,9 @@
          ser vista no Google Mail/Calendário. Se esquecer a password, sincronize com o Google e
          em seguida, reinstale a aplicação.</string>
     <string name="about">Sobre</string>
+    
+     <!-- Untranslated yet -->
+    <string name="sync_failed">Sync failed</string>
+    <string name="sync_login_failed">Login failed, could not connect to Google Tasks</string>
      
 </resources>

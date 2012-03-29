@@ -153,17 +153,15 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		}
 
 		private void tellUser(Context context, int result) {
-			String text = "";
+			int text = R.string.sync_failed;
 			switch (result) {
 			case SyncAdapter.ERROR:
-				text = "Sync did not succeed";
+				text = R.string.sync_failed;
 				break;
 			case SyncAdapter.LOGIN_FAIL:
-				text = "Login failed, could not access Google Tasks";
+				text = R.string.sync_login_failed;
 				break;
 			case SyncAdapter.SUCCESS:
-				//text = "Success";
-				//break;
 			default:
 				return;
 			}

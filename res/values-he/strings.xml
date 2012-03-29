@@ -126,5 +126,9 @@
     <string name="clear_password">בטל סיסמא</string>
     <string name="password_info">על ידי הגדרת סיסמה, תתבקש להזין את הסיסמה כדי להציג הערות נעולות. פתקים נעולים יציגו רק את הכותרת שלהם ואת תאריך היעד. פתקים נעולים עדיין ניתן לראות ב-Gmail וביומן Google. אם שכחת את הסיסמה שלך, סנכרן עם Google והתקן מחדש את היישום.</string>
     <string name="about">אודות</string>
+    
+     <!-- Untranslated yet -->
+    <string name="sync_failed">Sync failed</string>
+    <string name="sync_login_failed">Login failed, could not connect to Google Tasks</string>
 	
 </resources>

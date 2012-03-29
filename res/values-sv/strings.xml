@@ -130,5 +130,8 @@
         fortfarande komma åt anteckningen i Google mail/kalender. Om du glömmer ditt lösenord, synka
         med Google och installera om appen.</string>
     <string name="about">Om</string>
+    
+    <string name="sync_failed">Synk misslyckades</string>
+    <string name="sync_login_failed">Inloggning misslyckades, kunde inte komma åt Google Tasks</string>
 
 </resources>

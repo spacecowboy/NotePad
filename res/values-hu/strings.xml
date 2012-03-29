@@ -129,5 +129,9 @@
     A jelszó nem titkosítja a jegyzetet amely így látható a Google mail/calendar-ban. 
     Ha elfelejti a jelszavát, szinkronizáljon a Google fiókjával és installálja újra az alkalmazást</string>
 	<string name="about">Névjegy</string>
+	
+	 <!-- Untranslated yet -->
+    <string name="sync_failed">Sync failed</string>
+    <string name="sync_login_failed">Login failed, could not connect to Google Tasks</string>
 
 </resources>

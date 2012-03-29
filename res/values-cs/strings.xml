@@ -145,4 +145,7 @@
         be viewed in Google mail/calendar. If you forget your password, sync with Google and
         then reinstall the app.</string>
     <string name="about">About</string>
+    
+    <string name="sync_failed">Sync failed</string>
+    <string name="sync_login_failed">Login failed, could not connect to Google Tasks</string>
 </resources>

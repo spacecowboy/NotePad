@@ -130,5 +130,9 @@
         en Google mail/calendar. Si olvida la contraseña, sincronice con Google y
         después reinstale la aplicación.</string>
     <string name="about">Créditos</string>
+    
+     <!-- Untranslated yet -->
+    <string name="sync_failed">Sync failed</string>
+    <string name="sync_login_failed">Login failed, could not connect to Google Tasks</string>
 
 </resources>
