@@ -132,7 +132,7 @@
     <string name="about">Créditos</string>
     
      <!-- Untranslated yet -->
-    <string name="sync_failed">Sync failed</string>
-    <string name="sync_login_failed">Login failed, could not connect to Google Tasks</string>
+    <string name="sync_failed">Error de sincronización</string>
+    <string name="sync_login_failed">Error en el inicio de sesión, no se ha podido conectar a Google Tasks</string>
 
 </resources>
