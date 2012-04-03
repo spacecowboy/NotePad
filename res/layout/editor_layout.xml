@@ -21,7 +21,7 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="4dp" >
-
+
             <EditText
                 android:id="@+id/titleBox"
                 android:layout_width="fill_parent"
@@ -29,9 +29,10 @@
                 android:layout_alignParentLeft="true"
                 android:layout_alignParentTop="true"
                 android:hint="@string/editor_title_hint"
-                android:inputType="textMultiLine"
+                android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
                 android:padding="5dp"
                 android:textStyle="bold" >
+
             </EditText>
 
             <LinearLayout
@@ -69,7 +70,7 @@
             android:layout_weight="1"
             android:gravity="top"
             android:hint="@string/editor_note_hint"
-            android:inputType="textMultiLine" >
+            android:inputType="textAutoCorrect|textCapSentences|textMultiLine" >
 
 <!--             android:autoLink="web|email|map" Was bad user experience -->
         </com.nononsenseapps.ui.TabbingEditText>
