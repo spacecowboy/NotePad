@@ -75,6 +75,8 @@
         android:background="@drawable/gradient_bg_gmail_widget_holo">
         <ListView
             android:id="@+id/notes_list"
+            android:divider="@drawable/list_divider_holo_light"
+            android:dividerHeight="1dp"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
         <TextView
