@@ -7,5 +7,11 @@
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">normal</item>
     </style>
+    
+    <style name="WidgetTitleStyleDark">
+        <item name="android:textColor">@android:color/primary_text_dark</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">normal</item>
+    </style>
 
 </resources>
