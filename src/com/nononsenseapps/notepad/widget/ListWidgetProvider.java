@@ -126,8 +126,19 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		Intent intent = new Intent(context, ListWidgetService.class);
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
+		
+		final int itemId;
+		SharedPreferences settings = context.getSharedPreferences(
+				ListWidgetConfigure.getSharedPrefsFile(appWidgetId),
+				Context.MODE_PRIVATE);
+		if (settings!= null && ListWidgetConfigure.THEME_DARK.equals(settings.getString(ListWidgetConfigure.KEY_THEME, ListWidgetConfigure.THEME_LIGHT))) {
+			itemId = R.layout.listwidget_dark;
+		} else {
+			itemId = R.layout.listwidget;
+		}
+		
 		RemoteViews rv = new RemoteViews(context.getPackageName(),
-				R.layout.listwidget);
+				itemId);
 		rv.setRemoteAdapter(appWidgetId, R.id.notes_list, intent);
 
 		// Set the empty view to be displayed if the collection is empty. It
@@ -136,9 +147,6 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		rv.setEmptyView(R.id.notes_list, R.id.empty_view);
 
 		// set list title
-		SharedPreferences settings = context.getSharedPreferences(
-				ListWidgetConfigure.getSharedPrefsFile(appWidgetId),
-				Context.MODE_PRIVATE);
 		// String listTitle = settings.getString(
 		// ListWidgetConfigure.KEY_LIST_TITLE,
 		// context.getText(R.string.show_from_all_lists).toString());

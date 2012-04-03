@@ -6,12 +6,8 @@
             android:title="@string/settings_header_list"
             android:summary="@string/settings_header_list_summary" />
 
-    <!-- <header android:fragment="com.nononsenseapps.notepad.widget.ListWidgetConfigure$ThemeFragment"
-            android:title="Appereance"
-            android:summary="Set the theme and background transparency">
-        Arbitrary key/value pairs can be included with a header as
-             arguments to its fragment.
-        <extra android:name="someKey" android:value="someHeaderValue" />
-    </header> -->
+    <header android:fragment="com.nononsenseapps.notepad.widget.ListWidgetConfigure$ThemeFragment"
+            android:title="@string/settings_cat_theme"
+            android:summary="" />
 
 </preference-headers>

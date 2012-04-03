@@ -1,32 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="theme_preference">
-        <item>כהה</item>
-        <item>בהיר</item>
-    </string-array>
-    
-    <string-array name="sorting_preference">
-        <item>כותרת</item>
-        <item>תאריך יעד</item>
-        <item>שונה לאחרונה</item>
-        <item>מוגדר משתמש</item>
-    </string-array>
-    
-    <string-array name="sorting_order_preference">
-        <item>סדר עולה</item>
-        <item>סדר יורד</item>
-    </string-array>
-    
-    <string-array name="font_type_preference">
-        <item>Sans</item>
-        <item>Serif</item>
-        <item>Monospace</item>
-    </string-array>
-	
-    <string-array name="sync_freq_preference">
-        <item>ידנית</item>
-        <item>אוטומטית</item>
-	</string-array>
 
     <string-array name="preferences_week_start_day_labels">
       <item msgid="986150274035512339">"ברירת מחדל של מיקום"</item>

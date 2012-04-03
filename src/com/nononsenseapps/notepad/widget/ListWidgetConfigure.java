@@ -57,8 +57,8 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	public static final String KEY_SORT_ORDER = "widget_key_sort_order";
 	public static final String KEY_THEME = "widget_key_current_theme";
 
-	public static final String THEME_LIGHT = "widget_light";
-	public static final String THEME_DARK = "widget_dark";
+	public static final String THEME_LIGHT = "light";
+	public static final String THEME_DARK = "dark";
 
 	public static String getSharedPrefsFile(int widgetId) {
 		return SHARED_PREFS_BASE + widgetId;
@@ -157,7 +157,7 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			// Log.d("prefsActivity", "changed key: " + key);
 			// Log.d("prefsActivity","commiting: " +
 			// sharedPreferences.getString(key, null));
-			Log.d("config", "setting real values: " + key);
+			Log.d("config", "setting real values: " + key + ": " + sharedPreferences.getString(key, null));
 			getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
 					.edit()
 					.putString(key, sharedPreferences.getString(key, null))
@@ -291,20 +291,61 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	/**
 	 * This fragment shows the preferences for the theme settings.
 	 */
-	public static class ThemeFragment extends PreferenceFragment {
+	public static class ThemeFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
+		
+		private SharedPreferences lSettings;
+		private Activity activity;
+		private ListPreference themePref;
+
+		@Override
+		public void onAttach(Activity activity) {
+			super.onAttach(activity);
+			this.activity = activity;
+			lSettings = PreferenceManager.getDefaultSharedPreferences(activity);
+		}
 
 		@Override
 		public void onCreate(Bundle savedInstanceState) {
 			super.onCreate(savedInstanceState);
 
-			// Log.d("Prefs", "List appWidgetId: " + appWidgetId);
-			//
-			// Set our custom prefs file
-			// getPreferenceManager().setSharedPreferencesName(
-			// getSharedPrefsFile(appWidgetId));
-
 			// Load the preferences from an XML resource
 			addPreferencesFromResource(R.xml.widget_pref_theme);
+			
+			themePref = (ListPreference) findPreference(KEY_THEME);
+
+			// Also set the summaries
+			//if (themePref.getValue() == null)
+			themePref.setValue(ListWidgetConfigure.THEME_LIGHT);
+			themePref.setSummary(themePref.getEntry());
+		}
+		
+		@Override
+		public void onResume() {
+			super.onResume();
+			if (lSettings != null)
+				lSettings.registerOnSharedPreferenceChangeListener(this);
+		}
+
+		@Override
+		public void onPause() {
+			super.onPause();
+			if (lSettings != null)
+				lSettings.unregisterOnSharedPreferenceChangeListener(this);
+		}
+		
+		/**
+		 * Sets the list name in the preferences as well but also sets the list
+		 * summaries depending on the selected value.
+		 */
+		@Override
+		public void onSharedPreferenceChanged(
+				SharedPreferences sharedPreferences, String key) {
+			if (!activity.isFinishing()) {
+				if (key.equals(KEY_THEME)) {
+					// Also set the summary to this text
+					themePref.setSummary(themePref.getEntry());
+				}
+			}
 		}
 	}
 }

@@ -1,32 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="theme_preference">
-        <item>Scuro</item>
-        <item>Chiaro</item>
-    </string-array>
-    
-    <string-array name="sorting_preference">
-        <item>Titolo</item>
-        <item>Scadenza</item>
-        <item>Ultima modifica</item>
-        <item>Specificato dall\'utente</item>
-    </string-array>
-    
-    <string-array name="sorting_order_preference">
-        <item>Ascendente</item>
-        <item>Discendente</item>
-    </string-array>
-    
-    <string-array name="font_type_preference">
-        <item>Sans</item>
-        <item>Serif</item>
-        <item>Monospaziato</item>
-    </string-array>
-	
-    <string-array name="sync_freq_preference">
-        <item>Manuale</item>
-        <item>Automatico</item>
-	</string-array>
 
     <string-array name="preferences_week_start_day_labels">
       <item msgid="986150274035512339">"Impostazioni internazionali predefinite"</item>

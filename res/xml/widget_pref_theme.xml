@@ -6,8 +6,8 @@
         <ListPreference
             android:defaultValue="light"
             android:dialogTitle="@string/settings_theme_dialog"
-            android:entries="@array/theme_preference"
-            android:entryValues="@array/themevalues_preference"
+            android:entries="@array/widget_theme_preference"
+            android:entryValues="@array/widget_themevalues_preference"
             android:key="widget_key_current_theme"
             android:summary="Selected option should be here"
             android:title="@string/settings_theme" />

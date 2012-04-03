@@ -1,28 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string-array name="theme_preference">
-        <item>Тёмная</item>
-        <item>Светлая</item>
-    </string-array>
-
-    <string-array name="sorting_preference">
-        <item>Заголовок</item>
-        <item>Дата окончания</item>
-        <item>Последние изменение</item>
-        <item>Пользовательская</item>
-    </string-array>
-
-    <string-array name="sorting_order_preference">
-        <item>По возрастанию</item>
-        <item>По убыванию</item>
-    </string-array>
-
-    <string-array name="sync_freq_preference">
-        <item>Вручную</item>
-        <item>Автоматически</item>
-    </string-array>
-
     <string-array name="preferences_week_start_day_labels">
       <item msgid="986150274035512339">"Региональные настройки по умолчанию"</item>
       <item msgid="134027225275475280">"суббота"</item>

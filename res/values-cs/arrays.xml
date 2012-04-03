@@ -1,37 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="theme_preference">
-        <item>Tmavé</item>
-        <item>Světlé</item>
-    </string-array>
-    
-    <string-array name="sorting_preference">
-        <item>Název</item>
-        <item>Termín dokončení</item>
-        <item>Poslední upravené</item>
-        <item>User specified</item>
-    </string-array>
-    
-    <string-array name="sorting_order_preference">
-        <item>Vzestupně</item>
-        <item>Sestupně</item>
-    </string-array>
-    
-    <string-array name="font_type_preference">
-        <item>Sans</item>
-        <item>Serif</item>
-        <item>Monospace</item>
-    </string-array>
-    
-    <string-array name="sync_freq_preference">
-        <item>Ručně</item>
-        <!-- <item>1 hour</item>
-        <item>2 hours</item>
-        <item>4 hours</item>
-        <item>8 hours</item> -->
-        <!-- <item>1 den</item> -->
-        <item>Automaticky</item>
-	</string-array>
 
     <string-array name="preferences_week_start_day_labels">
         <item msgid="986150274035512339">"Výchozí hodnota národního prostředí"</item>

@@ -27,6 +27,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.media.audiofx.BassBoost.Settings;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -85,6 +86,11 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	}
 
 	public RemoteViews getViewAt(int position) {
+		// Get widget settings
+					SharedPreferences settings = mContext.getSharedPreferences(
+							ListWidgetConfigure.getSharedPrefsFile(mAppWidgetId),
+							Context.MODE_PRIVATE);
+					
 		// Get the data for this position from the content provider
 		String title = "";
 		String note = "";
@@ -110,10 +116,6 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			//localListId = mCursor.getLong(listIndex);
 			String date = mCursor.getString(dateIndex);
 
-			// Get widget settings
-			SharedPreferences settings = mContext.getSharedPreferences(
-					ListWidgetConfigure.getSharedPrefsFile(mAppWidgetId),
-					Context.MODE_PRIVATE);
 			if (settings != null) {
 				String sortChoice = settings.getString(
 						ListWidgetConfigure.KEY_SORT_TYPE,
@@ -134,7 +136,12 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			}
 		}
 
-		final int itemId = R.layout.widgetlist_item;
+		final int itemId;
+		if (settings!= null && ListWidgetConfigure.THEME_DARK.equals(settings.getString(ListWidgetConfigure.KEY_THEME, ListWidgetConfigure.THEME_LIGHT))) {
+			itemId = R.layout.widgetlist_item_dark;
+		} else {
+			itemId = R.layout.widgetlist_item;
+		}
 		RemoteViews rv = new RemoteViews(mContext.getPackageName(), itemId);
 		rv.setTextViewText(R.id.widget_itemTitle, title);
 		rv.setTextViewText(R.id.widget_itemNote, note);
@@ -143,9 +150,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 		// Set the click intent so that we can handle it and show a toast
 		// message
-		SharedPreferences settings = mContext.getSharedPreferences(
-				ListWidgetConfigure.getSharedPrefsFile(mAppWidgetId),
-				Context.MODE_PRIVATE);
+		
 		long listId = Long.parseLong(settings.getString(
 				ListWidgetConfigure.KEY_LIST,
 				Integer.toString(MainActivity.ALL_NOTES_ID)));
@@ -192,7 +197,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 					ListWidgetConfigure.KEY_LIST,
 					Integer.toString(MainActivity.ALL_NOTES_ID)));
 
-			//getListTitle(settings, listId);
+			// getListTitle(settings, listId);
 
 			String sortChoice = settings.getString(
 					ListWidgetConfigure.KEY_SORT_TYPE, MainPrefs.DUEDATESORT);

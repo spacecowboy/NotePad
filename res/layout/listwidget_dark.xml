@@ -94,11 +94,11 @@
             android:visibility="gone" />
     </FrameLayout>
 
-    <ImageView
+    <!-- <ImageView
         android:id="@+id/bottomBlue"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:scaleType="fitXY"
-        android:src="@drawable/list_div_top_btm_gmail_widget_holo" />
+        android:src="@drawable/list_div_top_btm_gmail_widget_holo" /> -->
 
 </LinearLayout>

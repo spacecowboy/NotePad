@@ -15,38 +15,6 @@
      limitations under the License.
 -->
 <resources>
-    <string-array name="theme_preference">
-        <item>Oscuro</item>
-        <item>Claro</item>
-    </string-array>
-    
-    <string-array name="sorting_preference">
-        <item>Título</item>
-        <item>Fecha</item>
-        <item>Fecha de modificación</item>
-        <item>Especificado por el usuario</item>
-    </string-array>
-    
-    <string-array name="sorting_order_preference">
-        <item>Ascendente</item>
-        <item>Descendente</item>
-    </string-array>
-    
-    <string-array name="font_type_preference">
-        <item>Sans</item>
-        <item>Serif</item>
-        <item>Monospace</item>
-    </string-array>
-
-    <string-array name="sync_freq_preference">
-        <item>Manual</item>
-        <!-- <item>1 hora</item>
-        <item>2 horas</item>
-        <item>4 horas</item>
-        <item>8 horas</item> -->
-        <!-- <item>1 día</item> -->
-        <item>Automática</item>
-    </string-array>
 
     <string-array name="preferences_week_start_day_labels">
         <item msgid="986150274035512339">"Región predeterminada"</item>

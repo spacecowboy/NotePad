@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     
     <string-array name="theme_preference">
-        <item>Dark</item>
-        <item>Light</item>
-		<item>Light, dark action bar</item>
+        <item>@string/settings_summary_theme_dark</item>
+        <item>@string/settings_summary_theme_light</item>
+        <item>@string/settings_summary_theme_light_dark_ab</item>
     </string-array>
 
-    <string-array name="themevalues_preference">
+    <string-array name="themevalues_preference" tools:ignore="MissingTranslation">
         <item>dark</item>
         <item>light</item>
       	<item>light_ab</item>

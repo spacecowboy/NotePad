@@ -15,38 +15,6 @@
      limitations under the License.
 -->
 <resources>
-    <string-array name="theme_preference">
-        <item>Mörk</item>
-        <item>Ljus</item>
-    </string-array>
-    
-    <string-array name="sorting_preference">
-        <item>Titel</item>
-        <item>Förfallodatum</item>
-        <item>Senast modifierad</item>
-        <item>Användarspecificerad</item>
-    </string-array>
-    
-    <string-array name="sorting_order_preference">
-        <item>Normal</item>
-        <item>Omvänd</item>
-    </string-array>
-    
-    <string-array name="font_type_preference">
-        <item>Sans</item>
-        <item>Serif</item>
-        <item>Monospace</item>
-    </string-array>
-    
-    <string-array name="sync_freq_preference">
-        <item>Manuellt</item>
-        <!-- <item>1 timme</item>
-        <item>2 timmar</item>
-        <item>4 timmar</item>
-        <item>8 timmar</item> -->
-        <!-- <item>1 dag</item> -->
-        <item>Automatiskt</item>
-	</string-array>
 
     <string-array name="preferences_week_start_day_labels">
       <item msgid="986150274035512339">"Standardinställning för språkkod"</item>
