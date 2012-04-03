@@ -65,6 +65,7 @@ import java.util.Map.Entry;
 public class NotePadProvider extends ContentProvider implements
 		PipeDataWriter<Cursor> {
 	
+	
 	public static boolean SyncAuto(Context context) {
 		String setting = PreferenceManager
 				.getDefaultSharedPreferences(context).getString(
@@ -77,6 +78,7 @@ public class NotePadProvider extends ContentProvider implements
 		
 		return syncEnabled && (syncAuto > 0);
 	}
+	
 	// Used for debugging and logging
 	private static final String TAG = "NotePadProvider";
 

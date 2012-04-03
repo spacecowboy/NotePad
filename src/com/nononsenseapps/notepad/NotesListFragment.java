@@ -196,7 +196,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			mCurId = -1;
 		}
 
-		// Sync any possible changes from server on start here. NOT in onresumse
+		// Sync any possible changes from server on start here. NOT in onresume
+		// TODO activate this once changes in the editor is not overwritten
+		/*
 		String accountName = PreferenceManager.getDefaultSharedPreferences(
 				activity).getString(SyncPrefs.KEY_ACCOUNT, "");
 
@@ -216,7 +218,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				ContentResolver
 						.requestSync(account, NotePad.AUTHORITY, options);
 			}
-		}
+		}*/
 	}
 
 	public void handleNoteIntent(Intent intent) {

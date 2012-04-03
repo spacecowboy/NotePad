@@ -149,8 +149,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						// save
 						// that for now.
 						// This is the latest time we synced
-						//String lastUpdated = dbTalker.getLastUpdated(account.name);
-						String lastUpdate = settings.getString(PREFS_LAST_SYNC_DATE, null);
+						String lastUpdate = dbTalker.getLastUpdated(account.name);
+						//String lastUpdate = settings.getString(PREFS_LAST_SYNC_DATE, null);
 						// Get the latest hash value we saw on the server
 						String localEtag = settings.getString(
 								PREFS_LAST_SYNC_ETAG, "");
@@ -176,14 +176,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						// remote
 						// lists if upload is not true
 
-						String serverEtag;
-						if (extras.getBoolean(
-								ContentResolver.SYNC_EXTRAS_UPLOAD, false)) {
-							serverEtag = localEtag;
-						} else {
-							serverEtag = apiTalker.getModifiedLists(localEtag,
+						String serverEtag = apiTalker.getModifiedLists(localEtag,
 									allLocalLists, listsToSaveToDB);
-						}
 
 						// IF the tags match, then nothing has changed on
 						// server.
@@ -319,17 +313,14 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						// Only worth doing if we actually uploaded anything
 						// Also, only do this if we are doing a full sync
 						String currentEtag = serverEtag;
-						if (uploadedStuff
-								&& !extras.getBoolean(
-										ContentResolver.SYNC_EXTRAS_UPLOAD,
-										false)) {
+						if (uploadedStuff) {
 							currentEtag = apiTalker.getEtag();
-							lastUpdate = dbTalker.getLastUpdated(account.name);
+							//lastUpdate = dbTalker.getLastUpdated(account.name);
 						}
 
 						settings.edit()
 								.putString(PREFS_LAST_SYNC_ETAG, currentEtag)
-								.putString(PREFS_LAST_SYNC_DATE, lastUpdate)
+								//.putString(PREFS_LAST_SYNC_DATE, lastUpdate)
 								.commit();
 
 						// Now, set sorting values.
@@ -358,7 +349,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 								tasksInListToSaveToDB);
 						// Commit it
 						ContentProviderResult[] result = dbTalker.apply();
-						Log.d(TAG, "Batched items: " + result.length);
 
 						if (SYNC_DEBUG_PRINTS)
 							Log.d(TAG, "Sync Complete!");
