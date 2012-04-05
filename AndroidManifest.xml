@@ -96,31 +96,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <!--
-                 This filter says that we can view or edit the data of
-                 a single note
-            -->
             
-            <intent-filter android:label="@string/resolve_edit" >
-                <action android:name="android.intent.action.INSERT" />
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.list" />
-            </intent-filter>
-
-            <!--
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/*" />
-                <data android:mimeType="text/*" android:path="*.txt" />  Would like to be able to open files in future
-            </intent-filter>
-            -->
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -141,6 +117,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
+            </intent-filter>
+            
+             <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/*" />
+                <!-- <data android:mimeType="text/*" android:path="*.txt" />  Would like to be able to open files in future  -->
             </intent-filter>
         </activity>
         
