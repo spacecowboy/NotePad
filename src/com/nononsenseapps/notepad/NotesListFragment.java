@@ -281,6 +281,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	}
 
 	private int getPosOfId(long id) {
+		if (mAdapter == null)
+			return -1;
+		
 		int length = mAdapter.getCount();
 		int position;
 		for (position = 0; position < length; position++) {
