@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources xmlns:tools="http://schemas.android.com/tools" >
+
+    <string name="app_name">Notes</string>
+    <string name="title_create">New note</string>
+    <string name="title_edit">Edit: %1$s</string>
+    <string name="menu_add">New note</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_revert">Revert changes</string>
+    <string name="menu_copy">Copy note</string>
+    <string name="menu_cancel">Cancel</string>
+    <string name="menu_setcompleted">Set done</string>
+    <string name="menu_setuncompleted">Set not done</string>
+    <string name="menu_deletelist">Delete list</string>
+    <string name="menu_sync">Refresh</string>
+    <string name="menu_share">Share</string>
+    <string name="menu_preferences">Settings</string>
+    <string name="menu_renamelist">Rename list</string>
+    <string name="menu_createlist">Create list</string>
+    <string name="menu_clearcompleted">Clear completed</string>
+    <string name="menu_setdefaultlist">Set as default list</string>
+    <string name="delete_list_warning">Are you sure you want to delete the list? The list will be permanently deleted.</string>
+    <string name="editor_due_date_hint">Due date</string>
+    <string name="editor_title_hint">Title</string>
+    <string name="editor_note_hint">Note</string>
+    <string name="resolve_edit">Edit note</string>
+    <string name="error_title">Error</string>
+    <string name="error_message">Error loading note</string>
+    <string name="search_hint">Search</string>
+    <string name="settings_theme">Current theme</string>
+    <string name="settings_theme_dialog">Use theme</string>
+    <string name="settings_cat_theme">Theme</string>
+    <string name="settings_cat_sorting">Sorting</string>
+    <string name="settings_sorting_type">Sorting on</string>
+    <string name="settings_sorting_type_dialog">Sort on</string>
+    <string name="settings_sorting_order">Order</string>
+    <string name="settings_sorting_order_dialog">Order by</string>
+    <string name="settings_summary_sort_type_alphabetic">Title</string>
+    <string name="settings_summary_sort_type_modified">Latest modified</string>
+    <string name="settings_summary_sort_type_duedate">Due date</string>
+    <string name="settings_summary_sort_type_serverposition">Server position</string>
+    <string name="settings_summary_sort_order_asc">Ascending</string>
+    <string name="settings_summary_sort_order_desc">Descending</string>
+    <string name="settings_summary_theme_dark">Dark</string>
+    <string name="settings_summary_theme_light">Light</string>
+    <string name="settings_summary_theme_light_dark_ab">Light, dark action bar</string>
+    <string name="settings_cat_appearance">Appearance</string>
+    <string name="settings_font_screen">Font settings</string>
+    <string name="settings_font_screen_summary">You can change the type and size of the fonts</string>
+    <string name="settings_cat_font_editor">Editor</string>
+    <string name="settings_font_type">Font</string>
+    <string name="settings_font_type_dialog">Select a font</string>
+    <string name="settings_font_size">Font size</string>
+    <string name="preference_preview_text">This is how the editor text will appear</string>
+    <string name="settings_text_preview_title">Preview</string>
+    <string name="monospace">Monospace</string>
+    <string name="sans">Sans</string>
+    <string name="serif">Serif</string>
+    <string name="settings_sync_freq_title">Sync frequency</string>
+    <string name="settings_account_title">Select an account</string>
+    <string name="settings_account_summary">Click to switch account</string>
+    <string name="settings_sync_enable_title">Google Tasks sync</string>
+    <string name="settings_sync_enable_summary">Synchronize notes with your Google account</string>
+    <string name="settings_cat_syncing">Synchronization</string>
+    <string name="manual">Manual</string>
+    <string name="minutes">minutes</string>
+    <string name="hours">hours</string>
+    <string name="onehour">One hour</string>
+    <string name="oneday">One day</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="ok">OK</string>
+    <string name="show_from_all_lists">All lists</string>
+    <string name="default_list_needed_warning">Set a default list first</string>
+    <string name="reverted">Reverted changes</string>
+    <string name="notecopied">Copied</string>
+    <string name="deleted">Deleted</string>
+    <string name="items">notes</string>
+    <string name="permission_read_label">read notes and lists</string>
+    <string name="permission_read_desc">Allows the application to read your notes and related lists.</string>
+    <string name="permission_write_label">modify notes and lists</string>
+    <string name="permission_write_desc">Allows the application to insert, update and delete notes and lists.</string>
+    <string name="settings_header_list">List settings</string>
+    <string name="settings_header_list_summary"></string>
+    <string name="settings_header_appearance">@string/settings_cat_appearance</string>
+    <string name="settings_header_appearance_summary"></string>
+    <string name="settings_header_sync">@string/settings_cat_syncing</string>
+    <string name="settings_header_sync_summary"></string>
+    <string name="settings_list_dialog">Select a list</string>
+    <string name="settings_list">List</string>
+    <string name="settings_list_summary"></string>
+    <string name="automatic">Automatically</string>
+
+    <string name="preferences_week_start_day_dialog">Week starts on</string>
+    <string name="preferences_week_start_day_title">Week starts on</string>
+
+    <string name="lock_note">Lock note</string>
+    <string name="unlock_note">Unlock note</string>
+    <string name="locked">Locked</string>
+    <string name="unlocked">Unlocked</string>
+    <string name="password_required">Password required</string>
+    <string name="select_account">Select an account</string>
+    <string name="password">Password</string>
+    <string name="password_set">Password set</string>
+    <string name="password_cleared">Password cleared</string>
+    <string name="passwords_dont_match">Passwords do not match</string>
+    <string name="enter_password">Enter password</string>
+    <string name="enter_new_password">Enter new password</string>
+    <string name="confirm_new_password">Confirm new password</string>
+    <string name="apply">Apply</string>
+    <string name="clear_password">Clear password</string>
+    <string name="password_info">Setting a password will require you to input the password 
+        to show any locked notes. It will only protect the note-field so you still have unprotected
+        access to the title and due date. It does not encrypt the note in any way so it can still 
+        be viewed in Google mail/calendar. If you forget your password, sync with Google and
+        then reinstall the app.</string>
+    <string name="about">About</string>
+    
+    <string name="sync_failed">Sync failed</string>
+    <string name="sync_login_failed">Login failed, could not connect to Google Tasks</string>
+
+</resources>
