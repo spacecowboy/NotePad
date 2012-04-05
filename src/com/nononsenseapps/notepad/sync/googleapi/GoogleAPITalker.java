@@ -98,7 +98,7 @@ public class GoogleAPITalker {
 
 	}
 
-	// This key is not valid. Replace it with one that is.
+	// This key is valid
 	public static final String[] APIKEYS = { "AIzaSyCAjRk2GfPARlIU3JsaEiExLMtj_rdN2i4" };
 
 	public static Random rand = new Random();
