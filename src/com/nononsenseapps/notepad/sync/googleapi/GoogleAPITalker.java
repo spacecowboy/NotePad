@@ -98,6 +98,7 @@ public class GoogleAPITalker {
 
 	}
 
+	// This key is not valid. Replace it with one that is.
 	public static final String[] APIKEYS = { "AIzaSyBCQyr-OSPQsMwU2tyCIKZG86Wb3WM1upw" };
 
 	public static Random rand = new Random();
@@ -108,9 +109,6 @@ public class GoogleAPITalker {
 
 		return APIKEYS[rand.nextInt(APIKEYS.length)];
 	}
-
-	// public static final String APIKEY =
-	// "AIzaSyBCQyr-OSPQsMwU2tyCIKZG86Wb3WM1upw";
 
 	public static String AuthUrlEnd() {
 		return "key=" + ApiKey();
