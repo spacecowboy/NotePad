@@ -60,7 +60,7 @@
     <string name="settings_summary_theme_dark">Scuro</string>
     <string name="settings_summary_theme_light">Chiaro</string>
     <string name="settings_summary_theme_light_dark_ab">Chiaro, con barre scure</string>
-    <string name="settings_cat_appearance">Apparenza</string>
+    <string name="settings_cat_appearance">Aspetto</string>
     <string name="settings_font_screen">Impostazioni carattere</string>
     <string name="settings_font_screen_summary">Puoi modificare tipo e dimensione dei caratteri</string>
     <string name="settings_cat_font_editor">Editor</string>
@@ -132,7 +132,7 @@
 	<string name="about">About</string>
 	
 	 <!-- Untranslated yet -->
-    <string name="sync_failed">Sync failed</string>
-    <string name="sync_login_failed">Login failed, could not connect to Google Tasks</string>
+    <string name="sync_failed">Sincronizzazione non riuscita</string>
+    <string name="sync_login_failed">Login non riuscito, non è possibile connettersi a Google Tasks</string>
 	
 </resources>
