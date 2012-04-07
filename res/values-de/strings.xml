@@ -127,8 +127,7 @@
     <string name="password_info">Das Einstellen eines Passwortes hat zur Folge, dass man zum Anzeigen der gesperrten Notizen das Passwort eingeben muss. Es wird nur der Inhalt der Notiz geschützt; Titel und Datum sind weiterhin sichtbar. Die Notiz wird nicht Verschlüsselt und kann weiterhin in Google Mail / Kalender betrachtet werden. Sollten Sie ihr Passwort vergessen so synchronisieren sie bitte mit Google und installieren sie anschließend die App neu.</string>
     <string name="about">Über</string>
     
-    <!-- Untranslated yet -->
-    <string name="sync_failed">Sync failed</string>
-    <string name="sync_login_failed">Login failed, could not connect to Google Tasks</string>
+    <string name="sync_failed">Synchronisation fehlgeschlagen</string>
+    <string name="sync_login_failed">Login fehlgeschlagen, es konnte keine Verbindung zu Google Tasks hergestellt werden</string>
 
 </resources>
