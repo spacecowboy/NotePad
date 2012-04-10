@@ -10,7 +10,7 @@
     <string name="menu_revert">Değişiklikleri geri al</string>
     <string name="menu_copy">Notu kopyala</string>
     <string name="menu_cancel">İptal</string>
-    <string name="menu_setcompleted"Yapıldı olarak işaretle</string>
+    <string name="menu_setcompleted">Yapıldı olarak işaretle</string>
     <string name="menu_setuncompleted">Yapılmadı olarak işaretle</string>
     <string name="menu_deletelist">Listeyi sil</string>
     <string name="menu_sync">Yenile</string>
@@ -74,7 +74,7 @@
     <string name="show_from_all_lists">Tüm listeler</string>
     <string name="default_list_needed_warning">Önce varsayılan listeyi seçin</string>
     <string name="reverted">Değişiklikler geri alındı</string>
-    <string name="notecopied"Kopyalandı: </string>
+    <string name="notecopied">Kopyalandı: </string>
     <string name="deleted">Silindi: </string>
     <string name="items">not</string>
     <string name="permission_read_label">Notları ve listeleri oku</string>
