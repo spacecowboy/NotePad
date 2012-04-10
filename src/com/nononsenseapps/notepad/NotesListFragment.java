@@ -736,9 +736,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
                                 getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE)).isEmpty();
 
                         if(isEmpty) layoutParams = new LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.FILL_PARENT, 0);
+                                    LinearLayout.LayoutParams.MATCH_PARENT, 0);
                         else layoutParams = new LinearLayout.LayoutParams(
-                                    LinearLayout.LayoutParams.FILL_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                                    LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
                         tv.setLayoutParams(layoutParams);
                     }
