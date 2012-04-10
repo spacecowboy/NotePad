@@ -1,97 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--
-     Copyright (C) 2007 The Android Open Source Project
-
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-  
-          http://www.apache.org/licenses/LICENSE-2.0
-  
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
 
 <resources xmlns:tools="http://schemas.android.com/tools" >
 
-    <string name="app_name">Notes</string>
-    <string name="title_create">New note</string>
-    <string name="title_edit">Edit: %1$s</string>
-    <string name="menu_add">New note</string>
+    <string name="app_name">Notlar</string>
+    <string name="title_create">Yeni not</string>
+    <string name="title_edit">Düzenle: %1$s</string>
+    <string name="menu_add">Yeni not</string>
     <string name="menu_delete">Delete</string>
-    <string name="menu_revert">Revert changes</string>
-    <string name="menu_copy">Copy note</string>
-    <string name="menu_cancel">Cancel</string>
-    <string name="menu_setcompleted">Set done</string>
-    <string name="menu_setuncompleted">Set not done</string>
-    <string name="menu_deletelist">Delete list</string>
-    <string name="menu_sync">Refresh</string>
-    <string name="menu_share">Share</string>
-    <string name="menu_preferences">Settings</string>
-    <string name="menu_renamelist">Rename list</string>
-    <string name="menu_createlist">Create list</string>
-    <string name="menu_clearcompleted">Clear completed</string>
-    <string name="menu_setdefaultlist">Set as default list</string>
-    <string name="delete_list_warning">Are you sure you want to delete the list? The list will be permanently deleted.</string>
-    <string name="editor_due_date_hint">Due date</string>
-    <string name="editor_title_hint">Title</string>
-    <string name="editor_note_hint">Note</string>
-    <string name="resolve_edit">Edit note</string>
-    <string name="error_title">Error</string>
-    <string name="error_message">Error loading note</string>
-    <string name="search_hint">Search</string>
-    <string name="settings_theme">Current theme</string>
-    <string name="settings_theme_dialog">Use theme</string>
-    <string name="settings_cat_theme">Theme</string>
-    <string name="settings_cat_sorting">Sorting</string>
-    <string name="settings_sorting_type">Sorting on</string>
-    <string name="settings_sorting_type_dialog">Sort on</string>
-    <string name="settings_sorting_order">Order</string>
-    <string name="settings_sorting_order_dialog">Order by</string>
-    <string name="settings_summary_sort_type_alphabetic">Title</string>
-    <string name="settings_summary_sort_type_modified">Latest modified</string>
-    <string name="settings_summary_sort_type_duedate">Due date</string>
-    <string name="settings_summary_sort_type_serverposition">Server position</string>
-    <string name="settings_summary_sort_order_asc">Ascending</string>
-    <string name="settings_summary_sort_order_desc">Descending</string>
-    <string name="settings_summary_theme_dark">Dark</string>
-    <string name="settings_summary_theme_light">Light</string>
-    <string name="settings_summary_theme_light_dark_ab">Light, dark action bar</string>
-    <string name="settings_cat_appearance">Appearance</string>
-    <string name="settings_font_screen">Font settings</string>
-    <string name="settings_font_screen_summary">You can change the type and size of the fonts</string>
-    <string name="settings_cat_font_editor">Editor</string>
-    <string name="settings_font_type">Font</string>
-    <string name="settings_font_type_dialog">Select a font</string>
-    <string name="settings_font_size">Font size</string>
-    <string name="preference_preview_text">This is how the editor text will appear</string>
-    <string name="settings_text_preview_title">Preview</string>
+    <string name="menu_revert">Değişiklikleri geri al</string>
+    <string name="menu_copy">Notu kopyala</string>
+    <string name="menu_cancel">İptal</string>
+    <string name="menu_setcompleted"Yapıldı olarak işaretle</string>
+    <string name="menu_setuncompleted">Yapılmadı olarak işaretle</string>
+    <string name="menu_deletelist">Listeyi sil</string>
+    <string name="menu_sync">Yenile</string>
+    <string name="menu_share">Paylaş</string>
+    <string name="menu_preferences">Ayarlar</string>
+    <string name="menu_renamelist">Listeyi yeniden adlandır</string>
+    <string name="menu_createlist">Liste oluştur</string>
+    <string name="menu_clearcompleted">Tamamlananları temizle</string>
+    <string name="menu_setdefaultlist">Varsayılan liste olarak ayarla</string>
+    <string name="delete_list_warning">Listeyi silmek istiyor musunuz? Silme işlemi geri döndürülemez..</string>
+    <string name="editor_due_date_hint">Bitiş tarihi</string>
+    <string name="editor_title_hint">Başlık</string>
+    <string name="editor_note_hint">Not</string>
+    <string name="resolve_edit">Notu düzenle</string>
+    <string name="error_title">Hata</string>
+    <string name="error_message">Not yüklenirken hata oluştu.</string>
+    <string name="search_hint">Ara</string>
+    <string name="settings_theme">Kullanılan tema</string>
+    <string name="settings_theme_dialog">Tema seçin</string>
+    <string name="settings_cat_theme">Tema</string>
+    <string name="settings_cat_sorting">Sıralama</string>
+    <string name="settings_sorting_type">Sıralama ölçütü</string>
+    <string name="settings_sorting_type_dialog">Ölçüt</string>
+    <string name="settings_sorting_order">Sıralama türü</string>
+    <string name="settings_sorting_order_dialog">Tür</string>
+    <string name="settings_summary_sort_type_alphabetic">Başlık</string>
+    <string name="settings_summary_sort_type_modified">Değiştirilme tarihi</string>
+    <string name="settings_summary_sort_type_duedate">Bitiş tarihi</string>
+    <string name="settings_summary_sort_type_serverposition">Sunucu konumu</string>
+    <string name="settings_summary_sort_order_asc">Artan</string>
+    <string name="settings_summary_sort_order_desc">Azalan</string>
+    <string name="settings_summary_theme_dark">Koyu</string>
+    <string name="settings_summary_theme_light">Açık</string>
+    <string name="settings_summary_theme_light_dark_ab">Açık (Koyu eylem çubuğu)</string>
+    <string name="settings_cat_appearance">Görünüş</string>
+    <string name="settings_font_screen">Yazı tipi ayarları</string>
+    <string name="settings_font_screen_summary">Notlarınızda kullanılacak yazı tipini ve boyutunu seçebilirsiniz.</string>
+    <string name="settings_cat_font_editor">Düzenleyici</string>
+    <string name="settings_font_type">Yazı tipi</string>
+    <string name="settings_font_type_dialog">Yazı tipini seçin</string>
+    <string name="settings_font_size">Yazı boyutu</string>
+    <string name="preference_preview_text">Pijamalı hasta yağız şoföre çabucak güvendi.</string>
+    <string name="settings_text_preview_title">Önizleme</string>
     <string name="monospace">Monospace</string>
     <string name="sans">Sans</string>
     <string name="serif">Serif</string>
-    <string name="settings_sync_freq_title">Sync frequency</string>
-    <string name="settings_account_title">Select an account</string>
-    <string name="settings_account_summary">Click to switch account</string>
-    <string name="settings_sync_enable_title">Google Tasks sync</string>
-    <string name="settings_sync_enable_summary">Synchronize notes with your Google account</string>
-    <string name="settings_cat_syncing">Synchronization</string>
-    <string name="manual">Manual</string>
-    <string name="minutes">minutes</string>
-    <string name="hours">hours</string>
-    <string name="onehour">One hour</string>
-    <string name="oneday">One day</string>
-    <string name="yes">Yes</string>
-    <string name="no">No</string>
-    <string name="ok">OK</string>
-    <string name="show_from_all_lists">All lists</string>
-    <string name="default_list_needed_warning">Set a default list first</string>
-    <string name="reverted">Reverted changes</string>
-    <string name="notecopied">Copied</string>
-    <string name="deleted">Deleted</string>
-    <string name="items">notes</string>
+    <string name="settings_sync_freq_title">Senk. sıklığı</string>
+    <string name="settings_account_title">Bir hesap seçin</string>
+    <string name="settings_account_summary">Başka bir hesaba geçmek için dokunun.</string>
+    <string name="settings_sync_enable_title">Google Görevler ile senk.</string>
+    <string name="settings_sync_enable_summary">Notlarınızı Google Görevler ile senkronize eder</string>
+    <string name="settings_cat_syncing">Senkronizasyon</string>
+    <string name="manual">El ile</string>
+    <string name="minutes">dakika</string>
+    <string name="hours">saat</string>
+    <string name="onehour">Bir saat</string>
+    <string name="oneday">Bir gün</string>
+    <string name="yes">Evet</string>
+    <string name="no">Hayır</string>
+    <string name="ok">Tamam</string>
+    <string name="show_from_all_lists">Tüm listeler</string>
+    <string name="default_list_needed_warning">Önce varsayılan listeyi seçin</string>
+    <string name="reverted">Değişiklikler geri alındı</string>
+    <string name="notecopied"Kopyalandı</string>
+    <string name="deleted">Silindi</string>
+    <string name="items">not</string>
     <string name="permission_read_label">read notes and lists</string>
     <string name="permission_read_desc">Allows the application to read your notes and related lists.</string>
     <string name="permission_write_label">modify notes and lists</string>
