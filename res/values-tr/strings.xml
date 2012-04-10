@@ -96,7 +96,6 @@
     <string name="preferences_week_start_day_title">Hafta şu günde başlar</string>
     <string name="preferences_week_start_day_default" tools:ignore="MissingTranslation" >-1</string>
 
-    <!-- Un-translated yet -->
     <string name="lock_note">Notu kilitle</string>
     <string name="unlock_note">Kilidi kaldır</string>
     <string name="locked">Kilitlendi</string>
@@ -122,7 +121,6 @@
     <string name="sync_failed">Senkronizasyon başarısız</string>
     <string name="sync_login_failed">Giriş yapılamadı, Google Görevler\'e erişilemiyor</string>
 
-    <!-- These should probably not be translated -->
     <string tools:ignore="MissingTranslation" name="about_text">Uygulamamı indirdiğiniz için teşekkürler! Bu uygulamayı mükemmeştirmek için en iyisini yaptığımı düşünmekteyim, fakat her uygulamada olabileceği gibi bunda da bazı hatalar olabilir.\n
 
 \nUygulama üzerinde bir hata veya yanlış bir çeviri görmeniz durumunda ya da uygulamayı geliştirmek için harika fikirleriniz varsa bundan haberdar olmaktan mutluluk duyarım.(Sadece İngilizce)
