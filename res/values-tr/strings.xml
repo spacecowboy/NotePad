@@ -120,23 +120,23 @@
     <string name="about">Hakkında</string>
     
     <string name="sync_failed">Senkronizasyon başarısız</string>
-    <string name="sync_login_failed">Giriş yapılamadı, Google Görevler'e erişilemiyor</string>
+    <string name="sync_login_failed">Giriş yapılamadı, Google Görevler\'e erişilemiyor</string>
 
     <!-- These should probably not be translated -->
-    <string tools:ignore="MissingTranslation" name="about_text">Thank you for downloading my app! I try my best to make this app awesome in every way but there will always be bugs and things can always get more awesome!\n
+    <string tools:ignore="MissingTranslation" name="about_text">Uygulamamı indirdiğiniz için teşekkürler! Bu uygulamayı mükemmeştirmek için en iyisini yaptığımı düşünmekteyim, fakat her uygulamada olabileceği gibi bunda da bazı hatalar olabilir.\n
 
-\nIf you\'ve found a bug, a translation being wrong or simply have an idea on how to make this app more awesome then I want to hear about it!
-\nSend me a mail: jonas@nononsenseapps.com
-\n\nTweet me: @SciencyGuy
-\n\n+1 me: https://plus.google.com/u/0/111801385015192089838
+\nUygulama üzerinde bir hata veya yanlış bir çeviri görmeniz durumunda ya da uygulamayı geliştirmek için harika fikirleriniz varsa bundan haberdar olmaktan mutluluk duyarım.(Sadece İngilizce)
+\nE-Posta Adresim: jonas@nononsenseapps.com
+\n\nTwitter: @SciencyGuy
+\n\nGoogle+: https://plus.google.com/u/0/111801385015192089838
 \n\nReport it in the issue tracker: https://github.com/spacecowboy/NotePad/issues
 
-\n\nSince the project is open source you can also try to fix it yourself if you have mad skills and send me a pull request!
+\n\nBu uygulama, açık kaynaklı bir projenin ürünü olduğundan dolayı, eğer isterseniz bulduğunuz hataları kendiniz düzeltip, sonrasında bana GitHub üzerinden bir çekme isteği(pull request) gönderebilirsiniz.
 
-\n\nIf you\'d like to provide a custom translation for your own language that would be awesome. Contact me!
-\nI made an instructional video demonstrating how you can update existing translations directly on GitHub: http://www.youtube.com/watch?v=oZTO5zOoCb4
+\n\nEğer uygulama için kendi dilinizde bir çeviri sunarsanız bu harika olur. Benimle iletişime geçin.
+\nAyrıca varolan diller üzerinde değişiklik yapıp, çeviri hatalarını gidermeyi direkt GitHub üzerinden çevrimiçi düzenltme hakkında yardım için http://www.youtube.com/watch?v=oZTO5zOoCb4 adresindeki videoya göz atabilirsiniz.
 
-\n\nAgain, thanks for downloading my app!
-\nIf you\'d like to support the project in a less active way, you can always buy the donate version: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
+\n\nUygulamamı indirdiğiniz için tekrar teşekkür ederim.
+\nEğer projeye daha kolay ve daha az aktif bir yoldan yardım etmek isterseniz https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate adresinde bulunan bağış sürümünü satın alabilirsiniz.</string>
 
 </resources>
