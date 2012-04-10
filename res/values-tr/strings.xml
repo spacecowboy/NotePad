@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:tools="http://schemas.android.com/tools" >
+
+    <string name="app_name">Notlar</string>
+    <string name="title_create">Yeni not</string>
+    <string name="title_edit">Düzenle: %1$s</string>
+    <string name="menu_add">Yeni not</string>
+    <string name="menu_delete">Delete</string>
+    <string name="menu_revert">Değişiklikleri geri al</string>
+    <string name="menu_copy">Notu kopyala</string>
+    <string name="menu_cancel">İptal</string>
+    <string name="menu_setcompleted">Yapıldı olarak işaretle</string>
+    <string name="menu_setuncompleted">Yapılmadı olarak işaretle</string>
+    <string name="menu_deletelist">Listeyi sil</string>
+    <string name="menu_sync">Yenile</string>
+    <string name="menu_share">Paylaş</string>
+    <string name="menu_preferences">Ayarlar</string>
+    <string name="menu_renamelist">Listeyi yeniden adlandır</string>
+    <string name="menu_createlist">Liste oluştur</string>
+    <string name="menu_clearcompleted">Tamamlananları temizle</string>
+    <string name="menu_setdefaultlist">Varsayılan liste olarak ayarla</string>
+    <string name="delete_list_warning">Listeyi silmek istiyor musunuz? Silme işlemi geri döndürülemez..</string>
+    <string name="editor_due_date_hint">Bitiş tarihi</string>
+    <string name="editor_title_hint">Başlık</string>
+    <string name="editor_note_hint">Not</string>
+    <string name="resolve_edit">Notu düzenle</string>
+    <string name="error_title">Hata</string>
+    <string name="error_message">Not yüklenirken hata oluştu.</string>
+    <string name="search_hint">Ara</string>
+    <string name="settings_theme">Kullanılan tema</string>
+    <string name="settings_theme_dialog">Tema seçin</string>
+    <string name="settings_cat_theme">Tema</string>
+    <string name="settings_cat_sorting">Sıralama</string>
+    <string name="settings_sorting_type">Sıralama ölçütü</string>
+    <string name="settings_sorting_type_dialog">Ölçüt</string>
+    <string name="settings_sorting_order">Sıralama türü</string>
+    <string name="settings_sorting_order_dialog">Tür</string>
+    <string name="settings_summary_sort_type_alphabetic">Başlık</string>
+    <string name="settings_summary_sort_type_modified">Değiştirilme tarihi</string>
+    <string name="settings_summary_sort_type_duedate">Bitiş tarihi</string>
+    <string name="settings_summary_sort_type_serverposition">Sunucu konumu</string>
+    <string name="settings_summary_sort_order_asc">Artan</string>
+    <string name="settings_summary_sort_order_desc">Azalan</string>
+    <string name="settings_summary_theme_dark">Koyu</string>
+    <string name="settings_summary_theme_light">Açık</string>
+    <string name="settings_summary_theme_light_dark_ab">Açık (Koyu eylem çubuğu)</string>
+    <string name="settings_cat_appearance">Görünüş</string>
+    <string name="settings_font_screen">Yazı tipi ayarları</string>
+    <string name="settings_font_screen_summary">Notlarınızda kullanılacak yazı tipini ve boyutunu seçebilirsiniz.</string>
+    <string name="settings_cat_font_editor">Düzenleyici</string>
+    <string name="settings_font_type">Yazı tipi</string>
+    <string name="settings_font_type_dialog">Yazı tipini seçin</string>
+    <string name="settings_font_size">Yazı boyutu</string>
+    <string name="preference_preview_text">Pijamalı hasta yağız şoföre çabucak güvendi.</string>
+    <string name="settings_text_preview_title">Önizleme</string>
+    <string name="monospace">Monospace</string>
+    <string name="sans">Sans</string>
+    <string name="serif">Serif</string>
+    <string name="settings_sync_freq_title">Senk. sıklığı</string>
+    <string name="settings_account_title">Bir hesap seçin</string>
+    <string name="settings_account_summary">Başka bir hesaba geçmek için dokunun.</string>
+    <string name="settings_sync_enable_title">Google Görevler ile senk.</string>
+    <string name="settings_sync_enable_summary">Notlarınızı Google Görevler ile senkronize eder</string>
+    <string name="settings_cat_syncing">Senkronizasyon</string>
+    <string name="manual">El ile</string>
+    <string name="minutes">dakika</string>
+    <string name="hours">saat</string>
+    <string name="onehour">Bir saat</string>
+    <string name="oneday">Bir gün</string>
+    <string name="yes">Evet</string>
+    <string name="no">Hayır</string>
+    <string name="ok">Tamam</string>
+    <string name="show_from_all_lists">Tüm listeler</string>
+    <string name="default_list_needed_warning">Önce varsayılan listeyi seçin</string>
+    <string name="reverted">Değişiklikler geri alındı</string>
+    <string name="notecopied">Kopyalandı: </string>
+    <string name="deleted">Silindi: </string>
+    <string name="items">not</string>
+    <string name="permission_read_label">Notları ve listeleri oku</string>
+    <string name="permission_read_desc">Uygulamanın notlarınıza ve onların bağlı olduğu listelere erişmesine izin verir.</string>
+    <string name="permission_write_label">Notları ve listeleri değiştir</string>
+    <string name="permission_write_desc">Uygulamanın yeni notlar ve listeler oluşturmasına, varolanları düzenlemesine veya silmesine izin verir.</string>
+    <string name="settings_header_list">Liste ayarları</string>
+    <string name="settings_header_list_summary"></string>
+    <string name="settings_header_appearance">@string/settings_cat_appearance</string>
+    <string name="settings_header_appearance_summary"></string>
+    <string name="settings_header_sync">@string/settings_cat_syncing</string>
+    <string name="settings_header_sync_summary"></string>
+    <string name="settings_list_dialog">Bir liste seçin</string>
+    <string name="settings_list">Liste</string>
+    <string name="settings_list_summary"></string>
+    <string name="automatic">Otomatik</string>
+
+    <string name="preferences_week_start_day_dialog">Hafta başlangıcı</string>
+    <string name="preferences_week_start_day_title">Hafta şu günde başlar</string>
+    <string name="preferences_week_start_day_default" tools:ignore="MissingTranslation" >-1</string>
+
+    <string name="lock_note">Notu kilitle</string>
+    <string name="unlock_note">Kilidi kaldır</string>
+    <string name="locked">Kilitlendi</string>
+    <string name="unlocked">Kilit kaldırıldı</string>
+    <string name="password_required">Parola gerekli</string>
+    <string name="select_account">Bir hesap seçin</string>
+    <string name="password">Parola</string>
+    <string name="password_set">Parola belirlendi</string>
+    <string name="password_cleared">Parola temizlendi</string>
+    <string name="passwords_dont_match">Parolalar uyuşmuyor</string>
+    <string name="enter_password">Parolayı girin</string>
+    <string name="enter_new_password">Yeni parolayı girin</string>
+    <string name="confirm_new_password">Yeni parolayı doğrulayın</string>
+    <string name="apply">Uygula</string>
+    <string name="clear_password">Parolayı kaldır</string>
+    <string name="password_info">Bir parola belirlediğiniz takdirde, notlarınızı görmek için parolayı
+        girmeniz gerekir. Bu işlem sadece notun gövde metnini korur, yani notun başlığını ve bitiş
+        tarihini her zaman görebilirsiniz. Bu işlem ile notlarınız sadece parola ile korunur. Şifreleme 
+        yapılmadığından dolayı Gmail ve Google Takvim gibi uygulamalarda hala görülebilir. Eğer parolayı
+        unutursanız notlarınızı Google ile senkronize edin ve ardından uygulamayı tekrar yükleyin.</string>
+    <string name="about">Hakkında</string>
+    
+    <string name="sync_failed">Senkronizasyon başarısız</string>
+    <string name="sync_login_failed">Giriş yapılamadı, Google Görevler\'e erişilemiyor</string>
+
+    <string tools:ignore="MissingTranslation" name="about_text">Uygulamamı indirdiğiniz için teşekkürler! Bu uygulamayı mükemmeştirmek için en iyisini yaptığımı düşünmekteyim, fakat her uygulamada olabileceği gibi bunda da bazı hatalar olabilir.\n
+
+\nUygulama üzerinde bir hata veya yanlış bir çeviri görmeniz durumunda ya da uygulamayı geliştirmek için harika fikirleriniz varsa bundan haberdar olmaktan mutluluk duyarım.(Sadece İngilizce)
+\nE-Posta Adresim: jonas@nononsenseapps.com
+\n\nTwitter: @SciencyGuy
+\n\nGoogle+: https://plus.google.com/u/0/111801385015192089838
+\n\nUygulamadaki hataları ayrıca https://github.com/spacecowboy/NotePad/issues adresinden de bildirebilirsiniz.
+
+\n\nBu uygulama, açık kaynaklı bir projenin ürünü olduğundan dolayı, eğer isterseniz bulduğunuz hataları kendiniz düzeltip, sonrasında bana GitHub üzerinden bir çekme isteği(pull request) gönderebilirsiniz.
+
+\n\nEğer uygulama için kendi dilinizde bir çeviri sunarsanız bu harika olur. Benimle iletişime geçin.
+\nAyrıca varolan diller üzerinde değişiklik yapıp, çeviri hatalarını gidermeyi direkt GitHub üzerinden çevrimiçi düzenleme hakkında yardım için http://www.youtube.com/watch?v=oZTO5zOoCb4 adresindeki videoya göz atabilirsiniz.
+
+\n\nUygulamamı indirdiğiniz için tekrar teşekkür ederim.
+\nEğer projeye daha kolay ve daha az aktif bir yoldan yardım etmek isterseniz https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate adresinde bulunan bağış sürümünü satın alabilirsiniz.</string>
+
+</resources>
