@@ -15,10 +15,10 @@
 -->
 
 <resources>
-    <string name="app_name">Notes</string>
+    <string name="app_name">Заметки</string>
 
     <string name="title_create">Новая запись</string>
-    <string name="title_edit">Редактировать: %1$s</string>
+    <string name="title_edit">Редактирование: %1$s</string>
 
     <string name="menu_add">Новая запись</string>
     <string name="menu_delete">Удалить</string>
@@ -26,10 +26,10 @@
     <string name="menu_copy">Копировать</string>
     <string name="menu_cancel">Отмена</string>
     <string name="menu_setcompleted">Пометить завершённым</string>
-    <string name="menu_setuncompleted">Пометить не завершённым</string>
+    <string name="menu_setuncompleted">Пометить незавершённым</string>
     <string name="menu_deletelist">Удалить список</string>
-    <string name="menu_sync">Обновить</string>
-    <string name="menu_share">Поделиться</string>
+    <string name="menu_sync">Синхронизировать</string>
+    <string name="menu_share">Отправить</string>
     <string name="menu_preferences">Настройки</string>
     <string name="menu_renamelist">Переименовать список</string>
     <string name="menu_createlist">Создать список</string>
@@ -93,14 +93,14 @@
 
     <string name="yes">Да</string>
     <string name="no">Нет</string>
-    <string name="ok">ОК</string>
+    <string name="ok">OK</string>
 
     <string name="show_from_all_lists">Все списки</string>
     <string name="default_list_needed_warning">Сперва задайте список по умолчанию</string>
     <string name="reverted">Изменения отменены</string>
     <string name="notecopied">Скопировано</string>
     <string name="deleted">Удалено</string>
-    <string name="items">запись</string>
+    <string name="items">записей</string>
 
     <string name="permission_read_label">читать записи и списки</string>
     <string name="permission_read_desc">Разрешить приложению читать записи и связанные списки.</string>
@@ -127,24 +127,24 @@
     <string name="lock_note">Заблокировать запись</string>
     <string name="unlock_note">Разблокировать запись</string>
 
-    <string name="locked">Заблокированно</string>
-    <string name="unlocked">Разблокированно</string>
+    <string name="locked">Заблокировано</string>
+    <string name="unlocked">Разблокировано</string>
     <string name="password_required">Требуется пароль</string>
     <string name="select_account">Выберите учётную запись</string>
     <string name="password">Пароль</string>
-    <string name="password_set">Пароль задан</string>
+    <string name="password_set">Пароль установлен</string>
     <string name="password_cleared">Пароль очищен</string>
-    <string name="passwords_dont_match">Пароль не соответствует</string>
+    <string name="passwords_dont_match">Пароли не совпадают</string>
     <string name="enter_password">Введите пароль</string>
     <string name="enter_new_password">Введите новый пароль</string>
     <string name="confirm_new_password">Подтвердите новый пароль</string>
     <string name="apply">Применить</string>
     <string name="clear_password">Очистить пароль</string>
-    <string name="password_info">После установки пароля, будет необходимо вводить пароль для просмотра любой заблокированной записи.
-        Это защищает только заметки, доступ до заголовка и даты окончания остаётся открытым.
-        Это не шифрует заметку, она попрежнему остаётся доступна в веб-приложениях Google.
+    <string name="password_info">После установки пароля, его будет необходимо вводить для просмотра любой заблокированной записи.
+        Это защищает только текст заметки, доступ до заголовка и даты окончания остаётся открытым.
+        Это не шифрует заметку, она по-прежнему остаётся доступна в веб-приложениях Google.
         Если вы забыли свой пароль, синхронизируйтесь и переустановите приложение.</string>
-    <string name="about">Помощь</string>
+    <string name="about">О программе</string>
 
     <string name="sync_failed">Ошибка синхронизации</string>
     <string name="sync_login_failed">Авторизация не выполнена, не удалось подключиться к Google Tasks</string>
