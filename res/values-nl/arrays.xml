@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string-array name="preferences_week_start_day_labels">
+        <item msgid="986150274035512339">"Lokale standaard"</item>
+        <item msgid="134027225275475280">"Zaterdag"</item>
+        <item msgid="95029346069903091">"Zondag"</item>
+        <item msgid="5840983116375063739">"Maandag"</item>
+    </string-array>
+
+</resources>
