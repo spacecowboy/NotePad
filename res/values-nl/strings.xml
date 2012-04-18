@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<resources>
+
+    <string name="app_name">Notities</string>
+    <string name="title_create">Nieuwe notitie</string>
+    <string name="title_edit">Bewerken %1$s</string>
+    <string name="menu_add">Nieuwe notitie</string>
+    <string name="menu_delete">Verwijderen</string>
+    <string name="menu_revert">Veranderingen ongedaan maken</string>
+    <string name="menu_copy">Notitie kopiëren</string>
+    <string name="menu_cancel">Annuleren</string>
+    <string name="menu_setcompleted">Wijzig naar voltooid</string>
+    <string name="menu_setuncompleted">Wijzig naar onvoltooid</string>
+    <string name="menu_deletelist">Verwijder lijst</string>
+    <string name="menu_sync">Herladen</string>
+    <string name="menu_share">Delen</string>
+    <string name="menu_preferences">Instellingen</string>
+    <string name="menu_renamelist">Lijst hernoemen</string>
+    <string name="menu_createlist">Nieuwe lijst</string>
+    <string name="menu_clearcompleted">Verwijder voltooide notities</string>
+    <string name="menu_setdefaultlist">Als standaard lijst gebruiken</string>
+    <string name="delete_list_warning">De lijst wordt permanent verwijderd. Weet je het zeker?</string>
+    <string name="editor_due_date_hint">Eind datum</string>
+    <string name="editor_title_hint">Titel</string>
+    <string name="editor_note_hint">Notitie</string>
+    <string name="resolve_edit">Bewerk notitie</string>
+    <string name="error_title">Mislukt</string>
+    <string name="error_message">Kon de notitie niet laden</string>
+    <string name="search_hint">Zoeken</string>
+    <string name="settings_theme">Huidig thema</string>
+    <string name="settings_theme_dialog">Gebruik thema</string>
+    <string name="settings_cat_theme">Thema</string>
+    <string name="settings_cat_sorting">Sortering</string>
+    <string name="settings_sorting_type">Gesorteerd op</string>
+    <string name="settings_sorting_type_dialog">Sorteren op</string>
+    <string name="settings_sorting_order">Volgorde</string>
+    <string name="settings_sorting_order_dialog">Volgorde</string>
+    <string name="settings_summary_sort_type_alphabetic">Titel</string>
+    <string name="settings_summary_sort_type_modified">Laatst bewerkt</string>
+    <string name="settings_summary_sort_type_duedate">Eind datum</string>
+    <string name="settings_summary_sort_type_serverposition">Server positie</string>
+    <string name="settings_summary_sort_order_asc">Oplopend</string>
+    <string name="settings_summary_sort_order_desc">Aflopend</string>
+    <string name="settings_summary_theme_dark">Donker</string>
+    <string name="settings_summary_theme_light">Licht</string>
+    <string name="settings_summary_theme_light_dark_ab">Licht, donker menu</string>
+    <string name="settings_cat_appearance">Opmaak</string>
+    <string name="settings_font_screen">Tekenstijl</string>
+    <string name="settings_font_screen_summary">Verander het letter type en grootte</string>
+    <string name="settings_cat_font_editor">Bewerker</string>
+    <string name="settings_font_type">Lettertype</string>
+    <string name="settings_font_type_dialog">Lettertype</string>
+    <string name="settings_font_size">Lettergrootte</string>
+    <string name="preference_preview_text">Dit is hoe de voorbeeld tekst eruit ziet</string>
+    <string name="settings_text_preview_title">Voorbeeld</string>
+    <string name="monospace">Monospace</string>
+    <string name="sans">Sans</string>
+    <string name="serif">Serif</string>
+    <string name="settings_sync_freq_title">Sync frequentie</string>
+    <string name="settings_account_title">Account kiezen</string>
+    <string name="settings_account_summary">Verander account</string>
+    <string name="settings_sync_enable_title">Google Tasks Sync</string>
+    <string name="settings_sync_enable_summary">Synchroniseer notities met je Google account</string>
+    <string name="settings_cat_syncing">Synchronisatie</string>
+    <string name="manual">Handmatig</string>
+    <string name="minutes">minuten</string>
+    <string name="hours">uren</string>
+    <string name="onehour">Een uur</string>
+    <string name="oneday">Een dag</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nee</string>
+    <string name="ok">OK</string>
+    <string name="show_from_all_lists">Alle Lijsten</string>
+    <string name="default_list_needed_warning">Stel eerst een standaard lijst in</string>
+    <string name="reverted">Veranderingen ongedaan gemaakt</string>
+    <string name="notecopied">Gekopiëerd</string>
+    <string name="deleted">Verwijderd</string>
+    <string name="items">notities</string>
+    <string name="permission_read_label">lees notities en lijsten</string>
+    <string name="permission_read_desc">Staat de applicatie toe notities en gerelateerde lijsten te lezen.</string>
+    <string name="permission_write_label">notities en lijsten bewerken</string>
+    <string name="permission_write_desc">Staat de applicatie toe om notities en lijsten te maken, bewerken en verwijderen.</string>
+    <string name="settings_header_list">Lijst instellingen</string>
+    <string name="settings_header_list_summary"></string>
+    <string name="settings_header_appearance">@string/settings_cat_appearance</string>
+    <string name="settings_header_appearance_summary"></string>
+    <string name="settings_header_sync">@string/settings_cat_syncing</string>
+    <string name="settings_header_sync_summary"></string>
+    <string name="settings_list_dialog">Selecteer een lijst</string>
+    <string name="settings_list">Lijst</string>
+    <string name="settings_list_summary"></string>
+    <string name="automatic">Automatisch</string>
+    <string name="preferences_week_start_day_title" msgid="4619489296444901622">"Week begint op"</string>
+    <string name="preferences_week_start_day_dialog" msgid="5181634128884089113">"Week begint op"</string>
+
+    <string name="lock_note">Notitie vergrendelen</string>
+    <string name="unlock_note">Notitie ontgrendelen</string>
+    <string name="locked">Vergrendeld</string>
+    <string name="unlocked">Ontgrendeld</string>
+    <string name="password_required">Wachtwoord vereist</string>
+    <string name="select_account">Selecteer een account</string>
+    <string name="password">Wachtwoord</string>
+    <string name="password_set">Wachtwoord instellen</string>
+    <string name="password_cleared">Wachtwoord verwijderd</string>
+    <string name="passwords_dont_match">Wachtwoord komt niet overeen</string>
+    <string name="enter_password">Wachtwoord invoeren</string>
+    <string name="enter_new_password">Nieuw wachtwoord invoeren</string>
+    <string name="confirm_new_password">Bevestig nieuw wachtwoord</string>
+    <string name="apply">Toepassen</string>
+    <string name="clear_password">Wachtwoord verwijderen</string>
+    <string name="password_info">Het instellen van een wachtwoord zal je vereisen een wachtwoord in te voeren om vergrendelde notities te bekijken. Het zal alleen het notitie deel beschermen, dus je hebt wel onbeschermd toegang tot de titel in de eind datum. Het encrypt de notitie niet, dus de notitie kan gewoon gezien worden in de Google mail/kalender. Als je je wachtwoord vergeet, synchroniseer dan met Google en her-installeer de app.</string>
+    <string name="about">Over</string>
+    
+    <string name="sync_failed">Synchronisatie mislukt</string>
+    <string name="sync_login_failed">Inloggen mislukt, kon niet verbinden met Google Tasks</string>
+
+</resources>
