@@ -254,7 +254,7 @@ public class NotePadProvider extends ContentProvider implements
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LOCKED,
 				NotePad.Notes.COLUMN_NAME_LOCKED);
 
-		// This is a special map. A locked note will note return its text in
+		// This is a special map. A locked note will not return its text in
 		// this projection.
 		// Useful for list displays, places that are not supposed to ask for
 		// passwords

@@ -14,16 +14,13 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+<resources>
 
-<!--
-  Important to use my own authority
-  also specify that we want to use standard google account as the type
-  also we want to be able to upload etc...
--->
+    <string-array name="preferences_week_start_day_labels">
+        <item msgid="986150274035512339">"Varsayılan"</item>
+        <item msgid="134027225275475280">"Cumartesi"</item>
+        <item msgid="95029346069903091">"Pazar"</item>
+        <item msgid="5840983116375063739">"Pazartesi"</item>
+    </string-array>
 
-<sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-    android:contentAuthority="com.nononsenseapps.NotePad"
-    android:accountType="com.google"
-    android:supportsUploading="true"
-    android:userVisible="true"
-/>
+</resources>

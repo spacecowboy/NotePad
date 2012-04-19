@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2007 The Android Open Source Project
+     Copyright (C) 2012 Jonas Kalderstam
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -128,7 +128,7 @@
     <string name="about">À propos</string>
     
      <!-- Untranslated yet -->
-    <string name="sync_failed">Sync failed</string>
-    <string name="sync_login_failed">Login failed, could not connect to Google Tasks</string>
+    <string name="sync_failed">La syncronisation a échoué</string>
+    <string name="sync_login_failed">La connexion à Google Tasks a échoué</string>
 
 </resources>
