@@ -16,12 +16,16 @@
 
 package com.nononsenseapps.notepad.prefs;
 
+import java.util.ArrayList;
+
 import com.nononsenseapps.notepad.MainActivity;
+import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceManager;
@@ -37,6 +41,7 @@ public class MainPrefs extends PreferenceFragment implements
 	public static final String KEY_FONT_SIZE_EDITOR = "key_font_size_editor";
 	public static final String KEY_TEXT_PREVIEW = "key_text_preview";
 	public static final String KEY_WEEK_START_DAY = "preferences_week_start_day";
+	public static final String KEY_DEFAULT_LIST = "key_default_list_id";
 
 	public static final String SANS = "Sans";
 	public static final String SERIF = "Serif";
@@ -61,6 +66,7 @@ public class MainPrefs extends PreferenceFragment implements
 	private ListPreference prefTheme;
 	private ListPreference prefFontType;
 	private ListPreference prefWeekStart;
+	private ListPreference prefDefaultList;
 
 	private Activity activity;
 
@@ -82,6 +88,7 @@ public class MainPrefs extends PreferenceFragment implements
 		prefTheme = (ListPreference) findPreference(KEY_THEME);
 		prefFontType = (ListPreference) findPreference(KEY_FONT_TYPE_EDITOR);
 		prefWeekStart = (ListPreference) findPreference(KEY_WEEK_START_DAY);
+		prefDefaultList = (ListPreference) findPreference(KEY_DEFAULT_LIST);
 
 		SharedPreferences sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(activity);
@@ -94,6 +101,55 @@ public class MainPrefs extends PreferenceFragment implements
 		prefTheme.setSummary(prefTheme.getEntry());
 		prefFontType.setSummary(prefFontType.getEntry());
 		prefWeekStart.setSummary(prefWeekStart.getEntry());
+		
+		setEntries(prefDefaultList);
+	}
+	
+	/**
+	 * Reads the lists from database. Also adds "All lists" as the first
+	 * item.
+	 * 
+	 * @return
+	 */
+	private void setEntries(ListPreference listSpinner) {
+
+		ArrayList<CharSequence> entries = new ArrayList<CharSequence>();
+		ArrayList<CharSequence> values = new ArrayList<CharSequence>();
+
+		// Start with all lists
+		entries.add(getText(R.string.show_from_all_lists));
+		values.add(Long.toString(MainActivity.ALL_NOTES_ID));
+		// Set it as the default value also
+		listSpinner.setDefaultValue(Long
+				.toString(MainActivity.ALL_NOTES_ID));
+
+		Cursor cursor = getActivity().getContentResolver().query(
+				NotePad.Lists.CONTENT_VISIBLE_URI,
+				new String[] { NotePad.Lists._ID,
+						NotePad.Lists.COLUMN_NAME_TITLE }, null, null,
+				NotePad.Lists.SORT_ORDER);
+		if (cursor != null) {
+			if (!cursor.isClosed() && !cursor.isAfterLast()) {
+				while (cursor.moveToNext()) {
+					entries.add(cursor.getString(cursor
+							.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE)));
+					values.add(Long.toString(cursor.getLong(cursor
+							.getColumnIndex(NotePad.Lists._ID))));
+				}
+			}
+
+			cursor.close();
+		}
+
+		// Set the values
+		if (listSpinner != null) {
+			listSpinner.setEntries(entries.toArray(new CharSequence[entries
+					.size()]));
+			listSpinner.setEntryValues(values
+					.toArray(new CharSequence[values.size()]));
+
+			listSpinner.setSummary(listSpinner.getEntry());
+		}
 	}
 
 	@Override
@@ -121,6 +177,8 @@ public class MainPrefs extends PreferenceFragment implements
 				} else if (KEY_WEEK_START_DAY.equals(key)) {
 					prefWeekStart.setSummary(prefWeekStart.getEntry());
 				} else if (KEY_FONT_SIZE_EDITOR.equals(key)) {
+				} else if (KEY_DEFAULT_LIST.equals(key)) {
+					prefDefaultList.setSummary(prefDefaultList.getEntry());
 				}
 			}
 		} catch (IllegalStateException e) {

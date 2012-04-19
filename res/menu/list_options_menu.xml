@@ -40,14 +40,9 @@
         android:showAsAction="never"
         android:title="@string/menu_clearcompleted"/>
     <item
-        android:id="@+id/menu_setdefaultlist"
-        android:orderInCategory="14"
-        android:showAsAction="never"
-        android:title="@string/menu_setdefaultlist"/>
-    <item
         android:id="@+id/menu_preferences"
         android:icon="?action_settings"
-        android:orderInCategory="15"
+        android:orderInCategory="14"
         android:showAsAction="never"
         android:title="@string/menu_preferences"/>
 

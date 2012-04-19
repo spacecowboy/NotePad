@@ -17,46 +17,45 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:robobunny="http://robobunny.com"
     android:key="preference_screen" >
-    
-        <ListPreference
-            android:defaultValue="light"
-            android:dialogTitle="@string/settings_theme_dialog"
-            android:entries="@array/theme_preference"
-            android:entryValues="@array/themevalues_preference"
-            android:key="key_current_theme"
-            android:summary="Selected option should be here"
-            android:title="@string/settings_theme" />
 
-        <com.nononsenseapps.ui.TextPreviewPreference
-            android:key="key_text_preview"
-            android:title="@string/settings_text_preview_title" />
+    <ListPreference
+        android:defaultValue="light"
+        android:dialogTitle="@string/settings_theme_dialog"
+        android:entries="@array/theme_preference"
+        android:entryValues="@array/themevalues_preference"
+        android:key="key_current_theme"
+        android:summary="Selected option should be here"
+        android:title="@string/settings_theme" />
 
-        <com.robobunny.SeekBarPreference
-            android:defaultValue="22"
-            android:key="key_font_size_editor"
-            android:max="30"
-            robobunny:min="12"
-            android:title="@string/settings_font_size"
-            robobunny:unitsLeft=""
-            robobunny:unitsRight="sp" />
+    <com.nononsenseapps.ui.TextPreviewPreference
+        android:key="key_text_preview"
+        android:title="@string/settings_text_preview_title" />
 
-        <ListPreference
-            android:defaultValue="Sans"
-            android:dialogTitle="@string/settings_font_type_dialog"
-            android:entries="@array/font_type_preference"
-            android:entryValues="@array/font_typevalues_preference"
-            android:key="key_font_type_editor"
-            android:summary="Selected option should be here"
-            android:title="@string/settings_font_type" />
+    <com.robobunny.SeekBarPreference
+        android:defaultValue="22"
+        android:key="key_font_size_editor"
+        android:max="30"
+        android:title="@string/settings_font_size"
+        robobunny:min="12"
+        robobunny:unitsLeft=""
+        robobunny:unitsRight="sp" />
 
-        <ListPreference
-            android:defaultValue="@string/preferences_week_start_day_default"
-            android:dialogTitle="@string/preferences_week_start_day_dialog" 
-            android:entries="@array/preferences_week_start_day_labels"
-            android:entryValues="@array/preferences_week_start_day_values"
-            android:key="preferences_week_start_day"
-            android:title="@string/preferences_week_start_day_title" />
-    
+    <ListPreference
+        android:defaultValue="Sans"
+        android:dialogTitle="@string/settings_font_type_dialog"
+        android:entries="@array/font_type_preference"
+        android:entryValues="@array/font_typevalues_preference"
+        android:key="key_font_type_editor"
+        android:summary="Selected option should be here"
+        android:title="@string/settings_font_type" />
+    <ListPreference
+        android:defaultValue="@string/preferences_week_start_day_default"
+        android:dialogTitle="@string/preferences_week_start_day_dialog"
+        android:entries="@array/preferences_week_start_day_labels"
+        android:entryValues="@array/preferences_week_start_day_values"
+        android:key="preferences_week_start_day"
+        android:title="@string/preferences_week_start_day_title" />
+
     <PreferenceCategory android:title="@string/settings_cat_sorting" >
         <ListPreference
             android:defaultValue="title COLLATE NOCASE"
@@ -74,6 +73,11 @@
             android:key="key_sort_order"
             android:summary="Selected option should be here"
             android:title="@string/settings_sorting_order" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_list" >
+        <ListPreference
+            android:key="key_default_list_id"
+            android:title="@string/menu_setdefaultlist" />
     </PreferenceCategory>
 
 </PreferenceScreen>

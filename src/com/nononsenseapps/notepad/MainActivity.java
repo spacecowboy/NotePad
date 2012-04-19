@@ -74,8 +74,6 @@ public class MainActivity extends DualLayoutActivity implements
 	public static String currentTheme = MainPrefs.THEME_LIGHT;
 	public static boolean shouldRestart = false;
 
-	public static final String DEFAULTLIST = "standardListId";
-
 	// For my special dropdown navigation items
 	public static final int ALL_NOTES_ID = -2;
 	public static final int CREATE_LIST_ID = -3;
@@ -141,8 +139,8 @@ public class MainActivity extends DualLayoutActivity implements
 
 		// Set up navigation list
 		// Set a default list to open if one is set
-		listIdToSelect = PreferenceManager.getDefaultSharedPreferences(this)
-				.getLong(DEFAULTLIST, -1);
+		listIdToSelect = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(this)
+				.getString(MainPrefs.KEY_DEFAULT_LIST, "-1"));
 		// Handle the intent first, so we know what to possibly select once
 		// the
 		// loader is finished
@@ -207,15 +205,6 @@ public class MainActivity extends DualLayoutActivity implements
 					renameList.setVisible(false);
 				} else {
 					renameList.setVisible(true);
-				}
-			}
-			MenuItem defaultList = menu.findItem(R.id.menu_setdefaultlist);
-			if (defaultList != null) {
-				// Only show this button if there is a proper list showing
-				if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
-					defaultList.setVisible(false);
-				} else {
-					defaultList.setVisible(true);
 				}
 			}
 		}
@@ -396,8 +385,8 @@ public class MainActivity extends DualLayoutActivity implements
 
 		if (tempList < 0) {
 			// Then check if a default list is specified
-			tempList = PreferenceManager.getDefaultSharedPreferences(this)
-					.getLong(DEFAULTLIST, -1);
+			tempList = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(this)
+					.getString(MainPrefs.KEY_DEFAULT_LIST, "-1"));
 			Log.d(TAG, "Default list: " + tempList);
 		}
 		// Not guaranteed that this is valid. Check the database even if it
@@ -690,13 +679,13 @@ public class MainActivity extends DualLayoutActivity implements
 			}
 
 			// Remove default setting if this is the default list
-			long defaultListId = PreferenceManager.getDefaultSharedPreferences(
-					this).getLong(DEFAULTLIST, -1);
+			long defaultListId = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(this)
+					.getString(MainPrefs.KEY_DEFAULT_LIST, "-1"));
 			if (currentListId == defaultListId) {
 				// Remove knowledge of default list
 				SharedPreferences.Editor prefEditor = PreferenceManager
 						.getDefaultSharedPreferences(this).edit();
-				prefEditor.remove(DEFAULTLIST);
+				prefEditor.remove(MainPrefs.KEY_DEFAULT_LIST);
 				prefEditor.commit();
 			}
 		}
@@ -776,14 +765,6 @@ public class MainActivity extends DualLayoutActivity implements
 		case R.id.menu_deletelist:
 			// Create dialog
 			showDialog(DELETE_LIST);
-			return true;
-		case R.id.menu_setdefaultlist:
-			if (currentListId >= 0) {
-				SharedPreferences.Editor prefEditor = PreferenceManager
-						.getDefaultSharedPreferences(this).edit();
-				prefEditor.putLong(DEFAULTLIST, currentListId);
-				prefEditor.commit();
-			}
 			return true;
 		case R.id.menu_search:
 			// Cant do this in HC, because it will crash.
