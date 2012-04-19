@@ -1,0 +1,151 @@
+<!--
+     Copyright (C) 2007 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+--><resources xmlns:tools="http://schemas.android.com/tools">
+
+    <string name="app_name">"Notes"</string>
+    <string name="title_create">"新しいノート"</string>
+    <string name="title_edit">"編集: %1$s"</string>
+    <string name="menu_add">"新しいノート"</string>
+    <string name="menu_delete">"削除"</string>
+    <string name="menu_revert">"元に戻す"</string>
+    <string name="menu_copy">"ノートのコピー"</string>
+    <string name="menu_cancel">"キャンセル"</string>
+    <string name="menu_setcompleted">"完了"</string>
+    <string name="menu_setuncompleted">"未完了"</string>
+    <string name="menu_deletelist">"リストの削除"</string>
+    <string name="menu_sync">"更新"</string>
+    <string name="menu_share">"共有"</string>
+    <string name="menu_preferences">"設定"</string>
+    <string name="menu_renamelist">"リストの名前を変更"</string>
+    <string name="menu_createlist">"リストの作成"</string>
+    <string name="menu_clearcompleted">"完了したノートの削除"</string>
+    <string name="menu_setdefaultlist">"デフォルトのリストに設定"</string>
+    <string name="delete_list_warning">"リストを削除してもよろしいですか？リストは完全に削除されます。"</string>
+    <string name="editor_due_date_hint">"期限"</string>
+    <string name="editor_title_hint">"タイトル"</string>
+    <string name="editor_note_hint">"ノート"</string>
+    <string name="resolve_edit">"ノートの編集"</string>
+    <string name="error_title">"エラー"</string>
+    <string name="error_message">"ノート読み込みエラー"</string>
+    <string name="search_hint">"検索"</string>
+    <string name="settings_theme">"現在のテーマ"</string>
+    <string name="settings_theme_dialog">"テーマの選択"</string>
+    <string name="settings_cat_theme">"テーマ"</string>
+    <string name="settings_cat_sorting">"整列"</string>
+    <string name="settings_sorting_type">"整列順"</string>
+    <string name="settings_sorting_type_dialog">"整列順"</string>
+    <string name="settings_sorting_order">"整列方向"</string>
+    <string name="settings_sorting_order_dialog">"整列方向"</string>
+    <string name="settings_summary_sort_type_alphabetic">"タイトル"</string>
+    <string name="settings_summary_sort_type_modified">"最近編集した順"</string>
+    <string name="settings_summary_sort_type_duedate">"期限"</string>
+    <string name="settings_summary_sort_type_serverposition">"サーバの設定どおり"</string>
+    <string name="settings_summary_sort_order_asc">"昇順"</string>
+    <string name="settings_summary_sort_order_desc">"降順"</string>
+    <string name="settings_summary_theme_dark">"ダーク"</string>
+    <string name="settings_summary_theme_light">"ライト"</string>
+    <string name="settings_summary_theme_light_dark_ab">"ライト、ダークなアクションバー"</string>
+    <string name="settings_cat_appearance">"表示"</string>
+    <string name="settings_font_screen">"フォントの設定"</string>
+    <string name="settings_font_screen_summary">"フォントの種類やサイズを変更することができます"</string>
+    <string name="settings_cat_font_editor">"エディタ"</string>
+    <string name="settings_font_type">"フォント"</string>
+    <string name="settings_font_type_dialog">"フォントの選択"</string>
+    <string name="settings_font_size">"フォント サイズ"</string>
+    <string name="preference_preview_text">"ここで実際の見た目を確認することが出来ます"</string>
+    <string name="settings_text_preview_title">"プレビュー"</string>
+    <string name="monospace">"固定幅"</string>
+    <string name="sans">"ゴシック体"</string>
+    <string name="serif">"明朝体"</string>
+    <string name="settings_sync_freq_title">"同期をとる周期"</string>
+    <string name="settings_account_title">"アカウントを選択する"</string>
+    <string name="settings_account_summary">"タップしてアカウントを切り替える"</string>
+    <string name="settings_sync_enable_title">"Google Tasksとの同期"</string>
+    <string name="settings_sync_enable_summary">"Googleアカウントでノートを同期する"</string>
+    <string name="settings_cat_syncing">"同期"</string>
+    <string name="manual">"手動"</string>
+    <string name="minutes">"分"</string>
+    <string name="hours">"時間"</string>
+    <string name="onehour">"1時間"</string>
+    <string name="oneday">"1日"</string>
+    <string name="yes">"Yes"</string>
+    <string name="no">"No"</string>
+    <string name="ok">"OK"</string>
+    <string name="show_from_all_lists">"すべてのノート"</string>
+    <string name="default_list_needed_warning">"最初にデフォルトのリストを設定してください"</string>
+    <string name="reverted">"変更を元に戻す"</string>
+    <string name="notecopied">"コピー"</string>
+    <string name="deleted">"削除済み"</string>
+    <string name="items">"ノート"</string>
+    <string name="permission_read_label">"ノートやリストを読み込む"</string>
+    <string name="permission_read_desc">"アプリケーションがノートとリストを読み取ることを許可します。"</string>
+    <string name="permission_write_label">"ノートやリストを変更"</string>
+    <string name="permission_write_desc">"アプリケーションがノートやリストの挿入、更新、および削除することを許可します。"</string>
+    <string name="settings_header_list">"リストの設定"</string>
+    <string name="settings_header_list_summary">""</string>
+    <string name="settings_header_appearance">"@string/settings_cat_appearance"</string>
+    <string name="settings_header_appearance_summary">""</string>
+    <string name="settings_header_sync">"@string/settings_cat_syncing"</string>
+    <string name="settings_header_sync_summary">""</string>
+    <string name="settings_list_dialog">"リストの選択"</string>
+    <string name="settings_list">"リスト"</string>
+    <string name="settings_list_summary">""</string>
+    <string name="automatic">"自動"</string>
+
+    <string name="preferences_week_start_day_dialog">"週の開始日"</string>
+    <string name="preferences_week_start_day_title">"週の開始日"</string>
+    <string name="preferences_week_start_day_default" tools:ignore="MissingTranslation">"-1"</string>
+
+    <string name="lock_note">"ノートのロック"</string>
+    <string name="unlock_note">"ロックの解除"</string>
+    <string name="locked">"ロック済み"</string>
+    <string name="unlocked">"未ロック"</string>
+    <string name="password_required">"パスワードが必要です"</string>
+    <string name="select_account">"アカウントを選択する"</string>
+    <string name="password">"パスワード"</string>
+    <string name="password_set">"パスワードを設定しました"</string>
+    <string name="password_cleared">"パスワードをクリアしました"</string>
+    <string name="passwords_dont_match">"パスワードが一致しません"</string>
+    <string name="enter_password">"パスワードを入力"</string>
+    <string name="enter_new_password">"新しいパスワードを入力"</string>
+    <string name="confirm_new_password">"新しいパスワードの確認"</string>
+    <string name="apply">"適用"</string>
+    <string name="clear_password">"パスワードをクリア"</string>
+    <string name="password_info">"パスワードを設定すると、ロックされたノートを表示するにはパスワードが必要となります。ロックされたノートでは、タイトルや期限は保護されずに、ノート欄を保護します。ノートはGmailやGoogleカレンダーで表示することができる為、ノートを暗号化することはありません。パスワードを忘れた場合は、Googleと同期してから、アプリケーションを再インストールしてください。"</string>
+    <string name="about">"このアプリについて"</string>
+    
+    <string name="sync_failed">"同期失敗"</string>
+    <string name="sync_login_failed">"ログインに失敗しました。Google Tasksに接続できませんでした。"</string>
+
+    <string name="about_text" tools:ignore="MissingTranslation">
+        "私のアプリをダウンロードしてくれてありがとう！私はこのアプリを素晴らしいものにするために最善を尽くしますが、より素晴らしい機能にはいつもバグが発生することでしょう。\n
+
+\nバグを発見した時、翻訳間違いを見つけた時、このアプリをもっと良くするアイデアが浮かんだとき、私は是非ともそれを知りたい！
+\n(訳註：コンタクトを取るときは英語でお願いします)
+\nメール： jonas@nononsenseapps.com
+\n\nTwitter: @SciencyGuy
+\n\nGoogle+: https://plus.google.com/u/0/111801385015192089838
+\n\nissueトラッカー: https://github.com/spacecowboy/NotePad/issues
+
+\n\nこのプロジェクトはオープンソースのため、あなたが素晴らしい技術力を有しており自分自身で修正したものがあれば、pull requestしてください！
+
+\n\nあなたがアプリの素晴らしい翻訳を思いついて提供したいなら、私にご連絡ください！
+\nGitHub上で既存の文字列を直接編集するやり方をまとめた動画を作成しました: http://www.youtube.com/watch?v=oZTO5zOoCb4
+
+\n\nもう一度言いますが、私のアプリをダウンロードしてくれて本当にありがとう！
+\nあなたがこのプロジェクトをよりアクティブな方向で支援したい場合は、donate版を購入することが出来ます: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate"
+    </string>
+    
+</resources>
