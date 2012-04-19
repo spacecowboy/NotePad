@@ -765,6 +765,23 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					// Return false so the normal call is used to set the text
 					return false;
 				} else if (columnIndex == cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE)) {
+					String text = cursor.getString(cursor
+							.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE));
+					TextView tv = (TextView) view;
+					LinearLayout.LayoutParams layoutParams;
+					if (text == null || text.isEmpty()) {
+						// Set height to zero
+						layoutParams = new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.WRAP_CONTENT, 0);
+					} else {
+						// Set height to wrap
+						layoutParams = new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.WRAP_CONTENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT);
+					}
+					tv.setLayoutParams(layoutParams);
+				} else if (columnIndex == cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL)) {
 					// Should only set this on the sort options where it is
 					// expected
