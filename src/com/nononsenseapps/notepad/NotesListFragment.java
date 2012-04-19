@@ -726,6 +726,23 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						|| columnIndex == cursor
 								.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE)) {
 					TextView tv = (TextView) view;
+
+					// Hide empty note
+					if (columnIndex == cursor
+							.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE)) {
+
+						LinearLayout.LayoutParams layoutParams;
+						boolean isEmpty = cursor.getString(cursor
+								.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE)).isEmpty();
+
+						if(isEmpty) layoutParams = new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.MATCH_PARENT, 0);
+						else layoutParams = new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+
+						tv.setLayoutParams(layoutParams);
+					}
+
 					// Set strike through on completed tasks
 					String text = cursor.getString(cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS));
