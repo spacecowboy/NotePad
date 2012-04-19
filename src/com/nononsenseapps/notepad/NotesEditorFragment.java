@@ -630,11 +630,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-		if (timeToDie) {
-
-			Log.d("NotesEditorFragment",
-					"onPrepareOptionsMenu, but it is time to die so doing nothing...");
-		} else {
+		if (!timeToDie) {
 			// Check if note has changed and enable/disable the revert option
 			if (!hasNoteChanged()) {
 				menu.findItem(R.id.menu_revert).setVisible(false);
@@ -643,13 +639,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			}
 			// Lock items
 			if (noteAttrs != null) {
-				if (noteAttrs.locked) {
-					menu.findItem(R.id.menu_lock).setVisible(false);
-					menu.findItem(R.id.menu_unlock).setVisible(true);
-				} else {
-					menu.findItem(R.id.menu_lock).setVisible(true);
-					menu.findItem(R.id.menu_unlock).setVisible(false);
-				}
+				menu.findItem(R.id.menu_lock).setVisible(!noteAttrs.locked);
+				menu.findItem(R.id.menu_unlock).setVisible(noteAttrs.locked);
 			}
 		}
 	}
