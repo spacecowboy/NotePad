@@ -781,6 +781,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 								LinearLayout.LayoutParams.WRAP_CONTENT);
 					}
 					tv.setLayoutParams(layoutParams);
+					return false;
 				} else if (columnIndex == cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL)) {
 					// Should only set this on the sort options where it is
