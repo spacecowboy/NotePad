@@ -76,8 +76,9 @@ public class MainActivity extends DualLayoutActivity implements
 
 	public static final String DEFAULTLIST = "standardListId";
 
-	// For my special dropdown navigation item
+	// For my special dropdown navigation items
 	public static final int ALL_NOTES_ID = -2;
+	public static final int CREATE_LIST_ID = -3;
 
 	private NotesListFragment list;
 	private Menu optionsMenu;
@@ -125,8 +126,8 @@ public class MainActivity extends DualLayoutActivity implements
 		mSpinnerAdapter = new ExtrasCursorAdapter(this,
 				R.layout.actionbar_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
-				new int[] { android.R.id.text1 }, new int[] { ALL_NOTES_ID },
-				new int[] { R.string.show_from_all_lists });
+				new int[] { android.R.id.text1 }, new int[] { ALL_NOTES_ID, CREATE_LIST_ID },
+				new int[] { R.string.show_from_all_lists, R.string.menu_createlist });
 
 		mSpinnerAdapter
 				.setDropDownViewResource(R.layout.actionbar_dropdown_item);
@@ -540,6 +541,7 @@ public class MainActivity extends DualLayoutActivity implements
 			noButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
+					getActionBar().setSelectedNavigationItem(currentListPos);
 					dialog.cancel();
 				}
 			});
@@ -767,10 +769,6 @@ public class MainActivity extends DualLayoutActivity implements
 		case R.id.menu_preferences:
 			showPrefs();
 			return true;
-		case R.id.menu_createlist:
-			// Create dialog
-			showDialog(CREATE_LIST);
-			return true;
 		case R.id.menu_renamelist:
 			// Create dialog
 			showDialog(RENAME_LIST);
@@ -910,10 +908,15 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 		// Change the active list
-		currentListId = itemId;
-		currentListPos = itemPosition;
-		// Display list'
-		if (list != null) {
+		
+		if (CREATE_LIST_ID == itemId) {
+			// Create list
+			showDialog(CREATE_LIST);
+		}
+		else if (list != null) {
+			// Display list
+			currentListId = itemId;
+			currentListPos = itemPosition;
 			list.showList(itemId);
 		}
 		return true;
