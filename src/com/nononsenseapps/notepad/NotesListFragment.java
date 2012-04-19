@@ -70,6 +70,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.ShareActionProvider;
@@ -148,7 +149,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						setRefreshActionItemState(false);
 					}
 				});
-				tellUser(context, intent.getExtras().getInt(SyncAdapter.SYNC_RESULT));
+				tellUser(context,
+						intent.getExtras().getInt(SyncAdapter.SYNC_RESULT));
 			}
 		}
 
@@ -199,26 +201,21 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		// Sync any possible changes from server on start here. NOT in onresume
 		// TODO activate this once changes in the editor is not overwritten
 		/*
-		String accountName = PreferenceManager.getDefaultSharedPreferences(
-				activity).getString(SyncPrefs.KEY_ACCOUNT, "");
-
-		if (accountName != null && !accountName.equals("")
-				&& NotePadProvider.SyncAuto(activity)) {
-			Account account = SyncPrefs.getAccount(
-					AccountManager.get(activity), accountName);
-			// Don't start a new sync if one is already going
-			if (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) {
-				Bundle options = new Bundle();
-				// This will force a sync regardless of what the setting is
-				// in
-				// accounts manager. Only use it here where the user has
-				// manually
-				// desired a sync to happen NOW.
-				options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-				ContentResolver
-						.requestSync(account, NotePad.AUTHORITY, options);
-			}
-		}*/
+		 * String accountName = PreferenceManager.getDefaultSharedPreferences(
+		 * activity).getString(SyncPrefs.KEY_ACCOUNT, "");
+		 * 
+		 * if (accountName != null && !accountName.equals("") &&
+		 * NotePadProvider.SyncAuto(activity)) { Account account =
+		 * SyncPrefs.getAccount( AccountManager.get(activity), accountName); //
+		 * Don't start a new sync if one is already going if
+		 * (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) { Bundle
+		 * options = new Bundle(); // This will force a sync regardless of what
+		 * the setting is // in // accounts manager. Only use it here where the
+		 * user has // manually // desired a sync to happen NOW.
+		 * options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+		 * ContentResolver .requestSync(account, NotePad.AUTHORITY, options); }
+		 * }
+		 */
 	}
 
 	public void handleNoteIntent(Intent intent) {
@@ -283,7 +280,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	private int getPosOfId(long id) {
 		if (mAdapter == null)
 			return -1;
-		
+
 		int length = mAdapter.getCount();
 		int position;
 		for (position = 0; position < length; position++) {
@@ -732,13 +729,19 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE)) {
 
 						LinearLayout.LayoutParams layoutParams;
-						boolean isEmpty = cursor.getString(cursor
-								.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE)).isEmpty();
+						String noteText = cursor.getString(cursor
+								.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE));
+						boolean isEmpty = noteText == null
+								|| noteText.isEmpty();
 
-						if(isEmpty) layoutParams = new LinearLayout.LayoutParams(
-								LinearLayout.LayoutParams.MATCH_PARENT, 0);
-						else layoutParams = new LinearLayout.LayoutParams(
-								LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+						// Set height to zero if it's empty, otherwise wrap
+						if (isEmpty)
+							layoutParams = new LinearLayout.LayoutParams(
+									LinearLayout.LayoutParams.MATCH_PARENT, 0);
+						else
+							layoutParams = new LinearLayout.LayoutParams(
+									LinearLayout.LayoutParams.MATCH_PARENT,
+									LinearLayout.LayoutParams.WRAP_CONTENT);
 
 						tv.setLayoutParams(layoutParams);
 					}
