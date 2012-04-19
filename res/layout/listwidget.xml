@@ -24,8 +24,8 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:orientation="horizontal"
-        android:paddingLeft="4dp"
-        android:paddingRight="8dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
         android:paddingTop="0dp"
         android:background="@drawable/header_bg_gmail_widget_holo" >
 
@@ -47,7 +47,7 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:paddingLeft="0dp"
             android:paddingRight="4dp"
             android:paddingBottom="0dp"
@@ -86,7 +86,7 @@
             android:gravity="center"
             android:visibility="gone"
             android:textColor="@android:color/primary_text_light"
-            android:text="Loading..."
+            android:text=""
             android:textSize="20sp" />
     </FrameLayout>
 

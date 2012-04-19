@@ -15,19 +15,21 @@
      limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_item"
     android:layout_width="match_parent"
     android:layout_height="64dp"
     android:orientation="horizontal"
-    android:paddingLeft="16dp"
-    android:paddingRight="8dp" >
-    
+    android:paddingLeft="12dp"
+    android:paddingRight="8dp"
+    tools:ignore="HardcodedText" >
+
     <TextView
-            android:id="@+id/widget_itemIndent"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+        android:id="@+id/widget_itemIndent"
+        android:layout_width="wrap_content"
+        android:layout_height="fill_parent"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -35,46 +37,50 @@
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="1"
-        android:paddingRight="4dp"
-        android:gravity="center_vertical"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+         >
 
         <TextView
             android:id="@+id/widget_itemTitle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
             android:ellipsize="end"
-            android:gravity="center_vertical"
+            android:gravity="bottom"
             android:maxLines="2"
+            android:text="a title  see very plainly"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/primary_text_light" />
 
-        <TextView
-            android:id="@+id/widget_itemNote"
+        <LinearLayout
+            android:id="@+id/widget_datecheckcontainer"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textColor="@android:color/secondary_text_light" />
-    </LinearLayout>
-    
-    <LinearLayout
-        android:id="@+id/widget_datecheckcontainer"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:orientation="vertical" >
+            android:orientation="horizontal" >
 
-        <TextView
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/widget_itemDate"
-            android:layout_width="wrap_content"
-            android:layout_height="fill_parent"
-            android:gravity="center"
-            android:text=""
-            android:textColor="@android:color/secondary_text_light"
-            android:textSize="12sp" />
+            <TextView
+                android:id="@+id/widget_itemNote"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ellipsize="end"
+                android:paddingRight="4dp"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:text="note text and it becomes longer and longer and longer"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="@android:color/secondary_text_light" />
+
+            <TextView
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/widget_itemDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="12 mar"
+                android:textColor="@android:color/secondary_text_light"
+                android:textSize="12sp" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>

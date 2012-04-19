@@ -27,8 +27,8 @@
         android:layout_height="48dp"
         android:background="@drawable/dark_widget_header"
         android:orientation="horizontal"
-        android:paddingLeft="4dp"
-        android:paddingRight="8dp"
+        android:paddingLeft="0dp"
+        android:paddingRight="0dp"
         android:paddingTop="0dp" >
 
         <ImageView
@@ -50,7 +50,7 @@
             android:layout_marginRight="8dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:gravity="center_vertical"
+            android:gravity="center"
             android:maxLines="2"
             android:paddingBottom="0dp"
             android:paddingLeft="0dp"
@@ -88,7 +88,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:text="Loading..."
+            android:text=""
             android:textColor="@android:color/primary_text_dark"
             android:textSize="20sp"
             android:visibility="gone" />
