@@ -16,7 +16,7 @@
 -->
 <!-- Provides constants and default values -->
 <resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-	<integer name="default_editor_font_size">18</integer>
+	<integer name="default_editor_font_size">22</integer>
 	<string name="gtask_status_uncompleted">needsAction</string>
 	<string name="gtask_status_completed">completed</string>
 </resources>

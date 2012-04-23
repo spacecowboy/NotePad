@@ -952,6 +952,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				if (mOriginalTitle == null) {
 					mOriginalTitle = title;
 				}
+				
+				// Some things might have changed
+				getActivity().invalidateOptionsMenu();
 			}
 
 			/*
