@@ -37,7 +37,7 @@
                 android:layout_weight="1"
                 android:spinnerMode="dropdown"
                 android:layout_gravity="center_vertical"
-                style="@android:style/Widget.Holo.Light.Spinner" />
+                style="?SpinnerStyle" />
 
             <LinearLayout
                 android:id="@+id/dateContainer"

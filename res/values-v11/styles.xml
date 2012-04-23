@@ -44,6 +44,7 @@
 		
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
+		<item name="SpinnerStyle">@android:style/Widget.Holo.Spinner</item>
 
 	</style>
 	
@@ -69,6 +70,7 @@
 		
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
 		<item name="btn_default_selector">@drawable/btn_default_selector_light</item>
+		<item name="SpinnerStyle">@android:style/Widget.Holo.Light.Spinner</item>
 	</style>
 
 	<style name="ThemeHoloDialogNoActionBar" parent="@android:style/Theme.Holo.Dialog.NoActionBar">
@@ -94,6 +96,7 @@
 		
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
+		<item name="SpinnerStyle">@android:style/Widget.Holo.Spinner</item>
 
 	</style>
 	
@@ -120,6 +123,7 @@
 		
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
 		<item name="btn_default_selector">@drawable/btn_default_selector_light</item>
+		<item name="SpinnerStyle">@android:style/Widget.Holo.Light.Spinner</item>
 	</style>
 
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light">
@@ -146,6 +150,7 @@
 		
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
 		<item name="btn_default_selector">@drawable/btn_default_selector_light</item>
+		<item name="SpinnerStyle">@android:style/Widget.Holo.Light.Spinner</item>
 
 	</style>
 	
