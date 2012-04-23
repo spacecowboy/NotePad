@@ -36,4 +36,5 @@
 	<attr name="editorBackgroundColor" format="reference" />
 	<attr name="ActionBarDropDownItem" format="reference" />
 	<attr name="btn_default_selector" format="reference" />
+	<attr name="SpinnerStyle" format="reference" />
 </resources>

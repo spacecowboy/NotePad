@@ -40,6 +40,7 @@
 		
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
+		<item name="SpinnerStyle">@android:style/Widget.Holo.Light.Spinner</item>
 		
 	</style>
 	
