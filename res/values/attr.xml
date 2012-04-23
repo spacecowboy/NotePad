@@ -28,6 +28,7 @@
 	<attr name="device_access_secure" format="reference" />
 	<attr name="device_access_not_secure" format="reference" />
 	<attr name="social_share" format="reference" />
+	<attr name="navigation_accept" format="reference" />
 
 
 	<attr name="my_list_selector" format="reference" />
