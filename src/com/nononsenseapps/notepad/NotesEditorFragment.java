@@ -87,7 +87,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public static final String[] PROJECTION = new String[] { NotePad.Notes._ID,
 			NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
-			NotePad.Notes.COLUMN_NAME_DELETED, NotePad.Notes.COLUMN_NAME_LIST, NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
+			NotePad.Notes.COLUMN_NAME_DELETED, NotePad.Notes.COLUMN_NAME_LIST,
+			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
 
 	// A label for the saved state of the activity
 	public static final String ORIGINAL_NOTE = "origContent";
@@ -535,12 +536,42 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		return theView;
 	}
 
-	protected void moveToList(long id) {
-		// TODO Auto-generated method stub
-
-		if (listId != id && id > -1) {
+	protected void moveToList(long newListId) {
+		if (listId != newListId && newListId > -1) {
 			Log.d("Note move list feature", "MoveToList called with id: " + id
 					+ " listId: " + listId);
+
+			// We must also sever any ties with the remote location
+			createDuplicateDeleted();
+
+			// Then move this list to the indicated one.
+			ContentValues values = new ContentValues();
+			values.put(NotePad.Notes.COLUMN_NAME_LIST, newListId);
+
+			activity.getContentResolver().update(mUri, values, null, null);
+			listId = newListId;
+		}
+	}
+
+	private void createDuplicateDeleted() {
+		// Insert a new deleted entry
+		ContentValues values = new ContentValues();
+		values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
+		values.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN, 1);
+		values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
+		Uri cUri = activity.getContentResolver().insert(
+				NotePad.Notes.CONTENT_URI, values);
+
+		// Switch their local ids to the new deleted one
+		if (cUri != null) {
+			Long cId = getIdFromUri(cUri);
+
+			values = new ContentValues();
+			values.put(NotePad.GTasks.COLUMN_NAME_DB_ID, cId);
+
+			activity.getContentResolver().update(NotePad.GTasks.CONTENT_URI,
+					values, NotePad.GTasks.COLUMN_NAME_DB_ID + " IS ?",
+					new String[] { Long.toString(id) });
 		}
 	}
 
@@ -848,9 +879,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				String title = mCursor.getString(colTitleIndex);
 				mTitle.setText(title);
 				mTitle.setEnabled(true);
-				
+
 				mComplete = getText(R.string.gtask_status_completed)
-						.toString().equals(mCursor.getString(mCursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS)));
+						.toString()
+						.equals(mCursor.getString(mCursor
+								.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS)));
 
 				// Set list ID
 				listId = mCursor.getLong(mCursor
