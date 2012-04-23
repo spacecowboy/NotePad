@@ -34,7 +34,7 @@
     <com.robobunny.SeekBarPreference
         android:defaultValue="22"
         android:key="key_font_size_editor"
-        android:max="30"
+        android:max="50"
         android:title="@string/settings_font_size"
         robobunny:min="12"
         robobunny:unitsLeft=""

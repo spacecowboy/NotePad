@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
+import com.robobunny.SeekBarPreference;
 
 import android.app.Activity;
 import android.content.SharedPreferences;
@@ -30,7 +31,6 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceFragment;
-import android.util.Log;
 
 public class MainPrefs extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {

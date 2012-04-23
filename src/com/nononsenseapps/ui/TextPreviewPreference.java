@@ -61,7 +61,8 @@ public class TextPreviewPreference extends Preference {
 		mText = (TextView) layout.findViewById(R.id.prefTextPreview);
 		
 		// Retrieve settings here and set them on the text
-		mText.setTextSize(getSharedPreferences().getInt(MainPrefs.KEY_FONT_SIZE_EDITOR, 22));
+		int size = getContext().getResources().getInteger(R.integer.default_editor_font_size);
+		mText.setTextSize(getSharedPreferences().getInt(MainPrefs.KEY_FONT_SIZE_EDITOR, size));
 		setTextType(getSharedPreferences().getString(MainPrefs.KEY_FONT_TYPE_EDITOR, MainPrefs.SANS));
 
 		return layout;
