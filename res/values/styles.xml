@@ -36,6 +36,7 @@
         <item name="social_share">@drawable/social_share_dark </item>
         <item name="device_access_secure">@drawable/device_access_secure_dark</item>
         <item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
+        <item name="navigation_accept">@drawable/navigation_accept_dark</item>
 
         <!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
         <!-- activated state doesnt exist before honeycomb -->
@@ -60,6 +61,7 @@
         <item name="social_share">@drawable/social_share_light </item>
         <item name="device_access_secure">@drawable/device_access_secure_light</item>
         <item name="device_access_not_secure">@drawable/device_access_not_secure_light</item>
+        <item name="navigation_accept">@drawable/navigation_accept_light</item>
 
         <!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
         <item name="my_list_selector">@android:color/transparent</item>
@@ -83,6 +85,7 @@
         <item name="social_share">@drawable/social_share_light </item>
         <item name="device_access_secure">@drawable/device_access_secure_light</item>
         <item name="device_access_not_secure">@drawable/device_access_not_secure_light</item>
+        <item name="navigation_accept">@drawable/navigation_accept_light</item>
 
         <!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
         <item name="my_list_selector">@android:color/transparent</item>
@@ -106,6 +109,7 @@
         <item name="social_share">@drawable/social_share_dark </item>
         <item name="device_access_secure">@drawable/device_access_secure_dark</item>
         <item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
+        <item name="navigation_accept">@drawable/navigation_accept_dark</item>
 
         <!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
         <item name="my_list_selector">@android:color/transparent</item>

@@ -25,11 +25,6 @@
    <!--  Here editor options should be displayed in landscape mode. Hence the drastic increase in order index -->
 
     <item
-        android:id="@+id/menu_createlist"
-        android:orderInCategory="10"
-        android:showAsAction="never"
-        android:title="@string/menu_createlist"/>
-    <item
         android:id="@+id/menu_renamelist"
         android:orderInCategory="11"
         android:showAsAction="never"
@@ -45,14 +40,9 @@
         android:showAsAction="never"
         android:title="@string/menu_clearcompleted"/>
     <item
-        android:id="@+id/menu_setdefaultlist"
-        android:orderInCategory="14"
-        android:showAsAction="never"
-        android:title="@string/menu_setdefaultlist"/>
-    <item
         android:id="@+id/menu_preferences"
         android:icon="?action_settings"
-        android:orderInCategory="15"
+        android:orderInCategory="14"
         android:showAsAction="never"
         android:title="@string/menu_preferences"/>
 

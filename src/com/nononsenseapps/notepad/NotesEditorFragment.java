@@ -41,6 +41,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.provider.BaseColumns;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -55,12 +56,16 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ScrollView;
 import android.widget.ShareActionProvider;
+import android.widget.SimpleCursorAdapter;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
@@ -82,7 +87,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public static final String[] PROJECTION = new String[] { NotePad.Notes._ID,
 			NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
-			NotePad.Notes.COLUMN_NAME_DELETED, NotePad.Notes.COLUMN_NAME_LIST };
+			NotePad.Notes.COLUMN_NAME_DELETED, NotePad.Notes.COLUMN_NAME_LIST,
+			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
 
 	// A label for the saved state of the activity
 	public static final String ORIGINAL_NOTE = "origContent";
@@ -143,8 +149,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private boolean opened = false;
 	public boolean selfAction = false;
 
+	private Spinner listSpinner;
+	private SimpleCursorAdapter listAdapter;
+	private static int LOADER_NOTE_ID = 0;
+	private static int LOADER_LISTS_ID = 1;
+
 	private NoteAttributes noteAttrs;
 	private Handler mHandler = new Handler();
+	private boolean mComplete;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -221,7 +233,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				// Prepare the loader. Either re-connect with an existing one,
 				// or start a new one. Will open the note
 				id = getIdFromUri(mUri);
-				getLoaderManager().restartLoader(0, null, this);
+				getLoaderManager().restartLoader(LOADER_NOTE_ID, null, this);
+				// Populate the list also
+				getLoaderManager().restartLoader(LOADER_LISTS_ID, null, this);
 			}
 		}
 	}
@@ -489,6 +503,26 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		mDueDate = (Button) theView.findViewById(R.id.dueDateBox);
 		mDueDate.setOnClickListener(this);
 		mDueDate.setEnabled(false);
+		// List spinner
+		listSpinner = (Spinner) theView.findViewById(R.id.noteListSpinner);
+		listAdapter = new SimpleCursorAdapter(getActivity(),
+				android.R.layout.simple_list_item_1, null,
+				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
+				new int[] { android.R.id.text1 });
+		listSpinner.setAdapter(listAdapter);
+		listSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int pos,
+					long id) {
+				moveToList(id);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// Can this happen?
+			}
+		});
 
 		ImageButton cancelButton = (ImageButton) theView
 				.findViewById(R.id.dueCancelButton);
@@ -500,6 +534,45 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		});
 
 		return theView;
+	}
+
+	protected void moveToList(long newListId) {
+		if (listId != newListId && newListId > -1) {
+			Log.d("Note move list feature", "MoveToList called with id: " + id
+					+ " listId: " + listId);
+
+			// We must also sever any ties with the remote location
+			createDuplicateDeleted();
+
+			// Then move this list to the indicated one.
+			ContentValues values = new ContentValues();
+			values.put(NotePad.Notes.COLUMN_NAME_LIST, newListId);
+
+			activity.getContentResolver().update(mUri, values, null, null);
+			listId = newListId;
+		}
+	}
+
+	private void createDuplicateDeleted() {
+		// Insert a new deleted entry
+		ContentValues values = new ContentValues();
+		values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
+		values.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN, 1);
+		values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
+		Uri cUri = activity.getContentResolver().insert(
+				NotePad.Notes.CONTENT_URI, values);
+
+		// Switch their local ids to the new deleted one
+		if (cUri != null) {
+			Long cId = getIdFromUri(cUri);
+
+			values = new ContentValues();
+			values.put(NotePad.GTasks.COLUMN_NAME_DB_ID, cId);
+
+			activity.getContentResolver().update(NotePad.GTasks.CONTENT_URI,
+					values, NotePad.GTasks.COLUMN_NAME_DB_ID + " IS ?",
+					new String[] { Long.toString(id) });
+		}
 	}
 
 	private void clearDueDate() {
@@ -642,6 +715,24 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				menu.findItem(R.id.menu_lock).setVisible(!noteAttrs.locked);
 				menu.findItem(R.id.menu_unlock).setVisible(noteAttrs.locked);
 			}
+			menu.findItem(R.id.menu_complete).setVisible(!mComplete);
+			menu.findItem(R.id.menu_uncomplete).setVisible(mComplete);
+		}
+	}
+
+	private void setCompleted(boolean val) {
+		if (mUri != null && activity != null) {
+			String s;
+			if (val) {
+				s = getText(R.string.gtask_status_completed).toString();
+			} else {
+				s = getText(R.string.gtask_status_uncompleted).toString();
+			}
+			ContentValues values = new ContentValues();
+			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, s);
+			activity.getContentResolver().update(mUri, values, null, null);
+			mComplete = val;
+			getActivity().invalidateOptionsMenu();
 		}
 	}
 
@@ -649,6 +740,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle all of the possible menu actions.
 		switch (item.getItemId()) {
+		case R.id.menu_complete:
+			setCompleted(true);
+			break;
+		case R.id.menu_uncomplete:
+			setCompleted(false);
+			break;
 		case R.id.menu_revert:
 			cancelNote();
 			Toast.makeText(activity, getString(R.string.reverted),
@@ -783,9 +880,19 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				mTitle.setText(title);
 				mTitle.setEnabled(true);
 
+				mComplete = getText(R.string.gtask_status_completed)
+						.toString()
+						.equals(mCursor.getString(mCursor
+								.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS)));
+
 				// Set list ID
 				listId = mCursor.getLong(mCursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
+
+				if (listAdapter.getCount() > 0) {
+					// It's loaded, select current
+					listSpinner.setSelection(getPosOfId(listId));
+				}
 
 				// Gets the note text from the Cursor and puts it in the
 				// TextView,
@@ -878,6 +985,22 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		// Regardless, set the share intent
 		setActionShareIntent();
+	}
+
+	private int getPosOfId(long id) {
+		int length = listAdapter.getCount();
+		int position;
+		for (position = 0; position < length; position++) {
+			if (id == listAdapter.getItemId(position)) {
+				break;
+			}
+		}
+		if (position == length) {
+			// Happens both if list is empty
+			// and if id is -1
+			position = -1;
+		}
+		return position;
 	}
 
 	private void setDueDate(String due) {
@@ -1066,45 +1189,58 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
-		return new CursorLoader(activity, mUri, PROJECTION, null, null, null);
+		if (LOADER_LISTS_ID == id)
+			return new CursorLoader(activity,
+					NotePad.Lists.CONTENT_VISIBLE_URI, new String[] {
+							BaseColumns._ID, NotePad.Lists.COLUMN_NAME_TITLE },
+					null, null, NotePad.Lists.SORT_ORDER);
+		else
+			return new CursorLoader(activity, mUri, PROJECTION, null, null,
+					null);
 	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		if (LOADER_LISTS_ID == loader.getId()) {
+			listAdapter.swapCursor(data);
+			if (listId > -1)
+				listSpinner.setSelection(getPosOfId(listId));
+		} else {
 
-		Log.d("notewa" + TAG, "onLoadFinished");
-		if (!selfAction) {
-			// This note has changed, re-open it.
-			// As a special case, we will not re-open it if that is
-			// equivalent to deleting all text.
-			// This will happen if you create a new note, start typing and
-			// then a background sync happens.
-			// Simply reopening it will delete everything you did. So only
-			// re-open if there was any content
-			// to begin with.
-			// Note the "NOT" in the beginning.
-			boolean reload = true;
+			if (!selfAction) {
+				// This note has changed, re-open it.
+				// As a special case, we will not re-open it if that is
+				// equivalent to deleting all text.
+				// This will happen if you create a new note, start typing and
+				// then a background sync happens.
+				// Simply reopening it will delete everything you did. So only
+				// re-open if there was any content
+				// to begin with.
+				// Note the "NOT" in the beginning.
+				boolean reload = true;
 
-			Log.d(TAG, "title field: " + mOriginalTitle);
+				Log.d(TAG, "title field: " + mOriginalTitle);
 
-			Log.d(TAG, "text field: " + mOriginalNote);
-			if (mOriginalTitle != null && mOriginalNote != null) {
-				if (mOriginalNote.isEmpty() && mOriginalTitle.isEmpty()
-						&& !mText.getText().toString().isEmpty()) {
-					// In this case, don't reload.
-					reload = false;
+				Log.d(TAG, "text field: " + mOriginalNote);
+				if (mOriginalTitle != null && mOriginalNote != null) {
+					if (mOriginalNote.isEmpty() && mOriginalTitle.isEmpty()
+							&& !mText.getText().toString().isEmpty()) {
+						// In this case, don't reload.
+						reload = false;
+					}
+				}
+				if (reload) {
+					showNote(data);
 				}
 			}
-			if (reload) {
-				showNote(data);
-			}
+			// Only one event is allowed to be ignored
+			selfAction = false;
 		}
-		// Only one event is allowed to be ignored
-		selfAction = false;
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
+		listAdapter.swapCursor(null);
 	}
 
 	public long getCurrentNoteId() {
