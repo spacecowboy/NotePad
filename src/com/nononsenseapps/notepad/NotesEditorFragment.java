@@ -87,7 +87,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public static final String[] PROJECTION = new String[] { NotePad.Notes._ID,
 			NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
-			NotePad.Notes.COLUMN_NAME_DELETED, NotePad.Notes.COLUMN_NAME_LIST };
+			NotePad.Notes.COLUMN_NAME_DELETED, NotePad.Notes.COLUMN_NAME_LIST, NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
 
 	// A label for the saved state of the activity
 	public static final String ORIGINAL_NOTE = "origContent";
@@ -155,6 +155,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	private NoteAttributes noteAttrs;
 	private Handler mHandler = new Handler();
+	private boolean mComplete;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -538,7 +539,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		// TODO Auto-generated method stub
 
 		if (listId != id && id > -1) {
-			Log.d("Note move list feature", "MoveToList called with id: " + id + " listId: " + listId);
+			Log.d("Note move list feature", "MoveToList called with id: " + id
+					+ " listId: " + listId);
 		}
 	}
 
@@ -682,6 +684,24 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				menu.findItem(R.id.menu_lock).setVisible(!noteAttrs.locked);
 				menu.findItem(R.id.menu_unlock).setVisible(noteAttrs.locked);
 			}
+			menu.findItem(R.id.menu_complete).setVisible(!mComplete);
+			menu.findItem(R.id.menu_uncomplete).setVisible(mComplete);
+		}
+	}
+
+	private void setCompleted(boolean val) {
+		if (mUri != null && activity != null) {
+			String s;
+			if (val) {
+				s = getText(R.string.gtask_status_completed).toString();
+			} else {
+				s = getText(R.string.gtask_status_uncompleted).toString();
+			}
+			ContentValues values = new ContentValues();
+			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, s);
+			activity.getContentResolver().update(mUri, values, null, null);
+			mComplete = val;
+			getActivity().invalidateOptionsMenu();
 		}
 	}
 
@@ -689,6 +709,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle all of the possible menu actions.
 		switch (item.getItemId()) {
+		case R.id.menu_complete:
+			setCompleted(true);
+			break;
+		case R.id.menu_uncomplete:
+			setCompleted(false);
+			break;
 		case R.id.menu_revert:
 			cancelNote();
 			Toast.makeText(activity, getString(R.string.reverted),
@@ -822,6 +848,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				String title = mCursor.getString(colTitleIndex);
 				mTitle.setText(title);
 				mTitle.setEnabled(true);
+				
+				mComplete = getText(R.string.gtask_status_completed)
+						.toString().equals(mCursor.getString(mCursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS)));
 
 				// Set list ID
 				listId = mCursor.getLong(mCursor
