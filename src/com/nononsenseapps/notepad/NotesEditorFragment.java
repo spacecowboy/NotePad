@@ -537,7 +537,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	}
 
 	protected void moveToList(long newListId) {
-		if (listId != newListId && newListId > -1) {
+		if (listId != newListId && newListId > -1 && listId > -1) {
 			Log.d("Note move list feature", "MoveToList called with id: " + id
 					+ " listId: " + listId);
 
