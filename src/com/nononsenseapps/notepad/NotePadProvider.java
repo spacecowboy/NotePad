@@ -1997,7 +1997,6 @@ public class NotePadProvider extends ContentProvider implements
 			Log.d(TAG, "batch failed: " + e.getLocalizedMessage());
 		} finally {
 			db.endTransaction();
-			db.close();
 		}
 
 		return result;
