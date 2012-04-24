@@ -659,7 +659,7 @@ public class NotePadProvider extends ContentProvider implements
 	 *             if the incoming URI pattern is invalid.
 	 */
 	@Override
-	public Cursor query(Uri uri, String[] projection, String selection,
+	synchronized public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "query");
@@ -852,7 +852,7 @@ public class NotePadProvider extends ContentProvider implements
 	 *             if the incoming URI pattern is invalid.
 	 */
 	@Override
-	public String getType(Uri uri) {
+	synchronized public String getType(Uri uri) {
 
 		/**
 		 * Chooses the MIME type based on the incoming URI pattern
@@ -916,7 +916,7 @@ public class NotePadProvider extends ContentProvider implements
 	 *             if the URI pattern doesn't match any supported patterns.
 	 */
 	@Override
-	public String[] getStreamTypes(Uri uri, String mimeTypeFilter) {
+	synchronized public String[] getStreamTypes(Uri uri, String mimeTypeFilter) {
 		/**
 		 * Chooses the data stream type based on the incoming URI pattern.
 		 */
@@ -970,7 +970,7 @@ public class NotePadProvider extends ContentProvider implements
 	 *             if there is no file associated with the incoming URI.
 	 */
 	@Override
-	public AssetFileDescriptor openTypedAssetFile(Uri uri,
+	synchronized public AssetFileDescriptor openTypedAssetFile(Uri uri,
 			String mimeTypeFilter, Bundle opts) throws FileNotFoundException {
 
 		// Checks to see if the MIME type filter matches a supported MIME type.
@@ -1021,7 +1021,7 @@ public class NotePadProvider extends ContentProvider implements
 	 * stream of data for the client to read.
 	 */
 	// @Override
-	public void writeDataToPipe(ParcelFileDescriptor output, Uri uri,
+	synchronized public void writeDataToPipe(ParcelFileDescriptor output, Uri uri,
 			String mimeType, Bundle opts, Cursor c) {
 		// We currently only support conversion-to-text from a single note
 		// entry,
@@ -1059,7 +1059,7 @@ public class NotePadProvider extends ContentProvider implements
 	 *             if the insertion fails.
 	 */
 	@Override
-	public Uri insert(Uri uri, ContentValues initialValues) {
+	synchronized public Uri insert(Uri uri, ContentValues initialValues) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "insert");
 
@@ -1081,7 +1081,7 @@ public class NotePadProvider extends ContentProvider implements
 		}
 	}
 
-	private Uri insertNote(Uri uri, ContentValues initialValues) {
+	synchronized private Uri insertNote(Uri uri, ContentValues initialValues) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "insertNote");
 		// A map to hold the new record's values.
@@ -1204,7 +1204,7 @@ public class NotePadProvider extends ContentProvider implements
 		throw new SQLException("Failed to insert row into " + uri);
 	}
 
-	private Uri insertList(Uri uri, ContentValues initialValues) {
+	synchronized private Uri insertList(Uri uri, ContentValues initialValues) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "insertList");
 		// A map to hold the new record's values.
@@ -1282,7 +1282,7 @@ public class NotePadProvider extends ContentProvider implements
 		throw new SQLException("Failed to insert row into " + uri);
 	}
 
-	private Uri insertGTask(Uri uri, ContentValues initialValues) {
+	synchronized private Uri insertGTask(Uri uri, ContentValues initialValues) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "insertGTask");
 		// A map to hold the new record's values.
@@ -1345,7 +1345,7 @@ public class NotePadProvider extends ContentProvider implements
 		throw new SQLException("Failed to insert row into " + uri);
 	}
 
-	private Uri insertGTaskList(Uri uri, ContentValues initialValues) {
+	synchronized private Uri insertGTaskList(Uri uri, ContentValues initialValues) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "insertGTaskList");
 		// A map to hold the new record's values.
@@ -1416,7 +1416,7 @@ public class NotePadProvider extends ContentProvider implements
 	 * @param db
 	 * @param cursor
 	 */
-	private static int deleteListsFromDb(SQLiteDatabase db, Cursor cursor) {
+	synchronized private static int deleteListsFromDb(SQLiteDatabase db, Cursor cursor) {
 		int count = 0;
 		while (cursor != null && !cursor.isClosed() && !cursor.isAfterLast()) {
 			if (!cursor.moveToNext())
@@ -1438,7 +1438,7 @@ public class NotePadProvider extends ContentProvider implements
 	 * @param db
 	 * @param listId
 	 */
-	private static int deleteNotesInListFromDb(SQLiteDatabase db, String listId) {
+	synchronized private static int deleteNotesInListFromDb(SQLiteDatabase db, String listId) {
 		int count = 0;
 		Cursor cursor = db.query(NotePad.Notes.TABLE_NAME,
 				new String[] { NotePad.Notes._ID },
@@ -1461,7 +1461,7 @@ public class NotePadProvider extends ContentProvider implements
 	 * @param whereArgs
 	 * @return
 	 */
-	private static int deleteListFromDb(SQLiteDatabase db, String id,
+	synchronized private static int deleteListFromDb(SQLiteDatabase db, String id,
 			String where, String[] whereArgs) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "Deleting list from DB: " + id);
@@ -1500,7 +1500,7 @@ public class NotePadProvider extends ContentProvider implements
 	 * @param whereArgs
 	 * @return
 	 */
-	private static int deleteNotesFromDb(SQLiteDatabase db, Cursor cursor) {
+	synchronized private static int deleteNotesFromDb(SQLiteDatabase db, Cursor cursor) {
 		int count = 0;
 		while (cursor != null && !cursor.isClosed() && !cursor.isAfterLast()) {
 			if (!cursor.moveToNext())
@@ -1523,7 +1523,7 @@ public class NotePadProvider extends ContentProvider implements
 	 * @param whereArgs
 	 * @return
 	 */
-	private static int deleteNoteFromDb(SQLiteDatabase db, String id,
+	synchronized private static int deleteNoteFromDb(SQLiteDatabase db, String id,
 			String where, String[] whereArgs) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "Deleting note from DB: " + id);
@@ -1571,7 +1571,7 @@ public class NotePadProvider extends ContentProvider implements
 	 *             if the incoming URI pattern is invalid.
 	 */
 	@Override
-	public int delete(Uri uri, String where, String[] whereArgs) {
+	synchronized public int delete(Uri uri, String where, String[] whereArgs) {
 
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "delete");
@@ -1734,7 +1734,7 @@ public class NotePadProvider extends ContentProvider implements
 	 *             if the incoming URI pattern is invalid.
 	 */
 	@Override
-	public int update(Uri uri, ContentValues values, String where,
+	synchronized public int update(Uri uri, ContentValues values, String where,
 			String[] whereArgs) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "update");
@@ -1977,7 +1977,7 @@ public class NotePadProvider extends ContentProvider implements
 	 * Performs the work provided in a single transaction. Done on sync
 	 */
 	@Override
-	public ContentProviderResult[] applyBatch(
+	synchronized public ContentProviderResult[] applyBatch(
 			ArrayList<ContentProviderOperation> operations) {
 		ContentProviderResult[] result = new ContentProviderResult[operations
 				.size()];
