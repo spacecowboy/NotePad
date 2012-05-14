@@ -34,8 +34,8 @@
     <string name="menu_renamelist">列表重命名</string>
     <string name="menu_createlist">创建列表</string>
     <string name="menu_clearcompleted">清除已完成</string>
-    <string name="menu_setdefaultlist">设为默认列表</string>
-    <string name="delete_list_warning">你确定要删除这个列表吗? 列表将被永久删除.</string>
+    <string name="menu_setdefaultlist">默认列表</string>
+    <string name="delete_list_warning">确实要删除列表吗? 列表将被永久删除.</string>
     <string name="editor_due_date_hint">到期日</string>
     <string name="editor_title_hint">标题</string>
     <string name="editor_note_hint">便签</string>
@@ -55,17 +55,17 @@
     <string name="settings_summary_sort_type_modified">最新修改</string>
     <string name="settings_summary_sort_type_duedate">到期日</string>
     <string name="settings_summary_sort_type_serverposition">服务器位置</string>
-    <string name="settings_summary_sort_order_asc">升序排列</string>
-    <string name="settings_summary_sort_order_desc">降序排列</string>
-    <string name="settings_summary_theme_dark">深色</string>
-    <string name="settings_summary_theme_light">浅色</string>
-    <string name="settings_summary_theme_light_dark_ab">浅色界面, 深色活动栏</string>
+    <string name="settings_summary_sort_order_asc">升序</string>
+    <string name="settings_summary_sort_order_desc">降序</string>
+    <string name="settings_summary_theme_dark">深</string>
+    <string name="settings_summary_theme_light">浅</string>
+    <string name="settings_summary_theme_light_dark_ab">界面浅, 活动栏深</string>
     <string name="settings_cat_appearance">外观</string>
     <string name="settings_font_screen">字体设定</string>
     <string name="settings_font_screen_summary">你可以改变字体的类型和大小</string>
     <string name="settings_cat_font_editor">编辑栏</string>
     <string name="settings_font_type">字体</string>
-    <string name="settings_font_type_dialog">选择一个字体</string>
+    <string name="settings_font_type_dialog">选择一种字体</string>
     <string name="settings_font_size">字体大小</string>
     <string name="preference_preview_text">This is how the editor text will appear</string>
     <string name="settings_text_preview_title">预览</string>
@@ -123,9 +123,9 @@
     <string name="confirm_new_password">确认新密码</string>
     <string name="apply">应用</string>
     <string name="clear_password">清除密码</string>
-    <string name="password_info">设置密码后,每次查看加锁便签需输入密码. 它只会保护便签内容,所以你还是可以看到标题和到期日. 便签内容将不会以任何形式加密,所以内容可以在Google邮箱和日历中查看. 如果忘记了密码, 先与Google同步然后重新安装软件.</string>
+    <string name="password_info">设置密码后，每次查看加锁便签需输入密码。只保护便签内容，标题和到期日仍可以显示。 便签内容将不以任何形式加密，所以内容可以在Google邮箱和日历中查看。如果忘记了密码，先与Google同步然后重新安装软件。</string>
     <string name="about">关于</string>
     <string name="sync_failed">同步失败</string>
-    <string name="sync_login_failed">登录失败,无法连接到Google工作表</string>
+    <string name="sync_login_failed">登录失败，无法连接到Google工作表。。</string>
 
 </resources>

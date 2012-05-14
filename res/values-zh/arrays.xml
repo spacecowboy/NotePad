@@ -17,9 +17,9 @@
 <resources>
     
     <string-array name="preferences_week_start_day_labels">
-        <item>地区默认</item>
+        <item>本地默认</item>
         <item>星期六</item>
-        <item>星期日</item>
+        <item>星期天</item>
         <item>星期一</item>
     </string-array>
 
