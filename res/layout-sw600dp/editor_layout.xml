@@ -1,81 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="?editorBackgroundColor"
-    android:fillViewport="true"
-    tools:ignore="Overdraw" >
+    android:orientation="vertical"
+    android:paddingBottom="0dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="16dp" >
+
+    <EditText
+        android:id="@+id/titleBox"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:hint="@string/editor_title_hint"
+        android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
+        android:padding="5dp"
+        android:textStyle="bold" />
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="0dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingTop="16dp" >
+        android:orientation="horizontal" >
 
-        <EditText
-            android:id="@+id/titleBox"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/editor_title_hint"
-            android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
-            android:padding="5dp"
-            android:textStyle="bold" />
+        <Spinner
+            android:id="@+id/noteListSpinner"
+            style="?SpinnerStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center_vertical"
+            android:minWidth="200dp"
+            android:spinnerMode="dropdown" />
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:id="@+id/dateContainer"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            android:minWidth="150dp"
+            android:orientation="horizontal"
+            android:paddingLeft="50dp" >
 
-            <Spinner
-                android:id="@+id/noteListSpinner"
-                style="?SpinnerStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:layout_gravity="center_vertical"
-                android:minWidth="200dp"
-                android:spinnerMode="dropdown" />
+            <Button
+                android:id="@+id/dueDateBox"
+                style="@android:style/Widget.Holo.Light.Spinner"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/editor_due_date_hint" />
 
-            <LinearLayout
-                android:id="@+id/dateContainer"
+            <ImageButton
+                android:id="@+id/dueCancelButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:minWidth="150dp"
-                android:orientation="horizontal"
-                android:paddingLeft="50dp" >
-
-                <Button
-                    android:id="@+id/dueDateBox"
-                    style="@android:style/Widget.Holo.Light.Spinner"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/editor_due_date_hint" />
-
-                <ImageButton
-                    android:id="@+id/dueCancelButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:background="?btn_default_selector"
-                    android:src="?content_remove" />
-            </LinearLayout>
+                android:layout_gravity="center_vertical"
+                android:background="?btn_default_selector"
+                android:src="?content_remove" />
         </LinearLayout>
-
-        <com.nononsenseapps.ui.TabbingEditText
-            android:id="@+id/noteBox"
-            android:layout_width="fill_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="top"
-            android:hint="@string/editor_note_hint"
-            android:inputType="textAutoCorrect|textCapSentences|textMultiLine" >
-
-            <!-- android:autoLink="web|email|map" Was bad user experience -->
-        </com.nononsenseapps.ui.TabbingEditText>
     </LinearLayout>
 
-</ScrollView>
+    <com.nononsenseapps.ui.TabbingEditText
+        android:id="@+id/noteBox"
+        android:layout_width="fill_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="top"
+        android:hint="@string/editor_note_hint"
+        android:inputType="textAutoCorrect|textCapSentences|textMultiLine" >
+
+        <!-- android:autoLink="web|email|map" Was bad user experience -->
+    </com.nononsenseapps.ui.TabbingEditText>
+
+</LinearLayout>

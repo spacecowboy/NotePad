@@ -62,6 +62,7 @@ import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.ShareActionProvider;
 import android.widget.SimpleCursorAdapter;
@@ -476,7 +477,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		int layout = R.layout.editor_layout;
 
 		// Gets a handle to the EditText in the the layout.
-		ScrollView theView = (ScrollView) inflater.inflate(layout, container,
+		LinearLayout theView = (LinearLayout) inflater.inflate(layout, container,
 				false);
 		// This is to prevent the view from setting focus (and bringing up the
 		// keyboard)
