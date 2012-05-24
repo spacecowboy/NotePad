@@ -148,7 +148,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private Button mDueDate;
 	private boolean mOriginalDueState;
 	private boolean opened = false;
-	public boolean selfAction = false;
 
 	private Spinner listSpinner;
 	private SimpleCursorAdapter listAdapter;
@@ -196,7 +195,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private void openNote(Bundle savedInstanceState) {
 		// Just make sure we are attached
 		if (!activity.isFinishing()) {
-			selfAction = false;
 			doSave = true;
 			opened = true;
 			if (id != -1) {
@@ -477,8 +475,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		int layout = R.layout.editor_layout;
 
 		// Gets a handle to the EditText in the the layout.
-		LinearLayout theView = (LinearLayout) inflater.inflate(layout, container,
-				false);
+		LinearLayout theView = (LinearLayout) inflater.inflate(layout,
+				container, false);
 		// This is to prevent the view from setting focus (and bringing up the
 		// keyboard)
 		theView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
@@ -723,12 +721,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	private void setCompleted(boolean val) {
 		if (mUri != null && activity != null) {
-			String s;
-			if (val) {
-				s = getText(R.string.gtask_status_completed).toString();
-			} else {
-				s = getText(R.string.gtask_status_uncompleted).toString();
-			}
+			String s = val ? getText(R.string.gtask_status_completed)
+					.toString() : getText(R.string.gtask_status_uncompleted)
+					.toString();
+
 			ContentValues values = new ContentValues();
 			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, s);
 			activity.getContentResolver().update(mUri, values, null, null);
@@ -843,7 +839,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		// If i'm going to do it, use a ViewSwitcher
 		saveNote();
 		doSave = true;
-		selfAction = false;
 		this.id = id;
 		// this.listId = listid;
 
@@ -953,7 +948,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				if (mOriginalTitle == null) {
 					mOriginalTitle = title;
 				}
-				
+
 				// Some things might have changed
 				getActivity().invalidateOptionsMenu();
 			}
@@ -972,7 +967,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mUri = null;
 			// id = -1;
 			doSave = false;
-			selfAction = false;
 			if (mText != null) {
 				mText.setText(getText(R.string.error_message));
 				mText.setEnabled(false);
@@ -1072,7 +1066,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	}
 
 	private void saveNote() {
-		selfAction = true; // Don't try to reload the note
 		if (doSave && mText != null && mTitle != null) {
 
 			Log.d("NotesEditorFragment", "Saving/Deleting Note");
@@ -1092,16 +1085,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			 */
 			// if (isFinishing() && (length == 0)) {
 			updateNote(title, text, noteDueDate.format3339(false));
-		}
-	}
-
-	/**
-	 * Prevents this Fragment from saving the note on exit Intended for deletion
-	 * of notes. Also disables monitoring of this note.
-	 */
-	public void setSelfAction() {
-		if (activity != null && !activity.isFinishing()) {
-			selfAction = true;
 		}
 	}
 
@@ -1210,41 +1193,16 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			if (listId > -1)
 				listSpinner.setSelection(getPosOfId(listId));
 		} else {
-
-			if (!selfAction) {
-				// This note has changed, re-open it.
-				// As a special case, we will not re-open it if that is
-				// equivalent to deleting all text.
-				// This will happen if you create a new note, start typing and
-				// then a background sync happens.
-				// Simply reopening it will delete everything you did. So only
-				// re-open if there was any content
-				// to begin with.
-				// Note the "NOT" in the beginning.
-				boolean reload = true;
-
-				Log.d(TAG, "title field: " + mOriginalTitle);
-
-				Log.d(TAG, "text field: " + mOriginalNote);
-				if (mOriginalTitle != null && mOriginalNote != null) {
-					if (mOriginalNote.isEmpty() && mOriginalTitle.isEmpty()
-							&& !mText.getText().toString().isEmpty()) {
-						// In this case, don't reload.
-						reload = false;
-					}
-				}
-				if (reload) {
-					showNote(data);
-				}
-			}
-			// Only one event is allowed to be ignored
-			selfAction = false;
+			showNote(data);
+			// We do NOT want updates on this URI
+			getLoaderManager().destroyLoader(LOADER_NOTE_ID);
 		}
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
-		listAdapter.swapCursor(null);
+		if (LOADER_LISTS_ID == loader.getId())
+			listAdapter.swapCursor(null);
 	}
 
 	public long getCurrentNoteId() {
