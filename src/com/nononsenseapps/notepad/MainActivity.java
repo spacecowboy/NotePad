@@ -857,7 +857,7 @@ public class MainActivity extends DualLayoutActivity implements
 			NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
 					.findFragmentById(R.id.rightFragment);
 			if (editor != null) {
-				editor.setSelfAction();
+				editor.clearNoSave();
 			}
 		}
 		deleteNotes(this, ids);
@@ -871,7 +871,7 @@ public class MainActivity extends DualLayoutActivity implements
 		if (list != null)
 			list.onDelete();
 		if (editor != null) {
-			editor.setSelfAction();
+			editor.clearNoSave();
 			deleteNote(this, editor.getCurrentNoteId());
 		}
 		if (list == null) {
