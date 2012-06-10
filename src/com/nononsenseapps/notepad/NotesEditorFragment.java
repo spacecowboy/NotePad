@@ -227,10 +227,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					mOriginalListId = savedInstanceState
 							.getLong(ORIGINAL_LISTID);
 				} else {
-					// If null, will set to current values in showNote
-					mOriginalNote = null;
-					mOriginalDueDate = null;
-					mOriginalTitle = null;
+					mOriginalNote = "";
+					mOriginalDueDate = "";
+					mOriginalTitle = "";
 					mOriginalDueState = false;
 					mOriginalComplete = false;
 					mOriginalListId = -1;
@@ -253,20 +252,17 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	}
 
 	private boolean hasNoteChanged() {
-		if (mOriginalNote == null || mOriginalTitle == null
-				|| mOriginalDueDate == null || mOriginalListId == -1) {
-			return false;
-		} else {
-			// Get the current note text.
-			String text = noteAttrs.getFullNote(mText.getText().toString());
-
-			return !(mOriginalNote.equals(text)
-					&& mTitle.getText().toString().equals(mOriginalTitle)
-					&& mOriginalComplete == mComplete
-					&& mOriginalListId == listId
-					&& dueDateSet == mOriginalDueState && (!dueDateSet || (dueDateSet && noteDueDate
-					.format3339(false).equals(mOriginalDueDate))));
-		}
+		boolean title, note, completed, date = false;
+		// Get the current note text.
+		String text = noteAttrs.getFullNote(mText.getText().toString());
+		
+		title =  !mTitle.getText().toString().equals(mOriginalTitle);
+		note =  !text.equals(mOriginalNote);
+		completed = mComplete != mOriginalComplete;
+		date = dueDateSet != mOriginalDueState || (dueDateSet && !noteDueDate
+				.format3339(false).equals(mOriginalDueDate));
+		
+		return title || note || completed || date;
 	}
 
 	/**
@@ -879,16 +875,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			// Stores the original note text, to allow the user to revert
 			// changes.
-			if (mOriginalNote == null) {
-				mOriginalNote = note; // Save original text here
-			}
-			if (mOriginalDueDate == null) {
-				mOriginalDueDate = due;
-				mOriginalDueState = dueDateSet;
-			}
-			if (mOriginalTitle == null) {
-				mOriginalTitle = title;
-			}
+			mOriginalNote = note; // Save original text here
+			mOriginalDueDate = due;
+			mOriginalDueState = dueDateSet;
+			mOriginalTitle = title;
 
 			// Some things might have changed
 			getActivity().invalidateOptionsMenu();
