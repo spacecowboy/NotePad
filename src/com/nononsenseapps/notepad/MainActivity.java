@@ -871,8 +871,8 @@ public class MainActivity extends DualLayoutActivity implements
 		if (list != null)
 			list.onDelete();
 		if (editor != null) {
-			editor.clearNoSave();
 			deleteNote(this, editor.getCurrentNoteId());
+			editor.clearNoSave();
 		}
 		if (list == null) {
 			// this is an editor view displaying inactive data. kill it

@@ -40,6 +40,7 @@ import android.graphics.Typeface;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.text.Editable;
@@ -255,13 +256,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		boolean title, note, completed, date = false;
 		// Get the current note text.
 		String text = noteAttrs.getFullNote(mText.getText().toString());
-		
-		title =  !mTitle.getText().toString().equals(mOriginalTitle);
-		note =  !text.equals(mOriginalNote);
+
+		title = !mTitle.getText().toString().equals(mOriginalTitle);
+		note = !text.equals(mOriginalNote);
 		completed = mComplete != mOriginalComplete;
-		date = dueDateSet != mOriginalDueState || (dueDateSet && !noteDueDate
-				.format3339(false).equals(mOriginalDueDate));
-		
+		date = dueDateSet != mOriginalDueState
+				|| (dueDateSet && !noteDueDate.format3339(false).equals(
+						mOriginalDueDate));
+
 		return title || note || completed || date;
 	}
 
@@ -436,25 +438,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 
-		Log.d("NotesEditorFragment", "onCreateView");
-
 		int layout = R.layout.editor_layout;
 
 		// Gets a handle to the EditText in the the layout.
 		LinearLayout theView = (LinearLayout) inflater.inflate(layout,
 				container, false);
-		// This is to prevent the view from setting focus (and bringing up the
-		// keyboard)
-		theView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
-		theView.setFocusable(true);
-		theView.setFocusableInTouchMode(true);
-		theView.setOnTouchListener(new View.OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				v.requestFocusFromTouch();
-				return false;
-			}
-		});
 
 		// Main note edit text
 		mText = (EditText) theView.findViewById(R.id.noteBox);
@@ -812,6 +800,25 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			String title = mCursor.getString(colTitleIndex);
 			mTitle.setText(title);
 			mTitle.setEnabled(true);
+			if ("".equals(title)) {
+				// Open keyboard on new notes so users can start typing directly
+				// need small delay (100ms) for it to open consistently
+				(new Handler()).postDelayed(new Runnable() {
+					public void run() {
+						if (mTitle != null) {
+							mTitle.dispatchTouchEvent(MotionEvent.obtain(
+									SystemClock.uptimeMillis(),
+									SystemClock.uptimeMillis(),
+									MotionEvent.ACTION_DOWN, 0, 0, 0));
+							mTitle.dispatchTouchEvent(MotionEvent.obtain(
+									SystemClock.uptimeMillis(),
+									SystemClock.uptimeMillis(),
+									MotionEvent.ACTION_UP, 0, 0, 0));
+						}
+
+					}
+				}, 100);
+			}
 
 			mComplete = getText(R.string.gtask_status_completed)
 					.toString()
@@ -900,11 +907,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		id = -1;
 		doSave = false;
 		if (mText != null) {
-			mText.setText(getText(R.string.error_message));
+			mText.setText("");
 			mText.setEnabled(false);
 		}
 		if (mTitle != null) {
-			mTitle.setText(getText(R.string.error_title));
+			mTitle.setText("");
 			mTitle.setEnabled(false);
 		}
 		if (mDueDate != null) {
