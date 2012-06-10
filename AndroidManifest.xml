@@ -90,6 +90,7 @@
             android:label="@string/app_name"
             android:theme="@style/ThemeHolo"
             android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
             android:uiOptions="splitActionBarWhenNarrow" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -107,7 +108,8 @@
         </activity>
         <activity
             android:name="RightActivity"
-            android:theme="@style/ThemeHolo" >
+            android:theme="@style/ThemeHolo"
+            android:windowSoftInputMode="adjustResize" >
             
             <intent-filter android:label="@string/resolve_edit" >
                 <action android:name="android.intent.action.INSERT" />

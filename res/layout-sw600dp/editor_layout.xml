@@ -15,9 +15,12 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="@string/editor_title_hint"
-        android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
+        android:inputType="textAutoCorrect|textCapSentences"
         android:padding="5dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:maxLines="1"
+        android:scrollHorizontally="true"
+        android:nextFocusDown="@+id/noteBox" />
 
     <LinearLayout
         android:layout_width="fill_parent"
@@ -66,7 +69,8 @@
         android:layout_weight="1"
         android:gravity="top"
         android:hint="@string/editor_note_hint"
-        android:inputType="textAutoCorrect|textCapSentences|textMultiLine" >
+        android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
+        android:scrollbars="vertical" >
 
         <!-- android:autoLink="web|email|map" Was bad user experience -->
     </com.nononsenseapps.ui.TabbingEditText>

@@ -49,6 +49,7 @@ import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.Log;
 import android.util.TimeFormatException;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -443,6 +444,19 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		// Gets a handle to the EditText in the the layout.
 		LinearLayout theView = (LinearLayout) inflater.inflate(layout,
 				container, false);
+
+		// This is to prevent the view from setting focus (and bringing up the
+		// keyboard)
+		theView.setDescendantFocusability(ViewGroup.FOCUS_BEFORE_DESCENDANTS);
+		theView.setFocusable(true);
+		theView.setFocusableInTouchMode(true);
+		theView.setOnTouchListener(new View.OnTouchListener() {
+			@Override
+			public boolean onTouch(View v, MotionEvent event) {
+				v.requestFocusFromTouch();
+				return false;
+			}
+		});
 
 		// Main note edit text
 		mText = (EditText) theView.findViewById(R.id.noteBox);
