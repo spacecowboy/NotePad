@@ -19,6 +19,8 @@ package com.nononsenseapps.notepad;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import sheetrock.panda.changelog.ChangeLog;
+
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.interfaces.PasswordChecker;
@@ -481,6 +483,10 @@ public class MainActivity extends DualLayoutActivity implements
 			restartAndRefresh();
 		}
 		super.onResume();
+		//Show changelog if it is new
+		ChangeLog cl = new ChangeLog(this);
+	    if (cl.firstRun())
+	        cl.getLogDialog().show();
 	}
 
 	@Override
@@ -760,6 +766,10 @@ public class MainActivity extends DualLayoutActivity implements
 		case R.id.menu_delete:
 			onDeleteAction();
 			break;
+		case R.id.menu_changelog:
+			ChangeLog cl = new ChangeLog(this);
+			cl.getFullLogDialog().show();
+			return true;
 		case R.id.menu_preferences:
 			showPrefs();
 			return true;
