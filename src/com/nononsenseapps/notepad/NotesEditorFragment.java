@@ -548,7 +548,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		dueDateSet = false;
 
 		// Remember to update share intent
-		setActionShareIntent();
+		if (activity != null && !activity.isFinishing())
+			setActionShareIntent();
 	}
 
 	private void setFontSettings() {
