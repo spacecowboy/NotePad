@@ -1,34 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:orientation="vertical"
-    android:padding="10dp"
-    tools:ignore="HardcodedText" >
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
 
-    <TextView
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Version 3.5.2"
-        android:textStyle="bold" />
+        android:orientation="vertical"
+        android:padding="10dp"
+        tools:ignore="HardcodedText" >
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="- This change log
-        \n- Support ICS" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="15dp"
+            android:autoLink="web|email|map"
+            android:text="For latest information or to report new bugs/ideas, go to https://github.com/spacecowboy/NotePad/issues" />
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
-        android:text="Version 1.0.1"
-        android:textStyle="bold" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Version 3.5.2"
+            android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:text="- Fix gps bug" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="- This change log
+        \n- Chinese translation
+        \n- Removed auto reloading of notes as it would overwrite changes
+        \n- Keyboard is opened automatically when creating new notes
+        \n- Note titles are now single line but in return a new next-button should appear on your keyboard which will move the cursor directly to the notes field
+        \n- Widget title is once again on the left
+        \n- Now impossible to delete a list if it is the only list as you could end up in a crash loop when you had no lists
+        \n- Completing or moving a note to another list should no longer delete the changes you made if they were not saved. All changes are now saved prior to any action being taken
+        \n- Moved the complete button to the overflow menu again as people confused it with a save button
+        \n- Various bugs and crashes should be fixed." />
+    </LinearLayout>
 
-</LinearLayout>
+</ScrollView>
