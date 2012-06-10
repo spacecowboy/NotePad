@@ -200,7 +200,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 */
 	private void openNote(Bundle savedInstanceState) {
 		// Just make sure we are attached
-		if (!activity.isFinishing()) {
+		if (activity == null || !activity.isFinishing()) {
 			doSave = true;
 			opened = true;
 			if (id != -1) {
@@ -211,7 +211,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			if (id == -1 || mUri == null) {
 				// Invalid id
 				// Closes the activity.
-				activity.finish();
+				if (activity != null)
+					activity.finish();
 				return;
 			} else {
 

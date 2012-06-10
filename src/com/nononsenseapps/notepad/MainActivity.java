@@ -88,8 +88,6 @@ public class MainActivity extends DualLayoutActivity implements
 	private long listIdToSelect = -1;
 	private boolean beforeBoot = false; // Used to indicate the intent handling
 
-	// how to select items
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// Must set theme before calling super
