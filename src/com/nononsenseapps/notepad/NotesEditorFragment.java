@@ -255,6 +255,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	}
 
 	private boolean hasNoteChanged() {
+		// Null check, can happen at first start up
+		if (noteAttrs == null ||
+				mTitle == null ||
+				mText == null) {
+			return false;
+		}
+		
 		boolean title, note, completed, date = false;
 		// Get the current note text.
 		String text = noteAttrs.getFullNote(mText.getText().toString());
