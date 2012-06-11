@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.nononsenseapps.notepad.MainActivity;
@@ -82,7 +83,16 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		} else if (action.equals(CLICK_ACTION)) {
 			appIntent.setClass(context, RightActivity.class);
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
-			// long listId = intent.getLongExtra(EXTRA_LIST_ID, -1);
+			
+			// This would complete the note
+//			if (noteId > -1) {
+//				Intent bintent = new Intent();
+//				bintent.setAction(context.getText(R.string.complete_note_broadcast_intent).toString());
+//				bintent.putExtra(NotePad.Notes._ID, noteId);
+//				Log.d("Broadcast", "Sending broadcast");
+//				context.sendBroadcast(bintent);
+//			}
+			
 			if (noteId > -1) {
 				appIntent.setData(Uri.withAppendedPath(
 						NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,

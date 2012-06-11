@@ -84,7 +84,15 @@
             android:writePermission="com.nononsenseapps.notepad.permissions.write" >
         </provider>
         <!-- removed android:readPermission="com.nononsenseapps.notepad.permissions.read" -->
+        
+        <!-- Broadcast receiver for accepting actions from widget for example -->
+		<receiver android:name="NotePadBroadcastReceiver" >
+		    <intent-filter>
+                <action android:name="com.nononsenseapps.completenote" />
+            </intent-filter>
+        </receiver>
 
+		<!-- Main program -->
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
