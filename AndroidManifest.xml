@@ -26,8 +26,8 @@
     android:installLocation="auto"
     package="com.nononsenseapps.notepad"
     
-    android:versionCode="31"
-    android:versionName="3.5.1" xmlns:tools="http://schemas.android.com/tools">
+    android:versionCode="32"
+    android:versionName="3.5.2" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- App crashes on 3.0. No one uses 3.1. So minimum version is set to 3.2 now -->
     <uses-sdk
