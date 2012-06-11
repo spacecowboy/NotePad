@@ -34,6 +34,7 @@
         \n- Keyboard is opened automatically when creating new notes
         \n- Note titles are now single line but in return a new next-button should appear on your keyboard which will move the cursor directly to the notes field
         \n- Widget title is once again on the left
+        \n- Widget items are now smaller at the cost of the note preview field. This means more visible items which has been heavily requested
         \n- Now impossible to delete a list if it is the only list as you could end up in a crash loop when you had no lists
         \n- Completing or moving a note to another list should no longer delete the changes you made if they were not saved. All changes are now saved prior to any action being taken
         \n- Moved the complete button to the overflow menu again as people confused it with a save button
