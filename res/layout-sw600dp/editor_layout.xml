@@ -62,17 +62,25 @@
         </LinearLayout>
     </LinearLayout>
 
-    <com.nononsenseapps.ui.TabbingEditText
-        android:id="@+id/noteBox"
+    <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:gravity="top"
-        android:hint="@string/editor_note_hint"
-        android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
-        android:scrollbars="vertical" >
+        android:fillViewport="true"
+        android:scrollbars="vertical"
+        android:isScrollContainer="true" >
 
-        <!-- android:autoLink="web|email|map" Was bad user experience -->
-    </com.nononsenseapps.ui.TabbingEditText>
+        <com.nononsenseapps.ui.TabbingEditText
+            android:id="@+id/noteBox"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="top"
+            android:hint="@string/editor_note_hint"
+            android:inputType="textAutoCorrect|textCapSentences|textMultiLine"
+             >
+
+            <!-- android:autoLink="web|email|map" Was bad user experience -->
+        </com.nononsenseapps.ui.TabbingEditText>
+    </ScrollView>
 
 </LinearLayout>
