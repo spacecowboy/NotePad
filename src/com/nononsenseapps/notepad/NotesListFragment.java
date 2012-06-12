@@ -428,13 +428,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	}
 
 	private void enableSync() {
-		Log.d("SyncFix", "enableSync");
 		// Get the first Google account on the device
 		final Account[] accounts = AccountManager.get(activity)
 				.getAccountsByType("com.google");
 		if (accounts.length > 0) {
 			final Account account = accounts[0];
-			Log.d("SyncFix", "Account: "+ account.name);
 
 			// Request access
 			AccountManager.get(activity).getAuthToken(account,
@@ -443,18 +441,14 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 						@Override
 						public void run(AccountManagerFuture<Bundle> future) {
-							Log.d("SyncFix", "Callback");
 							// This is the callback class, it handles all the
 							// steps
 							// after requesting access
 							try {
-								Log.d("SyncFix", "Trying token");
 								String token = future.getResult().getString(
 										AccountManager.KEY_AUTHTOKEN);
-								Log.d("SyncFix", "Got token");
 								if (token != null && !token.equals("")
 										&& account != null) {
-									Log.d("SyncFix", "Authorized");
 									// Get preference editor
 									Editor editor = PreferenceManager
 											.getDefaultSharedPreferences(
@@ -464,7 +458,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 									editor.putString(SyncPrefs.KEY_ACCOUNT,
 											account.name);
 
-									Log.d("SyncFix", "Setsyncable");
 									// Set it syncable
 									ContentResolver.setIsSyncable(account,
 											NotePad.AUTHORITY, 1);
@@ -474,11 +467,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 											SyncPrefs.KEY_SYNC_ENABLE, true);
 
 									// Enable periodic sync
-									long freqMin = 60; // Once an hour in
-														// minutes
-									long pollFrequency = 60 * freqMin; // In
-																		// seconds
-									Log.d("SyncFix", "AddPeriod");
+									long freqMin = 60; // minutes
+									long pollFrequency = 60 * freqMin; // seconds
 									ContentResolver.addPeriodicSync(account,
 											NotePad.AUTHORITY, new Bundle(),
 											pollFrequency);
@@ -494,16 +484,16 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 									requestSync(account.name);
 								}
 							} catch (OperationCanceledException e) {
-								Log.d("SyncFix", "Error1");
+								Log.e("SyncFix", "Error1");
 								// if the request was canceled for any reason
 							} catch (AuthenticatorException e) {
-								Log.d("SyncFix", "Error2");
+								Log.e("SyncFix", "Error2");
 								// if there was an error communicating with the
 								// authenticator or
 								// if the authenticator returned an invalid
 								// response
 							} catch (IOException e) {
-								Log.d("SyncFix", "Error3");
+								Log.e("SyncFix", "Error3");
 								// if the authenticator returned an error
 								// response that
 								// indicates that it encountered an IOException
@@ -517,21 +507,16 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	}
 
 	private void requestSync(String accountName) {
-		Log.d("SyncFix", "RequestSync");
 		if (accountName != null && !"".equals(accountName)) {
-			Log.d("SyncFix", "name: " + accountName);
 			Account account = SyncPrefs.getAccount(
 					AccountManager.get(activity), accountName);
-			Log.d("SyncFix", "Checking sync..");
 			// Don't start a new sync if one is already going
 			if (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) {
-				Log.d("SyncFix", "No sync going, start one");
 				Bundle options = new Bundle();
 				// This will force a sync regardless of what the setting is
 				// in accounts manager. Only use it here where the user has
 				// manually desired a sync to happen NOW.
 				options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-				Log.d("SyncFix", "Requesting sync");
 				ContentResolver
 						.requestSync(account, NotePad.AUTHORITY, options);
 			}
