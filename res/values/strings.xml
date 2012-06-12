@@ -145,6 +145,9 @@
     <string tools:ignore="MissingTranslation" name="widget_pref_preview_note">Show note preview</string>
     <string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">Title will be 2 lines</string>
     <string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_on">Note will be on 2nd line</string>
+    <string tools:ignore="MissingTranslation" name="widget_pref_show_complete">Mark as done button</string>
+    <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_off">Button will be hidden</string>
+    <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_on">Button will be visible</string>
 
     <!-- These should probably not be translated -->
     <string tools:ignore="MissingTranslation" name="default_notetitle">Welcome!</string>

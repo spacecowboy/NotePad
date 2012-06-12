@@ -58,6 +58,7 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	public static final String KEY_SORT_ORDER = "widget_key_sort_order";
 	public static final String KEY_THEME = "widget_key_current_theme";
 	public static final String KEY_PREVIEW_NOTE = "widget_key_preview_note";
+	public static final String KEY_SHOW_COMPLETE = "widget_key_show_complete";
 
 	public static final String THEME_LIGHT = "light";
 	public static final String THEME_DARK = "dark";
@@ -114,6 +115,7 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 						NotePad.Notes.ASCENDING_SORT_ORDERING)
 				.putString(KEY_SORT_TYPE, MainPrefs.DUEDATESORT)
 				.putBoolean(KEY_PREVIEW_NOTE, false)
+				.putBoolean(KEY_SHOW_COMPLETE, false)
 				.commit();
 	}
 
@@ -158,7 +160,7 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			String key) {
 
 		if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-			if (KEY_PREVIEW_NOTE.equals(key)) {
+			if (KEY_PREVIEW_NOTE.equals(key) || KEY_SHOW_COMPLETE.equals(key)) {
 				getSharedPreferences(getSharedPrefsFile(appWidgetId),
 						MODE_PRIVATE)
 						.edit()
@@ -329,6 +331,7 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			themePref.setSummary(themePref.getEntry());
 			
 			((CheckBoxPreference) findPreference(KEY_PREVIEW_NOTE)).setChecked(false);
+			((CheckBoxPreference) findPreference(KEY_SHOW_COMPLETE)).setChecked(false);
 		}
 
 		@Override

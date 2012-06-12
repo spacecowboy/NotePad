@@ -32,5 +32,12 @@
             android:key="widget_key_preview_note"
             android:summaryOff="@string/widget_pref_preview_note_summary_off"
             android:summaryOn="@string/widget_pref_preview_note_summary_on" />
+        
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:title="@string/widget_pref_show_complete"
+            android:key="widget_key_show_complete"
+            android:summaryOff="@string/widget_pref_show_complete_summary_off"
+            android:summaryOn="@string/widget_pref_show_complete_summary_on" />
 
 </PreferenceScreen>
