@@ -17,7 +17,6 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="preference_screen" >
 
-    <PreferenceCategory android:title="@string/settings_cat_appearance" >
         <ListPreference
             android:defaultValue="light"
             android:dialogTitle="@string/settings_theme_dialog"
@@ -26,6 +25,12 @@
             android:key="widget_key_current_theme"
             android:summary="Selected option should be here"
             android:title="@string/settings_theme" />
-    </PreferenceCategory>
+        
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:title="@string/widget_pref_preview_note"
+            android:key="widget_key_preview_note"
+            android:summaryOff="@string/widget_pref_preview_note_summary_off"
+            android:summaryOn="@string/widget_pref_preview_note_summary_on" />
 
 </PreferenceScreen>

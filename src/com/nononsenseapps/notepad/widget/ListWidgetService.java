@@ -58,7 +58,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 	private static final String[] PROJECTION = new String[] {
 			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
-			NotePad.Notes.COLUMN_NAME_LIST,
+			NotePad.Notes.COLUMN_NAME_NOTE, NotePad.Notes.COLUMN_NAME_LIST,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
 			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
 
@@ -92,7 +92,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 					
 		// Get the data for this position from the content provider
 		String title = "";
-//		String note = "";
+		String note = "";
 //		String space = "";
 		CharSequence dueDate = "";
 		long noteId = -1;
@@ -102,15 +102,15 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE);
 			final int dateIndex = mCursor
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
-//			final int noteIndex = mCursor
-//					.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
+			final int noteIndex = mCursor
+					.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE);
 //			final int listIndex = mCursor
 //					.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST);
 //			final int indentIndex = mCursor
 //					.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL);
 			final int idIndex = mCursor.getColumnIndex(NotePad.Notes._ID);
 			title = mCursor.getString(titleIndex);
-			//note = mCursor.getString(noteIndex);
+			note = mCursor.getString(noteIndex);
 			noteId = mCursor.getLong(idIndex);
 			//localListId = mCursor.getLong(listIndex);
 			String date = mCursor.getString(dateIndex);
@@ -137,13 +137,21 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 		final int itemId;
 		if (settings!= null && ListWidgetConfigure.THEME_DARK.equals(settings.getString(ListWidgetConfigure.KEY_THEME, ListWidgetConfigure.THEME_LIGHT))) {
-			itemId = R.layout.widgetlist_item_dark;
+			if (settings.getBoolean(ListWidgetConfigure.KEY_PREVIEW_NOTE, false)) {
+				itemId = R.layout.widgetlist_item_dark_note;
+			} else {
+				itemId = R.layout.widgetlist_item_dark;
+			}
 		} else {
-			itemId = R.layout.widgetlist_item;
+			if (settings.getBoolean(ListWidgetConfigure.KEY_PREVIEW_NOTE, false)) {
+				itemId = R.layout.widgetlist_item_note;
+			} else {
+				itemId = R.layout.widgetlist_item;
+			}
 		}
 		RemoteViews rv = new RemoteViews(mContext.getPackageName(), itemId);
 		rv.setTextViewText(R.id.widget_itemTitle, title);
-		//rv.setTextViewText(R.id.widget_itemNote, note);
+		rv.setTextViewText(R.id.widget_itemNote, note);
 		rv.setTextViewText(R.id.widget_itemDate, dueDate);
 		//rv.setTextViewText(R.id.widget_itemIndent, space);
 

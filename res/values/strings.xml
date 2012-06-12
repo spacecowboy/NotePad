@@ -142,6 +142,9 @@
     <string tools:ignore="MissingTranslation" name="changelog_title">What\'s new</string>
     <string tools:ignore="MissingTranslation" name="changelog_ok_button">OK</string>
     <string tools:ignore="MissingTranslation" name="changelog_show_full">Show full</string>
+    <string tools:ignore="MissingTranslation" name="widget_pref_preview_note">Show note preview</string>
+    <string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">Title will be 2 lines</string>
+    <string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_on">Note will be on 2nd line</string>
 
     <!-- These should probably not be translated -->
     <string tools:ignore="MissingTranslation" name="default_notetitle">Welcome!</string>

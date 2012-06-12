@@ -33,6 +33,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.CheckBoxPreference;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
@@ -56,6 +57,7 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	public static final String KEY_SORT_TYPE = "widget_key_sort_type";
 	public static final String KEY_SORT_ORDER = "widget_key_sort_order";
 	public static final String KEY_THEME = "widget_key_current_theme";
+	public static final String KEY_PREVIEW_NOTE = "widget_key_preview_note";
 
 	public static final String THEME_LIGHT = "light";
 	public static final String THEME_DARK = "dark";
@@ -110,7 +112,9 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		edit.putString(KEY_LIST, Integer.toString(MainActivity.ALL_NOTES_ID))
 				.putString(KEY_SORT_ORDER,
 						NotePad.Notes.ASCENDING_SORT_ORDERING)
-				.putString(KEY_SORT_TYPE, MainPrefs.DUEDATESORT).commit();
+				.putString(KEY_SORT_TYPE, MainPrefs.DUEDATESORT)
+				.putBoolean(KEY_PREVIEW_NOTE, false)
+				.commit();
 	}
 
 	/**
@@ -121,7 +125,7 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		loadHeadersFromResource(R.xml.widget_pref_headers, target);
 		setDefaultSharedPreferenceValues();
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
@@ -154,14 +158,19 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			String key) {
 
 		if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-			// Log.d("prefsActivity", "changed key: " + key);
-			// Log.d("prefsActivity","commiting: " +
-			// sharedPreferences.getString(key, null));
-			Log.d("config", "setting real values: " + key + ": " + sharedPreferences.getString(key, null));
-			getSharedPreferences(getSharedPrefsFile(appWidgetId), MODE_PRIVATE)
-					.edit()
-					.putString(key, sharedPreferences.getString(key, null))
-					.commit();
+			if (KEY_PREVIEW_NOTE.equals(key)) {
+				getSharedPreferences(getSharedPrefsFile(appWidgetId),
+						MODE_PRIVATE)
+						.edit()
+						.putBoolean(key,
+								sharedPreferences.getBoolean(key, false))
+						.commit();
+			} else {
+				getSharedPreferences(getSharedPrefsFile(appWidgetId),
+						MODE_PRIVATE).edit()
+						.putString(key, sharedPreferences.getString(key, null))
+						.commit();
+			}
 		}
 	}
 
@@ -291,8 +300,9 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	/**
 	 * This fragment shows the preferences for the theme settings.
 	 */
-	public static class ThemeFragment extends PreferenceFragment implements OnSharedPreferenceChangeListener {
-		
+	public static class ThemeFragment extends PreferenceFragment implements
+			OnSharedPreferenceChangeListener {
+
 		private SharedPreferences lSettings;
 		private Activity activity;
 		private ListPreference themePref;
@@ -310,15 +320,17 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 
 			// Load the preferences from an XML resource
 			addPreferencesFromResource(R.xml.widget_pref_theme);
-			
+
 			themePref = (ListPreference) findPreference(KEY_THEME);
 
 			// Also set the summaries
-			//if (themePref.getValue() == null)
+			// if (themePref.getValue() == null)
 			themePref.setValue(ListWidgetConfigure.THEME_LIGHT);
 			themePref.setSummary(themePref.getEntry());
+			
+			((CheckBoxPreference) findPreference(KEY_PREVIEW_NOTE)).setChecked(false);
 		}
-		
+
 		@Override
 		public void onResume() {
 			super.onResume();
@@ -332,7 +344,7 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			if (lSettings != null)
 				lSettings.unregisterOnSharedPreferenceChangeListener(this);
 		}
-		
+
 		/**
 		 * Sets the list name in the preferences as well but also sets the list
 		 * summaries depending on the selected value.

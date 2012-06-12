@@ -22,7 +22,7 @@
             android:summary="@string/settings_header_list_summary" />
 
     <header android:fragment="com.nononsenseapps.notepad.widget.ListWidgetConfigure$ThemeFragment"
-            android:title="@string/settings_cat_theme"
+            android:title="@string/settings_cat_appearance"
             android:summary="" />
 
 </preference-headers>
