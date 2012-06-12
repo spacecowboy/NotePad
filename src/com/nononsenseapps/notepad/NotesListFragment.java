@@ -16,6 +16,7 @@
 
 package com.nononsenseapps.notepad;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -41,6 +42,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.graphics.Paint;
@@ -51,6 +53,10 @@ import android.provider.BaseColumns;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.annotation.TargetApi;
 import android.app.LoaderManager;
 import android.app.SearchManager;
@@ -374,25 +380,15 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					.getDefaultSharedPreferences(activity).getBoolean(
 							SyncPrefs.KEY_SYNC_ENABLE, false);
 			if (accountName != null && !accountName.equals("") && syncEnabled) {
-				Account account = SyncPrefs.getAccount(
-						AccountManager.get(activity), accountName);
-				// Don't start a new sync if one is already going
-				if (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) {
-					Bundle options = new Bundle();
-					// This will force a sync regardless of what the setting is
-					// in
-					// accounts manager. Only use it here where the user has
-					// manually
-					// desired a sync to happen NOW.
-					options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-					ContentResolver.requestSync(account, NotePad.AUTHORITY,
-							options);
-				}
+				requestSync(accountName);
 			} else {
+				// Enable syncing
+				enableSync();
+				
 				// The user might want to enable syncing. Open preferences
-				Intent intent = new Intent();
-				intent.setClass(activity, PrefsActivity.class);
-				startActivity(intent);
+				//Intent intent = new Intent();
+				//intent.setClass(activity, PrefsActivity.class);
+				//startActivity(intent);
 			}
 			return false; // Editor will listen for this also and saves when it
 							// receives it
@@ -428,6 +424,117 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
+		}
+	}
+
+	private void enableSync() {
+		Log.d("SyncFix", "enableSync");
+		// Get the first Google account on the device
+		final Account[] accounts = AccountManager.get(activity)
+				.getAccountsByType("com.google");
+		if (accounts.length > 0) {
+			final Account account = accounts[0];
+			Log.d("SyncFix", "Account: "+ account.name);
+
+			// Request access
+			AccountManager.get(activity).getAuthToken(account,
+					SyncAdapter.AUTH_TOKEN_TYPE, null, activity,
+					new AccountManagerCallback<Bundle>() {
+
+						@Override
+						public void run(AccountManagerFuture<Bundle> future) {
+							Log.d("SyncFix", "Callback");
+							// This is the callback class, it handles all the
+							// steps
+							// after requesting access
+							try {
+								Log.d("SyncFix", "Trying token");
+								String token = future.getResult().getString(
+										AccountManager.KEY_AUTHTOKEN);
+								Log.d("SyncFix", "Got token");
+								if (token != null && !token.equals("")
+										&& account != null) {
+									Log.d("SyncFix", "Authorized");
+									// Get preference editor
+									Editor editor = PreferenceManager
+											.getDefaultSharedPreferences(
+													activity).edit();
+
+									// Write account name to prefs
+									editor.putString(SyncPrefs.KEY_ACCOUNT,
+											account.name);
+
+									Log.d("SyncFix", "Setsyncable");
+									// Set it syncable
+									ContentResolver.setIsSyncable(account,
+											NotePad.AUTHORITY, 1);
+
+									// Write to pref
+									editor.putBoolean(
+											SyncPrefs.KEY_SYNC_ENABLE, true);
+
+									// Enable periodic sync
+									long freqMin = 60; // Once an hour in
+														// minutes
+									long pollFrequency = 60 * freqMin; // In
+																		// seconds
+									Log.d("SyncFix", "AddPeriod");
+									ContentResolver.addPeriodicSync(account,
+											NotePad.AUTHORITY, new Bundle(),
+											pollFrequency);
+
+									// Write period to prefs
+									editor.putString(SyncPrefs.KEY_SYNC_FREQ,
+											Long.toString(freqMin));
+
+									// Commit prefs
+									editor.commit();
+									
+									// Then request sync
+									requestSync(account.name);
+								}
+							} catch (OperationCanceledException e) {
+								Log.d("SyncFix", "Error1");
+								// if the request was canceled for any reason
+							} catch (AuthenticatorException e) {
+								Log.d("SyncFix", "Error2");
+								// if there was an error communicating with the
+								// authenticator or
+								// if the authenticator returned an invalid
+								// response
+							} catch (IOException e) {
+								Log.d("SyncFix", "Error3");
+								// if the authenticator returned an error
+								// response that
+								// indicates that it encountered an IOException
+								// while
+								// communicating with the authentication server
+							}
+						}
+					}, null);
+
+		}
+	}
+
+	private void requestSync(String accountName) {
+		Log.d("SyncFix", "RequestSync");
+		if (accountName != null && !"".equals(accountName)) {
+			Log.d("SyncFix", "name: " + accountName);
+			Account account = SyncPrefs.getAccount(
+					AccountManager.get(activity), accountName);
+			Log.d("SyncFix", "Checking sync..");
+			// Don't start a new sync if one is already going
+			if (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) {
+				Log.d("SyncFix", "No sync going, start one");
+				Bundle options = new Bundle();
+				// This will force a sync regardless of what the setting is
+				// in accounts manager. Only use it here where the user has
+				// manually desired a sync to happen NOW.
+				options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+				Log.d("SyncFix", "Requesting sync");
+				ContentResolver
+						.requestSync(account, NotePad.AUTHORITY, options);
+			}
 		}
 	}
 
