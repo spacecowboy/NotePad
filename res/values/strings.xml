@@ -144,6 +144,15 @@
     <string tools:ignore="MissingTranslation" name="changelog_show_full">Show full</string>
 
     <!-- These should probably not be translated -->
+    <string tools:ignore="MissingTranslation" name="default_notetitle">Welcome!</string>
+    <string tools:ignore="MissingTranslation" name="default_notetext">To get the most out of this app I suggest you enable syncing first. Go ahead and hit the sync button up in the action bar when you get back to the list. By default it will enable automatic syncing which will sync once per hour.
+\n\nNote that this is coupled with your global sync preference. In a nutshell, if your gmail isn\'t syncing automatically then neither is this app. You can disable automatic syncing and go completely manual in the settings.
+\n\nIf you have more than one Google account on your device, I suggest going into settings and selecting which account to use manually.
+\n\nIn fact I recommend going into settings anyway just to see what options there are. You can adjust the font and size of the text in this window and change the theme from light to dark.
+\n\nThe app also includes a widget that is fully resizable. You resize it just like all other widgets: tap and hold your finger for a second on the widget as if you were going to move it. Then, instead of moving it you can pull on the sides of the widget to make it bigger or smaller.
+\n\nI hope you will find the app useful. Keep in mind that it is completely free, has no ads and is open source. If you have any great ideas or major complaints, tell me about them.
+\n\n/Jonas
+</string>
     <string tools:ignore="MissingTranslation" name="about_text">Thank you for downloading my app! I try my best to make this app awesome in every way but there will always be bugs and things can always get more awesome!\n
 
 \nIf you\'ve found a bug, a translation being wrong or simply have an idea on how to make this app more awesome then I want to hear about it!

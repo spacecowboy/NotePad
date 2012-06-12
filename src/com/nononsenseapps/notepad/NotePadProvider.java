@@ -422,9 +422,9 @@ public class NotePadProvider extends ContentProvider implements
 		private long insertDefaultNote(SQLiteDatabase db, long listId) {
 			ContentValues values = new ContentValues();
 			values.put(NotePad.Notes.COLUMN_NAME_TITLE,
-					NotePad.Notes.DEFAULT_NAME);
+					context.getString(R.string.default_notetitle));
 			values.put(NotePad.Notes.COLUMN_NAME_NOTE,
-					NotePad.Notes.DEFAULT_NAME);
+					context.getString(R.string.default_notetext));
 			values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
 			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 0);
 			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);

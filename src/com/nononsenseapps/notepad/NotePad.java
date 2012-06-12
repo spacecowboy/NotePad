@@ -194,9 +194,6 @@ public final class NotePad {
         /**
          * The default sort order for this table
          */
-        
-        public static final String DEFAULT_NAME = "";
-		
       //public static final String DEFAULT_SORT_TYPE = COLUMN_NAME_TITLE + " COLLATE NOCASE";
       public static final String ALPHABETIC_SORT_TYPE = COLUMN_NAME_TITLE + " COLLATE NOCASE";
       // We want items with no due dates to be placed at the end, hence the sql magic
