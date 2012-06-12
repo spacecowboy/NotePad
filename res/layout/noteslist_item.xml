@@ -20,7 +20,7 @@
     android:layout_height="70dp"
     style="?my_list_selector"
     android:orientation="horizontal"
-    android:paddingLeft="8dp"
+    android:paddingLeft="0dp"
     android:paddingRight="16dp" >
     
     <TextView
@@ -30,40 +30,41 @@
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <LinearLayout
+    <com.nononsenseapps.ui.DelegateFrame
+        xmlns:nononsenseapps="http://nononsenseapps.com"
         android:id="@+id/datecheckcontainer"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:minWidth="44dp"
         android:orientation="vertical"
         android:paddingBottom="4dp"
-        android:paddingLeft="0dp"
+        android:paddingLeft="8dp"
         android:paddingRight="4dp"
-        android:paddingTop="8dp" >
+        android:paddingTop="8dp"
+        android:clickable="true"
+        nononsenseapps:enlargedView="@+id/itemDone" >
 
-        <view
+        <com.nononsenseapps.ui.DateView
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/itemDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            class="com.nononsenseapps.ui.DateView"
             android:gravity="center"
             android:paddingLeft="0dp"
             android:textColor="?android:attr/textColorSecondary"
             android:textSize="12sp" />
 
-        <view
+        <com.nononsenseapps.ui.NoteCheckBox
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/itemDone"
             android:layout_width="wrap_content"
             android:layout_height="0dp"
             android:layout_weight="1"
-            class="com.nononsenseapps.ui.NoteCheckBox"
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:gravity="center"
             android:paddingLeft="0dp" />
-    </LinearLayout>
+    </com.nononsenseapps.ui.DelegateFrame>
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
