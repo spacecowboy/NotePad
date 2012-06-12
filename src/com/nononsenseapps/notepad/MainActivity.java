@@ -19,6 +19,8 @@ package com.nononsenseapps.notepad;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import sheetrock.panda.changelog.ChangeLog;
+
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.interfaces.PasswordChecker;
@@ -88,8 +90,6 @@ public class MainActivity extends DualLayoutActivity implements
 	private long listIdToSelect = -1;
 	private boolean beforeBoot = false; // Used to indicate the intent handling
 
-	// how to select items
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// Must set theme before calling super
@@ -124,8 +124,10 @@ public class MainActivity extends DualLayoutActivity implements
 		mSpinnerAdapter = new ExtrasCursorAdapter(this,
 				R.layout.actionbar_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
-				new int[] { android.R.id.text1 }, new int[] { ALL_NOTES_ID, CREATE_LIST_ID },
-				new int[] { R.string.show_from_all_lists, R.string.menu_createlist });
+				new int[] { android.R.id.text1 }, new int[] { ALL_NOTES_ID,
+						CREATE_LIST_ID },
+				new int[] { R.string.show_from_all_lists,
+						R.string.menu_createlist });
 
 		mSpinnerAdapter
 				.setDropDownViewResource(R.layout.actionbar_dropdown_item);
@@ -139,8 +141,9 @@ public class MainActivity extends DualLayoutActivity implements
 
 		// Set up navigation list
 		// Set a default list to open if one is set
-		listIdToSelect = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(this)
-				.getString(MainPrefs.KEY_DEFAULT_LIST, "-1"));
+		listIdToSelect = Long.parseLong(PreferenceManager
+				.getDefaultSharedPreferences(this).getString(
+						MainPrefs.KEY_DEFAULT_LIST, "-1"));
 		// Handle the intent first, so we know what to possibly select once
 		// the
 		// loader is finished
@@ -191,8 +194,8 @@ public class MainActivity extends DualLayoutActivity implements
 		MenuItem deleteList = menu.findItem(R.id.menu_deletelist);
 		if (null != mSpinnerAdapter) {
 			if (deleteList != null) {
-				// Only show this button if there is a list to create it in
-				if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
+				// Only show this button if there are more than one list
+				if (mSpinnerAdapter.getCount() <= 3 || currentListId < 0) {
 					deleteList.setVisible(false);
 				} else {
 					deleteList.setVisible(true);
@@ -200,7 +203,7 @@ public class MainActivity extends DualLayoutActivity implements
 			}
 			MenuItem renameList = menu.findItem(R.id.menu_renamelist);
 			if (renameList != null) {
-				// Only show this button if there is a list to create it in
+				// Only show this button if there is a list
 				if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
 					renameList.setVisible(false);
 				} else {
@@ -307,7 +310,8 @@ public class MainActivity extends DualLayoutActivity implements
 				createList(title);
 			}
 		} else if (intent.getType() != null
-				&& (intent.getType().equals(NotePad.Notes.CONTENT_TYPE) || intent.getType().startsWith("text/"))
+				&& (intent.getType().equals(NotePad.Notes.CONTENT_TYPE) || intent
+						.getType().startsWith("text/"))
 				|| intent.getData() != null
 				&& intent.getData().equals(NotePad.Notes.CONTENT_VISIBLE_URI)) {
 			Log.d("FragmentLayout", "INSERT NOTE");
@@ -315,9 +319,10 @@ public class MainActivity extends DualLayoutActivity implements
 			long listId = getAList(intent);
 			String text = "";
 			if (intent.getExtras() != null) {
-				text = intent.getExtras().getCharSequence(Intent.EXTRA_TEXT, "").toString();
+				text = intent.getExtras()
+						.getCharSequence(Intent.EXTRA_TEXT, "").toString();
 			}
-			
+
 			if (listId > -1) {
 				Uri noteUri = MainActivity.createNote(getContentResolver(),
 						listId, text);
@@ -385,8 +390,9 @@ public class MainActivity extends DualLayoutActivity implements
 
 		if (tempList < 0) {
 			// Then check if a default list is specified
-			tempList = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(this)
-					.getString(MainPrefs.KEY_DEFAULT_LIST, "-1"));
+			tempList = Long.parseLong(PreferenceManager
+					.getDefaultSharedPreferences(this).getString(
+							MainPrefs.KEY_DEFAULT_LIST, "-1"));
 			Log.d(TAG, "Default list: " + tempList);
 		}
 		// Not guaranteed that this is valid. Check the database even if it
@@ -477,6 +483,10 @@ public class MainActivity extends DualLayoutActivity implements
 			restartAndRefresh();
 		}
 		super.onResume();
+		//Show changelog if it is new
+		ChangeLog cl = new ChangeLog(this);
+	    if (cl.firstRun())
+	        cl.getLogDialog().show();
 	}
 
 	@Override
@@ -633,8 +643,7 @@ public class MainActivity extends DualLayoutActivity implements
 		if (settings == null)
 			return false;
 		else
-			return (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false) && !settings
-					.getString(SyncPrefs.KEY_ACCOUNT, "").isEmpty());
+			return (!settings.getString(SyncPrefs.KEY_ACCOUNT, "").isEmpty());
 	}
 
 	/**
@@ -642,8 +651,9 @@ public class MainActivity extends DualLayoutActivity implements
 	 * the database. Will be deleted on next sync.
 	 */
 	protected void deleteCurrentList() {
-		// Only if id is valid
-		if (currentListId > -1) {
+		// Only if id is valid and if it is NOT the last list
+		// 3 instead of 1 because we insert "create new" and "all items" in the list
+		if (currentListId > -1 && mSpinnerAdapter.getCount() > 3) {
 			// Only mark as deleted so it is synced
 			if (shouldMarkAsDeleted(this)) {
 				ContentValues values = new ContentValues();
@@ -679,8 +689,9 @@ public class MainActivity extends DualLayoutActivity implements
 			}
 
 			// Remove default setting if this is the default list
-			long defaultListId = Long.parseLong(PreferenceManager.getDefaultSharedPreferences(this)
-					.getString(MainPrefs.KEY_DEFAULT_LIST, "-1"));
+			long defaultListId = Long.parseLong(PreferenceManager
+					.getDefaultSharedPreferences(this).getString(
+							MainPrefs.KEY_DEFAULT_LIST, "-1"));
 			if (currentListId == defaultListId) {
 				// Remove knowledge of default list
 				SharedPreferences.Editor prefEditor = PreferenceManager
@@ -755,6 +766,10 @@ public class MainActivity extends DualLayoutActivity implements
 		case R.id.menu_delete:
 			onDeleteAction();
 			break;
+		case R.id.menu_changelog:
+			ChangeLog cl = new ChangeLog(this);
+			cl.getFullLogDialog().show();
+			return true;
 		case R.id.menu_preferences:
 			showPrefs();
 			return true;
@@ -836,7 +851,8 @@ public class MainActivity extends DualLayoutActivity implements
 	 * @param listId
 	 * @return
 	 */
-	public static Uri createNote(ContentResolver resolver, long listId, String noteText) {
+	public static Uri createNote(ContentResolver resolver, long listId,
+			String noteText) {
 		if (listId > -1) {
 			ContentValues values = new ContentValues();
 			// Must always include list
@@ -857,7 +873,7 @@ public class MainActivity extends DualLayoutActivity implements
 			NotesEditorFragment editor = (NotesEditorFragment) getFragmentManager()
 					.findFragmentById(R.id.rightFragment);
 			if (editor != null) {
-				editor.setSelfAction();
+				editor.clearNoSave();
 			}
 		}
 		deleteNotes(this, ids);
@@ -871,8 +887,8 @@ public class MainActivity extends DualLayoutActivity implements
 		if (list != null)
 			list.onDelete();
 		if (editor != null) {
-			editor.setSelfAction();
 			deleteNote(this, editor.getCurrentNoteId());
+			editor.clearNoSave();
 		}
 		if (list == null) {
 			// this is an editor view displaying inactive data. kill it
@@ -889,12 +905,11 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 		// Change the active list
-		
+
 		if (CREATE_LIST_ID == itemId) {
 			// Create list
 			showDialog(CREATE_LIST);
-		}
-		else if (list != null) {
+		} else if (list != null) {
 			// Display list
 			currentListId = itemId;
 			currentListPos = itemPosition;

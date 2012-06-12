@@ -136,6 +136,12 @@
     
     <string name="sync_failed">Sync failed</string>
     <string name="sync_login_failed">Login failed, could not connect to Google Tasks</string>
+    
+    <!-- Untranslated yet -->
+    <string tools:ignore="MissingTranslation" name="changelog_full_title">Change log</string>
+    <string tools:ignore="MissingTranslation" name="changelog_title">What\'s new</string>
+    <string tools:ignore="MissingTranslation" name="changelog_ok_button">OK</string>
+    <string tools:ignore="MissingTranslation" name="changelog_show_full">Show full</string>
 
     <!-- These should probably not be translated -->
     <string tools:ignore="MissingTranslation" name="about_text">Thank you for downloading my app! I try my best to make this app awesome in every way but there will always be bugs and things can always get more awesome!\n

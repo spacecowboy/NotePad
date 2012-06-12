@@ -14,10 +14,13 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<!-- Provides constants and default values -->
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
-	<integer name="default_editor_font_size">22</integer>
-	<string name="gtask_status_uncompleted">needsAction</string>
-	<string name="gtask_status_completed">completed</string>
-	<string name="complete_note_broadcast_intent">com.nononsenseapps.completenote</string>
+<resources>
+    
+    <string-array name="preferences_week_start_day_labels">
+        <item>本地默认</item>
+        <item>星期六</item>
+        <item>星期天</item>
+        <item>星期一</item>
+    </string-array>
+
 </resources>

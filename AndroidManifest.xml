@@ -26,8 +26,8 @@
     android:installLocation="auto"
     package="com.nononsenseapps.notepad"
     
-    android:versionCode="31"
-    android:versionName="3.5.1" xmlns:tools="http://schemas.android.com/tools">
+    android:versionCode="33"
+    android:versionName="3.5.3" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- App crashes on 3.0. No one uses 3.1. So minimum version is set to 3.2 now -->
     <uses-sdk
@@ -84,12 +84,21 @@
             android:writePermission="com.nononsenseapps.notepad.permissions.write" >
         </provider>
         <!-- removed android:readPermission="com.nononsenseapps.notepad.permissions.read" -->
+        
+        <!-- Broadcast receiver for accepting actions from widget for example -->
+		<receiver android:name="NotePadBroadcastReceiver" >
+		    <intent-filter>
+                <action android:name="com.nononsenseapps.completenote" />
+            </intent-filter>
+        </receiver>
 
+		<!-- Main program -->
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
             android:theme="@style/ThemeHolo"
             android:launchMode="singleTask"
+            android:windowSoftInputMode="adjustResize"
             android:uiOptions="splitActionBarWhenNarrow" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -107,7 +116,8 @@
         </activity>
         <activity
             android:name="RightActivity"
-            android:theme="@style/ThemeHolo" >
+            android:theme="@style/ThemeHolo"
+            android:windowSoftInputMode="adjustResize" >
             
             <intent-filter android:label="@string/resolve_edit" >
                 <action android:name="android.intent.action.INSERT" />
