@@ -138,8 +138,8 @@
     <string name="changelog_title">Nuevo</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Mostrar todo</string>
-    <string name="widget_pref_preview_note">Vista de la nota</string>
-    <string name="widget_pref_preview_note_summary_off">El título ocupa 2 líneas</string>
+    <string name="widget_pref_preview_note">Mostrar notas</string>
+    <string name="widget_pref_preview_note_summary_off">El título ocupa las 2 líneas</string>
     <string name="widget_pref_preview_note_summary_on">La nota ocupa la segunda línea</string>
     <string name="widget_pref_show_complete">Casilla de completada</string>
     <string name="widget_pref_show_complete_summary_off">Casilla oculta</string>
