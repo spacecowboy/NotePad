@@ -64,21 +64,18 @@ import java.util.Map.Entry;
  */
 public class NotePadProvider extends ContentProvider implements
 		PipeDataWriter<Cursor> {
-	
-	
+
 	public static boolean SyncAuto(Context context) {
-		String setting = PreferenceManager
-				.getDefaultSharedPreferences(context).getString(
-						SyncPrefs.KEY_SYNC_FREQ, "0");
+		String setting = PreferenceManager.getDefaultSharedPreferences(context)
+				.getString(SyncPrefs.KEY_SYNC_FREQ, "0");
 		int syncAuto = Integer.parseInt(setting);
-		
-		boolean syncEnabled = PreferenceManager
-				.getDefaultSharedPreferences(context).getBoolean(
-						SyncPrefs.KEY_SYNC_ENABLE, false);
-		
+
+		boolean syncEnabled = PreferenceManager.getDefaultSharedPreferences(
+				context).getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
+
 		return syncEnabled && (syncAuto > 0);
 	}
-	
+
 	// Used for debugging and logging
 	private static final String TAG = "NotePadProvider";
 
@@ -269,12 +266,9 @@ public class NotePadProvider extends ContentProvider implements
 				substrOf(NotePad.Notes.COLUMN_NAME_TITLE, "124"));
 		// Now replace the note text with a case statement to check the lock and
 		// do substr as well
-		sFastVisibleNotesProjectionMap.put(
-				NotePad.Notes.COLUMN_NAME_NOTE,
-				substrOf(
-						caseWhen(NotePad.Notes.COLUMN_NAME_LOCKED + " IS 1",
-								"''", NotePad.Notes.COLUMN_NAME_NOTE), "74",
-						NotePad.Notes.COLUMN_NAME_NOTE));
+		Log.d("lockfix", caseWhenLocked(NotePad.Notes.COLUMN_NAME_NOTE));
+		sFastVisibleNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_NOTE,
+				caseWhenLocked(NotePad.Notes.COLUMN_NAME_NOTE));
 
 		/*
 		 * Creates an initializes a projection map for handling Lists
@@ -365,12 +359,20 @@ public class NotePadProvider extends ContentProvider implements
 		return "substr(" + name + ",0," + length + ") as " + target;
 	}
 
+	private static String caseWhenLocked(String note) {
+		// We only do the search on the last chars to increase speed
+		String endnote = "substr(" + note + ",-10" + ")";
+		String clause = endnote + " LIKE '%" + NoteAttributes.LOCKED + "%'";
+		String that = "substr(" + note + ",0," + 140 + ")";
+		return caseWhen(clause, "''", that) + " as " + note;
+	}
+
 	/**
-	 * (case when CLAUSE then THIS else THAT end)
+	 * case when CLAUSE then THIS else THAT end
 	 */
 	private static String caseWhen(String clause, String cThis, String cThat) {
-		return "(case when " + clause + " then " + cThis + " else " + cThat
-				+ " end)";
+		return "case when " + clause + " then " + cThis + " else " + cThat
+				+ " end";
 	}
 
 	/**
@@ -659,8 +661,8 @@ public class NotePadProvider extends ContentProvider implements
 	 *             if the incoming URI pattern is invalid.
 	 */
 	@Override
-	synchronized public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
+	synchronized public Cursor query(Uri uri, String[] projection,
+			String selection, String[] selectionArgs, String sortOrder) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "query");
 
@@ -1021,8 +1023,8 @@ public class NotePadProvider extends ContentProvider implements
 	 * stream of data for the client to read.
 	 */
 	// @Override
-	synchronized public void writeDataToPipe(ParcelFileDescriptor output, Uri uri,
-			String mimeType, Bundle opts, Cursor c) {
+	synchronized public void writeDataToPipe(ParcelFileDescriptor output,
+			Uri uri, String mimeType, Bundle opts, Cursor c) {
 		// We currently only support conversion-to-text from a single note
 		// entry,
 		// so no need for cursor data type checking here.
@@ -1345,7 +1347,8 @@ public class NotePadProvider extends ContentProvider implements
 		throw new SQLException("Failed to insert row into " + uri);
 	}
 
-	synchronized private Uri insertGTaskList(Uri uri, ContentValues initialValues) {
+	synchronized private Uri insertGTaskList(Uri uri,
+			ContentValues initialValues) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "insertGTaskList");
 		// A map to hold the new record's values.
@@ -1416,7 +1419,8 @@ public class NotePadProvider extends ContentProvider implements
 	 * @param db
 	 * @param cursor
 	 */
-	synchronized private static int deleteListsFromDb(SQLiteDatabase db, Cursor cursor) {
+	synchronized private static int deleteListsFromDb(SQLiteDatabase db,
+			Cursor cursor) {
 		int count = 0;
 		while (cursor != null && !cursor.isClosed() && !cursor.isAfterLast()) {
 			if (!cursor.moveToNext())
@@ -1438,7 +1442,8 @@ public class NotePadProvider extends ContentProvider implements
 	 * @param db
 	 * @param listId
 	 */
-	synchronized private static int deleteNotesInListFromDb(SQLiteDatabase db, String listId) {
+	synchronized private static int deleteNotesInListFromDb(SQLiteDatabase db,
+			String listId) {
 		int count = 0;
 		Cursor cursor = db.query(NotePad.Notes.TABLE_NAME,
 				new String[] { NotePad.Notes._ID },
@@ -1461,8 +1466,8 @@ public class NotePadProvider extends ContentProvider implements
 	 * @param whereArgs
 	 * @return
 	 */
-	synchronized private static int deleteListFromDb(SQLiteDatabase db, String id,
-			String where, String[] whereArgs) {
+	synchronized private static int deleteListFromDb(SQLiteDatabase db,
+			String id, String where, String[] whereArgs) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "Deleting list from DB: " + id);
 
@@ -1500,7 +1505,8 @@ public class NotePadProvider extends ContentProvider implements
 	 * @param whereArgs
 	 * @return
 	 */
-	synchronized private static int deleteNotesFromDb(SQLiteDatabase db, Cursor cursor) {
+	synchronized private static int deleteNotesFromDb(SQLiteDatabase db,
+			Cursor cursor) {
 		int count = 0;
 		while (cursor != null && !cursor.isClosed() && !cursor.isAfterLast()) {
 			if (!cursor.moveToNext())
@@ -1523,8 +1529,8 @@ public class NotePadProvider extends ContentProvider implements
 	 * @param whereArgs
 	 * @return
 	 */
-	synchronized private static int deleteNoteFromDb(SQLiteDatabase db, String id,
-			String where, String[] whereArgs) {
+	synchronized private static int deleteNoteFromDb(SQLiteDatabase db,
+			String id, String where, String[] whereArgs) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "Deleting note from DB: " + id);
 
