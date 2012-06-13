@@ -25,8 +25,8 @@
     <string name="menu_revert">Deshacer cambios</string>
     <string name="menu_copy">Copiar nota</string>
     <string name="menu_cancel">Cancelar</string>
-    <string name="menu_setcompleted">Hecho</string>
-    <string name="menu_setuncompleted">No hecho</string>
+    <string name="menu_setcompleted">Completada</string>
+    <string name="menu_setuncompleted">No completada</string>
     <string name="menu_deletelist">Eliminar lista</string>
     <string name="menu_sync">Actualizar</string>
     <string name="menu_share">Compartir</string>
@@ -131,8 +131,28 @@
         después reinstale la aplicación.</string>
     <string name="about">Créditos</string>
     
-     <!-- Untranslated yet -->
     <string name="sync_failed">Error de sincronización</string>
     <string name="sync_login_failed">Error en el inicio de sesión, no se ha podido conectar a Google Tasks</string>
+    
+    <string name="changelog_full_title">Registro de cambios</string>
+    <string name="changelog_title">Nuevo</string>
+    <string name="changelog_ok_button">OK</string>
+    <string name="changelog_show_full">Mostrar todo</string>
+    <string name="widget_pref_preview_note">Mostrar notas</string>
+    <string name="widget_pref_preview_note_summary_off">El título ocupa las 2 líneas</string>
+    <string name="widget_pref_preview_note_summary_on">La nota ocupa la segunda línea</string>
+    <string name="widget_pref_show_complete">Casilla de completada</string>
+    <string name="widget_pref_show_complete_summary_off">Casilla oculta</string>
+    <string name="widget_pref_show_complete_summary_on">Casilla visible</string>
+
+    <string name="default_notetitle">¡Bienvenido!</string>
+    <string name="default_notetext">Para sacar el máximo aprovechamiento de esta aplicación, le sugiero que active la sincronización antes de nada. Continúe, y pulse el botón para sincronizar de la barra de acciones cuando vuelva a la lista. Esto activará la sincronización automática por defecto, que actuará cada hora.
+\n\nEsto está ligado a sus preferencias globales de sincronización. Resumidamente, si no está activada la sincronización de gmail, entonces tampoco se sincronizará esta aplicación. Puede desactivar la sincronización automática, y hacerla manualmente usted, en el apartado de configuración.
+\n\nSi tiene mas de una cuenta Google en su dispositivo, le sugiero seleccionar en el apartado de configuración cuál se usará.
+\n\nDe cualquier forma, recomiendo visitar este apartado para ver qué otras opciones tiene. Puede ajustar el tamaño y tipo de letra, y cambiar el tema de la aplicación de claro a oscuro.
+\n\nLa aplicación también incluye un widget completamente ajustable. Puede cambiar su tamaño como cualquier otro widget: toque y manténgalo un segundo con el dedo como si fuera a moverlo. Después, en lugar de moverlo, puede arrastrar los bordes del widget para estirarlo o encogerlo.
+\n\nEspero que encuentre útil la aplicación. Recuerde que es completamente gratis, no tiene publicidad y es de código abierto. Si tiene alguna buena idea o queja, por favor dígamelas.
+\n\n/Jonas
+</string>
 
 </resources>

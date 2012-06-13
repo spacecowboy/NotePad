@@ -163,6 +163,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private NoteAttributes noteAttrs;
 	private Handler mHandler = new Handler();
 	private boolean mComplete;
+	private boolean mCompleteChanged = false;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -268,7 +269,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		title = !mTitle.getText().toString().equals(mOriginalTitle);
 		note = !text.equals(mOriginalNote);
-		completed = mComplete != mOriginalComplete;
+		completed = mCompleteChanged;
 		date = dueDateSet != mOriginalDueState
 				|| (dueDateSet && !noteDueDate.format3339(false).equals(
 						mOriginalDueDate));
@@ -351,6 +352,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					NotePad.Notes.CONTENT_URI, values);
 			id = getIdFromUri(mUri);
 		}
+		// update changed variable
+		mCompleteChanged = false;
 	}
 
 	private String makeTitle(String text) {
@@ -692,6 +695,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private void setCompleted(boolean val) {
 		if (activity != null) {
 			mComplete = val;
+			mCompleteChanged = true;
 			saveNote();
 			getActivity().invalidateOptionsMenu();
 		}

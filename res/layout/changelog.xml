@@ -22,6 +22,17 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="Version 3.5.4"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="- Sync button now requests access and enables syncing instead of opening settings when no syncing has been enabled yet\n- Improved scrolling on long notes in the editor\n- Added a welcome note for first time users\n- Added option of showing or hiding the note preview when adding a widget to your homescreen\n- Added option to show or hide buttons to mark tasks as done in the widget\n- Enlarged the touch area for the checkbox in the list. Should make it harder to miss the box now\n- Possible to type in landscape mode on phones again\n- Added a choice between two list item layouts which can be chosen in the settings\n- Fixed so password protected notes do not reveal their contents in the list" />
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="Version 3.5.3"
             android:textStyle="bold" />
 

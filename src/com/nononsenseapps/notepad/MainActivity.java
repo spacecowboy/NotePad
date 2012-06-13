@@ -716,7 +716,7 @@ public class MainActivity extends DualLayoutActivity implements
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		// Need to restart to allow themes and such to go into effect
-		if (key.equals(MainPrefs.KEY_THEME)) {
+		if (key.equals(MainPrefs.KEY_THEME) || key.equals(MainPrefs.KEY_LISTITEM)) {
 			shouldRestart = true;
 		}
 	}

@@ -19,6 +19,7 @@ package com.nononsenseapps.notepad.widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -37,6 +38,7 @@ import com.nononsenseapps.notepad.RightActivity;
  */
 public class ListWidgetProvider extends AppWidgetProvider {
 	// private static final String TAG = "WIDGETPROVIDER";
+	public static final String COMPLETE_ACTION = "com.nononsenseapps.notepad.widget.COMPLETE";
 	public static final String CLICK_ACTION = "com.nononsenseapps.notepad.widget.CLICK";
 	public static final String OPEN_ACTION = "com.nononsenseapps.notepad.widget.OPENAPP";
 	public static final String CREATE_ACTION = "com.nononsenseapps.notepad.widget.CREATE";
@@ -81,17 +83,9 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			context.startActivity(appIntent);
 
 		} else if (action.equals(CLICK_ACTION)) {
+			Log.d("widgetwork", "CLICK ACTION RECEIVED");
 			appIntent.setClass(context, RightActivity.class);
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
-			
-			// This would complete the note
-//			if (noteId > -1) {
-//				Intent bintent = new Intent();
-//				bintent.setAction(context.getText(R.string.complete_note_broadcast_intent).toString());
-//				bintent.putExtra(NotePad.Notes._ID, noteId);
-//				Log.d("Broadcast", "Sending broadcast");
-//				context.sendBroadcast(bintent);
-//			}
 			
 			if (noteId > -1) {
 				appIntent.setData(Uri.withAppendedPath(
@@ -103,6 +97,18 @@ public class ListWidgetProvider extends AppWidgetProvider {
 										-1));
 				appIntent.setAction(Intent.ACTION_EDIT);
 				context.startActivity(appIntent);
+			}
+		} else if (action.equals(COMPLETE_ACTION)) {
+			// Should send broadcast here
+			Log.d("widgetwork", "COMPLETE ACTION RECEIVED");
+			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
+			// This will complete the note
+			if (noteId > -1) {
+				Intent bintent = new Intent();
+				bintent.setAction(context.getString(R.string.complete_note_broadcast_intent));
+				bintent.putExtra(NotePad.Notes._ID, noteId);
+				Log.d("Broadcast", "Sending broadcast");
+				context.sendBroadcast(bintent);
 			}
 		}
 
@@ -176,13 +182,24 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		// will be
 		// ignored otherwise.
 		Intent onClickIntent = new Intent(context, ListWidgetProvider.class);
-		onClickIntent.setAction(ListWidgetProvider.CLICK_ACTION)
+		///onClickIntent.setAction(ListWidgetProvider.CLICK_ACTION)
+		onClickIntent
 				.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
 				.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId).setData(data);
 
 		PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(
 				context, 0, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		rv.setPendingIntentTemplate(R.id.notes_list, onClickPendingIntent);
+		
+		// Complete button
+//		Intent completeIntent = new Intent(context, ListWidgetProvider.class);
+//		completeIntent.setAction(ListWidgetProvider.COMPLETE_ACTION)
+//				.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+//				.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId).setData(data);
+//
+//		PendingIntent completePendingIntent = PendingIntent.getBroadcast(
+//				context, 0, completeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+//		rv.setPendingIntentTemplate(R.id.widget_complete_task, completePendingIntent);
 
 		// Bind the click intent for the button on the widget
 		Intent openAppIntent = new Intent(context, ListWidgetProvider.class);
