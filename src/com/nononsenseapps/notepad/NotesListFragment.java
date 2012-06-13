@@ -384,11 +384,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			} else {
 				// Enable syncing
 				enableSync();
-				
+
 				// The user might want to enable syncing. Open preferences
-				//Intent intent = new Intent();
-				//intent.setClass(activity, PrefsActivity.class);
-				//startActivity(intent);
+				// Intent intent = new Intent();
+				// intent.setClass(activity, PrefsActivity.class);
+				// startActivity(intent);
 			}
 			return false; // Editor will listen for this also and saves when it
 							// receives it
@@ -479,7 +479,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 									// Commit prefs
 									editor.commit();
-									
+
 									// Then request sync
 									requestSync(account.name);
 								}
@@ -756,6 +756,15 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				R.id.itemNote, R.id.itemDate };
 
 		int themed_item = R.layout.noteslist_item;
+		// Support two different list items
+		if (activity != null) {
+			if (PreferenceManager.getDefaultSharedPreferences(activity)
+					.getBoolean(MainPrefs.KEY_LISTITEM, true)) {
+				themed_item = R.layout.noteslist_item;
+			} else {
+				themed_item = R.layout.noteslist_item_doublenote;
+			}
+		}
 
 		// Creates the backing adapter for the ListView.
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(activity,
@@ -828,12 +837,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 						// Set height to zero if it's empty, otherwise wrap
 						if (isEmpty)
-							layoutParams = new LinearLayout.LayoutParams(
-									LinearLayout.LayoutParams.MATCH_PARENT, 0);
+							layoutParams = new LinearLayout.LayoutParams(0, 0);
 						else
-							layoutParams = new LinearLayout.LayoutParams(
-									LinearLayout.LayoutParams.MATCH_PARENT,
+							layoutParams = new LinearLayout.LayoutParams(0,
 									LinearLayout.LayoutParams.WRAP_CONTENT);
+						layoutParams.weight = 1;
 
 						tv.setLayoutParams(layoutParams);
 					}
@@ -864,15 +872,15 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					LinearLayout.LayoutParams layoutParams;
 					if (text == null || text.isEmpty()) {
 						// Set height to zero
-						layoutParams = new LinearLayout.LayoutParams(
-								LinearLayout.LayoutParams.WRAP_CONTENT, 0);
+						 layoutParams = new LinearLayout.LayoutParams(
+						 LinearLayout.LayoutParams.WRAP_CONTENT, 0);
 					} else {
 						// Set height to wrap
-						layoutParams = new LinearLayout.LayoutParams(
-								LinearLayout.LayoutParams.WRAP_CONTENT,
-								LinearLayout.LayoutParams.WRAP_CONTENT);
+						 layoutParams = new LinearLayout.LayoutParams(
+						 LinearLayout.LayoutParams.WRAP_CONTENT,
+						 LinearLayout.LayoutParams.WRAP_CONTENT);
 					}
-					tv.setLayoutParams(layoutParams);
+					 tv.setLayoutParams(layoutParams);
 					return false;
 				} else if (columnIndex == cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL)) {
