@@ -263,7 +263,7 @@ public class NotePadProvider extends ContentProvider implements
 		}
 		// Now replace the title text with a substring
 		sFastVisibleNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_TITLE,
-				substrOf(NotePad.Notes.COLUMN_NAME_TITLE, "124"));
+				substrOf(NotePad.Notes.COLUMN_NAME_TITLE, "150"));
 		// Now replace the note text with a case statement to check the lock and
 		// do substr as well
 		Log.d("lockfix", caseWhenLocked(NotePad.Notes.COLUMN_NAME_NOTE));
@@ -363,7 +363,7 @@ public class NotePadProvider extends ContentProvider implements
 		// We only do the search on the last chars to increase speed
 		String endnote = "substr(" + note + ",-10" + ")";
 		String clause = endnote + " LIKE '%" + NoteAttributes.LOCKED + "%'";
-		String that = "substr(" + note + ",0," + 140 + ")";
+		String that = "substr(" + note + ",0," + 190 + ")";
 		return caseWhen(clause, "''", that) + " as " + note;
 	}
 
