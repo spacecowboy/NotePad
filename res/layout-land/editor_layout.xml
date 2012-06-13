@@ -29,10 +29,8 @@
                 android:inputType="textAutoCorrect|textCapSentences"
                 android:maxLines="1"
                 android:nextFocusDown="@+id/noteBox"
-                android:paddingTop="5dp"
-                android:paddingBottom="5dp"
-                android:paddingLeft="8dp"
-    			android:paddingRight="8dp"
+                android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
                 android:scrollHorizontally="true"
                 android:textStyle="bold" />
 
@@ -48,6 +46,7 @@
                     android:layout_height="fill_parent"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
+                    android:layout_marginLeft="8dp"
                     android:spinnerMode="dropdown" />
 
                 <LinearLayout
@@ -81,8 +80,8 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:gravity="top"
-                android:paddingLeft="8dp"
-    			android:paddingRight="8dp"
+                android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
                 android:hint="@string/editor_note_hint"
                 android:inputType="textAutoCorrect|textCapSentences|textMultiLine" >
 
