@@ -134,13 +134,13 @@
     <string name="sync_failed">Error de sincronización</string>
     <string name="sync_login_failed">Error en el inicio de sesión, no se ha podido conectar a Google Tasks</string>
     
-    <string tools:ignore="MissingTranslation" name="changelog_full_title">Registro de cambios</string>
-    <string tools:ignore="MissingTranslation" name="changelog_title">Nuevo</string>
-    <string tools:ignore="MissingTranslation" name="changelog_ok_button">OK</string>
-    <string tools:ignore="MissingTranslation" name="changelog_show_full">Mostrar todo</string>
+    <string name="changelog_full_title">Registro de cambios</string>
+    <string name="changelog_title">Nuevo</string>
+    <string name="changelog_ok_button">OK</string>
+    <string name="changelog_show_full">Mostrar todo</string>
 
-    <string tools:ignore="MissingTranslation" name="default_notetitle">¡Bienvenido!</string>
-    <string tools:ignore="MissingTranslation" name="default_notetext">Para sacar el máximo aprovechamiento de esta aplicación, le sugiero que active la sincronización antes de nada. Continúe, y pulse el botón para sincronizar de la barra de acciones cuando vuelva a la lista. Esto activará la sincronización automática por defecto, que actuará cada hora.
+    <string name="default_notetitle">¡Bienvenido!</string>
+    <string name="default_notetext">Para sacar el máximo aprovechamiento de esta aplicación, le sugiero que active la sincronización antes de nada. Continúe, y pulse el botón para sincronizar de la barra de acciones cuando vuelva a la lista. Esto activará la sincronización automática por defecto, que actuará cada hora.
 \n\nEsto está ligado a sus preferencias globales de sincronización. Resumidamente, si no está activada la sincronización de gmail, entonces tampoco se sincronizará esta aplicación. Puede desactivar la sincronización automática, y hacerla manualmente usted, en el apartado de configuración.
 \n\nSi tiene mas de una cuenta Google en su dispositivo, le sugiero seleccionar en el apartado de configuración cuál se usará.
 \n\nDe cualquier forma, recomiendo visitar este apartado para ver qué otras opciones tiene. Puede ajustar el tamaño y tipo de letra, y cambiar el tema de la aplicación de claro a oscuro.
