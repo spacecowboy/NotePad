@@ -26,6 +26,35 @@
         android:key="key_current_theme"
         android:summary="Selected option should be here"
         android:title="@string/settings_theme" />
+    
+    <PreferenceCategory android:title="@string/settings_list" >
+        <CheckBoxPreference 
+            android:defaultValue="true"
+            android:key="key_listitem"
+            android:title="@string/settings_listitem"
+            android:summaryOn="@string/settings_listitem_summary_on"
+            android:summaryOff="@string/settings_listitem_summary_off" />
+        <ListPreference
+            android:defaultValue="title COLLATE NOCASE"
+            android:dialogTitle="@string/settings_sorting_type_dialog"
+            android:entries="@array/sorting_preference"
+            android:entryValues="@array/sortingvalues_preference"
+            android:key="key_sort_type"
+            android:summary="Selected option should be here"
+            android:title="@string/settings_sorting_type" />
+        <ListPreference
+            android:defaultValue="ASC"
+            android:dialogTitle="@string/settings_sorting_order_dialog"
+            android:entries="@array/sorting_order_preference"
+            android:entryValues="@array/sorting_ordervalues_preference"
+            android:key="key_sort_order"
+            android:summary="Selected option should be here"
+            android:title="@string/settings_sorting_order" />
+        <ListPreference
+            android:key="key_default_list_id"
+            android:title="@string/menu_setdefaultlist" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/settings_cat_font_editor" >
 
     <com.nononsenseapps.ui.TextPreviewPreference
         android:key="key_text_preview"
@@ -55,29 +84,6 @@
         android:entryValues="@array/preferences_week_start_day_values"
         android:key="preferences_week_start_day"
         android:title="@string/preferences_week_start_day_title" />
-
-    <PreferenceCategory android:title="@string/settings_cat_sorting" >
-        <ListPreference
-            android:defaultValue="title COLLATE NOCASE"
-            android:dialogTitle="@string/settings_sorting_type_dialog"
-            android:entries="@array/sorting_preference"
-            android:entryValues="@array/sortingvalues_preference"
-            android:key="key_sort_type"
-            android:summary="Selected option should be here"
-            android:title="@string/settings_sorting_type" />
-        <ListPreference
-            android:defaultValue="ASC"
-            android:dialogTitle="@string/settings_sorting_order_dialog"
-            android:entries="@array/sorting_order_preference"
-            android:entryValues="@array/sorting_ordervalues_preference"
-            android:key="key_sort_order"
-            android:summary="Selected option should be here"
-            android:title="@string/settings_sorting_order" />
-    </PreferenceCategory>
-    <PreferenceCategory android:title="@string/settings_list" >
-        <ListPreference
-            android:key="key_default_list_id"
-            android:title="@string/menu_setdefaultlist" />
     </PreferenceCategory>
 
 </PreferenceScreen>
