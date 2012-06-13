@@ -138,6 +138,12 @@
     <string name="changelog_title">Nuevo</string>
     <string name="changelog_ok_button">OK</string>
     <string name="changelog_show_full">Mostrar todo</string>
+    <string name="widget_pref_preview_note">Mostrar notas</string>
+    <string name="widget_pref_preview_note_summary_off">El título ocupa las 2 líneas</string>
+    <string name="widget_pref_preview_note_summary_on">La nota ocupa la segunda línea</string>
+    <string name="widget_pref_show_complete">Casilla de completada</string>
+    <string name="widget_pref_show_complete_summary_off">Casilla oculta</string>
+    <string name="widget_pref_show_complete_summary_on">Casilla visible</string>
 
     <string name="default_notetitle">¡Bienvenido!</string>
     <string name="default_notetext">Para sacar el máximo aprovechamiento de esta aplicación, le sugiero que active la sincronización antes de nada. Continúe, y pulse el botón para sincronizar de la barra de acciones cuando vuelva a la lista. Esto activará la sincronización automática por defecto, que actuará cada hora.
