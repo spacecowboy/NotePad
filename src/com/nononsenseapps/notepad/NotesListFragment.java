@@ -118,7 +118,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private static final String SHOULD_OPEN_NOTE = "shouldOpenNote";
 
-	private static final int LOADER_LISTNAMES = -78;
+	private static final int LOADER_SECTIONED = -78;
 	private static final int LOADER_REGULARLIST = -99;
 
 	private final Map<Long, String> listNames = new LinkedHashMap<Long, String>();
@@ -1431,16 +1431,15 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	private void refreshList(Bundle args) {
 		if (mCurListId == MainActivity.ALL_NOTES_ID) {
 			Log.d("listproto", "refreshing sectioned list");
-			getLoaderManager().restartLoader(LOADER_LISTNAMES, args, this);
+			getLoaderManager().restartLoader(LOADER_SECTIONED, args, this);
 		} else {
 			Log.d("listproto", "refreshing normal list");
 			getLoaderManager().restartLoader(LOADER_REGULARLIST, args, this);
 		}
 	}
 
-	private CursorLoader getAllNotesLoader(long listId) {
-		// This is called when a new Loader needs to be created. This
-		// sample only has one Loader, so we don't care about the ID.
+	private CursorLoader getAllNotesLoader(long listId, Bundle args) {
+		if (listId == LOADER_REGULARLIST || listId >= 0) {
 		Uri baseUri = NotePad.Notes.CONTENT_VISIBLE_URI;
 
 		// Get current sort order or assemble the default one.
@@ -1476,6 +1475,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			return new CursorLoader(activity, baseUri, PROJECTION,
 					NotePad.Notes.COLUMN_NAME_LIST + " IS ?",
 					new String[] { Long.toString(listId) }, sortOrder);
+		}
+		}
+		else {
+			// Information is in Bundle on what to load
+			// What day(s) to load for sorting and modification
 		}
 	}
 
@@ -1522,21 +1526,27 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				Log.d("listproto", "Getting cursor normal list: " + mCurListId);
 				// Regular lists
 				return getAllNotesLoader(mCurListId);
-			} else if (id == LOADER_LISTNAMES) {
+			} else if (id == LOADER_SECTIONED) {
 				Log.d("listproto", "Getting cursor for list names");
 				// Section names
-
-				return new CursorLoader(activity, NotePad.Lists.CONTENT_URI,
-						new String[] { NotePad.Lists._ID,
-								NotePad.Lists.COLUMN_NAME_TITLE },
-						NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1", null,
-						NotePad.Lists.SORT_ORDER);
+				return getSectionNameLoader();
+				
 			} else {
 				Log.d("listproto", "Getting cursor for individual list: " + id);
-				// Individual lists. ID will actually be the list id
-				return getAllNotesLoader(id);
+				// Individual lists. ID could actually be the list id
+				return getAllNotesLoader(id, args);
 			}
 		}
+	}
+	
+	private CursorLoader getSectionNameLoader() {
+		// first check SharedPreferences for what the appropriate loader would be
+		// list names, due date, modification
+		return new CursorLoader(activity, NotePad.Lists.CONTENT_URI,
+				new String[] { NotePad.Lists._ID,
+						NotePad.Lists.COLUMN_NAME_TITLE },
+				NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1", null,
+				NotePad.Lists.SORT_ORDER);
 	}
 
 	@Override
@@ -1556,7 +1566,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		} else {
 			Log.d("listproto", "all notes");
 			// Sections
-			if (LOADER_LISTNAMES == loader.getId()) {
+			if (LOADER_SECTIONED == loader.getId()) {
 				Log.d("listproto", "List names");
 				long listid;
 				String listname;
