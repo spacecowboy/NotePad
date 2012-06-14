@@ -21,6 +21,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.helpers.dualpane.NoNonsenseListFragment;
@@ -30,6 +32,7 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.ui.NoteCheckBox;
+import com.nononsenseapps.ui.SectionAdapter;
 
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -74,8 +77,10 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Adapter;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
@@ -113,6 +118,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private static final String SHOULD_OPEN_NOTE = "shouldOpenNote";
 
+	private static final int LOADER_LISTNAMES = -78;
+	private static final int LOADER_REGULARLIST = -99;
+
+	private final Map<Long, String> listNames = new LinkedHashMap<Long, String>();
+
 	private long mCurId;
 
 	private boolean idInvalid = false;
@@ -130,6 +140,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	// private OnEditorDeleteListener onDeleteListener;
 
 	private SimpleCursorAdapter mAdapter;
+	private SectionAdapter mSectionAdapter;
 
 	private boolean autoOpenNote = false;
 	private long newNoteIdToSelect = -1;
@@ -186,6 +197,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		super.onActivityCreated(savedInstanceState);
 
 		// Set adapter
+		mSectionAdapter = new SectionAdapter(activity);
 		mAdapter = getThemedAdapter(null);
 		setListAdapter(mAdapter);
 
@@ -285,6 +297,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private int getPosOfId(long id) {
 		if (mAdapter == null)
+			return -1;
+		// Broken for now
+		if (mSectionAdapter != null)
 			return -1;
 
 		int length = mAdapter.getCount();
@@ -596,6 +611,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
+		Log.d("listproto", "OnListItemClick pos " + position + " id " + id);
 		showNote(position);
 	}
 
@@ -610,16 +626,32 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (index < 0) {
 			index = 0;
 		}
-		if (mAdapter != null) {
-			while (index >= mAdapter.getCount()) {
-				index = index - 1;
+
+		if (mAdapter != null && mSectionAdapter != null) {
+			if (mCurListId == MainActivity.ALL_NOTES_ID
+					&& index >= mSectionAdapter.getCount()) {
+				Log.d("listproto", "Resetting section index to valid range");
+				index = mSectionAdapter.getCount() - 1;
+			} else if (mCurListId != MainActivity.ALL_NOTES_ID
+					&& index >= mAdapter.getCount()) {
+				Log.d("listproto", "Resetting normal index to valid range");
+				index = mAdapter.getCount() - 1;
 			}
 
 			Log.d(TAG, "showNote valid index to show is: " + index);
 
 			if (index > -1) {
+				Log.d("listproto", "Going to try and open index: " + index);
 				mCurCheckPosition = index;
-				mCurId = mAdapter.getItemId(index);
+				if (mCurListId == MainActivity.ALL_NOTES_ID) {
+					mCurId = mSectionAdapter.getSubItemId(index);
+					Log.d("listproto", "Section adapter gave me this id: "
+							+ mCurId);
+				} else {
+					mCurId = mAdapter.getItemId(index);
+					Log.d("listproto", "Normal adapter gave me this id: "
+							+ mCurId);
+				}
 
 				if (activity.getCurrentContent().equals(
 						DualLayoutActivity.CONTENTVIEW.DUAL)) {
@@ -872,15 +904,15 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					LinearLayout.LayoutParams layoutParams;
 					if (text == null || text.isEmpty()) {
 						// Set height to zero
-						 layoutParams = new LinearLayout.LayoutParams(
-						 LinearLayout.LayoutParams.WRAP_CONTENT, 0);
+						layoutParams = new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.WRAP_CONTENT, 0);
 					} else {
 						// Set height to wrap
-						 layoutParams = new LinearLayout.LayoutParams(
-						 LinearLayout.LayoutParams.WRAP_CONTENT,
-						 LinearLayout.LayoutParams.WRAP_CONTENT);
+						layoutParams = new LinearLayout.LayoutParams(
+								LinearLayout.LayoutParams.WRAP_CONTENT,
+								LinearLayout.LayoutParams.WRAP_CONTENT);
 					}
-					 tv.setLayoutParams(layoutParams);
+					tv.setLayoutParams(layoutParams);
 					return false;
 				} else if (columnIndex == cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL)) {
@@ -918,7 +950,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			Log.d("NotesListFragment", "this is a new query");
 			currentQuery = query;
 
-			getLoaderManager().restartLoader(0, null, this);
+			refreshList(null);
 
 			// hide the clear completed option until search is over
 			MenuItem clearCompleted = mOptionsMenu
@@ -1392,10 +1424,21 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (activity.getCurrentContent().equals(
 				DualLayoutActivity.CONTENTVIEW.DUAL))
 			args.putBoolean(SHOULD_OPEN_NOTE, true);
-		getLoaderManager().restartLoader(0, args, this);
+
+		refreshList(args);
 	}
 
-	private CursorLoader getAllNotesLoader() {
+	private void refreshList(Bundle args) {
+		if (mCurListId == MainActivity.ALL_NOTES_ID) {
+			Log.d("listproto", "refreshing sectioned list");
+			getLoaderManager().restartLoader(LOADER_LISTNAMES, args, this);
+		} else {
+			Log.d("listproto", "refreshing normal list");
+			getLoaderManager().restartLoader(LOADER_REGULARLIST, args, this);
+		}
+	}
+
+	private CursorLoader getAllNotesLoader(long listId) {
 		// This is called when a new Loader needs to be created. This
 		// sample only has one Loader, so we don't care about the ID.
 		Uri baseUri = NotePad.Notes.CONTENT_VISIBLE_URI;
@@ -1426,13 +1469,13 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
 
-		if (mCurListId == MainActivity.ALL_NOTES_ID) {
+		if (listId == MainActivity.ALL_NOTES_ID) {
 			return new CursorLoader(activity, baseUri, PROJECTION, null, null,
 					sortOrder);
 		} else {
 			return new CursorLoader(activity, baseUri, PROJECTION,
 					NotePad.Notes.COLUMN_NAME_LIST + " IS ?",
-					new String[] { Long.toString(mCurListId) }, sortOrder);
+					new String[] { Long.toString(listId) }, sortOrder);
 		}
 	}
 
@@ -1471,10 +1514,28 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				autoOpenNote = true;
 			}
 		}
+
 		if (currentQuery != null && !currentQuery.isEmpty()) {
 			return getSearchNotesLoader();
 		} else {
-			return getAllNotesLoader();
+			if (id == LOADER_REGULARLIST) {
+				Log.d("listproto", "Getting cursor normal list: " + mCurListId);
+				// Regular lists
+				return getAllNotesLoader(mCurListId);
+			} else if (id == LOADER_LISTNAMES) {
+				Log.d("listproto", "Getting cursor for list names");
+				// Section names
+
+				return new CursorLoader(activity, NotePad.Lists.CONTENT_URI,
+						new String[] { NotePad.Lists._ID,
+								NotePad.Lists.COLUMN_NAME_TITLE },
+						NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1", null,
+						NotePad.Lists.SORT_ORDER);
+			} else {
+				Log.d("listproto", "Getting cursor for individual list: " + id);
+				// Individual lists. ID will actually be the list id
+				return getAllNotesLoader(id);
+			}
 		}
 	}
 
@@ -1485,7 +1546,59 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 		Log.d(TAG, "onLoadFinished");
 
-		mAdapter.swapCursor(data);
+		Log.d("listproto", "loader id: " + loader.getId());
+		Log.d("listproto", "Current list " + mCurListId);
+		if (loader.getId() == LOADER_REGULARLIST && mCurListId != MainActivity.ALL_NOTES_ID) {
+			Log.d("listproto", "Single list");
+			// Single list
+			mAdapter.swapCursor(data);
+			setListAdapter(mAdapter);
+		} else {
+			Log.d("listproto", "all notes");
+			// Sections
+			if (LOADER_LISTNAMES == loader.getId()) {
+				Log.d("listproto", "List names");
+				long listid;
+				String listname;
+				while (data != null && data.moveToNext()) {
+					listid = data.getLong(data
+							.getColumnIndex(NotePad.Lists._ID));
+					listname = data.getString(data
+							.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
+					Log.d("listproto", "Adding " + listname + " to headers");
+					listNames.put(listid, listname);
+					// Start loader for this list
+					Log.d("listproto", "Starting loader for " + listname
+							+ " id " + listid);
+					getLoaderManager().restartLoader((int) listid, null, this);
+				}
+				// Set as list adapter
+				setListAdapter(mSectionAdapter);
+			} else if (loader.getId() >= 0) {
+				Log.d("listproto", "Sublists");
+				// Sublists
+				long listid = loader.getId();
+				String listname = listNames.get(listid);
+				Log.d("listproto", "Loader finished for list id: " + listname);
+
+				if (listname != null) {
+					SimpleCursorAdapter adapter = mSectionAdapter.sections
+							.get(listname);
+					// Make sure it exists
+					if (adapter == null) {
+						adapter = getThemedAdapter(null);
+						mSectionAdapter.addSection(listname, adapter);
+					}
+					// Swap cursor
+					adapter.swapCursor(data);
+					// It doesn't always get that the data has changed in the
+					// sublists
+					mSectionAdapter.notifyDataSetChanged();
+				}
+			} else {
+				Log.d("listproto", "That's odd... List id invalid: " + loader.getId());
+			}
+		}
 
 		// The list should now be shown.
 		if (isResumed()) {
@@ -1529,7 +1642,18 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		// longer using it.
 
 		Log.d(TAG, "onLoaderReset");
-		mAdapter.swapCursor(null);
+		if (mCurListId == MainActivity.ALL_NOTES_ID) {
+			// Sections
+			for (SimpleCursorAdapter adapter : mSectionAdapter.sections
+					.values()) {
+				adapter.swapCursor(null);
+			}
+			mSectionAdapter.headers.clear();
+			mSectionAdapter.sections.clear();
+		} else {
+			// Single list
+			mAdapter.swapCursor(null);
+		}
 	}
 
 	/**
@@ -1548,7 +1672,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			} else {
 				if (MainPrefs.KEY_SORT_TYPE.equals(key)
 						|| MainPrefs.KEY_SORT_ORDER.equals(key)) {
-					getLoaderManager().restartLoader(0, null, this);
+					refreshList(null);
 				}
 			}
 		} catch (IllegalStateException e) {
