@@ -107,6 +107,7 @@ public class MainActivity extends DualLayoutActivity implements
 	private void leftOrTabletCreate(Bundle savedInstanceState) {
 		if (savedInstanceState != null) {
 			currentListId = savedInstanceState.getLong(CURRENT_LIST_ID);
+			listIdToSelect = currentListId;
 			currentListPos = savedInstanceState.getInt(CURRENT_LIST_POS);
 		}
 
@@ -141,9 +142,11 @@ public class MainActivity extends DualLayoutActivity implements
 
 		// Set up navigation list
 		// Set a default list to open if one is set
-		listIdToSelect = Long.parseLong(PreferenceManager
-				.getDefaultSharedPreferences(this).getString(
-						MainPrefs.KEY_DEFAULT_LIST, "-1"));
+		if (listIdToSelect < 0) {
+			listIdToSelect = Long.parseLong(PreferenceManager
+					.getDefaultSharedPreferences(this).getString(
+							MainPrefs.KEY_DEFAULT_LIST, "-1"));
+		}
 		// Handle the intent first, so we know what to possibly select once
 		// the
 		// loader is finished
@@ -483,10 +486,10 @@ public class MainActivity extends DualLayoutActivity implements
 			restartAndRefresh();
 		}
 		super.onResume();
-		//Show changelog if it is new
+		// Show changelog if it is new
 		ChangeLog cl = new ChangeLog(this);
-	    if (cl.firstRun())
-	        cl.getLogDialog().show();
+		if (cl.firstRun())
+			cl.getLogDialog().show();
 	}
 
 	@Override
@@ -652,7 +655,8 @@ public class MainActivity extends DualLayoutActivity implements
 	 */
 	protected void deleteCurrentList() {
 		// Only if id is valid and if it is NOT the last list
-		// 3 instead of 1 because we insert "create new" and "all items" in the list
+		// 3 instead of 1 because we insert "create new" and "all items" in the
+		// list
 		if (currentListId > -1 && mSpinnerAdapter.getCount() > 3) {
 			// Only mark as deleted so it is synced
 			if (shouldMarkAsDeleted(this)) {
@@ -716,7 +720,8 @@ public class MainActivity extends DualLayoutActivity implements
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		// Need to restart to allow themes and such to go into effect
-		if (key.equals(MainPrefs.KEY_THEME) || key.equals(MainPrefs.KEY_LISTITEM)) {
+		if (key.equals(MainPrefs.KEY_THEME)
+				|| key.equals(MainPrefs.KEY_LISTITEM)) {
 			shouldRestart = true;
 		}
 	}
