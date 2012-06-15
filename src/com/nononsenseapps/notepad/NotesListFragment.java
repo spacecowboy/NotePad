@@ -118,7 +118,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private static final String SHOULD_OPEN_NOTE = "shouldOpenNote";
 
-	private static final int LOADER_SECTIONED = -78;
+	private static final int LOADER_LISTNAMES = -78;
 	private static final int LOADER_REGULARLIST = -99;
 	// Date loaders
 	private static final int LOADER_DATEOVERDUE = -101;
@@ -1434,11 +1434,16 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					getThemedAdapter(null));
 			setListAdapter(mSectionAdapter);
 		}
-
+		// If sort date, fire sorting loaders
+		// If mod date, fire modded loaders
+		
+		// If list names
 		if (mSectionAdapter.isSectioned()) {
 			Log.d("listproto", "refreshing sectioned list");
-			getLoaderManager().restartLoader(LOADER_SECTIONED, args, this);
-		} else {
+			getLoaderManager().restartLoader(LOADER_LISTNAMES, args, this);
+		}
+		// If regular list
+		else {
 			Log.d("listproto", "refreshing normal list");
 			getLoaderManager().restartLoader(LOADER_REGULARLIST, args, this);
 		}
@@ -1540,7 +1545,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				Log.d("listproto", "Getting cursor normal list: " + mCurListId);
 				// Regular lists
 				return getAllNotesLoader(mCurListId);
-			case LOADER_SECTIONED:
+			case LOADER_LISTNAMES:
 				Log.d("listproto", "Getting cursor for list names");
 				// Section names
 				return getSectionNameLoader();
@@ -1582,7 +1587,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				Log.d("listproto",
 						"That's odd... List id invalid: " + loader.getId());
 			break;
-		case LOADER_SECTIONED:
+		case LOADER_LISTNAMES:
 			// Section names and starts loaders for individual sections
 			Log.d("listproto", "List names");
 			while (data != null && data.moveToNext()) {
@@ -1663,7 +1668,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		// longer using it.
 
 		Log.d(TAG, "onLoaderReset");
-		if (loader.getId() == LOADER_SECTIONED) {
+		if (mSectionAdapter.isSectioned()) {
 			// Sections
 			for (SimpleCursorAdapter adapter : mSectionAdapter.sections
 					.values()) {
