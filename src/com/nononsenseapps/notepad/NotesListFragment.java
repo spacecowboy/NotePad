@@ -121,6 +121,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private static final String SHOULD_OPEN_NOTE = "shouldOpenNote";
 
+	public static final String SECTION_STATE_LISTS = "listnames";
 	private static final int LOADER_LISTNAMES = -78;
 	// Will sort modification dates
 	private Comparator<String> alphaComparator = new Comparator<String>() {
@@ -132,6 +133,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private static final int LOADER_REGULARLIST = -99;
 	// Date loaders
+	public static final String SECTION_STATE_DATE = MainPrefs.DUEDATESORT;
 	private static final int LOADER_DATEOVERDUE = -101;
 	private static final int LOADER_DATETODAY = -102;
 	private static final int LOADER_DATETOMORROW = -103;
@@ -141,6 +143,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	// This will sort date headers properly
 	private Comparator<String> dateComparator;
 	// Modification loaders
+	public static final String SECTION_STATE_MOD = MainPrefs.MODIFIEDSORT;
 	private static final int LOADER_MODTODAY = -201;
 	private static final int LOADER_MODYESTERDAY = -202;
 	private static final int LOADER_MODWEEK = -203;
@@ -1459,6 +1462,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (shouldDisplaySections(sorting)) {
 			if (mSectionAdapter == null || !mSectionAdapter.isSectioned()) {
 				mSectionAdapter = new SectionAdapter(activity, null);
+				//mSectionAdapter.changeState(sorting);
 				setListAdapter(mSectionAdapter);
 			}
 		} else if (mSectionAdapter == null || mSectionAdapter.isSectioned()) {
@@ -1595,7 +1599,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			case LOADER_MODTODAY:
 			case LOADER_MODWEEK:
 			case LOADER_MODYESTERDAY:
-				return null;
+				return getModLoader(id, mCurListId);
 			case LOADER_REGULARLIST:
 				Log.d("listproto", "Getting cursor normal list: " + mCurListId);
 				// Regular lists
@@ -1624,6 +1628,17 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	}
 
 	private CursorLoader getDateLoader(int id, long listId) {
+		Log.d("listproto", "getting date loader");
+		String sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
+		NotesListFragment.sortType = sortOrder;
+		final String ordering = PreferenceManager.getDefaultSharedPreferences(
+				activity).getString(MainPrefs.KEY_SORT_ORDER,
+				NotePad.Notes.DEFAULT_SORT_ORDERING);
+		sortOrder += " " + ordering;
+
+		String[] vars = null;
+		String where = "";
+
 		if (dateComparator == null) {
 			// Create the comparator
 			// Doing it here because I need the context
@@ -1656,49 +1671,44 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 				public int compare(String object1, String object2) {
 					// -1 if object 1 is first, 0 equal, 1 otherwise
-					String m1 = orderMap.get(object1);
+					final String m1 = orderMap.get(object1);
+					final String m2 = orderMap.get(object2);
 					if (m1 == null)
 						return 1;
-
-					return m1.compareTo(orderMap.get(object2));
+					if (m2 == null)
+						return -1;
+					if (ordering.equals(NotePad.Notes.ASCENDING_SORT_ORDERING))
+						return m1.compareTo(m2);
+					else
+						return m2.compareTo(m1);
 				};
 			};
 		}
-		Log.d("listproto", "getting date loader");
-		String sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
-		NotesListFragment.sortType = sortOrder;
-		sortOrder += " "
-				+ PreferenceManager.getDefaultSharedPreferences(activity)
-						.getString(MainPrefs.KEY_SORT_ORDER,
-								NotePad.Notes.DEFAULT_SORT_ORDERING);
-
-		String[] vars = null;
-		String where = "";
 
 		switch (id) {
 		case LOADER_DATEFUTURE:
 			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
 			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE + ") >= ?";
-			vars = new String[] { TimeHelper.DateEightDay() };
+			vars = new String[] { TimeHelper.dateEightDay() };
 			break;
 		case LOADER_DATEOVERDUE:
 			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
 			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE + ") < ?";
-			vars = new String[] { TimeHelper.Today() };
+			vars = new String[] { TimeHelper.dateToday() };
 			break;
 		case LOADER_DATETODAY:
 			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
 			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE + ") IS ?";
-			vars = new String[] { TimeHelper.Today() };
+			vars = new String[] { TimeHelper.dateToday() };
 			break;
 		case LOADER_DATETOMORROW:
 			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
 			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE + ") IS ?";
-			vars = new String[] { TimeHelper.Tomorrow() };
+			vars = new String[] { TimeHelper.dateTomorrow() };
 			break;
 		case LOADER_DATEWEEK:
 			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
@@ -1706,8 +1716,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE
 					+ ") > ? AND date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE
 					+ ") < ?";
-			vars = new String[] { TimeHelper.Tomorrow(),
-					TimeHelper.DateEightDay() };
+			vars = new String[] { TimeHelper.dateTomorrow(),
+					TimeHelper.dateEightDay() };
 			break;
 		case LOADER_DATENONE:
 		default:
@@ -1737,8 +1747,101 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				PROJECTION, where, vars, sortOrder);
 	}
 
+	private CursorLoader getModLoader(int id, long listId) {
+		Log.d("listproto", "getting mod loader");
+		String sortOrder = NotePad.Notes.MODIFICATION_SORT_TYPE;
+		NotesListFragment.sortType = sortOrder;
+		final String ordering = PreferenceManager.getDefaultSharedPreferences(
+				activity).getString(MainPrefs.KEY_SORT_ORDER,
+				NotePad.Notes.DEFAULT_SORT_ORDERING);
+		sortOrder += " " + ordering;
+
+		String[] vars = null;
+		String where = "";
+
+		if (modComparator == null) {
+			// Create the comparator
+			// Doing it here because I need the context
+			// to fetch strings
+			modComparator = new Comparator<String>() {
+				@SuppressWarnings("serial")
+				private final Map<String, String> orderMap = Collections
+						.unmodifiableMap(new HashMap<String, String>() {
+							{
+								put(activity
+										.getString(R.string.mod_header_today),
+										"0");
+								put(activity
+										.getString(R.string.mod_header_yesterday),
+										"1");
+								put(activity
+										.getString(R.string.mod_header_thisweek),
+										"2");
+								put(activity
+										.getString(R.string.mod_header_earlier),
+										"3");
+							}
+						});
+
+				public int compare(String object1, String object2) {
+					// -1 if object 1 is first, 0 equal, 1 otherwise
+					final String m1 = orderMap.get(object1);
+					final String m2 = orderMap.get(object2);
+					if (m1 == null)
+						return 1;
+					if (m2 == null)
+						return -1;
+					if (ordering.equals(NotePad.Notes.ASCENDING_SORT_ORDERING))
+						return m1.compareTo(m2);
+					else
+						return m2.compareTo(m1);
+				};
+			};
+		}
+
+		switch (id) {
+		case LOADER_MODTODAY:
+			where = NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " > ?";
+			vars = new String[] { TimeHelper.milliTodayStart() };
+			break;
+		case LOADER_MODYESTERDAY:
+			where = NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " >= ? AND ";
+			where += NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " < ?";
+			vars = new String[] { TimeHelper.milliYesterdayStart(),
+					TimeHelper.milliTodayStart() };
+			break;
+		case LOADER_MODWEEK:
+			where = NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " >= ? AND ";
+			where += NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " < ?";
+			vars = new String[] { TimeHelper.milli7DaysAgo(),
+					TimeHelper.milliYesterdayStart() };
+			break;
+		case LOADER_MODPAST:
+		default:
+			where = NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE + " < ?";
+			vars = new String[] { TimeHelper.milli7DaysAgo() };
+			break;
+		}
+
+		// And only for current list
+		if (listId != MainActivity.ALL_NOTES_ID) {
+			where = NotePad.Notes.COLUMN_NAME_LIST + " IS ? AND (" + where
+					+ ")";
+			String[] nvars = new String[1 + vars.length];
+			nvars[0] = Long.toString(listId);
+			for (int i = 0; i < vars.length; i++) {
+				nvars[i + 1] = vars[i];
+			}
+
+			vars = nvars;
+		}
+
+		return new CursorLoader(activity, NotePad.Notes.CONTENT_VISIBLE_URI,
+				PROJECTION, where, vars, sortOrder);
+	}
+
 	private void addSectionToAdapter(String sectionname, Cursor data,
-			Comparator comp) {
+			Comparator<String> comp) {
 		// Make sure an adapter exists
 		// TODO not add empty cursors?
 		SimpleCursorAdapter adapter = mSectionAdapter.sections.get(sectionname);
@@ -1786,37 +1889,57 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			}
 			break;
 		case LOADER_DATEFUTURE:
+			mSectionAdapter.changeState(SECTION_STATE_DATE);
 			sectionname = activity.getString(R.string.date_header_future);
 			addSectionToAdapter(sectionname, data, dateComparator);
 			break;
 		case LOADER_DATENONE:
+			mSectionAdapter.changeState(SECTION_STATE_DATE);
 			sectionname = activity.getString(R.string.date_header_none);
 			addSectionToAdapter(sectionname, data, dateComparator);
 			break;
 		case LOADER_DATEOVERDUE:
+			mSectionAdapter.changeState(SECTION_STATE_DATE);
 			sectionname = activity.getString(R.string.date_header_overdue);
 			addSectionToAdapter(sectionname, data, dateComparator);
 			break;
 		case LOADER_DATETODAY:
+			mSectionAdapter.changeState(SECTION_STATE_DATE);
 			sectionname = activity.getString(R.string.date_header_today);
 			addSectionToAdapter(sectionname, data, dateComparator);
 			break;
 		case LOADER_DATETOMORROW:
+			mSectionAdapter.changeState(SECTION_STATE_DATE);
 			sectionname = activity.getString(R.string.date_header_tomorrow);
 			addSectionToAdapter(sectionname, data, dateComparator);
 			break;
 		case LOADER_DATEWEEK:
+			mSectionAdapter.changeState(SECTION_STATE_DATE);
 			sectionname = activity.getString(R.string.date_header_7days);
 			addSectionToAdapter(sectionname, data, dateComparator);
 			break;
 		case LOADER_MODPAST:
+			mSectionAdapter.changeState(SECTION_STATE_MOD);
+			sectionname = activity.getString(R.string.mod_header_earlier);
+			addSectionToAdapter(sectionname, data, modComparator);
+			break;
 		case LOADER_MODTODAY:
+			mSectionAdapter.changeState(SECTION_STATE_MOD);
+			sectionname = activity.getString(R.string.mod_header_today);
+			addSectionToAdapter(sectionname, data, modComparator);
+			break;
 		case LOADER_MODWEEK:
+			mSectionAdapter.changeState(SECTION_STATE_MOD);
+			sectionname = activity.getString(R.string.mod_header_thisweek);
+			addSectionToAdapter(sectionname, data, modComparator);
+			break;
 		case LOADER_MODYESTERDAY:
-			sectionname = "Should use proper mod resource";
-			addSectionToAdapter(sectionname, data, null);
+			mSectionAdapter.changeState(SECTION_STATE_MOD);
+			sectionname = activity.getString(R.string.mod_header_yesterday);
+			addSectionToAdapter(sectionname, data, modComparator);
 			break;
 		default:
+			mSectionAdapter.changeState(SECTION_STATE_LISTS);
 			// Individual lists have ids that are positive
 			if (loader.getId() >= 0) {
 				Log.d("listproto", "Sublists");
@@ -1903,6 +2026,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			} else {
 				if (MainPrefs.KEY_SORT_TYPE.equals(key)
 						|| MainPrefs.KEY_SORT_ORDER.equals(key)) {
+					// rebuild comparators during refresh
+					dateComparator = modComparator = null;
 					refreshList(null);
 				}
 			}

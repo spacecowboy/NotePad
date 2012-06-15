@@ -158,6 +158,11 @@
     <string tools:ignore="MissingTranslation" name="date_header_7days">Next 7 days</string>
     <string tools:ignore="MissingTranslation" name="date_header_future">Later</string>
     <string tools:ignore="MissingTranslation" name="date_header_none">No date</string>
+    
+    <string tools:ignore="MissingTranslation" name="mod_header_today">@string/date_header_today</string>
+    <string tools:ignore="MissingTranslation" name="mod_header_yesterday">Yesterday</string>
+    <string tools:ignore="MissingTranslation" name="mod_header_thisweek">This week</string>
+    <string tools:ignore="MissingTranslation" name="mod_header_earlier">Earlier</string>
 
     <!-- These should probably not be translated -->
     <string tools:ignore="MissingTranslation" name="default_notetitle">Welcome!</string>

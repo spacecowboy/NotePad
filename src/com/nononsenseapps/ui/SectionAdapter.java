@@ -27,6 +27,8 @@ public class SectionAdapter extends BaseAdapter {
 	public final static int TYPE_ITEM = 1;
 	public final static int TYPE_COUNT = TYPE_ITEM + 1;
 
+	private String state = "";
+
 	/**
 	 * A section adapter works in two ways. First, like a normal adapter. In
 	 * that case you give the constructor a regular adapter and the
@@ -59,7 +61,8 @@ public class SectionAdapter extends BaseAdapter {
 		return headers != null;
 	}
 
-	public void addSection(String section, SimpleCursorAdapter adapter, Comparator<String> comp) {
+	public void addSection(String section, SimpleCursorAdapter adapter,
+			Comparator<String> comp) {
 		if (headers == null) {
 			throw new InvalidParameterException(ERRORMSG);
 		}
@@ -93,7 +96,8 @@ public class SectionAdapter extends BaseAdapter {
 		if (comp != null) {
 			headers.sort(comp);
 		}
-		notifyDataSetChanged();
+		// dont notify, this is only called during resets
+		// notifyDataSetChanged();
 	}
 
 	public void swapCursor(Cursor data) {
@@ -231,6 +235,34 @@ public class SectionAdapter extends BaseAdapter {
 				headerPos += 1;
 			}
 			return -1;
+		}
+	}
+
+	/**
+	 * Guaranteed to be non null
+	 * 
+	 * @return
+	 */
+	public String getState() {
+		if (state == null)
+			state = "";
+		return state;
+	}
+
+	/**
+	 * Will also clear existing adapters etc
+	 * 
+	 * @param state
+	 */
+	public void changeState(String state) {
+		if (headers == null) {
+			throw new InvalidParameterException(ERRORMSG);
+		}
+		if (!getState().equals(state)) {
+			for (String header : sections.keySet().toArray(new String[sections.size()])) {
+				removeSection(header, null);
+			}
+			this.state = state;
 		}
 	}
 
