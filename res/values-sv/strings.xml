@@ -17,7 +17,7 @@
 
 <resources>
 
-    <string name="app_name">Anteckningar</string>
+    <string name="app_name">Notes dev</string>
     <string name="title_create">Ny anteckning</string>
     <string name="title_edit">Redigera: %1$s</string>
     <string name="menu_add">Skapa ny</string>
@@ -133,5 +133,19 @@
     
     <string name="sync_failed">Synk misslyckades</string>
     <string name="sync_login_failed">Inloggning misslyckades, kunde inte komma åt Google Tasks</string>
+    
+    <string name="changelog_full_title">Ändringslogg</string>
+    <string name="changelog_title">Nyheter</string>
+    <string name="changelog_ok_button">OK</string>
+    <string name="changelog_show_full">Visa hela</string>
+    <string name="widget_pref_preview_note">Visa anteckning</string>
+    <string name="widget_pref_preview_note_summary_off">Titel är 2 rader</string>
+    <string name="widget_pref_preview_note_summary_on">Anteckning på andra raden</string>
+    <string name="widget_pref_show_complete">Sätt avklarad knapp</string>
+    <string name="widget_pref_show_complete_summary_off">Knapp inte synlig</string>
+    <string name="widget_pref_show_complete_summary_on">Knapp synlig</string>
+    <string name="settings_listitem">Titelstorlek</string>
+    <string name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
+    <string name="settings_listitem_summary_off">Anteckning är 2 rader</string>
 
 </resources>

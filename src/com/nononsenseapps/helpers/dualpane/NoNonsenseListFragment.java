@@ -39,7 +39,7 @@ public class NoNonsenseListFragment extends ListFragment{
 		int layout = R.layout.list_layout;
 
 		// Gets a handle to the EditText in the the layout.
-		FrameLayout fl = (FrameLayout) inflater.inflate(layout, container, false);
+		ViewGroup fl = (ViewGroup) inflater.inflate(layout, container, false);
 		inflater.inflate(android.R.layout.list_content, fl, true);
 		
 		return fl;

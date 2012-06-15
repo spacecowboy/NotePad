@@ -975,6 +975,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				c.setTimeInMillis(noteDueDate.toMillis(false));
 
 				mDueDate.setText(DateFormat.format(DATEFORMAT_FORMAT, c));
+				Log.d("listproto", "Note has date: " + due);
+				Log.d("listproto", "Note date shown as: " + DateFormat.format(DATEFORMAT_FORMAT, c));
 			} catch (TimeFormatException e) {
 				noteDueDate.setToNow();
 				dueDateSet = false;

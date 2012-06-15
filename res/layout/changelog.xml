@@ -22,6 +22,18 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="Version 3.5.5"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="- The should now remember what list you had opened previously instead of opening the default list when you switch orientation or turn off the screen\n- Fixed clicking on the title of notes that did not open the note in certain widget configurations\n- All clickable things in the widgets will now highlight on touch" />
+    
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="Version 3.5.4"
             android:textStyle="bold" />
 

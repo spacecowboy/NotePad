@@ -17,7 +17,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools" >
 
-    <string name="app_name">Notes</string>
+    <string name="app_name">Notes dev</string>
     <string name="title_create">New note</string>
     <string name="title_edit">Edit: %1$s</string>
     <string name="menu_add">New note</string>
@@ -151,6 +151,22 @@
     <string tools:ignore="MissingTranslation" name="settings_listitem">Two line titles</string>
     <string tools:ignore="MissingTranslation" name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
     <string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">Note preview will be 2 lines</string>
+    
+    <string tools:ignore="MissingTranslation" name="date_header_overdue">Overdue</string>
+    <string tools:ignore="MissingTranslation" name="date_header_today">Today</string>
+    <string tools:ignore="MissingTranslation" name="date_header_tomorrow">Tomorrow</string>
+    <string tools:ignore="MissingTranslation" name="date_header_7days">Next 7 days</string>
+    <string tools:ignore="MissingTranslation" name="date_header_future">Later</string>
+    <string tools:ignore="MissingTranslation" name="date_header_none">No date</string>
+    
+    <string tools:ignore="MissingTranslation" name="mod_header_today">@string/date_header_today</string>
+    <string tools:ignore="MissingTranslation" name="mod_header_yesterday">Yesterday</string>
+    <string tools:ignore="MissingTranslation" name="mod_header_thisweek">This week</string>
+    <string tools:ignore="MissingTranslation" name="mod_header_earlier">Earlier</string>
+    
+    <string tools:ignore="MissingTranslation" name="settings_listheader">List name dividers</string>
+    <string tools:ignore="MissingTranslation" name="settings_listheader_off">No list name dividers</string>
+    <string tools:ignore="MissingTranslation" name="settings_listheader_on">Showing list name dividers</string>
 
     <!-- These should probably not be translated -->
     <string tools:ignore="MissingTranslation" name="default_notetitle">Welcome!</string>

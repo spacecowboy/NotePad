@@ -16,7 +16,6 @@
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-   
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:orientation="horizontal"
@@ -35,10 +34,12 @@
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-         android:id="@+id/widget_item"
+        android:id="@+id/widget_item"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="1"
+        android:padding="0dp"
+        android:background="@drawable/btn_default_selector_light"
         android:orientation="vertical" >
 
         <TextView
