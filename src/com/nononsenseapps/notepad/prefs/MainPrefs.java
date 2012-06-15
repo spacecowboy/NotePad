@@ -43,6 +43,7 @@ public class MainPrefs extends PreferenceFragment implements
 	public static final String KEY_WEEK_START_DAY = "preferences_week_start_day";
 	public static final String KEY_DEFAULT_LIST = "key_default_list_id";
 	public static final String KEY_LISTITEM = "key_listitem";
+	public static final String KEY_LISTHEADERS = "key_listheaders";
 
 	public static final String SANS = "Sans";
 	public static final String SERIF = "Serif";

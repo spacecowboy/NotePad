@@ -723,7 +723,8 @@ public class MainActivity extends DualLayoutActivity implements
 		if (key.equals(MainPrefs.KEY_THEME)
 				|| key.equals(MainPrefs.KEY_LISTITEM)
 				|| key.equals(MainPrefs.KEY_SORT_ORDER)
-				|| key.equals(MainPrefs.KEY_SORT_TYPE)) {
+				|| key.equals(MainPrefs.KEY_SORT_TYPE)
+				|| key.equals(MainPrefs.KEY_LISTHEADERS)) {
 			shouldRestart = true;
 		}
 	}

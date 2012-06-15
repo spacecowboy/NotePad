@@ -163,6 +163,10 @@
     <string tools:ignore="MissingTranslation" name="mod_header_yesterday">Yesterday</string>
     <string tools:ignore="MissingTranslation" name="mod_header_thisweek">This week</string>
     <string tools:ignore="MissingTranslation" name="mod_header_earlier">Earlier</string>
+    
+    <string tools:ignore="MissingTranslation" name="settings_listheader">List name dividers</string>
+    <string tools:ignore="MissingTranslation" name="settings_listheader_off">No list name dividers</string>
+    <string tools:ignore="MissingTranslation" name="settings_listheader_on">Showing list name dividers</string>
 
     <!-- These should probably not be translated -->
     <string tools:ignore="MissingTranslation" name="default_notetitle">Welcome!</string>

@@ -1441,13 +1441,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	}
 
 	private boolean shouldDisplaySections(String sorting) {
-		// Not implemented yet
-		// if (mCurListId == MainActivity.ALL_NOTES_ID
-		// && PreferenceManager.getDefaultSharedPreferences(activity)
-		// .getBoolean(MainPrefs.KEY_LIST_SECTIONS, false)) {
-		// return true;
-		// }
-		if (sorting.equals(MainPrefs.DUEDATESORT)
+		if (mCurListId == MainActivity.ALL_NOTES_ID
+				&& PreferenceManager.getDefaultSharedPreferences(activity)
+						.getBoolean(MainPrefs.KEY_LISTHEADERS, false)) {
+			return true;
+		} else if (sorting.equals(MainPrefs.DUEDATESORT)
 				|| sorting.equals(MainPrefs.MODIFIEDSORT)) {
 			return true;
 		} else {
@@ -1462,7 +1460,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (shouldDisplaySections(sorting)) {
 			if (mSectionAdapter == null || !mSectionAdapter.isSectioned()) {
 				mSectionAdapter = new SectionAdapter(activity, null);
-				//mSectionAdapter.changeState(sorting);
+				// mSectionAdapter.changeState(sorting);
 				setListAdapter(mSectionAdapter);
 			}
 		} else if (mSectionAdapter == null || mSectionAdapter.isSectioned()) {
@@ -1472,18 +1470,13 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		}
 
 		if (mSectionAdapter.isSectioned()) {
-
-			// Not implemented yet
-			// if (mCurListId == MainActivity.ALL_NOTES_ID
-			// && PreferenceManager.getDefaultSharedPreferences(activity)
-			// .getBoolean(MainPrefs.KEY_LIST_SECTIONS, false)) {
-			// getLoaderManager().restartLoader(LOADER_LISTNAMES, args, this);
-			// }
-
 			// If sort date, fire sorting loaders
 			// If mod date, fire modded loaders
-
-			if (sorting.equals(MainPrefs.DUEDATESORT)) {
+			if (mCurListId == MainActivity.ALL_NOTES_ID
+					&& PreferenceManager.getDefaultSharedPreferences(activity)
+							.getBoolean(MainPrefs.KEY_LISTHEADERS, false)) {
+				getLoaderManager().restartLoader(LOADER_LISTNAMES, args, this);
+			} else if (sorting.equals(MainPrefs.DUEDATESORT)) {
 				Log.d("listproto", "refreshing sectioned date list");
 				getLoaderManager().restartLoader(LOADER_DATEFUTURE, args, this);
 				getLoaderManager().restartLoader(LOADER_DATENONE, args, this);
@@ -1949,7 +1942,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				Log.d("listproto", "Loader finished for list id: "
 						+ sectionname);
 
-				addSectionToAdapter(sectionname, data, null);
+				addSectionToAdapter(sectionname, data, alphaComparator);
 			}
 			break;
 		}
