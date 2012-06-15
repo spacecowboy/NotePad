@@ -33,6 +33,7 @@ import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.ui.NoteCheckBox;
 import com.nononsenseapps.ui.SectionAdapter;
+import com.nononsenseapps.util.TimeHelper;
 
 import android.content.BroadcastReceiver;
 import android.content.ClipData;
@@ -314,7 +315,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		int length = mSectionAdapter.getCount();
 		int position;
 		for (position = 0; position < length; position++) {
-			if (id == mSectionAdapter.getSubItemId(position)) {
+			if (id == mSectionAdapter.getItemId(position)) {
 				break;
 			}
 		}
@@ -645,7 +646,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			if (index > -1) {
 				Log.d("listproto", "Going to try and open index: " + index);
 				mCurCheckPosition = index;
-				mCurId = mSectionAdapter.getSubItemId(index);
+				mCurId = mSectionAdapter.getItemId(index);
 				Log.d("listproto", "Section adapter gave me this id: " + mCurId);
 
 				if (activity.getCurrentContent().equals(
@@ -744,7 +745,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				mCurId = -1;
 			} else { // if (index != -1) {
 				mCurCheckPosition = index;
-				mCurId = mSectionAdapter.getSubItemId(index);
+				mCurId = mSectionAdapter.getItemId(index);
 			}
 		}
 	}
@@ -1404,7 +1405,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		for (int pos : positions) {
 
 			Log.d(TAG, "onModalDelete pos: " + pos);
-			ids.add(mSectionAdapter.getSubItemId(pos));
+			ids.add(mSectionAdapter.getItemId(pos));
 		}
 		((MainActivity) activity).onMultiDelete(ids, mCurId);
 	}
@@ -1422,31 +1423,71 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		refreshList(args);
 	}
 
+	private boolean shouldDisplaySections(String sorting) {
+		// Not implemented yet
+		// if (mCurListId == MainActivity.ALL_NOTES_ID
+		// && PreferenceManager.getDefaultSharedPreferences(activity)
+		// .getBoolean(MainPrefs.KEY_LIST_SECTIONS, false)) {
+		// return true;
+		// }
+		if (sorting.equals(MainPrefs.DUEDATESORT)
+				|| sorting.equals(MainPrefs.MODIFIEDSORT)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
 	private void refreshList(Bundle args) {
 		// We might need to construct a new adapter
-		if (mCurListId == MainActivity.ALL_NOTES_ID
-				&& (mSectionAdapter == null || !mSectionAdapter.isSectioned())) {
-			mSectionAdapter = new SectionAdapter(activity, null);
-			setListAdapter(mSectionAdapter);
-		} else if (mCurListId != MainActivity.ALL_NOTES_ID
-				&& (mSectionAdapter == null || mSectionAdapter.isSectioned())) {
+		final String sorting = PreferenceManager.getDefaultSharedPreferences(
+				activity).getString(MainPrefs.KEY_SORT_TYPE, "");
+		if (shouldDisplaySections(sorting)) {
+			if (mSectionAdapter == null || !mSectionAdapter.isSectioned()) {
+				mSectionAdapter = new SectionAdapter(activity, null);
+				setListAdapter(mSectionAdapter);
+			}
+		} else if (mSectionAdapter == null || mSectionAdapter.isSectioned()) {
 			mSectionAdapter = new SectionAdapter(activity,
 					getThemedAdapter(null));
 			setListAdapter(mSectionAdapter);
 		}
-		// If sort date, fire sorting loaders
-		// If mod date, fire modded loaders
-		
-		// If list names
+
 		if (mSectionAdapter.isSectioned()) {
-			Log.d("listproto", "refreshing sectioned list");
-			getLoaderManager().restartLoader(LOADER_LISTNAMES, args, this);
-		}
-		// If regular list
-		else {
+
+			// Not implemented yet
+			// if (mCurListId == MainActivity.ALL_NOTES_ID
+			// && PreferenceManager.getDefaultSharedPreferences(activity)
+			// .getBoolean(MainPrefs.KEY_LIST_SECTIONS, false)) {
+			// getLoaderManager().restartLoader(LOADER_LISTNAMES, args, this);
+			// }
+
+			// If sort date, fire sorting loaders
+			// If mod date, fire modded loaders
+
+			if (sorting.equals(MainPrefs.DUEDATESORT)) {
+				Log.d("listproto", "refreshing sectioned date list");
+				getLoaderManager().restartLoader(LOADER_DATEFUTURE, args, this);
+				getLoaderManager().restartLoader(LOADER_DATENONE, args, this);
+				getLoaderManager()
+						.restartLoader(LOADER_DATEOVERDUE, args, this);
+				getLoaderManager().restartLoader(LOADER_DATETODAY, args, this);
+				getLoaderManager().restartLoader(LOADER_DATETOMORROW, args,
+						this);
+				getLoaderManager().restartLoader(LOADER_DATEWEEK, args, this);
+			} else if (sorting.equals(MainPrefs.MODIFIEDSORT)) {
+				Log.d("listproto", "refreshing sectioned mod list");
+				getLoaderManager().restartLoader(LOADER_MODPAST, args, this);
+				getLoaderManager().restartLoader(LOADER_MODTODAY, args, this);
+				getLoaderManager().restartLoader(LOADER_MODWEEK, args, this);
+				getLoaderManager().restartLoader(LOADER_MODYESTERDAY, args,
+						this);
+			}
+		} else {
 			Log.d("listproto", "refreshing normal list");
 			getLoaderManager().restartLoader(LOADER_REGULARLIST, args, this);
 		}
+
 	}
 
 	private CursorLoader getAllNotesLoader(long listId) {
@@ -1535,7 +1576,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			case LOADER_DATETODAY:
 			case LOADER_DATETOMORROW:
 			case LOADER_DATEWEEK:
-				return null;
+				return getDateLoader(id, mCurListId);
 			case LOADER_MODPAST:
 			case LOADER_MODTODAY:
 			case LOADER_MODWEEK:
@@ -1567,6 +1608,89 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1", null,
 				NotePad.Lists.SORT_ORDER);
 	}
+	
+	private CursorLoader getDateLoader(int id, long listId) {
+		Log.d("listproto", "getting date loader");
+		String sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
+		NotesListFragment.sortType = sortOrder;
+		sortOrder += " "
+				+ PreferenceManager.getDefaultSharedPreferences(activity)
+						.getString(MainPrefs.KEY_SORT_ORDER,
+								NotePad.Notes.DEFAULT_SORT_ORDERING);
+		
+		String[] vars = null;
+		String where = "";
+		
+		switch (id) {
+		case LOADER_DATEFUTURE:
+			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " >= ?";
+			vars = new String[] {TimeHelper.DateEightDay()};
+			break;
+		case LOADER_DATEOVERDUE:
+			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " < ?";
+			vars = new String[] {TimeHelper.TodayStart()};
+			break;
+		case LOADER_DATETODAY:
+			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " >= ? AND " + NotePad.Notes.COLUMN_NAME_DUE_DATE + " <= ?";
+			vars = new String[] {TimeHelper.TodayStart(), TimeHelper.TodayEnd()};
+			break;
+		case LOADER_DATETOMORROW:
+			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " >= ? AND " + NotePad.Notes.COLUMN_NAME_DUE_DATE + " <= ?";
+			vars = new String[] {TimeHelper.DateTomorrowStart(), TimeHelper.DateTomorrowEnd()};
+			break;
+		case LOADER_DATEWEEK:
+			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " > ? AND " + NotePad.Notes.COLUMN_NAME_DUE_DATE + " < ?";
+			vars = new String[] {TimeHelper.DateTomorrowEnd(), TimeHelper.DateEightDay()};
+			break;
+		case LOADER_DATENONE:
+		default:
+			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NULL OR " + NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS ?";
+			vars = new String[] {"''"};
+			break;
+		}
+		
+		// And only for current list
+		if (listId != MainActivity.ALL_NOTES_ID) {
+			where = NotePad.Notes.COLUMN_NAME_LIST + " IS ? AND (" + where + ")";
+			
+			String[] nvars = new String[1 + vars.length];
+			nvars[0] = Long.toString(listId);
+			for (int i = 0; i < vars.length; i++) {
+				nvars[i + 1] = vars[i];
+			}
+			
+			vars = nvars;
+		}
+		
+		Log.d("listproto", "Where: " + where);
+		Log.d("listproto", "args: " + vars.toString());
+		return new CursorLoader(activity, NotePad.Notes.CONTENT_VISIBLE_URI,
+				PROJECTION,
+				where, vars,
+				sortOrder);
+	}
+
+	private void addSectionToAdapter(String sectionname, Cursor data) {
+		// Make sure an adapter exists
+		// TODO not add empty cursors?
+		SimpleCursorAdapter adapter = mSectionAdapter.sections.get(sectionname);
+		if (adapter == null) {
+			adapter = getThemedAdapter(null);
+			mSectionAdapter.addSection(sectionname, adapter);
+		}
+		adapter.swapCursor(data);
+		mSectionAdapter.notifyDataSetChanged();
+	}
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
@@ -1578,7 +1702,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		Log.d("listproto", "loader id: " + loader.getId());
 		Log.d("listproto", "Current list " + mCurListId);
 		long listid;
-		String listname;
+		String sectionname;
+		SimpleCursorAdapter adapter;
 		switch (loader.getId()) {
 		case LOADER_REGULARLIST:
 			if (!mSectionAdapter.isSectioned()) {
@@ -1592,15 +1717,46 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			Log.d("listproto", "List names");
 			while (data != null && data.moveToNext()) {
 				listid = data.getLong(data.getColumnIndex(NotePad.Lists._ID));
-				listname = data.getString(data
+				sectionname = data.getString(data
 						.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
-				Log.d("listproto", "Adding " + listname + " to headers");
-				listNames.put(listid, listname);
+				Log.d("listproto", "Adding " + sectionname + " to headers");
+				listNames.put(listid, sectionname);
 				// Start loader for this list
-				Log.d("listproto", "Starting loader for " + listname + " id "
-						+ listid);
+				Log.d("listproto", "Starting loader for " + sectionname
+						+ " id " + listid);
 				getLoaderManager().restartLoader((int) listid, null, this);
 			}
+			break;
+		case LOADER_DATEFUTURE:
+			sectionname = "4FUTURE";
+			addSectionToAdapter(sectionname, data);
+			break;
+		case LOADER_DATENONE:
+			sectionname = "5NO DATE";
+			addSectionToAdapter(sectionname, data);
+			break;
+		case LOADER_DATEOVERDUE:
+			sectionname = "0OVERDUE";
+			addSectionToAdapter(sectionname, data);
+			break;
+		case LOADER_DATETODAY:
+			sectionname = "1TODAY";
+			addSectionToAdapter(sectionname, data);
+			break;
+		case LOADER_DATETOMORROW:
+			sectionname = "2TOMORROW";
+			addSectionToAdapter(sectionname, data);
+			break;
+		case LOADER_DATEWEEK:
+			sectionname = "3NEXT 7 DAYS";
+			addSectionToAdapter(sectionname, data);
+			break;
+		case LOADER_MODPAST:
+		case LOADER_MODTODAY:
+		case LOADER_MODWEEK:
+		case LOADER_MODYESTERDAY:
+			sectionname = "Should use proper mod resource";
+			addSectionToAdapter(sectionname, data);
 			break;
 		default:
 			// Individual lists have ids that are positive
@@ -1608,20 +1764,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				Log.d("listproto", "Sublists");
 				// Sublists
 				listid = loader.getId();
-				listname = listNames.get(listid);
-				Log.d("listproto", "Loader finished for list id: " + listname);
+				sectionname = listNames.get(listid);
+				Log.d("listproto", "Loader finished for list id: "
+						+ sectionname);
 
-				if (listname != null) {
-					SimpleCursorAdapter adapter = mSectionAdapter.sections
-							.get(listname);
-					// Make sure it exists
-					if (adapter == null) {
-						adapter = getThemedAdapter(null);
-						mSectionAdapter.addSection(listname, adapter);
-					}
-					// Swap cursor
-					adapter.swapCursor(data);
-				}
+				addSectionToAdapter(sectionname, data);
 			}
 			break;
 		}

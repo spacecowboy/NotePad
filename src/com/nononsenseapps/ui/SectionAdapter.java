@@ -1,6 +1,7 @@
 package com.nononsenseapps.ui;
 
 import java.security.InvalidParameterException;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -8,6 +9,7 @@ import com.nononsenseapps.notepad.R;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
@@ -22,6 +24,8 @@ public class SectionAdapter extends BaseAdapter {
 	public final ArrayAdapter<String> headers;
 	private final SimpleCursorAdapter wrappedAdapter;
 	public final static int TYPE_SECTION_HEADER = 0;
+	public final static int TYPE_ITEM = 1;
+	public final static int TYPE_COUNT = TYPE_ITEM + 1;
 
 	/**
 	 * A section adapter works in two ways. First, like a normal adapter. In
@@ -39,14 +43,15 @@ public class SectionAdapter extends BaseAdapter {
 	 */
 	public SectionAdapter(Context context, SimpleCursorAdapter wrappedAdapter) {
 		if (wrappedAdapter == null) {
-			headers = new ArrayAdapter<String>(context, R.layout.list_header);
+			headers = new ArrayAdapter<String>(context, R.layout.list_header,
+					R.id.list_header_title);
 			this.wrappedAdapter = null;
 		} else {
 			headers = null;
 			this.wrappedAdapter = wrappedAdapter;
 		}
 	}
-	
+
 	/**
 	 * @return True if this adapter is in a sectioned state, False otherwise
 	 */
@@ -58,8 +63,21 @@ public class SectionAdapter extends BaseAdapter {
 		if (headers == null) {
 			throw new InvalidParameterException(ERRORMSG);
 		}
+		if (adapter == null) {
+			throw new NullPointerException();
+		}
 		this.headers.add(section);
-		this.sections.put(section, adapter);
+		SimpleCursorAdapter prev = this.sections.put(section, adapter);
+		if (prev != null) {
+			Log.d("listproto", "killing previous adapter");
+			prev.swapCursor(null);
+		}
+		// Need to sort the headers each time it changes
+		headers.sort(new Comparator<String>() {
+			public int compare(String object1, String object2) {
+				return object1.compareTo(object2);
+			};
+		});
 		notifyDataSetChanged();
 	}
 
@@ -68,10 +86,20 @@ public class SectionAdapter extends BaseAdapter {
 			throw new InvalidParameterException(ERRORMSG);
 		}
 		this.headers.remove(section);
-		this.sections.remove(section);
+		SimpleCursorAdapter prev = this.sections.remove(section);
+		if (prev != null) {
+			Log.d("listproto", "killing previous adapter");
+			prev.swapCursor(null);
+		}
+		// Need to sort the headers each time it changes
+		headers.sort(new Comparator<String>() {
+			public int compare(String object1, String object2) {
+				return object1.compareTo(object2);
+			};
+		});
 		notifyDataSetChanged();
 	}
-	
+
 	public void swapCursor(Cursor data) {
 		if (wrappedAdapter == null) {
 			throw new InvalidParameterException(ERRORMSG);
@@ -85,40 +113,23 @@ public class SectionAdapter extends BaseAdapter {
 		if (wrappedAdapter != null) {
 			return wrappedAdapter.getItem(position);
 		} else {
-			for (Object section : this.sections.keySet()) {
-				Adapter adapter = sections.get(section);
-				int size = adapter.getCount() + 1;
-
-				// check if position inside this section
+			// Top is always a section
+			int headerPos = 0;
+			// Sorting matters!
+			for (int i = 0; i < headers.getCount(); i++) {
+				Adapter adapter = sections.get(headers.getItem(i));
 				if (position == 0)
-					return section;
-				if (position < size)
-					return adapter.getItem(position - 1);
+					return headers.getItem(headerPos);
 
-				// otherwise jump into next section
-				position -= size;
+				position -= 1;
+
+				if (position < adapter.getCount())
+					return adapter.getItem(position);
+
+				position -= adapter.getCount();
+				headerPos += 1;
 			}
 			return null;
-		}
-	}
-
-	public long getSubItemId(int position) {
-		if (wrappedAdapter != null) {
-			return wrappedAdapter.getItemId(position);
-		} else {
-			for (Adapter adapter : this.sections.values()) {
-				int size = adapter.getCount() + 1;
-
-				// check if position inside this section
-				if (position == 0)
-					return -1;
-				if (position < size)
-					return adapter.getItemId(position - 1);
-
-				// otherwise jump into next section
-				position -= size;
-			}
-			return -1;
 		}
 	}
 
@@ -140,11 +151,7 @@ public class SectionAdapter extends BaseAdapter {
 		if (wrappedAdapter != null) {
 			return wrappedAdapter.getViewTypeCount();
 		} else {
-			// assume that headers count as one, then total all sections
-			int total = 1;
-			for (Adapter adapter : this.sections.values())
-				total += adapter.getViewTypeCount();
-			return total;
+			return TYPE_COUNT;
 		}
 	}
 
@@ -153,21 +160,21 @@ public class SectionAdapter extends BaseAdapter {
 		if (wrappedAdapter != null) {
 			return wrappedAdapter.getItemViewType(position);
 		} else {
-			int type = 1;
-			for (Object section : this.sections.keySet()) {
-				Adapter adapter = sections.get(section);
-				int size = adapter.getCount() + 1;
-
-				// check if position inside this section
+			// Top is always a section
+			// Sorting matters!
+			for (int i = 0; i < headers.getCount(); i++) {
+				Adapter adapter = sections.get(headers.getItem(i));
 				if (position == 0)
 					return TYPE_SECTION_HEADER;
-				if (position < size)
-					return type + adapter.getItemViewType(position - 1);
 
-				// otherwise jump into next section
-				position -= size;
-				type += adapter.getViewTypeCount();
+				position -= 1;
+
+				if (position < adapter.getCount())
+					return TYPE_ITEM;
+
+				position -= adapter.getCount();
 			}
+			// Could not be found
 			return -1;
 		}
 	}
@@ -186,21 +193,22 @@ public class SectionAdapter extends BaseAdapter {
 		if (wrappedAdapter != null) {
 			return wrappedAdapter.getView(position, convertView, parent);
 		} else {
-			int sectionnum = 0;
-			for (Object section : this.sections.keySet()) {
-				Adapter adapter = sections.get(section);
-				int size = adapter.getCount() + 1;
-
-				// check if position inside this section
+			// Top is always a section
+			// Sorting matters!
+			for (int headerPos = 0; headerPos < headers.getCount(); headerPos++) {
+				Adapter adapter = sections.get(headers.getItem(headerPos));
 				if (position == 0)
-					return headers.getView(sectionnum, convertView, parent);
-				if (position < size)
-					return adapter.getView(position - 1, convertView, parent);
+					return headers.getView(headerPos, convertView, parent);
 
-				// otherwise jump into next section
-				position -= size;
-				sectionnum++;
+				position -= 1;
+
+				if (position < adapter.getCount())
+					return adapter.getView(position, convertView, parent);
+
+				position -= adapter.getCount();
 			}
+
+			// None could be found
 			return null;
 		}
 	}
@@ -209,8 +217,25 @@ public class SectionAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		if (wrappedAdapter != null) {
 			return wrappedAdapter.getItemId(position);
-		} else
-			return position;
+		} else {
+			// Top is always a section
+			int headerPos = 0;
+			// Sorting matters!
+			for (int i = 0; i < headers.getCount(); i++) {
+				Adapter adapter = sections.get(headers.getItem(i));
+				if (position == 0)
+					return headers.getItemId(headerPos);
+
+				position -= 1;
+
+				if (position < adapter.getCount())
+					return adapter.getItemId(position);
+
+				position -= adapter.getCount();
+				headerPos += 1;
+			}
+			return -1;
+		}
 	}
 
 }
