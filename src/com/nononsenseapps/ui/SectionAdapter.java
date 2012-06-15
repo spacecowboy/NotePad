@@ -114,20 +114,21 @@ public class SectionAdapter extends BaseAdapter {
 			return wrappedAdapter.getItem(position);
 		} else {
 			// Top is always a section
-			int headerPos = 0;
 			// Sorting matters!
-			for (int i = 0; i < headers.getCount(); i++) {
-				Adapter adapter = sections.get(headers.getItem(i));
-				if (position == 0)
-					return headers.getItem(headerPos);
+			for (int headerPos = 0; headerPos < headers.getCount(); headerPos++) {
+				Adapter adapter = sections.get(headers.getItem(headerPos));
+				// Ignore headers that are empty
+				if (adapter.getCount() > 0) {
+					if (position == 0)
+						return headers.getItem(headerPos);
 
-				position -= 1;
+					position -= 1;
 
-				if (position < adapter.getCount())
-					return adapter.getItem(position);
+					if (position < adapter.getCount())
+						return adapter.getItem(position);
 
-				position -= adapter.getCount();
-				headerPos += 1;
+					position -= adapter.getCount();
+				}
 			}
 			return null;
 		}
@@ -140,8 +141,12 @@ public class SectionAdapter extends BaseAdapter {
 		} else {
 			// total together all sections, plus one for each section header
 			int total = 0;
-			for (Adapter adapter : this.sections.values())
-				total += adapter.getCount() + 1;
+			for (Adapter adapter : this.sections.values()) {
+				// Ignore headers that are empty
+				if (adapter.getCount() > 0) {
+					total += adapter.getCount() + 1;
+				}
+			}
 			return total;
 		}
 	}
@@ -164,15 +169,18 @@ public class SectionAdapter extends BaseAdapter {
 			// Sorting matters!
 			for (int i = 0; i < headers.getCount(); i++) {
 				Adapter adapter = sections.get(headers.getItem(i));
-				if (position == 0)
-					return TYPE_SECTION_HEADER;
+				// Ignore headers that are empty
+				if (adapter.getCount() > 0) {
+					if (position == 0)
+						return TYPE_SECTION_HEADER;
 
-				position -= 1;
+					position -= 1;
 
-				if (position < adapter.getCount())
-					return TYPE_ITEM;
+					if (position < adapter.getCount())
+						return TYPE_ITEM;
 
-				position -= adapter.getCount();
+					position -= adapter.getCount();
+				}
 			}
 			// Could not be found
 			return -1;
@@ -197,15 +205,19 @@ public class SectionAdapter extends BaseAdapter {
 			// Sorting matters!
 			for (int headerPos = 0; headerPos < headers.getCount(); headerPos++) {
 				Adapter adapter = sections.get(headers.getItem(headerPos));
-				if (position == 0)
-					return headers.getView(headerPos, convertView, parent);
+				// Ignore headers that are empty
+				if (adapter.getCount() > 0) {
+					if (position == 0) {
+						return headers.getView(headerPos, convertView, parent);
+					}
 
-				position -= 1;
+					position -= 1;
 
-				if (position < adapter.getCount())
-					return adapter.getView(position, convertView, parent);
+					if (position < adapter.getCount())
+						return adapter.getView(position, convertView, parent);
 
-				position -= adapter.getCount();
+					position -= adapter.getCount();
+				}
 			}
 
 			// None could be found
@@ -219,20 +231,21 @@ public class SectionAdapter extends BaseAdapter {
 			return wrappedAdapter.getItemId(position);
 		} else {
 			// Top is always a section
-			int headerPos = 0;
 			// Sorting matters!
-			for (int i = 0; i < headers.getCount(); i++) {
-				Adapter adapter = sections.get(headers.getItem(i));
-				if (position == 0)
-					return headers.getItemId(headerPos);
+			for (int headerPos = 0; headerPos < headers.getCount(); headerPos++) {
+				Adapter adapter = sections.get(headers.getItem(headerPos));
+				// Ignore headers that are empty
+				if (adapter.getCount() > 0) {
+					if (position == 0)
+						return headers.getItemId(headerPos);
 
-				position -= 1;
+					position -= 1;
 
-				if (position < adapter.getCount())
-					return adapter.getItemId(position);
+					if (position < adapter.getCount())
+						return adapter.getItemId(position);
 
-				position -= adapter.getCount();
-				headerPos += 1;
+					position -= adapter.getCount();
+				}
 			}
 			return -1;
 		}
@@ -259,7 +272,8 @@ public class SectionAdapter extends BaseAdapter {
 			throw new InvalidParameterException(ERRORMSG);
 		}
 		if (!getState().equals(state)) {
-			for (String header : sections.keySet().toArray(new String[sections.size()])) {
+			for (String header : sections.keySet().toArray(
+					new String[sections.size()])) {
 				removeSection(header, null);
 			}
 			this.state = state;
