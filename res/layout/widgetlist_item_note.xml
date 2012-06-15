@@ -16,27 +16,29 @@
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/widget_item"
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:orientation="horizontal"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
     tools:ignore="HardcodedText" >
-    
+
     <ImageButton
         android:id="@+id/widget_complete_task"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/transparent"
+        android:contentDescription="Complete task"
         android:padding="0dp"
-        android:contentDescription="Complete task"/>
-    
+        android:visibility="gone" />
+
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/widget_title_note_container"
+        android:id="@+id/widget_item"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
+        android:padding="0dp"
+        android:background="@drawable/btn_default_selector_light"
         android:orientation="vertical" >
 
         <TextView
@@ -61,8 +63,8 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:ellipsize="end"
-                android:paddingRight="4dp"
                 android:gravity="center_vertical"
+                android:paddingRight="4dp"
                 android:singleLine="true"
                 android:text="note text and it becomes longer and longer and longer"
                 android:textAppearance="?android:attr/textAppearanceSmall"

@@ -16,50 +16,61 @@
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/widget_item"
     android:layout_width="match_parent"
     android:layout_height="48dp"
     android:orientation="horizontal"
     android:paddingLeft="8dp"
     android:paddingRight="8dp"
     tools:ignore="HardcodedText" >
-    
+
     <ImageButton
         android:id="@+id/widget_complete_task"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@drawable/transparent"
+        android:contentDescription="Complete task"
         android:padding="0dp"
-        android:contentDescription="Complete task"/>
+        android:visibility="gone" />
 
-    <TextView
-        android:id="@+id/widget_itemTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:layout_weight="1"
-        android:ellipsize="end"
-        android:maxLines="2"
-        android:text="a title  see very plainly with a second line like so which should be too long ideally"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textColor="@android:color/primary_text_dark" />
-
-    <TextView
+    <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/widget_itemDate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:paddingLeft="4dp"
-        android:text="12 mar"
-        android:textColor="@android:color/secondary_text_dark"
-        android:textSize="12sp" />
+        android:id="@+id/widget_item"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="0dp"
+        android:background="@drawable/btn_default_selector_dark"
+        android:orientation="horizontal" >
+
+        <TextView
+            android:id="@+id/widget_itemTitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="1"
+            android:ellipsize="end"
+            android:maxLines="2"
+            android:text="a title  see very plainly with a second line like so which should be too long ideally"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="@android:color/primary_text_dark" />
+
+        <TextView
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/widget_itemDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:paddingLeft="4dp"
+            android:text="12 mar"
+            android:textColor="@android:color/secondary_text_dark"
+            android:textSize="12sp" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/widget_itemNote"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:padding="0dp"
-        android:text="note text and it becomes longer and longer and longer" />
+        android:text="note text and it becomes longer and longer and longer"
+        android:visibility="gone" />
 
 </LinearLayout>
