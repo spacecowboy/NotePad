@@ -124,7 +124,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	public static final String SECTION_STATE_LISTS = "listnames";
 	private static final int LOADER_LISTNAMES = -78;
 	// Will sort modification dates
-	private Comparator<String> alphaComparator = new Comparator<String>() {
+	private final Comparator<String> alphaComparator = new Comparator<String>() {
 		@Override
 		public int compare(String lhs, String rhs) {
 			return lhs.compareTo(rhs);
