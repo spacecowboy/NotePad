@@ -151,6 +151,13 @@
     <string tools:ignore="MissingTranslation" name="settings_listitem">Two line titles</string>
     <string tools:ignore="MissingTranslation" name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
     <string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">Note preview will be 2 lines</string>
+    
+    <string tools:ignore="MissingTranslation" name="date_header_overdue">Overdue</string>
+    <string tools:ignore="MissingTranslation" name="date_header_today">Today</string>
+    <string tools:ignore="MissingTranslation" name="date_header_tomorrow">Tomorrow</string>
+    <string tools:ignore="MissingTranslation" name="date_header_7days">Next 7 days</string>
+    <string tools:ignore="MissingTranslation" name="date_header_future">Later</string>
+    <string tools:ignore="MissingTranslation" name="date_header_none">No date</string>
 
     <!-- These should probably not be translated -->
     <string tools:ignore="MissingTranslation" name="default_notetitle">Welcome!</string>

@@ -11,77 +11,51 @@ import android.util.Log;
 
 /**
  * Has a few helper functions for dealing with dates.
+ * Google Tasks API is crap because it throws away the time part
+ * and sets to UTC.
  * @author Jonas
  *
  */
 public class TimeHelper {
 	
-	/**
-	 * Returns tomorrow at 00:00:00
-	 */
-	public static String DateTomorrowStart() {
-		Time time = new Time(Time.getCurrentTimezone());
-		time.setToNow();
-		int julianToday = Time.getJulianDay(time.toMillis(false), time.gmtoff);
-		time.setJulianDay(julianToday + 1);
-		Log.d("listproto", "tomorrow starts: " + time.format3339(false));
-		return time.format3339(false);
-	}
+	// 2012-12-31
+	public final static String dateFormat = "%Y-%m-%d";
 	
 	/**
-	 * Returns tomorrow at 23:59:59
+	 * Today = 2012-12-30
+	 * Returns 2012-12-31
 	 */
-	public static String DateTomorrowEnd() {
+	public static String Tomorrow() {
 		Time time = new Time(Time.getCurrentTimezone());
 		time.setToNow();
 		int julianToday = Time.getJulianDay(time.toMillis(false), time.gmtoff);
 		time.setJulianDay(julianToday + 1);
-		time.hour = 23;
-		time.minute = 59;
-		time.second = 59;
-		Log.d("listproto", "tomorrow ends: " + time.format3339(false));
-		return time.format3339(false);
+		Log.d("listproto", "tomorrow starts: " + time.format(dateFormat));
+		return time.format(dateFormat);
 	}
 
 	/**
-	 * Returns the date of the first day that is beyond the next seven days
-	 * @return
+	 * Today = 2012-01-01
+	 * Returns 2012-01-08
 	 */
 	public static String DateEightDay() {
 		Time time = new Time(Time.getCurrentTimezone());
 		time.setToNow();
 		int julianToday = Time.getJulianDay(time.toMillis(false), time.gmtoff);
 		time.setJulianDay(julianToday + 8);
-		Log.d("listproto", "eigth day starts: " + time.format3339(false));
-		return time.format3339(false);
+		Log.d("listproto", "eigth day starts: " + time.format(dateFormat));
+		return time.format(dateFormat);
 	}
 	
 	/**
-	 * Get the datetime when today started (00:00:00) in UTC as RFC3339 formatted string
-	 * @return
+	 * Today = 2012-12-30
+	 * Returns 2012-12-30
 	 */
-	public static String TodayStart() {
+	public static String Today() {
 		Time time = new Time(Time.getCurrentTimezone());
 		time.setToNow();
-		time.hour = 0;
-		time.minute = 0;
-		time.second = 0;
-		Log.d("listproto", "today starts: " + time.format3339(false));
-		return time.format3339(false);
-	}
-	
-	/**
-	 * Get the datetime when today ends (23:59:59) in UTC as RFC3339 formatted string
-	 * @return
-	 */
-	public static String TodayEnd() {
-		Time time = new Time(Time.getCurrentTimezone());
-		time.setToNow();
-		time.hour = 23;
-		time.minute = 59;
-		time.second = 59;
-		Log.d("listproto", "today ends: " + time.format3339(false));
-		return time.format3339(false);
+		Log.d("listproto", "today starts: " + time.format(dateFormat));
+		return time.format(dateFormat);
 	}
 
 }

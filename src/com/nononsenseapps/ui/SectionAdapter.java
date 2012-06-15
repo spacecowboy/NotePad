@@ -59,7 +59,7 @@ public class SectionAdapter extends BaseAdapter {
 		return headers != null;
 	}
 
-	public void addSection(String section, SimpleCursorAdapter adapter) {
+	public void addSection(String section, SimpleCursorAdapter adapter, Comparator<String> comp) {
 		if (headers == null) {
 			throw new InvalidParameterException(ERRORMSG);
 		}
@@ -73,15 +73,13 @@ public class SectionAdapter extends BaseAdapter {
 			prev.swapCursor(null);
 		}
 		// Need to sort the headers each time it changes
-		headers.sort(new Comparator<String>() {
-			public int compare(String object1, String object2) {
-				return object1.compareTo(object2);
-			};
-		});
+		if (comp != null) {
+			headers.sort(comp);
+		}
 		notifyDataSetChanged();
 	}
 
-	public void removeSection(String section) {
+	public void removeSection(String section, Comparator<String> comp) {
 		if (headers == null) {
 			throw new InvalidParameterException(ERRORMSG);
 		}
@@ -92,11 +90,9 @@ public class SectionAdapter extends BaseAdapter {
 			prev.swapCursor(null);
 		}
 		// Need to sort the headers each time it changes
-		headers.sort(new Comparator<String>() {
-			public int compare(String object1, String object2) {
-				return object1.compareTo(object2);
-			};
-		});
+		if (comp != null) {
+			headers.sort(comp);
+		}
 		notifyDataSetChanged();
 	}
 
