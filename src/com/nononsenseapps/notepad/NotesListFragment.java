@@ -120,6 +120,18 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private static final int LOADER_SECTIONED = -78;
 	private static final int LOADER_REGULARLIST = -99;
+	// Date loaders
+	private static final int LOADER_DATEOVERDUE = -101;
+	private static final int LOADER_DATETODAY = -102;
+	private static final int LOADER_DATETOMORROW = -103;
+	private static final int LOADER_DATEWEEK = -104;
+	private static final int LOADER_DATEFUTURE = -105;
+	private static final int LOADER_DATENONE = -106;
+	// Modification loaders
+	private static final int LOADER_MODTODAY = -201;
+	private static final int LOADER_MODYESTERDAY = -202;
+	private static final int LOADER_MODWEEK = -203;
+	private static final int LOADER_MODPAST = -204;
 
 	private final Map<Long, String> listNames = new LinkedHashMap<Long, String>();
 
@@ -139,7 +151,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	// private OnEditorDeleteListener onDeleteListener;
 
-	private SimpleCursorAdapter mAdapter;
+	// private SimpleCursorAdapter mAdapter;
 	private SectionAdapter mSectionAdapter;
 
 	private boolean autoOpenNote = false;
@@ -197,9 +209,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		super.onActivityCreated(savedInstanceState);
 
 		// Set adapter
-		mSectionAdapter = new SectionAdapter(activity);
-		mAdapter = getThemedAdapter(null);
-		setListAdapter(mAdapter);
+		// mSectionAdapter = new SectionAdapter(activity);
+		// mAdapter = getThemedAdapter(null);
+		// setListAdapter(mAdapter);
 
 		// Start out with a progress indicator.
 		setListShown(false);
@@ -275,8 +287,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	 * if none was open
 	 */
 	private void showFirstBestNote() {
-		if (mAdapter != null) {
-			if (mAdapter.isEmpty()) {
+		if (mSectionAdapter != null) {
+			if (mSectionAdapter.isEmpty()) {
 				// DOn't do shit
 			} else {
 				showNoteAndSelect(mCurCheckPosition);
@@ -296,16 +308,13 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	}
 
 	private int getPosOfId(long id) {
-		if (mAdapter == null)
-			return -1;
-		// Broken for now
 		if (mSectionAdapter != null)
 			return -1;
 
-		int length = mAdapter.getCount();
+		int length = mSectionAdapter.getCount();
 		int position;
 		for (position = 0; position < length; position++) {
-			if (id == mAdapter.getItemId(position)) {
+			if (id == mSectionAdapter.getSubItemId(position)) {
 				break;
 			}
 		}
@@ -627,31 +636,17 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			index = 0;
 		}
 
-		if (mAdapter != null && mSectionAdapter != null) {
-			if (mCurListId == MainActivity.ALL_NOTES_ID
-					&& index >= mSectionAdapter.getCount()) {
-				Log.d("listproto", "Resetting section index to valid range");
-				index = mSectionAdapter.getCount() - 1;
-			} else if (mCurListId != MainActivity.ALL_NOTES_ID
-					&& index >= mAdapter.getCount()) {
-				Log.d("listproto", "Resetting normal index to valid range");
-				index = mAdapter.getCount() - 1;
-			}
+		if (mSectionAdapter != null) {
+			index = index >= mSectionAdapter.getCount() ? mSectionAdapter
+					.getCount() - 1 : index;
 
 			Log.d(TAG, "showNote valid index to show is: " + index);
 
 			if (index > -1) {
 				Log.d("listproto", "Going to try and open index: " + index);
 				mCurCheckPosition = index;
-				if (mCurListId == MainActivity.ALL_NOTES_ID) {
-					mCurId = mSectionAdapter.getSubItemId(index);
-					Log.d("listproto", "Section adapter gave me this id: "
-							+ mCurId);
-				} else {
-					mCurId = mAdapter.getItemId(index);
-					Log.d("listproto", "Normal adapter gave me this id: "
-							+ mCurId);
-				}
+				mCurId = mSectionAdapter.getSubItemId(index);
+				Log.d("listproto", "Section adapter gave me this id: " + mCurId);
 
 				if (activity.getCurrentContent().equals(
 						DualLayoutActivity.CONTENTVIEW.DUAL)) {
@@ -738,10 +733,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private void reCalculateValidValuesAfterDelete() {
 		int index = mCurCheckPosition;
-		if (mAdapter != null) {
-			while (index >= mAdapter.getCount()) {
-				index = index - 1;
-			}
+		if (mSectionAdapter != null) {
+			index = index >= mSectionAdapter.getCount() ? mSectionAdapter
+					.getCount() - 1 : index;
 
 			Log.d(TAG, "ReCalculate valid index is: " + index);
 			if (index == -1) {
@@ -750,7 +744,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				mCurId = -1;
 			} else { // if (index != -1) {
 				mCurCheckPosition = index;
-				mCurId = mAdapter.getItemId(index);
+				mCurId = mSectionAdapter.getSubItemId(index);
 			}
 		}
 	}
@@ -1410,7 +1404,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		for (int pos : positions) {
 
 			Log.d(TAG, "onModalDelete pos: " + pos);
-			ids.add(mAdapter.getItemId(pos));
+			ids.add(mSectionAdapter.getSubItemId(pos));
 		}
 		((MainActivity) activity).onMultiDelete(ids, mCurId);
 	}
@@ -1429,7 +1423,19 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	}
 
 	private void refreshList(Bundle args) {
-		if (mCurListId == MainActivity.ALL_NOTES_ID) {
+		// We might need to construct a new adapter
+		if (mCurListId == MainActivity.ALL_NOTES_ID
+				&& (mSectionAdapter == null || !mSectionAdapter.isSectioned())) {
+			mSectionAdapter = new SectionAdapter(activity, null);
+			setListAdapter(mSectionAdapter);
+		} else if (mCurListId != MainActivity.ALL_NOTES_ID
+				&& (mSectionAdapter == null || mSectionAdapter.isSectioned())) {
+			mSectionAdapter = new SectionAdapter(activity,
+					getThemedAdapter(null));
+			setListAdapter(mSectionAdapter);
+		}
+
+		if (mSectionAdapter.isSectioned()) {
 			Log.d("listproto", "refreshing sectioned list");
 			getLoaderManager().restartLoader(LOADER_SECTIONED, args, this);
 		} else {
@@ -1438,8 +1444,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		}
 	}
 
-	private CursorLoader getAllNotesLoader(long listId, Bundle args) {
-		if (listId == LOADER_REGULARLIST || listId >= 0) {
+	private CursorLoader getAllNotesLoader(long listId) {
 		Uri baseUri = NotePad.Notes.CONTENT_VISIBLE_URI;
 
 		// Get current sort order or assemble the default one.
@@ -1475,11 +1480,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			return new CursorLoader(activity, baseUri, PROJECTION,
 					NotePad.Notes.COLUMN_NAME_LIST + " IS ?",
 					new String[] { Long.toString(listId) }, sortOrder);
-		}
-		}
-		else {
-			// Information is in Bundle on what to load
-			// What day(s) to load for sorting and modification
 		}
 	}
 
@@ -1522,25 +1522,39 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (currentQuery != null && !currentQuery.isEmpty()) {
 			return getSearchNotesLoader();
 		} else {
-			if (id == LOADER_REGULARLIST) {
+			// Important that these are in the correct order!
+			switch (id) {
+			case LOADER_DATEFUTURE:
+			case LOADER_DATENONE:
+			case LOADER_DATEOVERDUE:
+			case LOADER_DATETODAY:
+			case LOADER_DATETOMORROW:
+			case LOADER_DATEWEEK:
+				return null;
+			case LOADER_MODPAST:
+			case LOADER_MODTODAY:
+			case LOADER_MODWEEK:
+			case LOADER_MODYESTERDAY:
+				return null;
+			case LOADER_REGULARLIST:
 				Log.d("listproto", "Getting cursor normal list: " + mCurListId);
 				// Regular lists
 				return getAllNotesLoader(mCurListId);
-			} else if (id == LOADER_SECTIONED) {
+			case LOADER_SECTIONED:
 				Log.d("listproto", "Getting cursor for list names");
 				// Section names
 				return getSectionNameLoader();
-				
-			} else {
+			default:
 				Log.d("listproto", "Getting cursor for individual list: " + id);
-				// Individual lists. ID could actually be the list id
-				return getAllNotesLoader(id, args);
+				// Individual lists. ID is actually be the list id
+				return getAllNotesLoader(id);
 			}
 		}
 	}
-	
+
 	private CursorLoader getSectionNameLoader() {
-		// first check SharedPreferences for what the appropriate loader would be
+		// first check SharedPreferences for what the appropriate loader would
+		// be
 		// list names, due date, modification
 		return new CursorLoader(activity, NotePad.Lists.CONTENT_URI,
 				new String[] { NotePad.Lists._ID,
@@ -1558,37 +1572,38 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 		Log.d("listproto", "loader id: " + loader.getId());
 		Log.d("listproto", "Current list " + mCurListId);
-		if (loader.getId() == LOADER_REGULARLIST && mCurListId != MainActivity.ALL_NOTES_ID) {
-			Log.d("listproto", "Single list");
-			// Single list
-			mAdapter.swapCursor(data);
-			setListAdapter(mAdapter);
-		} else {
-			Log.d("listproto", "all notes");
-			// Sections
-			if (LOADER_SECTIONED == loader.getId()) {
-				Log.d("listproto", "List names");
-				long listid;
-				String listname;
-				while (data != null && data.moveToNext()) {
-					listid = data.getLong(data
-							.getColumnIndex(NotePad.Lists._ID));
-					listname = data.getString(data
-							.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
-					Log.d("listproto", "Adding " + listname + " to headers");
-					listNames.put(listid, listname);
-					// Start loader for this list
-					Log.d("listproto", "Starting loader for " + listname
-							+ " id " + listid);
-					getLoaderManager().restartLoader((int) listid, null, this);
-				}
-				// Set as list adapter
-				setListAdapter(mSectionAdapter);
-			} else if (loader.getId() >= 0) {
+		long listid;
+		String listname;
+		switch (loader.getId()) {
+		case LOADER_REGULARLIST:
+			if (!mSectionAdapter.isSectioned()) {
+				mSectionAdapter.swapCursor(data);
+			} else
+				Log.d("listproto",
+						"That's odd... List id invalid: " + loader.getId());
+			break;
+		case LOADER_SECTIONED:
+			// Section names and starts loaders for individual sections
+			Log.d("listproto", "List names");
+			while (data != null && data.moveToNext()) {
+				listid = data.getLong(data.getColumnIndex(NotePad.Lists._ID));
+				listname = data.getString(data
+						.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
+				Log.d("listproto", "Adding " + listname + " to headers");
+				listNames.put(listid, listname);
+				// Start loader for this list
+				Log.d("listproto", "Starting loader for " + listname + " id "
+						+ listid);
+				getLoaderManager().restartLoader((int) listid, null, this);
+			}
+			break;
+		default:
+			// Individual lists have ids that are positive
+			if (loader.getId() >= 0) {
 				Log.d("listproto", "Sublists");
 				// Sublists
-				long listid = loader.getId();
-				String listname = listNames.get(listid);
+				listid = loader.getId();
+				listname = listNames.get(listid);
 				Log.d("listproto", "Loader finished for list id: " + listname);
 
 				if (listname != null) {
@@ -1601,13 +1616,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					}
 					// Swap cursor
 					adapter.swapCursor(data);
-					// It doesn't always get that the data has changed in the
-					// sublists
-					mSectionAdapter.notifyDataSetChanged();
 				}
-			} else {
-				Log.d("listproto", "That's odd... List id invalid: " + loader.getId());
 			}
+			break;
 		}
 
 		// The list should now be shown.
@@ -1652,7 +1663,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		// longer using it.
 
 		Log.d(TAG, "onLoaderReset");
-		if (mCurListId == MainActivity.ALL_NOTES_ID) {
+		if (loader.getId() == LOADER_SECTIONED) {
 			// Sections
 			for (SimpleCursorAdapter adapter : mSectionAdapter.sections
 					.values()) {
@@ -1662,7 +1673,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			mSectionAdapter.sections.clear();
 		} else {
 			// Single list
-			mAdapter.swapCursor(null);
+			mSectionAdapter.swapCursor(null);
 		}
 	}
 
