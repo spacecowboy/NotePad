@@ -140,6 +140,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	private static final int LOADER_DATEWEEK = -104;
 	private static final int LOADER_DATEFUTURE = -105;
 	private static final int LOADER_DATENONE = -106;
+	private static final int LOADER_DATECOMPLETED = -107;
 	// This will sort date headers properly
 	private Comparator<String> dateComparator;
 	// Modification loaders
@@ -1486,6 +1487,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				getLoaderManager().restartLoader(LOADER_DATETOMORROW, args,
 						this);
 				getLoaderManager().restartLoader(LOADER_DATEWEEK, args, this);
+				getLoaderManager().restartLoader(LOADER_DATECOMPLETED, args, this);
 			} else if (sorting.equals(MainPrefs.MODIFIEDSORT)) {
 				Log.d("listproto", "refreshing sectioned mod list");
 				getLoaderManager().restartLoader(LOADER_MODPAST, args, this);
@@ -1587,6 +1589,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			case LOADER_DATETODAY:
 			case LOADER_DATETOMORROW:
 			case LOADER_DATEWEEK:
+			case LOADER_DATECOMPLETED:
 				return getDateLoader(id, mCurListId);
 			case LOADER_MODPAST:
 			case LOADER_MODTODAY:
@@ -1629,9 +1632,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				NotePad.Notes.DEFAULT_SORT_ORDERING);
 		sortOrder += " " + ordering;
 
-		String[] vars = null;
-		String where = "";
-
 		if (dateComparator == null) {
 			// Create the comparator
 			// Doing it here because I need the context
@@ -1659,6 +1659,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 								put(activity
 										.getString(R.string.date_header_none),
 										"5");
+								put(activity
+										.getString(R.string.date_header_completed),
+										"6");
 							}
 						});
 
@@ -1678,44 +1681,62 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			};
 		}
 
+		String[] vars = null;
+		String where = NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ? AND ";
 		switch (id) {
 		case LOADER_DATEFUTURE:
-			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
 			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE + ") >= ?";
-			vars = new String[] { TimeHelper.dateEightDay() };
+			vars = new String[] {
+					activity.getString(R.string.gtask_status_uncompleted),
+					TimeHelper.dateEightDay() };
 			break;
 		case LOADER_DATEOVERDUE:
-			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
 			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE + ") < ?";
-			vars = new String[] { TimeHelper.dateToday() };
+			vars = new String[] {
+					activity.getString(R.string.gtask_status_uncompleted),
+					TimeHelper.dateToday() };
 			break;
 		case LOADER_DATETODAY:
-			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
 			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE + ") IS ?";
-			vars = new String[] { TimeHelper.dateToday() };
+			vars = new String[] {
+					activity.getString(R.string.gtask_status_uncompleted),
+					TimeHelper.dateToday() };
 			break;
 		case LOADER_DATETOMORROW:
-			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
 			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE + ") IS ?";
-			vars = new String[] { TimeHelper.dateTomorrow() };
+			vars = new String[] {
+					activity.getString(R.string.gtask_status_uncompleted),
+					TimeHelper.dateTomorrow() };
 			break;
 		case LOADER_DATEWEEK:
-			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
 			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE
 					+ ") > ? AND date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE
 					+ ") < ?";
-			vars = new String[] { TimeHelper.dateTomorrow(),
-					TimeHelper.dateEightDay() };
+			vars = new String[] {
+					activity.getString(R.string.gtask_status_uncompleted),
+					TimeHelper.dateTomorrow(), TimeHelper.dateEightDay() };
+			break;
+		case LOADER_DATECOMPLETED:
+			where = NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?";
+			vars = new String[] { activity
+					.getString(R.string.gtask_status_completed) };
 			break;
 		case LOADER_DATENONE:
 		default:
-			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NULL OR "
-					+ NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS ''";
+			where += "(" + NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NULL OR "
+					+ NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS '')";
+			vars = new String[] { activity
+					.getString(R.string.gtask_status_uncompleted) };
 			break;
 		}
 
@@ -1843,7 +1864,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			mSectionAdapter.addSection(sectionname, adapter, comp);
 		}
 		adapter.swapCursor(data);
-		mSectionAdapter.notifyDataSetChanged();
+		// mSectionAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -1884,6 +1905,12 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		case LOADER_DATEFUTURE:
 			mSectionAdapter.changeState(SECTION_STATE_DATE);
 			sectionname = activity.getString(R.string.date_header_future);
+			addSectionToAdapter(sectionname, data, dateComparator);
+			break;
+		case LOADER_DATECOMPLETED:
+			Log.d("listproto", "got completed cursor");
+			mSectionAdapter.changeState(SECTION_STATE_DATE);
+			sectionname = activity.getString(R.string.date_header_completed);
 			addSectionToAdapter(sectionname, data, dateComparator);
 			break;
 		case LOADER_DATENONE:

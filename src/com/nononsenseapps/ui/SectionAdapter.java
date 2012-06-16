@@ -9,6 +9,7 @@ import com.nononsenseapps.notepad.R;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ public class SectionAdapter extends BaseAdapter {
 	public final static int TYPE_SECTION_HEADER = 0;
 	public final static int TYPE_ITEM = 1;
 	public final static int TYPE_COUNT = TYPE_ITEM + 1;
+	
+	private final DataSetObserver subObserver;
 
 	private String state = "";
 
@@ -44,13 +47,31 @@ public class SectionAdapter extends BaseAdapter {
 	 * @param context
 	 */
 	public SectionAdapter(Context context, SimpleCursorAdapter wrappedAdapter) {
+		/*
+		 * Same call in both cases since an invalid subadapter doesnt mean
+		 * that the entire sectionadapter is invalid.
+		 */
+		subObserver = new DataSetObserver() {
+			@Override
+			public void onChanged() {
+				notifyDataSetChanged();
+			}
+			
+			@Override
+			public void onInvalidated() {
+				notifyDataSetChanged();
+			}
+		};
+		
 		if (wrappedAdapter == null) {
 			headers = new ArrayAdapter<String>(context, R.layout.list_header,
 					R.id.list_header_title);
+			headers.registerDataSetObserver(subObserver);
 			this.wrappedAdapter = null;
 		} else {
 			headers = null;
 			this.wrappedAdapter = wrappedAdapter;
+			this.wrappedAdapter.registerDataSetObserver(subObserver);
 		}
 	}
 
@@ -73,13 +94,17 @@ public class SectionAdapter extends BaseAdapter {
 		SimpleCursorAdapter prev = this.sections.put(section, adapter);
 		if (prev != null) {
 			Log.d("listproto", "killing previous adapter");
+			prev.unregisterDataSetObserver(subObserver);
 			prev.swapCursor(null);
+		}
+		if (adapter != null) {
+			adapter.registerDataSetObserver(subObserver);
 		}
 		// Need to sort the headers each time it changes
 		if (comp != null) {
 			headers.sort(comp);
 		}
-		notifyDataSetChanged();
+		//notifyDataSetChanged();
 	}
 
 	public void removeSection(String section, Comparator<String> comp) {
@@ -90,6 +115,7 @@ public class SectionAdapter extends BaseAdapter {
 		SimpleCursorAdapter prev = this.sections.remove(section);
 		if (prev != null) {
 			Log.d("listproto", "killing previous adapter");
+			prev.unregisterDataSetObserver(subObserver);
 			prev.swapCursor(null);
 		}
 		// Need to sort the headers each time it changes
@@ -105,7 +131,7 @@ public class SectionAdapter extends BaseAdapter {
 			throw new InvalidParameterException(ERRORMSG);
 		}
 		this.wrappedAdapter.swapCursor(data);
-		notifyDataSetChanged();
+		//notifyDataSetChanged();
 	}
 
 	@Override
