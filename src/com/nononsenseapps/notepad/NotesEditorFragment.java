@@ -257,12 +257,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	private boolean hasNoteChanged() {
 		// Null check, can happen at first start up
-		if (noteAttrs == null ||
-				mTitle == null ||
-				mText == null) {
+		if (noteAttrs == null || mTitle == null || mText == null) {
 			return false;
 		}
-		
+
 		boolean title, note, completed, date = false;
 		// Get the current note text.
 		String text = noteAttrs.getFullNote(mText.getText().toString());
@@ -1045,16 +1043,19 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	@TargetApi(14)
 	private void setActionShareIntent() {
-		if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)
-				&& shareActionProvider != null) {
-			Intent share = new Intent(Intent.ACTION_SEND);
-			share.setType("text/plain");
-			share.putExtra(Intent.EXTRA_TEXT, makeShareText());
-			if (mTitle != null)
-				share.putExtra(Intent.EXTRA_SUBJECT, mTitle.getText());
-			share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+		if (getActivity() != null && !getActivity().isFinishing()) {
+			if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)
+					&& shareActionProvider != null) {
+				Intent share = new Intent(Intent.ACTION_SEND);
+				share.setType("text/plain");
+				share.putExtra(Intent.EXTRA_TEXT, makeShareText());
+				if (mTitle != null)
+					share.putExtra(Intent.EXTRA_SUBJECT, mTitle.getText());
+				share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 
-			((ShareActionProvider) shareActionProvider).setShareIntent(share);
+				((ShareActionProvider) shareActionProvider)
+						.setShareIntent(share);
+			}
 		}
 	}
 
