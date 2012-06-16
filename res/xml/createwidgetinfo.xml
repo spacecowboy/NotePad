@@ -19,5 +19,5 @@
     android:minHeight="40dp"
     android:updatePeriodMillis="0"
     android:initialLayout="@layout/createwidget"
-    android:previewImage="@drawable/preview_ori_portrait" >
+    android:previewImage="@drawable/preview_create_portrait" >
 </appwidget-provider>
