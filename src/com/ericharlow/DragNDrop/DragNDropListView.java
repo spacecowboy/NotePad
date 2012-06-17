@@ -34,8 +34,8 @@ import android.widget.ListView;
 
 public class DragNDropListView extends ListView {
 	// For scrolling
-	public static final int slowSpeed = 8;
-	public static final int fastSpeed = 24;
+	public static final int slowSpeed = 12;
+	public static final int fastSpeed = 32;
 
 	boolean mDragMode;
 
@@ -91,9 +91,17 @@ public class DragNDropListView extends ListView {
 				mDragPointOffset -= ((int) ev.getRawY()) - y;
 				startDrag(mItemPosition, y);
 				drag(0, y);// replace 0 with x if desired
+
 			}
 			break;
 		case MotionEvent.ACTION_MOVE:
+			// Action move can at times batch a bunch of actions
+			// together for efficiency purposes. We'd like to act on each.
+			final int historySize = ev.getHistorySize();
+			for (int h = 0; h < historySize; h++) {
+				Log.d("dragdrop_exp", "history dragged: " + h);
+				drag(0, (int) ev.getHistoricalY(h));
+			}
 			drag(0, y);// replace 0 with x if desired
 			break;
 		case MotionEvent.ACTION_CANCEL:
@@ -151,6 +159,10 @@ public class DragNDropListView extends ListView {
 	 * only scroll when users drag in the "right" direction, we store the old y
 	 * value to determine direction.
 	 * 
+	 * Views that are expandable (contains a child view with id
+	 * "expansionSpace") will be expanded and contracted appropriately. This is
+	 * great for making it clear where a drop will land.
+	 * 
 	 * @param x
 	 * @param y
 	 */
@@ -180,14 +192,14 @@ public class DragNDropListView extends ListView {
 					// Only scroll if the finger has moved downwards since last
 					// time.
 					if (y >= lastScrollY) {
-						// If the finger is on the second to last last visible
+						// If the finger is on the third to last last visible
 						// position in the list, scroll slowly.
-						if (last - 1 == pointPos) {
+						if (last - 2 == pointPos) {
 							setSelectionFromTop(last, v.getTop() - slowSpeed);
 						}
-						// If the finger is below the list, or on the last
-						// item, scroll fast
-						else if (-1 == pointPos || last == pointPos) {
+						// If the finger is below the list, or below the third
+						// to last item, scroll fast
+						else if (-1 == pointPos || last - 2 < pointPos) {
 							setSelectionFromTop(last, v.getTop() - fastSpeed);
 						}
 					}
@@ -203,15 +215,15 @@ public class DragNDropListView extends ListView {
 					// Only scroll if the finger has moved upwards since last
 					// time.
 					if (y <= lastScrollY) {
-						// If the finger is on the second visible position in
+						// If the finger is on the third visible position in
 						// the
 						// list, scroll slowly.
-						if ((first + 1) == pointPos) {
+						if ((first + 2) == pointPos) {
 							setSelectionFromTop(first, v.getTop() + slowSpeed);
 						}
 						// If the finger is above the list, or on the first
 						// position, scroll fast
-						else if (-1 == pointPos || first == pointPos) {
+						else if (first + 2 > pointPos) {
 							setSelectionFromTop(first, v.getTop() + fastSpeed);
 						}
 					}
