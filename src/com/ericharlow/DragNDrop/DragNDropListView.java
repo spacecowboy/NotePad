@@ -33,6 +33,9 @@ import android.widget.ImageView;
 import android.widget.ListView;
 
 public class DragNDropListView extends ListView {
+	// For scrolling
+	public static final int slowSpeed = 8;
+	public static final int fastSpeed = 24;
 
 	boolean mDragMode;
 
@@ -46,6 +49,8 @@ public class DragNDropListView extends ListView {
 	DropListener mDropListener;
 	RemoveListener mRemoveListener;
 	DragListener mDragListener;
+
+	private int lastScrollY = -1;
 
 	public DragNDropListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -139,7 +144,16 @@ public class DragNDropListView extends ListView {
 		return frame.contains(x, y);
 	}
 
-	// move the drag view
+	/**
+	 * move the drag view
+	 * 
+	 * When approaching the edges, will also scroll the list. To make the list
+	 * only scroll when users drag in the "right" direction, we store the old y
+	 * value to determine direction.
+	 * 
+	 * @param x
+	 * @param y
+	 */
 	private void drag(int x, int y) {
 		if (mDragView != null) {
 			WindowManager.LayoutParams layoutParams = (WindowManager.LayoutParams) mDragView
@@ -150,24 +164,59 @@ public class DragNDropListView extends ListView {
 					.getSystemService(Context.WINDOW_SERVICE);
 			mWindowManager.updateViewLayout(mDragView, layoutParams);
 
+			// change null to "this" when ready to use
 			if (mDragListener != null)
-				mDragListener.onDrag(x, y, null);// change null to "this" when
-													// ready to use
+				mDragListener.onDrag(x, y, null);
 
 			// If we are close to the edges, scroll the list
-			if (y > (getHeight() * 6) / 7) {
+			// First case if we are at the bottom half all scrolling will be
+			// downwards
+			final View v;
+			final int pointPos = pointToPosition(x, y);
+			if (y > (getHeight() / 2)) {
 				final int last = this.getLastVisiblePosition();
-				if (last < this.getCount()) {
-					final View v = getChildAt(last - getFirstVisiblePosition());
-					if (v != null)
-						this.setSelectionFromTop(last, v.getTop() - 24);
+				v = getChildAt(last - getFirstVisiblePosition());
+				if (v != null) {
+					// Only scroll if the finger has moved downwards since last
+					// time.
+					if (y >= lastScrollY) {
+						// If the finger is on the second to last last visible
+						// position in the list, scroll slowly.
+						if (last - 1 == pointPos) {
+							setSelectionFromTop(last, v.getTop() - slowSpeed);
+						}
+						// If the finger is below the list, or on the last
+						// item, scroll fast
+						else if (-1 == pointPos || last == pointPos) {
+							setSelectionFromTop(last, v.getTop() - fastSpeed);
+						}
+					}
+					// Remember finger position for next time
+					lastScrollY = y;
 				}
-			} else if (y < getHeight() / 5) {
+			}
+			// Upper half, scrolling upwards
+			else {
 				final int first = this.getFirstVisiblePosition();
-				if (first > 0) {
-					final View v = getChildAt(first - getFirstVisiblePosition());
-					if (v != null)
-						this.setSelectionFromTop(first, v.getTop() + 24);
+				v = getChildAt(0);
+				if (v != null) {
+					// Only scroll if the finger has moved upwards since last
+					// time.
+					if (y <= lastScrollY) {
+						// If the finger is on the second visible position in
+						// the
+						// list, scroll slowly.
+						if ((first + 1) == pointPos) {
+							setSelectionFromTop(first, v.getTop() + slowSpeed);
+						}
+						// If the finger is above the list, or on the first
+						// position, scroll fast
+						else if (-1 == pointPos || first == pointPos) {
+							setSelectionFromTop(first, v.getTop() + fastSpeed);
+						}
+					}
+					// Remember finger position for next time
+					lastScrollY = y;
 				}
 			}
 		}
