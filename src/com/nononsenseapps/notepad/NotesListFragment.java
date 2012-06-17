@@ -233,7 +233,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		// setListAdapter(mAdapter);
 
 		// Start out with a progress indicator.
-		setListShown(false);
+		//setListShown(false);
 
 		// Set list preferences
 		setSingleCheck();
@@ -1976,9 +1976,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 		// The list should now be shown.
 		if (isResumed()) {
-			setListShown(true);
+			//setListShown(true);
 		} else {
-			setListShownNoAnimation(true);
+			//setListShownNoAnimation(true);
 		}
 
 		// Reselect current note in list, if possible

@@ -40,7 +40,7 @@ public class NoNonsenseListFragment extends ListFragment{
 
 		// Gets a handle to the EditText in the the layout.
 		ViewGroup fl = (ViewGroup) inflater.inflate(layout, container, false);
-		inflater.inflate(android.R.layout.list_content, fl, true);
+		inflater.inflate(R.layout.list_content, fl, true);
 		
 		return fl;
 	}
