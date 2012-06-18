@@ -19,34 +19,27 @@ package com.ericharlow.DragNDrop;
 import com.nononsenseapps.notepad.R;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.ListView;
 
 public class DragNDropListView extends ListView {
 	// For scrolling
-	public static final int slowSpeed = 4;
-	public static final int fastSpeed = 16;
-	// You should adjust this value to be compatible with your expandable views
-	// This will determine how "early" views expand/contract
-	public static final int fingerOffsetDP = 70;
-	private final int fingerOffsetPX;
+	public static final int slowSpeed = 8;
+	public static final int fastSpeed = 24;
 
 	boolean mDragMode;
 	private View expandedView = null;
-	private int expandedPos = -1;
+	private int expandedPos;
 
 	int mStartPosition;
 	int mEndPosition;
@@ -60,14 +53,9 @@ public class DragNDropListView extends ListView {
 	DragListener mDragListener;
 
 	private int lastScrollY = -1;
-	private int lastFingerY = -1;
 
 	public DragNDropListView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		Resources r = getResources();
-		fingerOffsetPX = (int) TypedValue.applyDimension(
-				TypedValue.COMPLEX_UNIT_DIP, fingerOffsetDP,
-				r.getDisplayMetrics());
 	}
 
 	public void setDropListener(DropListener l) {
@@ -172,9 +160,8 @@ public class DragNDropListView extends ListView {
 	 * only scroll when users drag in the "right" direction, we store the old y
 	 * value to determine direction.
 	 * 
-	 * Views that are expandable (contains a child view with id
-	 * "expansionSpace") will be expanded and contracted appropriately. This is
-	 * great for making it clear where a drop will land.
+	 * Views that are targetable (contains a view called dropIndicator or
+	 * dropIndicatorNotAdjacent) will be highlighted appropriately.
 	 * 
 	 * @param x
 	 * @param y
@@ -193,14 +180,11 @@ public class DragNDropListView extends ListView {
 			if (mDragListener != null)
 				mDragListener.onDrag(x, y, null);
 
-			
-
 			final int pointPos = pointToPosition(x, y);
 			// If we are close to the edges, scroll the list
 			// First case if we are at the bottom half all scrolling will be
 			// downwards
 			final View v;
-			boolean scrolled = false;
 			if (y > (getHeight() / 2)) {
 				final int last = this.getLastVisiblePosition();
 				v = getChildAt(last - getFirstVisiblePosition());
@@ -210,17 +194,13 @@ public class DragNDropListView extends ListView {
 					if (y >= lastScrollY) {
 						// If the finger is on the third to last last visible
 						// position in the list, scroll slowly.
-						if (last - 1 == pointPos) {
+						if (last - 2 == pointPos) {
 							setSelectionFromTop(last, v.getTop() - slowSpeed);
-							if (v.getBottom() != getBottom())
-							scrolled = true;
 						}
 						// If the finger is below the list, or below the third
 						// to last item, scroll fast
-						else if (-1 == pointPos || last - 1 < pointPos) {
+						else if (-1 == pointPos || last - 2 < pointPos) {
 							setSelectionFromTop(last, v.getTop() - fastSpeed);
-							if (v.getBottom() != getBottom())
-							scrolled = true;
 						}
 					}
 					// Remember finger position for next time
@@ -238,44 +218,38 @@ public class DragNDropListView extends ListView {
 						// If the finger is on the third visible position in
 						// the
 						// list, scroll slowly.
-						if ((first + 1) == pointPos) {
+						if ((first + 2) == pointPos) {
 							setSelectionFromTop(first, v.getTop() + slowSpeed);
-							if (v.getTop() != getTop())
-								scrolled = true;
 						}
 						// If the finger is above the list, or on the first
 						// position, scroll fast
-						else if (first + 1 > pointPos) {
+						else if (first + 2 > pointPos) {
 							setSelectionFromTop(first, v.getTop() + fastSpeed);
-							if (v.getTop() != getTop())
-								scrolled = true;
 						}
 					}
 					// Remember finger position for next time
 					lastScrollY = y;
 				}
 			}
-			// Expand and unexpand views as necessary
-			if (!scrolled) {
-				// Get the view we are currently targeting
-				final int targetPos = getTargetPosition(x, y);
-				final View dropTarget = getChildAt(targetPos
-						- getFirstVisiblePosition());
-				final View dropExpansion;
 
-				if (dropTarget != null) {
-					// There are two kinds of spaces. Regular one and one that
-					// should not expand if the item originated just below. Just
-					// take whichever isn't null
-					dropExpansion = dropTarget.findViewById(R.id.expansionSpace) != null ? dropTarget
-							.findViewById(R.id.expansionSpace) : dropTarget
-							.findViewById(R.id.expansionSpaceNotAdjacent);
-				} else {
-					dropExpansion = null;
-				}
-				expand(targetPos, dropExpansion);
+			// Expand and unexpand views as necessary
+			// Get the view we are currently targeting
+			final int targetPos = getTargetPosition(x, y);
+			final View dropTarget = getChildAt(targetPos
+					- getFirstVisiblePosition());
+			final View dropExpansion;
+
+			if (dropTarget != null) {
+				// There are two kinds of spaces. Regular one and one that
+				// should not expand if the item originated just below. Just
+				// take whichever isn't null
+				dropExpansion = dropTarget.findViewById(R.id.dropIndicator) != null ? dropTarget
+						.findViewById(R.id.dropIndicator) : dropTarget
+						.findViewById(R.id.dropIndicatorNotAdjacent);
+			} else {
+				dropExpansion = null;
 			}
-			lastFingerY = y;
+			expand(targetPos, dropExpansion);
 		}
 	}
 
@@ -283,8 +257,6 @@ public class DragNDropListView extends ListView {
 	 * Will only do any thing if the new view is different from the existing
 	 * expanded view. It will then start by unexpanding the existing one and
 	 * then expand the new view.
-	 * 
-	 * Will also scroll to position itself in the middle of the expanded view.
 	 * 
 	 * Safe for null pointers.
 	 * 
@@ -298,9 +270,9 @@ public class DragNDropListView extends ListView {
 			if (dropExpansion != null && pointPos != mStartPosition) {
 				// The second type of space should only expand if the view did
 				// not originate from just below it
-				if (dropExpansion.getId() == R.id.expansionSpaceNotAdjacent
+				if (dropExpansion.getId() == R.id.dropIndicatorNotAdjacent
 						&& pointPos != (mStartPosition - 1)
-						|| dropExpansion.getId() != R.id.expansionSpaceNotAdjacent) {
+						|| dropExpansion.getId() != R.id.dropIndicatorNotAdjacent) {
 					// And expand the new view instead
 					dropExpansion.setVisibility(View.VISIBLE);
 				}
@@ -318,18 +290,23 @@ public class DragNDropListView extends ListView {
 	private void unExpand() {
 		// We have passed it, so un-expand it
 		if (expandedView != null) {
-			expandedView.setVisibility(View.GONE);
+			expandedView.setVisibility(View.INVISIBLE);
 			expandedView = null;
 			expandedPos = -1;
 		}
 	}
 
 	/**
-	 * Gets the view at the specified coordinates minus fingerOffsetPX
+	 * Gets the target for the coordinates. The target will be: 1) If the
+	 * coordinates are in the upper half of the view the target will be the item
+	 * above the view. If the view is the first item, then it is the target.
+	 * 
+	 * 2) If the coordinates are in the lower half of the view, the view itself
+	 * is the target.
 	 * 
 	 * @param x
 	 * @param y
-	 * @return
+	 * @return the position in the list which is the target
 	 */
 	private int getTargetPosition(final int x, final int y) {
 		final int realPos = pointToPosition(x, y);
@@ -337,46 +314,21 @@ public class DragNDropListView extends ListView {
 			return realPos;
 
 		if (realPos == -1) {
-//			 if (expandedPos == 0)
-//				 return expandedPos;
-//			 else if (expandedPos == getCount() -1)
-//				 return expandedPos;
-//			 else
-//				 return realPos;
-			
-			 if (y < getHeight() / 2) {
-				 return 0;
-				 //return getFirstVisiblePosition() < expandedPos ? getFirstVisiblePosition() : expandedPos;
-			 } else {
-				 return getCount() - 1;
-				 //return getLastVisiblePosition() > expandedPos ? getLastVisiblePosition() : expandedPos;
-			 }
+			if (expandedPos == 0 || expandedPos == getCount() - 1)
+				return expandedPos;
+			else
+				return realPos;
 		}
 
 		final View realView = getChildAt(realPos - getFirstVisiblePosition());
 		if (realView == null)
 			return realPos;
 
-		final int bottom = realView.getBottom();
-		if (bottom >= y && y >= bottom - fingerOffsetPX) {
+		final int top = realView.getTop();
+		if (y < top + realView.getHeight() / 2)
+			return realPos < 1 ? realPos : realPos - 1;
+		else
 			return realPos;
-//			if ((y > lastFingerY && realPos > expandedPos) ||
-//					(y < lastFingerY && realPos < expandedPos))
-//				return realPos;
-//			else
-//				return expandedPos;
-			//return (y > lastFingerY && realPos > expandedPos) ? realPos : expandedPos;
-		} else if (y > bottom) {
-			//if (y > lastFingerY)
-				return realPos == getCount() ? realPos : realPos + 1;
-//			else
-//				return expandedPos;
-		} else {
-//			if (y < lastFingerY)
-				return realPos == 0 ? realPos : realPos - 1;
-//			else
-//				return expandedPos;
-		}
 	}
 
 	// enable the drag view for dragging
