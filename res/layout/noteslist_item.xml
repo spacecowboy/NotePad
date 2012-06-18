@@ -19,15 +19,15 @@
     android:id="@+id/noteItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:paddingLeft="0dp"
-    android:paddingRight="8dp" >
+    android:orientation="vertical" >
 
     <LinearLayout
         style="?my_list_selector"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:orientation="horizontal" >
+        android:orientation="horizontal"
+        android:paddingLeft="0dp"
+    	android:paddingRight="8dp" >
 
         <TextView
             android:id="@+id/itemIndent"
@@ -110,10 +110,19 @@
         </LinearLayout>
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/expansionSpace"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:visibility="gone" />
+        android:visibility="gone" 
+        android:orientation="vertical">
+        
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/list_divider_holo_dark" />
+        
+    </LinearLayout>
 
 </LinearLayout>

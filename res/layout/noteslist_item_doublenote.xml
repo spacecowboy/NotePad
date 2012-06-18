@@ -109,10 +109,19 @@
         </LinearLayout>
     </LinearLayout>
 
-    <FrameLayout
+    <LinearLayout
         android:id="@+id/expansionSpace"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:visibility="gone" />
+        android:visibility="gone" 
+        android:orientation="vertical">
+        
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:scaleType="fitXY"
+            android:src="@drawable/list_divider_holo_dark" />
+        
+    </LinearLayout>
 
 </LinearLayout>
