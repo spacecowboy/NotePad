@@ -19,12 +19,12 @@
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ImageView
-        android:id="@+id/downarrow"
+        android:id="@+id/uparrow"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:src="?expander_open_holo"
+        android:src="?expander_close_holo"
         tools:ignore="ContentDescription" />
 
     <!-- DUE DATE SECTION -->
