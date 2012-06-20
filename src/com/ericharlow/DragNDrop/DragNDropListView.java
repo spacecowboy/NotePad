@@ -115,7 +115,7 @@ public class DragNDropListView extends ListView {
 					+ mEndPosition);
 			if (mDropListener != null && mStartPosition != INVALID_POSITION
 					&& mEndPosition != INVALID_POSITION)
-				mDropListener.onDrop(mStartPosition, mEndPosition);
+				mDropListener.onDrop(mStartPosition, getTargetPosition(x, y));
 			break;
 		}
 		return true;

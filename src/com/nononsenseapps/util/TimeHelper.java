@@ -103,4 +103,23 @@ public class TimeHelper {
 		Log.d("listproto", "7 days ago starts: " + time.toMillis(false));
 		return Long.toString(time.toMillis(false));
 	}
+
+	/**
+	 * Given the argument i, will return todays date + i days, formatted as
+	 * RFC3339
+	 */
+	public static String get3339DaysFromToday(int i) {
+		Time localtime = new Time(Time.getCurrentTimezone());
+		localtime.setToNow();
+		int julianToday = Time.getJulianDay(localtime.toMillis(false), localtime.gmtoff);
+		
+		Time time = new Time(Time.TIMEZONE_UTC);
+		time.setJulianDay(julianToday + i);
+		time.hour = 0;
+		time.minute = 0;
+		time.second = 0;
+		Log.d("dragdate", "" + i + " days ago: " + time.format3339(false));
+		
+		return time.format3339(false);
+	}
 }

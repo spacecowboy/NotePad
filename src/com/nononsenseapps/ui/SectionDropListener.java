@@ -5,13 +5,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.ericharlow.DragNDrop.DropListener;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotePad.Notes;
 import com.nononsenseapps.notepad.NotesEditorFragment;
 import com.nononsenseapps.notepad.NotesListFragment;
+import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.util.TimeHelper;
 
 /**
  * This class handles drag n drop actions for the sectioned adapter
@@ -81,9 +84,66 @@ public class SectionDropListener implements DropListener {
 			return false;
 	}
 
-	private void toDate(final int from, final int to, ContentValues values) {
+	private void toDate(final int from, final int to,
+			ContentValues values) {
 		if (NotesListFragment.SECTION_STATE_DATE.equals(adapter.getState())) {
+			Log.d("dragdate", "toDate");
+			// Get the targeted date. This will be a localized string like
+			// "Tomorrow"
+			final String targetDate = adapter.getSection(to);
 
+			// A special case is if we are moving to the completed section
+			if (context.getString(R.string.date_header_completed).equals(
+					targetDate)) {
+				Log.d("dragdate", "just completing note");
+				// Just set completed, don't touch the date
+				values.put(Notes.COLUMN_NAME_GTASKS_STATUS,
+						context.getString(R.string.gtask_status_completed));
+			} else {
+				String newDate = "";
+				// If the note was dropped on another note, use the same date
+				if (SectionAdapter.TYPE_ITEM == adapter.getItemViewType(to)) {
+					final long noteId = adapter.getItemId(to);
+					Log.d("dragdate", "using existing note date");
+					if (noteId > -1) {
+						Cursor c = context.getContentResolver().query(
+								NotesEditorFragment.getUriFrom(noteId),
+								new String[] { Notes.COLUMN_NAME_DUE_DATE },
+								null, null, null);
+
+						if (c != null) {
+							if (c.moveToFirst())
+								newDate = c
+										.getString(c
+												.getColumnIndex(Notes.COLUMN_NAME_DUE_DATE));
+							Log.d("dragdate", "which was: " + newDate);
+
+							c.close();
+						}
+					}
+				}
+				// Else do the best we can with the header
+				else {
+					if (context.getString(R.string.date_header_none).equals(targetDate)) {
+						newDate = "";
+					} else if (context.getString(R.string.date_header_7days).equals(targetDate)) {
+						newDate = TimeHelper.get3339DaysFromToday(3);
+					} else if (context.getString(R.string.date_header_future).equals(targetDate)) {
+						newDate = TimeHelper.get3339DaysFromToday(8);
+					} else if (context.getString(R.string.date_header_overdue).equals(targetDate)) {
+						newDate = TimeHelper.get3339DaysFromToday(-1);
+					} else if (context.getString(R.string.date_header_today).equals(targetDate)) {
+						newDate = TimeHelper.get3339DaysFromToday(0);
+					} else if (context.getString(R.string.date_header_tomorrow).equals(targetDate)) {
+						newDate = TimeHelper.get3339DaysFromToday(1);
+					}
+				}
+
+				Log.d("dragdate", "new date: " + newDate);
+				values.put(Notes.COLUMN_NAME_DUE_DATE, newDate);
+				values.put(Notes.COLUMN_NAME_GTASKS_STATUS,
+						context.getString(R.string.gtask_status_uncompleted));
+			}
 		}
 	}
 
