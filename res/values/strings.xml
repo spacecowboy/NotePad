@@ -152,6 +152,11 @@
     <string tools:ignore="MissingTranslation" name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
     <string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">Note preview will be 2 lines</string>
     
+    <string tools:ignore="MissingTranslation" name="editor_details">More</string>
+    <string tools:ignore="MissingTranslation" name="completed">Completed</string>
+    <string tools:ignore="MissingTranslation" name="subtask_of">Subtask of</string>
+    <string tools:ignore="MissingTranslation" name="security">Security</string>
+    
     <string tools:ignore="MissingTranslation" name="date_header_overdue">Overdue</string>
     <string tools:ignore="MissingTranslation" name="date_header_today">Today</string>
     <string tools:ignore="MissingTranslation" name="date_header_tomorrow">Tomorrow</string>
@@ -164,10 +169,6 @@
     <string tools:ignore="MissingTranslation" name="mod_header_yesterday">Yesterday</string>
     <string tools:ignore="MissingTranslation" name="mod_header_thisweek">This week</string>
     <string tools:ignore="MissingTranslation" name="mod_header_earlier">Earlier</string>
-    
-    <string tools:ignore="MissingTranslation" name="settings_listheader">List name dividers</string>
-    <string tools:ignore="MissingTranslation" name="settings_listheader_off">No list name dividers</string>
-    <string tools:ignore="MissingTranslation" name="settings_listheader_on">Showing list name dividers</string>
 
     <!-- These should probably not be translated -->
     <string tools:ignore="MissingTranslation" name="default_notetitle">Welcome!</string>
