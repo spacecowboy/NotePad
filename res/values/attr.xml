@@ -36,5 +36,9 @@
 	<attr name="editorBackgroundColor" format="reference" />
 	<attr name="ActionBarDropDownItem" format="reference" />
 	<attr name="btn_default_selector" format="reference" />
+	<attr name="img_default_selector" format="reference" />
 	<attr name="SpinnerStyle" format="reference" />
+	<attr name="expander_open_holo" format="reference" />
+	<attr name="expander_close_holo" format="reference" />
+	<attr name="list_divider_holo" format="reference" />
 </resources>

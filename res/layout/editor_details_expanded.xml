@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/detailsExpanded"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?img_default_selector"
+    android:clickable="true"
+    tools:ignore="HardcodedText" >
+
+    <CheckBox
+        android:id="@+id/expCompleted"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_vertical"
+        android:text="@string/completed"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageView
+        android:id="@+id/downarrow"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:src="?expander_open_holo"
+        tools:ignore="ContentDescription" />
+
+    <!-- DUE DATE SECTION -->
+
+    <TextView
+        android:id="@+id/dueHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/expCompleted"
+        android:paddingLeft="16dp"
+        android:text="@string/editor_due_date_hint"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ImageView
+        android:id="@+id/dueHeaderLine"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/dueHeader"
+        android:scaleType="fitXY"
+        android:src="@drawable/list_div_top_btm_gmail_widget_holo"
+        tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/dueCancelButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/dueHeaderLine"
+        android:background="?btn_default_selector"
+        android:contentDescription="Clear due date"
+        android:src="?content_remove" />
+
+    <Button
+        android:id="@+id/dueDateBox"
+        style="?android:attr/spinnerStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/dueCancelButton"
+        android:layout_below="@+id/dueHeaderLine"
+        android:layout_toLeftOf="@+id/dueCancelButton"
+        android:text="@string/editor_due_date_hint" />
+
+    <!-- SUB TASK SECTION -->
+
+    <TextView
+        android:id="@+id/subtaskHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/dueCancelButton"
+        android:paddingLeft="16dp"
+        android:text="@string/subtask_of"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ImageView
+        android:id="@+id/subtaskHeaderLine"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/subtaskHeader"
+        android:scaleType="fitXY"
+        android:src="@drawable/list_div_top_btm_gmail_widget_holo"
+        tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/subtaskRemoveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/subtaskHeaderLine"
+        android:background="?btn_default_selector"
+        android:contentDescription="Clear sub task"
+        android:src="?content_remove" />
+
+    <Spinner
+        android:id="@+id/subtaskSpinner"
+        style="?android:attr/spinnerStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/subtaskRemoveButton"
+        android:layout_below="@+id/subtaskHeaderLine"
+        android:layout_toLeftOf="@+id/subtaskRemoveButton"
+        android:spinnerMode="dialog" />
+
+    <!-- LIST SECTION -->
+
+    <TextView
+        android:id="@+id/listHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/subtaskSpinner"
+        android:paddingLeft="16dp"
+        android:text="@string/settings_list"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ImageView
+        android:id="@+id/listHeaderLine"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/listHeader"
+        android:scaleType="fitXY"
+        android:src="@drawable/list_div_top_btm_gmail_widget_holo"
+        tools:ignore="ContentDescription" />
+
+    <Spinner
+        android:id="@+id/noteListSpinner"
+        style="?android:attr/spinnerStyle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/listHeaderLine"
+        android:spinnerMode="dialog" />
+
+    <!-- LOCKING -->
+
+    <TextView
+        android:id="@+id/lockHeader"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/noteListSpinner"
+        android:paddingLeft="16dp"
+        android:text="@string/security"
+        android:textAllCaps="true"
+        android:textAppearance="?android:attr/textAppearanceSmall" />
+
+    <ImageView
+        android:id="@+id/lockHeaderLine"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/lockHeader"
+        android:scaleType="fitXY"
+        android:src="@drawable/list_div_top_btm_gmail_widget_holo"
+        tools:ignore="ContentDescription" />
+
+    <ImageButton
+        android:id="@+id/lockButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/lockHeaderLine"
+        android:background="@drawable/btn_default_selector_dark"
+        android:clickable="true"
+        android:contentDescription="Lock note"
+        android:src="?device_access_not_secure" />
+    <ImageButton
+        android:id="@+id/unlockButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/lockHeaderLine"
+        android:background="@drawable/btn_default_selector_dark"
+        android:clickable="true"
+        android:visibility="invisible"
+        android:contentDescription="Unlock note"
+        android:src="?device_access_secure" />
+
+    <TextView
+        android:id="@+id/lockButtonText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/lockButton"
+        android:layout_below="@+id/lockHeaderLine"
+        android:layout_toRightOf="@+id/lockButton"
+        android:background="@drawable/btn_default_selector_dark"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:text="@string/unlocked"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+
+    <ImageView
+        android:layout_width="fill_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/lockButton"
+        android:paddingLeft="48dp"
+        android:paddingRight="48dp"
+        android:scaleType="fitXY"
+        android:src="?list_divider_holo"
+        tools:ignore="ContentDescription" />
+
+</RelativeLayout>

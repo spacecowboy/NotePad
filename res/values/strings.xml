@@ -151,6 +151,11 @@
     <string tools:ignore="MissingTranslation" name="settings_listitem">Two line titles</string>
     <string tools:ignore="MissingTranslation" name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
     <string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">Note preview will be 2 lines</string>
+    
+    <string tools:ignore="MissingTranslation" name="editor_details">More</string>
+    <string tools:ignore="MissingTranslation" name="completed">Completed</string>
+    <string tools:ignore="MissingTranslation" name="subtask_of">Subtask of</string>
+    <string tools:ignore="MissingTranslation" name="security">Security</string>
 
     <!-- These should probably not be translated -->
     <string tools:ignore="MissingTranslation" name="default_notetitle">Welcome!</string>

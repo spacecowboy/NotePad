@@ -61,6 +61,9 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -69,6 +72,7 @@ import android.widget.ScrollView;
 import android.widget.ShareActionProvider;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
@@ -83,7 +87,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	// Two ways of expressing: "Mon, 16 Jan"
 	// Time is not stable, will always claim it's Sunday
 	// public final static String ANDROIDTIME_FORMAT = "%a, %e %b";
-	public final static String DATEFORMAT_FORMAT = "E, d MMM";
+	public final static String DATEFORMAT_FORMAT_SHORT = "E, d MMM";
+	public final static String DATEFORMAT_FORMAT_LONG = "EEEE, d MMMM";
 	/*
 	 * Creates a projection that returns the note ID and the note contents.
 	 */
@@ -164,6 +169,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private Handler mHandler = new Handler();
 	private boolean mComplete;
 	private boolean mCompleteChanged = false;
+	private CheckBox conComplete;
+	private CheckBox expComplete;
+	private TextView details;
+	private TextView lockedText;
+	private View lockButton;
+	private View unlockButton;
+	private View detailsContracted;
+	private View detailsExpanded;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -467,6 +480,82 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			}
 		});
 
+		// Make some action happen when you click stuff
+		final View detailsContracted = theView
+				.findViewById(R.id.detailsContracted);
+		final View detailsExpanded = theView.findViewById(R.id.detailsExpanded);
+		if (detailsContracted != null) {
+			detailsContracted.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (v != null)
+						v.setVisibility(View.GONE);
+					if (detailsExpanded != null)
+						detailsExpanded.setVisibility(View.VISIBLE);
+				}
+			});
+		}
+		if (detailsExpanded != null) {
+			detailsExpanded.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (v != null)
+						v.setVisibility(View.GONE);
+					if (detailsContracted != null)
+						detailsContracted.setVisibility(View.VISIBLE);
+				}
+			});
+		}
+		this.detailsContracted = detailsContracted;
+		this.detailsExpanded = detailsExpanded;
+
+		final CheckBox conComplete = (CheckBox) theView
+				.findViewById(R.id.conCompleted);
+		final CheckBox expComplete = (CheckBox) theView
+				.findViewById(R.id.expCompleted);
+		if (conComplete != null) {
+			conComplete
+					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView,
+								boolean isChecked) {
+							setCompleted(isChecked);
+							if (expComplete != null)
+								expComplete.setChecked(isChecked);
+						}
+					});
+		}
+		if (expComplete != null) {
+			expComplete
+					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView,
+								boolean isChecked) {
+							setCompleted(isChecked);
+							if (conComplete != null)
+								conComplete.setChecked(isChecked);
+						}
+					});
+		}
+		this.conComplete = conComplete;
+		this.expComplete = expComplete;
+
+		details = (TextView) theView.findViewById(R.id.editorDetails);
+
+		lockButton = theView.findViewById(R.id.lockButton);
+		unlockButton = theView.findViewById(R.id.unlockButton);
+		lockedText = (TextView) theView.findViewById(R.id.lockButtonText);
+
+		OnClickListener l = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showPasswordDialog(noteAttrs.locked ? UNLOCK_NOTE : LOCK_NOTE);
+			}
+		};
+		lockButton.setOnClickListener(l);
+		unlockButton.setOnClickListener(l);
+		lockedText.setOnClickListener(l);
+
 		// Main note edit text
 		mText = (EditText) theView.findViewById(R.id.noteBox);
 		mText.addTextChangedListener(this);
@@ -554,6 +643,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			day = c.get(Calendar.DAY_OF_MONTH);
 		}
 		dueDateSet = false;
+
+		if (details != null)
+			details.setText(R.string.editor_details);
 
 		// Remember to update share intent
 		if (activity != null && !activity.isFinishing())
@@ -671,31 +763,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		}
 	}
 
-	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		if (!timeToDie) {
-			// Check if note has changed and enable/disable the revert option
-			if (!hasNoteChanged()) {
-				menu.findItem(R.id.menu_revert).setVisible(false);
-			} else {
-				menu.findItem(R.id.menu_revert).setVisible(true);
-			}
-			// Lock items
-			if (noteAttrs != null) {
-				menu.findItem(R.id.menu_lock).setVisible(!noteAttrs.locked);
-				menu.findItem(R.id.menu_unlock).setVisible(noteAttrs.locked);
-			}
-			menu.findItem(R.id.menu_complete).setVisible(!mComplete);
-			menu.findItem(R.id.menu_uncomplete).setVisible(mComplete);
-		}
-	}
-
 	private void setCompleted(boolean val) {
 		if (activity != null) {
 			mComplete = val;
 			mCompleteChanged = true;
 			saveNote();
-			getActivity().invalidateOptionsMenu();
 		}
 	}
 
@@ -703,12 +775,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle all of the possible menu actions.
 		switch (item.getItemId()) {
-		case R.id.menu_complete:
-			setCompleted(true);
-			break;
-		case R.id.menu_uncomplete:
-			setCompleted(false);
-			break;
 		case R.id.menu_revert:
 			cancelNote();
 			Toast.makeText(activity, getString(R.string.reverted),
@@ -752,7 +818,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			dueDateSet = true;
 
 			note = note + getText(R.string.editor_due_date_hint) + ": "
-					+ DateFormat.format(DATEFORMAT_FORMAT, c) + "\n";
+					+ DateFormat.format(DATEFORMAT_FORMAT_SHORT, c) + "\n";
 		}
 
 		if (mText != null)
@@ -804,6 +870,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	}
 
 	private void showNote(Cursor mCursor) {
+		if (detailsContracted != null) {
+			detailsContracted.setVisibility(View.VISIBLE);
+		}
+		if (detailsExpanded != null) {
+			detailsExpanded.setVisibility(View.GONE);
+		}
 		if (mCursor != null && !mCursor.isClosed() && mCursor.moveToFirst()) {
 			/*
 			 * Moves to the first record. Always call moveToFirst() before
@@ -850,6 +922,16 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					.equals(mCursor.getString(mCursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS)));
 
+			conComplete.setEnabled(true);
+			expComplete.setEnabled(true);
+			details.setEnabled(true);
+			lockedText.setEnabled(true);
+			lockButton.setEnabled(true);
+			lockButton.setEnabled(true);
+
+			// Will call expComplete
+			conComplete.setChecked(mComplete);
+
 			// Set list ID
 			listId = mCursor.getLong(mCursor
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
@@ -874,6 +956,20 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			noteAttrs = new NoteAttributes();
 			noteAttrs.parseNote(note);
+
+			if (lockButton != null) {
+				lockButton.setVisibility(noteAttrs.locked ? View.INVISIBLE
+						: View.VISIBLE);
+			}
+			if (unlockButton != null) {
+				unlockButton.setVisibility(noteAttrs.locked ? View.VISIBLE
+						: View.INVISIBLE);
+			}
+			if (lockedText != null) {
+				lockedText
+						.setText(noteAttrs.locked ? R.string.password_required
+								: R.string.unlocked);
+			}
 			// Clear content if this is called in onResume
 			mText.setText("");
 			mText.setEnabled(false);
@@ -943,6 +1039,37 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mDueDate.setText(getText(R.string.editor_due_date_hint));
 			mDueDate.setEnabled(false);
 		}
+
+		if (conComplete != null) {
+			conComplete.setChecked(false);
+			conComplete.setEnabled(false);
+		}
+		if (expComplete != null) {
+			expComplete.setChecked(false);
+			expComplete.setEnabled(false);
+		}
+		if (details != null) {
+			details.setText(R.string.editor_details);
+			details.setEnabled(false);
+		}
+		if (lockedText != null) {
+			lockedText.setText(R.string.unlocked);
+			lockedText.setEnabled(false);
+		}
+		if (lockButton != null) {
+			lockButton.setVisibility(View.VISIBLE);
+			lockButton.setEnabled(false);
+		}
+		if (unlockButton != null) {
+			unlockButton.setVisibility(View.INVISIBLE);
+			lockButton.setEnabled(false);
+		}
+		if (detailsContracted != null) {
+			detailsContracted.setVisibility(View.VISIBLE);
+		}
+		if (detailsExpanded != null) {
+			detailsExpanded.setVisibility(View.GONE);
+		}
 	}
 
 	private int getPosOfId(long id) {
@@ -972,10 +1099,15 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 				c.setTimeInMillis(noteDueDate.toMillis(false));
 
-				mDueDate.setText(DateFormat.format(DATEFORMAT_FORMAT, c));
+				mDueDate.setText(DateFormat.format(DATEFORMAT_FORMAT_LONG, c));
+				if (details != null)
+					details.setText(DateFormat.format(DATEFORMAT_FORMAT_SHORT,
+							c));
 			} catch (TimeFormatException e) {
 				noteDueDate.setToNow();
 				dueDateSet = false;
+				if (details != null)
+					details.setText(R.string.editor_details);
 			}
 		}
 	}
@@ -1093,15 +1225,20 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		noteDueDate.set(dayOfMonth, monthOfYear, year);
 		dueDateSet = true;
 
-		final CharSequence timeToShow = DateFormat.format(DATEFORMAT_FORMAT, c);
+		final CharSequence shortTimeToShow = DateFormat.format(
+				DATEFORMAT_FORMAT_SHORT, c);
+		final CharSequence longTimeToShow = DateFormat.format(
+				DATEFORMAT_FORMAT_LONG, c);
 
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
 				if (mDueDate != null) {
-					mDueDate.setText(timeToShow);
+					mDueDate.setText(longTimeToShow);
 				}
+				if (details != null)
+					details.setText(shortTimeToShow);
 				// Remember to update share intent
 				setActionShareIntent();
 			}
@@ -1111,19 +1248,22 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	@Override
 	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.dueDateBox:
+		default:
+			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+			if (prev != null) {
+				ft.remove(prev);
+			}
+			ft.addToBackStack(null);
 
-		// activity.showDialog(DATE_DIALOG_ID);
-		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-		if (prev != null) {
-			ft.remove(prev);
+			// Create and show the dialog.
+			DatePickerDialogFragment newFragment = new DatePickerDialogFragment();
+			newFragment.setCallback(this);
+			newFragment.show(ft, "dialog");
+			break;
 		}
-		ft.addToBackStack(null);
-
-		// Create and show the dialog.
-		DatePickerDialogFragment newFragment = new DatePickerDialogFragment();
-		newFragment.setCallback(this);
-		newFragment.show(ft, "dialog");
 	}
 
 	@Override
@@ -1187,11 +1327,29 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				noteAttrs.locked = true;
 				Toast.makeText(activity, getString(R.string.locked),
 						Toast.LENGTH_SHORT).show();
+				if (lockButton != null) {
+					lockButton.setVisibility(View.INVISIBLE);
+				}
+				if (unlockButton != null) {
+					unlockButton.setVisibility(View.VISIBLE);
+				}
+				if (lockedText != null) {
+					lockedText.setText(R.string.password_required);
+				}
 				break;
 			case UNLOCK_NOTE:
 				noteAttrs.locked = false;
 				Toast.makeText(activity, getString(R.string.unlocked),
 						Toast.LENGTH_SHORT).show();
+				if (lockButton != null) {
+					lockButton.setVisibility(View.VISIBLE);
+				}
+				if (unlockButton != null) {
+					unlockButton.setVisibility(View.INVISIBLE);
+				}
+				if (lockedText != null) {
+					lockedText.setText(R.string.unlocked);
+				}
 				// Fall through and show the note as well
 			case SHOW_NOTE:
 				mText.setText(noteAttrs.getNoteText());

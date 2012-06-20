@@ -147,5 +147,10 @@
     <string name="settings_listitem">Titelstorlek</string>
     <string name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
     <string name="settings_listitem_summary_off">Anteckning är 2 rader</string>
+    
+    <string name="editor_details">Mer</string>
+    <string name="completed">Slutförd</string>
+    <string name="subtask_of">Underuppgift av</string>
+    <string name="security">Säkerhet</string>
 
 </resources>
