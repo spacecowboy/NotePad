@@ -262,7 +262,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		}
 	}
 
-	private static long getIdFromUri(Uri uri) {
+	public static long getIdFromUri(Uri uri) {
 		String newId = uri.getPathSegments().get(
 				NotePad.Notes.NOTE_ID_PATH_POSITION);
 		return Long.parseLong(newId);

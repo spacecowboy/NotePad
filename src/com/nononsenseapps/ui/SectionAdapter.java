@@ -2,6 +2,7 @@ package com.nononsenseapps.ui;
 
 import java.security.InvalidParameterException;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -23,11 +24,12 @@ public class SectionAdapter extends BaseAdapter {
 
 	public final Map<String, SimpleCursorAdapter> sections = new LinkedHashMap<String, SimpleCursorAdapter>();
 	public final ArrayAdapter<String> headers;
+	public final Map<String, Long> sectionIds = new HashMap<String, Long>();
 	private final SimpleCursorAdapter wrappedAdapter;
 	public final static int TYPE_SECTION_HEADER = 0;
 	public final static int TYPE_ITEM = 1;
 	public final static int TYPE_COUNT = TYPE_ITEM + 1;
-	
+
 	private final DataSetObserver subObserver;
 
 	private String state = "";
@@ -48,21 +50,21 @@ public class SectionAdapter extends BaseAdapter {
 	 */
 	public SectionAdapter(Context context, SimpleCursorAdapter wrappedAdapter) {
 		/*
-		 * Same call in both cases since an invalid subadapter doesnt mean
-		 * that the entire sectionadapter is invalid.
+		 * Same call in both cases since an invalid subadapter doesnt mean that
+		 * the entire sectionadapter is invalid.
 		 */
 		subObserver = new DataSetObserver() {
 			@Override
 			public void onChanged() {
 				notifyDataSetChanged();
 			}
-			
+
 			@Override
 			public void onInvalidated() {
 				notifyDataSetChanged();
 			}
 		};
-		
+
 		if (wrappedAdapter == null) {
 			headers = new ArrayAdapter<String>(context, R.layout.list_header,
 					R.id.list_header_title);
@@ -82,6 +84,67 @@ public class SectionAdapter extends BaseAdapter {
 		return headers != null;
 	}
 
+	/**
+	 * Get the Id of the section
+	 */
+	public Long getSectionId(String section) {
+		if (headers == null) {
+			throw new InvalidParameterException(ERRORMSG);
+		}
+		return sectionIds.get(section);
+	}
+	
+	/**
+	 * Get the Id of the section a position is contained in
+	 */
+	public Long getSectionIdOfPos(final int position) {
+		return getSectionId(getSection(position));
+	}
+
+	/**
+	 * Get the section a position is contained in.
+	 */
+	public String getSection(int position) {
+		if (headers == null) {
+			throw new InvalidParameterException(ERRORMSG);
+		}
+		// Top is always a section
+		// Sorting matters!
+		for (int headerPos = 0; headerPos < headers.getCount(); headerPos++) {
+			Adapter adapter = sections.get(headers.getItem(headerPos));
+			// Ignore headers that are empty
+			if (adapter.getCount() > 0) {
+				if (position == 0)
+					return headers.getItem(headerPos);
+
+				position -= 1;
+
+				if (position < adapter.getCount())
+					return headers.getItem(headerPos);
+
+				position -= adapter.getCount();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Add a section to the list with a corresponding ID which can be retrieved
+	 * using getSectionId()
+	 */
+	public void addSection(long sectionId, String section,
+			SimpleCursorAdapter adapter, Comparator<String> comp) {
+		if (headers == null) {
+			throw new InvalidParameterException(ERRORMSG);
+		}
+		if (section != null)
+			sectionIds.put(section, sectionId);
+		addSection(section, adapter, comp);
+	}
+
+	/**
+	 * Add a section to the list with corresponding adapter and defined sorting
+	 */
 	public void addSection(String section, SimpleCursorAdapter adapter,
 			Comparator<String> comp) {
 		if (headers == null) {
@@ -104,7 +167,6 @@ public class SectionAdapter extends BaseAdapter {
 		if (comp != null) {
 			headers.sort(comp);
 		}
-		//notifyDataSetChanged();
 	}
 
 	public void removeSection(String section, Comparator<String> comp) {
@@ -122,8 +184,8 @@ public class SectionAdapter extends BaseAdapter {
 		if (comp != null) {
 			headers.sort(comp);
 		}
-		// dont notify, this is only called during resets
-		// notifyDataSetChanged();
+
+		sectionIds.remove(section);
 	}
 
 	public void swapCursor(Cursor data) {
@@ -131,7 +193,7 @@ public class SectionAdapter extends BaseAdapter {
 			throw new InvalidParameterException(ERRORMSG);
 		}
 		this.wrappedAdapter.swapCursor(data);
-		//notifyDataSetChanged();
+		// notifyDataSetChanged();
 	}
 
 	@Override

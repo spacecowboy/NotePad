@@ -24,8 +24,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
+import com.ericharlow.DragNDrop.DragNDropListView;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.helpers.dualpane.NoNonsenseListFragment;
 import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
@@ -35,6 +37,7 @@ import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.ui.NoteCheckBox;
 import com.nononsenseapps.ui.SectionAdapter;
+import com.nononsenseapps.ui.SectionDropListener;
 import com.nononsenseapps.util.TimeHelper;
 
 import android.content.BroadcastReceiver;
@@ -172,6 +175,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	// private SimpleCursorAdapter mAdapter;
 	private SectionAdapter mSectionAdapter;
+	private final HashSet<Integer> activeLoaders = new HashSet<Integer>();
 
 	private boolean autoOpenNote = false;
 	private long newNoteIdToSelect = -1;
@@ -233,7 +237,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		// setListAdapter(mAdapter);
 
 		// Start out with a progress indicator.
-		//setListShown(false);
+		// setListShown(false);
 
 		// Set list preferences
 		setSingleCheck();
@@ -1460,11 +1464,21 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				activity).getString(MainPrefs.KEY_SORT_TYPE, "");
 		if (shouldDisplaySections(sorting)) {
 			if (mSectionAdapter == null || !mSectionAdapter.isSectioned()) {
+				// Destroy section loaders
+				destroyActiveLoaders();
+
 				mSectionAdapter = new SectionAdapter(activity, null);
 				// mSectionAdapter.changeState(sorting);
 				setListAdapter(mSectionAdapter);
+				final SectionDropListener dropListener = new SectionDropListener(
+						activity, mSectionAdapter);
+				((DragNDropListView) getListView())
+						.setDropListener(dropListener);
 			}
 		} else if (mSectionAdapter == null || mSectionAdapter.isSectioned()) {
+			// Destroy section loaders
+			destroyActiveLoaders();
+
 			mSectionAdapter = new SectionAdapter(activity,
 					getThemedAdapter(null));
 			setListAdapter(mSectionAdapter);
@@ -1476,9 +1490,19 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			if (mCurListId == MainActivity.ALL_NOTES_ID
 					&& PreferenceManager.getDefaultSharedPreferences(activity)
 							.getBoolean(MainPrefs.KEY_LISTHEADERS, false)) {
+				destroyNonListNameLoaders();
+				activeLoaders.add(LOADER_LISTNAMES);
 				getLoaderManager().restartLoader(LOADER_LISTNAMES, args, this);
 			} else if (sorting.equals(MainPrefs.DUEDATESORT)) {
 				Log.d("listproto", "refreshing sectioned date list");
+				destroyNonDateLoaders();
+				activeLoaders.add(LOADER_DATEFUTURE);
+				activeLoaders.add(LOADER_DATENONE);
+				activeLoaders.add(LOADER_DATEOVERDUE);
+				activeLoaders.add(LOADER_DATETODAY);
+				activeLoaders.add(LOADER_DATETOMORROW);
+				activeLoaders.add(LOADER_DATEWEEK);
+				activeLoaders.add(LOADER_DATECOMPLETED);
 				getLoaderManager().restartLoader(LOADER_DATEFUTURE, args, this);
 				getLoaderManager().restartLoader(LOADER_DATENONE, args, this);
 				getLoaderManager()
@@ -1487,9 +1511,15 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				getLoaderManager().restartLoader(LOADER_DATETOMORROW, args,
 						this);
 				getLoaderManager().restartLoader(LOADER_DATEWEEK, args, this);
-				getLoaderManager().restartLoader(LOADER_DATECOMPLETED, args, this);
+				getLoaderManager().restartLoader(LOADER_DATECOMPLETED, args,
+						this);
 			} else if (sorting.equals(MainPrefs.MODIFIEDSORT)) {
 				Log.d("listproto", "refreshing sectioned mod list");
+				destroyNonModLoaders();
+				activeLoaders.add(LOADER_MODPAST);
+				activeLoaders.add(LOADER_MODTODAY);
+				activeLoaders.add(LOADER_MODWEEK);
+				activeLoaders.add(LOADER_MODYESTERDAY);
 				getLoaderManager().restartLoader(LOADER_MODPAST, args, this);
 				getLoaderManager().restartLoader(LOADER_MODTODAY, args, this);
 				getLoaderManager().restartLoader(LOADER_MODWEEK, args, this);
@@ -1497,10 +1527,103 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						this);
 			}
 		} else {
+			destroyNonRegularLoaders();
 			Log.d("listproto", "refreshing normal list");
+			activeLoaders.add(LOADER_REGULARLIST);
 			getLoaderManager().restartLoader(LOADER_REGULARLIST, args, this);
 		}
 
+	}
+
+	private void destroyActiveLoaders() {
+		for (Integer id : activeLoaders.toArray(new Integer[activeLoaders
+				.size()])) {
+			activeLoaders.remove(id);
+			getLoaderManager().destroyLoader(id);
+		}
+	}
+
+	private void destroyListLoaders() {
+		for (Integer id : activeLoaders.toArray(new Integer[activeLoaders
+				.size()])) {
+			if (id > -1) {
+				activeLoaders.remove(id);
+				getLoaderManager().destroyLoader(id);
+			}
+		}
+	}
+	private void destroyModLoaders() {
+		activeLoaders.remove(LOADER_MODPAST);
+		getLoaderManager().destroyLoader(LOADER_MODPAST);
+
+		activeLoaders.remove(LOADER_MODWEEK);
+		getLoaderManager().destroyLoader(LOADER_MODWEEK);
+
+		activeLoaders.remove(LOADER_MODYESTERDAY);
+		getLoaderManager().destroyLoader(LOADER_MODYESTERDAY);
+
+		activeLoaders.remove(LOADER_MODTODAY);
+		getLoaderManager().destroyLoader(LOADER_MODTODAY);
+	}
+	
+	private void destroyDateLoaders() {
+		activeLoaders.remove(LOADER_DATECOMPLETED);
+		getLoaderManager().destroyLoader(LOADER_DATECOMPLETED);
+		
+		activeLoaders.remove(LOADER_DATEFUTURE);
+		getLoaderManager().destroyLoader(LOADER_DATEFUTURE);
+		
+		activeLoaders.remove(LOADER_DATENONE);
+		getLoaderManager().destroyLoader(LOADER_DATENONE);
+		
+		activeLoaders.remove(LOADER_DATEOVERDUE);
+		getLoaderManager().destroyLoader(LOADER_DATEOVERDUE);
+		
+		activeLoaders.remove(LOADER_DATETODAY);
+		getLoaderManager().destroyLoader(LOADER_DATETODAY);
+		
+		activeLoaders.remove(LOADER_DATETOMORROW);
+		getLoaderManager().destroyLoader(LOADER_DATETOMORROW);
+		
+		activeLoaders.remove(LOADER_DATEWEEK);
+		getLoaderManager().destroyLoader(LOADER_DATEWEEK);
+	}
+	
+	private void destroyListNameLoaders() {
+		activeLoaders.remove(LOADER_LISTNAMES);
+		getLoaderManager().destroyLoader(LOADER_LISTNAMES);
+	}
+	
+	private void destroyRegularLoaders() {
+		activeLoaders.remove(LOADER_REGULARLIST);
+		getLoaderManager().destroyLoader(LOADER_REGULARLIST);
+	}
+
+	private void destroyNonDateLoaders() {
+		destroyListNameLoaders();
+		destroyModLoaders();
+		destroyListLoaders();
+		destroyRegularLoaders();
+	}
+
+	private void destroyNonListNameLoaders() {
+		destroyDateLoaders();
+		destroyModLoaders();
+		destroyRegularLoaders();
+	}
+
+	private void destroyNonModLoaders() {
+		destroyListNameLoaders();
+		destroyDateLoaders();
+		destroyListLoaders();
+		destroyRegularLoaders();
+	}
+
+	private void destroyNonRegularLoaders() {
+		destroyListNameLoaders();
+		destroyModLoaders();
+		destroyListLoaders();
+		destroyDateLoaders();
 	}
 
 	private CursorLoader getAllNotesLoader(long listId) {
@@ -1856,15 +1979,22 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private void addSectionToAdapter(String sectionname, Cursor data,
 			Comparator<String> comp) {
+		addSectionToAdapter(-1, sectionname, data, comp);
+	}
+
+	private void addSectionToAdapter(long sectionId, String sectionname,
+			Cursor data, Comparator<String> comp) {
 		// Make sure an adapter exists
-		// TODO not add empty cursors?
 		SimpleCursorAdapter adapter = mSectionAdapter.sections.get(sectionname);
 		if (adapter == null) {
 			adapter = getThemedAdapter(null);
-			mSectionAdapter.addSection(sectionname, adapter, comp);
+			if (sectionId > -1)
+				mSectionAdapter.addSection(sectionId, sectionname, adapter,
+						comp);
+			else
+				mSectionAdapter.addSection(sectionname, adapter, comp);
 		}
 		adapter.swapCursor(data);
-		// mSectionAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -1899,6 +2029,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				// Start loader for this list
 				Log.d("listproto", "Starting loader for " + sectionname
 						+ " id " + listid);
+				activeLoaders.add((int) listid);
 				getLoaderManager().restartLoader((int) listid, null, this);
 			}
 			break;
@@ -1969,16 +2100,16 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				Log.d("listproto", "Loader finished for list id: "
 						+ sectionname);
 
-				addSectionToAdapter(sectionname, data, alphaComparator);
+				addSectionToAdapter(listid, sectionname, data, alphaComparator);
 			}
 			break;
 		}
 
 		// The list should now be shown.
 		if (isResumed()) {
-			//setListShown(true);
+			// setListShown(true);
 		} else {
-			//setListShownNoAnimation(true);
+			// setListShownNoAnimation(true);
 		}
 
 		// Reselect current note in list, if possible
