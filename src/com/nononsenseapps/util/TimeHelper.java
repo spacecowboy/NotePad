@@ -1,11 +1,5 @@
 package com.nononsenseapps.util;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.TimeZone;
-
 import android.text.format.Time;
 import android.util.Log;
 
@@ -106,7 +100,7 @@ public class TimeHelper {
 
 	/**
 	 * Given the argument i, will return todays date + i days, formatted as
-	 * RFC3339
+	 * RFC3339 in UTC time zone
 	 */
 	public static String get3339DaysFromToday(int i) {
 		Time localtime = new Time(Time.getCurrentTimezone());

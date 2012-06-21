@@ -69,6 +69,10 @@ public class SectionDropListener implements DropListener {
 
 	/**
 	 * This structure won't work in this case
+	 * 
+	 * Since you are always moving the "parent", it is quite easy to get the
+	 * final position. the parent sets its own parent to equal the target drop.
+	 * Position is calculated from the drop.
 	 */
 	private boolean toPosition(final int from, final int to,
 			ContentValues values) {
@@ -84,8 +88,7 @@ public class SectionDropListener implements DropListener {
 			return false;
 	}
 
-	private void toDate(final int from, final int to,
-			ContentValues values) {
+	private void toDate(final int from, final int to, ContentValues values) {
 		if (NotesListFragment.SECTION_STATE_DATE.equals(adapter.getState())) {
 			Log.d("dragdate", "toDate");
 			// Get the targeted date. This will be a localized string like
@@ -124,17 +127,23 @@ public class SectionDropListener implements DropListener {
 				}
 				// Else do the best we can with the header
 				else {
-					if (context.getString(R.string.date_header_none).equals(targetDate)) {
+					if (context.getString(R.string.date_header_none).equals(
+							targetDate)) {
 						newDate = "";
-					} else if (context.getString(R.string.date_header_7days).equals(targetDate)) {
+					} else if (context.getString(R.string.date_header_7days)
+							.equals(targetDate)) {
 						newDate = TimeHelper.get3339DaysFromToday(3);
-					} else if (context.getString(R.string.date_header_future).equals(targetDate)) {
+					} else if (context.getString(R.string.date_header_future)
+							.equals(targetDate)) {
 						newDate = TimeHelper.get3339DaysFromToday(8);
-					} else if (context.getString(R.string.date_header_overdue).equals(targetDate)) {
+					} else if (context.getString(R.string.date_header_overdue)
+							.equals(targetDate)) {
 						newDate = TimeHelper.get3339DaysFromToday(-1);
-					} else if (context.getString(R.string.date_header_today).equals(targetDate)) {
+					} else if (context.getString(R.string.date_header_today)
+							.equals(targetDate)) {
 						newDate = TimeHelper.get3339DaysFromToday(0);
-					} else if (context.getString(R.string.date_header_tomorrow).equals(targetDate)) {
+					} else if (context.getString(R.string.date_header_tomorrow)
+							.equals(targetDate)) {
 						newDate = TimeHelper.get3339DaysFromToday(1);
 					}
 				}

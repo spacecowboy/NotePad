@@ -17,6 +17,7 @@
 package com.nononsenseapps.notepad;
 
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.NotePad.Notes;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.notepad.widget.ListWidgetProvider;
@@ -51,6 +52,7 @@ import android.util.Log;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
@@ -824,16 +826,41 @@ public class NotePadProvider extends ContentProvider implements
 		 * contains null. If no records were selected, then the Cursor object is
 		 * empty, and Cursor.getCount() returns 0.
 		 */
-		Cursor c;
+		Cursor c = null;
 
-		c = qb.query(db, // The database to query
-				projection, // The columns to return from the query
-				selection, // The columns for the where clause
-				selectionArgs, // The values for the where clause
-				null, // don't group the rows
-				null, // don't filter by row groups
-				orderBy // The sort order
-		);
+		// Do recursive query if sort order is by position
+		if (orderBy.contains(Notes.POSSUBSORT_SORT_TYPE)) {
+			String sql;
+			try {
+				Resources res = getContext().getResources();
+				InputStream in_s = res.openRawResource(R.raw.subtask_query);
+
+				byte[] b = new byte[in_s.available()];
+				in_s.read(b);
+				sql = new String(b);
+				//sql += "select " + ",".join(projection) + " from cte "
+				//sql += "where " + ",".join(selection)"
+				
+				Log.d("dragpos", sql);
+
+				//String sqlWhere = "WHERE followed by array";
+				//c = db.rawQuery(sql, selectionArgs);
+
+			} catch (Exception e) {
+				Log.e(TAG, "recursive query failed: " + e);
+			}
+		}
+
+		// If no query has succeeded
+		if (c == null)
+			c = qb.query(db, // The database to query
+					projection, // The columns to return from the query
+					selection, // The columns for the where clause
+					selectionArgs, // The values for the where clause
+					null, // don't group the rows
+					null, // don't filter by row groups
+					orderBy // The sort order
+			);
 
 		// Tells the Cursor what URI to watch, so it knows when its source data
 		// changes
