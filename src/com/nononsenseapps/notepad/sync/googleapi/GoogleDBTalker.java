@@ -48,6 +48,7 @@ public class GoogleDBTalker {
 			NotePad.Notes.COLUMN_NAME_LIST,
 			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
 			NotePad.Notes.COLUMN_NAME_PARENT,
+			NotePad.Notes.COLUMN_NAME_PREVIOUS,
 			NotePad.Notes.COLUMN_NAME_POSITION,
 			NotePad.Notes.COLUMN_NAME_HIDDEN, NotePad.GTasks.COLUMN_NAME_DB_ID,
 			NotePad.Notes.COLUMN_NAME_POSSUBSORT, NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
@@ -291,7 +292,7 @@ public class GoogleDBTalker {
 				task.listdbid = cursor.getLong(cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
 
-				task.parent = cursor.getString(cursor
+				task.localparent = cursor.getString(cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_PARENT));
 				task.position = cursor.getString(cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_POSITION));
@@ -301,8 +302,8 @@ public class GoogleDBTalker {
 				task.modified = cursor.getInt(cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_MODIFIED));
 				
-				task.indentLevel = cursor.getInt(cursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL));
-				task.possort = cursor.getString(cursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_POSSUBSORT));
+				//task.indentLevel = cursor.getInt(cursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL));
+				//task.possort = cursor.getString(cursor.getColumnIndex(NotePad.Notes.COLUMN_NAME_POSSUBSORT));
 
 				// convert modification time to timestamp
 				long modTime = cursor

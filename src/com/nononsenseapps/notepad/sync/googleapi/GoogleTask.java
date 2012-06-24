@@ -37,6 +37,7 @@ public class GoogleTask {
 	private static final String COMPLETED = "completed";
 	private static final String NEEDSACTION = "needsAction";
 	private static final String PARENT = "parent";
+	private static final String PREVIOUS = "previous";
 	private static final String POSITION = "position";
 	private static final String HIDDEN = "hidden";
 	public String id = null;
@@ -46,7 +47,10 @@ public class GoogleTask {
 	public String notes = null;
 	public String status = null;
 	public String dueDate = null;
-	public String parent = null;
+	public String localprevious = null;
+	public String localparent = null;
+	public String remoteparent = null;
+	public String remoteprevious = null;
 	public String position = null;
 	
 	public int modified = 0;
@@ -57,9 +61,6 @@ public class GoogleTask {
 	public long listdbid = -1;
 	public boolean didRemoteInsert = false;
 	
-	// These are local values and not synced
-	public String possort = "";
-	public int indentLevel = 0;
 	
 	public JSONObject json = null;
 
@@ -75,7 +76,9 @@ public class GoogleTask {
 			notes = jsonTask.getString(NOTES);
 		status  = jsonTask.getString(STATUS);
 		if (jsonTask.has(PARENT))
-			parent  = jsonTask.getString(PARENT);
+			remoteparent  = jsonTask.getString(PARENT);
+		if (jsonTask.has(PREVIOUS))
+			remoteprevious  = jsonTask.getString(PREVIOUS);
 		position  = jsonTask.getString(POSITION);
 		if (jsonTask.has(DUE))
 			dueDate = jsonTask.getString(DUE);
@@ -156,14 +159,12 @@ public class GoogleTask {
 		values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, modified);
 		values.put(NotePad.Notes.COLUMN_NAME_DELETED, deleted);
 		values.put(NotePad.Notes.COLUMN_NAME_POSITION, position);
-		values.put(NotePad.Notes.COLUMN_NAME_PARENT, parent);
+		values.put(NotePad.Notes.COLUMN_NAME_PARENT, localparent);
+		values.put(NotePad.Notes.COLUMN_NAME_PREVIOUS, localprevious);
 		values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, hidden);
 		
-		values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, possort);
-		values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, indentLevel);
-		
-		// TODO add indent level here when it exists in database
-		//values.put(NotePad.Notes.COLUMN_NAME_ABCSUBSORT, abcsort);
+		//values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, possort);
+		//values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, indentLevel);
 		
 		return values;
 	}

@@ -247,48 +247,48 @@ public class GoogleTaskList {
 	 * 
 	 * Will also set indent levels on objects
 	 */
-	public void setSortingValues(ArrayList<GoogleTask> modifiedTasks,
-			ArrayList<GoogleTask> allTasks) {
-		// First clear all the position values as we will do a recursive
-		// recalculation on these objects
-		for (GoogleTask task : modifiedTasks) {
-			task.possort = "";
-			task.indentLevel = 0;
-		}
-		// Now, set the sorting values for these objects
-		for (GoogleTask task : modifiedTasks) {
-			getPosSort(task, modifiedTasks, allTasks);
-		}
-		// All sort values are set. It is OK to save now.
-	}
+//	public void setSortingValues(ArrayList<GoogleTask> modifiedTasks,
+//			ArrayList<GoogleTask> allTasks) {
+//		// First clear all the position values as we will do a recursive
+//		// recalculation on these objects
+//		for (GoogleTask task : modifiedTasks) {
+//			task.possort = "";
+//			task.indentLevel = 0;
+//		}
+//		// Now, set the sorting values for these objects
+//		for (GoogleTask task : modifiedTasks) {
+//			getPosSort(task, modifiedTasks, allTasks);
+//		}
+//		// All sort values are set. It is OK to save now.
+//	}
 
 	/**
 	 * This will write the position value if none exist
 	 */
-	private String getPosSort(GoogleTask task, ArrayList<GoogleTask> modifiedTasks, ArrayList<GoogleTask> allTasks) {
-		if (task.possort.isEmpty()) {
-			String sortingValue = "";
-			if (task.parent != null && !task.parent.isEmpty()) {
-				GoogleTask parent = getTaskWithRemoteId(task.parent, modifiedTasks);
-				if (parent == null) {
-					// Try all tasks instead
-					parent = getTaskWithRemoteId(task.parent, allTasks);
-				}
-				if (parent != null) {
-					sortingValue += getPosSort(parent, modifiedTasks, allTasks);
-					task.indentLevel = parent.indentLevel + 1;
-				}
-			}
-			if (task.position != null) {
-				sortingValue += task.position;
-			}
-			sortingValue += ".";
-
-			task.possort = sortingValue;
-		}
-		Log.d(TAG, "indent: " + task.indentLevel);
-		return task.possort;
-	}
+//	private String getPosSort(GoogleTask task, ArrayList<GoogleTask> modifiedTasks, ArrayList<GoogleTask> allTasks) {
+//		if (task.possort.isEmpty()) {
+//			String sortingValue = "";
+//			if (task.parent != null && !task.parent.isEmpty()) {
+//				GoogleTask parent = getTaskWithRemoteId(task.parent, modifiedTasks);
+//				if (parent == null) {
+//					// Try all tasks instead
+//					parent = getTaskWithRemoteId(task.parent, allTasks);
+//				}
+//				if (parent != null) {
+//					sortingValue += getPosSort(parent, modifiedTasks, allTasks);
+//					task.indentLevel = parent.indentLevel + 1;
+//				}
+//			}
+//			if (task.position != null) {
+//				sortingValue += task.position;
+//			}
+//			sortingValue += ".";
+//
+//			task.possort = sortingValue;
+//		}
+//		Log.d(TAG, "indent: " + task.indentLevel);
+//		return task.possort;
+//	}
 
 	/**
 	 * This will write the position value if none exists

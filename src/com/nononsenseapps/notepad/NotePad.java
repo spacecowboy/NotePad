@@ -203,6 +203,12 @@ public final class NotePad {
 		public static final String COLUMN_NAME_INDENTLEVEL = "indentlevel";
 		public static final String COLUMN_NAME_POSSUBSORT = "possubsort";
 		public static final String COLUMN_NAME_LOCALHIDDEN = "localhidden";
+		
+		// user sorting
+		public static final String COLUMN_NAME_TRUEPOS = "truepos";
+		public static final String COLUMN_NAME_PREVTRUEPOS = "prevtruepos";
+		public static final String COLUMN_NAME_NEXTTRUEPOS = "nexttruepos";
+		public static final String COLUMN_NAME_PREVIOUS = "previous";
 
 		// Password locking
 		public static final String COLUMN_NAME_LOCKED = "locked";
@@ -232,6 +238,10 @@ public final class NotePad {
 
 		public static final String DEFAULT_SORT_TYPE = ALPHABETIC_SORT_TYPE;
 		public static final String DEFAULT_SORT_ORDERING = ASCENDING_SORT_ORDERING;
+		
+		// Position constants
+		public static final String HEAD = "0";
+		public static final String TAIL = "1";
 
 		public static String SORT_ORDER = ALPHABETIC_ASC_ORDER;
 

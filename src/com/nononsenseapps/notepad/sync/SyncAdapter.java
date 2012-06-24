@@ -324,23 +324,23 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 								.commit();
 
 						// Now, set sorting values.
-						for (GoogleTaskList list : tasksInListToSaveToDB
-								.keySet()) {
-							if (SYNC_DEBUG_PRINTS)
-								Log.d(TAG, "Setting position values in: "
-										+ list.id);
-							ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
-									.get(list);
-							if (tasks != null) {
-								if (SYNC_DEBUG_PRINTS)
-									Log.d(TAG,
-											"Setting position values for #tasks: "
-													+ tasks.size());
-								ArrayList<GoogleTask> allListTasks = allTasksInList
-										.get(list.dbId);
-								list.setSortingValues(tasks, allListTasks);
-							}
-						}
+//						for (GoogleTaskList list : tasksInListToSaveToDB
+//								.keySet()) {
+//							if (SYNC_DEBUG_PRINTS)
+//								Log.d(TAG, "Setting position values in: "
+//										+ list.id);
+//							ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
+//									.get(list);
+//							if (tasks != null) {
+//								if (SYNC_DEBUG_PRINTS)
+//									Log.d(TAG,
+//											"Setting position values for #tasks: "
+//													+ tasks.size());
+//								ArrayList<GoogleTask> allListTasks = allTasksInList
+//										.get(list.dbId);
+//								list.setSortingValues(tasks, allListTasks);
+//							}
+//						}
 
 						// Save to database in a single transaction
 						if (SYNC_DEBUG_PRINTS)
