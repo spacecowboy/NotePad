@@ -1,7 +1,0 @@
-with cte as (
-        select * from notes c where c.gtasks_parent is '' or c.gtasks_parent is NULL
-        union all
-        select * from cte p, notes c where c.gtasks_parent = p._id
-        and c.gtasks_parent <> c._id
-    )
-    select * from cte
