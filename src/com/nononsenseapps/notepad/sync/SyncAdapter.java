@@ -24,6 +24,7 @@ import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleDBTalker;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
+import com.nononsenseapps.util.BiMap;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -44,6 +45,7 @@ import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -154,6 +156,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						// Get the latest hash value we saw on the server
 						String localEtag = settings.getString(
 								PREFS_LAST_SYNC_ETAG, "");
+						
+						// This is so we can set parent position values properly during upload using remote ids
+						BiMap<Long, String> idMap = new BiMap<Long, String>();
 
 						// Prepare lists for items
 						ArrayList<GoogleTaskList> listsToSaveToDB = new ArrayList<GoogleTaskList>();
@@ -164,7 +169,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 						// gets all tasks in one query
 						ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(
-								allTasksInList, tasksInListToUpload);
+								allTasksInList, tasksInListToUpload, idMap);
 
 						ArrayList<GoogleTaskList> listsToUpload = new ArrayList<GoogleTaskList>();
 						ArrayList<GoogleTaskList> allLocalLists = new ArrayList<GoogleTaskList>();
@@ -198,7 +203,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 														+ list.id);
 									tasksInListToSaveToDB.put(list, list
 											.downloadModifiedTasks(apiTalker,
-													allTasks, lastUpdate));
+													allTasks, lastUpdate, idMap));
 								}
 							}
 						}
@@ -294,12 +299,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 							ArrayList<GoogleTask> tasksToUpload = tasksInListToUpload
 									.get(list.dbId);
 							if (tasksToUpload != null) {
+								// It is vital that we upload the tasks in the correct order
+								// or we will not maintain the positions
+								Collections.sort(tasksToUpload, GoogleTask.LOCALORDER);
 								for (GoogleTask task : tasksToUpload) {
+									// Update position fields with data from previous uploads
+									task.remoteparent = idMap.get(task.localparent);
+									task.remoteprevious = idMap.get(task.localprevious);
+									
 									GoogleTask result = apiTalker.uploadTask(
 											task, list);
 									uploadedStuff = true;
 									// Task now has relevant fields set. Add to
 									// DB-list
+									idMap.put(result.dbId, result.id);
 									if (tasksInListToSaveToDB.get(list) == null)
 										tasksInListToSaveToDB.put(list,
 												new ArrayList<GoogleTask>());
@@ -346,7 +359,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						if (SYNC_DEBUG_PRINTS)
 							Log.d(TAG, "Save stuff to DB");
 						dbTalker.SaveToDatabase(listsToSaveToDB,
-								tasksInListToSaveToDB);
+								tasksInListToSaveToDB, idMap);
 						// Commit it
 						ContentProviderResult[] result = dbTalker.apply();
 

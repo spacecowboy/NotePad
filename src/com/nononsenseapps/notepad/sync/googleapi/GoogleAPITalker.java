@@ -153,7 +153,7 @@ public class GoogleAPITalker {
 
 	private static String TaskURL_ETAG_ID_UPDATED(String taskId, String listId) {
 		return BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId
-				+ "?fields=id,etag,updated&" + AuthUrlEnd();
+				+ "?fields=id,etag,updated,position,parent&" + AuthUrlEnd();
 	}
 
 	private static String AllTasksCompletedMin(String listId, String timestamp) {
@@ -553,7 +553,9 @@ public class GoogleAPITalker {
 
 	/**
 	 * Returns an object if all went well. Returns null if a conflict was
-	 * detected. Will return a partial result containing only id and etag
+	 * detected. Will set only remote id, etag, position and parent fields.
+	 * 
+	 * Updates the task in place and also returns it.
 	 */
 	public GoogleTask uploadTask(GoogleTask task, GoogleTaskList pList)
 			throws ClientProtocolException, JSONException, IOException {
@@ -619,8 +621,16 @@ public class GoogleAPITalker {
 			// Will return a task, containing id and etag. always update
 			// fields
 			// task.etag = jsonResponse.getString("etag");
-			task.id = jsonResponse.getString("id");
-			task.updated = jsonResponse.getString("updated");
+			task.id = jsonResponse.getString(GoogleTask.ID);
+			task.updated = jsonResponse.getString(GoogleTask.UPDATED);
+			if (jsonResponse.has(GoogleTask.PARENT))
+				task.remoteparent = jsonResponse.getString(GoogleTask.PARENT);
+			else
+				task.remoteparent = null;
+			if (jsonResponse.has(GoogleTask.POSITION))
+				task.position = jsonResponse.getString(GoogleTask.POSITION);
+			else
+				task.position = null;
 		}
 		// } catch (PreconditionException e) {
 		// // There was a conflict, return null in that case
