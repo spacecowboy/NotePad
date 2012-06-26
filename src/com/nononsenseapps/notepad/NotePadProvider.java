@@ -253,7 +253,7 @@ public class NotePadProvider extends ContentProvider implements
 
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LOCKED,
 				NotePad.Notes.COLUMN_NAME_LOCKED);
-		
+
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_PREVIOUS,
 				NotePad.Notes.COLUMN_NAME_PREVIOUS);
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_PREVTRUEPOS,
@@ -452,17 +452,18 @@ public class NotePadProvider extends ContentProvider implements
 
 			values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, "");
 			values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
-			
-			final ContentValues posValues = getNewPositionValuesFor(null, null, listId, db);
-			
+
+			final ContentValues posValues = getNewPositionValuesFor(null, null,
+					listId, db);
+
 			values.putAll(posValues);
 
-//			values.put(Notes.COLUMN_NAME_PREVTRUEPOS, Notes.HEAD);
-//			values.put(Notes.COLUMN_NAME_NEXTTRUEPOS, Notes.TAIL);
-//			values.put(Notes.COLUMN_NAME_TRUEPOS,
-//					Notes.between(Notes.HEAD, Notes.TAIL));
-//			values.putNull(Notes.COLUMN_NAME_PARENT);
-//			values.putNull(Notes.COLUMN_NAME_PREVIOUS);
+			// values.put(Notes.COLUMN_NAME_PREVTRUEPOS, Notes.HEAD);
+			// values.put(Notes.COLUMN_NAME_NEXTTRUEPOS, Notes.TAIL);
+			// values.put(Notes.COLUMN_NAME_TRUEPOS,
+			// Notes.between(Notes.HEAD, Notes.TAIL));
+			// values.putNull(Notes.COLUMN_NAME_PARENT);
+			// values.putNull(Notes.COLUMN_NAME_PREVIOUS);
 
 			return db.insert(NotePad.Notes.TABLE_NAME, null, values);
 		}
@@ -498,8 +499,9 @@ public class NotePadProvider extends ContentProvider implements
 					+ " TEXT DEFAULT '' NOT NULL,"
 					+ NotePad.Notes.COLUMN_NAME_NEXTTRUEPOS
 					+ " TEXT DEFAULT '' NOT NULL,"
-					+ NotePad.Notes.COLUMN_NAME_PREVIOUS + " TEXT DEFAULT NULL,"
-					+ NotePad.Notes.COLUMN_NAME_PARENT + " TEXT DEFAULT NULL,"
+					+ NotePad.Notes.COLUMN_NAME_PREVIOUS
+					+ " TEXT DEFAULT NULL," + NotePad.Notes.COLUMN_NAME_PARENT
+					+ " TEXT DEFAULT NULL,"
 
 					+ NotePad.Notes.COLUMN_NAME_LOCKED + " INTEGER DEFAULT 0,"
 
@@ -716,9 +718,10 @@ public class NotePadProvider extends ContentProvider implements
 			String selection, String[] selectionArgs, String sortOrder) {
 		if (SyncAdapter.SYNC_DEBUG_PRINTS)
 			Log.d(TAG, "query");
-		
+
 		// Only allow ascending order for truepos
-		if (sortOrder != null && sortOrder.startsWith(Notes.POSSUBSORT_SORT_TYPE))
+		if (sortOrder != null
+				&& sortOrder.startsWith(Notes.POSSUBSORT_SORT_TYPE))
 			sortOrder = Notes.POSSUBSORT_SORT_TYPE;
 
 		// Constructs a new query builder and sets its table name
@@ -1242,9 +1245,8 @@ public class NotePadProvider extends ContentProvider implements
 				values.getAsLong(Notes.COLUMN_NAME_PREVIOUS), listId, db);
 
 		values.putAll(posValues);
-		
+
 		// Need to remember the task at that position
-		
 
 		// Performs the insert and returns the ID of the new note.
 		long rowId = db.insert(NotePad.Notes.TABLE_NAME, // The table to insert
@@ -1266,7 +1268,7 @@ public class NotePadProvider extends ContentProvider implements
 					posValues.getAsString(Notes.COLUMN_NAME_TRUEPOS), null,
 					listId, db);
 			bumpGTaskAt(values.getAsLong(Notes.COLUMN_NAME_PARENT),
-					values.getAsLong(Notes.COLUMN_NAME_PREVIOUS), rowId, db);
+					values.getAsLong(Notes.COLUMN_NAME_PREVIOUS), rowId, listId, db);
 
 			// Creates a URI with the note ID pattern and the new row ID
 			// appended to it.
@@ -1309,16 +1311,21 @@ public class NotePadProvider extends ContentProvider implements
 		final String nextTruePos = currentValues
 				.getAsString(Notes.COLUMN_NAME_NEXTTRUEPOS);
 
+		final int indent = currentValues
+				.getAsInteger(Notes.COLUMN_NAME_INDENTLEVEL);
+
 		posValues.put(Notes.COLUMN_NAME_PREVTRUEPOS, prevTruePos);
 		posValues.put(Notes.COLUMN_NAME_NEXTTRUEPOS, nextTruePos);
 		posValues.put(Notes.COLUMN_NAME_TRUEPOS,
 				Notes.between(prevTruePos, nextTruePos));
-		
+
+		posValues.put(Notes.COLUMN_NAME_INDENTLEVEL, indent);
+
 		if (gTaskParent == null)
 			posValues.putNull(Notes.COLUMN_NAME_PARENT);
 		if (gTaskPrevious == null)
 			posValues.putNull(Notes.COLUMN_NAME_PREVIOUS);
-		
+
 		return posValues;
 	}
 
@@ -1335,39 +1342,40 @@ public class NotePadProvider extends ContentProvider implements
 			final Long listId, SQLiteDatabase db) {
 		final ContentValues posValues = new ContentValues();
 		Cursor c;
+		int indent;
+		boolean isParent = false;
 		if (gTaskPrevious != null) {
 			// There exists a task there
 			Log.d("posGetVals", "we have previous");
 
-			// prevTruePos = gTaskNext.prevTruePos
-			// nextTruePOs = gTaskNext.truePos
+			indent = 0;
 
 			c = db.query(NotePad.Notes.TABLE_NAME, new String[] { Notes._ID,
-					Notes.COLUMN_NAME_PREVTRUEPOS, Notes.COLUMN_NAME_TRUEPOS },
-					NotePad.Notes._ID + " IS ?",
-					new String[] { gTaskPrevious.toString() }, null, null,
-					Notes.COLUMN_NAME_TRUEPOS);
+					Notes.COLUMN_NAME_PREVTRUEPOS, Notes.COLUMN_NAME_TRUEPOS,
+					Notes.COLUMN_NAME_INDENTLEVEL }, NotePad.Notes._ID
+					+ " IS ?", new String[] { gTaskPrevious.toString() }, null,
+					null, Notes.COLUMN_NAME_TRUEPOS);
 		} else if (gTaskParent != null) {
 			// Parent is be the previous task
 			Log.d("posGetVals", "we have parent");
+			isParent = true;
 
-			// prevTruePos = gTaskNext.prevTruePos
-			// nextTruePOs = gTaskNext.truePos
+			indent = 1;
 
 			c = db.query(NotePad.Notes.TABLE_NAME, new String[] { Notes._ID,
-					Notes.COLUMN_NAME_PREVTRUEPOS, Notes.COLUMN_NAME_TRUEPOS },
-					NotePad.Notes._ID + " IS ?",
-					new String[] { gTaskParent.toString() }, null, null,
-					Notes.COLUMN_NAME_TRUEPOS);
+					Notes.COLUMN_NAME_TRUEPOS, Notes.COLUMN_NAME_NEXTTRUEPOS,
+					Notes.COLUMN_NAME_INDENTLEVEL }, NotePad.Notes._ID
+					+ " IS ?", new String[] { gTaskParent.toString() }, null,
+					null, Notes.COLUMN_NAME_TRUEPOS);
 		} else {
 			// Previous is first note
 			Log.d("posGetVals", "we have note at top");
 
-			// prevTruePos = Notes.HEAD;
-			// nextTruePOs = gTaskNext.truePos
+			indent = 0;
 
 			c = db.query(NotePad.Notes.TABLE_NAME, new String[] { Notes._ID,
-					Notes.COLUMN_NAME_PREVTRUEPOS, Notes.COLUMN_NAME_TRUEPOS },
+					Notes.COLUMN_NAME_PREVTRUEPOS, Notes.COLUMN_NAME_TRUEPOS,
+					Notes.COLUMN_NAME_INDENTLEVEL },
 					NotePad.Notes.COLUMN_NAME_PREVTRUEPOS + " IS ? AND "
 							+ Notes.COLUMN_NAME_LIST + " IS ?", new String[] {
 							Notes.HEAD, listId.toString() }, null, null,
@@ -1378,17 +1386,34 @@ public class NotePadProvider extends ContentProvider implements
 
 		if (c.moveToFirst()) {
 			Log.d("posGetVals", "calculating from note we found");
-			// Previous is the previous of this note
-			posValues.put(Notes.COLUMN_NAME_PREVTRUEPOS, c.getString(c
-					.getColumnIndex(Notes.COLUMN_NAME_PREVTRUEPOS)));
-			// Next is this note
-			posValues.put(Notes.COLUMN_NAME_NEXTTRUEPOS,
-					c.getString(c.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS)));
+
+			if (isParent) {
+				// Previous is this
+				posValues.put(Notes.COLUMN_NAME_PREVTRUEPOS, c.getString(c
+						.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS)));
+				// Next is the next
+				posValues.put(Notes.COLUMN_NAME_NEXTTRUEPOS, c.getString(c
+						.getColumnIndex(Notes.COLUMN_NAME_NEXTTRUEPOS)));
+			} else {
+				// Previous is the previous of this note
+				posValues.put(Notes.COLUMN_NAME_PREVTRUEPOS, c.getString(c
+						.getColumnIndex(Notes.COLUMN_NAME_PREVTRUEPOS)));
+				// Next is this note
+				posValues.put(Notes.COLUMN_NAME_NEXTTRUEPOS, c.getString(c
+						.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS)));
+			}
+
+			posValues
+					.put(Notes.COLUMN_NAME_INDENTLEVEL,
+							indent
+									+ c.getInt(c
+											.getColumnIndex(Notes.COLUMN_NAME_INDENTLEVEL)));
 
 		} else {
 			Log.d("posGetVals", "we must have an empty list");
 			posValues.put(Notes.COLUMN_NAME_PREVTRUEPOS, Notes.HEAD);
 			posValues.put(Notes.COLUMN_NAME_NEXTTRUEPOS, Notes.TAIL);
+			posValues.put(Notes.COLUMN_NAME_INDENTLEVEL, indent);
 		}
 
 		c.close();
@@ -1425,7 +1450,7 @@ public class NotePadProvider extends ContentProvider implements
 	 * Returns number of database rows updated
 	 */
 	private static int bumpGTaskAt(final Long parent, final Long previous,
-			final Long newTaskId, SQLiteDatabase db) {
+			final Long newTaskId, final Long newList, SQLiteDatabase db) {
 		final ContentValues values = new ContentValues();
 		values.put(Notes.COLUMN_NAME_PREVIOUS, newTaskId);
 
@@ -1433,8 +1458,9 @@ public class NotePadProvider extends ContentProvider implements
 		String pre = previous != null ? previous.toString() : null;
 
 		return db.update(Notes.TABLE_NAME, values, Notes.COLUMN_NAME_PARENT
-				+ " IS ? AND " + Notes.COLUMN_NAME_PREVIOUS + " IS ? AND " + Notes._ID + " IS NOT ?",
-				new String[] { par, pre, Long.toString(newTaskId) });
+				+ " IS ? AND " + Notes.COLUMN_NAME_PREVIOUS + " IS ? AND "
+				+ Notes._ID + " IS NOT ? AND " + Notes.COLUMN_NAME_LIST + " IS ?",
+				new String[] { par, pre, Long.toString(newTaskId), Long.toString(newList) });
 	}
 
 	synchronized private Uri insertList(Uri uri, ContentValues initialValues) {
@@ -2271,9 +2297,11 @@ public class NotePadProvider extends ContentProvider implements
 						.getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
 				final String parentS = c.getString(c
 						.getColumnIndex(Notes.COLUMN_NAME_PARENT));
-				
-				final Long previous = previousS == null ? null : Long.parseLong(previousS);
-				final Long parent = parentS == null ? null : Long.parseLong(parentS);
+
+				final Long previous = previousS == null ? null : Long
+						.parseLong(previousS);
+				final Long parent = parentS == null ? null : Long
+						.parseLong(parentS);
 
 				// Update children and get values to set on neighbours
 				final ContentValues neighbourVals = updateChildrenOfDeleted(db,
@@ -2350,16 +2378,19 @@ public class NotePadProvider extends ContentProvider implements
 						.getColumnIndex(Notes.COLUMN_NAME_NEXTTRUEPOS));
 				final Long listId = c.getLong(c
 						.getColumnIndex(Notes.COLUMN_NAME_LIST));
-				
+
 				final String previousS = c.getString(c
 						.getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
 				final String parentS = c.getString(c
 						.getColumnIndex(Notes.COLUMN_NAME_PARENT));
-				
-				final Long previous = previousS == null ? null : Long.parseLong(previousS);
-				final Long parent = parentS == null ? null : Long.parseLong(parentS);
-				
-				Log.d("posreordertest", "Gotten as strings: " + previousS + ", " + parentS);
+
+				final Long previous = previousS == null ? null : Long
+						.parseLong(previousS);
+				final Long parent = parentS == null ? null : Long
+						.parseLong(parentS);
+
+				Log.d("posreordertest", "Gotten as strings: " + previousS
+						+ ", " + parentS);
 
 				// Only do position changes if these fields have actually
 				// changed
@@ -2367,12 +2398,17 @@ public class NotePadProvider extends ContentProvider implements
 				if (listChanged || newParent != parent
 						|| newPrevious != previous) {
 					Log.d("posreorder", "we have changes fields!");
-					Log.d("posreorder", "list changed: " + Boolean.toString(listChanged)
-							+ ", parent changed: " + Boolean.toString(newParent != parent)
-							+ ", previous changed: " + Boolean.toString(newPrevious != previous));
-					
-					Log.d("posreorder", "parent: " + parent + ", newParent: " + newParent);
-					Log.d("posreorder", "previous: " + previous + ", newPrevious: " + newPrevious);
+					Log.d("posreorder",
+							"list changed: " + Boolean.toString(listChanged)
+									+ ", parent changed: "
+									+ Boolean.toString(newParent != parent)
+									+ ", previous changed: "
+									+ Boolean.toString(newPrevious != previous));
+
+					Log.d("posreorder", "parent: " + parent + ", newParent: "
+							+ newParent);
+					Log.d("posreorder", "previous: " + previous
+							+ ", newPrevious: " + newPrevious);
 
 					// First remove with subtasks from current location with a
 					// copy-delete move. This is to make Google Tasks API play
@@ -2424,7 +2460,7 @@ public class NotePadProvider extends ContentProvider implements
 				values.getAsString(Notes.COLUMN_NAME_TRUEPOS), null, newList,
 				db);
 		count += bumpGTaskAt(values.getAsLong(Notes.COLUMN_NAME_PARENT),
-				values.getAsLong(Notes.COLUMN_NAME_PREVIOUS), id, db);
+				values.getAsLong(Notes.COLUMN_NAME_PREVIOUS), newList, id, db);
 
 		// Save parent
 		count += db.update(Notes.TABLE_NAME, values, Notes._ID + " IS ?",
@@ -2443,9 +2479,11 @@ public class NotePadProvider extends ContentProvider implements
 					.getColumnIndex(Notes.COLUMN_NAME_PARENT));
 			final String previousS = c.getString(c
 					.getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
-			
-			final Long previous = previousS == null ? null : Long.parseLong(previousS);
-			final Long parent = parentS == null ? null : Long.parseLong(parentS);
+
+			final Long previous = previousS == null ? null : Long
+					.parseLong(previousS);
+			final Long parent = parentS == null ? null : Long
+					.parseLong(parentS);
 
 			count += insertWithSubtasks(db, childId, parent, previous, newList);
 		}
@@ -2490,8 +2528,9 @@ public class NotePadProvider extends ContentProvider implements
 		String sParent = parent != null ? parent.toString() : null;
 		count += db.update(Notes.TABLE_NAME, gtasknext,
 				Notes.COLUMN_NAME_PARENT + " IS ? AND "
-						+ Notes.COLUMN_NAME_PREVIOUS + " IS ?", new String[] {
-						sParent, Long.toString(id) });
+						+ Notes.COLUMN_NAME_PREVIOUS + " IS ? AND "
+						+ Notes.COLUMN_NAME_LIST + " IS ?", new String[] {
+						sParent, Long.toString(id), listId.toString() });
 
 		return count;
 	}
