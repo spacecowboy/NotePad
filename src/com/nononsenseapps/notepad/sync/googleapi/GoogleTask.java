@@ -24,6 +24,7 @@ import org.json.JSONObject;
 
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotePad.Notes;
+import com.nononsenseapps.util.BiMap;
 
 import android.content.ContentValues;
 import android.util.Log;
@@ -209,7 +210,8 @@ public class GoogleTask {
 	 * 
 	 * @return
 	 */
-	public ContentValues toNotesContentValues(int modified, long listDbId) {
+	public ContentValues toNotesContentValues(int modified, long listDbId,
+			BiMap<Long, String> idMap) {
 		ContentValues values = new ContentValues();
 		if (title != null)
 			values.put(NotePad.Notes.COLUMN_NAME_TITLE, title);
@@ -227,9 +229,25 @@ public class GoogleTask {
 		values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, modified);
 		values.put(NotePad.Notes.COLUMN_NAME_DELETED, deleted);
 		// values.put(NotePad.Notes.COLUMN_NAME_POSITION, position);
-		values.put(NotePad.Notes.COLUMN_NAME_PARENT, localparent);
-		values.put(NotePad.Notes.COLUMN_NAME_PREVIOUS, localprevious);
-		
+		// Make sure position values are set properly
+		if (remoteparent != null) {
+			// Do not join these IFs, because I actually do not want null there
+			// otherwise
+			if (idMap.containsValue(remoteparent))
+				values.put(Notes.COLUMN_NAME_PARENT, idMap.getKey(remoteparent));
+		} else {
+			values.putNull(NotePad.Notes.COLUMN_NAME_PARENT);
+		}
+		if (remoteprevious != null) {
+			// Do not join these IFs, because I actually do not want null there
+			// otherwise
+			if (idMap.containsValue(remoteprevious))
+				values.put(Notes.COLUMN_NAME_PARENT,
+						idMap.getKey(remoteprevious));
+		} else {
+			values.putNull(NotePad.Notes.COLUMN_NAME_PREVIOUS);
+		}
+
 		values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, hidden);
 
 		// values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, possort);
@@ -244,15 +262,20 @@ public class GoogleTask {
 	 * set to null, already set values will be used which might be null.
 	 */
 	public ContentValues toNotesBackRefContentValues(Integer listIdIndex,
-			Integer parentIndex, Integer previousIndex) {
+			BiMap<Long, String> idMap, BiMap<String, Integer> remoteToIndex) {
 		ContentValues values = new ContentValues();
 		if (listIdIndex != null)
 			values.put(NotePad.Notes.COLUMN_NAME_LIST, listIdIndex);
-		if (parentIndex != null)
-			values.put(Notes.COLUMN_NAME_PARENT, parentIndex);
-		if (previousIndex != null)
-			values.put(Notes.COLUMN_NAME_PREVIOUS, previousIndex);
+		// If the parent doesnt exist in the database, we must take the position
+		// from
+		// previous insert operations
+		// Otherwise, they have been set in tovalues
+		if (!idMap.containsValue(remoteparent))
+			values.put(Notes.COLUMN_NAME_PARENT, remoteToIndex.get(remoteparent));
 		
+		if (!idMap.containsValue(remoteprevious))
+			values.put(Notes.COLUMN_NAME_PREVIOUS, remoteToIndex.get(remoteprevious));
+
 		return values;
 	}
 

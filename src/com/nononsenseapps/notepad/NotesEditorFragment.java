@@ -75,6 +75,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nononsenseapps.notepad.NotePad.Notes;
 import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
@@ -96,7 +97,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
 			NotePad.Notes.COLUMN_NAME_DELETED, NotePad.Notes.COLUMN_NAME_LIST,
-			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
+			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, Notes.COLUMN_NAME_PARENT, Notes.COLUMN_NAME_PREVIOUS };
 
 	// A label for the saved state of the activity
 	public static final String ORIGINAL_NOTE = "origContent";
@@ -104,7 +105,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public static final String ORIGINAL_DUE = "origDue";
 	public static final String ORIGINAL_DUE_STATE = "origDueState";
 	public static final String ORIGINAL_COMPLETE = "origComplete";
-	public static final String ORIGINAL_LISTID = "origListId";
 
 	// Argument keys
 	public static final String KEYID = "com.nononsenseapps.notepad.NoteId";
@@ -140,12 +140,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public String mOriginalTitle;
 	public String mOriginalDueDate;
 	public boolean mOriginalComplete;
-	public long mOriginalListId;
 
 	private boolean doSave = false;
 
 	private long id = -1;
 	private long listId = -1;
+	
+	private Long parent = null;
+	private Long previous = null;
 
 	private boolean timeToDie;
 
@@ -241,15 +243,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 							.getBoolean(ORIGINAL_DUE_STATE);
 					mOriginalComplete = savedInstanceState
 							.getBoolean(ORIGINAL_COMPLETE);
-					mOriginalListId = savedInstanceState
-							.getLong(ORIGINAL_LISTID);
 				} else {
 					mOriginalNote = "";
 					mOriginalDueDate = "";
 					mOriginalTitle = "";
 					mOriginalDueState = false;
 					mOriginalComplete = false;
-					mOriginalListId = -1;
 				}
 
 				// Prepare the loader. Either re-connect with an existing one,
@@ -298,7 +297,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 *            The new note contents to use.
 	 */
 	private final void updateNote(String title, String text, String due,
-			boolean completed, long listId) {
+			boolean completed, long listId, Long parent, Long previous) {
 		// Sets up a map to contain values to be updated in the
 		// provider.
 		ContentValues values = new ContentValues();
@@ -327,6 +326,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		// Add list
 		values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
+		
+		// Add position
+		values.put(Notes.COLUMN_NAME_PARENT, parent);
+		values.put(Notes.COLUMN_NAME_PREVIOUS, previous);
 
 		// Put the due-date in
 		if (dueDateSet) {
@@ -915,6 +918,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				// It's loaded, select current
 				listSpinner.setSelection(getPosOfId(listId));
 			}
+			
+			// Position fields
+			final String parentS = mCursor.getString(mCursor.getColumnIndex(Notes.COLUMN_NAME_PARENT));
+			this.parent = parentS == null ? null : Long.parseLong(parentS);
+			final String previousS = mCursor.getString(mCursor.getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
+			this.previous = previousS == null ? null : Long.parseLong(previousS);
 
 			// Gets the note text from the Cursor and puts it in the
 			// TextView,
@@ -1146,7 +1155,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// if (isFinishing() && (length == 0)) {
 			if (hasNoteChanged())
 				updateNote(title, text, noteDueDate.format3339(false),
-						mComplete, listId);
+						mComplete, listId, parent, previous);
 		}
 	}
 

@@ -297,10 +297,14 @@ public class GoogleDBTalker {
 				task.listdbid = cursor.getLong(cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
 
-				task.localparent = cursor.getLong(cursor
+				final String previousS = cursor.getString(cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_PARENT));
-				task.localprevious = cursor.getLong(cursor
+				final String parentS = cursor.getString(cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_PREVIOUS));
+				
+				task.localprevious = previousS == null ? null : Long.parseLong(previousS);
+				task.localparent = parentS == null ? null : Long.parseLong(parentS);
+				
 				task.truepos = cursor.getString(cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_TRUEPOS));
 				task.hidden = cursor.getInt(cursor
@@ -477,7 +481,9 @@ public class GoogleDBTalker {
 								Uri.withAppendedPath(
 										NotePad.Notes.CONTENT_ID_URI_BASE,
 										Long.toString(task.dbId)))
-						.withValues(task.toNotesContentValues(0, listDbId))
+						.withValues(task.toNotesContentValues(0, listDbId, idMap))
+						.withValueBackReferences(
+									task.toNotesBackRefContentValues(null, idMap, remoteToIndex))
 						.build());
 				if (task.didRemoteInsert) {
 					operations
@@ -528,13 +534,9 @@ public class GoogleDBTalker {
 					// List exists, use existing id
 					operations.add(ContentProviderOperation
 							.newInsert(NotePad.Notes.CONTENT_URI)
-							.withValues(task.toNotesContentValues(0, listDbId))
+							.withValues(task.toNotesContentValues(0, listDbId, idMap))
 							.withValueBackReferences(
-									task.toNotesBackRefContentValues(null,
-											remoteToIndex
-													.get(task.remoteparent),
-											remoteToIndex
-													.get(task.remoteprevious)))
+									task.toNotesBackRefContentValues(null, idMap, remoteToIndex))
 							.build());
 				} else {
 					// Use back reference to that insert operation
@@ -544,13 +546,9 @@ public class GoogleDBTalker {
 									.newInsert(NotePad.Notes.CONTENT_URI)
 									.withValues(
 											task.toNotesContentValues(0,
-													listDbId))
+													listDbId, idMap))
 									.withValueBackReferences(
-											task.toNotesBackRefContentValues(listIdIndex,
-											remoteToIndex
-													.get(task.remoteparent),
-											remoteToIndex
-													.get(task.remoteprevious)))
+											task.toNotesBackRefContentValues(listIdIndex, idMap, remoteToIndex))
 									.build());
 				}
 				// Now the other table, use back reference to the id the note

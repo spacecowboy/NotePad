@@ -22,6 +22,7 @@ import java.security.InvalidParameterException;
 import android.app.SearchManager;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 /**
  * Defines a contract between the Note Pad content provider and its clients. A
@@ -195,7 +196,7 @@ public final class NotePad {
 
 		// parent position hidden
 
-		public static final String COLUMN_NAME_PARENT = "gtasks_parent";
+		//public static final String COLUMN_NAME_PARENT = "gtasks_parent";
 		public static final String COLUMN_NAME_POSITION = "gtasks_position";
 		public static final String COLUMN_NAME_HIDDEN = "hiddenflag";
 
@@ -209,6 +210,7 @@ public final class NotePad {
 		public static final String COLUMN_NAME_PREVTRUEPOS = "prevtruepos";
 		public static final String COLUMN_NAME_NEXTTRUEPOS = "nexttruepos";
 		public static final String COLUMN_NAME_PREVIOUS = "previous";
+		public static final String COLUMN_NAME_PARENT = "parent";
 
 		// Password locking
 		public static final String COLUMN_NAME_LOCKED = "locked";
@@ -227,7 +229,7 @@ public final class NotePad {
 		public static final String DUEDATE_SORT_TYPE = "CASE WHEN "
 				+ COLUMN_NAME_DUE_DATE + " IS NULL OR " + COLUMN_NAME_DUE_DATE
 				+ " IS '' THEN 1 ELSE 0 END, " + COLUMN_NAME_DUE_DATE;
-		public static final String POSSUBSORT_SORT_TYPE = COLUMN_NAME_POSSUBSORT;
+		public static final String POSSUBSORT_SORT_TYPE = COLUMN_NAME_TRUEPOS;
 
 		public static final String ASCENDING_SORT_ORDERING = "ASC";
 		public static final String DESCENDING_SORT_ORDERING = "DESC";
@@ -252,6 +254,7 @@ public final class NotePad {
 		 */
 		public static String between(final String truePrev,
 				final String trueNext) {
+			Log.d("pos", "between: " + truePrev + ", " + trueNext);
 			if (truePrev == null || !truePrev.startsWith("0"))
 				throw new InvalidParameterException(
 						"previous must start with a zero");
