@@ -603,33 +603,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	protected void moveToList(long newListId) {
 		if (listId != newListId && newListId > -1 && listId > -1) {
-			// We must also sever any ties with the remote location
-			createDuplicateDeleted();
-
 			listId = newListId;
 			saveNote();
-		}
-	}
-
-	private void createDuplicateDeleted() {
-		// Insert a new deleted entry
-		ContentValues values = new ContentValues();
-		values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
-		values.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN, 1);
-		values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
-		Uri cUri = activity.getContentResolver().insert(
-				NotePad.Notes.CONTENT_URI, values);
-
-		// Switch their local ids to the new deleted one
-		if (cUri != null) {
-			Long cId = getIdFromUri(cUri);
-
-			values = new ContentValues();
-			values.put(NotePad.GTasks.COLUMN_NAME_DB_ID, cId);
-
-			activity.getContentResolver().update(NotePad.GTasks.CONTENT_URI,
-					values, NotePad.GTasks.COLUMN_NAME_DB_ID + " IS ?",
-					new String[] { Long.toString(id) });
 		}
 	}
 

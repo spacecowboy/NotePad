@@ -46,9 +46,6 @@ public class SectionDropListener implements DropListener {
 		} else {
 			toDate(from, to, values);
 
-			// Create a deleted duplicate
-			createDuplicateDeleted(noteId);
-
 			// Update note with new information
 			updateNote(noteId, values);
 		}
@@ -176,31 +173,6 @@ public class SectionDropListener implements DropListener {
 		}
 
 		return listId;
-	}
-
-	private void createDuplicateDeleted(final long noteId) {
-		final long listId = getFromListId(noteId);
-		if (noteId > -1 && listId > -1) {
-			// Insert a new deleted entry
-			final ContentValues values = new ContentValues();
-			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
-			values.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN, 1);
-			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
-			Uri cUri = context.getContentResolver().insert(
-					NotePad.Notes.CONTENT_URI, values);
-
-			// Switch their local ids to the new deleted one
-			if (cUri != null) {
-				Long cId = NotesEditorFragment.getIdFromUri(cUri);
-
-				final ContentValues gvalues = new ContentValues();
-				gvalues.put(NotePad.GTasks.COLUMN_NAME_DB_ID, cId);
-
-				context.getContentResolver().update(NotePad.GTasks.CONTENT_URI,
-						gvalues, NotePad.GTasks.COLUMN_NAME_DB_ID + " IS ?",
-						new String[] { Long.toString(noteId) });
-			}
-		}
 	}
 
 	private void updateNote(final long noteId, ContentValues values) {
