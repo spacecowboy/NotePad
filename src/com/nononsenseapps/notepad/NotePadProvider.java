@@ -1343,22 +1343,23 @@ public class NotePadProvider extends ContentProvider implements
 		final ContentValues posValues = new ContentValues();
 		Cursor c;
 		int indent;
-		boolean isParent = false;
+		boolean isPrevious = false;
 		if (gTaskPrevious != null) {
 			// There exists a task there
 			Log.d("posGetVals", "we have previous");
+			isPrevious = true;
 
 			indent = 0;
 
 			c = db.query(NotePad.Notes.TABLE_NAME, new String[] { Notes._ID,
-					Notes.COLUMN_NAME_PREVTRUEPOS, Notes.COLUMN_NAME_TRUEPOS,
+					Notes.COLUMN_NAME_TRUEPOS, Notes.COLUMN_NAME_NEXTTRUEPOS,
 					Notes.COLUMN_NAME_INDENTLEVEL }, NotePad.Notes._ID
 					+ " IS ?", new String[] { gTaskPrevious.toString() }, null,
 					null, Notes.COLUMN_NAME_TRUEPOS);
 		} else if (gTaskParent != null) {
 			// Parent is be the previous task
 			Log.d("posGetVals", "we have parent");
-			isParent = true;
+			isPrevious = true;
 
 			indent = 1;
 
@@ -1387,7 +1388,7 @@ public class NotePadProvider extends ContentProvider implements
 		if (c.moveToFirst()) {
 			Log.d("posGetVals", "calculating from note we found");
 
-			if (isParent) {
+			if (isPrevious) {
 				// Previous is this
 				posValues.put(Notes.COLUMN_NAME_PREVTRUEPOS, c.getString(c
 						.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS)));
@@ -2512,15 +2513,15 @@ public class NotePadProvider extends ContentProvider implements
 		final ContentValues above = new ContentValues();
 		above.put(Notes.COLUMN_NAME_NEXTTRUEPOS, nextTruePosOfLast);
 		count += db.update(Notes.TABLE_NAME, above,
-				Notes.COLUMN_NAME_NEXTTRUEPOS + " IS ?",
-				new String[] { truePos });
+				Notes.COLUMN_NAME_NEXTTRUEPOS + " IS ? AND " + Notes.COLUMN_NAME_LIST + " IS ?",
+				new String[] { truePos, listId.toString() });
 
 		// Connect below with above
 		final ContentValues below = new ContentValues();
 		below.put(Notes.COLUMN_NAME_PREVTRUEPOS, prevTruePos);
 		count += db.update(Notes.TABLE_NAME, below,
-				Notes.COLUMN_NAME_PREVTRUEPOS + " IS ?",
-				new String[] { nextTruePosOfLast });
+				Notes.COLUMN_NAME_PREVTRUEPOS + " IS ? AND " + Notes.COLUMN_NAME_LIST + " IS ?",
+				new String[] { nextTruePosOfLast, listId.toString() });
 
 		// Connect next with previous
 		final ContentValues gtasknext = new ContentValues();

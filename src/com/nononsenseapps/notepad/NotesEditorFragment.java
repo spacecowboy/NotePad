@@ -255,7 +255,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 							.getString(ORIGINAL_TITLE);
 					mOriginalDueState = savedInstanceState
 							.getBoolean(ORIGINAL_DUE_STATE);
-					mOriginalListId= savedInstanceState.getLong(ORIGINAL_LIST);
+					mOriginalListId = savedInstanceState.getLong(ORIGINAL_LIST);
 					mOriginalParent = savedInstanceState
 							.getLong(ORIGINAL_PARENT);
 					mOriginalPrevious = savedInstanceState
@@ -276,9 +276,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				getLoaderManager().restartLoader(LOADER_NOTE_ID, null, this);
 				// Populate the list also
 				getLoaderManager().restartLoader(LOADER_LISTS_ID, null, this);
-				// And possible tasks to subtask under
-				getLoaderManager()
-						.restartLoader(OTHER_NOTES_LOADER, null, this);
+				// Do not start sub task loader until we have list
+
 			}
 		}
 	}
@@ -309,7 +308,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		parentC = this.parent != mOriginalParent;
 		previousC = this.previous != mOriginalPrevious;
 
-		return title || note || completed || date || listC || parentC || previousC;
+		return title || note || completed || date || listC || parentC
+				|| previousC;
 	}
 
 	/**
@@ -669,6 +669,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		if (listId != newListId && newListId > -1 && listId > -1) {
 			listId = newListId;
 			saveNote();
+			// Reload sub task spinner since we changed lists
+			getLoaderManager().restartLoader(OTHER_NOTES_LOADER, null, this);
 		}
 	}
 
@@ -989,6 +991,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				// It's loaded, select current
 				listSpinner.setSelection(getPosOfId(listAdapter, listId));
 			}
+
+			// Load sub task spinner
+			getLoaderManager().restartLoader(OTHER_NOTES_LOADER, null, this);
 
 			// Position fields
 			final String parentS = mCursor.getString(mCursor
@@ -1359,8 +1364,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		else if (OTHER_NOTES_LOADER == id) {
 			return new CursorLoader(activity, Notes.CONTENT_VISIBLE_URI,
 					new String[] { BaseColumns._ID, Notes.COLUMN_NAME_TITLE },
-					Notes._ID + " IS NOT ?",
-					new String[] { Long.toString(this.id) },
+					Notes._ID + " IS NOT ? AND " + Notes.COLUMN_NAME_LIST
+							+ " IS ?", new String[] { Long.toString(this.id),
+							Long.toString(this.listId) },
 					Notes.POSSUBSORT_SORT_TYPE);
 		} else
 			return new CursorLoader(activity, mUri, PROJECTION, null, null,

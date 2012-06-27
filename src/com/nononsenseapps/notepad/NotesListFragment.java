@@ -100,7 +100,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		OnSharedPreferenceChangeListener {
 	private int mCurCheckPosition = 0;
 
-	// Parent used for dragdrop
+	// Parent, list used for dragdrop
 	private static final String[] PROJECTION = new String[] {
 			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
 			NotePad.Notes.COLUMN_NAME_NOTE,
@@ -108,7 +108,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
 			NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
 			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
-			NotePad.Notes.COLUMN_NAME_PARENT };
+			NotePad.Notes.COLUMN_NAME_PARENT,
+			NotePad.Notes.COLUMN_NAME_LIST};
 
 	// public static final String SELECTEDPOS = "selectedpos";
 	// public static final String SELECTEDID = "selectedid";
@@ -1472,10 +1473,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				mSectionAdapter = new SectionAdapter(activity, null);
 				// mSectionAdapter.changeState(sorting);
 				setListAdapter(mSectionAdapter);
-				final SectionDropListener dropListener = new SectionDropListener(
-						activity, mSectionAdapter);
-				((DragNDropListView) getListView())
-						.setDropListener(dropListener);
 			}
 		} else if (mSectionAdapter == null || mSectionAdapter.isSectioned()) {
 			// Destroy section loaders
@@ -1485,6 +1482,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					getThemedAdapter(null));
 			setListAdapter(mSectionAdapter);
 		}
+
+		// TODO should hide the drag views in alphabetic sorting
+		final SectionDropListener dropListener = new SectionDropListener(
+				activity, mSectionAdapter);
+		((DragNDropListView) getListView()).setDropListener(dropListener);
 
 		if (mSectionAdapter.isSectioned()) {
 			// If sort date, fire sorting loaders
@@ -1554,6 +1556,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			}
 		}
 	}
+
 	private void destroyModLoaders() {
 		activeLoaders.remove(LOADER_MODPAST);
 		getLoaderManager().destroyLoader(LOADER_MODPAST);
@@ -1567,35 +1570,35 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		activeLoaders.remove(LOADER_MODTODAY);
 		getLoaderManager().destroyLoader(LOADER_MODTODAY);
 	}
-	
+
 	private void destroyDateLoaders() {
 		activeLoaders.remove(LOADER_DATECOMPLETED);
 		getLoaderManager().destroyLoader(LOADER_DATECOMPLETED);
-		
+
 		activeLoaders.remove(LOADER_DATEFUTURE);
 		getLoaderManager().destroyLoader(LOADER_DATEFUTURE);
-		
+
 		activeLoaders.remove(LOADER_DATENONE);
 		getLoaderManager().destroyLoader(LOADER_DATENONE);
-		
+
 		activeLoaders.remove(LOADER_DATEOVERDUE);
 		getLoaderManager().destroyLoader(LOADER_DATEOVERDUE);
-		
+
 		activeLoaders.remove(LOADER_DATETODAY);
 		getLoaderManager().destroyLoader(LOADER_DATETODAY);
-		
+
 		activeLoaders.remove(LOADER_DATETOMORROW);
 		getLoaderManager().destroyLoader(LOADER_DATETOMORROW);
-		
+
 		activeLoaders.remove(LOADER_DATEWEEK);
 		getLoaderManager().destroyLoader(LOADER_DATEWEEK);
 	}
-	
+
 	private void destroyListNameLoaders() {
 		activeLoaders.remove(LOADER_LISTNAMES);
 		getLoaderManager().destroyLoader(LOADER_LISTNAMES);
 	}
-	
+
 	private void destroyRegularLoaders() {
 		activeLoaders.remove(LOADER_REGULARLIST);
 		getLoaderManager().destroyLoader(LOADER_REGULARLIST);

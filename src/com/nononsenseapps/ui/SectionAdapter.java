@@ -26,9 +26,9 @@ public class SectionAdapter extends BaseAdapter {
 	public final ArrayAdapter<String> headers;
 	public final Map<String, Long> sectionIds = new HashMap<String, Long>();
 	private final SimpleCursorAdapter wrappedAdapter;
-	public final static int TYPE_SECTION_HEADER = 0;
-	public final static int TYPE_ITEM = 1;
-	public final static int TYPE_COUNT = TYPE_ITEM + 1;
+	public final static int TYPE_SECTION_HEADER = -39567;
+	public final static int TYPE_ITEM = -892746;
+	public final static int TYPE_COUNT = 2;
 
 	private final DataSetObserver subObserver;
 
