@@ -1268,7 +1268,8 @@ public class NotePadProvider extends ContentProvider implements
 					posValues.getAsString(Notes.COLUMN_NAME_TRUEPOS), null,
 					listId, db);
 			bumpGTaskAt(values.getAsLong(Notes.COLUMN_NAME_PARENT),
-					values.getAsLong(Notes.COLUMN_NAME_PREVIOUS), rowId, listId, db);
+					values.getAsLong(Notes.COLUMN_NAME_PREVIOUS), rowId,
+					listId, db);
 
 			// Creates a URI with the note ID pattern and the new row ID
 			// appended to it.
@@ -1342,34 +1343,47 @@ public class NotePadProvider extends ContentProvider implements
 			final Long listId, SQLiteDatabase db) {
 		final ContentValues posValues = new ContentValues();
 		Cursor c;
-		int indent;
+		final int indent;
 		boolean isPrevious = false;
 		if (gTaskPrevious != null) {
 			// There exists a task there
+			// The previous value should be 1) the note if no children exist
+			// or 2) the last recursive child.
 			Log.d("posGetVals", "we have previous");
 			isPrevious = true;
-
-			indent = 0;
 
 			c = db.query(NotePad.Notes.TABLE_NAME, new String[] { Notes._ID,
 					Notes.COLUMN_NAME_TRUEPOS, Notes.COLUMN_NAME_NEXTTRUEPOS,
 					Notes.COLUMN_NAME_INDENTLEVEL }, NotePad.Notes._ID
 					+ " IS ?", new String[] { gTaskPrevious.toString() }, null,
 					null, Notes.COLUMN_NAME_TRUEPOS);
+			
+			if (c.moveToFirst()) {
+				indent = c.getInt(c.getColumnIndex(Notes.COLUMN_NAME_INDENTLEVEL));
+			} else {
+				indent = 0;
+			}
+			
+			c = getLastRecursivePosition(db, c, gTaskPrevious);
+			
 		} else if (gTaskParent != null) {
 			// Parent is be the previous task
 			Log.d("posGetVals", "we have parent");
 			isPrevious = true;
-
-			indent = 1;
 
 			c = db.query(NotePad.Notes.TABLE_NAME, new String[] { Notes._ID,
 					Notes.COLUMN_NAME_TRUEPOS, Notes.COLUMN_NAME_NEXTTRUEPOS,
 					Notes.COLUMN_NAME_INDENTLEVEL }, NotePad.Notes._ID
 					+ " IS ?", new String[] { gTaskParent.toString() }, null,
 					null, Notes.COLUMN_NAME_TRUEPOS);
+			
+			if (c.moveToFirst()) {
+				indent = 1 + c.getInt(c.getColumnIndex(Notes.COLUMN_NAME_INDENTLEVEL));
+			} else {
+				indent = 1;
+			}
+			
 		} else {
-			// Previous is first note
 			Log.d("posGetVals", "we have note at top");
 
 			indent = 0;
@@ -1377,15 +1391,14 @@ public class NotePadProvider extends ContentProvider implements
 			c = db.query(NotePad.Notes.TABLE_NAME, new String[] { Notes._ID,
 					Notes.COLUMN_NAME_PREVTRUEPOS, Notes.COLUMN_NAME_TRUEPOS,
 					Notes.COLUMN_NAME_INDENTLEVEL },
-					NotePad.Notes.COLUMN_NAME_PREVTRUEPOS + " IS ? AND "
-							+ Notes.COLUMN_NAME_LIST + " IS ?", new String[] {
-							Notes.HEAD, listId.toString() }, null, null,
+					NotePad.Notes.COLUMN_NAME_PARENT + " IS NULL AND " + Notes.COLUMN_NAME_PREVIOUS + " IS NULL AND "
+							+ Notes.COLUMN_NAME_LIST + " IS ?", new String[] { listId.toString() }, null, null,
 					Notes.COLUMN_NAME_TRUEPOS);
 		}
 		// If we found a note, just pluck the values
 		// If no note was found, prev is HEAD and next is TAIL
 
-		if (c.moveToFirst()) {
+		if (c.moveToLast()) {
 			Log.d("posGetVals", "calculating from note we found");
 
 			if (isPrevious) {
@@ -1404,20 +1417,15 @@ public class NotePadProvider extends ContentProvider implements
 						.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS)));
 			}
 
-			posValues
-					.put(Notes.COLUMN_NAME_INDENTLEVEL,
-							indent
-									+ c.getInt(c
-											.getColumnIndex(Notes.COLUMN_NAME_INDENTLEVEL)));
-
 		} else {
 			Log.d("posGetVals", "we must have an empty list");
 			posValues.put(Notes.COLUMN_NAME_PREVTRUEPOS, Notes.HEAD);
 			posValues.put(Notes.COLUMN_NAME_NEXTTRUEPOS, Notes.TAIL);
-			posValues.put(Notes.COLUMN_NAME_INDENTLEVEL, indent);
 		}
 
 		c.close();
+
+		posValues.put(Notes.COLUMN_NAME_INDENTLEVEL, indent);
 
 		return posValues;
 	}
@@ -1460,8 +1468,9 @@ public class NotePadProvider extends ContentProvider implements
 
 		return db.update(Notes.TABLE_NAME, values, Notes.COLUMN_NAME_PARENT
 				+ " IS ? AND " + Notes.COLUMN_NAME_PREVIOUS + " IS ? AND "
-				+ Notes._ID + " IS NOT ? AND " + Notes.COLUMN_NAME_LIST + " IS ?",
-				new String[] { par, pre, Long.toString(newTaskId), Long.toString(newList) });
+				+ Notes._ID + " IS NOT ? AND " + Notes.COLUMN_NAME_LIST
+				+ " IS ?", new String[] { par, pre, Long.toString(newTaskId),
+				Long.toString(newList) });
 	}
 
 	synchronized private Uri insertList(Uri uri, ContentValues initialValues) {
@@ -2414,6 +2423,8 @@ public class NotePadProvider extends ContentProvider implements
 					// First remove with subtasks from current location with a
 					// copy-delete move. This is to make Google Tasks API play
 					// nice with us.
+					// TODO if the parent is moved after a child, delete only
+					// the parent, then put it there
 					count += removeWithSubtasks(db, id, listId, parent,
 							previous, prevpos, pos, nextpos);
 
@@ -2513,15 +2524,17 @@ public class NotePadProvider extends ContentProvider implements
 		final ContentValues above = new ContentValues();
 		above.put(Notes.COLUMN_NAME_NEXTTRUEPOS, nextTruePosOfLast);
 		count += db.update(Notes.TABLE_NAME, above,
-				Notes.COLUMN_NAME_NEXTTRUEPOS + " IS ? AND " + Notes.COLUMN_NAME_LIST + " IS ?",
-				new String[] { truePos, listId.toString() });
+				Notes.COLUMN_NAME_NEXTTRUEPOS + " IS ? AND "
+						+ Notes.COLUMN_NAME_LIST + " IS ?", new String[] {
+						truePos, listId.toString() });
 
 		// Connect below with above
 		final ContentValues below = new ContentValues();
 		below.put(Notes.COLUMN_NAME_PREVTRUEPOS, prevTruePos);
 		count += db.update(Notes.TABLE_NAME, below,
-				Notes.COLUMN_NAME_PREVTRUEPOS + " IS ? AND " + Notes.COLUMN_NAME_LIST + " IS ?",
-				new String[] { nextTruePosOfLast, listId.toString() });
+				Notes.COLUMN_NAME_PREVTRUEPOS + " IS ? AND "
+						+ Notes.COLUMN_NAME_LIST + " IS ?", new String[] {
+						nextTruePosOfLast, listId.toString() });
 
 		// Connect next with previous
 		final ContentValues gtasknext = new ContentValues();
@@ -2584,6 +2597,30 @@ public class NotePadProvider extends ContentProvider implements
 		c.close();
 
 		return copyDeleteRecursively(db, id, listId, pos);
+	}
+
+	/**
+	 * Will return the last recursive child, the item that would be displayed as
+	 * last in the list, under a parent.
+	 * 
+	 * If no children exists, this is the parent itself.
+	 */
+	private static Cursor getLastRecursivePosition(final SQLiteDatabase db,
+			final Cursor parentCursor, final Long parentId) {
+
+		// Children
+		final Cursor c = db.query(NotePad.Notes.TABLE_NAME, new String[] {
+				Notes._ID, Notes.COLUMN_NAME_TRUEPOS,
+				Notes.COLUMN_NAME_NEXTTRUEPOS, Notes.COLUMN_NAME_INDENTLEVEL },
+				NotePad.Notes.COLUMN_NAME_PARENT + " IS ?",
+				new String[] { parentId.toString() }, null, null,
+				Notes.COLUMN_NAME_TRUEPOS);
+		if (c.moveToLast()) {
+			final Long id = c.getLong(c.getColumnIndex(Notes._ID));
+			parentCursor.close();
+			return getLastRecursivePosition(db, c, id);
+		} else
+			return parentCursor;
 	}
 
 	/**
