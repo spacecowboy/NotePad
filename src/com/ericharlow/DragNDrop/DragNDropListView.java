@@ -136,7 +136,7 @@ public class DragNDropListView extends ListView {
 			return false;
 		}
 		// final View dragItem = item.findViewById(R.id.dragholder);
-		final View dragItem = item.findViewById(R.id.itemDate);
+		final View dragItem = item.findViewById(R.id.dragView);
 		if (dragItem == null) {
 			Log.d("dragndrop", "dragItem was null");
 			return false;

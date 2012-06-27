@@ -82,31 +82,39 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="?android:attr/textColorPrimary" />
 
-            <LinearLayout
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal" >
 
                 <TextView
                     android:id="@+id/itemNote"
-                    android:layout_width="0dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
                     android:ellipsize="end"
                     android:gravity="center_vertical"
                     android:singleLine="true"
                     android:textAppearance="?android:attr/textAppearanceSmall"
                     android:textColor="?android:attr/textColorSecondary" />
-
-                <com.nononsenseapps.ui.DateView
+        </LinearLayout>
+        <LinearLayout  android:id="@+id/dragView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+            
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:scaleType="fitXY"
+                android:layout_gravity="center"
+                android:src="@drawable/action_about_dark" />
+            
+            <com.nononsenseapps.ui.DateView
                     android:id="@+id/itemDate"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="center"
                     android:paddingLeft="0dp"
                     android:textColor="?android:attr/textColorSecondary"
                     android:textSize="12sp" />
-            </LinearLayout>
+            
         </LinearLayout>
     </LinearLayout>
 
