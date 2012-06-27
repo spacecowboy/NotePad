@@ -100,13 +100,15 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		OnSharedPreferenceChangeListener {
 	private int mCurCheckPosition = 0;
 
+	// Parent used for dragdrop
 	private static final String[] PROJECTION = new String[] {
 			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
 			NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
 			NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
-			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
+			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
+			NotePad.Notes.COLUMN_NAME_PARENT };
 
 	// public static final String SELECTEDPOS = "selectedpos";
 	// public static final String SELECTEDID = "selectedid";

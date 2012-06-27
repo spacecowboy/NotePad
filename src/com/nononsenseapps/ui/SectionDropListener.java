@@ -38,17 +38,17 @@ public class SectionDropListener implements DropListener {
 
 		final long noteId = adapter.getItemId(from);
 
+		// Set list data if it could have changed
 		toList(from, to, values);
 
-		// Position is a special case as it can update a whole bunch of notes
-		if (toPosition(from, to, values)) {
-
-		} else {
-			toDate(from, to, values);
-
-			// Update note with new information
-			updateNote(noteId, values);
-		}
+		// Set position data if we are displaying user sorting
+		toPosition(from, to, values);
+			
+		// Set new dat if we are displaying by date
+		toDate(from, to, values);
+			
+		// Update note with new information
+		updateNote(noteId, values);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class SectionDropListener implements DropListener {
 	 * final position. the parent sets its own parent to equal the target drop.
 	 * Position is calculated from the drop.
 	 */
-	private boolean toPosition(final int from, final int to,
+	private void toPosition(final int from, final int to,
 			ContentValues values) {
 		// Get current sort order since that is valid even if the adapter
 		// is in list state
@@ -79,10 +79,26 @@ public class SectionDropListener implements DropListener {
 				.getDefaultSharedPreferences(context).getString(
 						MainPrefs.KEY_SORT_TYPE, "");
 		if (MainPrefs.POSSUBSORT.equals(sortChoice)) {
-
-			return true;
-		} else
-			return false;
+			final Long newPrevious;
+			final Long newParent;
+			// If dropped on another note, the it should be placed previous to that
+			// and it should have the same parent
+			if (SectionAdapter.TYPE_ITEM == adapter.getItemViewType(to)) {
+				newPrevious = adapter.getItemId(to);
+				// Get the parent which was included in the cursor
+				// CursorAdapters return a cursor at the correct position
+				final Cursor c = (Cursor) adapter.getItem(to);
+				final String parentS = c.getString(c.getColumnIndex(Notes.COLUMN_NAME_PARENT));
+				newParent = parentS == null ? null : Long.parseLong(parentS);
+			} else {
+				// Was dropped on a header then, means it should be first so use
+				// NULL then
+				newPrevious = null;
+				newParent = null;
+			}
+			values.put(Notes.COLUMN_NAME_PREVIOUS, newPrevious);
+			values.put(Notes.COLUMN_NAME_PARENT, newParent);
+		}
 	}
 
 	private void toDate(final int from, final int to, ContentValues values) {
