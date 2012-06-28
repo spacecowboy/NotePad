@@ -520,7 +520,8 @@ public class NotePadProvider extends ContentProvider implements
 		private void createGTasksTable(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + NotePad.GTasks.TABLE_NAME + " ("
 					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
-					+ NotePad.GTasks.COLUMN_NAME_DB_ID + " TEXT,"
+					+ NotePad.GTasks.COLUMN_NAME_DB_ID + " INTEGER,"
+					+ "FOREIGN KEY("+NotePad.GTasks.COLUMN_NAME_DB_ID + ") REFERENCES " + Notes.TABLE_NAME + "(" + Notes._ID + ")"
 					+ NotePad.GTasks.COLUMN_NAME_GTASKS_ID + " INTEGER,"
 					+ NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT + " INTEGER,"
 					+ NotePad.GTasks.COLUMN_NAME_UPDATED + " TEXT,"
@@ -530,7 +531,8 @@ public class NotePadProvider extends ContentProvider implements
 		private void createGTaskListsTable(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + NotePad.GTaskLists.TABLE_NAME + " ("
 					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
-					+ NotePad.GTaskLists.COLUMN_NAME_DB_ID + " TEXT,"
+					+ NotePad.GTaskLists.COLUMN_NAME_DB_ID + " INTEGER,"
+					+ "FOREIGN KEY("+NotePad.GTaskLists.COLUMN_NAME_DB_ID + ") REFERENCES " + NotePad.Lists.TABLE_NAME + "(" + NotePad.Lists._ID + ")"
 					+ NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID + " INTEGER,"
 					+ NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT
 					+ " INTEGER," + NotePad.GTaskLists.COLUMN_NAME_UPDATED
@@ -1357,15 +1359,16 @@ public class NotePadProvider extends ContentProvider implements
 					Notes.COLUMN_NAME_INDENTLEVEL }, NotePad.Notes._ID
 					+ " IS ?", new String[] { gTaskPrevious.toString() }, null,
 					null, Notes.COLUMN_NAME_TRUEPOS);
-			
+
 			if (c.moveToFirst()) {
-				indent = c.getInt(c.getColumnIndex(Notes.COLUMN_NAME_INDENTLEVEL));
+				indent = c.getInt(c
+						.getColumnIndex(Notes.COLUMN_NAME_INDENTLEVEL));
 			} else {
 				indent = 0;
 			}
-			
+
 			c = getLastRecursivePosition(db, c, gTaskPrevious);
-			
+
 		} else if (gTaskParent != null) {
 			// Parent is be the previous task
 			Log.d("posGetVals", "we have parent");
@@ -1376,13 +1379,14 @@ public class NotePadProvider extends ContentProvider implements
 					Notes.COLUMN_NAME_INDENTLEVEL }, NotePad.Notes._ID
 					+ " IS ?", new String[] { gTaskParent.toString() }, null,
 					null, Notes.COLUMN_NAME_TRUEPOS);
-			
+
 			if (c.moveToFirst()) {
-				indent = 1 + c.getInt(c.getColumnIndex(Notes.COLUMN_NAME_INDENTLEVEL));
+				indent = 1 + c.getInt(c
+						.getColumnIndex(Notes.COLUMN_NAME_INDENTLEVEL));
 			} else {
 				indent = 1;
 			}
-			
+
 		} else {
 			Log.d("posGetVals", "we have note at top");
 
@@ -1391,8 +1395,9 @@ public class NotePadProvider extends ContentProvider implements
 			c = db.query(NotePad.Notes.TABLE_NAME, new String[] { Notes._ID,
 					Notes.COLUMN_NAME_PREVTRUEPOS, Notes.COLUMN_NAME_TRUEPOS,
 					Notes.COLUMN_NAME_INDENTLEVEL },
-					NotePad.Notes.COLUMN_NAME_PARENT + " IS NULL AND " + Notes.COLUMN_NAME_PREVIOUS + " IS NULL AND "
-							+ Notes.COLUMN_NAME_LIST + " IS ?", new String[] { listId.toString() }, null, null,
+					NotePad.Notes.COLUMN_NAME_PREVTRUEPOS + " IS ? AND "
+							+ Notes.COLUMN_NAME_LIST + " IS ?",
+					new String[] { Notes.HEAD, listId.toString() }, null, null,
 					Notes.COLUMN_NAME_TRUEPOS);
 		}
 		// If we found a note, just pluck the values
@@ -2425,12 +2430,16 @@ public class NotePadProvider extends ContentProvider implements
 					// nice with us.
 					// TODO if the parent is moved after a child, delete only
 					// the parent, then put it there
-					count += removeWithSubtasks(db, id, listId, parent,
-							previous, prevpos, pos, nextpos);
+					// Change from recursion to checking the truepos fields. Its last child will must have a value < new one
+					// or the item must have a truepos > than new one
+					if (!isDescendant(db, id, newParent) && !isDescendant(db, id, newPrevious)) {
+						count += removeWithSubtasks(db, id, listId, parent,
+								previous, prevpos, pos, nextpos);
 
-					// Insert the lot in the new position
-					count += insertWithSubtasks(db, id, newParent, newPrevious,
-							newList);
+						// Insert the lot in the new position
+						count += insertWithSubtasks(db, id, newParent,
+								newPrevious, newList);
+					}
 				}
 			}
 		}
@@ -2439,6 +2448,32 @@ public class NotePadProvider extends ContentProvider implements
 			c.close();
 
 		return count;
+	}
+
+	/**
+	 * Returns true if beta is a descendant of alpha
+	 */
+	private static boolean isDescendant(SQLiteDatabase db, Long alpha, Long beta) {
+		if (alpha == beta) {
+			return true;
+		}
+		
+		boolean foundInTree = false;
+		
+		final Cursor c = db.query(NotePad.Notes.TABLE_NAME, new String[] {
+				Notes._ID},
+				NotePad.Notes.COLUMN_NAME_PARENT + " IS ?",
+				new String[] { alpha.toString() }, null, null,
+				Notes.COLUMN_NAME_TRUEPOS);
+		while (c.moveToNext()) {
+			final Long id = c.getLong(c.getColumnIndex(Notes._ID));
+			if (isDescendant(db, id, beta)) {
+				foundInTree = true;
+				break;
+			}
+		} 
+		c.close();
+		return foundInTree;
 	}
 
 	/**
@@ -2460,6 +2495,7 @@ public class NotePadProvider extends ContentProvider implements
 		values.put(Notes.COLUMN_NAME_LIST, newList);
 
 		// Get new position values
+
 		final ContentValues newPosValues = getNewPositionValuesFor(newParent,
 				newPrevious, newList, db);
 		values.putAll(newPosValues);
