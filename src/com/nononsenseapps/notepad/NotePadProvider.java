@@ -520,8 +520,8 @@ public class NotePadProvider extends ContentProvider implements
 		private void createGTasksTable(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + NotePad.GTasks.TABLE_NAME + " ("
 					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
-					+ NotePad.GTasks.COLUMN_NAME_DB_ID + " INTEGER,"
-					+ "FOREIGN KEY("+NotePad.GTasks.COLUMN_NAME_DB_ID + ") REFERENCES " + Notes.TABLE_NAME + "(" + Notes._ID + ")"
+					+ NotePad.GTasks.COLUMN_NAME_DB_ID + " INTEGER NOT NULL,"
+					+ "FOREIGN KEY("+NotePad.GTasks.COLUMN_NAME_DB_ID + ") REFERENCES " + Notes.TABLE_NAME + "(" + Notes._ID + "),"
 					+ NotePad.GTasks.COLUMN_NAME_GTASKS_ID + " INTEGER,"
 					+ NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT + " INTEGER,"
 					+ NotePad.GTasks.COLUMN_NAME_UPDATED + " TEXT,"
@@ -531,8 +531,8 @@ public class NotePadProvider extends ContentProvider implements
 		private void createGTaskListsTable(SQLiteDatabase db) {
 			db.execSQL("CREATE TABLE " + NotePad.GTaskLists.TABLE_NAME + " ("
 					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
-					+ NotePad.GTaskLists.COLUMN_NAME_DB_ID + " INTEGER,"
-					+ "FOREIGN KEY("+NotePad.GTaskLists.COLUMN_NAME_DB_ID + ") REFERENCES " + NotePad.Lists.TABLE_NAME + "(" + NotePad.Lists._ID + ")"
+					+ NotePad.GTaskLists.COLUMN_NAME_DB_ID + " INTEGER NOT NULL,"
+					+ "FOREIGN KEY("+NotePad.GTaskLists.COLUMN_NAME_DB_ID + ") REFERENCES " + NotePad.Lists.TABLE_NAME + "(" + NotePad.Lists._ID + "),"
 					+ NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID + " INTEGER,"
 					+ NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT
 					+ " INTEGER," + NotePad.GTaskLists.COLUMN_NAME_UPDATED
