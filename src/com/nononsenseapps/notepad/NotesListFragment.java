@@ -1219,7 +1219,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// inflater.inflate(R.menu.list_select_menu_light, menu);
 			// else
 			inflater.inflate(R.menu.list_select_menu, menu);
-			mode.setTitle("Select Items");
+			mode.setTitle(getString(R.string.mode_choose));
 
 			this.mode = mode;
 
@@ -1246,13 +1246,21 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				ClipboardManager clipboard = (ClipboardManager) activity
 						.getSystemService(Context.CLIPBOARD_SERVICE);
 				// ICS style
-				// TODO remove hardcoded strings
 				clipboard.setPrimaryClip(ClipData.newPlainText("Note",
 						buildTextToShare()));
+
+				int num = getListView().getCheckedItemCount();
+				int s;
+
+				if (num == 1)
+					s = R.string.notecopied_msg_single;
+				else
+					s = R.string.notecopied_msg;
+
 				Toast.makeText(
 						activity,
-						"Copied " + getListView().getCheckedItemCount()
-								+ " notes to clipboard", Toast.LENGTH_SHORT)
+						getString(R.string.notecopied) + num + " "
+								+ getString(s) + ".", Toast.LENGTH_SHORT)
 						.show();
 				mode.finish();
 				break;
@@ -1292,11 +1300,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				mode.setSubtitle(null);
 				break;
 			case 1:
-				// TODO remove hard coded strings
-				mode.setSubtitle("One item selected");
+				mode.setSubtitle(getString(R.string.mode_choose_single));
 				break;
 			default:
-				mode.setSubtitle("" + checkedCount + " items selected");
+				mode.setSubtitle(checkedCount + " "
+						+ getString(R.string.mode_choose_more));
 				break;
 			}
 		}
@@ -1382,11 +1390,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			this.notesToDelete.clear();
 
 			MenuInflater inflater = activity.getMenuInflater();
-			// if (FragmentLayout.lightTheme)
-			// inflater.inflate(R.menu.list_select_menu_light, menu);
-			// else
 			inflater.inflate(R.menu.list_select_menu, menu);
-			mode.setTitle("Select Items");
+			mode.setTitle(getString(R.string.mode_choose));
 
 			this.mode = mode;
 
@@ -1872,17 +1877,14 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (listId != MainActivity.ALL_NOTES_ID) {
 			where = NotePad.Notes.COLUMN_NAME_LIST + " IS ? AND (" + where
 					+ ")";
-			if (vars == null)
-				vars = new String[] { Long.toString(listId) };
-			else {
-				String[] nvars = new String[1 + vars.length];
-				nvars[0] = Long.toString(listId);
-				for (int i = 0; i < vars.length; i++) {
-					nvars[i + 1] = vars[i];
-				}
 
-				vars = nvars;
+			String[] nvars = new String[1 + vars.length];
+			nvars[0] = Long.toString(listId);
+			for (int i = 0; i < vars.length; i++) {
+				nvars[i + 1] = vars[i];
 			}
+
+			vars = nvars;
 		}
 
 		return new CursorLoader(activity, NotePad.Notes.CONTENT_VISIBLE_URI,
