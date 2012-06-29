@@ -1210,8 +1210,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		outState.putBoolean(ORIGINAL_DUE_STATE, mOriginalDueState);
 		outState.putString(ORIGINAL_TITLE, mOriginalTitle);
 		outState.putLong(ORIGINAL_LIST, mOriginalListId);
-		outState.putLong(ORIGINAL_PARENT, mOriginalParent);
-		outState.putLong(ORIGINAL_PREVIOUS, mOriginalPrevious);
+		if (mOriginalParent != null)
+			outState.putLong(ORIGINAL_PARENT, mOriginalParent);
+		if (mOriginalPrevious != null)
+			outState.putLong(ORIGINAL_PREVIOUS, mOriginalPrevious);
 	}
 
 	/**

@@ -196,7 +196,7 @@ public final class NotePad {
 
 		// parent position hidden
 
-		//public static final String COLUMN_NAME_PARENT = "gtasks_parent";
+		// public static final String COLUMN_NAME_PARENT = "gtasks_parent";
 		public static final String COLUMN_NAME_POSITION = "gtasks_position";
 		public static final String COLUMN_NAME_HIDDEN = "hiddenflag";
 
@@ -204,11 +204,9 @@ public final class NotePad {
 		public static final String COLUMN_NAME_INDENTLEVEL = "indentlevel";
 		public static final String COLUMN_NAME_POSSUBSORT = "possubsort";
 		public static final String COLUMN_NAME_LOCALHIDDEN = "localhidden";
-		
+
 		// user sorting
 		public static final String COLUMN_NAME_TRUEPOS = "truepos";
-		public static final String COLUMN_NAME_PREVTRUEPOS = "prevtruepos";
-		public static final String COLUMN_NAME_NEXTTRUEPOS = "nexttruepos";
 		public static final String COLUMN_NAME_PREVIOUS = "previous";
 		public static final String COLUMN_NAME_PARENT = "parent";
 
@@ -240,7 +238,7 @@ public final class NotePad {
 
 		public static final String DEFAULT_SORT_TYPE = ALPHABETIC_SORT_TYPE;
 		public static final String DEFAULT_SORT_ORDERING = ASCENDING_SORT_ORDERING;
-		
+
 		// Position constants
 		public static final String HEAD = "0";
 		public static final String TAIL = "1";
@@ -251,9 +249,19 @@ public final class NotePad {
 		 * Calculate a valid positon between to two specified. Because numbers
 		 * will range between 0 and 1, truPrev must start with a 0 and trueNext
 		 * must start with either 0 or equal "1". Equal in the String sense.
+		 * 
+		 * Works both for raw positions like 0 and 1, and for complex positions
+		 * such as 0.014.0346
+		 * 
+		 * Does NOT accept null values
 		 */
-		public static String between(final String truePrev,
-				final String trueNext) {
+		public static String between(final String complexPrev,
+				final String complexNext) {
+			final String pattern = "^.*?\\.?([^\\.]+)$";
+			final String reversePattern = "(^.*?\\.?)[^\\.]+$";
+			final String truePrev = complexPrev.replaceFirst(pattern, "$1");
+			final String trueNext = complexNext.replaceFirst(pattern, "$1");
+
 			Log.d("pos", "between: " + truePrev + ", " + trueNext);
 			if (truePrev == null || !truePrev.startsWith("0"))
 				throw new InvalidParameterException(
@@ -275,7 +283,9 @@ public final class NotePad {
 					new BigDecimal(2)));
 			String betweenS = between.toPlainString();
 			// All that is left is to remove the decimal point
-			return betweenS.replace(".", "");
+			betweenS = betweenS.replace(".", "");
+			// And add the same prefix as the other notes have
+			return complexPrev.replaceFirst(reversePattern, "$1" + betweenS);
 		}
 	}
 
