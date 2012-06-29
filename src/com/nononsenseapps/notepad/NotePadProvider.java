@@ -2363,8 +2363,9 @@ public class NotePadProvider extends ContentProvider implements
 				|| values.containsKey(Notes.COLUMN_NAME_LIST)) {
 			c = db.query(Notes.TABLE_NAME, new String[] { Notes._ID,
 					Notes.COLUMN_NAME_LIST, Notes.COLUMN_NAME_TRUEPOS,
-					Notes.COLUMN_NAME_PREVIOUS, Notes.COLUMN_NAME_PARENT, Notes.COLUMN_NAME_INDENTLEVEL },
-					where, whereArgs, null, null, Notes.COLUMN_NAME_TRUEPOS);
+					Notes.COLUMN_NAME_PREVIOUS, Notes.COLUMN_NAME_PARENT,
+					Notes.COLUMN_NAME_INDENTLEVEL }, where, whereArgs, null,
+					null, Notes.COLUMN_NAME_TRUEPOS);
 		} else
 			c = null;
 
@@ -2380,7 +2381,8 @@ public class NotePadProvider extends ContentProvider implements
 					.getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
 			final String parentS = c.getString(c
 					.getColumnIndex(Notes.COLUMN_NAME_PARENT));
-			final int indent = c.getInt(c.getColumnIndex(Notes.COLUMN_NAME_INDENTLEVEL));
+			final int indent = c.getInt(c
+					.getColumnIndex(Notes.COLUMN_NAME_INDENTLEVEL));
 
 			final Long previous = previousS == null ? null : Long
 					.parseLong(previousS);
@@ -2389,9 +2391,8 @@ public class NotePadProvider extends ContentProvider implements
 
 			if (values.containsKey(Notes.COLUMN_NAME_DELETED)) {
 				Log.d("posdel", "Detachin children");
-
 				// Update children
-				detachChildren(db, oldList, id, parent, previous, indent);
+				detachChildren(db, oldList, id, parent, previous);
 			}
 			Log.d("posdel", "Removing pos: " + pos);
 			// Make sure position values are set to values that never will
@@ -2601,27 +2602,61 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	/**
-	 * Will return the last recursive child, the item that would be displayed as
-	 * last in the list, under a parent.
+	 * This is intended to be used to connect a note-tree to a new position. You
+	 * specify which notes with the where and whereargs arguments. As an
+	 * example, consider the task of moving a note and all of its subnotes to a
+	 * new position.
 	 * 
-	 * If no children exists, this is the parent itself.
+	 * You would first remove the note from its current position (no need to
+	 * touch the descendants yet) and give it NULL values (to ensure database
+	 * consistency at each step).
+	 * 
+	 * Next you would have to make space at the new location by temporarily
+	 * setting the previous column the note that is currently at that position
+	 * to null (again, to ensure we do not break UNIQUE constrains in the
+	 * database). The value we just replaced should have been equal to
+	 * "newPrevious".
+	 * 
+	 * Now is the time to call connectNotes. The values you would specify for
+	 * the where arguments would be
+	 * "Notes.Truepos >= ? AND Notes.Truepos < (? || '0')", and
+	 * [MovingNote.Truepos, MovingNote.Truepos] respectively.
+	 * 
+	 * (Remember to include list id in your query though)
+	 * 
+	 * This query would fetch all notes with position values that would be
+	 * sorted higher or equal to the note we are interested in (as all
+	 * descendants would) but less than MovingNote.Truepos + '0' (in Java
+	 * terms). No note will actually have that position but more importantly no
+	 * note will have a position inside that range that is not in the descendant
+	 * tree of MovingNote.
+	 * 
+	 * For arguments matching only the children but not the parent itself, you
+	 * could exchange the first ">=" for a ">" to remove the parent from the
+	 * result set. This is useful when you are deleting a note but would like to
+	 * keep its children which must be reordered because their parent just got
+	 * removed.
+	 * 
+	 * So, what the method actually does is: immediate children (children who's
+	 * parent field == oldParent) get their parentfield set to newParent the
+	 * first note returned by the query will get its previous field set to
+	 * newPrevious all notes returned by the query are otherwise simply given
+	 * new truepos values and indent values (automatically resolved from parent
+	 * in the update)
+	 * 
+	 * All these updates are done in a transaction. Once all updates are done,
+	 * the method returns the id of the last immediate child. It is the caller's
+	 * responsibility to set the previous field of the following note to this id
+	 * (this would be the same note that had previous == newPrevious before)
+	 * 
+	 * @return the id of the last immediate child updated which should be the
+	 *         new previous note of the note which previously occupied this
+	 *         position
 	 */
-	private static Cursor getLastRecursivePosition(final SQLiteDatabase db,
-			final Cursor parentCursor, final Long parentId) {
+	private static void connectNotes(final SQLiteDatabase db,
+			final Long newPrevious, final Long newParent, final Long oldParent,
+			final String where, final String[] whereArgs) {
 
-		// Children
-		final Cursor c = db.query(NotePad.Notes.TABLE_NAME, new String[] {
-				Notes._ID, Notes.COLUMN_NAME_TRUEPOS,
-				Notes.COLUMN_NAME_NEXTTRUEPOS, Notes.COLUMN_NAME_INDENTLEVEL },
-				NotePad.Notes.COLUMN_NAME_PARENT + " IS ?",
-				new String[] { parentId.toString() }, null, null,
-				Notes.COLUMN_NAME_TRUEPOS);
-		if (c.moveToLast()) {
-			final Long id = c.getLong(c.getColumnIndex(Notes._ID));
-			parentCursor.close();
-			return getLastRecursivePosition(db, c, id);
-		} else
-			return parentCursor;
 	}
 
 	/**
@@ -2634,9 +2669,16 @@ public class NotePadProvider extends ContentProvider implements
 	private static void detachChildren(final SQLiteDatabase db,
 			final Long listId, final Long parentId, final Long parentOfParent,
 			final Long previousOfParent) {
+		// First find position that will be sorted after the children
+		// This is the next note or parentPrefix.TAIL
+
+		// Update indentation as indent = indent - 1 for all descendant notes,
+		// this is found as the notes with positions between parent.truepos and
+		// the next position we retrieved above
+
 		final ContentValues values = new ContentValues();
 		values.put(Notes.COLUMN_NAME_PARENT, parentOfParent);
-		
+
 		// Children
 		final Cursor c = db.query(Notes.TABLE_NAME, new String[] { Notes._ID,
 				Notes.COLUMN_NAME_PREVIOUS }, Notes.COLUMN_NAME_PARENT
