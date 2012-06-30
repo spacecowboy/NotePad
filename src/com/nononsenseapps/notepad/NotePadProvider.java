@@ -429,8 +429,7 @@ public class NotePadProvider extends ContentProvider implements
 			// calls the super constructor, requesting the default cursor
 			// factory.
 			super(context, DATABASE_NAME, null, DATABASE_VERSION);
-			if (SyncAdapter.SYNC_DEBUG_PRINTS)
-				Log.d("DataBaseHelper", "Constructor");
+			Log.d("DataBaseHelper", "Constructor");
 			this.context = context;
 		}
 
@@ -441,15 +440,20 @@ public class NotePadProvider extends ContentProvider implements
 		 */
 		@Override
 		public void onCreate(SQLiteDatabase db) {
-			if (SyncAdapter.SYNC_DEBUG_PRINTS)
-				Log.d("DataBaseHelper", "onCreate");
+			Log.d("DataBaseHelper", "onCreate");
 			createListsTable(db);
+			Log.d("DataBaseHelper", "created Lists table");
 			createNotesTable(db);
+			Log.d("DataBaseHelper", "created notes table");
 			createGTasksTable(db);
+			Log.d("DataBaseHelper", "created gtasks table");
 			createGTaskListsTable(db);
+			Log.d("DataBaseHelper", "created gtasklists table");
 
 			long listId = insertDefaultList(db);
+			Log.d("DataBaseHelper", "created defautlist");
 			insertDefaultNote(db, listId);
+			Log.d("DataBaseHelper", "created defaultnote");
 		}
 
 		private long insertDefaultList(SQLiteDatabase db) {
@@ -551,7 +555,7 @@ public class NotePadProvider extends ContentProvider implements
 			db.execSQL("CREATE TABLE " + NotePad.GTasks.TABLE_NAME + " ("
 					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
 					+ NotePad.GTasks.COLUMN_NAME_DB_ID
-					+ " UNIQUE INTEGER NOT NULL REFERENCES " + Notes.TABLE_NAME
+					+ " INTEGER UNIQUE NOT NULL REFERENCES " + Notes.TABLE_NAME
 					+ "," + NotePad.GTasks.COLUMN_NAME_GTASKS_ID
 					+ " INTEGER NOT NULL,"
 					+ NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT
@@ -564,7 +568,7 @@ public class NotePadProvider extends ContentProvider implements
 			db.execSQL("CREATE TABLE " + NotePad.GTaskLists.TABLE_NAME + " ("
 					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
 					+ NotePad.GTaskLists.COLUMN_NAME_DB_ID
-					+ " UNIQUE INTEGER NOT NULL REFERENCES "
+					+ " INTEGER UNIQUE NOT NULL REFERENCES "
 					+ NotePad.Lists.TABLE_NAME + ","
 					+ NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID
 					+ " INTEGER NOT NULL,"
