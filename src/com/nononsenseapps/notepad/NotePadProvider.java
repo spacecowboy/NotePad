@@ -156,21 +156,87 @@ public class NotePadProvider extends ContentProvider implements
 	private static final UriMatcher sUriMatcher;
 
 	/**
-	 * SELECT FROM NOTESTABLE WHERE ID IS ? AND PARENT IS ?
+	 * Get parent, previous and current
 	 */
-	private static final String targetPositions = String
-			.format("SELECT %s FROM %s WHERE %s IS ? AND %s IS ? AND %s IS NOT 1"
-					+ " UNION "
-					+ "SELECT %s FROM %s WHERE %s IS ? AND %s IS ? AND %s IS NOT 1"
-					+ " UNION "
-					+ "SELECT %s FROM %s WHERE %s IS ? AND %s IS ? AND %s IS NOT 1 ORDER BY %s",
-					Notes.COLUMN_NAME_TRUEPOS, Notes.TABLE_NAME, Notes._ID,
-					Notes.COLUMN_NAME_LIST, Notes.COLUMN_NAME_DELETED,
-					Notes.COLUMN_NAME_TRUEPOS, Notes.TABLE_NAME, Notes._ID,
-					Notes.COLUMN_NAME_LIST, Notes.COLUMN_NAME_DELETED,
-					Notes.COLUMN_NAME_TRUEPOS, Notes.TABLE_NAME,
-					Notes.COLUMN_NAME_PARENT, Notes.COLUMN_NAME_LIST,
-					Notes.COLUMN_NAME_DELETED, Notes.COLUMN_NAME_TRUEPOS);
+	private static final String targetPositions(final Long parent,
+			final Long previous) {
+		String totalSelect = "";
+		if (parent != null)
+			totalSelect += String
+					.format("SELECT %s FROM %s WHERE %s IS ? AND %s IS ? AND %s IS NOT 1",
+							Notes.COLUMN_NAME_TRUEPOS, Notes.TABLE_NAME,
+							Notes._ID, Notes.COLUMN_NAME_LIST,
+							Notes.COLUMN_NAME_DELETED);
+
+		if (previous != null) {
+			if (!totalSelect.isEmpty())
+				totalSelect += " UNION ";
+			totalSelect += String
+					.format("SELECT %s FROM %s WHERE %s IS ? AND %s IS ? AND %s IS NOT 1",
+							Notes.COLUMN_NAME_TRUEPOS, Notes.TABLE_NAME,
+							Notes._ID, Notes.COLUMN_NAME_LIST,
+							Notes.COLUMN_NAME_DELETED);
+		}
+
+		if (!totalSelect.isEmpty())
+			totalSelect += " UNION ";
+
+		final String parentChars = (parent == null) ? "NULL" : "?";
+		final String previousChars = (previous == null) ? "NULL" : "?";
+
+		return totalSelect += String
+				.format("SELECT %s FROM %s WHERE %s IS %s AND %s IS %s AND %s IS ? AND %s IS NOT 1 ORDER BY %s",
+						Notes.COLUMN_NAME_TRUEPOS, Notes.TABLE_NAME,
+						Notes.COLUMN_NAME_PARENT, parentChars,
+						Notes.COLUMN_NAME_PREVIOUS, previousChars,
+						Notes.COLUMN_NAME_LIST, Notes.COLUMN_NAME_DELETED,
+						Notes.COLUMN_NAME_TRUEPOS);
+	}
+
+	/**
+	 * Returns a String array suitable for use with targetPosition where-clause.
+	 */
+	private static String[] targetPositionArgs(final Long listId,
+			final Long parent, final Long previous) {
+		int intendedSize = 1;
+		if (parent != null)
+			intendedSize += 3;
+		if (previous != null)
+			intendedSize += 3;
+
+		final String[] retVal = new String[intendedSize];
+
+		if (parent != null) {
+			retVal[0] = parent.toString();
+			retVal[1] = listId.toString();
+			int i = 2;
+			if (previous != null)
+				i += 2;
+			retVal[i] = parent.toString();
+		}
+		if (previous != null) {
+			int i = 0, j = 1, k = 2;
+			if (parent != null) {
+				i += 2;
+				j += 2;
+				k += 3;
+			}
+			retVal[i] = previous.toString();
+			retVal[j] = listId.toString();
+			retVal[k] = previous.toString();
+		}
+		retVal[intendedSize - 1] = listId.toString();
+
+		for (String val : retVal) {
+			Log.d("posredux", "targetPosArg: " + val);
+		}
+
+		return retVal;
+
+		// return toWhereArgs(parent, listId, previous, listId, parent,
+		// previous,
+		// listId);
+	}
 
 	private static final String parentIndent = "CASE WHEN %s = NULL THEN 0 ELSE 1 + (SELECT %s FROM %s WHERE %s = %d) END";
 
@@ -1258,53 +1324,60 @@ public class NotePadProvider extends ContentProvider implements
 
 		// Opens the database object in "write" mode.
 		SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+		Uri noteUri = null;
+		db.beginTransaction();
+		try {
 
-		// Performs the insert and returns the ID of the new note.
-		// WITHOUT position data, because we demand them to be unique we can not
-		// insert at correct position until the position is free
-		long rowId = db.insert(NotePad.Notes.TABLE_NAME, // The table to insert
-															// into.
-				NotePad.Notes.COLUMN_NAME_NOTE, // A hack, SQLite sets this
-												// column value to null
-												// if values is empty.
-				values // A map of column names, and the values to insert
-						// into the columns.
-				);
+			// Performs the insert and returns the ID of the new note.
+			// WITHOUT position data, because we demand them to be unique we can
+			// not
+			// insert at correct position until the position is free
+			long rowId = db.insert(NotePad.Notes.TABLE_NAME, // The table to
+																// insert
+																// into.
+					NotePad.Notes.COLUMN_NAME_NOTE, // A hack, SQLite sets this
+													// column value to null
+													// if values is empty.
+					values // A map of column names, and the values to insert
+							// into the columns.
+					);
 
-		// If the insert succeeded, the row ID exists.
-		if (rowId > 0) {
-			// Insert into the correct list position
-			insertNoteTree(db, null, null, null, listId, listId,
-					toWhereClause(Notes._ID), toWhereArgs(rowId));
+			// If the insert succeeded, the row ID exists.
+			if (rowId > 0) {
+				// Insert into the correct list position
+				insertNoteTree(db, null, null, null, listId, listId,
+						toWhereClause(Notes._ID), toWhereArgs(rowId));
 
-			// Creates a URI with the note ID pattern and the new row ID
-			// appended to it.
-			Uri noteUri = ContentUris.withAppendedId(
-					NotePad.Notes.CONTENT_ID_URI_BASE, rowId);
+				db.setTransactionSuccessful();
 
-			// Notifies observers registered against this provider that the data
-			// changed.
-			getContext().getContentResolver()
-					.notifyChange(noteUri, null, false);
-			// Also tell lists watching the other URI
-			getContext().getContentResolver().notifyChange(
-					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
-			// And update widgets
-			updateAllWidgets();
-			return noteUri;
+				Log.d("posredux", "Insert succeeded: " + rowId);
+
+				// Creates a URI with the note ID pattern and the new row ID
+				// appended to it.
+				noteUri = ContentUris.withAppendedId(
+						NotePad.Notes.CONTENT_ID_URI_BASE, rowId);
+			}
+		} catch (SQLException e) {
+			throw e;
+		} finally {
+			db.endTransaction();
 		}
+
+		// Notifies observers registered against this provider that the data
+		// changed.
+		getContext().getContentResolver().notifyChange(noteUri, null, false);
+		// Also tell lists watching the other URI
+		getContext().getContentResolver().notifyChange(
+				NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
+		// And update widgets
+		updateAllWidgets();
 
 		// If the insert didn't succeed, then the rowID is <= 0. Throws an
 		// exception.
-		throw new SQLException("Failed to insert row into " + uri);
-	}
-
-	/**
-	 * Returns a String array suitable for use with targetPosition where-clause.
-	 */
-	private static String[] targetPositionArgs(final Long listId,
-			final Long parent, final Long previous) {
-		return toWhereArgs(parent, listId, previous, listId, previous, listId);
+		if (noteUri == null)
+			throw new SQLException("Failed to insert row into " + uri);
+		else
+			return noteUri;
 	}
 
 	/**
@@ -1318,7 +1391,7 @@ public class NotePadProvider extends ContentProvider implements
 		int i;
 		for (i = 0; i < retVal.length; i++) {
 			if (vals[i] == null)
-				retVal[i] = "NULL";
+				retVal[i] = null;
 			else
 				retVal[i] = vals[i].toString();
 		}
@@ -1582,6 +1655,8 @@ public class NotePadProvider extends ContentProvider implements
 				count += deleteListFromDb(db, Long.toString(id), null, null);
 			}
 			db.setTransactionSuccessful();
+		} catch (SQLException e) {
+			throw e;
 		} finally {
 			db.endTransaction();
 		}
@@ -1637,6 +1712,8 @@ public class NotePadProvider extends ContentProvider implements
 			// then the list itself
 			count += db.delete(NotePad.Lists.TABLE_NAME, finalWhere, whereArgs);
 			db.setTransactionSuccessful();
+		} catch (SQLException e) {
+			throw e;
 		} finally {
 			db.endTransaction();
 		}
@@ -1670,6 +1747,8 @@ public class NotePadProvider extends ContentProvider implements
 				count += deleteNoteFromDb(db, Long.toString(id), null, null);
 			}
 			db.setTransactionSuccessful();
+		} catch (SQLException e) {
+			throw e;
 		} finally {
 			db.endTransaction();
 		}
@@ -1731,6 +1810,8 @@ public class NotePadProvider extends ContentProvider implements
 
 			count += db.delete(NotePad.Notes.TABLE_NAME, finalWhere, whereArgs);
 			db.setTransactionSuccessful();
+		} catch (SQLException e) {
+			throw e;
 		} finally {
 			db.endTransaction();
 		}
@@ -1997,6 +2078,8 @@ public class NotePadProvider extends ContentProvider implements
 									// on.
 						);
 				db.setTransactionSuccessful();
+			} catch (SQLException e) {
+				throw e;
 			} finally {
 				db.endTransaction();
 			}
@@ -2091,6 +2174,8 @@ public class NotePadProvider extends ContentProvider implements
 				count += db.update(NotePad.Notes.TABLE_NAME, values,
 						finalWhere, whereArgs);
 				db.setTransactionSuccessful();
+			} catch (SQLException e) {
+				throw e;
 			} finally {
 				db.endTransaction();
 			}
@@ -2259,11 +2344,23 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	private static void copyDeleteNote(final SQLiteDatabase db,
 			final long listId, final String where, final String[] whereArgs) {
+		Log.d("posredux", "Doing copyDelete");
 		// Insert a new deleted entry
 		final ContentValues values = new ContentValues();
 		values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
 		values.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN, 1);
 		values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
+		values.put(NotePad.Notes.COLUMN_NAME_TITLE, "");
+		values.put(NotePad.Notes.COLUMN_NAME_NOTE, "");
+		values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
+		final Long now = Long.valueOf(System.currentTimeMillis());
+		values.put(NotePad.Notes.COLUMN_NAME_CREATE_DATE, now);
+		values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, now);
+		values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
+		values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, "needsAction");
+		values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
+		values.put(NotePad.Notes.COLUMN_NAME_TRUEPOS, "-1");
+		values.putNull(NotePad.Notes.COLUMN_NAME_PREVIOUS);
 
 		long cId = db.insert(Notes.TABLE_NAME, null, values);
 
@@ -2275,6 +2372,7 @@ public class NotePadProvider extends ContentProvider implements
 
 			db.update(GTasks.TABLE_NAME, gvalues, where, whereArgs);
 		}
+		Log.d("posredux", "Finished copyDelete");
 	}
 
 	/**
@@ -2327,36 +2425,54 @@ public class NotePadProvider extends ContentProvider implements
 	 * @return the id of the last immediate child updated which should be the
 	 *         new previous note of the note which previously occupied this
 	 *         position
+	 * @throws SQLException
 	 */
 	private static void insertNoteTree(final SQLiteDatabase db,
 			final Long newPrevious, final Long newParent, final Long oldParent,
 			final Long newListId, final Long oldListId, final String where,
-			final String[] whereArgs) {
+			final String[] whereArgs) throws SQLException {
 		// First get the note currently at this location and some information
 		// about the surroundings
 		String nextPos = null, previousPos = null, parentPos = null;
 		// Query the position at the parent, previous location AND of the note
 		// currently at this position
-		final Cursor c = db.rawQuery(targetPositions,
-				targetPositionArgs(newListId, newParent, newPrevious));
-		while (c.moveToNext()) {
-			// If previous is null, then we will only have one result and it is
-			// the current note
-			// Sorted by truepos, so parent first, then previous, then current
-			if (parentPos == null && newParent != null)
-				parentPos = c.getColumnName(c
-						.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
-			else if (previousPos == null && newPrevious != null)
-				previousPos = c.getColumnName(c
-						.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
-			// Otherwise it will be the current
-			else if (nextPos == null)
-				nextPos = c.getColumnName(c
-						.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
-			else
-				Log.d("posredux", "Cursor returned more items than expected");
+		{
+			final Cursor c = db.rawQuery(
+					targetPositions(newParent, newPrevious),
+					targetPositionArgs(newListId, newParent, newPrevious));
+			Log.d("posredux", "Finding target: " + newListId + ", " + newParent
+					+ ", " + newPrevious);
+			Log.d("posredux", targetPositions(newParent, newPrevious));
+			while (c.moveToNext()) {
+				Log.d("posredux", "Found target");
+				// If previous is null, then we will only have one result and it
+				// is
+				// the current note
+				// Sorted by truepos, so parent first, then previous, then
+				// current
+				if (parentPos == null && newParent != null) {
+					parentPos = c.getString(c
+							.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
+					Log.d("posredux", "parentPos = " + parentPos);
+				} else if (previousPos == null && newPrevious != null) {
+					previousPos = c.getString(c
+							.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
+					Log.d("posredux", "previousPos = " + previousPos);
+					// Otherwise it will be the current
+				} else if (nextPos == null) {
+					nextPos = c.getString(c
+							.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
+					Log.d("posredux", "nextPos = " + nextPos);
+					// If we are adding a new note, it will have null values which mathces target position
+					if (nextPos != null && nextPos.isEmpty())
+						nextPos = null;
+				} else
+					Log.d("posredux",
+							"Cursor returned more items than expected: " + c.getString(c
+									.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS)));
+			}
+			c.close();
 		}
-		c.close();
 
 		// Make sure they have valid values
 		if (previousPos == null)
@@ -2376,13 +2492,24 @@ public class NotePadProvider extends ContentProvider implements
 			// if nextPos is not TAIL
 			if (!Notes.TAIL.equals(nextPos)) {
 				// Make a copy/delete of it for gtasks since it will move
-				copyDeleteNote(
-						db,
-						newListId,
-						toWhereClause(Notes.COLUMN_NAME_PREVIOUS,
-								Notes.COLUMN_NAME_LIST),
-						toWhereArgs(newPrevious, newListId));
+				Log.d("posredux", "Copydeleting preceeding note");
+				String whereGtask = NotePad.GTasks.COLUMN_NAME_DB_ID
+						+ " IN (SELECT " + Notes._ID + " FROM "
+						+ Notes.TABLE_NAME + " WHERE "
+						+ Notes.COLUMN_NAME_PREVIOUS + " IS %s AND "
+						+ Notes.COLUMN_NAME_LIST + " IS ?)";
+				final String[] whereGtaskArgs;
+				if (newPrevious == null) {
+					whereGtask = String.format(whereGtask, "NULL");
+					whereGtaskArgs = toWhereArgs(newListId);
+				} else {
+					whereGtask = String.format(whereGtask, "?");
+					whereGtaskArgs = toWhereArgs(newPrevious, newListId);
+				}
+				Log.d("posredux", whereGtask);
+				copyDeleteNote(db, newListId, whereGtask, whereGtaskArgs);
 				// Now detach it
+				Log.d("posredux", "Detatching it");
 				final ContentValues prevalue = new ContentValues();
 				prevalue.putNull(Notes.COLUMN_NAME_PREVIOUS);
 				db.update(
@@ -2391,6 +2518,7 @@ public class NotePadProvider extends ContentProvider implements
 						toWhereClause(Notes.COLUMN_NAME_PREVIOUS,
 								Notes.COLUMN_NAME_LIST),
 						toWhereArgs(newPrevious, newListId));
+				Log.d("posredux", "detached, ready for insert");
 			}
 
 			// Calculate a position between previous and the note currently at
@@ -2416,19 +2544,24 @@ public class NotePadProvider extends ContentProvider implements
 				values.clear();
 
 				// Get this note's values
-				final long noteId = c.getLong(c.getColumnIndex(Notes._ID));
+				final long noteId = tree
+						.getLong(tree.getColumnIndex(Notes._ID));
 				// final String previousS = c.getString(c
 				// .getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
-				final String parentS = c.getString(c
+				final String parentS = tree.getString(tree
 						.getColumnIndex(Notes.COLUMN_NAME_PARENT));
 				// final Long notePrevious = previousS == null ? null : Long
 				// .parseLong(previousS);
 				final Long noteParent = parentS == null ? null : Long
 						.parseLong(parentS);
 
+				Log.d("posredux", "inserting child: " + noteId);
+
 				// first note returned by the query gets a new previous value
 				if (firstNote) {
+					Log.d("posredux", "is first child");
 					values.put(Notes.COLUMN_NAME_PREVIOUS, newPrevious);
+					Log.d("posredux", "new child previous: " + newPrevious);
 					firstNote = false;
 				}
 
@@ -2438,14 +2571,19 @@ public class NotePadProvider extends ContentProvider implements
 				String notePos;
 				if (noteParent == null && noteParent == oldParent
 						|| noteParent.equals(oldParent)) {
+					Log.d("posredux", "is immediate child");
 					lastNoteId = noteId;
 					values.put(Notes.COLUMN_NAME_PARENT, newParent);
+					values.put(Notes.COLUMN_NAME_PARENT, oldParent);
+					Log.d("posredux", "new child parent: " + newParent);
 					notePos = Notes.between(currentPositions.get(noteParent),
 							nextPos);
 				} else {
+					Log.d("posredux", "is a descendant");
 					notePos = Notes.between(currentPositions.get(noteParent),
 							Notes.TAIL);
 				}
+				Log.d("posredux", "new child pos: " + notePos);
 				values.put(Notes.COLUMN_NAME_TRUEPOS, notePos);
 				// Remember for later, yes use old parent for this
 				currentPositions.put(noteParent, notePos);
@@ -2456,9 +2594,11 @@ public class NotePadProvider extends ContentProvider implements
 						Notes.COLUMN_NAME_INDENTLEVEL, Notes.TABLE_NAME,
 						Notes._ID, newParent));
 
+				Log.d("posredux", "copydeleting child");
 				// Make a copy/delete before we move it
 				copyDeleteNote(db, noteId, oldListId);
 
+				Log.d("posredux", "updating child");
 				// update
 				db.update(Notes.TABLE_NAME, values, toWhereClause(Notes._ID),
 						toWhereArgs(noteId));
@@ -2469,6 +2609,7 @@ public class NotePadProvider extends ContentProvider implements
 			// immediate child
 			values.clear();
 			values.put(Notes.COLUMN_NAME_PREVIOUS, lastNoteId);
+			Log.d("posredux", "reattaching following note");
 			db.update(
 					Notes.TABLE_NAME,
 					values,
@@ -2477,9 +2618,15 @@ public class NotePadProvider extends ContentProvider implements
 					toWhereArgs(nextPos, newListId));
 
 			// mark transaction successful
+			Log.d("posredux", "setting successful");
 			db.setTransactionSuccessful();
+		} catch (SQLException e) {
+			Log.d("posredux", e.getLocalizedMessage());
+			e.printStackTrace();
+			throw e;
 		} finally {
 			// commit transaction
+			Log.d("posredux", "ending");
 			db.endTransaction();
 		}
 	}
@@ -2554,6 +2701,8 @@ public class NotePadProvider extends ContentProvider implements
 			values.put(Notes.COLUMN_NAME_PARENT, parent);
 			values.put(Notes.COLUMN_NAME_LIST, listId);
 			values.put(Notes.COLUMN_NAME_TRUEPOS, truepos);
+		} catch (SQLException e) {
+			throw e;
 		} finally {
 			db.endTransaction();
 		}
