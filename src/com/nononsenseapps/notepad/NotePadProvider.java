@@ -260,14 +260,25 @@ public class NotePadProvider extends ContentProvider implements
 	 * "Notes.Truepos >= ? AND Notes.Truepos < (? || '9')", and
 	 * [MovingNote.Truepos, MovingNote.Truepos] respectively.
 	 */
-	private static final String noteWithDescendants = Notes.COLUMN_NAME_TRUEPOS
-			+ " >= ? AND " + Notes.COLUMN_NAME_TRUEPOS + " < (? || '9')";
-	private static final String noteDescendants = Notes.COLUMN_NAME_TRUEPOS
-			+ " > ? AND " + Notes.COLUMN_NAME_TRUEPOS + " < (? || '9')";
-
-	private static String[] noteDescendantsArgs(String truepos) {
-		return new String[] { truepos, truepos };
+	private static final String noteWithDescendants(final String noteId,
+			final String truepos) {
+		return String.format("(" + Notes._ID + " IS %s OR "
+				+ Notes.COLUMN_NAME_TRUEPOS + " >= '%s' AND "
+				+ Notes.COLUMN_NAME_TRUEPOS + " < '%s') AND "
+				+ Notes.COLUMN_NAME_DELETED + " IS NOT 1", noteId, truepos,
+				truepos + ".9");
 	}
+
+	private static final String noteDescendants(final String truepos) {
+		return String.format(Notes.COLUMN_NAME_TRUEPOS + " > '%s' AND "
+				+ Notes.COLUMN_NAME_TRUEPOS + " < '%s'"
+				+ Notes.COLUMN_NAME_DELETED + " IS NOT 1", truepos, truepos
+				+ ".9");
+	}
+
+	// private static String[] noteDescendantsArgs(String truepos) {
+	// return new String[] { truepos, truepos + ".9" };
+	// }
 
 	// Handle to a new DatabaseHelper.
 	private DatabaseHelper mOpenHelper;
@@ -1834,9 +1845,8 @@ public class NotePadProvider extends ContentProvider implements
 					Long.parseLong(id),
 					posValues.getAsLong(Notes.COLUMN_NAME_LIST),
 					posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-					noteDescendants,
-					noteDescendantsArgs(posValues
-							.getAsString(Notes.COLUMN_NAME_TRUEPOS)));
+					noteDescendants(posValues
+							.getAsString(Notes.COLUMN_NAME_TRUEPOS)), null);
 
 			count += db.delete(NotePad.Notes.TABLE_NAME, finalWhere, whereArgs);
 			db.setTransactionSuccessful();
@@ -2091,9 +2101,9 @@ public class NotePadProvider extends ContentProvider implements
 								posValues.getAsLong(Notes.COLUMN_NAME_PARENT),
 								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
 								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-								noteDescendants,
-								noteDescendantsArgs(posValues
-										.getAsString(Notes.COLUMN_NAME_TRUEPOS)));
+								noteDescendants(posValues
+										.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
+								null);
 					}
 					c.close();
 				}
@@ -2192,9 +2202,9 @@ public class NotePadProvider extends ContentProvider implements
 								posValues.getAsLong(Notes.COLUMN_NAME_PARENT),
 								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
 								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-								noteDescendants,
-								noteDescendantsArgs(posValues
-										.getAsString(Notes.COLUMN_NAME_TRUEPOS)));
+								noteDescendants(posValues
+										.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
+								null);
 					} else {
 						// Re attach at new location
 						insertNoteTree(
@@ -2204,9 +2214,9 @@ public class NotePadProvider extends ContentProvider implements
 								posValues.getAsLong(Notes.COLUMN_NAME_PARENT),
 								newListId,
 								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-								noteWithDescendants,
-								noteDescendantsArgs(posValues
-										.getAsString(Notes.COLUMN_NAME_TRUEPOS)));
+								noteWithDescendants(id, posValues
+										.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
+								null);
 					}
 				}
 
@@ -2592,6 +2602,10 @@ public class NotePadProvider extends ContentProvider implements
 			// this position
 
 			// Do a query
+			Log.d("posredux", "finding with where");
+			Log.d("posredux", "" + where);
+			if (whereArgs != null && whereArgs.length >= 2)
+				Log.d("posredux", "" + whereArgs[0] + ", " + whereArgs[1]);
 			final Cursor tree = db.query(
 					Notes.TABLE_NAME,
 					toStringArray(Notes._ID, Notes.COLUMN_NAME_PARENT,
@@ -2673,7 +2687,10 @@ public class NotePadProvider extends ContentProvider implements
 			// immediate child
 			values.clear();
 			values.put(Notes.COLUMN_NAME_PREVIOUS, lastNoteId);
-			Log.d("posredux", "reattaching following note");
+			Log.d("posredux", "reattaching following note with " + lastNoteId);
+			if (lastNoteId < 0)
+				throw new InvalidParameterException(
+						"cant reattach, no valid last note!");
 			db.update(
 					Notes.TABLE_NAME,
 					values,
@@ -2750,14 +2767,11 @@ public class NotePadProvider extends ContentProvider implements
 
 			values.clear();
 			values.put(Notes.COLUMN_NAME_PREVIOUS, previous);
+			Log.d("posredux", "Stitching next to " + previous);
 			// stitch the next note together with the previous
-			db.update(
-					Notes.TABLE_NAME,
-					values,
-					toWhereValidClause(Notes.COLUMN_NAME_LIST,
-							Notes.COLUMN_NAME_PARENT,
-							Notes.COLUMN_NAME_PREVIOUS),
-					toWhereArgs(listId, parent, noteId));
+			db.update(Notes.TABLE_NAME, values,
+					toWhereClause(Notes.COLUMN_NAME_PREVIOUS),
+					toWhereArgs(noteId));
 
 			db.setTransactionSuccessful();
 
