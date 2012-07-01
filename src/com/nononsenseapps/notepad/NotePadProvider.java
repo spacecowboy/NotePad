@@ -271,7 +271,7 @@ public class NotePadProvider extends ContentProvider implements
 
 	private static final String noteDescendants(final String truepos) {
 		return String.format(Notes.COLUMN_NAME_TRUEPOS + " > '%s' AND "
-				+ Notes.COLUMN_NAME_TRUEPOS + " < '%s'"
+				+ Notes.COLUMN_NAME_TRUEPOS + " < '%s' AND "
 				+ Notes.COLUMN_NAME_DELETED + " IS NOT 1", truepos, truepos
 				+ ".9");
 	}
@@ -2493,222 +2493,238 @@ public class NotePadProvider extends ContentProvider implements
 			final Long newPrevious, final Long newParent, final Long oldParent,
 			final Long newListId, final Long oldListId, final String where,
 			final String[] whereArgs) throws SQLException {
-		// First get the note currently at this location and some information
-		// about the surroundings
-		String nextPos = null, previousPos = null, parentPos = null;
-		// Query the position at the parent, previous location AND of the note
-		// currently at this position
-		{
-			final Cursor c = db.rawQuery(
-					targetPositions(newParent, newPrevious),
-					targetPositionArgs(newListId, newParent, newPrevious));
-			Log.d("posredux", "Finding target: " + newListId + ", " + newParent
-					+ ", " + newPrevious);
-			Log.d("posredux", targetPositions(newParent, newPrevious));
-			while (c.moveToNext()) {
-				Log.d("posredux", "Found target");
-				/*
-				 * If previous is null, then we will only have one result and it
-				 * is the current note Sorted by truepos, so parent first, then
-				 * previous, then current
-				 */
-				if (parentPos == null && newParent != null) {
-					parentPos = c.getString(c
-							.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
-					Log.d("posredux", "parentPos = " + parentPos);
-				} else if (previousPos == null && newPrevious != null) {
-					previousPos = c.getString(c
-							.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
-					Log.d("posredux", "previousPos = " + previousPos);
-					// Otherwise it will be the current
-				} else if (nextPos == null) {
-					nextPos = c.getString(c
-							.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
-					Log.d("posredux", "nextPos = " + nextPos);
-					// If we are adding a new note, it will have null values
-					// which mathces target position
-					if (nextPos != null && nextPos.isEmpty())
-						nextPos = null;
-				} else
-					Log.d("posredux",
-							"Cursor returned more items than expected: "
-									+ c.getString(c
-											.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS)));
-			}
-			c.close();
-		}
 
-		// Make sure they have valid values
-		if (previousPos == null)
-			previousPos = Notes.HEAD;
-		if (nextPos == null)
-			nextPos = Notes.TAIL;
+		// Do a query
+		Log.d("posredux", "finding with where");
+		Log.d("posredux", "" + where);
+		if (whereArgs != null && whereArgs.length >= 2)
+			Log.d("posredux", "" + whereArgs[0] + ", " + whereArgs[1]);
+		final Cursor tree = db.query(
+				Notes.TABLE_NAME,
+				toStringArray(Notes._ID, Notes.COLUMN_NAME_PARENT,
+						Notes.COLUMN_NAME_PREVIOUS), where, whereArgs, null,
+				null, Notes.COLUMN_NAME_TRUEPOS);
 
-		final String prefix = parentPos == null ? "" : parentPos + ".";
-
-		previousPos = prefix + previousPos;
-		nextPos = prefix + nextPos;
-
-		// start transaction
-		db.beginTransaction();
-		try {
-			// detach current note from the previous
-			// if nextPos is not TAIL
-			if (!Notes.TAIL.equals(nextPos)) {
-				// Make a copy/delete of it for gtasks since it will move
-				Log.d("posredux", "Copydeleting preceeding note");
-				String whereGtask = NotePad.GTasks.COLUMN_NAME_DB_ID
-						+ " IN (SELECT " + Notes._ID + " FROM "
-						+ Notes.TABLE_NAME + " WHERE "
-						+ toWhereValidClause(Notes.COLUMN_NAME_LIST) + " AND "
-						+ Notes.COLUMN_NAME_PARENT + " IS %s" + " AND "
-						+ Notes.COLUMN_NAME_PREVIOUS + " IS %s)";
-				final String[] whereGtaskArgs;
-				if (newParent == null) {
-					if (newPrevious == null) {
-						whereGtask = String.format(whereGtask, "NULL", "NULL");
-						whereGtaskArgs = toWhereArgs(newListId);
-					} else {
-						whereGtask = String.format(whereGtask, "NULL", "?");
-						whereGtaskArgs = toWhereArgs(newListId, newPrevious);
-					}
-				} else {
-					if (newPrevious == null) {
-						whereGtask = String.format(whereGtask, "?", "NULL");
-						whereGtaskArgs = toWhereArgs(newListId, newParent);
-					} else {
-						whereGtask = String.format(whereGtask, "?", "?");
-						whereGtaskArgs = toWhereArgs(newListId, newParent,
-								newPrevious);
-					}
+		// If this query is empty, then there is nothing to do
+		if (!tree.moveToNext()) {
+			tree.close();
+			return;
+		} else {
+			// Go back before first
+			tree.moveToPrevious();
+			// First get the note currently at this location and some
+			// information
+			// about the surroundings
+			String nextPos = null, previousPos = null, parentPos = null;
+			// Query the position at the parent, previous location AND of the
+			// note
+			// currently at this position
+			{
+				final Cursor c = db.rawQuery(
+						targetPositions(newParent, newPrevious),
+						targetPositionArgs(newListId, newParent, newPrevious));
+				Log.d("posredux", "Finding target: " + newListId + ", "
+						+ newParent + ", " + newPrevious);
+				Log.d("posredux", targetPositions(newParent, newPrevious));
+				while (c.moveToNext()) {
+					Log.d("posredux", "Found target");
+					/*
+					 * If previous is null, then we will only have one result
+					 * and it is the current note Sorted by truepos, so parent
+					 * first, then previous, then current
+					 */
+					if (parentPos == null && newParent != null) {
+						parentPos = c.getString(c
+								.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
+						Log.d("posredux", "parentPos = " + parentPos);
+					} else if (previousPos == null && newPrevious != null) {
+						previousPos = c.getString(c
+								.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
+						Log.d("posredux", "previousPos = " + previousPos);
+						// Otherwise it will be the current
+					} else if (nextPos == null) {
+						nextPos = c.getString(c
+								.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
+						Log.d("posredux", "nextPos = " + nextPos);
+						// If we are adding a new note, it will have null values
+						// which mathces target position
+						if (nextPos != null && nextPos.isEmpty())
+							nextPos = null;
+					} else
+						Log.d("posredux",
+								"Cursor returned more items than expected: "
+										+ c.getString(c
+												.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS)));
 				}
-				Log.d("posredux", whereGtask);
-				copyDeleteNote(db, newListId, whereGtask, whereGtaskArgs);
-				// Now detach it
-				Log.d("posredux", "Detatching it");
-				final ContentValues prevalue = new ContentValues();
-				prevalue.putNull(Notes.COLUMN_NAME_PREVIOUS);
+				c.close();
+			}
+
+			// Make sure they have valid values
+			if (previousPos == null)
+				previousPos = Notes.HEAD;
+			if (nextPos == null)
+				nextPos = Notes.TAIL;
+
+			final String prefix = parentPos == null ? "" : parentPos + ".";
+
+			previousPos = prefix + previousPos;
+			nextPos = prefix + nextPos;
+
+			// start transaction
+			db.beginTransaction();
+			try {
+				// detach current note from the previous
+				// if nextPos is not TAIL
+				if (!Notes.TAIL.equals(nextPos)) {
+					// Make a copy/delete of it for gtasks since it will move
+					Log.d("posredux", "Copydeleting preceeding note");
+					String whereGtask = NotePad.GTasks.COLUMN_NAME_DB_ID
+							+ " IN (SELECT " + Notes._ID + " FROM "
+							+ Notes.TABLE_NAME + " WHERE "
+							+ toWhereValidClause(Notes.COLUMN_NAME_LIST)
+							+ " AND " + Notes.COLUMN_NAME_PARENT + " IS %s"
+							+ " AND " + Notes.COLUMN_NAME_PREVIOUS + " IS %s)";
+					final String[] whereGtaskArgs;
+					if (newParent == null) {
+						if (newPrevious == null) {
+							whereGtask = String.format(whereGtask, "NULL",
+									"NULL");
+							whereGtaskArgs = toWhereArgs(newListId);
+						} else {
+							whereGtask = String.format(whereGtask, "NULL", "?");
+							whereGtaskArgs = toWhereArgs(newListId, newPrevious);
+						}
+					} else {
+						if (newPrevious == null) {
+							whereGtask = String.format(whereGtask, "?", "NULL");
+							whereGtaskArgs = toWhereArgs(newListId, newParent);
+						} else {
+							whereGtask = String.format(whereGtask, "?", "?");
+							whereGtaskArgs = toWhereArgs(newListId, newParent,
+									newPrevious);
+						}
+					}
+					Log.d("posredux", whereGtask);
+					copyDeleteNote(db, newListId, whereGtask, whereGtaskArgs);
+					// Now detach it
+					Log.d("posredux", "Detatching it");
+					final ContentValues prevalue = new ContentValues();
+					prevalue.putNull(Notes.COLUMN_NAME_PREVIOUS);
+					db.update(
+							Notes.TABLE_NAME,
+							prevalue,
+							toWhereValidClause(Notes.COLUMN_NAME_PREVIOUS,
+									Notes.COLUMN_NAME_PARENT,
+									Notes.COLUMN_NAME_LIST),
+							toWhereArgs(newPrevious, newParent, newListId));
+					Log.d("posredux", "detached, ready for insert");
+				}
+
+				// Calculate a position between previous and the note currently
+				// at
+				// this position
+
+				// Use this to keep track of position last set across levels
+				// Key is parent of note
+				HashMap<Long, String> currentPositions = new HashMap<Long, String>();
+				// Start with first level
+				currentPositions.put(oldParent, previousPos);
+				boolean firstNote = true;
+				final ContentValues values = new ContentValues();
+				long lastNoteId = -1;
+				while (tree.moveToNext()) {
+					// Clear previous values
+					values.clear();
+
+					// Get this note's values
+					final long noteId = tree.getLong(tree
+							.getColumnIndex(Notes._ID));
+					// final String previousS = c.getString(c
+					// .getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
+					final String parentS = tree.getString(tree
+							.getColumnIndex(Notes.COLUMN_NAME_PARENT));
+					// final Long notePrevious = previousS == null ? null : Long
+					// .parseLong(previousS);
+					final Long noteParent = parentS == null ? null : Long
+							.parseLong(parentS);
+
+					Log.d("posredux", "inserting child: " + noteId);
+
+					// first note returned by the query gets a new previous
+					// value
+					if (firstNote) {
+						Log.d("posredux", "is first child");
+						values.put(Notes.COLUMN_NAME_PREVIOUS, newPrevious);
+						Log.d("posredux", "new child previous: " + newPrevious);
+						firstNote = false;
+					}
+
+					// set immediate children's parent to newParent
+					// they also calculate position with next note and not tail
+					// and set last note
+					String notePos;
+					if (noteParent == null && noteParent == oldParent
+							|| noteParent.equals(oldParent)) {
+						Log.d("posredux", "is immediate child");
+						lastNoteId = noteId;
+						values.put(Notes.COLUMN_NAME_PARENT, newParent);
+						values.put(Notes.COLUMN_NAME_PARENT, oldParent);
+						Log.d("posredux", "new child parent: " + newParent);
+						notePos = Notes.between(
+								currentPositions.get(noteParent), nextPos);
+					} else {
+						Log.d("posredux", "is a descendant");
+						notePos = Notes.between(
+								currentPositions.get(noteParent), Notes.TAIL);
+					}
+					Log.d("posredux", "new child pos: " + notePos);
+					values.put(Notes.COLUMN_NAME_TRUEPOS, notePos);
+					// Remember for later, yes use old parent for this
+					currentPositions.put(noteParent, notePos);
+
+					Log.d("posredux", "copydeleting child");
+					// Make a copy/delete before we move it
+					copyDeleteNote(db, noteId, oldListId);
+
+					Log.d("posredux", "updating child");
+					// update with values
+					db.update(Notes.TABLE_NAME, values,
+							toWhereClause(Notes._ID), toWhereArgs(noteId));
+					// update indentation
+					Log.d("posredux", parentIndent(newParent, noteId));
+					db.execSQL(parentIndent(newParent, noteId));
+				}
+				tree.close();
+
+				// reattach the note that was moved to make space to the last
+				// immediate child
+				values.clear();
+				values.put(Notes.COLUMN_NAME_PREVIOUS, lastNoteId);
+				Log.d("posredux", "reattaching following note with "
+						+ lastNoteId);
+				if (lastNoteId < 0)
+					throw new InvalidParameterException(
+							"cant reattach, no valid last note!");
+
 				db.update(
 						Notes.TABLE_NAME,
-						prevalue,
-						toWhereValidClause(Notes.COLUMN_NAME_PREVIOUS,
-								Notes.COLUMN_NAME_PARENT,
+						values,
+						toWhereClause(Notes.COLUMN_NAME_TRUEPOS,
 								Notes.COLUMN_NAME_LIST),
-						toWhereArgs(newPrevious, newParent, newListId));
-				Log.d("posredux", "detached, ready for insert");
+						toWhereArgs(nextPos, newListId));
+
+				// mark transaction successful
+				Log.d("posredux", "setting successful");
+				db.setTransactionSuccessful();
+			} catch (SQLException e) {
+				Log.d("posredux", e.getLocalizedMessage());
+				e.printStackTrace();
+				throw e;
+			} finally {
+				// commit transaction
+				Log.d("posredux", "ending");
+				db.endTransaction();
 			}
-
-			// Calculate a position between previous and the note currently at
-			// this position
-
-			// Do a query
-			Log.d("posredux", "finding with where");
-			Log.d("posredux", "" + where);
-			if (whereArgs != null && whereArgs.length >= 2)
-				Log.d("posredux", "" + whereArgs[0] + ", " + whereArgs[1]);
-			final Cursor tree = db.query(
-					Notes.TABLE_NAME,
-					toStringArray(Notes._ID, Notes.COLUMN_NAME_PARENT,
-							Notes.COLUMN_NAME_PREVIOUS), where, whereArgs,
-					null, null, Notes.COLUMN_NAME_TRUEPOS);
-
-			// Use this to keep track of position last set across levels
-			// Key is parent of note
-			HashMap<Long, String> currentPositions = new HashMap<Long, String>();
-			// Start with first level
-			currentPositions.put(oldParent, previousPos);
-			boolean firstNote = true;
-			final ContentValues values = new ContentValues();
-			long lastNoteId = -1;
-			while (tree.moveToNext()) {
-				// Clear previous values
-				values.clear();
-
-				// Get this note's values
-				final long noteId = tree
-						.getLong(tree.getColumnIndex(Notes._ID));
-				// final String previousS = c.getString(c
-				// .getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
-				final String parentS = tree.getString(tree
-						.getColumnIndex(Notes.COLUMN_NAME_PARENT));
-				// final Long notePrevious = previousS == null ? null : Long
-				// .parseLong(previousS);
-				final Long noteParent = parentS == null ? null : Long
-						.parseLong(parentS);
-
-				Log.d("posredux", "inserting child: " + noteId);
-
-				// first note returned by the query gets a new previous value
-				if (firstNote) {
-					Log.d("posredux", "is first child");
-					values.put(Notes.COLUMN_NAME_PREVIOUS, newPrevious);
-					Log.d("posredux", "new child previous: " + newPrevious);
-					firstNote = false;
-				}
-
-				// set immediate children's parent to newParent
-				// they also calculate position with next note and not tail
-				// and set last note
-				String notePos;
-				if (noteParent == null && noteParent == oldParent
-						|| noteParent.equals(oldParent)) {
-					Log.d("posredux", "is immediate child");
-					lastNoteId = noteId;
-					values.put(Notes.COLUMN_NAME_PARENT, newParent);
-					values.put(Notes.COLUMN_NAME_PARENT, oldParent);
-					Log.d("posredux", "new child parent: " + newParent);
-					notePos = Notes.between(currentPositions.get(noteParent),
-							nextPos);
-				} else {
-					Log.d("posredux", "is a descendant");
-					notePos = Notes.between(currentPositions.get(noteParent),
-							Notes.TAIL);
-				}
-				Log.d("posredux", "new child pos: " + notePos);
-				values.put(Notes.COLUMN_NAME_TRUEPOS, notePos);
-				// Remember for later, yes use old parent for this
-				currentPositions.put(noteParent, notePos);
-
-				Log.d("posredux", "copydeleting child");
-				// Make a copy/delete before we move it
-				copyDeleteNote(db, noteId, oldListId);
-
-				Log.d("posredux", "updating child");
-				// update with values
-				db.update(Notes.TABLE_NAME, values, toWhereClause(Notes._ID),
-						toWhereArgs(noteId));
-				// update indentation
-				Log.d("posredux", parentIndent(newParent, noteId));
-				db.execSQL(parentIndent(newParent, noteId));
-			}
-			tree.close();
-
-			// reattach the note that was moved to make space to the last
-			// immediate child
-			values.clear();
-			values.put(Notes.COLUMN_NAME_PREVIOUS, lastNoteId);
-			Log.d("posredux", "reattaching following note with " + lastNoteId);
-			if (lastNoteId < 0)
-				throw new InvalidParameterException(
-						"cant reattach, no valid last note!");
-			db.update(
-					Notes.TABLE_NAME,
-					values,
-					toWhereClause(Notes.COLUMN_NAME_TRUEPOS,
-							Notes.COLUMN_NAME_LIST),
-					toWhereArgs(nextPos, newListId));
-
-			// mark transaction successful
-			Log.d("posredux", "setting successful");
-			db.setTransactionSuccessful();
-		} catch (SQLException e) {
-			Log.d("posredux", e.getLocalizedMessage());
-			e.printStackTrace();
-			throw e;
-		} finally {
-			// commit transaction
-			Log.d("posredux", "ending");
-			db.endTransaction();
 		}
 	}
 
