@@ -163,7 +163,7 @@ public class NotePadProvider extends ContentProvider implements
 		String totalSelect = "";
 		if (parent != null)
 			totalSelect += String
-					.format("SELECT %s FROM %s WHERE %s IS ? AND %s IS ? AND %s IS NOT 1'",
+					.format("SELECT %s FROM %s WHERE %s IS ? AND %s IS ? AND %s IS NOT 1",
 							Notes.COLUMN_NAME_TRUEPOS, Notes.TABLE_NAME,
 							Notes._ID, Notes.COLUMN_NAME_LIST,
 							Notes.COLUMN_NAME_DELETED);
@@ -2520,6 +2520,8 @@ public class NotePadProvider extends ContentProvider implements
 			// note
 			// currently at this position
 			{
+				Log.d("posredux", "target query");
+				Log.d("posredux", targetPositions(newParent, newPrevious));
 				final Cursor c = db.rawQuery(
 						targetPositions(newParent, newPrevious),
 						targetPositionArgs(newListId, newParent, newPrevious));
@@ -2679,8 +2681,8 @@ public class NotePadProvider extends ContentProvider implements
 					}
 					Log.d("posredux", "new child pos: " + notePos);
 					values.put(Notes.COLUMN_NAME_TRUEPOS, notePos);
-					// Remember for later, yes use old parent for this
-					currentPositions.put(noteParent, notePos);
+					// Remember for later
+					currentPositions.put(noteId, notePos);
 
 					Log.d("posredux", "copydeleting child");
 					// Make a copy/delete before we move it
