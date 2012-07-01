@@ -256,10 +256,18 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					mOriginalDueState = savedInstanceState
 							.getBoolean(ORIGINAL_DUE_STATE);
 					mOriginalListId = savedInstanceState.getLong(ORIGINAL_LIST);
-					mOriginalParent = savedInstanceState
-							.getLong(ORIGINAL_PARENT);
-					mOriginalPrevious = savedInstanceState
-							.getLong(ORIGINAL_PREVIOUS);
+					if (savedInstanceState.containsKey(ORIGINAL_PARENT))
+						mOriginalParent = savedInstanceState
+								.getLong(ORIGINAL_PARENT);
+					else
+						mOriginalParent = null;
+					Log.d("posredux", "originalpar1 " + mOriginalParent);
+					if (savedInstanceState.containsKey(ORIGINAL_PREVIOUS))
+						mOriginalPrevious = savedInstanceState
+								.getLong(ORIGINAL_PREVIOUS);
+					else
+						mOriginalPrevious = null;
+					Log.d("posredux", "originalprev1 " + mOriginalPrevious);
 				} else {
 					mOriginalNote = "";
 					mOriginalDueDate = "";
@@ -268,6 +276,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					mOriginalListId = -1;
 					mOriginalParent = null;
 					mOriginalPrevious = null;
+					Log.d("posredux", "originalpar2 " + mOriginalParent);
+					Log.d("posredux", "originalprev2 " + mOriginalPrevious);
 				}
 
 				// Prepare the loader. Either re-connect with an existing one,
@@ -304,9 +314,18 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		date = dueDateSet != mOriginalDueState
 				|| (dueDateSet && !noteDueDate.format3339(false).equals(
 						mOriginalDueDate));
-		listC = this.listId != mOriginalListId;
+		listC = this.listId != mOriginalListId && mOriginalListId > -1;
 		parentC = this.parent != mOriginalParent;
 		previousC = this.previous != mOriginalPrevious;
+		
+		Log.d("posredux", "has note changed");
+		Log.d("posredux", "title " + title);
+		Log.d("posredux", "note " + note);
+		Log.d("posredux", "completed " + completed);
+		Log.d("posredux", "date " + date);
+		Log.d("posredux", "listC " + listC);
+		Log.d("posredux", "parentC " + parentC);
+		Log.d("posredux", "previousC " + previousC);
 
 		return title || note || completed || date || listC || parentC
 				|| previousC;
@@ -349,12 +368,21 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			values.put(NotePad.Notes.COLUMN_NAME_LOCKED, 0);
 		}
 
-		// Add list
-		values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
+		// Add list if changed
+		if (listId != mOriginalListId && mOriginalListId > -1)
+			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
 
-		// Add position
-		values.put(Notes.COLUMN_NAME_PARENT, parent);
-		values.put(Notes.COLUMN_NAME_PREVIOUS, previous);
+		// Add position if changed
+		Log.d("posredux", "editor save parent: " + parent + ", "
+				+ mOriginalParent);
+		Log.d("posredux", "editor save previous: " + previous + ", "
+				+ mOriginalPrevious);
+		Log.d("posredux", "editor save list: " + listId + ", "
+				+ mOriginalListId);
+		if (parent != mOriginalParent)
+			values.put(Notes.COLUMN_NAME_PARENT, parent);
+		if (previous != mOriginalPrevious)
+			values.put(Notes.COLUMN_NAME_PREVIOUS, previous);
 
 		// Put the due-date in
 		if (dueDateSet) {
@@ -392,10 +420,17 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			id = getIdFromUri(mUri);
 		}
 		// update changed variable
+		mOriginalTitle = title;
+		mOriginalNote = text;
+		mOriginalDueDate = dueDateSet ? due : "";
+		
 		mCompleteChanged = false;
 		mOriginalListId = listId;
 		mOriginalParent = parent;
+		Log.d("posredux", "originalpar3 " + mOriginalParent);
 		mOriginalPrevious = previous;
+		Log.d("posredux", "originalprev3 " + mOriginalPrevious);
+		
 	}
 
 	private String makeTitle(String text) {
@@ -676,10 +711,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	protected void makeSubtaskOf(Long newParent) {
 		if (newParent != this.parent) {
+			Log.d("posredux", "newParent: " + newParent + ", oldparent: "
+					+ this.parent);
 			if (newParent != null && newParent == TOPNOTE)
-				newParent = null;
+				this.parent = null;
+			else
+				this.parent = newParent;
 			this.previous = null;
-			this.parent = newParent;
 			saveNote();
 		}
 	}
@@ -913,6 +951,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		// is opened
 		// Not sure if it is necessary with the fixes to selfAction.
 		// If i'm going to do it, use a ViewSwitcher
+		Log.d("posredux", "savign before display");
 		saveNote();
 		doSave = true;
 		this.id = id;
@@ -1003,6 +1042,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					.getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
 			this.previous = previousS == null ? null : Long
 					.parseLong(previousS);
+			
+			Log.d("posredux", "noteloadpar " + parent);
+			Log.d("posredux", "noteloadpre " + previous);
 
 			if (subtaskAdapter.getCount() > 0) {
 				// It's loaded, select current
@@ -1084,6 +1126,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mOriginalListId = listId;
 			mOriginalParent = parent;
 			mOriginalPrevious = previous;
+			Log.d("posredux", "originalprev4 " + mOriginalPrevious);
+			Log.d("posredux", "originalpar4 " + mOriginalParent);
 
 			// Some things might have changed
 			getActivity().invalidateOptionsMenu();
