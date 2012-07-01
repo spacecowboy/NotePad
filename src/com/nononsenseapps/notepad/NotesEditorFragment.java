@@ -710,13 +710,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	}
 
 	protected void makeSubtaskOf(Long newParent) {
+		if (newParent != null && newParent == TOPNOTE)
+			newParent = null;
+		
 		if (newParent != this.parent) {
 			Log.d("posredux", "newParent: " + newParent + ", oldparent: "
 					+ this.parent);
-			if (newParent != null && newParent == TOPNOTE)
-				this.parent = null;
-			else
-				this.parent = newParent;
+			this.parent = newParent;
 			this.previous = null;
 			saveNote();
 		}
@@ -1443,6 +1443,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public void onLoaderReset(Loader<Cursor> loader) {
 		if (LOADER_LISTS_ID == loader.getId())
 			listAdapter.swapCursor(null);
+		if (OTHER_NOTES_LOADER == loader.getId())
+			subtaskAdapter.swapCursor(null);
 	}
 
 	public long getCurrentNoteId() {

@@ -1372,7 +1372,7 @@ public class NotePadProvider extends ContentProvider implements
 			// If the insert succeeded, the row ID exists.
 			if (rowId > 0) {
 				// Insert into the correct list position
-				insertNoteTree(db, null, null, null, listId, listId,
+				insertNoteTree(db, null, null, listId, listId,
 						toWhereClause(Notes._ID), toWhereArgs(rowId));
 
 				db.setTransactionSuccessful();
@@ -1842,7 +1842,6 @@ public class NotePadProvider extends ContentProvider implements
 			// Re attach possible children
 			insertNoteTree(db, posValues.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
 					posValues.getAsLong(Notes.COLUMN_NAME_PARENT),
-					Long.parseLong(id),
 					posValues.getAsLong(Notes.COLUMN_NAME_LIST),
 					posValues.getAsLong(Notes.COLUMN_NAME_LIST),
 					noteDescendants(posValues
@@ -2098,7 +2097,6 @@ public class NotePadProvider extends ContentProvider implements
 								db,
 								values.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
 								values.getAsLong(Notes.COLUMN_NAME_PARENT),
-								posValues.getAsLong(Notes.COLUMN_NAME_PARENT),
 								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
 								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
 								noteDescendants(posValues
@@ -2199,7 +2197,6 @@ public class NotePadProvider extends ContentProvider implements
 								db,
 								values.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
 								values.getAsLong(Notes.COLUMN_NAME_PARENT),
-								posValues.getAsLong(Notes.COLUMN_NAME_PARENT),
 								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
 								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
 								noteDescendants(posValues
@@ -2211,7 +2208,6 @@ public class NotePadProvider extends ContentProvider implements
 								db,
 								values.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
 								values.getAsLong(Notes.COLUMN_NAME_PARENT),
-								posValues.getAsLong(Notes.COLUMN_NAME_PARENT),
 								newListId,
 								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
 								noteWithDescendants(id, posValues
@@ -2490,7 +2486,7 @@ public class NotePadProvider extends ContentProvider implements
 	 * @throws SQLException
 	 */
 	private static void insertNoteTree(final SQLiteDatabase db,
-			final Long newPrevious, final Long newParent, final Long oldParent,
+			final Long newPrevious, final Long newParent,
 			final Long newListId, final Long oldListId, final String where,
 			final String[] whereArgs) throws SQLException {
 
@@ -2629,8 +2625,10 @@ public class NotePadProvider extends ContentProvider implements
 				// Use this to keep track of position last set across levels
 				// Key is parent of note
 				HashMap<Long, String> currentPositions = new HashMap<Long, String>();
+				HashMap<Long, String> parentPositions = new HashMap<Long, String>();
+				Long immediateOldParent = Long.valueOf(-1);
 				// Start with first level
-				currentPositions.put(oldParent, previousPos);
+				parentPositions.put(null, "");
 				boolean firstNote = true;
 				final ContentValues values = new ContentValues();
 				long lastNoteId = -1;
@@ -2647,10 +2645,11 @@ public class NotePadProvider extends ContentProvider implements
 							.getColumnIndex(Notes.COLUMN_NAME_PARENT));
 					// final Long notePrevious = previousS == null ? null : Long
 					// .parseLong(previousS);
-					final Long noteParent = parentS == null ? null : Long
+					Long noteParent = parentS == null ? null : Long
 							.parseLong(parentS);
 
 					Log.d("posredux", "inserting child: " + noteId);
+					Log.d("posredux", "child parent: " + noteParent);
 
 					// first note returned by the query gets a new previous
 					// value
@@ -2659,30 +2658,41 @@ public class NotePadProvider extends ContentProvider implements
 						values.put(Notes.COLUMN_NAME_PREVIOUS, newPrevious);
 						Log.d("posredux", "new child previous: " + newPrevious);
 						firstNote = false;
+						immediateOldParent = noteParent;
+						currentPositions.put(immediateOldParent, previousPos);
+						Log.d("posredux", "immediateOldParent: " + immediateOldParent);
 					}
 
 					// set immediate children's parent to newParent
 					// they also calculate position with next note and not tail
 					// and set last note
 					String notePos;
-					if (noteParent == null && noteParent == oldParent
-							|| noteParent.equals(oldParent)) {
+					if (noteParent == null && noteParent == immediateOldParent
+							|| noteParent != null
+							&& noteParent.equals(immediateOldParent)) {
 						Log.d("posredux", "is immediate child");
 						lastNoteId = noteId;
 						values.put(Notes.COLUMN_NAME_PARENT, newParent);
-						values.put(Notes.COLUMN_NAME_PARENT, oldParent);
+						// for indendation
+						noteParent = newParent;
+
 						Log.d("posredux", "new child parent: " + newParent);
 						notePos = Notes.between(
-								currentPositions.get(noteParent), nextPos);
+								currentPositions.get(immediateOldParent), nextPos);
 					} else {
 						Log.d("posredux", "is a descendant");
+						// If this child does not have a position to work with,
+						// insert HEAD
+						if (!currentPositions.containsKey(noteParent))
+							currentPositions.put(noteParent, parentPositions.get(noteParent) + Notes.HEAD);
 						notePos = Notes.between(
-								currentPositions.get(noteParent), Notes.TAIL);
+								currentPositions.get(noteParent), parentPositions.get(noteParent) + Notes.TAIL);
 					}
 					Log.d("posredux", "new child pos: " + notePos);
 					values.put(Notes.COLUMN_NAME_TRUEPOS, notePos);
-					// Remember for later
-					currentPositions.put(noteId, notePos);
+					// Remember for following notes
+					currentPositions.put(noteParent, notePos);
+					parentPositions.put(noteId, notePos + ".");
 
 					Log.d("posredux", "copydeleting child");
 					// Make a copy/delete before we move it
@@ -2693,8 +2703,8 @@ public class NotePadProvider extends ContentProvider implements
 					db.update(Notes.TABLE_NAME, values,
 							toWhereClause(Notes._ID), toWhereArgs(noteId));
 					// update indentation
-					Log.d("posredux", parentIndent(newParent, noteId));
-					db.execSQL(parentIndent(newParent, noteId));
+					Log.d("posredux", parentIndent(noteParent, noteId));
+					db.execSQL(parentIndent(noteParent, noteId));
 				}
 				tree.close();
 
