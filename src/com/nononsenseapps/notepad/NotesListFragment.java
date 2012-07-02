@@ -875,31 +875,26 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE)
 						|| columnIndex == cursor
 								.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE)) {
-					TextView tv = (TextView) view;
+					final TextView tv = (TextView) view;
 
 					// Hide empty note
 					if (columnIndex == cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE)) {
 
-						LinearLayout.LayoutParams layoutParams;
-						String noteText = cursor.getString(cursor
+						final String noteText = cursor.getString(cursor
 								.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE));
-						boolean isEmpty = noteText == null
+						final boolean isEmpty = noteText == null
 								|| noteText.isEmpty();
 
 						// Set height to zero if it's empty, otherwise wrap
 						if (isEmpty)
-							layoutParams = new LinearLayout.LayoutParams(0, 0);
+							tv.setVisibility(View.GONE);
 						else
-							layoutParams = new LinearLayout.LayoutParams(0,
-									LinearLayout.LayoutParams.WRAP_CONTENT);
-						layoutParams.weight = 1;
-
-						tv.setLayoutParams(layoutParams);
+							tv.setVisibility(View.VISIBLE);
 					}
 
 					// Set strike through on completed tasks
-					String text = cursor.getString(cursor
+					final String text = cursor.getString(cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS));
 					if (text != null
 							&& text.equals(getText(R.string.gtask_status_completed))) {
@@ -918,29 +913,22 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					return false;
 				} else if (columnIndex == cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE)) {
-					String text = cursor.getString(cursor
+					final String text = cursor.getString(cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE));
-					TextView tv = (TextView) view;
-					LinearLayout.LayoutParams layoutParams;
+					final TextView tv = (TextView) view;
 					if (text == null || text.isEmpty()) {
-						// Set height to zero
-						layoutParams = new LinearLayout.LayoutParams(
-								LinearLayout.LayoutParams.WRAP_CONTENT, 0);
+						tv.setVisibility(View.GONE);
 					} else {
-						// Set height to wrap
-						layoutParams = new LinearLayout.LayoutParams(
-								LinearLayout.LayoutParams.WRAP_CONTENT,
-								LinearLayout.LayoutParams.WRAP_CONTENT);
+						tv.setVisibility(View.VISIBLE);
 					}
-					tv.setLayoutParams(layoutParams);
 					return false;
 				} else if (columnIndex == cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL)) {
 					// Should only set this on the sort options where it is
 					// expected
-					TextView indentView = (TextView) view;
+					final TextView indentView = (TextView) view;
 
-					int level = cursor.getInt(cursor
+					final int level = cursor.getInt(cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL));
 
 					// Now set the width

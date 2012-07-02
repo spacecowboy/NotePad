@@ -12,7 +12,7 @@
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
-     limitations under the License.
+     limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -82,39 +82,39 @@
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="?android:attr/textColorPrimary" />
 
-
-                <TextView
-                    android:id="@+id/itemNote"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:gravity="center_vertical"
-                    android:singleLine="true"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?android:attr/textColorSecondary" />
+            <TextView
+                android:id="@+id/itemNote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="?android:attr/textColorSecondary" />
         </LinearLayout>
-        <LinearLayout  android:id="@+id/dragView"
+
+        <LinearLayout
+            android:id="@+id/dragView"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:orientation="vertical">
-            
+            android:orientation="vertical" >
+
             <ImageView
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:scaleType="fitXY"
                 android:layout_gravity="center"
+                android:scaleType="fitXY"
                 android:src="@drawable/action_about_dark" />
-            
+
             <com.nononsenseapps.ui.DateView
-                    android:id="@+id/itemDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:paddingLeft="0dp"
-                    android:textColor="?android:attr/textColorSecondary"
-                    android:textSize="12sp" />
-            
+                android:id="@+id/itemDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:paddingLeft="0dp"
+                android:textColor="?android:attr/textColorSecondary"
+                android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -123,7 +123,7 @@
         android:layout_width="match_parent"
         android:layout_height="2dp"
         android:scaleType="fitXY"
-        android:visibility="invisible"
-        android:src="@drawable/list_pressed_holo" />
+        android:src="@drawable/list_pressed_holo"
+        android:visibility="invisible" />
 
 </LinearLayout>
