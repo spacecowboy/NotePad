@@ -617,7 +617,7 @@ public class NotePadProvider extends ContentProvider implements
 					+ " INTEGER DEFAULT 0,"
 
 					+ NotePad.Notes.COLUMN_NAME_TRUEPOS
-					+ " TEXT DEFAULT '-1' UNIQUE,"
+					+ " TEXT DEFAULT '-1' NOT NULL,"
 					+ NotePad.Notes.COLUMN_NAME_PREVIOUS
 					+ " INTEGER UNIQUE DEFAULT NULL REFERENCES "
 					+ Notes.TABLE_NAME + "," + NotePad.Notes.COLUMN_NAME_PARENT
