@@ -2772,6 +2772,9 @@ public class NotePadProvider extends ContentProvider implements
 					// Remember for following notes
 					currentPositions.put(noteParent, notePos);
 					parentPositions.put(noteId, notePos + ".");
+					
+					// Also set list
+					values.put(Notes.COLUMN_NAME_LIST, newListId);
 
 					Log.d("posredux", "copydeleting child");
 					// Make a copy/delete before we move it
