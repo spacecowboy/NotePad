@@ -112,11 +112,11 @@
     <string name="preferences_week_start_day_default" tools:ignore="MissingTranslation" >-1</string>
 
     <!-- Un-translated yet -->
-    <string name="notecopied_msg">notes to the clipboard</string>
-    <string name="notecopied_msg_single">note to the clipboard</string>
-    <string name="mode_choose">Select Items</string>
-    <string name="mode_choose_single">one item selected</string>
-    <string name="mode_choose_more">items selected</string>
+    <string name="notecopied_msg"  tools:ignore="MissingTranslation">notes to the clipboard</string>
+    <string name="notecopied_msg_single"  tools:ignore="MissingTranslation">note to the clipboard</string>
+    <string name="mode_choose"  tools:ignore="MissingTranslation">Select Items</string>
+    <string name="mode_choose_single"  tools:ignore="MissingTranslation">one item selected</string>
+    <string name="mode_choose_more"  tools:ignore="MissingTranslation">items selected</string>
     <string name="lock_note">Lock note</string>
     <string name="unlock_note">Unlock note</string>
     <string name="locked">Locked</string>
