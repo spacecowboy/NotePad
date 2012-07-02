@@ -628,7 +628,10 @@ public class NotePadProvider extends ContentProvider implements
 					+ " INTEGER DEFAULT 0 NOT NULL,"
 
 					+ NotePad.Notes.COLUMN_NAME_DELETED
-					+ " INTEGER DEFAULT 0 NOT NULL" + ");");
+					+ " INTEGER DEFAULT 0 NOT NULL,"
+
+					+ "UNIQUE(" + Notes.COLUMN_NAME_LIST + ","
+					+ Notes.COLUMN_NAME_TRUEPOS + ")" + ");");
 		}
 
 		private void createListsTable(SQLiteDatabase db) {
@@ -2205,7 +2208,8 @@ public class NotePadProvider extends ContentProvider implements
 								values.getAsLong(Notes.COLUMN_NAME_PARENT),
 								values.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
 								Long.parseLong(id))) {
-							Log.d("posredux2", "Target was a descendant of the note, dont do shit");
+							Log.d("posredux2",
+									"Target was a descendant of the note, dont do shit");
 							// Remove positions from values before update
 							values.remove(Notes.COLUMN_NAME_PARENT);
 							values.remove(Notes.COLUMN_NAME_PREVIOUS);
@@ -2399,29 +2403,30 @@ public class NotePadProvider extends ContentProvider implements
 	 * @param newPrevious
 	 * @param ancestor
 	 */
-	private static boolean isDescendant(final SQLiteDatabase db, final Long newParent, final Long newPrevious,
-			final long ancestor) {
-		if (newParent != null && ancestor == newParent || newPrevious != null && ancestor == newPrevious)
+	private static boolean isDescendant(final SQLiteDatabase db,
+			final Long newParent, final Long newPrevious, final long ancestor) {
+		if (newParent != null && ancestor == newParent || newPrevious != null
+				&& ancestor == newPrevious)
 			return true;
 		if (newParent == null)
 			return false;
-		
+
 		// Know one of them isnt null
-		//final long possibleDescendant = newPrevious != null ? newPrevious : newParent;
-		
+		// final long possibleDescendant = newPrevious != null ? newPrevious :
+		// newParent;
+
 		if (newParent < 0 || ancestor < 0)
 			throw new InvalidParameterException("Cant have parent of -1!");
 
-		Log.d("posredux2", "descendant check with " + ancestor + ", " + newParent);
+		Log.d("posredux2", "descendant check with " + ancestor + ", "
+				+ newParent);
 		String ancestorPos = "";
 		String descPos = "-1";
 		// Fetch position of ancestor and the possible descendant
-		final Cursor c = db.query(
-				Notes.TABLE_NAME,
-				toStringArray(Notes._ID, Notes.COLUMN_NAME_TRUEPOS),
-				Notes._ID
-						+ String.format(" IN (%d, %d)", ancestor,
-								newParent), null, null, null, null);
+		final Cursor c = db.query(Notes.TABLE_NAME,
+				toStringArray(Notes._ID, Notes.COLUMN_NAME_TRUEPOS), Notes._ID
+						+ String.format(" IN (%d, %d)", ancestor, newParent),
+				null, null, null, null);
 		while (c.moveToNext()) {
 			Log.d("posredux2", "Getting positions for descendant check...");
 			final long id = c.getLong(c.getColumnIndex(Notes._ID));
@@ -2433,7 +2438,7 @@ public class NotePadProvider extends ContentProvider implements
 				descPos = pos;
 		}
 		c.close();
-		
+
 		// Now see if ancester is included in the notes lineage
 		Log.d("posredux2", "Descendant check with:");
 		Log.d("posredux2", "" + descPos);
@@ -2772,7 +2777,7 @@ public class NotePadProvider extends ContentProvider implements
 					// Remember for following notes
 					currentPositions.put(noteParent, notePos);
 					parentPositions.put(noteId, notePos + ".");
-					
+
 					// Also set list
 					values.put(Notes.COLUMN_NAME_LIST, newListId);
 

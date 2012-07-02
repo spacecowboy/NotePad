@@ -35,7 +35,7 @@ public class SectionDropListener implements DropListener {
 	@Override
 	public void onDrop(final int from, final int to) {
 		final ContentValues values = new ContentValues();
-		
+
 		Log.d("drop", "onDrop: " + from + ", " + to);
 
 		final long noteId = adapter.getItemId(from);
@@ -45,10 +45,10 @@ public class SectionDropListener implements DropListener {
 
 		// Set position data if we are displaying user sorting
 		toPosition(from, to, values);
-			
+
 		// Set new dat if we are displaying by date
 		toDate(from, to, values);
-			
+
 		// Update note with new information
 		updateNote(noteId, values);
 	}
@@ -73,8 +73,7 @@ public class SectionDropListener implements DropListener {
 	 * final position. the parent sets its own parent to equal the target drop.
 	 * Position is calculated from the drop.
 	 */
-	private void toPosition(final int from, final int to,
-			ContentValues values) {
+	private void toPosition(final int from, final int to, ContentValues values) {
 		// Get current sort order since that is valid even if the adapter
 		// is in list state
 		final String sortChoice = PreferenceManager
@@ -86,35 +85,77 @@ public class SectionDropListener implements DropListener {
 			final Long newPrevious;
 			final Long newParent;
 			final Long listId;
-			// If dropped on another note, the it should be placed previous to that
+			// If dropped on another note, the it should be placed next to that
 			// and it should have the same parent
-			if (SectionAdapter.TYPE_SECTION_HEADER == adapter.getItemViewType(to)) {
+			if (SectionAdapter.TYPE_SECTION_HEADER == adapter
+					.getItemViewType(to)) {
 				Log.d("posdrop", "on a header");
 				// Was dropped on a header then, means it should be first so use
 				// NULL then
 				newPrevious = null;
 				newParent = null;
-				
+
 				listId = null; // This should have been set by toList
 			} else {
 				Log.d("posdrop", "on another note");
-				newPrevious = adapter.getItemId(to);
-				// Get the parent which was included in the cursor
-				// CursorAdapters return a cursor at the correct position
-				final Cursor c = (Cursor) adapter.getItem(to);
-				final String parentS = c.getString(c.getColumnIndex(Notes.COLUMN_NAME_PARENT));
-				newParent = parentS == null ? null : Long.parseLong(parentS);
-				listId = c.getLong(c.getColumnIndex(Notes.COLUMN_NAME_LIST));
+				/*
+				 * Two cases, either the next note is at the same indent or more
+				 * to the left. In that case, we use the same parent as previous
+				 * and set previous = previous. Otherwise, the next note is more
+				 * to the right and then it would be strange not to have the
+				 * same parent. So do parent = next.parent, previous = null
+				 */
+				final Cursor c;
+				// There is no next note
+				if (adapter.getCount() <= (to + 1)
+						|| -1 == adapter.getItemViewType(to + 1)
+						|| SectionAdapter.TYPE_SECTION_HEADER == adapter
+								.getItemViewType(to + 1)) {
+					newPrevious = adapter.getItemId(to);
+					// Get the parent which was included in the cursor
+					// CursorAdapters return a cursor at the correct position
+					c = (Cursor) adapter.getItem(to);
+					final String parentS = c.getString(c
+							.getColumnIndex(Notes.COLUMN_NAME_PARENT));
+					newParent = parentS == null ? null : Long
+							.parseLong(parentS);
+				}
+				// There is a next note
+				else {
+					Cursor c2 = (Cursor) adapter.getItem(to);
+					final int prevIndent = c2.getInt(c2.getColumnIndex(Notes.COLUMN_NAME_INDENTLEVEL));
+					c2 = (Cursor) adapter.getItem(to+1);
+					final int nextIndent = c2.getInt(c2.getColumnIndex(Notes.COLUMN_NAME_INDENTLEVEL));
+					
+					if (nextIndent > prevIndent) {
+						newPrevious = null;
+						c = (Cursor) adapter.getItem(to+1);
+					} else {
+						newPrevious = adapter.getItemId(to);
+						// Get the parent which was included in the cursor
+						// CursorAdapters return a cursor at the correct position
+						c = (Cursor) adapter.getItem(to);
+					}
+					final String parentS = c.getString(c
+							.getColumnIndex(Notes.COLUMN_NAME_PARENT));
+					newParent = parentS == null ? null : Long
+							.parseLong(parentS);
+				}
+					
+					listId = c
+							.getLong(c.getColumnIndex(Notes.COLUMN_NAME_LIST));
+				
 			}
 			if (listId != null)
 				values.put(Notes.COLUMN_NAME_LIST, listId);
 			Log.d("posdrop", "par: " + newParent + " , pre: " + newPrevious);
 			values.put(Notes.COLUMN_NAME_PREVIOUS, newPrevious);
 			values.put(Notes.COLUMN_NAME_PARENT, newParent);
-			
+
 			if (!values.containsKey(Notes.COLUMN_NAME_LIST)) {
 				Log.d("posdrop", "Values do not include list! WTF!");
-				throw new NullPointerException("Tried to move a note but did not have any list id!");
+				throw new NullPointerException(
+						"Tried to move a note but did not have any list id!");
 			}
 		}
 	}
