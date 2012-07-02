@@ -2182,16 +2182,11 @@ public class NotePadProvider extends ContentProvider implements
 					Log.d("posredux",
 							"" + values.getAsString(Notes.COLUMN_NAME_LIST));
 
-					// Then detach the note if not done already
-					ContentValues posValues = detachNote(db, Long.parseLong(id));
-
-					final Long newListId;
-					if (values.containsKey(Notes.COLUMN_NAME_LIST))
-						newListId = values.getAsLong(Notes.COLUMN_NAME_LIST);
-					else
-						newListId = posValues.getAsLong(Notes.COLUMN_NAME_LIST);
-
 					if (values.containsKey(Notes.COLUMN_NAME_DELETED)) {
+						// Then detach the note if not done already
+						final ContentValues posValues = detachNote(db,
+								Long.parseLong(id));
+
 						// Re attach possible children
 						insertNoteTree(
 								db,
@@ -2203,16 +2198,45 @@ public class NotePadProvider extends ContentProvider implements
 										.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
 								null);
 					} else {
-						// Re attach at new location
-						insertNoteTree(
-								db,
-								values.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
+						// Only move a note to a position that is not in its sub
+						// tree, E.g. the parent can not be a descendant of the
+						// note
+						if (isDescendant(db,
 								values.getAsLong(Notes.COLUMN_NAME_PARENT),
-								newListId,
-								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-								noteWithDescendants(id, posValues
-										.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
-								null);
+								values.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
+								Long.parseLong(id))) {
+							Log.d("posredux2", "Target was a descendant of the note, dont do shit");
+							// Remove positions from values before update
+							values.remove(Notes.COLUMN_NAME_PARENT);
+							values.remove(Notes.COLUMN_NAME_PREVIOUS);
+							values.remove(Notes.COLUMN_NAME_LIST);
+						} else {
+
+							// Then detach the note if not done already
+							final ContentValues posValues = detachNote(db,
+									Long.parseLong(id));
+
+							final Long newListId;
+							if (values.containsKey(Notes.COLUMN_NAME_LIST))
+								newListId = values
+										.getAsLong(Notes.COLUMN_NAME_LIST);
+							else
+								newListId = posValues
+										.getAsLong(Notes.COLUMN_NAME_LIST);
+
+							// Re attach at new location
+							insertNoteTree(
+									db,
+									values.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
+									values.getAsLong(Notes.COLUMN_NAME_PARENT),
+									newListId,
+									posValues.getAsLong(Notes.COLUMN_NAME_LIST),
+									noteWithDescendants(
+											id,
+											posValues
+													.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
+									null);
+						}
 					}
 				}
 
@@ -2364,6 +2388,60 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	/**
+	 * Checks whether a note is a descendant of another note.
+	 * 
+	 * Tries to use newPrevious unless null, then falls back to newParent.
+	 * 
+	 * Returns true if either = ancestor, uses truepos
+	 * 
+	 * @param db
+	 * @param newParent
+	 * @param newPrevious
+	 * @param ancestor
+	 */
+	private static boolean isDescendant(final SQLiteDatabase db, final Long newParent, final Long newPrevious,
+			final long ancestor) {
+		if (newParent != null && ancestor == newParent || newPrevious != null && ancestor == newPrevious)
+			return true;
+		if (newParent == null)
+			return false;
+		
+		// Know one of them isnt null
+		//final long possibleDescendant = newPrevious != null ? newPrevious : newParent;
+		
+		if (newParent < 0 || ancestor < 0)
+			throw new InvalidParameterException("Cant have parent of -1!");
+
+		Log.d("posredux2", "descendant check with " + ancestor + ", " + newParent);
+		String ancestorPos = "";
+		String descPos = "-1";
+		// Fetch position of ancestor and the possible descendant
+		final Cursor c = db.query(
+				Notes.TABLE_NAME,
+				toStringArray(Notes._ID, Notes.COLUMN_NAME_TRUEPOS),
+				Notes._ID
+						+ String.format(" IN (%d, %d)", ancestor,
+								newParent), null, null, null, null);
+		while (c.moveToNext()) {
+			Log.d("posredux2", "Getting positions for descendant check...");
+			final long id = c.getLong(c.getColumnIndex(Notes._ID));
+			final String pos = c.getString(c
+					.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
+			if (id == ancestor)
+				ancestorPos = pos;
+			else
+				descPos = pos;
+		}
+		c.close();
+		
+		// Now see if ancester is included in the notes lineage
+		Log.d("posredux2", "Descendant check with:");
+		Log.d("posredux2", "" + descPos);
+		Log.d("posredux2", "" + ancestorPos);
+		return descPos.startsWith(ancestorPos + ".");
+	}
+
+	/**
 	 * Marks this note as deleted in gtask tables, which means we "insert" a new
 	 * note in gtasks because moving would be a separate operation
 	 * 
@@ -2486,9 +2564,9 @@ public class NotePadProvider extends ContentProvider implements
 	 * @throws SQLException
 	 */
 	private static void insertNoteTree(final SQLiteDatabase db,
-			final Long newPrevious, final Long newParent,
-			final Long newListId, final Long oldListId, final String where,
-			final String[] whereArgs) throws SQLException {
+			final Long newPrevious, final Long newParent, final Long newListId,
+			final Long oldListId, final String where, final String[] whereArgs)
+			throws SQLException {
 
 		// Do a query
 		Log.d("posredux", "finding with where");
@@ -2558,15 +2636,11 @@ public class NotePadProvider extends ContentProvider implements
 			}
 
 			// Make sure they have valid values
-			if (previousPos == null)
-				previousPos = Notes.HEAD;
-			if (nextPos == null)
-				nextPos = Notes.TAIL;
-
 			final String prefix = parentPos == null ? "" : parentPos + ".";
-
-			previousPos = prefix + previousPos;
-			nextPos = prefix + nextPos;
+			if (previousPos == null)
+				previousPos = prefix + Notes.HEAD;
+			if (nextPos == null)
+				nextPos = prefix + Notes.TAIL;
 
 			// start transaction
 			db.beginTransaction();
@@ -2660,7 +2734,8 @@ public class NotePadProvider extends ContentProvider implements
 						firstNote = false;
 						immediateOldParent = noteParent;
 						currentPositions.put(immediateOldParent, previousPos);
-						Log.d("posredux", "immediateOldParent: " + immediateOldParent);
+						Log.d("posredux", "immediateOldParent: "
+								+ immediateOldParent);
 					}
 
 					// set immediate children's parent to newParent
@@ -2678,15 +2753,19 @@ public class NotePadProvider extends ContentProvider implements
 
 						Log.d("posredux", "new child parent: " + newParent);
 						notePos = Notes.between(
-								currentPositions.get(immediateOldParent), nextPos);
+								currentPositions.get(immediateOldParent),
+								nextPos);
 					} else {
 						Log.d("posredux", "is a descendant");
 						// If this child does not have a position to work with,
 						// insert HEAD
 						if (!currentPositions.containsKey(noteParent))
-							currentPositions.put(noteParent, parentPositions.get(noteParent) + Notes.HEAD);
+							currentPositions.put(noteParent,
+									parentPositions.get(noteParent)
+											+ Notes.HEAD);
 						notePos = Notes.between(
-								currentPositions.get(noteParent), parentPositions.get(noteParent) + Notes.TAIL);
+								currentPositions.get(noteParent),
+								parentPositions.get(noteParent) + Notes.TAIL);
 					}
 					Log.d("posredux", "new child pos: " + notePos);
 					values.put(Notes.COLUMN_NAME_TRUEPOS, notePos);
