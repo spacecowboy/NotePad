@@ -82,7 +82,7 @@ public class GoogleDBTalker {
 	 * essence supports several
 	 */
 	public GoogleDBTalker(String accountName, ContentProviderClient provider) {
-		if (SyncAdapter.SYNC_DEBUG_PRINTS)
+		
 			Log.d(TAG, "constructor");
 		this.accountName = accountName;
 		this.provider = provider;
@@ -439,7 +439,7 @@ public class GoogleDBTalker {
 			// Now do any possible tasks
 			ArrayList<GoogleTask> tasks = tasksInListToSaveToDB.get(list);
 			if (tasks != null && !tasks.isEmpty()) {
-				if (SyncAdapter.SYNC_DEBUG_PRINTS)
+				
 					Log.d(TAG, "Found some tasks to save in: " + list.id);
 				SaveNoteToDatabase(tasks, listIdIndex, list.dbId, idMap);
 			}
@@ -455,7 +455,7 @@ public class GoogleDBTalker {
 			ArrayList<GoogleTask> tasks = tasksInListToSaveToDB.get(list);
 			if (tasks != null && !tasks.isEmpty()) {
 				long listDbId = tasks.get(0).listdbid;
-				if (SyncAdapter.SYNC_DEBUG_PRINTS)
+				
 					Log.d(TAG, "Saving tasks for: " + listDbId);
 				SaveNoteToDatabase(tasks, -1, listDbId, idMap);
 			}
@@ -473,7 +473,7 @@ public class GoogleDBTalker {
 		Collections.sort(tasks, new GoogleTask.RemoteOrder(tasks));
 		for (GoogleTask task : tasks) {
 			if (task.dbId > -1 && task.deleted != 1) {
-				if (SyncAdapter.SYNC_DEBUG_PRINTS)
+				
 					Log.d(TAG, "Updating task");
 
 				operations.add(ContentProviderOperation
@@ -510,7 +510,7 @@ public class GoogleDBTalker {
 				}
 
 			} else if (task.dbId > -1 && task.deleted == 1) {
-				if (SyncAdapter.SYNC_DEBUG_PRINTS)
+				
 					Log.d(TAG, "Deleting task");
 
 				operations.add(ContentProviderOperation.newDelete(
@@ -520,13 +520,13 @@ public class GoogleDBTalker {
 				// GTasks table Handled by the provider
 
 			} else if (task.deleted == 1) {
-				if (SyncAdapter.SYNC_DEBUG_PRINTS)
+				
 					Log.d(TAG, "Delete task with no dbId? Madness!");
 				// This must be a task which we ourselves deleted earlier.
 				// Ignore them as they do not exist in the DB
 			} else {
 				// Tasks which have been created on the server
-				if (SyncAdapter.SYNC_DEBUG_PRINTS)
+				
 					Log.d(TAG, "Inserting task");
 
 				// Either the list exists, or the list is new as well

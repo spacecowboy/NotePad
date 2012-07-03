@@ -16,6 +16,7 @@
 
 package com.nononsenseapps.notepad.sync.googleapi;
 
+import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Comparator;
 
@@ -42,7 +43,7 @@ public class GoogleTask {
 
 		final ArrayList<GoogleTask> allTasks;
 
-		public RemoteOrder(ArrayList<GoogleTask> allTasks) {
+		public RemoteOrder(final ArrayList<GoogleTask> allTasks) {
 			this.allTasks = allTasks;
 		}
 
@@ -50,27 +51,49 @@ public class GoogleTask {
 		 * Returns the indendation level of a child with the specified parent.
 		 * if remoteParent is null or empty, returns 0;
 		 */
-		private int getLevel(String remoteParent) {
+		private int getLevel(final String remoteParent) {
 			if (remoteParent == null || remoteParent.isEmpty())
 				return 0;
 
 			// Find parent of parent
-			GoogleTask parent = null;
-			for (GoogleTask task : allTasks) {
-				if (remoteParent.equals(task.id)) {
-					parent = task;
+			String ancestor = remoteParent;
+			String currentAncestor = ancestor;
+			int indent = 1;
+			boolean notDone = true;
+			while (notDone) {
+				if (ancestor == null) {
+					notDone = false;
 					break;
+				} else {
+					currentAncestor = ancestor;
+					for (final GoogleTask task : allTasks) {
+						if (ancestor.equals(task.id)) {
+							if (task.indent > -1) {
+								indent += task.indent;
+								notDone = false;
+								ancestor = null;
+							} else if (task.remoteparent == null || task.remoteparent.isEmpty()) {
+								task.indent = 0;
+								notDone = false;
+								ancestor = null;
+							} else {
+								indent += 1;
+								ancestor = task.remoteparent;
+							}
+							break;
+						}
+					}
 				}
+				
+				if (remoteParent.equals(ancestor))
+					throw new InvalidParameterException("Detected infinite parent loop in structure!");
+				
+				if (currentAncestor.equals(ancestor))
+					throw new InvalidParameterException("Tried sorting on remote parent but could not find "
+								+ remoteParent + " in allTasks!");
 			}
 
-			if (parent == null) {
-				// This should seriously not happen
-				throw new NullPointerException(
-						"Tried sorting on remote parent but could not find "
-								+ remoteParent + " in allTasks!");
-			} else {
-				return 1 + getLevel(parent.remoteparent);
-			}
+			return indent;
 		}
 
 		@Override
@@ -127,6 +150,8 @@ public class GoogleTask {
 	public String truepos = null;
 
 	public JSONObject json = null;
+	public boolean moveUploaded = false;
+	private int indent = -1;
 
 	public GoogleTask() {
 	}
@@ -204,6 +229,27 @@ public class GoogleTask {
 	}
 
 	/**
+	 * 
+	 * @return Only the parent and previous fields (if not null)
+	 */
+	public String toMoveJSON() {
+		String returnString = "";
+		try {
+			JSONObject json = new JSONObject();
+			if (remoteparent != null)
+				json.put(PARENT, remoteparent);
+			if (remoteprevious != null)
+				json.put(PREVIOUS, remoteprevious);
+
+			return json.toString();
+		} catch (JSONException e) {
+			Log.d(TAG, e.getLocalizedMessage());
+		}
+
+		return returnString;
+	}
+
+	/**
 	 * Returns a ContentValues hashmap suitable for database insertion in the
 	 * Lists table Includes modified flag and list id as specified in the
 	 * arguments
@@ -230,22 +276,27 @@ public class GoogleTask {
 		values.put(NotePad.Notes.COLUMN_NAME_DELETED, deleted);
 		// values.put(NotePad.Notes.COLUMN_NAME_POSITION, position);
 		// Make sure position values are set properly
-		if (remoteparent != null) {
-			// Do not join these IFs, because I actually do not want null there
-			// otherwise
-			if (idMap.containsValue(remoteparent))
-				values.put(Notes.COLUMN_NAME_PARENT, idMap.getKey(remoteparent));
-		} else {
-			values.putNull(NotePad.Notes.COLUMN_NAME_PARENT);
-		}
-		if (remoteprevious != null) {
-			// Do not join these IFs, because I actually do not want null there
-			// otherwise
-			if (idMap.containsValue(remoteprevious))
-				values.put(Notes.COLUMN_NAME_PARENT,
-						idMap.getKey(remoteprevious));
-		} else {
-			values.putNull(NotePad.Notes.COLUMN_NAME_PREVIOUS);
+		if (dbId == -1 || !moveUploaded) {
+			if (remoteparent != null) {
+				// Do not join these IFs, because I actually do not want null
+				// there
+				// otherwise
+				if (idMap.containsValue(remoteparent))
+					values.put(Notes.COLUMN_NAME_PARENT,
+							idMap.getKey(remoteparent));
+			} else {
+				values.putNull(NotePad.Notes.COLUMN_NAME_PARENT);
+			}
+//			if (remoteprevious != null) {
+//				// Do not join these IFs, because I actually do not want null
+//				// there
+//				// otherwise
+//				if (idMap.containsValue(remoteprevious))
+//					values.put(Notes.COLUMN_NAME_PARENT,
+//							idMap.getKey(remoteprevious));
+//			} else {
+//				values.putNull(NotePad.Notes.COLUMN_NAME_PREVIOUS);
+//			}
 		}
 
 		values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, hidden);
@@ -266,15 +317,23 @@ public class GoogleTask {
 		ContentValues values = new ContentValues();
 		if (listIdIndex != null)
 			values.put(NotePad.Notes.COLUMN_NAME_LIST, listIdIndex);
-		// If the parent doesnt exist in the database, we must take the position
-		// from
-		// previous insert operations
-		// Otherwise, they have been set in tovalues
-		if (!idMap.containsValue(remoteparent))
-			values.put(Notes.COLUMN_NAME_PARENT, remoteToIndex.get(remoteparent));
-		
-		if (!idMap.containsValue(remoteprevious))
-			values.put(Notes.COLUMN_NAME_PREVIOUS, remoteToIndex.get(remoteprevious));
+		/*
+		 * If the parent doesnt exist in the database, we must take the position
+		 * from previous insert operations Otherwise, they have been set in
+		 * tovalues
+		 * 
+		 * And of course, only worth doing anything if we did not actually
+		 * upload the position ourselves successfully
+		 */
+		if (dbId == -1 || !moveUploaded) {
+			if (!idMap.containsValue(remoteparent))
+				values.put(Notes.COLUMN_NAME_PARENT,
+						remoteToIndex.get(remoteparent));
+
+//			if (!idMap.containsValue(remoteprevious))
+//				values.put(Notes.COLUMN_NAME_PREVIOUS,
+//						remoteToIndex.get(remoteprevious));
+		}
 
 		return values;
 	}

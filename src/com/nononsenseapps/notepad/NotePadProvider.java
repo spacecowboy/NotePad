@@ -850,8 +850,8 @@ public class NotePadProvider extends ContentProvider implements
 	@Override
 	synchronized public Cursor query(Uri uri, String[] projection,
 			String selection, String[] selectionArgs, String sortOrder) {
-		if (SyncAdapter.SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "query");
+
+		Log.d(TAG, "query");
 
 		// Only allow ascending order for truepos
 		if (sortOrder != null
@@ -1252,8 +1252,8 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	@Override
 	synchronized public Uri insert(Uri uri, ContentValues initialValues) {
-		if (SyncAdapter.SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "insert");
+
+		Log.d(TAG, "insert");
 
 		// Validates the incoming URI. Only the full provider URI is allowed for
 		// inserts.
@@ -1274,8 +1274,8 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	synchronized private Uri insertNote(Uri uri, ContentValues initialValues) {
-		if (SyncAdapter.SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "insertNote");
+
+		Log.d(TAG, "insertNote");
 		// A map to hold the new record's values.
 		ContentValues values;
 
@@ -1290,8 +1290,8 @@ public class NotePadProvider extends ContentProvider implements
 
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_LIST) == false
 				|| values.getAsLong(NotePad.Notes.COLUMN_NAME_LIST) < 0) {
-			if (SyncAdapter.SYNC_DEBUG_PRINTS)
-				Log.d(TAG, "Forgot to include note in a list");
+
+			Log.d(TAG, "Forgot to include note in a list");
 			throw new SQLException("A note must always belong to a list!");
 		}
 
@@ -1395,7 +1395,7 @@ public class NotePadProvider extends ContentProvider implements
 
 		// Notifies observers registered against this provider that the data
 		// changed.
-		getContext().getContentResolver().notifyChange(noteUri, null, false);
+		getContext().getContentResolver().notifyChange(noteUri, null, true);
 		// Also tell lists watching the other URI
 		getContext().getContentResolver().notifyChange(
 				NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
@@ -1471,8 +1471,8 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	synchronized private Uri insertList(Uri uri, ContentValues initialValues) {
-		if (SyncAdapter.SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "insertList");
+
+		Log.d(TAG, "insertList");
 		// A map to hold the new record's values.
 		ContentValues values;
 
@@ -1549,8 +1549,8 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	synchronized private Uri insertGTask(Uri uri, ContentValues initialValues) {
-		if (SyncAdapter.SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "insertGTask");
+
+		Log.d(TAG, "insertGTask");
 		// A map to hold the new record's values.
 		ContentValues values;
 
@@ -1613,8 +1613,8 @@ public class NotePadProvider extends ContentProvider implements
 
 	synchronized private Uri insertGTaskList(Uri uri,
 			ContentValues initialValues) {
-		if (SyncAdapter.SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "insertGTaskList");
+
+		Log.d(TAG, "insertGTaskList");
 		// A map to hold the new record's values.
 		ContentValues values;
 
@@ -1719,8 +1719,8 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	synchronized private static int deleteListFromDb(SQLiteDatabase db,
 			String id, String where, String[] whereArgs) {
-		if (SyncAdapter.SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "Deleting list from DB: " + id);
+
+		Log.d(TAG, "Deleting list from DB: " + id);
 
 		String finalWhere = BaseColumns._ID + " = " + id;
 
@@ -1813,8 +1813,8 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	synchronized private static int deleteNoteFromDb(SQLiteDatabase db,
 			String id, String where, String[] whereArgs) {
-		if (SyncAdapter.SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "Deleting note from DB: " + id);
+
+		Log.d(TAG, "Deleting note from DB: " + id);
 
 		String finalWhere = BaseColumns._ID + " = " + id;
 
@@ -1881,8 +1881,7 @@ public class NotePadProvider extends ContentProvider implements
 	@Override
 	synchronized public int delete(Uri uri, String where, String[] whereArgs) {
 
-		if (SyncAdapter.SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "delete");
+		Log.d(TAG, "delete");
 		// Opens the database object in "write" mode.
 		SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 		String finalWhere;
@@ -2003,7 +2002,7 @@ public class NotePadProvider extends ContentProvider implements
 		 * along to the resolver framework, and observers that have registered
 		 * themselves for the provider are notified.
 		 */
-		getContext().getContentResolver().notifyChange(uri, null, false);
+		getContext().getContentResolver().notifyChange(uri, null, true);
 		// Also tell lists watching the other URI
 		getContext().getContentResolver().notifyChange(
 				NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
@@ -2044,8 +2043,8 @@ public class NotePadProvider extends ContentProvider implements
 	@Override
 	synchronized public int update(Uri uri, ContentValues values, String where,
 			String[] whereArgs) {
-		if (SyncAdapter.SYNC_DEBUG_PRINTS)
-			Log.d(TAG, "update");
+
+		Log.d(TAG, "update");
 
 		// Opens the database object in "write" mode.
 		SQLiteDatabase db = mOpenHelper.getWritableDatabase();
@@ -2207,7 +2206,8 @@ public class NotePadProvider extends ContentProvider implements
 						if (isDescendant(db,
 								values.getAsLong(Notes.COLUMN_NAME_PARENT),
 								values.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
-								Long.parseLong(id))) {
+								Long.parseLong(id))
+								|| notChanged(db, values, Long.parseLong(id))) {
 							Log.d("posredux2",
 									"Target was a descendant of the note, dont do shit");
 							// Remove positions from values before update
@@ -2379,7 +2379,7 @@ public class NotePadProvider extends ContentProvider implements
 		 * along to the resolver framework, and observers that have registered
 		 * themselves for the provider are notified.
 		 */
-		getContext().getContentResolver().notifyChange(uri, null, false);
+		getContext().getContentResolver().notifyChange(uri, null, true);
 		// Manually send an update to the visible notes URL because lists
 		// are using this while the editor will use a different URI
 		getContext().getContentResolver().notifyChange(
@@ -2389,6 +2389,66 @@ public class NotePadProvider extends ContentProvider implements
 
 		// Returns the number of rows updated.
 		return count;
+	}
+
+	/**
+	 * Returns true if the fields have NOT changed from existing entries
+	 * 
+	 * @param db
+	 * @param values
+	 * @param noteId
+	 * @return
+	 */
+	private static boolean notChanged(final SQLiteDatabase db,
+			final ContentValues values, final long noteId) {
+		boolean not = true;
+		// Query the note
+		final Cursor c = db.query(
+				Notes.TABLE_NAME,
+				toStringArray(Notes.COLUMN_NAME_LIST, Notes.COLUMN_NAME_PARENT,
+						Notes.COLUMN_NAME_PREVIOUS), toWhereClause(Notes._ID),
+				toWhereArgs(noteId), null, null, null);
+		if (c.moveToFirst()) {
+			final long curList = c.getLong(c
+					.getColumnIndex(Notes.COLUMN_NAME_LIST));
+			final String previousS = c.getString(c
+					.getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
+			final String parentS = c.getString(c
+					.getColumnIndex(Notes.COLUMN_NAME_PARENT));
+			final Long notePrevious = previousS == null ? null : Long
+					.parseLong(previousS);
+			final Long noteParent = parentS == null ? null : Long
+					.parseLong(parentS);
+			
+			final Long newParent = values.getAsLong(Notes.COLUMN_NAME_PARENT);
+			final Long newPrevious = values.getAsLong(Notes.COLUMN_NAME_PREVIOUS);
+			
+			if (values.containsKey(Notes.COLUMN_NAME_LIST) && curList != values.getAsLong(Notes.COLUMN_NAME_LIST))
+				not = false;
+			else
+				values.remove(Notes.COLUMN_NAME_LIST);
+			
+			if (notePrevious == null && newPrevious != null
+					|| notePrevious != null && newPrevious == null
+					|| notePrevious != null && newPrevious != null && notePrevious != newPrevious) {
+				not = false;
+			}
+			
+			if (noteParent == null && newParent != null
+					|| noteParent != null && newParent == null
+					|| noteParent != null && newParent != null && noteParent != newParent) {
+				not = false;
+			}
+			
+			if (not) {
+				values.remove(Notes.COLUMN_NAME_PARENT);
+				values.remove(Notes.COLUMN_NAME_PREVIOUS);
+			}
+		}
+
+		c.close();
+
+		return not;
 	}
 
 	/**
