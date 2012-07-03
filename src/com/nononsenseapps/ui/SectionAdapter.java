@@ -2,6 +2,7 @@ package com.nononsenseapps.ui;
 
 import java.security.InvalidParameterException;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -9,6 +10,7 @@ import com.nononsenseapps.notepad.R;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +24,13 @@ public class SectionAdapter extends BaseAdapter {
 
 	public final Map<String, SimpleCursorAdapter> sections = new LinkedHashMap<String, SimpleCursorAdapter>();
 	public final ArrayAdapter<String> headers;
+	public final Map<String, Long> sectionIds = new HashMap<String, Long>();
 	private final SimpleCursorAdapter wrappedAdapter;
-	public final static int TYPE_SECTION_HEADER = 0;
-	public final static int TYPE_ITEM = 1;
-	public final static int TYPE_COUNT = TYPE_ITEM + 1;
+	public final static int TYPE_SECTION_HEADER = -39567;
+	public final static int TYPE_ITEM = -892746;
+	public final static int TYPE_COUNT = 2;
+
+	private final DataSetObserver subObserver;
 
 	private String state = "";
 
@@ -44,13 +49,31 @@ public class SectionAdapter extends BaseAdapter {
 	 * @param context
 	 */
 	public SectionAdapter(Context context, SimpleCursorAdapter wrappedAdapter) {
+		/*
+		 * Same call in both cases since an invalid subadapter doesnt mean that
+		 * the entire sectionadapter is invalid.
+		 */
+		subObserver = new DataSetObserver() {
+			@Override
+			public void onChanged() {
+				notifyDataSetChanged();
+			}
+
+			@Override
+			public void onInvalidated() {
+				notifyDataSetChanged();
+			}
+		};
+
 		if (wrappedAdapter == null) {
 			headers = new ArrayAdapter<String>(context, R.layout.list_header,
 					R.id.list_header_title);
+			headers.registerDataSetObserver(subObserver);
 			this.wrappedAdapter = null;
 		} else {
 			headers = null;
 			this.wrappedAdapter = wrappedAdapter;
+			this.wrappedAdapter.registerDataSetObserver(subObserver);
 		}
 	}
 
@@ -61,6 +84,67 @@ public class SectionAdapter extends BaseAdapter {
 		return headers != null;
 	}
 
+	/**
+	 * Get the Id of the section
+	 */
+	public Long getSectionId(String section) {
+		if (headers == null) {
+			throw new InvalidParameterException(ERRORMSG);
+		}
+		return sectionIds.get(section);
+	}
+	
+	/**
+	 * Get the Id of the section a position is contained in
+	 */
+	public Long getSectionIdOfPos(final int position) {
+		return getSectionId(getSection(position));
+	}
+
+	/**
+	 * Get the section a position is contained in.
+	 */
+	public String getSection(int position) {
+		if (headers == null) {
+			throw new InvalidParameterException(ERRORMSG);
+		}
+		// Top is always a section
+		// Sorting matters!
+		for (int headerPos = 0; headerPos < headers.getCount(); headerPos++) {
+			Adapter adapter = sections.get(headers.getItem(headerPos));
+			// Ignore headers that are empty
+			if (adapter.getCount() > 0) {
+				if (position == 0)
+					return headers.getItem(headerPos);
+
+				position -= 1;
+
+				if (position < adapter.getCount())
+					return headers.getItem(headerPos);
+
+				position -= adapter.getCount();
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * Add a section to the list with a corresponding ID which can be retrieved
+	 * using getSectionId()
+	 */
+	public void addSection(long sectionId, String section,
+			SimpleCursorAdapter adapter, Comparator<String> comp) {
+		if (headers == null) {
+			throw new InvalidParameterException(ERRORMSG);
+		}
+		if (section != null)
+			sectionIds.put(section, sectionId);
+		addSection(section, adapter, comp);
+	}
+
+	/**
+	 * Add a section to the list with corresponding adapter and defined sorting
+	 */
 	public void addSection(String section, SimpleCursorAdapter adapter,
 			Comparator<String> comp) {
 		if (headers == null) {
@@ -73,13 +157,16 @@ public class SectionAdapter extends BaseAdapter {
 		SimpleCursorAdapter prev = this.sections.put(section, adapter);
 		if (prev != null) {
 			Log.d("listproto", "killing previous adapter");
+			prev.unregisterDataSetObserver(subObserver);
 			prev.swapCursor(null);
+		}
+		if (adapter != null) {
+			adapter.registerDataSetObserver(subObserver);
 		}
 		// Need to sort the headers each time it changes
 		if (comp != null) {
 			headers.sort(comp);
 		}
-		notifyDataSetChanged();
 	}
 
 	public void removeSection(String section, Comparator<String> comp) {
@@ -90,14 +177,15 @@ public class SectionAdapter extends BaseAdapter {
 		SimpleCursorAdapter prev = this.sections.remove(section);
 		if (prev != null) {
 			Log.d("listproto", "killing previous adapter");
+			prev.unregisterDataSetObserver(subObserver);
 			prev.swapCursor(null);
 		}
 		// Need to sort the headers each time it changes
 		if (comp != null) {
 			headers.sort(comp);
 		}
-		// dont notify, this is only called during resets
-		// notifyDataSetChanged();
+
+		sectionIds.remove(section);
 	}
 
 	public void swapCursor(Cursor data) {
@@ -105,7 +193,7 @@ public class SectionAdapter extends BaseAdapter {
 			throw new InvalidParameterException(ERRORMSG);
 		}
 		this.wrappedAdapter.swapCursor(data);
-		notifyDataSetChanged();
+		// notifyDataSetChanged();
 	}
 
 	@Override

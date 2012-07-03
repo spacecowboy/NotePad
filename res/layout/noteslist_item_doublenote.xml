@@ -12,95 +12,117 @@
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
-     limitations under the License.android:theme="@style/ThemeHolo"
+     limitations under the License.
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/noteItem"
     style="?my_list_selector"
     android:layout_width="match_parent"
-    android:layout_height="70dp"
-    android:orientation="horizontal"
-    android:paddingLeft="0dp"
-    android:paddingRight="8dp" >
-
-    <TextView
-        android:id="@+id/itemIndent"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <com.nononsenseapps.ui.DelegateFrame
-        xmlns:nononsenseapps="http://nononsenseapps.com"
-        android:id="@+id/datecheckcontainer"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:clickable="true"
-        android:minWidth="44dp"
-        android:orientation="vertical"
-        android:paddingBottom="4dp"
-        android:paddingLeft="4dp"
-        android:paddingRight="0dp"
-        android:paddingTop="8dp"
-        nononsenseapps:enlargedView="@+id/itemDone" >
-
-        <com.nononsenseapps.ui.NoteCheckBox
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            android:id="@+id/itemDone"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:focusable="false"
-            android:focusableInTouchMode="false"
-            android:gravity="center"
-            android:paddingLeft="0dp" />
-    </com.nononsenseapps.ui.DelegateFrame>
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/title_note_container"
-        android:layout_width="0dp"
-        android:layout_height="fill_parent"
-        android:layout_weight="1"
-        android:gravity="center_vertical"
-        android:orientation="vertical" >
+        android:layout_width="match_parent"
+        android:layout_height="68dp"
+        android:orientation="horizontal"
+        android:paddingLeft="0dp"
+        android:paddingRight="8dp" >
 
         <TextView
-            android:id="@+id/itemTitle"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:gravity="center_vertical"
+            android:id="@+id/itemIndent"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
             android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="?android:attr/textColorPrimary" />
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+        <com.nononsenseapps.ui.DelegateFrame
+            xmlns:nononsenseapps="http://nononsenseapps.com"
+            android:id="@+id/datecheckcontainer"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:clickable="true"
+            android:minWidth="44dp"
+            android:orientation="vertical"
+            android:paddingBottom="4dp"
+            android:paddingLeft="4dp"
+            android:paddingRight="0dp"
+            android:paddingTop="8dp"
+            nononsenseapps:enlargedView="@+id/itemDone" >
+
+            <com.nononsenseapps.ui.NoteCheckBox
+                xmlns:android="http://schemas.android.com/apk/res/android"
+                android:id="@+id/itemDone"
+                android:layout_width="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:focusable="false"
+                android:focusableInTouchMode="false"
+                android:gravity="center"
+                android:paddingLeft="0dp" />
+        </com.nononsenseapps.ui.DelegateFrame>
 
         <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal" >
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/title_note_container"
+            android:layout_width="0dp"
+            android:layout_height="fill_parent"
+            android:layout_weight="1"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <TextView
+                android:id="@+id/itemTitle"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:gravity="center_vertical"
+                android:singleLine="true"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:textColor="?android:attr/textColorPrimary" />
 
             <TextView
                 android:id="@+id/itemNote"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
                 android:ellipsize="end"
                 android:gravity="center_vertical"
                 android:maxLines="2"
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="?android:attr/textColorSecondary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/dragView"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_gravity="center"
+                android:scaleType="fitXY"
+                android:src="@drawable/action_about_dark" />
 
             <com.nononsenseapps.ui.DateView
                 android:id="@+id/itemDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
+                android:layout_gravity="center"
                 android:paddingLeft="0dp"
                 android:textColor="?android:attr/textColorSecondary"
                 android:textSize="12sp" />
         </LinearLayout>
     </LinearLayout>
+
+    <ImageView
+        android:id="@+id/dropIndicator"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/list_pressed_holo"
+        android:visibility="invisible" />
 
 </LinearLayout>

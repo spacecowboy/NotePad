@@ -24,8 +24,10 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
+import com.ericharlow.DragNDrop.DragNDropListView;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.helpers.dualpane.NoNonsenseListFragment;
 import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
@@ -35,6 +37,7 @@ import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.ui.NoteCheckBox;
 import com.nononsenseapps.ui.SectionAdapter;
+import com.nononsenseapps.ui.SectionDropListener;
 import com.nononsenseapps.util.TimeHelper;
 
 import android.content.BroadcastReceiver;
@@ -97,13 +100,16 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		OnSharedPreferenceChangeListener {
 	private int mCurCheckPosition = 0;
 
+	// Parent, list used for dragdrop
 	private static final String[] PROJECTION = new String[] {
 			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
 			NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
 			NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
-			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
+			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
+			NotePad.Notes.COLUMN_NAME_PARENT,
+			NotePad.Notes.COLUMN_NAME_LIST};
 
 	// public static final String SELECTEDPOS = "selectedpos";
 	// public static final String SELECTEDID = "selectedid";
@@ -124,7 +130,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	public static final String SECTION_STATE_LISTS = "listnames";
 	private static final int LOADER_LISTNAMES = -78;
 	// Will sort modification dates
-	private Comparator<String> alphaComparator = new Comparator<String>() {
+	private final Comparator<String> alphaComparator = new Comparator<String>() {
 		@Override
 		public int compare(String lhs, String rhs) {
 			return lhs.compareTo(rhs);
@@ -140,6 +146,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	private static final int LOADER_DATEWEEK = -104;
 	private static final int LOADER_DATEFUTURE = -105;
 	private static final int LOADER_DATENONE = -106;
+	private static final int LOADER_DATECOMPLETED = -107;
 	// This will sort date headers properly
 	private Comparator<String> dateComparator;
 	// Modification loaders
@@ -171,6 +178,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	// private SimpleCursorAdapter mAdapter;
 	private SectionAdapter mSectionAdapter;
+	private final HashSet<Integer> activeLoaders = new HashSet<Integer>();
 
 	private boolean autoOpenNote = false;
 	private long newNoteIdToSelect = -1;
@@ -232,7 +240,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		// setListAdapter(mAdapter);
 
 		// Start out with a progress indicator.
-		setListShown(false);
+		// setListShown(false);
 
 		// Set list preferences
 		setSingleCheck();
@@ -867,31 +875,26 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE)
 						|| columnIndex == cursor
 								.getColumnIndex(NotePad.Notes.COLUMN_NAME_TITLE)) {
-					TextView tv = (TextView) view;
+					final TextView tv = (TextView) view;
 
 					// Hide empty note
 					if (columnIndex == cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE)) {
 
-						LinearLayout.LayoutParams layoutParams;
-						String noteText = cursor.getString(cursor
+						final String noteText = cursor.getString(cursor
 								.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE));
-						boolean isEmpty = noteText == null
+						final boolean isEmpty = noteText == null
 								|| noteText.isEmpty();
 
 						// Set height to zero if it's empty, otherwise wrap
 						if (isEmpty)
-							layoutParams = new LinearLayout.LayoutParams(0, 0);
+							tv.setVisibility(View.GONE);
 						else
-							layoutParams = new LinearLayout.LayoutParams(0,
-									LinearLayout.LayoutParams.WRAP_CONTENT);
-						layoutParams.weight = 1;
-
-						tv.setLayoutParams(layoutParams);
+							tv.setVisibility(View.VISIBLE);
 					}
 
 					// Set strike through on completed tasks
-					String text = cursor.getString(cursor
+					final String text = cursor.getString(cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS));
 					if (text != null
 							&& text.equals(getText(R.string.gtask_status_completed))) {
@@ -910,29 +913,22 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					return false;
 				} else if (columnIndex == cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE)) {
-					String text = cursor.getString(cursor
+					final String text = cursor.getString(cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE));
-					TextView tv = (TextView) view;
-					LinearLayout.LayoutParams layoutParams;
+					final TextView tv = (TextView) view;
 					if (text == null || text.isEmpty()) {
-						// Set height to zero
-						layoutParams = new LinearLayout.LayoutParams(
-								LinearLayout.LayoutParams.WRAP_CONTENT, 0);
+						tv.setVisibility(View.GONE);
 					} else {
-						// Set height to wrap
-						layoutParams = new LinearLayout.LayoutParams(
-								LinearLayout.LayoutParams.WRAP_CONTENT,
-								LinearLayout.LayoutParams.WRAP_CONTENT);
+						tv.setVisibility(View.VISIBLE);
 					}
-					tv.setLayoutParams(layoutParams);
 					return false;
 				} else if (columnIndex == cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL)) {
 					// Should only set this on the sort options where it is
 					// expected
-					TextView indentView = (TextView) view;
+					final TextView indentView = (TextView) view;
 
-					int level = cursor.getInt(cursor
+					final int level = cursor.getInt(cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL));
 
 					// Now set the width
@@ -1211,7 +1207,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// inflater.inflate(R.menu.list_select_menu_light, menu);
 			// else
 			inflater.inflate(R.menu.list_select_menu, menu);
-			mode.setTitle("Select Items");
+			mode.setTitle(getString(R.string.mode_choose));
 
 			this.mode = mode;
 
@@ -1238,13 +1234,21 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				ClipboardManager clipboard = (ClipboardManager) activity
 						.getSystemService(Context.CLIPBOARD_SERVICE);
 				// ICS style
-				// TODO remove hardcoded strings
 				clipboard.setPrimaryClip(ClipData.newPlainText("Note",
 						buildTextToShare()));
+
+				int num = getListView().getCheckedItemCount();
+				int s;
+
+				if (num == 1)
+					s = R.string.notecopied_msg_single;
+				else
+					s = R.string.notecopied_msg;
+
 				Toast.makeText(
 						activity,
-						"Copied " + getListView().getCheckedItemCount()
-								+ " notes to clipboard", Toast.LENGTH_SHORT)
+						getString(R.string.notecopied) + num + " "
+								+ getString(s) + ".", Toast.LENGTH_SHORT)
 						.show();
 				mode.finish();
 				break;
@@ -1284,11 +1288,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				mode.setSubtitle(null);
 				break;
 			case 1:
-				// TODO remove hard coded strings
-				mode.setSubtitle("One item selected");
+				mode.setSubtitle(getString(R.string.mode_choose_single));
 				break;
 			default:
-				mode.setSubtitle("" + checkedCount + " items selected");
+				mode.setSubtitle(checkedCount + " "
+						+ getString(R.string.mode_choose_more));
 				break;
 			}
 		}
@@ -1374,11 +1378,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			this.notesToDelete.clear();
 
 			MenuInflater inflater = activity.getMenuInflater();
-			// if (FragmentLayout.lightTheme)
-			// inflater.inflate(R.menu.list_select_menu_light, menu);
-			// else
 			inflater.inflate(R.menu.list_select_menu, menu);
-			mode.setTitle("Select Items");
+			mode.setTitle(getString(R.string.mode_choose));
 
 			this.mode = mode;
 
@@ -1459,15 +1460,26 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				activity).getString(MainPrefs.KEY_SORT_TYPE, "");
 		if (shouldDisplaySections(sorting)) {
 			if (mSectionAdapter == null || !mSectionAdapter.isSectioned()) {
+				// Destroy section loaders
+				destroyActiveLoaders();
+
 				mSectionAdapter = new SectionAdapter(activity, null);
 				// mSectionAdapter.changeState(sorting);
 				setListAdapter(mSectionAdapter);
 			}
 		} else if (mSectionAdapter == null || mSectionAdapter.isSectioned()) {
+			// Destroy section loaders
+			destroyActiveLoaders();
+
 			mSectionAdapter = new SectionAdapter(activity,
 					getThemedAdapter(null));
 			setListAdapter(mSectionAdapter);
 		}
+
+		// TODO should hide the drag views in alphabetic sorting
+		final SectionDropListener dropListener = new SectionDropListener(
+				activity, mSectionAdapter);
+		((DragNDropListView) getListView()).setDropListener(dropListener);
 
 		if (mSectionAdapter.isSectioned()) {
 			// If sort date, fire sorting loaders
@@ -1475,9 +1487,19 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			if (mCurListId == MainActivity.ALL_NOTES_ID
 					&& PreferenceManager.getDefaultSharedPreferences(activity)
 							.getBoolean(MainPrefs.KEY_LISTHEADERS, false)) {
+				destroyNonListNameLoaders();
+				activeLoaders.add(LOADER_LISTNAMES);
 				getLoaderManager().restartLoader(LOADER_LISTNAMES, args, this);
 			} else if (sorting.equals(MainPrefs.DUEDATESORT)) {
 				Log.d("listproto", "refreshing sectioned date list");
+				destroyNonDateLoaders();
+				activeLoaders.add(LOADER_DATEFUTURE);
+				activeLoaders.add(LOADER_DATENONE);
+				activeLoaders.add(LOADER_DATEOVERDUE);
+				activeLoaders.add(LOADER_DATETODAY);
+				activeLoaders.add(LOADER_DATETOMORROW);
+				activeLoaders.add(LOADER_DATEWEEK);
+				activeLoaders.add(LOADER_DATECOMPLETED);
 				getLoaderManager().restartLoader(LOADER_DATEFUTURE, args, this);
 				getLoaderManager().restartLoader(LOADER_DATENONE, args, this);
 				getLoaderManager()
@@ -1486,8 +1508,15 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				getLoaderManager().restartLoader(LOADER_DATETOMORROW, args,
 						this);
 				getLoaderManager().restartLoader(LOADER_DATEWEEK, args, this);
+				getLoaderManager().restartLoader(LOADER_DATECOMPLETED, args,
+						this);
 			} else if (sorting.equals(MainPrefs.MODIFIEDSORT)) {
 				Log.d("listproto", "refreshing sectioned mod list");
+				destroyNonModLoaders();
+				activeLoaders.add(LOADER_MODPAST);
+				activeLoaders.add(LOADER_MODTODAY);
+				activeLoaders.add(LOADER_MODWEEK);
+				activeLoaders.add(LOADER_MODYESTERDAY);
 				getLoaderManager().restartLoader(LOADER_MODPAST, args, this);
 				getLoaderManager().restartLoader(LOADER_MODTODAY, args, this);
 				getLoaderManager().restartLoader(LOADER_MODWEEK, args, this);
@@ -1495,10 +1524,104 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						this);
 			}
 		} else {
+			destroyNonRegularLoaders();
 			Log.d("listproto", "refreshing normal list");
+			activeLoaders.add(LOADER_REGULARLIST);
 			getLoaderManager().restartLoader(LOADER_REGULARLIST, args, this);
 		}
 
+	}
+
+	private void destroyActiveLoaders() {
+		for (Integer id : activeLoaders.toArray(new Integer[activeLoaders
+				.size()])) {
+			activeLoaders.remove(id);
+			getLoaderManager().destroyLoader(id);
+		}
+	}
+
+	private void destroyListLoaders() {
+		for (Integer id : activeLoaders.toArray(new Integer[activeLoaders
+				.size()])) {
+			if (id > -1) {
+				activeLoaders.remove(id);
+				getLoaderManager().destroyLoader(id);
+			}
+		}
+	}
+
+	private void destroyModLoaders() {
+		activeLoaders.remove(LOADER_MODPAST);
+		getLoaderManager().destroyLoader(LOADER_MODPAST);
+
+		activeLoaders.remove(LOADER_MODWEEK);
+		getLoaderManager().destroyLoader(LOADER_MODWEEK);
+
+		activeLoaders.remove(LOADER_MODYESTERDAY);
+		getLoaderManager().destroyLoader(LOADER_MODYESTERDAY);
+
+		activeLoaders.remove(LOADER_MODTODAY);
+		getLoaderManager().destroyLoader(LOADER_MODTODAY);
+	}
+
+	private void destroyDateLoaders() {
+		activeLoaders.remove(LOADER_DATECOMPLETED);
+		getLoaderManager().destroyLoader(LOADER_DATECOMPLETED);
+
+		activeLoaders.remove(LOADER_DATEFUTURE);
+		getLoaderManager().destroyLoader(LOADER_DATEFUTURE);
+
+		activeLoaders.remove(LOADER_DATENONE);
+		getLoaderManager().destroyLoader(LOADER_DATENONE);
+
+		activeLoaders.remove(LOADER_DATEOVERDUE);
+		getLoaderManager().destroyLoader(LOADER_DATEOVERDUE);
+
+		activeLoaders.remove(LOADER_DATETODAY);
+		getLoaderManager().destroyLoader(LOADER_DATETODAY);
+
+		activeLoaders.remove(LOADER_DATETOMORROW);
+		getLoaderManager().destroyLoader(LOADER_DATETOMORROW);
+
+		activeLoaders.remove(LOADER_DATEWEEK);
+		getLoaderManager().destroyLoader(LOADER_DATEWEEK);
+	}
+
+	private void destroyListNameLoaders() {
+		activeLoaders.remove(LOADER_LISTNAMES);
+		getLoaderManager().destroyLoader(LOADER_LISTNAMES);
+	}
+
+	private void destroyRegularLoaders() {
+		activeLoaders.remove(LOADER_REGULARLIST);
+		getLoaderManager().destroyLoader(LOADER_REGULARLIST);
+	}
+
+	private void destroyNonDateLoaders() {
+		destroyListNameLoaders();
+		destroyModLoaders();
+		destroyListLoaders();
+		destroyRegularLoaders();
+	}
+
+	private void destroyNonListNameLoaders() {
+		destroyDateLoaders();
+		destroyModLoaders();
+		destroyRegularLoaders();
+	}
+
+	private void destroyNonModLoaders() {
+		destroyListNameLoaders();
+		destroyDateLoaders();
+		destroyListLoaders();
+		destroyRegularLoaders();
+	}
+
+	private void destroyNonRegularLoaders() {
+		destroyListNameLoaders();
+		destroyModLoaders();
+		destroyListLoaders();
+		destroyDateLoaders();
 	}
 
 	private CursorLoader getAllNotesLoader(long listId) {
@@ -1587,6 +1710,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			case LOADER_DATETODAY:
 			case LOADER_DATETOMORROW:
 			case LOADER_DATEWEEK:
+			case LOADER_DATECOMPLETED:
 				return getDateLoader(id, mCurListId);
 			case LOADER_MODPAST:
 			case LOADER_MODTODAY:
@@ -1629,9 +1753,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				NotePad.Notes.DEFAULT_SORT_ORDERING);
 		sortOrder += " " + ordering;
 
-		String[] vars = null;
-		String where = "";
-
 		if (dateComparator == null) {
 			// Create the comparator
 			// Doing it here because I need the context
@@ -1659,6 +1780,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 								put(activity
 										.getString(R.string.date_header_none),
 										"5");
+								put(activity
+										.getString(R.string.date_header_completed),
+										"6");
 							}
 						});
 
@@ -1678,44 +1802,62 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			};
 		}
 
+		String[] vars = null;
+		String where = NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ? AND ";
 		switch (id) {
 		case LOADER_DATEFUTURE:
-			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
 			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE + ") >= ?";
-			vars = new String[] { TimeHelper.dateEightDay() };
+			vars = new String[] {
+					activity.getString(R.string.gtask_status_uncompleted),
+					TimeHelper.dateEightDay() };
 			break;
 		case LOADER_DATEOVERDUE:
-			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
 			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE + ") < ?";
-			vars = new String[] { TimeHelper.dateToday() };
+			vars = new String[] {
+					activity.getString(R.string.gtask_status_uncompleted),
+					TimeHelper.dateToday() };
 			break;
 		case LOADER_DATETODAY:
-			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
 			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE + ") IS ?";
-			vars = new String[] { TimeHelper.dateToday() };
+			vars = new String[] {
+					activity.getString(R.string.gtask_status_uncompleted),
+					TimeHelper.dateToday() };
 			break;
 		case LOADER_DATETOMORROW:
-			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
 			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE + ") IS ?";
-			vars = new String[] { TimeHelper.dateTomorrow() };
+			vars = new String[] {
+					activity.getString(R.string.gtask_status_uncompleted),
+					TimeHelper.dateTomorrow() };
 			break;
 		case LOADER_DATEWEEK:
-			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
+			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT NULL AND ";
 			where += NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NOT '' AND ";
 			where += "date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE
 					+ ") > ? AND date(" + NotePad.Notes.COLUMN_NAME_DUE_DATE
 					+ ") < ?";
-			vars = new String[] { TimeHelper.dateTomorrow(),
-					TimeHelper.dateEightDay() };
+			vars = new String[] {
+					activity.getString(R.string.gtask_status_uncompleted),
+					TimeHelper.dateTomorrow(), TimeHelper.dateEightDay() };
+			break;
+		case LOADER_DATECOMPLETED:
+			where = NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?";
+			vars = new String[] { activity
+					.getString(R.string.gtask_status_completed) };
 			break;
 		case LOADER_DATENONE:
 		default:
-			where = NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NULL OR "
-					+ NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS ''";
+			where += "(" + NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS NULL OR "
+					+ NotePad.Notes.COLUMN_NAME_DUE_DATE + " IS '')";
+			vars = new String[] { activity
+					.getString(R.string.gtask_status_uncompleted) };
 			break;
 		}
 
@@ -1723,17 +1865,14 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (listId != MainActivity.ALL_NOTES_ID) {
 			where = NotePad.Notes.COLUMN_NAME_LIST + " IS ? AND (" + where
 					+ ")";
-			if (vars == null)
-				vars = new String[] { Long.toString(listId) };
-			else {
-				String[] nvars = new String[1 + vars.length];
-				nvars[0] = Long.toString(listId);
-				for (int i = 0; i < vars.length; i++) {
-					nvars[i + 1] = vars[i];
-				}
 
-				vars = nvars;
+			String[] nvars = new String[1 + vars.length];
+			nvars[0] = Long.toString(listId);
+			for (int i = 0; i < vars.length; i++) {
+				nvars[i + 1] = vars[i];
 			}
+
+			vars = nvars;
 		}
 
 		return new CursorLoader(activity, NotePad.Notes.CONTENT_VISIBLE_URI,
@@ -1835,15 +1974,22 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private void addSectionToAdapter(String sectionname, Cursor data,
 			Comparator<String> comp) {
+		addSectionToAdapter(-1, sectionname, data, comp);
+	}
+
+	private void addSectionToAdapter(long sectionId, String sectionname,
+			Cursor data, Comparator<String> comp) {
 		// Make sure an adapter exists
-		// TODO not add empty cursors?
 		SimpleCursorAdapter adapter = mSectionAdapter.sections.get(sectionname);
 		if (adapter == null) {
 			adapter = getThemedAdapter(null);
-			mSectionAdapter.addSection(sectionname, adapter, comp);
+			if (sectionId > -1)
+				mSectionAdapter.addSection(sectionId, sectionname, adapter,
+						comp);
+			else
+				mSectionAdapter.addSection(sectionname, adapter, comp);
 		}
 		adapter.swapCursor(data);
-		mSectionAdapter.notifyDataSetChanged();
 	}
 
 	@Override
@@ -1878,12 +2024,19 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				// Start loader for this list
 				Log.d("listproto", "Starting loader for " + sectionname
 						+ " id " + listid);
+				activeLoaders.add((int) listid);
 				getLoaderManager().restartLoader((int) listid, null, this);
 			}
 			break;
 		case LOADER_DATEFUTURE:
 			mSectionAdapter.changeState(SECTION_STATE_DATE);
 			sectionname = activity.getString(R.string.date_header_future);
+			addSectionToAdapter(sectionname, data, dateComparator);
+			break;
+		case LOADER_DATECOMPLETED:
+			Log.d("listproto", "got completed cursor");
+			mSectionAdapter.changeState(SECTION_STATE_DATE);
+			sectionname = activity.getString(R.string.date_header_completed);
 			addSectionToAdapter(sectionname, data, dateComparator);
 			break;
 		case LOADER_DATENONE:
@@ -1942,16 +2095,16 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				Log.d("listproto", "Loader finished for list id: "
 						+ sectionname);
 
-				addSectionToAdapter(sectionname, data, alphaComparator);
+				addSectionToAdapter(listid, sectionname, data, alphaComparator);
 			}
 			break;
 		}
 
 		// The list should now be shown.
 		if (isResumed()) {
-			setListShown(true);
+			// setListShown(true);
 		} else {
-			setListShownNoAnimation(true);
+			// setListShownNoAnimation(true);
 		}
 
 		// Reselect current note in list, if possible

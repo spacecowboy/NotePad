@@ -61,19 +61,26 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.ResourceCursorAdapter;
 import android.widget.ScrollView;
 import android.widget.ShareActionProvider;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nononsenseapps.notepad.NotePad.Notes;
 import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
+import com.nononsenseapps.ui.ExtrasCursorAdapter;
 import com.nononsenseapps.ui.TextPreviewPreference;
 
 public class NotesEditorFragment extends Fragment implements TextWatcher,
@@ -83,7 +90,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	// Two ways of expressing: "Mon, 16 Jan"
 	// Time is not stable, will always claim it's Sunday
 	// public final static String ANDROIDTIME_FORMAT = "%a, %e %b";
-	public final static String DATEFORMAT_FORMAT = "E, d MMM";
+	public final static String DATEFORMAT_FORMAT_SHORT = "E, d MMM";
+	public final static String DATEFORMAT_FORMAT_LONG = "EEEE, d MMMM";
 	/*
 	 * Creates a projection that returns the note ID and the note contents.
 	 */
@@ -91,7 +99,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
 			NotePad.Notes.COLUMN_NAME_DELETED, NotePad.Notes.COLUMN_NAME_LIST,
-			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
+			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, Notes.COLUMN_NAME_PARENT,
+			Notes.COLUMN_NAME_PREVIOUS };
 
 	// A label for the saved state of the activity
 	public static final String ORIGINAL_NOTE = "origContent";
@@ -99,7 +108,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public static final String ORIGINAL_DUE = "origDue";
 	public static final String ORIGINAL_DUE_STATE = "origDueState";
 	public static final String ORIGINAL_COMPLETE = "origComplete";
-	public static final String ORIGINAL_LISTID = "origListId";
+	public static final String ORIGINAL_LIST = "origList";
+	public static final String ORIGINAL_PARENT = "origParent";
+	public static final String ORIGINAL_PREVIOUS = "origPrevious";
 
 	// Argument keys
 	public static final String KEYID = "com.nononsenseapps.notepad.NoteId";
@@ -134,18 +145,26 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public String mOriginalNote;
 	public String mOriginalTitle;
 	public String mOriginalDueDate;
-	public boolean mOriginalComplete;
+	// public boolean mOriginalComplete;
 	public long mOriginalListId;
+	public Long mOriginalParent;
+	public Long mOriginalPrevious;
 
 	private boolean doSave = false;
 
 	private long id = -1;
 	private long listId = -1;
 
+	private Long parent = null;
+	private Long previous = null;
+
 	private boolean timeToDie;
 
 	private Object shareActionProvider = null; // Must be object otherwise HC
 												// will crash
+
+	private final static int OTHER_NOTES_LOADER = -3056;
+	private static final int TOPNOTE = -793;
 
 	private Activity activity;
 
@@ -157,6 +176,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	private Spinner listSpinner;
 	private SimpleCursorAdapter listAdapter;
+	private Spinner subtaskSpinner;
+	private ExtrasCursorAdapter subtaskAdapter;
 	private static int LOADER_NOTE_ID = 0;
 	private static int LOADER_LISTS_ID = 1;
 
@@ -164,6 +185,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private Handler mHandler = new Handler();
 	private boolean mComplete;
 	private boolean mCompleteChanged = false;
+	private CheckBox conComplete;
+	private CheckBox expComplete;
+	private TextView details;
+	private TextView lockedText;
+	private View lockButton;
+	private View unlockButton;
+	private View detailsContracted;
+	private View detailsExpanded;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -226,17 +255,29 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 							.getString(ORIGINAL_TITLE);
 					mOriginalDueState = savedInstanceState
 							.getBoolean(ORIGINAL_DUE_STATE);
-					mOriginalComplete = savedInstanceState
-							.getBoolean(ORIGINAL_COMPLETE);
-					mOriginalListId = savedInstanceState
-							.getLong(ORIGINAL_LISTID);
+					mOriginalListId = savedInstanceState.getLong(ORIGINAL_LIST);
+					if (savedInstanceState.containsKey(ORIGINAL_PARENT))
+						mOriginalParent = savedInstanceState
+								.getLong(ORIGINAL_PARENT);
+					else
+						mOriginalParent = null;
+					Log.d("posredux", "originalpar1 " + mOriginalParent);
+					if (savedInstanceState.containsKey(ORIGINAL_PREVIOUS))
+						mOriginalPrevious = savedInstanceState
+								.getLong(ORIGINAL_PREVIOUS);
+					else
+						mOriginalPrevious = null;
+					Log.d("posredux", "originalprev1 " + mOriginalPrevious);
 				} else {
 					mOriginalNote = "";
 					mOriginalDueDate = "";
 					mOriginalTitle = "";
 					mOriginalDueState = false;
-					mOriginalComplete = false;
 					mOriginalListId = -1;
+					mOriginalParent = null;
+					mOriginalPrevious = null;
+					Log.d("posredux", "originalpar2 " + mOriginalParent);
+					Log.d("posredux", "originalprev2 " + mOriginalPrevious);
 				}
 
 				// Prepare the loader. Either re-connect with an existing one,
@@ -245,11 +286,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				getLoaderManager().restartLoader(LOADER_NOTE_ID, null, this);
 				// Populate the list also
 				getLoaderManager().restartLoader(LOADER_LISTS_ID, null, this);
+				// Do not start sub task loader until we have list
+
 			}
 		}
 	}
 
-	private static long getIdFromUri(Uri uri) {
+	public static long getIdFromUri(Uri uri) {
 		String newId = uri.getPathSegments().get(
 				NotePad.Notes.NOTE_ID_PATH_POSITION);
 		return Long.parseLong(newId);
@@ -257,13 +300,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	private boolean hasNoteChanged() {
 		// Null check, can happen at first start up
-		if (noteAttrs == null ||
-				mTitle == null ||
-				mText == null) {
+		if (noteAttrs == null || mTitle == null || mText == null) {
 			return false;
 		}
-		
-		boolean title, note, completed, date = false;
+
+		boolean title, note, completed, date, listC, parentC, previousC = false;
 		// Get the current note text.
 		String text = noteAttrs.getFullNote(mText.getText().toString());
 
@@ -273,8 +314,21 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		date = dueDateSet != mOriginalDueState
 				|| (dueDateSet && !noteDueDate.format3339(false).equals(
 						mOriginalDueDate));
+		listC = this.listId != mOriginalListId && mOriginalListId > -1;
+		parentC = this.parent != mOriginalParent;
+		previousC = this.previous != mOriginalPrevious;
+		
+		Log.d("posredux", "has note changed");
+		Log.d("posredux", "title " + title);
+		Log.d("posredux", "note " + note);
+		Log.d("posredux", "completed " + completed);
+		Log.d("posredux", "date " + date);
+		Log.d("posredux", "listC " + listC);
+		Log.d("posredux", "parentC " + parentC);
+		Log.d("posredux", "previousC " + previousC);
 
-		return title || note || completed || date;
+		return title || note || completed || date || listC || parentC
+				|| previousC;
 	}
 
 	/**
@@ -287,7 +341,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 *            The new note contents to use.
 	 */
 	private final void updateNote(String title, String text, String due,
-			boolean completed, long listId) {
+			boolean completed, long listId, Long parent, Long previous) {
 		// Sets up a map to contain values to be updated in the
 		// provider.
 		ContentValues values = new ContentValues();
@@ -314,8 +368,21 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			values.put(NotePad.Notes.COLUMN_NAME_LOCKED, 0);
 		}
 
-		// Add list
-		values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
+		// Add list if changed
+		if (listId != mOriginalListId && mOriginalListId > -1)
+			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
+
+		// Add position if changed
+		Log.d("posredux", "editor save parent: " + parent + ", "
+				+ mOriginalParent);
+		Log.d("posredux", "editor save previous: " + previous + ", "
+				+ mOriginalPrevious);
+		Log.d("posredux", "editor save list: " + listId + ", "
+				+ mOriginalListId);
+		if (parent != mOriginalParent)
+			values.put(Notes.COLUMN_NAME_PARENT, parent);
+		if (previous != mOriginalPrevious)
+			values.put(Notes.COLUMN_NAME_PREVIOUS, previous);
 
 		// Put the due-date in
 		if (dueDateSet) {
@@ -353,7 +420,17 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			id = getIdFromUri(mUri);
 		}
 		// update changed variable
+		mOriginalTitle = title;
+		mOriginalNote = text;
+		mOriginalDueDate = dueDateSet ? due : "";
+		
 		mCompleteChanged = false;
+		mOriginalListId = listId;
+		mOriginalParent = parent;
+		Log.d("posredux", "originalpar3 " + mOriginalParent);
+		mOriginalPrevious = previous;
+		Log.d("posredux", "originalprev3 " + mOriginalPrevious);
+		
 	}
 
 	private String makeTitle(String text) {
@@ -469,6 +546,82 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			}
 		});
 
+		// Make some action happen when you click stuff
+		final View detailsContracted = theView
+				.findViewById(R.id.detailsContracted);
+		final View detailsExpanded = theView.findViewById(R.id.detailsExpanded);
+		if (detailsContracted != null) {
+			detailsContracted.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (v != null)
+						v.setVisibility(View.GONE);
+					if (detailsExpanded != null)
+						detailsExpanded.setVisibility(View.VISIBLE);
+				}
+			});
+		}
+		if (detailsExpanded != null) {
+			detailsExpanded.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					if (v != null)
+						v.setVisibility(View.GONE);
+					if (detailsContracted != null)
+						detailsContracted.setVisibility(View.VISIBLE);
+				}
+			});
+		}
+		this.detailsContracted = detailsContracted;
+		this.detailsExpanded = detailsExpanded;
+
+		final CheckBox conComplete = (CheckBox) theView
+				.findViewById(R.id.conCompleted);
+		final CheckBox expComplete = (CheckBox) theView
+				.findViewById(R.id.expCompleted);
+		if (conComplete != null) {
+			conComplete
+					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView,
+								boolean isChecked) {
+							setCompleted(isChecked);
+							if (expComplete != null)
+								expComplete.setChecked(isChecked);
+						}
+					});
+		}
+		if (expComplete != null) {
+			expComplete
+					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView,
+								boolean isChecked) {
+							setCompleted(isChecked);
+							if (conComplete != null)
+								conComplete.setChecked(isChecked);
+						}
+					});
+		}
+		this.conComplete = conComplete;
+		this.expComplete = expComplete;
+
+		details = (TextView) theView.findViewById(R.id.editorDetails);
+
+		lockButton = theView.findViewById(R.id.lockButton);
+		unlockButton = theView.findViewById(R.id.unlockButton);
+		lockedText = (TextView) theView.findViewById(R.id.lockButtonText);
+
+		OnClickListener l = new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				showPasswordDialog(noteAttrs.locked ? UNLOCK_NOTE : LOCK_NOTE);
+			}
+		};
+		lockButton.setOnClickListener(l);
+		unlockButton.setOnClickListener(l);
+		lockedText.setOnClickListener(l);
+
 		// Main note edit text
 		mText = (EditText) theView.findViewById(R.id.noteBox);
 		mText.addTextChangedListener(this);
@@ -501,6 +654,39 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				// Can this happen?
 			}
 		});
+		// Subtask spinner
+		subtaskSpinner = (Spinner) theView.findViewById(R.id.subtaskSpinner);
+		subtaskAdapter = new ExtrasCursorAdapter(getActivity(),
+				android.R.layout.simple_list_item_1, null,
+				new String[] { Notes.COLUMN_NAME_TITLE },
+				new int[] { android.R.id.text1 }, new int[] { TOPNOTE },
+				new int[] { R.string.empty_string });
+		subtaskSpinner.setAdapter(subtaskAdapter);
+		subtaskSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+
+			@Override
+			public void onItemSelected(AdapterView<?> arg0, View arg1, int pos,
+					long id) {
+				makeSubtaskOf(id);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+				// Can this happen?
+			}
+		});
+
+		// Subtask clear button
+		ImageButton clearSubTask = (ImageButton) theView
+				.findViewById(R.id.subtaskRemoveButton);
+		clearSubTask.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				makeSubtaskOf(null);
+				subtaskSpinner
+						.setSelection(getPosOfId(subtaskAdapter, TOPNOTE));
+			}
+		});
 
 		ImageButton cancelButton = (ImageButton) theView
 				.findViewById(R.id.dueCancelButton);
@@ -516,33 +702,23 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	protected void moveToList(long newListId) {
 		if (listId != newListId && newListId > -1 && listId > -1) {
-			// We must also sever any ties with the remote location
-			createDuplicateDeleted();
-
 			listId = newListId;
 			saveNote();
+			// Reload sub task spinner since we changed lists
+			getLoaderManager().restartLoader(OTHER_NOTES_LOADER, null, this);
 		}
 	}
 
-	private void createDuplicateDeleted() {
-		// Insert a new deleted entry
-		ContentValues values = new ContentValues();
-		values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
-		values.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN, 1);
-		values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
-		Uri cUri = activity.getContentResolver().insert(
-				NotePad.Notes.CONTENT_URI, values);
-
-		// Switch their local ids to the new deleted one
-		if (cUri != null) {
-			Long cId = getIdFromUri(cUri);
-
-			values = new ContentValues();
-			values.put(NotePad.GTasks.COLUMN_NAME_DB_ID, cId);
-
-			activity.getContentResolver().update(NotePad.GTasks.CONTENT_URI,
-					values, NotePad.GTasks.COLUMN_NAME_DB_ID + " IS ?",
-					new String[] { Long.toString(id) });
+	protected void makeSubtaskOf(Long newParent) {
+		if (newParent != null && newParent == TOPNOTE)
+			newParent = null;
+		
+		if (newParent != this.parent) {
+			Log.d("posredux", "newParent: " + newParent + ", oldparent: "
+					+ this.parent);
+			this.parent = newParent;
+			this.previous = null;
+			saveNote();
 		}
 	}
 
@@ -556,6 +732,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			day = c.get(Calendar.DAY_OF_MONTH);
 		}
 		dueDateSet = false;
+
+		if (details != null)
+			details.setText(R.string.editor_details);
 
 		// Remember to update share intent
 		if (activity != null && !activity.isFinishing())
@@ -673,31 +852,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		}
 	}
 
-	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		if (!timeToDie) {
-			// Check if note has changed and enable/disable the revert option
-			if (!hasNoteChanged()) {
-				menu.findItem(R.id.menu_revert).setVisible(false);
-			} else {
-				menu.findItem(R.id.menu_revert).setVisible(true);
-			}
-			// Lock items
-			if (noteAttrs != null) {
-				menu.findItem(R.id.menu_lock).setVisible(!noteAttrs.locked);
-				menu.findItem(R.id.menu_unlock).setVisible(noteAttrs.locked);
-			}
-			menu.findItem(R.id.menu_complete).setVisible(!mComplete);
-			menu.findItem(R.id.menu_uncomplete).setVisible(mComplete);
-		}
-	}
-
 	private void setCompleted(boolean val) {
 		if (activity != null) {
 			mComplete = val;
 			mCompleteChanged = true;
 			saveNote();
-			getActivity().invalidateOptionsMenu();
 		}
 	}
 
@@ -705,12 +864,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle all of the possible menu actions.
 		switch (item.getItemId()) {
-		case R.id.menu_complete:
-			setCompleted(true);
-			break;
-		case R.id.menu_uncomplete:
-			setCompleted(false);
-			break;
 		case R.id.menu_revert:
 			cancelNote();
 			Toast.makeText(activity, getString(R.string.reverted),
@@ -754,7 +907,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			dueDateSet = true;
 
 			note = note + getText(R.string.editor_due_date_hint) + ": "
-					+ DateFormat.format(DATEFORMAT_FORMAT, c) + "\n";
+					+ DateFormat.format(DATEFORMAT_FORMAT_SHORT, c) + "\n";
 		}
 
 		if (mText != null)
@@ -798,6 +951,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		// is opened
 		// Not sure if it is necessary with the fixes to selfAction.
 		// If i'm going to do it, use a ViewSwitcher
+		Log.d("posredux", "savign before display");
 		saveNote();
 		doSave = true;
 		this.id = id;
@@ -806,6 +960,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	}
 
 	private void showNote(Cursor mCursor) {
+		if (detailsContracted != null) {
+			detailsContracted.setVisibility(View.VISIBLE);
+		}
+		if (detailsExpanded != null) {
+			detailsExpanded.setVisibility(View.GONE);
+		}
 		if (mCursor != null && !mCursor.isClosed() && mCursor.moveToFirst()) {
 			/*
 			 * Moves to the first record. Always call moveToFirst() before
@@ -852,13 +1012,48 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					.equals(mCursor.getString(mCursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS)));
 
+			conComplete.setEnabled(true);
+			expComplete.setEnabled(true);
+			details.setEnabled(true);
+			lockedText.setEnabled(true);
+			lockButton.setEnabled(true);
+			lockButton.setEnabled(true);
+
+			// Will call expComplete
+			conComplete.setChecked(mComplete);
+
 			// Set list ID
 			listId = mCursor.getLong(mCursor
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
 
 			if (listAdapter.getCount() > 0) {
 				// It's loaded, select current
-				listSpinner.setSelection(getPosOfId(listId));
+				listSpinner.setSelection(getPosOfId(listAdapter, listId));
+			}
+
+			// Load sub task spinner
+			getLoaderManager().restartLoader(OTHER_NOTES_LOADER, null, this);
+
+			// Position fields
+			final String parentS = mCursor.getString(mCursor
+					.getColumnIndex(Notes.COLUMN_NAME_PARENT));
+			this.parent = parentS == null ? null : Long.parseLong(parentS);
+			final String previousS = mCursor.getString(mCursor
+					.getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
+			this.previous = previousS == null ? null : Long
+					.parseLong(previousS);
+			
+			Log.d("posredux", "noteloadpar " + parent);
+			Log.d("posredux", "noteloadpre " + previous);
+
+			if (subtaskAdapter.getCount() > 0) {
+				// It's loaded, select current
+				if (this.parent != null)
+					subtaskSpinner.setSelection(getPosOfId(subtaskAdapter,
+							this.parent));
+				else
+					subtaskSpinner.setSelection(getPosOfId(subtaskAdapter,
+							TOPNOTE));
 			}
 
 			// Gets the note text from the Cursor and puts it in the
@@ -876,6 +1071,20 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			noteAttrs = new NoteAttributes();
 			noteAttrs.parseNote(note);
+
+			if (lockButton != null) {
+				lockButton.setVisibility(noteAttrs.locked ? View.INVISIBLE
+						: View.VISIBLE);
+			}
+			if (unlockButton != null) {
+				unlockButton.setVisibility(noteAttrs.locked ? View.VISIBLE
+						: View.INVISIBLE);
+			}
+			if (lockedText != null) {
+				lockedText
+						.setText(noteAttrs.locked ? R.string.password_required
+								: R.string.unlocked);
+			}
 			// Clear content if this is called in onResume
 			mText.setText("");
 			mText.setEnabled(false);
@@ -914,6 +1123,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mOriginalDueState = dueDateSet;
 			mOriginalTitle = title;
 
+			mOriginalListId = listId;
+			mOriginalParent = parent;
+			mOriginalPrevious = previous;
+			Log.d("posredux", "originalprev4 " + mOriginalPrevious);
+			Log.d("posredux", "originalpar4 " + mOriginalParent);
+
 			// Some things might have changed
 			getActivity().invalidateOptionsMenu();
 
@@ -945,13 +1160,44 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mDueDate.setText(getText(R.string.editor_due_date_hint));
 			mDueDate.setEnabled(false);
 		}
+
+		if (conComplete != null) {
+			conComplete.setChecked(false);
+			conComplete.setEnabled(false);
+		}
+		if (expComplete != null) {
+			expComplete.setChecked(false);
+			expComplete.setEnabled(false);
+		}
+		if (details != null) {
+			details.setText(R.string.editor_details);
+			details.setEnabled(false);
+		}
+		if (lockedText != null) {
+			lockedText.setText(R.string.unlocked);
+			lockedText.setEnabled(false);
+		}
+		if (lockButton != null) {
+			lockButton.setVisibility(View.VISIBLE);
+			lockButton.setEnabled(false);
+		}
+		if (unlockButton != null) {
+			unlockButton.setVisibility(View.INVISIBLE);
+			lockButton.setEnabled(false);
+		}
+		if (detailsContracted != null) {
+			detailsContracted.setVisibility(View.VISIBLE);
+		}
+		if (detailsExpanded != null) {
+			detailsExpanded.setVisibility(View.GONE);
+		}
 	}
 
-	private int getPosOfId(long id) {
-		int length = listAdapter.getCount();
+	private static int getPosOfId(ResourceCursorAdapter adapter, long id) {
+		int length = adapter.getCount();
 		int position;
 		for (position = 0; position < length; position++) {
-			if (id == listAdapter.getItemId(position)) {
+			if (id == adapter.getItemId(position)) {
 				break;
 			}
 		}
@@ -974,12 +1220,19 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 				c.setTimeInMillis(noteDueDate.toMillis(false));
 
-				mDueDate.setText(DateFormat.format(DATEFORMAT_FORMAT, c));
+				mDueDate.setText(DateFormat.format(DATEFORMAT_FORMAT_LONG, c));
 				Log.d("listproto", "Note has date: " + due);
-				Log.d("listproto", "Note date shown as: " + DateFormat.format(DATEFORMAT_FORMAT, c));
+				Log.d("listproto",
+						"Note date shown as: "
+								+ DateFormat.format(DATEFORMAT_FORMAT_LONG, c));
+				if (details != null)
+					details.setText(DateFormat.format(DATEFORMAT_FORMAT_SHORT,
+							c));
 			} catch (TimeFormatException e) {
 				noteDueDate.setToNow();
 				dueDateSet = false;
+				if (details != null)
+					details.setText(R.string.editor_details);
 			}
 		}
 	}
@@ -1000,6 +1253,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		outState.putString(ORIGINAL_DUE, noteDueDate.format3339(false));
 		outState.putBoolean(ORIGINAL_DUE_STATE, mOriginalDueState);
 		outState.putString(ORIGINAL_TITLE, mOriginalTitle);
+		outState.putLong(ORIGINAL_LIST, mOriginalListId);
+		if (mOriginalParent != null)
+			outState.putLong(ORIGINAL_PARENT, mOriginalParent);
+		if (mOriginalPrevious != null)
+			outState.putLong(ORIGINAL_PREVIOUS, mOriginalPrevious);
 	}
 
 	/**
@@ -1041,22 +1299,25 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// if (isFinishing() && (length == 0)) {
 			if (hasNoteChanged())
 				updateNote(title, text, noteDueDate.format3339(false),
-						mComplete, listId);
+						mComplete, listId, parent, previous);
 		}
 	}
 
 	@TargetApi(14)
 	private void setActionShareIntent() {
-		if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)
-				&& shareActionProvider != null) {
-			Intent share = new Intent(Intent.ACTION_SEND);
-			share.setType("text/plain");
-			share.putExtra(Intent.EXTRA_TEXT, makeShareText());
-			if (mTitle != null)
-				share.putExtra(Intent.EXTRA_SUBJECT, mTitle.getText());
-			share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+		if (getActivity() != null && !getActivity().isFinishing()) {
+			if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)
+					&& shareActionProvider != null) {
+				Intent share = new Intent(Intent.ACTION_SEND);
+				share.setType("text/plain");
+				share.putExtra(Intent.EXTRA_TEXT, makeShareText());
+				if (mTitle != null)
+					share.putExtra(Intent.EXTRA_SUBJECT, mTitle.getText());
+				share.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 
-			((ShareActionProvider) shareActionProvider).setShareIntent(share);
+				((ShareActionProvider) shareActionProvider)
+						.setShareIntent(share);
+			}
 		}
 	}
 
@@ -1094,15 +1355,20 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		noteDueDate.set(dayOfMonth, monthOfYear, year);
 		dueDateSet = true;
 
-		final CharSequence timeToShow = DateFormat.format(DATEFORMAT_FORMAT, c);
+		final CharSequence shortTimeToShow = DateFormat.format(
+				DATEFORMAT_FORMAT_SHORT, c);
+		final CharSequence longTimeToShow = DateFormat.format(
+				DATEFORMAT_FORMAT_LONG, c);
 
 		activity.runOnUiThread(new Runnable() {
 
 			@Override
 			public void run() {
 				if (mDueDate != null) {
-					mDueDate.setText(timeToShow);
+					mDueDate.setText(longTimeToShow);
 				}
+				if (details != null)
+					details.setText(shortTimeToShow);
 				// Remember to update share intent
 				setActionShareIntent();
 			}
@@ -1112,19 +1378,22 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 	@Override
 	public void onClick(View v) {
+		switch (v.getId()) {
+		case R.id.dueDateBox:
+		default:
+			FragmentTransaction ft = getFragmentManager().beginTransaction();
+			Fragment prev = getFragmentManager().findFragmentByTag("dialog");
+			if (prev != null) {
+				ft.remove(prev);
+			}
+			ft.addToBackStack(null);
 
-		// activity.showDialog(DATE_DIALOG_ID);
-		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		Fragment prev = getFragmentManager().findFragmentByTag("dialog");
-		if (prev != null) {
-			ft.remove(prev);
+			// Create and show the dialog.
+			DatePickerDialogFragment newFragment = new DatePickerDialogFragment();
+			newFragment.setCallback(this);
+			newFragment.show(ft, "dialog");
+			break;
 		}
-		ft.addToBackStack(null);
-
-		// Create and show the dialog.
-		DatePickerDialogFragment newFragment = new DatePickerDialogFragment();
-		newFragment.setCallback(this);
-		newFragment.show(ft, "dialog");
 	}
 
 	@Override
@@ -1138,7 +1407,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					NotePad.Lists.CONTENT_VISIBLE_URI, new String[] {
 							BaseColumns._ID, NotePad.Lists.COLUMN_NAME_TITLE },
 					null, null, NotePad.Lists.SORT_ORDER);
-		else
+		else if (OTHER_NOTES_LOADER == id) {
+			return new CursorLoader(activity, Notes.CONTENT_VISIBLE_URI,
+					new String[] { BaseColumns._ID, Notes.COLUMN_NAME_TITLE },
+					Notes._ID + " IS NOT ? AND " + Notes.COLUMN_NAME_LIST
+							+ " IS ?", new String[] { Long.toString(this.id),
+							Long.toString(this.listId) },
+					Notes.POSSUBSORT_SORT_TYPE);
+		} else
 			return new CursorLoader(activity, mUri, PROJECTION, null, null,
 					null);
 	}
@@ -1148,7 +1424,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		if (LOADER_LISTS_ID == loader.getId()) {
 			listAdapter.swapCursor(data);
 			if (listId > -1)
-				listSpinner.setSelection(getPosOfId(listId));
+				listSpinner.setSelection(getPosOfId(listAdapter, listId));
+		} else if (OTHER_NOTES_LOADER == loader.getId()) {
+			subtaskAdapter.swapCursor(data);
+			if (parent != null)
+				subtaskSpinner.setSelection(getPosOfId(subtaskAdapter, parent));
+			else
+				subtaskSpinner
+						.setSelection(getPosOfId(subtaskAdapter, TOPNOTE));
 		} else {
 			showNote(data);
 			// We do NOT want updates on this URI
@@ -1160,6 +1443,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public void onLoaderReset(Loader<Cursor> loader) {
 		if (LOADER_LISTS_ID == loader.getId())
 			listAdapter.swapCursor(null);
+		if (OTHER_NOTES_LOADER == loader.getId())
+			subtaskAdapter.swapCursor(null);
 	}
 
 	public long getCurrentNoteId() {
@@ -1188,11 +1473,29 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				noteAttrs.locked = true;
 				Toast.makeText(activity, getString(R.string.locked),
 						Toast.LENGTH_SHORT).show();
+				if (lockButton != null) {
+					lockButton.setVisibility(View.INVISIBLE);
+				}
+				if (unlockButton != null) {
+					unlockButton.setVisibility(View.VISIBLE);
+				}
+				if (lockedText != null) {
+					lockedText.setText(R.string.password_required);
+				}
 				break;
 			case UNLOCK_NOTE:
 				noteAttrs.locked = false;
 				Toast.makeText(activity, getString(R.string.unlocked),
 						Toast.LENGTH_SHORT).show();
+				if (lockButton != null) {
+					lockButton.setVisibility(View.VISIBLE);
+				}
+				if (unlockButton != null) {
+					unlockButton.setVisibility(View.INVISIBLE);
+				}
+				if (lockedText != null) {
+					lockedText.setText(R.string.unlocked);
+				}
 				// Fall through and show the note as well
 			case SHOW_NOTE:
 				mText.setText(noteAttrs.getNoteText());

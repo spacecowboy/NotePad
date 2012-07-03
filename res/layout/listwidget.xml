@@ -38,7 +38,7 @@
             android:paddingBottom="8dp"
             android:paddingTop="8dp"
             android:paddingLeft="0dp"
-            android:background="@drawable/btn_default_selector_light"
+            android:background="@drawable/img_default_selector_light"
             android:src="@drawable/app_icon" />
 
         <TextView
@@ -47,7 +47,7 @@
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:background="@drawable/btn_default_selector_light"
+            android:background="@drawable/img_default_selector_light"
             android:paddingTop="0dp"
             android:gravity="center_vertical"
             android:paddingLeft="0dp"
@@ -67,7 +67,7 @@
             android:paddingTop="8dp"
             android:paddingRight="8dp"
             android:layout_gravity="center"
-            android:background="@drawable/btn_default_selector_light"
+            android:background="@drawable/img_default_selector_light"
             android:src="@drawable/content_new_event_light" />
     </LinearLayout>
 

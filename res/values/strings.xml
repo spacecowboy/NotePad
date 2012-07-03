@@ -112,6 +112,11 @@
     <string name="preferences_week_start_day_default" tools:ignore="MissingTranslation" >-1</string>
 
     <!-- Un-translated yet -->
+    <string name="notecopied_msg"  tools:ignore="MissingTranslation">notes to the clipboard</string>
+    <string name="notecopied_msg_single"  tools:ignore="MissingTranslation">note to the clipboard</string>
+    <string name="mode_choose"  tools:ignore="MissingTranslation">Select Items</string>
+    <string name="mode_choose_single"  tools:ignore="MissingTranslation">one item selected</string>
+    <string name="mode_choose_more"  tools:ignore="MissingTranslation">items selected</string>
     <string name="lock_note">Lock note</string>
     <string name="unlock_note">Unlock note</string>
     <string name="locked">Locked</string>
@@ -152,12 +157,18 @@
     <string tools:ignore="MissingTranslation" name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
     <string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">Note preview will be 2 lines</string>
     
+    <string tools:ignore="MissingTranslation" name="editor_details">More</string>
+    <string tools:ignore="MissingTranslation" name="completed">Completed</string>
+    <string tools:ignore="MissingTranslation" name="subtask_of">Subtask of</string>
+    <string tools:ignore="MissingTranslation" name="security">Security</string>
+    
     <string tools:ignore="MissingTranslation" name="date_header_overdue">Overdue</string>
     <string tools:ignore="MissingTranslation" name="date_header_today">Today</string>
     <string tools:ignore="MissingTranslation" name="date_header_tomorrow">Tomorrow</string>
     <string tools:ignore="MissingTranslation" name="date_header_7days">Next 7 days</string>
     <string tools:ignore="MissingTranslation" name="date_header_future">Later</string>
     <string tools:ignore="MissingTranslation" name="date_header_none">No date</string>
+    <string tools:ignore="MissingTranslation" name="date_header_completed">Completed</string>
     
     <string tools:ignore="MissingTranslation" name="mod_header_today">@string/date_header_today</string>
     <string tools:ignore="MissingTranslation" name="mod_header_yesterday">Yesterday</string>
@@ -167,6 +178,8 @@
     <string tools:ignore="MissingTranslation" name="settings_listheader">List name dividers</string>
     <string tools:ignore="MissingTranslation" name="settings_listheader_off">No list name dividers</string>
     <string tools:ignore="MissingTranslation" name="settings_listheader_on">Showing list name dividers</string>
+    
+    <string tools:ignore="MissingTranslation" name="empty_string"> </string>
 
     <!-- These should probably not be translated -->
     <string tools:ignore="MissingTranslation" name="default_notetitle">Welcome!</string>

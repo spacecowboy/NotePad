@@ -56,7 +56,7 @@ public class MainPrefs extends PreferenceFragment implements
 	public static final String DUEDATESORT = "duedate";
 	public static final String TITLESORT = "title COLLATE NOCASE";
 	public static final String MODIFIEDSORT = "modified";
-	public static final String POSSUBSORT = "possubsort";
+	public static final String POSSUBSORT = "truepos";
 
 	public static final String WEEK_START_DEFAULT = "-1";
 	public static final String WEEK_START_SATURDAY = "7";

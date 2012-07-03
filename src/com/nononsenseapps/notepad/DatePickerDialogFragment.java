@@ -84,6 +84,8 @@ public class DatePickerDialogFragment extends DialogFragment {
 			Activity mActivity = getActivity();
 			DatePickerDialog dpd = new DatePickerDialog(mActivity, mFragment,
 					mFragment.year, mFragment.month, mFragment.day);
+			dpd.getDatePicker().setCalendarViewShown(true);
+			dpd.getDatePicker().setSpinnersShown(false);
 			CalendarView cv = dpd.getDatePicker().getCalendarView();
 	        cv.setShowWeekNumber(true);
 	        int startOfWeek = getFirstDayOfWeek(mActivity);
