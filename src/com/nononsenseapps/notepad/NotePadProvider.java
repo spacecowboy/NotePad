@@ -602,9 +602,8 @@ public class NotePadProvider extends ContentProvider implements
 					+ " INTEGER NOT NULL REFERENCES "
 					+ NotePad.Lists.TABLE_NAME + ","
 					+ NotePad.Notes.COLUMN_NAME_GTASKS_STATUS
-					+ " TEXT NOT NULL,"
-					+ NotePad.Notes.COLUMN_NAME_POSITION + " TEXT,"
-					+ NotePad.Notes.COLUMN_NAME_HIDDEN
+					+ " TEXT NOT NULL," + NotePad.Notes.COLUMN_NAME_POSITION
+					+ " TEXT," + NotePad.Notes.COLUMN_NAME_HIDDEN
 					+ " INTEGER DEFAULT 0 NOT NULL,"
 					+ NotePad.Notes.COLUMN_NAME_MODIFIED
 					+ " INTEGER DEFAULT 0 NOT NULL,"
@@ -625,8 +624,7 @@ public class NotePadProvider extends ContentProvider implements
 					+ "," + NotePad.Notes.COLUMN_NAME_MOVED_LOCALLY
 					+ " INTEGER DEFAULT 0 NOT NULL,"
 
-					+ NotePad.Notes.COLUMN_NAME_GTASKSPARENT
-					+ " TEXT,"
+					+ NotePad.Notes.COLUMN_NAME_GTASKSPARENT + " TEXT,"
 
 					+ NotePad.Notes.COLUMN_NAME_LOCKED
 					+ " INTEGER DEFAULT 0 NOT NULL,"
@@ -1416,13 +1414,13 @@ public class NotePadProvider extends ContentProvider implements
 		else {
 			// Notifies observers registered against this provider that the data
 			// changed.
-//			getContext().getContentResolver()
-//					.notifyChange(noteUri, null, false);
-//			// Also tell lists watching the other URI
-//			getContext().getContentResolver().notifyChange(
-//					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
-//			// And update widgets
-//			updateAllWidgets();
+			// getContext().getContentResolver()
+			// .notifyChange(noteUri, null, false);
+			// // Also tell lists watching the other URI
+			// getContext().getContentResolver().notifyChange(
+			// NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
+			// // And update widgets
+			// updateAllWidgets();
 			return noteUri;
 		}
 	}
@@ -1550,13 +1548,13 @@ public class NotePadProvider extends ContentProvider implements
 
 			// Notifies observers registered against this provider that the data
 			// changed.
-//			getContext().getContentResolver()
-//					.notifyChange(noteUri, null, false);
-//			// Also tell lists watching the other URI
-//			getContext().getContentResolver().notifyChange(
-//					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
-//			// And update widgets
-//			updateAllWidgets();
+			// getContext().getContentResolver()
+			// .notifyChange(noteUri, null, false);
+			// // Also tell lists watching the other URI
+			// getContext().getContentResolver().notifyChange(
+			// NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
+			// // And update widgets
+			// updateAllWidgets();
 			return noteUri;
 		}
 
@@ -1613,13 +1611,13 @@ public class NotePadProvider extends ContentProvider implements
 
 			// Notifies observers registered against this provider that the data
 			// changed.
-//			getContext().getContentResolver()
-//					.notifyChange(noteUri, null, false);
-//			// Also tell lists watching the other URI
-//			getContext().getContentResolver().notifyChange(
-//					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
-//			// And update widgets
-//			updateAllWidgets();
+			// getContext().getContentResolver()
+			// .notifyChange(noteUri, null, false);
+			// // Also tell lists watching the other URI
+			// getContext().getContentResolver().notifyChange(
+			// NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
+			// // And update widgets
+			// updateAllWidgets();
 			return noteUri;
 		}
 
@@ -1679,13 +1677,13 @@ public class NotePadProvider extends ContentProvider implements
 
 			// Notifies observers registered against this provider that the data
 			// changed.
-//			getContext().getContentResolver()
-//					.notifyChange(noteUri, null, false);
-//			// Also tell lists watching the other URI
-//			getContext().getContentResolver().notifyChange(
-//					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
-//			// And update widgets
-//			updateAllWidgets();
+			// getContext().getContentResolver()
+			// .notifyChange(noteUri, null, false);
+			// // Also tell lists watching the other URI
+			// getContext().getContentResolver().notifyChange(
+			// NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
+			// // And update widgets
+			// updateAllWidgets();
 			return noteUri;
 		}
 
@@ -2019,12 +2017,12 @@ public class NotePadProvider extends ContentProvider implements
 		 * along to the resolver framework, and observers that have registered
 		 * themselves for the provider are notified.
 		 */
-//		getContext().getContentResolver().notifyChange(uri, null, false);
-//		// Also tell lists watching the other URI
-//		getContext().getContentResolver().notifyChange(
-//				NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
-//		// And update widgets
-//		updateAllWidgets();
+		// getContext().getContentResolver().notifyChange(uri, null, false);
+		// // Also tell lists watching the other URI
+		// getContext().getContentResolver().notifyChange(
+		// NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
+		// // And update widgets
+		// updateAllWidgets();
 
 		// Returns the number of rows deleted.
 		return count;
@@ -2425,13 +2423,13 @@ public class NotePadProvider extends ContentProvider implements
 		 * along to the resolver framework, and observers that have registered
 		 * themselves for the provider are notified.
 		 */
-//		getContext().getContentResolver().notifyChange(uri, null, false);
-//		// Manually send an update to the visible notes URL because lists
-//		// are using this while the editor will use a different URI
-//		getContext().getContentResolver().notifyChange(
-//				NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
-//		// And update widgets
-//		updateAllWidgets();
+		// getContext().getContentResolver().notifyChange(uri, null, false);
+		// // Manually send an update to the visible notes URL because lists
+		// // are using this while the editor will use a different URI
+		// getContext().getContentResolver().notifyChange(
+		// NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
+		// // And update widgets
+		// updateAllWidgets();
 
 		// Returns the number of rows updated.
 		return count;
@@ -2944,10 +2942,11 @@ public class NotePadProvider extends ContentProvider implements
 
 	private static void insertNoteTreeByRemoteOrder(final SQLiteDatabase db,
 			final String position, final String gtasksParent,
-			final Long oldListId, String where, String[] whereArgs)
+			final Long oldListId, final String where, final String[] whereArgs)
 			throws SQLException {
 		// If whereArgs is not null, it is only thenote id
-		final long noteId = whereArgs != null ? Long.parseLong(whereArgs[0]) : -1;
+		final long noteId = whereArgs != null ? Long.parseLong(whereArgs[0])
+				: -1;
 		// Find relevant positions
 		final Long parent, previous;
 
@@ -2984,16 +2983,31 @@ public class NotePadProvider extends ContentProvider implements
 			 * Sort by position, then the previous note is the last note in the
 			 * query
 			 */
-			final Cursor c = db.query(Notes.TABLE_NAME,
+			String whereThis = Notes.COLUMN_NAME_POSITION + " < ? AND "
+					+ Notes.COLUMN_NAME_GTASKSPARENT + " IS ";
+			if (gtasksParent == null)
+				whereThis += "NULL";
+			else
+				whereThis += "'" + gtasksParent + "'";
+
+			final Cursor c = db.query(
+					Notes.TABLE_NAME,
 					toStringArray(Notes._ID, Notes.COLUMN_NAME_POSITION),
-					Notes.COLUMN_NAME_POSITION + " < ? AND " + toWhereValidClause(Notes.COLUMN_NAME_GTASKSPARENT), toWhereArgs(position, gtasksParent),
-					null, null, Notes.COLUMN_NAME_POSITION);
+					whereThis + " AND "
+							+ toWhereValidClause(
+									Notes.COLUMN_NAME_LIST),
+					toWhereArgs(position, oldListId), null, null,
+					Notes.COLUMN_NAME_POSITION);
 
 			if (c.moveToLast()) {
 				Log.d("remoteprovider", "Found a previous note for it!");
-				Log.d("remoteprovider", "this: " + position + ", prev: " + c.getString(c.getColumnIndex(Notes.COLUMN_NAME_POSITION)));
-				previous = c.getLong(c
-						.getColumnIndex(Notes._ID));
+				Log.d("remoteprovider",
+						"this: "
+								+ position
+								+ ", prev: "
+								+ c.getString(c
+										.getColumnIndex(Notes.COLUMN_NAME_POSITION)));
+				previous = c.getLong(c.getColumnIndex(Notes._ID));
 			} else {
 				Log.d("remoteprovider", "Could find no previous note for it!");
 				previous = null;
