@@ -602,7 +602,7 @@ public class NotePadProvider extends ContentProvider implements
 					+ " INTEGER NOT NULL REFERENCES "
 					+ NotePad.Lists.TABLE_NAME + ","
 					+ NotePad.Notes.COLUMN_NAME_GTASKS_STATUS
-					+ " TEXT NOT NULL," + "gtasks_parent" + " TEXT,"
+					+ " TEXT NOT NULL,"
 					+ NotePad.Notes.COLUMN_NAME_POSITION + " TEXT,"
 					+ NotePad.Notes.COLUMN_NAME_HIDDEN
 					+ " INTEGER DEFAULT 0 NOT NULL,"
@@ -626,7 +626,7 @@ public class NotePadProvider extends ContentProvider implements
 					+ " INTEGER DEFAULT 0 NOT NULL,"
 
 					+ NotePad.Notes.COLUMN_NAME_GTASKSPARENT
-					+ " TEXT DEFAULT NULL,"
+					+ " TEXT,"
 
 					+ NotePad.Notes.COLUMN_NAME_LOCKED
 					+ " INTEGER DEFAULT 0 NOT NULL,"

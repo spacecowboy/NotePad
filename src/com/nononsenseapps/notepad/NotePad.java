@@ -197,6 +197,7 @@ public final class NotePad {
 		// parent position hidden
 
 		// public static final String COLUMN_NAME_PARENT = "gtasks_parent";
+		public static final String COLUMN_NAME_GTASKSPARENT = "gtasks_parent";
 		public static final String COLUMN_NAME_POSITION = "gtasks_position";
 		public static final String COLUMN_NAME_HIDDEN = "hiddenflag";
 
@@ -243,7 +244,6 @@ public final class NotePad {
 		// Position constants
 		public static final String HEAD = "0";
 		public static final String TAIL = "1";
-		public static final String COLUMN_NAME_GTASKSPARENT = "gtasks_parent";
 
 		public static String SORT_ORDER = ALPHABETIC_ASC_ORDER;
 
