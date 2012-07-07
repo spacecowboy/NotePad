@@ -568,10 +568,11 @@ public class GoogleAPITalker {
 	 * detected. Will set only remote id, etag, position and parent fields.
 	 * 
 	 * Updates the task in place and also returns it.
+	 * @throws PreconditionException 
 	 */
 	public GoogleTask uploadTask(final GoogleTask task,
 			final GoogleTaskList pList) throws ClientProtocolException,
-			JSONException, IOException {
+			JSONException, IOException, PreconditionException {
 
 		if (pList.id == null || pList.id.isEmpty()) {
 			Log.d(TAG, "Invalid list ID found for uploadTask");
@@ -604,7 +605,7 @@ public class GoogleAPITalker {
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
 
 		// Always set ETAGS for tasks
-		//setHeaderStrongEtag(httppost, task.etag);
+		setHeaderStrongEtag(httppost, task.etag);
 
 		Log.d(TAG, httppost.getRequestLine().toString());
 		for (Header header : httppost.getAllHeaders()) {
@@ -617,7 +618,6 @@ public class GoogleAPITalker {
 		}
 
 		String stringResponse;
-		try {
 			stringResponse = parseResponse(client.execute(httppost));
 
 			// If we deleted the note, we will get an empty response. Return the
@@ -639,10 +639,7 @@ public class GoogleAPITalker {
 				// Then move it to its position
 				moveTask(task, pList);
 			}
-		} catch (PreconditionException e) {
-			// There was a conflict, return null in that case
-			return null;
-		}
+		
 
 		return task;
 	}
@@ -715,7 +712,8 @@ public class GoogleAPITalker {
 	 * @throws ClientProtocolException
 	 */
 	public GoogleTaskList uploadList(final GoogleTaskList list)
-			throws ClientProtocolException, JSONException, IOException {
+			throws ClientProtocolException, JSONException, IOException,
+			PreconditionException {
 		HttpUriRequest httppost;
 		if (list.id != null) {
 
@@ -754,7 +752,6 @@ public class GoogleAPITalker {
 		}
 
 		String stringResponse;
-		try {
 			stringResponse = parseResponse(client.execute(httppost));
 
 			// If we deleted the note, we will get an empty response. Return the
@@ -773,13 +770,7 @@ public class GoogleAPITalker {
 				list.id = jsonResponse.getString("id");
 				list.title = jsonResponse.getString("title");
 			}
-		} catch (PreconditionException e) {
-			// // There was a conflict, return null in that case
-			return null;
-			// } catch (NotModifiedException e) {
-			// // Should not be possible
-			// return null;
-		}
+		
 
 		return list;
 	}

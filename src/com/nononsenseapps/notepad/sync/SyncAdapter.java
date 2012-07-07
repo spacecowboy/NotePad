@@ -197,39 +197,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					dbTalker.getAllLists(allLocalLists, listsToUpload);
 
 					// Get the current hash value on the server and all
-					// remote
-					// lists if upload is not true
-
-					String serverEtag = apiTalker.getModifiedLists(localEtag,
-							allLocalLists, listsToSaveToDB);
-
-					// IF the tags match, then nothing has changed on
-					// server.
-					if (localEtag.equals(serverEtag)) {
-
-						Log.d(TAG, "Etags match, nothing to download");
-					} else {
-
-						Log.d(TAG, "Etags dont match, downloading new tasks");
-						// Download tasks which have been updated since last
-						// time
-						for (GoogleTaskList list : listsToSaveToDB) {
-							if (list.id != null && !list.id.isEmpty()) {
-
-								Log.d(TAG, "Saving remote modified tasks for: "
-										+ list.id);
-								tasksInListToSaveToDB.put(list, list
-										.downloadModifiedTasks(apiTalker,
-												allTasks, lastUpdate, idMap));
-							}
-						}
-					}
+					// remote lists
 
 					Log.d(TAG, "Getting stuff we want to upload");
 					/*
-					 * Get stuff we would like to upload to server In case of
-					 * lists, locally modified versions always wins in conflict,
-					 * so nothing more to do
+					 * Get stuff we would like to upload to server
 					 */
 
 					for (GoogleTaskList list : allLocalLists) {
@@ -251,34 +223,37 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 							 * note while saving the version we downloaded as
 							 * new in the database.
 							 */
+
 							for (GoogleTask moddedTask : (ArrayList<GoogleTask>) moddedTasks) {
-								ArrayList<GoogleTask> tasksToBeSaved = tasksInListToSaveToDB
-										.get(list);
-								if (tasksToBeSaved != null) {
-									for (GoogleTask remoteTask : tasksToBeSaved) {
-										if (remoteTask.equals(moddedTask)) {
-											Log.d(TAG,
-													"This modified task was newer on server, creating conflict copy: "
-															+ moddedTask.title);
-											/*
-											 * Remove DB-ID from remote task so
-											 * it is new locally
-											 */
-											remoteTask.dbId = -1;
-											/*
-											 * Remove remote ID from local task
-											 * so it is new remotely
-											 */
-											moddedTask.id = null;
-											/*
-											 * Also remove the mapping between
-											 * ids
-											 */
-											idMap.remove(moddedTask.dbId);
-											break;
-										}
-									}
-								}
+								// ArrayList<GoogleTask> tasksToBeSaved =
+								// tasksInListToSaveToDB
+								// .get(list);
+								// if (tasksToBeSaved != null) {
+								// for (GoogleTask remoteTask : tasksToBeSaved)
+								// {
+								// if (remoteTask.equals(moddedTask)) {
+								// Log.d(TAG,
+								// "This modified task was newer on server, creating conflict copy: "
+								// + moddedTask.title);
+								// /*
+								// * Remove DB-ID from remote task so
+								// * it is new locally
+								// */
+								// remoteTask.dbId = -1;
+								// /*
+								// * Remove remote ID from local task
+								// * so it is new remotely
+								// */
+								// moddedTask.id = null;
+								// /*
+								// * Also remove the mapping between
+								// * ids
+								// */
+								// idMap.remove(moddedTask.dbId);
+								// break;
+								// }
+								// }
+								// }
 
 								/*
 								 * In the case that a task has been deleted
@@ -302,20 +277,24 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					boolean uploadedStuff = false;
 					// Start with lists
 					for (GoogleTaskList list : listsToUpload) {
-						GoogleTaskList result = apiTalker.uploadList(list);
-						uploadedStuff = true;
-						if (result != null) {
-							// Make sure that local version is the same as
-							// server's
-							for (GoogleTaskList localList : allLocalLists) {
-								if (result.equals(localList)) {
-									localList.title = result.title;
-									localList.id = result.id;
-									result.dbId = localList.dbId;
-									break;
-								}
-							}
-							listsToSaveToDB.add(result);
+						try {
+							GoogleTaskList result = apiTalker.uploadList(list);
+							uploadedStuff = true;
+							// if (result != null) {
+							// // Make sure that local version is the same as
+							// // server's
+							// for (GoogleTaskList localList : allLocalLists) {
+							// if (result.equals(localList)) {
+							// localList.title = result.title;
+							// localList.id = result.id;
+							// result.dbId = localList.dbId;
+							// break;
+							// }
+							// }
+							// listsToSaveToDB.add(result);
+							// }
+						} catch (PreconditionException e) {
+							Log.d(TAG, "There was a conflict with list delete");
 						}
 					}
 
@@ -339,16 +318,59 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 								task.remoteprevious = idMap
 										.get(task.localprevious);
 
-								GoogleTask result = apiTalker.uploadTask(task,
-										list);
+								try {
+									GoogleTask result = apiTalker.uploadTask(
+											task, list);
+									idMap.put(result.dbId, result.id);
+								} catch (PreconditionException e) {
+									Log.d(TAG, "There was task conflict. Trying as new task");
+									// There was a conflict, do it again but as
+									// a new note
+									task.id = null;
+									task.etag = null;
+									try {
+										GoogleTask result = apiTalker
+												.uploadTask(task, list);
+									} catch (PreconditionException ee) {
+										Log.d(TAG, "Impossible conflict achieved");
+										// Impossible to reach this
+									}
+								}
 								uploadedStuff = true;
 								// Task now has relevant fields set. Add to
 								// DB-list
-								idMap.put(result.dbId, result.id);
+								// if (tasksInListToSaveToDB.get(list) == null)
+								// tasksInListToSaveToDB.put(list,
+								// new ArrayList<GoogleTask>());
+								// tasksInListToSaveToDB.get(list).add(result);
+							}
+						}
+					}
+
+					String serverEtag = apiTalker.getModifiedLists(localEtag,
+							allLocalLists, listsToSaveToDB);
+
+					// IF the tags match, then nothing has changed on
+					// server.
+					if (localEtag.equals(serverEtag)) {
+
+						Log.d(TAG, "Etags match, nothing to download");
+					} else {
+
+						Log.d(TAG, "Etags dont match, downloading new tasks");
+						// Download tasks which have been updated since last
+						// time
+						for (GoogleTaskList list : listsToSaveToDB) {
+							if (list.id != null && !list.id.isEmpty()) {
+
+								Log.d(TAG, "Saving remote modified tasks for: "
+										+ list.id);
 								if (tasksInListToSaveToDB.get(list) == null)
 									tasksInListToSaveToDB.put(list,
 											new ArrayList<GoogleTask>());
-								tasksInListToSaveToDB.get(list).add(result);
+								tasksInListToSaveToDB.get(list).addAll(
+										list.downloadModifiedTasks(apiTalker,
+												allTasks, lastUpdate, idMap));
 							}
 						}
 					}
@@ -369,6 +391,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						}
 					}
 
+					// Sort them first
+					for (final ArrayList<GoogleTask> tasks : tasksInListToSaveToDB
+							.values()) {
+						sortByRemoteParent(tasks);
+					}
 					// Save to database in a single transaction
 					Log.d(TAG, "Save stuff to DB");
 					dbTalker.SaveToDatabase(listsToSaveToDB,
@@ -427,5 +454,42 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		}
 
 		return doneIntent;
+	}
+
+	private void sortByRemoteParent(final ArrayList<GoogleTask> tasks) {
+		final HashMap<String, Integer> levels = new HashMap<String, Integer>();
+		levels.put(null, -1);
+		final ArrayList<GoogleTask> tasksToDo = (ArrayList<GoogleTask>) tasks
+				.clone();
+		GoogleTask lastFailed = null;
+		int current = -1;
+		Log.d("remoteorder", "Doing remote sorting with size: " + tasks.size());
+		while (!tasksToDo.isEmpty()) {
+			current = current >= (tasksToDo.size() - 1) ? 0 : current + 1;
+			Log.d("remoteorder", "current: " + current);
+
+			if (levels.containsKey(tasksToDo.get(current).remoteparent)) {
+				Log.d("remoteorder", "parent in levelmap");
+				levels.put(tasksToDo.get(current).id,
+						levels.get(tasksToDo.get(current).remoteparent) + 1);
+				tasksToDo.remove(current);
+				current -= 1;
+				lastFailed = null;
+			} else if (lastFailed == null) {
+				Log.d("remoteorder", "lastFailed null, now " + current);
+				lastFailed = tasksToDo.get(current);
+			} else if (lastFailed.equals(tasksToDo.get(current))) {
+				Log.d("remoteorder", "lastFailed == current");
+				// Did full lap, parent is not new
+				levels.put(tasksToDo.get(current).id, 99);
+				levels.put(tasksToDo.get(current).remoteparent, 98);
+				tasksToDo.remove(current);
+				current -= 1;
+				lastFailed = null;
+			}
+		}
+
+		// Just to make sure that new notes appear first in insertion order
+		Collections.sort(tasks, new GoogleTask.RemoteOrder(levels));
 	}
 }

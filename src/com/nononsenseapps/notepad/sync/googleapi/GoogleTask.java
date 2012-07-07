@@ -16,9 +16,8 @@
 
 package com.nononsenseapps.notepad.sync.googleapi;
 
-import java.security.InvalidParameterException;
-import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -41,130 +40,22 @@ public class GoogleTask {
 
 	public static class RemoteOrder implements Comparator<GoogleTask> {
 
-		final ArrayList<GoogleTask> allTasks;
-		final ArrayList<GoogleTask> moddedTasks;
+		final HashMap<String, Integer> levels;
 
-		public RemoteOrder(final ArrayList<GoogleTask> moddedTasks,
-				ArrayList<GoogleTask> allTasks) {
-			this.allTasks = allTasks;
-			this.moddedTasks = moddedTasks;
-		}
-
-		/**
-		 * Returns the indendation level of a child with the specified parent.
-		 * if remoteParent is null or empty, returns 0;
-		 */
-		private int getLevel(final GoogleTask remoteTask) {
-			final String remoteParent = remoteTask.remoteparent;
-			if (remoteParent == null || remoteParent.isEmpty())
-				return 0;
-
-			// Find parent of parent
-			String ancestor = remoteParent;
-			String currentAncestor = ancestor;
-			int indent = 1;
-			boolean notDone = true;
-			Log.d("remotesort", "size of allTasks: " + allTasks.size());
-			Log.d("remotesort", "size of moddedTasks: " + moddedTasks.size());
-			while (notDone) {
-				Log.d("remotesort", "ancestor: " + ancestor);
-				Log.d("remotesort", "current: " + currentAncestor);
-				if (ancestor == null) {
-					notDone = false;
-					Log.d("remotesort", "ancestor null, done!");
-					break;
-				} else {
-					currentAncestor = ancestor;
-					boolean found = false;
-					for (final GoogleTask task : moddedTasks) {
-						Log.d("remotesort", "Checking: " + task.id);
-						if (ancestor.equals(task.id)) {
-							found = true;
-							if (task.indent > -1) {
-								indent += task.indent;
-								notDone = false;
-								Log.d("remotesort",
-										"setting ancestor because we found: "
-												+ task.id);
-								ancestor = null;
-							} else if (task.remoteparent == null
-									|| task.remoteparent.isEmpty()) {
-								task.indent = 0;
-								notDone = false;
-								ancestor = null;
-								Log.d("remotesort",
-										"setting ancestor to null since we found the top");
-							} else {
-								indent += 1;
-								ancestor = task.remoteparent;
-								Log.d("remotesort", "setting ancestor to "
-										+ task.remoteparent);
-							}
-							break;
-						}
-					}
-					if (!found) {
-						for (final GoogleTask task : allTasks) {
-							Log.d("remotesort", "Checking all: " + task.id);
-							if (ancestor.equals(task.id)) {
-								found = true;
-								if (task.indent > -1) {
-									indent += task.indent;
-									notDone = false;
-									Log.d("remotesort",
-											"setting ancestor because we found  all: "
-													+ task.id);
-									ancestor = null;
-								} else if (task.remoteparent == null
-										|| task.remoteparent.isEmpty()) {
-									task.indent = 0;
-									notDone = false;
-									ancestor = null;
-									Log.d("remotesort",
-											"setting ancestor to null since we found the top  all");
-								} else {
-									indent += 1;
-									ancestor = task.remoteparent;
-									Log.d("remotesort",
-											"setting ancestor to  all "
-													+ task.remoteparent);
-								}
-								break;
-							}
-						}
-					}
-				}
-
-				if (remoteTask.id.equals(ancestor) || currentAncestor.equals(ancestor) || remoteParent.equals(ancestor)) {
-					Log.d("remotesort", "Could not find ancestor, fuck it");
-					remoteTask.remoteparent = null;
-					return 0;
-				}
-//					throw new InvalidParameterException(
-//							"Tried sorting on remote parent but could not find "
-//									+ remoteParent + " in allTasks!");
-//
-//				if (remoteParent.equals(ancestor))
-//					throw new InvalidParameterException(
-//							"Detected infinite parent loop in structure! "
-//									+ remoteParent + " == " + ancestor);
-			}
-
-			return indent;
+		public RemoteOrder(final HashMap<String, Integer> levels) {
+			this.levels = levels;
 		}
 
 		@Override
 		public int compare(GoogleTask lhs, GoogleTask rhs) {
-			if (lhs.deleted > 0 && rhs.deleted > 0)
-				return 0;
-			if (lhs.deleted > 0)
-				return 1;
-			if (rhs.deleted > 0)
-				return -1;
-
 			Log.d("remotesort", "Comparing: " + lhs.title + " and " + rhs.title);
-			final int leftLevel = getLevel(lhs);
-			final int rightLevel = getLevel(rhs);
+			final Integer leftLevel = levels.get(lhs.id);
+			final Integer rightLevel = levels.get(rhs.id);
+			
+			Log.d("remotesort", "lhs level: " + leftLevel + ", rhs level: " + rightLevel);
+			
+			if (leftLevel == null || rightLevel == null)
+				return 0;
 
 			if (leftLevel == rightLevel) {
 				// Share parents, compare their positions
@@ -341,30 +232,31 @@ public class GoogleTask {
 		values.put(NotePad.Notes.COLUMN_NAME_LIST, listDbId);
 		values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, modified);
 		values.put(NotePad.Notes.COLUMN_NAME_DELETED, deleted);
-		// values.put(NotePad.Notes.COLUMN_NAME_POSITION, position);
+		values.put(NotePad.Notes.COLUMN_NAME_POSITION, position);
+		values.put(NotePad.Notes.COLUMN_NAME_GTASKSPARENT, remoteparent);
 		// Make sure position values are set properly
-		if (dbId == -1 || !moveUploaded) {
-			if (remoteparent != null) {
-				// Do not join these IFs, because I actually do not want null
-				// there
-				// otherwise
-				if (idMap.containsValue(remoteparent))
-					values.put(Notes.COLUMN_NAME_PARENT,
-							idMap.getKey(remoteparent));
-			} else {
-				values.putNull(NotePad.Notes.COLUMN_NAME_PARENT);
-			}
-			// if (remoteprevious != null) {
-			// // Do not join these IFs, because I actually do not want null
-			// // there
-			// // otherwise
-			// if (idMap.containsValue(remoteprevious))
-			// values.put(Notes.COLUMN_NAME_PARENT,
-			// idMap.getKey(remoteprevious));
-			// } else {
-			// values.putNull(NotePad.Notes.COLUMN_NAME_PREVIOUS);
-			// }
-		}
+//		if (dbId == -1 || !moveUploaded) {
+//			if (remoteparent != null) {
+//				// Do not join these IFs, because I actually do not want null
+//				// there
+//				// otherwise
+//				if (idMap.containsValue(remoteparent))
+//					values.put(Notes.COLUMN_NAME_PARENT,
+//							idMap.getKey(remoteparent));
+//			} else {
+//				values.putNull(NotePad.Notes.COLUMN_NAME_PARENT);
+//			}
+//			// if (remoteprevious != null) {
+//			// // Do not join these IFs, because I actually do not want null
+//			// // there
+//			// // otherwise
+//			// if (idMap.containsValue(remoteprevious))
+//			// values.put(Notes.COLUMN_NAME_PARENT,
+//			// idMap.getKey(remoteprevious));
+//			// } else {
+//			// values.putNull(NotePad.Notes.COLUMN_NAME_PREVIOUS);
+//			// }
+//		}
 
 		values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, hidden);
 
@@ -379,8 +271,7 @@ public class GoogleTask {
 	 * indices to indicate the id of the parent and previous of this note. If
 	 * set to null, already set values will be used which might be null.
 	 */
-	public ContentValues toNotesBackRefContentValues(Integer listIdIndex,
-			BiMap<Long, String> idMap, BiMap<String, Integer> remoteToIndex) {
+	public ContentValues toNotesBackRefContentValues(Integer listIdIndex) {
 		ContentValues values = new ContentValues();
 		if (listIdIndex != null)
 			values.put(NotePad.Notes.COLUMN_NAME_LIST, listIdIndex);
@@ -392,15 +283,15 @@ public class GoogleTask {
 		 * And of course, only worth doing anything if we did not actually
 		 * upload the position ourselves successfully
 		 */
-		if (dbId == -1 || !moveUploaded) {
-			if (remoteparent != null && !remoteparent.isEmpty() && !idMap.containsValue(remoteparent))
-				values.put(Notes.COLUMN_NAME_PARENT,
-						remoteToIndex.get(remoteparent));
+//		if (dbId == -1 || !moveUploaded) {
+//			if (remoteparent != null && !remoteparent.isEmpty() && !idMap.containsValue(remoteparent))
+//				values.put(Notes.COLUMN_NAME_PARENT,
+//						remoteToIndex.get(remoteparent));
 
 			// if (!idMap.containsValue(remoteprevious))
 			// values.put(Notes.COLUMN_NAME_PREVIOUS,
 			// remoteToIndex.get(remoteprevious));
-		}
+//		}
 
 		return values;
 	}

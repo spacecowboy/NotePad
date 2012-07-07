@@ -114,6 +114,7 @@ public class GoogleTaskList {
 		ContentValues values = new ContentValues();
 		values.put(NotePad.Lists.COLUMN_NAME_TITLE, title);
 		values.put(NotePad.Lists.COLUMN_NAME_MODIFIED, 0);
+		values.put(NotePad.Lists.COLUMN_NAME_DELETED, 0);
 		return values;
 	}
 

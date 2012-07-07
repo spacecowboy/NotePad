@@ -27,12 +27,10 @@ import android.text.format.Time;
 import android.util.Log;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Set;
 
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.util.BiMap;
 
 /**
@@ -467,10 +465,7 @@ public class GoogleDBTalker {
 		int lastNoteIdIndex;
 		// Need to remember in what operation a note was created for position
 		// reasons
-		BiMap<String, Integer> remoteToIndex = new BiMap<String, Integer>();
-		// Sort on their remote position first notes with no parent, then notes
-		// at level1, then level2 etc
-		Collections.sort(tasks, new GoogleTask.RemoteOrder(tasks, allTasks));
+		//BiMap<String, Integer> remoteToIndex = new BiMap<String, Integer>();
 		for (GoogleTask task : tasks) {
 			if (task.dbId > -1 && task.deleted != 1) {
 				
@@ -482,8 +477,6 @@ public class GoogleDBTalker {
 										NotePad.Notes.CONTENT_ID_URI_BASE,
 										Long.toString(task.dbId)))
 						.withValues(task.toNotesContentValues(0, listDbId, idMap))
-						.withValueBackReferences(
-									task.toNotesBackRefContentValues(null, idMap, remoteToIndex))
 						.build());
 				if (task.didRemoteInsert) {
 					operations
@@ -535,8 +528,6 @@ public class GoogleDBTalker {
 					operations.add(ContentProviderOperation
 							.newInsert(NotePad.Notes.CONTENT_URI)
 							.withValues(task.toNotesContentValues(0, listDbId, idMap))
-							.withValueBackReferences(
-									task.toNotesBackRefContentValues(null, idMap, remoteToIndex))
 							.build());
 				} else {
 					// Use back reference to that insert operation
@@ -548,14 +539,14 @@ public class GoogleDBTalker {
 											task.toNotesContentValues(0,
 													listDbId, idMap))
 									.withValueBackReferences(
-											task.toNotesBackRefContentValues(listIdIndex, idMap, remoteToIndex))
+											task.toNotesBackRefContentValues(listIdIndex))
 									.build());
 				}
 				// Now the other table, use back reference to the id the note
 				// received
 				lastNoteIdIndex = operations.size() - 1;
 				// And store for positions
-				remoteToIndex.put(task.id, lastNoteIdIndex);
+				//remoteToIndex.put(task.id, lastNoteIdIndex);
 
 				operations
 						.add(ContentProviderOperation
