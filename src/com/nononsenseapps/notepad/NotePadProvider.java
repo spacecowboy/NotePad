@@ -2991,7 +2991,7 @@ public class NotePadProvider extends ContentProvider implements
 			if (c.moveToLast()) {
 				Log.d("remoteprovider", "Found a previous note for it!");
 				previous = c.getLong(c
-						.getColumnIndex(NotePad.GTasks.COLUMN_NAME_DB_ID));
+						.getColumnIndex(Notes._ID));
 			} else {
 				Log.d("remoteprovider", "Could find no previous note for it!");
 				previous = null;
