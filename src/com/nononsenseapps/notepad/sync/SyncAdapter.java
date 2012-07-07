@@ -131,16 +131,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 			doneIntent.putExtra(SYNC_RESULT, ERROR);
 
 			try {
-
-				if (extras != null
-						&& extras.getBoolean(
-								ContentResolver.SYNC_EXTRAS_UPLOAD, false)) {
-					doneIntent = uploadOnly(account, extras, authority,
-							provider, syncResult, settings);
-				} else {
-					doneIntent = fullSync(account, extras, authority, provider,
-							syncResult, settings);
-				}
+				doneIntent = fullSync(account, extras, authority, provider,
+						syncResult, settings);
 			} finally {
 				mContext.sendBroadcast(doneIntent);
 			}
@@ -234,11 +226,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					}
 
 					Log.d(TAG, "Getting stuff we want to upload");
-					// Get stuff we would like to upload to server
-					// In case of lists, locally modified versions always
-					// wins
-					// in
-					// conflict, so nothing more to do
+					/*
+					 * Get stuff we would like to upload to server In case of
+					 * lists, locally modified versions always wins in conflict,
+					 * so nothing more to do
+					 */
 
 					for (GoogleTaskList list : allLocalLists) {
 						ArrayList<GoogleTask> moddedTasks = tasksInListToUpload
@@ -251,34 +243,48 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 									+ ", Locally modified tasks found: "
 									+ moddedTasks.size());
 
-							// Now we need to handle possible conflicts in
-							// the
-							// tasks. But this has already been sorted when
-							// we
-							// downloaded them
-							// For any task which exists in stuffToSaveToDB,
-							// we
-							// should not upload it
-							// Iterate over a clone to avoid concurrency
-							// problems since we will be modifying
-							// the list during iteration
-							for (GoogleTask moddedTask : (ArrayList<GoogleTask>) moddedTasks
-									.clone()) {
+							/*
+							 * Now we need to handle possible conflicts in the
+							 * tasks. For any task which exists in
+							 * stuffToSaveToDB, we should create a conflict copy
+							 * of the local version and upload that as a new
+							 * note while saving the version we downloaded as
+							 * new in the database.
+							 */
+							for (GoogleTask moddedTask : (ArrayList<GoogleTask>) moddedTasks) {
 								ArrayList<GoogleTask> tasksToBeSaved = tasksInListToSaveToDB
 										.get(list);
-								if (tasksToBeSaved != null
-										&& tasksToBeSaved.contains(moddedTask)) {
-
-									Log.d(TAG,
-											"This modified task was newer on server, removing from upload list: "
-													+ moddedTask.title);
-									moddedTasks.remove(moddedTask);
+								if (tasksToBeSaved != null) {
+									for (GoogleTask remoteTask : tasksToBeSaved) {
+										if (remoteTask.equals(moddedTask)) {
+											Log.d(TAG,
+													"This modified task was newer on server, creating conflict copy: "
+															+ moddedTask.title);
+											/*
+											 * Remove DB-ID from remote task so
+											 * it is new locally
+											 */
+											remoteTask.dbId = -1;
+											/*
+											 * Remove remote ID from local task
+											 * so it is new remotely
+											 */
+											moddedTask.id = null;
+											/*
+											 * Also remove the mapping between
+											 * ids
+											 */
+											idMap.remove(moddedTask.dbId);
+											break;
+										}
+									}
 								}
-								// In the case that a task has been deleted
-								// before it was synced the first time
-								// We should definitely not sync it. Only
-								// delete
-								// it later
+
+								/*
+								 * In the case that a task has been deleted
+								 * before it was synced the first time We should
+								 * definitely not sync it. Only delete it later
+								 */
 								if (moddedTask.deleted == 1
 										&& (moddedTask.id == null || moddedTask.id
 												.isEmpty())) {
@@ -319,9 +325,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						ArrayList<GoogleTask> tasksToUpload = tasksInListToUpload
 								.get(list.dbId);
 						if (tasksToUpload != null) {
-							// It is vital that we upload the tasks in the
-							// correct order
-							// or we will not maintain the positions
+							/*
+							 * It is vital that we upload the tasks in the
+							 * correct order or we will not maintain the
+							 * positions
+							 */
 							Collections.sort(tasksToUpload,
 									GoogleTask.LOCALORDER);
 							for (GoogleTask task : tasksToUpload) {
@@ -332,7 +340,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 										.get(task.localprevious);
 
 								GoogleTask result = apiTalker.uploadTask(task,
-										list, false);
+										list);
 								uploadedStuff = true;
 								// Task now has relevant fields set. Add to
 								// DB-list
@@ -345,16 +353,19 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						}
 					}
 
-					// Finally, get the updated etag from the server and
-					// save.
-					// Only worth doing if we actually uploaded anything
+					/*
+					 * Finally, get the updated etag from the server and save.
+					 * Only worth doing if we actually uploaded anything
+					 */
 					String currentEtag = serverEtag;
 					if (uploadedStuff) {
 						try {
 							currentEtag = apiTalker.getEtag();
 						} catch (PreconditionException e) {
 							// Cant happen here
-							Log.e(TAG, "Blowtorch error: " + e.getLocalizedMessage());
+							Log.e(TAG,
+									"Blowtorch error: "
+											+ e.getLocalizedMessage());
 						}
 					}
 
@@ -414,179 +425,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 			}
 
 			Log.d(TAG, "SyncResult: " + syncResult.toDebugString());
-		}
-
-		return doneIntent;
-	}
-
-	/**
-	 * As you have guessed from the name, this method will only upload stuff.
-	 * Most notably, it will NOT handle conflicts AT ALL. Conflicted notes are
-	 * simply ignored. A full sync is required to solve them.
-	 * 
-	 * @param account
-	 * @param extras
-	 * @param authority
-	 * @param provider
-	 * @param syncResult
-	 * @param settings
-	 * @return
-	 */
-	private Intent uploadOnly(final Account account, final Bundle extras,
-			final String authority, final ContentProviderClient provider,
-			final SyncResult syncResult, final SharedPreferences settings) {
-		// For later
-		final Intent doneIntent = new Intent(SYNC_FINISHED);
-		doneIntent.putExtra(SYNC_RESULT, ERROR);
-
-		// Initialize necessary stuff
-		final GoogleDBTalker dbTalker = new GoogleDBTalker(account.name,
-				provider);
-		final GoogleAPITalker apiTalker = new GoogleAPITalker();
-
-		try {
-			final boolean connected = apiTalker.initialize(accountManager,
-					account, AUTH_TOKEN_TYPE, NOTIFY_AUTH_FAILURE);
-
-			if (connected) {
-				Log.d(TAG, "We got an authToken atleast");
-				try {
-					Log.d(TAG, "Getting stuff we want to upload");
-					// This is so we can set parent position values properly
-					// during upload using remote ids
-					final BiMap<Long, String> idMap = new BiMap<Long, String>();
-
-					// Prepare lists for items
-					final ArrayList<GoogleTaskList> listsToSaveToDB = new ArrayList<GoogleTaskList>();
-					final HashMap<GoogleTaskList, ArrayList<GoogleTask>> tasksInListToSaveToDB = new HashMap<GoogleTaskList, ArrayList<GoogleTask>>();
-
-					final HashMap<Long, ArrayList<GoogleTask>> tasksInListToUpload = new HashMap<Long, ArrayList<GoogleTask>>();
-					final HashMap<Long, ArrayList<GoogleTask>> allTasksInList = new HashMap<Long, ArrayList<GoogleTask>>();
-
-					// gets all tasks in one query
-					final ArrayList<GoogleTask> allTasks = dbTalker
-							.getAllTasks(allTasksInList, tasksInListToUpload,
-									idMap);
-
-					final ArrayList<GoogleTaskList> listsToUpload = new ArrayList<GoogleTaskList>();
-					final ArrayList<GoogleTaskList> allLocalLists = new ArrayList<GoogleTaskList>();
-
-					// gets all lists in one query
-					dbTalker.getAllLists(allLocalLists, listsToUpload);
-
-					Log.d(TAG, "Uploading lists");
-					/*
-					 * First thing we want to do is upload stuff, because some
-					 * values are updated then
-					 */
-					boolean uploadedStuff = false;
-					// Start with lists
-					for (GoogleTaskList list : listsToUpload) {
-						final GoogleTaskList result = apiTalker
-								.uploadList(list);
-						// Null if there is a conflict
-						if (result != null) {
-							uploadedStuff = true;
-							// Make sure that local version is the same as
-							// server's
-							for (GoogleTaskList localList : allLocalLists) {
-								if (result.equals(localList)) {
-									localList.title = result.title;
-									localList.id = result.id;
-									result.dbId = localList.dbId;
-									break;
-								}
-							}
-							listsToSaveToDB.add(result);
-						}
-					}
-
-					Log.d(TAG, "Uploading tasks");
-					// Right, now upload tasks
-					for (GoogleTaskList list : allLocalLists) {
-						ArrayList<GoogleTask> tasksToUpload = tasksInListToUpload
-								.get(list.dbId);
-						if (tasksToUpload != null) {
-							/*
-							 * It is vital that we upload the tasks in the
-							 * correct order or we will not maintain the
-							 * positions
-							 */
-							Collections.sort(tasksToUpload,
-									GoogleTask.LOCALORDER);
-							for (final GoogleTask task : tasksToUpload) {
-								// Update position fields with data from
-								// previous uploads
-								task.remoteparent = idMap.get(task.localparent);
-								task.remoteprevious = idMap
-										.get(task.localprevious);
-								if (task.localparent != null
-										&& task.remoteparent == null
-										|| task.localprevious != null
-										&& task.remoteprevious == null) {
-									// A previous task in the tree must have
-									// failed uploading
-									continue;
-								}
-								final GoogleTask result = apiTalker.uploadTask(
-										task, list, true);
-								// If null, there was a conflict
-								if (result != null) {
-									uploadedStuff = true;
-									// Task now has relevant fields set. Add to
-									// DB-list
-									idMap.put(result.dbId, result.id);
-									if (tasksInListToSaveToDB.get(list) == null)
-										tasksInListToSaveToDB.put(list,
-												new ArrayList<GoogleTask>());
-									tasksInListToSaveToDB.get(list).add(result);
-								}
-							}
-						}
-					}
-
-					if (uploadedStuff) {
-						// Save to database in a single transaction
-						Log.d(TAG, "Save stuff to DB");
-						dbTalker.SaveToDatabase(listsToSaveToDB,
-								tasksInListToSaveToDB, idMap);
-						// Commit it
-						ContentProviderResult[] result = dbTalker.apply();
-					}
-
-					Log.d(TAG, "Sync Complete!");
-					doneIntent.putExtra(SYNC_RESULT, SUCCESS);
-
-				} catch (ClientProtocolException e) {
-					Log.d(TAG,
-							"ClientProtocolException: "
-									+ e.getLocalizedMessage());
-				} catch (JSONException e) {
-					Log.d(TAG, "JSONException: " + e.getLocalizedMessage());
-				} catch (IOException e) {
-					syncResult.stats.numIoExceptions++;
-					Log.d(TAG, "IOException: " + e.getLocalizedMessage());
-				} catch (RemoteException e) {
-					Log.d(TAG, "RemoteException: " + e.getLocalizedMessage());
-				} catch (OperationApplicationException e) {
-					Log.d(TAG,
-							"Joined operation failed: "
-									+ e.getLocalizedMessage());
-				}
-			} else {
-				// return real failure
-
-				Log.d(TAG, "Could not get authToken. Reporting authException");
-				syncResult.stats.numAuthExceptions++;
-				doneIntent.putExtra(SYNC_RESULT, LOGIN_FAIL);
-			}
-		} finally {
-			// This must always be called or we will leak resources
-			if (apiTalker != null) {
-				apiTalker.closeClient();
-			}
-
-			Log.d(TAG, "uploadResult: " + syncResult.toDebugString());
 		}
 
 		return doneIntent;

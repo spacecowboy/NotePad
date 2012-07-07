@@ -78,7 +78,7 @@ public class DragNDropListActivity extends ListActivity {
     	int defaultBackgroundColor;
     	
 			public void onDrag(int x, int y, ListView listView) {
-				// TODO Auto-generated method stub
+				// Auto-generated method stub
 			}
 
 			public void onStartDrag(View itemView) {

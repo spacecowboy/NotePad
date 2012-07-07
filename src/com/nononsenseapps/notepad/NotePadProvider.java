@@ -623,15 +623,14 @@ public class NotePadProvider extends ContentProvider implements
 					+ Notes.TABLE_NAME + "," + NotePad.Notes.COLUMN_NAME_PARENT
 					+ " INTEGER DEFAULT NULL REFERENCES " + Notes.TABLE_NAME
 					+ ","
+					+ NotePad.Notes.COLUMN_NAME_MOVED_LOCALLY
+					+ " INTEGER DEFAULT 0 NOT NULL,"
 
 					+ NotePad.Notes.COLUMN_NAME_LOCKED
 					+ " INTEGER DEFAULT 0 NOT NULL,"
 
 					+ NotePad.Notes.COLUMN_NAME_DELETED
-					+ " INTEGER DEFAULT 0 NOT NULL,"
-
-					+ "UNIQUE(" + Notes.COLUMN_NAME_LIST + ","
-					+ Notes.COLUMN_NAME_TRUEPOS + ")" + ");");
+					+ " INTEGER DEFAULT 0 NOT NULL" + ");");
 		}
 
 		private void createListsTable(SQLiteDatabase db) {
@@ -1393,21 +1392,21 @@ public class NotePadProvider extends ContentProvider implements
 			db.endTransaction();
 		}
 
-		// Notifies observers registered against this provider that the data
-		// changed.
-		getContext().getContentResolver().notifyChange(noteUri, null, true);
-		// Also tell lists watching the other URI
-		getContext().getContentResolver().notifyChange(
-				NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
-		// And update widgets
-		updateAllWidgets();
-
 		// If the insert didn't succeed, then the rowID is <= 0. Throws an
 		// exception.
 		if (noteUri == null)
 			throw new SQLException("Failed to insert row into " + uri);
-		else
+		else {
+			// Notifies observers registered against this provider that the data
+			// changed.
+			getContext().getContentResolver().notifyChange(noteUri, null, true);
+			// Also tell lists watching the other URI
+			getContext().getContentResolver().notifyChange(
+					NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
+			// And update widgets
+			updateAllWidgets();
 			return noteUri;
+		}
 	}
 
 	/**
@@ -2514,13 +2513,13 @@ public class NotePadProvider extends ContentProvider implements
 	 * 
 	 * This is intended to be called during moves, e.g. in insertNoteTree
 	 */
-	private static void copyDeleteNote(final SQLiteDatabase db,
-			final long noteId, final long listId) {
-		if (noteId < 0 || listId < 0)
-			throw new InvalidParameterException("Invalid ID");
-		copyDeleteNote(db, listId, toWhereClause(Notes._ID),
-				toWhereArgs(noteId));
-	}
+//	private static void copyDeleteNote(final SQLiteDatabase db,
+//			final long noteId, final long listId) {
+//		if (noteId < 0 || listId < 0)
+//			throw new InvalidParameterException("Invalid ID");
+//		copyDeleteNote(db, listId, toWhereClause(Notes._ID),
+//				toWhereArgs(noteId));
+//	}
 
 	/**
 	 * Marks this note as deleted in gtask tables, which means we "insert" a new
@@ -2531,50 +2530,50 @@ public class NotePadProvider extends ContentProvider implements
 	 * 
 	 * This is intended to be called during moves, e.g. in insertNoteTree
 	 */
-	private static void copyDeleteNote(final SQLiteDatabase db,
-			final long listId, final String where, final String[] whereArgs) {
-		// Only do this if there is a gtask referencing this
-		boolean existsInGtasks = false;
-		final Cursor c = db.query(NotePad.GTasks.TABLE_NAME,
-				toStringArray(NotePad.GTasks._ID), where, whereArgs, null,
-				null, null);
-		if (c.moveToFirst()) {
-			existsInGtasks = true;
-		}
-		c.close();
-
-		if (existsInGtasks) {
-			Log.d("posredux", "Doing copyDelete");
-			// Insert a new deleted entry
-			final ContentValues values = new ContentValues();
-			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
-			values.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN, 1);
-			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
-			values.put(NotePad.Notes.COLUMN_NAME_TITLE, "");
-			values.put(NotePad.Notes.COLUMN_NAME_NOTE, "");
-			values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
-			final Long now = Long.valueOf(System.currentTimeMillis());
-			values.put(NotePad.Notes.COLUMN_NAME_CREATE_DATE, now);
-			values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, now);
-			values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
-			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, "needsAction");
-			values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
-			values.put(NotePad.Notes.COLUMN_NAME_TRUEPOS, "-1");
-			values.putNull(NotePad.Notes.COLUMN_NAME_PREVIOUS);
-
-			long cId = db.insert(Notes.TABLE_NAME, null, values);
-
-			// Switch their local ids to the new deleted one
-			if (cId > -1) {
-
-				final ContentValues gvalues = new ContentValues();
-				gvalues.put(NotePad.GTasks.COLUMN_NAME_DB_ID, cId);
-
-				db.update(GTasks.TABLE_NAME, gvalues, where, whereArgs);
-			}
-			Log.d("posredux", "Finished copyDelete");
-		}
-	}
+//	private static void copyDeletesNote(final SQLiteDatabase db,
+//			final long listId, final String where, final String[] whereArgs) {
+//		// Only do this if there is a gtask referencing this
+//		boolean existsInGtasks = false;
+//		final Cursor c = db.query(NotePad.GTasks.TABLE_NAME,
+//				toStringArray(NotePad.GTasks._ID), where, whereArgs, null,
+//				null, null);
+//		if (c.moveToFirst()) {
+//			existsInGtasks = true;
+//		}
+//		c.close();
+//
+//		if (existsInGtasks) {
+//			Log.d("posredux", "Doing copyDelete");
+//			// Insert a new deleted entry
+//			final ContentValues values = new ContentValues();
+//			values.put(NotePad.Notes.COLUMN_NAME_DELETED, 1);
+//			values.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN, 1);
+//			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
+//			values.put(NotePad.Notes.COLUMN_NAME_TITLE, "");
+//			values.put(NotePad.Notes.COLUMN_NAME_NOTE, "");
+//			values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
+//			final Long now = Long.valueOf(System.currentTimeMillis());
+//			values.put(NotePad.Notes.COLUMN_NAME_CREATE_DATE, now);
+//			values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, now);
+//			values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
+//			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, "needsAction");
+//			values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
+//			values.put(NotePad.Notes.COLUMN_NAME_TRUEPOS, "-1");
+//			values.putNull(NotePad.Notes.COLUMN_NAME_PREVIOUS);
+//
+//			long cId = db.insert(Notes.TABLE_NAME, null, values);
+//
+//			// Switch their local ids to the new deleted one
+//			if (cId > -1) {
+//
+//				final ContentValues gvalues = new ContentValues();
+//				gvalues.put(NotePad.GTasks.COLUMN_NAME_DB_ID, cId);
+//
+//				db.update(GTasks.TABLE_NAME, gvalues, where, whereArgs);
+//			}
+//			Log.d("posredux", "Finished copyDelete");
+//		}
+//	}
 
 	/**
 	 * This is intended to be used to connect a note-tree to a new position. You
@@ -2714,35 +2713,35 @@ public class NotePadProvider extends ContentProvider implements
 				// if nextPos is not TAIL
 				if (!Notes.TAIL.equals(nextPos)) {
 					// Make a copy/delete of it for gtasks since it will move
-					Log.d("posredux", "Copydeleting preceeding note");
-					String whereGtask = NotePad.GTasks.COLUMN_NAME_DB_ID
-							+ " IN (SELECT " + Notes._ID + " FROM "
-							+ Notes.TABLE_NAME + " WHERE "
-							+ toWhereValidClause(Notes.COLUMN_NAME_LIST)
-							+ " AND " + Notes.COLUMN_NAME_PARENT + " IS %s"
-							+ " AND " + Notes.COLUMN_NAME_PREVIOUS + " IS %s)";
-					final String[] whereGtaskArgs;
-					if (newParent == null) {
-						if (newPrevious == null) {
-							whereGtask = String.format(whereGtask, "NULL",
-									"NULL");
-							whereGtaskArgs = toWhereArgs(newListId);
-						} else {
-							whereGtask = String.format(whereGtask, "NULL", "?");
-							whereGtaskArgs = toWhereArgs(newListId, newPrevious);
-						}
-					} else {
-						if (newPrevious == null) {
-							whereGtask = String.format(whereGtask, "?", "NULL");
-							whereGtaskArgs = toWhereArgs(newListId, newParent);
-						} else {
-							whereGtask = String.format(whereGtask, "?", "?");
-							whereGtaskArgs = toWhereArgs(newListId, newParent,
-									newPrevious);
-						}
-					}
-					Log.d("posredux", whereGtask);
-					copyDeleteNote(db, newListId, whereGtask, whereGtaskArgs);
+					//Log.d("posredux", "Copydeleting preceeding note");
+//					String whereGtask = NotePad.GTasks.COLUMN_NAME_DB_ID
+//							+ " IN (SELECT " + Notes._ID + " FROM "
+//							+ Notes.TABLE_NAME + " WHERE "
+//							+ toWhereValidClause(Notes.COLUMN_NAME_LIST)
+//							+ " AND " + Notes.COLUMN_NAME_PARENT + " IS %s"
+//							+ " AND " + Notes.COLUMN_NAME_PREVIOUS + " IS %s)";
+//					final String[] whereGtaskArgs;
+//					if (newParent == null) {
+//						if (newPrevious == null) {
+//							whereGtask = String.format(whereGtask, "NULL",
+//									"NULL");
+//							whereGtaskArgs = toWhereArgs(newListId);
+//						} else {
+//							whereGtask = String.format(whereGtask, "NULL", "?");
+//							whereGtaskArgs = toWhereArgs(newListId, newPrevious);
+//						}
+//					} else {
+//						if (newPrevious == null) {
+//							whereGtask = String.format(whereGtask, "?", "NULL");
+//							whereGtaskArgs = toWhereArgs(newListId, newParent);
+//						} else {
+//							whereGtask = String.format(whereGtask, "?", "?");
+//							whereGtaskArgs = toWhereArgs(newListId, newParent,
+//									newPrevious);
+//						}
+//					}
+//					Log.d("posredux", whereGtask);
+//					copyDeleteNote(db, newListId, whereGtask, whereGtaskArgs);
 					// Now detach it
 					Log.d("posredux", "Detatching it");
 					final ContentValues prevalue = new ContentValues();
@@ -2774,6 +2773,9 @@ public class NotePadProvider extends ContentProvider implements
 				while (tree.moveToNext()) {
 					// Clear previous values
 					values.clear();
+					
+					// All notes in the tree are moved, so set that
+					values.put(Notes.COLUMN_NAME_MOVED_LOCALLY, 1);
 
 					// Get this note's values
 					final long noteId = tree.getLong(tree
@@ -2843,7 +2845,7 @@ public class NotePadProvider extends ContentProvider implements
 
 					Log.d("posredux", "copydeleting child");
 					// Make a copy/delete before we move it
-					copyDeleteNote(db, noteId, oldListId);
+//					copyDeleteNote(db, noteId, oldListId);
 
 					Log.d("posredux", "updating child");
 					// update with values

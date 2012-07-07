@@ -151,20 +151,16 @@ public class GoogleAPITalker {
 				+ AuthUrlEnd();
 	}
 
-	private static String TaskURL_ETAG_ID_UPDATED(final String taskId, final String listId, final boolean uploadOnly) {
+	private static String TaskURL_ETAG_ID_UPDATED(final String taskId, final String listId) {
 		String url =  BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId
-				+ "?fields=id,etag";
-		if (!uploadOnly)
-				url += ",updated";
+				+ "?fields=id,etag,updated";
 		url += ",position,parent&" + AuthUrlEnd();
 		return url;
 	}
 
-	private static String TaskMoveURL_ETAG_UPDATED(final String taskId, final String listId, final boolean uploadOnly) {
+	private static String TaskMoveURL_ETAG_UPDATED(final String taskId, final String listId) {
 		String url = BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId + "/move"
-				+ "?fields=etag";
-		if (!uploadOnly)
-			url += ",updated";
+				+ "?fields=etag,updated";
 		url += ",position,parent&" + AuthUrlEnd();
 		return url;
 	}
@@ -574,7 +570,7 @@ public class GoogleAPITalker {
 	 * Updates the task in place and also returns it.
 	 */
 	public GoogleTask uploadTask(final GoogleTask task,
-			final GoogleTaskList pList, final boolean uploadOnly) throws ClientProtocolException,
+			final GoogleTaskList pList) throws ClientProtocolException,
 			JSONException, IOException {
 
 		if (pList.id == null || pList.id.isEmpty()) {
@@ -589,7 +585,7 @@ public class GoogleAPITalker {
 				httppost.setHeader("X-HTTP-Method-Override", "DELETE");
 			} else {
 				httppost = new HttpPost(TaskURL_ETAG_ID_UPDATED(task.id,
-						pList.id, uploadOnly));
+						pList.id));
 				// apache does not include PATCH requests, but we can force a
 				// post to be a PATCH request
 				httppost.setHeader("X-HTTP-Method-Override", "PATCH");
@@ -608,7 +604,7 @@ public class GoogleAPITalker {
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
 
 		// Always set ETAGS for tasks
-		setHeaderStrongEtag(httppost, task.etag);
+		//setHeaderStrongEtag(httppost, task.etag);
 
 		Log.d(TAG, httppost.getRequestLine().toString());
 		for (Header header : httppost.getAllHeaders()) {
@@ -638,10 +634,10 @@ public class GoogleAPITalker {
 				// fields
 				task.etag = jsonResponse.getString("etag");
 				task.id = jsonResponse.getString(GoogleTask.ID);
-				if (!uploadOnly && jsonResponse.has(GoogleTask.UPDATED))
+				if (jsonResponse.has(GoogleTask.UPDATED))
 					task.updated = jsonResponse.getString(GoogleTask.UPDATED);
 				// Then move it to its position
-				moveTask(task, pList, uploadOnly);
+				moveTask(task, pList);
 			}
 		} catch (PreconditionException e) {
 			// There was a conflict, return null in that case
@@ -660,7 +656,7 @@ public class GoogleAPITalker {
 	 * @throws IOException
 	 * @throws PreconditionException 
 	 */
-	private void moveTask(final GoogleTask task, final GoogleTaskList pList, final boolean uploadOnly)
+	private void moveTask(final GoogleTask task, final GoogleTaskList pList)
 			throws ClientProtocolException, JSONException, IOException, PreconditionException {
 
 		if (pList.id == null || pList.id.isEmpty() || task.id == null
@@ -670,13 +666,13 @@ public class GoogleAPITalker {
 		}
 
 		HttpUriRequest httppost = new HttpPost(TaskMoveURL_ETAG_UPDATED(
-				task.id, pList.id, uploadOnly));
+				task.id, pList.id));
 
 		setAuthHeader(httppost);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
 
 		// Always set ETAGS for tasks
-		setHeaderStrongEtag(httppost, task.etag);
+		//setHeaderStrongEtag(httppost, task.etag);
 
 		Log.d(TAG, httppost.getRequestLine().toString());
 		for (Header header : httppost.getAllHeaders()) {
@@ -694,7 +690,7 @@ public class GoogleAPITalker {
 		// Will return a task, containing id and etag. always update
 		// fields
 		task.etag = jsonResponse.getString("etag");
-		if (!uploadOnly && jsonResponse.has(GoogleTask.UPDATED))
+		if (jsonResponse.has(GoogleTask.UPDATED))
 			task.updated = jsonResponse.getString(GoogleTask.UPDATED);
 		task.moveUploaded = true;
 		if (jsonResponse.has(GoogleTask.PARENT))

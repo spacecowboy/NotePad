@@ -326,7 +326,7 @@ public class GoogleTask {
 		 * upload the position ourselves successfully
 		 */
 		if (dbId == -1 || !moveUploaded) {
-			if (!idMap.containsValue(remoteparent))
+			if (remoteparent != null && !idMap.containsValue(remoteparent))
 				values.put(Notes.COLUMN_NAME_PARENT,
 						remoteToIndex.get(remoteparent));
 
