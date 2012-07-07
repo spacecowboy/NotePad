@@ -42,16 +42,20 @@ public class GoogleTask {
 	public static class RemoteOrder implements Comparator<GoogleTask> {
 
 		final ArrayList<GoogleTask> allTasks;
+		final ArrayList<GoogleTask> moddedTasks;
 
-		public RemoteOrder(final ArrayList<GoogleTask> allTasks) {
+		public RemoteOrder(final ArrayList<GoogleTask> moddedTasks,
+				ArrayList<GoogleTask> allTasks) {
 			this.allTasks = allTasks;
+			this.moddedTasks = moddedTasks;
 		}
 
 		/**
 		 * Returns the indendation level of a child with the specified parent.
 		 * if remoteParent is null or empty, returns 0;
 		 */
-		private int getLevel(final String remoteParent) {
+		private int getLevel(final GoogleTask remoteTask) {
+			final String remoteParent = remoteTask.remoteparent;
 			if (remoteParent == null || remoteParent.isEmpty())
 				return 0;
 
@@ -60,37 +64,90 @@ public class GoogleTask {
 			String currentAncestor = ancestor;
 			int indent = 1;
 			boolean notDone = true;
+			Log.d("remotesort", "size of allTasks: " + allTasks.size());
+			Log.d("remotesort", "size of moddedTasks: " + moddedTasks.size());
 			while (notDone) {
+				Log.d("remotesort", "ancestor: " + ancestor);
+				Log.d("remotesort", "current: " + currentAncestor);
 				if (ancestor == null) {
 					notDone = false;
+					Log.d("remotesort", "ancestor null, done!");
 					break;
 				} else {
 					currentAncestor = ancestor;
-					for (final GoogleTask task : allTasks) {
+					boolean found = false;
+					for (final GoogleTask task : moddedTasks) {
+						Log.d("remotesort", "Checking: " + task.id);
 						if (ancestor.equals(task.id)) {
+							found = true;
 							if (task.indent > -1) {
 								indent += task.indent;
 								notDone = false;
+								Log.d("remotesort",
+										"setting ancestor because we found: "
+												+ task.id);
 								ancestor = null;
-							} else if (task.remoteparent == null || task.remoteparent.isEmpty()) {
+							} else if (task.remoteparent == null
+									|| task.remoteparent.isEmpty()) {
 								task.indent = 0;
 								notDone = false;
 								ancestor = null;
+								Log.d("remotesort",
+										"setting ancestor to null since we found the top");
 							} else {
 								indent += 1;
 								ancestor = task.remoteparent;
+								Log.d("remotesort", "setting ancestor to "
+										+ task.remoteparent);
 							}
 							break;
 						}
 					}
+					if (!found) {
+						for (final GoogleTask task : allTasks) {
+							Log.d("remotesort", "Checking all: " + task.id);
+							if (ancestor.equals(task.id)) {
+								found = true;
+								if (task.indent > -1) {
+									indent += task.indent;
+									notDone = false;
+									Log.d("remotesort",
+											"setting ancestor because we found  all: "
+													+ task.id);
+									ancestor = null;
+								} else if (task.remoteparent == null
+										|| task.remoteparent.isEmpty()) {
+									task.indent = 0;
+									notDone = false;
+									ancestor = null;
+									Log.d("remotesort",
+											"setting ancestor to null since we found the top  all");
+								} else {
+									indent += 1;
+									ancestor = task.remoteparent;
+									Log.d("remotesort",
+											"setting ancestor to  all "
+													+ task.remoteparent);
+								}
+								break;
+							}
+						}
+					}
 				}
-				
-				if (remoteParent.equals(ancestor))
-					throw new InvalidParameterException("Detected infinite parent loop in structure!");
-				
-				if (currentAncestor.equals(ancestor))
-					throw new InvalidParameterException("Tried sorting on remote parent but could not find "
-								+ remoteParent + " in allTasks!");
+
+				if (remoteTask.id.equals(ancestor) || currentAncestor.equals(ancestor) || remoteParent.equals(ancestor)) {
+					Log.d("remotesort", "Could not find ancestor, fuck it");
+					remoteTask.remoteparent = null;
+					return 0;
+				}
+//					throw new InvalidParameterException(
+//							"Tried sorting on remote parent but could not find "
+//									+ remoteParent + " in allTasks!");
+//
+//				if (remoteParent.equals(ancestor))
+//					throw new InvalidParameterException(
+//							"Detected infinite parent loop in structure! "
+//									+ remoteParent + " == " + ancestor);
 			}
 
 			return indent;
@@ -98,8 +155,16 @@ public class GoogleTask {
 
 		@Override
 		public int compare(GoogleTask lhs, GoogleTask rhs) {
-			final int leftLevel = getLevel(lhs.remoteparent);
-			final int rightLevel = getLevel(rhs.remoteparent);
+			if (lhs.deleted > 0 && rhs.deleted > 0)
+				return 0;
+			if (lhs.deleted > 0)
+				return 1;
+			if (rhs.deleted > 0)
+				return -1;
+
+			Log.d("remotesort", "Comparing: " + lhs.title + " and " + rhs.title);
+			final int leftLevel = getLevel(lhs);
+			final int rightLevel = getLevel(rhs);
 
 			if (leftLevel == rightLevel) {
 				// Share parents, compare their positions
@@ -166,8 +231,10 @@ public class GoogleTask {
 		status = jsonTask.getString(STATUS);
 		if (jsonTask.has(PARENT))
 			remoteparent = jsonTask.getString(PARENT);
-		if (jsonTask.has(PREVIOUS))
-			remoteprevious = jsonTask.getString(PREVIOUS);
+		else
+			remoteparent = null;
+		// if (jsonTask.has(PREVIOUS))
+		// remoteprevious = jsonTask.getString(PREVIOUS);
 		position = jsonTask.getString(POSITION);
 		if (jsonTask.has(DUE))
 			dueDate = jsonTask.getString(DUE);
@@ -287,16 +354,16 @@ public class GoogleTask {
 			} else {
 				values.putNull(NotePad.Notes.COLUMN_NAME_PARENT);
 			}
-//			if (remoteprevious != null) {
-//				// Do not join these IFs, because I actually do not want null
-//				// there
-//				// otherwise
-//				if (idMap.containsValue(remoteprevious))
-//					values.put(Notes.COLUMN_NAME_PARENT,
-//							idMap.getKey(remoteprevious));
-//			} else {
-//				values.putNull(NotePad.Notes.COLUMN_NAME_PREVIOUS);
-//			}
+			// if (remoteprevious != null) {
+			// // Do not join these IFs, because I actually do not want null
+			// // there
+			// // otherwise
+			// if (idMap.containsValue(remoteprevious))
+			// values.put(Notes.COLUMN_NAME_PARENT,
+			// idMap.getKey(remoteprevious));
+			// } else {
+			// values.putNull(NotePad.Notes.COLUMN_NAME_PREVIOUS);
+			// }
 		}
 
 		values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, hidden);
@@ -326,13 +393,13 @@ public class GoogleTask {
 		 * upload the position ourselves successfully
 		 */
 		if (dbId == -1 || !moveUploaded) {
-			if (remoteparent != null && !idMap.containsValue(remoteparent))
+			if (remoteparent != null && !remoteparent.isEmpty() && !idMap.containsValue(remoteparent))
 				values.put(Notes.COLUMN_NAME_PARENT,
 						remoteToIndex.get(remoteparent));
 
-//			if (!idMap.containsValue(remoteprevious))
-//				values.put(Notes.COLUMN_NAME_PREVIOUS,
-//						remoteToIndex.get(remoteprevious));
+			// if (!idMap.containsValue(remoteprevious))
+			// values.put(Notes.COLUMN_NAME_PREVIOUS,
+			// remoteToIndex.get(remoteprevious));
 		}
 
 		return values;

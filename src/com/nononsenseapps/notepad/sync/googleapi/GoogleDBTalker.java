@@ -365,7 +365,7 @@ public class GoogleDBTalker {
 	public void SaveToDatabase(
 			ArrayList<GoogleTaskList> listsToSaveToDB,
 			HashMap<GoogleTaskList, ArrayList<GoogleTask>> tasksInListToSaveToDB,
-			BiMap<Long, String> idMap) {
+			BiMap<Long, String> idMap, ArrayList<GoogleTask> allTasks) {
 		int listIdIndex = -1;
 
 		Set<GoogleTaskList> listIdsWithTasks = tasksInListToSaveToDB.keySet();
@@ -441,7 +441,7 @@ public class GoogleDBTalker {
 			if (tasks != null && !tasks.isEmpty()) {
 				
 					Log.d(TAG, "Found some tasks to save in: " + list.id);
-				SaveNoteToDatabase(tasks, listIdIndex, list.dbId, idMap);
+				SaveNoteToDatabase(tasks, listIdIndex, list.dbId, idMap, allTasks);
 			}
 			// Remove it from the keyset, will affect the hashmap as well
 			if (list.id != null) {
@@ -457,20 +457,20 @@ public class GoogleDBTalker {
 				long listDbId = tasks.get(0).listdbid;
 				
 					Log.d(TAG, "Saving tasks for: " + listDbId);
-				SaveNoteToDatabase(tasks, -1, listDbId, idMap);
+				SaveNoteToDatabase(tasks, -1, listDbId, idMap, allTasks);
 			}
 		}
 	}
 
 	private void SaveNoteToDatabase(ArrayList<GoogleTask> tasks,
-			int listIdIndex, long listDbId, BiMap<Long, String> idMap) {
+			int listIdIndex, long listDbId, BiMap<Long, String> idMap, ArrayList<GoogleTask> allTasks) {
 		int lastNoteIdIndex;
 		// Need to remember in what operation a note was created for position
 		// reasons
 		BiMap<String, Integer> remoteToIndex = new BiMap<String, Integer>();
 		// Sort on their remote position first notes with no parent, then notes
 		// at level1, then level2 etc
-		Collections.sort(tasks, new GoogleTask.RemoteOrder(tasks));
+		Collections.sort(tasks, new GoogleTask.RemoteOrder(tasks, allTasks));
 		for (GoogleTask task : tasks) {
 			if (task.dbId > -1 && task.deleted != 1) {
 				

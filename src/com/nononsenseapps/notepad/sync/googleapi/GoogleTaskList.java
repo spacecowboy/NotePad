@@ -23,6 +23,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.util.BiMap;
 
 import android.content.ContentValues;
 import android.os.RemoteException;
@@ -160,7 +161,7 @@ public class GoogleTaskList {
 
 	public ArrayList<GoogleTask> downloadModifiedTasks(
 			GoogleAPITalker apiTalker, ArrayList<GoogleTask> allTasks,
-			String lastUpdated, HashMap<Long, String> idMap)
+			String lastUpdated, BiMap<Long, String> idMap)
 			throws RemoteException {
 		// Compare with local tasks, if the tasks have the same remote id, then
 		// they are the same. Use the existing db-id
@@ -171,19 +172,21 @@ public class GoogleTaskList {
 		ArrayList<GoogleTask> moddedTasks = new ArrayList<GoogleTask>();
 		// ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(this);
 		for (GoogleTask task : apiTalker.getModifiedTasks(lastUpdated, this)) {
-			GoogleTask localVersion = null;
+			//GoogleTask localVersion = null;
 			for (GoogleTask localTask : allTasks) {
 				if (task.equals(localTask)) {
 					// We found it!
 					task.dbId = localTask.dbId;
 					// Save it until later
-					localVersion = localTask;
+					//localVersion = localTask;
 
 					idMap.put(task.dbId, task.id);
 					// Move on to next task
 					break;
 				}
 			}
+			moddedTasks.add(task);
+			/*
 			if (localVersion == null) {
 				// New item, just add to list
 				moddedTasks.add(task);
@@ -205,6 +208,19 @@ public class GoogleTaskList {
 				} else {
 					Log.d(TAG, "Handling conflict: local was newer: "
 							+ localVersion.title);
+				}
+			}*/
+		}
+		
+		// Make sure all tasks have parent and previous set
+		for (GoogleTask modTask: moddedTasks) {
+			if (modTask.remoteparent != null && modTask.localparent == null) {
+				// Need to set parent field
+				if (idMap.containsValue(modTask.remoteparent)) {
+					modTask.localparent = idMap.getKey(modTask.remoteparent);
+				} else {
+					// The id map should be complete by now. But it could be a new remote task
+					Log.d("id mapping", "Did not find the remote parent in the id map");
 				}
 			}
 		}

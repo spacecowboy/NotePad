@@ -369,17 +369,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						}
 					}
 
+					// Save to database in a single transaction
+					Log.d(TAG, "Save stuff to DB");
+					dbTalker.SaveToDatabase(listsToSaveToDB,
+							tasksInListToSaveToDB, idMap, allTasks);
+					// Commit it
+					ContentProviderResult[] result = dbTalker.apply();
+
 					settings.edit()
 							.putString(PREFS_LAST_SYNC_ETAG, currentEtag)
 							.commit();
-
-					// Save to database in a single transaction
-
-					Log.d(TAG, "Save stuff to DB");
-					dbTalker.SaveToDatabase(listsToSaveToDB,
-							tasksInListToSaveToDB, idMap);
-					// Commit it
-					ContentProviderResult[] result = dbTalker.apply();
 
 					Log.d(TAG, "Sync Complete!");
 					doneIntent.putExtra(SYNC_RESULT, SUCCESS);
