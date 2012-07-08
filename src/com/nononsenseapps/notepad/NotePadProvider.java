@@ -261,19 +261,23 @@ public class NotePadProvider extends ContentProvider implements
 	 * [MovingNote.Truepos, MovingNote.Truepos] respectively.
 	 */
 	private static final String noteWithDescendants(final String noteId,
-			final String truepos) {
+			final Long listId, final String truepos) {
 		return String.format("(" + Notes._ID + " IS %s OR "
+				+ Notes.COLUMN_NAME_LIST + " IS " + listId.toString() + " AND "
 				+ Notes.COLUMN_NAME_TRUEPOS + " >= '%s' AND "
 				+ Notes.COLUMN_NAME_TRUEPOS + " < '%s') AND "
 				+ Notes.COLUMN_NAME_DELETED + " IS NOT 1", noteId, truepos,
 				truepos + ".9");
 	}
 
-	private static final String noteDescendants(final String truepos) {
-		return String.format(Notes.COLUMN_NAME_TRUEPOS + " > '%s' AND "
-				+ Notes.COLUMN_NAME_TRUEPOS + " < '%s' AND "
-				+ Notes.COLUMN_NAME_DELETED + " IS NOT 1", truepos, truepos
-				+ ".9");
+	private static final String noteDescendants(final Long listId,
+			final String truepos) {
+		return String.format(
+				Notes.COLUMN_NAME_LIST + " IS " + listId.toString() + " AND "
+						+ Notes.COLUMN_NAME_TRUEPOS + " > '%s' AND "
+						+ Notes.COLUMN_NAME_TRUEPOS + " < '%s' AND "
+						+ Notes.COLUMN_NAME_DELETED + " IS NOT 1", truepos,
+				truepos + ".9");
 	}
 
 	// private static String[] noteDescendantsArgs(String truepos) {
@@ -1858,12 +1862,16 @@ public class NotePadProvider extends ContentProvider implements
 			ContentValues posValues = detachNote(db, Long.parseLong(id));
 
 			// Re attach possible children
-			insertNoteTree(db, posValues.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
+			insertNoteTree(
+					db,
+					posValues.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
 					posValues.getAsLong(Notes.COLUMN_NAME_PARENT),
 					posValues.getAsLong(Notes.COLUMN_NAME_LIST),
 					posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-					noteDescendants(posValues
-							.getAsString(Notes.COLUMN_NAME_TRUEPOS)), null, 0);
+					noteDescendants(
+							posValues.getAsLong(Notes.COLUMN_NAME_LIST),
+							posValues.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
+					null, 0);
 
 			count += db.delete(NotePad.Notes.TABLE_NAME, finalWhere, whereArgs);
 			db.setTransactionSuccessful();
@@ -2100,7 +2108,8 @@ public class NotePadProvider extends ContentProvider implements
 			db.beginTransaction();
 			try {
 
-				if (values.containsKey(Notes.COLUMN_NAME_DELETED)  && values.getAsInteger(Notes.COLUMN_NAME_DELETED) == 1) {
+				if (values.containsKey(Notes.COLUMN_NAME_DELETED)
+						&& values.getAsInteger(Notes.COLUMN_NAME_DELETED) == 1) {
 					final Cursor c = db.query(Notes.TABLE_NAME,
 							toStringArray(Notes._ID), where, whereArgs, null,
 							null, null);
@@ -2116,8 +2125,11 @@ public class NotePadProvider extends ContentProvider implements
 								values.getAsLong(Notes.COLUMN_NAME_PARENT),
 								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
 								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-								noteDescendants(posValues
-										.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
+								noteDescendants(
+										posValues
+												.getAsLong(Notes.COLUMN_NAME_LIST),
+										posValues
+												.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
 								null, 0);
 					}
 					c.close();
@@ -2196,7 +2208,8 @@ public class NotePadProvider extends ContentProvider implements
 			db.beginTransaction();
 			try {
 
-				if (values.containsKey(Notes.COLUMN_NAME_DELETED) && values.getAsInteger(Notes.COLUMN_NAME_DELETED) == 1
+				if (values.containsKey(Notes.COLUMN_NAME_DELETED)
+						&& values.getAsInteger(Notes.COLUMN_NAME_DELETED) == 1
 						|| values.containsKey(Notes.COLUMN_NAME_PARENT)
 						|| values.containsKey(Notes.COLUMN_NAME_PREVIOUS)
 						|| values.containsKey(Notes.COLUMN_NAME_LIST)
@@ -2204,19 +2217,22 @@ public class NotePadProvider extends ContentProvider implements
 
 					Log.d("posredux", "updatedetach");
 					Log.d("posredux",
-							"deleted: " + values.getAsString(Notes.COLUMN_NAME_DELETED));
+							"deleted: "
+									+ values.getAsString(Notes.COLUMN_NAME_DELETED));
 					Log.d("posredux",
-							"parent: " + values.getAsString(Notes.COLUMN_NAME_PARENT));
+							"parent: "
+									+ values.getAsString(Notes.COLUMN_NAME_PARENT));
 					Log.d("posredux",
-							"previous: " + values.getAsString(Notes.COLUMN_NAME_PREVIOUS));
+							"previous: "
+									+ values.getAsString(Notes.COLUMN_NAME_PREVIOUS));
 					Log.d("posredux",
-							"list: " + values.getAsString(Notes.COLUMN_NAME_LIST));
-					Log.d("remoteposredux",
-							"position: " + position);
-					Log.d("remoteposredux",
-							"parent: " + remoteParent);
+							"list: "
+									+ values.getAsString(Notes.COLUMN_NAME_LIST));
+					Log.d("remoteposredux", "position: " + position);
+					Log.d("remoteposredux", "parent: " + remoteParent);
 
-					if (values.containsKey(Notes.COLUMN_NAME_DELETED)  && values.getAsInteger(Notes.COLUMN_NAME_DELETED) == 1) {
+					if (values.containsKey(Notes.COLUMN_NAME_DELETED)
+							&& values.getAsInteger(Notes.COLUMN_NAME_DELETED) == 1) {
 						// Then detach the note if not done already
 						final ContentValues posValues = detachNote(db,
 								Long.parseLong(id));
@@ -2228,8 +2244,11 @@ public class NotePadProvider extends ContentProvider implements
 								values.getAsLong(Notes.COLUMN_NAME_PARENT),
 								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
 								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-								noteDescendants(posValues
-										.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
+								noteDescendants(
+										posValues
+												.getAsLong(Notes.COLUMN_NAME_LIST),
+										posValues
+												.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
 								null, 0);
 					} else {
 						// Only move a note to a position that is not in its sub
@@ -2273,6 +2292,8 @@ public class NotePadProvider extends ContentProvider implements
 										noteWithDescendants(
 												id,
 												posValues
+														.getAsLong(Notes.COLUMN_NAME_LIST),
+												posValues
 														.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
 										null, 1);
 							} else {
@@ -2283,6 +2304,8 @@ public class NotePadProvider extends ContentProvider implements
 										newListId,
 										noteWithDescendants(
 												id,
+												posValues
+														.getAsLong(Notes.COLUMN_NAME_LIST),
 												posValues
 														.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
 										null);
@@ -2681,8 +2704,8 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	private static void insertNoteTree(final SQLiteDatabase db,
 			final Long newPrevious, final Long newParent, final Long newListId,
-			final Long oldListId, final String where, final String[] whereArgs, int modifiedFlag)
-			throws SQLException {
+			final Long oldListId, final String where, final String[] whereArgs,
+			int modifiedFlag) throws SQLException {
 
 		// Do a query
 		Log.d("posredux", "finding with where");
