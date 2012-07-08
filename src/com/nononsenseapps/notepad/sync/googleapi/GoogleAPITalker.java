@@ -40,8 +40,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import com.nononsenseapps.notepad.sync.SyncAdapter;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
@@ -151,17 +149,24 @@ public class GoogleAPITalker {
 				+ AuthUrlEnd();
 	}
 
-	private static String TaskURL_ETAG_ID_UPDATED(final String taskId, final String listId) {
-		String url =  BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId
+	private static String TaskURL_ETAG_ID_UPDATED(final String taskId,
+			final String listId) {
+		String url = BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId
 				+ "?fields=id,etag,updated";
 		url += ",position,parent&" + AuthUrlEnd();
 		return url;
 	}
 
-	private static String TaskMoveURL_ETAG_UPDATED(final String taskId, final String listId) {
-		String url = BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId + "/move"
-				+ "?fields=etag,updated";
-		url += ",position,parent&" + AuthUrlEnd();
+	private static String TaskMoveURL_ETAG_UPDATED(final String taskId,
+			final String listId, final String remoteparent,
+			final String remoteprevious) {
+		String url = BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId
+				+ "/move?";
+		if (remoteparent != null && !remoteparent.isEmpty())
+			url += "parent=" + remoteparent + "&";
+		if (remoteprevious != null && !remoteprevious.isEmpty())
+			url += "position=" + remoteprevious + "&";
+		url += "fields=etag,updated,position,parent&" + AuthUrlEnd();
 		return url;
 	}
 
@@ -568,7 +573,8 @@ public class GoogleAPITalker {
 	 * detected. Will set only remote id, etag, position and parent fields.
 	 * 
 	 * Updates the task in place and also returns it.
-	 * @throws PreconditionException 
+	 * 
+	 * @throws PreconditionException
 	 */
 	public GoogleTask uploadTask(final GoogleTask task,
 			final GoogleTaskList pList) throws ClientProtocolException,
@@ -618,28 +624,27 @@ public class GoogleAPITalker {
 		}
 
 		String stringResponse;
-			stringResponse = parseResponse(client.execute(httppost));
+		stringResponse = parseResponse(client.execute(httppost));
 
-			// If we deleted the note, we will get an empty response. Return the
-			// same element back.
-			if (task.deleted == 1) {
+		// If we deleted the note, we will get an empty response. Return the
+		// same element back.
+		if (task.deleted == 1) {
 
-				Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
-			} else {
-				JSONObject jsonResponse = new JSONObject(stringResponse);
+			Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
+		} else {
+			JSONObject jsonResponse = new JSONObject(stringResponse);
 
-				Log.d(TAG, jsonResponse.toString());
+			Log.d(TAG, jsonResponse.toString());
 
-				// Will return a task, containing id and etag. always update
-				// fields
-				task.etag = jsonResponse.getString("etag");
-				task.id = jsonResponse.getString(GoogleTask.ID);
-				if (jsonResponse.has(GoogleTask.UPDATED))
-					task.updated = jsonResponse.getString(GoogleTask.UPDATED);
-				// Then move it to its position
-				moveTask(task, pList);
-			}
-		
+			// Will return a task, containing id and etag. always update
+			// fields
+			task.etag = jsonResponse.getString("etag");
+			task.id = jsonResponse.getString(GoogleTask.ID);
+			if (jsonResponse.has(GoogleTask.UPDATED))
+				task.updated = jsonResponse.getString(GoogleTask.UPDATED);
+			// Then move it to its position
+			moveTask(task, pList);
+		}
 
 		return task;
 	}
@@ -651,10 +656,11 @@ public class GoogleAPITalker {
 	 * @throws ClientProtocolException
 	 * @throws JSONException
 	 * @throws IOException
-	 * @throws PreconditionException 
+	 * @throws PreconditionException
 	 */
 	private void moveTask(final GoogleTask task, final GoogleTaskList pList)
-			throws ClientProtocolException, JSONException, IOException, PreconditionException {
+			throws ClientProtocolException, JSONException, IOException,
+			PreconditionException {
 
 		if (pList.id == null || pList.id.isEmpty() || task.id == null
 				|| task.id.isEmpty()) {
@@ -663,20 +669,18 @@ public class GoogleAPITalker {
 		}
 
 		HttpUriRequest httppost = new HttpPost(TaskMoveURL_ETAG_UPDATED(
-				task.id, pList.id));
+				task.id, pList.id, task.remoteparent, task.remoteprevious));
 
 		setAuthHeader(httppost);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
 
-		// Always set ETAGS for tasks
-		//setHeaderStrongEtag(httppost, task.etag);
+		// No need since this is only done on sucessful updates
+		// setHeaderStrongEtag(httppost, task.etag);
 
 		Log.d(TAG, httppost.getRequestLine().toString());
 		for (Header header : httppost.getAllHeaders()) {
 			Log.d(TAG, header.getName() + ": " + header.getValue());
 		}
-
-		setMovePostBody(httppost, task);
 
 		String stringResponse = parseResponse(client.execute(httppost));
 
@@ -752,25 +756,24 @@ public class GoogleAPITalker {
 		}
 
 		String stringResponse;
-			stringResponse = parseResponse(client.execute(httppost));
+		stringResponse = parseResponse(client.execute(httppost));
 
-			// If we deleted the note, we will get an empty response. Return the
-			// same element back.
-			if (list.deleted == 1) {
+		// If we deleted the note, we will get an empty response. Return the
+		// same element back.
+		if (list.deleted == 1) {
 
-				Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
-			} else {
-				JSONObject jsonResponse = new JSONObject(stringResponse);
+			Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
+		} else {
+			JSONObject jsonResponse = new JSONObject(stringResponse);
 
-				Log.d(TAG, jsonResponse.toString());
+			Log.d(TAG, jsonResponse.toString());
 
-				// Will return a list, containing id and etag. always update
-				// fields
-				// list.etag = jsonResponse.getString("etag");
-				list.id = jsonResponse.getString("id");
-				list.title = jsonResponse.getString("title");
-			}
-		
+			// Will return a list, containing id and etag. always update
+			// fields
+			// list.etag = jsonResponse.getString("etag");
+			list.id = jsonResponse.getString("id");
+			list.title = jsonResponse.getString("title");
+		}
 
 		return list;
 	}
@@ -861,18 +864,6 @@ public class GoogleAPITalker {
 			((HttpPost) httppost).setEntity(se);
 		else if (httppost instanceof HttpPut)
 			((HttpPut) httppost).setEntity(se);
-	}
-
-	private void setMovePostBody(HttpUriRequest httppost, GoogleTask task) {
-		StringEntity se = null;
-		try {
-			se = new StringEntity(task.toMoveJSON(), HTTP.UTF_8);
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
-		se.setContentType("application/json");
-		((HttpPost) httppost).setEntity(se);
 	}
 
 	/**
