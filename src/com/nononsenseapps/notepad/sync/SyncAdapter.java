@@ -314,7 +314,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 							for (GoogleTask task : tasksToUpload) {
 								// Update position fields with data from
 								// previous uploads
+								Log.d("sortupload", "Setting parent: " + task.localparent + " to " + idMap.get(task.localparent));
 								task.remoteparent = idMap.get(task.localparent);
+								Log.d("sortupload", "Setting previous: " + task.localprevious + " to " + idMap.get(task.localprevious));
 								task.remoteprevious = idMap
 										.get(task.localprevious);
 
