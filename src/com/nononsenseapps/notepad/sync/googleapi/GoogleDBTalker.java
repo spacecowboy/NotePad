@@ -296,9 +296,9 @@ public class GoogleDBTalker {
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
 
 				final String previousS = cursor.getString(cursor
-						.getColumnIndex(NotePad.Notes.COLUMN_NAME_PARENT));
-				final String parentS = cursor.getString(cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_PREVIOUS));
+				final String parentS = cursor.getString(cursor
+						.getColumnIndex(NotePad.Notes.COLUMN_NAME_PARENT));
 				
 				task.localprevious = previousS == null ? null : Long.parseLong(previousS);
 				task.localparent = parentS == null ? null : Long.parseLong(parentS);
