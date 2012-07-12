@@ -90,7 +90,6 @@
     <string name="default_list_needed_warning">Seleccione primero una lista predeterminada</string>
     <string name="reverted">Cambios deshechos</string>
     <string name="notecopied">Copiado</string>
-    <string name="deleted">Eliminado</string>
     <string name="items">notas</string>
     <string name="permission_read_label">leer notas y listas</string>
     <string name="permission_read_desc">Permite a la aplicación leer sus notas y listas relacionadas.</string>
@@ -109,11 +108,23 @@
     <string name="preferences_week_start_day_title" msgid="4619489296444901622">"La semana empieza el"</string>
     <string name="preferences_week_start_day_dialog" msgid="5181634128884089113">"La semana empieza el"</string>
 
-    <string name="notecopied_msg">notas al portapapeles</string>
-    <string name="notecopied_msg_single">nota al portapapeles</string>
     <string name="mode_choose">Seleccionar elementos</string>
-    <string name="mode_choose_single">un elemento seleccionado</string>
-    <string name="mode_choose_more">elementos seleccionados</string>
+    
+    <plurals name="notecopied_msg">
+        <item quantity="one">Copiado de una nota.</item>
+        <item quantity="other">Copiado %d notas.</item>
+    </plurals>
+    
+    <plurals name="notedeleted_msg">
+        <item quantity="one">Eliminado de una nota.</item>
+        <item quantity="other">Elimiado %d notas.</item>
+    </plurals>
+    
+    <plurals name="mode_choose">
+        <item quantity="one">Elegida una nota.</item>
+        <item quantity="other">Seleccionados %d notas.</item>
+    </plurals>
+    
     <string name="lock_note">Bloquear nota</string>
     <string name="unlock_note">Desbloquear nota</string>
     <string name="locked">Bloqueada</string>

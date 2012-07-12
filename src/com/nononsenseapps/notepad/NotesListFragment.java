@@ -1243,18 +1243,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						buildTextToShare()));
 
 				int num = getListView().getCheckedItemCount();
-				int s;
 
-				if (num == 1)
-					s = R.string.notecopied_msg_single;
-				else
-					s = R.string.notecopied_msg;
-
-				Toast.makeText(
-						activity,
-						getString(R.string.notecopied) + num + " "
-								+ getString(s) + ".", Toast.LENGTH_SHORT)
-						.show();
+				Toast.makeText(activity,getResources().getQuantityString(R.plurals.notecopied_msg, num, num),
+				        Toast.LENGTH_SHORT).show();
 				mode.finish();
 				break;
 			case R.id.modal_delete:
@@ -1288,17 +1279,10 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				this.notesToDelete.remove(position);
 			}
 			final int checkedCount = getListView().getCheckedItemCount();
-			switch (checkedCount) {
-			case 0:
+			if (checkedCount == 0) {
 				mode.setSubtitle(null);
-				break;
-			case 1:
-				mode.setSubtitle(getString(R.string.mode_choose_single));
-				break;
-			default:
-				mode.setSubtitle(checkedCount + " "
-						+ getString(R.string.mode_choose_more));
-				break;
+			} else {
+			    mode.setSubtitle(getResources().getQuantityString(R.plurals.mode_choose, checkedCount, checkedCount));
 			}
 		}
 
@@ -1347,11 +1331,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				}
 				onDeleteListener.onModalDelete(notesToDelete);
 			}
-			Toast.makeText(
-					activity,
-					getString(R.string.deleted) + " " + num + " "
-							+ getString(R.string.items), Toast.LENGTH_SHORT)
-					.show();
+			
+			Toast.makeText(activity,getResources().getQuantityString(R.plurals.notedeleted_msg, num, num),
+			        Toast.LENGTH_SHORT).show();
 			mode.finish();
 		}
 
