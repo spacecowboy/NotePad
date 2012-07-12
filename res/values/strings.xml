@@ -128,8 +128,8 @@
     </plurals>
     
     <plurals name="mode_choose">
-        <item quantity="one">Choosen one note.</item>
-        <item quantity="other">Choosen %d notes.</item>
+        <item quantity="one">Selected one note.</item>
+        <item quantity="other">Selected %d notes.</item>
     </plurals>
     
     <string name="lock_note">Lock note</string>
