@@ -109,6 +109,11 @@
     <string name="preferences_week_start_day_title" msgid="4619489296444901622">"La semana empieza el"</string>
     <string name="preferences_week_start_day_dialog" msgid="5181634128884089113">"La semana empieza el"</string>
 
+    <string name="notecopied_msg">notas al portapapeles</string>
+    <string name="notecopied_msg_single">nota al portapapeles</string>
+    <string name="mode_choose">Seleccionar elementos</string>
+    <string name="mode_choose_single">un elemento seleccionado</string>
+    <string name="mode_choose_more">elementos seleccionados</string>
     <string name="lock_note">Bloquear nota</string>
     <string name="unlock_note">Desbloquear nota</string>
     <string name="locked">Bloqueada</string>
@@ -148,6 +153,28 @@
     <string name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
     <string name="settings_listitem_summary_off">La nota ocupa 2 líneas</string>
 
+    <string name="editor_details">Más</string>
+    <string name="completed">Completada</string>
+    <string name="subtask_of">Subtarea de</string>
+    <string name="security">Seguridad</string>
+    
+    <string name="date_header_overdue">Pasadas</string>
+    <string name="date_header_today">Hoy</string>
+    <string name="date_header_tomorrow">Mañana</string>
+    <string name="date_header_7days">Próximos 7 días</string>
+    <string name="date_header_future">Más tarde</string>
+    <string name="date_header_none">Sin fecha</string>
+    <string name="date_header_completed">Completadas</string>
+    
+    <string name="mod_header_today">@string/date_header_today</string>
+    <string name="mod_header_yesterday">Ayer</string>
+    <string name="mod_header_thisweek">Esta semana</string>
+    <string name="mod_header_earlier">Anterior</string>
+    
+    <string name="settings_listheader">Cabeceras de lista</string>
+    <string name="settings_listheader_off">Sin cabeceras de lista</string>
+    <string name="settings_listheader_on">Con cabeceras de lista</string>
+    
     <string name="default_notetitle">¡Bienvenido!</string>
     <string name="default_notetext">Para sacar el máximo aprovechamiento de esta aplicación, le sugiero que active la sincronización antes de nada. Continúe, y pulse el botón para sincronizar de la barra de acciones cuando vuelva a la lista. Esto activará la sincronización automática por defecto, que actuará cada hora.
 \n\nEsto está ligado a sus preferencias globales de sincronización. Resumidamente, si no está activada la sincronización de gmail, entonces tampoco se sincronizará esta aplicación. Puede desactivar la sincronización automática, y hacerla manualmente usted, en el apartado de configuración.
