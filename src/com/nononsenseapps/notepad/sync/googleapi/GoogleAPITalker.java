@@ -40,6 +40,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import com.nononsenseapps.build.Config;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
@@ -96,20 +98,10 @@ public class GoogleAPITalker {
 
 	}
 
-	// Debug key. Real key in build scripts
-	public static final String[] APIKEYS = { "AIzaSyAJQoa7u_V-j3AcFXa00LjyRcLFzLjcZJA" };
-
 	public static Random rand = new Random();
 
-	public static String ApiKey() {
-		if (null == rand)
-			rand = new Random();
-
-		return APIKEYS[rand.nextInt(APIKEYS.length)];
-	}
-
 	public static String AuthUrlEnd() {
-		return "key=" + ApiKey();
+		return "key=" + Config.GTASKS_API_KEY;
 	}
 
 	// public static final String AUTH_URL_END = "key=" + APIKEY;
