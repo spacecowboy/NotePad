@@ -20,7 +20,6 @@ import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotePad.GTasks;
 import com.nononsenseapps.notepad.NotePad.Notes;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 
 import android.appwidget.AppWidgetManager;
@@ -625,8 +624,7 @@ public class NotePadProvider extends ContentProvider implements
 					+ " INTEGER UNIQUE DEFAULT NULL REFERENCES "
 					+ Notes.TABLE_NAME + "," + NotePad.Notes.COLUMN_NAME_PARENT
 					+ " INTEGER DEFAULT NULL REFERENCES " + Notes.TABLE_NAME
-					+ "," + NotePad.Notes.COLUMN_NAME_MOVED_LOCALLY
-					+ " INTEGER DEFAULT 0 NOT NULL,"
+					+ ","
 
 					+ NotePad.Notes.COLUMN_NAME_GTASKSPARENT + " TEXT,"
 
@@ -2847,9 +2845,6 @@ public class NotePadProvider extends ContentProvider implements
 				while (tree.moveToNext()) {
 					// Clear previous values
 					values.clear();
-
-					// All notes in the tree are moved, so set that
-					values.put(Notes.COLUMN_NAME_MOVED_LOCALLY, 1);
 
 					// Get this note's values
 					final long noteId = tree.getLong(tree

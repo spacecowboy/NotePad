@@ -210,7 +210,6 @@ public final class NotePad {
 		public static final String COLUMN_NAME_TRUEPOS = "truepos";
 		public static final String COLUMN_NAME_PREVIOUS = "previous";
 		public static final String COLUMN_NAME_PARENT = "parent";
-		public static final String COLUMN_NAME_MOVED_LOCALLY = "movedlocally";
 
 		// Password locking
 		public static final String COLUMN_NAME_LOCKED = "locked";
