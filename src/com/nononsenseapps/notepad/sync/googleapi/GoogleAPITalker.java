@@ -96,8 +96,8 @@ public class GoogleAPITalker {
 
 	}
 
-	// This key is valid
-	public static final String[] APIKEYS = { "AIzaSyCAjRk2GfPARlIU3JsaEiExLMtj_rdN2i4" };
+	// Debug key. Real key in build scripts
+	public static final String[] APIKEYS = { "AIzaSyAJQoa7u_V-j3AcFXa00LjyRcLFzLjcZJA" };
 
 	public static Random rand = new Random();
 
