@@ -8,6 +8,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 
 import com.ericharlow.DragNDrop.DropListener;
+import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotePad.Notes;
 import com.nononsenseapps.notepad.NotesEditorFragment;
@@ -232,6 +233,7 @@ public class SectionDropListener implements DropListener {
 		final Uri uri = NotesEditorFragment.getUriFrom(noteId);
 		if (uri != null && values != null) {
 			context.getContentResolver().update(uri, values, null, null);
+			UpdateNotifier.notifyChangeNote(context, uri);
 		}
 	}
 
