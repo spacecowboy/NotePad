@@ -108,8 +108,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
 			NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
 			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
-			NotePad.Notes.COLUMN_NAME_PARENT,
-			NotePad.Notes.COLUMN_NAME_LIST};
+			NotePad.Notes.COLUMN_NAME_PARENT, NotePad.Notes.COLUMN_NAME_LIST };
 
 	// public static final String SELECTEDPOS = "selectedpos";
 	// public static final String SELECTEDID = "selectedid";
@@ -471,6 +470,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					values,
 					NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?" + inList,
 					args);
+			activity.getContentResolver().notifyChange(
+					NotePad.Notes.CONTENT_URI, null, false);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -835,10 +836,13 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, status);
 
 				long id = ((NoteCheckBox) buttonView).getNoteId();
-				if (id > -1)
+				if (id > -1) {
 					activity.getContentResolver().update(
 							NotesEditorFragment.getUriFrom(id), values, null,
 							null);
+					activity.getContentResolver().notifyChange(
+							NotesEditorFragment.getUriFrom(id), null, false);
+				}
 			}
 		};
 
@@ -1239,8 +1243,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 				int num = getListView().getCheckedItemCount();
 
-				Toast.makeText(activity,getResources().getQuantityString(R.plurals.notecopied_msg, num, num),
-				        Toast.LENGTH_SHORT).show();
+				Toast.makeText(
+						activity,
+						getResources().getQuantityString(
+								R.plurals.notecopied_msg, num, num),
+						Toast.LENGTH_SHORT).show();
 				mode.finish();
 				break;
 			case R.id.modal_delete:
@@ -1277,7 +1284,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			if (checkedCount == 0) {
 				mode.setSubtitle(null);
 			} else {
-			    mode.setSubtitle(getResources().getQuantityString(R.plurals.mode_choose, checkedCount, checkedCount));
+				mode.setSubtitle(getResources().getQuantityString(
+						R.plurals.mode_choose, checkedCount, checkedCount));
 			}
 		}
 
@@ -1326,9 +1334,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				}
 				onDeleteListener.onModalDelete(notesToDelete);
 			}
-			
-			Toast.makeText(activity,getResources().getQuantityString(R.plurals.notedeleted_msg, num, num),
-			        Toast.LENGTH_SHORT).show();
+
+			Toast.makeText(
+					activity,
+					getResources().getQuantityString(R.plurals.notedeleted_msg,
+							num, num), Toast.LENGTH_SHORT).show();
 			mode.finish();
 		}
 

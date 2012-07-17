@@ -419,6 +419,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					NotePad.Notes.CONTENT_URI, values);
 			id = getIdFromUri(mUri);
 		}
+		activity.getContentResolver().notifyChange(mUri, null, false);
 		// update changed variable
 		mOriginalTitle = title;
 		mOriginalNote = text;

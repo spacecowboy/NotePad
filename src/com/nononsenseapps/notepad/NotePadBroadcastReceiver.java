@@ -26,6 +26,7 @@ public class NotePadBroadcastReceiver extends BroadcastReceiver {
 
 			context.getContentResolver().update(
 					NotesEditorFragment.getUriFrom(id), values, null, null);
+			context.getContentResolver().notifyChange(NotesEditorFragment.getUriFrom(id), null, false);
 		}
 	}
 

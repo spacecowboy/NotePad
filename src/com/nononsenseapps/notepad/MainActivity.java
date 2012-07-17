@@ -593,15 +593,7 @@ public class MainActivity extends DualLayoutActivity implements
 			// Add list
 			Uri listUri = getContentResolver().insert(
 					NotePad.Lists.CONTENT_URI, values);
-			// Also create an empty note in it
-			if (listUri != null) {
-				createNote(
-						getContentResolver(),
-						Long.parseLong(listUri.getPathSegments().get(
-								NotePad.Lists.ID_PATH_POSITION)), "");
-				// Select list
-				listIdToSelect = Long.parseLong(listUri.getLastPathSegment());
-			}
+			getContentResolver().notifyChange(NotePad.Lists.CONTENT_URI, null, false);
 		}
 	}
 
@@ -631,6 +623,7 @@ public class MainActivity extends DualLayoutActivity implements
 			getContentResolver().update(
 					Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
 							Long.toString(currentListId)), values, null, null);
+			getContentResolver().notifyChange(NotePad.Lists.CONTENT_URI, null, false);
 		}
 	}
 
@@ -691,6 +684,7 @@ public class MainActivity extends DualLayoutActivity implements
 						Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
 								Long.toString(currentListId)), null, null);
 			}
+			getContentResolver().notifyChange(NotePad.Lists.CONTENT_URI, null, false);
 
 			// Remove default setting if this is the default list
 			long defaultListId = Long.parseLong(PreferenceManager
