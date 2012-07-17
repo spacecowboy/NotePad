@@ -30,6 +30,12 @@
          application and should be checked into Version Control Systems.
     -->
 
+
+    <!-- contains project name, will change for donate version -->
+
+    <property file="notepad.properties" />
+    <!-- api keys -->
+
     <property file="../NotePad_ant/ant.properties" />
 
     <!--
@@ -154,7 +160,6 @@
                             value="${config.gtasksapikey.release}" />
                     </filterset>
                 </copy>
-
             </else>
         </if>
     </target>
@@ -162,6 +167,29 @@
     <target
         name="-pre-compile"
         depends="config" />
+
+    <!-- Copy the binary to a location that includes version number -->
+
+    <xmlproperty
+        collapseAttributes="true"
+        file="AndroidManifest.xml"
+        prefix="mymanifest" />
+
+    <property
+        name="build.dir"
+        value="/home/jonas/Dropbox/dev/NotePad/apks/alphas/${mymanifest.manifest.android:versionName}_${mymanifest.manifest.android:versionCode}/" />
+
+    <target name="-post-build" >
+
+        <echo>
+Version is ${mymanifest.manifest.android:versionName}, ${mymanifest.manifest.android:versionCode}
+        </echo>
+
+        <copy toDir="${build.dir}" >
+
+            <fileset file="${out.final.file}" />
+        </copy>
+    </target>
 
     <!-- version-tag: custom -->
 
