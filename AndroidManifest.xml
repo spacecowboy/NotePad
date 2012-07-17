@@ -32,7 +32,7 @@
     <!-- App crashes on 3.0. No one uses 3.1. So minimum version is set to 3.2 now -->
     <uses-sdk
         android:minSdkVersion="13"
-        android:targetSdkVersion="15" />
+        android:targetSdkVersion="16" />
 
     <!-- For connection -->
     <uses-permission android:name="android.permission.INTERNET" />
