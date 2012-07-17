@@ -21,6 +21,7 @@ import java.util.Collection;
 
 import sheetrock.panda.changelog.ChangeLog;
 
+import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.interfaces.PasswordChecker;
@@ -593,7 +594,7 @@ public class MainActivity extends DualLayoutActivity implements
 			// Add list
 			Uri listUri = getContentResolver().insert(
 					NotePad.Lists.CONTENT_URI, values);
-			getContentResolver().notifyChange(NotePad.Lists.CONTENT_URI, null, false);
+			UpdateNotifier.notifyChangeList(getApplicationContext());
 		}
 	}
 
@@ -623,7 +624,8 @@ public class MainActivity extends DualLayoutActivity implements
 			getContentResolver().update(
 					Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
 							Long.toString(currentListId)), values, null, null);
-			getContentResolver().notifyChange(NotePad.Lists.CONTENT_URI, null, false);
+			UpdateNotifier.notifyChangeList(getApplicationContext(), Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
+					Long.toString(currentListId)));
 		}
 	}
 
@@ -684,7 +686,9 @@ public class MainActivity extends DualLayoutActivity implements
 						Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
 								Long.toString(currentListId)), null, null);
 			}
-			getContentResolver().notifyChange(NotePad.Lists.CONTENT_URI, null, false);
+			UpdateNotifier.notifyChangeList(getApplicationContext(), Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
+					Long.toString(currentListId)));
+			UpdateNotifier.notifyChangeNote(getApplicationContext());
 
 			// Remove default setting if this is the default list
 			long defaultListId = Long.parseLong(PreferenceManager

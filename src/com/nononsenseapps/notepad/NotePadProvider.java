@@ -16,6 +16,7 @@
 
 package com.nononsenseapps.notepad;
 
+import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotePad.GTasks;
 import com.nononsenseapps.notepad.NotePad.Notes;
@@ -3141,37 +3142,10 @@ public class NotePadProvider extends ContentProvider implements
 
 		// Notifies observers registered against this provider that the data
 		// changed.
-		getContext().getContentResolver().notifyChange(
-				NotePad.Lists.CONTENT_URI, null, false);
-		getContext().getContentResolver().notifyChange(
-				NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
-		// And update widgets
-		updateAllWidgets();
+		UpdateNotifier.notifyChangeList(getContext());
+		UpdateNotifier.notifyChangeNote(getContext());
 
 		return result;
-	}
-
-	/**
-	 * Instead of doing this in a service which might be killed, simply call
-	 * this whenever something is changed in here
-	 * 
-	 * Update all widgets's views as this database has changed somehow
-	 */
-	private void updateAllWidgets() {
-		AppWidgetManager appWidgetManager = AppWidgetManager
-				.getInstance(getContext().getApplicationContext());
-		int[] appWidgetIds = appWidgetManager
-				.getAppWidgetIds(new ComponentName(getContext()
-						.getApplicationContext(), ListWidgetProvider.class));
-		Log.d(TAG, "updateAllWidgets before: " + appWidgetIds.length);
-		if (appWidgetIds.length > 0) {
-			// Tell the widgets that the list items should be invalidated and
-			// refreshed!
-			// Will call onDatasetChanged in ListWidgetService, doing a new
-			// requery
-			appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds,
-					R.id.notes_list);
-		}
 	}
 
 	/**

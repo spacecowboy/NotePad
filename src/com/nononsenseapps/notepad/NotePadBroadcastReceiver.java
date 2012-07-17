@@ -1,9 +1,12 @@
 package com.nononsenseapps.notepad;
 
+import com.nononsenseapps.helpers.UpdateNotifier;
+
 import android.content.BroadcastReceiver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 public class NotePadBroadcastReceiver extends BroadcastReceiver {
@@ -26,7 +29,7 @@ public class NotePadBroadcastReceiver extends BroadcastReceiver {
 
 			context.getContentResolver().update(
 					NotesEditorFragment.getUriFrom(id), values, null, null);
-			context.getContentResolver().notifyChange(NotesEditorFragment.getUriFrom(id), null, false);
+			UpdateNotifier.notifyChangeNote(context, NotesEditorFragment.getUriFrom(id));
 		}
 	}
 

@@ -28,6 +28,7 @@ import java.util.LinkedList;
 import java.util.Map;
 
 import com.ericharlow.DragNDrop.DragNDropListView;
+import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.helpers.dualpane.NoNonsenseListFragment;
 import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
@@ -470,8 +471,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					values,
 					NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?" + inList,
 					args);
-			activity.getContentResolver().notifyChange(
-					NotePad.Notes.CONTENT_URI, null, false);
+			UpdateNotifier.notifyChangeNote(activity);
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -840,8 +840,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					activity.getContentResolver().update(
 							NotesEditorFragment.getUriFrom(id), values, null,
 							null);
-					activity.getContentResolver().notifyChange(
-							NotesEditorFragment.getUriFrom(id), null, false);
+					UpdateNotifier.notifyChangeNote(activity, NotesEditorFragment.getUriFrom(id));
 				}
 			}
 		};

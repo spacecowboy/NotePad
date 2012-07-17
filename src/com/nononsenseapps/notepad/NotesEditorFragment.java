@@ -76,6 +76,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.notepad.NotePad.Notes;
 import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
@@ -419,7 +420,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					NotePad.Notes.CONTENT_URI, values);
 			id = getIdFromUri(mUri);
 		}
-		activity.getContentResolver().notifyChange(mUri, null, false);
+		UpdateNotifier.notifyChangeNote(activity, mUri);
 		// update changed variable
 		mOriginalTitle = title;
 		mOriginalNote = text;
