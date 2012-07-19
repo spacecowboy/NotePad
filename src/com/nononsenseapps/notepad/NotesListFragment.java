@@ -16,7 +16,6 @@
 
 package com.nononsenseapps.notepad;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -24,7 +23,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedHashMap;
-import java.util.LinkedList;
 import java.util.Map;
 
 import com.ericharlow.DragNDrop.DragNDropListView;
@@ -33,7 +31,6 @@ import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.helpers.dualpane.NoNonsenseListFragment;
 import com.nononsenseapps.notepad.interfaces.OnModalDeleteListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
-import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.ui.NoteCheckBox;
@@ -52,7 +49,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.Loader;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.graphics.Paint;
@@ -61,13 +57,9 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 
-import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
 import android.annotation.TargetApi;
+import android.app.Activity;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.view.Menu;
@@ -84,11 +76,8 @@ import android.widget.AbsListView;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.BaseAdapter;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Adapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.ShareActionProvider;
@@ -99,7 +88,20 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		SearchView.OnQueryTextListener, OnItemLongClickListener,
 		OnModalDeleteListener, LoaderManager.LoaderCallbacks<Cursor>,
 		OnSharedPreferenceChangeListener {
-	private int mCurCheckPosition = 0;
+
+	private Callbacks mCallbacks = sDummyCallbacks;
+	private int mActivatedPosition = 0; // ListView.INVALID_POSITION;
+
+	public interface Callbacks {
+
+		public void onItemSelected(long id);
+	}
+
+	private static Callbacks sDummyCallbacks = new Callbacks() {
+		@Override
+		public void onItemSelected(long id) {
+		}
+	};
 
 	// Parent, list used for dragdrop
 	private static final String[] PROJECTION = new String[] {
@@ -123,7 +125,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private static final String SAVEDPOS = "listSavedPos";
 	private static final String SAVEDID = "listSavedId";
-	private static final String SAVEDLISTID = "listSavedListId";
 
 	private static final String SHOULD_OPEN_NOTE = "shouldOpenNote";
 
@@ -155,6 +156,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	private static final int LOADER_MODYESTERDAY = -202;
 	private static final int LOADER_MODWEEK = -203;
 	private static final int LOADER_MODPAST = -204;
+	public static final String LISTID = "com.nononsenseapps.notepad.ListId";
 	// Will sort modification dates
 	private Comparator<String> modComparator;
 
@@ -231,47 +233,45 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	private static String sortType = NotePad.Notes.DUEDATE_SORT_TYPE;
 
 	@Override
+	public void onAttach(Activity activity) {
+		super.onAttach(activity);
+		if (!(activity instanceof Callbacks)) {
+			throw new IllegalStateException(
+					"Activity must implement fragment's callbacks.");
+		}
+
+		mCallbacks = (Callbacks) activity;
+		this.activity = (DualLayoutActivity) activity;
+	}
+
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		mCallbacks = sDummyCallbacks;
+		activity = null;
+	}
+
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		
+		if (this.mCurListId != -1) {
+			//activity.findViewById(R.id.listContainer).setVisibility(View.VISIBLE);
+			//activity.findViewById(R.id.progressContainer).setVisibility(View.GONE);
+			
+			Bundle args = new Bundle();
+			if (activity.getCurrentContent().equals(
+					DualLayoutActivity.CONTENTVIEW.DUAL))
+				args.putBoolean(SHOULD_OPEN_NOTE, true);
 
-		// Set adapter
-		// mSectionAdapter = new SectionAdapter(activity);
-		// mAdapter = getThemedAdapter(null);
-		// setListAdapter(mAdapter);
-
-		// Start out with a progress indicator.
-		// setListShown(false);
+			refreshList(args);
+		} else {
+			//activity.findViewById(R.id.listContainer).setVisibility(View.GONE);
+			//activity.findViewById(R.id.progressContainer).setVisibility(View.VISIBLE);
+		}
 
 		// Set list preferences
 		setSingleCheck();
-
-		if (savedInstanceState != null) {
-			mCurListId = savedInstanceState.getLong(SAVEDLISTID, -1);
-			mCurCheckPosition = savedInstanceState.getInt(SAVEDPOS, 0);
-			mCurId = savedInstanceState.getLong(SAVEDID, -1);
-		} else {
-			mCurCheckPosition = 0;
-			mCurId = -1;
-		}
-
-		// Sync any possible changes from server on start here. NOT in onresume
-		// TODO activate this once changes in the editor is not overwritten
-		/*
-		 * String accountName = PreferenceManager.getDefaultSharedPreferences(
-		 * activity).getString(SyncPrefs.KEY_ACCOUNT, "");
-		 * 
-		 * if (accountName != null && !accountName.equals("") &&
-		 * NotePadProvider.SyncAuto(activity)) { Account account =
-		 * SyncPrefs.getAccount( AccountManager.get(activity), accountName); //
-		 * Don't start a new sync if one is already going if
-		 * (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) { Bundle
-		 * options = new Bundle(); // This will force a sync regardless of what
-		 * the setting is // in // accounts manager. Only use it here where the
-		 * user has // manually // desired a sync to happen NOW.
-		 * options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-		 * ContentResolver .requestSync(account, NotePad.AUTHORITY, options); }
-		 * }
-		 */
 	}
 
 	public void handleNoteIntent(Intent intent) {
@@ -291,7 +291,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				long noteId = Long.parseLong(newId);
 				int pos = getPosOfId(noteId);
 				if (pos > -1) {
-					selectPos(pos);
+					setActivatedPosition(showNote(pos));
 				} else {
 					newNoteIdToSelect = noteId;
 				}
@@ -317,7 +317,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			if (mSectionAdapter.isEmpty()) {
 				// DOn't do shit
 			} else {
-				showNoteAndSelect(mCurCheckPosition);
+				setActivatedPosition(showNote(mActivatedPosition));
 			}
 		}
 	}
@@ -422,26 +422,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			handleNoteCreation(mCurListId);
 
 			return true;
-		case R.id.menu_sync:
-
-			String accountName = PreferenceManager.getDefaultSharedPreferences(
-					activity).getString(SyncPrefs.KEY_ACCOUNT, "");
-			boolean syncEnabled = PreferenceManager
-					.getDefaultSharedPreferences(activity).getBoolean(
-							SyncPrefs.KEY_SYNC_ENABLE, false);
-			if (accountName != null && !accountName.equals("") && syncEnabled) {
-				requestSync(accountName);
-			} else {
-				// Enable syncing
-				enableSync();
-
-				// The user might want to enable syncing. Open preferences
-				// Intent intent = new Intent();
-				// intent.setClass(activity, PrefsActivity.class);
-				// startActivity(intent);
-			}
-			return false; // Editor will listen for this also and saves when it
-							// receives it
 		case R.id.menu_clearcompleted:
 			ContentValues values = new ContentValues();
 			values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, -1); // -1 anything
@@ -478,102 +458,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		}
 	}
 
-	private void enableSync() {
-		// Get the first Google account on the device
-		final Account[] accounts = AccountManager.get(activity)
-				.getAccountsByType("com.google");
-		if (accounts.length > 0) {
-			final Account account = accounts[0];
-
-			// Request access
-			AccountManager.get(activity).getAuthToken(account,
-					SyncAdapter.AUTH_TOKEN_TYPE, null, activity,
-					new AccountManagerCallback<Bundle>() {
-
-						@Override
-						public void run(AccountManagerFuture<Bundle> future) {
-							// This is the callback class, it handles all the
-							// steps
-							// after requesting access
-							try {
-								String token = future.getResult().getString(
-										AccountManager.KEY_AUTHTOKEN);
-								if (token != null && !token.equals("")
-										&& account != null) {
-									// Get preference editor
-									Editor editor = PreferenceManager
-											.getDefaultSharedPreferences(
-													activity).edit();
-
-									// Write account name to prefs
-									editor.putString(SyncPrefs.KEY_ACCOUNT,
-											account.name);
-
-									// Set it syncable
-									ContentResolver.setIsSyncable(account,
-											NotePad.AUTHORITY, 1);
-
-									// Write to pref
-									editor.putBoolean(
-											SyncPrefs.KEY_SYNC_ENABLE, true);
-
-									// Enable periodic sync
-									long freqMin = 60; // minutes
-									long pollFrequency = 60 * freqMin; // seconds
-									ContentResolver.addPeriodicSync(account,
-											NotePad.AUTHORITY, new Bundle(),
-											pollFrequency);
-
-									// Write period to prefs
-									editor.putString(SyncPrefs.KEY_SYNC_FREQ,
-											Long.toString(freqMin));
-
-									// Commit prefs
-									editor.commit();
-
-									// Then request sync
-									requestSync(account.name);
-								}
-							} catch (OperationCanceledException e) {
-								Log.e("SyncFix", "Error1");
-								// if the request was canceled for any reason
-							} catch (AuthenticatorException e) {
-								Log.e("SyncFix", "Error2");
-								// if there was an error communicating with the
-								// authenticator or
-								// if the authenticator returned an invalid
-								// response
-							} catch (IOException e) {
-								Log.e("SyncFix", "Error3");
-								// if the authenticator returned an error
-								// response that
-								// indicates that it encountered an IOException
-								// while
-								// communicating with the authentication server
-							}
-						}
-					}, null);
-
-		}
-	}
-
-	private void requestSync(String accountName) {
-		if (accountName != null && !"".equals(accountName)) {
-			Account account = SyncPrefs.getAccount(
-					AccountManager.get(activity), accountName);
-			// Don't start a new sync if one is already going
-			if (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) {
-				Bundle options = new Bundle();
-				// This will force a sync regardless of what the setting is
-				// in accounts manager. Only use it here where the user has
-				// manually desired a sync to happen NOW.
-				options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-				ContentResolver
-						.requestSync(account, NotePad.AUTHORITY, options);
-			}
-		}
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -594,12 +478,21 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		}
 		if (modeCallback != null)
 			modeCallback.setDeleteListener(this);
+		
+		this.mCurListId = -1;
+
+		if (getArguments()!= null && getArguments().containsKey(LISTID)) {
+			mCurListId = getArguments().getLong(LISTID);
+		}
 
 		if (savedInstanceState != null) {
-
 			Log.d("NotesListFragment", "onCreate saved not null");
-			// mCurCheckPosition = savedInstanceState.getInt(SAVEDPOS);
-			// mCurId = savedInstanceState.getLong(SAVEDID);
+			mCurListId = savedInstanceState.getLong(LISTID);
+			mActivatedPosition = savedInstanceState.getInt(SAVEDPOS, 0);
+			mCurId = savedInstanceState.getLong(SAVEDID, -1);
+		} else {
+			mActivatedPosition = 0;
+			mCurId = -1;
 		}
 	}
 
@@ -608,9 +501,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		super.onSaveInstanceState(outState);
 
 		Log.d("NotesListFragment", "onSaveInstanceState");
-		outState.putInt(SAVEDPOS, mCurCheckPosition);
+		outState.putInt(SAVEDPOS, mActivatedPosition);
 		outState.putLong(SAVEDID, mCurId);
-		outState.putLong(SAVEDLISTID, mCurListId);
+		outState.putLong(LISTID, mCurListId);
 	}
 
 	@Override
@@ -622,6 +515,12 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+		destroyActiveLoaders();
+		destroyDateLoaders();
+		destroyListNameLoaders();
+		destroyModLoaders();
+		destroyListLoaders();
+		destroyRegularLoaders();
 	}
 
 	@Override
@@ -646,9 +545,31 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	}
 
 	@Override
-	public void onListItemClick(ListView l, View v, int position, long id) {
+	public void onListItemClick(ListView listView, View view, int position,
+			long id) {
+		super.onListItemClick(listView, view, position, id);
 		Log.d("listproto", "OnListItemClick pos " + position + " id " + id);
-		showNote(position);
+		// Will tell the activity to open the note
+		mActivatedPosition = showNote(position);
+	}
+
+	public void setActivateOnItemClick(boolean activateOnItemClick) {
+		getListView().setChoiceMode(
+				activateOnItemClick ? ListView.CHOICE_MODE_SINGLE
+						: ListView.CHOICE_MODE_NONE);
+	}
+
+	public void setActivatedPosition(int position) {
+		if (checkMode == CHECK_SINGLE_FUTURE) {
+			setSingleCheck();
+		}
+		if (position == ListView.INVALID_POSITION) {
+			getListView().setItemChecked(mActivatedPosition, false);
+		} else {
+			getListView().setItemChecked(position, true);
+		}
+
+		mActivatedPosition = position;
 	}
 
 	/**
@@ -657,12 +578,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	 * 
 	 * returns position of note in list
 	 */
-	private void showNote(int index) {
+	private int showNote(int index) {
 		// if it's -1 to start with, we try with zero
 		if (index < 0) {
 			index = 0;
 		}
-
 		if (mSectionAdapter != null) {
 			index = index >= mSectionAdapter.getCount() ? mSectionAdapter
 					.getCount() - 1 : index;
@@ -671,64 +591,18 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 			if (index > -1) {
 				Log.d("listproto", "Going to try and open index: " + index);
-				mCurCheckPosition = index;
-				mCurId = mSectionAdapter.getItemId(index);
 				Log.d("listproto", "Section adapter gave me this id: " + mCurId);
-
-				if (activity.getCurrentContent().equals(
-						DualLayoutActivity.CONTENTVIEW.DUAL)) {
-
-					Log.d("NotesLIstFragmenT", "It is dualPane!");
-					// We can display everything in-place with fragments, so
-					// update
-					// the list to highlight the selected item and show the
-					// data.
-
-					Log.d("NotesListFragment", "Showing note: " + mCurId + ", "
-							+ mCurCheckPosition);
-
-					// Check what fragment is currently shown, replace if
-					// needed.
-					if (activity.getRightFragment() != null) {
-						// We want to know about changes here
-
-						Log.d("NotesListFragment", "Would open note here: "
-								+ mCurId);
-						((NotesEditorFragment) activity.getRightFragment())
-								.displayNote(mCurId);
-					}
-
-				} else {
-
-					Log.d("NotesListFragment",
-							"Showing note in SinglePane: id " + mCurId
-									+ ", pos: " + mCurCheckPosition);
-					// Otherwise we need to launch a new activity to display
-					// the dialog fragment with selected text.
-					Intent intent = new Intent();
-					intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-					intent.setClass(activity, RightActivity.class)
-							.setData(
-									Uri.withAppendedPath(
-											NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,
-											Long.toString(mCurId)))
-							.putExtra(NotePad.Notes.COLUMN_NAME_LIST,
-									mCurListId).setAction(Intent.ACTION_EDIT);
-
-					startActivity(intent);
-				}
+				mCurId = mSectionAdapter.getItemId(index);
+				mCallbacks.onItemSelected(mCurId);
 			} else {
 				// Empty search, do NOT display new note.
-				mCurCheckPosition = 0;
+				mActivatedPosition = 0;
 				mCurId = -1;
 				// Default show first note when search is cancelled.
 			}
 		}
-	}
 
-	private void showNoteAndSelect(int index) {
-		showNote(index);
-		selectPos(mCurCheckPosition);
+		return index;
 	}
 
 	/**
@@ -759,7 +633,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	}
 
 	private void reCalculateValidValuesAfterDelete() {
-		int index = mCurCheckPosition;
+		int index = mActivatedPosition;
 		if (mSectionAdapter != null) {
 			index = index >= mSectionAdapter.getCount() ? mSectionAdapter
 					.getCount() - 1 : index;
@@ -767,10 +641,10 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			Log.d(TAG, "ReCalculate valid index is: " + index);
 			if (index == -1) {
 				// Completely empty list.
-				mCurCheckPosition = 0;
+				mActivatedPosition = 0;
 				mCurId = -1;
 			} else { // if (index != -1) {
-				mCurCheckPosition = index;
+				mActivatedPosition = index;
 				mCurId = mSectionAdapter.getItemId(index);
 			}
 		}
@@ -786,8 +660,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		// This happens in a search. Don't destroy id information in selectPos
 		// when it is invalid
 		if (pos != -1) {
-			mCurCheckPosition = pos;
-			selectPos(mCurCheckPosition);
+			setActivatedPosition(pos);
 		}
 	}
 
@@ -840,7 +713,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					activity.getContentResolver().update(
 							NotesEditorFragment.getUriFrom(id), values, null,
 							null);
-					UpdateNotifier.notifyChangeNote(activity, NotesEditorFragment.getUriFrom(id));
+					UpdateNotifier.notifyChangeNote(activity,
+							NotesEditorFragment.getUriFrom(id));
 				}
 			}
 		};
@@ -982,16 +856,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	public boolean onQueryTextSubmit(String query) {
 		// Just do what we do on text change
 		return onQueryTextChange(query);
-	}
-
-	private void selectPos(int pos) {
-		if (checkMode == CHECK_SINGLE_FUTURE) {
-			setSingleCheck();
-		}
-
-		Log.d(TAG, "selectPos: " + pos);
-		getListView().setItemChecked(pos, true);
-		getListView().setSelection(pos);
 	}
 
 	public void setSingleCheck() {
@@ -1401,7 +1265,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	public void onModalDelete(Collection<Integer> positions) {
 
 		Log.d(TAG, "onModalDelete");
-		if (positions.contains(mCurCheckPosition)) {
+		if (positions.contains(mActivatedPosition)) {
 
 			Log.d(TAG, "onModalDelete contained setting id invalid");
 			idInvalid = true;
@@ -1417,19 +1281,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			ids.add(mSectionAdapter.getItemId(pos));
 		}
 		((MainActivity) activity).onMultiDelete(ids, mCurId);
-	}
-
-	public void showList(long id) {
-
-		Log.d(TAG, "showList id " + id);
-		mCurListId = id;
-		// Will show note if necessary
-		Bundle args = new Bundle();
-		if (activity.getCurrentContent().equals(
-				DualLayoutActivity.CONTENTVIEW.DUAL))
-			args.putBoolean(SHOULD_OPEN_NOTE, true);
-
-		refreshList(args);
 	}
 
 	private boolean shouldDisplaySections(String sorting) {
@@ -1994,7 +1845,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		Log.d("listproto", "Current list " + mCurListId);
 		long listid;
 		String sectionname;
-		SimpleCursorAdapter adapter;
 		switch (loader.getId()) {
 		case LOADER_REGULARLIST:
 			if (!mSectionAdapter.isSectioned()) {
@@ -2092,10 +1942,14 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		}
 
 		// The list should now be shown.
-		if (isResumed()) {
-			// setListShown(true);
+		if (this.getListAdapter().getCount() > 0) {
+			Log.d(TAG, "showing list");
+			activity.findViewById(R.id.listContainer).setVisibility(View.VISIBLE);
+			activity.findViewById(R.id.hintContainer).setVisibility(View.GONE);
 		} else {
-			// setListShownNoAnimation(true);
+			Log.d(TAG, "no notes, hiding list");
+			activity.findViewById(R.id.listContainer).setVisibility(View.GONE);
+			activity.findViewById(R.id.hintContainer).setVisibility(View.VISIBLE);
 		}
 
 		// Reselect current note in list, if possible
@@ -2112,7 +1966,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 		// If a note was created, it will be set in this variable
 		if (newNoteIdToSelect > -1) {
-			selectPos(getPosOfId(newNoteIdToSelect));
+			setActivatedPosition(showNote(getPosOfId(newNoteIdToSelect)));
 			newNoteIdToSelect = -1; // Should only be set to anything else on
 									// create
 		}

@@ -21,11 +21,19 @@
     android:baselineAligned="false"
     android:orientation="horizontal" >
 
-    <fragment
+    <FrameLayout
         android:id="@+id/leftFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        class="com.nononsenseapps.notepad.NotesListFragment"
-        android:paddingRight="0dp" />
+        android:paddingRight="0dp" >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:paddingTop="4dip"
+            android:layout_gravity="center"
+            android:text="@string/please_create_list"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        </FrameLayout>
 
 </LinearLayout>

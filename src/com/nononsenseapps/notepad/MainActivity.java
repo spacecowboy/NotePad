@@ -16,25 +16,21 @@
 
 package com.nononsenseapps.notepad;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import sheetrock.panda.changelog.ChangeLog;
-
-import com.nononsenseapps.helpers.UpdateNotifier;
-import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
-import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
-import com.nononsenseapps.notepad.interfaces.PasswordChecker;
-import com.nononsenseapps.notepad.prefs.MainPrefs;
-import com.nononsenseapps.notepad.prefs.PrefsActivity;
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.ui.ExtrasCursorAdapter;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
+import android.app.Activity;
 import android.app.Dialog;
 import android.app.LoaderManager;
 import android.app.SearchManager;
@@ -45,6 +41,7 @@ import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -52,7 +49,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
-import com.nononsenseapps.helpers.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -61,12 +57,24 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.UpdateNotifier;
+import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
+import com.nononsenseapps.notepad.NotesListFragment.Callbacks;
+import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
+import com.nononsenseapps.notepad.interfaces.PasswordChecker;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.PrefsActivity;
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.notepad.sync.SyncAdapter;
+import com.nononsenseapps.ui.ExtrasCursorAdapter;
+
 /**
  * Showing a single fragment in an activity.
  */
 public class MainActivity extends DualLayoutActivity implements
 		OnSharedPreferenceChangeListener, OnNavigationListener,
-		LoaderManager.LoaderCallbacks<Cursor>, PasswordChecker {
+		LoaderManager.LoaderCallbacks<Cursor>, PasswordChecker, Callbacks {
 	private static final String TAG = "FragmentLayout";
 	private static final String CURRENT_LIST_ID = "currentlistid";
 	private static final String CURRENT_LIST_POS = "currentlistpos";
@@ -81,7 +89,6 @@ public class MainActivity extends DualLayoutActivity implements
 	public static final int ALL_NOTES_ID = -2;
 	public static final int CREATE_LIST_ID = -3;
 
-	private NotesListFragment list;
 	private Menu optionsMenu;
 
 	private ExtrasCursorAdapter mSpinnerAdapter;
@@ -90,6 +97,7 @@ public class MainActivity extends DualLayoutActivity implements
 
 	private long listIdToSelect = -1;
 	private boolean beforeBoot = false; // Used to indicate the intent handling
+	private NotesListFragment list;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -190,6 +198,7 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		optionsMenu = menu;
+		getMenuInflater().inflate(R.menu.main_options_menu, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -197,23 +206,23 @@ public class MainActivity extends DualLayoutActivity implements
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		MenuItem deleteList = menu.findItem(R.id.menu_deletelist);
 		if (null != mSpinnerAdapter) {
-			if (deleteList != null) {
-				// Only show this button if there are more than one list
-				if (mSpinnerAdapter.getCount() <= 3 || currentListId < 0) {
-					deleteList.setVisible(false);
-				} else {
-					deleteList.setVisible(true);
-				}
-			}
-			MenuItem renameList = menu.findItem(R.id.menu_renamelist);
-			if (renameList != null) {
-				// Only show this button if there is a list
-				if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
-					renameList.setVisible(false);
-				} else {
-					renameList.setVisible(true);
-				}
-			}
+			// if (deleteList != null) {
+			// // Only show this button if there are more than one list
+			// if (mSpinnerAdapter.getCount() <= 3 || currentListId < 0) {
+			// deleteList.setVisible(false);
+			// } else {
+			// deleteList.setVisible(true);
+			// }
+			// }
+			// MenuItem renameList = menu.findItem(R.id.menu_renamelist);
+			// if (renameList != null) {
+			// // Only show this button if there is a list
+			// if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
+			// renameList.setVisible(false);
+			// } else {
+			// renameList.setVisible(true);
+			// }
+			// }
 		}
 
 		return super.onPrepareOptionsMenu(menu);
@@ -272,15 +281,13 @@ public class MainActivity extends DualLayoutActivity implements
 						.startsWith(NotePad.Notes.PATH_VISIBLE_NOTES) || intent
 						.getData().getPath()
 						.startsWith(NotePad.Notes.PATH_NOTES))) {
-			if (rightFragment != null) {
-				String newId = intent.getData().getPathSegments()
-						.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
-				long noteId = Long.parseLong(newId);
-
-				if (noteId > -1) {
-					((NotesEditorFragment) rightFragment).displayNote(noteId);
-				}
-			}
+			Bundle arguments = new Bundle();
+			arguments.putLong(NotesEditorFragment.KEYID,
+					NotesEditorFragment.getIdFromUri(intent.getData()));
+			NotesEditorFragment fragment = new NotesEditorFragment();
+			fragment.setArguments(arguments);
+			getFragmentManager().beginTransaction()
+					.replace(R.id.rightFragment, fragment).commit();
 			if (list != null) {
 				long listId = ALL_NOTES_ID;
 				if (intent.getExtras() != null) {
@@ -332,16 +339,13 @@ public class MainActivity extends DualLayoutActivity implements
 						listId, text);
 
 				if (noteUri != null) {
-					long newNoteIdToOpen = NotesListFragment
-							.getNoteIdFromUri(noteUri);
-
-					if (rightFragment != null) {
-						((NotesEditorFragment) rightFragment)
-								.displayNote(newNoteIdToOpen);
-					}
-
-					intent.setAction(Intent.ACTION_EDIT);
-					intent.setData(noteUri);
+					Bundle arguments = new Bundle();
+					arguments.putLong(NotesEditorFragment.KEYID,
+							NotesEditorFragment.getIdFromUri(noteUri));
+					NotesEditorFragment fragment = new NotesEditorFragment();
+					fragment.setArguments(arguments);
+					getFragmentManager().beginTransaction()
+							.replace(R.id.rightFragment, fragment).commit();
 				}
 			}
 
@@ -594,6 +598,8 @@ public class MainActivity extends DualLayoutActivity implements
 			// Add list
 			Uri listUri = getContentResolver().insert(
 					NotePad.Lists.CONTENT_URI, values);
+			listIdToSelect = Long.parseLong(listUri.getPathSegments().get(
+					NotePad.Lists.ID_PATH_POSITION));
 			UpdateNotifier.notifyChangeList(getApplicationContext());
 		}
 	}
@@ -624,8 +630,9 @@ public class MainActivity extends DualLayoutActivity implements
 			getContentResolver().update(
 					Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
 							Long.toString(currentListId)), values, null, null);
-			UpdateNotifier.notifyChangeList(getApplicationContext(), Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
-					Long.toString(currentListId)));
+			UpdateNotifier.notifyChangeList(getApplicationContext(), Uri
+					.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
+							Long.toString(currentListId)));
 		}
 	}
 
@@ -649,10 +656,7 @@ public class MainActivity extends DualLayoutActivity implements
 	 * the database. Will be deleted on next sync.
 	 */
 	protected void deleteCurrentList() {
-		// Only if id is valid and if it is NOT the last list
-		// 3 instead of 1 because we insert "create new" and "all items" in the
-		// list
-		if (currentListId > -1 && mSpinnerAdapter.getCount() > 3) {
+		if (currentListId > -1) {
 			// Only mark as deleted so it is synced
 			if (shouldMarkAsDeleted(this)) {
 				ContentValues values = new ContentValues();
@@ -686,8 +690,9 @@ public class MainActivity extends DualLayoutActivity implements
 						Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
 								Long.toString(currentListId)), null, null);
 			}
-			UpdateNotifier.notifyChangeList(getApplicationContext(), Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
-					Long.toString(currentListId)));
+			UpdateNotifier.notifyChangeList(getApplicationContext(), Uri
+					.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
+							Long.toString(currentListId)));
 			UpdateNotifier.notifyChangeNote(getApplicationContext());
 
 			// Remove default setting if this is the default list
@@ -804,8 +809,120 @@ public class MainActivity extends DualLayoutActivity implements
 				goUp();
 			}
 			break;
+		case R.id.menu_sync:
+
+			String accountName = PreferenceManager.getDefaultSharedPreferences(
+					this).getString(SyncPrefs.KEY_ACCOUNT, "");
+			boolean syncEnabled = PreferenceManager
+					.getDefaultSharedPreferences(this).getBoolean(
+							SyncPrefs.KEY_SYNC_ENABLE, false);
+			if (accountName != null && !accountName.equals("") && syncEnabled) {
+				requestSync(accountName);
+			} else {
+				// Enable syncing
+				enableSync();
+			}
+			return false; // Editor will listen for this also and saves when it
+							// receives it
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	private void enableSync() {
+		final Activity activity = this;
+		// Get the first Google account on the device
+		final Account[] accounts = AccountManager.get(activity)
+				.getAccountsByType("com.google");
+		if (accounts.length > 0) {
+			final Account account = accounts[0];
+
+			// Request access
+			AccountManager.get(activity).getAuthToken(account,
+					SyncAdapter.AUTH_TOKEN_TYPE, null, activity,
+					new AccountManagerCallback<Bundle>() {
+
+						@Override
+						public void run(AccountManagerFuture<Bundle> future) {
+							// This is the callback class, it handles all the
+							// steps
+							// after requesting access
+							try {
+								String token = future.getResult().getString(
+										AccountManager.KEY_AUTHTOKEN);
+								if (token != null && !token.equals("")
+										&& account != null) {
+									// Get preference editor
+									Editor editor = PreferenceManager
+											.getDefaultSharedPreferences(
+													activity).edit();
+
+									// Write account name to prefs
+									editor.putString(SyncPrefs.KEY_ACCOUNT,
+											account.name);
+
+									// Set it syncable
+									ContentResolver.setIsSyncable(account,
+											NotePad.AUTHORITY, 1);
+
+									// Write to pref
+									editor.putBoolean(
+											SyncPrefs.KEY_SYNC_ENABLE, true);
+
+									// Enable periodic sync
+									long freqMin = 60; // minutes
+									long pollFrequency = 60 * freqMin; // seconds
+									ContentResolver.addPeriodicSync(account,
+											NotePad.AUTHORITY, new Bundle(),
+											pollFrequency);
+
+									// Write period to prefs
+									editor.putString(SyncPrefs.KEY_SYNC_FREQ,
+											Long.toString(freqMin));
+
+									// Commit prefs
+									editor.commit();
+
+									// Then request sync
+									requestSync(account.name);
+								}
+							} catch (OperationCanceledException e) {
+								Log.e("SyncFix", "Error1");
+								// if the request was canceled for any reason
+							} catch (AuthenticatorException e) {
+								Log.e("SyncFix", "Error2");
+								// if there was an error communicating with the
+								// authenticator or
+								// if the authenticator returned an invalid
+								// response
+							} catch (IOException e) {
+								Log.e("SyncFix", "Error3");
+								// if the authenticator returned an error
+								// response that
+								// indicates that it encountered an IOException
+								// while
+								// communicating with the authentication server
+							}
+						}
+					}, null);
+
+		}
+	}
+
+	private void requestSync(String accountName) {
+		if (accountName != null && !"".equals(accountName)) {
+			Account account = SyncPrefs.getAccount(AccountManager.get(this),
+					accountName);
+			// Don't start a new sync if one is already going
+			if (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) {
+				Bundle options = new Bundle();
+				// This will force a sync regardless of what the setting is
+				// in accounts manager. Only use it here where the user has
+				// manually desired a sync to happen NOW.
+				options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+				ContentResolver
+						.requestSync(account, NotePad.AUTHORITY, options);
+			}
+		}
 	}
 
 	private void showPrefs() {
@@ -865,7 +982,9 @@ public class MainActivity extends DualLayoutActivity implements
 			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
 			values.put(NotePad.Notes.COLUMN_NAME_NOTE, noteText);
 			try {
-				return resolver.insert(NotePad.Notes.CONTENT_URI, values);
+				Uri uri = resolver.insert(NotePad.Notes.CONTENT_URI, values);
+				UpdateNotifier.notifyChangeNote(, uri);
+				return uri;
 			} catch (SQLException e) {
 				return null;
 			}
@@ -906,20 +1025,39 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
+		getLoaderManager().destroyLoader(0);
 	}
 
 	@Override
 	public boolean onNavigationItemSelected(int itemPosition, long itemId) {
 		// Change the active list
+		Log.d(TAG, "onNavigationItemSelected: " + itemId);
 
 		if (CREATE_LIST_ID == itemId) {
+			Log.d(TAG, "create list dialog");
 			// Create list
 			showDialog(CREATE_LIST);
-		} else if (list != null) {
+		} else {
+			Log.d(TAG, "show list");
 			// Display list
 			currentListId = itemId;
 			currentListPos = itemPosition;
-			list.showList(itemId);
+
+			// If there are no lists, there is nothing to open
+			// Two extra items
+			if (mSpinnerAdapter.getCount() <= 2) {
+				if (list != null)
+					getFragmentManager().beginTransaction().remove(list)
+							.commit();
+				list = null;
+			} else {
+				Bundle arguments = new Bundle();
+				arguments.putLong(NotesListFragment.LISTID, itemId);
+				list = new NotesListFragment();
+				list.setArguments(arguments);
+				getFragmentManager().beginTransaction()
+						.replace(R.id.leftFragment, list).commit();
+			}
 		}
 		return true;
 	}
@@ -929,15 +1067,13 @@ public class MainActivity extends DualLayoutActivity implements
 
 		// This is called when a new Loader needs to be created. This
 		// sample only has one Loader, so we don't care about the ID.
-		Uri baseUri = NotePad.Lists.CONTENT_URI;
+		Uri baseUri = NotePad.Lists.CONTENT_VISIBLE_URI;
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
 
 		return new CursorLoader(this, baseUri, new String[] { BaseColumns._ID,
-				NotePad.Lists.COLUMN_NAME_TITLE },
-				NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1", // un-deleted
-																	// records.
-				null, NotePad.Lists.SORT_ORDER // Use the default sort order.
+				NotePad.Lists.COLUMN_NAME_TITLE }, null, null,
+				NotePad.Lists.SORT_ORDER // Use the default sort order.
 		);
 	}
 
@@ -972,5 +1108,31 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 		mSpinnerAdapter.swapCursor(null);
+	}
+
+	@Override
+	public void onItemSelected(long id) {
+		// Open a note
+		if (id > -1) {
+			if (getCurrentContent().equals(DualLayoutActivity.CONTENTVIEW.DUAL)) {
+				Bundle arguments = new Bundle();
+				arguments.putLong(NotesEditorFragment.KEYID, id);
+				NotesEditorFragment fragment = new NotesEditorFragment();
+				fragment.setArguments(arguments);
+				getFragmentManager().beginTransaction()
+						.replace(R.id.rightFragment, fragment).commit();
+			} else {
+				Intent intent = new Intent();
+				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+				intent.setClass(this, RightActivity.class)
+						.setData(
+								Uri.withAppendedPath(
+										NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,
+										Long.toString(id)))
+						.setAction(Intent.ACTION_EDIT);
+
+				startActivity(intent);
+			}
+		}
 	}
 }

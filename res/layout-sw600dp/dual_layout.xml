@@ -18,27 +18,44 @@
     android:id="@+id/dual_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
     android:baselineAligned="false"
     android:orientation="horizontal"
-    android:weightSum="@integer/fragmentWeightSum"
-    android:animateLayoutChanges="true" >
+    android:weightSum="@integer/fragmentWeightSum" >
 
     <!-- Weights and sum differ depending on screen orientation/size -->
     <!-- You should replace the classes specified with your own extended classes -->
-    <fragment
+
+    <FrameLayout
         android:id="@+id/leftFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@integer/leftFragmentWeight"
-        class="com.nononsenseapps.notepad.NotesListFragment"
-        android:paddingRight="0dp" />
+        android:paddingRight="0dp" >
 
-    <fragment
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:paddingTop="4dip"
+            android:layout_gravity="center"
+            android:text="@string/please_create_list"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+        </FrameLayout>
+
+    <FrameLayout
         android:id="@+id/rightFragment"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="@integer/rightFragmentWeight"
-        class="com.nononsenseapps.notepad.NotesEditorFragment" >
-    </fragment>
+        android:layout_weight="@integer/rightFragmentWeight" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:enabled="false"
+            android:text="@string/please_select_note"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </FrameLayout>
 
 </LinearLayout>

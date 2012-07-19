@@ -193,6 +193,10 @@
     <string tools:ignore="MissingTranslation" name="settings_listheader_off">Show as one list</string>
     <string tools:ignore="MissingTranslation" name="settings_listheader_on">Show list names</string>
     
+    <string tools:ignore="MissingTranslation" name="please_create_list">Please create a list</string>
+    <string tools:ignore="MissingTranslation" name="please_select_note">Please select or create a note</string>
+    <string tools:ignore="MissingTranslation" name="please_create_note">Please create a note</string>
+    
     <string tools:ignore="MissingTranslation" name="empty_string"> </string>
 
     <!-- These should probably not be translated -->
