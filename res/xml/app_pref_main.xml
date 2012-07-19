@@ -35,7 +35,7 @@
             android:summaryOn="@string/settings_listitem_summary_on"
             android:summaryOff="@string/settings_listitem_summary_off" />
         <ListPreference
-            android:defaultValue="title COLLATE NOCASE"
+            android:defaultValue="truepos"
             android:dialogTitle="@string/settings_sorting_type_dialog"
             android:entries="@array/sorting_preference"
             android:entryValues="@array/sortingvalues_preference"

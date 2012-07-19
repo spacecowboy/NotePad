@@ -237,7 +237,7 @@ public final class NotePad {
 		public static final String POSITION_ASC_ORDER = COLUMN_NAME_POSITION
 				+ " ASC";
 
-		public static final String DEFAULT_SORT_TYPE = ALPHABETIC_SORT_TYPE;
+		public static final String DEFAULT_SORT_TYPE = POSSUBSORT_SORT_TYPE;
 		public static final String DEFAULT_SORT_ORDERING = ASCENDING_SORT_ORDERING;
 
 		// Position constants
