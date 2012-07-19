@@ -41,7 +41,7 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.os.RemoteException;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;

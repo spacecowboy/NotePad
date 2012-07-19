@@ -48,7 +48,7 @@ import android.os.ParcelFileDescriptor;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;

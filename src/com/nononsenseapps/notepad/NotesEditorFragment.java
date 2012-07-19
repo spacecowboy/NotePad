@@ -47,7 +47,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.text.format.Time;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 import android.util.TimeFormatException;
 import android.view.DragEvent;
 import android.view.LayoutInflater;

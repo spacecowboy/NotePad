@@ -104,7 +104,7 @@
                 android:layout_height="20dp"
                 android:layout_gravity="center"
                 android:scaleType="fitXY"
-                android:src="@drawable/action_about_dark" />
+                android:src="?ic_action_drag" />
 
             <com.nononsenseapps.ui.DateView
                 android:id="@+id/itemDate"

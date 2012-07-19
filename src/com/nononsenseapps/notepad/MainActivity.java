@@ -52,7 +52,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;

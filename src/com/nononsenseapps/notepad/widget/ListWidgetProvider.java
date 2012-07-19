@@ -25,7 +25,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 import android.widget.RemoteViews;
 
 import com.nononsenseapps.notepad.MainActivity;

@@ -20,7 +20,7 @@ import java.util.ArrayList;
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 
 /**
  * Handles parsing of attributes which are saved inside the note in order to get

@@ -24,7 +24,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.RemoteException;
 import android.text.format.Time;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;

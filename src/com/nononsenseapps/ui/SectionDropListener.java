@@ -5,7 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 
 import com.ericharlow.DragNDrop.DropListener;
 import com.nononsenseapps.helpers.UpdateNotifier;

@@ -25,7 +25,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 

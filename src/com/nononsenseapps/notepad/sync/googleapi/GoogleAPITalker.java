@@ -46,7 +46,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 import android.net.http.AndroidHttpClient; // Supports GZIP, apache's doesn't
 
 /**

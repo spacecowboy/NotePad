@@ -40,7 +40,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 import android.view.MenuItem;
 
 public class ListWidgetConfigure extends PreferenceActivity implements

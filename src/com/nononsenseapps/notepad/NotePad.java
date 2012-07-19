@@ -22,7 +22,7 @@ import java.security.InvalidParameterException;
 import android.app.SearchManager;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 
 /**
  * Defines a contract between the Note Pad content provider and its clients. A

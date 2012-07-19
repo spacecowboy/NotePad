@@ -54,7 +54,7 @@
             android:key="key_default_list_id"
             android:title="@string/menu_setdefaultlist" />
         <CheckBoxPreference 
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:key="key_listheaders"
             android:title="@string/settings_listheader"
             android:summaryOn="@string/settings_listheader_on"
