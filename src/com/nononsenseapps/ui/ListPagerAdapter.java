@@ -5,13 +5,14 @@ package com.nononsenseapps.ui;
 
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotesListFragment;
+import com.nononsenseapps.support.app.FragmentPagerAdapter;
+import com.nononsenseapps.support.app.FragmentStatePagerAdapter;
 
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
-import app.FragmentPagerAdapter;
 
 /**
  * Each page in the view pager displays a different list which is handled by a different cursor adapter

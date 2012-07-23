@@ -19,5 +19,6 @@
     <!-- This resource is true if running under at least IceCreamSandwich
          API level.  The default value is false; an alternative value
          for IceCreamSandwich is true. -->
-    <bool name="atLeastIceCreamSandwich">false</bool>
+    <bool name="atLeast14">false</bool>
+    <bool name="atLeast15">false</bool>
 </resources>

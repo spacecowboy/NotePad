@@ -469,7 +469,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		PreferenceManager.getDefaultSharedPreferences(activity)
 				.registerOnSharedPreferenceChangeListener(this);
 
-		if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)) {
+		if (getResources().getBoolean(R.bool.atLeast14)) {
 			// Share action provider
 			modeCallback = new ModeCallbackICS(this);
 		} else {

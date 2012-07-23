@@ -211,9 +211,6 @@ public final class NotePad {
 		public static final String COLUMN_NAME_PREVIOUS = "previous";
 		public static final String COLUMN_NAME_PARENT = "parent";
 
-		// Password locking
-		public static final String COLUMN_NAME_LOCKED = "locked";
-
 		/**
 		 * The default sort order for this table
 		 */

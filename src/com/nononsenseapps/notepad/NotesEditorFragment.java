@@ -363,11 +363,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// change the text
 			values.put(NotePad.Notes.COLUMN_NAME_NOTE, text);
 		}
-		if (noteAttrs.locked) {
-			values.put(NotePad.Notes.COLUMN_NAME_LOCKED, 1);
-		} else {
-			values.put(NotePad.Notes.COLUMN_NAME_LOCKED, 0);
-		}
 
 		// Add list if changed
 		if (listId != mOriginalListId && mOriginalListId > -1)
@@ -1310,7 +1305,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	@TargetApi(14)
 	private void setActionShareIntent() {
 		if (getActivity() != null && !getActivity().isFinishing()) {
-			if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)
+			if (getResources().getBoolean(R.bool.atLeast14)
 					&& shareActionProvider != null) {
 				Intent share = new Intent(Intent.ACTION_SEND);
 				share.setType("text/plain");

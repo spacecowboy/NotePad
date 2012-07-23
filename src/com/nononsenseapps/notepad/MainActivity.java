@@ -281,7 +281,7 @@ public class MainActivity extends DualLayoutActivity implements
 		switch (keyCode) {
 		case KeyEvent.KEYCODE_SEARCH:
 			// Ignore this in HC because it will crash there
-			if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)) {
+			if (getResources().getBoolean(R.bool.atLeast14)) {
 				NotesListFragment list = getLeftFragment();
 				if (list != null && list.mSearchItem != null) {
 					list.mSearchItem.expandActionView();
@@ -842,7 +842,7 @@ public class MainActivity extends DualLayoutActivity implements
 		case R.id.menu_search:
 			// Cant do this in HC, because it will crash.
 			// Ignore search button in HC
-			if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)) {
+			if (getResources().getBoolean(R.bool.atLeast14)) {
 				NotesListFragment list = getLeftFragment();
 				if (list != null && list.mSearchItem != null) {
 					list.mSearchItem.expandActionView();
