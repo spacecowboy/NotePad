@@ -32,6 +32,7 @@ import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.ContentResolver;
@@ -49,6 +50,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
+import android.support.v4.view.ViewPager;
+import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -68,6 +71,7 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.ui.ExtrasCursorAdapter;
+import com.nononsenseapps.ui.ListPagerAdapter;
 
 /**
  * Showing a single fragment in an activity.
@@ -97,7 +101,20 @@ public class MainActivity extends DualLayoutActivity implements
 
 	private long listIdToSelect = -1;
 	private boolean beforeBoot = false; // Used to indicate the intent handling
-	private NotesListFragment list;
+	//private NotesListFragment list;
+	
+	/**
+     * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
+     * sections. We use a {@link android.support.v4.app.FragmentPagerAdapter} derivative, which will
+     * keep every loaded fragment in memory. If this becomes too memory intensive, it may be best
+     * to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
+     */
+    private ListPagerAdapter mSectionsPagerAdapter;
+
+    /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    private ViewPager mViewPager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -121,7 +138,7 @@ public class MainActivity extends DualLayoutActivity implements
 		}
 
 		// Set up dropdown navigation
-		ActionBar actionBar = getActionBar();
+		final ActionBar actionBar = getActionBar();
 		actionBar.setDisplayShowTitleEnabled(false);
 		actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_LIST);
 
@@ -147,8 +164,34 @@ public class MainActivity extends DualLayoutActivity implements
 
 		// setContentView(R.layout.fragment_layout);
 
-		setUpList();
+//		setUpList();
 
+		mSectionsPagerAdapter = new ListPagerAdapter(this, getFragmentManager(), mSpinnerAdapter, -1);
+
+        // Set up the ViewPager with the sections adapter.
+        mViewPager = (ViewPager) findViewById(R.id.pager);
+        mViewPager.setAdapter(mSectionsPagerAdapter);
+        
+        mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
+			
+			@Override
+			public void onPageSelected(int pos) {
+				actionBar.setSelectedNavigationItem(pos);
+			}
+			
+			@Override
+			public void onPageScrolled(int arg0, float arg1, int arg2) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+			@Override
+			public void onPageScrollStateChanged(int arg0) {
+				// TODO Auto-generated method stub
+				
+			}
+		});
+		
 		// Set up navigation list
 		// Set a default list to open if one is set
 		if (listIdToSelect < 0) {
@@ -175,13 +218,13 @@ public class MainActivity extends DualLayoutActivity implements
 		onNewIntent(getIntent());
 	}
 
-	private void setUpList() {
-		if (leftFragment != null) {
-			NotesListFragment list = (NotesListFragment) leftFragment;
-
-			this.list = list;
-		}
-	}
+//	private void setUpList() {
+//		if (leftFragment != null) {
+//			NotesListFragment list = (NotesListFragment) leftFragment;
+//
+//			this.list = list;
+//		}
+//	}
 
 	/**
 	 * Launches the main activity
@@ -239,6 +282,7 @@ public class MainActivity extends DualLayoutActivity implements
 		case KeyEvent.KEYCODE_SEARCH:
 			// Ignore this in HC because it will crash there
 			if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)) {
+				NotesListFragment list = getLeftFragment();
 				if (list != null && list.mSearchItem != null) {
 					list.mSearchItem.expandActionView();
 				} else if (list != null) {
@@ -288,6 +332,7 @@ public class MainActivity extends DualLayoutActivity implements
 			fragment.setArguments(arguments);
 			getFragmentManager().beginTransaction()
 					.replace(R.id.rightFragment, fragment).commit();
+			NotesListFragment list = getLeftFragment();
 			if (list != null) {
 				long listId = ALL_NOTES_ID;
 				if (intent.getExtras() != null) {
@@ -335,7 +380,7 @@ public class MainActivity extends DualLayoutActivity implements
 			}
 
 			if (listId > -1) {
-				Uri noteUri = MainActivity.createNote(getContentResolver(),
+				Uri noteUri = MainActivity.createNote(this,
 						listId, text);
 
 				if (noteUri != null) {
@@ -350,6 +395,7 @@ public class MainActivity extends DualLayoutActivity implements
 			}
 
 			// Open appropriate list if tablet mode
+			NotesListFragment list = getLeftFragment();
 			if (list != null) {
 				long intentId = -1;
 				if (intent.getExtras() != null
@@ -441,6 +487,7 @@ public class MainActivity extends DualLayoutActivity implements
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			String query = intent.getStringExtra(SearchManager.QUERY);
 			// list.onQueryTextChange(query);
+			NotesListFragment list = getLeftFragment();
 			if (list != null && list.mSearchView != null) {
 				list.mSearchView.setQuery(query, false);
 			} else if (list != null) {
@@ -796,6 +843,7 @@ public class MainActivity extends DualLayoutActivity implements
 			// Cant do this in HC, because it will crash.
 			// Ignore search button in HC
 			if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)) {
+				NotesListFragment list = getLeftFragment();
 				if (list != null && list.mSearchItem != null) {
 					list.mSearchItem.expandActionView();
 				} else if (list != null) {
@@ -974,7 +1022,7 @@ public class MainActivity extends DualLayoutActivity implements
 	 * @param listId
 	 * @return
 	 */
-	public static Uri createNote(ContentResolver resolver, long listId,
+	public static Uri createNote(Context context, long listId,
 			String noteText) {
 		if (listId > -1) {
 			ContentValues values = new ContentValues();
@@ -982,8 +1030,9 @@ public class MainActivity extends DualLayoutActivity implements
 			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
 			values.put(NotePad.Notes.COLUMN_NAME_NOTE, noteText);
 			try {
+				ContentResolver resolver = context.getContentResolver();
 				Uri uri = resolver.insert(NotePad.Notes.CONTENT_URI, values);
-				UpdateNotifier.notifyChangeNote(, uri);
+				UpdateNotifier.notifyChangeNote(context, uri);
 				return uri;
 			} catch (SQLException e) {
 				return null;
@@ -1002,6 +1051,15 @@ public class MainActivity extends DualLayoutActivity implements
 			}
 		}
 		deleteNotes(this, ids);
+	}
+	
+	@Override
+	public NotesListFragment getLeftFragment() {
+		NotesListFragment retval = null;
+		if (mSectionsPagerAdapter != null) {
+			retval = (NotesListFragment) mSectionsPagerAdapter.getCurrentPrimaryItem();
+		}
+		return retval;
 	}
 
 	public void onDeleteAction() {
@@ -1040,23 +1098,27 @@ public class MainActivity extends DualLayoutActivity implements
 		} else {
 			Log.d(TAG, "show list");
 			// Display list
+			if (itemId != currentListId) {
 			currentListId = itemId;
 			currentListPos = itemPosition;
+			
+			mViewPager.setCurrentItem(itemPosition);
 
 			// If there are no lists, there is nothing to open
 			// Two extra items
-			if (mSpinnerAdapter.getCount() <= 2) {
-				if (list != null)
-					getFragmentManager().beginTransaction().remove(list)
-							.commit();
-				list = null;
-			} else {
-				Bundle arguments = new Bundle();
-				arguments.putLong(NotesListFragment.LISTID, itemId);
-				list = new NotesListFragment();
-				list.setArguments(arguments);
-				getFragmentManager().beginTransaction()
-						.replace(R.id.leftFragment, list).commit();
+//			if (mSpinnerAdapter.getCount() <= 2) {
+//				if (list != null)
+//					getFragmentManager().beginTransaction().remove(list)
+//							.commit();
+//				list = null;
+//			} else {
+//				Bundle arguments = new Bundle();
+//				arguments.putLong(NotesListFragment.LISTID, itemId);
+//				list = new NotesListFragment();
+//				list.setArguments(arguments);
+//				getFragmentManager().beginTransaction()
+//						.replace(R.id.leftFragment, list).commit();
+//			}
 			}
 		}
 		return true;
@@ -1091,17 +1153,17 @@ public class MainActivity extends DualLayoutActivity implements
 			listIdToSelect = -1;
 		}
 
-		if (optionsMenu != null) {
-			MenuItem createNote = optionsMenu.findItem(R.id.menu_add);
-			if (createNote != null) {
-				// Only show this button if there is a list to create notes in
-				if (mSpinnerAdapter.getCount() == 0) {
-					createNote.setVisible(false);
-				} else {
-					createNote.setVisible(true);
-				}
-			}
-		}
+//		if (optionsMenu != null) {
+//			MenuItem createNote = optionsMenu.findItem(R.id.menu_add);
+//			if (createNote != null) {
+//				// Only show this button if there is a list to create notes in
+//				if (mSpinnerAdapter.getCount() == 0) {
+//					createNote.setVisible(false);
+//				} else {
+//					createNote.setVisible(true);
+//				}
+//			}
+//		}
 		beforeBoot = false; // Need to do it here
 	}
 

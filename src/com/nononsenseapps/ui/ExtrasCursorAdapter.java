@@ -209,6 +209,19 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		else
 			return numOfItems;
 	}
+	
+	/**
+	 * Should be a number >= count of the wrapped cursor
+	 * @param realPos
+	 * @return
+	 */
+	public CharSequence getExtraItem(int realPos) {
+		realPos -= numOfItems;
+		if (extraLabels.length == 0 || realPos < -1 || realPos > extraLabels.length)
+			return null;
+		else
+			return context.getText(extraLabels[realPos]);
+	}
 
 	static class ViewHolder {
 		TextView[] texts;
