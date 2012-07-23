@@ -375,8 +375,6 @@ public class NotePadProvider extends ContentProvider implements
 
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
 				NotePad.Notes.COLUMN_NAME_INDENTLEVEL);
-		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT,
-				NotePad.Notes.COLUMN_NAME_POSSUBSORT);
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN,
 				NotePad.Notes.COLUMN_NAME_LOCALHIDDEN);
 
@@ -611,8 +609,6 @@ public class NotePadProvider extends ContentProvider implements
 
 					+ NotePad.Notes.COLUMN_NAME_INDENTLEVEL
 					+ " INTEGER DEFAULT 0 NOT NULL,"
-					+ NotePad.Notes.COLUMN_NAME_POSSUBSORT
-					+ " TEXT DEFAULT '',"
 					+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
 					+ " INTEGER DEFAULT 0,"
 
@@ -751,7 +747,13 @@ public class NotePadProvider extends ContentProvider implements
 						+ OldNotePad.GTaskLists.COLUMN_NAME_ETAG + " TEXT" + ");");
 
 				// Now insert a default list
-				long listId = insertDefaultList(db);
+				ContentValues lvalues = new ContentValues();
+				lvalues.put(OldNotePad.Lists.COLUMN_NAME_TITLE,
+						context.getString(R.string.app_name));
+				lvalues.put(OldNotePad.Lists.COLUMN_NAME_MODIFIED, 1);
+				lvalues.put(OldNotePad.Lists.COLUMN_NAME_DELETED, 0);
+
+				long listId = db.insert(OldNotePad.Lists.TABLE_NAME, null, lvalues);
 
 				// Place all existing notes in this list
 				// And give them sensible values in the new columns
@@ -819,7 +821,12 @@ public class NotePadProvider extends ContentProvider implements
 			if (oldVersion < 7) {
 				throw new NullPointerException(
 						"Please implement this you idiot");
-				// Add columns
+				// Create new tables
+				
+				// Migrate data from old to new tables
+				// Beware of bad data and conflicting stuff.
+				
+				// Drop old tables
 				/*
 				 * String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME +
 				 * " ADD COLUMN "; String postNameInt = " INTEGER"; String

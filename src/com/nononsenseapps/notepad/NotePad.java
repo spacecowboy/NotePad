@@ -50,7 +50,7 @@ public final class NotePad {
 		/**
 		 * The table name offered by this provider
 		 */
-		public static final String TABLE_NAME = "notes";
+		public static final String TABLE_NAME = "newnotes";
 		public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
 
 		/*
@@ -203,7 +203,6 @@ public final class NotePad {
 
 		// server side sorting and local hiding
 		public static final String COLUMN_NAME_INDENTLEVEL = "indentlevel";
-		public static final String COLUMN_NAME_POSSUBSORT = "possubsort";
 		public static final String COLUMN_NAME_LOCALHIDDEN = "localhidden";
 
 		// user sorting
@@ -301,7 +300,7 @@ public final class NotePad {
 		/**
 		 * The table name offered by this provider
 		 */
-		public static final String TABLE_NAME = "lists";
+		public static final String TABLE_NAME = "newlists";
 		public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
 
 		/*
@@ -438,7 +437,7 @@ public final class NotePad {
 		/**
 		 * The table name offered by this provider
 		 */
-		public static final String TABLE_NAME = "gtasks";
+		public static final String TABLE_NAME = "newgtasks";
 		public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
 
 		/*
@@ -556,7 +555,7 @@ public final class NotePad {
 		/**
 		 * The table name offered by this provider
 		 */
-		public static final String TABLE_NAME = "gtasklists";
+		public static final String TABLE_NAME = "newgtasklists";
 		public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
 
 		/*

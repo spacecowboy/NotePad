@@ -51,7 +51,6 @@ public class GoogleDBTalker {
 			NotePad.Notes.COLUMN_NAME_PREVIOUS,
 			NotePad.Notes.COLUMN_NAME_TRUEPOS,
 			NotePad.Notes.COLUMN_NAME_HIDDEN, NotePad.GTasks.COLUMN_NAME_DB_ID,
-			NotePad.Notes.COLUMN_NAME_POSSUBSORT,
 			NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
 			NotePad.GTasks.COLUMN_NAME_ETAG,
 			NotePad.GTasks.COLUMN_NAME_GTASKS_ID,
