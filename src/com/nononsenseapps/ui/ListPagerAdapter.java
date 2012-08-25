@@ -40,7 +40,7 @@ public class ListPagerAdapter extends FragmentPagerAdapter {
 
 			@Override
 			public void onInvalidated() {
-				notifyDataSetChanged();
+				// Probably destroying the loader
 			}
 		};
 
