@@ -101,20 +101,22 @@ public class MainActivity extends DualLayoutActivity implements
 
 	private long listIdToSelect = -1;
 	private boolean beforeBoot = false; // Used to indicate the intent handling
-	//private NotesListFragment list;
-	
-	/**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide fragments for each of the
-     * sections. We use a {@link android.support.v4.app.FragmentPagerAdapter} derivative, which will
-     * keep every loaded fragment in memory. If this becomes too memory intensive, it may be best
-     * to switch to a {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
-    private ListPagerAdapter mSectionsPagerAdapter;
+	// private NotesListFragment list;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
-    private ViewPager mViewPager;
+	/**
+	 * The {@link android.support.v4.view.PagerAdapter} that will provide
+	 * fragments for each of the sections. We use a
+	 * {@link android.support.v4.app.FragmentPagerAdapter} derivative, which
+	 * will keep every loaded fragment in memory. If this becomes too memory
+	 * intensive, it may be best to switch to a
+	 * {@link android.support.v4.app.FragmentStatePagerAdapter}.
+	 */
+	private ListPagerAdapter mSectionsPagerAdapter;
+
+	/**
+	 * The {@link ViewPager} that will host the section contents.
+	 */
+	private ViewPager mViewPager;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -164,34 +166,37 @@ public class MainActivity extends DualLayoutActivity implements
 
 		// setContentView(R.layout.fragment_layout);
 
-//		setUpList();
+		// setUpList();
 
-		mSectionsPagerAdapter = new ListPagerAdapter(this, getFragmentManager(), mSpinnerAdapter, -1);
+		mSectionsPagerAdapter = new ListPagerAdapter(this,
+				getFragmentManager(), mSpinnerAdapter, -1);
 
-        // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
-        
-        mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
-			
+		// Set up the ViewPager with the sections adapter.
+		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mViewPager.setAdapter(mSectionsPagerAdapter);
+
+		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
+
 			@Override
 			public void onPageSelected(int pos) {
+				currentListId = mSpinnerAdapter.getItemId(pos);
+				currentListPos = pos;
 				actionBar.setSelectedNavigationItem(pos);
 			}
-			
+
 			@Override
 			public void onPageScrolled(int arg0, float arg1, int arg2) {
 				// TODO Auto-generated method stub
-				
+
 			}
-			
+
 			@Override
 			public void onPageScrollStateChanged(int arg0) {
 				// TODO Auto-generated method stub
-				
+
 			}
 		});
-		
+
 		// Set up navigation list
 		// Set a default list to open if one is set
 		if (listIdToSelect < 0) {
@@ -218,13 +223,13 @@ public class MainActivity extends DualLayoutActivity implements
 		onNewIntent(getIntent());
 	}
 
-//	private void setUpList() {
-//		if (leftFragment != null) {
-//			NotesListFragment list = (NotesListFragment) leftFragment;
-//
-//			this.list = list;
-//		}
-//	}
+	// private void setUpList() {
+	// if (leftFragment != null) {
+	// NotesListFragment list = (NotesListFragment) leftFragment;
+	//
+	// this.list = list;
+	// }
+	// }
 
 	/**
 	 * Launches the main activity
@@ -380,8 +385,7 @@ public class MainActivity extends DualLayoutActivity implements
 			}
 
 			if (listId > -1) {
-				Uri noteUri = MainActivity.createNote(this,
-						listId, text);
+				Uri noteUri = MainActivity.createNote(this, listId, text);
 
 				if (noteUri != null) {
 					Bundle arguments = new Bundle();
@@ -986,6 +990,7 @@ public class MainActivity extends DualLayoutActivity implements
 	 * @param id
 	 */
 	public static void deleteNote(Context context, long id) {
+		Log.d(TAG, "deleteNote: " + id);
 		// Only do this for valid id
 		if (id > -1) {
 			ArrayList<Long> idList = new ArrayList<Long>();
@@ -1004,6 +1009,7 @@ public class MainActivity extends DualLayoutActivity implements
 		ContentResolver resolver = context.getContentResolver();
 		boolean shouldMark = shouldMarkAsDeleted(context);
 		for (long id : ids) {
+			Log.d(TAG, "deleteNotes: " + id);
 			if (shouldMark) {
 				ContentValues values = new ContentValues();
 				values.put(NotePad.Notes.COLUMN_NAME_DELETED, "1");
@@ -1012,6 +1018,7 @@ public class MainActivity extends DualLayoutActivity implements
 			} else {
 				resolver.delete(NotesEditorFragment.getUriFrom(id), null, null);
 			}
+			UpdateNotifier.notifyChangeNote(context, NotesEditorFragment.getUriFrom(id));
 		}
 	}
 
@@ -1022,8 +1029,7 @@ public class MainActivity extends DualLayoutActivity implements
 	 * @param listId
 	 * @return
 	 */
-	public static Uri createNote(Context context, long listId,
-			String noteText) {
+	public static Uri createNote(Context context, long listId, String noteText) {
 		if (listId > -1) {
 			ContentValues values = new ContentValues();
 			// Must always include list
@@ -1053,12 +1059,13 @@ public class MainActivity extends DualLayoutActivity implements
 		}
 		deleteNotes(this, ids);
 	}
-	
+
 	@Override
 	public NotesListFragment getLeftFragment() {
 		NotesListFragment retval = null;
 		if (mSectionsPagerAdapter != null) {
-			retval = (NotesListFragment) mSectionsPagerAdapter.getCurrentPrimaryItem();
+			retval = (NotesListFragment) mSectionsPagerAdapter
+					.getCurrentPrimaryItem();
 		}
 		return retval;
 	}
@@ -1067,6 +1074,7 @@ public class MainActivity extends DualLayoutActivity implements
 		// both list and editor should be notified
 		NotesListFragment list = (NotesListFragment) getLeftFragment();
 		NotesEditorFragment editor = (NotesEditorFragment) getRightFragment();
+		Log.d(TAG, "onDeleteAction, list: " + list + ", editor: " + editor);
 		// tell list to do what it should
 		if (list != null)
 			list.onDelete();
@@ -1100,26 +1108,23 @@ public class MainActivity extends DualLayoutActivity implements
 			Log.d(TAG, "show list");
 			// Display list
 			if (itemId != currentListId) {
-			currentListId = itemId;
-			currentListPos = itemPosition;
-			
-			mViewPager.setCurrentItem(itemPosition);
+				mViewPager.setCurrentItem(itemPosition);
 
-			// If there are no lists, there is nothing to open
-			// Two extra items
-//			if (mSpinnerAdapter.getCount() <= 2) {
-//				if (list != null)
-//					getFragmentManager().beginTransaction().remove(list)
-//							.commit();
-//				list = null;
-//			} else {
-//				Bundle arguments = new Bundle();
-//				arguments.putLong(NotesListFragment.LISTID, itemId);
-//				list = new NotesListFragment();
-//				list.setArguments(arguments);
-//				getFragmentManager().beginTransaction()
-//						.replace(R.id.leftFragment, list).commit();
-//			}
+				// If there are no lists, there is nothing to open
+				// Two extra items
+				// if (mSpinnerAdapter.getCount() <= 2) {
+				// if (list != null)
+				// getFragmentManager().beginTransaction().remove(list)
+				// .commit();
+				// list = null;
+				// } else {
+				// Bundle arguments = new Bundle();
+				// arguments.putLong(NotesListFragment.LISTID, itemId);
+				// list = new NotesListFragment();
+				// list.setArguments(arguments);
+				// getFragmentManager().beginTransaction()
+				// .replace(R.id.leftFragment, list).commit();
+				// }
 			}
 		}
 		return true;
@@ -1127,6 +1132,7 @@ public class MainActivity extends DualLayoutActivity implements
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+		Log.d(TAG, "onCreateLoader: " + id);
 
 		// This is called when a new Loader needs to be created. This
 		// sample only has one Loader, so we don't care about the ID.
@@ -1142,6 +1148,7 @@ public class MainActivity extends DualLayoutActivity implements
 
 	@Override
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+		Log.d(TAG, "onLoadFinished");
 		mSpinnerAdapter.swapCursor(data);
 
 		if (listIdToSelect > -1 || listIdToSelect == ALL_NOTES_ID) {
@@ -1154,27 +1161,29 @@ public class MainActivity extends DualLayoutActivity implements
 			listIdToSelect = -1;
 		}
 
-//		if (optionsMenu != null) {
-//			MenuItem createNote = optionsMenu.findItem(R.id.menu_add);
-//			if (createNote != null) {
-//				// Only show this button if there is a list to create notes in
-//				if (mSpinnerAdapter.getCount() == 0) {
-//					createNote.setVisible(false);
-//				} else {
-//					createNote.setVisible(true);
-//				}
-//			}
-//		}
+		// if (optionsMenu != null) {
+		// MenuItem createNote = optionsMenu.findItem(R.id.menu_add);
+		// if (createNote != null) {
+		// // Only show this button if there is a list to create notes in
+		// if (mSpinnerAdapter.getCount() == 0) {
+		// createNote.setVisible(false);
+		// } else {
+		// createNote.setVisible(true);
+		// }
+		// }
+		// }
 		beforeBoot = false; // Need to do it here
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
+		Log.d(TAG, "onLoaderReset");
 		mSpinnerAdapter.swapCursor(null);
 	}
 
 	@Override
 	public void onItemSelected(long id) {
+		Log.d(TAG, "onItemSelected: " + id);
 		// Open a note
 		if (id > -1) {
 			if (getCurrentContent().equals(DualLayoutActivity.CONTENTVIEW.DUAL)) {

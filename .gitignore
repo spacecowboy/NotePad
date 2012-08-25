@@ -7,3 +7,4 @@ proguard/
 ant.properties
 local.properties
 Config.java
+.settings*

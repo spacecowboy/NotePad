@@ -12,21 +12,41 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.DataSetObserver;
 import android.os.Bundle;
 
 /**
- * Each page in the view pager displays a different list which is handled by a different cursor adapter
- *
+ * Each page in the view pager displays a different list which is handled by a
+ * different cursor adapter
+ * 
  */
 public class ListPagerAdapter extends FragmentPagerAdapter {
 
 	private final ExtrasCursorAdapter wrappedAdapter;
 	private final int countAdjust;
+	private final DataSetObserver subObserver;
 
-	public ListPagerAdapter(Context context, final FragmentManager fm, final ExtrasCursorAdapter wrappedAdapter, final int countAdjust) {
+	public ListPagerAdapter(Context context, final FragmentManager fm,
+			final ExtrasCursorAdapter wrappedAdapter, final int countAdjust) {
 		super(context, fm);
 		this.wrappedAdapter = wrappedAdapter;
 		this.countAdjust = countAdjust;
+
+		subObserver = new DataSetObserver() {
+			@Override
+			public void onChanged() {
+				notifyDataSetChanged();
+			}
+
+			@Override
+			public void onInvalidated() {
+				notifyDataSetChanged();
+			}
+		};
+
+		if (wrappedAdapter != null)
+			wrappedAdapter.registerDataSetObserver(subObserver);
+
 	}
 
 	@Override
@@ -38,30 +58,31 @@ public class ListPagerAdapter extends FragmentPagerAdapter {
 		list.setArguments(arguments);
 		return list;
 	}
-	
+
 	@Override
 	public long getItemId(int position) {
-        return wrappedAdapter.getItemId(position);
-    }
+		return wrappedAdapter.getItemId(position);
+	}
 
 	@Override
 	public int getCount() {
 		return wrappedAdapter.getCount() + countAdjust;
 	}
-	
+
 	@Override
-    public CharSequence getPageTitle(int position) {
+	public CharSequence getPageTitle(int position) {
 		CharSequence title = null;
 		if (wrappedAdapter != null) {
 			Cursor c = (Cursor) wrappedAdapter.getItem(position);
 			if (c != null && !c.isAfterLast() && !c.isBeforeFirst()) {
-				title = c.getString(c.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
+				title = c.getString(c
+						.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
 			} else {
 				title = wrappedAdapter.getExtraItem(position);
 			}
 		}
-		
+
 		return title;
-		}
+	}
 
 }
