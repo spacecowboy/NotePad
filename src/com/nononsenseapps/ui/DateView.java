@@ -20,6 +20,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import com.nononsenseapps.helpers.Log;
+
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.text.format.Time;

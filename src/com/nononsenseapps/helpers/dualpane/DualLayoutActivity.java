@@ -40,8 +40,8 @@ public abstract class DualLayoutActivity extends Activity {
 
 	protected CONTENTVIEW currentContent;
 
-	protected Fragment leftFragment;
-	protected Fragment rightFragment;
+	// protected Fragment leftFragment;
+	// protected Fragment rightFragment;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -51,10 +51,9 @@ public abstract class DualLayoutActivity extends Activity {
 		decideContentView();
 
 		// Can potentially be null so plan for that
-		leftFragment = getFragmentManager().findFragmentById(R.id.leftFragment);
+		//leftFragment = getFragmentManager().findFragmentById(R.id.leftFragment);
 		// Can potentially be null so plan for that
-		rightFragment = getFragmentManager().findFragmentById(
-				R.id.rightFragment);
+		//rightFragment = getFragmentManager().findFragmentById(R.id.rightFragment);
 
 		// Set up navigation if in right fragment mode
 		if (currentContent.equals(CONTENTVIEW.RIGHT)) {
@@ -74,11 +73,15 @@ public abstract class DualLayoutActivity extends Activity {
 			Intent intent = getIntent();
 			setIntent(intent);
 			if (null != intent
-					&& (Intent.ACTION_SEND.equals(intent.getAction()) || null != intent.getData()
-					&& (intent.getData().getPath()
-							.startsWith(NotePad.Notes.PATH_VISIBLE_NOTES) || intent
-							.getData().getPath()
-							.startsWith(NotePad.Notes.PATH_NOTES)))) {
+					&& (Intent.ACTION_SEND.equals(intent.getAction()) || null != intent
+							.getData()
+							&& (intent
+									.getData()
+									.getPath()
+									.startsWith(
+											NotePad.Notes.PATH_VISIBLE_NOTES) || intent
+									.getData().getPath()
+									.startsWith(NotePad.Notes.PATH_NOTES)))) {
 				currentContent = CONTENTVIEW.RIGHT;
 				// Display right fragment
 				setRightContentView();
@@ -116,6 +119,9 @@ public abstract class DualLayoutActivity extends Activity {
 	 * @param visible
 	 */
 	protected void setLeftFragmentVisible(boolean visible) {
+		// Can potentially be null so plan for that
+		Fragment leftFragment = getFragmentManager().findFragmentById(
+				R.id.leftFragment);
 		if (leftFragment != null && (leftFragment.isVisible() || visible)
 				&& getResources().getBoolean(R.bool.leftHideable)) {
 			final float listWidth = getLeftFragment().getView().getWidth();
@@ -178,14 +184,16 @@ public abstract class DualLayoutActivity extends Activity {
 	 * Can be null if not dual pane!
 	 */
 	public Fragment getLeftFragment() {
-		return leftFragment;
+		// Can potentially be null so plan for that
+		return getFragmentManager().findFragmentById(R.id.leftFragment);
 	}
 
 	/**
 	 * Can be null if not dual pane!
 	 */
 	public Fragment getRightFragment() {
-		return rightFragment;
+		// Can potentially be null so plan for that
+		return getFragmentManager().findFragmentById(R.id.rightFragment);
 	}
 
 	public CONTENTVIEW getCurrentContent() {
@@ -229,6 +237,12 @@ public abstract class DualLayoutActivity extends Activity {
 	 */
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
+		// Can potentially be null so plan for that
+		Fragment leftFragment = getFragmentManager().findFragmentById(
+				R.id.leftFragment);
+		// Can potentially be null so plan for that
+		Fragment rightFragment = getFragmentManager().findFragmentById(
+				R.id.rightFragment);
 		// If user clicked inside right fragment, and this left fragment can be
 		// hidden, then hide it
 		if (rightFragment != null && leftFragment != null
