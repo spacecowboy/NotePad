@@ -87,7 +87,7 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	private static final String DATABASE_NAME = "note_pad.db";
 
-	private static final int DATABASE_VERSION = 6;
+	private static final int DATABASE_VERSION = 7;
 
 	/**
 	 * A projection map used to select columns from the database
@@ -723,19 +723,20 @@ public class NotePadProvider extends ContentProvider implements
 						+ OldNotePad.Lists.COLUMN_NAME_DELETED
 						+ " INTEGER DEFAULT 0 NOT NULL" + ");");
 
-				db.execSQL("CREATE TABLE " + OldNotePad.GTasks.TABLE_NAME + " ("
-						+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
+				db.execSQL("CREATE TABLE " + OldNotePad.GTasks.TABLE_NAME
+						+ " (" + BaseColumns._ID + " INTEGER PRIMARY KEY,"
 						+ OldNotePad.GTasks.COLUMN_NAME_DB_ID
-						+ " INTEGER UNIQUE NOT NULL REFERENCES " + Notes.TABLE_NAME
-						+ "," + OldNotePad.GTasks.COLUMN_NAME_GTASKS_ID
+						+ " INTEGER UNIQUE NOT NULL REFERENCES "
+						+ Notes.TABLE_NAME + ","
+						+ OldNotePad.GTasks.COLUMN_NAME_GTASKS_ID
 						+ " INTEGER NOT NULL,"
 						+ OldNotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT
-						+ " INTEGER NOT NULL," + OldNotePad.GTasks.COLUMN_NAME_UPDATED
-						+ " TEXT," + OldNotePad.GTasks.COLUMN_NAME_ETAG + " TEXT"
-						+ ");");
+						+ " INTEGER NOT NULL,"
+						+ OldNotePad.GTasks.COLUMN_NAME_UPDATED + " TEXT,"
+						+ OldNotePad.GTasks.COLUMN_NAME_ETAG + " TEXT" + ");");
 
-				db.execSQL("CREATE TABLE " + OldNotePad.GTaskLists.TABLE_NAME + " ("
-						+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
+				db.execSQL("CREATE TABLE " + OldNotePad.GTaskLists.TABLE_NAME
+						+ " (" + BaseColumns._ID + " INTEGER PRIMARY KEY,"
 						+ OldNotePad.GTaskLists.COLUMN_NAME_DB_ID
 						+ " INTEGER UNIQUE NOT NULL REFERENCES "
 						+ OldNotePad.Lists.TABLE_NAME + ","
@@ -744,7 +745,8 @@ public class NotePadProvider extends ContentProvider implements
 						+ OldNotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT
 						+ " INTEGER NOT NULL,"
 						+ OldNotePad.GTaskLists.COLUMN_NAME_UPDATED + " TEXT,"
-						+ OldNotePad.GTaskLists.COLUMN_NAME_ETAG + " TEXT" + ");");
+						+ OldNotePad.GTaskLists.COLUMN_NAME_ETAG + " TEXT"
+						+ ");");
 
 				// Now insert a default list
 				ContentValues lvalues = new ContentValues();
@@ -753,7 +755,8 @@ public class NotePadProvider extends ContentProvider implements
 				lvalues.put(OldNotePad.Lists.COLUMN_NAME_MODIFIED, 1);
 				lvalues.put(OldNotePad.Lists.COLUMN_NAME_DELETED, 0);
 
-				long listId = db.insert(OldNotePad.Lists.TABLE_NAME, null, lvalues);
+				long listId = db.insert(OldNotePad.Lists.TABLE_NAME, null,
+						lvalues);
 
 				// Place all existing notes in this list
 				// And give them sensible values in the new columns
@@ -819,27 +822,38 @@ public class NotePadProvider extends ContentProvider implements
 				db.update(OldNotePad.Notes.TABLE_NAME, values, null, null);
 			}
 			if (oldVersion < 7) {
-				throw new NullPointerException(
-						"Please implement this you idiot");
-				// Create new tables
-				
-				// Migrate data from old to new tables
-				// Beware of bad data and conflicting stuff.
-				
-				// Drop old tables
 				/*
-				 * String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME +
-				 * " ADD COLUMN "; String postNameInt = " INTEGER"; String
-				 * postNameText = "  TEXT DEFAULT '' NOT NULL";
-				 * db.execSQL(preName + NotePad.Notes.COLUMN_NAME_TRUEPOS +
-				 * postNameText); db.execSQL(preName +
-				 * NotePad.Notes.COLUMN_NAME_NEXTTRUEPOS + postNameText);
-				 * 
-				 * db.execSQL(preName + NotePad.Notes.COLUMN_NAME_PREVIOUS +
-				 * postNameInt); db.execSQL(preName +
-				 * NotePad.Notes.COLUMN_NAME_PARENT + postNameInt);
+				 * This is a bit of a hack Because version 7 was a major change
+				 * in the schema this upgrade is not entirely correct. version 7
+				 * added database restrictions which can only be set during the
+				 * initial create. Because of that I am here only adding the
+				 * fields that were also added. Anyone who updates will have all
+				 * the required database columns but not the restrictions. This
+				 * means that if I did any mistakes, the app will not crash for
+				 * these people when it actually should. They should not lose
+				 * any data however but things like positions could potentially
+				 * get fucked up. In that case a re-install is to be
+				 * recommended.
 				 */
-				// Give all tasks correct position values
+
+				// Add columns
+				String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
+						+ " ADD COLUMN ";
+				String postNameText = "  TEXT DEFAULT '-1' NOT NULL";
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_TRUEPOS
+						+ postNameText);
+
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_PREVIOUS
+						+ " INTEGER UNIQUE DEFAULT NULL REFERENCES "
+						+ Notes.TABLE_NAME);
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_PARENT
+						+ " INTEGER DEFAULT NULL REFERENCES "
+						+ Notes.TABLE_NAME);
+
+				// Mark all notes as modified to sync positions
+				ContentValues values = new ContentValues();
+				values.put(OldNotePad.Notes.COLUMN_NAME_MODIFIED, 1);
+				db.update(OldNotePad.Notes.TABLE_NAME, values, null, null);
 			}
 		}
 

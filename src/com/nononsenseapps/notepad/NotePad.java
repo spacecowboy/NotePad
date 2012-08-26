@@ -50,7 +50,7 @@ public final class NotePad {
 		/**
 		 * The table name offered by this provider
 		 */
-		public static final String TABLE_NAME = "newnotes";
+		public static final String TABLE_NAME = "notes";
 		public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
 
 		/*
@@ -196,7 +196,6 @@ public final class NotePad {
 
 		// parent position hidden
 
-		// public static final String COLUMN_NAME_PARENT = "gtasks_parent";
 		public static final String COLUMN_NAME_GTASKSPARENT = "gtasks_parent";
 		public static final String COLUMN_NAME_POSITION = "gtasks_position";
 		public static final String COLUMN_NAME_HIDDEN = "hiddenflag";
@@ -300,7 +299,7 @@ public final class NotePad {
 		/**
 		 * The table name offered by this provider
 		 */
-		public static final String TABLE_NAME = "newlists";
+		public static final String TABLE_NAME = "lists";
 		public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
 
 		/*
@@ -437,7 +436,7 @@ public final class NotePad {
 		/**
 		 * The table name offered by this provider
 		 */
-		public static final String TABLE_NAME = "newgtasks";
+		public static final String TABLE_NAME = "gtasks";
 		public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
 
 		/*
@@ -555,7 +554,7 @@ public final class NotePad {
 		/**
 		 * The table name offered by this provider
 		 */
-		public static final String TABLE_NAME = "newgtasklists";
+		public static final String TABLE_NAME = "gtasklists";
 		public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
 
 		/*
