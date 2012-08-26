@@ -85,4 +85,34 @@ public class ListPagerAdapter extends FragmentPagerAdapter {
 		return title;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * 
+	 * Called when the host view is attempting to determine if an item's
+	 * position has changed. Returns POSITION_UNCHANGED if the position of the
+	 * given item has not changed or POSITION_NONE if the item is no longer
+	 * present in the adapter.
+	 * 
+	 * Argument is the object previously returned by instantiateItem
+	 */
+	@Override
+	public int getItemPosition(Object object) {
+		Fragment f = (Fragment) object;
+		
+		long listId = f.getArguments().getLong(NotesListFragment.LISTID);
+		
+		int length = wrappedAdapter.getCount();
+		int position;
+		for (position = 0; position < length; position++) {
+			if (listId == wrappedAdapter.getItemId(position)) {
+				break;
+			}
+		}
+		if (position == length) {
+			// Happens both if list is empty
+			// and if id is -1
+			position = POSITION_NONE;
+		}
+		return position;
+	}
 }
