@@ -110,25 +110,23 @@
     <string name="preferences_week_start_day_dialog">Week starts on</string>
     <string name="preferences_week_start_day_title">Week starts on</string>
     <string name="preferences_week_start_day_default" tools:ignore="MissingTranslation" >-1</string>
-
-    <!-- Un-translated yet -->  
     <!--
         Use few if language need it. In English is the same.
         <item quantity="few">Copied 2 notes.</item>
     -->
     <plurals name="notecopied_msg">
-        <item quantity="one">Copied one note.</item>
-        <item quantity="other">Copied %d notes.</item>
+        <item quantity="one">Copied one note</item>
+        <item quantity="other">Copied %d notes</item>
     </plurals>
     
     <plurals name="notedeleted_msg">
-        <item quantity="one">Deleted one note.</item>
-        <item quantity="other">Deleted %d notes.</item>
+        <item quantity="one">Deleted one note</item>
+        <item quantity="other">Deleted %d notes</item>
     </plurals>
     
     <plurals name="mode_choose">
-        <item quantity="one">Selected one note.</item>
-        <item quantity="other">Selected %d notes.</item>
+        <item quantity="one">Selected one note</item>
+        <item quantity="other">Selected %d notes</item>
     </plurals>
     
     <string name="lock_note">Lock note</string>
