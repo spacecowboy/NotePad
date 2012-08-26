@@ -1074,7 +1074,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// inflater.inflate(R.menu.list_select_menu_light, menu);
 			// else
 			inflater.inflate(R.menu.list_select_menu, menu);
-			mode.setTitle(getResources().getQuantityString(R.plurals.mode_choose, 1, 1));
+			//mode.setTitle(getResources().getQuantityString(R.plurals.mode_choose, 1, 1));
 
 			this.mode = mode;
 
@@ -1144,12 +1144,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				this.notesToDelete.remove(position);
 			}
 			final int checkedCount = getListView().getCheckedItemCount();
-			if (checkedCount == 0) {
-				mode.setSubtitle(null);
-			} else {
-				mode.setSubtitle(getResources().getQuantityString(
+				mode.setTitle(getResources().getQuantityString(
 						R.plurals.mode_choose, checkedCount, checkedCount));
-			}
 		}
 
 		private void shareNote(String text) {
@@ -1234,7 +1230,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 			MenuInflater inflater = activity.getMenuInflater();
 			inflater.inflate(R.menu.list_select_menu, menu);
-			mode.setTitle(getResources().getQuantityString(R.plurals.mode_choose, 1, 1));
+			//mode.setTitle(getResources().getQuantityString(R.plurals.mode_choose, 1, 1));
 
 			this.mode = mode;
 
