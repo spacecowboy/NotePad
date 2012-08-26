@@ -134,9 +134,9 @@ public class MainActivity extends DualLayoutActivity implements
 
 	private void leftOrTabletCreate(Bundle savedInstanceState) {
 		if (savedInstanceState != null) {
-			currentListId = savedInstanceState.getLong(CURRENT_LIST_ID);
-			listIdToSelect = currentListId;
-			currentListPos = savedInstanceState.getInt(CURRENT_LIST_POS);
+			//currentListId = savedInstanceState.getLong(CURRENT_LIST_ID);
+			listIdToSelect = savedInstanceState.getLong(CURRENT_LIST_ID);
+			//currentListPos = savedInstanceState.getInt(CURRENT_LIST_POS);
 		}
 
 		// Set up dropdown navigation
@@ -1149,28 +1149,20 @@ public class MainActivity extends DualLayoutActivity implements
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		Log.d(TAG, "onLoadFinished");
 		mSpinnerAdapter.swapCursor(data);
-
+		int position = -1;
 		if (listIdToSelect > -1 || listIdToSelect == ALL_NOTES_ID) {
-			int position = getPosOfId(listIdToSelect);
-			if (position > -1) {
-				currentListPos = position;
-				currentListId = listIdToSelect;
-				getActionBar().setSelectedNavigationItem(position);
-			}
-			listIdToSelect = -1;
+			position = getPosOfId(listIdToSelect);
 		}
-
-		// if (optionsMenu != null) {
-		// MenuItem createNote = optionsMenu.findItem(R.id.menu_add);
-		// if (createNote != null) {
-		// // Only show this button if there is a list to create notes in
-		// if (mSpinnerAdapter.getCount() == 0) {
-		// createNote.setVisible(false);
-		// } else {
-		// createNote.setVisible(true);
-		// }
-		// }
-		// }
+		
+		if (position < 0 && currentListId < 0) {
+			position = 0;
+		}
+		
+		if (position > -1) {
+			getActionBar().setSelectedNavigationItem(position);
+		}
+		listIdToSelect = -1;
+		
 		beforeBoot = false; // Need to do it here
 	}
 
