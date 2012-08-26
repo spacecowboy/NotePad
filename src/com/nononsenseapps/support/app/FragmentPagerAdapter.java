@@ -94,9 +94,10 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 	 */
 	public abstract Fragment getItem(int position);
 
-	@Override
-	public void startUpdate(ViewGroup container) {
-	}
+//	@Override
+//	public void startUpdate(ViewGroup container) {
+//		
+//	}
 
 	@Override
 	public Object instantiateItem(ViewGroup container, int position) {

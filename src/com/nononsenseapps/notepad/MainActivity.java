@@ -179,7 +179,7 @@ public class MainActivity extends DualLayoutActivity implements
 
 			@Override
 			public void onPageSelected(int pos) {
-				currentListId = mSpinnerAdapter.getItemId(pos);
+				currentListId = mSectionsPagerAdapter.getItemId(pos);
 				currentListPos = pos;
 				actionBar.setSelectedNavigationItem(pos);
 			}
@@ -1104,9 +1104,10 @@ public class MainActivity extends DualLayoutActivity implements
 			// Create list
 			showDialog(CREATE_LIST);
 		} else {
-			Log.d(TAG, "show list");
+			Log.d(TAG, "show list pos: " + itemPosition);
 			// Display list
 			if (itemId != currentListId) {
+				Log.d(TAG, "set current item");
 				mViewPager.setCurrentItem(itemPosition);
 
 				// If there are no lists, there is nothing to open
