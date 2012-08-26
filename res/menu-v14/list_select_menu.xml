@@ -23,7 +23,7 @@
                 android:title="@string/menu_delete"/>
             <item
                 android:id="@+id/item1"
-                android:icon="?content_remove"
+                android:icon="?content_undo"
                 android:title="@string/menu_cancel"/>
         </menu>
     </item>
