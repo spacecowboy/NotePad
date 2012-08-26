@@ -1284,9 +1284,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	}
 
 	private boolean shouldDisplaySections(String sorting) {
-		if (mCurListId == MainActivity.ALL_NOTES_ID
-				&& PreferenceManager.getDefaultSharedPreferences(activity)
-						.getBoolean(MainPrefs.KEY_LISTHEADERS, true)) {
+		if (mCurListId == MainActivity.ALL_NOTES_ID) {
 			return true;
 		} else if (sorting.equals(MainPrefs.DUEDATESORT)
 				|| sorting.equals(MainPrefs.MODIFIEDSORT)) {
