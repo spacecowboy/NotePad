@@ -59,6 +59,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.SimpleCursorAdapter;
 
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.UpdateNotifier;
@@ -96,6 +97,7 @@ public class MainActivity extends DualLayoutActivity implements
 	private Menu optionsMenu;
 
 	private ExtrasCursorAdapter mSpinnerAdapter;
+	private SimpleCursorAdapter mSectionAdapter;
 	private long currentListId = -1;
 	private int currentListPos = 0;
 
@@ -134,9 +136,9 @@ public class MainActivity extends DualLayoutActivity implements
 
 	private void leftOrTabletCreate(Bundle savedInstanceState) {
 		if (savedInstanceState != null) {
-			//currentListId = savedInstanceState.getLong(CURRENT_LIST_ID);
+			// currentListId = savedInstanceState.getLong(CURRENT_LIST_ID);
 			listIdToSelect = savedInstanceState.getLong(CURRENT_LIST_ID);
-			//currentListPos = savedInstanceState.getInt(CURRENT_LIST_POS);
+			// currentListPos = savedInstanceState.getInt(CURRENT_LIST_POS);
 		}
 
 		// Set up dropdown navigation
@@ -153,10 +155,8 @@ public class MainActivity extends DualLayoutActivity implements
 		mSpinnerAdapter = new ExtrasCursorAdapter(this,
 				R.layout.actionbar_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
-				new int[] { android.R.id.text1 }, new int[] { ALL_NOTES_ID,
-						CREATE_LIST_ID },
-				new int[] { R.string.show_from_all_lists,
-						R.string.menu_createlist });
+				new int[] { android.R.id.text1 }, new int[] { CREATE_LIST_ID },
+				new int[] { R.string.menu_createlist });
 
 		mSpinnerAdapter
 				.setDropDownViewResource(R.layout.actionbar_dropdown_item);
@@ -167,12 +167,17 @@ public class MainActivity extends DualLayoutActivity implements
 		// setContentView(R.layout.fragment_layout);
 
 		// setUpList();
+		
+		mSectionAdapter = new SimpleCursorAdapter(this,
+				R.layout.actionbar_dropdown_item, null,
+				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
+				new int[] { android.R.id.text1 });
 
 		mSectionsPagerAdapter = new ListPagerAdapter(this,
-				getFragmentManager(), mSpinnerAdapter, -1);
+				getFragmentManager(), mSectionAdapter);
 
 		// Set up the ViewPager with the sections adapter.
-		mViewPager = (ViewPager) findViewById(R.id.pager);
+		mViewPager = (ViewPager) findViewById(R.id.leftFragment);
 		mViewPager.setAdapter(mSectionsPagerAdapter);
 
 		mViewPager.setOnPageChangeListener(new OnPageChangeListener() {
@@ -200,9 +205,7 @@ public class MainActivity extends DualLayoutActivity implements
 		// Set up navigation list
 		// Set a default list to open if one is set
 		if (listIdToSelect < 0) {
-			listIdToSelect = Long.parseLong(PreferenceManager
-					.getDefaultSharedPreferences(this).getString(
-							MainPrefs.KEY_DEFAULT_LIST, "-1"));
+			listIdToSelect = getAList(this, -1);
 		}
 		// Handle the intent first, so we know what to possibly select once
 		// the
@@ -253,24 +256,24 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		MenuItem deleteList = menu.findItem(R.id.menu_deletelist);
-		if (null != mSpinnerAdapter) {
-			// if (deleteList != null) {
-			// // Only show this button if there are more than one list
-			// if (mSpinnerAdapter.getCount() <= 3 || currentListId < 0) {
-			// deleteList.setVisible(false);
-			// } else {
-			// deleteList.setVisible(true);
-			// }
-			// }
-			// MenuItem renameList = menu.findItem(R.id.menu_renamelist);
-			// if (renameList != null) {
-			// // Only show this button if there is a list
-			// if (mSpinnerAdapter.getCount() == 0 || currentListId < 0) {
-			// renameList.setVisible(false);
-			// } else {
-			// renameList.setVisible(true);
-			// }
-			// }
+		if (null != mSectionAdapter) {
+			if (deleteList != null) {
+				// Only show this button if there is a list
+				if (mSectionAdapter.getCount() <= 0) {
+					deleteList.setVisible(false);
+				} else {
+					deleteList.setVisible(true);
+				}
+			}
+			MenuItem renameList = menu.findItem(R.id.menu_renamelist);
+			if (renameList != null) {
+				// Only show this button if there is a list
+				if (mSectionAdapter.getCount() <= 0) {
+					renameList.setVisible(false);
+				} else {
+					renameList.setVisible(true);
+				}
+			}
 		}
 
 		return super.onPrepareOptionsMenu(menu);
@@ -339,16 +342,15 @@ public class MainActivity extends DualLayoutActivity implements
 					.replace(R.id.rightFragment, fragment).commit();
 			NotesListFragment list = getLeftFragment();
 			if (list != null) {
-				long listId = ALL_NOTES_ID;
+				long listId = -1;
 				if (intent.getExtras() != null) {
 					listId = intent.getExtras().getLong(
-							NotePad.Notes.COLUMN_NAME_LIST, ALL_NOTES_ID);
+							NotePad.Notes.COLUMN_NAME_LIST, -1);
 				}
 				// Open the containing list if we have to. No need to change
 				// lists
 				// if we are already displaying all notes.
-				if (listId != -1 && currentListId != ALL_NOTES_ID
-						&& currentListId != listId) {
+				if (listId > -1 && currentListId != listId) {
 					openListFromIntent(listId);
 				}
 				// Need to highlight note in tablet mode
@@ -410,14 +412,13 @@ public class MainActivity extends DualLayoutActivity implements
 				}
 
 				// Change to the valid list if intent is crap
-				if (intentId != ALL_NOTES_ID && intentId == -1)
+				if (intentId <= -1)
 					intentId = listId;
 
 				// Open the containing list if we have to. No need to change
 				// lists
 				// if we are already displaying all notes.
-				if (intentId != -1 && currentListId != ALL_NOTES_ID
-						&& currentListId != intentId) {
+				if (intentId != -1 && currentListId != intentId) {
 					openListFromIntent(intentId);
 				}
 				if (intentId != -1) {
@@ -427,29 +428,13 @@ public class MainActivity extends DualLayoutActivity implements
 		}
 	}
 
-	/**
-	 * Will find a suitable list. Which is first ' If the intent contains a list
-	 * or the default list, if no valid default list then the first list is
-	 * returned. If there are no lists, then -1 is returned.
-	 */
-	private long getAList(Intent intent) {
+	public static long getAList(Context context, long tempList) {
 		long returnList = -1;
-		long tempList = -1;
-		// First see if the intent specifies a list
-		if (intent != null && intent.getExtras() != null) {
-			long intentId = intent.getExtras().getLong(
-					NotePad.Notes.COLUMN_NAME_LIST, -1);
-
-			if (intentId > -1) {
-				tempList = intentId;
-				Log.d(TAG, "Intent list: " + intentId);
-			}
-		}
 
 		if (tempList < 0) {
 			// Then check if a default list is specified
 			tempList = Long.parseLong(PreferenceManager
-					.getDefaultSharedPreferences(this).getString(
+					.getDefaultSharedPreferences(context).getString(
 							MainPrefs.KEY_DEFAULT_LIST, "-1"));
 			Log.d(TAG, "Default list: " + tempList);
 		}
@@ -460,7 +445,7 @@ public class MainActivity extends DualLayoutActivity implements
 		Cursor cursor;
 		if (tempList > -1) {
 			final String listString = Long.toString(tempList);
-			cursor = getContentResolver().query(
+			cursor = context.getContentResolver().query(
 					NotePad.Lists.CONTENT_VISIBLE_URI,
 					new String[] { NotePad.Lists._ID },
 					criteria + " OR NOT (EXISTS (SELECT NULL FROM "
@@ -468,7 +453,7 @@ public class MainActivity extends DualLayoutActivity implements
 							+ "))", new String[] { listString, listString },
 					NotePad.Lists.SORT_ORDER + " LIMIT 1");
 		} else {
-			cursor = getContentResolver().query(
+			cursor = context.getContentResolver().query(
 					NotePad.Lists.CONTENT_VISIBLE_URI,
 					new String[] { NotePad.Lists._ID }, null, null,
 					NotePad.Lists.SORT_ORDER + " LIMIT 1");
@@ -481,8 +466,28 @@ public class MainActivity extends DualLayoutActivity implements
 		if (cursor != null)
 			cursor.close();
 
-		// Return the result, whatever it may be
 		return returnList;
+	}
+
+	/**
+	 * Will find a suitable list. Which is first ' If the intent contains a list
+	 * or the default list, if no valid default list then the first list is
+	 * returned. If there are no lists, then -1 is returned.
+	 */
+	private long getAList(Intent intent) {
+		long tempList = -1;
+		// First see if the intent specifies a list
+		if (intent != null && intent.getExtras() != null) {
+			long intentId = intent.getExtras().getLong(
+					NotePad.Notes.COLUMN_NAME_LIST, -1);
+
+			if (intentId > -1) {
+				tempList = intentId;
+				Log.d(TAG, "Intent list: " + intentId);
+			}
+		}
+
+		return getAList(this, tempList);
 	}
 
 	@Override
@@ -707,6 +712,7 @@ public class MainActivity extends DualLayoutActivity implements
 	 * the database. Will be deleted on next sync.
 	 */
 	protected void deleteCurrentList() {
+		Log.d("deletebug", "currentlistid: " + currentListId);
 		if (currentListId > -1) {
 			// Only mark as deleted so it is synced
 			if (shouldMarkAsDeleted(this)) {
@@ -730,6 +736,7 @@ public class MainActivity extends DualLayoutActivity implements
 																	// tasks in
 																	// deleted
 																	// lists
+				Log.d("deletebug", "marking as deleted");
 				getContentResolver()
 						.update(NotePad.Notes.CONTENT_URI,
 								values,
@@ -737,14 +744,16 @@ public class MainActivity extends DualLayoutActivity implements
 										+ currentListId, null);
 			} else {
 				// Delete for real
+				Log.d("deletebug", "actually deleting");
 				getContentResolver().delete(
 						Uri.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
 								Long.toString(currentListId)), null, null);
 			}
-			UpdateNotifier.notifyChangeList(getApplicationContext(), Uri
+			Log.d("deletebug", "notify!");
+			UpdateNotifier.notifyChangeList(this, Uri
 					.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
 							Long.toString(currentListId)));
-			UpdateNotifier.notifyChangeNote(getApplicationContext());
+			UpdateNotifier.notifyChangeNote(this);
 
 			// Remove default setting if this is the default list
 			long defaultListId = Long.parseLong(PreferenceManager
@@ -1018,7 +1027,8 @@ public class MainActivity extends DualLayoutActivity implements
 			} else {
 				resolver.delete(NotesEditorFragment.getUriFrom(id), null, null);
 			}
-			UpdateNotifier.notifyChangeNote(context, NotesEditorFragment.getUriFrom(id));
+			UpdateNotifier.notifyChangeNote(context,
+					NotesEditorFragment.getUriFrom(id));
 		}
 	}
 
@@ -1109,22 +1119,7 @@ public class MainActivity extends DualLayoutActivity implements
 			if (itemId != currentListId) {
 				Log.d(TAG, "set current item");
 				mViewPager.setCurrentItem(itemPosition);
-
-				// If there are no lists, there is nothing to open
-				// Two extra items
-				// if (mSpinnerAdapter.getCount() <= 2) {
-				// if (list != null)
-				// getFragmentManager().beginTransaction().remove(list)
-				// .commit();
-				// list = null;
-				// } else {
-				// Bundle arguments = new Bundle();
-				// arguments.putLong(NotesListFragment.LISTID, itemId);
-				// list = new NotesListFragment();
-				// list.setArguments(arguments);
-				// getFragmentManager().beginTransaction()
-				// .replace(R.id.leftFragment, list).commit();
-				// }
+				currentListId = itemId;
 			}
 		}
 		return true;
@@ -1140,8 +1135,8 @@ public class MainActivity extends DualLayoutActivity implements
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
 
-		return new CursorLoader(this, baseUri, new String[] { BaseColumns._ID,
-				NotePad.Lists.COLUMN_NAME_TITLE }, null, null,
+		return new CursorLoader(this, baseUri, new String[] { NotePad.Lists._ID,
+				NotePad.Lists.COLUMN_NAME_TITLE, NotePad.Lists.COLUMN_NAME_DELETED }, null, null,
 				NotePad.Lists.SORT_ORDER // Use the default sort order.
 		);
 	}
@@ -1150,20 +1145,22 @@ public class MainActivity extends DualLayoutActivity implements
 	public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
 		Log.d(TAG, "onLoadFinished");
 		mSpinnerAdapter.swapCursor(data);
+		mSectionAdapter.swapCursor(data);
 		int position = -1;
-		if (listIdToSelect > -1 || listIdToSelect == ALL_NOTES_ID) {
+		if (listIdToSelect > -1) {
 			position = getPosOfId(listIdToSelect);
 		}
-		
+
 		if (position < 0 && currentListId < 0) {
 			position = 0;
+			currentListId = mSectionAdapter.getItemId(0);
 		}
-		
+
 		if (position > -1) {
 			getActionBar().setSelectedNavigationItem(position);
-		}
+		} 
 		listIdToSelect = -1;
-		
+
 		beforeBoot = false; // Need to do it here
 	}
 
@@ -1171,6 +1168,7 @@ public class MainActivity extends DualLayoutActivity implements
 	public void onLoaderReset(Loader<Cursor> loader) {
 		Log.d(TAG, "onLoaderReset");
 		mSpinnerAdapter.swapCursor(null);
+		mSectionAdapter.swapCursor(null);
 	}
 
 	@Override
@@ -1184,7 +1182,8 @@ public class MainActivity extends DualLayoutActivity implements
 				NotesEditorFragment fragment = new NotesEditorFragment();
 				fragment.setArguments(arguments);
 				getFragmentManager().beginTransaction()
-						.replace(R.id.rightFragment, fragment).commit();
+						.replace(R.id.rightFragment, fragment)
+						.commitAllowingStateLoss();
 			} else {
 				Intent intent = new Intent();
 				intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

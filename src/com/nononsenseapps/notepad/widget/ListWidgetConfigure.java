@@ -23,6 +23,7 @@ import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.PrefsActivity;
 
 import android.app.ActionBar;
 import android.app.Activity;
@@ -110,13 +111,15 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	private void setDefaultSharedPreferenceValues() {
 		SharedPreferences.Editor edit = PreferenceManager
 				.getDefaultSharedPreferences(this).edit();
-		edit.putString(KEY_LIST, Integer.toString(MainActivity.ALL_NOTES_ID))
+		edit.putString(
+				KEY_LIST,
+				Long.toString(MainActivity
+						.getAList(getApplicationContext(), -1)))
 				.putString(KEY_SORT_ORDER,
 						NotePad.Notes.ASCENDING_SORT_ORDERING)
 				.putString(KEY_SORT_TYPE, MainPrefs.DUEDATESORT)
 				.putBoolean(KEY_PREVIEW_NOTE, false)
-				.putBoolean(KEY_SHOW_COMPLETE, false)
-				.commit();
+				.putBoolean(KEY_SHOW_COMPLETE, false).commit();
 	}
 
 	/**
@@ -233,8 +236,7 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 		}
 
 		/**
-		 * Reads the lists from database. Also adds "All lists" as the first
-		 * item.
+		 * Reads the lists from database.
 		 * 
 		 * @return
 		 */
@@ -245,10 +247,10 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 
 			// Start with all lists
 			entries.add(getText(R.string.show_from_all_lists));
-			values.add(Long.toString(MainActivity.ALL_NOTES_ID));
+			// values.add(Long.toString(MainActivity.ALL_NOTES_ID));
 			// Set it as the default value also
-			listSpinner.setDefaultValue(Long
-					.toString(MainActivity.ALL_NOTES_ID));
+			listSpinner.setDefaultValue(Long.toString(MainActivity.getAList(
+					getActivity(), -1)));
 
 			Cursor cursor = getActivity().getContentResolver().query(
 					NotePad.Lists.CONTENT_VISIBLE_URI,
@@ -329,9 +331,11 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			// if (themePref.getValue() == null)
 			themePref.setValue(ListWidgetConfigure.THEME_LIGHT);
 			themePref.setSummary(themePref.getEntry());
-			
-			((CheckBoxPreference) findPreference(KEY_PREVIEW_NOTE)).setChecked(false);
-			((CheckBoxPreference) findPreference(KEY_SHOW_COMPLETE)).setChecked(false);
+
+			((CheckBoxPreference) findPreference(KEY_PREVIEW_NOTE))
+					.setChecked(false);
+			((CheckBoxPreference) findPreference(KEY_SHOW_COMPLETE))
+					.setChecked(false);
 		}
 
 		@Override

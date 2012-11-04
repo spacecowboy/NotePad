@@ -25,7 +25,6 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.ericharlow.DragNDrop.DragNDropListView;
 import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.helpers.dualpane.NoNonsenseListFragment;
@@ -35,7 +34,6 @@ import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.ui.NoteCheckBox;
 import com.nononsenseapps.ui.SectionAdapter;
-import com.nononsenseapps.ui.SectionDropListener;
 import com.nononsenseapps.util.TimeHelper;
 
 import android.content.BroadcastReceiver;
@@ -110,8 +108,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
 			NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
-			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
-			NotePad.Notes.COLUMN_NAME_PARENT, NotePad.Notes.COLUMN_NAME_LIST };
+			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, NotePad.Notes.COLUMN_NAME_LIST };
 
 	// public static final String SELECTEDPOS = "selectedpos";
 	// public static final String SELECTEDID = "selectedid";
@@ -334,8 +331,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	}
 
 	private int getPosOfId(long id) {
-		if (mSectionAdapter != null)
-			return -1;
+		if (mSectionAdapter == null || mSectionAdapter.isSectioned())
+			return ListView.INVALID_POSITION;
 
 		int length = mSectionAdapter.getCount();
 		int position;
@@ -347,7 +344,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (position == length) {
 			// Happens both if list is empty
 			// and if id is -1
-			position = -1;
+			position = ListView.INVALID_POSITION;
 		}
 		return position;
 	}
@@ -657,11 +654,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		int pos = getPosOfId(mCurId);
 
 		Log.d(TAG, "reSelectId id pos: " + mCurId + " " + pos);
-		// This happens in a search. Don't destroy id information in selectPos
-		// when it is invalid
-		if (pos != -1) {
-			setActivatedPosition(pos);
-		}
+		setActivatedPosition(pos);
 	}
 
 	private SimpleCursorAdapter getThemedAdapter(Cursor cursor) {
@@ -1312,11 +1305,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			setListAdapter(mSectionAdapter);
 		}
 
-		// TODO should hide the drag views in alphabetic sorting
-		final SectionDropListener dropListener = new SectionDropListener(
-				activity, mSectionAdapter);
-		((DragNDropListView) getListView()).setDropListener(dropListener);
-
 		if (mSectionAdapter.isSectioned()) {
 			// If sort date, fire sorting loaders
 			// If mod date, fire modded loaders
@@ -1956,6 +1944,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			if (activity.getCurrentContent().equals(
 					DualLayoutActivity.CONTENTVIEW.DUAL))
 				autoOpenNote = true;
+		} else {
+			reSelectId();
 		}
 
 		// If a note was created, it will be set in this variable

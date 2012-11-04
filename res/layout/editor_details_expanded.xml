@@ -70,7 +70,7 @@
         android:text="@string/editor_due_date_hint" />
 
     <!-- SUB TASK SECTION -->
-
+<!-- 
     <TextView
         android:id="@+id/subtaskHeader"
         android:layout_width="wrap_content"
@@ -110,7 +110,7 @@
         android:layout_below="@+id/subtaskHeaderLine"
         android:layout_toLeftOf="@+id/subtaskRemoveButton"
         android:spinnerMode="dialog" />
-
+ -->
     <!-- LIST SECTION -->
 
     <TextView
@@ -118,7 +118,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/subtaskSpinner"
+        android:layout_below="@+id/dueCancelButton"
         android:paddingLeft="16dp"
         android:text="@string/settings_list"
         android:textAllCaps="true"

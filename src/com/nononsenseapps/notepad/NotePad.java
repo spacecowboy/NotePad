@@ -16,13 +16,9 @@
 
 package com.nononsenseapps.notepad;
 
-import java.math.BigDecimal;
-import java.security.InvalidParameterException;
-
 import android.app.SearchManager;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import com.nononsenseapps.helpers.Log;
 
 /**
  * Defines a contract between the Note Pad content provider and its clients. A
@@ -196,18 +192,14 @@ public final class NotePad {
 
 		// parent position hidden
 
-		public static final String COLUMN_NAME_GTASKSPARENT = "gtasks_parent";
+		public static final String COLUMN_NAME_PARENT = "gtasks_parent";
 		public static final String COLUMN_NAME_POSITION = "gtasks_position";
 		public static final String COLUMN_NAME_HIDDEN = "hiddenflag";
 
 		// server side sorting and local hiding
 		public static final String COLUMN_NAME_INDENTLEVEL = "indentlevel";
 		public static final String COLUMN_NAME_LOCALHIDDEN = "localhidden";
-
-		// user sorting
-		public static final String COLUMN_NAME_TRUEPOS = "truepos";
-		public static final String COLUMN_NAME_PREVIOUS = "previous";
-		public static final String COLUMN_NAME_PARENT = "parent";
+		public static final String COLUMN_NAME_POSSUBSORT = "possubsort";
 
 		/**
 		 * The default sort order for this table
@@ -223,66 +215,18 @@ public final class NotePad {
 		public static final String DUEDATE_SORT_TYPE = "CASE WHEN "
 				+ COLUMN_NAME_DUE_DATE + " IS NULL OR " + COLUMN_NAME_DUE_DATE
 				+ " IS '' THEN 1 ELSE 0 END, " + COLUMN_NAME_DUE_DATE;
-		public static final String POSSUBSORT_SORT_TYPE = COLUMN_NAME_TRUEPOS;
+		public static final String POSSUBSORT_SORT_TYPE = COLUMN_NAME_POSSUBSORT;
 
 		public static final String ASCENDING_SORT_ORDERING = "ASC";
 		public static final String DESCENDING_SORT_ORDERING = "DESC";
 		public static final String ALPHABETIC_ASC_ORDER = COLUMN_NAME_TITLE
 				+ " COLLATE NOCASE ASC";
-		public static final String POSITION_ASC_ORDER = COLUMN_NAME_POSITION
-				+ " ASC";
+		//public static final String POSITION_ASC_ORDER = COLUMN_NAME_POSITION+ " ASC";
 
 		public static final String DEFAULT_SORT_TYPE = POSSUBSORT_SORT_TYPE;
 		public static final String DEFAULT_SORT_ORDERING = ASCENDING_SORT_ORDERING;
 
-		// Position constants
-		public static final String HEAD = "0";
-		public static final String TAIL = "1";
-
 		public static String SORT_ORDER = ALPHABETIC_ASC_ORDER;
-
-		/**
-		 * Calculate a valid positon between to two specified. Because numbers
-		 * will range between 0 and 1, truPrev must start with a 0 and trueNext
-		 * must start with either 0 or equal "1". Equal in the String sense.
-		 * 
-		 * Works both for raw positions like 0 and 1, and for complex positions
-		 * such as 0.014.0346
-		 * 
-		 * Does NOT accept null values
-		 */
-		public static String between(final String complexPrev,
-				final String complexNext) {
-			final String pattern = "^.*?\\.?([^\\.]+)$";
-			final String reversePattern = "(^.*?\\.?)[^\\.]+$";
-			final String truePrev = complexPrev.replaceFirst(pattern, "$1");
-			final String trueNext = complexNext.replaceFirst(pattern, "$1");
-
-			Log.d("pos", "between: " + truePrev + ", " + trueNext);
-			if (truePrev == null || !truePrev.startsWith("0"))
-				throw new InvalidParameterException(
-						"previous must start with a zero");
-			if (trueNext == null
-					|| (!trueNext.startsWith("0") && !trueNext.equals("1")))
-				throw new InvalidParameterException(
-						"next must start with zero or 1");
-
-			// Make the numbers correct decimals
-			String prevS = truePrev.replaceFirst("^0", "0.");
-			// If it is 1 it should stay 1
-			String nextS = trueNext.replaceFirst("^0", "0.");
-
-			BigDecimal prev = new BigDecimal(prevS);
-			BigDecimal next = new BigDecimal(nextS);
-
-			BigDecimal between = prev.add(next.subtract(prev).divide(
-					new BigDecimal(2)));
-			String betweenS = between.toPlainString();
-			// All that is left is to remove the decimal point
-			betweenS = betweenS.replace(".", "");
-			// And add the same prefix as the other notes have
-			return complexPrev.replaceFirst(reversePattern, "$1" + betweenS);
-		}
 	}
 
 	/**

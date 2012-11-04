@@ -21,11 +21,8 @@ import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotePad.GTasks;
 import com.nononsenseapps.notepad.NotePad.Notes;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 
-import android.appwidget.AppWidgetManager;
 import android.content.ClipDescription;
-import android.content.ComponentName;
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
@@ -155,135 +152,6 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	private static final UriMatcher sUriMatcher;
 
-	/**
-	 * Get parent, previous and current
-	 */
-	private static final String targetPositions(final Long parent,
-			final Long previous) {
-		String totalSelect = "";
-		if (parent != null)
-			totalSelect += String
-					.format("SELECT %s FROM %s WHERE %s IS ? AND %s IS ? AND %s IS NOT 1",
-							Notes.COLUMN_NAME_TRUEPOS, Notes.TABLE_NAME,
-							Notes._ID, Notes.COLUMN_NAME_LIST,
-							Notes.COLUMN_NAME_DELETED);
-
-		if (previous != null) {
-			if (!totalSelect.isEmpty())
-				totalSelect += " UNION ";
-			totalSelect += String
-					.format("SELECT %s FROM %s WHERE %s IS ? AND %s IS ? AND %s IS NOT 1",
-							Notes.COLUMN_NAME_TRUEPOS, Notes.TABLE_NAME,
-							Notes._ID, Notes.COLUMN_NAME_LIST,
-							Notes.COLUMN_NAME_DELETED);
-		}
-
-		if (!totalSelect.isEmpty())
-			totalSelect += " UNION ";
-
-		final String parentChars = (parent == null) ? "NULL" : "?";
-		final String previousChars = (previous == null) ? "NULL" : "?";
-
-		return totalSelect += String
-				.format("SELECT %s FROM %s WHERE %s IS %s AND %s IS %s AND %s IS ? AND %s IS NOT 1  AND %s > '%s' ORDER BY %s",
-						Notes.COLUMN_NAME_TRUEPOS, Notes.TABLE_NAME,
-						Notes.COLUMN_NAME_PARENT, parentChars,
-						Notes.COLUMN_NAME_PREVIOUS, previousChars,
-						Notes.COLUMN_NAME_LIST, Notes.COLUMN_NAME_DELETED,
-						Notes.COLUMN_NAME_TRUEPOS, Notes.HEAD,
-						Notes.COLUMN_NAME_TRUEPOS);
-	}
-
-	/**
-	 * Returns a String array suitable for use with targetPosition where-clause.
-	 */
-	private static String[] targetPositionArgs(final Long listId,
-			final Long parent, final Long previous) {
-		int intendedSize = 1;
-		if (parent != null)
-			intendedSize += 3;
-		if (previous != null)
-			intendedSize += 3;
-
-		final String[] retVal = new String[intendedSize];
-
-		if (parent != null) {
-			retVal[0] = parent.toString();
-			retVal[1] = listId.toString();
-			int i = 2;
-			if (previous != null)
-				i += 2;
-			retVal[i] = parent.toString();
-		}
-		if (previous != null) {
-			int i = 0, j = 1, k = 2;
-			if (parent != null) {
-				i += 2;
-				j += 2;
-				k += 3;
-			}
-			retVal[i] = previous.toString();
-			retVal[j] = listId.toString();
-			retVal[k] = previous.toString();
-		}
-		retVal[intendedSize - 1] = listId.toString();
-
-		for (String val : retVal) {
-			Log.d("posredux", "targetPosArg: " + val);
-		}
-
-		return retVal;
-
-		// return toWhereArgs(parent, listId, previous, listId, parent,
-		// previous,
-		// listId);
-	}
-
-	/**
-	 * Use this in execSQL to update the indentation of a note
-	 * 
-	 * @param parentId
-	 * @param noteId
-	 * @return
-	 */
-	private static String parentIndent(final Long parentId, final long noteId) {
-		return String
-				.format("UPDATE %s SET %s = (CASE WHEN %s IS NULL THEN 0 ELSE 1 + (SELECT %s FROM %s WHERE %s = %d) END) WHERE %s IS %d",
-						Notes.TABLE_NAME, Notes.COLUMN_NAME_INDENTLEVEL,
-						parentId, Notes.COLUMN_NAME_INDENTLEVEL,
-						Notes.TABLE_NAME, Notes._ID, parentId, Notes._ID,
-						noteId);
-	}
-
-	/**
-	 * The values you would specify for the where arguments would be
-	 * "Notes.Truepos >= ? AND Notes.Truepos < (? || '9')", and
-	 * [MovingNote.Truepos, MovingNote.Truepos] respectively.
-	 */
-	private static final String noteWithDescendants(final String noteId,
-			final Long listId, final String truepos) {
-		return String.format("(" + Notes._ID + " IS %s OR "
-				+ Notes.COLUMN_NAME_LIST + " IS " + listId.toString() + " AND "
-				+ Notes.COLUMN_NAME_TRUEPOS + " >= '%s' AND "
-				+ Notes.COLUMN_NAME_TRUEPOS + " < '%s') AND "
-				+ Notes.COLUMN_NAME_DELETED + " IS NOT 1", noteId, truepos,
-				truepos + ".9");
-	}
-
-	private static final String noteDescendants(final Long listId,
-			final String truepos) {
-		return String.format(
-				Notes.COLUMN_NAME_LIST + " IS " + listId.toString() + " AND "
-						+ Notes.COLUMN_NAME_TRUEPOS + " > '%s' AND "
-						+ Notes.COLUMN_NAME_TRUEPOS + " < '%s' AND "
-						+ Notes.COLUMN_NAME_DELETED + " IS NOT 1", truepos,
-				truepos + ".9");
-	}
-
-	// private static String[] noteDescendantsArgs(String truepos) {
-	// return new String[] { truepos, truepos + ".9" };
-	// }
-
 	// Handle to a new DatabaseHelper.
 	private DatabaseHelper mOpenHelper;
 
@@ -366,8 +234,8 @@ public class NotePadProvider extends ContentProvider implements
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LIST,
 				NotePad.Notes.COLUMN_NAME_LIST);
 
-		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_PARENT,
-				NotePad.Notes.COLUMN_NAME_PARENT);
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT,
+				NotePad.Notes.COLUMN_NAME_POSSUBSORT);
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_POSITION,
 				NotePad.Notes.COLUMN_NAME_POSITION);
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_HIDDEN,
@@ -377,11 +245,6 @@ public class NotePadProvider extends ContentProvider implements
 				NotePad.Notes.COLUMN_NAME_INDENTLEVEL);
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN,
 				NotePad.Notes.COLUMN_NAME_LOCALHIDDEN);
-
-		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_PREVIOUS,
-				NotePad.Notes.COLUMN_NAME_PREVIOUS);
-		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_TRUEPOS,
-				NotePad.Notes.COLUMN_NAME_TRUEPOS);
 
 		// This is a special map. A locked note will not return its text in
 		// this projection.
@@ -574,10 +437,8 @@ public class NotePadProvider extends ContentProvider implements
 			values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
 			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, "needsAction");
 
+			values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, "");
 			values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
-
-			values.put(NotePad.Notes.COLUMN_NAME_TRUEPOS,
-					NotePad.Notes.between(Notes.HEAD, Notes.TAIL));
 
 			return db.insert(NotePad.Notes.TABLE_NAME, null, values);
 		}
@@ -612,15 +473,8 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
 					+ " INTEGER DEFAULT 0,"
 
-					+ NotePad.Notes.COLUMN_NAME_TRUEPOS
-					+ " TEXT DEFAULT '-1' NOT NULL,"
-					+ NotePad.Notes.COLUMN_NAME_PREVIOUS
-					+ " INTEGER UNIQUE DEFAULT NULL REFERENCES "
-					+ Notes.TABLE_NAME + "," + NotePad.Notes.COLUMN_NAME_PARENT
-					+ " INTEGER DEFAULT NULL REFERENCES " + Notes.TABLE_NAME
-					+ ","
-
-					+ NotePad.Notes.COLUMN_NAME_GTASKSPARENT + " TEXT,"
+					+ NotePad.Notes.COLUMN_NAME_POSSUBSORT
+					+ " TEXT DEFAULT '' NOT NULL,"
 
 					+ NotePad.Notes.COLUMN_NAME_DELETED
 					+ " INTEGER DEFAULT 0 NOT NULL" + ");");
@@ -666,13 +520,6 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.GTaskLists.COLUMN_NAME_ETAG + " TEXT" + ");");
 		}
 
-		/**
-		 * 
-		 * Demonstrates that the provider must consider what happens when the
-		 * underlying datastore is changed. In this sample, the database is
-		 * upgraded the database by destroying the existing data. A real
-		 * application should upgrade the database in place.
-		 */
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.d("DataBaseHelper", "onUpgrade "
@@ -723,8 +570,8 @@ public class NotePadProvider extends ContentProvider implements
 						+ NotePad.Lists.COLUMN_NAME_DELETED
 						+ " INTEGER DEFAULT 0 NOT NULL" + ");");
 
-				db.execSQL("CREATE TABLE " + NotePad.GTasks.TABLE_NAME
-						+ " (" + BaseColumns._ID + " INTEGER PRIMARY KEY,"
+				db.execSQL("CREATE TABLE " + NotePad.GTasks.TABLE_NAME + " ("
+						+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
 						+ NotePad.GTasks.COLUMN_NAME_DB_ID
 						+ " INTEGER UNIQUE NOT NULL REFERENCES "
 						+ Notes.TABLE_NAME + ","
@@ -745,8 +592,7 @@ public class NotePadProvider extends ContentProvider implements
 						+ NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT
 						+ " INTEGER NOT NULL,"
 						+ NotePad.GTaskLists.COLUMN_NAME_UPDATED + " TEXT,"
-						+ NotePad.GTaskLists.COLUMN_NAME_ETAG + " TEXT"
-						+ ");");
+						+ NotePad.GTaskLists.COLUMN_NAME_ETAG + " TEXT" + ");");
 
 				// Now insert a default list
 				ContentValues lvalues = new ContentValues();
@@ -755,8 +601,8 @@ public class NotePadProvider extends ContentProvider implements
 				lvalues.put(NotePad.Lists.COLUMN_NAME_MODIFIED, 1);
 				lvalues.put(NotePad.Lists.COLUMN_NAME_DELETED, 0);
 
-				long listId = db.insert(NotePad.Lists.TABLE_NAME, null,
-						lvalues);
+				long listId = db
+						.insert(NotePad.Lists.TABLE_NAME, null, lvalues);
 
 				// Place all existing notes in this list
 				// And give them sensible values in the new columns
@@ -800,8 +646,7 @@ public class NotePadProvider extends ContentProvider implements
 						+ " ADD COLUMN ";
 				String postText = " TEXT DEFAULT ''";
 				String postNameInt = " INTEGER DEFAULT 0";
-				db.execSQL(preName + "possubsort"
-						+ postText);
+				db.execSQL(preName + "possubsort" + postText);
 				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
 						+ postNameInt);
 			}
@@ -812,45 +657,10 @@ public class NotePadProvider extends ContentProvider implements
 				String postNameInt = " INTEGER DEFAULT 0";
 				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_INDENTLEVEL
 						+ postNameInt);
-				db.execSQL(preName + "locked"
-						+ postNameInt);
+				db.execSQL(preName + "locked" + postNameInt);
 
 				// Mark all notes as modified to ensure we set the indents on
 				// next sync
-				ContentValues values = new ContentValues();
-				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
-				db.update(NotePad.Notes.TABLE_NAME, values, null, null);
-			}
-			if (oldVersion < 7) {
-				/*
-				 * This is a bit of a hack Because version 7 was a major change
-				 * in the schema this upgrade is not entirely correct. version 7
-				 * added database restrictions which can only be set during the
-				 * initial create. Because of that I am here only adding the
-				 * fields that were also added. Anyone who updates will have all
-				 * the required database columns but not the restrictions. This
-				 * means that if I did any mistakes, the app will not crash for
-				 * these people when it actually should. They should not lose
-				 * any data however but things like positions could potentially
-				 * get fucked up. In that case a re-install is to be
-				 * recommended.
-				 */
-
-				// Add columns
-				String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
-						+ " ADD COLUMN ";
-				String postNameText = "  TEXT DEFAULT '-1' NOT NULL";
-				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_TRUEPOS
-						+ postNameText);
-
-				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_PREVIOUS
-						+ " INTEGER UNIQUE DEFAULT NULL REFERENCES "
-						+ Notes.TABLE_NAME);
-				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_PARENT
-						+ " INTEGER DEFAULT NULL REFERENCES "
-						+ Notes.TABLE_NAME);
-
-				// Mark all notes as modified to sync positions
 				ContentValues values = new ContentValues();
 				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
 				db.update(NotePad.Notes.TABLE_NAME, values, null, null);
@@ -1342,8 +1152,6 @@ public class NotePadProvider extends ContentProvider implements
 			throw new SQLException("A note must always belong to a list!");
 		}
 
-		final Long listId = values.getAsLong(Notes.COLUMN_NAME_LIST);
-
 		// Gets the current system time in milliseconds
 		Long now = Long.valueOf(System.currentTimeMillis());
 
@@ -1396,15 +1204,6 @@ public class NotePadProvider extends ContentProvider implements
 			values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
 		}
 
-		String position = null, remoteParent = null;
-		// SyncAdapter will provide remote values
-		if (values.containsKey(Notes.COLUMN_NAME_POSITION)) {
-			position = values.getAsString(Notes.COLUMN_NAME_POSITION);
-		}
-		if (values.containsKey(Notes.COLUMN_NAME_GTASKSPARENT)) {
-			remoteParent = values.getAsString(Notes.COLUMN_NAME_GTASKSPARENT);
-		}
-
 		// Opens the database object in "write" mode.
 		SQLiteDatabase db = mOpenHelper.getWritableDatabase();
 		Uri noteUri = null;
@@ -1427,15 +1226,6 @@ public class NotePadProvider extends ContentProvider implements
 
 			// If the insert succeeded, the row ID exists.
 			if (rowId > 0) {
-				if (position == null && remoteParent == null) {
-					// Insert into the correct list position
-					insertNoteTree(db, null, null, listId, listId,
-							toWhereClause(Notes._ID), toWhereArgs(rowId), 1);
-				} else {
-					insertNoteTreeByRemoteOrder(db, position, remoteParent,
-							listId, toWhereClause(Notes._ID),
-							toWhereArgs(rowId));
-				}
 
 				db.setTransactionSuccessful();
 
@@ -1487,20 +1277,6 @@ public class NotePadProvider extends ContentProvider implements
 		}
 
 		return retVal;
-	}
-
-	/**
-	 * Given a bunch of columns will return a string as
-	 * "Col1 IS ? AND Col2 IS ? AND ..." ends the string with deleted is not 1
-	 * and truepos > "0" to only fetch valid notes
-	 * 
-	 * @param columns
-	 * @return
-	 */
-	private static String toWhereValidClause(String... columns) {
-		return toWhereClause(columns) + " AND " + Notes.COLUMN_NAME_DELETED
-				+ " IS NOT 1 AND " + Notes.COLUMN_NAME_TRUEPOS + " > '"
-				+ Notes.HEAD + "'";
 	}
 
 	/**
@@ -1899,21 +1675,6 @@ public class NotePadProvider extends ContentProvider implements
 					NotePad.GTasks.COLUMN_NAME_DB_ID + " IS ?",
 					new String[] { id });
 
-			// Then detach the note if not done already
-			ContentValues posValues = detachNote(db, Long.parseLong(id));
-
-			// Re attach possible children
-			insertNoteTree(
-					db,
-					posValues.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
-					posValues.getAsLong(Notes.COLUMN_NAME_PARENT),
-					posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-					posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-					noteDescendants(
-							posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-							posValues.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
-					null, 0);
-
 			count += db.delete(NotePad.Notes.TABLE_NAME, finalWhere, whereArgs);
 			db.setTransactionSuccessful();
 		} catch (SQLException e) {
@@ -2148,34 +1909,6 @@ public class NotePadProvider extends ContentProvider implements
 
 			db.beginTransaction();
 			try {
-
-				if (values.containsKey(Notes.COLUMN_NAME_DELETED)
-						&& values.getAsInteger(Notes.COLUMN_NAME_DELETED) == 1) {
-					final Cursor c = db.query(Notes.TABLE_NAME,
-							toStringArray(Notes._ID), where, whereArgs, null,
-							null, null);
-					while (c.moveToNext()) {
-						final long id = c.getLong(c.getColumnIndex(Notes._ID));
-						// Then detach the note if not done already
-						ContentValues posValues = detachNote(db, id);
-
-						// Re attach possible children
-						insertNoteTree(
-								db,
-								values.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
-								values.getAsLong(Notes.COLUMN_NAME_PARENT),
-								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-								noteDescendants(
-										posValues
-												.getAsLong(Notes.COLUMN_NAME_LIST),
-										posValues
-												.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
-								null, 0);
-					}
-					c.close();
-				}
-
 				// Does the update and returns the number of rows updated.
 				count += db.update(NotePad.Notes.TABLE_NAME, // The database
 																// table
@@ -2219,18 +1952,6 @@ public class NotePadProvider extends ContentProvider implements
 				values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, now);
 			}
 
-			String position = null,
-			remoteParent = null;
-			// SyncAdapter will provide remote values
-			if (values.containsKey(Notes.COLUMN_NAME_POSITION)) {
-				position = values.getAsString(Notes.COLUMN_NAME_POSITION);
-			}
-			if (values.containsKey(Notes.COLUMN_NAME_GTASKSPARENT)) {
-				remoteParent = values
-						.getAsString(Notes.COLUMN_NAME_GTASKSPARENT);
-				values.remove(Notes.COLUMN_NAME_GTASKSPARENT);
-			}
-
 			/*
 			 * Starts creating the final WHERE clause by restricting it to the
 			 * incoming note ID.
@@ -2249,111 +1970,11 @@ public class NotePadProvider extends ContentProvider implements
 			db.beginTransaction();
 			try {
 
-				if (values.containsKey(Notes.COLUMN_NAME_DELETED)
-						&& values.getAsInteger(Notes.COLUMN_NAME_DELETED) == 1
-						|| values.containsKey(Notes.COLUMN_NAME_PARENT)
-						|| values.containsKey(Notes.COLUMN_NAME_PREVIOUS)
-						|| values.containsKey(Notes.COLUMN_NAME_LIST)
-						|| position != null || remoteParent != null) {
+				if (values.containsKey(Notes.COLUMN_NAME_LIST)) {
+					final Long newListId = values
+							.getAsLong(Notes.COLUMN_NAME_LIST);
 
-					Log.d("posredux", "updatedetach");
-					Log.d("posredux",
-							"deleted: "
-									+ values.getAsString(Notes.COLUMN_NAME_DELETED));
-					Log.d("posredux",
-							"parent: "
-									+ values.getAsString(Notes.COLUMN_NAME_PARENT));
-					Log.d("posredux",
-							"previous: "
-									+ values.getAsString(Notes.COLUMN_NAME_PREVIOUS));
-					Log.d("posredux",
-							"list: "
-									+ values.getAsString(Notes.COLUMN_NAME_LIST));
-					Log.d("remoteposredux", "position: " + position);
-					Log.d("remoteposredux", "parent: " + remoteParent);
-
-					if (values.containsKey(Notes.COLUMN_NAME_DELETED)
-							&& values.getAsInteger(Notes.COLUMN_NAME_DELETED) == 1) {
-						// Then detach the note if not done already
-						final ContentValues posValues = detachNote(db,
-								Long.parseLong(id));
-
-						// Re attach possible children
-						insertNoteTree(
-								db,
-								values.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
-								values.getAsLong(Notes.COLUMN_NAME_PARENT),
-								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-								posValues.getAsLong(Notes.COLUMN_NAME_LIST),
-								noteDescendants(
-										posValues
-												.getAsLong(Notes.COLUMN_NAME_LIST),
-										posValues
-												.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
-								null, 0);
-					} else {
-						// Only move a note to a position that is not in its sub
-						// tree, E.g. the parent can not be a descendant of the
-						// note
-						if (isDescendant(db,
-								values.getAsLong(Notes.COLUMN_NAME_PARENT),
-								values.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
-								Long.parseLong(id))
-								|| notChanged(db, values, Long.parseLong(id))) {
-							Log.d("posredux2",
-									"Target was a descendant of the note, dont do shit");
-							// Remove positions from values before update
-							values.remove(Notes.COLUMN_NAME_PARENT);
-							values.remove(Notes.COLUMN_NAME_PREVIOUS);
-							values.remove(Notes.COLUMN_NAME_LIST);
-						} else {
-
-							// Then detach the note if not done already
-							final ContentValues posValues = detachNote(db,
-									Long.parseLong(id));
-
-							final Long newListId;
-							if (values.containsKey(Notes.COLUMN_NAME_LIST))
-								newListId = values
-										.getAsLong(Notes.COLUMN_NAME_LIST);
-							else
-								newListId = posValues
-										.getAsLong(Notes.COLUMN_NAME_LIST);
-
-							// Re attach at new location
-							if (position == null && remoteParent == null) {
-								// Insert into the correct list position
-								insertNoteTree(
-										db,
-										values.getAsLong(Notes.COLUMN_NAME_PREVIOUS),
-										values.getAsLong(Notes.COLUMN_NAME_PARENT),
-										newListId,
-										posValues
-												.getAsLong(Notes.COLUMN_NAME_LIST),
-										noteWithDescendants(
-												id,
-												posValues
-														.getAsLong(Notes.COLUMN_NAME_LIST),
-												posValues
-														.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
-										null, 1);
-							} else {
-								insertNoteTreeByRemoteOrder(
-										db,
-										position,
-										remoteParent,
-										newListId,
-										noteWithDescendants(
-												id,
-												posValues
-														.getAsLong(Notes.COLUMN_NAME_LIST),
-												posValues
-														.getAsString(Notes.COLUMN_NAME_TRUEPOS)),
-										null);
-							}
-
-						}
-					}
+					copyDeleteNote(db, Long.parseLong(id), newListId);
 				}
 
 				// Does the update and returns the number of rows updated.
@@ -2504,124 +2125,6 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	/**
-	 * Returns true if the fields have NOT changed from existing entries
-	 * 
-	 * @param db
-	 * @param values
-	 * @param noteId
-	 * @return
-	 */
-	private static boolean notChanged(final SQLiteDatabase db,
-			final ContentValues values, final long noteId) {
-		boolean not = true;
-		// Query the note
-		final Cursor c = db.query(
-				Notes.TABLE_NAME,
-				toStringArray(Notes.COLUMN_NAME_LIST, Notes.COLUMN_NAME_PARENT,
-						Notes.COLUMN_NAME_PREVIOUS), toWhereClause(Notes._ID),
-				toWhereArgs(noteId), null, null, null);
-		if (c.moveToFirst()) {
-			final long curList = c.getLong(c
-					.getColumnIndex(Notes.COLUMN_NAME_LIST));
-			final String previousS = c.getString(c
-					.getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
-			final String parentS = c.getString(c
-					.getColumnIndex(Notes.COLUMN_NAME_PARENT));
-			final Long notePrevious = previousS == null ? null : Long
-					.parseLong(previousS);
-			final Long noteParent = parentS == null ? null : Long
-					.parseLong(parentS);
-
-			final Long newParent = values.getAsLong(Notes.COLUMN_NAME_PARENT);
-			final Long newPrevious = values
-					.getAsLong(Notes.COLUMN_NAME_PREVIOUS);
-
-			if (values.containsKey(Notes.COLUMN_NAME_LIST)
-					&& curList != values.getAsLong(Notes.COLUMN_NAME_LIST))
-				not = false;
-			else
-				values.remove(Notes.COLUMN_NAME_LIST);
-
-			if (notePrevious == null && newPrevious != null
-					|| notePrevious != null && newPrevious == null
-					|| notePrevious != null && newPrevious != null
-					&& notePrevious != newPrevious) {
-				not = false;
-			}
-
-			if (noteParent == null && newParent != null || noteParent != null
-					&& newParent == null || noteParent != null
-					&& newParent != null && noteParent != newParent) {
-				not = false;
-			}
-
-			if (not) {
-				values.remove(Notes.COLUMN_NAME_PARENT);
-				values.remove(Notes.COLUMN_NAME_PREVIOUS);
-			}
-		}
-
-		c.close();
-
-		return not;
-	}
-
-	/**
-	 * Checks whether a note is a descendant of another note.
-	 * 
-	 * Tries to use newPrevious unless null, then falls back to newParent.
-	 * 
-	 * Returns true if either = ancestor, uses truepos
-	 * 
-	 * @param db
-	 * @param newParent
-	 * @param newPrevious
-	 * @param ancestor
-	 */
-	private static boolean isDescendant(final SQLiteDatabase db,
-			final Long newParent, final Long newPrevious, final long ancestor) {
-		if (newParent != null && ancestor == newParent || newPrevious != null
-				&& ancestor == newPrevious)
-			return true;
-		if (newParent == null)
-			return false;
-
-		// Know one of them isnt null
-		// final long possibleDescendant = newPrevious != null ? newPrevious :
-		// newParent;
-
-		if (newParent < 0 || ancestor < 0)
-			throw new InvalidParameterException("Cant have parent of -1!");
-
-		Log.d("posredux2", "descendant check with " + ancestor + ", "
-				+ newParent);
-		String ancestorPos = "";
-		String descPos = "-1";
-		// Fetch position of ancestor and the possible descendant
-		final Cursor c = db.query(Notes.TABLE_NAME,
-				toStringArray(Notes._ID, Notes.COLUMN_NAME_TRUEPOS), Notes._ID
-						+ String.format(" IN (%d, %d)", ancestor, newParent),
-				null, null, null, null);
-		while (c.moveToNext()) {
-			Log.d("posredux2", "Getting positions for descendant check...");
-			final long id = c.getLong(c.getColumnIndex(Notes._ID));
-			final String pos = c.getString(c
-					.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
-			if (id == ancestor)
-				ancestorPos = pos;
-			else
-				descPos = pos;
-		}
-		c.close();
-
-		// Now see if ancester is included in the notes lineage
-		Log.d("posredux2", "Descendant check with:");
-		Log.d("posredux2", "" + descPos);
-		Log.d("posredux2", "" + ancestorPos);
-		return descPos.startsWith(ancestorPos + ".");
-	}
-
-	/**
 	 * Marks this note as deleted in gtask tables, which means we "insert" a new
 	 * note in gtasks because moving would be a separate operation
 	 * 
@@ -2674,8 +2177,6 @@ public class NotePadProvider extends ContentProvider implements
 			values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
 			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, "needsAction");
 			values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
-			values.put(NotePad.Notes.COLUMN_NAME_TRUEPOS, "-1");
-			values.putNull(NotePad.Notes.COLUMN_NAME_PREVIOUS);
 
 			long cId = db.insert(Notes.TABLE_NAME, null, values);
 
@@ -2689,470 +2190,6 @@ public class NotePadProvider extends ContentProvider implements
 			}
 			Log.d("posredux", "Finished copyDelete");
 		}
-	}
-
-	/**
-	 * This is intended to be used to connect a note-tree to a new position. You
-	 * specify which notes with the where and whereargs arguments. As an
-	 * example, consider the task of moving a note and all of its subnotes to a
-	 * new position.
-	 * 
-	 * You would first remove the note from its current position (no need to
-	 * touch the descendants yet) and give it NULL values (to ensure database
-	 * consistency at each step).
-	 * 
-	 * Next you would have to make space at the new location by temporarily
-	 * setting the previous column the note that is currently at that position
-	 * to null (again, to ensure we do not break UNIQUE constrains in the
-	 * database). The value we just replaced should have been equal to
-	 * "newPrevious".
-	 * 
-	 * Now is the time to call connectNotes. The values you would specify for
-	 * the where arguments would be
-	 * "Notes.Truepos >= ? AND Notes.Truepos < (? || '9')", and
-	 * [MovingNote.Truepos, MovingNote.Truepos] respectively.
-	 * 
-	 * (Remember to include list id in your query though)
-	 * 
-	 * This query would fetch all notes with position values that would be
-	 * sorted higher or equal to the note we are interested in (as all
-	 * descendants would) but less than MovingNote.Truepos + '9' (in Java
-	 * terms). No note will actually have that position but more importantly no
-	 * note will have a position inside that range that is not in the descendant
-	 * tree of MovingNote.
-	 * 
-	 * For arguments matching only the children but not the parent itself, you
-	 * could exchange the first ">=" for a ">" to remove the parent from the
-	 * result set. This is useful when you are deleting a note but would like to
-	 * keep its children which must be reordered because their parent just got
-	 * removed.
-	 * 
-	 * So, what the method actually does is: immediate children (children who's
-	 * parent field == oldParent) get their parentfield set to newParent the
-	 * first note returned by the query will get its previous field set to
-	 * newPrevious all notes returned by the query are otherwise simply given
-	 * new truepos values and indent values (automatically resolved from parent
-	 * in the update)
-	 * 
-	 * All these updates are done in a transaction. The method will make sure to
-	 * make space and reconnect the insertion location so just make sure the
-	 * notes have been removed properly before this call.
-	 * 
-	 * @return the id of the last immediate child updated which should be the
-	 *         new previous note of the note which previously occupied this
-	 *         position
-	 * @throws SQLException
-	 */
-	private static void insertNoteTree(final SQLiteDatabase db,
-			final Long newPrevious, final Long newParent, final Long newListId,
-			final Long oldListId, final String where, final String[] whereArgs,
-			int modifiedFlag) throws SQLException {
-
-		// Do a query
-		Log.d("posredux", "finding with where");
-		Log.d("posredux", "" + where);
-		final Cursor tree = db.query(
-				Notes.TABLE_NAME,
-				toStringArray(Notes._ID, Notes.COLUMN_NAME_PARENT,
-						Notes.COLUMN_NAME_PREVIOUS), where, whereArgs, null,
-				null, Notes.COLUMN_NAME_TRUEPOS);
-
-		// If this query is empty, then there is nothing to do
-		if (!tree.moveToNext()) {
-			tree.close();
-			return;
-		} else {
-			// Go back before first
-			tree.moveToPrevious();
-			// First get the note currently at this location and some
-			// information
-			// about the surroundings
-			String nextPos = null, previousPos = null, parentPos = null;
-			// Query the position at the parent, previous location AND of the
-			// note
-			// currently at this position
-			{
-				Log.d("posredux", "target query");
-				Log.d("posredux", targetPositions(newParent, newPrevious));
-				final Cursor c = db.rawQuery(
-						targetPositions(newParent, newPrevious),
-						targetPositionArgs(newListId, newParent, newPrevious));
-				Log.d("posredux", "Finding target: " + newListId + ", "
-						+ newParent + ", " + newPrevious);
-				Log.d("posredux", targetPositions(newParent, newPrevious));
-				while (c.moveToNext()) {
-					Log.d("posredux", "Found target");
-					/*
-					 * If previous is null, then we will only have one result
-					 * and it is the current note Sorted by truepos, so parent
-					 * first, then previous, then current
-					 */
-					if (parentPos == null && newParent != null) {
-						parentPos = c.getString(c
-								.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
-						Log.d("posredux", "parentPos = " + parentPos);
-					} else if (previousPos == null && newPrevious != null) {
-						previousPos = c.getString(c
-								.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
-						Log.d("posredux", "previousPos = " + previousPos);
-						// Otherwise it will be the current
-					} else if (nextPos == null) {
-						nextPos = c.getString(c
-								.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
-						Log.d("posredux", "nextPos = " + nextPos);
-						// If we are adding a new note, it will have null values
-						// which mathces target position
-						if (nextPos != null && nextPos.isEmpty())
-							nextPos = null;
-					} else
-						Log.d("posredux",
-								"Cursor returned more items than expected: "
-										+ c.getString(c
-												.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS)));
-				}
-				c.close();
-			}
-
-			// Make sure they have valid values
-			final String prefix = parentPos == null ? "" : parentPos + ".";
-			if (previousPos == null)
-				previousPos = prefix + Notes.HEAD;
-			if (nextPos == null)
-				nextPos = prefix + Notes.TAIL;
-
-			// start transaction
-			db.beginTransaction();
-			try {
-				// detach current note from the previous
-				// if nextPos is not TAIL
-				if (!Notes.TAIL.equals(nextPos)) {
-					// Make a copy/delete of it for gtasks since it will move
-					// Log.d("posredux", "Copydeleting preceeding note");
-					// String whereGtask = NotePad.GTasks.COLUMN_NAME_DB_ID
-					// + " IN (SELECT " + Notes._ID + " FROM "
-					// + Notes.TABLE_NAME + " WHERE "
-					// + toWhereValidClause(Notes.COLUMN_NAME_LIST)
-					// + " AND " + Notes.COLUMN_NAME_PARENT + " IS %s"
-					// + " AND " + Notes.COLUMN_NAME_PREVIOUS + " IS %s)";
-					// final String[] whereGtaskArgs;
-					// if (newParent == null) {
-					// if (newPrevious == null) {
-					// whereGtask = String.format(whereGtask, "NULL",
-					// "NULL");
-					// whereGtaskArgs = toWhereArgs(newListId);
-					// } else {
-					// whereGtask = String.format(whereGtask, "NULL", "?");
-					// whereGtaskArgs = toWhereArgs(newListId, newPrevious);
-					// }
-					// } else {
-					// if (newPrevious == null) {
-					// whereGtask = String.format(whereGtask, "?", "NULL");
-					// whereGtaskArgs = toWhereArgs(newListId, newParent);
-					// } else {
-					// whereGtask = String.format(whereGtask, "?", "?");
-					// whereGtaskArgs = toWhereArgs(newListId, newParent,
-					// newPrevious);
-					// }
-					// }
-					// Log.d("posredux", whereGtask);
-					// copyDeleteNote(db, newListId, whereGtask,
-					// whereGtaskArgs);
-					// Now detach it
-					Log.d("posredux", "Detatching it");
-					final ContentValues prevalue = new ContentValues();
-					prevalue.putNull(Notes.COLUMN_NAME_PREVIOUS);
-					db.update(
-							Notes.TABLE_NAME,
-							prevalue,
-							toWhereValidClause(Notes.COLUMN_NAME_PREVIOUS,
-									Notes.COLUMN_NAME_PARENT,
-									Notes.COLUMN_NAME_LIST),
-							toWhereArgs(newPrevious, newParent, newListId));
-					Log.d("posredux", "detached, ready for insert");
-				}
-
-				// Calculate a position between previous and the note currently
-				// at
-				// this position
-
-				// Use this to keep track of position last set across levels
-				// Key is parent of note
-				HashMap<Long, String> currentPositions = new HashMap<Long, String>();
-				HashMap<Long, String> parentPositions = new HashMap<Long, String>();
-				Long immediateOldParent = Long.valueOf(-1);
-				// Start with first level
-				parentPositions.put(null, "");
-				boolean firstNote = true;
-				final ContentValues values = new ContentValues();
-				long lastNoteId = -1;
-				while (tree.moveToNext()) {
-					// Clear previous values
-					values.clear();
-
-					// Get this note's values
-					final long noteId = tree.getLong(tree
-							.getColumnIndex(Notes._ID));
-					// final String previousS = c.getString(c
-					// .getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
-					final String parentS = tree.getString(tree
-							.getColumnIndex(Notes.COLUMN_NAME_PARENT));
-					// final Long notePrevious = previousS == null ? null : Long
-					// .parseLong(previousS);
-					Long noteParent = parentS == null ? null : Long
-							.parseLong(parentS);
-
-					Log.d("posredux", "inserting child: " + noteId);
-					Log.d("posredux", "child parent: " + noteParent);
-
-					// first note returned by the query gets a new previous
-					// value
-					if (firstNote) {
-						Log.d("posredux", "is first child");
-						values.put(Notes.COLUMN_NAME_PREVIOUS, newPrevious);
-						Log.d("posredux", "new child previous: " + newPrevious);
-						firstNote = false;
-						immediateOldParent = noteParent;
-						currentPositions.put(immediateOldParent, previousPos);
-						Log.d("posredux", "immediateOldParent: "
-								+ immediateOldParent);
-					}
-
-					// set immediate children's parent to newParent
-					// they also calculate position with next note and not tail
-					// and set last note
-					String notePos;
-					if (noteParent == null && noteParent == immediateOldParent
-							|| noteParent != null
-							&& noteParent.equals(immediateOldParent)) {
-						Log.d("posredux", "is immediate child");
-						lastNoteId = noteId;
-						values.put(Notes.COLUMN_NAME_PARENT, newParent);
-						// for indendation
-						noteParent = newParent;
-
-						Log.d("posredux", "new child parent: " + newParent);
-						notePos = Notes.between(
-								currentPositions.get(immediateOldParent),
-								nextPos);
-					} else {
-						Log.d("posredux", "is a descendant");
-						// If this child does not have a position to work with,
-						// insert HEAD
-						if (!currentPositions.containsKey(noteParent))
-							currentPositions.put(noteParent,
-									parentPositions.get(noteParent)
-											+ Notes.HEAD);
-						notePos = Notes.between(
-								currentPositions.get(noteParent),
-								parentPositions.get(noteParent) + Notes.TAIL);
-					}
-					Log.d("posredux", "new child pos: " + notePos);
-					values.put(Notes.COLUMN_NAME_TRUEPOS, notePos);
-					// Remember for following notes
-					currentPositions.put(noteParent, notePos);
-					parentPositions.put(noteId, notePos + ".");
-
-					// Also set list
-					values.put(Notes.COLUMN_NAME_LIST, newListId);
-
-					Log.d("posredux", "copydeleting child");
-					// Make a copy/delete before we move it for list movement
-					if (newListId != oldListId)
-						copyDeleteNote(db, noteId, oldListId);
-
-					Log.d("posredux", "updating child");
-					values.put(Notes.COLUMN_NAME_MODIFIED, modifiedFlag);
-					// update with values
-					db.update(Notes.TABLE_NAME, values,
-							toWhereClause(Notes._ID), toWhereArgs(noteId));
-					// update indentation
-					Log.d("posredux", parentIndent(noteParent, noteId));
-					db.execSQL(parentIndent(noteParent, noteId));
-				}
-				tree.close();
-
-				// reattach the note that was moved to make space to the last
-				// immediate child
-				values.clear();
-				values.put(Notes.COLUMN_NAME_PREVIOUS, lastNoteId);
-				Log.d("posredux", "reattaching following note with "
-						+ lastNoteId);
-				if (lastNoteId < 0)
-					throw new InvalidParameterException(
-							"cant reattach, no valid last note!");
-
-				db.update(
-						Notes.TABLE_NAME,
-						values,
-						toWhereClause(Notes.COLUMN_NAME_TRUEPOS,
-								Notes.COLUMN_NAME_LIST),
-						toWhereArgs(nextPos, newListId));
-
-				// mark transaction successful
-				Log.d("posredux", "setting successful");
-				db.setTransactionSuccessful();
-			} catch (SQLException e) {
-				Log.d("posredux", e.getLocalizedMessage());
-				e.printStackTrace();
-				throw e;
-			} finally {
-				// commit transaction
-				Log.d("posredux", "ending");
-				db.endTransaction();
-			}
-		}
-	}
-
-	private static void insertNoteTreeByRemoteOrder(final SQLiteDatabase db,
-			final String position, final String gtasksParent,
-			final Long oldListId, final String where, final String[] whereArgs)
-			throws SQLException {
-		// Find relevant positions
-		final Long parent, previous;
-
-		// First parent
-		if (gtasksParent == null || gtasksParent.isEmpty()) {
-			Log.d("remoteprovider",
-					"Parent was null or empty so setting parent null");
-			parent = null;
-		} else {
-			final Cursor c = db.query(NotePad.GTasks.TABLE_NAME,
-					toStringArray(NotePad.GTasks.COLUMN_NAME_DB_ID),
-					toWhereClause(NotePad.GTasks.COLUMN_NAME_GTASKS_ID),
-					toWhereArgs(gtasksParent), null, null, null);
-
-			if (c.moveToFirst()) {
-				Log.d("remoteprovider", "Found the remote parent!");
-				parent = c.getLong(c
-						.getColumnIndex(NotePad.GTasks.COLUMN_NAME_DB_ID));
-			} else {
-				Log.d("remoteprovider", "Failed to find the remote parent");
-				parent = null;
-			}
-			c.close();
-		}
-
-		// Then previous
-		if (position == null || position.isEmpty()) {
-			Log.d("remoteprovider",
-					"Position was null or empty so setting previous null");
-			previous = null;
-		} else {
-			/*
-			 * Query all notes with positions sorted earlier than this position.
-			 * Sort by position, then the previous note is the last note in the
-			 * query
-			 */
-			String whereThis = Notes.COLUMN_NAME_POSITION + " < ? AND "
-					+ Notes.COLUMN_NAME_GTASKSPARENT + " IS ";
-			if (gtasksParent == null)
-				whereThis += "NULL";
-			else
-				whereThis += "'" + gtasksParent + "'";
-
-			final Cursor c = db.query(Notes.TABLE_NAME,
-					toStringArray(Notes._ID, Notes.COLUMN_NAME_POSITION),
-					whereThis + " AND "
-							+ toWhereValidClause(Notes.COLUMN_NAME_LIST),
-					toWhereArgs(position, oldListId), null, null,
-					Notes.COLUMN_NAME_POSITION);
-
-			if (c.moveToLast()) {
-				Log.d("remoteprovider", "Found a previous note for it!");
-				Log.d("remoteprovider",
-						"this: "
-								+ position
-								+ ", prev: "
-								+ c.getString(c
-										.getColumnIndex(Notes.COLUMN_NAME_POSITION)));
-				previous = c.getLong(c.getColumnIndex(Notes._ID));
-			} else {
-				Log.d("remoteprovider", "Could find no previous note for it!");
-				previous = null;
-			}
-			c.close();
-		}
-
-		// call normal insertNoteTree
-		insertNoteTree(db, previous, parent, oldListId, oldListId, where,
-				whereArgs, 0);
-	}
-
-	/**
-	 * Removes a note from its position in the list, connecting the following
-	 * note to this notes previous note and sets the current previous to null
-	 * 
-	 * returns a contentvalues containing the parent, previous that were
-	 * overwritten
-	 * 
-	 * Also contains the list and truepos
-	 */
-	private static ContentValues detachNote(final SQLiteDatabase db,
-			final long noteId) {
-		final ContentValues values = new ContentValues();
-		db.beginTransaction();
-		try {
-			// first query the note and get the values we need
-			final Long listId, previous, parent;
-			final String truepos;
-			final Cursor c = db.query(
-					Notes.TABLE_NAME,
-					toStringArray(Notes.COLUMN_NAME_LIST,
-							Notes.COLUMN_NAME_PARENT,
-							Notes.COLUMN_NAME_PREVIOUS,
-							Notes.COLUMN_NAME_TRUEPOS),
-					toWhereClause(Notes._ID), toWhereArgs(noteId), null, null,
-					null);
-			if (c.moveToFirst()) {
-				listId = c.getLong(c.getColumnIndex(Notes.COLUMN_NAME_LIST));
-				final String previousS = c.getString(c
-						.getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
-				final String parentS = c.getString(c
-						.getColumnIndex(Notes.COLUMN_NAME_PARENT));
-				previous = previousS == null ? null : Long.parseLong(previousS);
-				parent = parentS == null ? null : Long.parseLong(parentS);
-
-				truepos = c.getString(c
-						.getColumnIndex(Notes.COLUMN_NAME_TRUEPOS));
-			} else {
-				listId = null;
-				previous = null;
-				parent = null;
-				truepos = null;
-			}
-			c.close();
-
-			Log.d("posredux", "detach: previous value: " + previous);
-
-			// set the values to null
-			values.putNull(Notes.COLUMN_NAME_PREVIOUS);
-			values.putNull(Notes.COLUMN_NAME_PARENT);
-			values.put(Notes.COLUMN_NAME_TRUEPOS, "-1");
-			db.update(Notes.TABLE_NAME, values, toWhereClause(Notes._ID),
-					toWhereArgs(noteId));
-
-			values.clear();
-			values.put(Notes.COLUMN_NAME_PREVIOUS, previous);
-			Log.d("posredux", "Stitching next to " + previous);
-			// stitch the next note together with the previous
-			db.update(Notes.TABLE_NAME, values,
-					toWhereClause(Notes.COLUMN_NAME_PREVIOUS),
-					toWhereArgs(noteId));
-
-			db.setTransactionSuccessful();
-
-			// Set return values
-			values.clear();
-			values.put(Notes.COLUMN_NAME_PREVIOUS, previous);
-			values.put(Notes.COLUMN_NAME_PARENT, parent);
-			values.put(Notes.COLUMN_NAME_LIST, listId);
-			values.put(Notes.COLUMN_NAME_TRUEPOS, truepos);
-		} catch (SQLException e) {
-			throw e;
-		} finally {
-			db.endTransaction();
-		}
-		return values;
 	}
 
 	/**

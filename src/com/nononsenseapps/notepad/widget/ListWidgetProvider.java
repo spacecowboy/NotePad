@@ -86,7 +86,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			Log.d("widgetwork", "CLICK ACTION RECEIVED");
 			appIntent.setClass(context, RightActivity.class);
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
-			
+
 			if (noteId > -1) {
 				appIntent.setData(Uri.withAppendedPath(
 						NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,
@@ -105,7 +105,8 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			// This will complete the note
 			if (noteId > -1) {
 				Intent bintent = new Intent();
-				bintent.setAction(context.getString(R.string.complete_note_broadcast_intent));
+				bintent.setAction(context
+						.getString(R.string.complete_note_broadcast_intent));
 				bintent.putExtra(NotePad.Notes._ID, noteId);
 				Log.d("Broadcast", "Sending broadcast");
 				context.sendBroadcast(bintent);
@@ -142,19 +143,21 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		Intent intent = new Intent(context, ListWidgetService.class);
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
-		
+
 		final int itemId;
 		SharedPreferences settings = context.getSharedPreferences(
 				ListWidgetConfigure.getSharedPrefsFile(appWidgetId),
 				Context.MODE_PRIVATE);
-		if (settings!= null && ListWidgetConfigure.THEME_DARK.equals(settings.getString(ListWidgetConfigure.KEY_THEME, ListWidgetConfigure.THEME_LIGHT))) {
+		if (settings != null
+				&& ListWidgetConfigure.THEME_DARK.equals(settings.getString(
+						ListWidgetConfigure.KEY_THEME,
+						ListWidgetConfigure.THEME_LIGHT))) {
 			itemId = R.layout.listwidget_dark;
 		} else {
 			itemId = R.layout.listwidget;
 		}
-		
-		RemoteViews rv = new RemoteViews(context.getPackageName(),
-				itemId);
+
+		RemoteViews rv = new RemoteViews(context.getPackageName(), itemId);
 		rv.setRemoteAdapter(appWidgetId, R.id.notes_list, intent);
 
 		// Set the empty view to be displayed if the collection is empty. It
@@ -170,8 +173,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		// String listTitle = context.getText(R.string.app_name).toString();
 
 		long listId = Long.parseLong(settings.getString(
-				ListWidgetConfigure.KEY_LIST,
-				Integer.toString(MainActivity.ALL_NOTES_ID)));
+				ListWidgetConfigure.KEY_LIST, "-1"));
 
 		String listTitle = getListTitle(context, settings, listId);
 		rv.setCharSequence(R.id.titleButton, "setText", listTitle);
@@ -182,7 +184,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		// will be
 		// ignored otherwise.
 		Intent onClickIntent = new Intent(context, ListWidgetProvider.class);
-		///onClickIntent.setAction(ListWidgetProvider.CLICK_ACTION)
+		// /onClickIntent.setAction(ListWidgetProvider.CLICK_ACTION)
 		onClickIntent
 				.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
 				.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId).setData(data);
@@ -190,16 +192,18 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(
 				context, 0, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		rv.setPendingIntentTemplate(R.id.notes_list, onClickPendingIntent);
-		
+
 		// Complete button
-//		Intent completeIntent = new Intent(context, ListWidgetProvider.class);
-//		completeIntent.setAction(ListWidgetProvider.COMPLETE_ACTION)
-//				.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-//				.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId).setData(data);
-//
-//		PendingIntent completePendingIntent = PendingIntent.getBroadcast(
-//				context, 0, completeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-//		rv.setPendingIntentTemplate(R.id.widget_complete_task, completePendingIntent);
+		// Intent completeIntent = new Intent(context,
+		// ListWidgetProvider.class);
+		// completeIntent.setAction(ListWidgetProvider.COMPLETE_ACTION)
+		// .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+		// .putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId).setData(data);
+		//
+		// PendingIntent completePendingIntent = PendingIntent.getBroadcast(
+		// context, 0, completeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		// rv.setPendingIntentTemplate(R.id.widget_complete_task,
+		// completePendingIntent);
 
 		// Bind the click intent for the button on the widget
 		Intent openAppIntent = new Intent(context, ListWidgetProvider.class);
@@ -227,30 +231,25 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	// file
 	private static String getListTitle(Context mContext,
 			SharedPreferences settings, long listId) {
-		String title = mContext.getText(R.string.show_from_all_lists)
-				.toString();
-		if (listId == MainActivity.ALL_NOTES_ID) {
+		String title = "";
+		// mContext.getText(R.string.show_from_all_lists).toString();
+
+		Cursor c = mContext.getContentResolver().query(
+				NotePad.Lists.CONTENT_URI,
+				new String[] { NotePad.Lists._ID,
+						NotePad.Lists.COLUMN_NAME_TITLE },
+				NotePad.Lists._ID + " IS ?",
+				new String[] { Long.toString(listId) }, null);
+
+		if (c != null && c.moveToFirst()) {
+			title = c.getString(c
+					.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
 			settings.edit()
 					.putString(ListWidgetConfigure.KEY_LIST_TITLE, title)
 					.commit();
-		} else {
-			Cursor c = mContext.getContentResolver().query(
-					NotePad.Lists.CONTENT_URI,
-					new String[] { NotePad.Lists._ID,
-							NotePad.Lists.COLUMN_NAME_TITLE },
-					NotePad.Lists._ID + " IS ?",
-					new String[] { Long.toString(listId) }, null);
-
-			if (c != null && c.moveToFirst()) {
-				title = c.getString(c
-						.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
-				settings.edit()
-						.putString(ListWidgetConfigure.KEY_LIST_TITLE, title)
-						.commit();
-			}
-			if (c != null)
-				c.close();
 		}
+		if (c != null)
+			c.close();
 
 		return title;
 	}

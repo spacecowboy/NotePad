@@ -3,6 +3,7 @@
  */
 package com.nononsenseapps.ui;
 
+import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotesListFragment;
 import com.nononsenseapps.support.app.FragmentPagerAdapter;
@@ -14,6 +15,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Bundle;
+import android.widget.CursorAdapter;
 
 /**
  * Each page in the view pager displays a different list which is handled by a
@@ -22,15 +24,13 @@ import android.os.Bundle;
  */
 public class ListPagerAdapter extends FragmentPagerAdapter {
 
-	private final ExtrasCursorAdapter wrappedAdapter;
-	private final int countAdjust;
+	private final CursorAdapter wrappedAdapter;
 	private final DataSetObserver subObserver;
 
 	public ListPagerAdapter(Context context, final FragmentManager fm,
-			final ExtrasCursorAdapter wrappedAdapter, final int countAdjust) {
+			final CursorAdapter wrappedAdapter) {
 		super(context, fm);
 		this.wrappedAdapter = wrappedAdapter;
-		this.countAdjust = countAdjust;
 
 		subObserver = new DataSetObserver() {
 			@Override
@@ -51,7 +51,10 @@ public class ListPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public Fragment getItem(int pos) {
-		long id = wrappedAdapter.getItemId(pos);
+		long id = getItemId(pos);
+		Log.d("pagebug", "getitem: " + pos + " : " + id);
+		if (id < 0)
+			return null;
 		Bundle arguments = new Bundle();
 		arguments.putLong(NotesListFragment.LISTID, id);
 		NotesListFragment list = new NotesListFragment();
@@ -61,24 +64,34 @@ public class ListPagerAdapter extends FragmentPagerAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		return wrappedAdapter.getItemId(position);
+		long id = -1;
+		if (wrappedAdapter != null) {
+			Cursor c = (Cursor) wrappedAdapter.getItem(position);
+			if (c != null && !c.isAfterLast() && !c.isBeforeFirst()) {
+				id = c
+						.getLong((c
+								.getColumnIndex(NotePad.Lists._ID)));
+			}
+		}
+		Log.d("pagebug", "getItemId: " + position + " = " + id);
+		return id;
 	}
 
 	@Override
 	public int getCount() {
-		return wrappedAdapter.getCount() + countAdjust;
+		return wrappedAdapter.getCount();
 	}
 
 	@Override
 	public CharSequence getPageTitle(int position) {
+		if (position >= getCount())
+			return null;
 		CharSequence title = null;
 		if (wrappedAdapter != null) {
 			Cursor c = (Cursor) wrappedAdapter.getItem(position);
 			if (c != null && !c.isAfterLast() && !c.isBeforeFirst()) {
 				title = c.getString(c
 						.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
-			} else {
-				title = wrappedAdapter.getExtraItem(position);
 			}
 		}
 
@@ -98,21 +111,30 @@ public class ListPagerAdapter extends FragmentPagerAdapter {
 	@Override
 	public int getItemPosition(Object object) {
 		Fragment f = (Fragment) object;
-		
+
 		long listId = f.getArguments().getLong(NotesListFragment.LISTID);
-		
-		int length = wrappedAdapter.getCount();
+		int deleted = 1;
+
+		int length = getCount();
+		int result = POSITION_NONE;
 		int position;
 		for (position = 0; position < length; position++) {
-			if (listId == wrappedAdapter.getItemId(position)) {
+			if (listId == getItemId(position)) {
+				if (wrappedAdapter != null) {
+					Cursor c = (Cursor) wrappedAdapter.getItem(position);
+					if (c != null && !c.isAfterLast() && !c.isBeforeFirst()) {
+						deleted = c
+								.getInt((c
+										.getColumnIndex(NotePad.Lists.COLUMN_NAME_DELETED)));
+					}
+				}
+				if (deleted == 0)
+					result = position;
 				break;
 			}
 		}
-		if (position == length) {
-			// Happens both if list is empty
-			// and if id is -1
-			position = POSITION_NONE;
-		}
-		return position;
+		
+		Log.d("pagebug", "itemposition: " + + listId + " = " + result);
+		return result;
 	}
 }

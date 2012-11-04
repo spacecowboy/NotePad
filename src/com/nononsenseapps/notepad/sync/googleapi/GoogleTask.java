@@ -23,20 +23,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.NotePad.Notes;
 import com.nononsenseapps.util.BiMap;
 
 import android.content.ContentValues;
 import com.nononsenseapps.helpers.Log;
 
 public class GoogleTask {
-
-	public static final Comparator<GoogleTask> LOCALORDER = new Comparator<GoogleTask>() {
-		@Override
-		public int compare(final GoogleTask lhs, final GoogleTask rhs) {
-			return lhs.truepos.compareTo(rhs.truepos);
-		}
-	};
 
 	public static class RemoteOrder implements Comparator<GoogleTask> {
 
@@ -79,7 +71,6 @@ public class GoogleTask {
 	public static final String COMPLETED = "completed";
 	public static final String NEEDSACTION = "needsAction";
 	public static final String PARENT = "parent";
-	public static final String PREVIOUS = "previous";
 	public static final String POSITION = "position";
 	public static final String HIDDEN = "hidden";
 	public String id = null;
@@ -89,10 +80,7 @@ public class GoogleTask {
 	public String notes = null;
 	public String status = null;
 	public String dueDate = null;
-	public Long localprevious = null;
-	public Long localparent = null;
-	public String remoteparent = null;
-	public String remoteprevious = null;
+	public String parent = null;
 	public String position = null;
 
 	public int modified = 0;
@@ -103,11 +91,10 @@ public class GoogleTask {
 	public long listdbid = -1;
 	public boolean didRemoteInsert = false;
 
-	public String truepos = null;
+	public String possort = "";
+	public int indentLevel = 0;
 
 	public JSONObject json = null;
-	public boolean moveUploaded = false;
-	private int indent = -1;
 
 	public GoogleTask() {
 	}
@@ -121,11 +108,9 @@ public class GoogleTask {
 			notes = jsonTask.getString(NOTES);
 		status = jsonTask.getString(STATUS);
 		if (jsonTask.has(PARENT))
-			remoteparent = jsonTask.getString(PARENT);
+			parent = jsonTask.getString(PARENT);
 		else
-			remoteparent = null;
-		// if (jsonTask.has(PREVIOUS))
-		// remoteprevious = jsonTask.getString(PREVIOUS);
+			parent = null;
 		position = jsonTask.getString(POSITION);
 		if (jsonTask.has(DUE))
 			dueDate = jsonTask.getString(DUE);
@@ -157,10 +142,6 @@ public class GoogleTask {
 
 			json.put(TITLE, title);
 			json.put(NOTES, notes);
-			if (remoteparent != null)
-				json.put(PARENT, remoteparent);
-			if (remoteprevious != null)
-				json.put(PREVIOUS, remoteprevious);
 
 			if (dueDate != null && !dueDate.equals(""))
 				json.put(DUE, dueDate);
@@ -179,27 +160,6 @@ public class GoogleTask {
 			returnString = jsonString.substring(0, jsonString.length() - 1)
 					+ nullAppendage;
 
-		} catch (JSONException e) {
-			Log.d(TAG, e.getLocalizedMessage());
-		}
-
-		return returnString;
-	}
-
-	/**
-	 * 
-	 * @return Only the parent and previous fields (if not null)
-	 */
-	public String toMoveJSON() {
-		String returnString = "";
-		try {
-			JSONObject json = new JSONObject();
-			if (remoteparent != null)
-				json.put(PARENT, remoteparent);
-			if (remoteprevious != null)
-				json.put(PREVIOUS, remoteprevious);
-
-			return json.toString();
 		} catch (JSONException e) {
 			Log.d(TAG, e.getLocalizedMessage());
 		}
@@ -233,35 +193,11 @@ public class GoogleTask {
 		values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, modified);
 		values.put(NotePad.Notes.COLUMN_NAME_DELETED, deleted);
 		values.put(NotePad.Notes.COLUMN_NAME_POSITION, position);
-		values.put(NotePad.Notes.COLUMN_NAME_GTASKSPARENT, remoteparent);
-		// Make sure position values are set properly
-//		if (dbId == -1 || !moveUploaded) {
-//			if (remoteparent != null) {
-//				// Do not join these IFs, because I actually do not want null
-//				// there
-//				// otherwise
-//				if (idMap.containsValue(remoteparent))
-//					values.put(Notes.COLUMN_NAME_PARENT,
-//							idMap.getKey(remoteparent));
-//			} else {
-//				values.putNull(NotePad.Notes.COLUMN_NAME_PARENT);
-//			}
-//			// if (remoteprevious != null) {
-//			// // Do not join these IFs, because I actually do not want null
-//			// // there
-//			// // otherwise
-//			// if (idMap.containsValue(remoteprevious))
-//			// values.put(Notes.COLUMN_NAME_PARENT,
-//			// idMap.getKey(remoteprevious));
-//			// } else {
-//			// values.putNull(NotePad.Notes.COLUMN_NAME_PREVIOUS);
-//			// }
-//		}
-
+		values.put(NotePad.Notes.COLUMN_NAME_PARENT, parent);
 		values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, hidden);
 
-		// values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, possort);
-		// values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, indentLevel);
+		values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, possort);
+		values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, indentLevel);
 
 		return values;
 	}
@@ -275,23 +211,6 @@ public class GoogleTask {
 		ContentValues values = new ContentValues();
 		if (listIdIndex != null)
 			values.put(NotePad.Notes.COLUMN_NAME_LIST, listIdIndex);
-		/*
-		 * If the parent doesnt exist in the database, we must take the position
-		 * from previous insert operations Otherwise, they have been set in
-		 * tovalues
-		 * 
-		 * And of course, only worth doing anything if we did not actually
-		 * upload the position ourselves successfully
-		 */
-//		if (dbId == -1 || !moveUploaded) {
-//			if (remoteparent != null && !remoteparent.isEmpty() && !idMap.containsValue(remoteparent))
-//				values.put(Notes.COLUMN_NAME_PARENT,
-//						remoteToIndex.get(remoteparent));
-
-			// if (!idMap.containsValue(remoteprevious))
-			// values.put(Notes.COLUMN_NAME_PREVIOUS,
-			// remoteToIndex.get(remoteprevious));
-//		}
 
 		return values;
 	}

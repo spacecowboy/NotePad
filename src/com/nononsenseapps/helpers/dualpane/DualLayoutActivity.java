@@ -16,6 +16,7 @@ package com.nononsenseapps.helpers.dualpane;
  * limitations under the License.
  */
 
+import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 
@@ -120,11 +121,10 @@ public abstract class DualLayoutActivity extends Activity {
 	 */
 	protected void setLeftFragmentVisible(boolean visible) {
 		// Can potentially be null so plan for that
-		Fragment leftFragment = getFragmentManager().findFragmentById(
-				R.id.leftFragment);
-		if (leftFragment != null && (leftFragment.isVisible() || visible)
+		View leftFragment = getLeftView();
+		if (leftFragment != null && (leftFragment.isShown() || visible)
 				&& getResources().getBoolean(R.bool.leftHideable)) {
-			final float listWidth = getLeftFragment().getView().getWidth();
+			final float listWidth = leftFragment.getWidth();
 			ViewGroup container = (ViewGroup) findViewById(R.id.dual_layout);
 			// Don't clip the children, we want to draw the entire fragment even
 			// if it is partially off-screen.
@@ -159,19 +159,24 @@ public abstract class DualLayoutActivity extends Activity {
 					trans.getDuration(LayoutTransition.CHANGE_DISAPPEARING));
 			trans.setAnimator(LayoutTransition.DISAPPEARING, animOut);
 
-			FragmentManager fragmentManager = getFragmentManager();
-			FragmentTransaction fragmentTransaction = fragmentManager
-					.beginTransaction();
-			if (getLeftFragment().isVisible()) {
-				fragmentTransaction.hide(getLeftFragment());
+			//FragmentManager fragmentManager = getFragmentManager();
+			//FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+			if (getLeftView().isShown()) {
+				//fragmentTransaction.hide(getLeftFragment());
+				// TODO temporary fix
+				leftFragment.setVisibility(View.GONE);
 			} else {
-				fragmentTransaction.show(getLeftFragment());
+				//fragmentTransaction.show(getLeftFragment());
+				// TODO temporary fix
+				leftFragment.setVisibility(View.VISIBLE);
 			}
 			// The hiding/showing will automatically initiate the animations
 			// since
 			// we have specified that we want layout animations in the layout
 			// xml
-			fragmentTransaction.commit();
+			
+			// TODO temporary fix
+			//fragmentTransaction.commit();
 
 			/*
 			 * Display home as up to be able to view the list
@@ -183,9 +188,10 @@ public abstract class DualLayoutActivity extends Activity {
 	/**
 	 * Can be null if not dual pane!
 	 */
-	public Fragment getLeftFragment() {
-		// Can potentially be null so plan for that
-		return getFragmentManager().findFragmentById(R.id.leftFragment);
+	public abstract Fragment getLeftFragment();
+	
+	public View getLeftView() {
+		return findViewById(R.id.leftFragment);
 	}
 
 	/**
@@ -238,20 +244,19 @@ public abstract class DualLayoutActivity extends Activity {
 	@Override
 	public boolean dispatchTouchEvent(MotionEvent ev) {
 		// Can potentially be null so plan for that
-		Fragment leftFragment = getFragmentManager().findFragmentById(
-				R.id.leftFragment);
+		View leftFragment = getLeftView();
 		// Can potentially be null so plan for that
-		Fragment rightFragment = getFragmentManager().findFragmentById(
-				R.id.rightFragment);
+		Fragment rightFragment = getRightFragment();
 		// If user clicked inside right fragment, and this left fragment can be
 		// hidden, then hide it
 		if (rightFragment != null && leftFragment != null
-				&& leftFragment.isVisible()
+				&& leftFragment.isShown()
 				&& getResources().getBoolean(R.bool.leftHideable)) {
 			View r = rightFragment.getView();
-			float[] xy = getRelativeCoords(ev);
-			if (xy[0] < r.getRight() && xy[0] > r.getLeft()
-					&& xy[1] < r.getBottom() && xy[1] > r.getTop()) {
+			float[] xy = getRelativeCoords(ev, r);
+			Log.d("TabPortrait", "" + xy[0] + ": " + "0, " + r.getWidth());
+			if (xy[0] < r.getWidth() && xy[0] > 0
+					&& xy[1] < r.getHeight() && xy[1] > 0) {
 				setLeftFragmentVisible(false);
 				return true;
 			}
@@ -265,10 +270,12 @@ public abstract class DualLayoutActivity extends Activity {
 	 * Needed because touch event will report absolute coordinates and we only
 	 * have access to relative to our window.
 	 */
-	public float[] getRelativeCoords(MotionEvent e) {
+	public float[] getRelativeCoords(MotionEvent e, View contentView) {
 		// MapView
-		View contentView = getWindow().findViewById(Window.ID_ANDROID_CONTENT);
-		return new float[] { e.getRawX() - contentView.getLeft(),
-				e.getRawY() - contentView.getTop() };
+		//View contentView = getWindow().findViewById(Window.ID_ANDROID_CONTENT);
+		int[] vl = new int[2];
+		contentView.getLocationOnScreen(vl);
+		return new float[] { e.getRawX() - vl[0],
+				e.getRawY() - vl[1] };
 	}
 }

@@ -25,23 +25,30 @@
 
     <!-- Weights and sum differ depending on screen orientation/size -->
     <!-- You should replace the classes specified with your own extended classes -->
-
-    <FrameLayout
-        android:id="@+id/leftFragment"
-        android:layout_width="0dp"
+    
+    <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/leftFragment"
+    android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@integer/leftFragmentWeight"
-        android:paddingRight="0dp" >
+        android:paddingRight="0dp"
+    tools:context=".MainActivity">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:paddingTop="4dip"
-            android:layout_gravity="center"
-            android:text="@string/please_create_list"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-        </FrameLayout>
+    <!--
+    This title strip will display the currently visible page title, as well as the page
+    titles for adjacent pages.
+    -->
+    <android.support.v4.view.PagerTitleStrip android:id="@+id/pager_title_strip"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="top"
+        android:background="#33b5e5"
+        android:textColor="#fff"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp" />
+
+</android.support.v4.view.ViewPager>
 
     <FrameLayout
         android:id="@+id/rightFragment"

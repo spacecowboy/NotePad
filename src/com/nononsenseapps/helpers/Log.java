@@ -5,7 +5,7 @@ import com.nononsenseapps.build.Config;
 public final class Log {
 
 	public static void d(String t, String m) {
-		if (Config.LOGGING)
+		if (Config.LOGGING || true)
 			android.util.Log.d(t, m);
 	}
 

@@ -120,10 +120,10 @@ public class MainPrefs extends PreferenceFragment implements
 
 		// Start with all lists
 		entries.add(getText(R.string.show_from_all_lists));
-		values.add(Long.toString(MainActivity.ALL_NOTES_ID));
+		//values.add(Long.toString(MainActivity.ALL_NOTES_ID));
 		// Set it as the default value also
 		listSpinner.setDefaultValue(Long
-				.toString(MainActivity.ALL_NOTES_ID));
+				.toString(MainActivity.getAList(getActivity(), -1)));
 
 		Cursor cursor = getActivity().getContentResolver().query(
 				NotePad.Lists.CONTENT_VISIBLE_URI,
