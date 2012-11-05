@@ -27,7 +27,6 @@ import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
-import com.ericharlow.DragNDrop.DragNDropListView;
 import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.helpers.dualpane.NoNonsenseListFragment;
@@ -38,7 +37,6 @@ import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.ui.NoteCheckBox;
 import com.nononsenseapps.ui.SectionAdapter;
-import com.nononsenseapps.ui.SectionDropListener;
 import com.nononsenseapps.util.TimeHelper;
 
 import android.content.BroadcastReceiver;
@@ -1466,11 +1464,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					getThemedAdapter(null));
 			setListAdapter(mSectionAdapter);
 		}
-
-		// TODO should hide the drag views in alphabetic sorting
-		final SectionDropListener dropListener = new SectionDropListener(
-				activity, mSectionAdapter);
-		((DragNDropListView) getListView()).setDropListener(dropListener);
 
 		if (mSectionAdapter.isSectioned()) {
 			// If sort date, fire sorting loaders

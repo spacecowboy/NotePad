@@ -40,7 +40,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import com.nononsenseapps.build.Config;
+//import com.nononsenseapps.build.Config;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -101,7 +101,7 @@ public class GoogleAPITalker {
 	public static Random rand = new Random();
 
 	public static String AuthUrlEnd() {
-		return "key=" + Config.GTASKS_API_KEY;
+		return "key=" + "Config.GTASKS_API_KEY";
 	}
 
 	// public static final String AUTH_URL_END = "key=" + APIKEY;
