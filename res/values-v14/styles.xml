@@ -48,7 +48,6 @@
 		
 		<item name="list_divider_holo">@drawable/list_divider_holo_light</item>
 		
-		<item name="ic_action_drag">@drawable/ic_action_drag_light</item>
 	</style>
 	
 </resources>

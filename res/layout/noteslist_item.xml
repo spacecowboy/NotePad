@@ -100,13 +100,6 @@
             android:gravity="center_vertical"
             android:orientation="vertical" >
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center"
-                android:scaleType="fitXY"
-                android:src="?ic_action_drag" />
-
             <com.nononsenseapps.ui.DateView
                 android:id="@+id/itemDate"
                 android:layout_width="wrap_content"

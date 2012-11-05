@@ -1615,7 +1615,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		String sortChoice = PreferenceManager.getDefaultSharedPreferences(
 				activity).getString(MainPrefs.KEY_SORT_TYPE, "");
 
-		String sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
+		String sortOrder = NotePad.Notes.POSSUBSORT_SORT_TYPE;
 
 		if (MainPrefs.DUEDATESORT.equals(sortChoice)) {
 			sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
