@@ -27,7 +27,7 @@ import com.nononsenseapps.notepad.NotePad.Notes;
 import com.nononsenseapps.util.BiMap;
 
 import android.content.ContentValues;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 
 public class GoogleTask {
 

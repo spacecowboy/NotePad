@@ -45,7 +45,7 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 
 public class SyncPrefs extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {

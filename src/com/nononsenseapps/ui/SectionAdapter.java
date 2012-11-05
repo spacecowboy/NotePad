@@ -11,7 +11,7 @@ import com.nononsenseapps.notepad.R;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;

@@ -47,7 +47,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.text.format.Time;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 import android.util.TimeFormatException;
 import android.view.DragEvent;
 import android.view.LayoutInflater;
@@ -100,8 +100,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE,
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
 			NotePad.Notes.COLUMN_NAME_DELETED, NotePad.Notes.COLUMN_NAME_LIST,
-			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, Notes.COLUMN_NAME_PARENT,
-			Notes.COLUMN_NAME_PREVIOUS };
+			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
 
 	// A label for the saved state of the activity
 	public static final String ORIGINAL_NOTE = "origContent";
@@ -380,10 +379,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				+ mOriginalPrevious);
 		Log.d("posredux", "editor save list: " + listId + ", "
 				+ mOriginalListId);
-		if (parent != mOriginalParent)
-			values.put(Notes.COLUMN_NAME_PARENT, parent);
-		if (previous != mOriginalPrevious)
-			values.put(Notes.COLUMN_NAME_PREVIOUS, previous);
 
 		// Put the due-date in
 		if (dueDateSet) {
@@ -1034,19 +1029,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			}
 
 			// Load sub task spinner
+			/*
 			getLoaderManager().restartLoader(OTHER_NOTES_LOADER, null, this);
-
-			// Position fields
-			final String parentS = mCursor.getString(mCursor
-					.getColumnIndex(Notes.COLUMN_NAME_PARENT));
-			this.parent = parentS == null ? null : Long.parseLong(parentS);
-			final String previousS = mCursor.getString(mCursor
-					.getColumnIndex(Notes.COLUMN_NAME_PREVIOUS));
-			this.previous = previousS == null ? null : Long
-					.parseLong(previousS);
-			
-			Log.d("posredux", "noteloadpar " + parent);
-			Log.d("posredux", "noteloadpre " + previous);
 
 			if (subtaskAdapter.getCount() > 0) {
 				// It's loaded, select current
@@ -1057,6 +1041,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					subtaskSpinner.setSelection(getPosOfId(subtaskAdapter,
 							TOPNOTE));
 			}
+			*/
 
 			// Gets the note text from the Cursor and puts it in the
 			// TextView,

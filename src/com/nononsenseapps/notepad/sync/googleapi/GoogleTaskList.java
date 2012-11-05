@@ -28,7 +28,7 @@ import com.nononsenseapps.util.BiMap;
 import android.content.ContentValues;
 import android.os.RemoteException;
 import android.text.format.Time;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 
 public class GoogleTaskList {
 

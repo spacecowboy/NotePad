@@ -14,7 +14,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<resources>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="ThemeHolo" parent="@android:style/Theme.Holo">
 
@@ -79,6 +79,7 @@
 		<item name="expander_close_holo">@drawable/expander_close_holo_light</item>
 		
 		<item name="list_divider_holo">@drawable/list_divider_holo_light</item>
+	
 	</style>
 
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light">
@@ -112,6 +113,7 @@
 		<item name="expander_close_holo">@drawable/expander_close_holo_light</item>
 		
 		<item name="list_divider_holo">@drawable/list_divider_holo_light</item>
+		
 
 	</style>
 	

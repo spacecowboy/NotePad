@@ -1,7 +1,7 @@
 package com.nononsenseapps.util;
 
 import android.text.format.Time;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 
 /**
  * Has a few helper functions for dealing with dates.

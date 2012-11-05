@@ -54,7 +54,7 @@
     <string name="settings_summary_sort_type_alphabetic">Title</string>
     <string name="settings_summary_sort_type_modified">Latest modified</string>
     <string name="settings_summary_sort_type_duedate">Due date</string>
-    <string name="settings_summary_sort_type_serverposition">Server position</string>
+    <string name="settings_summary_sort_type_serverposition">My order</string>
     <string name="settings_summary_sort_order_asc">Ascending</string>
     <string name="settings_summary_sort_order_desc">Descending</string>
     <string name="settings_summary_theme_dark">Dark</string>
@@ -189,9 +189,9 @@
     <string tools:ignore="MissingTranslation" name="mod_header_thisweek">This week</string>
     <string tools:ignore="MissingTranslation" name="mod_header_earlier">Earlier</string>
     
-    <string tools:ignore="MissingTranslation" name="settings_listheader">List name dividers</string>
-    <string tools:ignore="MissingTranslation" name="settings_listheader_off">No list name dividers</string>
-    <string tools:ignore="MissingTranslation" name="settings_listheader_on">Showing list name dividers</string>
+    <string tools:ignore="MissingTranslation" name="settings_listheader">When showing all lists</string>
+    <string tools:ignore="MissingTranslation" name="settings_listheader_off">Show as one list</string>
+    <string tools:ignore="MissingTranslation" name="settings_listheader_on">Show list names</string>
     
     <string tools:ignore="MissingTranslation" name="empty_string"> </string>
 

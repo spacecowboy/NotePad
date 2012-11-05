@@ -73,7 +73,7 @@ import android.view.MenuItem;
 import android.widget.SimpleCursorAdapter;
 
 import android.text.format.Time;
-import android.util.Log;
+import com.nononsenseapps.helpers.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.MenuInflater;
@@ -107,7 +107,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			NotePad.Notes.COLUMN_NAME_DUE_DATE,
 			NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
 			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
-			NotePad.Notes.COLUMN_NAME_PARENT, NotePad.Notes.COLUMN_NAME_LIST };
+			NotePad.Notes.COLUMN_NAME_LIST };
 
 	// public static final String SELECTEDPOS = "selectedpos";
 	// public static final String SELECTEDID = "selectedid";
@@ -1433,7 +1433,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	private boolean shouldDisplaySections(String sorting) {
 		if (mCurListId == MainActivity.ALL_NOTES_ID
 				&& PreferenceManager.getDefaultSharedPreferences(activity)
-						.getBoolean(MainPrefs.KEY_LISTHEADERS, false)) {
+						.getBoolean(MainPrefs.KEY_LISTHEADERS, true)) {
 			return true;
 		} else if (sorting.equals(MainPrefs.DUEDATESORT)
 				|| sorting.equals(MainPrefs.MODIFIEDSORT)) {
@@ -1470,7 +1470,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// If mod date, fire modded loaders
 			if (mCurListId == MainActivity.ALL_NOTES_ID
 					&& PreferenceManager.getDefaultSharedPreferences(activity)
-							.getBoolean(MainPrefs.KEY_LISTHEADERS, false)) {
+							.getBoolean(MainPrefs.KEY_LISTHEADERS, true)) {
 				destroyNonListNameLoaders();
 				activeLoaders.add(LOADER_LISTNAMES);
 				getLoaderManager().restartLoader(LOADER_LISTNAMES, args, this);
