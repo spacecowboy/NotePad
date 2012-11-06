@@ -109,8 +109,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public static final String ORIGINAL_DUE_STATE = "origDueState";
 	public static final String ORIGINAL_COMPLETE = "origComplete";
 	public static final String ORIGINAL_LIST = "origList";
-	public static final String ORIGINAL_PARENT = "origParent";
-	public static final String ORIGINAL_PREVIOUS = "origPrevious";
 
 	// Argument keys
 	public static final String KEYID = "com.nononsenseapps.notepad.NoteId";
@@ -147,8 +145,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public String mOriginalDueDate;
 	// public boolean mOriginalComplete;
 	public long mOriginalListId;
-	public Long mOriginalParent;
-	public Long mOriginalPrevious;
 
 	private boolean doSave = false;
 
@@ -256,28 +252,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					mOriginalDueState = savedInstanceState
 							.getBoolean(ORIGINAL_DUE_STATE);
 					mOriginalListId = savedInstanceState.getLong(ORIGINAL_LIST);
-					if (savedInstanceState.containsKey(ORIGINAL_PARENT))
-						mOriginalParent = savedInstanceState
-								.getLong(ORIGINAL_PARENT);
-					else
-						mOriginalParent = null;
-					Log.d("posredux", "originalpar1 " + mOriginalParent);
-					if (savedInstanceState.containsKey(ORIGINAL_PREVIOUS))
-						mOriginalPrevious = savedInstanceState
-								.getLong(ORIGINAL_PREVIOUS);
-					else
-						mOriginalPrevious = null;
-					Log.d("posredux", "originalprev1 " + mOriginalPrevious);
+					
 				} else {
 					mOriginalNote = "";
 					mOriginalDueDate = "";
 					mOriginalTitle = "";
 					mOriginalDueState = false;
 					mOriginalListId = -1;
-					mOriginalParent = null;
-					mOriginalPrevious = null;
-					Log.d("posredux", "originalpar2 " + mOriginalParent);
-					Log.d("posredux", "originalprev2 " + mOriginalPrevious);
+					
 				}
 
 				// Prepare the loader. Either re-connect with an existing one,
@@ -315,8 +297,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				|| (dueDateSet && !noteDueDate.format3339(false).equals(
 						mOriginalDueDate));
 		listC = this.listId != mOriginalListId && mOriginalListId > -1;
-		parentC = this.parent != mOriginalParent;
-		previousC = this.previous != mOriginalPrevious;
 
 		Log.d("posredux", "has note changed");
 		Log.d("posredux", "title " + title);
@@ -324,11 +304,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		Log.d("posredux", "completed " + completed);
 		Log.d("posredux", "date " + date);
 		Log.d("posredux", "listC " + listC);
-		Log.d("posredux", "parentC " + parentC);
-		Log.d("posredux", "previousC " + previousC);
 
-		return title || note || completed || date || listC || parentC
-				|| previousC;
+		return title || note || completed || date || listC;
 	}
 
 	/**
@@ -362,23 +339,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// change the text
 			values.put(NotePad.Notes.COLUMN_NAME_NOTE, text);
 		}
-		if (noteAttrs.locked) {
-			values.put(NotePad.Notes.COLUMN_NAME_LOCKED, 1);
-		} else {
-			values.put(NotePad.Notes.COLUMN_NAME_LOCKED, 0);
-		}
 
 		// Add list if changed
 		if (listId != mOriginalListId && mOriginalListId > -1)
 			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
-
-		// Add position if changed
-		Log.d("posredux", "editor save parent: " + parent + ", "
-				+ mOriginalParent);
-		Log.d("posredux", "editor save previous: " + previous + ", "
-				+ mOriginalPrevious);
-		Log.d("posredux", "editor save list: " + listId + ", "
-				+ mOriginalListId);
 
 		// Put the due-date in
 		if (dueDateSet) {
@@ -423,10 +387,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		mCompleteChanged = false;
 		mOriginalListId = listId;
-		mOriginalParent = parent;
-		Log.d("posredux", "originalpar3 " + mOriginalParent);
-		mOriginalPrevious = previous;
-		Log.d("posredux", "originalprev3 " + mOriginalPrevious);
 
 	}
 
@@ -1103,10 +1063,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			mOriginalTitle = title;
 
 			mOriginalListId = listId;
-			mOriginalParent = parent;
-			mOriginalPrevious = previous;
-			Log.d("posredux", "originalprev4 " + mOriginalPrevious);
-			Log.d("posredux", "originalpar4 " + mOriginalParent);
 
 			// Some things might have changed
 			getActivity().invalidateOptionsMenu();
@@ -1235,10 +1191,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		outState.putBoolean(ORIGINAL_DUE_STATE, mOriginalDueState);
 		outState.putString(ORIGINAL_TITLE, mOriginalTitle);
 		outState.putLong(ORIGINAL_LIST, mOriginalListId);
-		if (mOriginalParent != null)
-			outState.putLong(ORIGINAL_PARENT, mOriginalParent);
-		if (mOriginalPrevious != null)
-			outState.putLong(ORIGINAL_PREVIOUS, mOriginalPrevious);
 	}
 
 	/**
@@ -1295,7 +1247,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	@TargetApi(14)
 	private void setActionShareIntent() {
 		if (getActivity() != null && !getActivity().isFinishing()) {
-			if (getResources().getBoolean(R.bool.atLeastIceCreamSandwich)
+			if (getResources().getBoolean(R.bool.atLeast14)
 					&& shareActionProvider != null) {
 				Intent share = new Intent(Intent.ACTION_SEND);
 				share.setType("text/plain");
