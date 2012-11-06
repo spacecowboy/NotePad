@@ -206,9 +206,6 @@ public final class NotePad {
 		public static final String COLUMN_NAME_POSSUBSORT = "possubsort";
 		public static final String COLUMN_NAME_LOCALHIDDEN = "localhidden";
 
-		// Password locking
-		public static final String COLUMN_NAME_LOCKED = "locked";
-
 		/**
 		 * The default sort order for this table
 		 */
