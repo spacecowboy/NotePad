@@ -26,7 +26,7 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="visible" >
+        android:visibility="gone" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -41,7 +41,7 @@
         android:id="@+id/listContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="gone" >
+        android:visibility="visible" >
 
         <com.ericharlow.DragNDrop.DragNDropListView
             android:id="@android:id/list"
