@@ -552,57 +552,60 @@ public class NotePadProvider extends ContentProvider implements
 			if (oldVersion < 3) {
 				// FIrst add columns to Notes table
 
-				String preName = "ALTER TABLE " + OldNotePad.Notes.TABLE_NAME
+				String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
 						+ " ADD COLUMN ";
 				// Don't want null values. Prefer empty String
 				String postText = " TEXT";
 				String postNameInt = " INTEGER";
 				// Add Columns to Notes DB
-				db.execSQL(preName + OldNotePad.Notes.COLUMN_NAME_LIST
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_LIST
 						+ postNameInt);
-				db.execSQL(preName + OldNotePad.Notes.COLUMN_NAME_DUE_DATE
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_DUE_DATE
 						+ postText);
-				db.execSQL(preName + OldNotePad.Notes.COLUMN_NAME_GTASKS_STATUS
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_GTASKS_STATUS
 						+ postText);
-				db.execSQL(preName + OldNotePad.Notes.COLUMN_NAME_MODIFIED
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_MODIFIED
 						+ postNameInt);
-				db.execSQL(preName + OldNotePad.Notes.COLUMN_NAME_DELETED
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_DELETED
 						+ postNameInt);
 
 				// Then create the 3 missing tables
-				db.execSQL("CREATE TABLE " + OldNotePad.Lists.TABLE_NAME + " ("
+				db.execSQL("CREATE TABLE " + NotePad.Lists.TABLE_NAME + " ("
 						+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
-						+ OldNotePad.Lists.COLUMN_NAME_TITLE
+						+ NotePad.Lists.COLUMN_NAME_TITLE
 						+ " TEXT DEFAULT '' NOT NULL,"
-						+ OldNotePad.Lists.COLUMN_NAME_MODIFIED
+						+ NotePad.Lists.COLUMN_NAME_MODIFIED
 						+ " INTEGER DEFAULT 0 NOT NULL,"
-						+ OldNotePad.Lists.COLUMN_NAME_MODIFICATION_DATE
+						+ NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE
 						+ " INTEGER DEFAULT 0 NOT NULL,"
-						+ OldNotePad.Lists.COLUMN_NAME_DELETED
+						+ NotePad.Lists.COLUMN_NAME_DELETED
 						+ " INTEGER DEFAULT 0 NOT NULL" + ");");
 
-				db.execSQL("CREATE TABLE " + OldNotePad.GTasks.TABLE_NAME + " ("
-						+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
-						+ OldNotePad.GTasks.COLUMN_NAME_DB_ID
-						+ " INTEGER UNIQUE NOT NULL REFERENCES " + Notes.TABLE_NAME
-						+ "," + OldNotePad.GTasks.COLUMN_NAME_GTASKS_ID
-						+ " INTEGER NOT NULL,"
-						+ OldNotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT
-						+ " INTEGER NOT NULL," + OldNotePad.GTasks.COLUMN_NAME_UPDATED
-						+ " TEXT," + OldNotePad.GTasks.COLUMN_NAME_ETAG + " TEXT"
-						+ ");");
 
-				db.execSQL("CREATE TABLE " + OldNotePad.GTaskLists.TABLE_NAME + " ("
-						+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
-						+ OldNotePad.GTaskLists.COLUMN_NAME_DB_ID
+				db.execSQL("CREATE TABLE " + NotePad.GTasks.TABLE_NAME
+						+ " (" + BaseColumns._ID + " INTEGER PRIMARY KEY,"
+						+ NotePad.GTasks.COLUMN_NAME_DB_ID
 						+ " INTEGER UNIQUE NOT NULL REFERENCES "
-						+ OldNotePad.Lists.TABLE_NAME + ","
-						+ OldNotePad.GTaskLists.COLUMN_NAME_GTASKS_ID
+						+ Notes.TABLE_NAME + ","
+						+ NotePad.GTasks.COLUMN_NAME_GTASKS_ID
 						+ " INTEGER NOT NULL,"
-						+ OldNotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT
+						+ NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT
 						+ " INTEGER NOT NULL,"
-						+ OldNotePad.GTaskLists.COLUMN_NAME_UPDATED + " TEXT,"
-						+ OldNotePad.GTaskLists.COLUMN_NAME_ETAG + " TEXT" + ");");
+						+ NotePad.GTasks.COLUMN_NAME_UPDATED + " TEXT,"
+						+ NotePad.GTasks.COLUMN_NAME_ETAG + " TEXT" + ");");
+
+				db.execSQL("CREATE TABLE " + NotePad.GTaskLists.TABLE_NAME
+						+ " (" + BaseColumns._ID + " INTEGER PRIMARY KEY,"
+						+ NotePad.GTaskLists.COLUMN_NAME_DB_ID
+						+ " INTEGER UNIQUE NOT NULL REFERENCES "
+						+ NotePad.Lists.TABLE_NAME + ","
+						+ NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID
+						+ " INTEGER NOT NULL,"
+						+ NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT
+						+ " INTEGER NOT NULL,"
+						+ NotePad.GTaskLists.COLUMN_NAME_UPDATED + " TEXT,"
+						+ NotePad.GTaskLists.COLUMN_NAME_ETAG + " TEXT"
+						+ ");");
 
 				// Now insert a default list
 				long listId = insertDefaultList(db);
@@ -610,66 +613,67 @@ public class NotePadProvider extends ContentProvider implements
 				// Place all existing notes in this list
 				// And give them sensible values in the new columns
 				ContentValues values = new ContentValues();
-				values.put(OldNotePad.Notes.COLUMN_NAME_LIST, listId);
-				values.put(OldNotePad.Notes.COLUMN_NAME_MODIFIED, 1);
-				values.put(OldNotePad.Notes.COLUMN_NAME_DELETED, 0);
-				values.put(OldNotePad.Notes.COLUMN_NAME_DUE_DATE, "");
-				values.put(OldNotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
+				values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
+				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
+				values.put(NotePad.Notes.COLUMN_NAME_DELETED, 0);
+				values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
+				values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
 						"needsAction");
 
-				db.update(OldNotePad.Notes.TABLE_NAME, values,
-						OldNotePad.Notes.COLUMN_NAME_LIST + " IS NOT ?",
+				db.update(NotePad.Notes.TABLE_NAME, values,
+						NotePad.Notes.COLUMN_NAME_LIST + " IS NOT ?",
 						new String[] { Long.toString(listId) });
 			}
 			if (oldVersion < 4) {
 
-				String preName = "ALTER TABLE " + OldNotePad.Notes.TABLE_NAME
+				String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
 						+ " ADD COLUMN ";
 				String postText = " TEXT";
 				String postNameInt = " INTEGER";
 				// Add Columns to Notes DB
 				db.execSQL(preName + "gtasks_parent" + postText);
-				db.execSQL(preName + OldNotePad.Notes.COLUMN_NAME_POSITION
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_POSITION
 						+ postText);
-				db.execSQL(preName + OldNotePad.Notes.COLUMN_NAME_HIDDEN
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_HIDDEN
 						+ postNameInt);
 
 				// Give all notes sensible values
 				ContentValues values = new ContentValues();
 				values.put("gtasks_parent", "");
-				values.put(OldNotePad.Notes.COLUMN_NAME_POSITION, "");
-				values.put(OldNotePad.Notes.COLUMN_NAME_HIDDEN, 0);
-				db.update(OldNotePad.Notes.TABLE_NAME, values,
-						OldNotePad.Notes.COLUMN_NAME_HIDDEN + " IS NOT ?",
+				values.put(NotePad.Notes.COLUMN_NAME_POSITION, "");
+				values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, 0);
+				db.update(NotePad.Notes.TABLE_NAME, values,
+						NotePad.Notes.COLUMN_NAME_HIDDEN + " IS NOT ?",
 						new String[] { "0" });
 			}
 			if (oldVersion < 5) {
 
-				String preName = "ALTER TABLE " + OldNotePad.Notes.TABLE_NAME
+				String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
 						+ " ADD COLUMN ";
 				String postText = " TEXT DEFAULT ''";
 				String postNameInt = " INTEGER DEFAULT 0";
-				db.execSQL(preName + OldNotePad.Notes.COLUMN_NAME_POSSUBSORT
+				db.execSQL(preName + "possubsort"
 						+ postText);
-				db.execSQL(preName + OldNotePad.Notes.COLUMN_NAME_LOCALHIDDEN
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
 						+ postNameInt);
 			}
 			if (oldVersion < 6) {
 				// Add Columns to Notes DB
-				String preName = "ALTER TABLE " + OldNotePad.Notes.TABLE_NAME
+				String preName = "ALTER TABLE " + NotePad.Notes.TABLE_NAME
 						+ " ADD COLUMN ";
 				String postNameInt = " INTEGER DEFAULT 0";
-				db.execSQL(preName + OldNotePad.Notes.COLUMN_NAME_INDENTLEVEL
+				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_INDENTLEVEL
 						+ postNameInt);
-				db.execSQL(preName + OldNotePad.Notes.COLUMN_NAME_LOCKED
+				db.execSQL(preName + "locked"
 						+ postNameInt);
 
 				// Mark all notes as modified to ensure we set the indents on
 				// next sync
 				ContentValues values = new ContentValues();
-				values.put(OldNotePad.Notes.COLUMN_NAME_MODIFIED, 1);
-				db.update(OldNotePad.Notes.TABLE_NAME, values, null, null);
+				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
+				db.update(NotePad.Notes.TABLE_NAME, values, null, null);
 			}
+			
 		}
 
 		@Override
