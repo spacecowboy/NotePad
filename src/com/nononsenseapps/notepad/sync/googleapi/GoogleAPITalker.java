@@ -157,7 +157,7 @@ public class GoogleAPITalker {
 		if (remoteparent != null && !remoteparent.isEmpty())
 			url += "parent=" + remoteparent + "&";
 		if (remoteprevious != null && !remoteprevious.isEmpty())
-			url += "position=" + remoteprevious + "&";
+			url += "previous=" + remoteprevious + "&";
 		url += "fields=etag,updated,position,parent&" + AuthUrlEnd();
 		return url;
 	}
@@ -635,7 +635,8 @@ public class GoogleAPITalker {
 			if (jsonResponse.has(GoogleTask.UPDATED))
 				task.updated = jsonResponse.getString(GoogleTask.UPDATED);
 			// Then move it to its position
-			moveTask(task, pList);
+			//Log.d(TAG + ".move", "Moving task");
+			//moveTask(task, pList);
 		}
 
 		return task;
@@ -650,51 +651,53 @@ public class GoogleAPITalker {
 	 * @throws IOException
 	 * @throws PreconditionException
 	 */
-	private void moveTask(final GoogleTask task, final GoogleTaskList pList)
-			throws ClientProtocolException, JSONException, IOException,
-			PreconditionException {
-
-		if (pList.id == null || pList.id.isEmpty() || task.id == null
-				|| task.id.isEmpty()) {
-			Log.d(TAG, "Invalid list ID found for uploadTask");
-			return;
-		}
-
-		HttpUriRequest httppost = new HttpPost(TaskMoveURL_ETAG_UPDATED(
-				task.id, pList.id, task.remoteparent, task.remoteprevious));
-
-		setAuthHeader(httppost);
-		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
-
-		// No need since this is only done on sucessful updates
-		// setHeaderStrongEtag(httppost, task.etag);
-
-		Log.d(TAG, httppost.getRequestLine().toString());
-		for (Header header : httppost.getAllHeaders()) {
-			Log.d(TAG, header.getName() + ": " + header.getValue());
-		}
-
-		String stringResponse = parseResponse(client.execute(httppost));
-
-		JSONObject jsonResponse = new JSONObject(stringResponse);
-
-		Log.d(TAG, jsonResponse.toString());
-
-		// Will return a task, containing id and etag. always update
-		// fields
-		task.etag = jsonResponse.getString("etag");
-		if (jsonResponse.has(GoogleTask.UPDATED))
-			task.updated = jsonResponse.getString(GoogleTask.UPDATED);
-		task.moveUploaded = true;
-		if (jsonResponse.has(GoogleTask.PARENT))
-			task.remoteparent = jsonResponse.getString(GoogleTask.PARENT);
-		else
-			task.remoteparent = null;
-		if (jsonResponse.has(GoogleTask.POSITION))
-			task.position = jsonResponse.getString(GoogleTask.POSITION);
-		else
-			task.position = null;
-	}
+//	private void moveTask(final GoogleTask task, final GoogleTaskList pList)
+//			throws ClientProtocolException, JSONException, IOException,
+//			PreconditionException {
+//
+//		if (pList.id == null || pList.id.isEmpty() || task.id == null
+//				|| task.id.isEmpty()) {
+//			Log.d(TAG + ".move", "Invalid list ID found for uploadTask");
+//			return;
+//		}
+//
+//		HttpUriRequest httppost = new HttpPost(TaskMoveURL_ETAG_UPDATED(
+//				task.id, pList.id, task.parent, task.remoteprevious));
+//
+//		setAuthHeader(httppost);
+//		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
+//
+//		// No need since this is only done on sucessful updates
+//		// setHeaderStrongEtag(httppost, task.etag);
+//
+//		Log.d(TAG + ".move", httppost.getRequestLine().toString());
+//		for (Header header : httppost.getAllHeaders()) {
+//			Log.d(TAG + ".move", header.getName() + ": " + header.getValue());
+//		}
+//
+//		String stringResponse = parseResponse(client.execute(httppost));
+//
+//		JSONObject jsonResponse = new JSONObject(stringResponse);
+//
+//		Log.d(TAG + ".move", jsonResponse.toString());
+//
+//		// Will return a task, containing id and etag. always update
+//		// fields
+//		task.etag = jsonResponse.getString("etag");
+//		if (jsonResponse.has(GoogleTask.UPDATED))
+//			task.updated = jsonResponse.getString(GoogleTask.UPDATED);
+//		task.moveUploaded = true;
+//		if (jsonResponse.has(GoogleTask.PARENT)) {
+//			task.remoteparent = jsonResponse.getString(GoogleTask.PARENT);
+//			Log.d(TAG + ".move", jsonResponse.getString(GoogleTask.PARENT));
+//		} else
+//			task.remoteparent = null;
+//		if (jsonResponse.has(GoogleTask.POSITION)) {
+//			task.position = jsonResponse.getString(GoogleTask.POSITION);
+//			Log.d(TAG + ".move", jsonResponse.getString(GoogleTask.POSITION));
+//		} else
+//			task.position = null;
+//	}
 
 	/**
 	 * Returns an object if all went well. Returns null if a conflict was
@@ -847,6 +850,7 @@ public class GoogleAPITalker {
 		StringEntity se = null;
 		try {
 			se = new StringEntity(task.toJSON(), HTTP.UTF_8);
+			Log.d(TAG + ".move", "Sending: " + task.toJSON());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}

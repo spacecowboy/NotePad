@@ -96,8 +96,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 	public static final int LOGIN_FAIL = 1;
 	public static final int ERROR = 2;
 
-	private static final String PREFS_LAST_SYNC_ETAG = "lastserveretag";
-	private static final String PREFS_LAST_SYNC_DATE = "lastsyncdate";
+	public static final String PREFS_LAST_SYNC_ETAG = "lastserveretag";
 
 	private final AccountManager accountManager;
 
@@ -225,36 +224,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 							 */
 
 							for (GoogleTask moddedTask : (ArrayList<GoogleTask>) moddedTasks) {
-								// ArrayList<GoogleTask> tasksToBeSaved =
-								// tasksInListToSaveToDB
-								// .get(list);
-								// if (tasksToBeSaved != null) {
-								// for (GoogleTask remoteTask : tasksToBeSaved)
-								// {
-								// if (remoteTask.equals(moddedTask)) {
-								// Log.d(TAG,
-								// "This modified task was newer on server, creating conflict copy: "
-								// + moddedTask.title);
-								// /*
-								// * Remove DB-ID from remote task so
-								// * it is new locally
-								// */
-								// remoteTask.dbId = -1;
-								// /*
-								// * Remove remote ID from local task
-								// * so it is new remotely
-								// */
-								// moddedTask.id = null;
-								// /*
-								// * Also remove the mapping between
-								// * ids
-								// */
-								// idMap.remove(moddedTask.dbId);
-								// break;
-								// }
-								// }
-								// }
-
 								/*
 								 * In the case that a task has been deleted
 								 * before it was synced the first time We should
@@ -280,19 +249,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						try {
 							GoogleTaskList result = apiTalker.uploadList(list);
 							uploadedStuff = true;
-							// if (result != null) {
-							// // Make sure that local version is the same as
-							// // server's
-							// for (GoogleTaskList localList : allLocalLists) {
-							// if (result.equals(localList)) {
-							// localList.title = result.title;
-							// localList.id = result.id;
-							// result.dbId = localList.dbId;
-							// break;
-							// }
-							// }
-							// listsToSaveToDB.add(result);
-							// }
 						} catch (PreconditionException e) {
 							Log.d(TAG, "There was a conflict with list delete");
 						}
@@ -304,28 +260,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						ArrayList<GoogleTask> tasksToUpload = tasksInListToUpload
 								.get(list.dbId);
 						if (tasksToUpload != null) {
-							/*
-							 * It is vital that we upload the tasks in the
-							 * correct order or we will not maintain the
-							 * positions
-							 */
-							Collections.sort(tasksToUpload,
-									GoogleTask.LOCALORDER);
 							for (GoogleTask task : tasksToUpload) {
 								// Update position fields with data from
 								// previous uploads
-								Log.d("sortupload", "Setting parent: " + task.localparent + " to " + idMap.get(task.localparent));
-								task.remoteparent = idMap.get(task.localparent);
-								Log.d("sortupload", "Setting previous: " + task.localprevious + " to " + idMap.get(task.localprevious));
-								task.remoteprevious = idMap
-										.get(task.localprevious);
 
 								try {
 									GoogleTask result = apiTalker.uploadTask(
 											task, list);
 									idMap.put(result.dbId, result.id);
 								} catch (PreconditionException e) {
-									Log.d(TAG, "There was task conflict. Trying as new task");
+									Log.d(TAG,
+											"There was task conflict. Trying as new task");
 									// There was a conflict, do it again but as
 									// a new note
 									task.id = null;
@@ -334,17 +279,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 										GoogleTask result = apiTalker
 												.uploadTask(task, list);
 									} catch (PreconditionException ee) {
-										Log.d(TAG, "Impossible conflict achieved");
+										Log.d(TAG,
+												"Impossible conflict achieved");
 										// Impossible to reach this
 									}
 								}
 								uploadedStuff = true;
-								// Task now has relevant fields set. Add to
-								// DB-list
-								// if (tasksInListToSaveToDB.get(list) == null)
-								// tasksInListToSaveToDB.put(list,
-								// new ArrayList<GoogleTask>());
-								// tasksInListToSaveToDB.get(list).add(result);
 							}
 						}
 					}
@@ -393,11 +333,23 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						}
 					}
 
-					// Sort them first
-					for (final ArrayList<GoogleTask> tasks : tasksInListToSaveToDB
-							.values()) {
-						sortByRemoteParent(tasks);
+					// Now, set sorting values.
+					for (GoogleTaskList list : tasksInListToSaveToDB.keySet()) {
+						Log.d(TAG, "Setting position values in: " + list.id);
+						ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
+								.get(list);
+
+						if (tasks != null) {
+							Log.d(TAG, "Setting position values for #tasks: "
+									+ tasks.size());
+							// Sort them first
+							sortByRemoteParent(tasks);
+							ArrayList<GoogleTask> allListTasks = allTasksInList
+									.get(list.dbId);
+							list.setSortingValues(tasks, allListTasks);
+						}
 					}
+
 					// Save to database in a single transaction
 					Log.d(TAG, "Save stuff to DB");
 					dbTalker.SaveToDatabase(listsToSaveToDB,
@@ -470,10 +422,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 			current = current >= (tasksToDo.size() - 1) ? 0 : current + 1;
 			Log.d("remoteorder", "current: " + current);
 
-			if (levels.containsKey(tasksToDo.get(current).remoteparent)) {
+			if (levels.containsKey(tasksToDo.get(current).parent)) {
 				Log.d("remoteorder", "parent in levelmap");
 				levels.put(tasksToDo.get(current).id,
-						levels.get(tasksToDo.get(current).remoteparent) + 1);
+						levels.get(tasksToDo.get(current).parent) + 1);
 				tasksToDo.remove(current);
 				current -= 1;
 				lastFailed = null;
@@ -484,7 +436,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 				Log.d("remoteorder", "lastFailed == current");
 				// Did full lap, parent is not new
 				levels.put(tasksToDo.get(current).id, 99);
-				levels.put(tasksToDo.get(current).remoteparent, 98);
+				levels.put(tasksToDo.get(current).parent, 98);
 				tasksToDo.remove(current);
 				current -= 1;
 				lastFailed = null;

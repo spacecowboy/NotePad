@@ -21,11 +21,8 @@ import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotePad.GTasks;
 import com.nononsenseapps.notepad.NotePad.Notes;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 
-import android.appwidget.AppWidgetManager;
 import android.content.ClipDescription;
-import android.content.ComponentName;
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
@@ -249,7 +246,6 @@ public class NotePadProvider extends ContentProvider implements
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_LOCALHIDDEN,
 				NotePad.Notes.COLUMN_NAME_LOCALHIDDEN);
 
-
 		// This is a special map. A locked note will not return its text in
 		// this projection.
 		// Useful for list displays, places that are not supposed to ask for
@@ -441,6 +437,7 @@ public class NotePadProvider extends ContentProvider implements
 			values.put(NotePad.Notes.COLUMN_NAME_DUE_DATE, "");
 			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, "needsAction");
 
+			values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, "");
 			values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
 
 			return db.insert(NotePad.Notes.TABLE_NAME, null, values);
@@ -474,7 +471,7 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.Notes.COLUMN_NAME_INDENTLEVEL
 					+ " INTEGER DEFAULT 0 NOT NULL,"
 					+ NotePad.Notes.COLUMN_NAME_POSSUBSORT
-					+ " TEXT DEFAULT '',"
+					+ " TEXT DEFAULT '' NOT NULL,"
 					+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
 					+ " INTEGER DEFAULT 0,"
 
@@ -524,13 +521,6 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.GTaskLists.COLUMN_NAME_ETAG + " TEXT" + ");");
 		}
 
-		/**
-		 * 
-		 * Demonstrates that the provider must consider what happens when the
-		 * underlying datastore is changed. In this sample, the database is
-		 * upgraded the database by destroying the existing data. A real
-		 * application should upgrade the database in place.
-		 */
 		@Override
 		public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 			Log.d("DataBaseHelper", "onUpgrade "
@@ -581,7 +571,6 @@ public class NotePadProvider extends ContentProvider implements
 						+ NotePad.Lists.COLUMN_NAME_DELETED
 						+ " INTEGER DEFAULT 0 NOT NULL" + ");");
 
-
 				db.execSQL("CREATE TABLE " + NotePad.GTasks.TABLE_NAME
 						+ " (" + BaseColumns._ID + " INTEGER PRIMARY KEY,"
 						+ NotePad.GTasks.COLUMN_NAME_DB_ID
@@ -604,11 +593,11 @@ public class NotePadProvider extends ContentProvider implements
 						+ NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT
 						+ " INTEGER NOT NULL,"
 						+ NotePad.GTaskLists.COLUMN_NAME_UPDATED + " TEXT,"
-						+ NotePad.GTaskLists.COLUMN_NAME_ETAG + " TEXT"
-						+ ");");
+						+ NotePad.GTaskLists.COLUMN_NAME_ETAG + " TEXT" + ");");
 
 				// Now insert a default list
 				long listId = insertDefaultList(db);
+
 
 				// Place all existing notes in this list
 				// And give them sensible values in the new columns
@@ -652,8 +641,7 @@ public class NotePadProvider extends ContentProvider implements
 						+ " ADD COLUMN ";
 				String postText = " TEXT DEFAULT ''";
 				String postNameInt = " INTEGER DEFAULT 0";
-				db.execSQL(preName + "possubsort"
-						+ postText);
+				db.execSQL(preName + "possubsort" + postText);
 				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
 						+ postNameInt);
 			}
@@ -664,8 +652,7 @@ public class NotePadProvider extends ContentProvider implements
 				String postNameInt = " INTEGER DEFAULT 0";
 				db.execSQL(preName + NotePad.Notes.COLUMN_NAME_INDENTLEVEL
 						+ postNameInt);
-				db.execSQL(preName + "locked"
-						+ postNameInt);
+				db.execSQL(preName + "locked" + postNameInt);
 
 				// Mark all notes as modified to ensure we set the indents on
 				// next sync
@@ -673,7 +660,6 @@ public class NotePadProvider extends ContentProvider implements
 				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
 				db.update(NotePad.Notes.TABLE_NAME, values, null, null);
 			}
-			
 		}
 
 		@Override
@@ -1161,8 +1147,6 @@ public class NotePadProvider extends ContentProvider implements
 			throw new SQLException("A note must always belong to a list!");
 		}
 
-		final Long listId = values.getAsLong(Notes.COLUMN_NAME_LIST);
-
 		// Gets the current system time in milliseconds
 		Long now = Long.valueOf(System.currentTimeMillis());
 
@@ -1213,15 +1197,6 @@ public class NotePadProvider extends ContentProvider implements
 
 		if (values.containsKey(NotePad.Notes.COLUMN_NAME_INDENTLEVEL) == false) {
 			values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, 0);
-		}
-
-		String position = null, remoteParent = null;
-		// SyncAdapter will provide remote values
-		if (values.containsKey(Notes.COLUMN_NAME_POSITION)) {
-			position = values.getAsString(Notes.COLUMN_NAME_POSITION);
-		}
-		if (values.containsKey(Notes.COLUMN_NAME_GTASKSPARENT)) {
-			remoteParent = values.getAsString(Notes.COLUMN_NAME_GTASKSPARENT);
 		}
 
 		// Opens the database object in "write" mode.
@@ -1300,6 +1275,7 @@ public class NotePadProvider extends ContentProvider implements
 
 	/**
 	 * Given a bunch of columns will return a string as
+<<<<<<< HEAD
 	 * "Col1 IS ? AND Col2 IS ? AND ..." ends the string with deleted is not 1
 	 * and truepos > "0" to only fetch valid notes
 	 * 
@@ -1313,6 +1289,8 @@ public class NotePadProvider extends ContentProvider implements
 
 	/**
 	 * Given a bunch of columns will return a string as
+=======
+>>>>>>> 7110d94... Recovery commit after corrupted backup
 	 * "Col1 IS ? AND Col2 IS ? AND ..."
 	 */
 	private static String toWhereClause(String... columns) {
@@ -1941,7 +1919,6 @@ public class NotePadProvider extends ContentProvider implements
 
 			db.beginTransaction();
 			try {
-
 				// Does the update and returns the number of rows updated.
 				count += db.update(NotePad.Notes.TABLE_NAME, // The database
 																// table
@@ -1985,18 +1962,6 @@ public class NotePadProvider extends ContentProvider implements
 				values.put(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE, now);
 			}
 
-			String position = null,
-			remoteParent = null;
-			// SyncAdapter will provide remote values
-			if (values.containsKey(Notes.COLUMN_NAME_POSITION)) {
-				position = values.getAsString(Notes.COLUMN_NAME_POSITION);
-			}
-			if (values.containsKey(Notes.COLUMN_NAME_GTASKSPARENT)) {
-				remoteParent = values
-						.getAsString(Notes.COLUMN_NAME_GTASKSPARENT);
-				values.remove(Notes.COLUMN_NAME_GTASKSPARENT);
-			}
-
 			/*
 			 * Starts creating the final WHERE clause by restricting it to the
 			 * incoming note ID.
@@ -2014,6 +1979,13 @@ public class NotePadProvider extends ContentProvider implements
 
 			db.beginTransaction();
 			try {
+
+				if (values.containsKey(Notes.COLUMN_NAME_LIST)) {
+					final Long newListId = values
+							.getAsLong(Notes.COLUMN_NAME_LIST);
+
+					copyDeleteNote(db, Long.parseLong(id), newListId);
+				}
 
 				// Does the update and returns the number of rows updated.
 				count += db.update(NotePad.Notes.TABLE_NAME, values,

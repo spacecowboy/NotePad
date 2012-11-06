@@ -21,25 +21,9 @@
     android:baselineAligned="false"
     android:orientation="horizontal" >
 
-    <FrameLayout
-        android:id="@+id/leftFragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:paddingRight="0dp"
-        android:visibility="gone" >
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:paddingTop="4dip"
-            android:layout_gravity="center"
-            android:text="@string/please_create_list"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
-        </FrameLayout>
-
     <android.support.v4.view.ViewPager xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/pager"
+    android:id="@+id/leftFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">

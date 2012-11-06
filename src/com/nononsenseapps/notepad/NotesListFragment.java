@@ -111,6 +111,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
 			NotePad.Notes.COLUMN_NAME_LIST };
 
+
 	// public static final String SELECTEDPOS = "selectedpos";
 	// public static final String SELECTEDID = "selectedid";
 
@@ -332,8 +333,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	}
 
 	private int getPosOfId(long id) {
-		if (mSectionAdapter != null)
-			return -1;
+		if (mSectionAdapter == null || mSectionAdapter.isSectioned())
+			return ListView.INVALID_POSITION;
 
 		int length = mSectionAdapter.getCount();
 		int position;
@@ -345,7 +346,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (position == length) {
 			// Happens both if list is empty
 			// and if id is -1
-			position = -1;
+			position = ListView.INVALID_POSITION;
 		}
 		return position;
 	}
@@ -655,11 +656,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		int pos = getPosOfId(mCurId);
 
 		Log.d(TAG, "reSelectId id pos: " + mCurId + " " + pos);
-		// This happens in a search. Don't destroy id information in selectPos
-		// when it is invalid
-		if (pos != -1) {
-			setActivatedPosition(pos);
-		}
+		setActivatedPosition(pos);
 	}
 
 	private SimpleCursorAdapter getThemedAdapter(Cursor cursor) {
@@ -1949,6 +1946,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			if (activity.getCurrentContent().equals(
 					DualLayoutActivity.CONTENTVIEW.DUAL))
 				autoOpenNote = true;
+		} else {
+			reSelectId();
 		}
 
 		// If a note was created, it will be set in this variable

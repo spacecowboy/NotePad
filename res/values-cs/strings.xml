@@ -103,7 +103,6 @@
     <string name="default_list_needed_warning">Nejprve zvolte výchozí seznam</string>
     <string name="reverted">Změny vráceny</string>
     <string name="deleted">Odstraněno</string>
-    <string name="mode_choose">Výběr položek</string>
     
     <string name="permission_read_label">číst poznámky a seznamy</string>
     <string name="permission_read_desc">Povolit aplikaci čtení vašich poznámek a souvisejících seznamů.</string>

@@ -45,7 +45,6 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	protected String[] from;
 	protected int[] to;
 
-	private int numOfItems = 0;
 	private int layout;
 
 	/**
@@ -146,7 +145,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if (cursor != null && position < numOfItems)
+		if (cursor != null && position < super.getCount())
 			return super.getView(position, convertView, parent);
 
 		ViewHolder viewHolder = null;
@@ -163,14 +162,14 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 			viewHolder = setViewHolder(convertView);
 		}
 		viewHolder.texts[0].setText(context.getText(extraLabels[position
-				- numOfItems]));
+				- super.getCount()]));
 
 		return convertView;
 	}
 
 	@Override
 	public View getDropDownView(int position, View convertView, ViewGroup parent) {
-		if (cursor != null && position < numOfItems)
+		if (cursor != null && position < super.getCount())
 			return super.getDropDownView(position, convertView, parent);
 
 		ViewHolder viewHolder = null;
@@ -187,27 +186,26 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 			viewHolder = setViewHolder(convertView);
 		}
 		viewHolder.texts[0].setText(context.getText(extraLabels[position
-				- numOfItems]));
+				- super.getCount()]));
 
 		return convertView;
 	}
 
 	@Override
 	public long getItemId(int position) {
-		if (position < numOfItems) {
+		if (position < super.getCount()) {
 			return super.getItemId(position);
 		} else {
-			return extraIds[position - numOfItems];
+			return extraIds[position - super.getCount()];
 		}
 	}
 
 	@Override
 	public int getCount() {
-		numOfItems = super.getCount();
 		if (extraIds != null)
-			return numOfItems + extraIds.length;
+			return super.getCount() + extraIds.length;
 		else
-			return numOfItems;
+			return super.getCount();
 	}
 	
 	/**
@@ -216,7 +214,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	 * @return
 	 */
 	public CharSequence getExtraItem(int realPos) {
-		realPos -= numOfItems;
+		realPos -= super.getCount();
 		if (extraLabels.length == 0 || realPos < -1 || realPos > extraLabels.length)
 			return null;
 		else

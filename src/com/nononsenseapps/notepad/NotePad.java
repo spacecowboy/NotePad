@@ -16,13 +16,9 @@
 
 package com.nononsenseapps.notepad;
 
-import java.math.BigDecimal;
-import java.security.InvalidParameterException;
-
 import android.app.SearchManager;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import com.nononsenseapps.helpers.Log;
 
 /**
  * Defines a contract between the Note Pad content provider and its clients. A
@@ -198,6 +194,8 @@ public final class NotePad {
 
 		// public static final String COLUMN_NAME_PARENT = "gtasks_parent";
 		public static final String COLUMN_NAME_GTASKSPARENT = "gtasks_parent";
+		public static final String COLUMN_NAME_PARENT = "gtasks_parent";
+
 		public static final String COLUMN_NAME_POSITION = "gtasks_position";
 		public static final String COLUMN_NAME_HIDDEN = "hiddenflag";
 
@@ -226,15 +224,12 @@ public final class NotePad {
 		public static final String DESCENDING_SORT_ORDERING = "DESC";
 		public static final String ALPHABETIC_ASC_ORDER = COLUMN_NAME_TITLE
 				+ " COLLATE NOCASE ASC";
-		public static final String POSITION_ASC_ORDER = COLUMN_NAME_POSITION
-				+ " ASC";
+		//public static final String POSITION_ASC_ORDER = COLUMN_NAME_POSITION+ " ASC";
 
 		public static final String DEFAULT_SORT_TYPE = POSSUBSORT_SORT_TYPE;
 		public static final String DEFAULT_SORT_ORDERING = ASCENDING_SORT_ORDERING;
 
 		public static String SORT_ORDER = ALPHABETIC_ASC_ORDER;
-
-		
 	}
 
 	/**

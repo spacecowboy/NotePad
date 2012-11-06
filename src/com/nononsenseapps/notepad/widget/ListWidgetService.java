@@ -185,7 +185,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 		long listId = Long.parseLong(settings.getString(
 				ListWidgetConfigure.KEY_LIST,
-				Integer.toString(MainActivity.ALL_NOTES_ID)));
+				"-1"));
 
 		final Intent fillInIntent = new Intent();
 		fillInIntent.setAction(ListWidgetProvider.CLICK_ACTION);
@@ -231,7 +231,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		if (settings != null) {
 			listId = Long.parseLong(settings.getString(
 					ListWidgetConfigure.KEY_LIST,
-					Integer.toString(MainActivity.ALL_NOTES_ID)));
+					"-1"));
 
 			// getListTitle(settings, listId);
 

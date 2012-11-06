@@ -130,23 +130,4 @@
     <string name="sync_failed">Synchronisation fehlgeschlagen</string>
     <string name="sync_login_failed">Login fehlgeschlagen, es konnte keine Verbindung zu Google Tasks hergestellt werden</string>
 
-    <string tools:ignore="MissingTranslation" name="about_text">Um das Beste aus dieser App zu holen empfehle ich Ihnen als ersten Schritt die Synchronisation mit Ihrem Google Konto. Hierzu drücken Sie einfach den Sync-Button in der Aktionsleiste, zurück in der Aufgabenübersicht. Die in den Einstellungen standardmäßig aktivierte, automatische Synchronisation, wird ein mal pro Stunde durchgeführt. 
-
-Beachten Sie, dass dies mit Ihrer globaler Voreinstellung gepaart ist. Dies bedeutet das bei Deaktivierung ihrer Gmail Konto Sync Funktionen auch diese App keine AutoSync mehr durchführen kann. 
-In den Einstellungen dieser App können sie weiterhin  zwischen ganz manueller und Synchronisierung nach Zeit, wählen. 
-
-Wenn Sie mehr als ein Google-Konto auf Ihrem Gerät haben, empfehle ich Ihnen, in die Einstellungen zu gehen und das Konto manuell zu wählen, welches Sie für Ihre Aufgaben verwenden möchten.
-
-Ich empfehle Ihnen in jedem Fall vor der weiteren Benutzung dieser App einmal in die Einstellungen zu gehen.
-Alleine nur um zu sehen, welche weiteren Möglichkeiten Ihnen dort zur Verfügung stehen. Wie z.B.:
--Wahl der Schriftart 
--Wahl der Schriftgröße
--Wechsel des Thema zw. hell und dunkel.
-
-Die App enthält ein Widget, welches vollständig skalierbar ist. Sie ändern es wie alle anderen Widgets: Tippen und halten Sie den Finger für einen Moment auf das Widget, als ob Sie es bewegen wollten. Dann ziehen Sie an den Seiten des Widgets um es größer oder kleiner werden zu lassen.
-
-Ich hoffe, Sie finden die App nützlich. Beachten Sie, dass sie völlig kostenlos ist,   keine fremden Lizenzen enthält und den Open Source Bedingungen unterliegt. 
-Für neue Ideen und/oder Beschwerden per eMail wäre ich Ihnen dankbar.
-Mfg Jonas</string>
-
 </resources>

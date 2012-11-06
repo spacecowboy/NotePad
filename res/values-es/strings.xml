@@ -88,7 +88,7 @@
     <string name="ok">OK</string>
     <string name="show_from_all_lists">Todas las listas</string>
     <string name="default_list_needed_warning">Seleccione primero una lista predeterminada</string>
-    <string name="reverted">Cambios descartados</string>
+    <string name="reverted">Cambios deshechos</string>
     <string name="notecopied">Copiado</string>
     <string name="items">notas</string>
     <string name="permission_read_label">leer notas y listas</string>
@@ -111,18 +111,18 @@
     <string name="mode_choose">Seleccionar elementos</string>
     
     <plurals name="notecopied_msg">
-        <item quantity="one">Una nota copiada</item>
-        <item quantity="other">%d notas copiadas</item>
+        <item quantity="one">Copiado de una nota.</item>
+        <item quantity="other">Copiado %d notas.</item>
     </plurals>
     
     <plurals name="notedeleted_msg">
-        <item quantity="one">Una nota eliminada</item>
-        <item quantity="other">%d notas eliminadas</item>
+        <item quantity="one">Eliminado de una nota.</item>
+        <item quantity="other">Elimiado %d notas.</item>
     </plurals>
     
     <plurals name="mode_choose">
-        <item quantity="one">Una nota seleccionada</item>
-        <item quantity="other">%d notas seleccionadas</item>
+        <item quantity="one">Elegida una nota.</item>
+        <item quantity="other">Seleccionados %d notas.</item>
     </plurals>
     
     <string name="lock_note">Bloquear nota</string>
@@ -141,8 +141,8 @@
     <string name="apply">Aplicar</string>
     <string name="clear_password">Borrar contraseña</string>
     <string name="password_info"> Establecer una contraseña requerirá que la introduzca
-        para que se muestren las notas bloqueadas. Sólo protegerá el campo Nota, por lo que seguirá habiendo libre acceso
-        al título y a la fecha. No encripta la nota de ningún modo, así que se podrá seguir viendo 
+        para que se muestren las notas bloqueadas. Sólo protegerá el campo Nota, por lo que seguirá habiendo acceso
+        libre al título y a la fecha. No encripta la nota de ningún modo, así que se podrá seguir viendo 
         en Google mail/calendar. Si olvida la contraseña, sincronice con Google y
         después reinstale la aplicación.</string>
     <string name="about">Créditos</string>
@@ -186,10 +186,6 @@
     <string name="settings_listheader_off">Sin cabeceras de lista</string>
     <string name="settings_listheader_on">Con cabeceras de lista</string>
     
-    <string tools:ignore="MissingTranslation" name="please_create_list">Cree una nueva lista, por favor</string>
-    <string tools:ignore="MissingTranslation" name="please_select_note">Seleccione o cree una nueva nota, por favor</string>
-    <string tools:ignore="MissingTranslation" name="please_create_note">Cree una nueva nota, por favor</string>
-    
     <string name="default_notetitle">¡Bienvenido!</string>
     <string name="default_notetext">Para sacar el máximo aprovechamiento de esta aplicación, le sugiero que active la sincronización antes de nada. Continúe, y pulse el botón para sincronizar de la barra de acciones cuando vuelva a la lista. Esto activará la sincronización automática por defecto, que actuará cada hora.
 \n\nEsto está ligado a sus preferencias globales de sincronización. Resumidamente, si no está activada la sincronización de gmail, entonces tampoco se sincronizará esta aplicación. Puede desactivar la sincronización automática, y hacerla manualmente usted, en el apartado de configuración.
@@ -199,20 +195,5 @@
 \n\nEspero que encuentre útil la aplicación. Recuerde que es completamente gratis, no tiene publicidad y es de código abierto. Si tiene alguna buena idea o queja, por favor dígamelas.
 \n\n/Jonas
 </string>
-<string tools:ignore="MissingTranslation" name="about_text">¡Gracias por descargar mi aplicación! Intento que esta aplicación sea lo más perfecta posible, pero siempre habrá errores y otras cosas que siempre pueden mejorarse.\n
-
-\nSi encuentra un error, una traducción errónea, o simplemente tiene una buena idea, ¡quiero oírlo!
-\nEnvíeme un email a: jonas@nononsenseapps.com
-\n\nTwitéeme: @SciencyGuy
-\n\Haga +1 en mi perfil: https://plus.google.com/u/0/111801385015192089838
-\n\nDé parte en el listado de errores: https://github.com/spacecowboy/NotePad/issues
-
-\n\nComo el proyecto es de código abierto, también puede intentar arreglarlo usted mismo si tiene conocimientos de programación, y enviarme un pull request.
-
-\n\nSi quiere proporcionar una traducción para su lengua, sería fantástico. ¡Contácteme!
-\nHe hecho un vídeo instructivo sobre cómo actualizar traducciones existentes de la aplicación directamente en GitHub: http://www.youtube.com/watch?v=oZTO5zOoCb4
-
-\n\nUna vez más, ¡gracias por descargar mi aplicación!
-\nSi le gustaría apoyar el proyecto de una forma menos activa, también puede comprar la versión de donación: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
 
 </resources>
