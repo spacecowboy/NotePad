@@ -47,9 +47,6 @@ public class GoogleDBTalker {
 			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
 			NotePad.Notes.COLUMN_NAME_LIST,
 			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
-			NotePad.Notes.COLUMN_NAME_PARENT,
-			NotePad.Notes.COLUMN_NAME_PREVIOUS,
-			NotePad.Notes.COLUMN_NAME_TRUEPOS,
 			NotePad.Notes.COLUMN_NAME_HIDDEN, NotePad.GTasks.COLUMN_NAME_DB_ID,
 			NotePad.Notes.COLUMN_NAME_POSSUBSORT,
 			NotePad.Notes.COLUMN_NAME_INDENTLEVEL,
@@ -253,7 +250,7 @@ public class GoogleDBTalker {
 		// Sort by position so the id map is updated correctly before being used
 		Cursor cursor = provider.query(NotePad.Notes.CONTENT_JOINED_URI,
 				JOINED_NOTES_PROJECTION, null, new String[] { accountName },
-				NotePad.Notes.COLUMN_NAME_TRUEPOS);
+				NotePad.Notes.COLUMN_NAME_POSSUBSORT);
 
 		populateWithTasks(cursor, allTasks, idMap);
 		cursor.close();
@@ -294,17 +291,7 @@ public class GoogleDBTalker {
 								.getColumnIndex(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS));
 				task.listdbid = cursor.getLong(cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
-
-				final String previousS = cursor.getString(cursor
-						.getColumnIndex(NotePad.Notes.COLUMN_NAME_PREVIOUS));
-				final String parentS = cursor.getString(cursor
-						.getColumnIndex(NotePad.Notes.COLUMN_NAME_PARENT));
 				
-				task.localprevious = previousS == null ? null : Long.parseLong(previousS);
-				task.localparent = parentS == null ? null : Long.parseLong(parentS);
-				
-				task.truepos = cursor.getString(cursor
-						.getColumnIndex(NotePad.Notes.COLUMN_NAME_TRUEPOS));
 				task.hidden = cursor.getInt(cursor
 						.getColumnIndex(NotePad.Notes.COLUMN_NAME_HIDDEN));
 				// Task is assembled, move on

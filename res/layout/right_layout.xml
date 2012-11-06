@@ -20,11 +20,10 @@
     android:orientation="vertical" >
     
     <!-- Change the class to your fragment class -->
-    <fragment
+    <FrameLayout
         android:id="@+id/rightFragment"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        class="com.nononsenseapps.notepad.NotesEditorFragment" >
-    </fragment>
+        android:layout_height="match_parent" >
+    </FrameLayout>
 
 </LinearLayout>

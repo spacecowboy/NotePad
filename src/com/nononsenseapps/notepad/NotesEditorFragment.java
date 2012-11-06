@@ -230,7 +230,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 */
 	private void openNote(Bundle savedInstanceState) {
 		// Just make sure we are attached
-		if (activity == null || !activity.isFinishing()) {
+		if (activity != null && !activity.isFinishing()) {
 			doSave = true;
 			opened = true;
 			if (id != -1) {
@@ -317,7 +317,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		listC = this.listId != mOriginalListId && mOriginalListId > -1;
 		parentC = this.parent != mOriginalParent;
 		previousC = this.previous != mOriginalPrevious;
-		
+
 		Log.d("posredux", "has note changed");
 		Log.d("posredux", "title " + title);
 		Log.d("posredux", "note " + note);
@@ -420,14 +420,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		mOriginalTitle = title;
 		mOriginalNote = text;
 		mOriginalDueDate = dueDateSet ? due : "";
-		
+
 		mCompleteChanged = false;
 		mOriginalListId = listId;
 		mOriginalParent = parent;
 		Log.d("posredux", "originalpar3 " + mOriginalParent);
 		mOriginalPrevious = previous;
 		Log.d("posredux", "originalprev3 " + mOriginalPrevious);
-		
+
 	}
 
 	private String makeTitle(String text) {
@@ -497,17 +497,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 								&& getArguments().containsKey(KEYID)
 								&& getArguments().containsKey(LISTID)));
 
-		if (getArguments() != null && getArguments().containsKey(KEYID)
-				&& getArguments().containsKey(LISTID)) {
-
-			Log.d(TAG, "Should never happen right");
+		id = -1;
+		if (getArguments() != null && getArguments().containsKey(KEYID)) {
 			id = getArguments().getLong(KEYID);
-			// listId = getArguments().getLong(LISTID);
-		} else {
-
-			Log.d(TAG, "onCreate, no valid values in arguments");
-			id = -1;
-			// listId = -1;
+		}
+		if (savedInstanceState != null && savedInstanceState.containsKey(KEYID)) {
+			id = savedInstanceState.getLong(KEYID);
 		}
 
 		noteDueDate = new Time(Time.getCurrentTimezone());
@@ -518,11 +513,19 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		day = c.get(Calendar.DAY_OF_MONTH);
 
 		noteAttrs = new NoteAttributes(); // Just a precaution
+		
+		if (id == -1) {
+			Log.d(TAG, "onCreate, no valid values in arguments");
+			throw new NullPointerException(
+					"No note id was specified in the arguments!");
+		}
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+
+		Log.d("NotesEditorFragment", "oncreateview");
 
 		int layout = R.layout.editor_layout;
 
@@ -622,15 +625,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		// Main note edit text
 		mText = (EditText) theView.findViewById(R.id.noteBox);
 		mText.addTextChangedListener(this);
-		mText.setEnabled(false);
 		// Title edit text
 		mTitle = (EditText) theView.findViewById(R.id.titleBox);
 		mTitle.addTextChangedListener(this);
-		mTitle.setEnabled(false);
 		// dueDate button
 		mDueDate = (Button) theView.findViewById(R.id.dueDateBox);
 		mDueDate.setOnClickListener(this);
-		mDueDate.setEnabled(false);
 		// List spinner
 		listSpinner = (Spinner) theView.findViewById(R.id.noteListSpinner);
 		listAdapter = new SimpleCursorAdapter(getActivity(),
@@ -709,7 +709,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	protected void makeSubtaskOf(Long newParent) {
 		if (newParent != null && newParent == TOPNOTE)
 			newParent = null;
-		
+
 		if (newParent != this.parent) {
 			Log.d("posredux", "newParent: " + newParent + ", oldparent: "
 					+ this.parent);
@@ -770,22 +770,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			Log.d("NotesEditorFragment",
 					"onActivityCreated, but it is time to die so doing nothing...");
-		} else if (saves != null && saves.containsKey(KEYID)
-				&& saves.containsKey(LISTID)) {
-
-			Log.d(TAG, "onActivityCrated, saves are not null!");
-			openNote(saves);
 		} else if (id > -1) {
-
 			Log.d(TAG,
 					"onActivityCreated, got valid id atleast. Displaying note...");
-			// in activity
-			// displayNote(id, listId);
-			openNote(null);
+			openNote(saves);
 		} else {
-
 			Log.d(TAG,
 					"onActivityCreated, could not find valid values. Maybe I should die now?");
+			throw new NullPointerException("No valid is was given!");
 		}
 	}
 
@@ -942,7 +934,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 * @param id
 	 * @param mCurListId
 	 */
-	public void displayNote(long id) {
+	private void displayNote(long id) {
 
 		// TODO make the fragment be a progress bar like the list here until it
 		// is opened
@@ -1236,6 +1228,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public void onSaveInstanceState(Bundle outState) {
 		// Save away the original text, so we still have it if the activity
 		// needs to be killed while paused.
+		outState.putLong(KEYID, this.id);
+		outState.putLong(this.LISTID, this.listId);
 		outState.putString(ORIGINAL_NOTE, mOriginalNote);
 		outState.putString(ORIGINAL_DUE, noteDueDate.format3339(false));
 		outState.putBoolean(ORIGINAL_DUE_STATE, mOriginalDueState);
@@ -1271,7 +1265,15 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		// Just make sure we are unregistered
+		getLoaderManager().destroyLoader(LOADER_LISTS_ID);
+		getLoaderManager().destroyLoader(LOADER_NOTE_ID);
+		getLoaderManager().destroyLoader(OTHER_NOTES_LOADER);
+	}
+	
+	@Override
+	public void onDetach() {
+		super.onDetach();
+		this.activity = null;
 	}
 
 	private void saveNote() {

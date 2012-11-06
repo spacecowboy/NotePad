@@ -18,6 +18,7 @@ package com.nononsenseapps.ui;
 
 import android.content.Context;
 import android.database.Cursor;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ResourceCursorAdapter;
@@ -33,7 +34,7 @@ import android.widget.TextView;
  * 
  */
 public class ExtrasCursorAdapter extends ResourceCursorAdapter {
-	//private static final String TAG = "ExtrasCursorAdapter";
+	// private static final String TAG = "ExtrasCursorAdapter";
 
 	private Cursor cursor;
 	protected Context context;
@@ -45,6 +46,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	protected int[] to;
 
 	private int numOfItems = 0;
+	private int layout;
 
 	/**
 	 * Same as a cursoradapter except two extra arrays are taken (and a layout).
@@ -61,6 +63,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		this.context = context;
 		this.from = from;
 		this.to = to;
+		this.layout = layout;
 	}
 
 	/**
@@ -79,6 +82,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		this.context = context;
 		this.from = from;
 		this.to = to;
+		this.layout = layout;
 	}
 
 	/**
@@ -97,6 +101,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		this.context = context;
 		this.from = from;
 		this.to = to;
+		this.layout = layout;
 	}
 
 	/**
@@ -115,9 +120,10 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 					.getColumnIndex(from[i])));
 		}
 	}
-	
+
 	/**
 	 * Initializes the viewholder according to the specified from/to arrays.
+	 * 
 	 * @param view
 	 * @return
 	 */
@@ -140,14 +146,16 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if (cursor == null || position < numOfItems)
+		if (cursor != null && position < numOfItems)
 			return super.getView(position, convertView, parent);
 
 		ViewHolder viewHolder = null;
 		if (convertView == null) {
 			// Make a new view
-			cursor.moveToFirst();
-			convertView = super.newView(parent.getContext(), cursor, parent);
+			LayoutInflater mInflater = LayoutInflater.from(context);
+			convertView = mInflater.inflate(layout, parent, false);
+			//cursor.moveToFirst();
+			//convertView = super.newView(parent.getContext(), cursor, parent);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
@@ -162,15 +170,16 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 
 	@Override
 	public View getDropDownView(int position, View convertView, ViewGroup parent) {
-		if (cursor == null || position < numOfItems)
+		if (cursor != null && position < numOfItems)
 			return super.getDropDownView(position, convertView, parent);
 
 		ViewHolder viewHolder = null;
 		if (convertView == null) {
 			// Make a new view
-			cursor.moveToFirst();
-			convertView = super.newDropDownView(parent.getContext(), cursor,
-					parent);
+			LayoutInflater mInflater = LayoutInflater.from(context);
+			convertView = mInflater.inflate(layout, parent, false);
+			//cursor.moveToFirst();
+			//convertView = super.newDropDownView(parent.getContext(), cursor,parent);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
@@ -185,7 +194,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 
 	@Override
 	public long getItemId(int position) {
-		if (numOfItems < 1 || position < numOfItems) {
+		if (position < numOfItems) {
 			return super.getItemId(position);
 		} else {
 			return extraIds[position - numOfItems];
@@ -195,7 +204,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	@Override
 	public int getCount() {
 		numOfItems = super.getCount();
-		if (numOfItems > 0 && extraIds != null)
+		if (extraIds != null)
 			return numOfItems + extraIds.length;
 		else
 			return numOfItems;

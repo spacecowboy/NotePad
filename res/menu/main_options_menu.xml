@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+    
+    <item
+        android:id="@+id/menu_sync"
+        android:icon="?navigation_refresh"
+        android:orderInCategory="1"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_sync"/> 
+    
+   <!--  Here editor options should be displayed in landscape mode. Hence the drastic increase in order index -->
+    <item
+        android:id="@+id/menu_preferences"
+        android:icon="?action_settings"
+        android:orderInCategory="14"
+        android:showAsAction="never"
+        android:title="@string/menu_preferences"/>
+    <item
+        android:id="@+id/menu_changelog"
+        android:orderInCategory="99"
+        android:showAsAction="never"
+        android:title="@string/changelog_full_title"/>
+
+</menu>
