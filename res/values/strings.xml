@@ -72,7 +72,7 @@
     <string name="monospace">Monospace</string>
     <string name="sans">Sans</string>
     <string name="serif">Serif</string>
-    <string name="settings_sync_freq_title">Sync frequency</string>
+    <string name="settings_sync_freq_title">Sync type</string>
     <string name="settings_account_title">Select an account</string>
     <string name="settings_account_summary">Click to switch account</string>
     <string name="settings_sync_enable_title">Google Tasks sync</string>
@@ -105,7 +105,7 @@
     <string name="settings_list_dialog">Select a list</string>
     <string name="settings_list">List</string>
     <string name="settings_list_summary"></string>
-    <string name="automatic">Automatically</string>
+    <string name="automatic">Automatic (1 hour)</string>
 
     <string name="preferences_week_start_day_dialog">Week starts on</string>
     <string name="preferences_week_start_day_title">Week starts on</string>
