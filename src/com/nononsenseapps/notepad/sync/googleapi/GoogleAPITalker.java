@@ -734,7 +734,7 @@ public class GoogleAPITalker {
 								// the server
 			}
 
-			Log.d(TAG, "ID IS NULL: " + AllLists());
+			Log.d(TAG, "Fetching lists with: " + AllLists());
 			httppost = new HttpPost(AllLists());
 			list.didRemoteInsert = true; // Need this later
 		}

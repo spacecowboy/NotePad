@@ -1995,7 +1995,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		try {
-			if (activity.isFinishing()) {
+			if (activity == null || activity.isFinishing()) {
 
 				Log.d(TAG, "isFinishing, should not update");
 				// Setting the summary now would crash it with
