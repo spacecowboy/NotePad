@@ -192,8 +192,6 @@ public final class NotePad {
 
 		// parent position hidden
 
-		// public static final String COLUMN_NAME_PARENT = "gtasks_parent";
-		public static final String COLUMN_NAME_GTASKSPARENT = "gtasks_parent";
 		public static final String COLUMN_NAME_PARENT = "gtasks_parent";
 
 		public static final String COLUMN_NAME_POSITION = "gtasks_position";

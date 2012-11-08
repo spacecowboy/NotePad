@@ -236,6 +236,8 @@ public class NotePadProvider extends ContentProvider implements
 
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_POSITION,
 				NotePad.Notes.COLUMN_NAME_POSITION);
+		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_PARENT,
+				NotePad.Notes.COLUMN_NAME_PARENT);
 		sNotesProjectionMap.put(NotePad.Notes.COLUMN_NAME_HIDDEN,
 				NotePad.Notes.COLUMN_NAME_HIDDEN);
 
@@ -475,7 +477,7 @@ public class NotePadProvider extends ContentProvider implements
 					+ NotePad.Notes.COLUMN_NAME_LOCALHIDDEN
 					+ " INTEGER DEFAULT 0,"
 
-					+ NotePad.Notes.COLUMN_NAME_GTASKSPARENT + " TEXT,"
+					+ NotePad.Notes.COLUMN_NAME_PARENT + " TEXT,"
 
 					+ NotePad.Notes.COLUMN_NAME_DELETED
 					+ " INTEGER DEFAULT 0 NOT NULL" + ");");
