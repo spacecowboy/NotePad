@@ -1958,7 +1958,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		}
 		// Open first note if this is first start
 		// or if one was opened previously
-		else if (autoOpenNote) {
+		else if (autoOpenNote && false) {
 			autoOpenNote = false;
 			showFirstBestNote();
 		} else {
