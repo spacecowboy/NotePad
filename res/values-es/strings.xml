@@ -111,18 +111,18 @@
     <string name="mode_choose">Seleccionar elementos</string>
     
     <plurals name="notecopied_msg">
-        <item quantity="one">Copiado de una nota.</item>
-        <item quantity="other">Copiado %d notas.</item>
+        <item quantity="one">Nota copiada</item>
+        <item quantity="other">%d notas copiadas</item>
     </plurals>
     
     <plurals name="notedeleted_msg">
-        <item quantity="one">Eliminado de una nota.</item>
-        <item quantity="other">Elimiado %d notas.</item>
+        <item quantity="one">Nota eliminada</item>
+        <item quantity="other">%d notas elimininadas</item>
     </plurals>
     
     <plurals name="mode_choose">
-        <item quantity="one">Elegida una nota.</item>
-        <item quantity="other">Seleccionados %d notas.</item>
+        <item quantity="one">Nota seleccionada</item>
+        <item quantity="other">%d notas seleccionadas</item>
     </plurals>
     
     <string name="lock_note">Bloquear nota</string>
