@@ -112,6 +112,10 @@
 
     <target name="config" >
 
+	<echo>
+	Copying api key into source
+	</echo>
+
         <property
             name="config-target-path"
             value="${source.dir}/com/nononsenseapps/build" />
@@ -189,6 +193,34 @@ Version is ${mymanifest.manifest.android:versionName}, ${mymanifest.manifest.and
 
             <fileset file="${out.final.file}" />
         </copy>
+
+	<property
+            name="config-target-path"
+            value="${source.dir}/com/nononsenseapps/build" />
+
+	<echo>
+	Replacing dummy Config file again
+	</echo>
+
+	<copy
+                    encoding="utf-8"
+                    file="../NotePad_ant/config/Config.java"
+                    overwrite="true"
+                    todir="${config-target-path}" >
+
+                    <filterset>
+
+                        <filter
+                            token="CONFIG.LOGGING"
+                            value="true" />
+
+                        <filter
+                            token="CONFIG.GTASKSAPIKEY"
+                            value="Put your key here" />
+                    </filterset>
+                </copy>
+
+
     </target>
 
     <!-- version-tag: custom -->
