@@ -35,8 +35,8 @@
 		
 		<item name="my_list_selector">@style/ListIndicatorDark</item>
 		
-		<item name="my_list_background">@android:color/transparent</item>
-		<item name="editorBackgroundColor">@android:color/transparent</item>
+		<item name="my_list_background">@android:color/black</item>
+		<item name="editorBackgroundColor">@android:color/black</item>
 		
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
