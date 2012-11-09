@@ -241,6 +241,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					mOriginalDueState = savedInstanceState
 							.getBoolean(ORIGINAL_DUE_STATE);
 					mOriginalListId = savedInstanceState.getLong(ORIGINAL_LIST);
+					
 				} else {
 					mOriginalNote = "";
 					mOriginalDueDate = "";
@@ -283,14 +284,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		date = dueDateSet != mOriginalDueState
 				|| (dueDateSet && !noteDueDate.format3339(false).equals(
 						mOriginalDueDate));
-		listC = this.listId != mOriginalListId && mOriginalListId > -1;
+		listC = this.listId != mOriginalListId && mOriginalListId > -1 && this.listId > -1;
 
 		Log.d("posredux", "has note changed");
 		Log.d("posredux", "title " + title);
 		Log.d("posredux", "note " + note);
 		Log.d("posredux", "completed " + completed);
 		Log.d("posredux", "date " + date);
-		Log.d("posredux", "listC " + listC);
+		Log.d("posredux", "listC " + listC + " " + this.listId + " " + mOriginalListId);
 
 		return title || note || completed || date || listC;
 	}
@@ -328,7 +329,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		}
 
 		// Add list if changed
-		if (listId != mOriginalListId && mOriginalListId > -1)
+		if (listId != mOriginalListId && mOriginalListId > -1 && listId > -1)
 			values.put(NotePad.Notes.COLUMN_NAME_LIST, listId);
 
 		// Put the due-date in
@@ -925,6 +926,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			// Will call expComplete
 			conComplete.setChecked(mComplete);
+			mCompleteChanged = false;
 
 			// Set list ID
 			listId = mCursor.getLong(mCursor
@@ -1055,10 +1057,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		if (conComplete != null) {
 			conComplete.setChecked(false);
 			conComplete.setEnabled(false);
+			mCompleteChanged = false;
 		}
 		if (expComplete != null) {
 			expComplete.setChecked(false);
 			expComplete.setEnabled(false);
+			mCompleteChanged = false;
 		}
 		if (details != null) {
 			details.setText(R.string.editor_details);
@@ -1094,12 +1098,14 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private static int getPosOfId(ResourceCursorAdapter adapter, long id) {
 		int length = adapter.getCount();
 		int position;
+		boolean found = false;
 		for (position = 0; position < length; position++) {
 			if (id == adapter.getItemId(position)) {
+				found = true;
 				break;
 			}
 		}
-		if (position == length) {
+		if (!found) {
 			// Happens both if list is empty
 			// and if id is -1
 			position = -1;
@@ -1174,7 +1180,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public void onPause() {
 		super.onPause();
 
-		if (doSave)
+		if (doSave && opened)
 			saveNote();
 	}
 
@@ -1192,7 +1198,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	}
 
 	private void saveNote() {
-		if (doSave && mText != null && mTitle != null) {
+		if (doSave && opened && mText != null && mTitle != null) {
 
 			// Get the current note text.
 			String text = noteAttrs.getFullNote(mText.getText().toString());
