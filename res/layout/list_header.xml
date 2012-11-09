@@ -33,17 +33,4 @@
         android:paddingBottom="2dip"
         android:paddingTop="2dip" />
 
-    <FrameLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <ImageView
-            android:id="@+id/dropIndicatorNotAdjacent"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/list_pressed_holo"
-            android:visibility="invisible" />
-    </FrameLayout>
-
 </LinearLayout>
