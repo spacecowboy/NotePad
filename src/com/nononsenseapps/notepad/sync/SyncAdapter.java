@@ -222,8 +222,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 							 * note while saving the version we downloaded as
 							 * new in the database.
 							 */
-
-							for (GoogleTask moddedTask : (ArrayList<GoogleTask>) moddedTasks) {
+							
+							// Avoid concurrency problems with clone
+							for (GoogleTask moddedTask : (ArrayList<GoogleTask>) moddedTasks.clone()) {
 								/*
 								 * In the case that a task has been deleted
 								 * before it was synced the first time We should
