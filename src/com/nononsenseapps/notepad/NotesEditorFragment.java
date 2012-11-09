@@ -177,6 +177,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private View unlockButton;
 	private View detailsContracted;
 	private View detailsExpanded;
+	private ImageButton cancelButton;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -461,8 +462,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		
 		if (id == -1) {
 			Log.d(TAG, "onCreate, no valid values in arguments");
-			throw new NullPointerException(
-					"No note id was specified in the arguments!");
+			//throw new NullPointerException(
+			//		"No note id was specified in the arguments!");
 		}
 	}
 
@@ -632,7 +633,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		});
 		*/
 
-		ImageButton cancelButton = (ImageButton) theView
+		cancelButton = (ImageButton) theView
 				.findViewById(R.id.dueCancelButton);
 		cancelButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -709,7 +710,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		} else {
 			Log.d(TAG,
 					"onActivityCreated, could not find valid values. Maybe I should die now?");
-			throw new NullPointerException("No valid is was given!");
+			//throw new NullPointerException("No valid id was given!");
 		}
 	}
 
@@ -919,6 +920,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			lockedText.setEnabled(true);
 			lockButton.setEnabled(true);
 			lockButton.setEnabled(true);
+			listSpinner.setEnabled(true);
+			cancelButton.setEnabled(true);
 
 			// Will call expComplete
 			conComplete.setChecked(mComplete);
@@ -1035,6 +1038,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		mUri = null;
 		id = -1;
 		doSave = false;
+		opened = false;
 		if (mText != null) {
 			mText.setText("");
 			mText.setEnabled(false);
@@ -1059,6 +1063,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		if (details != null) {
 			details.setText(R.string.editor_details);
 			details.setEnabled(false);
+			details.setClickable(false);
 		}
 		if (lockedText != null) {
 			lockedText.setText(R.string.unlocked);
@@ -1078,6 +1083,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		if (detailsExpanded != null) {
 			detailsExpanded.setVisibility(View.GONE);
 		}
+		
+		if (listSpinner != null)
+			listSpinner.setEnabled(false);
+		
+		if (cancelButton != null)
+			cancelButton.setEnabled(false);
 	}
 
 	private static int getPosOfId(ResourceCursorAdapter adapter, long id) {
@@ -1163,7 +1174,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public void onPause() {
 		super.onPause();
 
-		saveNote();
+		if (doSave)
+			saveNote();
 	}
 
 	@Override

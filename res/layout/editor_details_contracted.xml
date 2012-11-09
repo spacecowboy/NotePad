@@ -15,6 +15,7 @@
         android:layout_alignParentLeft="true"
         android:gravity="center_vertical"
         android:text="@string/completed"
+        android:enabled="false"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ImageView
