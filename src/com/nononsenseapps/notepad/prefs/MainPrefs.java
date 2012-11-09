@@ -119,7 +119,7 @@ public class MainPrefs extends PreferenceFragment implements
 		ArrayList<CharSequence> values = new ArrayList<CharSequence>();
 
 		// Start with all lists
-		entries.add(getText(R.string.show_from_all_lists));
+		//entries.add(getText(R.string.show_from_all_lists));
 		//values.add(Long.toString(MainActivity.ALL_NOTES_ID));
 		// Set it as the default value also
 		listSpinner.setDefaultValue(Long

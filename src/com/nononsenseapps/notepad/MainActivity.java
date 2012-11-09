@@ -663,14 +663,16 @@ public class MainActivity extends DualLayoutActivity implements
 	}
 
 	private int getPosOfId(long id) {
-		int length = mSpinnerAdapter.getCount();
+		int length = mSectionAdapter.getCount();
 		int position;
+		boolean found = false;
 		for (position = 0; position < length; position++) {
 			if (id == mSpinnerAdapter.getItemId(position)) {
+				found = true;	
 				break;
 			}
 		}
-		if (position == length) {
+		if (!found) {
 			// Happens both if list is empty
 			// and if id is -1
 			position = -1;
@@ -1161,7 +1163,7 @@ public class MainActivity extends DualLayoutActivity implements
 		}
 
 		if (position > -1) {
-			getActionBar().setSelectedNavigationItem(position);
+			mViewPager.setCurrentItem(position);
 		} 
 		listIdToSelect = -1;
 
