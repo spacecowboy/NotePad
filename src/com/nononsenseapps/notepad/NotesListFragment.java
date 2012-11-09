@@ -111,7 +111,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS,
 			NotePad.Notes.COLUMN_NAME_LIST };
 
-
 	// public static final String SELECTEDPOS = "selectedpos";
 	// public static final String SELECTEDID = "selectedid";
 
@@ -125,7 +124,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	private static final String SAVEDPOS = "listSavedPos";
 	private static final String SAVEDID = "listSavedId";
 
-	private static final String SHOULD_OPEN_NOTE = "shouldOpenNote";
+	//private static final String SHOULD_OPEN_NOTE = "shouldOpenNote";
 
 	public static final String SECTION_STATE_LISTS = "listnames";
 	private static final int LOADER_LISTNAMES = -78;
@@ -163,7 +162,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private long mCurId;
 
-	private boolean idInvalid = false;
+	//private boolean idInvalid = false;
 
 	public SearchView mSearchView;
 	public MenuItem mSearchItem;
@@ -181,7 +180,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	private SectionAdapter mSectionAdapter;
 	private final HashSet<Integer> activeLoaders = new HashSet<Integer>();
 
-	private boolean autoOpenNote = false;
 	private long newNoteIdToSelect = -1;
 
 	private Menu mOptionsMenu;
@@ -253,20 +251,20 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		
+
 		if (this.mCurListId != -1) {
-			//activity.findViewById(R.id.listContainer).setVisibility(View.VISIBLE);
-			//activity.findViewById(R.id.progressContainer).setVisibility(View.GONE);
-			
+			// activity.findViewById(R.id.listContainer).setVisibility(View.VISIBLE);
+			// activity.findViewById(R.id.progressContainer).setVisibility(View.GONE);
+
 			Bundle args = new Bundle();
-			if (activity.getCurrentContent().equals(
-					DualLayoutActivity.CONTENTVIEW.DUAL))
-				args.putBoolean(SHOULD_OPEN_NOTE, true);
+			//if (activity.getCurrentContent().equals(
+			//		DualLayoutActivity.CONTENTVIEW.DUAL))
+			//	args.putBoolean(SHOULD_OPEN_NOTE, true);
 
 			refreshList(args);
 		} else {
-			//activity.findViewById(R.id.listContainer).setVisibility(View.GONE);
-			//activity.findViewById(R.id.progressContainer).setVisibility(View.VISIBLE);
+			// activity.findViewById(R.id.listContainer).setVisibility(View.GONE);
+			// activity.findViewById(R.id.progressContainer).setVisibility(View.VISIBLE);
 		}
 
 		// Set list preferences
@@ -278,31 +276,15 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (intent != null
 				&& (Intent.ACTION_EDIT.equals(intent.getAction()) || Intent.ACTION_VIEW
 						.equals(intent.getAction()))) {
-			// Are we displaying the correct list already?
-			long listId = -1;
-			if (null != intent.getExtras())
-				listId = intent.getExtras().getLong(
-						NotePad.Notes.COLUMN_NAME_LIST, -1);
-			if (listId == mCurListId || mCurListId == MainActivity.ALL_NOTES_ID) {
-				// just highlight it
-				String newId = intent.getData().getPathSegments()
-						.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
-				long noteId = Long.parseLong(newId);
-				int pos = getPosOfId(noteId);
-				if (pos > -1) {
-					setActivatedPosition(showNote(pos));
-				} else {
-					newNoteIdToSelect = noteId;
-				}
+			// just highlight it
+			String newId = intent.getData().getPathSegments()
+					.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
+			long noteId = Long.parseLong(newId);
+			int pos = getPosOfId(noteId);
+			if (pos > -1) {
+				setActivatedPosition(showNote(pos));
 			} else {
-				// it's something we have to handle once the list has been
-				// loaded
-				String newId = intent.getData().getPathSegments()
-						.get(NotePad.Notes.NOTE_ID_PATH_POSITION);
-				long noteId = Long.parseLong(newId);
-				if (noteId > -1) {
-					newNoteIdToSelect = noteId;
-				}
+				newNoteIdToSelect = noteId;
 			}
 		}
 	}
@@ -311,6 +293,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	 * Will try to open the previously open note, but will default to first note
 	 * if none was open
 	 */
+	/*
 	private void showFirstBestNote() {
 		if (mSectionAdapter != null) {
 			if (mSectionAdapter.isEmpty()) {
@@ -319,7 +302,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				setActivatedPosition(showNote(mActivatedPosition));
 			}
 		}
-	}
+	}*/
 
 	private void setupSearchView() {
 
@@ -477,10 +460,10 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		}
 		if (modeCallback != null)
 			modeCallback.setDeleteListener(this);
-		
+
 		this.mCurListId = -1;
 
-		if (getArguments()!= null && getArguments().containsKey(LISTID)) {
+		if (getArguments() != null && getArguments().containsKey(LISTID)) {
 			mCurListId = getArguments().getLong(LISTID);
 		}
 
@@ -608,6 +591,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	 * Will re-list all notes, and show the note with closest position to
 	 * original
 	 */
+	/*
 	public void onDelete() {
 
 		Log.d(TAG, "onDelete");
@@ -629,7 +613,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// reCalculateValidValuesAfterDelete();
 			// }
 		}
-	}
+	}*/
 
 	private void reCalculateValidValuesAfterDelete() {
 		int index = mActivatedPosition;
@@ -656,6 +640,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		int pos = getPosOfId(mCurId);
 
 		Log.d(TAG, "reSelectId id pos: " + mCurId + " " + pos);
+		
 		setActivatedPosition(pos);
 	}
 
@@ -1069,7 +1054,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// inflater.inflate(R.menu.list_select_menu_light, menu);
 			// else
 			inflater.inflate(R.menu.list_select_menu, menu);
-			//mode.setTitle(getResources().getQuantityString(R.plurals.mode_choose, 1, 1));
+			// mode.setTitle(getResources().getQuantityString(R.plurals.mode_choose,
+			// 1, 1));
 
 			this.mode = mode;
 
@@ -1139,8 +1125,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				this.notesToDelete.remove(position);
 			}
 			final int checkedCount = getListView().getCheckedItemCount();
-				mode.setTitle(getResources().getQuantityString(
-						R.plurals.mode_choose, checkedCount, checkedCount));
+			mode.setTitle(getResources().getQuantityString(
+					R.plurals.mode_choose, checkedCount, checkedCount));
 		}
 
 		private void shareNote(String text) {
@@ -1225,7 +1211,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 			MenuInflater inflater = activity.getMenuInflater();
 			inflater.inflate(R.menu.list_select_menu, menu);
-			//mode.setTitle(getResources().getQuantityString(R.plurals.mode_choose, 1, 1));
+			// mode.setTitle(getResources().getQuantityString(R.plurals.mode_choose,
+			// 1, 1));
 
 			this.mode = mode;
 
@@ -1259,7 +1246,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (positions.contains(mActivatedPosition)) {
 
 			Log.d(TAG, "onModalDelete contained setting id invalid");
-			idInvalid = true;
+			//idInvalid = true;
 		} else {
 			// We must recalculate the positions index of the current note
 			// This is always done when content changes
@@ -1519,10 +1506,12 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		Log.d(TAG, "onCreateLoader");
 
 		if (args != null) {
+			/*
 			if (args.containsKey(SHOULD_OPEN_NOTE)
 					&& args.getBoolean(SHOULD_OPEN_NOTE)) {
 				autoOpenNote = true;
 			}
+			*/
 		}
 
 		if (currentQuery != null && !currentQuery.isEmpty()) {
@@ -1928,27 +1917,31 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		// The list should now be shown.
 		if (this.getListAdapter().getCount() > 0) {
 			Log.d(TAG, "showing list");
-			activity.findViewById(R.id.listContainer).setVisibility(View.VISIBLE);
+			activity.findViewById(R.id.listContainer).setVisibility(
+					View.VISIBLE);
 			activity.findViewById(R.id.hintContainer).setVisibility(View.GONE);
 		} else {
 			Log.d(TAG, "no notes, hiding list");
 			activity.findViewById(R.id.listContainer).setVisibility(View.GONE);
-			activity.findViewById(R.id.hintContainer).setVisibility(View.VISIBLE);
+			activity.findViewById(R.id.hintContainer).setVisibility(
+					View.VISIBLE);
 		}
 
 		// Reselect current note in list, if possible
 		// This happens in delete
+		/*
 		if (idInvalid) {
 			idInvalid = false;
 			// Note is invalid, so recalculate a valid position and index
 			reCalculateValidValuesAfterDelete();
 			reSelectId();
-			if (activity.getCurrentContent().equals(
-					DualLayoutActivity.CONTENTVIEW.DUAL))
-				autoOpenNote = true;
+			//if (activity.getCurrentContent().equals(
+			//		DualLayoutActivity.CONTENTVIEW.DUAL))
+				//autoOpenNote = true;
 		} else {
+		**/
 			reSelectId();
-		}
+		//}
 
 		// If a note was created, it will be set in this variable
 		if (newNoteIdToSelect > -1) {
@@ -1958,12 +1951,13 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		}
 		// Open first note if this is first start
 		// or if one was opened previously
+		/*
 		else if (autoOpenNote && false) {
 			autoOpenNote = false;
 			showFirstBestNote();
 		} else {
 			reSelectId();
-		}
+		}*/
 	}
 
 	@Override

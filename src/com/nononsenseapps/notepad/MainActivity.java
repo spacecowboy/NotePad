@@ -119,6 +119,8 @@ public class MainActivity extends DualLayoutActivity implements
 	 * The {@link ViewPager} that will host the section contents.
 	 */
 	private ViewPager mViewPager;
+	private long noteIdToSelect;
+	private Intent noteIntentToSelect;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -327,7 +329,7 @@ public class MainActivity extends DualLayoutActivity implements
 			long listId = Long.parseLong(newId);
 			// Handle it differently depending on if the app has already
 			// loaded or not.
-			openListFromIntent(listId);
+			openListFromIntent(listId, null);
 		} else if (intent.getData() != null
 				&& (intent.getData().getPath()
 						.startsWith(NotePad.Notes.PATH_VISIBLE_NOTES) || intent
@@ -340,8 +342,7 @@ public class MainActivity extends DualLayoutActivity implements
 			fragment.setArguments(arguments);
 			getFragmentManager().beginTransaction()
 					.replace(R.id.rightFragment, fragment).commit();
-			NotesListFragment list = getLeftFragment();
-			if (list != null) {
+			if (currentContent.equals(CONTENTVIEW.DUAL)) {
 				long listId = -1;
 				if (intent.getExtras() != null) {
 					listId = intent.getExtras().getLong(
@@ -350,12 +351,8 @@ public class MainActivity extends DualLayoutActivity implements
 				// Open the containing list if we have to. No need to change
 				// lists
 				// if we are already displaying all notes.
-				if (listId > -1 && currentListId != listId) {
-					openListFromIntent(listId);
-				}
-				// Need to highlight note in tablet mode
-				if (listId != -1) {
-					list.handleNoteIntent(intent);
+				if (listId > -1) {
+					openListFromIntent(listId, intent);
 				}
 			}
 		}
@@ -419,7 +416,7 @@ public class MainActivity extends DualLayoutActivity implements
 				// lists
 				// if we are already displaying all notes.
 				if (intentId != -1 && currentListId != intentId) {
-					openListFromIntent(intentId);
+					openListFromIntent(intentId, intent);
 				}
 				if (intentId != -1) {
 					list.handleNoteIntent(intent);
@@ -521,11 +518,12 @@ public class MainActivity extends DualLayoutActivity implements
 	 * 
 	 * @param listId
 	 */
-	private void openListFromIntent(long listId) {
+	private void openListFromIntent(long listId, Intent intent) {
 		if (beforeBoot) {
 			// Set the variable to be selected after the loader has
 			// finished its query
 			listIdToSelect = listId;
+			noteIntentToSelect = intent;
 			Log.d(TAG, "beforeBoot setting future id");
 		} else {
 			// Select the list directly since the loader is done
@@ -536,6 +534,10 @@ public class MainActivity extends DualLayoutActivity implements
 				ActionBar ab = getActionBar();
 				if (ab != null && ab.getSelectedNavigationIndex() != pos) {
 					ab.setSelectedNavigationItem(pos);
+				}
+				NotesListFragment list = getLeftFragment();
+				if (list != null) {
+					list.handleNoteIntent(intent);
 				}
 			}
 		}
@@ -1086,8 +1088,9 @@ public class MainActivity extends DualLayoutActivity implements
 		NotesEditorFragment editor = (NotesEditorFragment) getRightFragment();
 		Log.d(TAG, "onDeleteAction, list: " + list + ", editor: " + editor);
 		// tell list to do what it should
-		if (list != null)
-			list.onDelete();
+		//if (list != null)
+		//	list.onDelete();
+		
 		if (editor != null) {
 			deleteNote(this, editor.getCurrentNoteId());
 			editor.clearNoSave();
@@ -1163,6 +1166,16 @@ public class MainActivity extends DualLayoutActivity implements
 		listIdToSelect = -1;
 
 		beforeBoot = false; // Need to do it here
+		
+		if (noteIntentToSelect != null) {
+			NotesListFragment list = getLeftFragment();
+			
+			if (list != null) {
+				list.handleNoteIntent(noteIntentToSelect);
+			}
+			
+			noteIntentToSelect = null;
+		}
 	}
 
 	@Override
