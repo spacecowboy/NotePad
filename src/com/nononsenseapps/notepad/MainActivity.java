@@ -71,7 +71,6 @@ import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
-import com.nononsenseapps.ui.ExtrasCursorAdapter;
 import com.nononsenseapps.ui.ListPagerAdapter;
 
 /**
@@ -96,7 +95,7 @@ public class MainActivity extends DualLayoutActivity implements
 
 	private Menu optionsMenu;
 
-	private ExtrasCursorAdapter mSpinnerAdapter;
+	private SimpleCursorAdapter mSpinnerAdapter;
 	private SimpleCursorAdapter mSectionAdapter;
 	private long currentListId = -1;
 	private int currentListPos = 0;
@@ -154,11 +153,10 @@ public class MainActivity extends DualLayoutActivity implements
 		// new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
 		// new int[] { android.R.id.text1 }, new int[] { -9, -8 },
 		// new int[] { R.string.show_from_all_lists, R.string.error_title });
-		mSpinnerAdapter = new ExtrasCursorAdapter(this,
+		mSpinnerAdapter = new SimpleCursorAdapter(this,
 				R.layout.actionbar_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
-				new int[] { android.R.id.text1 }, new int[] { CREATE_LIST_ID },
-				new int[] { R.string.menu_createlist });
+				new int[] { android.R.id.text1 });
 
 		mSpinnerAdapter
 				.setDropDownViewResource(R.layout.actionbar_dropdown_item);
@@ -847,6 +845,9 @@ public class MainActivity extends DualLayoutActivity implements
 			return true;
 		case R.id.menu_preferences:
 			showPrefs();
+			return true;
+		case R.id.menu_createlist:
+			showDialog(CREATE_LIST);
 			return true;
 		case R.id.menu_renamelist:
 			// Create dialog
