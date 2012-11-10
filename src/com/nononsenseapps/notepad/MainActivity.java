@@ -204,6 +204,8 @@ public class MainActivity extends DualLayoutActivity implements
 		// Set a default list to open if one is set
 		if (listIdToSelect < 0) {
 			listIdToSelect = getAList(this, -1);
+			// Select the first note in that list to open also
+			noteIdToSelect = getANote(this, listIdToSelect);
 		}
 		// Handle the intent first, so we know what to possibly select once
 		// the
@@ -213,6 +215,30 @@ public class MainActivity extends DualLayoutActivity implements
 		onNewIntent(getIntent());
 
 		getLoaderManager().initLoader(0, null, this);
+	}
+
+	private static long getANote(Context context, long listId) {
+		long noteId = -1;
+		if (listId < 0)
+			return noteId;
+
+		Cursor cursor;
+		final String listString = Long.toString(listId);
+		cursor = context.getContentResolver().query(
+				NotePad.Notes.CONTENT_VISIBLE_URI,
+				new String[] { NotePad.Notes._ID },
+				NotePad.Notes.COLUMN_NAME_LIST + " IS ?",
+				new String[] { listString },
+				NotePad.Notes.SORT_ORDER + " LIMIT 1");
+
+		if (cursor != null && cursor.moveToFirst()) {
+			noteId = cursor.getLong(cursor.getColumnIndex(NotePad.Notes._ID));
+			Log.d(TAG, "getANote: " + noteId);
+		}
+		if (cursor != null)
+			cursor.close();
+
+		return noteId;
 	}
 
 	private void rightCreate() {
@@ -480,6 +506,17 @@ public class MainActivity extends DualLayoutActivity implements
 			handleInsertIntent(intent);
 		} else if (Intent.ACTION_SEND.equals(intent.getAction())) {
 			handleInsertIntent(intent);
+		} else {
+			// Open a note
+			if (noteIdToSelect > -1 && currentContent == CONTENTVIEW.DUAL) {
+				Bundle arguments = new Bundle();
+				arguments.putLong(NotesEditorFragment.KEYID, noteIdToSelect);
+				NotesEditorFragment fragment = new NotesEditorFragment();
+				fragment.setArguments(arguments);
+				getFragmentManager().beginTransaction()
+						.replace(R.id.rightFragment, fragment).commit();
+				noteIdToSelect = -1;
+			}
 		}
 	}
 
