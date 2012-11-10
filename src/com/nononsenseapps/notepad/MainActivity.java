@@ -167,7 +167,7 @@ public class MainActivity extends DualLayoutActivity implements
 		// setContentView(R.layout.fragment_layout);
 
 		// setUpList();
-		
+
 		mSectionAdapter = new SimpleCursorAdapter(this,
 				R.layout.actionbar_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
@@ -191,13 +191,11 @@ public class MainActivity extends DualLayoutActivity implements
 
 			@Override
 			public void onPageScrolled(int arg0, float arg1, int arg2) {
-				// TODO Auto-generated method stub
 
 			}
 
 			@Override
 			public void onPageScrollStateChanged(int arg0) {
-				// TODO Auto-generated method stub
 
 			}
 		});
@@ -666,7 +664,7 @@ public class MainActivity extends DualLayoutActivity implements
 		boolean found = false;
 		for (position = 0; position < length; position++) {
 			if (id == mSpinnerAdapter.getItemId(position)) {
-				found = true;	
+				found = true;
 				break;
 			}
 		}
@@ -752,9 +750,9 @@ public class MainActivity extends DualLayoutActivity implements
 								Long.toString(currentListId)), null, null);
 			}
 			Log.d("deletebug", "notify!");
-			UpdateNotifier.notifyChangeList(this, Uri
-					.withAppendedPath(NotePad.Lists.CONTENT_ID_URI_BASE,
-							Long.toString(currentListId)));
+			UpdateNotifier.notifyChangeList(this, Uri.withAppendedPath(
+					NotePad.Lists.CONTENT_ID_URI_BASE,
+					Long.toString(currentListId)));
 			UpdateNotifier.notifyChangeNote(this);
 
 			// Remove default setting if this is the default list
@@ -1091,9 +1089,9 @@ public class MainActivity extends DualLayoutActivity implements
 		NotesEditorFragment editor = (NotesEditorFragment) getRightFragment();
 		Log.d(TAG, "onDeleteAction, list: " + list + ", editor: " + editor);
 		// tell list to do what it should
-		//if (list != null)
-		//	list.onDelete();
-		
+		// if (list != null)
+		// list.onDelete();
+
 		if (editor != null) {
 			deleteNote(this, editor.getCurrentNoteId());
 			editor.clearNoSave();
@@ -1116,18 +1114,12 @@ public class MainActivity extends DualLayoutActivity implements
 		// Change the active list
 		Log.d(TAG, "onNavigationItemSelected: " + itemId);
 
-		if (CREATE_LIST_ID == itemId) {
-			Log.d(TAG, "create list dialog");
-			// Create list
-			showDialog(CREATE_LIST);
-		} else {
-			Log.d(TAG, "show list pos: " + itemPosition);
-			// Display list
-			if (itemId != currentListId) {
-				Log.d(TAG, "set current item");
-				mViewPager.setCurrentItem(itemPosition);
-				currentListId = itemId;
-			}
+		Log.d(TAG, "show list pos: " + itemPosition);
+		// Display list
+		if (itemId != currentListId) {
+			Log.d(TAG, "set current item");
+			mViewPager.setCurrentItem(itemPosition);
+			currentListId = itemId;
 		}
 		return true;
 	}
@@ -1142,8 +1134,9 @@ public class MainActivity extends DualLayoutActivity implements
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
 
-		return new CursorLoader(this, baseUri, new String[] { NotePad.Lists._ID,
-				NotePad.Lists.COLUMN_NAME_TITLE, NotePad.Lists.COLUMN_NAME_DELETED }, null, null,
+		return new CursorLoader(this, baseUri, new String[] {
+				NotePad.Lists._ID, NotePad.Lists.COLUMN_NAME_TITLE,
+				NotePad.Lists.COLUMN_NAME_DELETED }, null, null,
 				NotePad.Lists.SORT_ORDER // Use the default sort order.
 		);
 	}
@@ -1165,18 +1158,18 @@ public class MainActivity extends DualLayoutActivity implements
 
 		if (position > -1) {
 			mViewPager.setCurrentItem(position);
-		} 
+		}
 		listIdToSelect = -1;
 
 		beforeBoot = false; // Need to do it here
-		
+
 		if (noteIntentToSelect != null) {
 			NotesListFragment list = getLeftFragment();
-			
+
 			if (list != null) {
 				list.handleNoteIntent(noteIntentToSelect);
 			}
-			
+
 			noteIntentToSelect = null;
 		}
 	}

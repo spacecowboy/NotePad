@@ -486,6 +486,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	@Override
 	public void onPause() {
 		super.onPause();
+		setSingleCheck();
 		activity.unregisterReceiver(syncFinishedReceiver);
 	}
 
@@ -540,6 +541,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (checkMode == CHECK_SINGLE_FUTURE) {
 			setSingleCheck();
 		}
+
 		if (position == ListView.INVALID_POSITION) {
 			getListView().setItemChecked(mActivatedPosition, false);
 		} else {
@@ -831,8 +833,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		if (activity.getCurrentContent().equals(
 				DualLayoutActivity.CONTENTVIEW.DUAL)) {
 			// Fix the selection before releasing that
-			lv.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
-			// lv.setChoiceMode(ListView.CHOICE_MODE_NONE);
+			// lv.setChoiceMode(AbsListView.CHOICE_MODE_SINGLE);
+			lv.setChoiceMode(ListView.CHOICE_MODE_NONE);
 		} else {
 			// Not nice to show selected item in list when no editor is showing
 			lv.setChoiceMode(AbsListView.CHOICE_MODE_NONE);
