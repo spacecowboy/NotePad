@@ -20,7 +20,6 @@
 
     <integer name="leftFragmentWeight">1</integer>
     <integer name="rightFragmentWeight">2</integer>
-    <!-- Left fragment can be hidden, right fragment will be slightly off screen if visible -->
     <integer name="fragmentWeightSum">3</integer>
     <bool name="tabletLayout">true</bool>
     <bool name="leftHideable">false</bool>
