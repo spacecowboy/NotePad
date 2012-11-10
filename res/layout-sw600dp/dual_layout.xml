@@ -52,6 +52,7 @@
 
     <FrameLayout
         android:id="@+id/rightFragment"
+        android:background="?editorBackgroundColor"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@integer/rightFragmentWeight" >
