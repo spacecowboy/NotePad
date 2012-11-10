@@ -338,18 +338,13 @@ public class MainActivity extends DualLayoutActivity implements
 			fragment.setArguments(arguments);
 			getFragmentManager().beginTransaction()
 					.replace(R.id.rightFragment, fragment).commit();
-			if (currentContent.equals(CONTENTVIEW.DUAL)) {
-				long listId = -1;
-				if (intent.getExtras() != null) {
-					listId = intent.getExtras().getLong(
-							NotePad.Notes.COLUMN_NAME_LIST, -1);
-				}
+			// Open appropriate list if tablet mode
+			if (this.currentContent == CONTENTVIEW.DUAL) {
+				long listId = getAList(intent);
 				// Open the containing list if we have to. No need to change
 				// lists
 				// if we are already displaying all notes.
-				if (listId > -1) {
-					openListFromIntent(listId, intent);
-				}
+				openListFromIntent(listId, intent);
 			}
 		}
 	}
@@ -391,31 +386,13 @@ public class MainActivity extends DualLayoutActivity implements
 					getFragmentManager().beginTransaction()
 							.replace(R.id.rightFragment, fragment).commit();
 				}
-			}
 
-			// Open appropriate list if tablet mode
-			NotesListFragment list = getLeftFragment();
-			if (list != null) {
-				long intentId = -1;
-				if (intent.getExtras() != null
-						&& intent.getExtras().containsKey(
-								NotePad.Notes.COLUMN_NAME_LIST)) {
-					intentId = intent.getExtras().getLong(
-							NotePad.Notes.COLUMN_NAME_LIST, -1);
-				}
-
-				// Change to the valid list if intent is crap
-				if (intentId <= -1)
-					intentId = listId;
-
-				// Open the containing list if we have to. No need to change
-				// lists
-				// if we are already displaying all notes.
-				if (intentId != -1 && currentListId != intentId) {
-					openListFromIntent(intentId, intent);
-				}
-				if (intentId != -1) {
-					list.handleNoteIntent(intent);
+				// Open appropriate list if tablet mode
+				if (this.currentContent == CONTENTVIEW.DUAL) {
+					// Open the containing list if we have to. No need to change
+					// lists
+					// if we are already displaying all notes.
+					openListFromIntent(listId, intent);
 				}
 			}
 		}

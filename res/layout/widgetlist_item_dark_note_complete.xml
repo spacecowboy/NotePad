@@ -28,19 +28,19 @@
         android:layout_width="36dp"
         android:layout_height="48dp"
         android:background="@drawable/transparent"
+        android:contentDescription="Complete task"
         android:padding="0dp"
-        android:src="@drawable/btn_check_selector_dark"
-        android:contentDescription="Complete task"/>
+        android:src="@drawable/btn_check_selector_dark" />
 
     <LinearLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
-         android:id="@+id/widget_item"
+        android:id="@+id/widget_item"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
         android:layout_weight="1"
-        android:padding="0dp"
         android:background="@drawable/img_default_selector_dark"
-        android:orientation="vertical" >
+        android:orientation="vertical"
+        android:padding="0dp" >
 
         <TextView
             android:id="@+id/widget_itemTitle"
