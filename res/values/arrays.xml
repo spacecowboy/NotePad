@@ -47,7 +47,7 @@
         <item>title COLLATE NOCASE</item>
         <item>duedate</item>
         <item>modified</item>
-       	<item>truepos</item>
+       	<item>possubsort</item>
     </string-array>
     
     <string-array name="sorting_order_preference">
