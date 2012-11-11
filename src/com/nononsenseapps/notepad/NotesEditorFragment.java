@@ -218,8 +218,6 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private void openNote(Bundle savedInstanceState) {
 		// Just make sure we are attached
 		if (activity != null && !activity.isFinishing()) {
-			doSave = true;
-			opened = true;
 			if (id != -1) {
 				// Existing note
 				mUri = getUriFrom(id);
@@ -309,6 +307,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 */
 	private final void updateNote(String title, String text, String due,
 			boolean completed, long listId) {
+		Log.d(TAG, "Note text: " + text);
 		// Sets up a map to contain values to be updated in the
 		// provider.
 		ContentValues values = new ContentValues();
@@ -323,6 +322,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		values.put(NotePad.Notes.COLUMN_NAME_TITLE, title);
 
 		// This puts the desired notes text into the map.
+		Log.d(TAG, "Is text enabled? " + mText.isEnabled());
 		if (mText.isEnabled()) {
 			// the field will only be enabled if the password was
 			// successfully inputted (if one exists. Otherwise, don't
@@ -1025,7 +1025,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			// Some things might have changed
 			getActivity().invalidateOptionsMenu();
-
+			
+			doSave = true;
+			opened = true;
 		} else {
 			// You have tried to open something that doesn't exist
 			clearNoSave();
@@ -1204,6 +1206,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			// Get the current note text.
 			String text = noteAttrs.getFullNote(mText.getText().toString());
+			Log.d(TAG, "From editor: " + mText.getText());
+			Log.d(TAG, "From attr: " + text);
 
 			// Get title text
 			String title = mTitle.getText().toString();
