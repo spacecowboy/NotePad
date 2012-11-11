@@ -17,7 +17,7 @@
 
 <resources>
 
-    <string name="app_name">Notes dev</string>
+    <string name="app_name">Anteckningar</string>
     <string name="title_create">Ny anteckning</string>
     <string name="title_edit">Redigera: %1$s</string>
     <string name="menu_add">Skapa ny</string>
