@@ -22,7 +22,7 @@
 -->
 
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-    android:contentAuthority="com.nononsenseapps.NotePad"
+    android:contentAuthority="com.nononsenseapps.donate.NotePad"
     android:accountType="com.google"
     android:supportsUploading="true"
     android:userVisible="true"
