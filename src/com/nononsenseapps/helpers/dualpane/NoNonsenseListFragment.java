@@ -16,7 +16,7 @@ package com.nononsenseapps.helpers.dualpane;
  * limitations under the License.
  */
 
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad_donate.R;
 
 import android.app.Activity;
 import android.app.ListFragment;

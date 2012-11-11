@@ -28,7 +28,7 @@ import android.provider.BaseColumns;
  * client depends only on the constants in the contract.
  */
 public final class NotePad {
-	public static final String AUTHORITY = "com.nononsenseapps.NotePad";
+	public static final String AUTHORITY = "com.nononsenseapps.donate.NotePad";
 
 	// This class cannot be instantiated
 	private NotePad() {

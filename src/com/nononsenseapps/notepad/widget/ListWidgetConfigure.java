@@ -21,7 +21,8 @@ import java.util.List;
 
 import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad_donate.R;
+import com.nononsenseapps.notepad_donate.widget.ListWidgetProvider;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 

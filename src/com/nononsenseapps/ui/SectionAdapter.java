@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad_donate.R;
 
 import android.content.Context;
 import android.database.Cursor;

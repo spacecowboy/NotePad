@@ -7,7 +7,7 @@ package com.robobunny;
  */
 
 import com.nononsenseapps.notepad.MainActivity;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad_donate.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;

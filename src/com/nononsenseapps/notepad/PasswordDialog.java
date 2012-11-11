@@ -31,7 +31,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad_donate.R;
 import com.nononsenseapps.notepad.interfaces.PasswordChecker;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 

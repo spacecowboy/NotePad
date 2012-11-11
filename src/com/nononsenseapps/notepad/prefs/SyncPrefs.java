@@ -20,7 +20,7 @@ import java.io.IOException;
 
 import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad_donate.R;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 
 import android.accounts.Account;

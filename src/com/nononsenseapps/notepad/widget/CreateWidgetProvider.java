@@ -24,7 +24,7 @@ import android.content.Intent;
 import android.widget.RemoteViews;
 
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad_donate.R;
 import com.nononsenseapps.notepad.RightActivity;
 
 /**

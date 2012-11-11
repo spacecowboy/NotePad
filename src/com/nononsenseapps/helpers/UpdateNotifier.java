@@ -2,8 +2,8 @@ package com.nononsenseapps.helpers;
 
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotesEditorFragment;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.widget.ListWidgetProvider;
+import com.nononsenseapps.notepad_donate.widget.ListWidgetProvider;
+import com.nononsenseapps.notepad_donate.R;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;

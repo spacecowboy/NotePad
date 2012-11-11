@@ -17,7 +17,7 @@
 package com.nononsenseapps.notepad.prefs;
 
 import com.nononsenseapps.notepad.PasswordDialog;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad_donate.R;
 
 import android.app.Activity;
 import android.app.DialogFragment;

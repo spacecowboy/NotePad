@@ -18,7 +18,7 @@ package com.nononsenseapps.helpers.dualpane;
 
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad_donate.R;
 
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;

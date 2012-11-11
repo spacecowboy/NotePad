@@ -17,7 +17,7 @@
  */
 package sheetrock.panda.changelog;
 
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad_donate.R;
 
 import android.app.AlertDialog;
 import android.content.Context;

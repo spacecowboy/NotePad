@@ -16,7 +16,7 @@
 
 package com.nononsenseapps.ui;
 
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad_donate.R;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 
 import android.content.Context;

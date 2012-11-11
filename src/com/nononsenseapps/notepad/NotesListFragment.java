@@ -16,6 +16,8 @@
 
 package com.nononsenseapps.notepad;
 
+import com.nononsenseapps.notepad_donate.R;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
