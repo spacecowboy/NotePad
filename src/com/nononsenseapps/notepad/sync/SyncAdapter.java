@@ -55,9 +55,7 @@ import java.util.HashMap;
  * content). If this is the same as the etag we have, then nothing has changed
  * on server. Hence, we can know that there is nothing to download. If the etag
  * has changed, the adapter requests, for all lists, all tasks which have been
- * updated since the latest synced task in the database. Possible conflicts with
- * locally modified tasks is resolved by always choosing the latests modified
- * task as the winner.
+ * updated since the latest synced task in the database.
  * 
  * Before any changes are committed either way, we should have two DISJOINT
  * sets:
@@ -276,9 +274,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 									// a new note
 									task.id = null;
 									task.etag = null;
+									task.title = "sync-conflict " + task.title;
+									
 									try {
 										GoogleTask result = apiTalker
 												.uploadTask(task, list);
+										// Added this
+										idMap.put(result.dbId, result.id);
 									} catch (PreconditionException ee) {
 										Log.d(TAG,
 												"Impossible conflict achieved");
@@ -344,7 +346,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 							Log.d(TAG, "Setting position values for #tasks: "
 									+ tasks.size());
 							// Sort them first
-							sortByRemoteParent(tasks);
+							//sortByRemoteParent(tasks);
 							ArrayList<GoogleTask> allListTasks = allTasksInList
 									.get(list.dbId);
 							list.setSortingValues(tasks, allListTasks);

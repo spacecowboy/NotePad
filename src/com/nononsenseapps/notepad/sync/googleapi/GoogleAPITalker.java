@@ -589,6 +589,8 @@ public class GoogleAPITalker {
 				// post to be a PATCH request
 				httppost.setHeader("X-HTTP-Method-Override", "PATCH");
 			}
+			// Always set ETAGS for tasks
+			setHeaderStrongEtag(httppost, task.etag);
 		} else {
 			if (task.deleted == 1) {
 				return task; // Don't sync deleted items which do not exist on
@@ -601,9 +603,6 @@ public class GoogleAPITalker {
 		}
 		setAuthHeader(httppost);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
-
-		// Always set ETAGS for tasks
-		setHeaderStrongEtag(httppost, task.etag);
 
 		Log.d(TAG, httppost.getRequestLine().toString());
 		for (Header header : httppost.getAllHeaders()) {
@@ -634,9 +633,7 @@ public class GoogleAPITalker {
 			task.id = jsonResponse.getString(GoogleTask.ID);
 			if (jsonResponse.has(GoogleTask.UPDATED))
 				task.updated = jsonResponse.getString(GoogleTask.UPDATED);
-			// Then move it to its position
-			//Log.d(TAG + ".move", "Moving task");
-			//moveTask(task, pList);
+			
 		}
 
 		return task;
@@ -651,53 +648,53 @@ public class GoogleAPITalker {
 	 * @throws IOException
 	 * @throws PreconditionException
 	 */
-//	private void moveTask(final GoogleTask task, final GoogleTaskList pList)
-//			throws ClientProtocolException, JSONException, IOException,
-//			PreconditionException {
-//
-//		if (pList.id == null || pList.id.isEmpty() || task.id == null
-//				|| task.id.isEmpty()) {
-//			Log.d(TAG + ".move", "Invalid list ID found for uploadTask");
-//			return;
-//		}
-//
-//		HttpUriRequest httppost = new HttpPost(TaskMoveURL_ETAG_UPDATED(
-//				task.id, pList.id, task.parent, task.remoteprevious));
-//
-//		setAuthHeader(httppost);
-//		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
-//
-//		// No need since this is only done on sucessful updates
-//		// setHeaderStrongEtag(httppost, task.etag);
-//
-//		Log.d(TAG + ".move", httppost.getRequestLine().toString());
-//		for (Header header : httppost.getAllHeaders()) {
-//			Log.d(TAG + ".move", header.getName() + ": " + header.getValue());
-//		}
-//
-//		String stringResponse = parseResponse(client.execute(httppost));
-//
-//		JSONObject jsonResponse = new JSONObject(stringResponse);
-//
-//		Log.d(TAG + ".move", jsonResponse.toString());
-//
-//		// Will return a task, containing id and etag. always update
-//		// fields
-//		task.etag = jsonResponse.getString("etag");
-//		if (jsonResponse.has(GoogleTask.UPDATED))
-//			task.updated = jsonResponse.getString(GoogleTask.UPDATED);
-//		task.moveUploaded = true;
-//		if (jsonResponse.has(GoogleTask.PARENT)) {
-//			task.remoteparent = jsonResponse.getString(GoogleTask.PARENT);
-//			Log.d(TAG + ".move", jsonResponse.getString(GoogleTask.PARENT));
-//		} else
-//			task.remoteparent = null;
-//		if (jsonResponse.has(GoogleTask.POSITION)) {
-//			task.position = jsonResponse.getString(GoogleTask.POSITION);
-//			Log.d(TAG + ".move", jsonResponse.getString(GoogleTask.POSITION));
-//		} else
-//			task.position = null;
-//	}
+	// private void moveTask(final GoogleTask task, final GoogleTaskList pList)
+	// throws ClientProtocolException, JSONException, IOException,
+	// PreconditionException {
+	//
+	// if (pList.id == null || pList.id.isEmpty() || task.id == null
+	// || task.id.isEmpty()) {
+	// Log.d(TAG + ".move", "Invalid list ID found for uploadTask");
+	// return;
+	// }
+	//
+	// HttpUriRequest httppost = new HttpPost(TaskMoveURL_ETAG_UPDATED(
+	// task.id, pList.id, task.parent, task.remoteprevious));
+	//
+	// setAuthHeader(httppost);
+	// AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
+	//
+	// // No need since this is only done on sucessful updates
+	// // setHeaderStrongEtag(httppost, task.etag);
+	//
+	// Log.d(TAG + ".move", httppost.getRequestLine().toString());
+	// for (Header header : httppost.getAllHeaders()) {
+	// Log.d(TAG + ".move", header.getName() + ": " + header.getValue());
+	// }
+	//
+	// String stringResponse = parseResponse(client.execute(httppost));
+	//
+	// JSONObject jsonResponse = new JSONObject(stringResponse);
+	//
+	// Log.d(TAG + ".move", jsonResponse.toString());
+	//
+	// // Will return a task, containing id and etag. always update
+	// // fields
+	// task.etag = jsonResponse.getString("etag");
+	// if (jsonResponse.has(GoogleTask.UPDATED))
+	// task.updated = jsonResponse.getString(GoogleTask.UPDATED);
+	// task.moveUploaded = true;
+	// if (jsonResponse.has(GoogleTask.PARENT)) {
+	// task.remoteparent = jsonResponse.getString(GoogleTask.PARENT);
+	// Log.d(TAG + ".move", jsonResponse.getString(GoogleTask.PARENT));
+	// } else
+	// task.remoteparent = null;
+	// if (jsonResponse.has(GoogleTask.POSITION)) {
+	// task.position = jsonResponse.getString(GoogleTask.POSITION);
+	// Log.d(TAG + ".move", jsonResponse.getString(GoogleTask.POSITION));
+	// } else
+	// task.position = null;
+	// }
 
 	/**
 	 * Returns an object if all went well. Returns null if a conflict was
@@ -800,6 +797,8 @@ public class GoogleAPITalker {
 			httppost.setHeader("If-Match", etag);
 
 			Log.d(TAG, "If-Match: " + etag);
+		} else {
+			Log.d(TAG, "No ETAG could be found!");
 		}
 	}
 

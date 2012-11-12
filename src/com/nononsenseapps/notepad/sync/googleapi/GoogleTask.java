@@ -103,7 +103,7 @@ public class GoogleTask {
 		id = jsonTask.getString(ID);
 		title = jsonTask.getString(TITLE);
 		updated = jsonTask.getString(UPDATED);
-		// etag = jsonTask.getString("etag");
+		etag = jsonTask.getString("etag");
 		if (jsonTask.has(NOTES))
 			notes = jsonTask.getString(NOTES);
 		status = jsonTask.getString(STATUS);
@@ -218,6 +218,7 @@ public class GoogleTask {
 	public ContentValues toGTasksContentValues(String accountName) {
 		ContentValues values = new ContentValues();
 		values.put(NotePad.GTasks.COLUMN_NAME_DB_ID, dbId);
+		Log.d(TAG, "Db saving etag: " + etag);
 		values.put(NotePad.GTasks.COLUMN_NAME_ETAG, etag);
 		values.put(NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT, accountName);
 		values.put(NotePad.GTasks.COLUMN_NAME_GTASKS_ID, id);
