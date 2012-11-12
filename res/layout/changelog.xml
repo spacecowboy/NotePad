@@ -22,47 +22,69 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Version 3.6"
+            android:text="\nVersion 3.6.2"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="\n-Syncing code has been revised. Conficting notes on the server are no longer overwritten. Instead a local copy is made. This creates duplicates in case there are conflicts but should guarantee that no data is lost.\n-Lists are now displayed in swipeable tabs.\n-Editor layout has been revised and now has a hidden section with all the properties like list, due date, etc..\n- New 1x1 'New note' widget. Creates notes in your selected default list.\n- Due date dialog now displays a full calendar view on phones.\n- The app should now remember what list you had opened previously instead of opening the default list when you switch orientation or turn off the screen.\n- Fixed clicking on the title of notes that did not open the note in certain widget configurations.\n- Dark widgets have received increased transparency.\n- Dark theme now has true black as background.\n- Layout has been optimized for Nexus7.\n- All clickable things in the widgets will now highlight on touch.\n- Fixed crashes related to landscape changes.\n- New and updated translations." />
-
-
+            android:text="\n- Fixed an error in the synchronization (sorry about any lost notes). Changes on the server are no longer overwritten. If a note has been edited both in the app and on the server, a conflict will arise. In that case, the local version gets 'sync-conflict' added to its title and the server's version is downloaded so you can keep the one you want." />
+        
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Version 3.5.4"
+            android:text="\nVersion 3.6.1"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="- Sync button now requests access and enables syncing instead of opening settings when no syncing has been enabled yet.\n- Improved scrolling on long notes in the editor.\n- Added a welcome note for first time users.\n- Added option of showing or hiding the note preview when adding a widget to your homescreen.\n- Added option to show or hide buttons to mark tasks as done in the widget.\n- Enlarged the touch area for the checkbox in the list. Should make it harder to miss the box now.\n- Possible to type in landscape mode on phones again.\n- Added a choice between two list item layouts which can be chosen in the settings.\n- Fixed so password protected notes do not reveal their contents in the list" />
-
+            android:text="\n- Completed notes no longer get their contents deleted." />
+        
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Version 3.5.3"
+            android:text="\nVersion 3.6"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="- Fixed a crash.\n- Implemented a receiver for added widget functionality (soon)" />
+            android:text="\n- Syncing code has been revised. Conficting notes on the server are no longer overwritten. Instead a local copy is made. This creates duplicates in case there are conflicts but should guarantee that no data is lost.\n\n- Lists are now displayed in swipeable tabs.\n\n- Editor layout has been revised and now has a hidden section with all the properties like list, due date, etc..\n\n- New 1x1 'New note' widget. Creates notes in your selected default list.\n\n- Due date dialog now displays a full calendar view on phones.\n\n- The app should now remember what list you had opened previously instead of opening the default list when you switch orientation or turn off the screen.\n\n- Fixed clicking on the title of notes that did not open the note in certain widget configurations.\n\n- Dark widgets have received increased transparency.\n\n- Dark theme now has true black as background.\n\n- Layout has been optimized for Nexus7.\n\n- All clickable things in the widgets will now highlight on touch.\n\n- Fixed crashes related to landscape changes.\n\n- New and updated translations." />
+
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Version 3.5.2"
+            android:text="\nVersion 3.5.4"
             android:textStyle="bold" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="- This change log.\n- Chinese translation.\n- Removed auto reloading of notes as it would overwrite changes.\n- Keyboard is opened automatically when creating new notes.\n- Note titles are now single line but in return a new next-button should appear on your keyboard which will move the cursor directly to the notes field.\n- Widget title is once again on the left.\n- Widget items are now smaller at the cost of the note preview field. This means more visible items which has been heavily requested.\n- Now impossible to delete a list if it is the only list as you could end up in a crash loop when you had no lists.\n- Completing or moving a note to another list should no longer delete the changes you made if they were not saved. All changes are now saved prior to any action being taken.\n- Moved the complete button to the overflow menu again as people confused it with a save button.\n- Various bugs and crashes should be fixed." />
+            android:text="- Sync button now requests access and enables syncing instead of opening settings when no syncing has been enabled yet.\n\n- Improved scrolling on long notes in the editor.\n\n- Added a welcome note for first time users.\n\n- Added option of showing or hiding the note preview when adding a widget to your homescreen.\n\n- Added option to show or hide buttons to mark tasks as done in the widget.\n\n- Enlarged the touch area for the checkbox in the list. Should make it harder to miss the box now.\n\n- Possible to type in landscape mode on phones again.\n\n- Added a choice between two list item layouts which can be chosen in the settings.\n\n- Fixed so password protected notes do not reveal their contents in the list" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\nVersion 3.5.3"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="- Fixed a crash.\n\n- Implemented a receiver for added widget functionality (soon)" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\nVersion 3.5.2"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="- This change log.\n\n- Chinese translation.\n\n- Removed auto reloading of notes as it would overwrite changes.\n\n- Keyboard is opened automatically when creating new notes.\n\n- Note titles are now single line but in return a new next-button should appear on your keyboard which will move the cursor directly to the notes field.\n\n- Widget title is once again on the left.\n\n- Widget items are now smaller at the cost of the note preview field. This means more visible items which has been heavily requested.\n\n- Now impossible to delete a list if it is the only list as you could end up in a crash loop when you had no lists.\n\n- Completing or moving a note to another list should no longer delete the changes you made if they were not saved. All changes are now saved prior to any action being taken.\n\n- Moved the complete button to the overflow menu again as people confused it with a save button.\n\n- Various bugs and crashes should be fixed." />
     </LinearLayout>
 
 </ScrollView>

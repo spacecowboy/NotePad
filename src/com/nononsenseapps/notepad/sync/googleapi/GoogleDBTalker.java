@@ -324,6 +324,8 @@ public class GoogleDBTalker {
 
 				task.id = cursor.getString(cursor
 						.getColumnIndex(NotePad.GTasks.COLUMN_NAME_GTASKS_ID));
+				
+				task.etag = cursor.getString(cursor.getColumnIndex(NotePad.GTasks.COLUMN_NAME_ETAG));
 
 				// We need to be able to easily convert ids for position reasons
 				if (task.id != null && !task.id.isEmpty())
