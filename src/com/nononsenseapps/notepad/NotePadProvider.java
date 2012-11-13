@@ -573,8 +573,8 @@ public class NotePadProvider extends ContentProvider implements
 						+ NotePad.Lists.COLUMN_NAME_DELETED
 						+ " INTEGER DEFAULT 0 NOT NULL" + ");");
 
-				db.execSQL("CREATE TABLE " + NotePad.GTasks.TABLE_NAME
-						+ " (" + BaseColumns._ID + " INTEGER PRIMARY KEY,"
+				db.execSQL("CREATE TABLE " + NotePad.GTasks.TABLE_NAME + " ("
+						+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
 						+ NotePad.GTasks.COLUMN_NAME_DB_ID
 						+ " INTEGER UNIQUE NOT NULL REFERENCES "
 						+ Notes.TABLE_NAME + ","
@@ -599,7 +599,6 @@ public class NotePadProvider extends ContentProvider implements
 
 				// Now insert a default list
 				long listId = insertDefaultList(db);
-
 
 				// Place all existing notes in this list
 				// And give them sensible values in the new columns
@@ -1276,8 +1275,7 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	/**
-	 * Given a bunch of columns will return a string as
-<<<<<<< HEAD
+	 * Given a bunch of columns will return a string as <<<<<<< HEAD
 	 * "Col1 IS ? AND Col2 IS ? AND ..." ends the string with deleted is not 1
 	 * and truepos > "0" to only fetch valid notes
 	 * 
@@ -1290,9 +1288,8 @@ public class NotePadProvider extends ContentProvider implements
 	}
 
 	/**
-	 * Given a bunch of columns will return a string as
-=======
->>>>>>> 7110d94... Recovery commit after corrupted backup
+	 * Given a bunch of columns will return a string as ======= >>>>>>>
+	 * 7110d94... Recovery commit after corrupted backup
 	 * "Col1 IS ? AND Col2 IS ? AND ..."
 	 */
 	private static String toWhereClause(String... columns) {
@@ -2031,11 +2028,10 @@ public class NotePadProvider extends ContentProvider implements
 			if (values.containsKey(NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE) == false) {
 				values.put(NotePad.Lists.COLUMN_NAME_MODIFICATION_DATE, now);
 			}
+			String listId = uri.getPathSegments().get(
+					NotePad.Lists.ID_PATH_POSITION);
 
-			finalWhere = BaseColumns._ID + // The ID column name
-					" = " + // test for equality
-					uri.getPathSegments(). // the incoming note ID
-							get(NotePad.Lists.ID_PATH_POSITION);
+			finalWhere = BaseColumns._ID + " = " + listId;
 
 			if (where != null) {
 				finalWhere = finalWhere + " AND " + where;
@@ -2050,6 +2046,27 @@ public class NotePadProvider extends ContentProvider implements
 					whereArgs // The where clause column values to select on, or
 								// null if the values are in the where argument.
 					);
+
+			if (values.containsKey(NotePad.Lists.COLUMN_NAME_DELETED)
+					&& 1 == values
+							.getAsInteger(NotePad.Lists.COLUMN_NAME_DELETED)) {
+				// If it is a deletion, delete the notes already now for sync
+				// reasons
+				// First delete from GTasks table because it references the note
+				// Delete all which reference an id contained in thist list
+				count += db
+						.delete(NotePad.GTasks.TABLE_NAME,
+								NotePad.GTasks.COLUMN_NAME_DB_ID + " IN "
+										+ "(SELECT " + Notes._ID + " FROM "
+										+ Notes.TABLE_NAME + " WHERE "
+										+ Notes.COLUMN_NAME_LIST + " IS ?)",
+								toWhereArgs(listId));
+				// Then delete the notes
+				count += db.delete(Notes.TABLE_NAME,
+						toWhereClause(Notes.COLUMN_NAME_LIST),
+						toWhereArgs(listId));
+			}
+
 			break;
 
 		case GTASKS:
@@ -2141,15 +2158,12 @@ public class NotePadProvider extends ContentProvider implements
 	 * note in gtasks because moving would be a separate operation
 	 * 
 	 * Needs the id of the note and the list it was/is contained in
-	 * 
-	 * This is intended to be called during moves, e.g. in insertNoteTree
 	 */
 	private static void copyDeleteNote(final SQLiteDatabase db,
 			final long noteId, final long listId) {
-		if (noteId < 0 || listId < 0)
-			throw new InvalidParameterException("Invalid ID");
-		copyDeleteNote(db, listId, toWhereClause(Notes._ID),
-				toWhereArgs(noteId));
+		if (noteId >= 0 && listId >= 0)
+			copyDeleteNote(db, listId, toWhereClause(Notes._ID),
+					toWhereArgs(noteId));
 	}
 
 	/**
@@ -2163,12 +2177,31 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	private static void copyDeleteNote(final SQLiteDatabase db,
 			final long listId, final String where, final String[] whereArgs) {
+		// Make sure lists are different
+		boolean differentLists = false;
+		final Cursor cu = db.query(NotePad.Notes.TABLE_NAME,
+				toStringArray(NotePad.Notes.COLUMN_NAME_LIST), where,
+				whereArgs, null, null, null);
+		if (cu.moveToFirst()) {
+			if (cu.getLong(cu.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST)) != listId) {
+				differentLists = true;
+			}
+		}
+		cu.close();
+
+		// If not different lists, then nothing to do
+		if (!differentLists) {
+			Log.d(TAG, "copydelete: Not different lists, returning...");
+			return;
+		}
+
 		// Only do this if there is a gtask referencing this
 		boolean existsInGtasks = false;
 		final Cursor c = db.query(NotePad.GTasks.TABLE_NAME,
 				toStringArray(NotePad.GTasks._ID), where, whereArgs, null,
 				null, null);
 		if (c.moveToFirst()) {
+			Log.d(TAG, "copydelete: Exists in GTasks");
 			existsInGtasks = true;
 		}
 		c.close();
