@@ -291,10 +291,7 @@ public class GoogleAPITalker {
 		Log.d(TAG, "request: " + AllLists());
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
-		JSONObject jsonResponse;
-
-		jsonResponse = (JSONObject) new JSONTokener(
-				parseResponse(client.execute(httpget))).nextValue();
+		JSONObject jsonResponse = (JSONObject) new JSONTokener(parseResponse(client.execute(httpget))).nextValue();
 
 		Log.d(TAG, jsonResponse.toString());
 
@@ -342,10 +339,9 @@ public class GoogleAPITalker {
 
 		Log.d(TAG, "request: " + TaskURL(gimpedTask.id, list.id));
 
-		JSONObject jsonResponse;
-		// try {
-		jsonResponse = (JSONObject) new JSONTokener(
-				parseResponse(client.execute(httpget))).nextValue();
+		JSONObject jsonResponse  = (JSONObject) new JSONTokener(
+					parseResponse(client.execute(httpget))).nextValue();
+		
 
 		Log.d(TAG, jsonResponse.toString());
 		result = new GoogleTask(jsonResponse);
@@ -380,10 +376,8 @@ public class GoogleAPITalker {
 
 		Log.d(TAG, "request: " + ListURL(gimpedList.id));
 
-		JSONObject jsonResponse;
-		// try {
-		jsonResponse = (JSONObject) new JSONTokener(
-				parseResponse(client.execute(httpget))).nextValue();
+		JSONObject jsonResponse = (JSONObject) new JSONTokener(
+					parseResponse(client.execute(httpget))).nextValue();
 
 		Log.d(TAG, jsonResponse.toString());
 		result = new GoogleTaskList(jsonResponse);
@@ -403,10 +397,8 @@ public class GoogleAPITalker {
 		Log.d(TAG, "request: " + AllLists());
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
-		JSONObject jsonResponse;
-		// try {
-		jsonResponse = (JSONObject) new JSONTokener(
-				parseResponse(client.execute(httpget))).nextValue();
+		JSONObject jsonResponse = (JSONObject) new JSONTokener(
+					parseResponse(client.execute(httpget))).nextValue();
 
 		Log.d(TAG, jsonResponse.toString());
 
@@ -614,8 +606,7 @@ public class GoogleAPITalker {
 			setPostBody(httppost, task);
 		}
 
-		String stringResponse;
-		stringResponse = parseResponse(client.execute(httppost));
+		String stringResponse = parseResponse(client.execute(httppost));
 
 		// If we deleted the note, we will get an empty response. Return the
 		// same element back.
@@ -706,6 +697,7 @@ public class GoogleAPITalker {
 	 * @throws PreconditionException
 	 * @throws JSONException
 	 * @throws ClientProtocolException
+	 * @throws DefaultListDeleted 
 	 */
 	public GoogleTaskList uploadList(final GoogleTaskList list)
 			throws ClientProtocolException, JSONException, IOException,
@@ -762,7 +754,7 @@ public class GoogleAPITalker {
 
 			// Will return a list, containing id and etag. always update
 			// fields
-			// list.etag = jsonResponse.getString("etag");
+			list.etag = jsonResponse.getString("etag");
 			list.id = jsonResponse.getString("id");
 			list.title = jsonResponse.getString("title");
 		}
@@ -866,6 +858,7 @@ public class GoogleAPITalker {
 	 * exceptions for select status codes.
 	 * 
 	 * @throws PreconditionException
+	 * @throws DefaultListDeleted 
 	 */
 	public static String parseResponse(HttpResponse response)
 			throws ClientProtocolException, PreconditionException {
@@ -886,7 +879,7 @@ public class GoogleAPITalker {
 			 * update
 			 */
 			throw new PreconditionException(
-					"Etags don't match, can not perform update. Resolv the conflict then update without etag");
+					"Etags don't match, can not perform update. Resolve the conflict then update without etag");
 		}
 
 		/*
@@ -902,7 +895,7 @@ public class GoogleAPITalker {
 			// Make a log entry about it anyway though
 			Log.d(TAG,
 					"Response was 400. Either we deleted the default list in app or did something really bad");
-			return "";
+			throw new PreconditionException("Tried to delete default list, undelete it");
 		} else if (response.getStatusLine().getStatusCode() == 204) {
 			// Successful delete of a tasklist. return empty string as that is
 			// expected from delete

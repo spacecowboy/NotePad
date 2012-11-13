@@ -42,6 +42,8 @@ public class GoogleTaskList {
 
 	public boolean didRemoteInsert = false;
 	public int modified = 0;
+	// Intended for when default list is deleted. When that fails, redownload it and its contents
+	public boolean redownload = false;
 
 	// private GoogleAPITalker api;
 
@@ -53,8 +55,9 @@ public class GoogleTaskList {
 		updated = jsonList.getString("updated");
 
 		// Inital listing of lists does not contain etags
-		// if (jsonList.has("etag"))
-		// etag = jsonList.getString("etag");
+		if (jsonList.has("etag")) {
+			etag = jsonList.getString("etag");
+		}
 
 		json = jsonList;
 	}
@@ -154,7 +157,12 @@ public class GoogleTaskList {
 		// both items
 		ArrayList<GoogleTask> moddedTasks = new ArrayList<GoogleTask>();
 		// ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(this);
-		for (GoogleTask task : apiTalker.getModifiedTasks(lastUpdated, this)) {
+		String timestamp = lastUpdated;
+		if (redownload) {
+			// Force download of everything
+			timestamp = null;
+		}
+		for (GoogleTask task : apiTalker.getModifiedTasks(timestamp, this)) {
 			// GoogleTask localVersion = null;
 			for (GoogleTask localTask : allTasks) {
 				if (task.equals(localTask)) {

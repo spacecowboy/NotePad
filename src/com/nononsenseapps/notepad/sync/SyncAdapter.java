@@ -250,7 +250,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 							uploadedStuff = true;
 						} catch (PreconditionException e) {
 							Log.d(TAG, "There was a conflict with list delete");
-						}
+							// Tried to delete the default list or a modified list. That's not allowed
+							// Undelete and put in list to save to db
+							if (list.deleted > 0) {
+								list.deleted = 0;
+								// Make the list re-download all containing tasks
+								list.redownload = true;
+								//listsToSaveToDB.add(list);
+								// Also change the etag to make sure we download stuff
+								localEtag = "dummytag";
+							}
+						} 
 					}
 
 					Log.d(TAG, "Uploading tasks");
