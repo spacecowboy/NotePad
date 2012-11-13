@@ -22,6 +22,17 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="\nVersion 3.6.3"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\n- More synchronization tweaks. Deleting the default list in google tasks should no longer crash sync. Instead the list is simply redownloaded (Google does not permit the list to be deleted)." />
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="\nVersion 3.6.2"
             android:textStyle="bold" />
 

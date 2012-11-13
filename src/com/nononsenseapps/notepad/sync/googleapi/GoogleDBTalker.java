@@ -170,6 +170,8 @@ public class GoogleDBTalker {
 				localTime.set(modTime);
 
 				list.updated = localTime.format3339(false);
+				
+				list.etag = cursor.getString(cursor.getColumnIndex(NotePad.GTaskLists.COLUMN_NAME_ETAG));
 
 				list.id = cursor
 						.getString(cursor
