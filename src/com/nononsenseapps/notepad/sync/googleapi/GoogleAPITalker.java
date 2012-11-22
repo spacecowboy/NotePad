@@ -291,7 +291,8 @@ public class GoogleAPITalker {
 		Log.d(TAG, "request: " + AllLists());
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
-		JSONObject jsonResponse = (JSONObject) new JSONTokener(parseResponse(client.execute(httpget))).nextValue();
+		JSONObject jsonResponse = (JSONObject) new JSONTokener(
+				parseResponse(client.execute(httpget))).nextValue();
 
 		Log.d(TAG, jsonResponse.toString());
 
@@ -339,9 +340,8 @@ public class GoogleAPITalker {
 
 		Log.d(TAG, "request: " + TaskURL(gimpedTask.id, list.id));
 
-		JSONObject jsonResponse  = (JSONObject) new JSONTokener(
-					parseResponse(client.execute(httpget))).nextValue();
-		
+		JSONObject jsonResponse = (JSONObject) new JSONTokener(
+				parseResponse(client.execute(httpget))).nextValue();
 
 		Log.d(TAG, jsonResponse.toString());
 		result = new GoogleTask(jsonResponse);
@@ -377,7 +377,7 @@ public class GoogleAPITalker {
 		Log.d(TAG, "request: " + ListURL(gimpedList.id));
 
 		JSONObject jsonResponse = (JSONObject) new JSONTokener(
-					parseResponse(client.execute(httpget))).nextValue();
+				parseResponse(client.execute(httpget))).nextValue();
 
 		Log.d(TAG, jsonResponse.toString());
 		result = new GoogleTaskList(jsonResponse);
@@ -398,7 +398,7 @@ public class GoogleAPITalker {
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
 		JSONObject jsonResponse = (JSONObject) new JSONTokener(
-					parseResponse(client.execute(httpget))).nextValue();
+				parseResponse(client.execute(httpget))).nextValue();
 
 		Log.d(TAG, jsonResponse.toString());
 
@@ -553,8 +553,8 @@ public class GoogleAPITalker {
 	}
 
 	/**
-	 * Returns an object if all went well. Returns null if a conflict was
-	 * detected. Will set only remote id, etag, position and parent fields.
+	 * Returns an object if all went well. Returns null if no upload was done.
+	 * Will set only remote id, etag, position and parent fields.
 	 * 
 	 * Updates the task in place and also returns it.
 	 * 
@@ -566,11 +566,18 @@ public class GoogleAPITalker {
 
 		if (pList.id == null || pList.id.isEmpty()) {
 			Log.d(TAG, "Invalid list ID found for uploadTask");
-			return task; // Invalid list id
+			return null; // Invalid list id
+		}
+
+		// If we are trying to upload a deleted task which does not exist on
+		// server, we can ignore it. might happen with conflicts
+		if (task.deleted == 1 && (task.id == null || task.id.isEmpty())) {
+			Log.d(TAG, "Trying to upload a deleted non-synced note, ignoring: " + task.title);
+			return null;
 		}
 
 		HttpUriRequest httppost;
-		if (task.id != null) {
+		if (task.id != null && !task.id.isEmpty()) {
 			if (task.deleted == 1) {
 				httppost = new HttpPost(TaskURL(task.id, pList.id));
 				httppost.setHeader("X-HTTP-Method-Override", "DELETE");
@@ -624,7 +631,7 @@ public class GoogleAPITalker {
 			task.id = jsonResponse.getString(GoogleTask.ID);
 			if (jsonResponse.has(GoogleTask.UPDATED))
 				task.updated = jsonResponse.getString(GoogleTask.UPDATED);
-			
+
 		}
 
 		return task;
@@ -697,7 +704,7 @@ public class GoogleAPITalker {
 	 * @throws PreconditionException
 	 * @throws JSONException
 	 * @throws ClientProtocolException
-	 * @throws DefaultListDeleted 
+	 * @throws DefaultListDeleted
 	 */
 	public GoogleTaskList uploadList(final GoogleTaskList list)
 			throws ClientProtocolException, JSONException, IOException,
@@ -785,7 +792,7 @@ public class GoogleAPITalker {
 	 */
 	private void setHeaderStrongEtag(final HttpUriRequest httppost,
 			final String etag) {
-		if (etag != null && !etag.equals("")) {
+		if (etag != null && !etag.isEmpty()) {
 			httppost.setHeader("If-Match", etag);
 
 			Log.d(TAG, "If-Match: " + etag);
@@ -858,7 +865,7 @@ public class GoogleAPITalker {
 	 * exceptions for select status codes.
 	 * 
 	 * @throws PreconditionException
-	 * @throws DefaultListDeleted 
+	 * @throws DefaultListDeleted
 	 */
 	public static String parseResponse(HttpResponse response)
 			throws ClientProtocolException, PreconditionException {
@@ -895,7 +902,8 @@ public class GoogleAPITalker {
 			// Make a log entry about it anyway though
 			Log.d(TAG,
 					"Response was 400. Either we deleted the default list in app or did something really bad");
-			throw new PreconditionException("Tried to delete default list, undelete it");
+			throw new PreconditionException(
+					"Tried to delete default list, undelete it");
 		} else if (response.getStatusLine().getStatusCode() == 204) {
 			// Successful delete of a tasklist. return empty string as that is
 			// expected from delete

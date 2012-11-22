@@ -145,6 +145,19 @@ public class GoogleDBTalker {
 		cursor.close();
 	}
 
+	public void removeDeletedTask(GoogleTask task) {
+		if (task.deleted == 1) {
+			Log.d(TAG, "Deleting " + task.dbId + " from DB...");
+			try {
+				provider.delete(Uri.withAppendedPath(
+						NotePad.Notes.CONTENT_ID_URI_BASE,
+						Long.toString(task.dbId)), null, null);
+			} catch (RemoteException e) {
+				Log.e(TAG, e.getLocalizedMessage());
+			}
+		}
+	}
+
 	private void populateWithLists(Cursor cursor,
 			ArrayList<GoogleTaskList> allLists,
 			ArrayList<GoogleTaskList> modifiedLists) throws RemoteException {
@@ -170,8 +183,9 @@ public class GoogleDBTalker {
 				localTime.set(modTime);
 
 				list.updated = localTime.format3339(false);
-				
-				list.etag = cursor.getString(cursor.getColumnIndex(NotePad.GTaskLists.COLUMN_NAME_ETAG));
+
+				list.etag = cursor.getString(cursor
+						.getColumnIndex(NotePad.GTaskLists.COLUMN_NAME_ETAG));
 
 				list.id = cursor
 						.getString(cursor
@@ -246,19 +260,18 @@ public class GoogleDBTalker {
 	 */
 	public ArrayList<GoogleTask> getAllTasks(
 			HashMap<Long, ArrayList<GoogleTask>> allTasks,
-			HashMap<Long, ArrayList<GoogleTask>> modifiedTasks,
-			HashMap<Long, String> idMap) throws RemoteException {
+			HashMap<Long, ArrayList<GoogleTask>> modifiedTasks)
+			throws RemoteException {
 		allTasks.clear();
 		modifiedTasks.clear();
 
 		ArrayList<GoogleTask> listOfAllTasks = new ArrayList<GoogleTask>();
 
-		// Sort by position so the id map is updated correctly before being used
 		Cursor cursor = provider.query(NotePad.Notes.CONTENT_JOINED_URI,
 				JOINED_NOTES_PROJECTION, null, new String[] { accountName },
-				NotePad.Notes.COLUMN_NAME_POSSUBSORT);
+				null);
 
-		populateWithTasks(cursor, allTasks, idMap);
+		populateWithTasks(cursor, allTasks);
 		cursor.close();
 		// Now populate the modified ones
 		for (long listId : allTasks.keySet()) {
@@ -277,8 +290,7 @@ public class GoogleDBTalker {
 	}
 
 	private void populateWithTasks(Cursor cursor,
-			HashMap<Long, ArrayList<GoogleTask>> map,
-			HashMap<Long, String> idMap) throws RemoteException {
+			HashMap<Long, ArrayList<GoogleTask>> map) throws RemoteException {
 		if (cursor != null && !cursor.isAfterLast()) {
 			while (cursor.moveToNext()) {
 				GoogleTask task = new GoogleTask();
@@ -326,12 +338,9 @@ public class GoogleDBTalker {
 
 				task.id = cursor.getString(cursor
 						.getColumnIndex(NotePad.GTasks.COLUMN_NAME_GTASKS_ID));
-				
-				task.etag = cursor.getString(cursor.getColumnIndex(NotePad.GTasks.COLUMN_NAME_ETAG));
 
-				// We need to be able to easily convert ids for position reasons
-				if (task.id != null && !task.id.isEmpty())
-					idMap.put(task.dbId, task.id);
+				task.etag = cursor.getString(cursor
+						.getColumnIndex(NotePad.GTasks.COLUMN_NAME_ETAG));
 
 				// Compare with the modification time in the object, select
 				// the newest timestamp
@@ -357,7 +366,7 @@ public class GoogleDBTalker {
 	public void SaveToDatabase(
 			ArrayList<GoogleTaskList> listsToSaveToDB,
 			HashMap<GoogleTaskList, ArrayList<GoogleTask>> tasksInListToSaveToDB,
-			BiMap<Long, String> idMap, ArrayList<GoogleTask> allTasks) {
+			ArrayList<GoogleTask> allTasks) {
 		int listIdIndex = -1;
 
 		Set<GoogleTaskList> listIdsWithTasks = tasksInListToSaveToDB.keySet();
@@ -432,9 +441,8 @@ public class GoogleDBTalker {
 			ArrayList<GoogleTask> tasks = tasksInListToSaveToDB.get(list);
 			if (tasks != null && !tasks.isEmpty()) {
 
-				Log.d(TAG, "Found some tasks to save in: " + list.id);
-				SaveNoteToDatabase(tasks, listIdIndex, list.dbId, idMap,
-						allTasks);
+				Log.d(TAG, "Found some tasks to save in: " + list.title);
+				SaveNoteToDatabase(tasks, listIdIndex, list.dbId, allTasks);
 			}
 			// Remove it from the keyset, will affect the hashmap as well
 			if (list.id != null) {
@@ -450,30 +458,25 @@ public class GoogleDBTalker {
 				long listDbId = tasks.get(0).listdbid;
 
 				Log.d(TAG, "Saving tasks for: " + listDbId);
-				SaveNoteToDatabase(tasks, -1, listDbId, idMap, allTasks);
+				SaveNoteToDatabase(tasks, -1, listDbId, allTasks);
 			}
 		}
 	}
 
 	private void SaveNoteToDatabase(ArrayList<GoogleTask> tasks,
-			int listIdIndex, long listDbId, BiMap<Long, String> idMap,
-			ArrayList<GoogleTask> allTasks) {
+			int listIdIndex, long listDbId, ArrayList<GoogleTask> allTasks) {
 		int lastNoteIdIndex;
-		// Need to remember in what operation a note was created for position
-		// reasons
-		// BiMap<String, Integer> remoteToIndex = new BiMap<String, Integer>();
 		for (GoogleTask task : tasks) {
 			if (task.dbId > -1 && task.deleted != 1) {
 
-				Log.d(TAG, "Updating task");
+				Log.d(TAG, "Updating task " + task.title + " " + task.dbId);
 
 				operations.add(ContentProviderOperation
 						.newUpdate(
 								Uri.withAppendedPath(
 										NotePad.Notes.CONTENT_ID_URI_BASE,
 										Long.toString(task.dbId)))
-						.withValues(
-								task.toNotesContentValues(0, listDbId, idMap))
+						.withValues(task.toNotesContentValues(0, listDbId))
 						.build());
 				if (task.didRemoteInsert) {
 					operations
@@ -501,7 +504,7 @@ public class GoogleDBTalker {
 
 			} else if (task.dbId > -1 && task.deleted == 1) {
 
-				Log.d(TAG, "Deleting task");
+				Log.d(TAG, "Deleting task " + task.title + " " + task.dbId);
 
 				operations.add(ContentProviderOperation.newDelete(
 						Uri.withAppendedPath(NotePad.Notes.CONTENT_ID_URI_BASE,
@@ -517,16 +520,15 @@ public class GoogleDBTalker {
 			} else {
 				// Tasks which have been created on the server
 
-				Log.d(TAG, "Inserting task");
+				Log.d(TAG, "Inserting task " + task.title);
 
 				// Either the list exists, or the list is new as well
 				if (listDbId > -1) {
 					// List exists, use existing id
 					operations.add(ContentProviderOperation
 							.newInsert(NotePad.Notes.CONTENT_URI)
-							.withValues(
-									task.toNotesContentValues(0, listDbId,
-											idMap)).build());
+							.withValues(task.toNotesContentValues(0, listDbId))
+							.build());
 				} else {
 					// Use back reference to that insert operation
 					// back reference will get precedence over the invalid value
@@ -535,7 +537,7 @@ public class GoogleDBTalker {
 									.newInsert(NotePad.Notes.CONTENT_URI)
 									.withValues(
 											task.toNotesContentValues(0,
-													listDbId, idMap))
+													listDbId))
 									.withValueBackReferences(
 											task.toNotesBackRefContentValues(listIdIndex))
 									.build());
@@ -543,8 +545,6 @@ public class GoogleDBTalker {
 				// Now the other table, use back reference to the id the note
 				// received
 				lastNoteIdIndex = operations.size() - 1;
-				// And store for positions
-				// remoteToIndex.put(task.id, lastNoteIdIndex);
 
 				operations
 						.add(ContentProviderOperation
