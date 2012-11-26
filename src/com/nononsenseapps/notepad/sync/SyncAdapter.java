@@ -156,7 +156,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 			if (connected) {
 
-				Log.d(TAG, "We got an authToken atleast");
+				Log.d(TAG, "AuthToken acquired, we are connected...");
 
 				try {
 					/*
@@ -172,10 +172,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					String localEtag = settings.getString(PREFS_LAST_SYNC_ETAG,
 							"");
 
-					// This is so we can set parent position values properly
-					// during upload using remote ids
-					BiMap<Long, String> idMap = new BiMap<Long, String>();
-
 					// Prepare lists for items
 					ArrayList<GoogleTaskList> listsToSaveToDB = new ArrayList<GoogleTaskList>();
 					HashMap<GoogleTaskList, ArrayList<GoogleTask>> tasksInListToSaveToDB = new HashMap<GoogleTaskList, ArrayList<GoogleTask>>();
@@ -185,7 +181,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 					// gets all tasks in one query
 					ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(
-							allTasksInList, tasksInListToUpload, idMap);
+							allTasksInList, tasksInListToUpload);
 
 					ArrayList<GoogleTaskList> listsToUpload = new ArrayList<GoogleTaskList>();
 					ArrayList<GoogleTaskList> allLocalLists = new ArrayList<GoogleTaskList>();
@@ -193,13 +189,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					// gets all lists in one query
 					dbTalker.getAllLists(allLocalLists, listsToUpload);
 
-					// Get the current hash value on the server and all
-					// remote lists
-
 					Log.d(TAG, "Getting stuff we want to upload");
-					/*
-					 * Get stuff we would like to upload to server
-					 */
 
 					for (GoogleTaskList list : allLocalLists) {
 						ArrayList<GoogleTask> moddedTasks = tasksInListToUpload
@@ -208,21 +198,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 							// There are some tasks here which we want to
 							// upload
 
-							Log.d(TAG, "List id " + list.dbId
+							Log.d(TAG, "List id " + list.title
 									+ ", Locally modified tasks found: "
 									+ moddedTasks.size());
 
-							/*
-							 * Now we need to handle possible conflicts in the
-							 * tasks. For any task which exists in
-							 * stuffToSaveToDB, we should create a conflict copy
-							 * of the local version and upload that as a new
-							 * note while saving the version we downloaded as
-							 * new in the database.
-							 */
-							
 							// Avoid concurrency problems with clone
-							for (GoogleTask moddedTask : (ArrayList<GoogleTask>) moddedTasks.clone()) {
+							for (GoogleTask moddedTask : (ArrayList<GoogleTask>) moddedTasks
+									.clone()) {
 								/*
 								 * In the case that a task has been deleted
 								 * before it was synced the first time We should
@@ -231,7 +213,16 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 								if (moddedTask.deleted == 1
 										&& (moddedTask.id == null || moddedTask.id
 												.isEmpty())) {
+									Log.d(TAG,
+											"Task "
+													+ moddedTask.title
+													+ " was deleted before sync, not uploading");
+									if (moddedTask.title.contains("debug")) {
+										Log.d(TAG, "SyncDupe DELETED BEFORE SYNC REMOVING " + moddedTask.title);
+									}
 									moddedTasks.remove(moddedTask);
+									allTasks.remove(moddedTask);
+									dbTalker.removeDeletedTask(moddedTask);
 								}
 							}
 						}
@@ -249,18 +240,22 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 							GoogleTaskList result = apiTalker.uploadList(list);
 							uploadedStuff = true;
 						} catch (PreconditionException e) {
-							Log.d(TAG, "There was a conflict with list delete");
-							// Tried to delete the default list or a modified list. That's not allowed
+							Log.d(TAG, "There was a conflict with list delete "
+									+ list.dbId);
+							// Tried to delete the default list or a modified
+							// list. That's not allowed
 							// Undelete and put in list to save to db
-							if (list.deleted > 0) {
+							if (list.deleted == 1) {
 								list.deleted = 0;
-								// Make the list re-download all containing tasks
+								// Make the list re-download all containing
+								// tasks
 								list.redownload = true;
-								//listsToSaveToDB.add(list);
-								// Also change the etag to make sure we download stuff
+								// listsToSaveToDB.add(list);
+								// Also change the etag to make sure we download
+								// stuff
 								localEtag = "dummytag";
 							}
-						} 
+						}
 					}
 
 					Log.d(TAG, "Uploading tasks");
@@ -270,34 +265,47 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 								.get(list.dbId);
 						if (tasksToUpload != null) {
 							for (GoogleTask task : tasksToUpload) {
-								// Update position fields with data from
-								// previous uploads
-
 								try {
-									GoogleTask result = apiTalker.uploadTask(
-											task, list);
-									idMap.put(result.dbId, result.id);
+									if (null != apiTalker
+											.uploadTask(task, list))
+										uploadedStuff = true;
 								} catch (PreconditionException e) {
-									Log.d(TAG,
-											"There was task conflict. Trying as new task");
 									// There was a conflict, do it again but as
-									// a new note
-									task.id = null;
-									task.etag = null;
-									task.title = "sync-conflict " + task.title;
-									
-									try {
-										GoogleTask result = apiTalker
-												.uploadTask(task, list);
-										// Added this
-										idMap.put(result.dbId, result.id);
-									} catch (PreconditionException ee) {
+									// a new note. Except if we tried to delete
+									// a note
+									// then just delete it locally and download the
+									// server version later.
+									if (task.deleted == 1) {
+										if (task.title.contains("debug")) {
+											Log.d(TAG, "SyncDupe Upload conflict delete " + task.title);
+										}
+										allTasks.remove(task);
+										allTasksInList.get(task.listdbid).remove(task);
+										dbTalker.removeDeletedTask(task);
+									} else {
 										Log.d(TAG,
-												"Impossible conflict achieved");
-										// Impossible to reach this
+												"There was task conflict. Trying as new task");
+										if (task.title.contains("debug")) {
+											Log.d(TAG, "SyncDupe Upload conflict doing new " + task.title);
+										}
+										task.id = null;
+										task.etag = null;
+										task.title = "sync-conflict "
+												+ task.title;
+
+										try {
+											if (null != apiTalker.uploadTask(
+													task, list)) {
+												uploadedStuff = true;
+												Log.d(TAG, "Uploaded " + task.title + ", didremoteinsert: " + task.didRemoteInsert);
+											}
+										} catch (PreconditionException ee) {
+											Log.d(TAG,
+													"Impossible conflict achieved");
+											// Impossible to reach this
+										}
 									}
 								}
-								uploadedStuff = true;
 							}
 						}
 					}
@@ -319,13 +327,13 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 							if (list.id != null && !list.id.isEmpty()) {
 
 								Log.d(TAG, "Saving remote modified tasks for: "
-										+ list.id);
+										+ list.title);
 								if (tasksInListToSaveToDB.get(list) == null)
 									tasksInListToSaveToDB.put(list,
 											new ArrayList<GoogleTask>());
 								tasksInListToSaveToDB.get(list).addAll(
 										list.downloadModifiedTasks(apiTalker,
-												allTasks, lastUpdate, idMap));
+												allTasks, lastUpdate));
 							}
 						}
 					}
@@ -352,11 +360,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
 								.get(list);
 
-						if (tasks != null) {
+						if (tasks != null && !tasks.isEmpty()) {
 							Log.d(TAG, "Setting position values for #tasks: "
 									+ tasks.size());
-							// Sort them first
-							//sortByRemoteParent(tasks);
 							ArrayList<GoogleTask> allListTasks = allTasksInList
 									.get(list.dbId);
 							list.setSortingValues(tasks, allListTasks);
@@ -366,7 +372,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					// Save to database in a single transaction
 					Log.d(TAG, "Save stuff to DB");
 					dbTalker.SaveToDatabase(listsToSaveToDB,
-							tasksInListToSaveToDB, idMap, allTasks);
+							tasksInListToSaveToDB, allTasks);
 					// Commit it
 					ContentProviderResult[] result = dbTalker.apply();
 

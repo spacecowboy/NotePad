@@ -174,8 +174,7 @@ public class GoogleTask {
 	 * 
 	 * @return
 	 */
-	public ContentValues toNotesContentValues(int modified, long listDbId,
-			BiMap<Long, String> idMap) {
+	public ContentValues toNotesContentValues(int modified, long listDbId) {
 		ContentValues values = new ContentValues();
 		if (title != null)
 			values.put(NotePad.Notes.COLUMN_NAME_TITLE, title);
@@ -218,7 +217,8 @@ public class GoogleTask {
 	public ContentValues toGTasksContentValues(String accountName) {
 		ContentValues values = new ContentValues();
 		values.put(NotePad.GTasks.COLUMN_NAME_DB_ID, dbId);
-		Log.d(TAG, "Db saving etag: " + etag);
+		if (title.contains("debug"))
+			Log.d(TAG, title + " saving id: " + id);
 		values.put(NotePad.GTasks.COLUMN_NAME_ETAG, etag);
 		values.put(NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT, accountName);
 		values.put(NotePad.GTasks.COLUMN_NAME_GTASKS_ID, id);

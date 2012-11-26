@@ -6,7 +6,8 @@
     android:divider="?android:attr/dividerVertical"
     android:dividerPadding="0dip"
     android:showDividers="middle" >
-
+
+
     <EditText
         android:id="@+id/editTitle"
         android:layout_width="match_parent"
@@ -21,7 +22,8 @@
 
         <requestFocus />
     </EditText>
-
+
+
     <LinearLayout
         android:id="@+id/button_container"
         android:layout_width="match_parent"

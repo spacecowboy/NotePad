@@ -288,12 +288,13 @@ public class GoogleAPITalker {
 		HttpGet httpget = new HttpGet(AllLists());
 		httpget.setHeader("Authorization", "OAuth " + authToken);
 
-		Log.d(TAG, "request: " + AllLists());
+		//Log.d(TAG, "request: " + AllLists());
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
-		JSONObject jsonResponse = (JSONObject) new JSONTokener(parseResponse(client.execute(httpget))).nextValue();
+		JSONObject jsonResponse = (JSONObject) new JSONTokener(
+				parseResponse(client.execute(httpget))).nextValue();
 
-		Log.d(TAG, jsonResponse.toString());
+		//Log.d(TAG, jsonResponse.toString());
 
 		eTag = jsonResponse.getString("etag");
 		JSONArray lists = jsonResponse.getJSONArray("items");
@@ -337,13 +338,12 @@ public class GoogleAPITalker {
 		// setHeaderWeakEtag(httpget, gimpedTask.etag);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
-		Log.d(TAG, "request: " + TaskURL(gimpedTask.id, list.id));
+		//Log.d(TAG, "request: " + TaskURL(gimpedTask.id, list.id));
 
-		JSONObject jsonResponse  = (JSONObject) new JSONTokener(
-					parseResponse(client.execute(httpget))).nextValue();
-		
+		JSONObject jsonResponse = (JSONObject) new JSONTokener(
+				parseResponse(client.execute(httpget))).nextValue();
 
-		Log.d(TAG, jsonResponse.toString());
+		//Log.d(TAG, jsonResponse.toString());
 		result = new GoogleTask(jsonResponse);
 		// } catch (PreconditionException e) {
 		// // Can not happen since we are not doing a PUT/POST
@@ -374,12 +374,12 @@ public class GoogleAPITalker {
 		// setHeaderWeakEtag(httpget, gimpedList.etag);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
-		Log.d(TAG, "request: " + ListURL(gimpedList.id));
+		//Log.d(TAG, "request: " + ListURL(gimpedList.id));
 
 		JSONObject jsonResponse = (JSONObject) new JSONTokener(
-					parseResponse(client.execute(httpget))).nextValue();
+				parseResponse(client.execute(httpget))).nextValue();
 
-		Log.d(TAG, jsonResponse.toString());
+		//Log.d(TAG, jsonResponse.toString());
 		result = new GoogleTaskList(jsonResponse);
 		// } catch (PreconditionException e) {
 		// // Can not happen since we are not doing a PUT/POST
@@ -394,13 +394,13 @@ public class GoogleAPITalker {
 		HttpGet httpget = new HttpGet(AllListsJustEtag());
 		httpget.setHeader("Authorization", "OAuth " + authToken);
 
-		Log.d(TAG, "request: " + AllLists());
+		//Log.d(TAG, "request: " + AllLists());
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
 		JSONObject jsonResponse = (JSONObject) new JSONTokener(
-					parseResponse(client.execute(httpget))).nextValue();
+				parseResponse(client.execute(httpget))).nextValue();
 
-		Log.d(TAG, jsonResponse.toString());
+		//Log.d(TAG, jsonResponse.toString());
 
 		eTag = jsonResponse.getString("etag");
 
@@ -509,7 +509,7 @@ public class GoogleAPITalker {
 		setAuthHeader(httpget);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
-		Log.d(TAG, httpget.getRequestLine().toString());
+		//Log.d(TAG, httpget.getRequestLine().toString());
 		for (Header header : httpget.getAllHeaders()) {
 
 			Log.d(TAG, header.getName() + ": " + header.getValue());
@@ -521,7 +521,7 @@ public class GoogleAPITalker {
 
 			JSONObject jsonResponse = new JSONObject(stringResponse);
 
-			Log.d(TAG, jsonResponse.toString());
+			//Log.d(TAG, jsonResponse.toString());
 			// Will be an array of items
 			JSONArray items = jsonResponse.getJSONArray("items");
 
@@ -553,8 +553,8 @@ public class GoogleAPITalker {
 	}
 
 	/**
-	 * Returns an object if all went well. Returns null if a conflict was
-	 * detected. Will set only remote id, etag, position and parent fields.
+	 * Returns an object if all went well. Returns null if no upload was done.
+	 * Will set only remote id, etag, position and parent fields.
 	 * 
 	 * Updates the task in place and also returns it.
 	 * 
@@ -566,11 +566,18 @@ public class GoogleAPITalker {
 
 		if (pList.id == null || pList.id.isEmpty()) {
 			Log.d(TAG, "Invalid list ID found for uploadTask");
-			return task; // Invalid list id
+			return null; // Invalid list id
+		}
+
+		// If we are trying to upload a deleted task which does not exist on
+		// server, we can ignore it. might happen with conflicts
+		if (task.deleted == 1 && (task.id == null || task.id.isEmpty())) {
+			Log.d(TAG, "Trying to upload a deleted non-synced note, ignoring: " + task.title);
+			return null;
 		}
 
 		HttpUriRequest httppost;
-		if (task.id != null) {
+		if (task.id != null && !task.id.isEmpty()) {
 			if (task.deleted == 1) {
 				httppost = new HttpPost(TaskURL(task.id, pList.id));
 				httppost.setHeader("X-HTTP-Method-Override", "DELETE");
@@ -589,18 +596,17 @@ public class GoogleAPITalker {
 								// the server
 			}
 
-			Log.d(TAG, "ID IS NULL: " + AllTasksInsert(pList.id));
+			Log.d(TAG, "ID IS NULL: " + task.title);
 			httppost = new HttpPost(AllTasksInsert(pList.id));
 			task.didRemoteInsert = true; // Need this later
 		}
 		setAuthHeader(httppost);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
 
-		Log.d(TAG, httppost.getRequestLine().toString());
-		for (Header header : httppost.getAllHeaders()) {
-
-			Log.d(TAG, header.getName() + ": " + header.getValue());
-		}
+		//Log.d(TAG, httppost.getRequestLine().toString());
+		//for (Header header : httppost.getAllHeaders()) {
+		//	Log.d(TAG, header.getName() + ": " + header.getValue());
+		//}
 
 		if (task.deleted != 1) {
 			setPostBody(httppost, task);
@@ -616,7 +622,7 @@ public class GoogleAPITalker {
 		} else {
 			JSONObject jsonResponse = new JSONObject(stringResponse);
 
-			Log.d(TAG, jsonResponse.toString());
+			//Log.d(TAG, jsonResponse.toString());
 
 			// Will return a task, containing id and etag. always update
 			// fields
@@ -624,7 +630,7 @@ public class GoogleAPITalker {
 			task.id = jsonResponse.getString(GoogleTask.ID);
 			if (jsonResponse.has(GoogleTask.UPDATED))
 				task.updated = jsonResponse.getString(GoogleTask.UPDATED);
-			
+
 		}
 
 		return task;
@@ -697,7 +703,7 @@ public class GoogleAPITalker {
 	 * @throws PreconditionException
 	 * @throws JSONException
 	 * @throws ClientProtocolException
-	 * @throws DefaultListDeleted 
+	 * @throws DefaultListDeleted
 	 */
 	public GoogleTaskList uploadList(final GoogleTaskList list)
 			throws ClientProtocolException, JSONException, IOException,
@@ -730,10 +736,10 @@ public class GoogleAPITalker {
 		setAuthHeader(httppost);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
 
-		Log.d(TAG, httppost.getRequestLine().toString());
-		for (Header header : httppost.getAllHeaders()) {
-			Log.d(TAG, header.getName() + ": " + header.getValue());
-		}
+		//Log.d(TAG, httppost.getRequestLine().toString());
+		//for (Header header : httppost.getAllHeaders()) {
+		//	Log.d(TAG, header.getName() + ": " + header.getValue());
+		//}
 
 		if (list.deleted != 1) {
 			setPostBody(httppost, list);
@@ -750,7 +756,7 @@ public class GoogleAPITalker {
 		} else {
 			JSONObject jsonResponse = new JSONObject(stringResponse);
 
-			Log.d(TAG, jsonResponse.toString());
+			//Log.d(TAG, jsonResponse.toString());
 
 			// Will return a list, containing id and etag. always update
 			// fields
@@ -785,7 +791,7 @@ public class GoogleAPITalker {
 	 */
 	private void setHeaderStrongEtag(final HttpUriRequest httppost,
 			final String etag) {
-		if (etag != null && !etag.equals("")) {
+		if (etag != null && !etag.isEmpty()) {
 			httppost.setHeader("If-Match", etag);
 
 			Log.d(TAG, "If-Match: " + etag);
@@ -841,7 +847,7 @@ public class GoogleAPITalker {
 		StringEntity se = null;
 		try {
 			se = new StringEntity(task.toJSON(), HTTP.UTF_8);
-			Log.d(TAG + ".move", "Sending: " + task.toJSON());
+			//Log.d(TAG + ".move", "Sending: " + task.toJSON());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -858,15 +864,14 @@ public class GoogleAPITalker {
 	 * exceptions for select status codes.
 	 * 
 	 * @throws PreconditionException
-	 * @throws DefaultListDeleted 
+	 * @throws DefaultListDeleted
 	 */
 	public static String parseResponse(HttpResponse response)
 			throws ClientProtocolException, PreconditionException {
 		String page = "";
 		BufferedReader in = null;
 
-		Log.d(TAG, "HTTP Response Code: "
-				+ response.getStatusLine().getStatusCode());
+		Log.d(TAG, "HTTP Response Code: " + response.getStatusLine().getStatusCode());
 
 		if (response.getStatusLine().getStatusCode() == 403) {
 			// Invalid authtoken
@@ -895,7 +900,8 @@ public class GoogleAPITalker {
 			// Make a log entry about it anyway though
 			Log.d(TAG,
 					"Response was 400. Either we deleted the default list in app or did something really bad");
-			throw new PreconditionException("Tried to delete default list, undelete it");
+			throw new PreconditionException(
+					"Tried to delete default list, undelete it");
 		} else if (response.getStatusLine().getStatusCode() == 204) {
 			// Successful delete of a tasklist. return empty string as that is
 			// expected from delete
