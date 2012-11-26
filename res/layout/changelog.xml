@@ -22,6 +22,28 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="\nAnnouncement"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\nA new translation tool has been implemented which makes it super easy for anyone to help translate the app to their native language.\nPlease visit http://translate.nononsenseapps.com for details." />
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\nVersion 3.6.4"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\n- Fixed the duplication of notes during first sync.\n- Fixed the incorrect revival of conflicting deleted notes." />
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="\nVersion 3.6.3"
             android:textStyle="bold" />
 

@@ -26,13 +26,13 @@
     android:installLocation="internalOnly"
     package="com.nononsenseapps.notepad"
     
-    android:versionCode="39"
-    android:versionName="3.6.3" xmlns:tools="http://schemas.android.com/tools">
+    android:versionCode="40"
+    android:versionName="3.6.4" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- App crashes on 3.0. No one uses 3.1. So minimum version is set to 3.2 now -->
     <uses-sdk
         android:minSdkVersion="13"
-        android:targetSdkVersion="16" />
+        android:targetSdkVersion="17" />
 
     <!-- For connection -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -62,12 +62,11 @@
 
     <uses-permission android:name="com.nononsenseapps.notepad.permissions.read" />
     <uses-permission android:name="com.nononsenseapps.notepad.permissions.write" />
-    <uses-permission android:name="android.permission.BIND_REMOTEVIEWS" />
 
     <application
         android:hardwareAccelerated="true"
         android:icon="@drawable/app_icon"
-        android:label="@string/app_name" >
+        android:label="@string/app_name" android:allowBackup="true">
         <!--
         Widgets do NOT have read permission, hence the removal of the permission...
         To not get a SecurityException on a Widget, you must have exported=true and not require
@@ -86,7 +85,7 @@
         <!-- removed android:readPermission="com.nononsenseapps.notepad.permissions.read" -->
         
         <!-- Broadcast receiver for accepting actions from widget for example -->
-		<receiver android:name="NotePadBroadcastReceiver" >
+		<receiver android:name="NotePadBroadcastReceiver" tools:ignore="ExportedReceiver">
 		    <intent-filter>
                 <action android:name="com.nononsenseapps.completenote" />
             </intent-filter>
@@ -117,7 +116,7 @@
         <activity
             android:name="RightActivity"
             android:theme="@style/ThemeHolo"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustResize" tools:ignore="ExportedActivity">
             
             <intent-filter android:label="@string/resolve_edit" >
                 <action android:name="android.intent.action.INSERT" />
@@ -139,7 +138,7 @@
         
         <activity
             android:name=".prefs.PrefsActivity"
-            android:theme="@style/ThemeHolo" >
+            android:theme="@style/ThemeHolo" tools:ignore="ExportedActivity">
             <intent-filter>
                 <category android:name="android.intent.category.PREFERENCE" >
                 </category>
@@ -180,7 +179,7 @@
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
-        <activity android:name="com.nononsenseapps.notepad.widget.ListWidgetConfigure" android:theme="@style/ThemeHolo">
+        <activity android:name="com.nononsenseapps.notepad.widget.ListWidgetConfigure" android:theme="@style/ThemeHolo" tools:ignore="ExportedActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>

@@ -147,35 +147,37 @@ public class GoogleTaskList {
 
 	public ArrayList<GoogleTask> downloadModifiedTasks(
 			GoogleAPITalker apiTalker, ArrayList<GoogleTask> allTasks,
-			String lastUpdated, BiMap<Long, String> idMap)
+			String lastUpdated)
 			throws RemoteException {
 		// Compare with local tasks, if the tasks have the same remote id, then
 		// they are the same. Use the existing db-id
 		// to avoid creating duplicates
-		// Also, we handle conflicts here directly by comparing the update
-		// timestamp on
-		// both items
 		ArrayList<GoogleTask> moddedTasks = new ArrayList<GoogleTask>();
-		// ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(this);
 		String timestamp = lastUpdated;
 		if (redownload) {
 			// Force download of everything
+			Log.d(TAG, "Redownloading items in list " + this.title);
 			timestamp = null;
 		}
 		for (GoogleTask task : apiTalker.getModifiedTasks(timestamp, this)) {
-			// GoogleTask localVersion = null;
+			if (task.title.contains("debug")) {
+				Log.d(TAG, "SyncDupe Download modified sees remote " + task.title + " " + task.id);
+			}
 			for (GoogleTask localTask : allTasks) {
+				if (localTask.title.contains("debug")) {
+					Log.d(TAG, "SyncDupe Download modified sees local " + localTask.title + " " + task.id);
+				}
 				if (task.equals(localTask)) {
 					// We found it!
+					Log.d(TAG, "Found local version for remote task " + task.title);
 					task.dbId = localTask.dbId;
-					// Save it until later
-					// localVersion = localTask;
-
-					idMap.put(task.dbId, task.id);
+					// This line is important, so we don't create duplicates
+					task.didRemoteInsert = localTask.didRemoteInsert;
 					// Move on to next task
 					break;
 				}
 			}
+			Log.d(TAG, "DBID for " + task.title + " is " + task.dbId + " deleted: " + task.deleted);
 			moddedTasks.add(task);
 		}
 
