@@ -17,7 +17,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <string-array name="themevalues_preference" tools:ignore="MissingTranslation">
+    <string-array name="themevalues_preference" tools:ignore="MissingTranslation,InconsistentArrays">
         <item>ciemny</item>
         <item>jasny</item>
     </string-array>
