@@ -160,12 +160,19 @@ public class GoogleTaskList {
 			timestamp = null;
 		}
 		for (GoogleTask task : apiTalker.getModifiedTasks(timestamp, this)) {
-			// GoogleTask localVersion = null;
+			if (task.title.contains("debug")) {
+				Log.d(TAG, "SyncDupe Download modified sees remote " + task.title + " " + task.id);
+			}
 			for (GoogleTask localTask : allTasks) {
+				if (localTask.title.contains("debug")) {
+					Log.d(TAG, "SyncDupe Download modified sees local " + localTask.title + " " + task.id);
+				}
 				if (task.equals(localTask)) {
 					// We found it!
 					Log.d(TAG, "Found local version for remote task " + task.title);
 					task.dbId = localTask.dbId;
+					// This line is important, so we don't create duplicates
+					task.didRemoteInsert = localTask.didRemoteInsert;
 					// Move on to next task
 					break;
 				}
