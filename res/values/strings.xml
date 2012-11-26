@@ -105,7 +105,7 @@
     <string name="settings_list_dialog">Select a list</string>
     <string name="settings_list">List</string>
     <string name="settings_list_summary"></string>
-    <string name="automatic">Automatic (1 hour)</string>
+    <string name="automatic">Automatic</string>
 
     <string name="preferences_week_start_day_dialog">Week starts on</string>
     <string name="preferences_week_start_day_title">Week starts on</string>
@@ -211,14 +211,10 @@
 
 \nIf you\'ve found a bug, a translation being wrong or simply have an idea on how to make this app more awesome then I want to hear about it!
 \nSend me a mail: jonas@nononsenseapps.com
-\n\nTweet me: @SciencyGuy
 \n\n+1 me: https://plus.google.com/u/0/111801385015192089838
 \n\nReport it in the issue tracker: https://github.com/spacecowboy/NotePad/issues
 
-\n\nSince the project is open source you can also try to fix it yourself if you have mad skills and send me a pull request!
-
-\n\nIf you\'d like to provide a custom translation for your own language that would be awesome. Contact me!
-\nI made an instructional video demonstrating how you can update existing translations directly on GitHub: http://www.youtube.com/watch?v=oZTO5zOoCb4
+\n\nIf you\'d like to help with translating the app, please go to http://translate.nononsenseapps.com
 
 \n\nAgain, thanks for downloading my app!
 \nIf you\'d like to support the project in a less active way, you can always buy the donate version: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
