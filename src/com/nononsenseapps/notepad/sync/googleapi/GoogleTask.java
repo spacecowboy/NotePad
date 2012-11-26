@@ -217,7 +217,8 @@ public class GoogleTask {
 	public ContentValues toGTasksContentValues(String accountName) {
 		ContentValues values = new ContentValues();
 		values.put(NotePad.GTasks.COLUMN_NAME_DB_ID, dbId);
-		Log.d(TAG, "Db saving etag: " + etag);
+		if (title.contains("debug"))
+			Log.d(TAG, title + " saving id: " + id);
 		values.put(NotePad.GTasks.COLUMN_NAME_ETAG, etag);
 		values.put(NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT, accountName);
 		values.put(NotePad.GTasks.COLUMN_NAME_GTASKS_ID, id);

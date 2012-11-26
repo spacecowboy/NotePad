@@ -288,13 +288,13 @@ public class GoogleAPITalker {
 		HttpGet httpget = new HttpGet(AllLists());
 		httpget.setHeader("Authorization", "OAuth " + authToken);
 
-		Log.d(TAG, "request: " + AllLists());
+		//Log.d(TAG, "request: " + AllLists());
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
 		JSONObject jsonResponse = (JSONObject) new JSONTokener(
 				parseResponse(client.execute(httpget))).nextValue();
 
-		Log.d(TAG, jsonResponse.toString());
+		//Log.d(TAG, jsonResponse.toString());
 
 		eTag = jsonResponse.getString("etag");
 		JSONArray lists = jsonResponse.getJSONArray("items");
@@ -338,12 +338,12 @@ public class GoogleAPITalker {
 		// setHeaderWeakEtag(httpget, gimpedTask.etag);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
-		Log.d(TAG, "request: " + TaskURL(gimpedTask.id, list.id));
+		//Log.d(TAG, "request: " + TaskURL(gimpedTask.id, list.id));
 
 		JSONObject jsonResponse = (JSONObject) new JSONTokener(
 				parseResponse(client.execute(httpget))).nextValue();
 
-		Log.d(TAG, jsonResponse.toString());
+		//Log.d(TAG, jsonResponse.toString());
 		result = new GoogleTask(jsonResponse);
 		// } catch (PreconditionException e) {
 		// // Can not happen since we are not doing a PUT/POST
@@ -374,12 +374,12 @@ public class GoogleAPITalker {
 		// setHeaderWeakEtag(httpget, gimpedList.etag);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
-		Log.d(TAG, "request: " + ListURL(gimpedList.id));
+		//Log.d(TAG, "request: " + ListURL(gimpedList.id));
 
 		JSONObject jsonResponse = (JSONObject) new JSONTokener(
 				parseResponse(client.execute(httpget))).nextValue();
 
-		Log.d(TAG, jsonResponse.toString());
+		//Log.d(TAG, jsonResponse.toString());
 		result = new GoogleTaskList(jsonResponse);
 		// } catch (PreconditionException e) {
 		// // Can not happen since we are not doing a PUT/POST
@@ -394,13 +394,13 @@ public class GoogleAPITalker {
 		HttpGet httpget = new HttpGet(AllListsJustEtag());
 		httpget.setHeader("Authorization", "OAuth " + authToken);
 
-		Log.d(TAG, "request: " + AllLists());
+		//Log.d(TAG, "request: " + AllLists());
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
 		JSONObject jsonResponse = (JSONObject) new JSONTokener(
 				parseResponse(client.execute(httpget))).nextValue();
 
-		Log.d(TAG, jsonResponse.toString());
+		//Log.d(TAG, jsonResponse.toString());
 
 		eTag = jsonResponse.getString("etag");
 
@@ -509,7 +509,7 @@ public class GoogleAPITalker {
 		setAuthHeader(httpget);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
-		Log.d(TAG, httpget.getRequestLine().toString());
+		//Log.d(TAG, httpget.getRequestLine().toString());
 		for (Header header : httpget.getAllHeaders()) {
 
 			Log.d(TAG, header.getName() + ": " + header.getValue());
@@ -521,7 +521,7 @@ public class GoogleAPITalker {
 
 			JSONObject jsonResponse = new JSONObject(stringResponse);
 
-			Log.d(TAG, jsonResponse.toString());
+			//Log.d(TAG, jsonResponse.toString());
 			// Will be an array of items
 			JSONArray items = jsonResponse.getJSONArray("items");
 
@@ -596,18 +596,17 @@ public class GoogleAPITalker {
 								// the server
 			}
 
-			Log.d(TAG, "ID IS NULL: " + AllTasksInsert(pList.id));
+			Log.d(TAG, "ID IS NULL: " + task.title);
 			httppost = new HttpPost(AllTasksInsert(pList.id));
 			task.didRemoteInsert = true; // Need this later
 		}
 		setAuthHeader(httppost);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
 
-		Log.d(TAG, httppost.getRequestLine().toString());
-		for (Header header : httppost.getAllHeaders()) {
-
-			Log.d(TAG, header.getName() + ": " + header.getValue());
-		}
+		//Log.d(TAG, httppost.getRequestLine().toString());
+		//for (Header header : httppost.getAllHeaders()) {
+		//	Log.d(TAG, header.getName() + ": " + header.getValue());
+		//}
 
 		if (task.deleted != 1) {
 			setPostBody(httppost, task);
@@ -623,7 +622,7 @@ public class GoogleAPITalker {
 		} else {
 			JSONObject jsonResponse = new JSONObject(stringResponse);
 
-			Log.d(TAG, jsonResponse.toString());
+			//Log.d(TAG, jsonResponse.toString());
 
 			// Will return a task, containing id and etag. always update
 			// fields
@@ -737,10 +736,10 @@ public class GoogleAPITalker {
 		setAuthHeader(httppost);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
 
-		Log.d(TAG, httppost.getRequestLine().toString());
-		for (Header header : httppost.getAllHeaders()) {
-			Log.d(TAG, header.getName() + ": " + header.getValue());
-		}
+		//Log.d(TAG, httppost.getRequestLine().toString());
+		//for (Header header : httppost.getAllHeaders()) {
+		//	Log.d(TAG, header.getName() + ": " + header.getValue());
+		//}
 
 		if (list.deleted != 1) {
 			setPostBody(httppost, list);
@@ -757,7 +756,7 @@ public class GoogleAPITalker {
 		} else {
 			JSONObject jsonResponse = new JSONObject(stringResponse);
 
-			Log.d(TAG, jsonResponse.toString());
+			//Log.d(TAG, jsonResponse.toString());
 
 			// Will return a list, containing id and etag. always update
 			// fields
@@ -848,7 +847,7 @@ public class GoogleAPITalker {
 		StringEntity se = null;
 		try {
 			se = new StringEntity(task.toJSON(), HTTP.UTF_8);
-			Log.d(TAG + ".move", "Sending: " + task.toJSON());
+			//Log.d(TAG + ".move", "Sending: " + task.toJSON());
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
@@ -872,8 +871,7 @@ public class GoogleAPITalker {
 		String page = "";
 		BufferedReader in = null;
 
-		Log.d(TAG, "HTTP Response Code: "
-				+ response.getStatusLine().getStatusCode());
+		Log.d(TAG, "HTTP Response Code: " + response.getStatusLine().getStatusCode());
 
 		if (response.getStatusLine().getStatusCode() == 403) {
 			// Invalid authtoken

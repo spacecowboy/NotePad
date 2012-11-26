@@ -282,6 +282,9 @@ public class GoogleDBTalker {
 					modList.add(task);
 				}
 				listOfAllTasks.add(task); // add all to this
+				if (task.title.contains("debug")) {
+					Log.d(TAG, "SyncDupe Adding to listOfAllTasks: " + task.title);
+				}
 			}
 			modifiedTasks.put(listId, modList);
 		}
@@ -338,6 +341,10 @@ public class GoogleDBTalker {
 
 				task.id = cursor.getString(cursor
 						.getColumnIndex(NotePad.GTasks.COLUMN_NAME_GTASKS_ID));
+				
+				if (task.title.contains("debug")) {
+					Log.d(TAG, "SyncDupe populateWithTasks adds " + task.title + " " + task.id);
+				}
 
 				task.etag = cursor.getString(cursor
 						.getColumnIndex(NotePad.GTasks.COLUMN_NAME_ETAG));
@@ -479,6 +486,7 @@ public class GoogleDBTalker {
 						.withValues(task.toNotesContentValues(0, listDbId))
 						.build());
 				if (task.didRemoteInsert) {
+					Log.d(TAG, "Did remote insert, inserting GTASK-record");
 					operations
 							.add(ContentProviderOperation
 									.newInsert(NotePad.GTasks.CONTENT_URI)
@@ -486,6 +494,7 @@ public class GoogleDBTalker {
 											task.toGTasksContentValues(accountName))
 									.build());
 				} else {
+					Log.d(TAG, "Existing remote task, updating GTASK-record");
 					operations
 							.add(ContentProviderOperation
 									.newUpdate(NotePad.GTasks.CONTENT_URI)
@@ -524,12 +533,14 @@ public class GoogleDBTalker {
 
 				// Either the list exists, or the list is new as well
 				if (listDbId > -1) {
+					Log.d(TAG, "Existing list...");
 					// List exists, use existing id
 					operations.add(ContentProviderOperation
 							.newInsert(NotePad.Notes.CONTENT_URI)
 							.withValues(task.toNotesContentValues(0, listDbId))
 							.build());
 				} else {
+					Log.d(TAG, "New list, using back reference");
 					// Use back reference to that insert operation
 					// back reference will get precedence over the invalid value
 					operations
@@ -545,6 +556,8 @@ public class GoogleDBTalker {
 				// Now the other table, use back reference to the id the note
 				// received
 				lastNoteIdIndex = operations.size() - 1;
+				
+				Log.d(TAG, "Using backreference for GTASKs-record.");
 
 				operations
 						.add(ContentProviderOperation

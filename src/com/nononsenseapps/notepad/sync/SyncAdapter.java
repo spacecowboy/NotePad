@@ -217,6 +217,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 											"Task "
 													+ moddedTask.title
 													+ " was deleted before sync, not uploading");
+									if (moddedTask.title.contains("debug")) {
+										Log.d(TAG, "SyncDupe DELETED BEFORE SYNC REMOVING " + moddedTask.title);
+									}
 									moddedTasks.remove(moddedTask);
 									allTasks.remove(moddedTask);
 									dbTalker.removeDeletedTask(moddedTask);
@@ -263,24 +266,44 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						if (tasksToUpload != null) {
 							for (GoogleTask task : tasksToUpload) {
 								try {
-									if (null != apiTalker.uploadTask(task, list))
+									if (null != apiTalker
+											.uploadTask(task, list))
 										uploadedStuff = true;
 								} catch (PreconditionException e) {
-									Log.d(TAG,
-											"There was task conflict. Trying as new task");
 									// There was a conflict, do it again but as
-									// a new note
-									task.id = null;
-									task.etag = null;
-									task.title = "sync-conflict " + task.title;
-
-									try {
-										if (null != apiTalker.uploadTask(task, list))
-											uploadedStuff = true;
-									} catch (PreconditionException ee) {
+									// a new note. Except if we tried to delete
+									// a note
+									// then just delete it locally and download the
+									// server version later.
+									if (task.deleted == 1) {
+										if (task.title.contains("debug")) {
+											Log.d(TAG, "SyncDupe Upload conflict delete " + task.title);
+										}
+										allTasks.remove(task);
+										allTasksInList.get(task.listdbid).remove(task);
+										dbTalker.removeDeletedTask(task);
+									} else {
 										Log.d(TAG,
-												"Impossible conflict achieved");
-										// Impossible to reach this
+												"There was task conflict. Trying as new task");
+										if (task.title.contains("debug")) {
+											Log.d(TAG, "SyncDupe Upload conflict doing new " + task.title);
+										}
+										task.id = null;
+										task.etag = null;
+										task.title = "sync-conflict "
+												+ task.title;
+
+										try {
+											if (null != apiTalker.uploadTask(
+													task, list)) {
+												uploadedStuff = true;
+												Log.d(TAG, "Uploaded " + task.title + ", didremoteinsert: " + task.didRemoteInsert);
+											}
+										} catch (PreconditionException ee) {
+											Log.d(TAG,
+													"Impossible conflict achieved");
+											// Impossible to reach this
+										}
 									}
 								}
 							}
