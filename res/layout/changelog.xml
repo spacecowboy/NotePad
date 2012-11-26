@@ -28,6 +28,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:autoLink="web|email|map"
             android:text="\nA new translation tool has been implemented which makes it super easy for anyone to help translate the app to their native language.\nPlease visit http://translate.nononsenseapps.com for details." />
         
         <TextView
