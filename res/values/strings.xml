@@ -194,6 +194,28 @@
     <string tools:ignore="MissingTranslation" name="please_select_note">Please select or create a note</string>
     <string tools:ignore="MissingTranslation" name="please_create_note">Please create a note</string>
     
+    <string tools:ignore="MissingTranslation" name="hide_checkbox">Hide checkbox</string>
+    <string tools:ignore="MissingTranslation" name="hide_checkbox_summary_on">Checkbox will be hidden</string>
+    <string tools:ignore="MissingTranslation" name="hide_checkbox_summary_off">Checkbox will be shown</string>
+    
+    <string tools:ignore="MissingTranslation" name="hide_note">Hide note</string>
+    <string tools:ignore="MissingTranslation" name="hide_note_summary_on">Note will be hidden</string>
+    <string tools:ignore="MissingTranslation" name="hide_note_summary_off">Note will be shown</string>
+    
+    <string tools:ignore="MissingTranslation" name="hide_date">Hide due date</string>
+    <string tools:ignore="MissingTranslation" name="hide_date_summary_on">Date will be hidden</string>
+    <string tools:ignore="MissingTranslation" name="hide_date_summary_off">Date will be shown</string>
+    
+    <string tools:ignore="MissingTranslation" name="title_rows">Title max height</string>
+    <string tools:ignore="MissingTranslation" name="title_rows_1">1 row</string>
+    <string tools:ignore="MissingTranslation" name="title_rows_2">2 rows</string>
+    <string tools:ignore="MissingTranslation" name="title_rows_free">No restriction</string>
+    
+    <string tools:ignore="MissingTranslation" name="saturday">Saturday</string>
+    <string tools:ignore="MissingTranslation" name="sunday">Sunday</string>
+    <string tools:ignore="MissingTranslation" name="monday">Monday</string>
+    <string tools:ignore="MissingTranslation" name="localedefault">Locale default</string>
+    
     <string tools:ignore="MissingTranslation" name="empty_string"> </string>
 
     <!-- These should probably not be translated -->

@@ -798,7 +798,10 @@ public class MainActivity extends DualLayoutActivity implements
 			String key) {
 		// Need to restart to allow themes and such to go into effect
 		if (key.equals(MainPrefs.KEY_THEME)
-				|| key.equals(MainPrefs.KEY_LISTITEM)
+				|| key.equals(MainPrefs.KEY_HIDDENCHECKBOX)
+				|| key.equals(MainPrefs.KEY_HIDDENDATE)
+				|| key.equals(MainPrefs.KEY_HIDDENNOTE)
+				|| key.equals(MainPrefs.KEY_TITLEROWS)
 				|| key.equals(MainPrefs.KEY_SORT_ORDER)
 				|| key.equals(MainPrefs.KEY_SORT_TYPE)
 				|| key.equals(MainPrefs.KEY_LISTHEADERS)) {
