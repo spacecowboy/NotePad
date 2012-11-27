@@ -218,7 +218,9 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 													+ moddedTask.title
 													+ " was deleted before sync, not uploading");
 									if (moddedTask.title.contains("debug")) {
-										Log.d(TAG, "SyncDupe DELETED BEFORE SYNC REMOVING " + moddedTask.title);
+										Log.d(TAG,
+												"SyncDupe DELETED BEFORE SYNC REMOVING "
+														+ moddedTask.title);
 									}
 									moddedTasks.remove(moddedTask);
 									allTasks.remove(moddedTask);
@@ -273,20 +275,26 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 									// There was a conflict, do it again but as
 									// a new note. Except if we tried to delete
 									// a note
-									// then just delete it locally and download the
+									// then just delete it locally and download
+									// the
 									// server version later.
 									if (task.deleted == 1) {
 										if (task.title.contains("debug")) {
-											Log.d(TAG, "SyncDupe Upload conflict delete " + task.title);
+											Log.d(TAG,
+													"SyncDupe Upload conflict delete "
+															+ task.title);
 										}
 										allTasks.remove(task);
-										allTasksInList.get(task.listdbid).remove(task);
+										allTasksInList.get(task.listdbid)
+												.remove(task);
 										dbTalker.removeDeletedTask(task);
 									} else {
 										Log.d(TAG,
 												"There was task conflict. Trying as new task");
 										if (task.title.contains("debug")) {
-											Log.d(TAG, "SyncDupe Upload conflict doing new " + task.title);
+											Log.d(TAG,
+													"SyncDupe Upload conflict doing new "
+															+ task.title);
 										}
 										task.id = null;
 										task.etag = null;
@@ -297,7 +305,10 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 											if (null != apiTalker.uploadTask(
 													task, list)) {
 												uploadedStuff = true;
-												Log.d(TAG, "Uploaded " + task.title + ", didremoteinsert: " + task.didRemoteInsert);
+												Log.d(TAG, "Uploaded "
+														+ task.title
+														+ ", didremoteinsert: "
+														+ task.didRemoteInsert);
 											}
 										} catch (PreconditionException ee) {
 											Log.d(TAG,
@@ -336,49 +347,35 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 												allTasks, lastUpdate));
 							}
 						}
-					}
 
-					/*
-					 * Finally, get the updated etag from the server and save.
-					 * Only worth doing if we actually uploaded anything
-					 */
-					String currentEtag = serverEtag;
-					if (uploadedStuff) {
-						try {
-							currentEtag = apiTalker.getEtag();
-						} catch (PreconditionException e) {
-							// Cant happen here
-							Log.e(TAG,
-									"Blowtorch error: "
-											+ e.getLocalizedMessage());
+						// Now, set sorting values.
+						for (GoogleTaskList list : tasksInListToSaveToDB
+								.keySet()) {
+							Log.d(TAG, "Setting position values in: " + list.id);
+							ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
+									.get(list);
+
+							if (tasks != null && !tasks.isEmpty()) {
+								Log.d(TAG,
+										"Setting position values for #tasks: "
+												+ tasks.size());
+								ArrayList<GoogleTask> allListTasks = allTasksInList
+										.get(list.dbId);
+								list.setSortingValues(tasks, allListTasks);
+							}
 						}
+
+						// Save to database in a single transaction
+						Log.d(TAG, "Save stuff to DB");
+						dbTalker.SaveToDatabase(listsToSaveToDB,
+								tasksInListToSaveToDB, allTasks);
+						// Commit it
+						ContentProviderResult[] result = dbTalker.apply();
+
+						settings.edit()
+								.putString(PREFS_LAST_SYNC_ETAG, serverEtag)
+								.commit();
 					}
-
-					// Now, set sorting values.
-					for (GoogleTaskList list : tasksInListToSaveToDB.keySet()) {
-						Log.d(TAG, "Setting position values in: " + list.id);
-						ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
-								.get(list);
-
-						if (tasks != null && !tasks.isEmpty()) {
-							Log.d(TAG, "Setting position values for #tasks: "
-									+ tasks.size());
-							ArrayList<GoogleTask> allListTasks = allTasksInList
-									.get(list.dbId);
-							list.setSortingValues(tasks, allListTasks);
-						}
-					}
-
-					// Save to database in a single transaction
-					Log.d(TAG, "Save stuff to DB");
-					dbTalker.SaveToDatabase(listsToSaveToDB,
-							tasksInListToSaveToDB, allTasks);
-					// Commit it
-					ContentProviderResult[] result = dbTalker.apply();
-
-					settings.edit()
-							.putString(PREFS_LAST_SYNC_ETAG, currentEtag)
-							.commit();
 
 					Log.d(TAG, "Sync Complete!");
 					doneIntent.putExtra(SYNC_RESULT, SUCCESS);
@@ -388,10 +385,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					Log.d(TAG,
 							"ClientProtocolException: "
 									+ e.getLocalizedMessage());
-				} catch (JSONException e) {
+				}
+				// catch (JSONException e) {
 
-					Log.d(TAG, "JSONException: " + e.getLocalizedMessage());
-				} catch (IOException e) {
+				// Log.d(TAG, "JSONException: " + e.getLocalizedMessage());
+				// }
+				catch (IOException e) {
 					syncResult.stats.numIoExceptions++;
 
 					Log.d(TAG, "IOException: " + e.getLocalizedMessage());
