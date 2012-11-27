@@ -67,18 +67,18 @@ limitations under the License.
 <string name="settings_font_type">Yazı tipi</string>
 <string name="settings_font_type_dialog">Yazı tipini seçin</string>
 <string name="settings_font_size">Yazı boyutu</string>
-<string name="preference_preview_text">Pijamalı hasta yağız şoföre çabucak güvendi.</string>
+<string name="preference_preview_text">Düzenleyici, bu şekilde gösterilecektir.</string>
 <string name="settings_text_preview_title">Önizleme</string>
 <string name="monospace">Monospace</string>
 <string name="sans">Sans</string>
 <string name="serif">Serif</string>
 <string name="settings_sync_freq_title">Senk. sıklığı</string>
 <string name="settings_account_title">Bir hesap seçin</string>
-<string name="settings_account_summary">Başka bir hesaba geçmek için dokunun.</string>
+<string name="settings_account_summary">Başka bir hesaba geçmek için basın.</string>
 <string name="settings_sync_enable_title">Google Görevler ile senk.</string>
-<string name="settings_sync_enable_summary">Notlarınızı Google Görevler ile senkronize eder</string>
+<string name="settings_sync_enable_summary">Notlarınız, Google Görevler ile senkronize edilir</string>
 <string name="settings_cat_syncing">Senkronizasyon</string>
-<string name="manual">El ile</string>
+<string name="manual">Manuel</string>
 <string name="minutes">dakika</string>
 <string name="hours">saat</string>
 <string name="onehour">Bir saat</string>
@@ -151,14 +151,14 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="changelog_title">Yenilikler</string>
 <string tools:ignore="MissingTranslation" name="changelog_ok_button">Tamam</string>
 <string tools:ignore="MissingTranslation" name="changelog_show_full">Tamamını göster</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note">Not öngörüntüsü göster</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_preview_note">Not önizlemesi göster</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">Başlık iki satır olacaktır</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_on">Not ikinci satırda başlayacaktır</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_show_complete">Yapıldı olarak işaretleme butonu</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_off">Buton gizlenecektir</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_on">Buton gösterilecektir</string>
 <string tools:ignore="MissingTranslation" name="settings_listitem">İki satırlı başlıklar</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">Not öngörüntü iki satır olacaktır</string>
+<string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">Not önizlemesi iki satır olacaktır</string>
 
 <string tools:ignore="MissingTranslation" name="editor_details">Daha fazlası</string>
 <string tools:ignore="MissingTranslation" name="completed">Tamamlanmış</string>
@@ -174,7 +174,7 @@ Use few if language need it. In English is the same.
 
 <string tools:ignore="MissingTranslation" name="mod_header_yesterday">Dün</string>
 <string tools:ignore="MissingTranslation" name="mod_header_thisweek">Bu hafta</string>
-<string tools:ignore="MissingTranslation" name="mod_header_earlier">Daha önceki</string>
+<string tools:ignore="MissingTranslation" name="mod_header_earlier">Daha önce</string>
 
 <string tools:ignore="MissingTranslation" name="settings_listheader">Tüm listeleri gösterirken</string>
 <string tools:ignore="MissingTranslation" name="settings_listheader_off">Tek liste olarak göster</string>

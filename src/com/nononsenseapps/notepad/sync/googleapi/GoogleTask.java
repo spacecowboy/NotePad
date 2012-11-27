@@ -101,17 +101,21 @@ public class GoogleTask {
 
 	public GoogleTask(JSONObject jsonTask) throws JSONException {
 		id = jsonTask.getString(ID);
-		title = jsonTask.getString(TITLE);
 		updated = jsonTask.getString(UPDATED);
 		etag = jsonTask.getString("etag");
+		
+		if (jsonTask.has(TITLE))
+			title = jsonTask.getString(TITLE);
 		if (jsonTask.has(NOTES))
 			notes = jsonTask.getString(NOTES);
-		status = jsonTask.getString(STATUS);
+		if (jsonTask.has(STATUS))
+			status = jsonTask.getString(STATUS);
 		if (jsonTask.has(PARENT))
 			parent = jsonTask.getString(PARENT);
 		else
 			parent = null;
-		position = jsonTask.getString(POSITION);
+		if (jsonTask.has(POSITION))
+			position = jsonTask.getString(POSITION);
 		if (jsonTask.has(DUE))
 			dueDate = jsonTask.getString(DUE);
 		if (jsonTask.has(DELETED) && jsonTask.getBoolean(DELETED))
