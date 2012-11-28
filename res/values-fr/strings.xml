@@ -1,134 +1,179 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2012 Jonas Kalderstam
+Copyright (C) 2012 Jonas Kalderstam
 
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-  
-          http://www.apache.org/licenses/LICENSE-2.0
-  
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 -->
 
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools" >
 
-    <string name="app_name">Notes</string>
-    <string name="title_create">Nouvelle note</string>
-    <string name="title_edit">Editer : %1$s</string>
-    <string name="menu_add">Nouvelle note</string>
-    <string name="menu_delete">Supprimer</string>
-    <string name="menu_revert">Annuler les changements</string>
-    <string name="menu_copy">Copier la note</string>
-    <string name="menu_cancel">Annuler</string>
-    <string name="menu_setcompleted">Effectué</string>
-    <string name="menu_setuncompleted">Non effectué</string>
-    <string name="menu_deletelist">Supprimer la liste</string>
-    <string name="menu_sync">Actualiser</string>
-    <string name="menu_share">Partager</string>
-    <string name="menu_preferences">Paramètres</string>
-    <string name="menu_renamelist">Renommer la liste</string>
-    <string name="menu_createlist">Créer une liste</string>
-    <string name="menu_clearcompleted">Effacer complétées</string>
-    <string name="menu_setdefaultlist">Définir comme liste par défaut</string>
-    <string name="delete_list_warning">Êtes-vous sûr de vouloir supprimer la liste ? Ceci est définitif.</string>
-    <string name="editor_due_date_hint">Échéance</string>
-    <string name="editor_title_hint">Titre</string>
-    <string name="editor_note_hint">Note</string>
-    <string name="resolve_edit">Editer la note</string>
-    <string name="error_title">Erreur</string>
-    <string name="error_message">Erreur de chargement</string>
-    <string name="search_hint">Rechercher</string>
-    <string name="settings_theme">Thème actuel</string>
-    <string name="settings_theme_dialog">Choisir un thème</string>
-    <string name="settings_cat_theme">Thème</string>
-    <string name="settings_cat_sorting">Classement</string>
-    <string name="settings_sorting_type">Classé par</string>
-    <string name="settings_sorting_type_dialog">Classer par</string>
-    <string name="settings_sorting_order">Ordre</string>
-    <string name="settings_sorting_order_dialog">Ordonner</string>
-    <string name="settings_summary_sort_type_alphabetic">Titre</string>
-    <string name="settings_summary_sort_type_modified">Dernière modification</string>
-    <string name="settings_summary_sort_type_duedate">Date d\'échéance</string>
-    <string name="settings_summary_sort_type_serverposition">Position du serveur</string>
-    <string name="settings_summary_sort_order_asc">Ascendant</string>
-    <string name="settings_summary_sort_order_desc">Descendant</string>
-    <string name="settings_summary_theme_dark">Sombre</string>
-    <string name="settings_summary_theme_light">Clair</string>
-    <string name="settings_summary_theme_light_dark_ab">Clair, action bar sombre</string>
-    <string name="settings_cat_appearance">Apparence</string>
-    <string name="settings_font_screen">Paramètres de police</string>
-    <string name="settings_font_screen_summary">Vous pouvez changer la police et la taille du texte</string>
-    <string name="settings_cat_font_editor">Editeur</string>
-    <string name="settings_font_type">Police</string>
-    <string name="settings_font_type_dialog">Choisir une police</string>
-    <string name="settings_font_size">Taille du texte</string>
-    <string name="preference_preview_text">Voici comment le texte apparaîtra dans l\'éditeur</string>
-    <string name="settings_text_preview_title">Prévisualiser</string>
-    <string name="monospace">Monospace</string>
-    <string name="sans">Sans</string>
-    <string name="serif">Serif</string>
-    <string name="settings_sync_freq_title">Sync. fréquence</string>
-    <string name="settings_account_title">Choisir un compte</string>
-    <string name="settings_account_summary">Cliquer pour changer de compte</string>
-    <string name="settings_sync_enable_title">Sync. Google Tâches</string>
-    <string name="settings_sync_enable_summary">Synchroniser vos notes avec votre compte Google</string>
-    <string name="settings_cat_syncing">Synchronisation</string>
-    <string name="manual">Manuelle</string>
-    <string name="minutes">minutes</string>
-    <string name="hours">heures</string>
-    <string name="onehour">Une heure</string>
-    <string name="oneday">Un jour</string>
-    <string name="yes">Oui</string>
-    <string name="no">Non</string>
-    <string name="ok">OK</string>
-    <string name="show_from_all_lists">Toutes les listes</string>
-    <string name="default_list_needed_warning">Vous devez d\'abord définir une liste par défaut</string>
-    <string name="reverted">Changements annulés</string>
-    <string name="notecopied">Copié</string>
-    <string name="deleted">Supprimé</string>
-    <string name="items">notes</string>
-    <string name="permission_read_label">lire les notes et les listes</string>
-    <string name="permission_read_desc">Autorise l\'application à lire vos notes et listes.</string>
-    <string name="permission_write_label">modifier les notes et les listes</string>
-    <string name="permission_write_desc">Autorise l\'application à créer, modifier et supprimer des notes et listes.</string>
-    <string name="settings_header_list">Paramètres de la liste</string>
-    <string name="settings_header_list_summary"></string>
-    <string name="settings_header_appearance">@string/settings_cat_appearance</string>
-    <string name="settings_header_appearance_summary"></string>
-    <string name="settings_header_sync">@string/settings_cat_syncing</string>
-    <string name="settings_header_sync_summary"></string>
-    <string name="settings_list_dialog">Choisir une liste</string>
-    <string name="settings_list">Liste</string>
-    <string name="settings_list_summary"></string>
-    <string name="automatic">Automatique</string>
-    <string name="preferences_week_start_day_title" msgid="4619489296444901622">"1er jour de la semaine :"</string>
-    <string name="preferences_week_start_day_dialog" msgid="5181634128884089113">"1er jour de la semaine :"</string>
+<string tools:ignore="MissingTranslation" name="app_name">Notes</string>
+<string tools:ignore="MissingTranslation" name="title_create">Nouvelle note</string>
+<string tools:ignore="MissingTranslation" name="title_edit">Editer : %1$s</string>
+<string tools:ignore="MissingTranslation" name="menu_add">Nouvelle note</string>
+<string tools:ignore="MissingTranslation" name="menu_delete">Supprimer</string>
+<string tools:ignore="MissingTranslation" name="menu_revert">Annuler les changements</string>
+<string tools:ignore="MissingTranslation" name="menu_copy">Copier la note</string>
+<string tools:ignore="MissingTranslation" name="menu_cancel">Annuler</string>
+<string tools:ignore="MissingTranslation" name="menu_setcompleted">Effectué</string>
+<string tools:ignore="MissingTranslation" name="menu_setuncompleted">Non effectué</string>
+<string tools:ignore="MissingTranslation" name="menu_deletelist">Supprimer la liste</string>
+<string tools:ignore="MissingTranslation" name="menu_sync">Actualiser</string>
+<string tools:ignore="MissingTranslation" name="menu_share">Partager</string>
+<string tools:ignore="MissingTranslation" name="menu_preferences">Paramètres</string>
+<string tools:ignore="MissingTranslation" name="menu_renamelist">Renommer la liste</string>
+<string tools:ignore="MissingTranslation" name="menu_createlist">Créer une liste</string>
+<string tools:ignore="MissingTranslation" name="menu_clearcompleted">Effacer complétées</string>
+<string tools:ignore="MissingTranslation" name="menu_setdefaultlist">Définir comme liste par défaut</string>
+<string tools:ignore="MissingTranslation" name="delete_list_warning">Êtes-vous sûr de vouloir supprimer la liste ? Ceci est définitif.</string>
+<string tools:ignore="MissingTranslation" name="editor_due_date_hint">Échéance</string>
+<string tools:ignore="MissingTranslation" name="editor_title_hint">Titre</string>
+<string tools:ignore="MissingTranslation" name="editor_note_hint">Note</string>
+<string tools:ignore="MissingTranslation" name="resolve_edit">Editer la note</string>
+<string tools:ignore="MissingTranslation" name="error_title">Erreur</string>
+<string tools:ignore="MissingTranslation" name="error_message">Erreur de chargement</string>
+<string tools:ignore="MissingTranslation" name="search_hint">Rechercher</string>
+<string tools:ignore="MissingTranslation" name="settings_theme">Thème actuel</string>
+<string tools:ignore="MissingTranslation" name="settings_theme_dialog">Choisir un thème</string>
+<string tools:ignore="MissingTranslation" name="settings_cat_theme">Thème</string>
+<string tools:ignore="MissingTranslation" name="settings_cat_sorting">Classement</string>
+<string tools:ignore="MissingTranslation" name="settings_sorting_type">Classé par</string>
+<string tools:ignore="MissingTranslation" name="settings_sorting_type_dialog">Classer par</string>
+<string tools:ignore="MissingTranslation" name="settings_sorting_order">Ordre</string>
+<string tools:ignore="MissingTranslation" name="settings_sorting_order_dialog">Ordonner</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_alphabetic">Titre</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_modified">Dernière modification</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_duedate">Date d\'échéance</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">Position du serveur</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Ascendant</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Descendant</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Sombre</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Clair</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">Clair, action bar sombre</string>
+<string tools:ignore="MissingTranslation" name="settings_cat_appearance">Apparence</string>
+<string tools:ignore="MissingTranslation" name="settings_font_screen">Paramètres de police</string>
+<string tools:ignore="MissingTranslation" name="settings_font_screen_summary">Vous pouvez changer la police et la taille du texte</string>
+<string tools:ignore="MissingTranslation" name="settings_cat_font_editor">Editeur</string>
+<string tools:ignore="MissingTranslation" name="settings_font_type">Police</string>
+<string tools:ignore="MissingTranslation" name="settings_font_type_dialog">Choisir une police</string>
+<string tools:ignore="MissingTranslation" name="settings_font_size">Taille du texte</string>
+<string tools:ignore="MissingTranslation" name="preference_preview_text">Voici comment le texte apparaîtra dans l\'éditeur</string>
+<string tools:ignore="MissingTranslation" name="settings_text_preview_title">Prévisualiser</string>
+<string tools:ignore="MissingTranslation" name="monospace">Monospace</string>
+<string tools:ignore="MissingTranslation" name="sans">Sans</string>
+<string tools:ignore="MissingTranslation" name="serif">Serif</string>
+<string tools:ignore="MissingTranslation" name="settings_sync_freq_title">Sync. fréquence</string>
+<string tools:ignore="MissingTranslation" name="settings_account_title">Choisir un compte</string>
+<string tools:ignore="MissingTranslation" name="settings_account_summary">Cliquer pour changer de compte</string>
+<string tools:ignore="MissingTranslation" name="settings_sync_enable_title">Sync. Google Tâches</string>
+<string tools:ignore="MissingTranslation" name="settings_sync_enable_summary">Synchroniser vos notes avec votre compte Google</string>
+<string tools:ignore="MissingTranslation" name="settings_cat_syncing">Synchronisation</string>
+<string tools:ignore="MissingTranslation" name="manual">Manuelle</string>
+<string tools:ignore="MissingTranslation" name="minutes">minutes</string>
+<string tools:ignore="MissingTranslation" name="hours">heures</string>
+<string tools:ignore="MissingTranslation" name="onehour">Une heure</string>
+<string tools:ignore="MissingTranslation" name="oneday">Un jour</string>
+<string tools:ignore="MissingTranslation" name="yes">Oui</string>
+<string tools:ignore="MissingTranslation" name="no">Non</string>
+<string tools:ignore="MissingTranslation" name="ok">OK</string>
+<string tools:ignore="MissingTranslation" name="show_from_all_lists">Toutes les listes</string>
+<string tools:ignore="MissingTranslation" name="default_list_needed_warning">Vous devez d\'abord définir une liste par défaut</string>
+<string tools:ignore="MissingTranslation" name="reverted">Changements annulés</string>
+<string name="notecopied" tools:ignore="MissingTranslation">Copié</string>
+<string name="deleted" tools:ignore="MissingTranslation">Supprimé</string>
+<string name="items" tools:ignore="MissingTranslation">notes</string>
+<string tools:ignore="MissingTranslation" name="permission_read_label">lire les notes et les listes</string>
+<string tools:ignore="MissingTranslation" name="permission_read_desc">Autorise l\'application à lire vos notes et listes.</string>
+<string tools:ignore="MissingTranslation" name="permission_write_label">modifier les notes et les listes</string>
+<string tools:ignore="MissingTranslation" name="permission_write_desc">Autorise l\'application à créer, modifier et supprimer des notes et listes.</string>
+<string tools:ignore="MissingTranslation" name="settings_header_list">Paramètres de la liste</string>
+<string tools:ignore="MissingTranslation" name="settings_header_appearance">@string/settings_cat_appearance</string>
+<string tools:ignore="MissingTranslation" name="settings_header_sync">@string/settings_cat_syncing</string>
+<string tools:ignore="MissingTranslation" name="settings_list_dialog">Choisir une liste</string>
+<string tools:ignore="MissingTranslation" name="settings_list">Liste</string>
+<string tools:ignore="MissingTranslation" name="automatic">Automatique</string>
 
-    <string name="lock_note">Verrouiller la note</string>
-    <string name="unlock_note">Déverrouiller la note</string>
-    <string name="locked">Verrouillé</string>
-    <string name="unlocked">Déverrouillé</string>
-    <string name="password_required">Mot de passe requis</string>
-    <string name="select_account">Choisir un compte</string>
-    <string name="password">Mot de passe</string>
-    <string name="password_set">Mot de passe défini</string>
-    <string name="password_cleared">Mot de passe effacé</string>
-    <string name="passwords_dont_match">Les mots de passe ne correspondent pas</string>
-    <string name="enter_password">Entrer le mot de passe</string>
-    <string name="enter_new_password">Entrez le mot de passe</string>
-    <string name="confirm_new_password">Confirmez le mot de passe</string>
-    <string name="apply">Appliquer</string>
-    <string name="clear_password">Effacer le mot de passe</string>
-    <string name="password_info">Après avoir défini un mot de passe, vous devrez le saisir pour voir les notes verrouillées. Le mot de passe protègera la note elle-même, mais pas le titre ni la date. La note ne sera pas cryptée donc pourra toujours être lue via Google Mail/Agenda. Si vous oubliez votre mot de passe, synchronisez les notes avec Google et réinstallez l\'application.</string>
-    <string name="about">À propos</string>
-    
-     <!-- Untranslated yet -->
-    <string name="sync_failed">La syncronisation a échoué</string>
-    <string name="sync_login_failed">La connexion à Google Tasks a échoué</string>
+<string tools:ignore="MissingTranslation" name="preferences_week_start_day_dialog">"1er jour de la semaine :"</string>
+<string tools:ignore="MissingTranslation" name="preferences_week_start_day_title">"1er jour de la semaine :"</string>
+<!--
+Use few if language need it. In English is the same.
+<item quantity="few">Copied 2 notes.</item>
+-->
+<plurals name="notecopied_msg">
+<item quantity="one">Copied one note</item>
+<item quantity="other">Copied %d notes</item>
+</plurals>
+
+<plurals name="notedeleted_msg">
+<item quantity="one">Deleted one note</item>
+<item quantity="other">Deleted %d notes</item>
+</plurals>
+
+<plurals name="mode_choose">
+<item quantity="one">Selected one note</item>
+<item quantity="other">Selected %d notes</item>
+</plurals>
+
+<string tools:ignore="MissingTranslation" name="lock_note">Verrouiller la note</string>
+<string tools:ignore="MissingTranslation" name="unlock_note">Déverrouiller la note</string>
+<string tools:ignore="MissingTranslation" name="locked">Verrouillé</string>
+<string tools:ignore="MissingTranslation" name="unlocked">Déverrouillé</string>
+<string tools:ignore="MissingTranslation" name="password_required">Mot de passe requis</string>
+<string tools:ignore="MissingTranslation" name="select_account">Choisir un compte</string>
+<string tools:ignore="MissingTranslation" name="password">Mot de passe</string>
+<string tools:ignore="MissingTranslation" name="password_set">Mot de passe défini</string>
+<string tools:ignore="MissingTranslation" name="password_cleared">Mot de passe effacé</string>
+<string tools:ignore="MissingTranslation" name="passwords_dont_match">Les mots de passe ne correspondent pas</string>
+<string tools:ignore="MissingTranslation" name="enter_password">Entrer le mot de passe</string>
+<string tools:ignore="MissingTranslation" name="enter_new_password">Entrez le mot de passe</string>
+<string tools:ignore="MissingTranslation" name="confirm_new_password">Confirmez le mot de passe</string>
+<string tools:ignore="MissingTranslation" name="apply">Appliquer</string>
+<string tools:ignore="MissingTranslation" name="clear_password">Effacer le mot de passe</string>
+<string tools:ignore="MissingTranslation" name="password_info">Après avoir défini un mot de passe, vous devrez le saisir pour voir les notes verrouillées. Le mot de passe protègera la note elle-même, mais pas le titre ni la date. La note ne sera pas cryptée donc pourra toujours être lue via Google Mail/Agenda. Si vous oubliez votre mot de passe, synchronisez les notes avec Google et réinstallez l'application.</string>
+<string tools:ignore="MissingTranslation" name="about">À propos</string>
+
+<string tools:ignore="MissingTranslation" name="sync_failed">La syncronisation a échoué</string>
+<string tools:ignore="MissingTranslation" name="sync_login_failed">La connexion à Google Tasks a échoué</string>
+
+<string tools:ignore="MissingTranslation" name="changelog_title">Quoi de neuf</string>
+<string tools:ignore="MissingTranslation" name="changelog_ok_button">OK</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">Titre sur 2 lignes</string>
+
+<string tools:ignore="MissingTranslation" name="editor_details">Plus</string>
+<string tools:ignore="MissingTranslation" name="completed">Complété</string>
+
+<string tools:ignore="MissingTranslation" name="date_header_today">Aujourd'hui</string>
+<string tools:ignore="MissingTranslation" name="date_header_tomorrow">Demain</string>
+<string tools:ignore="MissingTranslation" name="date_header_completed">Complété</string>
+
+<string tools:ignore="MissingTranslation" name="mod_header_yesterday">Hier</string>
+<string tools:ignore="MissingTranslation" name="mod_header_thisweek">Cette semaine</string>
+<string tools:ignore="MissingTranslation" name="mod_header_earlier">Plus tôt</string>
+
+
+<string tools:ignore="MissingTranslation" name="please_select_note">SVP sélectionnez ou créez une note</string>
+<string tools:ignore="MissingTranslation" name="please_create_note">SVP créez une note</string>
+
+
+
+
+
+<string tools:ignore="MissingTranslation" name="saturday">Samedi</string>
+<string tools:ignore="MissingTranslation" name="sunday">Dimanche</string>
+<string tools:ignore="MissingTranslation" name="monday">Lundi</string>
+
+
+<!-- These should probably not be translated -->
+<string tools:ignore="MissingTranslation" name="default_notetitle">Bienvenue!</string>
 
 </resources>
