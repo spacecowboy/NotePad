@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources xmlns:tools="http://schemas.android.com/tools" >
 
     <string name="app_name">Notes</string>
     <string name="title_create">新しいノート</string>
@@ -92,10 +92,10 @@
     <string name="notecopied">コピー</string>
     <string name="deleted">削除済み</string>
     <string name="items">ノート</string>
-    <string name="permission_read_label">ノートやリストの読込み</string>
+    <string name="permission_read_label">ノートやリストを読み込む</string>
     <string name="permission_read_desc">アプリケーションがノートとリストを読み取ることを許可します。</string>
-    <string name="permission_write_label">ノートやリストの書込み</string>
-    <string name="permission_write_desc">アプリケーションがノートやリストの作成、更新、および削除することを許可します。</string>
+    <string name="permission_write_label">ノートやリストを変更</string>
+    <string name="permission_write_desc">アプリケーションがノートやリストの挿入、更新、および削除することを許可します。</string>
     <string name="settings_header_list">リストの設定</string>
     <string name="settings_header_list_summary"></string>
     <string name="settings_header_appearance">@string/settings_cat_appearance</string>
@@ -106,28 +106,10 @@
     <string name="settings_list">リスト</string>
     <string name="settings_list_summary"></string>
     <string name="automatic">自動</string>
-    
+
     <string name="preferences_week_start_day_dialog">週の開始日</string>
     <string name="preferences_week_start_day_title">週の開始日</string>
     <string name="preferences_week_start_day_default" tools:ignore="MissingTranslation">-1</string>
-    <!--
-        Use few if language need it. In English is the same.
-        <item quantity="few">Copied 2 notes.</item>
-    -->
-    <plurals name="notecopied_msg">
-        <item quantity="one">1件のノートをコピーしました</item>
-        <item quantity="other">%d件のノートをコピーしました</item>
-    </plurals>
-    
-    <plurals name="notedeleted_msg">
-        <item quantity="one">1件のノートを削除しました</item>
-        <item quantity="other">%d件のノートを削除しました</item>
-    </plurals>
-    
-    <plurals name="mode_choose">
-        <item quantity="one">1件のノートを選択しました</item>
-        <item quantity="other">%d件のノートを選択しました</item>
-    </plurals>
 
     <string name="lock_note">ノートのロック</string>
     <string name="unlock_note">ロックの解除</string>
@@ -144,20 +126,16 @@
     <string name="confirm_new_password">新しいパスワードの確認</string>
     <string name="apply">適用</string>
     <string name="clear_password">パスワードをクリア</string>
-    <string name="password_info">ロックされたノートを表示する為にパスワードが必要となるように設定できます。
-        ロックされたノートでは、ノート欄は保護しますが、タイトルや期限は保護されません。
-        またノートはGmailやGoogleカレンダーで表示できる為、暗号化はしません。
-        パスワードを忘れた場合は、一旦Googleのサーバと同期してから、
-        このアプリを再インストールしてください。</string>
+    <string name="password_info">パスワードを設定すると、ロックされたノートを表示するのにパスワードを要求するようになります。ロックされたノートでは、タイトルや期限は保護されずに、ノート欄を保護します。ノートはGmailやGoogleカレンダーで表示する為、ノートを暗号化することはしません。パスワードを忘れた場合は、Googleと同期してから、アプリケーションを再インストールしてください。</string>
     <string name="about">このアプリについて</string>
     
     <string name="sync_failed">同期失敗</string>
     <string name="sync_login_failed">ログインに失敗しました。Google Tasksに接続できませんでした。</string>
-
+        
     <!-- Untranslated yet -->
     <string tools:ignore="MissingTranslation" name="changelog_full_title">更新履歴</string>
     <string tools:ignore="MissingTranslation" name="changelog_title">最新情報</string>
-    <string tools:ignore="MissingTranslation" name="changelog_ok_button">閉じる</string>
+    <string tools:ignore="MissingTranslation" name="changelog_ok_button">OK</string>
     <string tools:ignore="MissingTranslation" name="changelog_show_full">すべて表示</string>
     <string tools:ignore="MissingTranslation" name="widget_pref_preview_note">ノートを併せて表示する</string>
     <string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">タイトルは2行で表示されます</string>
@@ -167,38 +145,11 @@
     <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_on">チェックボックスは表示されます</string>
     <string tools:ignore="MissingTranslation" name="settings_listitem">タイトルを2行で表示</string>
     <string tools:ignore="MissingTranslation" name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
-    <string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">ノートは2行目に表示されます</string>
+    <string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">ノートは2秒目に表示されます</string>
     
-    <string tools:ignore="MissingTranslation" name="editor_details">詳細</string>
-    <string tools:ignore="MissingTranslation" name="completed">完了</string>
-    <string tools:ignore="MissingTranslation" name="subtask_of">Subtask of</string>
-    <string tools:ignore="MissingTranslation" name="security">セキュリティ</string>
-    
-    <string tools:ignore="MissingTranslation" name="date_header_overdue">期限後</string>
-    <string tools:ignore="MissingTranslation" name="date_header_today">今日</string>
-    <string tools:ignore="MissingTranslation" name="date_header_tomorrow">明日</string>
-    <string tools:ignore="MissingTranslation" name="date_header_7days">1週間後</string>
-    <string tools:ignore="MissingTranslation" name="date_header_future">未来</string>
-    <string tools:ignore="MissingTranslation" name="date_header_none">期限なし</string>
-    <string tools:ignore="MissingTranslation" name="date_header_completed">完了</string>
-    
-    <string tools:ignore="MissingTranslation" name="mod_header_today">@string/date_header_today</string>
-    <string tools:ignore="MissingTranslation" name="mod_header_yesterday">昨日</string>
-    <string tools:ignore="MissingTranslation" name="mod_header_thisweek">今週中</string>
-    <string tools:ignore="MissingTranslation" name="mod_header_earlier">Earlier</string>
-    
-    <string tools:ignore="MissingTranslation" name="settings_listheader">When showing all lists</string>
-    <string tools:ignore="MissingTranslation" name="settings_listheader_off">Show as one list</string>
-    <string tools:ignore="MissingTranslation" name="settings_listheader_on">Show list names</string>
-    
-    <string tools:ignore="MissingTranslation" name="please_create_list">リストを作成して下さい</string>
-    <string tools:ignore="MissingTranslation" name="please_select_note">ノートを作成するか選択して下さい</string>
-    <string tools:ignore="MissingTranslation" name="please_create_note">ノートを作成して下さい</string>
-    
-    <string tools:ignore="MissingTranslation" name="empty_string"> </string>
     <!-- These should probably not be translated -->
-    <string name="default_notetitle" tools:ignore="MissingTranslation">ようこそ！</string>
-    <string name="default_notetext" tools:ignore="MissingTranslation">このアプリを最大限に利用するために、まず始めに同期機能を有効にすることをお勧めします。ノート一覧画面を開き、画面下部のバーの更新ボタンを押してください。初期状態では、1時間ごとに自動的にノートが同期されます。
+    <string tools:ignore="MissingTranslation" name="default_notetitle">ようこそ！</string>
+    <string tools:ignore="MissingTranslation" name="default_notetext">このアプリを最大限に利用するために、まず始めに同期機能を有効にすることをお勧めします。ノート一覧画面を開き、画面下部のバーの更新ボタンを押してください。初期状態では、1時間ごとに自動的にノートが同期されます。
 \n\n注意すべきは、あなたの共有設定とリンクしているということです。あなたのGmailアカウントで自動同期を設定していないならば、このアプリも自動同期を行いません。設定において自動同期を完全に無効化することで、手動での同期のみを提供することができます。
 \n\nあなたがGoogleアカウントを複数セットアップしている場合、設定画面から、どのアカウントを使用するかを選択することをお勧めします。
 \n\n設定画面にどのような項目があるのかを知って頂きたいので、一度設定画面をご確認頂くことをお勧めします。設定画面では文字のフォントやサイズを調節し、LightやDarkといったテーマを設定することも出来ます。
@@ -222,5 +173,5 @@
 
 \n\nもう一度言いますが、私のアプリをダウンロードしてくれて本当にありがとう！
 \nあなたがこのプロジェクトをよりアクティブな方向で支援したい場合は、donate版を購入することが出来ます: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
-
+    
 </resources>

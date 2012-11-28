@@ -652,14 +652,27 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 		int themed_item = R.layout.noteslist_item;
 		// Support two different list items
-		if (activity != null) {
-			if (PreferenceManager.getDefaultSharedPreferences(activity)
-					.getBoolean(MainPrefs.KEY_LISTITEM, true)) {
-				themed_item = R.layout.noteslist_item;
-			} else {
-				themed_item = R.layout.noteslist_item_doublenote;
-			}
-		}
+		// if (activity != null) {
+		// if (PreferenceManager.getDefaultSharedPreferences(activity)
+		// .getBoolean(MainPrefs.KEY_LISTITEM, true)) {
+		// themed_item = R.layout.noteslist_item;
+		// } else {
+		// themed_item = R.layout.noteslist_item_doublenote;
+		// }
+		// }
+
+		// Set appearence settings
+		final boolean hidden_checkbox = PreferenceManager
+				.getDefaultSharedPreferences(activity).getBoolean(
+						MainPrefs.KEY_HIDDENCHECKBOX, false);
+		final boolean hidden_note = PreferenceManager
+				.getDefaultSharedPreferences(activity).getBoolean(
+						MainPrefs.KEY_HIDDENNOTE, false);
+		final boolean hidden_date = PreferenceManager
+				.getDefaultSharedPreferences(activity).getBoolean(
+						MainPrefs.KEY_HIDDENDATE, false);
+		final int title_rows = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(
+				activity).getString(MainPrefs.KEY_TITLEROWS, "2"));
 
 		// Creates the backing adapter for the ListView.
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(activity,
@@ -689,6 +702,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		};
 
 		// In order to set the checked state in the checkbox
+		// and other theme stuff
 		adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
 			static final String indent = "      ";
 
@@ -715,6 +729,12 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					// Set a simple on change listener that updates the note on
 					// changes.
 					cb.setOnCheckedChangeListener(listener);
+					
+					// hide/show
+					if (hidden_checkbox)
+						((View) cb.getParent()).setVisibility(View.GONE);
+					else
+						((View) cb.getParent()).setVisibility(View.VISIBLE);
 
 					return true;
 				} else if (columnIndex == cursor
@@ -733,10 +753,16 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 								|| noteText.isEmpty();
 
 						// Set height to zero if it's empty, otherwise wrap
-						if (isEmpty)
+						if (hidden_note || isEmpty)
 							tv.setVisibility(View.GONE);
 						else
 							tv.setVisibility(View.VISIBLE);
+					} else {
+						// set number of rows
+						if (1 == title_rows || 2 == title_rows)
+							tv.setMaxLines(title_rows);
+						else
+							tv.setMaxLines(10);
 					}
 
 					// Set strike through on completed tasks
@@ -762,7 +788,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					final String text = cursor.getString(cursor
 							.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE));
 					final TextView tv = (TextView) view;
-					if (text == null || text.isEmpty()) {
+					if (text == null || text.isEmpty() || hidden_date) {
 						tv.setVisibility(View.GONE);
 					} else {
 						tv.setVisibility(View.VISIBLE);
@@ -1596,7 +1622,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						return 1;
 					if (m2 == null)
 						return -1;
-					if (ordering.equals(NotePad.Notes.ASCENDING_SORT_ORDERING))
+					if (ordering.equals(NotePad.Notes.DESCENDING_SORT_ORDERING))
 						return m1.compareTo(m2);
 					else
 						return m2.compareTo(m1);

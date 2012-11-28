@@ -281,6 +281,7 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		MenuItem deleteList = menu.findItem(R.id.menu_deletelist);
+		MenuItem renameList = menu.findItem(R.id.menu_renamelist);
 		if (null != mSectionAdapter) {
 			if (deleteList != null) {
 				// Only show this button if there is a list
@@ -290,7 +291,6 @@ public class MainActivity extends DualLayoutActivity implements
 					deleteList.setVisible(true);
 				}
 			}
-			MenuItem renameList = menu.findItem(R.id.menu_renamelist);
 			if (renameList != null) {
 				// Only show this button if there is a list
 				if (mSectionAdapter.getCount() <= 0) {
@@ -298,6 +298,14 @@ public class MainActivity extends DualLayoutActivity implements
 				} else {
 					renameList.setVisible(true);
 				}
+			}
+		} else {
+			// with null adapter, must hide
+			if (deleteList != null) {
+					deleteList.setVisible(false);
+			}
+			if (renameList != null) {
+					renameList.setVisible(false);
 			}
 		}
 
@@ -799,7 +807,10 @@ public class MainActivity extends DualLayoutActivity implements
 			String key) {
 		// Need to restart to allow themes and such to go into effect
 		if (key.equals(MainPrefs.KEY_THEME)
-				|| key.equals(MainPrefs.KEY_LISTITEM)
+				|| key.equals(MainPrefs.KEY_HIDDENCHECKBOX)
+				|| key.equals(MainPrefs.KEY_HIDDENDATE)
+				|| key.equals(MainPrefs.KEY_HIDDENNOTE)
+				|| key.equals(MainPrefs.KEY_TITLEROWS)
 				|| key.equals(MainPrefs.KEY_SORT_ORDER)
 				|| key.equals(MainPrefs.KEY_SORT_TYPE)
 				|| key.equals(MainPrefs.KEY_LISTHEADERS)) {

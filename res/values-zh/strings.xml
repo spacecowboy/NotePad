@@ -1,131 +1,176 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2012 Jonas Kalderstam
+Copyright (C) 2012 Jonas Kalderstam
 
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-  
-          http://www.apache.org/licenses/LICENSE-2.0
-  
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 -->
 
 <resources xmlns:tools="http://schemas.android.com/tools" >
 
-    <string name="app_name">便签</string>
-    <string name="title_create">新便签</string>
-    <string name="title_edit">编辑: %1$s</string>
-    <string name="menu_add">新便签</string>
-    <string name="menu_delete">删除</string>
-    <string name="menu_revert">恢复更改</string>
-    <string name="menu_copy">复制便签</string>
-    <string name="menu_cancel">取消</string>
-    <string name="menu_setcompleted">设置完成</string>
-    <string name="menu_setuncompleted">设置未完成</string>
-    <string name="menu_deletelist">删除列表</string>
-    <string name="menu_sync">刷新</string>
-    <string name="menu_share">分享</string>
-    <string name="menu_preferences">设置</string>
-    <string name="menu_renamelist">列表重命名</string>
-    <string name="menu_createlist">创建列表</string>
-    <string name="menu_clearcompleted">清除已完成</string>
-    <string name="menu_setdefaultlist">默认列表</string>
-    <string name="delete_list_warning">确实要删除列表吗? 列表将被永久删除.</string>
-    <string name="editor_due_date_hint">到期日</string>
-    <string name="editor_title_hint">标题</string>
-    <string name="editor_note_hint">便签</string>
-    <string name="resolve_edit">编辑便签</string>
-    <string name="error_title">出错</string>
-    <string name="error_message">加载便签出错</string>
-    <string name="search_hint">搜索</string>
-    <string name="settings_theme">当前主题</string>
-    <string name="settings_theme_dialog">选择主题</string>
-    <string name="settings_cat_theme">主题</string>
-    <string name="settings_cat_sorting">排序</string>
-    <string name="settings_sorting_type">排序方式</string>
-    <string name="settings_sorting_type_dialog">排序方式</string>
-    <string name="settings_sorting_order">排列方式</string>
-    <string name="settings_sorting_order_dialog">排列方式</string>
-    <string name="settings_summary_sort_type_alphabetic">标题</string>
-    <string name="settings_summary_sort_type_modified">最新修改</string>
-    <string name="settings_summary_sort_type_duedate">到期日</string>
-    <string name="settings_summary_sort_type_serverposition">服务器位置</string>
-    <string name="settings_summary_sort_order_asc">升序</string>
-    <string name="settings_summary_sort_order_desc">降序</string>
-    <string name="settings_summary_theme_dark">深</string>
-    <string name="settings_summary_theme_light">浅</string>
-    <string name="settings_summary_theme_light_dark_ab">界面浅, 活动栏深</string>
-    <string name="settings_cat_appearance">外观</string>
-    <string name="settings_font_screen">字体设定</string>
-    <string name="settings_font_screen_summary">你可以改变字体的类型和大小</string>
-    <string name="settings_cat_font_editor">编辑栏</string>
-    <string name="settings_font_type">字体</string>
-    <string name="settings_font_type_dialog">选择一种字体</string>
-    <string name="settings_font_size">字体大小</string>
-    <string name="preference_preview_text">This is how the editor text will appear</string>
-    <string name="settings_text_preview_title">预览</string>
-    <string name="monospace">等宽</string>
-    <string name="sans">无装饰</string>
-    <string name="serif">衬线</string>
-    <string name="settings_sync_freq_title">同步频率</string>
-    <string name="settings_account_title">选择一个账户</string>
-    <string name="settings_account_summary">点击切换账户</string>
-    <string name="settings_sync_enable_title">Google工作表同步</string>
-    <string name="settings_sync_enable_summary">与Google账户同步便签</string>
-    <string name="settings_cat_syncing">同步</string>
-    <string name="manual">手动</string>
-    <string name="minutes">分钟</string>
-    <string name="hours">小时</string>
-    <string name="onehour">1小时</string>
-    <string name="oneday">1天</string>
-    <string name="yes">同意</string>
-    <string name="no">不同意</string>
-    <string name="ok">好的</string>
-    <string name="show_from_all_lists">所有列表</string>
-    <string name="default_list_needed_warning">设置一个默认列表</string>
-    <string name="reverted">已恢复的更改</string>
-    <string name="notecopied">已复制</string>
-    <string name="deleted">已删除</string>
-    <string name="items">便签</string>
-    <string name="permission_read_label">读取便签和列表</string>
-    <string name="permission_read_desc">允许程序读取你的便签和相关列表.</string>
-    <string name="permission_write_label">更改便签盒列表</string>
-    <string name="permission_write_desc">允许程序插入,更新和删除便签和列表.</string>
-    <string name="settings_header_list">列表设置</string>
-    <string name="settings_header_list_summary"></string>
-    <string name="settings_header_appearance">@string/settings_cat_appearance</string>
-    <string name="settings_header_appearance_summary"></string>
-    <string name="settings_header_sync">@string/settings_cat_syncing</string>
-    <string name="settings_header_sync_summary"></string>
-    <string name="settings_list_dialog">选择一个列表</string>
-    <string name="settings_list">列表</string>
-    <string name="settings_list_summary"></string>
-    <string name="automatic">自动</string>
-    <string name="preferences_week_start_day_dialog">每周开始于</string>
-    <string name="preferences_week_start_day_title">每周开始于</string>
-    <string name="lock_note">便签锁定</string>
-    <string name="unlock_note">便签解锁</string>
-    <string name="locked">已锁定</string>
-    <string name="unlocked">已解锁</string>
-    <string name="password_required">需要密码</string>
-    <string name="select_account">选择一个账户</string>
-    <string name="password">密码</string>
-    <string name="password_set">密码设定</string>
-    <string name="password_cleared">密码已清除</string>
-    <string name="passwords_dont_match">密码错误</string>
-    <string name="enter_password">输入密码</string>
-    <string name="enter_new_password">输入新密码</string>
-    <string name="confirm_new_password">确认新密码</string>
-    <string name="apply">应用</string>
-    <string name="clear_password">清除密码</string>
-    <string name="password_info">设置密码后，每次查看加锁便签需输入密码。只保护便签内容，标题和到期日仍可以显示。 便签内容将不以任何形式加密，所以内容可以在Google邮箱和日历中查看。如果忘记了密码，先与Google同步然后重新安装软件。</string>
-    <string name="about">关于</string>
-    <string name="sync_failed">同步失败</string>
-    <string name="sync_login_failed">登录失败，无法连接到Google工作表。。</string>
+<string name="app_name">便签</string>
+<string name="title_create">新便签</string>
+<string name="title_edit">编辑: %1$s</string>
+<string name="menu_add">新便签</string>
+<string name="menu_delete">删除</string>
+<string name="menu_revert">恢复更改</string>
+<string name="menu_copy">复制便签</string>
+<string name="menu_cancel">取消</string>
+<string name="menu_setcompleted">设置完成</string>
+<string name="menu_setuncompleted">设置未完成</string>
+<string name="menu_deletelist">删除列表</string>
+<string name="menu_sync">刷新</string>
+<string name="menu_share">分享</string>
+<string name="menu_preferences">设置</string>
+<string name="menu_renamelist">列表重命名</string>
+<string name="menu_createlist">创建列表</string>
+<string name="menu_clearcompleted">清除已完成</string>
+<string name="menu_setdefaultlist">默认列表</string>
+<string name="delete_list_warning">确实要删除列表吗？列表将被永久删除。</string>
+<string name="editor_due_date_hint">到期日</string>
+<string name="editor_title_hint">标题</string>
+<string name="editor_note_hint">便签</string>
+<string name="resolve_edit">编辑便签</string>
+<string name="error_title">出错</string>
+<string name="error_message">加载便签出错</string>
+<string name="search_hint">搜索</string>
+<string name="settings_theme">当前主题</string>
+<string name="settings_theme_dialog">选择主题</string>
+<string name="settings_cat_theme">主题</string>
+<string name="settings_cat_sorting">排序</string>
+<string name="settings_sorting_type">排序方式</string>
+<string name="settings_sorting_type_dialog">排序方式</string>
+<string name="settings_sorting_order">排列方式</string>
+<string name="settings_sorting_order_dialog">排列方式</string>
+<string name="settings_summary_sort_type_alphabetic">标题</string>
+<string name="settings_summary_sort_type_modified">最新修改</string>
+<string name="settings_summary_sort_type_duedate">到期日</string>
+<string name="settings_summary_sort_type_serverposition">服务器位置</string>
+<string name="settings_summary_sort_order_asc">升序</string>
+<string name="settings_summary_sort_order_desc">降序</string>
+<string name="settings_summary_theme_dark">深</string>
+<string name="settings_summary_theme_light">浅</string>
+<string name="settings_summary_theme_light_dark_ab">界面浅, 活动栏深</string>
+<string name="settings_cat_appearance">外观</string>
+<string name="settings_font_screen">字体设定</string>
+<string name="settings_font_screen_summary">你可以改变字体的类型和大小</string>
+<string name="settings_cat_font_editor">编辑栏</string>
+<string name="settings_font_type">字体</string>
+<string name="settings_font_type_dialog">选择一种字体</string>
+<string name="settings_font_size">字体大小</string>
+<string name="preference_preview_text">我能吞下玻璃而不损伤身体</string>
+<string name="settings_text_preview_title">预览</string>
+<string name="monospace">等宽</string>
+<string name="sans">无装饰</string>
+<string name="serif">衬线</string>
+<string name="settings_sync_freq_title">同步频率</string>
+<string name="settings_account_title">选择一个账户</string>
+<string name="settings_account_summary">点击切换账户</string>
+<string name="settings_sync_enable_title">Google工作表同步</string>
+<string name="settings_sync_enable_summary">与Google账户同步便签</string>
+<string name="settings_cat_syncing">同步</string>
+<string name="manual">手动</string>
+<string name="minutes">分钟</string>
+<string name="hours">小时</string>
+<string name="onehour">1小时</string>
+<string name="oneday">1天</string>
+<string name="yes">同意</string>
+<string name="no">不同意</string>
+<string name="ok">确认</string>
+<string name="show_from_all_lists">所有列表</string>
+<string name="default_list_needed_warning">设置一个默认列表</string>
+<string name="reverted">已恢复的更改</string>
+<string name="notecopied" tools:ignore="MissingTranslation">已复制</string>
+<string name="deleted" tools:ignore="MissingTranslation">已删除</string>
+<string name="items" tools:ignore="MissingTranslation">便签</string>
+<string name="permission_read_label">读取便签和列表</string>
+<string name="permission_read_desc">允许程序读取你的便签和相关列表.</string>
+<string name="permission_write_label">更改便签盒列表</string>
+<string name="permission_write_desc">允许程序插入,更新和删除便签和列表.</string>
+<string name="settings_header_list">列表设置</string>
+<string name="settings_header_appearance">@string/settings_cat_appearance</string>
+<string name="settings_header_sync">@string/settings_cat_syncing</string>
+<string name="settings_list_dialog">选择一个列表</string>
+<string name="settings_list">列表</string>
+<string name="automatic">自动</string>
+
+<string name="preferences_week_start_day_dialog">每周开始于</string>
+<string name="preferences_week_start_day_title">每周开始于</string>
+<!--
+Use few if language need it. In English is the same.
+<item quantity="few">Copied 2 notes.</item>
+-->
+<plurals name="notecopied_msg">
+<item quantity="one">Copied one note</item>
+<item quantity="other">Copied %d notes</item>
+</plurals>
+
+<plurals name="notedeleted_msg">
+<item quantity="one">Deleted one note</item>
+<item quantity="other">Deleted %d notes</item>
+</plurals>
+
+<plurals name="mode_choose">
+<item quantity="one">Selected one note</item>
+<item quantity="other">Selected %d notes</item>
+</plurals>
+
+<string name="lock_note">锁定便签</string>
+<string name="unlock_note">解锁便签</string>
+<string name="locked">已锁定</string>
+<string name="unlocked">已解锁</string>
+<string name="password_required">需要密码</string>
+<string name="select_account">选择一个账户</string>
+<string name="password">密码</string>
+<string name="password_set">密码设定</string>
+<string name="password_cleared">密码已清除</string>
+<string name="passwords_dont_match">密码错误</string>
+<string name="enter_password">输入密码</string>
+<string name="enter_new_password">输入新密码</string>
+<string name="confirm_new_password">确认新密码</string>
+<string name="apply">应用</string>
+<string name="clear_password">清除密码</string>
+<string name="password_info">设置密码后，每次查看加锁便签需输入密码。只保护便签内容，标题和到期日仍可以显示。 便签内容将不以任何形式加密，所以内容可以在Google邮箱和日历中查看。如果忘记了密码，先与Google同步然后重新安装软件。</string>
+<string name="about">关于</string>
+
+<string name="sync_failed">同步失败</string>
+<string name="sync_login_failed">登录失败，无法连接到Google工作表。。</string>
+
+<!-- Untranslated yet -->
+<string tools:ignore="MissingTranslation" name="changelog_full_title">更新日志</string>
+<string tools:ignore="MissingTranslation" name="changelog_title">有什么更新的？</string>
+<string tools:ignore="MissingTranslation" name="changelog_ok_button">确认</string>
+<string tools:ignore="MissingTranslation" name="changelog_show_full">显示完整内容</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_preview_note">显示便签预览</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">标题将会变成两行</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_on">标签内容将会放在第二行</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_show_complete">“标记为完成”按钮</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_off">按钮将被隐藏</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_on">按钮将会可见</string>
+<string tools:ignore="MissingTranslation" name="settings_listitem">两行的标题</string>
+<string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">便签预览将会是两行</string>
+
+<string tools:ignore="MissingTranslation" name="editor_details">更多</string>
+<string tools:ignore="MissingTranslation" name="completed">已完成</string>
+
+<string tools:ignore="MissingTranslation" name="date_header_today">今天</string>
+<string tools:ignore="MissingTranslation" name="date_header_tomorrow">明天</string>
+
+<string tools:ignore="MissingTranslation" name="mod_header_earlier">早些时候</string>
+
+
+
+
+<!-- These should probably not be translated -->
+<string tools:ignore="MissingTranslation" name="default_notetitle">欢迎！</string>
 
 </resources>

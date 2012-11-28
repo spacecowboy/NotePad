@@ -15,26 +15,6 @@
           android:actionViewClass="android.widget.SearchView"
           android:orderInCategory="2"/> 
     
-   <!--  Here editor options should be displayed in landscape mode. Hence the drastic increase in order index -->
-	<item
-        android:id="@+id/menu_createlist"
-        android:orderInCategory="11"
-        android:showAsAction="never"
-        android:title="@string/menu_createlist"/>
-    <item
-        android:id="@+id/menu_renamelist"
-        android:orderInCategory="12"
-        android:showAsAction="never"
-        android:title="@string/menu_renamelist"/>
-    <item
-        android:id="@+id/menu_deletelist"
-        android:orderInCategory="13"
-        android:showAsAction="never"
-        android:title="@string/menu_deletelist"/>
-    <item
-        android:id="@+id/menu_clearcompleted"
-        android:orderInCategory="14"
-        android:showAsAction="never"
-        android:title="@string/menu_clearcompleted"/>
+   
 
 </menu>

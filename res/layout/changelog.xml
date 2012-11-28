@@ -34,6 +34,16 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="\nVersion 4.0"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\n- List items are now customizable. Take a look in appearence settings.\n- Traditional Chinese should now default to english.\n- List actions have been put in a 'Manage lists' sub menu. Create list should not be hidden when there are no lists anymore." />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="\nVersion 3.6.5"
             android:textStyle="bold" />
 
