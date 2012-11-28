@@ -190,8 +190,19 @@ Use few if language need it. In English is the same.
 
 <string tools:ignore="MissingTranslation" name="hide_note">Dölj anteckning</string>
 
+<string tools:ignore="MissingTranslation" name="hide_date">Göm datum</string>
+<string tools:ignore="MissingTranslation" name="hide_date_summary_on">Datum visas ej</string>
+<string tools:ignore="MissingTranslation" name="hide_date_summary_off">Datum visas</string>
 
+<string tools:ignore="MissingTranslation" name="title_rows">Titel maxhöjd</string>
+<string tools:ignore="MissingTranslation" name="title_rows_1">1 rad</string>
+<string tools:ignore="MissingTranslation" name="title_rows_2">2 rader</string>
+<string tools:ignore="MissingTranslation" name="title_rows_free">Ingen begränsing</string>
 
+<string tools:ignore="MissingTranslation" name="saturday">Lördag</string>
+<string tools:ignore="MissingTranslation" name="sunday">Söndag</string>
+<string tools:ignore="MissingTranslation" name="monday">Måndag</string>
+<string tools:ignore="MissingTranslation" name="localedefault">Språkspecifikt</string>
 
 
 <!-- These should probably not be translated -->
