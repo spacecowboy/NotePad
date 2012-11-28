@@ -35,6 +35,7 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="menu_createlist">Create list</string>
 <string tools:ignore="MissingTranslation" name="menu_clearcompleted">Clear completed</string>
 <string tools:ignore="MissingTranslation" name="menu_setdefaultlist">Set as default list</string>
+<string tools:ignore="MissingTranslation" name="menu_managelists">Manage lists</string>
 <string tools:ignore="MissingTranslation" name="delete_list_warning">Are you sure you want to delete the list? The list will be permanently deleted.</string>
 <string tools:ignore="MissingTranslation" name="editor_due_date_hint">Due date</string>
 <string tools:ignore="MissingTranslation" name="editor_title_hint">Title</string>
@@ -154,7 +155,6 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_off">Button will be hidden</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_on">Button will be visible</string>
 <string tools:ignore="MissingTranslation" name="settings_listitem">Two line titles</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
 <string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">Note preview will be 2 lines</string>
 
 <string tools:ignore="MissingTranslation" name="editor_details">More</string>
@@ -170,6 +170,7 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="date_header_none">No date</string>
 <string tools:ignore="MissingTranslation" name="date_header_completed">Completed</string>
 
+<string tools:ignore="MissingTranslation" name="mod_header_today">@string/date_header_today</string>
 <string tools:ignore="MissingTranslation" name="mod_header_yesterday">Yesterday</string>
 <string tools:ignore="MissingTranslation" name="mod_header_thisweek">This week</string>
 <string tools:ignore="MissingTranslation" name="mod_header_earlier">Earlier</string>
