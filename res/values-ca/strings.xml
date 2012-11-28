@@ -17,23 +17,23 @@ limitations under the License.
 
 <resources xmlns:tools="http://schemas.android.com/tools" >
 
-<string name="title_create">Nova anotació</string>
-<string name="title_edit">Edita</string>
-<string name="menu_add">Nova anotació</string>
-<string name="menu_delete">Esborra</string>
-<string name="menu_revert">Desfés-ne els canvis</string>
-<string name="menu_copy">Copia l'anotació</string>
-<string name="menu_cancel">Anul•la</string>
-<string name="menu_setcompleted">Marcar com a completada</string>
-<string name="menu_setuncompleted">Marcar com a no completada</string>
-<string name="menu_deletelist">Esborra la llista</string>
-<string name="menu_sync">Refresca</string>
-<string name="menu_share">Comparteix</string>
-<string name="menu_preferences">Configuració</string>
-<string name="menu_renamelist">Canvia el títol de la llista</string>
-<string name="menu_createlist">Crea una nova llista</string>
-<string name="menu_setdefaultlist">Estableix com a llista per defecte</string>
-<string name="delete_list_warning">Estàs segur d'esborrar aquesta llista? L'eliminació és permanent.</string>
+<string tools:ignore="MissingTranslation" name="title_create">Nova anotació</string>
+<string tools:ignore="MissingTranslation" name="title_edit">Edita</string>
+<string tools:ignore="MissingTranslation" name="menu_add">Nova anotació</string>
+<string tools:ignore="MissingTranslation" name="menu_delete">Esborra</string>
+<string tools:ignore="MissingTranslation" name="menu_revert">Desfés-ne els canvis</string>
+<string tools:ignore="MissingTranslation" name="menu_copy">Copia l\'anotació</string>
+<string tools:ignore="MissingTranslation" name="menu_cancel">Anul•la</string>
+<string tools:ignore="MissingTranslation" name="menu_setcompleted">Marcar com a completada</string>
+<string tools:ignore="MissingTranslation" name="menu_setuncompleted">Marcar com a no completada</string>
+<string tools:ignore="MissingTranslation" name="menu_deletelist">Esborra la llista</string>
+<string tools:ignore="MissingTranslation" name="menu_sync">Refresca</string>
+<string tools:ignore="MissingTranslation" name="menu_share">Comparteix</string>
+<string tools:ignore="MissingTranslation" name="menu_preferences">Configuració</string>
+<string tools:ignore="MissingTranslation" name="menu_renamelist">Canvia el títol de la llista</string>
+<string tools:ignore="MissingTranslation" name="menu_createlist">Crea una nova llista</string>
+<string tools:ignore="MissingTranslation" name="menu_setdefaultlist">Estableix com a llista per defecte</string>
+<string tools:ignore="MissingTranslation" name="delete_list_warning">Estàs segur d\'esborrar aquesta llista? L\'eliminació és permanent.</string>
 
 <!--
 Use few if language need it. In English is the same.
@@ -56,7 +56,11 @@ Use few if language need it. In English is the same.
 
 
 
-<!-- Untranslated yet -->
+
+
+
+
+
 
 
 
