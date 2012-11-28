@@ -139,7 +139,7 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="confirm_new_password">Confirmez le mot de passe</string>
 <string tools:ignore="MissingTranslation" name="apply">Appliquer</string>
 <string tools:ignore="MissingTranslation" name="clear_password">Effacer le mot de passe</string>
-<string tools:ignore="MissingTranslation" name="password_info">Après avoir défini un mot de passe, vous devrez le saisir pour voir les notes verrouillées. Le mot de passe protègera la note elle-même, mais pas le titre ni la date. La note ne sera pas cryptée donc pourra toujours être lue via Google Mail/Agenda. Si vous oubliez votre mot de passe, synchronisez les notes avec Google et réinstallez l'application.</string>
+<string tools:ignore="MissingTranslation" name="password_info">Après avoir défini un mot de passe, vous devrez le saisir pour voir les notes verrouillées. Le mot de passe protègera la note elle-même, mais pas le titre ni la date. La note ne sera pas cryptée donc pourra toujours être lue via Google Mail/Agenda. Si vous oubliez votre mot de passe, synchronisez les notes avec Google et réinstallez l\'application.</string>
 <string tools:ignore="MissingTranslation" name="about">À propos</string>
 
 <string tools:ignore="MissingTranslation" name="sync_failed">La syncronisation a échoué</string>
@@ -152,7 +152,7 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="editor_details">Plus</string>
 <string tools:ignore="MissingTranslation" name="completed">Complété</string>
 
-<string tools:ignore="MissingTranslation" name="date_header_today">Aujourd'hui</string>
+<string tools:ignore="MissingTranslation" name="date_header_today">Aujourd\'hui</string>
 <string tools:ignore="MissingTranslation" name="date_header_tomorrow">Demain</string>
 <string tools:ignore="MissingTranslation" name="date_header_completed">Complété</string>
 
