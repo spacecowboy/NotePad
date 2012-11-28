@@ -1,14 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
-    
+
     <item
         android:id="@+id/menu_sync"
         android:icon="?navigation_refresh"
         android:orderInCategory="1"
         android:showAsAction="ifRoom"
-        android:title="@string/menu_sync"/> 
-    
-   <!--  Here editor options should be displayed in landscape mode. Hence the drastic increase in order index -->
+        android:title="@string/menu_sync"/>
+
+    <!-- Here editor options should be displayed in landscape mode. Hence the drastic increase in order index -->
+    <item
+        android:id="@+id/menu_managelists"
+        android:orderInCategory="11"
+        android:showAsAction="never"
+        android:title="@string/menu_managelists">
+        <menu>
+            <item
+                android:id="@+id/menu_createlist"
+                android:orderInCategory="1"
+                android:showAsAction="never"
+                android:title="@string/menu_createlist"/>
+            <item
+                android:id="@+id/menu_renamelist"
+                android:orderInCategory="2"
+                android:showAsAction="never"
+                android:title="@string/menu_renamelist"/>
+            <item
+                android:id="@+id/menu_deletelist"
+                android:orderInCategory="3"
+                android:showAsAction="never"
+                android:title="@string/menu_deletelist"/>
+        </menu>
+    </item>
+    <item
+        android:id="@+id/menu_clearcompleted"
+        android:orderInCategory="14"
+        android:showAsAction="never"
+        android:title="@string/menu_clearcompleted"/>
     <item
         android:id="@+id/menu_preferences"
         android:icon="?action_settings"
