@@ -17,7 +17,7 @@ limitations under the License.
 
 <resources xmlns:tools="http://schemas.android.com/tools" >
 
-<string tools:ignore="MissingTranslation" name="app_name">Notes dev</string>
+<string tools:ignore="MissingTranslation" name="app_name">Anteckningar</string>
 <string tools:ignore="MissingTranslation" name="title_create">Ny anteckning</string>
 <string tools:ignore="MissingTranslation" name="title_edit">Redigera: %1$s</string>
 <string tools:ignore="MissingTranslation" name="menu_add">Skapa ny</string>
@@ -35,6 +35,7 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="menu_createlist">Skapa lista</string>
 <string tools:ignore="MissingTranslation" name="menu_clearcompleted">Ta bort slutförda uppgifter</string>
 <string tools:ignore="MissingTranslation" name="menu_setdefaultlist">Välj som standardlista</string>
+<string tools:ignore="MissingTranslation" name="menu_managelists">Hantera listor</string>
 <string tools:ignore="MissingTranslation" name="delete_list_warning">Är du säker på att du vill ta bort listan? Listan kommer att tas bort permanent.</string>
 <string tools:ignore="MissingTranslation" name="editor_due_date_hint">Förfallodatum</string>
 <string tools:ignore="MissingTranslation" name="editor_title_hint">Titel</string>
@@ -189,6 +190,8 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="hide_checkbox_summary_off">Kryssruta kommer att vara synlig</string>
 
 <string tools:ignore="MissingTranslation" name="hide_note">Dölj anteckning</string>
+<string tools:ignore="MissingTranslation" name="hide_note_summary_on">Antecking kommer inte att visas</string>
+<string tools:ignore="MissingTranslation" name="hide_note_summary_off">Antecking kommer att visas</string>
 
 <string tools:ignore="MissingTranslation" name="hide_date">Göm datum</string>
 <string tools:ignore="MissingTranslation" name="hide_date_summary_on">Datum visas ej</string>
