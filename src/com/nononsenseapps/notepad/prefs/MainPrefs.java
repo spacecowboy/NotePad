@@ -42,7 +42,6 @@ public class MainPrefs extends PreferenceFragment implements
 	public static final String KEY_TEXT_PREVIEW = "key_text_preview";
 	public static final String KEY_WEEK_START_DAY = "preferences_week_start_day";
 	public static final String KEY_DEFAULT_LIST = "key_default_list_id";
-	public static final String KEY_LISTITEM = "key_listitem";
 	public static final String KEY_LISTHEADERS = "key_listheaders";
 
 	public static final String SANS = "Sans";
@@ -62,6 +61,10 @@ public class MainPrefs extends PreferenceFragment implements
 	public static final String WEEK_START_SATURDAY = "7";
 	public static final String WEEK_START_SUNDAY = "1";
 	public static final String WEEK_START_MONDAY = "2";
+	public static final String KEY_HIDDENCHECKBOX = "key_hiddencheckbox";
+	public static final String KEY_HIDDENNOTE = "key_hiddennote";
+	public static final String KEY_HIDDENDATE = "key_hiddendate";
+	public static final String KEY_TITLEROWS = "key_titlerows";
 
 	private ListPreference prefSortOrder;
 	private ListPreference prefSortType;
@@ -69,6 +72,7 @@ public class MainPrefs extends PreferenceFragment implements
 	private ListPreference prefFontType;
 	private ListPreference prefWeekStart;
 	private ListPreference prefDefaultList;
+	private ListPreference prefTitleRows;
 
 	private Activity activity;
 
@@ -91,6 +95,7 @@ public class MainPrefs extends PreferenceFragment implements
 		prefFontType = (ListPreference) findPreference(KEY_FONT_TYPE_EDITOR);
 		prefWeekStart = (ListPreference) findPreference(KEY_WEEK_START_DAY);
 		prefDefaultList = (ListPreference) findPreference(KEY_DEFAULT_LIST);
+		prefTitleRows = (ListPreference) findPreference(KEY_TITLEROWS);
 
 		SharedPreferences sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(activity);
@@ -103,13 +108,13 @@ public class MainPrefs extends PreferenceFragment implements
 		prefTheme.setSummary(prefTheme.getEntry());
 		prefFontType.setSummary(prefFontType.getEntry());
 		prefWeekStart.setSummary(prefWeekStart.getEntry());
-		
+		prefTitleRows.setSummary(prefTitleRows.getEntry());
+
 		setEntries(prefDefaultList);
 	}
-	
+
 	/**
-	 * Reads the lists from database. Also adds "All lists" as the first
-	 * item.
+	 * Reads the lists from database. Also adds "All lists" as the first item.
 	 * 
 	 * @return
 	 */
@@ -119,11 +124,11 @@ public class MainPrefs extends PreferenceFragment implements
 		ArrayList<CharSequence> values = new ArrayList<CharSequence>();
 
 		// Start with all lists
-		//entries.add(getText(R.string.show_from_all_lists));
-		//values.add(Long.toString(MainActivity.ALL_NOTES_ID));
+		// entries.add(getText(R.string.show_from_all_lists));
+		// values.add(Long.toString(MainActivity.ALL_NOTES_ID));
 		// Set it as the default value also
-		listSpinner.setDefaultValue(Long
-				.toString(MainActivity.getAList(getActivity(), -1)));
+		listSpinner.setDefaultValue(Long.toString(MainActivity.getAList(
+				getActivity(), -1)));
 
 		Cursor cursor = getActivity().getContentResolver().query(
 				NotePad.Lists.CONTENT_VISIBLE_URI,
@@ -147,8 +152,8 @@ public class MainPrefs extends PreferenceFragment implements
 		if (listSpinner != null) {
 			listSpinner.setEntries(entries.toArray(new CharSequence[entries
 					.size()]));
-			listSpinner.setEntryValues(values
-					.toArray(new CharSequence[values.size()]));
+			listSpinner.setEntryValues(values.toArray(new CharSequence[values
+					.size()]));
 
 			listSpinner.setSummary(listSpinner.getEntry());
 		}
@@ -170,6 +175,8 @@ public class MainPrefs extends PreferenceFragment implements
 			} else {
 				if (KEY_THEME.equals(key)) {
 					prefTheme.setSummary(prefTheme.getEntry());
+				} else if (KEY_TITLEROWS.equals(key)) {
+					prefTitleRows.setSummary(prefTitleRows.getEntry());
 				} else if (KEY_SORT_TYPE.equals(key)) {
 					prefSortType.setSummary(prefSortType.getEntry());
 				} else if (KEY_SORT_ORDER.equals(key)) {

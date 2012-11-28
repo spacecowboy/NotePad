@@ -90,10 +90,10 @@
 	</string-array>
 
     <string-array tools:ignore="MissingTranslation" name="preferences_week_start_day_labels">
-        <item>Locale default</item>
-        <item>Saturday</item>
-        <item>Sunday</item>
-        <item>Monday</item>
+        <item>@string/localedefault</item>
+        <item>@string/saturday</item>
+        <item>@string/sunday</item>
+        <item>@string/monday</item>
     </string-array>
 
     <string-array name="preferences_week_start_day_values" translatable="false">
@@ -101,6 +101,18 @@
         <item>"7"</item>
         <item>"1"</item>
         <item>"2"</item>
+    </string-array>
+    
+    <string-array name="title_rows_entries" tools:ignore="MissingTranslation">
+        <item>@string/title_rows_1</item>
+        <item>@string/title_rows_2</item>
+        <item>@string/title_rows_free</item>
+    </string-array>
+
+    <string-array name="title_rows_values"  tools:ignore="MissingTranslation">
+        <item>1</item>
+        <item>2</item>
+        <item>20</item>
     </string-array>
 
 </resources>
