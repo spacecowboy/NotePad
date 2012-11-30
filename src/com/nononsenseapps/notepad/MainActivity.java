@@ -82,6 +82,7 @@ public class MainActivity extends DualLayoutActivity implements
 	private static final String TAG = "FragmentLayout";
 	private static final String CURRENT_LIST_ID = "currentlistid";
 	private static final String CURRENT_LIST_POS = "currentlistpos";
+    private static final String RESUMING = "resuming";
 	private static final int CREATE_LIST = 0;
 	private static final int RENAME_LIST = 1;
 	private static final int DELETE_LIST = 2;
@@ -99,6 +100,8 @@ public class MainActivity extends DualLayoutActivity implements
 	private SimpleCursorAdapter mSectionAdapter;
 	private long currentListId = -1;
 	private int currentListPos = 0;
+
+    private boolean resuming = false;
 
 	private long listIdToSelect = -1;
 	private boolean beforeBoot = false; // Used to indicate the intent handling
@@ -126,6 +129,9 @@ public class MainActivity extends DualLayoutActivity implements
 		// Must set theme before calling super
 		readAndSetSettings();
 		super.onCreate(savedInstanceState);
+
+        if (savedInstanceState != null)
+            resuming = savedInstanceState.getBoolean(RESUMING);
 
 		if (currentContent.equals(CONTENTVIEW.DUAL)
 				|| currentContent.equals(CONTENTVIEW.LEFT)) {
@@ -341,6 +347,7 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+        outState.putBoolean(RESUMING, true);
 		// Save current list
 		outState.putLong(CURRENT_LIST_ID, currentListId);
 		outState.putInt(CURRENT_LIST_POS, currentListPos);
@@ -384,6 +391,7 @@ public class MainActivity extends DualLayoutActivity implements
 	}
 
 	private void handleInsertIntent(Intent intent) {
+        if (!resuming) {
 		if (intent.getType() != null
 				&& intent.getType().equals(NotePad.Lists.CONTENT_TYPE)
 				|| intent.getData() != null
@@ -430,6 +438,7 @@ public class MainActivity extends DualLayoutActivity implements
 				}
 			}
 		}
+        }
 	}
 
 	public static long getAList(Context context, long tempList) {
