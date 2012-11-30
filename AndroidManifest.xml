@@ -27,7 +27,7 @@
     package="com.nononsenseapps.notepad"
     
     android:versionCode="43"
-    android:versionName="4.0" xmlns:tools="http://schemas.android.com/tools">
+    android:versionName="4.1" xmlns:tools="http://schemas.android.com/tools">
 
     <!-- App crashes on 3.0. No one uses 3.1. So minimum version is set to 3.2 now -->
     <uses-sdk
