@@ -19,6 +19,7 @@ package com.nononsenseapps.notepad.prefs;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
@@ -98,7 +99,7 @@ public class MainPrefs extends PreferenceFragment implements
 		prefWeekStart = (ListPreference) findPreference(KEY_WEEK_START_DAY);
 		prefDefaultList = (ListPreference) findPreference(KEY_DEFAULT_LIST);
 		prefTitleRows = (ListPreference) findPreference(KEY_TITLEROWS);
-        prefLang = (ListPreference) findPreference(getString(R.string.pref_locale));
+		prefLang = (ListPreference) findPreference(getString(R.string.pref_locale));
 
 		SharedPreferences sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(activity);
@@ -114,38 +115,39 @@ public class MainPrefs extends PreferenceFragment implements
 		prefTitleRows.setSummary(prefTitleRows.getEntry());
 
 		setEntries(prefDefaultList);
-        setLangEntries(prefLang, sharedPrefs);
+		setLangEntries(prefLang, sharedPrefs);
 	}
 
-    private void setLangEntries(ListPreference prefLang, SharedPreferences prefs) {
-        ArrayList<CharSequence> entries = new ArrayList<CharSequence>();
+	private void setLangEntries(ListPreference prefLang, SharedPreferences prefs) {
+		ArrayList<CharSequence> entries = new ArrayList<CharSequence>();
 		ArrayList<CharSequence> values = new ArrayList<CharSequence>();
 
-        entries.add(getString(R.string.localedefault));
+		entries.add(getString(R.string.localedefault));
 		values.add("");
-		
-		String[] langs = getResources().getStringArray(R.array.translated_langs);
 
-        for(String lang: langs) {
-        	Locale l;
-        	if (lang.length() > 2)
-        		l = new Locale(lang.substring(0, 2), lang.substring(3, 5));
-        	else
-        		l = new Locale(lang.substring(0, 2));
-            entries.add(l.getDisplayName(l));
-            values.add(lang);
-        }
-        prefLang.setEntries(entries.toArray(new CharSequence[entries
-					.size()]));
-        prefLang.setEntryValues(values.toArray(new CharSequence[values
-					.size()]));
+		String[] langs = getResources()
+				.getStringArray(R.array.translated_langs);
 
-        // Set currently selected value
-        String lang = prefs.getString(getString(R.string.pref_locale), "");
-        
-        // Set summary
-        prefLang.setSummary(prefLang.getEntry());
-    }
+		for (String lang : langs) {
+			Locale l;
+			if (lang.length() == 5) {
+				l = new Locale(lang.substring(0, 2), lang.substring(3, 5));
+			} else {
+				l = new Locale(lang.substring(0, 2));
+			}
+			
+			entries.add(l.getDisplayName(l));
+			values.add(lang);
+		}
+		prefLang.setEntries(entries.toArray(new CharSequence[entries.size()]));
+		prefLang.setEntryValues(values.toArray(new CharSequence[values.size()]));
+
+		// Set currently selected value
+		String lang = prefs.getString(getString(R.string.pref_locale), "");
+
+		// Set summary
+		prefLang.setSummary(prefLang.getEntry());
+	}
 
 	/**
 	 * Reads the lists from database. Also adds "All lists" as the first item.
@@ -223,8 +225,8 @@ public class MainPrefs extends PreferenceFragment implements
 				} else if (KEY_DEFAULT_LIST.equals(key)) {
 					prefDefaultList.setSummary(prefDefaultList.getEntry());
 				} else if (getString(R.string.pref_locale).equals(key)) {
-                    prefLang.setSummary(prefLang.getEntry());
-                }
+					prefLang.setSummary(prefLang.getEntry());
+				}
 			}
 		} catch (IllegalStateException e) {
 			// This is just in case the "isFinishing" wouldn't be enough

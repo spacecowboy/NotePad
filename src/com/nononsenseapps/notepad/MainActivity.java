@@ -85,7 +85,7 @@ public class MainActivity extends DualLayoutActivity implements
 	private static final String TAG = "FragmentLayout";
 	private static final String CURRENT_LIST_ID = "currentlistid";
 	private static final String CURRENT_LIST_POS = "currentlistpos";
-    private static final String RESUMING = "resuming";
+	private static final String RESUMING = "resuming";
 	private static final int CREATE_LIST = 0;
 	private static final int RENAME_LIST = 1;
 	private static final int DELETE_LIST = 2;
@@ -104,7 +104,7 @@ public class MainActivity extends DualLayoutActivity implements
 	private long currentListId = -1;
 	private int currentListPos = 0;
 
-    private boolean resuming = false;
+	private boolean resuming = false;
 
 	private long listIdToSelect = -1;
 	private boolean beforeBoot = false; // Used to indicate the intent handling
@@ -133,8 +133,8 @@ public class MainActivity extends DualLayoutActivity implements
 		readAndSetSettings();
 		super.onCreate(savedInstanceState);
 
-        if (savedInstanceState != null)
-            resuming = savedInstanceState.getBoolean(RESUMING);
+		if (savedInstanceState != null)
+			resuming = savedInstanceState.getBoolean(RESUMING);
 
 		if (currentContent.equals(CONTENTVIEW.DUAL)
 				|| currentContent.equals(CONTENTVIEW.LEFT)) {
@@ -310,10 +310,10 @@ public class MainActivity extends DualLayoutActivity implements
 		} else {
 			// with null adapter, must hide
 			if (deleteList != null) {
-					deleteList.setVisible(false);
+				deleteList.setVisible(false);
 			}
 			if (renameList != null) {
-					renameList.setVisible(false);
+				renameList.setVisible(false);
 			}
 		}
 
@@ -350,7 +350,7 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
-        outState.putBoolean(RESUMING, true);
+		outState.putBoolean(RESUMING, true);
 		// Save current list
 		outState.putLong(CURRENT_LIST_ID, currentListId);
 		outState.putInt(CURRENT_LIST_POS, currentListPos);
@@ -394,54 +394,57 @@ public class MainActivity extends DualLayoutActivity implements
 	}
 
 	private void handleInsertIntent(Intent intent) {
-        if (!resuming) {
-		if (intent.getType() != null
-				&& intent.getType().equals(NotePad.Lists.CONTENT_TYPE)
-				|| intent.getData() != null
-				&& intent.getData().equals(NotePad.Lists.CONTENT_VISIBLE_URI)) {
-			// get Title
-			if (intent.getExtras() != null) {
-				String title = intent.getExtras().getString(
-						NotePad.Lists.COLUMN_NAME_TITLE, "");
-				createList(title);
-			}
-		} else if (intent.getType() != null
-				&& (intent.getType().equals(NotePad.Notes.CONTENT_TYPE) || intent
-						.getType().startsWith("text/"))
-				|| intent.getData() != null
-				&& intent.getData().equals(NotePad.Notes.CONTENT_VISIBLE_URI)) {
-			Log.d("FragmentLayout", "INSERT NOTE");
-			// Get list to create note in first
-			long listId = getAList(intent);
-			String text = "";
-			if (intent.getExtras() != null) {
-				text = intent.getExtras()
-						.getCharSequence(Intent.EXTRA_TEXT, "").toString();
-			}
-
-			if (listId > -1) {
-				Uri noteUri = MainActivity.createNote(this, listId, text);
-
-				if (noteUri != null) {
-					Bundle arguments = new Bundle();
-					arguments.putLong(NotesEditorFragment.KEYID,
-							NotesEditorFragment.getIdFromUri(noteUri));
-					NotesEditorFragment fragment = new NotesEditorFragment();
-					fragment.setArguments(arguments);
-					getFragmentManager().beginTransaction()
-							.replace(R.id.rightFragment, fragment).commit();
+		if (!resuming) {
+			if (intent.getType() != null
+					&& intent.getType().equals(NotePad.Lists.CONTENT_TYPE)
+					|| intent.getData() != null
+					&& intent.getData().equals(
+							NotePad.Lists.CONTENT_VISIBLE_URI)) {
+				// get Title
+				if (intent.getExtras() != null) {
+					String title = intent.getExtras().getString(
+							NotePad.Lists.COLUMN_NAME_TITLE, "");
+					createList(title);
+				}
+			} else if (intent.getType() != null
+					&& (intent.getType().equals(NotePad.Notes.CONTENT_TYPE) || intent
+							.getType().startsWith("text/"))
+					|| intent.getData() != null
+					&& intent.getData().equals(
+							NotePad.Notes.CONTENT_VISIBLE_URI)) {
+				Log.d("FragmentLayout", "INSERT NOTE");
+				// Get list to create note in first
+				long listId = getAList(intent);
+				String text = "";
+				if (intent.getExtras() != null) {
+					text = intent.getExtras()
+							.getCharSequence(Intent.EXTRA_TEXT, "").toString();
 				}
 
-				// Open appropriate list if tablet mode
-				if (this.currentContent == CONTENTVIEW.DUAL) {
-					// Open the containing list if we have to. No need to change
-					// lists
-					// if we are already displaying all notes.
-					openListFromIntent(listId, intent);
+				if (listId > -1) {
+					Uri noteUri = MainActivity.createNote(this, listId, text);
+
+					if (noteUri != null) {
+						Bundle arguments = new Bundle();
+						arguments.putLong(NotesEditorFragment.KEYID,
+								NotesEditorFragment.getIdFromUri(noteUri));
+						NotesEditorFragment fragment = new NotesEditorFragment();
+						fragment.setArguments(arguments);
+						getFragmentManager().beginTransaction()
+								.replace(R.id.rightFragment, fragment).commit();
+					}
+
+					// Open appropriate list if tablet mode
+					if (this.currentContent == CONTENTVIEW.DUAL) {
+						// Open the containing list if we have to. No need to
+						// change
+						// lists
+						// if we are already displaying all notes.
+						openListFromIntent(listId, intent);
+					}
 				}
 			}
 		}
-        }
 	}
 
 	public static long getAList(Context context, long tempList) {
@@ -824,7 +827,7 @@ public class MainActivity extends DualLayoutActivity implements
 				|| key.equals(MainPrefs.KEY_TITLEROWS)
 				|| key.equals(MainPrefs.KEY_SORT_ORDER)
 				|| key.equals(MainPrefs.KEY_SORT_TYPE)
-            || key.equals(getString(R.string.pref_locale))
+				|| key.equals(getString(R.string.pref_locale))
 				|| key.equals(MainPrefs.KEY_LISTHEADERS)) {
 			shouldRestart = true;
 		}
@@ -839,21 +842,24 @@ public class MainActivity extends DualLayoutActivity implements
 
 		setTypeOfTheme();
 
-        // Set language
-        Configuration config = getResources().getConfiguration();
+		// Set language
+		Configuration config = getResources().getConfiguration();
 
-        String lang = prefs.getString(getString(R.string.pref_locale), "");
-        if (!config.locale.toString().equals(lang))
-        {
-            Locale locale = new Locale(lang);
-            if ("".equals(lang))
-                locale = Locale.getDefault();
-            else
-                locale = new Locale(lang);
-            //Locale.setDefault(locale);
-            config.locale = locale;
-            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-        }
+		String lang = prefs.getString(getString(R.string.pref_locale), "");
+		if (!config.locale.toString().equals(lang)) {
+			Locale locale;
+			if ("".equals(lang))
+				locale = Locale.getDefault();
+			else if (lang.length() == 5) {
+				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
+			} else {
+				locale = new Locale(lang.substring(0, 2));
+			}
+			// Locale.setDefault(locale);
+			config.locale = locale;
+			getResources().updateConfiguration(config,
+					getResources().getDisplayMetrics());
+		}
 
 		String sortType = prefs.getString(MainPrefs.KEY_SORT_TYPE,
 				NotePad.Notes.DEFAULT_SORT_TYPE);
