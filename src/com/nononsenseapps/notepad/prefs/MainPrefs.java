@@ -123,10 +123,17 @@ public class MainPrefs extends PreferenceFragment implements
 
         entries.add(getString(R.string.localedefault));
 		values.add("");
+		
+		String[] langs = getResources().getStringArray(R.array.translated_langs);
 
-        for(Locale l: Locale.getAvailableLocales()) {
+        for(String lang: langs) {
+        	Locale l;
+        	if (lang.length() > 2)
+        		l = new Locale(lang.substring(0, 2), lang.substring(3, 5));
+        	else
+        		l = new Locale(lang.substring(0, 2));
             entries.add(l.getDisplayName(l));
-            values.add(l.toString());
+            values.add(lang);
         }
         prefLang.setEntries(entries.toArray(new CharSequence[entries
 					.size()]));

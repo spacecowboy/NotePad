@@ -111,6 +111,10 @@
     <!-- Copy Config.java to our source tree, replacing custom tokens with values in build.properties. The configuration depends on "clean" because otherwise the build system will not detect changes in the configuration. -->
 
     <target name="config" >
+   <echo>
+   Making list of available languages
+   </echo>
+   <exec executable="./listlang.py" />
 
 	<echo>
 	Copying api key into source

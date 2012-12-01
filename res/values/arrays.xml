@@ -115,4 +115,28 @@
         <item>20</item>
     </string-array>
 
+    <string-array name="translated_langs" tools:ignore="MissingTranslation">
+        <item>ca</item>
+        <item>cs</item>
+        <item>de</item>
+        <item>en</item>
+        <item>es</item>
+        <item>fr</item>
+        <item>he</item>
+        <item>hu</item>
+        <item>it</item>
+        <item>iw</item>
+        <item>ja</item>
+        <item>nl</item>
+        <item>pl</item>
+        <item>pt</item>
+        <item>ru</item>
+        <item>sk</item>
+        <item>sv</item>
+        <item>tr</item>
+        <item>zh</item>
+        <item>zh_HK</item>
+        <item>zh_TW</item>
+    </string-array>
+
 </resources>
