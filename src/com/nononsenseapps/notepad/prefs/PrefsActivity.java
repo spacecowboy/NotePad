@@ -1,6 +1,7 @@
 package com.nononsenseapps.notepad.prefs;
 
 import java.util.List;
+import java.util.Locale;
 
 import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
@@ -16,6 +17,8 @@ import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import android.content.res.Configuration;
+
 public class PrefsActivity extends PreferenceActivity implements
 		PasswordChecker {
 
@@ -24,6 +27,21 @@ public class PrefsActivity extends PreferenceActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+        // Set language
+        SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+
+        Configuration config = getResources().getConfiguration();
+
+        String lang = prefs.getString(getString(R.string.pref_locale), "");
+        if (!"".equals(lang) && !config.locale.getLanguage().equals(lang))
+        {
+                Locale locale = new Locale(lang);
+                Locale.setDefault(locale);
+                config.locale = locale;
+                getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        }
 
 		// Set up navigation (adds nice arrow to icon)
 		ActionBar actionBar = getActionBar();

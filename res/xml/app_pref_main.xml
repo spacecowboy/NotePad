@@ -27,6 +27,13 @@
         android:summary="Selected option should be here"
         android:title="@string/settings_theme" />
 
+    <ListPreference
+        android:defaultValue=""
+        android:dialogTitle="@string/settings_lang_dialog"
+        android:key="@string/pref_locale"
+        android:summary="Selected option should be here"
+        android:title="@string/settings_lang" />
+
     <PreferenceCategory android:title="@string/settings_list" >
         <ListPreference
             android:defaultValue="2"

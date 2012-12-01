@@ -19,6 +19,7 @@ package com.nononsenseapps.notepad;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import sheetrock.panda.changelog.ChangeLog;
 import android.accounts.Account;
@@ -72,6 +73,8 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.ui.ListPagerAdapter;
+
+import android.content.res.Configuration;
 
 /**
  * Showing a single fragment in an activity.
@@ -821,6 +824,7 @@ public class MainActivity extends DualLayoutActivity implements
 				|| key.equals(MainPrefs.KEY_TITLEROWS)
 				|| key.equals(MainPrefs.KEY_SORT_ORDER)
 				|| key.equals(MainPrefs.KEY_SORT_TYPE)
+            || key.equals(getString(R.string.pref_locale))
 				|| key.equals(MainPrefs.KEY_LISTHEADERS)) {
 			shouldRestart = true;
 		}
@@ -834,6 +838,22 @@ public class MainActivity extends DualLayoutActivity implements
 		currentTheme = prefs.getString(MainPrefs.KEY_THEME, currentTheme);
 
 		setTypeOfTheme();
+
+        // Set language
+        Configuration config = getResources().getConfiguration();
+
+        String lang = prefs.getString(getString(R.string.pref_locale), "");
+        if (!config.locale.toString().equals(lang))
+        {
+            Locale locale = new Locale(lang);
+            if ("".equals(lang))
+                locale = Locale.getDefault();
+            else
+                locale = new Locale(lang);
+            //Locale.setDefault(locale);
+            config.locale = locale;
+            getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+        }
 
 		String sortType = prefs.getString(MainPrefs.KEY_SORT_TYPE,
 				NotePad.Notes.DEFAULT_SORT_TYPE);
