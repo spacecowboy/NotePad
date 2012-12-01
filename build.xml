@@ -116,6 +116,11 @@
    </echo>
    <exec executable="./listlang.py" />
 
+   <echo>
+     Fix missing escapes in string files
+   </echo>
+   <exec executable="./escapetranslations.py" />
+
 	<echo>
 	Copying api key into source
 	</echo>
