@@ -19,7 +19,7 @@ limitations under the License.
 
 <string tools:ignore="MissingTranslation" name="app_name">Notes</string>
 <string tools:ignore="MissingTranslation" name="title_create">Nouvelle note</string>
-<string tools:ignore="MissingTranslation" name="title_edit">Editer : %1$s</string>
+<string tools:ignore="MissingTranslation" name="title_edit">Éditer : %1$s</string>
 <string tools:ignore="MissingTranslation" name="menu_add">Nouvelle note</string>
 <string tools:ignore="MissingTranslation" name="menu_delete">Supprimer</string>
 <string tools:ignore="MissingTranslation" name="menu_revert">Annuler les changements</string>
@@ -33,13 +33,14 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="menu_preferences">Paramètres</string>
 <string tools:ignore="MissingTranslation" name="menu_renamelist">Renommer la liste</string>
 <string tools:ignore="MissingTranslation" name="menu_createlist">Créer une liste</string>
-<string tools:ignore="MissingTranslation" name="menu_clearcompleted">Effacer complétées</string>
+<string tools:ignore="MissingTranslation" name="menu_clearcompleted">Effacer les notes complétées</string>
 <string tools:ignore="MissingTranslation" name="menu_setdefaultlist">Définir comme liste par défaut</string>
+<string tools:ignore="MissingTranslation" name="menu_managelists">Gérer les listes</string>
 <string tools:ignore="MissingTranslation" name="delete_list_warning">Êtes-vous sûr de vouloir supprimer la liste ? Ceci est définitif.</string>
 <string tools:ignore="MissingTranslation" name="editor_due_date_hint">Échéance</string>
 <string tools:ignore="MissingTranslation" name="editor_title_hint">Titre</string>
 <string tools:ignore="MissingTranslation" name="editor_note_hint">Note</string>
-<string tools:ignore="MissingTranslation" name="resolve_edit">Editer la note</string>
+<string tools:ignore="MissingTranslation" name="resolve_edit">Éditer la note</string>
 <string tools:ignore="MissingTranslation" name="error_title">Erreur</string>
 <string tools:ignore="MissingTranslation" name="error_message">Erreur de chargement</string>
 <string tools:ignore="MissingTranslation" name="search_hint">Rechercher</string>
@@ -55,24 +56,24 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_type_modified">Dernière modification</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_type_duedate">Date d\'échéance</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">Position du serveur</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Ascendant</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Descendant</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Croissant</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Décroissant</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Sombre</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Clair</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">Clair, action bar sombre</string>
 <string tools:ignore="MissingTranslation" name="settings_cat_appearance">Apparence</string>
 <string tools:ignore="MissingTranslation" name="settings_font_screen">Paramètres de police</string>
 <string tools:ignore="MissingTranslation" name="settings_font_screen_summary">Vous pouvez changer la police et la taille du texte</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_font_editor">Editeur</string>
+<string tools:ignore="MissingTranslation" name="settings_cat_font_editor">Éditeur</string>
 <string tools:ignore="MissingTranslation" name="settings_font_type">Police</string>
 <string tools:ignore="MissingTranslation" name="settings_font_type_dialog">Choisir une police</string>
 <string tools:ignore="MissingTranslation" name="settings_font_size">Taille du texte</string>
 <string tools:ignore="MissingTranslation" name="preference_preview_text">Voici comment le texte apparaîtra dans l\'éditeur</string>
-<string tools:ignore="MissingTranslation" name="settings_text_preview_title">Prévisualiser</string>
+<string tools:ignore="MissingTranslation" name="settings_text_preview_title">Aperçu</string>
 <string tools:ignore="MissingTranslation" name="monospace">Monospace</string>
 <string tools:ignore="MissingTranslation" name="sans">Sans</string>
 <string tools:ignore="MissingTranslation" name="serif">Serif</string>
-<string tools:ignore="MissingTranslation" name="settings_sync_freq_title">Sync. fréquence</string>
+<string tools:ignore="MissingTranslation" name="settings_sync_freq_title">Type de synchronisation</string>
 <string tools:ignore="MissingTranslation" name="settings_account_title">Choisir un compte</string>
 <string tools:ignore="MissingTranslation" name="settings_account_summary">Cliquer pour changer de compte</string>
 <string tools:ignore="MissingTranslation" name="settings_sync_enable_title">Sync. Google Tâches</string>
@@ -103,8 +104,8 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="settings_list">Liste</string>
 <string tools:ignore="MissingTranslation" name="automatic">Automatique</string>
 
-<string tools:ignore="MissingTranslation" name="preferences_week_start_day_dialog">"1er jour de la semaine :"</string>
-<string tools:ignore="MissingTranslation" name="preferences_week_start_day_title">"1er jour de la semaine :"</string>
+<string tools:ignore="MissingTranslation" name="preferences_week_start_day_dialog">1er jour de la semaine :</string>
+<string tools:ignore="MissingTranslation" name="preferences_week_start_day_title">1er jour de la semaine :</string>
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
@@ -135,45 +136,80 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="password_cleared">Mot de passe effacé</string>
 <string tools:ignore="MissingTranslation" name="passwords_dont_match">Les mots de passe ne correspondent pas</string>
 <string tools:ignore="MissingTranslation" name="enter_password">Entrer le mot de passe</string>
-<string tools:ignore="MissingTranslation" name="enter_new_password">Entrez le mot de passe</string>
-<string tools:ignore="MissingTranslation" name="confirm_new_password">Confirmez le mot de passe</string>
+<string tools:ignore="MissingTranslation" name="enter_new_password">Entrer le nouveau mot de passe</string>
+<string tools:ignore="MissingTranslation" name="confirm_new_password">Confirmer le nouveau mot de passe</string>
 <string tools:ignore="MissingTranslation" name="apply">Appliquer</string>
 <string tools:ignore="MissingTranslation" name="clear_password">Effacer le mot de passe</string>
-<string tools:ignore="MissingTranslation" name="password_info">Après avoir défini un mot de passe, vous devrez le saisir pour voir les notes verrouillées. Le mot de passe protègera la note elle-même, mais pas le titre ni la date. La note ne sera pas cryptée donc pourra toujours être lue via Google Mail/Agenda. Si vous oubliez votre mot de passe, synchronisez les notes avec Google et réinstallez l\'application.</string>
+<string tools:ignore="MissingTranslation" name="password_info">Après avoir défini un mot de passe, vous devrez le saisir pour voir les notes verrouillées. Le mot de passe protégera la note elle-même, mais pas le titre ni la date. La note ne sera pas cryptée donc pourra toujours être lue via Google Mail/Agenda. Si vous oubliez votre mot de passe, synchronisez les notes avec Google et réinstallez l\'application.</string>
 <string tools:ignore="MissingTranslation" name="about">À propos</string>
 
-<string tools:ignore="MissingTranslation" name="sync_failed">La syncronisation a échoué</string>
-<string tools:ignore="MissingTranslation" name="sync_login_failed">La connexion à Google Tasks a échoué</string>
+<string tools:ignore="MissingTranslation" name="sync_failed">La synchronisation a échouée</string>
+<string tools:ignore="MissingTranslation" name="sync_login_failed">La connexion à Google Tâches a échouée</string>
 
+<string tools:ignore="MissingTranslation" name="changelog_full_title">Journal des modifications</string>
 <string tools:ignore="MissingTranslation" name="changelog_title">Quoi de neuf</string>
 <string tools:ignore="MissingTranslation" name="changelog_ok_button">OK</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">Titre sur 2 lignes</string>
+<string tools:ignore="MissingTranslation" name="changelog_show_full">Afficher tout</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_preview_note">Afficher l\'aperçu de la note</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">Le titre sera sur 2 lignes</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_on">La note sera sur la 2e ligne</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_show_complete">Bouton de tâche terminée</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_off">Le bouton sera masqué</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_on">Le bouton sera affiché</string>
+<string tools:ignore="MissingTranslation" name="settings_listitem">Titres sur 2 lignes</string>
+<string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">L\'aperçu de la note sera sur 2 lignes</string>
 
 <string tools:ignore="MissingTranslation" name="editor_details">Plus</string>
 <string tools:ignore="MissingTranslation" name="completed">Complété</string>
+<string tools:ignore="MissingTranslation" name="subtask_of">Sous-tâche de</string>
+<string tools:ignore="MissingTranslation" name="security">Sécurité</string>
 
+<string tools:ignore="MissingTranslation" name="date_header_overdue">En retard</string>
 <string tools:ignore="MissingTranslation" name="date_header_today">Aujourd\'hui</string>
 <string tools:ignore="MissingTranslation" name="date_header_tomorrow">Demain</string>
+<string tools:ignore="MissingTranslation" name="date_header_7days">7 prochains jours</string>
+<string tools:ignore="MissingTranslation" name="date_header_future">Plus tard</string>
+<string tools:ignore="MissingTranslation" name="date_header_none">Pas de date</string>
 <string tools:ignore="MissingTranslation" name="date_header_completed">Complété</string>
 
 <string tools:ignore="MissingTranslation" name="mod_header_yesterday">Hier</string>
 <string tools:ignore="MissingTranslation" name="mod_header_thisweek">Cette semaine</string>
 <string tools:ignore="MissingTranslation" name="mod_header_earlier">Plus tôt</string>
 
+<string tools:ignore="MissingTranslation" name="settings_listheader">Lorsque toutes les listes sont affichées</string>
+<string tools:ignore="MissingTranslation" name="settings_listheader_off">Afficher comme une seule liste</string>
+<string tools:ignore="MissingTranslation" name="settings_listheader_on">Afficher les noms des listes</string>
 
-<string tools:ignore="MissingTranslation" name="please_select_note">SVP sélectionnez ou créez une note</string>
-<string tools:ignore="MissingTranslation" name="please_create_note">SVP créez une note</string>
+<string tools:ignore="MissingTranslation" name="please_create_list">SVP créer une liste</string>
+<string tools:ignore="MissingTranslation" name="please_select_note">SVP sélectionner ou créer une note</string>
+<string tools:ignore="MissingTranslation" name="please_create_note">SVP créer une note</string>
 
+<string tools:ignore="MissingTranslation" name="hide_checkbox">Masquer la case à cocher</string>
+<string tools:ignore="MissingTranslation" name="hide_checkbox_summary_on">La case sera masquée</string>
+<string tools:ignore="MissingTranslation" name="hide_checkbox_summary_off">La case sera affichée</string>
 
+<string tools:ignore="MissingTranslation" name="hide_note">Masquer la note</string>
+<string tools:ignore="MissingTranslation" name="hide_note_summary_on">La note sera masquée</string>
+<string tools:ignore="MissingTranslation" name="hide_note_summary_off">La note sera affichée</string>
 
+<string tools:ignore="MissingTranslation" name="hide_date">Masquer la date d\'échéance</string>
+<string tools:ignore="MissingTranslation" name="hide_date_summary_on">La date sera masquée</string>
+<string tools:ignore="MissingTranslation" name="hide_date_summary_off">La date sera affichée</string>
 
+<string tools:ignore="MissingTranslation" name="title_rows">Hauteur maximale du titre</string>
+<string tools:ignore="MissingTranslation" name="title_rows_1">Une ligne</string>
+<string tools:ignore="MissingTranslation" name="title_rows_2">2 lignes</string>
+<string tools:ignore="MissingTranslation" name="title_rows_free">Pas de restriction</string>
 
 <string tools:ignore="MissingTranslation" name="saturday">Samedi</string>
 <string tools:ignore="MissingTranslation" name="sunday">Dimanche</string>
 <string tools:ignore="MissingTranslation" name="monday">Lundi</string>
+<string tools:ignore="MissingTranslation" name="localedefault">Paramètres régionaux par défaut</string>
 
 
 <!-- These should probably not be translated -->
 <string tools:ignore="MissingTranslation" name="default_notetitle">Bienvenue!</string>
+<string tools:ignore="MissingTranslation" name="default_notetext">Pour obtenir le meilleur de cette application, je vous suggère d’activer la synchronisation en premier lieu. Allez-y et appuyer sur le bouton de synchronisation dans l’action bar lorsque vous revenez à la liste. Par défaut, ceci activera la synchronisation automatique une fois à l’heure.\n\nNotez bien que ceci peut être combiné à vos préférences générales de synchronisation. En un mot, si votre compte Gmail ne se synchronise pas automatiquement, alors cette application ne le fera pas non plus. Vous pouvez désactiver, depuis les paramètres, la synchronisation automatique et rester en mode manuel.\n\nSi vous utilisez plus d’un compte Google sur votre appareil, je vous suggère d’aller dans les paramètres et de sélectionner le compte que vous désirez utiliser en mode manuel.\n\nEn fait, je recommande d’aller dans les paramètres de toute façon, simplement pour jeter un coup d’œil aux options qui s’y trouve. Vous pouvez ajuster la police, la taille du texte dans cette \nfenêtre et modifier le thème de clair à sombre.\n\nL’application inclus également un widget qui est complètement ajustable. Ajustez-le comme tout autre widget : appuyer sur le widget et maintenez-le une seconde comme pour le déplacer. Alors, plutôt que de le déplacer, vous pouvez étirer les côtés du widget pour l’agrandir ou le rapetisser.\n\nJ’espère que vous trouverez cette application utile. Gardez à l’esprit qu’elle est entièrement gratuite, sans publicité et que son code source est ouvert. Si vous avez d’autres grandes idées ou des plaintes, parlez-en moi.\n\n/Jonas</string>
+<string tools:ignore="MissingTranslation" name="about_text">Merci d’avoir téléchargé mon application ! J’essaie de mon mieux pour rendre cette application fantastique en tous points mais il y aura toujours des anomalies et les choses ne peuvent que devenir encore plus fantastiques !\n\nSi vous trouvez une anomalie, une mauvaise traduction ou simple si vous avez une idée sur comment rendre les choses encore plus fantastiques, alors je veux vous entre à ce sujet!\n\nEnvoyez-moi un message : jonas@nononsenseapps.com\n\n+1 moi: https://plus.google.com/u/0/111801385015192089838\n\nRapportez-le dans le gestionnaire d’anomalies : https://github.com/spacecowboy/NotePad/issues\n\nSi vous voulez aider à la traduction de l’application, aller au http://translate.nononsenseapps.com\n\nMerci encore d’avoir téléchargé mon application !\n\nSi vous désirez supporter le projet de façon moins active, vous pouvez toujours acheter la version donation : https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
 
 </resources>
