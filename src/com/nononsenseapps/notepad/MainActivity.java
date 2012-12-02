@@ -33,7 +33,6 @@ import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.ContentResolver;
@@ -50,7 +49,6 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.BaseColumns;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
@@ -97,8 +95,6 @@ public class MainActivity extends DualLayoutActivity implements
 	public static final int ALL_NOTES_ID = -2;
 	public static final int CREATE_LIST_ID = -3;
 
-	private Menu optionsMenu;
-
 	private SimpleCursorAdapter mSpinnerAdapter;
 	private SimpleCursorAdapter mSectionAdapter;
 	private long currentListId = -1;
@@ -133,8 +129,9 @@ public class MainActivity extends DualLayoutActivity implements
 		readAndSetSettings();
 		super.onCreate(savedInstanceState);
 
-		if (savedInstanceState != null)
+		if (savedInstanceState != null) {
 			resuming = savedInstanceState.getBoolean(RESUMING);
+		}
 
 		if (currentContent.equals(CONTENTVIEW.DUAL)
 				|| currentContent.equals(CONTENTVIEW.LEFT)) {
@@ -221,7 +218,9 @@ public class MainActivity extends DualLayoutActivity implements
 		// loader is finished
 		beforeBoot = true;
 
-		onNewIntent(getIntent());
+		if (!resuming ) {
+			onNewIntent(getIntent());
+		}
 
 		getLoaderManager().initLoader(0, null, this);
 	}
@@ -256,7 +255,9 @@ public class MainActivity extends DualLayoutActivity implements
 		if (actionBar != null) {
 			actionBar.setDisplayShowTitleEnabled(false);
 		}
-		onNewIntent(getIntent());
+		if (!resuming ) {
+			onNewIntent(getIntent());
+		}
 	}
 
 	// private void setUpList() {
@@ -281,7 +282,6 @@ public class MainActivity extends DualLayoutActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		optionsMenu = menu;
 		getMenuInflater().inflate(R.menu.main_options_menu, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -394,7 +394,6 @@ public class MainActivity extends DualLayoutActivity implements
 	}
 
 	private void handleInsertIntent(Intent intent) {
-		if (!resuming) {
 			if (intent.getType() != null
 					&& intent.getType().equals(NotePad.Lists.CONTENT_TYPE)
 					|| intent.getData() != null
@@ -445,7 +444,6 @@ public class MainActivity extends DualLayoutActivity implements
 				}
 			}
 		}
-	}
 
 	public static long getAList(Context context, long tempList) {
 		long returnList = -1;
