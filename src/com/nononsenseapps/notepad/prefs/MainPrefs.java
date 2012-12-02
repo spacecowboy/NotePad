@@ -51,6 +51,7 @@ public class MainPrefs extends PreferenceFragment implements
 	public static final String MONOSPACE = "Monospace";
 
 	public static final String THEME_DARK = "dark";
+	public static final String THEME_BLACK = "black";
 	public static final String THEME_LIGHT = "light";
 	public static final String THEME_LIGHT_ICS_AB = "light_ab";
 

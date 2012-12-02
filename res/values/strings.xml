@@ -62,6 +62,7 @@
     <string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">My order</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Ascending</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Descending</string>
+    <string tools:ignore="MissingTranslation" name="settings_summary_theme_black">Black</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Dark</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Light</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">Light, dark action bar</string>

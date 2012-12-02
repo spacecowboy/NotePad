@@ -218,7 +218,7 @@ public class MainActivity extends DualLayoutActivity implements
 		// loader is finished
 		beforeBoot = true;
 
-		if (!resuming ) {
+		if (!resuming) {
 			onNewIntent(getIntent());
 		}
 
@@ -255,7 +255,7 @@ public class MainActivity extends DualLayoutActivity implements
 		if (actionBar != null) {
 			actionBar.setDisplayShowTitleEnabled(false);
 		}
-		if (!resuming ) {
+		if (!resuming) {
 			onNewIntent(getIntent());
 		}
 	}
@@ -394,56 +394,54 @@ public class MainActivity extends DualLayoutActivity implements
 	}
 
 	private void handleInsertIntent(Intent intent) {
-			if (intent.getType() != null
-					&& intent.getType().equals(NotePad.Lists.CONTENT_TYPE)
-					|| intent.getData() != null
-					&& intent.getData().equals(
-							NotePad.Lists.CONTENT_VISIBLE_URI)) {
-				// get Title
-				if (intent.getExtras() != null) {
-					String title = intent.getExtras().getString(
-							NotePad.Lists.COLUMN_NAME_TITLE, "");
-					createList(title);
+		if (intent.getType() != null
+				&& intent.getType().equals(NotePad.Lists.CONTENT_TYPE)
+				|| intent.getData() != null
+				&& intent.getData().equals(NotePad.Lists.CONTENT_VISIBLE_URI)) {
+			// get Title
+			if (intent.getExtras() != null) {
+				String title = intent.getExtras().getString(
+						NotePad.Lists.COLUMN_NAME_TITLE, "");
+				createList(title);
+			}
+		} else if (intent.getType() != null
+				&& (intent.getType().equals(NotePad.Notes.CONTENT_TYPE) || intent
+						.getType().startsWith("text/"))
+				|| intent.getData() != null
+				&& intent.getData().equals(NotePad.Notes.CONTENT_VISIBLE_URI)) {
+			Log.d("FragmentLayout", "INSERT NOTE");
+			// Get list to create note in first
+			long listId = getAList(intent);
+			String text = "";
+			if (intent.getExtras() != null) {
+				text = intent.getExtras()
+						.getCharSequence(Intent.EXTRA_TEXT, "").toString();
+			}
+
+			if (listId > -1) {
+				Uri noteUri = MainActivity.createNote(this, listId, text);
+
+				if (noteUri != null) {
+					Bundle arguments = new Bundle();
+					arguments.putLong(NotesEditorFragment.KEYID,
+							NotesEditorFragment.getIdFromUri(noteUri));
+					NotesEditorFragment fragment = new NotesEditorFragment();
+					fragment.setArguments(arguments);
+					getFragmentManager().beginTransaction()
+							.replace(R.id.rightFragment, fragment).commit();
 				}
-			} else if (intent.getType() != null
-					&& (intent.getType().equals(NotePad.Notes.CONTENT_TYPE) || intent
-							.getType().startsWith("text/"))
-					|| intent.getData() != null
-					&& intent.getData().equals(
-							NotePad.Notes.CONTENT_VISIBLE_URI)) {
-				Log.d("FragmentLayout", "INSERT NOTE");
-				// Get list to create note in first
-				long listId = getAList(intent);
-				String text = "";
-				if (intent.getExtras() != null) {
-					text = intent.getExtras()
-							.getCharSequence(Intent.EXTRA_TEXT, "").toString();
-				}
 
-				if (listId > -1) {
-					Uri noteUri = MainActivity.createNote(this, listId, text);
-
-					if (noteUri != null) {
-						Bundle arguments = new Bundle();
-						arguments.putLong(NotesEditorFragment.KEYID,
-								NotesEditorFragment.getIdFromUri(noteUri));
-						NotesEditorFragment fragment = new NotesEditorFragment();
-						fragment.setArguments(arguments);
-						getFragmentManager().beginTransaction()
-								.replace(R.id.rightFragment, fragment).commit();
-					}
-
-					// Open appropriate list if tablet mode
-					if (this.currentContent == CONTENTVIEW.DUAL) {
-						// Open the containing list if we have to. No need to
-						// change
-						// lists
-						// if we are already displaying all notes.
-						openListFromIntent(listId, intent);
-					}
+				// Open appropriate list if tablet mode
+				if (this.currentContent == CONTENTVIEW.DUAL) {
+					// Open the containing list if we have to. No need to
+					// change
+					// lists
+					// if we are already displaying all notes.
+					openListFromIntent(listId, intent);
 				}
 			}
 		}
+	}
 
 	public static long getAList(Context context, long tempList) {
 		long returnList = -1;
@@ -875,6 +873,8 @@ public class MainActivity extends DualLayoutActivity implements
 			setTheme(R.style.ThemeHoloLightDarkActonBar);
 		} else if (MainPrefs.THEME_LIGHT.equals(currentTheme)) {
 			setTheme(R.style.ThemeHoloLight);
+		} else if (MainPrefs.THEME_BLACK.equals(currentTheme)) {
+			setTheme(R.style.ThemeHoloBlack);
 		} else {
 			setTheme(R.style.ThemeHolo);
 		}
