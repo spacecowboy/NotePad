@@ -15,13 +15,16 @@
      limitations under the License.
 -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:minResizeWidth ="110dp"
-    android:minResizeHeight="110dp"
-    android:minWidth ="180dp"
-    android:minHeight="110dp"
-    android:updatePeriodMillis="86400000"
+    android:configure="com.nononsenseapps.notepad.widget.ListWidgetConfigure"
     android:initialLayout="@layout/listwidget"
-    android:resizeMode="horizontal|vertical"
+    android:minHeight="110dp"
+    android:minResizeHeight="110dp"
+    android:minResizeWidth="110dp"
+    android:minWidth="180dp"
     android:previewImage="@drawable/preview_ori_portrait"
-    android:configure="com.nononsenseapps.notepad.widget.ListWidgetConfigure" >
+    android:resizeMode="horizontal|vertical"
+    android:updatePeriodMillis="86400000"
+    android:initialKeyguardLayout="@layout/listwidget"
+    android:widgetCategory="keyguard|home_screen" >
+
 </appwidget-provider>
