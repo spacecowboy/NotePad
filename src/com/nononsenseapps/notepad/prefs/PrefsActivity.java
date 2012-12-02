@@ -1,7 +1,9 @@
 package com.nononsenseapps.notepad.prefs;
 
 import java.util.List;
+import java.util.Locale;
 
+import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad_donate.R;
@@ -16,6 +18,8 @@ import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import android.content.res.Configuration;
+
 public class PrefsActivity extends PreferenceActivity implements
 		PasswordChecker {
 
@@ -24,6 +28,28 @@ public class PrefsActivity extends PreferenceActivity implements
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		// Set language
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+
+		Configuration config = getResources().getConfiguration();
+
+		String lang = prefs.getString(getString(R.string.pref_locale), "");
+		if (!config.locale.toString().equals(lang)) {
+			Locale locale;
+			if ("".equals(lang))
+				locale = Locale.getDefault();
+			else if (lang.length() == 5) {
+				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
+			} else {
+				locale = new Locale(lang.substring(0, 2));
+			}
+			// Locale.setDefault(locale);
+			config.locale = locale;
+			getResources().updateConfiguration(config,
+					getResources().getDisplayMetrics());
+		}
 
 		// Set up navigation (adds nice arrow to icon)
 		ActionBar actionBar = getActionBar();
@@ -78,8 +104,8 @@ public class PrefsActivity extends PreferenceActivity implements
 			Toast.makeText(
 					this,
 					("".equals(pendingNewPassword)) ? getText(R.string.password_cleared)
-							: getText(R.string.password_set), Toast.LENGTH_SHORT)
-					.show();
+							: getText(R.string.password_set),
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 }

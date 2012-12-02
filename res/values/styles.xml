@@ -35,8 +35,8 @@
 		
 		<item name="my_list_selector">@style/ListIndicatorDark</item>
 		
-		<item name="my_list_background">@android:color/black</item>
-		<item name="editorBackgroundColor">@android:color/black</item>
+		<item name="my_list_background">@drawable/background_holo_dark</item>
+		<item name="editorBackgroundColor">@drawable/background_holo_dark</item>
 		
 		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
@@ -47,8 +47,15 @@
 		<item name="expander_close_holo">@drawable/expander_close_holo_dark</item>
 		
 		<item name="list_divider_holo">@drawable/list_divider_holo_dark</item>
+		
+		<item name="viewpager_bg">@android:drawable/dark_header</item>
 
 	</style>
+	
+    <style name="ThemeHoloBlack" parent="@style/ThemeHolo">
+        <item name="my_list_background">@android:color/black</item>
+		<item name="editorBackgroundColor">@android:color/black</item>
+    </style>
 	
 	<style name="ThemeHoloLight" parent="@android:style/Theme.Holo.Light">
 	    <item name="navigation_refresh">@drawable/navigation_refresh_light </item>
@@ -79,6 +86,8 @@
 		<item name="expander_close_holo">@drawable/expander_close_holo_light</item>
 		
 		<item name="list_divider_holo">@drawable/list_divider_holo_light</item>
+		
+		<item name="viewpager_bg">@color/viewpager_blue</item>
 	
 	</style>
 
@@ -114,6 +123,7 @@
 		
 		<item name="list_divider_holo">@drawable/list_divider_holo_light</item>
 		
+		<item name="viewpager_bg">@color/viewpager_blue</item>
 
 	</style>
 	

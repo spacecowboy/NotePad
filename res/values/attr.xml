@@ -42,4 +42,6 @@
 	<attr name="expander_close_holo" format="reference" />
 	<attr name="list_divider_holo" format="reference" />
 	
+	<attr name="viewpager_bg" format="reference" />
+	
 </resources>
