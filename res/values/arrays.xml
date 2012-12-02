@@ -18,11 +18,13 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string-array name="theme_preference" tools:ignore="InconsistentArrays">
         <item>@string/settings_summary_theme_dark</item>
+        <item>@string/settings_summary_theme_black</item>
         <item>@string/settings_summary_theme_light</item>
     </string-array>
 
     <string-array name="themevalues_preference" tools:ignore="MissingTranslation,InconsistentArrays">
         <item>dark</item>
+        <item>black</item>
         <item>light</item>
     </string-array>
     
@@ -113,6 +115,30 @@
         <item>1</item>
         <item>2</item>
         <item>20</item>
+    </string-array>
+
+    <string-array name="translated_langs" tools:ignore="MissingTranslation">
+        <item>ca</item>
+        <item>cs</item>
+        <item>de</item>
+        <item>en</item>
+        <item>es</item>
+        <item>fr</item>
+        <item>ga</item>
+        <item>he</item>
+        <item>hu</item>
+        <item>it</item>
+        <item>iw</item>
+        <item>ja</item>
+        <item>nl</item>
+        <item>pl</item>
+        <item>pt</item>
+        <item>ru</item>
+        <item>sk</item>
+        <item>sv</item>
+        <item>tr</item>
+        <item>zh_CN</item>
+        <item>zh_TW</item>
     </string-array>
 
 </resources>

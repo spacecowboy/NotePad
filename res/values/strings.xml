@@ -46,6 +46,10 @@
     <string tools:ignore="MissingTranslation" name="search_hint">Search</string>
     <string tools:ignore="MissingTranslation" name="settings_theme">Current theme</string>
     <string tools:ignore="MissingTranslation" name="settings_theme_dialog">Use theme</string>
+
+    <string tools:ignore="MissingTranslation" name="settings_lang">Language</string>
+    <string tools:ignore="MissingTranslation" name="settings_lang_dialog">@string/settings_lang</string>
+
     <string tools:ignore="MissingTranslation" name="settings_cat_theme">Theme</string>
     <string tools:ignore="MissingTranslation" name="settings_cat_sorting">Sorting</string>
     <string tools:ignore="MissingTranslation" name="settings_sorting_type">Sorting on</string>
@@ -58,6 +62,7 @@
     <string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">My order</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Ascending</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Descending</string>
+    <string tools:ignore="MissingTranslation" name="settings_summary_theme_black">Black</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Dark</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Light</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">Light, dark action bar</string>
@@ -241,5 +246,9 @@
 
 \n\nAgain, thanks for downloading my app!
 \nIf you\'d like to support the project in a less active way, you can always buy the donate version: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
+
+<!-- settings string keys -->
+<string tools:ignore="MissingTranslation" name="pref_locale">pref_key_locale</string>
+
 
 </resources>

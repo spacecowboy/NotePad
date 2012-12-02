@@ -1620,7 +1620,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						return 1;
 					if (m2 == null)
 						return -1;
-					if (ordering.equals(NotePad.Notes.DESCENDING_SORT_ORDERING))
+					if (ordering.equals(NotePad.Notes.ASCENDING_SORT_ORDERING))
 						return m1.compareTo(m2);
 					else
 						return m2.compareTo(m1);
@@ -1749,7 +1749,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						return 1;
 					if (m2 == null)
 						return -1;
-					if (ordering.equals(NotePad.Notes.ASCENDING_SORT_ORDERING))
+					if (ordering.equals(NotePad.Notes.DESCENDING_SORT_ORDERING))
 						return m1.compareTo(m2);
 					else
 						return m2.compareTo(m1);

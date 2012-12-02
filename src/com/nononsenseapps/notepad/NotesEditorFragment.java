@@ -277,7 +277,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		String text = noteAttrs.getFullNote(mText.getText().toString());
 
 		title = !mTitle.getText().toString().equals(mOriginalTitle);
-		note = !text.equals(mOriginalNote);
+        if (mText.isEnabled())
+            note = !text.equals(mOriginalNote);
+        else
+            note = false;
 		completed = mCompleteChanged;
 		date = dueDateSet != mOriginalDueState
 				|| (dueDateSet && !noteDueDate.format3339(false).equals(
@@ -362,11 +365,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		if (mUri != null) {
 			activity.getContentResolver().update(mUri, values, null, null);
-		} else {
+                /*} else {
 			mUri = activity.getContentResolver().insert(
 					NotePad.Notes.CONTENT_URI, values);
 			id = getIdFromUri(mUri);
-		}
+            }*/
 		UpdateNotifier.notifyChangeNote(activity, mUri);
 		// update changed variable
 		mOriginalTitle = title;
@@ -375,6 +378,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 		mCompleteChanged = false;
 		mOriginalListId = listId;
+        }
 	}
 
 	private String makeTitle(String text) {
@@ -449,7 +453,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			id = getArguments().getLong(KEYID);
 		}
 		if (savedInstanceState != null && savedInstanceState.containsKey(KEYID)) {
-			id = savedInstanceState.getLong(KEYID);
+			if (-1 < savedInstanceState.getLong(KEYID))
+                id = savedInstanceState.getLong(KEYID);
 		}
 
 		noteDueDate = new Time(Time.getCurrentTimezone());

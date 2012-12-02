@@ -19,6 +19,7 @@ package com.nononsenseapps.notepad;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Locale;
 
 import sheetrock.panda.changelog.ChangeLog;
 import android.accounts.Account;
@@ -32,7 +33,6 @@ import android.app.ActionBar;
 import android.app.ActionBar.OnNavigationListener;
 import android.app.Activity;
 import android.app.Dialog;
-import android.app.Fragment;
 import android.app.LoaderManager;
 import android.app.SearchManager;
 import android.content.ContentResolver;
@@ -49,7 +49,6 @@ import android.database.SQLException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.BaseColumns;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
@@ -73,6 +72,8 @@ import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.ui.ListPagerAdapter;
 
+import android.content.res.Configuration;
+
 /**
  * Showing a single fragment in an activity.
  */
@@ -82,6 +83,7 @@ public class MainActivity extends DualLayoutActivity implements
 	private static final String TAG = "FragmentLayout";
 	private static final String CURRENT_LIST_ID = "currentlistid";
 	private static final String CURRENT_LIST_POS = "currentlistpos";
+	private static final String RESUMING = "resuming";
 	private static final int CREATE_LIST = 0;
 	private static final int RENAME_LIST = 1;
 	private static final int DELETE_LIST = 2;
@@ -93,12 +95,12 @@ public class MainActivity extends DualLayoutActivity implements
 	public static final int ALL_NOTES_ID = -2;
 	public static final int CREATE_LIST_ID = -3;
 
-	private Menu optionsMenu;
-
 	private SimpleCursorAdapter mSpinnerAdapter;
 	private SimpleCursorAdapter mSectionAdapter;
 	private long currentListId = -1;
 	private int currentListPos = 0;
+
+	private boolean resuming = false;
 
 	private long listIdToSelect = -1;
 	private boolean beforeBoot = false; // Used to indicate the intent handling
@@ -126,6 +128,10 @@ public class MainActivity extends DualLayoutActivity implements
 		// Must set theme before calling super
 		readAndSetSettings();
 		super.onCreate(savedInstanceState);
+
+		if (savedInstanceState != null) {
+			resuming = savedInstanceState.getBoolean(RESUMING);
+		}
 
 		if (currentContent.equals(CONTENTVIEW.DUAL)
 				|| currentContent.equals(CONTENTVIEW.LEFT)) {
@@ -212,7 +218,9 @@ public class MainActivity extends DualLayoutActivity implements
 		// loader is finished
 		beforeBoot = true;
 
-		onNewIntent(getIntent());
+		if (!resuming) {
+			onNewIntent(getIntent());
+		}
 
 		getLoaderManager().initLoader(0, null, this);
 	}
@@ -247,7 +255,9 @@ public class MainActivity extends DualLayoutActivity implements
 		if (actionBar != null) {
 			actionBar.setDisplayShowTitleEnabled(false);
 		}
-		onNewIntent(getIntent());
+		if (!resuming) {
+			onNewIntent(getIntent());
+		}
 	}
 
 	// private void setUpList() {
@@ -272,7 +282,6 @@ public class MainActivity extends DualLayoutActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		optionsMenu = menu;
 		getMenuInflater().inflate(R.menu.main_options_menu, menu);
 		return super.onCreateOptionsMenu(menu);
 	}
@@ -301,10 +310,10 @@ public class MainActivity extends DualLayoutActivity implements
 		} else {
 			// with null adapter, must hide
 			if (deleteList != null) {
-					deleteList.setVisible(false);
+				deleteList.setVisible(false);
 			}
 			if (renameList != null) {
-					renameList.setVisible(false);
+				renameList.setVisible(false);
 			}
 		}
 
@@ -341,6 +350,7 @@ public class MainActivity extends DualLayoutActivity implements
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		super.onSaveInstanceState(outState);
+		outState.putBoolean(RESUMING, true);
 		// Save current list
 		outState.putLong(CURRENT_LIST_ID, currentListId);
 		outState.putInt(CURRENT_LIST_POS, currentListPos);
@@ -423,7 +433,8 @@ public class MainActivity extends DualLayoutActivity implements
 
 				// Open appropriate list if tablet mode
 				if (this.currentContent == CONTENTVIEW.DUAL) {
-					// Open the containing list if we have to. No need to change
+					// Open the containing list if we have to. No need to
+					// change
 					// lists
 					// if we are already displaying all notes.
 					openListFromIntent(listId, intent);
@@ -812,6 +823,7 @@ public class MainActivity extends DualLayoutActivity implements
 				|| key.equals(MainPrefs.KEY_TITLEROWS)
 				|| key.equals(MainPrefs.KEY_SORT_ORDER)
 				|| key.equals(MainPrefs.KEY_SORT_TYPE)
+				|| key.equals(getString(R.string.pref_locale))
 				|| key.equals(MainPrefs.KEY_LISTHEADERS)) {
 			shouldRestart = true;
 		}
@@ -825,6 +837,25 @@ public class MainActivity extends DualLayoutActivity implements
 		currentTheme = prefs.getString(MainPrefs.KEY_THEME, currentTheme);
 
 		setTypeOfTheme();
+
+		// Set language
+		Configuration config = getResources().getConfiguration();
+
+		String lang = prefs.getString(getString(R.string.pref_locale), "");
+		if (!config.locale.toString().equals(lang)) {
+			Locale locale;
+			if ("".equals(lang))
+				locale = Locale.getDefault();
+			else if (lang.length() == 5) {
+				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
+			} else {
+				locale = new Locale(lang.substring(0, 2));
+			}
+			// Locale.setDefault(locale);
+			config.locale = locale;
+			getResources().updateConfiguration(config,
+					getResources().getDisplayMetrics());
+		}
 
 		String sortType = prefs.getString(MainPrefs.KEY_SORT_TYPE,
 				NotePad.Notes.DEFAULT_SORT_TYPE);
@@ -842,6 +873,8 @@ public class MainActivity extends DualLayoutActivity implements
 			setTheme(R.style.ThemeHoloLightDarkActonBar);
 		} else if (MainPrefs.THEME_LIGHT.equals(currentTheme)) {
 			setTheme(R.style.ThemeHoloLight);
+		} else if (MainPrefs.THEME_BLACK.equals(currentTheme)) {
+			setTheme(R.style.ThemeHoloBlack);
 		} else {
 			setTheme(R.style.ThemeHolo);
 		}
