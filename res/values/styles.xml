@@ -47,6 +47,8 @@
 		<item name="expander_close_holo">@drawable/expander_close_holo_dark</item>
 		
 		<item name="list_divider_holo">@drawable/list_divider_holo_dark</item>
+		
+		<item name="viewpager_bg">@color/viewpager_darkgrey</item>
 
 	</style>
 	
@@ -79,6 +81,8 @@
 		<item name="expander_close_holo">@drawable/expander_close_holo_light</item>
 		
 		<item name="list_divider_holo">@drawable/list_divider_holo_light</item>
+		
+		<item name="viewpager_bg">@color/viewpager_blue</item>
 	
 	</style>
 
@@ -114,6 +118,7 @@
 		
 		<item name="list_divider_holo">@drawable/list_divider_holo_light</item>
 		
+		<item name="viewpager_bg">@color/viewpager_blue</item>
 
 	</style>
 	

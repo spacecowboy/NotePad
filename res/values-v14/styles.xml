@@ -48,6 +48,8 @@
 		
 		<item name="list_divider_holo">@drawable/list_divider_holo_light</item>
 		
+		<item name="viewpager_bg">@color/viewpager_darkgrey</item>
+		
 	</style>
 	
 </resources>
