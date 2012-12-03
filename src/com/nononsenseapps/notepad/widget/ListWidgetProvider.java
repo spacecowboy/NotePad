@@ -178,51 +178,96 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		String listTitle = getListTitle(context, settings, listId);
 		rv.setCharSequence(R.id.titleButton, "setText", listTitle);
 
-		// Bind a click listener template for the contents of the list.
-		// Note that we
-		// need to update the intent's data if we set an extra, since the extras
-		// will be
-		// ignored otherwise.
-		Intent onClickIntent = new Intent(context, ListWidgetProvider.class);
-		// /onClickIntent.setAction(ListWidgetProvider.CLICK_ACTION)
-		onClickIntent
-				.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-				.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId).setData(data);
+		/*
+		 * Bind a click listener template for the contents of the list. Note
+		 * that we need to update the intent's data if we set an extra, since
+		 * the extras will be ignored otherwise.
+		 */
+		if (context.getResources().getBoolean(R.bool.atLeast16)) {
+			Intent appIntent = new Intent();
+			appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+					| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			appIntent.setAction(Intent.ACTION_EDIT);
 
-		PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(
-				context, 0, onClickIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		rv.setPendingIntentTemplate(R.id.notes_list, onClickPendingIntent);
+			PendingIntent onClickPendingIntent = PendingIntent.getActivity(
+					context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			rv.setPendingIntentTemplate(R.id.notes_list, onClickPendingIntent);
+		} else {
 
-		// Complete button
-		// Intent completeIntent = new Intent(context,
-		// ListWidgetProvider.class);
-		// completeIntent.setAction(ListWidgetProvider.COMPLETE_ACTION)
-		// .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-		// .putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId).setData(data);
-		//
-		// PendingIntent completePendingIntent = PendingIntent.getBroadcast(
-		// context, 0, completeIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		// rv.setPendingIntentTemplate(R.id.widget_complete_task,
-		// completePendingIntent);
+			Intent onClickIntent = new Intent(context, ListWidgetProvider.class);
+			// /onClickIntent.setAction(ListWidgetProvider.CLICK_ACTION)
+			onClickIntent
+					.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+					.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId)
+					.setData(data);
+
+			PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(
+					context, 0, onClickIntent,
+					PendingIntent.FLAG_UPDATE_CURRENT);
+			rv.setPendingIntentTemplate(R.id.notes_list, onClickPendingIntent);
+		}
 
 		// Bind the click intent for the button on the widget
-		Intent openAppIntent = new Intent(context, ListWidgetProvider.class);
-		openAppIntent.setAction(ListWidgetProvider.OPEN_ACTION);
-		openAppIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
-		openAppIntent.setData(data);
-		PendingIntent openAppPendingIntent = PendingIntent.getBroadcast(
-				context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+		// Branch for API 16 to enable lockscreen functionality
+
+		PendingIntent openAppPendingIntent;
+
+		if (context.getResources().getBoolean(R.bool.atLeast16)) {
+			Intent appIntent = new Intent();
+			appIntent
+					.setFlags(
+							Intent.FLAG_ACTIVITY_NEW_TASK
+									| Intent.FLAG_ACTIVITY_CLEAR_TASK)
+					.setClass(context, MainActivity.class)
+					.setAction(Intent.ACTION_VIEW)
+					.setData(
+							Uri.withAppendedPath(
+									NotePad.Lists.CONTENT_VISIBLE_ID_URI_BASE,
+									Long.toString(listId)));
+			openAppPendingIntent = PendingIntent.getActivity(context, 0,
+					appIntent, 0);
+		} else {
+			Intent openAppIntent = new Intent(context, ListWidgetProvider.class);
+			openAppIntent.setAction(ListWidgetProvider.OPEN_ACTION);
+			openAppIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
+			openAppIntent.setData(data);
+
+			openAppPendingIntent = PendingIntent.getBroadcast(context, 0,
+					openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		}
+
 		rv.setOnClickPendingIntent(R.id.openAppButton, openAppPendingIntent);
 		// Bind the click intent for the button on the widget
 		rv.setOnClickPendingIntent(R.id.titleButton, openAppPendingIntent);
+
 		// Create button
-		Intent createIntent = new Intent(context, ListWidgetProvider.class);
-		createIntent.setAction(ListWidgetProvider.CREATE_ACTION);
-		createIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
-		createIntent.setData(data);
-		PendingIntent createPendingIntent = PendingIntent.getBroadcast(context,
-				0, createIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		rv.setOnClickPendingIntent(R.id.createNoteButton, createPendingIntent);
+		if (context.getResources().getBoolean(R.bool.atLeast16)) {
+			Intent createIntent = new Intent();
+			createIntent
+					.setFlags(
+							Intent.FLAG_ACTIVITY_NEW_TASK
+									| Intent.FLAG_ACTIVITY_CLEAR_TASK)
+					.setClass(context, RightActivity.class)
+					.setAction(Intent.ACTION_INSERT)
+					.setData(NotePad.Notes.CONTENT_VISIBLE_URI)
+					.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
+
+			PendingIntent createPendingIntent = PendingIntent.getActivity(
+					context, 0, createIntent, 0);
+			rv.setOnClickPendingIntent(R.id.createNoteButton,
+					createPendingIntent);
+		} else {
+			Intent createIntent = new Intent(context, ListWidgetProvider.class);
+			createIntent.setAction(ListWidgetProvider.CREATE_ACTION);
+			createIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
+			createIntent.setData(data);
+			PendingIntent createPendingIntent = PendingIntent
+					.getBroadcast(context, 0, createIntent,
+							PendingIntent.FLAG_UPDATE_CURRENT);
+			rv.setOnClickPendingIntent(R.id.createNoteButton,
+					createPendingIntent);
+		}
 
 		return rv;
 	}
@@ -231,8 +276,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	// file
 	private static String getListTitle(Context mContext,
 			SharedPreferences settings, long listId) {
-		String title = "";
-		// mContext.getText(R.string.show_from_all_lists).toString();
+		String title = mContext.getString(R.string.app_name);
 
 		Cursor c = mContext.getContentResolver().query(
 				NotePad.Lists.CONTENT_URI,

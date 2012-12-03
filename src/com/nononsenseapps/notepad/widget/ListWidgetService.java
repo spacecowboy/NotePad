@@ -28,6 +28,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.audiofx.BassBoost.Settings;
+import android.net.Uri;
 import android.os.Bundle;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
@@ -184,14 +185,24 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		// message
 
 		long listId = Long.parseLong(settings.getString(
-				ListWidgetConfigure.KEY_LIST,
-				"-1"));
+				ListWidgetConfigure.KEY_LIST, "-1"));
 
-		final Intent fillInIntent = new Intent();
-		fillInIntent.setAction(ListWidgetProvider.CLICK_ACTION);
-		fillInIntent.putExtra(ListWidgetProvider.EXTRA_NOTE_ID, noteId);
-		fillInIntent.putExtra(ListWidgetProvider.EXTRA_LIST_ID, listId);
-		rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
+		if (mContext.getResources().getBoolean(R.bool.atLeast16)) {
+			final Intent fillInIntent = new Intent();
+			fillInIntent.setData(
+					Uri.withAppendedPath(
+							NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,
+							Long.toString(noteId))).putExtra(
+					NotePad.Notes.COLUMN_NAME_LIST, listId);
+
+			rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
+		} else {
+			final Intent fillInIntent = new Intent();
+			fillInIntent.setAction(ListWidgetProvider.CLICK_ACTION);
+			fillInIntent.putExtra(ListWidgetProvider.EXTRA_NOTE_ID, noteId);
+			fillInIntent.putExtra(ListWidgetProvider.EXTRA_LIST_ID, listId);
+			rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
+		}
 
 		final Intent completeFillIntent = new Intent();
 		completeFillIntent.setAction(ListWidgetProvider.COMPLETE_ACTION);
@@ -230,8 +241,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				Context.MODE_PRIVATE);
 		if (settings != null) {
 			listId = Long.parseLong(settings.getString(
-					ListWidgetConfigure.KEY_LIST,
-					"-1"));
+					ListWidgetConfigure.KEY_LIST, "-1"));
 
 			// getListTitle(settings, listId);
 
