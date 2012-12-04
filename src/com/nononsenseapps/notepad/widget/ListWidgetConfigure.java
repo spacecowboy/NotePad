@@ -58,8 +58,11 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 	public static final String KEY_SORT_TYPE = "widget_key_sort_type";
 	public static final String KEY_SORT_ORDER = "widget_key_sort_order";
 	public static final String KEY_THEME = "widget_key_current_theme";
-	public static final String KEY_PREVIEW_NOTE = "widget_key_preview_note";
-	public static final String KEY_SHOW_COMPLETE = "widget_key_show_complete";
+	
+	public static final String widget_key_hiddennote = "widget_key_hiddennote";
+	public static final String widget_key_hiddendate = "widget_key_hiddendate";
+	public static final String widget_key_hiddencheckbox = "widget_key_hiddencheckbox";
+	public static final String widget_key_titlerows = "widget_key_titlerows";
 
 	public static final String THEME_LIGHT = "light";
 	public static final String THEME_DARK = "dark";
@@ -118,8 +121,10 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 				.putString(KEY_SORT_ORDER,
 						NotePad.Notes.ASCENDING_SORT_ORDERING)
 				.putString(KEY_SORT_TYPE, MainPrefs.DUEDATESORT)
-				.putBoolean(KEY_PREVIEW_NOTE, false)
-				.putBoolean(KEY_SHOW_COMPLETE, false).commit();
+				.putBoolean(widget_key_hiddencheckbox, false)
+				.putBoolean(widget_key_hiddennote, false)
+				.putBoolean(widget_key_hiddendate, false)
+				.putString(widget_key_titlerows, "2").commit();
 	}
 
 	/**
@@ -163,7 +168,8 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			String key) {
 
 		if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID) {
-			if (KEY_PREVIEW_NOTE.equals(key) || KEY_SHOW_COMPLETE.equals(key)) {
+			if (widget_key_hiddennote.equals(key) || widget_key_hiddencheckbox.equals(key)
+					|| widget_key_hiddendate.equals(key)) {
 				getSharedPreferences(getSharedPrefsFile(appWidgetId),
 						MODE_PRIVATE)
 						.edit()
@@ -332,10 +338,14 @@ public class ListWidgetConfigure extends PreferenceActivity implements
 			themePref.setValue(ListWidgetConfigure.THEME_LIGHT);
 			themePref.setSummary(themePref.getEntry());
 
-			((CheckBoxPreference) findPreference(KEY_PREVIEW_NOTE))
+			((CheckBoxPreference) findPreference(widget_key_hiddencheckbox))
 					.setChecked(false);
-			((CheckBoxPreference) findPreference(KEY_SHOW_COMPLETE))
+			((CheckBoxPreference) findPreference(widget_key_hiddendate))
 					.setChecked(false);
+			((CheckBoxPreference) findPreference(widget_key_hiddennote))
+			.setChecked(false);
+			((ListPreference) findPreference(widget_key_titlerows))
+			.setValue("2");
 		}
 
 		@Override

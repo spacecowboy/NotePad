@@ -50,14 +50,14 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 	@Override
 	public void onEnabled(Context context) {
-		// Register for external updates to the data to trigger an update of the
-		// widget. When using
-		// content providers, the data is often updated via a background
-		// service, or in response to
-		// user interaction in the main app. To ensure that the widget always
-		// reflects the current
-		// state of the data, we must listen for changes and update ourselves
-		// accordingly.
+		/*
+		 * Register for external updates to the data to trigger an update of the
+		 * widget. When using content providers, the data is often updated via a
+		 * background service, or in response to user interaction in the main
+		 * app. To ensure that the widget always reflects the current state of
+		 * the data, we must listen for changes and update ourselves
+		 * accordingly.
+		 */
 	}
 
 	@Override
