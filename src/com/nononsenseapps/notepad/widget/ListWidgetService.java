@@ -25,7 +25,6 @@ import com.nononsenseapps.ui.DateView;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.media.audiofx.BassBoost.Settings;
 import android.net.Uri;
@@ -90,9 +89,11 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 	public RemoteViews getViewAt(int position) {
 		// Get widget settings
-		SharedPreferences settings = mContext.getSharedPreferences(
-				ListWidgetConfigure.getSharedPrefsFile(mAppWidgetId),
-				Context.MODE_PRIVATE);
+		WidgetPrefs settings = new WidgetPrefs(mContext, mAppWidgetId);
+		
+		if (!settings.isPresent()) {
+			return null;
+		}
 
 		// Get the data for this position from the content provider
 		String title = "";
@@ -130,7 +131,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 				// if (settings != null) {
 				// String sortChoice = settings.getString(
-				// ListWidgetConfigure.KEY_SORT_TYPE,
+				// ListWidgetConfig.KEY_SORT_TYPE,
 				// MainPrefs.DUEDATESORT);
 				// if (sortChoice.equals(MainPrefs.POSSUBSORT)) {
 				// int indentLevel = mCursor.getInt(indentIndex);
@@ -149,9 +150,9 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 				final int itemId;
 				if (settings != null
-						&& ListWidgetConfigure.THEME_DARK.equals(settings
-								.getString(ListWidgetConfigure.KEY_THEME,
-										ListWidgetConfigure.THEME_LIGHT))) {
+						&& mContext.getString(R.string.const_theme_dark).equals(settings
+								.getString(ListWidgetConfig.KEY_THEME,
+										mContext.getString(R.string.const_theme_light)))) {
 					itemId = R.layout.widgetlist_item_dark;
 				} else {
 					itemId = R.layout.widgetlist_item;
@@ -159,20 +160,23 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				rv = new RemoteViews(mContext.getPackageName(), itemId);
 
 				rv.setViewVisibility(R.id.widget_complete_task, settings
-						.getBoolean(ListWidgetConfigure.widget_key_hiddencheckbox,
+						.getBoolean(ListWidgetConfig.KEY_HIDDENCHECKBOX,
 								false) ?  View.GONE : View.VISIBLE);
-				rv.setViewVisibility(
-						R.id.widget_itemNote,
-						settings.getBoolean(
-								ListWidgetConfigure.widget_key_hiddennote, false) ? 
-								 View.GONE:View.VISIBLE);
-				rv.setViewVisibility(
-						R.id.widget_itemDate,
-						settings.getBoolean(
-								ListWidgetConfigure.widget_key_hiddendate, false) ? 
-								 View.GONE:View.VISIBLE);
 				
-				String lines = settings.getString(ListWidgetConfigure.widget_key_titlerows, "2");
+				if (note == null || note.isEmpty() || settings.getBoolean(
+						ListWidgetConfig.KEY_HIDDENNOTE, false))
+					rv.setViewVisibility(R.id.widget_itemNote, View.GONE);
+				else
+					rv.setViewVisibility(R.id.widget_itemNote, View.VISIBLE);
+				
+				if (date == null || date.isEmpty() || settings.getBoolean(
+						ListWidgetConfig.KEY_HIDDENDATE, false))
+					rv.setViewVisibility(R.id.widget_itemDate, View.GONE);
+				else
+					rv.setViewVisibility(R.id.widget_itemDate, View.VISIBLE);
+				
+				
+				String lines = settings.getString(ListWidgetConfig.KEY_TITLEROWS, "2");
 				rv.setInt(R.id.widget_itemTitle, "setMaxLines", Integer.parseInt(lines));
 
 				rv.setTextViewText(R.id.widget_itemTitle, title);
@@ -185,7 +189,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				// message
 
 				long listId = Long.parseLong(settings.getString(
-						ListWidgetConfigure.KEY_LIST, "-1"));
+						ListWidgetConfig.KEY_LIST, "-1"));
 
 				if (mContext.getResources().getBoolean(R.bool.atLeast16)) {
 					final Intent fillInIntent = new Intent();
@@ -243,17 +247,15 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		}
 
 		// Get widget settings
-		SharedPreferences settings = mContext.getSharedPreferences(
-				ListWidgetConfigure.getSharedPrefsFile(mAppWidgetId),
-				Context.MODE_PRIVATE);
+		WidgetPrefs settings = new WidgetPrefs(mContext, mAppWidgetId);
 		if (settings != null) {
 			listId = Long.parseLong(settings.getString(
-					ListWidgetConfigure.KEY_LIST, "-1"));
+					ListWidgetConfig.KEY_LIST, "-1"));
 
 			// getListTitle(settings, listId);
 
 			String sortChoice = settings.getString(
-					ListWidgetConfigure.KEY_SORT_TYPE, MainPrefs.DUEDATESORT);
+					ListWidgetConfig.KEY_SORT_TYPE, MainPrefs.DUEDATESORT);
 			String sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
 
 			if (MainPrefs.DUEDATESORT.equals(sortChoice)) {
@@ -267,7 +269,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			}
 
 			sortOrder += " "
-					+ settings.getString(ListWidgetConfigure.KEY_SORT_ORDER,
+					+ settings.getString(ListWidgetConfig.KEY_SORT_ORDER,
 							NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 			String listWhere = null;
@@ -289,7 +291,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 					NotePad.Notes.CONTENT_VISIBLE_URI, PROJECTION, listWhere,
 					listArg, sortOrder);
 			mCursor = new HeaderCursor(mContext, cursor, sortChoice,
-					settings.getString(ListWidgetConfigure.KEY_SORT_ORDER,
+					settings.getString(ListWidgetConfig.KEY_SORT_ORDER,
 							NotePad.Notes.DEFAULT_SORT_ORDERING));
 		}
 	}

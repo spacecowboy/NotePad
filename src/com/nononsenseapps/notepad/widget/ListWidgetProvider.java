@@ -19,12 +19,13 @@ package com.nononsenseapps.notepad.widget;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.ComponentName;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.Bundle;
+
 import com.nononsenseapps.helpers.Log;
 import android.widget.RemoteViews;
 
@@ -41,11 +42,13 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	public static final String COMPLETE_ACTION = "com.nononsenseapps.notepad.widget.COMPLETE";
 	public static final String CLICK_ACTION = "com.nononsenseapps.notepad.widget.CLICK";
 	public static final String OPEN_ACTION = "com.nononsenseapps.notepad.widget.OPENAPP";
+	public static final String CONFIG_ACTION = "com.nononsenseapps.notepad.widget.CONFIG";
 	public static final String CREATE_ACTION = "com.nononsenseapps.notepad.widget.CREATE";
 	public static final String EXTRA_NOTE_ID = "com.nononsenseapps.notepad.widget.note_id";
 	public static final String EXTRA_LIST_ID = "com.nononsenseapps.notepad.widget.list_id";
 
 	public ListWidgetProvider() {
+
 	}
 
 	@Override
@@ -73,6 +76,13 @@ public class ListWidgetProvider extends AppWidgetProvider {
 					NotePad.Lists.CONTENT_VISIBLE_ID_URI_BASE, Long
 							.toString(intent.getLongExtra(
 									NotePad.Notes.COLUMN_NAME_LIST, -1))));
+			context.startActivity(appIntent);
+		} else if (action.equals(CONFIG_ACTION)) {
+			appIntent.setClass(context, ListWidgetConfig.class).putExtra(
+					AppWidgetManager.EXTRA_APPWIDGET_ID,
+					intent.getExtras().getInt(
+							AppWidgetManager.EXTRA_APPWIDGET_ID,
+							AppWidgetManager.INVALID_APPWIDGET_ID));
 			context.startActivity(appIntent);
 		} else if (action.equals(CREATE_ACTION)) {
 			appIntent.setClass(context, RightActivity.class);
@@ -115,6 +125,16 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 		super.onReceive(context, intent);
 	}
+	
+	@Override
+	public void onDeleted(Context context, int[] appWidgetIds) {
+		super.onDeleted(context, appWidgetIds);
+		Log.d("ListWidgetProvider", "onDeleted, appWidgetIds.length = " + String.valueOf(appWidgetIds.length));
+
+		for (int widgetId : appWidgetIds) {
+			WidgetPrefs.delete(context, widgetId);
+		}
+	}
 
 	@Override
 	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
@@ -124,18 +144,39 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 		// Update each of the widgets with the remote adapter
 		for (int i = 0; i < appWidgetIds.length; ++i) {
-			appWidgetManager.updateAppWidget(appWidgetIds[i],
-					buildRemoteViews(context, appWidgetIds[i]));
+			int widgetId = appWidgetIds[i];
+			// Load widget prefs
+			WidgetPrefs prefs = new WidgetPrefs(context, widgetId);
+
+			// Build view update
+			RemoteViews updateViews = buildRemoteViews(context, appWidgetManager, widgetId, prefs);
+
+			// Tell the AppWidgetManager to perform an update
+			appWidgetManager.updateAppWidget(widgetId, updateViews);
 		}
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
 	}
 
-	public static RemoteViews buildRemoteViews(Context context, int appWidgetId) {
+	public static RemoteViews buildRemoteViews(Context context,
+			AppWidgetManager appWidgetManager, int appWidgetId, WidgetPrefs settings) {
 		// Hack: We must set this widget's id in the URI to prevent the
 		// situation
 		// where the last widget added will be used for everything
 		Uri data = Uri.withAppendedPath(Uri.parse("STUPIDWIDGETS"
 				+ "://widget/id/"), String.valueOf(appWidgetId));
+
+		boolean isKeyguard = false;
+		if (context.getResources().getBoolean(R.bool.atLeast16)) {
+			Bundle myOptions = appWidgetManager
+					.getAppWidgetOptions(appWidgetId);
+
+			// Get the value of OPTION_APPWIDGET_HOST_CATEGORY
+			int category = myOptions.getInt(
+					AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY, -1);
+
+			// If the value is WIDGET_CATEGORY_KEYGUARD, it's a lockscreen
+			// widget
+			isKeyguard = category == AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD;
+		}
 
 		// Specify the service to provide data for the collection widget. Note
 		// that we need to
@@ -145,13 +186,11 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
 		final int itemId;
-		SharedPreferences settings = context.getSharedPreferences(
-				ListWidgetConfigure.getSharedPrefsFile(appWidgetId),
-				Context.MODE_PRIVATE);
+		
 		if (settings != null
-				&& ListWidgetConfigure.THEME_DARK.equals(settings.getString(
-						ListWidgetConfigure.KEY_THEME,
-						ListWidgetConfigure.THEME_LIGHT))) {
+				&& context.getString(R.string.const_theme_dark).equals(settings.getString(
+						ListWidgetConfig.KEY_THEME,
+						context.getString(R.string.const_theme_light)))) {
 			itemId = R.layout.listwidget_dark;
 		} else {
 			itemId = R.layout.listwidget;
@@ -173,9 +212,12 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		// String listTitle = context.getText(R.string.app_name).toString();
 
 		long listId = Long.parseLong(settings.getString(
-				ListWidgetConfigure.KEY_LIST, "-1"));
+				ListWidgetConfig.KEY_LIST, "-1"));
+		
+		Log.d("Widget provider", "List id from settings: " + listId);
 
-		String listTitle = getListTitle(context, settings, listId);
+		String listTitle = settings.getString(ListWidgetConfig.KEY_LIST_TITLE, context.getString(R.string.app_name));
+		//String listTitle = getListTitle(context, settings, listId);
 		rv.setCharSequence(R.id.titleButton, "setText", listTitle);
 
 		/*
@@ -195,7 +237,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		} else {
 
 			Intent onClickIntent = new Intent(context, ListWidgetProvider.class);
-			// /onClickIntent.setAction(ListWidgetProvider.CLICK_ACTION)
+			onClickIntent.setAction(ListWidgetProvider.CLICK_ACTION);
 			onClickIntent
 					.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
 					.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId)
@@ -210,10 +252,8 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		// Bind the click intent for the button on the widget
 
 		// Branch for API 16 to enable lockscreen functionality
-
-		PendingIntent openAppPendingIntent;
-
-		if (context.getResources().getBoolean(R.bool.atLeast16)) {
+		// Title
+		if (context.getResources().getBoolean(R.bool.atLeast16) && isKeyguard) {
 			Intent appIntent = new Intent();
 			appIntent
 					.setFlags(
@@ -225,24 +265,45 @@ public class ListWidgetProvider extends AppWidgetProvider {
 							Uri.withAppendedPath(
 									NotePad.Lists.CONTENT_VISIBLE_ID_URI_BASE,
 									Long.toString(listId)));
-			openAppPendingIntent = PendingIntent.getActivity(context, 0,
-					appIntent, 0);
+			PendingIntent openAppPendingIntent = PendingIntent.getActivity(
+					context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			rv.setOnClickPendingIntent(R.id.titleButton, openAppPendingIntent);
 		} else {
 			Intent openAppIntent = new Intent(context, ListWidgetProvider.class);
 			openAppIntent.setAction(ListWidgetProvider.OPEN_ACTION);
 			openAppIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
 			openAppIntent.setData(data);
 
-			openAppPendingIntent = PendingIntent.getBroadcast(context, 0,
-					openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			PendingIntent openAppPendingIntent = PendingIntent.getBroadcast(
+					context, 0, openAppIntent,
+					PendingIntent.FLAG_UPDATE_CURRENT);
+			rv.setOnClickPendingIntent(R.id.titleButton, openAppPendingIntent);
 		}
+		// App icon
+		/*
+		 * if (context.getResources().getBoolean(R.bool.atLeast16) &&
+		 * isKeyguard) { Log.d("Widget shit", "Setting intent id: " +
+		 * appWidgetId); Intent appIntent = new Intent(); appIntent .setFlags(
+		 * Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+		 * .setClass(context, ListWidgetConfigure.class).setData(data)
+		 * .putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+		 * PendingIntent openAppPendingIntent = PendingIntent.getActivity(
+		 * context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		 * rv.setOnClickPendingIntent(R.id.openAppButton, openAppPendingIntent);
+		 * } else {
+		 */
+		Intent openAppIntent = new Intent(context, ListWidgetProvider.class);
+		openAppIntent.setAction(ListWidgetProvider.CONFIG_ACTION)
+				.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+				.setData(data);
 
+		PendingIntent openAppPendingIntent = PendingIntent.getBroadcast(
+				context, 0, openAppIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 		rv.setOnClickPendingIntent(R.id.openAppButton, openAppPendingIntent);
-		// Bind the click intent for the button on the widget
-		rv.setOnClickPendingIntent(R.id.titleButton, openAppPendingIntent);
+		// }
 
 		// Create button
-		if (context.getResources().getBoolean(R.bool.atLeast16)) {
+		if (context.getResources().getBoolean(R.bool.atLeast16) && isKeyguard) {
 			Intent createIntent = new Intent();
 			createIntent
 					.setFlags(
@@ -253,8 +314,9 @@ public class ListWidgetProvider extends AppWidgetProvider {
 					.setData(NotePad.Notes.CONTENT_VISIBLE_URI)
 					.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
 
-			PendingIntent createPendingIntent = PendingIntent.getActivity(
-					context, 0, createIntent, 0);
+			PendingIntent createPendingIntent = PendingIntent
+					.getActivity(context, 0, createIntent,
+							PendingIntent.FLAG_UPDATE_CURRENT);
 			rv.setOnClickPendingIntent(R.id.createNoteButton,
 					createPendingIntent);
 		} else {
@@ -275,7 +337,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	// Retrieve the list name from the database and set in shared preference
 	// file
 	private static String getListTitle(Context mContext,
-			SharedPreferences settings, long listId) {
+			WidgetPrefs settings, long listId) {
 		String title = mContext.getString(R.string.app_name);
 
 		Cursor c = mContext.getContentResolver().query(
@@ -288,9 +350,8 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		if (c != null && c.moveToFirst()) {
 			title = c.getString(c
 					.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
-			settings.edit()
-					.putString(ListWidgetConfigure.KEY_LIST_TITLE, title)
-					.commit();
+			settings
+					.putString(ListWidgetConfig.KEY_LIST_TITLE, title);
 		}
 		if (c != null)
 			c.close();

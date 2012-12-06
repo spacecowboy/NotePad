@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
-    android:configure="com.nononsenseapps.notepad.widget.ListWidgetConfigure"
+    android:configure="com.nononsenseapps.notepad.widget.ListWidgetConfig"
     android:initialLayout="@layout/listwidget"
     android:minHeight="110dp"
     android:minResizeHeight="110dp"

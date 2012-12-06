@@ -24,10 +24,10 @@
     </string-array>
 
     <string-array name="themevalues_preference" tools:ignore="MissingTranslation">
-        <item>dark</item>
-        <item>black</item>
-        <item>light</item>
-      	<item>light_ab</item>
+        <item>@string/const_theme_dark</item>
+        <item>@string/const_theme_black</item>
+        <item>@string/const_theme_light</item>
+      	<item>@string/const_theme_light_ab</item>
     </string-array>
 
 </resources>
