@@ -136,6 +136,7 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="password_set">Contraseña establecida</string>
 <string tools:ignore="MissingTranslation" name="password_cleared">Contraseña borrada</string>
 <string tools:ignore="MissingTranslation" name="passwords_dont_match">Las contraseñas no concuerdan</string>
+<string tools:ignore="MissingTranslation" name="password_incorrect">Contraseña incorrecta</string>
 <string tools:ignore="MissingTranslation" name="enter_password">Introduzca la contraseña</string>
 <string tools:ignore="MissingTranslation" name="enter_new_password">Introduzca una nueva contraseña</string>
 <string tools:ignore="MissingTranslation" name="confirm_new_password">Confirme la nueva contraseña</string>
