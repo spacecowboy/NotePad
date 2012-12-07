@@ -16,6 +16,7 @@
 
 package com.nononsenseapps.notepad.widget;
 
+import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
@@ -53,6 +54,8 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	private Context mContext;
 	private HeaderCursor mCursor;
 	private int mAppWidgetId;
+	
+	private static final String TAG = "WidgetService";
 
 	private static final String indent = "    ";
 
@@ -88,6 +91,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	}
 
 	public RemoteViews getViewAt(int position) {
+		Log.d(TAG, "getViewAt");
 		// Get widget settings
 		WidgetPrefs settings = new WidgetPrefs(mContext, mAppWidgetId);
 		
@@ -241,6 +245,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	}
 
 	public void onDataSetChanged() {
+		Log.d(TAG, "onDataSetChanged");
 		// Refresh the cursor
 		if (mCursor != null && mCursor.getCursor() != null) {
 			mCursor.getCursor().close();

@@ -217,7 +217,7 @@ public class ListWidgetConfig extends Activity {
 						appWidgetId);
 				setResult(RESULT_OK, resultValue);
 
-				// Build widget
+				// Build/Update widget
 				AppWidgetManager appWidgetManager = AppWidgetManager
 						.getInstance(getApplicationContext());
 				Log.d(TAG, "finishing WidgetId " + appWidgetId);
@@ -225,6 +225,9 @@ public class ListWidgetConfig extends Activity {
 						ListWidgetProvider.buildRemoteViews(
 								getApplicationContext(), appWidgetManager,
 								appWidgetId, widgetPrefs));
+				
+				// Update list items
+				appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.notes_list);
 
 				// Destroy activity
 				finish();
