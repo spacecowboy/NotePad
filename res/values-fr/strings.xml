@@ -135,6 +135,7 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="password_set">Mot de passe défini</string>
 <string tools:ignore="MissingTranslation" name="password_cleared">Mot de passe effacé</string>
 <string tools:ignore="MissingTranslation" name="passwords_dont_match">Les mots de passe ne correspondent pas</string>
+<string tools:ignore="MissingTranslation" name="password_incorrect">Mot de passe incorrect</string>
 <string tools:ignore="MissingTranslation" name="enter_password">Entrer le mot de passe</string>
 <string tools:ignore="MissingTranslation" name="enter_new_password">Entrer le nouveau mot de passe</string>
 <string tools:ignore="MissingTranslation" name="confirm_new_password">Confirmer le nouveau mot de passe</string>

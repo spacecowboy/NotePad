@@ -119,6 +119,7 @@
     <string name="password_set">Definir password</string>
     <string name="password_cleared">Password apagada</string>
     <string name="passwords_dont_match">As Passwords não combinam</string>
+    <string name="password_incorrect">Password errada</string>
     <string name="enter_password">Digite a password</string>
     <string name="enter_new_password">Digite a nova password</string>
     <string name="confirm_new_password">Confirme a nova password</string>

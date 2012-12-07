@@ -146,6 +146,7 @@
     <string tools:ignore="MissingTranslation" name="password_set">Password set</string>
     <string tools:ignore="MissingTranslation" name="password_cleared">Password cleared</string>
     <string tools:ignore="MissingTranslation" name="passwords_dont_match">Passwords do not match</string>
+    <string tools:ignore="MissingTranslation" name="password_incorrect">Password incorrect</string>
     <string tools:ignore="MissingTranslation" name="enter_password">Enter password</string>
     <string tools:ignore="MissingTranslation" name="enter_new_password">Enter new password</string>
     <string tools:ignore="MissingTranslation" name="confirm_new_password">Confirm new password</string>
