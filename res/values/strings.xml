@@ -17,7 +17,7 @@
 
 <resources xmlns:tools="http://schemas.android.com/tools" >
 
-    <string tools:ignore="MissingTranslation" name="app_name">Notes</string>
+    <string tools:ignore="MissingTranslation" name="app_name">Notes dev</string>
     <string tools:ignore="MissingTranslation" name="title_create">New note</string>
     <string tools:ignore="MissingTranslation" name="title_edit">Edit: %1$s</string>
     <string tools:ignore="MissingTranslation" name="menu_add">New note</string>
@@ -62,7 +62,6 @@
     <string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">My order</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Ascending</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Descending</string>
-    <string tools:ignore="MissingTranslation" name="settings_summary_theme_black">Black</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Dark</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Light</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">Light, dark action bar</string>
@@ -95,7 +94,6 @@
     <string tools:ignore="MissingTranslation" name="show_from_all_lists">All lists</string>
     <string tools:ignore="MissingTranslation" name="default_list_needed_warning">Set a default list first</string>
     <string tools:ignore="MissingTranslation" name="reverted">Reverted changes</string>
-
     <string name="notecopied" tools:ignore="MissingTranslation">Copied</string>
     <string name="deleted" tools:ignore="MissingTranslation">Deleted</string>
     <string name="items" tools:ignore="MissingTranslation">notes</string>
