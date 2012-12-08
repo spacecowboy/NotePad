@@ -62,6 +62,7 @@
     <string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">My order</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Ascending</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Descending</string>
+    <string tools:ignore="MissingTranslation" name="settings_summary_theme_black">Black</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Dark</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Light</string>
     <string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">Light, dark action bar</string>
@@ -97,23 +98,24 @@
     <string name="notecopied" tools:ignore="MissingTranslation">Copied</string>
     <string name="deleted" tools:ignore="MissingTranslation">Deleted</string>
     <string name="items" tools:ignore="MissingTranslation">notes</string>
-    <string name="permission_read_label" tools:ignore="MissingTranslation">read notes and lists</string>
-    <string name="permission_read_desc" tools:ignore="MissingTranslation">Allows the application to read your notes and related lists.</string>
-    <string name="permission_write_label" tools:ignore="MissingTranslation">modify notes and lists</string>
-    <string name="permission_write_desc" tools:ignore="MissingTranslation">Allows the application to insert, update and delete notes and lists.</string>
-    <string name="settings_header_list" tools:ignore="MissingTranslation">List settings</string>
-    <string name="settings_header_list_summary" tools:ignore="MissingTranslation"></string>
-    <string name="settings_header_appearance" tools:ignore="MissingTranslation">@string/settings_cat_appearance</string>
-    <string name="settings_header_appearance_summary" tools:ignore="MissingTranslation"></string>
-    <string name="settings_header_sync" tools:ignore="MissingTranslation">@string/settings_cat_syncing</string>
-    <string name="settings_header_sync_summary" tools:ignore="MissingTranslation"></string>
-    <string name="settings_list_dialog" tools:ignore="MissingTranslation">Select a list</string>
-    <string name="settings_list" tools:ignore="MissingTranslation">List</string>
-    <string name="settings_list_summary" tools:ignore="MissingTranslation"></string>
-    <string name="automatic" tools:ignore="MissingTranslation">Automatic</string>
-    <string name="preferences_week_start_day_dialog" tools:ignore="MissingTranslation">Week starts on</string>
-    <string name="preferences_week_start_day_title" tools:ignore="MissingTranslation">Week starts on</string>
-    <string name="preferences_week_start_day_default" tools:ignore="MissingTranslation">-1</string>
+    <string tools:ignore="MissingTranslation" name="permission_read_label">read notes and lists</string>
+    <string tools:ignore="MissingTranslation" name="permission_read_desc">Allows the application to read your notes and related lists.</string>
+    <string tools:ignore="MissingTranslation" name="permission_write_label">modify notes and lists</string>
+    <string tools:ignore="MissingTranslation" name="permission_write_desc">Allows the application to insert, update and delete notes and lists.</string>
+    <string tools:ignore="MissingTranslation" name="settings_header_list">List settings</string>
+    <string tools:ignore="MissingTranslation" name="settings_header_list_summary"></string>
+    <string tools:ignore="MissingTranslation" name="settings_header_appearance">@string/settings_cat_appearance</string>
+    <string tools:ignore="MissingTranslation" name="settings_header_appearance_summary"></string>
+    <string tools:ignore="MissingTranslation" name="settings_header_sync">@string/settings_cat_syncing</string>
+    <string tools:ignore="MissingTranslation" name="settings_header_sync_summary"></string>
+    <string tools:ignore="MissingTranslation" name="settings_list_dialog">Select a list</string>
+    <string tools:ignore="MissingTranslation" name="settings_list">List</string>
+    <string tools:ignore="MissingTranslation" name="settings_list_summary"></string>
+    <string tools:ignore="MissingTranslation" name="automatic">Automatic</string>
+
+    <string tools:ignore="MissingTranslation" name="preferences_week_start_day_dialog">Week starts on</string>
+    <string tools:ignore="MissingTranslation" name="preferences_week_start_day_title">Week starts on</string>
+    <string name="preferences_week_start_day_default" tools:ignore="MissingTranslation" >-1</string>
     <!--
         Use few if language need it. In English is the same.
         <item quantity="few">Copied 2 notes.</item>
@@ -122,90 +124,105 @@
         <item quantity="one">Copied one note</item>
         <item quantity="other">Copied %d notes</item>
     </plurals>
+    
     <plurals name="notedeleted_msg">
         <item quantity="one">Deleted one note</item>
         <item quantity="other">Deleted %d notes</item>
     </plurals>
+    
     <plurals name="mode_choose">
         <item quantity="one">Selected one note</item>
         <item quantity="other">Selected %d notes</item>
     </plurals>
-
-    <string name="lock_note" tools:ignore="MissingTranslation">Lock note</string>
-    <string name="unlock_note" tools:ignore="MissingTranslation">Unlock note</string>
-    <string name="locked" tools:ignore="MissingTranslation">Locked</string>
-    <string name="unlocked" tools:ignore="MissingTranslation">Unlocked</string>
-    <string name="password_required" tools:ignore="MissingTranslation">Password required</string>
-    <string name="select_account" tools:ignore="MissingTranslation">Select an account</string>
-    <string name="password" tools:ignore="MissingTranslation">Password</string>
-    <string name="password_set" tools:ignore="MissingTranslation">Password set</string>
-    <string name="password_cleared" tools:ignore="MissingTranslation">Password cleared</string>
-    <string name="passwords_dont_match" tools:ignore="MissingTranslation">Passwords do not match</string>
-    <string name="enter_password" tools:ignore="MissingTranslation">Enter password</string>
-    <string name="enter_new_password" tools:ignore="MissingTranslation">Enter new password</string>
-    <string name="confirm_new_password" tools:ignore="MissingTranslation">Confirm new password</string>
-    <string name="apply" tools:ignore="MissingTranslation">Apply</string>
-    <string name="clear_password" tools:ignore="MissingTranslation">Clear password</string>
-    <string name="password_info" tools:ignore="MissingTranslation">Setting a password will require you to input the password 
+    
+    <string tools:ignore="MissingTranslation" name="lock_note">Lock note</string>
+    <string tools:ignore="MissingTranslation" name="unlock_note">Unlock note</string>
+    <string tools:ignore="MissingTranslation" name="locked">Locked</string>
+    <string tools:ignore="MissingTranslation" name="unlocked">Unlocked</string>
+    <string tools:ignore="MissingTranslation" name="password_required">Password required</string>
+    <string tools:ignore="MissingTranslation" name="select_account">Select an account</string>
+    <string tools:ignore="MissingTranslation" name="password">Password</string>
+    <string tools:ignore="MissingTranslation" name="password_set">Password set</string>
+    <string tools:ignore="MissingTranslation" name="password_cleared">Password cleared</string>
+    <string tools:ignore="MissingTranslation" name="passwords_dont_match">Passwords do not match</string>
+    <string tools:ignore="MissingTranslation" name="enter_password">Enter password</string>
+    <string tools:ignore="MissingTranslation" name="enter_new_password">Enter new password</string>
+    <string tools:ignore="MissingTranslation" name="confirm_new_password">Confirm new password</string>
+    <string tools:ignore="MissingTranslation" name="apply">Apply</string>
+    <string tools:ignore="MissingTranslation" name="clear_password">Clear password</string>
+    <string tools:ignore="MissingTranslation" name="password_info">Setting a password will require you to input the password 
         to show any locked notes. It will only protect the note-field so you still have unprotected
         access to the title and due date. It does not encrypt the note in any way so it can still 
         be viewed in Google mail/calendar. If you forget your password, sync with Google and
         then reinstall the app.</string>
-    <string name="about" tools:ignore="MissingTranslation">About</string>
-    <string name="sync_failed" tools:ignore="MissingTranslation">Sync failed</string>
-    <string name="sync_login_failed" tools:ignore="MissingTranslation">Login failed, could not connect to Google Tasks</string>
-    <string name="changelog_full_title" tools:ignore="MissingTranslation">Change log</string>
-    <string name="changelog_title" tools:ignore="MissingTranslation">What\'s new</string>
-    <string name="changelog_ok_button" tools:ignore="MissingTranslation">OK</string>
-    <string name="changelog_show_full" tools:ignore="MissingTranslation">Show full</string>
-    <string name="widget_pref_preview_note" tools:ignore="MissingTranslation">Show note preview</string>
-    <string name="widget_pref_preview_note_summary_off" tools:ignore="MissingTranslation">Title will be 2 lines</string>
-    <string name="widget_pref_preview_note_summary_on" tools:ignore="MissingTranslation">Note will be on 2nd line</string>
-    <string name="widget_pref_show_complete" tools:ignore="MissingTranslation">Mark as done button</string>
-    <string name="widget_pref_show_complete_summary_off" tools:ignore="MissingTranslation">Button will be hidden</string>
-    <string name="widget_pref_show_complete_summary_on" tools:ignore="MissingTranslation">Button will be visible</string>
-    <string name="settings_listitem" tools:ignore="MissingTranslation">Two line titles</string>
-    <string name="settings_listitem_summary_on" tools:ignore="MissingTranslation">@string/widget_pref_preview_note_summary_off</string>
-    <string name="settings_listitem_summary_off" tools:ignore="MissingTranslation">Note preview will be 2 lines</string>
-    <string name="editor_details" tools:ignore="MissingTranslation">More</string>
-    <string name="completed" tools:ignore="MissingTranslation">Completed</string>
-    <string name="subtask_of" tools:ignore="MissingTranslation">Subtask of</string>
-    <string name="security" tools:ignore="MissingTranslation">Security</string>
-    <string name="date_header_overdue" tools:ignore="MissingTranslation">Overdue</string>
-    <string name="date_header_today" tools:ignore="MissingTranslation">Today</string>
-    <string name="date_header_tomorrow" tools:ignore="MissingTranslation">Tomorrow</string>
-    <string name="date_header_7days" tools:ignore="MissingTranslation">Next 7 days</string>
-    <string name="date_header_future" tools:ignore="MissingTranslation">Later</string>
-    <string name="date_header_none" tools:ignore="MissingTranslation">No date</string>
-    <string name="date_header_completed" tools:ignore="MissingTranslation">Completed</string>
-    <string name="mod_header_today" tools:ignore="MissingTranslation">@string/date_header_today</string>
-    <string name="mod_header_yesterday" tools:ignore="MissingTranslation">Yesterday</string>
-    <string name="mod_header_thisweek" tools:ignore="MissingTranslation">This week</string>
-    <string name="mod_header_earlier" tools:ignore="MissingTranslation">Earlier</string>
-    <string name="settings_listheader" tools:ignore="MissingTranslation">When showing all lists</string>
-    <string name="settings_listheader_off" tools:ignore="MissingTranslation">Show as one list</string>
-    <string name="settings_listheader_on" tools:ignore="MissingTranslation">Show list names</string>
-    <string name="please_create_list" tools:ignore="MissingTranslation">Please create a list</string>
-    <string name="please_select_note" tools:ignore="MissingTranslation">Please select or create a note</string>
-    <string name="please_create_note" tools:ignore="MissingTranslation">Please create a note</string>
-    <string name="hide_checkbox" tools:ignore="MissingTranslation">Hide checkbox</string>
-    <string name="hide_checkbox_summary_on" tools:ignore="MissingTranslation">Checkbox will be hidden</string>
-    <string name="hide_checkbox_summary_off" tools:ignore="MissingTranslation">Checkbox will be shown</string>
-    <string name="hide_note" tools:ignore="MissingTranslation">Hide note</string>
-    <string name="hide_note_summary_on" tools:ignore="MissingTranslation">Note will be hidden</string>
-    <string name="hide_note_summary_off" tools:ignore="MissingTranslation">Note will be shown</string>
-    <string name="hide_date" tools:ignore="MissingTranslation">Hide due date</string>
-    <string name="hide_date_summary_on" tools:ignore="MissingTranslation">Date will be hidden</string>
-    <string name="hide_date_summary_off" tools:ignore="MissingTranslation">Date will be shown</string>
-    <string name="title_rows" tools:ignore="MissingTranslation">Title max height</string>
-    <string name="title_rows_1" tools:ignore="MissingTranslation">1 row</string>
-    <string name="title_rows_2" tools:ignore="MissingTranslation">2 rows</string>
-    <string name="title_rows_free" tools:ignore="MissingTranslation">No restriction</string>
-    <string name="saturday" tools:ignore="MissingTranslation">Saturday</string>
-    <string name="sunday" tools:ignore="MissingTranslation">Sunday</string>
-    <string name="monday" tools:ignore="MissingTranslation">Monday</string>
-    <string name="localedefault" tools:ignore="MissingTranslation">Locale default</string>
-    <string name="empty_string" tools:ignore="MissingTranslation"></string>
+    <string tools:ignore="MissingTranslation" name="about">About</string>
+    
+    <string tools:ignore="MissingTranslation" name="sync_failed">Sync failed</string>
+    <string tools:ignore="MissingTranslation" name="sync_login_failed">Login failed, could not connect to Google Tasks</string>
+    
+    <string tools:ignore="MissingTranslation" name="changelog_full_title">Change log</string>
+    <string tools:ignore="MissingTranslation" name="changelog_title">What\'s new</string>
+    <string tools:ignore="MissingTranslation" name="changelog_ok_button">OK</string>
+    <string tools:ignore="MissingTranslation" name="changelog_show_full">Show full</string>
+    <string tools:ignore="MissingTranslation" name="widget_pref_preview_note">Show note preview</string>
+    <string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">Title will be 2 lines</string>
+    <string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_on">Note will be on 2nd line</string>
+    <string tools:ignore="MissingTranslation" name="widget_pref_show_complete">Mark as done button</string>
+    <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_off">Button will be hidden</string>
+    <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_on">Button will be visible</string>
+    <string tools:ignore="MissingTranslation" name="settings_listitem">Two line titles</string>
+    <string tools:ignore="MissingTranslation" name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
+    <string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">Note preview will be 2 lines</string>
+    
+    <string tools:ignore="MissingTranslation" name="editor_details">More</string>
+    <string tools:ignore="MissingTranslation" name="completed">Completed</string>
+    <string tools:ignore="MissingTranslation" name="subtask_of">Subtask of</string>
+    <string tools:ignore="MissingTranslation" name="security">Security</string>
+    
+    <string tools:ignore="MissingTranslation" name="date_header_overdue">Overdue</string>
+    <string tools:ignore="MissingTranslation" name="date_header_today">Today</string>
+    <string tools:ignore="MissingTranslation" name="date_header_tomorrow">Tomorrow</string>
+    <string tools:ignore="MissingTranslation" name="date_header_7days">Next 7 days</string>
+    <string tools:ignore="MissingTranslation" name="date_header_future">Later</string>
+    <string tools:ignore="MissingTranslation" name="date_header_none">No date</string>
+    <string tools:ignore="MissingTranslation" name="date_header_completed">Completed</string>
+    
+    <string tools:ignore="MissingTranslation" name="mod_header_today">@string/date_header_today</string>
+    <string tools:ignore="MissingTranslation" name="mod_header_yesterday">Yesterday</string>
+    <string tools:ignore="MissingTranslation" name="mod_header_thisweek">This week</string>
+    <string tools:ignore="MissingTranslation" name="mod_header_earlier">Earlier</string>
+    
+    <string tools:ignore="MissingTranslation" name="settings_listheader">When showing all lists</string>
+    <string tools:ignore="MissingTranslation" name="settings_listheader_off">Show as one list</string>
+    <string tools:ignore="MissingTranslation" name="settings_listheader_on">Show list names</string>
+    
+    <string tools:ignore="MissingTranslation" name="please_create_list">Please create a list</string>
+    <string tools:ignore="MissingTranslation" name="please_select_note">Please select or create a note</string>
+    <string tools:ignore="MissingTranslation" name="please_create_note">Please create a note</string>
+    
+    <string tools:ignore="MissingTranslation" name="hide_checkbox">Hide checkbox</string>
+    <string tools:ignore="MissingTranslation" name="hide_checkbox_summary_on">Checkbox will be hidden</string>
+    <string tools:ignore="MissingTranslation" name="hide_checkbox_summary_off">Checkbox will be shown</string>
+    
+    <string tools:ignore="MissingTranslation" name="hide_note">Hide note</string>
+    <string tools:ignore="MissingTranslation" name="hide_note_summary_on">Note will be hidden</string>
+    <string tools:ignore="MissingTranslation" name="hide_note_summary_off">Note will be shown</string>
+    
+    <string tools:ignore="MissingTranslation" name="hide_date">Hide due date</string>
+    <string tools:ignore="MissingTranslation" name="hide_date_summary_on">Date will be hidden</string>
+    <string tools:ignore="MissingTranslation" name="hide_date_summary_off">Date will be shown</string>
+    
+    <string tools:ignore="MissingTranslation" name="title_rows">Title max height</string>
+    <string tools:ignore="MissingTranslation" name="title_rows_1">1 row</string>
+    <string tools:ignore="MissingTranslation" name="title_rows_2">2 rows</string>
+    <string tools:ignore="MissingTranslation" name="title_rows_free">No restriction</string>
+    
+    <string tools:ignore="MissingTranslation" name="saturday">Saturday</string>
+    <string tools:ignore="MissingTranslation" name="sunday">Sunday</string>
+    <string tools:ignore="MissingTranslation" name="monday">Monday</string>
+    <string tools:ignore="MissingTranslation" name="localedefault">Locale default</string>
+    
+    <string tools:ignore="MissingTranslation" name="empty_string"> </string>
 
     <!-- These should probably not be translated -->
     <string name="default_notetitle" tools:ignore="MissingTranslation">Welcome!</string>
