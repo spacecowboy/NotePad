@@ -1117,6 +1117,11 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				dueDateSet = true;
 				Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 				c.setTimeInMillis(noteDueDate.toMillis(false));
+				
+				// Set these for the dialog to be set correctly
+				this.year = c.get(Calendar.YEAR);
+				this.month = c.get(Calendar.MONTH);
+				this.day = c.get(Calendar.DAY_OF_MONTH);
 
 				mDueDate.setText(DateFormat.format(DATEFORMAT_FORMAT_LONG, c));
 				Log.d("listproto", "Note has date: " + due);

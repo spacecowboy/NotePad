@@ -17,6 +17,9 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="ThemeHolo" parent="@android:style/Theme.Holo">
+        <item name="android:windowBackground">@android:color/black</item>
+        <!-- <item name="android:colorBackgroundCacheHint">#00000000</item> -->
+      	<!-- <item name="android:colorBackgroundCacheHint">@android:color/black</item>  -->
 
 		<item name="navigation_refresh">@drawable/navigation_refresh_dark </item>
         <item name="action_search">@drawable/action_search_dark </item>

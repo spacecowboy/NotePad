@@ -90,6 +90,7 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="show_from_all_lists">Alla listor</string>
 <string tools:ignore="MissingTranslation" name="default_list_needed_warning">Välj en standardlista först</string>
 <string tools:ignore="MissingTranslation" name="reverted">Återställde ändringar</string>
+
 <string name="notecopied" tools:ignore="MissingTranslation">Kopierad</string>
 <string name="deleted" tools:ignore="MissingTranslation">Tog bort</string>
 <string name="items" tools:ignore="MissingTranslation">anteckningar</string>
