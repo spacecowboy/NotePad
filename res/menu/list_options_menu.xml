@@ -3,7 +3,7 @@
 
     <item
         android:id="@+id/menu_add"
-        android:icon="?content_new_event"
+        android:icon="?content_new"
         android:orderInCategory="0"
         android:showAsAction="ifRoom"
         android:title="@string/menu_add"/>

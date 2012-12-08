@@ -19,7 +19,6 @@
 	<attr name="action_search" format="reference" />
 	<attr name="action_settings" format="reference" />
 	<attr name="content_new" format="reference" />
-	<attr name="content_new_event" format="reference" />
 	<attr name="content_discard" format="reference" />
 	<attr name="content_copy" format="reference" />
 	<attr name="content_paste" format="reference" />

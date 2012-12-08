@@ -232,5 +232,9 @@
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_list_widget_config">Widget configuration</string>
+    <string name="hide_appicon">Hide app icon</string>
+    <string name="hide_new">Hide new button</string>
+    <string name="hide_header">Hide entire widget header</string>
+    <string name="hide_widgetbg">Transparent background</string>
 
 </resources>

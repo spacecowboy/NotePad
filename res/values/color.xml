@@ -17,4 +17,6 @@
 <resources>
     <color name="viewpager_darkgrey">#ff444444</color>
     <color name="viewpager_blue">#33b5e5</color>
+    <color name="widgetItemBG_dark">#ee000000</color>
+    <color name="widgetItemBG_light">#eeffffff</color>
 </resources>

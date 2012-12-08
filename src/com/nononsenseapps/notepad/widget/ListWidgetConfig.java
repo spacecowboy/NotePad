@@ -4,6 +4,7 @@ import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.ExtrasCursorAdapter;
 
 import android.os.Bundle;
@@ -11,6 +12,7 @@ import android.app.Activity;
 import android.appwidget.AppWidgetManager;
 import android.content.Intent;
 import android.database.Cursor;
+import android.text.method.HideReturnsTransformationMethod;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -20,6 +22,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 
 public class ListWidgetConfig extends Activity {
 
@@ -30,6 +33,11 @@ public class ListWidgetConfig extends Activity {
 	public static final String KEY_SORT_TYPE = "widget1_key_sort_type";
 	public static final String KEY_SORT_ORDER = "widget1_key_sort_order";
 	public static final String KEY_THEME = "widget1_key_current_theme";
+
+	public static final String KEY_HIDDENAPPICON = "widget1_key_hiddenappicon";
+	public static final String KEY_HIDDENNEW = "widget1_key_hiddennew";
+	public static final String KEY_HIDDENHEADER = "widget1_key_hiddenheader";
+	public static final String KEY_TRANSPARENT = "widget1_key_transparent";
 
 	public static final String KEY_HIDDENNOTE = "widget1_key_hiddennote";
 	public static final String KEY_HIDDENDATE = "widget1_key_hiddendate";
@@ -195,6 +203,53 @@ public class ListWidgetConfig extends Activity {
 			}
 		});
 
+		CheckBox appIconCheckBox = (CheckBox) findViewById(R.id.list_widget_config_hide_appicon);
+		appIconCheckBox
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						Log.d(TAG, "note: " + isChecked);
+						widgetPrefs.putBoolean(KEY_HIDDENAPPICON, isChecked);
+					}
+				});
+
+		CheckBox newCheckBox = (CheckBox) findViewById(R.id.list_widget_config_hide_new);
+		newCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				Log.d(TAG, "note: " + isChecked);
+				widgetPrefs.putBoolean(KEY_HIDDENNEW, isChecked);
+			}
+		});
+
+		CheckBox headerCheckBox = (CheckBox) findViewById(R.id.list_widget_config_hide_header);
+		headerCheckBox
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						Log.d(TAG, "note: " + isChecked);
+						widgetPrefs.putBoolean(KEY_HIDDENHEADER, isChecked);
+					}
+				});
+
+		CheckBox transparentCheckBox = (CheckBox) findViewById(R.id.list_widget_config_transparent);
+		transparentCheckBox
+				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+					@Override
+					public void onCheckedChanged(CompoundButton buttonView,
+							boolean isChecked) {
+						Log.d(TAG, "note: " + isChecked);
+						widgetPrefs.putBoolean(KEY_TRANSPARENT, isChecked);
+					}
+				});
+
 		Button cancelButton = (Button) findViewById(R.id.list_widget_config_cancel);
 		cancelButton.setOnClickListener(new OnClickListener() {
 
@@ -225,9 +280,10 @@ public class ListWidgetConfig extends Activity {
 						ListWidgetProvider.buildRemoteViews(
 								getApplicationContext(), appWidgetManager,
 								appWidgetId, widgetPrefs));
-				
+
 				// Update list items
-				appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.notes_list);
+				appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,
+						R.id.notes_list);
 
 				// Destroy activity
 				finish();
@@ -274,11 +330,64 @@ public class ListWidgetConfig extends Activity {
 				// Another interface callback
 			}
 		});
-		
+
 		// Set previous values
-		if (widgetPrefs.isPresent()) {
-			
-		}
+		// List
+		int pos = getListPositionOf(
+				listSpinner,
+				Long.parseLong(widgetPrefs.getString(KEY_LIST,
+						Integer.toString(MainActivity.ALL_NOTES_ID))));
+		if (pos > -1)
+			listSpinner.setSelection(pos);
+
+		// Sort type
+		pos = getPositionOf(sortTypeValues,
+				widgetPrefs.getString(KEY_SORT_TYPE, MainPrefs.DUEDATESORT));
+		if (pos > -1)
+			sortTypeSpinner.setSelection(pos);
+
+		// Sort order
+		pos = getPositionOf(sortOrderValues, widgetPrefs.getString(
+				KEY_SORT_ORDER, NotePad.Notes.DEFAULT_SORT_ORDERING));
+		if (pos > -1)
+			sortOrderSpinner.setSelection(pos);
+
+		// Theme
+		pos = getPositionOf(themeValues, widgetPrefs.getString(KEY_THEME,
+				getString(R.string.const_theme_light)));
+		if (pos > -1)
+			themeSpinner.setSelection(pos);
+
+		// title rows
+		pos = getPositionOf(titleRowsValues,
+				widgetPrefs.getString(KEY_TITLEROWS, "2"));
+		if (pos > -1)
+			titleRowsSpinner.setSelection(pos);
+
+		// hide checkbox
+		doneCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX,
+				false));
+
+		// hide note
+		noteCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENNOTE, false));
+
+		// hide due date
+		dateCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENDATE, false));
+
+		// hide app icon
+		appIconCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENAPPICON,
+				false));
+
+		// hide new button
+		newCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENNEW, false));
+
+		// hide header
+		headerCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENHEADER,
+				false));
+
+		// transparent
+		transparentCheckBox.setChecked(widgetPrefs.getBoolean(KEY_TRANSPARENT,
+				false));
 	}
 
 	private void setListEntries(Spinner listSpinner) {
@@ -296,9 +405,38 @@ public class ListWidgetConfig extends Activity {
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
 				new int[] { android.R.id.text1 },
 				new int[] { MainActivity.ALL_NOTES_ID },
-				new int[] { R.string.show_from_all_lists }, android.R.layout.simple_dropdown_item_1line);
+				new int[] { R.string.show_from_all_lists },
+				android.R.layout.simple_dropdown_item_1line);
 
-		mSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+		mSpinnerAdapter
+				.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 		listSpinner.setAdapter(mSpinnerAdapter);
+	}
+
+	private int getListPositionOf(Spinner listSpinner, long listId) {
+		SpinnerAdapter adapter = listSpinner.getAdapter();
+		if (adapter == null || adapter.getCount() == 0)
+			return -1;
+		int pos = 0;
+		for (int i = 0; i < adapter.getCount(); i++) {
+			if (adapter.getItemId(i) == listId) {
+				pos = i;
+				break;
+			}
+		}
+		return pos;
+	}
+
+	private int getPositionOf(String[] values, String selectedVal) {
+		if (values == null || values.length == 0)
+			return -1;
+		int pos = 0;
+		for (int i = 0; i < values.length; i++) {
+			if (values[i].equals(selectedVal)) {
+				pos = i;
+				break;
+			}
+		}
+		return pos;
 	}
 }

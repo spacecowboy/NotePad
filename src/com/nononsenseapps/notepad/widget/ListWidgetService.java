@@ -54,7 +54,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	private Context mContext;
 	private HeaderCursor mCursor;
 	private int mAppWidgetId;
-	
+
 	private static final String TAG = "WidgetService";
 
 	private static final String indent = "    ";
@@ -94,9 +94,16 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		Log.d(TAG, "getViewAt");
 		// Get widget settings
 		WidgetPrefs settings = new WidgetPrefs(mContext, mAppWidgetId);
-		
+
 		if (!settings.isPresent()) {
 			return null;
+		}
+
+		boolean dark = false;
+		if (mContext.getString(R.string.const_theme_dark).equals(
+				settings.getString(ListWidgetConfig.KEY_THEME,
+						mContext.getString(R.string.const_theme_light)))) {
+			dark = true;
 		}
 
 		// Get the data for this position from the content provider
@@ -109,11 +116,19 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		RemoteViews rv = null;
 		if (mCursor.moveToPosition(position)) {
 			if (mCursor.getViewType() == HeaderCursor.headerType) {
-				final int itemId = R.layout.widgetlist_header;
+				final int itemId;
+				if (dark)
+					itemId = R.layout.widgetlist_header_dark;
+				else
+					itemId = R.layout.widgetlist_header;
 				rv = new RemoteViews(mContext.getPackageName(), itemId);
 				rv.setTextViewText(R.id.widget_itemHeader,
 						mCursor.getHeaderText());
 				rv.setBoolean(itemId, "setClickable", false);
+				if (!dark && settings
+						.getBoolean(ListWidgetConfig.KEY_TRANSPARENT, false)) {
+					rv.setTextColor(R.id.widget_itemHeader, mContext.getResources().getColor(android.R.color.primary_text_light));
+				}
 			} else {
 				final int titleIndex = mCursor.getCursor().getColumnIndex(
 						NotePad.Notes.COLUMN_NAME_TITLE);
@@ -153,39 +168,56 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				}
 
 				final int itemId;
-				if (settings != null
-						&& mContext.getString(R.string.const_theme_dark).equals(settings
-								.getString(ListWidgetConfig.KEY_THEME,
-										mContext.getString(R.string.const_theme_light)))) {
+				if (dark) {
 					itemId = R.layout.widgetlist_item_dark;
 				} else {
 					itemId = R.layout.widgetlist_item;
 				}
 				rv = new RemoteViews(mContext.getPackageName(), itemId);
 
-				rv.setViewVisibility(R.id.widget_complete_task, settings
-						.getBoolean(ListWidgetConfig.KEY_HIDDENCHECKBOX,
-								false) ?  View.GONE : View.VISIBLE);
-				
-				if (note == null || note.isEmpty() || settings.getBoolean(
-						ListWidgetConfig.KEY_HIDDENNOTE, false))
+				if (settings
+						.getBoolean(ListWidgetConfig.KEY_TRANSPARENT, false)) {
+					rv.setInt(R.id.widget_item_container,
+							"setBackgroundResource", 0);
+				}
+
+				rv.setViewVisibility(
+						R.id.widget_complete_task,
+						settings.getBoolean(
+								ListWidgetConfig.KEY_HIDDENCHECKBOX, false) ? View.GONE
+								: View.VISIBLE);
+				if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENCHECKBOX,
+						false)) {
+					rv.setViewPadding(R.id.widget_item, 8, 0, 0, 0);
+				}
+
+				if (note == null
+						|| note.isEmpty()
+						|| settings.getBoolean(ListWidgetConfig.KEY_HIDDENNOTE,
+								false)) {
 					rv.setViewVisibility(R.id.widget_itemNote, View.GONE);
-				else
-					rv.setViewVisibility(R.id.widget_itemNote, View.VISIBLE);
-				
-				if (date == null || date.isEmpty() || settings.getBoolean(
-						ListWidgetConfig.KEY_HIDDENDATE, false))
-					rv.setViewVisibility(R.id.widget_itemDate, View.GONE);
-				else
-					rv.setViewVisibility(R.id.widget_itemDate, View.VISIBLE);
-				
-				
-				String lines = settings.getString(ListWidgetConfig.KEY_TITLEROWS, "2");
-				rv.setInt(R.id.widget_itemTitle, "setMaxLines", Integer.parseInt(lines));
+					rv.setViewVisibility(R.id.widget_itemDateNote, View.GONE);
+					rv.setViewVisibility(R.id.widget_itemDateTitle,
+							View.VISIBLE);
+				}
+
+				if (dueDate == null
+						|| dueDate.length() == 0
+						|| settings.getBoolean(ListWidgetConfig.KEY_HIDDENDATE,
+								false)) {
+					rv.setViewVisibility(R.id.widget_itemDateNote, View.GONE);
+					rv.setViewVisibility(R.id.widget_itemDateTitle, View.GONE);
+				}
+
+				String lines = settings.getString(
+						ListWidgetConfig.KEY_TITLEROWS, "2");
+				rv.setInt(R.id.widget_itemTitle, "setMaxLines",
+						Integer.parseInt(lines));
 
 				rv.setTextViewText(R.id.widget_itemTitle, title);
 				rv.setTextViewText(R.id.widget_itemNote, note);
-				rv.setTextViewText(R.id.widget_itemDate, dueDate);
+				rv.setTextViewText(R.id.widget_itemDateNote, dueDate);
+				rv.setTextViewText(R.id.widget_itemDateTitle, dueDate);
 				// rv.setTextViewText(R.id.widget_itemIndent, space);
 
 				// Set the click intent so that we can handle it and show a
@@ -261,7 +293,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 			String sortChoice = settings.getString(
 					ListWidgetConfig.KEY_SORT_TYPE, MainPrefs.DUEDATESORT);
-			String sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
+			String sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
 
 			if (MainPrefs.DUEDATESORT.equals(sortChoice)) {
 				sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;

@@ -21,16 +21,15 @@
             android:id="@+id/textView1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:text="@string/settings_list"
             android:textAppearance="@android:style/TextAppearance.Holo.Medium"
             android:textColor="@android:color/primary_text_dark" />
 
         <Spinner
             android:id="@+id/list_widget_config_list"
+            style="?android:attr/spinnerStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textView1"
             android:prompt="@string/settings_list_dialog"
             android:spinnerMode="dialog" />
 
@@ -38,16 +37,15 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/list_widget_config_list"
             android:text="@string/settings_sorting_type_dialog"
             android:textAppearance="@android:style/TextAppearance.Holo.Medium"
             android:textColor="@android:color/primary_text_dark" />
 
         <Spinner
             android:id="@+id/list_widget_config_sort_type"
+            style="?android:attr/spinnerStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textView2"
             android:entries="@array/sorting_preference"
             android:spinnerMode="dropdown" />
 
@@ -55,16 +53,15 @@
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/list_widget_config_sort_type"
             android:text="@string/settings_sorting_order_dialog"
             android:textAppearance="@android:style/TextAppearance.Holo.Medium"
             android:textColor="@android:color/primary_text_dark" />
 
         <Spinner
             android:id="@+id/list_widget_config_sort_order"
+            style="?android:attr/spinnerStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textView3"
             android:entries="@array/sorting_order_preference"
             android:spinnerMode="dropdown" />
 
@@ -72,16 +69,15 @@
             android:id="@+id/textViewTheme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/list_widget_config_sort_order"
             android:text="@string/settings_theme_dialog"
             android:textAppearance="@android:style/TextAppearance.Holo.Medium"
             android:textColor="@android:color/primary_text_dark" />
 
         <Spinner
             android:id="@+id/list_widget_config_theme"
+            style="?android:attr/spinnerStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textViewTheme"
             android:entries="@array/widget_theme_preference"
             android:spinnerMode="dropdown" />
 
@@ -89,25 +85,30 @@
             android:id="@+id/textView4"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+d/list_widget_config_theme"
             android:text="@string/title_rows"
             android:textAppearance="@android:style/TextAppearance.Holo.Medium"
             android:textColor="@android:color/primary_text_dark" />
 
         <Spinner
             android:id="@+id/list_widget_config_titlerows"
+            style="?android:attr/spinnerStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/textView4"
             android:entries="@array/title_rows_entries"
             android:spinnerMode="dropdown" />
+
+        <CheckBox
+            android:id="@+id/list_widget_config_transparent"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/list_item_min_size"
+            android:text="@string/hide_widgetbg"
+            android:textAppearance="@android:style/TextAppearance.Holo.Large"
+            android:textColor="@android:color/primary_text_dark" />
 
         <CheckBox
             android:id="@+id/list_widget_config_hide_checkbox"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/list_item_min_size"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/list_widget_config_titlerows"
             android:text="@string/hide_checkbox"
             android:textAppearance="@android:style/TextAppearance.Holo.Large"
             android:textColor="@android:color/primary_text_dark" />
@@ -116,8 +117,6 @@
             android:id="@+id/list_widget_config_hide_note"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/list_item_min_size"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/list_widget_config_hide_checkbox"
             android:text="@string/hide_note"
             android:textAppearance="@android:style/TextAppearance.Holo.Large"
             android:textColor="@android:color/primary_text_dark" />
@@ -126,9 +125,31 @@
             android:id="@+id/list_widget_config_hide_date"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/list_item_min_size"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/list_widget_config_hide_note"
             android:text="@string/hide_date"
+            android:textAppearance="@android:style/TextAppearance.Holo.Large"
+            android:textColor="@android:color/primary_text_dark" />
+
+        <CheckBox
+            android:id="@+id/list_widget_config_hide_appicon"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/list_item_min_size"
+            android:text="@string/hide_appicon"
+            android:textAppearance="@android:style/TextAppearance.Holo.Large"
+            android:textColor="@android:color/primary_text_dark" />
+
+        <CheckBox
+            android:id="@+id/list_widget_config_hide_new"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/list_item_min_size"
+            android:text="@string/hide_new"
+            android:textAppearance="@android:style/TextAppearance.Holo.Large"
+            android:textColor="@android:color/primary_text_dark" />
+
+        <CheckBox
+            android:id="@+id/list_widget_config_hide_header"
+            android:layout_width="fill_parent"
+            android:layout_height="@dimen/list_item_min_size"
+            android:text="@string/hide_header"
             android:textAppearance="@android:style/TextAppearance.Holo.Large"
             android:textColor="@android:color/primary_text_dark" />
 
@@ -136,7 +157,6 @@
             android:id="@+id/spacer"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
-            android:layout_below="@id/list_widget_config_hide_date"
             android:layout_weight="1" >
         </LinearLayout>
 
@@ -144,7 +164,6 @@
             android:id="@+id/ok_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
             android:divider="?android:attr/dividerHorizontal"
             android:dividerPadding="0dip"
             android:orientation="horizontal"
