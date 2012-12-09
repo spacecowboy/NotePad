@@ -96,6 +96,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		WidgetPrefs settings = new WidgetPrefs(mContext, mAppWidgetId);
 
 		if (!settings.isPresent()) {
+			Log.d(TAG, "Is not present!");
 			return null;
 		}
 
@@ -256,6 +257,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 			}
 		}
+		
 		return rv;
 	}
 
@@ -265,7 +267,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	}
 
 	public int getViewTypeCount() {
-		return 2;
+		return 4;
 	}
 
 	public long getItemId(int position) {
@@ -330,6 +332,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			mCursor = new HeaderCursor(mContext, cursor, sortChoice,
 					settings.getString(ListWidgetConfig.KEY_SORT_ORDER,
 							NotePad.Notes.DEFAULT_SORT_ORDERING));
+			
 		}
 	}
 }
