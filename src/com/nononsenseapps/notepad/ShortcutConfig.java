@@ -1,5 +1,7 @@
 package com.nononsenseapps.notepad;
 
+import com.nononsenseapps.notepad_donate.R;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
