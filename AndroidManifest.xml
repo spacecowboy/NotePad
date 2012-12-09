@@ -92,7 +92,7 @@
             android:name="com.nononsenseapps.notepad.NotePadBroadcastReceiver"
             tools:ignore="ExportedReceiver" >
             <intent-filter>
-                <action android:name="@string/complete_note_broadcast_intent" />
+                <action android:name="com.nononsenseapps.completenote" />
             </intent-filter>
         </receiver>
 
@@ -127,7 +127,7 @@
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
                 
-                <action android:name="@string/complete_note_broadcast_intent" />
+                <action android:name="com.nononsenseapps.completenote" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 
