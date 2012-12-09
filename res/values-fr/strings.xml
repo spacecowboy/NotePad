@@ -57,7 +57,7 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="settings_sorting_order_dialog">Ordonner</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_type_alphabetic">Titre</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_type_modified">Dernière modification</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_duedate">Date d'échéance</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_duedate">Date d\'échéance</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">Position du serveur</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Croissant</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Décroissant</string>
@@ -72,7 +72,7 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="settings_font_type">Police</string>
 <string tools:ignore="MissingTranslation" name="settings_font_type_dialog">Choisir une police</string>
 <string tools:ignore="MissingTranslation" name="settings_font_size">Taille du texte</string>
-<string tools:ignore="MissingTranslation" name="preference_preview_text">Voici comment le texte apparaîtra dans l'éditeur</string>
+<string tools:ignore="MissingTranslation" name="preference_preview_text">Voici comment le texte apparaîtra dans l\'éditeur</string>
 <string tools:ignore="MissingTranslation" name="settings_text_preview_title">Aperçu</string>
 <string tools:ignore="MissingTranslation" name="monospace">Monospace</string>
 <string tools:ignore="MissingTranslation" name="sans">Sans</string>
@@ -92,15 +92,15 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="no">Non</string>
 <string tools:ignore="MissingTranslation" name="ok">OK</string>
 <string tools:ignore="MissingTranslation" name="show_from_all_lists">Toutes les listes</string>
-<string tools:ignore="MissingTranslation" name="default_list_needed_warning">Vous devez d'abord définir une liste par défaut</string>
+<string tools:ignore="MissingTranslation" name="default_list_needed_warning">Vous devez d\'abord définir une liste par défaut</string>
 <string tools:ignore="MissingTranslation" name="reverted">Changements annulés</string>
 <string name="notecopied" tools:ignore="MissingTranslation">Copié</string>
 <string name="deleted" tools:ignore="MissingTranslation">Supprimé</string>
 <string name="items" tools:ignore="MissingTranslation">notes</string>
 <string tools:ignore="MissingTranslation" name="permission_read_label">lire les notes et les listes</string>
-<string tools:ignore="MissingTranslation" name="permission_read_desc">Autorise l'application à lire vos notes et listes.</string>
+<string tools:ignore="MissingTranslation" name="permission_read_desc">Autorise l\'application à lire vos notes et listes.</string>
 <string tools:ignore="MissingTranslation" name="permission_write_label">modifier les notes et les listes</string>
-<string tools:ignore="MissingTranslation" name="permission_write_desc">Autorise l'application à créer, modifier et supprimer des notes et listes.</string>
+<string tools:ignore="MissingTranslation" name="permission_write_desc">Autorise l\'application à créer, modifier et supprimer des notes et listes.</string>
 <string tools:ignore="MissingTranslation" name="settings_header_list">Paramètres de la liste</string>
 <string tools:ignore="MissingTranslation" name="settings_header_appearance">@string/settings_cat_appearance</string>
 <string tools:ignore="MissingTranslation" name="settings_header_sync">@string/settings_cat_syncing</string>
@@ -145,7 +145,7 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="confirm_new_password">Confirmer le nouveau mot de passe</string>
 <string tools:ignore="MissingTranslation" name="apply">Appliquer</string>
 <string tools:ignore="MissingTranslation" name="clear_password">Effacer le mot de passe</string>
-<string tools:ignore="MissingTranslation" name="password_info">Après avoir défini un mot de passe, vous devrez le saisir pour voir les notes verrouillées. Le mot de passe protégera la note elle-même, mais pas le titre ni la date. La note ne sera pas cryptée donc pourra toujours être lue via Google Mail/Agenda. Si vous oubliez votre mot de passe, synchronisez les notes avec Google et réinstallez l'application.</string>
+<string tools:ignore="MissingTranslation" name="password_info">Après avoir défini un mot de passe, vous devrez le saisir pour voir les notes verrouillées. Le mot de passe protégera la note elle-même, mais pas le titre ni la date. La note ne sera pas cryptée donc pourra toujours être lue via Google Mail/Agenda. Si vous oubliez votre mot de passe, synchronisez les notes avec Google et réinstallez l\'application.</string>
 <string tools:ignore="MissingTranslation" name="about">À propos</string>
 
 <string tools:ignore="MissingTranslation" name="sync_failed">La synchronisation a échouée</string>
@@ -155,14 +155,14 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="changelog_title">Quoi de neuf</string>
 <string tools:ignore="MissingTranslation" name="changelog_ok_button">OK</string>
 <string tools:ignore="MissingTranslation" name="changelog_show_full">Afficher tout</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note">Afficher l'aperçu de la note</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_preview_note">Afficher l\'aperçu de la note</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">Le titre sera sur 2 lignes</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_on">La note sera sur la 2e ligne</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_show_complete">Bouton de tâche terminée</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_off">Le bouton sera masqué</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_on">Le bouton sera affiché</string>
 <string tools:ignore="MissingTranslation" name="settings_listitem">Titres sur 2 lignes</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">L'aperçu de la note sera sur 2 lignes</string>
+<string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">L\'aperçu de la note sera sur 2 lignes</string>
 
 <string tools:ignore="MissingTranslation" name="editor_details">Plus</string>
 <string tools:ignore="MissingTranslation" name="completed">Complété</string>
@@ -170,7 +170,7 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="security">Sécurité</string>
 
 <string tools:ignore="MissingTranslation" name="date_header_overdue">En retard</string>
-<string tools:ignore="MissingTranslation" name="date_header_today">Aujourd'hui</string>
+<string tools:ignore="MissingTranslation" name="date_header_today">Aujourd\'hui</string>
 <string tools:ignore="MissingTranslation" name="date_header_tomorrow">Demain</string>
 <string tools:ignore="MissingTranslation" name="date_header_7days">7 prochains jours</string>
 <string tools:ignore="MissingTranslation" name="date_header_future">Plus tard</string>
@@ -197,7 +197,7 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="hide_note_summary_on">La note sera masquée</string>
 <string tools:ignore="MissingTranslation" name="hide_note_summary_off">La note sera affichée</string>
 
-<string tools:ignore="MissingTranslation" name="hide_date">Masquer la date d'échéance</string>
+<string tools:ignore="MissingTranslation" name="hide_date">Masquer la date d\'échéance</string>
 <string tools:ignore="MissingTranslation" name="hide_date_summary_on">La date sera masquée</string>
 <string tools:ignore="MissingTranslation" name="hide_date_summary_off">La date sera affichée</string>
 
