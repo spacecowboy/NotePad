@@ -173,6 +173,9 @@ public class GoogleTaskList {
 					task.dbId = localTask.dbId;
 					// This line is important, so we don't create duplicates
 					task.didRemoteInsert = localTask.didRemoteInsert;
+					// Without this line duplicate GTask entries will be entered
+					// which results in a crash
+					task.conflict = localTask.conflict;
 					// Move on to next task
 					break;
 				}

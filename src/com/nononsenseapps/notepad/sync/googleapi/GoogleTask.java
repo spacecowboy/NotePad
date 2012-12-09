@@ -95,6 +95,7 @@ public class GoogleTask {
 	public int indentLevel = 0;
 
 	public JSONObject json = null;
+	public boolean conflict = false;
 
 	public GoogleTask() {
 	}

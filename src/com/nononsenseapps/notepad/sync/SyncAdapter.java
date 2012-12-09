@@ -300,6 +300,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 										task.etag = null;
 										task.title = "sync-conflict "
 												+ task.title;
+										task.conflict = true;
 
 										try {
 											if (null != apiTalker.uploadTask(
