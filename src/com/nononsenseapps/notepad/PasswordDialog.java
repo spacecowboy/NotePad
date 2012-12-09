@@ -110,7 +110,7 @@ public class PasswordDialog extends DialogFragment implements OnClickListener {
 			Animation shake = AnimationUtils.loadAnimation(activity,
 					R.anim.shake);
 			passwordText.startAnimation(shake);
-			Toast.makeText(activity, "Password incorrect string",
+			Toast.makeText(activity, getText(R.string.password_incorrect),
 					Toast.LENGTH_SHORT).show();
 		}
 	}
