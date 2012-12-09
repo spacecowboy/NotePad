@@ -247,7 +247,6 @@
 
     <!-- settings string keys -->
     <string name="pref_locale" tools:ignore="MissingTranslation">pref_key_locale</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_list_widget_config">Widget configuration</string>
     <string name="hide_appicon">Hide app icon</string>
