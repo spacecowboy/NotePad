@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools" >
+<resources xmlns:tools="http://schemas.android.com/tools">
 
 <string tools:ignore="MissingTranslation" name="app_name">Anteckningar</string>
 <string tools:ignore="MissingTranslation" name="title_create">Ny anteckning</string>
@@ -46,6 +46,9 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="search_hint">Sök</string>
 <string tools:ignore="MissingTranslation" name="settings_theme">Nuvarande tema</string>
 <string tools:ignore="MissingTranslation" name="settings_theme_dialog">Använd tema</string>
+
+<string tools:ignore="MissingTranslation" name="settings_lang">Språk</string>
+
 <string tools:ignore="MissingTranslation" name="settings_cat_theme">Tema</string>
 <string tools:ignore="MissingTranslation" name="settings_cat_sorting">Sortering</string>
 <string tools:ignore="MissingTranslation" name="settings_sorting_type">Sorterar på</string>
@@ -58,6 +61,7 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">Min ordning</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Normal</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Omvänd</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_theme_black">Svart</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Mörk</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Ljus</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">Ljus, mörk menyrad</string>
@@ -90,7 +94,6 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="show_from_all_lists">Alla listor</string>
 <string tools:ignore="MissingTranslation" name="default_list_needed_warning">Välj en standardlista först</string>
 <string tools:ignore="MissingTranslation" name="reverted">Återställde ändringar</string>
-
 <string name="notecopied" tools:ignore="MissingTranslation">Kopierad</string>
 <string name="deleted" tools:ignore="MissingTranslation">Tog bort</string>
 <string name="items" tools:ignore="MissingTranslation">anteckningar</string>
@@ -210,6 +213,14 @@ Use few if language need it. In English is the same.
 
 
 <!-- These should probably not be translated -->
-<string tools:ignore="MissingTranslation" name="default_notetitle">Välkommen!</string>
+<string name="default_notetitle" tools:ignore="MissingTranslation">Välkommen!</string>
+
+<!-- settings string keys -->
+<string name="menu_settings">Inställningar</string>
+<string name="title_activity_list_widget_config">Widget inställningar</string>
+<string name="hide_appicon">Dölj appikon</string>
+<string name="hide_new">Dölj skapa ny</string>
+<string name="hide_header">Dölj hela titelsektionen</string>
+<string name="hide_widgetbg">Genomskinlig bakgrund</string>
 
 </resources>

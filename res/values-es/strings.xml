@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools" >
+<resources xmlns:tools="http://schemas.android.com/tools">
 
 <string tools:ignore="MissingTranslation" name="app_name">Notes</string>
 <string tools:ignore="MissingTranslation" name="title_create">Nueva nota</string>
@@ -46,6 +46,8 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="search_hint">Búsqueda</string>
 <string tools:ignore="MissingTranslation" name="settings_theme">Tema actual</string>
 <string tools:ignore="MissingTranslation" name="settings_theme_dialog">Elegir tema</string>
+
+
 <string tools:ignore="MissingTranslation" name="settings_cat_theme">Tema</string>
 <string tools:ignore="MissingTranslation" name="settings_cat_sorting">Orden</string>
 <string tools:ignore="MissingTranslation" name="settings_sorting_type">Orden por</string>
@@ -136,6 +138,7 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="password_set">Contraseña establecida</string>
 <string tools:ignore="MissingTranslation" name="password_cleared">Contraseña borrada</string>
 <string tools:ignore="MissingTranslation" name="passwords_dont_match">Las contraseñas no concuerdan</string>
+<string tools:ignore="MissingTranslation" name="password_incorrect">Contraseña incorrecta</string>
 <string tools:ignore="MissingTranslation" name="enter_password">Introduzca la contraseña</string>
 <string tools:ignore="MissingTranslation" name="enter_new_password">Introduzca una nueva contraseña</string>
 <string tools:ignore="MissingTranslation" name="confirm_new_password">Confirme la nueva contraseña</string>
@@ -194,8 +197,10 @@ Use few if language need it. In English is the same.
 
 
 <!-- These should probably not be translated -->
-<string tools:ignore="MissingTranslation" name="default_notetitle">¡Bienvenido!</string>
-<string tools:ignore="MissingTranslation" name="default_notetext">Para sacar el máximo aprovechamiento de esta aplicación, le sugiero que active la sincronización antes de nada. Continúe, y pulse el botón para sincronizar de la barra de acciones cuando vuelva a la lista. Esto activará la sincronización automática por defecto, que actuará cada hora.\n\nEsto está ligado a sus preferencias globales de sincronización. Resumidamente, si no está activada la sincronización de gmail, entonces tampoco se sincronizará esta aplicación. Puede desactivar la sincronización automática, y hacerla manualmente usted, en el apartado de configuración.\n\nSi tiene mas de una cuenta Google en su dispositivo, le sugiero seleccionar en el apartado de configuración cuál se usará.\n\nDe cualquier forma, recomiendo visitar este apartado para ver qué otras opciones tiene. Puede ajustar el tamaño y tipo de letra, y cambiar el tema de la aplicación de claro a oscuro.\n\nLa aplicación también incluye un widget completamente ajustable. Puede cambiar su tamaño como cualquier otro widget: toque y manténgalo un segundo con el dedo como si fuera a moverlo. Después, en lugar de moverlo, puede arrastrar los bordes del widget para estirarlo o encogerlo.\n\nEspero que encuentre útil la aplicación. Recuerde que es completamente gratis, no tiene publicidad y es de código abierto. Si tiene alguna buena idea o queja, por favor dígamelas.\n\n/Jonas</string>
-<string tools:ignore="MissingTranslation" name="about_text">¡Gracias por descargar mi aplicación! Lo hago lo mejor que sé para que la aplicación sea estupenda en todo, pero siempre habrá errores y cosas que podrían mejorarse.\n\nSi ha encontrado un fallo, una traducción incorrecta, o simplemente tiene una idea acerca de cómo mejorar la aplicación, ¡quiero oírlo!\nEnvíeme un email: jonas@nononsenseapps.com\n\n+1: https://plus.google.com/u/0/111801385015192089838\n\nRepórtelo en el registro de fallos: https://github.com/spacecowboy/NotePad/issues\n\nSi quiere traducir la aplicación, por favor, vaya a http://translate.nononsenseapps.com\n\nUna vez más, ¡gracias por descargar mi aplicación!\nSi quiere apoyar el proyecto de un modo menos activo, siempre puede comprar la versión de donación:\nhttps://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
+<string name="default_notetitle" tools:ignore="MissingTranslation">¡Bienvenido!</string>
+<string name="default_notetext" tools:ignore="MissingTranslation">Para sacar el máximo aprovechamiento de esta aplicación, le sugiero que active la sincronización antes de nada. Continúe, y pulse el botón para sincronizar de la barra de acciones cuando vuelva a la lista. Esto activará la sincronización automática por defecto, que actuará cada hora.\n\nEsto está ligado a sus preferencias globales de sincronización. Resumidamente, si no está activada la sincronización de gmail, entonces tampoco se sincronizará esta aplicación. Puede desactivar la sincronización automática, y hacerla manualmente usted, en el apartado de configuración.\n\nSi tiene mas de una cuenta Google en su dispositivo, le sugiero seleccionar en el apartado de configuración cuál se usará.\n\nDe cualquier forma, recomiendo visitar este apartado para ver qué otras opciones tiene. Puede ajustar el tamaño y tipo de letra, y cambiar el tema de la aplicación de claro a oscuro.\n\nLa aplicación también incluye un widget completamente ajustable. Puede cambiar su tamaño como cualquier otro widget: toque y manténgalo un segundo con el dedo como si fuera a moverlo. Después, en lugar de moverlo, puede arrastrar los bordes del widget para estirarlo o encogerlo.\n\nEspero que encuentre útil la aplicación. Recuerde que es completamente gratis, no tiene publicidad y es de código abierto. Si tiene alguna buena idea o queja, por favor dígamelas.\n\n/Jonas</string>
+<string name="about_text" tools:ignore="MissingTranslation">¡Gracias por descargar mi aplicación! Lo hago lo mejor que sé para que la aplicación sea estupenda en todo, pero siempre habrá errores y cosas que podrían mejorarse.\n\nSi ha encontrado un fallo, una traducción incorrecta, o simplemente tiene una idea acerca de cómo mejorar la aplicación, ¡quiero oírlo!\nEnvíeme un email: jonas@nononsenseapps.com\n\n+1: https://plus.google.com/u/0/111801385015192089838\n\nRepórtelo en el registro de fallos: https://github.com/spacecowboy/NotePad/issues\n\nSi quiere traducir la aplicación, por favor, vaya a http://translate.nononsenseapps.com\n\nUna vez más, ¡gracias por descargar mi aplicación!\nSi quiere apoyar el proyecto de un modo menos activo, siempre puede comprar la versión de donación:\nhttps://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
+
+<!-- settings string keys -->
 
 </resources>

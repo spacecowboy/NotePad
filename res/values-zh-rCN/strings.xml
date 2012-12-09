@@ -17,94 +17,99 @@ limitations under the License.
 
 <resources xmlns:tools="http://schemas.android.com/tools" >
 
-<string name="app_name">便签</string>
-<string name="title_create">新便签</string>
-<string name="title_edit">编辑: %1$s</string>
-<string name="menu_add">新便签</string>
-<string name="menu_delete">删除</string>
-<string name="menu_revert">恢复更改</string>
-<string name="menu_copy">复制便签</string>
-<string name="menu_cancel">取消</string>
-<string name="menu_setcompleted">设置完成</string>
-<string name="menu_setuncompleted">设置未完成</string>
-<string name="menu_deletelist">删除列表</string>
-<string name="menu_sync">刷新</string>
-<string name="menu_share">分享</string>
-<string name="menu_preferences">设置</string>
-<string name="menu_renamelist">列表重命名</string>
-<string name="menu_createlist">创建列表</string>
-<string name="menu_clearcompleted">清除已完成</string>
-<string name="menu_setdefaultlist">默认列表</string>
-<string name="delete_list_warning">确实要删除列表吗？列表将被永久删除。</string>
-<string name="editor_due_date_hint">到期日</string>
-<string name="editor_title_hint">标题</string>
-<string name="editor_note_hint">便签</string>
-<string name="resolve_edit">编辑便签</string>
-<string name="error_title">出错</string>
-<string name="error_message">加载便签出错</string>
-<string name="search_hint">搜索</string>
-<string name="settings_theme">当前主题</string>
-<string name="settings_theme_dialog">选择主题</string>
-<string name="settings_cat_theme">主题</string>
-<string name="settings_cat_sorting">排序</string>
-<string name="settings_sorting_type">排序方式</string>
-<string name="settings_sorting_type_dialog">排序方式</string>
-<string name="settings_sorting_order">排列方式</string>
-<string name="settings_sorting_order_dialog">排列方式</string>
-<string name="settings_summary_sort_type_alphabetic">标题</string>
-<string name="settings_summary_sort_type_modified">最新修改</string>
-<string name="settings_summary_sort_type_duedate">到期日</string>
-<string name="settings_summary_sort_type_serverposition">服务器位置</string>
-<string name="settings_summary_sort_order_asc">升序</string>
-<string name="settings_summary_sort_order_desc">降序</string>
-<string name="settings_summary_theme_dark">深</string>
-<string name="settings_summary_theme_light">浅</string>
-<string name="settings_summary_theme_light_dark_ab">界面浅, 活动栏深</string>
-<string name="settings_cat_appearance">外观</string>
-<string name="settings_font_screen">字体设定</string>
-<string name="settings_font_screen_summary">你可以改变字体的类型和大小</string>
-<string name="settings_cat_font_editor">编辑栏</string>
-<string name="settings_font_type">字体</string>
-<string name="settings_font_type_dialog">选择一种字体</string>
-<string name="settings_font_size">字体大小</string>
-<string name="preference_preview_text">我能吞下玻璃而不损伤身体</string>
-<string name="settings_text_preview_title">预览</string>
-<string name="monospace">等宽</string>
-<string name="sans">无装饰</string>
-<string name="serif">衬线</string>
-<string name="settings_sync_freq_title">同步频率</string>
-<string name="settings_account_title">选择一个账户</string>
-<string name="settings_account_summary">点击切换账户</string>
-<string name="settings_sync_enable_title">Google工作表同步</string>
-<string name="settings_sync_enable_summary">与Google账户同步便签</string>
-<string name="settings_cat_syncing">同步</string>
-<string name="manual">手动</string>
-<string name="minutes">分钟</string>
-<string name="hours">小时</string>
-<string name="onehour">1小时</string>
-<string name="oneday">1天</string>
-<string name="yes">同意</string>
-<string name="no">不同意</string>
-<string name="ok">确认</string>
-<string name="show_from_all_lists">所有列表</string>
-<string name="default_list_needed_warning">设置一个默认列表</string>
-<string name="reverted">已恢复的更改</string>
+<string tools:ignore="MissingTranslation" name="app_name">便签</string>
+<string tools:ignore="MissingTranslation" name="title_create">新便签</string>
+<string tools:ignore="MissingTranslation" name="title_edit">编辑：%1$s</string>
+<string tools:ignore="MissingTranslation" name="menu_add">新便签</string>
+<string tools:ignore="MissingTranslation" name="menu_delete">删除</string>
+<string tools:ignore="MissingTranslation" name="menu_revert">恢复更改</string>
+<string tools:ignore="MissingTranslation" name="menu_copy">复制便签</string>
+<string tools:ignore="MissingTranslation" name="menu_cancel">取消</string>
+<string tools:ignore="MissingTranslation" name="menu_setcompleted">设为已完成</string>
+<string tools:ignore="MissingTranslation" name="menu_setuncompleted">设为未完成</string>
+<string tools:ignore="MissingTranslation" name="menu_deletelist">删除列表</string>
+<string tools:ignore="MissingTranslation" name="menu_sync">刷新</string>
+<string tools:ignore="MissingTranslation" name="menu_share">分享</string>
+<string tools:ignore="MissingTranslation" name="menu_preferences">设置</string>
+<string tools:ignore="MissingTranslation" name="menu_renamelist">重命名列表</string>
+<string tools:ignore="MissingTranslation" name="menu_createlist">创建列表</string>
+<string tools:ignore="MissingTranslation" name="menu_clearcompleted">清除已完成</string>
+<string tools:ignore="MissingTranslation" name="menu_setdefaultlist">设为默认列表</string>
+<string tools:ignore="MissingTranslation" name="menu_managelists">管理列表</string>
+<string tools:ignore="MissingTranslation" name="delete_list_warning">确实要删除此列表吗？列表将被永久删除。</string>
+<string tools:ignore="MissingTranslation" name="editor_due_date_hint">到期日</string>
+<string tools:ignore="MissingTranslation" name="editor_title_hint">标题</string>
+<string tools:ignore="MissingTranslation" name="editor_note_hint">便签</string>
+<string tools:ignore="MissingTranslation" name="resolve_edit">编辑便签</string>
+<string tools:ignore="MissingTranslation" name="error_title">错误</string>
+<string tools:ignore="MissingTranslation" name="error_message">加载便签时出错</string>
+<string tools:ignore="MissingTranslation" name="search_hint">搜索</string>
+<string tools:ignore="MissingTranslation" name="settings_theme">当前主题</string>
+<string tools:ignore="MissingTranslation" name="settings_theme_dialog">使用主题</string>
+
+<string tools:ignore="MissingTranslation" name="settings_lang">语言</string>
+
+<string tools:ignore="MissingTranslation" name="settings_cat_theme">主题</string>
+<string tools:ignore="MissingTranslation" name="settings_cat_sorting">分类</string>
+<string tools:ignore="MissingTranslation" name="settings_sorting_type">分类方式</string>
+<string tools:ignore="MissingTranslation" name="settings_sorting_type_dialog">分类方式</string>
+<string tools:ignore="MissingTranslation" name="settings_sorting_order">排序</string>
+<string tools:ignore="MissingTranslation" name="settings_sorting_order_dialog">排序方式</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_alphabetic">标题</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_modified">最近修改</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_duedate">到期时间</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">我的顺序</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">升序</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">降序</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_theme_black">黑色</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">深色</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_theme_light">浅色</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">浅色界面，深色活动栏</string>
+<string tools:ignore="MissingTranslation" name="settings_cat_appearance">外观</string>
+<string tools:ignore="MissingTranslation" name="settings_font_screen">字体设置</string>
+<string tools:ignore="MissingTranslation" name="settings_font_screen_summary">你可以更改字体的类型和大小</string>
+<string tools:ignore="MissingTranslation" name="settings_cat_font_editor">编辑器</string>
+<string tools:ignore="MissingTranslation" name="settings_font_type">字体</string>
+<string tools:ignore="MissingTranslation" name="settings_font_type_dialog">选择一种字体</string>
+<string tools:ignore="MissingTranslation" name="settings_font_size">字体大小</string>
+<string tools:ignore="MissingTranslation" name="preference_preview_text">我能吞下玻璃而不损伤身体</string>
+<string tools:ignore="MissingTranslation" name="settings_text_preview_title">预览</string>
+<string tools:ignore="MissingTranslation" name="monospace">等宽字体</string>
+<string tools:ignore="MissingTranslation" name="sans">无衬线字体</string>
+<string tools:ignore="MissingTranslation" name="serif">衬线字体</string>
+<string tools:ignore="MissingTranslation" name="settings_sync_freq_title">同步类型</string>
+<string tools:ignore="MissingTranslation" name="settings_account_title">选择一个账户</string>
+<string tools:ignore="MissingTranslation" name="settings_account_summary">点击切换账户</string>
+<string tools:ignore="MissingTranslation" name="settings_sync_enable_title">Google 工作表同步</string>
+<string tools:ignore="MissingTranslation" name="settings_sync_enable_summary">与 Google 账户同步便签</string>
+<string tools:ignore="MissingTranslation" name="settings_cat_syncing">同步</string>
+<string tools:ignore="MissingTranslation" name="manual">手动</string>
+<string tools:ignore="MissingTranslation" name="minutes">分钟</string>
+<string tools:ignore="MissingTranslation" name="hours">小时</string>
+<string tools:ignore="MissingTranslation" name="onehour">1 小时</string>
+<string tools:ignore="MissingTranslation" name="oneday">1 天</string>
+<string tools:ignore="MissingTranslation" name="yes">是</string>
+<string tools:ignore="MissingTranslation" name="no">否</string>
+<string tools:ignore="MissingTranslation" name="ok">确认</string>
+<string tools:ignore="MissingTranslation" name="show_from_all_lists">所有列表</string>
+<string tools:ignore="MissingTranslation" name="default_list_needed_warning">设置一个默认列表</string>
+<string tools:ignore="MissingTranslation" name="reverted">已恢复的更改</string>
 <string name="notecopied" tools:ignore="MissingTranslation">已复制</string>
 <string name="deleted" tools:ignore="MissingTranslation">已删除</string>
 <string name="items" tools:ignore="MissingTranslation">便签</string>
-<string name="permission_read_label">读取便签和列表</string>
-<string name="permission_read_desc">允许程序读取你的便签和相关列表.</string>
-<string name="permission_write_label">更改便签盒列表</string>
-<string name="permission_write_desc">允许程序插入,更新和删除便签和列表.</string>
-<string name="settings_header_list">列表设置</string>
-<string name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string name="settings_header_sync">@string/settings_cat_syncing</string>
-<string name="settings_list_dialog">选择一个列表</string>
-<string name="settings_list">列表</string>
-<string name="automatic">自动</string>
+<string tools:ignore="MissingTranslation" name="permission_read_label">读取便签和列表</string>
+<string tools:ignore="MissingTranslation" name="permission_read_desc">允许应用读取你的便签与相关列表。</string>
+<string tools:ignore="MissingTranslation" name="permission_write_label">更改便签与列表</string>
+<string tools:ignore="MissingTranslation" name="permission_write_desc">允许应用新增、更改和删除便签与列表。</string>
+<string tools:ignore="MissingTranslation" name="settings_header_list">列表设置</string>
+<string tools:ignore="MissingTranslation" name="settings_header_appearance">@string/settings_cat_appearance</string>
+<string tools:ignore="MissingTranslation" name="settings_header_sync">@string/settings_cat_syncing</string>
+<string tools:ignore="MissingTranslation" name="settings_list_dialog">选择一个列表</string>
+<string tools:ignore="MissingTranslation" name="settings_list">列表</string>
+<string tools:ignore="MissingTranslation" name="automatic">自动</string>
 
-<string name="preferences_week_start_day_dialog">每周开始于</string>
-<string name="preferences_week_start_day_title">每周开始于</string>
+<string tools:ignore="MissingTranslation" name="preferences_week_start_day_dialog">每周开始于</string>
+<string tools:ignore="MissingTranslation" name="preferences_week_start_day_title">每周开始于</string>
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
@@ -124,53 +129,94 @@ Use few if language need it. In English is the same.
 <item quantity="other">Selected %d notes</item>
 </plurals>
 
-<string name="lock_note">锁定便签</string>
-<string name="unlock_note">解锁便签</string>
-<string name="locked">已锁定</string>
-<string name="unlocked">已解锁</string>
-<string name="password_required">需要密码</string>
-<string name="select_account">选择一个账户</string>
-<string name="password">密码</string>
-<string name="password_set">密码设定</string>
-<string name="password_cleared">密码已清除</string>
-<string name="passwords_dont_match">密码错误</string>
-<string name="enter_password">输入密码</string>
-<string name="enter_new_password">输入新密码</string>
-<string name="confirm_new_password">确认新密码</string>
-<string name="apply">应用</string>
-<string name="clear_password">清除密码</string>
-<string name="password_info">设置密码后，每次查看加锁便签需输入密码。只保护便签内容，标题和到期日仍可以显示。 便签内容将不以任何形式加密，所以内容可以在Google邮箱和日历中查看。如果忘记了密码，先与Google同步然后重新安装软件。</string>
-<string name="about">关于</string>
+<string tools:ignore="MissingTranslation" name="lock_note">锁定便签</string>
+<string tools:ignore="MissingTranslation" name="unlock_note">解锁便签</string>
+<string tools:ignore="MissingTranslation" name="locked">已锁定</string>
+<string tools:ignore="MissingTranslation" name="unlocked">已解锁</string>
+<string tools:ignore="MissingTranslation" name="password_required">需要密码</string>
+<string tools:ignore="MissingTranslation" name="select_account">选择一个账户</string>
+<string tools:ignore="MissingTranslation" name="password">密码</string>
+<string tools:ignore="MissingTranslation" name="password_set">密码已设置</string>
+<string tools:ignore="MissingTranslation" name="password_cleared">密码已清除</string>
+<string tools:ignore="MissingTranslation" name="passwords_dont_match">密码错误</string>
+<string tools:ignore="MissingTranslation" name="enter_password">输入密码</string>
+<string tools:ignore="MissingTranslation" name="enter_new_password">输入新密码</string>
+<string tools:ignore="MissingTranslation" name="confirm_new_password">确认新密码</string>
+<string tools:ignore="MissingTranslation" name="apply">应用</string>
+<string tools:ignore="MissingTranslation" name="clear_password">清除密码</string>
+<string tools:ignore="MissingTranslation" name="password_info">设置密码后，每次查看加锁便签需输入密码。只保护便签内容，标题和到期日仍可以显示。便签内容将不以任何形式加密，所以内容可以在 Google 邮箱和日历中查看。如果忘记了密码，先与 Google 同步然后重新安装软件。</string>
+<string tools:ignore="MissingTranslation" name="about">关于</string>
 
-<string name="sync_failed">同步失败</string>
-<string name="sync_login_failed">登录失败，无法连接到Google工作表。。</string>
+<string tools:ignore="MissingTranslation" name="sync_failed">同步失败</string>
+<string tools:ignore="MissingTranslation" name="sync_login_failed">登录失败，无法连接到 Google 工作表</string>
 
-<!-- Untranslated yet -->
 <string tools:ignore="MissingTranslation" name="changelog_full_title">更新日志</string>
-<string tools:ignore="MissingTranslation" name="changelog_title">有什么更新的？</string>
+<string tools:ignore="MissingTranslation" name="changelog_title">最近更新</string>
 <string tools:ignore="MissingTranslation" name="changelog_ok_button">确认</string>
 <string tools:ignore="MissingTranslation" name="changelog_show_full">显示完整内容</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_preview_note">显示便签预览</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">标题将会变成两行</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_on">标签内容将会放在第二行</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_show_complete">“标记为完成”按钮</string>
+<string tools:ignore="MissingTranslation" name="widget_pref_show_complete">“设为已完成”按钮</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_off">按钮将被隐藏</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_on">按钮将会可见</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem">两行的标题</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">便签预览将会是两行</string>
+<string tools:ignore="MissingTranslation" name="settings_listitem">两行标题</string>
+<string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">便签预览将显示为 2 行</string>
 
 <string tools:ignore="MissingTranslation" name="editor_details">更多</string>
 <string tools:ignore="MissingTranslation" name="completed">已完成</string>
+<string tools:ignore="MissingTranslation" name="subtask_of">属于任务</string>
+<string tools:ignore="MissingTranslation" name="security">安全</string>
 
+<string tools:ignore="MissingTranslation" name="date_header_overdue">已过期</string>
 <string tools:ignore="MissingTranslation" name="date_header_today">今天</string>
 <string tools:ignore="MissingTranslation" name="date_header_tomorrow">明天</string>
+<string tools:ignore="MissingTranslation" name="date_header_7days">下周</string>
+<string tools:ignore="MissingTranslation" name="date_header_future">晚些时候</string>
+<string tools:ignore="MissingTranslation" name="date_header_none">无日期</string>
+<string tools:ignore="MissingTranslation" name="date_header_completed">已完成</string>
 
+<string tools:ignore="MissingTranslation" name="mod_header_yesterday">昨天</string>
+<string tools:ignore="MissingTranslation" name="mod_header_thisweek">本周</string>
 <string tools:ignore="MissingTranslation" name="mod_header_earlier">早些时候</string>
 
+<string tools:ignore="MissingTranslation" name="settings_listheader">当显示所有列表时</string>
+<string tools:ignore="MissingTranslation" name="settings_listheader_off">显示为一个列表</string>
+<string tools:ignore="MissingTranslation" name="settings_listheader_on">显示列表名称</string>
 
+<string tools:ignore="MissingTranslation" name="please_create_list">请创建一个列表</string>
+<string tools:ignore="MissingTranslation" name="please_select_note">请选择或者创建一个便签</string>
+<string tools:ignore="MissingTranslation" name="please_create_note">请创建一个便签</string>
+
+<string tools:ignore="MissingTranslation" name="hide_checkbox">隐藏复选框</string>
+<string tools:ignore="MissingTranslation" name="hide_checkbox_summary_on">复选框将被隐藏</string>
+<string tools:ignore="MissingTranslation" name="hide_checkbox_summary_off">复选框将被显示</string>
+
+<string tools:ignore="MissingTranslation" name="hide_note">隐藏便签</string>
+<string tools:ignore="MissingTranslation" name="hide_note_summary_on">便签将被隐藏</string>
+<string tools:ignore="MissingTranslation" name="hide_note_summary_off">便签将被显示</string>
+
+<string tools:ignore="MissingTranslation" name="hide_date">隐藏过期时间</string>
+<string tools:ignore="MissingTranslation" name="hide_date_summary_on">日期将被隐藏</string>
+<string tools:ignore="MissingTranslation" name="hide_date_summary_off">日期将被显示</string>
+
+<string tools:ignore="MissingTranslation" name="title_rows">标题最大高度</string>
+<string tools:ignore="MissingTranslation" name="title_rows_1">1 行</string>
+<string tools:ignore="MissingTranslation" name="title_rows_2">2 行</string>
+<string tools:ignore="MissingTranslation" name="title_rows_free">无限制</string>
+
+<string tools:ignore="MissingTranslation" name="saturday">周六</string>
+<string tools:ignore="MissingTranslation" name="sunday">周日</string>
+<string tools:ignore="MissingTranslation" name="monday">周一</string>
+<string tools:ignore="MissingTranslation" name="localedefault">使用所在地区的默认值</string>
 
 
 <!-- These should probably not be translated -->
 <string tools:ignore="MissingTranslation" name="default_notetitle">欢迎！</string>
+<string tools:ignore="MissingTranslation" name="default_notetext">为了充分体验本应用，我建议您首先启用同步功能。当您前往列表界面后，点击活动栏中的同步按钮。默认情况下，这将启用自动同步功能，每小时进行一次同步操作。\n\n请注意，这个设置与您的全局同步选项相关联。简而言之，如果您的 Gmail 没有设置为自动同步，那么这个应用也就不会。您可以在设置中把自动同步关闭，完全手动控制同步。\n\n如果在您的设备上有多于一个 Google 账户，我建议前往设置界面并手动选择使用哪一个账户。\n\n总之，我推荐前往设置界面复查一下所有相关的选项。您可以在那里调整文字字体和字号，更换应用的深浅配色主题。\n\n本应用同时包含了可随意调整大小的窗口小部件，可以像调整其他小部件一样：用手指轻触小部件并按住片刻，与移动它的动作相似。随后，您便可以用手指拉动小部件的边角来调整它的大小了。\n\n希望您能充分利用这款应用。请记住，这款应用是完全免费的，不含广告并且开放源代码。如果您有任何想法与意见，请不吝提出，集思广益。\n\n/Jonas</string>
+<string tools:ignore="MissingTranslation" name="about_text">感谢您下载我的应用！我一直在努力让这款应用变得强大，然而一定会有错误存在并且一切还可以变得更好！\n\n如果您发现了任何程序错误、翻译不当，或者想到可以完善这个应用的好点子，我愿洗耳恭听！\n\n给我发送邮件：jonas@nononsenseapps.com\n给我在G+上+1：https://plus.google.com/u/0/111801385015192089838\n报告错误：https://github.com/spacecowboy/NotePad/issues\n\n如果您愿意帮助翻译这个应用，请前往 http://translate.nononsenseapps.com\n\n再次感谢您下载这款应用！\n如果您愿意以“不太积极”的方式支持这个项目，可以在这里购买捐赠版本：https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
+
+<!-- settings string keys -->
+
 
 </resources>

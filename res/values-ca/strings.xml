@@ -33,7 +33,25 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="menu_renamelist">Canvia el títol de la llista</string>
 <string tools:ignore="MissingTranslation" name="menu_createlist">Crea una nova llista</string>
 <string tools:ignore="MissingTranslation" name="menu_setdefaultlist">Estableix com a llista per defecte</string>
+<string tools:ignore="MissingTranslation" name="menu_managelists">Gestiona les llistes</string>
 <string tools:ignore="MissingTranslation" name="delete_list_warning">Estàs segur d\'esborrar aquesta llista? L\'eliminació és permanent.</string>
+<string tools:ignore="MissingTranslation" name="editor_due_date_hint">Data límit</string>
+<string tools:ignore="MissingTranslation" name="editor_title_hint">Títol</string>
+<string tools:ignore="MissingTranslation" name="editor_note_hint">Nota</string>
+<string tools:ignore="MissingTranslation" name="resolve_edit">Editar nota</string>
+<string tools:ignore="MissingTranslation" name="error_title">Error</string>
+<string tools:ignore="MissingTranslation" name="search_hint">Cerca</string>
+<string tools:ignore="MissingTranslation" name="settings_theme">Tema actual</string>
+<string tools:ignore="MissingTranslation" name="settings_theme_dialog">Usa el tema</string>
+
+<string tools:ignore="MissingTranslation" name="settings_lang">Idioma</string>
+
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_alphabetic">Ordena per títol</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_modified">Ordena per darrera modificació</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_duedate">Ordena per data</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">El meu ordre</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Ascendent</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Descendent</string>
 
 <!--
 Use few if language need it. In English is the same.
@@ -69,5 +87,8 @@ Use few if language need it. In English is the same.
 
 
 <!-- These should probably not be translated -->
+
+<!-- settings string keys -->
+
 
 </resources>

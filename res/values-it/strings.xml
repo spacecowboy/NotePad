@@ -36,7 +36,7 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="menu_clearcompleted">Rimuovi completate</string>
 <string tools:ignore="MissingTranslation" name="menu_setdefaultlist">Imposta come elenco predefinito</string>
 <string tools:ignore="MissingTranslation" name="menu_managelists">Gestisci elenchi</string>
-<string tools:ignore="MissingTranslation" name="delete_list_warning">Sicuro di voler eliminare l\'elenco? L\'elenco verrà eliminato permanentemente.</string>
+<string tools:ignore="MissingTranslation" name="delete_list_warning">Sicuro di voler eliminare l'elenco? L'elenco verrà eliminato permanentemente.</string>
 <string tools:ignore="MissingTranslation" name="editor_due_date_hint">Data scadenza</string>
 <string tools:ignore="MissingTranslation" name="editor_title_hint">Titolo</string>
 <string tools:ignore="MissingTranslation" name="editor_note_hint">Nota</string>
@@ -46,6 +46,9 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="search_hint">Cerca</string>
 <string tools:ignore="MissingTranslation" name="settings_theme">Tema attuale</string>
 <string tools:ignore="MissingTranslation" name="settings_theme_dialog">Applica tema</string>
+
+<string tools:ignore="MissingTranslation" name="settings_lang">Lingua</string>
+
 <string tools:ignore="MissingTranslation" name="settings_cat_theme">Tema</string>
 <string tools:ignore="MissingTranslation" name="settings_cat_sorting">Ordinamento</string>
 <string tools:ignore="MissingTranslation" name="settings_sorting_type">Ordinamento</string>
@@ -58,6 +61,7 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">Ordinamento personale</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Ascendente</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Discendente</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_theme_black">Nero</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Scuro</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Chiaro</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">Chiaro, con barre scure</string>
@@ -140,7 +144,7 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="confirm_new_password">Conferma la nuova password</string>
 <string tools:ignore="MissingTranslation" name="apply">Applica</string>
 <string tools:ignore="MissingTranslation" name="clear_password">Azzera password</string>
-<string tools:ignore="MissingTranslation" name="password_info">Impostando una password, verrà richiesto di inserire tale password per mostrare le note bloccate. La protezione è solo per il contenuto, i titoli e le scadenze saranno comunque visibili. Le note non vengono cifrate, perciò visibili sul calendario/mail di Google. Nel caso ti dimenticassi la password, sincronizza con il tuo account Google e reinstalla l\'applicazione.</string>
+<string tools:ignore="MissingTranslation" name="password_info">Impostando una password, verrà richiesto di inserire tale password per mostrare le note bloccate. La protezione è solo per il contenuto, i titoli e le scadenze saranno comunque visibili. Le note non vengono cifrate, perciò visibili sul calendario/mail di Google. Nel caso ti dimenticassi la password, sincronizza con il tuo account Google e reinstalla l'applicazione.</string>
 <string tools:ignore="MissingTranslation" name="about">Informazioni</string>
 
 <string tools:ignore="MissingTranslation" name="sync_failed">Sincronizzazione non riuscita</string>
@@ -157,7 +161,7 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_off">Il pulsante sarà nascosto</string>
 <string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_on">Il pulsante sarà visibile</string>
 <string tools:ignore="MissingTranslation" name="settings_listitem">Titolo su due righe</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">L\'anteprima della nota sarà su 2 righe</string>
+<string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">L'anteprima della nota sarà su 2 righe</string>
 
 <string tools:ignore="MissingTranslation" name="editor_details">Altro</string>
 <string tools:ignore="MissingTranslation" name="completed">Completata</string>
@@ -208,5 +212,8 @@ Use few if language need it. In English is the same.
 
 
 <!-- These should probably not be translated -->
+
+<!-- settings string keys -->
+
 
 </resources>
