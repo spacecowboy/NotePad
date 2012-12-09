@@ -34,6 +34,17 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="\nVersion 4.2.1"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\n- Hiding some widget parts crashed on pre JellyBean. Fixed.\n- Fixed checkbox behaviour in widget on JellyBean.\n- Widget icon is once again a fixed size.\n- Adjusted text size of widget list headers." />
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="\nVersion 4.2"
             android:textStyle="bold" />
 
