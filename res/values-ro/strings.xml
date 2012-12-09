@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2012 Jonas Kalderstam
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<resources xmlns:tools="http://schemas.android.com/tools" >
+
+<string tools:ignore="MissingTranslation" name="app_name">Note</string>
+<string tools:ignore="MissingTranslation" name="title_create">Notă nouă</string>
+<string tools:ignore="MissingTranslation" name="title_edit">Modifică: %1$s</string>
+<string tools:ignore="MissingTranslation" name="menu_add">Notă nouă</string>
+<string tools:ignore="MissingTranslation" name="menu_delete">Șterge</string>
+<string tools:ignore="MissingTranslation" name="menu_revert">Refă modificările</string>
+<string tools:ignore="MissingTranslation" name="menu_copy">Copiază nota</string>
+<string tools:ignore="MissingTranslation" name="menu_cancel">Anulează</string>
+<string tools:ignore="MissingTranslation" name="menu_setcompleted">Finalizat</string>
+<string tools:ignore="MissingTranslation" name="menu_setuncompleted">Nefinalizat</string>
+<string tools:ignore="MissingTranslation" name="menu_deletelist">Șterge lista</string>
+<string tools:ignore="MissingTranslation" name="menu_sync">Actualizează</string>
+<string tools:ignore="MissingTranslation" name="menu_share">Partajează</string>
+<string tools:ignore="MissingTranslation" name="menu_preferences">Setări</string>
+<string tools:ignore="MissingTranslation" name="menu_renamelist">Redenumește lista</string>
+<string tools:ignore="MissingTranslation" name="menu_createlist">Creează lista</string>
+<string tools:ignore="MissingTranslation" name="menu_setdefaultlist">Stabilește ca listă implicită</string>
+<string tools:ignore="MissingTranslation" name="menu_managelists">Gestionează listele</string>
+<string tools:ignore="MissingTranslation" name="editor_title_hint">Titlu</string>
+<string tools:ignore="MissingTranslation" name="editor_note_hint">Notă</string>
+<string tools:ignore="MissingTranslation" name="resolve_edit">Modifică nota</string>
+<string tools:ignore="MissingTranslation" name="error_title">Eroare</string>
+<string tools:ignore="MissingTranslation" name="error_message">Eroare la încărcarea notei</string>
+<string tools:ignore="MissingTranslation" name="search_hint">Caută</string>
+<string tools:ignore="MissingTranslation" name="settings_theme">Tema actuală</string>
+<string tools:ignore="MissingTranslation" name="settings_theme_dialog">Folosește tema</string>
+
+<string tools:ignore="MissingTranslation" name="settings_lang">Limba</string>
+
+<string tools:ignore="MissingTranslation" name="settings_cat_theme">Temă</string>
+<string tools:ignore="MissingTranslation" name="settings_sorting_order">Ordine</string>
+<string tools:ignore="MissingTranslation" name="settings_sorting_order_dialog">Ordine după</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_alphabetic">Titlu</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_modified">Ultima modificare</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_theme_black">Negru</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Întunecat</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Luminat</string>
+<string tools:ignore="MissingTranslation" name="settings_cat_appearance">Aspect</string>
+<string tools:ignore="MissingTranslation" name="settings_text_preview_title">Previzualizare</string>
+<string tools:ignore="MissingTranslation" name="settings_cat_syncing">Sincronizare</string>
+<string tools:ignore="MissingTranslation" name="manual">Manual</string>
+<string tools:ignore="MissingTranslation" name="minutes">minute</string>
+<string tools:ignore="MissingTranslation" name="hours">ore</string>
+<string tools:ignore="MissingTranslation" name="onehour">O oră</string>
+<string tools:ignore="MissingTranslation" name="oneday">O zi</string>
+<string tools:ignore="MissingTranslation" name="yes">Da</string>
+<string tools:ignore="MissingTranslation" name="no">Nu</string>
+<string tools:ignore="MissingTranslation" name="ok">OK</string>
+<string tools:ignore="MissingTranslation" name="show_from_all_lists">Toate listele</string>
+
+<!--
+Use few if language need it. In English is the same.
+<item quantity="few">Copied 2 notes.</item>
+-->
+<plurals name="notecopied_msg">
+<item quantity="one">Copied one note</item>
+<item quantity="other">Copied %d notes</item>
+</plurals>
+
+<plurals name="notedeleted_msg">
+<item quantity="one">Deleted one note</item>
+<item quantity="other">Deleted %d notes</item>
+</plurals>
+
+<plurals name="mode_choose">
+<item quantity="one">Selected one note</item>
+<item quantity="other">Selected %d notes</item>
+</plurals>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- These should probably not be translated -->
+
+<!-- settings string keys -->
+
+
+</resources>

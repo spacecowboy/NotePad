@@ -46,6 +46,9 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="search_hint">Cerca</string>
 <string tools:ignore="MissingTranslation" name="settings_theme">Tema attuale</string>
 <string tools:ignore="MissingTranslation" name="settings_theme_dialog">Applica tema</string>
+
+<string tools:ignore="MissingTranslation" name="settings_lang">Lingua</string>
+
 <string tools:ignore="MissingTranslation" name="settings_cat_theme">Tema</string>
 <string tools:ignore="MissingTranslation" name="settings_cat_sorting">Ordinamento</string>
 <string tools:ignore="MissingTranslation" name="settings_sorting_type">Ordinamento</string>
@@ -58,6 +61,7 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">Ordinamento personale</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Ascendente</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Discendente</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_theme_black">Nero</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Scuro</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Chiaro</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">Chiaro, con barre scure</string>
@@ -208,5 +212,8 @@ Use few if language need it. In English is the same.
 
 
 <!-- These should probably not be translated -->
+
+<!-- settings string keys -->
+
 
 </resources>

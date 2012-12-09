@@ -39,19 +39,21 @@ public class PasswordDialog extends DialogFragment implements OnClickListener {
 	private Activity activity;
 	private EditText passwordText;
 	private int actionId = -1;
-	
-//	public static void showPasswordDialog() {
-//		// Create and show the dialog.
-//		DialogFragment newFragment = new PasswordDialog();
-//		FragmentTransaction ft = newFragment.getFragmentManager().beginTransaction();
-//		Fragment prev = newFragment.getFragmentManager().findFragmentByTag("newpassdialog");
-//		if (prev != null) {
-//			ft.remove(prev);
-//		}
-//		ft.addToBackStack(null);
-//		
-//		newFragment.show(ft, "newpassdialog");
-//	}
+
+	// public static void showPasswordDialog() {
+	// // Create and show the dialog.
+	// DialogFragment newFragment = new PasswordDialog();
+	// FragmentTransaction ft =
+	// newFragment.getFragmentManager().beginTransaction();
+	// Fragment prev =
+	// newFragment.getFragmentManager().findFragmentByTag("newpassdialog");
+	// if (prev != null) {
+	// ft.remove(prev);
+	// }
+	// ft.addToBackStack(null);
+	//
+	// newFragment.show(ft, "newpassdialog");
+	// }
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -96,9 +98,9 @@ public class PasswordDialog extends DialogFragment implements OnClickListener {
 				"");
 		String enteredPassword = passwordText.getText().toString();
 
-			// We want to return true or false, user has entered correct
-			// password
-			checkPassword(enteredPassword, currentPassword);
+		// We want to return true or false, user has entered correct
+		// password
+		checkPassword(enteredPassword, currentPassword);
 	}
 
 	private void checkPassword(String enteredPassword, String currentPassword) {
@@ -110,30 +112,33 @@ public class PasswordDialog extends DialogFragment implements OnClickListener {
 			Animation shake = AnimationUtils.loadAnimation(activity,
 					R.anim.shake);
 			passwordText.startAnimation(shake);
-			Toast.makeText(activity, "Password incorrect string",
+			Toast.makeText(activity, getText(R.string.password_incorrect),
 					Toast.LENGTH_SHORT).show();
 		}
 	}
-	
+
 	/**
 	 * To be able to tell what it is we are verifying later
+	 * 
 	 * @param actionId
 	 */
 	public void setAction(int actionId) {
 		this.actionId = actionId;
 	}
-	
+
 	public ActionResult getResult(boolean verified) {
 		ActionResult result = new ActionResult(actionId);
 		result.result = verified;
 		return result;
 	}
-	
+
 	public static class ActionResult {
 		public boolean result = false;
 		public int actionId = -1;
+
 		public ActionResult() {
 		}
+
 		public ActionResult(int actionId) {
 			this.actionId = actionId;
 		}

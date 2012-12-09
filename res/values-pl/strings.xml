@@ -46,6 +46,9 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="search_hint">Szukaj</string>
 <string tools:ignore="MissingTranslation" name="settings_theme">Obecny motyw</string>
 <string tools:ignore="MissingTranslation" name="settings_theme_dialog">Użyj motywu</string>
+
+<string tools:ignore="MissingTranslation" name="settings_lang">Język</string>
+
 <string tools:ignore="MissingTranslation" name="settings_cat_theme">Motyw</string>
 <string tools:ignore="MissingTranslation" name="settings_cat_sorting">Sortowanie</string>
 <string tools:ignore="MissingTranslation" name="settings_sorting_type">Sortowanie włączone</string>
@@ -58,6 +61,7 @@ limitations under the License.
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">Pozycji na serwerze</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Rosnąco</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Malejąco</string>
+<string tools:ignore="MissingTranslation" name="settings_summary_theme_black">Czarny</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Ciemny</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Jasny</string>
 <string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">Jasny, ciemny pasek akcji</string>
@@ -199,6 +203,8 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="hide_date_summary_off">Data będzie widoczna</string>
 
 <string tools:ignore="MissingTranslation" name="title_rows">Maksymalna długość nagłówka</string>
+<string tools:ignore="MissingTranslation" name="title_rows_1">1 wiersz</string>
+<string tools:ignore="MissingTranslation" name="title_rows_2">2 wiersze </string>
 <string tools:ignore="MissingTranslation" name="title_rows_free">Bez ograniczeń</string>
 
 <string tools:ignore="MissingTranslation" name="saturday">Sobota</string>
@@ -211,5 +217,8 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="default_notetitle">Witam!</string>
 <string tools:ignore="MissingTranslation" name="default_notetext">Aby wykorzystać aplikację jak najlepiej sugeruję włączyć synchronizację. Wciśnij przycisk synchronizacji na pasku akcji kiedy powrócisz do listy. Domyślnie uruchomi to synchronizację, która będzie wykonywana co godzinę.\n\nMiej na uwadze, że proces ten jest połączony z globalnymi ustawieniami synchronizacji urządzenia. W kilku słowach, jeśli Twój gmail nie jest synchronizowany automatycznie, to ta aplikacja również nie. W ustawieniach możesz wyłączyć automatyczną synchronizację i przejść na całkowicie manualną.\n\nJeśli na swoim urządzeniu posiadasz więcej niż jedno konto Google, sugeruję udanie sie do ustawień i wybranie konta ręcznie.\n\nMimo wszystko rekomendowałbym udanie się do ustawień, tylko po to, by zobaczyć jakie opcję się tam znajdują. Możesz tam zmienić czcionkę oraz rozmiar pisanego tekstu, a także zmienić motyw z jasnego na ciemny.\n\nAplikacja zawiera również widżet, którego rozmiar można dowolnie zmieniać. Robisz to tak, jak w przypadku każdego innego widżetu: naciskasz palcem na widżet i przytrzymujesz chwilę, tak jak podczas przenoszenia. Zamiast przenosić możesz teraz przeciągnąć jego brzegi powiększając go, lub zmniejszając.\n\nMam nadzieję, że aplikacja okaże się przydatna. Miej na uwadze, że jest ona kompletnie darmowa, nie posiada reklam i jest open source.\n\n/Jonas</string>
 <string tools:ignore="MissingTranslation" name="about_text">Dziękuję za pobranie mojej aplikacji! Dołożę wszelkich starań, by aplikacja była co raz bardziej zajebista pod każdym względem. Zawsze wkradną się jakieś błędy, ale zawsze też może być lepiej!\n\nJeśli znajdziesz jakiś błąd, lub niepoprawne tłumaczenie, lub też masz po prostu jakiś pomysł, dzięki któremu aplikacja może stać się bardziej zajebista, chcę o tym usłyszeć!\nWyślij mi maila: jonas@nononsenseapps.com\n\nWiadomośc na Twtterze: @SciencyGuy\n\n+1 na Google+: https://plus.google.com/u/0/111801385015192089838\n\nZgłoś w systemie śledzenia błędów: https://github.com/spacecowboy/NotePad/issues\n\nZe względu na to, że jest to projekt open source, jeśli masz niezbędną wiedzę możesz spróbować naprawić błąd samodzielnie i wysłać mi prośbę o aktualizację!\n\nJeśli chciałbyś stworzyć tłumaczenie w Twoim języku byłoby zajebiści. Skontaktuj się ze mną!\nZrobiłem film instruktażowy pokazujący jak możesz aktualizować obecne tłumaczenia bezpośrednio na GitHub: http://www.youtube.com/watch?v=oZTO5zOoCb4\n\nJeszcze raz dziękuję za pobranie mojej aplikacji!\nJeśli chciałbyś wspomóc projekt w mniej aktywny sposób, możesz zawsze zakupić aplikację, jako darowiznę: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
+
+<!-- settings string keys -->
+
 
 </resources>

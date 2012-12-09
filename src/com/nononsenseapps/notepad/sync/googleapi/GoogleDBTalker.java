@@ -485,7 +485,7 @@ public class GoogleDBTalker {
 										Long.toString(task.dbId)))
 						.withValues(task.toNotesContentValues(0, listDbId))
 						.build());
-				if (task.didRemoteInsert) {
+				if (!task.conflict && task.didRemoteInsert) {
 					Log.d(TAG, "Did remote insert, inserting GTASK-record");
 					operations
 							.add(ContentProviderOperation
