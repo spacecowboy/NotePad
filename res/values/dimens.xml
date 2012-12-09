@@ -34,4 +34,9 @@
     <!-- For widget -->
     <dimen name="widget_margin">8dp</dimen>
     
+    <!-- To set values in code -->
+    <dimen name="dim_2dp">2dp</dimen>
+    <dimen name="dim_4dp">4dp</dimen>
+    <dimen name="dim_8dp">8dp</dimen>
+    
 </resources>

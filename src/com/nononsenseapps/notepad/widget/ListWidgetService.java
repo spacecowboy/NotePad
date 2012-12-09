@@ -19,6 +19,7 @@ package com.nononsenseapps.notepad.widget;
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.NotePadBroadcastReceiver;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.DateView;
@@ -126,9 +127,13 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				rv.setTextViewText(R.id.widget_itemHeader,
 						mCursor.getHeaderText());
 				rv.setBoolean(itemId, "setClickable", false);
-				if (!dark && settings
-						.getBoolean(ListWidgetConfig.KEY_TRANSPARENT, false)) {
-					rv.setTextColor(R.id.widget_itemHeader, mContext.getResources().getColor(android.R.color.primary_text_light));
+				if (!dark
+						&& settings.getBoolean(
+								ListWidgetConfig.KEY_TRANSPARENT, false)) {
+					rv.setTextColor(
+							R.id.widget_itemHeader,
+							mContext.getResources().getColor(
+									android.R.color.primary_text_light));
 				}
 			} else {
 				final int titleIndex = mCursor.getCursor().getColumnIndex(
@@ -189,7 +194,9 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 								: View.VISIBLE);
 				if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENCHECKBOX,
 						false)) {
-					rv.setViewPadding(R.id.widget_item, 8, 0, 0, 0);
+					rv.setViewVisibility(R.id.item_spacer, View.VISIBLE);
+				} else {
+					rv.setViewVisibility(R.id.item_spacer, View.GONE);
 				}
 
 				if (note == null
@@ -203,8 +210,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				} else {
 					rv.setViewVisibility(R.id.widget_itemNote, View.VISIBLE);
 					rv.setViewVisibility(R.id.widget_itemDateNote, View.VISIBLE);
-					rv.setViewVisibility(R.id.widget_itemDateTitle,
-							View.GONE);
+					rv.setViewVisibility(R.id.widget_itemDateTitle, View.GONE);
 				}
 
 				if (dueDate == null
@@ -233,13 +239,17 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				long listId = Long.parseLong(settings.getString(
 						ListWidgetConfig.KEY_LIST, "-1"));
 
-				if (mContext.getResources().getBoolean(R.bool.atLeast16)) {
+				if (mContext.getResources().getBoolean(R.bool.atLeast16)
+						&& settings.getBoolean(ListWidgetConfig.KEY_LOCKSCREEN,
+								false)) {
 					final Intent fillInIntent = new Intent();
-					fillInIntent.setData(
-							Uri.withAppendedPath(
-									NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,
-									Long.toString(noteId))).putExtra(
-							NotePad.Notes.COLUMN_NAME_LIST, listId);
+					fillInIntent
+							.setAction(Intent.ACTION_EDIT)
+							.setData(
+									Uri.withAppendedPath(
+											NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,
+											Long.toString(noteId)))
+							.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
 
 					rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
 				} else {
@@ -252,17 +262,32 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 					rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
 				}
 
-				final Intent completeFillIntent = new Intent();
-				completeFillIntent
-						.setAction(ListWidgetProvider.COMPLETE_ACTION);
-				completeFillIntent.putExtra(ListWidgetProvider.EXTRA_NOTE_ID,
-						noteId);
-				rv.setOnClickFillInIntent(R.id.widget_complete_task,
-						completeFillIntent);
+				if (mContext.getResources().getBoolean(R.bool.atLeast16)
+						&& settings.getBoolean(ListWidgetConfig.KEY_LOCKSCREEN,
+								false)) {
+					final Intent fillInIntent = new Intent();
+					fillInIntent
+							.setAction(
+									mContext.getString(R.string.complete_note_broadcast_intent))
+							.setData(
+									Uri.withAppendedPath(
+											NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,
+											Long.toString(noteId)))
+							.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
+
+					rv.setOnClickFillInIntent(R.id.widget_complete_task, fillInIntent);
+				} else {
+					final Intent completeFillIntent = new Intent();
+					completeFillIntent
+							.setAction(ListWidgetProvider.COMPLETE_ACTION)
+							.putExtra(ListWidgetProvider.EXTRA_NOTE_ID, noteId);
+					rv.setOnClickFillInIntent(R.id.widget_complete_task,
+							completeFillIntent);
+				}
 
 			}
 		}
-		
+
 		return rv;
 	}
 
@@ -337,7 +362,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			mCursor = new HeaderCursor(mContext, cursor, sortChoice,
 					settings.getString(ListWidgetConfig.KEY_SORT_ORDER,
 							NotePad.Notes.DEFAULT_SORT_ORDERING));
-			
+
 		}
 	}
 }

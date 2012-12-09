@@ -29,9 +29,6 @@
         android:paddingTop="2dip"
         android:singleLine="true"
         android:text="TODAY"
-        android:textAllCaps="true"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="@android:color/primary_text_dark"
-        android:textStyle="normal" />
+        android:textAppearance="@style/WidgetItemHeaderStyleDark" />
 
 </RelativeLayout>

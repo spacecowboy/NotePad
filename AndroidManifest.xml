@@ -26,8 +26,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
-    android:versionCode="44"
-    android:versionName="4.2" >
+    android:versionCode="45"
+    android:versionName="4.2.1" >
 
     <!-- App crashes on 3.0. No one uses 3.1. So minimum version is set to 3.2 now -->
     <uses-sdk
@@ -92,7 +92,7 @@
             android:name="com.nononsenseapps.notepad.NotePadBroadcastReceiver"
             tools:ignore="ExportedReceiver" >
             <intent-filter>
-                <action android:name="com.nononsenseapps.completenote" />
+                <action android:name="@string/complete_note_broadcast_intent" />
             </intent-filter>
         </receiver>
 
@@ -126,6 +126,8 @@
                 <action android:name="android.intent.action.INSERT" />
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
+                
+                <action android:name="@string/complete_note_broadcast_intent" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 

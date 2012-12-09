@@ -35,6 +35,7 @@ import android.widget.RemoteViews;
 
 import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.NotePadBroadcastReceiver;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.RightActivity;
 
@@ -118,7 +119,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
 			// This will complete the note
 			if (noteId > -1) {
-				Intent bintent = new Intent();
+				Intent bintent = new Intent(context, NotePadBroadcastReceiver.class);
 				bintent.setAction(context
 						.getString(R.string.complete_note_broadcast_intent));
 				bintent.putExtra(NotePad.Notes._ID, noteId);
@@ -185,6 +186,9 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			// widget
 			isKeyguard = category == AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD;
 		}
+		if (isKeyguard) {
+			settings.putBoolean(ListWidgetConfig.KEY_LOCKSCREEN, true);
+		}
 
 		// Specify the service to provide data for the collection widget. Note
 		// that we need to
@@ -243,11 +247,10 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		 * that we need to update the intent's data if we set an extra, since
 		 * the extras will be ignored otherwise.
 		 */
-		if (context.getResources().getBoolean(R.bool.atLeast16)) {
-			Intent appIntent = new Intent();
+		if (context.getResources().getBoolean(R.bool.atLeast16) && isKeyguard) {
+			Intent appIntent = new Intent(context, RightActivity.class);
 			appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
 					| Intent.FLAG_ACTIVITY_CLEAR_TASK);
-			appIntent.setAction(Intent.ACTION_EDIT);
 
 			PendingIntent onClickPendingIntent = PendingIntent.getActivity(
 					context, 0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -255,7 +258,6 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		} else {
 
 			Intent onClickIntent = new Intent(context, ListWidgetProvider.class);
-			onClickIntent.setAction(ListWidgetProvider.CLICK_ACTION);
 			onClickIntent
 					.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
 					.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId)
@@ -327,8 +329,10 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 		if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENAPPICON, false)) {
 			rv.setViewVisibility(R.id.widgetConfigButton, View.GONE);
-			// Also give title some padding
-			rv.setViewPadding(R.id.titleButton, 8, 4, 4, 4);
+			rv.setViewVisibility(R.id.header_spacer, View.VISIBLE);
+		} else {
+			rv.setViewVisibility(R.id.widgetConfigButton, View.VISIBLE);
+			rv.setViewVisibility(R.id.header_spacer, View.GONE);
 		}
 
 		// Create button
