@@ -329,8 +329,6 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 		if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENAPPICON, false)) {
 			rv.setViewVisibility(R.id.widgetConfigButton, View.GONE);
-			// Also give title some padding
-			rv.setViewPadding(R.id.titleButton, 8, 4, 4, 4);
 		}
 
 		// Create button
