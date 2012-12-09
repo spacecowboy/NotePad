@@ -34,6 +34,17 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="\nVersion 4.2"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\n- Sync crash fixed where the app would crash if a conflict occurred with GTasks.\n- Fixed crash which happened when theme was changed in some languages.\n- Widget has been redesigned. It now offers much more customization.\n- 1x1 widget replaced by shortcut action. You can now create shortcuts to specific lists or note creation in a specific list.\n- New translations." />
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="\nVersion 4.1"
             android:textStyle="bold" />
 
