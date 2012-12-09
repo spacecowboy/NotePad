@@ -139,6 +139,7 @@ Use few if language need it. In English is the same.
 <string tools:ignore="MissingTranslation" name="password_set">Lösenord sparat</string>
 <string tools:ignore="MissingTranslation" name="password_cleared">Lösenord togs bort</string>
 <string tools:ignore="MissingTranslation" name="passwords_dont_match">Lösenorden är inte lika</string>
+<string tools:ignore="MissingTranslation" name="password_incorrect">Felaktigt lösenord</string>
 <string tools:ignore="MissingTranslation" name="enter_password">Skriv lösenord</string>
 <string tools:ignore="MissingTranslation" name="enter_new_password">Nytt lösenord</string>
 <string tools:ignore="MissingTranslation" name="confirm_new_password">Bekräfta nytt lösenord</string>
