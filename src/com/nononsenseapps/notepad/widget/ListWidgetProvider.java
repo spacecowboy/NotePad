@@ -329,6 +329,10 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 		if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENAPPICON, false)) {
 			rv.setViewVisibility(R.id.widgetConfigButton, View.GONE);
+			rv.setViewVisibility(R.id.header_spacer, View.VISIBLE);
+		} else {
+			rv.setViewVisibility(R.id.widgetConfigButton, View.VISIBLE);
+			rv.setViewVisibility(R.id.header_spacer, View.GONE);
 		}
 
 		// Create button

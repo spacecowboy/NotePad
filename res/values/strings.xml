@@ -230,12 +230,13 @@
 
     <!-- settings string keys -->
     <string name="pref_locale" tools:ignore="MissingTranslation">pref_key_locale</string>
-    <string name="menu_settings">Settings</string>
-    <string name="title_activity_list_widget_config">Widget configuration</string>
-    <string name="hide_appicon">Hide app icon</string>
-    <string name="hide_new">Hide new button</string>
-    <string name="hide_header">Hide entire widget header</string>
-    <string name="hide_widgetbg">Transparent background</string>
-    <string name="shortcut_help1">If checked, the shortcut will create a new note in the selected list and open the editor. If unchecked, the shortcut will open the selected list.</string>
+    <string name="menu_settings" tools:ignore="MissingTranslation">Settings</string>
+    <string name="title_activity_list_widget_config" tools:ignore="MissingTranslation">Widget configuration</string>
+    <string name="hide_appicon" tools:ignore="MissingTranslation">Hide app icon</string>
+    <string name="hide_new" tools:ignore="MissingTranslation">Hide new button</string>
+    <string name="hide_header" tools:ignore="MissingTranslation">Hide entire widget header</string>
+    <string name="hide_widgetbg" tools:ignore="MissingTranslation">Transparent background</string>
+    <string name="shortcut_help1" tools:ignore="MissingTranslation">If checked, the shortcut will create a new note in the selected list and open the editor. If unchecked, the shortcut will open the selected list.</string>
+    <string name="loading_widget" tools:ignore="MissingTranslation">Loading widget...</string>
 
 </resources>

@@ -13,7 +13,7 @@
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
      limitations under the License.
-
+     
 -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -27,29 +27,35 @@
         android:id="@+id/widgetHeader"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
         android:background="@drawable/dark_widget_header"
+        android:orientation="horizontal"
         android:padding="0dp" >
 
         <ImageView
             android:id="@+id/widgetConfigButton"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:contentDescription="Configure widget"
-            android:paddingBottom="4dp"
-            android:paddingRight="0dp"
-            android:paddingTop="4dp"
-            android:paddingLeft="0dp"
-            android:scaleType="fitCenter"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
             android:background="@drawable/img_default_selector_dark"
+            android:contentDescription="Configure widget"
+            android:paddingBottom="8dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="8dp"
             android:src="@drawable/app_icon" />
+
+        <LinearLayout
+            android:id="@+id/header_spacer"
+            android:layout_width="8dp"
+            android:layout_height="fill_parent"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/titleButton"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:layout_weight="1"
             android:background="@drawable/img_default_selector_dark"
             android:gravity="center_vertical"
             android:maxLines="2"
@@ -57,7 +63,7 @@
             android:paddingLeft="0dp"
             android:paddingRight="4dp"
             android:paddingTop="4dp"
-            android:text="The freakin list title goes here"
+            android:text="@string/loading_widget"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/primary_text_dark" />
 
@@ -73,16 +79,15 @@
             android:paddingTop="4dp"
             android:scaleType="fitCenter"
             android:src="@drawable/content_new_dark" />
-
     </LinearLayout>
-    
+
     <ImageView
-            android:id="@+id/blueLine"
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:scaleType="fitXY"
-            android:src="@drawable/list_div_top_btm_gmail_widget_holo"
-            tools:ignore="ContentDescription" />
+        android:id="@+id/blueLine"
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:scaleType="fitXY"
+        android:src="@drawable/list_div_top_btm_gmail_widget_holo"
+        tools:ignore="ContentDescription" />
 
     <FrameLayout
         android:id="@+id/widget_list_container"

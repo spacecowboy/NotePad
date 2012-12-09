@@ -194,7 +194,9 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 								: View.VISIBLE);
 				if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENCHECKBOX,
 						false)) {
-					rv.setViewPadding(R.id.widget_item, 8, 0, 0, 0);
+					rv.setViewVisibility(R.id.item_spacer, View.VISIBLE);
+				} else {
+					rv.setViewVisibility(R.id.item_spacer, View.GONE);
 				}
 
 				if (note == null
