@@ -205,7 +205,12 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		}
 
 		RemoteViews rv = new RemoteViews(context.getPackageName(), itemId);
-		rv.setRemoteAdapter(appWidgetId, R.id.notes_list, intent);
+
+		if (context.getResources().getBoolean(R.bool.atLeast14)) {
+			rv.setRemoteAdapter(R.id.notes_list, intent);
+		} else {
+			rv.setRemoteAdapter(appWidgetId, R.id.notes_list, intent);
+		}
 
 		// Set the empty view to be displayed if the collection is empty. It
 		// must be a sibling
@@ -319,7 +324,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			rv.setOnClickPendingIntent(R.id.widgetConfigButton,
 					openAppPendingIntent);
 		}
-		
+
 		if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENAPPICON, false)) {
 			rv.setViewVisibility(R.id.widgetConfigButton, View.GONE);
 			// Also give title some padding
@@ -354,11 +359,11 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			rv.setOnClickPendingIntent(R.id.createNoteButton,
 					createPendingIntent);
 		}
-		
+
 		if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENNEW, false)) {
 			rv.setViewVisibility(R.id.createNoteButton, View.GONE);
 		}
-		
+
 		if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENHEADER, false)) {
 			rv.setViewVisibility(R.id.widgetHeader, View.GONE);
 			rv.setViewVisibility(R.id.blueLine, View.GONE);
