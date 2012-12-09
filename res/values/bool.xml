@@ -21,4 +21,5 @@
          for IceCreamSandwich is true. -->
     <bool name="atLeast14">false</bool>
     <bool name="atLeast15">false</bool>
+    <bool name="atLeast16">false</bool>
 </resources>

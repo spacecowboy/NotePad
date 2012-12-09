@@ -43,7 +43,7 @@
     <ImageView
         android:id="@+id/dueHeaderLine"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="1dp"
         android:layout_below="@+id/dueHeader"
         android:scaleType="fitXY"
         android:src="@drawable/list_div_top_btm_gmail_widget_holo"
@@ -127,7 +127,7 @@
     <ImageView
         android:id="@+id/listHeaderLine"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="1dp"
         android:layout_below="@+id/listHeader"
         android:scaleType="fitXY"
         android:src="@drawable/list_div_top_btm_gmail_widget_holo"
@@ -158,7 +158,7 @@
     <ImageView
         android:id="@+id/lockHeaderLine"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="1dp"
         android:layout_below="@+id/lockHeader"
         android:scaleType="fitXY"
         android:src="@drawable/list_div_top_btm_gmail_widget_holo"

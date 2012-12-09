@@ -26,18 +26,33 @@
             android:summary="Selected option should be here"
             android:title="@string/settings_theme" />
         
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:title="@string/widget_pref_preview_note"
-            android:key="widget_key_preview_note"
-            android:summaryOff="@string/widget_pref_preview_note_summary_off"
-            android:summaryOn="@string/widget_pref_preview_note_summary_on" />
+        <ListPreference
+            android:defaultValue="2"
+            android:dialogTitle="@string/title_rows"
+            android:entries="@array/title_rows_entries"
+            android:entryValues="@array/title_rows_values"
+            android:key="widget_key_titlerows"
+            android:title="@string/title_rows" />
         
         <CheckBoxPreference
             android:defaultValue="false"
-            android:title="@string/widget_pref_show_complete"
-            android:key="widget_key_show_complete"
-            android:summaryOff="@string/widget_pref_show_complete_summary_off"
-            android:summaryOn="@string/widget_pref_show_complete_summary_on" />
+            android:key="widget_key_hiddencheckbox"
+            android:summaryOff="@string/hide_checkbox_summary_off"
+            android:summaryOn="@string/hide_checkbox_summary_on"
+            android:title="@string/hide_checkbox" />
+        
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="widget_key_hiddennote"
+            android:summaryOff="@string/hide_note_summary_off"
+            android:summaryOn="@string/hide_note_summary_on"
+            android:title="@string/hide_note" />
+        
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:key="widget_key_hiddendate"
+            android:summaryOff="@string/hide_date_summary_off"
+            android:summaryOn="@string/hide_date_summary_on"
+            android:title="@string/hide_date" />
 
 </PreferenceScreen>

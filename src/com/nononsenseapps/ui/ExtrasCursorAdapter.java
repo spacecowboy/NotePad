@@ -46,6 +46,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	protected int[] to;
 
 	private int layout;
+	private int dropdownlayout;
 
 	/**
 	 * Same as a cursoradapter except two extra arrays are taken (and a layout).
@@ -54,7 +55,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	 * resources to use as labels.
 	 */
 	public ExtrasCursorAdapter(Context context, int layout, Cursor c,
-			String[] from, int[] to, int[] extraIds, int[] extraLabels) {
+			String[] from, int[] to, int[] extraIds, int[] extraLabels, int dropdownlayout) {
 		super(context, layout, c);
 		this.cursor = c;
 		this.extraIds = extraIds;
@@ -63,6 +64,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		this.from = from;
 		this.to = to;
 		this.layout = layout;
+		this.dropdownlayout = dropdownlayout;
 	}
 
 	/**
@@ -73,7 +75,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	 */
 	public ExtrasCursorAdapter(Context context, int layout, Cursor c,
 			boolean autoRequery, String[] from, int[] to, int[] extraIds,
-			int[] extraLabels) {
+			int[] extraLabels, int dropdownlayout) {
 		super(context, layout, c, autoRequery);
 		this.cursor = c;
 		this.extraIds = extraIds;
@@ -82,6 +84,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		this.from = from;
 		this.to = to;
 		this.layout = layout;
+		this.dropdownlayout = dropdownlayout;
 	}
 
 	/**
@@ -92,7 +95,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	 */
 	public ExtrasCursorAdapter(Context context, int layout, Cursor c,
 			int flags, String[] from, int[] to, int[] extraIds,
-			int[] extraLabels) {
+			int[] extraLabels, int dropdownlayout) {
 		super(context, layout, c, flags);
 		this.cursor = c;
 		this.extraIds = extraIds;
@@ -101,6 +104,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		this.from = from;
 		this.to = to;
 		this.layout = layout;
+		this.dropdownlayout = dropdownlayout;
 	}
 
 	/**
@@ -176,7 +180,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		if (convertView == null) {
 			// Make a new view
 			LayoutInflater mInflater = LayoutInflater.from(context);
-			convertView = mInflater.inflate(layout, parent, false);
+			convertView = mInflater.inflate(dropdownlayout, parent, false);
 			//cursor.moveToFirst();
 			//convertView = super.newDropDownView(parent.getContext(), cursor,parent);
 		} else {
@@ -197,6 +201,15 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 			return super.getItemId(position);
 		} else {
 			return extraIds[position - super.getCount()];
+		}
+	}
+	
+	@Override
+	public Object getItem(int position) {
+		if (position < super.getCount()) {
+			return super.getItem(position);
+		} else {
+			return getExtraItem(position);
 		}
 	}
 

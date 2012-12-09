@@ -646,9 +646,13 @@ public class MainActivity extends DualLayoutActivity implements
 			renameDialog.setContentView(R.layout.rename_list_dialog);
 			renameDialog.setTitle(R.string.menu_renamelist);
 
+			CharSequence currentTitle = "";
+			if (mSectionsPagerAdapter != null)
+				currentTitle = mSectionsPagerAdapter.getPageTitle(currentListPos);
+			
 			EditText renameTitle = (EditText) renameDialog
 					.findViewById(R.id.renameTitle);
-			renameTitle.setText("");
+			renameTitle.setText(currentTitle);
 
 			Button rYesButton = (Button) renameDialog
 					.findViewById(R.id.r_dialog_yes);

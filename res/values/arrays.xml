@@ -23,9 +23,9 @@
     </string-array>
 
     <string-array name="themevalues_preference" tools:ignore="MissingTranslation,InconsistentArrays">
-        <item>dark</item>
-        <item>black</item>
-        <item>light</item>
+        <item>@string/const_theme_dark</item>
+        <item>@string/const_theme_black</item>
+        <item>@string/const_theme_light</item>
     </string-array>
     
     <string-array name="widget_theme_preference">
@@ -34,8 +34,8 @@
     </string-array>
     
     <string-array name="widget_themevalues_preference" tools:ignore="MissingTranslation">
-        <item>dark</item>
-        <item>light</item>
+        <item>@string/const_theme_dark</item>
+        <item>@string/const_theme_light</item>
     </string-array>
     
     <string-array name="sorting_preference">
@@ -46,10 +46,10 @@
     </string-array>
 
     <string-array name="sortingvalues_preference"  tools:ignore="MissingTranslation">
-        <item>title COLLATE NOCASE</item>
-        <item>duedate</item>
-        <item>modified</item>
-       	<item>possubsort</item>
+        <item>@string/const_alphabetic</item>
+        <item>@string/const_duedate</item>
+        <item>@string/const_modified</item>
+       	<item>@string/const_possubsort</item>
     </string-array>
     
     <string-array name="sorting_order_preference">
@@ -58,8 +58,8 @@
     </string-array>
 
     <string-array name="sorting_ordervalues_preference"  tools:ignore="MissingTranslation">
-        <item>ASC</item>
-        <item>DESC</item>
+        <item>@string/const_asc</item>
+        <item>@string/const_desc</item>
     </string-array>
     
     <string-array name="font_type_preference" tools:ignore="MissingTranslation">
@@ -69,9 +69,9 @@
     </string-array>
 
     <string-array name="font_typevalues_preference"  tools:ignore="MissingTranslation">
-        <item>Sans</item>
-        <item>Serif</item>
-        <item>Monospace</item>
+        <item>@string/const_sans</item>
+        <item>@string/const_serif</item>
+        <item>@string/const_monospace</item>
     </string-array>
     <string-array name="sync_freq_preference">
         <item>@string/manual</item>
