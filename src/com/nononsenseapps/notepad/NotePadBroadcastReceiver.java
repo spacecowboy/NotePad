@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.widget.Toast;
 
 public class NotePadBroadcastReceiver extends BroadcastReceiver {
 
@@ -30,6 +31,9 @@ public class NotePadBroadcastReceiver extends BroadcastReceiver {
 			context.getContentResolver().update(
 					NotesEditorFragment.getUriFrom(id), values, null, null);
 			UpdateNotifier.notifyChangeNote(context, NotesEditorFragment.getUriFrom(id));
+			
+			Toast.makeText(context, context.getString(R.string.completed),
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 

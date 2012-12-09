@@ -44,6 +44,9 @@ public class ListWidgetConfig extends Activity {
 	public static final String KEY_HIDDENCHECKBOX = "widget1_key_hiddencheckbox";
 	public static final String KEY_TITLEROWS = "widget1_key_titlerows";
 
+	// Used in widget service/provider
+	public static final String KEY_LOCKSCREEN = "widget1_key_lockscreen";
+
 	private int appWidgetId;
 
 	@Override

@@ -59,6 +59,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.SimpleCursorAdapter;
+import android.widget.Toast;
 
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.UpdateNotifier;
@@ -375,21 +376,33 @@ public class MainActivity extends DualLayoutActivity implements
 						.startsWith(NotePad.Notes.PATH_VISIBLE_NOTES) || intent
 						.getData().getPath()
 						.startsWith(NotePad.Notes.PATH_NOTES))) {
-			Bundle arguments = new Bundle();
-			arguments.putLong(NotesEditorFragment.KEYID,
-					NotesEditorFragment.getIdFromUri(intent.getData()));
-			NotesEditorFragment fragment = new NotesEditorFragment();
-			fragment.setArguments(arguments);
-			getFragmentManager().beginTransaction()
-					.replace(R.id.rightFragment, fragment).commit();
-			// Open appropriate list if tablet mode
-			if (this.currentContent == CONTENTVIEW.DUAL) {
-				long listId = getAList(intent);
-				// Open the containing list if we have to. No need to change
-				// lists
-				// if we are already displaying all notes.
-				openListFromIntent(listId, intent);
-			}
+			openNoteFragment(intent);
+		}
+	}
+
+	/**
+	 * Creates an editor fragment for the note specified in the intent. Use for
+	 * edit and complete intents.
+	 * 
+	 * @param intent
+	 */
+	private void openNoteFragment(Intent intent) {
+		Log.d(TAG, "openNoteFragment");
+		Bundle arguments = new Bundle();
+		arguments.putLong(NotesEditorFragment.KEYID,
+				NotesEditorFragment.getIdFromUri(intent.getData()));
+		NotesEditorFragment fragment = new NotesEditorFragment();
+		fragment.setArguments(arguments);
+		getFragmentManager().beginTransaction()
+				.replace(R.id.rightFragment, fragment).commit();
+		// Open appropriate list if tablet mode
+		if (this.currentContent == CONTENTVIEW.DUAL) {
+			long listId = getAList(intent);
+			/*
+			 * Open the containing list if we have to. No need to change lists
+			 * if we are already displaying all notes.
+			 */
+			openListFromIntent(listId, intent);
 		}
 	}
 
@@ -525,6 +538,25 @@ public class MainActivity extends DualLayoutActivity implements
 			handleInsertIntent(intent);
 		} else if (Intent.ACTION_SEND.equals(intent.getAction())) {
 			handleInsertIntent(intent);
+		} else if (getString(R.string.complete_note_broadcast_intent).equals(
+				intent.getAction())) {
+			// Sent from lock-screen widget on 4.2 and above.
+			// Send complete broadcast and finish
+			long noteId = NotesEditorFragment.getIdFromUri(intent.getData());
+			// This will complete the note
+			if (noteId > -1) {
+				Intent bintent = new Intent(this,
+						NotePadBroadcastReceiver.class);
+				bintent.setAction(getString(R.string.complete_note_broadcast_intent));
+				bintent.putExtra(NotePad.Notes._ID, noteId);
+				Log.d(TAG, "Sending complete broadcast");
+				sendBroadcast(bintent);
+				
+				openNoteFragment(intent);
+
+				// Toast.makeText(this, getString(R.string.completed),
+				// Toast.LENGTH_SHORT).show();
+			}
 		} else {
 			// Open a note
 			if (noteIdToSelect > -1 && currentContent == CONTENTVIEW.DUAL) {
@@ -647,8 +679,9 @@ public class MainActivity extends DualLayoutActivity implements
 
 			CharSequence currentTitle = "";
 			if (mSectionsPagerAdapter != null)
-				currentTitle = mSectionsPagerAdapter.getPageTitle(currentListPos);
-			
+				currentTitle = mSectionsPagerAdapter
+						.getPageTitle(currentListPos);
+
 			EditText renameTitle = (EditText) renameDialog
 					.findViewById(R.id.renameTitle);
 			renameTitle.setText(currentTitle);
