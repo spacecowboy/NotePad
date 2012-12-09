@@ -200,6 +200,11 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 					rv.setViewVisibility(R.id.widget_itemDateNote, View.GONE);
 					rv.setViewVisibility(R.id.widget_itemDateTitle,
 							View.VISIBLE);
+				} else {
+					rv.setViewVisibility(R.id.widget_itemNote, View.VISIBLE);
+					rv.setViewVisibility(R.id.widget_itemDateNote, View.VISIBLE);
+					rv.setViewVisibility(R.id.widget_itemDateTitle,
+							View.GONE);
 				}
 
 				if (dueDate == null
