@@ -37,6 +37,12 @@
         android:padding="0dp"
         android:scaleType="fitCenter"
         android:src="@drawable/btn_check_selector_light" />
+    
+    <LinearLayout
+        android:id="@+id/item_spacer"
+        android:layout_width="8dp"
+        android:visibility="gone"
+        android:layout_height="fill_parent" />
 
     <RelativeLayout
         xmlns:android="http://schemas.android.com/apk/res/android"
@@ -58,7 +64,7 @@
             android:visibility="gone"
             android:text="12 mar"
             android:textColor="@android:color/secondary_text_light"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/widget_itemTitle"
@@ -85,7 +91,7 @@
             android:gravity="center_vertical"
             android:text="12 mar"
             android:textColor="@android:color/secondary_text_light"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+            android:textSize="12sp" />
 
         <TextView
             android:id="@+id/widget_itemNote"

@@ -34,15 +34,21 @@
         <ImageView
             android:id="@+id/widgetConfigButton"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent"
+            android:layout_height="48dp"
+            android:layout_gravity="center"
             android:contentDescription="Configure widget"
-            android:paddingBottom="4dp"
+            android:paddingBottom="8dp"
             android:paddingRight="0dp"
-            android:paddingTop="4dp"
+            android:paddingTop="8dp"
             android:paddingLeft="0dp"
-            android:scaleType="fitCenter"
             android:background="@drawable/img_default_selector_light"
             android:src="@drawable/app_icon" />
+        
+        <LinearLayout
+            android:id="@+id/header_spacer"
+            android:layout_width="8dp"
+            android:layout_height="fill_parent"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/titleButton"
@@ -57,7 +63,7 @@
             android:paddingLeft="0dp"
             android:paddingRight="4dp"
             android:paddingTop="4dp"
-            android:text="The freakin list title goes here"
+            android:text="@string/loading_widget"
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="@android:color/primary_text_light" />
 
