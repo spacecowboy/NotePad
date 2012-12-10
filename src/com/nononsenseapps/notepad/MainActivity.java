@@ -140,6 +140,17 @@ public class MainActivity extends DualLayoutActivity implements
 		} else {
 			rightCreate();
 		}
+
+		// Synchronize on app open
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, "");
+		boolean syncEnabled = prefs
+				.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
+		boolean syncOnStart = prefs.getBoolean("syncOnStart", false);
+		if (accountName != null && !accountName.equals("") && syncEnabled && syncOnStart) {
+			requestSync(accountName);
+		}
 	}
 
 	private void leftOrTabletCreate(Bundle savedInstanceState) {
@@ -551,7 +562,7 @@ public class MainActivity extends DualLayoutActivity implements
 				bintent.putExtra(NotePad.Notes._ID, noteId);
 				Log.d(TAG, "Sending complete broadcast");
 				sendBroadcast(bintent);
-				
+
 				openNoteFragment(intent);
 
 				// Toast.makeText(this, getString(R.string.completed),
