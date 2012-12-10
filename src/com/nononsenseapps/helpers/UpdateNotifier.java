@@ -4,6 +4,7 @@ import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotesEditorFragment;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.widget.ListWidgetProvider;
+import com.nononsenseapps.notepad.widget.WidgetPrefs;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -67,7 +68,7 @@ public class UpdateNotifier {
 	 */
 	private static void notifyChange(Context context, Uri uri) {
 		if (uri != null)
-			context.getContentResolver().notifyChange(uri, null, false);
+			context.getContentResolver().notifyChange(uri, null, true);
 	}
 
 	/**
@@ -88,8 +89,16 @@ public class UpdateNotifier {
 			 * refreshed! Will call onDatasetChanged in ListWidgetService, doing
 			 * a new requery
 			 */
-			appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds,
-					R.id.notes_list);
+			//appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.notes_list);
+			
+			// Only update widgets that exist
+			for (int widgetId: appWidgetIds) {
+				WidgetPrefs prefs = new WidgetPrefs(context, widgetId);
+				if (prefs.isPresent()) {
+					appWidgetManager.notifyAppWidgetViewDataChanged(widgetId,
+							R.id.notes_list);
+				}
+			}
 		}
 	}
 }
