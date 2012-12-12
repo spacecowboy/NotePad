@@ -943,10 +943,6 @@ public class MainActivity extends DualLayoutActivity implements
 		case R.id.menu_delete:
 			onDeleteAction();
 			break;
-		case R.id.menu_changelog:
-			ChangeLog cl = new ChangeLog(this);
-			cl.getFullLogDialog().show();
-			return true;
 		case R.id.menu_preferences:
 			showPrefs();
 			return true;
