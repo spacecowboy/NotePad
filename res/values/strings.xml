@@ -118,16 +118,16 @@
         <item quantity="few">Copied 2 notes.</item>
     -->
     <plurals name="notecopied_msg">
-        <item quantity="one">Copied one note</item>
-        <item quantity="other">Copied %d notes</item>
+      <item quantity="one">@string/notecopied_one</item>
+        <item quantity="other">@string/notecopied_other</item>
     </plurals>
     <plurals name="notedeleted_msg">
-        <item quantity="one">Deleted one note</item>
-        <item quantity="other">Deleted %d notes</item>
+        <item quantity="one">@string/notedeleted_one</item>
+        <item quantity="other">@string/notedeleted_other</item>
     </plurals>
     <plurals name="mode_choose">
-        <item quantity="one">Selected one note</item>
-        <item quantity="other">Selected %d notes</item>
+        <item quantity="one">@string/selected_one</item>
+        <item quantity="other">@string/selected_other</item>
     </plurals>
 
     <string name="lock_note">Lock note</string>
@@ -239,5 +239,12 @@
     <string name="shortcut_help1">If checked, the shortcut will create a new note in the selected list and open the editor. If unchecked, the shortcut will open the selected list.</string>
     <string name="loading_widget">Loading widget&#8230;</string>
     <string name="default_list_set">Default list set</string>
+
+    <string name="notecopied_one">Copied one note</string>
+    <string name="notecopied_other">Copied %d notes</string>
+    <string name="notedeleted_one">Deleted one note</string>
+    <string name="notedeleted_other">Deleted %d notes</string>
+    <string name="selected_one">Selected one note</string>
+    <string name="selected_other">Selected %d notes</string>
 
 </resources>
