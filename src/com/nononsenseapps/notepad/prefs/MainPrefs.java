@@ -19,12 +19,9 @@ package com.nononsenseapps.notepad.prefs;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
-import com.robobunny.SeekBarPreference;
-
 import android.app.Activity;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -33,6 +30,7 @@ import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceManager;
 import android.preference.PreferenceFragment;
+import android.provider.BaseColumns;
 
 public class MainPrefs extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
@@ -169,7 +167,7 @@ public class MainPrefs extends PreferenceFragment implements
 
 		Cursor cursor = getActivity().getContentResolver().query(
 				NotePad.Lists.CONTENT_VISIBLE_URI,
-				new String[] { NotePad.Lists._ID,
+				new String[] { BaseColumns._ID,
 						NotePad.Lists.COLUMN_NAME_TITLE }, null, null,
 				NotePad.Lists.SORT_ORDER);
 		if (cursor != null) {
@@ -178,7 +176,7 @@ public class MainPrefs extends PreferenceFragment implements
 					entries.add(cursor.getString(cursor
 							.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE)));
 					values.add(Long.toString(cursor.getLong(cursor
-							.getColumnIndex(NotePad.Lists._ID))));
+							.getColumnIndex(BaseColumns._ID))));
 				}
 			}
 
@@ -203,6 +201,7 @@ public class MainPrefs extends PreferenceFragment implements
 				.unregisterOnSharedPreferenceChangeListener(this);
 	}
 
+	@Override
 	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
 			String key) {
 		try {

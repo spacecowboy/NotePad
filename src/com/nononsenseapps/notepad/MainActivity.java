@@ -148,7 +148,8 @@ public class MainActivity extends DualLayoutActivity implements
 		boolean syncEnabled = prefs
 				.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
 		boolean syncOnStart = prefs.getBoolean("syncOnStart", false);
-		if (accountName != null && !accountName.equals("") && syncEnabled && syncOnStart) {
+		if (accountName != null && !accountName.equals("") && syncEnabled
+				&& syncOnStart) {
 			requestSync(accountName);
 		}
 	}
@@ -174,7 +175,7 @@ public class MainActivity extends DualLayoutActivity implements
 		mSpinnerAdapter = new SimpleCursorAdapter(this,
 				R.layout.actionbar_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
-				new int[] { android.R.id.text1 });
+				new int[] { android.R.id.text1 }, 0);
 
 		mSpinnerAdapter
 				.setDropDownViewResource(R.layout.actionbar_dropdown_item);
@@ -189,7 +190,7 @@ public class MainActivity extends DualLayoutActivity implements
 		mSectionAdapter = new SimpleCursorAdapter(this,
 				R.layout.actionbar_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
-				new int[] { android.R.id.text1 });
+				new int[] { android.R.id.text1 }, 0);
 
 		mSectionsPagerAdapter = new ListPagerAdapter(this,
 				getFragmentManager(), mSectionAdapter);
@@ -302,6 +303,7 @@ public class MainActivity extends DualLayoutActivity implements
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		MenuItem deleteList = menu.findItem(R.id.menu_deletelist);
 		MenuItem renameList = menu.findItem(R.id.menu_renamelist);
+		MenuItem setDefaultList = menu.findItem(R.id.menu_setdefaultlist);
 		if (null != mSectionAdapter) {
 			if (deleteList != null) {
 				// Only show this button if there is a list
@@ -319,6 +321,14 @@ public class MainActivity extends DualLayoutActivity implements
 					renameList.setVisible(true);
 				}
 			}
+			if (setDefaultList != null) {
+				// Only show this button if there is a list
+				if (mSectionAdapter.getCount() <= 0) {
+					setDefaultList.setVisible(false);
+				} else {
+					setDefaultList.setVisible(true);
+				}
+			}
 		} else {
 			// with null adapter, must hide
 			if (deleteList != null) {
@@ -327,6 +337,8 @@ public class MainActivity extends DualLayoutActivity implements
 			if (renameList != null) {
 				renameList.setVisible(false);
 			}
+			if (setDefaultList != null)
+				setDefaultList.setVisible(false);
 		}
 
 		return super.onPrepareOptionsMenu(menu);
@@ -946,6 +958,23 @@ public class MainActivity extends DualLayoutActivity implements
 		case R.id.menu_preferences:
 			showPrefs();
 			return true;
+		case R.id.menu_setdefaultlist:
+			long currentId = -1;
+			if (mSectionsPagerAdapter != null)
+				currentId = mSectionsPagerAdapter.getItemId(currentListPos);
+
+			if (currentId != -1) {
+				PreferenceManager
+						.getDefaultSharedPreferences(this)
+						.edit()
+						.putString(MainPrefs.KEY_DEFAULT_LIST,
+								Long.toString(currentId)).commit();
+
+				Toast.makeText(this, getString(R.string.default_list_set),
+						Toast.LENGTH_SHORT).show();
+			}
+
+			break;
 		case R.id.menu_createlist:
 			showDialog(CREATE_LIST);
 			return true;
