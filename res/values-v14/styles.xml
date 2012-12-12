@@ -17,6 +17,8 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 	<!-- This theme doesn't exist in honeycomb -->
 	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+	    
+	    <item name="android:background">@null</item>
 
 		<item name="navigation_refresh">@drawable/navigation_refresh_dark </item>
         <item name="action_search">@drawable/action_search_dark </item>

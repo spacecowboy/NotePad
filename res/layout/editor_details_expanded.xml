@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:background="?img_default_selector"
     android:clickable="true"
-    tools:ignore="HardcodedText" >
+    tools:ignore="HardcodedText,Overdraw" >
 
     <CheckBox
         android:id="@+id/expCompleted"
