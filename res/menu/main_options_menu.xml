@@ -11,7 +11,7 @@
     <!-- Here editor options should be displayed in landscape mode. Hence the drastic increase in order index -->
     <item
         android:id="@+id/menu_managelists"
-        android:orderInCategory="11"
+        android:orderInCategory="12"
         android:showAsAction="never"
         android:title="@string/menu_managelists">
         <menu>
@@ -39,7 +39,7 @@
     </item>
     <item
         android:id="@+id/menu_clearcompleted"
-        android:orderInCategory="14"
+        android:orderInCategory="13"
         android:showAsAction="never"
         android:title="@string/menu_clearcompleted"/>
     <item

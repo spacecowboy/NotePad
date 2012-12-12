@@ -301,44 +301,57 @@ public class MainActivity extends DualLayoutActivity implements
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		MenuItem deleteList = menu.findItem(R.id.menu_deletelist);
-		MenuItem renameList = menu.findItem(R.id.menu_renamelist);
-		MenuItem setDefaultList = menu.findItem(R.id.menu_setdefaultlist);
-		if (null != mSectionAdapter) {
-			if (deleteList != null) {
-				// Only show this button if there is a list
-				if (mSectionAdapter.getCount() <= 0) {
-					deleteList.setVisible(false);
-				} else {
-					deleteList.setVisible(true);
-				}
-			}
-			if (renameList != null) {
-				// Only show this button if there is a list
-				if (mSectionAdapter.getCount() <= 0) {
-					renameList.setVisible(false);
-				} else {
-					renameList.setVisible(true);
-				}
-			}
-			if (setDefaultList != null) {
-				// Only show this button if there is a list
-				if (mSectionAdapter.getCount() <= 0) {
-					setDefaultList.setVisible(false);
-				} else {
-					setDefaultList.setVisible(true);
-				}
-			}
+		// Hide entire sub menu in editor.
+		if (currentContent == CONTENTVIEW.RIGHT) {
+			MenuItem manageLists = menu.findItem(R.id.menu_managelists);
+			if (manageLists != null)
+				manageLists.setVisible(false);
+			MenuItem clear = menu.findItem(R.id.menu_clearcompleted);
+			if (clear != null)
+				clear.setVisible(false);
+			MenuItem sync = menu.findItem(R.id.menu_sync);
+			if (sync != null)
+				sync.setVisible(false);
 		} else {
-			// with null adapter, must hide
-			if (deleteList != null) {
-				deleteList.setVisible(false);
+			MenuItem deleteList = menu.findItem(R.id.menu_deletelist);
+			MenuItem renameList = menu.findItem(R.id.menu_renamelist);
+			MenuItem setDefaultList = menu.findItem(R.id.menu_setdefaultlist);
+			if (null != mSectionAdapter) {
+				if (deleteList != null) {
+					// Only show this button if there is a list
+					if (mSectionAdapter.getCount() <= 0) {
+						deleteList.setVisible(false);
+					} else {
+						deleteList.setVisible(true);
+					}
+				}
+				if (renameList != null) {
+					// Only show this button if there is a list
+					if (mSectionAdapter.getCount() <= 0) {
+						renameList.setVisible(false);
+					} else {
+						renameList.setVisible(true);
+					}
+				}
+				if (setDefaultList != null) {
+					// Only show this button if there is a list
+					if (mSectionAdapter.getCount() <= 0) {
+						setDefaultList.setVisible(false);
+					} else {
+						setDefaultList.setVisible(true);
+					}
+				}
+			} else {
+				// with null adapter, must hide
+				if (deleteList != null) {
+					deleteList.setVisible(false);
+				}
+				if (renameList != null) {
+					renameList.setVisible(false);
+				}
+				if (setDefaultList != null)
+					setDefaultList.setVisible(false);
 			}
-			if (renameList != null) {
-				renameList.setVisible(false);
-			}
-			if (setDefaultList != null)
-				setDefaultList.setVisible(false);
 		}
 
 		return super.onPrepareOptionsMenu(menu);
