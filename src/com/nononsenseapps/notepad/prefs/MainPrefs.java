@@ -142,7 +142,7 @@ public class MainPrefs extends PreferenceFragment implements
 		prefLang.setEntryValues(values.toArray(new CharSequence[values.size()]));
 
 		// Set currently selected value
-		String lang = prefs.getString(getString(R.string.pref_locale), "");
+		//String lang = prefs.getString(getString(R.string.pref_locale), "");
 
 		// Set summary
 		prefLang.setSummary(prefLang.getEntry());
