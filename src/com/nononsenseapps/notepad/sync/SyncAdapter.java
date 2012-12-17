@@ -179,6 +179,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					 */
 					String localEtag = settings.getString(PREFS_LAST_SYNC_ETAG,
 							"");
+					
+					// If full sync, then assume no local information exists.
+					if (settings.getBoolean(SyncPrefs.KEY_FULLSYNC, false)) {
+						lastUpdate = null;
+						localEtag = "dummytag";
+					}
 
 					// Prepare lists for items
 					ArrayList<GoogleTaskList> listsToSaveToDB = new ArrayList<GoogleTaskList>();
@@ -383,6 +389,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 						settings.edit()
 								.putString(PREFS_LAST_SYNC_ETAG, serverEtag)
+								.putBoolean(SyncPrefs.KEY_FULLSYNC, false)
 								.commit();
 					}
 

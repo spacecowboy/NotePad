@@ -163,30 +163,21 @@ public class GoogleAPITalker {
 	}
 
 	private static String AllTasksCompletedMin(String listId, String timestamp) {
-		// showDeleted=true&showHidden=true
-		// don't want deleted and hidden as this is the first sync
-		if (timestamp == null)
-			return BASE_TASK_URL + "/" + listId + TASKS + "?fields=items&"
-					+ AuthUrlEnd();
-		else {
-			// In this case, we want deleted and hidden items in order to update
-			// our own database
-			try {
-				return BASE_TASK_URL
-						+ "/"
-						+ listId
-						+ TASKS
-						+ "?showDeleted=true&showHidden=true&fields=items&updatedMin="
-						+ URLEncoder.encode(timestamp, "UTF-8") + "&"
-						+ AuthUrlEnd();
-			} catch (UnsupportedEncodingException e) {
+		String request = BASE_TASK_URL + "/" + listId + TASKS
+				+ "?showDeleted=true&showHidden=true&fields=items&";
 
+		if (timestamp != null && !timestamp.isEmpty()) {
+			try {
+				request += "updatedMin="
+						+ URLEncoder.encode(timestamp, "UTF-8") + "&";
+			} catch (UnsupportedEncodingException e) {
+				// Is OK. Can request full sync.
 				Log.d(TAG, "Malformed timestamp: " + e.getLocalizedMessage());
-				return BASE_TASK_URL + "/" + listId + TASKS
-						+ "?showDeleted=true&showHidden=true&fields=items&"
-						+ AuthUrlEnd();
 			}
 		}
+
+		request += AuthUrlEnd();
+		return request;
 	}
 
 	// Tasks URL which inludes deleted tasks: /tasks?showDeleted=true
@@ -281,8 +272,7 @@ public class GoogleAPITalker {
 	 * @throws ClientProtocolException
 	 */
 	private String getListOfLists(ArrayList<GoogleTaskList> list)
-			throws ClientProtocolException, IOException,
-			PreconditionException {
+			throws ClientProtocolException, IOException, PreconditionException {
 		String eTag = "";
 		HttpGet httpget = new HttpGet(AllLists());
 		httpget.setHeader("Authorization", "OAuth " + authToken);
@@ -291,28 +281,28 @@ public class GoogleAPITalker {
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
 		try {
-		JSONObject jsonResponse = (JSONObject) new JSONTokener(
-				parseResponse(client.execute(httpget))).nextValue();
+			JSONObject jsonResponse = (JSONObject) new JSONTokener(
+					parseResponse(client.execute(httpget))).nextValue();
 
-		// Log.d(TAG, jsonResponse.toString());
+			// Log.d(TAG, jsonResponse.toString());
 
-		eTag = jsonResponse.getString("etag");
-		JSONArray lists = jsonResponse.getJSONArray("items");
+			eTag = jsonResponse.getString("etag");
+			JSONArray lists = jsonResponse.getJSONArray("items");
 
-		int size = lists.length();
-		int i;
+			int size = lists.length();
+			int i;
 
-		// Lists will not carry etags, must fetch them individually if that
-		// is desired
-		for (i = 0; i < size; i++) {
-			JSONObject jsonList = lists.getJSONObject(i);
-			list.add(new GoogleTaskList(jsonList));
-		}
-		// } catch (PreconditionException e) {
-		// // Can not happen in this case since we don't have any etag!
-		// } catch (NotModifiedException e) {
-		// // Can not happen in this case since we don't have any etag!
-		// }
+			// Lists will not carry etags, must fetch them individually if that
+			// is desired
+			for (i = 0; i < size; i++) {
+				JSONObject jsonList = lists.getJSONObject(i);
+				list.add(new GoogleTaskList(jsonList));
+			}
+			// } catch (PreconditionException e) {
+			// // Can not happen in this case since we don't have any etag!
+			// } catch (NotModifiedException e) {
+			// // Can not happen in this case since we don't have any etag!
+			// }
 		} catch (JSONException e) {
 			Log.d(TAG, "getlistoflists: " + e.getLocalizedMessage());
 		}
@@ -443,7 +433,7 @@ public class GoogleAPITalker {
 			// Can't happen
 			Log.e(TAG, "Grossball error: " + e.getLocalizedMessage());
 			newestEtag = null;
-		} 
+		}
 		if (newestEtag.equals(lastEtag)) {
 			// Nothing has changed, don't do anything
 			return newestEtag;

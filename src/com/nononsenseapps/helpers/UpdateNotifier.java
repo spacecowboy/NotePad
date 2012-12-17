@@ -3,6 +3,7 @@ package com.nononsenseapps.helpers;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotesEditorFragment;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 import com.nononsenseapps.notepad.widget.WidgetPrefs;
 
@@ -10,6 +11,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 
 /**
  * The purpose here is to make it easy for other classes to notify that
@@ -67,8 +69,13 @@ public class UpdateNotifier {
 	 *            optional uri
 	 */
 	private static void notifyChange(Context context, Uri uri) {
-		if (uri != null)
-			context.getContentResolver().notifyChange(uri, null, true);
+		if (uri != null) {
+			context.getContentResolver().notifyChange(
+					uri,
+					null,
+					PreferenceManager.getDefaultSharedPreferences(context)
+							.getBoolean(SyncPrefs.KEY_SYNC_ON_CHANGE, true));
+		}
 	}
 
 	/**
@@ -89,10 +96,11 @@ public class UpdateNotifier {
 			 * refreshed! Will call onDatasetChanged in ListWidgetService, doing
 			 * a new requery
 			 */
-			//appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.notes_list);
-			
+			// appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds,
+			// R.id.notes_list);
+
 			// Only update widgets that exist
-			for (int widgetId: appWidgetIds) {
+			for (int widgetId : appWidgetIds) {
 				WidgetPrefs prefs = new WidgetPrefs(context, widgetId);
 				if (prefs.isPresent()) {
 					appWidgetManager.notifyAppWidgetViewDataChanged(widgetId,

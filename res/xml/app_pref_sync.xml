@@ -23,27 +23,38 @@
             android:summary="@string/settings_sync_enable_summary"
             android:title="@string/settings_sync_enable_title" />
         
-        <CheckBoxPreference
-            android:dependency="syncEnablePref"
-            android:defaultValue="false"
-            android:key="syncOnStart"
-            android:summary="Will only trigger on fresh starts, not when resuming"
-            android:title="Synchronize on app start" />
-
         <Preference
             android:dependency="syncEnablePref"
             android:key="accountPref"
             android:summary=""
             android:title="@string/settings_account_title" />
-
-        <ListPreference
+        
+        <CheckBoxPreference
             android:dependency="syncEnablePref"
-            android:defaultValue="0"
-            android:dialogTitle="@string/settings_sync_freq_title"
-            android:entries="@array/sync_freq_preference"
-            android:entryValues="@array/sync_freqvalues_preference"
-            android:key="syncFreq"
-            android:summary="Selected frequency should be here"
-            android:title="@string/settings_sync_freq_title" />
+            android:defaultValue="true"
+            android:key="syncInBackground"
+            android:summary="@string/background_sync_info"
+            android:title="@string/background_sync" />
+        
+        <CheckBoxPreference
+            android:dependency="syncEnablePref"
+            android:defaultValue="true"
+            android:key="syncOnStart"
+            android:summary="@string/sync_on_start_info"
+            android:title="@string/sync_on_start" />
+        
+        <CheckBoxPreference
+            android:dependency="syncEnablePref"
+            android:defaultValue="true"
+            android:key="syncOnChange"
+            android:summary="@string/sync_on_change_info"
+            android:title="@string/sync_on_change" />
+        
+        <CheckBoxPreference
+            android:dependency="syncEnablePref"
+            android:defaultValue="false"
+            android:key="syncFull"
+            android:summary="@string/sync_full_force_info"
+            android:title="@string/sync_full_force" />
 
 </PreferenceScreen>

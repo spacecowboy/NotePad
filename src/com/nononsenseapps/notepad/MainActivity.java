@@ -147,7 +147,8 @@ public class MainActivity extends DualLayoutActivity implements
 		String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, "");
 		boolean syncEnabled = prefs
 				.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
-		boolean syncOnStart = prefs.getBoolean("syncOnStart", false);
+		boolean syncOnStart = prefs.getBoolean(SyncPrefs.KEY_SYNC_ON_START,
+				true);
 		if (accountName != null && !accountName.equals("") && syncEnabled
 				&& syncOnStart) {
 			requestSync(accountName);
@@ -1074,18 +1075,16 @@ public class MainActivity extends DualLayoutActivity implements
 
 									// Write to pref
 									editor.putBoolean(
-											SyncPrefs.KEY_SYNC_ENABLE, true);
+											SyncPrefs.KEY_SYNC_ENABLE, true)
+											.putBoolean(
+													SyncPrefs.KEY_BACKGROUND_SYNC,
+													true);
 
 									// Enable periodic sync
-									long freqMin = 60; // minutes
-									long pollFrequency = 60 * freqMin; // seconds
+									long pollFrequency = 3600; // seconds
 									ContentResolver.addPeriodicSync(account,
 											NotePad.AUTHORITY, new Bundle(),
 											pollFrequency);
-
-									// Write period to prefs
-									editor.putString(SyncPrefs.KEY_SYNC_FREQ,
-											Long.toString(freqMin));
 
 									// Commit prefs
 									editor.commit();

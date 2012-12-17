@@ -80,7 +80,7 @@
     <string name="settings_account_title">Select an account</string>
     <string name="settings_account_summary">Click to switch account</string>
     <string name="settings_sync_enable_title">Google Tasks sync</string>
-    <string name="settings_sync_enable_summary">Synchronize notes with your Google account</string>
+    <string name="settings_sync_enable_summary">Sync notes with your Google account</string>
     <string name="settings_cat_syncing">Synchronization</string>
     <string name="manual">Manual</string>
     <string name="minutes">minutes</string>
@@ -246,5 +246,14 @@
     <string name="notedeleted_other">Deleted %d notes</string>
     <string name="selected_one">Selected one note</string>
     <string name="selected_other">Selected %d notes</string>
-
+    
+    <string name="background_sync">Background sync</string>
+    <string name="background_sync_info">Syncs once per hour</string>
+	<string name="sync_on_change">Sync on changes</string>
+	<string name="sync_on_change_info">Schedules a sync shortly after a note has changed</string>
+	<string name="sync_on_start">Sync on app start</string>
+	<string name="sync_on_start_info">Will only trigger on fresh starts, not when resuming</string>
+	<string name="sync_full_force">Force full sync next time</string>
+	<string name="sync_full_force_info">Makes sure that local data matches that on the server</string>
+    
 </resources>
