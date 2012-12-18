@@ -203,6 +203,13 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <service
+            android:name="com.nononsenseapps.helpers.SyncDelay"
+            android:exported="false" >
+            <intent-filter>
+                <action android:name="android.intent.action.RUN" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

@@ -10,6 +10,7 @@ import com.nononsenseapps.notepad.widget.WidgetPrefs;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.preference.PreferenceManager;
 
@@ -70,11 +71,11 @@ public class UpdateNotifier {
 	 */
 	private static void notifyChange(Context context, Uri uri) {
 		if (uri != null) {
-			context.getContentResolver().notifyChange(
-					uri,
-					null,
-					PreferenceManager.getDefaultSharedPreferences(context)
-							.getBoolean(SyncPrefs.KEY_SYNC_ON_CHANGE, true));
+			context.getContentResolver().notifyChange(uri, null, false);
+			if (PreferenceManager.getDefaultSharedPreferences(context)
+							.getBoolean(SyncPrefs.KEY_SYNC_ON_CHANGE, true)) {
+				context.startService(new Intent(context, SyncDelay.class));
+			}
 		}
 	}
 
