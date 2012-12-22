@@ -254,6 +254,6 @@
 	<string name="sync_on_start">Sync on app start</string>
 	<string name="sync_on_start_info">Will only trigger on fresh starts, not when resuming</string>
 	<string name="sync_full_force">Force full sync next time</string>
-	<string name="sync_full_force_info">Makes sure that local data matches that on the server</string>
+	<string name="sync_full_force_info">Only check this if you believe sync is missing some items.</string>
     
 </resources>
