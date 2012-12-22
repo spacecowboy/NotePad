@@ -73,23 +73,6 @@
         <item>@string/const_serif</item>
         <item>@string/const_monospace</item>
     </string-array>
-    <string-array name="sync_freq_preference">
-        <item>@string/manual</item>
-        <!-- <item>1 hour</item>
-        <item>2 hours</item>
-        <item>4 hours</item>
-        <item>8 hours</item> -->
-        <!-- <item>1 day</item> -->
-        <item>@string/automatic</item>
-	</string-array>
-	<string-array name="sync_freqvalues_preference"  tools:ignore="MissingTranslation">
-	    <item>0</item>
-        <item>60</item>
-        <!-- <item>120</item>
-        <item>240</item>
-        <item>480</item> -->
-        <!-- <item>1440</item> -->
-	</string-array>
 
     <string-array tools:ignore="MissingTranslation" name="preferences_week_start_day_labels">
         <item>@string/localedefault</item>
