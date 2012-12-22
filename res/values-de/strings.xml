@@ -17,201 +17,205 @@ limitations under the License.
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-<string tools:ignore="MissingTranslation" name="app_name">Notizen</string>
-<string tools:ignore="MissingTranslation" name="title_create">Neue Notiz</string>
-<string tools:ignore="MissingTranslation" name="title_edit">Bearbeiten: %1$s</string>
-<string tools:ignore="MissingTranslation" name="menu_add">Neue Notiz</string>
-<string tools:ignore="MissingTranslation" name="menu_delete">Löschen</string>
-<string tools:ignore="MissingTranslation" name="menu_revert">Änderungen verwerfen</string>
-<string tools:ignore="MissingTranslation" name="menu_copy">Notiz kopieren</string>
-<string tools:ignore="MissingTranslation" name="menu_cancel">Abbrechen</string>
-<string tools:ignore="MissingTranslation" name="menu_setcompleted">Erledigt</string>
-<string tools:ignore="MissingTranslation" name="menu_setuncompleted">Nicht erledigt</string>
-<string tools:ignore="MissingTranslation" name="menu_deletelist">Liste löschen</string>
-<string tools:ignore="MissingTranslation" name="menu_sync">Aktualisieren</string>
-<string tools:ignore="MissingTranslation" name="menu_share">Senden</string>
-<string tools:ignore="MissingTranslation" name="menu_preferences">Einstellungen</string>
-<string tools:ignore="MissingTranslation" name="menu_renamelist">Liste umbenennen</string>
-<string tools:ignore="MissingTranslation" name="menu_createlist">Liste erstellen</string>
-<string tools:ignore="MissingTranslation" name="menu_clearcompleted">Erledigte löschen</string>
-<string tools:ignore="MissingTranslation" name="menu_setdefaultlist">Als Standardliste festlegen</string>
-<string tools:ignore="MissingTranslation" name="menu_managelists">Liste verwalten</string>
-<string tools:ignore="MissingTranslation" name="delete_list_warning">Die Liste wird unwiderruflich gelöscht. Bist du sicher?</string>
-<string tools:ignore="MissingTranslation" name="editor_due_date_hint">Fälligkeitsdatum</string>
-<string tools:ignore="MissingTranslation" name="editor_title_hint">Titel</string>
-<string tools:ignore="MissingTranslation" name="editor_note_hint">Notiz</string>
-<string tools:ignore="MissingTranslation" name="resolve_edit">Notiz bearbeiten</string>
-<string tools:ignore="MissingTranslation" name="error_title">Fehler</string>
-<string tools:ignore="MissingTranslation" name="error_message">Fehler beim Laden der Notiz</string>
-<string tools:ignore="MissingTranslation" name="search_hint">Suche</string>
-<string tools:ignore="MissingTranslation" name="settings_theme">Aktuelles Design</string>
-<string tools:ignore="MissingTranslation" name="settings_theme_dialog">Design verwenden</string>
-
-
-<string tools:ignore="MissingTranslation" name="settings_cat_theme">Design</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_sorting">Sortierung</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_type">Sortieren nach</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_type_dialog">Sortiere nach</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_order">Sortierreihenfolge</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_order_dialog">Ordnen nach</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_alphabetic">Titel</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_modified">Änderungsdatum</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_duedate">Fälligkeitsdatum</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">Serverposition</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Aufsteigend</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Absteigend</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Dunkel</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Hell</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">Hell, dunkle Aktionsleiste</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_appearance">Aussehen</string>
-<string tools:ignore="MissingTranslation" name="settings_font_screen">Schriftart</string>
-<string tools:ignore="MissingTranslation" name="settings_font_screen_summary">Schriftart und Schriftgröße bearbeiten</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_font_editor">Editor</string>
-<string tools:ignore="MissingTranslation" name="settings_font_type">Schriftart</string>
-<string tools:ignore="MissingTranslation" name="settings_font_type_dialog">Schriftart auswählen</string>
-<string tools:ignore="MissingTranslation" name="settings_font_size">Schriftgröße</string>
-<string tools:ignore="MissingTranslation" name="preference_preview_text">So wird der Text im Editor dargestellt</string>
-<string tools:ignore="MissingTranslation" name="settings_text_preview_title">Vorschau</string>
-<string tools:ignore="MissingTranslation" name="monospace">Monospace</string>
-<string tools:ignore="MissingTranslation" name="sans">Sans</string>
-<string tools:ignore="MissingTranslation" name="serif">Serif</string>
-<string tools:ignore="MissingTranslation" name="settings_sync_freq_title">Synchronisierungsintervall</string>
-<string tools:ignore="MissingTranslation" name="settings_account_title">Account wählen</string>
-<string tools:ignore="MissingTranslation" name="settings_account_summary">Account wechseln</string>
-<string tools:ignore="MissingTranslation" name="settings_sync_enable_title">mit Google Tasks sync.</string>
-<string tools:ignore="MissingTranslation" name="settings_sync_enable_summary">Notizen mit Google Tasks synchronisieren</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_syncing">Synchronisation</string>
-<string tools:ignore="MissingTranslation" name="manual">Manuell</string>
-<string tools:ignore="MissingTranslation" name="minutes">Minuten</string>
-<string tools:ignore="MissingTranslation" name="hours">Stunden</string>
-<string tools:ignore="MissingTranslation" name="onehour">Eine Stunde</string>
-<string tools:ignore="MissingTranslation" name="oneday">Einen Tag</string>
-<string tools:ignore="MissingTranslation" name="yes">Ja</string>
-<string tools:ignore="MissingTranslation" name="no">Nein</string>
-<string tools:ignore="MissingTranslation" name="ok">OK</string>
-<string tools:ignore="MissingTranslation" name="show_from_all_lists">Alle Listen</string>
-<string tools:ignore="MissingTranslation" name="default_list_needed_warning">Zuerst Standard-Liste setzen</string>
-<string tools:ignore="MissingTranslation" name="reverted">Verworfene Änderungen</string>
-<string name="notecopied" tools:ignore="MissingTranslation">Kopiert</string>
-<string name="deleted" tools:ignore="MissingTranslation">Gelöscht</string>
-<string name="items" tools:ignore="MissingTranslation">Notizen</string>
-<string tools:ignore="MissingTranslation" name="permission_read_label">Notizen und Listen lesen</string>
-<string tools:ignore="MissingTranslation" name="permission_read_desc">Erlaubt der Anwendung ihre Notizen und zugehörigen Listen zu lesen </string>
-<string tools:ignore="MissingTranslation" name="permission_write_label">Notizen und Listen bearbeiten</string>
-<string tools:ignore="MissingTranslation" name="permission_write_desc">Erlaubt der Anwendung Notizen und Listen hinzuzufügen zu aktualisieren oder zu löschen</string>
-<string tools:ignore="MissingTranslation" name="settings_header_list">Listeneinstellungen</string>
-<string tools:ignore="MissingTranslation" name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string tools:ignore="MissingTranslation" name="settings_header_sync">@string/settings_cat_syncing</string>
-<string tools:ignore="MissingTranslation" name="settings_list_dialog">Wählen Sie eine Liste</string>
-<string tools:ignore="MissingTranslation" name="settings_list">Liste</string>
-<string tools:ignore="MissingTranslation" name="automatic">Automatisch</string>
-
-<string tools:ignore="MissingTranslation" name="preferences_week_start_day_dialog">"Woche beginnt am"</string>
-<string tools:ignore="MissingTranslation" name="preferences_week_start_day_title">"Woche beginnt am"</string>
-<string name="preferences_week_start_day_default" tools:ignore="MissingTranslation" >-1</string>
+<string name="app_name">Notizen</string>
+<string name="title_create">Neue Notiz</string>
+<string name="title_edit">Bearbeiten: %1$s</string>
+<string name="menu_add">Neue Notiz</string>
+<string name="menu_delete">Löschen</string>
+<string name="menu_revert">Änderungen verwerfen</string>
+<string name="menu_copy">Notiz kopieren</string>
+<string name="menu_cancel">Abbrechen</string>
+<string name="menu_setcompleted">Erledigt</string>
+<string name="menu_setuncompleted">Nicht erledigt</string>
+<string name="menu_deletelist">Liste löschen</string>
+<string name="menu_sync">Aktualisieren</string>
+<string name="menu_share">Senden</string>
+<string name="menu_preferences">Einstellungen</string>
+<string name="menu_renamelist">Liste umbenennen</string>
+<string name="menu_createlist">Liste erstellen</string>
+<string name="menu_clearcompleted">Erledigte löschen</string>
+<string name="menu_setdefaultlist">Als Standardliste festlegen</string>
+<string name="menu_managelists">Liste verwalten</string>
+<string name="delete_list_warning">Die Liste wird unwiderruflich gelöscht. Bist du sicher?</string>
+<string name="editor_due_date_hint">Fälligkeitsdatum</string>
+<string name="editor_title_hint">Titel</string>
+<string name="editor_note_hint">Notiz</string>
+<string name="resolve_edit">Notiz bearbeiten</string>
+<string name="error_title">Fehler</string>
+<string name="error_message">Fehler beim Laden der Notiz</string>
+<string name="search_hint">Suche</string>
+<string name="settings_theme">Aktuelles Design</string>
+<string name="settings_theme_dialog">Design verwenden</string>
+<string name="settings_lang">Sprache</string>
+<string name="settings_cat_theme">Design</string>
+<string name="settings_cat_sorting">Sortierung</string>
+<string name="settings_sorting_type">Sortieren nach</string>
+<string name="settings_sorting_type_dialog">Sortiere nach</string>
+<string name="settings_sorting_order">Sortierreihenfolge</string>
+<string name="settings_sorting_order_dialog">Ordnen nach</string>
+<string name="settings_summary_sort_type_alphabetic">Titel</string>
+<string name="settings_summary_sort_type_modified">Änderungsdatum</string>
+<string name="settings_summary_sort_type_duedate">Fälligkeitsdatum</string>
+<string name="settings_summary_sort_type_serverposition">Serverposition</string>
+<string name="settings_summary_sort_order_asc">Aufsteigend</string>
+<string name="settings_summary_sort_order_desc">Absteigend</string>
+<string name="settings_summary_theme_black">Schwarz</string>
+<string name="settings_summary_theme_dark">Dunkel</string>
+<string name="settings_summary_theme_light">Hell</string>
+<string name="settings_summary_theme_light_dark_ab">Hell, dunkle Aktionsleiste</string>
+<string name="settings_cat_appearance">Aussehen</string>
+<string name="settings_font_screen">Schriftart</string>
+<string name="settings_font_screen_summary">Schriftart und Schriftgröße bearbeiten</string>
+<string name="settings_cat_font_editor">Editor</string>
+<string name="settings_font_type">Schriftart</string>
+<string name="settings_font_type_dialog">Schriftart auswählen</string>
+<string name="settings_font_size">Schriftgröße</string>
+<string name="preference_preview_text">So wird der Text im Editor dargestellt</string>
+<string name="settings_text_preview_title">Vorschau</string>
+<string name="monospace">Monospace</string>
+<string name="sans">Sans</string>
+<string name="serif">Serif</string>
+<string name="settings_sync_freq_title">Synchronisierungsintervall</string>
+<string name="settings_account_title">Account wählen</string>
+<string name="settings_account_summary">Account wechseln</string>
+<string name="settings_sync_enable_title">mit Google Tasks sync.</string>
+<string name="settings_sync_enable_summary">Notizen mit Google Tasks synchronisieren</string>
+<string name="settings_cat_syncing">Synchronisation</string>
+<string name="manual">Manuell</string>
+<string name="minutes">Minuten</string>
+<string name="hours">Stunden</string>
+<string name="onehour">Eine Stunde</string>
+<string name="oneday">Einen Tag</string>
+<string name="yes">Ja</string>
+<string name="no">Nein</string>
+<string name="ok">OK</string>
+<string name="show_from_all_lists">Alle Listen</string>
+<string name="default_list_needed_warning">Zuerst Standard-Liste setzen</string>
+<string name="reverted">Verworfene Änderungen</string>
+<string name="notecopied">Kopiert</string>
+<string name="deleted">Gelöscht</string>
+<string name="items">Notizen</string>
+<string name="permission_read_label">Notizen und Listen lesen</string>
+<string name="permission_read_desc">Erlaubt der Anwendung ihre Notizen und zugehörigen Listen zu lesen </string>
+<string name="permission_write_label">Notizen und Listen bearbeiten</string>
+<string name="permission_write_desc">Erlaubt der Anwendung Notizen und Listen hinzuzufügen zu aktualisieren oder zu löschen</string>
+<string name="settings_header_list">Listeneinstellungen</string>
+<string name="settings_header_appearance">@string/settings_cat_appearance</string>
+<string name="settings_header_sync">@string/settings_cat_syncing</string>
+<string name="settings_list_dialog">Wählen Sie eine Liste</string>
+<string name="settings_list">Liste</string>
+<string name="automatic">Automatisch</string>
+<string name="preferences_week_start_day_dialog">"Woche beginnt am"</string>
+<string name="preferences_week_start_day_title">"Woche beginnt am"</string>
+<string name="preferences_week_start_day_default">-1</string>
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
 -->
 <plurals name="notecopied_msg">
-<item quantity="one">Copied one note</item>
-<item quantity="other">Copied %d notes</item>
+<item quantity="one">@string/notecopied_one</item>
+<item quantity="other">@string/notecopied_other</item>
 </plurals>
-
 <plurals name="notedeleted_msg">
-<item quantity="one">Deleted one note</item>
-<item quantity="other">Deleted %d notes</item>
+<item quantity="one">@string/notedeleted_one</item>
+<item quantity="other">@string/notedeleted_other</item>
 </plurals>
-
 <plurals name="mode_choose">
-<item quantity="one">Selected one note</item>
-<item quantity="other">Selected %d notes</item>
+<item quantity="one">@string/selected_one</item>
+<item quantity="other">@string/selected_other</item>
 </plurals>
 
-<string tools:ignore="MissingTranslation" name="lock_note">Notiz sperren</string>
-<string tools:ignore="MissingTranslation" name="unlock_note">Notiz entsperren</string>
-<string tools:ignore="MissingTranslation" name="locked">Gesperrt</string>
-<string tools:ignore="MissingTranslation" name="unlocked">Entsperrt</string>
-<string tools:ignore="MissingTranslation" name="password_required">Passwort benötigt</string>
-<string tools:ignore="MissingTranslation" name="select_account">Wähle einen Account aus</string>
-<string tools:ignore="MissingTranslation" name="password">Passwort</string>
-<string tools:ignore="MissingTranslation" name="password_set">Passwort festgelegt</string>
-<string tools:ignore="MissingTranslation" name="password_cleared">Passwort gelöscht</string>
-<string tools:ignore="MissingTranslation" name="passwords_dont_match">Passwort stimmt nicht überein</string>
-<string tools:ignore="MissingTranslation" name="password_incorrect">Falsches Passwort</string>
-<string tools:ignore="MissingTranslation" name="enter_password">Passwort eingeben</string>
-<string tools:ignore="MissingTranslation" name="enter_new_password">Neues Passwort eingeben</string>
-<string tools:ignore="MissingTranslation" name="confirm_new_password">Neues Passwort bestätigen</string>
-<string tools:ignore="MissingTranslation" name="apply">Übernehmen</string>
-<string tools:ignore="MissingTranslation" name="clear_password">Passwort löschen</string>
-<string tools:ignore="MissingTranslation" name="password_info">Das Einstellen eines Passwortes hat zur Folge, dass man zum Anzeigen der gesperrten Notizen das Passwort eingeben muss. Es wird nur der Inhalt der Notiz geschützt; Titel und Fälligkeitsdatum sind weiterhin ungeschützt. Die Notiz wird nicht Verschlüsselt und kann weiterhin in Google Mail / Kalender betrachtet werden. Sollten Sie ihr Passwort vergessen so synchronisieren sie bitte mit Google und installieren sie anschließend die App neu.</string>
-<string tools:ignore="MissingTranslation" name="about">Infos</string>
-
-<string tools:ignore="MissingTranslation" name="sync_failed">Synchronisation fehlgeschlagen</string>
-<string tools:ignore="MissingTranslation" name="sync_login_failed">Login fehlgeschlagen, es konnte keine Verbindung zu Google Tasks hergestellt werden</string>
-
-<string tools:ignore="MissingTranslation" name="changelog_full_title">Changelog</string>
-<string tools:ignore="MissingTranslation" name="changelog_title">Was ist neu?</string>
-<string tools:ignore="MissingTranslation" name="changelog_ok_button">OK</string>
-<string tools:ignore="MissingTranslation" name="changelog_show_full">Vollständig anzeigen</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note">Notizvorschau anzeigen</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">Titel auf 2 Linien</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_on">Notiz ist auf der zweiten Linie</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_show_complete">"Erledigt"-Button</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_off">Button wird ausgeblendet</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_on">Button wird angezeigt</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem">Titel auf 2 Linien</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">Notiz auf beiden Linien</string>
-
-<string tools:ignore="MissingTranslation" name="editor_details">Mehr</string>
-<string tools:ignore="MissingTranslation" name="completed">Erledigt</string>
-<string tools:ignore="MissingTranslation" name="subtask_of">Bestandteil von</string>
-<string tools:ignore="MissingTranslation" name="security">Sicherheit</string>
-
-<string tools:ignore="MissingTranslation" name="date_header_overdue">Überfällig</string>
-<string tools:ignore="MissingTranslation" name="date_header_today">Heute</string>
-<string tools:ignore="MissingTranslation" name="date_header_tomorrow">Morgen</string>
-<string tools:ignore="MissingTranslation" name="date_header_7days">Nächste 7 Tage</string>
-<string tools:ignore="MissingTranslation" name="date_header_future">Später</string>
-<string tools:ignore="MissingTranslation" name="date_header_none">Kein Datum</string>
-<string tools:ignore="MissingTranslation" name="date_header_completed">Erledigt</string>
-
-<string tools:ignore="MissingTranslation" name="mod_header_yesterday">Gestern</string>
-<string tools:ignore="MissingTranslation" name="mod_header_thisweek">Diese Woche</string>
-<string tools:ignore="MissingTranslation" name="mod_header_earlier">Früher</string>
-
-<string tools:ignore="MissingTranslation" name="settings_listheader">Wenn alle Listen angezeigt werden</string>
-<string tools:ignore="MissingTranslation" name="settings_listheader_off">Als eine Liste anzeigen</string>
-<string tools:ignore="MissingTranslation" name="settings_listheader_on">Listennamen anzeigen</string>
-
-<string tools:ignore="MissingTranslation" name="please_create_list">Bitte erstelle eine Liste</string>
-<string tools:ignore="MissingTranslation" name="please_select_note">Bitte wähle oder erstelle eine Notiz</string>
-<string tools:ignore="MissingTranslation" name="please_create_note">Bitte erstelle eine Notiz</string>
-
-<string tools:ignore="MissingTranslation" name="hide_checkbox">Checkbox verbergen </string>
-<string tools:ignore="MissingTranslation" name="hide_checkbox_summary_on">Checkbox wird verborgen</string>
-<string tools:ignore="MissingTranslation" name="hide_checkbox_summary_off">Checkbox wird angezeigt</string>
-
-<string tools:ignore="MissingTranslation" name="hide_note">Notiz verbergen</string>
-<string tools:ignore="MissingTranslation" name="hide_note_summary_on">Notiz wird verborgen </string>
-<string tools:ignore="MissingTranslation" name="hide_note_summary_off">Notiz wird angezeigt</string>
-
-<string tools:ignore="MissingTranslation" name="hide_date">Fälligkeitsdatum verbergen</string>
-<string tools:ignore="MissingTranslation" name="hide_date_summary_on">Datum wird verborgen</string>
-<string tools:ignore="MissingTranslation" name="hide_date_summary_off">Datum wird angezeigt</string>
-
-<string tools:ignore="MissingTranslation" name="title_rows">max. Titelhöhe</string>
-
-<string tools:ignore="MissingTranslation" name="saturday">Samstag</string>
-<string tools:ignore="MissingTranslation" name="sunday">Sonntag</string>
-<string tools:ignore="MissingTranslation" name="monday">Montag </string>
-
+<string name="lock_note">Notiz sperren</string>
+<string name="unlock_note">Notiz entsperren</string>
+<string name="locked">Gesperrt</string>
+<string name="unlocked">Entsperrt</string>
+<string name="password_required">Passwort benötigt</string>
+<string name="select_account">Wähle einen Account aus</string>
+<string name="password">Passwort</string>
+<string name="password_set">Passwort festgelegt</string>
+<string name="password_cleared">Passwort gelöscht</string>
+<string name="passwords_dont_match">Passwort stimmt nicht überein</string>
+<string name="password_incorrect">Falsches Passwort</string>
+<string name="enter_password">Passwort eingeben</string>
+<string name="enter_new_password">Neues Passwort eingeben</string>
+<string name="confirm_new_password">Neues Passwort bestätigen</string>
+<string name="apply">Übernehmen</string>
+<string name="clear_password">Passwort löschen</string>
+<string name="password_info">Das Einstellen eines Passwortes hat zur Folge, dass man zum Anzeigen der gesperrten Notizen das Passwort eingeben muss. Es wird nur der Inhalt der Notiz geschützt; Titel und Fälligkeitsdatum sind weiterhin ungeschützt. Die Notiz wird nicht Verschlüsselt und kann weiterhin in Google Mail / Kalender betrachtet werden. Sollten Sie ihr Passwort vergessen so synchronisieren sie bitte mit Google und installieren sie anschließend die App neu.</string>
+<string name="about">Infos</string>
+<string name="sync_failed">Synchronisation fehlgeschlagen</string>
+<string name="sync_login_failed">Login fehlgeschlagen, es konnte keine Verbindung zu Google Tasks hergestellt werden</string>
+<string name="changelog_full_title">Changelog</string>
+<string name="changelog_title">Was ist neu?</string>
+<string name="changelog_ok_button">OK</string>
+<string name="changelog_show_full">Vollständig anzeigen</string>
+<string name="widget_pref_preview_note">Notizvorschau anzeigen</string>
+<string name="widget_pref_preview_note_summary_off">Titel auf 2 Linien</string>
+<string name="widget_pref_preview_note_summary_on">Notiz ist auf der zweiten Linie</string>
+<string name="widget_pref_show_complete">"Erledigt"-Button</string>
+<string name="widget_pref_show_complete_summary_off">Button wird ausgeblendet</string>
+<string name="widget_pref_show_complete_summary_on">Button wird angezeigt</string>
+<string name="settings_listitem">Titel auf 2 Linien</string>
+<string name="settings_listitem_summary_off">Notizvorschau auf zwei Zeilen</string>
+<string name="editor_details">Mehr</string>
+<string name="completed">Erledigt</string>
+<string name="subtask_of">Bestandteil von</string>
+<string name="security">Sicherheit</string>
+<string name="date_header_overdue">Überfällig</string>
+<string name="date_header_today">Heute</string>
+<string name="date_header_tomorrow">Morgen</string>
+<string name="date_header_7days">Nächste 7 Tage</string>
+<string name="date_header_future">Später</string>
+<string name="date_header_none">Kein Datum</string>
+<string name="date_header_completed">Erledigt</string>
+<string name="mod_header_yesterday">Gestern</string>
+<string name="mod_header_thisweek">Diese Woche</string>
+<string name="mod_header_earlier">Früher</string>
+<string name="settings_listheader">Wenn alle Listen angezeigt werden</string>
+<string name="settings_listheader_off">Als eine Liste anzeigen</string>
+<string name="settings_listheader_on">Listennamen anzeigen</string>
+<string name="please_create_list">Bitte erstelle eine Liste</string>
+<string name="please_select_note">Bitte wähle oder erstelle eine Notiz</string>
+<string name="please_create_note">Bitte erstelle eine Notiz</string>
+<string name="hide_checkbox">Checkbox verbergen </string>
+<string name="hide_checkbox_summary_on">Checkbox wird verborgen</string>
+<string name="hide_checkbox_summary_off">Checkbox wird angezeigt</string>
+<string name="hide_note">Notiz verbergen</string>
+<string name="hide_note_summary_on">Notiz wird verborgen </string>
+<string name="hide_note_summary_off">Notiz wird angezeigt</string>
+<string name="hide_date">Fälligkeitsdatum verbergen</string>
+<string name="hide_date_summary_on">Datum wird verborgen</string>
+<string name="hide_date_summary_off">Datum wird angezeigt</string>
+<string name="title_rows">max. Titelhöhe</string>
+<string name="title_rows_1">1 Zeile</string>
+<string name="title_rows_2">2 Zeilen</string>
+<string name="title_rows_free">Unbegrenzt</string>
+<string name="saturday">Samstag</string>
+<string name="sunday">Sonntag</string>
+<string name="monday">Montag </string>
+<string name="localedefault">Systemsprache</string>
 
 <!-- These should probably not be translated -->
-<string name="default_notetitle" tools:ignore="MissingTranslation">Willkommen</string>
-<string name="default_notetext" tools:ignore="MissingTranslation">Damit diese App ihr volles Potential entfalten kann, empfehle ich dir, zuerst die Synchronisation einzuschalten. Tippe auf den Sync-Button in der Aktionsleiste, wenn du zurück in die Liste kommst. Die automatische Synchronisation wird eingeschalten, und einmal  pro Stunde durchgeführt. \n\nBeachte, dass dies mit deinen globalen Synchronisationseinstellung gekoppelt ist. Kurz und bündig: Wenn dein gmail nicht automatisch synchronisiert , wird es diese App auch nicht tun. In den Einstellungen kannst du die automatische Synchronisation aussschalten und es manuell tun.\n\nWenn du mehr als ein Google-Konto auf deinem Gerät hast, schlage ich vor, die Einstellungen zu öffnen und manuell auszuwählen, welches Konto diese App verwenden soll.\n\nEigentlich empfehle ich es dir sowieso, dich mal in den Einstellungen rumzuschauen, nur um zu sehen, was es für Optionen gibt. Du kannst die Schriftart und -grösse in diesem Fenster anpassen oder das Design von hell zu dunkel ändern.\n\nDiese App besitzt auch ein skalierbares Widget. Um die Grösse zu ändern, behältst du den Finger einen Moment auf dem Widget, wie wenn du es verschieben möchtest. Dann kannst du, anstatt es zu verschieben, an den blau markierten Seiten ziehen, um es grösser oder kleiner zu machen.\n\nIch hoffe sehr, dass dir diese App nützlich ist. Bedenke, dass sie komplett  kostenfrei ist, keine Werbung beinhaltet, und Open Source ist. Wenn du irgendwelche guten Ideen oder grössere Beschwerden hast, lass es mich wissen.\n\nJonas</string>
-<string name="about_text" tools:ignore="MissingTranslation">Danke, dass du meine App installiert hast! Ich gebe mein Bestes, um diese App in jeder Beziehung toll zu machen, aber es wird immer Bugs geben und es geht immer noch besser.\n\nWenn du einen Bug oder eine falsche Übersetzung gefunden hast oder einfach eine Idee hast, um diese App zu verbessern, will ich davon hören!\n\nSchick mir ein Mail (wenn möglich Englisch): jonas@nononsenseapps.com\n\nGib mir +1: https://plus.google.com/u/0/111801385015192089838\n\nSchreib es in die Fehlerliste: https://github.com/spacecowboy/NotePad/issues\n\nWenn du mir mit der Übersetzung helfen willst, dann tu es auf http://translate.nononsenseapps.com\n\nNochmals vielen Dank, dass du diese App heruntergeladen hast!\nEine andere Möglichkeit, das Projekt zu unterstützen, ist das Kaufen der Donate-Version: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
+<string name="default_notetitle">Willkommen</string>
+<string name="default_notetext">Damit diese App ihr volles Potential entfalten kann, empfehle ich dir, zuerst die Synchronisation einzuschalten. Tippe auf den Sync-Button in der Aktionsleiste, wenn du zurück in die Liste kommst. Die automatische Synchronisation wird eingeschalten, und einmal  pro Stunde durchgeführt. \n\nBeachte, dass dies mit deinen globalen Synchronisationseinstellung gekoppelt ist. Kurz und bündig: Wenn dein gmail nicht automatisch synchronisiert , wird es diese App auch nicht tun. In den Einstellungen kannst du die automatische Synchronisation aussschalten und es manuell tun.\n\nWenn du mehr als ein Google-Konto auf deinem Gerät hast, schlage ich vor, die Einstellungen zu öffnen und manuell auszuwählen, welches Konto diese App verwenden soll.\n\nEigentlich empfehle ich es dir sowieso, dich mal in den Einstellungen rumzuschauen, nur um zu sehen, was es für Optionen gibt. Du kannst die Schriftart und -grösse in diesem Fenster anpassen oder das Design von hell zu dunkel ändern.\n\nDiese App besitzt auch ein skalierbares Widget. Um die Grösse zu ändern, behältst du den Finger einen Moment auf dem Widget, wie wenn du es verschieben möchtest. Dann kannst du, anstatt es zu verschieben, an den blau markierten Seiten ziehen, um es grösser oder kleiner zu machen.\n\nIch hoffe sehr, dass dir diese App nützlich ist. Bedenke, dass sie komplett  kostenfrei ist, keine Werbung beinhaltet, und Open Source ist. Wenn du irgendwelche guten Ideen oder grössere Beschwerden hast, lass es mich wissen.\n\nJonas</string>
+<string name="about_text">Danke, dass du meine App installiert hast! Ich gebe mein Bestes, um diese App in jeder Beziehung toll zu machen, aber es wird immer Bugs geben und es geht immer noch besser.\n\nWenn du einen Bug oder eine falsche Übersetzung gefunden hast oder einfach eine Idee hast, um diese App zu verbessern, will ich davon hören!\n\nSchick mir ein Mail (wenn möglich Englisch): jonas@nononsenseapps.com\n\nSchreib mir auf G+: https://plus.google.com/u/0/111801385015192089838\n\nSchreib es in die Fehlerliste: https://github.com/spacecowboy/NotePad/issues\n\nWenn du mir mit der Übersetzung helfen willst, dann tu es auf http://translate.nononsenseapps.com\n\nNochmals vielen Dank, dass du diese App heruntergeladen hast!\nEine andere Möglichkeit, das Projekt zu unterstützen, ist das Kaufen der Donate-Version: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
 
 <!-- settings string keys -->
+<string name="menu_settings">Einstellungen</string>
+<string name="title_activity_list_widget_config">Widget anpassen</string>
+<string name="hide_appicon">App-Icon ausblenden</string>
+<string name="hide_new">"Neu"-Button ausblenden</string>
+<string name="hide_header">Widget-Kopfzeile ausblenden</string>
+<string name="hide_widgetbg">Durchsichtiger Hintergrund</string>
+<string name="shortcut_help1">Wenn aktiviert, erstellt die Verknüpfng eine neue Notiz in der ausgewählten Liste und öffnet den Editor. Wenn nicht, öffnet die Verknüpfung nur die ausgewählte Liste.</string>
+<string name="loading_widget">Widget wird geladen...</string>
+<string name="default_list_set">Liste als Standard festgelegt</string>
+
+<string name="notecopied_one">1 Notiz kopiert</string>
+<string name="notecopied_other">%d Notizen kopiert</string>
+<string name="notedeleted_one">1 Notiz gelöscht</string>
+<string name="notedeleted_other">%d Notizen gelöscht</string>
+<string name="selected_one">1 Notiz ausgewählt</string>
+<string name="selected_other">%d Notizen ausgewählt</string>
 
 </resources>

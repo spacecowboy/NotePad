@@ -15,201 +15,206 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools" >
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-<string tools:ignore="MissingTranslation" name="app_name">Notlar</string>
-<string tools:ignore="MissingTranslation" name="title_create">Yeni not</string>
-<string tools:ignore="MissingTranslation" name="title_edit">Düzenle: %1$s</string>
-<string tools:ignore="MissingTranslation" name="menu_add">Yeni not</string>
-<string tools:ignore="MissingTranslation" name="menu_delete">Sil</string>
-<string tools:ignore="MissingTranslation" name="menu_revert">Değişiklikleri geri al</string>
-<string tools:ignore="MissingTranslation" name="menu_copy">Notu kopyala</string>
-<string tools:ignore="MissingTranslation" name="menu_cancel">İptal</string>
-<string tools:ignore="MissingTranslation" name="menu_setcompleted">Yapıldı olarak işaretle</string>
-<string tools:ignore="MissingTranslation" name="menu_setuncompleted">Yapılmadı olarak işaretle</string>
-<string tools:ignore="MissingTranslation" name="menu_deletelist">Listeyi sil</string>
-<string tools:ignore="MissingTranslation" name="menu_sync">Yenile</string>
-<string tools:ignore="MissingTranslation" name="menu_share">Paylaş</string>
-<string tools:ignore="MissingTranslation" name="menu_preferences">Ayarlar</string>
-<string tools:ignore="MissingTranslation" name="menu_renamelist">Listeyi yeniden adlandır</string>
-<string tools:ignore="MissingTranslation" name="menu_createlist">Liste oluştur</string>
-<string tools:ignore="MissingTranslation" name="menu_clearcompleted">Tamamlananları temizle</string>
-<string tools:ignore="MissingTranslation" name="menu_setdefaultlist">Varsayılan liste olarak ayarla</string>
-<string tools:ignore="MissingTranslation" name="menu_managelists">Listeleri düzenle</string>
-<string tools:ignore="MissingTranslation" name="delete_list_warning">Listeyi silmek istiyor musunuz? Silme işlemi geri döndürülemez..</string>
-<string tools:ignore="MissingTranslation" name="editor_due_date_hint">Bitiş tarihi</string>
-<string tools:ignore="MissingTranslation" name="editor_title_hint">Başlık</string>
-<string tools:ignore="MissingTranslation" name="editor_note_hint">Not</string>
-<string tools:ignore="MissingTranslation" name="resolve_edit">Notu düzenle</string>
-<string tools:ignore="MissingTranslation" name="error_title">Hata</string>
-<string tools:ignore="MissingTranslation" name="error_message">Not yüklenirken hata oluştu.</string>
-<string tools:ignore="MissingTranslation" name="search_hint">Ara</string>
-<string tools:ignore="MissingTranslation" name="settings_theme">Kullanılan tema</string>
-<string tools:ignore="MissingTranslation" name="settings_theme_dialog">Tema seçin</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_theme">Tema</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_sorting">Sıralama</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_type">Sıralama ölçütü</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_type_dialog">Ölçüt</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_order">Sıralama türü</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_order_dialog">Tür</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_alphabetic">Başlık</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_modified">Değiştirilme tarihi</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_duedate">Bitiş tarihi</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">Sunucu konumu</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Artan</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Azalan</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Koyu</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Açık</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">Açık (Koyu eylem çubuğu)</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_appearance">Görünüş</string>
-<string tools:ignore="MissingTranslation" name="settings_font_screen">Yazı tipi ayarları</string>
-<string tools:ignore="MissingTranslation" name="settings_font_screen_summary">Notlarınızda kullanılacak yazı tipini ve boyutunu seçebilirsiniz.</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_font_editor">Düzenleyici</string>
-<string tools:ignore="MissingTranslation" name="settings_font_type">Yazı tipi</string>
-<string tools:ignore="MissingTranslation" name="settings_font_type_dialog">Yazı tipini seçin</string>
-<string tools:ignore="MissingTranslation" name="settings_font_size">Yazı boyutu</string>
-<string tools:ignore="MissingTranslation" name="preference_preview_text">Düzenleyici, bu şekilde gösterilecektir.</string>
-<string tools:ignore="MissingTranslation" name="settings_text_preview_title">Önizleme</string>
-<string tools:ignore="MissingTranslation" name="monospace">Monospace</string>
-<string tools:ignore="MissingTranslation" name="sans">Sans</string>
-<string tools:ignore="MissingTranslation" name="serif">Serif</string>
-<string tools:ignore="MissingTranslation" name="settings_sync_freq_title">Senk. sıklığı</string>
-<string tools:ignore="MissingTranslation" name="settings_account_title">Bir hesap seçin</string>
-<string tools:ignore="MissingTranslation" name="settings_account_summary">Başka bir hesaba geçmek için basın.</string>
-<string tools:ignore="MissingTranslation" name="settings_sync_enable_title">Google Görevler ile senk.</string>
-<string tools:ignore="MissingTranslation" name="settings_sync_enable_summary">Notlarınız, Google Görevler ile senkronize edilir</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_syncing">Senkronizasyon</string>
-<string tools:ignore="MissingTranslation" name="manual">Manuel</string>
-<string tools:ignore="MissingTranslation" name="minutes">dakika</string>
-<string tools:ignore="MissingTranslation" name="hours">saat</string>
-<string tools:ignore="MissingTranslation" name="onehour">Bir saat</string>
-<string tools:ignore="MissingTranslation" name="oneday">Bir gün</string>
-<string tools:ignore="MissingTranslation" name="yes">Evet</string>
-<string tools:ignore="MissingTranslation" name="no">Hayır</string>
-<string tools:ignore="MissingTranslation" name="ok">Tamam</string>
-<string tools:ignore="MissingTranslation" name="show_from_all_lists">Tüm listeler</string>
-<string tools:ignore="MissingTranslation" name="default_list_needed_warning">Önce varsayılan listeyi seçin</string>
-<string tools:ignore="MissingTranslation" name="reverted">Değişiklikler geri alındı</string>
-<string name="notecopied" tools:ignore="MissingTranslation">Kopyalandı: </string>
-<string name="deleted" tools:ignore="MissingTranslation">Silindi: </string>
-<string name="items" tools:ignore="MissingTranslation">not</string>
-<string tools:ignore="MissingTranslation" name="permission_read_label">Notları ve listeleri oku</string>
-<string tools:ignore="MissingTranslation" name="permission_read_desc">Uygulamanın notlarınıza ve onların bağlı olduğu listelere erişmesine izin verir.</string>
-<string tools:ignore="MissingTranslation" name="permission_write_label">Notları ve listeleri değiştir</string>
-<string tools:ignore="MissingTranslation" name="permission_write_desc">Uygulamanın yeni notlar ve listeler oluşturmasına, varolanları düzenlemesine veya silmesine izin verir.</string>
-<string tools:ignore="MissingTranslation" name="settings_header_list">Liste ayarları</string>
-<string tools:ignore="MissingTranslation" name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string tools:ignore="MissingTranslation" name="settings_header_sync">@string/settings_cat_syncing</string>
-<string tools:ignore="MissingTranslation" name="settings_list_dialog">Bir liste seçin</string>
-<string tools:ignore="MissingTranslation" name="settings_list">Liste</string>
-<string tools:ignore="MissingTranslation" name="automatic">Otomatik</string>
-
-<string tools:ignore="MissingTranslation" name="preferences_week_start_day_dialog">Hafta başlangıcı</string>
-<string tools:ignore="MissingTranslation" name="preferences_week_start_day_title">Hafta şu günde başlar</string>
-<string name="preferences_week_start_day_default" tools:ignore="MissingTranslation" >-1</string>
+<string name="app_name">Notlar</string>
+<string name="title_create">Yeni not</string>
+<string name="title_edit">Düzenle: %1$s</string>
+<string name="menu_add">Yeni not</string>
+<string name="menu_delete">Sil</string>
+<string name="menu_revert">Değişiklikleri geri al</string>
+<string name="menu_copy">Notu kopyala</string>
+<string name="menu_cancel">İptal</string>
+<string name="menu_setcompleted">Yapıldı olarak işaretle</string>
+<string name="menu_setuncompleted">Yapılmadı olarak işaretle</string>
+<string name="menu_deletelist">Listeyi sil</string>
+<string name="menu_sync">Yenile</string>
+<string name="menu_share">Paylaş</string>
+<string name="menu_preferences">Ayarlar</string>
+<string name="menu_renamelist">Listeyi yeniden adlandır</string>
+<string name="menu_createlist">Liste oluştur</string>
+<string name="menu_clearcompleted">Tamamlananları temizle</string>
+<string name="menu_setdefaultlist">Varsayılan liste olarak ayarla</string>
+<string name="menu_managelists">Listeleri düzenle</string>
+<string name="delete_list_warning">Listeyi silmek istiyor musunuz? Silme işlemi geri döndürülemez..</string>
+<string name="editor_due_date_hint">Bitiş tarihi</string>
+<string name="editor_title_hint">Başlık</string>
+<string name="editor_note_hint">Not</string>
+<string name="resolve_edit">Notu düzenle</string>
+<string name="error_title">Hata</string>
+<string name="error_message">Not yüklenirken hata oluştu.</string>
+<string name="search_hint">Ara</string>
+<string name="settings_theme">Kullanılan tema</string>
+<string name="settings_theme_dialog">Tema seçin</string>
+<string name="settings_lang">Dil</string>
+<string name="settings_cat_theme">Tema</string>
+<string name="settings_cat_sorting">Sıralama</string>
+<string name="settings_sorting_type">Sıralama ölçütü</string>
+<string name="settings_sorting_type_dialog">Ölçüt</string>
+<string name="settings_sorting_order">Sıralama türü</string>
+<string name="settings_sorting_order_dialog">Tür</string>
+<string name="settings_summary_sort_type_alphabetic">Başlık</string>
+<string name="settings_summary_sort_type_modified">Değiştirilme tarihi</string>
+<string name="settings_summary_sort_type_duedate">Bitiş tarihi</string>
+<string name="settings_summary_sort_type_serverposition">Sunucu konumu</string>
+<string name="settings_summary_sort_order_asc">Artan</string>
+<string name="settings_summary_sort_order_desc">Azalan</string>
+<string name="settings_summary_theme_black">Siyah</string>
+<string name="settings_summary_theme_dark">Koyu</string>
+<string name="settings_summary_theme_light">Açık</string>
+<string name="settings_summary_theme_light_dark_ab">Açık (Koyu eylem çubuğu)</string>
+<string name="settings_cat_appearance">Görünüş</string>
+<string name="settings_font_screen">Yazı tipi ayarları</string>
+<string name="settings_font_screen_summary">Notlarınızda kullanılacak yazı tipini ve boyutunu seçebilirsiniz.</string>
+<string name="settings_cat_font_editor">Düzenleyici</string>
+<string name="settings_font_type">Yazı tipi</string>
+<string name="settings_font_type_dialog">Yazı tipini seçin</string>
+<string name="settings_font_size">Yazı boyutu</string>
+<string name="preference_preview_text">Düzenleyici, bu şekilde gösterilecektir.</string>
+<string name="settings_text_preview_title">Önizleme</string>
+<string name="monospace">Monospace</string>
+<string name="sans">Sans</string>
+<string name="serif">Serif</string>
+<string name="settings_sync_freq_title">Senk. sıklığı</string>
+<string name="settings_account_title">Bir hesap seçin</string>
+<string name="settings_account_summary">Başka bir hesaba geçmek için basın.</string>
+<string name="settings_sync_enable_title">Google Görevler ile senk.</string>
+<string name="settings_sync_enable_summary">Notlarınız, Google Görevler ile senkronize edilir</string>
+<string name="settings_cat_syncing">Senkronizasyon</string>
+<string name="manual">Manuel</string>
+<string name="minutes">dakika</string>
+<string name="hours">saat</string>
+<string name="onehour">Bir saat</string>
+<string name="oneday">Bir gün</string>
+<string name="yes">Evet</string>
+<string name="no">Hayır</string>
+<string name="ok">Tamam</string>
+<string name="show_from_all_lists">Tüm listeler</string>
+<string name="default_list_needed_warning">Önce varsayılan listeyi seçin</string>
+<string name="reverted">Değişiklikler geri alındı</string>
+<string name="notecopied">Kopyalandı: </string>
+<string name="deleted">Silindi: </string>
+<string name="items">not</string>
+<string name="permission_read_label">Notları ve listeleri oku</string>
+<string name="permission_read_desc">Uygulamanın notlarınıza ve onların bağlı olduğu listelere erişmesine izin verir.</string>
+<string name="permission_write_label">Notları ve listeleri değiştir</string>
+<string name="permission_write_desc">Uygulamanın yeni notlar ve listeler oluşturmasına, varolanları düzenlemesine veya silmesine izin verir.</string>
+<string name="settings_header_list">Liste ayarları</string>
+<string name="settings_header_appearance">@string/settings_cat_appearance</string>
+<string name="settings_header_sync">@string/settings_cat_syncing</string>
+<string name="settings_list_dialog">Bir liste seçin</string>
+<string name="settings_list">Liste</string>
+<string name="automatic">Otomatik</string>
+<string name="preferences_week_start_day_dialog">Hafta başlangıcı</string>
+<string name="preferences_week_start_day_title">Hafta şu günde başlar</string>
+<string name="preferences_week_start_day_default">-1</string>
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
 -->
 <plurals name="notecopied_msg">
-<item quantity="one">Copied one note</item>
-<item quantity="other">Copied %d notes</item>
+<item quantity="one">@string/notecopied_one</item>
+<item quantity="other">@string/notecopied_other</item>
 </plurals>
-
 <plurals name="notedeleted_msg">
-<item quantity="one">Deleted one note</item>
-<item quantity="other">Deleted %d notes</item>
+<item quantity="one">@string/notedeleted_one</item>
+<item quantity="other">@string/notedeleted_other</item>
 </plurals>
-
 <plurals name="mode_choose">
-<item quantity="one">Selected one note</item>
-<item quantity="other">Selected %d notes</item>
+<item quantity="one">@string/selected_one</item>
+<item quantity="other">@string/selected_other</item>
 </plurals>
 
-<string tools:ignore="MissingTranslation" name="lock_note">Notu kilitle</string>
-<string tools:ignore="MissingTranslation" name="unlock_note">Kilidi kaldır</string>
-<string tools:ignore="MissingTranslation" name="locked">Kilitlendi</string>
-<string tools:ignore="MissingTranslation" name="unlocked">Kilit kaldırıldı</string>
-<string tools:ignore="MissingTranslation" name="password_required">Parola gerekli</string>
-<string tools:ignore="MissingTranslation" name="select_account">Bir hesap seçin</string>
-<string tools:ignore="MissingTranslation" name="password">Parola</string>
-<string tools:ignore="MissingTranslation" name="password_set">Parola belirlendi</string>
-<string tools:ignore="MissingTranslation" name="password_cleared">Parola temizlendi</string>
-<string tools:ignore="MissingTranslation" name="passwords_dont_match">Parolalar uyuşmuyor</string>
-<string tools:ignore="MissingTranslation" name="enter_password">Parolayı girin</string>
-<string tools:ignore="MissingTranslation" name="enter_new_password">Yeni parolayı girin</string>
-<string tools:ignore="MissingTranslation" name="confirm_new_password">Yeni parolayı doğrulayın</string>
-<string tools:ignore="MissingTranslation" name="apply">Uygula</string>
-<string tools:ignore="MissingTranslation" name="clear_password">Parolayı kaldır</string>
-<string tools:ignore="MissingTranslation" name="password_info">Bir parola belirlediğiniz takdirde, notlarınızı görmek için parolayıgirmeniz gerekir. Bu işlem sadece notun gövde metnini korur, yani notun başlığını ve bitiştarihini her zaman görebilirsiniz. Bu işlem ile notlarınız sadece parola ile korunur. Şifrelemeyapılmadığından dolayı Gmail ve Google Takvim gibi uygulamalarda hala görülebilir. Eğer parolayıunutursanız notlarınızı Google ile senkronize edin ve ardından uygulamayı tekrar yükleyin.</string>
-<string tools:ignore="MissingTranslation" name="about">Hakkında</string>
-
-<string tools:ignore="MissingTranslation" name="sync_failed">Senkronizasyon başarısız</string>
-<string tools:ignore="MissingTranslation" name="sync_login_failed">Giriş yapılamadı, Google Görevler\'e erişilemiyor</string>
-
-<string tools:ignore="MissingTranslation" name="changelog_full_title">Değişiklikler</string>
-<string tools:ignore="MissingTranslation" name="changelog_title">Yenilikler</string>
-<string tools:ignore="MissingTranslation" name="changelog_ok_button">Tamam</string>
-<string tools:ignore="MissingTranslation" name="changelog_show_full">Tamamını göster</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note">Not önizlemesi göster</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">Başlık iki satır olacaktır</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_on">Not ikinci satırda başlayacaktır</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_show_complete">Yapıldı olarak işaretleme butonu</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_off">Buton gizlenecektir</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_on">Buton gösterilecektir</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem">İki satırlı başlıklar</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">Not önizlemesi iki satır olacaktır</string>
-
-<string tools:ignore="MissingTranslation" name="editor_details">Daha fazlası</string>
-<string tools:ignore="MissingTranslation" name="completed">Tamamlanmış</string>
-<string tools:ignore="MissingTranslation" name="security">Güvenlik</string>
-
-<string tools:ignore="MissingTranslation" name="date_header_overdue">Son gün</string>
-<string tools:ignore="MissingTranslation" name="date_header_today">Bugün</string>
-<string tools:ignore="MissingTranslation" name="date_header_tomorrow">Yarın</string>
-<string tools:ignore="MissingTranslation" name="date_header_7days">Gelecek 7 gün</string>
-<string tools:ignore="MissingTranslation" name="date_header_future">İlerki zaman</string>
-<string tools:ignore="MissingTranslation" name="date_header_none">Tarih belirlenmemiş</string>
-<string tools:ignore="MissingTranslation" name="date_header_completed">Tamamlanmış</string>
-
-<string tools:ignore="MissingTranslation" name="mod_header_yesterday">Dün</string>
-<string tools:ignore="MissingTranslation" name="mod_header_thisweek">Bu hafta</string>
-<string tools:ignore="MissingTranslation" name="mod_header_earlier">Daha önce</string>
-
-<string tools:ignore="MissingTranslation" name="settings_listheader">Tüm listeleri gösterirken</string>
-<string tools:ignore="MissingTranslation" name="settings_listheader_off">Tek liste olarak göster</string>
-<string tools:ignore="MissingTranslation" name="settings_listheader_on">Liste isimlerini göster</string>
-
-<string tools:ignore="MissingTranslation" name="please_create_list">Lütfen bir liste oluşturun</string>
-<string tools:ignore="MissingTranslation" name="please_select_note">Lütfen bir not seçin yada oluşturun</string>
-<string tools:ignore="MissingTranslation" name="please_create_note">Lütfen bir not oluşturun</string>
-
-<string tools:ignore="MissingTranslation" name="hide_checkbox">İşaretleme kutusunu gizle</string>
-<string tools:ignore="MissingTranslation" name="hide_checkbox_summary_on">İşaretleme kutusu gizlenecektir</string>
-<string tools:ignore="MissingTranslation" name="hide_checkbox_summary_off">İşaretleme kutusu gösterilecektir</string>
-
-<string tools:ignore="MissingTranslation" name="hide_note">Notu gizle</string>
-<string tools:ignore="MissingTranslation" name="hide_note_summary_on">Not gizlenecektir</string>
-<string tools:ignore="MissingTranslation" name="hide_note_summary_off">Not gösterilecektir</string>
-
-<string tools:ignore="MissingTranslation" name="hide_date">Bitiş tarihini gizle</string>
-<string tools:ignore="MissingTranslation" name="hide_date_summary_on">Tarih gizlenecektir</string>
-<string tools:ignore="MissingTranslation" name="hide_date_summary_off">Tarih gösterilecektir</string>
-
-<string tools:ignore="MissingTranslation" name="title_rows">Başlık ebat sınırı</string>
-<string tools:ignore="MissingTranslation" name="title_rows_1">1 satır</string>
-<string tools:ignore="MissingTranslation" name="title_rows_2">2 satır</string>
-<string tools:ignore="MissingTranslation" name="title_rows_free">Sınırsız</string>
-
-<string tools:ignore="MissingTranslation" name="saturday">Cumartesi</string>
-<string tools:ignore="MissingTranslation" name="sunday">Pazar</string>
-<string tools:ignore="MissingTranslation" name="monday">Pazartesi</string>
-<string tools:ignore="MissingTranslation" name="localedefault">Varsayılan yerel ayar</string>
-
+<string name="lock_note">Notu kilitle</string>
+<string name="unlock_note">Kilidi kaldır</string>
+<string name="locked">Kilitlendi</string>
+<string name="unlocked">Kilit kaldırıldı</string>
+<string name="password_required">Parola gerekli</string>
+<string name="select_account">Bir hesap seçin</string>
+<string name="password">Parola</string>
+<string name="password_set">Parola belirlendi</string>
+<string name="password_cleared">Parola temizlendi</string>
+<string name="passwords_dont_match">Parolalar uyuşmuyor</string>
+<string name="password_incorrect">Parola yanlış</string>
+<string name="enter_password">Parolayı girin</string>
+<string name="enter_new_password">Yeni parolayı girin</string>
+<string name="confirm_new_password">Yeni parolayı doğrulayın</string>
+<string name="apply">Uygula</string>
+<string name="clear_password">Parolayı kaldır</string>
+<string name="password_info">Bir parola belirlediğiniz takdirde, notlarınızı görmek için parolayıgirmeniz gerekir. Bu işlem sadece notun gövde metnini korur, yani notun başlığını ve bitiştarihini her zaman görebilirsiniz. Bu işlem ile notlarınız sadece parola ile korunur. Şifrelemeyapılmadığından dolayı Gmail ve Google Takvim gibi uygulamalarda hala görülebilir. Eğer parolayıunutursanız notlarınızı Google ile senkronize edin ve ardından uygulamayı tekrar yükleyin.</string>
+<string name="about">Hakkında</string>
+<string name="sync_failed">Senkronizasyon başarısız</string>
+<string name="sync_login_failed">Giriş yapılamadı, Google Görevler\'e erişilemiyor</string>
+<string name="changelog_full_title">Değişiklikler</string>
+<string name="changelog_title">Yenilikler</string>
+<string name="changelog_ok_button">Tamam</string>
+<string name="changelog_show_full">Tamamını göster</string>
+<string name="widget_pref_preview_note">Not önizlemesi göster</string>
+<string name="widget_pref_preview_note_summary_off">Başlık iki satır olacaktır</string>
+<string name="widget_pref_preview_note_summary_on">Not ikinci satırda başlayacaktır</string>
+<string name="widget_pref_show_complete">Yapıldı olarak işaretleme butonu</string>
+<string name="widget_pref_show_complete_summary_off">Buton gizlenecektir</string>
+<string name="widget_pref_show_complete_summary_on">Buton gösterilecektir</string>
+<string name="settings_listitem">İki satırlı başlıklar</string>
+<string name="settings_listitem_summary_off">Not önizlemesi iki satır olacaktır</string>
+<string name="editor_details">Daha fazlası</string>
+<string name="completed">Tamamlanmış</string>
+<string name="security">Güvenlik</string>
+<string name="date_header_overdue">Son gün</string>
+<string name="date_header_today">Bugün</string>
+<string name="date_header_tomorrow">Yarın</string>
+<string name="date_header_7days">Gelecek 7 gün</string>
+<string name="date_header_future">İlerki zaman</string>
+<string name="date_header_none">Tarih belirlenmemiş</string>
+<string name="date_header_completed">Tamamlanmış</string>
+<string name="mod_header_yesterday">Dün</string>
+<string name="mod_header_thisweek">Bu hafta</string>
+<string name="mod_header_earlier">Daha önce</string>
+<string name="settings_listheader">Tüm listeleri gösterirken</string>
+<string name="settings_listheader_off">Tek liste olarak göster</string>
+<string name="settings_listheader_on">Liste isimlerini göster</string>
+<string name="please_create_list">Lütfen bir liste oluşturun</string>
+<string name="please_select_note">Lütfen bir not seçin yada oluşturun</string>
+<string name="please_create_note">Lütfen bir not oluşturun</string>
+<string name="hide_checkbox">İşaretleme kutusunu gizle</string>
+<string name="hide_checkbox_summary_on">İşaretleme kutusu gizlenecektir</string>
+<string name="hide_checkbox_summary_off">İşaretleme kutusu gösterilecektir</string>
+<string name="hide_note">Notu gizle</string>
+<string name="hide_note_summary_on">Not gizlenecektir</string>
+<string name="hide_note_summary_off">Not gösterilecektir</string>
+<string name="hide_date">Bitiş tarihini gizle</string>
+<string name="hide_date_summary_on">Tarih gizlenecektir</string>
+<string name="hide_date_summary_off">Tarih gösterilecektir</string>
+<string name="title_rows">Başlık ebat sınırı</string>
+<string name="title_rows_1">1 satır</string>
+<string name="title_rows_2">2 satır</string>
+<string name="title_rows_free">Sınırsız</string>
+<string name="saturday">Cumartesi</string>
+<string name="sunday">Pazar</string>
+<string name="monday">Pazartesi</string>
+<string name="localedefault">Varsayılan yerel ayar</string>
 
 <!-- These should probably not be translated -->
-<string tools:ignore="MissingTranslation" name="default_notetitle">Hoşgeldiniz!</string>
-<string tools:ignore="MissingTranslation" name="default_notetext">Bu uygulamadan tam faydalanabilmek için önce senkronize özelliğini aktifleştirmeniz önerilir. Listeye geri döndüğünüzde eylem çubuğundaki senkronize butonuna basın. Bu eylem, otomatik  senkronize özelliğini  aktif hale getirecektir ve  saatte bir kere sinkronize olmasını sağlayacaktır.\n\nBu uygulama, telefonunuzun global senkronize seçenekleri  ile bağlantılıdır. Yani, eğer gmail hesabınız otomatik olarak senkronize olmuyorsa, bu uygulama da senkronize olmayacaktır. Dilerseniz, ayarlara girip otomatik senkronizeyi kapatarak, tamamen manuel bir deneyim yaşayabilirsiniz.\n\nEğer telefonunuzda birden fazla Google hesabınız varsa, ayarlara girip manuel olarak kullanmak istediğiniz hesabı seçmeniz önerilir.\n\nHer halükarda, ayarlara girip tüm özelliklere bir göz atmanızı öneririm. Yazı tipini ve boyutunu, uygulamanın temasını da ayarlayabilirsiniz.\n\nBu uygulama aynı zamanda ebatını istediğiniz şekilde değiştirebileceğiniz bir widget da içermektedir.  Bu widget’ın boyutunu, tüm diğer widget’larda olduğu gibi değiştirilebilirsiniz:  üzerine bir saniyeliğine basılı tutup, kenarlardan çekip büyütebilir ve küçültebilirsiniz.\n\nUmarım bu uygulama işinize yarayacaktır. Unutmayın ki, bu uygulama tamamen ücretsizdir, reklam içermez ve açık kaynak kodludur. Güzel fikirleriniz  ya da önemli şikâyetlerininiz varsa, lütfen benimle paylaşın.\n\n/Jonas</string>
-<string tools:ignore="MissingTranslation" name="about_text">Uygulamamı indirdiğiniz için teşekkürler! Bu uygulamayı mükemmeştirmek için en iyisini yaptığımı düşünmekteyim, fakat her uygulamada olabileceği gibi bunda da bazı hatalar olabilir.\n\nUygulama üzerinde bir hata veya yanlış bir çeviri görmeniz durumunda ya da uygulamayı geliştirmek için harika fikirleriniz varsa bundan haberdar olmaktan mutluluk duyarım.(Sadece İngilizce)\nE-Posta Adresim: jonas@nononsenseapps.com\n\nTwitter: @SciencyGuy\n\nGoogle+: https://plus.google.com/u/0/111801385015192089838\n\nUygulamadaki hataları ayrıca https://github.com/spacecowboy/NotePad/issues adresinden de bildirebilirsiniz.\n\nBu uygulama, açık kaynaklı bir projenin ürünü olduğundan dolayı, eğer isterseniz bulduğunuz hataları kendiniz düzeltip, sonrasında bana GitHub üzerinden bir çekme isteği(pull request) gönderebilirsiniz.\n\nEğer uygulama için kendi dilinizde bir çeviri sunarsanız bu harika olur. Benimle iletişime geçin.\nAyrıca varolan diller üzerinde değişiklik yapıp, çeviri hatalarını gidermeyi direkt GitHub üzerinden çevrimiçi düzenleme hakkında yardım için http://www.youtube.com/watch?v=oZTO5zOoCb4 adresindeki videoya göz atabilirsiniz.\n\nUygulamamı indirdiğiniz için tekrar teşekkür ederim.\nEğer projeye daha kolay ve daha az aktif bir yoldan yardım etmek isterseniz https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate adresinde bulunan bağış sürümünü satın alabilirsiniz.</string>
+<string name="default_notetitle">Hoşgeldiniz!</string>
+<string name="default_notetext">Bu uygulamadan tam faydalanabilmek için önce senkronize özelliğini aktifleştirmeniz önerilir. Listeye geri döndüğünüzde eylem çubuğundaki senkronize butonuna basın. Bu eylem, otomatik  senkronize özelliğini  aktif hale getirecektir ve  saatte bir kere sinkronize olmasını sağlayacaktır.\n\nBu uygulama, telefonunuzun global senkronize seçenekleri  ile bağlantılıdır. Yani, eğer gmail hesabınız otomatik olarak senkronize olmuyorsa, bu uygulama da senkronize olmayacaktır. Dilerseniz, ayarlara girip otomatik senkronizeyi kapatarak, tamamen manuel bir deneyim yaşayabilirsiniz.\n\nEğer telefonunuzda birden fazla Google hesabınız varsa, ayarlara girip manuel olarak kullanmak istediğiniz hesabı seçmeniz önerilir.\n\nHer halükarda, ayarlara girip tüm özelliklere bir göz atmanızı öneririm. Yazı tipini ve boyutunu, uygulamanın temasını da ayarlayabilirsiniz.\n\nBu uygulama aynı zamanda ebatını istediğiniz şekilde değiştirebileceğiniz bir widget da içermektedir.  Bu widget’ın boyutunu, tüm diğer widget’larda olduğu gibi değiştirilebilirsiniz:  üzerine bir saniyeliğine basılı tutup, kenarlardan çekip büyütebilir ve küçültebilirsiniz.\n\nUmarım bu uygulama işinize yarayacaktır. Unutmayın ki, bu uygulama tamamen ücretsizdir, reklam içermez ve açık kaynak kodludur. Güzel fikirleriniz  ya da önemli şikâyetlerininiz varsa, lütfen benimle paylaşın.\n\n/Jonas</string>
+<string name="about_text">Uygulamamı indirdiğiniz için teşekkürler! Bu uygulamayı mükemmeştirmek için en iyisini yaptığımı düşünmekteyim, fakat her uygulamada olabileceği gibi bunda da bazı hatalar olabilir.\n\nUygulama üzerinde bir hata veya yanlış bir çeviri görmeniz durumunda ya da uygulamayı geliştirmek için harika fikirleriniz varsa bundan haberdar olmaktan mutluluk duyarım.(Sadece İngilizce)\nE-Posta Adresim: jonas@nononsenseapps.com\n\nTwitter: @SciencyGuy\n\nGoogle+: https://plus.google.com/u/0/111801385015192089838\n\nUygulamadaki hataları ayrıca https://github.com/spacecowboy/NotePad/issues adresinden de bildirebilirsiniz.\n\nBu uygulama, açık kaynaklı bir projenin ürünü olduğundan dolayı, eğer isterseniz bulduğunuz hataları kendiniz düzeltip, sonrasında bana GitHub üzerinden bir çekme isteği(pull request) gönderebilirsiniz.\n\nEğer uygulama için kendi dilinizde bir çeviri sunarsanız bu harika olur. Benimle iletişime geçin.\nAyrıca varolan diller üzerinde değişiklik yapıp, çeviri hatalarını gidermeyi direkt GitHub üzerinden çevrimiçi düzenleme hakkında yardım için http://www.youtube.com/watch?v=oZTO5zOoCb4 adresindeki videoya göz atabilirsiniz.\n\nUygulamamı indirdiğiniz için tekrar teşekkür ederim.\nEğer projeye daha kolay ve daha az aktif bir yoldan yardım etmek isterseniz https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate adresinde bulunan bağış sürümünü satın alabilirsiniz.</string>
+
+<!-- settings string keys -->
+<string name="menu_settings">Ayarlar</string>
+<string name="title_activity_list_widget_config">Widget ayarları</string>
+<string name="hide_appicon">Uygulama ikonunu gizle</string>
+<string name="hide_new">Yeni not butonunu gizle</string>
+<string name="hide_header">Başlık panelini gizle</string>
+<string name="hide_widgetbg">Şeffaf arkaplan</string>
+<string name="shortcut_help1">İşaretlendiği taktirde, kısayol seçilen listede yeni bir not yaratacak ve editörü açacaktır. İşaretlenmediği taktirde, kısayol seçilen listeyi açacaktır.</string>
+<string name="loading_widget">Widget yükleniyor</string>
+<string name="default_list_set">Varsayılan liste seçildi</string>
+
+<string name="notecopied_one">Bir not kopyalandı</string>
+<string name="notecopied_other">% tane not kopyalandı</string>
+<string name="notedeleted_one">Bir not silindi</string>
+<string name="notedeleted_other">% tane not silindi</string>
+<string name="selected_one">Bir not seçildi</string>
+<string name="selected_other">% tane not seçildi</string>
 
 </resources>

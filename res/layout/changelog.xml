@@ -40,7 +40,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="\n- Added additional sync options.\n- Some menu items have been tweaked.\n- Moved change log to settings.\n- Optimized code and reduced size of the app." />
+            android:text="\n- Added additional sync options.\n- Some menu items have been tweaked.\n- Moved change log to settings.\n- Optimized code and reduced size of the app.\n- Updated translations." />
             
         <TextView
             android:layout_width="fill_parent"

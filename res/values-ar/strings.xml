@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2012 Jonas Kalderstam
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+<string name="app_name">ملاحظات</string>
+<string name="title_create">ملاحظة جديدة</string>
+<string name="title_edit">تحرير %1$s</string>
+<string name="menu_add">ملاحظة جديدة</string>
+<string name="menu_delete">حذف</string>
+<string name="menu_revert">تجاهل التغييرات</string>
+<string name="menu_copy">نسخ الملاحظة</string>
+<string name="menu_cancel">إلغاء</string>
+<string name="menu_setcompleted">تعليمها مُنجَزة</string>
+<string name="menu_setuncompleted">تعليمها غير مُنجَزة</string>
+<string name="menu_deletelist">حذف القائمة</string>
+<string name="menu_sync">تحديث</string>
+<string name="menu_share">مشاركة</string>
+<string name="menu_preferences">الإعدادات</string>
+<string name="menu_renamelist">إعادة تسمية القائمة</string>
+<string name="menu_createlist">إنشاء قائمة</string>
+<string name="menu_clearcompleted">مسح المهام المُنجَزة</string>
+<string name="menu_setdefaultlist">جعلها قائمة افتراضية</string>
+<string name="menu_managelists">إدارة القوائم</string>
+<string name="delete_list_warning">أمتأكد من أنك تريد حذف هذه القائمة؟ ستحذف القائمة ولن يمكنك إعادتها.</string>
+<string name="editor_due_date_hint">تاريخ الاستحقاق</string>
+<string name="editor_title_hint">العنوان</string>
+<string name="editor_note_hint">الملاحظة</string>
+<string name="resolve_edit">تحرير الملاحظة</string>
+<string name="error_title">خطأ</string>
+<string name="error_message">حدث خطأ أثناء تحميل الملاحظة</string>
+<string name="search_hint">بحث</string>
+<string name="settings_theme">السمة الحالية</string>
+<string name="settings_theme_dialog">استخدام السمة</string>
+<string name="settings_lang">اللغة</string>
+<string name="settings_lang_dialog">@string/settings_lang</string>
+<string name="settings_cat_theme">السمة</string>
+<string name="settings_cat_sorting">الترتيب</string>
+<string name="settings_sorting_type">الترتيب فعال</string>
+<string name="settings_sorting_type_dialog">الترتيب فعال</string>
+<string name="settings_sorting_order">الترتيب</string>
+<string name="settings_sorting_order_dialog">الترتيب بحسب</string>
+<string name="settings_summary_sort_type_alphabetic">العنوان</string>
+<string name="settings_summary_sort_type_modified">تاريخ آخر تعديل</string>
+<string name="settings_summary_sort_type_duedate">تاريخ الاستحقاق</string>
+<string name="settings_summary_sort_type_serverposition">ترتيبي الخاصّ</string>
+<string name="settings_summary_sort_order_asc">تصاعديًّا</string>
+<string name="settings_summary_sort_order_desc">تنازليًّا</string>
+<string name="settings_summary_theme_black">أسود</string>
+<string name="settings_summary_theme_dark">داكن</string>
+<string name="settings_summary_theme_light">فاتح</string>
+<string name="settings_summary_theme_light_dark_ab">فاتح، شريط الأفعال داكن</string>
+<string name="settings_cat_appearance">المظهر</string>
+<string name="settings_font_screen">إعدادات الخط</string>
+<string name="settings_font_screen_summary">يمكنك تغيير نمط وحجم الخطوط</string>
+<string name="settings_cat_font_editor">المحرر</string>
+<string name="settings_font_type">الخط</string>
+<string name="settings_font_type_dialog">اختر خطًّا</string>
+<string name="settings_font_size">حجم الخط</string>
+<string name="preference_preview_text">هكذا سيبدو النص في المحرّر</string>
+<string name="settings_text_preview_title">معاينة</string>
+<string name="monospace">أحادي المسافة</string>
+<string name="sans">Sans</string>
+<string name="serif">Serif</string>
+<string name="settings_sync_freq_title">نمط المزامنة</string>
+<string name="settings_account_title">اختر حسابًا</string>
+<string name="settings_account_summary">انقر لتغيير الحساب</string>
+<string name="settings_sync_enable_title">المزامنة مع مهام Google</string>
+<string name="settings_sync_enable_summary">مزامنة الملاحظات مع حساب Google</string>
+<string name="settings_cat_syncing">المزامنة</string>
+<string name="manual">يدويّة</string>
+<string name="minutes">دقائق</string>
+<string name="hours">ساعات</string>
+<string name="onehour">ساعة</string>
+<string name="oneday">يوم</string>
+<string name="yes">نعم</string>
+<string name="no">لا</string>
+<string name="ok">حسنًا</string>
+<string name="show_from_all_lists">كل القوائم</string>
+<string name="default_list_needed_warning">عّين قائمة افتراضيّة أولاً</string>
+<string name="reverted">تُجُوهلت التغييرات</string>
+<string name="notecopied">نُسخت</string>
+<string name="deleted">حُذِفت</string>
+<string name="items">ملاحظة</string>
+<!--
+Use few if language need it. In English is the same.
+<item quantity="few">Copied 2 notes.</item>
+-->
+<plurals name="notecopied_msg">
+<item quantity="one">@string/notecopied_one</item>
+<item quantity="other">@string/notecopied_other</item>
+</plurals>
+<plurals name="notedeleted_msg">
+<item quantity="one">@string/notedeleted_one</item>
+<item quantity="other">@string/notedeleted_other</item>
+</plurals>
+<plurals name="mode_choose">
+<item quantity="one">@string/selected_one</item>
+<item quantity="other">@string/selected_other</item>
+</plurals>
+
+<string name="lock_note">lock</string>
+
+<!-- These should probably not be translated -->
+
+<!-- settings string keys -->
+
+
+</resources>
