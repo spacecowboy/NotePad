@@ -34,6 +34,17 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="\nVersion 4.3"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\n- Added additional sync options.\n- Some menu items have been tweaked.\n- Moved change log to settings.\n- Optimized code and reduced size of the app." />
+            
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="\nVersion 4.2.1"
             android:textStyle="bold" />
 
