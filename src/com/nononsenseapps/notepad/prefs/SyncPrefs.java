@@ -52,12 +52,16 @@ public class SyncPrefs extends PreferenceFragment implements
 
 	public static final String KEY_SYNC_ENABLE = "syncEnablePref";
 	public static final String KEY_ACCOUNT = "accountPref";
-	public static final String KEY_SYNC_FREQ = "syncFreq";
+	//public static final String KEY_SYNC_FREQ = "syncFreq";
+	public static final String KEY_FULLSYNC = "syncFull";
+	public static final String KEY_SYNC_ON_START = "syncOnStart";
+	public static final String KEY_SYNC_ON_CHANGE = "syncOnChange";
+	public static final String KEY_BACKGROUND_SYNC = "syncInBackground";
 
 	private Activity activity;
 
 	private Preference prefAccount;
-	private Preference prefSyncFreq;
+	//private Preference prefSyncFreq;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -73,7 +77,7 @@ public class SyncPrefs extends PreferenceFragment implements
 		addPreferencesFromResource(R.xml.app_pref_sync);
 
 		prefAccount = findPreference(KEY_ACCOUNT);
-		prefSyncFreq = findPreference(KEY_SYNC_FREQ);
+		//prefSyncFreq = findPreference(KEY_SYNC_FREQ);
 
 		SharedPreferences sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(activity);
@@ -83,7 +87,6 @@ public class SyncPrefs extends PreferenceFragment implements
 		// Set summaries
 
 		setAccountTitle(sharedPrefs);
-		setFreqSummary(sharedPrefs);
 
 		prefAccount
 				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
@@ -128,9 +131,8 @@ public class SyncPrefs extends PreferenceFragment implements
 			} else {
 				if (KEY_SYNC_ENABLE.equals(key)) {
 					toggleSync(sharedPreferences);
-				} else if (KEY_SYNC_FREQ.equals(key)) {
+				} else if (KEY_BACKGROUND_SYNC.equals(key)) {
 					setSyncInterval(activity, sharedPreferences);
-					setFreqSummary(sharedPreferences);
 				} else if (KEY_ACCOUNT.equals(key)) {
 					Log.d("syncPrefs", "account");
 					prefAccount.setTitle(sharedPreferences.getString(
@@ -165,23 +167,16 @@ public class SyncPrefs extends PreferenceFragment implements
 	public static void setSyncInterval(Context activity,
 			SharedPreferences sharedPreferences) {
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
-		String sFreqMins = sharedPreferences.getString(KEY_SYNC_FREQ, "0");
-		int freqMins = 0;
-		try {
-			freqMins = Integer.parseInt(sFreqMins);
-		} catch (NumberFormatException e) {
-			// Debugging error because of a mistake...
-		}
-		if (accountName == "") {
-			// Something is very wrong if this happens
-		} else if (freqMins == 0) {
+		boolean backgroundSync = sharedPreferences.getBoolean(KEY_BACKGROUND_SYNC, true);
+		
+		if (accountName == "" || !backgroundSync) {
 			// Disable periodic syncing
 			ContentResolver.removePeriodicSync(
 					getAccount(AccountManager.get(activity), accountName),
 					NotePad.AUTHORITY, new Bundle());
 		} else {
 			// Convert from minutes to seconds
-			long pollFrequency = freqMins * 60;
+			long pollFrequency = 3600;
 			// Set periodic syncing
 			ContentResolver.addPeriodicSync(
 					getAccount(AccountManager.get(activity), accountName),
@@ -212,34 +207,6 @@ public class SyncPrefs extends PreferenceFragment implements
 	private void setAccountTitle(SharedPreferences sharedPreferences) {
 		prefAccount.setTitle(sharedPreferences.getString(KEY_ACCOUNT, ""));
 		prefAccount.setSummary(R.string.settings_account_summary);
-	}
-
-	private void setFreqSummary(SharedPreferences sharedPreferences) {
-		String sFreqMins = sharedPreferences.getString(KEY_SYNC_FREQ, "0");
-		int freq = 0;
-		try {
-			freq = Integer.parseInt(sFreqMins);
-		} catch (NumberFormatException e) {
-			// Debugging error because of a mistake...
-		}
-		switch (freq) {
-		case 0:
-			prefSyncFreq.setSummary(R.string.manual);
-			break;
-		default:
-			prefSyncFreq.setSummary(R.string.automatic);
-			break;
-		}
-		// else if (freq == 60)
-		// prefSyncFreq.setSummary(R.string.onehour);
-		// else if (freq == 1440)
-		// prefSyncFreq.setSummary(R.string.oneday);
-		// else if (freq > 60)
-		// prefSyncFreq.setSummary("" + freq/60 + " " +
-		// getText(R.string.hours).toString());
-		// else
-		// prefSyncFreq.setSummary("" + freq + " " +
-		// getText(R.string.minutes).toString());
 	}
 
 	public static class AccountDialog extends DialogFragment implements

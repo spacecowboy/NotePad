@@ -5,7 +5,7 @@
         <ignore path="res\layout\listwidget.xml" />
         <ignore path="res\layout\preference_widget_seekbar.xml" />
     </issue>
-    <issue id="MissingTranslation">
+    <issue id="MissingTranslation" severity="ignore">
         <ignore path="res\values-cs-v14" />
         <ignore path="res\values-de-v14" />
         <ignore path="res\values-es" />
@@ -21,4 +21,5 @@
     <issue id="ParserError">
         <ignore path="templates/Config.java" />
     </issue>
+    <issue id="Typos" severity="ignore" />
 </lint>

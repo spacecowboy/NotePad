@@ -17,6 +17,7 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="ThemeHolo" parent="@android:style/Theme.Holo">
+        <item name="android:background">@null</item>
 
 		<item name="navigation_refresh">@drawable/navigation_refresh_dark </item>
         <item name="action_search">@drawable/action_search_dark </item>
@@ -57,6 +58,8 @@
     </style>
 	
 	<style name="ThemeHoloLight" parent="@android:style/Theme.Holo.Light">
+	    <item name="android:background">@null</item>
+	    
 	    <item name="navigation_refresh">@drawable/navigation_refresh_light </item>
         <item name="action_search">@drawable/action_search_light </item>
         <item name="action_settings">@drawable/action_settings_light </item>
@@ -89,40 +92,7 @@
 	
 	</style>
 
-	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light">
-
-	    <item name="navigation_refresh">@drawable/navigation_refresh_light </item>
-        <item name="action_search">@drawable/action_search_light </item>
-        <item name="action_settings">@drawable/action_settings_light </item>
-        <item name="content_new">@drawable/content_new_light </item>
-        <item name="content_discard">@drawable/content_discard_light </item>
-        <item name="content_copy">@drawable/content_copy_light </item>
-        <item name="content_paste">@drawable/content_paste_light </item>
-        <item name="content_undo">@drawable/content_remove_light </item>
-        <item name="content_remove">@drawable/content_remove_light </item>
-        <item name="social_share">@drawable/social_share_light </item>
-        <item name="device_access_secure">@drawable/device_access_secure_light</item>
-        <item name="device_access_not_secure">@drawable/device_access_not_secure_light</item>
-        <item name="navigation_accept">@drawable/navigation_accept_light</item>
-		
-		<!--  <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
-		<item name="my_list_selector">@style/ListIndicatorLight</item>
-		<item name="my_list_background">@drawable/list_read_holo</item>
-		<item name="editorBackgroundColor">@android:color/white</item>
-		
-		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Light</item>
-		<item name="btn_default_selector">@drawable/btn_default_selector_light</item>
-		<item name="img_default_selector">@drawable/img_default_selector_light</item>
-		<item name="SpinnerStyle">@android:style/Widget.Holo.Light.Spinner</item>
-		
-		<item name="expander_open_holo">@drawable/expander_open_holo_light</item>
-		<item name="expander_close_holo">@drawable/expander_close_holo_light</item>
-		
-		<item name="list_divider_holo">@drawable/list_divider_holo_light</item>
-		
-		<item name="viewpager_bg">@color/viewpager_blue</item>
-
-	</style>
+	<style name="ThemeHoloLightDarkActonBar" parent="@style/ThemeHoloLight" />
 	
 	<style name="ListIndicatorLight">
 	    <item name="android:background">?android:attr/activatedBackgroundIndicator</item>

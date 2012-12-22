@@ -32,6 +32,11 @@
     android:title="@string/password"
     android:summary="" />
     
+    <header android:fragment="com.nononsenseapps.notepad.prefs.ChangelogPrefs"
+    android:icon="@drawable/action_about_dark"
+    android:title="@string/changelog_full_title"
+    android:summary="" />
+    
     <header android:fragment="com.nononsenseapps.notepad.prefs.AboutPrefs"
     android:icon="@drawable/action_about_dark"
     android:title="@string/about"

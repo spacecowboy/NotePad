@@ -789,25 +789,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			Toast.makeText(activity, getString(R.string.reverted),
 					Toast.LENGTH_SHORT).show();
 			break;
-		case R.id.menu_copy:
-			copyText(makeShareText());
-			Toast.makeText(activity, getString(R.string.notecopied),
-					Toast.LENGTH_SHORT).show();
-			break;
 		case R.id.menu_share:
 			shareNote();
 			break;
 		case R.id.menu_sync:
 			// Save note!
 			saveNote();
-			break;
-		case R.id.menu_lock:
-			// Lock note
-			showPasswordDialog(LOCK_NOTE);
-			break;
-		case R.id.menu_unlock:
-			// Unlock note
-			showPasswordDialog(UNLOCK_NOTE);
 			break;
 		}
 		return super.onOptionsItemSelected(item);
