@@ -114,12 +114,20 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(mContext);
 
-		// Only sync if it has been enabled by the user, and account is selected
-		// Issue on reinstall where account approval is remembered by system
-		if (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)
-				&& !settings.getString(SyncPrefs.KEY_ACCOUNT, "").isEmpty()
-				&& account.name.equals(settings.getString(
-						SyncPrefs.KEY_ACCOUNT, ""))) {
+		/*
+		 * Only sync if it has been enabled by the user, and account is selected
+		 * Issue on reinstall where account approval is remembered by system
+		 * Also only sync if APIKEY has no spaces in it. A space in the key
+		 * means that the app has been built from the open source code, for
+		 * which the api key is naturally not included. A space also causes the
+		 * app to crash since that is entirely invalid. So don't sync if there
+		 * is a space in the api key.
+		 */
+		if (!com.nononsenseapps.build.Config.GTASKS_API_KEY.contains(" ")
+				|| (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)
+						&& !settings.getString(SyncPrefs.KEY_ACCOUNT, "")
+								.isEmpty() && account.name.equals(settings
+						.getString(SyncPrefs.KEY_ACCOUNT, "")))) {
 
 			Log.d(TAG, "onPerformSync");
 			mContext.sendBroadcast(new Intent(SYNC_STARTED));
@@ -171,6 +179,12 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					 */
 					String localEtag = settings.getString(PREFS_LAST_SYNC_ETAG,
 							"");
+					
+					// If full sync, then assume no local information exists.
+					if (settings.getBoolean(SyncPrefs.KEY_FULLSYNC, false)) {
+						lastUpdate = null;
+						localEtag = "dummytag";
+					}
 
 					// Prepare lists for items
 					ArrayList<GoogleTaskList> listsToSaveToDB = new ArrayList<GoogleTaskList>();
@@ -375,6 +389,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 						settings.edit()
 								.putString(PREFS_LAST_SYNC_ETAG, serverEtag)
+								.putBoolean(SyncPrefs.KEY_FULLSYNC, false)
 								.commit();
 					}
 

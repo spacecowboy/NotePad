@@ -140,6 +140,19 @@ public class MainActivity extends DualLayoutActivity implements
 		} else {
 			rightCreate();
 		}
+
+		// Synchronize on app open
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, "");
+		boolean syncEnabled = prefs
+				.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
+		boolean syncOnStart = prefs.getBoolean(SyncPrefs.KEY_SYNC_ON_START,
+				true);
+		if (accountName != null && !accountName.equals("") && syncEnabled
+				&& syncOnStart) {
+			requestSync(accountName);
+		}
 	}
 
 	private void leftOrTabletCreate(Bundle savedInstanceState) {
@@ -163,7 +176,7 @@ public class MainActivity extends DualLayoutActivity implements
 		mSpinnerAdapter = new SimpleCursorAdapter(this,
 				R.layout.actionbar_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
-				new int[] { android.R.id.text1 });
+				new int[] { android.R.id.text1 }, 0);
 
 		mSpinnerAdapter
 				.setDropDownViewResource(R.layout.actionbar_dropdown_item);
@@ -178,7 +191,7 @@ public class MainActivity extends DualLayoutActivity implements
 		mSectionAdapter = new SimpleCursorAdapter(this,
 				R.layout.actionbar_dropdown_item, null,
 				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
-				new int[] { android.R.id.text1 });
+				new int[] { android.R.id.text1 }, 0);
 
 		mSectionsPagerAdapter = new ListPagerAdapter(this,
 				getFragmentManager(), mSectionAdapter);
@@ -289,32 +302,56 @@ public class MainActivity extends DualLayoutActivity implements
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		MenuItem deleteList = menu.findItem(R.id.menu_deletelist);
-		MenuItem renameList = menu.findItem(R.id.menu_renamelist);
-		if (null != mSectionAdapter) {
-			if (deleteList != null) {
-				// Only show this button if there is a list
-				if (mSectionAdapter.getCount() <= 0) {
-					deleteList.setVisible(false);
-				} else {
-					deleteList.setVisible(true);
-				}
-			}
-			if (renameList != null) {
-				// Only show this button if there is a list
-				if (mSectionAdapter.getCount() <= 0) {
-					renameList.setVisible(false);
-				} else {
-					renameList.setVisible(true);
-				}
-			}
+		// Hide entire sub menu in editor.
+		if (currentContent == CONTENTVIEW.RIGHT) {
+			MenuItem manageLists = menu.findItem(R.id.menu_managelists);
+			if (manageLists != null)
+				manageLists.setVisible(false);
+			MenuItem clear = menu.findItem(R.id.menu_clearcompleted);
+			if (clear != null)
+				clear.setVisible(false);
+			MenuItem sync = menu.findItem(R.id.menu_sync);
+			if (sync != null)
+				sync.setVisible(false);
 		} else {
-			// with null adapter, must hide
-			if (deleteList != null) {
-				deleteList.setVisible(false);
-			}
-			if (renameList != null) {
-				renameList.setVisible(false);
+			MenuItem deleteList = menu.findItem(R.id.menu_deletelist);
+			MenuItem renameList = menu.findItem(R.id.menu_renamelist);
+			MenuItem setDefaultList = menu.findItem(R.id.menu_setdefaultlist);
+			if (null != mSectionAdapter) {
+				if (deleteList != null) {
+					// Only show this button if there is a list
+					if (mSectionAdapter.getCount() <= 0) {
+						deleteList.setVisible(false);
+					} else {
+						deleteList.setVisible(true);
+					}
+				}
+				if (renameList != null) {
+					// Only show this button if there is a list
+					if (mSectionAdapter.getCount() <= 0) {
+						renameList.setVisible(false);
+					} else {
+						renameList.setVisible(true);
+					}
+				}
+				if (setDefaultList != null) {
+					// Only show this button if there is a list
+					if (mSectionAdapter.getCount() <= 0) {
+						setDefaultList.setVisible(false);
+					} else {
+						setDefaultList.setVisible(true);
+					}
+				}
+			} else {
+				// with null adapter, must hide
+				if (deleteList != null) {
+					deleteList.setVisible(false);
+				}
+				if (renameList != null) {
+					renameList.setVisible(false);
+				}
+				if (setDefaultList != null)
+					setDefaultList.setVisible(false);
 			}
 		}
 
@@ -551,7 +588,7 @@ public class MainActivity extends DualLayoutActivity implements
 				bintent.putExtra(NotePad.Notes._ID, noteId);
 				Log.d(TAG, "Sending complete broadcast");
 				sendBroadcast(bintent);
-				
+
 				openNoteFragment(intent);
 
 				// Toast.makeText(this, getString(R.string.completed),
@@ -932,13 +969,26 @@ public class MainActivity extends DualLayoutActivity implements
 		case R.id.menu_delete:
 			onDeleteAction();
 			break;
-		case R.id.menu_changelog:
-			ChangeLog cl = new ChangeLog(this);
-			cl.getFullLogDialog().show();
-			return true;
 		case R.id.menu_preferences:
 			showPrefs();
 			return true;
+		case R.id.menu_setdefaultlist:
+			long currentId = -1;
+			if (mSectionsPagerAdapter != null)
+				currentId = mSectionsPagerAdapter.getItemId(currentListPos);
+
+			if (currentId != -1) {
+				PreferenceManager
+						.getDefaultSharedPreferences(this)
+						.edit()
+						.putString(MainPrefs.KEY_DEFAULT_LIST,
+								Long.toString(currentId)).commit();
+
+				Toast.makeText(this, getString(R.string.default_list_set),
+						Toast.LENGTH_SHORT).show();
+			}
+
+			break;
 		case R.id.menu_createlist:
 			showDialog(CREATE_LIST);
 			return true;
@@ -1025,18 +1075,16 @@ public class MainActivity extends DualLayoutActivity implements
 
 									// Write to pref
 									editor.putBoolean(
-											SyncPrefs.KEY_SYNC_ENABLE, true);
+											SyncPrefs.KEY_SYNC_ENABLE, true)
+											.putBoolean(
+													SyncPrefs.KEY_BACKGROUND_SYNC,
+													true);
 
 									// Enable periodic sync
-									long freqMin = 60; // minutes
-									long pollFrequency = 60 * freqMin; // seconds
+									long pollFrequency = 3600; // seconds
 									ContentResolver.addPeriodicSync(account,
 											NotePad.AUTHORITY, new Bundle(),
 											pollFrequency);
-
-									// Write period to prefs
-									editor.putString(SyncPrefs.KEY_SYNC_FREQ,
-											Long.toString(freqMin));
 
 									// Commit prefs
 									editor.commit();

@@ -8,18 +8,10 @@
         android:showAsAction="ifRoom"
         android:title="@string/menu_revert"/>
     
-    
-    <item
-        android:id="@+id/menu_share"
-        android:icon="?social_share"
-        android:orderInCategory="4"
-        android:showAsAction="ifRoom"
-        android:title="@string/menu_share"/>
-    
     <item
         android:id="@+id/action_delete"
         android:icon="?content_discard"
-        android:orderInCategory="5"
+        android:orderInCategory="4"
         android:showAsAction="ifRoom"
         android:title="@string/menu_delete">
         <menu>
@@ -33,5 +25,12 @@
                 android:title="@string/menu_cancel"/>
         </menu>
     </item>
+    
+    <item
+        android:id="@+id/menu_share"
+        android:icon="?social_share"
+        android:orderInCategory="6"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_share"/>
 
 </menu>

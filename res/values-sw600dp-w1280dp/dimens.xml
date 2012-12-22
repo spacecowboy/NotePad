@@ -17,11 +17,5 @@
 <resources>
     <!-- <dimen name="preference_screen_side_margin">112dp</dimen> -->
     <dimen name="preference_screen_side_margin">64dp</dimen>
-    
-    <dimen name="preference_widget_width">64dp</dimen>
-    <!-- Preference fragment padding, bottom -->
-    <dimen name="preference_fragment_padding_bottom">48dp</dimen>
-    <!-- Preference fragment padding, sides -->
-    <dimen name="preference_fragment_padding_side">48dp</dimen>
 </resources>
 

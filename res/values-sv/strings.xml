@@ -17,204 +17,186 @@ limitations under the License.
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-<string tools:ignore="MissingTranslation" name="app_name">Anteckningar</string>
-<string tools:ignore="MissingTranslation" name="title_create">Ny anteckning</string>
-<string tools:ignore="MissingTranslation" name="title_edit">Redigera: %1$s</string>
-<string tools:ignore="MissingTranslation" name="menu_add">Skapa ny</string>
-<string tools:ignore="MissingTranslation" name="menu_delete">Ta bort</string>
-<string tools:ignore="MissingTranslation" name="menu_revert">Ångra ändringar</string>
-<string tools:ignore="MissingTranslation" name="menu_copy">Kopiera</string>
-<string tools:ignore="MissingTranslation" name="menu_cancel">Avbryt</string>
-<string tools:ignore="MissingTranslation" name="menu_setcompleted">Sätt avklarad</string>
-<string tools:ignore="MissingTranslation" name="menu_setuncompleted">Sätt ej avklarad</string>
-<string tools:ignore="MissingTranslation" name="menu_deletelist">Ta bort listan</string>
-<string tools:ignore="MissingTranslation" name="menu_sync">Uppdatera</string>
-<string tools:ignore="MissingTranslation" name="menu_share">Dela</string>
-<string tools:ignore="MissingTranslation" name="menu_preferences">Inställningar</string>
-<string tools:ignore="MissingTranslation" name="menu_renamelist">Byt namn på listan</string>
-<string tools:ignore="MissingTranslation" name="menu_createlist">Skapa lista</string>
-<string tools:ignore="MissingTranslation" name="menu_clearcompleted">Ta bort slutförda uppgifter</string>
-<string tools:ignore="MissingTranslation" name="menu_setdefaultlist">Välj som standardlista</string>
-<string tools:ignore="MissingTranslation" name="menu_managelists">Hantera listor</string>
-<string tools:ignore="MissingTranslation" name="delete_list_warning">Är du säker på att du vill ta bort listan? Listan kommer att tas bort permanent.</string>
-<string tools:ignore="MissingTranslation" name="editor_due_date_hint">Förfallodatum</string>
-<string tools:ignore="MissingTranslation" name="editor_title_hint">Titel</string>
-<string tools:ignore="MissingTranslation" name="editor_note_hint">Anteckning</string>
-<string tools:ignore="MissingTranslation" name="resolve_edit">Ändra anteckning</string>
-<string tools:ignore="MissingTranslation" name="error_title">Kunde inte hitta anteckningen</string>
-<string tools:ignore="MissingTranslation" name="error_message">Kunde inte hitta den aktuella anteckningen.</string>
-<string tools:ignore="MissingTranslation" name="search_hint">Sök</string>
-<string tools:ignore="MissingTranslation" name="settings_theme">Nuvarande tema</string>
-<string tools:ignore="MissingTranslation" name="settings_theme_dialog">Använd tema</string>
-
-<string tools:ignore="MissingTranslation" name="settings_lang">Språk</string>
-
-<string tools:ignore="MissingTranslation" name="settings_cat_theme">Tema</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_sorting">Sortering</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_type">Sorterar på</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_type_dialog">Sortera på</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_order">Ordnar efter</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_order_dialog">Ordna efter</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_alphabetic">Titel</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_modified">Senast modifierad</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_duedate">Förfallodatum</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">Min ordning</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Normal</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Omvänd</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_theme_black">Svart</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Mörk</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Ljus</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">Ljus, mörk menyrad</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_appearance">Utseende</string>
-<string tools:ignore="MissingTranslation" name="settings_font_screen">Typsnittsinställningar</string>
-<string tools:ignore="MissingTranslation" name="settings_font_screen_summary">Du kan ändra teckensnittet och storleken på texten</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_font_editor">Redigerare</string>
-<string tools:ignore="MissingTranslation" name="settings_font_type">Teckensnitt</string>
-<string tools:ignore="MissingTranslation" name="settings_font_type_dialog">Välj ett teckensnitt</string>
-<string tools:ignore="MissingTranslation" name="settings_font_size">Teckenstorlek</string>
-<string tools:ignore="MissingTranslation" name="preference_preview_text">Så här kommer texten att se ut</string>
-<string tools:ignore="MissingTranslation" name="settings_text_preview_title">Förhandsgranskning</string>
-<string tools:ignore="MissingTranslation" name="monospace">Monospace</string>
-<string tools:ignore="MissingTranslation" name="sans">Sans</string>
-<string tools:ignore="MissingTranslation" name="serif">Serif</string>
-<string tools:ignore="MissingTranslation" name="settings_sync_freq_title">Synkroniseringsfrekvens</string>
-<string tools:ignore="MissingTranslation" name="settings_account_title">Välj ett konto</string>
-<string tools:ignore="MissingTranslation" name="settings_account_summary">Tryck för att ändra konto</string>
-<string tools:ignore="MissingTranslation" name="settings_sync_enable_title">Google Tasks synk</string>
-<string tools:ignore="MissingTranslation" name="settings_sync_enable_summary">Synkronisera anteckningar med ditt Google konto</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_syncing">Synkronisering</string>
-<string tools:ignore="MissingTranslation" name="manual">Manuell</string>
-<string tools:ignore="MissingTranslation" name="minutes">minuter</string>
-<string tools:ignore="MissingTranslation" name="hours">timmar</string>
-<string tools:ignore="MissingTranslation" name="onehour">En timme</string>
-<string tools:ignore="MissingTranslation" name="oneday">En dag</string>
-<string tools:ignore="MissingTranslation" name="yes">Ja</string>
-<string tools:ignore="MissingTranslation" name="no">Nej</string>
-<string tools:ignore="MissingTranslation" name="ok">OK</string>
-<string tools:ignore="MissingTranslation" name="show_from_all_lists">Alla listor</string>
-<string tools:ignore="MissingTranslation" name="default_list_needed_warning">Välj en standardlista först</string>
-<string tools:ignore="MissingTranslation" name="reverted">Återställde ändringar</string>
-<string name="notecopied" tools:ignore="MissingTranslation">Kopierad</string>
-<string name="deleted" tools:ignore="MissingTranslation">Tog bort</string>
-<string name="items" tools:ignore="MissingTranslation">anteckningar</string>
-<string tools:ignore="MissingTranslation" name="permission_read_label">läsa anteckingar och listor</string>
-<string tools:ignore="MissingTranslation" name="permission_read_desc">Tillåter appen att läsa dina anteckingar och listor.</string>
-<string tools:ignore="MissingTranslation" name="permission_write_label">modify notes and lists</string>
-<string tools:ignore="MissingTranslation" name="permission_write_desc">Tillåter appen att lägga till, ändra och ta bort anteckingar och listor.</string>
-<string tools:ignore="MissingTranslation" name="settings_header_list">Listinställningar</string>
-<string tools:ignore="MissingTranslation" name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string tools:ignore="MissingTranslation" name="settings_header_sync">@string/settings_cat_syncing</string>
-<string tools:ignore="MissingTranslation" name="settings_list_dialog">Välj en lista</string>
-<string tools:ignore="MissingTranslation" name="settings_list">Lista</string>
-<string tools:ignore="MissingTranslation" name="automatic">Automatiskt</string>
-
-<string tools:ignore="MissingTranslation" name="preferences_week_start_day_dialog">"Veckan börjar med"</string>
-<string tools:ignore="MissingTranslation" name="preferences_week_start_day_title">"Veckan börjar med"</string>
+<string name="app_name">Anteckningar</string>
+<string name="title_create">Ny anteckning</string>
+<string name="title_edit">Redigera: %1$s</string>
+<string name="menu_add">Skapa ny</string>
+<string name="menu_delete">Ta bort</string>
+<string name="menu_revert">Ångra ändringar</string>
+<string name="menu_copy">Kopiera</string>
+<string name="menu_cancel">Avbryt</string>
+<string name="menu_setcompleted">Sätt avklarad</string>
+<string name="menu_setuncompleted">Sätt ej avklarad</string>
+<string name="menu_deletelist">Ta bort listan</string>
+<string name="menu_sync">Uppdatera</string>
+<string name="menu_share">Dela</string>
+<string name="menu_preferences">Inställningar</string>
+<string name="menu_renamelist">Byt namn på listan</string>
+<string name="menu_createlist">Skapa lista</string>
+<string name="menu_clearcompleted">Ta bort slutförda uppgifter</string>
+<string name="menu_setdefaultlist">Välj som standardlista</string>
+<string name="menu_managelists">Hantera listor</string>
+<string name="delete_list_warning">Är du säker på att du vill ta bort listan? Listan kommer att tas bort permanent.</string>
+<string name="editor_due_date_hint">Förfallodatum</string>
+<string name="editor_title_hint">Titel</string>
+<string name="editor_note_hint">Anteckning</string>
+<string name="resolve_edit">Ändra anteckning</string>
+<string name="error_title">Kunde inte hitta anteckningen</string>
+<string name="error_message">Kunde inte hitta den aktuella anteckningen.</string>
+<string name="search_hint">Sök</string>
+<string name="settings_theme">Nuvarande tema</string>
+<string name="settings_theme_dialog">Använd tema</string>
+<string name="settings_lang">Språk</string>
+<string name="settings_cat_theme">Tema</string>
+<string name="settings_cat_sorting">Sortering</string>
+<string name="settings_sorting_type">Sorterar på</string>
+<string name="settings_sorting_type_dialog">Sortera på</string>
+<string name="settings_sorting_order">Ordnar efter</string>
+<string name="settings_sorting_order_dialog">Ordna efter</string>
+<string name="settings_summary_sort_type_alphabetic">Titel</string>
+<string name="settings_summary_sort_type_modified">Senast modifierad</string>
+<string name="settings_summary_sort_type_duedate">Förfallodatum</string>
+<string name="settings_summary_sort_type_serverposition">Min ordning</string>
+<string name="settings_summary_sort_order_asc">Normal</string>
+<string name="settings_summary_sort_order_desc">Omvänd</string>
+<string name="settings_summary_theme_black">Svart</string>
+<string name="settings_summary_theme_dark">Mörk</string>
+<string name="settings_summary_theme_light">Ljus</string>
+<string name="settings_summary_theme_light_dark_ab">Ljus, mörk menyrad</string>
+<string name="settings_cat_appearance">Utseende</string>
+<string name="settings_font_screen">Typsnittsinställningar</string>
+<string name="settings_font_screen_summary">Du kan ändra teckensnittet och storleken på texten</string>
+<string name="settings_cat_font_editor">Redigerare</string>
+<string name="settings_font_type">Teckensnitt</string>
+<string name="settings_font_type_dialog">Välj ett teckensnitt</string>
+<string name="settings_font_size">Teckenstorlek</string>
+<string name="preference_preview_text">Så här kommer texten att se ut</string>
+<string name="settings_text_preview_title">Förhandsgranskning</string>
+<string name="monospace">Monospace</string>
+<string name="sans">Sans</string>
+<string name="serif">Serif</string>
+<string name="settings_sync_freq_title">Synkroniseringsfrekvens</string>
+<string name="settings_account_title">Välj ett konto</string>
+<string name="settings_account_summary">Tryck för att ändra konto</string>
+<string name="settings_sync_enable_title">Google Tasks synk</string>
+<string name="settings_sync_enable_summary">Synkronisera anteckningar med ditt Google konto</string>
+<string name="settings_cat_syncing">Synkronisering</string>
+<string name="manual">Manuell</string>
+<string name="minutes">minuter</string>
+<string name="hours">timmar</string>
+<string name="onehour">En timme</string>
+<string name="oneday">En dag</string>
+<string name="yes">Ja</string>
+<string name="no">Nej</string>
+<string name="ok">OK</string>
+<string name="show_from_all_lists">Alla listor</string>
+<string name="default_list_needed_warning">Välj en standardlista först</string>
+<string name="reverted">Återställde ändringar</string>
+<string name="notecopied">Kopierad</string>
+<string name="deleted">Tog bort</string>
+<string name="items">anteckningar</string>
+<string name="permission_read_label">läsa anteckingar och listor</string>
+<string name="permission_read_desc">Tillåter appen att läsa dina anteckingar och listor.</string>
+<string name="permission_write_label">modifiera anteckningar och listor</string>
+<string name="permission_write_desc">Tillåter appen att lägga till, ändra och ta bort anteckingar och listor.</string>
+<string name="settings_header_list">Listinställningar</string>
+<string name="settings_header_appearance">@string/settings_cat_appearance</string>
+<string name="settings_header_sync">@string/settings_cat_syncing</string>
+<string name="settings_list_dialog">Välj en lista</string>
+<string name="settings_list">Lista</string>
+<string name="automatic">Automatiskt</string>
+<string name="preferences_week_start_day_dialog">"Veckan börjar med"</string>
+<string name="preferences_week_start_day_title">"Veckan börjar med"</string>
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
 -->
 <plurals name="notecopied_msg">
-<item quantity="one">Copied one note</item>
-<item quantity="other">Copied %d notes</item>
+<item quantity="one">@string/notecopied_one</item>
+<item quantity="other">@string/notecopied_other</item>
 </plurals>
-
 <plurals name="notedeleted_msg">
-<item quantity="one">Deleted one note</item>
-<item quantity="other">Deleted %d notes</item>
+<item quantity="one">@string/notedeleted_one</item>
+<item quantity="other">@string/notedeleted_other</item>
 </plurals>
-
 <plurals name="mode_choose">
-<item quantity="one">Selected one note</item>
-<item quantity="other">Selected %d notes</item>
+<item quantity="one">@string/selected_one</item>
+<item quantity="other">@string/selected_other</item>
 </plurals>
 
-<string tools:ignore="MissingTranslation" name="lock_note">Lås anteckning</string>
-<string tools:ignore="MissingTranslation" name="unlock_note">Lås upp anteckning</string>
-<string tools:ignore="MissingTranslation" name="locked">Låst</string>
-<string tools:ignore="MissingTranslation" name="unlocked">Upplåst</string>
-<string tools:ignore="MissingTranslation" name="password_required">Lösenord krävs</string>
-<string tools:ignore="MissingTranslation" name="select_account">Välj ett konto</string>
-<string tools:ignore="MissingTranslation" name="password">Lösenord</string>
-<string tools:ignore="MissingTranslation" name="password_set">Lösenord sparat</string>
-<string tools:ignore="MissingTranslation" name="password_cleared">Lösenord togs bort</string>
-<string tools:ignore="MissingTranslation" name="passwords_dont_match">Lösenorden är inte lika</string>
-<string tools:ignore="MissingTranslation" name="password_incorrect">Felaktigt lösenord</string>
-<string tools:ignore="MissingTranslation" name="enter_password">Skriv lösenord</string>
-<string tools:ignore="MissingTranslation" name="enter_new_password">Nytt lösenord</string>
-<string tools:ignore="MissingTranslation" name="confirm_new_password">Bekräfta nytt lösenord</string>
-<string tools:ignore="MissingTranslation" name="apply">Ändra lösenord</string>
-<string tools:ignore="MissingTranslation" name="clear_password">Ta bort lösenord</string>
-<string tools:ignore="MissingTranslation" name="password_info">Genom att ställa in ett lösenord så kommer det krävas att du bekräftarlösenordet för att öppna låsta anteckningar. Det skyddar bara anteckningsfältet så du harfortfarande oskyddad tillgång till titel och datum. Detta är ingen typ av kryptering så du kanfortfarande komma åt anteckningen i Google mail/kalender. Om du glömmer ditt lösenord, synkamed Google och installera om appen.</string>
-<string tools:ignore="MissingTranslation" name="about">Om</string>
-
-<string tools:ignore="MissingTranslation" name="sync_failed">Synk misslyckades</string>
-<string tools:ignore="MissingTranslation" name="sync_login_failed">Inloggning misslyckades, kunde inte komma åt Google Tasks</string>
-
-<string tools:ignore="MissingTranslation" name="changelog_full_title">Ändringslogg</string>
-<string tools:ignore="MissingTranslation" name="changelog_title">Nyheter</string>
-<string tools:ignore="MissingTranslation" name="changelog_ok_button">OK</string>
-<string tools:ignore="MissingTranslation" name="changelog_show_full">Visa hela</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note">Visa anteckning</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">Titel är 2 rader</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_on">Anteckning på andra raden</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_show_complete">Sätt avklarad</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_off">Knapp inte synlig</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_on">Knapp synlig</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem">Titelstorlek</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">Anteckning är 2 rader</string>
-
-<string tools:ignore="MissingTranslation" name="editor_details">Mer</string>
-<string tools:ignore="MissingTranslation" name="completed">Slutförd</string>
-<string tools:ignore="MissingTranslation" name="subtask_of">Underuppgift av</string>
-<string tools:ignore="MissingTranslation" name="security">Säkerhet</string>
-
-<string tools:ignore="MissingTranslation" name="date_header_overdue">Försenade</string>
-<string tools:ignore="MissingTranslation" name="date_header_today">Idag</string>
-<string tools:ignore="MissingTranslation" name="date_header_tomorrow">Imorgon</string>
-<string tools:ignore="MissingTranslation" name="date_header_7days">Kommande 7 dagarna</string>
-<string tools:ignore="MissingTranslation" name="date_header_future">Senare</string>
-<string tools:ignore="MissingTranslation" name="date_header_none">Inget datum</string>
-<string tools:ignore="MissingTranslation" name="date_header_completed">Avklarade</string>
-
-<string tools:ignore="MissingTranslation" name="mod_header_yesterday">Igår</string>
-<string tools:ignore="MissingTranslation" name="mod_header_thisweek">Denna veckan</string>
-<string tools:ignore="MissingTranslation" name="mod_header_earlier">Tidigare</string>
-
-<string tools:ignore="MissingTranslation" name="settings_listheader">När alla listor visas</string>
-<string tools:ignore="MissingTranslation" name="settings_listheader_off">Visa som en lista</string>
-<string tools:ignore="MissingTranslation" name="settings_listheader_on">Visa listnamn</string>
-
-<string tools:ignore="MissingTranslation" name="please_create_list">Skapa en lista först</string>
-<string tools:ignore="MissingTranslation" name="please_select_note">Välj eller skapa en anteckning</string>
-<string tools:ignore="MissingTranslation" name="please_create_note">Skapa en anteckning först</string>
-
-<string tools:ignore="MissingTranslation" name="hide_checkbox">Dölj kryssruta</string>
-<string tools:ignore="MissingTranslation" name="hide_checkbox_summary_on">Kryssruta kommer att vara dold</string>
-<string tools:ignore="MissingTranslation" name="hide_checkbox_summary_off">Kryssruta kommer att vara synlig</string>
-
-<string tools:ignore="MissingTranslation" name="hide_note">Dölj anteckning</string>
-<string tools:ignore="MissingTranslation" name="hide_note_summary_on">Antecking kommer inte att visas</string>
-<string tools:ignore="MissingTranslation" name="hide_note_summary_off">Antecking kommer att visas</string>
-
-<string tools:ignore="MissingTranslation" name="hide_date">Göm datum</string>
-<string tools:ignore="MissingTranslation" name="hide_date_summary_on">Datum visas ej</string>
-<string tools:ignore="MissingTranslation" name="hide_date_summary_off">Datum visas</string>
-
-<string tools:ignore="MissingTranslation" name="title_rows">Titel maxhöjd</string>
-<string tools:ignore="MissingTranslation" name="title_rows_1">1 rad</string>
-<string tools:ignore="MissingTranslation" name="title_rows_2">2 rader</string>
-<string tools:ignore="MissingTranslation" name="title_rows_free">Ingen begränsing</string>
-
-<string tools:ignore="MissingTranslation" name="saturday">Lördag</string>
-<string tools:ignore="MissingTranslation" name="sunday">Söndag</string>
-<string tools:ignore="MissingTranslation" name="monday">Måndag</string>
-<string tools:ignore="MissingTranslation" name="localedefault">Språkspecifikt</string>
-
+<string name="lock_note">Lås anteckning</string>
+<string name="unlock_note">Lås upp anteckning</string>
+<string name="locked">Låst</string>
+<string name="unlocked">Upplåst</string>
+<string name="password_required">Lösenord krävs</string>
+<string name="select_account">Välj ett konto</string>
+<string name="password">Lösenord</string>
+<string name="password_set">Lösenord sparat</string>
+<string name="password_cleared">Lösenord togs bort</string>
+<string name="passwords_dont_match">Lösenorden är inte lika</string>
+<string name="password_incorrect">Felaktigt lösenord</string>
+<string name="enter_password">Skriv lösenord</string>
+<string name="enter_new_password">Nytt lösenord</string>
+<string name="confirm_new_password">Bekräfta nytt lösenord</string>
+<string name="apply">Ändra lösenord</string>
+<string name="clear_password">Ta bort lösenord</string>
+<string name="password_info">Genom att ställa in ett lösenord så kommer det krävas att du bekräftarlösenordet för att öppna låsta anteckningar. Det skyddar bara anteckningsfältet så du harfortfarande oskyddad tillgång till titel och datum. Detta är ingen typ av kryptering så du kanfortfarande komma åt anteckningen i Google mail/kalender. Om du glömmer ditt lösenord, synkamed Google och installera om appen.</string>
+<string name="about">Om</string>
+<string name="sync_failed">Synk misslyckades</string>
+<string name="sync_login_failed">Inloggning misslyckades, kunde inte komma åt Google Tasks</string>
+<string name="changelog_full_title">Ändringslogg</string>
+<string name="changelog_title">Nyheter</string>
+<string name="changelog_ok_button">OK</string>
+<string name="changelog_show_full">Visa hela</string>
+<string name="widget_pref_preview_note">Visa anteckning</string>
+<string name="widget_pref_preview_note_summary_off">Titel är 2 rader</string>
+<string name="widget_pref_preview_note_summary_on">Anteckning på andra raden</string>
+<string name="widget_pref_show_complete">Sätt avklarad</string>
+<string name="widget_pref_show_complete_summary_off">Knapp inte synlig</string>
+<string name="widget_pref_show_complete_summary_on">Knapp synlig</string>
+<string name="settings_listitem">Titelstorlek</string>
+<string name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
+<string name="settings_listitem_summary_off">Anteckning är 2 rader</string>
+<string name="editor_details">Mer</string>
+<string name="completed">Slutförd</string>
+<string name="subtask_of">Underuppgift av</string>
+<string name="security">Säkerhet</string>
+<string name="date_header_overdue">Försenade</string>
+<string name="date_header_today">Idag</string>
+<string name="date_header_tomorrow">Imorgon</string>
+<string name="date_header_7days">Kommande 7 dagarna</string>
+<string name="date_header_future">Senare</string>
+<string name="date_header_none">Inget datum</string>
+<string name="date_header_completed">Avklarade</string>
+<string name="mod_header_yesterday">Igår</string>
+<string name="mod_header_thisweek">Denna veckan</string>
+<string name="mod_header_earlier">Tidigare</string>
+<string name="settings_listheader">När alla listor visas</string>
+<string name="settings_listheader_off">Visa som en lista</string>
+<string name="settings_listheader_on">Visa listnamn</string>
+<string name="please_create_list">Skapa en lista först</string>
+<string name="please_select_note">Välj eller skapa en anteckning</string>
+<string name="please_create_note">Skapa en anteckning först</string>
+<string name="hide_checkbox">Dölj kryssruta</string>
+<string name="hide_checkbox_summary_on">Kryssruta kommer att vara dold</string>
+<string name="hide_checkbox_summary_off">Kryssruta kommer att vara synlig</string>
+<string name="hide_note">Dölj anteckning</string>
+<string name="hide_note_summary_on">Antecking kommer inte att visas</string>
+<string name="hide_note_summary_off">Antecking kommer att visas</string>
+<string name="hide_date">Göm datum</string>
+<string name="hide_date_summary_on">Datum visas ej</string>
+<string name="hide_date_summary_off">Datum visas</string>
+<string name="title_rows">Titel maxhöjd</string>
+<string name="title_rows_1">1 rad</string>
+<string name="title_rows_2">2 rader</string>
+<string name="title_rows_free">Ingen begränsing</string>
+<string name="saturday">Lördag</string>
+<string name="sunday">Söndag</string>
+<string name="monday">Måndag</string>
+<string name="localedefault">Språkspecifikt</string>
 
 <!-- These should probably not be translated -->
-<string name="default_notetitle" tools:ignore="MissingTranslation">Välkommen!</string>
+<string name="default_notetitle">Välkommen!</string>
 
 <!-- settings string keys -->
 <string name="menu_settings">Inställningar</string>
@@ -223,5 +205,24 @@ Use few if language need it. In English is the same.
 <string name="hide_new">Dölj skapa ny</string>
 <string name="hide_header">Dölj hela titelsektionen</string>
 <string name="hide_widgetbg">Genomskinlig bakgrund</string>
+<string name="shortcut_help1">Om vald, så kommer genvägen att skapa en ny anteckning i den valda listan. Annars öppnas bara den valda listan.</string>
+<string name="loading_widget">Laddar...</string>
+<string name="default_list_set">Standardlista vald</string>
+
+<string name="notecopied_one">Kopierade en anteckning</string>
+<string name="notecopied_other">Kopierade %d anteckningar</string>
+<string name="notedeleted_one">Raderade en anteckning</string>
+<string name="notedeleted_other">Raderade %d anteckningar</string>
+<string name="selected_one">Markerade en anteckning</string>
+<string name="selected_other">Markerade %d anteckningar</string>
+
+<string name="background_sync">Bakgrundssynk</string>
+<string name="background_sync_info">Synka en gång per timme</string>
+<string name="sync_on_change">Synka vid ändringar</string>
+<string name="sync_on_change_info">Schemalägger en synk en kort tid efter en anteckningar har ändrats</string>
+<string name="sync_on_start">Synka när appen startar</string>
+<string name="sync_on_start_info">Startar bara vid omstart, inte vid multitasking</string>
+<string name="sync_full_force">Tvinga full synk nästa gång</string>
+<string name="sync_full_force_info">Markera denna endast om du tror att synken missar några anteckingar.</string>
 
 </resources>

@@ -20,7 +20,6 @@ import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotePad.GTasks;
 import com.nononsenseapps.notepad.NotePad.Notes;
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
 
 import android.content.ClipDescription;
 import android.content.ContentProvider;
@@ -42,7 +41,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
-import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.text.TextUtils;
 import com.nononsenseapps.helpers.Log;
@@ -53,7 +51,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -64,17 +61,6 @@ import java.util.Map.Entry;
  */
 public class NotePadProvider extends ContentProvider implements
 		PipeDataWriter<Cursor> {
-
-	public static boolean SyncAuto(Context context) {
-		String setting = PreferenceManager.getDefaultSharedPreferences(context)
-				.getString(SyncPrefs.KEY_SYNC_FREQ, "0");
-		int syncAuto = Integer.parseInt(setting);
-
-		boolean syncEnabled = PreferenceManager.getDefaultSharedPreferences(
-				context).getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
-
-		return syncEnabled && (syncAuto > 0);
-	}
 
 	// Used for debugging and logging
 	private static final String TAG = "NotePadProvider";

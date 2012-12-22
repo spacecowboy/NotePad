@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2012 Jonas Kalderstam
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+<string name="app_name" tools:ignore="MissingTranslation">Noter</string>
+<string name="title_create" tools:ignore="MissingTranslation">Ny note</string>
+<string name="title_edit" tools:ignore="MissingTranslation">Rediger: %1$s</string>
+<string name="menu_add" tools:ignore="MissingTranslation">Ny note</string>
+<string name="menu_delete" tools:ignore="MissingTranslation">Slet</string>
+<string name="menu_revert" tools:ignore="MissingTranslation">Gendan ændringer</string>
+<string name="menu_copy" tools:ignore="MissingTranslation">Kopier note</string>
+<string name="menu_cancel" tools:ignore="MissingTranslation">Annuller</string>
+<string name="menu_setcompleted" tools:ignore="MissingTranslation">Sæt som udført</string>
+<string name="menu_setuncompleted" tools:ignore="MissingTranslation">Sæt som ikke udført</string>
+<string name="menu_deletelist" tools:ignore="MissingTranslation">Slet liste</string>
+<string name="menu_sync" tools:ignore="MissingTranslation">Opdater</string>
+<string name="menu_share" tools:ignore="MissingTranslation">Del</string>
+<string name="menu_preferences" tools:ignore="MissingTranslation">Indstillinger</string>
+<string name="menu_renamelist" tools:ignore="MissingTranslation">Omdøb liste</string>
+<string name="menu_createlist" tools:ignore="MissingTranslation">Opret liste</string>
+<string name="menu_clearcompleted" tools:ignore="MissingTranslation">Slet udførte</string>
+<string name="menu_setdefaultlist" tools:ignore="MissingTranslation">Vælg som standard liste</string>
+<string name="menu_managelists" tools:ignore="MissingTranslation">Administrer lister</string>
+<string name="delete_list_warning" tools:ignore="MissingTranslation">Er du sikker på du vil slette listen? Listen vil blive permanent slettet.</string>
+<string name="editor_due_date_hint" tools:ignore="MissingTranslation">Forfaldsdato</string>
+<string name="editor_title_hint" tools:ignore="MissingTranslation">Titel</string>
+<string name="editor_note_hint" tools:ignore="MissingTranslation">Note</string>
+<string name="resolve_edit" tools:ignore="MissingTranslation">Rediger note</string>
+<string name="error_title" tools:ignore="MissingTranslation">Fejl</string>
+<string name="error_message" tools:ignore="MissingTranslation">Fejl ved indlæsning af note</string>
+<string name="search_hint" tools:ignore="MissingTranslation">Søg</string>
+<string name="settings_theme" tools:ignore="MissingTranslation">Nuværende tema</string>
+<string name="settings_theme_dialog" tools:ignore="MissingTranslation">Brug tema</string>
+<string name="settings_lang" tools:ignore="MissingTranslation">Sprog</string>
+<string name="settings_lang_dialog" tools:ignore="MissingTranslation">@string/settings_lang</string>
+<string name="settings_cat_theme" tools:ignore="MissingTranslation">Tema</string>
+<string name="settings_cat_sorting" tools:ignore="MissingTranslation">Sortering</string>
+<string name="settings_sorting_type" tools:ignore="MissingTranslation">Sortering tilsluttet</string>
+<string name="settings_sorting_type_dialog" tools:ignore="MissingTranslation">Sorter tilsluttet</string>
+<string name="settings_sorting_order" tools:ignore="MissingTranslation">Sorter</string>
+<string name="settings_sorting_order_dialog" tools:ignore="MissingTranslation">Sorter efter</string>
+<string name="settings_summary_sort_type_alphabetic" tools:ignore="MissingTranslation">Titel</string>
+<string name="settings_summary_sort_type_modified" tools:ignore="MissingTranslation">Sidst ændret</string>
+<string name="settings_summary_sort_type_duedate" tools:ignore="MissingTranslation">Forfaldsdato</string>
+<string name="settings_summary_sort_type_serverposition" tools:ignore="MissingTranslation">Min sortering</string>
+<string name="settings_summary_sort_order_asc" tools:ignore="MissingTranslation">Stigende</string>
+<string name="settings_summary_sort_order_desc" tools:ignore="MissingTranslation">Faldende</string>
+<string name="settings_summary_theme_black" tools:ignore="MissingTranslation">Sort</string>
+<string name="settings_summary_theme_dark" tools:ignore="MissingTranslation">Mørk</string>
+<string name="settings_summary_theme_light" tools:ignore="MissingTranslation">Lys</string>
+<string name="settings_summary_theme_light_dark_ab" tools:ignore="MissingTranslation">Lys, mørk action bar</string>
+<string name="settings_cat_appearance" tools:ignore="MissingTranslation">Udseende</string>
+<string name="settings_font_screen" tools:ignore="MissingTranslation">Skrifttype indstillinger</string>
+<string name="settings_font_screen_summary" tools:ignore="MissingTranslation">Du kan ændre skrifttypen og størrelsen på skriften</string>
+<string name="settings_cat_font_editor" tools:ignore="MissingTranslation">Editor</string>
+<string name="settings_font_type" tools:ignore="MissingTranslation">Skrifttype</string>
+<string name="settings_font_type_dialog" tools:ignore="MissingTranslation">Vælg en skrifttype</string>
+<string name="settings_font_size" tools:ignore="MissingTranslation">Skriftstørrelse</string>
+<string name="preference_preview_text" tools:ignore="MissingTranslation">Sådan vil teksten i editoren blive vist</string>
+<string name="settings_text_preview_title" tools:ignore="MissingTranslation">Eksempel</string>
+<string name="monospace" tools:ignore="MissingTranslation">Monospace</string>
+<string name="sans" tools:ignore="MissingTranslation">Sans</string>
+<string name="serif" tools:ignore="MissingTranslation">Serif</string>
+<string name="settings_sync_freq_title" tools:ignore="MissingTranslation">Synkroniserings type</string>
+<string name="settings_account_title" tools:ignore="MissingTranslation">Vælg en konto</string>
+<string name="settings_account_summary" tools:ignore="MissingTranslation">Klik for at ændre konto</string>
+<string name="settings_sync_enable_title" tools:ignore="MissingTranslation">Google Tasks synkronisering</string>
+<string name="settings_sync_enable_summary" tools:ignore="MissingTranslation">Synkroniser noter med din Google konto</string>
+<string name="settings_cat_syncing" tools:ignore="MissingTranslation">Synkronisering</string>
+<string name="manual" tools:ignore="MissingTranslation">Manual</string>
+<string name="minutes" tools:ignore="MissingTranslation">minutter</string>
+<string name="hours" tools:ignore="MissingTranslation">timer</string>
+<string name="onehour" tools:ignore="MissingTranslation">En time</string>
+<string name="oneday" tools:ignore="MissingTranslation">En dag</string>
+<string name="yes" tools:ignore="MissingTranslation">Ja</string>
+<string name="no" tools:ignore="MissingTranslation">Nej</string>
+<string name="ok" tools:ignore="MissingTranslation">Ok</string>
+<string name="show_from_all_lists" tools:ignore="MissingTranslation">Alle lister</string>
+<string name="default_list_needed_warning" tools:ignore="MissingTranslation">Vælg en standardliste først</string>
+<string name="reverted" tools:ignore="MissingTranslation">Gendannet ændringer</string>
+<string name="notecopied" tools:ignore="MissingTranslation">Kopieret</string>
+<string name="deleted" tools:ignore="MissingTranslation">Slettet</string>
+<string name="items" tools:ignore="MissingTranslation">noter</string>
+<string name="permission_read_label" tools:ignore="MissingTranslation">læs noter og lister</string>
+<string name="permission_read_desc" tools:ignore="MissingTranslation">Tillader applikationen at læse dine noter og relaterede lister</string>
+<string name="permission_write_label" tools:ignore="MissingTranslation">modificer noter og lister</string>
+<string name="permission_write_desc" tools:ignore="MissingTranslation">Tillader applikationen at indstætte, opdatere og slette noter og lister</string>
+<string name="settings_header_list" tools:ignore="MissingTranslation">Liste indstillinger</string>
+<string name="settings_header_appearance" tools:ignore="MissingTranslation">@string/settings_cat_appearance</string>
+<string name="settings_header_sync" tools:ignore="MissingTranslation">@string/settings_cat_syncing</string>
+<string name="settings_list_dialog" tools:ignore="MissingTranslation">Vælg en liste</string>
+<string name="settings_list" tools:ignore="MissingTranslation">Liste</string>
+<string name="automatic" tools:ignore="MissingTranslation">Automatisk</string>
+<string name="preferences_week_start_day_dialog" tools:ignore="MissingTranslation">Ugen starter på</string>
+<string name="preferences_week_start_day_title" tools:ignore="MissingTranslation">Ugen starter på</string>
+<string name="preferences_week_start_day_default" tools:ignore="MissingTranslation">-1</string>
+<!--
+Use few if language need it. In English is the same.
+<item quantity="few">Copied 2 notes.</item>
+-->
+<plurals name="notecopied_msg">
+<item quantity="one">Copied one note</item>
+<item quantity="other">Copied %d notes</item>
+</plurals>
+<plurals name="notedeleted_msg">
+<item quantity="one">Deleted one note</item>
+<item quantity="other">Deleted %d notes</item>
+</plurals>
+<plurals name="mode_choose">
+<item quantity="one">Selected one note</item>
+<item quantity="other">Selected %d notes</item>
+</plurals>
+
+<string name="lock_note" tools:ignore="MissingTranslation">Lås note</string>
+<string name="unlock_note" tools:ignore="MissingTranslation">Oplås note</string>
+<string name="locked" tools:ignore="MissingTranslation">Låst</string>
+<string name="unlocked" tools:ignore="MissingTranslation">Ulåst</string>
+<string name="password_required" tools:ignore="MissingTranslation">Adgangskode påkrævet</string>
+<string name="select_account" tools:ignore="MissingTranslation">Vælg en konto</string>
+<string name="password" tools:ignore="MissingTranslation">Adgangskode</string>
+<string name="password_set" tools:ignore="MissingTranslation">Adgangskode valgt</string>
+<string name="password_cleared" tools:ignore="MissingTranslation">Adgangskode slettet</string>
+<string name="passwords_dont_match" tools:ignore="MissingTranslation">Adgangskoder matcher ikke</string>
+<string name="password_incorrect" tools:ignore="MissingTranslation">Forkert adgangskode</string>
+<string name="enter_password" tools:ignore="MissingTranslation">Indtast adgangskoden</string>
+<string name="enter_new_password" tools:ignore="MissingTranslation">Indtast ny adgangskode</string>
+<string name="confirm_new_password" tools:ignore="MissingTranslation">Bekræft ny adgangskode</string>
+<string name="apply" tools:ignore="MissingTranslation">Anvend</string>
+<string name="clear_password" tools:ignore="MissingTranslation">Slet adgangskode</string>
+<string name="password_info" tools:ignore="MissingTranslation">Angivelse af en adgangskode kræver at du indtaster adgangskoden for at vise alle låste noter. Dette vil kun beskytte note-feltet, så du vil stadig have ubeskyttet adgang til titlen og forfaldsdatoen. Noten vil på ingen måde blive krypteret, så disse kan stadig læses i Google\'s mail/kalender. Hvis du glemmer din kode, skal du synkronisere med Google og geninstallere app\'en.</string>
+<string name="about" tools:ignore="MissingTranslation">Om</string>
+<string name="sync_failed" tools:ignore="MissingTranslation">Synkornisering fejlet</string>
+<string name="sync_login_failed" tools:ignore="MissingTranslation">Login fejlet, kunne ikke forbinde til Google Tasks</string>
+<string name="changelog_full_title" tools:ignore="MissingTranslation">Historik</string>
+<string name="changelog_title" tools:ignore="MissingTranslation">Nyheder</string>
+<string name="changelog_ok_button" tools:ignore="MissingTranslation">Ok</string>
+<string name="changelog_show_full" tools:ignore="MissingTranslation">Vis fuld</string>
+<string name="widget_pref_preview_note" tools:ignore="MissingTranslation">Vis eksempel på note</string>
+<string name="widget_pref_preview_note_summary_off" tools:ignore="MissingTranslation">Titlen vil være 2 linier</string>
+<string name="widget_pref_preview_note_summary_on" tools:ignore="MissingTranslation">Noten vil være på 2. linie</string>
+<string name="widget_pref_show_complete" tools:ignore="MissingTranslation">Marker som udført-knap</string>
+<string name="widget_pref_show_complete_summary_off" tools:ignore="MissingTranslation">Knappen vil være skjult</string>
+<string name="widget_pref_show_complete_summary_on" tools:ignore="MissingTranslation">Knappen vil være vist</string>
+<string name="settings_listitem" tools:ignore="MissingTranslation">Titler med to linier</string>
+<string name="settings_listitem_summary_on" tools:ignore="MissingTranslation">@string/widget_pref_preview_note_summary_off</string>
+<string name="settings_listitem_summary_off" tools:ignore="MissingTranslation">Note eksempel vil være 2 linier</string>
+<string name="editor_details" tools:ignore="MissingTranslation">Mere</string>
+<string name="completed" tools:ignore="MissingTranslation">Udført</string>
+<string name="subtask_of" tools:ignore="MissingTranslation">Delopgave af</string>
+<string name="security" tools:ignore="MissingTranslation">Sikkerhed</string>
+<string name="date_header_overdue" tools:ignore="MissingTranslation">Forsinket</string>
+<string name="date_header_today" tools:ignore="MissingTranslation">I dag</string>
+<string name="date_header_tomorrow" tools:ignore="MissingTranslation">I morgen</string>
+<string name="date_header_7days" tools:ignore="MissingTranslation">Næste 7 dage</string>
+<string name="date_header_future" tools:ignore="MissingTranslation">Senere</string>
+<string name="date_header_none" tools:ignore="MissingTranslation">Ingen dato</string>
+<string name="date_header_completed" tools:ignore="MissingTranslation">Udført</string>
+<string name="mod_header_today" tools:ignore="MissingTranslation">@string/date_header_today</string>
+<string name="mod_header_yesterday" tools:ignore="MissingTranslation">I går</string>
+<string name="mod_header_thisweek" tools:ignore="MissingTranslation">Denne uge</string>
+<string name="mod_header_earlier" tools:ignore="MissingTranslation">Tidligere</string>
+<string name="settings_listheader" tools:ignore="MissingTranslation">Når alle lister vises</string>
+<string name="settings_listheader_off" tools:ignore="MissingTranslation">Vis som en liste</string>
+<string name="settings_listheader_on" tools:ignore="MissingTranslation">Vis navne på listerne</string>
+<string name="please_create_list" tools:ignore="MissingTranslation">Opret venligst en liste</string>
+<string name="please_select_note" tools:ignore="MissingTranslation">Vælg eller opret venligst en note</string>
+<string name="please_create_note" tools:ignore="MissingTranslation">Opret venligst en note</string>
+<string name="hide_checkbox" tools:ignore="MissingTranslation">Skjul afkrydsningsfejlt</string>
+<string name="hide_checkbox_summary_on" tools:ignore="MissingTranslation">Afkrydsningsfelt vil være skjult</string>
+<string name="hide_checkbox_summary_off" tools:ignore="MissingTranslation">Afkrydsningsfelt vil være vist</string>
+<string name="hide_note" tools:ignore="MissingTranslation">Skjul note</string>
+<string name="hide_note_summary_on" tools:ignore="MissingTranslation">Note vil være skjult</string>
+<string name="hide_note_summary_off" tools:ignore="MissingTranslation">Note vil være vist</string>
+<string name="hide_date" tools:ignore="MissingTranslation">Skjul forfaldsdato</string>
+<string name="hide_date_summary_on" tools:ignore="MissingTranslation">Dato vil være skjult</string>
+<string name="hide_date_summary_off" tools:ignore="MissingTranslation">Dato vil være vist</string>
+<string name="title_rows" tools:ignore="MissingTranslation">Titlens max højde</string>
+<string name="title_rows_1" tools:ignore="MissingTranslation">1 række</string>
+<string name="title_rows_2" tools:ignore="MissingTranslation">2 rækker</string>
+<string name="title_rows_free" tools:ignore="MissingTranslation">Ingen begrænsning</string>
+<string name="saturday" tools:ignore="MissingTranslation">Lørdag</string>
+<string name="sunday" tools:ignore="MissingTranslation">Søndag</string>
+<string name="monday" tools:ignore="MissingTranslation">Mandag</string>
+<string name="localedefault" tools:ignore="MissingTranslation">Lokal standard</string>
+
+<!-- These should probably not be translated -->
+<string name="default_notetitle" tools:ignore="MissingTranslation">Velkommen!</string>
+<string name="default_notetext" tools:ignore="MissingTranslation">For at få mest ud af denne app foreslår jeg, at du aktivererer synkronisering først. Tryk på synkroniserings-knappen oppe i action baren, når du kommer tilbage til listen. Som standard vil det aktivere automatisk synkronisering, som vil synkronisere en gang i timen.\n\nBemærk at dette er koblet sammen med dine globale synkroniserings indstillinger. I en nøddeskal, hvis din Gmail ikke synkronisere, gør denne app heller ikke. Du kan deaktivere automatisk synkronisering og vælge manuel istedet i indstillingerne.\n\nHvis du har mere end én Google konto på din enhed, vil jeg foreslå at gå ind i indstillingerne og vælge manuelt hvilken konto du vil bruge.\n\nFaktisk vil jeg anbefale at gå igennem indstillingerne alligevel, bare for at se hvilke muligheder der er. Du kan justere skrifttypen og skriftstørrelsen af teksten i dette vindue og ændre temaet fra lys til mørk.\n\nApp\'en inkluderer også en widget som er fuldt resizable. Du ændrer størrelsen lige præcist som ved alle andre widgets: Tryk og hold din finger i et sekund som om du vil flytte den. Herefter, isteder for at flytte den, kan du trække i siderne af widget\'en for at gøre den større eller mindre.\n\nJeg håber du finder denne app brugbar. Husk på at det er komplet gratis, har ingen reklamer og er open source. Hvis du har nogle gode idéer eller større klager, fortæl mig venligst om dem.\n\n/Jonas</string>
+<string name="about_text" tools:ignore="MissingTranslation">Tak for at du har downloadet min app! Jeg gør mit bedste for at gøre denne app fantastisk på alle måder, men der vil altid være fejl og ting kan altid blive endnu mere fantastiske!\n\nHvis du har fundet en fejl, en oversættelse er forkert eller du har en ide til at gøre denne app endnu mere fantastisk, vil jeg med glæde høre fra dig!\nSend mig en mail: jonas@nononsenseapps.com\n\n+1 mig: https://plus.google.com/u/0/111801385015192089838\n\nRapporter det i "issue trackeren": https://github.com/spacecowboy/NotePad/issues\n\nHvis du gerne vil hjælpe med at oversætte denne app, gå venligst til http://translate.nononsenseapps.com\n\nIgen, mange tak for at du har downloadet min app!\nHvis du vil støtte projektet på en mindre aktiv måde, kan du altid købe donations-versionen: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
+
+<!-- settings string keys -->
+<string name="pref_locale" tools:ignore="MissingTranslation">pref_key_locale</string>
+<string name="menu_settings" tools:ignore="MissingTranslation">Indstillinger</string>
+<string name="title_activity_list_widget_config" tools:ignore="MissingTranslation">Widget konfiguration</string>
+<string name="hide_appicon" tools:ignore="MissingTranslation">Skjul app ikonet</string>
+<string name="hide_new" tools:ignore="MissingTranslation">Skjul ny-knap</string>
+<string name="hide_header" tools:ignore="MissingTranslation">Skjul hele widget headeren</string>
+<string name="hide_widgetbg" tools:ignore="MissingTranslation">Gennemsigtig baggrund</string>
+<string name="shortcut_help1" tools:ignore="MissingTranslation">Hvis afkrydset, vil genvejen oprette en ny note i den valgte liste og åbne editoren. Hvis ikke afkrydset, vil genvejen åbne den valgte liste.</string>
+<string name="loading_widget" tools:ignore="MissingTranslation">Indlæser widget...</string>
+
+</resources>
