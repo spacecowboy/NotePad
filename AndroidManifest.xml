@@ -46,6 +46,9 @@
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
+    <!-- For notifications -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <!-- Define my permissions for the provider -->
     <permission
         android:name="com.nononsenseapps.notepad.permissions.read"
@@ -126,7 +129,6 @@
                 <action android:name="android.intent.action.INSERT" />
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
-                
                 <action android:name="com.nononsenseapps.completenote" />
 
                 <category android:name="android.intent.category.DEFAULT" />
@@ -203,6 +205,7 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+
         <service
             android:name="com.nononsenseapps.helpers.SyncDelay"
             android:exported="false" >
@@ -210,6 +213,21 @@
                 <action android:name="android.intent.action.RUN" />
             </intent-filter>
         </service>
+
+        <receiver
+            android:name="com.nononsenseapps.helpers.NotificationHelper"
+            android:exported="true"
+            tools:ignore="ExportedReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.RUN" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.DELETE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.notification" />
+            </intent-filter>
+        </receiver>
     </application>
 
 </manifest>

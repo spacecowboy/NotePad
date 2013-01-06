@@ -256,4 +256,16 @@
 	<string name="sync_full_force">Force full sync next time</string>
 	<string name="sync_full_force_info">Only check this if you believe sync is missing some items.</string>
     
+	<string name="silent">Silent</string>
+	<string name="sound">Sound</string>
+	<string name="vibrate">Vibrate</string>
+	<string name="reminders">Reminders</string>
+	<string name="add_reminder">Add reminder</string>
+	<string name="standard">Standard</string>
+	<string name="notification_prio_high">High: On top, expanded</string>
+	<string name="notification_prio_low">Low: Hidden, minimized</string>
+	<string name="priority">Priority</string>
+	<string name="group_on_list">Group on list</string>
+	<string name="group_on_list_summary">Multiple notifications will be grouped together if they belong to the same list.</string>
+	<string name="more">more</string>
 </resources>

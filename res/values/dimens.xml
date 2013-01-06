@@ -25,4 +25,7 @@
     <!-- For widget -->
     <dimen name="widget_margin">8dp</dimen>
     
+    <!-- Editor fragment stuff -->
+    <dimen name="editor_side_margin">8dp</dimen>
+    
 </resources>
