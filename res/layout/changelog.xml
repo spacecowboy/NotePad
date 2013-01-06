@@ -40,7 +40,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="\n- Reminders/notifications for notes.\n- Updated translations." />
+            android:text="\n- Reminders/notifications for notes.\n- Updated translations.\n- Fixed a crash when selecting items with Turkish language.\n- Fixed a crash if you toggled sync options before setting an account." />
         
         <TextView
             android:layout_width="fill_parent"

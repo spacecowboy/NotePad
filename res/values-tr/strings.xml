@@ -211,10 +211,11 @@ Use few if language need it. In English is the same.
 <string name="default_list_set">Varsayılan liste seçildi</string>
 
 <string name="notecopied_one">Bir not kopyalandı</string>
-<string name="notecopied_other">% tane not kopyalandı</string>
+<string name="notecopied_other">%d tane not kopyalandı</string>
 <string name="notedeleted_one">Bir not silindi</string>
-<string name="notedeleted_other">% tane not silindi</string>
+<string name="notedeleted_other">%d tane not silindi</string>
 <string name="selected_one">Bir not seçildi</string>
-<string name="selected_other">% tane not seçildi</string>
+<string name="selected_other">%d tane not seçildi</string>
+
 
 </resources>

@@ -26,7 +26,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
-    android:versionCode="47"
+    android:versionCode="48"
     android:versionName="4.4" >
 
     <!-- App crashes on 3.0. No one uses 3.1. So minimum version is set to 3.2 now -->
