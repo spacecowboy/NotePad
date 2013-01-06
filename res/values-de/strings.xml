@@ -218,4 +218,13 @@ Use few if language need it. In English is the same.
 <string name="selected_one">1 Notiz ausgewählt</string>
 <string name="selected_other">%d Notizen ausgewählt</string>
 
+<string name="background_sync">Im Hintergrund synchronisieren</string>
+<string name="background_sync_info">Stündlich synchronisieren</string>
+<string name="sync_on_change">Nach Änderungen synchronisieren</string>
+<string name="sync_on_change_info">Synchronisiert, kurt nachdem eine Notiz geändert wurde.</string>
+<string name="sync_on_start">Beim App-Start synchronisieren</string>
+<string name="sync_on_start_info">Löst nur bei richtigen Starts aus, wenn die App vorher nicht im Hintergrund gelaufen ist</string>
+<string name="sync_full_force">Volle Synchronisation erzwingen</string>
+<string name="sync_full_force_info">Schalte dies ein, wenn du denkst, es fehlen einige Objekte.</string>
+
 </resources>

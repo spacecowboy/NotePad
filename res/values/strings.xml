@@ -268,4 +268,5 @@
 	<string name="group_on_list">Group on list</string>
 	<string name="group_on_list_summary">Multiple notifications will be grouped together if they belong to the same list.</string>
 	<string name="more">more</string>
+	<string name="notifications">Notifications</string>
 </resources>

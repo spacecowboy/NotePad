@@ -30,7 +30,7 @@
         android:fragment="com.nononsenseapps.notepad.prefs.NotificationPrefs"
         android:icon="@drawable/device_access_alarms_dark"
         android:summary=""
-        android:title="Notifications" />
+        android:title="@string/notifications" />
     <header
         android:fragment="com.nononsenseapps.notepad.prefs.PasswordPrefs"
         android:icon="@drawable/device_access_secure_dark"
