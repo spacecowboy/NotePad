@@ -669,8 +669,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		final boolean hidden_date = PreferenceManager
 				.getDefaultSharedPreferences(activity).getBoolean(
 						MainPrefs.KEY_HIDDENDATE, false);
-		final int title_rows = Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(
-				activity).getString(MainPrefs.KEY_TITLEROWS, "2"));
+		final int title_rows = Integer.parseInt(PreferenceManager
+				.getDefaultSharedPreferences(activity).getString(
+						MainPrefs.KEY_TITLEROWS, "2"));
 
 		// Creates the backing adapter for the ListView.
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(activity,
@@ -727,7 +728,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 					// Set a simple on change listener that updates the note on
 					// changes.
 					cb.setOnCheckedChangeListener(listener);
-					
+
 					// hide/show
 					if (hidden_checkbox)
 						((View) cb.getParent()).setVisibility(View.GONE);
@@ -1100,11 +1101,15 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 				int num = getListView().getCheckedItemCount();
 
-				Toast.makeText(
-						activity,
-						getResources().getQuantityString(
-								R.plurals.notecopied_msg, num, num),
-						Toast.LENGTH_SHORT).show();
+				try {
+					Toast.makeText(
+							activity,
+							getResources().getQuantityString(
+									R.plurals.notecopied_msg, num, num),
+							Toast.LENGTH_SHORT).show();
+				} catch (Exception e) {
+					// Protect against faulty translations
+				}
 				mode.finish();
 				break;
 			case R.id.modal_delete:
@@ -1138,8 +1143,12 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				this.notesToDelete.remove(position);
 			}
 			final int checkedCount = getListView().getCheckedItemCount();
-			mode.setTitle(getResources().getQuantityString(
-					R.plurals.mode_choose, checkedCount, checkedCount));
+			try {
+				mode.setTitle(getResources().getQuantityString(
+						R.plurals.mode_choose, checkedCount, checkedCount));
+			} catch (Exception e) {
+				// Protect against faulty translations
+			}
 		}
 
 		private void shareNote(String text) {
@@ -1188,10 +1197,15 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				onDeleteListener.onModalDelete(notesToDelete);
 			}
 
-			Toast.makeText(
-					activity,
-					getResources().getQuantityString(R.plurals.notedeleted_msg,
-							num, num), Toast.LENGTH_SHORT).show();
+			try {
+				Toast.makeText(
+						activity,
+						getResources().getQuantityString(
+								R.plurals.notedeleted_msg, num, num),
+						Toast.LENGTH_SHORT).show();
+			} catch (Exception e) {
+				// Protect against faulty translations
+			}
 			mode.finish();
 		}
 
