@@ -99,6 +99,18 @@
         <item>2</item>
         <item>20</item>
     </string-array>
+    
+    <string-array name="notification_prio_entries">
+        <item>@string/notification_prio_high</item>
+        <item>@string/standard</item>
+        <item>@string/notification_prio_low</item>
+    </string-array>
+    
+    <string-array name="notification_prio_values">
+        <item>2</item>
+        <item>0</item>
+        <item>-2</item>
+    </string-array>
 
     <string-array name="translated_langs" tools:ignore="MissingTranslation">
         <item>ar</item>
@@ -114,6 +126,7 @@
         <item>it</item>
         <item>iw</item>
         <item>ja</item>
+        <item>nb</item>
         <item>nl</item>
         <item>pl</item>
         <item>pt</item>

@@ -13,9 +13,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:enabled="false"
         android:gravity="center_vertical"
         android:text="@string/completed"
-        android:enabled="false"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ImageView
@@ -23,15 +25,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        tools:ignore="ContentDescription" 
-        android:src="?expander_open_holo" />
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:src="?expander_open_holo"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/editorDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_toLeftOf="@+id/downarrow"
         android:layout_centerVertical="true"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_toLeftOf="@+id/downarrow"
         android:text="@string/editor_details"
         android:textAppearance="?android:attr/textAppearanceSmall" />
 

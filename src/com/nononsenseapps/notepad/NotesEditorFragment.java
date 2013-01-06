@@ -17,6 +17,8 @@
 package com.nononsenseapps.notepad;
 
 import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 import java.util.TimeZone;
 
 import android.annotation.TargetApi;
@@ -48,6 +50,8 @@ import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.text.format.Time;
 import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NotificationHelper;
+
 import android.util.TimeFormatException;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -117,7 +121,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	// public static final int STATE_INSERT = 1;
 
 	protected static final int DATE_DIALOG_ID = 999;
-	private static final String TAG = "NotesEditorFragment";
+	private static final String TAG = "NoNonsenseNotes.NotesEditorFragment";
 	protected static final int SHOW_NOTE = 10;
 	protected static final int LOCK_NOTE = 11;
 	protected static final int UNLOCK_NOTE = 12;
@@ -164,6 +168,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private SimpleCursorAdapter listAdapter;
 	private static int LOADER_NOTE_ID = 0;
 	private static int LOADER_LISTS_ID = 1;
+	private static int LOADER_NOTIFICATIONS_ID = 2;
 
 	private NoteAttributes noteAttrs;
 	private Handler mHandler = new Handler();
@@ -178,6 +183,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private View detailsContracted;
 	private View detailsExpanded;
 	private ImageButton cancelButton;
+	private View addNotificationButton;
+	private LinearLayout notificationListLayout;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -255,6 +262,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				// Populate the list also
 				getLoaderManager().restartLoader(LOADER_LISTS_ID, null, this);
 				// Do not start sub task loader until we have list
+				getLoaderManager().restartLoader(LOADER_NOTIFICATIONS_ID, null,
+						this);
 
 			}
 		}
@@ -475,8 +484,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+	public View onCreateView(final LayoutInflater inflater,
+			ViewGroup container, Bundle savedInstanceState) {
 
 		Log.d("NotesEditorFragment", "oncreateview");
 
@@ -638,7 +647,131 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			}
 		});
 
+		// Notifications
+		notificationListLayout = (LinearLayout) theView
+				.findViewById(R.id.notificationList);
+
+		addNotificationButton = theView.findViewById(R.id.notificationAdd);
+		addNotificationButton.setOnClickListener(new OnClickListener() {
+
+			@Override
+			public void onClick(View v) {
+				if (mText != null && mTitle != null && id > -1) {
+					NotificationHelper.NoteNotification not = new NotificationHelper.NoteNotification(
+							id, mTitle.getText().toString(), mText.getText()
+									.toString());
+					// If a due date is set, default to that
+					if (dueDateSet) {
+						Calendar c = Calendar.getInstance();
+						c.setTime(new Date(not.time));
+						
+						Calendar dc = Calendar.getInstance();
+						dc.setTime(new Date(noteDueDate.toMillis(false)));
+						
+						c.set(dc.get(Calendar.YEAR), dc.get(Calendar.MONTH), dc.get(Calendar.DAY_OF_MONTH));
+						
+						not.time = c.getTime().getTime();
+					}
+					// Inserts it into the database and updates id
+					NotificationHelper.updateNotification(activity, not);
+					// Inserts a row in the UI
+					addNotification(not);
+				}
+			}
+		});
+
 		return theView;
+	}
+
+	/**
+	 * Inserts a notification item in the UI
+	 * 
+	 * @param not
+	 */
+	private void addNotification(final NotificationHelper.NoteNotification not) {
+		if (activity != null) {
+			Log.d(TAG, "Adding listeners for " + not.id);
+
+			View nv = LayoutInflater.from(activity).inflate(
+					R.layout.notification_view, null);
+			// Set date
+			String notDate = not.getLocalDate();
+			((Button) nv.findViewById(R.id.notificationDate)).setText(notDate);
+
+			String notTime = not.getLocalTime();
+			((Button) nv.findViewById(R.id.notificationTime)).setText(notTime);
+
+			// Remove button
+			nv.findViewById(R.id.notificationRemove).setOnClickListener(
+					new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// Remove row from UI
+							notificationListLayout.removeView((View) v
+									.getParent());
+							// Remove from database and renotify
+							NotificationHelper
+									.deleteNotification(activity, not.id);
+						}
+					});
+
+			// Date button
+			nv.findViewById(R.id.notificationDate).setOnClickListener(
+					new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							FragmentTransaction ft = getFragmentManager()
+									.beginTransaction();
+							Fragment prev = getFragmentManager()
+									.findFragmentByTag("notificationdatedialog");
+							if (prev != null) {
+								ft.remove(prev);
+							}
+							ft.addToBackStack(null);
+
+							// Create and show the dialog.
+							TimePickerDialogFragment newFragment = new TimePickerDialogFragment();
+							Bundle args = new Bundle();
+							args.putBoolean(
+									TimePickerDialogFragment.KEY_DATEPICKER,
+									true);
+							newFragment.setArguments(args);
+							newFragment.setCallbacks((Button) v, not);
+							newFragment.show(ft, "notificationdatedialog");
+						}
+					});
+
+			// Time button
+			nv.findViewById(R.id.notificationTime).setOnClickListener(
+					new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							FragmentTransaction ft = getFragmentManager()
+									.beginTransaction();
+							Fragment prev = getFragmentManager()
+									.findFragmentByTag("notificationtimedialog");
+							if (prev != null) {
+								ft.remove(prev);
+							}
+							ft.addToBackStack(null);
+
+							// Create and show the dialog.
+							TimePickerDialogFragment newFragment = new TimePickerDialogFragment();
+							Bundle args = new Bundle();
+							args.putBoolean(
+									TimePickerDialogFragment.KEY_DATEPICKER,
+									false);
+							newFragment.setArguments(args);
+							newFragment.setCallbacks((Button) v, not);
+							newFragment.show(ft, "notificationtimedialog");
+						}
+					});
+
+			notificationListLayout.addView(nv);
+		}
 	}
 
 	protected void moveToList(long newListId) {
@@ -1104,7 +1237,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				dueDateSet = true;
 				Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 				c.setTimeInMillis(noteDueDate.toMillis(false));
-				
+
 				// Set these for the dialog to be set correctly
 				this.year = c.get(Calendar.YEAR);
 				this.month = c.get(Calendar.MONTH);
@@ -1309,6 +1442,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					NotePad.Lists.CONTENT_VISIBLE_URI, new String[] {
 							BaseColumns._ID, NotePad.Lists.COLUMN_NAME_TITLE },
 					null, null, NotePad.Lists.SORT_ORDER);
+		else if (LOADER_NOTIFICATIONS_ID == id)
+			return new CursorLoader(activity,
+					NotePad.Notifications.CONTENT_JOINED_URI,
+					NotificationHelper.PROJECTION,
+					NotePad.Notifications.COLUMN_NAME_NOTEID + " IS ?",
+					new String[] { Long.toString(this.id) },
+					NotePad.Notifications.COLUMN_NAME_TIME);
 		else
 			return new CursorLoader(activity, mUri, PROJECTION, null, null,
 					null);
@@ -1320,6 +1460,15 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			listAdapter.swapCursor(data);
 			if (listId > -1)
 				listSpinner.setSelection(getPosOfId(listAdapter, listId));
+		} else if (LOADER_NOTIFICATIONS_ID == loader.getId()) {
+			if (data != null && !data.isClosed() && !data.isAfterLast()) {
+				while (data.moveToNext()) {
+					addNotification(new NotificationHelper.NoteNotification(
+							activity, data));
+				}
+			}
+			// Do not need updates on this
+			getLoaderManager().destroyLoader(LOADER_NOTIFICATIONS_ID);
 		} else {
 			showNote(data);
 			// We do NOT want updates on this URI

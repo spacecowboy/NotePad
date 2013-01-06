@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2012 Jonas Kalderstam
+     Copyright (C) 2013 Jonas Kalderstam
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -15,12 +15,7 @@
      limitations under the License.
 -->
 <resources>
-
-    <integer name="leftFragmentWeight">3</integer>
-    <integer name="rightFragmentWeight">7</integer>
-    <!-- Both fragments will be visible at all times -->
-    <integer name="fragmentWeightSum">10</integer>
-    <bool name="tabletLayout">true</bool>
-    <bool name="leftHideable">false</bool>
-
+    <!-- Editor fragment stuff -->
+    <dimen name="editor_side_margin">16dp</dimen>
+    
 </resources>
