@@ -52,7 +52,7 @@ public class SyncPrefs extends PreferenceFragment implements
 
 	public static final String KEY_SYNC_ENABLE = "syncEnablePref";
 	public static final String KEY_ACCOUNT = "accountPref";
-	//public static final String KEY_SYNC_FREQ = "syncFreq";
+	// public static final String KEY_SYNC_FREQ = "syncFreq";
 	public static final String KEY_FULLSYNC = "syncFull";
 	public static final String KEY_SYNC_ON_START = "syncOnStart";
 	public static final String KEY_SYNC_ON_CHANGE = "syncOnChange";
@@ -61,7 +61,8 @@ public class SyncPrefs extends PreferenceFragment implements
 	private Activity activity;
 
 	private Preference prefAccount;
-	//private Preference prefSyncFreq;
+
+	// private Preference prefSyncFreq;
 
 	@Override
 	public void onAttach(Activity activity) {
@@ -77,7 +78,7 @@ public class SyncPrefs extends PreferenceFragment implements
 		addPreferencesFromResource(R.xml.app_pref_sync);
 
 		prefAccount = findPreference(KEY_ACCOUNT);
-		//prefSyncFreq = findPreference(KEY_SYNC_FREQ);
+		// prefSyncFreq = findPreference(KEY_SYNC_FREQ);
 
 		SharedPreferences sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(activity);
@@ -167,40 +168,43 @@ public class SyncPrefs extends PreferenceFragment implements
 	public static void setSyncInterval(Context activity,
 			SharedPreferences sharedPreferences) {
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
-		boolean backgroundSync = sharedPreferences.getBoolean(KEY_BACKGROUND_SYNC, true);
-		
-		if (accountName == "" || !backgroundSync) {
-			// Disable periodic syncing
-			ContentResolver.removePeriodicSync(
-					getAccount(AccountManager.get(activity), accountName),
-					NotePad.AUTHORITY, new Bundle());
-		} else {
-			// Convert from minutes to seconds
-			long pollFrequency = 3600;
-			// Set periodic syncing
-			ContentResolver.addPeriodicSync(
-					getAccount(AccountManager.get(activity), accountName),
-					NotePad.AUTHORITY, new Bundle(), pollFrequency);
+		boolean backgroundSync = sharedPreferences.getBoolean(
+				KEY_BACKGROUND_SYNC, true);
+
+		if (accountName != null && !accountName.isEmpty()) {
+			if (!backgroundSync) {
+				// Disable periodic syncing
+				ContentResolver.removePeriodicSync(
+						getAccount(AccountManager.get(activity), accountName),
+						NotePad.AUTHORITY, new Bundle());
+			} else {
+				// Convert from minutes to seconds
+				long pollFrequency = 3600;
+				// Set periodic syncing
+				ContentResolver.addPeriodicSync(
+						getAccount(AccountManager.get(activity), accountName),
+						NotePad.AUTHORITY, new Bundle(), pollFrequency);
+			}
 		}
 	}
 
 	private void toggleSync(SharedPreferences sharedPreferences) {
 		boolean enabled = sharedPreferences.getBoolean(KEY_SYNC_ENABLE, false);
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
-		if (accountName.equals("")) {
-			// do nothing yet
-		} else if (enabled) {
-			// set syncable
-			ContentResolver.setIsSyncable(
-					getAccount(AccountManager.get(activity), accountName),
-					NotePad.AUTHORITY, 1);
-			// Also set sync frequency
-			setSyncInterval(activity, sharedPreferences);
-		} else {
-			// set unsyncable
-			ContentResolver.setIsSyncable(
-					getAccount(AccountManager.get(activity), accountName),
-					NotePad.AUTHORITY, 0);
+		if (accountName != null && !accountName.isEmpty()) {
+			if (enabled) {
+				// set syncable
+				ContentResolver.setIsSyncable(
+						getAccount(AccountManager.get(activity), accountName),
+						NotePad.AUTHORITY, 1);
+				// Also set sync frequency
+				setSyncInterval(activity, sharedPreferences);
+			} else {
+				// set unsyncable
+				ContentResolver.setIsSyncable(
+						getAccount(AccountManager.get(activity), accountName),
+						NotePad.AUTHORITY, 0);
+			}
 		}
 	}
 
