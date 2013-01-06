@@ -62,6 +62,7 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
 import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.notepad.NotesListFragment.Callbacks;
@@ -154,6 +155,9 @@ public class MainActivity extends DualLayoutActivity implements
 				&& syncOnStart) {
 			requestSync(accountName);
 		}
+		
+		// Schedule notifications if needed
+		NotificationHelper.schedule(this);
 	}
 
 	private void leftOrTabletCreate(Bundle savedInstanceState) {

@@ -65,14 +65,14 @@ public class NotePadProvider extends ContentProvider implements
 		PipeDataWriter<Cursor> {
 
 	// Used for debugging and logging
-	private static final String TAG = "NotePadProvider";
+	private static final String TAG = "NoNonsenseNotes.NotePadProvider";
 
 	/**
 	 * The database that the provider uses as its underlying data store
 	 */
 	private static final String DATABASE_NAME = "note_pad.db";
 
-	private static final int DATABASE_VERSION = 6;
+	private static final int DATABASE_VERSION = 7;
 
 	/**
 	 * A projection map used to select columns from the database
@@ -90,6 +90,9 @@ public class NotePadProvider extends ContentProvider implements
 
 	private static HashMap<String, String> sJoinedNotesProjectionMap;
 	private static HashMap<String, String> sJoinedListsProjectionMap;
+
+	private static HashMap<String, String> sNotificationsProjectionMap;
+	private static HashMap<String, String> sJoinedNotificationProjectionMap;
 
 	/**
 	 * Standard projection for the interesting columns of a normal note.
@@ -132,6 +135,12 @@ public class NotePadProvider extends ContentProvider implements
 	// For joined queries
 	private static final int JOINED_NOTES = 13;
 	private static final int JOINED_LISTS = 14;
+
+	// Notifications
+	private static final int NOTIFICATIONS = 15;
+	private static final int NOTIFICATION_ID = 16;
+	private static final int NOTIFICATION_LISTID = 17;
+	private static final int JOINED_NOTIFICATIONS = 18;
 
 	// private static final int SEARCH = 4;
 
@@ -183,6 +192,17 @@ public class NotePadProvider extends ContentProvider implements
 		// Joined queries
 		sUriMatcher.addURI(NotePad.AUTHORITY, "joinedlists", JOINED_LISTS);
 		sUriMatcher.addURI(NotePad.AUTHORITY, "joinednotes", JOINED_NOTES);
+
+		// Notifications
+		sUriMatcher.addURI(NotePad.AUTHORITY, "notification", NOTIFICATIONS);
+		sUriMatcher
+				.addURI(NotePad.AUTHORITY, "notification/#", NOTIFICATION_ID);
+
+		sUriMatcher.addURI(NotePad.AUTHORITY, "joinednotifications",
+				JOINED_NOTIFICATIONS);
+
+		sUriMatcher.addURI(NotePad.AUTHORITY, "notificationlists/#",
+				NOTIFICATION_LISTID);
 
 		/*
 		 * Creates and initializes a projection map that returns all columns
@@ -302,6 +322,18 @@ public class NotePadProvider extends ContentProvider implements
 		sGTaskListsProjectionMap.put(NotePad.GTaskLists.COLUMN_NAME_UPDATED,
 				NotePad.GTaskLists.COLUMN_NAME_UPDATED);
 
+		// Notifications
+		sNotificationsProjectionMap = new HashMap<String, String>();
+		sNotificationsProjectionMap.put(BaseColumns._ID, BaseColumns._ID);
+		sNotificationsProjectionMap.put(NotePad.Notifications.COLUMN_NAME_TIME,
+				NotePad.Notifications.COLUMN_NAME_TIME);
+		sNotificationsProjectionMap.put(
+				NotePad.Notifications.COLUMN_NAME_PERMANENT,
+				NotePad.Notifications.COLUMN_NAME_PERMANENT);
+		sNotificationsProjectionMap.put(
+				NotePad.Notifications.COLUMN_NAME_NOTEID,
+				NotePad.Notifications.COLUMN_NAME_NOTEID);
+
 		// Joined projection maps
 		// Prepend the table name here
 		// Order is important since _ID column is the same
@@ -330,6 +362,33 @@ public class NotePadProvider extends ContentProvider implements
 			sJoinedListsProjectionMap.put(listsEntry.getKey(),
 					NotePad.Lists.TABLE_NAME + "." + listsEntry.getValue());
 		}
+
+		sJoinedNotificationProjectionMap = new HashMap<String, String>();
+		// Order is important, make sure notification values overwite notes
+		// values where they are the same.
+		for (Entry<String, String> notesEntry : sNotesProjectionMap.entrySet()) {
+			sJoinedNotificationProjectionMap.put(notesEntry.getKey(),
+					NotePad.Notes.TABLE_NAME + "." + notesEntry.getValue());
+		}
+		for (Entry<String, String> notificationEntry : sNotificationsProjectionMap
+				.entrySet()) {
+			sJoinedNotificationProjectionMap.put(
+					notificationEntry.getKey(),
+					NotePad.Notifications.TABLE_NAME + "."
+							+ notificationEntry.getValue());
+		}
+		// TODO
+		// Also add special list column
+		sJoinedNotificationProjectionMap.put(
+				NotePad.Notifications.JOINED_COLUMN_LIST_TITLE,
+				NotePad.Notifications.JOINED_COLUMN_LIST_TITLE);
+		/*
+		 * for (Entry<String, String> listEntry :
+		 * sListsProjectionMap.entrySet()) {
+		 * sJoinedNotificationProjectionMap.put(NotePad.Lists.TABLE_NAME + "." +
+		 * listEntry.getKey(), NotePad.Lists.TABLE_NAME + "." +
+		 * listEntry.getValue()); }
+		 */
 
 	}
 
@@ -398,6 +457,9 @@ public class NotePadProvider extends ContentProvider implements
 			Log.d("DataBaseHelper", "created defautlist");
 			insertDefaultNote(db, listId);
 			Log.d("DataBaseHelper", "created defaultnote");
+
+			createNotificationsTable(db);
+			Log.d("DataBaseHelper", "created notifications table");
 		}
 
 		private long insertDefaultList(SQLiteDatabase db) {
@@ -509,6 +571,35 @@ public class NotePadProvider extends ContentProvider implements
 					+ " INTEGER NOT NULL,"
 					+ NotePad.GTaskLists.COLUMN_NAME_UPDATED + " TEXT,"
 					+ NotePad.GTaskLists.COLUMN_NAME_ETAG + " TEXT" + ");");
+		}
+
+		private void createNotificationsTable(SQLiteDatabase db) {
+			db.execSQL("CREATE TABLE " + NotePad.Notifications.TABLE_NAME
+					+ " (" + NotePad.Notifications._ID
+					+ " INTEGER PRIMARY KEY,"
+					+ NotePad.Notifications.COLUMN_NAME_TIME
+					+ " INTEGER NOT NULL DEFAULT 0,"
+					+ NotePad.Notifications.COLUMN_NAME_PERMANENT
+					+ " INTEGER NOT NULL DEFAULT 0,"
+					+ NotePad.Notifications.COLUMN_NAME_NOTEID + " INTEGER,"
+					+ "FOREIGN KEY(" + NotePad.Notifications.COLUMN_NAME_NOTEID
+					+ ") REFERENCES " + NotePad.Notes.TABLE_NAME + "("
+					+ NotePad.Notes._ID + ") ON DELETE CASCADE" + ");");
+		}
+
+		private void createNotificationTriggers(SQLiteDatabase db) {
+			/*
+			 * CREATE TRIGGER post_note_markdelete AFTER UPDATE ON notes WHEN
+			 * new.deleted = 1 BEGIN DELETE FROM notification WHERE
+			 * notification.noteid = new._id; END;
+			 */
+			db.execSQL("CREATE TRIGGER post_note_markdelete AFTER UPDATE ON "
+					+ NotePad.Notes.TABLE_NAME + " WHEN new."
+					+ NotePad.Notes.COLUMN_NAME_DELETED + " = 1" + " BEGIN"
+					+ "   DELETE FROM " + NotePad.Notifications.TABLE_NAME
+					+ "   WHERE " + NotePad.Notifications.TABLE_NAME + "."
+					+ NotePad.Notifications.COLUMN_NAME_NOTEID + "   = "
+					+ "new." + NotePad.Notes._ID + ";" + " END");
 		}
 
 		@Override
@@ -648,6 +739,10 @@ public class NotePadProvider extends ContentProvider implements
 				ContentValues values = new ContentValues();
 				values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
 				db.update(NotePad.Notes.TABLE_NAME, values, null, null);
+			}
+			if (oldVersion < 7) {
+				createNotificationsTable(db);
+				createNotificationTriggers(db);
 			}
 		}
 
@@ -833,6 +928,33 @@ public class NotePadProvider extends ContentProvider implements
 			qb.setTables(NotePad.GTaskLists.TABLE_NAME);
 			qb.setProjectionMap(sGTaskListsProjectionMap);
 			break;
+		case NOTIFICATION_ID:
+			qb.appendWhere(BaseColumns._ID + // the name of the ID column
+					"=" +
+					// the position of the note ID itself in the incoming URI
+					uri.getPathSegments().get(
+							NotePad.Notifications.ID_PATH_POSITION));
+		case NOTIFICATIONS:
+			qb.setTables(NotePad.Notifications.TABLE_NAME);
+			qb.setProjectionMap(sNotificationsProjectionMap);
+			break;
+		case JOINED_NOTIFICATIONS:
+			/*
+			 * Notifications join Notes join Lists User must use fully names
+			 * (table.column)
+			 */
+			// TODO
+			qb.setTables(NotePad.Notifications.TABLE_NAME + " LEFT OUTER JOIN "
+					+ NotePad.Notes.TABLE_NAME + " ON "
+					+ NotePad.Notifications.TABLE_NAME + "."
+					+ NotePad.Notifications.COLUMN_NAME_NOTEID + " = "
+					+ NotePad.Notes.TABLE_NAME + "." + NotePad.Notes._ID + ""
+					+ " LEFT OUTER JOIN " + NotePad.Lists.TABLE_NAME + " ON "
+					+ NotePad.Notes.TABLE_NAME + "."
+					+ NotePad.Notes.COLUMN_NAME_LIST + " = "
+					+ NotePad.Lists.TABLE_NAME + "." + NotePad.Lists._ID + "");
+			qb.setProjectionMap(sJoinedNotificationProjectionMap);
+			break;
 		default:
 			// If the URI doesn't match any of the known patterns, throw an
 			// exception.
@@ -918,6 +1040,10 @@ public class NotePadProvider extends ContentProvider implements
 			return NotePad.GTaskLists.CONTENT_TYPE;
 		case GTASKLISTS_ID:
 			return NotePad.GTaskLists.CONTENT_ITEM_TYPE;
+		case NOTIFICATIONS:
+			return NotePad.Notifications.CONTENT_TYPE;
+		case NOTIFICATION_ID:
+			return NotePad.Notifications.CONTENT_ITEM_TYPE;
 
 			// If the URI pattern doesn't match any permitted patterns, throws
 			// an exception.
@@ -1109,6 +1235,8 @@ public class NotePadProvider extends ContentProvider implements
 			return insertGTask(uri, initialValues);
 		case GTASKLISTS:
 			return insertGTaskList(uri, initialValues);
+		case NOTIFICATIONS:
+			return insertNotification(uri, initialValues);
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
 		}
@@ -1510,6 +1638,61 @@ public class NotePadProvider extends ContentProvider implements
 		throw new SQLException("Failed to insert row into " + uri);
 	}
 
+	synchronized private Uri insertNotification(Uri uri,
+			ContentValues initialValues) {
+
+		Log.d(TAG, "insertNotification");
+		// A map to hold the new record's values.
+		ContentValues values;
+
+		// If the incoming values map is not null, uses it for the new values.
+		if (initialValues != null) {
+			values = new ContentValues(initialValues);
+
+		} else {
+			// Otherwise, create a new value map
+			values = new ContentValues();
+		}
+
+		// Opens the database object in "write" mode.
+		SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+
+		// Performs the insert and returns the ID of the new note.
+		long rowId = db.insert(NotePad.Notifications.TABLE_NAME, // The table to
+																	// insert
+				// into.
+				NotePad.Notifications.COLUMN_NAME_NOTEID, // A hack, SQLite sets
+															// this
+				// column value to null
+				// if values is empty.
+				values // A map of column names, and the values to insert
+						// into the columns.
+				);
+
+		// If the insert succeeded, the row ID exists.
+		if (rowId > 0) {
+			// Creates a URI with the note ID pattern and the new row ID
+			// appended to it.
+			Uri noteUri = ContentUris.withAppendedId(
+					NotePad.Notifications.CONTENT_ID_URI_BASE, rowId);
+
+			// Notifies observers registered against this provider that the data
+			// changed.
+			// getContext().getContentResolver()
+			// .notifyChange(noteUri, null, false);
+			// // Also tell lists watching the other URI
+			// getContext().getContentResolver().notifyChange(
+			// NotePad.Notes.CONTENT_VISIBLE_URI, null, false);
+			// // And update widgets
+			// updateAllWidgets();
+			return noteUri;
+		}
+
+		// If the insert didn't succeed, then the rowID is <= 0. Throws an
+		// exception.
+		throw new SQLException("Failed to insert row into " + uri);
+	}
+
 	/**
 	 * Calls deleteListFromDb on all ids fetched from cursor.
 	 * 
@@ -1806,6 +1989,65 @@ public class NotePadProvider extends ContentProvider implements
 
 			// Performs the delete.
 			count = db.delete(NotePad.GTaskLists.TABLE_NAME, // The database
+																// table
+					// name.
+					finalWhere, // The final WHERE clause
+					whereArgs // The incoming where clause values.
+					);
+			break;
+		case NOTIFICATIONS:
+			Log.d(TAG, "Deleting notifications: " + where);
+			count = db.delete(NotePad.Notifications.TABLE_NAME, // The database
+					// table
+					// name
+					where, // The incoming where clause column names
+					whereArgs // The incoming where clause values
+					);
+			break;
+		case NOTIFICATION_ID:
+			finalWhere = BaseColumns._ID + // The ID column name
+					" = " + // test for equality
+					uri.getPathSegments(). // the incoming note ID
+							get(NotePad.Notifications.ID_PATH_POSITION);
+
+			if (where != null) {
+				finalWhere = finalWhere + " AND " + where;
+			}
+
+			Log.d(TAG, "Deleting notification: " + finalWhere);
+
+			// Performs the delete.
+			count = db.delete(NotePad.Notifications.TABLE_NAME, // The database
+																// table
+					// name.
+					finalWhere, // The final WHERE clause
+					whereArgs // The incoming where clause values.
+					);
+			break;
+		case NOTIFICATION_LISTID:
+			/*
+			 * WHERE notif.noteid IN (SELECT _id FROM notes WHERE list = ?)
+			 */
+			finalWhere = NotePad.Notifications.COLUMN_NAME_NOTEID
+					+ " IN ("
+					+ "SELECT "
+					+ NotePad.Notes._ID
+					+ " FROM "
+					+ NotePad.Notes.TABLE_NAME
+					+ " WHERE "
+					+ NotePad.Notes.COLUMN_NAME_LIST
+					+ " = "
+					+ uri.getPathSegments().get(
+							NotePad.Notifications.ID_PATH_POSITION) + ")";
+
+			if (where != null) {
+				finalWhere = finalWhere + " AND " + where;
+			}
+
+			Log.d(TAG, "Deleting notifications in list: " + finalWhere);
+
+			// Performs the delete.
+			count = db.delete(NotePad.Notifications.TABLE_NAME, // The database
 																// table
 					// name.
 					finalWhere, // The final WHERE clause
@@ -2109,6 +2351,43 @@ public class NotePadProvider extends ContentProvider implements
 
 			// Does the update and returns the number of rows updated.
 			count = db.update(NotePad.GTaskLists.TABLE_NAME, // The database
+																// table
+					// name.
+					values, // A map of column names and new values to use.
+					finalWhere, // The final WHERE clause to use
+								// placeholders for whereArgs
+					whereArgs // The where clause column values to select on, or
+								// null if the values are in the where argument.
+					);
+			break;
+		case NOTIFICATIONS:
+			Log.d(TAG, "Notifications");
+			Log.d(TAG, "Final Where: " + where);
+
+			// Does the update and returns the number of rows updated.
+			count = db.update(NotePad.Notifications.TABLE_NAME, // The database
+																// table
+					// name.
+					values, // A map of column names and new values to use.
+					where, // The where clause column names.
+					whereArgs // The where clause column values to select on.
+					);
+			break;
+		case NOTIFICATION_ID:
+			Log.d(TAG, "Notification_ID");
+			finalWhere = BaseColumns._ID + // The ID column name
+					" = " + // test for equality
+					uri.getPathSegments(). // the incoming note ID
+							get(NotePad.Notifications.ID_PATH_POSITION);
+
+			if (where != null) {
+				finalWhere = finalWhere + " AND " + where;
+			}
+
+			Log.d(TAG, "Final Where: " + finalWhere);
+
+			// Does the update and returns the number of rows updated.
+			count = db.update(NotePad.Notifications.TABLE_NAME, // The database
 																// table
 					// name.
 					values, // A map of column names and new values to use.

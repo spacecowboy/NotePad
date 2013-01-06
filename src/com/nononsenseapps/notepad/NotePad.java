@@ -222,7 +222,8 @@ public final class NotePad {
 		public static final String DESCENDING_SORT_ORDERING = "DESC";
 		public static final String ALPHABETIC_ASC_ORDER = COLUMN_NAME_TITLE
 				+ " COLLATE NOCASE ASC";
-		//public static final String POSITION_ASC_ORDER = COLUMN_NAME_POSITION+ " ASC";
+		// public static final String POSITION_ASC_ORDER = COLUMN_NAME_POSITION+
+		// " ASC";
 
 		public static final String DEFAULT_SORT_TYPE = POSSUBSORT_SORT_TYPE;
 		public static final String DEFAULT_SORT_ORDERING = ASCENDING_SORT_ORDERING;
@@ -603,5 +604,106 @@ public final class NotePad {
 		 * </P>
 		 */
 		public static final String COLUMN_NAME_UPDATED = "updated";
+	}
+
+	/**
+	 * Notifications table contract
+	 */
+	public static final class Notifications implements BaseColumns {
+
+		// This class cannot be instantiated
+		private Notifications() {
+		}
+
+		/**
+		 * The table name offered by this provider
+		 */
+		public static final String TABLE_NAME = "notification";
+		public static final String KEY_WORD = SearchManager.SUGGEST_COLUMN_TEXT_1;
+
+		/*
+		 * Column definitions
+		 */
+		public static final String COLUMN_NAME_TIME = "time";
+		public static final String COLUMN_NAME_PERMANENT = "permanent";
+		public static final String COLUMN_NAME_NOTEID = "noteid";
+
+		public static final String JOINED_COLUMN_LIST_TITLE = NotePad.Lists.TABLE_NAME
+				+ "." + NotePad.Lists.COLUMN_NAME_TITLE;
+
+		/*
+		 * URI definitions
+		 */
+
+		/**
+		 * The scheme part for this provider's URI
+		 */
+		private static final String SCHEME = "content://";
+
+		/**
+		 * Path parts for the URIs
+		 */
+
+		/**
+		 * Path part for the Lists URI
+		 */
+		private static final String PATH = "/" + TABLE_NAME;
+
+		/**
+		 * Path part for the List ID URI
+		 */
+		private static final String PATH_ID = PATH + "/";
+
+		/**
+		 * 0-relative position of a note ID segment in the path part of a note
+		 * ID URI
+		 */
+		public static final int ID_PATH_POSITION = 1;
+
+		private static final String PATH_JOINED_NOTIFICATIONS = "/joinednotifications";
+		public static final String PATH_NOTIFICATIONS_LISTID = "/notificationlists";
+		private static final String PATH_NOTIFICATIONS_LISTID_BASE = PATH_NOTIFICATIONS_LISTID + "/";
+		/**
+		 * The content:// style URL for this table
+		 */
+		public static final Uri CONTENT_URI = Uri.parse(SCHEME + AUTHORITY
+				+ PATH);
+
+		public static final Uri CONTENT_JOINED_URI = Uri.parse(SCHEME
+				+ AUTHORITY + PATH_JOINED_NOTIFICATIONS);
+
+		public static final Uri CONTENT_LISTID_URI_BASE = Uri.parse(SCHEME
+				+ AUTHORITY + PATH_NOTIFICATIONS_LISTID);
+
+		/**
+		 * The content URI base for a single note. Callers must append a numeric
+		 * note id to this Uri to retrieve a note
+		 */
+		public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME
+				+ AUTHORITY + PATH_ID);
+
+		/**
+		 * The content URI match pattern for a single note, specified by its ID.
+		 * Use this to match incoming URIs or to construct an Intent.
+		 */
+		public static final Uri CONTENT_ID_URI_PATTERN = Uri.parse(SCHEME
+				+ AUTHORITY + PATH_ID + "/#");
+
+		/*
+		 * MIME type definitions
+		 */
+
+		/**
+		 * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
+		 */
+		public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps."
+				+ TABLE_NAME;
+
+		/**
+		 * The MIME type of a {@link #CONTENT_URI} sub-directory of a single
+		 * note.
+		 */
+		public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps."
+				+ TABLE_NAME;
 	}
 }

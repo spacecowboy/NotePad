@@ -225,4 +225,17 @@ Use few if language need it. In English is the same.
 <string name="sync_full_force">Tvinga full synk nästa gång</string>
 <string name="sync_full_force_info">Markera denna endast om du tror att synken missar några anteckingar.</string>
 
+<string name="silent">Tyst</string>
+<string name="sound">Ljud</string>
+<string name="vibrate">Vibrera</string>
+<string name="reminders">Påminnelser</string>
+<string name="add_reminder">Ny påminnelse</string>
+<string name="standard">Standard</string>
+<string name="notification_prio_high">Hög: Högst upp, expanderad</string>
+<string name="notification_prio_low">Låg: Gömd, minimerad</string>
+<string name="priority">Prioritet</string>
+<string name="group_on_list">Gruppera om listan är samma</string>
+<string name="group_on_list_summary">Flera påminnelser visas tillsammans som en om de hör till samma lista.</string>
+<string name="more">fler</string>
+<string name="notifications">Påminnelser</string>
 </resources>
