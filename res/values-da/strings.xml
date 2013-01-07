@@ -231,4 +231,17 @@ Use few if language need it. In English is the same.
 <string name="sync_full_force">Tving fuld synkronisering næste gang</string>
 <string name="sync_full_force_info">Marker kun dette felt, hvis du tror, ​​synkroniseringen mangler nogle elementer.</string>
 
+<string name="silent">Stille</string>
+<string name="sound">Lyd</string>
+<string name="vibrate">Vibration</string>
+<string name="reminders">Påmindelser</string>
+<string name="add_reminder">Tilføj påmindelse</string>
+<string name="standard">Standard</string>
+<string name="notification_prio_high">Høj: Øverst, udvidet</string>
+<string name="notification_prio_low">Lav: Skjult, minimeret</string>
+<string name="priority">Prioritet</string>
+<string name="group_on_list">Grupper ved liste</string>
+<string name="group_on_list_summary">Flere notifikationer vil blive grupperet sammen, hvis de tilhører den samme liste.</string>
+<string name="more">mere</string>
+<string name="notifications">Notifikationer</string>
 </resources>
