@@ -2,6 +2,8 @@ package com.nononsenseapps.notepad.prefs;
 
 import com.nononsenseapps.notepad_donate.R;
 
+import android.app.Activity;
+import android.content.Context;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -49,15 +51,19 @@ public class NotificationPrefs extends PreferenceFragment {
 		});
 
 		final Preference ringtoneChooser = findPreference(getString(R.string.key_pref_ringtone));
-		// Set current ringtone as summary
-		setRingtoneSummary(
-				ringtoneChooser,
-				PreferenceManager.getDefaultSharedPreferences(getActivity())
-						.getString(
-								getString(R.string.key_pref_ringtone),
-								RingtoneManager.getDefaultUri(
-										RingtoneManager.TYPE_NOTIFICATION)
-										.toString()));
+
+		final Context context = getActivity();
+		if (context != null) {
+			// Set current ringtone as summary
+			setRingtoneSummary(
+					ringtoneChooser,
+					PreferenceManager.getDefaultSharedPreferences(context)
+							.getString(
+									getString(R.string.key_pref_ringtone),
+									RingtoneManager.getDefaultUri(
+											RingtoneManager.TYPE_NOTIFICATION)
+											.toString()));
+		}
 
 		// Change summary on preference change
 		ringtoneChooser
@@ -77,14 +83,20 @@ public class NotificationPrefs extends PreferenceFragment {
 
 	private void setRingtoneSummary(final Preference pref,
 			final String stringUri) {
+		final Context context = getActivity();
+
 		if (stringUri == null || stringUri.isEmpty()) {
 			// Silent is an empty string
 			pref.setSummary(R.string.silent);
-		} else {
+		} else if (context != null) {
+			// Got crash report, activity seemed to be null. Guard against it.
 			Uri ringtoneUri = Uri.parse(stringUri);
-			Ringtone ringtone = RingtoneManager.getRingtone(getActivity(),
-					ringtoneUri);
-			pref.setSummary(ringtone.getTitle(getActivity()));
+			if (ringtoneUri != null) {
+				Ringtone ringtone = RingtoneManager.getRingtone(context,
+						ringtoneUri);
+				if (ringtone != null)
+					pref.setSummary(ringtone.getTitle(context));
+			}
 		}
 	}
 }

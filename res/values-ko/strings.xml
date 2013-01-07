@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2012 Jonas Kalderstam
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+<string name="app_name">노트</string>
+<string name="title_create">새 노트</string>
+<string name="title_edit">편집: %1$s</string>
+<string name="menu_add">새 노트</string>
+<string name="menu_delete">지우기</string>
+<string name="menu_revert">되돌리기</string>
+<string name="menu_copy">노트 복사</string>
+<string name="menu_cancel">취소</string>
+<string name="menu_setcompleted">완료 표시</string>
+<string name="menu_setuncompleted">미완료 표시</string>
+<string name="menu_deletelist">목록 지우기</string>
+<string name="menu_sync">새로고침</string>
+<string name="menu_share">공유</string>
+<string name="menu_preferences">설정</string>
+<string name="menu_renamelist">목록 이름 바꾸기</string>
+<string name="menu_createlist">목록 만들기</string>
+<string name="menu_clearcompleted">완료된 노트 지우기</string>
+<string name="menu_setdefaultlist">기본 목록으로 설정</string>
+<string name="menu_managelists">목록 관리</string>
+<string name="delete_list_warning">목록을 지울까요? 되돌릴 수 없습니다.</string>
+<string name="editor_due_date_hint">목표 날짜</string>
+<string name="editor_title_hint">제목</string>
+<string name="editor_note_hint">노트</string>
+<string name="resolve_edit">노트 고치기</string>
+<string name="error_title">오류</string>
+<string name="error_message">노트 읽기 오류</string>
+<string name="search_hint">찾기</string>
+<string name="settings_theme">현재 테마</string>
+<string name="settings_theme_dialog">테마 사용하기</string>
+<string name="settings_lang">언어</string>
+<string name="settings_cat_theme">테마</string>
+<string name="settings_cat_sorting">정렬</string>
+<string name="settings_sorting_type">정렬 방법</string>
+<string name="settings_sorting_type_dialog">정렬하기</string>
+<string name="settings_sorting_order">순서</string>
+<string name="settings_sorting_order_dialog">순서 방법</string>
+<string name="settings_summary_sort_type_alphabetic">제목</string>
+<string name="settings_summary_sort_type_modified">나중에 고침</string>
+<string name="settings_summary_sort_type_duedate">목표 날짜</string>
+<string name="settings_summary_sort_type_serverposition">내 순서</string>
+<string name="settings_summary_sort_order_asc">오름차순</string>
+<string name="settings_summary_sort_order_desc">내림차순</string>
+<string name="settings_summary_theme_black">검정</string>
+<string name="settings_summary_theme_dark">어두움</string>
+<string name="settings_summary_theme_light">밝음</string>
+<string name="settings_summary_theme_light_dark_ab">밝고, 어두운 액션 바</string>
+<string name="settings_cat_appearance">모양</string>
+<string name="settings_font_screen">글꼴 설정</string>
+<string name="settings_font_screen_summary">글꼴 모양과 크기를 바꿀 수 있음</string>
+<string name="settings_cat_font_editor">편집기</string>
+<string name="settings_font_type">글꼴</string>
+<string name="settings_font_type_dialog">글꼴 선택</string>
+<string name="settings_font_size">글꼴 크기</string>
+<string name="preference_preview_text">편집기 글꼴이 이렇게 보입니다</string>
+<string name="settings_text_preview_title">미리 보기</string>
+<string name="monospace">고정폭</string>
+<string name="sans">돋움</string>
+<string name="serif">바탕</string>
+<string name="settings_sync_freq_title">동기화 방법</string>
+<string name="settings_account_title">계정 선택</string>
+<string name="settings_account_summary">계정 바꾸기</string>
+<string name="settings_sync_enable_title">Google Task 동기화</string>
+<string name="settings_sync_enable_summary">노트를 Google 계정과 동기화</string>
+<string name="settings_cat_syncing">동기화</string>
+<string name="manual">수동</string>
+<string name="minutes">분</string>
+<string name="hours">시간</string>
+<string name="onehour">1시간</string>
+<string name="oneday">하루</string>
+<string name="yes">예</string>
+<string name="no">아니요</string>
+<string name="ok">확인</string>
+<string name="show_from_all_lists">모든 목록</string>
+<string name="default_list_needed_warning">기본 목록을 먼저 정해야 합니다</string>
+<string name="reverted">되돌리기</string>
+<string name="notecopied">복사됨</string>
+<string name="deleted">삭제됨</string>
+<string name="items">노트</string>
+<string name="permission_read_label">노트와 목록을 읽기</string>
+<string name="permission_read_desc">애플리케이션이 사용자의 노트와 목록을 읽게 합니다.</string>
+<string name="permission_write_label">노트와 목록을 수정</string>
+<string name="permission_write_desc">애플리케이션이 노트와 목록을 추가, 수정, 삭제하게 합니다.</string>
+<string name="settings_header_list">목록 설정</string>
+<string name="settings_list_dialog">목록 선택</string>
+<string name="settings_list">목록</string>
+<string name="automatic">자동</string>
+<string name="preferences_week_start_day_dialog">한 주의 시작</string>
+<string name="preferences_week_start_day_title">한 주의 시작</string>
+<string name="preferences_week_start_day_default">-1</string>
+<!--
+Use few if language need it. In English is the same.
+<item quantity="few">Copied 2 notes.</item>
+-->
+<plurals name="notecopied_msg">
+<item quantity="one">@string/notecopied_one</item>
+<item quantity="other">@string/notecopied_other</item>
+</plurals>
+<plurals name="notedeleted_msg">
+<item quantity="one">@string/notedeleted_one</item>
+<item quantity="other">@string/notedeleted_other</item>
+</plurals>
+<plurals name="mode_choose">
+<item quantity="one">@string/selected_one</item>
+<item quantity="other">@string/selected_other</item>
+</plurals>
+
+<string name="lock_note">노트 잠금</string>
+<string name="unlock_note">노트 잠금 풀기</string>
+<string name="locked">잠김</string>
+<string name="unlocked">잠금 풀림</string>
+<string name="password_required">비밀번호 필요</string>
+<string name="select_account">계정 선택</string>
+<string name="password">비밀번호</string>
+<string name="password_set">비밀번호 선택됨</string>
+<string name="password_cleared">비밀번호 지워짐</string>
+<string name="passwords_dont_match">비밀번호 같지 않음</string>
+<string name="password_incorrect">비밀번호 틀림</string>
+<string name="enter_password">비밀번호 입력</string>
+<string name="enter_new_password">새 비밀번호 입력</string>
+<string name="confirm_new_password">새 비밀번호 확인</string>
+<string name="apply">적용</string>
+<string name="clear_password">비밀번호 지우기</string>
+<string name="password_info">비밀번호를 설정하면, 잠근 노트를 열기 위해 비밀번호를 입력해야 합니다. 노트를 잠그면 내용은 숨기고 제목과 목표 날짜는 비밀번호 없이 볼 수 있습니다. 내용이 암호화되지 않으므로 Gmail이나 Google Calendar에서 볼 수 있습니다. 비밀번호를 잊으면, Google과 동기화 후 애플리케이션을 다시 설치하십시오.</string>
+<string name="about">정보</string>
+<string name="sync_failed">동기화 실패</string>
+<string name="sync_login_failed">로그인을 실패하여 Google Tasks에 연결할 수 없음</string>
+<string name="changelog_full_title">애플리케이션 변경 사항</string>
+<string name="changelog_title">새로운 기능</string>
+<string name="changelog_ok_button">확인</string>
+<string name="changelog_show_full">모두 보기</string>
+<string name="widget_pref_preview_note">노트 미리보기</string>
+<string name="widget_pref_preview_note_summary_off">두 줄 제목</string>
+<string name="widget_pref_preview_note_summary_on">두 번째 줄에 노트 내용</string>
+<string name="widget_pref_show_complete">완료 버튼</string>
+<string name="widget_pref_show_complete_summary_off">버튼 보이지 않음</string>
+<string name="widget_pref_show_complete_summary_on">버튼 보임</string>
+<string name="settings_listitem">두 줄 제목</string>
+<string name="settings_listitem_summary_off">두 번째 줄에 노트 미리보기</string>
+<string name="editor_details">더 보기</string>
+<string name="completed">완료됨</string>
+<string name="subtask_of">다음 작업의 하위: </string>
+<string name="security">보안</string>
+<string name="date_header_overdue">목표 날짜 지남</string>
+<string name="date_header_today">오늘</string>
+<string name="date_header_tomorrow">내일</string>
+<string name="date_header_7days">7일 동안</string>
+<string name="date_header_future">나중</string>
+<string name="date_header_none">날짜 없음</string>
+<string name="date_header_completed">완료됨</string>
+<string name="mod_header_yesterday">어제</string>
+<string name="mod_header_thisweek">이번 주</string>
+<string name="mod_header_earlier">먼저</string>
+<string name="settings_listheader">모든 목록을 다 보일 때</string>
+<string name="settings_listheader_off">한 목록으로 보기</string>
+<string name="settings_listheader_on">목록 이름 보기</string>
+<string name="please_create_list">목록을 만드세요</string>
+<string name="please_select_note">노트를 만들거나 선택하세요</string>
+<string name="please_create_note">노트를 만드세요</string>
+<string name="hide_checkbox">체크 표시 숨기기</string>
+<string name="hide_checkbox_summary_on">체크 표시 보이지 않음</string>
+<string name="hide_checkbox_summary_off">체크 표시 보임</string>
+<string name="hide_note">노트 숨기기</string>
+<string name="hide_note_summary_on">노트 보이지 않음</string>
+<string name="hide_note_summary_off">노트 보임</string>
+<string name="hide_date">목표 날짜 숨기기</string>
+<string name="hide_date_summary_on">날짜 보이지 않음</string>
+<string name="hide_date_summary_off">날짜 보이기</string>
+<string name="title_rows">제목 줄 수</string>
+<string name="title_rows_1">한 줄</string>
+<string name="title_rows_2">두 줄</string>
+<string name="title_rows_free">제한 없음</string>
+<string name="saturday">토요일</string>
+<string name="sunday">일요일</string>
+<string name="monday">월요일</string>
+<string name="localedefault">언어 설정 따르기</string>
+
+<!-- These should probably not be translated -->
+
+<!-- settings string keys -->
+<string name="pref_locale">pref_key_locale</string>
+<string name="menu_settings">설정</string>
+<string name="title_activity_list_widget_config">위젯 설정</string>
+<string name="hide_appicon">애플리케이션 아이콘 숨기기</string>
+<string name="hide_new">새 노트 버튼 숨기기</string>
+<string name="hide_header">위젯 제목 숨기기</string>
+<string name="hide_widgetbg">투명한 배경</string>
+<string name="shortcut_help1">체크하면, 바로가기를 누르면 선택한 리스트에 새 노트를 만들고 편집기를 엽니다. 체크하지 않으면, 선택한 리스트만 보여줍니다.</string>
+<string name="loading_widget">위젯 읽고 있음&#8230;</string>
+<string name="default_list_set">기본 리스트 설정됨</string>
+
+<string name="notecopied_one">노트 복사됨</string>
+<string name="notecopied_other">노트 %d개 복사됨</string>
+<string name="notedeleted_one">노트 지워짐</string>
+<string name="notedeleted_other">노트 %d개 지워짐</string>
+<string name="selected_one">노트 선택됨</string>
+<string name="selected_other">노트 %d개 선택됨</string>
+
+<string name="background_sync">백그라운드 동기화</string>
+<string name="background_sync_info">한 시간마다 동기화</string>
+<string name="sync_on_change">고칠 때마다 동기화</string>
+<string name="sync_on_change_info">노트를 고치고 나면 동기화 되도록 설정</string>
+<string name="sync_on_start">애플리케이션 시작할 때마다 동기화하기</string>
+<string name="sync_on_start_info">애플리케이션을 \'새로\' 시작할 때에만 동기화됨</string>
+<string name="sync_full_force">다음 번에 무조건 모두 동기화하도록 하기</string>
+<string name="sync_full_force_info">몇몇 사항이 제대로 동기화되고 있지 않을 때에만 체크</string>
+
+<string name="silent">조용히</string>
+<string name="sound">소리</string>
+<string name="vibrate">진동</string>
+<string name="reminders">알림이</string>
+<string name="add_reminder">알림이 추가</string>
+<string name="standard">표준</string>
+<string name="notification_prio_high">상위: 맨 위에서 확장</string>
+<string name="notification_prio_low">하위: 숨김</string>
+<string name="priority">우선순위</string>
+<string name="group_on_list">한데 모으기</string>
+<string name="group_on_list_summary">같은 목록에 속한 알림은 한데 모으기</string>
+<string name="more">더 보기</string>
+<string name="notifications">알림</string>
+</resources>
