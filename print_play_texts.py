@@ -8,20 +8,21 @@ import os, re, fileinput
 
 
 def print_play_texts(lang, filename):
-    print(lang, filename)
+    print("\n", lang, filename)
     printing = False
     for line in fileinput.input(filename):
         if not printing and 'name="google_play' in line:
-            print("\nLanguage: {}".format(lang))
+            print("\n{}".format(line))
             printing = True
             continue
-
-        if printing:
-            print(line, end='')
 
         if printing and '</string>' in line:
             printing = False
             print("\n", end='')
+
+        if printing:
+            # And also decode \n, \t etc
+            print(line.strip().decode('string_escape'), end=' ')
 
 
 # List dirs in res dir
