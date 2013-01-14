@@ -272,6 +272,8 @@
 	<string name="group_on_list_summary">Multiple notifications will be grouped together if they belong to the same list.</string>
 	<string name="more">more</string>
 	<string name="notifications">Notifications</string>
+	<string name="dateformat_short">E, d MMM</string>
+	<string name="dateformat_long">EEEE, d MMMM</string>
     <string name="google_play_promo_80_char_limit">
     Good looking notes, tasks and to-do app with Google Tasks sync.
     </string>
