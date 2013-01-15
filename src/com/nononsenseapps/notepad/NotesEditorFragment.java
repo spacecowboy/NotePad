@@ -89,8 +89,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	// Two ways of expressing: "Mon, 16 Jan"
 	// Time is not stable, will always claim it's Sunday
 	// public final static String ANDROIDTIME_FORMAT = "%a, %e %b";
-	public final static String DATEFORMAT_FORMAT_SHORT = "E, d MMM";
-	public final static String DATEFORMAT_FORMAT_LONG = "EEEE, d MMMM";
+	// public final static String DATEFORMAT_FORMAT_SHORT = "E, d MMM";
+	// public final static String DATEFORMAT_FORMAT_LONG = "EEEE, d MMMM";
 	/*
 	 * Creates a projection that returns the note ID and the note contents.
 	 */
@@ -662,12 +662,13 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					if (dueDateSet) {
 						Calendar c = Calendar.getInstance();
 						c.setTime(new Date(not.time));
-						
+
 						Calendar dc = Calendar.getInstance();
 						dc.setTime(new Date(noteDueDate.toMillis(false)));
-						
-						c.set(dc.get(Calendar.YEAR), dc.get(Calendar.MONTH), dc.get(Calendar.DAY_OF_MONTH));
-						
+
+						c.set(dc.get(Calendar.YEAR), dc.get(Calendar.MONTH),
+								dc.get(Calendar.DAY_OF_MONTH));
+
 						not.time = c.getTime().getTime();
 					}
 					// Inserts it into the database and updates id
@@ -709,8 +710,8 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 							notificationListLayout.removeView((View) v
 									.getParent());
 							// Remove from database and renotify
-							NotificationHelper
-									.deleteNotification(activity, not.id);
+							NotificationHelper.deleteNotification(activity,
+									not.id);
 						}
 					});
 
@@ -942,10 +943,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 
 			dueDateSet = true;
 
-			String dateFormat = DATEFORMAT_FORMAT_SHORT;
-			if (getString(R.string.dateformat_short) != null) {
-				dateFormat = getString(R.string.dateformat_short);
-			}
+			String dateFormat = getString(R.string.dateformat_short);
 
 			note = note + getText(R.string.editor_due_date_hint) + ": "
 					+ DateFormat.format(dateFormat, c) + "\n";
@@ -1246,15 +1244,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				this.month = c.get(Calendar.MONTH);
 				this.day = c.get(Calendar.DAY_OF_MONTH);
 
-				String dateFormatShort = DATEFORMAT_FORMAT_SHORT;
-				if (getString(R.string.dateformat_short) != null) {
-					dateFormatShort = getString(R.string.dateformat_short);
-				}
-
-				String dateFormatLong = DATEFORMAT_FORMAT_LONG;
-				if (getString(R.string.dateformat_long) != null) {
-					dateFormatLong = getString(R.string.dateformat_long);
-				}
+				String dateFormatShort = getString(R.string.dateformat_short);
+				
+				String dateFormatLong = getString(R.string.dateformat_long);
 
 				mDueDate.setText(DateFormat.format(dateFormatLong, c));
 				Log.d("listproto", "Note has date: " + due);
@@ -1262,8 +1254,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 						"Note date shown as: "
 								+ DateFormat.format(dateFormatLong, c));
 				if (details != null)
-					details.setText(DateFormat.format(dateFormatShort,
-							c));
+					details.setText(DateFormat.format(dateFormatShort, c));
 			} catch (TimeFormatException e) {
 				noteDueDate.setToNow();
 				dueDateSet = false;
@@ -1400,15 +1391,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			noteDueDate.set(dayOfMonth, monthOfYear, year);
 			dueDateSet = true;
 
-			String dateFormatShort = DATEFORMAT_FORMAT_SHORT;
-			if (getString(R.string.dateformat_short) != null) {
-				dateFormatShort = getString(R.string.dateformat_short);
-			}
+			final String dateFormatShort = getString(R.string.dateformat_short);
 
-			String dateFormatLong = DATEFORMAT_FORMAT_LONG;
-			if (getString(R.string.dateformat_long) != null) {
-				dateFormatLong = getString(R.string.dateformat_long);
-			}
+			final String dateFormatLong = getString(R.string.dateformat_long);
 
 			final CharSequence shortTimeToShow = DateFormat.format(
 					dateFormatShort, c);
