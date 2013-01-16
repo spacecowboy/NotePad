@@ -221,4 +221,6 @@ Use few if language need it. In English is the same.
 <string name="sync_full_force">強制的に全て同期</string>
 <string name="sync_full_force_info">ノート等の同期がおかしい場合のみチェックをONにしてください</string>
 
+<string name="dateformat_micro">MM/dd</string>
+
 </resources>
