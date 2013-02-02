@@ -20,13 +20,13 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import com.nononsenseapps.helpers.Log;
-
 import android.content.Context;
 import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.AttributeSet;
 import android.widget.TextView;
+
+import com.nononsenseapps.notepad.R;
 
 /**
  * A simple textview that displays time. It expects input to be a string
@@ -41,16 +41,21 @@ public class DateView extends TextView {
 	public static final String day = "MMM d";
 	public static final String time = "kk:mm";
 
+	private static Context mContext;
+
 	public DateView(Context context) {
 		super(context);
+		this.mContext = context;
 	}
 
 	public DateView(Context context, AttributeSet attrs) {
 		super(context, attrs);
+		this.mContext = context;
 	}
 
 	public DateView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
+		this.mContext = context;
 	}
 
 	@Override
@@ -66,7 +71,16 @@ public class DateView extends TextView {
 		Time time = new Time(Time.getCurrentTimezone());
 		time.parse3339(time3339);
 
-		return toDate(day, time.toMillis(false));
+		// Ugg... Not beautiful... :-(
+		String dateFormatMicro = day;
+		String dateFormatForRes = mContext.getString(
+				R.string.dateformat_micro);
+
+		if (dateFormatForRes != null) {
+			dateFormatMicro = dateFormatForRes;
+		}
+
+		return toDate(dateFormatMicro, time.toMillis(false));
 	}
 
 	public static CharSequence toDate(String format, long msecs) {
