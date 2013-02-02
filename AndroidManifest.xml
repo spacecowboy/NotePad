@@ -48,6 +48,7 @@
 
     <!-- For notifications -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- Define my permissions for the provider -->
     <permission
