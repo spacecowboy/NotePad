@@ -41,7 +41,7 @@ public class DateView extends TextView {
 	public static final String day = "MMM d";
 	public static final String time = "kk:mm";
 
-	private static Context mContext;
+	private final Context mContext;
 
 	public DateView(Context context) {
 		super(context);
@@ -63,17 +63,17 @@ public class DateView extends TextView {
 		if (text == null || text.toString().length() == 0)
 			super.setText("", type);
 		else {
-			super.setText(toDate(text.toString()), type);
+			super.setText(toDate(mContext, text.toString()), type);
 		}
 	}
 
-	public static CharSequence toDate(String time3339) {
+	public static CharSequence toDate(final Context context, String time3339) {
 		Time time = new Time(Time.getCurrentTimezone());
 		time.parse3339(time3339);
 
 		// Ugg... Not beautiful... :-(
 		String dateFormatMicro = day;
-		String dateFormatForRes = mContext.getString(
+		String dateFormatForRes = context.getString(
 				R.string.dateformat_micro);
 
 		if (dateFormatForRes != null) {
