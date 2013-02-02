@@ -170,7 +170,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				if (date == null || date.isEmpty())
 					dueDate = "";
 				else {
-					dueDate = DateView.toDate(date);
+					dueDate = DateView.toDate(mContext, date);
 				}
 
 				final int itemId;
