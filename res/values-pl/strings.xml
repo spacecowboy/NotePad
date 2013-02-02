@@ -233,7 +233,7 @@ Use few if language need it. In English is the same.
 <string name="vibrate">Wibracje</string>
 <string name="reminders">Przypomnienia </string>
 <string name="add_reminder">Dodaj przypomnienie </string>
-<string name="standard">Standardowe </string>
+<string name="standard">Standardowy</string>
 <string name="notification_prio_high">Wysoki: na górze, rozszerzone </string>
 <string name="notification_prio_low">Niski: ukryte, zminimalizowane</string>
 <string name="priority">Priorytet </string>
@@ -241,4 +241,5 @@ Use few if language need it. In English is the same.
 <string name="group_on_list_summary">Powiadomienia będą grupowane jeśli należą do tej samej listy.</string>
 <string name="more">więcej </string>
 <string name="notifications">Powiadomienia</string>
+
 </resources>

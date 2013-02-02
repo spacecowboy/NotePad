@@ -22,7 +22,7 @@ limitations under the License.
 <string name="title_edit">Rediger: %1$s</string>
 <string name="menu_add">Nytt notat</string>
 <string name="menu_delete">Slett</string>
-<string name="menu_revert">Angre endringerr</string>
+<string name="menu_revert">Angre endringer</string>
 <string name="menu_copy">Kopier notat</string>
 <string name="menu_cancel">Avbryt</string>
 <string name="menu_setcompleted">Merk som utført</string>
@@ -153,10 +153,19 @@ Use few if language need it. In English is the same.
 <string name="widget_pref_show_complete_summary_off">Knappen vil bli skjult</string>
 <string name="widget_pref_show_complete_summary_on">Knappen vil bli synlig</string>
 <string name="settings_listitem">Titler med to linjer</string>
+<string name="settings_listitem_summary_off">Notat forhåndsvisning vil bli 2 linjer</string>
+<string name="editor_details">Mer</string>
+<string name="completed">Fullført</string>
+<string name="subtask_of">Underpunkt av</string>
+<string name="security">Sikkerhet</string>
+<string name="date_header_overdue">Forfalt</string>
+<string name="date_header_today">I dag</string>
+<string name="date_header_tomorrow">I morgen</string>
 
 <!-- These should probably not be translated -->
 
 <!-- settings string keys -->
+
 
 
 

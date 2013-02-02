@@ -199,7 +199,7 @@ Use few if language need it. In English is the same.
 <!-- These should probably not be translated -->
 <string name="default_notetitle">ようこそ！</string>
 <string name="default_notetext">このアプリを最大限に利用するために、まず始めに同期機能を有効にすることをお勧めします。ノート一覧画面を開き、画面下部のバーの更新ボタンを押してください。初期状態では、1時間ごとに自動的にノートが同期されます。\n\n注意すべきは、あなたの共有設定とリンクしているということです。あなたのGmailアカウントで自動同期を設定していないならば、このアプリも自動同期を行いません。設定において自動同期を完全に無効化することで、手動での同期のみを提供することができます。\n\nあなたがGoogleアカウントを複数セットアップしている場合、設定画面から、どのアカウントを使用するかを選択することをお勧めします。\n\n設定画面にどのような項目があるのかを知って頂きたいので、一度設定画面をご確認頂くことをお勧めします。設定画面では文字のフォントやサイズを調節し、LightやDarkといったテーマを設定することも出来ます。\n\nこのアプリにはリサイズ可能なウィジェットが含まれています。他のリサイズ可能なウィジェットと同じようにサイズ変更が可能です。\n\nこのアプリがあなたにとって有用なものとなることを望んでおります。このアプリが完全に自由で広告がなく、オープンソースであることを心に留めておいてください。もしもあなたが素晴らしいアイデアや改善点について気がついた場合、それらを私にお伝えください。(訳註：英語でのコンタクトをお願いします。)\n\n/Jonas</string>
-<string name="about_text">私のアプリをダウンロードしてくれてありがとう！私はこのアプリを素晴らしいものにするために最善を尽くしますが、より素晴らしい機能にはいつもバグが発生することでしょう。\n\nバグを発見した時、翻訳間違いを見つけた時、このアプリをもっと良くするアイデアが浮かんだとき、私は是非ともそれを知りたい！\n(訳註：コンタクトを取るときは英語でお願いします)\nメール： jonas@nononsenseapps.com\n\nGoogle+: https://plus.google.com/u/0/111801385015192089838\n\nissueトラッカー: https://github.com/spacecowboy/NotePad/issues\n\nこのプロジェクトはオープンソースですから、あなたが素晴らしい技術力を有しており自分自身で修正したものがあれば、pull requestしてください！\n\nあなたがアプリの素晴らしい翻訳を思いついて提供したいなら、私にご連絡ください！\nGitHub上で既存の文字列を直接編集するやり方をまとめた動画を作成しました: http://www.youtube.com/watch?v=oZTO5zOoCb4\n\nもう一度言いますが、私のアプリをダウンロードしてくれて本当にありがとう！\nあなたがこのプロジェクトをよりアクティブな方向で支援したい場合は、donate版を購入することが出来ます: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
+<string name="about_text">本アプリをダウンロードしていただきありがとうございます！本アプリをより良いものにするため最善を尽くしておりますが、バグや改善すべき点はまだまだ存在します。\n\nバグを発見した時や誤った翻訳を見つけた時、このアプリをより良くするアイデアが浮かんだ時は是非お気軽にご連絡ください！\n\nメール : jonas@nononsenseapps.com\nGoogle+ : https://plus.google.com/u/0/111801385015192089838\nIssue Tracker : https://github.com/spacecowboy/NotePad/issues\n\n本アプリの翻訳に参加したい場合は、以下のURLにアクセスしてください。\nhttp://translate.nononsenseapps.com\n\n最後に、本アプリをダウンロードしていただき本当にありがとうございました！\nこのプロジェクトをさらに支援したい場合は、是非有料版の購入をご検討ください。 https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
 
 <!-- settings string keys -->
 <string name="menu_settings">設定</string>
@@ -211,6 +211,12 @@ Use few if language need it. In English is the same.
 <string name="shortcut_help1">チェックすると、ショートカットタップ時に選択したリストに新規ノートを作成し、エディタを開きます。チェックを外すと、ショートカットタップ時に選択したリストを開きます。</string>
 <string name="loading_widget">しばらくお待ち下さい&#8230;</string>
 
+<string name="notecopied_one">ノートをコピーしました</string>
+<string name="notecopied_other">%d 個のノートをコピーしました</string>
+<string name="notedeleted_one">ノートを削除しました</string>
+<string name="notedeleted_other">%d 個のノートを削除しました</string>
+<string name="selected_one">ノートを選択</string>
+<string name="selected_other">%d 個のノートを選択</string>
 
 <string name="background_sync">バックグラウンド同期</string>
 <string name="background_sync_info">1時間毎に同期されます</string>
@@ -221,7 +227,22 @@ Use few if language need it. In English is the same.
 <string name="sync_full_force">強制的に全て同期</string>
 <string name="sync_full_force_info">ノート等の同期がおかしい場合のみチェックをONにしてください</string>
 
+<string name="silent">サイレント</string>
+<string name="sound">通知音</string>
+<string name="vibrate">バイブレーション</string>
+<string name="reminders">リマインダー</string>
+<string name="add_reminder">リマインダーを追加</string>
+<string name="standard">普通</string>
+<string name="notification_prio_high">高：通知領域の先頭、拡張</string>
+<string name="notification_prio_low">低：隠す、縮小</string>
+<string name="priority">優先度</string>
+<string name="group_on_list">リストごとにまとめる</string>
+<string name="group_on_list_summary">同一リストに属するノートの通知は1つにまとめる</string>
+<string name="more">詳細</string>
+<string name="notifications">通知</string>
+<string name="dateformat_micro">MM/dd</string>
 <string name="dateformat_short">MM/dd(E)</string>
 <string name="dateformat_long">MM月dd日 (E曜日)</string>
-<string name="dateformat_micro">MM/dd</string>
+<string name="google_play_promo_80_char_limit">Google Tasksと同期可能な美しいノート・タスクアプリ</string>
+<string name="google_play_description">スマートフォン、タブレット両対応のオープンソースノート・タスクアプリです。パスワードを入力することなくデバイスに登録されたGoogleアカウントにノート及びタスクを同期します。\n\n機能：\n・通知/リマインダー\n・言語設定\n・カスタマイズ可能なUI\n・サイズ等各種設定可能なウィジェット\n・Gmailアプリに準じたタブレットサポート\n・Androidに最適なHoloテーマ\n・Google Tasksとの自動同期\n・ノートのパスワード保護\n・リスト間のノート移動\n・Androidカレンダーウィジェットとの連帯\n・全ノートの検索（タイトル...etc）\n・フォント/テキストサイズの変更\n\n注意：\nAndroid 4.2には通知機能を使用する全てのアプリに関するバグが存在します。通知時バイブレーションをOFF（デフォルト設定）にした上でサイレントモード（バイブなし）に設定すると、通知時バイブレーションが有効になってしまいます。これはAndroid OSのバグであり、本アプリの問題ではありません。\n\n本アプリの翻訳に参加したい場合は、以下のURLにアクセスしてください：\nhttp://translate.nononsenseapps.com\n\n問題が発生した場合やバグ報告は、ぜひお気軽に以下の連絡先までご連絡ください！\n+NoNonsenseApps（Google+）\nまたは\nhttps://github.com/spacecowboy/NotePad/issues\n\n本アプリのソースコードは以下のURLで公開しています\nhttps://github.com/spacecowboy/NotePad\n\n有料版も販売しています。本アプリを気に入っていただけましたら、ぜひご購入をご検討ください。\nhttps://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>

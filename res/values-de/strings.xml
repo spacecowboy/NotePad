@@ -47,6 +47,7 @@ limitations under the License.
 <string name="settings_theme">Aktuelles Design</string>
 <string name="settings_theme_dialog">Design verwenden</string>
 <string name="settings_lang">Sprache</string>
+<string name="settings_lang_dialog">@string/settings_lang</string>
 <string name="settings_cat_theme">Design</string>
 <string name="settings_cat_sorting">Sortierung</string>
 <string name="settings_sorting_type">Sortieren nach</string>
@@ -156,6 +157,7 @@ Use few if language need it. In English is the same.
 <string name="widget_pref_show_complete_summary_off">Button wird ausgeblendet</string>
 <string name="widget_pref_show_complete_summary_on">Button wird angezeigt</string>
 <string name="settings_listitem">Titel auf 2 Linien</string>
+<string name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
 <string name="settings_listitem_summary_off">Notizvorschau auf zwei Zeilen</string>
 <string name="editor_details">Mehr</string>
 <string name="completed">Erledigt</string>
@@ -168,6 +170,7 @@ Use few if language need it. In English is the same.
 <string name="date_header_future">Später</string>
 <string name="date_header_none">Kein Datum</string>
 <string name="date_header_completed">Erledigt</string>
+<string name="mod_header_today">@string/date_header_today</string>
 <string name="mod_header_yesterday">Gestern</string>
 <string name="mod_header_thisweek">Diese Woche</string>
 <string name="mod_header_earlier">Früher</string>
@@ -201,6 +204,7 @@ Use few if language need it. In English is the same.
 <string name="about_text">Danke, dass du meine App installiert hast! Ich gebe mein Bestes, um diese App in jeder Beziehung toll zu machen, aber es wird immer Bugs geben und es geht immer noch besser.\n\nWenn du einen Bug oder eine falsche Übersetzung gefunden hast oder einfach eine Idee hast, um diese App zu verbessern, will ich davon hören!\n\nSchick mir ein Mail (wenn möglich Englisch): jonas@nononsenseapps.com\n\nSchreib mir auf G+: https://plus.google.com/u/0/111801385015192089838\n\nSchreib es in die Fehlerliste: https://github.com/spacecowboy/NotePad/issues\n\nWenn du mir mit der Übersetzung helfen willst, dann tu es auf http://translate.nononsenseapps.com\n\nNochmals vielen Dank, dass du diese App heruntergeladen hast!\nEine andere Möglichkeit, das Projekt zu unterstützen, ist das Kaufen der Donate-Version: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
 
 <!-- settings string keys -->
+<string name="pref_locale">pref_key_locale</string>
 <string name="menu_settings">Einstellungen</string>
 <string name="title_activity_list_widget_config">Widget anpassen</string>
 <string name="hide_appicon">App-Icon ausblenden</string>
@@ -226,5 +230,18 @@ Use few if language need it. In English is the same.
 <string name="sync_on_start_info">Löst nur bei richtigen Starts aus, wenn die App vorher nicht im Hintergrund gelaufen ist</string>
 <string name="sync_full_force">Volle Synchronisation erzwingen</string>
 <string name="sync_full_force_info">Schalte dies ein, wenn du denkst, es fehlen einige Objekte.</string>
+
+<string name="silent">Lautlos</string>
+<string name="sound">Ton</string>
+<string name="vibrate">Vibration</string>
+<string name="reminders">Erinnerungen</string>
+<string name="add_reminder">Erinnerung hinzufügen</string>
+<string name="standard">Standard</string>
+<string name="notification_prio_high">Hoch: immer oben, maximiert</string>
+<string name="notification_prio_low">Niedrig: versteckt, minimiert</string>
+<string name="priority">Priorität</string>
+<string name="group_on_list_summary">Mehrere Benachrichtigungen für die selbe Gruppe werden zusammengefasst.</string>
+<string name="more">mehr</string>
+<string name="notifications">Benachrichtigungen</string>
 
 </resources>
