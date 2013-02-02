@@ -261,9 +261,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// if (activity.getCurrentContent().equals(
 			// DualLayoutActivity.CONTENTVIEW.DUAL))
 			// args.putBoolean(SHOULD_OPEN_NOTE, true);
-			
-			// Synchronize on app open
-	        SyncHelper.requestSyncIf(getActivity(), SyncHelper.ONAPPSTART);
 
 			refreshList(args);
 		} else {

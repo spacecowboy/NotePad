@@ -14,4 +14,10 @@ public class RightActivity extends MainActivity {
 		finish();
 		super.goUp();
 	}
+	
+	/**
+	 * Dont sync in editor
+	 */
+	protected void syncOnStart() {
+	}
 }
