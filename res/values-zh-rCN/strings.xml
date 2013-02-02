@@ -22,7 +22,7 @@ limitations under the License.
 <string name="title_edit">编辑：%1$s</string>
 <string name="menu_add">新便签</string>
 <string name="menu_delete">删除</string>
-<string name="menu_revert">恢复更改</string>
+<string name="menu_revert">撤消更改</string>
 <string name="menu_copy">复制便签</string>
 <string name="menu_cancel">取消</string>
 <string name="menu_setcompleted">设为已完成</string>
@@ -70,7 +70,7 @@ limitations under the License.
 <string name="settings_font_type">字体</string>
 <string name="settings_font_type_dialog">选择一种字体</string>
 <string name="settings_font_size">字体大小</string>
-<string name="preference_preview_text">我能吞下玻璃而不损伤身体</string>
+<string name="preference_preview_text">我能吞下玻璃而不伤身体。</string>
 <string name="settings_text_preview_title">预览</string>
 <string name="monospace">等宽字体</string>
 <string name="sans">无衬线字体</string>
@@ -91,7 +91,7 @@ limitations under the License.
 <string name="ok">确认</string>
 <string name="show_from_all_lists">所有列表</string>
 <string name="default_list_needed_warning">设置一个默认列表</string>
-<string name="reverted">已恢复的更改</string>
+<string name="reverted">更改已撤消</string>
 <string name="notecopied">已复制</string>
 <string name="deleted">已删除</string>
 <string name="items">便签</string>
@@ -217,4 +217,29 @@ Use few if language need it. In English is the same.
 <string name="selected_one">已选定一条便签</string>
 <string name="selected_other">已选定 %d 条便签</string>
 
+<string name="background_sync">后台同步</string>
+<string name="background_sync_info">每小时同步一次</string>
+<string name="sync_on_change">更改时同步</string>
+<string name="sync_on_change_info">在更改便签后立刻同步</string>
+<string name="sync_on_start">应用启动时同步</string>
+<string name="sync_on_start_info">仅在初次启动时进行，再次打开时不再同步</string>
+<string name="sync_full_force">强制下次进行完整同步</string>
+<string name="sync_full_force_info">仅在您确信存在数据缺失时选择此项</string>
+
+<string name="silent">静音</string>
+<string name="sound">铃声</string>
+<string name="vibrate">震动</string>
+<string name="reminders">提醒</string>
+<string name="add_reminder">添加提醒</string>
+<string name="standard">标准</string>
+<string name="notification_prio_high">高：置顶并显示详细内容</string>
+<string name="notification_prio_low">低：隐藏并最小化显示</string>
+<string name="priority">优先级</string>
+<string name="group_on_list">列表内分组</string>
+<string name="group_on_list_summary">同一列表内的多个通知会被分组显示</string>
+<string name="more">更多</string>
+<string name="notifications">通知</string>
+
+<string name="google_play_promo_80_char_limit">支持 Google 工作表同步，美观易用的便签、任务与待办事项应用。</string>
+<string name="google_play_description">一款开源的记事本与待办事项应用，同时支持手机与平板界面。可与您现有的 Google 账户进行便签及任务同步，云端备份，无需提供密码！\n\n特色功能：\n* 通知/提醒设定\n* 多语言切换\n* 自定义界面\n* 桌面小工具，支持调整大小与功能\n* 与 Gmail 功能相近的完美平板支持\n* 与 Android 相融合的 Holo 主题\n* 与 Google 工作表同步\n* 为便签设定密码\n* 在多个列表间移动便签\n* 与 Android 日程小工具集成\n* 搜索便签（支持全文搜索）\n* 更改字体与字号\n\n提示：\n在 Android 4.2 中存在一个问题，影响到所有使用通知的应用。如果您设定通知时选择不震动（默认），一旦把设备切换到静音模式（仅震动），即便之前明确设置为关闭震动，收到通知时也会一直震动。\n再次重申，这是 Android 系统的缺陷，而不是应用的问题。\n\n您可以帮助翻译这个应用，只需前往：http://translate.nononsenseapps.com\n\n如果您有任何疑问或需要报告问题，请尽管联系我！\n+NoNonsenseApps\n或者，报告到事件跟踪：https://github.com/spacecowboy/NotePad/issues\n\n此应用为开源项目，请参见：https://github.com/spacecowboy/NotePad\n\n此应用有对应的收费版本，用于支持我的开发工作。链接：https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>

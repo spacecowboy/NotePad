@@ -215,8 +215,10 @@
 \n\nIn fact I recommend going into settings anyway just to see what options there are. You can adjust the font and size of the text in this window and change the theme from light to dark.
 \n\nThe app also includes a widget that is fully resizable. You resize it just like all other widgets: tap and hold your finger for a second on the widget as if you were going to move it. Then, instead of moving it you can pull on the sides of the widget to make it bigger or smaller.
 \n\nI hope you will find the app useful. Keep in mind that it is completely free, has no ads and is open source. If you have any great ideas or major complaints, tell me about them.
-\n\n/Jonas</string>
-    <string name="about_text">Thank you for downloading my app! I try my best to make this app awesome in every way but there will always be bugs and things can always get more awesome!\n
+\n\n/Jonas
+    </string>
+    <string name="about_text">
+      Thank you for downloading my app! I try my best to make this app awesome in every way but there will always be bugs and things can always get more awesome!\n
 
 \nIf you\'ve found a bug, a translation being wrong or simply have an idea on how to make this app more awesome then I want to hear about it!
 \nSend me a mail: jonas@nononsenseapps.com
@@ -226,7 +228,8 @@
 \n\nIf you\'d like to help with translating the app, please go to http://translate.nononsenseapps.com
 
 \n\nAgain, thanks for downloading my app!
-\nIf you\'d like to support the project in a less active way, you can always buy the donate version: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
+\nIf you\'d like to support the project in a less active way, you can always buy the donate version: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate
+    </string>
 
     <!-- settings string keys -->
     <string name="pref_locale">pref_key_locale</string>
@@ -269,6 +272,45 @@
 	<string name="group_on_list_summary">Multiple notifications will be grouped together if they belong to the same list.</string>
 	<string name="more">more</string>
 	<string name="notifications">Notifications</string>
-
 	<string name="dateformat_micro">MMM d</string>
+	<string name="dateformat_short">E, d MMM</string>
+	<string name="dateformat_long">EEEE, d MMMM</string>
+    <string name="google_play_promo_80_char_limit">
+    Good looking notes, tasks and to-do app with Google Tasks sync.
+    </string>
+    <string name="google_play_description">
+An open source notepad and to do app with both phone and tablet UIs. Syncs with your existing Google account to keep your notes 
+and tasks backed up in the cloud without requiring you to input any passwords!
+
+\n\nFeatures:
+\n* Notifications/Reminders
+\n* Language selection
+\n* Customizable UI
+\n* Widget, resizeable and configurable.
+\n* Superb Tablet support which mimics Gmail features
+\n* Holo themes so it matches the rest of Android
+\n* Automatic synchronization with Google Tasks
+\n* Ability to set passwords on notes
+\n* Move notes between different lists
+\n* Integration with Android Agenda Widget
+\n* Search all your notes (not just titles)
+\n* Change the font and text size!
+
+\n\nNote:
+\nThere is a bug in Android 4.2 which manifests in all apps which uses notifications. If you set notifications NOT to 
+vibrate (this is the default), then set your phone to silent (vibrate only), notifications will always vibrate even though it was explicitly turned off.
+\nAgain, that is a fault in Android, not a bug in the app.
+
+\n\nYou can help translate the app, just go to: http://translate.nononsenseapps.com
+
+\n\nIf you have any problems or want to report a bug, don\'t hesitate to contact me!
+\n+NoNonsenseApps
+\nor
+\nreport them on the issue tracker: https://github.com/spacecowboy/NotePad/issues
+
+\n\nThis app is open source and is available online at: https://github.com/spacecowboy/NotePad
+
+\n\nThere is a non-free version of this app available for those who want to support me in my development. 
+Link: https://market.android.com/details?id=com.nononsenseapps.notepad_donate
+    </string>
 </resources>

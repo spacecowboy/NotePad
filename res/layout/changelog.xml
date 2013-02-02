@@ -34,6 +34,18 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="\nVersion 4.4.2"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\n- Fixed crash when selecting vibration for notifications. Had forgotten the permission.\n Will no longer clear new notes when SyncOnAppStart was enabled.\n Some other sync bugs fixed.\n Better date handling in Japanese.\n Updated translations." />
+            
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="\nVersion 4.4.1"
             android:textStyle="bold" />
 

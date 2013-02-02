@@ -231,7 +231,7 @@ Use few if language need it. In English is the same.
 <string name="sync_full_force">Tving fuld synkronisering næste gang</string>
 <string name="sync_full_force_info">Marker kun dette felt, hvis du tror, ​​synkroniseringen mangler nogle elementer.</string>
 
-<string name="silent">Stille</string>
+<string name="silent">Lydløs</string>
 <string name="sound">Lyd</string>
 <string name="vibrate">Vibration</string>
 <string name="reminders">Påmindelser</string>
@@ -244,4 +244,7 @@ Use few if language need it. In English is the same.
 <string name="group_on_list_summary">Flere notifikationer vil blive grupperet sammen, hvis de tilhører den samme liste.</string>
 <string name="more">mere</string>
 <string name="notifications">Notifikationer</string>
+
+<string name="google_play_promo_80_char_limit">Flot note, opgave og to-do app med Google Opgaver synkronisering.</string>
+<string name="google_play_description">En open source notesblok og to do app med både telefon og tablet brugerflader. Synkroniserer med din eksisterende Google konto for at holde dine noter og opgaver sikkerhedskopieret i skyen uden du behøver at indtaste nogle adgangskoder!\n\nFunktioner:\n* Notifikationer/Påmindelser\n* Sprogvalg\n* Tilpasselig brugerflade\n* Widget, justerbar og konfigurerbar.\n* Super tablet understøttelse, der efterligner Gmail-funktioner\n* Holo temaer så det matcher resten af Android\n* Automatisk synkronisering med Google Tasks\n* Mulighed for at angive adgangskode på noter\n* Flyt noter mellem forskellige lister\n* Integration med Android Agenda Widget\n* Søg alle dine noter (ikke kun titler)\n* Udskift skifttype og tekst størrelsen!\n\nNote:\nDer er en fej i Android 4.2 som manifesterer sig i alle apps som bruger notifikationer. Hvis du indstiller notifikationer til IKKE at vibrere (dette er standard), og derefter indstiller din telefon til lydløs (med vibration), vil notifikationer altid vibrere, selvom det er blevet slukket.\nIgen, dette er en fejl i Android, ikke i appen.\n\nDu kan hjælpe med at oversætte appen, ved at gå til: http://translate.nononsenseapps.com\n\nHvis du har problemer eller vil rapportere en fejl, så tøv ikke med at kontakte mig!\n+NoNonsenseApps\neller\nrapporter dem på "issue trackeren": https://github.com/spacecowboy/NotePad/issues\n\nDenne app er open source og er tilgængelig online på: https://github.com/spacecowboy/NotePad\n\nDer er en ikke-gratis version af denne app tilgængelig, til dem som vil støtte udviklingen. Link: https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>

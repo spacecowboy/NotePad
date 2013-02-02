@@ -25,6 +25,7 @@ import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.helpers.dualpane.NoNonsenseListFragment;
@@ -260,6 +261,9 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// if (activity.getCurrentContent().equals(
 			// DualLayoutActivity.CONTENTVIEW.DUAL))
 			// args.putBoolean(SHOULD_OPEN_NOTE, true);
+			
+			// Synchronize on app open
+	        SyncHelper.requestSyncIf(getActivity(), SyncHelper.ONAPPSTART);
 
 			refreshList(args);
 		} else {

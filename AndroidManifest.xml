@@ -26,8 +26,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
-    android:versionCode="49"
-    android:versionName="4.4.1" >
+    android:versionCode="50"
+    android:versionName="4.4.2" >
 
     <!-- App crashes on 3.0. No one uses 3.1. So minimum version is set to 3.2 now -->
     <uses-sdk
@@ -48,6 +48,7 @@
 
     <!-- For notifications -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <!-- Define my permissions for the provider -->
     <permission

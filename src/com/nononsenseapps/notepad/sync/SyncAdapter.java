@@ -123,24 +123,31 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		 * app to crash since that is entirely invalid. So don't sync if there
 		 * is a space in the api key.
 		 */
-		if (!com.nononsenseapps.build.Config.GTASKS_API_KEY.contains(" ")
-				|| (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)
-						&& !settings.getString(SyncPrefs.KEY_ACCOUNT, "")
-								.isEmpty() && account.name.equals(settings
-						.getString(SyncPrefs.KEY_ACCOUNT, "")))) {
 
-			Log.d(TAG, "onPerformSync");
-			mContext.sendBroadcast(new Intent(SYNC_STARTED));
+		Intent doneIntent = new Intent(SYNC_FINISHED);
+		doneIntent.putExtra(SYNC_RESULT, ERROR);
+		try {
+			// Dummy key has a space in it. Only builds using real api keys should
+			// not have spaces
+			Log.d("nononsensenotes", com.nononsenseapps.build.Config.GTASKS_API_KEY);
+			if (!com.nononsenseapps.build.Config.GTASKS_API_KEY.contains(" ")) {
 
-			Intent doneIntent = new Intent(SYNC_FINISHED);
-			doneIntent.putExtra(SYNC_RESULT, ERROR);
+				if (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE,
+								false)
+								&& !settings.getString(SyncPrefs.KEY_ACCOUNT,
+										"").isEmpty() && account.name
+									.equals(settings.getString(
+											SyncPrefs.KEY_ACCOUNT, ""))) {
 
-			try {
-				doneIntent = fullSync(account, extras, authority, provider,
-						syncResult, settings);
-			} finally {
-				mContext.sendBroadcast(doneIntent);
+					Log.d(TAG, "onPerformSync");
+					mContext.sendBroadcast(new Intent(SYNC_STARTED));
+
+					doneIntent = fullSync(account, extras, authority, provider,
+							syncResult, settings);
+				}
 			}
+		} finally {
+			mContext.sendBroadcast(doneIntent);
 		}
 	}
 
@@ -179,7 +186,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					 */
 					String localEtag = settings.getString(PREFS_LAST_SYNC_ETAG,
 							"");
-					
+
 					// If full sync, then assume no local information exists.
 					if (settings.getBoolean(SyncPrefs.KEY_FULLSYNC, false)) {
 						lastUpdate = null;

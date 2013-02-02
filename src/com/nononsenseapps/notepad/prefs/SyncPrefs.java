@@ -169,7 +169,7 @@ public class SyncPrefs extends PreferenceFragment implements
 			SharedPreferences sharedPreferences) {
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
 		boolean backgroundSync = sharedPreferences.getBoolean(
-				KEY_BACKGROUND_SYNC, true);
+				KEY_BACKGROUND_SYNC, false);
 
 		if (accountName != null && !accountName.isEmpty()) {
 			if (!backgroundSync) {
