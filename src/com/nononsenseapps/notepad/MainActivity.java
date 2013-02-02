@@ -144,8 +144,15 @@ public class MainActivity extends DualLayoutActivity implements
 			rightCreate();
 		}
 		
+		// Synchronize on app open
+        syncOnStart();
+		
 		// Schedule notifications if needed
 		NotificationHelper.schedule(this);
+	}
+	
+	protected void syncOnStart() {
+		SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
 	}
 
 	private void leftOrTabletCreate(Bundle savedInstanceState) {
