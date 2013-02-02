@@ -31,21 +31,21 @@
         
         <CheckBoxPreference
             android:dependency="syncEnablePref"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="syncInBackground"
             android:summary="@string/background_sync_info"
             android:title="@string/background_sync" />
         
         <CheckBoxPreference
             android:dependency="syncEnablePref"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="syncOnStart"
             android:summary="@string/sync_on_start_info"
             android:title="@string/sync_on_start" />
         
         <CheckBoxPreference
             android:dependency="syncEnablePref"
-            android:defaultValue="true"
+            android:defaultValue="false"
             android:key="syncOnChange"
             android:summary="@string/sync_on_change_info"
             android:title="@string/sync_on_change" />
