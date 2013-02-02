@@ -72,10 +72,7 @@ public class UpdateNotifier {
 	private static void notifyChange(Context context, Uri uri) {
 		if (uri != null) {
 			context.getContentResolver().notifyChange(uri, null, false);
-			if (PreferenceManager.getDefaultSharedPreferences(context)
-							.getBoolean(SyncPrefs.KEY_SYNC_ON_CHANGE, false)) {
-				context.startService(new Intent(context, SyncDelay.class));
-			}
+			SyncHelper.requestSyncIf(context, SyncHelper.ONCHANGE);
 		}
 	}
 

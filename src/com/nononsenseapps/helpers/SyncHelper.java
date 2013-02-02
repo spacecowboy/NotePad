@@ -7,6 +7,7 @@ import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -79,7 +80,7 @@ public class SyncHelper {
 	}
 
 	private static void requestDelayedSync(final Context context) {
-
+		context.startService(new Intent(context, SyncDelay.class));
 	}
 
 	private static boolean shouldSyncAtAll(final Context context) {

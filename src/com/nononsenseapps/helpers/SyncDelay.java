@@ -29,7 +29,8 @@ public class SyncDelay extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		/* Schedule a sync if settings say so */
 		if (intent != null && Intent.ACTION_RUN.equals(intent.getAction())) {
-			requestSync();
+			Log.d(TAG, "Requesting sync NOW");
+			SyncHelper.requestSyncIf(this, SyncHelper.MANUAL);
 		} else {
 			scheduleSync();
 		}
@@ -37,25 +38,6 @@ public class SyncDelay extends Service {
 		// Not needed any more, stop us
 		super.stopSelf(startId);
 		return Service.START_NOT_STICKY;
-	}
-
-	private void requestSync() {
-		Log.d(TAG, "Requesting sync");
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
-		String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, "");
-		if (accountName != null && !accountName.equals("")) {
-			Account account = SyncPrefs.getAccount(AccountManager.get(this),
-					accountName);
-			// Don't start a new sync if one is already going
-			if (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) {
-				Bundle options = new Bundle();
-				// options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-				ContentResolver
-						.requestSync(account, NotePad.AUTHORITY, options);
-				Log.d(TAG, "Requested sync");
-			}
-		}
 	}
 
 	private void scheduleSync() {
