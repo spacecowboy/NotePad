@@ -143,9 +143,6 @@ public class MainActivity extends DualLayoutActivity implements
 		} else {
 			rightCreate();
 		}
-
-		// Synchronize on app open
-        SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
 		
 		// Schedule notifications if needed
 		NotificationHelper.schedule(this);
