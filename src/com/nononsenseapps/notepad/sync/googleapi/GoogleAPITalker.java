@@ -162,7 +162,7 @@ public class GoogleAPITalker {
 		return url;
 	}
 
-	private static String AllTasksCompletedMin(String listId, String timestamp) {
+	private static String allTasksUpdatedMin(String listId, String timestamp) {
 		String request = BASE_TASK_URL + "/" + listId + TASKS
 				+ "?showDeleted=true&showHidden=true&fields=items&";
 
@@ -498,7 +498,7 @@ public class GoogleAPITalker {
 		ArrayList<GoogleTask> moddedList = new ArrayList<GoogleTask>();
 
 		HttpGet httpget = new HttpGet(
-				AllTasksCompletedMin(list.id, lastUpdated));
+				allTasksUpdatedMin(list.id, lastUpdated));
 		setAuthHeader(httpget);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
