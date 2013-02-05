@@ -100,8 +100,6 @@ limitations under the License.
 <string name="permission_write_label">muokkaa muistiinpanoja ja listoja</string>
 <string name="permission_write_desc">Sallii sovelluksen lisätä, päivittää ja poistaa muistiinpanoja ja listoja.</string>
 <string name="settings_header_list">Lista-asetukset</string>
-<string name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string name="settings_header_sync">@string/settings_cat_syncing</string>
 <string name="settings_list_dialog">Valitse lista</string>
 <string name="settings_list">Lista</string>
 <string name="automatic">Automaattinen</string>
@@ -155,7 +153,6 @@ Use few if language need it. In English is the same.
 <string name="widget_pref_show_complete_summary_off">Nappi piilotetaan</string>
 <string name="widget_pref_show_complete_summary_on">Nappi näytetään</string>
 <string name="settings_listitem">Kaksiriviset otsikot</string>
-<string name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_of</string>
 <string name="settings_listitem_summary_off">Muistiinpanon esikatselu kahdella rivillä</string>
 <string name="editor_details">Lisää</string>
 <string name="completed">Valmis</string>
