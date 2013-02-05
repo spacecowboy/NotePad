@@ -25,7 +25,6 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Random;
 
-import org.apache.http.Header;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.methods.HttpDelete;
@@ -47,6 +46,8 @@ import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.notepad.MainActivity;
+
 import android.net.http.AndroidHttpClient; // Supports GZIP, apache's doesn't
 
 /**
@@ -100,6 +101,8 @@ public class GoogleAPITalker {
 
 	public static Random rand = new Random();
 
+	private static final String NEXTPAGETOKEN = "nextPageToken";
+
 	public static String AuthUrlEnd() {
 		return "key=" + Config.GTASKS_API_KEY;
 	}
@@ -108,7 +111,18 @@ public class GoogleAPITalker {
 
 	public static final String BASE_URL = "https://www.googleapis.com/tasks/v1/users/@me/lists";
 
-	public static String AllLists() {
+	public static String AllLists(final String pageToken) {
+		String result = BASE_URL + "?";
+
+		if (pageToken != null && !pageToken.isEmpty()) {
+			result += "pageToken=" + pageToken + "&";
+		}
+
+		result += AuthUrlEnd();
+		return result;
+	}
+	
+	public static String InsertLists() {
 		return BASE_URL + "?" + AuthUrlEnd();
 	}
 
@@ -162,9 +176,22 @@ public class GoogleAPITalker {
 		return url;
 	}
 
-	private static String allTasksUpdatedMin(String listId, String timestamp) {
-		String request = BASE_TASK_URL + "/" + listId + TASKS
-				+ "?showDeleted=true&showHidden=true&fields=items&";
+	/**
+	 * Set the pageToken to null to get the first page
+	 */
+	private static String allTasksUpdatedMin(final String listId,
+			final String timestamp, final String pageToken) {
+		// items,nextPageToken
+		String request = BASE_TASK_URL
+				+ "/"
+				+ listId
+				+ TASKS
+				+ "?showDeleted=true&showHidden=true&fields=items%2CnextPageToken&";
+
+		// Comes into play if user has Many tasks
+		if (pageToken != null && !pageToken.isEmpty()) {
+			request += "pageToken=" + pageToken + "&";
+		}
 
 		if (timestamp != null && !timestamp.isEmpty()) {
 			try {
@@ -265,6 +292,8 @@ public class GoogleAPITalker {
 	 * The entries in this does only one net-call, and such the list items do
 	 * not contain e-tags. useful to get an id-list.
 	 * 
+	 * E-tag is an amalgam of etags in all pages if user has more than 100 lists.
+	 * 
 	 * @return
 	 * @throws IOException
 	 * @throws NotModifiedException
@@ -274,38 +303,49 @@ public class GoogleAPITalker {
 	private String getListOfLists(ArrayList<GoogleTaskList> list)
 			throws ClientProtocolException, IOException, PreconditionException {
 		String eTag = "";
-		HttpGet httpget = new HttpGet(AllLists());
-		httpget.setHeader("Authorization", "OAuth " + authToken);
+		String pageToken = null;
+		do {
+			HttpGet httpget = new HttpGet(AllLists(pageToken));
+			httpget.setHeader("Authorization", "OAuth " + authToken);
 
-		// Log.d(TAG, "request: " + AllLists());
-		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
+			// Log.d(TAG, "request: " + AllLists());
+			AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
-		try {
-			JSONObject jsonResponse = (JSONObject) new JSONTokener(
-					parseResponse(client.execute(httpget))).nextValue();
+			try {
+				JSONObject jsonResponse = (JSONObject) new JSONTokener(
+						parseResponse(client.execute(httpget))).nextValue();
 
-			// Log.d(TAG, jsonResponse.toString());
+				// Log.d(TAG, jsonResponse.toString());
+				if (jsonResponse.isNull(NEXTPAGETOKEN)) {
+					pageToken = null;
+				} else {
+					pageToken = jsonResponse.getString(NEXTPAGETOKEN);
+				}
 
-			eTag = jsonResponse.getString("etag");
-			JSONArray lists = jsonResponse.getJSONArray("items");
+				eTag += jsonResponse.getString("etag");
 
-			int size = lists.length();
-			int i;
+				JSONArray lists = jsonResponse.getJSONArray("items");
 
-			// Lists will not carry etags, must fetch them individually if that
-			// is desired
-			for (i = 0; i < size; i++) {
-				JSONObject jsonList = lists.getJSONObject(i);
-				list.add(new GoogleTaskList(jsonList));
+				int size = lists.length();
+				int i;
+
+				// Lists will not carry etags, must fetch them individually if
+				// that
+				// is desired
+				for (i = 0; i < size; i++) {
+					JSONObject jsonList = lists.getJSONObject(i);
+					list.add(new GoogleTaskList(jsonList));
+				}
+				// } catch (PreconditionException e) {
+				// // Can not happen in this case since we don't have any etag!
+				// } catch (NotModifiedException e) {
+				// // Can not happen in this case since we don't have any etag!
+				// }
+			} catch (JSONException e) {
+				pageToken = null;
+				Log.d(TAG, "getlistoflists: " + e.getLocalizedMessage());
 			}
-			// } catch (PreconditionException e) {
-			// // Can not happen in this case since we don't have any etag!
-			// } catch (NotModifiedException e) {
-			// // Can not happen in this case since we don't have any etag!
-			// }
-		} catch (JSONException e) {
-			Log.d(TAG, "getlistoflists: " + e.getLocalizedMessage());
-		}
+		} while (pageToken != null);
 
 		return eTag;
 	}
@@ -497,51 +537,59 @@ public class GoogleAPITalker {
 			GoogleTaskList list) {
 		ArrayList<GoogleTask> moddedList = new ArrayList<GoogleTask>();
 
-		HttpGet httpget = new HttpGet(
-				allTasksUpdatedMin(list.id, lastUpdated));
-		setAuthHeader(httpget);
-		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
+		// If user has many tasks, they will not all be returned in same request
+		String pageToken = null;
 
-		// Log.d(TAG, httpget.getRequestLine().toString());
-		for (Header header : httpget.getAllHeaders()) {
+		// Loop while we have a next page to go to. Always fetch the first page
+		do {
+			HttpGet httpget = new HttpGet(allTasksUpdatedMin(list.id,
+					lastUpdated, pageToken));
+			setAuthHeader(httpget);
+			AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
 
-			Log.d(TAG, header.getName() + ": " + header.getValue());
-		}
+			String stringResponse;
+			try {
+				stringResponse = parseResponse(client.execute(httpget));
 
-		String stringResponse;
-		try {
-			stringResponse = parseResponse(client.execute(httpget));
+				JSONObject jsonResponse = new JSONObject(stringResponse);
 
-			JSONObject jsonResponse = new JSONObject(stringResponse);
+				// Log.d(MainActivity.TAG, jsonResponse.toString());
+				// If we have a next page, get that
+				if (jsonResponse.isNull(NEXTPAGETOKEN)) {
+					pageToken = null;
+				} else {
+					pageToken = jsonResponse.getString(NEXTPAGETOKEN);
+				}
+				// Will be an array of items
+				JSONArray items = jsonResponse.getJSONArray("items");
 
-			// Log.d(TAG, jsonResponse.toString());
-			// Will be an array of items
-			JSONArray items = jsonResponse.getJSONArray("items");
-
-			int i;
-			int length = items.length();
-			for (i = 0; i < length; i++) {
-				JSONObject jsonTask = items.getJSONObject(i);
-				Log.d(TAG, "moddedJSONTask: " + jsonTask.toString());
-				moddedList.add(new GoogleTask(jsonTask));
+				int i;
+				int length = items.length();
+				for (i = 0; i < length; i++) {
+					JSONObject jsonTask = items.getJSONObject(i);
+					Log.d(MainActivity.TAG,
+							"moddedJSONTask: " + jsonTask.toString());
+					moddedList.add(new GoogleTask(jsonTask));
+				}
+			} catch (ClientProtocolException e) {
+				pageToken = null;
+				Log.d(MainActivity.TAG, e.getLocalizedMessage());
+			} catch (PreconditionException e) {
+				// // Can't happen
+				pageToken = null;
+				return null;
+				// } catch (NotModifiedException e) {
+				//
+				// Log.d(TAG, e.getLocalizedMessage());
+			} catch (IOException e) {
+				pageToken = null;
+				Log.d(MainActivity.TAG, e.getLocalizedMessage());
+			} catch (JSONException e) {
+				// Item list must have been empty
+				pageToken = null;
+				Log.d(MainActivity.TAG, e.getLocalizedMessage());
 			}
-		} catch (ClientProtocolException e) {
-
-			Log.d(TAG, e.getLocalizedMessage());
-		} catch (PreconditionException e) {
-			// // Can't happen
-			return null;
-			// } catch (NotModifiedException e) {
-			//
-			// Log.d(TAG, e.getLocalizedMessage());
-		} catch (IOException e) {
-
-			Log.d(TAG, e.getLocalizedMessage());
-		} catch (JSONException e) {
-			// Item list must have been empty
-
-			Log.d(TAG, e.getLocalizedMessage());
-		}
+		} while (pageToken != null);
 
 		return moddedList;
 	}
@@ -729,8 +777,7 @@ public class GoogleAPITalker {
 								// the server
 			}
 
-			Log.d(TAG, "Fetching lists with: " + AllLists());
-			httppost = new HttpPost(AllLists());
+			httppost = new HttpPost(InsertLists());
 			list.didRemoteInsert = true; // Need this later
 		}
 		setAuthHeader(httppost);
