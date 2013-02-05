@@ -194,6 +194,7 @@ Use few if language need it. In English is the same.
 <string name="localedefault">언어 설정 따르기</string>
 
 <!-- These should probably not be translated -->
+<string name="default_notetitle">환영합니다!</string>
 
 <!-- settings string keys -->
 <string name="pref_locale">pref_key_locale</string>

@@ -33,7 +33,7 @@ limitations under the License.
 <string name="menu_preferences">Beállítások</string>
 <string name="menu_renamelist">Lista átnevezése</string>
 <string name="menu_createlist">Lista létrehozása</string>
-<string name="menu_clearcompleted">Kész jegyzet törlése</string>
+<string name="menu_clearcompleted">Kész jegyzetek törlése</string>
 <string name="menu_setdefaultlist">Alapértelmezett lista</string>
 <string name="menu_managelists">Lista kezelése</string>
 <string name="delete_list_warning">Biztosan törli a teljes listát? A lista véglegesen törlődik.</string>
@@ -79,7 +79,7 @@ limitations under the License.
 <string name="settings_account_title">Válassz fiókot</string>
 <string name="settings_account_summary">Kattints a fiók váltásához</string>
 <string name="settings_sync_enable_title">Google Feladatok szinkronizálása</string>
-<string name="settings_sync_enable_summary">Szinkronizálás a Google-fiókoddal</string>
+<string name="settings_sync_enable_summary">Szinkronizálás a Google-fiókkal</string>
 <string name="settings_cat_syncing">Szinkronizálás</string>
 <string name="manual">Kézi</string>
 <string name="minutes">perc</string>
@@ -145,13 +145,13 @@ Use few if language need it. In English is the same.
 <string name="about">Névjegy</string>
 <string name="sync_failed">Szinkronizálási hiba</string>
 <string name="sync_login_failed">Bejelentkezési hiba, nem lehetett csatlakozni a Google Feladatokhoz</string>
-<string name="changelog_full_title">Változtatások</string>
+<string name="changelog_full_title">Változások</string>
 <string name="changelog_title">Újítások</string>
 <string name="changelog_ok_button">OK</string>
 <string name="changelog_show_full">Teljes lista</string>
 <string name="widget_pref_preview_note">Előnézet mutatása</string>
 <string name="widget_pref_preview_note_summary_off">A cím két soros lesz</string>
-<string name="widget_pref_preview_note_summary_on">A jegyzet a második soron lesz</string>
+<string name="widget_pref_preview_note_summary_on">A jegyzet a második sorban lesz</string>
 <string name="widget_pref_show_complete">Készre jelölés gomb</string>
 <string name="widget_pref_show_complete_summary_off">A gomb rejtve lesz</string>
 <string name="widget_pref_show_complete_summary_on">A gomb látható lesz</string>
@@ -190,12 +190,12 @@ Use few if language need it. In English is the same.
 <string name="hide_date_summary_off">Határidő látható</string>
 <string name="title_rows">Cím maximális magassága</string>
 <string name="title_rows_1">1 sor</string>
-<string name="title_rows_2">2sor</string>
+<string name="title_rows_2">2 sor</string>
 <string name="title_rows_free">Nincs meghatározva</string>
 <string name="saturday">Szombat</string>
 <string name="sunday">Vasárnap</string>
 <string name="monday">Hétfő</string>
-<string name="localedefault">Helyi</string>
+<string name="localedefault">Alapértelmezett</string>
 
 <!-- These should probably not be translated -->
 <string name="default_notetitle">Üdvözöllek!</string>
@@ -208,7 +208,7 @@ Use few if language need it. In English is the same.
 <string name="hide_new">Új gomb elrejtése</string>
 <string name="hide_header">Widget fejrész elrejtése</string>
 <string name="hide_widgetbg">Átlátszó háttér</string>
-<string name="shortcut_help1">Ezt az opciót bekapcsolva, a parancsikon megnyitva a szerkesztőt létrehoz egy új jegyzetet a kiválasztott listában. Kikapcsolva a kiválasztott listát nyitja meg.</string>
+<string name="shortcut_help1">Ezt az opciót bekapcsolva, a parancsikon (megnyitva a szerkesztőt) létrehoz egy új jegyzetet a kiválasztott listában. Kikapcsolva a kiválasztott listát nyitja meg.</string>
 
 <string name="notecopied_one">1 jegyzet másolva</string>
 <string name="notecopied_other">%d jegyzet másolva</string>
@@ -220,24 +220,23 @@ Use few if language need it. In English is the same.
 <string name="background_sync">Szinkronizálás a háttérben</string>
 <string name="background_sync_info">Óránként egyszer szinkronizál</string>
 <string name="sync_on_change">Szinkronizálás változáskor</string>
-<string name="sync_on_change_info">Jegyzet váltakozása után nem sokkal szinkronizál</string>
+<string name="sync_on_change_info">Jegyzet változása után nem sokkal szinkronizál</string>
 <string name="sync_on_start">Szinkronizálás alkalmazás indításakor</string>
 <string name="sync_on_start_info">Csak indításkor, visszaváltáskor nem</string>
 <string name="sync_full_force">Teljes szinkronizálás következő alkalommal</string>
-<string name="sync_full_force_info">Csak akkor válassza ezt, ha úgy gondolja, hogy hiányzik néhány elemet.</string>
+<string name="sync_full_force_info">Csak akkor válassza ezt, ha úgy gondolja, hogy hiányzik néhány elem.</string>
 
 <string name="silent">Csendes</string>
-<string name="sound">Hangos</string>
+<string name="sound">Hang</string>
 <string name="vibrate">Rezgés</string>
 <string name="reminders">Emlékeztetők</string>
 <string name="add_reminder">Emlékeztető hozzáadása</string>
 <string name="standard">Alapértelmezett</string>
 <string name="notification_prio_high">Magas: Legfelül, kiterjesztve</string>
 <string name="notification_prio_low">Alacsony: Rejtve, minimalizálva</string>
-<string name="priority">Priorotás</string>
+<string name="priority">Prioritás</string>
 <string name="group_on_list">Lista csoportosítása</string>
-<string name="group_on_list_summary">Különböző értesítések egy csoportosítva lesznek ha egy listában vannak</string>
+<string name="group_on_list_summary">Különböző értesítések csoportosítva lesznek ha egy listában vannak</string>
 <string name="notifications">Értesítések</string>
-
 <string name="google_play_promo_80_char_limit">Szép jegyzet, feladat és teendő alkalmazás Google Feladatok szinkronizálással</string>
 </resources>
