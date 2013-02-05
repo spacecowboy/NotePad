@@ -15,200 +15,228 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools" >
+<resources xmlns:tools="http://schemas.android.com/tools">
 
-<string tools:ignore="MissingTranslation" name="app_name">Notities</string>
-<string tools:ignore="MissingTranslation" name="title_create">Nieuwe notitie</string>
-<string tools:ignore="MissingTranslation" name="title_edit">Bewerken %1$s</string>
-<string tools:ignore="MissingTranslation" name="menu_add">Nieuwe notitie</string>
-<string tools:ignore="MissingTranslation" name="menu_delete">Verwijderen</string>
-<string tools:ignore="MissingTranslation" name="menu_revert">Veranderingen ongedaan maken</string>
-<string tools:ignore="MissingTranslation" name="menu_copy">Notitie kopiëren</string>
-<string tools:ignore="MissingTranslation" name="menu_cancel">Annuleren</string>
-<string tools:ignore="MissingTranslation" name="menu_setcompleted">Wijzig naar voltooid</string>
-<string tools:ignore="MissingTranslation" name="menu_setuncompleted">Wijzig naar onvoltooid</string>
-<string tools:ignore="MissingTranslation" name="menu_deletelist">Verwijder lijst</string>
-<string tools:ignore="MissingTranslation" name="menu_sync">Herladen</string>
-<string tools:ignore="MissingTranslation" name="menu_share">Delen</string>
-<string tools:ignore="MissingTranslation" name="menu_preferences">Instellingen</string>
-<string tools:ignore="MissingTranslation" name="menu_renamelist">Lijst hernoemen</string>
-<string tools:ignore="MissingTranslation" name="menu_createlist">Nieuwe lijst</string>
-<string tools:ignore="MissingTranslation" name="menu_clearcompleted">Verwijder voltooide notities</string>
-<string tools:ignore="MissingTranslation" name="menu_setdefaultlist">Als standaard lijst gebruiken</string>
-<string tools:ignore="MissingTranslation" name="menu_managelists">Lijsten beheren</string>
-<string tools:ignore="MissingTranslation" name="delete_list_warning">De lijst wordt permanent verwijderd. Weet je het zeker?</string>
-<string tools:ignore="MissingTranslation" name="editor_due_date_hint">Einddatum</string>
-<string tools:ignore="MissingTranslation" name="editor_title_hint">Titel</string>
-<string tools:ignore="MissingTranslation" name="editor_note_hint">Notitie</string>
-<string tools:ignore="MissingTranslation" name="resolve_edit">Bewerk notitie</string>
-<string tools:ignore="MissingTranslation" name="error_title">Mislukt</string>
-<string tools:ignore="MissingTranslation" name="error_message">Kon de notitie niet laden</string>
-<string tools:ignore="MissingTranslation" name="search_hint">Zoeken</string>
-<string tools:ignore="MissingTranslation" name="settings_theme">Huidig thema</string>
-<string tools:ignore="MissingTranslation" name="settings_theme_dialog">Gebruik thema</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_theme">Thema</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_sorting">Sortering</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_type">Gesorteerd op</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_type_dialog">Sorteren op</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_order">Volgorde</string>
-<string tools:ignore="MissingTranslation" name="settings_sorting_order_dialog">Volgorde</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_alphabetic">Titel</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_modified">Laatst bewerkt</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_duedate">Einddatum</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_type_serverposition">Server positie</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_asc">Oplopend</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_sort_order_desc">Aflopend</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_theme_dark">Donker</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_theme_light">Licht</string>
-<string tools:ignore="MissingTranslation" name="settings_summary_theme_light_dark_ab">Licht, donker menu</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_appearance">Opmaak</string>
-<string tools:ignore="MissingTranslation" name="settings_font_screen">Tekenstijl</string>
-<string tools:ignore="MissingTranslation" name="settings_font_screen_summary">Verander het lettertype en grootte</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_font_editor">Bewerker</string>
-<string tools:ignore="MissingTranslation" name="settings_font_type">Lettertype</string>
-<string tools:ignore="MissingTranslation" name="settings_font_type_dialog">Kies een lettertype</string>
-<string tools:ignore="MissingTranslation" name="settings_font_size">Lettergrootte</string>
-<string tools:ignore="MissingTranslation" name="preference_preview_text">Dit is hoe de voorbeeld tekst eruit ziet</string>
-<string tools:ignore="MissingTranslation" name="settings_text_preview_title">Voorbeeld</string>
-<string tools:ignore="MissingTranslation" name="monospace">Monospace</string>
-<string tools:ignore="MissingTranslation" name="sans">Schreefloos</string>
-<string tools:ignore="MissingTranslation" name="serif">Schreef</string>
-<string tools:ignore="MissingTranslation" name="settings_sync_freq_title">Sync frequentie</string>
-<string tools:ignore="MissingTranslation" name="settings_account_title">Account kiezen</string>
-<string tools:ignore="MissingTranslation" name="settings_account_summary">Verander account</string>
-<string tools:ignore="MissingTranslation" name="settings_sync_enable_title">Google Tasks sync</string>
-<string tools:ignore="MissingTranslation" name="settings_sync_enable_summary">Synchroniseer notities met je Google account</string>
-<string tools:ignore="MissingTranslation" name="settings_cat_syncing">Synchronisatie</string>
-<string tools:ignore="MissingTranslation" name="manual">Handmatig</string>
-<string tools:ignore="MissingTranslation" name="minutes">minuten</string>
-<string tools:ignore="MissingTranslation" name="hours">uren</string>
-<string tools:ignore="MissingTranslation" name="onehour">Een uur</string>
-<string tools:ignore="MissingTranslation" name="oneday">Een dag</string>
-<string tools:ignore="MissingTranslation" name="yes">Ja</string>
-<string tools:ignore="MissingTranslation" name="no">Nee</string>
-<string tools:ignore="MissingTranslation" name="ok">OK</string>
-<string tools:ignore="MissingTranslation" name="show_from_all_lists">Alle lijsten</string>
-<string tools:ignore="MissingTranslation" name="default_list_needed_warning">Stel eerst een standaardlijst in</string>
-<string tools:ignore="MissingTranslation" name="reverted">Veranderingen ongedaan gemaakt</string>
-<string name="notecopied" tools:ignore="MissingTranslation">Gekopiëerd</string>
-<string name="deleted" tools:ignore="MissingTranslation">Verwijderd</string>
-<string name="items" tools:ignore="MissingTranslation">notities</string>
-<string tools:ignore="MissingTranslation" name="permission_read_label">lees notities en lijsten</string>
-<string tools:ignore="MissingTranslation" name="permission_read_desc">Staat de applicatie toe notities en gerelateerde lijsten te lezen.</string>
-<string tools:ignore="MissingTranslation" name="permission_write_label">notities en lijsten bewerken</string>
-<string tools:ignore="MissingTranslation" name="permission_write_desc">Staat de applicatie toe om notities en lijsten te maken, bewerken en verwijderen.</string>
-<string tools:ignore="MissingTranslation" name="settings_header_list">Lijstinstellingen</string>
-<string tools:ignore="MissingTranslation" name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string tools:ignore="MissingTranslation" name="settings_header_sync">@string/settings_cat_syncing</string>
-<string tools:ignore="MissingTranslation" name="settings_list_dialog">Selecteer een lijst</string>
-<string tools:ignore="MissingTranslation" name="settings_list">Lijst</string>
-<string tools:ignore="MissingTranslation" name="automatic">Automatisch</string>
-
-<string tools:ignore="MissingTranslation" name="preferences_week_start_day_dialog">"Week begint op"</string>
-<string tools:ignore="MissingTranslation" name="preferences_week_start_day_title">"Week begint op"</string>
+<string name="app_name">Notities</string>
+<string name="title_create">Nieuwe notitie</string>
+<string name="title_edit">Bewerken %1$s</string>
+<string name="menu_add">Nieuwe notitie</string>
+<string name="menu_delete">Verwijderen</string>
+<string name="menu_revert">Veranderingen ongedaan maken</string>
+<string name="menu_copy">Notitie kopiëren</string>
+<string name="menu_cancel">Annuleren</string>
+<string name="menu_setcompleted">Wijzig naar voltooid</string>
+<string name="menu_setuncompleted">Wijzig naar onvoltooid</string>
+<string name="menu_deletelist">Verwijder lijst</string>
+<string name="menu_sync">Herladen</string>
+<string name="menu_share">Delen</string>
+<string name="menu_preferences">Instellingen</string>
+<string name="menu_renamelist">Lijst hernoemen</string>
+<string name="menu_createlist">Nieuwe lijst</string>
+<string name="menu_clearcompleted">Verwijder voltooide notities</string>
+<string name="menu_setdefaultlist">Als standaard lijst gebruiken</string>
+<string name="menu_managelists">Lijsten beheren</string>
+<string name="delete_list_warning">De lijst wordt permanent verwijderd. Weet je het zeker?</string>
+<string name="editor_due_date_hint">Einddatum</string>
+<string name="editor_title_hint">Titel</string>
+<string name="editor_note_hint">Notitie</string>
+<string name="resolve_edit">Notitie bewerken</string>
+<string name="error_title">Mislukt</string>
+<string name="error_message">Kon de notitie niet laden</string>
+<string name="search_hint">Zoeken</string>
+<string name="settings_theme">Huidig thema</string>
+<string name="settings_theme_dialog">Gebruik thema</string>
+<string name="settings_lang">Taal</string>
+<string name="settings_cat_theme">Thema</string>
+<string name="settings_cat_sorting">Sortering</string>
+<string name="settings_sorting_type">Gesorteerd op</string>
+<string name="settings_sorting_type_dialog">Sorteren op</string>
+<string name="settings_sorting_order">Volgorde</string>
+<string name="settings_sorting_order_dialog">Volgorde</string>
+<string name="settings_summary_sort_type_alphabetic">Titel</string>
+<string name="settings_summary_sort_type_modified">Laatst bewerkt</string>
+<string name="settings_summary_sort_type_duedate">Einddatum</string>
+<string name="settings_summary_sort_type_serverposition">Mijn volgorde</string>
+<string name="settings_summary_sort_order_asc">Oplopend</string>
+<string name="settings_summary_sort_order_desc">Aflopend</string>
+<string name="settings_summary_theme_black">Zwart</string>
+<string name="settings_summary_theme_dark">Donker</string>
+<string name="settings_summary_theme_light">Licht</string>
+<string name="settings_summary_theme_light_dark_ab">Licht, donker menu</string>
+<string name="settings_cat_appearance">Opmaak</string>
+<string name="settings_font_screen">Tekenstijl</string>
+<string name="settings_font_screen_summary">Verander het lettertype en grootte</string>
+<string name="settings_cat_font_editor">Bewerker</string>
+<string name="settings_font_type">Lettertype</string>
+<string name="settings_font_type_dialog">Kies een lettertype</string>
+<string name="settings_font_size">Lettergrootte</string>
+<string name="preference_preview_text">Dit is hoe de voorbeeldtekst eruit ziet</string>
+<string name="settings_text_preview_title">Voorbeeld</string>
+<string name="monospace">Monospace</string>
+<string name="sans">Schreefloos</string>
+<string name="serif">Schreef</string>
+<string name="settings_sync_freq_title">Synchronisatie-frequentie</string>
+<string name="settings_account_title">Account kiezen</string>
+<string name="settings_account_summary">Verander account</string>
+<string name="settings_sync_enable_title">Google Tasks sync</string>
+<string name="settings_sync_enable_summary">Synchroniseer notities met je Google account</string>
+<string name="settings_cat_syncing">Synchronisatie</string>
+<string name="manual">Handmatig</string>
+<string name="minutes">minuten</string>
+<string name="hours">uren</string>
+<string name="onehour">Een uur</string>
+<string name="oneday">Een dag</string>
+<string name="yes">Ja</string>
+<string name="no">Nee</string>
+<string name="ok">OK</string>
+<string name="show_from_all_lists">Alle lijsten</string>
+<string name="default_list_needed_warning">Stel eerst een standaardlijst in</string>
+<string name="reverted">Veranderingen ongedaan gemaakt</string>
+<string name="notecopied">Gekopiëerd</string>
+<string name="deleted">Verwijderd</string>
+<string name="items">notities</string>
+<string name="permission_read_label">lees notities en lijsten</string>
+<string name="permission_read_desc">Staat de applicatie toe notities en gerelateerde lijsten te lezen.</string>
+<string name="permission_write_label">notities en lijsten bewerken</string>
+<string name="permission_write_desc">Staat de applicatie toe om notities en lijsten te maken, bewerken en verwijderen.</string>
+<string name="settings_header_list">Lijstinstellingen</string>
+<string name="settings_header_appearance">@string/settings_cat_appearance</string>
+<string name="settings_header_sync">@string/settings_cat_syncing</string>
+<string name="settings_list_dialog">Selecteer een lijst</string>
+<string name="settings_list">Lijst</string>
+<string name="automatic">Automatisch</string>
+<string name="preferences_week_start_day_dialog">"Week begint op"</string>
+<string name="preferences_week_start_day_title">"Week begint op"</string>
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
 -->
 <plurals name="notecopied_msg">
-<item quantity="one">Copied one note</item>
-<item quantity="other">Copied %d notes</item>
+<item quantity="one">@string/notecopied_one</item>
+<item quantity="other">@string/notecopied_other</item>
 </plurals>
-
 <plurals name="notedeleted_msg">
-<item quantity="one">Deleted one note</item>
-<item quantity="other">Deleted %d notes</item>
+<item quantity="one">@string/notedeleted_one</item>
+<item quantity="other">@string/notedeleted_other</item>
 </plurals>
-
 <plurals name="mode_choose">
-<item quantity="one">Selected one note</item>
-<item quantity="other">Selected %d notes</item>
+<item quantity="one">@string/selected_one</item>
+<item quantity="other">@string/selected_other</item>
 </plurals>
 
-<string tools:ignore="MissingTranslation" name="lock_note">Notitie vergrendelen</string>
-<string tools:ignore="MissingTranslation" name="unlock_note">Notitie ontgrendelen</string>
-<string tools:ignore="MissingTranslation" name="locked">Vergrendeld</string>
-<string tools:ignore="MissingTranslation" name="unlocked">Ontgrendeld</string>
-<string tools:ignore="MissingTranslation" name="password_required">Wachtwoord vereist</string>
-<string tools:ignore="MissingTranslation" name="select_account">Selecteer een account</string>
-<string tools:ignore="MissingTranslation" name="password">Wachtwoord</string>
-<string tools:ignore="MissingTranslation" name="password_set">Wachtwoord instellen</string>
-<string tools:ignore="MissingTranslation" name="password_cleared">Wachtwoord verwijderd</string>
-<string tools:ignore="MissingTranslation" name="passwords_dont_match">Wachtwoord komt niet overeen</string>
-<string tools:ignore="MissingTranslation" name="enter_password">Wachtwoord invoeren</string>
-<string tools:ignore="MissingTranslation" name="enter_new_password">Nieuw wachtwoord invoeren</string>
-<string tools:ignore="MissingTranslation" name="confirm_new_password">Bevestig nieuw wachtwoord</string>
-<string tools:ignore="MissingTranslation" name="apply">Toepassen</string>
-<string tools:ignore="MissingTranslation" name="clear_password">Wachtwoord verwijderen</string>
-<string tools:ignore="MissingTranslation" name="password_info">Het instellen van een wachtwoord zal je vereisen een wachtwoord in te voeren om vergrendelde notities te bekijken. Het zal alleen het notitiedeel beschermen, dus je hebt wel onbeschermd toegang tot de titel en de einddatum. Het versleuteld de notitie niet, dus de notitie kan gewoon gezien worden in Google Mail/Agenda. Als je je wachtwoord vergeet, synchroniseer dan met Google en herinstalleer de app.</string>
-<string tools:ignore="MissingTranslation" name="about">Over</string>
-
-<string tools:ignore="MissingTranslation" name="sync_failed">Synchronisatie mislukt</string>
-<string tools:ignore="MissingTranslation" name="sync_login_failed">Inloggen mislukt, kon niet verbinden met Google Tasks</string>
-
-<string tools:ignore="MissingTranslation" name="changelog_full_title">Recente wijzigingen</string>
-<string tools:ignore="MissingTranslation" name="changelog_title">Wat is er veranderd?</string>
-<string tools:ignore="MissingTranslation" name="changelog_ok_button">OK</string>
-<string tools:ignore="MissingTranslation" name="changelog_show_full">Volledige versie inzien</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note">Notitievoorbeeld tonen</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_off">Titel neemt 2 regels in</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_preview_note_summary_on">Notitie op 2de regel</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_show_complete">Markeren-als-voltooid tonen</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_off">Knop wordt getoond</string>
-<string tools:ignore="MissingTranslation" name="widget_pref_show_complete_summary_on">Knop wordt niet getoond</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem">Titel op 2 regels</string>
-<string tools:ignore="MissingTranslation" name="settings_listitem_summary_off">Notitievoorbeeld is 2 regels</string>
-
-<string tools:ignore="MissingTranslation" name="editor_details">Meer</string>
-<string tools:ignore="MissingTranslation" name="completed">Voltooid</string>
-<string tools:ignore="MissingTranslation" name="subtask_of">Subtaak van</string>
-<string tools:ignore="MissingTranslation" name="security">Beveiliging</string>
-
-<string tools:ignore="MissingTranslation" name="date_header_overdue">Over tijd</string>
-<string tools:ignore="MissingTranslation" name="date_header_today">Vandaag</string>
-<string tools:ignore="MissingTranslation" name="date_header_tomorrow">Morgen</string>
-<string tools:ignore="MissingTranslation" name="date_header_7days">Komende 7 dagen</string>
-<string tools:ignore="MissingTranslation" name="date_header_future">Later</string>
-<string tools:ignore="MissingTranslation" name="date_header_none">Geen datum</string>
-<string tools:ignore="MissingTranslation" name="date_header_completed">Voltooid</string>
-
-<string tools:ignore="MissingTranslation" name="mod_header_yesterday">Gisteren</string>
-<string tools:ignore="MissingTranslation" name="mod_header_thisweek">Deze week</string>
-<string tools:ignore="MissingTranslation" name="mod_header_earlier">Eerder</string>
-
-<string tools:ignore="MissingTranslation" name="settings_listheader">Als alle lijsten worden getoond</string>
-<string tools:ignore="MissingTranslation" name="settings_listheader_off">Toon als 1 lijst</string>
-<string tools:ignore="MissingTranslation" name="settings_listheader_on">Toon lijstnamen</string>
-
-<string tools:ignore="MissingTranslation" name="please_create_list">Maak eerst een lijst aan</string>
-<string tools:ignore="MissingTranslation" name="please_select_note">Selecteer of maak eerst een notitie</string>
-<string tools:ignore="MissingTranslation" name="please_create_note">Maak eerst een notitie</string>
-
-<string tools:ignore="MissingTranslation" name="hide_checkbox">Checkbox verbergen</string>
-<string tools:ignore="MissingTranslation" name="hide_checkbox_summary_on">Checkbox wordt verborgen</string>
-<string tools:ignore="MissingTranslation" name="hide_checkbox_summary_off">Checkbox wordt getoond</string>
-
-<string tools:ignore="MissingTranslation" name="hide_note">Notitie verbergen</string>
-<string tools:ignore="MissingTranslation" name="hide_note_summary_on">Notitie wordt verborgen</string>
-<string tools:ignore="MissingTranslation" name="hide_note_summary_off">Notitie wordt getoond</string>
-
-<string tools:ignore="MissingTranslation" name="hide_date">Verborgen einddatum</string>
-<string tools:ignore="MissingTranslation" name="hide_date_summary_on">Datum wordt verborgen</string>
-<string tools:ignore="MissingTranslation" name="hide_date_summary_off">Datum wordt getoond</string>
-
-<string tools:ignore="MissingTranslation" name="title_rows">Maximale titelhoogte</string>
-<string tools:ignore="MissingTranslation" name="title_rows_1">1 rij</string>
-<string tools:ignore="MissingTranslation" name="title_rows_2">2 rijen</string>
-<string tools:ignore="MissingTranslation" name="title_rows_free">Geen beperkingen</string>
-
-<string tools:ignore="MissingTranslation" name="saturday">Zaterdag</string>
-<string tools:ignore="MissingTranslation" name="sunday">Zondag</string>
-<string tools:ignore="MissingTranslation" name="monday">Maandag</string>
-<string tools:ignore="MissingTranslation" name="localedefault">Standaard locale</string>
-
+<string name="lock_note">Notitie vergrendelen</string>
+<string name="unlock_note">Notitie ontgrendelen</string>
+<string name="locked">Vergrendeld</string>
+<string name="unlocked">Ontgrendeld</string>
+<string name="password_required">Wachtwoord vereist</string>
+<string name="select_account">Selecteer een account</string>
+<string name="password">Wachtwoord</string>
+<string name="password_set">Wachtwoord instellen</string>
+<string name="password_cleared">Wachtwoord verwijderd</string>
+<string name="passwords_dont_match">Wachtwoorden komen niet overeen</string>
+<string name="password_incorrect">Ongeldig wachtwoord</string>
+<string name="enter_password">Wachtwoord invoeren</string>
+<string name="enter_new_password">Nieuw wachtwoord invoeren</string>
+<string name="confirm_new_password">Bevestig nieuw wachtwoord</string>
+<string name="apply">Toepassen</string>
+<string name="clear_password">Wachtwoord wissen</string>
+<string name="password_info">Na het instellen van een wachtwoord, zal je een wachtwoord in moeten voeren om vergrendelde notities te bekijken. Het zal alleen het notitieveld beschermen, dus je hebt wel onbeschermd toegang tot de titel en de einddatum. Het versleutelt de notitie niet, dus de notitie is gewoon zichtbaar in Google Mail/Agenda. Als je het wachtwoord vergeet, synchroniseer dan met Google en installeer de app opnieuw.</string>
+<string name="about">Over</string>
+<string name="sync_failed">Synchronisatie mislukt</string>
+<string name="sync_login_failed">Inloggen mislukt, kon niet verbinden met Google Tasks</string>
+<string name="changelog_full_title">Recente wijzigingen</string>
+<string name="changelog_title">Wat is er veranderd?</string>
+<string name="changelog_ok_button">OK</string>
+<string name="changelog_show_full">Volledige versie inzien</string>
+<string name="widget_pref_preview_note">Notitievoorbeeld tonen</string>
+<string name="widget_pref_preview_note_summary_off">Titel neemt 2 regels in</string>
+<string name="widget_pref_preview_note_summary_on">Notitie op 2de regel</string>
+<string name="widget_pref_show_complete">Markeren-als-voltooid tonen</string>
+<string name="widget_pref_show_complete_summary_off">Knop wordt getoond</string>
+<string name="widget_pref_show_complete_summary_on">Knop wordt niet getoond</string>
+<string name="settings_listitem">Titel op 2 regels</string>
+<string name="settings_listitem_summary_off">Notitievoorbeeld is 2 regels</string>
+<string name="editor_details">Meer</string>
+<string name="completed">Voltooid</string>
+<string name="subtask_of">Subtaak van</string>
+<string name="security">Beveiliging</string>
+<string name="date_header_overdue">Over tijd</string>
+<string name="date_header_today">Vandaag</string>
+<string name="date_header_tomorrow">Morgen</string>
+<string name="date_header_7days">Komende 7 dagen</string>
+<string name="date_header_future">Later</string>
+<string name="date_header_none">Geen datum</string>
+<string name="date_header_completed">Voltooid</string>
+<string name="mod_header_yesterday">Gisteren</string>
+<string name="mod_header_thisweek">Deze week</string>
+<string name="mod_header_earlier">Eerder</string>
+<string name="settings_listheader">Als alle lijsten worden getoond</string>
+<string name="settings_listheader_off">Toon als 1 lijst</string>
+<string name="settings_listheader_on">Toon lijstnamen</string>
+<string name="please_create_list">Maak eerst een lijst aan</string>
+<string name="please_select_note">Selecteer of maak eerst een notitie</string>
+<string name="please_create_note">Maak eerst een notitie</string>
+<string name="hide_checkbox">Checkbox verbergen</string>
+<string name="hide_checkbox_summary_on">Checkbox wordt verborgen</string>
+<string name="hide_checkbox_summary_off">Checkbox wordt getoond</string>
+<string name="hide_note">Notitie verbergen</string>
+<string name="hide_note_summary_on">Notitie wordt verborgen</string>
+<string name="hide_note_summary_off">Notitie wordt getoond</string>
+<string name="hide_date">Einddatum verbergen</string>
+<string name="hide_date_summary_on">Datum wordt verborgen</string>
+<string name="hide_date_summary_off">Datum wordt getoond</string>
+<string name="title_rows">Maximale titelhoogte</string>
+<string name="title_rows_1">1 rij</string>
+<string name="title_rows_2">2 rijen</string>
+<string name="title_rows_free">Geen beperkingen</string>
+<string name="saturday">Zaterdag</string>
+<string name="sunday">Zondag</string>
+<string name="monday">Maandag</string>
+<string name="localedefault">Standaard</string>
 
 <!-- These should probably not be translated -->
-<string tools:ignore="MissingTranslation" name="default_notetitle">Welkom!</string>
-<string tools:ignore="MissingTranslation" name="default_notetext">Om het maximale uit deze app te halen adviseer ik eerst synchronisatie aan te zetten. Klik op de syncknop in het menu vanuit het notitielijstscherm. Standaard wordt er dan automatisch elk uur gesynchroniseerd.\n\nNotitiesynchronisatie is gekoppeld aan de globale instelling. Kort gezegd zal deze app synchroniseren als ook Gmail dat doet. Je kunt automatische synchronisatie handmatig uit zetten in de instellingen.\n\nAls je je apparaat met meerdere Google accounts hebt gekoppeld, dan kun je in de instellingen kiezen met welk account gesynchroniseerd moet worden.\n\nIk advisieer om de instellingen eens te bekijken, om te zien wat je zoal kunt aanpassen. Zo zijn lettertype en lettergrootte van de tekst in stellen en zijn er donkere en lichte thema\'s beschikbaar.\n\nDe app biedt ook een volledig aanpasbare widget aan. Het formaat is te wijzingen zoals bij andere widgets: hou je vinger lang op de widget alsof je heb gaat verplaatsen. Vervolgens kun je de randen verslepen om het formaat aan te passen.\n\nIk hoop dat je de app nuttig vind. Onthoud dat hij volledig gratis is, zonder advertenties en open source. Als je een goed idee hebt of een klacht, neem dan contact met me op.\n\n/Jonas</string>
+<string name="default_notetitle">Welkom!</string>
+<string name="default_notetext">Om het maximale uit deze app te halen adviseer ik eerst synchronisatie aan te zetten. Klik op de syncknop in het menu vanuit het notitielijstscherm. Standaard wordt er dan automatisch elk uur gesynchroniseerd.\n\nNotitiesynchronisatie is gekoppeld aan de globale instelling. Kort gezegd zal deze app synchroniseren als ook Gmail dat doet. Je kunt automatische synchronisatie uitzetten en overgaan op handmatig in de instellingen.\n\nAls je je apparaat met meerdere Google accounts hebt gekoppeld, dan kun je in de instellingen kiezen met welk account gesynchroniseerd moet worden.\n\nIk adviseer om de instellingen eens te bekijken, om te zien wat je zoal kunt aanpassen. Zo zijn lettertype en lettergrootte van de tekst in stellen en zijn er donkere en lichte thema\'s beschikbaar.\n\nDe app biedt ook een volledig aanpasbare widget aan. Het formaat is te wijzigen net zoals bij andere widgets: hou je vinger lang op de widget alsof je heb gaat verplaatsen. Vervolgens kun je de randen verslepen om het formaat aan te passen.\n\nIk hoop dat je de app nuttig vind. Onthoud dat hij volledig gratis is, geen  advertenties heeft en open source is. Als je een goed idee hebt of een serieuze klacht, neem dan contact met me op.\n\n/Jonas</string>
 
+<!-- settings string keys -->
+<string name="menu_settings">Instellingen</string>
+<string name="title_activity_list_widget_config">Widgetconfiguratie</string>
+<string name="hide_appicon">App-icon verbergen</string>
+<string name="hide_new">Knop Nieuw verbergen</string>
+<string name="hide_header">Hele widget-kop verbergen</string>
+<string name="hide_widgetbg">Transparante achtergrond</string>
+<string name="shortcut_help1">Indien ingeschakeld maakt snelkoppeling een nieuwe notitie in de gekozen lijst en opent de bewerker. Indien uitgeschakeld opent de snelkoppeling de gekozen lijst,</string>
+<string name="loading_widget">Laden widget&#8230;</string>
+<string name="default_list_set">Standaardlijst instellen</string>
+
+<string name="notecopied_one">1 notitie gekopieerd</string>
+<string name="notecopied_other">%s notities gekopieerd</string>
+<string name="notedeleted_one">1 notitie verwijderd</string>
+<string name="notedeleted_other">%s notities verwijderd</string>
+<string name="selected_one">1 notitie geselecteerd</string>
+<string name="selected_other">%d notities geselecteerd</string>
+
+<string name="background_sync">Achtergrondsynchronisatie</string>
+<string name="background_sync_info">Synchoniseert een keer per uur</string>
+<string name="sync_on_change">Synchroniseer bij wijzigingen</string>
+<string name="sync_on_change_info">Synchroniseer kort nadat een notitie is gewijzigd</string>
+<string name="sync_on_start">Synchroniseer bij starten app</string>
+<string name="sync_on_start_info">Zal alleen gebeuren bij nieuwe start, niet bij hervatten app</string>
+<string name="sync_full_force">Volledige synchronisatie forceren de volgende keer</string>
+<string name="sync_full_force_info">Kies dit alleen als je denkt dat bij synchronisatie sommige items ontbreken.</string>
+
+<string name="silent">Stil</string>
+<string name="sound">Geluid</string>
+<string name="vibrate">Vibratie</string>
+<string name="reminders">Herinneringen</string>
+<string name="add_reminder">Herinnering toevoegen</string>
+<string name="standard">Standaard	</string>
+<string name="notification_prio_high">Hoog: Bovenaan, uitgevouwen	</string>
+<string name="notification_prio_low">Laag: Verborgen, geminimaliseerd</string>
+<string name="priority">Prioriteit	</string>
+<string name="group_on_list">Groeperen op lijst</string>
+<string name="group_on_list_summary">Meerdere meldingen zullen samengevoegd worden als ze bij dezelfde lijst horen.</string>
+<string name="more">meer</string>
+<string name="notifications">Meldingen</string>
+<string name="google_play_promo_80_char_limit">Mooie notitie-, taken- en te doen-app met Google Tasks-synchronisatie.</string>
 </resources>

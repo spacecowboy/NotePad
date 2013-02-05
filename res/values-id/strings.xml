@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2012 Jonas Kalderstam
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+<string name="app_name">Catatan</string>
+<string name="title_create">Catatan Baru</string>
+<string name="title_edit">Ubah</string>
+<string name="menu_add">Catatan Baru</string>
+<string name="menu_delete">Hapus</string>
+<string name="menu_revert">Batalkan Perubahan</string>
+<string name="menu_copy">Salin Catatan</string>
+<string name="menu_cancel">Batalkan</string>
+<string name="menu_sync">Muat Ulang</string>
+<string name="menu_share">Bagikan</string>
+<string name="menu_preferences">Pengaturan</string>
+<string name="menu_renamelist">Ubah Nama Daftar</string>
+<string name="menu_createlist">Buat Daftar</string>
+<string name="editor_title_hint">Judul</string>
+<string name="editor_note_hint">Catatan</string>
+<string name="resolve_edit">Ubah Catatan</string>
+<string name="error_title">Kesalahan</string>
+<string name="search_hint">Cari</string>
+<string name="settings_lang">Bahasa</string>
+<string name="settings_cat_theme">Tema</string>
+<string name="settings_cat_sorting">Penyortiran</string>
+<string name="settings_sorting_order">Urutan</string>
+<string name="settings_summary_sort_type_alphabetic">Judul</string>
+<string name="settings_summary_theme_black">Hitam</string>
+<string name="settings_summary_theme_dark">Gelap</string>
+<string name="settings_summary_theme_light">Terang</string>
+<string name="settings_summary_theme_light_dark_ab">Terang dengan action bar gelap</string>
+<string name="settings_cat_appearance">Tampilan</string>
+<string name="settings_font_screen">Pengaturan Font</string>
+<string name="settings_font_type">Font</string>
+<string name="settings_font_type_dialog">Pilih Font</string>
+<string name="settings_font_size">Ukuran Font</string>
+<string name="settings_text_preview_title">Pratinjau</string>
+<string name="settings_account_title">Pilih Akun</string>
+<string name="settings_account_summary">Tekan untuk memilih akun</string>
+<string name="manual">Manual</string>
+<string name="minutes">menit</string>
+<string name="hours">jam</string>
+<string name="onehour">Satu jam</string>
+<string name="oneday">Satu hari</string>
+<string name="yes">Ya</string>
+<string name="no">Tidak</string>
+<string name="ok">OK</string>
+<string name="show_from_all_lists">Semua daftar</string>
+<string name="notecopied">Terkopi</string>
+<string name="deleted">Terhapus</string>
+<string name="items">Catatan</string>
+<string name="permission_read_label">Baca catatan dan daftar</string>
+<string name="permission_read_desc">Perbolehkan aplikasi untuk membaca catatan dan daftar anda.</string>
+<string name="permission_write_label">Ubah catatan dan daftar</string>
+<string name="permission_write_desc">Perbolehkan aplikasi untuk menambah, memperbaharui, dan menghapus catatan dan daftar.</string>
+<string name="settings_header_list">Pengaturan Daftar</string>
+<string name="settings_list_dialog">Pilih Daftar</string>
+<string name="settings_list">Daftar</string>
+<string name="automatic">Otomatis</string>
+<string name="preferences_week_start_day_dialog">Awal pekan dimulai pada</string>
+<string name="preferences_week_start_day_title">Awal pekan dimulai pada</string>
+<string name="preferences_week_start_day_default">-1</string>
+<!--
+Use few if language need it. In English is the same.
+<item quantity="few">Copied 2 notes.</item>
+-->
+<plurals name="notecopied_msg">
+<item quantity="one">@string/notecopied_one</item>
+<item quantity="other">@string/notecopied_other</item>
+</plurals>
+<plurals name="notedeleted_msg">
+<item quantity="one">@string/notedeleted_one</item>
+<item quantity="other">@string/notedeleted_other</item>
+</plurals>
+<plurals name="mode_choose">
+<item quantity="one">@string/selected_one</item>
+<item quantity="other">@string/selected_other</item>
+</plurals>
+
+<string name="lock_note">Kunci catatan</string>
+<string name="unlock_note">Buka kunci catatan</string>
+<string name="locked">Terkunci</string>
+<string name="unlocked">Kunci Terbuka</string>
+<string name="password_required">Diperlukan sandi</string>
+<string name="select_account">Pilih akun</string>
+<string name="password">Sandi</string>
+<string name="password_set">Sandi terpasang</string>
+<string name="password_cleared">Sandi terhapus</string>
+<string name="passwords_dont_match">Sandi tidak cocok</string>
+<string name="password_incorrect">Sandi salah</string>
+<string name="enter_password">Masukkan sandi</string>
+<string name="enter_new_password">Masukkan sandi baru</string>
+<string name="confirm_new_password">Konfirmasi sandi baru</string>
+<string name="apply">Terapkan</string>
+<string name="clear_password">Hapus sandi</string>
+<string name="password_info">Pengaturan password akan meminta Anda untuk memasukkan password untuk menunjukkan catatan yang terkunci. Ini hanya akan melindungi isi catatan sehingga Anda masih memiliki akses ke judul dan tanggal yang tidak terproteksi . Ini tidak mengenkripsi catatan dengan cara apapun sehingga dapat stillbe dilihat di Google mail / calendar. Jika Anda lupa password Anda, sinkron dengan Google dan kemudian menginstal ulang aplikasi.</string>
+<string name="about">Tentang</string>
+<string name="sync_failed">Snkronisasi gagal</string>
+<string name="changelog_title">Apa yang baru</string>
+<string name="changelog_ok_button">OK</string>
+<string name="changelog_show_full">Tunjukkan semua</string>
+<string name="widget_pref_preview_note">Tunjukkan pratinjau catatan</string>
+<string name="editor_details">Lainnya</string>
+<string name="completed">Selesai</string>
+<string name="date_header_today">Hari ini</string>
+<string name="date_header_tomorrow">Besok</string>
+<string name="date_header_7days">Minggu depan</string>
+<string name="date_header_future">Nanti</string>
+<string name="date_header_none">Tanpa tanggal</string>
+<string name="date_header_completed">Selesai</string>
+<string name="mod_header_yesterday">Kemarin</string>
+<string name="mod_header_thisweek">Minggu ini</string>
+<string name="hide_note">Sembunyikan catatan</string>
+<string name="hide_note_summary_on">Catatan akan tersembunyi</string>
+<string name="hide_note_summary_off">Catatan akan ditampilkan</string>
+<string name="title_rows_1">Satu baris</string>
+<string name="title_rows_2">Dua baris</string>
+<string name="saturday">Sabtu</string>
+<string name="sunday">Minggu</string>
+<string name="monday">Senin</string>
+
+<!-- These should probably not be translated -->
+<string name="default_notetitle">Selamat datang!</string>
+
+<!-- settings string keys -->
+<string name="menu_settings">Pengaturan</string>
+<string name="hide_appicon">Sembunyikan ikon aplikasi</string>
+<string name="hide_new">Sembunyikan tombol \'baru\'</string>
+<string name="hide_header">Sembunyikan seluruh header pada widget</string>
+
+
+<string name="background_sync">Sinkronisasi di latar belakang</string>
+<string name="background_sync_info">Menyinkronisasi setiap jam</string>
+<string name="sync_on_change">Menyinkronisasi pada saat berubah</string>
+<string name="sync_on_start">Menyinkronisasi pada saat aplikasi mulai</string>
+<string name="sync_on_start_info">Hanya akan memicu pada mulai pertama, tidak saat melanjutkan</string>
+<string name="sync_full_force">Paksa untuk sinkronisasi penuh lain kali</string>
+<string name="sync_full_force_info">Hanya memeriksa ini jika Anda percaya sinkronisasi kehilangan beberapa item.</string>
+
+<string name="silent">Diam</string>
+<string name="sound">Suara</string>
+<string name="vibrate">Getar</string>
+<string name="reminders">pengingat</string>
+<string name="add_reminder">Tambahkan pengingat</string>
+<string name="standard">Standar</string>
+<string name="notification_prio_high">Tinggi: Di atas, diperluas</string>
+<string name="notification_prio_low">Rendah: Tersembunyi, dipersempit</string>
+<string name="priority">Prioritas</string>
+<string name="group_on_list">Grup dalam daftar</string>
+<string name="more">lainnya</string>
+<string name="notifications">notifikasi</string>
+</resources>

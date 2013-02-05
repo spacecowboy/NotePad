@@ -229,4 +229,19 @@ Use few if language need it. In English is the same.
 <string name="sync_full_force">Forzar sincronización completa la próxima vez</string>
 <string name="sync_full_force_info">Active esto solo si cree que la sincronización pierde algunos elementos.</string>
 
+<string name="silent">Silencioso</string>
+<string name="sound">Sonido</string>
+<string name="vibrate">Vibrar</string>
+<string name="reminders">Recordatorio</string>
+<string name="add_reminder">Añadir recordatorio</string>
+<string name="standard">Estándar</string>
+<string name="notification_prio_high">Alta: encima, expandido</string>
+<string name="notification_prio_low">Baja: oculto, minimizado</string>
+<string name="priority">Prioridad</string>
+<string name="group_on_list">Agrupar en lista</string>
+<string name="group_on_list_summary">Múltiples notificaciones serán agrupadas juntas si pertenecen a la misma lista</string>
+<string name="more">más</string>
+<string name="notifications">Notificaciones</string>
+<string name="google_play_promo_80_char_limit">Aplicación de notas y tareas que sincroniza con Google Tasks</string>
+<string name="google_play_description">Una libreta de notas y tareas-por-hacer de código abierto, de uso en teléfonos y tablets. Sincroniza con tu cuenta de Google para tener un respaldo de tus notas y tareas en la nube sin introducir siquiera una contraseña!\n\nCaracterísticas:\n* Notificaciones/Recordatorios\n* Selección de idioma\n* Interfaz de usuario configurable\n* Widget configurable y de tamaño modificable\n* Gran soporte para tablet, imitando las funcionalidades de Gmail\n* Tema Holo acorde al resto de Android\n* Sincronización automática con Google Tasks\n* Posibilidad de establecer contraseñas para las notas\n* Mover notas entre diferentes listas\n* Integración con el widget de Agenda Android\n* Buscar en todas tus notas (no sólo en sus títulos)\n* Cambiar la fuente y el tamaño del texto!\n\nNota:\nExiste un bug en Android 4.2 que afecta a todas las aplicaciones que usan notificaciones. Si configuras las notificaciones para que NO vibren (que es su valor por defecto), y luego pones tu teléfono en silencio (sólo vibración), las notificaciones siempre vibrarán incluso si las has silenciado explícitamente.\nComo ya se ha indicado, esto es un fallo de Android, no de esta aplicación.\n\nPuedes ayudar con la traducción de la aplicación, simplemente ve a: http://translate.nononsenseapps.com\n\nSi tienes cualquier problema o quieres reportar un fallo, no dudes en contactar conmigo +NoNonsenseApps o reportarlo en el gestor de incidencias https://github.com/spacecowboy/NotePad/issues\n\nEsta aplicación es de código abierto y está disponible en línea en:\nhttps://github.com/spacecowboy/NotePad\n\nExiste una versión de pago de esta aplicación para aquellos que quieran contribuir a su desarrollo. Enlace: https://market.android.com/details?id=com.nononsenseapps.notepad_donate\n</string>
 </resources>

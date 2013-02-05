@@ -84,7 +84,7 @@ import android.content.res.Configuration;
 public class MainActivity extends DualLayoutActivity implements
 		OnSharedPreferenceChangeListener, OnNavigationListener,
 		LoaderManager.LoaderCallbacks<Cursor>, PasswordChecker, Callbacks {
-	private static final String TAG = "FragmentLayout";
+	public static final String TAG = "nononsensenotes";
 	private static final String CURRENT_LIST_ID = "currentlistid";
 	private static final String CURRENT_LIST_POS = "currentlistpos";
 	private static final String RESUMING = "resuming";
