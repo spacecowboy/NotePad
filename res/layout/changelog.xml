@@ -39,7 +39,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="\n- Notifications are now removed/cancelled when notes are deleted.\n- Fixed incorrect ordering of due dates in widgets in some timezones where a note due tomorrow would be shown under today for example.\n- Removed Honeycomb compatibility.\n- Updated translations." />
+            android:text="\n- Added 'New Note'-button to editor on phones.\n- Notifications are now removed/cancelled when notes are deleted.\n- Fixed incorrect ordering of due dates in widgets in some timezones where a note due tomorrow would be shown under today for example.\n- Removed Honeycomb compatibility.\n- Updated translations." />
         
         
         <TextView

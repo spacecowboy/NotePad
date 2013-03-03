@@ -26,8 +26,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
-    android:versionCode="51"
-    android:versionName="4.4.3" >
+    android:versionCode="52"
+    android:versionName="4.4.4" >
 
     <!-- Practically no one on honeycomb anymore -->
     <uses-sdk
