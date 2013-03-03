@@ -163,7 +163,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 	public static RemoteViews buildRemoteViews(Context context,
 			AppWidgetManager appWidgetManager, int appWidgetId,
 			WidgetPrefs settings) {
@@ -174,7 +174,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 				+ "://widget/id/"), String.valueOf(appWidgetId));
 
 		boolean isKeyguard = false;
-		if (context.getResources().getBoolean(R.bool.atLeast16)) {
+		if (context.getResources().getBoolean(R.bool.atLeast17)) {
 			Bundle myOptions = appWidgetManager
 					.getAppWidgetOptions(appWidgetId);
 

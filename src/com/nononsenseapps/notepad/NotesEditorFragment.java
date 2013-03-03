@@ -1012,14 +1012,18 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				(new Handler()).postDelayed(new Runnable() {
 					public void run() {
 						if (mTitle != null) {
-							mTitle.dispatchTouchEvent(MotionEvent.obtain(
+							MotionEvent e = MotionEvent.obtain(
 									SystemClock.uptimeMillis(),
 									SystemClock.uptimeMillis(),
-									MotionEvent.ACTION_DOWN, 0, 0, 0));
-							mTitle.dispatchTouchEvent(MotionEvent.obtain(
+									MotionEvent.ACTION_DOWN, 0, 0, 0);
+							mTitle.dispatchTouchEvent(e);
+							e.recycle();
+							e = MotionEvent.obtain(
 									SystemClock.uptimeMillis(),
 									SystemClock.uptimeMillis(),
-									MotionEvent.ACTION_UP, 0, 0, 0));
+									MotionEvent.ACTION_UP, 0, 0, 0);
+							mTitle.dispatchTouchEvent(e);
+							e.recycle();
 						}
 
 					}

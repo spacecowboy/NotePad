@@ -22,15 +22,16 @@
 
     <TextView
         android:id="@+id/list_header_title"
-        android:textStyle="bold"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingBottom="2dip"
+        android:paddingLeft="8dip"
+        android:paddingTop="2dip"
         android:textAllCaps="true"
         android:textColor="?android:attr/textColorSecondary"
         android:textSize="14sp"
-        android:gravity="center_vertical"
-        android:paddingLeft="8dip"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="2dip"
-        android:paddingTop="2dip" />
+        android:textStyle="bold"
+        tools:ignore="SelectableText" />
 
 </LinearLayout>
