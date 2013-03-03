@@ -458,6 +458,8 @@ public class NotePadProvider extends ContentProvider implements
 
 			createNotificationsTable(db);
 			Log.d("DataBaseHelper", "created notifications table");
+			createNotificationTriggers(db);
+			Log.d("DataBaseHelper", "created notifications trigger");
 		}
 
 		private long insertDefaultList(SQLiteDatabase db) {
@@ -598,6 +600,13 @@ public class NotePadProvider extends ContentProvider implements
 					+ "   WHERE " + NotePad.Notifications.TABLE_NAME + "."
 					+ NotePad.Notifications.COLUMN_NAME_NOTEID + "   = "
 					+ "new." + NotePad.Notes._ID + ";" + " END");
+			
+			db.execSQL("CREATE TRIGGER post_note_actualdelete AFTER DELETE ON "
+					+ NotePad.Notes.TABLE_NAME + " BEGIN"
+					+ "   DELETE FROM " + NotePad.Notifications.TABLE_NAME
+					+ "   WHERE " + NotePad.Notifications.TABLE_NAME + "."
+					+ NotePad.Notifications.COLUMN_NAME_NOTEID + "   = "
+					+ "old." + NotePad.Notes._ID + ";" + " END");
 		}
 
 		@Override
