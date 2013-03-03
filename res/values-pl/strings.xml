@@ -100,8 +100,6 @@ limitations under the License.
 <string name="permission_write_label">zmodyfikuj notatki i listy</string>
 <string name="permission_write_desc">Umożliwia aplikacji dodawanie, aktualizację oraz usuwanie notatek i list.</string>
 <string name="settings_header_list">Ustawienia listy</string>
-<string name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string name="settings_header_sync">@string/settings_cat_syncing</string>
 <string name="settings_list_dialog">Wybierz listę</string>
 <string name="settings_list">Lista</string>
 <string name="automatic">Automatycznie</string>
@@ -168,7 +166,6 @@ Use few if language need it. In English is the same.
 <string name="date_header_future">Później</string>
 <string name="date_header_none">Bez daty</string>
 <string name="date_header_completed">Zakończone</string>
-<string name="mod_header_today">@string/date_header_today</string>
 <string name="mod_header_yesterday">Wczoraj</string>
 <string name="mod_header_thisweek">W tym tygodniu</string>
 <string name="mod_header_earlier">Wcześniej</string>
@@ -241,5 +238,5 @@ Use few if language need it. In English is the same.
 <string name="group_on_list_summary">Powiadomienia będą grupowane jeśli należą do tej samej listy.</string>
 <string name="more">więcej </string>
 <string name="notifications">Powiadomienia</string>
-
+<string name="google_play_promo_80_char_limit">Dobrze wyglądający notes, lista zadań z synchronizacją z kontem Google</string>
 </resources>

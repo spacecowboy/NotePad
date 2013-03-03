@@ -65,6 +65,7 @@ public class UpdateNotifier {
 
 	/**
 	 * Will update all lists and specific uri if present
+	 * Always updates notifications
 	 * 
 	 * @param uri
 	 *            optional uri
@@ -73,6 +74,7 @@ public class UpdateNotifier {
 		if (uri != null) {
 			context.getContentResolver().notifyChange(uri, null, false);
 			SyncHelper.requestSyncIf(context, SyncHelper.ONCHANGE);
+			context.getContentResolver().notifyChange(NotePad.Notifications.CONTENT_URI, null);
 		}
 	}
 

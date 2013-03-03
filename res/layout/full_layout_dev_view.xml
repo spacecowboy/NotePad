@@ -7,8 +7,6 @@
     android:weightSum="@integer/fragmentWeightSum" >
 
     <android.support.v4.view.ViewPager
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="@integer/leftFragmentWeight"

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
     <LinearLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -30,6 +29,18 @@
             android:layout_height="wrap_content"
             android:autoLink="web|email|map"
             android:text="\nA new translation tool has been implemented which makes it super easy for anyone to help translate the app to their native language.\nPlease visit http://translate.nononsenseapps.com for details." />
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\nVersion 4.4.4"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\n- Added 'New Note'-button to editor on phones.\n- Notifications are now removed/cancelled when notes are deleted.\n- Fixed incorrect ordering of due dates in widgets in some timezones where a note due tomorrow would be shown under today for example.\n- Removed Honeycomb compatibility.\n- Updated translations." />
+        
         
         <TextView
             android:layout_width="fill_parent"

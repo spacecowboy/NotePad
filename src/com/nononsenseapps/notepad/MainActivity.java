@@ -92,7 +92,7 @@ public class MainActivity extends DualLayoutActivity implements
 	private static final int RENAME_LIST = 1;
 	private static final int DELETE_LIST = 2;
 	// public static boolean lightTheme = false;
-	public static String currentTheme = MainPrefs.THEME_LIGHT;
+	public static String currentTheme = MainPrefs.THEME_LIGHT_ICS_AB;
 	public static boolean shouldRestart = false;
 
 	// For my special dropdown navigation items

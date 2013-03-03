@@ -77,6 +77,7 @@ import android.widget.Toast;
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.UpdateNotifier;
+import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
@@ -154,7 +155,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	private Object shareActionProvider = null; // Must be object otherwise HC
 												// will crash
 
-	private Activity activity;
+	private MainActivity activity;
 
 	private EditText mTitle;
 
@@ -187,7 +188,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
-		this.activity = activity;
+		this.activity = (MainActivity) activity;
 	}
 
 	/**
@@ -914,6 +915,28 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle all of the possible menu actions.
 		switch (item.getItemId()) {
+		case R.id.menu_add:
+			boolean res = false;
+
+			if (activity != null
+					&& listId > -1
+					&& activity.getCurrentContent().equals(
+							DualLayoutActivity.CONTENTVIEW.RIGHT)) {
+				res = true;
+				Intent intent = new Intent()
+				.setAction(Intent.ACTION_INSERT)
+				.setData(NotePad.Notes.CONTENT_VISIBLE_URI)
+				.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
+
+				//start a new editor activity
+				intent.setClass(activity, RightActivity.class);
+				startActivity(intent);
+			}
+
+			if (res)
+				return res;
+			else
+				break;
 		case R.id.menu_revert:
 			cancelNote();
 			Toast.makeText(activity, getString(R.string.reverted),
@@ -1012,14 +1035,17 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				(new Handler()).postDelayed(new Runnable() {
 					public void run() {
 						if (mTitle != null) {
-							mTitle.dispatchTouchEvent(MotionEvent.obtain(
+							MotionEvent e = MotionEvent.obtain(
 									SystemClock.uptimeMillis(),
 									SystemClock.uptimeMillis(),
-									MotionEvent.ACTION_DOWN, 0, 0, 0));
-							mTitle.dispatchTouchEvent(MotionEvent.obtain(
+									MotionEvent.ACTION_DOWN, 0, 0, 0);
+							mTitle.dispatchTouchEvent(e);
+							e.recycle();
+							e = MotionEvent.obtain(SystemClock.uptimeMillis(),
 									SystemClock.uptimeMillis(),
-									SystemClock.uptimeMillis(),
-									MotionEvent.ACTION_UP, 0, 0, 0));
+									MotionEvent.ACTION_UP, 0, 0, 0);
+							mTitle.dispatchTouchEvent(e);
+							e.recycle();
 						}
 
 					}
@@ -1245,7 +1271,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				this.day = c.get(Calendar.DAY_OF_MONTH);
 
 				String dateFormatShort = getString(R.string.dateformat_short);
-				
+
 				String dateFormatLong = getString(R.string.dateformat_long);
 
 				mDueDate.setText(DateFormat.format(dateFormatLong, c));

@@ -100,14 +100,11 @@ limitations under the License.
 <string name="permission_write_label">modificar notas y listas</string>
 <string name="permission_write_desc">Permite a la aplicación añadir, modificar y eliminar notas y listas.</string>
 <string name="settings_header_list">Ajustes de la lista</string>
-<string name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string name="settings_header_sync">@string/settings_cat_syncing</string>
 <string name="settings_list_dialog">Seleccione una lista</string>
 <string name="settings_list">Lista</string>
 <string name="automatic">Automática</string>
 <string name="preferences_week_start_day_dialog">La semana empieza el</string>
 <string name="preferences_week_start_day_title">La semana empieza el</string>
-<string name="preferences_week_start_day_default">-1</string>
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
@@ -156,7 +153,6 @@ Use few if language need it. In English is the same.
 <string name="widget_pref_show_complete_summary_off">Casilla oculta</string>
 <string name="widget_pref_show_complete_summary_on">Casilla visible</string>
 <string name="settings_listitem">Títulos en dos líneas</string>
-<string name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
 <string name="settings_listitem_summary_off">La nota ocupa 2 líneas</string>
 <string name="editor_details">Más</string>
 <string name="completed">Completada</string>
@@ -169,7 +165,6 @@ Use few if language need it. In English is the same.
 <string name="date_header_future">Más tarde</string>
 <string name="date_header_none">Sin fecha</string>
 <string name="date_header_completed">Completadas</string>
-<string name="mod_header_today">@string/date_header_today</string>
 <string name="mod_header_yesterday">Ayer</string>
 <string name="mod_header_thisweek">Esta semana</string>
 <string name="mod_header_earlier">Anterior</string>

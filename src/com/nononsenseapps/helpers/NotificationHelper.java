@@ -21,9 +21,11 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 
@@ -40,7 +42,16 @@ public class NotificationHelper extends BroadcastReceiver {
 
 	public static final int NOTIFICATION_ID = 4364;
 
-	private static final String TAG = "NoNonsenseNotes.NotificationHelper";
+	private static final String TAG = MainActivity.TAG + ".NotificationHelper";
+	
+	private static ContextObserver observer = null;
+	
+	private static ContextObserver getObserver(final Context context) {
+		if (observer == null) {
+			observer = new ContextObserver(context, null);
+		}
+		return observer;
+	}
 
 	/**
 	 * Fires notifications that have elapsed and sets an alarm to be woken at
@@ -60,9 +71,10 @@ public class NotificationHelper extends BroadcastReceiver {
 						NotesEditorFragment.getIdFromUri(intent.getData()),
 						intent.getLongExtra(
 								NotePad.Notifications.COLUMN_NAME_TIME, 0));
-			} else
+			} else {
 				// Just a notification
 				deleteNotification(context, intent.getData());
+			}
 
 			// User in editor, don't spam
 			notifyPast(context, true);
@@ -71,6 +83,14 @@ public class NotificationHelper extends BroadcastReceiver {
 		}
 
 		scheduleNext(context);
+	}
+
+	private static void monitorUri(final Context context) {
+		Log.d(MainActivity.TAG, "NotificationTable setting observer");
+		context.getContentResolver().unregisterContentObserver(getObserver(context));
+		context.getContentResolver().registerContentObserver(
+				NotePad.Notifications.CONTENT_URI, true,
+				getObserver(context));
 	}
 
 	/**
@@ -93,11 +113,14 @@ public class NotificationHelper extends BroadcastReceiver {
 
 		final NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
+		
+		Log.d(TAG, "Number of notifications: " + notifications.size());
+		
 		// If empty, cancel
 		if (notifications.isEmpty()) {
 			// cancelAll permanent notifications here if/when that is
 			// implemented. Don't touch others.
-			// notificationManager.cancelAll();
+			notificationManager.cancelAll();
 		} else {
 			// else, notify
 			// Fetch sound and vibrate settings
@@ -189,7 +212,7 @@ public class NotificationHelper extends BroadcastReceiver {
 			final List<NoteNotification> notifications) {
 		ArrayList<Long> seenIds = new ArrayList<Long>();
 		ArrayList<NoteNotification> firsts = new ArrayList<NoteNotification>();
-		
+
 		NoteNotification noti;
 		for (int i = notifications.size() - 1; i >= 0; i--) {
 			noti = notifications.get(i);
@@ -205,8 +228,8 @@ public class NotificationHelper extends BroadcastReceiver {
 			final NoteNotification first,
 			final List<NoteNotification> notifications) {
 		ArrayList<NoteNotification> dups = new ArrayList<NoteNotification>();
-		
-		for (NoteNotification noti: notifications) {
+
+		for (NoteNotification noti : notifications) {
 			if (noti.noteId == first.noteId && noti.id != first.id) {
 				dups.add(noti);
 			}
@@ -332,6 +355,8 @@ public class NotificationHelper extends BroadcastReceiver {
 			am.set(AlarmManager.RTC_WAKEUP, notifications.get(0).time,
 					pendingIntent);
 		}
+
+		monitorUri(context);
 	}
 
 	/**
@@ -383,6 +408,8 @@ public class NotificationHelper extends BroadcastReceiver {
 					NotePad.Notifications.CONTENT_URI, values);
 			notification.id = (int) NotesEditorFragment.getIdFromUri(uri);
 		}
+		
+		context.getContentResolver().notifyChange(NotePad.Notifications.CONTENT_URI, null);
 
 		notifyPast(context, true);
 		scheduleNext(context);
@@ -413,6 +440,8 @@ public class NotificationHelper extends BroadcastReceiver {
 					Uri.withAppendedPath(
 							NotePad.Notifications.CONTENT_ID_URI_BASE,
 							Long.toString(id)), null, null);
+			
+			context.getContentResolver().notifyChange(NotePad.Notifications.CONTENT_URI, null);
 
 			/*
 			 * final NotificationManager notificationManager =
@@ -426,6 +455,8 @@ public class NotificationHelper extends BroadcastReceiver {
 	public static void deleteNotification(Context context, Uri uri) {
 		Log.d(TAG, "Trying to delete " + uri.toString());
 		context.getContentResolver().delete(uri, null, null);
+		
+		context.getContentResolver().notifyChange(NotePad.Notifications.CONTENT_URI, null);
 
 		/*
 		 * final NotificationManager notificationManager = (NotificationManager)
@@ -448,6 +479,8 @@ public class NotificationHelper extends BroadcastReceiver {
 		final NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.cancel((int) listid);
+		
+		context.getContentResolver().notifyChange(NotePad.Notifications.CONTENT_URI, null);
 	}
 
 	/**
@@ -604,6 +637,34 @@ public class NotificationHelper extends BroadcastReceiver {
 			}
 
 			Log.d(TAG, "constructor notification id = " + id);
+		}
+	}
+
+	private static class ContextObserver extends ContentObserver {
+		private final Context context;
+
+		public ContextObserver(final Context context, Handler h) {
+			super(h);
+			this.context = context.getApplicationContext();
+		}
+
+		// Implement the onChange(boolean) method to delegate the
+		// change notification to the onChange(boolean, Uri) method
+		// to ensure correct operation on older versions
+		// of the framework that did not have the onChange(boolean,
+		// Uri) method.
+		@Override
+		public void onChange(boolean selfChange) {
+			onChange(selfChange, null);
+		}
+
+		// Implement the onChange(boolean, Uri) method to take
+		// advantage of the new Uri argument.
+		@Override
+		public void onChange(boolean selfChange, Uri uri) {
+			Log.d(MainActivity.TAG, "NotificationTable onChange: got change");
+			// Handle change but don't spam
+			notifyPast(context, true);
 		}
 	}
 }

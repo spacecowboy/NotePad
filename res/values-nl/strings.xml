@@ -25,16 +25,16 @@ limitations under the License.
 <string name="menu_revert">Veranderingen ongedaan maken</string>
 <string name="menu_copy">Notitie kopiëren</string>
 <string name="menu_cancel">Annuleren</string>
-<string name="menu_setcompleted">Wijzig naar voltooid</string>
-<string name="menu_setuncompleted">Wijzig naar onvoltooid</string>
-<string name="menu_deletelist">Verwijder lijst</string>
+<string name="menu_setcompleted">Op voltooid zetten</string>
+<string name="menu_setuncompleted">Op onvoltooid zetten</string>
+<string name="menu_deletelist">Lijst verwijderen</string>
 <string name="menu_sync">Herladen</string>
 <string name="menu_share">Delen</string>
 <string name="menu_preferences">Instellingen</string>
 <string name="menu_renamelist">Lijst hernoemen</string>
 <string name="menu_createlist">Nieuwe lijst</string>
-<string name="menu_clearcompleted">Verwijder voltooide notities</string>
-<string name="menu_setdefaultlist">Als standaard lijst gebruiken</string>
+<string name="menu_clearcompleted">Voltooide notities wissen</string>
+<string name="menu_setdefaultlist">Standaard lijst</string>
 <string name="menu_managelists">Lijsten beheren</string>
 <string name="delete_list_warning">De lijst wordt permanent verwijderd. Weet je het zeker?</string>
 <string name="editor_due_date_hint">Einddatum</string>
@@ -70,9 +70,9 @@ limitations under the License.
 <string name="settings_font_type">Lettertype</string>
 <string name="settings_font_type_dialog">Kies een lettertype</string>
 <string name="settings_font_size">Lettergrootte</string>
-<string name="preference_preview_text">Dit is hoe de voorbeeldtekst eruit ziet</string>
+<string name="preference_preview_text">Dit is hoe de tekst eruit zal zien</string>
 <string name="settings_text_preview_title">Voorbeeld</string>
-<string name="monospace">Monospace</string>
+<string name="monospace">Vaste breedte</string>
 <string name="sans">Schreefloos</string>
 <string name="serif">Schreef</string>
 <string name="settings_sync_freq_title">Synchronisatie-frequentie</string>
@@ -100,8 +100,6 @@ limitations under the License.
 <string name="permission_write_label">notities en lijsten bewerken</string>
 <string name="permission_write_desc">Staat de applicatie toe om notities en lijsten te maken, bewerken en verwijderen.</string>
 <string name="settings_header_list">Lijstinstellingen</string>
-<string name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string name="settings_header_sync">@string/settings_cat_syncing</string>
 <string name="settings_list_dialog">Selecteer een lijst</string>
 <string name="settings_list">Lijst</string>
 <string name="automatic">Automatisch</string>
@@ -171,8 +169,8 @@ Use few if language need it. In English is the same.
 <string name="mod_header_thisweek">Deze week</string>
 <string name="mod_header_earlier">Eerder</string>
 <string name="settings_listheader">Als alle lijsten worden getoond</string>
-<string name="settings_listheader_off">Toon als 1 lijst</string>
-<string name="settings_listheader_on">Toon lijstnamen</string>
+<string name="settings_listheader_off">Als 1 lijst tonen</string>
+<string name="settings_listheader_on">Lijstnamen tonen</string>
 <string name="please_create_list">Maak eerst een lijst aan</string>
 <string name="please_select_note">Selecteer of maak eerst een notitie</string>
 <string name="please_create_note">Maak eerst een notitie</string>
@@ -210,9 +208,9 @@ Use few if language need it. In English is the same.
 <string name="default_list_set">Standaardlijst instellen</string>
 
 <string name="notecopied_one">1 notitie gekopieerd</string>
-<string name="notecopied_other">%s notities gekopieerd</string>
+<string name="notecopied_other">%d notities gekopieerd</string>
 <string name="notedeleted_one">1 notitie verwijderd</string>
-<string name="notedeleted_other">%s notities verwijderd</string>
+<string name="notedeleted_other">%d notities verwijderd</string>
 <string name="selected_one">1 notitie geselecteerd</string>
 <string name="selected_other">%d notities geselecteerd</string>
 
@@ -221,7 +219,7 @@ Use few if language need it. In English is the same.
 <string name="sync_on_change">Synchroniseer bij wijzigingen</string>
 <string name="sync_on_change_info">Synchroniseer kort nadat een notitie is gewijzigd</string>
 <string name="sync_on_start">Synchroniseer bij starten app</string>
-<string name="sync_on_start_info">Zal alleen gebeuren bij nieuwe start, niet bij hervatten app</string>
+<string name="sync_on_start_info">Synchroniseert bij nieuwe start, niet bij hervatten app</string>
 <string name="sync_full_force">Volledige synchronisatie forceren de volgende keer</string>
 <string name="sync_full_force_info">Kies dit alleen als je denkt dat bij synchronisatie sommige items ontbreken.</string>
 

@@ -63,14 +63,14 @@ public class NotePadProvider extends ContentProvider implements
 		PipeDataWriter<Cursor> {
 
 	// Used for debugging and logging
-	private static final String TAG = "NoNonsenseNotes.NotePadProvider";
+	private static final String TAG = MainActivity.TAG + ".NotePadProvider";
 
 	/**
 	 * The database that the provider uses as its underlying data store
 	 */
 	private static final String DATABASE_NAME = "note_pad.db";
 
-	private static final int DATABASE_VERSION = 7;
+	private static final int DATABASE_VERSION = 8;
 
 	/**
 	 * A projection map used to select columns from the database
@@ -458,6 +458,8 @@ public class NotePadProvider extends ContentProvider implements
 
 			createNotificationsTable(db);
 			Log.d("DataBaseHelper", "created notifications table");
+			createNotificationTriggers(db);
+			Log.d("DataBaseHelper", "created notifications trigger");
 		}
 
 		private long insertDefaultList(SQLiteDatabase db) {
@@ -591,6 +593,11 @@ public class NotePadProvider extends ContentProvider implements
 			 * new.deleted = 1 BEGIN DELETE FROM notification WHERE
 			 * notification.noteid = new._id; END;
 			 */
+			
+			// The following code works. But if you change anything, remove
+			// the try block. It is here to allow upgrades from a bug in
+			// version 7 where triggers were not created on fresh installs.
+			try {
 			db.execSQL("CREATE TRIGGER post_note_markdelete AFTER UPDATE ON "
 					+ NotePad.Notes.TABLE_NAME + " WHEN new."
 					+ NotePad.Notes.COLUMN_NAME_DELETED + " = 1" + " BEGIN"
@@ -598,6 +605,20 @@ public class NotePadProvider extends ContentProvider implements
 					+ "   WHERE " + NotePad.Notifications.TABLE_NAME + "."
 					+ NotePad.Notifications.COLUMN_NAME_NOTEID + "   = "
 					+ "new." + NotePad.Notes._ID + ";" + " END");
+			} catch (SQLException e) {
+				Log.d(TAG, "Creating trigger failed. It probably already existed:\n " + e.getLocalizedMessage());
+			}
+			
+			try {
+			db.execSQL("CREATE TRIGGER post_note_actualdelete AFTER DELETE ON "
+					+ NotePad.Notes.TABLE_NAME + " BEGIN"
+					+ "   DELETE FROM " + NotePad.Notifications.TABLE_NAME
+					+ "   WHERE " + NotePad.Notifications.TABLE_NAME + "."
+					+ NotePad.Notifications.COLUMN_NAME_NOTEID + "   = "
+					+ "old." + NotePad.Notes._ID + ";" + " END");
+			} catch (SQLException e) {
+				Log.d(TAG, "Creating trigger failed. It probably already existed:\n " + e.getLocalizedMessage());
+			}
 		}
 
 		@Override
@@ -740,6 +761,8 @@ public class NotePadProvider extends ContentProvider implements
 			}
 			if (oldVersion < 7) {
 				createNotificationsTable(db);
+			}
+			if (oldVersion < 8) {
 				createNotificationTriggers(db);
 			}
 		}

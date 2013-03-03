@@ -2,16 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
     
     <item
-        android:id="@+id/menu_revert"
-        android:icon="?content_undo"
-        android:orderInCategory="3"
-        android:showAsAction="ifRoom"
-        android:title="@string/menu_revert"/>
-    
-    <item
         android:id="@+id/action_delete"
         android:icon="?content_discard"
-        android:orderInCategory="4"
+        android:orderInCategory="3"
         android:showAsAction="ifRoom"
         android:title="@string/menu_delete">
         <menu>
@@ -25,6 +18,13 @@
                 android:title="@string/menu_cancel"/>
         </menu>
     </item>
+    
+    <item
+        android:id="@+id/menu_revert"
+        android:icon="?content_undo"
+        android:orderInCategory="4"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_revert"/>
     
     <item
         android:id="@+id/menu_share"

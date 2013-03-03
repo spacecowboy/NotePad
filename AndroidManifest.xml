@@ -26,12 +26,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
-    android:versionCode="51"
-    android:versionName="4.4.3" >
+    android:versionCode="52"
+    android:versionName="4.4.4" >
 
-    <!-- App crashes on 3.0. No one uses 3.1. So minimum version is set to 3.2 now -->
+    <!-- Practically no one on honeycomb anymore -->
     <uses-sdk
-        android:minSdkVersion="13"
+        android:minSdkVersion="14"
         android:targetSdkVersion="17" />
 
     <!-- For connection -->

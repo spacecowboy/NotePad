@@ -45,7 +45,6 @@
         android:layout_height="fill_parent" />
 
     <RelativeLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
         android:id="@+id/widget_item"
         android:layout_width="0dp"
         android:layout_height="fill_parent"
@@ -55,7 +54,6 @@
         android:padding="0dp" >
         
         <TextView
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/widget_itemDateTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -82,7 +80,6 @@
             android:textColor="@android:color/primary_text_light" />
 
         <TextView
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/widget_itemDateNote"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

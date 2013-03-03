@@ -21,6 +21,7 @@
     <string name="title_create">New note</string>
     <string name="title_edit">Edit: %1$s</string>
     <string name="menu_add">New note</string>
+    <string name="menu_save_and_add">Save and open a new note</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_revert">Revert changes</string>
     <string name="menu_copy">Copy note</string>
@@ -112,7 +113,7 @@
     <string name="automatic">Automatic</string>
     <string name="preferences_week_start_day_dialog">Week starts on</string>
     <string name="preferences_week_start_day_title">Week starts on</string>
-    <string name="preferences_week_start_day_default">-1</string>
+    
     <!--
         Use few if language need it. In English is the same.
         <item quantity="few">Copied 2 notes.</item>
@@ -232,7 +233,6 @@
     </string>
 
     <!-- settings string keys -->
-    <string name="pref_locale">pref_key_locale</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_list_widget_config">Widget configuration</string>
     <string name="hide_appicon">Hide app icon</string>
