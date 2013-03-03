@@ -90,7 +90,7 @@ limitations under the License.
 <string name="no">Ei</string>
 <string name="ok">OK</string>
 <string name="show_from_all_lists">Kaikki listat</string>
-<string name="default_list_needed_warning">Aseta ensin oletuslista</string>
+<string name="default_list_needed_warning">Aseta oletuslista ensin</string>
 <string name="reverted">Kumotut muutokset</string>
 <string name="notecopied">Kopioitu</string>
 <string name="deleted">Poistettu</string>
@@ -138,7 +138,7 @@ Use few if language need it. In English is the same.
 <string name="confirm_new_password">Vahvista uusi salasana</string>
 <string name="apply">Hyväksy</string>
 <string name="clear_password">Poista salasana</string>
-<string name="password_info">Jos asetat salasanan, sinun täytyy syöttää se aina, kun haluat katsella lukittuja muistiinpanoja. Se suojaa vain muistiinpanokenttää, joten otsikko ja eräpäivä ovat suojaamattomia. Se ei salaa muistiinpanoa millään tavalla, joten se on edelleen näkyvissä Google sähköpostissa/kalenterissa. Jos unohdat salasanasi, synkronoi sovellus Google-tilisi kanssa ja asenna sovellus sitten uudelleen.</string>
+<string name="password_info">Kun asetat salasanan, voit tutkia lukittuja muistiinpanoja vain sen avulla. Se suojaa vain muistiinpanokenttää, joten otsikko ja eräpäivä jäävät suojaamattomiksi. Salasanan asettaminen ei myöskään salaa muistiinpanoa millään tavalla, joten se on edelleen nähtävissä Google sähköpostissa / kalenterissa. Jos unohdat salasanasi, synkronoi sovellus Google-tilisi kanssa ja asenna sovellus sitten uudelleen.</string>
 <string name="about">Tietoja</string>
 <string name="sync_failed">Synkronointi epäonnistui</string>
 <string name="sync_login_failed">Sisäänkirjautuminen epäonnistui, ei voitu yhdistää Google Tasks:iin</string>
@@ -149,9 +149,9 @@ Use few if language need it. In English is the same.
 <string name="widget_pref_preview_note">Esikatsele muistiinpanoa</string>
 <string name="widget_pref_preview_note_summary_off">Otsikko kahdella rivillä</string>
 <string name="widget_pref_preview_note_summary_on">Muistiinpano toisella rivillä</string>
-<string name="widget_pref_show_complete">Merkitse valmiiksi -nappi</string>
-<string name="widget_pref_show_complete_summary_off">Nappi piilotetaan</string>
-<string name="widget_pref_show_complete_summary_on">Nappi näytetään</string>
+<string name="widget_pref_show_complete">Merkitse valmiiksi -painike</string>
+<string name="widget_pref_show_complete_summary_off">Painike piilotetaan</string>
+<string name="widget_pref_show_complete_summary_on">Painike näytetään</string>
 <string name="settings_listitem">Kaksiriviset otsikot</string>
 <string name="settings_listitem_summary_off">Muistiinpanon esikatselu kahdella rivillä</string>
 <string name="editor_details">Lisää</string>
@@ -194,14 +194,14 @@ Use few if language need it. In English is the same.
 
 <!-- These should probably not be translated -->
 <string name="default_notetitle">Tervetuloa!</string>
-<string name="default_notetext">Jotta saisit kaiken irti tästä sovelluksesta, suosittelen ensimmäiseksi ottamaan synkronoinnin käyttöön. Paina synkronointinappia toimintopalkissa, kun palaat takaisin listaan. Synkronointi tapahtuu oletuksena kerran tunnissa.\n\nOta huomioon, että yleiset synkronointiasetuksesi vaikuttavat tähän. Lyhyesti sanottuna, jos Gmail ei synkronoidu automaattisesti, niin ei tämäkään sovellus. Voit myös ottaa automaattisen synkronoinnin pois käytöstä ja hallita asetuksiasi itse.\n\nJos sinulla on enemmän kuin yksi Google-tili laitteellasi, ehdotan, että menet asetuksiin ja valitset, mitä käyttäjätiliä haluat hallita itse.\n\nItse asiassa suosittelen käymään asetuksissa ihan vain nähdäksesi minkälaisia vaihtoehtoja siellä on. Voit säätää fonttia ja sen kokoa tässä ikkunassa ja vaihtaa teeman vaaleasta tummaksi.\n\nSovellus sisältää myös lisäohjelman, jonka koko on täysin muutettavissa. Voit muuttaa sen kokoa samalla tavalla kuin muitakin lisäohjelmia: napauta ja pidä sormeasi pohjassa lisäohjelman kohdalla ikään kuin aikoisit liikuttaa sitä. Liikuttamisen sijaan vedä lisäohjelman sivuja tehdäksesi siitä suuremman tai pienemmän.\n\nToivottavasti tästä sovelluksesta on hyötyä sinulle. Muista, että se on täysin ilmainen, siinä ei ole mainoksia ja sen lähdekoodi on avoin. Jos sinulla on loistavia ideoita tai suuria valituksen aiheita, kerro niistä minulle.\n\n/Jonas</string>
-<string name="about_text">Kiitos, että latasit sovellukseni! Yritän tehdä tästä sovelluksesta kaikin tavoin mahtavan, mutta bugeja löytyy aina ja asioita voi parantaa!\n\nJos löysit bugin tai huomasit, että käännöksessä on virhe tai sinulla vain on idea sovelluksen parantamiseksi, haluan kuulla siitä!\n\nAnna minulle +1: https://plus.google.com/u/0/111801385015192089838\n\nRaportoi virheistä: https://github.com/spacecowboy/Notepad/issues\n\nJos haluat auttaa tämän sovelluksen kääntämisessä, käy osoitteessa\nhttp://translate.nononsenseapps.com\n\nVielä kerran kiitos, että latasit sovellukseni!\nJos haluat tukea tätä projektia vähemmän aktiivisella tavalla, voit aina ostaa maksullisen version: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate\n\n</string>
+<string name="default_notetext">Jotta saisit kaiken irti tästä sovelluksesta, suosittelen ensimmäiseksi ottamaan synkronoinnin käyttöön. Paina synkronointinappia toimintopalkissa, kun palaat takaisin listaan. Synkronointi tapahtuu oletuksena kerran tunnissa.\n\nOta huomioon, että yleiset synkronointiasetuksesi vaikuttavat tähän. Lyhyesti sanottuna, jos Gmail ei synkronoidu automaattisesti, niin ei tämäkään sovellus. Voit myös ottaa automaattisen synkronoinnin pois käytöstä ja hallita asetuksiasi itse.\n\nJos sinulla on enemmän kuin yksi Google-tili laitteellasi, ehdotan, että menet asetuksiin ja valitset, mitä käyttäjätiliä haluat hallita itse.\n\nItse asiassa suosittelen käymään asetuksissa ihan vain nähdäksesi minkälaisia vaihtoehtoja siellä on. Voit muun muassa säätää fonttia ja sen kokoa ja vaihtaa teeman vaaleasta tummaksi.\n\nSovellus sisältää myös lisäohjelman, jonka koko on täysin muutettavissa. Voit muuttaa sen kokoa samalla tavalla kuin muitakin lisäohjelmia: napauta ja pidä sormeasi pohjassa lisäohjelman kohdalla ikään kuin aikoisit liikuttaa sitä. Liikuttamisen sijaan vedä lisäohjelman sivuja tehdäksesi siitä suuremman tai pienemmän.\n\nToivottavasti tästä sovelluksesta on hyötyä sinulle. Muista, että se on täysin ilmainen, siinä ei ole mainoksia ja sen lähdekoodi on avoin. Jos sinulla on loistavia ideoita tai suuria valituksen aiheita, kerro niistä minulle.\n\n/Jonas</string>
+<string name="about_text">Kiitos, että latasit sovellukseni! Yritän tehdä siitä kaikin tavoin mahtavan, mutta bugeja löytyy aina ja asioita voi parantaa!\n\nJos löysit bugin tai huomasit, että käännöksessä on virhe tai sinulla vain on idea sovelluksen parantamiseksi, haluan kuulla siitä!\n\nAnna minulle +1: https://plus.google.com/u/0/111801385015192089838\n\nRaportoi virheistä: https://github.com/spacecowboy/Notepad/issues\n\nJos haluat auttaa tämän sovelluksen kääntämisessä, käy osoitteessa\nhttp://translate.nononsenseapps.com\n\nVielä kerran kiitos, että latasit sovellukseni!\nJos haluat tukea tätä projektia vähemmän aktiivisella tavalla, voit aina ostaa maksullisen version: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate\n\n</string>
 
 <!-- settings string keys -->
 <string name="menu_settings">Asetukset</string>
 <string name="title_activity_list_widget_config">Lisäohjelman asetukset</string>
 <string name="hide_appicon">Piilota sovelluksen ikoni</string>
-<string name="hide_new">Piilota uusi nappi</string>
+<string name="hide_new">Piilota uusi muistiinpano -painike</string>
 <string name="hide_header">Piilota koko lisäohjelmatunniste</string>
 <string name="hide_widgetbg">Läpinäkyvä tausta</string>
 <string name="shortcut_help1">Jos valittu, pikakuvake luo uuden muistiinpanon valittuun listaan ja avaa editorin. Muuten pikakuvake avaa valitun listan.</string>
@@ -216,7 +216,7 @@ Use few if language need it. In English is the same.
 <string name="selected_other">%d muistiinpanoista valittu</string>
 
 <string name="background_sync">Synkronointi taustalla</string>
-<string name="background_sync_info">Synkroi kerran tunnissa</string>
+<string name="background_sync_info">Synkronoi kerran tunnissa</string>
 <string name="sync_on_change">Synkronoi muutosten yhteydessä</string>
 <string name="sync_on_change_info">Synkronoi, kun muistiinpano on muuttunut</string>
 <string name="sync_on_start">Synkronoi sovelluksen käynnistyessä</string>

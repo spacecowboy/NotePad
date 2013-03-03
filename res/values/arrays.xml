@@ -114,12 +114,14 @@
 
     <string-array name="translated_langs" tools:ignore="MissingTranslation">
         <item>ar</item>
+        <item>bg</item>
         <item>ca</item>
         <item>cs</item>
         <item>da</item>
         <item>de</item>
         <item>en</item>
         <item>es</item>
+        <item>et</item>
         <item>fi_FI</item>
         <item>fr</item>
         <item>he</item>

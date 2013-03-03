@@ -112,7 +112,7 @@
     <string name="automatic">Automatic</string>
     <string name="preferences_week_start_day_dialog">Week starts on</string>
     <string name="preferences_week_start_day_title">Week starts on</string>
-    <string name="preferences_week_start_day_default">-1</string>
+    
     <!--
         Use few if language need it. In English is the same.
         <item quantity="few">Copied 2 notes.</item>
@@ -232,7 +232,6 @@
     </string>
 
     <!-- settings string keys -->
-    <string name="pref_locale">pref_key_locale</string>
     <string name="menu_settings">Settings</string>
     <string name="title_activity_list_widget_config">Widget configuration</string>
     <string name="hide_appicon">Hide app icon</string>
