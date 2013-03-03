@@ -33,6 +33,17 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="\nVersion 4.4.5"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\n- Added some functionality to support the latest version of the DashClock Extension.\n- Fixed new button appearing twice in certain cases."/>
+            
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="\nVersion 4.4.4"
             android:textStyle="bold" />
 

@@ -26,8 +26,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
-    android:versionCode="52"
-    android:versionName="4.4.4" >
+    android:versionCode="53"
+    android:versionName="4.4.5" >
 
     <!-- Practically no one on honeycomb anymore -->
     <uses-sdk
@@ -136,6 +136,14 @@
 
                 <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
             </intent-filter>
+            <intent-filter android:label="@string/resolve_edit" >
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.list" />
+            </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
 
@@ -225,7 +233,9 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.DELETE" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.notification" />
             </intent-filter>
         </receiver>

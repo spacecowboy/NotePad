@@ -32,10 +32,12 @@ public class RightActivity extends MainActivity {
 	 */
 	protected void syncOnStart() {
 	}
-	
+
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.right_activity_menu, menu);
+		if (getCurrentContent().equals(DualLayoutActivity.CONTENTVIEW.RIGHT)) {
+			getMenuInflater().inflate(R.menu.right_activity_menu, menu);
+		}
 		return super.onCreateOptionsMenu(menu);
 	}
 }
