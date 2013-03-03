@@ -26,7 +26,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
-    android:versionCode="53"
+    android:versionCode="54"
     android:versionName="4.4.5" >
 
     <!-- Practically no one on honeycomb anymore -->
@@ -116,6 +116,15 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
+            
+            <intent-filter android:label="@string/resolve_edit" >
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.list" />
+            </intent-filter>
 
             <meta-data
                 android:name="android.app.searchable"
@@ -135,14 +144,6 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
-            </intent-filter>
-            <intent-filter android:label="@string/resolve_edit" >
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.list" />
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
