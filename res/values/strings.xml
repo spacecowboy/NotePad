@@ -21,6 +21,7 @@
     <string name="title_create">New note</string>
     <string name="title_edit">Edit: %1$s</string>
     <string name="menu_add">New note</string>
+    <string name="menu_save_and_add">Save and open a new note</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_revert">Revert changes</string>
     <string name="menu_copy">Copy note</string>
