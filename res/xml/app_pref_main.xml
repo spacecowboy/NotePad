@@ -19,7 +19,7 @@
     android:key="preference_screen" >
 
     <ListPreference
-        android:defaultValue="light"
+        android:defaultValue="light_ab"
         android:dialogTitle="@string/settings_theme_dialog"
         android:entries="@array/theme_preference"
         android:entryValues="@array/themevalues_preference"
