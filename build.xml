@@ -38,6 +38,7 @@
 
     <property file="../NotePad_ant/ant.properties" />
 
+    
     <!--
          if sdk.dir was not set from one of the property file, then
          get it from the ANDROID_HOME env var.
@@ -86,7 +87,7 @@
             -post-build
             -pre-clean
     -->
-    <!-- <import file="custom_rules.xml" optional="true" /> -->
+    <import file="custom_rules.xml" optional="true" />
 
 
     <!--
@@ -110,127 +111,6 @@
     -->
     <!-- Copy Config.java to our source tree, replacing custom tokens with values in build.properties. The configuration depends on "clean" because otherwise the build system will not detect changes in the configuration. -->
 
-    <target name="config" >
-   <echo>
-   Making list of available languages
-   </echo>
-   <exec executable="./listlang.py" />
-
-   <echo>
-     Fix missing escapes in string files
-   </echo>
-   <exec executable="./escapetranslations.py" />
-
-	<echo>
-	Copying api key into source
-	</echo>
-
-        <property
-            name="config-target-path"
-            value="${source.dir}/com/nononsenseapps/build" />
-
-        <!-- Copy the configuration file, replacing tokens in the file. -->
-
-        <if condition="${build.is.packaging.debug}" >
-
-            <then>
-
-                <copy
-                    encoding="utf-8"
-                    file="../NotePad_ant/config/Config.java"
-                    overwrite="true"
-                    todir="${config-target-path}" >
-
-                    <filterset>
-
-                        <filter
-                            token="CONFIG.LOGGING"
-                            value="${config.logging.debug}" />
-
-                        <filter
-                            token="CONFIG.GTASKSAPIKEY"
-                            value="${config.gtasksapikey.debug}" />
-                    </filterset>
-                </copy>
-            </then>
-
-            <else>
-
-                <copy
-                    encoding="utf-8"
-                    file="../NotePad_ant/config/Config.java"
-                    overwrite="true"
-                    todir="${config-target-path}" >
-
-                    <filterset>
-
-                        <filter
-                            token="CONFIG.LOGGING"
-                            value="${config.logging.release}" />
-
-                        <filter
-                            token="CONFIG.GTASKSAPIKEY"
-                            value="${config.gtasksapikey.release}" />
-                    </filterset>
-                </copy>
-            </else>
-        </if>
-    </target>
-
-    <target
-        name="-pre-compile"
-        depends="config" />
-
-    <!-- Copy the binary to a location that includes version number -->
-
-    <xmlproperty
-        collapseAttributes="true"
-        file="AndroidManifest.xml"
-        prefix="mymanifest" />
-
-    <property
-        name="build.dir"
-        value="/home/jonas/Dropbox/dev/NotePad/apks/release/${mymanifest.manifest.android:versionName}_${mymanifest.manifest.android:versionCode}/" />
-
-    <target name="-post-build" >
-
-        <echo>
-Version is ${mymanifest.manifest.android:versionName}, ${mymanifest.manifest.android:versionCode}
-        </echo>
-
-        <copy toDir="${build.dir}" >
-
-            <fileset file="${out.final.file}" />
-        </copy>
-
-	<property
-            name="config-target-path"
-            value="${source.dir}/com/nononsenseapps/build" />
-
-	<echo>
-	Replacing dummy Config file again
-	</echo>
-
-	<copy
-                    encoding="utf-8"
-                    file="../NotePad_ant/config/Config.java"
-                    overwrite="true"
-                    todir="${config-target-path}" >
-
-                    <filterset>
-
-                        <filter
-                            token="CONFIG.LOGGING"
-                            value="true" />
-
-                        <filter
-                            token="CONFIG.GTASKSAPIKEY"
-                            value="Put your key here" />
-                    </filterset>
-                </copy>
-
-
-    </target>
 
     <!-- version-tag: custom -->
 
