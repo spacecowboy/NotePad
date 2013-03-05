@@ -25,6 +25,7 @@
     <if condition="${build.is.packaging.debug}" >
       <then>
         <copy
+            failonerror="false"
             encoding="utf-8"
             file="../NotePad_ant/config/Config.java"
             overwrite="true"
