@@ -1,126 +1,115 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="help" >
 
-
-    <target name="config" >
-   <echo>
-   Making list of available languages
-   </echo>
-   <exec executable="./listlang.py" />
-
-   <echo>
-     Fix missing escapes in string files
-   </echo>
-   <exec executable="./escapetranslations.py" />
-
+<!-- To handle translations I have some scripts that fix some languages issues -->
+  <target name="config">
+    <echo>
+      Making list of available languages
+    </echo>
+    <exec executable="./listlang.py" />
+    
+    <echo>
+      Fix missing escapes in string files
+    </echo>
+    <exec executable="./escapetranslations.py" />
+    
 	<echo>
-	Copying api key into source
+      Copying api key into source
 	</echo>
-
-        <property
-            name="config-target-path"
-            value="${source.dir}/com/nononsenseapps/build" />
-
-        <!-- Copy the configuration file, replacing tokens in the file. -->
-
-        <if condition="${build.is.packaging.debug}" >
-
-            <then>
-
-                <copy
-                    encoding="utf-8"
-                    file="../NotePad_ant/config/Config.java"
-                    overwrite="true"
-                    todir="${config-target-path}" >
-
-                    <filterset>
-
-                        <filter
-                            token="CONFIG.LOGGING"
-                            value="${config.logging.debug}" />
-
-                        <filter
-                            token="CONFIG.GTASKSAPIKEY"
-                            value="${config.gtasksapikey.debug}" />
-                    </filterset>
-                </copy>
-            </then>
-
-            <else>
-
-                <copy
-                    encoding="utf-8"
-                    file="../NotePad_ant/config/Config.java"
-                    overwrite="true"
-                    todir="${config-target-path}" >
-
-                    <filterset>
-
-                        <filter
-                            token="CONFIG.LOGGING"
-                            value="${config.logging.release}" />
-
-                        <filter
-                            token="CONFIG.GTASKSAPIKEY"
-                            value="${config.gtasksapikey.release}" />
-                    </filterset>
-                </copy>
-            </else>
-        </if>
-    </target>
-
-    <target
-        name="-pre-compile"
-        depends="config" />
-
-    <!-- Copy the binary to a location that includes version number -->
-
-    <xmlproperty
-        collapseAttributes="true"
-        file="AndroidManifest.xml"
-        prefix="mymanifest" />
 
     <property
-        name="build.dir"
-        value="/home/jonas/Dropbox/dev/NotePad/apks/alphas/${mymanifest.manifest.android:versionName}_${mymanifest.manifest.android:versionCode}/" />
-
-    <target name="-post-build" >
-
-        <echo>
-Version is ${mymanifest.manifest.android:versionName}, ${mymanifest.manifest.android:versionCode}
-        </echo>
-
-        <copy toDir="${build.dir}" >
-
-            <fileset file="${out.final.file}" />
+        name="config-target-path"
+        value="${source.dir}/com/nononsenseapps/build" />
+    
+    <!-- Copy the configuration file, replacing tokens in the file. -->
+    <if condition="${build.is.packaging.debug}" >
+      <then>
+        <copy
+            encoding="utf-8"
+            file="../NotePad_ant/config/Config.java"
+            overwrite="true"
+            todir="${config-target-path}" >
+          <filterset>
+            <filter
+                token="CONFIG.LOGGING"
+                value="${config.logging.debug}" />
+            
+            <filter
+                token="CONFIG.GTASKSAPIKEY"
+                value="${config.gtasksapikey.debug}" />
+          </filterset>
         </copy>
-
+      </then>
+      <else>
+        <copy
+            encoding="utf-8"
+            file="../NotePad_ant/config/Config.java"
+            overwrite="true"
+            todir="${config-target-path}" >
+          <filterset>
+            <filter
+                token="CONFIG.LOGGING"
+                value="${config.logging.release}" />
+            
+            <filter
+                token="CONFIG.GTASKSAPIKEY"
+                value="${config.gtasksapikey.release}" />
+          </filterset>
+        </copy>
+      </else>
+    </if>
+  </target>
+  
+  <target
+      name="-pre-compile"
+      depends="config" />
+  
+  <!-- Copy the binary to a location that includes version number -->
+  
+  <xmlproperty
+      collapseAttributes="true"
+      file="AndroidManifest.xml"
+      prefix="mymanifest" />
+  
+  <property
+      name="build.dir"      
+      value="/home/jonas/Dropbox/dev/NotePad/apks/alphas/${mymanifest.manifest.android:versionName}_${mymanifest.manifest.android:versionCode}/" />
+  
+  <target name="-post-build">
+    
+    <echo>
+      Version is ${mymanifest.manifest.android:versionName}, ${mymanifest.manifest.android:versionCode}
+    </echo>
+    <!-- Do the actual copying here -->
+    <copy toDir="${build.dir}" failonerror="false">
+      <fileset file="${out.final.file}" />
+    </copy>
+    
 	<property
-            name="config-target-path"
-            value="${source.dir}/com/nononsenseapps/build" />
-
+        name="config-target-path"
+        value="${source.dir}/com/nononsenseapps/build" />
+    
 	<echo>
-	Replacing dummy Config file again
+      Replacing dummy Config file again
 	</echo>
-
+    
 	<copy
-                    encoding="utf-8"
-                    file="../NotePad_ant/config/Config.java"
-                    overwrite="true"
-                    todir="${config-target-path}" >
-
-                    <filterset>
-
-                        <filter
-                            token="CONFIG.LOGGING"
-                            value="true" />
-
-                        <filter
-                            token="CONFIG.GTASKSAPIKEY"
-                            value="Put your key here" />
-                    </filterset>
-                </copy>
-
-
-    </target>
+        failonerror="false"
+        encoding="utf-8"
+        file="../NotePad_ant/config/Config.java"
+        overwrite="true"
+        todir="${config-target-path}" >
+      
+      <filterset>
+        
+        <filter
+            token="CONFIG.LOGGING"
+            value="true" />
+        
+        <filter
+            token="CONFIG.GTASKSAPIKEY"
+            value="Put your key here" />
+      </filterset>
+    </copy>
+  </target>
 </project>
