@@ -5,7 +5,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -19,6 +18,7 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 
 /**
@@ -33,9 +33,6 @@ import com.nononsenseapps.notepad.R;
  * API Guide</a> for more information on developing a Settings UI.
  */
 public class TasksSettings extends PreferenceActivity {
-	
-	final static Uri VISIBLE_LISTS_URI = Uri
-			.parse("content://com.nononsenseapps.NotePad/visiblelists");
 	
 	/**
 	 * Determines whether to always show the simplified settings UI, where
@@ -110,7 +107,7 @@ public class TasksSettings extends PreferenceActivity {
 		//listSpinner.setDefaultValue("-1");
 
 		Cursor cursor = activity.getContentResolver().query(
-				VISIBLE_LISTS_URI,
+				NotePad.Lists.CONTENT_VISIBLE_URI,
 				new String[] { BaseColumns._ID,
 						"title" }, null, null,
 				"title");

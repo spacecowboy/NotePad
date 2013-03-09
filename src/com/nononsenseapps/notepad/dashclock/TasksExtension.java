@@ -11,15 +11,16 @@ import android.provider.BaseColumns;
 
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
+import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.util.TimeHelper;
 
 public class TasksExtension extends DashClockExtension {
 
-	final static Uri VISIBLE_NOTES_URI = Uri
-			.parse("content://com.nononsenseapps.NotePad/visiblenotes");
-	final static Uri VISIBLE_LISTS_URI = Uri
-			.parse("content://com.nononsenseapps.NotePad/visiblelists");
+	//final static Uri VISIBLE_NOTES_URI = Uri
+	//		.parse("content://com.nononsenseapps.NotePad/visiblenotes");
+	//final static Uri VISIBLE_LISTS_URI = Uri
+	//		.parse("content://com.nononsenseapps.NotePad/visiblelists");
 	public static final String DUEDATE_SORT_TYPE = "CASE WHEN " + "duedate"
 			+ " IS NULL OR " + "duedate" + " IS '' THEN 1 ELSE 0 END, "
 			+ "duedate";
@@ -52,7 +53,7 @@ public class TasksExtension extends DashClockExtension {
 	protected void onInitialize(boolean isReconnect) {
 		super.onInitialize(isReconnect);
 		// Watch the notes URI
-		addWatchContentUris(toA(VISIBLE_NOTES_URI.toString()));
+		addWatchContentUris(toA(NotePad.Notes.CONTENT_VISIBLE_URI.toString()));
 	}
 
 	@Override
@@ -106,13 +107,13 @@ public class TasksExtension extends DashClockExtension {
 			final Intent noteIntent = new Intent();
 			if (notes.size() > 1) {
 				noteIntent.setAction(Intent.ACTION_VIEW).setData(
-						listId >= 0 ? Uri.withAppendedPath(VISIBLE_LISTS_URI,
-								Long.toString(listId)) : VISIBLE_LISTS_URI);
+						listId >= 0 ? Uri.withAppendedPath(NotePad.Lists.CONTENT_VISIBLE_URI,
+								Long.toString(listId)) : NotePad.Lists.CONTENT_VISIBLE_URI);
 			} else {
 				noteIntent
 						.setAction(Intent.ACTION_EDIT)
 						.setData(
-								Uri.withAppendedPath(VISIBLE_NOTES_URI,
+								Uri.withAppendedPath(NotePad.Notes.CONTENT_VISIBLE_URI,
 										Long.toString(notes.get(0).id)));
 				if (listId >= 0) {
 					noteIntent.putExtra("list", listId);
@@ -183,7 +184,7 @@ public class TasksExtension extends DashClockExtension {
 		where += getUpperQueryLimitWhere(upperLimit);
 		whereArgs = getUpperQueryLimitWhereArgs(whereArgs, upperLimit);
 
-		final Cursor cursor = getContentResolver().query(VISIBLE_NOTES_URI,
+		final Cursor cursor = getContentResolver().query(NotePad.Notes.CONTENT_VISIBLE_URI,
 				NOTEFIELDS, where, whereArgs, DUEDATE_SORT_TYPE);
 
 		final ArrayList<Note> result = new ArrayList<Note>();
@@ -204,7 +205,7 @@ public class TasksExtension extends DashClockExtension {
 		String header = getString(R.string.dashclock_tasks);
 
 		if (list > -1) {
-			final Cursor cursor = getContentResolver().query(VISIBLE_LISTS_URI,
+			final Cursor cursor = getContentResolver().query(NotePad.Lists.CONTENT_VISIBLE_URI,
 					new String[] { BaseColumns._ID, "title" },
 					"" + BaseColumns._ID + " IS ?",
 					new String[] { Long.toString(list) }, null);
