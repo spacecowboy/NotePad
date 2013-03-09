@@ -1,14 +1,23 @@
 debug:
 	ant debug
 
+release:
+	ant release
+
 bin/NotePad-debug.apk: res/values/arrays.xml
 	ant debug
+
+bin/NotePad-release.apk: bin/NotePad-debug.apk
+	ant release
 
 clean:
 	ant clean
 
 install: bin/NotePad-debug.apk
 	adb install -r bin/NotePad-debug.apk
+
+installrelease: bin/NotePad-release.apk
+	adb install -r bin/NotePad-release.apk
 
 translations:
 	get-diff-translations
