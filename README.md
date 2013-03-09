@@ -1,5 +1,5 @@
 # An open source task manager
-The might be confusing but that's historical as it started out as a simple note app. Syncing with Google Tasks
+The name might be confusing but that's historical as it started out as a simple note app. Syncing with Google Tasks
 was just practical and along that path it went.
 
 If you are developing an app of your own and have any questions on how the implementation details here, don't hesitate to drop me an e-mail or something!
