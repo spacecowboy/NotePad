@@ -76,7 +76,7 @@
 
   <property
       name="build.dir"
-      value="/home/jonas/Dropbox/dev/NotePad/apks/alphas/${mymanifest.manifest.android:versionName}_${mymanifest.manifest.android:versionCode}/" />
+      value="/home/jonas/Dropbox/dev/NotePad/apks/alphas/${mymanifest.manifest.android:versionCode}_${mymanifest.manifest.android:versionName}/" />
 
   <target name="-post-build">
 
