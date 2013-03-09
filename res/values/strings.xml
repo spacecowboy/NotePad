@@ -275,6 +275,31 @@
 	<string name="dateformat_micro">MMM d</string>
 	<string name="dateformat_short">E, d MMM</string>
 	<string name="dateformat_long">EEEE, d MMMM</string>
+	
+	
+    <string name="dashclock_tasks">Tasks</string>
+    <string name="dashclock_restrict_to_tasks_in_a_specific_list">Restrict to tasks in a specific list</string>
+    <string name="dashclock_show_overdue_tasks">Show overdue tasks</string>
+    <string name="dashclock_overdue_tasks_show">Overdue tasks will be shown</string>
+    <string name="dashclock_overdue_tasks_hide">Overdue tasks will be hidden</string>
+    
+    <string name="dashclock_title_activity_tasks_settings">NoNonsense Notes Settings</string>
+    <string name="dashclock_pref_header_general">General</string>
+    
+    <string name="dashclock_due_upper_limit_title">Limit to tasks due at the latest</string>
+    <string name="dashclock_today">Today</string>
+    <string name="dashclock_tomorrow">Tomorrow</string>
+    <string name="dashclock_next7">Next 7 days</string>
+    <string name="dashclock_anytime">Anytime</string>
+    <string name="dashclock_will_show_as_many_as_possible">Will show as many as possible</string>
+    <string name="dashclock_will_only_show_the_task_due_first">Will only show the task due first</string>
+    <string name="dashclock_show_only_the_next_task">Show only the next task</string>
+    <string name="dashclock_header_shown">List name will be shown in bold. If &quot;All Lists&quot; is selected, will show &quot;Tasks&quot;</string>
+    <string name="dashclock_first_task_shown">Title of first task will be shown in bold</string>
+    <string name="dashclock_display_header">Display header</string>
+	
+	
+	<!-- Store text -->
     <string name="google_play_promo_80_char_limit">
     Good looking notes, tasks and to-do app with Google Tasks sync.
     </string>
