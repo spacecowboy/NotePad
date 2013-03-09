@@ -21,6 +21,7 @@ limitations under the License.
 <string name="title_create">Нова бележка</string>
 <string name="title_edit">Редактиране: %1$s</string>
 <string name="menu_add">Нова бележка</string>
+<string name="menu_save_and_add">Запазване и отваряне на нова бележка</string>
 <string name="menu_delete">Изтриване</string>
 <string name="menu_revert">Отмяна на промените</string>
 <string name="menu_copy">Копиране на бележката</string>
@@ -34,9 +35,9 @@ limitations under the License.
 <string name="menu_renamelist">Преименуване на списъка</string>
 <string name="menu_createlist">Създаване на списък</string>
 <string name="menu_clearcompleted">Изтриване на изпълнените</string>
-<string name="menu_setdefaultlist">Задаване сп. по подразбиране</string>
+<string name="menu_setdefaultlist">Задаване списък по подразб.</string>
 <string name="menu_managelists">Управление на списъците</string>
-<string name="delete_list_warning">Сигурни ли сте, че искате да изтриете списъка? Списъкът ще бъде изтрит безвъзвратно.</string>
+<string name="delete_list_warning">Сигурни ли сте, че искате да изтриете списъка? Той ще бъде изтрит безвъзвратно.</string>
 <string name="editor_due_date_hint">Дата за изпълнение</string>
 <string name="editor_title_hint">Заглавие</string>
 <string name="editor_note_hint">Бележка</string>
@@ -70,7 +71,7 @@ limitations under the License.
 <string name="settings_font_type">Шрифт</string>
 <string name="settings_font_type_dialog">Изберете шрифт</string>
 <string name="settings_font_size">Размер на шрифта</string>
-<string name="preference_preview_text">Така ще се показва текстът в текстовия редактор</string>
+<string name="preference_preview_text">Така ще изглежда текстът в текстовия редактор</string>
 <string name="settings_text_preview_title">Преглед</string>
 <string name="monospace">Eдноразряден</string>
 <string name="sans">Sans</string>
@@ -105,6 +106,7 @@ limitations under the License.
 <string name="automatic">Автоматично</string>
 <string name="preferences_week_start_day_dialog">Седмицата започва в</string>
 <string name="preferences_week_start_day_title">Седмицата започва в</string>
+
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
