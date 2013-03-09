@@ -7,7 +7,7 @@ release:
 bin/NotePad-debug.apk: res/values/arrays.xml
 	ant debug
 
-bin/NotePad-release.apk: bin/NotePad-debug.apk
+bin/NotePad-release.apk: res/values/arrays.xml
 	ant release
 
 clean:
