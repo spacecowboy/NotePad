@@ -21,6 +21,7 @@ limitations under the License.
 <string name="title_create">Ny note</string>
 <string name="title_edit">Rediger: %1$s</string>
 <string name="menu_add">Ny note</string>
+<string name="menu_save_and_add">Gem og åbn en ny note</string>
 <string name="menu_delete">Slet</string>
 <string name="menu_revert">Gendan ændringer</string>
 <string name="menu_copy">Kopier note</string>
@@ -108,7 +109,7 @@ limitations under the License.
 <string name="automatic">Automatisk</string>
 <string name="preferences_week_start_day_dialog">Ugen starter på</string>
 <string name="preferences_week_start_day_title">Ugen starter på</string>
-<string name="preferences_week_start_day_default">-1</string>
+
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
@@ -204,7 +205,6 @@ Use few if language need it. In English is the same.
 <string name="about_text">Tak for at du har downloadet min app! Jeg gør mit bedste for at gøre denne app fantastisk på alle måder, men der vil altid være fejl og ting kan altid blive endnu mere fantastiske!\n\nHvis du har fundet en fejl, en oversættelse er forkert eller du har en ide til at gøre denne app endnu mere fantastisk, vil jeg med glæde høre fra dig!\nSend mig en mail: jonas@nononsenseapps.com\n\n+1 mig: https://plus.google.com/u/0/111801385015192089838\n\nRapporter det i "issue trackeren": https://github.com/spacecowboy/NotePad/issues\n\nHvis du gerne vil hjælpe med at oversætte denne app, gå venligst til http://translate.nononsenseapps.com\n\nIgen, mange tak for at du har downloadet min app!\nHvis du vil støtte projektet på en mindre aktiv måde, kan du altid købe donations-versionen: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
 
 <!-- settings string keys -->
-<string name="pref_locale">pref_key_locale</string>
 <string name="menu_settings">Indstillinger</string>
 <string name="title_activity_list_widget_config">Widget konfiguration</string>
 <string name="hide_appicon">Skjul app ikonet</string>
@@ -244,7 +244,6 @@ Use few if language need it. In English is the same.
 <string name="group_on_list_summary">Flere notifikationer vil blive grupperet sammen, hvis de tilhører den samme liste.</string>
 <string name="more">mere</string>
 <string name="notifications">Notifikationer</string>
-
 <string name="google_play_promo_80_char_limit">Flot note, opgave og to-do app med Google Opgaver synkronisering.</string>
 <string name="google_play_description">En open source notesblok og to do app med både telefon og tablet brugerflader. Synkroniserer med din eksisterende Google konto for at holde dine noter og opgaver sikkerhedskopieret i skyen uden du behøver at indtaste nogle adgangskoder!\n\nFunktioner:\n* Notifikationer/Påmindelser\n* Sprogvalg\n* Tilpasselig brugerflade\n* Widget, justerbar og konfigurerbar.\n* Super tablet understøttelse, der efterligner Gmail-funktioner\n* Holo temaer så det matcher resten af Android\n* Automatisk synkronisering med Google Tasks\n* Mulighed for at angive adgangskode på noter\n* Flyt noter mellem forskellige lister\n* Integration med Android Agenda Widget\n* Søg alle dine noter (ikke kun titler)\n* Udskift skifttype og tekst størrelsen!\n\nNote:\nDer er en fej i Android 4.2 som manifesterer sig i alle apps som bruger notifikationer. Hvis du indstiller notifikationer til IKKE at vibrere (dette er standard), og derefter indstiller din telefon til lydløs (med vibration), vil notifikationer altid vibrere, selvom det er blevet slukket.\nIgen, dette er en fejl i Android, ikke i appen.\n\nDu kan hjælpe med at oversætte appen, ved at gå til: http://translate.nononsenseapps.com\n\nHvis du har problemer eller vil rapportere en fejl, så tøv ikke med at kontakte mig!\n+NoNonsenseApps\neller\nrapporter dem på "issue trackeren": https://github.com/spacecowboy/NotePad/issues\n\nDenne app er open source og er tilgængelig online på: https://github.com/spacecowboy/NotePad\n\nDer er en ikke-gratis version af denne app tilgængelig, til dem som vil støtte udviklingen. Link: https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>

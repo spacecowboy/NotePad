@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 <!-- Provides constants and default values -->
-<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+<resources>
 
     <integer name="default_editor_font_size">22</integer>
 
@@ -35,10 +35,18 @@
     <string name="const_sans">Sans</string>
     <string name="const_serif">Serif</string>
     <string name="const_monospace">Monospace</string>
-    
     <string name="key_pref_ringtone">global_ringtone</string>
     <string name="key_pref_vibrate">global_vibrate</string>
     <string name="key_pref_prio">global_prio</string>
     <string name="key_pref_group_on_lists">group_on_lists</string>
+    <string name="pref_locale">pref_key_locale</string>
+    <string name="preferences_week_start_day_default">-1</string>
+    <string name="dashclock_nononsense_notes">NoNonsense Notes</string>
+    <string name="dashclock_tasks_count">%d</string>
+    <!-- These are intended for the upper_limit_values array -->
+    <string name="dashclock_pref_today">Today</string>
+    <string name="dashclock_pref_tomorrow">Tomorrow</string>
+    <string name="dashclock_pref_next7">Next7</string>
+    <string name="dashclock_pref_none">None</string>
 
 </resources>

@@ -26,8 +26,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
-    android:versionCode="54"
-    android:versionName="4.4.5" >
+    android:versionCode="55"
+    android:versionName="4.5" >
 
     <!-- Practically no one on honeycomb anymore -->
     <uses-sdk
@@ -240,6 +240,34 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.notification" />
             </intent-filter>
         </receiver>
+        
+        <!-- Dashclock -->
+        <service
+            android:name="com.nononsenseapps.notepad.dashclock.TasksExtension"
+            android:icon="@drawable/ic_stat_notification_edit"
+            android:label="@string/dashclock_nononsense_notes"
+            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA" >
+            <intent-filter>
+                <action android:name="com.google.android.apps.dashclock.Extension" />
+            </intent-filter>
+
+            <meta-data
+                android:name="protocolVersion"
+                android:value="1" />
+            <meta-data
+                android:name="description"
+                android:value="Displays your tasks from NoNonsense Notes." />
+            <meta-data
+                android:name="settingsActivity"
+                android:value="com.nononsenseapps.notepad.dashclock.TasksSettings" />
+        </service>
+
+        <activity
+            android:name="com.nononsenseapps.notepad.dashclock.TasksSettings"
+            android:exported="true"
+            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA"
+            android:label="@string/dashclock_title_activity_tasks_settings" >
+        </activity>
     </application>
 
 </manifest>

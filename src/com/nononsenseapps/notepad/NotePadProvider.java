@@ -1029,42 +1029,31 @@ public class NotePadProvider extends ContentProvider implements
 	 */
 	@Override
 	synchronized public String getType(Uri uri) {
+		//throw new UnsupportedOperationException("Not yet implemented");
 
 		/**
 		 * Chooses the MIME type based on the incoming URI pattern
 		 */
+		
 		switch (sUriMatcher.match(uri)) {
 
 		// If the pattern is for notes or live folders, returns the general
 		// content type.
 		case NOTES:
 		case VISIBLE_NOTES:
-			return NotePad.Notes.CONTENT_TYPE;
-			// If the pattern is for note IDs, returns the note ID content type.
 		case NOTE_ID:
 		case VISIBLE_NOTE_ID:
-			return NotePad.Notes.CONTENT_ITEM_TYPE;
+			return NotePad.Notes.CONTENT_TYPE;
 
 		case LISTS:
 		case VISIBLE_LISTS:
-			return NotePad.Lists.CONTENT_TYPE;
 		case LISTS_ID:
 		case VISIBLE_LIST_ID:
-			return NotePad.Lists.CONTENT_ITEM_TYPE;
+			return NotePad.Lists.CONTENT_TYPE;
 
-		case GTASKS:
-			return NotePad.GTasks.CONTENT_TYPE;
-		case GTASKS_ID:
-			return NotePad.GTasks.CONTENT_ITEM_TYPE;
-
-		case GTASKLISTS:
-			return NotePad.GTaskLists.CONTENT_TYPE;
-		case GTASKLISTS_ID:
-			return NotePad.GTaskLists.CONTENT_ITEM_TYPE;
 		case NOTIFICATIONS:
-			return NotePad.Notifications.CONTENT_TYPE;
 		case NOTIFICATION_ID:
-			return NotePad.Notifications.CONTENT_ITEM_TYPE;
+			return NotePad.Notifications.CONTENT_TYPE;
 
 			// If the URI pattern doesn't match any permitted patterns, throws
 			// an exception.

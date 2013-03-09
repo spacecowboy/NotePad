@@ -21,6 +21,7 @@ limitations under the License.
 <string name="title_create">Nouvelle note</string>
 <string name="title_edit">Éditer : %1$s</string>
 <string name="menu_add">Nouvelle note</string>
+<string name="menu_save_and_add">Sauvegarder et ouvrir une nouvelle notenote</string>
 <string name="menu_delete">Supprimer</string>
 <string name="menu_revert">Annuler les changements</string>
 <string name="menu_copy">Copier la note</string>
@@ -107,6 +108,7 @@ limitations under the License.
 <string name="automatic">Automatique</string>
 <string name="preferences_week_start_day_dialog">1er jour de la semaine :</string>
 <string name="preferences_week_start_day_title">1er jour de la semaine :</string>
+
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
@@ -239,7 +241,6 @@ Use few if language need it. In English is the same.
 <string name="group_on_list_summary">Les notifications multiples seront regroupées si elles appartiennent à la même liste.</string>
 <string name="more">plus</string>
 <string name="notifications">Notifications</string>
-
 <string name="google_play_promo_80_char_limit">Application de notes, tâches et choses à faire synchronisés avec Google Tâches.</string>
 <string name="google_play_description">Un bloc-notes à code source ouvert avec une interface optimisé autant pour les téléphones que les tablettes. Se synchronise avec votre compte Google existant afin de conserver vos notes et tâches dans les nuages sans requérir de mot de passe.\n\nCaractéristiques:\n* Notifications et rappels\n* Sélection de langue\n* Interface personnalisable\n* Widget configurable à taille ajustable\n* Superbe support pour tablette reprenant les caractéristiques de Gmail\n* Thème Holo qui s’harmonise à Android\n* Synchronisation automatique avec Google Tâches\n* Possibilité de protéger les notes avec un mot de passe\n* Déplacer les notes entre vos différentes listes\n* S’intègre avec le widget Agenda d’Android\n* Recherche par contenu (pas seulement par titres)\n* Police et taille du texte personnalisable!\n\nNote:\nIl y a une anomalie dans Android 4.2 qui se manifeste dans toutes les applications utilisant les notifications. Si nous configurer les notifications pour NE PAS vibrer (ceci est la configuration par défaut) et que vous configurer votre téléphone sur silence (vibration seulement), les notifications vont toujours vibrées même si vous désactivez explicitement cette option.\nC’est une anomalie dans Android et non pas de l’application.\n\nVous pouvez aider à la traduction de l’application, visiter : http://translate.nononsenseapps.com\n\nSi vous avez un problème ou voulez rapporter une anomalie, n’hésitez pas à me contacter!\n+NoNonsenseApps\nou\nrapportez-le dans le gestionnaire d’anomalies : https://github.com/spacecowboy/NotePad/issues\n\nLe code source de cette application est disponible à : https://github.com/spacecowboy/NotePad\n\nUne version donation de cette application est disponible pour ceux qui souhaiteraient me supporter dans son développement : https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>
