@@ -264,8 +264,8 @@ public final class NotePad {
 		/**
 		 * Path part for the Lists URI
 		 */
-		private static final String PATH_LISTS = "/lists";
-		private static final String PATH_VISIBLE_LISTS = "/visiblelists";
+		public static final String PATH_LISTS = "/lists";
+		public static final String PATH_VISIBLE_LISTS = "/visiblelists";
 		// Complete entry gotten with a join with GTasksLists table
 		private static final String PATH_JOINED_LISTS = "/joinedlists";
 

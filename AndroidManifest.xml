@@ -116,7 +116,6 @@
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
-            
             <intent-filter android:label="@string/resolve_edit" >
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -240,7 +239,7 @@
                 <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.notification" />
             </intent-filter>
         </receiver>
-        
+
         <!-- Dashclock -->
         <service
             android:name="com.nononsenseapps.notepad.dashclock.TasksExtension"
@@ -265,9 +264,16 @@
         <activity
             android:name="com.nononsenseapps.notepad.dashclock.TasksSettings"
             android:exported="true"
-            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA"
-            android:label="@string/dashclock_title_activity_tasks_settings" >
+            android:label="@string/dashclock_title_activity_tasks_settings"
+            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA" >
         </activity>
+
+        <provider
+            android:name="com.nononsenseapps.notepad.database.MyContentProvider"
+            android:authorities="com.nononsenseapps.NotePad"
+            android:enabled="true"
+            android:exported="true" >
+        </provider>
     </application>
 
 </manifest>

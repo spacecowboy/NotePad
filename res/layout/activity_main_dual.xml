@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:animateLayoutChanges="true"
+    android:baselineAligned="false"
+    android:orientation="horizontal"
+    android:weightSum="@integer/fragmentWeightSum" >
+
+    <FrameLayout
+        android:id="@+id/fragment1"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="@integer/leftFragmentWeight" />
+
+    <FrameLayout
+        android:id="@+id/fragment2"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="@integer/rightFragmentWeight"
+        android:background="?editorBackgroundColor" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:enabled="false"
+            android:text="@string/please_select_note"
+            android:textAppearance="?android:attr/textAppearanceMedium" />
+    </FrameLayout>
+
+</LinearLayout>

@@ -31,3 +31,9 @@ langs:
 res/values/arrays.xml:
 	python listlang.py
 	python escapetranslation.py
+
+test:
+	cd Test; make test
+
+testinstall:
+	cd Test; make debug install test
