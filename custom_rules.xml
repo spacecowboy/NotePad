@@ -1,5 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="help" >
+<!-- Used for Jenkins -->
+<target name="fetch-test-report">
+  <echo>Downloading XML test report…</echo>
+  <mkdir dir="junitreports"/>
+  <exec executable="${adb}" failonerror="true">
+    <arg line="${adb.device.arg}"/>
+    <arg value="pull" />
+    <arg value="/data/data/${tested.manifest.package}/files/junit-report.xml" />
+    <arg value="junitreports/junit-report.xml" />
+  </exec>
+</target>
 
 <!-- To handle translations I have some scripts that fix some languages issues -->
   <target name="config">
