@@ -33,7 +33,7 @@ res/values/arrays.xml:
 	python escapetranslation.py
 
 test:
-	cd Test; make test
+	cd ../NoNonsenseNotesTest; make test
 
 testinstall:
-	cd Test; make debug install test
+	cd ../NoNonsenseNotesTest; make debug install test

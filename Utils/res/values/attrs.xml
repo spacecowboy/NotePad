@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <declare-styleable name="StyledTextView">
+        <attr name="linkify" format="boolean" />
+        <attr name="styledText" format="string" />
+        <attr name="titleRelativeSize" format="float" />
+        <attr name="titleFontFamily" format="enum">
+            <enum name="robotosans" value="0" />
+            <enum name="robotocondensed" value="1" />
+            <enum name="robotolight" value="2" />
+        </attr>
+        <attr name="titleFontStyle" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="bold" value="1" />
+            <enum name="italic" value="2" />
+        </attr>
+    </declare-styleable>
+
+</resources>
