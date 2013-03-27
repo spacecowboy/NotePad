@@ -5,12 +5,13 @@ import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
+import com.nononsenseapps.notepad.fragments.TaskListFragment_;
+import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
+import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment_;
 
 import android.content.Intent;
-import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
-import android.view.Menu;
 import android.view.View;
 
 @EActivity(R.layout.activity_main)
@@ -36,26 +37,18 @@ public class ActivityMain extends FragmentActivity {
 		 * lists.
 		 */
 		if (isNoteIntent(intent) || fragment2 != null) {
-			Bundle arguments = new Bundle();
-			arguments
-					.putLong(TaskDetailFragment.ARG_ITEM_ID, getNoteId(intent));
-			TaskDetailFragment fragment = TaskDetailFragment_.builder().build();
-			fragment.setArguments(arguments);
+			TaskDetailFragment_ fragment = TaskDetailFragment_.getInstance(getNoteId(intent));
 			if (fragment2 != null) {
-				transaction.add(R.id.fragment2, fragment);
+				//transaction.add(R.id.fragment2, fragment);
 			} else {
-				transaction.add(R.id.fragment1, fragment);
+				//transaction.add(R.id.fragment1, fragment);
 			}
 		}
 		/*
 		 * Other case, is a list id or a tablet
 		 */
-		if (!isNoteIntent(intent) || fragment2 != null) {
-			//Bundle arguments = new Bundle();
-			//arguments.putLong(TaskListFragment.ARG_ITEM_ID, getListId(intent));
-			//TaskListFragment fragment = TaskListFragment_.builder().build();
-			//fragment.setArguments(arguments);
-			//transaction.add(R.id.fragment1, fragment);
+		if (!isNoteIntent(intent) || fragment2 != null || true) {
+			transaction.add(R.id.fragment1, TaskListViewPagerFragment.getInstance());
 		}
 
 		// Commit transaction

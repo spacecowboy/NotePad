@@ -4,6 +4,9 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:baselineAligned="false"
+    android:layout_marginLeft="16dp"
+    android:layout_marginRight="16dp"
+    android:divider="?android:attr/dividerHorizontal"
     android:orientation="horizontal"
     android:weightSum="@integer/fragmentWeightSum" >
 

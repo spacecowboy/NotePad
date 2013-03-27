@@ -130,6 +130,45 @@
                 android:resource="@xml/searchable" />
         </activity>
         <activity
+            android:name="com.nononsenseapps.notepad.ActivityMain_"
+            android:label="Notes2013"
+            android:launchMode="singleTask"
+            android:theme="@style/ThemeHolo"
+            android:uiOptions="splitActionBarWhenNarrow"
+            android:windowSoftInputMode="adjustResize" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:label="@string/resolve_edit" >
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.list" />
+            </intent-filter>
+            <intent-filter android:label="@string/resolve_edit" >
+                <action android:name="android.intent.action.INSERT" />
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <action android:name="com.nononsenseapps.completenote" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/*" />
+                <!-- <data android:mimeType="text/*" android:path="*.txt" />  Would like to be able to open files in future -->
+            </intent-filter>
+        </activity>
+        <activity
             android:name="com.nononsenseapps.notepad.RightActivity"
             android:theme="@style/ThemeHolo"
             android:windowSoftInputMode="adjustResize"

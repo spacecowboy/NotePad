@@ -42,6 +42,15 @@ public class TaskDetailFragment extends Fragment {
 
 	// Dao version of the object this fragment represents
 	private Task mTask;
+	
+	public static TaskDetailFragment_ getInstance(final long itemId) {
+		Bundle arguments = new Bundle();
+		arguments
+				.putLong(TaskDetailFragment.ARG_ITEM_ID, itemId);
+		TaskDetailFragment_ fragment = new TaskDetailFragment_();
+		fragment.setArguments(arguments);
+		return fragment;
+	}
 
 	/**
 	 * Mandatory empty constructor for the fragment manager to instantiate the
@@ -54,7 +63,7 @@ public class TaskDetailFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		if (getArguments().containsKey(ARG_ITEM_ID)) {
+		if (getArguments().getLong(ARG_ITEM_ID, -1) > 0) {
 			// Load data from database
 		} else {
 			if (!getArguments().containsKey(ARG_ITEM_LIST_ID)) {
