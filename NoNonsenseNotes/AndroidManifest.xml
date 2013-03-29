@@ -78,6 +78,7 @@
         To not get a SecurityException on a Widget, you must have exported=true and not require
         any read permissions.
         -->
+        <!-- 
         <provider
             android:name="com.nononsenseapps.notepad.NotePadProvider"
             android:authorities="com.nononsenseapps.NotePad"
@@ -88,6 +89,7 @@
             android:syncable="true"
             android:writePermission="com.nononsenseapps.notepad.permissions.write" >
         </provider>
+         -->
         <!-- removed android:readPermission="com.nononsenseapps.notepad.permissions.read" -->
 
 
@@ -132,8 +134,8 @@
         <activity
             android:name="com.nononsenseapps.notepad.ActivityMain_"
             android:label="Notes2013"
-            android:launchMode="singleTask"
-            android:theme="@style/ThemeHolo"
+            android:launchMode="standard"
+            android:theme="@style/ThemeGoogleNowDark"
             android:uiOptions="splitActionBarWhenNarrow"
             android:windowSoftInputMode="adjustResize" >
             <intent-filter>

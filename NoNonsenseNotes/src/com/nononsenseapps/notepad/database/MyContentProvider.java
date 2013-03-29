@@ -41,6 +41,10 @@ public class MyContentProvider extends ContentProvider {
 		case Task.BASEITEMCODE:
 		case Task.BASEURICODE:
 		case Task.INDENTEDQUERYCODE:
+		case Task.LEGACYBASEITEMCODE:
+		case Task.LEGACYBASEURICODE:
+		case Task.LEGACYVISIBLEITEMCODE:
+		case Task.LEGACYVISIBLEURICODE:
 			return Task.CONTENT_TYPE;
 		default:
 			throw new IllegalArgumentException("Unknown URI " + uri);
@@ -292,6 +296,9 @@ public class MyContentProvider extends ContentProvider {
 			result.setNotificationUri(getContext().getContentResolver(),
 					uri);
 			break;
+		case Task.LEGACYBASEURICODE:
+		case Task.LEGACYVISIBLEURICODE:
+			
 		default:
 			throw new IllegalArgumentException("Faulty URI provided");
 		}

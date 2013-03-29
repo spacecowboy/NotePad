@@ -4,32 +4,34 @@
     android:layout_height="match_parent"
     android:animateLayoutChanges="true"
     android:baselineAligned="false"
-    android:layout_marginLeft="16dp"
-    android:layout_marginRight="16dp"
-    android:divider="?android:attr/dividerHorizontal"
-    android:orientation="horizontal"
-    android:weightSum="@integer/fragmentWeightSum" >
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:showDividers="middle"
+    android:orientation="horizontal" >
 
     <FrameLayout
         android:id="@+id/fragment1"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="@integer/leftFragmentWeight" />
+        android:layout_weight="@integer/leftFragmentWeight"
+    android:layout_marginRight="4dp" />
 
     <FrameLayout
         android:id="@+id/fragment2"
         android:layout_width="0dp"
         android:layout_height="match_parent"
-        android:layout_weight="@integer/rightFragmentWeight"
-        android:background="?editorBackgroundColor" >
+        android:layout_marginLeft="4dp"
+        android:layout_weight="@integer/rightFragmentWeight" >
 
         <TextView
+            android:id="@+id/taskHint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:enabled="false"
             android:text="@string/please_select_note"
-            android:textAppearance="?android:attr/textAppearanceMedium" />
+            android:fontFamily="sans-serif-light"
+            android:textAppearance="?android:attr/textAppearanceLarge" />
     </FrameLayout>
 
 </LinearLayout>

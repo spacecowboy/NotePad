@@ -14,6 +14,10 @@ public class TaskList extends DAO {
 			Uri.parse(MyContentProvider.SCHEME + MyContentProvider.AUTHORITY),
 			TABLE_NAME);
 	
+	public static Uri getUri(final long id) {
+		return Uri.withAppendedPath(URI, Long.toString(id));
+	}
+	
 	public static final String CONTENT_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps.list";
 	
 	public static final int BASEURICODE = 101;

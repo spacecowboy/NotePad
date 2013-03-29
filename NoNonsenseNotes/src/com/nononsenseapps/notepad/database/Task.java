@@ -27,6 +27,11 @@ public class Task extends DAO {
 	public static final Uri URI = Uri.withAppendedPath(
 			Uri.parse(MyContentProvider.SCHEME + MyContentProvider.AUTHORITY),
 			TABLE_NAME);
+	
+	public static Uri getUri(final long id) {
+		return Uri.withAppendedPath(URI, Long.toString(id));
+	}
+	
 	public static final int BASEURICODE = 201;
 	public static final int BASEITEMCODE = 202;
 	public static final int INDENTEDQUERYCODE = 203;
@@ -37,6 +42,11 @@ public class Task extends DAO {
 	public static final int UNINDENTITEMCODE = 208;
 	public static final int DELETEDQUERYCODE = 209;
 	public static final int DELETEDITEMCODE = 210;
+	// Legacy support, these also need to use legacy projections
+	public static final int LEGACYBASEURICODE = 221;
+	public static final int LEGACYBASEITEMCODE = 222;
+	public static final int LEGACYVISIBLEURICODE = 223;
+	public static final int LEGACYVISIBLEITEMCODE = 224;
 	
 	
 	public static void addMatcherUris(UriMatcher sURIMatcher) {
@@ -52,6 +62,16 @@ public class Task extends DAO {
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/" + UNINDENT + "/#", UNINDENTITEMCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/" + DELETEDQUERY, DELETEDQUERYCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/" + DELETEDQUERY + "/#", DELETEDITEMCODE);
+		
+		// Legacy URIs
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, 
+				LegacyDBHelper.NotePad.Notes.PATH_NOTES, LEGACYBASEURICODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, 
+				LegacyDBHelper.NotePad.Notes.PATH_NOTES + "/#", LEGACYBASEITEMCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, 
+				LegacyDBHelper.NotePad.Notes.PATH_VISIBLE_NOTES, LEGACYVISIBLEURICODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, 
+				LegacyDBHelper.NotePad.Notes.PATH_VISIBLE_NOTES + "/#", LEGACYVISIBLEITEMCODE);
 	}
 
 	// Used in indented query

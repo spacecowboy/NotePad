@@ -15,6 +15,7 @@
      limitations under the License.
 -->
 <resources>
+    <dimen name="listMargins">0dp</dimen>
     <!-- list item min size -->
     <dimen name="list_item_min_size">48dp</dimen>
     <dimen name="widget_item_min_size">35dp</dimen>
@@ -27,5 +28,7 @@
     
     <!-- Editor fragment stuff -->
     <dimen name="editor_side_margin">8dp</dimen>
+    <dimen name="editor_vertical_margin">0dp</dimen>
+    <dimen name="editor_vertical_margin_bottom">0dp</dimen>
     
 </resources>

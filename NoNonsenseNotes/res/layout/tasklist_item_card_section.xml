@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.nononsenseapps.notepad"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/taskitemCard"
+    android:background="?attr/list_item_card_background"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/list_item_min_size"
+    android:orientation="vertical"
+    android:paddingBottom="4dp"
+    android:paddingLeft="4dp"
+    android:paddingRight="8dp"
+    android:paddingTop="4dp" >
+
+    <RelativeLayout 
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
+    <com.nononsenseapps.ui.DelegateFrame
+        xmlns:nononsenseapps="http://nononsenseapps.com"
+        android:id="@+id/checkboxcontainer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minHeight="40dp"
+        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/indent"
+        android:paddingRight="4dp"
+        android:clickable="true"
+        nononsenseapps:enlargedView="@+id/itemDone" >
+
+        <com.nononsenseapps.ui.NoteCheckBox
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@+id/checkbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:focusable="false"
+            android:focusableInTouchMode="false"
+            android:text="" />
+    </com.nononsenseapps.ui.DelegateFrame>
+
+    <com.nononsenseapps.utils.views.TitleNoteTextView
+        xmlns:ttv="http://schemas.android.com/apk/res/com.nononsenseapps.utils.views"
+        android:id="@android:id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/checkboxcontainer"
+        android:layout_alignBaseline="@+id/checkboxcontainer"
+        android:ellipsize="end"
+        android:paddingBottom="4dp"
+        android:fontFamily="sans-serif"
+        android:maxLines="4"
+        android:singleLine="false"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?textColorPrimary"
+        android:textIsSelectable="false"
+        custom:linkify="true"
+        custom:titleFontFamily="robotocondensed"
+        custom:titleFontStyle="bold"
+        custom:titleRelativeSize="1.4" />
+
+    </RelativeLayout>
+    <com.nononsenseapps.ui.DateView
+        android:id="@+id/date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        android:gravity="right"
+        android:fontFamily="sans-serif-light"
+        android:textColor="?textColorSecondary"
+        android:textSize="12sp" />
+
+</LinearLayout>

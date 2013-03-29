@@ -15,6 +15,7 @@
      limitations under the License.
 -->
 <resources>
+    <dimen name="listMargins">16dp</dimen>
     <!-- Editor fragment stuff -->
     <dimen name="editor_side_margin">16dp</dimen>
     

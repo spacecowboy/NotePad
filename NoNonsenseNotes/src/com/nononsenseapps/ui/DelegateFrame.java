@@ -20,7 +20,7 @@ import android.content.Context;
 import android.util.AttributeSet;
 import com.nononsenseapps.helpers.Log;
 import android.view.View;
-import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.view.View.OnClickListener;
 
 /**
@@ -35,7 +35,6 @@ import android.view.View.OnClickListener;
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:minWidth="44dp"
-        android:orientation="vertical"
         android:paddingBottom="4dp"
         android:paddingLeft="8dp"
         android:paddingRight="4dp"
@@ -47,7 +46,7 @@ import android.view.View.OnClickListener;
         nononsenseapps:enlargedView="@+id/YOURIDHERE"
  *
  */
-public class DelegateFrame extends LinearLayout implements OnClickListener {
+public class DelegateFrame extends RelativeLayout implements OnClickListener {
 	public static final String NONONSENSEAPPSNS = "http://nononsenseapps.com";
 	public static final String ATTR_ENLARGEDVIEW = "enlargedView";
 	

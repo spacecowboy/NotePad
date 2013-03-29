@@ -255,8 +255,8 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			/**
 			 * Path part for the Note ID URI
 			 */
-			private static final String PATH_NOTE_ID = "/notes/";
-			private static final String PATH_VISIBLE_NOTE_ID = "/visiblenotes/";
+			public static final String PATH_NOTE_ID = "/notes/";
+			public static final String PATH_VISIBLE_NOTE_ID = "/visiblenotes/";
 
 			/**
 			 * 0-relative position of a note ID segment in the path part of a note

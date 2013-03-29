@@ -19,4 +19,14 @@
     <color name="viewpager_blue">#33b5e5</color>
     <color name="widgetItemBG_dark">#ee000000</color>
     <color name="widgetItemBG_light">#eeffffff</color>
+    <color name="listLightBG">#ffeeeeee</color>
+	<color name="googlenow_grey">#e5e5e5</color>
+	<color name="googlenow_grey_trans">#aae5e5e5</color>
+	<color name="googlenow_darkgrey">#2d2d2d</color>
+	<color name="googlenow_darkergrey">#151515</color>
+	<color name="googlenow_darkergrey_trans">#aa151515</color>
+	<color name="googlenow_darkgrey_shadow">#000000</color>
+	
+	<color name="labelItemTextColorLight">#555555</color>
+	<color name="labelItemTextColorDark">#cccccc</color>
 </resources>

@@ -9,6 +9,7 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.style.AlignmentSpan;
 import android.text.style.ClickableSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
@@ -53,7 +54,8 @@ public class TitleNoteTextView extends TextView {
 					R.styleable.StyledTextView_titleFontStyle, 0);
 			mStyledText = a.getString(R.styleable.StyledTextView_styledText);
 			mLinkify = a.getBoolean(R.styleable.StyledTextView_linkify, false);
-		} finally {
+		}
+		finally {
 			a.recycle();
 		}
 
@@ -91,13 +93,13 @@ public class TitleNoteTextView extends TextView {
 	public void setStyledText(final String styledText) {
 		if (styledText != null) {
 			this.mStyledText = styledText;
-			SpannableString ss = new SpannableString(mStyledText);
 
 			int titleEnd = mStyledText.indexOf("\n");
 			if (titleEnd < 0) {
 				titleEnd = mStyledText.length();
 			}
 
+			SpannableString ss = new SpannableString(mStyledText);
 			if (titleEnd > 0) {
 				ss.setSpan(textBoldSpan, 0, titleEnd,
 						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -147,7 +149,8 @@ public class TitleNoteTextView extends TextView {
 				if (link.length != 0) {
 					if (action == MotionEvent.ACTION_UP) {
 						link[0].onClick(widget);
-					} else if (action == MotionEvent.ACTION_DOWN) {
+					}
+					else if (action == MotionEvent.ACTION_DOWN) {
 						Selection.setSelection(buffer,
 								buffer.getSpanStart(link[0]),
 								buffer.getSpanEnd(link[0]));
@@ -165,9 +168,13 @@ public class TitleNoteTextView extends TextView {
 		return mRest;
 	}
 
-	public void setTextRest(final String mRest) {
-		if (mRest != null) {
-			this.mRest = mRest;
+	public void setTextRest(final String rest) {
+		if (rest != null) {
+			this.mRest = rest;
+			// Make sure it starts with a new line
+			if (mRest.length() > 0) {
+				mRest = (rest.startsWith("\n") ? "" : "\n") + rest;
+			}
 
 			setStyledText(mTitle + mRest);
 		}
@@ -177,10 +184,10 @@ public class TitleNoteTextView extends TextView {
 		return mTitle;
 	}
 
-	public void setTextTitle(final String mTitle) {
-		if (mTitle != null) {
-			// Make sure it ends with newline
-			this.mTitle = mTitle + (mTitle.endsWith("\n") ? "" : "\n");
+	public void setTextTitle(final String title) {
+		if (title != null) {
+			// Make sure it does not end with a newline
+			this.mTitle = (title.endsWith("\n") ? title.substring(0, title.length() - 1) : title);
 
 			setStyledText(mTitle + mRest);
 		}

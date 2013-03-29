@@ -33,10 +33,10 @@
     <string name="menu_share">Share</string>
     <string name="menu_preferences">Settings</string>
     <string name="menu_renamelist">Rename list</string>
-    <string name="menu_createlist">Create list</string>
+    <string name="menu_createlist">Start new list</string>
     <string name="menu_clearcompleted">Clear completed</string>
     <string name="menu_setdefaultlist">Set as default list</string>
-    <string name="menu_managelists">Manage lists</string>
+    <string name="menu_managelists">Edit list</string>
     <string name="delete_list_warning">Are you sure you want to delete the list? The list will be permanently deleted.</string>
     <string name="editor_due_date_hint">Due date</string>
     <string name="editor_title_hint">Title</string>

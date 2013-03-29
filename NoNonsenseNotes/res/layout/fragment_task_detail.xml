@@ -5,11 +5,16 @@
     android:id="@+id/fragment_task_edit"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="true" >
+    android:fillViewport="false" >
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/editor_vertical_margin"
+        android:background="?editorBackgroundColor"
+        android:paddingBottom="@dimen/editor_vertical_margin_bottom"
+        android:paddingLeft="16dp"
+        android:paddingRight="8dp"
         tools:context=".TaskDetailFragment" >
 
         <com.nononsenseapps.utils.views.StyledEditText
@@ -17,11 +22,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:paddingLeft="16dp"
             android:fontFamily="sans-serif"
             android:hint="@string/editor_note_hint"
-            android:textColor="@android:color/secondary_text_light"
-        	android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?textColorPrimary"
             android:visibility="visible"
             custom:linkify="true"
             custom:titleFontFamily="robotocondensed"
@@ -34,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/taskText"
             android:layout_marginTop="16dp"
-            android:paddingLeft="16dp" >
+            android:paddingLeft="8dp" >
 
             <CheckBox
                 android:id="@+id/taskCompleted"
@@ -59,7 +63,7 @@
                 android:layout_alignBottom="@+id/taskCompleted"
                 android:layout_alignParentRight="true"
                 android:layout_alignParentTop="true"
-                android:src="@drawable/content_remove_light" />
+                android:src="?attr/body_remove" />
 
             <Button
                 android:id="@+id/dueDateBox"
@@ -71,8 +75,8 @@
                 android:layout_toLeftOf="@+id/dueCancelButton"
                 android:layout_toRightOf="@+id/taskCompleted"
                 android:fontFamily="sans-serif-light"
-                android:paddingLeft="16dp"
                 android:hint="@string/editor_due_date_hint"
+                android:paddingLeft="16dp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
 
             <TextView
@@ -88,7 +92,7 @@
                 android:text="@string/reminders"
                 android:textAllCaps="true"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@android:color/secondary_text_light" />
+                android:textColor="?textColorSecondary" />
 
             <LinearLayout
                 android:id="@+id/notificationList"
@@ -120,19 +124,20 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_gravity="center_horizontal"
                     android:layout_marginBottom="4dp"
                     android:layout_marginTop="4dp"
+                    android:layout_gravity="center_horizontal"
+        			android:paddingRight="20dp"
                     android:background="#0000"
                     android:clickable="false"
-                    android:drawableLeft="@drawable/content_new_light"
+                    android:drawableLeft="?attr/body_new"
+                    android:drawablePadding="8dp"
                     android:fontFamily="sans-serif"
                     android:gravity="center_vertical"
-                    android:paddingLeft="4dp"
                     android:text="@string/add_reminder"
                     android:textAllCaps="true"
                     android:textAppearance="@android:style/TextAppearance.Medium"
-                    android:textColor="@android:color/secondary_text_light"
+                    android:textColor="?attr/labelAddItemTextColor"
                     android:textStyle="bold" />
             </LinearLayout>
         </RelativeLayout>

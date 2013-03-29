@@ -1089,10 +1089,6 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 			Log.d("MODALMAN", "onActionItemClicked mode: " + mode);
 			switch (item.getItemId()) {
-			case R.id.modal_share:
-				shareNote(buildTextToShare());
-				mode.finish();
-				break;
 			case R.id.modal_copy:
 				ClipboardManager clipboard = (ClipboardManager) activity
 						.getSystemService(Context.CLIPBOARD_SERVICE);
