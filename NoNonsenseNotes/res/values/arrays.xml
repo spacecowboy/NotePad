@@ -100,6 +100,19 @@
         <item>20</item>
     </string-array>
     
+    <string-array name="show_list_as">
+        <item>@string/default_style</item>
+        <item >@string/show_items_as_tasks</item>
+        <item >@string/show_items_as_notes</item>
+    </string-array>
+    <string-array name="sort_list_by">
+        <item>@string/sort_list_default</item>
+        <item>@string/sort_list_alphabetical</item>
+        <item>@string/sort_list_updated</item>
+        <item>@string/sort_list_due</item>
+        <item>@string/sort_list_manual</item>
+    </string-array>
+    
     <string-array name="notification_prio_entries">
         <item>@string/notification_prio_high</item>
         <item>@string/standard</item>

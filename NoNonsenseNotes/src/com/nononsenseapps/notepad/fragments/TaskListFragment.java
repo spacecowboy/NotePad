@@ -9,14 +9,11 @@ import com.googlecode.androidannotations.annotations.ViewById;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
-import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
 import com.mobeta.android.dslv.DragSortListView;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -140,13 +137,20 @@ public class TaskListFragment extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasklist, menu);
 	}
-	
+
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
 		case R.id.menu_add:
 			if (mListener != null && mListId > 0) {
 				mListener.addTaskInList("", mListId);
+			}
+			return true;
+		case R.id.menu_managelists:
+			// Show fragment
+			if (mListId > 0) {
+				DialogEditList_ dialog = DialogEditList_.getInstance(mListId);
+				dialog.show(getFragmentManager(), "fragment_edit_list");
 			}
 			return true;
 		case R.id.menu_deletelist:

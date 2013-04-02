@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="16dp"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:orientation="vertical" >
+
+    <EditText
+        android:id="@+id/titleField"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:hint="@string/editor_title_hint"
+        android:inputType="textCapSentences"
+        android:singleLine="true"
+        android:textStyle="bold"
+        android:textAppearance="@android:style/TextAppearance.Medium" />
+
+    <CheckBox
+        android:id="@+id/defaultListBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="48dp"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/menu_setdefaultlist"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textColor="?textColorSecondary" />
+
+    <Spinner
+        android:id="@+id/sortSpinner"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:spinnerMode="dropdown"
+        
+        tools:listitem="@layout/spinner_item" />
+
+    <Spinner
+        android:id="@+id/modeSpinner"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:spinnerMode="dropdown"
+        tools:listitem="@layout/spinner_item" />
+
+    <LinearLayout
+        android:id="@+id/taskList"
+        android:visibility="gone"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="0dp"
+        android:layout_marginTop="4dp"
+        android:orientation="vertical" >
+
+        <EditText
+            android:id="@+id/quickAddFirst"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:paddingLeft="16dp"
+            android:hint="@string/add_item"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textColor="?textColorPrimary" />
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/deleteButton"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginTop="4dp"
+        android:clickable="true"
+        android:drawableLeft="?attr/body_delete"
+        android:drawablePadding="8dp"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="20dp"
+        android:text="@string/menu_deletelist"
+        android:textAllCaps="true"
+        android:textAppearance="@android:style/TextAppearance.Medium"
+        android:textColor="?attr/textColorSecondary"
+        android:textStyle="bold" />
+
+    <include
+        android:id="@+id/buttons"
+        android:layout_marginTop="16dp"
+        layout="@layout/dialog_ok_cancel" />
+
+</LinearLayout>

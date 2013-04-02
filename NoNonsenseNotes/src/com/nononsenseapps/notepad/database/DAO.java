@@ -36,10 +36,10 @@ public abstract class DAO {
 
 		try {
 
-			if (_id > -1) {
+			if (_id > 0) {
 				result += db.update(getTableName(), getContent(),
-						BaseColumns._ID + " IS ?",
-						new String[] { String.valueOf(_id) });
+						whereIdIs,
+						whereIdArg());
 			}
 
 			if (result > 0) {

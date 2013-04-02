@@ -6,6 +6,7 @@ import com.googlecode.androidannotations.annotations.ViewById;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 
 /**
  * Displays many listfragments across a viewpager. Supports selecting a certain
@@ -31,7 +33,8 @@ import android.view.MenuInflater;
  * 
  */
 @EFragment(R.layout.fragment_tasklist_viewpager)
-public class TaskListViewPagerFragment extends Fragment {
+public class TaskListViewPagerFragment extends Fragment implements
+		EditListDialogListener {
 
 	public static final String START_LIST_ID = "start_list_id";
 
@@ -69,7 +72,7 @@ public class TaskListViewPagerFragment extends Fragment {
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
 		setHasOptionsMenu(true);
-		
+
 		mListIdToSelect = getArguments().getLong(START_LIST_ID, -1);
 		if (savedState != null) {
 			mListIdToSelect = savedState.getLong(START_LIST_ID);
@@ -104,7 +107,7 @@ public class TaskListViewPagerFragment extends Fragment {
 							.getItemPosition(mListIdToSelect);
 					if (pos >= 0) {
 						// TODO
-						//pager.setCurrentItem(pos);
+						// pager.setCurrentItem(pos);
 					}
 				}
 			}
@@ -121,10 +124,33 @@ public class TaskListViewPagerFragment extends Fragment {
 		// Set adapters
 		pager.setAdapter(mSectionsPagerAdapter);
 	}
-	
+
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasklists_viewpager, menu);
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case R.id.menu_createlist:
+			// Show fragment
+			DialogEditList_ dialog = DialogEditList_.getInstance();
+			dialog.setListener(this);
+			dialog.show(getFragmentManager(), "fragment_create_list");
+			return true;
+		default:
+			return false;
+		}
+	}
+
+	@Override
+	public void onFinishEditDialog(final long id) {
+		// open the list
+		if (mSectionsPagerAdapter != null) {
+			pager.setCurrentItem(mSectionsPagerAdapter.getItemPosition(id),
+					true);
+		}
 	}
 
 	@Override
@@ -187,8 +213,7 @@ public class TaskListViewPagerFragment extends Fragment {
 		@Override
 		public Fragment getItem(int pos) {
 			long id = getItemId(pos);
-			if (id < 0)
-				return null;
+			if (id < 0) return null;
 			return TaskListFragment_.getInstance(id);
 		}
 
@@ -211,8 +236,7 @@ public class TaskListViewPagerFragment extends Fragment {
 
 		@Override
 		public CharSequence getPageTitle(int position) {
-			if (position >= getCount())
-				return null;
+			if (position >= getCount()) return null;
 			CharSequence title = null;
 			if (wrappedAdapter != null) {
 				Cursor c = (Cursor) wrappedAdapter.getItem(position);

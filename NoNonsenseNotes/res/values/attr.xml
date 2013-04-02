@@ -51,5 +51,6 @@
 	<attr name="labelAddItemTextColor" format="reference|color" />
 	<attr name="body_new" format="reference" />
 	<attr name="body_remove" format="reference" />
+	<attr name="body_delete" format="reference" />
 	
 </resources>

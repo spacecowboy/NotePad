@@ -50,6 +50,7 @@
         <item name="list_item_card_background">@drawable/darkgrey_rounded_corners</item>
         <item name="body_new">@drawable/content_new_dark </item>
         <item name="body_remove">@drawable/content_remove_dark</item>
+        <item name="body_delete">@drawable/content_discard_dark</item>
         
         <item name="android:actionBarStyle">@android:style/Widget.Holo.ActionBar.Solid</item>
     </style>
@@ -106,6 +107,7 @@
         <item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
         <item name="body_new">@drawable/content_new_light </item>
         <item name="body_remove">@drawable/content_remove_light</item>
+        <item name="body_delete">@drawable/content_discard_light</item>
         
         <item name="list_item_card_background">@drawable/white_rounded_corners</item>
     </style>

@@ -80,7 +80,8 @@ public class MyContentProvider extends ContentProvider {
 
 			result = item.insert(getContext(), db);
 			db.setTransactionSuccessful();
-		} finally {
+		}
+		finally {
 			db.endTransaction();
 		}
 
@@ -88,8 +89,8 @@ public class MyContentProvider extends ContentProvider {
 	}
 
 	@Override
-	synchronized public int update(Uri uri, ContentValues values, String selection,
-			String[] selectionArgs) {
+	synchronized public int update(Uri uri, ContentValues values,
+			String selection, String[] selectionArgs) {
 		final SQLiteDatabase db = DatabaseHandler.getInstance(getContext())
 				.getWritableDatabase();
 		int result = 0;
@@ -100,56 +101,65 @@ public class MyContentProvider extends ContentProvider {
 		try {
 			// TODO add legacy URIs
 			switch (sURIMatcher.match(uri)) {
+			case TaskList.BASEITEMCODE:
+				final TaskList list = new TaskList(uri, values);
+				result += db.update(TaskList.TABLE_NAME, list.getContent(),
+						TaskList.whereIdIs, list.whereIdArg());
+				break;
 			case Task.INDENTITEMCODE:
 				// indent one
-				
+
 				t = new Task(uri, values);
 				if (!t.shouldIndent()) {
 					throw new SQLException(
 							"Cant indent task without the correct information");
 				}
 
-				stmt = db.compileStatement(t
-						.getSQLIndentItem());
+				stmt = db.compileStatement(t.getSQLIndentItem());
 				result += stmt.executeUpdateDelete();
 				break;
 			case Task.UNINDENTITEMCODE:
 				// unindent one
-				
+
 				t = new Task(uri, values);
 				if (!t.shouldIndent()) {
 					throw new SQLException(
 							"Cant unindent task without the correct information");
 				}
-				
+
 				Task parent = null;
 				// Get the parent
-				final Cursor c = db.query(Task.TABLE_NAME, Task.Columns.FIELDS, 
-						String.format("%1$s < ? AND %2$s > ? AND %3$s IS ?", Task.Columns.LEFT, Task.Columns.RIGHT, Task.Columns.DBLIST),
-						new String[] {Long.toString(t.left), Long.toString(t.right), Long.toString(t.dblist)},
-						null, null, String.format("(%2$s - %1$s) ASC", Task.Columns.LEFT, Task.Columns.RIGHT), "1");
-				
+				final Cursor c = db
+						.query(Task.TABLE_NAME, Task.Columns.FIELDS, String
+								.format("%1$s < ? AND %2$s > ? AND %3$s IS ?",
+										Task.Columns.LEFT, Task.Columns.RIGHT,
+										Task.Columns.DBLIST), new String[] {
+								Long.toString(t.left), Long.toString(t.right),
+								Long.toString(t.dblist) }, null, null, String
+								.format("(%2$s - %1$s) ASC", Task.Columns.LEFT,
+										Task.Columns.RIGHT), "1");
+
 				if (c != null && c.getCount() == 1 && c.moveToFirst()) {
 					parent = new Task(c);
 				}
 				c.close();
-				
+
 				if (parent != null) {
-					stmt = db.compileStatement(t.getSQLUnIndentItem(parent.right));
+					stmt = db.compileStatement(t
+							.getSQLUnIndentItem(parent.right));
 					result += stmt.executeUpdateDelete();
 				}
 				break;
 			case Task.MOVESUBTREECODE:
 				// Move subtree
-				
+
 				t = new Task(uri, values);
 				if (!t.shouldMove(values)) {
 					throw new SQLException(
 							"Cant move task without the correct information");
 				}
 
-				stmt = db.compileStatement(t
-						.getSQLMoveSubTree(values));
+				stmt = db.compileStatement(t.getSQLMoveSubTree(values));
 				result += stmt.executeUpdateDelete();
 				break;
 			case Task.BASEITEMCODE:
@@ -157,7 +167,7 @@ public class MyContentProvider extends ContentProvider {
 				t = new Task(uri, values);
 				if (t.getContent().size() > 0) {
 					// Something changed in task
-					
+
 					result += db.update(Task.TABLE_NAME, t.getContent(),
 							Task.whereIdIs, t.whereIdArg());
 				}
@@ -169,7 +179,8 @@ public class MyContentProvider extends ContentProvider {
 			if (result >= 0) {
 				db.setTransactionSuccessful();
 			}
-		} finally {
+		}
+		finally {
 			db.endTransaction();
 		}
 
@@ -180,15 +191,16 @@ public class MyContentProvider extends ContentProvider {
 		return result;
 	}
 
-	synchronized private int safeDeleteItem(final SQLiteDatabase db, final String tableName,
-			final Uri uri) {
+	synchronized private int safeDeleteItem(final SQLiteDatabase db,
+			final String tableName, final Uri uri) {
 		db.beginTransaction();
 		int result = 0;
 		try {
 			result += db.delete(tableName, BaseColumns._ID + " IS ?",
 					new String[] { uri.getLastPathSegment() });
 			db.setTransactionSuccessful();
-		} finally {
+		}
+		finally {
 			db.endTransaction();
 		}
 
@@ -196,7 +208,8 @@ public class MyContentProvider extends ContentProvider {
 	}
 
 	@Override
-	synchronized public int delete(Uri uri, String selection, String[] selectionArgs) {
+	synchronized public int delete(Uri uri, String selection,
+			String[] selectionArgs) {
 		final SQLiteDatabase db = DatabaseHandler.getInstance(getContext())
 				.getWritableDatabase();
 		int result = 0;
@@ -219,8 +232,8 @@ public class MyContentProvider extends ContentProvider {
 	}
 
 	@Override
-	synchronized public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
+	synchronized public Cursor query(Uri uri, String[] projection,
+			String selection, String[] selectionArgs, String sortOrder) {
 		Cursor result = null;
 		final long id;
 		// TODO add legacy URIs
@@ -234,6 +247,17 @@ public class MyContentProvider extends ContentProvider {
 			result.setNotificationUri(getContext().getContentResolver(),
 					TaskList.URI);
 			break;
+		case TaskList.BASEITEMCODE:
+			id = Long.parseLong(uri.getLastPathSegment());
+			result = DatabaseHandler
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(TaskList.TABLE_NAME, projection,
+							TaskList.Columns._ID + " IS ?",
+							new String[] { String.valueOf(id) }, null, null,
+							sortOrder);
+			result.setNotificationUri(getContext().getContentResolver(), uri);
+			break;
 		case Task.INDENTEDQUERYCODE:
 			// Ignore selection param
 			// Selection arg must be the list id
@@ -243,7 +267,6 @@ public class MyContentProvider extends ContentProvider {
 						"Indented URI requires only argument to be the list id!");
 			}
 
-			
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
@@ -254,13 +277,13 @@ public class MyContentProvider extends ContentProvider {
 			break;
 		case Task.DELETEDQUERYCODE:
 			result = DatabaseHandler
-			.getInstance(getContext())
-			.getReadableDatabase()
-			.query(Task.DELETE_TABLE_NAME, projection, selection,
-					selectionArgs, null, null, null);
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(Task.DELETE_TABLE_NAME, projection, selection,
+							selectionArgs, null, null, null);
 
 			result.setNotificationUri(getContext().getContentResolver(),
-			Task.URI_DELETED_QUERY);
+					Task.URI_DELETED_QUERY);
 			break;
 		case Task.DELETEDITEMCODE:
 			id = Long.parseLong(uri.getLastPathSegment());
@@ -271,8 +294,7 @@ public class MyContentProvider extends ContentProvider {
 							Task.Columns._ID + " IS ?",
 							new String[] { String.valueOf(id) }, null, null,
 							null);
-			result.setNotificationUri(getContext().getContentResolver(),
-					uri);
+			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
 		case Task.BASEURICODE:
 			result = DatabaseHandler
@@ -293,12 +315,11 @@ public class MyContentProvider extends ContentProvider {
 							Task.Columns._ID + " IS ?",
 							new String[] { String.valueOf(id) }, null, null,
 							sortOrder);
-			result.setNotificationUri(getContext().getContentResolver(),
-					uri);
+			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
 		case Task.LEGACYBASEURICODE:
 		case Task.LEGACYVISIBLEURICODE:
-			
+
 		default:
 			throw new IllegalArgumentException("Faulty URI provided");
 		}

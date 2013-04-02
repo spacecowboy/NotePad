@@ -10,24 +10,11 @@
         android:id="@+id/menu_managelists"
         android:orderInCategory="301"
         android:showAsAction="never"
-        android:title="@string/menu_managelists">
-        <menu>
-            <item
-                android:id="@+id/menu_setdefaultlist"
-                android:orderInCategory="1"
-                android:showAsAction="never"
-                android:title="@string/menu_setdefaultlist"/>
-            <item
-                android:id="@+id/menu_renamelist"
-                android:orderInCategory="3"
-                android:showAsAction="never"
-                android:title="@string/menu_renamelist"/>
-            <item
-                android:id="@+id/menu_deletelist"
-                android:orderInCategory="4"
-                android:showAsAction="never"
-                android:title="@string/menu_deletelist"/>
-        </menu>
-    </item>
+        android:title="@string/menu_managelists"/>
+    <item
+        android:id="@+id/menu_deletelist"
+        android:orderInCategory="9999"
+        android:showAsAction="never"
+        android:title="@string/menu_deletelist"/>
 
 </menu>
