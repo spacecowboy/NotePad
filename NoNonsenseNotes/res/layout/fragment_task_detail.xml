@@ -5,7 +5,9 @@
     android:id="@+id/fragment_task_edit"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fillViewport="false" >
+    android:layout_marginLeft="@dimen/editor_side_margin"
+    android:layout_marginRight="@dimen/editor_side_margin"
+    android:fillViewport="@bool/fillEditor" >
 
     <RelativeLayout
         android:layout_width="match_parent"

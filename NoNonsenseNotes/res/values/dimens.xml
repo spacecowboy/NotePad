@@ -27,8 +27,16 @@
     <dimen name="widget_margin">8dp</dimen>
     
     <!-- Editor fragment stuff -->
-    <dimen name="editor_side_margin">8dp</dimen>
+    <dimen name="editor_side_margin">0dp</dimen>
     <dimen name="editor_vertical_margin">0dp</dimen>
     <dimen name="editor_vertical_margin_bottom">0dp</dimen>
+    
+    <!-- For card in editor -->
+    <dimen name="card_editor_shadow_bottom">0dp</dimen>
+    <dimen name="card_editor_top_bottom">0dp</dimen>
+    
+    <!-- Hacky but it works! -->
+    <dimen name="match_parent">-1dp</dimen>
+    <dimen name="wrap_content">-2dp</dimen>
     
 </resources>

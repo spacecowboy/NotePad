@@ -18,5 +18,4 @@
 <resources>
     <!-- Increase size (used to be 0 for dual pane -->
     <dimen name="preference_screen_side_margin">64dp</dimen>
-    <dimen name="editor_side_margin">64dp</dimen>
 </resources>
