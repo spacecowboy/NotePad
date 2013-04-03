@@ -280,7 +280,7 @@ public class MyContentProvider extends ContentProvider {
 					.getInstance(getContext())
 					.getReadableDatabase()
 					.query(Task.DELETE_TABLE_NAME, projection, selection,
-							selectionArgs, null, null, null);
+							selectionArgs, null, null, sortOrder);
 
 			result.setNotificationUri(getContext().getContentResolver(),
 					Task.URI_DELETED_QUERY);

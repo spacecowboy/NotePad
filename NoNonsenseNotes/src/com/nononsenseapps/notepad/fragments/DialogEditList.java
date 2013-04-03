@@ -6,8 +6,10 @@ import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 
 import android.database.Cursor;
 import android.net.Uri;
@@ -28,10 +30,10 @@ import android.widget.Toast;
 
 @EFragment(R.layout.fragment_dialog_editlist)
 public class DialogEditList extends DialogFragment {
-	
+
 	public interface EditListDialogListener {
-        void onFinishEditDialog(long id);
-    }
+		void onFinishEditDialog(long id);
+	}
 
 	static final String LIST_ID = "list_id";
 
@@ -57,7 +59,7 @@ public class DialogEditList extends DialogFragment {
 	Button cancelButton;
 
 	private TaskList mTaskList;
-	
+
 	private EditListDialogListener listener;
 
 	/**
@@ -89,7 +91,7 @@ public class DialogEditList extends DialogFragment {
 	void setup() {
 		if (getArguments().getLong(LIST_ID, -1) > 0) {
 			getDialog().setTitle(R.string.menu_managelists);
-			getLoaderManager().initLoader(0, null,
+			getLoaderManager().restartLoader(0, null,
 					new LoaderCallbacks<Cursor>() {
 
 						@Override
@@ -147,9 +149,21 @@ public class DialogEditList extends DialogFragment {
 		okButton.setEnabled(text.length() > 0);
 	}
 
+	@Click(R.id.deleteButton)
+	void deleteClicked() {
+		if (mTaskList._id > 0) {
+			DialogDeleteList.showDialog(getFragmentManager(), mTaskList._id, new DialogConfirmedListener() {
+				@Override
+				public void onConfirm() {
+					dismiss();
+				}
+			});
+		}
+	}
+
 	@Click(R.id.dialog_no)
 	void cancelClicked() {
-		this.dismiss();
+		dismiss();
 	}
 
 	@Click(R.id.dialog_yes)

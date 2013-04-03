@@ -4,6 +4,7 @@ import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
 
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
@@ -86,37 +87,45 @@ public class TaskListViewPagerFragment extends Fragment implements
 		// Adapter for view pager
 		mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager(),
 				mTaskListsAdapter);
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
 
 		// Load actual data
-		getLoaderManager().initLoader(0, null, new LoaderCallbacks<Cursor>() {
+		getLoaderManager().restartLoader(0, null,
+				new LoaderCallbacks<Cursor>() {
 
-			@Override
-			public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
-				return new CursorLoader(getActivity(), TaskList.URI,
-						new String[] { TaskList.Columns._ID,
-								TaskList.Columns.TITLE }, null, null,
-						TaskList.Columns.TITLE);
-			}
-
-			@Override
-			public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
-				mTaskListsAdapter.swapCursor(c);
-				if (firstLoad) {
-					firstLoad = false;
-					final int pos = mSectionsPagerAdapter
-							.getItemPosition(mListIdToSelect);
-					if (pos >= 0) {
-						// TODO
-						// pager.setCurrentItem(pos);
+					@Override
+					public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+						return new CursorLoader(getActivity(), TaskList.URI,
+								new String[] { TaskList.Columns._ID,
+										TaskList.Columns.TITLE }, null, null,
+								getResources().getString(
+										R.string.const_as_alphabetic,
+										TaskList.Columns.TITLE));
 					}
-				}
-			}
 
-			@Override
-			public void onLoaderReset(Loader<Cursor> arg0) {
-				mTaskListsAdapter.swapCursor(null);
-			}
-		});
+					@Override
+					public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
+						mTaskListsAdapter.swapCursor(c);
+						if (firstLoad) {
+							firstLoad = false;
+							final int pos = mSectionsPagerAdapter
+									.getItemPosition(mListIdToSelect);
+							if (pos >= 0) {
+								// TODO
+								// pager.setCurrentItem(pos);
+							}
+						}
+					}
+
+					@Override
+					public void onLoaderReset(Loader<Cursor> arg0) {
+						mTaskListsAdapter.swapCursor(null);
+					}
+				});
 	}
 
 	@AfterViews
@@ -148,22 +157,27 @@ public class TaskListViewPagerFragment extends Fragment implements
 	public void onFinishEditDialog(final long id) {
 		// open the list
 		if (mSectionsPagerAdapter != null) {
-			pager.setCurrentItem(mSectionsPagerAdapter.getItemPosition(id),
-					true);
+			final int pos = mSectionsPagerAdapter.getItemPosition(id);
+			if (pos > -1) {
+				pager.setCurrentItem(pos, true);
+			}
 		}
 	}
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
 		outState.putLong(START_LIST_ID,
 				mTaskListsAdapter.getItemId(pager.getCurrentItem()));
 	}
 
 	@Override
 	public void onDestroy() {
-		super.onDestroy();
+		if (mSectionsPagerAdapter != null) {
+			mSectionsPagerAdapter.destroy();
+		}
 		getLoaderManager().destroyLoader(0);
+
+		super.onDestroy();
 	}
 
 	/**
@@ -210,6 +224,12 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 		}
 
+		public void destroy() {
+			if (wrappedAdapter != null) {
+				wrappedAdapter.unregisterDataSetObserver(subObserver);
+			}
+		}
+
 		@Override
 		public Fragment getItem(int pos) {
 			long id = getItemId(pos);
@@ -231,7 +251,10 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 		@Override
 		public int getCount() {
-			return wrappedAdapter.getCount();
+			if (wrappedAdapter != null)
+				return wrappedAdapter.getCount();
+			else
+				return 0;
 		}
 
 		@Override

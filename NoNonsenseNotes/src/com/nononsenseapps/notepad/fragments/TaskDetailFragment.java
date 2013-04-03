@@ -6,16 +6,16 @@ import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityMain_;
-import com.nononsenseapps.notepad.NotesEditorFragment;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.utils.views.StyledEditText;
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -26,13 +26,11 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ShareActionProvider;
 
 /**
@@ -43,9 +41,9 @@ import android.widget.ShareActionProvider;
 @EFragment(R.layout.fragment_task_detail)
 public class TaskDetailFragment extends Fragment {
 
-	private static int LOADER_TASK = 0;
-	private static int LOADER_TASKLISTS = 1;
-	private static int LOADER_NOTIFICATIONS = 2;
+	public static int LOADER_EDITOR_TASK = 1;
+	public static int LOADER_EDITOR_TASKLISTS = 2;
+	public static int LOADER_EDITOR_NOTIFICATIONS = 3;
 
 	@ViewById
 	StyledEditText taskText;
@@ -113,10 +111,15 @@ public class TaskDetailFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 
 		setHasOptionsMenu(true);
+	}
+
+	@Override
+	public void onStart() {
+		super.onStart();
 
 		if (getArguments().getLong(ARG_ITEM_ID, -1) > 0) {
 			// Load data from database
-			getLoaderManager().initLoader(LOADER_TASK, null,
+			getLoaderManager().restartLoader(LOADER_EDITOR_TASK, null,
 					new LoaderCallbacks<Cursor>() {
 
 						@Override
@@ -134,7 +137,8 @@ public class TaskDetailFragment extends Fragment {
 							mTask = new Task(c);
 							fillUIFromTask();
 							// Don't want updates while editing
-							getLoaderManager().destroyLoader(LOADER_TASK);
+							getLoaderManager()
+									.destroyLoader(LOADER_EDITOR_TASK);
 						}
 
 						@Override
@@ -154,20 +158,21 @@ public class TaskDetailFragment extends Fragment {
 			mTask.setText(getArguments().getString(ARG_ITEM_CONTENT, ""));
 		}
 	}
-	
+
 	@AfterViews
 	void setListener() {
 		taskText.addTextChangedListener(new TextWatcher() {
-			
+
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
+			public void onTextChanged(CharSequence s, int start, int before,
+					int count) {
 			}
-			
+
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
 					int after) {
 			}
-			
+
 			@Override
 			public void afterTextChanged(Editable s) {
 				setShareIntent(s.toString());
@@ -239,24 +244,49 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	private void deleteAndClose() {
-		if (mTask != null) {
-			// TODO
-			// getActivity().getContentResolver().delete(mTask.getUri(), null,
-			// null);
+		if (mTask != null && mTask._id > 0) {
+			DialogDeleteTask.showDialog(getFragmentManager(), mTask._id,
+					new DialogConfirmedListener() {
+						@Override
+						public void onConfirm() {
+							// Prevents save attempts
+							mTask = null;
+							// Request a close from activity
+							if (mListener != null) {
+								mListener
+										.closeFragment(TaskDetailFragment.this);
+							}
+						}
+					});
 		}
-		// Prevents save attempts
-		mTask = null;
-		// Request a close from activity
-		if (mListener != null) {
-			mListener.closeFragment(this);
+		else {
+			// Prevents save attempts
+			mTask = null;
+			// Request a close from activity
+			if (mListener != null) {
+				mListener.closeFragment(this);
+			}
 		}
 	}
 
 	private void saveTask() {
 		// if mTask is null, the task has been deleted or cancelled
 		if (mTask != null) {
-
+			// TODO save other fields
+			if (mTask._id < 1) {
+				// New item, only save if something has been entered
+				if (isThereContent()) {
+					mTask.setText(taskText.getText().toString());
+					getActivity().getContentResolver().insert(
+							mTask.getBaseUri(), mTask.getContent());
+				}
+			}
 		}
+	}
+
+	boolean isThereContent() {
+		// TODO check more fields
+		return taskText.getText().length() > 0;
 	}
 
 	@Override

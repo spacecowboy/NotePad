@@ -27,6 +27,7 @@
     <string name="const_theme_light">light</string>
     <string name="const_theme_light_ab">light_ab</string>
     <string name="const_alphabetic">title COLLATE NOCASE</string>
+    <string name="const_as_alphabetic">%s COLLATE NOCASE</string>
     <string name="const_duedate">duedate</string>
     <string name="const_modified">modified</string>
     <string name="const_possubsort">possubsort</string>

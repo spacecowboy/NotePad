@@ -19,9 +19,11 @@ import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -30,6 +32,10 @@ import android.view.ViewGroup;
 @EActivity(R.layout.activity_main)
 public class ActivityMain extends FragmentActivity implements
 		OnFragmentInteractionListener {
+
+	// Using tags for test
+	public static final String DETAILTAG = "detailfragment";
+	public static final String LISTPAGERTAG = "listpagerfragment";
 
 	@ViewById
 	View fragment1;
@@ -51,20 +57,24 @@ public class ActivityMain extends FragmentActivity implements
 		final FragmentTransaction transaction = getSupportFragmentManager()
 				.beginTransaction().setCustomAnimations(R.anim.slide_in_top,
 						R.anim.slide_out_bottom);
+		
+		Log.d("JONAS", "loading content");
 		/*
 		 * If it contains a noteId, load an editor. If also tablet, load the
 		 * lists.
 		 */
 		if (fragment2 != null) {
+			Log.d("JONAS", "detail in 2");
 			if (getNoteId(intent) > 0) {
 				transaction.replace(R.id.fragment2,
-						TaskDetailFragment_.getInstance(getNoteId(intent)));
+						TaskDetailFragment_.getInstance(getNoteId(intent)), DETAILTAG);
 				taskHint.setVisibility(View.GONE);
 			}
 		}
 		else if (isNoteIntent(intent)) {
+			Log.d("JONAS", "detail in 1");
 			transaction.replace(R.id.fragment1,
-					TaskDetailFragment_.getInstance(getNoteId(intent)));
+					TaskDetailFragment_.getInstance(getNoteId(intent)), DETAILTAG);
 
 			// also set up-navigation
 			getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -73,12 +83,20 @@ public class ActivityMain extends FragmentActivity implements
 		 * Other case, is a list id or a tablet
 		 */
 		if (!isNoteIntent(intent) || fragment2 != null) {
+			Log.d("JONAS", "lists in 1");
 			transaction.replace(R.id.fragment1, TaskListViewPagerFragment
-					.getInstance(getListIdToShow(intent)));
+					.getInstance(getListIdToShow(intent)), LISTPAGERTAG);
 		}
 
+		Log.d("JONAS", "commit content");
 		// Commit transaction
 		transaction.commit();
+	}
+	
+	@Override
+	public void onSaveInstanceState(Bundle outState) {
+		// Do absolutely NOT call super class here. Will bug out the viewpager!
+		//super.onSaveInstanceState(outState);
 	}
 
 	@Override

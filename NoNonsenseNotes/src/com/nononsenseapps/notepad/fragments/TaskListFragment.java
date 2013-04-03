@@ -6,6 +6,7 @@ import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
 
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
@@ -94,27 +95,34 @@ public class TaskListFragment extends Fragment {
 				return false;
 			}
 		});
+	}
 
-		getLoaderManager().initLoader(0, null, new LoaderCallbacks<Cursor>() {
+	@Override
+	public void onStart() {
+		super.onStart();
 
-			@Override
-			public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
-				return new CursorLoader(getActivity(), Task.URI_INDENTED_QUERY,
-						Task.Columns.FIELDS, Task.Columns.DBLIST + " IS ?",
-						new String[] { Long.toString(mListId) },
-						Task.Columns.LEFT);
-			}
+		getLoaderManager().restartLoader(0, null,
+				new LoaderCallbacks<Cursor>() {
 
-			@Override
-			public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
-				mAdapter.swapCursor(c);
-			}
+					@Override
+					public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+						return new CursorLoader(getActivity(),
+								Task.URI_INDENTED_QUERY, Task.Columns.FIELDS,
+								Task.Columns.DBLIST + " IS ?",
+								new String[] { Long.toString(mListId) },
+								Task.Columns.LEFT);
+					}
 
-			@Override
-			public void onLoaderReset(Loader<Cursor> arg0) {
-				mAdapter.swapCursor(null);
-			}
-		});
+					@Override
+					public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
+						mAdapter.swapCursor(c);
+					}
+
+					@Override
+					public void onLoaderReset(Loader<Cursor> arg0) {
+						mAdapter.swapCursor(null);
+					}
+				});
 	}
 
 	@AfterViews
@@ -163,7 +171,6 @@ public class TaskListFragment extends Fragment {
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		super.onSaveInstanceState(outState);
 	}
 
 	@Override
