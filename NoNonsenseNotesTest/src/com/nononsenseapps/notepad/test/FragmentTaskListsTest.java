@@ -30,7 +30,6 @@ public class FragmentTaskListsTest extends
 		mInstrumentation = getInstrumentation();
 
 		setActivityInitialTouchMode(false);
-
 	}
 
 	protected void tearDown() throws Exception {
@@ -44,7 +43,8 @@ public class FragmentTaskListsTest extends
 				getActivity().findViewById(R.id.fragment1));
 	}
 
-	private void testFragmentLoaded() throws InterruptedException {
+	@SmallTest
+	public void testFragmentLoaded() throws InterruptedException {
 		mInstrumentation.waitForIdleSync();
 		
 		Spoon.screenshot(getActivity(), "List_loaded");
@@ -61,44 +61,5 @@ public class FragmentTaskListsTest extends
 				.findViewById(android.R.id.list);
 
 		assertNotNull("Could not find the list!", taskList);
-	}
-
-	private void recreate() {
-		mInstrumentation.runOnMainSync(new Runnable() {
-			@Override
-			public void run() {
-				getActivity().recreate();
-			}
-		});
-	}
-
-	@SmallTest
-	public void testFragmentLoadedPortraitLandscape()
-			throws InterruptedException {
-		getActivity();
-		mInstrumentation.waitForIdleSync();
-		Spoon.screenshot(getActivity(), "List_loaded_initial");
-		getActivity().setRequestedOrientation(
-				ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		// Load activity again
-		//recreate();
-		mInstrumentation.waitForIdleSync();
-		Thread.sleep(100);
-		testFragmentLoaded();
-		getActivity().setRequestedOrientation(
-				ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-		// Load activity again
-		//recreate();
-		mInstrumentation.waitForIdleSync();
-		Thread.sleep(100);
-		testFragmentLoaded();
-		// And back again
-		getActivity().setRequestedOrientation(
-				ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-		// Load activity again
-		//recreate();
-		mInstrumentation.waitForIdleSync();
-		Thread.sleep(100);
-		testFragmentLoaded();
 	}
 }

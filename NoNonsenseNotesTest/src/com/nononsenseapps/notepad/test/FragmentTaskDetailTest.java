@@ -18,7 +18,7 @@ import android.widget.TextView;
 public class FragmentTaskDetailTest extends
 		ActivityInstrumentationTestCase2<ActivityMain_> {
 
-	private Instrumentation mInstrumentation;
+	protected Instrumentation mInstrumentation;
 
 	public FragmentTaskDetailTest() {
 		super(ActivityMain_.class);
