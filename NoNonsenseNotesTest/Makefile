@@ -14,6 +14,8 @@ install:
 uninstall:
 	adb uninstall com.nononsenseapps.notepad.test
 
+#For class: -Dspoon.test.class=fully.qualified.ClassName
+#For method in that class, also: -Dspoon.test.method=testAllTheThings
 testspoon:
 	java -jar spoon-runner-1.0.2-jar-with-dependencies.jar \
 --apk ../NoNonsenseNotes/bin/NotePad-debug.apk \

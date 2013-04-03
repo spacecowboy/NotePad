@@ -3,20 +3,22 @@ package com.nononsenseapps.notepad.test;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.database.Task;
+import com.squareup.spoon.Spoon;
 
 import android.app.Instrumentation;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.view.View;
 import android.widget.TextView;
 
+//import static org.fest.assertions.api.ANDROID.assertThat;
 
 public class FragmentTaskDetailTest extends
 		ActivityInstrumentationTestCase2<ActivityMain_> {
 
 	private Instrumentation mInstrumentation;
-	private ActivityMain_ mActivity;
 
 	public FragmentTaskDetailTest() {
 		super(ActivityMain_.class);
@@ -32,17 +34,9 @@ public class FragmentTaskDetailTest extends
 		// Set activity Intent
 		// Intent should be task id
 		Intent i = new Intent();
-		i.setAction(Intent.ACTION_EDIT).setData(
-				Task.getUri(1L));
-		
-		setActivityIntent(i);
-		mActivity = getActivity(); // get a references to the app under test
+		i.setAction(Intent.ACTION_EDIT).setData(Task.getUri(1L));
 
-		/*
-		 * Get a reference to the main widget of the app under test, a Spinner
-		 */
-		// mSpinner = (Spinner)
-		// mActivity.findViewById(com.android.demo.myactivity.R.id.Spinner01)
+		setActivityIntent(i);
 	}
 
 	protected void tearDown() throws Exception {
@@ -53,9 +47,13 @@ public class FragmentTaskDetailTest extends
 	public void testSanity() {
 		assertEquals("This should succeed", 1, 1);
 	}
-	
+
 	public void testFragmentLoaded() {
-		View taskText = mActivity.findViewById(com.nononsenseapps.notepad.R.id.taskText);
-		assertNotNull("Could not find the editor!", taskText);
+		Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(com.nononsenseapps.notepad.ActivityMain.DETAILTAG);
+		Spoon.screenshot(getActivity(), "Editor_loaded");
+		assertNotNull("Editor should NOT be null", fragment);
+		assertTrue("Editor should be visible", fragment.isAdded() && fragment.isVisible());
+		//assertThat(fragment).isUserVisible();
+		//assertNotNull("Could not find the editor!", taskText);
 	}
 }
