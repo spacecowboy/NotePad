@@ -14,6 +14,12 @@ install:
 uninstall:
 	adb uninstall com.nononsenseapps.notepad.test
 
+testspoon:
+	java -jar spoon-runner-1.0.2-jar-with-dependencies.jar \
+--apk ../NoNonsenseNotes/bin/NotePad-debug.apk \
+--test-apk bin/Test-debug.apk \
+--sdk ~/android-sdk-linux
+
 testeditor:
 	adb shell am instrument -w \
 -e class com.nononsenseapps.notepad.test.FragmentTaskDetailTest \
