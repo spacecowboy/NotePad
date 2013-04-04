@@ -57,7 +57,7 @@ public class ActivityMain extends FragmentActivity implements
 		final FragmentTransaction transaction = getSupportFragmentManager()
 				.beginTransaction().setCustomAnimations(R.anim.slide_in_top,
 						R.anim.slide_out_bottom);
-		
+
 		Log.d("JONAS", "loading content");
 		/*
 		 * If it contains a noteId, load an editor. If also tablet, load the
@@ -67,14 +67,28 @@ public class ActivityMain extends FragmentActivity implements
 			Log.d("JONAS", "detail in 2");
 			if (getNoteId(intent) > 0) {
 				transaction.replace(R.id.fragment2,
-						TaskDetailFragment_.getInstance(getNoteId(intent)), DETAILTAG);
+						TaskDetailFragment_.getInstance(getNoteId(intent)),
+						DETAILTAG);
 				taskHint.setVisibility(View.GONE);
+			}
+			else if (getListId(intent) > 0) {
+				transaction.replace(R.id.fragment2,
+						TaskDetailFragment_.getInstance("", getListId(intent)),
+						DETAILTAG);
 			}
 		}
 		else if (isNoteIntent(intent)) {
 			Log.d("JONAS", "detail in 1");
-			transaction.replace(R.id.fragment1,
-					TaskDetailFragment_.getInstance(getNoteId(intent)), DETAILTAG);
+			if (getNoteId(intent) > 0) {
+				transaction.replace(R.id.fragment1,
+						TaskDetailFragment_.getInstance(getNoteId(intent)),
+						DETAILTAG);
+			}
+			else if (getListId(intent) > 0) {
+				transaction.replace(R.id.fragment1,
+						TaskDetailFragment_.getInstance("", getListId(intent)),
+						DETAILTAG);
+			}
 
 			// also set up-navigation
 			getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -92,11 +106,11 @@ public class ActivityMain extends FragmentActivity implements
 		// Commit transaction
 		transaction.commit();
 	}
-	
+
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		// Do absolutely NOT call super class here. Will bug out the viewpager!
-		//super.onSaveInstanceState(outState);
+		// super.onSaveInstanceState(outState);
 	}
 
 	@Override
@@ -197,8 +211,9 @@ public class ActivityMain extends FragmentActivity implements
 		long retval = -1;
 		if (intent != null
 				&& intent.getData() != null
-				&& (Intent.ACTION_EDIT.equals(intent.getAction()) || Intent.ACTION_VIEW
-						.equals(intent.getAction()))) {
+				&& (Intent.ACTION_EDIT.equals(intent.getAction())
+						|| Intent.ACTION_VIEW.equals(intent.getAction()) || Intent.ACTION_INSERT
+							.equals(intent.getAction()))) {
 			if ((intent.getData().getPath()
 					.startsWith(NotePad.Lists.PATH_VISIBLE_LISTS)
 					|| intent.getData().getPath()
@@ -213,17 +228,10 @@ public class ActivityMain extends FragmentActivity implements
 						.parseLong(intent
 								.getStringExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST));
 			}
-			else if (null != intent
-					.getStringExtra(Task.Columns.DBLIST)) {
-				// TODO why string?
-				retval = Long
-						.parseLong(intent
-								.getStringExtra(Task.Columns.DBLIST));
-			}
-			else if (null != intent
-					.getStringExtra(TaskDetailFragment.ARG_ITEM_LIST_ID)) {
-				retval = Long.parseLong(intent
-						.getStringExtra(TaskDetailFragment.ARG_ITEM_LIST_ID));
+			else if (0 < intent.getLongExtra(
+					TaskDetailFragment.ARG_ITEM_LIST_ID, -1)) {
+				retval = intent.getLongExtra(
+						TaskDetailFragment.ARG_ITEM_LIST_ID, -1);
 			}
 		}
 		return retval;
@@ -260,9 +268,9 @@ public class ActivityMain extends FragmentActivity implements
 		// phone
 		else {
 			// TODO
-			//final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
-			//		.setClass(this, ActivityMain_.class).setData(taskUri);
-			//startActivity(intent);
+			final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
+					.setClass(this, ActivityMain_.class).setData(taskUri);
+			startActivity(intent);
 		}
 	}
 
@@ -284,7 +292,7 @@ public class ActivityMain extends FragmentActivity implements
 			// TODO
 			final Intent intent = new Intent().setAction(Intent.ACTION_INSERT)
 					.setClass(this, ActivityMain_.class).setData(Task.URI)
-					.putExtra(Task.Columns.DBLIST, listId);
+					.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 			startActivity(intent);
 		}
 	}

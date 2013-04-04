@@ -22,20 +22,25 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.GridView;
 
-@EFragment(R.layout.fragment_task_list)
+@EFragment
 public class TaskListFragment extends Fragment {
 
 	public static final String LIST_ID = "list_id";
 
+	//DragSortListView listView;
 	@ViewById(android.R.id.list)
-	DragSortListView listView;
+	AbsListView listView;
 
 	SimpleCursorAdapter mAdapter;
 
@@ -96,6 +101,12 @@ public class TaskListFragment extends Fragment {
 			}
 		});
 	}
+	
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_task_list, container, false);
+        return view;
+    }
 
 	@Override
 	public void onStart() {
