@@ -74,24 +74,4 @@ public class DBProviderTest extends AndroidTestCase {
 		// LegacyDBHelper.NotePad.Notes.CONTENT_VISIBLE_URI,
 		// new String[] { LegacyDBHelper.NotePad.Notes.COLUMN_NAME_TITLE });
 	}
-
-	@SmallTest
-	public void testTaskDeletedURIs() {
-		// Manually insert an object first
-		final SQLiteDatabase db = DatabaseHandler.getInstance(mContext)
-				.getWritableDatabase();
-
-		ContentValues values = new ContentValues();
-		values.put(Task.Columns.TITLE, "title");
-		long id = db.insert(Task.DELETE_TABLE_NAME, null, values);
-		resolver.notifyChange(Task.URI_DELETED_QUERY, null, false);
-
-		// TODO
-		assertUriReturnsResult(Task.URI_DELETED_QUERY,
-				Task.Columns.DELETEFIELDS);
-
-		// Remove item again
-		db.delete(Task.DELETE_TABLE_NAME, Task.Columns._ID + " IS ?",
-				new String[] { Long.toString(id) });
-	}
 }
