@@ -16,6 +16,9 @@
 -->
 <!-- Provides constants and default values -->
 <resources>
+    <integer name="layout_horizontal">0</integer>
+    <integer name="layout_vertical">1</integer>
+    <integer name="layout_best_orientation">@integer/layout_vertical</integer>
 
     <integer name="default_editor_font_size">22</integer>
 
@@ -26,13 +29,12 @@
     <string name="const_theme_black">black</string>
     <string name="const_theme_light">light</string>
     <string name="const_theme_light_ab">light_ab</string>
+    <string name="const_theme_googlenow_dark">googlenow_dark</string>
     <string name="const_alphabetic">title COLLATE NOCASE</string>
     <string name="const_as_alphabetic">%s COLLATE NOCASE</string>
     <string name="const_duedate">duedate</string>
     <string name="const_modified">modified</string>
-    <string name="const_possubsort">possubsort</string>
-    <string name="const_asc">ASC</string>
-    <string name="const_desc">DESC</string>
+    <string name="const_possubsort">manual</string>
     <string name="const_sans">Sans</string>
     <string name="const_serif">Serif</string>
     <string name="const_monospace">Monospace</string>
@@ -41,6 +43,9 @@
     <string name="key_pref_prio">global_prio</string>
     <string name="key_pref_group_on_lists">group_on_lists</string>
     <string name="pref_locale">pref_key_locale</string>
+    <string name="key_pref_item_max_height">item_max_height</string>
+    <string name="key_pref_dateformat_long">dateformat_long</string>
+    <string name="key_pref_dateformat_short">dateformat_short</string>
     <string name="preferences_week_start_day_default">-1</string>
     <string name="dashclock_nononsense_notes">NoNonsense Notes</string>
     <string name="dashclock_tasks_count">%d</string>

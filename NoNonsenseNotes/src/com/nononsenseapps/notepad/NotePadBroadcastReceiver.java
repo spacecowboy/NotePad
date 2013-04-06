@@ -1,40 +1,28 @@
 package com.nononsenseapps.notepad;
 
-import com.nononsenseapps.helpers.UpdateNotifier;
+import com.nononsenseapps.notepad.database.Task;
 
 import android.content.BroadcastReceiver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
+import android.provider.BaseColumns;
 import android.widget.Toast;
 
 public class NotePadBroadcastReceiver extends BroadcastReceiver {
 
 	@Override
-	public void onReceive(Context context, Intent intent) {
+	public void onReceive(final Context context, final Intent intent) {
 		Bundle extras = intent.getExtras();
 		if (extras != null) {
-			completeNote(context, extras.getLong(NotePad.Notes._ID, -1));
+			if (extras.getLong(BaseColumns._ID, -1) > 0 && context != null) {
+				Task.setCompleted(context, true, extras.getLong(BaseColumns._ID, -1));
+				//UpdateNotifier.notifyChangeNote(context, NotesEditorFragment.getUriFrom(id));
+				
+				Toast.makeText(context, context.getString(R.string.completed),
+						Toast.LENGTH_SHORT).show();
+			}
 		}
 
 	}
-
-	private void completeNote(Context context, long id) {
-		if (id > -1 && context != null) {
-			ContentValues values = new ContentValues();
-			String status = context.getText(R.string.gtask_status_completed)
-					.toString();
-			values.put(NotePad.Notes.COLUMN_NAME_GTASKS_STATUS, status);
-
-			context.getContentResolver().update(
-					NotesEditorFragment.getUriFrom(id), values, null, null);
-			UpdateNotifier.notifyChangeNote(context, NotesEditorFragment.getUriFrom(id));
-			
-			Toast.makeText(context, context.getString(R.string.completed),
-					Toast.LENGTH_SHORT).show();
-		}
-	}
-
 }

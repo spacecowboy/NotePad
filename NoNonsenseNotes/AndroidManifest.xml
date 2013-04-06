@@ -196,8 +196,11 @@
         </activity>
         <activity
             android:name="com.nononsenseapps.notepad.prefs.PrefsActivity"
-            android:theme="@style/ThemeHolo"
-            tools:ignore="ExportedActivity" >
+            tools:ignore="ExportedActivity" 
+            android:parentActivityName="com.nononsenseapps.notepad.ActivityMain_" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nononsenseapps.notepad.ActivityMain_" />
             <intent-filter>
                 <category android:name="android.intent.category.PREFERENCE" >
                 </category>

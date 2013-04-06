@@ -33,7 +33,4 @@ public class AboutPrefs extends Fragment {
 		
 		return layout;
 	}
-	
-	public void ensureList() {
-	}
 }

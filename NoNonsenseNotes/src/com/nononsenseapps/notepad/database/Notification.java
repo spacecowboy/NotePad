@@ -1,18 +1,28 @@
 package com.nononsenseapps.notepad.database;
 
+import java.util.Calendar;
+import java.util.Date;
+
+import com.nononsenseapps.notepad.R;
+
 import android.content.ContentValues;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
+import android.text.format.DateFormat;
 
 public class Notification extends DAO {
 
 	// SQL convention says Table name should be "singular"
 	public static final String TABLE_NAME = "notification";
 	public static final String JOINED_TASK_PATH = TABLE_NAME + "/joined_task";
-	
-	public static final String CONTENT_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps." + TABLE_NAME;
+
+	public static final String CONTENT_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps."
+			+ TABLE_NAME;
 
 	public static final Uri URI = Uri.withAppendedPath(
 			Uri.parse(MyContentProvider.SCHEME + MyContentProvider.AUTHORITY),
@@ -48,30 +58,30 @@ public class Notification extends DAO {
 
 	public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME
 			+ "(" + Columns._ID + " INTEGER PRIMARY KEY," + Columns.TIME
-			+ " INTEGER," + Columns.PERMANENT
-			+ " INTEGER NOT NULL DEFAULT 0," + Columns.TASKID + " INTEGER,"
+			+ " INTEGER," + Columns.PERMANENT + " INTEGER NOT NULL DEFAULT 0,"
+			+ Columns.TASKID + " INTEGER,"
 
 			// Foreign key for task
 			+ "FOREIGN KEY(" + Columns.TASKID + ") REFERENCES "
 			+ Task.TABLE_NAME + "(" + Task.Columns._ID + ") ON DELETE CASCADE"
 
 			+ ")";
-	
+
 	// milliseconds since 1970-01-01 UTC
 	public Long time = null;
 	public Long permanent = null;
 	public Long taskID = null;
-	
+
 	// Read only
 	public String listTitle = null;
-	
+
 	/**
 	 * Must be associated with a task
 	 */
 	public Notification(final long taskID) {
 		this.taskID = taskID;
 	}
-	
+
 	public Notification(final Cursor c) {
 		_id = c.getLong(0);
 		time = c.getLong(1);
@@ -81,29 +91,28 @@ public class Notification extends DAO {
 			listTitle = c.getString(4);
 		}
 	}
-	
+
 	public Notification(final long id, final ContentValues values) {
 		this(values);
 		_id = id;
 	}
-	
+
 	public Notification(final ContentValues values) {
-		time =values.getAsLong(Columns.TIME);
+		time = values.getAsLong(Columns.TIME);
 		permanent = values.getAsLong(Columns.PERMANENT);
-		taskID =values.getAsLong(Columns.TASKID);
+		taskID = values.getAsLong(Columns.TASKID);
 	}
 
 	@Override
 	public ContentValues getContent() {
 		final ContentValues values = new ContentValues();
-		
+
 		values.put(Columns.TIME, time);
 		values.put(Columns.TASKID, taskID);
-		if (permanent != null)
-			values.put(Columns.PERMANENT, permanent);
-		
+		if (permanent != null) values.put(Columns.PERMANENT, permanent);
+
 		return values;
-		
+
 	}
 
 	@Override
@@ -116,4 +125,16 @@ public class Notification extends DAO {
 		return CONTENT_TYPE;
 	}
 
+	/**
+	 * Returns date and time formatted in text in local time zone
+	 * 
+	 * @return
+	 */
+	public CharSequence getLocalDateTimeText(final Context context) {
+		// TODO respect preferences for date format long
+		// TODO timezones?
+		final Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(time);
+		return DateFormat.format("yyyy-MM-dd hh:mm", cal);
+	}
 }

@@ -1482,10 +1482,10 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 		NotesListFragment.sortType = sortOrder;
 
-		sortOrder += " "
-				+ PreferenceManager.getDefaultSharedPreferences(activity)
-						.getString(MainPrefs.KEY_SORT_ORDER,
-								NotePad.Notes.DEFAULT_SORT_ORDERING);
+		//sortOrder += " "
+		//		+ PreferenceManager.getDefaultSharedPreferences(activity)
+		//				.getString(MainPrefs.KEY_SORT_ORDER,
+		//						NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 		// Now create and return a CursorLoader that will take care of
 		// creating a Cursor for the data being displayed.
@@ -1510,11 +1510,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		// Get current sort order or assemble the default one.
 		String sortOrder = PreferenceManager.getDefaultSharedPreferences(
 				activity).getString(MainPrefs.KEY_SORT_TYPE,
-				NotePad.Notes.DEFAULT_SORT_TYPE)
-				+ " "
-				+ PreferenceManager.getDefaultSharedPreferences(activity)
-						.getString(MainPrefs.KEY_SORT_ORDER,
-								NotePad.Notes.DEFAULT_SORT_ORDERING);
+				NotePad.Notes.DEFAULT_SORT_TYPE);
+				//+ " "
+				//+ PreferenceManager.getDefaultSharedPreferences(activity)
+				//		.getString(MainPrefs.KEY_SORT_ORDER,
+				//				NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 		// include title field in search
 		return new CursorLoader(activity, baseUri, PROJECTION,
@@ -1585,10 +1585,10 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		Log.d("listproto", "getting date loader");
 		String sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
 		NotesListFragment.sortType = sortOrder;
-		final String ordering = PreferenceManager.getDefaultSharedPreferences(
-				activity).getString(MainPrefs.KEY_SORT_ORDER,
-				NotePad.Notes.DEFAULT_SORT_ORDERING);
-		sortOrder += " " + ordering;
+		//final String ordering = PreferenceManager.getDefaultSharedPreferences(
+		//		activity).getString(MainPrefs.KEY_SORT_ORDER,
+		//		NotePad.Notes.DEFAULT_SORT_ORDERING);
+		//sortOrder += " " + ordering;
 
 		if (dateComparator == null) {
 			// Create the comparator
@@ -1631,10 +1631,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						return 1;
 					if (m2 == null)
 						return -1;
-					if (ordering.equals(NotePad.Notes.ASCENDING_SORT_ORDERING))
-						return m1.compareTo(m2);
-					else
-						return m2.compareTo(m1);
+					
+					return m1.compareTo(m2);
 				};
 			};
 		}
@@ -1720,10 +1718,10 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		Log.d("listproto", "getting mod loader");
 		String sortOrder = NotePad.Notes.MODIFICATION_SORT_TYPE;
 		NotesListFragment.sortType = sortOrder;
-		final String ordering = PreferenceManager.getDefaultSharedPreferences(
-				activity).getString(MainPrefs.KEY_SORT_ORDER,
-				NotePad.Notes.DEFAULT_SORT_ORDERING);
-		sortOrder += " " + ordering;
+		//final String ordering = PreferenceManager.getDefaultSharedPreferences(
+		//		activity).getString(MainPrefs.KEY_SORT_ORDER,
+		//		NotePad.Notes.DEFAULT_SORT_ORDERING);
+		//sortOrder += " " + ordering;
 
 		String[] vars = null;
 		String where = "";
@@ -1760,10 +1758,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 						return 1;
 					if (m2 == null)
 						return -1;
-					if (ordering.equals(NotePad.Notes.DESCENDING_SORT_ORDERING))
-						return m1.compareTo(m2);
-					else
-						return m2.compareTo(m1);
+					
+					return m2.compareTo(m1);
 				};
 			};
 		}
@@ -2014,12 +2010,12 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				// Setting the summary now would crash it with
 				// IllegalStateException since we are not attached to a view
 			} else {
-				if (MainPrefs.KEY_SORT_TYPE.equals(key)
-						|| MainPrefs.KEY_SORT_ORDER.equals(key)) {
+				//if (MainPrefs.KEY_SORT_TYPE.equals(key)
+				//		|| MainPrefs.KEY_SORT_ORDER.equals(key)) {
 					// rebuild comparators during refresh
-					dateComparator = modComparator = null;
-					refreshList(null);
-				}
+				//	dateComparator = modComparator = null;
+				//	refreshList(null);
+				//}
 			}
 		} catch (IllegalStateException e) {
 			// This is just in case the "isFinishing" wouldn't be enough

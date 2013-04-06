@@ -16,94 +16,75 @@
 -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
+
     <string-array name="theme_preference">
+        <item>@string/settings_summary_theme_light_dark_ab</item>
         <item>@string/settings_summary_theme_dark</item>
         <item>@string/settings_summary_theme_black</item>
-        <item>@string/settings_summary_theme_light_dark_ab</item>
+        <item>@string/settings_summary_theme_googlenow_dark</item>
     </string-array>
-
     <string-array name="themevalues_preference" tools:ignore="MissingTranslation">
+        <item>@string/const_theme_light_ab</item>
         <item>@string/const_theme_dark</item>
         <item>@string/const_theme_black</item>
-      	<item>@string/const_theme_light_ab</item>
+        <item>@string/const_theme_googlenow_dark</item>
     </string-array>
-    
     <string-array name="widget_theme_preference">
         <item>@string/settings_summary_theme_dark</item>
         <item>@string/settings_summary_theme_light</item>
     </string-array>
-    
     <string-array name="widget_themevalues_preference" tools:ignore="MissingTranslation">
         <item>@string/const_theme_dark</item>
         <item>@string/const_theme_light</item>
     </string-array>
-    
     <string-array name="sorting_preference">
         <item>@string/settings_summary_sort_type_alphabetic</item>
         <item>@string/settings_summary_sort_type_duedate</item>
         <item>@string/settings_summary_sort_type_modified</item>
         <item>@string/settings_summary_sort_type_serverposition</item>
     </string-array>
-
-    <string-array name="sortingvalues_preference"  tools:ignore="MissingTranslation">
+    <string-array name="sortingvalues_preference" tools:ignore="MissingTranslation">
         <item>@string/const_alphabetic</item>
         <item>@string/const_duedate</item>
         <item>@string/const_modified</item>
-       	<item>@string/const_possubsort</item>
+        <item>@string/const_possubsort</item>
     </string-array>
-    
-    <string-array name="sorting_order_preference">
-        <item>@string/settings_summary_sort_order_asc</item>
-        <item>@string/settings_summary_sort_order_desc</item>
-    </string-array>
-
-    <string-array name="sorting_ordervalues_preference"  tools:ignore="MissingTranslation">
-        <item>@string/const_asc</item>
-        <item>@string/const_desc</item>
-    </string-array>
-    
     <string-array name="font_type_preference" tools:ignore="MissingTranslation">
         <item>@string/sans</item>
         <item>@string/serif</item>
         <item>@string/monospace</item>
     </string-array>
-
-    <string-array name="font_typevalues_preference"  tools:ignore="MissingTranslation">
+    <string-array name="font_typevalues_preference" tools:ignore="MissingTranslation">
         <item>@string/const_sans</item>
         <item>@string/const_serif</item>
         <item>@string/const_monospace</item>
     </string-array>
-
-    <string-array tools:ignore="MissingTranslation" name="preferences_week_start_day_labels">
+    <string-array name="preferences_week_start_day_labels" tools:ignore="MissingTranslation">
         <item>@string/localedefault</item>
         <item>@string/saturday</item>
         <item>@string/sunday</item>
         <item>@string/monday</item>
     </string-array>
-
     <string-array name="preferences_week_start_day_values" translatable="false">
         <item>"-1"</item>
         <item>"7"</item>
         <item>"1"</item>
         <item>"2"</item>
     </string-array>
-    
     <string-array name="title_rows_entries" tools:ignore="MissingTranslation">
         <item>@string/title_rows_1</item>
         <item>@string/title_rows_2</item>
         <item>@string/title_rows_free</item>
     </string-array>
-
-    <string-array name="title_rows_values"  tools:ignore="MissingTranslation">
+    <string-array name="title_rows_values" tools:ignore="MissingTranslation">
         <item>1</item>
         <item>2</item>
         <item>20</item>
     </string-array>
-    
     <string-array name="show_list_as">
         <item>@string/default_style</item>
-        <item >@string/show_items_as_tasks</item>
-        <item >@string/show_items_as_notes</item>
+        <item>@string/show_items_as_tasks</item>
+        <item>@string/show_items_as_notes</item>
     </string-array>
     <string-array name="sort_list_by">
         <item>@string/sort_list_default</item>
@@ -113,18 +94,24 @@
         <item>@string/sort_list_manual</item>
     </string-array>
     
+    <string-array name="dateformat_long_values">
+        <item>@string/dateformat_long_1</item>
+        <item>@string/dateformat_long_2</item>
+    </string-array>
+    
+    <string-array name="dateformat_short_values">
+        <item>@string/dateformat_short_1</item>
+    </string-array>
     <string-array name="notification_prio_entries">
         <item>@string/notification_prio_high</item>
         <item>@string/standard</item>
         <item>@string/notification_prio_low</item>
     </string-array>
-    
     <string-array name="notification_prio_values">
         <item>2</item>
         <item>0</item>
         <item>-2</item>
     </string-array>
-
     <string-array name="translated_langs" tools:ignore="MissingTranslation">
         <item>ar</item>
         <item>bg</item>

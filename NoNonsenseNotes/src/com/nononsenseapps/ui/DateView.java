@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2012 Jonas Kalderstam
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.nononsenseapps.ui;
@@ -21,6 +21,8 @@ import java.util.Date;
 import java.util.TimeZone;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
 import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.AttributeSet;
@@ -42,22 +44,39 @@ public class DateView extends TextView {
 	public static final String time = "kk:mm";
 
 	private final Context mContext;
+	private final String dateFormat;
 
 	public DateView(Context context) {
 		super(context);
 		this.mContext = context;
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		dateFormat = prefs.getString(
+				context.getString(R.string.key_pref_dateformat_short),
+				context.getString(R.string.dateformat_short_1));
 	}
 
 	public DateView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.mContext = context;
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		dateFormat = prefs.getString(
+				context.getString(R.string.key_pref_dateformat_short),
+				context.getString(R.string.dateformat_short_1));
 	}
 
 	public DateView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		this.mContext = context;
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+		dateFormat = prefs.getString(
+				context.getString(R.string.key_pref_dateformat_short),
+				context.getString(R.string.dateformat_short_1));
 	}
 
+	/*
 	@Override
 	public void setText(CharSequence text, BufferType type) {
 		if (text == null || text.toString().length() == 0)
@@ -66,6 +85,12 @@ public class DateView extends TextView {
 			super.setText(toDate(mContext, text.toString()), type);
 		}
 	}
+*/
+	public void setTimeText(final long time) {
+		// TODO
+		// Does this handle localtime?
+		super.setText(DateFormat.format(dateFormat, time));
+	}
 
 	public static CharSequence toDate(final Context context, String time3339) {
 		Time time = new Time(Time.getCurrentTimezone());
@@ -73,8 +98,7 @@ public class DateView extends TextView {
 
 		// Ugg... Not beautiful... :-(
 		String dateFormatMicro = day;
-		String dateFormatForRes = context.getString(
-				R.string.dateformat_micro);
+		String dateFormatForRes = context.getString(R.string.dateformat_micro);
 
 		if (dateFormatForRes != null) {
 			dateFormatMicro = dateFormatForRes;
@@ -90,7 +114,8 @@ public class DateView extends TextView {
 			c.setTimeInMillis(msecs);
 
 			return DateFormat.format(format, c);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			return "";
 		}
 	}
@@ -113,7 +138,8 @@ public class DateView extends TextView {
 		// Adding half a day
 		if (difference >= 0) {
 			difference += SECONDS_PER_DAY / 2; // plus half a day in seconds
-		} else {
+		}
+		else {
 			difference -= SECONDS_PER_DAY / 2; // minus half a day in seconds
 		}
 		// Rounding down to days

@@ -57,14 +57,6 @@
             android:textAppearance="@android:style/TextAppearance.Holo.Medium"
             android:textColor="@android:color/primary_text_dark" />
 
-        <Spinner
-            android:id="@+id/list_widget_config_sort_order"
-            style="?android:attr/spinnerStyle"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:entries="@array/sorting_order_preference"
-            android:spinnerMode="dropdown" />
-
         <TextView
             android:id="@+id/textViewTheme"
             android:layout_width="wrap_content"

@@ -696,10 +696,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					R.layout.notification_view, null);
 			// Set date
 			String notDate = not.getLocalDate();
-			((Button) nv.findViewById(R.id.notificationDate)).setText(notDate);
+			//((Button) nv.findViewById(R.id.notificationDate)).setText(notDate);
 
 			String notTime = not.getLocalTime();
-			((Button) nv.findViewById(R.id.notificationTime)).setText(notTime);
+			//((Button) nv.findViewById(R.id.notificationTime)).setText(notTime);
 
 			// Remove button
 			nv.findViewById(R.id.notificationRemove).setOnClickListener(
@@ -717,6 +717,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					});
 
 			// Date button
+			/*
 			nv.findViewById(R.id.notificationDate).setOnClickListener(
 					new OnClickListener() {
 
@@ -769,7 +770,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 							newFragment.show(ft, "notificationtimedialog");
 						}
 					});
-
+*/
 			notificationListLayout.addView(nv);
 		}
 	}

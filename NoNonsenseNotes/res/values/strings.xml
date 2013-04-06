@@ -74,12 +74,11 @@
     <string name="settings_summary_sort_type_modified">Latest modified</string>
     <string name="settings_summary_sort_type_duedate">Due date</string>
     <string name="settings_summary_sort_type_serverposition">My order</string>
-    <string name="settings_summary_sort_order_asc">Ascending</string>
-    <string name="settings_summary_sort_order_desc">Descending</string>
     <string name="settings_summary_theme_black">Black</string>
     <string name="settings_summary_theme_dark">Dark</string>
     <string name="settings_summary_theme_light">Light</string>
-    <string name="settings_summary_theme_light_dark_ab">Light, dark action bar</string>
+    <string name="settings_summary_theme_light_dark_ab">Light with dark action bar</string>
+    <string name="settings_summary_theme_googlenow_dark">Dark Google now inspired</string>
     <string name="settings_cat_appearance">Appearance</string>
     <string name="settings_font_screen">Font settings</string>
     <string name="settings_font_screen_summary">You can change the type and size of the fonts</string>
@@ -213,6 +212,9 @@
     <string name="hide_date">Hide due date</string>
     <string name="hide_date_summary_on">Date will be hidden</string>
     <string name="hide_date_summary_off">Date will be shown</string>
+    <string name="item_max_height">Max height</string>
+    <string name="long_date_format">Long date format</string>
+    <string name="short_date_format">Short date format</string>
     <string name="title_rows">Title max height</string>
     <string name="title_rows_1">1 row</string>
     <string name="title_rows_2">2 rows</string>
@@ -257,6 +259,8 @@
     <string name="shortcut_help1">If checked, the shortcut will create a new note in the selected list and open the editor. If unchecked, the shortcut will open the selected list.</string>
     <string name="loading_widget">Loading widget&#8230;</string>
     <string name="default_list_set">Default list set</string>
+    
+    <string name="please_type_before_reminder">Please type some text before setting a reminder</string>
 
     <string name="notecopied_one">Copied one note</string>
     <string name="notecopied_other">Copied %d notes</string>
@@ -290,6 +294,9 @@
 	<string name="dateformat_micro">MMM d</string>
 	<string name="dateformat_short">E, d MMM</string>
 	<string name="dateformat_long">EEEE, d MMMM</string>
+	<string name="dateformat_short_1">E, d MMM</string>
+	<string name="dateformat_long_1">EEEE, d MMMM</string>
+	<string name="dateformat_long_2">EEEE hh:mm, d MMMM</string>
 	
 	
     <string name="dashclock_tasks">Tasks</string>

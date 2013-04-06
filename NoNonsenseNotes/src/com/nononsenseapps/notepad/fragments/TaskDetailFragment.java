@@ -1,37 +1,54 @@
 package com.nononsenseapps.notepad.fragments;
 
 import java.security.InvalidParameterException;
+import java.util.Calendar;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.TimePickerDialogFragment;
+import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
+import com.nononsenseapps.notepad.fragments.DialogDateTimePicker.DateTimeSetListener;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.utils.views.StyledEditText;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
 import android.widget.ShareActionProvider;
+import android.widget.Toast;
 
 /**
  * A fragment representing a single Note detail screen. This fragment is either
@@ -39,7 +56,7 @@ import android.widget.ShareActionProvider;
  * {@link TaskDetailActivity} on handsets.
  */
 @EFragment(R.layout.fragment_task_detail)
-public class TaskDetailFragment extends Fragment {
+public class TaskDetailFragment extends Fragment implements DateTimeSetListener {
 
 	public static int LOADER_EDITOR_TASK = 1;
 	public static int LOADER_EDITOR_TASKLISTS = 2;
@@ -54,6 +71,12 @@ public class TaskDetailFragment extends Fragment {
 	@ViewById
 	CheckBox taskCompleted;
 
+	@ViewById
+	Button dueDateBox;
+
+	@ViewById
+	LinearLayout notificationList;
+
 	// Id of task to open
 	public static final String ARG_ITEM_ID = "item_id";
 	// If no id is given, a string can be accepted as initial state
@@ -63,6 +86,10 @@ public class TaskDetailFragment extends Fragment {
 
 	// Dao version of the object this fragment represents
 	private Task mTask;
+	// Version when task was opened
+	private Task mTaskOrg;
+	// To save orgState
+	// TODO
 
 	private OnFragmentInteractionListener mListener;
 	private ShareActionProvider mShareActionProvider;
@@ -135,6 +162,9 @@ public class TaskDetailFragment extends Fragment {
 						public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
 							c.moveToFirst();
 							mTask = new Task(c);
+							if (mTaskOrg == null) {
+								mTaskOrg = new Task(c);
+							}
 							fillUIFromTask();
 							// Don't want updates while editing
 							getLoaderManager()
@@ -152,6 +182,7 @@ public class TaskDetailFragment extends Fragment {
 						"Must specify a list id to create a note in!");
 			}
 
+			mTaskOrg = new Task();
 			mTask = new Task();
 			mTask.dblist = getArguments().getLong(ARG_ITEM_LIST_ID);
 			// New note but start with the text given
@@ -160,9 +191,8 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	@AfterViews
-	void setListener() {
+	void setListeners() {
 		taskText.addTextChangedListener(new TextWatcher() {
-
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
 					int count) {
@@ -180,9 +210,87 @@ public class TaskDetailFragment extends Fragment {
 		});
 	}
 
+	@Click(R.id.dueDateBox)
+	void onDateClick() {
+		DialogDateTimePicker_.showDialog(getFragmentManager(), mTask.due, this);
+	}
+
+	@Override
+	public void onDateTimeSet(final long time) {
+		mTask.due = time;
+		setDueText();
+	}
+
+	private void setDueText() {
+		if (mTask.due == null) {
+			dueDateBox.setText("");
+		}
+		else {
+			// Due date
+			final SharedPreferences prefs = PreferenceManager
+					.getDefaultSharedPreferences(getActivity());
+
+			// TODO does this respect timezones?
+			dueDateBox.setText(DateFormat.format(prefs.getString(getActivity()
+					.getString(R.string.key_pref_dateformat_long),
+					getActivity().getString(R.string.dateformat_long_1)),
+					mTask.due));
+		}
+	}
+
+	@Click(R.id.dueCancelButton)
+	void onDueRemoveClick() {
+		mTask.due = null;
+		setDueText();
+	}
+
+	@Click(R.id.notificationAdd)
+	void onAddReminder() {
+		if (mTask != null) {
+			// TODO
+			// IF no id, have to save first
+			if (mTask._id < 1) {
+				saveTask();
+			}
+			// Only allow if save succeeded
+			if (mTask._id < 1) {
+				Toast.makeText(getActivity(),
+						R.string.please_type_before_reminder,
+						Toast.LENGTH_SHORT).show();
+				return;
+			}
+			// TODO add item to DB
+			final Notification not = new Notification(mTask._id);
+			if (mTask.due == null) {
+				final Calendar local = Calendar.getInstance();
+				local.add(Calendar.MINUTE, 1);
+				not.time = local.getTimeInMillis();
+			}
+			else {
+				not.time = mTask.due;
+			}
+			// TODO save item
+
+			// TODO add item to UI
+			addNotification(not);
+		}
+	}
+
 	@UiThread
 	void fillUIFromTask() {
 		taskText.setText(mTask.getText());
+		setDueText();
+		taskCompleted.setChecked(mTask.completed != null);
+		taskCompleted.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView,
+					boolean isChecked) {
+				if (isChecked)
+					mTask.completed = Calendar.getInstance().getTimeInMillis();
+				else
+					mTask.completed = null;
+			}
+		});
 	}
 
 	@Override
@@ -272,21 +380,24 @@ public class TaskDetailFragment extends Fragment {
 	private void saveTask() {
 		// if mTask is null, the task has been deleted or cancelled
 		if (mTask != null) {
-			// TODO save other fields
-			if (mTask._id < 1) {
-				// New item, only save if something has been entered
-				if (isThereContent()) {
-					mTask.setText(taskText.getText().toString());
-					getActivity().getContentResolver().insert(
-							mTask.getBaseUri(), mTask.getContent());
-				}
+			// Needed for comparison
+			mTask.setText(taskText.getText().toString());
+			// if new item, only save if something has been entered
+			if ((mTask._id > 0 && !mTask.equals(mTaskOrg))
+					|| (mTask._id == -1 && isThereContent())) {
+				// mTask.setText(taskText.getText().toString());
+				mTask.save(getActivity());
 			}
 		}
 	}
 
 	boolean isThereContent() {
 		// TODO check more fields
-		return taskText.getText().length() > 0;
+		boolean result = false;
+		result |= taskText.getText().length() > 0;
+		result |= dueDateBox.getText().length() > 0;
+
+		return result;
 	}
 
 	@Override
@@ -311,5 +422,81 @@ public class TaskDetailFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		mListener = null;
+	}
+
+	@Override
+	public void onSaveInstanceState(final Bundle state) {
+		// TODO
+		// Save orgstate
+	}
+
+	/**
+	 * Inserts a notification item in the UI
+	 * 
+	 * @param not
+	 */
+	private void addNotification(final Notification not) {
+		if (getActivity() != null) {
+
+			View nv = LayoutInflater.from(getActivity()).inflate(
+					R.layout.notification_view, null);
+			// Set date time text
+			final Button notTimeButton =  (Button) nv.findViewById(R.id.notificationDateTime);
+			notTimeButton.setText(not
+					.getLocalDateTimeText(getActivity()));
+
+			// Remove button
+			nv.findViewById(R.id.notificationRemove).setOnClickListener(
+					new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// Remove row from UI
+							notificationList.removeView((View) v.getParent());
+							// Remove from database and renotify
+							// TODO
+							// NotificationHelper.deleteNotification(activity,
+							// not.id);
+						}
+					});
+
+			// Date button
+			nv.findViewById(R.id.notificationDateTime).setOnClickListener(
+					new OnClickListener() {
+
+						@Override
+						public void onClick(View v) {
+							// TODO open dual dialog as for due date
+							DialogDateTimePicker_.showDialog(getFragmentManager(), not.time, new DateTimeSetListener() {
+								@Override
+								public void onDateTimeSet(long time) {
+									not.time = time;
+									notTimeButton.setText(not
+											.getLocalDateTimeText(getActivity()));
+									// TODO save to database etc
+								}
+							});
+							/*
+							 * FragmentTransaction ft = getFragmentManager()
+							 * .beginTransaction(); Fragment prev =
+							 * getFragmentManager()
+							 * .findFragmentByTag("notificationdatedialog"); if
+							 * (prev != null) { ft.remove(prev); }
+							 * ft.addToBackStack(null);
+							 * 
+							 * // Create and show the dialog.
+							 * TimePickerDialogFragment newFragment = new
+							 * TimePickerDialogFragment(); Bundle args = new
+							 * Bundle(); args.putBoolean(
+							 * TimePickerDialogFragment.KEY_DATEPICKER, true);
+							 * newFragment.setArguments(args);
+							 * newFragment.setCallbacks((Button) v, not);
+							 * newFragment.show(ft, "notificationdatedialog");
+							 */
+						}
+					});
+
+			notificationList.addView(nv);
+		}
 	}
 }

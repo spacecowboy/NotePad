@@ -172,6 +172,10 @@ public class MyContentProvider extends ContentProvider {
 							Task.whereIdIs, t.whereIdArg());
 				}
 				break;
+			case Task.BASEURICODE:
+				// Batch. No checks made
+				result += db.update(Task.TABLE_NAME, values, selection, selectionArgs);
+				break;
 			default:
 				throw new IllegalArgumentException("Faulty URI provided");
 			}

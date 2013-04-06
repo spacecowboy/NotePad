@@ -18,9 +18,9 @@ package com.nononsenseapps.notepad.prefs;
 
 import java.io.IOException;
 
-import com.nononsenseapps.notepad.MainActivity;
-import com.nononsenseapps.notepad.NotePad;
+//import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 
 import android.accounts.Account;
@@ -176,14 +176,14 @@ public class SyncPrefs extends PreferenceFragment implements
 				// Disable periodic syncing
 				ContentResolver.removePeriodicSync(
 						getAccount(AccountManager.get(activity), accountName),
-						NotePad.AUTHORITY, new Bundle());
+						MyContentProvider.AUTHORITY, new Bundle());
 			} else {
 				// Convert from minutes to seconds
 				long pollFrequency = 3600;
 				// Set periodic syncing
 				ContentResolver.addPeriodicSync(
 						getAccount(AccountManager.get(activity), accountName),
-						NotePad.AUTHORITY, new Bundle(), pollFrequency);
+						MyContentProvider.AUTHORITY, new Bundle(), pollFrequency);
 			}
 		}
 	}
@@ -196,14 +196,14 @@ public class SyncPrefs extends PreferenceFragment implements
 				// set syncable
 				ContentResolver.setIsSyncable(
 						getAccount(AccountManager.get(activity), accountName),
-						NotePad.AUTHORITY, 1);
+						MyContentProvider.AUTHORITY, 1);
 				// Also set sync frequency
 				setSyncInterval(activity, sharedPreferences);
 			} else {
 				// set unsyncable
 				ContentResolver.setIsSyncable(
 						getAccount(AccountManager.get(activity), accountName),
-						NotePad.AUTHORITY, 0);
+						MyContentProvider.AUTHORITY, 0);
 			}
 		}
 	}
@@ -290,7 +290,7 @@ public class SyncPrefs extends PreferenceFragment implements
 
 					// Set it syncable
 					ContentResolver
-							.setIsSyncable(account, NotePad.AUTHORITY, 1);
+							.setIsSyncable(account, MyContentProvider.AUTHORITY, 1);
 					// Set sync frequency
 					SyncPrefs.setSyncInterval(activity, customSharedPreference);
 				}

@@ -895,7 +895,7 @@ public class MainActivity extends DualLayoutActivity implements
 				|| key.equals(MainPrefs.KEY_HIDDENDATE)
 				|| key.equals(MainPrefs.KEY_HIDDENNOTE)
 				|| key.equals(MainPrefs.KEY_TITLEROWS)
-				|| key.equals(MainPrefs.KEY_SORT_ORDER)
+				//|| key.equals(MainPrefs.KEY_SORT_ORDER)
 				|| key.equals(MainPrefs.KEY_SORT_TYPE)
 				|| key.equals(getString(R.string.pref_locale))
 				|| key.equals(MainPrefs.KEY_LISTHEADERS)) {
@@ -933,10 +933,10 @@ public class MainActivity extends DualLayoutActivity implements
 
 		String sortType = prefs.getString(MainPrefs.KEY_SORT_TYPE,
 				NotePad.Notes.DEFAULT_SORT_TYPE);
-		String sortOrder = prefs.getString(MainPrefs.KEY_SORT_ORDER,
-				NotePad.Notes.DEFAULT_SORT_ORDERING);
+		//String sortOrder = prefs.getString(MainPrefs.KEY_SORT_ORDER,
+		//		NotePad.Notes.DEFAULT_SORT_ORDERING);
 
-		NotePad.Notes.SORT_ORDER = sortType + " " + sortOrder;
+		NotePad.Notes.SORT_ORDER = sortType; // + " " + sortOrder;
 
 		// We want to be notified of future changes
 		prefs.registerOnSharedPreferenceChangeListener(this);
@@ -945,9 +945,11 @@ public class MainActivity extends DualLayoutActivity implements
 	private void setTypeOfTheme() {
 		if (MainPrefs.THEME_LIGHT_ICS_AB.equals(currentTheme)) {
 			setTheme(R.style.ThemeHoloLightDarkActonBar);
-		} else if (MainPrefs.THEME_LIGHT.equals(currentTheme)) {
-			setTheme(R.style.ThemeHoloLight);
-		} else if (MainPrefs.THEME_BLACK.equals(currentTheme)) {
+		} 
+		//else if (MainPrefs.THEME_LIGHT.equals(currentTheme)) {
+		//	setTheme(R.style.ThemeHoloLight);
+		//} 
+		else if (MainPrefs.THEME_BLACK.equals(currentTheme)) {
 			setTheme(R.style.ThemeHoloBlack);
 		} else {
 			setTheme(R.style.ThemeHolo);

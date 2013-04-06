@@ -79,8 +79,8 @@ public class ListWidgetConfig extends Activity {
 		if (appWidgetId != AppWidgetManager.INVALID_APPWIDGET_ID)
 			Log.d(TAG, "Configstart appwidgetid: " + appWidgetId);
 
-		final String[] sortOrderValues = getResources().getStringArray(
-				R.array.sorting_ordervalues_preference);
+		//final String[] sortOrderValues = getResources().getStringArray(
+		//		R.array.sorting_ordervalues_preference);
 		final String[] sortTypeValues = getResources().getStringArray(
 				R.array.sortingvalues_preference);
 		final String[] titleRowsValues = getResources().getStringArray(
@@ -96,6 +96,7 @@ public class ListWidgetConfig extends Activity {
 			}
 		}
 
+		/*
 		Spinner sortOrderSpinner = (Spinner) findViewById(R.id.list_widget_config_sort_order);
 		sortOrderSpinner
 				.setOnItemSelectedListener(new OnItemSelectedListener() {
@@ -115,7 +116,7 @@ public class ListWidgetConfig extends Activity {
 						// Another interface callback
 					}
 				});
-
+*/
 		Spinner sortTypeSpinner = (Spinner) findViewById(R.id.list_widget_config_sort_type);
 		sortTypeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -350,11 +351,12 @@ public class ListWidgetConfig extends Activity {
 			sortTypeSpinner.setSelection(pos);
 
 		// Sort order
+		/*
 		pos = getPositionOf(sortOrderValues, widgetPrefs.getString(
 				KEY_SORT_ORDER, NotePad.Notes.DEFAULT_SORT_ORDERING));
 		if (pos > -1)
 			sortOrderSpinner.setSelection(pos);
-
+*/
 		// Theme
 		pos = getPositionOf(themeValues, widgetPrefs.getString(KEY_THEME,
 				getString(R.string.const_theme_light)));

@@ -22,7 +22,8 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="\nAnnouncement"
+            android:text="\nHelp translate the app"
+            android:fontFamily="sans-serif-condensed"
             android:textColor="@android:color/holo_blue_dark"
             android:textStyle="bold" />
 
@@ -30,12 +31,13 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:autoLink="web|email|map"
-            android:text="\nA new translation tool has been implemented which makes it super easy for anyone to help translate the app to their native language.\nPlease visit http://translate.nononsenseapps.com for details." />
+            android:text="\nA new translation tool has been implemented which makes it super easy for anyone to help translate the app to their native language.\nIt can be found at http://translate.nononsenseapps.com" />
 
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="\nVersion 4.5"
+            android:fontFamily="sans-serif-condensed"
             android:textColor="@android:color/holo_blue_dark"
             android:textStyle="bold" />
 
@@ -49,6 +51,8 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            
+            android:fontFamily="sans-serif-condensed"
             android:text="\nVersion 4.4.5"
             android:textColor="@android:color/holo_blue_dark"
             android:textStyle="bold" />
@@ -63,6 +67,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
             android:text="\nVersion 4.4.4"
             android:textColor="@android:color/holo_blue_dark"
             android:textStyle="bold" />
@@ -77,6 +82,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
             android:text="\nVersion 4.4.3"
             android:textColor="@android:color/holo_blue_dark"
             android:textStyle="bold" />
@@ -91,6 +97,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
             android:text="\nVersion 4.4.2"
             android:textColor="@android:color/holo_blue_dark"
             android:textStyle="bold" />
@@ -105,6 +112,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
             android:text="\nVersion 4.4.1"
             android:textColor="@android:color/holo_blue_dark"
             android:textStyle="bold" />
@@ -119,6 +127,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
             android:text="\nVersion 4.4"
             android:textColor="@android:color/holo_blue_dark"
             android:textStyle="bold" />
@@ -133,6 +142,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
             android:text="\nVersion 4.3"
             android:textColor="@android:color/holo_blue_dark"
             android:textStyle="bold" />
@@ -147,6 +157,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-condensed"
             android:text="\nVersion 4.2.1"
             android:textColor="@android:color/holo_blue_dark"
             android:textStyle="bold" />

@@ -6,12 +6,12 @@ import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
 
-import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
+import com.nononsenseapps.ui.DateView;
+import com.nononsenseapps.ui.NoteCheckBox;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
-import com.mobeta.android.dslv.DragSortListView;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -22,6 +22,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -30,15 +31,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
+import android.widget.CompoundButton;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.GridView;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 @EFragment
 public class TaskListFragment extends Fragment {
 
 	public static final String LIST_ID = "list_id";
 
-	//DragSortListView listView;
+	// DragSortListView listView;
 	@ViewById(android.R.id.list)
 	AbsListView listView;
 
@@ -76,10 +78,20 @@ public class TaskListFragment extends Fragment {
 		// Start loading data
 		mAdapter = new SimpleCursorAdapter(getActivity(),
 				R.layout.tasklist_item_rich, null, new String[] {
-						Task.Columns.TITLE, Task.Columns.NOTE }, new int[] {
-						android.R.id.text1, android.R.id.text1 }, 0);
+						Task.Columns.TITLE, Task.Columns.NOTE,
+						Task.Columns.DUE, Task.Columns.COMPLETED }, new int[] {
+						android.R.id.text1, android.R.id.text1, R.id.date,
+						R.id.checkbox }, 0);
 
 		mAdapter.setViewBinder(new ViewBinder() {
+			final OnCheckedChangeListener checkBoxListener = new OnCheckedChangeListener() {
+				@Override
+				public void onCheckedChanged(CompoundButton buttonView,
+						boolean isChecked) {
+					Task.setCompleted(getActivity(), isChecked,
+							((NoteCheckBox) buttonView).getNoteId());
+				}
+			};
 
 			@Override
 			public boolean setViewValue(View view, Cursor c, int colIndex) {
@@ -94,6 +106,22 @@ public class TaskListFragment extends Fragment {
 					((TitleNoteTextView) view).setTextRest(c
 							.getString(colIndex));
 					return true;
+				case 3:
+					((NoteCheckBox) view).setOnCheckedChangeListener(null);
+					((NoteCheckBox) view).setChecked(!c.isNull(colIndex));
+					((NoteCheckBox) view).setNoteId(c.getLong(0));
+					((NoteCheckBox) view)
+							.setOnCheckedChangeListener(checkBoxListener);
+					return true;
+				case 4:
+					if (c.isNull(colIndex)) {
+						view.setVisibility(View.GONE);
+					}
+					else {
+						view.setVisibility(View.VISIBLE);
+						((DateView) view).setTimeText(c.getLong(colIndex));
+					}
+					return true;
 				default:
 					break;
 				}
@@ -101,12 +129,14 @@ public class TaskListFragment extends Fragment {
 			}
 		});
 	}
-	
+
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_task_list, container, false);
-        return view;
-    }
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		View view = inflater.inflate(R.layout.fragment_task_list, container,
+				false);
+		return view;
+	}
 
 	@Override
 	public void onStart() {

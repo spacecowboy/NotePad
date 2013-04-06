@@ -1,5 +1,7 @@
 package com.nononsenseapps.notepad;
 
+import java.util.Locale;
+
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.ViewById;
@@ -12,14 +14,18 @@ import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 
 import android.animation.Animator;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
@@ -47,6 +53,66 @@ public class ActivityMain extends FragmentActivity implements
 	// Shown on tablets on start up. Hide on selection
 	@ViewById
 	View taskHint;
+
+	@Override
+	public void onCreate(Bundle b) {
+		// Must do this before super.onCreate
+		readAndSetSettings();
+		super.onCreate(b);
+	}
+
+	private void readAndSetSettings() {
+		// Read settings and set
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+
+		final String theme = prefs.getString(MainPrefs.KEY_THEME,
+				MainPrefs.THEME_LIGHT_ICS_AB);
+		if (MainPrefs.THEME_LIGHT_ICS_AB.equals(theme)) {
+			setTheme(R.style.ThemeHoloLightDarkActonBar);
+		}
+		else if (MainPrefs.THEME_BLACK.equals(theme)) {
+			setTheme(R.style.ThemeHoloBlack);
+		}
+		else if (theme.equals(getResources().getString(
+				R.string.const_theme_googlenow_dark))) {
+			setTheme(R.style.ThemeGoogleNowDark);
+		}
+		else {
+			setTheme(R.style.ThemeHolo);
+		}
+
+		// Set language
+		Configuration config = getResources().getConfiguration();
+
+		String lang = prefs.getString(getString(R.string.pref_locale), "");
+		if (!config.locale.toString().equals(lang)) {
+			Locale locale;
+			if ("".equals(lang))
+				locale = Locale.getDefault();
+			else if (lang.length() == 5) {
+				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
+			}
+			else {
+				locale = new Locale(lang.substring(0, 2));
+			}
+			// Locale.setDefault(locale);
+			config.locale = locale;
+			getResources().updateConfiguration(config,
+					getResources().getDisplayMetrics());
+		}
+
+		// String sortType = prefs.getString(MainPrefs.KEY_SORT_TYPE,
+		// NotePad.Notes.DEFAULT_SORT_TYPE);
+		// String sortOrder = prefs.getString(MainPrefs.KEY_SORT_ORDER,
+		// NotePad.Notes.DEFAULT_SORT_ORDERING);
+
+		// NotePad.Notes.SORT_ORDER = sortType; // + " " + sortOrder;
+
+		// We want to be notified of future changes
+		// TODO monitor changes so we can restart
+		// prefs.registerOnSharedPreferenceChangeListener(this);
+	}
 
 	/**
 	 * Loads the appropriate fragments depending on state and intent.

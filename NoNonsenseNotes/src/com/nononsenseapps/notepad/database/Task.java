@@ -1,15 +1,21 @@
 package com.nononsenseapps.notepad.database;
 
 import java.security.InvalidParameterException;
+import java.util.Calendar;
+
+import com.googlecode.androidannotations.annotations.rest.Post;
 
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.text.format.Time;
+import android.util.Log;
 
 /**
  * An object that represents the task information contained in the database.
@@ -175,12 +181,13 @@ public class Task extends DAO {
 			+ "(" + Columns._ID + " INTEGER PRIMARY KEY," + Columns.TITLE
 			+ " TEXT NOT NULL DEFAULT ''," + Columns.NOTE
 			+ " TEXT NOT NULL DEFAULT '',"
+			// These are all msec times
 			+ Columns.COMPLETED
-			+ " INTEGER,"
+			+ " INTEGER DEFAULT NULL,"
 			+ Columns.UPDATED
-			+ " INTEGER,"
+			+ " INTEGER DEFAULT NULL,"
 			+ Columns.DUE
-			+ " INTEGER,"
+			+ " INTEGER DEFAULT NULL,"
 
 			// sync stuff
 			+ Columns.GTASKACCOUNT + " TEXT," + Columns.GTASKID
@@ -201,6 +208,10 @@ public class Task extends DAO {
 			+ " CHECK(" + Columns.LEFT + " > 0), " + " CHECK("
 			+ Columns.RIGHT
 			+ " > 0), "
+			// Each side's value should be unique in it's list
+			// Handled in trigger
+			//+ " UNIQUE(" + Columns.LEFT + ", " + Columns.DBLIST + ")"
+			//+ " UNIQUE(" + Columns.RIGHT + ", " + Columns.DBLIST + ")"
 
 			// Foreign key for list
 			+ "FOREIGN KEY(" + Columns.DBLIST + ") REFERENCES "
@@ -294,10 +305,15 @@ public class Task extends DAO {
 		this._id = c.getLong(0);
 		this.title = c.getString(1);
 		note = c.getString(2);
-		completed = c.getLong(3);
-		due = c.getLong(4);
-		updated = c.getLong(5);
-
+		// msec times which can be null
+		if (!c.isNull(3))
+			completed = c.getLong(3);
+		if (!c.isNull(4))
+			due = c.getLong(4);
+		if (!c.isNull(5))
+			updated = c.getLong(5);
+		
+		// enforced not to be null
 		left = c.getLong(6);
 		right = c.getLong(7);
 		dblist = c.getLong(8);
@@ -393,11 +409,119 @@ public class Task extends DAO {
 
 		return values;
 	}
+	
+	/**
+	 * Compares this task to another and returns true if their contents are the same.
+	 * Content is defined as: title, note, duedate, completed != null
+	 * Returns false if title or note are null.
+	 * 
+	 * The intended usage is the editor where content and not id's or position are of
+	 * importance.
+	 */
+	@Override
+	public boolean equals(Object o) {
+		boolean result = false;
+		
+		if (o instanceof Task) {
+			final Task other = (Task) o;
+			result = true;
+			
+			result &= (title != null && title.equals(other.title));
+			result &= (note != null && note.equals(other.note));
+			result &= (due == other.due);
+			result &= ((completed != null) == (other.completed != null));
+			
+		} else {
+			result = super.equals(o);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Convenience method for normal operations. Updates "updated" field.
+	 * Returns number of db-rows affected. Fail if < 1
+	 */
+	public int save(final Context context) {
+		int result = 0;
+		updated = Calendar.getInstance().getTimeInMillis();
+		if (_id < 1) {
+			final Uri uri = context.getContentResolver().insert(
+				getBaseUri(),getContent());
+			if (uri != null) {
+				_id = Long.parseLong(uri.getLastPathSegment());
+				result++;
+			}
+		}
+		else {
+			result += context.getContentResolver().update(
+					getUri(),getContent(), null, null);
+		}
+		return result;
+	}
+	
+	/**
+	 * Convenience method to complete tasks in list view for example.
+	 * Starts an asynctask to do the operation in the background.
+	 */
+	public static void setCompleted(final Context context, final boolean completed, final Long... ids) {
+		// TODO
+		if (ids.length > 0) {
+		final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
+			@Override
+			protected Void doInBackground(final Long... ids) {
+				final ContentValues values = new ContentValues();
+				values.put(Columns.COMPLETED, 
+						completed ? Calendar.getInstance().getTimeInMillis() : null);
+				String idStrings = "(";
+				for (Long id: ids) {
+					idStrings += id + ",";
+				}
+				idStrings = idStrings.substring(0, idStrings.length() - 1);
+				idStrings += ")";
+				Log.d("JONAS", "where: " + Columns._ID + " IN " + idStrings);
+				context.getContentResolver().update(URI, values, Columns._ID + " IN " + idStrings, null);
+				return null;
+			}
+		};
+		task.execute(ids);
+		}
+	}
 
 	@Override
 	protected String getTableName() {
 		return TABLE_NAME;
 	}
+	
+	// TODO trigger pre-update, make room if list changes
+		// TODO trigger post-update, get rid of space if list changed
+		
+		/**
+		 * Can't use unique constraint on positions because SQLite checks constraints
+		 * after every row is updated an not after each statement like it should.
+		 * So have to do the check in a trigger instead.
+		 */
+		//TODO
+		static final String countVals(final String col, final String ver) {
+			return String.format("SELECT COUNT(DISTINCT %2$s)" +
+				" AS ColCount FROM %1$s WHERE %3$s=%4$s.%3$s", TABLE_NAME, col, Columns.DBLIST, ver);
+		}
+
+		// verify that left are unique
+		// count number of id and compare to number of left and right
+		static final String posUniqueConstraint(final String ver, final String msg) { 
+			return String.format(
+				" SELECT CASE WHEN ((%1$s) != (%2$s) OR (%1$s) != (%3$s)) THEN "
+			    + " RAISE (ABORT, '" + msg + "')"
+			    + " END;", countVals(Columns._ID, ver), countVals(Columns.LEFT, ver),
+				countVals(Columns.RIGHT, ver));
+		};
+		
+		//public static final String TRIGGER_POST_UPDATE = String.format(
+		//		"CREATE TRIGGER task_post_update AFTER UPDATE ON %1$s BEGIN "
+		//		+ posUniqueConstraint("new", "pos not unique post update")
+		//		+ posUniqueConstraint("old", "pos not unique post update")
+		//		+ " END;", TABLE_NAME);
 
 	// Makes a gap in the list where the task is being inserted
 	private static final String BUMP_TO_RIGHT = " UPDATE %1$s SET %2$s = %2$s + 2, %3$s = %3$s + 2 WHERE %3$s >= new.%3$s AND %4$s IS new.%4$s;";
@@ -405,7 +529,16 @@ public class Task extends DAO {
 			"CREATE TRIGGER task_pre_insert BEFORE INSERT ON %s BEGIN ",
 			TABLE_NAME)
 			+ String.format(BUMP_TO_RIGHT, TABLE_NAME, Columns.RIGHT,
-					Columns.LEFT, Columns.DBLIST) + " END;";
+					Columns.LEFT, Columns.DBLIST) 
+					+ " END;";
+	
+	public static final String TRIGGER_POST_INSERT = String.format(
+			"CREATE TRIGGER task_post_insert AFTER INSERT ON %s BEGIN ",
+			TABLE_NAME)
+					// Enforce integrity
+					+ posUniqueConstraint("new", "pos not unique post insert")
+					
+					+ " END;";
 
 	// Upgrades children and closes the gap made from the delete
 	private static final String BUMP_TO_LEFT = " UPDATE %1$s SET %2$s = %2$s - 2 WHERE %2$s > old.%3$s AND %4$s IS old.%4$s;";
@@ -418,7 +551,12 @@ public class Task extends DAO {
 			+ String.format(BUMP_TO_LEFT, TABLE_NAME, Columns.RIGHT,
 					Columns.RIGHT, Columns.DBLIST)
 			+ String.format(BUMP_TO_LEFT, TABLE_NAME, Columns.LEFT,
-					Columns.RIGHT, Columns.DBLIST) + " END;";
+					Columns.RIGHT, Columns.DBLIST) 
+					
+				// Enforce integrity
+					+ posUniqueConstraint("old", "pos not unique post delete")
+					
+					+ " END;";
 
 	public static final String TRIGGER_PRE_DELETE = String.format(
 			"CREATE TRIGGER task_pre_delete BEFORE DELETE ON %1$s BEGIN "
@@ -546,7 +684,12 @@ public class Task extends DAO {
 					// " ELSE %3$s END " +
 
 					// Restrict to list
-					" WHERE %6$s IS %7$d;", TABLE_NAME, Columns.LEFT,
+					" WHERE %6$s IS %7$d; "
+					
+					//Enforce integrity
+					+ posUniqueConstraint("new", "pos not unique unindent")
+					
+					, TABLE_NAME, Columns.LEFT,
 					Columns.RIGHT, left, right, Columns.DBLIST, dblist);
 
 		else
@@ -596,7 +739,12 @@ public class Task extends DAO {
 							" ELSE %3$s END " +
 
 							// Restrict to list
-							" WHERE %6$s IS %7$d;", TABLE_NAME, Columns.LEFT,
+							" WHERE %6$s IS %7$d; "
+							
+							//Enforce integrity
+							+ posUniqueConstraint("new", "pos not unique indent item")
+							
+							, TABLE_NAME, Columns.LEFT,
 							Columns.RIGHT, left, right, Columns.DBLIST, dblist);
 
 		else
@@ -696,7 +844,11 @@ public class Task extends DAO {
 					// Do nothing otherwise
 					" ELSE 0 END " +
 					// No move actually performed. End update with semicolon
-					" ELSE 0 END " + " WHERE %8$s IS %9$d;",
+					" ELSE 0 END " + " WHERE %8$s IS %9$d; "
+					
+					//Enforce integrity
+					+ posUniqueConstraint("new", "pos not unique move sub tree")
+					,
 
 			TABLE_NAME, Columns.LEFT, Columns.RIGHT,
 					values.getAsLong(TARGETLEFT),

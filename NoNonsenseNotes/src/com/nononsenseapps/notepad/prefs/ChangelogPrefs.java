@@ -33,7 +33,4 @@ public class ChangelogPrefs extends Fragment {
 		
 		return layout;
 	}
-	
-	public void ensureList() {
-	}
 }

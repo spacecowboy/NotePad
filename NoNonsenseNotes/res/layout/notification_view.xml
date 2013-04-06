@@ -3,24 +3,18 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:weightSum="2" >
+    android:weightSum="1" >
 
     <Button
-        android:id="@+id/notificationDate"
+        android:id="@+id/notificationDateTime"
         style="?android:attr/spinnerStyle"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="4dp"
-        android:layout_weight="1" />
-
-    <Button
-        android:id="@+id/notificationTime"
-        style="?android:attr/spinnerStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:layout_marginRight="4dp"
-        android:layout_weight="1" />
+        android:layout_height="48dp"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-light"
+        android:hint="@string/editor_due_date_hint"
+        android:paddingLeft="16dp"
+        android:textAppearance="?android:attr/textAppearanceMedium" />
 
     <ImageButton
         android:id="@+id/notificationRemove"

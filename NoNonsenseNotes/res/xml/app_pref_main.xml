@@ -26,22 +26,38 @@
         android:key="key_current_theme"
         android:summary="Selected option should be here"
         android:title="@string/settings_theme" />
-
     <ListPreference
         android:defaultValue=""
         android:dialogTitle="@string/settings_lang_dialog"
         android:key="@string/pref_locale"
         android:summary="Selected option should be here"
         android:title="@string/settings_lang" />
+    <ListPreference
+        android:defaultValue="@string/preferences_week_start_day_default"
+        android:dialogTitle="@string/preferences_week_start_day_dialog"
+        android:entries="@array/preferences_week_start_day_labels"
+        android:entryValues="@array/preferences_week_start_day_values"
+        android:key="preferences_week_start_day"
+        android:title="@string/preferences_week_start_day_title" />
+    <ListPreference
+        android:title="@string/long_date_format"
+        android:key="@string/key_pref_dateformat_long" />
+    <ListPreference
+        android:title="@string/short_date_format"
+        android:key="@string/key_pref_dateformat_short" />
+    <ListPreference
+            android:key="key_default_list_id"
+            android:title="@string/menu_setdefaultlist" />
 
     <PreferenceCategory android:title="@string/settings_list" >
-        <ListPreference
-            android:defaultValue="2"
-            android:dialogTitle="@string/title_rows"
-            android:entries="@array/title_rows_entries"
-            android:entryValues="@array/title_rows_values"
-            android:key="key_titlerows"
-            android:title="@string/title_rows" />
+        <com.robobunny.SeekBarPreference
+            android:defaultValue="3"
+            android:key="@string/key_pref_item_max_height"
+            android:max="50"
+            android:title="@string/item_max_height"
+            robobunny:min="1"
+            robobunny:unitsLeft=""
+            robobunny:unitsRight="" />
 
         <CheckBoxPreference
             android:defaultValue="false"
@@ -49,14 +65,6 @@
             android:summaryOff="@string/hide_checkbox_summary_off"
             android:summaryOn="@string/hide_checkbox_summary_on"
             android:title="@string/hide_checkbox" />
-        
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="key_hiddennote"
-            android:summaryOff="@string/hide_note_summary_off"
-            android:summaryOn="@string/hide_note_summary_on"
-            android:title="@string/hide_note" />
-        
         <CheckBoxPreference
             android:defaultValue="false"
             android:key="key_hiddendate"
@@ -72,18 +80,8 @@
             android:key="key_sort_type"
             android:summary="Selected option should be here"
             android:title="@string/settings_sorting_type" />
-        <ListPreference
-            android:defaultValue="ASC"
-            android:dialogTitle="@string/settings_sorting_order_dialog"
-            android:entries="@array/sorting_order_preference"
-            android:entryValues="@array/sorting_ordervalues_preference"
-            android:key="key_sort_order"
-            android:summary="Selected option should be here"
-            android:title="@string/settings_sorting_order" />
-        <ListPreference
-            android:key="key_default_list_id"
-            android:title="@string/menu_setdefaultlist" />
     </PreferenceCategory>
+    <!-- 
     <PreferenceCategory android:title="@string/settings_cat_font_editor" >
         <com.nononsenseapps.ui.TextPreviewPreference
             android:key="key_text_preview"
@@ -106,13 +104,7 @@
             android:key="key_font_type_editor"
             android:summary="Selected option should be here"
             android:title="@string/settings_font_type" />
-        <ListPreference
-            android:defaultValue="@string/preferences_week_start_day_default"
-            android:dialogTitle="@string/preferences_week_start_day_dialog"
-            android:entries="@array/preferences_week_start_day_labels"
-            android:entryValues="@array/preferences_week_start_day_values"
-            android:key="preferences_week_start_day"
-            android:title="@string/preferences_week_start_day_title" />
     </PreferenceCategory>
+     -->
 
 </PreferenceScreen>
