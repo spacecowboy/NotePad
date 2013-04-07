@@ -139,8 +139,9 @@ public class ActivityMain extends FragmentActivity implements
 			}
 			else if (getListId(intent) > 0) {
 				transaction.replace(R.id.fragment2,
-						TaskDetailFragment_.getInstance("", getListId(intent)),
-						DETAILTAG);
+						TaskDetailFragment_.getInstance(getNoteShareText(intent),
+								TaskListViewPagerFragment.getAList(this,
+										getListId(intent))), DETAILTAG);
 			}
 		}
 		else if (isNoteIntent(intent)) {
@@ -150,10 +151,13 @@ public class ActivityMain extends FragmentActivity implements
 						TaskDetailFragment_.getInstance(getNoteId(intent)),
 						DETAILTAG);
 			}
-			else if (getListId(intent) > 0) {
-				transaction.replace(R.id.fragment1,
-						TaskDetailFragment_.getInstance("", getListId(intent)),
-						DETAILTAG);
+			else {
+				// Get a share text (null safe)
+				// In a list (if specified, or default otherwise)
+				transaction.replace(R.id.fragment1, TaskDetailFragment_
+						.getInstance(getNoteShareText(intent),
+								TaskListViewPagerFragment.getAList(this,
+										getListId(intent))), DETAILTAG);
 			}
 
 			// also set up-navigation
@@ -238,12 +242,44 @@ public class ActivityMain extends FragmentActivity implements
 	}
 
 	/**
+	 * Returns the text that has been shared with the app. Returns null if not a
+	 * share intent.
+	 */
+	String getNoteShareText(final Intent intent) {
+		// TODO
+
+		StringBuilder retval = new StringBuilder();
+		
+		// possible title
+		if (intent.getExtras().containsKey(Intent.EXTRA_SUBJECT)) {
+			retval.append(intent.getExtras().get(Intent.EXTRA_SUBJECT));
+		}
+		
+		// possible note
+		if (intent.getExtras().containsKey(Intent.EXTRA_TEXT)) {
+			if (retval.length() > 0) {
+				retval.append("\n");
+			}
+			retval.append(intent.getExtras().get(Intent.EXTRA_TEXT));
+		}
+
+		return retval.toString();
+	}
+
+	/**
 	 * Returns true the intent URI targets a note. Either an edit/view or
 	 * insert.
 	 */
 	boolean isNoteIntent(final Intent intent) {
-		if (intent != null
-				&& intent.getData() != null
+		if (intent == null) {
+			return false;
+		}
+		if (Intent.ACTION_SEND.equals(intent.getAction()) ||
+				"com.google.android.gm.action.AUTO_SEND".equals(intent.getAction())) {
+			return true;
+		}
+
+		if (intent.getData() != null
 				&& (Intent.ACTION_EDIT.equals(intent.getAction())
 						|| Intent.ACTION_VIEW.equals(intent.getAction()) || Intent.ACTION_INSERT
 							.equals(intent.getAction()))
@@ -262,9 +298,8 @@ public class ActivityMain extends FragmentActivity implements
 						.startsWith(TaskList.URI.getPath())) {
 			return true;
 		}
-		else {
-			return false;
-		}
+
+		return false;
 	}
 
 	/**

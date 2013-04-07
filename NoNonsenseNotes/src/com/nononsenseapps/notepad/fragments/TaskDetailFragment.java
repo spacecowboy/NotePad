@@ -116,8 +116,7 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 	/**
 	 * Use to create a new task
 	 */
-	public static TaskDetailFragment_ getInstance(final String text,
-			final long listId) {
+	public static TaskDetailFragment_ getInstance(String text, final long listId) {
 		Bundle arguments = new Bundle();
 		arguments.putString(ARG_ITEM_CONTENT, text);
 		arguments.putLong(ARG_ITEM_LIST_ID, listId);
@@ -178,8 +177,12 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 		}
 		else {
 			if (getArguments().getLong(ARG_ITEM_LIST_ID, -1) < 1) {
-				throw new InvalidParameterException(
-						"Must specify a list id to create a note in!");
+				// throw new InvalidParameterException(
+				// "Must specify a list id to create a note in!");
+				Toast.makeText(getActivity(),
+						"Must specify a list id to create a note in!",
+						Toast.LENGTH_SHORT).show();
+				getActivity().finish();
 			}
 
 			mTaskOrg = new Task();
@@ -187,6 +190,7 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 			mTask.dblist = getArguments().getLong(ARG_ITEM_LIST_ID);
 			// New note but start with the text given
 			mTask.setText(getArguments().getString(ARG_ITEM_CONTENT, ""));
+			fillUIFromTask();
 		}
 	}
 
@@ -231,10 +235,11 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 					.getDefaultSharedPreferences(getActivity());
 
 			// TODO does this respect timezones?
+			final Calendar cal = Calendar.getInstance();
+			cal.setTimeInMillis(mTask.due);
 			dueDateBox.setText(DateFormat.format(prefs.getString(getActivity()
 					.getString(R.string.key_pref_dateformat_long),
-					getActivity().getString(R.string.dateformat_long_1)),
-					mTask.due));
+					getActivity().getString(R.string.dateformat_long_1)), cal));
 		}
 	}
 
@@ -441,9 +446,9 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 			View nv = LayoutInflater.from(getActivity()).inflate(
 					R.layout.notification_view, null);
 			// Set date time text
-			final Button notTimeButton =  (Button) nv.findViewById(R.id.notificationDateTime);
-			notTimeButton.setText(not
-					.getLocalDateTimeText(getActivity()));
+			final Button notTimeButton = (Button) nv
+					.findViewById(R.id.notificationDateTime);
+			notTimeButton.setText(not.getLocalDateTimeText(getActivity()));
 
 			// Remove button
 			nv.findViewById(R.id.notificationRemove).setOnClickListener(
@@ -467,15 +472,17 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 						@Override
 						public void onClick(View v) {
 							// TODO open dual dialog as for due date
-							DialogDateTimePicker_.showDialog(getFragmentManager(), not.time, new DateTimeSetListener() {
-								@Override
-								public void onDateTimeSet(long time) {
-									not.time = time;
-									notTimeButton.setText(not
-											.getLocalDateTimeText(getActivity()));
-									// TODO save to database etc
-								}
-							});
+							DialogDateTimePicker_.showDialog(
+									getFragmentManager(), not.time,
+									new DateTimeSetListener() {
+										@Override
+										public void onDateTimeSet(long time) {
+											not.time = time;
+											notTimeButton.setText(not
+													.getLocalDateTimeText(getActivity()));
+											// TODO save to database etc
+										}
+									});
 							/*
 							 * FragmentTransaction ft = getFragmentManager()
 							 * .beginTransaction(); Fragment prev =

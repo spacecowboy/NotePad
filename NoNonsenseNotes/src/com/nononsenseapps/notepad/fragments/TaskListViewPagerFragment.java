@@ -180,7 +180,10 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 	/**
 	 * If temp list is > 0, returns it. Else, checks if a default list is set
-	 * then returns that. If none set, then returns -1.
+	 * then returns that. If none set, then returns first (alphabetical) list
+	 * Returns -1 if no lists in database.
+	 * 
+	 * Guarantees default list is valid
 	 */
 	public static long getAList(final Context context, final long tempList) {
 		long returnList = tempList;
@@ -190,6 +193,33 @@ public class TaskListViewPagerFragment extends Fragment implements
 			returnList = Long.parseLong(PreferenceManager
 					.getDefaultSharedPreferences(context).getString(
 							MainPrefs.KEY_DEFAULT_LIST, "-1"));
+		}
+
+		if (returnList > 0) {
+			// See if it exists
+			final Cursor c = context.getContentResolver().query(TaskList.URI,
+					TaskList.Columns.FIELDS, TaskList.Columns._ID + " IS ?",
+					new String[] { Long.toString(returnList) }, null);
+			if (c.moveToFirst()) {
+				returnList = c.getLong(0);
+			}
+			c.close();
+		}
+
+		if (returnList < 1) {
+			// Fetch a valid list from database if previous attempts are invalid
+			final Cursor c = context.getContentResolver().query(
+					TaskList.URI,
+					TaskList.Columns.FIELDS,
+					null,
+					null,
+					context.getResources().getString(
+							R.string.const_as_alphabetic,
+							TaskList.Columns.TITLE));
+			if (c.moveToFirst()) {
+				returnList = c.getLong(0);
+			}
+			c.close();
 		}
 
 		return returnList;
