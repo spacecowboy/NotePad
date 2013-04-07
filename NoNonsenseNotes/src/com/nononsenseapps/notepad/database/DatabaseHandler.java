@@ -72,6 +72,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL(Task.TRIGGER_POST_DELETE);
 		//db.execSQL(Task.TRIGGER_POST_UPDATE);
 		db.execSQL(Notification.CREATE_TABLE);
+		db.execSQL(Notification.CREATE_JOINED_VIEW);
 
 		initializedDB(db);
 	}

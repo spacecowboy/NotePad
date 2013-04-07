@@ -261,7 +261,8 @@
     <string name="default_list_set">Default list set</string>
     
     <string name="please_type_before_reminder">Please type some text before setting a reminder</string>
-
+	<string name="select_a_time">Select a time</string>
+    
     <string name="notecopied_one">Copied one note</string>
     <string name="notecopied_other">Copied %d notes</string>
     <string name="notedeleted_one">Deleted one note</string>
@@ -294,9 +295,14 @@
 	<string name="dateformat_micro">MMM d</string>
 	<string name="dateformat_short">E, d MMM</string>
 	<string name="dateformat_long">EEEE, d MMMM</string>
-	<string name="dateformat_short_1">E, d MMM</string>
-	<string name="dateformat_long_1">EEEE, d MMMM</string>
-	<string name="dateformat_long_2">EEEE hh:mm, d MMMM</string>
+	<string name="dateformat_short_1">E kk:mm, d MMM</string>
+	<string name="dateformat_short_2">E h:mm a, d MMM</string>
+	<string name="dateformat_short_3">E, d MMM</string>
+	<string name="dateformat_short_4">MMM d</string>
+	<string name="dateformat_short_5">E, kk:mm</string>
+	<string name="dateformat_short_6">E, h:mm a</string>
+	<string name="dateformat_long_1">EEEE kk:mm, d MMMM</string>
+	<string name="dateformat_long_2">EEEE h:mm a, d MMMM</string>
 	
 	
     <string name="dashclock_tasks">Tasks</string>

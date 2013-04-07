@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Jonas Kalderstam
+ * Copyright (C) 2013 Jonas Kalderstam
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -21,30 +21,22 @@ import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 
 import java.util.Calendar;
 
-import android.app.Activity;
-import android.app.DatePickerDialog;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
-import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.text.format.DateFormat;
-import android.text.format.Time;
-import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
 @EFragment(R.layout.fragment_dialog_datetimepicker)
 public class DialogDateTimePicker extends DialogFragment {
-	public static final String ARG_TIME = "argtime";
 
 	@ViewById
 	DatePicker datePicker;
@@ -76,7 +68,6 @@ public class DialogDateTimePicker extends DialogFragment {
 		fragment.setTime(time);
 		fragment.setListener(listener);
 		fragment.show(fm, "datetime");
-		// TODO GIVE ME A TITLE!
 	}
 
 	@Click(R.id.dialog_no)
@@ -87,9 +78,6 @@ public class DialogDateTimePicker extends DialogFragment {
 	@Click(R.id.dialog_yes)
 	void okClicked() {
 		final Calendar localTime = Calendar.getInstance();
-		//if (mTime != null) {
-		//	localTime.setTimeInMillis(mTime);
-		//}
 
 		localTime.set(datePicker.getYear(), datePicker.getMonth(),
 				datePicker.getDayOfMonth(), timePicker.getCurrentHour(),
@@ -103,6 +91,8 @@ public class DialogDateTimePicker extends DialogFragment {
 
 	@AfterViews
 	void setValues() {
+		// TODO GIVE ME A TITLE!
+		getDialog().setTitle(R.string.select_a_time);
 		final CalendarView cv = datePicker.getCalendarView();
 		cv.setFirstDayOfWeek(getFirstDayOfWeek(getActivity()));
 		timePicker.setIs24HourView(DateFormat.is24HourFormat(getActivity()));
@@ -125,7 +115,7 @@ public class DialogDateTimePicker extends DialogFragment {
 	 * 
 	 * @return the first day of week in android.text.format.Time
 	 */
-	private static int getFirstDayOfWeek(final Context context) {
+	public static int getFirstDayOfWeek(final Context context) {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		final String pref = prefs.getString(MainPrefs.KEY_WEEK_START_DAY,
@@ -141,22 +131,4 @@ public class DialogDateTimePicker extends DialogFragment {
 
 		return startDay;
 	}
-
-	/*
-	 * public Dialog onCreateDialog(Bundle savedInstanceState) { if (listener ==
-	 * null) { // Device was rotated perhaps // Need the listener dismiss(); }
-	 * 
-	 * 
-	 * DatePickerDialog dpd = new DatePickerDialog(mActivity, mFragment,
-	 * mFragment.year, mFragment.month, mFragment.day);
-	 * dpd.getDatePicker().setCalendarViewShown(true);
-	 * dpd.getDatePicker().setSpinnersShown(false); CalendarView cv =
-	 * dpd.getDatePicker().getCalendarView(); cv.setShowWeekNumber(true); int
-	 * startOfWeek = getFirstDayOfWeek(mActivity); // Utils returns Time days
-	 * while CalendarView wants Calendar days if (startOfWeek == Time.SATURDAY)
-	 * { startOfWeek = Calendar.SATURDAY; } else if (startOfWeek == Time.SUNDAY)
-	 * { startOfWeek = Calendar.SUNDAY; } else { startOfWeek = Calendar.MONDAY;
-	 * } cv.setFirstDayOfWeek(startOfWeek); dpd.setCanceledOnTouchOutside(true);
-	 * return dpd; }
-	 */
 }

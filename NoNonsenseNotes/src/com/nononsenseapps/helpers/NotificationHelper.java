@@ -2,15 +2,16 @@ package com.nononsenseapps.helpers;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 
-import com.nononsenseapps.notepad.MainActivity;
-import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.NotesEditorFragment;
+import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -31,21 +32,15 @@ import android.support.v4.app.NotificationCompat;
 
 public class NotificationHelper extends BroadcastReceiver {
 
-	// The order is damn important here, see constructor for NoteNotification
-	public static final String[] PROJECTION = new String[] {
-			NotePad.Notifications._ID, NotePad.Notifications.COLUMN_NAME_TIME,
-			NotePad.Notifications.COLUMN_NAME_PERMANENT,
-			NotePad.Notifications.COLUMN_NAME_NOTEID,
-			NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE,
-			NotePad.Notes.COLUMN_NAME_LIST,
-			NotePad.Notifications.JOINED_COLUMN_LIST_TITLE };
-
 	public static final int NOTIFICATION_ID = 4364;
 
-	private static final String TAG = MainActivity.TAG + ".NotificationHelper";
-	
+	static final String ARG_MAX_TIME = "maxtime";
+	static final String ARG_LISTID = "listid";
+
+	private static final String TAG = "nononsenseapps.NotificationHelper";
+
 	private static ContextObserver observer = null;
-	
+
 	private static ContextObserver getObserver(final Context context) {
 		if (observer == null) {
 			observer = new ContextObserver(context, null);
@@ -65,20 +60,25 @@ public class NotificationHelper extends BroadcastReceiver {
 		Log.d(TAG, intent.getAction());
 		if (Intent.ACTION_DELETE.equals(intent.getAction())) {
 			Log.d(TAG, "Got delete broadcast");
-			if (intent.hasExtra(NotePad.Notifications.COLUMN_NAME_TIME)) {
+			if (intent.hasExtra(ARG_MAX_TIME)) {
 				Log.d(TAG, "Got delete list broadcast");
-				deleteNotification(context,
-						NotesEditorFragment.getIdFromUri(intent.getData()),
-						intent.getLongExtra(
-								NotePad.Notifications.COLUMN_NAME_TIME, 0));
-			} else {
+				// TODO
+				// deleteNotification(context,
+				// NotesEditorFragment.getIdFromUri(intent.getData()),
+				// intent.getLongExtra(
+				// NotePad.Notifications.COLUMN_NAME_TIME, 0));
+				deleteNotification(context, intent.getLongExtra(ARG_LISTID, -1), intent.getLongExtra(ARG_MAX_TIME, 0));
+			}
+			else {
 				// Just a notification
-				deleteNotification(context, intent.getData());
+				context.getContentResolver().delete(intent.getData(), null, null);
+				cancelNotification(context, intent.getData());
 			}
 
 			// User in editor, don't spam
 			notifyPast(context, true);
-		} else {
+		}
+		else {
 			notifyPast(context, false);
 		}
 
@@ -86,10 +86,10 @@ public class NotificationHelper extends BroadcastReceiver {
 	}
 
 	private static void monitorUri(final Context context) {
-		Log.d(MainActivity.TAG, "NotificationTable setting observer");
-		context.getContentResolver().unregisterContentObserver(getObserver(context));
+		context.getContentResolver().unregisterContentObserver(
+				getObserver(context));
 		context.getContentResolver().registerContentObserver(
-				NotePad.Notifications.CONTENT_URI, true,
+				com.nononsenseapps.notepad.database.Notification.URI, true,
 				getObserver(context));
 	}
 
@@ -100,41 +100,38 @@ public class NotificationHelper extends BroadcastReceiver {
 	 */
 	private static void notifyPast(Context context, boolean alertOnce) {
 		// Get list of past notifications
-		Date now = new Date();
+		final Calendar now = Calendar.getInstance();
 
-		List<NoteNotification> notifications = getNotifications(context,
-				NotePad.Notifications.COLUMN_NAME_TIME + " <= ?",
-				new String[] { Long.toString(now.getTime()) });
+		final List<com.nononsenseapps.notepad.database.Notification> notifications = com.nononsenseapps.notepad.database.Notification
+				.getNotificationsWithTime(context, now.getTimeInMillis(), true);
 
 		// Remove duplicates
-		makeUnique(context, notifications,
-				NotePad.Notifications.COLUMN_NAME_TIME + " <= ?",
-				new String[] { Long.toString(now.getTime()) });
+		makeUnique(context, notifications);
 
 		final NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
-		
+
 		Log.d(TAG, "Number of notifications: " + notifications.size());
-		
+
 		// If empty, cancel
 		if (notifications.isEmpty()) {
 			// cancelAll permanent notifications here if/when that is
 			// implemented. Don't touch others.
 			notificationManager.cancelAll();
-		} else {
+		}
+		else {
 			// else, notify
 			// Fetch sound and vibrate settings
-			SharedPreferences prefs = PreferenceManager
+			final SharedPreferences prefs = PreferenceManager
 					.getDefaultSharedPreferences(context);
 
 			// Always use default lights
 			int lightAndVibrate = Notification.DEFAULT_LIGHTS;
 			// If vibrate on, use default vibration pattern also
 			if (prefs.getBoolean(context.getString(R.string.key_pref_vibrate),
-					false))
-				lightAndVibrate |= Notification.DEFAULT_VIBRATE;
+					false)) lightAndVibrate |= Notification.DEFAULT_VIBRATE;
 
-			NotificationCompat.Builder builder = new NotificationCompat.Builder(
+			final NotificationCompat.Builder builder = new NotificationCompat.Builder(
 					context)
 					.setWhen(0)
 					.setSmallIcon(R.drawable.ic_stat_notification_edit)
@@ -146,7 +143,7 @@ public class NotificationHelper extends BroadcastReceiver {
 									context.getString(R.string.key_pref_prio),
 									"0")))
 					.setDefaults(lightAndVibrate)
-					.setAutoCancel(false)
+					.setAutoCancel(true)
 					.setOnlyAlertOnce(alertOnce)
 					.setSound(
 							Uri.parse(prefs.getString(context
@@ -158,22 +155,24 @@ public class NotificationHelper extends BroadcastReceiver {
 				// Group together notes contained in the same list.
 				// Always use listid
 				for (long listId : getRelatedLists(notifications)) {
-					List<NoteNotification> subList = getSubList(listId,
-							notifications);
+					List<com.nononsenseapps.notepad.database.Notification> subList = getSubList(
+							listId, notifications);
 					if (subList.size() == 1) {
 						// Notify as single
 						notifyBigText(context, notificationManager, builder,
-								(int) listId, subList.get(0));
-					} else {
+								listId, subList.get(0));
+					}
+					else {
 						notifyInboxStyle(context, notificationManager, builder,
-								(int) listId, subList);
+								listId, subList);
 					}
 				}
-			} else {
+			}
+			else {
 				// Notify for each individually
-				for (NoteNotification note : notifications) {
+				for (com.nononsenseapps.notepad.database.Notification note : notifications) {
 					notifyBigText(context, notificationManager, builder,
-							(int) note.noteId, note);
+							note.taskID, note);
 				}
 			}
 		}
@@ -187,15 +186,16 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * @param context
 	 * @param notifications
 	 */
-	private static void makeUnique(final Context context,
-			final List<NoteNotification> notifications, String where,
-			String[] whereArgs) {
+	private static void makeUnique(
+			final Context context,
+			final List<com.nononsenseapps.notepad.database.Notification> notifications) {
 		// get duplicates and iterate over them
-		for (NoteNotification noti : getLatestOccurence(notifications)) {
+		for (com.nononsenseapps.notepad.database.Notification noti : getLatestOccurence(notifications)) {
 			// remove all but the first one from database, and big list
-			for (NoteNotification dupNoti : getDuplicates(noti, notifications)) {
+			for (com.nononsenseapps.notepad.database.Notification dupNoti : getDuplicates(
+					noti, notifications)) {
 				notifications.remove(dupNoti);
-				deleteNotification(context, dupNoti);
+				cancelNotification(context, dupNoti);
 			}
 		}
 
@@ -208,29 +208,29 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * @param notifications
 	 * @return
 	 */
-	private static List<NoteNotification> getLatestOccurence(
-			final List<NoteNotification> notifications) {
-		ArrayList<Long> seenIds = new ArrayList<Long>();
-		ArrayList<NoteNotification> firsts = new ArrayList<NoteNotification>();
+	private static List<com.nononsenseapps.notepad.database.Notification> getLatestOccurence(
+			final List<com.nononsenseapps.notepad.database.Notification> notifications) {
+		final ArrayList<Long> seenIds = new ArrayList<Long>();
+		final ArrayList<com.nononsenseapps.notepad.database.Notification> firsts = new ArrayList<com.nononsenseapps.notepad.database.Notification>();
 
-		NoteNotification noti;
+		com.nononsenseapps.notepad.database.Notification noti;
 		for (int i = notifications.size() - 1; i >= 0; i--) {
 			noti = notifications.get(i);
-			if (!seenIds.contains(noti.noteId)) {
-				seenIds.add(noti.noteId);
+			if (!seenIds.contains(noti.taskID)) {
+				seenIds.add(noti.taskID);
 				firsts.add(noti);
 			}
 		}
 		return firsts;
 	}
 
-	private static List<NoteNotification> getDuplicates(
-			final NoteNotification first,
-			final List<NoteNotification> notifications) {
-		ArrayList<NoteNotification> dups = new ArrayList<NoteNotification>();
+	private static List<com.nononsenseapps.notepad.database.Notification> getDuplicates(
+			final com.nononsenseapps.notepad.database.Notification first,
+			final List<com.nononsenseapps.notepad.database.Notification> notifications) {
+		final ArrayList<com.nononsenseapps.notepad.database.Notification> dups = new ArrayList<com.nononsenseapps.notepad.database.Notification>();
 
-		for (NoteNotification noti : notifications) {
-			if (noti.noteId == first.noteId && noti.id != first.id) {
+		for (com.nononsenseapps.notepad.database.Notification noti : notifications) {
+			if (noti.taskID == first.taskID && noti._id != first._id) {
 				dups.add(noti);
 			}
 		}
@@ -244,69 +244,57 @@ public class NotificationHelper extends BroadcastReceiver {
 	 */
 	private static void notifyBigText(final Context context,
 			final NotificationManager notificationManager,
-			final NotificationCompat.Builder builder, final int idToUse,
-			final NoteNotification note) {
+			final NotificationCompat.Builder builder, final Long idToUse,
+			final com.nononsenseapps.notepad.database.Notification note) {
 		// Delete it on clear
-		PendingIntent deleteIntent = PendingIntent.getBroadcast(
-				context,
-				0,
-				new Intent(Intent.ACTION_DELETE, Uri.withAppendedPath(
-						NotePad.Notifications.CONTENT_ID_URI_BASE,
-						Integer.toString(note.id))),
+		PendingIntent deleteIntent = PendingIntent.getBroadcast(context, 0,
+				new Intent(Intent.ACTION_DELETE, note.getUri()),
 				PendingIntent.FLAG_UPDATE_CURRENT);
 
 		// Open note on click
-		PendingIntent clickIntent = PendingIntent.getActivity(
-				context,
-				0,
-				new Intent(Intent.ACTION_VIEW, Uri.withAppendedPath(
-						NotePad.Notes.CONTENT_ID_URI_BASE,
-						Long.toString(note.noteId))),
+		PendingIntent clickIntent = PendingIntent.getActivity(context, 0,
+				new Intent(Intent.ACTION_VIEW, Task.getUri(note.taskID)),
 				PendingIntent.FLAG_UPDATE_CURRENT);
 
 		// Build notification
 		final Notification noti = builder
-				.setContentTitle(note.title)
-				.setContentText(note.summary)
+				.setContentTitle(note.taskTitle)
+				.setContentText(note.taskNote)
 				.setContentIntent(clickIntent)
 				.setDeleteIntent(deleteIntent)
 				.setStyle(
 						new NotificationCompat.BigTextStyle()
-								.bigText(note.summary)).build();
+								.bigText(note.taskNote)).build();
 
-		notificationManager.notify(idToUse, noti);
+		notificationManager.notify(idToUse.intValue(), noti);
 	}
 
-	private static void notifyInboxStyle(final Context context,
+	private static void notifyInboxStyle(
+			final Context context,
 			final NotificationManager notificationManager,
-			final NotificationCompat.Builder builder, final int idToUse,
-			final List<NoteNotification> notifications) {
+			final NotificationCompat.Builder builder,
+			final Long idToUse,
+			final List<com.nononsenseapps.notepad.database.Notification> notifications) {
 		// Delete intent must delete all notifications
-		Intent delint = new Intent(Intent.ACTION_DELETE, Uri.withAppendedPath(
-				NotePad.Notifications.CONTENT_ID_URI_BASE,
-				Integer.toString(idToUse)));
+		Intent delint = new Intent(Intent.ACTION_DELETE,
+				com.nononsenseapps.notepad.database.Notification.URI);
 		// Add extra so we don't delete all
-		delint.putExtra(NotePad.Notifications.COLUMN_NAME_TIME,
-				getLatestTime(notifications));
+		delint.putExtra(ARG_MAX_TIME, getLatestTime(notifications));
+		delint.putExtra(ARG_LISTID, idToUse);
 		PendingIntent deleteIntent = PendingIntent.getBroadcast(context, 0,
 				delint, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		// Open intent should open the list
-		PendingIntent clickIntent = PendingIntent
-				.getActivity(
-						context,
-						0,
-						new Intent(Intent.ACTION_VIEW, Uri.withAppendedPath(
-								NotePad.Lists.CONTENT_VISIBLE_ID_URI_BASE,
-								Integer.toString(idToUse)), context,
-								MainActivity.class),
-						PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent clickIntent = PendingIntent.getActivity(context, 0,
+				new Intent(Intent.ACTION_VIEW, TaskList.getUri(idToUse),
+						context, ActivityMain_.class),
+				PendingIntent.FLAG_UPDATE_CURRENT);
 
 		final String title = notifications.get(0).listTitle + " ("
 				+ notifications.size() + ")";
 		// Build notification
 		builder.setContentTitle(title)
-				.setContentText(notifications.get(0).title)
+				.setContentText(notifications.get(0).taskTitle)
 				.setContentIntent(clickIntent).setDeleteIntent(deleteIntent);
 
 		NotificationCompat.InboxStyle ib = new NotificationCompat.InboxStyle()
@@ -315,19 +303,19 @@ public class NotificationHelper extends BroadcastReceiver {
 			ib.setSummaryText("+" + (notifications.size() - 6) + " "
 					+ context.getString(R.string.more));
 
-		for (NoteNotification e : notifications) {
-			ib.addLine(e.title);
+		for (com.nononsenseapps.notepad.database.Notification e : notifications) {
+			ib.addLine(e.taskTitle);
 		}
 
 		final Notification noti = builder.setStyle(ib).build();
-		notificationManager.notify(idToUse, noti);
+		notificationManager.notify(idToUse.intValue(), noti);
 	}
 
-	private static long getLatestTime(final List<NoteNotification> notifications) {
+	private static long getLatestTime(
+			final List<com.nononsenseapps.notepad.database.Notification> notifications) {
 		long latest = 0;
-		for (NoteNotification noti : notifications) {
-			if (noti.time > latest)
-				latest = noti.time;
+		for (com.nononsenseapps.notepad.database.Notification noti : notifications) {
+			if (noti.time > latest) latest = noti.time;
 		}
 		return latest;
 	}
@@ -337,10 +325,9 @@ public class NotificationHelper extends BroadcastReceiver {
 	 */
 	private static void scheduleNext(Context context) {
 		// Get first future notification
-		Date now = new Date();
-		List<NoteNotification> notifications = getNotifications(context,
-				NotePad.Notifications.COLUMN_NAME_TIME + " > ?",
-				new String[] { Long.toString(now.getTime()) });
+		final Calendar now = Calendar.getInstance();
+		final List<com.nononsenseapps.notepad.database.Notification> notifications = 
+				com.nononsenseapps.notepad.database.Notification.getNotificationsWithTime(context, now.getTimeInMillis(), false);
 
 		// if not empty, schedule alarm wake up
 		if (!notifications.isEmpty()) {
@@ -376,159 +363,68 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * @param notifications
 	 */
 	public static void updateNotification(final Context context,
-			NoteNotification notification) {
-		ContentValues values = new ContentValues();
-
-		values.put(NotePad.Notifications.COLUMN_NAME_NOTEID,
-				notification.noteId);
-		values.put(NotePad.Notifications.COLUMN_NAME_PERMANENT,
-				notification.permanent);
-		values.put(NotePad.Notifications.COLUMN_NAME_TIME, notification.time);
-
-		Log.d(TAG, notification.getLocalTime());
+			final com.nononsenseapps.notepad.database.Notification notification) {
 		/*
 		 * Only don't insert if update is success This way the editor can update
 		 * a deleted notification and still have it persisted in the database
 		 */
 		boolean shouldInsert = true;
 		// If id is -1, then this should be inserted
-		if (notification.id != -1) {
+		if (notification._id > 0) {
 			// Else it should be updated
-			int result = context.getContentResolver().update(
-					Uri.withAppendedPath(
-							NotePad.Notifications.CONTENT_ID_URI_BASE,
-							Integer.toString(notification.id)), values, null,
-					null);
-			if (result > 0)
-				shouldInsert = false;
+			int result = notification.save(context);
+			if (result > 0) shouldInsert = false;
 		}
 
 		if (shouldInsert) {
-			Uri uri = context.getContentResolver().insert(
-					NotePad.Notifications.CONTENT_URI, values);
-			notification.id = (int) NotesEditorFragment.getIdFromUri(uri);
+			notification._id = -1;
+			notification.save(context);
 		}
-		
-		context.getContentResolver().notifyChange(NotePad.Notifications.CONTENT_URI, null);
 
 		notifyPast(context, true);
 		scheduleNext(context);
 	}
 
 	/**
-	 * Deletes the indicated notification from the database.
+	 * Deletes the indicated notification from the notification tray (does not touch database)
+	 * 
+	 * Called by notification.delete()
 	 * 
 	 * @param context
 	 * @param id
 	 */
-	public static void deleteNotification(Context context, NoteNotification not) {
+	public static void cancelNotification(final Context context,
+			final com.nononsenseapps.notepad.database.Notification not) {
 		if (not != null) {
-			deleteNotification(context, not.id);
+			cancelNotification(context, not.getUri());
 		}
 	}
 
-	/**
-	 * Deletes the indicated notification from the database.
-	 * 
-	 * @param context
-	 * @param id
-	 */
-	public static void deleteNotification(Context context, long id) {
-		Log.d(TAG, "delete notification ID: " + id);
-		if (id > -1) {
-			context.getContentResolver().delete(
-					Uri.withAppendedPath(
-							NotePad.Notifications.CONTENT_ID_URI_BASE,
-							Long.toString(id)), null, null);
-			
-			context.getContentResolver().notifyChange(NotePad.Notifications.CONTENT_URI, null);
-
-			/*
-			 * final NotificationManager notificationManager =
-			 * (NotificationManager) context
-			 * .getSystemService(Context.NOTIFICATION_SERVICE);
-			 * notificationManager.cancel((int) id);
-			 */
-		}
+	static void cancelNotification(final Context context, final Uri uri) {
+		final NotificationManager notificationManager = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.cancel(Integer.parseInt(uri.getLastPathSegment()));
 	}
 
-	public static void deleteNotification(Context context, Uri uri) {
-		Log.d(TAG, "Trying to delete " + uri.toString());
-		context.getContentResolver().delete(uri, null, null);
-		
-		context.getContentResolver().notifyChange(NotePad.Notifications.CONTENT_URI, null);
-
-		/*
-		 * final NotificationManager notificationManager = (NotificationManager)
-		 * context .getSystemService(Context.NOTIFICATION_SERVICE);
-		 * notificationManager.cancel((int)
-		 * NotesEditorFragment.getIdFromUri(uri));
-		 */
-	}
-
-	public static void deleteNotification(Context context, long listid,
-			long modlimit) {
-		Log.d(TAG, "Trying to delete with modlimit: " + listid);
-		context.getContentResolver().delete(
-				Uri.withAppendedPath(
-						NotePad.Notifications.CONTENT_LISTID_URI_BASE,
-						Long.toString(listid)),
-				NotePad.Notifications.COLUMN_NAME_TIME + " <= ?",
-				new String[] { Long.toString(modlimit) });
+	public static void deleteNotification(final Context context, long listId,
+			long maxTime) {
+		com.nononsenseapps.notepad.database.Notification.removeWithListId(
+				context, listId, maxTime);
 
 		final NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.cancel((int) listid);
-		
-		context.getContentResolver().notifyChange(NotePad.Notifications.CONTENT_URI, null);
-	}
-
-	/**
-	 * Returns the notifications associated with this note
-	 * 
-	 * @param context
-	 * @param noteId
-	 * @return
-	 */
-	public static List<NoteNotification> getNotifications(Context context,
-			long noteId) {
-		return getNotifications(context,
-				NotePad.Notifications.COLUMN_NAME_NOTEID + " IS ?",
-				new String[] { Long.toString(noteId) });
-	}
-
-	private static List<NoteNotification> getNotifications(Context context,
-			String where, String[] whereArgs) {
-		List<NoteNotification> notifications = new ArrayList<NotificationHelper.NoteNotification>();
-
-		Cursor cursor = context.getContentResolver().query(
-				NotePad.Notifications.CONTENT_JOINED_URI, PROJECTION, where,
-				whereArgs, NotePad.Notifications.COLUMN_NAME_TIME);
-
-		if (cursor != null) {
-			if (!cursor.isClosed() && !cursor.isAfterLast()) {
-				while (cursor.moveToNext()) {
-					notifications.add(new NoteNotification(context, cursor));
-				}
-			}
-			cursor.close();
-		}
-
-		return notifications;
+		notificationManager.cancel((int) listId);
 	}
 
 	/**
 	 * Given a list of notifications, returns a list of the lists the notes
 	 * belong to.
-	 * 
-	 * @param notifications
-	 * @return
 	 */
 	private static Collection<Long> getRelatedLists(
-			List<NoteNotification> notifications) {
-		HashSet<Long> lists = new HashSet<Long>();
-		for (NoteNotification not : notifications) {
-			lists.add(not.listId);
+			final List<com.nononsenseapps.notepad.database.Notification> notifications) {
+		final HashSet<Long> lists = new HashSet<Long>();
+		for (com.nononsenseapps.notepad.database.Notification not : notifications) {
+			lists.add(not.listID);
 		}
 
 		return lists;
@@ -537,107 +433,18 @@ public class NotificationHelper extends BroadcastReceiver {
 	/**
 	 * Returns a list of those notifications that are associated to notes in the
 	 * specified list.
-	 * 
-	 * @param listId
-	 * @param notifications
-	 * @return
 	 */
-	private static List<NoteNotification> getSubList(long listId,
-			List<NoteNotification> notifications) {
-		ArrayList<NoteNotification> subList = new ArrayList<NoteNotification>();
-		for (NoteNotification not : notifications) {
-			if (not.listId == listId) {
+	private static List<com.nononsenseapps.notepad.database.Notification> getSubList(
+			final long listId,
+			final List<com.nononsenseapps.notepad.database.Notification> notifications) {
+		final ArrayList<com.nononsenseapps.notepad.database.Notification> subList = new ArrayList<com.nononsenseapps.notepad.database.Notification>();
+		for (com.nononsenseapps.notepad.database.Notification not : notifications) {
+			if (not.listID == listId) {
 				subList.add(not);
 			}
 		}
 
 		return subList;
-	}
-
-	public static class NoteNotification {
-		public int id;
-		public long time;
-		public boolean permanent;
-		public long noteId;
-		public long listId;
-
-		// Actually note title
-		public String title;
-		// Actually note content
-		public String summary;
-
-		// Actually list title
-		public String listTitle;
-
-		/**
-		 * Returns the date according to the locale
-		 * 
-		 * @return
-		 */
-		public String getLocalDate() {
-			DateFormat df = DateFormat.getDateInstance();
-			// df.setTimeZone(TimeZone.getTimeZone("gmt"));
-			return df.format(new Date(time));
-		}
-
-		/**
-		 * Returns the time according to the locale
-		 * 
-		 * @return
-		 */
-		public String getLocalTime() {
-			DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT);
-			// df.setTimeZone(TimeZone.getTimeZone("gmt"));
-			return df.format(new Date(time));
-		}
-
-		/**
-		 * Defaults to current date and time. Used to insert notifications in DB
-		 */
-		public NoteNotification(long noteId, String title, String note) {
-			id = -1;
-			this.listId = -1; // Not needed to insert notifications
-			this.listTitle = ""; // Not needed either
-			this.noteId = noteId;
-			this.title = title;
-			summary = note;
-			permanent = false;
-
-			// default to now + 2 hours
-			Date now = new Date();
-			this.time = now.getTime() + 2 * 60 * 60 * 1000;
-		}
-
-		public NoteNotification(Context context, Cursor cursor) {
-			id = cursor
-					.getInt(cursor.getColumnIndex(NotePad.Notifications._ID));
-			time = cursor.getLong(cursor
-					.getColumnIndex(NotePad.Notifications.COLUMN_NAME_TIME));
-			noteId = cursor.getLong(cursor
-					.getColumnIndex(NotePad.Notifications.COLUMN_NAME_NOTEID));
-			listId = cursor.getLong(cursor
-					.getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST));
-
-			// See projection array for this. Notes.COLUMN_NAME_TITLE
-			// Issue with join projection
-			title = cursor.getString(4);
-			summary = cursor.getString(cursor
-					.getColumnIndex(NotePad.Notes.COLUMN_NAME_NOTE));
-
-			// See projection array for this. Notes.COLUMN_NAME_TITLE
-			// Issue with join projection
-			listTitle = cursor.getString(7);
-
-			if (0 == cursor
-					.getLong(cursor
-							.getColumnIndex(NotePad.Notifications.COLUMN_NAME_PERMANENT))) {
-				permanent = false;
-			} else {
-				permanent = true;
-			}
-
-			Log.d(TAG, "constructor notification id = " + id);
-		}
 	}
 
 	private static class ContextObserver extends ContentObserver {
@@ -662,7 +469,6 @@ public class NotificationHelper extends BroadcastReceiver {
 		// advantage of the new Uri argument.
 		@Override
 		public void onChange(boolean selfChange, Uri uri) {
-			Log.d(MainActivity.TAG, "NotificationTable onChange: got change");
 			// Handle change but don't spam
 			notifyPast(context, true);
 		}

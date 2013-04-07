@@ -169,6 +169,8 @@ public class Task extends DAO {
 		public static final String[] FIELDS = { _ID, TITLE, NOTE, COMPLETED,
 				DUE, UPDATED, LEFT, RIGHT, DBLIST, GTASKACCOUNT, GTASKID,
 				DROPBOXACCOUNT, DROPBOXID };
+		public static final String[] SHALLOWFIELDS = { _ID, TITLE, NOTE, DBLIST, COMPLETED,
+			DUE, UPDATED };
 		public static final String[] DELETEFIELDS = { _ID, TITLE, NOTE,
 				COMPLETED, DUE, DBLIST };
 		// Same but no ID
@@ -442,6 +444,7 @@ public class Task extends DAO {
 	 * Convenience method for normal operations. Updates "updated" field.
 	 * Returns number of db-rows affected. Fail if < 1
 	 */
+	@Override
 	public int save(final Context context) {
 		int result = 0;
 		updated = Calendar.getInstance().getTimeInMillis();
@@ -465,7 +468,6 @@ public class Task extends DAO {
 	 * Starts an asynctask to do the operation in the background.
 	 */
 	public static void setCompleted(final Context context, final boolean completed, final Long... ids) {
-		// TODO
 		if (ids.length > 0) {
 		final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
 			@Override

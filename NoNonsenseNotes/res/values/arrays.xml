@@ -101,6 +101,11 @@
     
     <string-array name="dateformat_short_values">
         <item>@string/dateformat_short_1</item>
+        <item>@string/dateformat_short_2</item>
+        <item>@string/dateformat_short_3</item>
+        <item>@string/dateformat_short_4</item>
+        <item>@string/dateformat_short_5</item>
+        <item>@string/dateformat_short_6</item>
     </string-array>
     <string-array name="notification_prio_entries">
         <item>@string/notification_prio_high</item>

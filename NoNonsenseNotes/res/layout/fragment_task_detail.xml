@@ -41,13 +41,28 @@
             android:layout_below="@+id/taskText"
             android:layout_marginTop="16dp"
             android:paddingLeft="8dp" >
+            
+            <TextView
+                android:id="@+id/dueHeader"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginBottom="4dp"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif-light"
+                android:paddingLeft="0dp"
+                android:text="@string/editor_due_date_hint"
+                android:textAllCaps="true"
+                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:textColor="?textColorSecondary" />
 
             <CheckBox
                 android:id="@+id/taskCompleted"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
+                android:layout_below="@+id/dueHeader"
                 android:gravity="center_vertical"
                 android:text=""
                 android:textAppearance="?android:attr/textAppearanceMedium" />
@@ -64,7 +79,7 @@
                 android:layout_height="48dp"
                 android:layout_alignBottom="@+id/taskCompleted"
                 android:layout_alignParentRight="true"
-                android:layout_alignParentTop="true"
+                android:layout_below="@+id/dueHeader"
                 android:src="?attr/body_remove" />
 
             <Button
@@ -73,7 +88,7 @@
                 android:layout_width="fill_parent"
                 android:layout_height="48dp"
                 android:layout_alignBottom="@+id/taskCompleted"
-                android:layout_alignParentTop="true"
+                android:layout_below="@+id/dueHeader"
                 android:layout_toLeftOf="@+id/dueCancelButton"
                 android:layout_toRightOf="@+id/taskCompleted"
                 android:fontFamily="sans-serif-light"
@@ -124,11 +139,10 @@
                 -->
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginBottom="4dp"
                     android:layout_marginTop="4dp"
-                    android:layout_gravity="center_horizontal"
         			android:paddingRight="20dp"
                     android:background="#0000"
                     android:clickable="false"

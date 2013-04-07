@@ -33,7 +33,8 @@ public class MyContentProvider extends ContentProvider {
 		switch (sURIMatcher.match(uri)) {
 		case Notification.BASEITEMCODE:
 		case Notification.BASEURICODE:
-		case Notification.JOINEDTASKQUERY:
+		case Notification.WITHTASKQUERYCODE:
+		case Notification.WITHTASKQUERYITEMCODE:
 			return Notification.CONTENT_TYPE;
 		case TaskList.BASEITEMCODE:
 		case TaskList.BASEURICODE:
@@ -73,6 +74,10 @@ public class MyContentProvider extends ContentProvider {
 				break;
 			case Task.BASEURICODE:
 				item = new Task(values);
+				break;
+			case Notification.BASEURICODE:
+			case Notification.WITHTASKQUERYITEMCODE:
+				item = new Notification(values);
 				break;
 			default:
 				throw new IllegalArgumentException("Faulty URI provided");
@@ -174,7 +179,16 @@ public class MyContentProvider extends ContentProvider {
 				break;
 			case Task.BASEURICODE:
 				// Batch. No checks made
-				result += db.update(Task.TABLE_NAME, values, selection, selectionArgs);
+				result += db.update(Task.TABLE_NAME, values, selection,
+						selectionArgs);
+				break;
+			case Notification.BASEITEMCODE:
+			case Notification.WITHTASKQUERYITEMCODE:
+				final Notification n = new Notification(uri, values);
+				if (n.getContent().size() > 0) {
+					result += db.update(Notification.TABLE_NAME,
+							n.getContent(), n.whereIdIs, n.whereIdArg());
+				}
 				break;
 			default:
 				throw new IllegalArgumentException("Faulty URI provided");
@@ -224,6 +238,10 @@ public class MyContentProvider extends ContentProvider {
 			break;
 		case Task.BASEITEMCODE:
 			result += safeDeleteItem(db, Task.TABLE_NAME, uri);
+			break;
+		case Notification.BASEITEMCODE:
+		case Notification.WITHTASKQUERYITEMCODE:
+			result += safeDeleteItem(db, Notification.TABLE_NAME, uri);
 			break;
 		default:
 			throw new IllegalArgumentException("Faulty URI provided");
@@ -321,9 +339,48 @@ public class MyContentProvider extends ContentProvider {
 							sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
+		case Notification.BASEITEMCODE:
+			id = Long.parseLong(uri.getLastPathSegment());
+			result = DatabaseHandler
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(Notification.TABLE_NAME,
+							projection,
+							Notification.Columns._ID + " IS ?",
+							new String[] { String.valueOf(id) }, null, null,
+							sortOrder);
+			result.setNotificationUri(getContext().getContentResolver(), uri);
+			break;
+		case Notification.WITHTASKQUERYITEMCODE:
+			id = Long.parseLong(uri.getLastPathSegment());
+			result = DatabaseHandler
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(Notification.WITH_TASK_VIEW_NAME,
+							projection,
+							Notification.Columns._ID + " IS ?",
+							new String[] { String.valueOf(id) }, null, null,
+							sortOrder);
+			result.setNotificationUri(getContext().getContentResolver(), uri);
+			break;
+		case Notification.BASEURICODE:
+			result = DatabaseHandler
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(Notification.TABLE_NAME, projection,
+							selection, selectionArgs, null, null, sortOrder);
+			result.setNotificationUri(getContext().getContentResolver(), uri);
+			break;
+		case Notification.WITHTASKQUERYCODE:
+			result = DatabaseHandler
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(Notification.WITH_TASK_VIEW_NAME, projection,
+							selection, selectionArgs, null, null, sortOrder);
+			result.setNotificationUri(getContext().getContentResolver(), uri);
+			break;
 		case Task.LEGACYBASEURICODE:
 		case Task.LEGACYVISIBLEURICODE:
-
 		default:
 			throw new IllegalArgumentException("Faulty URI provided");
 		}

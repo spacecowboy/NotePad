@@ -1,5 +1,8 @@
 package com.nononsenseapps.notepad.database;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -15,6 +18,71 @@ public abstract class DAO {
 
 	public String[] whereIdArg() {
 		return new String[] { Long.toString(_id) };
+	}
+	
+	public static String[] prefixArray(final String prefix, final String[] array) {
+		final String[] result = new String[array.length];
+		for (int i = 0; i < array.length; i++) {
+			result[i] = "" + prefix + array[i];
+		}
+		return result;
+	}
+	
+	public static String[] joinArrays(final String[]... arrays) {
+		final ArrayList<String> list = new ArrayList<String>();
+		for (final String[] array: arrays) {
+			for (final String txt: array) {
+				list.add(txt);
+			}
+		}
+		return list.toArray(new String[list.size()]);
+	}
+	
+	/**
+	 * Example: [] -> ""
+	 * [a] -> "a"
+	 * [a, b] -> "a,b"
+	 */
+	public static String arrayToCommaString(final String[] array) {
+		return arrayToCommaString("", array);
+	}
+	
+	/**
+	 * Example (prefix=t.): 
+	 * [] -> ""
+	 * [a] -> "t.a"
+	 * [a, b] -> "t.a,t.b"
+	 */
+	public static String arrayToCommaString(final String prefix, final String[] array) {
+		return arrayToCommaString(prefix, array, "");
+	}
+	
+	/**
+	 * Example (prefix=t., suffix=.45): 
+	 * [] -> ""
+	 * [a] -> "t.a.45"
+	 * [a, b] -> "t.a.45,t.b.45"
+	 * 
+	 * In addition, the txt itself can be referenced using %1$s in either
+	 * prefix or suffix. The prefix can be referenced as %2$s in suffix, and vice-versa.
+	 * 
+	 * So the following is valid:
+	 * 
+	 * (prefix='t.', suffix=' AS %2$s%1$s')
+	 * 
+	 * [listId] -> t.listId AS t.listId
+	 */
+	protected static String arrayToCommaString(final String pfx, 
+			final String[] array, final String sfx) {
+		StringBuilder result = new StringBuilder();
+		for (final String txt: array) {
+			if (result.length() > 0)
+				result.append(",");
+			result.append(String.format(pfx, txt, sfx));
+			result.append(txt);
+			result.append(String.format(sfx, txt, pfx));
+		}
+		return result.toString();
 	}
 
 	public Uri getUri() {
@@ -116,16 +184,6 @@ public abstract class DAO {
 	public void setId(final Uri uri) {
 		_id = Long.parseLong(uri.getLastPathSegment());
 	}
-	
-	protected static String arrayToCommaString(final String pfx, final String[] items, final String sfx) {
-		String result = "";
-		for (final String item: items) {
-			result += "," + pfx + item + sfx;
-		}
-		
-		// Ignore first comma
-		return result.substring(1);
-	}
 
 	protected void beforeInsert(final Context context, final SQLiteDatabase db) {
 
@@ -167,4 +225,16 @@ public abstract class DAO {
 	protected abstract String getTableName();
 	
 	public abstract String getContentType();
+	
+	/**
+	 * Convenience method for normal operations. Updates "updated" field.
+	 * Returns number of db-rows affected. Fail if < 1
+	 */
+	public abstract int save(final Context context);
+	/**
+	 * Delete object from database
+	 */
+	public int delete(final Context context) {
+		return context.getContentResolver().delete(getUri(), null, null);
+	}
 }

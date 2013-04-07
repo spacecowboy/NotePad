@@ -45,6 +45,8 @@ public class DateView extends TextView {
 
 	private final Context mContext;
 	private final String dateFormat;
+	
+	private final Calendar mCalendar;
 
 	public DateView(Context context) {
 		super(context);
@@ -54,6 +56,7 @@ public class DateView extends TextView {
 		dateFormat = prefs.getString(
 				context.getString(R.string.key_pref_dateformat_short),
 				context.getString(R.string.dateformat_short_1));
+		mCalendar = Calendar.getInstance();
 	}
 
 	public DateView(Context context, AttributeSet attrs) {
@@ -64,6 +67,7 @@ public class DateView extends TextView {
 		dateFormat = prefs.getString(
 				context.getString(R.string.key_pref_dateformat_short),
 				context.getString(R.string.dateformat_short_1));
+		mCalendar = Calendar.getInstance();
 	}
 
 	public DateView(Context context, AttributeSet attrs, int defStyle) {
@@ -74,6 +78,7 @@ public class DateView extends TextView {
 		dateFormat = prefs.getString(
 				context.getString(R.string.key_pref_dateformat_short),
 				context.getString(R.string.dateformat_short_1));
+		mCalendar = Calendar.getInstance();
 	}
 
 	/*
@@ -87,12 +92,12 @@ public class DateView extends TextView {
 	}
 */
 	public void setTimeText(final long time) {
-		// TODO
-		// Does this handle localtime?
-		super.setText(DateFormat.format(dateFormat, time));
+		mCalendar.setTimeInMillis(time);
+		super.setText(DateFormat.format(dateFormat, mCalendar));
 	}
 
 	public static CharSequence toDate(final Context context, String time3339) {
+		// TODO remove this
 		Time time = new Time(Time.getCurrentTimezone());
 		time.parse3339(time3339);
 
@@ -108,6 +113,7 @@ public class DateView extends TextView {
 	}
 
 	public static CharSequence toDate(String format, long msecs) {
+		// TODO remove this
 		// String format = day;
 		try {
 			Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
@@ -126,6 +132,7 @@ public class DateView extends TextView {
 	 * have one day inbetween.
 	 */
 	public static long daysBetween(Date firstDate, Date secondDate) {
+		// TODO change this
 		// We only use the date part of the given dates
 		long firstSeconds = truncateToDate(firstDate).getTime() / 1000;
 		long secondSeconds = truncateToDate(secondDate).getTime() / 1000;
@@ -152,6 +159,7 @@ public class DateView extends TextView {
 	 * Truncates a date to the date part alone.
 	 */
 	public static Date truncateToDate(Date d) {
+		// TODO change this
 		if (d instanceof java.sql.Date) {
 			return d; // java.sql.Date is already truncated to date. And raises
 						// an

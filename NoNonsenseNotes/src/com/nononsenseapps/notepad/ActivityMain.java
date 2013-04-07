@@ -242,19 +242,15 @@ public class ActivityMain extends FragmentActivity implements
 	}
 
 	/**
-	 * Returns the text that has been shared with the app. Returns null if not a
-	 * share intent.
+	 * Returns the text that has been shared with the app. Does not check anything
+	 * other than EXTRA_SUBJECT AND EXTRA_TEXT
 	 */
 	String getNoteShareText(final Intent intent) {
-		// TODO
-
 		StringBuilder retval = new StringBuilder();
-		
 		// possible title
 		if (intent.getExtras().containsKey(Intent.EXTRA_SUBJECT)) {
 			retval.append(intent.getExtras().get(Intent.EXTRA_SUBJECT));
 		}
-		
 		// possible note
 		if (intent.getExtras().containsKey(Intent.EXTRA_TEXT)) {
 			if (retval.length() > 0) {
@@ -262,7 +258,6 @@ public class ActivityMain extends FragmentActivity implements
 			}
 			retval.append(intent.getExtras().get(Intent.EXTRA_TEXT));
 		}
-
 		return retval.toString();
 	}
 

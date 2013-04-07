@@ -651,6 +651,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 				.findViewById(R.id.notificationList);
 
 		addNotificationButton = theView.findViewById(R.id.notificationAdd);
+		/*
 		addNotificationButton.setOnClickListener(new OnClickListener() {
 
 			@Override
@@ -675,10 +676,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					// Inserts it into the database and updates id
 					NotificationHelper.updateNotification(activity, not);
 					// Inserts a row in the UI
-					addNotification(not);
+					//addNotification(not);
 				}
 			}
-		});
+		});*/
 
 		return theView;
 	}
@@ -687,7 +688,7 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 	 * Inserts a notification item in the UI
 	 * 
 	 * @param not
-	 */
+	 *
 	private void addNotification(final NotificationHelper.NoteNotification not) {
 		if (activity != null) {
 			Log.d(TAG, "Adding listeners for " + not.id);
@@ -770,10 +771,10 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 							newFragment.show(ft, "notificationtimedialog");
 						}
 					});
-*/
+					
 			notificationListLayout.addView(nv);
 		}
-	}
+	}*/
 
 	protected void moveToList(long newListId) {
 		if (listId != newListId && newListId > -1 && listId > -1) {
@@ -1477,13 +1478,15 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 					NotePad.Lists.CONTENT_VISIBLE_URI, new String[] {
 							BaseColumns._ID, NotePad.Lists.COLUMN_NAME_TITLE },
 					null, null, NotePad.Lists.SORT_ORDER);
+		/*
+		 * TODO copy me
 		else if (LOADER_NOTIFICATIONS_ID == id)
 			return new CursorLoader(activity,
 					NotePad.Notifications.CONTENT_JOINED_URI,
 					NotificationHelper.PROJECTION,
 					NotePad.Notifications.COLUMN_NAME_NOTEID + " IS ?",
 					new String[] { Long.toString(this.id) },
-					NotePad.Notifications.COLUMN_NAME_TIME);
+					NotePad.Notifications.COLUMN_NAME_TIME);*/
 		else
 			return new CursorLoader(activity, mUri, PROJECTION, null, null,
 					null);
@@ -1498,8 +1501,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		} else if (LOADER_NOTIFICATIONS_ID == loader.getId()) {
 			if (data != null && !data.isClosed() && !data.isAfterLast()) {
 				while (data.moveToNext()) {
-					addNotification(new NotificationHelper.NoteNotification(
-							activity, data));
+					// TODO copy me
+					//addNotification(new NotificationHelper.NoteNotification(
+					//		activity, data));
 				}
 			}
 			// Do not need updates on this

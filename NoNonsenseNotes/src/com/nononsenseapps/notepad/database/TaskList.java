@@ -1,6 +1,9 @@
 package com.nononsenseapps.notepad.database;
 
+import java.util.Calendar;
+
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
@@ -50,6 +53,7 @@ public class TaskList extends DAO {
 
 		public static final String[] FIELDS = { _ID, TITLE, UPDATED,
 				GTASKACCOUNT, GTASKID, DROPBOXACCOUNT, DROPBOXID };
+		public static final String[] SHALLOWFIELDS = { _ID, TITLE, UPDATED };
 	}
 
 	public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME
@@ -129,4 +133,22 @@ public class TaskList extends DAO {
 		return CONTENT_TYPE;
 	}
 
+	@Override
+	public int save(final Context context) {
+		int result = 0;
+		updated = Calendar.getInstance().getTimeInMillis();
+		if (_id < 1) {
+			final Uri uri = context.getContentResolver().insert(
+				getBaseUri(),getContent());
+			if (uri != null) {
+				_id = Long.parseLong(uri.getLastPathSegment());
+				result++;
+			}
+		}
+		else {
+			result += context.getContentResolver().update(
+					getUri(),getContent(), null, null);
+		}
+		return result;
+	}
 }

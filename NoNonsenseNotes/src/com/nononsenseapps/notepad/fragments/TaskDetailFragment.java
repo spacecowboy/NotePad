@@ -1,6 +1,5 @@
 package com.nononsenseapps.notepad.fragments;
 
-import java.security.InvalidParameterException;
 import java.util.Calendar;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
@@ -8,11 +7,9 @@ import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
-import com.nononsenseapps.helpers.Log;
-import com.nononsenseapps.notepad.ActivityMain;
+import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.TimePickerDialogFragment;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -22,7 +19,6 @@ import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.utils.views.StyledEditText;
 
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -58,9 +54,55 @@ import android.widget.Toast;
 @EFragment(R.layout.fragment_task_detail)
 public class TaskDetailFragment extends Fragment implements DateTimeSetListener {
 
-	public static int LOADER_EDITOR_TASK = 1;
-	public static int LOADER_EDITOR_TASKLISTS = 2;
-	public static int LOADER_EDITOR_NOTIFICATIONS = 3;
+	public static int LOADER_EDITOR_TASK = 3001;
+	public static int LOADER_EDITOR_TASKLISTS = 3002;
+	public static int LOADER_EDITOR_NOTIFICATIONS = 3003;
+
+	LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<Cursor>() {
+		@Override
+		public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
+			if (LOADER_EDITOR_NOTIFICATIONS == id) {
+				return new CursorLoader(getActivity(), Notification.URI,
+						Notification.Columns.FIELDS, Notification.Columns.TASKID
+								+ " IS ?", new String[] { Long.toString(args
+								.getLong(ARG_ITEM_ID, -1)) },
+						Notification.Columns.TIME);
+			}
+			else if (LOADER_EDITOR_TASK == id) {
+				return new CursorLoader(getActivity(),
+						Task.getUri(args.getLong(ARG_ITEM_ID, -1)),
+						Task.Columns.FIELDS, null, null, null);
+			}
+			else {
+				return null;
+			}
+		}
+
+		@Override
+		public void onLoadFinished(Loader<Cursor> ldr, Cursor c) {
+			if (LOADER_EDITOR_TASK == ldr.getId()) {
+				c.moveToFirst();
+				mTask = new Task(c);
+				if (mTaskOrg == null) {
+					mTaskOrg = new Task(c);
+				}
+				fillUIFromTask();
+				// Don't want updates while editing
+				getLoaderManager().destroyLoader(LOADER_EDITOR_TASK);
+			}
+			else if (LOADER_EDITOR_NOTIFICATIONS == ldr.getId()) {
+				while (c.moveToNext()) {
+					addNotification(new Notification(c));
+				}
+				// Don't update while editing
+				getLoaderManager().destroyLoader(LOADER_EDITOR_NOTIFICATIONS);
+			}
+		}
+
+		@Override
+		public void onLoaderReset(Loader<Cursor> arg0) {
+		}
+	};
 
 	@ViewById
 	StyledEditText taskText;
@@ -145,35 +187,12 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 
 		if (getArguments().getLong(ARG_ITEM_ID, -1) > 0) {
 			// Load data from database
-			getLoaderManager().restartLoader(LOADER_EDITOR_TASK, null,
-					new LoaderCallbacks<Cursor>() {
-
-						@Override
-						public Loader<Cursor> onCreateLoader(int arg0,
-								Bundle arg1) {
-							return new CursorLoader(getActivity(), Task
-									.getUri(getArguments().getLong(ARG_ITEM_ID,
-											-1)), Task.Columns.FIELDS, null,
-									null, null);
-						}
-
-						@Override
-						public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
-							c.moveToFirst();
-							mTask = new Task(c);
-							if (mTaskOrg == null) {
-								mTaskOrg = new Task(c);
-							}
-							fillUIFromTask();
-							// Don't want updates while editing
-							getLoaderManager()
-									.destroyLoader(LOADER_EDITOR_TASK);
-						}
-
-						@Override
-						public void onLoaderReset(Loader<Cursor> arg0) {
-						}
-					});
+			final Bundle args = new Bundle();
+			args.putLong(ARG_ITEM_ID, getArguments().getLong(ARG_ITEM_ID, -1));
+			getLoaderManager().restartLoader(LOADER_EDITOR_TASK, args,
+					loaderCallbacks);
+			getLoaderManager().restartLoader(LOADER_EDITOR_NOTIFICATIONS, args,
+					loaderCallbacks);
 		}
 		else {
 			if (getArguments().getLong(ARG_ITEM_LIST_ID, -1) < 1) {
@@ -234,7 +253,6 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 			final SharedPreferences prefs = PreferenceManager
 					.getDefaultSharedPreferences(getActivity());
 
-			// TODO does this respect timezones?
 			final Calendar cal = Calendar.getInstance();
 			cal.setTimeInMillis(mTask.due);
 			dueDateBox.setText(DateFormat.format(prefs.getString(getActivity()
@@ -252,7 +270,6 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 	@Click(R.id.notificationAdd)
 	void onAddReminder() {
 		if (mTask != null) {
-			// TODO
 			// IF no id, have to save first
 			if (mTask._id < 1) {
 				saveTask();
@@ -264,7 +281,6 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 						Toast.LENGTH_SHORT).show();
 				return;
 			}
-			// TODO add item to DB
 			final Notification not = new Notification(mTask._id);
 			if (mTask.due == null) {
 				final Calendar local = Calendar.getInstance();
@@ -274,7 +290,7 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 			else {
 				not.time = mTask.due;
 			}
-			// TODO save item
+			not.save(getActivity(), true);
 
 			// TODO add item to UI
 			addNotification(not);
@@ -392,6 +408,8 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 					|| (mTask._id == -1 && isThereContent())) {
 				// mTask.setText(taskText.getText().toString());
 				mTask.save(getActivity());
+
+				// TODO, should restart notification loader for new tasks
 			}
 		}
 	}
@@ -440,7 +458,8 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 	 * 
 	 * @param not
 	 */
-	private void addNotification(final Notification not) {
+	@UiThread
+	void addNotification(final Notification not) {
 		if (getActivity() != null) {
 
 			View nv = LayoutInflater.from(getActivity()).inflate(
@@ -459,9 +478,7 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 							// Remove row from UI
 							notificationList.removeView((View) v.getParent());
 							// Remove from database and renotify
-							// TODO
-							// NotificationHelper.deleteNotification(activity,
-							// not.id);
+							not.delete(getActivity());
 						}
 					});
 
@@ -471,7 +488,6 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 
 						@Override
 						public void onClick(View v) {
-							// TODO open dual dialog as for due date
 							DialogDateTimePicker_.showDialog(
 									getFragmentManager(), not.time,
 									new DateTimeSetListener() {
@@ -480,26 +496,9 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 											not.time = time;
 											notTimeButton.setText(not
 													.getLocalDateTimeText(getActivity()));
-											// TODO save to database etc
+											not.save(getActivity(), true);
 										}
 									});
-							/*
-							 * FragmentTransaction ft = getFragmentManager()
-							 * .beginTransaction(); Fragment prev =
-							 * getFragmentManager()
-							 * .findFragmentByTag("notificationdatedialog"); if
-							 * (prev != null) { ft.remove(prev); }
-							 * ft.addToBackStack(null);
-							 * 
-							 * // Create and show the dialog.
-							 * TimePickerDialogFragment newFragment = new
-							 * TimePickerDialogFragment(); Bundle args = new
-							 * Bundle(); args.putBoolean(
-							 * TimePickerDialogFragment.KEY_DATEPICKER, true);
-							 * newFragment.setArguments(args);
-							 * newFragment.setCallbacks((Button) v, not);
-							 * newFragment.show(ft, "notificationdatedialog");
-							 */
 						}
 					});
 
