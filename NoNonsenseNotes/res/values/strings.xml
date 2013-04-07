@@ -279,6 +279,7 @@
 	<string name="sync_full_force">Force full sync next time</string>
 	<string name="sync_full_force_info">Only check this if you believe sync is missing some items.</string>
     
+	<string name="snooze">Snooze</string>
 	<string name="silent">Silent</string>
 	<string name="sound">Sound</string>
 	<string name="vibrate">Vibrate</string>

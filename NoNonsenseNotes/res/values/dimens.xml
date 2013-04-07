@@ -39,4 +39,7 @@
     <dimen name="match_parent">-1dp</dimen>
     <dimen name="wrap_content">-2dp</dimen>
     
+    <dimen name="task_list_divider_height_small">1dp</dimen>
+    <dimen name="task_list_divider_height_large">4dp</dimen>
+    
 </resources>

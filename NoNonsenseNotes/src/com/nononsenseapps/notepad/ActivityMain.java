@@ -5,6 +5,7 @@ import java.util.Locale;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity.CONTENTVIEW;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.Task;
@@ -59,6 +60,8 @@ public class ActivityMain extends FragmentActivity implements
 		// Must do this before super.onCreate
 		readAndSetSettings();
 		super.onCreate(b);
+		// Schedule notifications
+		NotificationHelper.schedule(this);
 	}
 
 	private void readAndSetSettings() {

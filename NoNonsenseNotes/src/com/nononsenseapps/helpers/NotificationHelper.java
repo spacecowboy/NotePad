@@ -36,6 +36,9 @@ public class NotificationHelper extends BroadcastReceiver {
 
 	static final String ARG_MAX_TIME = "maxtime";
 	static final String ARG_LISTID = "listid";
+	static final String ARG_TASKID = "taskid";
+	private static final String ARG_COMPLETE = "complete";
+	private static final String ARG_SNOOZE = "snooze";
 
 	private static final String TAG = "nononsenseapps.NotificationHelper";
 
@@ -57,25 +60,40 @@ public class NotificationHelper extends BroadcastReceiver {
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		Log.d(TAG, intent.getAction());
 		if (Intent.ACTION_DELETE.equals(intent.getAction())) {
-			Log.d(TAG, "Got delete broadcast");
 			if (intent.hasExtra(ARG_MAX_TIME)) {
-				Log.d(TAG, "Got delete list broadcast");
-				// TODO
-				// deleteNotification(context,
-				// NotesEditorFragment.getIdFromUri(intent.getData()),
-				// intent.getLongExtra(
-				// NotePad.Notifications.COLUMN_NAME_TIME, 0));
-				deleteNotification(context, intent.getLongExtra(ARG_LISTID, -1), intent.getLongExtra(ARG_MAX_TIME, 0));
+				deleteNotification(context,
+						intent.getLongExtra(ARG_LISTID, -1),
+						intent.getLongExtra(ARG_MAX_TIME, 0));
+
+				// TODO handle complete here
 			}
 			else {
 				// Just a notification
-				context.getContentResolver().delete(intent.getData(), null, null);
+				context.getContentResolver().delete(intent.getData(), null,
+						null);
 				cancelNotification(context, intent.getData());
+				if (intent.getBooleanExtra(ARG_COMPLETE, false)) {
+					// Also complete note
+					Task.setCompleted(context, true,
+							intent.getLongExtra(ARG_TASKID, -1));
+				}
 			}
 
 			// User in editor, don't spam
+			notifyPast(context, true);
+		}
+		else if (Intent.ACTION_EDIT.equals(intent.getAction())) {
+			if (intent.getBooleanExtra(ARG_SNOOZE, false)) {
+				// Cancel current notification
+				cancelNotification(context, intent.getData());
+				// msec/sec * sec/min * 15
+				long delay15min = 1000 * 60 * 15;
+				final Calendar now = Calendar.getInstance();
+				com.nononsenseapps.notepad.database.Notification.setTime(
+						context, intent.getData(),
+						delay15min + now.getTimeInMillis());
+			}
 			notifyPast(context, true);
 		}
 		else {
@@ -256,6 +274,19 @@ public class NotificationHelper extends BroadcastReceiver {
 				new Intent(Intent.ACTION_VIEW, Task.getUri(note.taskID)),
 				PendingIntent.FLAG_UPDATE_CURRENT);
 
+		// Action to complete
+		PendingIntent completeIntent = PendingIntent.getBroadcast(
+				context,
+				0,
+				new Intent(Intent.ACTION_DELETE, note.getUri()).putExtra(
+						ARG_COMPLETE, true).putExtra(ARG_TASKID, note.taskID),
+				PendingIntent.FLAG_UPDATE_CURRENT);
+
+		// Action to snooze
+		PendingIntent snoozeIntent = PendingIntent.getBroadcast(context, 0,
+				new Intent(Intent.ACTION_EDIT, note.getUri()).putExtra(
+						ARG_SNOOZE, true), PendingIntent.FLAG_UPDATE_CURRENT);
+
 		// Build notification
 		final Notification noti = builder
 				.setContentTitle(note.taskTitle)
@@ -264,7 +295,11 @@ public class NotificationHelper extends BroadcastReceiver {
 				.setDeleteIntent(deleteIntent)
 				.setStyle(
 						new NotificationCompat.BigTextStyle()
-								.bigText(note.taskNote)).build();
+								.bigText(note.taskNote))
+				.addAction(R.drawable.navigation_accept_dark,
+						context.getText(R.string.completed), completeIntent)
+				.addAction(R.drawable.device_access_alarms_dark,
+						context.getText(R.string.snooze), snoozeIntent).build();
 
 		notificationManager.notify(idToUse.intValue(), noti);
 	}
@@ -297,6 +332,11 @@ public class NotificationHelper extends BroadcastReceiver {
 				.setContentText(notifications.get(0).taskTitle)
 				.setContentIntent(clickIntent).setDeleteIntent(deleteIntent);
 
+		// Action to snooze
+		// TODO
+
+		// TODO Action to complete
+
 		NotificationCompat.InboxStyle ib = new NotificationCompat.InboxStyle()
 				.setBigContentTitle(title);
 		if (notifications.size() > 6)
@@ -326,8 +366,8 @@ public class NotificationHelper extends BroadcastReceiver {
 	private static void scheduleNext(Context context) {
 		// Get first future notification
 		final Calendar now = Calendar.getInstance();
-		final List<com.nononsenseapps.notepad.database.Notification> notifications = 
-				com.nononsenseapps.notepad.database.Notification.getNotificationsWithTime(context, now.getTimeInMillis(), false);
+		final List<com.nononsenseapps.notepad.database.Notification> notifications = com.nononsenseapps.notepad.database.Notification
+				.getNotificationsWithTime(context, now.getTimeInMillis(), false);
 
 		// if not empty, schedule alarm wake up
 		if (!notifications.isEmpty()) {
@@ -386,7 +426,8 @@ public class NotificationHelper extends BroadcastReceiver {
 	}
 
 	/**
-	 * Deletes the indicated notification from the notification tray (does not touch database)
+	 * Deletes the indicated notification from the notification tray (does not
+	 * touch database)
 	 * 
 	 * Called by notification.delete()
 	 * 

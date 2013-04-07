@@ -53,4 +53,6 @@
 	<attr name="body_remove" format="reference" />
 	<attr name="body_delete" format="reference" />
 	
+	<attr name="task_list_divider_height" format="reference"/>
+	
 </resources>

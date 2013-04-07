@@ -278,6 +278,7 @@
             </intent-filter>
             <intent-filter>
                 <action android:name="android.intent.action.DELETE" />
+                <action android:name="android.intent.action.EDIT" />
 
                 <category android:name="android.intent.category.DEFAULT" />
 

@@ -190,6 +190,11 @@ public class MyContentProvider extends ContentProvider {
 							n.getContent(), n.whereIdIs, n.whereIdArg());
 				}
 				break;
+			case Notification.BASEURICODE:
+				// No checks
+				result += db.update(Notification.TABLE_NAME, values, selection,
+						selectionArgs);
+				break;
 			default:
 				throw new IllegalArgumentException("Faulty URI provided");
 			}

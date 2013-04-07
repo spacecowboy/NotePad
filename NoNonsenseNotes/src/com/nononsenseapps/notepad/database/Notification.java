@@ -73,12 +73,12 @@ public class Notification extends DAO {
 		private ColumnsWithTask() {
 		}
 
-		//public static final String notificationPrefix = "n.";
+		// public static final String notificationPrefix = "n.";
 		public static final String taskPrefix = "t_";
 		public static final String listPrefix = "l_";
 
 		public static final String[] FIELDS = joinArrays(
-				//prefixArray(notificationPrefix, Columns.FIELDS),
+				// prefixArray(notificationPrefix, Columns.FIELDS),
 				Columns.FIELDS,
 				prefixArray(taskPrefix, Task.Columns.SHALLOWFIELDS),
 				prefixArray(listPrefix, TaskList.Columns.SHALLOWFIELDS));
@@ -102,20 +102,25 @@ public class Notification extends DAO {
 	 * View that joins relevant data from tasks and lists tables
 	 */
 	public static final String CREATE_JOINED_VIEW = new StringBuilder()
-			.append("CREATE VIEW ").append(WITH_TASK_VIEW_NAME).append(" AS ")
+			.append("CREATE VIEW ")
+			.append(WITH_TASK_VIEW_NAME)
+			.append(" AS ")
 			.append(" SELECT ")
 			// Notifications as normal column names
-			.append(arrayToCommaString(TABLE_NAME +".", Columns.FIELDS))
+			.append(arrayToCommaString(TABLE_NAME + ".", Columns.FIELDS))
 			.append(",")
 			// Rest gets prefixed
-			.append(arrayToCommaString("t.", Task.Columns.SHALLOWFIELDS, " AS " + ColumnsWithTask.taskPrefix + "%1$s"))
+			.append(arrayToCommaString("t.", Task.Columns.SHALLOWFIELDS, " AS "
+					+ ColumnsWithTask.taskPrefix + "%1$s"))
 			.append(",")
-			.append(arrayToCommaString("l.", TaskList.Columns.SHALLOWFIELDS, " AS " + ColumnsWithTask.listPrefix + "%1$s"))
+			.append(arrayToCommaString("l.", TaskList.Columns.SHALLOWFIELDS,
+					" AS " + ColumnsWithTask.listPrefix + "%1$s"))
 			.append(" FROM ").append(TABLE_NAME).append(",")
 			.append(Task.TABLE_NAME).append(" AS t,")
-			.append(TaskList.TABLE_NAME).append(" AS l ").append(" WHERE ").append(TABLE_NAME).append(".")
-			.append(Columns.TASKID).append(" = t.").append(Task.Columns._ID)
-			.append(" AND t.").append(Task.Columns.DBLIST).append(" = l.")
+			.append(TaskList.TABLE_NAME).append(" AS l ").append(" WHERE ")
+			.append(TABLE_NAME).append(".").append(Columns.TASKID)
+			.append(" = t.").append(Task.Columns._ID).append(" AND t.")
+			.append(Task.Columns.DBLIST).append(" = l.")
 			.append(TaskList.Columns._ID).append(";").toString();
 
 	// milliseconds since 1970-01-01 UTC
@@ -154,7 +159,7 @@ public class Notification extends DAO {
 					+ Task.Columns.NOTE));
 		}
 	}
-	
+
 	public Notification(final Uri uri, final ContentValues values) {
 		this(Long.parseLong(uri.getLastPathSegment()), values);
 	}
@@ -226,7 +231,7 @@ public class Notification extends DAO {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * If true, will also schedule/notify android notifications
 	 */
@@ -237,7 +242,7 @@ public class Notification extends DAO {
 		}
 		return result;
 	}
-	
+
 	@Override
 	public int delete(final Context context) {
 		// Make sure existing notifications are cancelled.
@@ -310,11 +315,12 @@ public class Notification extends DAO {
 	public static List<Notification> getNotificationsOfTask(
 			final Context context, final long taskId) {
 		return getNotificationsWithTasks(
-						context,
-						new StringBuilder()
-								.append(com.nononsenseapps.notepad.database.Notification.Columns.TASKID)
-								+ " IS ?",
-						new String[] { Long.toString(taskId) }, new StringBuilder()
+				context,
+				new StringBuilder()
+						.append(com.nononsenseapps.notepad.database.Notification.Columns.TASKID)
+						+ " IS ?",
+				new String[] { Long.toString(taskId) },
+				new StringBuilder()
 						.append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
 						.toString());
 	}
@@ -351,5 +357,18 @@ public class Notification extends DAO {
 
 		c.close();
 		return list;
+	}
+
+	/**
+	 * Used for snooze
+	 */
+	public static int setTime(final Context context, final Uri uri,
+			final long newTime) {
+		final ContentValues values = new ContentValues();
+		values.put(Columns.TIME, newTime);
+		// Use base ID to bypass type checks
+		return context.getContentResolver().update(URI, values,
+				Columns._ID + " IS ?",
+				new String[] { uri.getLastPathSegment() });
 	}
 }

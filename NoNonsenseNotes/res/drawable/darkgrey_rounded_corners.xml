@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
  
     <!-- Bottom 2dp Shadow -->
-    <item 
+    <!-- <item 
         android:left="0dp"
         android:right="0dp" >
         <shape  android:shape="rectangle">
@@ -11,10 +11,10 @@
             <corners android:radius="2dp" />
  
         </shape>
-    </item>
+    </item> -->
  
-    <!-- White Top color -->
-    <item android:bottom="2dp" 
+    <!-- Top color -->
+    <item android:bottom="0dp" 
         android:left="0dp"
         android:right="0dp" >
  

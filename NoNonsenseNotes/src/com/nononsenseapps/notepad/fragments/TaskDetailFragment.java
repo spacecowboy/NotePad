@@ -184,6 +184,8 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 	@Override
 	public void onStart() {
 		super.onStart();
+		
+		// TODO opening from a notification should delete the notification
 
 		if (getArguments().getLong(ARG_ITEM_ID, -1) > 0) {
 			// Load data from database
