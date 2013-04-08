@@ -9,7 +9,7 @@ rm -rf translate-temp/res/values
 rm -rf translate-temp/res/values-en
 
 echo 'Isolate newest translations.'
-php5 /home/jonas/bin/get-diff-translations.php
+php5 ./get-diff-translations.php
 
 echo 'Copy new translation files to dev dir.'
 cp -rf translate-temp/res ./
