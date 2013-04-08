@@ -28,6 +28,7 @@ import android.text.format.Time;
 import android.util.AttributeSet;
 import android.widget.TextView;
 
+import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 
 /**
@@ -92,8 +93,9 @@ public class DateView extends TextView {
 	}
 */
 	public void setTimeText(final long time) {
-		mCalendar.setTimeInMillis(time);
-		super.setText(DateFormat.format(dateFormat, mCalendar));
+		//mCalendar.setTimeInMillis(time);
+		//super.setText(DateFormat.format(dateFormat, mCalendar));
+		super.setText(TimeFormatter.getLocalDateString(mContext, dateFormat, time));
 	}
 
 	public static CharSequence toDate(final Context context, String time3339) {

@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import com.nononsenseapps.helpers.NotificationHelper;
+import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 
 import android.content.ContentValues;
@@ -204,14 +205,18 @@ public class Notification extends DAO {
 	 */
 	public CharSequence getLocalDateTimeText(final Context context) {
 		// TODO respect global settings for 24 hour clock?
-		final Calendar cal = Calendar.getInstance();
-		cal.setTimeInMillis(time);
+		//final Calendar cal = Calendar.getInstance();
+		//cal.setTimeInMillis(time);
 
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
+		return TimeFormatter.getLocalDateString(context, prefs.getString(
+				context.getString(R.string.key_pref_dateformat_long),
+				context.getString(R.string.dateformat_long_1)), time);
+		/*
 		return DateFormat.format(prefs.getString(
 				context.getString(R.string.key_pref_dateformat_long),
-				context.getString(R.string.dateformat_long_1)), cal);
+				context.getString(R.string.dateformat_long_1)), cal);*/
 	}
 
 	@Override

@@ -16,12 +16,15 @@
 
 package com.nononsenseapps.notepad.prefs;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.helpers.TimeFormatter;
 
 import android.app.Activity;
 import android.database.Cursor;
@@ -79,8 +82,12 @@ public class MainPrefs extends PreferenceFragment {
 		// Fill listpreferences
 		setEntries((ListPreference) findPreference(KEY_DEFAULT_LIST));
 		setLangEntries((ListPreference) findPreference(getString(R.string.pref_locale)));
-		setDateEntries((ListPreference) findPreference(getString(R.string.key_pref_dateformat_short)), R.array.dateformat_short_values);
-		setDateEntries((ListPreference) findPreference(getString(R.string.key_pref_dateformat_long)), R.array.dateformat_long_values);
+		setDateEntries(
+				(ListPreference) findPreference(getString(R.string.key_pref_dateformat_short)),
+				R.array.dateformat_short_values);
+		setDateEntries(
+				(ListPreference) findPreference(getString(R.string.key_pref_dateformat_long)),
+				R.array.dateformat_long_values);
 
 		// Bind summaries
 		PrefsActivity
@@ -102,17 +109,17 @@ public class MainPrefs extends PreferenceFragment {
 	}
 
 	private void setDateEntries(ListPreference prefDate, int array) {
-		final String[] values = getResources().getStringArray(
-				array);
+		final String[] values = getResources().getStringArray(array);
 
 		final ArrayList<CharSequence> entries = new ArrayList<CharSequence>();
 
 		final GregorianCalendar cal = new GregorianCalendar(2099, 2, 27, 23, 59);
-		// Format values
+
 		for (final String val : values) {
-			entries.add(DateFormat.format(val, cal));
+			entries.add(TimeFormatter.getLocalDateString(getActivity(), val,
+					cal.getTimeInMillis()));
 		}
-		
+
 		prefDate.setEntries(entries.toArray(new CharSequence[entries.size()]));
 		prefDate.setEntryValues(values);
 	}

@@ -8,6 +8,7 @@ import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.nononsenseapps.helpers.NotificationHelper;
+import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Notification;
@@ -255,11 +256,15 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 			final SharedPreferences prefs = PreferenceManager
 					.getDefaultSharedPreferences(getActivity());
 
-			final Calendar cal = Calendar.getInstance();
-			cal.setTimeInMillis(mTask.due);
+			//final Calendar cal = Calendar.getInstance();
+			//cal.setTimeInMillis(mTask.due);
+			dueDateBox.setText(TimeFormatter.getLocalDateString(getActivity(), prefs.getString(getActivity()
+					.getString(R.string.key_pref_dateformat_long),
+					getActivity().getString(R.string.dateformat_long_1)), mTask.due));
+			/*
 			dueDateBox.setText(DateFormat.format(prefs.getString(getActivity()
 					.getString(R.string.key_pref_dateformat_long),
-					getActivity().getString(R.string.dateformat_long_1)), cal));
+					getActivity().getString(R.string.dateformat_long_1)), cal));*/
 		}
 	}
 
