@@ -9,6 +9,7 @@
             <enum name="robotosans" value="0" />
             <enum name="robotocondensed" value="1" />
             <enum name="robotolight" value="2" />
+            <enum name="robotothin" value="3" />
         </attr>
         <attr name="titleFontStyle" format="enum">
             <enum name="normal" value="0" />

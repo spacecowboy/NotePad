@@ -68,6 +68,9 @@ public class TitleNoteTextView extends TextView {
 		case 2:
 			textCondensedSpan = new TypefaceSpan("sans-serif-light");
 			break;
+		case 3:
+			textCondensedSpan = new TypefaceSpan("sans-serif-thin");
+			break;
 		default:
 			textCondensedSpan = new TypefaceSpan("sans-serif");
 			break;

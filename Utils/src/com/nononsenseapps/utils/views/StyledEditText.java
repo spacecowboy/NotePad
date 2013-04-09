@@ -63,6 +63,9 @@ public class StyledEditText extends EditText {
 		case 2:
 			textCondensedSpan = new TypefaceSpan("sans-serif-light");
 			break;
+		case 3:
+			textCondensedSpan = new TypefaceSpan("sans-serif-thin");
+			break;
 		default:
 			textCondensedSpan = new TypefaceSpan("sans-serif");
 			break;
