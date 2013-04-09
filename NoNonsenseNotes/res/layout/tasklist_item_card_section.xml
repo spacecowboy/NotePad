@@ -50,7 +50,6 @@
         android:layout_alignBaseline="@+id/checkboxcontainer"
         android:ellipsize="end"
         android:paddingBottom="4dp"
-        android:fontFamily="sans-serif"
         android:maxLines="4"
         android:singleLine="false"
         android:textAppearance="?android:attr/textAppearanceSmall"

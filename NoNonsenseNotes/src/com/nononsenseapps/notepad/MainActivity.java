@@ -662,7 +662,7 @@ public class MainActivity extends DualLayoutActivity implements
 			deleteDialog.setTitle(R.string.menu_deletelist);
 
 			Button dYesButton = (Button) deleteDialog
-					.findViewById(R.id.d_dialog_yes);
+					.findViewById(R.id.dialog_yes);
 			dYesButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -672,7 +672,7 @@ public class MainActivity extends DualLayoutActivity implements
 			});
 
 			Button dNoButton = (Button) deleteDialog
-					.findViewById(R.id.d_dialog_no);
+					.findViewById(R.id.dialog_no);
 			dNoButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {

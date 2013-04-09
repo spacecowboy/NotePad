@@ -205,23 +205,17 @@ public class Task extends DAO {
 		public static final String LEFT = "lft";
 		public static final String RIGHT = "rgt";
 
-		public static final String GTASKID = "gtaskid";
-		public static final String GTASKACCOUNT = "gtaskaccount";
-
-		public static final String DROPBOXID = "dropboxid";
-		public static final String DROPBOXACCOUNT = "dropboxaccount";
-
 		public static final String[] FIELDS = { _ID, TITLE, NOTE, COMPLETED,
-				DUE, UPDATED, LEFT, RIGHT, DBLIST, GTASKACCOUNT, GTASKID,
-				DROPBOXACCOUNT, DROPBOXID };
+				DUE, UPDATED, LEFT, RIGHT, DBLIST };
 		public static final String[] FIELDS_NO_ID = { TITLE, NOTE, COMPLETED,
-			DUE, UPDATED, LEFT, RIGHT, DBLIST, GTASKACCOUNT, GTASKID,
-			DROPBOXACCOUNT, DROPBOXID };
+			DUE, UPDATED, LEFT, RIGHT, DBLIST };
 		public static final String[] SHALLOWFIELDS = { _ID, TITLE, NOTE, DBLIST, COMPLETED,
 			DUE, UPDATED };
+		public static final String TRIG_DELETED = "deletedtime";
+		// Used to read the table. Deleted field set by database
 		public static final String[] DELETEFIELDS = { _ID, TITLE, NOTE,
-				COMPLETED, DUE, DBLIST };
-		// Same but no ID
+				COMPLETED, DUE, DBLIST, TRIG_DELETED};
+		// Used in trigger creation
 		private static final String[] DELETEFIELDS_TRIGGER = { TITLE, NOTE,
 				COMPLETED, DUE, DBLIST };
 
@@ -238,14 +232,6 @@ public class Task extends DAO {
 			+ " INTEGER DEFAULT NULL,"
 			+ Columns.DUE
 			+ " INTEGER DEFAULT NULL,"
-
-			// sync stuff
-			+ Columns.GTASKACCOUNT + " TEXT," + Columns.GTASKID
-			+ " TEXT,"
-			+ Columns.DROPBOXACCOUNT
-			+ " TEXT,"
-			+ Columns.DROPBOXID
-			+ " TEXT,"
 
 			// position stuff
 			+ Columns.LEFT + " INTEGER NOT NULL DEFAULT 1,"
@@ -270,11 +256,18 @@ public class Task extends DAO {
 
 	// Delete table has no constraints. In fact, list values and positions
 	// should not even be thought of as valid.
-	public static final String CREATE_DELETE_TABLE = "CREATE TABLE "
-			+ DELETE_TABLE_NAME + "(" + Columns._ID + " INTEGER PRIMARY KEY,"
-			+ Columns.TITLE + " TEXT NOT NULL DEFAULT ''," + Columns.NOTE
-			+ " TEXT NOT NULL DEFAULT ''," + Columns.COMPLETED + " TEXT,"
-			+ Columns.DUE + " TEXT," + Columns.DBLIST + " INTEGER)";
+	public static final String CREATE_DELETE_TABLE = 
+			new StringBuilder()
+			.append("CREATE TABLE ")
+			.append(DELETE_TABLE_NAME).append("(")
+			.append(Columns._ID).append(" INTEGER PRIMARY KEY,")
+			.append(Columns.TITLE).append(" TEXT NOT NULL DEFAULT '',")
+			.append(Columns.NOTE).append(" TEXT NOT NULL DEFAULT '',")
+			.append(Columns.COMPLETED).append(" INTEGER DEFAULT NULL,")
+			.append(Columns.DUE).append(" INTEGER DEFAULT NULL,")
+			.append(Columns.DBLIST).append(" INTEGER DEFAULT NULL,")
+			.append(Columns.TRIG_DELETED).append(" TIMESTAMP NOT NULL DEFAULT current_timestamp")
+			.append(")").toString();
 	
 	/**
 	 * This is a view which returns the tasks in the specified list with
@@ -428,11 +421,6 @@ public class Task extends DAO {
 	public Long completed = null;
 	public Long due = null;
 	public Long updated = null;
-	// Sync stuff
-	public String gtaskaccount = null;
-	public String gtaskid = null;
-	public String dropboxaccount = null;
-	public String dropboxid = null;
 
 	// position stuff
 	public Long left = null;
@@ -514,11 +502,6 @@ public class Task extends DAO {
 		right = c.getLong(7);
 		dblist = c.getLong(8);
 
-		gtaskaccount = c.getString(9);
-		gtaskid = c.getString(10);
-		dropboxaccount = c.getString(11);
-		dropboxid = c.getString(12);
-
 		if (c.getColumnCount() > Columns.FIELDS.length) {
 			level = c.getInt(Columns.FIELDS.length);
 		}
@@ -540,11 +523,6 @@ public class Task extends DAO {
 			this.completed = values.getAsLong(Columns.COMPLETED);
 			this.due = values.getAsLong(Columns.DUE);
 			this.updated = values.getAsLong(Columns.UPDATED);
-
-			gtaskaccount = values.getAsString(Columns.GTASKACCOUNT);
-			gtaskid = values.getAsString(Columns.GTASKID);
-			dropboxaccount = values.getAsString(Columns.DROPBOXACCOUNT);
-			dropboxid = values.getAsString(Columns.DROPBOXID);
 
 			this.dblist = values.getAsLong(Columns.DBLIST);
 			this.left = values.getAsLong(Columns.LEFT);
@@ -597,11 +575,6 @@ public class Task extends DAO {
 		values.put(Columns.UPDATED, updated);
 		values.put(Columns.DUE, due);
 		values.put(Columns.COMPLETED, completed);
-
-		values.put(Columns.GTASKACCOUNT, gtaskaccount);
-		values.put(Columns.GTASKID, gtaskid);
-		values.put(Columns.DROPBOXACCOUNT, dropboxaccount);
-		values.put(Columns.DROPBOXID, dropboxid);
 
 		return values;
 	}

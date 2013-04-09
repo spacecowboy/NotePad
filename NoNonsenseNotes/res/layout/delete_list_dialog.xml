@@ -2,10 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:divider="?android:attr/dividerVertical"
-    android:dividerPadding="0dip"
-    android:showDividers="middle" >
+    android:orientation="vertical" >
 
     <TextView
         android:id="@+id/warning_label"
@@ -19,31 +16,6 @@
         android:text="@string/delete_list_warning"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <LinearLayout
-        android:id="@+id/button_container"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingTop="8dp"
-        android:divider="?android:attr/dividerHorizontal"
-        android:dividerPadding="0dip"
-        android:orientation="horizontal"
-        android:showDividers="middle" >
-
-        <Button
-            android:id="@+id/d_dialog_no"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/no" />
-
-        <Button
-            android:id="@+id/d_dialog_yes"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@string/yes" />
-    </LinearLayout>
+    <include layout="@layout/dialog_ok_cancel"/>
 
 </LinearLayout>

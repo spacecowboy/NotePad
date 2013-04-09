@@ -3,26 +3,35 @@
     android:id="@+id/button_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:divider="?android:attr/dividerHorizontal"
-    android:dividerPadding="2dp"
-    android:orientation="horizontal"
-    android:paddingTop="8dp"
-    android:showDividers="middle" >
+    android:orientation="vertical" >
 
-    <Button
-        android:id="@+id/dialog_no"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/menu_cancel" />
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/dividerHorizontal" />
 
-    <Button
-        android:id="@+id/dialog_yes"
-        style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="0dp"
+    <LinearLayout
+        style="?android:attr/buttonBarStyle"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        android:text="@string/ok" />
+        android:orientation="horizontal" >
+
+        <Button
+            android:id="@+id/dialog_no"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/menu_cancel" />
+
+        <Button
+            android:id="@+id/dialog_yes"
+            style="?android:attr/buttonBarButtonStyle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/ok" />
+    </LinearLayout>
 
 </LinearLayout>

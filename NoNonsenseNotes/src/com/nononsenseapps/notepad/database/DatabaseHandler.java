@@ -185,8 +185,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 					t.updated = c.getLong(6);
 
-					t.gtaskid = c.getString(7);
-					t.gtaskaccount = c.getString(8);
+					//t.gtaskid = c.getString(7);
+					//t.gtaskaccount = c.getString(8);
 
 					// insert
 					// Just make extra sure list exists
