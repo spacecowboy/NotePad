@@ -14,8 +14,10 @@ import com.nononsenseapps.ui.NoteCheckBox;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
 
 import android.app.Activity;
+import android.content.Context;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
@@ -76,14 +78,16 @@ public class TaskListFragment extends Fragment {
 		mListId = getArguments().getLong(LIST_ID, -1);
 
 		// Start loading data
-		mAdapter = new SimpleCursorAdapter(getActivity(),
-				R.layout.tasklist_item_rich, null, new String[] {
-						Task.Columns.TITLE, Task.Columns.NOTE,
+		mAdapter = new SimpleSectionsAdapter(getActivity(),
+				R.layout.tasklist_item_rich, R.layout.tasklist_header, null,
+				new String[] { Task.Columns.TITLE, Task.Columns.NOTE,
 						Task.Columns.DUE, Task.Columns.COMPLETED }, new int[] {
 						android.R.id.text1, android.R.id.text1, R.id.date,
 						R.id.checkbox }, 0);
 
 		mAdapter.setViewBinder(new ViewBinder() {
+			boolean isHeader = false;
+			String sTemp = "";
 			final OnCheckedChangeListener checkBoxListener = new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView,
@@ -95,31 +99,71 @@ public class TaskListFragment extends Fragment {
 
 			@Override
 			public boolean setViewValue(View view, Cursor c, int colIndex) {
+				// Check for headers, they have invalid ids
+				isHeader = c.getLong(0) == -1;
 
 				switch (colIndex) {
 				// Matches order in Task.Columns.Fields
 				case 1:
-					((TitleNoteTextView) view).setTextTitle(c
-							.getString(colIndex));
+					sTemp = c.getString(colIndex);
+					if (isHeader) {
+						// TODO fetch strings
+						if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {
+							sTemp = getString(R.string.date_header_overdue);
+						}
+						else if (Task.HEADER_KEY_TODAY.equals(sTemp)) {
+							sTemp = getString(R.string.date_header_today);
+						}
+						else if (Task.HEADER_KEY_PLUS1.equals(sTemp)) {
+							sTemp = getString(R.string.date_header_tomorrow);
+						}
+						else if (Task.HEADER_KEY_PLUS2.equals(sTemp)) {
+							sTemp = "weekday2";
+						}
+						else if (Task.HEADER_KEY_PLUS3.equals(sTemp)) {
+							sTemp = "weekday3";
+						}
+						else if (Task.HEADER_KEY_PLUS4.equals(sTemp)) {
+							sTemp = "weekday4";
+						}
+						else if (Task.HEADER_KEY_LATER.equals(sTemp)) {
+							sTemp = getString(R.string.date_header_future);
+						}
+						else if (Task.HEADER_KEY_NODATE.equals(sTemp)) {
+							sTemp = getString(R.string.date_header_none);
+						}
+						else if (Task.HEADER_KEY_COMPLETE.equals(sTemp)) {
+							sTemp = getString(R.string.date_header_completed);
+						}
+					}
+					((TitleNoteTextView) view).setTextTitle(sTemp);
 					return true;
 				case 2:
-					((TitleNoteTextView) view).setTextRest(c
-							.getString(colIndex));
+					if (!isHeader) {
+						((TitleNoteTextView) view).setTextRest(c
+								.getString(colIndex));
+					}
 					return true;
 				case 3:
-					((NoteCheckBox) view).setOnCheckedChangeListener(null);
-					((NoteCheckBox) view).setChecked(!c.isNull(colIndex));
-					((NoteCheckBox) view).setNoteId(c.getLong(0));
-					((NoteCheckBox) view)
-							.setOnCheckedChangeListener(checkBoxListener);
+					if (!isHeader) {
+						((NoteCheckBox) view).setOnCheckedChangeListener(null);
+						((NoteCheckBox) view).setChecked(!c.isNull(colIndex));
+						((NoteCheckBox) view).setNoteId(c.getLong(0));
+						((NoteCheckBox) view)
+								.setOnCheckedChangeListener(checkBoxListener);
+					}
 					return true;
 				case 4:
-					if (c.isNull(colIndex)) {
-						view.setVisibility(View.GONE);
-					}
-					else {
-						view.setVisibility(View.VISIBLE);
-						((DateView) view).setTimeText(c.getLong(colIndex));
+					if (!isHeader) {
+						if (c.isNull(colIndex)) {
+							view.setVisibility(View.GONE);
+						}
+						else {
+							view.setVisibility(View.VISIBLE);
+							Log.d("nononsenseapps",
+									"list sees: " + c.getLong(colIndex));
+							((DateView) view).setTimeText(c.getLong(colIndex));
+						}
 					}
 					return true;
 				default:
@@ -147,11 +191,13 @@ public class TaskListFragment extends Fragment {
 
 					@Override
 					public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+						// Task.URI_INDENTED_QUERY
+						// Task.Columns.LEFT
 						return new CursorLoader(getActivity(),
-								Task.URI_INDENTED_QUERY, Task.Columns.FIELDS,
-								Task.Columns.DBLIST + " IS ?",
-								new String[] { Long.toString(mListId) },
-								Task.Columns.LEFT);
+								Task.URI_SECTIONED_BY_DATE,
+								Task.Columns.FIELDS, Task.Columns.DBLIST
+										+ " IS ?", new String[] { Long
+										.toString(mListId) }, null);
 					}
 
 					@Override
@@ -175,7 +221,7 @@ public class TaskListFragment extends Fragment {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
 					long id) {
-				if (mListener != null) {
+				if (mListener != null && id > 0) {
 					mListener.onFragmentInteraction(Task.getUri(id));
 				}
 			}
@@ -236,5 +282,56 @@ public class TaskListFragment extends Fragment {
 	public void onDetach() {
 		super.onDetach();
 		mListener = null;
+	}
+
+	static class SimpleSectionsAdapter extends SimpleCursorAdapter {
+		final int mItemLayout;
+		final int mHeaderLayout;
+		final static int itemType = 0;
+		final static int headerType = 1;
+
+		public SimpleSectionsAdapter(Context context, int layout,
+				int headerLayout, Cursor c, String[] from, int[] to, int flags) {
+			super(context, layout, c, from, to, flags);
+			mItemLayout = layout;
+			mHeaderLayout = headerLayout;
+
+		}
+
+		int getViewLayout(final int position) {
+			if (itemType == getItemViewType(position)) {
+				return mItemLayout;
+			}
+			else {
+				return mHeaderLayout;
+			}
+		}
+
+		@Override
+		public int getViewTypeCount() {
+			return 2;
+		}
+
+		@Override
+		public int getItemViewType(int position) {
+			final Cursor c = (Cursor) getItem(position);
+			// If the id is invalid, it's a header
+			if (c.getLong(0) < 1) {
+				return headerType;
+			}
+			else {
+				return itemType;
+			}
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			if (convertView == null) {
+				final LayoutInflater inflater = LayoutInflater.from(mContext);
+				convertView = inflater.inflate(getViewLayout(position), parent,
+						false);
+			}
+			return super.getView(position, convertView, parent);
+		}
 	}
 }

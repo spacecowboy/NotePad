@@ -42,6 +42,8 @@ public class MyContentProvider extends ContentProvider {
 		case Task.BASEITEMCODE:
 		case Task.BASEURICODE:
 		case Task.INDENTEDQUERYCODE:
+		case Task.SECTIONEDDATEITEMCODE:
+		case Task.SECTIONEDDATEQUERYCODE:
 		case Task.LEGACYBASEITEMCODE:
 		case Task.LEGACYBASEURICODE:
 		case Task.LEGACYVISIBLEITEMCODE:
@@ -344,13 +346,37 @@ public class MyContentProvider extends ContentProvider {
 							sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
+		case Task.SECTIONEDDATEQUERYCODE:
+			// Add list null because that's what the headers will have
+			if (selectionArgs == null || selectionArgs.length == 0) {
+				throw new SQLException(
+						"Need a listid as first arg at the moment for this view!");
+			}
+			// Create view if not exists
+			DatabaseHandler.getInstance(getContext()).getWritableDatabase()
+					.execSQL(Task.CREATE_SECTIONED_DATE_VIEW(selectionArgs[0]));
+
+			result = DatabaseHandler
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(Task.getSECTION_DATE_VIEW_NAME(selectionArgs[0]),
+							projection,
+							selection,
+							selectionArgs,
+							null,
+							null,
+							Task.SECRET_TYPEID + "," + Task.Columns.DUE + ","
+									+ Task.SECRET_TYPEID2);
+
+			result.setNotificationUri(getContext().getContentResolver(),
+					Task.URI);
+			break;
 		case Notification.BASEITEMCODE:
 			id = Long.parseLong(uri.getLastPathSegment());
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
-					.query(Notification.TABLE_NAME,
-							projection,
+					.query(Notification.TABLE_NAME, projection,
 							Notification.Columns._ID + " IS ?",
 							new String[] { String.valueOf(id) }, null, null,
 							sortOrder);
@@ -361,8 +387,7 @@ public class MyContentProvider extends ContentProvider {
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
-					.query(Notification.WITH_TASK_VIEW_NAME,
-							projection,
+					.query(Notification.WITH_TASK_VIEW_NAME, projection,
 							Notification.Columns._ID + " IS ?",
 							new String[] { String.valueOf(id) }, null, null,
 							sortOrder);
@@ -372,8 +397,8 @@ public class MyContentProvider extends ContentProvider {
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
-					.query(Notification.TABLE_NAME, projection,
-							selection, selectionArgs, null, null, sortOrder);
+					.query(Notification.TABLE_NAME, projection, selection,
+							selectionArgs, null, null, sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
 		case Notification.WITHTASKQUERYCODE:

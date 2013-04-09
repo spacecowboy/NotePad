@@ -201,22 +201,10 @@ public class Notification extends DAO {
 	/**
 	 * Returns date and time formatted in text in local time zone
 	 * 
-	 * @return
 	 */
 	public CharSequence getLocalDateTimeText(final Context context) {
 		// TODO respect global settings for 24 hour clock?
-		//final Calendar cal = Calendar.getInstance();
-		//cal.setTimeInMillis(time);
-
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		return TimeFormatter.getLocalDateString(context, prefs.getString(
-				context.getString(R.string.key_pref_dateformat_long),
-				context.getString(R.string.dateformat_long_1)), time);
-		/*
-		return DateFormat.format(prefs.getString(
-				context.getString(R.string.key_pref_dateformat_long),
-				context.getString(R.string.dateformat_long_1)), cal);*/
+		return TimeFormatter.getLocalDateStringLong(context, time);
 	}
 
 	@Override

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Jonas Kalderstam
+ * Copyright (C) 2013 Jonas Kalderstam
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -16,6 +16,7 @@
 
 package com.nononsenseapps.ui;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
@@ -32,70 +33,41 @@ import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 
 /**
- * A simple textview that displays time. It expects input to be a string
- * represtentation of time in milliseconds since the epoch.
- * 
- * @author Jonas
+ * A simple textview that can display time.
  * 
  */
 public class DateView extends TextView {
 	private static final int SECONDS_PER_DAY = 3600;
 	// private String day = "E, d MMM";
-	public static final String day = "MMM d";
-	public static final String time = "kk:mm";
+	//public static final String day = "MMM d";
+	//public static final String time = "kk:mm";
 
 	private final Context mContext;
-	private final String dateFormat;
 	
-	private final Calendar mCalendar;
+	//private final Calendar mCalendar;
+	
+	final SimpleDateFormat mDateFormatter;
 
 	public DateView(Context context) {
 		super(context);
 		this.mContext = context;
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		dateFormat = prefs.getString(
-				context.getString(R.string.key_pref_dateformat_short),
-				context.getString(R.string.dateformat_short_1));
-		mCalendar = Calendar.getInstance();
+		mDateFormatter = TimeFormatter.getLocalFormatterShort(context);
 	}
 
 	public DateView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.mContext = context;
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		dateFormat = prefs.getString(
-				context.getString(R.string.key_pref_dateformat_short),
-				context.getString(R.string.dateformat_short_1));
-		mCalendar = Calendar.getInstance();
+		mDateFormatter = TimeFormatter.getLocalFormatterShort(context);
 	}
 
 	public DateView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		this.mContext = context;
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		dateFormat = prefs.getString(
-				context.getString(R.string.key_pref_dateformat_short),
-				context.getString(R.string.dateformat_short_1));
-		mCalendar = Calendar.getInstance();
+		mDateFormatter = TimeFormatter.getLocalFormatterShort(context);
 	}
-
-	/*
-	@Override
-	public void setText(CharSequence text, BufferType type) {
-		if (text == null || text.toString().length() == 0)
-			super.setText("", type);
-		else {
-			super.setText(toDate(mContext, text.toString()), type);
-		}
-	}
-*/
+	
 	public void setTimeText(final long time) {
-		//mCalendar.setTimeInMillis(time);
-		//super.setText(DateFormat.format(dateFormat, mCalendar));
-		super.setText(TimeFormatter.getLocalDateString(mContext, dateFormat, time));
+		super.setText(mDateFormatter.format(new Date(time)));
 	}
 
 	public static CharSequence toDate(final Context context, String time3339) {
@@ -104,7 +76,7 @@ public class DateView extends TextView {
 		time.parse3339(time3339);
 
 		// Ugg... Not beautiful... :-(
-		String dateFormatMicro = day;
+		String dateFormatMicro = "MMM d";
 		String dateFormatForRes = context.getString(R.string.dateformat_micro);
 
 		if (dateFormatForRes != null) {

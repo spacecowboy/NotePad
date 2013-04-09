@@ -84,6 +84,41 @@ public abstract class DAO {
 		}
 		return result.toString();
 	}
+	
+	/**
+	 * Second and Third value is wrapped in '' ticks, NOT the first.
+	 * 
+	 * @param asColumns
+	 * @param exceptCol1
+	 * @param asValue1
+	 * @param exceptCol
+	 * @param asValue
+	 * @return
+	 */
+	protected static String asEmptyCommaStringExcept(final String[] asColumns,
+			final String exceptCol1, final String asValue1,
+			final String exceptCol2, final String asValue2,
+			final String exceptCol3, final String asValue3) {
+		StringBuilder result = new StringBuilder();
+		for (final String colName: asColumns) {
+			if (result.length() > 0)
+				result.append(",");
+			
+			if (colName.equals(exceptCol2)) {
+				result.append("'").append(asValue2).append("'");
+			}
+			else if (colName.equals(exceptCol3)) {
+				result.append("'").append(asValue3).append("'");
+			}
+			else if (colName.equals(exceptCol1)) {
+				result.append(asValue1);
+			}
+			else {
+				result.append("null");
+			}
+		}
+		return result.toString();
+	}
 
 	public Uri getUri() {
 		return Uri.withAppendedPath(getBaseUri(), Long.toString(_id));

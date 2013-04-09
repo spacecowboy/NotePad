@@ -253,18 +253,7 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 		}
 		else {
 			// Due date
-			final SharedPreferences prefs = PreferenceManager
-					.getDefaultSharedPreferences(getActivity());
-
-			//final Calendar cal = Calendar.getInstance();
-			//cal.setTimeInMillis(mTask.due);
-			dueDateBox.setText(TimeFormatter.getLocalDateString(getActivity(), prefs.getString(getActivity()
-					.getString(R.string.key_pref_dateformat_long),
-					getActivity().getString(R.string.dateformat_long_1)), mTask.due));
-			/*
-			dueDateBox.setText(DateFormat.format(prefs.getString(getActivity()
-					.getString(R.string.key_pref_dateformat_long),
-					getActivity().getString(R.string.dateformat_long_1)), cal));*/
+			dueDateBox.setText(TimeFormatter.getLocalDateStringLong(getActivity(), mTask.due));
 		}
 	}
 

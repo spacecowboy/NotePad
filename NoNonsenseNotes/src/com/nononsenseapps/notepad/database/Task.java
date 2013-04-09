@@ -22,11 +22,45 @@ import android.util.Log;
  * Provides convenience methods for moving and indenting items.
  */
 public class Task extends DAO {
-
+	
+	// Use this to identify headers in SectionedViews
+	// Will be placed as the title to identify the headers from items
+	// headers wont have proper ids
+	//public static final String MAGIC_HEADER_TITLE = "af0bae0e5dfb72efb4e74e5e49c4c2dfa93bae0b";
+	// Used to separate tasks with due dates from completed and from tasks with no date
+	public static final String SECRET_TYPEID = "secret_typeid";
+	public static final String SECRET_TYPEID2 = "secret_typeid2";
+	
 	// SQL convention says Table name should be "singular"
 	public static final String TABLE_NAME = "task";
 	public static final String DELETE_TABLE_NAME = "deleted_task";
+	private static final String SECTIONED_DATE_VIEW = "sectioned_date_view";
+	public static String getSECTION_DATE_VIEW_NAME(final String listId) {
+		return new StringBuilder().append(SECTIONED_DATE_VIEW).append("_")
+		.append(listId).toString();
+	}
+	
+	// Used in sectioned view date
+	static final String FAR_FUTURE = "strftime('%s','3999-01-01') * 1000";
+	static final String OVERDUE = "strftime('%s', '1970-01-01') * 1000";
+	static final String TODAY_START = "strftime('%s','now','localtime','start of day', 'utc') * 1000";
+	static final String TODAY_PLUS(final int offset) { 
+		return "strftime('%s','now','localtime','+" 
+				+ Integer.toString(offset) 
+				+ " days','start of day', 'utc') * 1000";
+		}
 
+	// Code used to decode title of date header
+	public static final String HEADER_KEY_TODAY = "today+0";
+	public static final String HEADER_KEY_PLUS1 = "today+1";
+	public static final String HEADER_KEY_PLUS2 = "today+2";
+	public static final String HEADER_KEY_PLUS3 = "today+3";
+	public static final String HEADER_KEY_PLUS4 = "today+4";
+	public static final String HEADER_KEY_OVERDUE = "overdue";
+	public static final String HEADER_KEY_LATER = "later";
+	public static final String HEADER_KEY_NODATE = "nodate";
+	public static final String HEADER_KEY_COMPLETE = "complete";
+	
 	public static final String CONTENT_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps.note";
 
 	public static final Uri URI = Uri.withAppendedPath(
@@ -47,6 +81,8 @@ public class Task extends DAO {
 	public static final int UNINDENTITEMCODE = 208;
 	public static final int DELETEDQUERYCODE = 209;
 	public static final int DELETEDITEMCODE = 210;
+	public static final int SECTIONEDDATEQUERYCODE = 211;
+	public static final int SECTIONEDDATEITEMCODE = 212;
 	// Legacy support, these also need to use legacy projections
 	public static final int LEGACYBASEURICODE = 221;
 	public static final int LEGACYBASEITEMCODE = 222;
@@ -76,6 +112,11 @@ public class Task extends DAO {
 				+ DELETEDQUERY, DELETEDQUERYCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
 				+ DELETEDQUERY + "/#", DELETEDITEMCODE);
+		
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
+				+ SECTIONED_DATE_VIEW, SECTIONEDDATEQUERYCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
+				+ SECTIONED_DATE_VIEW + "/#", SECTIONEDDATEITEMCODE);
 
 		// Legacy URIs
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
@@ -108,6 +149,10 @@ public class Task extends DAO {
 	// Special URI where the last column will be a count
 	public static final Uri URI_INDENTED_QUERY = Uri.withAppendedPath(URI,
 			INDENTEDQUERY);
+	
+	// Query the view with date section headers
+	public static final Uri URI_SECTIONED_BY_DATE = Uri.withAppendedPath(URI,
+			SECTIONED_DATE_VIEW);
 
 	// Special URI to use when a move is requested
 	public static final Uri URI_WRITE_MOVESUBTREE = Uri.withAppendedPath(URI,
@@ -169,6 +214,9 @@ public class Task extends DAO {
 		public static final String[] FIELDS = { _ID, TITLE, NOTE, COMPLETED,
 				DUE, UPDATED, LEFT, RIGHT, DBLIST, GTASKACCOUNT, GTASKID,
 				DROPBOXACCOUNT, DROPBOXID };
+		public static final String[] FIELDS_NO_ID = { TITLE, NOTE, COMPLETED,
+			DUE, UPDATED, LEFT, RIGHT, DBLIST, GTASKACCOUNT, GTASKID,
+			DROPBOXACCOUNT, DROPBOXID };
 		public static final String[] SHALLOWFIELDS = { _ID, TITLE, NOTE, DBLIST, COMPLETED,
 			DUE, UPDATED };
 		public static final String[] DELETEFIELDS = { _ID, TITLE, NOTE,
@@ -227,6 +275,152 @@ public class Task extends DAO {
 			+ Columns.TITLE + " TEXT NOT NULL DEFAULT ''," + Columns.NOTE
 			+ " TEXT NOT NULL DEFAULT ''," + Columns.COMPLETED + " TEXT,"
 			+ Columns.DUE + " TEXT," + Columns.DBLIST + " INTEGER)";
+	
+	/**
+	 * This is a view which returns the tasks in the specified list with
+	 * headers suitable for dates, if any tasks would be sorted under them.
+	 * Provider hardcodes the sort order for this.
+	 */
+	public static final String CREATE_SECTIONED_DATE_VIEW(final String listId){
+		final String sListId = "'" + listId + "'";
+		return new StringBuilder()
+	.append("CREATE TEMP VIEW IF NOT EXISTS ")
+	.append(getSECTION_DATE_VIEW_NAME(listId))
+	// Tasks WITH dates NOT completed, secret 0
+	.append(" AS SELECT ")
+	.append(arrayToCommaString(Columns.FIELDS))
+	.append(",0").append(" AS ").append(SECRET_TYPEID)
+	.append(",1").append(" AS ").append(SECRET_TYPEID2)
+	.append(" FROM ").append(TABLE_NAME)
+	.append(" WHERE ").append(Columns.COMPLETED).append(" IS null ")
+	.append(" AND ").append(Columns.DUE).append(" IS NOT null ")
+	.append(" UNION ALL ")
+	// Tasks NO dates NOT completed, secret 1
+	.append(" SELECT ")
+	.append(arrayToCommaString(Columns.FIELDS))
+	.append(",1").append(" AS ").append(SECRET_TYPEID)
+	.append(",1").append(" AS ").append(SECRET_TYPEID2)
+	.append(" FROM ").append(TABLE_NAME)
+	.append(" WHERE ").append(Columns.COMPLETED).append(" IS null ")
+	.append(" AND ").append(Columns.DUE).append(" IS null ")
+	.append(" UNION ALL ")
+	// Tasks completed, secret 2 + 1
+	.append(" SELECT ")
+	.append(arrayToCommaString(Columns.FIELDS))
+	.append(",3").append(" AS ").append(SECRET_TYPEID)
+	.append(",1").append(" AS ").append(SECRET_TYPEID2)
+	.append(" FROM ").append(TABLE_NAME)
+	.append(" WHERE ").append(Columns.COMPLETED).append(" IS NOT null ")
+	// TODAY
+	.append(" UNION ALL ")
+	.append(" SELECT -1,")
+	.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID, Columns.DUE, TODAY_START, 
+			Columns.TITLE, HEADER_KEY_TODAY, Columns.DBLIST, listId))
+	.append(",0,0")
+	// Only show header if there are tasks under it
+	.append(" WHERE EXISTS(SELECT _ID FROM ").append(TABLE_NAME)
+	.append(" WHERE ").append(Columns.DBLIST).append(" IS ").append(sListId)
+	.append(" AND ").append(Columns.DUE).append(" BETWEEN ")
+	.append(TODAY_START).append(" AND ").append(TODAY_PLUS(1))
+	.append(") ")
+	// TOMORROW (Today + 1)
+	.append(" UNION ALL ")
+	.append(" SELECT -1,")
+	.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID, Columns.DUE, TODAY_PLUS(1),
+			Columns.TITLE, HEADER_KEY_PLUS1, Columns.DBLIST, listId))
+	.append(",0,0")
+	// Only show header if there are tasks under it
+	.append(" WHERE EXISTS(SELECT _ID FROM ").append(TABLE_NAME)
+	.append(" WHERE ").append(Columns.DBLIST).append(" IS ").append(sListId)
+	.append(" AND ").append(Columns.DUE).append(" BETWEEN ")
+	.append(TODAY_PLUS(1)).append(" AND ").append(TODAY_PLUS(2))
+	.append(") ")
+	// Today + 2
+	.append(" UNION ALL ")
+	.append(" SELECT -1,")
+	.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID, Columns.DUE, TODAY_PLUS(2),
+			Columns.TITLE, HEADER_KEY_PLUS2, Columns.DBLIST, listId))
+	.append(",0,0")
+	// Only show header if there are tasks under it
+	.append(" WHERE EXISTS(SELECT _ID FROM ").append(TABLE_NAME)
+	.append(" WHERE ").append(Columns.DBLIST).append(" IS ").append(sListId)
+	.append(" AND ").append(Columns.DUE).append(" BETWEEN ")
+	.append(TODAY_PLUS(2)).append(" AND ").append(TODAY_PLUS(3))
+	.append(") ")
+	// Today + 3
+	.append(" UNION ALL ")
+	.append(" SELECT -1,")
+	.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID, Columns.DUE, TODAY_PLUS(3),
+			Columns.TITLE, HEADER_KEY_PLUS3, Columns.DBLIST, listId))
+	.append(",0,0")
+	// Only show header if there are tasks under it
+	.append(" WHERE EXISTS(SELECT _ID FROM ").append(TABLE_NAME)
+	.append(" WHERE ").append(Columns.DBLIST).append(" IS ").append(sListId)
+	.append(" AND ").append(Columns.DUE).append(" BETWEEN ")
+	.append(TODAY_PLUS(3)).append(" AND ").append(TODAY_PLUS(4))
+	.append(") ")
+	// Today + 4
+	.append(" UNION ALL ")
+	.append(" SELECT -1,")
+	.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID, Columns.DUE, TODAY_PLUS(4),
+			Columns.TITLE, HEADER_KEY_PLUS4, Columns.DBLIST, listId))
+	.append(",0,0")
+	// Only show header if there are tasks under it
+	.append(" WHERE EXISTS(SELECT _ID FROM ").append(TABLE_NAME)
+	.append(" WHERE ").append(Columns.DBLIST).append(" IS ").append(sListId)
+	.append(" AND ").append(Columns.DUE).append(" BETWEEN ")
+	.append(TODAY_PLUS(4)).append(" AND ").append(TODAY_PLUS(5))
+	.append(") ")
+	// Overdue (0)
+	.append(" UNION ALL ")
+	.append(" SELECT -1,")
+	.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID, Columns.DUE, OVERDUE,
+			Columns.TITLE, HEADER_KEY_OVERDUE, Columns.DBLIST, listId))
+	.append(",0,0")
+	// Only show header if there are tasks under it
+	.append(" WHERE EXISTS(SELECT _ID FROM ").append(TABLE_NAME)
+	.append(" WHERE ").append(Columns.DBLIST).append(" IS ").append(sListId)
+	.append(" AND ").append(Columns.DUE).append(" BETWEEN ")
+	.append(OVERDUE).append(" AND ").append(TODAY_START)
+	.append(") ")
+	// Later
+	.append(" UNION ALL ")
+	.append(" SELECT '-1',")
+	.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID, Columns.DUE, TODAY_PLUS(5),
+			Columns.TITLE, HEADER_KEY_LATER, Columns.DBLIST, listId))
+	.append(",0,0")
+	// Only show header if there are tasks under it
+	.append(" WHERE EXISTS(SELECT _ID FROM ").append(TABLE_NAME)
+	.append(" WHERE ").append(Columns.DBLIST).append(" IS ").append(sListId)
+	.append(" AND ").append(Columns.DUE).append(" >= ")
+	.append(TODAY_PLUS(5))
+	.append(") ")
+	// No date
+	.append(" UNION ALL ")
+	.append(" SELECT -1,")
+	.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID, Columns.DUE, "null",
+			Columns.TITLE, HEADER_KEY_NODATE, Columns.DBLIST, listId))
+	.append(",1,0")
+	// Only show header if there are tasks under it
+	.append(" WHERE EXISTS(SELECT _ID FROM ").append(TABLE_NAME)
+	.append(" WHERE ").append(Columns.DBLIST).append(" IS ").append(sListId)
+	.append(" AND ").append(Columns.DUE).append(" IS null ")
+	.append(" AND ").append(Columns.COMPLETED).append(" IS null ")
+	.append(") ")
+	// Complete, overdue to catch all
+	.append(" UNION ALL ")
+	.append(" SELECT -1,")
+	.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID, Columns.DUE, OVERDUE,
+			Columns.TITLE, HEADER_KEY_COMPLETE, Columns.DBLIST, listId))
+	.append(",2,0")
+	// Only show header if there are tasks under it
+	.append(" WHERE EXISTS(SELECT _ID FROM ").append(TABLE_NAME)
+	.append(" WHERE ").append(Columns.DBLIST).append(" IS ").append(sListId)
+	.append(" AND ").append(Columns.COMPLETED).append(" IS NOT null ")
+	.append(") ")
+	
+	.append(";").toString();
+	}
 
 	public String title = null;
 	public String note = null;
