@@ -1,3 +1,6 @@
 [submodule "drag-sort-listview"]
 	path = drag-sort-listview
 	url = https://github.com/spacecowboy/drag-sort-listview.git
+[submodule "wizardpager"]
+	path = wizardpager
+	url = git://github.com/spacecowboy/wizardpager.git
