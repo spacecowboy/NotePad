@@ -4,6 +4,7 @@ import java.util.Locale;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.SystemService;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity.CONTENTVIEW;
@@ -21,6 +22,7 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import android.animation.Animator;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
+import android.app.ActionBar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -31,6 +33,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -141,8 +144,8 @@ public class ActivityMain extends FragmentActivity implements
 				taskHint.setVisibility(View.GONE);
 			}
 			else if (getListId(intent) > 0) {
-				transaction.replace(R.id.fragment2,
-						TaskDetailFragment_.getInstance(getNoteShareText(intent),
+				transaction.replace(R.id.fragment2, TaskDetailFragment_
+						.getInstance(getNoteShareText(intent),
 								TaskListViewPagerFragment.getAList(this,
 										getListId(intent))), DETAILTAG);
 			}
@@ -163,8 +166,30 @@ public class ActivityMain extends FragmentActivity implements
 										getListId(intent))), DETAILTAG);
 			}
 
-			// also set up-navigation
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+			// Courtesy of Mr Roman Nurik
+			// Inflate a "Done" custom action bar view to serve as the "Up"
+			// affordance.
+			LayoutInflater inflater = (LayoutInflater) getActionBar()
+					.getThemedContext().getSystemService(
+							LAYOUT_INFLATER_SERVICE);
+			final View customActionBarView = inflater.inflate(
+					R.layout.actionbar_custom_view_done, null);
+			customActionBarView.findViewById(R.id.actionbar_done)
+					.setOnClickListener(new View.OnClickListener() {
+						@Override
+						public void onClick(View v) {
+							// "Done"
+							finish(); // TODO: don't just finish()!
+						}
+					});
+
+			// Show the custom action bar view and hide the normal Home icon and
+			// title.
+			final ActionBar actionBar = getActionBar();
+			actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
+					ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+							| ActionBar.DISPLAY_SHOW_TITLE);
+			actionBar.setCustomView(customActionBarView);
 		}
 		/*
 		 * Other case, is a list id or a tablet
@@ -245,8 +270,8 @@ public class ActivityMain extends FragmentActivity implements
 	}
 
 	/**
-	 * Returns the text that has been shared with the app. Does not check anything
-	 * other than EXTRA_SUBJECT AND EXTRA_TEXT
+	 * Returns the text that has been shared with the app. Does not check
+	 * anything other than EXTRA_SUBJECT AND EXTRA_TEXT
 	 */
 	String getNoteShareText(final Intent intent) {
 		StringBuilder retval = new StringBuilder();
@@ -272,8 +297,9 @@ public class ActivityMain extends FragmentActivity implements
 		if (intent == null) {
 			return false;
 		}
-		if (Intent.ACTION_SEND.equals(intent.getAction()) ||
-				"com.google.android.gm.action.AUTO_SEND".equals(intent.getAction())) {
+		if (Intent.ACTION_SEND.equals(intent.getAction())
+				|| "com.google.android.gm.action.AUTO_SEND".equals(intent
+						.getAction())) {
 			return true;
 		}
 
