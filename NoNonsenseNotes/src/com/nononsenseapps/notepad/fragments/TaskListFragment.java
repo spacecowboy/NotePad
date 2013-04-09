@@ -1,11 +1,14 @@
 package com.nononsenseapps.notepad.fragments;
 
 import java.security.InvalidParameterException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
 
+import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
@@ -86,6 +89,8 @@ public class TaskListFragment extends Fragment {
 						R.id.checkbox }, 0);
 
 		mAdapter.setViewBinder(new ViewBinder() {
+			SimpleDateFormat weekdayFormatter = TimeFormatter
+					.getLocalFormatterWeekday(getActivity());
 			boolean isHeader = false;
 			String sTemp = "";
 			final OnCheckedChangeListener checkBoxListener = new OnCheckedChangeListener() {
@@ -117,14 +122,11 @@ public class TaskListFragment extends Fragment {
 						else if (Task.HEADER_KEY_PLUS1.equals(sTemp)) {
 							sTemp = getString(R.string.date_header_tomorrow);
 						}
-						else if (Task.HEADER_KEY_PLUS2.equals(sTemp)) {
-							sTemp = "weekday2";
-						}
-						else if (Task.HEADER_KEY_PLUS3.equals(sTemp)) {
-							sTemp = "weekday3";
-						}
-						else if (Task.HEADER_KEY_PLUS4.equals(sTemp)) {
-							sTemp = "weekday4";
+						else if (Task.HEADER_KEY_PLUS2.equals(sTemp)
+								|| Task.HEADER_KEY_PLUS3.equals(sTemp)
+								|| Task.HEADER_KEY_PLUS4.equals(sTemp)) {
+							sTemp = weekdayFormatter.format(new Date(c
+									.getLong(4)));
 						}
 						else if (Task.HEADER_KEY_LATER.equals(sTemp)) {
 							sTemp = getString(R.string.date_header_future);
@@ -160,8 +162,6 @@ public class TaskListFragment extends Fragment {
 						}
 						else {
 							view.setVisibility(View.VISIBLE);
-							Log.d("nononsenseapps",
-									"list sees: " + c.getLong(colIndex));
 							((DateView) view).setTimeText(c.getLong(colIndex));
 						}
 					}

@@ -296,6 +296,7 @@
 	<string name="dateformat_micro">MMM d</string>
 	<string name="dateformat_short">E, d MMM</string>
 	<string name="dateformat_long">EEEE, d MMMM</string>
+	<string name="dateformat_weekday">EEEE</string>
 	<string name="dateformat_short_1">E kk:mm, d MMM</string>
 	<string name="dateformat_short_2">E h:mm a, d MMM</string>
 	<string name="dateformat_short_3">E, d MMM</string>
