@@ -8,6 +8,12 @@ import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
 
+import com.mobeta.android.dslv.DragSortListView.DragSortListener;
+import com.mobeta.android.dslv.DragSortListView.DropListener;
+import com.mobeta.android.dslv.DragSortListView.RemoveListener;
+import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
+import com.mobeta.android.dslv.DragSortListView;
+import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
@@ -19,14 +25,13 @@ import com.nononsenseapps.utils.views.TitleNoteTextView;
 import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -40,16 +45,16 @@ import android.widget.CompoundButton;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
-@EFragment
+@EFragment(R.layout.fragment_task_list)
 public class TaskListFragment extends Fragment {
 
 	public static final String LIST_ID = "list_id";
 
 	// DragSortListView listView;
 	@ViewById(android.R.id.list)
-	AbsListView listView;
+	DragSortListView listView;
 
-	SimpleCursorAdapter mAdapter;
+	SimpleSectionsAdapter mAdapter;
 
 	private long mListId = -1;
 
@@ -87,6 +92,32 @@ public class TaskListFragment extends Fragment {
 						Task.Columns.DUE, Task.Columns.COMPLETED }, new int[] {
 						android.R.id.text1, android.R.id.text1, R.id.date,
 						R.id.checkbox }, 0);
+
+		// Set a drag listener
+		mAdapter.setDropListener(new DropListener() {
+			@Override
+			public void drop(int from, int to) {
+				Log.d("nononsenseapps drag", "Position from " + from + " to " + to);
+
+				final Task fromTask = new Task((Cursor) mAdapter
+						.getItem(from));
+				final Task toTask = new Task((Cursor) mAdapter.getItem(to));
+				
+				fromTask.moveTo(getActivity().getContentResolver(), toTask);
+			}
+		});
+		/*
+		 * listAdapter.setRemoveListener(new RemoveListener() {
+		 * 
+		 * @Override public void remove(int which) { Log.d(TAG, "Remove pos: " +
+		 * which); Log.d(TAG, "Remove id: " + listAdapter.getItemId(which));
+		 * 
+		 * getActivity().getContentResolver().delete(
+		 * Uri.withAppendedPath(Task.URI, "" + listAdapter.getItemId(which)),
+		 * null, null); }
+		 * 
+		 * });
+		 */
 
 		mAdapter.setViewBinder(new ViewBinder() {
 			SimpleDateFormat weekdayFormatter = TimeFormatter
@@ -175,14 +206,6 @@ public class TaskListFragment extends Fragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		View view = inflater.inflate(R.layout.fragment_task_list, container,
-				false);
-		return view;
-	}
-
-	@Override
 	public void onActivityCreated(final Bundle state) {
 		super.onActivityCreated(state);
 
@@ -191,13 +214,14 @@ public class TaskListFragment extends Fragment {
 
 					@Override
 					public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+						// Task.URI_SECTIONED_BY_DATE
 						// Task.URI_INDENTED_QUERY
 						// Task.Columns.LEFT
 						return new CursorLoader(getActivity(),
-								Task.URI_SECTIONED_BY_DATE,
-								Task.Columns.FIELDS, Task.Columns.DBLIST
-										+ " IS ?", new String[] { Long
-										.toString(mListId) }, null);
+								Task.URI_INDENTED_QUERY, Task.Columns.FIELDS,
+								Task.Columns.DBLIST + " IS ?",
+								new String[] { Long.toString(mListId) },
+								Task.Columns.LEFT);
 					}
 
 					@Override
@@ -226,6 +250,7 @@ public class TaskListFragment extends Fragment {
 				}
 			}
 		});
+
 	}
 
 	@Override
@@ -284,7 +309,9 @@ public class TaskListFragment extends Fragment {
 		mListener = null;
 	}
 
-	static class SimpleSectionsAdapter extends SimpleCursorAdapter {
+	static class SimpleSectionsAdapter extends SimpleDragSortCursorAdapter {
+		DropListener dropListener = null;
+		RemoveListener removeListener = null;
 		final int mItemLayout;
 		final int mHeaderLayout;
 		final static int itemType = 0;
@@ -295,7 +322,6 @@ public class TaskListFragment extends Fragment {
 			super(context, layout, c, from, to, flags);
 			mItemLayout = layout;
 			mHeaderLayout = headerLayout;
-
 		}
 
 		int getViewLayout(final int position) {
@@ -305,6 +331,29 @@ public class TaskListFragment extends Fragment {
 			else {
 				return mHeaderLayout;
 			}
+		}
+
+		@Override
+		public void remove(int which) {
+			if (removeListener != null) removeListener.remove(which);
+			super.remove(which);
+
+		}
+
+		@Override
+		public void drop(int from, int to) {
+			// Call any listener that has been defined
+			if (dropListener != null) dropListener.drop(from, to);
+			// Call super to handle UI mapping (for smoothness)
+			super.drop(from, to);
+		}
+
+		public void setDropListener(DropListener dropListener) {
+			this.dropListener = dropListener;
+		}
+
+		public void setRemoveListener(RemoveListener removeListener) {
+			this.removeListener = removeListener;
 		}
 
 		@Override

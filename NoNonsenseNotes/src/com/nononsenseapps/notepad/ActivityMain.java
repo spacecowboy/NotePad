@@ -185,7 +185,19 @@ public class ActivityMain extends FragmentActivity implements
 						@Override
 						public void onClick(View v) {
 							// "Done"
-							finish(); // TODO: don't just finish()!
+							// finish(); // TODO: don't just finish()!
+							final Intent intent = new Intent()
+									.setAction(Intent.ACTION_VIEW)
+									.setClass(ActivityMain.this, ActivityMain_.class)
+									.setFlags(
+											Intent.FLAG_ACTIVITY_CLEAR_TASK
+													| Intent.FLAG_ACTIVITY_NEW_TASK);
+							// TODO should ideally load the same list again
+							// if (mTask != null) {
+							// intent.setData(TaskList.getUri(mTask.dblist));
+							// }
+							startActivity(intent);
+							finish();
 						}
 					});
 

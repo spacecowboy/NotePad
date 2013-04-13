@@ -192,40 +192,52 @@ public class DBProviderMovementTest  extends AndroidTestCase  {
 		final ArrayList<Task> oldtasks = getTasks(tl._id);
 
 		// Move 5 to 4
-		final Task old = oldtasks.get(fromPos);
-		final long intendedLeft = oldtasks.get(toPos).left;
-		final long intendedRight = oldtasks.get(toPos).right;
-
-		final int result = old.move(resolver, intendedLeft, intendedRight);
+		final Task movingTask = oldtasks.get(fromPos);
+		final Task targetTask = oldtasks.get(toPos);
+		
+		final int result = movingTask.moveTo(resolver, targetTask);
 		
 		// Verity that things changed or not
-		if (old.left != intendedLeft)
-			assertTrue("Moving a subtree should update rows", 0 < result);
+		if (movingTask._id != targetTask._id)
+			assertTrue("Moving a task should update rows", 0 < result);
 		else
 			assertTrue(
-					"Moving a subtree to its own location shouldn't change anything",
+					"Moving a task to itself shouldn't change anything",
 					0 == result);
-
-		// t = new Task(t.getmoveTo(intendedLeft));
-		// assertEquals(t.moveSubTree(t.getMoveTo(intendedLeft)), 1, 2);
 
 		// Find new values
 		final ArrayList<Task> newtasks = getTasks(tl._id);
 		Task newone = null;
+		Task newtarget = null;
 
 		for (Task t : newtasks) {
-			if (t._id == old._id) {
+			if (t._id == movingTask._id) {
 				newone = t;
-				break;
+			}
+			if (t._id == targetTask._id){
+				newtarget = t;
 			}
 		}
+		Log.d("nononsenseapps test", "old, target, new, newtarget: " + movingTask.left +
+				","+ movingTask.right + " " + targetTask.left +
+				","+ targetTask.right + " " + newone.left +
+				","+ newone.right + " " + newtarget.left +
+				"," + newtarget.right);
 
 		assertNotNull("Couldnt find the moved task", newone);
-		// Left can shift slightly if we're moving a subtree
-		/*
-		assertEquals("Position is not what was intended: " + old.left + " "
-				+ old.right + "," + newone.left + " " + newone.right,
-				intendedLeft, (long) newone.left);*/
+		
+		if (targetTask.left < movingTask.left){
+			assertEquals("Left value does not equal target", targetTask.left, newone.left);
+			assertEquals("Right value does not equal target left + 1", targetTask.left + 1, (long) newone.right);
+		}
+		else if (targetTask.right > movingTask.right){
+			assertEquals("Left value does not equal target right - 1", targetTask.right - 1, (long) newone.left);
+			assertEquals("Right value does not equal target", targetTask.right, newone.right);
+		}
+		
+		assertEquals("Width should be 1 after a move", 1, newone.right - newone.left);
+
+		//assertEquals("Target should have moved 2 steps", 2,);
 
 		assertTrue("Number of tasks should not change",
 				oldtasks.size() == newtasks.size());

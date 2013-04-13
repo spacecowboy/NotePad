@@ -38,6 +38,12 @@
             android:focusableInTouchMode="false"
             android:text="" />
     </com.nononsenseapps.ui.DelegateFrame>
+    
+    <View android:id="@+id/dragpadding"  
+        android:layout_width="@dimen/drag_grip_avoid_padding"
+        android:layout_height="1dp"
+        android:layout_alignParentRight="true"
+        />
 
     <com.nononsenseapps.utils.views.TitleNoteTextView
         xmlns:ttv="http://schemas.android.com/apk/res/com.nononsenseapps.utils.views"
@@ -45,7 +51,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_alignParentRight="true"
+        android:layout_toLeftOf="@+id/dragpadding"
         android:layout_toRightOf="@+id/checkboxcontainer"
         android:layout_alignBaseline="@+id/checkboxcontainer"
         android:ellipsize="end"

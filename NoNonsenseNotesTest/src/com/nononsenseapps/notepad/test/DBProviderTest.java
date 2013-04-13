@@ -1,5 +1,9 @@
 package com.nononsenseapps.notepad.test;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
 import com.nononsenseapps.notepad.database.DatabaseHandler;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.Task;
@@ -32,25 +36,43 @@ public class DBProviderTest extends AndroidTestCase {
 	}
 
 	private void assertUriReturnsResult(final Uri uri, final String[] fields) {
-		assertUriReturnsResult(uri, fields, null, null);
+		assertUriReturnsResult(uri, fields, null, null, -1);
 	}
 
 	private void assertUriReturnsResult(final Uri uri, final String[] fields,
-			final String where, final String[] whereArgs) {
+			final String where, final String[] whereArgs, final int count) {
 		final Cursor c = resolver.query(uri, fields, where, whereArgs, null);
-		final boolean notEmpty = c.moveToFirst();
+		final int cursorCount = c.getCount();
 		c.close();
-		assertTrue("Uri did not return a result: " + uri.getEncodedPath(),
-				notEmpty);
+		if (count < 0) {
+			assertTrue("Uri did not return a result: " + uri.getEncodedPath(),
+					cursorCount > 0);
+		}
+		else {
+			assertEquals("Uri did not return expected number of results",
+					count, cursorCount);
+		}
 	}
 
-	private TaskList getList() {
-		final Cursor c = resolver.query(TaskList.URI, TaskList.Columns.FIELDS,
-				null, null, null);
-		c.moveToFirst();
-		final TaskList result = new TaskList(c);
-		c.close();
+	private TaskList getNewList() {
+		TaskList result = new TaskList();
+		result.title = "111aaTestingList";
+		result.save(context);
 		return result;
+	}
+
+	private ArrayList<Task> insertSomeTasks(final TaskList list, final int count) {
+		ArrayList<Task> tasks = new ArrayList<Task>();
+		for (int i = 0; i < count; i++) {
+			Task t = new Task();
+			t.title = "testTask" + i;
+			t.note = "testNote" + i;
+			t.due = Calendar.getInstance().getTimeInMillis();
+			t.dblist = list._id;
+			t.save(context);
+			tasks.add(t);
+		}
+		return tasks;
 	}
 
 	@SmallTest
@@ -61,11 +83,33 @@ public class DBProviderTest extends AndroidTestCase {
 
 	@SmallTest
 	public void testTaskURIs() {
+		final TaskList list = getNewList();
+		final int taskCount = 5;
+		final List<Task> tasks = insertSomeTasks(list, taskCount);
+
 		assertUriReturnsResult(Task.URI, Task.Columns.FIELDS);
-		final TaskList list = getList();
 		assertUriReturnsResult(Task.URI_INDENTED_QUERY, Task.Columns.FIELDS,
 				Task.Columns.DBLIST + " IS ?",
-				new String[] { Long.toString(list._id) });
+				new String[] { Long.toString(list._id) }, taskCount);
+
+		// Sectioned Date query
+		assertUriReturnsResult(Task.URI_SECTIONED_BY_DATE, Task.Columns.FIELDS,
+				Task.Columns.DBLIST + " IS ?",
+				new String[] { Long.toString(list._id) }, taskCount + 1);
+
+		// History query
+		Task t = tasks.get(0);
+		final int histCount = 22;
+		for (int i = 0; i < 22; i++) {
+			t.title += " hist" + i;
+			t.save(getContext());
+		}
+		// Should return insert (1) + update count (histCount)
+		assertUriReturnsResult(Task.URI_TASK_HISTORY,
+				Task.Columns.HISTORY_COLUMNS, Task.Columns.HIST_TASK_ID
+						+ " IS ?", new String[] { Long.toString(t._id) },
+				histCount + 1);
+
 		// TODO remember legacy uris
 		// TODO need a projection mapper
 		// assertUriReturnsResult(LegacyDBHelper.NotePad.Notes.CONTENT_URI,
@@ -73,5 +117,12 @@ public class DBProviderTest extends AndroidTestCase {
 		// assertUriReturnsResult(
 		// LegacyDBHelper.NotePad.Notes.CONTENT_VISIBLE_URI,
 		// new String[] { LegacyDBHelper.NotePad.Notes.COLUMN_NAME_TITLE });
+
+		list.delete(context);
+
+		// Should return insert NOTHING since it should have been deleted
+		assertUriReturnsResult(Task.URI_TASK_HISTORY,
+				Task.Columns.HISTORY_COLUMNS, Task.Columns.HIST_TASK_ID
+						+ " IS ?", new String[] { Long.toString(t._id) }, 0);
 	}
 }

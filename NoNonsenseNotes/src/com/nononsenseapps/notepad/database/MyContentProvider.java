@@ -103,6 +103,7 @@ public class MyContentProvider extends ContentProvider {
 		int result = 0;
 		final Task t;
 		final SQLiteStatement stmt;
+		final String sql;
 		db.beginTransaction();
 
 		try {
@@ -157,18 +158,34 @@ public class MyContentProvider extends ContentProvider {
 					result += stmt.executeUpdateDelete();
 				}
 				break;
-			case Task.MOVESUBTREECODE:
-				// Move subtree
-
-				t = new Task(uri, values);
-				if (!t.shouldMove(values)) {
-					throw new SQLException(
-							"Cant move task without the correct information");
+			case Task.MOVEITEMLEFTCODE:
+				t = new Task(values);
+				sql = t.getSQLMoveItemLeft(values);
+				if (sql != null) {
+					stmt = db.compileStatement(sql);
+					result += stmt.executeUpdateDelete();
 				}
-
-				stmt = db.compileStatement(t.getSQLMoveSubTree(values));
-				result += stmt.executeUpdateDelete();
 				break;
+			case Task.MOVEITEMRIGHTCODE:
+				t = new Task(values);
+				sql = t.getSQLMoveItemRight(values);
+				if (sql != null) {
+					stmt = db.compileStatement(sql);
+					result += stmt.executeUpdateDelete();
+				}
+				break;
+//			case Task.MOVESUBTREECODE:
+//				// Move subtree
+//
+//				t = new Task(uri, values);
+//				if (!t.shouldMove(values)) {
+//					throw new SQLException(
+//							"Cant move task without the correct information");
+//				}
+//
+//				stmt = db.compileStatement(t.getSQLMoveSubTree(values));
+//				result += stmt.executeUpdateDelete();
+//				break;
 			case Task.BASEITEMCODE:
 				// regular update
 				t = new Task(uri, values);

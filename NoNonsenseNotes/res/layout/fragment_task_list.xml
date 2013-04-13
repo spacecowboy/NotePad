@@ -39,16 +39,19 @@
             android:divider="@android:color/transparent"
             android:dividerHeight="?attr/task_list_divider_height"
             android:drawSelectorOnTop="true"
-            app:collapsed_height="1dp"
-            app:drag_enabled="false"
+            app:collapsed_height="1px"
+            app:drag_enabled="true"
+            app:drag_handle_id="@+id/drag_handle"
             app:drag_scroll_start="0.33"
-            app:drag_start_mode="onDown"
+            app:drag_start_mode="onMove"
             app:float_alpha="1.0"
             app:float_background_color="@android:color/holo_blue_dark"
             app:remove_enabled="false"
             app:remove_mode="flingRemove"
             app:slide_shuffle_speed="0.3"
-            app:sort_enabled="false" >
+            app:sort_enabled="true"
+            tools:ignore="PxUsage" >
+
         </com.mobeta.android.dslv.DragSortListView>
     </FrameLayout>
 

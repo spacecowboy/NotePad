@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/taskItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/list_item_min_size" >
 
-    <TextView
-        android:id="@+id/indent"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:singleLine="true"
-        tools:ignore="SelectableText" />
+        android:minHeight="@dimen/list_item_min_size" >
 
-    <include layout="@layout/tasklist_item_card_section"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/indent" />
+        <TextView
+            android:id="@+id/indent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:singleLine="true"
+            tools:ignore="SelectableText" />
 
-</RelativeLayout>
+        <include
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/indent"
+            layout="@layout/tasklist_item_card_section" />
+    </RelativeLayout>
+    
+     <com.google.android.apps.dashclock.ui.DragGripView
+        android:id="@+id/drag_handle"
+        android:layout_width="@dimen/drag_grip_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="fill_vertical|end"
+        android:paddingEnd="8dp"
+        android:paddingTop="12dp"
+        android:paddingBottom="12dp"
+        android:color="?attr/drag_handle_color" />
+
+</FrameLayout>

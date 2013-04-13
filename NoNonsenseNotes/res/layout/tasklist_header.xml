@@ -17,6 +17,7 @@
         android:layout_height="wrap_content"
         android:ellipsize="end"
         android:singleLine="true"
+        android:paddingLeft="16dp"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="?textColorPrimary"
         android:textIsSelectable="false"

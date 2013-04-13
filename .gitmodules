@@ -4,9 +4,15 @@
 [submodule "wizardpager"]
 	path = wizardpager
 	url = git://github.com/spacecowboy/wizardpager.git
-[submodule "android-betterpickers"]
-	path = android-betterpickers
-	url = git://github.com/derekbrameyer/android-betterpickers.git
 [submodule "Android-ViewPagerIndicator"]
 	path = Android-ViewPagerIndicator
 	url = git://github.com/JakeWharton/Android-ViewPagerIndicator.git
+[submodule "ShowcaseView"]
+	path = ShowcaseView
+	url = git://github.com/Espiandev/ShowcaseView.git
+[submodule "NineOldAndroids"]
+	path = NineOldAndroids
+	url = git://github.com/JakeWharton/NineOldAndroids.git
+[submodule "android-betterpickers"]
+	path = android-betterpickers
+	url = git://github.com/spacecowboy/android-betterpickers.git

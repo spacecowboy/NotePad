@@ -46,7 +46,7 @@ public class DateView extends TextView {
 	
 	//private final Calendar mCalendar;
 	
-	final SimpleDateFormat mDateFormatter;
+	SimpleDateFormat mDateFormatter;
 
 	public DateView(Context context) {
 		super(context);
@@ -57,7 +57,12 @@ public class DateView extends TextView {
 	public DateView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.mContext = context;
-		mDateFormatter = TimeFormatter.getLocalFormatterShort(context);
+		try {
+			mDateFormatter = TimeFormatter.getLocalFormatterShort(context);
+		} catch(Exception e) {
+			// Just to function in view
+			mDateFormatter = new SimpleDateFormat();
+		}
 	}
 
 	public DateView(Context context, AttributeSet attrs, int defStyle) {
