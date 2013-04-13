@@ -21,5 +21,10 @@
         android:showAsAction="ifRoom"
         android:title="@string/menu_share"
         android:actionProviderClass="android.widget.ShareActionProvider" />
+    <item
+        android:id="@+id/menu_timemachine"
+        android:orderInCategory="103"
+        android:showAsAction="never"
+        android:title="@string/timemachine"/>
 
 </menu>

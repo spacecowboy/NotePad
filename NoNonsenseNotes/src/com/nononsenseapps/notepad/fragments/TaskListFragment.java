@@ -183,8 +183,8 @@ public class TaskListFragment extends Fragment {
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onActivityCreated(final Bundle state) {
+		super.onActivityCreated(state);
 
 		getLoaderManager().restartLoader(0, null,
 				new LoaderCallbacks<Cursor>() {

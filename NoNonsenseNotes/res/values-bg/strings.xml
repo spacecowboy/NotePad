@@ -239,6 +239,31 @@ Use few if language need it. In English is the same.
 <string name="group_on_list_summary">Няколко известия ще бъдат групирани заедно, ако те принадлежат към същия списък.</string>
 <string name="more">още</string>
 <string name="notifications">Известия</string>
+
+
+<string name="dashclock_tasks">Задачи</string>
+<string name="dashclock_restrict_to_tasks_in_a_specific_list">Ограничаване до задачите в определен списък</string>
+<string name="dashclock_show_overdue_tasks">Показване на просрочените задачи</string>
+<string name="dashclock_overdue_tasks_show">Просрочените задачи ще бъдат показвани</string>
+<string name="dashclock_overdue_tasks_hide">Просрочените задачи ще бъдат скрити</string>
+
+<string name="dashclock_title_activity_tasks_settings">Настройки на NoNonsense бележки</string>
+<string name="dashclock_pref_header_general">Общи</string>
+
+<string name="dashclock_due_upper_limit_title">Ограничаване до последните задачи</string>
+<string name="dashclock_today">Днес</string>
+<string name="dashclock_tomorrow">Утре</string>
+<string name="dashclock_next7">Следващите 7 дни</string>
+<string name="dashclock_anytime">По всяко време</string>
+<string name="dashclock_will_show_as_many_as_possible">Ще покаже възможно най-много</string>
+<string name="dashclock_will_only_show_the_task_due_first">Ще покаже само първата задача</string>
+<string name="dashclock_show_only_the_next_task">Покажи само следващата задача</string>
+<string name="dashclock_header_shown">Името на списъка ще бъде показвано с удебелен шрифт. Ако е избрано „Всички списъци“, ще се показва „Задачи“.</string>
+<string name="dashclock_first_task_shown">Името на първата задача ще бъде показвано с удебелен шрифт.</string>
+<string name="dashclock_display_header">Показване на заглавната област</string>
+
+
+<!-- Store text -->
 <string name="google_play_promo_80_char_limit">Приложение за бележки и задачи с красив вид и синхронизация с Google Задачи.</string>
 <string name="google_play_description">Приложение за бележки и задачи с отворен код, с интерфейс за смартфони и таблети. Синхронизира се с вашия профил в Google, за да пази вашите бележки и задачи на сигурно място в облака, без да изисква от вас да въвеждате пароли!\n\nВъзможности:\n* Известия / Напомняния\n* Избор на език\n* Възможност за промяна на интерфейса\n* Джаджа с преоразмеряване и конфигуриране\n* Превъзходна поддръжка на таблети, която наподобява функциите на Gmail\n* Holo теми, така че да съответства на останалата част от Android\n* Автоматично синхронизиране с Google Задачи\n* Възможност за задаване на пароли на бележките\n* Преместване на бележките между различни списъци\n* Интеграция с джаджата Дневен ред на Андроид\n* Търсене във вашите бележки (не само в заглавията)\n* Промяна на шрифта и размера на текста!\n\nЗабележка:\nИма бъг в Android 4.2, който се проявява във всички приложения, които използват известия. Ако зададете известията да не вибрират (това е по подразбиране), след което зададете телефона си на безшумен режим (само вибрация), известията винаги ще вибрират, въпреки че това е изрично изключено.\nОще веднъж, това е неизправност в Android, не е бъг в приложението.\n\nМожете да помогнете за превода на приложението, просто отидете на:\nhttp://translate.nononsenseapps.com\n\nАко имате някакви проблеми или искате да съобщите за грешки, не се колебайте да се свържете с нас!\n+NoNonsenseApps\nили\nги докладвайте в сайта за проблеми:\nhttps://github.com/spacecowboy/NotePad/issues\n\nТова приложение е с отворен код, достъпен онлайн на адрес:\nhttps://github.com/spacecowboy/NotePad\n\nИма и платена (дарителска) версия на това приложение за тези, които искат да ни подкрепят в разработките:\nhttps://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>

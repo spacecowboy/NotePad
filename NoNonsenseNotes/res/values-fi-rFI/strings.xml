@@ -21,6 +21,7 @@ limitations under the License.
 <string name="title_create">Uusi muistiinpano</string>
 <string name="title_edit">Muokkaa: %1$s</string>
 <string name="menu_add">Uusi muistiinpano</string>
+<string name="menu_save_and_add">Tallenna ja avaa uusi muistiinpano</string>
 <string name="menu_delete">Poista</string>
 <string name="menu_revert">Kumoa muutokset</string>
 <string name="menu_copy">Kopioi muistiinpano</string>
@@ -105,6 +106,7 @@ limitations under the License.
 <string name="automatic">Automaattinen</string>
 <string name="preferences_week_start_day_dialog">Viikon aloituspäivä</string>
 <string name="preferences_week_start_day_title">Viikon aloituspäivä</string>
+
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
@@ -209,11 +211,11 @@ Use few if language need it. In English is the same.
 <string name="default_list_set">Oletuslista asetettu</string>
 
 <string name="notecopied_one">Muistiinpano kopioitu</string>
-<string name="notecopied_other">%d muistiinpanoista kopioitu</string>
+<string name="notecopied_other">%d muistiinpanoa kopioitu</string>
 <string name="notedeleted_one">Muistiinpano poistettu</string>
-<string name="notedeleted_other">%d muistiinpanoista poistettu</string>
+<string name="notedeleted_other">%d muistiinpanoa poistettu</string>
 <string name="selected_one">Muistiinpano valittu</string>
-<string name="selected_other">%d muistiinpanoista valittu</string>
+<string name="selected_other">%d muistiinpanoa valittu</string>
 
 <string name="background_sync">Synkronointi taustalla</string>
 <string name="background_sync_info">Synkronoi kerran tunnissa</string>
@@ -237,6 +239,30 @@ Use few if language need it. In English is the same.
 <string name="group_on_list_summary">Useat ilmoitukset asetetaan samaan ryhmään, jos ne kuuluvat samaan listaan.</string>
 <string name="more">lisää</string>
 <string name="notifications">Ilmoitukset</string>
+
+
+<string name="dashclock_tasks">Tehtävät</string>
+<string name="dashclock_restrict_to_tasks_in_a_specific_list">Rajaa tietyssä listassa oleviin tehtäviin</string>
+<string name="dashclock_show_overdue_tasks">Näytä erääntyneet tehtävät</string>
+<string name="dashclock_overdue_tasks_show">Erääntyneet tehtävät näytetään</string>
+<string name="dashclock_overdue_tasks_hide">Erääntyneet tehtävät piilotetaan</string>
+
+<string name="dashclock_title_activity_tasks_settings">NoNonsense -muistiinpanojen asetukset</string>
+<string name="dashclock_pref_header_general">Yleiset</string>
+
+<string name="dashclock_due_upper_limit_title">Rajaa seuraavaksi erääntyviin tehtäviin</string>
+<string name="dashclock_today">Tänään</string>
+<string name="dashclock_tomorrow">Huomenna</string>
+<string name="dashclock_next7">Seuraavat 7 päivää</string>
+<string name="dashclock_anytime">Milloin tahansa</string>
+<string name="dashclock_will_show_as_many_as_possible">Näyttää niin paljon kuin mahdollista</string>
+<string name="dashclock_will_only_show_the_task_due_first">Näyttää vain erääntyvän tehtävän ensin</string>
+<string name="dashclock_show_only_the_next_task">Näytä vain seuraava tehtävä</string>
+<string name="dashclock_first_task_shown">Ensimmäisen tehtävän otsikko lihavoidaan</string>
+<string name="dashclock_display_header">Näytön tunniste</string>
+
+
+<!-- Store text -->
 <string name="google_play_promo_80_char_limit">Siisti sovellus muistiinpanojen, tehtävien ja muistilistojen tekoon Google Tasks -synkronoinnilla.</string>
 <string name="google_play_description">Avoimen lähdekoodin muistio- ja tehtävälistasovellus, jossa on puhelimille ja tableteille soveltuva käyttöliittymä. Synkronoi sovellus Google-tilisi kanssa, ja pidä muistiinpanosi tallessa ilman, että sinun täytyy käyttää salasanoja!\n\nOminaisuudet:\n*Ilmoitukset/Muistutukset\n*Kielen valinta\n*Muokattava käyttöliittymä\n*Lisäohjelma, jonka kokoa voi muuttaa\n*Gmailin ominaisuuksia mukaileva tuki tableteille\n*Holo-teemaa noudattava käyttöliittymä\n*Automaattinen synkronointi Google Tasks -ominaisuudella \n*Mahdollisuus asettaa muistiinpanoille salasanoja\n*Siirrä muistiinpanoja listojen välillä\n*Integroitu Android Agenda -lisäohjelmaan\n*Hae kaikkia muistiinpanojasi (ei pelkästään otsikoita)\n*Muuta fonttia ja sen kokoa\n\nHuomaa:\nAndroid 4.2-käyttöjärjestelmässä on bugi, joka näkyy kaikissa ilmoituksia käyttävissä sovelluksissa. Vaikka ET ASETA ilmoituksiin värinähälytystä (tämä on oletuksena), ilmoitukset käyttävät värinää siitä huolimatta. Aseta siis puhelimesi äänettömälle (vain värinä).\n\nVoit auttaa sovelluksen kääntämisessä, mene osoitteeseen: http://translate.nononsenseapps.com\n\nJos sinulla on ongelmia tai haluat raportoida bugista, ota minuun yhteyttä!\n+NoNonsenseApps\ntai\nraportoi niistä osoitteessa: https://github.com/spacecowboy/NotePad/issues\n\nTämän sovelluksen lähdekoodi on avoin ja on saatavilla osoitteessa:\nhttps://github.com/spacecowboy/NotePad\n\nTästä sovelluksesta on myös maksullinen versio niille, jotka haluavat tukea sovelluksen kehitystä: https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>

@@ -20,6 +20,8 @@
     <string name="app_name">Notes dev</string>
     <string name="title_create">New note</string>
     <string name="title_edit">Edit: %1$s</string>
+    <string name="timemachine">Time machine</string>
+    <string name="done">Done</string>
     <string name="menu_add">New note</string>
     <string name="menu_save_and_add">Save and open a new note</string>
     <string name="menu_delete">Delete</string>
@@ -127,13 +129,13 @@
     <string name="automatic">Automatic</string>
     <string name="preferences_week_start_day_dialog">Week starts on</string>
     <string name="preferences_week_start_day_title">Week starts on</string>
-    
+
     <!--
         Use few if language need it. In English is the same.
         <item quantity="few">Copied 2 notes.</item>
     -->
     <plurals name="notecopied_msg">
-      <item quantity="one">@string/notecopied_one</item>
+        <item quantity="one">@string/notecopied_one</item>
         <item quantity="other">@string/notecopied_other</item>
     </plurals>
     <plurals name="notedeleted_msg">
@@ -233,10 +235,8 @@
 \n\nIn fact I recommend going into settings anyway just to see what options there are. You can adjust the font and size of the text in this window and change the theme from light to dark.
 \n\nThe app also includes a widget that is fully resizable. You resize it just like all other widgets: tap and hold your finger for a second on the widget as if you were going to move it. Then, instead of moving it you can pull on the sides of the widget to make it bigger or smaller.
 \n\nI hope you will find the app useful. Keep in mind that it is completely free, has no ads and is open source. If you have any great ideas or major complaints, tell me about them.
-\n\n/Jonas
-    </string>
-    <string name="about_text">
-      Thank you for downloading my app! I try my best to make this app awesome in every way but there will always be bugs and things can always get more awesome!\n
+\n\n/Jonas</string>
+    <string name="about_text">      Thank you for downloading my app! I try my best to make this app awesome in every way but there will always be bugs and things can always get more awesome!\n
 
 \nIf you\'ve found a bug, a translation being wrong or simply have an idea on how to make this app more awesome then I want to hear about it!
 \nSend me a mail: jonas@nononsenseapps.com
@@ -246,8 +246,7 @@
 \n\nIf you\'d like to help with translating the app, please go to http://translate.nononsenseapps.com
 
 \n\nAgain, thanks for downloading my app!
-\nIf you\'d like to support the project in a less active way, you can always buy the donate version: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate
-    </string>
+\nIf you\'d like to support the project in a less active way, you can always buy the donate version: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
 
     <!-- settings string keys -->
     <string name="menu_settings">Settings</string>
@@ -259,63 +258,55 @@
     <string name="shortcut_help1">If checked, the shortcut will create a new note in the selected list and open the editor. If unchecked, the shortcut will open the selected list.</string>
     <string name="loading_widget">Loading widget&#8230;</string>
     <string name="default_list_set">Default list set</string>
-    
     <string name="please_type_before_reminder">Please type some text before setting a reminder</string>
-	<string name="select_a_time">Select a time</string>
-    
+    <string name="select_a_time">Select a time</string>
     <string name="notecopied_one">Copied one note</string>
     <string name="notecopied_other">Copied %d notes</string>
     <string name="notedeleted_one">Deleted one note</string>
     <string name="notedeleted_other">Deleted %d notes</string>
     <string name="selected_one">Selected one note</string>
     <string name="selected_other">Selected %d notes</string>
-    
     <string name="background_sync">Background sync</string>
     <string name="background_sync_info">Syncs once per hour</string>
-	<string name="sync_on_change">Sync on changes</string>
-	<string name="sync_on_change_info">Schedules a sync shortly after a note has changed</string>
-	<string name="sync_on_start">Sync on app start</string>
-	<string name="sync_on_start_info">Will only trigger on fresh starts, not when resuming</string>
-	<string name="sync_full_force">Force full sync next time</string>
-	<string name="sync_full_force_info">Only check this if you believe sync is missing some items.</string>
-    
-	<string name="snooze">Snooze</string>
-	<string name="silent">Silent</string>
-	<string name="sound">Sound</string>
-	<string name="vibrate">Vibrate</string>
-	<string name="reminders">Reminders</string>
-	<string name="add_reminder">Add reminder</string>
-	<string name="standard">Standard</string>
-	<string name="notification_prio_high">High: On top, expanded</string>
-	<string name="notification_prio_low">Low: Hidden, minimized</string>
-	<string name="priority">Priority</string>
-	<string name="group_on_list">Group on list</string>
-	<string name="group_on_list_summary">Multiple notifications will be grouped together if they belong to the same list.</string>
-	<string name="more">more</string>
-	<string name="notifications">Notifications</string>
-	<string name="dateformat_micro">MMM d</string>
-	<string name="dateformat_short">E, d MMM</string>
-	<string name="dateformat_long">EEEE, d MMMM</string>
-	<string name="dateformat_weekday">EEEE</string>
-	<string name="dateformat_short_1">E kk:mm, d MMM</string>
-	<string name="dateformat_short_2">E h:mm a, d MMM</string>
-	<string name="dateformat_short_3">E, d MMM</string>
-	<string name="dateformat_short_4">MMM d</string>
-	<string name="dateformat_short_5">E, kk:mm</string>
-	<string name="dateformat_short_6">E, h:mm a</string>
-	<string name="dateformat_long_1">EEEE kk:mm, d MMMM</string>
-	<string name="dateformat_long_2">EEEE h:mm a, d MMMM</string>
-	
-	
+    <string name="sync_on_change">Sync on changes</string>
+    <string name="sync_on_change_info">Schedules a sync shortly after a note has changed</string>
+    <string name="sync_on_start">Sync on app start</string>
+    <string name="sync_on_start_info">Will only trigger on fresh starts, not when resuming</string>
+    <string name="sync_full_force">Force full sync next time</string>
+    <string name="sync_full_force_info">Only check this if you believe sync is missing some items.</string>
+    <string name="snooze">Snooze</string>
+    <string name="silent">Silent</string>
+    <string name="sound">Sound</string>
+    <string name="vibrate">Vibrate</string>
+    <string name="reminders">Reminders</string>
+    <string name="add_reminder">Add reminder</string>
+    <string name="standard">Standard</string>
+    <string name="notification_prio_high">High: On top, expanded</string>
+    <string name="notification_prio_low">Low: Hidden, minimized</string>
+    <string name="priority">Priority</string>
+    <string name="group_on_list">Group on list</string>
+    <string name="group_on_list_summary">Multiple notifications will be grouped together if they belong to the same list.</string>
+    <string name="more">more</string>
+    <string name="notifications">Notifications</string>
+    <string name="dateformat_micro">MMM d</string>
+    <string name="dateformat_short">E, d MMM</string>
+    <string name="dateformat_long">EEEE, d MMMM</string>
+    <string name="dateformat_weekday">EEEE</string>
+    <string name="dateformat_short_1">E kk:mm, d MMM</string>
+    <string name="dateformat_short_2">E h:mm a, d MMM</string>
+    <string name="dateformat_short_3">E, d MMM</string>
+    <string name="dateformat_short_4">MMM d</string>
+    <string name="dateformat_short_5">E, kk:mm</string>
+    <string name="dateformat_short_6">E, h:mm a</string>
+    <string name="dateformat_long_1">EEEE kk:mm, d MMMM</string>
+    <string name="dateformat_long_2">EEEE h:mm a, d MMMM</string>
     <string name="dashclock_tasks">Tasks</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Restrict to tasks in a specific list</string>
     <string name="dashclock_show_overdue_tasks">Show overdue tasks</string>
     <string name="dashclock_overdue_tasks_show">Overdue tasks will be shown</string>
     <string name="dashclock_overdue_tasks_hide">Overdue tasks will be hidden</string>
-    
     <string name="dashclock_title_activity_tasks_settings">NoNonsense Notes Settings</string>
     <string name="dashclock_pref_header_general">General</string>
-    
     <string name="dashclock_due_upper_limit_title">Limit to tasks due at the latest</string>
     <string name="dashclock_today">Today</string>
     <string name="dashclock_tomorrow">Tomorrow</string>
@@ -327,14 +318,10 @@
     <string name="dashclock_header_shown">List name will be shown in bold. If &quot;All Lists&quot; is selected, will show &quot;Tasks&quot;</string>
     <string name="dashclock_first_task_shown">Title of first task will be shown in bold</string>
     <string name="dashclock_display_header">Display header</string>
-	
-	
-	<!-- Store text -->
-    <string name="google_play_promo_80_char_limit">
-    Good looking notes, tasks and to-do app with Google Tasks sync.
-    </string>
-    <string name="google_play_description">
-An open source notepad and to do app with both phone and tablet UIs. Syncs with your existing Google account to keep your notes 
+
+    <!-- Store text -->
+    <string name="google_play_promo_80_char_limit">    Good looking notes, tasks and to-do app with Google Tasks sync.</string>
+    <string name="google_play_description">An open source notepad and to do app with both phone and tablet UIs. Syncs with your existing Google account to keep your notes 
 and tasks backed up in the cloud without requiring you to input any passwords!
 
 \n\nFeatures:
@@ -366,6 +353,6 @@ vibrate (this is the default), then set your phone to silent (vibrate only), not
 \n\nThis app is open source and is available online at: https://github.com/spacecowboy/NotePad
 
 \n\nThere is a non-free version of this app available for those who want to support me in my development. 
-Link: https://market.android.com/details?id=com.nononsenseapps.notepad_donate
-    </string>
+Link: https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
+
 </resources>

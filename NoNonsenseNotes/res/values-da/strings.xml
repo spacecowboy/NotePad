@@ -244,6 +244,28 @@ Use few if language need it. In English is the same.
 <string name="group_on_list_summary">Flere notifikationer vil blive grupperet sammen, hvis de tilhører den samme liste.</string>
 <string name="more">mere</string>
 <string name="notifications">Notifikationer</string>
+
+
+<string name="dashclock_tasks">Opgaver</string>
+<string name="dashclock_restrict_to_tasks_in_a_specific_list">Begræns til opgaver i en bestemt liste</string>
+<string name="dashclock_show_overdue_tasks">Vis forfaldne opgaver</string>
+<string name="dashclock_overdue_tasks_show">Forfaldne opgaver vil blive vist</string>
+<string name="dashclock_overdue_tasks_hide">Forfaldne opgaver vil blive skjult</string>
+
+<string name="dashclock_title_activity_tasks_settings">NoNonsense Notes Indstillinger</string>
+<string name="dashclock_pref_header_general">Generelt</string>
+
+<string name="dashclock_today">Idag</string>
+<string name="dashclock_tomorrow">Imorgen</string>
+<string name="dashclock_next7">Næste 7 dage</string>
+<string name="dashclock_anytime">Når som helst</string>
+<string name="dashclock_will_show_as_many_as_possible">Vil vise så mange som muligt</string>
+<string name="dashclock_show_only_the_next_task">Vis kun den næste opgave</string>
+<string name="dashclock_first_task_shown">Titlen på første opgave vil blive vist med fed skrift</string>
+<string name="dashclock_display_header">Vis overskriften</string>
+
+
+<!-- Store text -->
 <string name="google_play_promo_80_char_limit">Flot note, opgave og to-do app med Google Opgaver synkronisering.</string>
 <string name="google_play_description">En open source notesblok og to do app med både telefon og tablet brugerflader. Synkroniserer med din eksisterende Google konto for at holde dine noter og opgaver sikkerhedskopieret i skyen uden du behøver at indtaste nogle adgangskoder!\n\nFunktioner:\n* Notifikationer/Påmindelser\n* Sprogvalg\n* Tilpasselig brugerflade\n* Widget, justerbar og konfigurerbar.\n* Super tablet understøttelse, der efterligner Gmail-funktioner\n* Holo temaer så det matcher resten af Android\n* Automatisk synkronisering med Google Tasks\n* Mulighed for at angive adgangskode på noter\n* Flyt noter mellem forskellige lister\n* Integration med Android Agenda Widget\n* Søg alle dine noter (ikke kun titler)\n* Udskift skifttype og tekst størrelsen!\n\nNote:\nDer er en fej i Android 4.2 som manifesterer sig i alle apps som bruger notifikationer. Hvis du indstiller notifikationer til IKKE at vibrere (dette er standard), og derefter indstiller din telefon til lydløs (med vibration), vil notifikationer altid vibrere, selvom det er blevet slukket.\nIgen, dette er en fejl i Android, ikke i appen.\n\nDu kan hjælpe med at oversætte appen, ved at gå til: http://translate.nononsenseapps.com\n\nHvis du har problemer eller vil rapportere en fejl, så tøv ikke med at kontakte mig!\n+NoNonsenseApps\neller\nrapporter dem på "issue trackeren": https://github.com/spacecowboy/NotePad/issues\n\nDenne app er open source og er tilgængelig online på: https://github.com/spacecowboy/NotePad\n\nDer er en ikke-gratis version af denne app tilgængelig, til dem som vil støtte udviklingen. Link: https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>

@@ -241,6 +241,31 @@ Use few if language need it. In English is the same.
 <string name="group_on_list_summary">Les notifications multiples seront regroupées si elles appartiennent à la même liste.</string>
 <string name="more">plus</string>
 <string name="notifications">Notifications</string>
+
+
+<string name="dashclock_tasks">Tâches</string>
+<string name="dashclock_restrict_to_tasks_in_a_specific_list">Restreindre les tâches à une liste spécifique</string>
+<string name="dashclock_show_overdue_tasks">Afficher les tâches passées dues</string>
+<string name="dashclock_overdue_tasks_show">Les tâches seront affichées</string>
+<string name="dashclock_overdue_tasks_hide">Les tâches passées dues seront masquées</string>
+
+<string name="dashclock_title_activity_tasks_settings">Paramètres de NoNonesense Notes</string>
+<string name="dashclock_pref_header_general">Général</string>
+
+<string name="dashclock_due_upper_limit_title">Limiter aux tâches dues prochainement</string>
+<string name="dashclock_today">Aujourd\'hui</string>
+<string name="dashclock_tomorrow">Demain</string>
+<string name="dashclock_next7">7 prochains jours</string>
+<string name="dashclock_anytime">N\'importe quand</string>
+<string name="dashclock_will_show_as_many_as_possible">En affichera autant que possible</string>
+<string name="dashclock_will_only_show_the_task_due_first">Affichera seulement les tâches dues</string>
+<string name="dashclock_show_only_the_next_task">Afficher seulement la prochaine tâche</string>
+<string name="dashclock_header_shown">Le nom de la liste s\'affichera en gras. Si &quot;Toutes les listes&quot; est sélectionné, affichera &quot;Tâches&quot;</string>
+<string name="dashclock_first_task_shown">Le titre de la première tâches s\'affichera en premier</string>
+<string name="dashclock_display_header">Afficher l\'en-tête</string>
+
+
+<!-- Store text -->
 <string name="google_play_promo_80_char_limit">Application de notes, tâches et choses à faire synchronisés avec Google Tâches.</string>
 <string name="google_play_description">Un bloc-notes à code source ouvert avec une interface optimisé autant pour les téléphones que les tablettes. Se synchronise avec votre compte Google existant afin de conserver vos notes et tâches dans les nuages sans requérir de mot de passe.\n\nCaractéristiques:\n* Notifications et rappels\n* Sélection de langue\n* Interface personnalisable\n* Widget configurable à taille ajustable\n* Superbe support pour tablette reprenant les caractéristiques de Gmail\n* Thème Holo qui s’harmonise à Android\n* Synchronisation automatique avec Google Tâches\n* Possibilité de protéger les notes avec un mot de passe\n* Déplacer les notes entre vos différentes listes\n* S’intègre avec le widget Agenda d’Android\n* Recherche par contenu (pas seulement par titres)\n* Police et taille du texte personnalisable!\n\nNote:\nIl y a une anomalie dans Android 4.2 qui se manifeste dans toutes les applications utilisant les notifications. Si nous configurer les notifications pour NE PAS vibrer (ceci est la configuration par défaut) et que vous configurer votre téléphone sur silence (vibration seulement), les notifications vont toujours vibrées même si vous désactivez explicitement cette option.\nC’est une anomalie dans Android et non pas de l’application.\n\nVous pouvez aider à la traduction de l’application, visiter : http://translate.nononsenseapps.com\n\nSi vous avez un problème ou voulez rapporter une anomalie, n’hésitez pas à me contacter!\n+NoNonsenseApps\nou\nrapportez-le dans le gestionnaire d’anomalies : https://github.com/spacecowboy/NotePad/issues\n\nLe code source de cette application est disponible à : https://github.com/spacecowboy/NotePad\n\nUne version donation de cette application est disponible pour ceux qui souhaiteraient me supporter dans son développement : https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>

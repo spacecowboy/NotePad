@@ -10,6 +10,7 @@ import com.googlecode.androidannotations.annotations.ViewById;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
+import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
@@ -17,6 +18,7 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogDateTimePicker.DateTimeSetListener;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
+import com.nononsenseapps.notepad.interfaces.TimeTraveler;
 import com.nononsenseapps.utils.views.StyledEditText;
 
 import android.app.Activity;
@@ -45,6 +47,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.ShareActionProvider;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -53,7 +56,8 @@ import android.widget.Toast;
  * {@link TaskDetailActivity} on handsets.
  */
 @EFragment(R.layout.fragment_task_detail)
-public class TaskDetailFragment extends Fragment implements DateTimeSetListener {
+public class TaskDetailFragment extends Fragment implements
+		DateTimeSetListener, TimeTraveler {
 
 	public static int LOADER_EDITOR_TASK = 3001;
 	public static int LOADER_EDITOR_TASKLISTS = 3002;
@@ -64,15 +68,15 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 		public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
 			if (LOADER_EDITOR_NOTIFICATIONS == id) {
 				return new CursorLoader(getActivity(), Notification.URI,
-						Notification.Columns.FIELDS, Notification.Columns.TASKID
-								+ " IS ?", new String[] { Long.toString(args
-								.getLong(ARG_ITEM_ID, -1)) },
-						Notification.Columns.TIME);
+						Notification.Columns.FIELDS,
+						Notification.Columns.TASKID + " IS ?",
+						new String[] { Long.toString(args.getLong(ARG_ITEM_ID,
+								-1)) }, Notification.Columns.TIME);
 			}
 			else if (LOADER_EDITOR_TASK == id) {
-				return new CursorLoader(getActivity(),
-						Task.getUri(args.getLong(ARG_ITEM_ID, -1)),
-						Task.Columns.FIELDS, null, null, null);
+				return new CursorLoader(getActivity(), Task.getUri(args
+						.getLong(ARG_ITEM_ID, -1)), Task.Columns.FIELDS, null,
+						null, null);
 			}
 			else {
 				return null;
@@ -183,9 +187,9 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
-		
+	public void onActivityCreated(final Bundle state) {
+		super.onActivityCreated(state);
+
 		// TODO opening from a notification should delete the notification
 
 		if (getArguments().getLong(ARG_ITEM_ID, -1) > 0) {
@@ -253,7 +257,8 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 		}
 		else {
 			// Due date
-			dueDateBox.setText(TimeFormatter.getLocalDateStringLong(getActivity(), mTask.due));
+			dueDateBox.setText(TimeFormatter.getLocalDateStringLong(
+					getActivity(), mTask.due));
 		}
 	}
 
@@ -361,11 +366,22 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 				mListener.closeFragment(this);
 			}
 			return true;
+		case R.id.menu_timemachine:
+			if (mTask != null && mTask._id > 0) {
+				ActivityTaskHistory.start(getActivity(), mTask._id);
+			}
+			return true;
 		case R.id.menu_delete:
 			deleteAndClose();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
+	}
+
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		menu.findItem(R.id.menu_timemachine).setEnabled(
+				mTask != null && mTask._id > 0);
 	}
 
 	private void deleteAndClose() {
@@ -461,7 +477,7 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 			View nv = LayoutInflater.from(getActivity()).inflate(
 					R.layout.notification_view, null);
 			// Set date time text
-			final Button notTimeButton = (Button) nv
+			final TextView notTimeButton = (TextView) nv
 					.findViewById(R.id.notificationDateTime);
 			notTimeButton.setText(not.getLocalDateTimeText(getActivity()));
 
@@ -499,6 +515,15 @@ public class TaskDetailFragment extends Fragment implements DateTimeSetListener 
 					});
 
 			notificationList.addView(nv);
+		}
+	}
+
+	@Override
+	public void onTimeTravel(Intent data) {
+		// TODO
+		if (taskText != null) {
+			taskText.setText(data
+					.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
 		}
 	}
 }

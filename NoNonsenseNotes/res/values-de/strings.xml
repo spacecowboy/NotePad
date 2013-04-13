@@ -21,6 +21,7 @@ limitations under the License.
 <string name="title_create">Neue Notiz</string>
 <string name="title_edit">Bearbeiten: %1$s</string>
 <string name="menu_add">Neue Notiz</string>
+<string name="menu_save_and_add">Speichern und neue Notiz öffnen</string>
 <string name="menu_delete">Löschen</string>
 <string name="menu_revert">Änderungen verwerfen</string>
 <string name="menu_copy">Notiz kopieren</string>
@@ -105,6 +106,7 @@ limitations under the License.
 <string name="automatic">Automatisch</string>
 <string name="preferences_week_start_day_dialog">"Woche beginnt am"</string>
 <string name="preferences_week_start_day_title">"Woche beginnt am"</string>
+
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
@@ -236,5 +238,22 @@ Use few if language need it. In English is the same.
 <string name="group_on_list_summary">Mehrere Benachrichtigungen für die selbe Liste werden zusammengefasst.</string>
 <string name="more">Mehr</string>
 <string name="notifications">Benachrichtigungen</string>
+
+
+<string name="dashclock_tasks">Aufgaben</string>
+<string name="dashclock_show_overdue_tasks">Überfällige Aufgaben anzeigen</string>
+
+<string name="dashclock_title_activity_tasks_settings">NoNonsense Notes Einstellungen</string>
+<string name="dashclock_pref_header_general">Allgemein</string>
+
+<string name="dashclock_today">Heute</string>
+<string name="dashclock_tomorrow">Morgen</string>
+<string name="dashclock_next7">Nächste 7 Tage</string>
+<string name="dashclock_anytime">Irgendwann</string>
+<string name="dashclock_show_only_the_next_task">Zeige nur die nächste Aufgabe</string>
+
+
+<!-- Store text -->
+<string name="google_play_promo_80_char_limit">Gut aussehende Notiz, Aufgaben und To-Do App mit Google Tasks Synchronisation.</string>
 <string name="google_play_description">Eine Notizen- und To Do-App sowohl mit Telefon- als auch mit Tablet-UI. Synchronisiert mit einem bereits vorhandenen Google-Konto, damit deine Notizen in der Cloud gesichert sind, ohne ein Passwort einzugeben müssen!\n\nFunktionen:\nNachrichten/Erinnerungen\nSprachauswahl\nAnpassbares Interface\nSkalierbares und Anpassbares Widgets\nHervorragendes Tablet-Interface, inspiriert von der Gmail-App\nHolo-Design, das mit dem Rest von Android harmoniert\nAutomatische Google-Tasks-Synchronisation\nNotizen mit Passwort verschlüsseln\nNotizen zwischen verschiedenen Listen hin- und herbewegen\nIntegration mit dem Android-Agenda-Widget\nAlle Notizen mitsamt Inhalt durchsuchen\nSchriftart und -Grösse änderbar!\n\nAchtung:\nIn Android 4.2 gibt es einen Fehler, der in allen Apps vorkommt, die Benachrichtigungen senden. Wenn du die Vibration bei Benachrichtigungen ausschaltest (was standardmässig so ist) und dein Handy auf lautlos (mit Vibration) stellst, werden die Benachrichtigungen trotzdem Vibrieren, obwohl du vorher die Vibration ausgeschaltet hast.\nDas ist ein Fehler im Android OS und nicht in meiner App, ich kann ihn also nicht beheben.\n\nUm mir bei der Übersetzung zu helfen, besuche:\nhttp://translate.nononsenseapps.com.\n(Deutsche Übersetzung von balducien, balducien@gmail.com)\n\nWenn du irgendein Problem oder einen Fehler gefunden hast, zögere nicht, es mir zu sagen:\n+NoNonsenseApps auf Google+\noder schreib es in das Fehlerprotokoll:\nhttps://github.com/spacecowboy/NotePad/issues\n\nDer Quellcode dieser Open Source-App ist zur freien Benutzung verfügbar auf:\nhttps://github.com/spacecowboy/NotePad\n\nWenn du die Entwicklung dieser App unterstützen willst, kannst du dir die bezahlte Version dieser App kaufen und mir einen Gefallen tun:\nhttps://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>

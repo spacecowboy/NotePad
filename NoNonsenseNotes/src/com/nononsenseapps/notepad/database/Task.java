@@ -34,6 +34,7 @@ public class Task extends DAO {
 	// SQL convention says Table name should be "singular"
 	public static final String TABLE_NAME = "task";
 	public static final String DELETE_TABLE_NAME = "deleted_task";
+	public static final String HISTORY_TABLE_NAME = "history";
 	private static final String SECTIONED_DATE_VIEW = "sectioned_date_view";
 	public static String getSECTION_DATE_VIEW_NAME(final String listId) {
 		return new StringBuilder().append(SECTIONED_DATE_VIEW).append("_")
@@ -83,6 +84,7 @@ public class Task extends DAO {
 	public static final int DELETEDITEMCODE = 210;
 	public static final int SECTIONEDDATEQUERYCODE = 211;
 	public static final int SECTIONEDDATEITEMCODE = 212;
+	public static final int HISTORYQUERYCODE = 213;
 	// Legacy support, these also need to use legacy projections
 	public static final int LEGACYBASEURICODE = 221;
 	public static final int LEGACYBASEITEMCODE = 222;
@@ -117,6 +119,9 @@ public class Task extends DAO {
 				+ SECTIONED_DATE_VIEW, SECTIONEDDATEQUERYCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
 				+ SECTIONED_DATE_VIEW + "/#", SECTIONEDDATEITEMCODE);
+		
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
+				+ HISTORY_TABLE_NAME, HISTORYQUERYCODE);
 
 		// Legacy URIs
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
@@ -153,6 +158,10 @@ public class Task extends DAO {
 	// Query the view with date section headers
 	public static final Uri URI_SECTIONED_BY_DATE = Uri.withAppendedPath(URI,
 			SECTIONED_DATE_VIEW);
+
+	// Query for history of tasks
+	public static final Uri URI_TASK_HISTORY = Uri.withAppendedPath(URI, 
+			HISTORY_TABLE_NAME);
 
 	// Special URI to use when a move is requested
 	public static final Uri URI_WRITE_MOVESUBTREE = Uri.withAppendedPath(URI,
@@ -212,12 +221,18 @@ public class Task extends DAO {
 		public static final String[] SHALLOWFIELDS = { _ID, TITLE, NOTE, DBLIST, COMPLETED,
 			DUE, UPDATED };
 		public static final String TRIG_DELETED = "deletedtime";
+		public static final String HIST_TASK_ID = "taskid";
 		// Used to read the table. Deleted field set by database
 		public static final String[] DELETEFIELDS = { _ID, TITLE, NOTE,
 				COMPLETED, DUE, DBLIST, TRIG_DELETED};
 		// Used in trigger creation
 		private static final String[] DELETEFIELDS_TRIGGER = { TITLE, NOTE,
 				COMPLETED, DUE, DBLIST };
+		
+		// accessible fields in history table
+		public static final String[] HISTORY_COLUMNS = {Columns.HIST_TASK_ID,
+			Columns.TITLE,
+			Columns.NOTE};
 
 	}
 
@@ -257,8 +272,7 @@ public class Task extends DAO {
 	// Delete table has no constraints. In fact, list values and positions
 	// should not even be thought of as valid.
 	public static final String CREATE_DELETE_TABLE = 
-			new StringBuilder()
-			.append("CREATE TABLE ")
+			new StringBuilder("CREATE TABLE ")
 			.append(DELETE_TABLE_NAME).append("(")
 			.append(Columns._ID).append(" INTEGER PRIMARY KEY,")
 			.append(Columns.TITLE).append(" TEXT NOT NULL DEFAULT '',")
@@ -268,6 +282,44 @@ public class Task extends DAO {
 			.append(Columns.DBLIST).append(" INTEGER DEFAULT NULL,")
 			.append(Columns.TRIG_DELETED).append(" TIMESTAMP NOT NULL DEFAULT current_timestamp")
 			.append(")").toString();
+	
+	// Every change to a note gets saved here
+	// TODO
+	public static final String CREATE_HISTORY_TABLE = 
+			new StringBuilder("CREATE TABLE ")
+			.append(HISTORY_TABLE_NAME).append("(")
+			.append(Columns._ID).append(" INTEGER PRIMARY KEY,")
+			.append(Columns.HIST_TASK_ID).append(" INTEGER NOT NULL,")
+			.append(Columns.TITLE).append(" TEXT NOT NULL DEFAULT '',")
+			.append(Columns.NOTE).append(" TEXT NOT NULL DEFAULT '',")
+			.append(Columns.UPDATED).append(" TIMESTAMP NOT NULL DEFAULT current_timestamp,")
+			.append(" FOREIGN KEY(").append(Columns.HIST_TASK_ID)
+			.append(" ) REFERENCES ").append(TABLE_NAME)
+			.append(" ( ").append(Columns._ID).append(") ON DELETE CASCADE ")
+			.append(" ) ").toString();
+	static final String HISTORY_TRIGGER_BODY = 
+			new StringBuilder(" INSERT INTO ")
+			.append(HISTORY_TABLE_NAME)
+			.append(" (").append(arrayToCommaString(Columns.HISTORY_COLUMNS)).append(")")
+			.append(" VALUES (")
+			.append(arrayToCommaString("new.", 
+					new String[] {Columns._ID, Columns.TITLE, Columns.NOTE}))
+			.append(");").toString();
+	public static final String CREATE_HISTORY_UPDATE_TRIGGER =
+			new StringBuilder("CREATE TRIGGER trigger_update_")
+			.append(HISTORY_TABLE_NAME).append(" AFTER UPDATE OF ")
+			.append(arrayToCommaString(new String[] {Columns.TITLE, Columns.NOTE}))
+			.append(" ON ").append(TABLE_NAME).append(" BEGIN ")
+			.append(HISTORY_TRIGGER_BODY)
+			.append(" END;")
+			.toString();
+	public static final String CREATE_HISTORY_INSERT_TRIGGER =
+			new StringBuilder("CREATE TRIGGER trigger_insert_")
+			.append(HISTORY_TABLE_NAME).append(" AFTER INSERT ON ")
+			.append(TABLE_NAME).append(" BEGIN ")
+			.append(HISTORY_TRIGGER_BODY)
+			.append(" END;")
+			.toString();
 	
 	/**
 	 * This is a view which returns the tasks in the specified list with

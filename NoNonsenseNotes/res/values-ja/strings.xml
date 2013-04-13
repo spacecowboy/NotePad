@@ -57,8 +57,6 @@ limitations under the License.
 <string name="settings_summary_sort_type_modified">変更日時</string>
 <string name="settings_summary_sort_type_duedate">期限</string>
 <string name="settings_summary_sort_type_serverposition">サーバーの設定に従う</string>
-<string name="settings_summary_sort_order_asc">昇順</string>
-<string name="settings_summary_sort_order_desc">降順</string>
 <string name="settings_summary_theme_black">ブラック</string>
 <string name="settings_summary_theme_dark">ダーク</string>
 <string name="settings_summary_theme_light">ライト</string>
@@ -107,7 +105,7 @@ limitations under the License.
 <string name="automatic">自動</string>
 <string name="preferences_week_start_day_dialog">週の開始日</string>
 <string name="preferences_week_start_day_title">週の開始日</string>
-<string name="preferences_week_start_day_default">-1</string>
+
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
@@ -211,6 +209,7 @@ Use few if language need it. In English is the same.
 <string name="shortcut_help1">チェックすると、ショートカットタップ時に選択したリストに新規ノートを作成し、エディタを開きます。チェックを外すと、ショートカットタップ時に選択したリストを開きます。</string>
 <string name="loading_widget">しばらくお待ち下さい&#8230;</string>
 
+
 <string name="notecopied_one">ノートをコピーしました</string>
 <string name="notecopied_other">%d 個のノートをコピーしました</string>
 <string name="notedeleted_one">ノートを削除しました</string>
@@ -242,7 +241,22 @@ Use few if language need it. In English is the same.
 <string name="notifications">通知</string>
 <string name="dateformat_micro">MM/dd</string>
 <string name="dateformat_short">MM/dd(E)</string>
-<string name="dateformat_long">MM月dd日 (E曜日)</string>
+<string name="dateformat_long">MM月dd日 (EEEE)</string>
+<string name="dateformat_short_1">kk:mm MM/dd(E)</string>
+<string name="dateformat_short_2">h:mm MM/dd(E)</string>
+<string name="dateformat_short_3">MM/dd(E)</string>
+<string name="dateformat_short_4">MM/dd</string>
+<string name="dateformat_short_5">kk:mm (E)</string>
+<string name="dateformat_short_6">h:mm (E)</string>
+<string name="dateformat_long_1">kk:mm MM月dd日 (EEEE)</string>
+<string name="dateformat_long_2">h:mm MM月dd日 (EEEE)</string>
+
+
+
+
+
+
+<!-- Store text -->
 <string name="google_play_promo_80_char_limit">Google Tasksと同期可能な美しいノート・タスクアプリ</string>
 <string name="google_play_description">スマートフォン、タブレット両対応のオープンソースノート・タスクアプリです。パスワードを入力することなくデバイスに登録されたGoogleアカウントにノート及びタスクを同期します。\n\n機能：\n・通知/リマインダー\n・言語設定\n・カスタマイズ可能なUI\n・サイズ等各種設定可能なウィジェット\n・Gmailアプリに準じたタブレットサポート\n・Androidに最適なHoloテーマ\n・Google Tasksとの自動同期\n・ノートのパスワード保護\n・リスト間のノート移動\n・Androidカレンダーウィジェットとの連帯\n・全ノートの検索（タイトル...etc）\n・フォント/テキストサイズの変更\n\n注意：\nAndroid 4.2には通知機能を使用する全てのアプリに関するバグが存在します。通知時バイブレーションをOFF（デフォルト設定）にした上でサイレントモード（バイブなし）に設定すると、通知時バイブレーションが有効になってしまいます。これはAndroid OSのバグであり、本アプリの問題ではありません。\n\n本アプリの翻訳に参加したい場合は、以下のURLにアクセスしてください：\nhttp://translate.nononsenseapps.com\n\n問題が発生した場合やバグ報告は、ぜひお気軽に以下の連絡先までご連絡ください！\n+NoNonsenseApps（Google+）\nまたは\nhttps://github.com/spacecowboy/NotePad/issues\n\n本アプリのソースコードは以下のURLで公開しています\nhttps://github.com/spacecowboy/NotePad\n\n有料版も販売しています。本アプリを気に入っていただけましたら、ぜひご購入をご検討ください。\nhttps://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>

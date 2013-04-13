@@ -65,8 +65,9 @@ public class Notification extends DAO {
 		public static final String TIME = "time";
 		public static final String PERMANENT = "permanent";
 		public static final String TASKID = "taskid";
+		public static final String REPEATS = "repeats";
 
-		public static final String[] FIELDS = { _ID, TIME, PERMANENT, TASKID };
+		public static final String[] FIELDS = { _ID, TIME, PERMANENT, TASKID, REPEATS };
 	}
 
 	public static class ColumnsWithTask extends Columns {
@@ -88,16 +89,18 @@ public class Notification extends DAO {
 	/**
 	 * Main table to store notification data
 	 */
-	public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME
-			+ "(" + Columns._ID + " INTEGER PRIMARY KEY," + Columns.TIME
-			+ " INTEGER," + Columns.PERMANENT + " INTEGER NOT NULL DEFAULT 0,"
-			+ Columns.TASKID + " INTEGER,"
-
+	public static final String CREATE_TABLE = new StringBuilder("CREATE TABLE ")
+			.append(TABLE_NAME)
+			.append("(").append(Columns._ID).append(" INTEGER PRIMARY KEY,")
+			.append(Columns.TIME).append(" INTEGER,").append(Columns.PERMANENT)
+			.append(" INTEGER NOT NULL DEFAULT 0,")
+			.append(Columns.TASKID).append(" INTEGER,")
+			// Interpreted binary
+			.append(Columns.REPEATS).append(" INTEGER NOT NULL DEFAULT 0,")
 			// Foreign key for task
-			+ "FOREIGN KEY(" + Columns.TASKID + ") REFERENCES "
-			+ Task.TABLE_NAME + "(" + Task.Columns._ID + ") ON DELETE CASCADE"
-
-			+ ")";
+			.append("FOREIGN KEY(").append(Columns.TASKID).append(") REFERENCES ")
+			.append(Task.TABLE_NAME).append("(").append(Task.Columns._ID).append(") ON DELETE CASCADE")
+			.append(")").toString();
 
 	/**
 	 * View that joins relevant data from tasks and lists tables
@@ -134,6 +137,7 @@ public class Notification extends DAO {
 	public Long listID = null;
 	public String taskTitle = null;
 	public String taskNote = null;
+	private long repeats = 0;
 
 	/**
 	 * Must be associated with a task
@@ -147,9 +151,10 @@ public class Notification extends DAO {
 		time = c.getLong(1);
 		permanent = 1 == c.getLong(2);
 		taskID = c.getLong(3);
+		repeats  = c.getLong(4);
 		// if cursor has more fields, then assume it was constructed with
 		// the WITH_TASKS view query
-		if (c.getColumnCount() > 4) {
+		if (c.getColumnCount() > 5) {
 			listTitle = c.getString(c.getColumnIndex(ColumnsWithTask.listPrefix
 					+ TaskList.Columns.TITLE));
 			listID = c.getLong(c.getColumnIndex(ColumnsWithTask.listPrefix
@@ -174,6 +179,7 @@ public class Notification extends DAO {
 		time = values.getAsLong(Columns.TIME);
 		permanent = 1 == values.getAsLong(Columns.PERMANENT);
 		taskID = values.getAsLong(Columns.TASKID);
+		repeats  = values.getAsLong(Columns.REPEATS);
 	}
 
 	@Override
@@ -183,6 +189,7 @@ public class Notification extends DAO {
 		values.put(Columns.TIME, time);
 		values.put(Columns.TASKID, taskID);
 		values.put(Columns.PERMANENT, permanent ? 1 : 0);
+		values.put(Columns.REPEATS, repeats);
 
 		return values;
 
@@ -259,8 +266,7 @@ public class Notification extends DAO {
 					}
 					idStrings = idStrings.substring(0, idStrings.length() - 1);
 					idStrings += ")";
-					Log.d("JONAS", "where: " + Columns.TASKID + " IN "
-							+ idStrings);
+					
 					context.getContentResolver().delete(URI,
 							Columns.TASKID + " IN " + idStrings, null);
 					return null;
@@ -291,7 +297,7 @@ public class Notification extends DAO {
 				c.close();
 				idStrings = idStrings.substring(0, idStrings.length() - 1);
 				idStrings += ")";
-				Log.d("JONAS", "where: " + Columns.TASKID + " IN " + idStrings);
+				
 				context.getContentResolver().delete(
 						URI,
 						Columns.TIME + " <= " + maxTime + " AND "

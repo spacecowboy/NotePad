@@ -36,7 +36,7 @@ limitations under the License.
 <string name="menu_clearcompleted">Wyczyść zakończone</string>
 <string name="menu_setdefaultlist">Ustaw jako domyślną listę</string>
 <string name="menu_managelists">Zarządzaj listą</string>
-<string name="delete_list_warning">Jesteś pewny, że chcesz usunąć listę? Lista zostanie usunięta nieodwracalnie.</string>
+<string name="delete_list_warning">Jesteś pewny, że chcesz usunąć listę? Lista zostanie nieodwracalnie usunięta.</string>
 <string name="editor_due_date_hint">Termin</string>
 <string name="editor_title_hint">Tytuł</string>
 <string name="editor_note_hint">Notatka</string>
@@ -49,8 +49,8 @@ limitations under the License.
 <string name="settings_lang">Język</string>
 <string name="settings_cat_theme">Motyw</string>
 <string name="settings_cat_sorting">Sortowanie</string>
-<string name="settings_sorting_type">Sortowanie włączone</string>
-<string name="settings_sorting_type_dialog">Sortowanie wyłączone</string>
+<string name="settings_sorting_type">Sortowanie według</string>
+<string name="settings_sorting_type_dialog">Sortuj według</string>
 <string name="settings_sorting_order">Kolejność</string>
 <string name="settings_sorting_order_dialog">Kolejność według</string>
 <string name="settings_summary_sort_type_alphabetic">Tytułu</string>
@@ -70,14 +70,14 @@ limitations under the License.
 <string name="settings_font_type">Czcionka</string>
 <string name="settings_font_type_dialog">Wybierz czcionkę</string>
 <string name="settings_font_size">Rozmiar czcionki</string>
-<string name="preference_preview_text">Tak będzie widoczny tekst w edytorze</string>
+<string name="preference_preview_text">Tak będzie wyglądał tekst w edytorze</string>
 <string name="settings_text_preview_title">Podgląd</string>
 <string name="monospace">Monospace</string>
 <string name="sans">Sans</string>
 <string name="serif">Serif</string>
 <string name="settings_sync_freq_title">Częstotliwość synchronizacji</string>
 <string name="settings_account_title">Wybierz konto</string>
-<string name="settings_account_summary">Kliknij aby zmienić konto</string>
+<string name="settings_account_summary">Kliknij, aby zmienić konto</string>
 <string name="settings_sync_enable_title">Synchronizacja z Google Tasks</string>
 <string name="settings_sync_enable_summary">Synchronizuj notatki ze swoim kontem Google</string>
 <string name="settings_cat_syncing">Synchronizacja</string>
@@ -90,7 +90,7 @@ limitations under the License.
 <string name="no">Nie</string>
 <string name="ok">OK</string>
 <string name="show_from_all_lists">Wszystkie listy</string>
-<string name="default_list_needed_warning">Ustaw domyślną listę jako pierwszą</string>
+<string name="default_list_needed_warning">Na początek ustaw domyślną listę</string>
 <string name="reverted">Cofnięto zmiany</string>
 <string name="notecopied">Skopiowano</string>
 <string name="deleted">Usunięto</string>
@@ -105,6 +105,7 @@ limitations under the License.
 <string name="automatic">Automatycznie</string>
 <string name="preferences_week_start_day_dialog">Tydzień zaczyna się od</string>
 <string name="preferences_week_start_day_title">Tydzień zaczyna się od</string>
+
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
@@ -135,10 +136,10 @@ Use few if language need it. In English is the same.
 <string name="password_incorrect">Hasło niepoprawne </string>
 <string name="enter_password">Wprowadź hasło</string>
 <string name="enter_new_password">Wprowadź nowe hasło</string>
-<string name="confirm_new_password">Potwierdź hasło</string>
+<string name="confirm_new_password">Potwierdź nowe hasło</string>
 <string name="apply">Zastosuj</string>
 <string name="clear_password">Usuń hasło</string>
-<string name="password_info">Ustawienie hasła będzie wymagało wprowadzanie go　　　　za każdym razem kiedy chcesz wyświetlić zablokowane notatki. Zabezpiecza to wyłącznie　　　　pole samej notatki, do pól "tytuł" oraz "termin" dostęp pozostanie niezabezpiezony.　　　　Metoda ta nie szyfruje w żaden sposób notatek, zatem cały czas mogą być one wyświetlanew poczcie/kalendarzu Google. Jeśli zapomnisz hasła, zsynchronizuj notatki z Google i　　　　przeinstaluj aplikację.</string>
+<string name="password_info">Ustawienie hasła będzie wymagało wprowadzania go za każdym razem kiedy chcesz wyświetlić zablokowane notatki. Zabezpiecza to wyłącznie pole samej notatki, do pól "tytuł" oraz "termin" dostęp pozostanie niezabezpiezony. Metoda ta nie szyfruje w żaden sposób notatek, zatem cały czas mogą być one wyświetlanew poczcie/kalendarzu Google. Jeśli zapomnisz hasła, zsynchronizuj notatki z Google i przeinstaluj aplikację.</string>
 <string name="about">O aplikacji</string>
 <string name="sync_failed">Synchronizacja nieudana</string>
 <string name="sync_login_failed">Logowanie nieudane, nie można połaczyć się z Google Tasks</string>
@@ -169,9 +170,9 @@ Use few if language need it. In English is the same.
 <string name="mod_header_yesterday">Wczoraj</string>
 <string name="mod_header_thisweek">W tym tygodniu</string>
 <string name="mod_header_earlier">Wcześniej</string>
-<string name="settings_listheader">Rozdzielacze nazwy listy</string>
-<string name="settings_listheader_off">Bez rozdzielaczy nazwy listy</string>
-<string name="settings_listheader_on">Wyświetlanie rozdzielaczy nazwy listy</string>
+<string name="settings_listheader">Gdy są wyświetlane wszystkie listy</string>
+<string name="settings_listheader_off">Wyświetlaj jako jedną listę</string>
+<string name="settings_listheader_on">Wyświetlaj nazwy list</string>
 <string name="please_create_list">Proszę stworzyć listę</string>
 <string name="please_select_note">Proszę zaznaczyć lub stworzyć notatkę</string>
 <string name="please_create_note">Proszę stworzyć notatkę</string>
@@ -195,8 +196,8 @@ Use few if language need it. In English is the same.
 
 <!-- These should probably not be translated -->
 <string name="default_notetitle">Witam!</string>
-<string name="default_notetext">Aby wykorzystać aplikację jak najlepiej sugeruję włączyć synchronizację. Wciśnij przycisk synchronizacji na pasku akcji kiedy powrócisz do listy. Domyślnie uruchomi to synchronizację, która będzie wykonywana co godzinę.\n\nMiej na uwadze, że proces ten jest połączony z globalnymi ustawieniami synchronizacji urządzenia. W kilku słowach, jeśli Twój gmail nie jest synchronizowany automatycznie, to ta aplikacja również nie. W ustawieniach możesz wyłączyć automatyczną synchronizację i przejść na całkowicie manualną.\n\nJeśli na swoim urządzeniu posiadasz więcej niż jedno konto Google, sugeruję udanie sie do ustawień i wybranie konta ręcznie.\n\nMimo wszystko rekomendowałbym udanie się do ustawień, tylko po to, by zobaczyć jakie opcję się tam znajdują. Możesz tam zmienić czcionkę oraz rozmiar pisanego tekstu, a także zmienić motyw z jasnego na ciemny.\n\nAplikacja zawiera również widżet, którego rozmiar można dowolnie zmieniać. Robisz to tak, jak w przypadku każdego innego widżetu: naciskasz palcem na widżet i przytrzymujesz chwilę, tak jak podczas przenoszenia. Zamiast przenosić możesz teraz przeciągnąć jego brzegi powiększając go, lub zmniejszając.\n\nMam nadzieję, że aplikacja okaże się przydatna. Miej na uwadze, że jest ona kompletnie darmowa, nie posiada reklam i jest open source.\n\n/Jonas</string>
-<string name="about_text">Dziękuję za pobranie mojej aplikacji! Dołożę wszelkich starań, by aplikacja była co raz bardziej zajebista pod każdym względem. Zawsze wkradną się jakieś błędy, ale zawsze też może być lepiej!\n\nJeśli znajdziesz jakiś błąd, lub niepoprawne tłumaczenie, lub też masz po prostu jakiś pomysł, dzięki któremu aplikacja może stać się bardziej zajebista, chcę o tym usłyszeć!\nWyślij mi maila: jonas@nononsenseapps.com\n\nWiadomośc na Twtterze: @SciencyGuy\n\n+1 na Google+: https://plus.google.com/u/0/111801385015192089838\n\nZgłoś w systemie śledzenia błędów: https://github.com/spacecowboy/NotePad/issues\n\nZe względu na to, że jest to projekt open source, jeśli masz niezbędną wiedzę możesz spróbować naprawić błąd samodzielnie i wysłać mi prośbę o aktualizację!\n\nJeśli chciałbyś stworzyć tłumaczenie w Twoim języku byłoby zajebiści. Skontaktuj się ze mną!\nZrobiłem film instruktażowy pokazujący jak możesz aktualizować obecne tłumaczenia bezpośrednio na GitHub: http://www.youtube.com/watch?v=oZTO5zOoCb4\n\nJeszcze raz dziękuję za pobranie mojej aplikacji!\nJeśli chciałbyś wspomóc projekt w mniej aktywny sposób, możesz zawsze zakupić aplikację, jako darowiznę: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
+<string name="default_notetext">Aby wykorzystać aplikację jak najlepiej sugeruję włączyć synchronizację. Wciśnij przycisk synchronizacji na pasku akcji, gdy powrócisz do listy. Domyślnie uruchomi to synchronizację wykonywaną co godzinę.\n\nMiej na uwadze, że proces ten jest połączony z globalnymi ustawieniami synchronizacji urządzenia. W kilku słowach, jeśli Twój GMail nie jest synchronizowany automatycznie, to ta aplikacja również nie będzie się synchronizować automatycznie. W ustawieniach możesz wyłączyć synchronizację automatyczną i przejść na ręczną.\n\nJeśli na swoim urządzeniu posiadasz więcej niż jedno konto Google, sugeruję udanie się do ustawień i wskazanie konta ręcznie.\n\nMimo wszystko rekomendowałbym udanie się do ustawień, tylko po to, by zobaczyć jakie opcję się tam znajdują. Możesz tam zmienić czcionkę oraz rozmiar pisanego tekstu, a także zmienić motyw z jasnego na ciemny.\n\nAplikacja zawiera również widżet, którego rozmiar można dowolnie zmieniać. Robisz to tak, jak w przypadku każdego innego widżetu: naciskasz palcem na widżet i przytrzymujesz chwilę, tak jak podczas przenoszenia. Zamiast przenosić możesz teraz przeciągnąć jego brzegi powiększając lub zmniejszając jego rozmiar.\n\nMam nadzieję, że aplikacja okaże się przydatna. Miej na uwadze, że jest ona kompletnie darmowa, nie posiada reklam oraz posiada otwarte źródło.\n\n/Jonas</string>
+<string name="about_text">Dziękuję za pobranie mojej aplikacji! Dołożę wszelkich starań, by aplikacja była co raz bardziej dopracowana pod każdym względem. Pamiętajcie że zawsze mogą wkraść się jakieś błędy, ale zawsze też może być lepiej!\n\nJeśli znajdziesz jakiś błąd lub niepoprawne tłumaczenie ewentualnie masz po prostu jakiś pomysł, dzięki któremu aplikacja może stać się bardziej przydatna chcę o tym usłyszeć!\n\nWyślij mi maila: jonas@nononsenseapps.com\nKliknij +1 w: https://plus.google.com/u/0/111801385015192089838\n\nBłędy zgłaszaj w systemie śledzenia błędów: https://github.com/spacecowboy/NotePad/issues\n\nJeżeli chciałbyś poprawić tłumaczenie udaj się na: http://translate.nononsenseapps.com\n\nJeszcze raz dziękuję za pobranie mojej aplikacji!\nJeśli chciałbyś wspomóc projekt w mniej aktywny sposób, możesz zawsze zakupić aplikację, jako darowiznę: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
 
 <!-- settings string keys -->
 <string name="menu_settings">Ustawienia</string>
@@ -235,8 +236,34 @@ Use few if language need it. In English is the same.
 <string name="notification_prio_low">Niski: ukryte, zminimalizowane</string>
 <string name="priority">Priorytet </string>
 <string name="group_on_list">Grupuj na liście </string>
-<string name="group_on_list_summary">Powiadomienia będą grupowane jeśli należą do tej samej listy.</string>
+<string name="group_on_list_summary">Powiadomienia będą grupowane, gdy należą do tej samej listy.</string>
 <string name="more">więcej </string>
 <string name="notifications">Powiadomienia</string>
-<string name="google_play_promo_80_char_limit">Dobrze wyglądający notes, lista zadań z synchronizacją z kontem Google</string>
+
+
+<string name="dashclock_tasks">Zadania</string>
+<string name="dashclock_restrict_to_tasks_in_a_specific_list">Ogranicz zadania do określonej listy</string>
+<string name="dashclock_show_overdue_tasks">Wyświetlanie zaległych zadań</string>
+<string name="dashclock_overdue_tasks_show">Zaległe zadania będą wyświetlane</string>
+<string name="dashclock_overdue_tasks_hide">Zaległe zadania nie będą wyświetlane</string>
+
+<string name="dashclock_title_activity_tasks_settings">Ustawienia Notesu  NoNonsense</string>
+<string name="dashclock_pref_header_general">Ogólny</string>
+
+<string name="dashclock_due_upper_limit_title">Ogranicz do zadań występujących</string>
+<string name="dashclock_today">Dziś</string>
+<string name="dashclock_tomorrow">Jutro</string>
+<string name="dashclock_next7">W następnych 7 dniach</string>
+<string name="dashclock_anytime">Kiedykolwiek</string>
+<string name="dashclock_will_show_as_many_as_possible">Wyświetlanych będzie tak wiele jak to możliwe</string>
+<string name="dashclock_will_only_show_the_task_due_first">Wyświetlane będzie tylko pierwsze zadanie</string>
+<string name="dashclock_show_only_the_next_task">Wyświetlaj tylko nastepne zadanie</string>
+<string name="dashclock_header_shown">Nazwa listy będzie pogrubiona.</string>
+<string name="dashclock_first_task_shown">Tytuł pierwszego zadania będzie pogrubiony</string>
+<string name="dashclock_display_header">Wyświetlaj nagłówek</string>
+
+
+<!-- Store text -->
+<string name="google_play_promo_80_char_limit">Świetnie wyglądający notes, lista zadań z synchronizacją z kontem Google</string>
+<string name="google_play_description">Notatnik oraz lista zadań o otwartym źródle. Synchronizuje dane z twoim kontem Google przechowując twoje notatki w chmurze nie żądając od Ciebie żadnych haseł.\n\nFunkcje:\n* Powiadomienia / Przypomnienia\n* Wybór języka\n* Konfigurowalny UI\n* Widżety\n* Wsparcie dla tabletów\n* Motyw Holo\n* Automatyczna synchronizacja z kontem Google\n* Możliwość ustawiania haseł do notatek\n* Przenoszenie notatek między listami\n* Integracja z widżetem Agenda\n* Wyszukiwanie w treści notatek\n* Zmiana czcionki oraz jej rozmiaru\n\nMożesz pomóc w tłumaczeniu aplikacji, tutaj: http://translate.nononsenseapps.com\n\nGdy znajdziesz jakikolwiek błąd w aplikacji daj mi znać, możesz napisać na profilu Google +NoNonsenseApps lub https://github.com/spacecowboy/NotePad/issues\n\nJest to aplikacja o otwartym źródle, który możesz znaleźć tutaj: https://github.com/spacecowboy/NotePad\n\nIstnieje również płatna wersja aplikacji dostępna dla tych którzy chcieli by wspomóc mnie finansowo. https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>

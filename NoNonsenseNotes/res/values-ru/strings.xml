@@ -21,6 +21,7 @@ limitations under the License.
 <string name="title_create">Новая запись</string>
 <string name="title_edit">Редактирование: %1$s</string>
 <string name="menu_add">Новая запись</string>
+<string name="menu_save_and_add">Записать и открыть новую заметку</string>
 <string name="menu_delete">Удалить</string>
 <string name="menu_revert">Отменить изменения</string>
 <string name="menu_copy">Копировать</string>
@@ -47,6 +48,7 @@ limitations under the License.
 <string name="settings_theme">Текущая тема</string>
 <string name="settings_theme_dialog">Использовать тему</string>
 <string name="settings_lang">Язык</string>
+<string name="settings_lang_dialog">Настройки языка диалога</string>
 <string name="settings_cat_theme">Тема</string>
 <string name="settings_cat_sorting">Сортировка</string>
 <string name="settings_sorting_type">Сортировать по</string>
@@ -107,6 +109,7 @@ limitations under the License.
 <string name="automatic">Автоматически</string>
 <string name="preferences_week_start_day_dialog">Начало недели:</string>
 <string name="preferences_week_start_day_title">Начало недели:</string>
+
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
@@ -202,10 +205,14 @@ Use few if language need it. In English is the same.
 <string name="about_text">"Спасибо за установку моего приложения! Я стараюсь, чтобы это приложение было отличным во всех отношениях, но всегда найдутся ошибки или вещи, которые всегда сделать приложение более удивительным! Если вы нашли ошибку в приложении, неточность в переводе или у вас просто появилась идея, как сделать приложение еще лучше, то я готов выслушать вас!Напишите мне на E-mail: jonas@nononsenseapps.comОтправьте Твит: @SciencyGuyПоставьте +1: https://plus.google.com/u/0/111801385015192089838Сообщите об ошибках на трекере: https://github.com/spacecowboy/NotePad/issuesТак как проект с открытым исходным кодом, вы можете самостоятельно исправить все что захочется, или же пришлите мне запрос!Если вы хотите сделать перевод приложения на свой язык, это замечательно. Свяжитесь со мной!Я сделал видео инструкцию, как можно сделать обновление уже существующих переводов прямо на GitHub: http://www.youtube.com/watch?v=oZTO5zOoCb4И снова, спасибо за установку моего приложения!Если вы хотите поддержать проект, оставив его не менее активным, вы всегда можете сделать пожертвования, купив платную версию: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate"</string>
 
 <!-- settings string keys -->
+<string name="menu_settings">Настройки</string>
+<string name="title_activity_list_widget_config">Настройки виджета</string>
 <string name="hide_appicon">Скрыть иконку программы</string>
 <string name="hide_new">Скрыть кнопку новой заметки</string>
 <string name="hide_header">Скрыть весь заголовок виджета</string>
 <string name="hide_widgetbg">Прозрачный фон</string>
+<string name="shortcut_help1">Если отмечено, ярлык будет создать новую заметку в выбранном списке и открывать редактор. Если флажок не установлен, ярлык будет открыть выбранный список.</string>
+<string name="loading_widget">Загрузка виджета</string>
 
 <string name="notecopied_one">Скопирована одна заметка</string>
 <string name="notecopied_other">Скопировано %d заметки</string>
@@ -234,6 +241,24 @@ Use few if language need it. In English is the same.
 <string name="priority">Приоритет</string>
 <string name="group_on_list">Сгруппировать в списке</string>
 <string name="group_on_list_summary">Множественные уведомления будут объеденинены, если они находятся в одном листе.</string>
+<string name="more">больше</string>
 <string name="notifications">Уведомления</string>
 
+
+<string name="dashclock_tasks">Задачи</string>
+<string name="dashclock_show_overdue_tasks">Показать просроченные задачи</string>
+<string name="dashclock_overdue_tasks_show">Просроченные задачи будут отображаться</string>
+<string name="dashclock_overdue_tasks_hide">Просроченные задачи не будут показаны</string>
+
+
+<string name="dashclock_today">Сегодня</string>
+<string name="dashclock_tomorrow">Завтра</string>
+<string name="dashclock_next7">На семь дней вперед</string>
+<string name="dashclock_anytime">В любое время</string>
+<string name="dashclock_will_show_as_many_as_possible">Будет показано так много, как возможно</string>
+<string name="dashclock_show_only_the_next_task">Показывать только следующую задачу</string>
+<string name="dashclock_display_header">Отображать заголовок</string>
+
+
+<!-- Store text -->
 </resources>

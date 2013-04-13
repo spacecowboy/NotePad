@@ -1,28 +1,101 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:weightSum="1" >
+    android:paddingBottom="4dp"
+    android:paddingTop="4dp" >
 
-    <Button
-        android:id="@+id/notificationDateTime"
-        style="?android:attr/spinnerStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:layout_weight="1"
-        android:fontFamily="sans-serif-light"
-        android:hint="@string/editor_due_date_hint"
-        android:paddingLeft="16dp"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
+    <!-- style="?android:attr/spinnerStyle" -->
+    <!-- android:background="@android:drawable/btn_default_holo_dark" -->
 
     <ImageButton
         android:id="@+id/notificationRemove"
+        style="?android:attr/buttonBarButtonStyle"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="4dp"
-        android:background="?btn_default_selector"
-        android:scaleType="fitCenter"
-        android:src="?content_remove" />
+        android:layout_height="48dp"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="4dp"
+        android:scaleType="center"
+        android:src="?attr/body_remove" />
 
-</LinearLayout>
+    <TextView
+        android:id="@+id/notificationDateTime"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@id/notificationRemove"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center_vertical"
+        android:hint="@string/editor_due_date_hint"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textIsSelectable="false" />
+
+    <View
+        android:id="@+id/dividerLine"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignStart="@id/notificationDateTime"
+        android:layout_below="@id/notificationDateTime"
+        android:background="?android:attr/dividerVertical" />
+
+    <TextView
+        android:id="@+id/repeatTextField"
+        android:layout_width="wrap_content"
+        android:layout_height="24dp"
+        android:layout_alignParentEnd="true"
+        android:layout_alignStart="@id/notificationDateTime"
+        android:layout_below="@id/dividerLine"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
+        android:enabled="false"
+        android:drawableRight="?attr/expander_open_holo"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center_vertical"
+        android:hint=""
+        android:singleLine="true"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textIsSelectable="false" />
+
+    <!-- Click to unhide this -->
+
+    <RelativeLayout
+        android:id="@+id/repeatDetails"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentEnd="true"
+        android:visibility="gone"
+        android:layout_alignStart="@id/notificationDateTime"
+        android:layout_below="@id/repeatTextField" >
+
+        <CheckBox
+            android:id="@+id/repeatCheckbox"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentStart="true"
+            android:singleLine="true"
+            android:text=""
+            android:textAllCaps="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textIsSelectable="false" />
+        
+        <ToggleButton 
+            android:id="@+id/mondayButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@id/repeatCheckbox"
+            android:textOff="MON"
+            android:textOn="MON"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            style="@android:attr/buttonBarButtonStyle"
+            android:textStyle="bold" />
+    </RelativeLayout>
+
+</RelativeLayout>

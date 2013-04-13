@@ -89,8 +89,8 @@ public class TaskListViewPagerFragment extends Fragment implements
 	}
 
 	@Override
-	public void onStart() {
-		super.onStart();
+	public void onActivityCreated(final Bundle state) {
+		super.onActivityCreated(state);
 
 		// Load actual data
 		getLoaderManager().restartLoader(0, null,

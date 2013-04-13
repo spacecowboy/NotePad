@@ -2,6 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <!-- Bottom 2dp Shadow -->
+    <!-- 
     <item
         android:bottom="@dimen/card_editor_shadow_bottom"
         android:left="0dp"
@@ -12,10 +13,11 @@
             <corners android:radius="2dp" />
         </shape>
     </item>
+     -->
 
     <!-- White Top color -->
     <item
-        android:bottom="@dimen/card_editor_top_bottom"
+        android:bottom="@dimen/card_editor_shadow_bottom"
         android:left="0dp"
         android:right="0dp">
         <shape android:shape="rectangle" >

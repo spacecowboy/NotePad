@@ -24,6 +24,7 @@
 	<attr name="content_paste" format="reference" />
 	<attr name="content_undo" format="reference" />
 	<attr name="content_remove" format="reference" />
+	<attr name="ab_cancel" format="reference" />
 	<attr name="device_access_secure" format="reference" />
 	<attr name="device_access_not_secure" format="reference" />
 	<attr name="social_share" format="reference" />

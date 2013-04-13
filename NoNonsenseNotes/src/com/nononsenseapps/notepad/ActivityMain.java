@@ -1,9 +1,12 @@
 package com.nononsenseapps.notepad;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.OnActivityResult;
 import com.googlecode.androidannotations.annotations.SystemService;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.nononsenseapps.helpers.NotificationHelper;
@@ -15,6 +18,7 @@ import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
+import com.nononsenseapps.notepad.interfaces.TimeTraveler;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
@@ -47,6 +51,8 @@ public class ActivityMain extends FragmentActivity implements
 	public static final String DETAILTAG = "detailfragment";
 	public static final String LISTPAGERTAG = "listpagerfragment";
 
+	List<TimeTraveler> onActivityResultListeners = new ArrayList<TimeTraveler>();
+
 	@ViewById
 	View fragment1;
 
@@ -67,7 +73,7 @@ public class ActivityMain extends FragmentActivity implements
 		NotificationHelper.schedule(this);
 	}
 
-	private void readAndSetSettings() {
+	protected void readAndSetSettings() {
 		// Read settings and set
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
@@ -437,6 +443,17 @@ public class ActivityMain extends FragmentActivity implements
 		else {
 			// Phone case, just finish the activity
 			finish();
+		}
+	}
+
+	@OnActivityResult(1)
+	protected void onTimeMachineResult(int resultCode, Intent data) {
+		if (resultCode == RESULT_OK) {
+			Fragment editor = getSupportFragmentManager().findFragmentByTag(
+					DETAILTAG);
+			if (editor != null && editor instanceof TimeTraveler) {
+				((TimeTraveler) editor).onTimeTravel(data);
+			}
 		}
 	}
 }

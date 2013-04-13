@@ -371,6 +371,21 @@ public class MyContentProvider extends ContentProvider {
 			result.setNotificationUri(getContext().getContentResolver(),
 					Task.URI);
 			break;
+		case Task.HISTORYQUERYCODE:
+			result = DatabaseHandler
+			.getInstance(getContext())
+			.getReadableDatabase()
+			.query(Task.HISTORY_TABLE_NAME,
+					projection,
+					selection,
+					selectionArgs,
+					null,
+					null,
+					Task.Columns.UPDATED + " ASC");
+			// SQLite timestamp in updated column.
+
+			result.setNotificationUri(getContext().getContentResolver(), uri);
+			break;
 		case Notification.BASEITEMCODE:
 			id = Long.parseLong(uri.getLastPathSegment());
 			result = DatabaseHandler

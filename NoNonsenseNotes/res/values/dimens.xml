@@ -15,31 +15,34 @@
      limitations under the License.
 -->
 <resources>
+
     <dimen name="listMargins">0dp</dimen>
     <!-- list item min size -->
     <dimen name="list_item_min_size">48dp</dimen>
     <dimen name="widget_item_min_size">35dp</dimen>
-    
+
     <!-- Preference activity side margins -->
     <dimen name="preference_screen_side_margin">8dp</dimen>
-    
+
     <!-- For widget -->
     <dimen name="widget_margin">8dp</dimen>
-    
+
     <!-- Editor fragment stuff -->
     <dimen name="editor_side_margin">0dp</dimen>
     <dimen name="editor_vertical_margin">0dp</dimen>
     <dimen name="editor_vertical_margin_bottom">0dp</dimen>
-    
+
     <!-- For card in editor -->
     <dimen name="card_editor_shadow_bottom">0dp</dimen>
     <dimen name="card_editor_top_bottom">0dp</dimen>
-    
+
     <!-- Hacky but it works! -->
     <dimen name="match_parent">-1dp</dimen>
     <dimen name="wrap_content">-2dp</dimen>
-    
     <dimen name="task_list_divider_height_small">1dp</dimen>
     <dimen name="task_list_divider_height_large">4dp</dimen>
-    
+    <dimen name="activity_lone_horizontal_margin">0dp</dimen>
+    <dimen name="activity_lone_vertical_margin">16dp</dimen>
+    <dimen name="activity_lone_horizontal_padding">16dp</dimen>
+
 </resources>

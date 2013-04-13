@@ -21,6 +21,7 @@ limitations under the License.
 <string name="title_create">Nuova nota</string>
 <string name="title_edit">Modifica: %1$s</string>
 <string name="menu_add">Nuova nota</string>
+<string name="menu_save_and_add">Salva e apre una nuova nota</string>
 <string name="menu_delete">Elimina</string>
 <string name="menu_revert">Annulla modifiche</string>
 <string name="menu_copy">Copia nota</string>
@@ -78,7 +79,7 @@ limitations under the License.
 <string name="settings_sync_freq_title">Tipo di sincronizzazione</string>
 <string name="settings_account_title">Seleziona un account</string>
 <string name="settings_account_summary">Clicca per cambiare account</string>
-<string name="settings_sync_enable_title">Sincronizzazione con Google Tasks</string>
+<string name="settings_sync_enable_title">Sincronizza con Google Tasks</string>
 <string name="settings_sync_enable_summary">Sincronizza le note con il tuo account Google</string>
 <string name="settings_cat_syncing">Sincronizzazione</string>
 <string name="manual">Manuale</string>
@@ -105,6 +106,7 @@ limitations under the License.
 <string name="automatic">Automatica</string>
 <string name="preferences_week_start_day_dialog">La settimana inizia il</string>
 <string name="preferences_week_start_day_title">La settimana inizia il</string>
+
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
@@ -147,7 +149,7 @@ Use few if language need it. In English is the same.
 <string name="changelog_ok_button">OK</string>
 <string name="changelog_show_full">Mostra tutto</string>
 <string name="widget_pref_preview_note">Mostra anteprima della nota</string>
-<string name="widget_pref_preview_note_summary_off">Il titolo sarà su due righe</string>
+<string name="widget_pref_preview_note_summary_off">Il titolo sarà su 2 righe</string>
 <string name="widget_pref_preview_note_summary_on">La nota sarà sulla seconda riga</string>
 <string name="widget_pref_show_complete">Pulsante per contrassegnare come completata</string>
 <string name="widget_pref_show_complete_summary_off">Il pulsante sarà nascosto</string>
@@ -199,8 +201,8 @@ Use few if language need it. In English is the same.
 <string name="menu_settings">Impostazioni</string>
 <string name="title_activity_list_widget_config">Configurazione del widget</string>
 <string name="hide_appicon">Nascondi icona applicazione</string>
-<string name="hide_new">Nascondi nuovo pulsante</string>
-<string name="hide_header">Nascondi l\'intestazione del widget</string>
+<string name="hide_new">Nascondi pulsante Nuova</string>
+<string name="hide_header">Nascondi intestazione widget</string>
 <string name="hide_widgetbg">Sfondo trasparente</string>
 <string name="loading_widget">Caricamento widget&#8230;</string>
 <string name="default_list_set">Elenco predefinito impostato</string>
@@ -212,14 +214,54 @@ Use few if language need it. In English is the same.
 <string name="selected_one">Selezionata una nota</string>
 <string name="selected_other">Selezionate %d note</string>
 
-<string name="background_sync">Sincronizzazione in background</string>
-<string name="background_sync_info">Sincronizzazione pgni ora</string>
-<string name="sync_on_change">Sincronizzazone ad ogni modifica</string>
+<string name="background_sync">Sincronizza in background</string>
+<string name="background_sync_info">Sincronizza ogni ora</string>
+<string name="sync_on_change">Sincronizza a ogni modifica</string>
 <string name="sync_on_change_info">Pianifica la sincronizzazione poco dopo la modifica della nota</string>
 <string name="sync_on_start">Sincronizza all\'avvio dell\'applicazione</string>
 <string name="sync_on_start_info">Avverrà solo all\'avvio iniziale, non ad ogni ripristino</string>
 <string name="sync_full_force">La prossima volta sincronizza completamente</string>
-<string name="sync_full_force_info">Spunta solo se ritiene che la sincronizzazione non sia completa</string>
+<string name="sync_full_force_info">Attivare solo se ritiene che la sincronizzazione non sia completa</string>
 
 <string name="silent">Silenzioso</string>
+<string name="sound">Suono</string>
+<string name="vibrate">Vibrazione</string>
+<string name="reminders">Promemoria</string>
+<string name="add_reminder">Aggiungi promemoria</string>
+<string name="standard">Standard</string>
+<string name="notification_prio_high">Alta: in alto, espansa</string>
+<string name="notification_prio_low">Bassa: nascosta, minimizzata</string>
+<string name="priority">Priorità</string>
+<string name="group_on_list">Raggruppa per elenco</string>
+<string name="group_on_list_summary">Più notifiche verranno raggruppate insieme se appartengono allo stesso elenco</string>
+<string name="more">altro</string>
+<string name="notifications">Notifiche</string>
+<string name="dateformat_micro">d MMM</string>
+
+
+<string name="dashclock_tasks">Attività</string>
+<string name="dashclock_restrict_to_tasks_in_a_specific_list">Limita alle attività in un elenco specifico</string>
+<string name="dashclock_show_overdue_tasks">Mostra attività scadute</string>
+<string name="dashclock_overdue_tasks_show">Le attività scadute verranno mostrate</string>
+<string name="dashclock_overdue_tasks_hide">Le attività scadute verranno nascoste</string>
+
+<string name="dashclock_title_activity_tasks_settings">Impostazioni Note NoNonsente</string>
+<string name="dashclock_pref_header_general">Generale</string>
+
+<string name="dashclock_due_upper_limit_title">Limita alle attività scadute al più tardi</string>
+<string name="dashclock_today">Oggi</string>
+<string name="dashclock_tomorrow">Domani</string>
+<string name="dashclock_next7">Prossimi 7 giorni</string>
+<string name="dashclock_anytime">Sempre</string>
+<string name="dashclock_will_show_as_many_as_possible">Mostrerà più attività possibili</string>
+<string name="dashclock_will_only_show_the_task_due_first">Mostrerà solo l\'attività in scadenza immediata</string>
+<string name="dashclock_show_only_the_next_task">Mostra solo la prossima attività</string>
+<string name="dashclock_header_shown">Il nome dell\'elenco sarà mostrato in grassetto. Se è selezionato &quot;Tutti gli elenchi&quot; mostrerà &quot;Attività&quot;</string>
+<string name="dashclock_first_task_shown">Il titolo della prima attività sarà mostrato in grassetto</string>
+<string name="dashclock_display_header">Mostra intestazione</string>
+
+
+<!-- Store text -->
+<string name="google_play_promo_80_char_limit">Un\'app dall\'aspetto accattivante per note, attività e todo sincronizzata con Google Tasks</string>
+<string name="google_play_description">Un\'app open source per appunti e to-do, con interfaccia per smartphone e tablet. Sincronizza con il tuo account Google per mantenere al sicuro nel cloud le tue note e attività, senza dover inserire alcuna password!\n\nFunzionalità\n* Notifiche/Promemoria\n* Selezione lingua\n* Interfaccia personalizzabile\n* Widget, ridimensionabile e configurabile\n* Ottimo supporto ai tablet, che riprende le funzionalità di Gmail\n* Temi Holo per essere uniforme ad Android\n* Sincronizzazione automatica con Google Tasks\n* Possibilità di impostare password per le note\n* Spostamento delle note tra elenchi differenti\n* Integrazione con Adroid Agenda Widget\n* Ricerca in tutte le note (non solo nei titoli)\n* Regolazione del carattere e della dimensione del testo!\n\nAnnotazioni:\nÈ presente un bug in Android 4.2 che si manifesta in tutte le app che fanno uso delle notifiche. Se si impostano le notifiche per NON vibrare (predefinito) e poi si imposta il telefono in silenzioso (solo vibrazione), le notifiche vibreranno sempre anche se si è esplicitamente disattivato tale comportamento.\nDi nuovo, è un errore in Androidi, non un bug nell\'applicazione.\n\nÈ possibile aiutare a tradurre questa applicazione, presso  http://translate.nononsenseapps.com\n\nPer ogni problema o per segnalare un bug, non esitate a contattarmi!\n+NoNonsenseApps\noppure\nsegnalate i bug nel tracker dedicato presso https://github.com/spacecowboy/NotePad/issues\n\nQuesta app è open source ed è disponibile online presso https://github.com/spacecowboy/NotePad\n\nÈ disponibile una versione a pagamento dell\'app per coloro che volessero supportarmi nello sviluppo: https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>
