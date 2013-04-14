@@ -19,6 +19,7 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -130,11 +131,11 @@ public class DialogEditList extends DialogFragment {
 			okButton.setEnabled(false);
 		}
 
-		sortSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),
+		modeSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),
 				R.layout.spinner_item, getActivity().getResources()
 						.getStringArray(R.array.show_list_as)));
 
-		modeSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),
+		sortSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),
 				R.layout.spinner_item, getActivity().getResources()
 						.getStringArray(R.array.sort_list_by)));
 	}
@@ -142,6 +143,8 @@ public class DialogEditList extends DialogFragment {
 	@UiThread
 	void fillViews() {
 		titleField.setText(mTaskList.title);
+		selectSortKey();
+		// TODO all fields
 	}
 
 	@AfterTextChange(R.id.titleField)
@@ -152,12 +155,13 @@ public class DialogEditList extends DialogFragment {
 	@Click(R.id.deleteButton)
 	void deleteClicked() {
 		if (mTaskList._id > 0) {
-			DialogDeleteList.showDialog(getFragmentManager(), mTaskList._id, new DialogConfirmedListener() {
-				@Override
-				public void onConfirm() {
-					dismiss();
-				}
-			});
+			DialogDeleteList.showDialog(getFragmentManager(), mTaskList._id,
+					new DialogConfirmedListener() {
+						@Override
+						public void onConfirm() {
+							dismiss();
+						}
+					});
 		}
 	}
 
@@ -168,24 +172,14 @@ public class DialogEditList extends DialogFragment {
 
 	@Click(R.id.dialog_yes)
 	void okClicked() {
-		// TODO save it
-		Toast.makeText(getActivity(), "Remember to show save toast",
+		Toast.makeText(getActivity(), R.string.saved,
 				Toast.LENGTH_SHORT).show();
 
 		mTaskList.title = titleField.getText().toString();
+		mTaskList.sorting = getSortValue();
+		// TODO list type
 
-		if (mTaskList._id > 0) {
-			getActivity().getContentResolver().update(mTaskList.getUri(),
-					mTaskList.getContent(), null, null);
-		}
-		else {
-			final Uri result = getActivity().getContentResolver().insert(
-					mTaskList.getBaseUri(), mTaskList.getContent());
-
-			if (result != null) {
-				mTaskList._id = Long.parseLong(result.getLastPathSegment());
-			}
-		}
+		mTaskList.save(getActivity());
 
 		if (mTaskList._id > 0 && listener != null) {
 			listener.onFinishEditDialog(mTaskList._id);
@@ -195,5 +189,49 @@ public class DialogEditList extends DialogFragment {
 
 		// TODO save items if necessary
 		this.dismiss();
+	}
+
+	String getSortValue() {
+		String result = null;
+		if (sortSpinner != null) {
+			final String key = (String) sortSpinner.getSelectedItem();
+			if (key.equals(getString(R.string.sort_list_alphabetical))) {
+				result = getString(R.string.const_alphabetic);
+			}
+			else if (key.equals(getString(R.string.sort_list_due))) {
+				result = getString(R.string.const_duedate);
+			}
+			else if (key.equals(getString(R.string.sort_list_manual))) {
+				result = getString(R.string.const_possubsort);
+			}
+			else if (key.equals(getString(R.string.sort_list_updated))) {
+				result = getString(R.string.const_modified);
+			}
+			else {
+				// Default from global prefs
+				result = null;
+			}
+		}
+		return result;
+	}
+
+	void selectSortKey() {
+		if (sortSpinner != null && mTaskList != null) {
+			if (mTaskList.sorting == null) {
+				sortSpinner.setSelection(0);
+			}
+			else if (mTaskList.sorting.equals(getString(R.string.const_alphabetic))) {
+				sortSpinner.setSelection(1);
+			}
+			else if (mTaskList.sorting.equals(getString(R.string.const_modified))) {
+				sortSpinner.setSelection(2);
+			}
+			else if (mTaskList.sorting.equals(getString(R.string.const_duedate))) {
+				sortSpinner.setSelection(3);
+			}
+			else if (mTaskList.sorting.equals(getString(R.string.const_possubsort))) {
+				sortSpinner.setSelection(4);
+			}
+		}
 	}
 }

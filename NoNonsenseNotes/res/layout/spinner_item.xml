@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:minHeight="48dp"
     android:gravity="center_vertical"
-    android:fontFamily="sans-serif-light"
+    android:fontFamily="sans-serif"
     android:paddingLeft="16dp"
     android:textAppearance="?android:attr/textAppearanceMedium"
     android:textColor="?textColorSecondary"

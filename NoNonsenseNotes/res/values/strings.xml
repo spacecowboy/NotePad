@@ -22,6 +22,7 @@
     <string name="title_edit">Edit: %1$s</string>
     <string name="timemachine">Time machine</string>
     <string name="done">Done</string>
+    <string name="saved">Saved</string>
     <string name="menu_add">New note</string>
     <string name="menu_save_and_add">Save and open a new note</string>
     <string name="menu_delete">Delete</string>
