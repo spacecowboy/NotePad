@@ -35,6 +35,11 @@
     <string name="const_duedate">duedate</string>
     <string name="const_modified">modified</string>
     <string name="const_possubsort">manual</string>
+    <string name="default_sorttype">@string/const_possubsort</string>
+    <string name="const_listtype_tasks">astasks</string>
+    <string name="const_listtype_notes">asnotes</string>
+    <string name="default_listtype">@string/const_listtype_tasks</string>
+    <string name="pref_listtype">listtype</string>
     <string name="const_sans">Sans</string>
     <string name="const_serif">Serif</string>
     <string name="const_monospace">Monospace</string>
@@ -46,6 +51,7 @@
     <string name="key_pref_item_max_height">item_max_height</string>
     <string name="key_pref_dateformat_long">dateformat_long</string>
     <string name="key_pref_dateformat_short">dateformat_short</string>
+    <string name="pref_sorttype">key_sort_type</string>
     <string name="preferences_week_start_day_default">-1</string>
     <string name="dashclock_nononsense_notes">NoNonsense Notes</string>
     <string name="dashclock_tasks_count">%d</string>

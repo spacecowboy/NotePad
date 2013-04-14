@@ -1299,7 +1299,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	private void refreshList(Bundle args) {
 		// We might need to construct a new adapter
 		final String sorting = PreferenceManager.getDefaultSharedPreferences(
-				activity).getString(MainPrefs.KEY_SORT_TYPE, "");
+				activity).getString(getString(R.string.pref_sorttype), "");
 		if (shouldDisplaySections(sorting)) {
 			if (mSectionAdapter == null || !mSectionAdapter.isSectioned()) {
 				// Destroy section loaders
@@ -1466,7 +1466,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 		// Get current sort order or assemble the default one.
 		String sortChoice = PreferenceManager.getDefaultSharedPreferences(
-				activity).getString(MainPrefs.KEY_SORT_TYPE, "");
+				activity).getString(getString(R.string.pref_sorttype), "");
 
 		String sortOrder = NotePad.Notes.POSSUBSORT_SORT_TYPE;
 
@@ -1509,7 +1509,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 		// Get current sort order or assemble the default one.
 		String sortOrder = PreferenceManager.getDefaultSharedPreferences(
-				activity).getString(MainPrefs.KEY_SORT_TYPE,
+				activity).getString(getString(R.string.pref_sorttype),
 				NotePad.Notes.DEFAULT_SORT_TYPE);
 				//+ " "
 				//+ PreferenceManager.getDefaultSharedPreferences(activity)

@@ -896,7 +896,7 @@ public class MainActivity extends DualLayoutActivity implements
 				|| key.equals(MainPrefs.KEY_HIDDENNOTE)
 				|| key.equals(MainPrefs.KEY_TITLEROWS)
 				//|| key.equals(MainPrefs.KEY_SORT_ORDER)
-				|| key.equals(MainPrefs.KEY_SORT_TYPE)
+				|| key.equals(getString(R.string.pref_sorttype))
 				|| key.equals(getString(R.string.pref_locale))
 				|| key.equals(MainPrefs.KEY_LISTHEADERS)) {
 			shouldRestart = true;
@@ -931,7 +931,7 @@ public class MainActivity extends DualLayoutActivity implements
 					getResources().getDisplayMetrics());
 		}
 
-		String sortType = prefs.getString(MainPrefs.KEY_SORT_TYPE,
+		String sortType = prefs.getString(getString(R.string.pref_sorttype),
 				NotePad.Notes.DEFAULT_SORT_TYPE);
 		//String sortOrder = prefs.getString(MainPrefs.KEY_SORT_ORDER,
 		//		NotePad.Notes.DEFAULT_SORT_ORDERING);

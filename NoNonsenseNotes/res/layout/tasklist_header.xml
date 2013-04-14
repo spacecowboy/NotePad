@@ -16,8 +16,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ellipsize="end"
-        android:singleLine="true"
         android:paddingLeft="16dp"
+        android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="?textColorPrimary"
         android:textIsSelectable="false"
@@ -39,6 +39,18 @@
 
     <com.nononsenseapps.ui.DateView
         android:id="@+id/date"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/dragpadding"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/drag_handle"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone" />

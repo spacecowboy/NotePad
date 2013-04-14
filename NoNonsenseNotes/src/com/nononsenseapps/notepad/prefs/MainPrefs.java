@@ -36,7 +36,7 @@ import android.text.format.Time;
 
 public class MainPrefs extends PreferenceFragment {
 	public static final String KEY_THEME = "key_current_theme";
-	public static final String KEY_SORT_TYPE = "key_sort_type";
+	//public static final String KEY_SORT_TYPE = "key_sort_type";
 	public static final String KEY_FONT_TYPE_EDITOR = "key_font_type_editor";
 	public static final String KEY_FONT_SIZE_EDITOR = "key_font_size_editor";
 	public static final String KEY_TEXT_PREVIEW = "key_text_preview";
@@ -91,7 +91,7 @@ public class MainPrefs extends PreferenceFragment {
 
 		// Bind summaries
 		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(KEY_SORT_TYPE));
+				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sorttype)));
 		PrefsActivity.bindPreferenceSummaryToValue(findPreference(KEY_THEME));
 		// PrefsActivity
 		// .bindPreferenceSummaryToValue(findPreference(KEY_FONT_TYPE_EDITOR));

@@ -17,6 +17,7 @@ import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
@@ -24,6 +25,8 @@ import com.nononsenseapps.utils.views.TitleNoteTextView;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -46,7 +49,8 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 
 @EFragment(R.layout.fragment_task_list)
-public class TaskListFragment extends Fragment {
+public class TaskListFragment extends Fragment implements
+		OnSharedPreferenceChangeListener {
 
 	public static final String LIST_ID = "list_id";
 
@@ -59,6 +63,12 @@ public class TaskListFragment extends Fragment {
 	private long mListId = -1;
 
 	private OnFragmentInteractionListener mListener;
+
+	private String mSortType = null;
+
+	private String mListType = null;
+
+	private LoaderCallbacks<Cursor> mCallback = null;
 
 	public static TaskListFragment_ getInstance(final long listId) {
 		TaskListFragment_ f = new TaskListFragment_();
@@ -89,20 +99,20 @@ public class TaskListFragment extends Fragment {
 		mAdapter = new SimpleSectionsAdapter(getActivity(),
 				R.layout.tasklist_item_rich, R.layout.tasklist_header, null,
 				new String[] { Task.Columns.TITLE, Task.Columns.NOTE,
-						Task.Columns.DUE, Task.Columns.COMPLETED }, new int[] {
+						Task.Columns.DUE, Task.Columns.COMPLETED, Task.Columns.LEFT, Task.Columns.RIGHT }, new int[] {
 						android.R.id.text1, android.R.id.text1, R.id.date,
-						R.id.checkbox }, 0);
+						R.id.checkbox, R.id.drag_handle, R.id.dragpadding }, 0);
 
 		// Set a drag listener
 		mAdapter.setDropListener(new DropListener() {
 			@Override
 			public void drop(int from, int to) {
-				Log.d("nononsenseapps drag", "Position from " + from + " to " + to);
+				Log.d("nononsenseapps drag", "Position from " + from + " to "
+						+ to);
 
-				final Task fromTask = new Task((Cursor) mAdapter
-						.getItem(from));
+				final Task fromTask = new Task((Cursor) mAdapter.getItem(from));
 				final Task toTask = new Task((Cursor) mAdapter.getItem(to));
-				
+
 				fromTask.moveTo(getActivity().getContentResolver(), toTask);
 			}
 		});
@@ -123,6 +133,7 @@ public class TaskListFragment extends Fragment {
 			SimpleDateFormat weekdayFormatter = TimeFormatter
 					.getLocalFormatterWeekday(getActivity());
 			boolean isHeader = false;
+			final String manualsort = getString(R.string.const_possubsort);
 			String sTemp = "";
 			final OnCheckedChangeListener checkBoxListener = new OnCheckedChangeListener() {
 				@Override
@@ -143,7 +154,6 @@ public class TaskListFragment extends Fragment {
 				case 1:
 					sTemp = c.getString(colIndex);
 					if (isHeader) {
-						// TODO fetch strings
 						if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {
 							sTemp = getString(R.string.date_header_overdue);
 						}
@@ -197,6 +207,19 @@ public class TaskListFragment extends Fragment {
 						}
 					}
 					return true;
+				case 6:
+					// left, handle
+				case 7:
+					// right, padding
+					if (!isHeader) {
+						if (mSortType != null && mSortType.equals(manualsort)) {
+							view.setVisibility(View.VISIBLE);
+						}
+						else {
+							view.setVisibility(View.GONE);
+						}
+					}
+					return true;
 				default:
 					break;
 				}
@@ -209,31 +232,93 @@ public class TaskListFragment extends Fragment {
 	public void onActivityCreated(final Bundle state) {
 		super.onActivityCreated(state);
 
-		getLoaderManager().restartLoader(0, null,
-				new LoaderCallbacks<Cursor>() {
+		// Get the global list settings
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(getActivity());
 
-					@Override
-					public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
-						// Task.URI_SECTIONED_BY_DATE
-						// Task.URI_INDENTED_QUERY
-						// Task.Columns.LEFT
-						return new CursorLoader(getActivity(),
-								Task.URI_INDENTED_QUERY, Task.Columns.FIELDS,
-								Task.Columns.DBLIST + " IS ?",
-								new String[] { Long.toString(mListId) },
-								Task.Columns.LEFT);
+		// mSortType = prefs.getString(getString(R.string.pref_sorttype),
+		// getString(R.string.default_sorttype));
+		// mListType = prefs.getString(getString(R.string.pref_listtype),
+		// getString(R.string.default_listtype));
+
+		mCallback = new LoaderCallbacks<Cursor>() {
+			@Override
+			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
+				if (id == 0) {
+					Log.d("nononsenseapps list", "creating loader 0");
+					return new CursorLoader(getActivity(),
+							TaskList.getUri(mListId), TaskList.Columns.FIELDS,
+							null, null, null);
+				}
+				else {
+					Log.d("nononsenseapps list", "creating loader 1");
+					// What sorting to use
+					final Uri targetUri;
+					final String sortSpec;
+					if (mSortType == null) {
+						mSortType = prefs.getString(
+								getString(R.string.pref_sorttype),
+								getString(R.string.default_sorttype));
+					}
+					if (mSortType.equals(getString(R.string.const_alphabetic))) {
+						targetUri = Task.URI;
+						sortSpec = Task.Columns.TITLE;
+					}
+					else if (mSortType
+							.equals(getString(R.string.const_duedate))) {
+						targetUri = Task.URI_SECTIONED_BY_DATE;
+						sortSpec = null;
+					}
+					else if (mSortType
+							.equals(getString(R.string.const_modified))) {
+						targetUri = Task.URI;
+						sortSpec = Task.Columns.UPDATED + " DESC";
+					}
+					// manual sorting
+					else {
+						targetUri = Task.URI_INDENTED_QUERY;
+						sortSpec = null;
 					}
 
-					@Override
-					public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
-						mAdapter.swapCursor(c);
-					}
+					// Task.URI_SECTIONED_BY_DATE
+					// Task.URI_INDENTED_QUERY
+					// Task.Columns.LEFT
+					return new CursorLoader(getActivity(), targetUri,
+							Task.Columns.FIELDS, Task.Columns.DBLIST + " IS ?",
+							new String[] { Long.toString(mListId) }, sortSpec);
+				}
+			}
 
-					@Override
-					public void onLoaderReset(Loader<Cursor> arg0) {
-						mAdapter.swapCursor(null);
+			@Override
+			public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
+				if (loader.getId() == 0) {
+					Log.d("nononsenseapps list", "loader 0 finished");
+					if (c.moveToFirst()) {
+						final TaskList list = new TaskList(c);
+						mSortType = list.sorting;
+						mListType = list.listtype;
+						// Reload tasks with new sorting
+						getLoaderManager().restartLoader(1, null, this);
 					}
-				});
+				}
+				else {
+					Log.d("nononsenseapps list", "loader 1 finished");
+					mAdapter.swapCursor(c);
+				}
+			}
+
+			@Override
+			public void onLoaderReset(Loader<Cursor> loader) {
+				if (loader.getId() == 0) {
+					// Nothing to do
+				}
+				else {
+					mAdapter.swapCursor(null);
+				}
+			}
+		};
+
+		getLoaderManager().restartLoader(0, null, mCallback);
 	}
 
 	@AfterViews
@@ -301,12 +386,18 @@ public class TaskListFragment extends Fragment {
 			// throw new ClassCastException(activity.toString()
 			// + " must implement OnFragmentInteractionListener");
 		}
+
+		// We want to be notified of future changes to auto refresh
+		PreferenceManager.getDefaultSharedPreferences(getActivity())
+				.registerOnSharedPreferenceChangeListener(this);
 	}
 
 	@Override
 	public void onDetach() {
 		super.onDetach();
 		mListener = null;
+		PreferenceManager.getDefaultSharedPreferences(getActivity())
+				.unregisterOnSharedPreferenceChangeListener(this);
 	}
 
 	static class SimpleSectionsAdapter extends SimpleDragSortCursorAdapter {
@@ -382,5 +473,17 @@ public class TaskListFragment extends Fragment {
 			}
 			return super.getView(position, convertView, parent);
 		}
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(final SharedPreferences prefs,
+			final String key) {
+		// if (key.equals(getString(R.string.pref_sorttype))) {
+		Log.d("nononsenseapps list", "prefs changed. restartin loader");
+		mSortType = null;
+		if (mCallback != null) {
+			getLoaderManager().restartLoader(0, null, mCallback);
+		}
+		// }
 	}
 }

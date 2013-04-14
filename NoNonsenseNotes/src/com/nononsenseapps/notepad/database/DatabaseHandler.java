@@ -145,12 +145,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			while (!c.isClosed() && c.moveToNext()) {
 				TaskList tl = new TaskList();
 				tl.title = c.getString(1);
-				if (c.getString(2) != null && !c.getString(2).isEmpty()) {
-					tl.gtaskid = c.getString(2);
-				}
-				if (c.getString(3) != null && !c.getString(3).isEmpty()) {
-					tl.gtaskaccount = c.getString(3);
-				}
+				// TODO handle gtask info
+//				if (c.getString(2) != null && !c.getString(2).isEmpty()) {
+//					tl.gtaskid = c.getString(2);
+//				}
+//				if (c.getString(3) != null && !c.getString(3).isEmpty()) {
+//					tl.gtaskaccount = c.getString(3);
+//				}
 
 				Time time = new Time(Time.TIMEZONE_UTC);
 				time.setToNow();

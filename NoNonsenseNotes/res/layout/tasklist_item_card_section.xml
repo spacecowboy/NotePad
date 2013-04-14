@@ -52,6 +52,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/dragpadding"
+        android:layout_alignWithParentIfMissing="true"
         android:layout_toRightOf="@+id/checkboxcontainer"
         android:layout_alignBaseline="@+id/checkboxcontainer"
         android:ellipsize="end"

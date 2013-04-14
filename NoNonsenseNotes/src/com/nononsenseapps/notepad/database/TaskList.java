@@ -43,39 +43,49 @@ public class TaskList extends DAO {
 
 		public static final String TITLE = "title";
 		public static final String UPDATED = "updated";
+		public static final String LISTTYPE = "tasktype";
+		public static final String SORTING = "sorting";
 
-		public static final String GTASKACCOUNT = "gtaskaccount";
-		public static final String GTASKID = "gtaskid";
+		// public static final String GTASKACCOUNT = "gtaskaccount";
+		// public static final String GTASKID = "gtaskid";
+		//
+		// // Future proofing
+		// public static final String DROPBOXACCOUNT = "dropboxaccount";
+		// public static final String DROPBOXID = "dropboxid";
 
-		// Future proofing
-		public static final String DROPBOXACCOUNT = "dropboxaccount";
-		public static final String DROPBOXID = "dropboxid";
-
-		public static final String[] FIELDS = { _ID, TITLE, UPDATED,
-				GTASKACCOUNT, GTASKID, DROPBOXACCOUNT, DROPBOXID };
+		public static final String[] FIELDS = { _ID, TITLE, UPDATED, LISTTYPE,
+				SORTING };
+		// GTASKACCOUNT, GTASKID, DROPBOXACCOUNT, DROPBOXID };
 		public static final String[] SHALLOWFIELDS = { _ID, TITLE, UPDATED };
 	}
 
-	public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME
-			+ "(" + Columns._ID + " INTEGER PRIMARY KEY," + Columns.TITLE
-			+ " TEXT NOT NULL DEFAULT ''," + Columns.UPDATED + " INTEGER,"
+	public static final String CREATE_TABLE = new StringBuilder("CREATE TABLE ")
+			.append(TABLE_NAME).append("(").append(Columns._ID)
+			.append(" INTEGER PRIMARY KEY,").append(Columns.TITLE)
+			.append(" TEXT NOT NULL DEFAULT '',").append(Columns.UPDATED)
+			.append(" INTEGER,").append(Columns.LISTTYPE)
+			.append(" TEXT DEFAULT NULL,").append(Columns.SORTING)
+			.append(" TEXT DEFAULT NULL")
 			// GTask fields
-			+ Columns.GTASKACCOUNT + " TEXT," + Columns.GTASKID + " TEXT,"
+			// .append(Columns.GTASKACCOUNT).append(" TEXT,").append(Columns.GTASKID).append(" TEXT,")
 			// Dropbox fields
-			+ Columns.DROPBOXACCOUNT + " TEXT," + Columns.DROPBOXID + " TEXT"
-
-			+ ")";
+			// .append(Columns.DROPBOXACCOUNT).append(" TEXT,").append(Columns.DROPBOXID).append(" TEXT")
+			.append(")").toString();
 
 	public String title = "";
 
 	// milliseconds since 1970-01-01 UTC
 	public Long updated = null;
+	
+	// Null, use global prefs
+	public String listtype = null;
+	public String sorting = null;
 
 	// Sync stuff
-	public String gtaskaccount = null;
-	public String gtaskid = null;
-	public String dropboxaccount = null;
-	public String dropboxid = null;
+	// public String gtaskaccount = null;
+	// public String gtaskid = null;
+	// public String dropboxaccount = null;
+	// public String dropboxid = null;
 
 	public TaskList() {
 	}
@@ -84,11 +94,13 @@ public class TaskList extends DAO {
 		this._id = c.getLong(0);
 		this.title = c.getString(1);
 		this.updated = c.getLong(2);
+		this.listtype = c.getString(3);
+		this.sorting = c.getString(4);
 		// sync stuff
-		gtaskaccount = c.getString(3);
-		gtaskid = c.getString(4);
-		dropboxaccount = c.getString(5);
-		dropboxid = c.getString(6);
+//		gtaskaccount = c.getString(3);
+//		gtaskid = c.getString(4);
+//		dropboxaccount = c.getString(5);
+//		dropboxid = c.getString(6);
 	}
 
 	public TaskList(final Uri uri, final ContentValues values) {
@@ -101,24 +113,29 @@ public class TaskList extends DAO {
 	}
 
 	public TaskList(final ContentValues values) {
-		this.title = values.getAsString(Columns.TITLE);
+		title = values.getAsString(Columns.TITLE);
 		updated = values.getAsLong(Columns.UPDATED);
-		gtaskaccount = values.getAsString(Columns.GTASKACCOUNT);
-		gtaskid = values.getAsString(Columns.GTASKID);
-		dropboxaccount = values.getAsString(Columns.DROPBOXACCOUNT);
-		dropboxid = values.getAsString(Columns.DROPBOXID);
+		listtype = values.getAsString(Columns.LISTTYPE);
+		sorting = values.getAsString(Columns.SORTING);
+		
+//		gtaskaccount = values.getAsString(Columns.GTASKACCOUNT);
+//		gtaskid = values.getAsString(Columns.GTASKID);
+//		dropboxaccount = values.getAsString(Columns.DROPBOXACCOUNT);
+//		dropboxid = values.getAsString(Columns.DROPBOXID);
 	}
 
 	public ContentValues getContent() {
 		final ContentValues values = new ContentValues();
 		// Note that ID is NOT included here
 		values.put(Columns.TITLE, title);
-
 		values.put(Columns.UPDATED, updated);
-		values.put(Columns.GTASKACCOUNT, gtaskaccount);
-		values.put(Columns.GTASKID, gtaskid);
-		values.put(Columns.DROPBOXACCOUNT, dropboxaccount);
-		values.put(Columns.DROPBOXID, dropboxid);
+		values.put(Columns.LISTTYPE, listtype);
+		values.put(Columns.SORTING, sorting);
+		
+//		values.put(Columns.GTASKACCOUNT, gtaskaccount);
+//		values.put(Columns.GTASKID, gtaskid);
+//		values.put(Columns.DROPBOXACCOUNT, dropboxaccount);
+//		values.put(Columns.DROPBOXID, dropboxid);
 
 		return values;
 	}
@@ -138,16 +155,16 @@ public class TaskList extends DAO {
 		int result = 0;
 		updated = Calendar.getInstance().getTimeInMillis();
 		if (_id < 1) {
-			final Uri uri = context.getContentResolver().insert(
-				getBaseUri(),getContent());
+			final Uri uri = context.getContentResolver().insert(getBaseUri(),
+					getContent());
 			if (uri != null) {
 				_id = Long.parseLong(uri.getLastPathSegment());
 				result++;
 			}
 		}
 		else {
-			result += context.getContentResolver().update(
-					getUri(),getContent(), null, null);
+			result += context.getContentResolver().update(getUri(),
+					getContent(), null, null);
 		}
 		return result;
 	}

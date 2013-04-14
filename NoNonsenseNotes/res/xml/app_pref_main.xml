@@ -73,11 +73,11 @@
             android:title="@string/hide_date" />
 
         <ListPreference
-            android:defaultValue="possubsort"
+            android:defaultValue="@string/default_sorttype"
             android:dialogTitle="@string/settings_sorting_type_dialog"
             android:entries="@array/sorting_preference"
             android:entryValues="@array/sortingvalues_preference"
-            android:key="key_sort_type"
+            android:key="@string/pref_sorttype"
             android:summary="Selected option should be here"
             android:title="@string/settings_sorting_type" />
     </PreferenceCategory>
