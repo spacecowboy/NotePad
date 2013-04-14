@@ -221,12 +221,20 @@ public class TaskListFragment extends Fragment implements
 					return true;
 				case 4:
 					if (!isHeader) {
-						if (c.isNull(colIndex)) {
+						// Always hide for note type
+						if (mListType != null && mListType.equals(notetype)) {
 							view.setVisibility(View.GONE);
 						}
+						// Show for tasks if present
 						else {
-							view.setVisibility(View.VISIBLE);
-							((DateView) view).setTimeText(c.getLong(colIndex));
+							if (c.isNull(colIndex)) {
+								view.setVisibility(View.GONE);
+							}
+							else {
+								view.setVisibility(View.VISIBLE);
+								((DateView) view).setTimeText(c
+										.getLong(colIndex));
+							}
 						}
 					}
 					return true;

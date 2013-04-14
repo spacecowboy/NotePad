@@ -38,7 +38,7 @@
         <!-- DUE DATE SECTION -->
 
         <RelativeLayout
-            android:id="@+id/detailsSection"
+            android:id="@+id/dueSection"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/taskText"
@@ -102,21 +102,23 @@
                 android:hint="@string/editor_due_date_hint"
                 android:paddingLeft="16dp"
                 android:textAppearance="?android:attr/textAppearanceMedium" />
-
-            <TextView
+        </RelativeLayout>
+        
+        <TextView
                 android:id="@+id/notificationAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
                 android:clickable="true"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentLeft="true"
-                android:layout_below="@+id/dueDateBox"
+                android:layout_below="@id/dueSection"
+                android:layout_alignWithParentIfMissing="true"
                 android:layout_marginBottom="4dp"
                 android:layout_marginTop="8dp"
                 android:drawableRight="?attr/body_new"
                 android:fontFamily="sans-serif-light"
                 android:gravity="center_vertical"
-                android:paddingLeft="0dp"
+                android:paddingLeft="8dp"
                 android:paddingRight="16dp"
                 android:text="@string/reminders"
         		android:background="?android:attr/selectableItemBackground"
@@ -171,7 +173,6 @@
                     android:textColor="?attr/labelAddItemTextColor"
                     android:textStyle="bold" />
             </LinearLayout>
-        </RelativeLayout>
     </RelativeLayout>
 
 </ScrollView>

@@ -78,6 +78,11 @@ public class TaskDetailFragment extends Fragment implements
 						.getLong(ARG_ITEM_ID, -1)), Task.Columns.FIELDS, null,
 						null, null);
 			}
+			else if (LOADER_EDITOR_TASKLISTS == id) {
+				return new CursorLoader(getActivity(), TaskList.getUri(args
+						.getLong(ARG_ITEM_LIST_ID)), TaskList.Columns.FIELDS,
+						null, null, null);
+			}
 			else {
 				return null;
 			}
@@ -94,6 +99,11 @@ public class TaskDetailFragment extends Fragment implements
 				fillUIFromTask();
 				// Don't want updates while editing
 				getLoaderManager().destroyLoader(LOADER_EDITOR_TASK);
+				// Load the list to see if we should hide task bits
+				Bundle args = new Bundle();
+				args.putLong(ARG_ITEM_LIST_ID, mTask.dblist);
+				getLoaderManager().restartLoader(LOADER_EDITOR_TASKLISTS, args,
+						loaderCallbacks);
 			}
 			else if (LOADER_EDITOR_NOTIFICATIONS == ldr.getId()) {
 				while (c.moveToNext()) {
@@ -101,6 +111,14 @@ public class TaskDetailFragment extends Fragment implements
 				}
 				// Don't update while editing
 				getLoaderManager().destroyLoader(LOADER_EDITOR_NOTIFICATIONS);
+			}
+			else if (LOADER_EDITOR_TASKLISTS == ldr.getId()) {
+				// At current only loading a single list
+				if (c.moveToFirst()) {
+					final TaskList list = new TaskList(c);
+
+					hideTaskParts(list);
+				}
 			}
 		}
 
@@ -123,6 +141,9 @@ public class TaskDetailFragment extends Fragment implements
 
 	@ViewById
 	LinearLayout notificationList;
+
+	@ViewById
+	View dueSection;
 
 	// Id of task to open
 	public static final String ARG_ITEM_ID = "item_id";
@@ -192,9 +213,9 @@ public class TaskDetailFragment extends Fragment implements
 
 		// TODO opening from a notification should delete the notification
 
+		final Bundle args = new Bundle();
 		if (getArguments().getLong(ARG_ITEM_ID, -1) > 0) {
 			// Load data from database
-			final Bundle args = new Bundle();
 			args.putLong(ARG_ITEM_ID, getArguments().getLong(ARG_ITEM_ID, -1));
 			getLoaderManager().restartLoader(LOADER_EDITOR_TASK, args,
 					loaderCallbacks);
@@ -210,6 +231,10 @@ public class TaskDetailFragment extends Fragment implements
 						Toast.LENGTH_SHORT).show();
 				getActivity().finish();
 			}
+			args.putLong(ARG_ITEM_LIST_ID,
+					getArguments().getLong(ARG_ITEM_LIST_ID, -1));
+			getLoaderManager().restartLoader(LOADER_EDITOR_TASKLISTS, args,
+					loaderCallbacks);
 
 			mTaskOrg = new Task();
 			mTask = new Task();
@@ -313,6 +338,21 @@ public class TaskDetailFragment extends Fragment implements
 					mTask.completed = null;
 			}
 		});
+	}
+
+	void hideTaskParts(final TaskList list) {
+		String type;
+		if (list.listtype == null) {
+			type = PreferenceManager.getDefaultSharedPreferences(getActivity())
+					.getString(getString(R.string.pref_listtype),
+							getString(R.string.default_listtype));
+		}
+		else {
+			type = list.listtype;
+		}
+		dueSection.setVisibility(type
+				.equals(getString(R.string.const_listtype_notes)) ? View.GONE
+				: View.VISIBLE);
 	}
 
 	@Override
