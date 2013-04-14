@@ -23,6 +23,7 @@
         android:title="@string/settings_cat_appearance" />
     <header
         android:summary=""
+        android:icon="@drawable/ic_action_list_prefs_dark"
         android:fragment="com.nononsenseapps.notepad.prefs.ListPrefs"
         android:title="@string/settings_list" />
     <header

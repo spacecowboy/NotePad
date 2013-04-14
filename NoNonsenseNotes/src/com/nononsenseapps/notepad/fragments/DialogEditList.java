@@ -14,6 +14,7 @@ import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedLis
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
@@ -144,7 +145,16 @@ public class DialogEditList extends DialogFragment {
 	void fillViews() {
 		titleField.setText(mTaskList.title);
 		selectSortKey();
+
 		// TODO all fields
+
+		// Check if this is the default list
+		final long defList = Long.parseLong(PreferenceManager
+				.getDefaultSharedPreferences(getActivity()).getString(
+						getString(R.string.pref_defaultlist), "-1"));
+		if (mTaskList._id > 0 && defList == mTaskList._id) {
+			defaultListBox.setChecked(true);
+		}
 	}
 
 	@AfterTextChange(R.id.titleField)
@@ -172,8 +182,8 @@ public class DialogEditList extends DialogFragment {
 
 	@Click(R.id.dialog_yes)
 	void okClicked() {
-		Toast.makeText(getActivity(), R.string.saved,
-				Toast.LENGTH_SHORT).show();
+		Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT)
+				.show();
 
 		mTaskList.title = titleField.getText().toString();
 		mTaskList.sorting = getSortValue();
@@ -181,11 +191,28 @@ public class DialogEditList extends DialogFragment {
 
 		mTaskList.save(getActivity());
 
+		if (mTaskList._id > 0 && defaultListBox.isChecked()) {
+			PreferenceManager
+					.getDefaultSharedPreferences(getActivity())
+					.edit()
+					.putString(getString(R.string.pref_defaultlist),
+							Long.toString(mTaskList._id)).commit();
+		}
+		else if (mTaskList._id > 0) {
+			// Remove pref if it is the default list currently
+			final long defList = Long.parseLong(PreferenceManager
+					.getDefaultSharedPreferences(getActivity()).getString(
+							getString(R.string.pref_defaultlist), "-1"));
+			if (defList == mTaskList._id) {
+				PreferenceManager.getDefaultSharedPreferences(getActivity())
+						.edit().remove(getString(R.string.pref_defaultlist))
+						.commit();
+			}
+		}
+
 		if (mTaskList._id > 0 && listener != null) {
 			listener.onFinishEditDialog(mTaskList._id);
 		}
-
-		// TODO set as default list if checked
 
 		// TODO save items if necessary
 		this.dismiss();
@@ -220,16 +247,20 @@ public class DialogEditList extends DialogFragment {
 			if (mTaskList.sorting == null) {
 				sortSpinner.setSelection(0);
 			}
-			else if (mTaskList.sorting.equals(getString(R.string.const_alphabetic))) {
+			else if (mTaskList.sorting
+					.equals(getString(R.string.const_alphabetic))) {
 				sortSpinner.setSelection(1);
 			}
-			else if (mTaskList.sorting.equals(getString(R.string.const_modified))) {
+			else if (mTaskList.sorting
+					.equals(getString(R.string.const_modified))) {
 				sortSpinner.setSelection(2);
 			}
-			else if (mTaskList.sorting.equals(getString(R.string.const_duedate))) {
+			else if (mTaskList.sorting
+					.equals(getString(R.string.const_duedate))) {
 				sortSpinner.setSelection(3);
 			}
-			else if (mTaskList.sorting.equals(getString(R.string.const_possubsort))) {
+			else if (mTaskList.sorting
+					.equals(getString(R.string.const_possubsort))) {
 				sortSpinner.setSelection(4);
 			}
 		}

@@ -4,9 +4,10 @@ package com.robobunny;
  * Found this on http://robobunny.com/wp/2011/08/13/android-seekbar-preference/
  * 
  * A great thank you to Kirk Baucom for posting it online for others to use!
+ * 
+ * It has been modified to handle attributes (strings etc) dynamically.
  */
 
-import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.R;
 
 import android.content.Context;
@@ -26,8 +27,8 @@ public class SeekBarPreference extends Preference implements
 
 	private final String TAG = getClass().getName();
 
-	private static final String ANDROIDNS = "http://schemas.android.com/apk/res/android";
-	private static final String ROBOBUNNYNS = "http://robobunny.com";
+//	private static final String ANDROIDNS = "http://schemas.android.com/apk/res/android";
+//	private static final String ROBOBUNNYNS = "http://robobunny.com";
 	private static final int DEFAULT_VALUE = 50;
 
 	private int mMaxValue = 100;
