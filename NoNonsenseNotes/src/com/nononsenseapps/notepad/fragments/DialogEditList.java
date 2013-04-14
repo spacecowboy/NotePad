@@ -145,8 +145,7 @@ public class DialogEditList extends DialogFragment {
 	void fillViews() {
 		titleField.setText(mTaskList.title);
 		selectSortKey();
-
-		// TODO all fields
+		selectListTypeKey();
 
 		// Check if this is the default list
 		final long defList = Long.parseLong(PreferenceManager
@@ -187,7 +186,7 @@ public class DialogEditList extends DialogFragment {
 
 		mTaskList.title = titleField.getText().toString();
 		mTaskList.sorting = getSortValue();
-		// TODO list type
+		mTaskList.listtype = getListTypeValue();
 
 		mTaskList.save(getActivity());
 
@@ -262,6 +261,39 @@ public class DialogEditList extends DialogFragment {
 			else if (mTaskList.sorting
 					.equals(getString(R.string.const_possubsort))) {
 				sortSpinner.setSelection(4);
+			}
+		}
+	}
+	String getListTypeValue() {
+		String result = null;
+		if (modeSpinner != null) {
+			final String key = (String) modeSpinner.getSelectedItem();
+			if (key.equals(getString(R.string.show_items_as_notes))) {
+				result = getString(R.string.const_listtype_notes);
+			}
+			else if (key.equals(getString(R.string.show_items_as_tasks))) {
+				result = getString(R.string.const_listtype_tasks);
+			}
+			else {
+				// Default from global prefs
+				result = null;
+			}
+		}
+		return result;
+	}
+
+	void selectListTypeKey() {
+		if (modeSpinner != null && mTaskList != null) {
+			if (mTaskList.sorting == null) {
+				modeSpinner.setSelection(0);
+			}
+			else if (mTaskList.listtype
+					.equals(getString(R.string.const_listtype_tasks))) {
+				modeSpinner.setSelection(1);
+			}
+			else if (mTaskList.listtype
+					.equals(getString(R.string.const_listtype_notes))) {
+				modeSpinner.setSelection(2);
 			}
 		}
 	}

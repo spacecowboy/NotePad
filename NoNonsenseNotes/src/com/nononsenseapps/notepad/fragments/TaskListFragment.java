@@ -67,6 +67,7 @@ public class TaskListFragment extends Fragment implements
 	private String mSortType = null;
 
 	private int mRowCount = 3;
+	private boolean mHideCheckbox = false;
 
 	private String mListType = null;
 
@@ -137,6 +138,7 @@ public class TaskListFragment extends Fragment implements
 					.getLocalFormatterWeekday(getActivity());
 			boolean isHeader = false;
 			final String manualsort = getString(R.string.const_possubsort);
+			final String notetype = getString(R.string.const_listtype_notes);
 			String sTemp = "";
 			final OnCheckedChangeListener checkBoxListener = new OnCheckedChangeListener() {
 				@Override
@@ -207,6 +209,14 @@ public class TaskListFragment extends Fragment implements
 						((NoteCheckBox) view).setNoteId(c.getLong(0));
 						((NoteCheckBox) view)
 								.setOnCheckedChangeListener(checkBoxListener);
+						if (mHideCheckbox
+								|| (mListType != null && mListType
+										.equals(notetype))) {
+							view.setVisibility(View.GONE);
+						}
+						else {
+							view.setVisibility(View.VISIBLE);
+						}
 					}
 					return true;
 				case 4:
@@ -248,9 +258,12 @@ public class TaskListFragment extends Fragment implements
 		// Get the global list settings
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
-		
+
 		// Load pref for item height
-		mRowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
+		mRowCount = prefs.getInt(getString(R.string.key_pref_item_max_height),
+				3);
+		mHideCheckbox = prefs.getBoolean(
+				getString(R.string.pref_hidecheckboxes), false);
 
 		// mSortType = prefs.getString(getString(R.string.pref_sorttype),
 		// getString(R.string.default_sorttype));
@@ -271,6 +284,12 @@ public class TaskListFragment extends Fragment implements
 					// What sorting to use
 					final Uri targetUri;
 					final String sortSpec;
+					if (mListType == null) {
+						mListType = prefs.getString(
+								getString(R.string.pref_listtype),
+								getString(R.string.default_listtype));
+					}
+
 					if (mSortType == null) {
 						mSortType = prefs.getString(
 								getString(R.string.pref_sorttype),
@@ -500,8 +519,15 @@ public class TaskListFragment extends Fragment implements
 			reload = true;
 		}
 		else if (key.equals(getString(R.string.key_pref_item_max_height))) {
-			mRowCount = prefs.getInt(
-					getString(R.string.key_pref_item_max_height), 3);
+			mRowCount = prefs.getInt(key, 3);
+			reload = true;
+		}
+		else if (key.equals(getString(R.string.pref_hidecheckboxes))) {
+			mHideCheckbox = prefs.getBoolean(key, false);
+			reload = true;
+		}
+		else if (key.equals(getString(R.string.pref_listtype))) {
+			mListType = null;
 			reload = true;
 		}
 
