@@ -66,6 +66,8 @@ public class TaskListFragment extends Fragment implements
 
 	private String mSortType = null;
 
+	private int mRowCount = 3;
+
 	private String mListType = null;
 
 	private LoaderCallbacks<Cursor> mCallback = null;
@@ -99,7 +101,8 @@ public class TaskListFragment extends Fragment implements
 		mAdapter = new SimpleSectionsAdapter(getActivity(),
 				R.layout.tasklist_item_rich, R.layout.tasklist_header, null,
 				new String[] { Task.Columns.TITLE, Task.Columns.NOTE,
-						Task.Columns.DUE, Task.Columns.COMPLETED, Task.Columns.LEFT, Task.Columns.RIGHT }, new int[] {
+						Task.Columns.DUE, Task.Columns.COMPLETED,
+						Task.Columns.LEFT, Task.Columns.RIGHT }, new int[] {
 						android.R.id.text1, android.R.id.text1, R.id.date,
 						R.id.checkbox, R.id.drag_handle, R.id.dragpadding }, 0);
 
@@ -179,6 +182,16 @@ public class TaskListFragment extends Fragment implements
 							sTemp = getString(R.string.date_header_completed);
 						}
 					}
+					else {
+						// Set height of text for non-headers
+						if (mRowCount == 1) {
+							((TitleNoteTextView) view).setSingleLine(true);
+						}
+						else {
+							((TitleNoteTextView) view).setSingleLine(false);
+							((TitleNoteTextView) view).setMaxLines(mRowCount);
+						}
+					}
 					((TitleNoteTextView) view).setTextTitle(sTemp);
 					return true;
 				case 2:
@@ -235,6 +248,9 @@ public class TaskListFragment extends Fragment implements
 		// Get the global list settings
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
+		
+		// Load pref for item height
+		mRowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
 
 		// mSortType = prefs.getString(getString(R.string.pref_sorttype),
 		// getString(R.string.default_sorttype));
@@ -478,12 +494,19 @@ public class TaskListFragment extends Fragment implements
 	@Override
 	public void onSharedPreferenceChanged(final SharedPreferences prefs,
 			final String key) {
-		// if (key.equals(getString(R.string.pref_sorttype))) {
-		Log.d("nononsenseapps list", "prefs changed. restartin loader");
-		mSortType = null;
-		if (mCallback != null) {
+		boolean reload = false;
+		if (key.equals(getString(R.string.pref_sorttype))) {
+			mSortType = null;
+			reload = true;
+		}
+		else if (key.equals(getString(R.string.key_pref_item_max_height))) {
+			mRowCount = prefs.getInt(
+					getString(R.string.key_pref_item_max_height), 3);
+			reload = true;
+		}
+
+		if (reload && mCallback != null) {
 			getLoaderManager().restartLoader(0, null, mCallback);
 		}
-		// }
 	}
 }
