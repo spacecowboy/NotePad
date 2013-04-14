@@ -51,43 +51,69 @@ public class SeekBarPreference extends Preference implements
 	}
 
 	private void initPreference(Context context, AttributeSet attrs) {
-		setValuesFromXml(attrs);
+		setValuesFromXml(context, attrs);
 		//mSeekBar = new SeekBar(context, attrs);
 		//mSeekBar.setMax(mMaxValue - mMinValue);
 		//mSeekBar.setOnSeekBarChangeListener(this);	
 		}
 
-	private void setValuesFromXml(AttributeSet attrs) {
-		mMaxValue = attrs.getAttributeIntValue(ANDROIDNS, "max", 100);
-		mMinValue = attrs.getAttributeIntValue(ROBOBUNNYNS, "min", 0);
-
-		mUnitsLeft = getAttributeStringValue(attrs, ROBOBUNNYNS, "unitsLeft",
-				"");
-		String units = getAttributeStringValue(attrs, ROBOBUNNYNS, "units", "");
-		mUnitsRight = getAttributeStringValue(attrs, ROBOBUNNYNS, "unitsRight",
-				units);
+	private void setValuesFromXml(final Context context, final AttributeSet attrs) {
 		
-		mCurrentValue = attrs.getAttributeIntValue(ANDROIDNS, "summary", 100);
-
+		TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
+				R.styleable.SeekBarPreference, 0, 0);
+		
 		try {
-			String newInterval = attrs.getAttributeValue(ROBOBUNNYNS,
-					"interval");
-			if (newInterval != null)
-				mInterval = Integer.parseInt(newInterval);
-		} catch (Exception e) {
-			Log.e(TAG, "Invalid interval value", e);
+			mMaxValue = a.getInt(R.styleable.SeekBarPreference_max, 100);
+			mMinValue = a.getInt(R.styleable.SeekBarPreference_min, 0);
+			mUnitsLeft = a.getString(R.styleable.SeekBarPreference_unitsLeft);
+			if (mUnitsLeft == null)
+				mUnitsLeft = "";
+			String units = a.getString(R.styleable.SeekBarPreference_units);
+			if (units == null)
+				units = "";
+			mUnitsRight = a.getString(R.styleable.SeekBarPreference_unitsRight);
+			if (mUnitsRight == null)
+				mUnitsRight = "";
+			if (mUnitsRight.isEmpty()) {
+				mUnitsRight = units;
+			}
+			mCurrentValue = a.getInt(R.styleable.SeekBarPreference_summary, 100);
+			mInterval = a.getInt(R.styleable.SeekBarPreference_interval, 1);
 		}
+		finally {
+			a.recycle();
+		}
+		
+//		mMaxValue = attrs.getAttributeIntValue(ANDROIDNS, "max", 100);
+//		mMinValue = attrs.getAttributeIntValue(ROBOBUNNYNS, "min", 0);
+//
+//		mUnitsLeft = getAttributeStringValue(attrs, ROBOBUNNYNS, "unitsLeft",
+//				"");
+//		String units = getAttributeStringValue(attrs, ROBOBUNNYNS, "units", "");
+//		mUnitsRight = getAttributeStringValue(attrs, ROBOBUNNYNS, "unitsRight",
+//				units);
+//		
+//		mCurrentValue = attrs.getAttributeIntValue(ANDROIDNS, "summary", 100);
+//
+//		try {
+//			String newInterval = attrs.getAttributeValue(ROBOBUNNYNS,
+//					"interval");
+//			if (newInterval != null)
+//				mInterval = Integer.parseInt(newInterval);
+//		} catch (Exception e) {
+//			Log.e(TAG, "Invalid interval value", e);
+//		}
 
 	}
 
-	private String getAttributeStringValue(AttributeSet attrs,
-			String namespace, String name, String defaultValue) {
-		String value = attrs.getAttributeValue(namespace, name);
-		if (value == null)
-			value = defaultValue;
-
-		return value;
-	}
+//	private String getAttributeStringValue(AttributeSet attrs,
+//			String namespace, String name, String defaultValue) {
+//		String value = attrs.getAttributeValue(namespace, name);
+//		if (value == null)
+//			value = defaultValue;
+//
+//		return value;
+//	}
 
 	@Override
 	protected View onCreateView(ViewGroup parent) {

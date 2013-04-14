@@ -215,13 +215,14 @@
     <string name="hide_date">Hide due date</string>
     <string name="hide_date_summary_on">Date will be hidden</string>
     <string name="hide_date_summary_off">Date will be shown</string>
-    <string name="item_max_height">Max height</string>
+    <string name="item_max_height">Max height of notes/tasks</string>
     <string name="long_date_format">Long date format</string>
     <string name="short_date_format">Short date format</string>
     <string name="title_rows">Title max height</string>
     <string name="title_rows_1">1 row</string>
     <string name="title_rows_2">2 rows</string>
     <string name="title_rows_free">No restriction</string>
+    <string name="rows">rows</string>
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
     <string name="monday">Monday</string>
@@ -259,6 +260,7 @@
     <string name="shortcut_help1">If checked, the shortcut will create a new note in the selected list and open the editor. If unchecked, the shortcut will open the selected list.</string>
     <string name="loading_widget">Loading widget&#8230;</string>
     <string name="default_list_set">Default list set</string>
+    <string name="default_list">Default list</string>
     <string name="please_type_before_reminder">Please type some text before setting a reminder</string>
     <string name="select_a_time">Select a time</string>
     <string name="notecopied_one">Copied one note</string>

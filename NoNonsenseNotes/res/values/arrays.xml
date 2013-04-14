@@ -38,10 +38,10 @@
         <item>@string/const_theme_light</item>
     </string-array>
     <string-array name="sorting_preference">
-        <item>@string/settings_summary_sort_type_alphabetic</item>
-        <item>@string/settings_summary_sort_type_duedate</item>
-        <item>@string/settings_summary_sort_type_modified</item>
-        <item>@string/settings_summary_sort_type_serverposition</item>
+        <item>@string/sort_list_alphabetical</item>
+        <item>@string/sort_list_due</item>
+        <item>@string/sort_list_updated</item>
+        <item>@string/sort_list_manual</item>
     </string-array>
     <string-array name="sortingvalues_preference" tools:ignore="MissingTranslation">
         <item>@string/const_alphabetic</item>
@@ -85,6 +85,14 @@
         <item>@string/default_style</item>
         <item>@string/show_items_as_tasks</item>
         <item>@string/show_items_as_notes</item>
+    </string-array>
+    <string-array name="listtype_preference">
+        <item>@string/show_items_as_tasks</item>
+        <item>@string/show_items_as_notes</item>
+    </string-array>
+    <string-array name="listtypevalues_preference">
+        <item>@string/const_listtype_tasks</item>
+        <item>@string/const_listtype_notes</item>
     </string-array>
     <string-array name="sort_list_by">
         <item>@string/sort_list_default</item>

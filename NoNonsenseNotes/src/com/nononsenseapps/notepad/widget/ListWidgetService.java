@@ -324,16 +324,16 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			// getListTitle(settings, listId);
 
 			String sortChoice = settings.getString(
-					ListWidgetConfig.KEY_SORT_TYPE, MainPrefs.DUEDATESORT);
+					ListWidgetConfig.KEY_SORT_TYPE, mContext.getString(R.string.default_sorttype));
 			String sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
 
-			if (MainPrefs.DUEDATESORT.equals(sortChoice)) {
+			if (mContext.getString(R.string.const_duedate).equals(sortChoice)) {
 				sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
-			} else if (MainPrefs.TITLESORT.equals(sortChoice)) {
+			} else if (mContext.getString(R.string.const_alphabetic).equals(sortChoice)) {
 				sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
-			} else if (MainPrefs.MODIFIEDSORT.equals(sortChoice)) {
+			} else if (mContext.getString(R.string.const_modified).equals(sortChoice)) {
 				sortOrder = NotePad.Notes.MODIFICATION_SORT_TYPE;
-			} else if (MainPrefs.POSSUBSORT.equals(sortChoice)) {
+			} else if (mContext.getString(R.string.const_possubsort).equals(sortChoice)) {
 				sortOrder = NotePad.Notes.POSSUBSORT_SORT_TYPE;
 			}
 

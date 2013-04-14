@@ -500,7 +500,7 @@ public class MainActivity extends DualLayoutActivity implements
 			// Then check if a default list is specified
 			tempList = Long.parseLong(PreferenceManager
 					.getDefaultSharedPreferences(context).getString(
-							MainPrefs.KEY_DEFAULT_LIST, "-1"));
+							"removed me", "-1"));
 			Log.d(TAG, "Default list: " + tempList);
 		}
 		// Not guaranteed that this is valid. Check the database even if it
@@ -865,12 +865,12 @@ public class MainActivity extends DualLayoutActivity implements
 			// Remove default setting if this is the default list
 			long defaultListId = Long.parseLong(PreferenceManager
 					.getDefaultSharedPreferences(this).getString(
-							MainPrefs.KEY_DEFAULT_LIST, "-1"));
+							"REMOVED", "-1"));
 			if (currentListId == defaultListId) {
 				// Remove knowledge of default list
 				SharedPreferences.Editor prefEditor = PreferenceManager
 						.getDefaultSharedPreferences(this).edit();
-				prefEditor.remove(MainPrefs.KEY_DEFAULT_LIST);
+				prefEditor.remove("REMOVED");
 				prefEditor.commit();
 			}
 		}
@@ -891,14 +891,14 @@ public class MainActivity extends DualLayoutActivity implements
 			String key) {
 		// Need to restart to allow themes and such to go into effect
 		if (key.equals(MainPrefs.KEY_THEME)
-				|| key.equals(MainPrefs.KEY_HIDDENCHECKBOX)
-				|| key.equals(MainPrefs.KEY_HIDDENDATE)
-				|| key.equals(MainPrefs.KEY_HIDDENNOTE)
-				|| key.equals(MainPrefs.KEY_TITLEROWS)
+				|| key.equals("removed")
+				|| key.equals("removed")
+				|| key.equals("removed")
+				|| key.equals("removed")
 				//|| key.equals(MainPrefs.KEY_SORT_ORDER)
 				|| key.equals(getString(R.string.pref_sorttype))
 				|| key.equals(getString(R.string.pref_locale))
-				|| key.equals(MainPrefs.KEY_LISTHEADERS)) {
+				|| key.equals("removed")) {
 			shouldRestart = true;
 		}
 	}
@@ -983,7 +983,7 @@ public class MainActivity extends DualLayoutActivity implements
 				PreferenceManager
 						.getDefaultSharedPreferences(this)
 						.edit()
-						.putString(MainPrefs.KEY_DEFAULT_LIST,
+						.putString("REMOVED",
 								Long.toString(currentId)).commit();
 
 				Toast.makeText(this, getString(R.string.default_list_set),

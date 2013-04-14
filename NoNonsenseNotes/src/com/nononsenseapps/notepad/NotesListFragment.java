@@ -139,7 +139,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 	private static final int LOADER_REGULARLIST = -99;
 	// Date loaders
-	public static final String SECTION_STATE_DATE = MainPrefs.DUEDATESORT;
+	public static final String SECTION_STATE_DATE = "removed";
 	private static final int LOADER_DATEOVERDUE = -101;
 	private static final int LOADER_DATETODAY = -102;
 	private static final int LOADER_DATETOMORROW = -103;
@@ -150,7 +150,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	// This will sort date headers properly
 	private Comparator<String> dateComparator;
 	// Modification loaders
-	public static final String SECTION_STATE_MOD = MainPrefs.MODIFIEDSORT;
+	public static final String SECTION_STATE_MOD = "removed";
 	private static final int LOADER_MODTODAY = -201;
 	private static final int LOADER_MODYESTERDAY = -202;
 	private static final int LOADER_MODWEEK = -203;
@@ -663,16 +663,16 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 		// Set appearence settings
 		final boolean hidden_checkbox = PreferenceManager
 				.getDefaultSharedPreferences(activity).getBoolean(
-						MainPrefs.KEY_HIDDENCHECKBOX, false);
+						"removed", false);
 		final boolean hidden_note = PreferenceManager
 				.getDefaultSharedPreferences(activity).getBoolean(
-						MainPrefs.KEY_HIDDENNOTE, false);
+						"removed", false);
 		final boolean hidden_date = PreferenceManager
 				.getDefaultSharedPreferences(activity).getBoolean(
-						MainPrefs.KEY_HIDDENDATE, false);
+						"removed", false);
 		final int title_rows = Integer.parseInt(PreferenceManager
 				.getDefaultSharedPreferences(activity).getString(
-						MainPrefs.KEY_TITLEROWS, "2"));
+						"removed", "2"));
 
 		// Creates the backing adapter for the ListView.
 		SimpleCursorAdapter adapter = new SimpleCursorAdapter(activity,
@@ -1288,8 +1288,8 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 	private boolean shouldDisplaySections(String sorting) {
 		if (mCurListId == MainActivity.ALL_NOTES_ID) {
 			return true;
-		} else if (sorting.equals(MainPrefs.DUEDATESORT)
-				|| sorting.equals(MainPrefs.MODIFIEDSORT)) {
+		} else if (sorting.equals("removed")
+				|| sorting.equals("removed")) {
 			return true;
 		} else {
 			return false;
@@ -1323,11 +1323,11 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 			// If mod date, fire modded loaders
 			if (mCurListId == MainActivity.ALL_NOTES_ID
 					&& PreferenceManager.getDefaultSharedPreferences(activity)
-							.getBoolean(MainPrefs.KEY_LISTHEADERS, true)) {
+							.getBoolean("removed", true)) {
 				destroyNonListNameLoaders();
 				activeLoaders.add(LOADER_LISTNAMES);
 				getLoaderManager().restartLoader(LOADER_LISTNAMES, args, this);
-			} else if (sorting.equals(MainPrefs.DUEDATESORT)) {
+			} else if (sorting.equals("removed")) {
 				Log.d("listproto", "refreshing sectioned date list");
 				destroyNonDateLoaders();
 				activeLoaders.add(LOADER_DATEFUTURE);
@@ -1347,7 +1347,7 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 				getLoaderManager().restartLoader(LOADER_DATEWEEK, args, this);
 				getLoaderManager().restartLoader(LOADER_DATECOMPLETED, args,
 						this);
-			} else if (sorting.equals(MainPrefs.MODIFIEDSORT)) {
+			} else if (sorting.equals("removed")) {
 				Log.d("listproto", "refreshing sectioned mod list");
 				destroyNonModLoaders();
 				activeLoaders.add(LOADER_MODPAST);
@@ -1470,13 +1470,13 @@ public class NotesListFragment extends NoNonsenseListFragment implements
 
 		String sortOrder = NotePad.Notes.POSSUBSORT_SORT_TYPE;
 
-		if (MainPrefs.DUEDATESORT.equals(sortChoice)) {
+		if ("removed".equals(sortChoice)) {
 			sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
-		} else if (MainPrefs.TITLESORT.equals(sortChoice)) {
+		} else if ("removed".equals(sortChoice)) {
 			sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
-		} else if (MainPrefs.MODIFIEDSORT.equals(sortChoice)) {
+		} else if ("removed".equals(sortChoice)) {
 			sortOrder = NotePad.Notes.MODIFICATION_SORT_TYPE;
-		} else if (MainPrefs.POSSUBSORT.equals(sortChoice)) {
+		} else if ("removed".equals(sortChoice)) {
 			sortOrder = NotePad.Notes.POSSUBSORT_SORT_TYPE;
 		}
 

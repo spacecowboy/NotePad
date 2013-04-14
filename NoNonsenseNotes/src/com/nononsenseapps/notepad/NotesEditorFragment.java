@@ -807,12 +807,12 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			// set characteristics from settings
 			float size = PreferenceManager
 					.getDefaultSharedPreferences(activity).getInt(
-							MainPrefs.KEY_FONT_SIZE_EDITOR,
+							"removed",
 							getResources().getInteger(
 									R.integer.default_editor_font_size));
 			Typeface tf = TextPreviewPreference.getTypeface(PreferenceManager
 					.getDefaultSharedPreferences(activity).getString(
-							MainPrefs.KEY_FONT_TYPE_EDITOR, MainPrefs.SANS));
+							"removed", MainPrefs.SANS));
 
 			mText.setTextSize(size);
 			mText.setTypeface(tf);

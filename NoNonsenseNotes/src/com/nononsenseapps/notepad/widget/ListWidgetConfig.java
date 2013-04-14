@@ -346,7 +346,7 @@ public class ListWidgetConfig extends Activity {
 
 		// Sort type
 		pos = getPositionOf(sortTypeValues,
-				widgetPrefs.getString(KEY_SORT_TYPE, MainPrefs.DUEDATESORT));
+				widgetPrefs.getString(KEY_SORT_TYPE, getString(R.string.default_sorttype)));
 		if (pos > -1)
 			sortTypeSpinner.setSelection(pos);
 

@@ -43,7 +43,7 @@ public class HeaderCursor {
 		this.headers = new TreeMap<Integer, String>();
 
 		offset = 0;
-		if (MainPrefs.DUEDATESORT.equals(sortType)) {
+		if (context.getString(R.string.const_duedate).equals(sortType)) {
 			final int dateIndex = cursor
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_DUE_DATE);
 			String date;
@@ -101,7 +101,7 @@ public class HeaderCursor {
 
 			}
 
-		} else if (MainPrefs.MODIFIEDSORT.equals(sortType)) {
+		} else if (context.getString(R.string.const_modified).equals(sortType)) {
 			final int modIndex = cursor
 					.getColumnIndex(NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE);
 			long modtime;

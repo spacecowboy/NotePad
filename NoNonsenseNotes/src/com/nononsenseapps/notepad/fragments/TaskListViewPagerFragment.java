@@ -185,14 +185,14 @@ public class TaskListViewPagerFragment extends Fragment implements
 	 * 
 	 * Guarantees default list is valid
 	 */
-	public static long getAList(final Context context, final long tempList) {
+	public static long getAList(final Context context, final long tempList, final String defaultlistkey) {
 		long returnList = tempList;
 
 		if (returnList < 1) {
 			// Then check if a default list is specified
 			returnList = Long.parseLong(PreferenceManager
 					.getDefaultSharedPreferences(context).getString(
-							MainPrefs.KEY_DEFAULT_LIST, "-1"));
+							defaultlistkey, "-1"));
 		}
 
 		if (returnList > 0) {

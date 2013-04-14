@@ -22,6 +22,10 @@
         android:summary=""
         android:title="@string/settings_cat_appearance" />
     <header
+        android:summary=""
+        android:fragment="com.nononsenseapps.notepad.prefs.ListPrefs"
+        android:title="@string/settings_list" />
+    <header
         android:fragment="com.nononsenseapps.notepad.prefs.SyncPrefs"
         android:icon="@drawable/navigation_refresh_dark"
         android:summary=""

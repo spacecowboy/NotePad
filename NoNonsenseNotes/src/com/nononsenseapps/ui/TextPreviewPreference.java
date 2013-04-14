@@ -62,8 +62,8 @@ public class TextPreviewPreference extends Preference {
 		
 		// Retrieve settings here and set them on the text
 		int size = getContext().getResources().getInteger(R.integer.default_editor_font_size);
-		mText.setTextSize(getSharedPreferences().getInt(MainPrefs.KEY_FONT_SIZE_EDITOR, size));
-		setTextType(getSharedPreferences().getString(MainPrefs.KEY_FONT_TYPE_EDITOR, MainPrefs.SANS));
+		mText.setTextSize(getSharedPreferences().getInt("removed", size));
+		setTextType(getSharedPreferences().getString("removed", MainPrefs.SANS));
 
 		return layout;
 

@@ -153,7 +153,7 @@ public class ActivityMain extends FragmentActivity implements
 				transaction.replace(R.id.fragment2, TaskDetailFragment_
 						.getInstance(getNoteShareText(intent),
 								TaskListViewPagerFragment.getAList(this,
-										getListId(intent))), DETAILTAG);
+										getListId(intent), getString(R.string.pref_defaultlist))), DETAILTAG);
 			}
 		}
 		else if (isNoteIntent(intent)) {
@@ -169,7 +169,7 @@ public class ActivityMain extends FragmentActivity implements
 				transaction.replace(R.id.fragment1, TaskDetailFragment_
 						.getInstance(getNoteShareText(intent),
 								TaskListViewPagerFragment.getAList(this,
-										getListId(intent))), DETAILTAG);
+										getListId(intent), getString(R.string.pref_defaultlist))), DETAILTAG);
 			}
 
 			// Courtesy of Mr Roman Nurik
@@ -386,7 +386,7 @@ public class ActivityMain extends FragmentActivity implements
 	 */
 	long getListIdToShow(final Intent intent) {
 		long result = getListId(intent);
-		return TaskListViewPagerFragment.getAList(this, result);
+		return TaskListViewPagerFragment.getAList(this, result, getString(R.string.pref_defaultlist));
 	}
 
 	@Override
