@@ -26,11 +26,16 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import android.animation.Animator;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
+import android.annotation.TargetApi;
 import android.app.ActionBar;
+import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
@@ -47,6 +52,8 @@ import android.view.ViewGroup;
 public class ActivityMain extends FragmentActivity implements
 		OnFragmentInteractionListener {
 
+	// Set to true in bundle if exits should be animated
+	public static final String ANIMATEEXIT = "animateexit";
 	// Using tags for test
 	public static final String DETAILTAG = "detailfragment";
 	public static final String LISTPAGERTAG = "listpagerfragment";
@@ -64,6 +71,8 @@ public class ActivityMain extends FragmentActivity implements
 	@ViewById
 	View taskHint;
 
+	boolean mAnimateExit = false;
+
 	@Override
 	public void onCreate(Bundle b) {
 		// Must do this before super.onCreate
@@ -71,6 +80,12 @@ public class ActivityMain extends FragmentActivity implements
 		super.onCreate(b);
 		// Schedule notifications
 		NotificationHelper.schedule(this);
+
+		// To know if we should animate exits
+		if (getIntent() != null
+				&& getIntent().getBooleanExtra(ANIMATEEXIT, false)) {
+			mAnimateExit = true;
+		}
 	}
 
 	protected void readAndSetSettings() {
@@ -153,7 +168,9 @@ public class ActivityMain extends FragmentActivity implements
 				transaction.replace(R.id.fragment2, TaskDetailFragment_
 						.getInstance(getNoteShareText(intent),
 								TaskListViewPagerFragment.getAList(this,
-										getListId(intent), getString(R.string.pref_defaultlist))), DETAILTAG);
+										getListId(intent),
+										getString(R.string.pref_defaultlist))),
+						DETAILTAG);
 			}
 		}
 		else if (isNoteIntent(intent)) {
@@ -169,7 +186,9 @@ public class ActivityMain extends FragmentActivity implements
 				transaction.replace(R.id.fragment1, TaskDetailFragment_
 						.getInstance(getNoteShareText(intent),
 								TaskListViewPagerFragment.getAList(this,
-										getListId(intent), getString(R.string.pref_defaultlist))), DETAILTAG);
+										getListId(intent),
+										getString(R.string.pref_defaultlist))),
+						DETAILTAG);
 			}
 
 			// Courtesy of Mr Roman Nurik
@@ -188,7 +207,8 @@ public class ActivityMain extends FragmentActivity implements
 							// finish(); // TODO: don't just finish()!
 							final Intent intent = new Intent()
 									.setAction(Intent.ACTION_VIEW)
-									.setClass(ActivityMain.this, ActivityMain_.class)
+									.setClass(ActivityMain.this,
+											ActivityMain_.class)
 									.setFlags(
 											Intent.FLAG_ACTIVITY_CLEAR_TASK
 													| Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -197,7 +217,7 @@ public class ActivityMain extends FragmentActivity implements
 							// intent.setData(TaskList.getUri(mTask.dblist));
 							// }
 							startActivity(intent);
-							finish();
+							finishSlideTop();
 						}
 					});
 
@@ -386,7 +406,8 @@ public class ActivityMain extends FragmentActivity implements
 	 */
 	long getListIdToShow(final Intent intent) {
 		long result = getListId(intent);
-		return TaskListViewPagerFragment.getAList(this, result, getString(R.string.pref_defaultlist));
+		return TaskListViewPagerFragment.getAList(this, result,
+				getString(R.string.pref_defaultlist));
 	}
 
 	@Override
@@ -394,8 +415,9 @@ public class ActivityMain extends FragmentActivity implements
 		super.onNewIntent(intent);
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@Override
-	public void onFragmentInteraction(final Uri taskUri) {
+	public void onFragmentInteraction(final Uri taskUri, final View origin) {
 		// User clicked a task in the list
 		// tablet
 		if (fragment2 != null) {
@@ -410,13 +432,40 @@ public class ActivityMain extends FragmentActivity implements
 		}
 		// phone
 		else {
-			// TODO
+			// TODO animate like Keep does
 			final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
 					.setClass(this, ActivityMain_.class).setData(taskUri);
-			startActivity(intent);
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
+					&& origin != null) {
+				Log.d("nononsenseapps animation", "Animating");
+				intent.putExtra(ANIMATEEXIT, true);
+				startActivity(
+						intent,
+						ActivityOptions.makeCustomAnimation(this,
+								R.anim.activity_slide_in_left,
+								R.anim.activity_slide_out_left).toBundle());
+
+				// startActivity(
+				// intent,
+				// ActivityOptions.makeScaleUpAnimation(origin, 0, 0,
+				// origin.getWidth(), origin.getHeight())
+				// .toBundle());
+
+				// Bitmap b = Bitmap.createBitmap(origin.getWidth(),
+				// origin.getHeight(), Bitmap.Config.ARGB_8888);
+				//
+				// startActivity(intent, ActivityOptions
+				// .makeThumbnailScaleUpAnimation(origin, b, 0, 0)
+				// .toBundle());
+			}
+			else {
+				Log.d("nononsenseapps animation", "Not animating");
+				startActivity(intent);
+			}
 		}
 	}
 
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@Override
 	public void addTaskInList(final String text, final long listId) {
 		if (fragment2 != null) {
@@ -436,7 +485,20 @@ public class ActivityMain extends FragmentActivity implements
 			final Intent intent = new Intent().setAction(Intent.ACTION_INSERT)
 					.setClass(this, ActivityMain_.class).setData(Task.URI)
 					.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
-			startActivity(intent);
+
+			// TODO animate always?
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+				Log.d("nononsenseapps animation", "Animating");
+				intent.putExtra(ANIMATEEXIT, true);
+				startActivity(
+						intent,
+						ActivityOptions.makeCustomAnimation(this,
+								R.anim.activity_slide_in_left,
+								R.anim.activity_slide_out_left).toBundle());
+			}
+			else {
+				startActivity(intent);
+			}
 		}
 	}
 
@@ -455,6 +517,25 @@ public class ActivityMain extends FragmentActivity implements
 		else {
 			// Phone case, just finish the activity
 			finish();
+		}
+	}
+
+	void finishSlideTop() {
+		super.finish();
+		// TODO
+		// Only animate when launched internally
+		overridePendingTransition(R.anim.activity_slide_in_right_full,
+				R.anim.activity_slide_out_right);
+	}
+
+	@Override
+	public void finish() {
+		super.finish();
+		// TODO
+		// Only animate when launched internally
+		if (mAnimateExit) {
+			overridePendingTransition(R.anim.activity_slide_in_right,
+					R.anim.activity_slide_out_right_full);
 		}
 	}
 
