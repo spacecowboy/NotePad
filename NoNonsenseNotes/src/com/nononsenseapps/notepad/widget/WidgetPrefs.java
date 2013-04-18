@@ -90,4 +90,40 @@ public class WidgetPrefs {
 		}
 		return defValue;
 	}
+
+	public int getInt(String key, int defValue) {
+		if (prefs != null) {
+			return prefs.getInt(keyWrap(key), defValue);
+		}
+		return defValue;
+	}
+	
+	public boolean putInt(String key, int value) {
+		if (prefs != null && prefsEditor == null) {
+			prefsEditor = prefs.edit();
+		}
+		if (prefsEditor != null) {
+			prefsEditor.putInt(keyWrap(key), value).commit();
+			return true;
+		}
+		return false;
+	}
+
+	public boolean putLong(String key, long value) {
+		if (prefs != null && prefsEditor == null) {
+			prefsEditor = prefs.edit();
+		}
+		if (prefsEditor != null) {
+			prefsEditor.putLong(keyWrap(key), value).commit();
+			return true;
+		}
+		return false;
+	}
+	
+	public long getLong(String key, long defValue) {
+		if (prefs != null) {
+			return prefs.getLong(keyWrap(key), defValue);
+		}
+		return defValue;
+	}
 }

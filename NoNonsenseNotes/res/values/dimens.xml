@@ -32,6 +32,14 @@
 
     <!-- For widget -->
     <dimen name="widget_margin">8dp</dimen>
+    
+    <!-- WidgetConfig -->
+    <dimen name="widget_conf_preview_land_width">250dp</dimen>
+    <dimen name="widget_conf_preview_port_height">150dp</dimen>
+    <dimen name="layout_match_parent">-1dp</dimen>
+    <!-- Changes depending on screen values -->
+    <dimen name="widget_conf_preview_width">@dimen/layout_match_parent</dimen>
+    <dimen name="widget_conf_preview_height">@dimen/widget_conf_preview_port_height</dimen>
 
     <!-- Editor fragment stuff -->
     <dimen name="editor_side_margin">0dp</dimen>

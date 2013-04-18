@@ -21,7 +21,7 @@
     tools:ignore="HardcodedText" >
 
     <TextView
-        android:id="@+id/widget_itemHeader"
+        android:id="@android:id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="2dip"

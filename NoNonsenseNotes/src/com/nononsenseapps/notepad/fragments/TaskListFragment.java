@@ -371,10 +371,10 @@ public class TaskListFragment extends Fragment implements
 		listView.setOnItemClickListener(new OnItemClickListener() {
 
 			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
+			public void onItemClick(AdapterView<?> arg0, View origin, int pos,
 					long id) {
 				if (mListener != null && id > 0) {
-					mListener.onFragmentInteraction(Task.getUri(id));
+					mListener.onFragmentInteraction(Task.getUri(id), origin);
 				}
 			}
 		});

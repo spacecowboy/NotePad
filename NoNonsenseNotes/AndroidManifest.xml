@@ -201,6 +201,7 @@
         <activity
             android:name="com.nononsenseapps.notepad.prefs.PrefsActivity"
             android:parentActivityName="com.nononsenseapps.notepad.ActivityMain_"
+            android:theme="@style/ThemeGoogleNowDark"
             tools:ignore="ExportedActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
@@ -247,8 +248,8 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <activity
-            android:name="com.nononsenseapps.notepad.widget.ListWidgetConfig"
-            android:theme="@style/ThemeHolo"
+            android:name="com.nononsenseapps.notepad.widget.ListWidgetConfig_"
+            android:theme="@style/ThemeGoogleNowDark"
             tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
@@ -256,6 +257,7 @@
         </activity>
         <activity
             android:name="com.nononsenseapps.notepad.ShortcutConfig"
+            android:theme="@style/ThemeGoogleNowDark"
             tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />

@@ -432,7 +432,6 @@ public class ActivityMain extends FragmentActivity implements
 		}
 		// phone
 		else {
-			// TODO animate like Keep does
 			final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
 					.setClass(this, ActivityMain_.class).setData(taskUri);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
@@ -481,12 +480,10 @@ public class ActivityMain extends FragmentActivity implements
 		}
 		else {
 			// Open an activity
-			// TODO
 			final Intent intent = new Intent().setAction(Intent.ACTION_INSERT)
 					.setClass(this, ActivityMain_.class).setData(Task.URI)
 					.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 
-			// TODO animate always?
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 				Log.d("nononsenseapps animation", "Animating");
 				intent.putExtra(ANIMATEEXIT, true);
@@ -520,10 +517,13 @@ public class ActivityMain extends FragmentActivity implements
 		}
 	}
 
+	/**
+	 * Only call this when pressing the up-navigation.
+	 * Makes sure the new activity comes in on top
+	 * of this one.
+	 */
 	void finishSlideTop() {
 		super.finish();
-		// TODO
-		// Only animate when launched internally
 		overridePendingTransition(R.anim.activity_slide_in_right_full,
 				R.anim.activity_slide_out_right);
 	}
@@ -531,8 +531,7 @@ public class ActivityMain extends FragmentActivity implements
 	@Override
 	public void finish() {
 		super.finish();
-		// TODO
-		// Only animate when launched internally
+		// Only animate when specified. Should be when it was animated "in"
 		if (mAnimateExit) {
 			overridePendingTransition(R.anim.activity_slide_in_right,
 					R.anim.activity_slide_out_right_full);

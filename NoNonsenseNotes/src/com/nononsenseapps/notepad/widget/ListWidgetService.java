@@ -127,14 +127,14 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				rv.setTextViewText(R.id.widget_itemHeader,
 						mCursor.getHeaderText());
 				rv.setBoolean(itemId, "setClickable", false);
-				if (!dark
-						&& settings.getBoolean(
-								ListWidgetConfig.KEY_TRANSPARENT, false)) {
-					rv.setTextColor(
-							R.id.widget_itemHeader,
-							mContext.getResources().getColor(
-									android.R.color.primary_text_light));
-				}
+//				if (!dark
+//						&& settings.getBoolean(
+//								ListWidgetConfig.KEY_TRANSPARENT, false)) {
+//					rv.setTextColor(
+//							R.id.widget_itemHeader,
+//							mContext.getResources().getColor(
+//									android.R.color.primary_text_light));
+//				}
 			} else {
 				final int titleIndex = mCursor.getCursor().getColumnIndex(
 						NotePad.Notes.COLUMN_NAME_TITLE);
@@ -181,11 +181,11 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				}
 				rv = new RemoteViews(mContext.getPackageName(), itemId);
 
-				if (settings
-						.getBoolean(ListWidgetConfig.KEY_TRANSPARENT, false)) {
-					rv.setInt(R.id.widget_item_container,
-							"setBackgroundResource", 0);
-				}
+//				if (settings
+//						.getBoolean(ListWidgetConfig.KEY_TRANSPARENT, false)) {
+//					rv.setInt(R.id.widget_item_container,
+//							"setBackgroundResource", 0);
+//				}
 
 				rv.setViewVisibility(
 						R.id.widget_complete_task,
@@ -199,19 +199,19 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 					rv.setViewVisibility(R.id.item_spacer, View.GONE);
 				}
 
-				if (note == null
-						|| note.isEmpty()
-						|| settings.getBoolean(ListWidgetConfig.KEY_HIDDENNOTE,
-								false)) {
-					rv.setViewVisibility(R.id.widget_itemNote, View.GONE);
-					rv.setViewVisibility(R.id.widget_itemDateNote, View.GONE);
-					rv.setViewVisibility(R.id.widget_itemDateTitle,
-							View.VISIBLE);
-				} else {
-					rv.setViewVisibility(R.id.widget_itemNote, View.VISIBLE);
-					rv.setViewVisibility(R.id.widget_itemDateNote, View.VISIBLE);
-					rv.setViewVisibility(R.id.widget_itemDateTitle, View.GONE);
-				}
+//				if (note == null
+//						|| note.isEmpty()
+//						|| settings.getBoolean(ListWidgetConfig.KEY_HIDDENNOTE,
+//								false)) {
+//					rv.setViewVisibility(R.id.widget_itemNote, View.GONE);
+//					rv.setViewVisibility(R.id.widget_itemDateNote, View.GONE);
+//					rv.setViewVisibility(R.id.widget_itemDateTitle,
+//							View.VISIBLE);
+//				} else {
+//					rv.setViewVisibility(R.id.widget_itemNote, View.VISIBLE);
+//					rv.setViewVisibility(R.id.widget_itemDateNote, View.VISIBLE);
+//					rv.setViewVisibility(R.id.widget_itemDateTitle, View.GONE);
+//				}
 
 				if (dueDate == null
 						|| dueDate.length() == 0
@@ -337,9 +337,9 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				sortOrder = NotePad.Notes.POSSUBSORT_SORT_TYPE;
 			}
 
-			sortOrder += " "
-					+ settings.getString(ListWidgetConfig.KEY_SORT_ORDER,
-							NotePad.Notes.DEFAULT_SORT_ORDERING);
+			//sortOrder += " "
+			//		+ settings.getString(ListWidgetConfig.KEY_SORT_ORDER,
+			//				NotePad.Notes.DEFAULT_SORT_ORDERING);
 
 			String listWhere = null;
 			String[] listArg = null;
@@ -360,8 +360,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 					NotePad.Notes.CONTENT_VISIBLE_URI, PROJECTION, listWhere,
 					listArg, sortOrder);
 			mCursor = new HeaderCursor(mContext, cursor, sortChoice,
-					settings.getString(ListWidgetConfig.KEY_SORT_ORDER,
-							NotePad.Notes.DEFAULT_SORT_ORDERING));
+					null);
 
 		}
 	}

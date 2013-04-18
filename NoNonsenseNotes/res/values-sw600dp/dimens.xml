@@ -27,4 +27,9 @@
     
     <dimen name="activity_lone_horizontal_margin">100dp</dimen>
     
+    
+    <!-- WidgetConfig -->
+    <dimen name="widget_conf_preview_land_width">300dp</dimen>
+    <dimen name="widget_conf_preview_port_height">300dp</dimen>
+    
 </resources>

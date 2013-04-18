@@ -221,9 +221,9 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		// view of the collection view.
 		rv.setEmptyView(R.id.notes_list, R.id.empty_view);
 
-		if (settings.getBoolean(ListWidgetConfig.KEY_TRANSPARENT, false)) {
-			rv.setInt(R.id.widget_list_container, "setBackgroundResource", 0);
-		}
+//		if (settings.getBoolean(ListWidgetConfig.KEY_TRANSPARENT, false)) {
+//			rv.setInt(R.id.widget_list_container, "setBackgroundResource", 0);
+//		}
 
 		// set list title
 		// String listTitle = settings.getString(
@@ -232,8 +232,8 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 		// String listTitle = context.getText(R.string.app_name).toString();
 
-		long listId = Long.parseLong(settings.getString(
-				ListWidgetConfig.KEY_LIST, "-1"));
+		long listId = settings.getLong(
+				ListWidgetConfig.KEY_LIST, -1);
 
 		Log.d("Widget provider", "List id from settings: " + listId);
 
@@ -327,13 +327,13 @@ public class ListWidgetProvider extends AppWidgetProvider {
 					openAppPendingIntent);
 		}
 
-		if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENAPPICON, false)) {
-			rv.setViewVisibility(R.id.widgetConfigButton, View.GONE);
-			rv.setViewVisibility(R.id.header_spacer, View.VISIBLE);
-		} else {
-			rv.setViewVisibility(R.id.widgetConfigButton, View.VISIBLE);
-			rv.setViewVisibility(R.id.header_spacer, View.GONE);
-		}
+//		if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENAPPICON, false)) {
+//			rv.setViewVisibility(R.id.widgetConfigButton, View.GONE);
+//			rv.setViewVisibility(R.id.header_spacer, View.VISIBLE);
+//		} else {
+//			rv.setViewVisibility(R.id.widgetConfigButton, View.VISIBLE);
+//			rv.setViewVisibility(R.id.header_spacer, View.GONE);
+//		}
 
 		// Create button
 		if (context.getResources().getBoolean(R.bool.atLeast16) && isKeyguard) {
@@ -364,9 +364,9 @@ public class ListWidgetProvider extends AppWidgetProvider {
 					createPendingIntent);
 		}
 
-		if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENNEW, false)) {
-			rv.setViewVisibility(R.id.createNoteButton, View.GONE);
-		}
+//		if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENNEW, false)) {
+//			rv.setViewVisibility(R.id.createNoteButton, View.GONE);
+//		}
 
 		if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENHEADER, false)) {
 			rv.setViewVisibility(R.id.widgetHeader, View.GONE);

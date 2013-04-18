@@ -18,12 +18,8 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:enabled="false"
-            android:fontFamily="sans-serif-light"
-            android:paddingTop="4dip"
-            android:text="@string/please_create_note"
-            android:textColor="?android:attr/textColorSecondary"
-            android:textAppearance="?android:attr/textAppearanceLarge" />
+            style="@style/FragmentHint"
+            android:text="@string/please_create_note" />
     </LinearLayout>
 
     <FrameLayout
