@@ -81,7 +81,7 @@ public class MainPrefs extends PreferenceFragment {
 
 		final ArrayList<CharSequence> entries = new ArrayList<CharSequence>();
 
-		final GregorianCalendar cal = new GregorianCalendar(2099, 2, 27, 23, 59);
+		final GregorianCalendar cal = new GregorianCalendar(2099, 2, 27, 0, 59);
 
 		for (final String val : values) {
 			entries.add(TimeFormatter.getLocalDateString(getActivity(), val,

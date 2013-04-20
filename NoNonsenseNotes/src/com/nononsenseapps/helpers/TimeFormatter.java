@@ -66,10 +66,26 @@ public class TimeFormatter {
 		return getLocalFormatterShort(context).format(new Date(time));
 	}
 
+	/**
+	 * Replaces first "localtime" in format string to a time which respects
+	 * global 24h setting.
+	 */
+	private static String withSuitableTime(final Context context,
+			final String formatString) {
+		if (android.text.format.DateFormat.is24HourFormat(context)) {
+			// 00:59
+			return formatString.replaceFirst("localtime", "HH:mm");
+		}
+		else {
+			// 12:59 am
+			return formatString.replaceFirst("localtime", "h:mm a");
+		}
+	}
+
 	private static SimpleDateFormat getLocalFormatter(final Context context,
 			final String lang, final String format) {
 		final Locale locale = getLocale(lang);
-		return new SimpleDateFormat(format, locale);
+		return new SimpleDateFormat(withSuitableTime(context, format), locale);
 	}
 
 	/**
@@ -80,11 +96,13 @@ public class TimeFormatter {
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
 						.getString(context.getString(R.string.pref_locale), ""),
-				PreferenceManager
-						.getDefaultSharedPreferences(context)
-						.getString(
-								context.getString(R.string.key_pref_dateformat_long),
-								context.getString(R.string.dateformat_long_1)));
+				withSuitableTime(
+						context,
+						PreferenceManager
+								.getDefaultSharedPreferences(context)
+								.getString(
+										context.getString(R.string.key_pref_dateformat_long),
+										context.getString(R.string.dateformat_long_1))));
 	}
 
 	/**
@@ -95,11 +113,23 @@ public class TimeFormatter {
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
 						.getString(context.getString(R.string.pref_locale), ""),
-				PreferenceManager
-						.getDefaultSharedPreferences(context)
-						.getString(
-								context.getString(R.string.key_pref_dateformat_short),
-								context.getString(R.string.dateformat_short_1)));
+				withSuitableTime(
+						context,
+						PreferenceManager
+								.getDefaultSharedPreferences(context)
+								.getString(
+										context.getString(R.string.key_pref_dateformat_short),
+										context.getString(R.string.dateformat_short_1))));
+	}
+	
+	public static SimpleDateFormat getLocalFormatterMicro(final Context context) {
+		return getLocalFormatter(
+				context,
+				PreferenceManager.getDefaultSharedPreferences(context)
+						.getString(context.getString(R.string.pref_locale), ""),
+				withSuitableTime(
+						context,
+						context.getString(R.string.dateformat_micro)));
 	}
 
 	/**

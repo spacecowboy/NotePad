@@ -1,28 +1,35 @@
 /*
  * Copyright (C) 2012 Jonas Kalderstam
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.nononsenseapps.notepad.widget;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotePadBroadcastReceiver;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.DateView;
+import com.nononsenseapps.utils.views.TitleNoteTextView;
 
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
@@ -53,21 +60,14 @@ public class ListWidgetService extends RemoteViewsService {
  */
 class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 	private Context mContext;
-	private HeaderCursor mCursor;
+	// private HeaderCursor mCursor;
+	private Cursor mCursor;
 	private int mAppWidgetId;
+	private SimpleDateFormat mDateFormatter = null;
+	private SimpleDateFormat weekdayFormatter;
 
-	private static final String TAG = "WidgetService";
-
-	private static final String indent = "    ";
-
-	private long listId = -1;
-
-	private static final String[] PROJECTION = new String[] {
-			NotePad.Notes._ID, NotePad.Notes.COLUMN_NAME_TITLE,
-			NotePad.Notes.COLUMN_NAME_NOTE, NotePad.Notes.COLUMN_NAME_LIST,
-			NotePad.Notes.COLUMN_NAME_DUE_DATE,
-			NotePad.Notes.COLUMN_NAME_MODIFICATION_DATE,
-			NotePad.Notes.COLUMN_NAME_GTASKS_STATUS };
+	// private static final String indent = "    ";
+	// private long listId = -1;
 
 	public ListRemoteViewsFactory(Context context, Intent intent) {
 		mContext = context;
@@ -75,15 +75,18 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				AppWidgetManager.INVALID_APPWIDGET_ID);
 	}
 
+	@Override
 	public void onCreate() {
 	}
 
+	@Override
 	public void onDestroy() {
-		if (mCursor != null && mCursor.getCursor() != null) {
-			mCursor.getCursor().close();
+		if (mCursor != null) {
+			mCursor.close();
 		}
 	}
 
+	@Override
 	public int getCount() {
 		if (mCursor != null)
 			return mCursor.getCount();
@@ -91,276 +94,226 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			return 0;
 	}
 
+	@Override
 	public RemoteViews getViewAt(int position) {
-		Log.d(TAG, "getViewAt");
 		// Get widget settings
-		WidgetPrefs settings = new WidgetPrefs(mContext, mAppWidgetId);
+		final WidgetPrefs widgetPrefs = new WidgetPrefs(mContext, mAppWidgetId);
 
-		if (!settings.isPresent()) {
-			Log.d(TAG, "Is not present!");
+		if (!widgetPrefs.isPresent()) {
 			return null;
 		}
 
-		boolean dark = false;
-		if (mContext.getString(R.string.const_theme_dark).equals(
-				settings.getString(ListWidgetConfig.KEY_THEME,
-						mContext.getString(R.string.const_theme_light)))) {
-			dark = true;
+		// load date formatter if not present
+		if (mDateFormatter == null) {
+			mDateFormatter = TimeFormatter.getLocalFormatterMicro(mContext);
 		}
 
-		// Get the data for this position from the content provider
-		String title = "";
-		String note = "";
-		// String space = "";
-		CharSequence dueDate = "";
-		long noteId = -1;
-		// long localListId = -1;
+		final long listId = widgetPrefs.getLong(ListWidgetConfig.KEY_LIST, -1);
+		final int theme = widgetPrefs.getInt(ListWidgetConfig.KEY_THEME,
+				ListWidgetConfig.DEFAULT_THEME);
+		final int primaryTextColor = widgetPrefs.getInt(
+				ListWidgetConfig.KEY_TEXTPRIMARY,
+				ListWidgetConfig.DEFAULT_TEXTPRIMARY);
+		final int rows = widgetPrefs.getInt(ListWidgetConfig.KEY_TITLEROWS,
+				ListWidgetConfig.DEFAULT_ROWS);
+		final boolean isCheckboxHidden = widgetPrefs.getBoolean(
+				ListWidgetConfig.KEY_HIDDENCHECKBOX, false);
+		boolean isDateHidden = widgetPrefs.getBoolean(
+				ListWidgetConfig.KEY_HIDDENDATE, false);
+
+		// TODO rest
+
+		// boolean isHeader = false;
+		String sTemp = "";
+		if (weekdayFormatter == null) {
+			weekdayFormatter = TimeFormatter.getLocalFormatterWeekday(mContext);
+		}
+
 		RemoteViews rv = null;
 		if (mCursor.moveToPosition(position)) {
-			if (mCursor.getViewType() == HeaderCursor.headerType) {
-				final int itemId;
-				if (dark)
-					itemId = R.layout.widgetlist_header_dark;
-				else
-					itemId = R.layout.widgetlist_header;
+			if (mCursor.getLong(0) < 1) {
+				// Header
+				// if (mCursor.getViewType() == HeaderCursor.headerType) {
+				final int itemId = R.layout.widgetlist_header;
 				rv = new RemoteViews(mContext.getPackageName(), itemId);
-				rv.setTextViewText(R.id.widget_itemHeader,
-						mCursor.getHeaderText());
+				rv.setTextColor(android.R.id.text1, primaryTextColor);
 				rv.setBoolean(itemId, "setClickable", false);
-//				if (!dark
-//						&& settings.getBoolean(
-//								ListWidgetConfig.KEY_TRANSPARENT, false)) {
-//					rv.setTextColor(
-//							R.id.widget_itemHeader,
-//							mContext.getResources().getColor(
-//									android.R.color.primary_text_light));
-//				}
-			} else {
-				final int titleIndex = mCursor.getCursor().getColumnIndex(
-						NotePad.Notes.COLUMN_NAME_TITLE);
-				final int dateIndex = mCursor.getCursor().getColumnIndex(
-						NotePad.Notes.COLUMN_NAME_DUE_DATE);
-				final int noteIndex = mCursor.getCursor().getColumnIndex(
-						NotePad.Notes.COLUMN_NAME_NOTE);
-				// final int listIndex = mCursor
-				// .getColumnIndex(NotePad.Notes.COLUMN_NAME_LIST);
-				// final int indentIndex = mCursor
-				// .getColumnIndex(NotePad.Notes.COLUMN_NAME_INDENTLEVEL);
-				final int idIndex = mCursor.getCursor().getColumnIndex(
-						NotePad.Notes._ID);
-				title = mCursor.getCursor().getString(titleIndex);
-				note = mCursor.getCursor().getString(noteIndex);
-				noteId = mCursor.getCursor().getLong(idIndex);
-				// localListId = mCursor.getLong(listIndex);
-				String date = mCursor.getCursor().getString(dateIndex);
 
-				// if (settings != null) {
-				// String sortChoice = settings.getString(
-				// ListWidgetConfig.KEY_SORT_TYPE,
-				// MainPrefs.DUEDATESORT);
-				// if (sortChoice.equals(MainPrefs.POSSUBSORT)) {
-				// int indentLevel = mCursor.getInt(indentIndex);
-				// int l;
-				// for (l = 0; l < indentLevel; l++) {
-				// space += indent;
-				// }
-				// }
-				// }
-
-				if (date == null || date.isEmpty())
-					dueDate = "";
-				else {
-					dueDate = DateView.toDate(mContext, date);
+				sTemp = mCursor.getString(1);
+				if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {
+					sTemp = mContext.getString(R.string.date_header_overdue);
 				}
-
-				final int itemId;
-				if (dark) {
-					itemId = R.layout.widgetlist_item_dark;
-				} else {
-					itemId = R.layout.widgetlist_item;
+				else if (Task.HEADER_KEY_TODAY.equals(sTemp)) {
+					sTemp = mContext.getString(R.string.date_header_today);
 				}
+				else if (Task.HEADER_KEY_PLUS1.equals(sTemp)) {
+					sTemp = mContext.getString(R.string.date_header_tomorrow);
+				}
+				else if (Task.HEADER_KEY_PLUS2.equals(sTemp)
+						|| Task.HEADER_KEY_PLUS3.equals(sTemp)
+						|| Task.HEADER_KEY_PLUS4.equals(sTemp)) {
+					sTemp = weekdayFormatter
+							.format(new Date(mCursor.getLong(4)));
+				}
+				else if (Task.HEADER_KEY_LATER.equals(sTemp)) {
+					sTemp = mContext.getString(R.string.date_header_future);
+				}
+				else if (Task.HEADER_KEY_NODATE.equals(sTemp)) {
+					sTemp = mContext.getString(R.string.date_header_none);
+				}
+				else if (Task.HEADER_KEY_COMPLETE.equals(sTemp)) {
+					sTemp = mContext.getString(R.string.date_header_completed);
+				}
+				// Set text
+				rv.setTextViewText(android.R.id.text1, sTemp);
+			}
+			else {
+				final int itemId = R.layout.widgetlist_item;
+
 				rv = new RemoteViews(mContext.getPackageName(), itemId);
 
-//				if (settings
-//						.getBoolean(ListWidgetConfig.KEY_TRANSPARENT, false)) {
-//					rv.setInt(R.id.widget_item_container,
-//							"setBackgroundResource", 0);
-//				}
-
-				rv.setViewVisibility(
-						R.id.widget_complete_task,
-						settings.getBoolean(
-								ListWidgetConfig.KEY_HIDDENCHECKBOX, false) ? View.GONE
-								: View.VISIBLE);
-				if (settings.getBoolean(ListWidgetConfig.KEY_HIDDENCHECKBOX,
-						false)) {
-					rv.setViewVisibility(R.id.item_spacer, View.VISIBLE);
-				} else {
-					rv.setViewVisibility(R.id.item_spacer, View.GONE);
+				// Complete checkbox
+				final int visibleCheckBox;
+				final int hiddenCheckBox;
+				if (theme == ListWidgetConfig.THEME_LIGHT) {
+					hiddenCheckBox = R.id.completedCheckBoxDark;
+					visibleCheckBox = R.id.completedCheckBoxLight;
 				}
-
-//				if (note == null
-//						|| note.isEmpty()
-//						|| settings.getBoolean(ListWidgetConfig.KEY_HIDDENNOTE,
-//								false)) {
-//					rv.setViewVisibility(R.id.widget_itemNote, View.GONE);
-//					rv.setViewVisibility(R.id.widget_itemDateNote, View.GONE);
-//					rv.setViewVisibility(R.id.widget_itemDateTitle,
-//							View.VISIBLE);
-//				} else {
-//					rv.setViewVisibility(R.id.widget_itemNote, View.VISIBLE);
-//					rv.setViewVisibility(R.id.widget_itemDateNote, View.VISIBLE);
-//					rv.setViewVisibility(R.id.widget_itemDateTitle, View.GONE);
-//				}
-
-				if (dueDate == null
-						|| dueDate.length() == 0
-						|| settings.getBoolean(ListWidgetConfig.KEY_HIDDENDATE,
-								false)) {
-					rv.setViewVisibility(R.id.widget_itemDateNote, View.GONE);
-					rv.setViewVisibility(R.id.widget_itemDateTitle, View.GONE);
+				else {
+					hiddenCheckBox = R.id.completedCheckBoxLight;
+					visibleCheckBox = R.id.completedCheckBoxDark;
 				}
+				rv.setViewVisibility(hiddenCheckBox, View.GONE);
+				rv.setViewVisibility(visibleCheckBox,
+						isCheckboxHidden ? View.GONE : View.VISIBLE);
+				// Spacer
+				rv.setViewVisibility(R.id.itemSpacer,
+						isCheckboxHidden ? View.GONE : View.VISIBLE);
 
-				String lines = settings.getString(
-						ListWidgetConfig.KEY_TITLEROWS, "2");
-				rv.setInt(R.id.widget_itemTitle, "setMaxLines",
-						Integer.parseInt(lines));
-
-				rv.setTextViewText(R.id.widget_itemTitle, title);
-				rv.setTextViewText(R.id.widget_itemNote, note);
-				rv.setTextViewText(R.id.widget_itemDateNote, dueDate);
-				rv.setTextViewText(R.id.widget_itemDateTitle, dueDate);
-				// rv.setTextViewText(R.id.widget_itemIndent, space);
-
-				// Set the click intent so that we can handle it and show a
-				// toast
-				// message
-
-				long listId = Long.parseLong(settings.getString(
-						ListWidgetConfig.KEY_LIST, "-1"));
-
-				if (mContext.getResources().getBoolean(R.bool.atLeast16)
-						&& settings.getBoolean(ListWidgetConfig.KEY_LOCKSCREEN,
-								false)) {
-					final Intent fillInIntent = new Intent();
-					fillInIntent
-							.setAction(Intent.ACTION_EDIT)
-							.setData(
-									Uri.withAppendedPath(
-											NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,
-											Long.toString(noteId)))
-							.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
-
-					rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
-				} else {
-					final Intent fillInIntent = new Intent();
-					fillInIntent.setAction(ListWidgetProvider.CLICK_ACTION);
-					fillInIntent.putExtra(ListWidgetProvider.EXTRA_NOTE_ID,
-							noteId);
-					fillInIntent.putExtra(ListWidgetProvider.EXTRA_LIST_ID,
-							listId);
-					rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
+				// Date
+				if (mCursor.isNull(4)) {
+					rv.setTextViewText(R.id.dueDate, "");
+					isDateHidden = true;
 				}
-
-				if (mContext.getResources().getBoolean(R.bool.atLeast16)
-						&& settings.getBoolean(ListWidgetConfig.KEY_LOCKSCREEN,
-								false)) {
-					final Intent fillInIntent = new Intent();
-					fillInIntent
-							.setAction(
-									mContext.getString(R.string.complete_note_broadcast_intent))
-							.setData(
-									Uri.withAppendedPath(
-											NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,
-											Long.toString(noteId)))
-							.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
-
-					rv.setOnClickFillInIntent(R.id.widget_complete_task, fillInIntent);
-				} else {
-					final Intent completeFillIntent = new Intent();
-					completeFillIntent
-							.setAction(ListWidgetProvider.COMPLETE_ACTION)
-							.putExtra(ListWidgetProvider.EXTRA_NOTE_ID, noteId);
-					rv.setOnClickFillInIntent(R.id.widget_complete_task,
-							completeFillIntent);
+				else {
+					rv.setTextViewText(R.id.dueDate,
+							mDateFormatter.format(new Date(mCursor.getLong(4))));
 				}
+				rv.setViewVisibility(R.id.dueDate, isDateHidden ? View.GONE
+						: View.VISIBLE);
+				rv.setTextColor(R.id.dueDate, primaryTextColor);
 
+				// Text
+				rv.setTextColor(android.R.id.text1, primaryTextColor);
+				rv.setInt(android.R.id.text1, "setMaxLines", rows);
+				rv.setTextViewText(android.R.id.text1, TitleNoteTextView
+						.getStyledText(mCursor.getString(1),
+								mCursor.getString(2), 1.3f, 1, 1));
+
+				// Set the click intent
+				final Intent clickIntent = new Intent();
+				clickIntent.setAction(Intent.ACTION_EDIT)
+						.setData(Task.getUri(mCursor.getLong(0)))
+						.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
+				rv.setOnClickFillInIntent(R.id.widget_item, clickIntent);
+
+				// Set complete broadcast
+
+				final Intent completeIntent = new Intent();
+				completeIntent
+						.setAction(
+								mContext.getString(R.string.complete_note_broadcast_intent))
+						.setData(Task.getUri(mCursor.getLong(0)))
+						.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
+				rv.setOnClickFillInIntent(R.id.completedCheckBoxDark,
+						completeIntent);
+				rv.setOnClickFillInIntent(R.id.completedCheckBoxLight,
+						completeIntent);
 			}
 		}
 
 		return rv;
 	}
 
+	@Override
 	public RemoteViews getLoadingView() {
 		// We aren't going to return a default loading view in this sample
 		return null;
 	}
 
+	@Override
 	public int getViewTypeCount() {
-		return 4;
+		return 2;
 	}
 
+	@Override
 	public long getItemId(int position) {
 		return position;
 	}
 
+	@Override
 	public boolean hasStableIds() {
 		return true;
 	}
 
+	@Override
 	public void onDataSetChanged() {
-		Log.d(TAG, "onDataSetChanged");
 		// Refresh the cursor
-		if (mCursor != null && mCursor.getCursor() != null) {
-			mCursor.getCursor().close();
+		if (mCursor != null) {
+			mCursor.close();
 		}
 
+		// (re)load dateformatter in case preferences changed
+		mDateFormatter = TimeFormatter.getLocalFormatterMicro(mContext);
+
 		// Get widget settings
-		WidgetPrefs settings = new WidgetPrefs(mContext, mAppWidgetId);
-		if (settings != null) {
-			listId = Long.parseLong(settings.getString(
-					ListWidgetConfig.KEY_LIST, "-1"));
+		final WidgetPrefs widgetPrefs = new WidgetPrefs(mContext, mAppWidgetId);
+		if (widgetPrefs != null) {
+			final Uri targetUri;
+			final long listId = widgetPrefs.getLong(ListWidgetConfig.KEY_LIST,
+					-1);
+			final String sortSpec;
+			final String sortType = widgetPrefs.getString(
+					ListWidgetConfig.KEY_SORT_TYPE,
+					mContext.getString(R.string.default_sorttype));
 
-			// getListTitle(settings, listId);
-
-			String sortChoice = settings.getString(
-					ListWidgetConfig.KEY_SORT_TYPE, mContext.getString(R.string.default_sorttype));
-			String sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
-
-			if (mContext.getString(R.string.const_duedate).equals(sortChoice)) {
-				sortOrder = NotePad.Notes.DUEDATE_SORT_TYPE;
-			} else if (mContext.getString(R.string.const_alphabetic).equals(sortChoice)) {
-				sortOrder = NotePad.Notes.ALPHABETIC_SORT_TYPE;
-			} else if (mContext.getString(R.string.const_modified).equals(sortChoice)) {
-				sortOrder = NotePad.Notes.MODIFICATION_SORT_TYPE;
-			} else if (mContext.getString(R.string.const_possubsort).equals(sortChoice)) {
-				sortOrder = NotePad.Notes.POSSUBSORT_SORT_TYPE;
+			if (sortType.equals(mContext.getString(R.string.const_possubsort))
+					&& listId > 0) {
+				targetUri = Task.URI_INDENTED_QUERY;
+				sortSpec = null;
 			}
-
-			//sortOrder += " "
-			//		+ settings.getString(ListWidgetConfig.KEY_SORT_ORDER,
-			//				NotePad.Notes.DEFAULT_SORT_ORDERING);
+			else if (sortType.equals(mContext
+					.getString(R.string.const_modified))) {
+				targetUri = Task.URI;
+				sortSpec = Task.Columns.UPDATED + " DESC";
+			}
+			// due date sorting
+			else if (sortType
+					.equals(mContext.getString(R.string.const_duedate))
+					&& listId > 0) {
+				targetUri = Task.URI_SECTIONED_BY_DATE;
+				sortSpec = null;
+			}
+			// Alphabetic
+			else {
+				targetUri = Task.URI;
+				sortSpec = Task.Columns.TITLE;
+			}
 
 			String listWhere = null;
 			String[] listArg = null;
 			if (listId > -1) {
-				listWhere = NotePad.Notes.COLUMN_NAME_LIST + " IS ? AND "
-						+ NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?";
-				listArg = new String[] {
-						Long.toString(listId),
-						mContext.getText(R.string.gtask_status_uncompleted)
-								.toString() };
-			} else {
-				listWhere = NotePad.Notes.COLUMN_NAME_GTASKS_STATUS + " IS ?";
-				listArg = new String[] { mContext.getText(
-						R.string.gtask_status_uncompleted).toString() };
+				listWhere = Task.Columns.DBLIST + " IS ? AND "
+						+ Task.Columns.COMPLETED + " IS NULL";
+				listArg = new String[] { Long.toString(listId) };
+			}
+			else {
+				listWhere = Task.Columns.COMPLETED + " IS NULL";
+				listArg = null;
 			}
 
-			Cursor cursor = mContext.getContentResolver().query(
-					NotePad.Notes.CONTENT_VISIBLE_URI, PROJECTION, listWhere,
-					listArg, sortOrder);
-			mCursor = new HeaderCursor(mContext, cursor, sortChoice,
-					null);
+			mCursor = mContext.getContentResolver().query(targetUri,
+					Task.Columns.FIELDS, listWhere, listArg, sortSpec);
 
 		}
 	}

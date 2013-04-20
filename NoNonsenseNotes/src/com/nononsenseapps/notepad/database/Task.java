@@ -47,7 +47,9 @@ public class Task extends DAO {
 	// Used in sectioned view date
 	static final String FAR_FUTURE = "strftime('%s','3999-01-01') * 1000";
 	static final String OVERDUE = "strftime('%s', '1970-01-01') * 1000";
-	static final String TODAY_START = "strftime('%s','now','localtime','start of day', 'utc') * 1000";
+	// Today should be from NOW...
+	static final String TODAY_START = "strftime('%s','now', 'utc') * 1000";
+	//static final String TODAY_START = "strftime('%s','now','localtime','start of day', 'utc') * 1000";
 
 	static final String TODAY_PLUS(final int offset) {
 		return "strftime('%s','now','localtime','+" + Integer.toString(offset)

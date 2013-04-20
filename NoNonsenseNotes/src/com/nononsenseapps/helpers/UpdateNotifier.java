@@ -104,7 +104,7 @@ public class UpdateNotifier {
 				WidgetPrefs prefs = new WidgetPrefs(context, widgetId);
 				if (prefs.isPresent()) {
 					appWidgetManager.notifyAppWidgetViewDataChanged(widgetId,
-							R.id.notes_list);
+							R.id.notesList);
 				}
 			}
 		}

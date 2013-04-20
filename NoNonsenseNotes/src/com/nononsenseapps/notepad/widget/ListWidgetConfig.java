@@ -5,23 +5,12 @@ import java.util.Date;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
-import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
-import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
-import com.mobeta.android.dslv.DragSortListView.DropListener;
-import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.ActivityMain;
-import com.nononsenseapps.notepad.ActivityMain_;
-import com.nononsenseapps.notepad.MainActivity;
-import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.prefs.MainPrefs;
-import com.nononsenseapps.notepad.widget.ListWidgetConfig.SimpleWidgetPreviewAdapter;
-import com.nononsenseapps.ui.ExtrasCursorAdapter;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
 
 import android.net.Uri;
@@ -29,8 +18,6 @@ import android.os.Build;
 import android.os.Bundle;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
-import android.app.Activity;
-import android.app.WallpaperManager;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -41,24 +28,20 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter.ViewBinder;
-import android.text.method.HideReturnsTransformationMethod;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
+import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
-import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 @EActivity(R.layout.activity_widget_config)
@@ -166,20 +149,9 @@ public class ListWidgetConfig extends FragmentActivity {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@AfterViews
 	void setupPreview() {
-		// Setup wallpaper preview
-		WallpaperManager wpm = WallpaperManager.getInstance(this);
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-			// TODO fix aspect ratio
-			//widgetPreviewWrapper.setBackground(wpm.getDrawable());
-		}
-		else {
-			//widgetPreviewWrapper.setBackgroundDrawable(wpm.getDrawable());
-		}
-
 		final WidgetPrefs widgetPrefs = new WidgetPrefs(this, appWidgetId);
 
 		mNotesAdapter = new SimpleWidgetPreviewAdapter(this,
@@ -195,8 +167,10 @@ public class ListWidgetConfig extends FragmentActivity {
 					ListWidgetConfig.this, appWidgetId);
 			boolean isHeader = false;
 			String sTemp = "";
-			SimpleDateFormat weekdayFormatter = TimeFormatter
+			final SimpleDateFormat weekdayFormatter = TimeFormatter
 					.getLocalFormatterWeekday(ListWidgetConfig.this);
+			final SimpleDateFormat dateFormatter = TimeFormatter
+					.getLocalFormatterMicro(ListWidgetConfig.this);
 
 			@Override
 			public boolean setViewValue(View view, Cursor c, int colIndex) {
@@ -232,8 +206,9 @@ public class ListWidgetConfig extends FragmentActivity {
 							sTemp = getString(R.string.date_header_completed);
 						}
 
-						((TextView) view).setText(TitleNoteTextView
-								.getStyledText(sTemp, 1.3f, 1, 1));
+						((TextView) view).setText(sTemp);
+						// ((TextView) view).setText(TitleNoteTextView
+						// .getStyledText(sTemp, 1.3f, 1, 1));
 					}
 					else {
 						((TextView) view).setText(TitleNoteTextView
@@ -273,6 +248,13 @@ public class ListWidgetConfig extends FragmentActivity {
 					// Date
 					view.setVisibility(widgetPrefs.getBoolean(KEY_HIDDENDATE,
 							false) ? View.GONE : View.VISIBLE);
+					if (c.isNull(colIndex)) {
+						((TextView) view).setText("");
+					}
+					else {
+						((TextView) view).setText(dateFormatter
+								.format(new Date(c.getLong(colIndex))));
+					}
 					((TextView) view).setTextColor(widgetPrefs.getInt(
 							KEY_TEXTPRIMARY, DEFAULT_TEXTPRIMARY));
 					return true;
@@ -335,13 +317,12 @@ public class ListWidgetConfig extends FragmentActivity {
 			public void onLoadFinished(Loader<Cursor> l, Cursor c) {
 				if (l.getId() == 1) {
 					mListAdapter.swapCursor(c);
-					// Set default item
-					widgetPrefs.putLong(KEY_LIST, mListAdapter.getItemId(0));
-					widgetPrefs.putString(KEY_LIST_TITLE,
-							((Cursor) mListAdapter.getItem(0)).getString(1));
-					titleButton.setText(widgetPrefs.getString(KEY_LIST_TITLE,
-							""));
-					reloadTasks();
+					if (c.getCount() > 0) {
+						// Set current item
+						final int pos = getListPositionOf(c,
+								widgetPrefs.getLong(KEY_LIST, -1));
+						listSpinner.setSelection(pos);
+					}
 				}
 				else {
 					mNotesAdapter.swapCursor(c);
@@ -420,8 +401,6 @@ public class ListWidgetConfig extends FragmentActivity {
 		// R.array.sorting_ordervalues_preference);
 		final String[] sortTypeValues = getResources().getStringArray(
 				R.array.sortingvalues_preference);
-		final String[] titleRowsValues = getResources().getStringArray(
-				R.array.title_rows_values);
 		final String[] themeValues = getResources().getStringArray(
 				R.array.widget_themevalues_preference);
 
@@ -447,6 +426,9 @@ public class ListWidgetConfig extends FragmentActivity {
 			public void onNothingSelected(AdapterView<?> parent) {
 			}
 		});
+		sortingSpinner.setSelection(getArrayPositionOf(sortTypeValues,
+				widgetPrefs.getString(KEY_SORT_TYPE,
+						getString(R.string.default_sorttype))));
 
 		themeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -463,7 +445,6 @@ public class ListWidgetConfig extends FragmentActivity {
 							android.R.color.primary_text_light);
 					secondaryTextColor = getResources().getColor(
 							android.R.color.secondary_text_light);
-
 				}
 				else {
 					mTheme = THEME_DARK;
@@ -482,6 +463,15 @@ public class ListWidgetConfig extends FragmentActivity {
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
+		final String currentThemeString;
+		if (widgetPrefs.getInt(KEY_THEME, DEFAULT_THEME) == THEME_LIGHT) {
+			currentThemeString = getString(R.string.settings_summary_theme_light);
+		}
+		else {
+			currentThemeString = getString(R.string.settings_summary_theme_dark);
+		}
+		themeSpinner.setSelection(getSpinnerPositionOf(
+				themeSpinner.getAdapter(), currentThemeString));
 
 		itemRowsSeekBar
 				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -500,9 +490,13 @@ public class ListWidgetConfig extends FragmentActivity {
 						// Plus one since seekbars start at zero
 						widgetPrefs.putInt(KEY_TITLEROWS, progress + 1);
 						// Only need to reload existing loader
-						mNotesAdapter.notifyDataSetChanged();
+						if (mNotesAdapter != null) {
+							mNotesAdapter.notifyDataSetChanged();
+						}
 					}
 				});
+		itemRowsSeekBar.setProgress(widgetPrefs.getInt(KEY_TITLEROWS,
+				DEFAULT_ROWS) - 1);
 
 		transparencySeekBar
 				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
@@ -527,11 +521,14 @@ public class ListWidgetConfig extends FragmentActivity {
 						updateBG(color);
 					}
 				});
-		// Set default value
-		final int progress = transparencySeekBar.getProgress();
-		final int color = getHomescreenBackgroundColor(progress, DEFAULT_SHADE);
-		widgetPrefs.putInt(KEY_SHADE_COLOR, color);
-		updateBG(color);
+		// Set current item
+		int opacity = widgetPrefs.getInt(KEY_SHADE_COLOR, DEFAULT_SHADE);
+		// Isolate the alpha
+		opacity = opacity >> 24;
+		opacity &= 0xff;
+		// Get percentage
+		opacity = (100 * opacity) / 0xff;
+		transparencySeekBar.setProgress(opacity);
 
 		listSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -552,7 +549,7 @@ public class ListWidgetConfig extends FragmentActivity {
 			}
 		});
 		mListAdapter = new SimpleCursorAdapter(this,
-				android.R.layout.simple_dropdown_item_1line, null,
+				android.R.layout.simple_spinner_dropdown_item, null,
 				new String[] { TaskList.Columns.TITLE },
 				new int[] { android.R.id.text1 }, 0);
 		listSpinner.setAdapter(mListAdapter);
@@ -567,6 +564,8 @@ public class ListWidgetConfig extends FragmentActivity {
 						widgetPrefs.putBoolean(KEY_HIDDENHEADER, isChecked);
 					}
 				});
+		transparentHeaderCheckBox.setChecked(widgetPrefs.getBoolean(
+				KEY_HIDDENHEADER, false));
 
 		hideCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
@@ -577,6 +576,8 @@ public class ListWidgetConfig extends FragmentActivity {
 					mNotesAdapter.notifyDataSetChanged();
 			}
 		});
+		hideCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX,
+				false));
 
 		hideDateCheckBox
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
@@ -588,310 +589,15 @@ public class ListWidgetConfig extends FragmentActivity {
 							mNotesAdapter.notifyDataSetChanged();
 					}
 				});
-
-		// Spinner titleRowsSpinner = (Spinner)
-		// findViewById(R.id.list_widget_config_titlerows);
-		// titleRowsSpinner
-		// .setOnItemSelectedListener(new OnItemSelectedListener() {
-		// @Override
-		// public void onItemSelected(AdapterView<?> parent,
-		// View view, int pos, long id) {
-		// // An item was selected. You can retrieve the selected
-		// // item using
-		// // parent.getItemAtPosition(pos)
-		// Log.d(TAG, "titlerows: " + titleRowsValues[pos]);
-		// widgetPrefs.putString(KEY_TITLEROWS,
-		// titleRowsValues[pos]);
-		// }
-		//
-		// @Override
-		// public void onNothingSelected(AdapterView<?> parent) {
-		// // Another interface callback
-		// }
-		// });
-
-		// Spinner themeSpinner = (Spinner)
-		// findViewById(R.id.list_widget_config_theme);
-		// themeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-		// @Override
-		// public void onItemSelected(AdapterView<?> parent, View view,
-		// int pos, long id) {
-		// // An item was selected. You can retrieve the selected item
-		// // using
-		// // parent.getItemAtPosition(pos)
-		// Log.d(TAG, "" + themeValues);
-		// Log.d(TAG, "theme: " + pos);
-		// widgetPrefs.putString(KEY_THEME, themeValues[pos]);
-		// }
-		//
-		// @Override
-		// public void onNothingSelected(AdapterView<?> parent) {
-		// // Another interface callback
-		// }
-		// });
-		//
-		// CheckBox doneCheckBox = (CheckBox)
-		// findViewById(R.id.list_widget_config_hide_checkbox);
-		// doneCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener()
-		// {
-		//
-		// @Override
-		// public void onCheckedChanged(CompoundButton buttonView,
-		// boolean isChecked) {
-		// Log.d(TAG, "checkbox: " + isChecked);
-		// widgetPrefs.putBoolean(KEY_HIDDENCHECKBOX, isChecked);
-		// }
-		// });
-		//
-		// CheckBox dateCheckBox = (CheckBox)
-		// findViewById(R.id.list_widget_config_hide_date);
-		// dateCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener()
-		// {
-		//
-		// @Override
-		// public void onCheckedChanged(CompoundButton buttonView,
-		// boolean isChecked) {
-		// Log.d(TAG, "date: " + isChecked);
-		// widgetPrefs.putBoolean(KEY_HIDDENDATE, isChecked);
-		// }
-		// });
-		//
-		// CheckBox noteCheckBox = (CheckBox)
-		// findViewById(R.id.list_widget_config_hide_note);
-		// noteCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener()
-		// {
-		//
-		// @Override
-		// public void onCheckedChanged(CompoundButton buttonView,
-		// boolean isChecked) {
-		// Log.d(TAG, "note: " + isChecked);
-		// widgetPrefs.putBoolean(KEY_HIDDENNOTE, isChecked);
-		// }
-		// });
-		//
-		// CheckBox appIconCheckBox = (CheckBox)
-		// findViewById(R.id.list_widget_config_hide_appicon);
-		// appIconCheckBox
-		// .setOnCheckedChangeListener(new OnCheckedChangeListener() {
-		//
-		// @Override
-		// public void onCheckedChanged(CompoundButton buttonView,
-		// boolean isChecked) {
-		// Log.d(TAG, "note: " + isChecked);
-		// widgetPrefs.putBoolean(KEY_HIDDENAPPICON, isChecked);
-		// }
-		// });
-		//
-		// CheckBox newCheckBox = (CheckBox)
-		// findViewById(R.id.list_widget_config_hide_new);
-		// newCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener()
-		// {
-		//
-		// @Override
-		// public void onCheckedChanged(CompoundButton buttonView,
-		// boolean isChecked) {
-		// Log.d(TAG, "note: " + isChecked);
-		// widgetPrefs.putBoolean(KEY_HIDDENNEW, isChecked);
-		// }
-		// });
-		//
-		// CheckBox headerCheckBox = (CheckBox)
-		// findViewById(R.id.list_widget_config_hide_header);
-		// headerCheckBox
-		// .setOnCheckedChangeListener(new OnCheckedChangeListener() {
-		//
-		// @Override
-		// public void onCheckedChanged(CompoundButton buttonView,
-		// boolean isChecked) {
-		// Log.d(TAG, "note: " + isChecked);
-		// widgetPrefs.putBoolean(KEY_HIDDENHEADER, isChecked);
-		// }
-		// });
-		//
-		// CheckBox transparentCheckBox = (CheckBox)
-		// findViewById(R.id.list_widget_config_transparent);
-		// transparentCheckBox
-		// .setOnCheckedChangeListener(new OnCheckedChangeListener() {
-		//
-		// @Override
-		// public void onCheckedChanged(CompoundButton buttonView,
-		// boolean isChecked) {
-		// Log.d(TAG, "note: " + isChecked);
-		// widgetPrefs.putBoolean(KEY_TRANSPARENT, isChecked);
-		// }
-		// });
-		//
-		// Button cancelButton = (Button)
-		// findViewById(R.id.list_widget_config_cancel);
-		// cancelButton.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// setResult(RESULT_CANCELED);
-		// finish();
-		// }
-		// });
-		//
-		// Button okButton = (Button) findViewById(R.id.list_widget_config_ok);
-		// okButton.setOnClickListener(new OnClickListener() {
-		//
-		// @Override
-		// public void onClick(View v) {
-		// // Set success
-		// widgetPrefs.setPresent();
-		// Intent resultValue = new Intent();
-		// resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-		// appWidgetId);
-		// setResult(RESULT_OK, resultValue);
-		//
-		// // Build/Update widget
-		// AppWidgetManager appWidgetManager = AppWidgetManager
-		// .getInstance(getApplicationContext());
-		// Log.d(TAG, "finishing WidgetId " + appWidgetId);
-		// appWidgetManager.updateAppWidget(appWidgetId,
-		// ListWidgetProvider.buildRemoteViews(
-		// getApplicationContext(), appWidgetManager,
-		// appWidgetId, widgetPrefs));
-		//
-		// // Update list items
-		// appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,
-		// R.id.notes_list);
-		//
-		// // Destroy activity
-		// finish();
-		// }
-		// });
-		//
-		// Spinner listSpinner = (Spinner)
-		// findViewById(R.id.list_widget_config_list);
-		// setListEntries(listSpinner);
-		// listSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
-		// @Override
-		// public void onItemSelected(AdapterView<?> parent, View view,
-		// int pos, long id) {
-		// // An item was selected. You can retrieve the selected item
-		// // using
-		// // parent.getItemAtPosition(pos)
-		// Log.d(TAG, "list spinner pos: " + pos);
-		// Log.d(TAG, "list spinner id: " + id);
-		// Log.d(TAG,
-		// "list spinner getItemIdAt: "
-		// + parent.getItemIdAtPosition(pos));
-		//
-		// String title = "DUMMY";
-		//
-		// Object item = parent.getItemAtPosition(pos);
-		// if (item != null) {
-		// Log.d(TAG, "item not null: " + item);
-		// if (id > -1) {
-		// int col = ((Cursor) item)
-		// .getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE);
-		// title = ((Cursor) item).getString(col);
-		// }
-		// else {
-		// title = item.toString();
-		// }
-		// }
-		//
-		// Log.d(TAG, "list spinner title: " + title);
-		//
-		// widgetPrefs.putString(KEY_LIST, Long.toString(id));
-		// widgetPrefs.putString(KEY_LIST_TITLE, title);
-		// }
-		//
-		// @Override
-		// public void onNothingSelected(AdapterView<?> parent) {
-		// // Another interface callback
-		// }
-		// });
-		//
-		// // Set previous values
-		// // List
-		// int pos = getListPositionOf(
-		// listSpinner,
-		// Long.parseLong(widgetPrefs.getString(KEY_LIST,
-		// Integer.toString(MainActivity.ALL_NOTES_ID))));
-		// if (pos > -1) listSpinner.setSelection(pos);
-		//
-		// // Sort type
-		// pos = getPositionOf(sortTypeValues, widgetPrefs.getString(
-		// KEY_SORT_TYPE, getString(R.string.default_sorttype)));
-		// // if (pos > -1) sortTypeSpinner.setSelection(pos);
-		//
-		// // Sort order
-		// /*
-		// * pos = getPositionOf(sortOrderValues, widgetPrefs.getString(
-		// * KEY_SORT_ORDER, NotePad.Notes.DEFAULT_SORT_ORDERING)); if (pos >
-		// -1)
-		// * sortOrderSpinner.setSelection(pos);
-		// */
-		// // Theme
-		// pos = getPositionOf(themeValues, widgetPrefs.getString(KEY_THEME,
-		// getString(R.string.const_theme_light)));
-		// if (pos > -1) themeSpinner.setSelection(pos);
-		//
-		// // title rows
-		// pos = getPositionOf(titleRowsValues,
-		// widgetPrefs.getString(KEY_TITLEROWS, "2"));
-		// if (pos > -1) titleRowsSpinner.setSelection(pos);
-		//
-		// // hide checkbox
-		// doneCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX,
-		// false));
-		//
-		// // hide note
-		// noteCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENNOTE,
-		// false));
-		//
-		// // hide due date
-		// dateCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENDATE,
-		// false));
-		//
-		// // hide app icon
-		// appIconCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENAPPICON,
-		// false));
-		//
-		// // hide new button
-		// newCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENNEW, false));
-		//
-		// // hide header
-		// headerCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENHEADER,
-		// false));
-		//
-		// // transparent
-		// transparentCheckBox.setChecked(widgetPrefs.getBoolean(KEY_TRANSPARENT,
-		// false));
+		hideDateCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENDATE,
+				false));
 	}
 
-	private void setListEntries(Spinner listSpinner) {
-		Cursor cursor = getContentResolver().query(
-				NotePad.Lists.CONTENT_VISIBLE_URI,
-				new String[] { NotePad.Lists._ID,
-						NotePad.Lists.COLUMN_NAME_TITLE }, null, null,
-				NotePad.Lists.SORT_ORDER);
-		if (cursor == null) {
-			return;
-		}
-
-		ExtrasCursorAdapter mSpinnerAdapter = new ExtrasCursorAdapter(this,
-				android.R.layout.simple_spinner_item, cursor,
-				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
-				new int[] { android.R.id.text1 },
-				new int[] { MainActivity.ALL_NOTES_ID },
-				new int[] { R.string.show_from_all_lists },
-				android.R.layout.simple_dropdown_item_1line);
-
-		mSpinnerAdapter
-				.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
-		listSpinner.setAdapter(mSpinnerAdapter);
-	}
-
-	private int getListPositionOf(Spinner listSpinner, long listId) {
-		SpinnerAdapter adapter = listSpinner.getAdapter();
-		if (adapter == null || adapter.getCount() == 0) return -1;
+	private int getListPositionOf(final Cursor cursor, final long id) {
+		if (cursor == null || cursor.getCount() == 0) return 0;
 		int pos = 0;
-		for (int i = 0; i < adapter.getCount(); i++) {
-			if (adapter.getItemId(i) == listId) {
+		for (int i = 0; i < cursor.getCount(); i++) {
+			if (cursor.moveToPosition(i) && cursor.getLong(0) == id) {
 				pos = i;
 				break;
 			}
@@ -899,11 +605,23 @@ public class ListWidgetConfig extends FragmentActivity {
 		return pos;
 	}
 
-	private int getPositionOf(String[] values, String selectedVal) {
-		if (values == null || values.length == 0) return -1;
+	private int getSpinnerPositionOf(final Adapter adapter, final String entry) {
+		if (adapter == null || adapter.getCount() == 0) return 0;
 		int pos = 0;
-		for (int i = 0; i < values.length; i++) {
-			if (values[i].equals(selectedVal)) {
+		for (int i = 0; i < adapter.getCount(); i++) {
+			if (adapter.getItem(i).toString().equals(entry)) {
+				pos = i;
+				break;
+			}
+		}
+		return pos;
+	}
+
+	private int getArrayPositionOf(final String[] array, final String entry) {
+		if (array == null || array.length == 0) return 0;
+		int pos = 0;
+		for (int i = 0; i < array.length; i++) {
+			if (array[i].equals(entry)) {
 				pos = i;
 				break;
 			}
@@ -972,7 +690,6 @@ public class ListWidgetConfig extends FragmentActivity {
 			final int color) {
 		// Get rid of possible alpha
 		int retColor = color & 0x00ffffff;
-		// retColor = retColor >> 8;
 
 		return getHomescreenBackgroundColor(opacity) | retColor;
 	}
