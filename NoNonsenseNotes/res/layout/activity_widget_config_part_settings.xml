@@ -7,6 +7,7 @@
     android:fillViewport="true"
     android:isScrollContainer="true"
     android:scrollbars="vertical"
+    android:background="@color/googlenow_darkergrey"
     tools:context="com.nononsenseapps.notepad.widget.ListWidgetConfig" >
 
     <LinearLayout
@@ -22,31 +23,34 @@
             android:id="@+id/listSpinner"
             style="?android:attr/spinnerStyle"
             android:layout_width="match_parent"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
             android:layout_height="@dimen/list_item_min_size"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
             android:prompt="@string/settings_list_dialog"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            tools:listitem="@android:layout/simple_spinner_dropdown_item" />
 
         <Spinner
             android:id="@+id/sortingSpinner"
             style="?android:attr/spinnerStyle"
             android:layout_width="match_parent"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
             android:layout_height="@dimen/list_item_min_size"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
             android:entries="@array/sorting_preference"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            tools:listitem="@android:layout/simple_spinner_dropdown_item" />
 
         <Spinner
-            android:id="@+id/list_widget_config_theme"
+            android:id="@+id/themeSpinner"
             style="?android:attr/spinnerStyle"
             android:layout_width="match_parent"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
             android:layout_height="@dimen/list_item_min_size"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="4dp"
             android:entries="@array/widget_theme_preference"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            tools:listitem="@android:layout/simple_spinner_dropdown_item" />
         
         <TextView
             android:layout_width="match_parent"
@@ -66,6 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
+            style="?android:attr/seekBarStyle"
             android:max="100"
             android:progress="75" />
 
@@ -87,6 +92,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
+            style="?android:attr/seekBarStyle"
             android:max="10"
             android:progress="3" />
 
@@ -95,31 +101,28 @@
             android:layout_width="fill_parent"
             android:layout_height="@dimen/list_item_min_size"
             android:text="@string/hide_checkbox"
-            android:textAppearance="@android:style/TextAppearance.Holo.Large"
-            android:textColor="@android:color/primary_text_dark" />
+            style="?android:attr/checkboxStyle" />
 
         <CheckBox
             android:id="@+id/hideDateCheckBox"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/list_item_min_size"
             android:text="@string/hide_date"
-            android:textAppearance="@android:style/TextAppearance.Holo.Large"
-            android:textColor="@android:color/primary_text_dark" />
+            style="?android:attr/checkboxStyle" />
 
         <CheckBox
             android:id="@+id/transparentHeaderCheckBox"
             android:layout_width="fill_parent"
             android:layout_height="@dimen/list_item_min_size"
             android:text="@string/hide_header"
-            android:textAppearance="@android:style/TextAppearance.Holo.Large"
-            android:textColor="@android:color/primary_text_dark" />
+            style="?android:attr/checkboxStyle" />
 
-        <LinearLayout
+        <!-- <LinearLayout
             android:id="@+id/spacer"
             android:layout_width="fill_parent"
             android:layout_height="0dp"
             android:layout_weight="1" >
-        </LinearLayout>
+        </LinearLayout> -->
 
         <!-- <include
             android:layout_width="match_parent"

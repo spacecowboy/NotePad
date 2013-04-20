@@ -52,6 +52,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -68,6 +69,8 @@ public class ListWidgetConfig extends FragmentActivity {
 	public static final String KEY_SORT_TYPE = "widget1_key_sort_type";
 	// public static final String KEY_SORT_ORDER = "widget1_key_sort_order";
 	public static final String KEY_THEME = "widget1_key_current_theme";
+	public static final String KEY_TEXTPRIMARY = "widget1_key_primary_text";
+	public static final String KEY_TEXTSECONDARY = "widget1_key_secondary_text";
 	// public static final String KEY_HIDDENAPPICON =
 	// "widget1_key_hiddenappicon";
 	// public static final String KEY_HIDDENNEW = "widget1_key_hiddennew";
@@ -79,6 +82,20 @@ public class ListWidgetConfig extends FragmentActivity {
 	public static final String KEY_TITLEROWS = "widget1_key_titlerows";
 	// Used in widget service/provider
 	public static final String KEY_LOCKSCREEN = "widget1_key_lockscreen";
+
+	public final static int THEME_DARK = 0;
+	public final static int THEME_LIGHT = 1;
+
+	// These are the default widget values
+	public final static int DEFAULT_THEME = THEME_DARK;
+	// 75% translucent black
+	public final static int DEFAULT_SHADE = 0xC0000000;
+	// White (android primary dark)
+	public final static int DEFAULT_TEXTPRIMARY = 0xff000000;
+	// Greyish (android secondary dark)
+	public final static int DEFAULT_TEXTSECONDARY = 0xffbebebe;
+	// Number of rows
+	public final static int DEFAULT_ROWS = 3;
 
 	@ViewById
 	View widgetPreviewWrapper;
@@ -94,6 +111,9 @@ public class ListWidgetConfig extends FragmentActivity {
 
 	@ViewById
 	SeekBar transparencySeekBar;
+
+	@ViewById
+	Spinner themeSpinner;
 
 	@ViewById
 	ImageView shade;
@@ -146,6 +166,7 @@ public class ListWidgetConfig extends FragmentActivity {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@AfterViews
 	void setupPreview() {
@@ -153,21 +174,22 @@ public class ListWidgetConfig extends FragmentActivity {
 		WallpaperManager wpm = WallpaperManager.getInstance(this);
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
 			// TODO fix aspect ratio
-			widgetPreviewWrapper.setBackground(wpm.getDrawable());
+			//widgetPreviewWrapper.setBackground(wpm.getDrawable());
 		}
 		else {
-			widgetPreviewWrapper.setBackgroundDrawable(wpm.getDrawable());
+			//widgetPreviewWrapper.setBackgroundDrawable(wpm.getDrawable());
 		}
 
-		// TODO
 		final WidgetPrefs widgetPrefs = new WidgetPrefs(this, appWidgetId);
 
 		mNotesAdapter = new SimpleWidgetPreviewAdapter(this,
 				R.layout.widgetlist_item, R.layout.widgetlist_header, null,
-				new String[] { Task.Columns.TITLE, Task.Columns.COMPLETED,
-						Task.Columns.COMPLETED, Task.Columns.DUE }, new int[] {
-						android.R.id.text1, R.id.completedCheckBox,
-						R.id.itemSpacer, R.id.dueDate }, 0);
+				new String[] { Task.Columns.TITLE, Task.Columns.DUE,
+						Task.Columns.COMPLETED, Task.Columns.COMPLETED,
+						Task.Columns.COMPLETED }, new int[] {
+						android.R.id.text1, R.id.dueDate,
+						R.id.completedCheckBoxDark, R.id.itemSpacer,
+						R.id.completedCheckBoxLight }, 0);
 		mNotesAdapter.setViewBinder(new ViewBinder() {
 			final WidgetPrefs widgetPrefs = new WidgetPrefs(
 					ListWidgetConfig.this, appWidgetId);
@@ -217,23 +239,42 @@ public class ListWidgetConfig extends FragmentActivity {
 						((TextView) view).setText(TitleNoteTextView
 								.getStyledText(c.getString(1), c.getString(2),
 										1.3f, 1, 1));
-						final int rows = widgetPrefs.getInt(KEY_TITLEROWS, 3);
+						final int rows = widgetPrefs.getInt(KEY_TITLEROWS,
+								DEFAULT_ROWS);
 						((TextView) view).setMaxLines(rows < 1 ? 1 : rows);
 					}
+					// Set color
+					((TextView) view).setTextColor(widgetPrefs.getInt(
+							KEY_TEXTPRIMARY, DEFAULT_TEXTPRIMARY));
 					return true;
 				case 2:
 					// already done.
 					return true;
 				case 3:
 					// Complete checkbox
-					view.setVisibility(widgetPrefs.getBoolean(
-							KEY_HIDDENCHECKBOX, false) ? View.GONE
-							: View.VISIBLE);
+					boolean visible;
+					if (view.getId() == R.id.completedCheckBoxLight) {
+						visible = THEME_LIGHT == widgetPrefs.getInt(KEY_THEME,
+								DEFAULT_THEME);
+					}
+					else if (view.getId() == R.id.completedCheckBoxDark) {
+						visible = THEME_DARK == widgetPrefs.getInt(KEY_THEME,
+								DEFAULT_THEME);
+					}
+					else {
+						// Spacer
+						visible = true;
+					}
+					visible &= !widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX,
+							false);
+					view.setVisibility(visible ? View.VISIBLE : View.GONE);
 					return true;
 				case 4:
 					// Date
 					view.setVisibility(widgetPrefs.getBoolean(KEY_HIDDENDATE,
 							false) ? View.GONE : View.VISIBLE);
+					((TextView) view).setTextColor(widgetPrefs.getInt(
+							KEY_TEXTPRIMARY, DEFAULT_TEXTPRIMARY));
 					return true;
 				default:
 					return false;
@@ -327,6 +368,8 @@ public class ListWidgetConfig extends FragmentActivity {
 
 	@AfterViews
 	void setupActionBar() {
+		final WidgetPrefs widgetPrefs = new WidgetPrefs(this, appWidgetId);
+
 		LayoutInflater inflater = (LayoutInflater) getActionBar()
 				.getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
 		final View customActionBarView = inflater.inflate(
@@ -336,28 +379,26 @@ public class ListWidgetConfig extends FragmentActivity {
 					@Override
 					public void onClick(View v) {
 						// "Done"
-						// TODO
 						// // Set success
-						// widgetPrefs.setPresent();
-						// Intent resultValue = new Intent();
-						// resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
-						// appWidgetId);
-						// setResult(RESULT_OK, resultValue);
-						//
-						// // Build/Update widget
-						// AppWidgetManager appWidgetManager = AppWidgetManager
-						// .getInstance(getApplicationContext());
+						widgetPrefs.setPresent();
+						Intent resultValue = new Intent();
+						resultValue.putExtra(
+								AppWidgetManager.EXTRA_APPWIDGET_ID,
+								appWidgetId);
+						setResult(RESULT_OK, resultValue);
+						// Build/Update widget
+						AppWidgetManager appWidgetManager = AppWidgetManager
+								.getInstance(getApplicationContext());
 						// Log.d(TAG, "finishing WidgetId " + appWidgetId);
-						// appWidgetManager.updateAppWidget(appWidgetId,
-						// ListWidgetProvider.buildRemoteViews(
-						// getApplicationContext(), appWidgetManager,
-						// appWidgetId, widgetPrefs));
-						//
-						// // Update list items
-						// appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId,
-						// R.id.notes_list);
-						//
-						// // Destroy activity
+						appWidgetManager.updateAppWidget(appWidgetId,
+								ListWidgetProvider.buildRemoteViews(
+										getApplicationContext(),
+										appWidgetManager, appWidgetId,
+										widgetPrefs));
+						// Update list items
+						appWidgetManager.notifyAppWidgetViewDataChanged(
+								appWidgetId, R.id.notesList);
+						// Destroy activity
 						finish();
 					}
 				});
@@ -407,6 +448,41 @@ public class ListWidgetConfig extends FragmentActivity {
 			}
 		});
 
+		themeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view,
+					int pos, long id) {
+				final String theme = parent.getItemAtPosition(pos).toString();
+				final int mTheme;
+				final int primaryTextColor;
+				final int secondaryTextColor;
+				if (theme
+						.equals(getString(R.string.settings_summary_theme_light))) {
+					mTheme = THEME_LIGHT;
+					primaryTextColor = getResources().getColor(
+							android.R.color.primary_text_light);
+					secondaryTextColor = getResources().getColor(
+							android.R.color.secondary_text_light);
+
+				}
+				else {
+					mTheme = THEME_DARK;
+					primaryTextColor = getResources().getColor(
+							android.R.color.primary_text_dark);
+					secondaryTextColor = getResources().getColor(
+							android.R.color.secondary_text_dark);
+				}
+				widgetPrefs.putInt(KEY_THEME, mTheme);
+				widgetPrefs.putInt(KEY_TEXTPRIMARY, primaryTextColor);
+				widgetPrefs.putInt(KEY_TEXTSECONDARY, secondaryTextColor);
+				updateTheme(mTheme, widgetPrefs);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> arg0) {
+			}
+		});
+
 		itemRowsSeekBar
 				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
@@ -441,23 +517,21 @@ public class ListWidgetConfig extends FragmentActivity {
 					@Override
 					public void onProgressChanged(SeekBar seekBar,
 							int progress, boolean fromUser) {
-						// TODO should change depending on light/dark theme
-						final int color = getHomescreenBackgroundColor(progress);
-						shade.setBackgroundColor(color);
-						shade.setVisibility(color == 0 ? View.GONE
-								: View.VISIBLE);
-						widgetPrefs.putInt(KEY_SHADE_COLOR,
-								getHomescreenBackgroundColor(progress));
+						// final int color =
+						// getHomescreenBackgroundColor(progress, 0xffffff);
+						final int color = getHomescreenBackgroundColor(
+								progress, widgetPrefs.getInt(KEY_SHADE_COLOR,
+										DEFAULT_SHADE));
+
+						widgetPrefs.putInt(KEY_SHADE_COLOR, color);
+						updateBG(color);
 					}
 				});
 		// Set default value
 		final int progress = transparencySeekBar.getProgress();
-		final int color = getHomescreenBackgroundColor(progress);
-		shade.setBackgroundColor(color);
-		shade.setVisibility(color == 0 ? View.GONE
-				: View.VISIBLE);
-		widgetPrefs.putInt(KEY_SHADE_COLOR,
-				getHomescreenBackgroundColor(progress));
+		final int color = getHomescreenBackgroundColor(progress, DEFAULT_SHADE);
+		widgetPrefs.putInt(KEY_SHADE_COLOR, color);
+		updateBG(color);
 
 		listSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -837,6 +911,39 @@ public class ListWidgetConfig extends FragmentActivity {
 		return pos;
 	}
 
+	void updateBG(final int color) {
+		if (shade != null) {
+			shade.setBackgroundColor(color);
+			shade.setVisibility((color & 0xff000000) == 0 ? View.GONE
+					: View.VISIBLE);
+		}
+	}
+
+	void updateTheme(final int theme, final WidgetPrefs widgetPrefs) {
+		int color;
+		int alpha = widgetPrefs.getInt(KEY_SHADE_COLOR, DEFAULT_SHADE);
+		// Isolate alpha channel
+		alpha = 0xff000000 & alpha;
+		switch (theme) {
+		case THEME_LIGHT:
+			// WHITE
+			color = 0xffffff;
+			break;
+		case THEME_DARK:
+		default:
+			color = 0;
+			break;
+		}
+		// Add alpha
+		color = alpha | color;
+		widgetPrefs.putInt(KEY_SHADE_COLOR, color);
+		updateBG(color);
+		mNotesAdapter.notifyDataSetChanged();
+	}
+
+	/**
+	 * Returns black, with the opacity specified
+	 */
 	public static int getHomescreenBackgroundColor(final int opacity) {
 		// int opacity = 50;
 		// try {
@@ -846,12 +953,28 @@ public class ListWidgetConfig extends FragmentActivity {
 		// } catch (NumberFormatException ignored) {
 		// }
 
-		if (opacity == 100) {
+		if (opacity >= 100) {
 			return 0xff000000;
+		}
+		else if (opacity <= 0) {
+			return 0;
 		}
 		else {
 			return (opacity * 256 / 100) << 24;
 		}
+	}
+
+	/**
+	 * Returns the specified color, with the opacity specified. The color will
+	 * have its alpha overwritten.
+	 */
+	public static int getHomescreenBackgroundColor(final int opacity,
+			final int color) {
+		// Get rid of possible alpha
+		int retColor = color & 0x00ffffff;
+		// retColor = retColor >> 8;
+
+		return getHomescreenBackgroundColor(opacity) | retColor;
 	}
 
 	static class SimpleWidgetPreviewAdapter extends SimpleCursorAdapter {

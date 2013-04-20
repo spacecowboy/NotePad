@@ -25,9 +25,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:paddingBottom="2dip"
-        android:paddingLeft="8dip"
+        android:paddingLeft="16dip"
         android:paddingTop="2dip"
         android:singleLine="true"
+        android:fontFamily="sans-serif-light"
         android:text="TODAY"
         android:textAppearance="@style/WidgetItemHeaderStyleDark" />
 

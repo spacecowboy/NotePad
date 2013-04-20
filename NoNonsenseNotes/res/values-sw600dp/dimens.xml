@@ -29,7 +29,7 @@
     
     
     <!-- WidgetConfig -->
-    <dimen name="widget_conf_preview_land_width">300dp</dimen>
+    <dimen name="widget_conf_preview_land_width">500dp</dimen>
     <dimen name="widget_conf_preview_port_height">300dp</dimen>
     
 </resources>

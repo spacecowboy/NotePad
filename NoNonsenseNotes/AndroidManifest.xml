@@ -249,7 +249,7 @@
 
         <activity
             android:name="com.nononsenseapps.notepad.widget.ListWidgetConfig_"
-            android:theme="@style/ThemeGoogleNowDark"
+            android:theme="@style/ThemeWidgetConfig"
             tools:ignore="ExportedActivity" >
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />

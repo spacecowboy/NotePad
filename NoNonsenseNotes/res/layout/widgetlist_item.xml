@@ -21,10 +21,7 @@
     android:layout_height="wrap_content"
     android:minHeight="@dimen/widget_item_min_size"
     android:orientation="horizontal"
-    android:paddingBottom="4dp"
-    android:paddingLeft="0dp"
     android:paddingRight="12dp"
-    android:paddingTop="4dp"
     tools:ignore="HardcodedText" >
 
     <RelativeLayout
@@ -47,13 +44,15 @@
             android:id="@android:id/text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_alignWithParentIfMissing="true"
             android:layout_toLeftOf="@+id/dueDate"
+            android:layout_alignParentTop="true"
             android:layout_toRightOf="@id/itemSpacer"
             android:gravity="center_vertical"
             android:maxLines="2"
             android:paddingRight="4dp"
+    		android:paddingTop="2dp"
+    		android:paddingBottom="2dp"
             android:text="a title  see very plainly with a second line like so which should be too long ideally"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/primary_text_dark"
@@ -64,22 +63,36 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:fontFamily="sans-serif-light"
             android:gravity="center_vertical"
             android:text="12 mar"
-            android:textColor="@android:color/secondary_text_dark"
+            android:textColor="@android:color/primary_text_dark"
             android:textSize="12sp" />
     </RelativeLayout>
 
+    <!-- Two to support theme switching. Cant change image src through remoteviews -->
     <ImageButton
-        android:id="@+id/completedCheckBox"
+        android:id="@+id/completedCheckBoxDark"
         android:layout_width="48dp"
         android:layout_height="@dimen/widget_item_min_size"
         android:layout_gravity="center_vertical|left"
-        android:background="@drawable/transparent"
+        android:background="@null"
         android:contentDescription="Complete task"
         android:padding="0dp"
         android:scaleType="fitStart"
         android:src="@drawable/btn_check_selector_dark" />
+    <ImageButton
+        android:id="@+id/completedCheckBoxLight"
+        android:layout_width="48dp"
+        android:layout_height="@dimen/widget_item_min_size"
+        android:layout_gravity="center_vertical|left"
+        android:background="@null"
+        android:contentDescription="Complete task"
+        android:padding="0dp"
+        android:scaleType="fitStart"
+        android:visibility="gone"
+        android:src="@drawable/btn_check_selector_light" />
+    
 
 </FrameLayout>

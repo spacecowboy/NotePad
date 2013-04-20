@@ -71,49 +71,54 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
-		Intent appIntent = new Intent();
-		appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-				| Intent.FLAG_ACTIVITY_CLEAR_TASK);
-		if (action.equals(OPEN_ACTION)) {
-			appIntent.setClass(context, MainActivity.class);
-			appIntent.setAction(Intent.ACTION_VIEW);
-			appIntent.setData(Uri.withAppendedPath(
-					NotePad.Lists.CONTENT_VISIBLE_ID_URI_BASE, Long
-							.toString(intent.getLongExtra(
-									NotePad.Notes.COLUMN_NAME_LIST, -1))));
-			context.startActivity(appIntent);
-		} else if (action.equals(CONFIG_ACTION)) {
-			appIntent.setClass(context, ListWidgetConfig.class).putExtra(
-					AppWidgetManager.EXTRA_APPWIDGET_ID,
-					intent.getExtras().getInt(
-							AppWidgetManager.EXTRA_APPWIDGET_ID,
-							AppWidgetManager.INVALID_APPWIDGET_ID));
-			context.startActivity(appIntent);
-		} else if (action.equals(CREATE_ACTION)) {
-			appIntent.setClass(context, RightActivity.class);
-			appIntent.setData(NotePad.Notes.CONTENT_VISIBLE_URI);
-			appIntent.setAction(Intent.ACTION_INSERT);
-			appIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST,
-					intent.getLongExtra(NotePad.Notes.COLUMN_NAME_LIST, -1));
-			context.startActivity(appIntent);
-
-		} else if (action.equals(CLICK_ACTION)) {
-			Log.d("widgetwork", "CLICK ACTION RECEIVED");
-			appIntent.setClass(context, RightActivity.class);
-			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
-
-			if (noteId > -1) {
-				appIntent.setData(Uri.withAppendedPath(
-						NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,
-						Long.toString(noteId)));
-				appIntent
-						.putExtra(NotePad.Notes.COLUMN_NAME_LIST, intent
-								.getLongExtra(NotePad.Notes.COLUMN_NAME_LIST,
-										-1));
-				appIntent.setAction(Intent.ACTION_EDIT);
-				context.startActivity(appIntent);
-			}
-		} else if (action.equals(COMPLETE_ACTION)) {
+//		Intent appIntent = new Intent();
+//		appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+//				| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//		if (action.equals(OPEN_ACTION)) {
+//			appIntent.setClass(context, MainActivity.class);
+//			appIntent.setAction(Intent.ACTION_VIEW);
+//			appIntent.setData(Uri.withAppendedPath(
+//					NotePad.Lists.CONTENT_VISIBLE_ID_URI_BASE, Long
+//							.toString(intent.getLongExtra(
+//									NotePad.Notes.COLUMN_NAME_LIST, -1))));
+//			context.startActivity(appIntent);
+//		}
+//		else if (action.equals(CONFIG_ACTION)) {
+//			appIntent.setClass(context, ListWidgetConfig.class).putExtra(
+//					AppWidgetManager.EXTRA_APPWIDGET_ID,
+//					intent.getExtras().getInt(
+//							AppWidgetManager.EXTRA_APPWIDGET_ID,
+//							AppWidgetManager.INVALID_APPWIDGET_ID));
+//			context.startActivity(appIntent);
+//		}
+//		else if (action.equals(CREATE_ACTION)) {
+//			appIntent.setClass(context, RightActivity.class);
+//			appIntent.setData(NotePad.Notes.CONTENT_VISIBLE_URI);
+//			appIntent.setAction(Intent.ACTION_INSERT);
+//			appIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST,
+//					intent.getLongExtra(NotePad.Notes.COLUMN_NAME_LIST, -1));
+//			context.startActivity(appIntent);
+//
+//		}
+//		else if (action.equals(CLICK_ACTION)) {
+//			Log.d("widgetwork", "CLICK ACTION RECEIVED");
+//			appIntent.setClass(context, RightActivity.class);
+//			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
+//
+//			if (noteId > -1) {
+//				appIntent.setData(Uri.withAppendedPath(
+//						NotePad.Notes.CONTENT_VISIBLE_ID_URI_BASE,
+//						Long.toString(noteId)));
+//				appIntent
+//						.putExtra(NotePad.Notes.COLUMN_NAME_LIST, intent
+//								.getLongExtra(NotePad.Notes.COLUMN_NAME_LIST,
+//										-1));
+//				appIntent.setAction(Intent.ACTION_EDIT);
+//				context.startActivity(appIntent);
+//			}
+//		}
+//		else
+			if (action.equals(COMPLETE_ACTION)) {
 			// Should send broadcast here
 			Log.d("widgetwork", "COMPLETE ACTION RECEIVED");
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
@@ -199,14 +204,14 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 		final int itemId;
 
-		if (settings != null
-				&& context.getString(R.string.const_theme_dark).equals(
-						settings.getString(ListWidgetConfig.KEY_THEME,
-								context.getString(R.string.const_theme_light)))) {
-			itemId = R.layout.listwidget_dark;
-		} else {
+//		if (settings != null
+//				&& context.getString(R.string.const_theme_dark).equals(
+//						settings.getString(ListWidgetConfig.KEY_THEME,
+//								context.getString(R.string.const_theme_light)))) {
+//			itemId = R.layout.listwidget_dark;
+//		} else {
 			itemId = R.layout.listwidget;
-		}
+		//}
 
 		RemoteViews rv = new RemoteViews(context.getPackageName(), itemId);
 
