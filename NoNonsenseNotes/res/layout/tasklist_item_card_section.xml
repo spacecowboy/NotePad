@@ -3,7 +3,6 @@
     xmlns:custom="http://schemas.android.com/apk/res/com.nononsenseapps.notepad"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/taskitemCard"
-    android:background="?attr/list_item_card_background"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/list_item_min_size"
@@ -23,7 +22,6 @@
         android:layout_height="wrap_content"
         android:minHeight="40dp"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/indent"
         android:paddingRight="4dp"
         android:clickable="true"
         nononsenseapps:enlargedView="@+id/itemDone" >

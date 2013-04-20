@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:tools="http://schemas.android.com/tools" xmlns:custom="http://schemas.android.com/apk/res/com.nononsenseapps.notepad">
+<resources xmlns:tools="http://schemas.android.com/tools" xmlns:custom="http://schemas.android.com/apk/res/com.nononsenseapps.notepad" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="ViewPagerStyleDarkGrey">
         <item name="android:background">@android:drawable/dark_header</item>
@@ -49,6 +49,10 @@
         <item name="titleFontFamily">robotocondensed</item>
         <item name="titleFontStyle">bold</item>
         <item name="titleRelativeSize">1.3</item>
+    </style>
+    
+    <style name="TaskListItem">
+        <item name="android:background">@drawable/tasklist_item_darkcard_bg</item>
     </style>
 
 </resources>

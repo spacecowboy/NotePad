@@ -32,7 +32,7 @@
         <item name="device_access_secure">@drawable/device_access_secure_dark</item>
         <item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
         <item name="navigation_accept">@drawable/navigation_accept_dark</item>
-        <item name="my_list_selector">@style/ListIndicatorDark</item>
+        <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
         <item name="my_list_background">@drawable/background_holo_dark</item>
         <item name="editorBackgroundColor">@drawable/background_holo_dark</item>
         <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
@@ -91,7 +91,7 @@
         <item name="navigation_accept">@drawable/navigation_accept_dark</item>
 
         <!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
-        <item name="my_list_selector">@style/ListIndicatorLight</item>
+        <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
         <item name="my_list_background">@color/listLightBG</item>
         <item name="editorBackgroundColor">@drawable/white_rounded_corners_padded_vertically</item>
         <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>

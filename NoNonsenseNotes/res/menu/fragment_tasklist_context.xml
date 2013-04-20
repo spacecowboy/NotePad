@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+    
+    <item
+        android:id="@+id/menu_unindent"
+        android:showAsAction="never"
+        android:title="unindent" tools:ignore="HardcodedText"/>
+    <item
+        android:id="@+id/menu_indent"
+        android:showAsAction="never"
+        android:title="indent" tools:ignore="HardcodedText"/>
+
+    <item
+        android:id="@+id/menu_share"
+        android:actionProviderClass="android.widget.ShareActionProvider"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_share"/>
+    <item
+        android:id="@+id/menu_copy"
+        android:icon="?content_copy"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_copy"/>
+    <item
+        android:id="@+id/menu_delete"
+        android:icon="?content_discard"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_delete"/>
+
+</menu>

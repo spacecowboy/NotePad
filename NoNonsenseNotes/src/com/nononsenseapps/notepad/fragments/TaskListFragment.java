@@ -2,7 +2,9 @@ package com.nononsenseapps.notepad.fragments;
 
 import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EFragment;
@@ -24,9 +26,13 @@ import com.nononsenseapps.ui.NoteCheckBox;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
 
 import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,17 +42,24 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.util.Log;
+import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CompoundButton;
+import android.widget.ListView;
+import android.widget.ShareActionProvider;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.Toast;
 
 @EFragment(R.layout.fragment_task_list)
 public class TaskListFragment extends Fragment implements
@@ -369,7 +382,6 @@ public class TaskListFragment extends Fragment implements
 		listView.setAdapter(mAdapter);
 
 		listView.setOnItemClickListener(new OnItemClickListener() {
-
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View origin, int pos,
 					long id) {
@@ -379,6 +391,165 @@ public class TaskListFragment extends Fragment implements
 			}
 		});
 
+		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View view,
+					int pos, long id) {
+				listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+				// Also select the item in question
+				listView.setItemChecked(pos, true);
+				return true;
+			}
+		});
+
+		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+			HashMap<Long, Task> tasks = new HashMap<Long, Task>();
+			ShareActionProvider mShareProvider;
+
+			@Override
+			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+				// Here you can perform updates to the CAB due to
+				// an invalidate() request
+				return false;
+			}
+
+			@Override
+			public void onDestroyActionMode(ActionMode mode) {
+				// Here you can make any necessary updates to the activity when
+				// the CAB is removed. By default, selected items are
+				// deselected/unchecked.
+				tasks.clear();
+			}
+
+			@Override
+			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+				// Must setup the contextual action menu
+				final MenuInflater inflater = getActivity().getMenuInflater();
+				inflater.inflate(R.menu.fragment_tasklist_context, menu);
+
+				// Must clear for reuse
+				tasks.clear();
+
+				final MenuItem actionItem = menu.findItem(R.id.menu_share);
+				mShareProvider = (ShareActionProvider) actionItem
+						.getActionProvider();
+				mShareProvider
+						.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
+				mShareProvider.setShareIntent(getShareIntent());
+				return true;
+			}
+
+			@Override
+			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+				// Respond to clicks on the actions in the CAB
+				boolean finish = false;
+				switch (item.getItemId()) {
+				case R.id.menu_copy:
+					final ClipboardManager clipboard = (ClipboardManager) getActivity()
+							.getSystemService(Context.CLIPBOARD_SERVICE);
+					clipboard.setPrimaryClip(ClipData.newPlainText(
+							getString(R.string.app_name), getShareText()));
+					try {
+						Toast.makeText(
+								getActivity(),
+								getResources().getQuantityString(
+										R.plurals.notecopied_msg, tasks.size(),
+										tasks.size()), Toast.LENGTH_SHORT)
+								.show();
+					}
+					catch (Exception e) {
+						// Protect against faulty translations
+					}
+					finish = true;
+					break;
+				case R.id.menu_delete:
+					for (final Task t : tasks.values()) {
+						try {
+							t.delete(getActivity());
+						}
+						catch (Exception e) {
+							// Deleting a task that has already been deleted
+							// should under no circumstances do stupid stuff
+						}
+					}
+					try {
+						Toast.makeText(
+								getActivity(),
+								getResources().getQuantityString(
+										R.plurals.notedeleted_msg,
+										tasks.size(), tasks.size()),
+								Toast.LENGTH_SHORT).show();
+					}
+					catch (Exception e) {
+						// Protect against faulty translations
+					}
+					finish = true;
+					break;
+				case R.id.menu_indent:
+					// TODO
+					break;
+				case R.id.menu_unindent:
+					// TODO
+					break;
+				default:
+					finish = false;
+				}
+
+				if (finish) mode.finish(); // Action picked, so close the CAB
+				return finish;
+			}
+
+			@Override
+			public void onItemCheckedStateChanged(ActionMode mode,
+					int position, long id, boolean checked) {
+				if (checked) {
+					tasks.put(id, new Task((Cursor) listView.getAdapter()
+							.getItem(position)));
+				}
+				else {
+					tasks.remove(id);
+				}
+
+				mShareProvider.setShareIntent(getShareIntent());
+
+				try {
+					// Only show the title string on screens that are wide
+					// enough
+					// E.g. large screens or if you are in landscape
+					final Configuration conf = getResources()
+							.getConfiguration();
+					if (conf.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE)
+							|| conf.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+						mode.setTitle(getResources().getQuantityString(
+								R.plurals.mode_choose, tasks.size(),
+								tasks.size()));
+					}
+				}
+				catch (Exception e) {
+					// Protect against faulty translations
+				}
+			}
+
+			String getShareText() {
+				final StringBuilder sb = new StringBuilder();
+				for (Task t : tasks.values()) {
+					if (sb.length() > 0) {
+						sb.append("\n\n");
+					}
+					sb.append(t.getText());
+				}
+				return sb.toString();
+			}
+
+			Intent getShareIntent() {
+				final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+				shareIntent.setType("text/plain");
+				shareIntent.putExtra(Intent.EXTRA_TEXT, getShareText());
+				shareIntent
+						.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+				return shareIntent;
+			}
+		});
 	}
 
 	@Override
