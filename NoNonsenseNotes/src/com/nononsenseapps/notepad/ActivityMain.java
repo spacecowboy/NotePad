@@ -5,10 +5,16 @@ import java.util.List;
 import java.util.Locale;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.OnActivityResult;
 import com.googlecode.androidannotations.annotations.SystemService;
+import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.nononsenseapps.billing.IabHelper;
+import com.nononsenseapps.billing.IabResult;
+import com.nononsenseapps.billing.Inventory;
+import com.nononsenseapps.billing.Purchase;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity.CONTENTVIEW;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
@@ -31,6 +37,8 @@ import android.app.ActionBar;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -47,10 +55,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 @EActivity(R.layout.activity_main)
 public class ActivityMain extends FragmentActivity implements
 		OnFragmentInteractionListener {
+
+	// In-app donate identifier
+	static final String SKU_DONATE = "donate_inapp";
+	// For static testing
+	// static final String SKU_DONATE = "android.test.purchased";
+	// static final String SKU_DONATE = "android.test.cancelled";
+	static final int SKU_DONATE_REQUEST_CODE = 7331;
 
 	// Set to true in bundle if exits should be animated
 	public static final String ANIMATEEXIT = "animateexit";
@@ -72,6 +88,9 @@ public class ActivityMain extends FragmentActivity implements
 	View taskHint;
 
 	boolean mAnimateExit = false;
+	IabHelper mBillingHelper;
+	// True if user has donated
+	boolean mIsDonate = false;
 
 	@Override
 	public void onCreate(Bundle b) {
@@ -86,7 +105,115 @@ public class ActivityMain extends FragmentActivity implements
 				&& getIntent().getBooleanExtra(ANIMATEEXIT, false)) {
 			mAnimateExit = true;
 		}
+
+		// If user has donated some other time
+		mIsDonate = PreferenceManager.getDefaultSharedPreferences(this)
+				.getBoolean(SKU_DONATE, false);
+
+		// For in-app billing
+		final String base64EncodedPublicKey = new StringBuilder(
+				"MIIBIjANBgkqhki")
+				.append("G9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkNMrvFQmGKm5YoSD7UMCvKMvlEguAHVNCzEb")
+				.append("Bww7T8iQHPr5H7Ltag03HLT4oToG1hDKsbEV7tks2tjwAm1ftzlud+gFMEG/GCL6G")
+				.append("F+aisWKLJJZtpODRzidAAJVjlDaIROJBsnDnBQ2f8uoukSrXNaT42k/plIjhCiCdZ")
+				.append("AmMb7Yb48v6aMvnB7FHXBffrkI2mpn4c8kSe721ROovZXNDw7/U94ZODKkOrnZGON")
+				.append("rJ1isUwibFA3MhOfRdemE1aZF6KwCMD2EvgV8y9KVOPwF3lE0ucsJ4I56eEQpmzzR")
+				.append("jItb/Gn8iHp0qa7IhSR/vXBL4p+byCcoQDlfvjeAmjY6dQIDAQAB")
+				.toString();
+		try {
+			mBillingHelper = new IabHelper(this, base64EncodedPublicKey);
+			mBillingHelper.enableDebugLogging(true, "nononsenseapps billing");
+			mBillingHelper
+					.startSetup(new IabHelper.OnIabSetupFinishedListener() {
+						public void onIabSetupFinished(IabResult result) {
+							if (!result.isSuccess()) {
+								// Oh noes, there was a problem.
+								Log.d("nononsenseapps billing",
+										"Problem setting up In-app Billing: "
+												+ result);
+								return;
+							}
+							// Hooray, IAB is fully set up!
+							mBillingHelper
+									.queryInventoryAsync(mBillingInventoryListener);
+						}
+					});
+		}
+		catch (Exception e) {
+			Log.d("nononsenseapps billing",
+					"InApp billing cant be allowed to crash app, EVER");
+		}
+
+		// See if the donate version is installed and offer to import if so
+		isOldDonateVersionInstalled();
 	}
+
+	@Background
+	void isOldDonateVersionInstalled() {
+		List<ApplicationInfo> packages;
+		PackageManager pm;
+		pm = getPackageManager();
+		packages = pm.getInstalledApplications(0);
+		for (ApplicationInfo packageInfo : packages) {
+			if (packageInfo.packageName
+					.equals("com.nononsenseapps.notepad_donate")) {
+				migrateDonateUser();
+				// Stop loop
+				break;
+			}
+		}
+	}
+	
+	@UiThread
+	void migrateDonateUser() {
+		// TODO migrate user
+		Toast.makeText(this, "Donate installed!", Toast.LENGTH_SHORT).show();
+	}
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if (mBillingHelper != null) mBillingHelper.dispose();
+		mBillingHelper = null;
+	}
+
+	// Listener that's called when we finish querying the items and
+	// subscriptions we own
+	IabHelper.QueryInventoryFinishedListener mBillingInventoryListener = new IabHelper.QueryInventoryFinishedListener() {
+		public void onQueryInventoryFinished(IabResult result,
+				Inventory inventory) {
+			if (result.isFailure()) {
+				Log.d("nononsenseapps billing", "Failed to query inventory: "
+						+ result);
+				return;
+			}
+
+			Log.d("nononsenseapps billing", "Query inventory was successful.");
+
+			/*
+			 * Check for items we own. Notice that for each purchase, we check
+			 * the developer payload to see if it's correct! See
+			 * verifyDeveloperPayload().
+			 */
+
+			// Do we have the premium upgrade?
+			// Purchase premiumPurchase = inventory.getPurchase(SKU_DONATE);
+			// mIsDonate = (premiumPurchase != null);// &&
+			// verifyDeveloperPayload(premiumPurchase));
+			mIsDonate = inventory.hasPurchase(SKU_DONATE);
+			Log.d("nononsenseapps billing", "User is "
+					+ (mIsDonate ? "PREMIUM" : "NOT PREMIUM"));
+
+			if (mIsDonate) {
+				// Save in prefs
+				PreferenceManager
+						.getDefaultSharedPreferences(ActivityMain.this).edit()
+						.putBoolean(SKU_DONATE, mIsDonate).commit();
+				// Update relevant parts of UI
+				updateUiDonate();
+			}
+		}
+	};
 
 	protected void readAndSetSettings() {
 		// Read settings and set
@@ -268,10 +395,60 @@ public class ActivityMain extends FragmentActivity implements
 			intent.setClass(this, PrefsActivity.class);
 			startActivity(intent);
 			return true;
+		case R.id.menu_donate:
+			try {
+				mBillingHelper.launchPurchaseFlow(this, SKU_DONATE,
+						SKU_DONATE_REQUEST_CODE,
+						new IabHelper.OnIabPurchaseFinishedListener() {
+							public void onIabPurchaseFinished(IabResult result,
+									Purchase purchase) {
+								if (result.isFailure()) {
+									Log.d("nononsenseapps billing",
+											"Error purchasing: " + result);
+									return;
+								}
+								else if (purchase.getSku().equals(SKU_DONATE)) {
+									mIsDonate = true;
+									// Save in prefs
+									PreferenceManager
+											.getDefaultSharedPreferences(
+													ActivityMain.this).edit()
+											.putBoolean(SKU_DONATE, true)
+											.commit();
+									// Update relevant parts of UI
+									updateUiDonate();
+								}
+							}
+						});
+			}
+			catch (Exception e) {
+				Log.d("nononsenseapps billing",
+						"Shouldnt start two purchases! "
+								+ e.getLocalizedMessage());
+			}
+			return true;
 		case R.id.menu_sync:
 		case R.id.menu_delete:
 		default:
 			return false;
+		}
+	}
+
+	@OnActivityResult(SKU_DONATE_REQUEST_CODE)
+	void onDonatePurchased(int resultCode, Intent data) {
+		if (mBillingHelper != null)
+			mBillingHelper.handleActivityResult(SKU_DONATE_REQUEST_CODE,
+					resultCode, data);
+	}
+
+	void updateUiDonate() {
+		if (mIsDonate) {
+			Toast.makeText(this, "WOW, Thanks a bunch dude!",
+					Toast.LENGTH_SHORT).show();
+		}
+		else {
+			Toast.makeText(this, "No premium for you!", Toast.LENGTH_SHORT)
+					.show();
 		}
 	}
 
@@ -518,9 +695,8 @@ public class ActivityMain extends FragmentActivity implements
 	}
 
 	/**
-	 * Only call this when pressing the up-navigation.
-	 * Makes sure the new activity comes in on top
-	 * of this one.
+	 * Only call this when pressing the up-navigation. Makes sure the new
+	 * activity comes in on top of this one.
 	 */
 	void finishSlideTop() {
 		super.finish();

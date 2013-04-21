@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
     <item
         android:id="@+id/menu_add"
         android:icon="?content_new"
@@ -12,5 +12,9 @@
         android:orderInCategory="999"
         android:showAsAction="never"
         android:title="@string/menu_preferences"/>
+    <item
+        android:id="@+id/menu_donate"
+        android:showAsAction="never"
+        android:title="Donate 1" tools:ignore="HardcodedText"/>
 
 </menu>

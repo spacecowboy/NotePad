@@ -8,6 +8,7 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.interfaces.PasswordChecker;
 
 import android.app.ActionBar;
+import android.app.backup.BackupManager;
 import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -64,6 +65,14 @@ public class PrefsActivity extends PreferenceActivity implements
 			actionBar.setDisplayHomeAsUpEnabled(true);
 			// actionBar.setDisplayShowTitleEnabled(false);
 		}
+	}
+	
+	@Override
+	protected void onDestroy() {
+		// Request a backup in case prefs changed
+		// Safe to call multiple times
+		new BackupManager(this).dataChanged();
+		super.onDestroy();
 	}
 
 	/**
