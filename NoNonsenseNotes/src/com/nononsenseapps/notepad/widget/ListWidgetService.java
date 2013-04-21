@@ -206,9 +206,19 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				// Text
 				rv.setTextColor(android.R.id.text1, primaryTextColor);
 				rv.setInt(android.R.id.text1, "setMaxLines", rows);
-				rv.setTextViewText(android.R.id.text1, TitleNoteTextView
-						.getStyledText(mCursor.getString(1),
-								mCursor.getString(2), 1.3f, 1, 1));
+				// Only if task it not locked
+				if (mCursor.getInt(9) != 1) {
+					rv.setTextViewText(android.R.id.text1, TitleNoteTextView
+							.getStyledText(mCursor.getString(1),
+									mCursor.getString(2), 1.3f, 1, 1));
+				}
+				else {
+					// Just title
+					rv.setTextViewText(
+							android.R.id.text1,
+							TitleNoteTextView.getStyledText(
+									mCursor.getString(1), 1.3f, 1, 1));
+				}
 
 				// Set the click intent
 				final Intent clickIntent = new Intent();

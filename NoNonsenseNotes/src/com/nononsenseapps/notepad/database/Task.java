@@ -23,11 +23,6 @@ import android.util.Log;
  */
 public class Task extends DAO {
 
-	// Use this to identify headers in SectionedViews
-	// Will be placed as the title to identify the headers from items
-	// headers wont have proper ids
-	// public static final String MAGIC_HEADER_TITLE =
-	// "af0bae0e5dfb72efb4e74e5e49c4c2dfa93bae0b";
 	// Used to separate tasks with due dates from completed and from tasks with
 	// no date
 	public static final String SECRET_TYPEID = "secret_typeid";
@@ -244,16 +239,17 @@ public class Task extends DAO {
 		public static final String COMPLETED = "completed";
 		public static final String DUE = "due";
 		public static final String UPDATED = "updated";
+		public static final String LOCKED = "locked";
 
 		public static final String LEFT = "lft";
 		public static final String RIGHT = "rgt";
 
 		public static final String[] FIELDS = { _ID, TITLE, NOTE, COMPLETED,
-				DUE, UPDATED, LEFT, RIGHT, DBLIST };
+				DUE, UPDATED, LEFT, RIGHT, DBLIST, LOCKED };
 		public static final String[] FIELDS_NO_ID = { TITLE, NOTE, COMPLETED,
-				DUE, UPDATED, LEFT, RIGHT, DBLIST };
+				DUE, UPDATED, LEFT, RIGHT, DBLIST, LOCKED };
 		public static final String[] SHALLOWFIELDS = { _ID, TITLE, NOTE,
-				DBLIST, COMPLETED, DUE, UPDATED };
+				DBLIST, COMPLETED, DUE, UPDATED, LOCKED };
 		public static final String TRIG_DELETED = "deletedtime";
 		public static final String HIST_TASK_ID = "taskid";
 		// Used to read the table. Deleted field set by database
@@ -285,6 +281,9 @@ public class Task extends DAO {
 			.append(" INTEGER DEFAULT NULL,")
 			.append(Columns.DUE)
 			.append(" INTEGER DEFAULT NULL,")
+			// boolean, 1 for locked, unlocked otherwise
+			.append(Columns.LOCKED)
+			.append(" INTEGER NOT NULL DEFAULT 0,")
 
 			// position stuff
 			.append(Columns.LEFT)
@@ -329,7 +328,6 @@ public class Task extends DAO {
 			.append(")").toString();
 
 	// Every change to a note gets saved here
-	// TODO
 	public static final String CREATE_HISTORY_TABLE = new StringBuilder(
 			"CREATE TABLE ").append(HISTORY_TABLE_NAME).append("(")
 			.append(Columns._ID).append(" INTEGER PRIMARY KEY,")
@@ -612,6 +610,8 @@ public class Task extends DAO {
 	public Long completed = null;
 	public Long due = null;
 	public Long updated = null;
+	// converted from integer
+	public boolean locked = false;
 
 	// position stuff
 	public Long left = null;
@@ -689,6 +689,7 @@ public class Task extends DAO {
 		left = c.getLong(6);
 		right = c.getLong(7);
 		dblist = c.getLong(8);
+		locked = c.getInt(9) == 1;
 
 		if (c.getColumnCount() > Columns.FIELDS.length) {
 			level = c.getInt(Columns.FIELDS.length);
@@ -718,6 +719,7 @@ public class Task extends DAO {
 				this.completed = values.getAsLong(Columns.COMPLETED);
 				this.due = values.getAsLong(Columns.DUE);
 				this.updated = values.getAsLong(Columns.UPDATED);
+				this.locked = values.getAsLong(Columns.LOCKED) == 1;
 
 				this.dblist = values.getAsLong(Columns.DBLIST);
 				this.left = values.getAsLong(Columns.LEFT);
@@ -769,6 +771,7 @@ public class Task extends DAO {
 		values.put(Columns.UPDATED, updated);
 		values.put(Columns.DUE, due);
 		values.put(Columns.COMPLETED, completed);
+		values.put(Columns.LOCKED, locked ? 1 : 0);
 
 		return values;
 	}
@@ -803,13 +806,12 @@ public class Task extends DAO {
 	}
 
 	/**
-	 * Convenience method for normal operations. Updates "updated" field.
+	 * Convenience method for normal operations. Updates "updated" field to specified
 	 * Returns number of db-rows affected. Fail if < 1
 	 */
-	@Override
-	public int save(final Context context) {
+	public int save(final Context context, final long updated) {
 		int result = 0;
-		updated = Calendar.getInstance().getTimeInMillis();
+		this.updated = updated;
 		if (_id < 1) {
 			final Uri uri = context.getContentResolver().insert(getBaseUri(),
 					getContent());
@@ -823,6 +825,15 @@ public class Task extends DAO {
 					getContent(), null, null);
 		}
 		return result;
+	}
+	
+	/**
+	 * Convenience method for normal operations. Updates "updated" field.
+	 * Returns number of db-rows affected. Fail if < 1
+	 */
+	@Override
+	public int save(final Context context) {
+		return save(context, Calendar.getInstance().getTimeInMillis());
 	}
 
 	/**

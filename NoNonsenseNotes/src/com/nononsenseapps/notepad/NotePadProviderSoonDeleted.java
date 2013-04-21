@@ -59,7 +59,7 @@ import java.util.Map.Entry;
  * Provides access to a database of notes. Each note has a title, the note
  * itself, a creation date and a modified data.
  */
-public class NotePadProvider extends ContentProvider implements
+public class NotePadProviderSoonDeleted extends ContentProvider implements
 		PipeDataWriter<Cursor> {
 
 	// Used for debugging and logging

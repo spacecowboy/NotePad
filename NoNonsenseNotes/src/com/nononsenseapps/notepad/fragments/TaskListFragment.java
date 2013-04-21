@@ -211,8 +211,11 @@ public class TaskListFragment extends Fragment implements
 					return true;
 				case 2:
 					if (!isHeader) {
-						((TitleNoteTextView) view).setTextRest(c
-								.getString(colIndex));
+						// Only if task it not locked
+						if (c.getInt(9) != 1) {
+							((TitleNoteTextView) view).setTextRest(c
+									.getString(colIndex));
+						}
 					}
 					return true;
 				case 3:

@@ -26,6 +26,7 @@ import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 import com.nononsenseapps.notepad.interfaces.TimeTraveler;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
+import com.nononsenseapps.notepad.legacy.DonateMigrator_;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 
@@ -168,6 +169,9 @@ public class ActivityMain extends FragmentActivity implements
 	void migrateDonateUser() {
 		// TODO migrate user
 		Toast.makeText(this, "Donate installed!", Toast.LENGTH_SHORT).show();
+		// Show dialog with this action
+		final Intent migrator = new Intent(this, DonateMigrator_.class);
+		startService(migrator);
 	}
 
 	@Override

@@ -265,6 +265,7 @@
             </intent-filter>
         </service>
 
+        <!-- Handles notifications associated with notes -->
         <receiver
             android:name="com.nononsenseapps.helpers.NotificationHelper"
             android:exported="true"
@@ -311,6 +312,7 @@
             android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA" >
         </activity>
 
+        <!-- DataBase provider -->
         <provider
             android:name="com.nononsenseapps.notepad.database.MyContentProvider"
             android:authorities="com.nononsenseapps.NotePad"
@@ -320,10 +322,18 @@
             android:writePermission="com.nononsenseapps.notepad.permissions.write" >
         </provider>
 
+        <!-- Time Machine -->
         <activity
             android:name="com.nononsenseapps.notepad.ActivityTaskHistory_"
             android:label="@string/timemachine" >
         </activity>
+
+        <!-- Service for migrating date from donate app -->
+        <service
+            android:name="com.nononsenseapps.notepad.legacy.DonateMigrator_"
+            android:enabled="true"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

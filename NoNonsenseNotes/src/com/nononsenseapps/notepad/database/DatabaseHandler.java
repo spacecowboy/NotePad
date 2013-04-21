@@ -1,6 +1,7 @@
 package com.nononsenseapps.notepad.database;
 
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.HashMap;
 
 import com.nononsenseapps.notepad.R;
@@ -153,9 +154,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 //					tl.gtaskaccount = c.getString(3);
 //				}
 
-				Time time = new Time(Time.TIMEZONE_UTC);
-				time.setToNow();
-				tl.updated = time.toMillis(false);
+				tl.updated = Calendar.getInstance().getTimeInMillis();
 
 				// insert into db
 				tl.insert(context, db);
@@ -174,6 +173,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					Task t = new Task();
 					t.title = c.getString(1);
 					t.note = c.getString(2);
+					
+					if (t.note.contains("[locked]")) {
+						t.locked = true;
+						t.note = t.note.replace("[locked]", "");
+					}
 
 					try {
 						t.due = RFC3339Date.parseRFC3339Date(c.getString(3))
@@ -190,7 +194,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					t.dblist = listIDMap.get(c.getLong(5));
 
 					t.updated = c.getLong(6);
+					
+					// TODO password
 
+					// TODO gtask
 					//t.gtaskid = c.getString(7);
 					//t.gtaskaccount = c.getString(8);
 
