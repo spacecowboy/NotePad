@@ -22,8 +22,20 @@
         android:title="@string/menu_share"
         android:actionProviderClass="android.widget.ShareActionProvider" />
     <item
-        android:id="@+id/menu_timemachine"
+        android:id="@+id/menu_lock"
+        android:icon="?device_access_secure"
         android:orderInCategory="103"
+        android:showAsAction="ifRoom"
+        android:title="@string/lock_note" />
+    <item
+        android:id="@+id/menu_unlock"
+        android:icon="?device_access_not_secure"
+        android:orderInCategory="104"
+        android:showAsAction="ifRoom"
+        android:title="@string/unlock_note" />
+    <item
+        android:id="@+id/menu_timemachine"
+        android:orderInCategory="105"
         android:showAsAction="never"
         android:title="@string/timemachine"/>
 

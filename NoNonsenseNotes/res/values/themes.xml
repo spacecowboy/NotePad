@@ -86,8 +86,8 @@
         <item name="ab_cancel">@drawable/content_remove_dark </item>
         <item name="content_remove">@drawable/content_remove_light </item>
         <item name="social_share">@drawable/social_share_dark </item>
-        <item name="device_access_secure">@drawable/device_access_secure_light</item>
-        <item name="device_access_not_secure">@drawable/device_access_not_secure_light</item>
+        <item name="device_access_secure">@drawable/device_access_secure_dark</item>
+        <item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
         <item name="navigation_accept">@drawable/navigation_accept_dark</item>
 
         <!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->

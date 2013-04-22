@@ -20,6 +20,7 @@ import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
@@ -406,8 +407,34 @@ public class TaskListFragment extends Fragment implements
 		});
 
 		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-			HashMap<Long, Task> tasks = new HashMap<Long, Task>();
+			final HashMap<Long, Task> tasks = new HashMap<Long, Task>();
 			ShareActionProvider mShareProvider;
+			ActionMode mMode;
+			final PasswordConfirmedListener pListener = new PasswordConfirmedListener() {
+				@Override
+				public void onPasswordConfirmed() {
+					for (final Task t : tasks.values()) {
+						try {
+							t.delete(getActivity());
+						}
+						catch (Exception e) {
+						}
+					}
+					try {
+						Toast.makeText(
+								getActivity(),
+								getResources().getQuantityString(
+										R.plurals.notedeleted_msg,
+										tasks.size(), tasks.size()),
+								Toast.LENGTH_SHORT).show();
+					}
+					catch (Exception e) {
+						// Protect against faulty translations
+					}
+					if (mMode != null)
+						mMode.finish();
+				}
+			};
 
 			@Override
 			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
@@ -432,6 +459,9 @@ public class TaskListFragment extends Fragment implements
 
 				// Must clear for reuse
 				tasks.clear();
+				
+				// For password
+				mMode = mode;
 
 				final MenuItem actionItem = menu.findItem(R.id.menu_share);
 				mShareProvider = (ShareActionProvider) actionItem
@@ -466,27 +496,41 @@ public class TaskListFragment extends Fragment implements
 					finish = true;
 					break;
 				case R.id.menu_delete:
+					boolean locked = false;
 					for (final Task t : tasks.values()) {
+						if (t.locked) {
+							locked = true;
+							break;
+						}
+					}
+					if (locked) {
+						DialogPassword_ delpf = new DialogPassword_();
+						delpf.setListener(pListener);
+						delpf.show(getFragmentManager(), "multi_delete_verify");
+					}
+					else {
+						for (final Task t : tasks.values()) {
+							try {
+								t.delete(getActivity());
+							}
+							catch (Exception e) {
+								// Deleting a task that has already been deleted
+								// should under no circumstances do stupid stuff
+							}
+						}
 						try {
-							t.delete(getActivity());
+							Toast.makeText(
+									getActivity(),
+									getResources().getQuantityString(
+											R.plurals.notedeleted_msg,
+											tasks.size(), tasks.size()),
+									Toast.LENGTH_SHORT).show();
 						}
 						catch (Exception e) {
-							// Deleting a task that has already been deleted
-							// should under no circumstances do stupid stuff
+							// Protect against faulty translations
 						}
+						finish = true;
 					}
-					try {
-						Toast.makeText(
-								getActivity(),
-								getResources().getQuantityString(
-										R.plurals.notedeleted_msg,
-										tasks.size(), tasks.size()),
-								Toast.LENGTH_SHORT).show();
-					}
-					catch (Exception e) {
-						// Protect against faulty translations
-					}
-					finish = true;
 					break;
 				case R.id.menu_indent:
 					// TODO
@@ -539,7 +583,12 @@ public class TaskListFragment extends Fragment implements
 					if (sb.length() > 0) {
 						sb.append("\n\n");
 					}
-					sb.append(t.getText());
+					if (t.locked) {
+						sb.append(t.title);
+					}
+					else {
+						sb.append(t.getText());
+					}
 				}
 				return sb.toString();
 			}
