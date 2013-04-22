@@ -22,7 +22,7 @@ public class DialogDeleteList extends DialogConfirmBase {
 
 	@Override
 	int getTitle() {
-		return R.string.delete_list_title;
+		return R.string.delete_question;
 	}
 
 	@Override
@@ -36,7 +36,7 @@ public class DialogDeleteList extends DialogConfirmBase {
 			if (0 < getActivity().getContentResolver()
 					.delete(TaskList.getUri(getArguments().getLong(ID, -1)),
 							null, null)) {
-				Toast.makeText(getActivity(), R.string.delete_list_toast,
+				Toast.makeText(getActivity(), R.string.deleted,
 						Toast.LENGTH_SHORT).show();
 			}
 		}

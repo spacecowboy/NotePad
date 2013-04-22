@@ -431,8 +431,7 @@ public class TaskListFragment extends Fragment implements
 					catch (Exception e) {
 						// Protect against faulty translations
 					}
-					if (mMode != null)
-						mMode.finish();
+					if (mMode != null) mMode.finish();
 				}
 			};
 
@@ -459,7 +458,7 @@ public class TaskListFragment extends Fragment implements
 
 				// Must clear for reuse
 				tasks.clear();
-				
+
 				// For password
 				mMode = mode;
 
@@ -622,6 +621,12 @@ public class TaskListFragment extends Fragment implements
 			if (mListId > 0) {
 				DialogEditList_ dialog = DialogEditList_.getInstance(mListId);
 				dialog.show(getFragmentManager(), "fragment_edit_list");
+			}
+			return true;
+		case R.id.menu_clearcompleted:
+			if (mListId > 0) {
+				DialogDeleteCompletedTasks.showDialog(getFragmentManager(),
+						mListId, null);
 			}
 			return true;
 		case R.id.menu_deletelist:

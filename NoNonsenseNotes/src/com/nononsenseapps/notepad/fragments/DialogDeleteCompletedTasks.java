@@ -6,36 +6,33 @@ import android.widget.Toast;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
 
-public class DialogDeleteTask extends DialogConfirmBase {
-	static final String ID = "id";
-	static final String TAG = "deletetaskok";
-
-	public static void showDialog(final FragmentManager fm, final long taskId,
+public class DialogDeleteCompletedTasks extends DialogDeleteTask {
+	public static void showDialog(final FragmentManager fm, final long listId,
 			final DialogConfirmedListener listener) {
-		DialogDeleteTask d = new DialogDeleteTask();
+		DialogDeleteCompletedTasks d = new DialogDeleteCompletedTasks();
 		d.setListener(listener);
 		Bundle args = new Bundle();
-		args.putLong(ID, taskId);
+		args.putLong(ID, listId);
 		d.setArguments(args);
 		d.show(fm, TAG);
 	}
 
 	@Override
-	int getTitle() {
-		return R.string.delete_question;
-	}
-
-	@Override
 	int getMessage() {
-		return R.string.delete_item_message;
+		return R.string.delete_items_message;
 	}
 
 	@Override
 	void onOKClick() {
 		if (getArguments().getLong(ID, -1) > 0) {
 			if (0 < getActivity().getContentResolver().delete(
-					Task.getUri(getArguments().getLong(ID, -1)), null, null)) {
+					Task.URI,
+					Task.Columns.DBLIST + " IS ? AND " + Task.Columns.COMPLETED
+							+ " IS NOT NULL",
+					new String[] { Long
+							.toString(getArguments().getLong(ID, -1)) })) {
 				Toast.makeText(getActivity(), R.string.deleted,
 						Toast.LENGTH_SHORT).show();
 			}
