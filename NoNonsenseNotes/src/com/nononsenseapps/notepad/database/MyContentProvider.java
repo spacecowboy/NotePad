@@ -67,7 +67,7 @@ public class MyContentProvider extends ContentProvider {
 		Uri result = null;
 
 		db.beginTransaction();
-		// TODO add legacy URIs
+		// Do not add legacy URIs
 		try {
 			final DAO item;
 			switch (sURIMatcher.match(uri)) {
@@ -91,6 +91,10 @@ public class MyContentProvider extends ContentProvider {
 		finally {
 			db.endTransaction();
 		}
+		
+		if (result != null) {
+			UpdateNotifier.updateWidgets(getContext());
+		}
 
 		return result;
 	}
@@ -107,12 +111,13 @@ public class MyContentProvider extends ContentProvider {
 		db.beginTransaction();
 
 		try {
-			// TODO add legacy URIs
+			// Do not add legacy URIs
 			switch (sURIMatcher.match(uri)) {
 			case TaskList.BASEITEMCODE:
 				final TaskList list = new TaskList(uri, values);
 				result += db.update(TaskList.TABLE_NAME, list.getContent(),
-						TaskList.whereIdIs, list.whereIdArg());
+						TaskList.whereIdIs(selection),
+						list.whereIdArg(selectionArgs));
 				break;
 			case Task.INDENTITEMCODE:
 				// indent one
@@ -174,18 +179,18 @@ public class MyContentProvider extends ContentProvider {
 					result += stmt.executeUpdateDelete();
 				}
 				break;
-//			case Task.MOVESUBTREECODE:
-//				// Move subtree
-//
-//				t = new Task(uri, values);
-//				if (!t.shouldMove(values)) {
-//					throw new SQLException(
-//							"Cant move task without the correct information");
-//				}
-//
-//				stmt = db.compileStatement(t.getSQLMoveSubTree(values));
-//				result += stmt.executeUpdateDelete();
-//				break;
+			// case Task.MOVESUBTREECODE:
+			// // Move subtree
+			//
+			// t = new Task(uri, values);
+			// if (!t.shouldMove(values)) {
+			// throw new SQLException(
+			// "Cant move task without the correct information");
+			// }
+			//
+			// stmt = db.compileStatement(t.getSQLMoveSubTree(values));
+			// result += stmt.executeUpdateDelete();
+			// break;
 			case Task.BASEITEMCODE:
 				// regular update
 				t = new Task(uri, values);
@@ -193,7 +198,8 @@ public class MyContentProvider extends ContentProvider {
 					// Something changed in task
 
 					result += db.update(Task.TABLE_NAME, t.getContent(),
-							Task.whereIdIs, t.whereIdArg());
+							Task.whereIdIs(selection),
+							t.whereIdArg(selectionArgs));
 				}
 				break;
 			case Task.BASEURICODE:
@@ -206,7 +212,8 @@ public class MyContentProvider extends ContentProvider {
 				final Notification n = new Notification(uri, values);
 				if (n.getContent().size() > 0) {
 					result += db.update(Notification.TABLE_NAME,
-							n.getContent(), n.whereIdIs, n.whereIdArg());
+							n.getContent(), Notification.whereIdIs(selection),
+							n.whereIdArg(selectionArgs));
 				}
 				break;
 			case Notification.BASEURICODE:
@@ -228,18 +235,23 @@ public class MyContentProvider extends ContentProvider {
 
 		if (result >= 0) {
 			DAO.notifyProviderOnChange(getContext(), uri);
+			UpdateNotifier.updateWidgets(getContext());
 		}
 
 		return result;
 	}
 
 	synchronized private int safeDeleteItem(final SQLiteDatabase db,
-			final String tableName, final Uri uri) {
+			final String tableName, final Uri uri, final String selection,
+			final String[] selectionArgs) {
 		db.beginTransaction();
 		int result = 0;
 		try {
-			result += db.delete(tableName, BaseColumns._ID + " IS ?",
-					new String[] { uri.getLastPathSegment() });
+			result += db.delete(
+					tableName,
+					DAO.whereIdIs(selection),
+					DAO.joinArrays(selectionArgs,
+							new String[] { uri.getLastPathSegment() }));
 			db.setTransactionSuccessful();
 		}
 		finally {
@@ -255,17 +267,20 @@ public class MyContentProvider extends ContentProvider {
 		final SQLiteDatabase db = DatabaseHandler.getInstance(getContext())
 				.getWritableDatabase();
 		int result = 0;
-		// TODO add legacy URIs
+		// Do not add legacy URIs
 		switch (sURIMatcher.match(uri)) {
 		case TaskList.BASEITEMCODE:
-			result += safeDeleteItem(db, TaskList.TABLE_NAME, uri);
+			result += safeDeleteItem(db, TaskList.TABLE_NAME, uri, selection,
+					selectionArgs);
 			break;
 		case Task.BASEITEMCODE:
-			result += safeDeleteItem(db, Task.TABLE_NAME, uri);
+			result += safeDeleteItem(db, Task.TABLE_NAME, uri, selection,
+					selectionArgs);
 			break;
 		case Notification.BASEITEMCODE:
 		case Notification.WITHTASKQUERYITEMCODE:
-			result += safeDeleteItem(db, Notification.TABLE_NAME, uri);
+			result += safeDeleteItem(db, Notification.TABLE_NAME, uri,
+					selection, selectionArgs);
 			break;
 		default:
 			throw new IllegalArgumentException("Faulty URI provided");
@@ -273,6 +288,7 @@ public class MyContentProvider extends ContentProvider {
 
 		if (result > 0) {
 			DAO.notifyProviderOnChange(getContext(), uri);
+			UpdateNotifier.updateWidgets(getContext());
 		}
 		return result;
 	}
@@ -299,8 +315,9 @@ public class MyContentProvider extends ContentProvider {
 					.getInstance(getContext())
 					.getReadableDatabase()
 					.query(TaskList.TABLE_NAME, projection,
-							TaskList.Columns._ID + " IS ?",
-							new String[] { String.valueOf(id) }, null, null,
+							TaskList.whereIdIs(selection),
+							TaskList.joinArrays(selectionArgs, new String[] { String.valueOf(id) })
+							, null, null,
 							sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
@@ -337,8 +354,8 @@ public class MyContentProvider extends ContentProvider {
 					.getInstance(getContext())
 					.getReadableDatabase()
 					.query(Task.DELETE_TABLE_NAME, projection,
-							Task.Columns._ID + " IS ?",
-							new String[] { String.valueOf(id) }, null, null,
+							Task.whereIdIs(selection),
+							Task.joinArrays(selectionArgs, new String[] { String.valueOf(id) }), null, null,
 							null);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
@@ -358,8 +375,8 @@ public class MyContentProvider extends ContentProvider {
 					.getInstance(getContext())
 					.getReadableDatabase()
 					.query(Task.TABLE_NAME, projection,
-							Task.Columns._ID + " IS ?",
-							new String[] { String.valueOf(id) }, null, null,
+							Task.whereIdIs(selection),
+							Task.joinArrays(selectionArgs, new String[] { String.valueOf(id) }), null, null,
 							sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
@@ -390,15 +407,11 @@ public class MyContentProvider extends ContentProvider {
 			break;
 		case Task.HISTORYQUERYCODE:
 			result = DatabaseHandler
-			.getInstance(getContext())
-			.getReadableDatabase()
-			.query(Task.HISTORY_TABLE_NAME,
-					projection,
-					selection,
-					selectionArgs,
-					null,
-					null,
-					Task.Columns.UPDATED + " ASC");
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(Task.HISTORY_TABLE_NAME, projection, selection,
+							selectionArgs, null, null,
+							Task.Columns.UPDATED + " ASC");
 			// SQLite timestamp in updated column.
 
 			result.setNotificationUri(getContext().getContentResolver(), uri);
@@ -409,8 +422,8 @@ public class MyContentProvider extends ContentProvider {
 					.getInstance(getContext())
 					.getReadableDatabase()
 					.query(Notification.TABLE_NAME, projection,
-							Notification.Columns._ID + " IS ?",
-							new String[] { String.valueOf(id) }, null, null,
+							Notification.whereIdIs(selection),
+							Notification.joinArrays(selectionArgs, new String[] { String.valueOf(id) }), null, null,
 							sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
@@ -420,8 +433,8 @@ public class MyContentProvider extends ContentProvider {
 					.getInstance(getContext())
 					.getReadableDatabase()
 					.query(Notification.WITH_TASK_VIEW_NAME, projection,
-							Notification.Columns._ID + " IS ?",
-							new String[] { String.valueOf(id) }, null, null,
+							Notification.whereIdIs(selection),
+							Notification.joinArrays(selectionArgs, new String[] { String.valueOf(id) }), null, null,
 							sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;

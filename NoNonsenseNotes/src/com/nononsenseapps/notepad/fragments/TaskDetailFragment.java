@@ -382,7 +382,6 @@ public class TaskDetailFragment extends Fragment implements
 	void fillUIFromTask() {
 		if (isLocked()) {
 			taskText.setText(mTask.title);
-			// TODO request password to unlock
 			DialogPassword_ pflock = new DialogPassword_();
 			pflock.setListener(new PasswordConfirmedListener() {
 				@Override

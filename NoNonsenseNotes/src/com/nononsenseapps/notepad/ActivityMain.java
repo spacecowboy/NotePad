@@ -164,7 +164,7 @@ public class ActivityMain extends FragmentActivity implements
 			}
 		}
 	}
-	
+
 	@UiThread
 	void migrateDonateUser() {
 		// TODO migrate user
@@ -343,10 +343,12 @@ public class ActivityMain extends FragmentActivity implements
 									.setFlags(
 											Intent.FLAG_ACTIVITY_CLEAR_TASK
 													| Intent.FLAG_ACTIVITY_NEW_TASK);
-							// TODO should ideally load the same list again
-							// if (mTask != null) {
-							// intent.setData(TaskList.getUri(mTask.dblist));
-							// }
+							// Should load the same list again
+							// Try getting the list from the original intent
+							final long listId = getListId(getIntent());
+							if (listId > 0) {
+								intent.setData(TaskList.getUri(listId));
+							}
 							startActivity(intent);
 							finishSlideTop();
 						}
@@ -576,6 +578,9 @@ public class ActivityMain extends FragmentActivity implements
 					TaskDetailFragment.ARG_ITEM_LIST_ID, -1)) {
 				retval = intent.getLongExtra(
 						TaskDetailFragment.ARG_ITEM_LIST_ID, -1);
+			}
+			else if (0 < intent.getLongExtra(Task.Columns.DBLIST, -1)) {
+				retval = intent.getLongExtra(Task.Columns.DBLIST, -1);
 			}
 		}
 		return retval;

@@ -78,7 +78,7 @@ import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
-import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
+//import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 import com.nononsenseapps.ui.TextPreviewPreference;
@@ -1534,55 +1534,55 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 		ft.addToBackStack(null);
 
 		// Create and show the dialog.
-		PasswordDialog newFragment = new PasswordDialog();
-		newFragment.setAction(actionId);
-		newFragment.show(ft, "newpassdialog");
+//		PasswordDialog newFragment = new PasswordDialog();
+//		newFragment.setAction(actionId);
+//		newFragment.show(ft, "newpassdialog");
 	}
 
-	public void OnPasswordVerified(ActionResult result) {
-		if (result != null && result.result && mText != null
-				&& noteAttrs != null) {
-			switch (result.actionId) {
-			case LOCK_NOTE:
-				noteAttrs.locked = true;
-				Toast.makeText(activity, getString(R.string.locked),
-						Toast.LENGTH_SHORT).show();
-				if (lockButton != null) {
-					lockButton.setVisibility(View.INVISIBLE);
-				}
-				if (unlockButton != null) {
-					unlockButton.setVisibility(View.VISIBLE);
-				}
-				if (lockedText != null) {
-					lockedText.setText(R.string.password_required);
-				}
-				break;
-			case UNLOCK_NOTE:
-				noteAttrs.locked = false;
-				Toast.makeText(activity, getString(R.string.unlocked),
-						Toast.LENGTH_SHORT).show();
-				if (lockButton != null) {
-					lockButton.setVisibility(View.VISIBLE);
-				}
-				if (unlockButton != null) {
-					unlockButton.setVisibility(View.INVISIBLE);
-				}
-				if (lockedText != null) {
-					lockedText.setText(R.string.unlocked);
-				}
-				// Fall through and show the note as well
-			case SHOW_NOTE:
-				mText.setText(noteAttrs.getNoteText());
-				mText.setEnabled(true);
-				break;
-			default:
-				// Dont do anything without proper key
-				break;
-			}
-		}
-		// Invalidate the menu so it redraws and hides/shows the icons if
-		// applicable
-		getActivity().invalidateOptionsMenu();
-	}
+//	public void OnPasswordVerified(ActionResult result) {
+//		if (result != null && result.result && mText != null
+//				&& noteAttrs != null) {
+//			switch (result.actionId) {
+//			case LOCK_NOTE:
+//				noteAttrs.locked = true;
+//				Toast.makeText(activity, getString(R.string.locked),
+//						Toast.LENGTH_SHORT).show();
+//				if (lockButton != null) {
+//					lockButton.setVisibility(View.INVISIBLE);
+//				}
+//				if (unlockButton != null) {
+//					unlockButton.setVisibility(View.VISIBLE);
+//				}
+//				if (lockedText != null) {
+//					lockedText.setText(R.string.password_required);
+//				}
+//				break;
+//			case UNLOCK_NOTE:
+//				noteAttrs.locked = false;
+//				Toast.makeText(activity, getString(R.string.unlocked),
+//						Toast.LENGTH_SHORT).show();
+//				if (lockButton != null) {
+//					lockButton.setVisibility(View.VISIBLE);
+//				}
+//				if (unlockButton != null) {
+//					unlockButton.setVisibility(View.INVISIBLE);
+//				}
+//				if (lockedText != null) {
+//					lockedText.setText(R.string.unlocked);
+//				}
+//				// Fall through and show the note as well
+//			case SHOW_NOTE:
+//				mText.setText(noteAttrs.getNoteText());
+//				mText.setEnabled(true);
+//				break;
+//			default:
+//				// Dont do anything without proper key
+//				break;
+//			}
+//		}
+//		// Invalidate the menu so it redraws and hides/shows the icons if
+//		// applicable
+//		getActivity().invalidateOptionsMenu();
+//	}
 
 }

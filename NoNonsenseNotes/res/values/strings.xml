@@ -257,6 +257,7 @@
     <string name="hide_new">Hide new button</string>
     <string name="hide_header">Hide entire widget header</string>
     <string name="transparency">Transparency</string>
+    <string name="notes_shortcut">Notes shortcut</string>
     <string name="shortcut_help1">If checked, the shortcut will create a new note in the selected list and open the editor. If unchecked, the shortcut will open the selected list.</string>
     <string name="loading_widget">Loading widget&#8230;</string>
     <string name="default_list_set">Default list set</string>

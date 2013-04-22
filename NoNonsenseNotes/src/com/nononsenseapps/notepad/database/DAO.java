@@ -14,10 +14,34 @@ import android.util.Log;
 
 public abstract class DAO {
 
-	public static final String whereIdIs = "" + BaseColumns._ID + " IS ?";
+	private static final String whereIdIs = "" + BaseColumns._ID + " IS ?";
+	/**
+	 * Append where is id ? to string
+	 */
+	public static String whereIdIs(final String orgWhere) {
+			final StringBuilder sb = new StringBuilder();
+			if (orgWhere != null) {
+				sb.append("(");
+				sb.append(orgWhere);
+				sb.append(") AND ");
+			}
+			sb.append(BaseColumns._ID).append(" IS ?");
+			return sb.toString();
+	}
 
 	public String[] whereIdArg() {
 		return new String[] { Long.toString(_id) };
+	}
+	/**
+	 * Append the id argument to array
+	 */
+	public String[] whereIdArg(final String[] orgWhereArgs) {
+		if (orgWhereArgs == null) {
+			return whereIdArg();
+		}
+		else {
+			return joinArrays(orgWhereArgs, whereIdArg());
+		}
 	}
 	
 	public static String[] prefixArray(final String prefix, final String[] array) {
@@ -31,8 +55,10 @@ public abstract class DAO {
 	public static String[] joinArrays(final String[]... arrays) {
 		final ArrayList<String> list = new ArrayList<String>();
 		for (final String[] array: arrays) {
-			for (final String txt: array) {
-				list.add(txt);
+			if (array != null) {
+				for (final String txt: array) {
+					list.add(txt);
+				}
 			}
 		}
 		return list.toArray(new String[list.size()]);

@@ -67,7 +67,7 @@ import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity;
 import com.nononsenseapps.notepad.NotesListFragment.Callbacks;
-import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
+//import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.interfaces.PasswordChecker;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
@@ -83,7 +83,7 @@ import android.content.res.Configuration;
  */
 public class MainActivity extends DualLayoutActivity implements
 		OnSharedPreferenceChangeListener, OnNavigationListener,
-		LoaderManager.LoaderCallbacks<Cursor>, PasswordChecker, Callbacks {
+		LoaderManager.LoaderCallbacks<Cursor>, Callbacks {
 	public static final String TAG = "nononsensenotes";
 	private static final String CURRENT_LIST_ID = "currentlistid";
 	private static final String CURRENT_LIST_POS = "currentlistpos";
@@ -956,13 +956,13 @@ public class MainActivity extends DualLayoutActivity implements
 		}
 	}
 
-	@Override
-	public void PasswordVerified(ActionResult result) {
-		NotesEditorFragment editor = (NotesEditorFragment) getRightFragment();
-		if (editor != null) {
-			editor.OnPasswordVerified(result);
-		}
-	}
+//	@Override
+//	public void PasswordVerified(ActionResult result) {
+//		NotesEditorFragment editor = (NotesEditorFragment) getRightFragment();
+//		if (editor != null) {
+//			editor.OnPasswordVerified(result);
+//		}
+//	}
 
 	@TargetApi(14)
 	@Override

@@ -1,10 +1,21 @@
 package com.nononsenseapps.notepad;
 
+import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Click;
+import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.ViewById;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
+
 import android.net.Uri;
 import android.os.Bundle;
+import android.app.ActionBar;
 import android.app.Activity;
+import android.app.LoaderManager.LoaderCallbacks;
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
+import android.content.Loader;
 import android.database.Cursor;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -12,94 +23,96 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
+import android.widget.Switch;
 
+@EActivity(R.layout.activity_shortcut_config)
 public class ShortcutConfig extends Activity {
 
-	private CheckBox createNoteCheckBox;
-	private Spinner listSpinner;
+	@ViewById
+	Switch noteSwitch;
+	@ViewById
+	Spinner listSpinner;
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.shortcut_config);
-
+	@AfterViews
+	protected void setup() {
 		// Default result is fail
 		setResult(RESULT_CANCELED);
-
-		createNoteCheckBox = (CheckBox) findViewById(R.id.create_note);
-		listSpinner = (Spinner) findViewById(R.id.list);
-
 		setListEntries(listSpinner);
-
-		Button okButton = (Button) findViewById(R.id.ok);
-		okButton.setOnClickListener(new OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				Intent shortcutIntent = new Intent();
-				// Set icon
-				ShortcutIconResource iconResource = Intent.ShortcutIconResource
-						.fromContext(ShortcutConfig.this, R.drawable.app_icon);
-				shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
-						iconResource);
-				String shortcutTitle = "";
-				Intent intent = new Intent();
-				if (createNoteCheckBox.isChecked()) {
-					shortcutTitle = ShortcutConfig.this
-							.getString(R.string.title_create);
-
-					intent.setClass(ShortcutConfig.this, RightActivity.class)
-							.setData(NotePad.Notes.CONTENT_VISIBLE_URI)
-							.setAction(Intent.ACTION_INSERT)
-							.putExtra(NotePad.Notes.COLUMN_NAME_LIST,
-									listSpinner.getSelectedItemId());
-				} else {
-					Cursor c = (Cursor) listSpinner.getSelectedItem();
-
-					if (c != null && !c.isClosed() && !c.isAfterLast()) {
-						shortcutTitle = c.getString(c
-								.getColumnIndex(NotePad.Lists.COLUMN_NAME_TITLE));
-					}
-					shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, ""
-							+ listSpinner.getSelectedItem());
-
-					intent.setClass(ShortcutConfig.this, MainActivity.class)
-							.setAction(Intent.ACTION_VIEW)
-							.setData(
-									Uri.withAppendedPath(
-											NotePad.Lists.CONTENT_VISIBLE_ID_URI_BASE,
-											Long.toString(listSpinner
-													.getSelectedItemId())));
-				}
-				shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
-				shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
-						shortcutTitle);
-
-				setResult(RESULT_OK, shortcutIntent);
-
-				// Destroy activity
-				finish();
-			}
-		});
 	}
 
-	private void setListEntries(Spinner listSpinner) {
-		Cursor cursor = getContentResolver().query(
-				NotePad.Lists.CONTENT_VISIBLE_URI,
-				new String[] { NotePad.Lists._ID,
-						NotePad.Lists.COLUMN_NAME_TITLE }, null, null,
-				NotePad.Lists.SORT_ORDER);
-		if (cursor == null) {
-			return;
-		}
+	@Click(R.id.ok)
+	void onOK() {
+		final Intent shortcutIntent = new Intent();
+		// Set icon
+		final ShortcutIconResource iconResource = Intent.ShortcutIconResource
+				.fromContext(ShortcutConfig.this, R.drawable.app_icon);
+		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE,
+				iconResource);
+		String shortcutTitle = "";
+		final Intent intent = new Intent();
+		if (noteSwitch.isChecked()) {
+			shortcutTitle = ShortcutConfig.this
+					.getString(R.string.title_create);
 
-		SimpleCursorAdapter mSpinnerAdapter = new SimpleCursorAdapter(this,
-				android.R.layout.simple_spinner_item, cursor,
-				new String[] { NotePad.Lists.COLUMN_NAME_TITLE },
+			intent.setClass(ShortcutConfig.this, ActivityMain_.class)
+					.setData(Task.URI)
+					.setAction(Intent.ACTION_INSERT)
+					.putExtra(Task.Columns.DBLIST,
+							listSpinner.getSelectedItemId());
+		}
+		else {
+			final Cursor c = (Cursor) listSpinner.getSelectedItem();
+
+			if (c != null && !c.isClosed() && !c.isAfterLast()) {
+				shortcutTitle = c.getString(1);
+			}
+			shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, ""
+					+ listSpinner.getSelectedItem());
+
+			intent.setClass(ShortcutConfig.this, ActivityMain_.class)
+					.setAction(Intent.ACTION_VIEW)
+					.setData(TaskList.getUri(listSpinner.getSelectedItemId()));
+		}
+		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, intent);
+		shortcutIntent.putExtra(Intent.EXTRA_SHORTCUT_NAME, shortcutTitle);
+
+		setResult(RESULT_OK, shortcutIntent);
+
+		// Destroy activity
+		finish();
+	}
+
+	private void setListEntries(final Spinner listSpinner) {
+		final SimpleCursorAdapter mSpinnerAdapter = new SimpleCursorAdapter(
+				this, android.R.layout.simple_spinner_dropdown_item, null,
+				new String[] { TaskList.Columns.TITLE },
 				new int[] { android.R.id.text1 }, 0);
 
-		mSpinnerAdapter
-				.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
+		// mSpinnerAdapter
+		// .setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 		listSpinner.setAdapter(mSpinnerAdapter);
+
+		getLoaderManager().restartLoader(0, null,
+				new LoaderCallbacks<Cursor>() {
+
+					@Override
+					public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+						return new CursorLoader(ShortcutConfig.this,
+								TaskList.URI, new String[] {
+										TaskList.Columns._ID,
+										TaskList.Columns.TITLE }, null, null,
+								TaskList.Columns.TITLE);
+					}
+
+					@Override
+					public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
+						mSpinnerAdapter.swapCursor(c);
+					}
+
+					@Override
+					public void onLoaderReset(Loader<Cursor> arg0) {
+						mSpinnerAdapter.swapCursor(null);
+					}
+				});
 	}
 }

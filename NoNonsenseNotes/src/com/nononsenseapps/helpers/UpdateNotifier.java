@@ -1,18 +1,14 @@
 package com.nononsenseapps.helpers;
 
 import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.NotesEditorFragment;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 import com.nononsenseapps.notepad.widget.WidgetPrefs;
 
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
-import android.preference.PreferenceManager;
 
 /**
  * The purpose here is to make it easy for other classes to notify that
@@ -84,8 +80,8 @@ public class UpdateNotifier {
 	 * 
 	 * Update all widgets's views as this database has changed somehow
 	 */
-	private static void updateWidgets(Context context) {
-		AppWidgetManager appWidgetManager = AppWidgetManager
+	public static void updateWidgets(Context context) {
+		final AppWidgetManager appWidgetManager = AppWidgetManager
 				.getInstance(context);
 		int[] appWidgetIds = appWidgetManager
 				.getAppWidgetIds(new ComponentName(context,
@@ -101,7 +97,7 @@ public class UpdateNotifier {
 
 			// Only update widgets that exist
 			for (int widgetId : appWidgetIds) {
-				WidgetPrefs prefs = new WidgetPrefs(context, widgetId);
+				final WidgetPrefs prefs = new WidgetPrefs(context, widgetId);
 				if (prefs.isPresent()) {
 					appWidgetManager.notifyAppWidgetViewDataChanged(widgetId,
 							R.id.notesList);
