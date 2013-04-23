@@ -741,15 +741,4 @@ public class ActivityMain extends FragmentActivity implements
 					R.anim.activity_slide_out_right_full);
 		}
 	}
-
-	@OnActivityResult(1)
-	protected void onTimeMachineResult(int resultCode, Intent data) {
-		if (resultCode == RESULT_OK) {
-			Fragment editor = getSupportFragmentManager().findFragmentByTag(
-					DETAILTAG);
-			if (editor != null && editor instanceof TimeTraveler) {
-				((TimeTraveler) editor).onTimeTravel(data);
-			}
-		}
-	}
 }

@@ -11,24 +11,21 @@ import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
-import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
+import com.nononsenseapps.notepad.ActivityTaskHistory_;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
-import com.nononsenseapps.notepad.fragments.DialogDateTimePicker.DateTimeSetListener;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
-import com.nononsenseapps.notepad.interfaces.TimeTraveler;
 import com.nononsenseapps.utils.views.StyledEditText;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -39,7 +36,6 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -62,7 +58,7 @@ import android.widget.Toast;
  */
 @EFragment(R.layout.fragment_task_detail)
 public class TaskDetailFragment extends Fragment implements
-		DatePickerDialogHandler, TimePickerDialogHandler, TimeTraveler {
+		DatePickerDialogHandler, TimePickerDialogHandler {
 
 	public static int LOADER_EDITOR_TASK = 3001;
 	public static int LOADER_EDITOR_TASKLISTS = 3002;
@@ -489,7 +485,10 @@ public class TaskDetailFragment extends Fragment implements
 			return true;
 		case R.id.menu_timemachine:
 			if (mTask != null && mTask._id > 0) {
-				ActivityTaskHistory.start(getActivity(), mTask._id);
+				Intent timeIntent = new Intent(getActivity(), ActivityTaskHistory_.class);
+				timeIntent.putExtra(Task.Columns._ID, mTask._id);
+				startActivityForResult(timeIntent, 1);
+				//ActivityTaskHistory.start(getActivity(), mTask._id);
 			}
 			return true;
 		case R.id.menu_delete:
@@ -557,6 +556,18 @@ public class TaskDetailFragment extends Fragment implements
 				.setVisible(mTask != null && !mTask.locked);
 		menu.findItem(R.id.menu_unlock).setVisible(
 				mTask != null && mTask.locked);
+	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == 1) {
+			if (resultCode == Activity.RESULT_OK) {
+				onTimeTravel(data);
+			}
+		}
+		else {
+			super.onActivityResult(requestCode, resultCode, data);
+		}
 	}
 
 	private void deleteAndClose() {
@@ -777,7 +788,7 @@ public class TaskDetailFragment extends Fragment implements
 		}
 	}
 
-	@Override
+	//@Override
 	public void onTimeTravel(Intent data) {
 		if (taskText != null) {
 			taskText.setText(data
