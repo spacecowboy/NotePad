@@ -121,6 +121,74 @@ public class TitleNoteTextView extends TextView {
 			}
 		}
 	}
+	
+	/**
+	 * Useful method for widgets where only default textviews may be used. Use
+	 * this method in your widget adapter to get the functionality this view
+	 * would have offered.
+	 * 
+	 * First argument is a relative size of the first line, like 1.3
+	 * 
+	 * Second argument is of type: android.graphics.Typeface.BOLD, ITALIC etc
+	 * 
+	 * Third is: 0 (normal), 1 (condensed), 2 (light), 3 (thin)
+	 */
+	public static CharSequence getStyledText(final String title, final String rest, final float titleRelSize, final int face, final int font) {
+		final StringBuilder textBuilder = new StringBuilder(title);
+		if (rest.length() > 0) {
+			textBuilder.append("\n").append(rest);
+		}
+		return getStyledText(textBuilder.toString(), titleRelSize, face, font);
+	}
+
+	/**
+	 * Useful method for widgets where only default textviews may be used. Use
+	 * this method in your widget adapter to get the functionality this view
+	 * would have offered.
+	 * 
+	 * First argument is a relative size of the first line, like 1.3
+	 * 
+	 * Second argument is of type: android.graphics.Typeface.BOLD, ITALIC etc
+	 * 
+	 * Third is: 0 (normal), 1 (condensed), 2 (light), 3 (thin)
+	 */
+	public static CharSequence getStyledText(final String text, final float titleRelSize, final int face, final int font) {
+		if (text == null)
+			return null;
+		
+		int titleEnd = text.indexOf("\n");
+		if (titleEnd < 0) {
+			titleEnd = text.length();
+		}
+		
+		TypefaceSpan fontSpan;
+		switch (font) {
+		case 1:
+			fontSpan = new TypefaceSpan("sans-serif-condensed");
+			break;
+		case 2:
+			fontSpan = new TypefaceSpan("sans-serif-light");
+			break;
+		case 3:
+			fontSpan = new TypefaceSpan("sans-serif-thin");
+			break;
+		default:
+			fontSpan = new TypefaceSpan("sans-serif");
+			break;
+		}
+
+		SpannableString ss = new SpannableString(text);
+		if (titleEnd > 0) {
+			ss.setSpan(new StyleSpan(face), 0, titleEnd,
+					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			ss.setSpan(new RelativeSizeSpan(titleRelSize), 0, titleEnd,
+					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			ss.setSpan(fontSpan, 0, titleEnd,
+					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+		}
+		
+		return ss;
+	}
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
@@ -190,7 +258,8 @@ public class TitleNoteTextView extends TextView {
 	public void setTextTitle(final String title) {
 		if (title != null) {
 			// Make sure it does not end with a newline
-			this.mTitle = (title.endsWith("\n") ? title.substring(0, title.length() - 1) : title);
+			this.mTitle = (title.endsWith("\n") ? title.substring(0,
+					title.length() - 1) : title);
 
 			setStyledText(mTitle + mRest);
 		}

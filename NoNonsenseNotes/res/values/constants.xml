@@ -51,6 +51,8 @@
     <string name="key_pref_item_max_height">item_max_height</string>
     <string name="key_pref_dateformat_long">dateformat_long</string>
     <string name="key_pref_dateformat_short">dateformat_short</string>
+    <string name="pref_dropbox">key_dropbox</string>
+    
     <string name="pref_sorttype">key_sort_type</string>
     <string name="pref_defaultlist">key_default_list_id</string>
     <string name="pref_hidecheckboxes">key_hiddencheckbox</string>

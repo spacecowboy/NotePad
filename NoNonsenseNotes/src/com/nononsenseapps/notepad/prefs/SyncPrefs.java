@@ -1,24 +1,25 @@
 /*
  * Copyright (C) 2012 Jonas Kalderstam
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.nononsenseapps.notepad.prefs;
 
 import java.io.IOException;
 
-//import com.nononsenseapps.notepad.NotePad;
+// import com.nononsenseapps.notepad.NotePad;
+import com.dropbox.sync.android.DbxAccountManager;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
@@ -38,6 +39,7 @@ import android.app.FragmentTransaction;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -45,10 +47,16 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
+import android.preference.SwitchPreference;
+import android.widget.Toast;
+
+import com.nononsenseapps.build.Config;
 import com.nononsenseapps.helpers.Log;
 
 public class SyncPrefs extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
+	
+	public static final int DROPBOX_RESULT = 68;
 
 	public static final String KEY_SYNC_ENABLE = "syncEnablePref";
 	public static final String KEY_ACCOUNT = "accountPref";
@@ -129,25 +137,62 @@ public class SyncPrefs extends PreferenceFragment implements
 			if (activity.isFinishing()) {
 				// Setting the summary now would crash it with
 				// IllegalStateException since we are not attached to a view
-			} else {
+			}
+			else {
 				if (KEY_SYNC_ENABLE.equals(key)) {
 					toggleSync(sharedPreferences);
-				} else if (KEY_BACKGROUND_SYNC.equals(key)) {
+				}
+				else if (KEY_BACKGROUND_SYNC.equals(key)) {
 					setSyncInterval(activity, sharedPreferences);
-				} else if (KEY_ACCOUNT.equals(key)) {
+				}
+				else if (KEY_ACCOUNT.equals(key)) {
 					Log.d("syncPrefs", "account");
 					prefAccount.setTitle(sharedPreferences.getString(
 							KEY_ACCOUNT, ""));
 				}
+				else if (key.equals(getString(R.string.pref_dropbox))) {
+					final DbxAccountManager dbxAccountManager = DbxAccountManager
+							.getInstance(getActivity().getApplicationContext(),
+									Config.DROPBOX_APP_KEY, Config.DROPBOX_APP_SECRET);
+					if (!dbxAccountManager.hasLinkedAccount()) {
+						dbxAccountManager.startLink(this, DROPBOX_RESULT);
+					}
+					// TODO should offer a way to unlink
+				}
 			}
-		} catch (IllegalStateException e) {
+		}
+		catch (IllegalStateException e) {
 			// This is just in case the "isFinishing" wouldn't be enough
 			// The isFinishing will try to prevent us from doing something
 			// stupid
 			// This catch prevents the app from crashing if we do something
 			// stupid
 		}
+		
 	}
+	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		if (requestCode == DROPBOX_RESULT) {
+			if (resultCode == Activity.RESULT_OK) {
+				// ... Start using Dropbox files.
+				// TODO
+				Toast.makeText(getActivity(), "Dropbox linked!", Toast.LENGTH_SHORT).show();
+			}
+			else {
+				// ... Link failed or was cancelled by the user.
+				PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
+						.putBoolean(getString(R.string.pref_dropbox), false)
+						.commit();
+				((SwitchPreference) findPreference(getString(R.string.pref_dropbox))).setChecked(false);
+			}
+		}
+		else {
+			super.onActivityResult(requestCode, resultCode, data);
+		}
+	}
+	
+	
 
 	/**
 	 * Finds and returns the account of the name given
@@ -177,13 +222,15 @@ public class SyncPrefs extends PreferenceFragment implements
 				ContentResolver.removePeriodicSync(
 						getAccount(AccountManager.get(activity), accountName),
 						MyContentProvider.AUTHORITY, new Bundle());
-			} else {
+			}
+			else {
 				// Convert from minutes to seconds
 				long pollFrequency = 3600;
 				// Set periodic syncing
 				ContentResolver.addPeriodicSync(
 						getAccount(AccountManager.get(activity), accountName),
-						MyContentProvider.AUTHORITY, new Bundle(), pollFrequency);
+						MyContentProvider.AUTHORITY, new Bundle(),
+						pollFrequency);
 			}
 		}
 	}
@@ -199,7 +246,8 @@ public class SyncPrefs extends PreferenceFragment implements
 						MyContentProvider.AUTHORITY, 1);
 				// Also set sync frequency
 				setSyncInterval(activity, sharedPreferences);
-			} else {
+			}
+			else {
 				// set unsyncable
 				ContentResolver.setIsSyncable(
 						getAccount(AccountManager.get(activity), accountName),
@@ -289,17 +337,20 @@ public class SyncPrefs extends PreferenceFragment implements
 					editor.commit();
 
 					// Set it syncable
-					ContentResolver
-							.setIsSyncable(account, MyContentProvider.AUTHORITY, 1);
+					ContentResolver.setIsSyncable(account,
+							MyContentProvider.AUTHORITY, 1);
 					// Set sync frequency
 					SyncPrefs.setSyncInterval(activity, customSharedPreference);
 				}
-			} catch (OperationCanceledException e) {
+			}
+			catch (OperationCanceledException e) {
 				// if the request was canceled for any reason
-			} catch (AuthenticatorException e) {
+			}
+			catch (AuthenticatorException e) {
 				// if there was an error communicating with the authenticator or
 				// if the authenticator returned an invalid response
-			} catch (IOException e) {
+			}
+			catch (IOException e) {
 				// if the authenticator returned an error response that
 				// indicates that it encountered an IOException while
 				// communicating with the authentication server

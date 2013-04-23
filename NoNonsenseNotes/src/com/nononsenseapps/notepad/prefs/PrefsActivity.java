@@ -5,7 +5,9 @@ import java.util.Locale;
 import com.nononsenseapps.notepad.R;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.backup.BackupManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -24,7 +26,6 @@ import android.content.res.Configuration;
 
 public class PrefsActivity extends PreferenceActivity {
 
-	private String pendingNewPassword = "";
 	private boolean mIsRoot = false;
 
 	@Override
@@ -61,7 +62,7 @@ public class PrefsActivity extends PreferenceActivity {
 			// actionBar.setDisplayShowTitleEnabled(false);
 		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		// Request a backup in case prefs changed
@@ -69,6 +70,8 @@ public class PrefsActivity extends PreferenceActivity {
 		new BackupManager(this).dataChanged();
 		super.onDestroy();
 	}
+
+	
 
 	/**
 	 * Populate the activity with the top-level headers.

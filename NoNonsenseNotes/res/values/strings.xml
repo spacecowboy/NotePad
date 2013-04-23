@@ -97,6 +97,10 @@
     <string name="settings_sync_enable_title">Google Tasks sync</string>
     <string name="settings_sync_enable_summary">Sync notes with your Google account</string>
     <string name="settings_cat_syncing">Synchronization</string>
+    <string name="gtasks">Google Tasks</string>
+    <string name="dropbox">Dropbox</string>
+    <string name="dropbox_enable">Sync with Dropbox</string>
+    <string name="dropbox_enable_summary">Creates a special NoNonsense Notes folder in your Dropbox</string>
     <string name="manual">Manual</string>
     <string name="minutes">minutes</string>
     <string name="hours">hours</string>
@@ -127,7 +131,14 @@
     <string name="automatic">Automatic</string>
     <string name="preferences_week_start_day_dialog">Week starts on</string>
     <string name="preferences_week_start_day_title">Week starts on</string>
-
+    
+    <string name="import_data_question">Import data?</string>
+    <string name="import_data_msg">Would you like to import the notes from the donate version?</string>
+	<string name="imported_result">Imported %1$d notes in %2$d lists</string>
+	<string name="import_error">Something went wrong: %s</string>
+	<string name="uninstall_donate_msg">Press OK to uninstall the donate version.</string>
+	<string name="uninstall_donate">Uninstall old version?</string>
+	
     <!--
         Use few if language need it. In English is the same.
         <item quantity="few">Copied 2 notes.</item>

@@ -20,12 +20,14 @@ import com.nononsenseapps.helpers.dualpane.DualLayoutActivity.CONTENTVIEW;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
 import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 import com.nononsenseapps.notepad.interfaces.TimeTraveler;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
+import com.nononsenseapps.notepad.legacy.DonateMigrator;
 import com.nononsenseapps.notepad.legacy.DonateMigrator_;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
@@ -167,11 +169,28 @@ public class ActivityMain extends FragmentActivity implements
 
 	@UiThread
 	void migrateDonateUser() {
-		// TODO migrate user
-		Toast.makeText(this, "Donate installed!", Toast.LENGTH_SHORT).show();
-		// Show dialog with this action
-		final Intent migrator = new Intent(this, DonateMigrator_.class);
-		startService(migrator);
+		// migrate user
+		if (!DonateMigrator.hasImported(this)) {
+			final DialogConfirmBase dialog = new DialogConfirmBase() {
+
+				@Override
+				public void onOKClick() {
+					startService(new Intent(ActivityMain.this,
+							DonateMigrator_.class));
+				}
+
+				@Override
+				public int getTitle() {
+					return R.string.import_data_question;
+				}
+
+				@Override
+				public int getMessage() {
+					return R.string.import_data_msg;
+				}
+			};
+			dialog.show(getSupportFragmentManager(), "migrate_question");
+		}
 	}
 
 	@Override
