@@ -41,13 +41,10 @@
     <string name="menu_setdefaultlist">Set as default list</string>
     <string name="menu_managelists">Edit list</string>
     <string name="add_item">Add item</string>
-    <string name="archive_item_title">Archive?</string>
-    <string name="archive_item_message">Are  you sure you want to archive this item?</string>
-    <string name="archive_item_toast">Archived</string>
-    <string name="delete_list_title">Delete list?</string>
-    <string name="delete_list_message">Are you sure you want to delete the list? Notes will be archived.</string>
-    <string name="delete_list_toast">List deleted</string>
-    <string name="delete_list_warning">Are you sure you want to delete the list? The list will be permanently deleted.</string>
+    <string name="delete_question">Delete?</string>
+    <string name="delete_items_message">Are  you sure you want to delete these items?</string>
+    <string name="delete_item_message">Are  you sure you want to delete this item?</string>
+    <string name="delete_list_message">Are you sure you want to delete the list?</string>
     <string name="editor_due_date_hint">Due date</string>
     <string name="editor_title_hint">Title</string>
     <string name="editor_note_hint">Note</string>
@@ -164,11 +161,7 @@
     <string name="confirm_new_password">Confirm new password</string>
     <string name="apply">Apply</string>
     <string name="clear_password">Clear password</string>
-    <string name="password_info">Setting a password will require you to input the password 
-        to show any locked notes. It will only protect the note-field so you still have unprotected
-        access to the title and due date. It does not encrypt the note in any way so it can still 
-        be viewed in Google mail/calendar. If you forget your password, sync with Google and
-        then reinstall the app.</string>
+    <string name="password_info">Locking a note limits access to viewing and modifying it. You lock notes on an individual basis. The notes are only protected here and remain fully accessible on other devices.</string>
     <string name="about">About</string>
     <string name="sync_failed">Sync failed</string>
     <string name="sync_login_failed">Login failed, could not connect to Google Tasks</string>

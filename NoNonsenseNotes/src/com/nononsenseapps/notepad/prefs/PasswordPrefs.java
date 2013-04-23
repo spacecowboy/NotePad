@@ -16,13 +16,12 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import com.nononsenseapps.notepad.PasswordDialog;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
+import com.nononsenseapps.notepad.fragments.DialogPasswordV11_;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -138,17 +137,22 @@ public class PasswordPrefs extends Fragment {
 		}
 	}
 
-	private void showPasswordDialog(String newPassword) {
-		((PrefsActivity) activity).setPendingNewPassword(newPassword);
-		FragmentTransaction ft = getFragmentManager().beginTransaction();
-		Fragment prev = getFragmentManager().findFragmentByTag("newpassdialog");
-		if (prev != null) {
-			ft.remove(prev);
-		}
-		ft.addToBackStack(null);
-
-		// Create and show the dialog.
-		DialogFragment newFragment = new PasswordDialog();
-		newFragment.show(ft, "newpassdialog");
+	private void showPasswordDialog(final String newPassword) {
+		final DialogPasswordV11_ pd = new DialogPasswordV11_();
+		pd.setListener(new PasswordConfirmedListener() {
+			@Override
+			public void onPasswordConfirmed() {
+				PreferenceManager
+						.getDefaultSharedPreferences(getActivity()).edit()
+						.putString(PasswordPrefs.KEY_PASSWORD, newPassword)
+						.commit();
+				Toast.makeText(
+						getActivity(),
+						("".equals(newPassword)) ? getText(R.string.password_cleared)
+								: getText(R.string.password_set),
+						Toast.LENGTH_SHORT).show();
+			}
+		});
+		pd.show(getFragmentManager(), "pw-verify");
 	}
 }
