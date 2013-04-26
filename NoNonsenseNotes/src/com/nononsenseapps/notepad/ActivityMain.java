@@ -25,7 +25,6 @@ import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
-import com.nononsenseapps.notepad.interfaces.TimeTraveler;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.legacy.DonateMigrator;
 import com.nononsenseapps.notepad.legacy.DonateMigrator_;
@@ -76,8 +75,6 @@ public class ActivityMain extends FragmentActivity implements
 	// Using tags for test
 	public static final String DETAILTAG = "detailfragment";
 	public static final String LISTPAGERTAG = "listpagerfragment";
-
-	List<TimeTraveler> onActivityResultListeners = new ArrayList<TimeTraveler>();
 
 	@ViewById
 	View fragment1;

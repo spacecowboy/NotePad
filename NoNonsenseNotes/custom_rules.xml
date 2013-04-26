@@ -232,7 +232,17 @@
         <filter
             token="CONFIG.GTASKSAPIKEY"
             value="Put your key here" />
-      </filterset>
+	
+	<filter
+                token="CONFIG.DROPBOXAPPKEY"
+                value="Put your key here" />
+
+            <filter
+                token="CONFIG.DROPBOXAPPSECRET"
+                value="Put your key here" />
+   
+
+   </filterset>
     </copy>
   </target>
 

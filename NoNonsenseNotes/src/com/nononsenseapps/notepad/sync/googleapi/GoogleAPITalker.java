@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2012 Jonas Kalderstam
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.nononsenseapps.notepad.sync.googleapi;
@@ -22,7 +22,9 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import org.apache.http.HttpResponse;
@@ -47,6 +49,7 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.MainActivity;
+import com.nononsenseapps.utils.time.RFC3339Date;
 
 import android.net.http.AndroidHttpClient; // Supports GZIP, apache's doesn't
 
@@ -121,7 +124,7 @@ public class GoogleAPITalker {
 		result += AuthUrlEnd();
 		return result;
 	}
-	
+
 	public static String InsertLists() {
 		return BASE_URL + "?" + AuthUrlEnd();
 	}
@@ -197,7 +200,8 @@ public class GoogleAPITalker {
 			try {
 				request += "updatedMin="
 						+ URLEncoder.encode(timestamp, "UTF-8") + "&";
-			} catch (UnsupportedEncodingException e) {
+			}
+			catch (UnsupportedEncodingException e) {
 				// Is OK. Can request full sync.
 				Log.d(TAG, "Malformed timestamp: " + e.getLocalizedMessage());
 			}
@@ -236,9 +240,12 @@ public class GoogleAPITalker {
 
 			authToken = accountManager.blockingGetAuthToken(account,
 					authTokenType, notifyAuthFailure);
-		} catch (OperationCanceledException e) {
-		} catch (AuthenticatorException e) {
-		} catch (IOException e) {
+		}
+		catch (OperationCanceledException e) {
+		}
+		catch (AuthenticatorException e) {
+		}
+		catch (IOException e) {
 		}
 		return authToken;
 	}
@@ -259,7 +266,8 @@ public class GoogleAPITalker {
 		Log.d(TAG, "authToken: " + authToken);
 		if (authToken != null && !authToken.equals("")) {
 			return true;
-		} else {
+		}
+		else {
 			return false;
 		}
 	}
@@ -292,7 +300,8 @@ public class GoogleAPITalker {
 	 * The entries in this does only one net-call, and such the list items do
 	 * not contain e-tags. useful to get an id-list.
 	 * 
-	 * E-tag is an amalgam of etags in all pages if user has more than 100 lists.
+	 * E-tag is an amalgam of etags in all pages if user has more than 100
+	 * lists.
 	 * 
 	 * @return
 	 * @throws IOException
@@ -300,8 +309,8 @@ public class GoogleAPITalker {
 	 * @throws PreconditionException
 	 * @throws ClientProtocolException
 	 */
-	private String getListOfLists(ArrayList<GoogleTaskList> list)
-			throws ClientProtocolException, IOException, PreconditionException {
+	public String getListOfLists(ArrayList<GoogleTaskList> list)
+			throws ClientProtocolException, IOException {
 		String eTag = "";
 		String pageToken = null;
 		do {
@@ -318,7 +327,8 @@ public class GoogleAPITalker {
 				// Log.d(TAG, jsonResponse.toString());
 				if (jsonResponse.isNull(NEXTPAGETOKEN)) {
 					pageToken = null;
-				} else {
+				}
+				else {
 					pageToken = jsonResponse.getString(NEXTPAGETOKEN);
 				}
 
@@ -336,12 +346,14 @@ public class GoogleAPITalker {
 					JSONObject jsonList = lists.getJSONObject(i);
 					list.add(new GoogleTaskList(jsonList));
 				}
-				// } catch (PreconditionException e) {
+			}
+			catch (PreconditionException e) {
 				// // Can not happen in this case since we don't have any etag!
 				// } catch (NotModifiedException e) {
 				// // Can not happen in this case since we don't have any etag!
 				// }
-			} catch (JSONException e) {
+			}
+			catch (JSONException e) {
 				pageToken = null;
 				Log.d(TAG, "getlistoflists: " + e.getLocalizedMessage());
 			}
@@ -366,7 +378,8 @@ public class GoogleAPITalker {
 			throws ClientProtocolException, JSONException,
 			NotModifiedException, IOException, PreconditionException {
 		GoogleTask result = null;
-		HttpGet httpget = new HttpGet(TaskURL(gimpedTask.id, list.id));
+		HttpGet httpget = new HttpGet(TaskURL(gimpedTask.remoteId,
+				list.remoteId));
 		setAuthHeader(httpget);
 		// setHeaderWeakEtag(httpget, gimpedTask.etag);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
@@ -382,7 +395,7 @@ public class GoogleAPITalker {
 		// // Can not happen since we are not doing a PUT/POST
 		// }
 
-		result.listdbid = list.dbId;
+		result.listdbid = list.dbid;
 		return result;
 	}
 
@@ -402,7 +415,7 @@ public class GoogleAPITalker {
 			throws ClientProtocolException, JSONException,
 			NotModifiedException, IOException, PreconditionException {
 		GoogleTaskList result = null;
-		HttpGet httpget = new HttpGet(ListURL(gimpedList.id));
+		HttpGet httpget = new HttpGet(ListURL(gimpedList.remoteId));
 		setAuthHeader(httpget);
 		// setHeaderWeakEtag(httpget, gimpedList.etag);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
@@ -447,94 +460,14 @@ public class GoogleAPITalker {
 	}
 
 	/**
-	 * If the etag matches the one from Google, nothing has changed and an empty
-	 * list is returned. Else, all lists are returned, but with the title value
-	 * set from the appropriate source (db or remote). dbId is of course also
-	 * set.
-	 * 
-	 * Also, because the API does not support deleted flags on lists, we have to
-	 * compare with the local list to find missing (deleted) lists.
-	 * 
-	 * @throws IOException
-	 * @throws JSONException
-	 * @throws ClientProtocolException
-	 * @throws PreconditionException
-	 * 
-	 */
-	public String getModifiedLists(String lastEtag,
-			ArrayList<GoogleTaskList> allLocalLists,
-			ArrayList<GoogleTaskList> modifiedLists)
-			throws ClientProtocolException, IOException {
-		ArrayList<GoogleTaskList> allRemoteLists = new ArrayList<GoogleTaskList>();
-		String newestEtag;
-		try {
-			newestEtag = getListOfLists(allRemoteLists);
-		} catch (PreconditionException e) {
-			// Can't happen
-			Log.e(TAG, "Grossball error: " + e.getLocalizedMessage());
-			newestEtag = null;
-		}
-		if (newestEtag.equals(lastEtag)) {
-			// Nothing has changed, don't do anything
-			return newestEtag;
-		} else {
-
-			// Get list of lists
-			@SuppressWarnings("unchecked")
-			ArrayList<GoogleTaskList> deletedLists = (ArrayList<GoogleTaskList>) allLocalLists
-					.clone();
-			for (GoogleTaskList gimpedList : allRemoteLists) {
-				boolean retrieved = false;
-				for (GoogleTaskList localList : allLocalLists) {
-					if (gimpedList.equals(localList)) {
-						// Remove from list as well. any that remains do not
-						// exist
-						// on server, and hence should be deleted
-						deletedLists.remove(localList);
-						// Compare. If the list was modified locally, it wins
-						// Otherwise, use remote info
-						if (localList.modified != 1) {
-							localList.title = gimpedList.title;
-						}
-						modifiedLists.add(localList);
-
-						retrieved = true;
-						break; // Break first loop, since we found it
-					}
-				}
-				if (!retrieved) {
-					// for new items, just get, and save
-					modifiedLists.add(gimpedList);
-				}
-			}
-
-			// Any lists that remain in the deletedLists, could not be
-			// found on server. Hence
-			// they must have been deleted. Set them as deleted and add to
-			// modified
-			// list.
-			// This is though only true if it existed on the server in the first
-			// place
-			for (GoogleTaskList possiblyDeletedList : deletedLists) {
-				if (possiblyDeletedList.id != null
-						&& !possiblyDeletedList.id.isEmpty()) {
-					possiblyDeletedList.deleted = 1;
-					if (!modifiedLists.contains(possiblyDeletedList))
-						modifiedLists.add(possiblyDeletedList);
-				}
-			}
-
-			return newestEtag;
-		}
-	}
-
-	/**
 	 * Given a time, will fetch all tasks which were modified afterwards
 	 * 
 	 * @param googleTaskList
+	 * @throws IOException
+	 * @throws ClientProtocolException
 	 */
 	public ArrayList<GoogleTask> getModifiedTasks(String lastUpdated,
-			GoogleTaskList list) {
+			GoogleTaskList list) throws ClientProtocolException, IOException {
 		ArrayList<GoogleTask> moddedList = new ArrayList<GoogleTask>();
 
 		// If user has many tasks, they will not all be returned in same request
@@ -542,7 +475,7 @@ public class GoogleAPITalker {
 
 		// Loop while we have a next page to go to. Always fetch the first page
 		do {
-			HttpGet httpget = new HttpGet(allTasksUpdatedMin(list.id,
+			HttpGet httpget = new HttpGet(allTasksUpdatedMin(list.remoteId,
 					lastUpdated, pageToken));
 			setAuthHeader(httpget);
 			AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
@@ -557,7 +490,8 @@ public class GoogleAPITalker {
 				// If we have a next page, get that
 				if (jsonResponse.isNull(NEXTPAGETOKEN)) {
 					pageToken = null;
-				} else {
+				}
+				else {
 					pageToken = jsonResponse.getString(NEXTPAGETOKEN);
 				}
 				// Will be an array of items
@@ -569,22 +503,20 @@ public class GoogleAPITalker {
 					JSONObject jsonTask = items.getJSONObject(i);
 					Log.d(MainActivity.TAG,
 							"moddedJSONTask: " + jsonTask.toString());
-					moddedList.add(new GoogleTask(jsonTask));
+					final GoogleTask gt = new GoogleTask(jsonTask);
+					gt.listdbid = list.dbid;
+					moddedList.add(gt);
 				}
-			} catch (ClientProtocolException e) {
-				pageToken = null;
-				Log.d(MainActivity.TAG, e.getLocalizedMessage());
-			} catch (PreconditionException e) {
+			}
+			catch (PreconditionException e) {
 				// // Can't happen
 				pageToken = null;
 				return null;
 				// } catch (NotModifiedException e) {
 				//
 				// Log.d(TAG, e.getLocalizedMessage());
-			} catch (IOException e) {
-				pageToken = null;
-				Log.d(MainActivity.TAG, e.getLocalizedMessage());
-			} catch (JSONException e) {
+			}
+			catch (JSONException e) {
 				// Item list must have been empty
 				pageToken = null;
 				Log.d(MainActivity.TAG, e.getLocalizedMessage());
@@ -606,42 +538,44 @@ public class GoogleAPITalker {
 			final GoogleTaskList pList) throws ClientProtocolException,
 			IOException, PreconditionException {
 
-		if (pList.id == null || pList.id.isEmpty()) {
+		if (pList.remoteId == null || pList.remoteId.isEmpty()) {
 			Log.d(TAG, "Invalid list ID found for uploadTask");
 			return null; // Invalid list id
 		}
 
 		// If we are trying to upload a deleted task which does not exist on
 		// server, we can ignore it. might happen with conflicts
-		if (task.deleted == 1 && (task.id == null || task.id.isEmpty())) {
+		if (task.deleted && (task.remoteId == null || task.remoteId.isEmpty())) {
 			Log.d(TAG, "Trying to upload a deleted non-synced note, ignoring: "
 					+ task.title);
 			return null;
 		}
 
 		HttpUriRequest httppost;
-		if (task.id != null && !task.id.isEmpty()) {
-			if (task.deleted == 1) {
-				httppost = new HttpPost(TaskURL(task.id, pList.id));
+		if (task.remoteId != null && !task.remoteId.isEmpty()) {
+			if (task.deleted) {
+				httppost = new HttpPost(TaskURL(task.remoteId, pList.remoteId));
 				httppost.setHeader("X-HTTP-Method-Override", "DELETE");
-			} else {
-				httppost = new HttpPost(TaskURL_ETAG_ID_UPDATED(task.id,
-						pList.id));
+			}
+			else {
+				httppost = new HttpPost(TaskURL_ETAG_ID_UPDATED(task.remoteId,
+						pList.remoteId));
 				// apache does not include PATCH requests, but we can force a
 				// post to be a PATCH request
 				httppost.setHeader("X-HTTP-Method-Override", "PATCH");
 			}
 			// Always set ETAGS for tasks
-			setHeaderStrongEtag(httppost, task.etag);
-		} else {
-			if (task.deleted == 1) {
+			// setHeaderStrongEtag(httppost, task.etag);
+		}
+		else {
+			if (task.deleted) {
 				return task; // Don't sync deleted items which do not exist on
 								// the server
 			}
 
 			Log.d(TAG, "ID IS NULL: " + task.title);
-			httppost = new HttpPost(AllTasksInsert(pList.id));
-			task.didRemoteInsert = true; // Need this later
+			httppost = new HttpPost(AllTasksInsert(pList.remoteId));
+			// task.didRemoteInsert = true; // Need this later
 		}
 		setAuthHeader(httppost);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
@@ -651,7 +585,7 @@ public class GoogleAPITalker {
 		// Log.d(TAG, header.getName() + ": " + header.getValue());
 		// }
 
-		if (task.deleted != 1) {
+		if (!task.deleted) {
 			setPostBody(httppost, task);
 		}
 
@@ -659,10 +593,11 @@ public class GoogleAPITalker {
 
 		// If we deleted the note, we will get an empty response. Return the
 		// same element back.
-		if (task.deleted == 1) {
+		if (task.deleted) {
 
 			Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
-		} else {
+		}
+		else {
 			JSONObject jsonResponse = null;
 
 			try {
@@ -672,12 +607,20 @@ public class GoogleAPITalker {
 
 				// Will return a task, containing id and etag. always update
 				// fields
-				task.id = jsonResponse.getString(GoogleTask.ID);
-				task.etag = jsonResponse.getString("etag");
-				if (jsonResponse.has(GoogleTask.UPDATED))
-					task.updated = jsonResponse.getString(GoogleTask.UPDATED);
-
-			} catch (JSONException e) {
+				task.remoteId = jsonResponse.getString(GoogleTask.ID);
+				// task.etag = jsonResponse.getString("etag");
+				if (jsonResponse.has(GoogleTask.UPDATED)) {
+					try {
+						task.updated = RFC3339Date.parseRFC3339Date(
+								jsonResponse.getString(GoogleTask.UPDATED))
+								.getTime();
+					}
+					catch (Exception e) {
+						task.updated = 0L;
+					}
+				}
+			}
+			catch (JSONException e) {
 				Log.d(TAG, "" + jsonResponse + " " + e.getLocalizedMessage());
 			}
 		}
@@ -756,29 +699,22 @@ public class GoogleAPITalker {
 	 */
 	public GoogleTaskList uploadList(final GoogleTaskList list)
 			throws ClientProtocolException, IOException, PreconditionException {
-		HttpUriRequest httppost;
-		if (list.id != null) {
-
-			Log.d(TAG, "ID is not NULL!! " + ListURL(list.id));
-			if (list.deleted == 1) {
-				httppost = new HttpDelete(ListURL(list.id));
-				// Delete is the only case for lists where we really
-				// care about conflicts
-				setHeaderStrongEtag(httppost, list.etag);
-			} else {
-				httppost = new HttpPost(ListURL(list.id));
+		final HttpUriRequest httppost;
+		if (list.remoteId != null) {
+			Log.d(TAG, "ID is not NULL!! " + ListURL(list.remoteId));
+			if (list.deletedLocally) {
+				httppost = new HttpDelete(ListURL(list.remoteId));
+			}
+			else {
+				httppost = new HttpPost(ListURL(list.remoteId));
 				// apache does not include PATCH requests, but we can force a
 				// post to be a PATCH request
 				httppost.setHeader("X-HTTP-Method-Override", "PATCH");
 			}
-		} else {
-			if (list.deleted == 1) {
-				return list; // Don't sync deleted items which do not exist on
-								// the server
-			}
-
+		}
+		else {
 			httppost = new HttpPost(InsertLists());
-			list.didRemoteInsert = true; // Need this later
+			// list.didRemoteInsert = true; // Need this later
 		}
 		setAuthHeader(httppost);
 		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
@@ -788,19 +724,18 @@ public class GoogleAPITalker {
 		// Log.d(TAG, header.getName() + ": " + header.getValue());
 		// }
 
-		if (list.deleted != 1) {
+		if (!list.deletedLocally) {
 			setPostBody(httppost, list);
 		}
 
-		String stringResponse;
-		stringResponse = parseResponse(client.execute(httppost));
+		String stringResponse = parseResponse(client.execute(httppost));
 
 		// If we deleted the note, we will get an empty response. Return the
 		// same element back.
-		if (list.deleted == 1) {
-
+		if (list.deletedLocally) {
 			Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
-		} else {
+		}
+		else {
 			JSONObject jsonResponse = null;
 			try {
 				jsonResponse = new JSONObject(stringResponse);
@@ -809,10 +744,17 @@ public class GoogleAPITalker {
 
 				// Will return a list, containing id and etag. always update
 				// fields
-				list.etag = jsonResponse.getString("etag");
-				list.id = jsonResponse.getString("id");
+				// list.etag = jsonResponse.getString("etag");
+				list.remoteId = jsonResponse.getString("id");
 				list.title = jsonResponse.getString("title");
-			} catch (JSONException e) {
+				try {
+					list.updated = RFC3339Date.parseRFC3339Date(jsonResponse.getString("updated")).getTime();
+				}
+				catch (Exception e) {
+					list.updated = 0L;
+				}
+			}
+			catch (JSONException e) {
 				Log.d(TAG, "" + jsonResponse + " " + e.getLocalizedMessage());
 			}
 		}
@@ -847,7 +789,8 @@ public class GoogleAPITalker {
 			httppost.setHeader("If-Match", etag);
 
 			Log.d(TAG, "If-Match: " + etag);
-		} else {
+		}
+		else {
 			Log.d(TAG, "No ETAG could be found!");
 		}
 	}
@@ -878,7 +821,8 @@ public class GoogleAPITalker {
 		StringEntity se = null;
 		try {
 			se = new StringEntity(list.toJSON(), HTTP.UTF_8);
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 
@@ -900,7 +844,8 @@ public class GoogleAPITalker {
 		try {
 			se = new StringEntity(task.toJSON(), HTTP.UTF_8);
 			// Log.d(TAG + ".move", "Sending: " + task.toJSON());
-		} catch (UnsupportedEncodingException e) {
+		}
+		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 
@@ -955,13 +900,15 @@ public class GoogleAPITalker {
 					"Response was 400. Either we deleted the default list in app or did something really bad");
 			throw new PreconditionException(
 					"Tried to delete default list, undelete it");
-		} else if (response.getStatusLine().getStatusCode() == 204) {
+		}
+		else if (response.getStatusLine().getStatusCode() == 204) {
 			// Successful delete of a tasklist. return empty string as that is
 			// expected from delete
 
 			Log.d(TAG, "Response was 204: Successful delete");
 			return "";
-		} else {
+		}
+		else {
 
 			try {
 				if (response.getEntity() != null) {
@@ -982,12 +929,15 @@ public class GoogleAPITalker {
 						// System.out.println(page);
 					}
 				}
-			} catch (IOException e) {
-			} finally {
+			}
+			catch (IOException e) {
+			}
+			finally {
 				if (in != null) {
 					try {
 						in.close();
-					} catch (IOException e) {
+					}
+					catch (IOException e) {
 						e.printStackTrace();
 					}
 				}

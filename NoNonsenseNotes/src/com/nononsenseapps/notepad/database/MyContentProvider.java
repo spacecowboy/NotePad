@@ -25,6 +25,8 @@ public class MyContentProvider extends ContentProvider {
 		TaskList.addMatcherUris(sURIMatcher);
 		Task.addMatcherUris(sURIMatcher);
 		Notification.addMatcherUris(sURIMatcher);
+		RemoteTaskList.addMatcherUris(sURIMatcher);
+		RemoteTask.addMatcherUris(sURIMatcher);
 	}
 
 	@Override

@@ -16,32 +16,36 @@
 
 package com.nononsenseapps.notepad.sync.googleapi;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.ArrayList;
 
+import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.database.RemoteTaskList;
+import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.util.BiMap;
+import com.nononsenseapps.utils.time.RFC3339Date;
 
 import android.content.ContentValues;
 import android.os.RemoteException;
 import com.nononsenseapps.helpers.Log;
 
-public class GoogleTaskList {
+public class GoogleTaskList extends RemoteTaskList {
 
-	private static final String TAG = "GoogleTaskList";
-	public String id = null;
-	public long dbId = -1;
-	public String etag = "";
+	private static final String TAG = "nononsenseapps";
+	//public String id = null;
 	public String title = null;
-	public int deleted = 0;
+	public boolean deletedLocally = false;
 	// public String selfLink = null;
-	public JSONObject json = null;
-	public String updated = null;
+	//public JSONObject json = null;
+	//public String updated = null;
 
-	public boolean didRemoteInsert = false;
-	public int modified = 0;
+	//public boolean didRemoteInsert = false;
+	//public int modified = 0;
 	// Intended for when default list is deleted. When that fails, redownload it and its contents
 	public boolean redownload = false;
 
@@ -50,38 +54,45 @@ public class GoogleTaskList {
 	public GoogleTaskList(JSONObject jsonList) throws JSONException {
 		// this.api = ;
 
-		id = jsonList.getString("id");
+		remoteId = jsonList.getString("id");
 		title = jsonList.getString("title");
-		updated = jsonList.getString("updated");
-
-		// Inital listing of lists does not contain etags
-		if (jsonList.has("etag")) {
-			etag = jsonList.getString("etag");
+		
+		try {
+			updated = RFC3339Date.parseRFC3339Date(jsonList.getString("updated")).getTime();
+		}
+		catch (Exception e) {
+			Log.d(TAG, e.getLocalizedMessage());
+			updated = 0L;
 		}
 
-		json = jsonList;
+		//json = jsonList;
+	}
+	
+	public GoogleTaskList(final TaskList dbList) {
+		this.title = dbList.title;
+		this.dbid = dbList._id;
 	}
 
 	public GoogleTaskList() {
 	}
 
-	public String toString() {
-		String res = "";
-		JSONObject json = new JSONObject();
-		try {
-			json.put("title", title);
-			json.put("id", id);
-			// json.put("etag", etag);
-			json.put("dbid", dbId);
-			json.put("deleted", deleted);
-			json.put("updated", updated);
-
-			res = json.toString(2);
-		} catch (JSONException e) {
-			Log.d(TAG, e.getLocalizedMessage());
-		}
-		return res;
-	}
+//	public String toString() {
+//		String res = "";
+//		JSONObject json = new JSONObject();
+//		try {
+//			json.put("title", title);
+//			json.put("id", remoteId);
+//			// json.put("etag", etag);
+//			json.put("dbid", dbId);
+//			json.put("deleted", deleted);
+//			json.put("updated", updated);
+//
+//			res = json.toString(2);
+//		} catch (JSONException e) {
+//			Log.d(TAG, e.getLocalizedMessage());
+//		}
+//		return res;
+//	}
 
 	/**
 	 * Returns a JSON formatted version of this list. Includes title and not id
@@ -103,6 +114,13 @@ public class GoogleTaskList {
 
 		return json.toString();
 	}
+	
+	/**
+	 * ----------------------
+	 * OLD stuff
+	 * 
+	 * _______________________
+	 */
 
 	/**
 	 * Returns a ContentValues hashmap suitable for database insertion in the
@@ -121,10 +139,10 @@ public class GoogleTaskList {
 
 	public ContentValues toGTaskListsContentValues(String accountName) {
 		ContentValues values = new ContentValues();
-		values.put(NotePad.GTaskLists.COLUMN_NAME_DB_ID, dbId);
-		values.put(NotePad.GTaskLists.COLUMN_NAME_ETAG, etag);
+		//values.put(NotePad.GTaskLists.COLUMN_NAME_DB_ID, dbId);
+		//values.put(NotePad.GTaskLists.COLUMN_NAME_ETAG, etag);
 		values.put(NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT, accountName);
-		values.put(NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID, id);
+		//values.put(NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID, id);
 		values.put(NotePad.GTaskLists.COLUMN_NAME_UPDATED, updated);
 		return values;
 	}
@@ -148,7 +166,7 @@ public class GoogleTaskList {
 	public ArrayList<GoogleTask> downloadModifiedTasks(
 			GoogleAPITalker apiTalker, ArrayList<GoogleTask> allTasks,
 			String lastUpdated)
-			throws RemoteException {
+			throws RemoteException, ClientProtocolException, IOException {
 		// Compare with local tasks, if the tasks have the same remote id, then
 		// they are the same. Use the existing db-id
 		// to avoid creating duplicates
@@ -265,10 +283,10 @@ public class GoogleTaskList {
 		if (GoogleTaskList.class.isInstance(o)) {
 			// It's a list!
 			GoogleTaskList list = (GoogleTaskList) o;
-			if (dbId != -1 && dbId == list.dbId) {
+			if (dbid != -1 && dbid == list.dbid) {
 				equal = true;
 			}
-			if (id != null && id.equals(list.id)) {
+			if (remoteId != null && remoteId.equals(list.remoteId)) {
 				equal = true;
 			}
 		}

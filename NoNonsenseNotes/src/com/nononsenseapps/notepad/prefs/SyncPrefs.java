@@ -55,7 +55,7 @@ import com.nononsenseapps.helpers.Log;
 
 public class SyncPrefs extends PreferenceFragment implements
 		OnSharedPreferenceChangeListener {
-	
+
 	public static final int DROPBOX_RESULT = 68;
 
 	public static final String KEY_SYNC_ENABLE = "syncEnablePref";
@@ -105,6 +105,14 @@ public class SyncPrefs extends PreferenceFragment implements
 						return true;
 					}
 				});
+
+		// Disable prefs if this is not correct build
+		findPreference(KEY_SYNC_ENABLE).setEnabled(
+				!Config.GTASKS_API_KEY.contains(" "));
+		findPreference(getString(R.string.pref_dropbox)).setEnabled(
+				!Config.DROPBOX_APP_SECRET.contains(" "));
+		Log.d("nononsenseapps dropbox", Config.DROPBOX_APP_SECRET);
+
 	}
 
 	@Override
@@ -151,9 +159,11 @@ public class SyncPrefs extends PreferenceFragment implements
 							KEY_ACCOUNT, ""));
 				}
 				else if (key.equals(getString(R.string.pref_dropbox))) {
+					Log.d("nononsenseapps dropbox", "Trying to link...");
 					final DbxAccountManager dbxAccountManager = DbxAccountManager
 							.getInstance(getActivity().getApplicationContext(),
-									Config.DROPBOX_APP_KEY, Config.DROPBOX_APP_SECRET);
+									Config.DROPBOX_APP_KEY,
+									Config.DROPBOX_APP_SECRET);
 					if (!dbxAccountManager.hasLinkedAccount()) {
 						dbxAccountManager.startLink(this, DROPBOX_RESULT);
 					}
@@ -168,31 +178,32 @@ public class SyncPrefs extends PreferenceFragment implements
 			// This catch prevents the app from crashing if we do something
 			// stupid
 		}
-		
+
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == DROPBOX_RESULT) {
 			if (resultCode == Activity.RESULT_OK) {
 				// ... Start using Dropbox files.
 				// TODO
-				Toast.makeText(getActivity(), "Dropbox linked!", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), "Dropbox linked!",
+						Toast.LENGTH_SHORT).show();
 			}
 			else {
 				// ... Link failed or was cancelled by the user.
-				PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
+				PreferenceManager.getDefaultSharedPreferences(getActivity())
+						.edit()
 						.putBoolean(getString(R.string.pref_dropbox), false)
 						.commit();
-				((SwitchPreference) findPreference(getString(R.string.pref_dropbox))).setChecked(false);
+				((SwitchPreference) findPreference(getString(R.string.pref_dropbox)))
+						.setChecked(false);
 			}
 		}
 		else {
 			super.onActivityResult(requestCode, resultCode, data);
 		}
 	}
-	
-	
 
 	/**
 	 * Finds and returns the account of the name given
