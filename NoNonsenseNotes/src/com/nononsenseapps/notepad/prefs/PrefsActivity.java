@@ -2,13 +2,12 @@ package com.nononsenseapps.notepad.prefs;
 
 import java.util.List;
 import java.util.Locale;
-
-import com.nononsenseapps.notepad.PasswordDialog.ActionResult;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.interfaces.PasswordChecker;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.backup.BackupManager;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -22,14 +21,11 @@ import android.preference.RingtonePreference;
 import android.support.v4.app.NavUtils;
 import android.text.TextUtils;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import android.content.res.Configuration;
 
-public class PrefsActivity extends PreferenceActivity implements
-		PasswordChecker {
+public class PrefsActivity extends PreferenceActivity {
 
-	private String pendingNewPassword = "";
 	private boolean mIsRoot = false;
 
 	@Override
@@ -66,7 +62,7 @@ public class PrefsActivity extends PreferenceActivity implements
 			// actionBar.setDisplayShowTitleEnabled(false);
 		}
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		// Request a backup in case prefs changed
@@ -74,6 +70,8 @@ public class PrefsActivity extends PreferenceActivity implements
 		new BackupManager(this).dataChanged();
 		super.onDestroy();
 	}
+
+	
 
 	/**
 	 * Populate the activity with the top-level headers.
@@ -106,27 +104,6 @@ public class PrefsActivity extends PreferenceActivity implements
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
-	}
-
-	public void setPendingNewPassword(String newPassword) {
-		this.pendingNewPassword = newPassword;
-	}
-
-	@Override
-	public void PasswordVerified(ActionResult result) {
-		if (result.result) {
-			SharedPreferences settings = PreferenceManager
-					.getDefaultSharedPreferences(this);
-			// Set new password
-			settings.edit()
-					.putString(PasswordPrefs.KEY_PASSWORD, pendingNewPassword)
-					.commit();
-			Toast.makeText(
-					this,
-					("".equals(pendingNewPassword)) ? getText(R.string.password_cleared)
-							: getText(R.string.password_set),
-					Toast.LENGTH_SHORT).show();
-		}
 	}
 
 	/**

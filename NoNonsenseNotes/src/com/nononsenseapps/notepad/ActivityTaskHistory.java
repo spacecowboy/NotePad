@@ -43,14 +43,6 @@ public class ActivityTaskHistory extends FragmentActivity {
 	@ViewById
 	TitleNoteTextView taskText;
 
-	public static void start(final Activity activity, final long taskId) {
-		if (taskId > 0) {
-			Intent intent = new Intent(activity, ActivityTaskHistory_.class);
-			intent.putExtra(Task.Columns._ID, taskId);
-			activity.startActivityForResult(intent, 1);
-		}
-	}
-
 	protected void readAndSetSettings() {
 		// Read settings and set
 		final SharedPreferences prefs = PreferenceManager

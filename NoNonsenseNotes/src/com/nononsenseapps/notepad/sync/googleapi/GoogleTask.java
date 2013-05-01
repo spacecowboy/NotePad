@@ -16,6 +16,7 @@
 
 package com.nononsenseapps.notepad.sync.googleapi;
 
+import java.text.ParseException;
 import java.util.Comparator;
 import java.util.HashMap;
 
@@ -23,13 +24,16 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.database.RemoteTask;
 import com.nononsenseapps.util.BiMap;
+import com.nononsenseapps.utils.time.RFC3339Date;
 
 import android.content.ContentValues;
 import com.nononsenseapps.helpers.Log;
 
-public class GoogleTask {
+public class GoogleTask extends RemoteTask {
 
+	/*
 	public static class RemoteOrder implements Comparator<GoogleTask> {
 
 		final HashMap<String, Integer> levels;
@@ -58,7 +62,7 @@ public class GoogleTask {
 				return 1;
 			}
 		}
-	}
+	}*/
 
 	private static final String TAG = "GoogleTask";
 	public static final String ID = "id";
@@ -73,37 +77,36 @@ public class GoogleTask {
 	public static final String PARENT = "parent";
 	public static final String POSITION = "position";
 	public static final String HIDDEN = "hidden";
-	public String id = null;
-	public String etag = "";
 	public String title = null;
-	public String updated = null;
 	public String notes = null;
 	public String status = null;
 	public String dueDate = null;
 	public String parent = null;
 	public String position = null;
 
-	public int modified = 0;
-
 	public long dbId = -1;
-	public int deleted = 0;
-	public int hidden = 0;
-	public long listdbid = -1;
-	public boolean didRemoteInsert = false;
+	public boolean deleted = false;
+	//public int hidden = 0;
+	//public boolean didRemoteInsert = false;
 
 	public String possort = "";
-	public int indentLevel = 0;
+	//public int indentLevel = 0;
 
-	public JSONObject json = null;
-	public boolean conflict = false;
+//	public JSONObject json = null;
+	//public boolean conflict = false;
 
 	public GoogleTask() {
 	}
 
 	public GoogleTask(JSONObject jsonTask) throws JSONException {
-		id = jsonTask.getString(ID);
-		updated = jsonTask.getString(UPDATED);
-		etag = jsonTask.getString("etag");
+		remoteId = jsonTask.getString(ID);
+		try {
+			updated = RFC3339Date.parseRFC3339Date(jsonTask.getString(UPDATED)).getTime();
+		}
+		catch (Exception e) {
+			updated = 0L;
+		}
+		//etag = jsonTask.getString("etag");
 		
 		if (jsonTask.has(TITLE))
 			title = jsonTask.getString(TITLE);
@@ -120,15 +123,11 @@ public class GoogleTask {
 		if (jsonTask.has(DUE))
 			dueDate = jsonTask.getString(DUE);
 		if (jsonTask.has(DELETED) && jsonTask.getBoolean(DELETED))
-			deleted = 1;
-		else
-			deleted = 0;
+			deleted = true;
 		if (jsonTask.has(HIDDEN) && jsonTask.getBoolean(HIDDEN))
-			hidden = 1;
-		else
-			hidden = 0;
+			deleted = true;
 
-		json = jsonTask;
+//		json = jsonTask;
 	}
 
 	/**
@@ -198,10 +197,10 @@ public class GoogleTask {
 		values.put(NotePad.Notes.COLUMN_NAME_DELETED, deleted);
 		values.put(NotePad.Notes.COLUMN_NAME_POSITION, position);
 		values.put(NotePad.Notes.COLUMN_NAME_PARENT, parent);
-		values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, hidden);
+		//values.put(NotePad.Notes.COLUMN_NAME_HIDDEN, hidden);
 
 		values.put(NotePad.Notes.COLUMN_NAME_POSSUBSORT, possort);
-		values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, indentLevel);
+		//values.put(NotePad.Notes.COLUMN_NAME_INDENTLEVEL, indentLevel);
 
 		return values;
 	}
@@ -222,11 +221,11 @@ public class GoogleTask {
 	public ContentValues toGTasksContentValues(String accountName) {
 		ContentValues values = new ContentValues();
 		values.put(NotePad.GTasks.COLUMN_NAME_DB_ID, dbId);
-		if (title.contains("debug"))
-			Log.d(TAG, title + " saving id: " + id);
-		values.put(NotePad.GTasks.COLUMN_NAME_ETAG, etag);
-		values.put(NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT, accountName);
-		values.put(NotePad.GTasks.COLUMN_NAME_GTASKS_ID, id);
+//		if (title.contains("debug"))
+//			Log.d(TAG, title + " saving id: " + id);
+//		values.put(NotePad.GTasks.COLUMN_NAME_ETAG, etag);
+//		values.put(NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT, accountName);
+//		values.put(NotePad.GTasks.COLUMN_NAME_GTASKS_ID, id);
 		values.put(NotePad.GTasks.COLUMN_NAME_UPDATED, updated);
 		return values;
 	}
@@ -249,11 +248,10 @@ public class GoogleTask {
 			if (dbId != -1 && dbId == task.dbId) {
 				equal = true;
 			}
-			if (id != null && id.equals(task.id)) {
+			if (remoteId != null && remoteId.equals(task.remoteId)) {
 				equal = true;
 			}
 		}
 		return equal;
 	}
-
 }

@@ -213,7 +213,7 @@ public class ListWidgetConfig extends FragmentActivity {
 					else {
 						((TextView) view).setText(TitleNoteTextView
 								.getStyledText(c.getString(1), c.getString(2),
-										1.3f, 1, 1));
+										1.0f, 1, 1));
 						final int rows = widgetPrefs.getInt(KEY_TITLEROWS,
 								DEFAULT_ROWS);
 						((TextView) view).setMaxLines(rows < 1 ? 1 : rows);

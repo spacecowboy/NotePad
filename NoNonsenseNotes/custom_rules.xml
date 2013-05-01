@@ -138,6 +138,15 @@
             <filter
                 token="CONFIG.GTASKSAPIKEY"
                 value="${config.gtasksapikey.debug}" />
+
+            <filter
+                token="CONFIG.DROPBOXAPPKEY"
+                value="${config.dropboxappkey}" />
+
+            <filter
+                token="CONFIG.DROPBOXAPPSECRET"
+                value="${config.dropboxappsecret}" />
+
           </filterset>
         </copy>
       </then>
@@ -156,7 +165,16 @@
             <filter
                 token="CONFIG.GTASKSAPIKEY"
                 value="${config.gtasksapikey.release}" />
-          </filterset>
+
+            <filter
+                token="CONFIG.DROPBOXAPPKEY"
+                value="${config.dropboxappkey}" />
+
+            <filter
+                token="CONFIG.DROPBOXAPPSECRET"
+                value="${config.dropboxappsecret}" />
+
+        </filterset>
         </copy>
       </else>
     </if>
@@ -214,7 +232,17 @@
         <filter
             token="CONFIG.GTASKSAPIKEY"
             value="Put your key here" />
-      </filterset>
+	
+	<filter
+                token="CONFIG.DROPBOXAPPKEY"
+                value="Put your key here" />
+
+            <filter
+                token="CONFIG.DROPBOXAPPSECRET"
+                value="Put your key here" />
+   
+
+   </filterset>
     </copy>
   </target>
 

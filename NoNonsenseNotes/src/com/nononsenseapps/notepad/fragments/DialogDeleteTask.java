@@ -22,17 +22,17 @@ public class DialogDeleteTask extends DialogConfirmBase {
 	}
 
 	@Override
-	int getTitle() {
+	public int getTitle() {
 		return R.string.delete_question;
 	}
 
 	@Override
-	int getMessage() {
+	public int getMessage() {
 		return R.string.delete_item_message;
 	}
 
 	@Override
-	void onOKClick() {
+	public void onOKClick() {
 		if (getArguments().getLong(ID, -1) > 0) {
 			if (0 < getActivity().getContentResolver().delete(
 					Task.getUri(getArguments().getLong(ID, -1)), null, null)) {

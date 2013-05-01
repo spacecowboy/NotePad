@@ -5,10 +5,13 @@ import java.util.HashMap;
 
 import com.googlecode.androidannotations.annotations.EService;
 import com.googlecode.androidannotations.annotations.UiThread;
+import com.nononsenseapps.notepad.ActivityMain;
+import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
+import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
 import android.app.IntentService;
@@ -168,19 +171,24 @@ public class DonateMigrator extends IntentService {
 	 */
 	@UiThread
 	void reportCompleteStatus(final int noteCount, final int listCount) {
-		// TODO
-		Toast.makeText(
-				this,
-				"Import complete! " + noteCount + " notes in " + listCount
-						+ " lists were imported.", Toast.LENGTH_SHORT).show();
+		try {
+			Toast.makeText(
+					this,
+					getString(R.string.imported_result, noteCount, listCount), Toast.LENGTH_SHORT).show();
+		} catch (Exception e) {
+			// In case of bad translations
+		}
 	}
 
 	@UiThread
 	void reportFailure(final String errorMessage) {
-		// TODO
+		try {
 		Toast.makeText(this,
-				"Something went wrong with the import: " + errorMessage,
+				getString(R.string.import_error, errorMessage),
 				Toast.LENGTH_SHORT).show();
+		} catch (Exception e) {
+			// In case of bad translations
+		}
 	}
 
 }

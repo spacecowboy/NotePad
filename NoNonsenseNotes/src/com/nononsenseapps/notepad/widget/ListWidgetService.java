@@ -210,14 +210,14 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				if (mCursor.getInt(9) != 1) {
 					rv.setTextViewText(android.R.id.text1, TitleNoteTextView
 							.getStyledText(mCursor.getString(1),
-									mCursor.getString(2), 1.3f, 1, 1));
+									mCursor.getString(2), 1.0f, 1, 0));
 				}
 				else {
 					// Just title
 					rv.setTextViewText(
 							android.R.id.text1,
 							TitleNoteTextView.getStyledText(
-									mCursor.getString(1), 1.3f, 1, 1));
+									mCursor.getString(1), 1.0f, 1, 0));
 				}
 
 				// Set the click intent

@@ -97,6 +97,10 @@
     <string name="settings_sync_enable_title">Google Tasks sync</string>
     <string name="settings_sync_enable_summary">Sync notes with your Google account</string>
     <string name="settings_cat_syncing">Synchronization</string>
+    <string name="gtasks">Google Tasks</string>
+    <string name="dropbox">Dropbox</string>
+    <string name="dropbox_enable">Sync with Dropbox</string>
+    <string name="dropbox_enable_summary">Creates a special NoNonsense Notes folder in your Dropbox</string>
     <string name="manual">Manual</string>
     <string name="minutes">minutes</string>
     <string name="hours">hours</string>
@@ -127,7 +131,14 @@
     <string name="automatic">Automatic</string>
     <string name="preferences_week_start_day_dialog">Week starts on</string>
     <string name="preferences_week_start_day_title">Week starts on</string>
-
+    
+    <string name="import_data_question">Import data?</string>
+    <string name="import_data_msg">Would you like to import the notes from the donate version?</string>
+	<string name="imported_result">Imported %1$d notes in %2$d lists</string>
+	<string name="import_error">Something went wrong: %s</string>
+	<string name="uninstall_donate_msg">Press OK to uninstall the donate version.</string>
+	<string name="uninstall_donate">Uninstall old version?</string>
+	
     <!--
         Use few if language need it. In English is the same.
         <item quantity="few">Copied 2 notes.</item>
@@ -161,11 +172,7 @@
     <string name="confirm_new_password">Confirm new password</string>
     <string name="apply">Apply</string>
     <string name="clear_password">Clear password</string>
-    <string name="password_info">Setting a password will require you to input the password 
-        to show any locked notes. It will only protect the note-field so you still have unprotected
-        access to the title and due date. It does not encrypt the note in any way so it can still 
-        be viewed in Google mail/calendar. If you forget your password, sync with Google and
-        then reinstall the app.</string>
+    <string name="password_info">Locking a note limits access to viewing and modifying it. You lock notes on an individual basis. The notes are only protected here and remain fully accessible on other devices.</string>
     <string name="about">About</string>
     <string name="sync_failed">Sync failed</string>
     <string name="sync_login_failed">Login failed, could not connect to Google Tasks</string>

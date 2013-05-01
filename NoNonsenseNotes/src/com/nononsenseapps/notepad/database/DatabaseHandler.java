@@ -71,6 +71,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL(Task.CREATE_DELETE_TABLE);
 		db.execSQL(Task.CREATE_HISTORY_TABLE);
 		db.execSQL(Notification.CREATE_TABLE);
+		db.execSQL(RemoteTaskList.CREATE_TABLE);
+		db.execSQL(RemoteTask.CREATE_TABLE);
 		
 		db.execSQL(Notification.CREATE_JOINED_VIEW);
 		
@@ -146,20 +148,20 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			while (!c.isClosed() && c.moveToNext()) {
 				TaskList tl = new TaskList();
 				tl.title = c.getString(1);
-				// TODO handle gtask info
-//				if (c.getString(2) != null && !c.getString(2).isEmpty()) {
-//					tl.gtaskid = c.getString(2);
-//				}
-//				if (c.getString(3) != null && !c.getString(3).isEmpty()) {
-//					tl.gtaskaccount = c.getString(3);
-//				}
-
 				tl.updated = Calendar.getInstance().getTimeInMillis();
 
 				// insert into db
 				tl.insert(context, db);
 				// remember id
 				listIDMap.put(c.getLong(0), tl._id);
+				
+				// handle gtask info
+				RemoteTaskList rl = null;
+				if (c.getString(2) != null && !c.getString(2).isEmpty() &&
+						c.getString(3) != null && !c.getString(3).isEmpty()) {
+					rl = new RemoteTaskList(tl._id, c.getString(2), tl.updated, c.getString(3));
+					rl.insert(context, db);
+				}
 			}
 			c.close();
 

@@ -46,9 +46,9 @@ public abstract class DialogConfirmBase extends DialogFragment {
 						}).create();
 	}
 
-	abstract int getTitle();
+	public abstract int getTitle();
 
-	abstract int getMessage();
+	public abstract int getMessage();
 
-	abstract void onOKClick();
+	public abstract void onOKClick();
 }
