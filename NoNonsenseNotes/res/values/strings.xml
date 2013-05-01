@@ -41,13 +41,10 @@
     <string name="menu_setdefaultlist">Set as default list</string>
     <string name="menu_managelists">Edit list</string>
     <string name="add_item">Add item</string>
-    <string name="archive_item_title">Archive?</string>
-    <string name="archive_item_message">Are  you sure you want to archive this item?</string>
-    <string name="archive_item_toast">Archived</string>
-    <string name="delete_list_title">Delete list?</string>
-    <string name="delete_list_message">Are you sure you want to delete the list? Notes will be archived.</string>
-    <string name="delete_list_toast">List deleted</string>
-    <string name="delete_list_warning">Are you sure you want to delete the list? The list will be permanently deleted.</string>
+    <string name="delete_question">Delete?</string>
+    <string name="delete_items_message">Are  you sure you want to delete these items?</string>
+    <string name="delete_item_message">Are  you sure you want to delete this item?</string>
+    <string name="delete_list_message">Are you sure you want to delete the list?</string>
     <string name="editor_due_date_hint">Due date</string>
     <string name="editor_title_hint">Title</string>
     <string name="editor_note_hint">Note</string>
