@@ -42,3 +42,14 @@ testprovider:
 	adb shell am instrument -w \
 -e class com.nononsenseapps.notepad.test.DBProviderTest \
 com.nononsenseapps.notepad.test/android.test.InstrumentationTestRunner
+
+
+testgtask:
+	adb shell am instrument -w \
+-e class com.nononsenseapps.notepad.test.GTaskSyncTest \
+com.nononsenseapps.notepad.test/android.test.InstrumentationTestRunner
+
+testrfc:
+	adb shell am instrument -w \
+-e class com.nononsenseapps.notepad.test.RFCDateTest \
+com.nononsenseapps.notepad.test/android.test.InstrumentationTestRunner
