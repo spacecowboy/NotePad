@@ -25,6 +25,7 @@ import android.preference.PreferenceManager;
 import android.util.Pair;
 
 import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
@@ -47,13 +48,11 @@ public class GoogleTaskSync {
 
 		Log.d(TAG, "fullSync");
 		// Is saved at a successful sync
-		final long currentTime = Calendar.getInstance().getTimeInMillis();
+		final long startTime = Calendar.getInstance().getTimeInMillis();
 
 		boolean success = false;
 		// Initialize necessary stuff
 		final AccountManager accountManager = AccountManager.get(context);
-		final GoogleDBTalker dbTalker = new GoogleDBTalker(account.name,
-				provider);
 		final GoogleAPITalker apiTalker = new GoogleAPITalker();
 
 		try {
@@ -65,43 +64,62 @@ public class GoogleTaskSync {
 				Log.d(TAG, "AuthToken acquired, we are connected...");
 
 				try {
-					// final String localEtag;
+					// IF full sync, download since start of all time
+					if (PreferenceManager.getDefaultSharedPreferences(context)
+							.getBoolean(SyncPrefs.KEY_FULLSYNC, false)) {
+						PreferenceManager.getDefaultSharedPreferences(context)
+								.edit()
+								.putBoolean(SyncPrefs.KEY_FULLSYNC, false)
+								.putLong(PREFS_GTASK_LAST_SYNC_TIME, 0)
+								.commit();
+					}
 
-					// If full sync, then assume no local information exists.
-					// if (settings.getBoolean(SyncPrefs.KEY_FULLSYNC, false)) {
-					// localEtag = "dummytag";
-					// }
-					// else {
-					// localEtag = settings
-					// .getString(PREFS_LAST_SYNC_ETAG, "");
-					// }
-
-					// First the lists
 					// Download lists from server
+					Log.d(TAG, "download lists");
 					final List<GoogleTaskList> remoteLists = downloadLists(apiTalker);
 
+					// merge with local complement
+					Log.d(TAG, "merge lists");
+					mergeListsWithLocalDB(context, account.name, remoteLists);
+
 					// Synchronize lists locally
+					Log.d(TAG, "sync lists locally");
 					final List<Pair<TaskList, GoogleTaskList>> listPairs = synchronizeListsLocally(
 							context, remoteLists);
 
 					// Synchronize lists remotely
+					Log.d(TAG, "sync lists remotely");
 					final List<Pair<TaskList, GoogleTaskList>> syncedPairs = synchronizeListsRemotely(
-							listPairs, apiTalker);
+							context, listPairs, apiTalker);
 
 					// For each list
 					for (Pair<TaskList, GoogleTaskList> syncedPair : syncedPairs) {
 						// Download tasks from server
+						Log.d(TAG, "download tasks");
 						final List<GoogleTask> remoteTasks = downloadChangedTasks(
 								context, apiTalker, syncedPair.second);
 
-						// Synchronize tasks locally
-						// TODO
-						final List<Pair<Task, GoogleTask>> taskPairs = synchronizeTasksLocally(
-								context, remoteTasks);
+						// merge with local complement
+						Log.d(TAG, "merge tasks");
+						mergeTasksWithLocalDB(context, account.name,
+								remoteTasks, syncedPair.first._id);
 
+						// Synchronize tasks locally
+						Log.d(TAG, "sync tasks locally");
+						final List<Pair<Task, GoogleTask>> taskPairs = synchronizeTasksLocally(
+								context, remoteTasks, syncedPair);
 						// Synchronize tasks remotely
-						// TODO
+						Log.d(TAG, "sync tasks remotely");
+						synchronizeTasksRemotely(context, taskPairs,
+								syncedPair.second, apiTalker);
 					}
+
+					Log.d(TAG, "Sync Complete!");
+					success = true;
+					PreferenceManager.getDefaultSharedPreferences(context)
+							.edit()
+							.putLong(PREFS_GTASK_LAST_SYNC_TIME, startTime)
+							.commit();
 
 					/*
 					 * Tasks Step 1: Download changes from the server Step 2:
@@ -112,203 +130,6 @@ public class GoogleTaskSync {
 					 * that do not exist locally, save Step 4: For local items
 					 * that do not exist remotely, upload
 					 */
-
-					// Prepare lists for items
-					// ArrayList<GoogleTaskList> listsToSaveToDB = new
-					// ArrayList<GoogleTaskList>();
-					// HashMap<GoogleTaskList, ArrayList<GoogleTask>>
-					// tasksInListToSaveToDB = new HashMap<GoogleTaskList,
-					// ArrayList<GoogleTask>>();
-					//
-					// HashMap<Long, ArrayList<GoogleTask>> tasksInListToUpload
-					// = new HashMap<Long, ArrayList<GoogleTask>>();
-					// HashMap<Long, ArrayList<GoogleTask>> allTasksInList = new
-					// HashMap<Long, ArrayList<GoogleTask>>();
-					//
-					// // gets all tasks in one query
-					// ArrayList<GoogleTask> allTasks = dbTalker.getAllTasks(
-					// allTasksInList, tasksInListToUpload);
-					//
-					// ArrayList<GoogleTaskList> listsToUpload = new
-					// ArrayList<GoogleTaskList>();
-					// ArrayList<GoogleTaskList> allLocalLists = new
-					// ArrayList<GoogleTaskList>();
-
-					// gets all lists in one query
-					dbTalker.getAllLists(allLocalLists, listsToUpload);
-
-					Log.d(TAG, "Getting stuff we want to upload");
-
-					for (GoogleTaskList list : allLocalLists) {
-						ArrayList<GoogleTask> moddedTasks = tasksInListToUpload
-								.get(list.dbId);
-						if (moddedTasks != null && !moddedTasks.isEmpty()) {
-							// There are some tasks here which we want to
-							// upload
-
-							Log.d(TAG, "List id " + list.title
-									+ ", Locally modified tasks found: "
-									+ moddedTasks.size());
-
-						}
-					}
-
-					Log.d(TAG, "Uploading lists");
-					/*
-					 * First thing we want to do is upload stuff, because some
-					 * values are updated then
-					 */
-					boolean uploadedStuff = false;
-					// Start with lists
-					for (GoogleTaskList list : listsToUpload) {
-						try {
-							GoogleTaskList result = apiTalker.uploadList(list);
-							uploadedStuff = true;
-						}
-						catch (PreconditionException e) {
-							Log.d(TAG, "There was a conflict with list delete "
-									+ list.dbId);
-							// Tried to delete the default list or a modified
-							// list. That's not allowed
-							// Undelete and put in list to save to db
-							if (list.deleted == 1) {
-								list.deleted = 0;
-								// Make the list re-download all containing
-								// tasks
-								list.redownload = true;
-								// listsToSaveToDB.add(list);
-								// Also change the etag to make sure we download
-								// stuff
-								localEtag = "dummytag";
-							}
-						}
-					}
-
-					Log.d(TAG, "Uploading tasks");
-					// Right, now upload tasks
-					for (GoogleTaskList list : allLocalLists) {
-						ArrayList<GoogleTask> tasksToUpload = tasksInListToUpload
-								.get(list.dbId);
-						if (tasksToUpload != null) {
-							for (GoogleTask task : tasksToUpload) {
-								try {
-									if (null != apiTalker
-											.uploadTask(task, list))
-										uploadedStuff = true;
-								}
-								catch (PreconditionException e) {
-									// There was a conflict, do it again but as
-									// a new note. Except if we tried to delete
-									// a note
-									// then just delete it locally and download
-									// the
-									// server version later.
-									if (task.deleted == 1) {
-										if (task.title.contains("debug")) {
-											Log.d(TAG,
-													"SyncDupe Upload conflict delete "
-															+ task.title);
-										}
-										allTasks.remove(task);
-										allTasksInList.get(task.listdbid)
-												.remove(task);
-										dbTalker.removeDeletedTask(task);
-									}
-									else {
-										Log.d(TAG,
-												"There was task conflict. Trying as new task");
-										if (task.title.contains("debug")) {
-											Log.d(TAG,
-													"SyncDupe Upload conflict doing new "
-															+ task.title);
-										}
-										task.id = null;
-										task.etag = null;
-										task.title = "sync-conflict "
-												+ task.title;
-										task.conflict = true;
-
-										try {
-											if (null != apiTalker.uploadTask(
-													task, list)) {
-												uploadedStuff = true;
-												Log.d(TAG, "Uploaded "
-														+ task.title
-														+ ", didremoteinsert: "
-														+ task.didRemoteInsert);
-											}
-										}
-										catch (PreconditionException ee) {
-											Log.d(TAG,
-													"Impossible conflict achieved");
-											// Impossible to reach this
-										}
-									}
-								}
-							}
-						}
-					}
-
-					String serverEtag = apiTalker.getModifiedLists(localEtag,
-							allLocalLists, listsToSaveToDB);
-
-					// IF the tags match, then nothing has changed on
-					// server.
-					if (localEtag.equals(serverEtag)) {
-
-						Log.d(TAG, "Etags match, nothing to download");
-					}
-					else {
-
-						Log.d(TAG, "Etags dont match, downloading new tasks");
-						// Download tasks which have been updated since last
-						// time
-						for (GoogleTaskList list : listsToSaveToDB) {
-							if (list.id != null && !list.id.isEmpty()) {
-
-								Log.d(TAG, "Saving remote modified tasks for: "
-										+ list.title);
-								if (tasksInListToSaveToDB.get(list) == null)
-									tasksInListToSaveToDB.put(list,
-											new ArrayList<GoogleTask>());
-								tasksInListToSaveToDB.get(list).addAll(
-										list.downloadModifiedTasks(apiTalker,
-												allTasks, lastUpdate));
-							}
-						}
-
-						// Now, set sorting values.
-						for (GoogleTaskList list : tasksInListToSaveToDB
-								.keySet()) {
-							Log.d(TAG, "Setting position values in: " + list.id);
-							ArrayList<GoogleTask> tasks = tasksInListToSaveToDB
-									.get(list);
-
-							if (tasks != null && !tasks.isEmpty()) {
-								Log.d(TAG,
-										"Setting position values for #tasks: "
-												+ tasks.size());
-								ArrayList<GoogleTask> allListTasks = allTasksInList
-										.get(list.dbId);
-								list.setSortingValues(tasks, allListTasks);
-							}
-						}
-
-						// Save to database in a single transaction
-						Log.d(TAG, "Save stuff to DB");
-						dbTalker.SaveToDatabase(listsToSaveToDB,
-								tasksInListToSaveToDB, allTasks);
-						// Commit it
-						ContentProviderResult[] result = dbTalker.apply();
-
-						settings.edit()
-								.putString(PREFS_LAST_SYNC_ETAG, serverEtag)
-								.putBoolean(SyncPrefs.KEY_FULLSYNC, false)
-								.commit();
-					}
-
-					Log.d(TAG, "Sync Complete!");
-					success = true;
 
 				}
 				catch (ClientProtocolException e) {
@@ -325,15 +146,6 @@ public class GoogleTaskSync {
 					syncResult.stats.numIoExceptions++;
 
 					Log.d(TAG, "IOException: " + e.getLocalizedMessage());
-				}
-				catch (RemoteException e) {
-
-					Log.d(TAG, "RemoteException: " + e.getLocalizedMessage());
-				}
-				catch (OperationApplicationException e) {
-					Log.d(TAG,
-							"Joined operation failed: "
-									+ e.getLocalizedMessage());
 				}
 				catch (ClassCastException e) {
 					// GetListofLists will cast this if it returns a string.
@@ -354,6 +166,7 @@ public class GoogleTaskSync {
 		}
 		catch (Exception e) {
 			// Something went wrong, don't punish the user
+			Log.d(TAG, e.getLocalizedMessage());
 		}
 		finally {
 			// This must always be called or we will leak resources
@@ -365,6 +178,97 @@ public class GoogleTaskSync {
 		}
 
 		return success;
+	}
+
+	/**
+	 * Loads the remote lists from the database and merges the two lists. If the
+	 * remote list contains all lists, then this method only adds local db-ids
+	 * to the items. If it does not contain all of them, this loads whatever
+	 * extra items are known in the db to the list also.
+	 * 
+	 * Since all lists are expected to be downloaded, any non-existing entries
+	 * are assumed to be deleted and marked as such.
+	 */
+	public static void mergeListsWithLocalDB(final Context context,
+			final String account, final List<GoogleTaskList> remoteLists) {
+		Log.d(TAG, "remoteList starting with: " + remoteLists.size());
+
+		final HashMap<String, GoogleTaskList> localVersions = new HashMap<String, GoogleTaskList>();
+		final Cursor c = context.getContentResolver().query(
+				GoogleTaskList.URI,
+				GoogleTaskList.Columns.FIELDS,
+				GoogleTaskList.Columns.ACCOUNT + " IS ? AND "
+						+ GoogleTaskList.Columns.SERVICE + " IS ?",
+				new String[] { account, GoogleTaskList.SERVICENAME }, null);
+		try {
+			while (c.moveToNext()) {
+				GoogleTaskList list = new GoogleTaskList(c);
+				localVersions.put(list.remoteId, list);
+			}
+		}
+		finally {
+			if (c != null) c.close();
+		}
+
+		for (final GoogleTaskList list : remoteLists) {
+			// Merge with hashmap
+			if (localVersions.containsKey(list.remoteId)) {
+				Log.d(TAG, "Setting merge id");
+				list.dbid = localVersions.get(list.remoteId).dbid;
+				localVersions.remove(list.remoteId);
+			}
+		}
+
+		// Remaining ones
+		for (final GoogleTaskList list : localVersions.values()) {
+			list.deleted = true;
+			remoteLists.add(list);
+		}
+		Log.d(TAG, "remoteList finishing with: " + remoteLists.size());
+	}
+
+	/**
+	 * Loads the remote tasks from the database and merges the two lists. If the
+	 * remote list contains all items, then this method only adds local db-ids
+	 * to the items. If it does not contain all of them, this loads whatever
+	 * extra items are known in the db to the list also.
+	 */
+	public static void mergeTasksWithLocalDB(final Context context,
+			final String account, final List<GoogleTask> remoteTasks,
+			long listDbId) {
+		final HashMap<String, GoogleTask> localVersions = new HashMap<String, GoogleTask>();
+		final Cursor c = context.getContentResolver().query(
+				GoogleTask.URI,
+				GoogleTask.Columns.FIELDS,
+				GoogleTask.Columns.LISTDBID + " IS ? AND "
+						+ GoogleTask.Columns.ACCOUNT + " IS ? AND "
+						+ GoogleTask.Columns.SERVICE + " IS ?",
+				new String[] { Long.toString(listDbId), account,
+						GoogleTaskList.SERVICENAME }, null);
+		try {
+			while (c.moveToNext()) {
+				GoogleTask task = new GoogleTask(c);
+				localVersions.put(task.remoteId, task);
+			}
+		}
+		finally {
+			if (c != null) c.close();
+		}
+
+		for (final GoogleTask task : remoteTasks) {
+			// Set list on remote objects
+			task.listdbid = listDbId;
+			// Merge with hashmap
+			if (localVersions.containsKey(task.remoteId)) {
+				task.dbid = localVersions.get(task.remoteId).dbid;
+				localVersions.remove(task.remoteId);
+			}
+		}
+
+		// Remaining ones
+		for (final GoogleTask task : localVersions.values()) {
+			remoteTasks.add(task);
+		}
 	}
 
 	/**
@@ -394,7 +298,7 @@ public class GoogleTaskSync {
 	 * 
 	 * Returns a list of pairs (local, remote).
 	 */
-	static List<Pair<TaskList, GoogleTaskList>> synchronizeListsLocally(
+	public static List<Pair<TaskList, GoogleTaskList>> synchronizeListsLocally(
 			final Context context, final List<GoogleTaskList> remoteLists) {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(context);
@@ -402,6 +306,7 @@ public class GoogleTaskSync {
 		// For every list
 		for (final GoogleTaskList remoteList : remoteLists) {
 			// Compare with local
+			Log.d(TAG, "Loading remote lists from db");
 			TaskList localList = loadRemoteListFromDB(context, remoteList);
 
 			if (localList == null) {
@@ -410,36 +315,46 @@ public class GoogleTaskSync {
 					// If no local, and updated is higher than latestupdate,
 					// create
 					// new
+					Log.d(TAG, "Inserting new list");
 					localList = new TaskList();
 					localList.title = remoteList.title;
-					localList.updated = remoteList.updated;
-					localList.save(context);
+					localList.save(context, remoteList.updated);
 					// Save id in remote also
 					remoteList.dbid = localList._id;
 					remoteList.save(context);
 				}
 				else {
-					// If no local, updated is not higher, leaving local means
+					Log.d(TAG, "List must have been deleted");
+					// If no local, updated is not higher, delete remote
 				}
 			}
 			else {
 				// If local is newer, update remote object
 				if (localList.updated > remoteList.updated) {
+					Log.d(TAG, "Local list newer");
 					remoteList.title = localList.title;
 					// Updated is set by Google
 				}
+				else if (remoteList.deleted) {
+					Log.d(TAG, "Remote list was deleted");
+					localList.delete(context);
+					localList = null;
+					remoteList.delete(context);
+				}
 				else {
+					Log.d(TAG, "Updating local list");
 					// If remote is newer, update local and save to db
 					localList.title = remoteList.title;
-					localList.updated = remoteList.updated;
-					localList.save(context);
+					localList.save(context, remoteList.updated);
 				}
 			}
-			listPairs.add(new Pair<TaskList, GoogleTaskList>(localList,
-					remoteList));
+			if (!remoteList.deleted)
+				listPairs.add(new Pair<TaskList, GoogleTaskList>(localList,
+						remoteList));
 		}
 
 		// Add local lists without a remote version to pairs
+		Log.d(TAG, "loading new lists from db");
 		for (final TaskList tl : loadNewListsFromDB(context, remoteLists.get(0))) {
 			listPairs.add(new Pair<TaskList, GoogleTaskList>(tl, null));
 		}
@@ -449,6 +364,7 @@ public class GoogleTaskSync {
 	}
 
 	static List<Pair<TaskList, GoogleTaskList>> synchronizeListsRemotely(
+			final Context context,
 			final List<Pair<TaskList, GoogleTaskList>> listPairs,
 			final GoogleAPITalker apiTalker) throws ClientProtocolException,
 			IOException, PreconditionException {
@@ -458,14 +374,25 @@ public class GoogleTaskSync {
 			Pair<TaskList, GoogleTaskList> syncedPair = pair;
 			if (pair.first == null) {
 				// Deleted locally, delete remotely also
-				pair.second.deletedLocally = true;
-				apiTalker.uploadList(pair.second);
+				pair.second.deleted = true;
+				try {
+					apiTalker.uploadList(pair.second);
+				}
+				catch (PreconditionException e) {
+					// Deleted the default list. Ignore error
+				}
+				// and delete from db if it exists there
+				pair.second.delete(context);
 				syncedPair = null;
 			}
 			else if (pair.second == null) {
 				// New list to create
-				final GoogleTaskList newList = new GoogleTaskList(pair.first);
+				final GoogleTaskList newList = new GoogleTaskList(pair.first,
+						apiTalker.accountName);
 				apiTalker.uploadList(newList);
+				// Save to db also
+				newList.save(context);
+				pair.first.save(context, newList.updated);
 				syncedPair = new Pair<TaskList, GoogleTaskList>(pair.first,
 						newList);
 			}
@@ -473,7 +400,8 @@ public class GoogleTaskSync {
 				// If local update is different than remote, that means we
 				// should update
 				apiTalker.uploadList(pair.second);
-
+				// No need to save remote object
+				pair.first.save(context, pair.second.updated);
 			}
 			// else remote has already been saved locally, nothing to upload
 			if (syncedPair != null) {
@@ -484,12 +412,44 @@ public class GoogleTaskSync {
 		return syncedPairs;
 	}
 
+	static void synchronizeTasksRemotely(final Context context,
+			final List<Pair<Task, GoogleTask>> taskPairs,
+			final GoogleTaskList gTaskList, final GoogleAPITalker apiTalker)
+			throws ClientProtocolException, IOException, PreconditionException {
+		for (final Pair<Task, GoogleTask> pair : taskPairs) {
+			// if deleted locally
+			if (pair.first == null) {
+				// Delete remote also
+				pair.second.deleted = true;
+				apiTalker.uploadTask(pair.second, gTaskList);
+				// Remove from db
+				pair.second.delete(context);
+			}
+			// if newly created locally
+			else if (pair.second == null) {
+				final GoogleTask newTask = new GoogleTask(pair.first,
+						apiTalker.accountName);
+				apiTalker.uploadTask(newTask, gTaskList);
+				newTask.save(context);
+				pair.first.save(context, newTask.updated);
+			}
+			// if local updated is different from remote,
+			// should update remote
+			else if (pair.first.updated > pair.second.updated) {
+				apiTalker.uploadTask(pair.second, gTaskList);
+				// No need to save remote object here
+				pair.first.save(context, pair.second.updated);
+			}
+		}
+	}
+
 	static TaskList loadRemoteListFromDB(final Context context,
 			final GoogleTaskList remoteList) {
-		final Cursor c = context.getContentResolver().query(TaskList.URI,
-				TaskList.Columns.FIELDS,
-				remoteList.getTaskListWithRemoteClause(),
-				remoteList.getTaskListWithRemoteArgs(), null);
+		if (remoteList.dbid == null || remoteList.dbid < 1) return null;
+
+		final Cursor c = context.getContentResolver().query(
+				TaskList.getUri(remoteList.dbid), TaskList.Columns.FIELDS,
+				null, null, null);
 		TaskList tl = null;
 		try {
 			if (c.moveToFirst()) {
@@ -507,7 +467,7 @@ public class GoogleTaskSync {
 			final GoogleTaskList remoteList) {
 		final Cursor c = context.getContentResolver().query(TaskList.URI,
 				TaskList.Columns.FIELDS,
-				remoteList.getTaskListWithoutRemoteClause(),
+				GoogleTaskList.getTaskListWithoutRemoteClause(),
 				remoteList.getTaskListWithoutRemoteArgs(), null);
 		final ArrayList<TaskList> lists = new ArrayList<TaskList>();
 		try {
@@ -521,13 +481,15 @@ public class GoogleTaskSync {
 
 		return lists;
 	}
-	
+
 	static List<Task> loadNewTasksFromDB(final Context context,
-			final GoogleTask remoteTask) {
-		final Cursor c = context.getContentResolver().query(Task.URI,
+			final long listdbid, final String account) {
+		final Cursor c = context.getContentResolver().query(
+				Task.URI,
 				Task.Columns.FIELDS,
-				remoteTask.getTaskWithoutRemoteClause(),
-				remoteTask.getTaskWithoutRemoteArgs(), null);
+				GoogleTask.getTaskWithoutRemoteClause(),
+				GoogleTask.getTaskWithoutRemoteArgs(listdbid, account,
+						GoogleTaskList.SERVICENAME), null);
 		final ArrayList<Task> tasks = new ArrayList<Task>();
 		try {
 			while (c.moveToNext()) {
@@ -572,9 +534,9 @@ public class GoogleTaskSync {
 		return t;
 	}
 
-	static List<Pair<Task, GoogleTask>> synchronizeTasksLocally(
-			final Context context, final List<GoogleTask> remoteTasks) {
-		// TODO Auto-generated method stub
+	public static List<Pair<Task, GoogleTask>> synchronizeTasksLocally(
+			final Context context, final List<GoogleTask> remoteTasks,
+			final Pair<TaskList, GoogleTaskList> listPair) {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		final ArrayList<Pair<Task, GoogleTask>> taskPairs = new ArrayList<Pair<Task, GoogleTask>>();
@@ -583,16 +545,21 @@ public class GoogleTaskSync {
 			// Compare with local
 			Task localTask = loadRemoteTaskFromDB(context, remoteTask);
 
+			// When no local version was found, either
+			// a) it was deleted by the user or
+			// b) it was created on the server
 			if (localTask == null) {
-				if (remoteTask.updated > settings.getLong(
-						PREFS_GTASK_LAST_SYNC_TIME, 0)) {
+				if (remoteTask.deleted) {
+					// Nothing to do
+					remoteTask.delete(context);
+				}
+				else if (remoteTask.updated > settings.getLong(
+						PREFS_GTASK_LAST_SYNC_TIME, 0L)) {
 					// If no local, and updated is higher than latestupdate,
-					// create
-					// new
+					// create new
 					localTask = new Task();
 					localTask.title = remoteTask.title;
 					localTask.note = remoteTask.notes;
-					localTask.updated = remoteTask.updated;
 					localTask.dblist = remoteTask.listdbid;
 					if (remoteTask.dueDate != null
 							&& !remoteTask.dueDate.isEmpty()) {
@@ -608,25 +575,39 @@ public class GoogleTaskSync {
 						localTask.completed = remoteTask.updated;
 					}
 
-					localTask.save(context);
+					localTask.save(context, remoteTask.updated);
 					// Save id in remote also
 					remoteTask.dbid = localTask._id;
 					remoteTask.save(context);
 				}
 				else {
-					// If no local, updated is not higher, leaving local means
+					// It was deleted locally, but dont mark it as deleted
+					// because we want to upload the change as well
 				}
 			}
 			else {
+				Log.d("nononsenseapps gtasksync", "l.updated: "
+						+ localTask.updated);
+				Log.d("nononsenseapps gtasksync", "r.updated: "
+						+ remoteTask.updated);
 				// If local is newer, update remote object
 				if (localTask.updated > remoteTask.updated) {
-					// TODO
+					remoteTask.fillFrom(localTask);
+					// Updated is set by Google
+				}
+				// Remote is newer
+				else if (remoteTask.deleted) {
+					localTask.delete(context);
+					localTask = null;
+					remoteTask.delete(context);
+				}
+				else if (localTask.updated == remoteTask.updated) {
+					// Nothing to do, we are already updated
 				}
 				else {
 					// If remote is newer, update local and save to db
 					localTask.title = remoteTask.title;
 					localTask.note = remoteTask.notes;
-					localTask.updated = remoteTask.updated;
 					localTask.dblist = remoteTask.listdbid;
 					if (remoteTask.dueDate != null
 							&& !remoteTask.dueDate.isEmpty()) {
@@ -643,14 +624,25 @@ public class GoogleTaskSync {
 						localTask.completed = remoteTask.updated;
 					}
 
-					localTask.save(context);
+					localTask.save(context, remoteTask.updated);
 				}
 			}
-			taskPairs.add(new Pair<Task, GoogleTask>(localTask, remoteTask));
+			if (remoteTask.deleted) {	
+				// Dont
+			}
+			else if (localTask != null && remoteTask != null
+					&& localTask.updated == remoteTask.updated) {
+				// Dont
+			}
+			else {
+				taskPairs
+						.add(new Pair<Task, GoogleTask>(localTask, remoteTask));
+			}
 		}
 
 		// Add local lists without a remote version to pairs
-		for (final Task t : loadNewTasksFromDB(context, remoteTasks.get(0))) {
+		for (final Task t : loadNewTasksFromDB(context, listPair.first._id,
+				listPair.second.account)) {
 			taskPairs.add(new Pair<Task, GoogleTask>(t, null));
 		}
 
@@ -658,42 +650,42 @@ public class GoogleTaskSync {
 		return taskPairs;
 	}
 
-	private void sortByRemoteParent(final ArrayList<GoogleTask> tasks) {
-		final HashMap<String, Integer> levels = new HashMap<String, Integer>();
-		levels.put(null, -1);
-		final ArrayList<GoogleTask> tasksToDo = (ArrayList<GoogleTask>) tasks
-				.clone();
-		GoogleTask lastFailed = null;
-		int current = -1;
-		Log.d("remoteorder", "Doing remote sorting with size: " + tasks.size());
-		while (!tasksToDo.isEmpty()) {
-			current = current >= (tasksToDo.size() - 1) ? 0 : current + 1;
-			Log.d("remoteorder", "current: " + current);
-
-			if (levels.containsKey(tasksToDo.get(current).parent)) {
-				Log.d("remoteorder", "parent in levelmap");
-				levels.put(tasksToDo.get(current).id,
-						levels.get(tasksToDo.get(current).parent) + 1);
-				tasksToDo.remove(current);
-				current -= 1;
-				lastFailed = null;
-			}
-			else if (lastFailed == null) {
-				Log.d("remoteorder", "lastFailed null, now " + current);
-				lastFailed = tasksToDo.get(current);
-			}
-			else if (lastFailed.equals(tasksToDo.get(current))) {
-				Log.d("remoteorder", "lastFailed == current");
-				// Did full lap, parent is not new
-				levels.put(tasksToDo.get(current).id, 99);
-				levels.put(tasksToDo.get(current).parent, 98);
-				tasksToDo.remove(current);
-				current -= 1;
-				lastFailed = null;
-			}
-		}
-
-		// Just to make sure that new notes appear first in insertion order
-		Collections.sort(tasks, new GoogleTask.RemoteOrder(levels));
-	}
+	// private void sortByRemoteParent(final ArrayList<GoogleTask> tasks) {
+	// final HashMap<String, Integer> levels = new HashMap<String, Integer>();
+	// levels.put(null, -1);
+	// final ArrayList<GoogleTask> tasksToDo = (ArrayList<GoogleTask>) tasks
+	// .clone();
+	// GoogleTask lastFailed = null;
+	// int current = -1;
+	// Log.d("remoteorder", "Doing remote sorting with size: " + tasks.size());
+	// while (!tasksToDo.isEmpty()) {
+	// current = current >= (tasksToDo.size() - 1) ? 0 : current + 1;
+	// Log.d("remoteorder", "current: " + current);
+	//
+	// if (levels.containsKey(tasksToDo.get(current).parent)) {
+	// Log.d("remoteorder", "parent in levelmap");
+	// levels.put(tasksToDo.get(current).id,
+	// levels.get(tasksToDo.get(current).parent) + 1);
+	// tasksToDo.remove(current);
+	// current -= 1;
+	// lastFailed = null;
+	// }
+	// else if (lastFailed == null) {
+	// Log.d("remoteorder", "lastFailed null, now " + current);
+	// lastFailed = tasksToDo.get(current);
+	// }
+	// else if (lastFailed.equals(tasksToDo.get(current))) {
+	// Log.d("remoteorder", "lastFailed == current");
+	// // Did full lap, parent is not new
+	// levels.put(tasksToDo.get(current).id, 99);
+	// levels.put(tasksToDo.get(current).parent, 98);
+	// tasksToDo.remove(current);
+	// current -= 1;
+	// lastFailed = null;
+	// }
+	// }
+	//
+	// // Just to make sure that new notes appear first in insertion order
+	// Collections.sort(tasks, new GoogleTask.RemoteOrder(levels));
+	// }
 }

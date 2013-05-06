@@ -1,6 +1,7 @@
 package com.nononsenseapps.notepad.database;
 
 import com.nononsenseapps.helpers.UpdateNotifier;
+import com.nononsenseapps.notepad.MainActivity;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -11,6 +12,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 public class MyContentProvider extends ContentProvider {
 	public static final String AUTHORITY = "com.nononsenseapps.NotePad";
@@ -83,8 +85,14 @@ public class MyContentProvider extends ContentProvider {
 			case Notification.WITHTASKQUERYITEMCODE:
 				item = new Notification(values);
 				break;
+			case RemoteTaskList.BASEURICODE:
+				item = new RemoteTaskList(values);
+				break;
+			case RemoteTask.BASEURICODE:
+				item = new RemoteTask(values);
+				break;
 			default:
-				throw new IllegalArgumentException("Faulty URI provided");
+				throw new IllegalArgumentException("Faulty insertURI provided: " + uri.toString());
 			}
 
 			result = item.insert(getContext(), db);
@@ -223,8 +231,14 @@ public class MyContentProvider extends ContentProvider {
 				result += db.update(Notification.TABLE_NAME, values, selection,
 						selectionArgs);
 				break;
+			case RemoteTaskList.BASEITEMCODE:
+				result += db.update(RemoteTaskList.TABLE_NAME, values, selection, selectionArgs);
+				break;
+			case RemoteTask.BASEITEMCODE:
+				result += db.update(RemoteTask.TABLE_NAME, values, selection, selectionArgs);
+				break;
 			default:
-				throw new IllegalArgumentException("Faulty URI provided");
+				throw new IllegalArgumentException("Faulty URI provided: " + uri.toString());
 			}
 
 			if (result >= 0) {
@@ -290,8 +304,22 @@ public class MyContentProvider extends ContentProvider {
 			result += safeDeleteItem(db, Notification.TABLE_NAME, uri,
 					selection, selectionArgs);
 			break;
+			case RemoteTaskList.BASEURICODE:
+				result += db.delete(RemoteTaskList.TABLE_NAME, selection, selectionArgs);
+				break;
+		case RemoteTaskList.BASEITEMCODE:
+			result += safeDeleteItem(db, RemoteTaskList.TABLE_NAME, uri, 
+					selection, selectionArgs);
+			break;
+		case RemoteTask.BASEURICODE:
+			result += db.delete(RemoteTask.TABLE_NAME, selection, selectionArgs);
+			break;
+		case RemoteTask.BASEITEMCODE:
+			result += safeDeleteItem(db, RemoteTask.TABLE_NAME, uri, 
+					selection, selectionArgs);
+			break;
 		default:
-			throw new IllegalArgumentException("Faulty URI provided");
+			throw new IllegalArgumentException("Faulty delete-URI provided: " + uri.toString());
 		}
 
 		if (result > 0) {
@@ -306,6 +334,10 @@ public class MyContentProvider extends ContentProvider {
 			String selection, String[] selectionArgs, String sortOrder) {
 		Cursor result = null;
 		final long id;
+		if (selection != null)
+			Log.d("nononsenseapps", selection);
+		if (selectionArgs != null)
+			Log.d("nononsenseapps", DAO.arrayToCommaString(selectionArgs));
 		// TODO add legacy URIs
 		switch (sURIMatcher.match(uri)) {
 		case TaskList.BASEURICODE:
@@ -462,10 +494,29 @@ public class MyContentProvider extends ContentProvider {
 							selection, selectionArgs, null, null, sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
+		case RemoteTaskList.BASEURICODE:
+			if (selection != null && selectionArgs != null)
+				Log.d(MainActivity.TAG, "remotetasklist query: " + selection + DAO.arrayToCommaString(selectionArgs));
+			result = DatabaseHandler
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(RemoteTaskList.TABLE_NAME, projection,
+							selection, selectionArgs, null, null, sortOrder);
+			result.setNotificationUri(getContext().getContentResolver(), uri);
+			break;
+		case RemoteTask.BASEURICODE:
+			result = DatabaseHandler
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(RemoteTask.TABLE_NAME, projection,
+							selection, selectionArgs, null, null, sortOrder);
+			result.setNotificationUri(getContext().getContentResolver(), uri);
+			break;
 		case Task.LEGACYBASEURICODE:
 		case Task.LEGACYVISIBLEURICODE:
+			// TODO
 		default:
-			throw new IllegalArgumentException("Faulty URI provided");
+			throw new IllegalArgumentException("Faulty queryURI provided: " + uri.toString());
 		}
 
 		return result;

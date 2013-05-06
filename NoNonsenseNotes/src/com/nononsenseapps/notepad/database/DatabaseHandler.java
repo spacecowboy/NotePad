@@ -5,6 +5,8 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
 
 import com.nononsenseapps.utils.time.RFC3339Date;
 
@@ -130,7 +132,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	private void initializedDB(final SQLiteDatabase db) throws SQLiteException {
 		// Load legacy DB if it exists
-		// TODO Open database and copy information
+		// Open database and copy information
 		// Remember to do try except
 
 		db.beginTransaction();
@@ -142,7 +144,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			final SQLiteDatabase legacyDB = legacyDBHelper
 					.getReadableDatabase();
 
-			// TODO First copy lists
+			// First copy lists
 			Cursor c = getLegacyLists(legacyDB);
 
 			while (!c.isClosed() && c.moveToNext()) {
@@ -156,16 +158,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				listIDMap.put(c.getLong(0), tl._id);
 				
 				// handle gtask info
-				RemoteTaskList rl = null;
+				GoogleTaskList rl = null;
 				if (c.getString(2) != null && !c.getString(2).isEmpty() &&
 						c.getString(3) != null && !c.getString(3).isEmpty()) {
-					rl = new RemoteTaskList(tl._id, c.getString(2), tl.updated, c.getString(3));
+					rl = new GoogleTaskList(tl._id, c.getString(2), tl.updated, c.getString(3));
 					rl.insert(context, db);
 				}
 			}
 			c.close();
 
-			// TODO Then notes
+			// Then notes
 			if (!listIDMap.isEmpty()) {
 				// query
 				c = getLegacyNotes(legacyDB);
@@ -196,12 +198,6 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					t.dblist = listIDMap.get(c.getLong(5));
 
 					t.updated = c.getLong(6);
-					
-					// TODO password
-
-					// TODO gtask
-					//t.gtaskid = c.getString(7);
-					//t.gtaskaccount = c.getString(8);
 
 					// insert
 					// Just make extra sure list exists
@@ -211,11 +207,22 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 						// put in idmap
 						taskIDMap.put(c.getLong(0), t._id);
 					}
+					
+					// gtask
+					GoogleTask gt = null;
+					if (!c.isNull(7) && !c.getString(7).isEmpty()
+							&& !c.isNull(8) && !c.getString(8).isEmpty()) {
+						gt = new GoogleTask(t, c.getString(8));
+						gt.remoteId = c.getString(7);
+						gt.updated = t.updated;
+						gt.save(context);
+					}
+					
 				}
 				c.close();
 			}
 
-			// TODO Then notifications
+			// Then notifications
 			if (!taskIDMap.isEmpty()) {
 				c = getLegacyNotifications(legacyDB);
 
@@ -237,13 +244,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			legacyDB.close();
 		} catch (SQLException e) {
 			// Database must have been empty. Ignore it
-			// TODO
 			// Test reasons, throw it!
 			//throw e;
 		}
 
 		// If no lists, insert a list and example note.
-		// TODO
 
 		Cursor c = db.query(TaskList.TABLE_NAME, TaskList.Columns.FIELDS, null,
 				null, null, null, null);
@@ -269,7 +274,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// TODO Auto-generated method stub
+		// Auto-generated method stub
 	}
 
 }

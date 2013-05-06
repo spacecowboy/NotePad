@@ -16,6 +16,7 @@ import com.nononsenseapps.billing.IabResult;
 import com.nononsenseapps.billing.Inventory;
 import com.nononsenseapps.billing.Purchase;
 import com.nononsenseapps.helpers.NotificationHelper;
+import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity.CONTENTVIEW;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.Task;
@@ -450,6 +451,8 @@ public class ActivityMain extends FragmentActivity implements
 			}
 			return true;
 		case R.id.menu_sync:
+			SyncHelper.requestSyncIf(this, SyncHelper.MANUAL);
+			return true;
 		case R.id.menu_delete:
 		default:
 			return false;

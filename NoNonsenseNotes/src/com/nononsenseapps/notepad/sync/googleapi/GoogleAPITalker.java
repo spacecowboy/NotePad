@@ -215,7 +215,7 @@ public class GoogleAPITalker {
 	// Also do showHidden=true?
 	// Tasks returnerd will have deleted = true or no deleted field at all. Same
 	// case for hidden.
-	private static final String TAG = "GoogleAPITalker";
+	private static final String TAG = "nononsenseapps GoogleAPITalker";
 
 	private static final String USERAGENT = "HoloNotes (gzip)";
 
@@ -226,6 +226,8 @@ public class GoogleAPITalker {
 	public String authToken;
 
 	public AndroidHttpClient client;
+	
+	public String accountName = null;
 
 	public static String getAuthToken(AccountManager accountManager,
 			Account account, String authTokenType, boolean notifyAuthFailure) {
@@ -254,6 +256,7 @@ public class GoogleAPITalker {
 			String authTokenType, boolean notifyAuthFailure) {
 
 		Log.d(TAG, "initialize");
+		accountName = account.name;
 		// HttpParams params = new BasicHttpParams();
 		// params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
 		// HttpVersion.HTTP_1_1);
@@ -344,7 +347,8 @@ public class GoogleAPITalker {
 				// is desired
 				for (i = 0; i < size; i++) {
 					JSONObject jsonList = lists.getJSONObject(i);
-					list.add(new GoogleTaskList(jsonList));
+					Log.d("nononsenseapps", jsonList.toString(2));
+					list.add(new GoogleTaskList(jsonList, accountName));
 				}
 			}
 			catch (PreconditionException e) {
@@ -390,7 +394,7 @@ public class GoogleAPITalker {
 				parseResponse(client.execute(httpget))).nextValue();
 
 		// Log.d(TAG, jsonResponse.toString());
-		result = new GoogleTask(jsonResponse);
+		result = new GoogleTask(jsonResponse, accountName);
 		// } catch (PreconditionException e) {
 		// // Can not happen since we are not doing a PUT/POST
 		// }
@@ -426,7 +430,7 @@ public class GoogleAPITalker {
 				parseResponse(client.execute(httpget))).nextValue();
 
 		// Log.d(TAG, jsonResponse.toString());
-		result = new GoogleTaskList(jsonResponse);
+		result = new GoogleTaskList(jsonResponse, accountName);
 		// } catch (PreconditionException e) {
 		// // Can not happen since we are not doing a PUT/POST
 		// }
@@ -503,7 +507,7 @@ public class GoogleAPITalker {
 					JSONObject jsonTask = items.getJSONObject(i);
 					Log.d(MainActivity.TAG,
 							"moddedJSONTask: " + jsonTask.toString());
-					final GoogleTask gt = new GoogleTask(jsonTask);
+					final GoogleTask gt = new GoogleTask(jsonTask, accountName);
 					gt.listdbid = list.dbid;
 					moddedList.add(gt);
 				}
@@ -702,7 +706,7 @@ public class GoogleAPITalker {
 		final HttpUriRequest httppost;
 		if (list.remoteId != null) {
 			Log.d(TAG, "ID is not NULL!! " + ListURL(list.remoteId));
-			if (list.deletedLocally) {
+			if (list.deleted) {
 				httppost = new HttpDelete(ListURL(list.remoteId));
 			}
 			else {
@@ -724,7 +728,7 @@ public class GoogleAPITalker {
 		// Log.d(TAG, header.getName() + ": " + header.getValue());
 		// }
 
-		if (!list.deletedLocally) {
+		if (!list.deleted) {
 			setPostBody(httppost, list);
 		}
 
@@ -732,7 +736,7 @@ public class GoogleAPITalker {
 
 		// If we deleted the note, we will get an empty response. Return the
 		// same element back.
-		if (list.deletedLocally) {
+		if (list.deleted) {
 			Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
 		}
 		else {

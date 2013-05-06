@@ -23,6 +23,7 @@ import com.dropbox.sync.android.DbxAccountManager;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -316,7 +317,7 @@ public class SyncPrefs extends PreferenceFragment implements
 				this.account = account;
 				// Request user's permission
 				AccountManager.get(activity)
-						.getAuthToken(account, SyncAdapter.AUTH_TOKEN_TYPE,
+						.getAuthToken(account, GoogleTaskSync.AUTH_TOKEN_TYPE,
 								null, activity, this, null);
 				// work continues in callback, method run()
 			}

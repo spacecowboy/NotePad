@@ -31,15 +31,17 @@ import com.nononsenseapps.util.BiMap;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.RemoteException;
 import com.nononsenseapps.helpers.Log;
 
 public class GoogleTaskList extends RemoteTaskList {
 
 	private static final String TAG = "nononsenseapps";
+	public static final String SERVICENAME = "googletasks";
 	//public String id = null;
 	public String title = null;
-	public boolean deletedLocally = false;
+	public boolean deleted = false;
 	// public String selfLink = null;
 	//public JSONObject json = null;
 	//public String updated = null;
@@ -51,11 +53,14 @@ public class GoogleTaskList extends RemoteTaskList {
 
 	// private GoogleAPITalker api;
 
-	public GoogleTaskList(JSONObject jsonList) throws JSONException {
+	public GoogleTaskList(final JSONObject jsonList, final String accountName) throws JSONException {
+		super();
+		this.service = SERVICENAME;
 		// this.api = ;
 
 		remoteId = jsonList.getString("id");
 		title = jsonList.getString("title");
+		account = accountName;
 		
 		try {
 			updated = RFC3339Date.parseRFC3339Date(jsonList.getString("updated")).getTime();
@@ -68,12 +73,23 @@ public class GoogleTaskList extends RemoteTaskList {
 		//json = jsonList;
 	}
 	
-	public GoogleTaskList(final TaskList dbList) {
+	public GoogleTaskList(final TaskList dbList, final String accountName) {
+		super();
 		this.title = dbList.title;
 		this.dbid = dbList._id;
+		this.account = accountName;
+		this.service = SERVICENAME;
 	}
 
-	public GoogleTaskList() {
+	public GoogleTaskList(final String accountName) {
+		super();
+		this.account = accountName;
+		this.service = SERVICENAME;
+	}
+	
+	public GoogleTaskList(final Cursor c) {
+		super(c);
+		this.service = SERVICENAME;
 	}
 
 //	public String toString() {
@@ -94,6 +110,11 @@ public class GoogleTaskList extends RemoteTaskList {
 //		return res;
 //	}
 
+	public GoogleTaskList(final Long dbid, final String remoteId, final Long updated, final String account) {
+		super(dbid, remoteId, updated, account);
+		this.service = SERVICENAME;
+	}
+
 	/**
 	 * Returns a JSON formatted version of this list. Includes title and not id
 	 * 
@@ -113,164 +134,6 @@ public class GoogleTaskList extends RemoteTaskList {
 		}
 
 		return json.toString();
-	}
-	
-	/**
-	 * ----------------------
-	 * OLD stuff
-	 * 
-	 * _______________________
-	 */
-
-	/**
-	 * Returns a ContentValues hashmap suitable for database insertion in the
-	 * Lists table Includes Title and modified flag as specified in the
-	 * arguments
-	 * 
-	 * @return
-	 */
-	public ContentValues toListsContentValues() {
-		ContentValues values = new ContentValues();
-		values.put(NotePad.Lists.COLUMN_NAME_TITLE, title);
-		values.put(NotePad.Lists.COLUMN_NAME_MODIFIED, 0);
-		values.put(NotePad.Lists.COLUMN_NAME_DELETED, 0);
-		return values;
-	}
-
-	public ContentValues toGTaskListsContentValues(String accountName) {
-		ContentValues values = new ContentValues();
-		//values.put(NotePad.GTaskLists.COLUMN_NAME_DB_ID, dbId);
-		//values.put(NotePad.GTaskLists.COLUMN_NAME_ETAG, etag);
-		values.put(NotePad.GTaskLists.COLUMN_NAME_GOOGLE_ACCOUNT, accountName);
-		//values.put(NotePad.GTaskLists.COLUMN_NAME_GTASKS_ID, id);
-		values.put(NotePad.GTaskLists.COLUMN_NAME_UPDATED, updated);
-		return values;
-	}
-
-	/**
-	 * Needs the result index, the index of the operation where the list is
-	 * inserted in the database This will take precedence over the value in the
-	 * other method
-	 * 
-	 * @param accountName
-	 * @param resultIndex
-	 * @return
-	 */
-	public ContentValues toGTaskListsBackRefContentValues(String accountName,
-			int resultIndex) {
-		ContentValues values = new ContentValues();
-		values.put(NotePad.GTaskLists.COLUMN_NAME_DB_ID, resultIndex);
-		return values;
-	}
-
-	public ArrayList<GoogleTask> downloadModifiedTasks(
-			GoogleAPITalker apiTalker, ArrayList<GoogleTask> allTasks,
-			String lastUpdated)
-			throws RemoteException, ClientProtocolException, IOException {
-		// Compare with local tasks, if the tasks have the same remote id, then
-		// they are the same. Use the existing db-id
-		// to avoid creating duplicates
-		ArrayList<GoogleTask> moddedTasks = new ArrayList<GoogleTask>();
-		String timestamp = lastUpdated;
-		if (redownload) {
-			// Force download of everything
-			Log.d(TAG, "Redownloading items in list " + this.title);
-			timestamp = null;
-		}
-		for (GoogleTask task : apiTalker.getModifiedTasks(timestamp, this)) {
-			if (task.title.contains("debug")) {
-				Log.d(TAG, "SyncDupe Download modified sees remote " + task.title + " " + task.id);
-			}
-			for (GoogleTask localTask : allTasks) {
-				if (localTask.title.contains("debug")) {
-					Log.d(TAG, "SyncDupe Download modified sees local " + localTask.title + " " + task.id);
-				}
-				if (task.equals(localTask)) {
-					// We found it!
-					Log.d(TAG, "Found local version for remote task " + task.title);
-					task.dbId = localTask.dbId;
-					// This line is important, so we don't create duplicates
-					task.didRemoteInsert = localTask.didRemoteInsert;
-					// Without this line duplicate GTask entries will be entered
-					// which results in a crash
-					task.conflict = localTask.conflict;
-					// Move on to next task
-					break;
-				}
-			}
-			Log.d(TAG, "DBID for " + task.title + " is " + task.dbId + " deleted: " + task.deleted);
-			moddedTasks.add(task);
-		}
-
-		return moddedTasks;
-	}
-
-	/**
-	 * This will set the sorting values correctly for these tasks. This must be
-	 * called last when all other changes have been made to the tasks as it
-	 * requires all parents etc to be present. Note that only objects in the
-	 * modifiedTasks list are modified. The other is for reference only if the
-	 * parent can not be found in modifiedTasks. If so, it is assumed to have a
-	 * correct position.
-	 * 
-	 * Will also set indent levels on objects
-	 */
-	public void setSortingValues(ArrayList<GoogleTask> modifiedTasks,
-			ArrayList<GoogleTask> allTasks) {
-		// First clear all the position values as we will do a recursive
-		// recalculation on these objects
-		for (GoogleTask task : modifiedTasks) {
-			task.possort = "";
-			task.indentLevel = 0;
-		}
-		// Now, set the sorting values for these objects
-		for (GoogleTask task : modifiedTasks) {
-			getPosSort(task, modifiedTasks, allTasks);
-		}
-		// All sort values are set. It is OK to save now.
-	}
-
-	/**
-	 * This will write the position value if none exist
-	 */
-	private String getPosSort(GoogleTask task,
-			ArrayList<GoogleTask> modifiedTasks, ArrayList<GoogleTask> allTasks) {
-		if (task.possort.isEmpty()) {
-			String sortingValue = "";
-			if (task.parent != null && !task.parent.isEmpty()) {
-				GoogleTask parent = getTaskWithRemoteId(task.parent,
-						modifiedTasks);
-				if (parent == null) {
-					// Try all tasks instead
-					parent = getTaskWithRemoteId(task.parent, allTasks);
-				}
-				if (parent != null) {
-					sortingValue += getPosSort(parent, modifiedTasks, allTasks);
-					task.indentLevel = parent.indentLevel + 1;
-				}
-			}
-			if (task.position != null) {
-				sortingValue += task.position;
-			}
-			sortingValue += ".";
-
-			task.possort = sortingValue;
-		}
-		Log.d(TAG, "indent: " + task.indentLevel);
-		return task.possort;
-	}
-
-	private GoogleTask getTaskWithRemoteId(String id,
-			ArrayList<GoogleTask> tasks) {
-		if (id == null || tasks == null)
-			return null;
-
-		for (GoogleTask task : tasks) {
-			if (id.equals(task.id)) {
-				return task;
-			}
-		}
-		return null;
 	}
 
 	/**

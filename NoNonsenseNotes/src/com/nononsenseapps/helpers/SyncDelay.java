@@ -53,6 +53,7 @@ public class SyncDelay extends Service {
 				intent, PendingIntent.FLAG_CANCEL_CURRENT);
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		am.cancel(pendingIntent);
+		// Yes, use local time
 		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
 		Log.d(TAG, "Scheduled sync");
 	}

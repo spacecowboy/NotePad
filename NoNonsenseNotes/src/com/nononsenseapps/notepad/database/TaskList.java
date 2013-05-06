@@ -149,11 +149,15 @@ public class TaskList extends DAO {
 	public String getContentType() {
 		return CONTENT_TYPE;
 	}
-
+	
 	@Override
 	public int save(final Context context) {
+		return save(context, Calendar.getInstance().getTimeInMillis());
+	}
+
+	public int save(final Context context, final long updateTime) {
 		int result = 0;
-		updated = Calendar.getInstance().getTimeInMillis();
+		updated = updateTime;
 		if (_id < 1) {
 			final Uri uri = context.getContentResolver().insert(getBaseUri(),
 					getContent());

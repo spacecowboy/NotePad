@@ -71,6 +71,7 @@ import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
 //import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.ui.ListPagerAdapter;
 
@@ -82,7 +83,7 @@ import android.content.res.Configuration;
 public class MainActivity extends DualLayoutActivity implements
 		OnSharedPreferenceChangeListener, OnNavigationListener,
 		LoaderManager.LoaderCallbacks<Cursor>, Callbacks {
-	public static final String TAG = "nononsensenotes";
+	public static final String TAG = "nononsenseapps";
 	private static final String CURRENT_LIST_ID = "currentlistid";
 	private static final String CURRENT_LIST_POS = "currentlistpos";
 	private static final String RESUMING = "resuming";
@@ -1049,7 +1050,7 @@ public class MainActivity extends DualLayoutActivity implements
 
 			// Request access
 			AccountManager.get(activity).getAuthToken(account,
-					SyncAdapter.AUTH_TOKEN_TYPE, null, activity,
+					GoogleTaskSync.AUTH_TOKEN_TYPE, null, activity,
 					new AccountManagerCallback<Bundle>() {
 
 						@Override

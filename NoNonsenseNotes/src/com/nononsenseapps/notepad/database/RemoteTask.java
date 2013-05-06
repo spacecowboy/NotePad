@@ -2,6 +2,8 @@ package com.nononsenseapps.notepad.database;
 
 import java.util.List;
 
+import com.nononsenseapps.notepad.database.RemoteTaskList.Columns;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -40,10 +42,12 @@ public class RemoteTask extends DAO {
 		private Columns() {
 		}
 
+		public static final String SERVICE = "service";
 		public static final String ACCOUNT = "account";
 		public static final String REMOTEID = "remoteid";
 		public static final String UPDATED = "updated";
 		public static final String DBID = "dbid";
+		public static final String LISTDBID = "listdbid";
 		// Reserved columns, depending on what different services needs
 		public static final String FIELD1 = "field1";
 		public static final String FIELD2 = "field2";
@@ -52,7 +56,7 @@ public class RemoteTask extends DAO {
 		public static final String FIELD5 = "field5";
 
 		public static final String[] FIELDS = { _ID, DBID, REMOTEID, UPDATED,
-				ACCOUNT, FIELD1, FIELD2, FIELD3, FIELD4, FIELD5 };
+				ACCOUNT, LISTDBID, FIELD1, FIELD2, FIELD3, FIELD4, FIELD5 };
 	}
 
 	/**
@@ -61,21 +65,26 @@ public class RemoteTask extends DAO {
 	public static final String CREATE_TABLE = new StringBuilder("CREATE TABLE ")
 			.append(TABLE_NAME).append("(").append(Columns._ID)
 			.append(" INTEGER PRIMARY KEY,").append(Columns.ACCOUNT)
-			.append(" TEXT NOT NULL,").append(Columns.DBID)
+			.append(" TEXT NOT NULL,")
+			.append(Columns.SERVICE).append(" TEXT NOT NULL,")
+			.append(Columns.DBID)
 			.append(" INTEGER NOT NULL,").append(Columns.UPDATED)
 			.append(" INTEGER NOT NULL,").append(Columns.REMOTEID)
-			.append(" TEXT NOT NULL,").append(Columns.FIELD1).append(" TEXT,")
+			.append(" TEXT NOT NULL,")
+			.append(Columns.LISTDBID)
+			.append(" INTEGER NOT NULL,")
+			.append(Columns.FIELD1).append(" TEXT,")
 			.append(Columns.FIELD2).append(" TEXT,").append(Columns.FIELD3)
 			.append(" TEXT,").append(Columns.FIELD4).append(" TEXT,")
-			.append(Columns.FIELD5).append(" TEXT,").append("FOREIGN KEY(")
-			.append(Columns.DBID).append(") REFERENCES ")
-			.append(Task.TABLE_NAME).append("(").append(Task.Columns._ID)
-			.append(") ON DELETE CASCADE").append(")").toString();
+			.append(Columns.FIELD5).append(" TEXT")
+			// Cant delete on cascade because we must sync before!
+			.append(")").toString();
 
 	// milliseconds since 1970-01-01 UTC
 	public Long updated = null;
 
 	public Long dbid = null;
+	public Long listdbid = null;
 	public String account = null;
 	public String remoteId = null;
 	public String field1 = null;
@@ -83,9 +92,9 @@ public class RemoteTask extends DAO {
 	public String field3 = null;
 	public String field4 = null;
 	public String field5 = null;
-
-	// Not stored as separate field
-	public long listdbid = -1;
+	
+	// Should be overwritten by children
+	protected String service = null;	
 
 	public RemoteTask() {
 
@@ -99,9 +108,10 @@ public class RemoteTask extends DAO {
 	 * @param updated
 	 * @param account
 	 */
-	public RemoteTask(final Long dbid, final String remoteId,
+	public RemoteTask(final Long dbid, final Long listdbid, final String remoteId,
 			final Long updated, final String account) {
 		this.dbid = dbid;
+		this.listdbid = listdbid;
 		this.remoteId = remoteId;
 		this.updated = updated;
 		this.account = account;
@@ -113,12 +123,13 @@ public class RemoteTask extends DAO {
 		remoteId = c.getString(2);
 		updated = c.getLong(3);
 		account = c.getString(4);
+		listdbid = c.getLong(5);
 
-		field1 = c.getString(5);
-		field2 = c.getString(6);
-		field3 = c.getString(7);
-		field4 = c.getString(8);
-		field5 = c.getString(9);
+		field1 = c.getString(6);
+		field2 = c.getString(7);
+		field3 = c.getString(8);
+		field4 = c.getString(9);
+		field5 = c.getString(10);
 	}
 
 	public RemoteTask(final Uri uri, final ContentValues values) {
@@ -135,6 +146,8 @@ public class RemoteTask extends DAO {
 		remoteId = values.getAsString(Columns.REMOTEID);
 		updated = values.getAsLong(Columns.UPDATED);
 		account = values.getAsString(Columns.ACCOUNT);
+		service = values.getAsString(Columns.SERVICE);
+		listdbid = values.getAsLong(Columns.LISTDBID);
 
 		field1 = values.getAsString(Columns.FIELD1);
 		field2 = values.getAsString(Columns.FIELD2);
@@ -148,9 +161,11 @@ public class RemoteTask extends DAO {
 		final ContentValues values = new ContentValues();
 
 		values.put(Columns.DBID, dbid);
+		values.put(Columns.LISTDBID, listdbid);
 		values.put(Columns.REMOTEID, remoteId);
 		values.put(Columns.UPDATED, updated);
 		values.put(Columns.ACCOUNT, account);
+		values.put(Columns.SERVICE, service);
 		values.put(Columns.FIELD1, field1);
 		values.put(Columns.FIELD2, field2);
 		values.put(Columns.FIELD3, field3);
@@ -214,15 +229,16 @@ public class RemoteTask extends DAO {
 	 * 
 	 * Combine with account
 	 */
-	public String getTaskWithoutRemoteClause() {
+	public static String getTaskWithoutRemoteClause() {
 		return new StringBuilder(Task.Columns.DBLIST + " IS ? AND ")
 				.append(BaseColumns._ID).append(" NOT IN (SELECT ")
 				.append(Columns.DBID).append(" FROM ").append(TABLE_NAME)
-				.append(" WHERE ").append(Columns.ACCOUNT).append(" IS ?)")
+				.append(" WHERE ").append(Columns.ACCOUNT).append(" IS ? AND ")
+				.append(Columns.SERVICE).append(" IS ?)")
 				.toString();
 	}
 
-	public String[] getTaskWithoutRemoteArgs() {
-		return new String[] { Long.toString(listdbid), account };
+	public static String[] getTaskWithoutRemoteArgs(final long listdbid, final String account, final String service) {
+		return new String[] { Long.toString(listdbid), account, service };
 	}
 }

@@ -23,7 +23,6 @@ import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker.PreconditionException;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleDBTalker;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;

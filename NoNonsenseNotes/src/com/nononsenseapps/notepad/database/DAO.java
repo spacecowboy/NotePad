@@ -296,6 +296,9 @@ public abstract class DAO {
 	 * Delete object from database
 	 */
 	public int delete(final Context context) {
-		return context.getContentResolver().delete(getUri(), null, null);
+		if (_id > 0)
+			return context.getContentResolver().delete(getUri(), null, null);
+		else
+			return 0;
 	}
 }

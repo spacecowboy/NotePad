@@ -26,8 +26,11 @@ package com.nononsenseapps.utils.time;
 
 // package org.doubango.imsdroid.utils;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class RFC3339Date {
 	public static java.util.Date parseRFC3339Date(String datestring)
@@ -39,6 +42,7 @@ public class RFC3339Date {
 			try {
 				SimpleDateFormat s = new SimpleDateFormat(
 						"yyyy-MM-dd'T'HH:mm:ss'Z'"); // spec for RFC3339
+				s.setCalendar(Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 				d = s.parse(datestring);
 			}
 			catch (java.text.ParseException pe) {// try again with optional
@@ -47,6 +51,7 @@ public class RFC3339Date {
 						"yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");// spec for RFC3339
 															// (with fractional
 															// seconds)
+				s.setCalendar(Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 				s.setLenient(true);
 				d = s.parse(datestring);
 			}
@@ -54,21 +59,23 @@ public class RFC3339Date {
 		}
 
 		// step one, split off the timezone.
-		String firstpart = datestring.substring(0, datestring.lastIndexOf('-'));
-		String secondpart = datestring.substring(datestring.lastIndexOf('-'));
-
-		// step two, remove the colon from the timezone offset
-		secondpart = secondpart.substring(0, secondpart.indexOf(':'))
-				+ secondpart.substring(secondpart.indexOf(':') + 1);
-		datestring = firstpart + secondpart;
+//		String firstpart = datestring.substring(0, datestring.lastIndexOf('-'));
+//		String secondpart = datestring.substring(datestring.lastIndexOf('-'));
+//
+//		// step two, remove the colon from the timezone offset
+//		secondpart = secondpart.substring(0, secondpart.indexOf(':'))
+//				+ secondpart.substring(secondpart.indexOf(':') + 1);
+//		datestring = firstpart + secondpart;
 		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 		// spec for RFC3339
+		s.setCalendar(Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 
 		try {
 			d = s.parse(datestring);
 		}
 		catch (java.text.ParseException pe) {// try again with optional decimals
 			s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ");
+			s.setCalendar(Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 			// spec for RFC3339(with fractional seconds)
 			s.setLenient(true);
 			d = s.parse(datestring);
@@ -77,14 +84,17 @@ public class RFC3339Date {
 		return d;
 	}
 	
-	public static String asRFC3339(final long time) {
+	public static String asRFC3339(final Long time) {
+		if (time == null)
+			return null;
 		return asRFC3339(new Date(time));
 	}
 
-	public static String asRFC3339(final java.util.Date date) {
+	private static String asRFC3339(final java.util.Date date) {
+		if (date == null)
+			return null;
 		final SimpleDateFormat s = new SimpleDateFormat(
 				"yyyy-MM-dd'T'HH:mm:ssZ");// spec for RFC3339
 		return s.format(date);
 	}
-
 }

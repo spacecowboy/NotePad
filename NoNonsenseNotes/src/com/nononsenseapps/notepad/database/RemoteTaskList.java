@@ -38,6 +38,7 @@ public class RemoteTaskList extends DAO {
 		private Columns() {
 		}
 
+		public static final String SERVICE = "service";
 		public static final String ACCOUNT = "account";
 		public static final String REMOTEID = "remoteid";
 		public static final String UPDATED = "updated";
@@ -59,6 +60,7 @@ public class RemoteTaskList extends DAO {
 			.append(TABLE_NAME)
 			.append("(").append(Columns._ID).append(" INTEGER PRIMARY KEY,")
 			.append(Columns.ACCOUNT).append(" TEXT NOT NULL,")
+			.append(Columns.SERVICE).append(" TEXT NOT NULL,")
 			.append(Columns.DBID).append(" INTEGER NOT NULL,")
 			.append(Columns.UPDATED).append(" INTEGER NOT NULL,")
 			.append(Columns.REMOTEID).append(" TEXT NOT NULL,")
@@ -66,9 +68,8 @@ public class RemoteTaskList extends DAO {
 			.append(Columns.FIELD2).append(" TEXT,")
 			.append(Columns.FIELD3).append(" TEXT,")
 			.append(Columns.FIELD4).append(" TEXT,")
-			.append(Columns.FIELD5).append(" TEXT,")
-			.append("FOREIGN KEY(").append(Columns.DBID).append(") REFERENCES ")
-			.append(TaskList.TABLE_NAME).append("(").append(TaskList.Columns._ID).append(") ON DELETE CASCADE")
+			.append(Columns.FIELD5).append(" TEXT")
+			// Cant delete on cascade, since then we cant remember to sync it!
 			.append(")").toString();
 	
 	// milliseconds since 1970-01-01 UTC
@@ -82,6 +83,9 @@ public class RemoteTaskList extends DAO {
 	public String field3 = null;
 	public String field4 = null;
 	public String field5 = null;
+	
+	// Should be overwritten by children
+	protected String service = null;	
 	
 	public RemoteTaskList() {
 		
@@ -129,6 +133,7 @@ public class RemoteTaskList extends DAO {
 		remoteId = values.getAsString(Columns.REMOTEID);
 		updated = values.getAsLong(Columns.UPDATED);
 		account = values.getAsString(Columns.ACCOUNT);
+		service = values.getAsString(Columns.SERVICE);
 		
 		field1 = values.getAsString(Columns.FIELD1);
 		field2 = values.getAsString(Columns.FIELD2);
@@ -145,6 +150,7 @@ public class RemoteTaskList extends DAO {
 		values.put(Columns.REMOTEID, remoteId);
 		values.put(Columns.UPDATED,updated);
 		values.put(Columns.ACCOUNT, account);
+		values.put(Columns.SERVICE, service);
 		values.put(Columns.FIELD1, field1);
 		values.put(Columns.FIELD2, field2);
 		values.put(Columns.FIELD3, field3);
@@ -186,31 +192,33 @@ public class RemoteTaskList extends DAO {
 	/**
 	 * Returns a where clause that can be used to fetch the tasklist that
 	 * is associated with this remote object.
-	 * As argument, use remoteid, account
+	 * As argument, use remoteid, account, service
 	 * @return
 	 */
 	public String getTaskListWithRemoteClause() {
 		return new StringBuilder(BaseColumns._ID).append(" IN (SELECT ").
 		append(Columns.DBID).append(" FROM ").append(TABLE_NAME).append(" WHERE ")
 		.append(Columns.REMOTEID).append(" IS ? AND ")
-		.append(Columns.ACCOUNT).append(" IS ?)")
+		.append(Columns.ACCOUNT).append(" IS ? AND ")
+		.append(Columns.SERVICE).append(" IS ?)")
 		.toString();
 	}
 	public String[] getTaskListWithRemoteArgs() {
-		return new String[] {remoteId, account};
+		return new String[] {remoteId, account, service};
 	}
 	/**
 	 * Returns a where clause that limits the tasklists to those that do not
 	 * have a remote version.
 	 * 
-	 * Combine with account
+	 * Combine with account, service
 	 */
-	public String getTaskListWithoutRemoteClause() {
+	public static String getTaskListWithoutRemoteClause() {
 		return new StringBuilder(BaseColumns._ID).append(" NOT IN (SELECT ").
 		append(Columns.DBID).append(" FROM ").append(TABLE_NAME).append(" WHERE ")
-		.append(Columns.ACCOUNT).append(" IS ?)").toString();
+		.append(Columns.ACCOUNT).append(" IS ? AND ")
+		.append(Columns.SERVICE).append(" IS ?)").toString();
 	}
 	public String[] getTaskListWithoutRemoteArgs() {
-		return new String[] {account};
+		return new String[] {account, service};
 	}
 }

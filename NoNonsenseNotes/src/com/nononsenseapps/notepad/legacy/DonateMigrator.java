@@ -12,6 +12,8 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
 import android.app.IntentService;
@@ -22,6 +24,7 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.Toast;
 
 @EService
@@ -33,6 +36,8 @@ public class DonateMigrator extends IntentService {
 			+ DONATE_AUTHORITY);
 	static final String PATH_NOTES = "notes";
 	static final String PATH_LISTS = "lists";
+	static final String PATH_GTASKS = "gtasks";
+	static final String PATH_GTASKLISTS = "gtasklists";
 
 	static final String[] NOTEPROJECTION = new String[] { NotePad.Notes._ID,
 			NotePad.Notes.COLUMN_NAME_TITLE, NotePad.Notes.COLUMN_NAME_NOTE,
@@ -102,6 +107,26 @@ public class DonateMigrator extends IntentService {
 					listIDMap.put(listCursor.getLong(0), tl._id);
 					mListsImportedCount += 1;
 				}
+				// Gtasklist 
+				final Cursor gtasklistCursor = getContentResolver().query(
+						Uri.withAppendedPath(BASEURI, PATH_GTASKLISTS), GTASKLISTPROJECTION,
+						NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS ?", 
+						new String[] {Long.toString(listCursor.getLong(0))}, null);
+				try {
+					if (gtasklistCursor.moveToFirst()) {
+						GoogleTaskList gl = new GoogleTaskList(tl, gtasklistCursor.getString(2));
+						gl.remoteId = gtasklistCursor.getString(1);
+						gl.updated = tl.updated;
+						gl.save(this);
+					}
+				}
+				catch (Exception e) {
+					mError = e.getLocalizedMessage();
+					return;
+				}
+				finally {
+					if (gtasklistCursor != null) gtasklistCursor.close();
+				}
 			}
 		}
 		catch (Exception e) {
@@ -111,7 +136,6 @@ public class DonateMigrator extends IntentService {
 		finally {
 			if (listCursor != null) listCursor.close();
 		}
-		// TODO Gtasklist info
 
 		final Cursor noteCursor = getContentResolver().query(
 				Uri.withAppendedPath(BASEURI, PATH_NOTES),
@@ -153,6 +177,26 @@ public class DonateMigrator extends IntentService {
 					taskIDMap.put(noteCursor.getLong(0), t._id);
 					mNotesImportedCount += 1;
 				}
+				// Gtask 
+				final Cursor gtaskCursor = getContentResolver().query(
+						Uri.withAppendedPath(BASEURI, PATH_GTASKS), GTASKPROJECTION,
+						NotePad.GTasks.COLUMN_NAME_DB_ID + " IS ?", 
+						new String[] {Long.toString(noteCursor.getLong(0))}, null);
+				try {
+					if (gtaskCursor.moveToFirst()) {
+						GoogleTask gt = new GoogleTask(t, gtaskCursor.getString(2));
+						gt.remoteId = gtaskCursor.getString(1);
+						gt.updated = t.updated;
+						gt.save(this);
+					}
+				}
+				catch (Exception e) {
+					mError = e.getLocalizedMessage();
+					return;
+				}
+				finally {
+					if (gtaskCursor != null) gtaskCursor.close();
+				}
 			}
 		}
 		catch (Exception e) {
@@ -162,7 +206,6 @@ public class DonateMigrator extends IntentService {
 		finally {
 			if (noteCursor != null) noteCursor.close();
 		}
-		// TODO Gtask info
 	}
 
 	/**
@@ -183,6 +226,7 @@ public class DonateMigrator extends IntentService {
 	@UiThread
 	void reportFailure(final String errorMessage) {
 		try {
+			Log.d("nononsenseapps migrate", errorMessage);
 		Toast.makeText(this,
 				getString(R.string.import_error, errorMessage),
 				Toast.LENGTH_SHORT).show();

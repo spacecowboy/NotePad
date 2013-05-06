@@ -25,10 +25,13 @@ import org.json.JSONObject;
 
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.database.RemoteTask;
+import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.util.BiMap;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
 import android.content.ContentValues;
+import android.database.Cursor;
+
 import com.nononsenseapps.helpers.Log;
 
 public class GoogleTask extends RemoteTask {
@@ -64,7 +67,7 @@ public class GoogleTask extends RemoteTask {
 		}
 	}*/
 
-	private static final String TAG = "GoogleTask";
+	private static final String TAG = "nononsenseapps GoogleTask";
 	public static final String ID = "id";
 	public static final String TITLE = "title";
 	public static final String UPDATED = "updated";
@@ -84,7 +87,6 @@ public class GoogleTask extends RemoteTask {
 	public String parent = null;
 	public String position = null;
 
-	public long dbId = -1;
 	public boolean deleted = false;
 	//public int hidden = 0;
 	//public boolean didRemoteInsert = false;
@@ -95,13 +97,20 @@ public class GoogleTask extends RemoteTask {
 //	public JSONObject json = null;
 	//public boolean conflict = false;
 
-	public GoogleTask() {
+	public GoogleTask(final String accountName) {
+		super();
+		account = accountName;
+		this.service = GoogleTaskList.SERVICENAME;
 	}
 
-	public GoogleTask(JSONObject jsonTask) throws JSONException {
+	public GoogleTask(final JSONObject jsonTask, final String accountName) throws JSONException {
+		super();
+		this.service = GoogleTaskList.SERVICENAME;
+		account = accountName;
 		remoteId = jsonTask.getString(ID);
 		try {
 			updated = RFC3339Date.parseRFC3339Date(jsonTask.getString(UPDATED)).getTime();
+			Log.d(TAG, "Updated: " + jsonTask.getString(UPDATED) + " -> " + updated);
 		}
 		catch (Exception e) {
 			updated = 0L;
@@ -128,6 +137,30 @@ public class GoogleTask extends RemoteTask {
 			deleted = true;
 
 //		json = jsonTask;
+	}
+
+	public GoogleTask(final Task dbTask, final String accountName) {
+		super();
+		this.service = GoogleTaskList.SERVICENAME;
+		account = accountName;
+		if (dbTask != null)
+			fillFrom(dbTask);
+	}
+	
+	public GoogleTask(final Cursor c) {
+		super(c);
+		this.service = GoogleTaskList.SERVICENAME;
+	}
+
+	public void fillFrom(final Task dbTask) {
+		title = dbTask.title;
+		notes = dbTask.note;
+		dueDate = RFC3339Date.asRFC3339(dbTask.due);
+		status = dbTask.completed != null ? GoogleTask.COMPLETED
+				: GoogleTask.NEEDSACTION;
+		deleted = false;
+		dbid = dbTask._id;
+		listdbid = dbTask.dblist;
 	}
 
 	/**
@@ -189,8 +222,8 @@ public class GoogleTask extends RemoteTask {
 		if (notes != null)
 			values.put(NotePad.Notes.COLUMN_NAME_NOTE, notes);
 
-		if (dbId > -1)
-			values.put(NotePad.Notes._ID, dbId);
+		if (dbid > -1)
+			values.put(NotePad.Notes._ID, dbid);
 
 		values.put(NotePad.Notes.COLUMN_NAME_LIST, listDbId);
 		values.put(NotePad.Notes.COLUMN_NAME_MODIFIED, modified);
@@ -220,7 +253,7 @@ public class GoogleTask extends RemoteTask {
 
 	public ContentValues toGTasksContentValues(String accountName) {
 		ContentValues values = new ContentValues();
-		values.put(NotePad.GTasks.COLUMN_NAME_DB_ID, dbId);
+		values.put(NotePad.GTasks.COLUMN_NAME_DB_ID, dbid);
 //		if (title.contains("debug"))
 //			Log.d(TAG, title + " saving id: " + id);
 //		values.put(NotePad.GTasks.COLUMN_NAME_ETAG, etag);
@@ -245,7 +278,7 @@ public class GoogleTask extends RemoteTask {
 		if (GoogleTask.class.isInstance(o)) {
 			// It's a list!
 			GoogleTask task = (GoogleTask) o;
-			if (dbId != -1 && dbId == task.dbId) {
+			if (dbid != -1 && dbid == task.dbid) {
 				equal = true;
 			}
 			if (remoteId != null && remoteId.equals(task.remoteId)) {
