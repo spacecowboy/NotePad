@@ -217,7 +217,7 @@ public class DonateMigrator extends IntentService {
 		try {
 			Toast.makeText(
 					this,
-					getString(R.string.imported_result, noteCount, listCount), Toast.LENGTH_SHORT).show();
+					getString(R.string.imported_result, noteCount, listCount), Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			// In case of bad translations
 		}
@@ -229,10 +229,19 @@ public class DonateMigrator extends IntentService {
 			Log.d("nononsenseapps migrate", errorMessage);
 		Toast.makeText(this,
 				getString(R.string.import_error, errorMessage),
-				Toast.LENGTH_SHORT).show();
+				Toast.LENGTH_LONG).show();
 		} catch (Exception e) {
 			// In case of bad translations
 		}
 	}
-
+	@UiThread
+	void reportStarting() {
+		try {
+			Toast.makeText(
+					this,
+					getString(R.string.import_started), Toast.LENGTH_SHORT).show();
+		} catch (Exception e) {
+			// In case of bad translations
+		}
+	}
 }

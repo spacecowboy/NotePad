@@ -310,11 +310,14 @@ public class GoogleTaskSync {
 			TaskList localList = loadRemoteListFromDB(context, remoteList);
 
 			if (localList == null) {
-				if (remoteList.updated > settings.getLong(
+				if (remoteList.deleted) {
+					// Deleted locally AND on server
+					remoteList.delete(context);
+				}
+				else if (remoteList.updated > settings.getLong(
 						PREFS_GTASK_LAST_SYNC_TIME, 0)) {
 					// If no local, and updated is higher than latestupdate,
-					// create
-					// new
+					// create new
 					Log.d(TAG, "Inserting new list");
 					localList = new TaskList();
 					localList.title = remoteList.title;
@@ -330,16 +333,16 @@ public class GoogleTaskSync {
 			}
 			else {
 				// If local is newer, update remote object
-				if (localList.updated > remoteList.updated) {
-					Log.d(TAG, "Local list newer");
-					remoteList.title = localList.title;
-					// Updated is set by Google
-				}
-				else if (remoteList.deleted) {
+				if (remoteList.deleted) {
 					Log.d(TAG, "Remote list was deleted");
 					localList.delete(context);
 					localList = null;
 					remoteList.delete(context);
+				}
+				else if (localList.updated > remoteList.updated) {
+					Log.d(TAG, "Local list newer");
+					remoteList.title = localList.title;
+					// Updated is set by Google
 				}
 				else {
 					Log.d(TAG, "Updating local list");

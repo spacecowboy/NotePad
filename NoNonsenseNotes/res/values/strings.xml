@@ -133,6 +133,7 @@
     <string name="preferences_week_start_day_title">Week starts on</string>
     
     <string name="import_data_question">Import data?</string>
+    <string name="import_started">Importing data. This might take a few seconds.</string>
     <string name="import_data_msg">Would you like to import the notes from the donate version?</string>
 	<string name="imported_result">Imported %1$d notes in %2$d lists</string>
 	<string name="import_error">Something went wrong: %s</string>
