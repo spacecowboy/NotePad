@@ -34,4 +34,6 @@
 	<color name="dragHandleColorLight">#2333</color>
 	<color name="dragHandleColorDark">#2CCC</color>
 	
+	<color name="completedGrey">#aa888888</color>
+	
 </resources>

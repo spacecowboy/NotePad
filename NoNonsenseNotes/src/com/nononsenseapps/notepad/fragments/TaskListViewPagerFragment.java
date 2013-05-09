@@ -9,6 +9,8 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 
+import com.nononsenseapps.utils.ViewsHelper;
+
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
@@ -128,6 +130,8 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 	@AfterViews
 	void setAdapter() {
+		// Set space between fragments
+		pager.setPageMargin(ViewsHelper.convertDip2Pixels(getActivity(), 16));
 		// Set adapters
 		pager.setAdapter(mSectionsPagerAdapter);
 	}

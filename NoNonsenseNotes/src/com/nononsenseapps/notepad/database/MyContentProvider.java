@@ -299,6 +299,9 @@ public class MyContentProvider extends ContentProvider {
 		case Task.BASEURICODE:
 			result += db.delete(Task.TABLE_NAME, selection, selectionArgs);
 			break;
+		case Notification.BASEURICODE:
+			result += db.delete(Notification.TABLE_NAME, selection, selectionArgs);
+			break;
 		case Notification.BASEITEMCODE:
 		case Notification.WITHTASKQUERYITEMCODE:
 			result += safeDeleteItem(db, Notification.TABLE_NAME, uri,

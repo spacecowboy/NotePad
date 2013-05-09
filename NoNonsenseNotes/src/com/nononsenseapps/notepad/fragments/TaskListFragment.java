@@ -171,6 +171,7 @@ public class TaskListFragment extends Fragment implements
 				switch (colIndex) {
 				// Matches order in Task.Columns.Fields
 				case 1:
+					// Title
 					sTemp = c.getString(colIndex);
 					if (isHeader) {
 						if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {
@@ -207,10 +208,16 @@ public class TaskListFragment extends Fragment implements
 							((TitleNoteTextView) view).setSingleLine(false);
 							((TitleNoteTextView) view).setMaxLines(mRowCount);
 						}
+
+						// Change color based on complete status
+						((TitleNoteTextView) view).useSecondaryColor(!c
+								.isNull(3));
+
 					}
 					((TitleNoteTextView) view).setTextTitle(sTemp);
 					return true;
 				case 2:
+					// Note
 					if (!isHeader) {
 						// Only if task it not locked
 						if (c.getInt(9) != 1) {
@@ -220,6 +227,7 @@ public class TaskListFragment extends Fragment implements
 					}
 					return true;
 				case 3:
+					// Checkbox
 					if (!isHeader) {
 						((NoteCheckBox) view).setOnCheckedChangeListener(null);
 						((NoteCheckBox) view).setChecked(!c.isNull(colIndex));
@@ -237,6 +245,7 @@ public class TaskListFragment extends Fragment implements
 					}
 					return true;
 				case 4:
+					// Due date
 					if (!isHeader) {
 						// Always hide for note type
 						if (mListType != null && mListType.equals(notetype)) {
@@ -530,12 +539,6 @@ public class TaskListFragment extends Fragment implements
 						}
 						finish = true;
 					}
-					break;
-				case R.id.menu_indent:
-					// TODO
-					break;
-				case R.id.menu_unindent:
-					// TODO
 					break;
 				default:
 					finish = false;

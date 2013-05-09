@@ -349,10 +349,11 @@ public class TaskDetailFragment extends Fragment implements
 				return;
 			}
 			final Notification not = new Notification(mTask._id);
-			if (mTask.due == null) {
-				final Calendar local = Calendar.getInstance();
-				local.add(Calendar.MINUTE, 1);
-				not.time = local.getTimeInMillis();
+			final Calendar local = Calendar.getInstance();
+			local.add(Calendar.MINUTE, 1);
+			final long soon = local.getTimeInMillis();
+			if (mTask.due == null || mTask.due < soon) {
+				not.time = soon;
 			}
 			else {
 				not.time = mTask.due;

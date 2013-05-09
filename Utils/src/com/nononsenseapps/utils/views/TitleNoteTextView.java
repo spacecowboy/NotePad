@@ -4,6 +4,7 @@ import com.nononsenseapps.utils.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.graphics.Color;
 import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
@@ -31,6 +32,8 @@ public class TitleNoteTextView extends TextView {
 	Object textBigSpan;
 	Object textCondensedSpan;
 
+	private int primaryColor;
+	private int secondaryColor;
 	private float mTitleRelativeSize;
 	private int mTitleFontFamily;
 	private int mTitleFontStyle;
@@ -54,6 +57,9 @@ public class TitleNoteTextView extends TextView {
 					R.styleable.StyledTextView_titleFontStyle, 0);
 			mStyledText = a.getString(R.styleable.StyledTextView_styledText);
 			mLinkify = a.getBoolean(R.styleable.StyledTextView_linkify, false);
+			primaryColor = super.getCurrentTextColor();
+			secondaryColor = a.getColor(
+					R.styleable.StyledTextView_secondaryColor, primaryColor);
 		}
 		finally {
 			a.recycle();
@@ -89,6 +95,17 @@ public class TitleNoteTextView extends TextView {
 		}
 	}
 
+	public void useSecondaryColor(final boolean useSecondary) {
+		if (secondaryColor != primaryColor) {
+			if (useSecondary) {
+				super.setTextColor(secondaryColor);
+			}
+			else {
+				super.setTextColor(primaryColor);
+			}
+		}
+	}
+
 	public String getStyledText() {
 		return mStyledText;
 	}
@@ -121,7 +138,7 @@ public class TitleNoteTextView extends TextView {
 			}
 		}
 	}
-	
+
 	/**
 	 * Useful method for widgets where only default textviews may be used. Use
 	 * this method in your widget adapter to get the functionality this view
@@ -133,7 +150,9 @@ public class TitleNoteTextView extends TextView {
 	 * 
 	 * Third is: 0 (normal), 1 (condensed), 2 (light), 3 (thin)
 	 */
-	public static CharSequence getStyledText(final String title, final String rest, final float titleRelSize, final int face, final int font) {
+	public static CharSequence getStyledText(final String title,
+			final String rest, final float titleRelSize, final int face,
+			final int font) {
 		final StringBuilder textBuilder = new StringBuilder(title);
 		if (rest.length() > 0) {
 			textBuilder.append("\n").append(rest);
@@ -152,15 +171,15 @@ public class TitleNoteTextView extends TextView {
 	 * 
 	 * Third is: 0 (normal), 1 (condensed), 2 (light), 3 (thin)
 	 */
-	public static CharSequence getStyledText(final String text, final float titleRelSize, final int face, final int font) {
-		if (text == null)
-			return null;
-		
+	public static CharSequence getStyledText(final String text,
+			final float titleRelSize, final int face, final int font) {
+		if (text == null) return null;
+
 		int titleEnd = text.indexOf("\n");
 		if (titleEnd < 0) {
 			titleEnd = text.length();
 		}
-		
+
 		TypefaceSpan fontSpan;
 		switch (font) {
 		case 1:
@@ -186,7 +205,7 @@ public class TitleNoteTextView extends TextView {
 			ss.setSpan(fontSpan, 0, titleEnd,
 					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		}
-		
+
 		return ss;
 	}
 

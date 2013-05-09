@@ -16,6 +16,7 @@
             <enum name="bold" value="1" />
             <enum name="italic" value="2" />
         </attr>
+        <attr name="secondaryColor" format="color" />
     </declare-styleable>
 
 </resources>

@@ -54,7 +54,7 @@
 	<attr name="body_remove" format="reference" />
 	<attr name="body_delete" format="reference" />
 	
-	<attr name="task_list_divider_height" format="reference"/>
+	<!-- <attr name="task_list_divider_height" format="reference"/> -->
 	
 	<attr name="drag_handle_color" format="reference|color" />
 	
@@ -67,5 +67,8 @@
 	   	<attr name="summary" format="string" />
 	   	<attr name="interval" format="integer" />
 	</declare-styleable>
+	
+	<attr name="TaskListItem" format="reference" />
+	<attr name="ListDividerStyle" format="reference"/>
 	
 </resources>
