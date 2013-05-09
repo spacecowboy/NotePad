@@ -84,6 +84,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL(Task.CREATE_HISTORY_INSERT_TRIGGER);
 		db.execSQL(Task.CREATE_HISTORY_UPDATE_TRIGGER);
 		
+		db.execSQL(RemoteTask.TRIGGER_LISTDELETE_CASCADE);
+		
 
 		initializedDB(db);
 	}

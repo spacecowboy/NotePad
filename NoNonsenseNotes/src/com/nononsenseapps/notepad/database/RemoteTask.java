@@ -79,7 +79,22 @@ public class RemoteTask extends DAO {
 			.append(Columns.FIELD5).append(" TEXT")
 			// Cant delete on cascade because we must sync before!
 			.append(")").toString();
+	
+	/*
+	 * Trigger to delete items when their list is deleted
+	 */
+	public static final String TRIGGER_LISTDELETE_CASCADE = new StringBuilder()
+	.append("CREATE TRIGGER cascade_trigger_delete_").append(TABLE_NAME)
+	.append(" AFTER DELETE ON ").append(RemoteTaskList.TABLE_NAME).append(" BEGIN ")
 
+	.append("DELETE FROM ").append(TABLE_NAME).append(" WHERE ").append(Columns.LISTDBID)
+	.append("IS old.").append(RemoteTaskList.Columns.DBID).append(" AND ")
+	.append(Columns.ACCOUNT).append(" IS old.").append(RemoteTaskList.Columns.ACCOUNT)
+	.append(" AND ").append(Columns.SERVICE).append(" IS old.")
+	.append(RemoteTaskList.Columns.SERVICE)
+	
+	.append(" END;").toString();
+	
 	// milliseconds since 1970-01-01 UTC
 	public Long updated = null;
 

@@ -62,11 +62,22 @@ public class NotificationHelper extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		if (Intent.ACTION_DELETE.equals(intent.getAction())) {
 			if (intent.hasExtra(ARG_MAX_TIME)) {
+				if (intent.hasExtra(ARG_LISTID)) {
 				deleteNotification(context,
 						intent.getLongExtra(ARG_LISTID, -1),
 						intent.getLongExtra(ARG_MAX_TIME, 0));
-
-				// TODO handle complete here
+				}
+				else if (intent.hasExtra(ARG_TASKID)) {
+					cancelNotification(context, intent.getData());
+					
+					com.nononsenseapps.notepad.database.Notification
+					.removeWithMaxTimeAndTaskIds(context, 
+							intent.getLongExtra(ARG_MAX_TIME, 0), 
+							intent.getLongExtra(ARG_TASKID, -1));
+				}
+				
+				// handle complete list here if/when supported
+				//Task.setCompleted(context, true, ids)
 			}
 			else {
 				// Just a notification
@@ -214,6 +225,7 @@ public class NotificationHelper extends BroadcastReceiver {
 					noti, notifications)) {
 				notifications.remove(dupNoti);
 				cancelNotification(context, dupNoti);
+				dupNoti.delete(context);
 			}
 		}
 
@@ -264,9 +276,13 @@ public class NotificationHelper extends BroadcastReceiver {
 			final NotificationManager notificationManager,
 			final NotificationCompat.Builder builder, final Long idToUse,
 			final com.nononsenseapps.notepad.database.Notification note) {
+		final Intent delIntent = new Intent(Intent.ACTION_DELETE, note.getUri());
+		// Add extra so we don't delete all
+		delIntent.putExtra(ARG_MAX_TIME, note.time);
+		delIntent.putExtra(ARG_TASKID, note.taskID);
 		// Delete it on clear
 		PendingIntent deleteIntent = PendingIntent.getBroadcast(context, 0,
-				new Intent(Intent.ACTION_DELETE, note.getUri()),
+				delIntent,
 				PendingIntent.FLAG_UPDATE_CURRENT);
 
 		// Open note on click
@@ -441,12 +457,21 @@ public class NotificationHelper extends BroadcastReceiver {
 		}
 	}
 
+	/**
+	 * Does not touch db
+	 * 
+	 * @param context
+	 * @param uri
+	 */
 	static void cancelNotification(final Context context, final Uri uri) {
 		final NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.cancel(Integer.parseInt(uri.getLastPathSegment()));
 	}
 
+	/**
+	 * Modifies DB
+	 */
 	public static void deleteNotification(final Context context, long listId,
 			long maxTime) {
 		com.nononsenseapps.notepad.database.Notification.removeWithListId(

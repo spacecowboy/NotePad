@@ -275,6 +275,34 @@ public class Notification extends DAO {
 			task.execute(ids);
 		}
 	}
+	
+	/**
+	 * Starts a background task that removes all notifications associated with
+	 * the specified tasks up to the specified time.
+	 */
+	public static void removeWithMaxTimeAndTaskIds(final Context context,
+			final long maxTime,
+			final Long... ids) {
+		if (ids.length > 0) {
+			final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
+				@Override
+				protected Void doInBackground(final Long... ids) {
+					String idStrings = "(";
+					for (Long id : ids) {
+						idStrings += id + ",";
+					}
+					idStrings = idStrings.substring(0, idStrings.length() - 1);
+					idStrings += ")";
+					
+					context.getContentResolver().delete(URI,
+							Columns.TASKID + " IN " + idStrings +
+							" AND " + Columns.TIME + " <= " + maxTime, null);
+					return null;
+				}
+			};
+			task.execute(ids);
+		}
+	}
 
 	/**
 	 * Starts a background task that removes all notifications associated with
