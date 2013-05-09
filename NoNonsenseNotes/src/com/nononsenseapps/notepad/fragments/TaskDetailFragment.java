@@ -556,6 +556,7 @@ public class TaskDetailFragment extends Fragment implements
 				.setVisible(mTask != null && !mTask.locked);
 		menu.findItem(R.id.menu_unlock).setVisible(
 				mTask != null && mTask.locked);
+		menu.findItem(R.id.menu_share).setEnabled(!isLocked());
 	}
 	
 	@Override
