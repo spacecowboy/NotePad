@@ -87,12 +87,12 @@ public class RemoteTask extends DAO {
 	.append("CREATE TRIGGER cascade_trigger_delete_").append(TABLE_NAME)
 	.append(" AFTER DELETE ON ").append(RemoteTaskList.TABLE_NAME).append(" BEGIN ")
 
-	.append("DELETE FROM ").append(TABLE_NAME).append(" WHERE ").append(Columns.LISTDBID)
-	.append("IS old.").append(RemoteTaskList.Columns.DBID).append(" AND ")
+	.append(" DELETE FROM ").append(TABLE_NAME).append(" WHERE ").append(Columns.LISTDBID)
+	.append(" IS old.").append(RemoteTaskList.Columns.DBID).append(" AND ")
 	.append(Columns.ACCOUNT).append(" IS old.").append(RemoteTaskList.Columns.ACCOUNT)
 	.append(" AND ").append(Columns.SERVICE).append(" IS old.")
 	.append(RemoteTaskList.Columns.SERVICE)
-	
+	.append(";")
 	.append(" END;").toString();
 	
 	// milliseconds since 1970-01-01 UTC

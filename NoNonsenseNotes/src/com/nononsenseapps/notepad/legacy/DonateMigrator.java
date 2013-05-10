@@ -71,19 +71,23 @@ public class DonateMigrator extends IntentService {
 		if (hasImported(this)) {
 			return;
 		}
-		
+
+		reportStarting();
 		importNotes();
 		if (mError != null) {
 			reportFailure(mError);
 		}
 		else {
-			PreferenceManager.getDefaultSharedPreferences(this).edit().putBoolean(PREFS_ALREADY_IMPORTED, true).commit();
+			PreferenceManager.getDefaultSharedPreferences(this).edit()
+					.putBoolean(PREFS_ALREADY_IMPORTED, true).commit();
 			reportCompleteStatus(mNotesImportedCount, mListsImportedCount);
+			askIfUninstall();
 		}
 	}
-	
+
 	public static boolean hasImported(final Context context) {
-		return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(PREFS_ALREADY_IMPORTED, false);
+		return PreferenceManager.getDefaultSharedPreferences(context)
+				.getBoolean(PREFS_ALREADY_IMPORTED, false);
 	}
 
 	/**
@@ -107,14 +111,17 @@ public class DonateMigrator extends IntentService {
 					listIDMap.put(listCursor.getLong(0), tl._id);
 					mListsImportedCount += 1;
 				}
-				// Gtasklist 
+				// Gtasklist
 				final Cursor gtasklistCursor = getContentResolver().query(
-						Uri.withAppendedPath(BASEURI, PATH_GTASKLISTS), GTASKLISTPROJECTION,
-						NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS ?", 
-						new String[] {Long.toString(listCursor.getLong(0))}, null);
+						Uri.withAppendedPath(BASEURI, PATH_GTASKLISTS),
+						GTASKLISTPROJECTION,
+						NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS ?",
+						new String[] { Long.toString(listCursor.getLong(0)) },
+						null);
 				try {
 					if (gtasklistCursor.moveToFirst()) {
-						GoogleTaskList gl = new GoogleTaskList(tl, gtasklistCursor.getString(2));
+						GoogleTaskList gl = new GoogleTaskList(tl,
+								gtasklistCursor.getString(2));
 						gl.remoteId = gtasklistCursor.getString(1);
 						gl.updated = tl.updated;
 						gl.save(this);
@@ -177,14 +184,17 @@ public class DonateMigrator extends IntentService {
 					taskIDMap.put(noteCursor.getLong(0), t._id);
 					mNotesImportedCount += 1;
 				}
-				// Gtask 
+				// Gtask
 				final Cursor gtaskCursor = getContentResolver().query(
-						Uri.withAppendedPath(BASEURI, PATH_GTASKS), GTASKPROJECTION,
-						NotePad.GTasks.COLUMN_NAME_DB_ID + " IS ?", 
-						new String[] {Long.toString(noteCursor.getLong(0))}, null);
+						Uri.withAppendedPath(BASEURI, PATH_GTASKS),
+						GTASKPROJECTION,
+						NotePad.GTasks.COLUMN_NAME_DB_ID + " IS ?",
+						new String[] { Long.toString(noteCursor.getLong(0)) },
+						null);
 				try {
 					if (gtaskCursor.moveToFirst()) {
-						GoogleTask gt = new GoogleTask(t, gtaskCursor.getString(2));
+						GoogleTask gt = new GoogleTask(t,
+								gtaskCursor.getString(2));
 						gt.remoteId = gtaskCursor.getString(1);
 						gt.updated = t.updated;
 						gt.save(this);
@@ -215,10 +225,11 @@ public class DonateMigrator extends IntentService {
 	@UiThread
 	void reportCompleteStatus(final int noteCount, final int listCount) {
 		try {
-			Toast.makeText(
-					this,
-					getString(R.string.imported_result, noteCount, listCount), Toast.LENGTH_LONG).show();
-		} catch (Exception e) {
+			Toast.makeText(this,
+					getString(R.string.imported_result, noteCount, listCount),
+					Toast.LENGTH_LONG).show();
+		}
+		catch (Exception e) {
 			// In case of bad translations
 		}
 	}
@@ -227,21 +238,31 @@ public class DonateMigrator extends IntentService {
 	void reportFailure(final String errorMessage) {
 		try {
 			Log.d("nononsenseapps migrate", errorMessage);
-		Toast.makeText(this,
-				getString(R.string.import_error, errorMessage),
-				Toast.LENGTH_LONG).show();
-		} catch (Exception e) {
+			Toast.makeText(this,
+					getString(R.string.import_error, errorMessage),
+					Toast.LENGTH_LONG).show();
+		}
+		catch (Exception e) {
 			// In case of bad translations
 		}
 	}
+
 	@UiThread
 	void reportStarting() {
 		try {
-			Toast.makeText(
-					this,
-					getString(R.string.import_started), Toast.LENGTH_SHORT).show();
-		} catch (Exception e) {
+			Toast.makeText(this, getString(R.string.import_started),
+					Toast.LENGTH_SHORT).show();
+		}
+		catch (Exception e) {
 			// In case of bad translations
 		}
+	}
+
+	void askIfUninstall() {
+		Uri packageURI = Uri.parse("package:com.nononsenseapps.notepad_donate");
+		Intent uninstallIntent = new Intent(Intent.ACTION_DELETE, packageURI);
+		// Need this flag since this is a service
+		uninstallIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+		startActivity(uninstallIntent);
 	}
 }

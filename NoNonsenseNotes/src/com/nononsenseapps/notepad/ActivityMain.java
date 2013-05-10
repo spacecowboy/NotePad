@@ -159,6 +159,9 @@ public class ActivityMain extends FragmentActivity implements
 			if (packageInfo.packageName
 					.equals("com.nononsenseapps.notepad_donate")) {
 				migrateDonateUser();
+				PreferenceManager
+				.getDefaultSharedPreferences(ActivityMain.this).edit()
+				.putBoolean(SKU_DONATE, true).commit();
 				// Stop loop
 				break;
 			}
@@ -407,6 +410,10 @@ public class ActivityMain extends FragmentActivity implements
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
+		final MenuItem donateItem = menu.findItem(R.id.menu_donate);
+		if (donateItem != null) {
+			donateItem.setVisible(!mIsDonate);
+		}
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -468,12 +475,12 @@ public class ActivityMain extends FragmentActivity implements
 
 	void updateUiDonate() {
 		if (mIsDonate) {
-			Toast.makeText(this, "WOW, Thanks a bunch dude!",
+			Toast.makeText(this, R.string.donate_thanks,
 					Toast.LENGTH_SHORT).show();
 		}
 		else {
-			Toast.makeText(this, "No premium for you!", Toast.LENGTH_SHORT)
-					.show();
+//			Toast.makeText(this, "No premium for you!", Toast.LENGTH_SHORT)
+//					.show();
 		}
 	}
 

@@ -133,7 +133,7 @@
     
     <string name="import_data_question">Import data?</string>
     <string name="import_started">Importing data. This might take a few seconds.</string>
-    <string name="import_data_msg">Would you like to import the notes from the donate version?</string>
+    <string name="import_data_msg">Would you like to import the notes from the donate version? When finished, you are given the option to uninstall it also.</string>
 	<string name="imported_result">Imported %1$d notes in %2$d lists</string>
 	<string name="import_error">Something went wrong: %s</string>
 	<string name="uninstall_donate_msg">Press OK to uninstall the donate version.</string>
@@ -232,6 +232,8 @@
     <string name="monday">Monday</string>
     <string name="localedefault">Locale default</string>
     <string name="empty_string"></string>
+    <string name="donate">Donate</string>
+    <string name="donate_thanks">Thank you for your support!</string>
 
     <!-- These should probably not be translated -->
     <string name="default_notetitle">Welcome!</string>

@@ -440,9 +440,11 @@ public class TaskDetailFragment extends Fragment implements
 		// Locate MenuItem with ShareActionProvider
 		MenuItem item = menu.findItem(R.id.menu_share);
 
-		// Fetch and store ShareActionProvider
-		mShareActionProvider = (ShareActionProvider) item.getActionProvider();
-		setShareIntent("");
+		if (item != null) {
+			// Fetch and store ShareActionProvider
+			mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+			setShareIntent("");
+		}
 	}
 
 	// Call to update the share intent
