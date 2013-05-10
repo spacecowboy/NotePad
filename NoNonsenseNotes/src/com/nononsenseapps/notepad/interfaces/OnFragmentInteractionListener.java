@@ -11,7 +11,7 @@ import android.view.View;
  */
 public interface OnFragmentInteractionListener {
 	//public void onFragmentInteraction(final Uri uri);
-	public void onFragmentInteraction(final Uri uri, final View origin);
+	public void onFragmentInteraction(final Uri uri, final long listId, final View origin);
 	public void addTaskInList(final String text, final long listId);
 	public void closeFragment(final Fragment fragment);
 }

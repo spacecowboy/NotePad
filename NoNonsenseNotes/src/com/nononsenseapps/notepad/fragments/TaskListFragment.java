@@ -224,6 +224,9 @@ public class TaskListFragment extends Fragment implements
 							((TitleNoteTextView) view).setTextRest(c
 									.getString(colIndex));
 						}
+						else {
+							((TitleNoteTextView) view).setTextRest("");
+						}
 					}
 					return true;
 				case 3:
@@ -399,7 +402,7 @@ public class TaskListFragment extends Fragment implements
 			public void onItemClick(AdapterView<?> arg0, View origin, int pos,
 					long id) {
 				if (mListener != null && id > 0) {
-					mListener.onFragmentInteraction(Task.getUri(id), origin);
+					mListener.onFragmentInteraction(Task.getUri(id), mListId, origin);
 				}
 			}
 		});

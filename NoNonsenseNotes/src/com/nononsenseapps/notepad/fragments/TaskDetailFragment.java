@@ -519,7 +519,7 @@ public class TaskDetailFragment extends Fragment implements
 					if (mTask != null) {
 						mLocked = true;
 						mTask.locked = true;
-						saveTask();
+						mTask.save(getActivity());
 						fillUIFromTask();
 						Toast.makeText(getActivity(), R.string.locked,
 								Toast.LENGTH_SHORT).show();

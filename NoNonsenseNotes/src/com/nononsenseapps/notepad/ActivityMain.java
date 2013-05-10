@@ -365,6 +365,7 @@ public class ActivityMain extends FragmentActivity implements
 													| Intent.FLAG_ACTIVITY_NEW_TASK);
 							// Should load the same list again
 							// Try getting the list from the original intent
+							// TODO
 							final long listId = getListId(getIntent());
 							if (listId > 0) {
 								intent.setData(TaskList.getUri(listId));
@@ -629,7 +630,7 @@ public class ActivityMain extends FragmentActivity implements
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@Override
-	public void onFragmentInteraction(final Uri taskUri, final View origin) {
+	public void onFragmentInteraction(final Uri taskUri, final long listId, final View origin) {
 		// User clicked a task in the list
 		// tablet
 		if (fragment2 != null) {
@@ -650,6 +651,7 @@ public class ActivityMain extends FragmentActivity implements
 					&& origin != null) {
 				Log.d("nononsenseapps animation", "Animating");
 				intent.putExtra(ANIMATEEXIT, true);
+				intent.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 				startActivity(
 						intent,
 						ActivityOptions.makeCustomAnimation(this,

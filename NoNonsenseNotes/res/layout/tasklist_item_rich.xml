@@ -23,7 +23,7 @@
     -->
 
     <include
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/tasklist_item_card_section" />
     <!-- </RelativeLayout> -->
@@ -32,6 +32,7 @@
         android:id="@+id/drag_handle"
         android:layout_width="@dimen/drag_grip_width"
         android:layout_height="match_parent"
+    	android:minHeight="@dimen/list_item_min_size"
         android:layout_gravity="fill_vertical|end"
         android:paddingBottom="12dp"
         android:paddingEnd="8dp"
