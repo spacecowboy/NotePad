@@ -18,5 +18,9 @@
         </attr>
         <attr name="secondaryColor" format="color" />
     </declare-styleable>
+    
+    <declare-styleable name="GreyableToggleButton">
+        <attr name="secondaryColor" />
+    </declare-styleable>
 
 </resources>

@@ -113,6 +113,7 @@
     <string name="reverted">Reverted changes</string>
     <string name="notecopied">Copied</string>
     <string name="deleted">Deleted</string>
+    <string name="repeat">Repeat</string>
     <string name="items">notes</string>
     <string name="permission_read_label">read notes and lists</string>
     <string name="permission_read_desc">Allows the application to read your notes and related lists.</string>
@@ -302,6 +303,7 @@
     <string name="dateformat_micro">MMM d</string>
     <string name="dateformat_short">E, d MMM</string>
     <string name="dateformat_long">EEEE, d MMMM</string>
+    <string name="dateformat_weekday_short">E</string>
     <string name="dateformat_weekday">EEEE</string>
     <string name="dateformat_short_1">E localtime, d MMM</string>
     <string name="dateformat_short_2">E, d MMM</string>

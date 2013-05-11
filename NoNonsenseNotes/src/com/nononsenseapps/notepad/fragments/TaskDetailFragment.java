@@ -22,7 +22,9 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
+import com.nononsenseapps.ui.WeekDaysView;
 import com.nononsenseapps.utils.views.StyledEditText;
+import com.nononsenseapps.ui.WeekDaysView.onCheckedDaysChangeListener;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -777,6 +779,39 @@ public class TaskDetailFragment extends Fragment implements
 							}
 						}
 					});
+			
+			final TextView openRepeatField = (TextView) nv.findViewById(R.id.openRepeatField);
+			final View closeRepeatField = nv.findViewById(R.id.closeRepeatField);
+			final View repeatDetails = nv.findViewById(R.id.repeatDetails);
+			
+			// set text on this
+			openRepeatField.setText(not.getRepeatAsText(getActivity()));
+			openRepeatField.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					v.setVisibility(View.GONE);
+					repeatDetails.setVisibility(View.VISIBLE);
+				}
+			});
+			closeRepeatField.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					repeatDetails.setVisibility(View.GONE);
+					openRepeatField.setVisibility(View.VISIBLE);
+				}
+			});
+			
+			WeekDaysView days = ((WeekDaysView) nv.findViewById(R.id.weekdays));
+			days.setCheckedDays(not.repeats);
+			days.setOnCheckedDaysChangedListener(new onCheckedDaysChangeListener() {
+				
+				@Override
+				public void onChange(final long checkedDays) {
+					not.repeats = checkedDays;
+					openRepeatField.setText(not.getRepeatAsText(getActivity()));
+					not.saveInBackground(getActivity(), true);
+				}
+			});
 
 			notificationList.addView(nv);
 		}

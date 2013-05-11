@@ -39,8 +39,8 @@
         <item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
         <item name="img_default_selector">@drawable/img_default_selector_dark</item>
         <item name="SpinnerStyle">@android:style/Widget.Holo.Spinner</item>
-        <item name="expander_open_holo">@drawable/expander_open_holo_dark</item>
-        <item name="expander_close_holo">@drawable/expander_close_holo_dark</item>
+        <item name="expander_open_holo">@drawable/ic_action_big_expander_open_dark</item>
+        <item name="expander_close_holo">@drawable/ic_action_big_expander_close_dark</item>
         <item name="list_divider_holo">@drawable/list_divider_holo_dark</item>
         <item name="viewpager_bg">@android:drawable/dark_header</item>
         <item name="textColorPrimary">?android:attr/textColorPrimary</item>
@@ -103,8 +103,8 @@
         <item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
         <item name="img_default_selector">@drawable/img_default_selector_light</item>
         <item name="SpinnerStyle">@android:style/Widget.Holo.Light.Spinner</item>
-        <item name="expander_open_holo">@drawable/expander_open_holo_light</item>
-        <item name="expander_close_holo">@drawable/expander_close_holo_light</item>
+        <item name="expander_open_holo">@drawable/ic_action_big_expander_open_light</item>
+        <item name="expander_close_holo">@drawable/ic_action_big_expander_close_light</item>
         <item name="list_divider_holo">@drawable/list_divider_holo_light</item>
 
         <!-- <item name="viewpager_bg">@color/viewpager_darkgrey</item> -->

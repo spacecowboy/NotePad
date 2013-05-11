@@ -864,7 +864,7 @@ public class Task extends DAO {
 			task.execute(ids);
 		}
 	}
-
+	
 	public int moveTo(final ContentResolver resolver, final Task targetTask) {
 		if (targetTask.dblist == dblist) {
 			if (targetTask.left < left) {

@@ -1,12 +1,16 @@
 package com.nononsenseapps.notepad.database;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.ui.WeekDaysView;
+import com.nononsenseapps.utils.views.GreyableToggleButton;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -67,7 +71,8 @@ public class Notification extends DAO {
 		public static final String TASKID = "taskid";
 		public static final String REPEATS = "repeats";
 
-		public static final String[] FIELDS = { _ID, TIME, PERMANENT, TASKID, REPEATS };
+		public static final String[] FIELDS = { _ID, TIME, PERMANENT, TASKID,
+				REPEATS };
 	}
 
 	public static class ColumnsWithTask extends Columns {
@@ -90,17 +95,22 @@ public class Notification extends DAO {
 	 * Main table to store notification data
 	 */
 	public static final String CREATE_TABLE = new StringBuilder("CREATE TABLE ")
-			.append(TABLE_NAME)
-			.append("(").append(Columns._ID).append(" INTEGER PRIMARY KEY,")
-			.append(Columns.TIME).append(" INTEGER,").append(Columns.PERMANENT)
+			.append(TABLE_NAME).append("(").append(Columns._ID)
+			.append(" INTEGER PRIMARY KEY,")
+			.append(Columns.TIME)
+			.append(" INTEGER,")
+			.append(Columns.PERMANENT)
 			.append(" INTEGER NOT NULL DEFAULT 0,")
-			.append(Columns.TASKID).append(" INTEGER,")
+			.append(Columns.TASKID)
+			.append(" INTEGER,")
 			// Interpreted binary
-			.append(Columns.REPEATS).append(" INTEGER NOT NULL DEFAULT 0,")
+			.append(Columns.REPEATS)
+			.append(" INTEGER NOT NULL DEFAULT 0,")
 			// Foreign key for task
-			.append("FOREIGN KEY(").append(Columns.TASKID).append(") REFERENCES ")
-			.append(Task.TABLE_NAME).append("(").append(Task.Columns._ID).append(") ON DELETE CASCADE")
-			.append(")").toString();
+			.append("FOREIGN KEY(").append(Columns.TASKID)
+			.append(") REFERENCES ").append(Task.TABLE_NAME).append("(")
+			.append(Task.Columns._ID).append(") ON DELETE CASCADE").append(")")
+			.toString();
 
 	/**
 	 * View that joins relevant data from tasks and lists tables
@@ -137,7 +147,7 @@ public class Notification extends DAO {
 	public Long listID = null;
 	public String taskTitle = null;
 	public String taskNote = null;
-	private long repeats = 0;
+	public long repeats = 0;
 
 	/**
 	 * Must be associated with a task
@@ -151,7 +161,7 @@ public class Notification extends DAO {
 		time = c.getLong(1);
 		permanent = 1 == c.getLong(2);
 		taskID = c.getLong(3);
-		repeats  = c.getLong(4);
+		repeats = c.getLong(4);
 		// if cursor has more fields, then assume it was constructed with
 		// the WITH_TASKS view query
 		if (c.getColumnCount() > 5) {
@@ -179,7 +189,7 @@ public class Notification extends DAO {
 		time = values.getAsLong(Columns.TIME);
 		permanent = 1 == values.getAsLong(Columns.PERMANENT);
 		taskID = values.getAsLong(Columns.TASKID);
-		repeats  = values.getAsLong(Columns.REPEATS);
+		repeats = values.getAsLong(Columns.REPEATS);
 	}
 
 	@Override
@@ -249,6 +259,17 @@ public class Notification extends DAO {
 		NotificationHelper.cancelNotification(context, this);
 		return super.delete(context);
 	}
+	
+	public void saveInBackground(final Context context, final boolean schedule) {
+		final AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+			@Override
+			protected Void doInBackground(Void...voids ) {
+				save(context, schedule);
+				return null;
+			}
+		};
+		task.execute();
+	}
 
 	/**
 	 * Starts a background task that removes all notifications associated with
@@ -266,7 +287,7 @@ public class Notification extends DAO {
 					}
 					idStrings = idStrings.substring(0, idStrings.length() - 1);
 					idStrings += ")";
-					
+
 					context.getContentResolver().delete(URI,
 							Columns.TASKID + " IN " + idStrings, null);
 					return null;
@@ -275,14 +296,27 @@ public class Notification extends DAO {
 			task.execute(ids);
 		}
 	}
-	
+
+	/**
+	 * Delete or reschedule a specific notification.
+	 */
+	public static void deleteOrReschedule(final Context context, final Uri uri) {
+		final Cursor c = context.getContentResolver().query(uri,
+				Columns.FIELDS, null, null, null);
+
+		while (c.moveToNext()) {
+			Notification n = new Notification(c);
+			n.deleteOrReschedule(context);
+		}
+		c.close();
+	}
+
 	/**
 	 * Starts a background task that removes all notifications associated with
 	 * the specified tasks up to the specified time.
 	 */
 	public static void removeWithMaxTimeAndTaskIds(final Context context,
-			final long maxTime,
-			final Long... ids) {
+			final long maxTime, final Long... ids) {
 		if (ids.length > 0) {
 			final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
 				@Override
@@ -293,10 +327,23 @@ public class Notification extends DAO {
 					}
 					idStrings = idStrings.substring(0, idStrings.length() - 1);
 					idStrings += ")";
-					
-					context.getContentResolver().delete(URI,
-							Columns.TASKID + " IN " + idStrings +
-							" AND " + Columns.TIME + " <= " + maxTime, null);
+
+					final Cursor c = context.getContentResolver().query(
+							URI,
+							Columns.FIELDS,
+							Columns.TASKID + " IN " + idStrings + " AND "
+									+ Columns.TIME + " <= " + maxTime, null,
+							null);
+
+					while (c.moveToNext()) {
+						Notification n = new Notification(c);
+						n.deleteOrReschedule(context);
+					}
+					c.close();
+
+					// context.getContentResolver().delete(URI,
+					// Columns.TASKID + " IN " + idStrings +
+					// " AND " + Columns.TIME + " <= " + maxTime, null);
 					return null;
 				}
 			};
@@ -325,7 +372,7 @@ public class Notification extends DAO {
 				c.close();
 				idStrings = idStrings.substring(0, idStrings.length() - 1);
 				idStrings += ")";
-				
+
 				context.getContentResolver().delete(
 						URI,
 						Columns.TIME + " <= " + maxTime + " AND "
@@ -397,5 +444,146 @@ public class Notification extends DAO {
 		return context.getContentResolver().update(URI, values,
 				Columns._ID + " IS ?",
 				new String[] { uri.getLastPathSegment() });
+	}
+
+	/**
+	 * Used for snooze
+	 */
+	public static void setTimeForListAndBefore(final Context context,
+			final long listId, final long maxTime, final long newTime) {
+		final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
+			@Override
+			protected Void doInBackground(final Long... ids) {
+				// First get the list of tasks in that list
+				final Cursor c = context.getContentResolver().query(Task.URI,
+						Task.Columns.FIELDS, Task.Columns.DBLIST + " IS ?",
+						new String[] { Long.toString(listId) }, null);
+
+				String idStrings = "(";
+				while (c.moveToNext()) {
+					idStrings += c.getLong(0) + ",";
+				}
+				c.close();
+				idStrings = idStrings.substring(0, idStrings.length() - 1);
+				idStrings += ")";
+
+				final ContentValues values = new ContentValues();
+				values.put(Columns.TIME, newTime);
+
+				context.getContentResolver().update(
+						URI,
+						values,
+						Columns.TIME + " <= " + maxTime + " AND "
+								+ Columns.TASKID + " IN " + idStrings, null);
+				return null;
+			}
+		};
+		task.execute(listId);
+	}
+
+	public static void completeTasksInList(final Context context,
+			final long listId, final long maxTime) {
+
+	}
+
+	/**
+	 * Returns true if the notification repeats on the given day. Day of the
+	 * week as given by Calendar.getField(DayOfWeek)
+	 */
+	public boolean repeatsOn(final int calendarDay) {
+		int day;
+
+		switch (calendarDay) {
+		case Calendar.MONDAY:
+			day = WeekDaysView.mon;
+			break;
+		case Calendar.TUESDAY:
+			day = WeekDaysView.tue;
+			break;
+		case Calendar.WEDNESDAY:
+			day = WeekDaysView.wed;
+			break;
+		case Calendar.THURSDAY:
+			day = WeekDaysView.thu;
+			break;
+		case Calendar.FRIDAY:
+			day = WeekDaysView.fri;
+			break;
+		case Calendar.SATURDAY:
+			day = WeekDaysView.sat;
+			break;
+		case Calendar.SUNDAY:
+			day = WeekDaysView.sun;
+			break;
+		default:
+			day = 0;
+		}
+
+		return (0 < (day & repeats));
+	}
+
+	public void deleteOrReschedule(final Context context) {
+		if (repeats == 0) {
+			delete(context);
+		}
+		else {
+			// Need to set the correct time, but using today as the date
+			// Because no sense in setting reminders in the past
+			GregorianCalendar gcOrgTime = new GregorianCalendar();
+			gcOrgTime.setTimeInMillis(time);
+			// Use today's date
+			GregorianCalendar gc = new GregorianCalendar();
+			final long now = gc.getTimeInMillis();
+			// With original time
+			gc.set(GregorianCalendar.HOUR_OF_DAY,
+					gcOrgTime.get(GregorianCalendar.HOUR_OF_DAY));
+			gc.set(GregorianCalendar.MINUTE,
+					gcOrgTime.get(GregorianCalendar.MINUTE));
+			// Save as base
+			final long base = gc.getTimeInMillis();
+
+			// Check today if the time is actually in the future
+			final int start = now < base ? 0 : 1;
+			final long oneDay = 24 * 60 * 60 * 1000;
+			boolean done = false;
+			for (int i = start; i <= 7; i++) {
+				gc.setTimeInMillis(base + i * oneDay);
+
+				if (repeatsOn(gc.get(GregorianCalendar.DAY_OF_WEEK))) {
+					done = true;
+					time = gc.getTimeInMillis();
+					save(context);
+					break;
+				}
+
+			}
+			// Just in case of faulty repeat codes
+			if (!done) {
+				delete(context);
+			}
+		}
+	}
+
+	public String getRepeatAsText(final Context context) {
+		final StringBuilder sb = new StringBuilder();
+
+		SimpleDateFormat weekDayFormatter = TimeFormatter
+				.getLocalFormatterWeekdayShort(context);
+		// 2013-05-13 was a monday
+		GregorianCalendar gc = new GregorianCalendar(2013, GregorianCalendar.MAY, 13);
+		final long base = gc.getTimeInMillis();
+		final long day = 24 * 60 * 60 * 1000;
+		for (int i = 0; i < 7; i++) {
+			gc.setTimeInMillis(base + i * day);
+
+			if (repeatsOn(gc.get(GregorianCalendar.DAY_OF_WEEK))) {
+				if (sb.length() > 0) {
+					sb.append(", ");
+				}
+				sb.append(weekDayFormatter.format(gc.getTime()));
+			}
+		}
+
+		return sb.toString();
 	}
 }

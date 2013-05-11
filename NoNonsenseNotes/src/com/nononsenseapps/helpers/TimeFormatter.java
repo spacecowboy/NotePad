@@ -143,4 +143,16 @@ public class TimeFormatter {
 						.getString(context.getString(R.string.pref_locale), ""),
 				context.getString(R.string.dateformat_weekday));
 	}
+	
+	/**
+	 * Good for performance critical situations, like lists
+	 */
+	public static SimpleDateFormat getLocalFormatterWeekdayShort(
+			final Context context) {
+		return getLocalFormatter(
+				context,
+				PreferenceManager.getDefaultSharedPreferences(context)
+						.getString(context.getString(R.string.pref_locale), ""),
+				context.getString(R.string.dateformat_weekday_short));
+	}
 }

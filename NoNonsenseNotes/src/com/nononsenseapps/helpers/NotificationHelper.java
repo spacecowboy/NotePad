@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.List;
 
@@ -63,26 +64,30 @@ public class NotificationHelper extends BroadcastReceiver {
 		if (Intent.ACTION_DELETE.equals(intent.getAction())) {
 			if (intent.hasExtra(ARG_MAX_TIME)) {
 				if (intent.hasExtra(ARG_LISTID)) {
-				deleteNotification(context,
-						intent.getLongExtra(ARG_LISTID, -1),
-						intent.getLongExtra(ARG_MAX_TIME, 0));
+					deleteNotification(context,
+							intent.getLongExtra(ARG_LISTID, -1),
+							intent.getLongExtra(ARG_MAX_TIME, 0));
+
+					// TODO
+					if (intent.getBooleanExtra(ARG_COMPLETE, false)) {
+
+					}
 				}
 				else if (intent.hasExtra(ARG_TASKID)) {
 					cancelNotification(context, intent.getData());
-					
+
 					com.nononsenseapps.notepad.database.Notification
-					.removeWithMaxTimeAndTaskIds(context, 
-							intent.getLongExtra(ARG_MAX_TIME, 0), 
-							intent.getLongExtra(ARG_TASKID, -1));
+							.removeWithMaxTimeAndTaskIds(context,
+									intent.getLongExtra(ARG_MAX_TIME, 0),
+									intent.getLongExtra(ARG_TASKID, -1));
 				}
-				
-				// handle complete list here if/when supported
-				//Task.setCompleted(context, true, ids)
+
 			}
 			else {
 				// Just a notification
-				context.getContentResolver().delete(intent.getData(), null,
-						null);
+				com.nononsenseapps.notepad.database.Notification
+				.deleteOrReschedule(context, intent.getData());
+
 				cancelNotification(context, intent.getData());
 				if (intent.getBooleanExtra(ARG_COMPLETE, false)) {
 					// Also complete note
@@ -101,9 +106,19 @@ public class NotificationHelper extends BroadcastReceiver {
 				// msec/sec * sec/min * 15
 				long delay15min = 1000 * 60 * 15;
 				final Calendar now = Calendar.getInstance();
-				com.nononsenseapps.notepad.database.Notification.setTime(
-						context, intent.getData(),
-						delay15min + now.getTimeInMillis());
+				if (intent.hasExtra(ARG_LISTID)) {
+					// Is list
+					com.nononsenseapps.notepad.database.Notification
+							.setTimeForListAndBefore(context,
+									intent.getLongExtra(ARG_LISTID, -1),
+									now.getTimeInMillis(),
+									delay15min + now.getTimeInMillis());
+				}
+				else {
+					com.nononsenseapps.notepad.database.Notification.setTime(
+							context, intent.getData(),
+							delay15min + now.getTimeInMillis());
+				}
 			}
 			notifyPast(context, true);
 		}
@@ -160,30 +175,23 @@ public class NotificationHelper extends BroadcastReceiver {
 			if (prefs.getBoolean(context.getString(R.string.key_pref_vibrate),
 					false)) lightAndVibrate |= Notification.DEFAULT_VIBRATE;
 
-			final NotificationCompat.Builder builder = new NotificationCompat.Builder(
-					context)
-					.setWhen(0)
-					.setSmallIcon(R.drawable.ic_stat_notification_edit)
-					.setLargeIcon(
-							BitmapFactory.decodeResource(
-									context.getResources(), R.drawable.app_icon))
-					.setPriority(
-							Integer.parseInt(prefs.getString(
-									context.getString(R.string.key_pref_prio),
-									"0")))
-					.setDefaults(lightAndVibrate)
-					.setAutoCancel(true)
-					.setOnlyAlertOnce(alertOnce)
-					.setSound(
-							Uri.parse(prefs.getString(context
-									.getString(R.string.key_pref_ringtone),
-									"DEFAULT_NOTIFICATION_URI")));
+			// Need to get a new one because the action buttons will duplicate
+			// otherwise
+			NotificationCompat.Builder builder;
 
 			if (prefs.getBoolean(
 					context.getString(R.string.key_pref_group_on_lists), true)) {
 				// Group together notes contained in the same list.
 				// Always use listid
 				for (long listId : getRelatedLists(notifications)) {
+					builder = getNotificationBuilder(context,
+							Integer.parseInt(prefs.getString(
+									context.getString(R.string.key_pref_prio),
+									"0")), lightAndVibrate,
+							Uri.parse(prefs.getString(context
+									.getString(R.string.key_pref_ringtone),
+									"DEFAULT_NOTIFICATION_URI")), alertOnce);
+
 					List<com.nononsenseapps.notepad.database.Notification> subList = getSubList(
 							listId, notifications);
 					if (subList.size() == 1) {
@@ -200,11 +208,38 @@ public class NotificationHelper extends BroadcastReceiver {
 			else {
 				// Notify for each individually
 				for (com.nononsenseapps.notepad.database.Notification note : notifications) {
+					builder = getNotificationBuilder(context,
+							Integer.parseInt(prefs.getString(
+									context.getString(R.string.key_pref_prio),
+									"0")), lightAndVibrate,
+							Uri.parse(prefs.getString(context
+									.getString(R.string.key_pref_ringtone),
+									"DEFAULT_NOTIFICATION_URI")), alertOnce);
+
 					notifyBigText(context, notificationManager, builder,
 							note.taskID, note);
 				}
 			}
 		}
+	}
+
+	/**
+	 * Returns a notification builder set with non-item specific properties.
+	 */
+	private static NotificationCompat.Builder getNotificationBuilder(
+			final Context context, final int priority,
+			final int lightAndVibrate, final Uri ringtone,
+			final boolean alertOnce) {
+		final NotificationCompat.Builder builder = new NotificationCompat.Builder(
+				context)
+				.setWhen(0)
+				.setSmallIcon(R.drawable.ic_stat_notification_edit)
+				.setLargeIcon(
+						BitmapFactory.decodeResource(context.getResources(),
+								R.drawable.app_icon)).setPriority(priority)
+				.setDefaults(lightAndVibrate).setAutoCancel(true)
+				.setOnlyAlertOnce(alertOnce).setSound(ringtone);
+		return builder;
 	}
 
 	/**
@@ -224,8 +259,9 @@ public class NotificationHelper extends BroadcastReceiver {
 			for (com.nononsenseapps.notepad.database.Notification dupNoti : getDuplicates(
 					noti, notifications)) {
 				notifications.remove(dupNoti);
-				cancelNotification(context, dupNoti);
-				dupNoti.delete(context);
+				// cancelNotification(context, dupNoti);
+				// Cancelled called in delete
+				dupNoti.deleteOrReschedule(context);
 			}
 		}
 
@@ -282,8 +318,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		delIntent.putExtra(ARG_TASKID, note.taskID);
 		// Delete it on clear
 		PendingIntent deleteIntent = PendingIntent.getBroadcast(context, 0,
-				delIntent,
-				PendingIntent.FLAG_UPDATE_CURRENT);
+				delIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		// Open note on click
 		PendingIntent clickIntent = PendingIntent.getActivity(context, 0,
@@ -314,7 +349,7 @@ public class NotificationHelper extends BroadcastReceiver {
 								.bigText(note.taskNote))
 				.addAction(R.drawable.navigation_accept_dark,
 						context.getText(R.string.completed), completeIntent)
-				.addAction(R.drawable.device_access_alarms_dark,
+				.addAction(R.drawable.ic_stat_snooze,
 						context.getText(R.string.snooze), snoozeIntent).build();
 
 		notificationManager.notify(idToUse.intValue(), noti);
@@ -330,7 +365,8 @@ public class NotificationHelper extends BroadcastReceiver {
 		Intent delint = new Intent(Intent.ACTION_DELETE,
 				com.nononsenseapps.notepad.database.Notification.URI);
 		// Add extra so we don't delete all
-		delint.putExtra(ARG_MAX_TIME, getLatestTime(notifications));
+		final long maxTime = getLatestTime(notifications);
+		delint.putExtra(ARG_MAX_TIME, maxTime);
 		delint.putExtra(ARG_LISTID, idToUse);
 		PendingIntent deleteIntent = PendingIntent.getBroadcast(context, 0,
 				delint, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -344,14 +380,34 @@ public class NotificationHelper extends BroadcastReceiver {
 		final String title = notifications.get(0).listTitle + " ("
 				+ notifications.size() + ")";
 		// Build notification
-		builder.setContentTitle(title)
+		builder.setContentTitle(title).setNumber(notifications.size())
 				.setContentText(notifications.get(0).taskTitle)
 				.setContentIntent(clickIntent).setDeleteIntent(deleteIntent);
 
 		// Action to snooze
-		// TODO
+		PendingIntent snoozeIntent = PendingIntent.getBroadcast(
+				context,
+				0,
+				new Intent(Intent.ACTION_EDIT, TaskList.getUri(idToUse))
+						.putExtra(ARG_SNOOZE, true)
+						.putExtra(ARG_LISTID, idToUse)
+						.setClass(context, NotificationHelper.class),
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		builder.addAction(R.drawable.ic_stat_snooze,
+				context.getText(R.string.snooze), snoozeIntent);
 
-		// TODO Action to complete
+		// Action to complete
+		PendingIntent completeIntent = PendingIntent.getBroadcast(
+				context,
+				0,
+				new Intent(Intent.ACTION_DELETE, TaskList.getUri(idToUse))
+						.putExtra(ARG_COMPLETE, true)
+						.putExtra(ARG_LISTID, idToUse)
+						.putExtra(ARG_MAX_TIME, maxTime)
+						.setClass(context, NotificationHelper.class),
+				PendingIntent.FLAG_UPDATE_CURRENT);
+		builder.addAction(R.drawable.navigation_accept_dark,
+				context.getText(R.string.completed), completeIntent);
 
 		NotificationCompat.InboxStyle ib = new NotificationCompat.InboxStyle()
 				.setBigContentTitle(title);

@@ -22,8 +22,7 @@
     <TextView
         android:id="@+id/notificationDateTime"
         android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:minHeight="48dp"
+        android:layout_height="wrap_content"
         android:layout_alignParentStart="true"
         android:layout_toStartOf="@id/notificationRemove"
         android:background="?android:attr/selectableItemBackground"
@@ -31,6 +30,7 @@
         android:fontFamily="sans-serif-light"
         android:gravity="center_vertical"
         android:hint="@string/editor_due_date_hint"
+        android:minHeight="48dp"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textIsSelectable="false" />
@@ -45,58 +45,74 @@
         android:background="?android:attr/dividerVertical" />
 
     <TextView
-        android:id="@+id/repeatTextField"
+        android:id="@+id/openRepeatField"
         android:layout_width="wrap_content"
-        android:layout_height="24dp"
+        android:layout_height="36dp"
+        android:paddingRight="16dp"
         android:layout_alignParentEnd="true"
         android:layout_alignStart="@id/notificationDateTime"
         android:layout_below="@id/dividerLine"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
-        android:enabled="false"
         android:drawableRight="?attr/expander_open_holo"
         android:fontFamily="sans-serif-light"
         android:gravity="center_vertical"
         android:hint=""
         android:singleLine="true"
         android:text=""
+        android:textAllCaps="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textIsSelectable="false" />
+        android:textIsSelectable="false"
+        android:visibility="visible" />
 
     <!-- Click to unhide this -->
 
-    <RelativeLayout
+    <LinearLayout
         android:id="@+id/repeatDetails"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
-        android:visibility="gone"
         android:layout_alignStart="@id/notificationDateTime"
-        android:layout_below="@id/repeatTextField" >
+        android:layout_below="@id/openRepeatField"
+        android:orientation="vertical"
+        android:visibility="gone" >
 
-        <CheckBox
-            android:id="@+id/repeatCheckbox"
+        <TextView
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentStart="true"
+        	android:layout_height="36dp"
+            android:fontFamily="sans-serif-light"
             android:singleLine="true"
-            android:text=""
+        android:gravity="center_vertical"
+            android:text="@string/repeat"
             android:textAllCaps="true"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textIsSelectable="false" />
-        
-        <ToggleButton 
-            android:id="@+id/mondayButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@id/repeatCheckbox"
-            android:textOff="MON"
-            android:textOn="MON"
+
+        <com.nononsenseapps.ui.WeekDaysView
+            android:id="@+id/weekdays"
+            android:layout_width="match_parent"
+            android:layout_height="48dp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/dividerVertical" />
+
+        <TextView
+            android:id="@+id/closeRepeatField"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+        android:paddingRight="16dp"
+            android:background="?android:attr/selectableItemBackground"
+            android:clickable="true"
+            android:drawableRight="?attr/expander_close_holo"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_vertical"
+            android:hint=""
+            android:singleLine="true"
+            android:text=""
             android:textAppearance="?android:attr/textAppearanceSmall"
-            style="@android:attr/buttonBarButtonStyle"
-            android:textStyle="bold" />
-    </RelativeLayout>
+            android:textIsSelectable="false" />
+    </LinearLayout>
 
 </RelativeLayout>
