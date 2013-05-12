@@ -38,6 +38,8 @@ import android.animation.ObjectAnimator;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActivityOptions;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
@@ -58,6 +60,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 @EActivity(R.layout.activity_main)
@@ -160,8 +163,8 @@ public class ActivityMain extends FragmentActivity implements
 					.equals("com.nononsenseapps.notepad_donate")) {
 				migrateDonateUser();
 				PreferenceManager
-				.getDefaultSharedPreferences(ActivityMain.this).edit()
-				.putBoolean(SKU_DONATE, true).commit();
+						.getDefaultSharedPreferences(ActivityMain.this).edit()
+						.putBoolean(SKU_DONATE, true).commit();
 				// Stop loop
 				break;
 			}
@@ -406,6 +409,7 @@ public class ActivityMain extends FragmentActivity implements
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
+
 		return super.onCreateOptionsMenu(menu);
 	}
 
@@ -476,12 +480,12 @@ public class ActivityMain extends FragmentActivity implements
 
 	void updateUiDonate() {
 		if (mIsDonate) {
-			Toast.makeText(this, R.string.donate_thanks,
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.donate_thanks, Toast.LENGTH_SHORT)
+					.show();
 		}
 		else {
-//			Toast.makeText(this, "No premium for you!", Toast.LENGTH_SHORT)
-//					.show();
+			// Toast.makeText(this, "No premium for you!", Toast.LENGTH_SHORT)
+			// .show();
 		}
 	}
 
@@ -592,14 +596,18 @@ public class ActivityMain extends FragmentActivity implements
 					|| intent.getData().getPath()
 							.startsWith(NotePad.Lists.PATH_LISTS) || intent
 					.getData().getPath().startsWith(TaskList.URI.getPath()))) {
-				retval = Long.parseLong(intent.getData().getLastPathSegment());
+				try {
+					retval = Long.parseLong(intent.getData()
+							.getLastPathSegment());
+				}
+				catch (NumberFormatException e) {
+					retval = -1;
+				}
 			}
-			else if (null != intent
-					.getStringExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST)) {
-				// TODO why string?
-				retval = Long
-						.parseLong(intent
-								.getStringExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST));
+			else if (0 < intent.getLongExtra(
+					LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1)) {
+				retval = intent.getLongExtra(
+						LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
 			}
 			else if (0 < intent.getLongExtra(
 					TaskDetailFragment.ARG_ITEM_LIST_ID, -1)) {
@@ -630,7 +638,8 @@ public class ActivityMain extends FragmentActivity implements
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@Override
-	public void onFragmentInteraction(final Uri taskUri, final long listId, final View origin) {
+	public void onFragmentInteraction(final Uri taskUri, final long listId,
+			final View origin) {
 		// User clicked a task in the list
 		// tablet
 		if (fragment2 != null) {
@@ -646,12 +655,12 @@ public class ActivityMain extends FragmentActivity implements
 		// phone
 		else {
 			final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
-					.setClass(this, ActivityMain_.class).setData(taskUri);
+					.setClass(this, ActivityMain_.class).setData(taskUri)
+					.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
 					&& origin != null) {
 				Log.d("nononsenseapps animation", "Animating");
 				intent.putExtra(ANIMATEEXIT, true);
-				intent.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 				startActivity(
 						intent,
 						ActivityOptions.makeCustomAnimation(this,

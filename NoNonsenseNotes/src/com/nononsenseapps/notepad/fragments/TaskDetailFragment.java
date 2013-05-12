@@ -613,10 +613,32 @@ public class TaskDetailFragment extends Fragment implements
 					|| (mTask._id == -1 && isThereContent())) {
 				// mTask.setText(taskText.getText().toString());
 				mTask.save(getActivity());
+				// Set the intent to open the task.
+				// So we dont create a new one on rotation for example
+				fixIntent();
+				
 
 				// TODO, should restart notification loader for new tasks
 			}
 		}
+	}
+	
+	void fixIntent() {
+		if (getActivity() == null)
+			return;
+		
+		final Intent orgIntent = getActivity().getIntent();
+		if (orgIntent == null || !orgIntent.getAction().equals(Intent.ACTION_INSERT))
+			return;
+		
+		if (mTask == null || mTask._id < 1)
+			return;
+		
+		final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
+				.setClass(getActivity(), ActivityMain_.class).setData(mTask.getUri())
+				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, mTask.dblist);
+		
+		getActivity().setIntent(intent);
 	}
 
 	boolean isThereContent() {

@@ -209,7 +209,7 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 
 	
 	public static final class NotePad {
-		public static final String AUTHORITY = "com.nononsenseapps.NotePad";
+		public static final String AUTHORITY = MyContentProvider.AUTHORITY;
 
 		// This class cannot be instantiated
 		private NotePad() {

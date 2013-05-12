@@ -20,6 +20,7 @@ import java.util.List;
 
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.TaskList;
 
 /**
  * A {@link PreferenceActivity} that presents a set of application settings. On
@@ -107,10 +108,9 @@ public class TasksSettings extends PreferenceActivity {
 		//listSpinner.setDefaultValue("-1");
 
 		Cursor cursor = activity.getContentResolver().query(
-				NotePad.Lists.CONTENT_VISIBLE_URI,
-				new String[] { BaseColumns._ID,
-						"title" }, null, null,
-				"title");
+				TaskList.URI,
+				TaskList.Columns.FIELDS, null, null,
+				TaskList.Columns.TITLE);
 		if (cursor != null) {
 			if (!cursor.isClosed() && !cursor.isAfterLast()) {
 				while (cursor.moveToNext()) {

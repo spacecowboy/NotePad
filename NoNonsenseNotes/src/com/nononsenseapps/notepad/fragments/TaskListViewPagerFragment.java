@@ -11,6 +11,7 @@ import com.nononsenseapps.notepad.prefs.MainPrefs;
 
 import com.nononsenseapps.utils.ViewsHelper;
 
+import android.app.SearchManager;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
@@ -28,6 +29,7 @@ import android.support.v4.widget.SimpleCursorAdapter;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.SearchView;
 
 /**
  * Displays many listfragments across a viewpager. Supports selecting a certain
@@ -139,6 +141,15 @@ public class TaskListViewPagerFragment extends Fragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasklists_viewpager, menu);
+		
+		// Get the SearchView and set the searchable configuration
+	    SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
+	    SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
+	    // Assumes current activity is the searchable activity
+	    searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
+	    //searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
+		searchView.setQueryRefinementEnabled(true);
+		searchView.setSubmitButtonEnabled(true);
 	}
 
 	@Override
@@ -149,6 +160,9 @@ public class TaskListViewPagerFragment extends Fragment implements
 			DialogEditList_ dialog = DialogEditList_.getInstance();
 			dialog.setListener(this);
 			dialog.show(getFragmentManager(), "fragment_create_list");
+			return true;
+		case R.id.menu_search:
+			getActivity().onSearchRequested();
 			return true;
 		default:
 			return false;

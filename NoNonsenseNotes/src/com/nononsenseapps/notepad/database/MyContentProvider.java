@@ -33,7 +33,7 @@ public class MyContentProvider extends ContentProvider {
 
 	@Override
 	public String getType(Uri uri) {
-		// TODO add legacy URIs
+		// add legacy URIs
 		switch (sURIMatcher.match(uri)) {
 		case Notification.BASEITEMCODE:
 		case Notification.BASEURICODE:
@@ -42,6 +42,10 @@ public class MyContentProvider extends ContentProvider {
 			return Notification.CONTENT_TYPE;
 		case TaskList.BASEITEMCODE:
 		case TaskList.BASEURICODE:
+		case TaskList.LEGACYBASEITEMCODE:
+		case TaskList.LEGACYBASEURICODE:
+		case TaskList.LEGACYVISIBLEITEMCODE:
+		case TaskList.LEGACYVISIBLEURICODE:
 			return TaskList.CONTENT_TYPE;
 		case Task.BASEITEMCODE:
 		case Task.BASEURICODE:
@@ -54,8 +58,20 @@ public class MyContentProvider extends ContentProvider {
 		case Task.LEGACYVISIBLEURICODE:
 			return Task.CONTENT_TYPE;
 		default:
-			throw new IllegalArgumentException("Unknown URI " + uri);
+			//throw new IllegalArgumentException("Unknown URI " + uri);
 		}
+		
+		// Legacy URIs, above didn't work for some reason
+		if (uri.toString().startsWith(LegacyDBHelper.NotePad.Lists.CONTENT_URI.toString())
+				|| uri.toString().startsWith(LegacyDBHelper.NotePad.Lists.CONTENT_VISIBLE_URI.toString())) {
+			return TaskList.CONTENT_TYPE;
+		}
+		else if (uri.toString().startsWith(LegacyDBHelper.NotePad.Notes.CONTENT_URI.toString())
+				|| uri.toString().startsWith(LegacyDBHelper.NotePad.Notes.CONTENT_VISIBLE_URI.toString())) {
+			return Task.CONTENT_TYPE;
+		}
+		
+		throw new IllegalArgumentException("Unknown URI " + uri);
 	}
 
 	@Override
@@ -92,7 +108,8 @@ public class MyContentProvider extends ContentProvider {
 				item = new RemoteTask(values);
 				break;
 			default:
-				throw new IllegalArgumentException("Faulty insertURI provided: " + uri.toString());
+				throw new IllegalArgumentException(
+						"Faulty insertURI provided: " + uri.toString());
 			}
 
 			result = item.insert(getContext(), db);
@@ -101,7 +118,7 @@ public class MyContentProvider extends ContentProvider {
 		finally {
 			db.endTransaction();
 		}
-		
+
 		if (result != null) {
 			UpdateNotifier.updateWidgets(getContext());
 		}
@@ -232,13 +249,16 @@ public class MyContentProvider extends ContentProvider {
 						selectionArgs);
 				break;
 			case RemoteTaskList.BASEITEMCODE:
-				result += db.update(RemoteTaskList.TABLE_NAME, values, selection, selectionArgs);
+				result += db.update(RemoteTaskList.TABLE_NAME, values,
+						selection, selectionArgs);
 				break;
 			case RemoteTask.BASEITEMCODE:
-				result += db.update(RemoteTask.TABLE_NAME, values, selection, selectionArgs);
+				result += db.update(RemoteTask.TABLE_NAME, values, selection,
+						selectionArgs);
 				break;
 			default:
-				throw new IllegalArgumentException("Faulty URI provided: " + uri.toString());
+				throw new IllegalArgumentException("Faulty URI provided: "
+						+ uri.toString());
 			}
 
 			if (result >= 0) {
@@ -300,29 +320,33 @@ public class MyContentProvider extends ContentProvider {
 			result += db.delete(Task.TABLE_NAME, selection, selectionArgs);
 			break;
 		case Notification.BASEURICODE:
-			result += db.delete(Notification.TABLE_NAME, selection, selectionArgs);
+			result += db.delete(Notification.TABLE_NAME, selection,
+					selectionArgs);
 			break;
 		case Notification.BASEITEMCODE:
 		case Notification.WITHTASKQUERYITEMCODE:
 			result += safeDeleteItem(db, Notification.TABLE_NAME, uri,
 					selection, selectionArgs);
 			break;
-			case RemoteTaskList.BASEURICODE:
-				result += db.delete(RemoteTaskList.TABLE_NAME, selection, selectionArgs);
-				break;
+		case RemoteTaskList.BASEURICODE:
+			result += db.delete(RemoteTaskList.TABLE_NAME, selection,
+					selectionArgs);
+			break;
 		case RemoteTaskList.BASEITEMCODE:
-			result += safeDeleteItem(db, RemoteTaskList.TABLE_NAME, uri, 
+			result += safeDeleteItem(db, RemoteTaskList.TABLE_NAME, uri,
 					selection, selectionArgs);
 			break;
 		case RemoteTask.BASEURICODE:
-			result += db.delete(RemoteTask.TABLE_NAME, selection, selectionArgs);
+			result += db
+					.delete(RemoteTask.TABLE_NAME, selection, selectionArgs);
 			break;
 		case RemoteTask.BASEITEMCODE:
-			result += safeDeleteItem(db, RemoteTask.TABLE_NAME, uri, 
-					selection, selectionArgs);
+			result += safeDeleteItem(db, RemoteTask.TABLE_NAME, uri, selection,
+					selectionArgs);
 			break;
 		default:
-			throw new IllegalArgumentException("Faulty delete-URI provided: " + uri.toString());
+			throw new IllegalArgumentException("Faulty delete-URI provided: "
+					+ uri.toString());
 		}
 
 		if (result > 0) {
@@ -337,8 +361,7 @@ public class MyContentProvider extends ContentProvider {
 			String selection, String[] selectionArgs, String sortOrder) {
 		Cursor result = null;
 		final long id;
-		if (selection != null)
-			Log.d("nononsenseapps", selection);
+		if (selection != null) Log.d("nononsenseapps", selection);
 		if (selectionArgs != null)
 			Log.d("nononsenseapps", DAO.arrayToCommaString(selectionArgs));
 		// TODO add legacy URIs
@@ -357,11 +380,12 @@ public class MyContentProvider extends ContentProvider {
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
-					.query(TaskList.TABLE_NAME, projection,
+					.query(TaskList.TABLE_NAME,
+							projection,
 							TaskList.whereIdIs(selection),
-							TaskList.joinArrays(selectionArgs, new String[] { String.valueOf(id) })
-							, null, null,
-							sortOrder);
+							TaskList.joinArrays(selectionArgs,
+									new String[] { String.valueOf(id) }), null,
+							null, sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
 		case Task.INDENTEDQUERYCODE:
@@ -396,10 +420,12 @@ public class MyContentProvider extends ContentProvider {
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
-					.query(Task.DELETE_TABLE_NAME, projection,
+					.query(Task.DELETE_TABLE_NAME,
+							projection,
 							Task.whereIdIs(selection),
-							Task.joinArrays(selectionArgs, new String[] { String.valueOf(id) }), null, null,
-							null);
+							Task.joinArrays(selectionArgs,
+									new String[] { String.valueOf(id) }), null,
+							null, null);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
 		case Task.BASEURICODE:
@@ -417,10 +443,12 @@ public class MyContentProvider extends ContentProvider {
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
-					.query(Task.TABLE_NAME, projection,
+					.query(Task.TABLE_NAME,
+							projection,
 							Task.whereIdIs(selection),
-							Task.joinArrays(selectionArgs, new String[] { String.valueOf(id) }), null, null,
-							sortOrder);
+							Task.joinArrays(selectionArgs,
+									new String[] { String.valueOf(id) }), null,
+							null, sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
 		case Task.SECTIONEDDATEQUERYCODE:
@@ -464,10 +492,12 @@ public class MyContentProvider extends ContentProvider {
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
-					.query(Notification.TABLE_NAME, projection,
+					.query(Notification.TABLE_NAME,
+							projection,
 							Notification.whereIdIs(selection),
-							Notification.joinArrays(selectionArgs, new String[] { String.valueOf(id) }), null, null,
-							sortOrder);
+							Notification.joinArrays(selectionArgs,
+									new String[] { String.valueOf(id) }), null,
+							null, sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
 		case Notification.WITHTASKQUERYITEMCODE:
@@ -475,10 +505,12 @@ public class MyContentProvider extends ContentProvider {
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
-					.query(Notification.WITH_TASK_VIEW_NAME, projection,
+					.query(Notification.WITH_TASK_VIEW_NAME,
+							projection,
 							Notification.whereIdIs(selection),
-							Notification.joinArrays(selectionArgs, new String[] { String.valueOf(id) }), null, null,
-							sortOrder);
+							Notification.joinArrays(selectionArgs,
+									new String[] { String.valueOf(id) }), null,
+							null, sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
 		case Notification.BASEURICODE:
@@ -499,27 +531,29 @@ public class MyContentProvider extends ContentProvider {
 			break;
 		case RemoteTaskList.BASEURICODE:
 			if (selection != null && selectionArgs != null)
-				Log.d(MainActivity.TAG, "remotetasklist query: " + selection + DAO.arrayToCommaString(selectionArgs));
+				Log.d(MainActivity.TAG, "remotetasklist query: " + selection
+						+ DAO.arrayToCommaString(selectionArgs));
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
-					.query(RemoteTaskList.TABLE_NAME, projection,
-							selection, selectionArgs, null, null, sortOrder);
+					.query(RemoteTaskList.TABLE_NAME, projection, selection,
+							selectionArgs, null, null, sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
 		case RemoteTask.BASEURICODE:
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
-					.query(RemoteTask.TABLE_NAME, projection,
-							selection, selectionArgs, null, null, sortOrder);
+					.query(RemoteTask.TABLE_NAME, projection, selection,
+							selectionArgs, null, null, sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
 		case Task.LEGACYBASEURICODE:
 		case Task.LEGACYVISIBLEURICODE:
 			// TODO
 		default:
-			throw new IllegalArgumentException("Faulty queryURI provided: " + uri.toString());
+			throw new IllegalArgumentException("Faulty queryURI provided: "
+					+ uri.toString());
 		}
 
 		return result;

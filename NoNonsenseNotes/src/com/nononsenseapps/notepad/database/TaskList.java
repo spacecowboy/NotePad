@@ -25,6 +25,11 @@ public class TaskList extends DAO {
 
 	public static final int BASEURICODE = 101;
 	public static final int BASEITEMCODE = 102;
+	// Legacy support, these also need to use legacy projections
+		public static final int LEGACYBASEURICODE = 111;
+		public static final int LEGACYBASEITEMCODE = 112;
+		public static final int LEGACYVISIBLEURICODE = 113;
+		public static final int LEGACYVISIBLEITEMCODE = 114;
 
 	/**
 	 * TaskList URIs start at 101, up to 199
@@ -34,6 +39,19 @@ public class TaskList extends DAO {
 				.addURI(MyContentProvider.AUTHORITY, TABLE_NAME, BASEURICODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/#",
 				BASEITEMCODE);
+		
+		// Legacy URIs
+				sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+						LegacyDBHelper.NotePad.Lists.PATH_LISTS, LEGACYBASEURICODE);
+				sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+						LegacyDBHelper.NotePad.Lists.PATH_LISTS + "/#",
+						LEGACYBASEITEMCODE);
+				sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+						LegacyDBHelper.NotePad.Lists.PATH_VISIBLE_LISTS,
+						LEGACYVISIBLEURICODE);
+				sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+						LegacyDBHelper.NotePad.Lists.PATH_VISIBLE_LISTS + "/#",
+						LEGACYVISIBLEITEMCODE);
 	}
 
 	public static class Columns implements BaseColumns {
