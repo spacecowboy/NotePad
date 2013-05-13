@@ -6,5 +6,5 @@
     -->
     <dimen name="activity_lone_horizontal_margin">250dp</dimen>
     <dimen name="activity_lone_horizontal_padding">128dp</dimen>
-
+    
 </resources>

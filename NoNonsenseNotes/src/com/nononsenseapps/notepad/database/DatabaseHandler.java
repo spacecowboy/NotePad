@@ -86,6 +86,17 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		
 		db.execSQL(RemoteTask.TRIGGER_LISTDELETE_CASCADE);
 		
+		// Search tables
+		db.execSQL(Task.CREATE_FTS3_TABLE);
+		db.execSQL(Task.CREATE_FTS3_INSERT_TRIGGER);
+		db.execSQL(Task.CREATE_FTS3_UPDATE_TRIGGER);
+		db.execSQL(Task.CREATE_FTS3_DELETE_TRIGGER);
+		
+		// Delete search tables
+		db.execSQL(Task.CREATE_FTS3_DELETE_TABLE);
+		db.execSQL(Task.CREATE_FTS3_DELETED_INSERT_TRIGGER);
+		db.execSQL(Task.CREATE_FTS3_DELETED_UPDATE_TRIGGER);
+		db.execSQL(Task.CREATE_FTS3_DELETED_DELETE_TRIGGER);
 
 		initializedDB(db);
 	}

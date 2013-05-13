@@ -69,7 +69,11 @@ public abstract class DAO {
 	 * [a] -> "a"
 	 * [a, b] -> "a,b"
 	 */
-	public static String arrayToCommaString(final String[] array) {
+//	public static String arrayToCommaString(final String[] array) {
+//		return arrayToCommaString("", array);
+//	}
+	
+	public static String arrayToCommaString(final String... array) {
 		return arrayToCommaString("", array);
 	}
 	

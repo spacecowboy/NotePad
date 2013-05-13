@@ -2,9 +2,12 @@ package com.nononsenseapps.notepad.fragments;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EFragment;
+import com.googlecode.androidannotations.annotations.SystemService;
 import com.googlecode.androidannotations.annotations.ViewById;
 
+import com.nononsenseapps.notepad.ActivitySearchDeleted_;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
@@ -13,6 +16,7 @@ import com.nononsenseapps.utils.ViewsHelper;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Bundle;
@@ -44,6 +48,9 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 	@ViewById
 	ViewPager pager;
+
+	@SystemService
+	SearchManager searchManager;
 
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	SimpleCursorAdapter mTaskListsAdapter;
@@ -136,20 +143,24 @@ public class TaskListViewPagerFragment extends Fragment implements
 		pager.setPageMargin(ViewsHelper.convertDip2Pixels(getActivity(), 16));
 		// Set adapters
 		pager.setAdapter(mSectionsPagerAdapter);
+
 	}
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasklists_viewpager, menu);
-		
-		// Get the SearchView and set the searchable configuration
-	    SearchManager searchManager = (SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-	    SearchView searchView = (SearchView) menu.findItem(R.id.menu_search).getActionView();
-	    // Assumes current activity is the searchable activity
-	    searchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
-	    //searchView.setIconifiedByDefault(false); // Do not iconify the widget; expand it by default
-		searchView.setQueryRefinementEnabled(true);
-		searchView.setSubmitButtonEnabled(true);
+
+		if (menu.findItem(R.id.menu_search) != null) {
+			SearchView searchView = (SearchView) menu
+					.findItem(R.id.menu_search).getActionView();
+			// Assumes current activity is the searchable activity
+			searchView.setSearchableInfo(searchManager
+					.getSearchableInfo(getActivity().getComponentName()));
+			// searchView.setIconifiedByDefault(false); // Do not iconify the
+			// widget; expand it by default
+			searchView.setQueryRefinementEnabled(true);
+			searchView.setSubmitButtonEnabled(false);
+		}
 	}
 
 	@Override
@@ -162,7 +173,11 @@ public class TaskListViewPagerFragment extends Fragment implements
 			dialog.show(getFragmentManager(), "fragment_create_list");
 			return true;
 		case R.id.menu_search:
-			getActivity().onSearchRequested();
+			// Always visible, but do this if not visible
+			// getActivity().onSearchRequested();
+			return true;
+		case R.id.menu_deletedtasks:
+			startActivity(new Intent(getActivity(), ActivitySearchDeleted_.class));
 			return true;
 		default:
 			return false;
@@ -203,7 +218,8 @@ public class TaskListViewPagerFragment extends Fragment implements
 	 * 
 	 * Guarantees default list is valid
 	 */
-	public static long getAList(final Context context, final long tempList, final String defaultlistkey) {
+	public static long getAList(final Context context, final long tempList,
+			final String defaultlistkey) {
 		long returnList = tempList;
 
 		if (returnList < 1) {

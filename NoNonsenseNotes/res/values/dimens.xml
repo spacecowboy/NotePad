@@ -23,6 +23,10 @@
     <dimen name="drag_grip_avoid_padding">16dp</dimen>
 
     <dimen name="listMargins">0dp</dimen>
+    
+    <!-- Used in search where no note fragment exists ever -->
+    <dimen name="listNoDetailWidth">@dimen/layout_match_parent</dimen>
+    
     <!-- list item min size -->
     <dimen name="list_item_min_size">48dp</dimen>
     <dimen name="widget_item_min_size">35dp</dimen>

@@ -3,9 +3,8 @@ package com.nononsenseapps.notepad.database;
 import java.security.InvalidParameterException;
 import java.util.Calendar;
 
-import com.googlecode.androidannotations.annotations.rest.Post;
-
 import android.annotation.SuppressLint;
+import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -31,8 +30,10 @@ public class Task extends DAO {
 	// SQL convention says Table name should be "singular"
 	public static final String TABLE_NAME = "task";
 	public static final String DELETE_TABLE_NAME = "deleted_task";
+	public static final String FTS3_DELETE_TABLE_NAME = "fts3_deleted_task";
 	public static final String HISTORY_TABLE_NAME = "history";
 	private static final String SECTIONED_DATE_VIEW = "sectioned_date_view";
+	public static final String FTS3_TABLE_NAME = "fts3_task";
 
 	public static String getSECTION_DATE_VIEW_NAME(final String listId) {
 		return new StringBuilder().append(SECTIONED_DATE_VIEW).append("_")
@@ -92,6 +93,9 @@ public class Task extends DAO {
 	public static final int LEGACYBASEITEMCODE = 222;
 	public static final int LEGACYVISIBLEURICODE = 223;
 	public static final int LEGACYVISIBLEITEMCODE = 224;
+	// Search URI
+	public static final int SEARCHCODE = 299;
+	public static final int SEARCHSUGGESTIONSCODE = 298;
 
 	public static void addMatcherUris(UriMatcher sURIMatcher) {
 		sURIMatcher
@@ -141,6 +145,13 @@ public class Task extends DAO {
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
 				LegacyDBHelper.NotePad.Notes.PATH_VISIBLE_NOTES + "/#",
 				LEGACYVISIBLEITEMCODE);
+		
+		// Search URI
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				FTS3_TABLE_NAME, SEARCHCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				SearchManager.SUGGEST_URI_PATH_QUERY + "*", SEARCHSUGGESTIONSCODE);
+		
 	}
 
 	// Used in indented query
@@ -171,6 +182,11 @@ public class Task extends DAO {
 	// Query for history of tasks
 	public static final Uri URI_TASK_HISTORY = Uri.withAppendedPath(URI,
 			HISTORY_TABLE_NAME);
+	
+	// Search URI
+	public static final Uri URI_SEARCH = Uri.withAppendedPath(
+			Uri.parse(MyContentProvider.SCHEME + MyContentProvider.AUTHORITY),
+			FTS3_TABLE_NAME);
 
 	// Special URI to use when a move is requested
 	// public static final Uri URI_WRITE_MOVESUBTREE = Uri.withAppendedPath(URI,
@@ -361,6 +377,90 @@ public class Task extends DAO {
 			"CREATE TRIGGER trigger_insert_").append(HISTORY_TABLE_NAME)
 			.append(" AFTER INSERT ON ").append(TABLE_NAME).append(" BEGIN ")
 			.append(HISTORY_TRIGGER_BODY).append(" END;").toString();
+	
+	// Delete search table
+	public static final String CREATE_FTS3_DELETE_TABLE = "CREATE VIRTUAL TABLE "
+			+ FTS3_DELETE_TABLE_NAME + " USING FTS3(" + Columns._ID
+			+ ", " + Columns.TITLE + ", " + Columns.NOTE
+			+ ");";
+	public static final String CREATE_FTS3_DELETED_INSERT_TRIGGER = new StringBuilder()
+	.append("CREATE TRIGGER deletedtask_fts3_insert AFTER INSERT ON ").append(DELETE_TABLE_NAME)
+	.append(" BEGIN ")
+	.append(" INSERT INTO ").append(FTS3_DELETE_TABLE_NAME).append(" (")
+	.append(arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE))
+	.append(") VALUES (")
+	.append(arrayToCommaString("new.", new String[] { Columns._ID,
+					Columns.TITLE, Columns.NOTE }))
+	.append(");")
+	.append(" END;")
+	.toString();
+	
+	public static final String CREATE_FTS3_DELETED_UPDATE_TRIGGER = new StringBuilder()
+	.append("CREATE TRIGGER deletedtask_fts3_update AFTER UPDATE OF ")
+	.append(arrayToCommaString(new String[] { Columns.TITLE,
+					Columns.NOTE })).append(" ON ")
+	.append(DELETE_TABLE_NAME)
+	.append(" BEGIN ")
+	.append(" UPDATE ").append(FTS3_DELETE_TABLE_NAME).append(" SET ")
+	.append(Columns.TITLE).append(" = new.").append(Columns.TITLE)
+	.append(",").append(Columns.NOTE).append(" = new.").append(Columns.NOTE)
+	.append(" WHERE ").append(Columns._ID).append(" IS new.").append(Columns._ID)
+	.append(";")
+	.append(" END;")
+	.toString();
+	public static final String CREATE_FTS3_DELETED_DELETE_TRIGGER = new StringBuilder()
+	.append("CREATE TRIGGER deletedtask_fts3_delete AFTER DELETE ON ")
+	.append(DELETE_TABLE_NAME)
+	.append(" BEGIN ")
+	.append(" DELETE FROM ").append(FTS3_DELETE_TABLE_NAME)
+	.append(" WHERE ").append(Columns._ID).append(" IS old.").append(Columns._ID)
+	.append(";")
+	.append(" END;")
+	.toString();
+	
+	// Search table
+	public static final String CREATE_FTS3_TABLE = "CREATE VIRTUAL TABLE "
+			+ FTS3_TABLE_NAME + " USING FTS3(" + Columns._ID
+			+ ", " + Columns.TITLE + ", " + Columns.NOTE
+			+ ");";
+	
+	public static final String CREATE_FTS3_INSERT_TRIGGER = new StringBuilder()
+	.append("CREATE TRIGGER task_fts3_insert AFTER INSERT ON ").append(TABLE_NAME)
+	.append(" BEGIN ")
+	.append(" INSERT INTO ").append(FTS3_TABLE_NAME).append(" (")
+	.append(arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE))
+	.append(") VALUES (")
+	.append(arrayToCommaString("new.", new String[] { Columns._ID,
+					Columns.TITLE, Columns.NOTE }))
+	.append(");")
+	.append(" END;")
+	.toString();
+	
+	public static final String CREATE_FTS3_UPDATE_TRIGGER = new StringBuilder()
+	.append("CREATE TRIGGER task_fts3_update AFTER UPDATE OF ")
+	.append(arrayToCommaString(new String[] { Columns.TITLE,
+					Columns.NOTE })).append(" ON ")
+	.append(TABLE_NAME)
+	.append(" BEGIN ")
+	.append(" UPDATE ").append(FTS3_TABLE_NAME).append(" SET ")
+	.append(Columns.TITLE).append(" = new.").append(Columns.TITLE)
+	.append(",").append(Columns.NOTE).append(" = new.").append(Columns.NOTE)
+	.append(" WHERE ").append(Columns._ID).append(" IS new.").append(Columns._ID)
+	.append(";")
+	.append(" END;")
+	.toString();
+	
+	public static final String CREATE_FTS3_DELETE_TRIGGER = new StringBuilder()
+	.append("CREATE TRIGGER task_fts3_delete AFTER DELETE ON ")
+	.append(TABLE_NAME)
+	.append(" BEGIN ")
+	.append(" DELETE FROM ").append(FTS3_TABLE_NAME)
+	.append(" WHERE ").append(Columns._ID).append(" IS old.").append(Columns._ID)
+	.append(";")
+	.append(" END;")
+	.toString();
+	
+	
 
 	/**
 	 * This is a view which returns the tasks in the specified list with headers

@@ -131,8 +131,10 @@
             android:launchMode="standard"
             android:theme="@style/ThemeGoogleNowDark"
             android:windowSoftInputMode="adjustResize" >
-            <meta-data android:name="android.app.default_searchable"
-                   android:value="com.nononsenseapps.notepad.ActivitySearch_" />
+            <meta-data
+                android:name="android.app.default_searchable"
+                android:value="com.nononsenseapps.notepad.ActivitySearch_" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -167,17 +169,33 @@
                 <!-- <data android:mimeType="text/*" android:path="*.txt" />  Would like to be able to open files in future -->
             </intent-filter>
         </activity>
-        
+
         <!-- Search activity -->
-        <activity android:name="com.nononsenseapps.notepad.ActivitySearch_" 
-            android:launchMode="singleTop">
-        <intent-filter>
-            <action android:name="android.intent.action.SEARCH" />
-        </intent-filter>
-        <meta-data android:name="android.app.searchable"
-                   android:resource="@xml/searchable"/>
-    </activity>
+        <activity
+            android:name="com.nononsenseapps.notepad.ActivitySearch_"
+            android:launchMode="singleTop" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+        </activity>
         
+        <!-- Deleted tasks activity -->
+        <activity
+            android:name="com.nononsenseapps.notepad.ActivitySearchDeleted_"
+            android:launchMode="singleTop" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchabledeleted" />
+        </activity>
+
         <!--
         <activity
             android:name="com.nononsenseapps.notepad.RightActivity"

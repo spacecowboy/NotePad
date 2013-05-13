@@ -3,6 +3,7 @@ package com.nononsenseapps.notepad.database;
 import com.nononsenseapps.helpers.UpdateNotifier;
 import com.nononsenseapps.notepad.MainActivity;
 
+import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
@@ -56,21 +57,29 @@ public class MyContentProvider extends ContentProvider {
 		case Task.LEGACYBASEURICODE:
 		case Task.LEGACYVISIBLEITEMCODE:
 		case Task.LEGACYVISIBLEURICODE:
+		case Task.SEARCHCODE:
+		case Task.SEARCHSUGGESTIONSCODE:
 			return Task.CONTENT_TYPE;
 		default:
-			//throw new IllegalArgumentException("Unknown URI " + uri);
+			// throw new IllegalArgumentException("Unknown URI " + uri);
 		}
-		
+
 		// Legacy URIs, above didn't work for some reason
-		if (uri.toString().startsWith(LegacyDBHelper.NotePad.Lists.CONTENT_URI.toString())
-				|| uri.toString().startsWith(LegacyDBHelper.NotePad.Lists.CONTENT_VISIBLE_URI.toString())) {
+		if (uri.toString().startsWith(
+				LegacyDBHelper.NotePad.Lists.CONTENT_URI.toString())
+				|| uri.toString().startsWith(
+						LegacyDBHelper.NotePad.Lists.CONTENT_VISIBLE_URI
+								.toString())) {
 			return TaskList.CONTENT_TYPE;
 		}
-		else if (uri.toString().startsWith(LegacyDBHelper.NotePad.Notes.CONTENT_URI.toString())
-				|| uri.toString().startsWith(LegacyDBHelper.NotePad.Notes.CONTENT_VISIBLE_URI.toString())) {
+		else if (uri.toString().startsWith(
+				LegacyDBHelper.NotePad.Notes.CONTENT_URI.toString())
+				|| uri.toString().startsWith(
+						LegacyDBHelper.NotePad.Notes.CONTENT_VISIBLE_URI
+								.toString())) {
 			return Task.CONTENT_TYPE;
 		}
-		
+
 		throw new IllegalArgumentException("Unknown URI " + uri);
 	}
 
@@ -344,6 +353,14 @@ public class MyContentProvider extends ContentProvider {
 			result += safeDeleteItem(db, RemoteTask.TABLE_NAME, uri, selection,
 					selectionArgs);
 			break;
+		case Task.DELETEDQUERYCODE:
+			result += db.delete(Task.DELETE_TABLE_NAME, selection,
+					selectionArgs);
+			break;
+		case Task.DELETEDITEMCODE:
+			result += safeDeleteItem(db, Task.DELETE_TABLE_NAME, uri,
+					selection, selectionArgs);
+			break;
 		default:
 			throw new IllegalArgumentException("Faulty delete-URI provided: "
 					+ uri.toString());
@@ -406,28 +423,41 @@ public class MyContentProvider extends ContentProvider {
 					Task.URI);
 			break;
 		case Task.DELETEDQUERYCODE:
-			result = DatabaseHandler
-					.getInstance(getContext())
-					.getReadableDatabase()
-					.query(Task.DELETE_TABLE_NAME, projection, selection,
-							selectionArgs, null, null, sortOrder);
-
-			result.setNotificationUri(getContext().getContentResolver(),
-					Task.URI_DELETED_QUERY);
-			break;
-		case Task.DELETEDITEMCODE:
-			id = Long.parseLong(uri.getLastPathSegment());
+			// TODO
+			final String[] query = sanitize(selectionArgs);
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
 					.query(Task.DELETE_TABLE_NAME,
-							projection,
-							Task.whereIdIs(selection),
-							Task.joinArrays(selectionArgs,
-									new String[] { String.valueOf(id) }), null,
-							null, null);
-			result.setNotificationUri(getContext().getContentResolver(), uri);
+							Task.Columns.DELETEFIELDS,
+							Task.Columns._ID
+									+ " IN (SELECT "
+									+ Task.Columns._ID
+									+ " FROM "
+									+ Task.FTS3_DELETE_TABLE_NAME
+									+ ((query[0].isEmpty() || query[0]
+											.equals("'*'")) ? ")"
+											: (" WHERE "
+													+ Task.FTS3_DELETE_TABLE_NAME + " MATCH ?)")),
+							(query[0].isEmpty() || query[0].equals("'*'")) ? null
+									: query, null, null, sortOrder);
+
+			// result.setNotificationUri(getContext().getContentResolver(),
+			// Task.URI_DELETED_QUERY);
 			break;
+		// case Task.DELETEDITEMCODE:
+		// id = Long.parseLong(uri.getLastPathSegment());
+		// result = DatabaseHandler
+		// .getInstance(getContext())
+		// .getReadableDatabase()
+		// .query(Task.DELETE_TABLE_NAME,
+		// projection,
+		// Task.whereIdIs(selection),
+		// Task.joinArrays(selectionArgs,
+		// new String[] { String.valueOf(id) }), null,
+		// null, null);
+		// result.setNotificationUri(getContext().getContentResolver(), uri);
+		// break;
 		case Task.BASEURICODE:
 			result = DatabaseHandler
 					.getInstance(getContext())
@@ -548,15 +578,68 @@ public class MyContentProvider extends ContentProvider {
 							selectionArgs, null, null, sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
+		case Task.SEARCHCODE:
+			result = DatabaseHandler
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(Task.TABLE_NAME,
+							Task.Columns.FIELDS,
+							Task.Columns._ID + " IN (SELECT "
+									+ Task.Columns._ID + " FROM "
+									+ Task.FTS3_TABLE_NAME + " WHERE "
+									+ Task.FTS3_TABLE_NAME + " MATCH ?)",
+							sanitize(selectionArgs), null, null, sortOrder);
+			result.setNotificationUri(getContext().getContentResolver(),
+					Task.URI_SEARCH);
+			break;
 		case Task.LEGACYBASEURICODE:
 		case Task.LEGACYVISIBLEURICODE:
 			// TODO
 		default:
-			throw new IllegalArgumentException("Faulty queryURI provided: "
-					+ uri.toString());
+			if (uri.toString().contains(SearchManager.SUGGEST_URI_PATH_QUERY)) {
+				result = DatabaseHandler
+						.getInstance(getContext())
+						.getReadableDatabase()
+						.query(Task.FTS3_TABLE_NAME,
+								new String[] {
+										Task.Columns._ID,
+										Task.Columns._ID
+												+ " AS "
+												+ SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID,
+										Task.Columns.TITLE
+												+ " AS "
+												+ SearchManager.SUGGEST_COLUMN_TEXT_1,
+										Task.Columns.NOTE
+												+ " AS "
+												+ SearchManager.SUGGEST_COLUMN_TEXT_2 },
+								Task.FTS3_TABLE_NAME + " MATCH ?",
+								sanitize(selectionArgs), null, null,
+								SearchManager.SUGGEST_COLUMN_TEXT_1);
+				result.setNotificationUri(getContext().getContentResolver(),
+						Task.URI_SEARCH);
+			}
+			else {
+				throw new IllegalArgumentException("Faulty queryURI provided: "
+						+ uri.toString());
+			}
 		}
 
 		return result;
+	}
+
+	private String[] sanitize(final String... args) {
+		if (args.length == 0) return new String[] { "" };
+
+		final StringBuilder result = new StringBuilder();
+		for (String query : args) {
+			for (String part : query.split("\\s")) {
+				if (result.length() > 0) result.append(" AND ");
+				// Wrap each word in quotes and add star to the end
+				result.append("'" + part + "*'");
+			}
+		}
+
+		return new String[] { result.toString() };
 	}
 
 }

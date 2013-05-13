@@ -59,6 +59,9 @@
     <string name="sort_list_due">Order by due date</string>
     <string name="sort_list_updated">Order by latest updated</string>
     <string name="sort_list_manual">Order manually</string>
+    <string name="search_description">Notes and tasks</string>
+    <string name="view_deletedtasks">View deleted</string>
+    <string name="restore">Restore</string>
     <string name="search_hint">Search</string>
     <string name="settings_theme">Current theme</string>
     <string name="settings_theme_dialog">Use theme</string>
