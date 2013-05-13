@@ -423,7 +423,6 @@ public class MyContentProvider extends ContentProvider {
 					Task.URI);
 			break;
 		case Task.DELETEDQUERYCODE:
-			// TODO
 			final String[] query = sanitize(selectionArgs);
 			result = DatabaseHandler
 					.getInstance(getContext())
@@ -442,8 +441,8 @@ public class MyContentProvider extends ContentProvider {
 							(query[0].isEmpty() || query[0].equals("'*'")) ? null
 									: query, null, null, sortOrder);
 
-			// result.setNotificationUri(getContext().getContentResolver(),
-			// Task.URI_DELETED_QUERY);
+			result.setNotificationUri(getContext().getContentResolver(),
+					Task.URI_DELETED_QUERY);
 			break;
 		// case Task.DELETEDITEMCODE:
 		// id = Long.parseLong(uri.getLastPathSegment());

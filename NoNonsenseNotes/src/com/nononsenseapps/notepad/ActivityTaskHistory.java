@@ -6,6 +6,7 @@ import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.SeekBarProgressChange;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
@@ -43,52 +44,10 @@ public class ActivityTaskHistory extends FragmentActivity {
 	@ViewById
 	TitleNoteTextView taskText;
 
-	protected void readAndSetSettings() {
-		// Read settings and set
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
-
-		final String theme = prefs.getString(MainPrefs.KEY_THEME,
-				MainPrefs.THEME_LIGHT_ICS_AB);
-		if (MainPrefs.THEME_LIGHT_ICS_AB.equals(theme)) {
-			setTheme(R.style.ThemeHoloLightDarkActonBar);
-		}
-		else if (MainPrefs.THEME_BLACK.equals(theme)) {
-			setTheme(R.style.ThemeHoloBlack);
-		}
-		else if (theme.equals(getResources().getString(
-				R.string.const_theme_googlenow_dark))) {
-			setTheme(R.style.ThemeGoogleNowDark);
-		}
-		else {
-			setTheme(R.style.ThemeHolo);
-		}
-
-		// Set language
-		Configuration config = getResources().getConfiguration();
-
-		String lang = prefs.getString(getString(R.string.pref_locale), "");
-		if (!config.locale.toString().equals(lang)) {
-			Locale locale;
-			if ("".equals(lang))
-				locale = Locale.getDefault();
-			else if (lang.length() == 5) {
-				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
-			}
-			else {
-				locale = new Locale(lang.substring(0, 2));
-			}
-			// Locale.setDefault(locale);
-			config.locale = locale;
-			getResources().updateConfiguration(config,
-					getResources().getDisplayMetrics());
-		}
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// Must do this before super.onCreate
-		readAndSetSettings();
+		ActivityHelper.readAndSetSettings(this);
 		super.onCreate(savedInstanceState);
 
 		// Intent must contain a task id

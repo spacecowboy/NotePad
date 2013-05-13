@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.HashMap;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
 
@@ -20,6 +21,7 @@ import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.ui.DateView;
@@ -424,6 +426,7 @@ public class TaskListFragment extends Fragment implements
 			ActionMode mMode;
 			final PasswordConfirmedListener pListener = new PasswordConfirmedListener() {
 				@Override
+				@Background
 				public void onPasswordConfirmed() {
 					for (final Task t : tasks.values()) {
 						try {
@@ -484,7 +487,7 @@ public class TaskListFragment extends Fragment implements
 			}
 
 			@Override
-			public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
+			public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
 				// Respond to clicks on the actions in the CAB
 				boolean finish = false;
 				switch (item.getItemId()) {
@@ -520,27 +523,13 @@ public class TaskListFragment extends Fragment implements
 						delpf.show(getFragmentManager(), "multi_delete_verify");
 					}
 					else {
-						for (final Task t : tasks.values()) {
-							try {
-								t.delete(getActivity());
-							}
-							catch (Exception e) {
-								// Deleting a task that has already been deleted
-								// should under no circumstances do stupid stuff
-							}
-						}
-						try {
-							Toast.makeText(
-									getActivity(),
-									getResources().getQuantityString(
-											R.plurals.notedeleted_msg,
-											tasks.size(), tasks.size()),
-									Toast.LENGTH_SHORT).show();
-						}
-						catch (Exception e) {
-							// Protect against faulty translations
-						}
-						finish = true;
+						DialogDeleteTask.showDialog(getFragmentManager(), -1,
+								new DialogConfirmedListener() {
+									@Override
+									public void onConfirm() {
+										pListener.onPasswordConfirmed();
+									}
+								});
 					}
 					break;
 				default:
