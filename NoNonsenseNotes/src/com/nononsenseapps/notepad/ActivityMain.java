@@ -472,11 +472,16 @@ public class ActivityMain extends FragmentActivity implements
 	/**
 	 * Returns the text that has been shared with the app. Does not check
 	 * anything other than EXTRA_SUBJECT AND EXTRA_TEXT
+	 * 
+	 * If it is a Google Now intent, will ignore the subject which is
+	 * "Note to self"
 	 */
 	String getNoteShareText(final Intent intent) {
 		StringBuilder retval = new StringBuilder();
 		// possible title
-		if (intent.getExtras().containsKey(Intent.EXTRA_SUBJECT)) {
+		if (intent.getExtras().containsKey(Intent.EXTRA_SUBJECT)
+				&& !"com.google.android.gm.action.AUTO_SEND".equals(intent
+						.getAction())) {
 			retval.append(intent.getExtras().get(Intent.EXTRA_SUBJECT));
 		}
 		// possible note
