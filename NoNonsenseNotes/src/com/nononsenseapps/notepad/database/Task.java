@@ -45,7 +45,9 @@ public class Task extends DAO {
 	static final String OVERDUE = "strftime('%s', '1970-01-01') * 1000";
 	// Today should be from NOW...
 	static final String TODAY_START = "strftime('%s','now', 'utc') * 1000";
-	//static final String TODAY_START = "strftime('%s','now','localtime','start of day', 'utc') * 1000";
+
+	// static final String TODAY_START =
+	// "strftime('%s','now','localtime','start of day', 'utc') * 1000";
 
 	static final String TODAY_PLUS(final int offset) {
 		return "strftime('%s','now','localtime','+" + Integer.toString(offset)
@@ -137,23 +139,23 @@ public class Task extends DAO {
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
 				LegacyDBHelper.NotePad.Notes.NOTES, LEGACYBASEURICODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
-				LegacyDBHelper.NotePad.Notes.NOTES + "/#",
-				LEGACYBASEITEMCODE);
+				LegacyDBHelper.NotePad.Notes.NOTES + "/#", LEGACYBASEITEMCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
 				LegacyDBHelper.NotePad.Notes.VISIBLE_NOTES,
 				LEGACYVISIBLEURICODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
 				LegacyDBHelper.NotePad.Notes.VISIBLE_NOTES + "/#",
 				LEGACYVISIBLEITEMCODE);
-		
+
 		// Search URI
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
-				FTS3_TABLE_NAME, SEARCHCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, FTS3_TABLE_NAME,
+				SEARCHCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
 				SearchManager.SUGGEST_URI_PATH_QUERY, SEARCHSUGGESTIONSCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
-				SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCHSUGGESTIONSCODE);
-		
+				SearchManager.SUGGEST_URI_PATH_QUERY + "/*",
+				SEARCHSUGGESTIONSCODE);
+
 	}
 
 	// Used in indented query
@@ -184,7 +186,7 @@ public class Task extends DAO {
 	// Query for history of tasks
 	public static final Uri URI_TASK_HISTORY = Uri.withAppendedPath(URI,
 			HISTORY_TABLE_NAME);
-	
+
 	// Search URI
 	public static final Uri URI_SEARCH = Uri.withAppendedPath(
 			Uri.parse(MyContentProvider.SCHEME + MyContentProvider.AUTHORITY),
@@ -379,90 +381,80 @@ public class Task extends DAO {
 			"CREATE TRIGGER trigger_insert_").append(HISTORY_TABLE_NAME)
 			.append(" AFTER INSERT ON ").append(TABLE_NAME).append(" BEGIN ")
 			.append(HISTORY_TRIGGER_BODY).append(" END;").toString();
-	
+
 	// Delete search table
 	public static final String CREATE_FTS3_DELETE_TABLE = "CREATE VIRTUAL TABLE "
-			+ FTS3_DELETE_TABLE_NAME + " USING FTS3(" + Columns._ID
-			+ ", " + Columns.TITLE + ", " + Columns.NOTE
-			+ ");";
+			+ FTS3_DELETE_TABLE_NAME
+			+ " USING FTS3("
+			+ Columns._ID
+			+ ", "
+			+ Columns.TITLE + ", " + Columns.NOTE + ");";
 	public static final String CREATE_FTS3_DELETED_INSERT_TRIGGER = new StringBuilder()
-	.append("CREATE TRIGGER deletedtask_fts3_insert AFTER INSERT ON ").append(DELETE_TABLE_NAME)
-	.append(" BEGIN ")
-	.append(" INSERT INTO ").append(FTS3_DELETE_TABLE_NAME).append(" (")
-	.append(arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE))
-	.append(") VALUES (")
-	.append(arrayToCommaString("new.", new String[] { Columns._ID,
-					Columns.TITLE, Columns.NOTE }))
-	.append(");")
-	.append(" END;")
-	.toString();
-	
+			.append("CREATE TRIGGER deletedtask_fts3_insert AFTER INSERT ON ")
+			.append(DELETE_TABLE_NAME)
+			.append(" BEGIN ")
+			.append(" INSERT INTO ")
+			.append(FTS3_DELETE_TABLE_NAME)
+			.append(" (")
+			.append(arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE))
+			.append(") VALUES (")
+			.append(arrayToCommaString("new.", new String[] { Columns._ID,
+					Columns.TITLE, Columns.NOTE })).append(");")
+			.append(" END;").toString();
+
 	public static final String CREATE_FTS3_DELETED_UPDATE_TRIGGER = new StringBuilder()
-	.append("CREATE TRIGGER deletedtask_fts3_update AFTER UPDATE OF ")
-	.append(arrayToCommaString(new String[] { Columns.TITLE,
-					Columns.NOTE })).append(" ON ")
-	.append(DELETE_TABLE_NAME)
-	.append(" BEGIN ")
-	.append(" UPDATE ").append(FTS3_DELETE_TABLE_NAME).append(" SET ")
-	.append(Columns.TITLE).append(" = new.").append(Columns.TITLE)
-	.append(",").append(Columns.NOTE).append(" = new.").append(Columns.NOTE)
-	.append(" WHERE ").append(Columns._ID).append(" IS new.").append(Columns._ID)
-	.append(";")
-	.append(" END;")
-	.toString();
+			.append("CREATE TRIGGER deletedtask_fts3_update AFTER UPDATE OF ")
+			.append(arrayToCommaString(new String[] { Columns.TITLE,
+					Columns.NOTE })).append(" ON ").append(DELETE_TABLE_NAME)
+			.append(" BEGIN ").append(" UPDATE ")
+			.append(FTS3_DELETE_TABLE_NAME).append(" SET ")
+			.append(Columns.TITLE).append(" = new.").append(Columns.TITLE)
+			.append(",").append(Columns.NOTE).append(" = new.")
+			.append(Columns.NOTE).append(" WHERE ").append(Columns._ID)
+			.append(" IS new.").append(Columns._ID).append(";").append(" END;")
+			.toString();
 	public static final String CREATE_FTS3_DELETED_DELETE_TRIGGER = new StringBuilder()
-	.append("CREATE TRIGGER deletedtask_fts3_delete AFTER DELETE ON ")
-	.append(DELETE_TABLE_NAME)
-	.append(" BEGIN ")
-	.append(" DELETE FROM ").append(FTS3_DELETE_TABLE_NAME)
-	.append(" WHERE ").append(Columns._ID).append(" IS old.").append(Columns._ID)
-	.append(";")
-	.append(" END;")
-	.toString();
-	
+			.append("CREATE TRIGGER deletedtask_fts3_delete AFTER DELETE ON ")
+			.append(DELETE_TABLE_NAME).append(" BEGIN ")
+			.append(" DELETE FROM ").append(FTS3_DELETE_TABLE_NAME)
+			.append(" WHERE ").append(Columns._ID).append(" IS old.")
+			.append(Columns._ID).append(";").append(" END;").toString();
+
 	// Search table
 	public static final String CREATE_FTS3_TABLE = "CREATE VIRTUAL TABLE "
-			+ FTS3_TABLE_NAME + " USING FTS3(" + Columns._ID
-			+ ", " + Columns.TITLE + ", " + Columns.NOTE
-			+ ");";
-	
+			+ FTS3_TABLE_NAME + " USING FTS3(" + Columns._ID + ", "
+			+ Columns.TITLE + ", " + Columns.NOTE + ");";
+
 	public static final String CREATE_FTS3_INSERT_TRIGGER = new StringBuilder()
-	.append("CREATE TRIGGER task_fts3_insert AFTER INSERT ON ").append(TABLE_NAME)
-	.append(" BEGIN ")
-	.append(" INSERT INTO ").append(FTS3_TABLE_NAME).append(" (")
-	.append(arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE))
-	.append(") VALUES (")
-	.append(arrayToCommaString("new.", new String[] { Columns._ID,
-					Columns.TITLE, Columns.NOTE }))
-	.append(");")
-	.append(" END;")
-	.toString();
-	
+			.append("CREATE TRIGGER task_fts3_insert AFTER INSERT ON ")
+			.append(TABLE_NAME)
+			.append(" BEGIN ")
+			.append(" INSERT INTO ")
+			.append(FTS3_TABLE_NAME)
+			.append(" (")
+			.append(arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE))
+			.append(") VALUES (")
+			.append(arrayToCommaString("new.", new String[] { Columns._ID,
+					Columns.TITLE, Columns.NOTE })).append(");")
+			.append(" END;").toString();
+
 	public static final String CREATE_FTS3_UPDATE_TRIGGER = new StringBuilder()
-	.append("CREATE TRIGGER task_fts3_update AFTER UPDATE OF ")
-	.append(arrayToCommaString(new String[] { Columns.TITLE,
-					Columns.NOTE })).append(" ON ")
-	.append(TABLE_NAME)
-	.append(" BEGIN ")
-	.append(" UPDATE ").append(FTS3_TABLE_NAME).append(" SET ")
-	.append(Columns.TITLE).append(" = new.").append(Columns.TITLE)
-	.append(",").append(Columns.NOTE).append(" = new.").append(Columns.NOTE)
-	.append(" WHERE ").append(Columns._ID).append(" IS new.").append(Columns._ID)
-	.append(";")
-	.append(" END;")
-	.toString();
-	
+			.append("CREATE TRIGGER task_fts3_update AFTER UPDATE OF ")
+			.append(arrayToCommaString(new String[] { Columns.TITLE,
+					Columns.NOTE })).append(" ON ").append(TABLE_NAME)
+			.append(" BEGIN ").append(" UPDATE ").append(FTS3_TABLE_NAME)
+			.append(" SET ").append(Columns.TITLE).append(" = new.")
+			.append(Columns.TITLE).append(",").append(Columns.NOTE)
+			.append(" = new.").append(Columns.NOTE).append(" WHERE ")
+			.append(Columns._ID).append(" IS new.").append(Columns._ID)
+			.append(";").append(" END;").toString();
+
 	public static final String CREATE_FTS3_DELETE_TRIGGER = new StringBuilder()
-	.append("CREATE TRIGGER task_fts3_delete AFTER DELETE ON ")
-	.append(TABLE_NAME)
-	.append(" BEGIN ")
-	.append(" DELETE FROM ").append(FTS3_TABLE_NAME)
-	.append(" WHERE ").append(Columns._ID).append(" IS old.").append(Columns._ID)
-	.append(";")
-	.append(" END;")
-	.toString();
-	
-	
+			.append("CREATE TRIGGER task_fts3_delete AFTER DELETE ON ")
+			.append(TABLE_NAME).append(" BEGIN ").append(" DELETE FROM ")
+			.append(FTS3_TABLE_NAME).append(" WHERE ").append(Columns._ID)
+			.append(" IS old.").append(Columns._ID).append(";").append(" END;")
+			.toString();
 
 	/**
 	 * This is a view which returns the tasks in the specified list with headers
@@ -908,8 +900,8 @@ public class Task extends DAO {
 	}
 
 	/**
-	 * Convenience method for normal operations. Updates "updated" field to specified
-	 * Returns number of db-rows affected. Fail if < 1
+	 * Convenience method for normal operations. Updates "updated" field to
+	 * specified Returns number of db-rows affected. Fail if < 1
 	 */
 	public int save(final Context context, final long updated) {
 		int result = 0;
@@ -928,7 +920,7 @@ public class Task extends DAO {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Convenience method for normal operations. Updates "updated" field.
 	 * Returns number of db-rows affected. Fail if < 1
@@ -951,6 +943,8 @@ public class Task extends DAO {
 					final ContentValues values = new ContentValues();
 					values.put(Columns.COMPLETED, completed ? Calendar
 							.getInstance().getTimeInMillis() : null);
+					values.put(Columns.UPDATED, Calendar.getInstance()
+							.getTimeInMillis());
 					String idStrings = "(";
 					for (Long id : ids) {
 						idStrings += id + ",";
@@ -966,7 +960,7 @@ public class Task extends DAO {
 			task.execute(ids);
 		}
 	}
-	
+
 	public int moveTo(final ContentResolver resolver, final Task targetTask) {
 		if (targetTask.dblist == dblist) {
 			if (targetTask.left < left) {
@@ -1254,14 +1248,16 @@ public class Task extends DAO {
 	}
 
 	public String getSQLMoveItemLeft(final ContentValues values) {
-		if (!values.containsKey(TARGETPOS) || values.getAsLong(TARGETPOS) >= left) {
+		if (!values.containsKey(TARGETPOS)
+				|| values.getAsLong(TARGETPOS) >= left) {
 			return null;
 		}
 		return getSQLMoveItem(Columns.LEFT, values.getAsLong(TARGETPOS));
 	}
 
 	public String getSQLMoveItemRight(final ContentValues values) {
-		if (!values.containsKey(TARGETPOS) || values.getAsLong(TARGETPOS) <= right) {
+		if (!values.containsKey(TARGETPOS)
+				|| values.getAsLong(TARGETPOS) <= right) {
 			return null;
 		}
 		return getSQLMoveItem(Columns.RIGHT, values.getAsLong(TARGETPOS));
@@ -1276,8 +1272,8 @@ public class Task extends DAO {
 	 */
 	private String getSQLMoveItem(final String edgeCol, final Long edgeVal) {
 		boolean movingLeft = Columns.LEFT.equals(edgeCol);
-		return String.format(
-				new StringBuilder("UPDATE %1$s SET ")
+		return String
+				.format(new StringBuilder("UPDATE %1$s SET ")
 						/*
 						 * Left item follows Left = Left + ...
 						 */
@@ -1292,7 +1288,8 @@ public class Task extends DAO {
 						.append(" (%7$d - %5$d")
 						.append(movingLeft ? ") " : " -1) ")
 						// Sub items take one step opposite
-						// Careful if moving inside subtree, which can only happen when moving right.
+						// Careful if moving inside subtree, which can only
+						// happen when moving right.
 						// Then only left position changes
 						.append(" WHEN %2$s BETWEEN (%5$d + 1) AND (%6$d - 1) ")
 						.append(" THEN ")
@@ -1334,10 +1331,9 @@ public class Task extends DAO {
 						// Not in target range, no change
 						.append(" ELSE 0 END ")
 						// And limit to the list in question
-						.append(" WHERE %8$s IS %9$d;")
-						.toString(), TABLE_NAME,
-				Columns.LEFT, Columns.RIGHT, edgeCol, left, right, edgeVal,
-				Columns.DBLIST, dblist);
+						.append(" WHERE %8$s IS %9$d;").toString(), TABLE_NAME,
+						Columns.LEFT, Columns.RIGHT, edgeCol, left, right,
+						edgeVal, Columns.DBLIST, dblist);
 	}
 
 	/*
