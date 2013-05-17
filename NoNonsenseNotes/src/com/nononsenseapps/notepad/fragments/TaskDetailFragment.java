@@ -12,6 +12,7 @@ import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.ActivityLocation_;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.ActivityTaskHistory_;
@@ -864,6 +865,14 @@ public class TaskDetailFragment extends Fragment implements
 					not.repeats = checkedDays;
 					openRepeatField.setText(not.getRepeatAsText(getActivity()));
 					not.saveInBackground(getActivity(), true);
+				}
+			});
+			
+			TextView location = (TextView) nv.findViewById(R.id.notificationLocation);
+			location.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					startActivity(new Intent(getActivity(), ActivityLocation_.class));
 				}
 			});
 
