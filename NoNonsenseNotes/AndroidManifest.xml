@@ -130,7 +130,7 @@
             android:label="Notes2013"
             android:launchMode="standard"
             android:theme="@style/ThemeGoogleNowDark"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="stateHidden|adjustResize" >
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value="com.nononsenseapps.notepad.ActivitySearch_" />

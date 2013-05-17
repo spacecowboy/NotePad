@@ -31,6 +31,8 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
@@ -42,6 +44,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -302,14 +305,15 @@ public class TaskDetailFragment extends Fragment implements
 		localTime.set(Calendar.YEAR, year);
 		localTime.set(Calendar.MONTH, monthOfYear);
 		localTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-		
-		// set to 23:59 to be more or less consistent with earlier date only implementation
+
+		// set to 23:59 to be more or less consistent with earlier date only
+		// implementation
 		localTime.set(Calendar.HOUR_OF_DAY, 23);
 		localTime.set(Calendar.MINUTE, 59);
-		
+
 		mTask.due = localTime.getTimeInMillis();
 		setDueText();
-		
+
 		// and ask for time as well
 		final TimePickerDialogFragment picker = TimePickerDialogFragment
 				.newInstance();
@@ -414,6 +418,26 @@ public class TaskDetailFragment extends Fragment implements
 		});
 		// Lock fields
 		setFieldStatus();
+
+		// Open keyboard on new notes so users can start typing directly
+		// need small delay (100ms) for it to open consistently
+		if (mTask._id < 1) {
+			(new Handler()).postDelayed(new Runnable() {
+				public void run() {
+					MotionEvent e = MotionEvent.obtain(
+							SystemClock.uptimeMillis(),
+							SystemClock.uptimeMillis(),
+							MotionEvent.ACTION_DOWN, 0, 0, 0);
+					taskText.dispatchTouchEvent(e);
+					e.recycle();
+					e = MotionEvent.obtain(SystemClock.uptimeMillis(),
+							SystemClock.uptimeMillis(), MotionEvent.ACTION_UP,
+							0, 0, 0);
+					taskText.dispatchTouchEvent(e);
+					e.recycle();
+				}
+			}, 100);
+		}
 	}
 
 	/**
@@ -450,7 +474,8 @@ public class TaskDetailFragment extends Fragment implements
 
 		if (item != null) {
 			// Fetch and store ShareActionProvider
-			mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+			mShareActionProvider = (ShareActionProvider) item
+					.getActionProvider();
 			setShareIntent("");
 		}
 	}
@@ -496,10 +521,11 @@ public class TaskDetailFragment extends Fragment implements
 			return true;
 		case R.id.menu_timemachine:
 			if (mTask != null && mTask._id > 0) {
-				Intent timeIntent = new Intent(getActivity(), ActivityTaskHistory_.class);
+				Intent timeIntent = new Intent(getActivity(),
+						ActivityTaskHistory_.class);
 				timeIntent.putExtra(Task.Columns._ID, mTask._id);
 				startActivityForResult(timeIntent, 1);
-				//ActivityTaskHistory.start(getActivity(), mTask._id);
+				// ActivityTaskHistory.start(getActivity(), mTask._id);
 			}
 			return true;
 		case R.id.menu_delete:
@@ -569,7 +595,7 @@ public class TaskDetailFragment extends Fragment implements
 				mTask != null && mTask.locked);
 		menu.findItem(R.id.menu_share).setEnabled(!isLocked());
 	}
-	
+
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode == 1) {
@@ -622,28 +648,26 @@ public class TaskDetailFragment extends Fragment implements
 				// Set the intent to open the task.
 				// So we dont create a new one on rotation for example
 				fixIntent();
-				
 
 				// TODO, should restart notification loader for new tasks
 			}
 		}
 	}
-	
+
 	void fixIntent() {
-		if (getActivity() == null)
-			return;
-		
+		if (getActivity() == null) return;
+
 		final Intent orgIntent = getActivity().getIntent();
-		if (orgIntent == null || !orgIntent.getAction().equals(Intent.ACTION_INSERT))
-			return;
-		
-		if (mTask == null || mTask._id < 1)
-			return;
-		
+		if (orgIntent == null
+				|| !orgIntent.getAction().equals(Intent.ACTION_INSERT)) return;
+
+		if (mTask == null || mTask._id < 1) return;
+
 		final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
-				.setClass(getActivity(), ActivityMain_.class).setData(mTask.getUri())
+				.setClass(getActivity(), ActivityMain_.class)
+				.setData(mTask.getUri())
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, mTask.dblist);
-		
+
 		getActivity().setIntent(intent);
 	}
 
@@ -807,11 +831,13 @@ public class TaskDetailFragment extends Fragment implements
 							}
 						}
 					});
-			
-			final TextView openRepeatField = (TextView) nv.findViewById(R.id.openRepeatField);
-			final View closeRepeatField = nv.findViewById(R.id.closeRepeatField);
+
+			final TextView openRepeatField = (TextView) nv
+					.findViewById(R.id.openRepeatField);
+			final View closeRepeatField = nv
+					.findViewById(R.id.closeRepeatField);
 			final View repeatDetails = nv.findViewById(R.id.repeatDetails);
-			
+
 			// set text on this
 			openRepeatField.setText(not.getRepeatAsText(getActivity()));
 			openRepeatField.setOnClickListener(new OnClickListener() {
@@ -828,11 +854,11 @@ public class TaskDetailFragment extends Fragment implements
 					openRepeatField.setVisibility(View.VISIBLE);
 				}
 			});
-			
+
 			WeekDaysView days = ((WeekDaysView) nv.findViewById(R.id.weekdays));
 			days.setCheckedDays(not.repeats);
 			days.setOnCheckedDaysChangedListener(new onCheckedDaysChangeListener() {
-				
+
 				@Override
 				public void onChange(final long checkedDays) {
 					not.repeats = checkedDays;
@@ -855,7 +881,7 @@ public class TaskDetailFragment extends Fragment implements
 		}
 	}
 
-	//@Override
+	// @Override
 	public void onTimeTravel(Intent data) {
 		if (taskText != null) {
 			taskText.setText(data
