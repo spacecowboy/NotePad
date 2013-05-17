@@ -11,3 +11,5 @@ proguard/
 .settings*
 translate-temp/
 *~
+*iml
+.idea

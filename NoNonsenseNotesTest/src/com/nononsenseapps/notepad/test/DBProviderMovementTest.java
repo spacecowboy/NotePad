@@ -684,7 +684,8 @@ public class DBProviderMovementTest  extends AndroidTestCase  {
 		
 		final Task orgTask = orgTasks.get(0);
 		
-		orgTask.title = "HABANA MAMAMANA";
+		final String t = "HABANA MAMAMANA";
+		orgTask.title = t;
 		
 		resolver.update(orgTask.getUri(), orgTask.getContent(), null, null);
 		resolver.delete(orgTask.getUri(), null, null);
@@ -695,7 +696,7 @@ public class DBProviderMovementTest  extends AndroidTestCase  {
 		
 		// Get the item from backup table instead
 		Cursor c = resolver.query(Task.URI_DELETED_QUERY, Task.Columns.DELETEFIELDS, Task.Columns.TITLE + " IS ?", 
-				new String[] {orgTask.title}, null);
+				new String[] {t}, null);
 		
 		assertTrue("Task should be found in delete table after delete!", c.moveToFirst());
 		
