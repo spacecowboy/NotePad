@@ -31,8 +31,23 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:autoLink="web|email|map"
-            android:text="\nA new translation tool has been implemented which makes it super easy for anyone to help translate the app to their native language.\nIt can be found at http://translate.nononsenseapps.com" />
+            android:text="\nGo to http://translate.nononsenseapps.com to help translate the app to your native language." />
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\nVersion 5.0"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="\nApp has been rewritten almost from scratch and much of the UI has been updated\nReminders can be set to repeat\nItems can be sorted manually\nLists can have individual sort options\nDeleted notes can be restored\nView and restore changes in the Time Machine\nCustomizable date formats\nWidget has been updated and given a preview configuration\nSay 'note to self' in Google search app to create a new note" />
+        
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -64,110 +79,6 @@
             android:paddingRight="20dp"
             android:text="\nAdded some functionality to support the latest version of the DashClock Extension.\nFixed new button appearing twice in certain cases." />
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nVersion 4.4.4"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="\nAdded &apos;New Note&apos;-button to editor on phones.\nNotifications are now removed/cancelled when notes are deleted.\nFixed incorrect ordering of due dates in widgets in some timezones where a note due tomorrow would be shown under today for example.\nRemoved Honeycomb compatibility.\nUpdated translations." />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nVersion 4.4.3"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="\nFixed issue where app did not download more than 100 tasks, visible or not. Now downloads all tasks and lists correctly.\nUpdated translations." />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nVersion 4.4.2"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="\nFixed crash when selecting vibration for notifications. Had forgotten the permission.\n Will no longer clear new notes when SyncOnAppStart was enabled.\n Some other sync bugs fixed.\n Better date handling in Japanese.\n Updated translations." />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nVersion 4.4.1"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="\nFixed crash that could happen in notification settings.\nUpdated translations and added Korean." />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nVersion 4.4"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="\nReminders/notifications for notes.\nUpdated translations.\nFixed a crash when selecting items with Turkish language.\nFixed a crash if you toggled sync options before setting an account." />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nVersion 4.3"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="\nAdded additional sync options.\nSome menu items have been tweaked.\nMoved change log to settings.\nOptimized code and reduced size of the app.\nUpdated translations." />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nVersion 4.2.1"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold" />
-
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="\nHiding some widget parts crashed on pre JellyBean. Fixed.\nFixed checkbox behaviour in widget on JellyBean.\nWidget icon is once again a fixed size.\nAdjusted text size of widget list headers." />
     </LinearLayout>
 
 </ScrollView>

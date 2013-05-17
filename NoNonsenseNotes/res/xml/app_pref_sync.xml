@@ -17,6 +17,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="app_preference_screen_sync" >
 
+    <!--
     <PreferenceScreen
         android:key="pref_dropbox_section_key"
         android:persistent="false"
@@ -25,17 +26,18 @@
             android:defaultValue="false"
             android:key="@string/pref_dropbox"
             android:summary="@string/dropbox_enable_summary"
-            android:title="@string/dropbox_enable" />
+            android:title="@string/dropbox_enable" /> 
         
     </PreferenceScreen>
+    -->
     <PreferenceScreen
         android:key="pref_gtask_section_key"
         android:persistent="false"
         android:title="@string/gtasks" >
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="syncEnablePref"
-            android:summary="@string/settings_sync_enable_summary"
+            android:summary="@string/gtasks_sync_info"
             android:title="@string/settings_sync_enable_title" />
 
         <Preference
@@ -44,20 +46,20 @@
             android:summary=""
             android:title="@string/settings_account_title" />
 
-        <CheckBoxPreference
-            android:defaultValue="false"
+        <SwitchPreference
+            android:defaultValue="true"
             android:dependency="syncEnablePref"
             android:key="syncInBackground"
             android:summary="@string/background_sync_info"
             android:title="@string/background_sync" />
-        <CheckBoxPreference
-            android:defaultValue="false"
+        <SwitchPreference
+            android:defaultValue="true"
             android:dependency="syncEnablePref"
             android:key="syncOnStart"
             android:summary="@string/sync_on_start_info"
             android:title="@string/sync_on_start" />
-        <CheckBoxPreference
-            android:defaultValue="false"
+        <SwitchPreference
+            android:defaultValue="true"
             android:dependency="syncEnablePref"
             android:key="syncOnChange"
             android:summary="@string/sync_on_change_info"

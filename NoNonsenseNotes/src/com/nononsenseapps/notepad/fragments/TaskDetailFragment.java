@@ -269,10 +269,15 @@ public class TaskDetailFragment extends Fragment implements
 
 	@Click(R.id.dueDateBox)
 	void onDateClick() {
-		final TimePickerDialogFragment picker = TimePickerDialogFragment
-				.newInstance();
+		final Calendar localTime = Calendar.getInstance();
+		final DatePickerDialogFragment picker = DatePickerDialogFragment
+				.newInstance(-1,
+				// localTime.get(Calendar.MONTH),
+						-1,
+						// localTime.get(Calendar.DAY_OF_MONTH),
+						localTime.get(Calendar.YEAR));
 		picker.setListener(this);
-		picker.show(getFragmentManager(), "time");
+		picker.show(getFragmentManager(), "date");
 	}
 
 	@Override
@@ -286,15 +291,6 @@ public class TaskDetailFragment extends Fragment implements
 
 		mTask.due = localTime.getTimeInMillis();
 		setDueText();
-		// Ask for date, yes the order is screwed up.
-		final DatePickerDialogFragment picker = DatePickerDialogFragment
-				.newInstance(-1,
-				// localTime.get(Calendar.MONTH),
-						-1,
-						// localTime.get(Calendar.DAY_OF_MONTH),
-						localTime.get(Calendar.YEAR));
-		picker.setListener(this);
-		picker.show(getFragmentManager(), "date");
 	}
 
 	@Override
@@ -306,9 +302,19 @@ public class TaskDetailFragment extends Fragment implements
 		localTime.set(Calendar.YEAR, year);
 		localTime.set(Calendar.MONTH, monthOfYear);
 		localTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
+		
+		// set to 23:59 to be more or less consistent with earlier date only implementation
+		localTime.set(Calendar.HOUR_OF_DAY, 23);
+		localTime.set(Calendar.MINUTE, 59);
+		
 		mTask.due = localTime.getTimeInMillis();
 		setDueText();
+		
+		// and ask for time as well
+		final TimePickerDialogFragment picker = TimePickerDialogFragment
+				.newInstance();
+		picker.setListener(this);
+		picker.show(getFragmentManager(), "time");
 	}
 
 	// @Override

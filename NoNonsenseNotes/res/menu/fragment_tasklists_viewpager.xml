@@ -6,21 +6,20 @@
           android:icon="?action_search"
           android:showAsAction="ifRoom|collapseActionView"
           android:actionViewClass="android.widget.SearchView"
-          android:orderInCategory="200"/> 
-          
-    <item
-        android:id="@+id/menu_createlist"
-        android:orderInCategory="201"
-        android:showAsAction="never"
-        android:title="@string/menu_createlist"/>
+          android:orderInCategory="201"/> 
     
     <item
         android:id="@+id/menu_sync"
         android:icon="?navigation_refresh"
-        android:orderInCategory="202"
-        android:showAsAction="never"
+        android:orderInCategory="200"
+        android:showAsAction="ifRoom"
         android:title="@string/menu_sync"/>
     
+    <item
+        android:id="@+id/menu_createlist"
+        android:orderInCategory="202"
+        android:showAsAction="never"
+        android:title="@string/menu_createlist"/>
     
     <item
         android:id="@+id/menu_deletedtasks"

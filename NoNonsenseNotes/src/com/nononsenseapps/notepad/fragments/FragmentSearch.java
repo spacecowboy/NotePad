@@ -73,6 +73,7 @@ public class FragmentSearch extends Fragment {
 
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.fragment_search, menu);
 
 		// Get the SearchView and set the searchable configuration
@@ -85,6 +86,9 @@ public class FragmentSearch extends Fragment {
 													// expand it by default
 		mSearchView.setQueryRefinementEnabled(true);
 		mSearchView.setSubmitButtonEnabled(false);
+		
+		// Disable suggestions in search activity
+		mSearchView.setSuggestionsAdapter(null);
 
 		mSearchView.setOnQueryTextListener(new OnQueryTextListener() {
 			@Override

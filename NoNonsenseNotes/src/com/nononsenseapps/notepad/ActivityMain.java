@@ -18,6 +18,8 @@ import com.nononsenseapps.billing.Purchase;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.SyncHelper;
+import com.nononsenseapps.helpers.SyncStatusMonitor;
+import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
 import com.nononsenseapps.helpers.dualpane.DualLayoutActivity.CONTENTVIEW;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.Task;
@@ -30,8 +32,10 @@ import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.legacy.DonateMigrator;
 import com.nononsenseapps.notepad.legacy.DonateMigrator_;
+import com.nononsenseapps.notepad.prefs.AccountDialog4;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
+import com.nononsenseapps.notepad.prefs.SyncPrefs.AccountDialog;
 
 import android.animation.Animator;
 import android.animation.LayoutTransition;
@@ -40,6 +44,7 @@ import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActivityOptions;
 import android.app.SearchManager;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -66,7 +71,7 @@ import android.widget.Toast;
 
 @EActivity(R.layout.activity_main)
 public class ActivityMain extends FragmentActivity implements
-		OnFragmentInteractionListener {
+		OnFragmentInteractionListener, OnSyncStartStopListener {
 
 	// In-app donate identifier
 	static final String SKU_DONATE = "donate_inapp";
@@ -92,10 +97,18 @@ public class ActivityMain extends FragmentActivity implements
 	@ViewById
 	View taskHint;
 
+	@SystemService
+	LayoutInflater layoutInflater;
+	// View mRefreshIndeterminateProgressView = null;
+	private Menu mMenu;
+	// private MenuItem mSyncMenuItem;
+
 	boolean mAnimateExit = false;
 	IabHelper mBillingHelper;
 	// True if user has donated
 	boolean mIsDonate = false;
+
+	SyncStatusMonitor syncStatusReceiver = null;
 
 	@Override
 	public void onCreate(Bundle b) {
@@ -104,6 +117,8 @@ public class ActivityMain extends FragmentActivity implements
 		super.onCreate(b);
 		// Schedule notifications
 		NotificationHelper.schedule(this);
+
+		syncStatusReceiver = new SyncStatusMonitor();
 
 		// To know if we should animate exits
 		if (getIntent() != null
@@ -163,6 +178,7 @@ public class ActivityMain extends FragmentActivity implements
 			if (packageInfo.packageName
 					.equals("com.nononsenseapps.notepad_donate")) {
 				migrateDonateUser();
+				// TODO Allow them to donate again?
 				PreferenceManager
 						.getDefaultSharedPreferences(ActivityMain.this).edit()
 						.putBoolean(SKU_DONATE, true).commit();
@@ -195,6 +211,47 @@ public class ActivityMain extends FragmentActivity implements
 				}
 			};
 			dialog.show(getSupportFragmentManager(), "migrate_question");
+		}
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		// activate monitor
+		if (syncStatusReceiver != null) {
+			syncStatusReceiver.startMonitoring(this);
+		}
+
+		// Sync if appropriate
+		SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
+	}
+
+	@Override
+	public void onPause() {
+		super.onPause();
+		// deactivate monitor
+		if (syncStatusReceiver != null) {
+			syncStatusReceiver.stopMonitoring();
+		}
+	}
+
+	@UiThread
+	@Override
+	public void onSyncStartStop(final boolean ongoing) {
+		if (mMenu == null) {
+			return;
+		}
+		final MenuItem syncMenuItem = mMenu.findItem(R.id.menu_sync);
+		if (syncMenuItem == null) {
+			return;
+		}
+
+		if (ongoing) {
+			syncMenuItem
+					.setActionView(R.layout.actionbar_indeterminate_progress);
+		}
+		else {
+			syncMenuItem.setActionView(null);
 		}
 	}
 
@@ -356,9 +413,12 @@ public class ActivityMain extends FragmentActivity implements
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 
-		return super.onCreateOptionsMenu(menu);
+		this.mMenu = menu;
+
+		return true;
 	}
 
 	@Override
@@ -411,7 +471,23 @@ public class ActivityMain extends FragmentActivity implements
 			}
 			return true;
 		case R.id.menu_sync:
-			SyncHelper.requestSyncIf(this, SyncHelper.MANUAL);
+			if (SyncHelper.shouldSyncAtAll(this)) {
+				SyncHelper.requestSyncIf(this, SyncHelper.MANUAL);
+			}
+			else {
+				FragmentTransaction ft = getSupportFragmentManager()
+						.beginTransaction();
+				Fragment prev = getSupportFragmentManager().findFragmentByTag(
+						"accountdialog");
+				if (prev != null) {
+					ft.remove(prev);
+				}
+				ft.addToBackStack(null);
+
+				// Create and show the dialog.
+				AccountDialog4 newFragment = new AccountDialog4();
+				newFragment.show(ft, "accountdialog");
+			}
 			return true;
 		case R.id.menu_delete:
 		default:
@@ -586,7 +662,8 @@ public class ActivityMain extends FragmentActivity implements
 
 	@Override
 	public void onNewIntent(Intent intent) {
-		super.onNewIntent(intent);
+		// TODO need to see if this has side-effects
+		loadContent();
 	}
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)

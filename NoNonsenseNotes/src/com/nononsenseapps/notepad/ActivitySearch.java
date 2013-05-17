@@ -9,6 +9,7 @@ import android.app.ActionBar;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
@@ -29,13 +30,20 @@ public class ActivitySearch extends FragmentActivity {
 
 		handleIntent(getIntent());
 	}
+	
+	/**
+	 * To allow child classes to override content
+	 */
+	protected Fragment getFragment() {
+		return FragmentSearch.getInstance(mQuery);
+	}
 
 	@AfterViews
 	void loadContent() {
 		getSupportFragmentManager()
 				.beginTransaction()
 				.add(R.id.fragmentPlaceHolder,
-						FragmentSearch.getInstance(mQuery)).commit();
+						getFragment()).commit();
 	}
 
 	@Override

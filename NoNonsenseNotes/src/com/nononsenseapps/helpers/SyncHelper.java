@@ -1,16 +1,29 @@
 package com.nononsenseapps.helpers;
 
+import java.util.Calendar;
+
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.notepad.prefs.SyncPrefs.AccountDialog;
+import com.nononsenseapps.notepad.sync.SyncAdapter;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.app.Activity;
+import android.app.DialogFragment;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 /**
  * This class handles sync logic. No other class should request a sync.
@@ -32,9 +45,9 @@ public class SyncHelper {
 			}
 			break;
 		case BACKGROUND:
-			if (shouldSyncBackground(context)) {
-				requestSync(context);
-			}
+			// if (shouldSyncBackground(context)) {
+			// //requestSync(context);
+			// }
 			break;
 		case ONCHANGE:
 			if (shouldSyncOnChange(context)) {
@@ -71,19 +84,20 @@ public class SyncHelper {
 				options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
 				ContentResolver
 						.requestSync(account, NotePad.AUTHORITY, options);
+				// Set last sync time to now
+				prefs.edit()
+						.putLong(SyncPrefs.KEY_LAST_SYNC,
+								Calendar.getInstance().getTimeInMillis())
+						.commit();
 			}
 		}
-	}
-
-	private static void requestSync(final Context context) {
-
 	}
 
 	private static void requestDelayedSync(final Context context) {
 		context.startService(new Intent(context, SyncDelay.class));
 	}
 
-	private static boolean shouldSyncAtAll(final Context context) {
+	public static boolean shouldSyncAtAll(final Context context) {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		final String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, "");
@@ -99,7 +113,7 @@ public class SyncHelper {
 				.getDefaultSharedPreferences(context);
 
 		return shouldSync
-				& prefs.getBoolean(SyncPrefs.KEY_SYNC_ON_CHANGE, false);
+				& prefs.getBoolean(SyncPrefs.KEY_SYNC_ON_CHANGE, true);
 	}
 
 	private static boolean shouldSyncBackground(final Context context) {
@@ -109,7 +123,7 @@ public class SyncHelper {
 				.getDefaultSharedPreferences(context);
 
 		return shouldSync
-				& prefs.getBoolean(SyncPrefs.KEY_BACKGROUND_SYNC, false);
+				& prefs.getBoolean(SyncPrefs.KEY_BACKGROUND_SYNC, true);
 	}
 
 	private static boolean shouldSyncOnAppStart(final Context context) {
@@ -118,7 +132,12 @@ public class SyncHelper {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 
-		return shouldSync
-				& prefs.getBoolean(SyncPrefs.KEY_SYNC_ON_START, false);
+		// Let 5 mins elapse before sync on start again
+		final long now = Calendar.getInstance().getTimeInMillis();
+		final long lastSync = prefs.getLong(SyncPrefs.KEY_LAST_SYNC, 0);
+		final long fivemins = 5 * 60 * 1000;
+
+		return shouldSync & prefs.getBoolean(SyncPrefs.KEY_SYNC_ON_START, true)
+				& (fivemins < now - lastSync);
 	}
 }

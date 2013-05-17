@@ -1,8 +1,10 @@
 package com.nononsenseapps.notepad.fragments;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.SystemService;
+import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
 
 import com.nononsenseapps.notepad.ActivitySearchDeleted_;
@@ -55,7 +57,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	SimpleCursorAdapter mTaskListsAdapter;
 
-	boolean firstLoad = true;
+	//boolean firstLoad = true;
 
 	private long mListIdToSelect = -1;
 
@@ -120,12 +122,13 @@ public class TaskListViewPagerFragment extends Fragment implements
 					@Override
 					public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
 						mTaskListsAdapter.swapCursor(c);
-						if (firstLoad) {
-							firstLoad = false;
+						if (mListIdToSelect > 0) {
 							final int pos = mSectionsPagerAdapter
 									.getItemPosition(mListIdToSelect);
 							if (pos >= 0) {
 								pager.setCurrentItem(pos);
+								// TODO here, or after if?
+								mListIdToSelect = -1;
 							}
 						}
 					}
@@ -186,11 +189,13 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 	@Override
 	public void onFinishEditDialog(final long id) {
-		// open the list
+		// If it fails, will load on refresh
+		mListIdToSelect = id;
 		if (mSectionsPagerAdapter != null) {
 			final int pos = mSectionsPagerAdapter.getItemPosition(id);
 			if (pos > -1) {
 				pager.setCurrentItem(pos, true);
+				mListIdToSelect = -1;
 			}
 		}
 	}

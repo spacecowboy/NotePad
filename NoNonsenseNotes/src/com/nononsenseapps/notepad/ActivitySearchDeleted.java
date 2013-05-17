@@ -1,17 +1,17 @@
 package com.nononsenseapps.notepad;
 
+import android.support.v4.app.Fragment;
+
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
+import com.nononsenseapps.notepad.fragments.FragmentSearch;
 import com.nononsenseapps.notepad.fragments.FragmentSearchDeleted_;
 
 @EActivity(R.layout.fullscreen_fragment)
 public class ActivitySearchDeleted extends ActivitySearch {
-
-	@AfterViews
+	
 	@Override
-	void loadContent() {
-		getSupportFragmentManager().beginTransaction()
-				.add(R.id.fragmentPlaceHolder, new FragmentSearchDeleted_())
-				.commit();
+	protected Fragment getFragment() {
+		return new FragmentSearchDeleted_();
 	}
 }

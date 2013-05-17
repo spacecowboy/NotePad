@@ -32,7 +32,7 @@
     <string name="menu_setcompleted">Set done</string>
     <string name="menu_setuncompleted">Set not done</string>
     <string name="menu_deletelist">Delete list</string>
-    <string name="menu_sync">Refresh</string>
+    <string name="menu_sync">Sync</string>
     <string name="menu_share">Share</string>
     <string name="menu_preferences">Settings</string>
     <string name="menu_renamelist">Rename list</string>
@@ -60,8 +60,9 @@
     <string name="sort_list_updated">Order by latest updated</string>
     <string name="sort_list_manual">Order manually</string>
     <string name="search_description">Notes and tasks</string>
-    <string name="view_deletedtasks">View deleted</string>
-    <string name="trash">Trash</string>
+    <string name="archive">Archive</string>
+    <string name="view_deletedtasks">@string/archive</string>
+    <string name="location">Location</string>
     <string name="restore">Restore</string>
     <string name="restore_to">Restore to</string>
     <string name="search_hint">Search</string>
@@ -100,6 +101,7 @@
     <string name="settings_account_summary">Click to switch account</string>
     <string name="settings_sync_enable_title">Google Tasks sync</string>
     <string name="settings_sync_enable_summary">Sync notes with your Google account</string>
+    <string name="gtasks_sync_info">Not all information can be synced with Google Tasks. Only notes, due date (not time) and todo-status is synced.</string>
     <string name="settings_cat_syncing">Synchronization</string>
     <string name="gtasks">Google Tasks</string>
     <string name="dropbox">Dropbox</string>
@@ -289,7 +291,7 @@
     <string name="sync_on_change">Sync on changes</string>
     <string name="sync_on_change_info">Schedules a sync shortly after a note has changed</string>
     <string name="sync_on_start">Sync on app start</string>
-    <string name="sync_on_start_info">Will only trigger on fresh starts, not when resuming</string>
+    <string name="sync_on_start_info">Will sync at most every 5 minutes</string>
     <string name="sync_full_force">Force full sync next time</string>
     <string name="sync_full_force_info">Only check this if you believe sync is missing some items.</string>
     <string name="snooze">Snooze</string>

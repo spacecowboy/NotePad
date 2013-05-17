@@ -26,8 +26,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
-    android:versionCode="56"
-    android:versionName="5.0" >
+    android:versionCode="58"
+    android:versionName="5.0 Beta" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -173,6 +173,7 @@
         <!-- Search activity -->
         <activity
             android:name="com.nononsenseapps.notepad.ActivitySearch_"
+            android:label="@string/search_hint"
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
@@ -186,6 +187,7 @@
         <!-- Deleted tasks activity -->
         <activity
             android:name="com.nononsenseapps.notepad.ActivitySearchDeleted_"
+            android:label="@string/archive"
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />

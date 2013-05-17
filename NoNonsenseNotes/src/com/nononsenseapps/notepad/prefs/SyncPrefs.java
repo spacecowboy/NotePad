@@ -45,9 +45,10 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
+import android.preference.Preference.OnPreferenceChangeListener;
+import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.PreferenceFragment;
 import android.preference.SwitchPreference;
 import android.widget.Toast;
 
@@ -66,6 +67,8 @@ public class SyncPrefs extends PreferenceFragment implements
 	public static final String KEY_SYNC_ON_START = "syncOnStart";
 	public static final String KEY_SYNC_ON_CHANGE = "syncOnChange";
 	public static final String KEY_BACKGROUND_SYNC = "syncInBackground";
+	// Used for sync on start and on change
+	public static final String KEY_LAST_SYNC = "lastSync";
 
 	private Activity activity;
 
@@ -110,9 +113,15 @@ public class SyncPrefs extends PreferenceFragment implements
 		// Disable prefs if this is not correct build
 		findPreference(KEY_SYNC_ENABLE).setEnabled(
 				!Config.GTASKS_API_KEY.contains(" "));
-		findPreference(getString(R.string.pref_dropbox)).setEnabled(
-				!Config.DROPBOX_APP_SECRET.contains(" "));
-		Log.d("nononsenseapps dropbox", Config.DROPBOX_APP_SECRET);
+
+		try {
+			findPreference(getString(R.string.pref_dropbox)).setEnabled(
+					!Config.DROPBOX_APP_SECRET.contains(" "));
+			Log.d("nononsenseapps dropbox", Config.DROPBOX_APP_SECRET);
+		}
+		catch (Exception e) {
+			// TODO: re-enable
+		}
 
 	}
 
@@ -250,6 +259,7 @@ public class SyncPrefs extends PreferenceFragment implements
 	private void toggleSync(SharedPreferences sharedPreferences) {
 		boolean enabled = sharedPreferences.getBoolean(KEY_SYNC_ENABLE, false);
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
+
 		if (accountName != null && !accountName.isEmpty()) {
 			if (enabled) {
 				// set syncable
@@ -261,10 +271,13 @@ public class SyncPrefs extends PreferenceFragment implements
 			}
 			else {
 				// set unsyncable
-				ContentResolver.setIsSyncable(
-						getAccount(AccountManager.get(activity), accountName),
-						MyContentProvider.AUTHORITY, 0);
+				// ContentResolver.setIsSyncable(
+				// getAccount(AccountManager.get(activity), accountName),
+				// MyContentProvider.AUTHORITY, 0);
 			}
+		}
+		else if (enabled) {
+			showAccountDialog();
 		}
 	}
 
@@ -316,9 +329,9 @@ public class SyncPrefs extends PreferenceFragment implements
 				Log.d("prefsActivity", "step one");
 				this.account = account;
 				// Request user's permission
-				AccountManager.get(activity)
-						.getAuthToken(account, GoogleTaskSync.AUTH_TOKEN_TYPE,
-								null, activity, this, null);
+				AccountManager.get(activity).getAuthToken(account,
+						GoogleTaskSync.AUTH_TOKEN_TYPE, null, activity, this,
+						null);
 				// work continues in callback, method run()
 			}
 		}
@@ -343,10 +356,9 @@ public class SyncPrefs extends PreferenceFragment implements
 					Log.d("prefsActivity", "step three: " + account.name);
 					SharedPreferences customSharedPreference = PreferenceManager
 							.getDefaultSharedPreferences(activity);
-					SharedPreferences.Editor editor = customSharedPreference
-							.edit();
-					editor.putString(SyncPrefs.KEY_ACCOUNT, account.name);
-					editor.commit();
+					customSharedPreference.edit()
+							.putString(SyncPrefs.KEY_ACCOUNT, account.name)
+							.putBoolean(KEY_SYNC_ENABLE, true).commit();
 
 					// Set it syncable
 					ContentResolver.setIsSyncable(account,
