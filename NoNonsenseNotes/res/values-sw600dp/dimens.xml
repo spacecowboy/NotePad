@@ -16,6 +16,7 @@
 -->
 <resources>
     <dimen name="listMargins">16dp</dimen>
+    <dimen name="listMarginsPadded">@dimen/listMargins</dimen>
     
     <!-- Used in search where no note fragment exists ever -->
     <dimen name="listNoDetailWidth">500dp</dimen>

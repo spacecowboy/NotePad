@@ -4,8 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res/com.nononsenseapps.notepad"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingLeft="@dimen/listMargins"
-    android:paddingRight="@dimen/listMargins" >
+    style="?ListMarginStyle" >
 
     <LinearLayout
         android:id="@+id/hintContainer"

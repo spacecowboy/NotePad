@@ -70,5 +70,6 @@
 	
 	<attr name="TaskListItem" format="reference" />
 	<attr name="ListDividerStyle" format="reference"/>
+	<attr name="ListMarginStyle" format="reference"/>
 	
 </resources>

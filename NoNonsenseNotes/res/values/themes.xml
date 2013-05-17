@@ -55,6 +55,7 @@
         
         <item name="TaskListItem">@style/TaskListItemDark</item>
         <item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
+        <item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
     </style>
 
     <style name="ThemeHoloBlack" parent="@style/ThemeGoogleNowDark">
@@ -73,6 +74,8 @@
         <item name="android:colorBackgroundCacheHint">@color/googlenow_darkergrey</item>
         <item name="viewpager_bg">@null</item>
         <item name="editorBackgroundColor">@drawable/darkgrey_rounded_corners_padded_vertically</item>
+    	
+        <item name="ListMarginStyle">@style/ListMarginStyleCard</item>
     </style>
 
     <!-- This theme doesn't exist in honeycomb -->
@@ -120,11 +123,13 @@
         
         <item name="TaskListItem">@style/TaskListItemLight</item>
         <item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
+        <item name="ListMarginStyle">@style/ListMarginStyleCard</item>
     </style>
     
     <style name="ThemeHoloLightClassic" parent="@style/ThemeHoloLightDarkActonBar">
         <item name="TaskListItem">@style/TaskListItemLightClassic</item>
         <item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
+        <item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
     </style>
     
     <!-- No theme background to let users wall paper shine through -->
