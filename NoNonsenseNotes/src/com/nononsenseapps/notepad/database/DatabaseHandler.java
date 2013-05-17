@@ -195,7 +195,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 						t.locked = true;
 						t.note = t.note.replace("[locked]", "");
 					}
-
+					
 					try {
 						t.due = RFC3339Date.parseRFC3339Date(c.getString(3))
 								.getTime();
@@ -228,7 +228,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 						gt = new GoogleTask(t, c.getString(8));
 						gt.remoteId = c.getString(7);
 						gt.updated = t.updated;
-						gt.save(context);
+						gt.insert(context, db);
 					}
 					
 				}
