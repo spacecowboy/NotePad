@@ -28,6 +28,7 @@
     <string name="const_theme_dark">dark</string>
     <string name="const_theme_black">black</string>
     <string name="const_theme_light">light</string>
+    <string name="const_theme_classic">classic</string>
     <string name="const_theme_light_ab">light_ab</string>
     <string name="const_theme_googlenow_dark">googlenow_dark</string>
     <string name="const_alphabetic">title COLLATE NOCASE</string>

@@ -83,6 +83,7 @@
     <string name="settings_summary_theme_black">Black</string>
     <string name="settings_summary_theme_dark">Dark</string>
     <string name="settings_summary_theme_light">Light</string>
+    <string name="settings_summary_theme_classic">Classic</string>
     <string name="settings_summary_theme_light_dark_ab">Light with dark action bar</string>
     <string name="settings_cat_appearance">Appearance</string>
     <string name="settings_font_screen">Font settings</string>

@@ -122,6 +122,11 @@
         <item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
     </style>
     
+    <style name="ThemeHoloLightClassic" parent="@style/ThemeHoloLightDarkActonBar">
+        <item name="TaskListItem">@style/TaskListItemLightClassic</item>
+        <item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
+    </style>
+    
     <!-- No theme background to let users wall paper shine through -->
     <style name="ThemeWidgetConfig" parent="@style/ThemeHolo" >
         <item name="android:background">@null</item>

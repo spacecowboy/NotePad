@@ -58,13 +58,16 @@
     </style>
     
     <style name="TaskListItemBlack">
-        <item name="android:background">@android:color/black</item>
+        <item name="android:background">@drawable/tasklist_item_blackclassic_bg</item>
     </style>
     <style name="TaskListItemDark">
         <item name="android:background">@drawable/tasklist_item_darkcard_bg</item>
     </style>
     <style name="TaskListItemLight">
         <item name="android:background">@drawable/tasklist_item_lightcard_bg</item>
+    </style>
+    <style name="TaskListItemLightClassic">
+        <item name="android:background">@drawable/tasklist_item_lightclassic_bg</item>
     </style>
     
     <style name="ListSpaceDividerStyle">

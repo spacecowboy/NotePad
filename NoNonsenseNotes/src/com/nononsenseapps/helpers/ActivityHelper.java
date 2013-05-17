@@ -25,6 +25,9 @@ public class ActivityHelper {
 		else if (MainPrefs.THEME_BLACK.equals(theme)) {
 			activity.setTheme(R.style.ThemeHoloBlack);
 		}
+		else if (activity.getString(R.string.const_theme_classic).equals(theme)) {
+			activity.setTheme(R.style.ThemeHoloLightClassic);
+		}
 		else // if (theme.equals(getResources().getString(
 				// R.string.const_theme_googlenow_dark)))
 		{

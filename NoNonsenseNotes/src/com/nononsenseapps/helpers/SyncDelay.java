@@ -20,9 +20,9 @@ import android.preference.PreferenceManager;
 
 public class SyncDelay extends Service {
 
-	private static final String TAG = "NoNonsenseSyncDelay";
+	private static final String TAG = "nononsenseapps SyncDelay";
 
-	// Delay this log before doing the sync
+	// Delay this long before doing the sync
 	private static final int delaySecs = 60;
 
 	@Override
