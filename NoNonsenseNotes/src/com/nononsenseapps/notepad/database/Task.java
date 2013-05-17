@@ -135,22 +135,24 @@ public class Task extends DAO {
 
 		// Legacy URIs
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
-				LegacyDBHelper.NotePad.Notes.PATH_NOTES, LEGACYBASEURICODE);
+				LegacyDBHelper.NotePad.Notes.NOTES, LEGACYBASEURICODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
-				LegacyDBHelper.NotePad.Notes.PATH_NOTES + "/#",
+				LegacyDBHelper.NotePad.Notes.NOTES + "/#",
 				LEGACYBASEITEMCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
-				LegacyDBHelper.NotePad.Notes.PATH_VISIBLE_NOTES,
+				LegacyDBHelper.NotePad.Notes.VISIBLE_NOTES,
 				LEGACYVISIBLEURICODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
-				LegacyDBHelper.NotePad.Notes.PATH_VISIBLE_NOTES + "/#",
+				LegacyDBHelper.NotePad.Notes.VISIBLE_NOTES + "/#",
 				LEGACYVISIBLEITEMCODE);
 		
 		// Search URI
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
 				FTS3_TABLE_NAME, SEARCHCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
-				SearchManager.SUGGEST_URI_PATH_QUERY + "*", SEARCHSUGGESTIONSCODE);
+				SearchManager.SUGGEST_URI_PATH_QUERY, SEARCHSUGGESTIONSCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY,
+				SearchManager.SUGGEST_URI_PATH_QUERY + "/*", SEARCHSUGGESTIONSCODE);
 		
 	}
 

@@ -8,6 +8,7 @@ import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
@@ -381,7 +382,6 @@ public class MyContentProvider extends ContentProvider {
 		if (selection != null) Log.d("nononsenseapps", selection);
 		if (selectionArgs != null)
 			Log.d("nononsenseapps", DAO.arrayToCommaString(selectionArgs));
-		// TODO add legacy URIs
 		switch (sURIMatcher.match(uri)) {
 		case TaskList.BASEURICODE:
 			result = DatabaseHandler
@@ -591,36 +591,95 @@ public class MyContentProvider extends ContentProvider {
 			result.setNotificationUri(getContext().getContentResolver(),
 					Task.URI_SEARCH);
 			break;
+
+		case TaskList.LEGACYBASEURICODE:
+		case TaskList.LEGACYVISIBLEURICODE:
+			Log.d("nononsenseapps db", "legacy list: " + uri);
+			result = DatabaseHandler
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(TaskList.TABLE_NAME,
+							LegacyDBHelper.convertLegacyColumns(projection),
+							null, null, null, null, sortOrder);
+			result.setNotificationUri(getContext().getContentResolver(),
+					TaskList.URI);
+			break;
+		case TaskList.LEGACYBASEITEMCODE:
+		case TaskList.LEGACYVISIBLEITEMCODE:
+			Log.d("nononsenseapps db", "legacy listitem: " + uri);
+			id = Long.parseLong(uri.getLastPathSegment());
+			result = DatabaseHandler
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(TaskList.TABLE_NAME,
+							LegacyDBHelper.convertLegacyColumns(projection),
+							TaskList.whereIdIs(selection),
+							TaskList.joinArrays(selectionArgs,
+									new String[] { String.valueOf(id) }), null,
+							null, sortOrder);
+			result.setNotificationUri(getContext().getContentResolver(),
+					TaskList.getUri(id));
+			break;
 		case Task.LEGACYBASEURICODE:
 		case Task.LEGACYVISIBLEURICODE:
-			// TODO
+			Log.d("nononsenseapps db", "legacy notes: " + uri);
+			final Cursor c = DatabaseHandler
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(Task.TABLE_NAME,
+							LegacyDBHelper.convertLegacyColumns(projection),
+							null, null, null, null, Task.Columns.DUE);
+			result = new MatrixCursor(projection);
+			while (c.moveToNext()) {
+				Log.d("nononsenseapps db", "legacy notes adding row to matrix: " + c.getString(1));
+				((MatrixCursor) result).addRow(LegacyDBHelper
+						.convertLegacyTaskValues(c));
+			}
+			c.close();
+
+			result.setNotificationUri(getContext().getContentResolver(),
+					Task.URI);
+			break;
+		case Task.SEARCHSUGGESTIONSCODE:
+			final String limit = uri
+					.getQueryParameter(SearchManager.SUGGEST_PARAMETER_LIMIT);
+			Log.d("nononsenseapps db", "search limit: " + limit);
+			result = DatabaseHandler
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(Task.FTS3_TABLE_NAME,
+							new String[] {
+									Task.Columns._ID,
+									Task.Columns._ID
+											+ " AS "
+											+ SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID,
+									Task.Columns.TITLE
+											+ " AS "
+											+ SearchManager.SUGGEST_COLUMN_TEXT_1,
+									Task.Columns.NOTE
+											+ " AS "
+											+ SearchManager.SUGGEST_COLUMN_TEXT_2 },
+							Task.FTS3_TABLE_NAME + " MATCH ?",
+							sanitize(selectionArgs), null, null,
+							SearchManager.SUGGEST_COLUMN_TEXT_1, limit);
+			result.setNotificationUri(getContext().getContentResolver(),
+					Task.URI_SEARCH);
+			break;
+		// These legacy URIs will not be supported
+		case Task.LEGACYBASEITEMCODE:
+		case Task.LEGACYVISIBLEITEMCODE:
 		default:
-			if (uri.toString().contains(SearchManager.SUGGEST_URI_PATH_QUERY)) {
-				result = DatabaseHandler
-						.getInstance(getContext())
-						.getReadableDatabase()
-						.query(Task.FTS3_TABLE_NAME,
-								new String[] {
-										Task.Columns._ID,
-										Task.Columns._ID
-												+ " AS "
-												+ SearchManager.SUGGEST_COLUMN_INTENT_DATA_ID,
-										Task.Columns.TITLE
-												+ " AS "
-												+ SearchManager.SUGGEST_COLUMN_TEXT_1,
-										Task.Columns.NOTE
-												+ " AS "
-												+ SearchManager.SUGGEST_COLUMN_TEXT_2 },
-								Task.FTS3_TABLE_NAME + " MATCH ?",
-								sanitize(selectionArgs), null, null,
-								SearchManager.SUGGEST_COLUMN_TEXT_1);
-				result.setNotificationUri(getContext().getContentResolver(),
-						Task.URI_SEARCH);
-			}
-			else {
-				throw new IllegalArgumentException("Faulty queryURI provided: "
-						+ uri.toString());
-			}
+
+			// Log.d("nononsenseapps db", "default: " + uri);
+			// if
+			// (uri.toString().contains(SearchManager.SUGGEST_URI_PATH_QUERY)) {
+			//
+			// }
+			// // For Android Agenda Widget
+			// else {
+			throw new IllegalArgumentException("Faulty queryURI provided: "
+					+ uri.toString());
+			// }
 		}
 
 		return result;

@@ -3,6 +3,7 @@ package com.nononsenseapps.notepad.database;
 import android.app.SearchManager;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -11,6 +12,7 @@ import android.provider.BaseColumns;
 
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.utils.time.RFC3339Date;
 
 /**
  * This class contains the code that has been called over the versions to
@@ -18,91 +20,72 @@ import com.nononsenseapps.notepad.NotePad;
  * linear progression from 1.0 to current version without problems even if the
  * entire database is changed.
  * 
- * onUpgrade should be called first from the databaseopenhelper's onUpgrade method.
+ * onUpgrade should be called first from the databaseopenhelper's onUpgrade
+ * method.
  * 
  */
 public class LegacyDBHelper extends SQLiteOpenHelper {
-	
+
 	public static final String LEGACY_DATABASE_NAME = "note_pad.db";
 	public static final int LEGACY_DATABASE_FINAL_VERSION = 8;
-	
+
 	public LegacyDBHelper(Context context) {
 		this(context, "");
 	}
-	
+
 	public LegacyDBHelper(Context context, String testPrefix) {
-		super(context.getApplicationContext(), testPrefix + LEGACY_DATABASE_NAME, null, LEGACY_DATABASE_FINAL_VERSION);
+		super(context.getApplicationContext(), testPrefix
+				+ LEGACY_DATABASE_NAME, null, LEGACY_DATABASE_FINAL_VERSION);
 	}
-	
+
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		// Don't create anything if the database doesn't exist before.
 	}
 
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.d("LegacyHelper", "onUpgrade "
-				+ "Upgrading database from version " + oldVersion + " to "
-				+ newVersion);
+		Log.d("LegacyHelper", "onUpgrade " + "Upgrading database from version "
+				+ oldVersion + " to " + newVersion);
 
 		if (oldVersion < 3) {
 			// FIrst add columns to Notes table
 
-			String preName = "ALTER TABLE " + "notes"
-					+ " ADD COLUMN ";
+			String preName = "ALTER TABLE " + "notes" + " ADD COLUMN ";
 			// Don't want null values. Prefer empty String
 			String postText = " TEXT";
 			String postNameInt = " INTEGER";
 			// Add Columns to Notes DB
-			db.execSQL(preName + "list"
-					+ postNameInt);
-			db.execSQL(preName + "duedate"
-					+ postText);
-			db.execSQL(preName + "gtaskstatus"
-					+ postText);
-			db.execSQL(preName + "modifiedflag"
-					+ postNameInt);
-			db.execSQL(preName + "deleted"
-					+ postNameInt);
+			db.execSQL(preName + "list" + postNameInt);
+			db.execSQL(preName + "duedate" + postText);
+			db.execSQL(preName + "gtaskstatus" + postText);
+			db.execSQL(preName + "modifiedflag" + postNameInt);
+			db.execSQL(preName + "deleted" + postNameInt);
 
 			// Then create the 3 missing tables
-			db.execSQL("CREATE TABLE " + "lists" + " ("
-					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
-					+ "title"
-					+ " TEXT DEFAULT '' NOT NULL,"
-					+ "modifiedflag"
-					+ " INTEGER DEFAULT 0 NOT NULL,"
-					+ "modified"
-					+ " INTEGER DEFAULT 0 NOT NULL,"
-					+ "deleted"
+			db.execSQL("CREATE TABLE " + "lists" + " (" + BaseColumns._ID
+					+ " INTEGER PRIMARY KEY," + "title"
+					+ " TEXT DEFAULT '' NOT NULL," + "modifiedflag"
+					+ " INTEGER DEFAULT 0 NOT NULL," + "modified"
+					+ " INTEGER DEFAULT 0 NOT NULL," + "deleted"
 					+ " INTEGER DEFAULT 0 NOT NULL" + ");");
-			
-			db.execSQL("CREATE TABLE " + "gtasks" + " ("
-					+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
-					+ "dbid"
-					+ " INTEGER UNIQUE NOT NULL REFERENCES "
-					+ "notes" + ","
-					+ "googleid"
-					+ " INTEGER NOT NULL,"
-					+ "googleaccount"
-					+ " INTEGER NOT NULL,"
-					+ "updated" + " TEXT,"
-					+ "etag" + " TEXT" + ");");
 
-			db.execSQL("CREATE TABLE " + "gtasklists"
-					+ " (" + BaseColumns._ID + " INTEGER PRIMARY KEY,"
-					+ "dbid"
-					+ " INTEGER UNIQUE NOT NULL REFERENCES "
-					+ "lists" + ","
-					+ "googleid"
-					+ " INTEGER NOT NULL,"
-					+ "googleaccount"
-					+ " INTEGER NOT NULL,"
-					+ "updated" + " TEXT,"
-					+ "etag" + " TEXT" + ");");
+			db.execSQL("CREATE TABLE " + "gtasks" + " (" + BaseColumns._ID
+					+ " INTEGER PRIMARY KEY," + "dbid"
+					+ " INTEGER UNIQUE NOT NULL REFERENCES " + "notes" + ","
+					+ "googleid" + " INTEGER NOT NULL," + "googleaccount"
+					+ " INTEGER NOT NULL," + "updated" + " TEXT," + "etag"
+					+ " TEXT" + ");");
+
+			db.execSQL("CREATE TABLE " + "gtasklists" + " (" + BaseColumns._ID
+					+ " INTEGER PRIMARY KEY," + "dbid"
+					+ " INTEGER UNIQUE NOT NULL REFERENCES " + "lists" + ","
+					+ "googleid" + " INTEGER NOT NULL," + "googleaccount"
+					+ " INTEGER NOT NULL," + "updated" + " TEXT," + "etag"
+					+ " TEXT" + ");");
 
 			// Now insert a default list
 			ContentValues values = new ContentValues();
-			values.put("title"	, "Tasks");
+			values.put("title", "Tasks");
 			values.put("modifiedflag", 1);
 			values.put("deleted", 0);
 			long listId = db.insert("lists", null, values);
@@ -114,52 +97,42 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			values.put("modifiedflag", 1);
 			values.put("deleted", 0);
 			values.put("duedate", "");
-			values.put("gtaskstatus",
-					"needsAction");
+			values.put("gtaskstatus", "needsAction");
 
-			db.update("notes", values,
-					"list" + " IS NOT ?",
+			db.update("notes", values, "list" + " IS NOT ?",
 					new String[] { Long.toString(listId) });
 		}
 		if (oldVersion < 4) {
 
-			String preName = "ALTER TABLE " + "notes"
-					+ " ADD COLUMN ";
+			String preName = "ALTER TABLE " + "notes" + " ADD COLUMN ";
 			String postText = " TEXT";
 			String postNameInt = " INTEGER";
 			// Add Columns to Notes DB
 			db.execSQL(preName + "gtasks_parent" + postText);
-			db.execSQL(preName + "gtasks_position"
-					+ postText);
-			db.execSQL(preName + "hiddenflag"
-					+ postNameInt);
+			db.execSQL(preName + "gtasks_position" + postText);
+			db.execSQL(preName + "hiddenflag" + postNameInt);
 
 			// Give all notes sensible values
 			ContentValues values = new ContentValues();
 			values.put("gtasks_parent", "");
 			values.put("gtasks_position", "");
 			values.put("hiddenflag", 0);
-			db.update("notes", values,
-					"hiddenflag" + " IS NOT ?",
+			db.update("notes", values, "hiddenflag" + " IS NOT ?",
 					new String[] { "0" });
 		}
 		if (oldVersion < 5) {
 
-			String preName = "ALTER TABLE " + "notes"
-					+ " ADD COLUMN ";
+			String preName = "ALTER TABLE " + "notes" + " ADD COLUMN ";
 			String postText = " TEXT DEFAULT ''";
 			String postNameInt = " INTEGER DEFAULT 0";
 			db.execSQL(preName + "possubsort" + postText);
-			db.execSQL(preName + "localhidden"
-					+ postNameInt);
+			db.execSQL(preName + "localhidden" + postNameInt);
 		}
 		if (oldVersion < 6) {
 			// Add Columns to Notes DB
-			String preName = "ALTER TABLE " + "notes"
-					+ " ADD COLUMN ";
+			String preName = "ALTER TABLE " + "notes" + " ADD COLUMN ";
 			String postNameInt = " INTEGER DEFAULT 0";
-			db.execSQL(preName + "indentlevel"
-					+ postNameInt);
+			db.execSQL(preName + "indentlevel" + postNameInt);
 			db.execSQL(preName + "locked" + postNameInt);
 
 			// Mark all notes as modified to ensure we set the indents on
@@ -169,45 +142,59 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			db.update("notes", values, null, null);
 		}
 		if (oldVersion < 7) {
-			db.execSQL("CREATE TABLE " + "notification"
-					+ " (" + BaseColumns._ID
-					+ " INTEGER PRIMARY KEY,"
-					+ "time"
-					+ " INTEGER NOT NULL DEFAULT 0,"
-					+ "permanent"
-					+ " INTEGER NOT NULL DEFAULT 0,"
-					+ "noteid" + " INTEGER,"
-					+ "FOREIGN KEY(" + "noteid"
-					+ ") REFERENCES " + "notes" + "("
-					+ BaseColumns._ID + ") ON DELETE CASCADE" + ");");
+			db.execSQL("CREATE TABLE " + "notification" + " ("
+					+ BaseColumns._ID + " INTEGER PRIMARY KEY," + "time"
+					+ " INTEGER NOT NULL DEFAULT 0," + "permanent"
+					+ " INTEGER NOT NULL DEFAULT 0," + "noteid" + " INTEGER,"
+					+ "FOREIGN KEY(" + "noteid" + ") REFERENCES " + "notes"
+					+ "(" + BaseColumns._ID + ") ON DELETE CASCADE" + ");");
 		}
 		if (oldVersion < 8) {
 			try {
 				db.execSQL("CREATE TRIGGER post_note_markdelete AFTER UPDATE ON "
-						+ "notes" + " WHEN new."
-						+ "deleted" + " = 1" + " BEGIN"
-						+ "   DELETE FROM " + "notification"
-						+ "   WHERE " + "notification" + "."
-						+ "noteid" + "   = "
-						+ "new." + BaseColumns._ID + ";" + " END");
-				} catch (SQLException e) {
-					//Log.d(TAG, "Creating trigger failed. It probably already existed:\n " + e.getLocalizedMessage());
-				}
-				
-				try {
+						+ "notes"
+						+ " WHEN new."
+						+ "deleted"
+						+ " = 1"
+						+ " BEGIN"
+						+ "   DELETE FROM "
+						+ "notification"
+						+ "   WHERE "
+						+ "notification"
+						+ "."
+						+ "noteid"
+						+ "   = " + "new." + BaseColumns._ID + ";" + " END");
+			}
+			catch (SQLException e) {
+				// Log.d(TAG,
+				// "Creating trigger failed. It probably already existed:\n " +
+				// e.getLocalizedMessage());
+			}
+
+			try {
 				db.execSQL("CREATE TRIGGER post_note_actualdelete AFTER DELETE ON "
-						+ "notes" + " BEGIN"
-						+ "   DELETE FROM " + "notification"
-						+ "   WHERE " + "notification" + "."
-						+ "noteid" + "   = "
-						+ "old." + BaseColumns._ID + ";" + " END");
-				} catch (SQLException e) {
-					//Log.d(TAG, "Creating trigger failed. It probably already existed:\n " + e.getLocalizedMessage());
-				}
+						+ "notes"
+						+ " BEGIN"
+						+ "   DELETE FROM "
+						+ "notification"
+						+ "   WHERE "
+						+ "notification"
+						+ "."
+						+ "noteid"
+						+ "   = "
+						+ "old."
+						+ BaseColumns._ID
+						+ ";"
+						+ " END");
+			}
+			catch (SQLException e) {
+				// Log.d(TAG,
+				// "Creating trigger failed. It probably already existed:\n " +
+				// e.getLocalizedMessage());
+			}
 		}
 	}
 
-	
 	public static final class NotePad {
 		public static final String AUTHORITY = MyContentProvider.AUTHORITY;
 
@@ -247,8 +234,10 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			 * Path part for the Notes URI
 			 */
 			public static final String PATH_NOTES = "/notes";
+			public static final String NOTES = "notes";
 			// Visible notes
 			public static final String PATH_VISIBLE_NOTES = "/visiblenotes";
+			public static final String VISIBLE_NOTES = "visiblenotes";
 			// Complete note entry including stuff in GTasks table
 			private static final String PATH_JOINED_NOTES = "/joinednotes";
 
@@ -259,8 +248,8 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			public static final String PATH_VISIBLE_NOTE_ID = "/visiblenotes/";
 
 			/**
-			 * 0-relative position of a note ID segment in the path part of a note
-			 * ID URI
+			 * 0-relative position of a note ID segment in the path part of a
+			 * note ID URI
 			 */
 			public static final int NOTE_ID_PATH_POSITION = 1;
 
@@ -275,17 +264,17 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 					+ AUTHORITY + PATH_JOINED_NOTES);
 
 			/**
-			 * The content URI base for a single note. Callers must append a numeric
-			 * note id to this Uri to retrieve a note
+			 * The content URI base for a single note. Callers must append a
+			 * numeric note id to this Uri to retrieve a note
 			 */
 			public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME
 					+ AUTHORITY + PATH_NOTE_ID);
-			public static final Uri CONTENT_VISIBLE_ID_URI_BASE = Uri.parse(SCHEME
-					+ AUTHORITY + PATH_VISIBLE_NOTE_ID);
+			public static final Uri CONTENT_VISIBLE_ID_URI_BASE = Uri
+					.parse(SCHEME + AUTHORITY + PATH_VISIBLE_NOTE_ID);
 
 			/**
-			 * The content URI match pattern for a single note, specified by its ID.
-			 * Use this to match incoming URIs or to construct an Intent.
+			 * The content URI match pattern for a single note, specified by its
+			 * ID. Use this to match incoming URIs or to construct an Intent.
 			 */
 			public static final Uri CONTENT_ID_URI_PATTERN = Uri.parse(SCHEME
 					+ AUTHORITY + PATH_NOTE_ID + "/#");
@@ -297,7 +286,8 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			 */
 
 			/**
-			 * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
+			 * The MIME type of {@link #CONTENT_URI} providing a directory of
+			 * notes.
 			 */
 			// public static final String CONTENT_TYPE =
 			// "vnd.android.cursor.dir/vnd.nononsenseapps.note";
@@ -347,7 +337,8 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			public static final String COLUMN_NAME_MODIFICATION_DATE = "modified";
 
 			/**
-			 * Due date of the task (as an RFC 3339 timestamp) formatted as String.
+			 * Due date of the task (as an RFC 3339 timestamp) formatted as
+			 * String.
 			 */
 			public static final String COLUMN_NAME_DUE_DATE = "duedate";
 
@@ -386,24 +377,28 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			/**
 			 * The default sort order for this table
 			 */
-			// public static final String DEFAULT_SORT_TYPE = COLUMN_NAME_TITLE +
+			// public static final String DEFAULT_SORT_TYPE = COLUMN_NAME_TITLE
+			// +
 			// " COLLATE NOCASE";
 			public static final String ALPHABETIC_SORT_TYPE = COLUMN_NAME_TITLE
 					+ " COLLATE NOCASE";
-			// We want items with no due dates to be placed at the end, hence the
+			// We want items with no due dates to be placed at the end, hence
+			// the
 			// sql magic
 			// Coalesce returns the first non-null argument
 			public static final String MODIFICATION_SORT_TYPE = COLUMN_NAME_MODIFICATION_DATE;
 			public static final String DUEDATE_SORT_TYPE = "CASE WHEN "
-					+ COLUMN_NAME_DUE_DATE + " IS NULL OR " + COLUMN_NAME_DUE_DATE
-					+ " IS '' THEN 1 ELSE 0 END, " + COLUMN_NAME_DUE_DATE;
+					+ COLUMN_NAME_DUE_DATE + " IS NULL OR "
+					+ COLUMN_NAME_DUE_DATE + " IS '' THEN 1 ELSE 0 END, "
+					+ COLUMN_NAME_DUE_DATE;
 			public static final String POSSUBSORT_SORT_TYPE = COLUMN_NAME_POSSUBSORT;
 
 			public static final String ASCENDING_SORT_ORDERING = "ASC";
 			public static final String DESCENDING_SORT_ORDERING = "DESC";
 			public static final String ALPHABETIC_ASC_ORDER = COLUMN_NAME_TITLE
 					+ " COLLATE NOCASE ASC";
-			// public static final String POSITION_ASC_ORDER = COLUMN_NAME_POSITION+
+			// public static final String POSITION_ASC_ORDER =
+			// COLUMN_NAME_POSITION+
 			// " ASC";
 
 			public static final String DEFAULT_SORT_TYPE = POSSUBSORT_SORT_TYPE;
@@ -446,7 +441,9 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			 * Path part for the Lists URI
 			 */
 			public static final String PATH_LISTS = "/lists";
+			public static final String LISTS = "lists";
 			public static final String PATH_VISIBLE_LISTS = "/visiblelists";
+			public static final String VISIBLE_LISTS = "visiblelists";
 			// Complete entry gotten with a join with GTasksLists table
 			private static final String PATH_JOINED_LISTS = "/joinedlists";
 
@@ -472,17 +469,17 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 					+ AUTHORITY + PATH_JOINED_LISTS);
 
 			/**
-			 * The content URI base for a single note. Callers must append a numeric
-			 * note id to this Uri to retrieve a note
+			 * The content URI base for a single note. Callers must append a
+			 * numeric note id to this Uri to retrieve a note
 			 */
 			public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME
 					+ AUTHORITY + PATH_LIST_ID);
-			public static final Uri CONTENT_VISIBLE_ID_URI_BASE = Uri.parse(SCHEME
-					+ AUTHORITY + PATH_VISIBLE_LIST_ID);
+			public static final Uri CONTENT_VISIBLE_ID_URI_BASE = Uri
+					.parse(SCHEME + AUTHORITY + PATH_VISIBLE_LIST_ID);
 
 			/**
-			 * The content URI match pattern for a single note, specified by its ID.
-			 * Use this to match incoming URIs or to construct an Intent.
+			 * The content URI match pattern for a single note, specified by its
+			 * ID. Use this to match incoming URIs or to construct an Intent.
 			 */
 			public static final Uri CONTENT_ID_URI_PATTERN = Uri.parse(SCHEME
 					+ AUTHORITY + PATH_LIST_ID + "/#");
@@ -590,8 +587,8 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			private static final String PATH_ID = "/gtasks/";
 
 			/**
-			 * 0-relative position of a note ID segment in the path part of a note
-			 * ID URI
+			 * 0-relative position of a note ID segment in the path part of a
+			 * note ID URI
 			 */
 			public static final int ID_PATH_POSITION = 1;
 
@@ -602,15 +599,15 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 					+ PATH);
 
 			/**
-			 * The content URI base for a single note. Callers must append a numeric
-			 * note id to this Uri to retrieve a note
+			 * The content URI base for a single note. Callers must append a
+			 * numeric note id to this Uri to retrieve a note
 			 */
 			public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME
 					+ AUTHORITY + PATH_ID);
 
 			/**
-			 * The content URI match pattern for a single note, specified by its ID.
-			 * Use this to match incoming URIs or to construct an Intent.
+			 * The content URI match pattern for a single note, specified by its
+			 * ID. Use this to match incoming URIs or to construct an Intent.
 			 */
 			public static final Uri CONTENT_ID_URI_PATTERN = Uri.parse(SCHEME
 					+ AUTHORITY + PATH_ID + "/#");
@@ -620,7 +617,8 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			 */
 
 			/**
-			 * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
+			 * The MIME type of {@link #CONTENT_URI} providing a directory of
+			 * notes.
 			 */
 			public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps.gtask";
 
@@ -708,8 +706,8 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			private static final String PATH_ID = "/gtasklists/";
 
 			/**
-			 * 0-relative position of a note ID segment in the path part of a note
-			 * ID URI
+			 * 0-relative position of a note ID segment in the path part of a
+			 * note ID URI
 			 */
 			public static final int ID_PATH_POSITION = 1;
 
@@ -720,15 +718,15 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 					+ PATH);
 
 			/**
-			 * The content URI base for a single note. Callers must append a numeric
-			 * note id to this Uri to retrieve a note
+			 * The content URI base for a single note. Callers must append a
+			 * numeric note id to this Uri to retrieve a note
 			 */
 			public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME
 					+ AUTHORITY + PATH_ID);
 
 			/**
-			 * The content URI match pattern for a single note, specified by its ID.
-			 * Use this to match incoming URIs or to construct an Intent.
+			 * The content URI match pattern for a single note, specified by its
+			 * ID. Use this to match incoming URIs or to construct an Intent.
 			 */
 			public static final Uri CONTENT_ID_URI_PATTERN = Uri.parse(SCHEME
 					+ AUTHORITY + PATH_ID + "/#");
@@ -738,7 +736,8 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			 */
 
 			/**
-			 * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
+			 * The MIME type of {@link #CONTENT_URI} providing a directory of
+			 * notes.
 			 */
 			public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps.gtasklist";
 
@@ -836,14 +835,15 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			private static final String PATH_ID = PATH + "/";
 
 			/**
-			 * 0-relative position of a note ID segment in the path part of a note
-			 * ID URI
+			 * 0-relative position of a note ID segment in the path part of a
+			 * note ID URI
 			 */
 			public static final int ID_PATH_POSITION = 1;
 
 			private static final String PATH_JOINED_NOTIFICATIONS = "/joinednotifications";
 			public static final String PATH_NOTIFICATIONS_LISTID = "/notificationlists";
-			private static final String PATH_NOTIFICATIONS_LISTID_BASE = PATH_NOTIFICATIONS_LISTID + "/";
+			private static final String PATH_NOTIFICATIONS_LISTID_BASE = PATH_NOTIFICATIONS_LISTID
+					+ "/";
 			/**
 			 * The content:// style URL for this table
 			 */
@@ -857,15 +857,15 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 					+ AUTHORITY + PATH_NOTIFICATIONS_LISTID);
 
 			/**
-			 * The content URI base for a single note. Callers must append a numeric
-			 * note id to this Uri to retrieve a note
+			 * The content URI base for a single note. Callers must append a
+			 * numeric note id to this Uri to retrieve a note
 			 */
 			public static final Uri CONTENT_ID_URI_BASE = Uri.parse(SCHEME
 					+ AUTHORITY + PATH_ID);
 
 			/**
-			 * The content URI match pattern for a single note, specified by its ID.
-			 * Use this to match incoming URIs or to construct an Intent.
+			 * The content URI match pattern for a single note, specified by its
+			 * ID. Use this to match incoming URIs or to construct an Intent.
 			 */
 			public static final Uri CONTENT_ID_URI_PATTERN = Uri.parse(SCHEME
 					+ AUTHORITY + PATH_ID + "/#");
@@ -875,7 +875,8 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			 */
 
 			/**
-			 * The MIME type of {@link #CONTENT_URI} providing a directory of notes.
+			 * The MIME type of {@link #CONTENT_URI} providing a directory of
+			 * notes.
 			 */
 			public static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd.nononsenseapps."
 					+ TABLE_NAME;
@@ -887,5 +888,82 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps."
 					+ TABLE_NAME;
 		}
+	}
+
+	/**
+	 * Converts the columns names from the legacy URIs. However, the data must
+	 * also be returned correctly!
+	 */
+	public static String[] convertLegacyColumns(final String[] legacyCols) {
+		String[] newCols = new String[legacyCols.length];
+		for (int i = 0; i < legacyCols.length; i++) {
+			String col = legacyCols[i];
+			String newCol = col;
+			// Lists
+			if (NotePad.Lists.COLUMN_NAME_TITLE.equals(col)) {
+				newCol = TaskList.Columns.TITLE;
+			}
+			// Tasks
+			else if (NotePad.Notes.COLUMN_NAME_TITLE.equals(col)) {
+				newCol = Task.Columns.TITLE;
+			}
+			else if (NotePad.Notes.COLUMN_NAME_NOTE.equals(col)) {
+				newCol = Task.Columns.NOTE;
+			}
+			else if (NotePad.Notes.COLUMN_NAME_LIST.equals(col)) {
+				newCol = Task.Columns.DBLIST;
+			}
+			else if (NotePad.Notes.COLUMN_NAME_DUE_DATE.equals(col)) {
+				newCol = Task.Columns.DUE;
+			}
+			else if (NotePad.Notes.COLUMN_NAME_GTASKS_STATUS.equals(col)) {
+				newCol = Task.Columns.COMPLETED;
+			}
+
+			Log.d("nononsenseapps db", "legacy converted field:" + newCol);
+			newCols[i] = newCol;
+		}
+		return newCols;
+	}
+
+	/** 
+	 * Convert new values to old, but using old or new column names
+	 * 
+	 * TaskProjection: new String[] { "_id", "title", "note", "list", "duedate",
+	 * "gtaskstatus"};
+	 */
+	public static Object[] convertLegacyTaskValues(final Cursor cursor) {
+		Object[] retval = new Object[cursor.getColumnCount()];
+		for (int i = 0; i < cursor.getColumnCount(); i++) {
+			final String colName = cursor.getColumnName(i);
+			final Object val;
+			if (NotePad.Notes.COLUMN_NAME_DUE_DATE.equals(colName) ||
+					Task.Columns.DUE.equals(colName)) {
+				val = cursor.isNull(i) ? "" : RFC3339Date.asRFC3339(cursor.getLong(i));
+			}
+			else if (NotePad.Notes.COLUMN_NAME_GTASKS_STATUS.equals(colName) ||
+					Task.Columns.COMPLETED.equals(colName)) {
+				val = cursor.isNull(i) ? "needsAction" : "completed";
+			}
+			else {
+				switch (cursor.getType(i)) {
+				case Cursor.FIELD_TYPE_FLOAT:
+					val = cursor.getFloat(i);
+					break;
+				case Cursor.FIELD_TYPE_INTEGER:
+					val = cursor.getLong(i);
+					break;
+				case Cursor.FIELD_TYPE_STRING:
+					val = cursor.getString(i);
+					break;
+				case Cursor.FIELD_TYPE_NULL:
+				default:
+					val = null;
+				}
+			}
+			Log.d("nononsenseapps db", "legacy notes col: " + val);
+			retval[i] = val;
+		}
+		return retval;
 	}
 }

@@ -42,15 +42,15 @@ public class TaskList extends DAO {
 		
 		// Legacy URIs
 				sURIMatcher.addURI(MyContentProvider.AUTHORITY,
-						LegacyDBHelper.NotePad.Lists.PATH_LISTS, LEGACYBASEURICODE);
+						LegacyDBHelper.NotePad.Lists.LISTS, LEGACYBASEURICODE);
 				sURIMatcher.addURI(MyContentProvider.AUTHORITY,
-						LegacyDBHelper.NotePad.Lists.PATH_LISTS + "/#",
+						LegacyDBHelper.NotePad.Lists.LISTS + "/#",
 						LEGACYBASEITEMCODE);
 				sURIMatcher.addURI(MyContentProvider.AUTHORITY,
-						LegacyDBHelper.NotePad.Lists.PATH_VISIBLE_LISTS,
+						LegacyDBHelper.NotePad.Lists.VISIBLE_LISTS,
 						LEGACYVISIBLEURICODE);
 				sURIMatcher.addURI(MyContentProvider.AUTHORITY,
-						LegacyDBHelper.NotePad.Lists.PATH_VISIBLE_LISTS + "/#",
+						LegacyDBHelper.NotePad.Lists.VISIBLE_LISTS + "/#",
 						LEGACYVISIBLEITEMCODE);
 	}
 
