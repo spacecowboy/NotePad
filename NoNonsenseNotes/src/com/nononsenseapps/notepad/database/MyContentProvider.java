@@ -35,7 +35,6 @@ public class MyContentProvider extends ContentProvider {
 
 	@Override
 	public String getType(Uri uri) {
-		// add legacy URIs
 		switch (sURIMatcher.match(uri)) {
 		case Notification.BASEITEMCODE:
 		case Notification.BASEURICODE:
@@ -481,18 +480,23 @@ public class MyContentProvider extends ContentProvider {
 			break;
 		case Task.SECTIONEDDATEQUERYCODE:
 			// Add list null because that's what the headers will have
+			final String listId;
 			if (selectionArgs == null || selectionArgs.length == 0) {
-				throw new SQLException(
-						"Need a listid as first arg at the moment for this view!");
+				listId = null;
+//				throw new SQLException(
+//						"Need a listid as first arg at the moment for this view!");
+			}
+			else {
+				listId = selectionArgs[0];
 			}
 			// Create view if not exists
 			DatabaseHandler.getInstance(getContext()).getWritableDatabase()
-					.execSQL(Task.CREATE_SECTIONED_DATE_VIEW(selectionArgs[0]));
+					.execSQL(Task.CREATE_SECTIONED_DATE_VIEW(listId));
 
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
-					.query(Task.getSECTION_DATE_VIEW_NAME(selectionArgs[0]),
+					.query(Task.getSECTION_DATE_VIEW_NAME(listId),
 							projection,
 							selection,
 							selectionArgs,

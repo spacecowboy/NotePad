@@ -36,8 +36,9 @@ public class Task extends DAO {
 	public static final String FTS3_TABLE_NAME = "fts3_task";
 
 	public static String getSECTION_DATE_VIEW_NAME(final String listId) {
+		// listId CAN be null. Hence the string concat hack
 		return new StringBuilder().append(SECTIONED_DATE_VIEW).append("_")
-				.append(listId).toString();
+				.append("" + listId).toString();
 	}
 
 	// Used in sectioned view date
@@ -460,9 +461,11 @@ public class Task extends DAO {
 	 * This is a view which returns the tasks in the specified list with headers
 	 * suitable for dates, if any tasks would be sorted under them. Provider
 	 * hardcodes the sort order for this.
+	 * 
+	 * if listId is null, will return for all lists
 	 */
 	public static final String CREATE_SECTIONED_DATE_VIEW(final String listId) {
-		final String sListId = "'" + listId + "'";
+		final String sListId = listId == null ? " IS NOT NULL " : "'" + listId + "'";
 		return new StringBuilder()
 				.append("CREATE TEMP VIEW IF NOT EXISTS ")
 				.append(getSECTION_DATE_VIEW_NAME(listId))
@@ -527,6 +530,9 @@ public class Task extends DAO {
 				.append(" WHERE EXISTS(SELECT _ID FROM ")
 				.append(TABLE_NAME)
 				.append(" WHERE ")
+				.append(Columns.COMPLETED)
+				.append(" IS NULL ")
+				.append(" AND ")
 				.append(Columns.DBLIST)
 				.append(" IS ")
 				.append(sListId)
@@ -548,6 +554,9 @@ public class Task extends DAO {
 				.append(" WHERE EXISTS(SELECT _ID FROM ")
 				.append(TABLE_NAME)
 				.append(" WHERE ")
+				.append(Columns.COMPLETED)
+				.append(" IS NULL ")
+				.append(" AND ")
 				.append(Columns.DBLIST)
 				.append(" IS ")
 				.append(sListId)
@@ -569,6 +578,9 @@ public class Task extends DAO {
 				.append(" WHERE EXISTS(SELECT _ID FROM ")
 				.append(TABLE_NAME)
 				.append(" WHERE ")
+				.append(Columns.COMPLETED)
+				.append(" IS NULL ")
+				.append(" AND ")
 				.append(Columns.DBLIST)
 				.append(" IS ")
 				.append(sListId)
@@ -590,6 +602,9 @@ public class Task extends DAO {
 				.append(" WHERE EXISTS(SELECT _ID FROM ")
 				.append(TABLE_NAME)
 				.append(" WHERE ")
+				.append(Columns.COMPLETED)
+				.append(" IS NULL ")
+				.append(" AND ")
 				.append(Columns.DBLIST)
 				.append(" IS ")
 				.append(sListId)
@@ -611,6 +626,9 @@ public class Task extends DAO {
 				.append(" WHERE EXISTS(SELECT _ID FROM ")
 				.append(TABLE_NAME)
 				.append(" WHERE ")
+				.append(Columns.COMPLETED)
+				.append(" IS NULL ")
+				.append(" AND ")
 				.append(Columns.DBLIST)
 				.append(" IS ")
 				.append(sListId)
@@ -632,6 +650,9 @@ public class Task extends DAO {
 				.append(" WHERE EXISTS(SELECT _ID FROM ")
 				.append(TABLE_NAME)
 				.append(" WHERE ")
+				.append(Columns.COMPLETED)
+				.append(" IS NULL ")
+				.append(" AND ")
 				.append(Columns.DBLIST)
 				.append(" IS ")
 				.append(sListId)
@@ -653,6 +674,9 @@ public class Task extends DAO {
 				.append(" WHERE EXISTS(SELECT _ID FROM ")
 				.append(TABLE_NAME)
 				.append(" WHERE ")
+				.append(Columns.COMPLETED)
+				.append(" IS NULL ")
+				.append(" AND ")
 				.append(Columns.DBLIST)
 				.append(" IS ")
 				.append(sListId)
