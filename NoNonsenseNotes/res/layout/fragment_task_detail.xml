@@ -76,7 +76,6 @@
                 style="?android:attr/buttonBarButtonStyle"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:layout_alignBottom="@+id/taskCompleted"
                 android:layout_alignParentRight="true"
                 android:layout_below="@+id/dueHeader"
                 android:src="?attr/body_remove" />
@@ -87,7 +86,6 @@
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:minHeight="48dp"
-                android:layout_alignBottom="@+id/taskCompleted"
                 android:layout_below="@+id/dueHeader"
                 android:layout_toLeftOf="@+id/dueCancelButton"
                 android:layout_toRightOf="@+id/checkboxcontainer"
@@ -126,47 +124,12 @@
                 android:layout_below="@+id/notificationAdd"
                 android:layout_marginBottom="0dp"
                 android:paddingLeft="8dp"
+                android:paddingBottom="8dp"
                 android:layout_marginTop="4dp"
                 android:animateLayoutChanges="true"
                 android:orientation="vertical" >
             </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/notificationAddBak"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_width="match_parent"
-                android:layout_height="48dp"
-                android:layout_below="@+id/notificationList"
-                android:orientation="horizontal"
-                android:visibility="gone" >
-
-                <!--
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
-                        android:background="#0000"
-                        android:clickable="false"
-                        android:src="@drawable/content_new_light" />
-                -->
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="4dp"
-                    android:layout_marginTop="4dp"
-                    android:background="#0000"
-                    android:clickable="false"
-                    android:drawableLeft="?attr/body_new"
-                    android:drawablePadding="8dp"
-                    android:fontFamily="sans-serif"
-                    android:gravity="center_vertical"
-                    android:paddingRight="20dp"
-                    android:text="@string/add_reminder"
-                    android:textAllCaps="true"
-                    android:textAppearance="@android:style/TextAppearance.Medium"
-                    android:textColor="?attr/labelAddItemTextColor"
-                    android:textStyle="bold" />
-            </LinearLayout>
+            
     </RelativeLayout>
 
 </ScrollView>

@@ -32,15 +32,18 @@ public abstract class DAO {
 	public String[] whereIdArg() {
 		return new String[] { Long.toString(_id) };
 	}
+	public static String[] whereIdArg(final long _id) {
+		return new String[] { Long.toString(_id) };
+	}
 	/**
 	 * Append the id argument to array
 	 */
-	public String[] whereIdArg(final String[] orgWhereArgs) {
+	public static String[] whereIdArg(final long _id, final String[] orgWhereArgs) {
 		if (orgWhereArgs == null) {
-			return whereIdArg();
+			return whereIdArg(_id);
 		}
 		else {
-			return joinArrays(orgWhereArgs, whereIdArg());
+			return joinArrays(orgWhereArgs, whereIdArg(_id));
 		}
 	}
 	

@@ -21,8 +21,12 @@
     <string name="title_create">New note</string>
     <string name="title_edit">Edit: %1$s</string>
     <string name="timemachine">Time machine</string>
+    <string name="time">Time</string>
     <string name="done">Done</string>
     <string name="saved">Saved</string>
+    <string name="distance">Distance</string>
+    <string name="need_location_help">Long press to set a location</string>
+    <string name="near_location">Near</string>
     <string name="menu_add">New note</string>
     <string name="menu_save_and_add">Save and open a new note</string>
     <string name="menu_delete">Delete</string>
@@ -122,6 +126,7 @@
     <string name="notecopied">Copied</string>
     <string name="deleted">Deleted</string>
     <string name="repeat">Repeat</string>
+    <string name="once">Once</string>
     <string name="items">notes</string>
     <string name="permission_read_label">read notes and lists</string>
     <string name="permission_read_desc">Allows the application to read your notes and related lists.</string>
@@ -313,7 +318,6 @@
     <string name="dateformat_micro">MMM d</string>
     <string name="dateformat_short">E, d MMM</string>
     <string name="dateformat_long">EEEE, d MMMM</string>
-    <string name="dateformat_weekday_short">E</string>
     <string name="dateformat_weekday">EEEE</string>
     <string name="dateformat_short_1">E localtime, d MMM</string>
     <string name="dateformat_short_2">E, d MMM</string>

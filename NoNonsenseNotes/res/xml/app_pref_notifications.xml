@@ -36,10 +36,10 @@
         android:entryValues="@array/notification_prio_values"
         android:key="@string/key_pref_prio" />
     
-    <CheckBoxPreference
-        android:defaultValue="true"
+    <!-- <CheckBoxPreference
+        android:defaultValue="false"
         android:key="@string/key_pref_group_on_lists"
         android:title="@string/group_on_list"
-        android:summary="@string/group_on_list_summary" />
+        android:summary="@string/group_on_list_summary" /> -->
 
 </PreferenceScreen>

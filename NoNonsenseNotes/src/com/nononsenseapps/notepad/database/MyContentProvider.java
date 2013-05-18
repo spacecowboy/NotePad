@@ -154,7 +154,7 @@ public class MyContentProvider extends ContentProvider {
 				final TaskList list = new TaskList(uri, values);
 				result += db.update(TaskList.TABLE_NAME, list.getContent(),
 						TaskList.whereIdIs(selection),
-						list.whereIdArg(selectionArgs));
+						TaskList.whereIdArg(list._id, selectionArgs));
 				break;
 			case Task.INDENTITEMCODE:
 				// indent one
@@ -236,7 +236,7 @@ public class MyContentProvider extends ContentProvider {
 
 					result += db.update(Task.TABLE_NAME, t.getContent(),
 							Task.whereIdIs(selection),
-							t.whereIdArg(selectionArgs));
+							Task.whereIdArg(t._id, selectionArgs));
 				}
 				break;
 			case Task.BASEURICODE:
@@ -246,12 +246,11 @@ public class MyContentProvider extends ContentProvider {
 				break;
 			case Notification.BASEITEMCODE:
 			case Notification.WITHTASKQUERYITEMCODE:
-				final Notification n = new Notification(uri, values);
-				if (n.getContent().size() > 0) {
+				//final Notification n = new Notification(uri, values);
 					result += db.update(Notification.TABLE_NAME,
-							n.getContent(), Notification.whereIdIs(selection),
-							n.whereIdArg(selectionArgs));
-				}
+							values, Notification.whereIdIs(selection),
+							Notification.whereIdArg(Long.parseLong(uri.getLastPathSegment()),
+									selectionArgs));
 				break;
 			case Notification.BASEURICODE:
 				// No checks
@@ -379,9 +378,9 @@ public class MyContentProvider extends ContentProvider {
 			String selection, String[] selectionArgs, String sortOrder) {
 		Cursor result = null;
 		final long id;
-		if (selection != null) Log.d("nononsenseapps", selection);
-		if (selectionArgs != null)
-			Log.d("nononsenseapps", DAO.arrayToCommaString(selectionArgs));
+//		if (selection != null) Log.d("nononsenseapps", selection);
+//		if (selectionArgs != null)
+//			Log.d("nononsenseapps", DAO.arrayToCommaString(selectionArgs));
 		switch (sURIMatcher.match(uri)) {
 		case TaskList.BASEURICODE:
 			result = DatabaseHandler
@@ -560,8 +559,8 @@ public class MyContentProvider extends ContentProvider {
 			break;
 		case RemoteTaskList.BASEURICODE:
 			if (selection != null && selectionArgs != null)
-				Log.d(MainActivity.TAG, "remotetasklist query: " + selection
-						+ DAO.arrayToCommaString(selectionArgs));
+//				Log.d(MainActivity.TAG, "remotetasklist query: " + selection
+//						+ DAO.arrayToCommaString(selectionArgs));
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
@@ -594,7 +593,6 @@ public class MyContentProvider extends ContentProvider {
 
 		case TaskList.LEGACYBASEURICODE:
 		case TaskList.LEGACYVISIBLEURICODE:
-			Log.d("nononsenseapps db", "legacy list: " + uri);
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
@@ -606,7 +604,6 @@ public class MyContentProvider extends ContentProvider {
 			break;
 		case TaskList.LEGACYBASEITEMCODE:
 		case TaskList.LEGACYVISIBLEITEMCODE:
-			Log.d("nononsenseapps db", "legacy listitem: " + uri);
 			id = Long.parseLong(uri.getLastPathSegment());
 			result = DatabaseHandler
 					.getInstance(getContext())
@@ -622,7 +619,6 @@ public class MyContentProvider extends ContentProvider {
 			break;
 		case Task.LEGACYBASEURICODE:
 		case Task.LEGACYVISIBLEURICODE:
-			Log.d("nononsenseapps db", "legacy notes: " + uri);
 			final Cursor c = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
@@ -631,7 +627,6 @@ public class MyContentProvider extends ContentProvider {
 							null, null, null, null, Task.Columns.DUE);
 			result = new MatrixCursor(projection);
 			while (c.moveToNext()) {
-				Log.d("nononsenseapps db", "legacy notes adding row to matrix: " + c.getString(1));
 				((MatrixCursor) result).addRow(LegacyDBHelper
 						.convertLegacyTaskValues(c));
 			}
@@ -643,7 +638,6 @@ public class MyContentProvider extends ContentProvider {
 		case Task.SEARCHSUGGESTIONSCODE:
 			final String limit = uri
 					.getQueryParameter(SearchManager.SUGGEST_PARAMETER_LIMIT);
-			Log.d("nononsenseapps db", "search limit: " + limit);
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()

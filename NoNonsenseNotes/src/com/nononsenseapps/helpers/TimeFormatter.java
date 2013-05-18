@@ -14,6 +14,8 @@ import android.preference.PreferenceManager;
  * 
  */
 public class TimeFormatter {
+	
+	public static String WEEKDAY_SHORTEST_FORMAT = "E";
 
 	public static Locale getLocale(final String lang) {
 		final Locale locale;
@@ -153,6 +155,6 @@ public class TimeFormatter {
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
 						.getString(context.getString(R.string.pref_locale), ""),
-				context.getString(R.string.dateformat_weekday_short));
+						WEEKDAY_SHORTEST_FORMAT);
 	}
 }

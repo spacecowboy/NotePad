@@ -10,6 +10,7 @@ import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.ui.WeekDaysView;
+import com.nononsenseapps.util.GeofenceRemover;
 import com.nononsenseapps.utils.views.GreyableToggleButton;
 
 import android.content.ContentValues;
@@ -23,6 +24,8 @@ import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.text.format.DateFormat;
 import android.util.Log;
+import android.view.View;
+import android.widget.TextView;
 
 public class Notification extends DAO {
 
@@ -70,9 +73,13 @@ public class Notification extends DAO {
 		public static final String PERMANENT = "permanent";
 		public static final String TASKID = "taskid";
 		public static final String REPEATS = "repeats";
+		public static final String LATITUDE = "latitude";
+		public static final String LONGITUDE = "longitude";
+		public static final String RADIUS = "radius";
+		public static final String LOCATIONNAME = "locationname";
 
 		public static final String[] FIELDS = { _ID, TIME, PERMANENT, TASKID,
-				REPEATS };
+				REPEATS, LOCATIONNAME, LATITUDE, LONGITUDE, RADIUS };
 	}
 
 	public static class ColumnsWithTask extends Columns {
@@ -95,7 +102,9 @@ public class Notification extends DAO {
 	 * Main table to store notification data
 	 */
 	public static final String CREATE_TABLE = new StringBuilder("CREATE TABLE ")
-			.append(TABLE_NAME).append("(").append(Columns._ID)
+			.append(TABLE_NAME)
+			.append("(")
+			.append(Columns._ID)
 			.append(" INTEGER PRIMARY KEY,")
 			.append(Columns.TIME)
 			.append(" INTEGER,")
@@ -106,6 +115,13 @@ public class Notification extends DAO {
 			// Interpreted binary
 			.append(Columns.REPEATS)
 			.append(" INTEGER NOT NULL DEFAULT 0,")
+			// Location data
+			.append(Columns.LOCATIONNAME).append(" TEXT,")
+			.append(Columns.LATITUDE).append(" REAL, ")
+			.append(Columns.LONGITUDE)
+			.append(" REAL, ")
+			.append(Columns.RADIUS)
+			.append(" REAL, ")
 			// Foreign key for task
 			.append("FOREIGN KEY(").append(Columns.TASKID)
 			.append(") REFERENCES ").append(Task.TABLE_NAME).append("(")
@@ -140,14 +156,23 @@ public class Notification extends DAO {
 	// milliseconds since 1970-01-01 UTC
 	public Long time = null;
 	public boolean permanent = false;
+
 	public Long taskID = null;
+	public long repeats = 0;
+
+	public String locationName = null;
+	public Double latitude = null;
+	public Double longitude = null;
+	public Double radius = null;
 
 	// Read only, fetched from VIEW
 	public String listTitle = null;
 	public Long listID = null;
 	public String taskTitle = null;
 	public String taskNote = null;
-	public long repeats = 0;
+
+	// Convenience for the editor
+	public View view = null;
 
 	/**
 	 * Must be associated with a task
@@ -158,13 +183,17 @@ public class Notification extends DAO {
 
 	public Notification(final Cursor c) {
 		_id = c.getLong(0);
-		time = c.getLong(1);
+		time = c.isNull(1) ? null : c.getLong(1);
 		permanent = 1 == c.getLong(2);
-		taskID = c.getLong(3);
+		taskID = c.isNull(3) ? null : c.getLong(3);
 		repeats = c.getLong(4);
+		locationName = c.isNull(5) ? null : c.getString(5);
+		latitude = c.isNull(6) ? null : c.getDouble(6);
+		longitude = c.isNull(7) ? null : c.getDouble(7);
+		radius = c.isNull(8) ? null : c.getDouble(8);
 		// if cursor has more fields, then assume it was constructed with
 		// the WITH_TASKS view query
-		if (c.getColumnCount() > 5) {
+		if (c.getColumnCount() > 9) {
 			listTitle = c.getString(c.getColumnIndex(ColumnsWithTask.listPrefix
 					+ TaskList.Columns.TITLE));
 			listID = c.getLong(c.getColumnIndex(ColumnsWithTask.listPrefix
@@ -190,6 +219,10 @@ public class Notification extends DAO {
 		permanent = 1 == values.getAsLong(Columns.PERMANENT);
 		taskID = values.getAsLong(Columns.TASKID);
 		repeats = values.getAsLong(Columns.REPEATS);
+		locationName = values.getAsString(Columns.LOCATIONNAME);
+		latitude = values.getAsDouble(Columns.LATITUDE);
+		longitude = values.getAsDouble(Columns.LONGITUDE);
+		radius = values.getAsDouble(Columns.RADIUS);
 	}
 
 	@Override
@@ -200,6 +233,10 @@ public class Notification extends DAO {
 		values.put(Columns.TASKID, taskID);
 		values.put(Columns.PERMANENT, permanent ? 1 : 0);
 		values.put(Columns.REPEATS, repeats);
+		values.put(Columns.LOCATIONNAME, locationName);
+		values.put(Columns.LATITUDE, latitude);
+		values.put(Columns.LONGITUDE, longitude);
+		values.put(Columns.RADIUS, radius);
 
 		return values;
 
@@ -257,13 +294,15 @@ public class Notification extends DAO {
 	public int delete(final Context context) {
 		// Make sure existing notifications are cancelled.
 		NotificationHelper.cancelNotification(context, this);
+		// Also remove any associated geofences
+		GeofenceRemover.removeFences(context, Long.toString(_id));
 		return super.delete(context);
 	}
-	
+
 	public void saveInBackground(final Context context, final boolean schedule) {
 		final AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
 			@Override
-			protected Void doInBackground(Void...voids ) {
+			protected Void doInBackground(Void... voids) {
 				save(context, schedule);
 				return null;
 			}
@@ -282,14 +321,28 @@ public class Notification extends DAO {
 				@Override
 				protected Void doInBackground(final Long... ids) {
 					String idStrings = "(";
+					ArrayList<String> idsToClear = new ArrayList<String>();
 					for (Long id : ids) {
 						idStrings += id + ",";
+						idsToClear.add(Long.toString(id));
 					}
 					idStrings = idStrings.substring(0, idStrings.length() - 1);
 					idStrings += ")";
+					
+					final Cursor c = context.getContentResolver().query(
+							URI,
+							Columns.FIELDS,
+							Columns.TASKID + " IN " + idStrings, null,
+							null);
 
-					context.getContentResolver().delete(URI,
-							Columns.TASKID + " IN " + idStrings, null);
+					while (c.moveToNext()) {
+						// Yes dont just call delete in database
+						// We have to remove geofences (in delete)
+						Notification n = new Notification(c);
+						n.delete(context);
+					}
+					c.close();
+					
 					return null;
 				}
 			};
@@ -335,11 +388,18 @@ public class Notification extends DAO {
 									+ Columns.TIME + " <= " + maxTime, null,
 							null);
 
+					ArrayList<String> idsToClear = new ArrayList<String>();
 					while (c.moveToNext()) {
 						Notification n = new Notification(c);
+						idsToClear.add(Long.toString(n._id));
 						n.deleteOrReschedule(context);
 					}
 					c.close();
+
+					if (idsToClear.size() > 0) {
+						// Remove geofences as well
+						GeofenceRemover.removeFences(context, idsToClear);
+					}
 
 					// context.getContentResolver().delete(URI,
 					// Columns.TASKID + " IN " + idStrings +
@@ -355,33 +415,39 @@ public class Notification extends DAO {
 	 * Starts a background task that removes all notifications associated with
 	 * the specified list, occurring before the specified time
 	 */
-	public static void removeWithListId(final Context context,
-			final long listId, final long maxTime) {
-		final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
-			@Override
-			protected Void doInBackground(final Long... ids) {
-				// First get the list of tasks in that list
-				final Cursor c = context.getContentResolver().query(Task.URI,
-						Task.Columns.FIELDS, Task.Columns.DBLIST + " IS ?",
-						new String[] { Long.toString(listId) }, null);
-
-				String idStrings = "(";
-				while (c.moveToNext()) {
-					idStrings += c.getLong(0) + ",";
-				}
-				c.close();
-				idStrings = idStrings.substring(0, idStrings.length() - 1);
-				idStrings += ")";
-
-				context.getContentResolver().delete(
-						URI,
-						Columns.TIME + " <= " + maxTime + " AND "
-								+ Columns.TASKID + " IN " + idStrings, null);
-				return null;
-			}
-		};
-		task.execute(listId);
-	}
+//	public static void removeWithListId(final Context context,
+//			final long listId, final long maxTime) {
+//		final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
+//			@Override
+//			protected Void doInBackground(final Long... ids) {
+//				// First get the list of tasks in that list
+//				final Cursor c = context
+//						.getContentResolver()
+//						.query(Task.URI,
+//								Task.Columns.FIELDS,
+//								Task.Columns.DBLIST
+//										+ " IS ? AND "
+//										+ com.nononsenseapps.notepad.database.Notification.Columns.RADIUS
+//										+ " IS NULL",
+//								new String[] { Long.toString(listId) }, null);
+//
+//				String idStrings = "(";
+//				while (c.moveToNext()) {
+//					idStrings += c.getLong(0) + ",";
+//				}
+//				c.close();
+//				idStrings = idStrings.substring(0, idStrings.length() - 1);
+//				idStrings += ")";
+//
+//				context.getContentResolver().delete(
+//						URI,
+//						Columns.TIME + " <= " + maxTime + " AND "
+//								+ Columns.TASKID + " IN " + idStrings, null);
+//				return null;
+//			}
+//		};
+//		task.execute(listId);
+//	}
 
 	/**
 	 * Returns list of notifications coupled to specified task, sorted by time
@@ -400,8 +466,9 @@ public class Notification extends DAO {
 	}
 
 	/**
-	 * Returns a list of notifications occurring after/before specified time.
-	 * Sorted by time ascending
+	 * Returns a list of notifications occurring after/before specified time,
+	 * and which do not have a location (radius == null). Sorted by time
+	 * ascending
 	 */
 	public static List<Notification> getNotificationsWithTime(
 			final Context context, final long time, final boolean before) {
@@ -410,7 +477,10 @@ public class Notification extends DAO {
 				context,
 				new StringBuilder()
 						.append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
-						.append(comparison).toString(),
+						.append(comparison)
+						.append(" AND ")
+						.append(com.nononsenseapps.notepad.database.Notification.Columns.RADIUS)
+						.append(" IS NULL").toString(),
 				new String[] { Long.toString(time) },
 				new StringBuilder()
 						.append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
@@ -455,9 +525,15 @@ public class Notification extends DAO {
 			@Override
 			protected Void doInBackground(final Long... ids) {
 				// First get the list of tasks in that list
-				final Cursor c = context.getContentResolver().query(Task.URI,
-						Task.Columns.FIELDS, Task.Columns.DBLIST + " IS ?",
-						new String[] { Long.toString(listId) }, null);
+				final Cursor c = context
+						.getContentResolver()
+						.query(Task.URI,
+								Task.Columns.FIELDS,
+								Task.Columns.DBLIST
+										+ " IS ? AND "
+										+ com.nononsenseapps.notepad.database.Notification.Columns.RADIUS
+										+ " IS NULL",
+								new String[] { Long.toString(listId) }, null);
 
 				String idStrings = "(";
 				while (c.moveToNext()) {
@@ -570,7 +646,8 @@ public class Notification extends DAO {
 		SimpleDateFormat weekDayFormatter = TimeFormatter
 				.getLocalFormatterWeekdayShort(context);
 		// 2013-05-13 was a monday
-		GregorianCalendar gc = new GregorianCalendar(2013, GregorianCalendar.MAY, 13);
+		GregorianCalendar gc = new GregorianCalendar(2013,
+				GregorianCalendar.MAY, 13);
 		final long base = gc.getTimeInMillis();
 		final long day = 24 * 60 * 60 * 1000;
 		for (int i = 0; i < 7; i++) {

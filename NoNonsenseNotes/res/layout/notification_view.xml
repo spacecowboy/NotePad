@@ -26,14 +26,35 @@
         android:layout_alignParentLeft="true"
         android:layout_toLeftOf="@id/notificationRemove"
         android:background="?android:attr/selectableItemBackground"
+        android:drawableLeft="@drawable/ic_alarm"
         android:clickable="true"
         android:fontFamily="sans-serif-light"
         android:gravity="center_vertical"
-        android:hint="@string/editor_due_date_hint"
+        android:hint="@string/time"
         android:minHeight="48dp"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textIsSelectable="false" />
+
+        <TextView
+            android:id="@+id/notificationLocation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_below="@id/notificationDateTime"
+            android:layout_toLeftOf="@id/notificationRemove"
+            android:background="?android:attr/selectableItemBackground"
+            android:layout_alignWithParentIfMissing="true"
+            android:clickable="true"
+            android:drawableLeft="@drawable/ic_location_red"
+            android:fontFamily="sans-serif-light"
+            android:gravity="center_vertical"
+            android:hint="@string/location"
+            android:minHeight="48dp"
+            android:singleLine="true"
+            android:visibility="visible"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:textIsSelectable="false" />
 
     <View
         android:id="@+id/dividerLine"
@@ -41,7 +62,7 @@
         android:layout_height="1dp"
         android:layout_alignParentRight="true"
         android:layout_alignLeft="@id/notificationDateTime"
-        android:layout_below="@id/notificationDateTime"
+        android:layout_below="@id/notificationLocation"
         android:background="?android:attr/dividerVertical" />
 
     <TextView
@@ -56,14 +77,15 @@
         android:drawableRight="?attr/expander_open_holo"
         android:fontFamily="sans-serif-light"
         android:gravity="center_vertical"
-        android:hint=""
+        android:hint="@string/once"
         android:paddingRight="16dp"
+        android:paddingLeft="16dp"
         android:singleLine="true"
         android:text=""
         android:textAllCaps="true"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textIsSelectable="false"
-        android:visibility="visible" />
+        android:visibility="gone" />
 
     <!-- Click to unhide this -->
 
@@ -76,44 +98,11 @@
         android:layout_below="@id/openRepeatField"
         android:visibility="gone" >
 
-        <ImageButton
-            android:id="@+id/notificationLocationRemove"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="4dp"
-            android:visibility="visible"
-            android:scaleType="center"
-            android:src="?attr/body_remove" />
-
-        <TextView
-            android:id="@+id/notificationLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentTop="true"
-            android:layout_toLeftOf="@id/notificationLocationRemove"
-            android:background="?android:attr/selectableItemBackground"
-            android:layout_alignWithParentIfMissing="true"
-            android:clickable="true"
-            android:drawableLeft="@drawable/ic_location"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center_vertical"
-            android:hint="@string/location"
-            android:minHeight="48dp"
-            android:singleLine="true"
-            android:visibility="visible"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textIsSelectable="false" />
-
         <TextView
             android:id="@+id/temp1"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_alignWithParentIfMissing="true"
-            android:layout_below="@id/notificationLocation"
             android:fontFamily="sans-serif-light"
             android:gravity="center_vertical"
             android:singleLine="true"

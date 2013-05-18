@@ -11,7 +11,9 @@ import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.ActivityLocation;
 import com.nononsenseapps.notepad.ActivityLocation_;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
@@ -117,6 +119,7 @@ public class TaskDetailFragment extends Fragment implements
 					addNotification(new Notification(c));
 				}
 				// Don't update while editing
+				// TODO this allows updating of the location name etc
 				getLoaderManager().destroyLoader(LOADER_EDITOR_NOTIFICATIONS);
 			}
 			else if (LOADER_EDITOR_TASKLISTS == ldr.getId()) {
@@ -164,6 +167,9 @@ public class TaskDetailFragment extends Fragment implements
 	// AND with task.locked. If result is true, note is locked and has not been
 	// unlocked, otherwise good to show
 	private boolean mLocked = true;
+
+	// This is the notification we are setting a location for
+	private Notification pendingLocationNotification = null;
 
 	private OnFragmentInteractionListener mListener;
 	private ShareActionProvider mShareActionProvider;
@@ -362,15 +368,16 @@ public class TaskDetailFragment extends Fragment implements
 				return;
 			}
 			final Notification not = new Notification(mTask._id);
-			final Calendar local = Calendar.getInstance();
-			local.add(Calendar.MINUTE, 1);
-			final long soon = local.getTimeInMillis();
-			if (mTask.due == null || mTask.due < soon) {
-				not.time = soon;
-			}
-			else {
-				not.time = mTask.due;
-			}
+			// TODO remove this, no need to default
+			// final Calendar local = Calendar.getInstance();
+			// local.add(Calendar.MINUTE, 1);
+			// final long soon = local.getTimeInMillis();
+			// if (mTask.due == null || mTask.due < soon) {
+			// not.time = soon;
+			// }
+			// else {
+			// not.time = mTask.due;
+			// }
 			not.save(getActivity(), true);
 
 			// add item to UI
@@ -604,6 +611,37 @@ public class TaskDetailFragment extends Fragment implements
 				onTimeTravel(data);
 			}
 		}
+		else if (requestCode == 2) {
+			// Location
+			if (resultCode == Activity.RESULT_OK
+					&& pendingLocationNotification != null) {
+				// TODO update text field and shit, possibly not here
+				pendingLocationNotification.latitude = data.getExtras()
+						.getDouble(ActivityLocation.EXTRA_LATITUDE);
+				pendingLocationNotification.longitude = data.getExtras()
+						.getDouble(ActivityLocation.EXTRA_LONGITUDE);
+				pendingLocationNotification.radius = (double) data.getExtras()
+						.getInt(ActivityLocation.EXTRA_RADIUS);
+				pendingLocationNotification.locationName = data.getExtras()
+						.getString(ActivityLocation.EXTRA_LOCATION_NAME);
+				if (pendingLocationNotification.view != null
+						&& pendingLocationNotification.locationName != null) {
+					pendingLocationNotification.view.findViewById(
+							// Hide time part
+							R.id.notificationDateTime).setVisibility(View.GONE);
+					// Fill in location name
+					((TextView) pendingLocationNotification.view
+							.findViewById(R.id.notificationLocation))
+							.setText(pendingLocationNotification.locationName);
+				}
+				// do in background
+				pendingLocationNotification.saveInBackground(getActivity(),
+						false);
+				// TODO remove this
+				// NotificationHelper.notifyGeofence(getActivity(),
+				// pendingLocationNotification._id);
+			}
+		}
 		else {
 			super.onActivityResult(requestCode, resultCode, data);
 		}
@@ -725,119 +763,164 @@ public class TaskDetailFragment extends Fragment implements
 	@UiThread
 	void addNotification(final Notification not) {
 		if (getActivity() != null) {
-
-			View nv = LayoutInflater.from(getActivity()).inflate(
+			View nv;// = notificationList.findViewById((int) not._id);
+			// if (nv == null) {
+			nv = LayoutInflater.from(getActivity()).inflate(
 					R.layout.notification_view, null);
+			// nv.setId((int) not._id);
+			// }
+			// else {
+			// notificationList.removeView(nv);
+			// }
+
+			// So we can update the view later
+			not.view = nv;
+
 			// Set date time text
 			final TextView notTimeButton = (TextView) nv
 					.findViewById(R.id.notificationDateTime);
-			notTimeButton.setText(not.getLocalDateTimeText(getActivity()));
+			if (not.time != null) {
+				notTimeButton.setText(not.getLocalDateTimeText(getActivity()));
+			}
+
+			if (not.radius != null) {
+				// TODO
+				notTimeButton.setVisibility(View.GONE);
+			}
+
+			final View notRemoveButton = nv
+					.findViewById(R.id.notificationRemove);
 
 			// Remove button
-			nv.findViewById(R.id.notificationRemove).setOnClickListener(
-					new OnClickListener() {
+			notRemoveButton.setOnClickListener(new OnClickListener() {
 
-						@Override
-						public void onClick(View v) {
-							if (!isLocked()) {
-								// Remove row from UI
-								notificationList.removeView((View) v
-										.getParent());
-								// Remove from database and renotify
-								not.delete(getActivity());
-							}
-						}
-					});
+				@Override
+				public void onClick(View v) {
+					if (!isLocked()) {
+						// Remove row from UI
+						notificationList.removeView((View) v.getParent());
+						// Remove from database and renotify
+						not.delete(getActivity());
+					}
+				}
+			});
 
-			// Date button
-			nv.findViewById(R.id.notificationDateTime).setOnClickListener(
-					new OnClickListener() {
+			// Location button
+			final TextView location = (TextView) nv
+					.findViewById(R.id.notificationLocation);
+			if (not.locationName != null) location.setText(not.locationName);
 
-						@Override
-						public void onClick(View v) {
-							if (!isLocked()) {
-								final TimePickerDialogFragment timePicker = TimePickerDialogFragment
-										.newInstance();
-								timePicker
-										.setListener(new TimePickerDialogHandler() {
-											@Override
-											public void onDialogTimeSet(
-													int hourOfDay, int minute) {
-												final Calendar localTime = Calendar
-														.getInstance();
-												localTime
-														.setTimeInMillis(not.time);
-												localTime.set(
-														Calendar.HOUR_OF_DAY,
-														hourOfDay);
-												localTime.set(Calendar.MINUTE,
-														minute);
+			if (not.time != null && not.radius == null) {
+				location.setVisibility(View.GONE);
+			}
 
-												not.time = localTime
-														.getTimeInMillis();
-												notTimeButton.setText(not
-														.getLocalDateTimeText(getActivity()));
-												not.save(getActivity(), false);
+			location.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					// TODO
+					pendingLocationNotification = not;
 
-												// Ask for date, yes the order
-												// is
-												// screwed up.
-												final DatePickerDialogFragment datePicker = DatePickerDialogFragment
-														.newInstance(
-																-1,
-																// localTime.get(Calendar.MONTH),
-																-1,
-																// localTime.get(Calendar.DAY_OF_MONTH),
-																localTime
-																		.get(Calendar.YEAR));
-												datePicker
-														.setListener(new DatePickerDialogHandler() {
-															@Override
-															public void onDialogDateSet(
-																	int year,
-																	int monthOfYear,
-																	int dayOfMonth) {
-																final Calendar localTime = Calendar
-																		.getInstance();
-																localTime
-																		.setTimeInMillis(not.time);
-																localTime
-																		.set(Calendar.YEAR,
-																				year);
-																localTime
-																		.set(Calendar.MONTH,
-																				monthOfYear);
-																localTime
-																		.set(Calendar.DAY_OF_MONTH,
-																				dayOfMonth);
-
-																not.time = localTime
-																		.getTimeInMillis();
-																notTimeButton
-																		.setText(not
-																				.getLocalDateTimeText(getActivity()));
-
-																not.save(
-																		getActivity(),
-																		true);
-															}
-														});
-												datePicker.show(
-														getFragmentManager(),
-														"date");
-											}
-
-										});
-								timePicker.show(getFragmentManager(), "time");
-							}
-						}
-					});
-
+					Intent i = new Intent(getActivity(),
+							ActivityLocation_.class);
+					i.putExtra(ActivityLocation.EXTRA_ID, not._id);
+					if (not.latitude != null && not.longitude != null
+							&& not.radius != null) {
+						i.putExtra(ActivityLocation.EXTRA_LATITUDE,
+								not.latitude)
+								.putExtra(ActivityLocation.EXTRA_LONGITUDE,
+										not.longitude)
+								.putExtra(ActivityLocation.EXTRA_RADIUS,
+										not.radius);
+					}
+					startActivityForResult(i, 2);
+				}
+			});
+			
 			final TextView openRepeatField = (TextView) nv
 					.findViewById(R.id.openRepeatField);
 			final View closeRepeatField = nv
 					.findViewById(R.id.closeRepeatField);
 			final View repeatDetails = nv.findViewById(R.id.repeatDetails);
+			
+			if (not.time != null && not.radius == null) {
+				openRepeatField.setVisibility(View.VISIBLE);
+			}
+
+			// Date button
+			notTimeButton.setOnClickListener(new OnClickListener() {
+
+				@Override
+				public void onClick(View v) {
+					if (!isLocked()) {
+						final TimePickerDialogFragment timePicker = TimePickerDialogFragment
+								.newInstance();
+						timePicker.setListener(new TimePickerDialogHandler() {
+							@Override
+							public void onDialogTimeSet(int hourOfDay,
+									int minute) {
+								final Calendar localTime = Calendar
+										.getInstance();
+								if (not.time != null) {
+									localTime.setTimeInMillis(not.time);
+								}
+								localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+								localTime.set(Calendar.MINUTE, minute);
+
+								not.time = localTime.getTimeInMillis();
+								// Enable repeat options
+								openRepeatField.setVisibility(View.VISIBLE);
+								// Fill in time so far
+								notTimeButton.setText(not
+										.getLocalDateTimeText(getActivity()));
+								not.save(getActivity(), false);
+								// Hide location
+								location.setVisibility(View.GONE);
+
+								// Ask for date, yes the order
+								// is
+								// screwed up.
+								final DatePickerDialogFragment datePicker = DatePickerDialogFragment
+										.newInstance(-1,
+										// localTime.get(Calendar.MONTH),
+												-1,
+												// localTime.get(Calendar.DAY_OF_MONTH),
+												localTime.get(Calendar.YEAR));
+								datePicker
+										.setListener(new DatePickerDialogHandler() {
+											@Override
+											public void onDialogDateSet(
+													int year, int monthOfYear,
+													int dayOfMonth) {
+												final Calendar localTime = Calendar
+														.getInstance();
+												if (not.time != null) {
+													localTime
+															.setTimeInMillis(not.time);
+												}
+												localTime.set(Calendar.YEAR,
+														year);
+												localTime.set(Calendar.MONTH,
+														monthOfYear);
+												localTime.set(
+														Calendar.DAY_OF_MONTH,
+														dayOfMonth);
+
+												not.time = localTime
+														.getTimeInMillis();
+												notTimeButton.setText(not
+														.getLocalDateTimeText(getActivity()));
+
+												not.save(getActivity(), true);
+											}
+										});
+								datePicker.show(getFragmentManager(), "date");
+							}
+
+						});
+						timePicker.show(getFragmentManager(), "time");
+					}
+				}
+			});
 
 			// set text on this
 			openRepeatField.setText(not.getRepeatAsText(getActivity()));
@@ -865,14 +948,6 @@ public class TaskDetailFragment extends Fragment implements
 					not.repeats = checkedDays;
 					openRepeatField.setText(not.getRepeatAsText(getActivity()));
 					not.saveInBackground(getActivity(), true);
-				}
-			});
-			
-			TextView location = (TextView) nv.findViewById(R.id.notificationLocation);
-			location.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					startActivity(new Intent(getActivity(), ActivityLocation_.class));
 				}
 			});
 

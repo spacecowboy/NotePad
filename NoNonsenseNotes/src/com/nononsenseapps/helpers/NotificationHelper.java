@@ -13,6 +13,7 @@ import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.util.GeofenceRemover;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -63,17 +64,18 @@ public class NotificationHelper extends BroadcastReceiver {
 	public void onReceive(Context context, Intent intent) {
 		if (Intent.ACTION_DELETE.equals(intent.getAction())) {
 			if (intent.hasExtra(ARG_MAX_TIME)) {
-				if (intent.hasExtra(ARG_LISTID)) {
-					deleteNotification(context,
-							intent.getLongExtra(ARG_LISTID, -1),
-							intent.getLongExtra(ARG_MAX_TIME, 0));
-
-					// TODO
-					if (intent.getBooleanExtra(ARG_COMPLETE, false)) {
-
-					}
-				}
-				else if (intent.hasExtra(ARG_TASKID)) {
+				// if (intent.hasExtra(ARG_LISTID)) {
+				// deleteNotification(context,
+				// intent.getLongExtra(ARG_LISTID, -1),
+				// intent.getLongExtra(ARG_MAX_TIME, 0));
+				//
+				// // TODO
+				// if (intent.getBooleanExtra(ARG_COMPLETE, false)) {
+				//
+				// }
+				// }
+				// else
+				if (intent.hasExtra(ARG_TASKID)) {
 					cancelNotification(context, intent.getData());
 
 					com.nononsenseapps.notepad.database.Notification
@@ -84,9 +86,10 @@ public class NotificationHelper extends BroadcastReceiver {
 
 			}
 			else {
+				// TODO add for geofence
 				// Just a notification
 				com.nononsenseapps.notepad.database.Notification
-				.deleteOrReschedule(context, intent.getData());
+						.deleteOrReschedule(context, intent.getData());
 
 				cancelNotification(context, intent.getData());
 				if (intent.getBooleanExtra(ARG_COMPLETE, false)) {
@@ -137,10 +140,112 @@ public class NotificationHelper extends BroadcastReceiver {
 				getObserver(context));
 	}
 
+	public static void unnotifyGeofence(final Context context,
+			final long... ids) {
+		final NotificationManager notificationManager = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+		String idStrings = "(";
+		for (Long id : ids) {
+			idStrings += id + ",";
+		}
+		idStrings = idStrings.substring(0, idStrings.length() - 1);
+		idStrings += ")";
+
+		final Cursor c = context
+				.getContentResolver()
+				.query(com.nononsenseapps.notepad.database.Notification.URI_WITH_TASK_PATH,
+						com.nononsenseapps.notepad.database.Notification.ColumnsWithTask.FIELDS,
+						com.nononsenseapps.notepad.database.Notification.Columns._ID
+								+ " IN " + idStrings, null, null);
+
+		try {
+			while (c.moveToNext()) {
+				com.nononsenseapps.notepad.database.Notification not = new com.nononsenseapps.notepad.database.Notification(
+						c);
+				if (not.taskID != null) {
+					notificationManager.cancel(not.taskID.intValue());
+				}
+			}
+		}
+		finally {
+			c.close();
+		}
+	}
+
+	public static void notifyGeofence(final Context context, final long... ids) {
+		Log.d(TAG, "notifyGeofence");
+		ArrayList<String> geofenceIdsToRemove = new ArrayList<String>();
+		String idStrings = "(";
+		for (Long id : ids) {
+			geofenceIdsToRemove.add(Long.toString(id));
+			idStrings += id + ",";
+		}
+		idStrings = idStrings.substring(0, idStrings.length() - 1);
+		idStrings += ")";
+
+		Log.d(TAG, "ids: " + idStrings);
+
+		final Cursor c = context
+				.getContentResolver()
+				.query(com.nononsenseapps.notepad.database.Notification.URI_WITH_TASK_PATH,
+						com.nononsenseapps.notepad.database.Notification.ColumnsWithTask.FIELDS,
+						com.nononsenseapps.notepad.database.Notification.Columns._ID
+								+ " IN " + idStrings, null, null);
+
+		List<com.nononsenseapps.notepad.database.Notification> notifications = new ArrayList<com.nononsenseapps.notepad.database.Notification>();
+		try {
+			while (c.moveToNext()) {
+				final com.nononsenseapps.notepad.database.Notification not = new com.nononsenseapps.notepad.database.Notification(
+						c);
+				notifications
+						.add(not);
+				// Keep track of which ones are added
+				geofenceIdsToRemove.remove(Long.toString(not._id));
+			}
+		}
+		finally {
+			c.close();
+		}
+		
+		// For any geofence ids that were not found in the database, unregister monitoring of their location. They must have been deleted somehow
+		if (geofenceIdsToRemove.size() > 0) {
+			GeofenceRemover.removeFences(context, geofenceIdsToRemove);
+		}
+
+		final NotificationManager notificationManager = (NotificationManager) context
+				.getSystemService(Context.NOTIFICATION_SERVICE);
+
+		Log.d(TAG, "geofence: Number of notifications: " + notifications.size());
+		// Fetch sound and vibrate settings
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+
+		// Always use default lights
+		int lightAndVibrate = Notification.DEFAULT_LIGHTS;
+		// If vibrate on, use default vibration pattern also
+		if (prefs.getBoolean(context.getString(R.string.key_pref_vibrate),
+				false)) lightAndVibrate |= Notification.DEFAULT_VIBRATE;
+
+		// Need to get a new one because the action buttons will duplicate
+		// otherwise
+		NotificationCompat.Builder builder;
+		for (com.nononsenseapps.notepad.database.Notification note : notifications) {
+			builder = getNotificationBuilder(context,
+					Integer.parseInt(prefs.getString(
+							context.getString(R.string.key_pref_prio), "0")),
+					lightAndVibrate, Uri.parse(prefs.getString(
+							context.getString(R.string.key_pref_ringtone),
+							"DEFAULT_NOTIFICATION_URI")), false);
+
+			notifyBigText(context, notificationManager, builder, note.taskID,
+					note);
+		}
+	}
+
 	/**
-	 * Displays notifications that have a time occurring in the past. If no
-	 * notifications like that exist, will make sure to cancel any notifications
-	 * showing.
+	 * Displays notifications that have a time occurring in the past (and no
+	 * location). If no notifications like that exist, will make sure to cancel
+	 * any notifications showing.
 	 */
 	private static void notifyPast(Context context, boolean alertOnce) {
 		// Get list of past notifications
@@ -161,7 +266,8 @@ public class NotificationHelper extends BroadcastReceiver {
 		if (notifications.isEmpty()) {
 			// cancelAll permanent notifications here if/when that is
 			// implemented. Don't touch others.
-			notificationManager.cancelAll();
+			// Dont do this, it clears location
+			// notificationManager.cancelAll();
 		}
 		else {
 			// else, notify
@@ -179,8 +285,10 @@ public class NotificationHelper extends BroadcastReceiver {
 			// otherwise
 			NotificationCompat.Builder builder;
 
-			if (prefs.getBoolean(
-					context.getString(R.string.key_pref_group_on_lists), true)) {
+			if (false)
+			// prefs.getBoolean(context.getString(R.string.key_pref_group_on_lists),
+			// false))
+			{
 				// Group together notes contained in the same list.
 				// Always use listid
 				for (long listId : getRelatedLists(notifications)) {
@@ -317,6 +425,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		delIntent.putExtra(ARG_MAX_TIME, note.time);
 		delIntent.putExtra(ARG_TASKID, note.taskID);
 		// Delete it on clear
+		// TODO respect geofence
 		PendingIntent deleteIntent = PendingIntent.getBroadcast(context, 0,
 				delIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
@@ -339,18 +448,24 @@ public class NotificationHelper extends BroadcastReceiver {
 						ARG_SNOOZE, true), PendingIntent.FLAG_UPDATE_CURRENT);
 
 		// Build notification
-		final Notification noti = builder
-				.setContentTitle(note.taskTitle)
+		builder.setContentTitle(note.taskTitle)
 				.setContentText(note.taskNote)
 				.setContentIntent(clickIntent)
-				.setDeleteIntent(deleteIntent)
 				.setStyle(
 						new NotificationCompat.BigTextStyle()
-								.bigText(note.taskNote))
-				.addAction(R.drawable.navigation_accept_dark,
-						context.getText(R.string.completed), completeIntent)
-				.addAction(R.drawable.ic_stat_snooze,
-						context.getText(R.string.snooze), snoozeIntent).build();
+								.bigText(note.taskNote));
+		// TODO geofence delete etc?
+		Log.d(TAG, "Notification: " + note.latitude + ", " + note.longitude);
+		Log.d(TAG, "Notification: radius " + note.radius);
+		if (note.radius == null) {
+			builder.setDeleteIntent(deleteIntent)
+					.addAction(R.drawable.ic_stat_snooze,
+							context.getText(R.string.snooze), snoozeIntent)
+					.addAction(R.drawable.navigation_accept_dark,
+							context.getText(R.string.completed), completeIntent);
+		}
+
+		final Notification noti = builder.build();
 
 		notificationManager.notify(idToUse.intValue(), noti);
 	}
@@ -528,15 +643,16 @@ public class NotificationHelper extends BroadcastReceiver {
 	/**
 	 * Modifies DB
 	 */
-	public static void deleteNotification(final Context context, long listId,
-			long maxTime) {
-		com.nononsenseapps.notepad.database.Notification.removeWithListId(
-				context, listId, maxTime);
-
-		final NotificationManager notificationManager = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-		notificationManager.cancel((int) listId);
-	}
+	// public static void deleteNotification(final Context context, long listId,
+	// long maxTime) {
+	// com.nononsenseapps.notepad.database.Notification.removeWithListId(
+	// context, listId, maxTime);
+	//
+	// final NotificationManager notificationManager = (NotificationManager)
+	// context
+	// .getSystemService(Context.NOTIFICATION_SERVICE);
+	// notificationManager.cancel((int) listId);
+	// }
 
 	/**
 	 * Given a list of notifications, returns a list of the lists the notes

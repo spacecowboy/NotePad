@@ -12,7 +12,7 @@
      distributed under the License is distributed on an "AS IS" BASIS,
      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
      See the License for the specific language governing permissions and
-     limitations under the License.
+     limitations under the License.
 -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -52,7 +52,6 @@
         <item name="body_delete">@drawable/content_discard_dark</item>
         <item name="android:actionBarStyle">@android:style/Widget.Holo.ActionBar.Solid</item>
         <item name="drag_handle_color">@color/dragHandleColorDark</item>
-        
         <item name="TaskListItem">@style/TaskListItemDark</item>
         <item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
         <item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
@@ -62,7 +61,6 @@
         <item name="android:windowBackground">@android:color/black</item>
         <item name="android:colorBackgroundCacheHint">@android:color/black</item>
         <item name="editorBackgroundColor">@android:color/black</item>
-        
         <item name="TaskListItem">@style/TaskListItemBlack</item>
         <item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
     </style>
@@ -74,7 +72,6 @@
         <item name="android:colorBackgroundCacheHint">@color/googlenow_darkergrey</item>
         <item name="viewpager_bg">@null</item>
         <item name="editorBackgroundColor">@drawable/darkgrey_rounded_corners_padded_vertically</item>
-    	
         <item name="ListMarginStyle">@style/ListMarginStyleCard</item>
     </style>
 
@@ -120,20 +117,24 @@
         <item name="body_delete">@drawable/content_discard_light</item>
         <item name="list_item_card_background">@drawable/white_rounded_corners</item>
         <item name="drag_handle_color">@color/dragHandleColorLight</item>
-        
         <item name="TaskListItem">@style/TaskListItemLight</item>
         <item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
         <item name="ListMarginStyle">@style/ListMarginStyleCard</item>
     </style>
-    
+
     <style name="ThemeHoloLightClassic" parent="@style/ThemeHoloLightDarkActonBar">
         <item name="TaskListItem">@style/TaskListItemLightClassic</item>
         <item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
         <item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
     </style>
-    
+
+    <style name="ThemeMapActivity" parent="@style/ThemeHoloLightDarkActonBar">
+        <!-- <item name="android:windowActionBarOverlay">true</item> -->
+        <!-- <item name="android:actionBarStyle">@android:style/Widget.Holo.ActionBar</item> -->
+    </style>
+
     <!-- No theme background to let users wall paper shine through -->
-    <style name="ThemeWidgetConfig" parent="@style/ThemeHolo" >
+    <style name="ThemeWidgetConfig" parent="@style/ThemeHolo">
         <item name="android:background">@null</item>
         <item name="android:colorBackgroundCacheHint">@null</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -143,8 +144,6 @@
 
     <!-- Deprecated -->
     <style name="ThemeHoloLight" parent="@style/ThemeHoloLightDarkActonBar" />
-
-    
 
     <style name="ActionBar.Solid.GoogleNowDark" parent="@android:style/Widget.Holo.ActionBar.Solid">
         <item name="android:background">@null</item>

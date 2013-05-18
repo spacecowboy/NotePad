@@ -31,7 +31,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return singleton;
 	}
 
-	private static final int DATABASE_VERSION = 9;
+	private static final int DATABASE_VERSION = 10;
 	public static final String DATABASE_NAME = "nononsense_notes.db";
 
 	private final Context context;
@@ -287,7 +287,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		// Auto-generated method stub
+		if (oldVersion < 10) {
+			// Notification locations
+			// Add columns
+			String preName = "ALTER TABLE " + Notification.TABLE_NAME + " ADD COLUMN ";
+			String postText = " TEXT";
+			String postReal = " REAL";
+			db.execSQL(preName + Notification.Columns.LOCATIONNAME + postText);
+			db.execSQL(preName + Notification.Columns.LATITUDE + postReal);
+			db.execSQL(preName + Notification.Columns.LONGITUDE + postReal);
+			db.execSQL(preName + Notification.Columns.RADIUS + postReal);
+			// Drop view
+			db.execSQL("DROP VIEW IF EXISTS " + Notification.WITH_TASK_VIEW_NAME);
+			// Recreate view with additional tables
+			db.execSQL(Notification.CREATE_JOINED_VIEW);
+		}
 	}
 
 }

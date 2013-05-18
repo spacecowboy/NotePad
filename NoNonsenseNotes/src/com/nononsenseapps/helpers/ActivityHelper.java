@@ -3,6 +3,7 @@ package com.nononsenseapps.helpers;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
@@ -54,5 +55,29 @@ public class ActivityHelper {
 			activity.getResources().updateConfiguration(config,
 					activity.getResources().getDisplayMetrics());
 		}
+	}
+
+	public static Locale getUserLocale(Context activity) {
+		Configuration config = activity.getResources().getConfiguration();
+
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(activity);
+		String lang = prefs.getString(activity.getString(R.string.pref_locale),
+				"");
+		final Locale locale;
+		if (!config.locale.toString().equals(lang)) {
+			if ("".equals(lang))
+				locale = Locale.getDefault();
+			else if (lang.length() == 5) {
+				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
+			}
+			else {
+				locale = new Locale(lang.substring(0, 2));
+			}
+		}
+		else {
+			locale = Locale.getDefault();
+		}
+		return locale;
 	}
 }
