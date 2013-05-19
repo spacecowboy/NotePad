@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Jonas Kalderstam
+ * Copyright (C) 2013 Jonas Kalderstam
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -24,6 +24,7 @@ import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotePadBroadcastReceiver;
+import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
@@ -37,6 +38,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.media.audiofx.BassBoost.Settings;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
@@ -108,7 +110,8 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			mDateFormatter = TimeFormatter.getLocalFormatterMicro(mContext);
 		}
 
-		final long listId = widgetPrefs.getLong(ListWidgetConfig.KEY_LIST, ListWidgetConfig.ALL_LISTS_ID);
+		final long listId = widgetPrefs.getLong(ListWidgetConfig.KEY_LIST,
+				ListWidgetConfig.ALL_LISTS_ID);
 		final int theme = widgetPrefs.getInt(ListWidgetConfig.KEY_THEME,
 				ListWidgetConfig.DEFAULT_THEME);
 		final int primaryTextColor = widgetPrefs.getInt(
@@ -221,20 +224,45 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 				}
 
 				// Set the click intent
-				final Intent clickIntent = new Intent();
-				clickIntent.setAction(Intent.ACTION_EDIT)
-						.setData(Task.getUri(mCursor.getLong(0)))
-						.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
-				rv.setOnClickFillInIntent(R.id.widget_item, clickIntent);
+				if (widgetPrefs.getBoolean(ListWidgetConfig.KEY_LOCKSCREEN,
+						false)) {
+					final Intent clickIntent = new Intent();
+					clickIntent
+							.setAction(Intent.ACTION_EDIT)
+							.setData(Task.getUri(mCursor.getLong(0)))
+							.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
+									listId);
+					rv.setOnClickFillInIntent(R.id.widget_item, clickIntent);
+				}
+				else {
+					final Intent fillInIntent = new Intent();
+					fillInIntent.setAction(ListWidgetProvider.CLICK_ACTION);
+					fillInIntent.putExtra(ListWidgetProvider.EXTRA_NOTE_ID,
+							mCursor.getLong(0));
+					fillInIntent.putExtra(ListWidgetProvider.EXTRA_LIST_ID,
+							listId);
+					rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
+				}
 
 				// Set complete broadcast
-
+				// If not on lock screen, send broadcast to complete.
+				// Otherwise, have to open note
 				final Intent completeIntent = new Intent();
-				completeIntent
-						.setAction(
-								mContext.getString(R.string.complete_note_broadcast_intent))
-						.setData(Task.getUri(mCursor.getLong(0)))
-						.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
+				if (widgetPrefs.getBoolean(ListWidgetConfig.KEY_LOCKSCREEN,
+						false)) {
+					completeIntent
+							.setAction(Intent.ACTION_EDIT)
+							.setData(Task.getUri(mCursor.getLong(0)))
+							.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
+									listId);
+				}
+				else {
+					completeIntent
+							.setAction(ListWidgetProvider.COMPLETE_ACTION)
+							.putExtra(ListWidgetProvider.EXTRA_NOTE_ID,
+									mCursor.getLong(0));
+
+				}
 				rv.setOnClickFillInIntent(R.id.completedCheckBoxDark,
 						completeIntent);
 				rv.setOnClickFillInIntent(R.id.completedCheckBoxLight,
@@ -299,15 +327,16 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			}
 			// due date sorting
 			else if (sortType
-					.equals(mContext.getString(R.string.const_duedate))
-					) {
+					.equals(mContext.getString(R.string.const_duedate))) {
 				targetUri = Task.URI_SECTIONED_BY_DATE;
 				sortSpec = null;
 			}
 			// Alphabetic
 			else {
 				targetUri = Task.URI;
-				sortSpec = mContext.getString(R.string.const_as_alphabetic, Task.Columns.TITLE);;
+				sortSpec = mContext.getString(R.string.const_as_alphabetic,
+						Task.Columns.TITLE);
+				;
 			}
 
 			String listWhere = null;

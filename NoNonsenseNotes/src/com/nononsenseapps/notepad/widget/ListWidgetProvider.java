@@ -16,12 +16,16 @@
 
 package com.nononsenseapps.notepad.widget;
 
+import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.appwidget.AppWidgetProviderInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.os.Bundle;
 
 import com.nononsenseapps.helpers.Log;
 
@@ -29,6 +33,7 @@ import android.view.View;
 import android.widget.RemoteViews;
 
 import com.nononsenseapps.notepad.ActivityMain_;
+import com.nononsenseapps.notepad.NotePadBroadcastReceiver;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -49,6 +54,47 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 	public ListWidgetProvider() {
 
+	}
+
+	/**
+	 * Complete note calls go here
+	 */
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		String action = intent.getAction();
+		Intent appIntent = new Intent();
+		appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+				| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+		if (action.equals(CLICK_ACTION)) {
+			Log.d("widgetwork", "CLICK ACTION RECEIVED");
+			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
+			if (noteId > -1) {
+				appIntent
+						.setAction(Intent.ACTION_EDIT)
+						.setData(Task.getUri(noteId))
+						.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
+								intent.getLongExtra(EXTRA_LIST_ID, -1));
+
+				context.startActivity(appIntent);
+			}
+		}
+		else if (action.equals(COMPLETE_ACTION)) {
+			// Should send broadcast here
+			Log.d("widgetwork", "COMPLETE ACTION RECEIVED");
+			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
+			// This will complete the note
+			if (noteId > -1) {
+				Intent bintent = new Intent(context,
+						NotePadBroadcastReceiver.class);
+				bintent.setAction(context
+						.getString(R.string.complete_note_broadcast_intent));
+				bintent.putExtra(Task.Columns._ID, noteId);
+				context.sendBroadcast(bintent);
+			}
+		}
+
+		super.onReceive(context, intent);
 	}
 
 	@Override
@@ -95,7 +141,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		}
 	}
 
-	// @TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
+	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 	public static RemoteViews buildRemoteViews(final Context context,
 			final AppWidgetManager appWidgetManager, final int appWidgetId,
 			final WidgetPrefs settings) {
@@ -104,6 +150,24 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		// where the last widget added will be used for everything
 		final Uri data = Uri.withAppendedPath(Uri.parse("STUPIDWIDGETS"
 				+ "://widget/id/"), String.valueOf(appWidgetId));
+
+		boolean isKeyguard = false;
+
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+			Bundle myOptions = appWidgetManager
+					.getAppWidgetOptions(appWidgetId);
+
+			// Get the value of OPTION_APPWIDGET_HOST_CATEGORY
+			int category = myOptions.getInt(
+					AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY, -1);
+
+			// If the value is WIDGET_CATEGORY_KEYGUARD, it's a lockscreen
+			// widget
+			isKeyguard = category == AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD;
+		}
+		if (isKeyguard) {
+			settings.putBoolean(ListWidgetConfig.KEY_LOCKSCREEN, true);
+		}
 
 		// Specify the service to provide data for the collection widget. Note
 		// that we need to
@@ -145,13 +209,27 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		 * that we need to update the intent's data if we set an extra, since
 		 * the extras will be ignored otherwise.
 		 */
-		final Intent itemIntent = new Intent(context, ActivityMain_.class);
-		itemIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-				| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		if (isKeyguard) {
+			final Intent itemIntent = new Intent(context, ActivityMain_.class);
+			itemIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+					| Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-		PendingIntent onClickPendingIntent = PendingIntent.getActivity(context,
-				0, itemIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-		rv.setPendingIntentTemplate(R.id.notesList, onClickPendingIntent);
+			PendingIntent onClickPendingIntent = PendingIntent.getActivity(
+					context, 0, itemIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+			rv.setPendingIntentTemplate(R.id.notesList, onClickPendingIntent);
+		}
+		else {
+			// To handle complete, we use broadcasts
+			Intent onClickIntent = new Intent(context, ListWidgetProvider.class);
+			onClickIntent
+					.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
+					.putExtra(Task.Columns.DBLIST, listId).setData(data);
+
+			PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(
+					context, 0, onClickIntent,
+					PendingIntent.FLAG_UPDATE_CURRENT);
+			rv.setPendingIntentTemplate(R.id.notesList, onClickPendingIntent);
+		}
 
 		final Intent appIntent = new Intent();
 		appIntent
