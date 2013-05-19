@@ -9,6 +9,7 @@ import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.text.SpannableStringBuilder;
 import android.text.Spanned;
 import android.text.style.AlignmentSpan;
 import android.text.style.ClickableSpan;
@@ -119,22 +120,39 @@ public class TitleNoteTextView extends TextView {
 				titleEnd = mStyledText.length();
 			}
 
-			SpannableString ss = new SpannableString(mStyledText);
+			// Need to link first so we can avoid the title
 			if (titleEnd > 0) {
+				// Set the body first
+				if (titleEnd < mStyledText.length()) {
+					SpannableString body = new SpannableString(
+							mStyledText.substring(titleEnd));
+					setText(body, BufferType.SPANNABLE);
+					// Linkify body
+					if (mLinkify) {
+						Linkify.addLinks(this, Linkify.ALL);
+						// Make sure links dont steal click focus everywhere
+						setMovementMethod(null);
+					}
+				}
+				else {
+					setText(new SpannableString(""), BufferType.SPANNABLE);
+				}
+				// combine title and body again
+				SpannableStringBuilder ss = new SpannableStringBuilder(
+						mStyledText.substring(0, titleEnd))
+						.append((SpannableString) getText());
 				ss.setSpan(textBoldSpan, 0, titleEnd,
 						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 				ss.setSpan(textBigSpan, 0, titleEnd,
 						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 				ss.setSpan(textCondensedSpan, 0, titleEnd,
 						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+				setText(ss, BufferType.SPANNABLE);
 			}
-
-			setText(ss, BufferType.SPANNABLE);
-
-			if (mLinkify) {
-				Linkify.addLinks(this, Linkify.ALL);
-				// Make sure links dont steal click focus everywhere
-				setMovementMethod(null);
+			else {
+				// Emtpy string
+				setText(new SpannableString(mStyledText), BufferType.SPANNABLE);
 			}
 		}
 	}
