@@ -307,7 +307,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			// Alphabetic
 			else {
 				targetUri = Task.URI;
-				sortSpec = Task.Columns.TITLE;
+				sortSpec = mContext.getString(R.string.const_as_alphabetic, Task.Columns.TITLE);;
 			}
 
 			String listWhere = null;

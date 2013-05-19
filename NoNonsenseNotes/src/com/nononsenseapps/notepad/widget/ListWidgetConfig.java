@@ -278,7 +278,7 @@ public class ListWidgetConfig extends FragmentActivity {
 				if (id == 1) {
 					return new CursorLoader(ListWidgetConfig.this,
 							TaskList.URI, TaskList.Columns.FIELDS, null, null,
-							TaskList.Columns.TITLE);
+							getString(R.string.const_as_alphabetic, TaskList.Columns.TITLE));
 				}
 				else {
 					final Uri targetUri;
@@ -308,14 +308,25 @@ public class ListWidgetConfig extends FragmentActivity {
 					// Alphabetic
 					else {
 						targetUri = Task.URI;
-						sortSpec = Task.Columns.TITLE;
+						sortSpec = getString(R.string.const_as_alphabetic, Task.Columns.TITLE);
+					}
+					
+					String listWhere = null;
+					String[] listArg = null;
+					if (listId > 0) {
+						listWhere = Task.Columns.DBLIST + " IS ? AND "
+								+ Task.Columns.COMPLETED + " IS NULL";
+						listArg = new String[] { Long.toString(listId) };
+					}
+					else {
+						listWhere = Task.Columns.COMPLETED + " IS NULL";
+						listArg = null;
 					}
 
 					return new CursorLoader(ListWidgetConfig.this, targetUri,
 							Task.Columns.FIELDS,
-							listId > 0 ? Task.Columns.DBLIST + " IS ?" : null,
-							listId > 0 ? new String[] { Long.toString(listId) }
-									: null, sortSpec);
+							listWhere,
+							listArg, sortSpec);
 				}
 			}
 

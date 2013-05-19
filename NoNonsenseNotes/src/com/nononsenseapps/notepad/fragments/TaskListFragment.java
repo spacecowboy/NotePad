@@ -336,7 +336,7 @@ public class TaskListFragment extends Fragment implements
 					}
 					if (mSortType.equals(getString(R.string.const_alphabetic))) {
 						targetUri = Task.URI;
-						sortSpec = Task.Columns.TITLE;
+						sortSpec = getString(R.string.const_as_alphabetic, Task.Columns.TITLE);
 					}
 					else if (mSortType
 							.equals(getString(R.string.const_duedate))) {
