@@ -465,7 +465,7 @@ public class Task extends DAO {
 	 * if listId is null, will return for all lists
 	 */
 	public static final String CREATE_SECTIONED_DATE_VIEW(final String listId) {
-		final String sListId = listId == null ? " IS NOT NULL " : "'" + listId + "'";
+		final String sListId = listId == null ? " NOT NULL " : "'" + listId + "'";
 		return new StringBuilder()
 				.append("CREATE TEMP VIEW IF NOT EXISTS ")
 				.append(getSECTION_DATE_VIEW_NAME(listId))
@@ -707,10 +707,13 @@ public class Task extends DAO {
 				.append(" IS null ")
 				.append(") ")
 				// Complete, overdue to catch all
+				// Set complete time to 1
 				.append(" UNION ALL ")
 				.append(" SELECT -1,")
 				.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, OVERDUE, Columns.TITLE,
+						Columns.DUE, OVERDUE, 
+						Columns.COMPLETED, "1",
+						Columns.TITLE,
 						HEADER_KEY_COMPLETE, Columns.DBLIST, listId))
 				.append(",2,0")
 				// Only show header if there are tasks under it

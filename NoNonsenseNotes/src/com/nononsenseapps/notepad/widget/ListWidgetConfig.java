@@ -11,6 +11,7 @@ import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.ui.ExtrasCursorAdapter;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
 
 import android.net.Uri;
@@ -22,6 +23,7 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
@@ -79,6 +81,8 @@ public class ListWidgetConfig extends FragmentActivity {
 	public final static int DEFAULT_TEXTSECONDARY = 0xffbebebe;
 	// Number of rows
 	public final static int DEFAULT_ROWS = 3;
+	// All lists id
+	public final static int ALL_LISTS_ID = -2;
 
 	@ViewById
 	View widgetPreviewWrapper;
@@ -125,7 +129,7 @@ public class ListWidgetConfig extends FragmentActivity {
 
 	private LoaderCallbacks<Cursor> mCallback;
 
-	private SimpleCursorAdapter mListAdapter;
+	private ExtrasCursorAdapter mListAdapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -279,7 +283,8 @@ public class ListWidgetConfig extends FragmentActivity {
 				else {
 					final Uri targetUri;
 
-					final long listId = widgetPrefs.getLong(KEY_LIST, -1);
+					final long listId = widgetPrefs.getLong(KEY_LIST,
+							ALL_LISTS_ID);
 					final String sortSpec;
 					final String sortType = widgetPrefs
 							.getString(KEY_SORT_TYPE,
@@ -296,8 +301,7 @@ public class ListWidgetConfig extends FragmentActivity {
 						sortSpec = Task.Columns.UPDATED + " DESC";
 					}
 					// due date sorting
-					else if (sortType.equals(getString(R.string.const_duedate))
-							&& listId > 0) {
+					else if (sortType.equals(getString(R.string.const_duedate))) {
 						targetUri = Task.URI_SECTIONED_BY_DATE;
 						sortSpec = null;
 					}
@@ -308,8 +312,10 @@ public class ListWidgetConfig extends FragmentActivity {
 					}
 
 					return new CursorLoader(ListWidgetConfig.this, targetUri,
-							Task.Columns.FIELDS, Task.Columns.DBLIST + " IS ?",
-							new String[] { Long.toString(listId) }, sortSpec);
+							Task.Columns.FIELDS,
+							listId > 0 ? Task.Columns.DBLIST + " IS ?" : null,
+							listId > 0 ? new String[] { Long.toString(listId) }
+									: null, sortSpec);
 				}
 			}
 
@@ -320,7 +326,7 @@ public class ListWidgetConfig extends FragmentActivity {
 					if (c.getCount() > 0) {
 						// Set current item
 						final int pos = getListPositionOf(c,
-								widgetPrefs.getLong(KEY_LIST, -1));
+								widgetPrefs.getLong(KEY_LIST, ALL_LISTS_ID));
 						listSpinner.setSelection(pos);
 					}
 				}
@@ -535,8 +541,15 @@ public class ListWidgetConfig extends FragmentActivity {
 			public void onItemSelected(AdapterView<?> adapter, View arg1,
 					int pos, long id) {
 				widgetPrefs.putLong(KEY_LIST, id);
-				widgetPrefs.putString(KEY_LIST_TITLE,
-						((Cursor) adapter.getItemAtPosition(pos)).getString(1));
+				try {
+					widgetPrefs.putString(KEY_LIST_TITLE, ((Cursor) adapter
+							.getItemAtPosition(pos)).getString(1));
+				}
+				catch (ClassCastException e) {
+					// Its the all lists item
+					widgetPrefs.putString(KEY_LIST_TITLE,
+							((String) adapter.getItemAtPosition(pos)));
+				}
 
 				// Need to reload tasks
 				reloadTasks();
@@ -548,10 +561,17 @@ public class ListWidgetConfig extends FragmentActivity {
 			public void onNothingSelected(AdapterView<?> arg0) {
 			}
 		});
-		mListAdapter = new SimpleCursorAdapter(this,
+		mListAdapter = new ExtrasCursorAdapter(this,
 				android.R.layout.simple_spinner_dropdown_item, null,
 				new String[] { TaskList.Columns.TITLE },
-				new int[] { android.R.id.text1 }, 0);
+				new int[] { android.R.id.text1 }, new int[] { ALL_LISTS_ID },
+				new int[] { R.string.show_from_all_lists },
+				android.R.layout.simple_spinner_dropdown_item);
+
+		// new SimpleCursorAdapter(this,
+		// android.R.layout.simple_spinner_dropdown_item, null,
+		// new String[] { TaskList.Columns.TITLE },
+		// new int[] { android.R.id.text1 }, 0);
 		listSpinner.setAdapter(mListAdapter);
 
 		transparentHeaderCheckBox

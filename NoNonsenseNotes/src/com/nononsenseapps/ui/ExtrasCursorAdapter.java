@@ -26,8 +26,8 @@ import android.widget.TextView;
 
 /**
  * Mimics the SimpleCursorAdapter, but also allows extra items to be injected at
- * the end. When asked for id for the extra items, the defined ids are returned.
- * Make sure to set them to negative values in order not to confuse them with
+ * the beginning. When asked for id for the extra items, the defined ids are returned.
+ * Make sure to set them to negative values (< -1) in order not to confuse them with
  * database IDs.
  * 
  * @author Jonas
@@ -149,8 +149,8 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
-		if (cursor != null && position < super.getCount())
-			return super.getView(position, convertView, parent);
+		if (cursor != null && position >= extraLabels.length)
+			return super.getView(position - extraLabels.length, convertView, parent);
 
 		ViewHolder viewHolder = null;
 		if (convertView == null) {
@@ -165,16 +165,15 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		if (viewHolder == null) {
 			viewHolder = setViewHolder(convertView);
 		}
-		viewHolder.texts[0].setText(context.getText(extraLabels[position
-				- super.getCount()]));
+		viewHolder.texts[0].setText(context.getText(extraLabels[position]));
 
 		return convertView;
 	}
 
 	@Override
 	public View getDropDownView(int position, View convertView, ViewGroup parent) {
-		if (cursor != null && position < super.getCount())
-			return super.getDropDownView(position, convertView, parent);
+		if (cursor != null && position >= extraLabels.length)
+			return super.getDropDownView(position - extraLabels.length, convertView, parent);
 
 		ViewHolder viewHolder = null;
 		if (convertView == null) {
@@ -189,28 +188,39 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		if (viewHolder == null) {
 			viewHolder = setViewHolder(convertView);
 		}
-		viewHolder.texts[0].setText(context.getText(extraLabels[position
-				- super.getCount()]));
+		viewHolder.texts[0].setText(context.getText(extraLabels[position]));
 
 		return convertView;
 	}
 
 	@Override
 	public long getItemId(int position) {
-		if (position < super.getCount()) {
-			return super.getItemId(position);
-		} else {
-			return extraIds[position - super.getCount()];
+		if (position < extraIds.length) {
+			return extraIds[position];
 		}
+		else {
+			return super.getItemId(position - extraIds.length);
+		}
+//		if (position < super.getCount()) {
+//			return super.getItemId(position);
+//		} else {
+//			return extraIds[position - super.getCount()];
+//		}
 	}
 	
 	@Override
 	public Object getItem(int position) {
-		if (position < super.getCount()) {
-			return super.getItem(position);
-		} else {
+		if (position < extraIds.length) {
 			return getExtraItem(position);
 		}
+		else {
+			return super.getItem(position - extraIds.length);
+		}
+//		if (position < super.getCount()) {
+//			return super.getItem(position);
+//		} else {
+//			return getExtraItem(position);
+//		}
 	}
 
 	@Override
@@ -227,7 +237,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	 * @return
 	 */
 	public CharSequence getExtraItem(int realPos) {
-		realPos -= super.getCount();
+		//realPos -= super.getCount();
 		if (extraLabels.length == 0 || realPos < -1 || realPos > extraLabels.length)
 			return null;
 		else

@@ -108,7 +108,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			mDateFormatter = TimeFormatter.getLocalFormatterMicro(mContext);
 		}
 
-		final long listId = widgetPrefs.getLong(ListWidgetConfig.KEY_LIST, -1);
+		final long listId = widgetPrefs.getLong(ListWidgetConfig.KEY_LIST, ListWidgetConfig.ALL_LISTS_ID);
 		final int theme = widgetPrefs.getInt(ListWidgetConfig.KEY_THEME,
 				ListWidgetConfig.DEFAULT_THEME);
 		final int primaryTextColor = widgetPrefs.getInt(
@@ -281,7 +281,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 		if (widgetPrefs != null) {
 			final Uri targetUri;
 			final long listId = widgetPrefs.getLong(ListWidgetConfig.KEY_LIST,
-					-1);
+					ListWidgetConfig.ALL_LISTS_ID);
 			final String sortSpec;
 			final String sortType = widgetPrefs.getString(
 					ListWidgetConfig.KEY_SORT_TYPE,
@@ -300,7 +300,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 			// due date sorting
 			else if (sortType
 					.equals(mContext.getString(R.string.const_duedate))
-					&& listId > 0) {
+					) {
 				targetUri = Task.URI_SECTIONED_BY_DATE;
 				sortSpec = null;
 			}
@@ -312,7 +312,7 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 			String listWhere = null;
 			String[] listArg = null;
-			if (listId > -1) {
+			if (listId > 0) {
 				listWhere = Task.Columns.DBLIST + " IS ? AND "
 						+ Task.Columns.COMPLETED + " IS NULL";
 				listArg = new String[] { Long.toString(listId) };
