@@ -104,6 +104,8 @@ public class TaskListFragment extends Fragment implements
 	@Override
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
+		
+		Log.d("nononsenseapps fragment", "listfragment create: " + savedState);
 
 		setHasOptionsMenu(true);
 

@@ -51,27 +51,43 @@ import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.support.v4.widget.SimpleCursorAdapter;
+import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
 
 @EActivity(R.layout.activity_main)
 public class ActivityMain extends FragmentActivity implements
 		OnFragmentInteractionListener, OnSyncStartStopListener {
+	
+	public static interface ListOpener {
+		public void openList(final long id);
+	}
 
 	// In-app donate identifier
 	static final String SKU_DONATE = "donate_inapp";
@@ -85,6 +101,11 @@ public class ActivityMain extends FragmentActivity implements
 	// Using tags for test
 	public static final String DETAILTAG = "detailfragment";
 	public static final String LISTPAGERTAG = "listpagerfragment";
+
+	@ViewById
+	ListView leftDrawer;
+	@ViewById
+	DrawerLayout drawerLayout;
 
 	@ViewById
 	View fragment1;
@@ -107,8 +128,18 @@ public class ActivityMain extends FragmentActivity implements
 	IabHelper mBillingHelper;
 	// True if user has donated
 	boolean mIsDonate = false;
+	private ActionBarDrawerToggle mDrawerToggle;
+
+	// Changes depending on what we're showing since the started activity can
+	// receive new intents
+	boolean showingEditor = false;
 
 	SyncStatusMonitor syncStatusReceiver = null;
+	// Only not if opening note directly
+	private boolean shouldAddToBackStack = true;
+	
+	// WIll only be the viewpager fragment
+	ListOpener listOpener = null;
 
 	@Override
 	public void onCreate(Bundle b) {
@@ -119,6 +150,9 @@ public class ActivityMain extends FragmentActivity implements
 		NotificationHelper.schedule(this);
 
 		syncStatusReceiver = new SyncStatusMonitor();
+
+		// First load, then don't add to backstack
+		shouldAddToBackStack = false;
 
 		// To know if we should animate exits
 		if (getIntent() != null
@@ -166,6 +200,22 @@ public class ActivityMain extends FragmentActivity implements
 
 		// See if the donate version is installed and offer to import if so
 		isOldDonateVersionInstalled();
+
+		// To listen on fragment changes
+		getSupportFragmentManager().addOnBackStackChangedListener(
+				new FragmentManager.OnBackStackChangedListener() {
+					public void onBackStackChanged() {
+						// Update your UI here. TODO
+						Log.d("nononsenseapps fragments",
+								"onBackStackChanged: " + showingEditor + ", "
+										+ isNoteIntent(getIntent()));
+						if (showingEditor && !isNoteIntent(getIntent())) {
+							resetActionBar();
+						}
+						// Always update menu
+						invalidateOptionsMenu();
+					}
+				});
 	}
 
 	@Background
@@ -299,16 +349,150 @@ public class ActivityMain extends FragmentActivity implements
 			}
 		}
 	};
+	protected boolean reverseAnimation = false;
+
+	@Override
+	protected void onPostCreate(Bundle savedInstanceState) {
+		super.onPostCreate(savedInstanceState);
+		// Sync the toggle state after onRestoreInstanceState has occurred.
+		if (mDrawerToggle != null) mDrawerToggle.syncState();
+	}
+
+	@Override
+	public void onConfigurationChanged(Configuration newConfig) {
+		super.onConfigurationChanged(newConfig);
+		if (mDrawerToggle != null)
+			mDrawerToggle.onConfigurationChanged(newConfig);
+	}
+
+	/**
+	 * Load a list of lists in the left
+	 */
+	protected void loadLeftDrawer() {
+		// Set a listener on drawer events
+		// TODO theme icons
+		// TODO strings
+		// TODO prepare options
+		// boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
+		// menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
+		if (mDrawerToggle == null) {
+			mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
+					R.drawable.ic_drawer_dark, R.string.ok, R.string.about) {
+
+				/**
+				 * Called when a drawer has settled in a completely closed
+				 * state.
+				 */
+				public void onDrawerClosed(View view) {
+					getActionBar().setTitle(R.string.app_name);
+					invalidateOptionsMenu(); // creates call to
+												// onPrepareOptionsMenu()
+				}
+
+				/** Called when a drawer has settled in a completely open state. */
+				public void onDrawerOpened(View drawerView) {
+					getActionBar().setTitle(R.string.show_from_all_lists);
+					invalidateOptionsMenu(); // creates call to
+												// onPrepareOptionsMenu()
+				}
+			};
+
+			// Set the drawer toggle as the DrawerListener
+			drawerLayout.setDrawerListener(mDrawerToggle);
+		}
+
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		getActionBar().setHomeButtonEnabled(true);
+
+		// Adapter for list titles and ids
+		// TODO use a better layout
+		final SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+				R.layout.simple_light_list_item_1, null,
+				new String[] { TaskList.Columns.TITLE },
+				new int[] { android.R.id.text1 }, 0);
+		leftDrawer.setAdapter(adapter);
+		// Set click handler
+		leftDrawer.setOnItemClickListener(new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View v, int pos,
+					long id) {
+				// TODO Open list
+				Intent i = new Intent(ActivityMain.this, ActivityMain_.class);
+				i.setAction(Intent.ACTION_VIEW).setData(TaskList.getUri(id))
+						.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+				// Initial state, never start on tablet layout
+				//boolean shouldStartActivity = fragment2 == null;
+
+				// If editor is on screen, we need to reload fragments
+				if (listOpener == null) {
+					while (getSupportFragmentManager().popBackStackImmediate()) {
+						// Need to pop the entire stack and then load
+					}
+					reverseAnimation = true;
+					startActivity(i);
+				}
+				else {
+					// If not popped, then send the call to the fragment
+					// directly
+					Log.d("nononsenseapps fragments",
+							"shoudl call fragment here");
+					// TODO
+					listOpener.openList(id);
+				}
+
+				// And then close drawer
+				drawerLayout.closeDrawer(leftDrawer);
+			}
+		});
+
+		// Load actual data
+		getSupportLoaderManager().restartLoader(0, null,
+				new LoaderCallbacks<Cursor>() {
+
+					@Override
+					public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+						return new CursorLoader(ActivityMain.this,
+								TaskList.URI, new String[] {
+										TaskList.Columns._ID,
+										TaskList.Columns.TITLE }, null, null,
+								getResources().getString(
+										R.string.const_as_alphabetic,
+										TaskList.Columns.TITLE));
+					}
+
+					@Override
+					public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
+						adapter.swapCursor(c);
+					}
+
+					@Override
+					public void onLoaderReset(Loader<Cursor> arg0) {
+						adapter.swapCursor(null);
+					}
+				});
+	}
 
 	/**
 	 * Loads the appropriate fragments depending on state and intent.
 	 */
 	@AfterViews
 	protected void loadContent() {
+		loadLeftDrawer();
 		final Intent intent = getIntent();
 		final FragmentTransaction transaction = getSupportFragmentManager()
-				.beginTransaction().setCustomAnimations(R.anim.slide_in_top,
-						R.anim.slide_out_bottom);
+				.beginTransaction();
+		if (reverseAnimation) {
+			reverseAnimation = false;
+			transaction.setCustomAnimations(R.anim.slide_in_bottom,
+					R.anim.slide_out_top, R.anim.slide_in_top,
+					R.anim.slide_out_bottom);
+		}
+		else {
+			transaction.setCustomAnimations(R.anim.slide_in_top,
+					R.anim.slide_out_bottom, R.anim.slide_in_bottom,
+					R.anim.slide_out_top);
+		}
 
 		Log.d("JONAS", "loading content");
 		/*
@@ -330,9 +514,12 @@ public class ActivityMain extends FragmentActivity implements
 										getListId(intent),
 										getString(R.string.pref_defaultlist))),
 						DETAILTAG);
+				taskHint.setVisibility(View.GONE);
 			}
 		}
 		else if (isNoteIntent(intent)) {
+			showingEditor = true;
+			listOpener = null;
 			Log.d("JONAS", "detail in 1");
 			if (getNoteId(intent) > 0) {
 				transaction.replace(R.id.fragment1,
@@ -349,6 +536,10 @@ public class ActivityMain extends FragmentActivity implements
 										getString(R.string.pref_defaultlist))),
 						DETAILTAG);
 			}
+			// TODO fucking stack
+			if (shouldAddToBackStack) {
+				transaction.addToBackStack(null);
+			}
 
 			// Courtesy of Mr Roman Nurik
 			// Inflate a "Done" custom action bar view to serve as the "Up"
@@ -363,23 +554,35 @@ public class ActivityMain extends FragmentActivity implements
 						@Override
 						public void onClick(View v) {
 							// "Done"
-							// finish(); // TODO: don't just finish()!
-							final Intent intent = new Intent()
-									.setAction(Intent.ACTION_VIEW)
-									.setClass(ActivityMain.this,
-											ActivityMain_.class)
-									.setFlags(
-											Intent.FLAG_ACTIVITY_CLEAR_TASK
-													| Intent.FLAG_ACTIVITY_NEW_TASK);
+
 							// Should load the same list again
 							// Try getting the list from the original intent
-							// TODO
 							final long listId = getListId(getIntent());
+
+							final Intent intent = new Intent().setAction(
+									Intent.ACTION_VIEW).setClass(
+									ActivityMain.this, ActivityMain_.class);
 							if (listId > 0) {
 								intent.setData(TaskList.getUri(listId));
 							}
+
+							// Set the intent before, so we set the correct
+							// action bar
+							setIntent(intent);
+							while (getSupportFragmentManager()
+									.popBackStackImmediate()) {
+								// Need to pop the entire stack and then load
+							}
+
+							reverseAnimation = true;
+							Log.d("nononsenseapps fragment",
+									"starting activity");
+
+							intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
 							startActivity(intent);
-							finishSlideTop();
+							// TODO fix this?
+							// finishSlideTop();
 						}
 					});
 
@@ -395,14 +598,48 @@ public class ActivityMain extends FragmentActivity implements
 		 * Other case, is a list id or a tablet
 		 */
 		if (!isNoteIntent(intent) || fragment2 != null) {
+			// If we're in the editor, reset the action bar
+			if (showingEditor && fragment2 == null
+					&& !isNoteIntent(getIntent())) {
+				resetActionBar();
+			}
+
+			showingEditor = false;
 			Log.d("JONAS", "lists in 1");
-			transaction.replace(R.id.fragment1, TaskListViewPagerFragment
-					.getInstance(getListIdToShow(intent)), LISTPAGERTAG);
+
+			Fragment f = TaskListViewPagerFragment
+					.getInstance(getListIdToShow(intent));
+			listOpener = (ListOpener) f;
+			transaction.replace(R.id.fragment1, f, LISTPAGERTAG);
 		}
 
 		Log.d("JONAS", "commit content");
 		// Commit transaction
 		transaction.commit();
+		// Next go, always add
+		shouldAddToBackStack = true;
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if ((keyCode == KeyEvent.KEYCODE_BACK)) {
+			// Reset intent so we get proper fragment handling when the stack
+			// pops
+			if (getSupportFragmentManager().getBackStackEntryCount() <= 1)
+				setIntent(new Intent(this, ActivityMain_.class));
+		}
+		return super.onKeyDown(keyCode, event);
+	}
+
+	void resetActionBar() {
+		// Reset Done button
+		final ActionBar actionBar = getActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME
+					| ActionBar.DISPLAY_SHOW_TITLE,
+					ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+							| ActionBar.DISPLAY_SHOW_TITLE);
+		}
 	}
 
 	@Override
@@ -432,7 +669,17 @@ public class ActivityMain extends FragmentActivity implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		// Pass the event to ActionBarDrawerToggle, if it returns
+		// true, then it has handled the app icon touch event
+		if (mDrawerToggle.onOptionsItemSelected(item)) {
+			return true;
+		}
+		// Handle your other action bar items...
 		switch (item.getItemId()) {
+		case android.R.id.home:
+			// TODO
+			// Do whatever happens in the done button here
+			return true;
 		case R.id.menu_preferences:
 			Intent intent = new Intent();
 			intent.setClass(this, PrefsActivity.class);
@@ -663,6 +910,7 @@ public class ActivityMain extends FragmentActivity implements
 	@Override
 	public void onNewIntent(Intent intent) {
 		// TODO need to see if this has side-effects
+		setIntent(intent);
 		loadContent();
 	}
 
@@ -670,9 +918,15 @@ public class ActivityMain extends FragmentActivity implements
 	@Override
 	public void onFragmentInteraction(final Uri taskUri, final long listId,
 			final View origin) {
+		final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
+				.setClass(this, ActivityMain_.class).setData(taskUri)
+				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 		// User clicked a task in the list
 		// tablet
 		if (fragment2 != null) {
+			// Set the intent here also so rotations open the same item
+			setIntent(intent);
 			getSupportFragmentManager()
 					.beginTransaction()
 					.setCustomAnimations(R.anim.slide_in_top,
@@ -684,43 +938,35 @@ public class ActivityMain extends FragmentActivity implements
 		}
 		// phone
 		else {
-			final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
-					.setClass(this, ActivityMain_.class).setData(taskUri)
-					.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
-					&& origin != null) {
-				Log.d("nononsenseapps animation", "Animating");
-				intent.putExtra(ANIMATEEXIT, true);
-				startActivity(
-						intent,
-						ActivityOptions.makeCustomAnimation(this,
-								R.anim.activity_slide_in_left,
-								R.anim.activity_slide_out_left).toBundle());
+			
+//			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
+//					&& origin != null) {
+//				Log.d("nononsenseapps animation", "Animating");
+//				//intent.putExtra(ANIMATEEXIT, true);
+//				startActivity(
+//						intent,
+//						ActivityOptions.makeCustomAnimation(this,
+//								R.anim.activity_slide_in_left,
+//								R.anim.activity_slide_out_left).toBundle());
 
-				// startActivity(
-				// intent,
-				// ActivityOptions.makeScaleUpAnimation(origin, 0, 0,
-				// origin.getWidth(), origin.getHeight())
-				// .toBundle());
-
-				// Bitmap b = Bitmap.createBitmap(origin.getWidth(),
-				// origin.getHeight(), Bitmap.Config.ARGB_8888);
-				//
-				// startActivity(intent, ActivityOptions
-				// .makeThumbnailScaleUpAnimation(origin, b, 0, 0)
-				// .toBundle());
-			}
-			else {
+			//}
+			//else {
 				Log.d("nononsenseapps animation", "Not animating");
 				startActivity(intent);
-			}
+			//}
 		}
 	}
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@Override
 	public void addTaskInList(final String text, final long listId) {
+		final Intent intent = new Intent().setAction(Intent.ACTION_INSERT)
+				.setClass(this, ActivityMain_.class).setData(Task.URI)
+				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 		if (fragment2 != null) {
+			// Set intent to preserve state when rotating
+			setIntent(intent);
 			// Replace editor fragment
 			getSupportFragmentManager()
 					.beginTransaction()
@@ -733,22 +979,19 @@ public class ActivityMain extends FragmentActivity implements
 		}
 		else {
 			// Open an activity
-			final Intent intent = new Intent().setAction(Intent.ACTION_INSERT)
-					.setClass(this, ActivityMain_.class).setData(Task.URI)
-					.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-				Log.d("nononsenseapps animation", "Animating");
-				intent.putExtra(ANIMATEEXIT, true);
-				startActivity(
-						intent,
-						ActivityOptions.makeCustomAnimation(this,
-								R.anim.activity_slide_in_left,
-								R.anim.activity_slide_out_left).toBundle());
-			}
-			else {
+//			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+//				Log.d("nononsenseapps animation", "Animating");
+//				intent.putExtra(ANIMATEEXIT, true);
+//				startActivity(
+//						intent,
+//						ActivityOptions.makeCustomAnimation(this,
+//								R.anim.activity_slide_in_left,
+//								R.anim.activity_slide_out_left).toBundle());
+//			}
+//			else {
 				startActivity(intent);
-			}
+			//}
 		}
 	}
 

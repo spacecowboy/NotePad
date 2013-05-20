@@ -7,6 +7,7 @@ import com.googlecode.androidannotations.annotations.SystemService;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
 
+import com.nononsenseapps.notepad.ActivityMain.ListOpener;
 import com.nononsenseapps.notepad.ActivitySearchDeleted_;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
@@ -32,6 +33,7 @@ import android.support.v4.content.Loader;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -44,7 +46,7 @@ import android.widget.SearchView;
  */
 @EFragment(R.layout.fragment_tasklist_viewpager)
 public class TaskListViewPagerFragment extends Fragment implements
-		EditListDialogListener {
+		EditListDialogListener, ListOpener {
 
 	public static final String START_LIST_ID = "start_list_id";
 
@@ -57,9 +59,11 @@ public class TaskListViewPagerFragment extends Fragment implements
 	private SectionsPagerAdapter mSectionsPagerAdapter;
 	SimpleCursorAdapter mTaskListsAdapter;
 
-	//boolean firstLoad = true;
+	// boolean firstLoad = true;
 
 	private long mListIdToSelect = -1;
+
+	private LoaderCallbacks<Cursor> loaderCallbacks;
 
 	public static TaskListViewPagerFragment getInstance() {
 		return getInstance(-1);
@@ -85,6 +89,8 @@ public class TaskListViewPagerFragment extends Fragment implements
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
 		setHasOptionsMenu(true);
+		Log.d("nononsenseapps fragment", "viewpagerfragment create: "
+				+ savedState);
 
 		mListIdToSelect = getArguments().getLong(START_LIST_ID, -1);
 		if (savedState != null) {
@@ -97,47 +103,49 @@ public class TaskListViewPagerFragment extends Fragment implements
 				new String[] { TaskList.Columns.TITLE },
 				new int[] { android.R.id.text1 }, 0);
 		// Adapter for view pager
-		mSectionsPagerAdapter = new SectionsPagerAdapter(getFragmentManager(),
-				mTaskListsAdapter);
+		mSectionsPagerAdapter = new SectionsPagerAdapter(
+				getChildFragmentManager(), mTaskListsAdapter);
 	}
 
 	@Override
 	public void onActivityCreated(final Bundle state) {
 		super.onActivityCreated(state);
 
+		Log.d("nononsenseapps fragment", "viewpager onactivitycreated");
+
+		loaderCallbacks = new LoaderCallbacks<Cursor>() {
+
+			@Override
+			public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+				return new CursorLoader(getActivity(), TaskList.URI,
+						new String[] { TaskList.Columns._ID,
+								TaskList.Columns.TITLE }, null, null,
+						getResources().getString(R.string.const_as_alphabetic,
+								TaskList.Columns.TITLE));
+			}
+
+			@Override
+			public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
+				mTaskListsAdapter.swapCursor(c);
+				if (mListIdToSelect > 0) {
+					final int pos = mSectionsPagerAdapter
+							.getItemPosition(mListIdToSelect);
+					if (pos >= 0) {
+						pager.setCurrentItem(pos);
+						// TODO here, or after if?
+						mListIdToSelect = -1;
+					}
+				}
+			}
+
+			@Override
+			public void onLoaderReset(Loader<Cursor> arg0) {
+				mTaskListsAdapter.swapCursor(null);
+			}
+		};
+
 		// Load actual data
-		getLoaderManager().restartLoader(0, null,
-				new LoaderCallbacks<Cursor>() {
-
-					@Override
-					public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
-						return new CursorLoader(getActivity(), TaskList.URI,
-								new String[] { TaskList.Columns._ID,
-										TaskList.Columns.TITLE }, null, null,
-								getResources().getString(
-										R.string.const_as_alphabetic,
-										TaskList.Columns.TITLE));
-					}
-
-					@Override
-					public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
-						mTaskListsAdapter.swapCursor(c);
-						if (mListIdToSelect > 0) {
-							final int pos = mSectionsPagerAdapter
-									.getItemPosition(mListIdToSelect);
-							if (pos >= 0) {
-								pager.setCurrentItem(pos);
-								// TODO here, or after if?
-								mListIdToSelect = -1;
-							}
-						}
-					}
-
-					@Override
-					public void onLoaderReset(Loader<Cursor> arg0) {
-						mTaskListsAdapter.swapCursor(null);
-					}
-				});
+		getLoaderManager().restartLoader(0, null, loaderCallbacks);
 	}
 
 	@AfterViews
@@ -180,7 +188,8 @@ public class TaskListViewPagerFragment extends Fragment implements
 			// getActivity().onSearchRequested();
 			return true;
 		case R.id.menu_deletedtasks:
-			startActivity(new Intent(getActivity(), ActivitySearchDeleted_.class));
+			startActivity(new Intent(getActivity(),
+					ActivitySearchDeleted_.class));
 			return true;
 		default:
 			return false;
@@ -189,6 +198,11 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 	@Override
 	public void onFinishEditDialog(final long id) {
+		openList(id);
+	}
+
+	@Override
+	public void openList(final long id) {
 		// If it fails, will load on refresh
 		mListIdToSelect = id;
 		if (mSectionsPagerAdapter != null) {
@@ -204,6 +218,11 @@ public class TaskListViewPagerFragment extends Fragment implements
 	public void onSaveInstanceState(Bundle outState) {
 		outState.putLong(START_LIST_ID,
 				mTaskListsAdapter.getItemId(pager.getCurrentItem()));
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
 	}
 
 	@Override

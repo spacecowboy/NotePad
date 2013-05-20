@@ -43,6 +43,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -100,19 +101,23 @@ public class TaskDetailFragment extends Fragment implements
 		@Override
 		public void onLoadFinished(Loader<Cursor> ldr, Cursor c) {
 			if (LOADER_EDITOR_TASK == ldr.getId()) {
-				c.moveToFirst();
-				mTask = new Task(c);
-				if (mTaskOrg == null) {
-					mTaskOrg = new Task(c);
+				if (c.moveToFirst()) {
+					mTask = new Task(c);
+					if (mTaskOrg == null) {
+						mTaskOrg = new Task(c);
+					}
+					fillUIFromTask();
+					// Don't want updates while editing
+					getLoaderManager().destroyLoader(LOADER_EDITOR_TASK);
+					// Load the list to see if we should hide task bits
+					Bundle args = new Bundle();
+					args.putLong(ARG_ITEM_LIST_ID, mTask.dblist);
+					getLoaderManager().restartLoader(LOADER_EDITOR_TASKLISTS,
+							args, loaderCallbacks);
 				}
-				fillUIFromTask();
-				// Don't want updates while editing
-				getLoaderManager().destroyLoader(LOADER_EDITOR_TASK);
-				// Load the list to see if we should hide task bits
-				Bundle args = new Bundle();
-				args.putLong(ARG_ITEM_LIST_ID, mTask.dblist);
-				getLoaderManager().restartLoader(LOADER_EDITOR_TASKLISTS, args,
-						loaderCallbacks);
+				else {
+					// Should kill myself maybe?
+				}
 			}
 			else if (LOADER_EDITOR_NOTIFICATIONS == ldr.getId()) {
 				while (c.moveToNext()) {
@@ -429,23 +434,24 @@ public class TaskDetailFragment extends Fragment implements
 
 		// Open keyboard on new notes so users can start typing directly
 		// need small delay (100ms) for it to open consistently
-		if (mTask._id < 1) {
-			(new Handler()).postDelayed(new Runnable() {
-				public void run() {
-					MotionEvent e = MotionEvent.obtain(
-							SystemClock.uptimeMillis(),
-							SystemClock.uptimeMillis(),
-							MotionEvent.ACTION_DOWN, 0, 0, 0);
-					taskText.dispatchTouchEvent(e);
-					e.recycle();
-					e = MotionEvent.obtain(SystemClock.uptimeMillis(),
-							SystemClock.uptimeMillis(), MotionEvent.ACTION_UP,
-							0, 0, 0);
-					taskText.dispatchTouchEvent(e);
-					e.recycle();
-				}
-			}, 100);
-		}
+		// TODO
+		// if (mTask._id < 1) {
+		// (new Handler()).postDelayed(new Runnable() {
+		// public void run() {
+		// MotionEvent e = MotionEvent.obtain(
+		// SystemClock.uptimeMillis(),
+		// SystemClock.uptimeMillis(),
+		// MotionEvent.ACTION_DOWN, 0, 0, 0);
+		// taskText.dispatchTouchEvent(e);
+		// e.recycle();
+		// e = MotionEvent.obtain(SystemClock.uptimeMillis(),
+		// SystemClock.uptimeMillis(), MotionEvent.ACTION_UP,
+		// 0, 0, 0);
+		// taskText.dispatchTouchEvent(e);
+		// e.recycle();
+		// }
+		// }, 100);
+		// }
 	}
 
 	/**
@@ -499,20 +505,6 @@ public class TaskDetailFragment extends Fragment implements
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			// Launch main showing lists
-			final Intent intent = new Intent()
-					.setAction(Intent.ACTION_VIEW)
-					.setClass(getActivity(), ActivityMain_.class)
-					.setFlags(
-							Intent.FLAG_ACTIVITY_CLEAR_TASK
-									| Intent.FLAG_ACTIVITY_NEW_TASK);
-			if (mTask != null) {
-				intent.setData(TaskList.getUri(mTask.dblist));
-			}
-			startActivity(intent);
-			getActivity().finish();
-			return true;
 		case R.id.menu_add:
 			// TODO should not call if in tablet mode
 			if (mListener != null && mTask != null && mTask.dblist > 0) {
@@ -627,7 +619,7 @@ public class TaskDetailFragment extends Fragment implements
 				if (pendingLocationNotification.view != null
 						&& pendingLocationNotification.locationName != null) {
 					pendingLocationNotification.view.findViewById(
-							// Hide time part
+					// Hide time part
 							R.id.notificationDateTime).setVisibility(View.GONE);
 					// Fill in location name
 					((TextView) pendingLocationNotification.view
@@ -697,7 +689,7 @@ public class TaskDetailFragment extends Fragment implements
 		if (getActivity() == null) return;
 
 		final Intent orgIntent = getActivity().getIntent();
-		if (orgIntent == null
+		if (orgIntent == null || orgIntent.getAction() == null
 				|| !orgIntent.getAction().equals(Intent.ACTION_INSERT)) return;
 
 		if (mTask == null || mTask._id < 1) return;
@@ -835,13 +827,13 @@ public class TaskDetailFragment extends Fragment implements
 					startActivityForResult(i, 2);
 				}
 			});
-			
+
 			final TextView openRepeatField = (TextView) nv
 					.findViewById(R.id.openRepeatField);
 			final View closeRepeatField = nv
 					.findViewById(R.id.closeRepeatField);
 			final View repeatDetails = nv.findViewById(R.id.repeatDetails);
-			
+
 			if (not.time != null && not.radius == null) {
 				openRepeatField.setVisibility(View.VISIBLE);
 			}

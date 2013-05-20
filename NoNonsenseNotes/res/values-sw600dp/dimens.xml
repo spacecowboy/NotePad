@@ -23,7 +23,7 @@
     
     <!-- Editor fragment stuff -->
     <dimen name="editor_side_margin">16dp</dimen>
-    <dimen name="editor_vertical_margin">16dp</dimen>
+    <dimen name="editor_vertical_margin">32dp</dimen>
     <dimen name="editor_vertical_margin_bottom">16dp</dimen>
     
     <!-- For card in editor -->
