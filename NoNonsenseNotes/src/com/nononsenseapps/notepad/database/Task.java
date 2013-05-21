@@ -465,7 +465,8 @@ public class Task extends DAO {
 	 * if listId is null, will return for all lists
 	 */
 	public static final String CREATE_SECTIONED_DATE_VIEW(final String listId) {
-		final String sListId = listId == null ? " NOT NULL " : "'" + listId + "'";
+		final String sListId = listId == null ? " NOT NULL " : "'" + listId
+				+ "'";
 		return new StringBuilder()
 				.append("CREATE TEMP VIEW IF NOT EXISTS ")
 				.append(getSECTION_DATE_VIEW_NAME(listId))
@@ -711,10 +712,9 @@ public class Task extends DAO {
 				.append(" UNION ALL ")
 				.append(" SELECT -1,")
 				.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
-						Columns.DUE, OVERDUE, 
-						Columns.COMPLETED, "1",
-						Columns.TITLE,
-						HEADER_KEY_COMPLETE, Columns.DBLIST, listId))
+						Columns.DUE, OVERDUE, Columns.COMPLETED, "1",
+						Columns.TITLE, HEADER_KEY_COMPLETE, Columns.DBLIST,
+						listId))
 				.append(",2,0")
 				// Only show header if there are tasks under it
 				.append(" WHERE EXISTS(SELECT _ID FROM ").append(TABLE_NAME)
@@ -1064,9 +1064,9 @@ public class Task extends DAO {
 			TABLE_NAME)
 			+ String.format(UPGRADE_CHILDREN, TABLE_NAME, Columns.LEFT,
 					Columns.RIGHT, Columns.DBLIST)
-			+ String.format(BUMP_TO_LEFT, TABLE_NAME, Columns.RIGHT,
-					Columns.RIGHT, Columns.DBLIST)
 			+ String.format(BUMP_TO_LEFT, TABLE_NAME, Columns.LEFT,
+					Columns.RIGHT, Columns.DBLIST)
+			+ String.format(BUMP_TO_LEFT, TABLE_NAME, Columns.RIGHT,
 					Columns.RIGHT, Columns.DBLIST)
 
 			// Enforce integrity
