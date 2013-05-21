@@ -14,6 +14,9 @@ install:
 uninstall:
 	adb uninstall com.nononsenseapps.notepad.test
 
+makeinstallmother:
+	cd ../NoNonsenseNotes/;make debug install
+
 #For class: -Dspoon.test.class=fully.qualified.ClassName
 #For method in that class, also: -Dspoon.test.method=testAllTheThings
 testspoon:

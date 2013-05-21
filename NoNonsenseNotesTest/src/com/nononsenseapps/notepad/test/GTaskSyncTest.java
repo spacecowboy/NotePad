@@ -31,7 +31,6 @@ public class GTaskSyncTest extends AndroidTestCase {
 	HashMap<GoogleTaskList, ArrayList<GoogleTask>> remoteTasksSubSet;
 
 	int remoteOnlyCount = 2;
-	int remoteNewCount = 1; // only one of above actually
 	int localOnlyCount = 1;
 
 	int localListNewestCount = 0;
@@ -72,6 +71,7 @@ public class GTaskSyncTest extends AndroidTestCase {
 			localTasks.put(l, new ArrayList<Task>());
 			if (i < (max - localOnlyCount)) {
 				gl = new GoogleTaskList(l, account);
+				// 0 2 4 6
 				if (i % 2 == 0) {
 					gl.updated = l.updated - 1;
 					// localListNewestCount++;
@@ -85,6 +85,7 @@ public class GTaskSyncTest extends AndroidTestCase {
 				remoteListsInDB.add(gl);
 				remoteTasksInDB.put(gl, new ArrayList<GoogleTask>());
 				remoteTasksSubSet.put(gl, new ArrayList<GoogleTask>());
+				// 0 2
 				if (i < 4) {
 					remoteListsSubset.add(gl);
 					if (i % 2 == 0) {
@@ -108,9 +109,10 @@ public class GTaskSyncTest extends AndroidTestCase {
 
 		gl = new GoogleTaskList(account);
 		gl.title = balleRemote;
-		gl.updated = 0L;
+		gl.updated = Calendar.getInstance().getTimeInMillis();
 		gl.remoteId = balle + "998";
 		remoteListsSubset.add(gl);
+		remoteListNewestCount++;
 
 		remoteOnlyCount = 2;
 	}
@@ -160,6 +162,7 @@ public class GTaskSyncTest extends AndroidTestCase {
 			gt.remoteId = balleRemote + "991";
 			// gt.listdbid = l._id;
 			gt.updated = Calendar.getInstance().getTimeInMillis();
+			remoteTaskNewestCount++;
 
 			remoteTasksSubSet.get(gl).add(gt);
 
@@ -351,23 +354,24 @@ public class GTaskSyncTest extends AndroidTestCase {
 						pair.second.title);
 				assertEquals("local id should be set", (Long) pair.first._id,
 						pair.second.dbid);
-				if (pair.second.updated >= pair.first.updated) {
+				// REverse check to avoid .equals fuckup
+				if (pair.first.updated > pair.second.updated) {
+					localNewestCount++;
+				}
+				else {
 					remoteNewestCount++;
 					assertEquals("Update time should be the same",
 							pair.second.updated, pair.first.updated);
 				}
-				else {
-					localNewestCount++;
-				}
 			}
 		}
 
-		assertTrue("Only one item was supposed to be remote and 'old'",
-				localNullCount == 1);
+//		assertTrue("Only one item was supposed to be remote and deleted locally",
+//				localNullCount == remoteOnlyCount);
 		assertTrue("Expected only one 'new local list'", remoteNullCount == 1);
 
-		assertTrue(localListNewestCount > 0);
-		assertTrue(remoteListNewestCount > 0);
+		assertTrue(localNewestCount > 0);
+		assertTrue(remoteNewestCount > 0);
 		assertEquals("lUpdate time incorrect", localListNewestCount,
 				localNewestCount);
 		// Plus one for remote only object which creates new list
@@ -390,8 +394,7 @@ public class GTaskSyncTest extends AndroidTestCase {
 						new Pair<TaskList, GoogleTaskList>(tl, gl));
 
 		assertNotNull(pairs);
-		assertEquals("Synced pairs have wrong length", localTasks.get(tl)
-				.size() + remoteOnlyCount, pairs.size());
+		assertEquals("Synced pairs have wrong length", localOnlyCount + localTaskNewestCount, pairs.size());
 
 		int remoteNewestCount = 0;
 		int localNewestCount = 0;
@@ -414,7 +417,14 @@ public class GTaskSyncTest extends AndroidTestCase {
 						pair.second.dbid);
 				assertEquals("list id should be set", (Long) pair.first.dblist,
 						pair.second.listdbid);
-				if (pair.second.updated >= pair.first.updated) {
+				
+				if (pair.first.updated > pair.second.updated){
+					localNewestCount++;
+
+					Log.d("nononsenseapps gtasksync", "local newest: "
+							+ pair.first.title + " : " + pair.second.title);
+				}
+				else {
 					remoteNewestCount++;
 					assertEquals("Update time should be the same",
 							pair.second.updated, pair.first.updated);
@@ -428,17 +438,11 @@ public class GTaskSyncTest extends AndroidTestCase {
 					Log.d("nononsenseapps gtasksync", "remote newest: "
 							+ pair.first.title + " : " + pair.second.title);
 				}
-				else {
-					localNewestCount++;
-
-					Log.d("nononsenseapps gtasksync", "local newest: "
-							+ pair.first.title + " : " + pair.second.title);
-				}
 			}
 		}
 
-		assertTrue("Only one item was supposed to be remote and 'old': "
-				+ localNullCount, localNullCount == localOnlyCount);
+//		assertTrue("Only one item was supposed to be remote and deletedlocally: "
+//				+ localNullCount, localNullCount == localOnlyCount);
 		assertEquals("Not expected 'new local task' count: " + remoteNullCount,
 				localTasks.get(tl).size() - remoteTasksInDB.get(gl).size(),
 				remoteNullCount);
@@ -448,10 +452,9 @@ public class GTaskSyncTest extends AndroidTestCase {
 		Log.d("nononsenseapps gtasksync", "remotenewest: "
 				+ remoteTaskNewestCount + " vs " + remoteNewestCount);
 
-		assertTrue("local count", localTaskNewestCount > 0);
-		assertTrue("remote count", remoteTaskNewestCount > 0);
+		assertTrue("local count", localNewestCount > 0);
+		assertEquals("remote count", 0, remoteNewestCount);
 		assertEquals("lUpdate time incorrect", localTaskNewestCount, localNewestCount);
-		assertEquals("rUpdate time incorrect", remoteTaskNewestCount,
-				remoteNewestCount);
+		assertEquals("rUpdate time incorrect", 0, remoteNewestCount);
 	}
 }
