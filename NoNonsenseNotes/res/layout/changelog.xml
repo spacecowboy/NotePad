@@ -22,7 +22,7 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="\nHelp translate the app"
+            android:text="Help translate the app"
             android:fontFamily="sans-serif-condensed"
             android:textColor="@android:color/holo_blue_dark"
             android:textStyle="bold" />
@@ -31,8 +31,38 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:autoLink="web|email|map"
-            android:text="\nGo to http://translate.nononsenseapps.com to help translate the app to your native language." />
+            android:text="Go to http://translate.nononsenseapps.com to help translate the app to your native language." />
 
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\nFaster updates? Join the beta community"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:autoLink="web|email|map"
+            android:text="http://goo.gl/Ocjjl" />
+        
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="\nLatest Beta fixes"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="\nThemed Left Drawer List\nModified sync code, hoping it fixes the problems"/>
+        
+        
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

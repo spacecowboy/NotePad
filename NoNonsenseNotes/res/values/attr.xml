@@ -71,5 +71,7 @@
 	<attr name="TaskListItem" format="reference" />
 	<attr name="ListDividerStyle" format="reference"/>
 	<attr name="ListMarginStyle" format="reference"/>
+	<attr name="LeftDrawerStyle" format="reference"/>
+	<attr name="LeftDrawerListItemStyle" format="reference" />
 	
 </resources>

@@ -1,5 +1,7 @@
 package com.nononsenseapps.notepad.database;
 
+import com.nononsenseapps.notepad.database.RemoteTask.Columns;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -44,13 +46,13 @@ public class RemoteTaskList extends DAO {
 		public static final String UPDATED = "updated";
 		public static final String DBID = "dbid";
 		// Reserved columns, depending on what different services needs
-		public static final String FIELD1 = "field1";
+		public static final String DELETED = "field1";
 		public static final String FIELD2 = "field2";
 		public static final String FIELD3 = "field3";
 		public static final String FIELD4 = "field4";
 		public static final String FIELD5 = "field5";
 
-		public static final String[] FIELDS = { _ID, DBID, REMOTEID, UPDATED, ACCOUNT, FIELD1, FIELD2, FIELD3, FIELD4, FIELD5 };
+		public static final String[] FIELDS = { _ID, DBID, REMOTEID, UPDATED, ACCOUNT, DELETED, FIELD2, FIELD3, FIELD4, FIELD5 };
 	}
 
 	/**
@@ -64,7 +66,7 @@ public class RemoteTaskList extends DAO {
 			.append(Columns.DBID).append(" INTEGER NOT NULL,")
 			.append(Columns.UPDATED).append(" INTEGER NOT NULL,")
 			.append(Columns.REMOTEID).append(" TEXT NOT NULL,")
-			.append(Columns.FIELD1).append(" TEXT,")
+			.append(Columns.DELETED).append(" TEXT,")
 			.append(Columns.FIELD2).append(" TEXT,")
 			.append(Columns.FIELD3).append(" TEXT,")
 			.append(Columns.FIELD4).append(" TEXT,")
@@ -78,7 +80,7 @@ public class RemoteTaskList extends DAO {
 	public Long dbid = null;
 	public String account = null;
 	public String remoteId = null;
-	public String field1 = null;
+	public String deleted = null;
 	public String field2 = null;
 	public String field3 = null;
 	public String field4 = null;
@@ -112,11 +114,11 @@ public class RemoteTaskList extends DAO {
 		updated = c.getLong(3);
 		account  = c.getString(4);
 		
-		field1  = c.getString(5);
-		field2  = c.getString(6);
-		field3  = c.getString(7);
-		field4  = c.getString(8);
-		field5  = c.getString(9);
+		deleted  = c.isNull(5) ? null : c.getString(5);
+		field2  = c.isNull(6) ? null : c.getString(6);
+		field3  = c.isNull(7) ? null : c.getString(7);
+		field4  = c.isNull(8) ? null : c.getString(8);
+		field5  = c.isNull(9) ? null : c.getString(9);
 	}
 
 	public RemoteTaskList(final Uri uri, final ContentValues values) {
@@ -135,11 +137,18 @@ public class RemoteTaskList extends DAO {
 		account = values.getAsString(Columns.ACCOUNT);
 		service = values.getAsString(Columns.SERVICE);
 		
-		field1 = values.getAsString(Columns.FIELD1);
+		deleted = values.getAsString(Columns.DELETED);
 		field2 = values.getAsString(Columns.FIELD2);
 		field3 = values.getAsString(Columns.FIELD3);
 		field4 = values.getAsString(Columns.FIELD4);
 		field5 = values.getAsString(Columns.FIELD5);
+	}
+	
+	public boolean isDeleted() {
+		return deleted != null && !deleted.isEmpty();
+	}
+	public void setDeleted(final boolean deleted) {
+		this.deleted = deleted ? "deleted" : null;
 	}
 
 	@Override
@@ -151,7 +160,7 @@ public class RemoteTaskList extends DAO {
 		values.put(Columns.UPDATED,updated);
 		values.put(Columns.ACCOUNT, account);
 		values.put(Columns.SERVICE, service);
-		values.put(Columns.FIELD1, field1);
+		values.put(Columns.DELETED, deleted);
 		values.put(Columns.FIELD2, field2);
 		values.put(Columns.FIELD3, field3);
 		values.put(Columns.FIELD4, field4);
@@ -221,4 +230,15 @@ public class RemoteTaskList extends DAO {
 	public String[] getTaskListWithoutRemoteArgs() {
 		return new String[] {account, service};
 	}
+	
+	/*
+	 * Trigger to delete items when their list is deleted
+	 */
+	public static final String TRIGGER_REALDELETE_MARK = new StringBuilder()
+	.append("CREATE TRIGGER trigger_real_deletemark_").append(TABLE_NAME)
+	.append(" AFTER DELETE ON ").append(TaskList.TABLE_NAME).append(" BEGIN ")
+	.append(" UPDATE ").append(TABLE_NAME).append(" SET ").append(Columns.DELETED).append(" = 'deleted' ")
+	.append(" WHERE ").append(Columns.DBID).append(" IS old.").append(TaskList.Columns._ID)
+	.append(";")
+	.append(" END;").toString();
 }

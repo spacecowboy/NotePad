@@ -55,6 +55,9 @@
         <item name="TaskListItem">@style/TaskListItemDark</item>
         <item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
         <item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
+        
+        <item name="LeftDrawerStyle">@style/LeftDrawerStyleDark</item>
+        <item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleDark</item>
     </style>
 
     <style name="ThemeHoloBlack" parent="@style/ThemeGoogleNowDark">
@@ -63,6 +66,7 @@
         <item name="editorBackgroundColor">@android:color/black</item>
         <item name="TaskListItem">@style/TaskListItemBlack</item>
         <item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
+         <item name="LeftDrawerStyle">@style/LeftDrawerStyleBlack</item>
     </style>
 
     <style name="ThemeGoogleNowDark" parent="@style/ThemeHolo">
@@ -120,6 +124,9 @@
         <item name="TaskListItem">@style/TaskListItemLight</item>
         <item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
         <item name="ListMarginStyle">@style/ListMarginStyleCard</item>
+        
+         <item name="LeftDrawerStyle">@style/LeftDrawerStyleLight</item>
+        <item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleLight</item>
     </style>
 
     <style name="ThemeHoloLightClassic" parent="@style/ThemeHoloLightDarkActonBar">

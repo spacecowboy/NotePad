@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.apache.http.client.ClientProtocolException;
+import org.json.JSONException;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -134,24 +135,21 @@ public class GoogleTaskSync {
 				}
 				catch (ClientProtocolException e) {
 
-					Log.d(TAG,
+					Log.e(TAG,
 							"ClientProtocolException: "
 									+ e.getLocalizedMessage());
+					syncResult.stats.numAuthExceptions++;
 				}
-				// catch (JSONException e) {
-
-				// Log.d(TAG, "JSONException: " + e.getLocalizedMessage());
-				// }
 				catch (IOException e) {
 					syncResult.stats.numIoExceptions++;
 
-					Log.d(TAG, "IOException: " + e.getLocalizedMessage());
+					Log.e(TAG, "IOException: " + e.getLocalizedMessage());
 				}
 				catch (ClassCastException e) {
 					// GetListofLists will cast this if it returns a string.
-					// It should not return a string
-					// but it did...
-					Log.d(TAG, "ClassCastException: " + e.getLocalizedMessage());
+					// It should not return a string but it did...
+					syncResult.stats.numAuthExceptions++;
+					Log.e(TAG, "ClassCastException: " + e.getLocalizedMessage());
 				}
 
 			}
@@ -166,7 +164,8 @@ public class GoogleTaskSync {
 		}
 		catch (Exception e) {
 			// Something went wrong, don't punish the user
-			Log.d(TAG, e.getLocalizedMessage());
+			syncResult.stats.numAuthExceptions++;
+			Log.e(TAG, e.getLocalizedMessage());
 		}
 		finally {
 			// This must always be called or we will leak resources
@@ -210,18 +209,21 @@ public class GoogleTaskSync {
 			if (c != null) c.close();
 		}
 
-		for (final GoogleTaskList list : remoteLists) {
+		for (final GoogleTaskList remotelist : remoteLists) {
 			// Merge with hashmap
-			if (localVersions.containsKey(list.remoteId)) {
+			if (localVersions.containsKey(remotelist.remoteId)) {
 				Log.d(TAG, "Setting merge id");
-				list.dbid = localVersions.get(list.remoteId).dbid;
-				localVersions.remove(list.remoteId);
+				remotelist.dbid = localVersions.get(remotelist.remoteId).dbid;
+				Log.d(TAG, "Setting merge delete status");
+				remotelist.setDeleted(localVersions.get(remotelist.remoteId)
+						.isDeleted());
+				localVersions.remove(remotelist.remoteId);
 			}
 		}
 
 		// Remaining ones
 		for (final GoogleTaskList list : localVersions.values()) {
-			list.deleted = true;
+			list.remotelyDeleted = true;
 			remoteLists.add(list);
 		}
 		Log.d(TAG, "remoteList finishing with: " + remoteLists.size());
@@ -261,6 +263,8 @@ public class GoogleTaskSync {
 			// Merge with hashmap
 			if (localVersions.containsKey(task.remoteId)) {
 				task.dbid = localVersions.get(task.remoteId).dbid;
+				Log.d(TAG, "merge: task was deleted locally");
+				task.setDeleted(localVersions.get(task.remoteId).isDeleted());
 				localVersions.remove(task.remoteId);
 			}
 		}
@@ -276,9 +280,10 @@ public class GoogleTaskSync {
 	 * 
 	 * @throws IOException
 	 * @throws ClientProtocolException
+	 * @throws JSONException
 	 */
 	static List<GoogleTaskList> downloadLists(final GoogleAPITalker apiTalker)
-			throws ClientProtocolException, IOException {
+			throws ClientProtocolException, IOException, JSONException {
 		// Do the actual download
 		final ArrayList<GoogleTaskList> remoteLists = new ArrayList<GoogleTaskList>();
 		apiTalker.getListOfLists(remoteLists);
@@ -310,14 +315,17 @@ public class GoogleTaskSync {
 			TaskList localList = loadRemoteListFromDB(context, remoteList);
 
 			if (localList == null) {
-				if (remoteList.deleted) {
+				if (remoteList.remotelyDeleted) {
+					Log.d(TAG, "List was remotely deleted");
 					// Deleted locally AND on server
 					remoteList.delete(context);
 				}
-				else if (remoteList.updated > settings.getLong(
-						PREFS_GTASK_LAST_SYNC_TIME, 0)) {
-					// If no local, and updated is higher than latestupdate,
-					// create new
+				else if (remoteList.isDeleted()) {
+					Log.d(TAG, "List was locally deleted");
+					// Was deleted locally
+				}
+				else {
+					// is a new list
 					Log.d(TAG, "Inserting new list");
 					localList = new TaskList();
 					localList.title = remoteList.title;
@@ -326,14 +334,10 @@ public class GoogleTaskSync {
 					remoteList.dbid = localList._id;
 					remoteList.save(context);
 				}
-				else {
-					Log.d(TAG, "List must have been deleted");
-					// If no local, updated is not higher, delete remote
-				}
 			}
 			else {
 				// If local is newer, update remote object
-				if (remoteList.deleted) {
+				if (remoteList.remotelyDeleted) {
 					Log.d(TAG, "Remote list was deleted");
 					localList.delete(context);
 					localList = null;
@@ -351,7 +355,7 @@ public class GoogleTaskSync {
 					localList.save(context, remoteList.updated);
 				}
 			}
-			if (!remoteList.deleted)
+			if (!remoteList.remotelyDeleted)
 				listPairs.add(new Pair<TaskList, GoogleTaskList>(localList,
 						remoteList));
 		}
@@ -370,25 +374,12 @@ public class GoogleTaskSync {
 			final Context context,
 			final List<Pair<TaskList, GoogleTaskList>> listPairs,
 			final GoogleAPITalker apiTalker) throws ClientProtocolException,
-			IOException, PreconditionException {
+			IOException, PreconditionException, JSONException {
 		final List<Pair<TaskList, GoogleTaskList>> syncedPairs = new ArrayList<Pair<TaskList, GoogleTaskList>>();
 		// For every list
 		for (final Pair<TaskList, GoogleTaskList> pair : listPairs) {
 			Pair<TaskList, GoogleTaskList> syncedPair = pair;
-			if (pair.first == null) {
-				// Deleted locally, delete remotely also
-				pair.second.deleted = true;
-				try {
-					apiTalker.uploadList(pair.second);
-				}
-				catch (PreconditionException e) {
-					// Deleted the default list. Ignore error
-				}
-				// and delete from db if it exists there
-				pair.second.delete(context);
-				syncedPair = null;
-			}
-			else if (pair.second == null) {
+			if (pair.second == null) {
 				// New list to create
 				final GoogleTaskList newList = new GoogleTaskList(pair.first,
 						apiTalker.accountName);
@@ -398,6 +389,20 @@ public class GoogleTaskSync {
 				pair.first.save(context, newList.updated);
 				syncedPair = new Pair<TaskList, GoogleTaskList>(pair.first,
 						newList);
+			}
+			else if (pair.second.isDeleted()) {
+				Log.d(TAG, "remotesync: isDeletedLocally");
+				// Deleted locally, delete remotely also
+				pair.second.remotelyDeleted = true;
+				try {
+					apiTalker.uploadList(pair.second);
+				}
+				catch (PreconditionException e) {
+					// Deleted the default list. Ignore error
+				}
+				// and delete from db if it exists there
+				pair.second.delete(context);
+				syncedPair = null;
 			}
 			else if (pair.first.updated > pair.second.updated) {
 				// If local update is different than remote, that means we
@@ -418,23 +423,26 @@ public class GoogleTaskSync {
 	static void synchronizeTasksRemotely(final Context context,
 			final List<Pair<Task, GoogleTask>> taskPairs,
 			final GoogleTaskList gTaskList, final GoogleAPITalker apiTalker)
-			throws ClientProtocolException, IOException, PreconditionException {
+			throws ClientProtocolException, IOException, PreconditionException,
+			JSONException {
 		for (final Pair<Task, GoogleTask> pair : taskPairs) {
-			// if deleted locally
-			if (pair.first == null) {
-				// Delete remote also
-				pair.second.deleted = true;
-				apiTalker.uploadTask(pair.second, gTaskList);
-				// Remove from db
-				pair.second.delete(context);
-			}
+
 			// if newly created locally
-			else if (pair.second == null) {
+			if (pair.second == null) {
 				final GoogleTask newTask = new GoogleTask(pair.first,
 						apiTalker.accountName);
 				apiTalker.uploadTask(newTask, gTaskList);
 				newTask.save(context);
 				pair.first.save(context, newTask.updated);
+			}
+			// if deleted locally
+			else if (pair.second.isDeleted()) {
+				Log.d(TAG, "remotetasksync: isDeletedLocally");
+				// Delete remote also
+				pair.second.remotelydeleted = true;
+				apiTalker.uploadTask(pair.second, gTaskList);
+				// Remove from db
+				pair.second.delete(context);
 			}
 			// if local updated is different from remote,
 			// should update remote
@@ -508,7 +516,7 @@ public class GoogleTaskSync {
 
 	static List<GoogleTask> downloadChangedTasks(final Context context,
 			final GoogleAPITalker apiTalker, final GoogleTaskList remoteList)
-			throws ClientProtocolException, IOException {
+			throws ClientProtocolException, IOException, JSONException {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(context);
 
@@ -552,12 +560,17 @@ public class GoogleTaskSync {
 			// a) it was deleted by the user or
 			// b) it was created on the server
 			if (localTask == null) {
-				if (remoteTask.deleted) {
+				if (remoteTask.remotelydeleted) {
+					Log.d(TAG, "slocal: task was remotely deleted1");
 					// Nothing to do
 					remoteTask.delete(context);
 				}
-				else if (remoteTask.updated > settings.getLong(
-						PREFS_GTASK_LAST_SYNC_TIME, 0L)) {
+				else if (remoteTask.isDeleted()) {
+					Log.d(TAG, "slocal: task was locally deleted");
+					// upload change
+				}
+				else {
+					Log.d(TAG, "slocal: task was new");
 					// If no local, and updated is higher than latestupdate,
 					// create new
 					localTask = new Task();
@@ -583,10 +596,6 @@ public class GoogleTaskSync {
 					remoteTask.dbid = localTask._id;
 					remoteTask.save(context);
 				}
-				else {
-					// It was deleted locally, but dont mark it as deleted
-					// because we want to upload the change as well
-				}
 			}
 			else {
 				Log.d("nononsenseapps gtasksync", "l.updated: "
@@ -599,12 +608,13 @@ public class GoogleTaskSync {
 					// Updated is set by Google
 				}
 				// Remote is newer
-				else if (remoteTask.deleted) {
+				else if (remoteTask.remotelydeleted) {
+					Log.d(TAG, "slocal: task was remotely deleted2");
 					localTask.delete(context);
 					localTask = null;
 					remoteTask.delete(context);
 				}
-				else if (localTask.updated == remoteTask.updated) {
+				else if (localTask.updated.equals(remoteTask.updated)) {
 					// Nothing to do, we are already updated
 				}
 				else {
@@ -619,25 +629,38 @@ public class GoogleTaskSync {
 									remoteTask.dueDate).getTime();
 						}
 						catch (Exception e) {
+							localTask.due = null;
 						}
 					}
+					else {
+						localTask.due = null;
+					}
+					
 					if (localTask.completed == null
 							&& remoteTask.status != null
 							&& remoteTask.status.equals(GoogleTask.COMPLETED)) {
 						localTask.completed = remoteTask.updated;
 					}
+					else {
+						localTask.completed = null;
+					}
 
 					localTask.save(context, remoteTask.updated);
 				}
 			}
-			if (remoteTask.deleted) {	
+			if (remoteTask.remotelydeleted) {
 				// Dont
+				Log.d("nononsenseapps gtasksync", "skipping remotely deleted");
 			}
 			else if (localTask != null && remoteTask != null
-					&& localTask.updated == remoteTask.updated) {
+					&& localTask.updated.equals(remoteTask.updated)) {
+				Log.d("nononsenseapps gtasksync", "skipping equal update");
 				// Dont
 			}
 			else {
+				if (localTask != null) {
+					Log.d("nononsenseapps gtasksync", "adding: l." + localTask.updated + " r." + remoteTask.updated);
+				}
 				taskPairs
 						.add(new Pair<Task, GoogleTask>(localTask, remoteTask));
 			}
@@ -646,6 +669,7 @@ public class GoogleTaskSync {
 		// Add local lists without a remote version to pairs
 		for (final Task t : loadNewTasksFromDB(context, listPair.first._id,
 				listPair.second.account)) {
+			Log.d("nononsenseapps gtasksync", "adding local only");
 			taskPairs.add(new Pair<Task, GoogleTask>(t, null));
 		}
 

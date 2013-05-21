@@ -87,7 +87,7 @@ public class GoogleTask extends RemoteTask {
 	public String parent = null;
 	public String position = null;
 
-	public boolean deleted = false;
+	public boolean remotelydeleted = false;
 	//public int hidden = 0;
 	//public boolean didRemoteInsert = false;
 
@@ -132,9 +132,9 @@ public class GoogleTask extends RemoteTask {
 		if (jsonTask.has(DUE))
 			dueDate = jsonTask.getString(DUE);
 		if (jsonTask.has(DELETED) && jsonTask.getBoolean(DELETED))
-			deleted = true;
+			remotelydeleted = true;
 		if (jsonTask.has(HIDDEN) && jsonTask.getBoolean(HIDDEN))
-			deleted = true;
+			remotelydeleted = true;
 
 //		json = jsonTask;
 	}
@@ -158,7 +158,7 @@ public class GoogleTask extends RemoteTask {
 		dueDate = RFC3339Date.asRFC3339(dbTask.due);
 		status = dbTask.completed != null ? GoogleTask.COMPLETED
 				: GoogleTask.NEEDSACTION;
-		deleted = false;
+		remotelydeleted = false;
 		dbid = dbTask._id;
 		listdbid = dbTask.dblist;
 	}

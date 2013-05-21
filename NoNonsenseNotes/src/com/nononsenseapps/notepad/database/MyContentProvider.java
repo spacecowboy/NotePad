@@ -562,9 +562,6 @@ public class MyContentProvider extends ContentProvider {
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
 		case RemoteTaskList.BASEURICODE:
-			if (selection != null && selectionArgs != null)
-//				Log.d(MainActivity.TAG, "remotetasklist query: " + selection
-//						+ DAO.arrayToCommaString(selectionArgs));
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()

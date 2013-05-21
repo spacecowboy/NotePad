@@ -49,14 +49,14 @@ public class RemoteTask extends DAO {
 		public static final String DBID = "dbid";
 		public static final String LISTDBID = "listdbid";
 		// Reserved columns, depending on what different services needs
-		public static final String FIELD1 = "field1";
+		public static final String DELETED = "field1";
 		public static final String FIELD2 = "field2";
 		public static final String FIELD3 = "field3";
 		public static final String FIELD4 = "field4";
 		public static final String FIELD5 = "field5";
 
 		public static final String[] FIELDS = { _ID, DBID, REMOTEID, UPDATED,
-				ACCOUNT, LISTDBID, FIELD1, FIELD2, FIELD3, FIELD4, FIELD5 };
+				ACCOUNT, LISTDBID, DELETED, FIELD2, FIELD3, FIELD4, FIELD5 };
 	}
 
 	/**
@@ -73,7 +73,7 @@ public class RemoteTask extends DAO {
 			.append(" TEXT NOT NULL,")
 			.append(Columns.LISTDBID)
 			.append(" INTEGER NOT NULL,")
-			.append(Columns.FIELD1).append(" TEXT,")
+			.append(Columns.DELETED).append(" TEXT,")
 			.append(Columns.FIELD2).append(" TEXT,").append(Columns.FIELD3)
 			.append(" TEXT,").append(Columns.FIELD4).append(" TEXT,")
 			.append(Columns.FIELD5).append(" TEXT")
@@ -95,6 +95,17 @@ public class RemoteTask extends DAO {
 	.append(";")
 	.append(" END;").toString();
 	
+	/*
+	 * Trigger to delete items when their real items are deleted
+	 */
+	public static final String TRIGGER_REALDELETE_MARK = new StringBuilder()
+	.append("CREATE TRIGGER trigger_real_deletemark_").append(TABLE_NAME)
+	.append(" AFTER DELETE ON ").append(Task.TABLE_NAME).append(" BEGIN ")
+	.append(" UPDATE ").append(TABLE_NAME).append(" SET ").append(Columns.DELETED).append(" = 'deleted' ")
+	.append(" WHERE ").append(Columns.DBID).append(" IS old.").append(Task.Columns._ID)
+	.append(";")
+	.append(" END;").toString();
+	
 	// milliseconds since 1970-01-01 UTC
 	public Long updated = null;
 
@@ -102,11 +113,18 @@ public class RemoteTask extends DAO {
 	public Long listdbid = null;
 	public String account = null;
 	public String remoteId = null;
-	public String field1 = null;
+	public String deleted = null;
 	public String field2 = null;
 	public String field3 = null;
 	public String field4 = null;
 	public String field5 = null;
+	
+	public boolean isDeleted() {
+		return deleted != null && !deleted.isEmpty();
+	}
+	public void setDeleted(final boolean deleted) {
+		this.deleted = deleted ? "deleted" : null;
+	}
 	
 	// Should be overwritten by children
 	protected String service = null;	
@@ -140,11 +158,11 @@ public class RemoteTask extends DAO {
 		account = c.getString(4);
 		listdbid = c.getLong(5);
 
-		field1 = c.getString(6);
-		field2 = c.getString(7);
-		field3 = c.getString(8);
-		field4 = c.getString(9);
-		field5 = c.getString(10);
+		deleted  = c.isNull(6) ? null : c.getString(6);
+		field2  = c.isNull(7) ? null : c.getString(7);
+		field3  = c.isNull(8) ? null : c.getString(8);
+		field4  = c.isNull(9) ? null : c.getString(9);
+		field5  = c.isNull(10) ? null : c.getString(10);
 	}
 
 	public RemoteTask(final Uri uri, final ContentValues values) {
@@ -164,7 +182,7 @@ public class RemoteTask extends DAO {
 		service = values.getAsString(Columns.SERVICE);
 		listdbid = values.getAsLong(Columns.LISTDBID);
 
-		field1 = values.getAsString(Columns.FIELD1);
+		deleted = values.getAsString(Columns.DELETED);
 		field2 = values.getAsString(Columns.FIELD2);
 		field3 = values.getAsString(Columns.FIELD3);
 		field4 = values.getAsString(Columns.FIELD4);
@@ -181,7 +199,7 @@ public class RemoteTask extends DAO {
 		values.put(Columns.UPDATED, updated);
 		values.put(Columns.ACCOUNT, account);
 		values.put(Columns.SERVICE, service);
-		values.put(Columns.FIELD1, field1);
+		values.put(Columns.DELETED, deleted);
 		values.put(Columns.FIELD2, field2);
 		values.put(Columns.FIELD3, field3);
 		values.put(Columns.FIELD4, field4);
@@ -256,4 +274,6 @@ public class RemoteTask extends DAO {
 	public static String[] getTaskWithoutRemoteArgs(final long listdbid, final String account, final String service) {
 		return new String[] { Long.toString(listdbid), account, service };
 	}
+	
+	
 }

@@ -311,9 +311,10 @@ public class GoogleAPITalker {
 	 * @throws NotModifiedException
 	 * @throws PreconditionException
 	 * @throws ClientProtocolException
+	 * @throws JSONException 
 	 */
 	public String getListOfLists(ArrayList<GoogleTaskList> list)
-			throws ClientProtocolException, IOException {
+			throws ClientProtocolException, IOException, JSONException {
 		String eTag = "";
 		String pageToken = null;
 		do {
@@ -333,6 +334,10 @@ public class GoogleAPITalker {
 				}
 				else {
 					pageToken = jsonResponse.getString(NEXTPAGETOKEN);
+				}
+				// No lists
+				if (jsonResponse.isNull("items")) {
+					break;
 				}
 
 				eTag += jsonResponse.getString("etag");
@@ -356,10 +361,6 @@ public class GoogleAPITalker {
 				// } catch (NotModifiedException e) {
 				// // Can not happen in this case since we don't have any etag!
 				// }
-			}
-			catch (JSONException e) {
-				pageToken = null;
-				Log.d(TAG, "getlistoflists: " + e.getLocalizedMessage());
 			}
 		} while (pageToken != null);
 
@@ -469,9 +470,10 @@ public class GoogleAPITalker {
 	 * @param googleTaskList
 	 * @throws IOException
 	 * @throws ClientProtocolException
+	 * @throws JSONException 
 	 */
 	public ArrayList<GoogleTask> getModifiedTasks(String lastUpdated,
-			GoogleTaskList list) throws ClientProtocolException, IOException {
+			GoogleTaskList list) throws ClientProtocolException, IOException, JSONException {
 		ArrayList<GoogleTask> moddedList = new ArrayList<GoogleTask>();
 
 		// If user has many tasks, they will not all be returned in same request
@@ -498,6 +500,12 @@ public class GoogleAPITalker {
 				else {
 					pageToken = jsonResponse.getString(NEXTPAGETOKEN);
 				}
+				
+				// No modified tasks
+				if (jsonResponse.isNull("items")) {
+					break;
+				}
+				
 				// Will be an array of items
 				JSONArray items = jsonResponse.getJSONArray("items");
 
@@ -505,8 +513,8 @@ public class GoogleAPITalker {
 				int length = items.length();
 				for (i = 0; i < length; i++) {
 					JSONObject jsonTask = items.getJSONObject(i);
-					Log.d(MainActivity.TAG,
-							"moddedJSONTask: " + jsonTask.toString());
+//					Log.d(MainActivity.TAG,
+//							"moddedJSONTask: " + jsonTask.toString());
 					final GoogleTask gt = new GoogleTask(jsonTask, accountName);
 					gt.listdbid = list.dbid;
 					moddedList.add(gt);
@@ -520,11 +528,6 @@ public class GoogleAPITalker {
 				//
 				// Log.d(TAG, e.getLocalizedMessage());
 			}
-			catch (JSONException e) {
-				// Item list must have been empty
-				pageToken = null;
-				Log.d(MainActivity.TAG, e.getLocalizedMessage());
-			}
 		} while (pageToken != null);
 
 		return moddedList;
@@ -537,10 +540,11 @@ public class GoogleAPITalker {
 	 * Updates the task in place and also returns it.
 	 * 
 	 * @throws PreconditionException
+	 * @throws JSONException 
 	 */
 	public GoogleTask uploadTask(final GoogleTask task,
 			final GoogleTaskList pList) throws ClientProtocolException,
-			IOException, PreconditionException {
+			IOException, PreconditionException, JSONException {
 
 		if (pList.remoteId == null || pList.remoteId.isEmpty()) {
 			Log.d(TAG, "Invalid list ID found for uploadTask");
@@ -549,7 +553,7 @@ public class GoogleAPITalker {
 
 		// If we are trying to upload a deleted task which does not exist on
 		// server, we can ignore it. might happen with conflicts
-		if (task.deleted && (task.remoteId == null || task.remoteId.isEmpty())) {
+		if (task.isDeleted() && (task.remoteId == null || task.remoteId.isEmpty())) {
 			Log.d(TAG, "Trying to upload a deleted non-synced note, ignoring: "
 					+ task.title);
 			return null;
@@ -557,7 +561,7 @@ public class GoogleAPITalker {
 
 		HttpUriRequest httppost;
 		if (task.remoteId != null && !task.remoteId.isEmpty()) {
-			if (task.deleted) {
+			if (task.isDeleted()) {
 				httppost = new HttpPost(TaskURL(task.remoteId, pList.remoteId));
 				httppost.setHeader("X-HTTP-Method-Override", "DELETE");
 			}
@@ -572,7 +576,7 @@ public class GoogleAPITalker {
 			// setHeaderStrongEtag(httppost, task.etag);
 		}
 		else {
-			if (task.deleted) {
+			if (task.isDeleted()) {
 				return task; // Don't sync deleted items which do not exist on
 								// the server
 			}
@@ -589,7 +593,7 @@ public class GoogleAPITalker {
 		// Log.d(TAG, header.getName() + ": " + header.getValue());
 		// }
 
-		if (!task.deleted) {
+		if (!task.isDeleted()) {
 			setPostBody(httppost, task);
 		}
 
@@ -597,15 +601,12 @@ public class GoogleAPITalker {
 
 		// If we deleted the note, we will get an empty response. Return the
 		// same element back.
-		if (task.deleted) {
+		if (task.isDeleted()) {
 
 			Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
 		}
 		else {
-			JSONObject jsonResponse = null;
-
-			try {
-				jsonResponse = new JSONObject(stringResponse);
+			JSONObject jsonResponse = new JSONObject(stringResponse);
 
 				// Log.d(TAG, jsonResponse.toString());
 
@@ -623,10 +624,6 @@ public class GoogleAPITalker {
 						task.updated = 0L;
 					}
 				}
-			}
-			catch (JSONException e) {
-				Log.d(TAG, "" + jsonResponse + " " + e.getLocalizedMessage());
-			}
 		}
 
 		return task;
@@ -702,11 +699,11 @@ public class GoogleAPITalker {
 	 * @throws DefaultListDeleted
 	 */
 	public GoogleTaskList uploadList(final GoogleTaskList list)
-			throws ClientProtocolException, IOException, PreconditionException {
+			throws ClientProtocolException, IOException, PreconditionException, JSONException {
 		final HttpUriRequest httppost;
 		if (list.remoteId != null) {
 			Log.d(TAG, "ID is not NULL!! " + ListURL(list.remoteId));
-			if (list.deleted) {
+			if (list.isDeleted()) {
 				httppost = new HttpDelete(ListURL(list.remoteId));
 			}
 			else {
@@ -728,7 +725,7 @@ public class GoogleAPITalker {
 		// Log.d(TAG, header.getName() + ": " + header.getValue());
 		// }
 
-		if (!list.deleted) {
+		if (!list.isDeleted()) {
 			setPostBody(httppost, list);
 		}
 
@@ -736,13 +733,11 @@ public class GoogleAPITalker {
 
 		// If we deleted the note, we will get an empty response. Return the
 		// same element back.
-		if (list.deleted) {
+		if (list.isDeleted()) {
 			Log.d(TAG, "deleted and Stringresponse: " + stringResponse);
 		}
 		else {
-			JSONObject jsonResponse = null;
-			try {
-				jsonResponse = new JSONObject(stringResponse);
+			JSONObject jsonResponse = new JSONObject(stringResponse);
 
 				// Log.d(TAG, jsonResponse.toString());
 
@@ -757,10 +752,6 @@ public class GoogleAPITalker {
 				catch (Exception e) {
 					list.updated = 0L;
 				}
-			}
-			catch (JSONException e) {
-				Log.d(TAG, "" + jsonResponse + " " + e.getLocalizedMessage());
-			}
 		}
 
 		return list;

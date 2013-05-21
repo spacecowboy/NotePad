@@ -31,7 +31,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return singleton;
 	}
 
-	private static final int DATABASE_VERSION = 10;
+	private static final int DATABASE_VERSION = 11;
 	public static final String DATABASE_NAME = "nononsense_notes.db";
 
 	private final Context context;
@@ -85,6 +85,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL(Task.CREATE_HISTORY_UPDATE_TRIGGER);
 		
 		db.execSQL(RemoteTask.TRIGGER_LISTDELETE_CASCADE);
+		// Mark as deleted when real item deleted
+		db.execSQL(RemoteTask.TRIGGER_REALDELETE_MARK);
+		db.execSQL(RemoteTaskList.TRIGGER_REALDELETE_MARK);
 		
 		// Search tables
 		db.execSQL(Task.CREATE_FTS3_TABLE);
@@ -301,6 +304,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			db.execSQL("DROP VIEW IF EXISTS " + Notification.WITH_TASK_VIEW_NAME);
 			// Recreate view with additional tables
 			db.execSQL(Notification.CREATE_JOINED_VIEW);
+		}
+		if (oldVersion < 11) {
+			// Mark as deleted when real item deleted
+			db.execSQL(RemoteTask.TRIGGER_REALDELETE_MARK);
+			db.execSQL(RemoteTaskList.TRIGGER_REALDELETE_MARK);
 		}
 	}
 
