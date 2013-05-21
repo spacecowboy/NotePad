@@ -422,6 +422,12 @@ public class MyContentProvider extends ContentProvider {
 			break;
 		case Task.DELETEDQUERYCODE:
 			final String[] query = sanitize(selectionArgs);
+//			Log.d("nononsenseapps delete", ((query[0].isEmpty() || query[0]
+//											.equals("'*'")) ? ")"
+//											: (" WHERE "
+//													+ Task.FTS3_DELETE_TABLE_NAME + " MATCH ?)")));
+//
+//			Log.d("nononsenseapps delete", "" + ((query[0].isEmpty() || query[0].equals("'*'")) ? null : query[0]));
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
@@ -685,11 +691,11 @@ public class MyContentProvider extends ContentProvider {
 
 		final StringBuilder result = new StringBuilder();
 		for (String query : args) {
-			for (String part : query.split("\\s")) {
+			//for (String part : query.split("\\s")) {
 				if (result.length() > 0) result.append(" AND ");
 				// Wrap each word in quotes and add star to the end
-				result.append("'" + part + "*'");
-			}
+				result.append("'" + query + "*'");
+			//}
 		}
 
 		return new String[] { result.toString() };
