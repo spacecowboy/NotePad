@@ -77,6 +77,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.Toast;
@@ -84,7 +85,7 @@ import android.widget.Toast;
 @EActivity(R.layout.activity_main)
 public class ActivityMain extends FragmentActivity implements
 		OnFragmentInteractionListener, OnSyncStartStopListener {
-	
+
 	public static interface ListOpener {
 		public void openList(final long id);
 	}
@@ -137,7 +138,7 @@ public class ActivityMain extends FragmentActivity implements
 	SyncStatusMonitor syncStatusReceiver = null;
 	// Only not if opening note directly
 	private boolean shouldAddToBackStack = true;
-	
+
 	// WIll only be the viewpager fragment
 	ListOpener listOpener = null;
 
@@ -228,10 +229,10 @@ public class ActivityMain extends FragmentActivity implements
 			if (packageInfo.packageName
 					.equals("com.nononsenseapps.notepad_donate")) {
 				migrateDonateUser();
-				// TODO Allow them to donate again?
-				PreferenceManager
-						.getDefaultSharedPreferences(ActivityMain.this).edit()
-						.putBoolean(SKU_DONATE, true).commit();
+				// Allow them to donate again
+				// PreferenceManager
+				// .getDefaultSharedPreferences(ActivityMain.this).edit()
+				// .putBoolean(SKU_DONATE, true).commit();
 				// Stop loop
 				break;
 			}
@@ -370,7 +371,6 @@ public class ActivityMain extends FragmentActivity implements
 	 */
 	protected void loadLeftDrawer() {
 		// Set a listener on drawer events
-		// TODO theme icons
 		// TODO strings
 		// TODO prepare options
 		// boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
@@ -385,6 +385,7 @@ public class ActivityMain extends FragmentActivity implements
 				 */
 				public void onDrawerClosed(View view) {
 					getActionBar().setTitle(R.string.app_name);
+					// TODO show items
 					invalidateOptionsMenu(); // creates call to
 												// onPrepareOptionsMenu()
 				}
@@ -392,6 +393,7 @@ public class ActivityMain extends FragmentActivity implements
 				/** Called when a drawer has settled in a completely open state. */
 				public void onDrawerOpened(View drawerView) {
 					getActionBar().setTitle(R.string.show_from_all_lists);
+					// TODO hide items
 					invalidateOptionsMenu(); // creates call to
 												// onPrepareOptionsMenu()
 				}
@@ -416,13 +418,10 @@ public class ActivityMain extends FragmentActivity implements
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View v, int pos,
 					long id) {
-				// TODO Open list
+				// Open list
 				Intent i = new Intent(ActivityMain.this, ActivityMain_.class);
 				i.setAction(Intent.ACTION_VIEW).setData(TaskList.getUri(id))
 						.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-				// Initial state, never start on tablet layout
-				//boolean shouldStartActivity = fragment2 == null;
 
 				// If editor is on screen, we need to reload fragments
 				if (listOpener == null) {
@@ -437,12 +436,25 @@ public class ActivityMain extends FragmentActivity implements
 					// directly
 					Log.d("nononsenseapps fragments",
 							"shoudl call fragment here");
-					// TODO
 					listOpener.openList(id);
 				}
 
 				// And then close drawer
 				drawerLayout.closeDrawer(leftDrawer);
+			}
+		});
+		leftDrawer.setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+					int pos, long id) {
+				// Open dialog to edit list
+				if (id > 0) {
+					DialogEditList_ dialog = DialogEditList_.getInstance(id);
+					dialog.show(getSupportFragmentManager(),
+							"fragment_edit_list");
+				}
+				return true;
 			}
 		});
 
@@ -536,7 +548,7 @@ public class ActivityMain extends FragmentActivity implements
 										getString(R.string.pref_defaultlist))),
 						DETAILTAG);
 			}
-			// TODO fucking stack
+			// fucking stack
 			if (shouldAddToBackStack) {
 				transaction.addToBackStack(null);
 			}
@@ -581,8 +593,6 @@ public class ActivityMain extends FragmentActivity implements
 							intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
 							startActivity(intent);
-							// TODO fix this?
-							// finishSlideTop();
 						}
 					});
 
@@ -618,6 +628,19 @@ public class ActivityMain extends FragmentActivity implements
 		transaction.commit();
 		// Next go, always add
 		shouldAddToBackStack = true;
+	}
+
+	private void simulateBack() {
+		if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
+			setIntent(new Intent(this, ActivityMain_.class));
+		}
+		
+		if (!getSupportFragmentManager().popBackStackImmediate()) {
+			finish();
+//			Intent i = new Intent(this, ActivityMain_.class);
+//			i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//			startActivity(i);
+		}
 	}
 
 	@Override
@@ -677,8 +700,7 @@ public class ActivityMain extends FragmentActivity implements
 		// Handle your other action bar items...
 		switch (item.getItemId()) {
 		case android.R.id.home:
-			// TODO
-			// Do whatever happens in the done button here
+			// Handled by drawer
 			return true;
 		case R.id.menu_preferences:
 			Intent intent = new Intent();
@@ -909,7 +931,6 @@ public class ActivityMain extends FragmentActivity implements
 
 	@Override
 	public void onNewIntent(Intent intent) {
-		// TODO need to see if this has side-effects
 		setIntent(intent);
 		loadContent();
 	}
@@ -938,22 +959,22 @@ public class ActivityMain extends FragmentActivity implements
 		}
 		// phone
 		else {
-			
-//			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
-//					&& origin != null) {
-//				Log.d("nononsenseapps animation", "Animating");
-//				//intent.putExtra(ANIMATEEXIT, true);
-//				startActivity(
-//						intent,
-//						ActivityOptions.makeCustomAnimation(this,
-//								R.anim.activity_slide_in_left,
-//								R.anim.activity_slide_out_left).toBundle());
 
-			//}
-			//else {
-				Log.d("nononsenseapps animation", "Not animating");
-				startActivity(intent);
-			//}
+			// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN
+			// && origin != null) {
+			// Log.d("nononsenseapps animation", "Animating");
+			// //intent.putExtra(ANIMATEEXIT, true);
+			// startActivity(
+			// intent,
+			// ActivityOptions.makeCustomAnimation(this,
+			// R.anim.activity_slide_in_left,
+			// R.anim.activity_slide_out_left).toBundle());
+
+			// }
+			// else {
+			Log.d("nononsenseapps animation", "Not animating");
+			startActivity(intent);
+			// }
 		}
 	}
 
@@ -980,18 +1001,18 @@ public class ActivityMain extends FragmentActivity implements
 		else {
 			// Open an activity
 
-//			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-//				Log.d("nononsenseapps animation", "Animating");
-//				intent.putExtra(ANIMATEEXIT, true);
-//				startActivity(
-//						intent,
-//						ActivityOptions.makeCustomAnimation(this,
-//								R.anim.activity_slide_in_left,
-//								R.anim.activity_slide_out_left).toBundle());
-//			}
-//			else {
-				startActivity(intent);
-			//}
+			// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
+			// Log.d("nononsenseapps animation", "Animating");
+			// intent.putExtra(ANIMATEEXIT, true);
+			// startActivity(
+			// intent,
+			// ActivityOptions.makeCustomAnimation(this,
+			// R.anim.activity_slide_in_left,
+			// R.anim.activity_slide_out_left).toBundle());
+			// }
+			// else {
+			startActivity(intent);
+			// }
 		}
 	}
 
@@ -1008,8 +1029,9 @@ public class ActivityMain extends FragmentActivity implements
 			taskHint.animate().alpha(1f).setStartDelay(500);
 		}
 		else {
-			// Phone case, just finish the activity
-			finish();
+			// Phone case, simulate back button
+			// finish();
+			simulateBack();
 		}
 	}
 
