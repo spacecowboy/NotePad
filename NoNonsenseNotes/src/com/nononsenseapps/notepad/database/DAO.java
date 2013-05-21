@@ -15,30 +15,34 @@ import android.util.Log;
 public abstract class DAO {
 
 	private static final String whereIdIs = "" + BaseColumns._ID + " IS ?";
+
 	/**
 	 * Append where is id ? to string
 	 */
 	public static String whereIdIs(final String orgWhere) {
-			final StringBuilder sb = new StringBuilder();
-			if (orgWhere != null) {
-				sb.append("(");
-				sb.append(orgWhere);
-				sb.append(") AND ");
-			}
-			sb.append(BaseColumns._ID).append(" IS ?");
-			return sb.toString();
+		final StringBuilder sb = new StringBuilder();
+		if (orgWhere != null) {
+			sb.append("(");
+			sb.append(orgWhere);
+			sb.append(") AND ");
+		}
+		sb.append(BaseColumns._ID).append(" IS ?");
+		return sb.toString();
 	}
 
 	public String[] whereIdArg() {
 		return new String[] { Long.toString(_id) };
 	}
+
 	public static String[] whereIdArg(final long _id) {
 		return new String[] { Long.toString(_id) };
 	}
+
 	/**
 	 * Append the id argument to array
 	 */
-	public static String[] whereIdArg(final long _id, final String[] orgWhereArgs) {
+	public static String[] whereIdArg(final long _id,
+			final String[] orgWhereArgs) {
 		if (orgWhereArgs == null) {
 			return whereIdArg(_id);
 		}
@@ -46,7 +50,7 @@ public abstract class DAO {
 			return joinArrays(orgWhereArgs, whereIdArg(_id));
 		}
 	}
-	
+
 	public static String[] prefixArray(final String prefix, final String[] array) {
 		final String[] result = new String[array.length];
 		for (int i = 0; i < array.length; i++) {
@@ -54,50 +58,55 @@ public abstract class DAO {
 		}
 		return result;
 	}
-	
+
 	public static String[] joinArrays(final String[]... arrays) {
 		final ArrayList<String> list = new ArrayList<String>();
-		for (final String[] array: arrays) {
+		for (final String[] array : arrays) {
 			if (array != null) {
-				for (final String txt: array) {
+				for (final String txt : array) {
 					list.add(txt);
 				}
 			}
 		}
 		return list.toArray(new String[list.size()]);
 	}
-	
+
 	/**
-	 * Example: [] -> ""
-	 * [a] -> "a"
-	 * [a, b] -> "a,b"
+	 * Example: [] -> "" [a] -> "a" [a, b] -> "a,b"
 	 */
-//	public static String arrayToCommaString(final String[] array) {
-//		return arrayToCommaString("", array);
-//	}
-	
+	// public static String arrayToCommaString(final String[] array) {
+	// return arrayToCommaString("", array);
+	// }
+
+	public static String arrayToCommaString(final long... array) {
+		StringBuilder result = new StringBuilder();
+		for (final long val : array) {
+			final String txt = Long.toString(val);
+			if (result.length() > 0) result.append(",");
+			result.append(txt);
+		}
+		return result.toString();
+	}
+
 	public static String arrayToCommaString(final String... array) {
 		return arrayToCommaString("", array);
 	}
-	
+
 	/**
-	 * Example (prefix=t.): 
-	 * [] -> ""
-	 * [a] -> "t.a"
-	 * [a, b] -> "t.a,t.b"
+	 * Example (prefix=t.): [] -> "" [a] -> "t.a" [a, b] -> "t.a,t.b"
 	 */
-	public static String arrayToCommaString(final String prefix, final String[] array) {
+	public static String arrayToCommaString(final String prefix,
+			final String[] array) {
 		return arrayToCommaString(prefix, array, "");
 	}
-	
+
 	/**
-	 * Example (prefix=t., suffix=.45): 
-	 * [] -> ""
-	 * [a] -> "t.a.45"
-	 * [a, b] -> "t.a.45,t.b.45"
+	 * Example (prefix=t., suffix=.45): [] -> "" [a] -> "t.a.45" [a, b] ->
+	 * "t.a.45,t.b.45"
 	 * 
-	 * In addition, the txt itself can be referenced using %1$s in either
-	 * prefix or suffix. The prefix can be referenced as %2$s in suffix, and vice-versa.
+	 * In addition, the txt itself can be referenced using %1$s in either prefix
+	 * or suffix. The prefix can be referenced as %2$s in suffix, and
+	 * vice-versa.
 	 * 
 	 * So the following is valid:
 	 * 
@@ -105,19 +114,18 @@ public abstract class DAO {
 	 * 
 	 * [listId] -> t.listId AS t.listId
 	 */
-	protected static String arrayToCommaString(final String pfx, 
+	protected static String arrayToCommaString(final String pfx,
 			final String[] array, final String sfx) {
 		StringBuilder result = new StringBuilder();
-		for (final String txt: array) {
-			if (result.length() > 0)
-				result.append(",");
+		for (final String txt : array) {
+			if (result.length() > 0) result.append(",");
 			result.append(String.format(pfx, txt, sfx));
 			result.append(txt);
 			result.append(String.format(sfx, txt, pfx));
 		}
 		return result.toString();
 	}
-	
+
 	/**
 	 * Second and Third value is wrapped in '' ticks, NOT the first.
 	 */
@@ -126,10 +134,9 @@ public abstract class DAO {
 			final String exceptCol2, final String asValue2,
 			final String exceptCol3, final String asValue3) {
 		StringBuilder result = new StringBuilder();
-		for (final String colName: asColumns) {
-			if (result.length() > 0)
-				result.append(",");
-			
+		for (final String colName : asColumns) {
+			if (result.length() > 0) result.append(",");
+
 			if (colName.equals(exceptCol2)) {
 				result.append("'").append(asValue2).append("'");
 			}
@@ -145,6 +152,7 @@ public abstract class DAO {
 		}
 		return result.toString();
 	}
+
 	/**
 	 * Third and Fourth value is wrapped in '' ticks, NOT the first and second.
 	 */
@@ -154,10 +162,9 @@ public abstract class DAO {
 			final String exceptCol3, final String asValue3,
 			final String exceptCol4, final String asValue4) {
 		StringBuilder result = new StringBuilder();
-		for (final String colName: asColumns) {
-			if (result.length() > 0)
-				result.append(",");
-			
+		for (final String colName : asColumns) {
+			if (result.length() > 0) result.append(",");
+
 			if (colName.equals(exceptCol3)) {
 				result.append("'").append(asValue3).append("'");
 			}
@@ -197,8 +204,7 @@ public abstract class DAO {
 		try {
 
 			if (_id > 0) {
-				result += db.update(getTableName(), getContent(),
-						whereIdIs,
+				result += db.update(getTableName(), getContent(), whereIdIs,
 						whereIdArg());
 			}
 
@@ -206,9 +212,11 @@ public abstract class DAO {
 				db.setTransactionSuccessful();
 			}
 
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			throw e;
-		} finally {
+		}
+		finally {
 			db.endTransaction();
 		}
 
@@ -230,15 +238,18 @@ public abstract class DAO {
 
 			if (id == -1) {
 				throw new SQLException("Insert failed in " + getTableName());
-			} else {
+			}
+			else {
 				_id = id;
 				afterInsert(context, db);
 				db.setTransactionSuccessful();
 				retval = getUri();
 			}
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			throw e;
-		} finally {
+		}
+		finally {
 			db.endTransaction();
 		}
 
@@ -264,7 +275,8 @@ public abstract class DAO {
 			final Uri uri) {
 		try {
 			context.getContentResolver().notifyChange(uri, null, false);
-		} catch (UnsupportedOperationException e) {
+		}
+		catch (UnsupportedOperationException e) {
 			// Catch this for test suite. Mock provider cant notify
 		}
 	}
@@ -315,14 +327,15 @@ public abstract class DAO {
 	public abstract ContentValues getContent();
 
 	protected abstract String getTableName();
-	
+
 	public abstract String getContentType();
-	
+
 	/**
 	 * Convenience method for normal operations. Updates "updated" field.
 	 * Returns number of db-rows affected. Fail if < 1
 	 */
 	public abstract int save(final Context context);
+
 	/**
 	 * Delete object from database
 	 */

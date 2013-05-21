@@ -206,7 +206,7 @@ public class ActivityMain extends FragmentActivity implements
 		getSupportFragmentManager().addOnBackStackChangedListener(
 				new FragmentManager.OnBackStackChangedListener() {
 					public void onBackStackChanged() {
-						// Update your UI here. TODO
+						// Update your UI here.
 						Log.d("nononsenseapps fragments",
 								"onBackStackChanged: " + showingEditor + ", "
 										+ isNoteIntent(getIntent()));
@@ -407,7 +407,6 @@ public class ActivityMain extends FragmentActivity implements
 		getActionBar().setHomeButtonEnabled(true);
 
 		// Adapter for list titles and ids
-		// TODO use a better layout
 		final SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
 				R.layout.simple_light_list_item_1, null,
 				new String[] { TaskList.Columns.TITLE },

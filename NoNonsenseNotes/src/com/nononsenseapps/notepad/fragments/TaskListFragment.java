@@ -104,7 +104,7 @@ public class TaskListFragment extends Fragment implements
 	@Override
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
-		
+
 		Log.d("nononsenseapps fragment", "listfragment create: " + savedState);
 
 		setHasOptionsMenu(true);
@@ -338,7 +338,8 @@ public class TaskListFragment extends Fragment implements
 					}
 					if (mSortType.equals(getString(R.string.const_alphabetic))) {
 						targetUri = Task.URI;
-						sortSpec = getString(R.string.const_as_alphabetic, Task.Columns.TITLE);
+						sortSpec = getString(R.string.const_as_alphabetic,
+								Task.Columns.TITLE);
 					}
 					else if (mSortType
 							.equals(getString(R.string.const_duedate))) {
@@ -406,7 +407,8 @@ public class TaskListFragment extends Fragment implements
 			public void onItemClick(AdapterView<?> arg0, View origin, int pos,
 					long id) {
 				if (mListener != null && id > 0) {
-					mListener.onFragmentInteraction(Task.getUri(id), mListId, origin);
+					mListener.onFragmentInteraction(Task.getUri(id), mListId,
+							origin);
 				}
 			}
 		});
@@ -489,7 +491,8 @@ public class TaskListFragment extends Fragment implements
 			}
 
 			@Override
-			public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
+			public boolean onActionItemClicked(final ActionMode mode,
+					MenuItem item) {
 				// Respond to clicks on the actions in the CAB
 				boolean finish = false;
 				switch (item.getItemId()) {
@@ -534,6 +537,11 @@ public class TaskListFragment extends Fragment implements
 								});
 					}
 					break;
+				case R.id.menu_switch_list:
+					// show move to list dialog
+					DialogMoveToList.getInstance(tasks.keySet().toArray(new Long[tasks.size()])).show(
+							getFragmentManager(), "move_to_list_dialog");
+					finish = true;
 				default:
 					finish = false;
 				}
@@ -626,9 +634,6 @@ public class TaskListFragment extends Fragment implements
 						mListId, null);
 			}
 			return true;
-		case R.id.menu_deletelist:
-		case R.id.menu_renamelist:
-		case R.id.menu_setdefaultlist:
 		default:
 			return false;
 		}

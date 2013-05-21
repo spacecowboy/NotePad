@@ -171,6 +171,10 @@
         <item quantity="one">@string/selected_one</item>
         <item quantity="other">@string/selected_other</item>
     </plurals>
+    
+    <string name="move">Move</string>
+    <string name="move_to">Move to</string>
+    <string name="moved_x_to">Moved %d to</string>
 
     <string name="lock_note">Lock note</string>
     <string name="unlock_note">Unlock note</string>

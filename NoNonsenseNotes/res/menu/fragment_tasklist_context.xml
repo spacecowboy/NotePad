@@ -16,5 +16,9 @@
         android:icon="?content_discard"
         android:showAsAction="ifRoom"
         android:title="@string/menu_delete"/>
+    <item
+        android:id="@+id/menu_switch_list"
+        android:showAsAction="never"
+        android:title="@string/move"/>
 
 </menu>

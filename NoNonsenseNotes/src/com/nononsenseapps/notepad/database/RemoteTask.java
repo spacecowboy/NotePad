@@ -65,47 +65,61 @@ public class RemoteTask extends DAO {
 	public static final String CREATE_TABLE = new StringBuilder("CREATE TABLE ")
 			.append(TABLE_NAME).append("(").append(Columns._ID)
 			.append(" INTEGER PRIMARY KEY,").append(Columns.ACCOUNT)
-			.append(" TEXT NOT NULL,")
-			.append(Columns.SERVICE).append(" TEXT NOT NULL,")
-			.append(Columns.DBID)
+			.append(" TEXT NOT NULL,").append(Columns.SERVICE)
+			.append(" TEXT NOT NULL,").append(Columns.DBID)
 			.append(" INTEGER NOT NULL,").append(Columns.UPDATED)
 			.append(" INTEGER NOT NULL,").append(Columns.REMOTEID)
-			.append(" TEXT NOT NULL,")
-			.append(Columns.LISTDBID)
-			.append(" INTEGER NOT NULL,")
-			.append(Columns.DELETED).append(" TEXT,")
-			.append(Columns.FIELD2).append(" TEXT,").append(Columns.FIELD3)
-			.append(" TEXT,").append(Columns.FIELD4).append(" TEXT,")
-			.append(Columns.FIELD5).append(" TEXT")
+			.append(" TEXT NOT NULL,").append(Columns.LISTDBID)
+			.append(" INTEGER NOT NULL,").append(Columns.DELETED)
+			.append(" TEXT,").append(Columns.FIELD2).append(" TEXT,")
+			.append(Columns.FIELD3).append(" TEXT,").append(Columns.FIELD4)
+			.append(" TEXT,").append(Columns.FIELD5).append(" TEXT")
 			// Cant delete on cascade because we must sync before!
 			.append(")").toString();
-	
+
 	/*
 	 * Trigger to delete items when their list is deleted
 	 */
 	public static final String TRIGGER_LISTDELETE_CASCADE = new StringBuilder()
-	.append("CREATE TRIGGER cascade_trigger_delete_").append(TABLE_NAME)
-	.append(" AFTER DELETE ON ").append(RemoteTaskList.TABLE_NAME).append(" BEGIN ")
+			.append("CREATE TRIGGER cascade_trigger_delete_")
+			.append(TABLE_NAME).append(" AFTER DELETE ON ")
+			.append(RemoteTaskList.TABLE_NAME).append(" BEGIN ")
 
-	.append(" DELETE FROM ").append(TABLE_NAME).append(" WHERE ").append(Columns.LISTDBID)
-	.append(" IS old.").append(RemoteTaskList.Columns.DBID).append(" AND ")
-	.append(Columns.ACCOUNT).append(" IS old.").append(RemoteTaskList.Columns.ACCOUNT)
-	.append(" AND ").append(Columns.SERVICE).append(" IS old.")
-	.append(RemoteTaskList.Columns.SERVICE)
-	.append(";")
-	.append(" END;").toString();
-	
+			.append(" DELETE FROM ").append(TABLE_NAME).append(" WHERE ")
+			.append(Columns.LISTDBID).append(" IS old.")
+			.append(RemoteTaskList.Columns.DBID).append(" AND ")
+			.append(Columns.ACCOUNT).append(" IS old.")
+			.append(RemoteTaskList.Columns.ACCOUNT).append(" AND ")
+			.append(Columns.SERVICE).append(" IS old.")
+			.append(RemoteTaskList.Columns.SERVICE).append(";").append(" END;")
+			.toString();
+
 	/*
 	 * Trigger to delete items when their real items are deleted
 	 */
 	public static final String TRIGGER_REALDELETE_MARK = new StringBuilder()
-	.append("CREATE TRIGGER trigger_real_deletemark_").append(TABLE_NAME)
-	.append(" AFTER DELETE ON ").append(Task.TABLE_NAME).append(" BEGIN ")
-	.append(" UPDATE ").append(TABLE_NAME).append(" SET ").append(Columns.DELETED).append(" = 'deleted' ")
-	.append(" WHERE ").append(Columns.DBID).append(" IS old.").append(Task.Columns._ID)
-	.append(";")
-	.append(" END;").toString();
-	
+			.append("CREATE TRIGGER trigger_real_deletemark_")
+			.append(TABLE_NAME).append(" AFTER DELETE ON ")
+			.append(Task.TABLE_NAME).append(" BEGIN ").append(" UPDATE ")
+			.append(TABLE_NAME).append(" SET ").append(Columns.DELETED)
+			.append(" = 'deleted' ").append(" WHERE ").append(Columns.DBID)
+			.append(" IS old.").append(Task.Columns._ID).append(";")
+			.append(" END;").toString();
+
+	/*
+	 * Trigger to move between lists
+	 */
+	public static final String TRIGGER_MOVE_LIST = new StringBuilder()
+			.append("CREATE TRIGGER trigger_move_list_").append(TABLE_NAME)
+			.append(" AFTER UPDATE OF ").append(Task.Columns.DBLIST)
+			.append(" ON ").append(Task.TABLE_NAME).append(" WHEN old.")
+			.append(Task.Columns.DBLIST).append(" IS NOT new.")
+			.append(Task.Columns.DBLIST).append(" BEGIN ").append(" UPDATE ")
+			.append(TABLE_NAME).append(" SET ").append(Columns.DELETED)
+			.append(" = 'deleted', ").append(Columns.DBID).append(" = -99 ")
+			.append(" WHERE ").append(Columns.DBID).append(" IS old.")
+			.append(Task.Columns._ID).append(";").append(" END;").toString();
+
 	// milliseconds since 1970-01-01 UTC
 	public Long updated = null;
 
@@ -118,16 +132,17 @@ public class RemoteTask extends DAO {
 	public String field3 = null;
 	public String field4 = null;
 	public String field5 = null;
-	
+
 	public boolean isDeleted() {
 		return deleted != null && !deleted.isEmpty();
 	}
+
 	public void setDeleted(final boolean deleted) {
 		this.deleted = deleted ? "deleted" : null;
 	}
-	
+
 	// Should be overwritten by children
-	protected String service = null;	
+	protected String service = null;
 
 	public RemoteTask() {
 
@@ -141,8 +156,8 @@ public class RemoteTask extends DAO {
 	 * @param updated
 	 * @param account
 	 */
-	public RemoteTask(final Long dbid, final Long listdbid, final String remoteId,
-			final Long updated, final String account) {
+	public RemoteTask(final Long dbid, final Long listdbid,
+			final String remoteId, final Long updated, final String account) {
 		this.dbid = dbid;
 		this.listdbid = listdbid;
 		this.remoteId = remoteId;
@@ -158,11 +173,11 @@ public class RemoteTask extends DAO {
 		account = c.getString(4);
 		listdbid = c.getLong(5);
 
-		deleted  = c.isNull(6) ? null : c.getString(6);
-		field2  = c.isNull(7) ? null : c.getString(7);
-		field3  = c.isNull(8) ? null : c.getString(8);
-		field4  = c.isNull(9) ? null : c.getString(9);
-		field5  = c.isNull(10) ? null : c.getString(10);
+		deleted = c.isNull(6) ? null : c.getString(6);
+		field2 = c.isNull(7) ? null : c.getString(7);
+		field3 = c.isNull(8) ? null : c.getString(8);
+		field4 = c.isNull(9) ? null : c.getString(9);
+		field5 = c.isNull(10) ? null : c.getString(10);
 	}
 
 	public RemoteTask(final Uri uri, final ContentValues values) {
@@ -267,13 +282,12 @@ public class RemoteTask extends DAO {
 				.append(BaseColumns._ID).append(" NOT IN (SELECT ")
 				.append(Columns.DBID).append(" FROM ").append(TABLE_NAME)
 				.append(" WHERE ").append(Columns.ACCOUNT).append(" IS ? AND ")
-				.append(Columns.SERVICE).append(" IS ?)")
-				.toString();
+				.append(Columns.SERVICE).append(" IS ?)").toString();
 	}
 
-	public static String[] getTaskWithoutRemoteArgs(final long listdbid, final String account, final String service) {
+	public static String[] getTaskWithoutRemoteArgs(final long listdbid,
+			final String account, final String service) {
 		return new String[] { Long.toString(listdbid), account, service };
 	}
-	
-	
+
 }
