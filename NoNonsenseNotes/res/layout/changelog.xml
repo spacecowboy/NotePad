@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="\nThemed Left Drawer List\nModified sync code, hoping it fixes the problems"/>
+            android:text="\nThemed Left Drawer List\nModified sync code, hoping it fixes the problems\nFix that should correct crash on clear completed"/>
         
         
         <TextView

@@ -1058,12 +1058,12 @@ public class Task extends DAO {
 
 	// Upgrades children and closes the gap made from the delete
 	private static final String BUMP_TO_LEFT = " UPDATE %1$s SET %2$s = %2$s - 2 WHERE %2$s > old.%3$s AND %4$s IS old.%4$s;";
-	private static final String UPGRADE_CHILDREN = " UPDATE %1$s SET %2$s = %2$s - 1, %3$s = %3$s - 1 WHERE %4$s IS old.%4$s AND %2$s BETWEEN old.%2$s AND old.%3$s;";
+	//private static final String UPGRADE_CHILDREN = " UPDATE %1$s SET %2$s = %2$s - 1, %3$s = %3$s - 1 WHERE %4$s IS old.%4$s AND %2$s BETWEEN old.%2$s AND old.%3$s;";
 	public static final String TRIGGER_POST_DELETE = String.format(
 			"CREATE TRIGGER task_post_delete AFTER DELETE ON %s BEGIN ",
 			TABLE_NAME)
-			+ String.format(UPGRADE_CHILDREN, TABLE_NAME, Columns.LEFT,
-					Columns.RIGHT, Columns.DBLIST)
+//			+ String.format(UPGRADE_CHILDREN, TABLE_NAME, Columns.LEFT,
+//					Columns.RIGHT, Columns.DBLIST)
 			+ String.format(BUMP_TO_LEFT, TABLE_NAME, Columns.LEFT,
 					Columns.RIGHT, Columns.DBLIST)
 			+ String.format(BUMP_TO_LEFT, TABLE_NAME, Columns.RIGHT,

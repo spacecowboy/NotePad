@@ -353,7 +353,9 @@ public class TaskDetailFragment extends Fragment implements
 	@Click(R.id.dueCancelButton)
 	void onDueRemoveClick() {
 		if (!isLocked()) {
-			mTask.due = null;
+			if (mTask != null) {
+				mTask.due = null;
+			}
 			setDueText();
 		}
 	}

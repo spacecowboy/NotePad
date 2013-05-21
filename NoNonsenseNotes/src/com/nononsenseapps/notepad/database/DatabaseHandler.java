@@ -31,7 +31,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return singleton;
 	}
 
-	private static final int DATABASE_VERSION = 11;
+	private static final int DATABASE_VERSION = 12;
 	public static final String DATABASE_NAME = "nononsense_notes.db";
 
 	private final Context context;
@@ -309,6 +309,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			// Mark as deleted when real item deleted
 			db.execSQL(RemoteTask.TRIGGER_REALDELETE_MARK);
 			db.execSQL(RemoteTaskList.TRIGGER_REALDELETE_MARK);
+		}
+		if (oldVersion < 12) {
+			// Recreate trigger
+			db.execSQL("DROP TRIGGER IF EXISTS task_post_delete");
+			db.execSQL(Task.TRIGGER_POST_DELETE);
 		}
 	}
 
