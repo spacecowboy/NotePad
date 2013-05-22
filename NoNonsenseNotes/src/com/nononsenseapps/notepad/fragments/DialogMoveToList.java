@@ -198,6 +198,8 @@ public class DialogMoveToList extends DialogFragment {
 				moveItems(targetListId, taskIds);
 			}
 
+			// TODO fix to complete format string. This version will break in japanese
+			// since list name should be first (listname ni 5 wo ugokimashita)
 			Toast.makeText(getActivity(),
 					getString(R.string.moved_x_to, taskIds.length) + " " + targetListTitle,
 					Toast.LENGTH_SHORT).show();
