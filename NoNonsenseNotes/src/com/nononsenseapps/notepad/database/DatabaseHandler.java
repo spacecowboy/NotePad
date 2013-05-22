@@ -81,6 +81,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL(Task.TRIGGER_PRE_INSERT);
 		db.execSQL(Task.TRIGGER_PRE_DELETE);
 		db.execSQL(Task.TRIGGER_POST_DELETE);
+		db.execSQL(Task.TRIGGER_MOVE_LIST);
 		db.execSQL(Task.CREATE_HISTORY_INSERT_TRIGGER);
 		db.execSQL(Task.CREATE_HISTORY_UPDATE_TRIGGER);
 		
@@ -320,6 +321,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		if (oldVersion < 13) {
 			// Create move list trigger
 			db.execSQL(RemoteTask.TRIGGER_MOVE_LIST);
+			// Create trigger to fix positions when moving lists
+			db.execSQL(Task.TRIGGER_MOVE_LIST);
 		}
 	}
 

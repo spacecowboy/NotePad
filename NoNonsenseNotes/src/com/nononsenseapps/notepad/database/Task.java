@@ -3,6 +3,8 @@ package com.nononsenseapps.notepad.database;
 import java.security.InvalidParameterException;
 import java.util.Calendar;
 
+import com.nononsenseapps.notepad.database.RemoteTask.Columns;
+
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.ContentResolver;
@@ -320,7 +322,7 @@ public class Task extends DAO {
 			.append(" > 0), ")
 			.append(" CHECK(")
 			.append(Columns.RIGHT)
-			.append(" > 0), ")
+			.append(" > 1), ")
 			// Each side's value should be unique in it's list
 			// Handled in trigger
 			// ).append(" UNIQUE(").append(Columns.LEFT).append(", ").append(Columns.DBLIST).append(")"
@@ -749,6 +751,15 @@ public class Task extends DAO {
 	}
 
 	/**
+	 * Resets id and position values
+	 */
+	public void resetForInsertion() {
+		_id = -1;
+		left = null;
+		right = null;
+	}
+
+	/**
 	 * Set task as completed. Returns the time stamp that is set.
 	 */
 	public Long setAsCompleted() {
@@ -886,8 +897,9 @@ public class Task extends DAO {
 		if (note != null) values.put(Columns.NOTE, note);
 
 		if (dblist != null) values.put(Columns.DBLIST, dblist);
-		if (left != null) values.put(Columns.LEFT, left);
-		if (right != null) values.put(Columns.RIGHT, right);
+		// Never write position values unless you are 110% sure that they are correct
+		//if (left != null) values.put(Columns.LEFT, left);
+		//if (right != null) values.put(Columns.RIGHT, right);
 
 		values.put(Columns.UPDATED, updated);
 		values.put(Columns.DUE, due);
@@ -1058,12 +1070,13 @@ public class Task extends DAO {
 
 	// Upgrades children and closes the gap made from the delete
 	private static final String BUMP_TO_LEFT = " UPDATE %1$s SET %2$s = %2$s - 2 WHERE %2$s > old.%3$s AND %4$s IS old.%4$s;";
-	//private static final String UPGRADE_CHILDREN = " UPDATE %1$s SET %2$s = %2$s - 1, %3$s = %3$s - 1 WHERE %4$s IS old.%4$s AND %2$s BETWEEN old.%2$s AND old.%3$s;";
+	// private static final String UPGRADE_CHILDREN =
+	// " UPDATE %1$s SET %2$s = %2$s - 1, %3$s = %3$s - 1 WHERE %4$s IS old.%4$s AND %2$s BETWEEN old.%2$s AND old.%3$s;";
 	public static final String TRIGGER_POST_DELETE = String.format(
 			"CREATE TRIGGER task_post_delete AFTER DELETE ON %s BEGIN ",
 			TABLE_NAME)
-//			+ String.format(UPGRADE_CHILDREN, TABLE_NAME, Columns.LEFT,
-//					Columns.RIGHT, Columns.DBLIST)
+			// + String.format(UPGRADE_CHILDREN, TABLE_NAME, Columns.LEFT,
+			// Columns.RIGHT, Columns.DBLIST)
 			+ String.format(BUMP_TO_LEFT, TABLE_NAME, Columns.LEFT,
 					Columns.RIGHT, Columns.DBLIST)
 			+ String.format(BUMP_TO_LEFT, TABLE_NAME, Columns.RIGHT,
@@ -1289,6 +1302,45 @@ public class Task extends DAO {
 		}
 		return getSQLMoveItem(Columns.RIGHT, values.getAsLong(TARGETPOS));
 	}
+
+	/*
+	 * Trigger to move between lists
+	 */
+	public static final String TRIGGER_MOVE_LIST = new StringBuilder()
+			.append("CREATE TRIGGER trigger_post_move_list_")
+			.append(TABLE_NAME)
+			.append(" AFTER UPDATE OF ")
+			.append(Task.Columns.DBLIST)
+			.append(" ON ")
+			.append(Task.TABLE_NAME)
+			.append(" WHEN old.")
+			.append(Task.Columns.DBLIST)
+			.append(" IS NOT new.")
+			.append(Task.Columns.DBLIST)
+			.append(" BEGIN ")
+			// Bump everything to the right, except the item itself (in same
+			// list)
+			.append(String
+					.format("UPDATE %1$s SET %2$s = %2$s + 2, %3$s = %3$s + 2 WHERE %4$s IS new.%4$s AND %5$s IS NOT new.%5$s;",
+							TABLE_NAME, Columns.LEFT, Columns.RIGHT,
+							Columns.DBLIST, Columns._ID))
+
+			// Bump everything left in the old list, to the right of position
+			.append(String
+					.format("UPDATE %1$s SET %2$s = %2$s - 2, %3$s = %3$s - 2 WHERE %2$s > old.%3$s AND %4$s IS old.%4$s;",
+							TABLE_NAME, Columns.LEFT, Columns.RIGHT,
+							Columns.DBLIST))
+
+			// Set positions to 1 and 2 for item
+			.append(String
+					.format("UPDATE %1$s SET %2$s = 1, %3$s = 2 WHERE %4$s IS new.%4$s;",
+							TABLE_NAME, Columns.LEFT, Columns.RIGHT,
+							Columns._ID))
+						
+			.append(posUniqueConstraint("new", "Moving list, new positions not unique/ordered"))
+			.append(posUniqueConstraint("old", "Moving list, old positions not unique/ordered"))
+
+			.append(" END;").toString();
 
 	/**
 	 * If moving left, then edgeCol is left and vice-versa. Values should come

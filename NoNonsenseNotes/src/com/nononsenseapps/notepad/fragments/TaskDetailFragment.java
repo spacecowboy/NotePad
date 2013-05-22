@@ -43,6 +43,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -102,18 +103,31 @@ public class TaskDetailFragment extends Fragment implements
 		public void onLoadFinished(Loader<Cursor> ldr, Cursor c) {
 			if (LOADER_EDITOR_TASK == ldr.getId()) {
 				if (c.moveToFirst()) {
-					mTask = new Task(c);
-					if (mTaskOrg == null) {
-						mTaskOrg = new Task(c);
+					if (mTask == null) {
+						mTask = new Task(c);
+						if (mTaskOrg == null) {
+							mTaskOrg = new Task(c);
+						}
+						fillUIFromTask();
+						// Don't want updates while editing
+						// getLoaderManager().destroyLoader(LOADER_EDITOR_TASK);
 					}
-					fillUIFromTask();
-					// Don't want updates while editing
-					getLoaderManager().destroyLoader(LOADER_EDITOR_TASK);
+					else {
+						// Don't want updates while editing
+						// getLoaderManager().destroyLoader(LOADER_EDITOR_TASK);
+						// Only update the list if that changes
+						Log.d("nononsenseapps listedit", "Updating list in task from " + mTask.dblist);
+						mTask.dblist = new Task(c).dblist;
+						Log.d("nononsenseapps listedit", "Updating list in task to " + mTask.dblist);
+						if (mTaskOrg != null) {
+							mTaskOrg.dblist = mTask.dblist;
+						}
+					}
 					// Load the list to see if we should hide task bits
 					Bundle args = new Bundle();
 					args.putLong(ARG_ITEM_LIST_ID, mTask.dblist);
 					getLoaderManager().restartLoader(LOADER_EDITOR_TASKLISTS,
-							args, loaderCallbacks);
+							args, this);
 				}
 				else {
 					// Should kill myself maybe?

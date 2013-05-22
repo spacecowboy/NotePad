@@ -91,6 +91,20 @@ public class DialogEditList extends DialogFragment {
 
 	@AfterViews
 	void setup() {
+		// New item hides delete button and disables OK initially
+		if (getArguments().getLong(LIST_ID, -1) < 1) {
+			deleteButton.setVisibility(View.GONE);
+			okButton.setEnabled(false);
+		}
+
+		modeSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),
+				R.layout.spinner_item, getActivity().getResources()
+						.getStringArray(R.array.show_list_as)));
+
+		sortSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),
+				R.layout.spinner_item, getActivity().getResources()
+						.getStringArray(R.array.sort_list_by)));
+
 		if (getArguments().getLong(LIST_ID, -1) > 0) {
 			getDialog().setTitle(R.string.menu_managelists);
 			getLoaderManager().restartLoader(0, null,
@@ -125,20 +139,6 @@ public class DialogEditList extends DialogFragment {
 			getDialog().setTitle(R.string.menu_createlist);
 			mTaskList = new TaskList();
 		}
-
-		// New item hides delete button and disables OK initially
-		if (getArguments().getLong(LIST_ID, -1) < 1) {
-			deleteButton.setVisibility(View.GONE);
-			okButton.setEnabled(false);
-		}
-
-		modeSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),
-				R.layout.spinner_item, getActivity().getResources()
-						.getStringArray(R.array.show_list_as)));
-
-		sortSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),
-				R.layout.spinner_item, getActivity().getResources()
-						.getStringArray(R.array.sort_list_by)));
 	}
 
 	@UiThread
@@ -264,6 +264,7 @@ public class DialogEditList extends DialogFragment {
 			}
 		}
 	}
+
 	String getListTypeValue() {
 		String result = null;
 		if (modeSpinner != null) {

@@ -542,6 +542,7 @@ public class TaskListFragment extends Fragment implements
 					DialogMoveToList.getInstance(tasks.keySet().toArray(new Long[tasks.size()])).show(
 							getFragmentManager(), "move_to_list_dialog");
 					finish = true;
+					break;
 				default:
 					finish = false;
 				}
