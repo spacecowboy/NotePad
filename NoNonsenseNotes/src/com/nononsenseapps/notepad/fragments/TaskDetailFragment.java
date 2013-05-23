@@ -171,6 +171,9 @@ public class TaskDetailFragment extends Fragment implements
 
 	@ViewById
 	View taskSection;
+	
+	@SystemService
+	InputMethodManager inputManager;
 
 	// Id of task to open
 	public static final String ARG_ITEM_ID = "item_id";
@@ -470,6 +473,14 @@ public class TaskDetailFragment extends Fragment implements
 		// }
 		// }, 100);
 		// }
+		
+		/**
+		 * Only show keyboard for new/empty notes
+		 */
+		if (taskText.getText().length() == 0) {
+			taskText.requestFocus();
+			inputManager.showSoftInput(taskText, InputMethodManager.SHOW_IMPLICIT);
+		}
 	}
 
 	/**
