@@ -110,6 +110,11 @@ public class StyledEditText extends EditText {
 	}
 
 	private void spannify(final Spannable s) {
+		// Clear this first, or it will multiply!
+		for (RelativeSizeSpan rs: s.getSpans(0, s.length(), RelativeSizeSpan.class)) {
+			s.removeSpan(rs);
+		}
+		
 		int titleEnd = s.toString().indexOf("\n");
 		if (titleEnd < 0) {
 			titleEnd = s.toString().length();
@@ -153,7 +158,8 @@ public class StyledEditText extends EditText {
 				ClickableSpan[] link = buffer.getSpans(off, off,
 						ClickableSpan.class);
 
-				if (link.length != 0) {
+				// Dont care about first line!
+				if (line > 0 && link.length != 0) {
 					if (action == MotionEvent.ACTION_UP) {
 						link[0].onClick(widget);
 					} else if (action == MotionEvent.ACTION_DOWN) {
