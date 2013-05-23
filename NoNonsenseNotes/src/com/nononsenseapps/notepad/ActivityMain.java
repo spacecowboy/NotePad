@@ -75,6 +75,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -92,6 +93,7 @@ public class ActivityMain extends FragmentActivity implements
 
 	// In-app donate identifier
 	static final String SKU_DONATE = "donate_inapp";
+	static final String DONATED = "donate_inapp_or_oldversion";
 	// For static testing
 	// static final String SKU_DONATE = "android.test.purchased";
 	// static final String SKU_DONATE = "android.test.cancelled";
@@ -121,6 +123,8 @@ public class ActivityMain extends FragmentActivity implements
 
 	@SystemService
 	LayoutInflater layoutInflater;
+	@SystemService
+	InputMethodManager inputManager;
 	// View mRefreshIndeterminateProgressView = null;
 	private Menu mMenu;
 	// private MenuItem mSyncMenuItem;
@@ -162,8 +166,10 @@ public class ActivityMain extends FragmentActivity implements
 		}
 
 		// If user has donated some other time
-		mIsDonate = PreferenceManager.getDefaultSharedPreferences(this)
-				.getBoolean(SKU_DONATE, false);
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+		mIsDonate = prefs.getBoolean(SKU_DONATE, false)
+				| prefs.getBoolean(DONATED, false);
 
 		// For in-app billing
 		final String base64EncodedPublicKey = new StringBuilder(
@@ -210,6 +216,11 @@ public class ActivityMain extends FragmentActivity implements
 						Log.d("nononsenseapps fragments",
 								"onBackStackChanged: " + showingEditor + ", "
 										+ isNoteIntent(getIntent()));
+
+						inputManager.hideSoftInputFromWindow(ActivityMain.this
+								.getCurrentFocus().getWindowToken(),
+								InputMethodManager.HIDE_NOT_ALWAYS);
+
 						if (showingEditor && !isNoteIntent(getIntent())) {
 							resetActionBar();
 						}
@@ -230,9 +241,9 @@ public class ActivityMain extends FragmentActivity implements
 					.equals("com.nononsenseapps.notepad_donate")) {
 				migrateDonateUser();
 				// Allow them to donate again
-				// PreferenceManager
-				// .getDefaultSharedPreferences(ActivityMain.this).edit()
-				// .putBoolean(SKU_DONATE, true).commit();
+				PreferenceManager
+						.getDefaultSharedPreferences(ActivityMain.this).edit()
+						.putBoolean(DONATED, true).commit();
 				// Stop loop
 				break;
 			}
@@ -336,17 +347,21 @@ public class ActivityMain extends FragmentActivity implements
 			// Purchase premiumPurchase = inventory.getPurchase(SKU_DONATE);
 			// mIsDonate = (premiumPurchase != null);// &&
 			// verifyDeveloperPayload(premiumPurchase));
-			mIsDonate = inventory.hasPurchase(SKU_DONATE);
-			Log.d("nononsenseapps billing", "User is "
-					+ (mIsDonate ? "PREMIUM" : "NOT PREMIUM"));
+			if (!mIsDonate) {
+				mIsDonate = inventory.hasPurchase(SKU_DONATE);
 
-			if (mIsDonate) {
-				// Save in prefs
-				PreferenceManager
-						.getDefaultSharedPreferences(ActivityMain.this).edit()
-						.putBoolean(SKU_DONATE, mIsDonate).commit();
-				// Update relevant parts of UI
-				updateUiDonate();
+				if (mIsDonate) {
+					// Save in prefs
+					PreferenceManager
+							.getDefaultSharedPreferences(ActivityMain.this)
+							.edit().putBoolean(SKU_DONATE, mIsDonate)
+							.putBoolean(DONATED, mIsDonate).commit();
+					// Update relevant parts of UI
+					updateUiDonate();
+				}
+
+				Log.d("nononsenseapps billing", "User is "
+						+ (mIsDonate ? "PREMIUM" : "NOT PREMIUM"));
 			}
 		}
 	};
@@ -633,12 +648,12 @@ public class ActivityMain extends FragmentActivity implements
 		if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
 			setIntent(new Intent(this, ActivityMain_.class));
 		}
-		
+
 		if (!getSupportFragmentManager().popBackStackImmediate()) {
 			finish();
-//			Intent i = new Intent(this, ActivityMain_.class);
-//			i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//			startActivity(i);
+			// Intent i = new Intent(this, ActivityMain_.class);
+			// i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			// startActivity(i);
 		}
 	}
 
@@ -725,7 +740,7 @@ public class ActivityMain extends FragmentActivity implements
 											.getDefaultSharedPreferences(
 													ActivityMain.this).edit()
 											.putBoolean(SKU_DONATE, true)
-											.commit();
+											.putBoolean(DONATED, true).commit();
 									// Update relevant parts of UI
 									updateUiDonate();
 								}
