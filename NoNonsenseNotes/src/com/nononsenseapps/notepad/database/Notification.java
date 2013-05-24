@@ -28,6 +28,17 @@ import android.view.View;
 import android.widget.TextView;
 
 public class Notification extends DAO {
+	// These match WeekDaysView's values
+	public static final int mon = 0x1;
+	public static final int tue = 0x10;
+	public static final int wed = 0x100;
+	public static final int thu = 0x1000;
+	public static final int fri = 0x10000;
+	public static final int sat = 0x100000;
+	public static final int sun = 0x1000000;
+	
+	// Location repeat, one left of sun
+	public static final int locationRepeat = 0x10000000;
 
 	// SQL convention says Table name should be "singular"
 	public static final String TABLE_NAME = "notification";
@@ -285,6 +296,9 @@ public class Notification extends DAO {
 	public int save(final Context context, final boolean schedule) {
 		int result = save(context);
 		if (schedule) {
+			// First cancel any potentially old versions
+			NotificationHelper.cancelNotification(context, this);
+			// Then reschedule
 			NotificationHelper.schedule(context);
 		}
 		return result;
@@ -369,7 +383,7 @@ public class Notification extends DAO {
 	 * the specified tasks up to the specified time.
 	 */
 	public static void removeWithMaxTimeAndTaskIds(final Context context,
-			final long maxTime, final Long... ids) {
+			final long maxTime, final boolean reschedule, final Long... ids) {
 		if (ids.length > 0) {
 			final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
 				@Override
@@ -392,7 +406,12 @@ public class Notification extends DAO {
 					while (c.moveToNext()) {
 						Notification n = new Notification(c);
 						idsToClear.add(Long.toString(n._id));
-						n.deleteOrReschedule(context);
+						if (reschedule) {
+							n.deleteOrReschedule(context);
+						}
+						else {
+							n.delete(context);
+						}
 					}
 					c.close();
 
@@ -599,7 +618,11 @@ public class Notification extends DAO {
 	}
 
 	public void deleteOrReschedule(final Context context) {
-		if (repeats == 0) {
+		if (isLocationRepeat()) {
+			return;
+		}
+		
+		if (repeats == 0 || time == null) {
 			delete(context);
 		}
 		else {
@@ -662,5 +685,21 @@ public class Notification extends DAO {
 		}
 
 		return sb.toString();
+	}
+
+	/**
+	 * This overrides ALL other repeat fields! 
+	 */
+	public void setLocationRepeat(final boolean b) {
+		if (b) {
+			this.repeats = locationRepeat;
+		}
+		else {
+			this.repeats = 0;
+		}
+	}
+	
+	public boolean isLocationRepeat() {
+		return 0 < (this.repeats & locationRepeat);
 	}
 }

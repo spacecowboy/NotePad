@@ -9,6 +9,7 @@ import com.doomonafireball.betterpickers.timepicker.TimePickerDialogFragment.Tim
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
+import com.googlecode.androidannotations.annotations.OnActivityResult;
 import com.googlecode.androidannotations.annotations.SystemService;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
@@ -60,6 +61,7 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.ShareActionProvider;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -118,9 +120,11 @@ public class TaskDetailFragment extends Fragment implements
 						// Don't want updates while editing
 						// getLoaderManager().destroyLoader(LOADER_EDITOR_TASK);
 						// Only update the list if that changes
-						Log.d("nononsenseapps listedit", "Updating list in task from " + mTask.dblist);
+						Log.d("nononsenseapps listedit",
+								"Updating list in task from " + mTask.dblist);
 						mTask.dblist = new Task(c).dblist;
-						Log.d("nononsenseapps listedit", "Updating list in task to " + mTask.dblist);
+						Log.d("nononsenseapps listedit",
+								"Updating list in task to " + mTask.dblist);
 						if (mTaskOrg != null) {
 							mTaskOrg.dblist = mTask.dblist;
 						}
@@ -171,7 +175,7 @@ public class TaskDetailFragment extends Fragment implements
 
 	@ViewById
 	View taskSection;
-	
+
 	@SystemService
 	InputMethodManager inputManager;
 
@@ -473,13 +477,14 @@ public class TaskDetailFragment extends Fragment implements
 		// }
 		// }, 100);
 		// }
-		
+
 		/**
 		 * Only show keyboard for new/empty notes
 		 */
 		if (taskText.getText().length() == 0) {
 			taskText.requestFocus();
-			inputManager.showSoftInput(taskText, InputMethodManager.SHOW_IMPLICIT);
+			inputManager.showSoftInput(taskText,
+					InputMethodManager.SHOW_IMPLICIT);
 		}
 	}
 
@@ -625,46 +630,49 @@ public class TaskDetailFragment extends Fragment implements
 		menu.findItem(R.id.menu_share).setEnabled(!isLocked());
 	}
 
-	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == 1) {
-			if (resultCode == Activity.RESULT_OK) {
-				onTimeTravel(data);
-			}
+	@OnActivityResult(1)
+	void onTimeTravelResult(int resultCode, Intent data) {
+		if (resultCode == Activity.RESULT_OK) {
+			onTimeTravel(data);
 		}
-		else if (requestCode == 2) {
-			// Location
-			if (resultCode == Activity.RESULT_OK
-					&& pendingLocationNotification != null) {
-				// TODO update text field and shit, possibly not here
-				pendingLocationNotification.latitude = data.getExtras()
-						.getDouble(ActivityLocation.EXTRA_LATITUDE);
-				pendingLocationNotification.longitude = data.getExtras()
-						.getDouble(ActivityLocation.EXTRA_LONGITUDE);
-				pendingLocationNotification.radius = (double) data.getExtras()
-						.getInt(ActivityLocation.EXTRA_RADIUS);
-				pendingLocationNotification.locationName = data.getExtras()
-						.getString(ActivityLocation.EXTRA_LOCATION_NAME);
-				if (pendingLocationNotification.view != null
-						&& pendingLocationNotification.locationName != null) {
-					pendingLocationNotification.view.findViewById(
-					// Hide time part
-							R.id.notificationDateTime).setVisibility(View.GONE);
-					// Fill in location name
-					((TextView) pendingLocationNotification.view
-							.findViewById(R.id.notificationLocation))
-							.setText(pendingLocationNotification.locationName);
-				}
-				// do in background
-				pendingLocationNotification.saveInBackground(getActivity(),
-						false);
-				// TODO remove this
-				// NotificationHelper.notifyGeofence(getActivity(),
-				// pendingLocationNotification._id);
+	}
+
+	@OnActivityResult(2)
+	public void onLocationResult(int resultCode, Intent data) {
+		// Location
+		if (resultCode == Activity.RESULT_OK
+				&& pendingLocationNotification != null) {
+			// update text field and shit
+			pendingLocationNotification.latitude = data.getExtras().getDouble(
+					ActivityLocation.EXTRA_LATITUDE);
+			pendingLocationNotification.longitude = data.getExtras().getDouble(
+					ActivityLocation.EXTRA_LONGITUDE);
+			pendingLocationNotification.radius = (double) data.getExtras()
+					.getInt(ActivityLocation.EXTRA_RADIUS);
+			pendingLocationNotification.locationName = data.getExtras()
+					.getString(ActivityLocation.EXTRA_LOCATION_NAME);
+			if (pendingLocationNotification.view != null
+					&& pendingLocationNotification.locationName != null) {
+				pendingLocationNotification.view.findViewById(
+				// Hide time parts
+						R.id.notificationDateTime).setVisibility(View.GONE);
+				pendingLocationNotification.view.findViewById(R.id.weekdays)
+						.setVisibility(View.GONE);
+				// Show location reminder
+				pendingLocationNotification.view
+						.findViewById(R.id.repeatSwitch).setVisibility(
+								View.VISIBLE);
+				// Show repeat section
+				pendingLocationNotification.view.findViewById(
+						R.id.openRepeatField).setVisibility(View.VISIBLE);
+
+				// Fill in location name
+				((TextView) pendingLocationNotification.view
+						.findViewById(R.id.notificationLocation))
+						.setText(pendingLocationNotification.locationName);
 			}
-		}
-		else {
-			super.onActivityResult(requestCode, resultCode, data);
+			// do in background
+			pendingLocationNotification.saveInBackground(getActivity(), false);
 		}
 	}
 
@@ -797,6 +805,10 @@ public class TaskDetailFragment extends Fragment implements
 			// So we can update the view later
 			not.view = nv;
 
+			// Hide this if it's a new notification
+			final TextView openRepeatField = (TextView) nv
+					.findViewById(R.id.openRepeatField);
+
 			// Set date time text
 			final TextView notTimeButton = (TextView) nv
 					.findViewById(R.id.notificationDateTime);
@@ -805,8 +817,8 @@ public class TaskDetailFragment extends Fragment implements
 			}
 
 			if (not.radius != null) {
-				// TODO
 				notTimeButton.setVisibility(View.GONE);
+				openRepeatField.setVisibility(View.VISIBLE);
 			}
 
 			final View notRemoveButton = nv
@@ -857,14 +869,47 @@ public class TaskDetailFragment extends Fragment implements
 				}
 			});
 
-			final TextView openRepeatField = (TextView) nv
-					.findViewById(R.id.openRepeatField);
 			final View closeRepeatField = nv
 					.findViewById(R.id.closeRepeatField);
 			final View repeatDetails = nv.findViewById(R.id.repeatDetails);
+			final View weekDays = nv.findViewById(R.id.weekdays);
+
+			// Location repeat
+			final Switch repeatSwitch = (Switch) nv
+					.findViewById(R.id.repeatSwitch);
+			repeatSwitch.setChecked(not.isLocationRepeat());
+			if (not.isLocationRepeat()) {
+				openRepeatField.setText(R.string.always);
+			}
+			else {
+				openRepeatField.setText(not.getRepeatAsText(getActivity()));
+			}
+			repeatSwitch
+					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+						@Override
+						public void onCheckedChanged(CompoundButton buttonView,
+								boolean isChecked) {
+							not.setLocationRepeat(isChecked);
+							not.saveInBackground(getActivity(), true);
+							if (isChecked) {
+								openRepeatField.setText(R.string.always);
+							}
+							else {
+								openRepeatField.setText("");
+							}
+							
+						}
+					});
 
 			if (not.time != null && not.radius == null) {
 				openRepeatField.setVisibility(View.VISIBLE);
+				weekDays.setVisibility(View.VISIBLE);
+				repeatSwitch.setVisibility(View.GONE);
+			}
+			else {
+				weekDays.setVisibility(View.GONE);
+				repeatSwitch.setVisibility(View.VISIBLE);
 			}
 
 			// Date button
@@ -890,10 +935,12 @@ public class TaskDetailFragment extends Fragment implements
 								not.time = localTime.getTimeInMillis();
 								// Enable repeat options
 								openRepeatField.setVisibility(View.VISIBLE);
+								weekDays.setVisibility(View.VISIBLE);
+								repeatSwitch.setVisibility(View.GONE);
 								// Fill in time so far
 								notTimeButton.setText(not
 										.getLocalDateTimeText(getActivity()));
-								not.save(getActivity(), false);
+								
 								// Hide location
 								location.setVisibility(View.GONE);
 
@@ -933,6 +980,11 @@ public class TaskDetailFragment extends Fragment implements
 
 												not.save(getActivity(), true);
 											}
+
+											@Override
+											public void onDialogCancel() {
+												not.save(getActivity(), false);
+											}
 										});
 								datePicker.show(getFragmentManager(), "date");
 							}
@@ -943,8 +995,6 @@ public class TaskDetailFragment extends Fragment implements
 				}
 			});
 
-			// set text on this
-			openRepeatField.setText(not.getRepeatAsText(getActivity()));
 			openRepeatField.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
@@ -997,5 +1047,11 @@ public class TaskDetailFragment extends Fragment implements
 			mTask.setText(data
 					.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
 		}
+	}
+
+	@Override
+	public void onDialogCancel() {
+		// TODO Auto-generated method stub
+		
 	}
 }

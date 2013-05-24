@@ -70,7 +70,7 @@
         android:layout_width="wrap_content"
         android:layout_height="36dp"
         android:layout_alignParentRight="true"
-        android:layout_alignLeft="@id/notificationDateTime"
+        android:layout_alignParentLeft="true"
         android:layout_below="@id/dividerLine"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
@@ -116,12 +116,20 @@
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:layout_below="@id/temp1" />
+        
+        <Switch 
+            android:id="@+id/repeatSwitch"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:layout_below="@id/weekdays"
+            />
 
         <View
             android:id="@+id/temp2"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:layout_below="@id/weekdays"
+            android:layout_below="@id/repeatSwitch"
+            android:layout_marginTop="4dp"
             android:background="?android:attr/dividerVertical" />
 
         <TextView
