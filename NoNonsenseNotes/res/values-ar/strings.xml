@@ -37,13 +37,23 @@ limitations under the License.
 <string name="menu_clearcompleted">مسح المهام المُنجَزة</string>
 <string name="menu_setdefaultlist">جعلها قائمة افتراضية</string>
 <string name="menu_managelists">إدارة القوائم</string>
-<string name="delete_list_warning">أمتأكد من أنك تريد حذف هذه القائمة؟ ستحذف القائمة ولن يمكنك إعادتها.</string>
+<string name="delete_list_title">حذف القائمة؟</string>
+<string name="delete_list_toast">تم حذف القائمة</string>
+<string name="delete_list_warning">هل أنت متأكد من أنك تريد حذف هذه القائمة؟ ستحذف القائمة ولن يمكنك إعادتها.</string>
 <string name="editor_due_date_hint">تاريخ الاستحقاق</string>
 <string name="editor_title_hint">العنوان</string>
 <string name="editor_note_hint">الملاحظة</string>
 <string name="resolve_edit">تحرير الملاحظة</string>
 <string name="error_title">خطأ</string>
 <string name="error_message">حدث خطأ أثناء تحميل الملاحظة</string>
+<string name="default_style">النمط الأساسي</string>
+<string name="show_items_as_tasks">إظهار العناصر كمهام</string>
+<string name="show_items_as_notes">إظهار العناصر كملاحظات</string>
+<string name="sort_list_default">ترتيب الفرز الافتراضي</string>
+<string name="sort_list_alphabetical">ترتيب حسب الأبجدية</string>
+<string name="sort_list_due">ترتيب حسب التاريخ</string>
+<string name="sort_list_updated">ترتيب حسب آخر تعديل</string>
+<string name="sort_list_manual">ترتيب يدوي</string>
 <string name="search_hint">بحث</string>
 <string name="settings_theme">السمة الحالية</string>
 <string name="settings_theme_dialog">استخدام السمة</string>
@@ -59,8 +69,6 @@ limitations under the License.
 <string name="settings_summary_sort_type_modified">تاريخ آخر تعديل</string>
 <string name="settings_summary_sort_type_duedate">تاريخ الاستحقاق</string>
 <string name="settings_summary_sort_type_serverposition">ترتيبي الخاصّ</string>
-<string name="settings_summary_sort_order_asc">تصاعديًّا</string>
-<string name="settings_summary_sort_order_desc">تنازليًّا</string>
 <string name="settings_summary_theme_black">أسود</string>
 <string name="settings_summary_theme_dark">داكن</string>
 <string name="settings_summary_theme_light">فاتح</string>
@@ -190,6 +198,9 @@ Use few if language need it. In English is the same.
 <string name="hide_date">اخفاء تاريخ الاستحقاق</string>
 <string name="hide_date_summary_on">تاريخ الاستحقاق سوف يتم إخفاؤه</string>
 <string name="hide_date_summary_off">تاريخ الاستحقاق سوف يتم اظهاره</string>
+<string name="item_max_height">أقصى إرتفاع</string>
+<string name="long_date_format">تنسيق التاريخ الطويل</string>
+<string name="short_date_format">تنسيق التاريخ القصير</string>
 <string name="title_rows">اقصى ارتفاع للعنوان</string>
 <string name="title_rows_1">1 صف</string>
 <string name="title_rows_2">2 صف</string>
@@ -215,6 +226,9 @@ Use few if language need it. In English is the same.
 <string name="loading_widget">Loading widget&#8230;</string>
 <string name="default_list_set">مجموعة قائمة افتراضية</string>
 
+<string name="please_type_before_reminder">يرجى كتابة كلام قبل إضافة تذكير</string>
+<string name="select_a_time">إختيار الوقت</string>
+
 <string name="notecopied_one">نُسخت ملاحظة واحدة</string>
 <string name="notecopied_other">نُسخت %d ملاحظات</string>
 <string name="notedeleted_one">حُذفت ملاحظة واحدة</string>
@@ -231,6 +245,7 @@ Use few if language need it. In English is the same.
 <string name="sync_full_force">الزِم بعمل مزامنة كاملة في المرة القادمة</string>
 <string name="sync_full_force_info">فقط قم بتحديد هذا اذا كنت واثق من ان بعض العناصر مفقودة</string>
 
+<string name="snooze">غفوة</string>
 <string name="silent">صامت</string>
 <string name="sound">صوت</string>
 <string name="vibrate">اهتزاز</string>
@@ -247,6 +262,23 @@ Use few if language need it. In English is the same.
 <string name="dateformat_micro">MMM d</string>
 <string name="dateformat_short">E, d MMM</string>
 <string name="dateformat_long">EEEE, d MMMM</string>
+
+
+
+<string name="dashclock_title_activity_tasks_settings">إعدادات ملاحظات NoNonsense</string>
+<string name="dashclock_pref_header_general">عام</string>
+
+<string name="dashclock_today">اليوم</string>
+<string name="dashclock_tomorrow">غداً</string>
+<string name="dashclock_next7">الأيام ٧ القادمة</string>
+<string name="dashclock_anytime">اي وقت</string>
+<string name="dashclock_will_show_as_many_as_possible">سيتم الإظهار بقدر المستطاع</string>
+<string name="dashclock_will_only_show_the_task_due_first">سيتم عرض المهام حسب الأولوية</string>
+<string name="dashclock_show_only_the_next_task">عرض المهمة التالية فقط</string>
+<string name="dashclock_first_task_shown">سيتم عرض عنوان المهمة الأولى بخط سميك</string>
+
+
+<!-- Store text -->
 <string name="google_play_promo_80_char_limit">Good looking notes, tasks and to-do app with Google Tasks sync.</string>
 <string name="google_play_description">تطبيق ملاحظات ومهام مفتوح المصدر يعمل على الهواتف والاجهزة اللوحية . يقوم بالمزامنة عبر حسابك جوجل الخاص بك ويبقي ملاحظاتك ومهامك محفوظةبدون الحاجة الى ادخال كلمة مرور!\n\nالمميزات :\n* إعلامات/تذكير\n* إختيار اللغة\n* واجهة تطبيق قابلة للتعديل\n* قطعة، قابلة لتغيير الحجم والترتيب\n* دعم الاجهزة اللوحية بشكل رائع\n* سمة هولو بحيث تتوافق في الشكل مع معظم نظام الاندرويد\n* مزامنة تلقائية مع تطبيق Google Tasks\n* قابلية وضع كلمة مرور على الملاحظات\n* نقل الملاحظات بين القوائم المختلفة\n* تكامل مع قطعة الأجندة الخاصة بالاندرويد\n* بحث في جميع الملاحظات ليس فقط في العنوان\n* تغيير حجم ونوع الخط\n\nملاحظة:\nهناك خطأ في نظام الاندرويد 4.2 الذي يظهر في جميع تطبيقات التي تستخدم الاعلامات. اذا قمت بإعداد الاعلامات بدون اهتزاز (هذا هو الافتراضي ) اذا اعد هاتفك الى الوضع الصامت (اهتزاز فقط) الاعلامات سوف تقوم دائماً بالاهتزاز حتى وان اغلق.\nمرة اخرى ، هذا خطأ في نظام الاندرويد ، ليس خطأ في التطبيق.\n\nيمكنكم المساعدة في ترجمة التطبيق، واذهبوا إلى: http://translate.nononsenseapps.com\n\nإذا كان لديك أي مشاكل أو تريد الإبلاغ عن خطأ، دون تتردد قم بالاتصال بي!\n+ NoNonsenseApps\nأو\nالإبلاغ عنها في تعقب المشكلة: https://github.com/spacecowboy/NotePad/issues\n\nهذا التطبيق مفتوح المصدر، وهي متاحة على الانترنت على العنوان التالي: https://github.com/spacecowboy/NotePad\n\nهناك نسخة غير مجانية من هذا التطبيق متاحة لأولئك الذين يرغبون في الدعم لي في development.Link: https://market.android.com/details؟id=com.nononsenseapps.notepad_donate</string>
 </resources>

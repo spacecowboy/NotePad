@@ -20,6 +20,12 @@ limitations under the License.
 <string name="app_name">Notizen</string>
 <string name="title_create">Neue Notiz</string>
 <string name="title_edit">Bearbeiten: %1$s</string>
+<string name="time">Uhrzeit</string>
+<string name="done">Fertig</string>
+<string name="saved">Gespeichert</string>
+<string name="distance">Entfernung</string>
+<string name="need_location_help">Lange auf die Karte drücken um einen Standort auszuwählen</string>
+<string name="near_location">In der Nähe</string>
 <string name="menu_add">Neue Notiz</string>
 <string name="menu_save_and_add">Speichern und neue Notiz öffnen</string>
 <string name="menu_delete">Löschen</string>
@@ -37,13 +43,29 @@ limitations under the License.
 <string name="menu_clearcompleted">Erledigte löschen</string>
 <string name="menu_setdefaultlist">Als Standardliste festlegen</string>
 <string name="menu_managelists">Liste verwalten</string>
-<string name="delete_list_warning">Die Liste wird unwiderruflich gelöscht. Bist du sicher?</string>
+<string name="add_item">Element hinzufügen</string>
+<string name="delete_question">Löschen?</string>
+<string name="delete_items_message">Bist Du Dir sicher, dass Du diese Elemente löschen möchtest?</string>
+<string name="delete_item_message">Bist Du Dir sicher, dass Du dieses Element löschen möchtest?</string>
+<string name="delete_list_message">Bist Du Dir sicher, dass Du diese Liste löschen möchtest?</string>
 <string name="editor_due_date_hint">Fälligkeitsdatum</string>
 <string name="editor_title_hint">Titel</string>
 <string name="editor_note_hint">Notiz</string>
 <string name="resolve_edit">Notiz bearbeiten</string>
 <string name="error_title">Fehler</string>
 <string name="error_message">Fehler beim Laden der Notiz</string>
+<string name="default_style">Normaler Style</string>
+<string name="show_items_as_tasks">Zeige Elemente als Aufgabe</string>
+<string name="show_items_as_notes">Zeige Elemente als Notizen</string>
+<string name="sort_list_default">Normale Sortierung</string>
+<string name="sort_list_alphabetical">Sortiere alphabetisch</string>
+<string name="sort_list_due">Sortiere nach Fälligkeitsdatum</string>
+<string name="sort_list_manual">Manuell Sortieren</string>
+<string name="search_description">Notizen und Aufgaben</string>
+<string name="archive">Archiv</string>
+<string name="location">Ort</string>
+<string name="restore">Wiederherstellen</string>
+<string name="restore_to">Wiederherstellen in</string>
 <string name="search_hint">Suche</string>
 <string name="settings_theme">Aktuelles Design</string>
 <string name="settings_theme_dialog">Design verwenden</string>
@@ -58,11 +80,10 @@ limitations under the License.
 <string name="settings_summary_sort_type_modified">Änderungsdatum</string>
 <string name="settings_summary_sort_type_duedate">Fälligkeitsdatum</string>
 <string name="settings_summary_sort_type_serverposition">Serverposition</string>
-<string name="settings_summary_sort_order_asc">Aufsteigend</string>
-<string name="settings_summary_sort_order_desc">Absteigend</string>
 <string name="settings_summary_theme_black">Schwarz</string>
 <string name="settings_summary_theme_dark">Dunkel</string>
 <string name="settings_summary_theme_light">Hell</string>
+<string name="settings_summary_theme_classic">Klassisch</string>
 <string name="settings_summary_theme_light_dark_ab">Hell, dunkle Aktionsleiste</string>
 <string name="settings_cat_appearance">Aussehen</string>
 <string name="settings_font_screen">Schriftart</string>
@@ -81,7 +102,10 @@ limitations under the License.
 <string name="settings_account_summary">Account wechseln</string>
 <string name="settings_sync_enable_title">mit Google Tasks sync.</string>
 <string name="settings_sync_enable_summary">Notizen mit Google Tasks synchronisieren</string>
+<string name="gtasks_sync_info">Nicht alle Informationen können mit Google Tasks synchronisiert werden. Lediglich Notizen, Fälligkeitsdaten (außer der Uhrzeit) und der Todo-Status werden synchronisiert</string>
 <string name="settings_cat_syncing">Synchronisation</string>
+<string name="dropbox_enable">Mit Dropbox synchronisieren</string>
+<string name="dropbox_enable_summary">Erstelle einen gesonderten NoNonesense Ordner in Deiner Dropbox</string>
 <string name="manual">Manuell</string>
 <string name="minutes">Minuten</string>
 <string name="hours">Stunden</string>
@@ -95,6 +119,8 @@ limitations under the License.
 <string name="reverted">Verworfene Änderungen</string>
 <string name="notecopied">Kopiert</string>
 <string name="deleted">Gelöscht</string>
+<string name="repeat">Wiederholen</string>
+<string name="once">Einmalig</string>
 <string name="items">Notizen</string>
 <string name="permission_read_label">Notizen und Listen lesen</string>
 <string name="permission_read_desc">Erlaubt der Anwendung ihre Notizen und zugehörigen Listen zu lesen </string>
@@ -106,6 +132,16 @@ limitations under the License.
 <string name="automatic">Automatisch</string>
 <string name="preferences_week_start_day_dialog">"Woche beginnt am"</string>
 <string name="preferences_week_start_day_title">"Woche beginnt am"</string>
+
+<string name="select_restore_list">Wähle eine Liste zum Wiederherstellen aus</string>
+
+<string name="import_data_question">Daten importieren?</string>
+<string name="import_started">Importieren Daten. Dies kann einige Sekunden dauern</string>
+<string name="import_data_msg">Möchtest Du Daten aus der Donate-Version importieren? Wenn das abgeschlossen ist, gibt es die Möglichkeit diese wieder zu löschen</string>
+<string name="imported_result">Es wurden %1$d Notizen aus %2$d Listen importiert</string>
+<string name="import_error">Etwas hat nicht funktioniert: %s</string>
+<string name="uninstall_donate_msg">Klicke Ok um die Donate-Version zu löschen</string>
+<string name="uninstall_donate">Alte Version löschen?</string>
 
 <!--
 Use few if language need it. In English is the same.
@@ -185,14 +221,19 @@ Use few if language need it. In English is the same.
 <string name="hide_date">Fälligkeitsdatum verbergen</string>
 <string name="hide_date_summary_on">Datum wird verborgen</string>
 <string name="hide_date_summary_off">Datum wird angezeigt</string>
+<string name="item_max_height">Maximale Höhe</string>
+<string name="long_date_format">Langes Datum</string>
+<string name="short_date_format">Kurzes Datum</string>
 <string name="title_rows">max. Titelhöhe</string>
 <string name="title_rows_1">1 Zeile</string>
 <string name="title_rows_2">2 Zeilen</string>
 <string name="title_rows_free">Unbegrenzt</string>
+<string name="rows">Reihen</string>
 <string name="saturday">Samstag</string>
 <string name="sunday">Sonntag</string>
 <string name="monday">Montag </string>
 <string name="localedefault">Systemsprache</string>
+<string name="donate_thanks">Vielen Dank für Deine Unterstützung</string>
 
 <!-- These should probably not be translated -->
 <string name="default_notetitle">Willkommen</string>
@@ -205,18 +246,20 @@ Use few if language need it. In English is the same.
 <string name="hide_appicon">App-Icon ausblenden</string>
 <string name="hide_new">"Neu"-Button ausblenden</string>
 <string name="hide_header">Widget-Kopfzeile ausblenden</string>
-<string name="hide_widgetbg">Durchsichtiger Hintergrund</string>
+<string name="transparency">Transparenz</string>
+<string name="notes_shortcut">Notizen Shortcut</string>
 <string name="shortcut_help1">Wenn aktiviert, erstellt die Verknüpfng eine neue Notiz in der ausgewählten Liste und öffnet den Editor. Wenn nicht, öffnet die Verknüpfung nur die ausgewählte Liste.</string>
 <string name="loading_widget">Widget wird geladen...</string>
 <string name="default_list_set">Liste als Standard festgelegt</string>
-
+<string name="default_list">Standard Liste</string>
+<string name="please_type_before_reminder">Bitte schreibe etwas Text, bevor Du eine Erinnerung erstellst</string>
+<string name="select_a_time">Wähle eine Zeit aus</string>
 <string name="notecopied_one">1 Notiz kopiert</string>
 <string name="notecopied_other">%d Notizen kopiert</string>
 <string name="notedeleted_one">1 Notiz gelöscht</string>
 <string name="notedeleted_other">%d Notizen gelöscht</string>
 <string name="selected_one">1 Notiz ausgewählt</string>
 <string name="selected_other">%d Notizen ausgewählt</string>
-
 <string name="background_sync">Im Hintergrund synchronisieren</string>
 <string name="background_sync_info">Stündlich synchronisieren</string>
 <string name="sync_on_change">Nach Änderungen synchronisieren</string>
@@ -225,7 +268,6 @@ Use few if language need it. In English is the same.
 <string name="sync_on_start_info">Löst nur bei richtigen Starts aus, wenn die App vorher nicht im Hintergrund gelaufen ist</string>
 <string name="sync_full_force">Volle Synchronisation erzwingen</string>
 <string name="sync_full_force_info">Schalte dies ein, wenn du denkst, es fehlen einige Objekte.</string>
-
 <string name="silent">Lautlos</string>
 <string name="sound">Ton</string>
 <string name="vibrate">Vibration</string>
@@ -235,25 +277,29 @@ Use few if language need it. In English is the same.
 <string name="notification_prio_high">Hoch: immer oben, maximiert</string>
 <string name="notification_prio_low">Niedrig: versteckt, minimiert</string>
 <string name="priority">Priorität</string>
+<string name="group_on_list">In Liste gruppieren</string>
 <string name="group_on_list_summary">Mehrere Benachrichtigungen für die selbe Liste werden zusammengefasst.</string>
 <string name="more">Mehr</string>
 <string name="notifications">Benachrichtigungen</string>
-
-
+<!-- "localtime" is replaced at runtime with 12/24 hour clock -->
 <string name="dashclock_tasks">Aufgaben</string>
 <string name="dashclock_show_overdue_tasks">Überfällige Aufgaben anzeigen</string>
-
+<string name="dashclock_overdue_tasks_show">Überfällige Aufgaben werden angezeigt</string>
+<string name="dashclock_overdue_tasks_hide">Überfällige Aufgaben werden versteckt</string>
 <string name="dashclock_title_activity_tasks_settings">NoNonsense Notes Einstellungen</string>
 <string name="dashclock_pref_header_general">Allgemein</string>
-
 <string name="dashclock_today">Heute</string>
 <string name="dashclock_tomorrow">Morgen</string>
 <string name="dashclock_next7">Nächste 7 Tage</string>
 <string name="dashclock_anytime">Irgendwann</string>
+<string name="dashclock_will_show_as_many_as_possible">Es werden so viele wie möglich angezeigt</string>
 <string name="dashclock_show_only_the_next_task">Zeige nur die nächste Aufgabe</string>
-
+<string name="dashclock_header_shown">Listen Name wird fett dargestellt. Wenn &quot;Alle Listen&quot; ausgewählt wurden, werden &quot;Aufgaben&quot; angezeigt</string>
+<string name="dashclock_first_task_shown">Name der ersten Aufgabe wird fett geschrieben</string>
+<string name="dashclock_display_header">Zeige Header</string>
 
 <!-- Store text -->
-<string name="google_play_promo_80_char_limit">Gut aussehende Notiz, Aufgaben und To-Do App mit Google Tasks Synchronisation.</string>
+<string name="google_play_promo_80_char_limit">Gut aussehende Notizen-, Aufgaben- und To-Do App mit Google Tasks Synchronisation.</string>
 <string name="google_play_description">Eine Notizen- und To Do-App sowohl mit Telefon- als auch mit Tablet-UI. Synchronisiert mit einem bereits vorhandenen Google-Konto, damit deine Notizen in der Cloud gesichert sind, ohne ein Passwort einzugeben müssen!\n\nFunktionen:\nNachrichten/Erinnerungen\nSprachauswahl\nAnpassbares Interface\nSkalierbares und Anpassbares Widgets\nHervorragendes Tablet-Interface, inspiriert von der Gmail-App\nHolo-Design, das mit dem Rest von Android harmoniert\nAutomatische Google-Tasks-Synchronisation\nNotizen mit Passwort verschlüsseln\nNotizen zwischen verschiedenen Listen hin- und herbewegen\nIntegration mit dem Android-Agenda-Widget\nAlle Notizen mitsamt Inhalt durchsuchen\nSchriftart und -Grösse änderbar!\n\nAchtung:\nIn Android 4.2 gibt es einen Fehler, der in allen Apps vorkommt, die Benachrichtigungen senden. Wenn du die Vibration bei Benachrichtigungen ausschaltest (was standardmässig so ist) und dein Handy auf lautlos (mit Vibration) stellst, werden die Benachrichtigungen trotzdem Vibrieren, obwohl du vorher die Vibration ausgeschaltet hast.\nDas ist ein Fehler im Android OS und nicht in meiner App, ich kann ihn also nicht beheben.\n\nUm mir bei der Übersetzung zu helfen, besuche:\nhttp://translate.nononsenseapps.com.\n(Deutsche Übersetzung von balducien, balducien@gmail.com)\n\nWenn du irgendein Problem oder einen Fehler gefunden hast, zögere nicht, es mir zu sagen:\n+NoNonsenseApps auf Google+\noder schreib es in das Fehlerprotokoll:\nhttps://github.com/spacecowboy/NotePad/issues\n\nDer Quellcode dieser Open Source-App ist zur freien Benutzung verfügbar auf:\nhttps://github.com/spacecowboy/NotePad\n\nWenn du die Entwicklung dieser App unterstützen willst, kannst du dir die bezahlte Version dieser App kaufen und mir einen Gefallen tun:\nhttps://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
+
 </resources>

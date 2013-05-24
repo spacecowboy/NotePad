@@ -37,6 +37,13 @@ limitations under the License.
 <string name="menu_clearcompleted">Изтриване на изпълнените</string>
 <string name="menu_setdefaultlist">Задаване списък по подразб.</string>
 <string name="menu_managelists">Управление на списъците</string>
+<string name="add_item">Добавяне на обект</string>
+<string name="archive_item_title">Архивиране?</string>
+<string name="archive_item_message">Сигурни ли сте, че искате да архивирате този обект?</string>
+<string name="archive_item_toast">Архивиран</string>
+<string name="delete_list_title">Изтриване на списъка?</string>
+<string name="delete_list_message">Сигурни ли сте, че искате да изтриете списъка? Бележките ще бъдат архивирани.</string>
+<string name="delete_list_toast">Списъкът е изтрит</string>
 <string name="delete_list_warning">Сигурни ли сте, че искате да изтриете списъка? Той ще бъде изтрит безвъзвратно.</string>
 <string name="editor_due_date_hint">Дата за изпълнение</string>
 <string name="editor_title_hint">Заглавие</string>
@@ -44,6 +51,14 @@ limitations under the License.
 <string name="resolve_edit">Редактиране на бележката</string>
 <string name="error_title">Грешка</string>
 <string name="error_message">Грешка при зареждане на бележката</string>
+<string name="default_style">Стил по подразбиране</string>
+<string name="show_items_as_tasks">Показване като задачи</string>
+<string name="show_items_as_notes">Показване като бележки</string>
+<string name="sort_list_default">Подредба по подразбиране</string>
+<string name="sort_list_alphabetical">Подреди по азбучен ред</string>
+<string name="sort_list_due">Подреди по дата на изпълнение</string>
+<string name="sort_list_updated">Подреди по дата на актуализиране</string>
+<string name="sort_list_manual">Ръчно подреждане</string>
 <string name="search_hint">Търсене</string>
 <string name="settings_theme">Текуща тема</string>
 <string name="settings_theme_dialog">Използвана тема</string>
@@ -58,12 +73,11 @@ limitations under the License.
 <string name="settings_summary_sort_type_modified">Последна промяна</string>
 <string name="settings_summary_sort_type_duedate">Дата за изпълнение</string>
 <string name="settings_summary_sort_type_serverposition">Моят ред</string>
-<string name="settings_summary_sort_order_asc">Възходящ</string>
-<string name="settings_summary_sort_order_desc">Низходящ</string>
 <string name="settings_summary_theme_black">Черна</string>
 <string name="settings_summary_theme_dark">Тъмна</string>
 <string name="settings_summary_theme_light">Светла</string>
 <string name="settings_summary_theme_light_dark_ab">Светла с тъмна лента</string>
+<string name="settings_summary_theme_googlenow_dark">Вдъхновена от тъмния Google Now</string>
 <string name="settings_cat_appearance">Външен вид</string>
 <string name="settings_font_screen">Настройки на шрифта</string>
 <string name="settings_font_screen_summary">Можете да променяте вида и размера на шрифтовете</string>
@@ -185,6 +199,9 @@ Use few if language need it. In English is the same.
 <string name="hide_date">Скриване на датата</string>
 <string name="hide_date_summary_on">Да се скрие</string>
 <string name="hide_date_summary_off">Да се показва</string>
+<string name="item_max_height">Максимална височина</string>
+<string name="long_date_format">Дълъг формат на датата</string>
+<string name="short_date_format">Кратък формат на датата</string>
 <string name="title_rows">Макс. височина на заглавието</string>
 <string name="title_rows_1">1 ред</string>
 <string name="title_rows_2">2 реда</string>
@@ -210,6 +227,9 @@ Use few if language need it. In English is the same.
 <string name="loading_widget">Зареждане на джаджата</string>
 <string name="default_list_set">Списъкът по подразбиране е зададен</string>
 
+<string name="please_type_before_reminder">Моля, напишете някакъв текст, преди да зададете напомняне</string>
+<string name="select_a_time">Изберете време</string>
+
 <string name="notecopied_one">Копирана е една бележка</string>
 <string name="notecopied_other">Копирани са %d бележки</string>
 <string name="notedeleted_one">Изтрита е една бележка</string>
@@ -226,6 +246,7 @@ Use few if language need it. In English is the same.
 <string name="sync_full_force">Принудително пълно синхр. следващия път</string>
 <string name="sync_full_force_info">Изберете това, само ако смятате, че синхронизирането е пропуснало някои елементи.</string>
 
+<string name="snooze">Отлагане</string>
 <string name="silent">Безшумно</string>
 <string name="sound">Със звук</string>
 <string name="vibrate">Вибрация</string>

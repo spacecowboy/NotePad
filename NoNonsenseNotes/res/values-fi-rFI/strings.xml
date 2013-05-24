@@ -37,6 +37,13 @@ limitations under the License.
 <string name="menu_clearcompleted">Tyhjennä valmiit</string>
 <string name="menu_setdefaultlist">Aseta oletuslistaksi</string>
 <string name="menu_managelists">Hallitse listoja</string>
+<string name="add_item">Lisää kohde</string>
+<string name="archive_item_title">Arkistoi?</string>
+<string name="archive_item_message">Haluatko varmasti arkistoida tämän kohteen?</string>
+<string name="archive_item_toast">Arkistoitu</string>
+<string name="delete_list_title">Poista lista?</string>
+<string name="delete_list_message">Haluatko varmasti poistaa listan? Muistiinpanot arkistoidaan.</string>
+<string name="delete_list_toast">Lista poistettu</string>
 <string name="delete_list_warning">Haluatko varmasti poistaa listan pysyvästi?</string>
 <string name="editor_due_date_hint">Eräpäivä</string>
 <string name="editor_title_hint">Otsikko</string>
@@ -44,6 +51,14 @@ limitations under the License.
 <string name="resolve_edit">Muokkaa muistiinpanoa</string>
 <string name="error_title">Virhe</string>
 <string name="error_message">Virhe ladattaessa muistiinpanoa</string>
+<string name="default_style">Oletustyyli</string>
+<string name="show_items_as_tasks">Näytä kohteet tehtävinä</string>
+<string name="show_items_as_notes">Näytä kohteet muistiinpanoina</string>
+<string name="sort_list_default">Oletusjärjestys</string>
+<string name="sort_list_alphabetical">Järjestä aakkosittain</string>
+<string name="sort_list_due">Järjestä eräpäivän mukaan</string>
+<string name="sort_list_updated">Järjestä viimeksi päivitetyn mukaan</string>
+<string name="sort_list_manual">Järjestä itse</string>
 <string name="search_hint">Etsi</string>
 <string name="settings_theme">Nykyinen teema</string>
 <string name="settings_theme_dialog">Käytä teemaa</string>
@@ -58,8 +73,6 @@ limitations under the License.
 <string name="settings_summary_sort_type_modified">Viimeksi muokattu</string>
 <string name="settings_summary_sort_type_duedate">Eräpäivä</string>
 <string name="settings_summary_sort_type_serverposition">Oma järjestys</string>
-<string name="settings_summary_sort_order_asc">Nouseva</string>
-<string name="settings_summary_sort_order_desc">Laskeva</string>
 <string name="settings_summary_theme_black">Musta</string>
 <string name="settings_summary_theme_dark">Tumma</string>
 <string name="settings_summary_theme_light">Vaalea</string>
@@ -185,6 +198,9 @@ Use few if language need it. In English is the same.
 <string name="hide_date">Piilota eräpäivä</string>
 <string name="hide_date_summary_on">Päivämäärä piilotetaan</string>
 <string name="hide_date_summary_off">Päivämäärä näytetään</string>
+<string name="item_max_height">Maksimikorkeus</string>
+<string name="long_date_format">Pitkä päivämäärä</string>
+<string name="short_date_format">Lyhyt päivämäärä</string>
 <string name="title_rows">Otsikon maksimikorkeus</string>
 <string name="title_rows_1">1 rivi</string>
 <string name="title_rows_2">2 riviä</string>
@@ -210,6 +226,9 @@ Use few if language need it. In English is the same.
 <string name="loading_widget">Ladataan lisäohjelmaa</string>
 <string name="default_list_set">Oletuslista asetettu</string>
 
+<string name="please_type_before_reminder">Kirjoita jotakin ennen muistutuksen asettamista</string>
+<string name="select_a_time">Valitse aika</string>
+
 <string name="notecopied_one">Muistiinpano kopioitu</string>
 <string name="notecopied_other">%d muistiinpanoa kopioitu</string>
 <string name="notedeleted_one">Muistiinpano poistettu</string>
@@ -226,6 +245,7 @@ Use few if language need it. In English is the same.
 <string name="sync_full_force">Pakota täydellinen synkronointi seuraavalla kerralla</string>
 <string name="sync_full_force_info">Valitse tämä vain silloin, kun epäilet, että synkronoinnista puuttuu kohteita.</string>
 
+<string name="snooze">Torkku</string>
 <string name="silent">Äänetön</string>
 <string name="sound">Ääni</string>
 <string name="vibrate">Värinä</string>

@@ -127,6 +127,7 @@
     <string name="deleted">Deleted</string>
     <string name="repeat">Repeat</string>
     <string name="once">Once</string>
+    <string name="always">Always</string>
     <string name="items">notes</string>
     <string name="permission_read_label">read notes and lists</string>
     <string name="permission_read_desc">Allows the application to read your notes and related lists.</string>

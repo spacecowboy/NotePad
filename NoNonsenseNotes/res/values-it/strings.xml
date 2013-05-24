@@ -37,6 +37,13 @@ limitations under the License.
 <string name="menu_clearcompleted">Rimuovi completate</string>
 <string name="menu_setdefaultlist">Imposta come elenco predefinito</string>
 <string name="menu_managelists">Gestisci elenchi</string>
+<string name="add_item">Aggiungi elemento</string>
+<string name="archive_item_title">Archiviare?</string>
+<string name="archive_item_message">Sei sicuro di voler archiviare questo elemento?</string>
+<string name="archive_item_toast">Archiviato</string>
+<string name="delete_list_title">Eliminare elenco?</string>
+<string name="delete_list_message">Sei sicuro di voler eliminare l\'elenco? Le note verranno archiviate</string>
+<string name="delete_list_toast">Lista eliminata</string>
 <string name="delete_list_warning">Sicuro di voler eliminare l\'elenco? L\'elenco verrà eliminato permanentemente.</string>
 <string name="editor_due_date_hint">Data scadenza</string>
 <string name="editor_title_hint">Titolo</string>
@@ -44,6 +51,14 @@ limitations under the License.
 <string name="resolve_edit">Modifica nota</string>
 <string name="error_title">Errore</string>
 <string name="error_message">Errore nel caricare la nota</string>
+<string name="default_style">Stile predefinito</string>
+<string name="show_items_as_tasks">Mostra elementi come attività</string>
+<string name="show_items_as_notes">Mostra elementi come note</string>
+<string name="sort_list_default">Ordine predefinito</string>
+<string name="sort_list_alphabetical">Ordine alfabetico</string>
+<string name="sort_list_due">Ordina per data</string>
+<string name="sort_list_updated">Ordina per ultima modifica</string>
+<string name="sort_list_manual">Ordine manuale</string>
 <string name="search_hint">Cerca</string>
 <string name="settings_theme">Tema attuale</string>
 <string name="settings_theme_dialog">Applica tema</string>
@@ -58,12 +73,11 @@ limitations under the License.
 <string name="settings_summary_sort_type_modified">Ultima modifica</string>
 <string name="settings_summary_sort_type_duedate">Data scadenza</string>
 <string name="settings_summary_sort_type_serverposition">Personalizzato</string>
-<string name="settings_summary_sort_order_asc">Crescente</string>
-<string name="settings_summary_sort_order_desc">Decrescente</string>
 <string name="settings_summary_theme_black">Nero</string>
 <string name="settings_summary_theme_dark">Scuro</string>
 <string name="settings_summary_theme_light">Chiaro</string>
-<string name="settings_summary_theme_light_dark_ab">Chiaro, con barre scure</string>
+<string name="settings_summary_theme_light_dark_ab">Chiaro con barra azione scura</string>
+<string name="settings_summary_theme_googlenow_dark">Scuro ispirato a Google Now</string>
 <string name="settings_cat_appearance">Aspetto</string>
 <string name="settings_font_screen">Impostazioni carattere</string>
 <string name="settings_font_screen_summary">Puoi modificare tipo e dimensione dei caratteri</string>
@@ -185,6 +199,9 @@ Use few if language need it. In English is the same.
 <string name="hide_date">Nascondi la data di scadenza</string>
 <string name="hide_date_summary_on">La data verrà nascosata</string>
 <string name="hide_date_summary_off">La data verrà mostrata</string>
+<string name="item_max_height">Altezza massima</string>
+<string name="long_date_format">Formato data estesa</string>
+<string name="short_date_format">Formato data compatta</string>
 <string name="title_rows">Altezza massima del titolo</string>
 <string name="title_rows_1">1 riga</string>
 <string name="title_rows_2">2 righe</string>
@@ -204,8 +221,12 @@ Use few if language need it. In English is the same.
 <string name="hide_new">Nascondi pulsante Nuova</string>
 <string name="hide_header">Nascondi intestazione widget</string>
 <string name="hide_widgetbg">Sfondo trasparente</string>
+<string name="shortcut_help1">Se attivo, il collegamento creerà una nuova nota nell\'elenco selezionato e aprirà l\'editor. Se non attiva, il collegamento aprirà l\'elenco selezionato.</string>
 <string name="loading_widget">Caricamento widget&#8230;</string>
 <string name="default_list_set">Elenco predefinito impostato</string>
+
+<string name="please_type_before_reminder">Inserisci del testo prima di impostare un promemoria</string>
+<string name="select_a_time">Scegli un orario</string>
 
 <string name="notecopied_one">Copiata una nota</string>
 <string name="notecopied_other">Copiate %d note</string>
@@ -223,6 +244,7 @@ Use few if language need it. In English is the same.
 <string name="sync_full_force">La prossima volta sincronizza completamente</string>
 <string name="sync_full_force_info">Attivare solo se ritiene che la sincronizzazione non sia completa</string>
 
+<string name="snooze">Snooze</string>
 <string name="silent">Silenzioso</string>
 <string name="sound">Suono</string>
 <string name="vibrate">Vibrazione</string>
@@ -233,10 +255,21 @@ Use few if language need it. In English is the same.
 <string name="notification_prio_low">Bassa: nascosta, minimizzata</string>
 <string name="priority">Priorità</string>
 <string name="group_on_list">Raggruppa per elenco</string>
-<string name="group_on_list_summary">Più notifiche verranno raggruppate insieme se appartengono allo stesso elenco</string>
+<string name="group_on_list_summary">Più notifiche verranno raggruppate insieme se appartengono allo stesso elenco.</string>
 <string name="more">altro</string>
 <string name="notifications">Notifiche</string>
 <string name="dateformat_micro">d MMM</string>
+<string name="dateformat_short">E, d MMM</string>
+<string name="dateformat_long">EEEE, d MMMM</string>
+<string name="dateformat_weekday">EEEE</string>
+<string name="dateformat_short_1">E kk:mm, d MMM</string>
+<string name="dateformat_short_2">E h:mm a, d MMM</string>
+<string name="dateformat_short_3">E, d MMM</string>
+<string name="dateformat_short_4">MMM d</string>
+<string name="dateformat_short_5">E, kk:mm</string>
+<string name="dateformat_short_6">E, h:mm a</string>
+<string name="dateformat_long_1">EEEE kk:mm, d MMMM</string>
+<string name="dateformat_long_2">EEEE h:mm a, d MMMM</string>
 
 
 <string name="dashclock_tasks">Attività</string>
@@ -245,10 +278,10 @@ Use few if language need it. In English is the same.
 <string name="dashclock_overdue_tasks_show">Le attività scadute verranno mostrate</string>
 <string name="dashclock_overdue_tasks_hide">Le attività scadute verranno nascoste</string>
 
-<string name="dashclock_title_activity_tasks_settings">Impostazioni Note NoNonsente</string>
+<string name="dashclock_title_activity_tasks_settings">Impostazioni NoNonsense Notes</string>
 <string name="dashclock_pref_header_general">Generale</string>
 
-<string name="dashclock_due_upper_limit_title">Limita alle attività scadute al più tardi</string>
+<string name="dashclock_due_upper_limit_title">Limite per attività scadute al più tardi</string>
 <string name="dashclock_today">Oggi</string>
 <string name="dashclock_tomorrow">Domani</string>
 <string name="dashclock_next7">Prossimi 7 giorni</string>
@@ -263,5 +296,5 @@ Use few if language need it. In English is the same.
 
 <!-- Store text -->
 <string name="google_play_promo_80_char_limit">Un\'app dall\'aspetto accattivante per note, attività e todo sincronizzata con Google Tasks</string>
-<string name="google_play_description">Un\'app open source per appunti e to-do, con interfaccia per smartphone e tablet. Sincronizza con il tuo account Google per mantenere al sicuro nel cloud le tue note e attività, senza dover inserire alcuna password!\n\nFunzionalità\n* Notifiche/Promemoria\n* Selezione lingua\n* Interfaccia personalizzabile\n* Widget, ridimensionabile e configurabile\n* Ottimo supporto ai tablet, che riprende le funzionalità di Gmail\n* Temi Holo per essere uniforme ad Android\n* Sincronizzazione automatica con Google Tasks\n* Possibilità di impostare password per le note\n* Spostamento delle note tra elenchi differenti\n* Integrazione con Adroid Agenda Widget\n* Ricerca in tutte le note (non solo nei titoli)\n* Regolazione del carattere e della dimensione del testo!\n\nAnnotazioni:\nÈ presente un bug in Android 4.2 che si manifesta in tutte le app che fanno uso delle notifiche. Se si impostano le notifiche per NON vibrare (predefinito) e poi si imposta il telefono in silenzioso (solo vibrazione), le notifiche vibreranno sempre anche se si è esplicitamente disattivato tale comportamento.\nDi nuovo, è un errore in Androidi, non un bug nell\'applicazione.\n\nÈ possibile aiutare a tradurre questa applicazione, presso  http://translate.nononsenseapps.com\n\nPer ogni problema o per segnalare un bug, non esitate a contattarmi!\n+NoNonsenseApps\noppure\nsegnalate i bug nel tracker dedicato presso https://github.com/spacecowboy/NotePad/issues\n\nQuesta app è open source ed è disponibile online presso https://github.com/spacecowboy/NotePad\n\nÈ disponibile una versione a pagamento dell\'app per coloro che volessero supportarmi nello sviluppo: https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
+<string name="google_play_description">Un\'app open source per appunti e to-do, con interfaccia per smartphone e tablet. Sincronizzala con il tuo account Google per mantenere al sicuro nel cloud le tue note e attività, senza dover inserire alcuna password!\n\nFunzionalità\n* Notifiche/Promemoria\n* Selezione lingua\n* Interfaccia personalizzabile\n* Widget, ridimensionabile e configurabile\n* Ottimo supporto ai tablet, che riprende le funzionalità di Gmail\n* Temi Holo per essere uniforme ad Android\n* Sincronizzazione automatica con Google Tasks\n* Possibilità di impostare password per le note\n* Spostamento delle note tra elenchi differenti\n* Integrazione con Adroid Agenda Widget\n* Ricerca in tutte le note (non solo nei titoli)\n* Regolazione del carattere e della dimensione del testo!\n\nAnnotazioni:\nÈ presente un bug in Android 4.2 che si manifesta in tutte le app che fanno uso delle notifiche. Se si impostano le notifiche per NON vibrare (predefinito) e poi si imposta il telefono in silenzioso (solo vibrazione), le notifiche vibreranno sempre anche se si è esplicitamente disattivato tale comportamento.\nDi nuovo, è un errore in Android, non un bug nell\'applicazione.\n\nÈ possibile aiutare a tradurre questa applicazione, presso  http://translate.nononsenseapps.com\n\nPer ogni problema o per segnalare un bug, non esitate a contattarmi!\n+NoNonsenseApps\noppure\nsegnalate i bug nel tracker dedicato presso https://github.com/spacecowboy/NotePad/issues\n\nQuesta app è open source ed è disponibile online presso https://github.com/spacecowboy/NotePad\n\nÈ disponibile una versione a pagamento dell\'app per coloro che volessero supportarmi nello sviluppo: https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>
