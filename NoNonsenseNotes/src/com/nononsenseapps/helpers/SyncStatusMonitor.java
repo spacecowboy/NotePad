@@ -51,6 +51,13 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 			catch (Exception e) {
 			}
 		}
+		else {
+			try {
+				((OnSyncStartStopListener) activity).onSyncStartStop(false);
+			}
+			catch (Exception e) {
+			}
+		}
 	}
 
 	/**
@@ -58,6 +65,11 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 	 */
 	public void stopMonitoring() {
 		activity.unregisterReceiver(this);
+		try {
+			((OnSyncStartStopListener) activity).onSyncStartStop(false);
+		}
+		catch (Exception e) {
+		}
 	}
 
 	@Override
