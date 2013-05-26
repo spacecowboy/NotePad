@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.util.GeofenceRemover;
@@ -395,10 +396,23 @@ public class NotificationHelper extends BroadcastReceiver {
 		PendingIntent deleteIntent = PendingIntent.getBroadcast(context, 0,
 				delIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
+		// Open intent
+		final Intent openIntent = new Intent(Intent.ACTION_VIEW, Task.getUri(note.taskID));
+		
+		// Delete intent on non-location repeats
+		if (!note.isLocationRepeat()) {
+			// repeating location reminders should not have a delete intent, the
+			// rest do
+			// Opening the note should delete/reschedule the notification
+			openIntent.putExtra(ActivityMain.NOTIFICATION_DELETE_ARG, note._id);
+		}
+		// Opening always cancels the notification though
+		openIntent.putExtra(ActivityMain.NOTIFICATION_CANCEL_ARG, note._id);
+		
 		// Open note on click
-		PendingIntent clickIntent = PendingIntent.getActivity(context, 0,
-				new Intent(Intent.ACTION_VIEW, Task.getUri(note.taskID)),
-				PendingIntent.FLAG_UPDATE_CURRENT);
+				PendingIntent clickIntent = PendingIntent.getActivity(context, 0,
+						openIntent,
+						PendingIntent.FLAG_UPDATE_CURRENT);
 
 		// Action to complete
 		PendingIntent completeIntent = PendingIntent.getBroadcast(context, 0,
@@ -423,6 +437,7 @@ public class NotificationHelper extends BroadcastReceiver {
 			// repeating location reminders should not have a delete intent, the
 			// rest do
 			builder.setDeleteIntent(deleteIntent);
+			
 		}
 
 		// Snooze button only on time non-repeating
@@ -604,7 +619,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	/**
 	 * Does not touch db
 	 */
-	static void cancelNotification(final Context context, final Uri uri) {
+	public static void cancelNotification(final Context context, final Uri uri) {
 		if (uri != null)
 			cancelNotification(context, Integer.parseInt(uri.getLastPathSegment()));
 	}
@@ -612,7 +627,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	/**
 	 * Does not touch db
 	 */
-	static void cancelNotification(final Context context, final int notId) {
+	public static void cancelNotification(final Context context, final int notId) {
 		final NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		notificationManager.cancel(notId);

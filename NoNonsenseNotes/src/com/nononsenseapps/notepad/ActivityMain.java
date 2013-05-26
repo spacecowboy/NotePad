@@ -22,6 +22,7 @@ import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
+import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
@@ -93,6 +94,10 @@ public class ActivityMain extends FragmentActivity implements
 	public static interface ListOpener {
 		public void openList(final long id);
 	}
+
+	// Intent notification argument
+	public static final String NOTIFICATION_CANCEL_ARG = "notification_cancel_arg";
+	public static final String NOTIFICATION_DELETE_ARG = "notification_delete_arg";
 
 	// In-app donate identifier
 	static final String SKU_DONATE = "donate_inapp";
@@ -255,7 +260,8 @@ public class ActivityMain extends FragmentActivity implements
 		}
 	}
 
-	@SuppressLint("ValidFragment") @UiThread
+	@SuppressLint("ValidFragment")
+	@UiThread
 	void migrateDonateUser() {
 		// migrate user
 		if (!DonateMigrator.hasImported(this)) {
@@ -514,6 +520,9 @@ public class ActivityMain extends FragmentActivity implements
 	protected void loadContent() {
 		loadLeftDrawer();
 		final Intent intent = getIntent();
+		// Clear notification if present
+		clearNotification(intent);
+		// Load stuff
 		final FragmentTransaction transaction = getSupportFragmentManager()
 				.beginTransaction();
 		if (reverseAnimation) {
@@ -653,6 +662,20 @@ public class ActivityMain extends FragmentActivity implements
 		transaction.commit();
 		// Next go, always add
 		shouldAddToBackStack = true;
+	}
+
+	private void clearNotification(final Intent intent) {
+		if (intent != null
+				&& intent.getLongExtra(NOTIFICATION_DELETE_ARG, -1) > 0) {
+			Notification.deleteOrReschedule(this, Notification.getUri(intent
+					.getLongExtra(NOTIFICATION_DELETE_ARG, -1)));
+		}
+		if (intent != null
+				&& intent.getLongExtra(NOTIFICATION_CANCEL_ARG, -1) > 0) {
+			NotificationHelper.cancelNotification(this,
+					(int) intent.getLongExtra(NOTIFICATION_CANCEL_ARG, -1));
+		}
+
 	}
 
 	private void simulateBack() {
