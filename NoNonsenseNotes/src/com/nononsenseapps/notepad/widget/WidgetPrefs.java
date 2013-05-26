@@ -68,7 +68,12 @@ public class WidgetPrefs {
 
 	public boolean getBoolean(String key, boolean defValue) {
 		if (prefs != null) {
-			return prefs.getBoolean(keyWrap(key), defValue);
+			try {
+				return prefs.getBoolean(keyWrap(key), defValue);
+			}
+			catch (ClassCastException e) {
+				// Return default value
+			}
 		}
 		return false;
 	}
@@ -86,18 +91,28 @@ public class WidgetPrefs {
 
 	public String getString(String key, String defValue) {
 		if (prefs != null) {
-			return prefs.getString(keyWrap(key), defValue);
+			try {
+				return prefs.getString(keyWrap(key), defValue);
+			}
+			catch (ClassCastException e) {
+				// Return default value
+			}
 		}
 		return defValue;
 	}
 
 	public int getInt(String key, int defValue) {
 		if (prefs != null) {
-			return prefs.getInt(keyWrap(key), defValue);
+			try {
+				return prefs.getInt(keyWrap(key), defValue);
+			}
+			catch (ClassCastException e) {
+				// Return default value
+			}
 		}
 		return defValue;
 	}
-	
+
 	public boolean putInt(String key, int value) {
 		if (prefs != null && prefsEditor == null) {
 			prefsEditor = prefs.edit();
@@ -119,10 +134,15 @@ public class WidgetPrefs {
 		}
 		return false;
 	}
-	
+
 	public long getLong(String key, long defValue) {
 		if (prefs != null) {
-			return prefs.getLong(keyWrap(key), defValue);
+			try {
+				return prefs.getLong(keyWrap(key), defValue);
+			}
+			catch (ClassCastException e) {
+				// Return default value
+			}
 		}
 		return defValue;
 	}
