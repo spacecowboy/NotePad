@@ -13,6 +13,7 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
+import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 
 import com.nononsenseapps.utils.ViewsHelper;
@@ -171,6 +172,15 @@ public class TaskListViewPagerFragment extends Fragment implements
 			// widget; expand it by default
 			searchView.setQueryRefinementEnabled(true);
 			searchView.setSubmitButtonEnabled(false);
+		}
+	}
+	
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		if (getActivity() instanceof MenuStateController) {
+			final boolean visible = ((MenuStateController) getActivity()).childItemsVisible();
+			
+			menu.setGroupVisible(R.id.viewpager_menu_group, visible);
 		}
 	}
 

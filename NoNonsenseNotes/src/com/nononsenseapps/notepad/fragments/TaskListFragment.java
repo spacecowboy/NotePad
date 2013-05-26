@@ -23,6 +23,7 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
+import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
@@ -88,6 +89,8 @@ public class TaskListFragment extends Fragment implements
 	private String mListType = null;
 
 	private LoaderCallbacks<Cursor> mCallback = null;
+
+	private ActionMode mMode;
 
 	public static TaskListFragment_ getInstance(final long listId) {
 		TaskListFragment_ f = new TaskListFragment_();
@@ -427,7 +430,7 @@ public class TaskListFragment extends Fragment implements
 		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 			final HashMap<Long, Task> tasks = new HashMap<Long, Task>();
 			ShareActionProvider mShareProvider;
-			ActionMode mMode;
+			//ActionMode mMode;
 			final PasswordConfirmedListener pListener = new PasswordConfirmedListener() {
 				@Override
 				@Background
@@ -612,6 +615,18 @@ public class TaskListFragment extends Fragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasklist, menu);
+	}
+	
+	@Override
+	public void onPrepareOptionsMenu(Menu menu) {
+		if (getActivity() instanceof MenuStateController) {
+			final boolean visible = ((MenuStateController) getActivity()).childItemsVisible();
+			
+			menu.setGroupVisible(R.id.list_menu_group, visible);
+			if (!visible) {
+				if (mMode != null) mMode.finish();
+			}
+		}
 	}
 
 	@Override

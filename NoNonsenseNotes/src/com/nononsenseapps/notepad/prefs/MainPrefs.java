@@ -29,7 +29,7 @@ import android.preference.PreferenceFragment;
 
 public class MainPrefs extends PreferenceFragment {
 	public static final String KEY_THEME = "key_current_theme";
-	public static final String KEY_WEEK_START_DAY = "preferences_week_start_day";
+	//public static final String KEY_WEEK_START_DAY = "preferences_week_start_day";
 
 	public static final String SANS = "Sans";
 	public static final String SERIF = "Serif";
@@ -65,8 +65,8 @@ public class MainPrefs extends PreferenceFragment {
 		PrefsActivity.bindPreferenceSummaryToValue(findPreference(KEY_THEME));
 		// PrefsActivity
 		// .bindPreferenceSummaryToValue(findPreference(KEY_FONT_TYPE_EDITOR));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(KEY_WEEK_START_DAY));
+//		PrefsActivity
+//				.bindPreferenceSummaryToValue(findPreference(KEY_WEEK_START_DAY));
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_locale)));
 

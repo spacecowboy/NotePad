@@ -63,13 +63,14 @@ public class DialogCalendar extends DialogFragment {
 		final Calendar future = Calendar.getInstance();
 	    future.add(Calendar.YEAR, 1);
 	    final Calendar selected = Calendar.getInstance();
-		if (getArguments().getLong(SELECTED_DATE, -1) > 0) {
+	    // Must be greater/equal to today
+		if (getArguments().getLong(SELECTED_DATE, -1) >= selected.getTimeInMillis()) {
 			// set date
 			selected.setTimeInMillis(getArguments().getLong(SELECTED_DATE, -1));
 		}
 		else {
 		    // Default to tomorrow
-		    selected.add(Calendar.DAY_OF_YEAR, 1);
+		    //selected.add(Calendar.DAY_OF_YEAR, 1);
 		}
 
 		calendarView.init(Calendar.getInstance().getTime(), future.getTime())

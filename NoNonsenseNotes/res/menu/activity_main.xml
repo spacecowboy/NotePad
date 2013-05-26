@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+    <group android:id="@+id/activity_menu_group">
     <item
         android:id="@+id/menu_add"
         android:icon="?content_new"
         android:orderInCategory="0"
         android:showAsAction="ifRoom"
         android:title="@string/menu_save_and_add"/>
+    </group>
     <item
         android:id="@+id/menu_preferences"
         android:icon="?action_settings"

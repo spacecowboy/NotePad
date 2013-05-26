@@ -29,6 +29,7 @@ import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
+import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.legacy.DonateMigrator;
 import com.nononsenseapps.notepad.legacy.DonateMigrator_;
@@ -85,7 +86,7 @@ import android.widget.Toast;
 
 @EActivity(R.layout.activity_main)
 public class ActivityMain extends FragmentActivity implements
-		OnFragmentInteractionListener, OnSyncStartStopListener {
+		OnFragmentInteractionListener, OnSyncStartStopListener, MenuStateController {
 
 	public static interface ListOpener {
 		public void openList(final long id);
@@ -138,6 +139,8 @@ public class ActivityMain extends FragmentActivity implements
 	// Changes depending on what we're showing since the started activity can
 	// receive new intents
 	boolean showingEditor = false;
+	
+	boolean isDrawerClosed = true;
 
 	SyncStatusMonitor syncStatusReceiver = null;
 	// Only not if opening note directly
@@ -401,6 +404,7 @@ public class ActivityMain extends FragmentActivity implements
 				public void onDrawerClosed(View view) {
 					getActionBar().setTitle(R.string.app_name);
 					// TODO show items
+					isDrawerClosed = true;
 					invalidateOptionsMenu(); // creates call to
 												// onPrepareOptionsMenu()
 				}
@@ -409,6 +413,7 @@ public class ActivityMain extends FragmentActivity implements
 				public void onDrawerOpened(View drawerView) {
 					getActionBar().setTitle(R.string.show_from_all_lists);
 					// TODO hide items
+					isDrawerClosed = false;
 					invalidateOptionsMenu(); // creates call to
 												// onPrepareOptionsMenu()
 				}
@@ -701,6 +706,7 @@ public class ActivityMain extends FragmentActivity implements
 		if (donateItem != null) {
 			donateItem.setVisible(!mIsDonate);
 		}
+		menu.setGroupVisible(R.id.activity_menu_group, isDrawerClosed);
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -787,8 +793,8 @@ public class ActivityMain extends FragmentActivity implements
 
 	void updateUiDonate() {
 		if (mIsDonate) {
-			Toast.makeText(this, R.string.donate_thanks, Toast.LENGTH_SHORT)
-					.show();
+//			Toast.makeText(this, R.string.donate_thanks, Toast.LENGTH_SHORT)
+//					.show();
 		}
 		else {
 			// Toast.makeText(this, "No premium for you!", Toast.LENGTH_SHORT)
@@ -1067,5 +1073,11 @@ public class ActivityMain extends FragmentActivity implements
 			overridePendingTransition(R.anim.activity_slide_in_right,
 					R.anim.activity_slide_out_right_full);
 		}
+	}
+
+	@Override
+	public boolean childItemsVisible() {
+		// TODO Auto-generated method stub
+		return isDrawerClosed;
 	}
 }

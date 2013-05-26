@@ -1460,9 +1460,9 @@ public class NotesEditorFragment extends Fragment implements TextWatcher,
 			ft.addToBackStack(null);
 
 			// Create and show the dialog.
-			DatePickerDialogFragment newFragment = new DatePickerDialogFragment();
-			newFragment.setCallback(this);
-			newFragment.show(ft, "dialog");
+//			DatePickerDialogFragment newFragment = new DatePickerDialogFragment();
+//			newFragment.setCallback(this);
+//			newFragment.show(ft, "dialog");
 			break;
 		}
 	}

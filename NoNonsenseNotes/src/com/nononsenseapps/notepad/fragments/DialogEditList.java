@@ -285,7 +285,7 @@ public class DialogEditList extends DialogFragment {
 
 	void selectListTypeKey() {
 		if (modeSpinner != null && mTaskList != null) {
-			if (mTaskList.sorting == null) {
+			if (mTaskList.listtype == null) {
 				modeSpinner.setSelection(0);
 			}
 			else if (mTaskList.listtype

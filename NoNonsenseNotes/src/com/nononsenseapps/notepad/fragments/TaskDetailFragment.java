@@ -25,6 +25,7 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogCalendar.DateSetListener;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
+import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.WeekDaysView;
@@ -517,7 +518,7 @@ public class TaskDetailFragment extends Fragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasks_detail, menu);
-
+		
 		// Locate MenuItem with ShareActionProvider
 		MenuItem item = menu.findItem(R.id.menu_share);
 
@@ -629,6 +630,12 @@ public class TaskDetailFragment extends Fragment implements
 		menu.findItem(R.id.menu_unlock).setVisible(
 				mTask != null && mTask.locked);
 		menu.findItem(R.id.menu_share).setEnabled(!isLocked());
+		
+		if (getActivity() instanceof MenuStateController) {
+			final boolean visible = ((MenuStateController) getActivity()).childItemsVisible();
+			
+			menu.setGroupVisible(R.id.editor_menu_group, visible);
+		}
 	}
 
 	@OnActivityResult(1)

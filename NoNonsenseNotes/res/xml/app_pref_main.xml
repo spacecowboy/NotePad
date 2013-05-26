@@ -18,6 +18,7 @@
     xmlns:robobunny="http://robobunny.com"
     android:key="preference_screen" >
 
+    <!-- Should be disabled by default as a premium feature -->
     <ListPreference
         android:defaultValue="light_ab"
         android:dialogTitle="@string/settings_theme_dialog"
@@ -32,13 +33,14 @@
         android:key="@string/pref_locale"
         android:summary="Selected option should be here"
         android:title="@string/settings_lang" />
-    <ListPreference
+    <!-- Cant set first day of week on Square's calendar, so remove option -->
+    <!-- <ListPreference
         android:defaultValue="@string/preferences_week_start_day_default"
         android:dialogTitle="@string/preferences_week_start_day_dialog"
         android:entries="@array/preferences_week_start_day_labels"
         android:entryValues="@array/preferences_week_start_day_values"
         android:key="preferences_week_start_day"
-        android:title="@string/preferences_week_start_day_title" />
+        android:title="@string/preferences_week_start_day_title" /> -->
     <ListPreference
         android:title="@string/long_date_format"
         android:key="@string/key_pref_dateformat_long" />
