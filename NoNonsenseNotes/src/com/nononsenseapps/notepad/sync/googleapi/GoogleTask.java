@@ -23,7 +23,7 @@ import java.util.HashMap;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.nononsenseapps.notepad.NotePad;
+import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.RemoteTask;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.util.BiMap;

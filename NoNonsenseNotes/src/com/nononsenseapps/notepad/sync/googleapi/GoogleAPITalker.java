@@ -48,7 +48,6 @@ import android.accounts.AccountManager;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import com.nononsenseapps.helpers.Log;
-import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
 import android.net.http.AndroidHttpClient; // Supports GZIP, apache's doesn't

@@ -24,7 +24,6 @@ import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.util.BiMap;

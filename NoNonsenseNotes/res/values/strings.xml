@@ -27,11 +27,11 @@
     <string name="distance">Distance</string>
     <string name="need_location_help">Long press to set a location</string>
     <string name="near_location">Near</string>
-    <string name="menu_add">New note</string>
-    <string name="menu_save_and_add">Save and open a new note</string>
+    <string name="menu_add">Add note</string>
+    <string name="menu_save_and_add">Save and add note</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_revert">Revert changes</string>
-    <string name="menu_copy">Copy note</string>
+    <string name="menu_copy">Copy</string>
     <string name="menu_cancel">Cancel</string>
     <string name="menu_setcompleted">Set done</string>
     <string name="menu_setuncompleted">Set not done</string>

@@ -1,7 +1,6 @@
 package com.nononsenseapps.notepad.database;
 
 import com.nononsenseapps.helpers.UpdateNotifier;
-import com.nononsenseapps.notepad.MainActivity;
 
 import android.app.SearchManager;
 import android.content.ContentProvider;

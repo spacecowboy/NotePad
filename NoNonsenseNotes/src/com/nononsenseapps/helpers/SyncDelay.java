@@ -2,7 +2,6 @@ package com.nononsenseapps.helpers;
 
 import java.util.Calendar;
 
-import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 
 import android.accounts.Account;

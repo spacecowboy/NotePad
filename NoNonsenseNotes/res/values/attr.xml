@@ -54,6 +54,7 @@
 	<attr name="body_remove" format="reference" />
 	<attr name="body_delete" format="reference" />
 	<attr name="ic_action_add_list" format="reference" />
+	<attr name="ic_action_list" format="reference" />
 	
 	<!-- <attr name="task_list_divider_height" format="reference"/> -->
 	

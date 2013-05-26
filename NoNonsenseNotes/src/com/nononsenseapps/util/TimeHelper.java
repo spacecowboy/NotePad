@@ -2,7 +2,6 @@ package com.nononsenseapps.util;
 
 import android.text.format.Time;
 import com.nononsenseapps.helpers.Log;
-import com.nononsenseapps.notepad.MainActivity;
 
 /**
  * Has a few helper functions for dealing with dates. Google Tasks API is crap
@@ -24,8 +23,7 @@ public class TimeHelper {
 		time.setToNow();
 		int julianToday = Time.getJulianDay(time.toMillis(false), time.gmtoff);
 		time.setJulianDay(julianToday + 1);
-		Log.d(MainActivity.TAG,
-				"TimeHelper: tomorrow starts: " + time.format(dateFormat));
+		
 		return time.format(dateFormat);
 	}
 
@@ -37,8 +35,7 @@ public class TimeHelper {
 		time.setToNow();
 		int julianToday = Time.getJulianDay(time.toMillis(false), time.gmtoff);
 		time.setJulianDay(julianToday + 8);
-		Log.d(MainActivity.TAG,
-				"TimeHelper: eigth day starts: " + time.format(dateFormat));
+		
 		return time.format(dateFormat);
 	}
 
@@ -48,8 +45,7 @@ public class TimeHelper {
 	public static String dateToday() {
 		Time time = new Time(Time.getCurrentTimezone());
 		time.setToNow();
-		Log.d(MainActivity.TAG,
-				"TimeHelper: today starts: " + time.format(dateFormat));
+		
 		return time.format(dateFormat);
 	}
 
@@ -62,8 +58,7 @@ public class TimeHelper {
 		time.hour = 0;
 		time.minute = 0;
 		time.second = 0;
-		Log.d(MainActivity.TAG,
-				"TimeHelper: today starts: " + time.toMillis(false));
+		
 		return Long.toString(time.toMillis(false));
 	}
 
@@ -76,8 +71,7 @@ public class TimeHelper {
 		time.hour = 0;
 		time.minute = 0;
 		time.second = 0;
-		Log.d(MainActivity.TAG,
-				"TimeHelper: today starts: " + time.toMillis(false));
+		
 		return time.toMillis(false);
 	}
 
@@ -92,8 +86,7 @@ public class TimeHelper {
 		time.hour = 0;
 		time.minute = 0;
 		time.second = 0;
-		Log.d(MainActivity.TAG,
-				"TimeHelper: yesterday starts: " + time.toMillis(false));
+		
 		return Long.toString(time.toMillis(false));
 	}
 
@@ -108,8 +101,7 @@ public class TimeHelper {
 		time.hour = 0;
 		time.minute = 0;
 		time.second = 0;
-		Log.d(MainActivity.TAG,
-				"TimeHelper: yesterday starts: " + time.toMillis(false));
+		
 		return time.toMillis(false);
 	}
 
@@ -124,8 +116,7 @@ public class TimeHelper {
 		time.hour = 0;
 		time.minute = 0;
 		time.second = 0;
-		Log.d(MainActivity.TAG,
-				"TimeHelper: 7 days ago starts: " + time.toMillis(false));
+		
 		return Long.toString(time.toMillis(false));
 	}
 
@@ -140,8 +131,7 @@ public class TimeHelper {
 		time.hour = 0;
 		time.minute = 0;
 		time.second = 0;
-		Log.d(MainActivity.TAG,
-				"TimeHelper: 7 days ago starts: " + time.toMillis(false));
+		
 		return time.toMillis(false);
 	}
 
@@ -189,9 +179,6 @@ public class TimeHelper {
 		Time ctime = new Time();
 		ctime.parse3339(compareString);
 
-		Log.d(MainActivity.TAG, "TimeHelper: dateBefore: " + dbstring + " < "
-				+ compareString + " == " + time.before(ctime));
-
 		return time.before(ctime);
 	}
 
@@ -218,15 +205,6 @@ public class TimeHelper {
 
 		Time ctime = new Time();
 		ctime.parse3339(compareString);
-
-		Log.d(MainActivity.TAG,
-				"TimeHelper: dateIs: "
-						+ dbstring
-						+ " = "
-						+ compareString
-						+ " == "
-						+ ((time.year == ctime.year)
-								&& (time.month == ctime.month) && (time.monthDay == ctime.monthDay)));
 
 		return (time.year == ctime.year) && (time.month == ctime.month)
 				&& (time.monthDay == ctime.monthDay);

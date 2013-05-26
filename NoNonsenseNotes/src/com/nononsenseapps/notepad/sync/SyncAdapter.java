@@ -19,7 +19,6 @@ package com.nononsenseapps.notepad.sync;
 import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
-import com.nononsenseapps.notepad.MainActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker.PreconditionException;
@@ -79,8 +78,6 @@ import java.util.HashMap;
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
-	private static final String TAG = MainActivity.TAG + ".SyncAdapter";
-
 	// public static final String AUTH_TOKEN_TYPE =
 	// "oauth2:https://www.googleapis.com/auth/tasks";
 
@@ -132,7 +129,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						&& account.name.equals(settings.getString(
 								SyncPrefs.KEY_ACCOUNT, ""))) {
 
-					Log.d(TAG, "onPerformSync");
+					Log.d("nononsenseapps notes sync", "onPerformSync");
 					mContext.sendBroadcast(new Intent(SYNC_STARTED));
 
 					if (GoogleTaskSync.fullSync(mContext,

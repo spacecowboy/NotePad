@@ -11,7 +11,6 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import com.nononsenseapps.helpers.Log;
-import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
 /**

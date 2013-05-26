@@ -1,7 +1,9 @@
 package com.nononsenseapps.helpers;
 
-import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.Notification;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 import com.nononsenseapps.notepad.widget.WidgetPrefs;
 
@@ -22,7 +24,7 @@ public class UpdateNotifier {
 	 * Will update all notes and specific uri if present
 	 */
 	public static void notifyChangeNote(Context context) {
-		notifyChange(context, NotePad.Notes.CONTENT_VISIBLE_URI);
+		notifyChange(context, Task.URI);
 		updateWidgets(context);
 	}
 
@@ -44,7 +46,7 @@ public class UpdateNotifier {
 	 *            optional uri
 	 */
 	public static void notifyChangeList(Context context) {
-		notifyChange(context, NotePad.Lists.CONTENT_VISIBLE_URI);
+		notifyChange(context, TaskList.URI);
 		updateWidgets(context);
 	}
 
@@ -70,7 +72,7 @@ public class UpdateNotifier {
 		if (uri != null) {
 			context.getContentResolver().notifyChange(uri, null, false);
 			SyncHelper.requestSyncIf(context, SyncHelper.ONCHANGE);
-			context.getContentResolver().notifyChange(NotePad.Notifications.CONTENT_URI, null);
+			context.getContentResolver().notifyChange(Notification.URI, null);
 		}
 	}
 

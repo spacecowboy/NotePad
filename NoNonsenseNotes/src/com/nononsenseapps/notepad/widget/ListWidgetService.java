@@ -21,8 +21,6 @@ import java.util.Date;
 
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.MainActivity;
-import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.NotePadBroadcastReceiver;
 import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 import com.nononsenseapps.notepad.R;

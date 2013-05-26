@@ -2,7 +2,6 @@ package com.nononsenseapps.helpers;
 
 import java.util.Calendar;
 
-import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
@@ -76,14 +75,14 @@ public class SyncHelper {
 			Account account = SyncPrefs.getAccount(AccountManager.get(context),
 					accountName);
 			// Don't start a new sync if one is already going
-			if (!ContentResolver.isSyncActive(account, NotePad.AUTHORITY)) {
+			if (!ContentResolver.isSyncActive(account, MyContentProvider.AUTHORITY)) {
 				Bundle options = new Bundle();
 				// This will force a sync regardless of what the setting is
 				// in accounts manager. Only use it here where the user has
 				// manually desired a sync to happen NOW.
 				options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
 				ContentResolver
-						.requestSync(account, NotePad.AUTHORITY, options);
+						.requestSync(account, MyContentProvider.AUTHORITY, options);
 				// Set last sync time to now
 				prefs.edit()
 						.putLong(SyncPrefs.KEY_LAST_SYNC,

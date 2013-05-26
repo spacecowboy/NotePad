@@ -18,7 +18,6 @@ import android.view.MenuItem;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
 
