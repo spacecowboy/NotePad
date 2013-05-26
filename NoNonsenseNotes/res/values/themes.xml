@@ -138,7 +138,7 @@
         <item name="CalendarTitle">@style/CalendarTitleLight</item>
         <item name="CalendarCell.DayHeader">@style/CalendarCell.DayHeaderLight</item>
         <item name="CalendarCell.CalendarDate">@style/CalendarCell.CalendarDateLight</item>
-    	<item name="CalendarPickerBackground">@android:color/white</item>
+    	<item name="CalendarPickerBackground">#fff3f3f3</item>
     </style>
 
     <style name="ThemeHoloLightClassic" parent="@style/ThemeHoloLightDarkActonBar">

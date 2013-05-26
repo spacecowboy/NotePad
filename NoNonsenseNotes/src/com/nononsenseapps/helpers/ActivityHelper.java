@@ -42,7 +42,7 @@ public class ActivityHelper {
 				"");
 		if (!config.locale.toString().equals(lang)) {
 			Locale locale;
-			if ("".equals(lang))
+			if (lang == null || lang.isEmpty())
 				locale = Locale.getDefault();
 			else if (lang.length() == 5) {
 				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
@@ -58,26 +58,20 @@ public class ActivityHelper {
 	}
 
 	public static Locale getUserLocale(Context activity) {
-		Configuration config = activity.getResources().getConfiguration();
-
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(activity);
 		String lang = prefs.getString(activity.getString(R.string.pref_locale),
 				"");
 		final Locale locale;
-		if (!config.locale.toString().equals(lang)) {
-			if ("".equals(lang))
-				locale = Locale.getDefault();
-			else if (lang.length() == 5) {
-				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
-			}
-			else {
-				locale = new Locale(lang.substring(0, 2));
-			}
+		if (lang == null || lang.isEmpty())
+			locale = Locale.getDefault();
+		else if (lang.length() == 5) {
+			locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
 		}
 		else {
-			locale = Locale.getDefault();
+			locale = new Locale(lang.substring(0, 2));
 		}
+
 		return locale;
 	}
 }

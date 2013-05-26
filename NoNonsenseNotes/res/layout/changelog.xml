@@ -60,7 +60,7 @@
             android:layout_height="wrap_content"
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
-            android:text="\nFound cause of crash when doing delete completed, among others\nMove task to list - now available in list select menu\nThemed Left Drawer List\nModified sync code, hoping it fixes the problems\nFix that should correct crash on clear completed"/>
+            android:text="\nFixed force-close on boot\nDate pickers replaced by calendar views\nFound cause of crash when doing delete completed, among others\nMove task to list - now available in list select menu\nThemed Left Drawer List\nModified sync code, hoping it fixes the problems\nFix that should correct crash on clear completed"/>
         
         
         <TextView

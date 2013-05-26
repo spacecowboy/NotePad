@@ -308,7 +308,13 @@ public class TaskDetailFragment extends Fragment implements
 	@Click(R.id.dueDateBox)
 	void onDateClick() {
 		final Calendar localTime = Calendar.getInstance();
-		final DialogCalendar datePicker = DialogCalendar.getInstance();
+		final DialogCalendar datePicker;
+		if (mTask != null && mTask.due != null) {
+			datePicker = DialogCalendar.getInstance(mTask.due);
+		}
+		else {
+			datePicker = DialogCalendar.getInstance();
+		}
 		datePicker.setListener(this);
 		datePicker.show(getFragmentManager(), "date");
 	}

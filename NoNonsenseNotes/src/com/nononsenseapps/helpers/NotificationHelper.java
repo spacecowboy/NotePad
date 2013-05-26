@@ -30,7 +30,7 @@ public class NotificationHelper extends BroadcastReceiver {
 
 	public static final int NOTIFICATION_ID = 4364;
 
-	//static final String ARG_MAX_TIME = "maxtime";
+	// static final String ARG_MAX_TIME = "maxtime";
 	// static final String ARG_LISTID = "listid";
 	static final String ARG_TASKID = "taskid";
 	private static final String ACTION_COMPLETE = "com.nononsenseapps.notepad.ACTION.COMPLETE";
@@ -57,48 +57,38 @@ public class NotificationHelper extends BroadcastReceiver {
 	 */
 	@Override
 	public void onReceive(Context context, Intent intent) {
-		// Always cancel
-		cancelNotification(context, intent.getData());
-//		if (intent.hasExtra(ARG_TASKID)) {
-//			cancelNotification(context,
-//					(int) intent.getLongExtra(ARG_TASKID, -1));
-//		}
-//		else {
-//			// Hmm, shouldnt happen, but try with the URI
-//			cancelNotification(context, intent.getData());
-//		}
-		
-		if (Intent.ACTION_DELETE.equals(intent.getAction())
-				|| ACTION_RESCHEDULE.equals(intent.getAction())) {
-//			if (intent.hasExtra(ARG_MAX_TIME)) {
-//				com.nononsenseapps.notepad.database.Notification
-//						.removeWithMaxTimeAndTaskIds(context,
-//								intent.getLongExtra(ARG_MAX_TIME, 0),
-//								true,
-//								intent.getLongExtra(ARG_TASKID, -1));
-//
-//			}
-//			else {
+		if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())
+				|| Intent.ACTION_RUN.equals(intent.getAction())) {
+			// Can't cancel anything. Just schedule and notify at end
+		}
+		else {
+			// Always cancel
+			cancelNotification(context, intent.getData());
+
+			if (Intent.ACTION_DELETE.equals(intent.getAction())
+					|| ACTION_RESCHEDULE.equals(intent.getAction())) {
 				// Just a notification
 				com.nononsenseapps.notepad.database.Notification
 						.deleteOrReschedule(context, intent.getData());
-			//}
-		}
-		else if (ACTION_SNOOZE.equals(intent.getAction())) {
-			// msec/sec * sec/min * 30
-			long delay30min = 1000 * 60 * 30;
-			final Calendar now = Calendar.getInstance();
+			}
+			else if (ACTION_SNOOZE.equals(intent.getAction())) {
+				// msec/sec * sec/min * 30
+				long delay30min = 1000 * 60 * 30;
+				final Calendar now = Calendar.getInstance();
 
-			com.nononsenseapps.notepad.database.Notification.setTime(context,
-					intent.getData(), delay30min + now.getTimeInMillis());
-		}
-		else if (ACTION_COMPLETE.equals(intent.getAction())) {
-			// Delete notifications with the same task id
-			com.nononsenseapps.notepad.database.Notification
-					.removeWithTaskIds(context, intent.getLongExtra(ARG_TASKID, -1));
-			// Also complete note
-			Task.setCompleted(context, true,
-					intent.getLongExtra(ARG_TASKID, -1));
+				com.nononsenseapps.notepad.database.Notification.setTime(
+						context, intent.getData(),
+						delay30min + now.getTimeInMillis());
+			}
+			else if (ACTION_COMPLETE.equals(intent.getAction())) {
+				// Delete notifications with the same task id
+				com.nononsenseapps.notepad.database.Notification
+						.removeWithTaskIds(context,
+								intent.getLongExtra(ARG_TASKID, -1));
+				// Also complete note
+				Task.setCompleted(context, true,
+						intent.getLongExtra(ARG_TASKID, -1));
+			}
 		}
 
 		notifyPast(context, true);
@@ -397,9 +387,9 @@ public class NotificationHelper extends BroadcastReceiver {
 			delIntent.setAction(ACTION_RESCHEDULE);
 		}
 		// Add extra so we don't delete all
-//		if (note.time != null) {
-//			delIntent.putExtra(ARG_MAX_TIME, note.time);
-//		}
+		// if (note.time != null) {
+		// delIntent.putExtra(ARG_MAX_TIME, note.time);
+		// }
 		delIntent.putExtra(ARG_TASKID, note.taskID);
 		// Delete it on clear
 		PendingIntent deleteIntent = PendingIntent.getBroadcast(context, 0,
@@ -427,13 +417,14 @@ public class NotificationHelper extends BroadcastReceiver {
 				.setStyle(
 						new NotificationCompat.BigTextStyle()
 								.bigText(note.taskNote));
-		
+
 		// Delete intent on non-location repeats
 		if (!note.isLocationRepeat()) {
-			// repeating location reminders should not have a delete intent, the rest do
+			// repeating location reminders should not have a delete intent, the
+			// rest do
 			builder.setDeleteIntent(deleteIntent);
 		}
-		
+
 		// Snooze button only on time non-repeating
 		if (note.time != null && note.repeats == 0) {
 			builder.addAction(R.drawable.ic_stat_snooze,
@@ -442,7 +433,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		// Complete button only on non-repeating, both time and location
 		if (note.repeats == 0) {
 			builder.addAction(R.drawable.navigation_accept_dark,
-							context.getText(R.string.completed), completeIntent);
+					context.getText(R.string.completed), completeIntent);
 		}
 
 		final Notification noti = builder.build();
@@ -614,7 +605,8 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * Does not touch db
 	 */
 	static void cancelNotification(final Context context, final Uri uri) {
-		cancelNotification(context, Integer.parseInt(uri.getLastPathSegment()));
+		if (uri != null)
+			cancelNotification(context, Integer.parseInt(uri.getLastPathSegment()));
 	}
 
 	/**

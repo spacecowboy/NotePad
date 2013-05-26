@@ -5,6 +5,7 @@ import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.notepad.R;
 import com.squareup.timessquare.CalendarPickerView;
 
@@ -60,17 +61,20 @@ public class DialogCalendar extends DialogFragment {
 	@AfterViews
 	void setup() {
 		final Calendar future = Calendar.getInstance();
-	    future.add(Calendar.YEAR, 10);
+	    future.add(Calendar.YEAR, 1);
 	    final Calendar selected = Calendar.getInstance();
-	    // Default to tomorrow
-	    selected.add(Calendar.DAY_OF_YEAR, 1);
 		if (getArguments().getLong(SELECTED_DATE, -1) > 0) {
-			// TODO default date
+			// set date
 			selected.setTimeInMillis(getArguments().getLong(SELECTED_DATE, -1));
 		}
+		else {
+		    // Default to tomorrow
+		    selected.add(Calendar.DAY_OF_YEAR, 1);
+		}
 
-		calendarView.init(Calendar.getInstance().getTime(), future.getTime());
-		calendarView.selectDate(selected.getTime());
+		calendarView.init(Calendar.getInstance().getTime(), future.getTime())
+		.withLocale(ActivityHelper.getUserLocale(getActivity()))
+		.withSelectedDate(selected.getTime());
 		
 		getDialog().setTitle(R.string.select_date);
 	}
