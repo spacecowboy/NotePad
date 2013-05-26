@@ -86,7 +86,8 @@ import android.widget.Toast;
 
 @EActivity(R.layout.activity_main)
 public class ActivityMain extends FragmentActivity implements
-		OnFragmentInteractionListener, OnSyncStartStopListener, MenuStateController {
+		OnFragmentInteractionListener, OnSyncStartStopListener,
+		MenuStateController {
 
 	public static interface ListOpener {
 		public void openList(final long id);
@@ -139,7 +140,7 @@ public class ActivityMain extends FragmentActivity implements
 	// Changes depending on what we're showing since the started activity can
 	// receive new intents
 	boolean showingEditor = false;
-	
+
 	boolean isDrawerClosed = true;
 
 	SyncStatusMonitor syncStatusReceiver = null;
@@ -388,6 +389,7 @@ public class ActivityMain extends FragmentActivity implements
 	 * Load a list of lists in the left
 	 */
 	protected void loadLeftDrawer() {
+		// TODO handle being called repeatably better?
 		// Set a listener on drawer events
 		// TODO strings
 		// TODO prepare options
@@ -568,6 +570,9 @@ public class ActivityMain extends FragmentActivity implements
 						DETAILTAG);
 			}
 			// fucking stack
+			while (getSupportFragmentManager().popBackStackImmediate()) {
+				// Need to pop the entire stack and then load
+			}
 			if (shouldAddToBackStack) {
 				transaction.addToBackStack(null);
 			}
@@ -793,8 +798,8 @@ public class ActivityMain extends FragmentActivity implements
 
 	void updateUiDonate() {
 		if (mIsDonate) {
-//			Toast.makeText(this, R.string.donate_thanks, Toast.LENGTH_SHORT)
-//					.show();
+			// Toast.makeText(this, R.string.donate_thanks, Toast.LENGTH_SHORT)
+			// .show();
 		}
 		else {
 			// Toast.makeText(this, "No premium for you!", Toast.LENGTH_SHORT)
