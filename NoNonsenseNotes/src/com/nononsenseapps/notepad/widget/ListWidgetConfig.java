@@ -334,12 +334,12 @@ public class ListWidgetConfig extends FragmentActivity {
 			public void onLoadFinished(Loader<Cursor> l, Cursor c) {
 				if (l.getId() == 1) {
 					mListAdapter.swapCursor(c);
-					if (c.getCount() > 0) {
-						// Set current item
-						final int pos = getListPositionOf(c,
-								widgetPrefs.getLong(KEY_LIST, ALL_LISTS_ID));
-						listSpinner.setSelection(pos);
-					}
+					final int pos = getListPositionOf(mListAdapter,
+							widgetPrefs.getLong(KEY_LIST, ALL_LISTS_ID));
+					//if (c.getCount() > 0) {
+					// Set current item
+					listSpinner.setSelection(pos);
+					//}
 				}
 				else {
 					mNotesAdapter.swapCursor(c);
@@ -624,11 +624,11 @@ public class ListWidgetConfig extends FragmentActivity {
 				false));
 	}
 
-	private int getListPositionOf(final Cursor cursor, final long id) {
-		if (cursor == null || cursor.getCount() == 0) return 0;
+	private int getListPositionOf(final Adapter adapter, final long id) {
+		if (adapter == null || adapter.getCount() == 0) return 0;
 		int pos = 0;
-		for (int i = 0; i < cursor.getCount(); i++) {
-			if (cursor.moveToPosition(i) && cursor.getLong(0) == id) {
+		for (int i = 0; i < adapter.getCount(); i++) {
+			if (adapter.getItemId(i) == id) {
 				pos = i;
 				break;
 			}
