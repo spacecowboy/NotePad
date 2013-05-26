@@ -35,9 +35,9 @@ public class MainPrefs extends PreferenceFragment {
 	public static final String SERIF = "Serif";
 	public static final String MONOSPACE = "Monospace";
 
-	public static final String THEME_DARK = "dark";
-	public static final String THEME_BLACK = "black";
-	public static final String THEME_LIGHT_ICS_AB = "light_ab";
+//	public static final String THEME_DARK = "dark";
+//	public static final String THEME_BLACK = "black";
+//	public static final String THEME_LIGHT_ICS_AB = "light_ab";
 
 
 	public static final String WEEK_START_DEFAULT = "-1";

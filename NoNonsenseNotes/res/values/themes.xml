@@ -58,6 +58,12 @@
         
         <item name="LeftDrawerStyle">@style/LeftDrawerStyleDark</item>
         <item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleDark</item>
+        
+        <!-- For Square's Date picker -->
+        <item name="CalendarTitle">@style/CalendarTitleDark</item>
+        <item name="CalendarCell.DayHeader">@style/CalendarCell.DayHeaderDark</item>
+        <item name="CalendarCell.CalendarDate">@style/CalendarCell.CalendarDateDark</item>
+        <item name="CalendarPickerBackground">@color/googlenow_darkergrey</item>
     </style>
 
     <style name="ThemeHoloBlack" parent="@style/ThemeGoogleNowDark">
@@ -127,6 +133,12 @@
         
          <item name="LeftDrawerStyle">@style/LeftDrawerStyleLight</item>
         <item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleLight</item>
+        
+        <!-- For Square's Date picker -->
+        <item name="CalendarTitle">@style/CalendarTitleLight</item>
+        <item name="CalendarCell.DayHeader">@style/CalendarCell.DayHeaderLight</item>
+        <item name="CalendarCell.CalendarDate">@style/CalendarCell.CalendarDateLight</item>
+    	<item name="CalendarPickerBackground">@android:color/white</item>
     </style>
 
     <style name="ThemeHoloLightClassic" parent="@style/ThemeHoloLightDarkActonBar">

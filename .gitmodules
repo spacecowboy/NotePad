@@ -16,3 +16,6 @@
 [submodule "android-betterpickers"]
 	path = android-betterpickers
 	url = git://github.com/spacecowboy/android-betterpickers.git
+[submodule "android-times-square"]
+	path = android-times-square
+	url = git://github.com/spacecowboy/android-times-square.git

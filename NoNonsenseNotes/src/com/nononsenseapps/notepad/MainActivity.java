@@ -91,7 +91,7 @@ public class MainActivity extends DualLayoutActivity implements
 	private static final int RENAME_LIST = 1;
 	private static final int DELETE_LIST = 2;
 	// public static boolean lightTheme = false;
-	public static String currentTheme = MainPrefs.THEME_LIGHT_ICS_AB;
+	public static String currentTheme = "";//;MainPrefs.THEME_LIGHT_ICS_AB;
 	public static boolean shouldRestart = false;
 
 	// For my special dropdown navigation items
@@ -942,17 +942,17 @@ public class MainActivity extends DualLayoutActivity implements
 	}
 
 	private void setTypeOfTheme() {
-		if (MainPrefs.THEME_LIGHT_ICS_AB.equals(currentTheme)) {
-			setTheme(R.style.ThemeHoloLightDarkActonBar);
-		} 
-		//else if (MainPrefs.THEME_LIGHT.equals(currentTheme)) {
-		//	setTheme(R.style.ThemeHoloLight);
-		//} 
-		else if (MainPrefs.THEME_BLACK.equals(currentTheme)) {
-			setTheme(R.style.ThemeHoloBlack);
-		} else {
-			setTheme(R.style.ThemeHolo);
-		}
+//		if (MainPrefs.THEME_LIGHT_ICS_AB.equals(currentTheme)) {
+//			setTheme(R.style.ThemeHoloLightDarkActonBar);
+//		} 
+//		//else if (MainPrefs.THEME_LIGHT.equals(currentTheme)) {
+//		//	setTheme(R.style.ThemeHoloLight);
+//		//} 
+//		else if (MainPrefs.THEME_BLACK.equals(currentTheme)) {
+//			setTheme(R.style.ThemeHoloBlack);
+//		} else {
+//			setTheme(R.style.ThemeHolo);
+//		}
 	}
 
 //	@Override

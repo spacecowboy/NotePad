@@ -248,6 +248,7 @@
     <string name="title_rows_2">2 rows</string>
     <string name="title_rows_free">No restriction</string>
     <string name="rows">rows</string>
+    <string name="select_date">Select date</string>
     <string name="saturday">Saturday</string>
     <string name="sunday">Sunday</string>
     <string name="monday">Monday</string>

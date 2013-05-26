@@ -2,8 +2,6 @@ package com.nononsenseapps.notepad.fragments;
 
 import java.util.Calendar;
 
-import com.doomonafireball.betterpickers.datepicker.DatePickerDialogFragment;
-import com.doomonafireball.betterpickers.datepicker.DatePickerDialogFragment.DatePickerDialogHandler;
 import com.doomonafireball.betterpickers.timepicker.TimePickerDialogFragment;
 import com.doomonafireball.betterpickers.timepicker.TimePickerDialogFragment.TimePickerDialogHandler;
 import com.googlecode.androidannotations.annotations.AfterViews;
@@ -24,9 +22,11 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.fragments.DialogCalendar.DateSetListener;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.WeekDaysView;
 import com.nononsenseapps.utils.views.StyledEditText;
 import com.nononsenseapps.ui.WeekDaysView.onCheckedDaysChangeListener;
@@ -72,7 +72,7 @@ import android.widget.Toast;
  */
 @EFragment(R.layout.fragment_task_detail)
 public class TaskDetailFragment extends Fragment implements
-		DatePickerDialogHandler, TimePickerDialogHandler {
+		TimePickerDialogHandler, DateSetListener {
 
 	public static int LOADER_EDITOR_TASK = 3001;
 	public static int LOADER_EDITOR_TASKLISTS = 3002;
@@ -308,14 +308,9 @@ public class TaskDetailFragment extends Fragment implements
 	@Click(R.id.dueDateBox)
 	void onDateClick() {
 		final Calendar localTime = Calendar.getInstance();
-		final DatePickerDialogFragment picker = DatePickerDialogFragment
-				.newInstance(-1,
-				// localTime.get(Calendar.MONTH),
-						-1,
-						// localTime.get(Calendar.DAY_OF_MONTH),
-						localTime.get(Calendar.YEAR));
-		picker.setListener(this);
-		picker.show(getFragmentManager(), "date");
+		final DialogCalendar datePicker = DialogCalendar.getInstance();
+		datePicker.setListener(this);
+		datePicker.show(getFragmentManager(), "date");
 	}
 
 	@Override
@@ -332,14 +327,15 @@ public class TaskDetailFragment extends Fragment implements
 	}
 
 	@Override
-	public void onDialogDateSet(int year, int monthOfYear, int dayOfMonth) {
+	public void onDialogTimeCancel() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void onDateSet(final long time) {
 		final Calendar localTime = Calendar.getInstance();
-		if (mTask.due != null) {
-			localTime.setTimeInMillis(mTask.due);
-		}
-		localTime.set(Calendar.YEAR, year);
-		localTime.set(Calendar.MONTH, monthOfYear);
-		localTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+		localTime.setTimeInMillis(time);
 
 		// set to 23:59 to be more or less consistent with earlier date only
 		// implementation
@@ -350,8 +346,7 @@ public class TaskDetailFragment extends Fragment implements
 		setDueText();
 
 		// and ask for time as well
-		final TimePickerDialogFragment picker = TimePickerDialogFragment
-				.newInstance();
+		final TimePickerDialogFragment picker = getTimePickerFragment();
 		picker.setListener(this);
 		picker.show(getFragmentManager(), "time");
 	}
@@ -898,7 +893,7 @@ public class TaskDetailFragment extends Fragment implements
 							else {
 								openRepeatField.setText("");
 							}
-							
+
 						}
 					});
 
@@ -918,21 +913,33 @@ public class TaskDetailFragment extends Fragment implements
 				@Override
 				public void onClick(View v) {
 					if (!isLocked()) {
-						final TimePickerDialogFragment timePicker = TimePickerDialogFragment
-								.newInstance();
-						timePicker.setListener(new TimePickerDialogHandler() {
+						final DialogCalendar datePicker;
+
+						if (mTask != null && mTask.due != null) {
+							datePicker = DialogCalendar.getInstance(mTask.due);
+						}
+						else {
+							datePicker = DialogCalendar.getInstance();
+						}
+						datePicker.setListener(new DateSetListener() {
+
 							@Override
-							public void onDialogTimeSet(int hourOfDay,
-									int minute) {
+							public void onDateSet(long time) {
 								final Calendar localTime = Calendar
 										.getInstance();
+								localTime.setTimeInMillis(time);
 								if (not.time != null) {
-									localTime.setTimeInMillis(not.time);
+									final Calendar notTime = Calendar
+											.getInstance();
+									notTime.setTimeInMillis(not.time);
+									localTime.set(Calendar.HOUR_OF_DAY,
+											notTime.get(Calendar.HOUR_OF_DAY));
+									localTime.set(Calendar.MINUTE,
+											notTime.get(Calendar.MINUTE));
 								}
-								localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-								localTime.set(Calendar.MINUTE, minute);
 
 								not.time = localTime.getTimeInMillis();
+
 								// Enable repeat options
 								openRepeatField.setVisibility(View.VISIBLE);
 								weekDays.setVisibility(View.VISIBLE);
@@ -940,41 +947,33 @@ public class TaskDetailFragment extends Fragment implements
 								// Fill in time so far
 								notTimeButton.setText(not
 										.getLocalDateTimeText(getActivity()));
-								
+
 								// Hide location
 								location.setVisibility(View.GONE);
 
-								// Ask for date, yes the order
-								// is
-								// screwed up.
-								final DatePickerDialogFragment datePicker = DatePickerDialogFragment
-										.newInstance(-1,
-										// localTime.get(Calendar.MONTH),
-												-1,
-												// localTime.get(Calendar.DAY_OF_MONTH),
-												localTime.get(Calendar.YEAR));
-								datePicker
-										.setListener(new DatePickerDialogHandler() {
+								// Now display time picker
+								final TimePickerDialogFragment timePicker = getTimePickerFragment();
+								timePicker
+										.setListener(new TimePickerDialogHandler() {
 											@Override
-											public void onDialogDateSet(
-													int year, int monthOfYear,
-													int dayOfMonth) {
+											public void onDialogTimeSet(
+													int hourOfDay, int minute) {
 												final Calendar localTime = Calendar
 														.getInstance();
 												if (not.time != null) {
 													localTime
 															.setTimeInMillis(not.time);
 												}
-												localTime.set(Calendar.YEAR,
-														year);
-												localTime.set(Calendar.MONTH,
-														monthOfYear);
 												localTime.set(
-														Calendar.DAY_OF_MONTH,
-														dayOfMonth);
+														Calendar.HOUR_OF_DAY,
+														hourOfDay);
+												localTime.set(Calendar.MINUTE,
+														minute);
 
 												not.time = localTime
 														.getTimeInMillis();
+
+												// Fill in time so far
 												notTimeButton.setText(not
 														.getLocalDateTimeText(getActivity()));
 
@@ -982,15 +981,20 @@ public class TaskDetailFragment extends Fragment implements
 											}
 
 											@Override
-											public void onDialogCancel() {
-												not.save(getActivity(), false);
+											public void onDialogTimeCancel() {
+												// TODO why is this not
+												// scheduling?
+												not.save(getActivity(), true);
 											}
-										});
-								datePicker.show(getFragmentManager(), "date");
-							}
 
+										});
+
+								timePicker.show(getFragmentManager(), "time");
+							}
 						});
-						timePicker.show(getFragmentManager(), "time");
+
+						datePicker.show(getFragmentManager(), "date");
+
 					}
 				}
 			});
@@ -1049,9 +1053,21 @@ public class TaskDetailFragment extends Fragment implements
 		}
 	}
 
-	@Override
-	public void onDialogCancel() {
-		// TODO Auto-generated method stub
-		
+	/**
+	 * Returns an appropriately themed time picker fragment
+	 */
+	TimePickerDialogFragment getTimePickerFragment() {
+		final String theme = PreferenceManager.getDefaultSharedPreferences(
+				getActivity()).getString(MainPrefs.KEY_THEME,
+				getString(R.string.const_theme_light_ab));
+		if (theme.contains("light")) {
+			return TimePickerDialogFragment
+					.newInstance(R.style.BetterPickersDialogFragment_Light);
+		}
+		else {
+			// dark
+			return TimePickerDialogFragment
+					.newInstance(R.style.BetterPickersDialogFragment);
+		}
 	}
 }

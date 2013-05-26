@@ -74,4 +74,7 @@
 	<attr name="LeftDrawerStyle" format="reference"/>
 	<attr name="LeftDrawerListItemStyle" format="reference" />
 	
+	<!-- Square calendar picker -->
+	<attr name="CalendarPickerBackground" format="reference|color" />
+	
 </resources>
