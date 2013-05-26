@@ -17,7 +17,6 @@
 
 <resources>
     <!-- app name and title -->
-    <string name="app_name">Geofence Detection</string>
     <string name="title_activity_geofence">Geofence Entry</string>
 
     <!-- UI -->

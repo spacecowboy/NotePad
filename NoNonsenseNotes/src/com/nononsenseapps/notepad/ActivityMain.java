@@ -41,6 +41,7 @@ import com.nononsenseapps.notepad.prefs.SyncPrefs.AccountDialog;
 import android.animation.Animator;
 import android.animation.LayoutTransition;
 import android.animation.ObjectAnimator;
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.app.ActivityOptions;
@@ -254,7 +255,7 @@ public class ActivityMain extends FragmentActivity implements
 		}
 	}
 
-	@UiThread
+	@SuppressLint("ValidFragment") @UiThread
 	void migrateDonateUser() {
 		// migrate user
 		if (!DonateMigrator.hasImported(this)) {

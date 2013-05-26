@@ -2,11 +2,10 @@ package com.nononsenseapps.notepad.test;
 
 import java.io.File;
 
-import com.nononsenseapps.notepad.NotePad;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.NotePad.Notes;
 import com.nononsenseapps.notepad.database.DatabaseHandler;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
+import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -104,7 +103,7 @@ public class DBUpgradeTest extends AndroidTestCase {
 		legacyDB.execSQL("CREATE TABLE " + NotePad.GTasks.TABLE_NAME + " ("
 				+ BaseColumns._ID + " INTEGER PRIMARY KEY,"
 				+ NotePad.GTasks.COLUMN_NAME_DB_ID
-				+ " INTEGER UNIQUE NOT NULL REFERENCES " + Notes.TABLE_NAME
+				+ " INTEGER UNIQUE NOT NULL REFERENCES " + NotePad.Notes.TABLE_NAME
 				+ "," + NotePad.GTasks.COLUMN_NAME_GTASKS_ID
 				+ " INTEGER NOT NULL,"
 				+ NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT

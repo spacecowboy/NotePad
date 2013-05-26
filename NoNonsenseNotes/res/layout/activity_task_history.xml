@@ -17,7 +17,7 @@
     <TextView 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Drag to time travel"
+        android:text="@string/drag_to_timetravel"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="24sp"
         android:fontFamily="sans-serif-thin"
@@ -48,7 +48,6 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="?textColorPrimary"
         android:textIsSelectable="true"
-        android:text="BAHABHABAHA\nBAHBABALALFA"
         custom:linkify="true"
         custom:titleFontFamily="robotocondensed"
         custom:titleFontStyle="bold"

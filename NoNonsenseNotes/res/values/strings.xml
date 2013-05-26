@@ -147,6 +147,7 @@
     <string name="preferences_week_start_day_title">Week starts on</string>
     
     <string name="select_restore_list">Select the list to restore to</string>
+    <string name="drag_to_timetravel">Drag to time travel</string>
     
     <string name="import_data_question">Import data?</string>
     <string name="import_started">Importing data. This might take a few seconds.</string>
