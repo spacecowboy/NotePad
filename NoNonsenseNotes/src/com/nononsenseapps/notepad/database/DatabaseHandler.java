@@ -277,14 +277,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		} else {
 			// Create a list
 			final TaskList tl = new TaskList();
-			tl.title = context.getString(R.string.app_name);
+			tl.title = context.getString(R.string.tasks);
 			tl.insert(context, db);
 
-			final Task t = new Task();
-			t.dblist = tl._id;
-			t.title = context.getString(R.string.default_notetitle);
-			t.note = context.getString(R.string.default_notetext);
-			t.insert(context, db);
+//			final Task t = new Task();
+//			t.dblist = tl._id;
+//			t.title = context.getString(R.string.default_notetitle);
+//			t.note = context.getString(R.string.default_notetext);
+//			t.insert(context, db);
 		}
 		c.close();
 		db.setTransactionSuccessful();

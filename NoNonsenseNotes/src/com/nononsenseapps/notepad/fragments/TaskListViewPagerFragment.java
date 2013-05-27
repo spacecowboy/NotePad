@@ -186,20 +186,20 @@ public class TaskListViewPagerFragment extends Fragment implements
 				menu.findItem(R.id.menu_search).setVisible(visible);
 			if (menu.findItem(R.id.menu_sync) != null)
 				menu.findItem(R.id.menu_sync).setVisible(visible);
-			if (menu.findItem(R.id.menu_createlist) != null)
-				menu.findItem(R.id.menu_createlist).setVisible(visible);
+//			if (menu.findItem(R.id.menu_createlist) != null)
+//				menu.findItem(R.id.menu_createlist).setVisible(visible);
 		}
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case R.id.menu_createlist:
-			// Show fragment
-			DialogEditList_ dialog = DialogEditList_.getInstance();
-			dialog.setListener(this);
-			dialog.show(getFragmentManager(), "fragment_create_list");
-			return true;
+//		case R.id.menu_createlist:
+//			// Show fragment
+//			DialogEditList_ dialog = DialogEditList_.getInstance();
+//			dialog.setListener(this);
+//			dialog.show(getFragmentManager(), "fragment_create_list");
+//			return true;
 		case R.id.menu_search:
 			// Always visible, but do this if not visible
 			// getActivity().onSearchRequested();

@@ -66,6 +66,9 @@
         <item name="CalendarCell.DayHeader">@style/CalendarCell.DayHeaderDark</item>
         <item name="CalendarCell.CalendarDate">@style/CalendarCell.CalendarDateDark</item>
         <item name="CalendarPickerBackground">@color/googlenow_darkergrey</item>
+        
+        <!-- ShowCaseView -->
+        <item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>
     </style>
 
     <style name="ThemeHoloBlack" parent="@style/ThemeGoogleNowDark">
@@ -143,6 +146,9 @@
         <item name="CalendarCell.DayHeader">@style/CalendarCell.DayHeaderLight</item>
         <item name="CalendarCell.CalendarDate">@style/CalendarCell.CalendarDateLight</item>
     	<item name="CalendarPickerBackground">#fff3f3f3</item>
+    	
+        <!-- ShowCaseView -->
+        <item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>
     </style>
 
     <style name="ThemeHoloLightClassic" parent="@style/ThemeHoloLightDarkActonBar">

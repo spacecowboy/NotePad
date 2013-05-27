@@ -20,36 +20,60 @@ limitations under the License.
 <string name="app_name">Notas</string>
 <string name="title_create">Nova nota</string>
 <string name="title_edit">Editar: %1$s</string>
+<string name="timemachine">Linha do tempo</string>
+<string name="time">Horário</string>
+<string name="done">Pronto</string>
+<string name="saved">Salvo</string>
+<string name="distance">Distância</string>
+<string name="need_location_help">Pressione continuamente para definir um local</string>
+<string name="near_location">Próximo</string>
 <string name="menu_add">Nova nota</string>
+<string name="menu_save_and_add">Salvar e abrir nova nota</string>
 <string name="menu_delete">Eliminar</string>
 <string name="menu_revert">Reverter alterações</string>
 <string name="menu_copy">Copiar nota</string>
 <string name="menu_cancel">Cancelar</string>
-<string name="menu_setcompleted">Feito</string>
-<string name="menu_setuncompleted">Por fazer</string>
+<string name="menu_setcompleted">Marcar como concluído</string>
+<string name="menu_setuncompleted">Marcar como não concluído</string>
 <string name="menu_deletelist">Apagar lista</string>
-<string name="menu_sync">Atualizar</string>
+<string name="menu_sync">Sincronizar</string>
 <string name="menu_share">Compartilhar</string>
 <string name="menu_preferences">Configurações</string>
 <string name="menu_renamelist">Renomear lista</string>
 <string name="menu_createlist">Criar lista</string>
-<string name="menu_clearcompleted">Limpar concluído</string>
+<string name="menu_clearcompleted">Apagar concluídas</string>
 <string name="menu_setdefaultlist">Definir como lista padrão</string>
 <string name="menu_managelists">Gerenciar listas</string>
-<string name="delete_list_warning">Tem a certeza que quer apagar a lista? A lista será excluída permanentemente.</string>
-<string name="editor_due_date_hint">Prazo</string>
+<string name="add_item">Adicionar item</string>
+<string name="delete_question">Apagar?</string>
+<string name="delete_items_message">Tem certeza que deseja deletar estes itens?</string>
+<string name="delete_item_message">Tem certeza que deseja deletar este item?</string>
+<string name="delete_list_message">Tem certeza que deseja deletar esta lista?</string>
+<string name="editor_due_date_hint">Data limite</string>
 <string name="editor_title_hint">Título</string>
 <string name="editor_note_hint">Nota</string>
 <string name="resolve_edit">Editar nota</string>
 <string name="error_title">Erro</string>
 <string name="error_message">Erro ao carregar a nota</string>
+<string name="default_style">Estilo padrão</string>
+<string name="show_items_as_tasks">Mostrar itens como tarefas</string>
+<string name="show_items_as_notes">Mostrar itens como notas</string>
+<string name="sort_list_default">Ordenação padrão</string>
+<string name="sort_list_alphabetical">Ordenar alfabeticamente</string>
+<string name="sort_list_due">Ordenar por data limite</string>
+<string name="sort_list_updated">Ordenar por última alteração</string>
+<string name="sort_list_manual">Ordenar manualmente</string>
+<string name="search_description">Notas e tarefas</string>
+<string name="archive">Arquivar</string>
+<string name="location">Local</string>
+<string name="restore">Restaurar</string>
+<string name="restore_to">Restaurar para</string>
 <string name="search_hint">Procurar</string>
 <string name="settings_theme">Tema atual</string>
 <string name="settings_theme_dialog">Usar tema</string>
 <string name="settings_lang">Idioma </string>
-<string name="settings_lang_dialog">@string/settings_lang</string>
 <string name="settings_cat_theme">Tema</string>
-<string name="settings_cat_sorting">Ordem</string>
+<string name="settings_cat_sorting">Ordenação</string>
 <string name="settings_sorting_type">Ordenado por</string>
 <string name="settings_sorting_type_dialog">Ordenar por</string>
 <string name="settings_sorting_order">Ordem</string>
@@ -58,12 +82,11 @@ limitations under the License.
 <string name="settings_summary_sort_type_modified">Última alteração</string>
 <string name="settings_summary_sort_type_duedate">Prazo</string>
 <string name="settings_summary_sort_type_serverposition">Minha ordem</string>
-<string name="settings_summary_sort_order_asc">Crescente</string>
-<string name="settings_summary_sort_order_desc">Decrescente</string>
 <string name="settings_summary_theme_black">Preto</string>
 <string name="settings_summary_theme_dark">Escuro</string>
 <string name="settings_summary_theme_light">Claro</string>
-<string name="settings_summary_theme_light_dark_ab">Claro, action bar escura</string>
+<string name="settings_summary_theme_classic">Clássico</string>
+<string name="settings_summary_theme_light_dark_ab">Claro com barra de navegação escura</string>
 <string name="settings_cat_appearance">Aparência</string>
 <string name="settings_font_screen">Configurações da fonte</string>
 <string name="settings_font_screen_summary">É possível alterar o tipo e tamanho das fontes</string>
@@ -72,16 +95,19 @@ limitations under the License.
 <string name="settings_font_type_dialog">Selecione uma fonte</string>
 <string name="settings_font_size">Tamanho da fonte</string>
 <string name="preference_preview_text">É assim que o texto irá aparecer</string>
-<string name="settings_text_preview_title">Prévia</string>
+<string name="settings_text_preview_title">Pré-visualização</string>
 <string name="monospace">Monospace</string>
 <string name="sans">Sans</string>
 <string name="serif">Serif</string>
 <string name="settings_sync_freq_title">Frequência de sincronização</string>
 <string name="settings_account_title">Selecione uma conta</string>
 <string name="settings_account_summary">Clique para alterar a conta</string>
-<string name="settings_sync_enable_title">Google Tasks</string>
+<string name="settings_sync_enable_title">Sincronização do Google Tasks</string>
 <string name="settings_sync_enable_summary">Sincronize as notas com a sua conta Google</string>
+<string name="gtasks_sync_info">Nem todas as informações podem ser sincronizadas com o Google Tasks. Somente notas e datas-limite (e não a hora) e marcação completo/incompleto são sincronizadas</string>
 <string name="settings_cat_syncing">Sincronização</string>
+<string name="dropbox_enable">Sincronizar com o Dropbox</string>
+<string name="dropbox_enable_summary">Criar uma pasta especial NoNonsense Notes no seu Dropbox</string>
 <string name="manual">Manual</string>
 <string name="minutes">minutos</string>
 <string name="hours">horas</string>
@@ -95,20 +121,30 @@ limitations under the License.
 <string name="reverted">Alterações revertidas</string>
 <string name="notecopied">Copiado</string>
 <string name="deleted">Apagado</string>
+<string name="repeat">Repetir</string>
+<string name="once">Uma vez</string>
 <string name="items">notas</string>
 <string name="permission_read_label">ler as notas e as listas</string>
 <string name="permission_read_desc">Permite que o aplicativo leia as suas notas e listas</string>
 <string name="permission_write_label">modificar as notas e as listas</string>
 <string name="permission_write_desc">Permite que a aplicação insira, atualize e apague notas e listas.</string>
 <string name="settings_header_list">Configurações das listas</string>
-<string name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string name="settings_header_sync">@string/settings_cat_syncing</string>
 <string name="settings_list_dialog">Selecione uma lista</string>
 <string name="settings_list">Lista</string>
 <string name="automatic">Automático</string>
 <string name="preferences_week_start_day_dialog">A semana começa em</string>
 <string name="preferences_week_start_day_title">A semana começa em</string>
-<string name="preferences_week_start_day_default">-1</string>
+
+<string name="select_restore_list">Selecione a lista para ser restaurada</string>
+
+<string name="import_data_question">Importar dados?</string>
+<string name="import_started">Importando dados. Isto pode levar alguns segundos.</string>
+<string name="import_data_msg">Gostaria de importar as notas a partir da versão de doação? Quando finalizado, você poderá desinstalá-la também.</string>
+<string name="imported_result">Importado %1$d notas de %2$d listas</string>
+<string name="import_error">Algo deu errado: %s</string>
+<string name="uninstall_donate_msg">Pressione OK para desinstalar a versão de doação</string>
+<string name="uninstall_donate">Desinstalar versão antiga?</string>
+
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
@@ -153,22 +189,31 @@ Use few if language need it. In English is the same.
 <string name="widget_pref_preview_note">Mostrar prévia da nota </string>
 <string name="widget_pref_preview_note_summary_off">O título terá duas linhas</string>
 <string name="widget_pref_preview_note_summary_on">Nota estará na 2ª linha</string>
+<string name="widget_pref_show_complete">Botão marcar como concluído</string>
 <string name="widget_pref_show_complete_summary_off">Botão será escondido</string>
 <string name="widget_pref_show_complete_summary_on">Botão será visível</string>
+<string name="settings_listitem">Título de duas linhas</string>
 <string name="settings_listitem_summary_off">Prévia da nota terá 2 linhas</string>
 <string name="editor_details">Mais</string>
 <string name="completed">Concluído </string>
+<string name="subtask_of">Subtarefa de</string>
 <string name="security">Segurança</string>
+<string name="date_header_overdue">Atrasado</string>
 <string name="date_header_today">Hoje </string>
 <string name="date_header_tomorrow">Amanhã </string>
 <string name="date_header_7days">Próximos 7 dias</string>
 <string name="date_header_future">Mais tarde </string>
 <string name="date_header_none">Sem data</string>
+<string name="date_header_completed">Completado</string>
 <string name="mod_header_yesterday">Ontem</string>
 <string name="mod_header_thisweek">Esta semana</string>
 <string name="mod_header_earlier">Mais cedo</string>
 <string name="settings_listheader">Quando mostrando todas as listas</string>
 <string name="settings_listheader_off">Mostrar como uma lista</string>
+<string name="settings_listheader_on">Mostrar nomes das listas</string>
+<string name="please_create_list">Por favor, crie uma lista</string>
+<string name="please_select_note">Por favor, selecione ou crie uma nota</string>
+<string name="please_create_note">Por favor, crie uma nota</string>
 <string name="hide_checkbox">Esconder checkbox</string>
 <string name="hide_checkbox_summary_on">Checkbox será escondida</string>
 <string name="hide_checkbox_summary_off">Checkbox será mostrada</string>
@@ -178,44 +223,90 @@ Use few if language need it. In English is the same.
 <string name="hide_date">Esconder o prazo</string>
 <string name="hide_date_summary_on">Data será escondida</string>
 <string name="hide_date_summary_off">Data será mostrada</string>
+<string name="item_max_height">Altura máxima das notas/tarefas</string>
+<string name="long_date_format">Formato de data extendido</string>
+<string name="short_date_format">Formato de data compacto</string>
 <string name="title_rows">Máxima altura do título</string>
 <string name="title_rows_1">1 linha</string>
 <string name="title_rows_2">2 linhas</string>
 <string name="title_rows_free">Sem restrições</string>
+<string name="rows">linhas</string>
 <string name="saturday">Sábado</string>
 <string name="sunday">Domingo</string>
 <string name="monday">Segunda-Feira</string>
+<string name="localedefault">Localização padrão</string>
+<string name="donate">Faça uma doação</string>
+<string name="donate_thanks">Obrigado pela sua ajuda!</string>
 
 <!-- These should probably not be translated -->
 <string name="default_notetitle">Bem-vindo!</string>
+<string name="default_notetext">Para aproveitar este app ao máximo, eu sugiro que você, primeiramente, permita a sincronização. Vá em frete e pressione o botão de sincronização na barra de navegação quanto você retornar à lista. Por padrão, a sincronização ocorrerá automaticamente a cada hora.\n\nNote que isto é associado à sua preferência de sincronização global. Resumidamente, se o seu gmail não sincroniza automaticamente, este app também não irá. Você pode desabilitar a sincronização automática torná-la completamente manual nas preferências deste app.\n\nNa verdade, recomendo que vá às configurações de qualquer maneira, para que você veja as opções ali disponíveis. Você pode ajustar o tamanho da fonte do texto nesta janela, e até mudar o tema de claro para escuro.\n\nO app também inclui um widget que é totalmente redimensionável. Você escolhe seu tamanho assim como todos os widgets: mantenha o dedo pressionado por um segundo no widget como se fosse movê-lo. Então, ao invés de movimentá-lo, você pode puxar os lados do widget para torná-lo maior ou menor.\n\nEu espero que você ache este app útil. Não se esqueça de que ele é completamente gratuito, não possui propagandas e possui código aberto. Se você tem grandes idéias ou reclamações, avise-me.\n\n/Jonas</string>
 <string name="about_text">Obrigado por baixar meu app! Eu tento o máximo em fazer esse aplicativo ótimo de todas as formas mas sempre existiram bugs mo entanto as coisas podem melhorar!\n\nSe você achar um bug, uma tradução errada ou tem uma ideia de como fazer esse app melhor então eu quero te ouvir!\nMe mande um email: jonas@nononsenseapps.com\n\nDê um +1: https://plus.google.com/u/0/111801385015192089838\n\nRelate um erro em: https://github.com/spacecowboy/NotePad/issues\n\nSe você quiser ajudar na tradução do aplicativo, por favor vá para\nhttp://translate.nononsenseapps.com\n\nDe novo, obrigado por baixar meu app!\nSe você quiser ajudar o projeto em uma forma menos ativa, você pode comprar a versão de doação: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate\n</string>
 
 <!-- settings string keys -->
 <string name="menu_settings">Configurações</string>
+<string name="title_activity_list_widget_config">Configurações do widget</string>
 <string name="hide_appicon">Esconder o ícone</string>
+<string name="hide_new">Esconder botão de adição</string>
+<string name="hide_header">Esconder todo o cabeçalho do widget</string>
+<string name="transparency">Transparência</string>
+<string name="notes_shortcut">Atalho para notas</string>
+<string name="shortcut_help1">Se marcado, o atalho irá criar uma nova nota na lista selecionada e abrir o editor. Se desmarcado, o atalho irá abrir a lista selecionada.</string>
+<string name="loading_widget">Carregando widget&#8230;</string>
 <string name="default_list_set">Lista padrão definida</string>
-
+<string name="default_list">Lista padrão</string>
+<string name="please_type_before_reminder">Por favor, insira algum texto antes de definir um lembrete</string>
+<string name="select_a_time">Escolha uma hora</string>
 <string name="notecopied_one">Uma nota copiada</string>
 <string name="notecopied_other">%d notas copiadas</string>
 <string name="notedeleted_one">Uma nota apagada</string>
 <string name="notedeleted_other">%d notas apagadas</string>
 <string name="selected_one">Uma nota selecionada</string>
 <string name="selected_other">%d notas selecionadas</string>
-
 <string name="background_sync">Sincronização em segundo plano</string>
 <string name="background_sync_info">Sincroniza de hora em hora</string>
-<string name="sync_on_change">Sincronização em modificações</string>
-<string name="sync_on_change_info">Sincroniza imediatamente depois que a nota foi modificada</string>
+<string name="sync_on_change">Sincronizar após modificações</string>
+<string name="sync_on_change_info">Sincronizar imediatamente depois que a nota foi modificada</string>
 <string name="sync_on_start">Sincronização na inicialização do app</string>
+<string name="sync_on_start_info">Irá sincronizar no máximo a cada 5 minutos</string>
 <string name="sync_full_force">Força sincronização completa próxima vez</string>
-<string name="sync_full_force_info">Apenas cheque se sentir falta de alguns itens</string>
-
+<string name="sync_full_force_info">Apenas selecione se sentir falta de alguns itens</string>
+<string name="snooze">Adiar o lembrete</string>
+<string name="silent">Silêncio</string>
 <string name="sound">Som</string>
 <string name="vibrate">Vibrar</string>
 <string name="reminders">Lembretes</string>
 <string name="add_reminder">Adicionar lembrete</string>
 <string name="standard">Padrão</string>
+<string name="notification_prio_high">Alta: No topo, expandida</string>
+<string name="notification_prio_low">Baixa: Escondida, minimizada</string>
 <string name="priority">Prioridade</string>
+<string name="group_on_list">Agrupar na lista</string>
+<string name="group_on_list_summary">Múltiplas notificações serão agrupadas se pertencerem à mesma lista</string>
 <string name="more">mais</string>
 <string name="notifications">Notificações</string>
+<!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+<string name="dashclock_tasks">Tarefas</string>
+<string name="dashclock_restrict_to_tasks_in_a_specific_list">Restringir tarefas a uma lista específica</string>
+<string name="dashclock_show_overdue_tasks">Mostrar tarefas atrasadas</string>
+<string name="dashclock_overdue_tasks_show">Tarefas atrasadas serão exibidas</string>
+<string name="dashclock_overdue_tasks_hide">Tarefas vencidas serão ocultas</string>
+<string name="dashclock_title_activity_tasks_settings">NoNonsense Notes Settings</string>
+<string name="dashclock_pref_header_general">Geral</string>
+<string name="dashclock_due_upper_limit_title">Limitar a tarefas que vencem mais antes</string>
+<string name="dashclock_today">Hoje</string>
+<string name="dashclock_tomorrow">Amanhã</string>
+<string name="dashclock_next7">Próximos 7 dias</string>
+<string name="dashclock_anytime">A qualquer hora</string>
+<string name="dashclock_will_show_as_many_as_possible">Irá mostrar o máximo possível</string>
+<string name="dashclock_will_only_show_the_task_due_first">Irá mostrar somente a tarefa que vencer primeiro</string>
+<string name="dashclock_show_only_the_next_task">Mostrar somente a próxima tarefa</string>
+<string name="dashclock_header_shown">O nome da lista será exibido em negrito. Se &quot;Todas as listas&quot; for selecionado, irá mostrar &quot;Tarefas&quot;</string>
+<string name="dashclock_first_task_shown">O título da primeira tarefa será exibido em negrito</string>
+<string name="dashclock_display_header">Mostrar cabeçalho</string>
+
+<!-- Store text -->
+<string name="google_play_promo_80_char_limit">Belo aplicativo para anotações e tarefas com sincronização com o Google Tasks</string>
+<string name="google_play_description">Um aplicativo de código aberto para anotações e tarefas com interface adaptada para telefones e tablets. Sincroniza com sua conta Google para manter seu quadro de anotações armazenado na nuvem, sem a necessidade de inserir senhas!\n\nInclui funcionalidades de:\n* Notificações/Lembretres\n* Seleção de idioma\n* Interface customizável\n* Widget redimensionável e customizável\n* Excelente suporte a Tablets que imita as funcionalidades do Gmail\n* Temas Holo, para coincidir com o sistema Android\n* Sincronização automática com o Google Tasks\n* Capacidade de definir senhas em notas\n* Mova notas entre diferentes listas\n* Integração com Android Agenda Widget\n* Procure em todas as suas notas (não somente nos títulos)\n* Mudas a fonte e o tamanho do texto!\n\nNota:\nHá um bug no Android 4.2 que se manifesta em todos os ap que usam notificações. Se você definir que as notificações NÃO irão vibrar (este é o padrão), e então colocar o seu telefone no silencioso (vibrando, somente), as notificações sempre irão vibrar, mesmo que ista esteja explicitamente desabilitado no app.\nNovamente, é um problema relacionado ao Android, e não ao app.\n\nVocê pode ajudar na tradução do app, simplesmente acesse: http://translate.nononsenseapps.com\n\nSe você está com problemas ou quer reportar um bug, não hesite em me contactar! +NoNonsenseApps\nou\nreporte-os no rastreador de erros: https://github.com/spacecowboy/NotePad/issues\n\nHá uma versão paga do app disponível para aqueles que querem apoiar meu desenvolvimento. Link: https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
+
 </resources>

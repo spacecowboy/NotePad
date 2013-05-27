@@ -20,6 +20,13 @@ limitations under the License.
 <string name="app_name">便箋</string>
 <string name="title_create">新建便箋</string>
 <string name="title_edit">編輯：%1$s</string>
+<string name="timemachine">時光機</string>
+<string name="time">時間</string>
+<string name="done">完成</string>
+<string name="saved">已儲存</string>
+<string name="distance">距離</string>
+<string name="need_location_help">長按來設定位置</string>
+<string name="near_location">附近</string>
 <string name="menu_add">新建便箋</string>
 <string name="menu_save_and_add">保存並打開一個新便箋</string>
 <string name="menu_delete">刪除</string>
@@ -37,13 +44,30 @@ limitations under the License.
 <string name="menu_clearcompleted">清除已完成</string>
 <string name="menu_setdefaultlist">設為預設清單</string>
 <string name="menu_managelists">管理清單</string>
-<string name="delete_list_warning">您確信要刪除此清單麼？此清單將被永久刪除。</string>
+<string name="add_item">建立項目</string>
+<string name="delete_question">刪除？</string>
+<string name="delete_items_message">您確信要刪除這些項目嗎？</string>
+<string name="delete_item_message">您確信要刪除這個項目嗎？</string>
+<string name="delete_list_message">您確信要刪除這個清單嗎？</string>
 <string name="editor_due_date_hint">到期日</string>
 <string name="editor_title_hint">標題</string>
 <string name="editor_note_hint">便箋</string>
 <string name="resolve_edit">編輯便箋</string>
 <string name="error_title">錯誤</string>
 <string name="error_message">載入便箋時出錯</string>
+<string name="default_style">默認樣式</string>
+<string name="show_items_as_tasks">以任務顯示項目</string>
+<string name="show_items_as_notes">以便箋顯示項目</string>
+<string name="sort_list_default">默認排序方法</string>
+<string name="sort_list_alphabetical">按字母表順序</string>
+<string name="sort_list_due">按過期日順序</string>
+<string name="sort_list_updated">按最近更新順序</string>
+<string name="sort_list_manual">手動排序</string>
+<string name="search_description">便箋和任務</string>
+<string name="archive">封存</string>
+<string name="location">位置</string>
+<string name="restore">還原</string>
+<string name="restore_to">還原至</string>
 <string name="search_hint">搜尋</string>
 <string name="settings_theme">當前主題</string>
 <string name="settings_theme_dialog">使用主題</string>
@@ -58,11 +82,10 @@ limitations under the License.
 <string name="settings_summary_sort_type_modified">最近修改時間</string>
 <string name="settings_summary_sort_type_duedate">到期日</string>
 <string name="settings_summary_sort_type_serverposition">我的順序</string>
-<string name="settings_summary_sort_order_asc">升序</string>
-<string name="settings_summary_sort_order_desc">降序</string>
 <string name="settings_summary_theme_black">黑色</string>
 <string name="settings_summary_theme_dark">深色</string>
 <string name="settings_summary_theme_light">淺色</string>
+<string name="settings_summary_theme_classic">經典</string>
 <string name="settings_summary_theme_light_dark_ab">介面淺色，動作欄深色</string>
 <string name="settings_cat_appearance">外觀</string>
 <string name="settings_font_screen">字型設定</string>
@@ -81,7 +104,11 @@ limitations under the License.
 <string name="settings_account_summary">點擊切換帳戶</string>
 <string name="settings_sync_enable_title">Google 工作表同步</string>
 <string name="settings_sync_enable_summary">用 Google 帳戶同步便箋</string>
+<string name="gtasks_sync_info">並非所有資料都可同步至 Google 工作表。只有便箋、過期日（不是時間）以及待辦狀態可以同步。</string>
 <string name="settings_cat_syncing">同步</string>
+<string name="gtasks">Google 工作表</string>
+<string name="dropbox_enable">與 Dropbox 同步</string>
+<string name="dropbox_enable_summary">向您的 Dropbox 建立一個 NoNonsense Notes 文件夾</string>
 <string name="manual">手動</string>
 <string name="minutes">分鐘</string>
 <string name="hours">小時</string>
@@ -95,6 +122,8 @@ limitations under the License.
 <string name="reverted">變更已撤消</string>
 <string name="notecopied">已複製</string>
 <string name="deleted">已刪除</string>
+<string name="repeat">重複</string>
+<string name="once">一次性</string>
 <string name="items">便箋</string>
 <string name="permission_read_label">閱讀便箋與清單</string>
 <string name="permission_read_desc">允許本應用讀取您的便箋及相關清單。</string>
@@ -106,6 +135,16 @@ limitations under the License.
 <string name="automatic">自動</string>
 <string name="preferences_week_start_day_dialog">一週開始日</string>
 <string name="preferences_week_start_day_title">一週開始日</string>
+
+<string name="select_restore_list">選擇一個要還原至的清單</string>
+
+<string name="import_data_question">匯入數據？</string>
+<string name="import_started">正在匯入數據。這可能需要幾秒。</string>
+<string name="import_data_msg">您要把捐贈版本的便箋匯入嗎？當操作完成後您也可以選擇卸載它。</string>
+<string name="imported_result">已匯入 %1$d 條便箋至 %2$d 清單</string>
+<string name="import_error">出現了一些問題：%s</string>
+<string name="uninstall_donate_msg">點按確定卸載捐贈版本。</string>
+<string name="uninstall_donate">卸載舊版本嗎？</string>
 
 <!--
 Use few if language need it. In English is the same.
@@ -186,14 +225,20 @@ Use few if language need it. In English is the same.
 <string name="hide_date">隱藏過期日</string>
 <string name="hide_date_summary_on">日期會被隱藏</string>
 <string name="hide_date_summary_off">日期會被顯示</string>
+<string name="item_max_height">便箋/任務的</string>
+<string name="long_date_format">長日期格式</string>
+<string name="short_date_format">短日期格式</string>
 <string name="title_rows">標題最大高度</string>
 <string name="title_rows_1">一行</string>
 <string name="title_rows_2">兩行</string>
 <string name="title_rows_free">無限制</string>
+<string name="rows">行</string>
 <string name="saturday">週六</string>
 <string name="sunday">週日</string>
 <string name="monday">週一</string>
 <string name="localedefault">使用所在地區預設值</string>
+<string name="donate">捐贈</string>
+<string name="donate_thanks">感謝您的支持！</string>
 
 <!-- These should probably not be translated -->
 <string name="default_notetitle">歡迎！</string>
@@ -206,18 +251,20 @@ Use few if language need it. In English is the same.
 <string name="hide_appicon">隱藏應用圖標</string>
 <string name="hide_new">隱藏新增按鈕</string>
 <string name="hide_header">隱藏整個小部件標題行</string>
-<string name="hide_widgetbg">透明背景</string>
+<string name="transparency">透明度</string>
+<string name="notes_shortcut">便箋捷徑</string>
 <string name="shortcut_help1">如果選定，快捷方式將會在選中的清單創建一個便箋並打開編輯器。如果不選中，快捷方式只打開選定的清單。</string>
 <string name="loading_widget">正在加載小部件...</string>
 <string name="default_list_set">默認清單已設定</string>
-
+<string name="default_list">默認清單</string>
+<string name="please_type_before_reminder">請在設定提醒前輸入一些文字</string>
+<string name="select_a_time">選擇一個時間</string>
 <string name="notecopied_one">已複製 1 個便箋</string>
 <string name="notecopied_other">已複製 %d 個便箋</string>
 <string name="notedeleted_one">已刪除 1 個便箋</string>
 <string name="notedeleted_other">已刪除 %d 個便箋</string>
 <string name="selected_one">已選擇 1 個便箋</string>
 <string name="selected_other">已選擇 %d 個便箋</string>
-
 <string name="background_sync">後台同步</string>
 <string name="background_sync_info">每小時同步一次</string>
 <string name="sync_on_change">變更時同步</string>
@@ -226,7 +273,7 @@ Use few if language need it. In English is the same.
 <string name="sync_on_start_info">只在初次啟動時同步，再次打開應用時不再同步</string>
 <string name="sync_full_force">強制下次進行完整同步</string>
 <string name="sync_full_force_info">只在您確信存在數據缺失時選擇此項</string>
-
+<string name="snooze">打盹</string>
 <string name="silent">靜音</string>
 <string name="sound">鈴聲</string>
 <string name="vibrate">震動</string>
@@ -240,17 +287,14 @@ Use few if language need it. In English is the same.
 <string name="group_on_list_summary">同一清單內的多個通知會被分為一組。</string>
 <string name="more">更多</string>
 <string name="notifications">通知</string>
-
-
+<!-- "localtime" is replaced at runtime with 12/24 hour clock -->
 <string name="dashclock_tasks">任務</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">僅限特定清單中的任務</string>
 <string name="dashclock_show_overdue_tasks">顯示已到期任務</string>
 <string name="dashclock_overdue_tasks_show">已到期任務將會顯示</string>
 <string name="dashclock_overdue_tasks_hide">已到期任務將會隱藏</string>
-
 <string name="dashclock_title_activity_tasks_settings">NoNonsense 便箋設定</string>
 <string name="dashclock_pref_header_general">一般</string>
-
 <string name="dashclock_due_upper_limit_title">僅限最晚到期的任務</string>
 <string name="dashclock_today">今天</string>
 <string name="dashclock_tomorrow">明天</string>
@@ -263,8 +307,8 @@ Use few if language need it. In English is the same.
 <string name="dashclock_first_task_shown">第一個任務的標題將加粗顯示</string>
 <string name="dashclock_display_header">顯示標題</string>
 
-
 <!-- Store text -->
 <string name="google_play_promo_80_char_limit">支援 Google 工作表同步，美觀又易用的便箋、任務及待辦事項應用。</string>
 <string name="google_play_description">一款開放源碼的記事本與待辦事項應用，同時支援手機與平板界面。可與您現有的 Google 賬戶進行便箋及任務同步，雲端備份而無需出示您的密碼！\n\n特色功能：\n* 通知/提醒設定\n* 多語言切換\n* 可自定制界面\n* 桌面小部件，支援調整大小和功能\n* 與 Gmail 功能相近的完美平板支援\n* 與 Android 渾然一體的 Holo 主題\n* 與 Google 工作表同步\n* 為便箋設定密碼\n* 在多個清單之間移動便箋\n* 與 Android 日程小部件集成\n* 搜尋便箋（支援全文搜尋）\n* 變更字體與字號\n\n提示：\n在 Android 4.2 中存在一個問題，影響到所有使用通知的應用。如果您設定通知時選擇不震動（默認設定），一旦把設備切換至靜音模式（僅震動），即便之前明確設定了關閉震動，在收到通知時也會一直震動。\n再次說明，這是 Android 系統的一個缺陷，而不是應用的問題。\n\n您可以幫助翻譯這個應用，請前往：http://translate.nononsenseapps.com\n\n若您有任何疑問，或者有問題要回報，請儘管聯繫我！\n+NoNonsenseApps\n或者報告至事件跟踪介面：https://github.com/spacecowboy/NotePad/issues\n\n此應用是開放源碼的項目，請參見：https://github.com/spacecowboy/NotePad\n\n此應用有相對應的收費版本，以用於支持我的開發工作。連接：https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
+
 </resources>

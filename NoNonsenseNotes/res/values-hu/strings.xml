@@ -125,6 +125,7 @@ limitations under the License.
 <string name="deleted">Törölve</string>
 <string name="repeat">Ismétlés</string>
 <string name="once">Egyszer</string>
+<string name="always">Mindig</string>
 <string name="items">jegyzetek</string>
 <string name="permission_read_label">listák és jegyzetek olvasása</string>
 <string name="permission_read_desc">Engedély a jegyzetek és kapcsolódó listák olvasására.</string>
@@ -148,6 +149,7 @@ limitations under the License.
 <string name="uninstall_donate_msg">Támogatott verzió eltávolítása.</string>
 <string name="uninstall_donate">El kívánja távolítani az előző verziót?</string>
 
+
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
@@ -164,6 +166,10 @@ Use few if language need it. In English is the same.
 <item quantity="one">@string/selected_one</item>
 <item quantity="other">@string/selected_other</item>
 </plurals>
+
+<string name="move">Áthelyezés</string>
+<string name="move_to">Áthelyezés</string>
+<string name="moved_x_to">Áthelyezve a %d listába</string>
 
 <string name="lock_note">Zárolás</string>
 <string name="unlock_note">Feloldás</string>
@@ -235,7 +241,8 @@ Use few if language need it. In English is the same.
 <string name="title_rows_1">1 sor</string>
 <string name="title_rows_2">2 sor</string>
 <string name="title_rows_free">Nincs meghatározva</string>
-<string name="rows">sor(ok)</string>
+<string name="rows">sor</string>
+<string name="select_date">Dátum</string>
 <string name="saturday">Szombat</string>
 <string name="sunday">Vasárnap</string>
 <string name="monday">Hétfő</string>
@@ -304,10 +311,12 @@ Use few if language need it. In English is the same.
 <string name="dashclock_will_show_as_many_as_possible">Annyit jelenít meg amennyit csak lehet</string>
 <string name="dashclock_will_only_show_the_task_due_first">A határidő szerint a következőt jeleníti meg</string>
 <string name="dashclock_show_only_the_next_task">Csak a soron következő feladat megjelenítése</string>
+<string name="dashclock_header_shown">A lista neve félkövéren jelenik meg. Ha minden lista látszik akkor a a lista neve helyett &quot;Feladatok&quot; jelenik meg.</string>
 <string name="dashclock_first_task_shown">Az első feladat címe lesz félkövér</string>
 <string name="dashclock_display_header">Fejléc megjelenítése</string>
 
 <!-- Store text -->
 <string name="google_play_promo_80_char_limit">Szép jegyzet, feladat és teendő alkalmazás Google Feladatok szinkronizálással</string>
+<string name="google_play_description">Egy nyílt forráskódú jegyzet és teendő alkalmazás telefon és táblagép felülettel. Az alkalmazás a Google fiókkal szinkronizál hogy bárhol elérhesd a jegyzeteidet! (A szinkronizálás opció)\n\nJellemzők:\n* Értesítések/Emlékeztetők\n* Nyelv választás\n* Testre szabható felület\n* Átméretezhető és testre szabható widget.\n* Táblagép támogatás\n* Holo témák\n* Automatikus szinkronizálás a Google Feladatokkal\n* Jelszavazható jegyzetek\n* Jegyzetek áthelyezése egyik listából a másikba\n* Android Agenda Widget támogatás\n* Keresés a jegyzetek közt (nem csak a címekben)\n* Változtatható betűméretek!\n\nMegjegyzés:\nAz Android 4.2-ben van egy hiba ami azoknál az alkalmazásoknál vehető észre amelyek értesítéseket használnak. Ha az értesítéseknél ki van kapcsolva a rezgés (ami az alapértelmezett) és a telefon csendes módba van (csak rezgésre) állítva, a beállítások ellenére az értesítésekkor mindig rezegni fog.\nMég egyszer, az Androidban van a hiba nem az alkalmazásban.\n\nAz következő linken segíthetsz az alkalmazás fordításában: http://translate.nononsenseapps.com\n\nHa bármi probléma adódik, vagy hibát szeretnél bejelenteni ne hezitálj, keress meg!\n+NoNonsenseApps\nvagy\njelezd az issue tracker-en: https://github.com/spacecowboy/NotePad/issues\n\nEz az alkalmazás nyílt forráskódú és a online elérhető itt: https://github.com/spacecowboy/NotePad\n\nLétezik egy fizetős verzió is az alkalmazásból azoknak, akik támogatni szeretnének a fejlesztésben. Link: https://market.android.com/details?id=com.nononsenseapps.notepad_donate\n</string>
 
 </resources>

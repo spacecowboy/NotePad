@@ -124,5 +124,9 @@
         <item name="android:divider">?android:attr/dividerVertical</item>
         <item name="android:dividerHeight" tools:ignore="PxUsage">1px</item>
     </style>
+    
+    <style name="CustomShowcaseTheme" parent="ShowcaseView">
+        <item name="sv_backgroundColor">#AA000000</item>
+  </style>
 
 </resources>

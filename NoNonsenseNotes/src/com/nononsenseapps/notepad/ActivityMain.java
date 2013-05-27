@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.github.espiandev.showcaseview.ShowcaseView;
+import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
+import com.github.espiandev.showcaseview.ShowcaseViewBuilder;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.EActivity;
@@ -39,6 +42,7 @@ import com.nononsenseapps.notepad.prefs.AccountDialog4;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs.AccountDialog;
+import com.nononsenseapps.utils.ViewsHelper;
 
 import android.animation.Animator;
 import android.animation.LayoutTransition;
@@ -79,6 +83,7 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -114,6 +119,8 @@ public class ActivityMain extends FragmentActivity implements
 	// Using tags for test
 	public static final String DETAILTAG = "detailfragment";
 	public static final String LISTPAGERTAG = "listpagerfragment";
+	private static final String SHOWCASED_MAIN = "showcased_main_window";
+	private static final String SHOWCASED_DRAWER = "showcased_main_drawer";
 
 	@ViewById
 	ListView leftDrawer;
@@ -151,6 +158,9 @@ public class ActivityMain extends FragmentActivity implements
 
 	boolean isDrawerClosed = true;
 
+	boolean alreadyShowcased = false;
+	boolean alreadyShowcasedDrawer = false;
+
 	SyncStatusMonitor syncStatusReceiver = null;
 	// Only not if opening note directly
 	private boolean shouldAddToBackStack = true;
@@ -182,6 +192,9 @@ public class ActivityMain extends FragmentActivity implements
 				.getDefaultSharedPreferences(this);
 		mIsDonate = prefs.getBoolean(SKU_DONATE, false)
 				| prefs.getBoolean(DONATED, false);
+
+		alreadyShowcased = prefs.getBoolean(SHOWCASED_MAIN, false);
+		alreadyShowcasedDrawer = prefs.getBoolean(SHOWCASED_DRAWER, false);
 
 		// For in-app billing
 		final String base64EncodedPublicKey = new StringBuilder(
@@ -303,7 +316,7 @@ public class ActivityMain extends FragmentActivity implements
 		// Sync if appropriate
 		SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
 	}
-	
+
 	private void restartAndRefresh() {
 		shouldRestart = false;
 		Intent intent = getIntent();
@@ -393,6 +406,7 @@ public class ActivityMain extends FragmentActivity implements
 	};
 	protected boolean reverseAnimation = false;
 	private boolean shouldRestart = false;
+	private ShowcaseView sv;
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -415,9 +429,6 @@ public class ActivityMain extends FragmentActivity implements
 		// TODO handle being called repeatably better?
 		// Set a listener on drawer events
 		// TODO strings
-		// TODO prepare options
-		// boolean drawerOpen = mDrawerLayout.isDrawerOpen(mDrawerList);
-		// menu.findItem(R.id.action_websearch).setVisible(!drawerOpen);
 		if (mDrawerToggle == null) {
 			mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
 					R.drawable.ic_drawer_dark, R.string.ok, R.string.about) {
@@ -428,7 +439,6 @@ public class ActivityMain extends FragmentActivity implements
 				 */
 				public void onDrawerClosed(View view) {
 					getActionBar().setTitle(R.string.app_name);
-					// TODO show items
 					isDrawerClosed = true;
 					invalidateOptionsMenu(); // creates call to
 												// onPrepareOptionsMenu()
@@ -437,10 +447,11 @@ public class ActivityMain extends FragmentActivity implements
 				/** Called when a drawer has settled in a completely open state. */
 				public void onDrawerOpened(View drawerView) {
 					getActionBar().setTitle(R.string.show_from_all_lists);
-					// TODO hide items
 					isDrawerClosed = false;
 					invalidateOptionsMenu(); // creates call to
 												// onPrepareOptionsMenu()
+
+					showcaseDrawerPress();
 				}
 			};
 
@@ -529,7 +540,7 @@ public class ActivityMain extends FragmentActivity implements
 			// directly
 			listOpener.openList(id);
 		}
-		
+
 		// And then close drawer
 		if (drawerLayout != null && leftDrawer != null) {
 			drawerLayout.closeDrawer(leftDrawer);
@@ -685,6 +696,62 @@ public class ActivityMain extends FragmentActivity implements
 		transaction.commit();
 		// Next go, always add
 		shouldAddToBackStack = true;
+
+		if (!showingEditor || fragment2 != null) {
+			showcaseDrawer();
+		}
+	}
+
+	/**
+	 * On first load, show some functionality hints
+	 */
+	private void showcaseDrawer() {
+		if (alreadyShowcased) {
+			return;
+		}
+		final ConfigOptions options = new ConfigOptions();
+		options.shotType = ShowcaseView.TYPE_NO_LIMIT;
+		options.block = true;
+		// Used in saving state
+		options.showcaseId = 1;
+		final int vertDp = ViewsHelper.convertDip2Pixels(this, 200);
+		final int horDp = ViewsHelper.convertDip2Pixels(this, 200);
+		sv = ShowcaseView
+				.insertShowcaseViewWithType(ShowcaseView.ITEM_ACTION_HOME,
+						android.R.id.home, this, R.string.showcase_main_title,
+						R.string.showcase_main_msg, options);
+		sv.animateGesture(0, vertDp, horDp, vertDp);
+		
+		PreferenceManager.getDefaultSharedPreferences(this).edit()
+				.putBoolean(SHOWCASED_MAIN, true).commit();
+		alreadyShowcased = true;
+	}
+
+	private void showcaseDrawerPress() {
+		// only show on first boot
+		if (alreadyShowcasedDrawer) {
+			return;
+		}
+
+		final int vertDp = ViewsHelper.convertDip2Pixels(this, 110);
+		final int horDp = ViewsHelper.convertDip2Pixels(this, 60);
+
+		if (sv != null) {
+			sv.setText(R.string.showcase_drawer_title, R.string.showcase_drawer_msg);
+			sv.setShowcasePosition(horDp, vertDp);
+		}
+		else {
+			final ConfigOptions options = new ConfigOptions();
+			options.shotType = ShowcaseView.TYPE_NO_LIMIT;
+			options.block = true;
+			// Used in saving state
+			options.showcaseId = 2;
+			sv = ShowcaseView.insertShowcaseView(horDp, vertDp, this,
+					R.string.showcase_drawer_title, R.string.showcase_drawer_msg, options);
+		}
+		PreferenceManager
+		.getDefaultSharedPreferences(this).edit().putBoolean(SHOWCASED_DRAWER, true).commit();
+		alreadyShowcasedDrawer = true;
 	}
 
 	private void clearNotification(final Intent intent) {
@@ -857,6 +924,7 @@ public class ActivityMain extends FragmentActivity implements
 	}
 
 	void updateUiDonate() {
+		// TODO check correct variable
 		if (mIsDonate) {
 			// Toast.makeText(this, R.string.donate_thanks, Toast.LENGTH_SHORT)
 			// .show();
@@ -1148,10 +1216,9 @@ public class ActivityMain extends FragmentActivity implements
 	@Override
 	public void onSharedPreferenceChanged(final SharedPreferences prefs,
 			final String key) {
-		// TODO Auto-generated method stub
 		if (key.equals(MainPrefs.KEY_THEME)
 				|| key.equals(getString(R.string.pref_locale))) {
-			shouldRestart  = true;
+			shouldRestart = true;
 		}
 	}
 }

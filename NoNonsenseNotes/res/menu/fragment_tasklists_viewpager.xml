@@ -15,12 +15,12 @@
         android:orderInCategory="201"
         android:showAsAction="ifRoom"
         android:title="@string/menu_sync"/>
-    <item
+    <!-- <item
         android:id="@+id/menu_createlist"
         android:icon="?ic_action_add_list"
         android:orderInCategory="202"
         android:showAsAction="ifRoom"
-        android:title="@string/menu_createlist"/>
+        android:title="@string/menu_createlist"/> -->
 
     <group android:id="@+id/viewpager_menu_group" >
         <item

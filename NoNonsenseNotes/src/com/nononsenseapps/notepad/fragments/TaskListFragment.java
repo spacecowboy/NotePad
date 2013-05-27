@@ -637,13 +637,13 @@ public class TaskListFragment extends Fragment implements
 				mListener.addTaskInList("", mListId);
 			}
 			return true;
-		case R.id.menu_managelists:
-			// Show fragment
-			if (mListId > 0) {
-				DialogEditList_ dialog = DialogEditList_.getInstance(mListId);
-				dialog.show(getFragmentManager(), "fragment_edit_list");
-			}
-			return true;
+//		case R.id.menu_managelists:
+//			// Show fragment
+//			if (mListId > 0) {
+//				DialogEditList_ dialog = DialogEditList_.getInstance(mListId);
+//				dialog.show(getFragmentManager(), "fragment_edit_list");
+//			}
+//			return true;
 		case R.id.menu_clearcompleted:
 			if (mListId > 0) {
 				DialogDeleteCompletedTasks.showDialog(getFragmentManager(),

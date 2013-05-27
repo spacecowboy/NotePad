@@ -60,6 +60,7 @@ limitations under the License.
 <string name="sort_list_default">Normale Sortierung</string>
 <string name="sort_list_alphabetical">Sortiere alphabetisch</string>
 <string name="sort_list_due">Sortiere nach Fälligkeitsdatum</string>
+<string name="sort_list_updated">Sortiere nach letzten Änderungen</string>
 <string name="sort_list_manual">Manuell Sortieren</string>
 <string name="search_description">Notizen und Aufgaben</string>
 <string name="archive">Archiv</string>
@@ -70,6 +71,7 @@ limitations under the License.
 <string name="settings_theme">Aktuelles Design</string>
 <string name="settings_theme_dialog">Design verwenden</string>
 <string name="settings_lang">Sprache</string>
+<string name="settings_lang_dialog">Verschieben</string>
 <string name="settings_cat_theme">Design</string>
 <string name="settings_cat_sorting">Sortierung</string>
 <string name="settings_sorting_type">Sortieren nach</string>
@@ -121,6 +123,7 @@ limitations under the License.
 <string name="deleted">Gelöscht</string>
 <string name="repeat">Wiederholen</string>
 <string name="once">Einmalig</string>
+<string name="always">Immer</string>
 <string name="items">Notizen</string>
 <string name="permission_read_label">Notizen und Listen lesen</string>
 <string name="permission_read_desc">Erlaubt der Anwendung ihre Notizen und zugehörigen Listen zu lesen </string>
@@ -159,6 +162,10 @@ Use few if language need it. In English is the same.
 <item quantity="one">@string/selected_one</item>
 <item quantity="other">@string/selected_other</item>
 </plurals>
+
+<string name="move">Verschieben</string>
+<string name="move_to">Verschieben nach</string>
+<string name="moved_x_to">%d verschoben nach</string>
 
 <string name="lock_note">Notiz sperren</string>
 <string name="unlock_note">Notiz entsperren</string>
@@ -222,17 +229,19 @@ Use few if language need it. In English is the same.
 <string name="hide_date_summary_on">Datum wird verborgen</string>
 <string name="hide_date_summary_off">Datum wird angezeigt</string>
 <string name="item_max_height">Maximale Höhe</string>
-<string name="long_date_format">Langes Datum</string>
-<string name="short_date_format">Kurzes Datum</string>
+<string name="long_date_format">Langes Datumsformat</string>
+<string name="short_date_format">Kurzes Datumsformat</string>
 <string name="title_rows">max. Titelhöhe</string>
 <string name="title_rows_1">1 Zeile</string>
 <string name="title_rows_2">2 Zeilen</string>
 <string name="title_rows_free">Unbegrenzt</string>
 <string name="rows">Reihen</string>
+<string name="select_date">Datum wählen</string>
 <string name="saturday">Samstag</string>
 <string name="sunday">Sonntag</string>
 <string name="monday">Montag </string>
 <string name="localedefault">Systemsprache</string>
+<string name="donate">Spenden</string>
 <string name="donate_thanks">Vielen Dank für Deine Unterstützung</string>
 
 <!-- These should probably not be translated -->
@@ -283,6 +292,7 @@ Use few if language need it. In English is the same.
 <string name="notifications">Benachrichtigungen</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
 <string name="dashclock_tasks">Aufgaben</string>
+<string name="dashclock_restrict_to_tasks_in_a_specific_list">Auf Aufgaben in bestimmter Liste beschränken</string>
 <string name="dashclock_show_overdue_tasks">Überfällige Aufgaben anzeigen</string>
 <string name="dashclock_overdue_tasks_show">Überfällige Aufgaben werden angezeigt</string>
 <string name="dashclock_overdue_tasks_hide">Überfällige Aufgaben werden versteckt</string>

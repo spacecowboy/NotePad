@@ -4,6 +4,10 @@ import java.util.Calendar;
 
 import com.doomonafireball.betterpickers.timepicker.TimePickerDialogFragment;
 import com.doomonafireball.betterpickers.timepicker.TimePickerDialogFragment.TimePickerDialogHandler;
+import com.github.espiandev.showcaseview.ShowcaseView;
+import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
+import com.github.espiandev.showcaseview.ShowcaseViews;
+import com.github.espiandev.showcaseview.ShowcaseViews.ItemViewProperties;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
@@ -29,6 +33,7 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.WeekDaysView;
+import com.nononsenseapps.utils.ViewsHelper;
 import com.nononsenseapps.utils.views.StyledEditText;
 import com.nononsenseapps.ui.WeekDaysView.onCheckedDaysChangeListener;
 
@@ -186,6 +191,7 @@ public class TaskDetailFragment extends Fragment implements
 	public static final String ARG_ITEM_CONTENT = "item_text";
 	// A list id is necessary
 	public static final String ARG_ITEM_LIST_ID = "item_list_id";
+	private static final String SHOWCASED_EDITOR = "showcased_editor_window";
 
 	// Dao version of the object this fragment represents
 	private Task mTask;
@@ -284,6 +290,29 @@ public class TaskDetailFragment extends Fragment implements
 			mTask.setText(getArguments().getString(ARG_ITEM_CONTENT, ""));
 			fillUIFromTask();
 		}
+
+		// showcase first time
+		showcaseEditor();
+	}
+
+	void showcaseEditor() {
+		final boolean alreadyShowcased = PreferenceManager
+				.getDefaultSharedPreferences(getActivity()).getBoolean(
+						SHOWCASED_EDITOR, false);
+
+		if (alreadyShowcased) {
+			return;
+		}
+
+		ShowcaseViews views = new ShowcaseViews(getActivity(),
+				R.layout.showcase_view_template);
+		views.addView(new ItemViewProperties(ItemViewProperties.ID_OVERFLOW,
+				R.string.showcase_timemachine_title,
+				R.string.showcase_timemachine_msg,
+				ShowcaseView.ITEM_ACTION_OVERFLOW, 0.5f));
+		views.show();
+		 PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(SHOWCASED_EDITOR,
+		 true).commit();
 	}
 
 	@AfterViews
