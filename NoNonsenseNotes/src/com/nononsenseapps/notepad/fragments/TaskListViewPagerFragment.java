@@ -181,6 +181,13 @@ public class TaskListViewPagerFragment extends Fragment implements
 			final boolean visible = ((MenuStateController) getActivity()).childItemsVisible();
 			
 			menu.setGroupVisible(R.id.viewpager_menu_group, visible);
+			// Outside group to allow for action bar placement
+			if (menu.findItem(R.id.menu_search) != null)
+				menu.findItem(R.id.menu_search).setVisible(visible);
+			if (menu.findItem(R.id.menu_sync) != null)
+				menu.findItem(R.id.menu_sync).setVisible(visible);
+			if (menu.findItem(R.id.menu_createlist) != null)
+				menu.findItem(R.id.menu_createlist).setVisible(visible);
 		}
 	}
 

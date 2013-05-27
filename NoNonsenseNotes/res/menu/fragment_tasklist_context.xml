@@ -21,6 +21,6 @@
         android:id="@+id/menu_copy"
         android:icon="?content_copy"
         android:showAsAction="ifRoom"
-        android:title="@string/menu_copy"/>
+        android:title="@android:string/copy"/>
 
 </menu>

@@ -518,7 +518,7 @@ public class TaskDetailFragment extends Fragment implements
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasks_detail, menu);
-		
+
 		// Locate MenuItem with ShareActionProvider
 		MenuItem item = menu.findItem(R.id.menu_share);
 
@@ -630,11 +630,25 @@ public class TaskDetailFragment extends Fragment implements
 		menu.findItem(R.id.menu_unlock).setVisible(
 				mTask != null && mTask.locked);
 		menu.findItem(R.id.menu_share).setEnabled(!isLocked());
-		
+
 		if (getActivity() instanceof MenuStateController) {
-			final boolean visible = ((MenuStateController) getActivity()).childItemsVisible();
-			
+			final boolean visible = ((MenuStateController) getActivity())
+					.childItemsVisible();
+
 			menu.setGroupVisible(R.id.editor_menu_group, visible);
+			// Outside group to allow for action bar placement
+			if (menu.findItem(R.id.menu_delete) != null)
+				menu.findItem(R.id.menu_delete).setVisible(visible);
+			if (menu.findItem(R.id.menu_revert) != null)
+				menu.findItem(R.id.menu_revert).setVisible(visible);
+			if (menu.findItem(R.id.menu_share) != null)
+				menu.findItem(R.id.menu_share).setVisible(visible);
+			if (menu.findItem(R.id.menu_lock) != null)
+				menu.findItem(R.id.menu_lock).setVisible(
+						visible && mTask != null && !mTask.locked);
+			if (menu.findItem(R.id.menu_unlock) != null)
+				menu.findItem(R.id.menu_unlock).setVisible(
+						visible && mTask != null && mTask.locked);
 		}
 	}
 

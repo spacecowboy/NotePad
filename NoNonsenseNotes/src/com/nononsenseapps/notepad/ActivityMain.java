@@ -26,6 +26,7 @@ import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
+import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
 import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
@@ -446,29 +447,7 @@ public class ActivityMain extends FragmentActivity implements
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View v, int pos,
 					long id) {
-				// Open list
-				Intent i = new Intent(ActivityMain.this, ActivityMain_.class);
-				i.setAction(Intent.ACTION_VIEW).setData(TaskList.getUri(id))
-						.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-				// If editor is on screen, we need to reload fragments
-				if (listOpener == null) {
-					while (getSupportFragmentManager().popBackStackImmediate()) {
-						// Need to pop the entire stack and then load
-					}
-					reverseAnimation = true;
-					startActivity(i);
-				}
-				else {
-					// If not popped, then send the call to the fragment
-					// directly
-					Log.d("nononsenseapps fragments",
-							"shoudl call fragment here");
-					listOpener.openList(id);
-				}
-
-				// And then close drawer
-				drawerLayout.closeDrawer(leftDrawer);
+				openList(id);
 			}
 		});
 		leftDrawer.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -511,6 +490,35 @@ public class ActivityMain extends FragmentActivity implements
 						adapter.swapCursor(null);
 					}
 				});
+	}
+
+	/**
+	 * Opens the specified list and closes the left drawer
+	 */
+	void openList(final long id) {
+		// Open list
+		Intent i = new Intent(ActivityMain.this, ActivityMain_.class);
+		i.setAction(Intent.ACTION_VIEW).setData(TaskList.getUri(id))
+				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+		// If editor is on screen, we need to reload fragments
+		if (listOpener == null) {
+			while (getSupportFragmentManager().popBackStackImmediate()) {
+				// Need to pop the entire stack and then load
+			}
+			reverseAnimation = true;
+			startActivity(i);
+		}
+		else {
+			// If not popped, then send the call to the fragment
+			// directly
+			listOpener.openList(id);
+		}
+		
+		// And then close drawer
+		if (drawerLayout != null && leftDrawer != null) {
+			drawerLayout.closeDrawer(leftDrawer);
+		}
 	}
 
 	/**
@@ -736,6 +744,7 @@ public class ActivityMain extends FragmentActivity implements
 			donateItem.setVisible(!mIsDonate);
 		}
 		menu.setGroupVisible(R.id.activity_menu_group, isDrawerClosed);
+		menu.setGroupVisible(R.id.activity_reverse_menu_group, !isDrawerClosed);
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -750,6 +759,18 @@ public class ActivityMain extends FragmentActivity implements
 		switch (item.getItemId()) {
 		case android.R.id.home:
 			// Handled by drawer
+			return true;
+		case R.id.drawer_menu_createlist:
+			// Show fragment
+			DialogEditList_ dialog = DialogEditList_.getInstance();
+			dialog.setListener(new EditListDialogListener() {
+
+				@Override
+				public void onFinishEditDialog(long id) {
+					openList(id);
+				}
+			});
+			dialog.show(getSupportFragmentManager(), "fragment_create_list");
 			return true;
 		case R.id.menu_preferences:
 			Intent intent = new Intent();

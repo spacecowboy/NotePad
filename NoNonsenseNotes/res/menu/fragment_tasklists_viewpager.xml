@@ -1,20 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <!-- Outside group to allow for action bar placement -->
+    <item
+        android:id="@+id/menu_search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="?action_search"
+        android:orderInCategory="200"
+        android:showAsAction="ifRoom|collapseActionView"
+        android:title="@string/search_hint"/>
+    <item
+        android:id="@+id/menu_sync"
+        android:icon="?navigation_refresh"
+        android:orderInCategory="201"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_sync"/>
+    <item
+        android:id="@+id/menu_createlist"
+        android:icon="?ic_action_add_list"
+        android:orderInCategory="202"
+        android:showAsAction="ifRoom"
+        android:title="@string/menu_createlist"/>
+
     <group android:id="@+id/viewpager_menu_group" >
-        <item
-            android:id="@+id/menu_search"
-            android:actionViewClass="android.widget.SearchView"
-            android:icon="?action_search"
-            android:orderInCategory="200"
-            android:showAsAction="ifRoom|collapseActionView"
-            android:title="@string/search_hint"/>
-        <item
-            android:id="@+id/menu_sync"
-            android:icon="?navigation_refresh"
-            android:orderInCategory="201"
-            android:showAsAction="ifRoom"
-            android:title="@string/menu_sync"/>
         <item
             android:id="@+id/menu_deletedtasks"
             android:orderInCategory="203"
@@ -26,13 +34,5 @@
             android:showAsAction="never"
             android:title="@string/donate"/>
     </group>
-
-    <!-- TODO need action icon -->
-    <item
-        android:id="@+id/menu_createlist"
-        android:orderInCategory="202"
-        android:showAsAction="ifRoom"
-        android:icon="?ic_action_add_list"
-        android:title="@string/menu_createlist"/>
 
 </menu>
