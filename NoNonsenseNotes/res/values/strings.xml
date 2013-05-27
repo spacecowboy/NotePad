@@ -31,7 +31,7 @@
     <string name="menu_save_and_add">Save and add note</string>
     <string name="menu_delete">Delete</string>
     <string name="menu_revert">Revert changes</string>
-    <string name="menu_copy">@android:string/copy</string>
+    <string name="menu_copy">Copy</string>
     <string name="menu_cancel">Cancel</string>
     <string name="menu_setcompleted">Set done</string>
     <string name="menu_setuncompleted">Set not done</string>

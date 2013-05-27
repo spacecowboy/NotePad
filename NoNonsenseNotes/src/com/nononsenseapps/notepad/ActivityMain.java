@@ -52,6 +52,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
@@ -90,7 +91,7 @@ import android.widget.Toast;
 @EActivity(R.layout.activity_main)
 public class ActivityMain extends FragmentActivity implements
 		OnFragmentInteractionListener, OnSyncStartStopListener,
-		MenuStateController {
+		MenuStateController, OnSharedPreferenceChangeListener {
 
 	public static interface ListOpener {
 		public void openList(final long id);
@@ -290,6 +291,9 @@ public class ActivityMain extends FragmentActivity implements
 
 	@Override
 	public void onResume() {
+		if (shouldRestart) {
+			restartAndRefresh();
+		}
 		super.onResume();
 		// activate monitor
 		if (syncStatusReceiver != null) {
@@ -298,6 +302,16 @@ public class ActivityMain extends FragmentActivity implements
 
 		// Sync if appropriate
 		SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
+	}
+	
+	private void restartAndRefresh() {
+		shouldRestart = false;
+		Intent intent = getIntent();
+		overridePendingTransition(0, 0);
+		intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+		finish();
+		overridePendingTransition(0, 0);
+		startActivity(intent);
 	}
 
 	@Override
@@ -378,6 +392,7 @@ public class ActivityMain extends FragmentActivity implements
 		}
 	};
 	protected boolean reverseAnimation = false;
+	private boolean shouldRestart = false;
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -1127,7 +1142,16 @@ public class ActivityMain extends FragmentActivity implements
 
 	@Override
 	public boolean childItemsVisible() {
-		// TODO Auto-generated method stub
 		return isDrawerClosed;
+	}
+
+	@Override
+	public void onSharedPreferenceChanged(final SharedPreferences prefs,
+			final String key) {
+		// TODO Auto-generated method stub
+		if (key.equals(MainPrefs.KEY_THEME)
+				|| key.equals(getString(R.string.pref_locale))) {
+			shouldRestart  = true;
+		}
 	}
 }

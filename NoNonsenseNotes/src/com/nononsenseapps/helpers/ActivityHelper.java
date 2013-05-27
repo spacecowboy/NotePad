@@ -5,6 +5,7 @@ import java.util.Locale;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 
@@ -54,6 +55,10 @@ public class ActivityHelper {
 			config.locale = locale;
 			activity.getResources().updateConfiguration(config,
 					activity.getResources().getDisplayMetrics());
+		}
+		
+		if (activity instanceof OnSharedPreferenceChangeListener) {
+			prefs.registerOnSharedPreferenceChangeListener((OnSharedPreferenceChangeListener) activity);
 		}
 	}
 
