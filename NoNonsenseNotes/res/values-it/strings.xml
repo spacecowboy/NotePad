@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (C) 2012 Jonas Kalderstam
+Copyright (C) 2013 Jonas Kalderstam
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,38 +19,22 @@ limitations under the License.
 
 <string name="app_name">Note</string>
 <string name="title_create">Nuova nota</string>
-<string name="title_edit">Modifica: %1$s</string>
-<string name="menu_add">Nuova nota</string>
 <string name="menu_save_and_add">Salva e apre una nuova nota</string>
 <string name="menu_delete">Elimina</string>
-<string name="menu_revert">Annulla modifiche</string>
-<string name="menu_copy">Copia nota</string>
-<string name="menu_cancel">Annulla</string>
-<string name="menu_setcompleted">Imposta come completata</string>
-<string name="menu_setuncompleted">Imposta come in corso</string>
 <string name="menu_deletelist">Elimina elenco</string>
 <string name="menu_sync">Aggiorna</string>
 <string name="menu_share">Condividi</string>
 <string name="menu_preferences">Impostazioni</string>
-<string name="menu_renamelist">Rinomina elenco</string>
 <string name="menu_createlist">Crea elenco</string>
 <string name="menu_clearcompleted">Rimuovi completate</string>
 <string name="menu_setdefaultlist">Imposta come elenco predefinito</string>
 <string name="menu_managelists">Gestisci elenchi</string>
 <string name="add_item">Aggiungi elemento</string>
-<string name="archive_item_title">Archiviare?</string>
-<string name="archive_item_message">Sei sicuro di voler archiviare questo elemento?</string>
-<string name="archive_item_toast">Archiviato</string>
-<string name="delete_list_title">Eliminare elenco?</string>
 <string name="delete_list_message">Sei sicuro di voler eliminare l\'elenco? Le note verranno archiviate</string>
-<string name="delete_list_toast">Lista eliminata</string>
-<string name="delete_list_warning">Sicuro di voler eliminare l\'elenco? L\'elenco verrà eliminato permanentemente.</string>
 <string name="editor_due_date_hint">Data scadenza</string>
 <string name="editor_title_hint">Titolo</string>
 <string name="editor_note_hint">Nota</string>
 <string name="resolve_edit">Modifica nota</string>
-<string name="error_title">Errore</string>
-<string name="error_message">Errore nel caricare la nota</string>
 <string name="default_style">Stile predefinito</string>
 <string name="show_items_as_tasks">Mostra elementi come attività</string>
 <string name="show_items_as_notes">Mostra elementi come note</string>
@@ -63,63 +47,25 @@ limitations under the License.
 <string name="settings_theme">Tema attuale</string>
 <string name="settings_theme_dialog">Applica tema</string>
 <string name="settings_lang">Lingua</string>
-<string name="settings_cat_theme">Tema</string>
-<string name="settings_cat_sorting">Ordinamento</string>
-<string name="settings_sorting_type">Ordinamento</string>
-<string name="settings_sorting_type_dialog">Ordinamento</string>
-<string name="settings_sorting_order">Ordina</string>
-<string name="settings_sorting_order_dialog">Ordina per</string>
-<string name="settings_summary_sort_type_alphabetic">Titolo</string>
-<string name="settings_summary_sort_type_modified">Ultima modifica</string>
-<string name="settings_summary_sort_type_duedate">Data scadenza</string>
-<string name="settings_summary_sort_type_serverposition">Personalizzato</string>
 <string name="settings_summary_theme_black">Nero</string>
 <string name="settings_summary_theme_dark">Scuro</string>
 <string name="settings_summary_theme_light">Chiaro</string>
-<string name="settings_summary_theme_light_dark_ab">Chiaro con barra azione scura</string>
-<string name="settings_summary_theme_googlenow_dark">Scuro ispirato a Google Now</string>
 <string name="settings_cat_appearance">Aspetto</string>
-<string name="settings_font_screen">Impostazioni carattere</string>
-<string name="settings_font_screen_summary">Puoi modificare tipo e dimensione dei caratteri</string>
-<string name="settings_cat_font_editor">Editor</string>
-<string name="settings_font_type">Carattere</string>
-<string name="settings_font_type_dialog">Seleziona un carattere</string>
-<string name="settings_font_size">Dimensione carattere</string>
 <string name="preference_preview_text">Ecco come apparirà il testo nell\'editor</string>
-<string name="settings_text_preview_title">Anteprima</string>
-<string name="monospace">Monospace</string>
-<string name="sans">Sans</string>
-<string name="serif">Serif</string>
-<string name="settings_sync_freq_title">Tipo di sincronizzazione</string>
 <string name="settings_account_title">Seleziona un account</string>
 <string name="settings_account_summary">Clicca per cambiare account</string>
 <string name="settings_sync_enable_title">Sincronizza con Google Tasks</string>
-<string name="settings_sync_enable_summary">Sincronizza le note con il tuo account Google</string>
 <string name="settings_cat_syncing">Sincronizzazione</string>
-<string name="manual">Manuale</string>
-<string name="minutes">minuti</string>
-<string name="hours">ore</string>
-<string name="onehour">Un\'ora</string>
-<string name="oneday">Un giorno</string>
-<string name="yes">Sì</string>
-<string name="no">No</string>
-<string name="ok">OK</string>
 <string name="show_from_all_lists">Tutti gli elenchi</string>
-<string name="default_list_needed_warning">Imposta prima un elenco predefinito</string>
-<string name="reverted">Modifiche annullate</string>
-<string name="notecopied">Copiata</string>
 <string name="deleted">Eliminata</string>
-<string name="items">note</string>
 <string name="permission_read_label">leggi note ed elenchi</string>
 <string name="permission_read_desc">Permetti all\'applicazione di leggere le tue note e i relativi elenchi.</string>
 <string name="permission_write_label">modifica note ed elenchi</string>
 <string name="permission_write_desc">Permetti all\'applicazione di inserire, aggiornare ed eliminare note ed elenchi.</string>
-<string name="settings_header_list">Impostazioni elenco</string>
 <string name="settings_list_dialog">Seleziona un elenco</string>
 <string name="settings_list">Elenco</string>
-<string name="automatic">Automatica</string>
-<string name="preferences_week_start_day_dialog">La settimana inizia il</string>
-<string name="preferences_week_start_day_title">La settimana inizia il</string>
+
+
 
 <!--
 Use few if language need it. In English is the same.
@@ -127,16 +73,29 @@ Use few if language need it. In English is the same.
 -->
 <plurals name="notecopied_msg">
 <item quantity="one">@string/notecopied_one</item>
+<item quantity="zero">@string/notecopied_zero</item>
+<item quantity="two">@string/notecopied_two</item>
+<item quantity="few">@string/notecopied_few</item>
+<item quantity="many">@string/notecopied_many</item>
 <item quantity="other">@string/notecopied_other</item>
 </plurals>
 <plurals name="notedeleted_msg">
 <item quantity="one">@string/notedeleted_one</item>
+<item quantity="zero">@string/notedeleted_zero</item>
+<item quantity="two">@string/notedeleted_two</item>
+<item quantity="few">@string/notedeleted_few</item>
+<item quantity="many">@string/notedeleted_many</item>
 <item quantity="other">@string/notedeleted_other</item>
 </plurals>
 <plurals name="mode_choose">
 <item quantity="one">@string/selected_one</item>
+<item quantity="zero">@string/selected_zero</item>
+<item quantity="two">@string/selected_two</item>
+<item quantity="few">@string/selected_few</item>
+<item quantity="many">@string/selected_many</item>
 <item quantity="other">@string/selected_other</item>
 </plurals>
+
 
 <string name="lock_note">Blocca nota</string>
 <string name="unlock_note">Sblocca nota</string>
@@ -160,81 +119,35 @@ Use few if language need it. In English is the same.
 <string name="sync_login_failed">Login non riuscito, non è possibile connettersi a Google Tasks</string>
 <string name="changelog_full_title">Changelog</string>
 <string name="changelog_title">Novità</string>
-<string name="changelog_ok_button">OK</string>
-<string name="changelog_show_full">Mostra tutto</string>
-<string name="widget_pref_preview_note">Mostra anteprima della nota</string>
-<string name="widget_pref_preview_note_summary_off">Il titolo sarà su 2 righe</string>
-<string name="widget_pref_preview_note_summary_on">La nota sarà sulla seconda riga</string>
-<string name="widget_pref_show_complete">Pulsante per contrassegnare come completata</string>
-<string name="widget_pref_show_complete_summary_off">Il pulsante sarà nascosto</string>
-<string name="widget_pref_show_complete_summary_on">Il pulsante sarà visibile</string>
-<string name="settings_listitem">Titolo su due righe</string>
-<string name="settings_listitem_summary_off">L\'anteprima della nota sarà su 2 righe</string>
-<string name="editor_details">Altro</string>
 <string name="completed">Completata</string>
-<string name="subtask_of">Sotto-attività di</string>
-<string name="security">Sicurezza</string>
 <string name="date_header_overdue">Scadute</string>
 <string name="date_header_today">Oggi</string>
 <string name="date_header_tomorrow">Domani</string>
-<string name="date_header_7days">Prossimi 7 giorni</string>
 <string name="date_header_future">Dopo</string>
 <string name="date_header_none">Nessuna data</string>
 <string name="date_header_completed">Completate</string>
-<string name="mod_header_yesterday">Ieri</string>
-<string name="mod_header_thisweek">Questa settimana</string>
-<string name="mod_header_earlier">Prima</string>
-<string name="settings_listheader">Quando si mostrano tutti gli elenchi</string>
-<string name="settings_listheader_off">Mostra come un elenco</string>
-<string name="settings_listheader_on">Mostra i nomi degli elenchi</string>
-<string name="please_create_list">Creare un elenco</string>
 <string name="please_select_note">Selezionare o creare una nota</string>
 <string name="please_create_note">Creare una nota</string>
 <string name="hide_checkbox">Nascondi casella di spunta</string>
 <string name="hide_checkbox_summary_on">La casella di spunta verrà nascosta</string>
 <string name="hide_checkbox_summary_off">La casella di spunta verrà mostrata</string>
-<string name="hide_note">Nascondi la nota</string>
-<string name="hide_note_summary_on">La nota verrà nascosta</string>
-<string name="hide_note_summary_off">La nota verrà mostrata</string>
 <string name="hide_date">Nascondi la data di scadenza</string>
-<string name="hide_date_summary_on">La data verrà nascosata</string>
-<string name="hide_date_summary_off">La data verrà mostrata</string>
 <string name="item_max_height">Altezza massima</string>
 <string name="long_date_format">Formato data estesa</string>
 <string name="short_date_format">Formato data compatta</string>
-<string name="title_rows">Altezza massima del titolo</string>
-<string name="title_rows_1">1 riga</string>
-<string name="title_rows_2">2 righe</string>
-<string name="title_rows_free">Nessuna limitazione</string>
-<string name="saturday">Sabato</string>
-<string name="sunday">Domenica</string>
-<string name="monday">Lunedì</string>
 <string name="localedefault">Predefinito del sistema</string>
 
-<!-- These should probably not be translated -->
-<string name="default_notetitle">Benvenuto!</string>
-
 <!-- settings string keys -->
-<string name="menu_settings">Impostazioni</string>
-<string name="title_activity_list_widget_config">Configurazione del widget</string>
-<string name="hide_appicon">Nascondi icona applicazione</string>
-<string name="hide_new">Nascondi pulsante Nuova</string>
 <string name="hide_header">Nascondi intestazione widget</string>
-<string name="hide_widgetbg">Sfondo trasparente</string>
 <string name="shortcut_help1">Se attivo, il collegamento creerà una nuova nota nell\'elenco selezionato e aprirà l\'editor. Se non attiva, il collegamento aprirà l\'elenco selezionato.</string>
 <string name="loading_widget">Caricamento widget&#8230;</string>
-<string name="default_list_set">Elenco predefinito impostato</string>
-
 <string name="please_type_before_reminder">Inserisci del testo prima di impostare un promemoria</string>
-<string name="select_a_time">Scegli un orario</string>
-
 <string name="notecopied_one">Copiata una nota</string>
 <string name="notecopied_other">Copiate %d note</string>
 <string name="notedeleted_one">Eliminata una nota</string>
 <string name="notedeleted_other">Eliminate % d note</string>
 <string name="selected_one">Selezionata una nota</string>
 <string name="selected_other">Selezionate %d note</string>
-
 <string name="background_sync">Sincronizza in background</string>
 <string name="background_sync_info">Sincronizza ogni ora</string>
 <string name="sync_on_change">Sincronizza a ogni modifica</string>
@@ -243,44 +156,32 @@ Use few if language need it. In English is the same.
 <string name="sync_on_start_info">Avverrà solo all\'avvio iniziale, non ad ogni ripristino</string>
 <string name="sync_full_force">La prossima volta sincronizza completamente</string>
 <string name="sync_full_force_info">Attivare solo se ritiene che la sincronizzazione non sia completa</string>
-
 <string name="snooze">Snooze</string>
 <string name="silent">Silenzioso</string>
 <string name="sound">Suono</string>
 <string name="vibrate">Vibrazione</string>
 <string name="reminders">Promemoria</string>
-<string name="add_reminder">Aggiungi promemoria</string>
 <string name="standard">Standard</string>
 <string name="notification_prio_high">Alta: in alto, espansa</string>
 <string name="notification_prio_low">Bassa: nascosta, minimizzata</string>
 <string name="priority">Priorità</string>
-<string name="group_on_list">Raggruppa per elenco</string>
-<string name="group_on_list_summary">Più notifiche verranno raggruppate insieme se appartengono allo stesso elenco.</string>
-<string name="more">altro</string>
 <string name="notifications">Notifiche</string>
+<!-- "localtime" is replaced at runtime with 12/24 hour clock -->
 <string name="dateformat_micro">d MMM</string>
-<string name="dateformat_short">E, d MMM</string>
-<string name="dateformat_long">EEEE, d MMMM</string>
 <string name="dateformat_weekday">EEEE</string>
 <string name="dateformat_short_1">E kk:mm, d MMM</string>
 <string name="dateformat_short_2">E h:mm a, d MMM</string>
 <string name="dateformat_short_3">E, d MMM</string>
 <string name="dateformat_short_4">MMM d</string>
-<string name="dateformat_short_5">E, kk:mm</string>
-<string name="dateformat_short_6">E, h:mm a</string>
 <string name="dateformat_long_1">EEEE kk:mm, d MMMM</string>
 <string name="dateformat_long_2">EEEE h:mm a, d MMMM</string>
-
-
 <string name="dashclock_tasks">Attività</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Limita alle attività in un elenco specifico</string>
 <string name="dashclock_show_overdue_tasks">Mostra attività scadute</string>
 <string name="dashclock_overdue_tasks_show">Le attività scadute verranno mostrate</string>
 <string name="dashclock_overdue_tasks_hide">Le attività scadute verranno nascoste</string>
-
 <string name="dashclock_title_activity_tasks_settings">Impostazioni NoNonsense Notes</string>
 <string name="dashclock_pref_header_general">Generale</string>
-
 <string name="dashclock_due_upper_limit_title">Limite per attività scadute al più tardi</string>
 <string name="dashclock_today">Oggi</string>
 <string name="dashclock_tomorrow">Domani</string>
@@ -293,8 +194,4 @@ Use few if language need it. In English is the same.
 <string name="dashclock_first_task_shown">Il titolo della prima attività sarà mostrato in grassetto</string>
 <string name="dashclock_display_header">Mostra intestazione</string>
 
-
-<!-- Store text -->
-<string name="google_play_promo_80_char_limit">Un\'app dall\'aspetto accattivante per note, attività e todo sincronizzata con Google Tasks</string>
-<string name="google_play_description">Un\'app open source per appunti e to-do, con interfaccia per smartphone e tablet. Sincronizzala con il tuo account Google per mantenere al sicuro nel cloud le tue note e attività, senza dover inserire alcuna password!\n\nFunzionalità\n* Notifiche/Promemoria\n* Selezione lingua\n* Interfaccia personalizzabile\n* Widget, ridimensionabile e configurabile\n* Ottimo supporto ai tablet, che riprende le funzionalità di Gmail\n* Temi Holo per essere uniforme ad Android\n* Sincronizzazione automatica con Google Tasks\n* Possibilità di impostare password per le note\n* Spostamento delle note tra elenchi differenti\n* Integrazione con Adroid Agenda Widget\n* Ricerca in tutte le note (non solo nei titoli)\n* Regolazione del carattere e della dimensione del testo!\n\nAnnotazioni:\nÈ presente un bug in Android 4.2 che si manifesta in tutte le app che fanno uso delle notifiche. Se si impostano le notifiche per NON vibrare (predefinito) e poi si imposta il telefono in silenzioso (solo vibrazione), le notifiche vibreranno sempre anche se si è esplicitamente disattivato tale comportamento.\nDi nuovo, è un errore in Android, non un bug nell\'applicazione.\n\nÈ possibile aiutare a tradurre questa applicazione, presso  http://translate.nononsenseapps.com\n\nPer ogni problema o per segnalare un bug, non esitate a contattarmi!\n+NoNonsenseApps\noppure\nsegnalate i bug nel tracker dedicato presso https://github.com/spacecowboy/NotePad/issues\n\nQuesta app è open source ed è disponibile online presso https://github.com/spacecowboy/NotePad\n\nÈ disponibile una versione a pagamento dell\'app per coloro che volessero supportarmi nello sviluppo: https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>

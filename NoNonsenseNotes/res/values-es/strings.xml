@@ -1,242 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-Copyright (C) 2012 Jonas Kalderstam
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
-<resources xmlns:tools="http://schemas.android.com/tools">
-
-<string name="app_name">Notes</string>
-<string name="title_create">Nueva nota</string>
-<string name="title_edit">Editar: %1$s</string>
-<string name="menu_add">Nueva nota</string>
-<string name="menu_delete">Eliminar</string>
-<string name="menu_revert">Deshacer cambios</string>
-<string name="menu_copy">Copiar nota</string>
-<string name="menu_cancel">Cancelar</string>
-<string name="menu_setcompleted">Completada</string>
-<string name="menu_setuncompleted">No completada</string>
-<string name="menu_deletelist">Eliminar lista</string>
-<string name="menu_sync">Actualizar</string>
-<string name="menu_share">Compartir</string>
-<string name="menu_preferences">Ajustes</string>
-<string name="menu_renamelist">Renombrar lista</string>
-<string name="menu_createlist">Crear lista</string>
-<string name="menu_clearcompleted">Borrar completadas</string>
-<string name="menu_setdefaultlist">Establecer como predeterminada</string>
-<string name="menu_managelists">Administrar listas</string>
-<string name="delete_list_warning">¿Está seguro de que quiere borrar la lista? Se eliminará permanentemente.</string>
-<string name="editor_due_date_hint">Fecha</string>
-<string name="editor_title_hint">Título</string>
-<string name="editor_note_hint">Nota</string>
-<string name="resolve_edit">Editar nota</string>
-<string name="error_title">Error</string>
-<string name="error_message">Error al cargar la nota</string>
-<string name="search_hint">Búsqueda</string>
-<string name="settings_theme">Tema actual</string>
-<string name="settings_theme_dialog">Elegir tema</string>
-<string name="settings_lang">Idioma</string>
-<string name="settings_cat_theme">Tema</string>
-<string name="settings_cat_sorting">Orden</string>
-<string name="settings_sorting_type">Orden por</string>
-<string name="settings_sorting_type_dialog">Ordenar por</string>
-<string name="settings_sorting_order">Orden</string>
-<string name="settings_sorting_order_dialog">Ordenar por</string>
-<string name="settings_summary_sort_type_alphabetic">Título</string>
-<string name="settings_summary_sort_type_modified">Fecha de modificación</string>
-<string name="settings_summary_sort_type_duedate">Fecha</string>
-<string name="settings_summary_sort_type_serverposition">Posición en el servidor</string>
-<string name="settings_summary_sort_order_asc">Ascendente</string>
-<string name="settings_summary_sort_order_desc">Descendente</string>
-<string name="settings_summary_theme_black">Negro</string>
-<string name="settings_summary_theme_dark">Oscuro</string>
-<string name="settings_summary_theme_light">Claro</string>
-<string name="settings_summary_theme_light_dark_ab">Claro, barra de acciones oscura</string>
-<string name="settings_cat_appearance">Aspecto</string>
-<string name="settings_font_screen">Ajustes del tipo de letra</string>
-<string name="settings_font_screen_summary">Puede cambiar el tipo y tamaño de letra</string>
-<string name="settings_cat_font_editor">Editor</string>
-<string name="settings_font_type">Tipo de letra</string>
-<string name="settings_font_type_dialog">Seleccione un tipo de letra</string>
-<string name="settings_font_size">Tamaño de letra</string>
-<string name="preference_preview_text">Así es como se verá el texto en el editor</string>
-<string name="settings_text_preview_title">Previsualización</string>
-<string name="monospace">Monospace</string>
-<string name="sans">Sans</string>
-<string name="serif">Serif</string>
-<string name="settings_sync_freq_title">Frecuencia de actualización</string>
-<string name="settings_account_title">Seleccione una cuenta</string>
-<string name="settings_account_summary">Pulse para elegir la cuenta</string>
-<string name="settings_sync_enable_title">Sincroniz. con Google Tasks</string>
-<string name="settings_sync_enable_summary">Sincronizar notas con su cuenta de Google</string>
-<string name="settings_cat_syncing">Sincronización</string>
-<string name="manual">Manual</string>
-<string name="minutes">minutos</string>
-<string name="hours">horas</string>
-<string name="onehour">Una hora</string>
-<string name="oneday">Un día</string>
-<string name="yes">Sí</string>
-<string name="no">No</string>
-<string name="ok">OK</string>
-<string name="show_from_all_lists">Todas las listas</string>
-<string name="default_list_needed_warning">Seleccione primero una lista predeterminada</string>
-<string name="reverted">Cambios deshechos</string>
-<string name="notecopied">Copiado</string>
-<string name="deleted">Borrado</string>
-<string name="items">notas</string>
-<string name="permission_read_label">leer notas y listas</string>
-<string name="permission_read_desc">Permite a la aplicación leer sus notas y listas relacionadas.</string>
-<string name="permission_write_label">modificar notas y listas</string>
-<string name="permission_write_desc">Permite a la aplicación añadir, modificar y eliminar notas y listas.</string>
-<string name="settings_header_list">Ajustes de la lista</string>
-<string name="settings_list_dialog">Seleccione una lista</string>
-<string name="settings_list">Lista</string>
-<string name="automatic">Automática</string>
-<string name="preferences_week_start_day_dialog">La semana empieza el</string>
-<string name="preferences_week_start_day_title">La semana empieza el</string>
-<!--
-Use few if language need it. In English is the same.
-<item quantity="few">Copied 2 notes.</item>
--->
-<plurals name="notecopied_msg">
-<item quantity="one">@string/notecopied_one</item>
-<item quantity="other">@string/notecopied_other</item>
-</plurals>
-<plurals name="notedeleted_msg">
-<item quantity="one">@string/notedeleted_one</item>
-<item quantity="other">@string/notedeleted_other</item>
-</plurals>
-<plurals name="mode_choose">
-<item quantity="one">@string/selected_one</item>
-<item quantity="other">@string/selected_other</item>
-</plurals>
-
-<string name="lock_note">Bloquear nota</string>
-<string name="unlock_note">Desbloquear nota</string>
-<string name="locked">Bloqueada</string>
-<string name="unlocked">Desbloqueada</string>
-<string name="password_required">Contraseña requerida</string>
-<string name="select_account">Seleccione una cuenta</string>
-<string name="password">Contraseña</string>
-<string name="password_set">Contraseña establecida</string>
-<string name="password_cleared">Contraseña borrada</string>
-<string name="passwords_dont_match">Las contraseñas no concuerdan</string>
-<string name="password_incorrect">Contraseña incorrecta</string>
-<string name="enter_password">Introduzca la contraseña</string>
-<string name="enter_new_password">Introduzca una nueva contraseña</string>
-<string name="confirm_new_password">Confirme la nueva contraseña</string>
-<string name="apply">Aplicar</string>
-<string name="clear_password">Borrar contraseña</string>
-<string name="password_info"> Establecer una contraseña requerirá que la introduzcapara que se muestren las notas bloqueadas. Sólo protegerá el campo Nota, por lo que seguirá habiendo accesolibre al título y a la fecha. No encripta la nota de ningún modo, así que se podrá seguir viendoen Google mail/calendar. Si olvida la contraseña, sincronice con Google ydespués reinstale la aplicación.</string>
-<string name="about">Créditos</string>
-<string name="sync_failed">Error de sincronización</string>
-<string name="sync_login_failed">Error en el inicio de sesión, no se ha podido conectar a Google Tasks</string>
-<string name="changelog_full_title">Registro de cambios</string>
-<string name="changelog_title">Nuevo</string>
-<string name="changelog_ok_button">OK</string>
-<string name="changelog_show_full">Mostrar todo</string>
-<string name="widget_pref_preview_note">Mostrar notas</string>
-<string name="widget_pref_preview_note_summary_off">El título ocupa 2 líneas</string>
-<string name="widget_pref_preview_note_summary_on">La nota ocupa la segunda línea</string>
-<string name="widget_pref_show_complete">Casilla de completada</string>
-<string name="widget_pref_show_complete_summary_off">Casilla oculta</string>
-<string name="widget_pref_show_complete_summary_on">Casilla visible</string>
-<string name="settings_listitem">Títulos en dos líneas</string>
-<string name="settings_listitem_summary_off">La nota ocupa 2 líneas</string>
-<string name="editor_details">Más</string>
-<string name="completed">Completada</string>
-<string name="subtask_of">Subtarea de</string>
-<string name="security">Seguridad</string>
-<string name="date_header_overdue">Pasadas</string>
-<string name="date_header_today">Hoy</string>
-<string name="date_header_tomorrow">Mañana</string>
-<string name="date_header_7days">Próximos 7 días</string>
-<string name="date_header_future">Más tarde</string>
-<string name="date_header_none">Sin fecha</string>
-<string name="date_header_completed">Completadas</string>
-<string name="mod_header_yesterday">Ayer</string>
-<string name="mod_header_thisweek">Esta semana</string>
-<string name="mod_header_earlier">Anterior</string>
-<string name="settings_listheader">Cabeceras de lista</string>
-<string name="settings_listheader_off">Sin cabeceras de lista</string>
-<string name="settings_listheader_on">Con cabeceras de lista</string>
-<string name="please_create_list">Por favor, cree una nueva lista</string>
-<string name="please_select_note">Por favor, seleccione o cree una nota nueva</string>
-<string name="please_create_note">Por favor, cree una nota nueva</string>
-<string name="hide_checkbox">Esconder casilla</string>
-<string name="hide_checkbox_summary_on">La casilla se ocultará</string>
-<string name="hide_checkbox_summary_off">La casilla se mostrará</string>
-<string name="hide_note">Ocultar nota</string>
-<string name="hide_note_summary_on">La nota se ocultará</string>
-<string name="hide_note_summary_off">La nota se mostrará</string>
-<string name="hide_date">Ocultar fecha de cumplimiento</string>
-<string name="hide_date_summary_on">La fecha se ocultará</string>
-<string name="hide_date_summary_off">La fecha se mostrará</string>
-<string name="title_rows">Altura máxima de título</string>
-<string name="title_rows_1">1 fila</string>
-<string name="title_rows_2">2 filas</string>
-<string name="title_rows_free">Sin restricción</string>
-<string name="saturday">Sábado</string>
-<string name="sunday">Domingo</string>
-<string name="monday">Lunes</string>
-<string name="localedefault">Localización por defecto</string>
-
-<!-- These should probably not be translated -->
-<string name="default_notetitle">¡Bienvenido!</string>
-<string name="default_notetext">Para sacar el máximo aprovechamiento de esta aplicación, le sugiero que active la sincronización antes de nada. Continúe, y pulse el botón para sincronizar de la barra de acciones cuando vuelva a la lista. Esto activará la sincronización automática por defecto, que actuará cada hora.\n\nEsto está ligado a sus preferencias globales de sincronización. Resumidamente, si no está activada la sincronización de gmail, entonces tampoco se sincronizará esta aplicación. Puede desactivar la sincronización automática, y hacerla manualmente usted, en el apartado de configuración.\n\nSi tiene mas de una cuenta Google en su dispositivo, le sugiero seleccionar en el apartado de configuración cuál se usará.\n\nDe cualquier forma, recomiendo visitar este apartado para ver qué otras opciones tiene. Puede ajustar el tamaño y tipo de letra, y cambiar el tema de la aplicación de claro a oscuro.\n\nLa aplicación también incluye un widget completamente ajustable. Puede cambiar su tamaño como cualquier otro widget: toque y manténgalo un segundo con el dedo como si fuera a moverlo. Después, en lugar de moverlo, puede arrastrar los bordes del widget para estirarlo o encogerlo.\n\nEspero que encuentre útil la aplicación. Recuerde que es completamente gratis, no tiene publicidad y es de código abierto. Si tiene alguna buena idea o queja, por favor dígamelas.\n\n/Jonas</string>
-<string name="about_text">¡Gracias por descargar mi aplicación! Lo hago lo mejor que sé para que la aplicación sea estupenda en todo, pero siempre habrá errores y cosas que podrían mejorarse.\n\nSi ha encontrado un fallo, una traducción incorrecta, o simplemente tiene una idea acerca de cómo mejorar la aplicación, ¡quiero oírlo!\nEnvíeme un email: jonas@nononsenseapps.com\n\n+1: https://plus.google.com/u/0/111801385015192089838\n\nRepórtelo en el registro de fallos: https://github.com/spacecowboy/NotePad/issues\n\nSi quiere traducir la aplicación, por favor, vaya a http://translate.nononsenseapps.com\n\nUna vez más, ¡gracias por descargar mi aplicación!\nSi quiere apoyar el proyecto de un modo menos activo, siempre puede comprar la versión de donación:\nhttps://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
-
-<!-- settings string keys -->
-<string name="menu_settings">Ajustes</string>
-<string name="title_activity_list_widget_config">Widget configuración</string>
-<string name="hide_appicon">Ocultar icono de aplicación</string>
-<string name="hide_new">Ocultar Botón Nuevo</string>
-<string name="hide_header">Ocultar Encabezado de Widget</string>
-<string name="hide_widgetbg">Fondo transparente</string>
-<string name="shortcut_help1">Si estás marcado, el atajo creará una nota nueva en la lista seleccionada y abrirá el editor. Si no lo está, sólo abrirá la lista seleccionada. </string>
-<string name="loading_widget">Cargando widget</string>
-<string name="default_list_set">Listas por defecto</string>
-
-<string name="notecopied_one">Copiada una nota</string>
-<string name="notecopied_other">Copiadas %d notas</string>
-<string name="notedeleted_one">Borrada una nota</string>
-<string name="notedeleted_other">Borradas %d notas</string>
-<string name="selected_one">Seleccionada una nota</string>
-<string name="selected_other">Seleccionadas %d notas</string>
-
-<string name="background_sync">Sincronizar en segundo plano</string>
-<string name="background_sync_info">Sincroniza una vez por hora</string>
-<string name="sync_on_change">Sincronizar cuando haya cambios</string>
-<string name="sync_on_change_info">Programa una sincronización poco depués de que una nota ha cambiado</string>
-<string name="sync_on_start">Sincroniza al inicio de la app</string>
-<string name="sync_on_start_info">Se activará con inicios limpios, no al resumir</string>
-<string name="sync_full_force">Forzar sincronización completa la próxima vez</string>
-<string name="sync_full_force_info">Active esto solo si cree que la sincronización pierde algunos elementos.</string>
-
-<string name="silent">Silencioso</string>
-<string name="sound">Sonido</string>
-<string name="vibrate">Vibrar</string>
-<string name="reminders">Recordatorio</string>
-<string name="add_reminder">Añadir recordatorio</string>
-<string name="standard">Estándar</string>
-<string name="notification_prio_high">Alta: encima, expandido</string>
-<string name="notification_prio_low">Baja: oculto, minimizado</string>
-<string name="priority">Prioridad</string>
-<string name="group_on_list">Agrupar en lista</string>
-<string name="group_on_list_summary">Múltiples notificaciones serán agrupadas juntas si pertenecen a la misma lista</string>
-<string name="more">más</string>
-<string name="notifications">Notificaciones</string>
-<string name="google_play_promo_80_char_limit">Aplicación de notas y tareas que sincroniza con Google Tasks</string>
-<string name="google_play_description">Una libreta de notas y tareas-por-hacer de código abierto, de uso en teléfonos y tablets. Sincroniza con tu cuenta de Google para tener un respaldo de tus notas y tareas en la nube sin introducir siquiera una contraseña!\n\nCaracterísticas:\n* Notificaciones/Recordatorios\n* Selección de idioma\n* Interfaz de usuario configurable\n* Widget configurable y de tamaño modificable\n* Gran soporte para tablet, imitando las funcionalidades de Gmail\n* Tema Holo acorde al resto de Android\n* Sincronización automática con Google Tasks\n* Posibilidad de establecer contraseñas para las notas\n* Mover notas entre diferentes listas\n* Integración con el widget de Agenda Android\n* Buscar en todas tus notas (no sólo en sus títulos)\n* Cambiar la fuente y el tamaño del texto!\n\nNota:\nExiste un bug en Android 4.2 que afecta a todas las aplicaciones que usan notificaciones. Si configuras las notificaciones para que NO vibren (que es su valor por defecto), y luego pones tu teléfono en silencio (sólo vibración), las notificaciones siempre vibrarán incluso si las has silenciado explícitamente.\nComo ya se ha indicado, esto es un fallo de Android, no de esta aplicación.\n\nPuedes ayudar con la traducción de la aplicación, simplemente ve a: http://translate.nononsenseapps.com\n\nSi tienes cualquier problema o quieres reportar un fallo, no dudes en contactar conmigo +NoNonsenseApps o reportarlo en el gestor de incidencias https://github.com/spacecowboy/NotePad/issues\n\nEsta aplicación es de código abierto y está disponible en línea en:\nhttps://github.com/spacecowboy/NotePad\n\nExiste una versión de pago de esta aplicación para aquellos que quieran contribuir a su desarrollo. Enlace: https://market.android.com/details?id=com.nononsenseapps.notepad_donate\n</string>
-</resources>

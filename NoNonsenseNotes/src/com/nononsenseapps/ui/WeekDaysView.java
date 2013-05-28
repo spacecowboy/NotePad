@@ -2,7 +2,9 @@ package com.nononsenseapps.ui;
 
 import java.text.SimpleDateFormat;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 
+import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.utils.views.GreyableToggleButton;
@@ -38,6 +40,7 @@ public class WeekDaysView extends LinearLayout implements
 	GreyableToggleButton sunday;
 
 	private onCheckedDaysChangeListener listener = null;
+	private Locale mLocale;
 
 	public WeekDaysView(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -48,6 +51,8 @@ public class WeekDaysView extends LinearLayout implements
 		// TODO respect locale settings regarding first day of week
 
 		try {
+			mLocale = ActivityHelper.getUserLocale(context);
+			
 			SimpleDateFormat dayFormat = TimeFormatter
 					.getLocalFormatterWeekdayShort(context);
 			// 2013-05-13 was a monday
@@ -85,15 +90,16 @@ public class WeekDaysView extends LinearLayout implements
 		}
 		catch (Exception e) {
 			// For UI editor's sake
+			mLocale = Locale.getDefault();
 		}
 
 	}
 
 	void initializeToggleButton(final String text,
 			final GreyableToggleButton button) {
-		button.setText(text.toUpperCase());
-		button.setTextOn(text.toUpperCase());
-		button.setTextOff(text.toUpperCase());
+		button.setText(text.toUpperCase(mLocale));
+		button.setTextOn(text.toUpperCase(mLocale));
+		button.setTextOff(text.toUpperCase(mLocale));
 		button.setOnCheckedChangeListener(this);
 	}
 

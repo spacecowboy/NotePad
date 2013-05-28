@@ -21,6 +21,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -54,7 +55,7 @@ public class DateView extends TextView {
 		mDateFormatter = TimeFormatter.getLocalFormatterShort(context);
 	}
 
-	public DateView(Context context, AttributeSet attrs) {
+	@SuppressLint("SimpleDateFormat") public DateView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.mContext = context;
 		try {

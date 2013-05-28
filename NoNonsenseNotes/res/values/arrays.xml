@@ -49,38 +49,6 @@
         <item>@string/const_modified</item>
         <item>@string/const_possubsort</item>
     </string-array>
-    <string-array name="font_type_preference" tools:ignore="MissingTranslation">
-        <item>@string/sans</item>
-        <item>@string/serif</item>
-        <item>@string/monospace</item>
-    </string-array>
-    <string-array name="font_typevalues_preference" tools:ignore="MissingTranslation">
-        <item>@string/const_sans</item>
-        <item>@string/const_serif</item>
-        <item>@string/const_monospace</item>
-    </string-array>
-    <string-array name="preferences_week_start_day_labels" tools:ignore="MissingTranslation">
-        <item>@string/localedefault</item>
-        <item>@string/saturday</item>
-        <item>@string/sunday</item>
-        <item>@string/monday</item>
-    </string-array>
-    <string-array name="preferences_week_start_day_values" translatable="false">
-        <item>"-1"</item>
-        <item>"7"</item>
-        <item>"1"</item>
-        <item>"2"</item>
-    </string-array>
-    <string-array name="title_rows_entries" tools:ignore="MissingTranslation">
-        <item>@string/title_rows_1</item>
-        <item>@string/title_rows_2</item>
-        <item>@string/title_rows_free</item>
-    </string-array>
-    <string-array name="title_rows_values" tools:ignore="MissingTranslation">
-        <item>1</item>
-        <item>2</item>
-        <item>20</item>
-    </string-array>
     <string-array name="show_list_as">
         <item>@string/default_style</item>
         <item>@string/show_items_as_tasks</item>

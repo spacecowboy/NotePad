@@ -4,11 +4,12 @@
     android:id="@+id/list_widget_conf_wrapper"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/googlenow_darkergrey"
     android:fillViewport="true"
     android:isScrollContainer="true"
     android:scrollbars="vertical"
-    android:background="@color/googlenow_darkergrey"
-    tools:context="com.nononsenseapps.notepad.widget.ListWidgetConfig" >
+    tools:context="com.nononsenseapps.notepad.widget.ListWidgetConfig"
+    tools:ignore="Overdraw" >
 
     <LinearLayout
         android:layout_width="match_parent"

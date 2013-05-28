@@ -139,7 +139,7 @@ public class ChangeLog {
         AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
         
         builder.setView(view).setTitle(R.string.changelog_title)
-        .setPositiveButton(R.string.changelog_ok_button, new DialogInterface.OnClickListener() {
+        .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();

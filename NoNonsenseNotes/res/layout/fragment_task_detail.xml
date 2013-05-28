@@ -84,7 +84,9 @@
                     android:layout_height="48dp"
                     android:layout_alignParentRight="true"
                     android:layout_below="@+id/dueHeader"
-                    android:src="?attr/body_remove" />
+                    android:contentDescription="Remove due date"
+                    android:src="?attr/body_remove"
+                    tools:ignore="HardcodedText" />
 
                 <Button
                     android:id="@+id/dueDateBox"

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (C) 2012 Jonas Kalderstam
+Copyright (C) 2013 Jonas Kalderstam
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,38 +19,22 @@ limitations under the License.
 
 <string name="app_name">Muistiinpanot</string>
 <string name="title_create">Uusi muistiinpano</string>
-<string name="title_edit">Muokkaa: %1$s</string>
-<string name="menu_add">Uusi muistiinpano</string>
 <string name="menu_save_and_add">Tallenna ja avaa uusi muistiinpano</string>
 <string name="menu_delete">Poista</string>
-<string name="menu_revert">Kumoa muutokset</string>
-<string name="menu_copy">Kopioi muistiinpano</string>
-<string name="menu_cancel">Peruuta</string>
-<string name="menu_setcompleted">Merkitse valmiiksi</string>
-<string name="menu_setuncompleted">Merkitse keskeneräiseksi</string>
 <string name="menu_deletelist">Poista lista</string>
 <string name="menu_sync">Päivitä</string>
 <string name="menu_share">Jaa</string>
 <string name="menu_preferences">Asetukset</string>
-<string name="menu_renamelist">Nimeä lista uudelleen</string>
 <string name="menu_createlist">Luo lista</string>
 <string name="menu_clearcompleted">Tyhjennä valmiit</string>
 <string name="menu_setdefaultlist">Aseta oletuslistaksi</string>
 <string name="menu_managelists">Hallitse listoja</string>
 <string name="add_item">Lisää kohde</string>
-<string name="archive_item_title">Arkistoi?</string>
-<string name="archive_item_message">Haluatko varmasti arkistoida tämän kohteen?</string>
-<string name="archive_item_toast">Arkistoitu</string>
-<string name="delete_list_title">Poista lista?</string>
 <string name="delete_list_message">Haluatko varmasti poistaa listan? Muistiinpanot arkistoidaan.</string>
-<string name="delete_list_toast">Lista poistettu</string>
-<string name="delete_list_warning">Haluatko varmasti poistaa listan pysyvästi?</string>
 <string name="editor_due_date_hint">Eräpäivä</string>
 <string name="editor_title_hint">Otsikko</string>
 <string name="editor_note_hint">Muistiinpano</string>
 <string name="resolve_edit">Muokkaa muistiinpanoa</string>
-<string name="error_title">Virhe</string>
-<string name="error_message">Virhe ladattaessa muistiinpanoa</string>
 <string name="default_style">Oletustyyli</string>
 <string name="show_items_as_tasks">Näytä kohteet tehtävinä</string>
 <string name="show_items_as_notes">Näytä kohteet muistiinpanoina</string>
@@ -63,62 +47,25 @@ limitations under the License.
 <string name="settings_theme">Nykyinen teema</string>
 <string name="settings_theme_dialog">Käytä teemaa</string>
 <string name="settings_lang">Kieli</string>
-<string name="settings_cat_theme">Teema</string>
-<string name="settings_cat_sorting">Lajittelu</string>
-<string name="settings_sorting_type">Lajittelu</string>
-<string name="settings_sorting_type_dialog">Lajittelu</string>
-<string name="settings_sorting_order">Järjestys</string>
-<string name="settings_sorting_order_dialog">Järjestys</string>
-<string name="settings_summary_sort_type_alphabetic">Otsikko</string>
-<string name="settings_summary_sort_type_modified">Viimeksi muokattu</string>
-<string name="settings_summary_sort_type_duedate">Eräpäivä</string>
-<string name="settings_summary_sort_type_serverposition">Oma järjestys</string>
 <string name="settings_summary_theme_black">Musta</string>
 <string name="settings_summary_theme_dark">Tumma</string>
 <string name="settings_summary_theme_light">Vaalea</string>
-<string name="settings_summary_theme_light_dark_ab">Vaalea, tumma toimintopalkki</string>
 <string name="settings_cat_appearance">Ulkonäkö</string>
-<string name="settings_font_screen">Fonttiasetukset</string>
-<string name="settings_font_screen_summary">Voit muuttaa fontin tyyppiä ja kokoa</string>
-<string name="settings_cat_font_editor">Editori</string>
-<string name="settings_font_type">Fontti</string>
-<string name="settings_font_type_dialog">Valitse fontti</string>
-<string name="settings_font_size">Fontin koko</string>
 <string name="preference_preview_text">Tältä editorin teksti näyttää</string>
-<string name="settings_text_preview_title">Esikatselu</string>
-<string name="monospace">Monospace</string>
-<string name="sans">Sans</string>
-<string name="serif">Serif</string>
-<string name="settings_sync_freq_title">Synkronoinnin tyyppi</string>
 <string name="settings_account_title">Valitse käyttäjätili</string>
 <string name="settings_account_summary">Napauta vaihtaaksesi tiliä</string>
 <string name="settings_sync_enable_title">Google Tasks -synkronointi</string>
-<string name="settings_sync_enable_summary">Synkronoi muistiinpanoja Google-tililläsi</string>
 <string name="settings_cat_syncing">Synkronointi</string>
-<string name="manual">Käyttöohje</string>
-<string name="minutes">minuuttia</string>
-<string name="hours">tuntia</string>
-<string name="onehour">Tunti</string>
-<string name="oneday">Päivä</string>
-<string name="yes">Kyllä</string>
-<string name="no">Ei</string>
-<string name="ok">OK</string>
 <string name="show_from_all_lists">Kaikki listat</string>
-<string name="default_list_needed_warning">Aseta oletuslista ensin</string>
-<string name="reverted">Kumotut muutokset</string>
-<string name="notecopied">Kopioitu</string>
 <string name="deleted">Poistettu</string>
-<string name="items">muistiinpanot</string>
 <string name="permission_read_label">lue muistiinpanoja ja listoja</string>
 <string name="permission_read_desc">Sallii sovelluksen lukea muistiinpanojasi ja niihin liittyviä listoja.</string>
 <string name="permission_write_label">muokkaa muistiinpanoja ja listoja</string>
 <string name="permission_write_desc">Sallii sovelluksen lisätä, päivittää ja poistaa muistiinpanoja ja listoja.</string>
-<string name="settings_header_list">Lista-asetukset</string>
 <string name="settings_list_dialog">Valitse lista</string>
 <string name="settings_list">Lista</string>
-<string name="automatic">Automaattinen</string>
-<string name="preferences_week_start_day_dialog">Viikon aloituspäivä</string>
-<string name="preferences_week_start_day_title">Viikon aloituspäivä</string>
+
+
 
 <!--
 Use few if language need it. In English is the same.
@@ -126,16 +73,29 @@ Use few if language need it. In English is the same.
 -->
 <plurals name="notecopied_msg">
 <item quantity="one">@string/notecopied_one</item>
+<item quantity="zero">@string/notecopied_zero</item>
+<item quantity="two">@string/notecopied_two</item>
+<item quantity="few">@string/notecopied_few</item>
+<item quantity="many">@string/notecopied_many</item>
 <item quantity="other">@string/notecopied_other</item>
 </plurals>
 <plurals name="notedeleted_msg">
 <item quantity="one">@string/notedeleted_one</item>
+<item quantity="zero">@string/notedeleted_zero</item>
+<item quantity="two">@string/notedeleted_two</item>
+<item quantity="few">@string/notedeleted_few</item>
+<item quantity="many">@string/notedeleted_many</item>
 <item quantity="other">@string/notedeleted_other</item>
 </plurals>
 <plurals name="mode_choose">
 <item quantity="one">@string/selected_one</item>
+<item quantity="zero">@string/selected_zero</item>
+<item quantity="two">@string/selected_two</item>
+<item quantity="few">@string/selected_few</item>
+<item quantity="many">@string/selected_many</item>
 <item quantity="other">@string/selected_other</item>
 </plurals>
+
 
 <string name="lock_note">Lukitse muistiinpano</string>
 <string name="unlock_note">Avaa muistiinpanon lukitus</string>
@@ -159,83 +119,35 @@ Use few if language need it. In English is the same.
 <string name="sync_login_failed">Sisäänkirjautuminen epäonnistui, ei voitu yhdistää Google Tasks:iin</string>
 <string name="changelog_full_title">Muutosloki</string>
 <string name="changelog_title">Uutta</string>
-<string name="changelog_ok_button">OK</string>
-<string name="changelog_show_full">Näytä kokonaan</string>
-<string name="widget_pref_preview_note">Esikatsele muistiinpanoa</string>
-<string name="widget_pref_preview_note_summary_off">Otsikko kahdella rivillä</string>
-<string name="widget_pref_preview_note_summary_on">Muistiinpano toisella rivillä</string>
-<string name="widget_pref_show_complete">Merkitse valmiiksi -painike</string>
-<string name="widget_pref_show_complete_summary_off">Painike piilotetaan</string>
-<string name="widget_pref_show_complete_summary_on">Painike näytetään</string>
-<string name="settings_listitem">Kaksiriviset otsikot</string>
-<string name="settings_listitem_summary_off">Muistiinpanon esikatselu kahdella rivillä</string>
-<string name="editor_details">Lisää</string>
 <string name="completed">Valmis</string>
-<string name="subtask_of">Kuuluu tehtävään</string>
-<string name="security">Suojaus</string>
 <string name="date_header_overdue">Myöhässä</string>
 <string name="date_header_today">Tänään</string>
 <string name="date_header_tomorrow">Huomenna</string>
-<string name="date_header_7days">Seuraavat 7 päivää</string>
 <string name="date_header_future">Myöhemmin</string>
 <string name="date_header_none">Ei päivämäärää</string>
 <string name="date_header_completed">Valmis</string>
-<string name="mod_header_yesterday">Eilen</string>
-<string name="mod_header_thisweek">Tällä viikolla</string>
-<string name="mod_header_earlier">Aikaisemmin</string>
-<string name="settings_listheader">Kun kaikki listat näytetään</string>
-<string name="settings_listheader_off">Näytä yhtenä listana</string>
-<string name="settings_listheader_on">Näytä listojen nimet</string>
-<string name="please_create_list">Luo lista</string>
 <string name="please_select_note">Valitse tai luo muistiinpano</string>
 <string name="please_create_note">Luo muistiinpano</string>
 <string name="hide_checkbox">Piilota valintaruutu</string>
 <string name="hide_checkbox_summary_on">Valintaruutu piilotetaan</string>
 <string name="hide_checkbox_summary_off">Valintaruutu näytetään</string>
-<string name="hide_note">Piilota muistiinpano</string>
-<string name="hide_note_summary_on">Muistiinpano piilotetaan</string>
-<string name="hide_note_summary_off">Muistiinpano näytetään</string>
 <string name="hide_date">Piilota eräpäivä</string>
-<string name="hide_date_summary_on">Päivämäärä piilotetaan</string>
-<string name="hide_date_summary_off">Päivämäärä näytetään</string>
 <string name="item_max_height">Maksimikorkeus</string>
 <string name="long_date_format">Pitkä päivämäärä</string>
 <string name="short_date_format">Lyhyt päivämäärä</string>
-<string name="title_rows">Otsikon maksimikorkeus</string>
-<string name="title_rows_1">1 rivi</string>
-<string name="title_rows_2">2 riviä</string>
-<string name="title_rows_free">Ei rajoitusta</string>
-<string name="saturday">Lauantai</string>
-<string name="sunday">Sunnuntai</string>
-<string name="monday">Maanantai</string>
 <string name="localedefault">Oletus</string>
 
-<!-- These should probably not be translated -->
-<string name="default_notetitle">Tervetuloa!</string>
-<string name="default_notetext">Jotta saisit kaiken irti tästä sovelluksesta, suosittelen ensimmäiseksi ottamaan synkronoinnin käyttöön. Paina synkronointinappia toimintopalkissa, kun palaat takaisin listaan. Synkronointi tapahtuu oletuksena kerran tunnissa.\n\nOta huomioon, että yleiset synkronointiasetuksesi vaikuttavat tähän. Lyhyesti sanottuna, jos Gmail ei synkronoidu automaattisesti, niin ei tämäkään sovellus. Voit myös ottaa automaattisen synkronoinnin pois käytöstä ja hallita asetuksiasi itse.\n\nJos sinulla on enemmän kuin yksi Google-tili laitteellasi, ehdotan, että menet asetuksiin ja valitset, mitä käyttäjätiliä haluat hallita itse.\n\nItse asiassa suosittelen käymään asetuksissa ihan vain nähdäksesi minkälaisia vaihtoehtoja siellä on. Voit muun muassa säätää fonttia ja sen kokoa ja vaihtaa teeman vaaleasta tummaksi.\n\nSovellus sisältää myös lisäohjelman, jonka koko on täysin muutettavissa. Voit muuttaa sen kokoa samalla tavalla kuin muitakin lisäohjelmia: napauta ja pidä sormeasi pohjassa lisäohjelman kohdalla ikään kuin aikoisit liikuttaa sitä. Liikuttamisen sijaan vedä lisäohjelman sivuja tehdäksesi siitä suuremman tai pienemmän.\n\nToivottavasti tästä sovelluksesta on hyötyä sinulle. Muista, että se on täysin ilmainen, siinä ei ole mainoksia ja sen lähdekoodi on avoin. Jos sinulla on loistavia ideoita tai suuria valituksen aiheita, kerro niistä minulle.\n\n/Jonas</string>
-<string name="about_text">Kiitos, että latasit sovellukseni! Yritän tehdä siitä kaikin tavoin mahtavan, mutta bugeja löytyy aina ja asioita voi parantaa!\n\nJos löysit bugin tai huomasit, että käännöksessä on virhe tai sinulla vain on idea sovelluksen parantamiseksi, haluan kuulla siitä!\n\nAnna minulle +1: https://plus.google.com/u/0/111801385015192089838\n\nRaportoi virheistä: https://github.com/spacecowboy/Notepad/issues\n\nJos haluat auttaa tämän sovelluksen kääntämisessä, käy osoitteessa\nhttp://translate.nononsenseapps.com\n\nVielä kerran kiitos, että latasit sovellukseni!\nJos haluat tukea tätä projektia vähemmän aktiivisella tavalla, voit aina ostaa maksullisen version: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate\n\n</string>
-
 <!-- settings string keys -->
-<string name="menu_settings">Asetukset</string>
-<string name="title_activity_list_widget_config">Lisäohjelman asetukset</string>
-<string name="hide_appicon">Piilota sovelluksen ikoni</string>
-<string name="hide_new">Piilota uusi muistiinpano -painike</string>
 <string name="hide_header">Piilota koko lisäohjelmatunniste</string>
-<string name="hide_widgetbg">Läpinäkyvä tausta</string>
 <string name="shortcut_help1">Jos valittu, pikakuvake luo uuden muistiinpanon valittuun listaan ja avaa editorin. Muuten pikakuvake avaa valitun listan.</string>
 <string name="loading_widget">Ladataan lisäohjelmaa</string>
-<string name="default_list_set">Oletuslista asetettu</string>
-
 <string name="please_type_before_reminder">Kirjoita jotakin ennen muistutuksen asettamista</string>
-<string name="select_a_time">Valitse aika</string>
-
 <string name="notecopied_one">Muistiinpano kopioitu</string>
 <string name="notecopied_other">%d muistiinpanoa kopioitu</string>
 <string name="notedeleted_one">Muistiinpano poistettu</string>
 <string name="notedeleted_other">%d muistiinpanoa poistettu</string>
 <string name="selected_one">Muistiinpano valittu</string>
 <string name="selected_other">%d muistiinpanoa valittu</string>
-
 <string name="background_sync">Synkronointi taustalla</string>
 <string name="background_sync_info">Synkronoi kerran tunnissa</string>
 <string name="sync_on_change">Synkronoi muutosten yhteydessä</string>
@@ -244,32 +156,24 @@ Use few if language need it. In English is the same.
 <string name="sync_on_start_info">Tapahtuu vain uusissa käynnistyksissä, ei sovellukseen palattaessa</string>
 <string name="sync_full_force">Pakota täydellinen synkronointi seuraavalla kerralla</string>
 <string name="sync_full_force_info">Valitse tämä vain silloin, kun epäilet, että synkronoinnista puuttuu kohteita.</string>
-
 <string name="snooze">Torkku</string>
 <string name="silent">Äänetön</string>
 <string name="sound">Ääni</string>
 <string name="vibrate">Värinä</string>
 <string name="reminders">Muistutukset</string>
-<string name="add_reminder">Lisää muistutus</string>
 <string name="standard">Normaali</string>
 <string name="notification_prio_high">Korkea: Ylimpänä, laajennettu</string>
 <string name="notification_prio_low">Matala: Piilotettu, pienennetty</string>
 <string name="priority">Prioriteetti</string>
-<string name="group_on_list">Ryhmä listalla</string>
-<string name="group_on_list_summary">Useat ilmoitukset asetetaan samaan ryhmään, jos ne kuuluvat samaan listaan.</string>
-<string name="more">lisää</string>
 <string name="notifications">Ilmoitukset</string>
-
-
+<!-- "localtime" is replaced at runtime with 12/24 hour clock -->
 <string name="dashclock_tasks">Tehtävät</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Rajaa tietyssä listassa oleviin tehtäviin</string>
 <string name="dashclock_show_overdue_tasks">Näytä erääntyneet tehtävät</string>
 <string name="dashclock_overdue_tasks_show">Erääntyneet tehtävät näytetään</string>
 <string name="dashclock_overdue_tasks_hide">Erääntyneet tehtävät piilotetaan</string>
-
 <string name="dashclock_title_activity_tasks_settings">NoNonsense -muistiinpanojen asetukset</string>
 <string name="dashclock_pref_header_general">Yleiset</string>
-
 <string name="dashclock_due_upper_limit_title">Rajaa seuraavaksi erääntyviin tehtäviin</string>
 <string name="dashclock_today">Tänään</string>
 <string name="dashclock_tomorrow">Huomenna</string>
@@ -281,8 +185,4 @@ Use few if language need it. In English is the same.
 <string name="dashclock_first_task_shown">Ensimmäisen tehtävän otsikko lihavoidaan</string>
 <string name="dashclock_display_header">Näytön tunniste</string>
 
-
-<!-- Store text -->
-<string name="google_play_promo_80_char_limit">Siisti sovellus muistiinpanojen, tehtävien ja muistilistojen tekoon Google Tasks -synkronoinnilla.</string>
-<string name="google_play_description">Avoimen lähdekoodin muistio- ja tehtävälistasovellus, jossa on puhelimille ja tableteille soveltuva käyttöliittymä. Synkronoi sovellus Google-tilisi kanssa, ja pidä muistiinpanosi tallessa ilman, että sinun täytyy käyttää salasanoja!\n\nOminaisuudet:\n*Ilmoitukset/Muistutukset\n*Kielen valinta\n*Muokattava käyttöliittymä\n*Lisäohjelma, jonka kokoa voi muuttaa\n*Gmailin ominaisuuksia mukaileva tuki tableteille\n*Holo-teemaa noudattava käyttöliittymä\n*Automaattinen synkronointi Google Tasks -ominaisuudella \n*Mahdollisuus asettaa muistiinpanoille salasanoja\n*Siirrä muistiinpanoja listojen välillä\n*Integroitu Android Agenda -lisäohjelmaan\n*Hae kaikkia muistiinpanojasi (ei pelkästään otsikoita)\n*Muuta fonttia ja sen kokoa\n\nHuomaa:\nAndroid 4.2-käyttöjärjestelmässä on bugi, joka näkyy kaikissa ilmoituksia käyttävissä sovelluksissa. Vaikka ET ASETA ilmoituksiin värinähälytystä (tämä on oletuksena), ilmoitukset käyttävät värinää siitä huolimatta. Aseta siis puhelimesi äänettömälle (vain värinä).\n\nVoit auttaa sovelluksen kääntämisessä, mene osoitteeseen: http://translate.nononsenseapps.com\n\nJos sinulla on ongelmia tai haluat raportoida bugista, ota minuun yhteyttä!\n+NoNonsenseApps\ntai\nraportoi niistä osoitteessa: https://github.com/spacecowboy/NotePad/issues\n\nTämän sovelluksen lähdekoodi on avoin ja on saatavilla osoitteessa:\nhttps://github.com/spacecowboy/NotePad\n\nTästä sovelluksesta on myös maksullinen versio niille, jotka haluavat tukea sovelluksen kehitystä: https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
 </resources>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (C) 2012 Jonas Kalderstam
+Copyright (C) 2013 Jonas Kalderstam
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,96 +19,44 @@ limitations under the License.
 
 <string name="app_name">Заметки</string>
 <string name="title_create">Новая запись</string>
-<string name="title_edit">Редактирование: %1$s</string>
-<string name="menu_add">Новая запись</string>
 <string name="menu_save_and_add">Записать и открыть новую заметку</string>
 <string name="menu_delete">Удалить</string>
-<string name="menu_revert">Отменить изменения</string>
-<string name="menu_copy">Копировать</string>
-<string name="menu_cancel">Отмена</string>
-<string name="menu_setcompleted">Пометить завершённым</string>
-<string name="menu_setuncompleted">Пометить незавершённым</string>
 <string name="menu_deletelist">Удалить список</string>
 <string name="menu_sync">Синхронизировать</string>
 <string name="menu_share">Отправить</string>
 <string name="menu_preferences">Настройки</string>
-<string name="menu_renamelist">Переименовать список</string>
 <string name="menu_createlist">Создать список</string>
 <string name="menu_clearcompleted">Очистить завершённые</string>
 <string name="menu_setdefaultlist">Задать как список по умолчанию</string>
 <string name="menu_managelists">Управление списками</string>
-<string name="delete_list_warning">Вы уверены, что хотите удалить этот список? Этот список будет удалён навсегда.</string>
 <string name="editor_due_date_hint">Дата окончания</string>
 <string name="editor_title_hint">Заголовок</string>
 <string name="editor_note_hint">Заметка</string>
 <string name="resolve_edit">Редактировать запись</string>
-<string name="error_title">Ошибка</string>
-<string name="error_message">Ошибка загрузки записи</string>
 <string name="search_hint">Поиск</string>
 <string name="settings_theme">Текущая тема</string>
 <string name="settings_theme_dialog">Использовать тему</string>
 <string name="settings_lang">Язык</string>
 <string name="settings_lang_dialog">Настройки языка диалога</string>
-<string name="settings_cat_theme">Тема</string>
-<string name="settings_cat_sorting">Сортировка</string>
-<string name="settings_sorting_type">Сортировать по</string>
-<string name="settings_sorting_type_dialog">Сортировать по</string>
-<string name="settings_sorting_order">Порядок сортировки</string>
-<string name="settings_sorting_order_dialog">Порядок сортировки</string>
-<string name="settings_summary_sort_type_alphabetic">Заголовок</string>
-<string name="settings_summary_sort_type_modified">Последнее изменение</string>
-<string name="settings_summary_sort_type_duedate">Дата окончания</string>
-<string name="settings_summary_sort_type_serverposition">Позиция сервера</string>
-<string name="settings_summary_sort_order_asc">По возрастанию</string>
-<string name="settings_summary_sort_order_desc">По убыванию</string>
 <string name="settings_summary_theme_black">Черная</string>
 <string name="settings_summary_theme_dark">Тёмная</string>
 <string name="settings_summary_theme_light">Светлая</string>
-<string name="settings_summary_theme_light_dark_ab">Светлая, с тёмным баром</string>
 <string name="settings_cat_appearance">Внешний вид</string>
-<string name="settings_font_screen">Настройки шрифта</string>
-<string name="settings_font_screen_summary">Вы можете изменить тип и размер шрифта</string>
-<string name="settings_cat_font_editor">Редактор</string>
-<string name="settings_font_type">Шрифт</string>
-<string name="settings_font_type_dialog">Выберите шрифт</string>
-<string name="settings_font_size">Размер шрифта</string>
 <string name="preference_preview_text">Так будет выглядеть текст при редактировании</string>
-<string name="settings_text_preview_title">Предварительный просмотр</string>
-<string name="monospace">Monospace</string>
-<string name="sans">Sans</string>
-<string name="serif">Serif</string>
-<string name="settings_sync_freq_title">Частота синхронизации</string>
 <string name="settings_account_title">Выберите учётную запись</string>
 <string name="settings_account_summary">Нажмите для смены учётной записи</string>
 <string name="settings_sync_enable_title">Синхронизация Google Tasks</string>
-<string name="settings_sync_enable_summary">Синхронизировать заметки с вашей учётной записью Google</string>
 <string name="settings_cat_syncing">Синхронизация</string>
-<string name="manual">Ручная</string>
-<string name="minutes">минуты</string>
-<string name="hours">часы</string>
-<string name="onehour">Раз в час</string>
-<string name="oneday">Раз в день</string>
-<string name="yes">Да</string>
-<string name="no">Нет</string>
-<string name="ok">OK</string>
 <string name="show_from_all_lists">Все списки</string>
-<string name="default_list_needed_warning">Сперва задайте список по умолчанию</string>
-<string name="reverted">Изменения отменены</string>
-<string name="notecopied">Скопировано</string>
 <string name="deleted">Удалено</string>
-<string name="items">записей</string>
 <string name="permission_read_label">читать записи и списки</string>
 <string name="permission_read_desc">Разрешить приложению читать записи и связанные списки.</string>
 <string name="permission_write_label">изменять записи и списки</string>
 <string name="permission_write_desc">Разрешить приложению добавлять, изменять и удалять записи и списки.</string>
-<string name="settings_header_list">Настройки списков</string>
-<string name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string name="settings_header_sync">@string/settings_cat_syncing</string>
 <string name="settings_list_dialog">Выберите список</string>
 <string name="settings_list">Список</string>
-<string name="automatic">Автоматически</string>
-<string name="preferences_week_start_day_dialog">Начало недели:</string>
-<string name="preferences_week_start_day_title">Начало недели:</string>
+
+
 
 <!--
 Use few if language need it. In English is the same.
@@ -116,16 +64,29 @@ Use few if language need it. In English is the same.
 -->
 <plurals name="notecopied_msg">
 <item quantity="one">@string/notecopied_one</item>
+<item quantity="zero">@string/notecopied_zero</item>
+<item quantity="two">@string/notecopied_two</item>
+<item quantity="few">@string/notecopied_few</item>
+<item quantity="many">@string/notecopied_many</item>
 <item quantity="other">@string/notecopied_other</item>
 </plurals>
 <plurals name="notedeleted_msg">
 <item quantity="one">@string/notedeleted_one</item>
+<item quantity="zero">@string/notedeleted_zero</item>
+<item quantity="two">@string/notedeleted_two</item>
+<item quantity="few">@string/notedeleted_few</item>
+<item quantity="many">@string/notedeleted_many</item>
 <item quantity="other">@string/notedeleted_other</item>
 </plurals>
 <plurals name="mode_choose">
 <item quantity="one">@string/selected_one</item>
+<item quantity="zero">@string/selected_zero</item>
+<item quantity="two">@string/selected_two</item>
+<item quantity="few">@string/selected_few</item>
+<item quantity="many">@string/selected_many</item>
 <item quantity="other">@string/selected_other</item>
 </plurals>
+
 
 <string name="lock_note">Заблокировать запись</string>
 <string name="unlock_note">Разблокировать запись</string>
@@ -149,78 +110,31 @@ Use few if language need it. In English is the same.
 <string name="sync_login_failed">Авторизация не выполнена, не удалось подключиться к Google Tasks</string>
 <string name="changelog_full_title">Список изменений</string>
 <string name="changelog_title">"Что нового?"</string>
-<string name="changelog_ok_button">Ок</string>
-<string name="changelog_show_full">Показать полностью</string>
-<string name="widget_pref_preview_note">Показывать начало заметок</string>
-<string name="widget_pref_preview_note_summary_off">Заголовок будет в две строки</string>
-<string name="widget_pref_preview_note_summary_on">Заметка будет на второй строке</string>
-<string name="widget_pref_show_complete">Кнопка Выполнено</string>
-<string name="widget_pref_show_complete_summary_off">Кнопка будет скрыта</string>
-<string name="widget_pref_show_complete_summary_on">Кнопка будет видимой</string>
-<string name="settings_listitem">Заголовок в две строки</string>
-<string name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
-<string name="settings_listitem_summary_off">Начало заметки будет в две строки</string>
-<string name="editor_details">Больше</string>
 <string name="completed">Завершено</string>
-<string name="subtask_of">Подзадача </string>
-<string name="security">Безопасность</string>
 <string name="date_header_overdue">Сверх срока</string>
 <string name="date_header_today">Сегодня</string>
 <string name="date_header_tomorrow">Завтра</string>
-<string name="date_header_7days">Следующие 7 дней</string>
 <string name="date_header_future">Позднее</string>
 <string name="date_header_none">Без даты</string>
 <string name="date_header_completed">Завершено</string>
-<string name="mod_header_today">@string/date_header_today</string>
-<string name="mod_header_yesterday">Вчера</string>
-<string name="mod_header_thisweek">Эта неделя</string>
-<string name="mod_header_earlier">Ранее</string>
-<string name="settings_listheader">При показе всех списков</string>
-<string name="settings_listheader_off">Показывать единым списком</string>
-<string name="settings_listheader_on">Показывать названия списков</string>
-<string name="please_create_list">Создайте список, пожалуйста</string>
 <string name="please_select_note">Выберите или создайте заметку, пожалуйста</string>
 <string name="please_create_note">Создайте заметку, пожалуйста</string>
 <string name="hide_checkbox">Скрыть отметку</string>
 <string name="hide_checkbox_summary_on">Отметка будет скрыта</string>
 <string name="hide_checkbox_summary_off">Отметка будет показана</string>
-<string name="hide_note">Скрыть заметку</string>
-<string name="hide_note_summary_on">Заметека будет скрыта</string>
-<string name="hide_note_summary_off">Заметека будет показана</string>
 <string name="hide_date">Скрыть дату окончания</string>
-<string name="hide_date_summary_on">Дата будет скрыта</string>
-<string name="hide_date_summary_off">Дата будет показана</string>
-<string name="title_rows">Максимальная высота заголовка</string>
-<string name="title_rows_1">1 строка</string>
-<string name="title_rows_2">2 строки</string>
-<string name="title_rows_free">Без ограничения</string>
-<string name="saturday">Суббота</string>
-<string name="sunday">Воскресенье</string>
-<string name="monday">Понедельник</string>
 <string name="localedefault">Язык по-умолчанию</string>
 
-<!-- These should probably not be translated -->
-<string name="default_notetitle">Добро пожаловать!</string>
-<string name="default_notetext">"Чтобы получить максимум от этого приложения, я рекомендую, для начала, включить синхронизацию. Когда вы вернетесь обратно в список, вы увидите кнопку синхронизации в панели действий. По умолчанию, синхронизация происходит автоматически каждый час.Отмечу, что это соответствует глобальным настройкам. В общем, если ваш Gmail не синхронизируется автоматически, то приложение тоже не будет. Вы можете отключить автоматическую синхронизацию и переключить ее на ручную, в меню настроек.Если у вас больше одного аккаунта Google, я советую вам зайти в настройки и выбрать нужный аккаунт вручную.На самом деле, я в любом случае рекомендую вам зайти в настройки, просто чтобы взглянуть на то, что можно изменить. Вы можете выбрать шрифт и размер текста, а также изменить тему на темную.Также, приложение имеет виджет, с полностью изменяемым размером. Вы можете изменить его размер, также как и на других виджетах: нажмите и удерживайте ваш палец, в течении секунды, на виджете, будто собираетесь его перенести. Затем, просто отпустите виджет и сделайте его больше или меньше.Я надеюсь, вы найдете приложение полезным. Помните, что оно полностью бесплатно, не содержит рекламы и с открытым исходным кодом. Если у вас есть отличные идеи или жалобы, расскажите мне о них./Jonas"</string>
-<string name="about_text">"Спасибо за установку моего приложения! Я стараюсь, чтобы это приложение было отличным во всех отношениях, но всегда найдутся ошибки или вещи, которые всегда сделать приложение более удивительным! Если вы нашли ошибку в приложении, неточность в переводе или у вас просто появилась идея, как сделать приложение еще лучше, то я готов выслушать вас!Напишите мне на E-mail: jonas@nononsenseapps.comОтправьте Твит: @SciencyGuyПоставьте +1: https://plus.google.com/u/0/111801385015192089838Сообщите об ошибках на трекере: https://github.com/spacecowboy/NotePad/issuesТак как проект с открытым исходным кодом, вы можете самостоятельно исправить все что захочется, или же пришлите мне запрос!Если вы хотите сделать перевод приложения на свой язык, это замечательно. Свяжитесь со мной!Я сделал видео инструкцию, как можно сделать обновление уже существующих переводов прямо на GitHub: http://www.youtube.com/watch?v=oZTO5zOoCb4И снова, спасибо за установку моего приложения!Если вы хотите поддержать проект, оставив его не менее активным, вы всегда можете сделать пожертвования, купив платную версию: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate"</string>
-
 <!-- settings string keys -->
-<string name="menu_settings">Настройки</string>
-<string name="title_activity_list_widget_config">Настройки виджета</string>
-<string name="hide_appicon">Скрыть иконку программы</string>
-<string name="hide_new">Скрыть кнопку новой заметки</string>
 <string name="hide_header">Скрыть весь заголовок виджета</string>
-<string name="hide_widgetbg">Прозрачный фон</string>
 <string name="shortcut_help1">Если отмечено, ярлык будет создать новую заметку в выбранном списке и открывать редактор. Если флажок не установлен, ярлык будет открыть выбранный список.</string>
 <string name="loading_widget">Загрузка виджета</string>
-
 <string name="notecopied_one">Скопирована одна заметка</string>
 <string name="notecopied_other">Скопировано %d заметки</string>
 <string name="notedeleted_one">Удалена одна заметка</string>
 <string name="notedeleted_other">Выделено %d заметки</string>
 <string name="selected_one">Выделена одна заметка</string>
 <string name="selected_other">Выделено %d заметки</string>
-
 <string name="background_sync">Фоновая синхр.</string>
 <string name="background_sync_info">Синхронизировать каждый час</string>
 <string name="sync_on_change">Синхр. при изменениях</string>
@@ -229,28 +143,20 @@ Use few if language need it. In English is the same.
 <string name="sync_on_start_info">Синхронизировать при новом запуске, не при восстановлении из памяти</string>
 <string name="sync_full_force">Принудительная полная синхр. в следующий раз</string>
 <string name="sync_full_force_info">Отмечайте только если вы уверены, что отсутствуют какие-то заметки.</string>
-
 <string name="silent">Без звука</string>
 <string name="sound">Мелодия</string>
 <string name="vibrate">Вибрация</string>
 <string name="reminders">Напоминания</string>
-<string name="add_reminder">Добавить напоминание</string>
 <string name="standard">Обычный</string>
 <string name="notification_prio_high">Высокий: сверху, расширенный</string>
 <string name="notification_prio_low">Низкий: скрытый, свернутый</string>
 <string name="priority">Приоритет</string>
-<string name="group_on_list">Сгруппировать в списке</string>
-<string name="group_on_list_summary">Множественные уведомления будут объеденинены, если они находятся в одном листе.</string>
-<string name="more">больше</string>
 <string name="notifications">Уведомления</string>
-
-
+<!-- "localtime" is replaced at runtime with 12/24 hour clock -->
 <string name="dashclock_tasks">Задачи</string>
 <string name="dashclock_show_overdue_tasks">Показать просроченные задачи</string>
 <string name="dashclock_overdue_tasks_show">Просроченные задачи будут отображаться</string>
 <string name="dashclock_overdue_tasks_hide">Просроченные задачи не будут показаны</string>
-
-
 <string name="dashclock_today">Сегодня</string>
 <string name="dashclock_tomorrow">Завтра</string>
 <string name="dashclock_next7">На семь дней вперед</string>
@@ -259,6 +165,4 @@ Use few if language need it. In English is the same.
 <string name="dashclock_show_only_the_next_task">Показывать только следующую задачу</string>
 <string name="dashclock_display_header">Отображать заголовок</string>
 
-
-<!-- Store text -->
 </resources>

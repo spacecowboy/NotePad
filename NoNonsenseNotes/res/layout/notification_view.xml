@@ -16,8 +16,10 @@
         android:layout_height="48dp"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="4dp"
+        android:contentDescription="Remove reminder"
         android:scaleType="center"
-        android:src="?attr/body_remove" />
+        android:src="?attr/body_remove"
+        tools:ignore="HardcodedText" />
 
     <TextView
         android:id="@+id/notificationDateTime"

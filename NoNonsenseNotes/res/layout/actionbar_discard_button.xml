@@ -14,7 +14,7 @@
   limitations under the License.
   -->
 
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     style="?android:actionButtonStyle"
     android:id="@+id/actionbar_discard"
     android:layout_width="0dp"
@@ -30,4 +30,4 @@
         android:drawablePadding="8dp"
         android:gravity="center_vertical"
         android:text="@android:string/cancel" />
-</FrameLayout>
+</merge>

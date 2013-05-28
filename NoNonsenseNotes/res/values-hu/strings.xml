@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (C) 2012 Jonas Kalderstam
+Copyright (C) 2013 Jonas Kalderstam
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,27 +19,18 @@ limitations under the License.
 
 <string name="app_name">Jegyzetek</string>
 <string name="title_create">Új jegyzet</string>
-<string name="title_edit">Szerkesztés: %1$s</string>
 <string name="timemachine">Időgép</string>
 <string name="time">Idő</string>
 <string name="done">Kész</string>
 <string name="saved">Mentve</string>
 <string name="distance">Távolság</string>
 <string name="need_location_help">Hely megadásához nyomjon hosszan</string>
-<string name="near_location">Közelben</string>
-<string name="menu_add">Új jegyzet</string>
 <string name="menu_save_and_add">Mentés és új létrehozása</string>
 <string name="menu_delete">Törlés</string>
-<string name="menu_revert">Változások visszavonása</string>
-<string name="menu_copy">Jegyzet másolása</string>
-<string name="menu_cancel">Mégse</string>
-<string name="menu_setcompleted">Készre jelöl</string>
-<string name="menu_setuncompleted">Kész jelölés törlése</string>
 <string name="menu_deletelist">Lista törlése</string>
 <string name="menu_sync">Frissítés</string>
 <string name="menu_share">Megosztás</string>
 <string name="menu_preferences">Beállítások</string>
-<string name="menu_renamelist">Lista átnevezése</string>
 <string name="menu_createlist">Lista létrehozása</string>
 <string name="menu_clearcompleted">Kész jegyzetek törlése</string>
 <string name="menu_setdefaultlist">Alapértelmezett lista</string>
@@ -53,8 +44,6 @@ limitations under the License.
 <string name="editor_title_hint">Cím</string>
 <string name="editor_note_hint">Szöveg</string>
 <string name="resolve_edit">Szerkesztés</string>
-<string name="error_title">Hiba</string>
-<string name="error_message">Hiba a jegyzet betöltésekor</string>
 <string name="default_style">Alapértelemezett stílus</string>
 <string name="show_items_as_tasks">Elemek megjelenítése feladatokként</string>
 <string name="show_items_as_notes">Elemek megjelenítése jegyzetekként</string>
@@ -72,82 +61,38 @@ limitations under the License.
 <string name="settings_theme">Jelenlegi téma</string>
 <string name="settings_theme_dialog">Téma használata</string>
 <string name="settings_lang">Program nyelve</string>
-<string name="settings_cat_theme">Téma</string>
-<string name="settings_cat_sorting">Listázási szempontok</string>
-<string name="settings_sorting_type">Rendezés</string>
-<string name="settings_sorting_type_dialog">Rendezés</string>
-<string name="settings_sorting_order">Sorrend</string>
-<string name="settings_sorting_order_dialog">Sorrend</string>
-<string name="settings_summary_sort_type_alphabetic">Cím</string>
-<string name="settings_summary_sort_type_modified">Utolsó módosítás</string>
-<string name="settings_summary_sort_type_duedate">Határidő</string>
-<string name="settings_summary_sort_type_serverposition">Szerver pozíció</string>
 <string name="settings_summary_theme_black">Fekete</string>
 <string name="settings_summary_theme_dark">Sötét</string>
 <string name="settings_summary_theme_light">Világos</string>
 <string name="settings_summary_theme_classic">Klasszikus</string>
-<string name="settings_summary_theme_light_dark_ab">Világos, sötét menüsávval</string>
 <string name="settings_cat_appearance">Megjelenés</string>
-<string name="settings_font_screen">Betűtípus beállítások</string>
-<string name="settings_font_screen_summary">A betűtípus és mérete változtatható</string>
-<string name="settings_cat_font_editor">Szerkesztő</string>
-<string name="settings_font_type">Betűtípus</string>
-<string name="settings_font_type_dialog">Válassz betűtípust</string>
-<string name="settings_font_size">Betűméret</string>
 <string name="preference_preview_text">Így fog megjelenni a szöveg a szerkesztőben</string>
-<string name="settings_text_preview_title">Előnézet</string>
-<string name="monospace">Monospace</string>
-<string name="sans">Sans</string>
-<string name="serif">Serif</string>
-<string name="settings_sync_freq_title">Szinkronizálás gyakorisága</string>
 <string name="settings_account_title">Válassz fiókot</string>
 <string name="settings_account_summary">Kattints a fiók váltásához</string>
 <string name="settings_sync_enable_title">Google Feladatok szinkronizálása</string>
-<string name="settings_sync_enable_summary">Szinkronizálás a Google-fiókkal</string>
 <string name="gtasks_sync_info">Nem minden információ szinkronizálható a Google Feladatokal. Csak a jegyzetek, a lejárati dátum (az időpont nem) és a teendő állapot.</string>
 <string name="settings_cat_syncing">Szinkronizálás</string>
 <string name="gtasks">Google Feladatok</string>
 <string name="dropbox">Dropbox</string>
 <string name="dropbox_enable">Szinkronizálás Dropbox-al</string>
 <string name="dropbox_enable_summary">Létrehoz egy NoNonsense Notes mappát a Dropbox-ában</string>
-<string name="manual">Kézi</string>
-<string name="minutes">perc</string>
-<string name="hours">óra</string>
-<string name="onehour">Egy óra</string>
-<string name="oneday">Egy nap</string>
-<string name="yes">Igen</string>
-<string name="no">Nem</string>
-<string name="ok">OK</string>
 <string name="show_from_all_lists">Összes lista</string>
-<string name="default_list_needed_warning">Először add meg az alapértelmezett listát</string>
-<string name="reverted">Változások visszavonva</string>
-<string name="notecopied">Lemásolva</string>
 <string name="deleted">Törölve</string>
 <string name="repeat">Ismétlés</string>
 <string name="once">Egyszer</string>
 <string name="always">Mindig</string>
-<string name="items">jegyzetek</string>
 <string name="permission_read_label">listák és jegyzetek olvasása</string>
 <string name="permission_read_desc">Engedély a jegyzetek és kapcsolódó listák olvasására.</string>
 <string name="permission_write_label">listák és jegyzetek módosítása</string>
 <string name="permission_write_desc">Engedély a jegyzetek és listák módosítására és törlésére.</string>
-<string name="settings_header_list">Lista beállításai</string>
-<string name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string name="settings_header_sync">@string/settings_cat_syncing</string>
 <string name="settings_list_dialog">Válassz egy listát</string>
 <string name="settings_list">Lista</string>
-<string name="automatic">Automatikus</string>
-<string name="preferences_week_start_day_dialog">A hét kezdőnapja</string>
-<string name="preferences_week_start_day_title">A hét kezdőnapja</string>
-
 
 <string name="import_data_question">Adatok importálása?</string>
 <string name="import_started">Adatok importálása folyamatban. A művelet eltarthat néhány másodpercig.</string>
 <string name="import_data_msg">Szeretné átimportálni a jegyzeteket a támogatott verzióból? Amikor kész, eltávolíthatja az alkalmazást.</string>
 <string name="imported_result">%1$d jegyzet importálása %2$d listába</string>
 <string name="import_error">Hiba:</string>
-<string name="uninstall_donate_msg">Támogatott verzió eltávolítása.</string>
-<string name="uninstall_donate">El kívánja távolítani az előző verziót?</string>
 
 
 <!--
@@ -156,20 +101,31 @@ Use few if language need it. In English is the same.
 -->
 <plurals name="notecopied_msg">
 <item quantity="one">@string/notecopied_one</item>
+<item quantity="zero">@string/notecopied_zero</item>
+<item quantity="two">@string/notecopied_two</item>
+<item quantity="few">@string/notecopied_few</item>
+<item quantity="many">@string/notecopied_many</item>
 <item quantity="other">@string/notecopied_other</item>
 </plurals>
 <plurals name="notedeleted_msg">
 <item quantity="one">@string/notedeleted_one</item>
+<item quantity="zero">@string/notedeleted_zero</item>
+<item quantity="two">@string/notedeleted_two</item>
+<item quantity="few">@string/notedeleted_few</item>
+<item quantity="many">@string/notedeleted_many</item>
 <item quantity="other">@string/notedeleted_other</item>
 </plurals>
 <plurals name="mode_choose">
 <item quantity="one">@string/selected_one</item>
+<item quantity="zero">@string/selected_zero</item>
+<item quantity="two">@string/selected_two</item>
+<item quantity="few">@string/selected_few</item>
+<item quantity="many">@string/selected_many</item>
 <item quantity="other">@string/selected_other</item>
 </plurals>
 
 <string name="move">Áthelyezés</string>
 <string name="move_to">Áthelyezés</string>
-<string name="moved_x_to">Áthelyezve a %d listába</string>
 
 <string name="lock_note">Zárolás</string>
 <string name="unlock_note">Feloldás</string>
@@ -193,73 +149,29 @@ Use few if language need it. In English is the same.
 <string name="sync_login_failed">Bejelentkezési hiba, nem lehetett csatlakozni a Google Feladatokhoz</string>
 <string name="changelog_full_title">Változások</string>
 <string name="changelog_title">Újítások</string>
-<string name="changelog_ok_button">OK</string>
-<string name="changelog_show_full">Teljes lista</string>
-<string name="widget_pref_preview_note">Előnézet mutatása</string>
-<string name="widget_pref_preview_note_summary_off">A cím két soros lesz</string>
-<string name="widget_pref_preview_note_summary_on">A jegyzet a második sorban lesz</string>
-<string name="widget_pref_show_complete">Készre jelölés gomb</string>
-<string name="widget_pref_show_complete_summary_off">A gomb rejtve lesz</string>
-<string name="widget_pref_show_complete_summary_on">A gomb látható lesz</string>
-<string name="settings_listitem">Két soros cím</string>
-<string name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
-<string name="settings_listitem_summary_off">A jegyzet előnézete két soros lesz</string>
-<string name="editor_details">Több</string>
 <string name="completed">Kész</string>
-<string name="subtask_of">Részfeladat</string>
-<string name="security">Biztonság</string>
 <string name="date_header_overdue">Lejárt</string>
 <string name="date_header_today">Ma</string>
 <string name="date_header_tomorrow">Holnap</string>
-<string name="date_header_7days">Következő 7 nap</string>
 <string name="date_header_future">Később</string>
 <string name="date_header_none">Nincs dátum</string>
 <string name="date_header_completed">Kész</string>
-<string name="mod_header_today">@string/date_header_today</string>
-<string name="mod_header_yesterday">Tegnap</string>
-<string name="mod_header_thisweek">Ezen a héten</string>
-<string name="mod_header_earlier">Korábban</string>
-<string name="settings_listheader">Összes lista mutatása</string>
-<string name="settings_listheader_off">Egy listaként mutatása</string>
-<string name="settings_listheader_on">Lista címek mutatása</string>
-<string name="please_create_list">Hozz létre egy listát</string>
 <string name="please_select_note">Válassz ki vagy hozz létre egy listát</string>
 <string name="please_create_note">Hozz létre egy jegyzetet</string>
 <string name="hide_checkbox">Jelölőnégyzet elrejtése</string>
 <string name="hide_checkbox_summary_on">Jelölőnégyzet el van rejtve</string>
 <string name="hide_checkbox_summary_off">Jelölőnégyzet látható</string>
-<string name="hide_note">Jegyzet elrejtése</string>
-<string name="hide_note_summary_on">Jegyzet el van rejtve</string>
-<string name="hide_note_summary_off">Jegyzet látható</string>
 <string name="hide_date">Határidő elrejtése</string>
-<string name="hide_date_summary_on">Határidő van rejtve</string>
-<string name="hide_date_summary_off">Határidő látható</string>
 <string name="item_max_height">Jegyzet/Feladat magassága</string>
 <string name="long_date_format">Hosszú dátum formátum</string>
 <string name="short_date_format">Rövid dátum formátum</string>
-<string name="title_rows">Cím maximális magassága</string>
-<string name="title_rows_1">1 sor</string>
-<string name="title_rows_2">2 sor</string>
-<string name="title_rows_free">Nincs meghatározva</string>
 <string name="rows">sor</string>
 <string name="select_date">Dátum</string>
-<string name="saturday">Szombat</string>
-<string name="sunday">Vasárnap</string>
-<string name="monday">Hétfő</string>
 <string name="localedefault">Alapértelmezett</string>
 <string name="donate">Támogatás</string>
 <string name="donate_thanks">Köszönöm a támogatását</string>
 
-<!-- These should probably not be translated -->
-<string name="default_notetitle">Üdvözöllek!</string>
-<string name="default_notetext">Ahhoz, hogy a legtöbbet kihozd az alkalmazásból, azt javaslom, hogy először engedélyezd a szinkronizálást. Nyomd meg a szinkronizálás gombot amikor visszatérsz a listákhoz. Alapértelmezetten óránként engedélyezve lesz a szinkronizálás.\n\nA szinkronizálás az összes többi szolgáltatással együtt fog történni. Ha nincs engedélyezve az automatikus szinkronizálás a Gmail-nél, akkor ez az alkalmazás se fog tudni szinkronizálódni.\n\nHa több Google-fiók van az eszközhöz rendelve, akkor azt ajánlom, hogy manuálisan állítsd be a használni kívánt fiókot. Ettől függetlenül ajánlatos megnézni, hogy milyen beállítási lehetőségek vannak. Megtudod változtatni a betű típusát és méret, továbbá hogy sötét vagy világos legyen a háttér.\n\nAz alkalmazáshoz tartozik egy widget is, amit szabadon átméretezhetsz: érintsd meg valahol és egy pillanatra tartsd lenyomva rajta az ujjad. Így az oldalánál fogva át tudod méretezni.\n\nRemélem hasznosnak találod az alkalmazást! Fontos, hogy teljesen ingyenes, reklámmentes és nyílt forráskódú! Ha bármilyen ötleted vagy panaszod lenne, nyugodtan mondd el nekem.\n\n/Jonas</string>
-<string name="about_text">Köszönöm, hogy letöltötted az alkalmazást! Igyekszem a lehető legtöbbet kihozni az alkalmazásból, de hibák és újítások mindig lesznek!\n\nHa valamilyen hibát találtál, esetleg helytelen fordítást vagy csak lenne egy remek ötleted, hogy hogyan fejleszthetném tovább az alkalmazást, nyugodtan írd meg a következő e-mail címre: jonas@nononsenseapps.com.\n\nGoogle+: https://plus.google.com/u/0/111801385015192089838\nHibajelentő: https://github.com/spacecowboy/NotePad/issues\nFordítás: http://translate.nononsenseapps.com\n\nMég egyszer köszönöm, hogy letöltötted az alkalmazást! Ha támogatni szeretnéd a munkámat, akkor itt megveheted a fizetős verziót: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
-
 <!-- settings string keys -->
-<string name="menu_settings">Beállítások</string>
-<string name="title_activity_list_widget_config">Widget beállítások</string>
-<string name="hide_appicon">Ikon elrejtése</string>
-<string name="hide_new">Új gomb elrejtése</string>
 <string name="hide_header">Widget fejrész elrejtése</string>
 <string name="transparency">Átlátszóság</string>
 <string name="notes_shortcut">Jegyzetek parancsikon</string>
@@ -267,7 +179,6 @@ Use few if language need it. In English is the same.
 <string name="loading_widget">Widget betölt</string>
 <string name="default_list">Alapértelmezett lista</string>
 <string name="please_type_before_reminder">Emlékeztető beállítása elött kérem írjon valamit.</string>
-<string name="select_a_time">Idő kiválasztása</string>
 <string name="notecopied_one">1 jegyzet másolva</string>
 <string name="notecopied_other">%d jegyzet másolva</string>
 <string name="notedeleted_one">1 jegyzet törölve</string>
@@ -287,14 +198,10 @@ Use few if language need it. In English is the same.
 <string name="sound">Hang</string>
 <string name="vibrate">Rezgés</string>
 <string name="reminders">Emlékeztetők</string>
-<string name="add_reminder">Emlékeztető hozzáadása</string>
 <string name="standard">Alapértelmezett</string>
 <string name="notification_prio_high">Magas: Legfelül, kiterjesztve</string>
 <string name="notification_prio_low">Alacsony: Rejtve, minimalizálva</string>
 <string name="priority">Prioritás</string>
-<string name="group_on_list">Lista csoportosítása</string>
-<string name="group_on_list_summary">Különböző értesítések csoportosítva lesznek ha egy listában vannak</string>
-<string name="more">több</string>
 <string name="notifications">Értesítések</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
 <string name="dashclock_tasks">Feladatok</string>
@@ -314,9 +221,5 @@ Use few if language need it. In English is the same.
 <string name="dashclock_header_shown">A lista neve félkövéren jelenik meg. Ha minden lista látszik akkor a a lista neve helyett &quot;Feladatok&quot; jelenik meg.</string>
 <string name="dashclock_first_task_shown">Az első feladat címe lesz félkövér</string>
 <string name="dashclock_display_header">Fejléc megjelenítése</string>
-
-<!-- Store text -->
-<string name="google_play_promo_80_char_limit">Szép jegyzet, feladat és teendő alkalmazás Google Feladatok szinkronizálással</string>
-<string name="google_play_description">Egy nyílt forráskódú jegyzet és teendő alkalmazás telefon és táblagép felülettel. Az alkalmazás a Google fiókkal szinkronizál hogy bárhol elérhesd a jegyzeteidet! (A szinkronizálás opció)\n\nJellemzők:\n* Értesítések/Emlékeztetők\n* Nyelv választás\n* Testre szabható felület\n* Átméretezhető és testre szabható widget.\n* Táblagép támogatás\n* Holo témák\n* Automatikus szinkronizálás a Google Feladatokkal\n* Jelszavazható jegyzetek\n* Jegyzetek áthelyezése egyik listából a másikba\n* Android Agenda Widget támogatás\n* Keresés a jegyzetek közt (nem csak a címekben)\n* Változtatható betűméretek!\n\nMegjegyzés:\nAz Android 4.2-ben van egy hiba ami azoknál az alkalmazásoknál vehető észre amelyek értesítéseket használnak. Ha az értesítéseknél ki van kapcsolva a rezgés (ami az alapértelmezett) és a telefon csendes módba van (csak rezgésre) állítva, a beállítások ellenére az értesítésekkor mindig rezegni fog.\nMég egyszer, az Androidban van a hiba nem az alkalmazásban.\n\nAz következő linken segíthetsz az alkalmazás fordításában: http://translate.nononsenseapps.com\n\nHa bármi probléma adódik, vagy hibát szeretnél bejelenteni ne hezitálj, keress meg!\n+NoNonsenseApps\nvagy\njelezd az issue tracker-en: https://github.com/spacecowboy/NotePad/issues\n\nEz az alkalmazás nyílt forráskódú és a online elérhető itt: https://github.com/spacecowboy/NotePad\n\nLétezik egy fizetős verzió is az alkalmazásból azoknak, akik támogatni szeretnének a fejlesztésben. Link: https://market.android.com/details?id=com.nononsenseapps.notepad_donate\n</string>
 
 </resources>

@@ -1,25 +1,34 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
+    <issue id="CutPasteId" severity="ignore" />
     <issue id="HardcodedText" severity="error">
-        <ignore path="res\layout\editor_layout.xml" />
-        <ignore path="res\layout\listwidget.xml" />
-        <ignore path="res\layout\preference_widget_seekbar.xml" />
+        <ignore path="res/layout/editor_layout.xml" />
+        <ignore path="res/layout/listwidget.xml" />
+        <ignore path="res/layout/preference_widget_seekbar.xml" />
     </issue>
+    <issue id="IconColors" severity="ignore" />
+    <issue id="IconDuplicates">
+        <ignore path="res/drawable-hdpi/drawer_shadow_light.9.png" />
+        <ignore path="res/drawable-mdpi/drawer_shadow_light.9.png" />
+        <ignore path="res/drawable-xhdpi/drawer_shadow_light.9.png" />
+    </issue>
+    <issue id="MissingRegistered" severity="ignore" />
     <issue id="MissingTranslation" severity="ignore">
-        <ignore path="res\values-cs-v14" />
-        <ignore path="res\values-de-v14" />
-        <ignore path="res\values-es" />
-        <ignore path="res\values-fr-v14" />
-        <ignore path="res\values-he" />
-        <ignore path="res\values-hu-v14" />
-        <ignore path="res\values-it-v14" />
-        <ignore path="res\values-iw" />
-        <ignore path="res\values-pt" />
-        <ignore path="res\values-ru-v14" />
-        <ignore path="res\values-sv-v14" />
+        <ignore path="res/values-cs-v14" />
+        <ignore path="res/values-de-v14" />
+        <ignore path="res/values-es" />
+        <ignore path="res/values-fr-v14" />
+        <ignore path="res/values-he" />
+        <ignore path="res/values-hu-v14" />
+        <ignore path="res/values-it-v14" />
+        <ignore path="res/values-iw" />
+        <ignore path="res/values-pt" />
+        <ignore path="res/values-ru-v14" />
+        <ignore path="res/values-sv-v14" />
     </issue>
     <issue id="ParserError">
         <ignore path="templates/Config.java" />
     </issue>
+    <issue id="Registered" severity="ignore" />
     <issue id="Typos" severity="ignore" />
 </lint>

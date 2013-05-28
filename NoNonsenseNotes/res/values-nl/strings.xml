@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (C) 2012 Jonas Kalderstam
+Copyright (C) 2013 Jonas Kalderstam
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -19,99 +19,44 @@ limitations under the License.
 
 <string name="app_name">Notities</string>
 <string name="title_create">Nieuwe notitie</string>
-<string name="title_edit">Bewerken %1$s</string>
-<string name="menu_add">Nieuwe notitie</string>
 <string name="menu_save_and_add">Opslaan en open nieuwe notitie</string>
 <string name="menu_delete">Verwijderen</string>
-<string name="menu_revert">Ongedaan maken</string>
-<string name="menu_copy">Notitie kopiëren</string>
-<string name="menu_cancel">Annuleer</string>
-<string name="menu_setcompleted">Zet als voltooid</string>
-<string name="menu_setuncompleted">Zet als onvoltooid</string>
 <string name="menu_deletelist">Verwijder lijst</string>
 <string name="menu_sync">Herladen</string>
 <string name="menu_share">Delen</string>
 <string name="menu_preferences">Instellingen</string>
-<string name="menu_renamelist">Hernoem lijst</string>
 <string name="menu_createlist">Nieuwe lijst</string>
 <string name="menu_clearcompleted">Wis voltooide notities</string>
 <string name="menu_setdefaultlist">Standaard lijst</string>
 <string name="menu_managelists">Lijsten beheren</string>
-<string name="delete_list_warning">De lijst wordt permanent verwijderd. Weet je het zeker?</string>
 <string name="editor_due_date_hint">Einddatum</string>
 <string name="editor_title_hint">Titel</string>
 <string name="editor_note_hint">Notitie</string>
 <string name="resolve_edit">Notitie bewerken</string>
-<string name="error_title">Fout</string>
-<string name="error_message">Fout bij laden notitie</string>
 <string name="search_hint">Zoeken</string>
 <string name="settings_theme">Huidig thema</string>
 <string name="settings_theme_dialog">Gebruik thema</string>
 <string name="settings_lang">Taal</string>
 <string name="settings_lang_dialog">@string/settings_lang</string>
-<string name="settings_cat_theme">Thema</string>
-<string name="settings_cat_sorting">Sortering</string>
-<string name="settings_sorting_type">Gesorteerd op</string>
-<string name="settings_sorting_type_dialog">Sorteren op</string>
-<string name="settings_sorting_order">Volgorde</string>
-<string name="settings_sorting_order_dialog">Volgorde</string>
-<string name="settings_summary_sort_type_alphabetic">Titel</string>
-<string name="settings_summary_sort_type_modified">Laatst bewerkt</string>
-<string name="settings_summary_sort_type_duedate">Einddatum</string>
-<string name="settings_summary_sort_type_serverposition">Mijn volgorde</string>
-<string name="settings_summary_sort_order_asc">Oplopend</string>
-<string name="settings_summary_sort_order_desc">Aflopend</string>
 <string name="settings_summary_theme_black">Zwart</string>
 <string name="settings_summary_theme_dark">Donker</string>
 <string name="settings_summary_theme_light">Licht</string>
-<string name="settings_summary_theme_light_dark_ab">Licht, donker menu</string>
 <string name="settings_cat_appearance">Opmaak</string>
-<string name="settings_font_screen">Tekenstijl</string>
-<string name="settings_font_screen_summary">Verander het lettertype en grootte</string>
-<string name="settings_cat_font_editor">Tekstverwerker</string>
-<string name="settings_font_type">Lettertype</string>
-<string name="settings_font_type_dialog">Kies een lettertype</string>
-<string name="settings_font_size">Lettergrootte</string>
 <string name="preference_preview_text">Dit is hoe de tekst eruit zal zien</string>
-<string name="settings_text_preview_title">Voorbeeld</string>
-<string name="monospace">Vaste breedte</string>
-<string name="sans">Schreefloos</string>
-<string name="serif">Schreef</string>
-<string name="settings_sync_freq_title">Synchronisatie-frequentie</string>
 <string name="settings_account_title">Selecteer een account</string>
 <string name="settings_account_summary">Verander account</string>
 <string name="settings_sync_enable_title">Google Tasks sync</string>
-<string name="settings_sync_enable_summary">Synchroniseer notities met je Google account</string>
 <string name="settings_cat_syncing">Synchronisatie</string>
-<string name="manual">Handmatig</string>
-<string name="minutes">minuten</string>
-<string name="hours">uren</string>
-<string name="onehour">Een uur</string>
-<string name="oneday">Een dag</string>
-<string name="yes">Ja</string>
-<string name="no">Nee</string>
-<string name="ok">OK</string>
 <string name="show_from_all_lists">Alle lijsten</string>
-<string name="default_list_needed_warning">Eerst een standaardlijst instellen</string>
-<string name="reverted">Ongedaan maken</string>
-<string name="notecopied">Gekopiëerd</string>
 <string name="deleted">Verwijderd</string>
-<string name="items">notities</string>
 <string name="permission_read_label">lees notities en lijsten</string>
 <string name="permission_read_desc">Staat de applicatie toe notities en gerelateerde lijsten te lezen.</string>
 <string name="permission_write_label">notities en lijsten bewerken</string>
 <string name="permission_write_desc">Staat de applicatie toe om notities en lijsten te maken, bewerken en verwijderen.</string>
-<string name="settings_header_list">Lijstinstellingen</string>
-<string name="settings_header_list_summary">Overzichtslijst</string>
-<string name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string name="settings_header_sync">@string/settings_cat_syncing</string>
-<string name="settings_header_sync_summary">Synchronisatie overzicht</string>
 <string name="settings_list_dialog">Selecteer een lijst</string>
 <string name="settings_list">Lijst</string>
-<string name="settings_list_summary">samenvatting</string>
-<string name="automatic">Automatisch</string>
-<string name="preferences_week_start_day_dialog">"Week begint op"</string>
-<string name="preferences_week_start_day_title">"Week begint op"</string>
+
+
 
 <!--
 Use few if language need it. In English is the same.
@@ -119,16 +64,29 @@ Use few if language need it. In English is the same.
 -->
 <plurals name="notecopied_msg">
 <item quantity="one">@string/notecopied_one</item>
+<item quantity="zero">@string/notecopied_zero</item>
+<item quantity="two">@string/notecopied_two</item>
+<item quantity="few">@string/notecopied_few</item>
+<item quantity="many">@string/notecopied_many</item>
 <item quantity="other">@string/notecopied_other</item>
 </plurals>
 <plurals name="notedeleted_msg">
 <item quantity="one">@string/notedeleted_one</item>
+<item quantity="zero">@string/notedeleted_zero</item>
+<item quantity="two">@string/notedeleted_two</item>
+<item quantity="few">@string/notedeleted_few</item>
+<item quantity="many">@string/notedeleted_many</item>
 <item quantity="other">@string/notedeleted_other</item>
 </plurals>
 <plurals name="mode_choose">
 <item quantity="one">@string/selected_one</item>
+<item quantity="zero">@string/selected_zero</item>
+<item quantity="two">@string/selected_two</item>
+<item quantity="few">@string/selected_few</item>
+<item quantity="many">@string/selected_many</item>
 <item quantity="other">@string/selected_other</item>
 </plurals>
+
 
 <string name="lock_note">Notitie vergrendelen</string>
 <string name="unlock_note">Notitie ontgrendelen</string>
@@ -152,79 +110,31 @@ Use few if language need it. In English is the same.
 <string name="sync_login_failed">Inloggen mislukt, kon niet verbinden met Google Tasks</string>
 <string name="changelog_full_title">Recente wijzigingen</string>
 <string name="changelog_title">Wat is er veranderd?</string>
-<string name="changelog_ok_button">OK</string>
-<string name="changelog_show_full">Volledige versie inzien</string>
-<string name="widget_pref_preview_note">Toon notitievoorbeeld</string>
-<string name="widget_pref_preview_note_summary_off">Titel neemt 2 regels in</string>
-<string name="widget_pref_preview_note_summary_on">Notitie op 2de regel</string>
-<string name="widget_pref_show_complete">Markeren-als-voltooid tonen</string>
-<string name="widget_pref_show_complete_summary_off">Knop wordt niet getoond</string>
-<string name="widget_pref_show_complete_summary_on">Knop wordt getoond</string>
-<string name="settings_listitem">Titel op 2 regels</string>
-<string name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
-<string name="settings_listitem_summary_off">Notitievoorbeeld is 2 regels</string>
-<string name="editor_details">Meer</string>
 <string name="completed">Voltooid</string>
-<string name="subtask_of">Subtaak van</string>
-<string name="security">Beveiliging</string>
 <string name="date_header_overdue">Over tijd</string>
 <string name="date_header_today">Vandaag</string>
 <string name="date_header_tomorrow">Morgen</string>
-<string name="date_header_7days">Komende 7 dagen</string>
 <string name="date_header_future">Later</string>
 <string name="date_header_none">Geen datum</string>
 <string name="date_header_completed">Voltooid</string>
-<string name="mod_header_today">@string/date_header_today</string>
-<string name="mod_header_yesterday">Gisteren</string>
-<string name="mod_header_thisweek">Deze week</string>
-<string name="mod_header_earlier">Eerder</string>
-<string name="settings_listheader">Als alle lijsten worden getoond</string>
-<string name="settings_listheader_off">Als enkele lijst tonen</string>
-<string name="settings_listheader_on">Lijstnamen tonen</string>
-<string name="please_create_list">Eerst een lijst aanmaken</string>
 <string name="please_select_note">Selecteer of maak eerst een notitie</string>
 <string name="please_create_note">Maak eerst een notitie</string>
 <string name="hide_checkbox">Vinkje verbergen</string>
 <string name="hide_checkbox_summary_on">Vinkje wordt verborgen</string>
 <string name="hide_checkbox_summary_off">Vinkje wordt getoond</string>
-<string name="hide_note">Notitie verbergen</string>
-<string name="hide_note_summary_on">Notitie wordt verborgen</string>
-<string name="hide_note_summary_off">Notitie wordt getoond</string>
 <string name="hide_date">Einddatum verbergen</string>
-<string name="hide_date_summary_on">Datum wordt verborgen</string>
-<string name="hide_date_summary_off">Datum wordt getoond</string>
-<string name="title_rows">Maximale titelhoogte</string>
-<string name="title_rows_1">1 rij</string>
-<string name="title_rows_2">2 rijen</string>
-<string name="title_rows_free">Onbeperkt</string>
-<string name="saturday">Zaterdag</string>
-<string name="sunday">Zondag</string>
-<string name="monday">Maandag</string>
 <string name="localedefault">Standaard</string>
 
-<!-- These should probably not be translated -->
-<string name="default_notetitle">Welkom!</string>
-<string name="default_notetext">Om het maximale uit deze app te halen adviseer ik eerst synchronisatie aan te zetten. Klik op de syncknop in het menu vanuit het notitielijstscherm. Standaard wordt er dan automatisch elk uur gesynchroniseerd.\n\nNotitiesynchronisatie is gekoppeld aan de globale instelling. Kort gezegd zal deze app synchroniseren als ook Gmail dat doet. Je kunt automatische synchronisatie uitzetten en overgaan op handmatig in de instellingen.\n\nAls je je apparaat met meerdere Google accounts hebt gekoppeld, dan kun je in de instellingen kiezen met welk account gesynchroniseerd moet worden.\n\nIk adviseer om de instellingen eens te bekijken, om te zien wat je zoal kunt aanpassen. Zo zijn lettertype en lettergrootte van de tekst in stellen en zijn er donkere en lichte thema\'s beschikbaar.\n\nDe app biedt ook een volledig aanpasbare widget aan. Het formaat is te wijzigen net zoals bij andere widgets: hou je vinger lang op de widget alsof je heb gaat verplaatsen. Vervolgens kun je de randen verslepen om het formaat aan te passen.\n\nIk hoop dat je de app nuttig vind. Onthoud dat hij volledig gratis is, geen  advertenties heeft en open source is. Als je een goed idee hebt of een serieuze klacht, neem dan contact met me op.\n\n/Jonas</string>
-<string name="about_text">Bedankt voor het downloaden mijn app! Ik doe mijn best om deze app geweldig te maken in alle opzichten, maar er zullen altijd bugs zijn en zaken diee nog beter kunnen!\n\nWanneer u een bug heeft gevonden, een verkeerde vertaling of gewoon een idee heeft om deze app nog beter te maken, hoor ik dit graag!\nStuur me een e-mail: jonas@nononsenseapps.com\n\n+1 Me: https://plus.google.com/u/0/111801385015192089838\n\nMeld het via issue tracker: https://github.com/spacecowboy/NotePad/issues\n\nWanneer u zou willen helpen met het vertalen van de app, ga dan naar http://translate.nononsenseapps.com\n\nNogmaals, bedankt voor het downloaden van mijn app!\n\nWanneer u het project op een minder actieve manier zou willen ondersteunen, kunt u altijd de donatie versie kopen: https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
-
 <!-- settings string keys -->
-<string name="menu_settings">Instellingen</string>
-<string name="title_activity_list_widget_config">Widget configuratie</string>
-<string name="hide_appicon">App-icon verbergen</string>
-<string name="hide_new">Knop Nieuw verbergen</string>
 <string name="hide_header">Hele widget-kop verbergen</string>
-<string name="hide_widgetbg">Transparante achtergrond</string>
 <string name="shortcut_help1">Indien ingeschakeld maakt snelkoppeling een nieuwe notitie in de gekozen lijst en opent de bewerker. Indien uitgeschakeld opent de snelkoppeling de gekozen lijst,</string>
 <string name="loading_widget">Laden widget&#8230;</string>
-<string name="default_list_set">Standaardlijst instellen</string>
-
 <string name="notecopied_one">1 notitie gekopieerd</string>
 <string name="notecopied_other">%d notities gekopieerd</string>
 <string name="notedeleted_one">1 notitie verwijderd</string>
 <string name="notedeleted_other">%d notities verwijderd</string>
 <string name="selected_one">1 notitie geselecteerd</string>
 <string name="selected_other">%d notities geselecteerd</string>
-
 <string name="background_sync">Achtergrondsynchronisatie</string>
 <string name="background_sync_info">Synchoniseert een keer per uur</string>
 <string name="sync_on_change">Synchroniseer bij wijzigingen</string>
@@ -233,34 +143,24 @@ Use few if language need it. In English is the same.
 <string name="sync_on_start_info">Synchroniseert bij nieuwe start, niet bij hervatten app</string>
 <string name="sync_full_force">Volledige synchronisatie forceren de volgende keer</string>
 <string name="sync_full_force_info">Kies dit alleen als je denkt dat bij synchronisatie sommige items ontbreken.</string>
-
 <string name="silent">Stil</string>
 <string name="sound">Geluid</string>
 <string name="vibrate">Vibratie</string>
 <string name="reminders">Herinneringen</string>
-<string name="add_reminder">Herinnering toevoegen</string>
 <string name="standard">Standaard	</string>
 <string name="notification_prio_high">Hoog: Bovenaan, uitgevouwen	</string>
 <string name="notification_prio_low">Laag: Verborgen, geminimaliseerd</string>
 <string name="priority">Prioriteit	</string>
-<string name="group_on_list">Groeperen op lijst</string>
-<string name="group_on_list_summary">Meerdere meldingen zullen samengevoegd worden als ze bij dezelfde lijst horen.</string>
-<string name="more">meer</string>
 <string name="notifications">Meldingen</string>
+<!-- "localtime" is replaced at runtime with 12/24 hour clock -->
 <string name="dateformat_micro">d MMM</string>
-<string name="dateformat_short">d MMM E</string>
-<string name="dateformat_long">d MMMM EEEE</string>
-
-
 <string name="dashclock_tasks">Taken</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Beperk tot taken uit een specifieke lijst</string>
 <string name="dashclock_show_overdue_tasks">Toon verlopen taken</string>
 <string name="dashclock_overdue_tasks_show">Verlopen taken worden getoond</string>
 <string name="dashclock_overdue_tasks_hide">Verlopen taken worden verborgen</string>
-
 <string name="dashclock_title_activity_tasks_settings">NoNonsense Notes Instellingen</string>
 <string name="dashclock_pref_header_general">Algemeen</string>
-
 <string name="dashclock_due_upper_limit_title">Beperk tot taken die uiterlijk verlopen</string>
 <string name="dashclock_today">Vandaag</string>
 <string name="dashclock_tomorrow">Morgen</string>
@@ -273,8 +173,4 @@ Use few if language need it. In English is the same.
 <string name="dashclock_first_task_shown">Titel van de eerste taak wordt vet getoond</string>
 <string name="dashclock_display_header">Kop weergave</string>
 
-
-<!-- Store text -->
-<string name="google_play_promo_80_char_limit">Mooie notitie-, taken- en te doen-app met Google Tasks-synchronisatie.</string>
-<string name="google_play_description">Een open source kladblok en takenlijst app, met een gebruikersinterface (UI) voor zowel telefoon als tablet. Synchroniseert notities en taken met uw bestaande Google-account  en stelt deze veilig in de Cloud zonder verplichte wachtwoord invoer!\n\nEigenschappen:\n* Dash Klokservice\n* Meldingen / Herinneringen\n* Taalkeuze\n* Aanpasbare gebruikersinterface (UI)\n* Widget, resizeable en configureerbaar.\n* Tablet ondersteuning die Gmail-functies nabootst\n* Holo thema\'s, zodat het overeenkomt met de rest van Android\n* Automatische synchronisatie met Google Tasks\n* Mogelijkheid om wachtwoorden instellen op de notities\n* Verplaats notities tussen verschillende lijsten\n* Integratie met Android Agenda Widget\n* Zoeken in al uw notities (niet alleen titels)\n* Wijzig het lettertype en de tekstgrootte!\n\nOpmerking:\nEr is een bug in Android 4.2 die zich manifesteert in alle apps die meldingen gebruiken. wanneer u NIET trillen bij meldingen instelt (dit is de standaardinstelling), zet dan uw telefoon op Stil(alleen trillen), meldingen trillen altijd, ook als dit expliciet werd uitgeschakeld.\nNogmaals, dat is een fout in Android, niet een bug in de app.\n\nU kunt helpen de app te vertalen, ga hiervoor naar: http://translate.nononsenseapps.com\n\nWanneer u vragen heeft of een bug wilt rapporteren, aarzel dan niet om contact met mij op te nemen!\n+ NoNonsenseApps\nof\nrapporteer via de issue tracker: https://github.com/spacecowboy/NotePad/issues\n\nDeze app is open source en is online beschikbaar op: https://github.com/spacecowboy/NotePad\n\nDank u voor uw bijdragen:\nVovicon op reddit voor het maken dit geweldige pictogram.\nVerder: jonasdieamer, arenl, WishuKaiser, Daniel, mr1338, droustchev, Ekuler, OlegKrikun, ayal91, Remi, Alexis, vincentfrombelgium, Ghir0, Francisco, Szoboszlai Károly, Jose, ismailcarlik, NeverGone-RU, dunnkers, keima, Xiaoxuan ma\n\nEr is een donatie versie van deze app beschikbaar voor degenen die mij willen steunen bij de verdere ontwikkeling. \nLink: http://goo.gl/QbkFh</string>
 </resources>
