@@ -46,7 +46,7 @@
         <item name="textColorPrimary">?android:attr/textColorPrimary</item>
         <item name="textColorSecondary">?android:attr/textColorSecondary</item>
         <item name="labelAddItemTextColor">@color/labelItemTextColorDark</item>
-        <item name="list_item_card_background">@drawable/darkgrey_rounded_corners</item>
+        <item name="list_item_card_background">@drawable/card_dark</item>
         <item name="body_new">@drawable/content_new_dark </item>
         <item name="body_remove">@drawable/content_remove_dark</item>
         <item name="body_delete">@drawable/content_discard_dark</item>
@@ -86,7 +86,7 @@
         <item name="android:windowBackground">@color/googlenow_darkergrey</item>
         <item name="android:colorBackgroundCacheHint">@color/googlenow_darkergrey</item>
         <item name="viewpager_bg">@null</item>
-        <item name="editorBackgroundColor">@drawable/darkgrey_rounded_corners_padded_vertically</item>
+        <item name="editorBackgroundColor">@drawable/card_dark</item>
         <item name="ListMarginStyle">@style/ListMarginStyleCard</item>
     </style>
 
@@ -113,7 +113,7 @@
         <!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
         <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
         <item name="my_list_background">@color/listLightBG</item>
-        <item name="editorBackgroundColor">@drawable/white_rounded_corners_padded_vertically</item>
+        <item name="editorBackgroundColor">@drawable/card_light</item>
         <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
         <item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
         <item name="img_default_selector">@drawable/img_default_selector_light</item>
@@ -132,7 +132,7 @@
         <item name="body_new">@drawable/content_new_light </item>
         <item name="body_remove">@drawable/content_remove_light</item>
         <item name="body_delete">@drawable/content_discard_light</item>
-        <item name="list_item_card_background">@drawable/white_rounded_corners</item>
+        <item name="list_item_card_background">@drawable/card_light</item>
         <item name="drag_handle_color">@color/dragHandleColorLight</item>
         <item name="TaskListItem">@style/TaskListItemLight</item>
         <item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>

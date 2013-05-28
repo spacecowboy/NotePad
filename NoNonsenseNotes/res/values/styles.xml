@@ -60,21 +60,20 @@
         <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
         <item name="android:textColor">?textColorPrimary</item>
-        <item name="android:layout_marginTop">@dimen/editor_vertical_margin</item>
         <item name="linkify">true</item>
         <item name="titleFontFamily">robotocondensed</item>
         <item name="titleFontStyle">bold</item>
         <item name="titleRelativeSize">1.3</item>
     </style>
 
-    <style name="ListIndicatorLight">
-        <item name="android:background">@drawable/white_rounded_corners</item>
-        <!-- <item name="android:background">?android:attr/activatedBackgroundIndicator</item> -->
+    <!-- <style name="ListIndicatorLight">
+        <item name="android:background">@drawable/card_light</item>
+        <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
     </style>
 
     <style name="ListIndicatorDark">
         <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
-    </style>
+    </style> -->
 
     <style name="ActionBarDropDownItem.Dark" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">#FFFFFF</item>
