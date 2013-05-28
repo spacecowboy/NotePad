@@ -10,6 +10,8 @@ def fixfile(filename):
     for line in fileinput.FileInput(filename, inplace=1):
         # If ['] is not preceeded by [\], replace with [\']
         line = re.sub(r'(?<=[^\\])\'', r"\'", line)
+        # replace ... with ellipsis &#8230;
+        line = re.sub(r'\.\.\.', r'&#8230;', line)
         print(line, end='')
 
 stringfile = 'strings.xml'
@@ -27,8 +29,12 @@ for dir in dirs:
     m = re.match('^values\-([a-z]{2})(-r([A-Z]{2}))?$', dir)
 
     if m is not None:
+        if not os.path.exists(os.path.join(resdir, m.group(0),
+                                           stringfile)):
+            continue
+
         fixfile(os.path.join(resdir, m.group(0), stringfile))
-        
+
         # Language iso code
         ##isocode = m.group(1)
         #if m.group(3) is not None:
@@ -44,7 +50,7 @@ for dir in dirs:
 #for line in fileinput.FileInput(arrayfile, inplace=1):
 #    if not replacing:
 #        print(line, end='')
-#    
+#
 #    if 'name="translated_langs"' in line:
 #        replacing = True
         #Print list of languages
