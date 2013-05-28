@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
 
@@ -16,6 +17,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
 import android.text.format.Time;
 import android.util.Log;
@@ -75,29 +77,29 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL(Notification.CREATE_TABLE);
 		db.execSQL(RemoteTaskList.CREATE_TABLE);
 		db.execSQL(RemoteTask.CREATE_TABLE);
-		
+
 		db.execSQL(Notification.CREATE_JOINED_VIEW);
-		
+
 		db.execSQL(Task.TRIGGER_PRE_INSERT);
 		db.execSQL(Task.TRIGGER_PRE_DELETE);
 		db.execSQL(Task.TRIGGER_POST_DELETE);
 		db.execSQL(Task.TRIGGER_MOVE_LIST);
 		db.execSQL(Task.CREATE_HISTORY_INSERT_TRIGGER);
 		db.execSQL(Task.CREATE_HISTORY_UPDATE_TRIGGER);
-		
+
 		db.execSQL(RemoteTask.TRIGGER_LISTDELETE_CASCADE);
 		// Mark as deleted when real item deleted
 		db.execSQL(RemoteTask.TRIGGER_REALDELETE_MARK);
 		db.execSQL(RemoteTaskList.TRIGGER_REALDELETE_MARK);
 		// Create move list trigger
 		db.execSQL(RemoteTask.TRIGGER_MOVE_LIST);
-		
+
 		// Search tables
 		db.execSQL(Task.CREATE_FTS3_TABLE);
 		db.execSQL(Task.CREATE_FTS3_INSERT_TRIGGER);
 		db.execSQL(Task.CREATE_FTS3_UPDATE_TRIGGER);
 		db.execSQL(Task.CREATE_FTS3_DELETE_TRIGGER);
-		
+
 		// Delete search tables
 		db.execSQL(Task.CREATE_FTS3_DELETE_TABLE);
 		db.execSQL(Task.CREATE_FTS3_DELETED_INSERT_TRIGGER);
@@ -175,12 +177,13 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				tl.insert(context, db);
 				// remember id
 				listIDMap.put(c.getLong(0), tl._id);
-				
+
 				// handle gtask info
 				GoogleTaskList rl = null;
-				if (c.getString(2) != null && !c.getString(2).isEmpty() &&
-						c.getString(3) != null && !c.getString(3).isEmpty()) {
-					rl = new GoogleTaskList(tl._id, c.getString(2), tl.updated, c.getString(3));
+				if (c.getString(2) != null && !c.getString(2).isEmpty()
+						&& c.getString(3) != null && !c.getString(3).isEmpty()) {
+					rl = new GoogleTaskList(tl._id, c.getString(2), tl.updated,
+							c.getString(3));
 					rl.insert(context, db);
 				}
 			}
@@ -196,17 +199,19 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					Task t = new Task();
 					t.title = c.getString(1);
 					t.note = c.getString(2);
-					
+
 					if (t.note.contains("[locked]")) {
 						t.locked = true;
 						t.note = t.note.replace("[locked]", "");
 					}
-					
+
 					try {
 						t.due = RFC3339Date.parseRFC3339Date(c.getString(3))
 								.getTime();
-					} catch (IndexOutOfBoundsException e) {
-					} catch (ParseException e) {
+					}
+					catch (IndexOutOfBoundsException e) {
+					}
+					catch (ParseException e) {
 					}
 
 					// completed must be converted
@@ -226,7 +231,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 						// put in idmap
 						taskIDMap.put(c.getLong(0), t._id);
 					}
-					
+
 					// gtask
 					GoogleTask gt = null;
 					if (!c.isNull(7) && !c.getString(7).isEmpty()
@@ -236,7 +241,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 						gt.updated = t.updated;
 						gt.insert(context, db);
 					}
-					
+
 				}
 				c.close();
 			}
@@ -261,10 +266,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 			// Complete, close the legacy db
 			legacyDB.close();
-		} catch (SQLException e) {
+		}
+		catch (SQLException e) {
 			// Database must have been empty. Ignore it
 			// Test reasons, throw it!
-			//throw e;
+			// throw e;
 		}
 
 		// If no lists, insert a list and example note.
@@ -274,17 +280,27 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		if (!c.isClosed() && c.getCount() > 0) {
 			// Done
-		} else {
-			// Create a list
-			final TaskList tl = new TaskList();
-			tl.title = context.getString(R.string.tasks);
-			tl.insert(context, db);
+		}
+		else {
+			// If preferences has sync enabled, don't create this list
+			// The backup agent has restored a reinstallation
+			if (PreferenceManager.getDefaultSharedPreferences(context)
+					.contains(SyncPrefs.KEY_ACCOUNT)) {
 
-//			final Task t = new Task();
-//			t.dblist = tl._id;
-//			t.title = context.getString(R.string.default_notetitle);
-//			t.note = context.getString(R.string.default_notetext);
-//			t.insert(context, db);
+			}
+			else {
+
+				// Create a list
+				final TaskList tl = new TaskList();
+				tl.title = context.getString(R.string.tasks);
+				tl.insert(context, db);
+
+				// final Task t = new Task();
+				// t.dblist = tl._id;
+				// t.title = context.getString(R.string.default_notetitle);
+				// t.note = context.getString(R.string.default_notetext);
+				// t.insert(context, db);
+			}
 		}
 		c.close();
 		db.setTransactionSuccessful();
@@ -296,7 +312,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		if (oldVersion < 10) {
 			// Notification locations
 			// Add columns
-			String preName = "ALTER TABLE " + Notification.TABLE_NAME + " ADD COLUMN ";
+			String preName = "ALTER TABLE " + Notification.TABLE_NAME
+					+ " ADD COLUMN ";
 			String postText = " TEXT";
 			String postReal = " REAL";
 			db.execSQL(preName + Notification.Columns.LOCATIONNAME + postText);
@@ -304,7 +321,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			db.execSQL(preName + Notification.Columns.LONGITUDE + postReal);
 			db.execSQL(preName + Notification.Columns.RADIUS + postReal);
 			// Drop view
-			db.execSQL("DROP VIEW IF EXISTS " + Notification.WITH_TASK_VIEW_NAME);
+			db.execSQL("DROP VIEW IF EXISTS "
+					+ Notification.WITH_TASK_VIEW_NAME);
 			// Recreate view with additional tables
 			db.execSQL(Notification.CREATE_JOINED_VIEW);
 		}
