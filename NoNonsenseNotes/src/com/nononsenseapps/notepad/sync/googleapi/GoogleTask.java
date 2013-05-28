@@ -159,6 +159,7 @@ public class GoogleTask extends RemoteTask {
 		status = dbTask.completed != null ? GoogleTask.COMPLETED
 				: GoogleTask.NEEDSACTION;
 		remotelydeleted = false;
+		deleted = null;
 		dbid = dbTask._id;
 		listdbid = dbTask.dblist;
 	}

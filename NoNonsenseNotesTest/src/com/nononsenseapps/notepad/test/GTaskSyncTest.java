@@ -457,4 +457,14 @@ public class GTaskSyncTest extends AndroidTestCase {
 		assertEquals("lUpdate time incorrect", localTaskNewestCount, localNewestCount);
 		assertEquals("rUpdate time incorrect", 0, remoteNewestCount);
 	}
+	
+	@SmallTest
+	public void testSyncTasksLocallyCompleteBug() {
+		// TODO
+//		Complete status should be transferred correclty,
+//		localcomplete, remote not
+//		localcomplete, remote complete
+//		local not, remote not
+//		localcomplete, remote complete
+	}
 }

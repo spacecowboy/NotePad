@@ -174,9 +174,9 @@ public class DBUpgradeTest extends AndroidTestCase {
 			for (int j = 0; j < numOfLegacyNotes; j++) {
 				values.clear();
 				values.put(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_TITLE,
-						context.getString(R.string.default_notetitle) + j);
+						"default" + j);
 				values.put(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_NOTE,
-						context.getString(R.string.default_notetext));
+						"defaulttext");
 				values.put(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_MODIFIED, 1);
 				values.put(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_DELETED, 0);
 				values.put(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST,

@@ -351,7 +351,7 @@ public class GoogleAPITalker {
 				// is desired
 				for (i = 0; i < size; i++) {
 					JSONObject jsonList = lists.getJSONObject(i);
-					Log.d("nononsenseapps", jsonList.toString(2));
+					//Log.d("nononsenseapps", jsonList.toString(2));
 					list.add(new GoogleTaskList(jsonList, accountName));
 				}
 			}
@@ -580,7 +580,7 @@ public class GoogleAPITalker {
 								// the server
 			}
 
-			Log.d(TAG, "ID IS NULL: " + task.title);
+			//Log.d(TAG, "ID IS NULL: " + task.title);
 			httppost = new HttpPost(AllTasksInsert(pList.remoteId));
 			// task.didRemoteInsert = true; // Need this later
 		}
@@ -701,7 +701,7 @@ public class GoogleAPITalker {
 			throws ClientProtocolException, IOException, PreconditionException, JSONException {
 		final HttpUriRequest httppost;
 		if (list.remoteId != null) {
-			Log.d(TAG, "ID is not NULL!! " + ListURL(list.remoteId));
+			//Log.d(TAG, "ID is not NULL!! " + ListURL(list.remoteId));
 			if (list.isDeleted()) {
 				httppost = new HttpDelete(ListURL(list.remoteId));
 			}
@@ -782,10 +782,10 @@ public class GoogleAPITalker {
 		if (etag != null && !etag.isEmpty()) {
 			httppost.setHeader("If-Match", etag);
 
-			Log.d(TAG, "If-Match: " + etag);
+			//Log.d(TAG, "If-Match: " + etag);
 		}
 		else {
-			Log.d(TAG, "No ETAG could be found!");
+			//Log.d(TAG, "No ETAG could be found!");
 		}
 	}
 
@@ -801,7 +801,7 @@ public class GoogleAPITalker {
 		if (etag != null && !etag.equals("")) {
 			httpget.setHeader("If-None-Match", etag);
 
-			Log.d(TAG, "If-None-Match: " + etag);
+			//Log.d(TAG, "If-None-Match: " + etag);
 		}
 	}
 

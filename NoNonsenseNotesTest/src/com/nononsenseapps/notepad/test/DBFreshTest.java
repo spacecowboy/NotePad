@@ -44,7 +44,7 @@ public class DBFreshTest extends AndroidTestCase {
 		tlc.close();
 		
 		Cursor tc = db.query(Task.TABLE_NAME, Task.Columns.FIELDS, null, null, null, null, null);
-		assertEquals("Should be ONE task present on fresh installs", 1, tc.getCount());
+		assertEquals("Should be NO task present on fresh installs", 0, tc.getCount());
 		tc.close();
 		
 		db.close();
