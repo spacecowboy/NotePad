@@ -237,7 +237,7 @@
     <string name="dateformat_long_2">E localtime, d MMM</string>
     <string name="tasks">Tasks</string>
     <string name="dashclock_tasks">@string/tasks</string>
-    <string name="dashclock_restrict_to_tasks_in_a_specific_list">Restrict to tasks in a specific list</string>
+    <string name="dashclock_restrict_to_tasks_in_a_specific_list">Restrict to tasks in</string>
     <string name="dashclock_show_overdue_tasks">Show overdue tasks</string>
     <string name="dashclock_overdue_tasks_show">Overdue tasks will be shown</string>
     <string name="dashclock_overdue_tasks_hide">Overdue tasks will be hidden</string>
@@ -249,10 +249,10 @@
     <string name="dashclock_next7">Next 7 days</string>
     <string name="dashclock_anytime">Anytime</string>
     <string name="dashclock_will_show_as_many_as_possible">Will show as many as possible</string>
-    <string name="dashclock_will_only_show_the_task_due_first">Will only show the task due first</string>
+    <string name="dashclock_will_only_show_the_task_due_first">@string/dashclock_show_only_the_next_task</string>
     <string name="dashclock_show_only_the_next_task">Show only the next task</string>
-    <string name="dashclock_header_shown">List name will be shown in bold. If &quot;All Lists&quot; is selected, will show &quot;Tasks&quot;</string>
+    <string name="dashclock_header_shown">List name will be shown in bold</string>
     <string name="dashclock_first_task_shown">Title of first task will be shown in bold</string>
-    <string name="dashclock_display_header">Display header</string>
+    <string name="dashclock_display_header">Display list name</string>
 
 </resources>
