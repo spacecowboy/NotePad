@@ -1,17 +1,17 @@
 /*
  * Copyright (C) 2012 Jonas Kalderstam
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
+ * 
+ * Licensed under the Apache License, Version 2.0 (the "License"); you may not
+ * use this file except in compliance with the License. You may obtain a copy of
+ * the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+ * License for the specific language governing permissions and limitations under
+ * the License.
  */
 
 package com.nononsenseapps.notepad.fragments;
@@ -28,6 +28,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
@@ -38,18 +39,21 @@ import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 public class DialogPassword extends DialogFragment {
 	@ViewById
 	EditText passwordField;
-	
+
+	@ViewById
+	EditText passwordVerificationField;
+
 	@ViewById
 	View dialog_yes;
 	@ViewById
 	View dialog_no;
 
 	PasswordConfirmedListener listener = null;
-	
+
 	public static interface PasswordConfirmedListener {
 		public void onPasswordConfirmed();
 	}
-	
+
 	public void setListener(final PasswordConfirmedListener listener) {
 		this.listener = listener;
 	}
@@ -57,42 +61,92 @@ public class DialogPassword extends DialogFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		getDialog().setTitle(R.string.password_required);
+		final SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(getActivity());
+		final String currentPassword = settings.getString(
+				PasswordPrefs.KEY_PASSWORD, "");
+		if (currentPassword.isEmpty()) {
+			getDialog().setTitle(R.string.enter_new_password);
+		}
+		else {
+			getDialog().setTitle(R.string.password_required);
+		}
 		// Let annotations deal with it
 		return null;
 	}
-	
+
+	@AfterViews
+	public void showField() {
+		final SharedPreferences settings = PreferenceManager
+				.getDefaultSharedPreferences(getActivity());
+		final String currentPassword = settings.getString(
+				PasswordPrefs.KEY_PASSWORD, "");
+		if (currentPassword.isEmpty()) {
+			passwordVerificationField.setVisibility(View.VISIBLE);
+		}
+		else {
+			passwordVerificationField.setVisibility(View.GONE);
+		}
+	}
+
 	@Click(R.id.dialog_no)
 	void cancel() {
 		dismiss();
 	}
-	
+
 	@Click(R.id.dialog_yes)
 	void confirm() {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
-		String currentPassword = settings.getString(PasswordPrefs.KEY_PASSWORD,
+		final String currentPassword = settings.getString(PasswordPrefs.KEY_PASSWORD,
 				"");
-		String enteredPassword = passwordField.getText().toString();
+		final String enteredPassword = passwordField.getText().toString();
+		final String verifiedPassword = passwordVerificationField.getText()
+				.toString();
 
-		// We want to return true or false, user has entered correct
-		// password
-		checkPassword(enteredPassword, currentPassword);
+		if (currentPassword.isEmpty()) {
+			setPassword(enteredPassword, verifiedPassword);
+		}
+		else {
+			// We want to return true or false, user has entered correct
+			// password
+			checkPassword(enteredPassword, currentPassword);
+		}
 	}
 
-	private void checkPassword(String enteredPassword, String currentPassword) {
-		if ("".equals(currentPassword)
-				|| currentPassword.equals(enteredPassword)) {
+	private void checkPassword(final String enteredPassword,
+			final String currentPassword) {
+		if (currentPassword.equals(enteredPassword)) {
 			if (listener != null) {
 				listener.onPasswordConfirmed();
 			}
 			dismiss();
-		} else {
+		}
+		else {
 			Animation shake = AnimationUtils.loadAnimation(getActivity(),
 					R.anim.shake);
 			passwordField.startAnimation(shake);
 			Toast.makeText(getActivity(), getText(R.string.password_incorrect),
 					Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	private void setPassword(final String pass1, final String pass2) {
+		if (pass1 != null && !pass1.isEmpty() && pass1.equals(pass2)) {
+			PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
+					.putString(PasswordPrefs.KEY_PASSWORD, pass1).commit();
+			if (listener != null) {
+				listener.onPasswordConfirmed();
+			}
+			dismiss();
+		}
+		else {
+			Animation shake = AnimationUtils.loadAnimation(getActivity(),
+					R.anim.shake);
+			passwordVerificationField.startAnimation(shake);
+			Toast.makeText(getActivity(),
+					getText(R.string.passwords_dont_match), Toast.LENGTH_SHORT)
+					.show();
 		}
 	}
 }
