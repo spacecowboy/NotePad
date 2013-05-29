@@ -20,25 +20,29 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.helpers.TimeFormatter;
 
 import android.os.Bundle;
 import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 public class MainPrefs extends PreferenceFragment {
 	public static final String KEY_THEME = "key_current_theme";
-	//public static final String KEY_WEEK_START_DAY = "preferences_week_start_day";
+	// public static final String KEY_WEEK_START_DAY =
+	// "preferences_week_start_day";
 
 	public static final String SANS = "Sans";
 	public static final String SERIF = "Serif";
 	public static final String MONOSPACE = "Monospace";
 
-//	public static final String THEME_DARK = "dark";
-//	public static final String THEME_BLACK = "black";
-//	public static final String THEME_LIGHT_ICS_AB = "light_ab";
-
+	// public static final String THEME_DARK = "dark";
+	// public static final String THEME_BLACK = "black";
+	// public static final String THEME_LIGHT_ICS_AB = "light_ab";
 
 	public static final String WEEK_START_DEFAULT = "-1";
 	public static final String WEEK_START_SATURDAY = "7";
@@ -62,11 +66,10 @@ public class MainPrefs extends PreferenceFragment {
 				R.array.dateformat_long_values);
 
 		// Bind summaries
-		PrefsActivity.bindPreferenceSummaryToValue(findPreference(KEY_THEME));
 		// PrefsActivity
 		// .bindPreferenceSummaryToValue(findPreference(KEY_FONT_TYPE_EDITOR));
-//		PrefsActivity
-//				.bindPreferenceSummaryToValue(findPreference(KEY_WEEK_START_DAY));
+		// PrefsActivity
+		// .bindPreferenceSummaryToValue(findPreference(KEY_WEEK_START_DAY));
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_locale)));
 
@@ -74,6 +77,24 @@ public class MainPrefs extends PreferenceFragment {
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_dateformat_long)));
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_dateformat_short)));
+
+		updateDonateStatus();
+	}
+
+	private void updateDonateStatus() {
+		final boolean isPremium = PreferenceManager
+				.getDefaultSharedPreferences(getActivity()).getBoolean(
+						ActivityMain.PREMIUMSTATUS, false);
+		Preference pref = findPreference(KEY_THEME);
+		findPreference(KEY_THEME).setEnabled(isPremium);
+		if (isPremium) {
+			// Bind summary
+			PrefsActivity.bindPreferenceSummaryToValue(pref);
+		}
+		else {
+			// Set donate message
+			pref.setSummary(R.string.donate_to_unlock);
+		}
 	}
 
 	private void setDateEntries(ListPreference prefDate, int array) {

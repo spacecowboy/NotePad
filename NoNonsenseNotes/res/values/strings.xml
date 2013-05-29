@@ -105,6 +105,9 @@
 	<string name="showcase_timemachine_title">Saves everything</string>
 	<string name="showcase_timemachine_msg">Your changes are always saved on exit. Use the time machine to restore a note to a previous version.</string>
 	
+	<string name="donate_to_unlock">Donate to unlock</string>
+	<string name="premiums_unlocked_and_thanks">Premium features unlocked. Thank you for your support!</string>
+	
     <!--
         Use few if language need it. In English is the same.
         <item quantity="few">Copied 2 notes.</item>

@@ -107,8 +107,9 @@ public class ActivityMain extends FragmentActivity implements
 	public static final String NOTIFICATION_DELETE_ARG = "notification_delete_arg";
 
 	// In-app donate identifier
-	static final String SKU_DONATE = "donate_inapp";
-	static final String DONATED = "donate_inapp_or_oldversion";
+	public static final String SKU_INAPP_PREMIUM = "donate_inapp";
+	// User bought old donate version or in-app
+	public static final String PREMIUMSTATUS = "donate_inapp_or_oldversion";
 	// For static testing
 	// static final String SKU_DONATE = "android.test.purchased";
 	// static final String SKU_DONATE = "android.test.cancelled";
@@ -148,8 +149,11 @@ public class ActivityMain extends FragmentActivity implements
 
 	boolean mAnimateExit = false;
 	IabHelper mBillingHelper;
-	// True if user has donated
-	boolean mIsDonate = false;
+	// True if user has access to premium features, through in-app purchase or
+	// old donate version
+	boolean mHasPremiumAccess = false;
+	// True if user donated in-app
+	protected boolean mDonatedInApp = false;
 	private ActionBarDrawerToggle mDrawerToggle;
 
 	// Changes depending on what we're showing since the started activity can
@@ -190,8 +194,8 @@ public class ActivityMain extends FragmentActivity implements
 		// If user has donated some other time
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
-		mIsDonate = prefs.getBoolean(SKU_DONATE, false)
-				| prefs.getBoolean(DONATED, false);
+		mHasPremiumAccess = prefs.getBoolean(PREMIUMSTATUS, false);
+		mDonatedInApp = prefs.getBoolean(SKU_INAPP_PREMIUM, false);
 
 		alreadyShowcased = prefs.getBoolean(SHOWCASED_MAIN, false);
 		alreadyShowcasedDrawer = prefs.getBoolean(SHOWCASED_DRAWER, false);
@@ -268,7 +272,7 @@ public class ActivityMain extends FragmentActivity implements
 				// Allow them to donate again
 				PreferenceManager
 						.getDefaultSharedPreferences(ActivityMain.this).edit()
-						.putBoolean(DONATED, true).commit();
+						.putBoolean(PREMIUMSTATUS, true).commit();
 				// Stop loop
 				break;
 			}
@@ -386,21 +390,22 @@ public class ActivityMain extends FragmentActivity implements
 			// Purchase premiumPurchase = inventory.getPurchase(SKU_DONATE);
 			// mIsDonate = (premiumPurchase != null);// &&
 			// verifyDeveloperPayload(premiumPurchase));
-			if (!mIsDonate) {
-				mIsDonate = inventory.hasPurchase(SKU_DONATE);
+			if (!mHasPremiumAccess) {
+				mHasPremiumAccess = inventory.hasPurchase(SKU_INAPP_PREMIUM);
 
-				if (mIsDonate) {
+				if (mHasPremiumAccess) {
 					// Save in prefs
 					PreferenceManager
 							.getDefaultSharedPreferences(ActivityMain.this)
-							.edit().putBoolean(SKU_DONATE, mIsDonate)
-							.putBoolean(DONATED, mIsDonate).commit();
+							.edit().putBoolean(SKU_INAPP_PREMIUM, true)
+							.putBoolean(PREMIUMSTATUS, mHasPremiumAccess)
+							.commit();
 					// Update relevant parts of UI
 					updateUiDonate();
 				}
 
 				Log.d("nononsenseapps billing", "User is "
-						+ (mIsDonate ? "PREMIUM" : "NOT PREMIUM"));
+						+ (mHasPremiumAccess ? "PREMIUM" : "NOT PREMIUM"));
 			}
 		}
 	};
@@ -716,12 +721,12 @@ public class ActivityMain extends FragmentActivity implements
 		options.showcaseId = 1;
 		final int vertDp = ViewsHelper.convertDip2Pixels(this, 200);
 		final int horDp = ViewsHelper.convertDip2Pixels(this, 200);
-		sv = ShowcaseView
-				.insertShowcaseViewWithType(ShowcaseView.ITEM_ACTION_HOME,
-						android.R.id.home, this, R.string.showcase_main_title,
-						R.string.showcase_main_msg, options);
+		sv = ShowcaseView.insertShowcaseViewWithType(
+				ShowcaseView.ITEM_ACTION_HOME, android.R.id.home, this,
+				R.string.showcase_main_title, R.string.showcase_main_msg,
+				options);
 		sv.animateGesture(0, vertDp, horDp, vertDp);
-		
+
 		PreferenceManager.getDefaultSharedPreferences(this).edit()
 				.putBoolean(SHOWCASED_MAIN, true).commit();
 		alreadyShowcased = true;
@@ -737,8 +742,10 @@ public class ActivityMain extends FragmentActivity implements
 		final int horDp = ViewsHelper.convertDip2Pixels(this, 60);
 
 		if (sv != null) {
-			sv.setText(R.string.showcase_drawer_title, R.string.showcase_drawer_msg);
+			sv.setText(R.string.showcase_drawer_title,
+					R.string.showcase_drawer_msg);
 			sv.setShowcasePosition(horDp, vertDp);
+			sv.show();
 		}
 		else {
 			final ConfigOptions options = new ConfigOptions();
@@ -747,10 +754,12 @@ public class ActivityMain extends FragmentActivity implements
 			// Used in saving state
 			options.showcaseId = 2;
 			sv = ShowcaseView.insertShowcaseView(horDp, vertDp, this,
-					R.string.showcase_drawer_title, R.string.showcase_drawer_msg, options);
+					R.string.showcase_drawer_title,
+					R.string.showcase_drawer_msg, options);
+			sv.show();
 		}
-		PreferenceManager
-		.getDefaultSharedPreferences(this).edit().putBoolean(SHOWCASED_DRAWER, true).commit();
+		PreferenceManager.getDefaultSharedPreferences(this).edit()
+				.putBoolean(SHOWCASED_DRAWER, true).commit();
 		alreadyShowcasedDrawer = true;
 	}
 
@@ -823,7 +832,7 @@ public class ActivityMain extends FragmentActivity implements
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		final MenuItem donateItem = menu.findItem(R.id.menu_donate);
 		if (donateItem != null) {
-			donateItem.setVisible(!mIsDonate);
+			donateItem.setVisible(!mDonatedInApp);
 		}
 		menu.setGroupVisible(R.id.activity_menu_group, isDrawerClosed);
 		menu.setGroupVisible(R.id.activity_reverse_menu_group, !isDrawerClosed);
@@ -861,7 +870,7 @@ public class ActivityMain extends FragmentActivity implements
 			return true;
 		case R.id.menu_donate:
 			try {
-				mBillingHelper.launchPurchaseFlow(this, SKU_DONATE,
+				mBillingHelper.launchPurchaseFlow(this, SKU_INAPP_PREMIUM,
 						SKU_DONATE_REQUEST_CODE,
 						new IabHelper.OnIabPurchaseFinishedListener() {
 							public void onIabPurchaseFinished(IabResult result,
@@ -871,16 +880,25 @@ public class ActivityMain extends FragmentActivity implements
 											"Error purchasing: " + result);
 									return;
 								}
-								else if (purchase.getSku().equals(SKU_DONATE)) {
-									mIsDonate = true;
+								else if (purchase.getSku().equals(
+										SKU_INAPP_PREMIUM)) {
+									mHasPremiumAccess = true;
+									mDonatedInApp = true;
 									// Save in prefs
 									PreferenceManager
 											.getDefaultSharedPreferences(
-													ActivityMain.this).edit()
-											.putBoolean(SKU_DONATE, true)
-											.putBoolean(DONATED, true).commit();
+													ActivityMain.this)
+											.edit()
+											.putBoolean(SKU_INAPP_PREMIUM, true)
+											.putBoolean(PREMIUMSTATUS, true)
+											.commit();
 									// Update relevant parts of UI
 									updateUiDonate();
+									// Notify user of success
+									Toast.makeText(
+											ActivityMain.this,
+											R.string.premiums_unlocked_and_thanks,
+											Toast.LENGTH_SHORT).show();
 								}
 							}
 						});
@@ -924,14 +942,9 @@ public class ActivityMain extends FragmentActivity implements
 	}
 
 	void updateUiDonate() {
-		// TODO check correct variable
-		if (mIsDonate) {
-			// Toast.makeText(this, R.string.donate_thanks, Toast.LENGTH_SHORT)
-			// .show();
-		}
-		else {
-			// Toast.makeText(this, "No premium for you!", Toast.LENGTH_SHORT)
-			// .show();
+		// check correct variableF
+		if (mDonatedInApp) {
+			invalidateOptionsMenu();
 		}
 	}
 

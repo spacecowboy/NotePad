@@ -26,7 +26,8 @@
         android:entryValues="@array/themevalues_preference"
         android:key="key_current_theme"
         android:summary="Selected option should be here"
-        android:title="@string/settings_theme" />
+        android:title="@string/settings_theme"
+        android:enabled="false" />
     <ListPreference
         android:defaultValue=""
         android:dialogTitle="@string/settings_lang_dialog"

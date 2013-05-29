@@ -19,6 +19,9 @@ limitations under the License.
 
 <string name="app_name">Notes</string>
 <string name="title_create">新しいノート</string>
+<string name="time">時間</string>
+<string name="near">近くに</string>
+<string name="menu_save_and_add">デリート</string>
 <string name="menu_delete">削除</string>
 <string name="menu_deletelist">リストの削除</string>
 <string name="menu_sync">更新</string>
@@ -28,10 +31,12 @@ limitations under the License.
 <string name="menu_clearcompleted">完了したノートの削除</string>
 <string name="menu_setdefaultlist">デフォルトのリスト</string>
 <string name="menu_managelists">リストの管理</string>
+<string name="delete_question">デリート？</string>
 <string name="editor_due_date_hint">期限</string>
 <string name="editor_title_hint">タイトル</string>
 <string name="editor_note_hint">ノート</string>
 <string name="resolve_edit">ノートの編集</string>
+<string name="search_description">ノートやタスク</string>
 <string name="search_hint">検索</string>
 <string name="settings_theme">現在のテーマ</string>
 <string name="settings_theme_dialog">テーマの選択</string>
@@ -39,6 +44,7 @@ limitations under the License.
 <string name="settings_summary_theme_black">ブラック</string>
 <string name="settings_summary_theme_dark">ダーク</string>
 <string name="settings_summary_theme_light">ライト</string>
+<string name="settings_summary_theme_classic">クラシック</string>
 <string name="settings_cat_appearance">外観</string>
 <string name="preference_preview_text">ここで実際の見た目を確認することが出来ます</string>
 <string name="settings_account_title">アカウントを選択</string>
@@ -47,12 +53,14 @@ limitations under the License.
 <string name="settings_cat_syncing">同期</string>
 <string name="show_from_all_lists">すべてのノート</string>
 <string name="deleted">削除済み</string>
+<string name="once">一度</string>
 <string name="permission_read_label">ノートやリストを読み込む</string>
 <string name="permission_read_desc">アプリケーションがノートとリストを読み取ることを許可します。</string>
 <string name="permission_write_label">ノートやリストを変更</string>
 <string name="permission_write_desc">アプリケーションがノートやリストの挿入、更新、および削除することを許可します。</string>
 <string name="settings_list_dialog">リストの選択</string>
 <string name="settings_list">リスト</string>
+
 
 
 
@@ -85,6 +93,7 @@ Use few if language need it. In English is the same.
 <item quantity="other">@string/selected_other</item>
 </plurals>
 
+<string name="move">動く</string>
 
 <string name="lock_note">ノートのロック</string>
 <string name="unlock_note">ロックの解除</string>
