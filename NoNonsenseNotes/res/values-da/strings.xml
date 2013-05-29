@@ -25,6 +25,7 @@ limitations under the License.
 <string name="saved">Gemt</string>
 <string name="distance">Afstand</string>
 <string name="need_location_help">Langt tryk for at vælge en lokation</string>
+<string name="near">Nær</string>
 <string name="menu_save_and_add">Gem og åbn en ny note</string>
 <string name="menu_delete">Slet</string>
 <string name="menu_deletelist">Slet liste</string>
@@ -61,7 +62,6 @@ limitations under the License.
 <string name="settings_theme">Nuværende tema</string>
 <string name="settings_theme_dialog">Brug tema</string>
 <string name="settings_lang">Sprog</string>
-<string name="settings_lang_dialog">@string/settings_lang</string>
 <string name="settings_summary_theme_black">Sort</string>
 <string name="settings_summary_theme_dark">Mørk</string>
 <string name="settings_summary_theme_light">Lys</string>
@@ -81,12 +81,14 @@ limitations under the License.
 <string name="deleted">Slettet</string>
 <string name="repeat">Gentag</string>
 <string name="once">En gang</string>
+<string name="always">Altid</string>
 <string name="permission_read_label">læs noter og lister</string>
 <string name="permission_read_desc">Tillader applikationen at læse dine noter og relaterede lister</string>
 <string name="permission_write_label">modificer noter og lister</string>
 <string name="permission_write_desc">Tillader applikationen at indstætte, opdatere og slette noter og lister</string>
 <string name="settings_list_dialog">Vælg en liste</string>
 <string name="settings_list">Liste</string>
+<string name="drag_to_timetravel">Træk for at rejse i tiden</string>
 
 <string name="import_data_question">Importer data?</string>
 <string name="import_started">Importerer data. Dette kan tage et par sekunder.</string>
@@ -94,6 +96,11 @@ limitations under the License.
 <string name="imported_result">Importeret %1$d noter i %2$d lister</string>
 <string name="import_error">Noget gik galt: %s</string>
 
+<string name="showcase_main_title">Rør for at administrere lister</string>
+<string name="showcase_main_msg">Eller swipe fra venstre kant</string>
+<string name="showcase_drawer_title">Langt tryk for at redigere eller slette</string>
+<string name="showcase_timemachine_title">Gemmer alt</string>
+<string name="showcase_timemachine_msg">Dine ændringer gemmes altid ved exit. Brug tidsmaskinen for at genskabe en note til en tidligere version.</string>
 
 <!--
 Use few if language need it. In English is the same.
@@ -124,6 +131,9 @@ Use few if language need it. In English is the same.
 <item quantity="other">@string/selected_other</item>
 </plurals>
 
+<string name="move">Flyt</string>
+<string name="move_to">Flyt til</string>
+<string name="moved_x_to_list">%1$d flyttet til %2$s	</string>
 
 <string name="lock_note">Lås note</string>
 <string name="unlock_note">Oplås note</string>
@@ -164,6 +174,7 @@ Use few if language need it. In English is the same.
 <string name="long_date_format">Langt dato format</string>
 <string name="short_date_format">Kort dato format</string>
 <string name="rows">rækker</string>
+<string name="select_date">Vælg dato</string>
 <string name="localedefault">Lokal standard</string>
 <string name="donate">Donér</string>
 <string name="donate_thanks">Tak for din support!</string>
@@ -201,15 +212,7 @@ Use few if language need it. In English is the same.
 <string name="priority">Prioritet</string>
 <string name="notifications">Notifikationer</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
-<string name="dateformat_micro">MMM d</string>
-<string name="dateformat_weekday">EEEE</string>
-<string name="dateformat_short_1">E kk:mm, d MMM</string>
-<string name="dateformat_short_2">E h:mm a, d MMM</string>
-<string name="dateformat_short_3">E, d MMM</string>
-<string name="dateformat_short_4">MMM d</string>
-<string name="dateformat_long_1">EEEE kk:mm, d MMMM</string>
-<string name="dateformat_long_2">EEEE h:mm a, d MMMM</string>
-<string name="dashclock_tasks">Opgaver</string>
+<string name="tasks">Opgaver</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Begræns til opgaver i en bestemt liste</string>
 <string name="dashclock_show_overdue_tasks">Vis forfaldne opgaver</string>
 <string name="dashclock_overdue_tasks_show">Forfaldne opgaver vil blive vist</string>
@@ -222,7 +225,6 @@ Use few if language need it. In English is the same.
 <string name="dashclock_next7">Næste 7 dage</string>
 <string name="dashclock_anytime">Når som helst</string>
 <string name="dashclock_will_show_as_many_as_possible">Vil vise så mange som muligt</string>
-<string name="dashclock_will_only_show_the_task_due_first">Vil kun vise opgaven med tidligst forfaldsdato</string>
 <string name="dashclock_show_only_the_next_task">Vis kun den næste opgave</string>
 <string name="dashclock_header_shown">Liste navnet vil blive vist med fed skrift. Hvis &quot;Alle Lister&quot; er valgt, vil &quot;Opgaver&quot; vises</string>
 <string name="dashclock_first_task_shown">Titlen på første opgave vil blive vist med fed skrift</string>
