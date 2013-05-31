@@ -661,9 +661,8 @@ public class ActivityMain extends FragmentActivity implements
 		 * Other case, is a list id or a tablet
 		 */
 		if (!isNoteIntent(intent) || fragment2 != null) {
-			// If we're in the editor, reset the action bar
-			if (showingEditor && fragment2 == null
-					&& !isNoteIntent(getIntent())) {
+			// If we're no longer in the editor, reset the action bar
+			if (fragment2 == null) {
 				resetActionBar();
 			}
 
@@ -727,8 +726,7 @@ public class ActivityMain extends FragmentActivity implements
 						reverseAnimation = true;
 						Log.d("nononsenseapps fragment", "starting activity");
 
-						intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
+						intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
 					}
 				});
@@ -844,6 +842,7 @@ public class ActivityMain extends FragmentActivity implements
 					| ActionBar.DISPLAY_SHOW_TITLE,
 					ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
 							| ActionBar.DISPLAY_SHOW_TITLE);
+			actionBar.setTitle(R.string.app_name);
 		}
 	}
 
