@@ -19,6 +19,12 @@ limitations under the License.
 
 <string name="app_name">Notities</string>
 <string name="title_create">Nieuwe notitie</string>
+<string name="time">Tijd</string>
+<string name="done">Klaar</string>
+<string name="saved">Opgeslagen</string>
+<string name="distance">Afstand</string>
+<string name="need_location_help">Lang indrukken om een locatie in te stellen</string>
+<string name="near">Vlakbij</string>
 <string name="menu_save_and_add">Opslaan en open nieuwe notitie</string>
 <string name="menu_delete">Verwijderen</string>
 <string name="menu_deletelist">Verwijder lijst</string>
@@ -29,18 +35,23 @@ limitations under the License.
 <string name="menu_clearcompleted">Wis voltooide notities</string>
 <string name="menu_setdefaultlist">Standaard lijst</string>
 <string name="menu_managelists">Lijsten beheren</string>
+<string name="add_item">Toevoegen</string>
+<string name="delete_question">Verwijderen?</string>
 <string name="editor_due_date_hint">Einddatum</string>
 <string name="editor_title_hint">Titel</string>
 <string name="editor_note_hint">Notitie</string>
 <string name="resolve_edit">Notitie bewerken</string>
+<string name="location">Plaats</string>
+<string name="restore">Herstellen</string>
+<string name="restore_to">Herstellen naar</string>
 <string name="search_hint">Zoeken</string>
 <string name="settings_theme">Huidig thema</string>
 <string name="settings_theme_dialog">Gebruik thema</string>
 <string name="settings_lang">Taal</string>
-<string name="settings_lang_dialog">@string/settings_lang</string>
 <string name="settings_summary_theme_black">Zwart</string>
 <string name="settings_summary_theme_dark">Donker</string>
 <string name="settings_summary_theme_light">Licht</string>
+<string name="settings_summary_theme_classic">Klassiek</string>
 <string name="settings_cat_appearance">Opmaak</string>
 <string name="preference_preview_text">Dit is hoe de tekst eruit zal zien</string>
 <string name="settings_account_title">Selecteer een account</string>
@@ -49,12 +60,15 @@ limitations under the License.
 <string name="settings_cat_syncing">Synchronisatie</string>
 <string name="show_from_all_lists">Alle lijsten</string>
 <string name="deleted">Verwijderd</string>
+<string name="once">Eenmalig</string>
+<string name="always">Altijd</string>
 <string name="permission_read_label">lees notities en lijsten</string>
 <string name="permission_read_desc">Staat de applicatie toe notities en gerelateerde lijsten te lezen.</string>
 <string name="permission_write_label">notities en lijsten bewerken</string>
 <string name="permission_write_desc">Staat de applicatie toe om notities en lijsten te maken, bewerken en verwijderen.</string>
 <string name="settings_list_dialog">Selecteer een lijst</string>
 <string name="settings_list">Lijst</string>
+
 
 
 
@@ -129,11 +143,11 @@ Use few if language need it. In English is the same.
 <string name="hide_header">Hele widget-kop verbergen</string>
 <string name="shortcut_help1">Indien ingeschakeld maakt snelkoppeling een nieuwe notitie in de gekozen lijst en opent de bewerker. Indien uitgeschakeld opent de snelkoppeling de gekozen lijst,</string>
 <string name="loading_widget">Laden widget&#8230;</string>
-<string name="notecopied_one">1 notitie gekopieerd</string>
+<string name="notecopied_one">%d notitie gekopieerd</string>
 <string name="notecopied_other">%d notities gekopieerd</string>
-<string name="notedeleted_one">1 notitie verwijderd</string>
+<string name="notedeleted_one">%d notitie verwijderd</string>
 <string name="notedeleted_other">%d notities verwijderd</string>
-<string name="selected_one">1 notitie geselecteerd</string>
+<string name="selected_one">%d notitie geselecteerd</string>
 <string name="selected_other">%d notities geselecteerd</string>
 <string name="background_sync">Achtergrondsynchronisatie</string>
 <string name="background_sync_info">Synchoniseert een keer per uur</string>

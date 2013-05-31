@@ -25,6 +25,7 @@ limitations under the License.
 <string name="saved">Mentve</string>
 <string name="distance">Távolság</string>
 <string name="need_location_help">Hely megadásához nyomjon hosszan</string>
+<string name="near">Közel</string>
 <string name="menu_save_and_add">Mentés és új létrehozása</string>
 <string name="menu_delete">Törlés</string>
 <string name="menu_deletelist">Lista törlése</string>
@@ -100,6 +101,9 @@ limitations under the License.
 <string name="showcase_drawer_title">Szerkesztéshez vagy törléshez nyomjon hosszan</string>
 <string name="showcase_timemachine_title">Mindent ment</string>
 <string name="showcase_timemachine_msg">Kilépéskor minden változás mentésre kerül. Használd az időgépet hogy visszaállítsd az előző verzióra.</string>
+
+<string name="donate_to_unlock">Támogass a feloldáshoz</string>
+<string name="premiums_unlocked_and_thanks">Prémium funkciók feloldva. Köszönöm a támogatást.</string>
 
 <!--
 Use few if language need it. In English is the same.

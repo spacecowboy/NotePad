@@ -100,6 +100,9 @@ limitations under the License.
 <string name="showcase_timemachine_title">Sparar allt</string>
 <string name="showcase_timemachine_msg">Dina ändringar sparas alltid. Använd tidsmaskinen för att återställa en anteckning från en äldre version.</string>
 
+<string name="donate_to_unlock">Donera för att låsa upp</string>
+<string name="premiums_unlocked_and_thanks">Upplåst. Tack för ditt stöd!</string>
+
 <!--
 Use few if language need it. In English is the same.
 <item quantity="few">Copied 2 notes.</item>
