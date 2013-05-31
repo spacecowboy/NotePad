@@ -90,10 +90,9 @@ public class TaskListViewPagerFragment extends Fragment implements
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
 		setHasOptionsMenu(true);
-		Log.d("nononsenseapps fragment", "viewpagerfragment create: "
-				+ savedState);
 
 		mListIdToSelect = getArguments().getLong(START_LIST_ID, -1);
+		Log.d("nononsenseapps list", "onCreate: " + savedState);
 		if (savedState != null) {
 			mListIdToSelect = savedState.getLong(START_LIST_ID);
 		}
@@ -111,8 +110,6 @@ public class TaskListViewPagerFragment extends Fragment implements
 	@Override
 	public void onActivityCreated(final Bundle state) {
 		super.onActivityCreated(state);
-
-		Log.d("nononsenseapps fragment", "viewpager onactivitycreated");
 
 		loaderCallbacks = new LoaderCallbacks<Cursor>() {
 
@@ -174,32 +171,33 @@ public class TaskListViewPagerFragment extends Fragment implements
 			searchView.setSubmitButtonEnabled(false);
 		}
 	}
-	
+
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		if (getActivity() instanceof MenuStateController) {
-			final boolean visible = ((MenuStateController) getActivity()).childItemsVisible();
-			
+			final boolean visible = ((MenuStateController) getActivity())
+					.childItemsVisible();
+
 			menu.setGroupVisible(R.id.viewpager_menu_group, visible);
 			// Outside group to allow for action bar placement
 			if (menu.findItem(R.id.menu_search) != null)
 				menu.findItem(R.id.menu_search).setVisible(visible);
 			if (menu.findItem(R.id.menu_sync) != null)
 				menu.findItem(R.id.menu_sync).setVisible(visible);
-//			if (menu.findItem(R.id.menu_createlist) != null)
-//				menu.findItem(R.id.menu_createlist).setVisible(visible);
+			// if (menu.findItem(R.id.menu_createlist) != null)
+			// menu.findItem(R.id.menu_createlist).setVisible(visible);
 		}
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-//		case R.id.menu_createlist:
-//			// Show fragment
-//			DialogEditList_ dialog = DialogEditList_.getInstance();
-//			dialog.setListener(this);
-//			dialog.show(getFragmentManager(), "fragment_create_list");
-//			return true;
+		// case R.id.menu_createlist:
+		// // Show fragment
+		// DialogEditList_ dialog = DialogEditList_.getInstance();
+		// dialog.setListener(this);
+		// dialog.show(getFragmentManager(), "fragment_create_list");
+		// return true;
 		case R.id.menu_search:
 			// Always visible, but do this if not visible
 			// getActivity().onSearchRequested();
@@ -222,6 +220,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 	public void openList(final long id) {
 		// If it fails, will load on refresh
 		mListIdToSelect = id;
+		Log.d("nononsenseapps list", "openList: " + mListIdToSelect);
 		if (mSectionsPagerAdapter != null) {
 			final int pos = mSectionsPagerAdapter.getItemPosition(id);
 			if (pos > -1) {
@@ -233,8 +232,15 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
-		outState.putLong(START_LIST_ID,
-				mTaskListsAdapter.getItemId(pager.getCurrentItem()));
+		super.onSaveInstanceState(outState);
+		if (mTaskListsAdapter != null && pager != null) {
+			outState.putLong(START_LIST_ID,
+					mTaskListsAdapter.getItemId(pager.getCurrentItem()));
+			Log.d("nononsenseapps list",
+					"Save state: "
+							+ mTaskListsAdapter.getItemId(pager
+									.getCurrentItem()));
+		}
 	}
 
 	@Override

@@ -1,15 +1,13 @@
 package com.nononsenseapps.notepad;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import com.github.espiandev.showcaseview.ShowcaseView;
 import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
-import com.github.espiandev.showcaseview.ShowcaseViewBuilder;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.EActivity;
+import com.googlecode.androidannotations.annotations.InstanceState;
 import com.googlecode.androidannotations.annotations.OnActivityResult;
 import com.googlecode.androidannotations.annotations.SystemService;
 import com.googlecode.androidannotations.annotations.UiThread;
@@ -41,19 +39,11 @@ import com.nononsenseapps.notepad.legacy.DonateMigrator_;
 import com.nononsenseapps.notepad.prefs.AccountDialog4;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
-import com.nononsenseapps.notepad.prefs.SyncPrefs.AccountDialog;
 import com.nononsenseapps.utils.ViewsHelper;
 
-import android.animation.Animator;
-import android.animation.LayoutTransition;
-import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
-import android.app.ActivityOptions;
-import android.app.SearchManager;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -61,8 +51,6 @@ import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -83,14 +71,11 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 @EActivity(R.layout.activity_main)
@@ -158,6 +143,7 @@ public class ActivityMain extends FragmentActivity implements
 
 	// Changes depending on what we're showing since the started activity can
 	// receive new intents
+	@InstanceState
 	boolean showingEditor = false;
 
 	boolean isDrawerClosed = true;
@@ -171,6 +157,7 @@ public class ActivityMain extends FragmentActivity implements
 
 	// WIll only be the viewpager fragment
 	ListOpener listOpener = null;
+	private Bundle state;
 
 	@Override
 	public void onCreate(Bundle b) {
@@ -194,6 +181,7 @@ public class ActivityMain extends FragmentActivity implements
 		// If user has donated some other time
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(this);
+
 		mHasPremiumAccess = prefs.getBoolean(PREMIUMSTATUS, false);
 		mDonatedInApp = prefs.getBoolean(SKU_INAPP_PREMIUM, false);
 
@@ -257,6 +245,11 @@ public class ActivityMain extends FragmentActivity implements
 						invalidateOptionsMenu();
 					}
 				});
+
+		if (b != null) {
+			Log.d("nononsenseapps list", "Activity Saved not null: " + b);
+			this.state = b;
+		}
 	}
 
 	@Background
@@ -269,6 +262,7 @@ public class ActivityMain extends FragmentActivity implements
 			if (packageInfo.packageName
 					.equals("com.nononsenseapps.notepad_donate")) {
 				migrateDonateUser();
+				mHasPremiumAccess = true;
 				// Allow them to donate again
 				PreferenceManager
 						.getDefaultSharedPreferences(ActivityMain.this).edit()
@@ -561,6 +555,50 @@ public class ActivityMain extends FragmentActivity implements
 		final Intent intent = getIntent();
 		// Clear notification if present
 		clearNotification(intent);
+
+		// Mandatory
+		Fragment left = null;
+		String leftTag = null;
+		// Only if fragment2 is not null
+		Fragment right = null;
+
+		if (this.state != null) {
+			this.state = null;
+			if (showingEditor && fragment2 != null) {
+				// Should only be true in portrait
+				showingEditor = false;
+			}
+
+			// Find fragments
+			// This is an instance state variable
+			if (showingEditor) {
+				// Portrait, with editor, modify action bar
+				setDoneActionBar();
+				// Done
+				return;
+			}
+			else {
+				// Find the listpager
+				left = getSupportFragmentManager().findFragmentByTag(
+						LISTPAGERTAG);
+				listOpener = (ListOpener) left;
+
+				if (left != null && fragment2 == null) {
+					// Done
+					return;
+				}
+				else if (left != null && fragment2 != null) {
+					right = getSupportFragmentManager().findFragmentByTag(
+							DETAILTAG);
+				}
+
+				if (left != null && right != null) {
+					// Done
+					return;
+				}
+			}
+		}
+
 		// Load stuff
 		final FragmentTransaction transaction = getSupportFragmentManager()
 				.beginTransaction();
@@ -576,47 +614,38 @@ public class ActivityMain extends FragmentActivity implements
 					R.anim.slide_out_top);
 		}
 
-		Log.d("JONAS", "loading content");
 		/*
 		 * If it contains a noteId, load an editor. If also tablet, load the
 		 * lists.
 		 */
 		if (fragment2 != null) {
-			Log.d("JONAS", "detail in 2");
-			if (getNoteId(intent) > 0) {
-				transaction.replace(R.id.fragment2,
-						TaskDetailFragment_.getInstance(getNoteId(intent)),
-						DETAILTAG);
-				taskHint.setVisibility(View.GONE);
-			}
-			else if (getListId(intent) > 0) {
-				transaction.replace(R.id.fragment2, TaskDetailFragment_
-						.getInstance(getNoteShareText(intent),
-								TaskListViewPagerFragment.getAList(this,
-										getListId(intent),
-										getString(R.string.pref_defaultlist))),
-						DETAILTAG);
-				taskHint.setVisibility(View.GONE);
+			if (right == null) {
+				if (getNoteId(intent) > 0) {
+					right = TaskDetailFragment_.getInstance(getNoteId(intent));
+				}
+				else if (getNoteShareText(intent).length() > 0) {
+					right = TaskDetailFragment_.getInstance(
+							getNoteShareText(intent),
+							TaskListViewPagerFragment.getAList(this,
+									getListId(intent),
+									getString(R.string.pref_defaultlist)));
+				}
 			}
 		}
 		else if (isNoteIntent(intent)) {
 			showingEditor = true;
 			listOpener = null;
-			Log.d("JONAS", "detail in 1");
+			leftTag = DETAILTAG;
 			if (getNoteId(intent) > 0) {
-				transaction.replace(R.id.fragment1,
-						TaskDetailFragment_.getInstance(getNoteId(intent)),
-						DETAILTAG);
+				left = TaskDetailFragment_.getInstance(getNoteId(intent));
 			}
 			else {
 				// Get a share text (null safe)
 				// In a list (if specified, or default otherwise)
-				transaction.replace(R.id.fragment1, TaskDetailFragment_
-						.getInstance(getNoteShareText(intent),
-								TaskListViewPagerFragment.getAList(this,
-										getListId(intent),
-										getString(R.string.pref_defaultlist))),
-						DETAILTAG);
+				left = TaskDetailFragment_.getInstance(
+						getNoteShareText(intent), TaskListViewPagerFragment
+								.getAList(this, getListId(intent),
+										getString(R.string.pref_defaultlist)));
 			}
 			// fucking stack
 			while (getSupportFragmentManager().popBackStackImmediate()) {
@@ -626,56 +655,7 @@ public class ActivityMain extends FragmentActivity implements
 				transaction.addToBackStack(null);
 			}
 
-			// Courtesy of Mr Roman Nurik
-			// Inflate a "Done" custom action bar view to serve as the "Up"
-			// affordance.
-			LayoutInflater inflater = (LayoutInflater) getActionBar()
-					.getThemedContext().getSystemService(
-							LAYOUT_INFLATER_SERVICE);
-			final View customActionBarView = inflater.inflate(
-					R.layout.actionbar_custom_view_done, null);
-			customActionBarView.findViewById(R.id.actionbar_done)
-					.setOnClickListener(new View.OnClickListener() {
-						@Override
-						public void onClick(View v) {
-							// "Done"
-
-							// Should load the same list again
-							// Try getting the list from the original intent
-							final long listId = getListId(getIntent());
-
-							final Intent intent = new Intent().setAction(
-									Intent.ACTION_VIEW).setClass(
-									ActivityMain.this, ActivityMain_.class);
-							if (listId > 0) {
-								intent.setData(TaskList.getUri(listId));
-							}
-
-							// Set the intent before, so we set the correct
-							// action bar
-							setIntent(intent);
-							while (getSupportFragmentManager()
-									.popBackStackImmediate()) {
-								// Need to pop the entire stack and then load
-							}
-
-							reverseAnimation = true;
-							Log.d("nononsenseapps fragment",
-									"starting activity");
-
-							intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-							startActivity(intent);
-						}
-					});
-
-			// Show the custom action bar view and hide the normal Home icon and
-			// title.
-			final ActionBar actionBar = getActionBar();
-			actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
-					ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-							| ActionBar.DISPLAY_SHOW_TITLE);
-			actionBar.setCustomView(customActionBarView);
+			setDoneActionBar();
 		}
 		/*
 		 * Other case, is a list id or a tablet
@@ -688,15 +668,19 @@ public class ActivityMain extends FragmentActivity implements
 			}
 
 			showingEditor = false;
-			Log.d("JONAS", "lists in 1");
 
-			Fragment f = TaskListViewPagerFragment
+			left = TaskListViewPagerFragment
 					.getInstance(getListIdToShow(intent));
-			listOpener = (ListOpener) f;
-			transaction.replace(R.id.fragment1, f, LISTPAGERTAG);
+			leftTag = LISTPAGERTAG;
+			listOpener = (ListOpener) left;
 		}
 
-		Log.d("JONAS", "commit content");
+		if (fragment2 != null && right != null) {
+			transaction.replace(R.id.fragment2, right, DETAILTAG);
+			taskHint.setVisibility(View.GONE);
+		}
+		transaction.replace(R.id.fragment1, left, leftTag);
+
 		// Commit transaction
 		transaction.commit();
 		// Next go, always add
@@ -705,6 +689,57 @@ public class ActivityMain extends FragmentActivity implements
 		if (!showingEditor || fragment2 != null) {
 			showcaseDrawer();
 		}
+	}
+
+	void setDoneActionBar() {
+		// Courtesy of Mr Roman Nurik
+		// Inflate a "Done" custom action bar view to serve as the "Up"
+		// affordance.
+		LayoutInflater inflater = (LayoutInflater) getActionBar()
+				.getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+		final View customActionBarView = inflater.inflate(
+				R.layout.actionbar_custom_view_done, null);
+		customActionBarView.findViewById(R.id.actionbar_done)
+				.setOnClickListener(new View.OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						// "Done"
+
+						// Should load the same list again
+						// Try getting the list from the original intent
+						final long listId = getListId(getIntent());
+
+						final Intent intent = new Intent().setAction(
+								Intent.ACTION_VIEW).setClass(ActivityMain.this,
+								ActivityMain_.class);
+						if (listId > 0) {
+							intent.setData(TaskList.getUri(listId));
+						}
+
+						// Set the intent before, so we set the correct
+						// action bar
+						setIntent(intent);
+						while (getSupportFragmentManager()
+								.popBackStackImmediate()) {
+							// Need to pop the entire stack and then load
+						}
+
+						reverseAnimation = true;
+						Log.d("nononsenseapps fragment", "starting activity");
+
+						intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+						startActivity(intent);
+					}
+				});
+
+		// Show the custom action bar view and hide the normal Home icon and
+		// title.
+		final ActionBar actionBar = getActionBar();
+		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
+				ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+						| ActionBar.DISPLAY_SHOW_TITLE);
+		actionBar.setCustomView(customActionBarView);
 	}
 
 	/**
@@ -815,7 +850,7 @@ public class ActivityMain extends FragmentActivity implements
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		// Do absolutely NOT call super class here. Will bug out the viewpager!
-		// super.onSaveInstanceState(outState);
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override
@@ -830,12 +865,14 @@ public class ActivityMain extends FragmentActivity implements
 
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.setGroupVisible(R.id.activity_menu_group, isDrawerClosed);
+		menu.setGroupVisible(R.id.activity_reverse_menu_group, !isDrawerClosed);
+
 		final MenuItem donateItem = menu.findItem(R.id.menu_donate);
 		if (donateItem != null) {
 			donateItem.setVisible(!mDonatedInApp);
 		}
-		menu.setGroupVisible(R.id.activity_menu_group, isDrawerClosed);
-		menu.setGroupVisible(R.id.activity_reverse_menu_group, !isDrawerClosed);
+
 		return super.onPrepareOptionsMenu(menu);
 	}
 
@@ -960,7 +997,11 @@ public class ActivityMain extends FragmentActivity implements
 				&& intent.getData() != null
 				&& (Intent.ACTION_EDIT.equals(intent.getAction()) || Intent.ACTION_VIEW
 						.equals(intent.getAction()))) {
-			if ((intent
+			if (intent.getData().getPath().startsWith(TaskList.URI.getPath())) {
+				// Find it in the extras. See DashClock extension for an example
+				retval = intent.getLongExtra(Task.TABLE_NAME, -1);
+			}
+			else if ((intent
 					.getData()
 					.getPath()
 					.startsWith(LegacyDBHelper.NotePad.Notes.PATH_VISIBLE_NOTES)
@@ -971,11 +1012,11 @@ public class ActivityMain extends FragmentActivity implements
 					.getData().getPath().startsWith(Task.URI.getPath()))) {
 				retval = Long.parseLong(intent.getData().getLastPathSegment());
 			}
-			else if (null != intent
-					.getStringExtra(TaskDetailFragment.ARG_ITEM_ID)) {
-				retval = Long.parseLong(intent
-						.getStringExtra(TaskDetailFragment.ARG_ITEM_ID));
-			}
+			// else if (null != intent
+			// .getStringExtra(TaskDetailFragment.ARG_ITEM_ID)) {
+			// retval = Long.parseLong(intent
+			// .getStringExtra(TaskDetailFragment.ARG_ITEM_ID));
+			// }
 		}
 		return retval;
 	}
@@ -988,6 +1029,10 @@ public class ActivityMain extends FragmentActivity implements
 	 * "Note to self"
 	 */
 	String getNoteShareText(final Intent intent) {
+		if (intent == null || intent.getExtras() == null) {
+			return "";
+		}
+
 		StringBuilder retval = new StringBuilder();
 		// possible title
 		if (intent.getExtras().containsKey(Intent.EXTRA_SUBJECT)

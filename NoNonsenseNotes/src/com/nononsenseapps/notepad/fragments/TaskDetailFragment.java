@@ -11,6 +11,7 @@ import com.github.espiandev.showcaseview.ShowcaseViews.ItemViewProperties;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
+import com.googlecode.androidannotations.annotations.InstanceState;
 import com.googlecode.androidannotations.annotations.OnActivityResult;
 import com.googlecode.androidannotations.annotations.SystemService;
 import com.googlecode.androidannotations.annotations.UiThread;
@@ -23,6 +24,7 @@ import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.ActivityTaskHistory_;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.R.layout;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -59,6 +61,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -76,7 +79,7 @@ import android.widget.Toast;
  * contained in a {@link TaskListActivity} in two-pane mode (on tablets) or a
  * {@link TaskDetailActivity} on handsets.
  */
-@EFragment(R.layout.fragment_task_detail)
+@EFragment
 public class TaskDetailFragment extends Fragment implements
 		TimePickerDialogHandler, DateSetListener {
 
@@ -193,6 +196,11 @@ public class TaskDetailFragment extends Fragment implements
 	public static final String ARG_ITEM_LIST_ID = "item_list_id";
 	private static final String SHOWCASED_EDITOR = "showcased_editor_window";
 
+	// To override intent values with
+	@InstanceState
+	long stateId = -1;
+	@InstanceState
+	long stateListId = -1;
 	// Dao version of the object this fragment represents
 	private Task mTask;
 	// Version when task was opened
@@ -208,6 +216,13 @@ public class TaskDetailFragment extends Fragment implements
 
 	private OnFragmentInteractionListener mListener;
 	private ShareActionProvider mShareActionProvider;
+	
+	/*
+	 * If in tablet and added, rotating to portrait actually recreats the
+	 * fragment even though it isn't visible. So if this is true, don't
+	 * load anything.
+	 */
+	private boolean dontLoad = false;
 
 	/**
 	 * Performs no error checking. Only calls other getter with the last segment
@@ -247,30 +262,46 @@ public class TaskDetailFragment extends Fragment implements
 	public TaskDetailFragment() {
 	}
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+//	@Override
+//	public void onCreate(Bundle savedInstanceState) {
+//		super.onCreate(savedInstanceState);
+//
+//	}
 
+	/**
+	 * Must handle this manually because annotations do not return null if
+	 * container is null
+	 */
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		if (container == null) {
+			dontLoad = true;
+			return null;
+		}
 		setHasOptionsMenu(true);
+		return inflater.inflate(layout.fragment_task_detail, container, false);
 	}
 
 	@Override
 	public void onActivityCreated(final Bundle state) {
 		super.onActivityCreated(state);
-
-		// TODO opening from a notification should delete the notification
+		
+		if (dontLoad) {
+			return;
+		}
 
 		final Bundle args = new Bundle();
-		if (getArguments().getLong(ARG_ITEM_ID, -1) > 0) {
+		if (getArguments().getLong(ARG_ITEM_ID, stateId) > 0) {
 			// Load data from database
-			args.putLong(ARG_ITEM_ID, getArguments().getLong(ARG_ITEM_ID, -1));
+			args.putLong(ARG_ITEM_ID, getArguments().getLong(ARG_ITEM_ID, stateId));
 			getLoaderManager().restartLoader(LOADER_EDITOR_TASK, args,
 					loaderCallbacks);
 			getLoaderManager().restartLoader(LOADER_EDITOR_NOTIFICATIONS, args,
 					loaderCallbacks);
 		}
 		else {
-			if (getArguments().getLong(ARG_ITEM_LIST_ID, -1) < 1) {
+			if (getArguments().getLong(ARG_ITEM_LIST_ID, stateListId) < 1) {
 				// throw new InvalidParameterException(
 				// "Must specify a list id to create a note in!");
 				Toast.makeText(getActivity(),
@@ -279,7 +310,7 @@ public class TaskDetailFragment extends Fragment implements
 				getActivity().finish();
 			}
 			args.putLong(ARG_ITEM_LIST_ID,
-					getArguments().getLong(ARG_ITEM_LIST_ID, -1));
+					getArguments().getLong(ARG_ITEM_LIST_ID, stateListId));
 			getLoaderManager().restartLoader(LOADER_EDITOR_TASKLISTS, args,
 					loaderCallbacks);
 
@@ -311,12 +342,16 @@ public class TaskDetailFragment extends Fragment implements
 				R.string.showcase_timemachine_msg,
 				ShowcaseView.ITEM_ACTION_OVERFLOW, 0.5f));
 		views.show();
-		 PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(SHOWCASED_EDITOR,
-		 true).commit();
+		PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
+				.putBoolean(SHOWCASED_EDITOR, true).commit();
 	}
 
 	@AfterViews
 	void setListeners() {
+		if (dontLoad) {
+			return;
+		}
+		
 		taskText.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
@@ -458,6 +493,7 @@ public class TaskDetailFragment extends Fragment implements
 
 	@UiThread
 	void fillUIFromTask() {
+		Log.d("nononsenseapps editor", "fillUI, act: " + getActivity());
 		if (isLocked()) {
 			taskText.setText(mTask.title);
 			DialogPassword_ pflock = new DialogPassword_();
@@ -774,6 +810,9 @@ public class TaskDetailFragment extends Fragment implements
 	}
 
 	void fixIntent() {
+		stateId = mTask._id;
+		stateListId = mTask.dblist;
+		
 		if (getActivity() == null) return;
 
 		final Intent orgIntent = getActivity().getIntent();
@@ -802,6 +841,10 @@ public class TaskDetailFragment extends Fragment implements
 	@Override
 	public void onPause() {
 		super.onPause();
+		if (dontLoad) {
+			return;
+		}
+		
 		saveTask();
 		// Set locked again
 		mLocked = true;
@@ -814,6 +857,9 @@ public class TaskDetailFragment extends Fragment implements
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
+		if (dontLoad) {
+			return;
+		}
 		try {
 			mListener = (OnFragmentInteractionListener) activity;
 		}
@@ -831,8 +877,7 @@ public class TaskDetailFragment extends Fragment implements
 
 	@Override
 	public void onSaveInstanceState(final Bundle state) {
-		// TODO
-		// Save orgstate
+		super.onSaveInstanceState(state);
 	}
 
 	/**
@@ -1089,6 +1134,9 @@ public class TaskDetailFragment extends Fragment implements
 	@Override
 	public void onResume() {
 		super.onResume();
+		if (dontLoad) {
+			return;
+		}
 
 		// Hide data from snoopers
 		if (mTask != null && isLocked()) {

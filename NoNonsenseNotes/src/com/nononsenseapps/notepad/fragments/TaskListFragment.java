@@ -108,8 +108,6 @@ public class TaskListFragment extends Fragment implements
 	public void onCreate(Bundle savedState) {
 		super.onCreate(savedState);
 
-		Log.d("nononsenseapps fragment", "listfragment create: " + savedState);
-
 		setHasOptionsMenu(true);
 
 		if (getArguments().getLong(LIST_ID, -1) < 1) {
@@ -318,13 +316,11 @@ public class TaskListFragment extends Fragment implements
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
 				if (id == 0) {
-					Log.d("nononsenseapps list", "creating loader 0");
 					return new CursorLoader(getActivity(),
 							TaskList.getUri(mListId), TaskList.Columns.FIELDS,
 							null, null, null);
 				}
 				else {
-					Log.d("nononsenseapps list", "creating loader 1");
 					// What sorting to use
 					final Uri targetUri;
 					final String sortSpec;
@@ -372,7 +368,6 @@ public class TaskListFragment extends Fragment implements
 			@Override
 			public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
 				if (loader.getId() == 0) {
-					Log.d("nononsenseapps list", "loader 0 finished");
 					if (c.moveToFirst()) {
 						final TaskList list = new TaskList(c);
 						mSortType = list.sorting;
@@ -382,7 +377,6 @@ public class TaskListFragment extends Fragment implements
 					}
 				}
 				else {
-					Log.d("nononsenseapps list", "loader 1 finished");
 					mAdapter.swapCursor(c);
 				}
 			}
@@ -657,6 +651,7 @@ public class TaskListFragment extends Fragment implements
 
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
+		super.onSaveInstanceState(outState);
 	}
 
 	@Override

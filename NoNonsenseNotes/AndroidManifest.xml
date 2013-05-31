@@ -27,8 +27,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
-    android:versionCode="79"
-    android:versionName="5.0 Beta" >
+    android:versionCode="81"
+    android:versionName="5.0 RC1" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -147,7 +147,7 @@
         <activity
             android:name="com.nononsenseapps.notepad.ActivityMain_"
             android:label="@string/app_name"
-            android:launchMode="standard"
+            android:launchMode="singleTop"
             android:theme="@style/ThemeHoloLightDarkActonBar"
             android:windowSoftInputMode="adjustResize" >
             <meta-data

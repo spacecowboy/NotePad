@@ -7,17 +7,13 @@ import java.util.GregorianCalendar;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.net.Uri;
 import android.preference.PreferenceManager;
-import android.provider.BaseColumns;
 
 import com.google.android.apps.dashclock.api.DashClockExtension;
 import com.google.android.apps.dashclock.api.ExtensionData;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.util.TimeHelper;
 
 public class TasksExtension extends DashClockExtension {
 
@@ -115,20 +111,18 @@ public class TasksExtension extends DashClockExtension {
 
 			final Intent noteIntent = new Intent();
 			if (notes.size() > 1) {
-				noteIntent.setAction(Intent.ACTION_VIEW).setData(
-						listId >= 0 ? 
-								Uri.withAppendedPath(
-								NotePad.Lists.CONTENT_VISIBLE_URI,
-								Long.toString(listId))
-								: NotePad.Lists.CONTENT_VISIBLE_URI);
+				noteIntent
+						.setAction(Intent.ACTION_VIEW)
+						.setData(
+								TaskList.getUri(notes.get(0).dblist.longValue()))
+						.putExtra(Task.TABLE_NAME, notes.get(0)._id);
 			}
 			else {
-				noteIntent.setAction(Intent.ACTION_EDIT).setData(
-						Uri.withAppendedPath(NotePad.Notes.CONTENT_VISIBLE_URI,
-								Long.toString(notes.get(0)._id)));
-				if (listId >= 0) {
-					noteIntent.putExtra(NotePad.Notes.COLUMN_NAME_LIST, listId);
-				}
+				noteIntent
+						.setAction(Intent.ACTION_EDIT)
+						.setData(Task.getUri(notes.get(0)._id))
+						.putExtra(Task.Columns.DBLIST,
+								notes.get(0).dblist.longValue());
 			}
 
 			// Publish the extension data update.
@@ -245,7 +239,7 @@ public class TasksExtension extends DashClockExtension {
 		gc.set(GregorianCalendar.HOUR_OF_DAY, 23);
 		gc.set(GregorianCalendar.MINUTE, 59);
 		final long base = gc.getTimeInMillis();
-		final long day = 24 * 60* 60 * 1000;
+		final long day = 24 * 60 * 60 * 1000;
 		if (getString(R.string.dashclock_pref_today).equals(upperLimit)) {
 			return appendTo(whereArgs, Long.toString(gc.getTimeInMillis()));
 		}
