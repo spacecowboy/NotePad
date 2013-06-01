@@ -94,11 +94,12 @@ limitations under the License.
 <string name="imported_result">Importerade %1$d anteckningar i %2$d listor</string>
 <string name="import_error">Något gick fel: %s</string>
 
-<string name="showcase_main_title">Peka för att hantera listor</string>
-<string name="showcase_main_msg">Eller dra från skärmens vänstra sida</string>
-<string name="showcase_drawer_title">Peka och håll för att ändra eller ta bort</string>
-<string name="showcase_timemachine_title">Sparar allt</string>
-<string name="showcase_timemachine_msg">Dina ändringar sparas alltid. Använd tidsmaskinen för att återställa en anteckning från en äldre version.</string>
+<string name="showcase_main_title">Öppna dina listor</string>
+<string name="showcase_main_msg">Tryck på ikonen eller dra från skärmens vänstra sida</string>
+<string name="showcase_drawer_title">Hantera dina listor</string>
+<string name="showcase_drawer_msg">Tryck och håll inne för att ändra eller ta bort</string>
+<string name="showcase_timemachine_title">Spara anteckningar</string>
+<string name="showcase_timemachine_msg">Dina ändringar sparas alltid. Använd tidsmaskinen för att återställa en äldre version.</string>
 
 <string name="donate_to_unlock">Donera för att låsa upp</string>
 <string name="premiums_unlocked_and_thanks">Upplåst. Tack för ditt stöd!</string>

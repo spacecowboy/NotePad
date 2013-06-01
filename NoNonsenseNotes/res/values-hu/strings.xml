@@ -76,7 +76,7 @@ limitations under the License.
 <string name="gtasks">Google Feladatok</string>
 <string name="dropbox">Dropbox</string>
 <string name="dropbox_enable">Szinkronizálás Dropbox-al</string>
-<string name="dropbox_enable_summary">Létrehoz egy NoNonsense Notes mappát a Dropbox-ában</string>
+<string name="dropbox_enable_summary">Létrehoz egy NoNonsense Notes mappát a Dropbox fiókjában</string>
 <string name="show_from_all_lists">Összes lista</string>
 <string name="deleted">Törölve</string>
 <string name="repeat">Ismétlés</string>
@@ -136,7 +136,7 @@ Use few if language need it. In English is the same.
 
 <string name="move">Áthelyezés</string>
 <string name="move_to">Áthelyezés</string>
-<string name="moved_x_to_list">%1$d elem áthelyezve a %2$s listába</string>
+<string name="moved_x_to_list">%1$d elem áthelyezve a következő listába: %2$s</string>
 
 <string name="lock_note">Zárolás</string>
 <string name="unlock_note">Feloldás</string>
