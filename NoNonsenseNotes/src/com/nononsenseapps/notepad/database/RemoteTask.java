@@ -1,9 +1,5 @@
 package com.nononsenseapps.notepad.database;
 
-import java.util.List;
-
-import com.nononsenseapps.notepad.database.RemoteTaskList.Columns;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;

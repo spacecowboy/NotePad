@@ -19,8 +19,6 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
-import android.text.format.Time;
-import android.util.Log;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -85,10 +83,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL(Task.TRIGGER_POST_DELETE);
 		db.execSQL(Task.TRIGGER_MOVE_LIST);
 		db.execSQL(Task.CREATE_HISTORY_INSERT_TRIGGER);
-		// TODO
 		db.execSQL(Task.CREATE_HISTORY_UPDATE_TRIGGER);
-		
-		Log.d("nononsenseapps db", Task.CREATE_HISTORY_UPDATE_TRIGGER);
 
 		db.execSQL(RemoteTask.TRIGGER_LISTDELETE_CASCADE);
 		// Mark as deleted when real item deleted

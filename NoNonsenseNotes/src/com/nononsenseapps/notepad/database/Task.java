@@ -3,8 +3,6 @@ package com.nononsenseapps.notepad.database;
 import java.security.InvalidParameterException;
 import java.util.Calendar;
 
-import com.nononsenseapps.notepad.database.RemoteTask.Columns;
-
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.ContentResolver;
@@ -285,6 +283,8 @@ public class Task extends DAO {
 		// accessible fields in history table
 		public static final String[] HISTORY_COLUMNS = { Columns.HIST_TASK_ID,
 				Columns.TITLE, Columns.NOTE };
+		public static final String[] HISTORY_COLUMNS_UPDATED = { Columns.HIST_TASK_ID,
+			Columns.TITLE, Columns.NOTE, Columns.UPDATED };
 
 	}
 

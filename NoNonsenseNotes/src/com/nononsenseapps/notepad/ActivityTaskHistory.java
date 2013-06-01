@@ -1,35 +1,34 @@
 package com.nononsenseapps.notepad;
 
-import java.util.Locale;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.SeekBarProgressChange;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.nononsenseapps.helpers.ActivityHelper;
+import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
 
 import android.os.Bundle;
-import android.preference.PreferenceManager;
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
-import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.TextView;
 
 @EActivity(R.layout.activity_task_history)
 public class ActivityTaskHistory extends FragmentActivity {
@@ -44,6 +43,12 @@ public class ActivityTaskHistory extends FragmentActivity {
 	@ViewById
 	TitleNoteTextView taskText;
 
+	@ViewById
+	TextView timestamp;
+	private SimpleDateFormat timeFormatter;
+	private SimpleDateFormat dbTimeParser;
+
+	@SuppressLint("SimpleDateFormat")
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		// Must do this before super.onCreate
@@ -55,10 +60,16 @@ public class ActivityTaskHistory extends FragmentActivity {
 				|| getIntent().getLongExtra(Task.Columns._ID, -1) < 1) {
 			setResult(RESULT_CANCELED, new Intent());
 			finish();
+			return;
 		}
 		else {
 			mTaskID = getIntent().getLongExtra(Task.Columns._ID, -1);
 		}
+
+		timeFormatter = TimeFormatter.getLocalFormatterLong(this);
+		// Default datetime format in sqlite. Set to UTC timezone
+		dbTimeParser = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		dbTimeParser.setTimeZone(TimeZone.getTimeZone("UTC"));
 	}
 
 	@AfterViews
@@ -75,12 +86,11 @@ public class ActivityTaskHistory extends FragmentActivity {
 					@Override
 					public void onClick(View v) {
 						// "Done"
-						// TODO set result text in intent
 						final Intent returnIntent = new Intent();
 						returnIntent.putExtra(RESULT_TEXT_KEY, taskText
 								.getText().toString());
 						setResult(RESULT_OK, returnIntent);
-						finish(); // TODO: don't just finish()!
+						finish();
 					}
 				});
 		customActionBarView.findViewById(R.id.actionbar_discard)
@@ -101,26 +111,6 @@ public class ActivityTaskHistory extends FragmentActivity {
 		actionBar.setCustomView(customActionBarView,
 				new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
 						ViewGroup.LayoutParams.MATCH_PARENT));
-		/*
-		 * seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-		 * 
-		 * @Override public void onStopTrackingTouch(SeekBar seekBar) { // TODO
-		 * Auto-generated method stub
-		 * 
-		 * }
-		 * 
-		 * @Override public void onStartTrackingTouch(SeekBar seekBar) { // TODO
-		 * Auto-generated method stub
-		 * 
-		 * }
-		 * 
-		 * @Override public void onProgressChanged(SeekBar seekBar, int
-		 * progress, boolean fromUser) { // TODO Auto-generated method stub if
-		 * (mCursor != null) { if (progress < mCursor.getCount()) {
-		 * mCursor.moveToPosition(progress);
-		 * taskText.setTextTitle(mCursor.getString(1));
-		 * taskText.setTextRest(mCursor.getString(2)); } } } });
-		 */
 	}
 
 	@Override
@@ -133,7 +123,7 @@ public class ActivityTaskHistory extends FragmentActivity {
 					public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 						return new CursorLoader(ActivityTaskHistory.this,
 								Task.URI_TASK_HISTORY,
-								Task.Columns.HISTORY_COLUMNS,
+								Task.Columns.HISTORY_COLUMNS_UPDATED,
 								Task.Columns.HIST_TASK_ID + " IS ?",
 								new String[] { Long.toString(mTaskID) }, null);
 					}
@@ -163,6 +153,13 @@ public class ActivityTaskHistory extends FragmentActivity {
 				mCursor.moveToPosition(progress);
 				taskText.setTextTitle(mCursor.getString(1));
 				taskText.setTextRest(mCursor.getString(2));
+				try {
+					timestamp.setText(timeFormatter.format(dbTimeParser
+							.parse(mCursor.getString(3))));
+				}
+				catch (ParseException e) {
+					Log.d("nononsenseapps time", e.getLocalizedMessage());
+				}
 			}
 		}
 	}
