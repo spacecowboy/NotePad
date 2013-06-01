@@ -372,12 +372,19 @@ public class Task extends DAO {
 			.append(" VALUES (")
 			.append(arrayToCommaString("new.", new String[] { Columns._ID,
 					Columns.TITLE, Columns.NOTE })).append(");").toString();
+	public static final String HISTORY_UPDATE_TRIGGER_NAME = "trigger_update_" + HISTORY_TABLE_NAME;
 	public static final String CREATE_HISTORY_UPDATE_TRIGGER = new StringBuilder(
-			"CREATE TRIGGER trigger_update_")
-			.append(HISTORY_TABLE_NAME)
+			"CREATE TRIGGER ").append(HISTORY_UPDATE_TRIGGER_NAME)
 			.append(" AFTER UPDATE OF ")
 			.append(arrayToCommaString(new String[] { Columns.TITLE,
 					Columns.NOTE })).append(" ON ").append(TABLE_NAME)
+					
+			.append(" WHEN old.")
+			.append(Columns.TITLE).append(" IS NOT new.")
+			.append(Columns.TITLE).append(" OR old.")
+			.append(Columns.NOTE).append(" IS NOT new.")
+			.append(Columns.NOTE)
+			
 			.append(" BEGIN ").append(HISTORY_TRIGGER_BODY).append(" END;")
 			.toString();
 	public static final String CREATE_HISTORY_INSERT_TRIGGER = new StringBuilder(

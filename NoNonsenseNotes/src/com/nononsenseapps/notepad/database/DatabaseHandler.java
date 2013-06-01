@@ -33,7 +33,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return singleton;
 	}
 
-	private static final int DATABASE_VERSION = 13;
+	private static final int DATABASE_VERSION = 14;
 	public static final String DATABASE_NAME = "nononsense_notes.db";
 
 	private final Context context;
@@ -85,7 +85,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		db.execSQL(Task.TRIGGER_POST_DELETE);
 		db.execSQL(Task.TRIGGER_MOVE_LIST);
 		db.execSQL(Task.CREATE_HISTORY_INSERT_TRIGGER);
+		// TODO
 		db.execSQL(Task.CREATE_HISTORY_UPDATE_TRIGGER);
+		
+		Log.d("nononsenseapps db", Task.CREATE_HISTORY_UPDATE_TRIGGER);
 
 		db.execSQL(RemoteTask.TRIGGER_LISTDELETE_CASCADE);
 		// Mark as deleted when real item deleted
@@ -341,6 +344,11 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			db.execSQL(RemoteTask.TRIGGER_MOVE_LIST);
 			// Create trigger to fix positions when moving lists
 			db.execSQL(Task.TRIGGER_MOVE_LIST);
+		}
+		if (oldVersion < 14) {
+			// Update history update trigger
+			db.execSQL("DROP TRIGGER IF EXISTS " + Task.HISTORY_UPDATE_TRIGGER_NAME);
+			db.execSQL(Task.CREATE_HISTORY_UPDATE_TRIGGER);
 		}
 	}
 
