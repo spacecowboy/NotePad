@@ -98,12 +98,12 @@
 	<string name="imported_result">Imported %1$d notes in %2$d lists</string>
 	<string name="import_error">Something went wrong: %s</string>
 	
-	<string name="showcase_main_title">Touch to manage lists</string>
-	<string name="showcase_main_msg">Or swipe from the left edge</string>
-	<string name="showcase_drawer_title">Long press to edit or delete</string>
-	<string name="showcase_drawer_msg"></string>
-	<string name="showcase_timemachine_title">Saves everything</string>
-	<string name="showcase_timemachine_msg">Your changes are always saved on exit. Use the time machine to restore a note to a previous version.</string>
+	<string name="showcase_main_title">Access your lists</string>
+	<string name="showcase_main_msg">Click on the icon or swipe from the left edge</string>
+	<string name="showcase_drawer_title">Manage your lists</string>
+	<string name="showcase_drawer_msg">Long press to edit or delete</string>
+	<string name="showcase_timemachine_title">Save your notes</string>
+	<string name="showcase_timemachine_msg">Changes are always saved. Use the time machine to restore a previous version.</string>
 	
 	<string name="donate_to_unlock">Donate to unlock</string>
 	<string name="premiums_unlocked_and_thanks">Premium features unlocked. Thank you for your support!</string>
