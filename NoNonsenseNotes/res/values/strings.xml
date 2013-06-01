@@ -99,7 +99,7 @@
 	<string name="import_error">Something went wrong: %s</string>
 	
 	<string name="showcase_main_title">Access your lists</string>
-	<string name="showcase_main_msg">Click on the icon or swipe from the left edge</string>
+	<string name="showcase_main_msg">Touch the icon or swipe from the left edge</string>
 	<string name="showcase_drawer_title">Manage your lists</string>
 	<string name="showcase_drawer_msg">Long press to edit or delete</string>
 	<string name="showcase_timemachine_title">Save your notes</string>
