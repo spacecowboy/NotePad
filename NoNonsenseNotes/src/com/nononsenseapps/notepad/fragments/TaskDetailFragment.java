@@ -290,6 +290,8 @@ public class TaskDetailFragment extends Fragment implements
 		if (dontLoad) {
 			return;
 		}
+		
+		boolean openKb = false;
 
 		final Bundle args = new Bundle();
 		if (getArguments().getLong(ARG_ITEM_ID, stateId) > 0) {
@@ -314,6 +316,7 @@ public class TaskDetailFragment extends Fragment implements
 			getLoaderManager().restartLoader(LOADER_EDITOR_TASKLISTS, args,
 					loaderCallbacks);
 
+			openKb = true;
 			mTaskOrg = new Task();
 			mTask = new Task();
 			mTask.dblist = getArguments().getLong(ARG_ITEM_LIST_ID);
@@ -323,16 +326,29 @@ public class TaskDetailFragment extends Fragment implements
 		}
 
 		// showcase first time
-		showcaseEditor();
+		final boolean showcasing = showcaseEditor();
+		
+		if (!showcasing && openKb) {
+			/**
+			 * Only show keyboard for new/empty notes
+			 * But not if the showcase view is showing
+			 */
+				taskText.requestFocus();
+				inputManager.showSoftInput(taskText,
+						InputMethodManager.SHOW_IMPLICIT);
+		}
 	}
 
-	void showcaseEditor() {
+	/**
+	 * Returns true if showcase window is visible
+	 */
+	boolean showcaseEditor() {
 		final boolean alreadyShowcased = PreferenceManager
 				.getDefaultSharedPreferences(getActivity()).getBoolean(
 						SHOWCASED_EDITOR, false);
 
 		if (alreadyShowcased) {
-			return;
+			return false;
 		}
 
 		ShowcaseViews views = new ShowcaseViews(getActivity(),
@@ -344,6 +360,7 @@ public class TaskDetailFragment extends Fragment implements
 		views.show();
 		PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
 				.putBoolean(SHOWCASED_EDITOR, true).commit();
+		return true;
 	}
 
 	@AfterViews
@@ -545,14 +562,7 @@ public class TaskDetailFragment extends Fragment implements
 		// }, 100);
 		// }
 
-		/**
-		 * Only show keyboard for new/empty notes
-		 */
-		if (taskText.getText().length() == 0) {
-			taskText.requestFocus();
-			inputManager.showSoftInput(taskText,
-					InputMethodManager.SHOW_IMPLICIT);
-		}
+		
 	}
 
 	/**
