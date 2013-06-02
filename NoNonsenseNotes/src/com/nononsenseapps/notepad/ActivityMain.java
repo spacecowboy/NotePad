@@ -681,7 +681,9 @@ public class ActivityMain extends FragmentActivity implements
 		transaction.replace(R.id.fragment1, left, leftTag);
 
 		// Commit transaction
-		transaction.commit();
+		// Allow state loss as workaround for bug
+		// https://code.google.com/p/android/issues/detail?id=19917
+		transaction.commitAllowingStateLoss();
 		// Next go, always add
 		shouldAddToBackStack = true;
 

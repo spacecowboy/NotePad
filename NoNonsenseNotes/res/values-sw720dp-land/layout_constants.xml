@@ -14,8 +14,9 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-
 <resources>
-    <!-- Increase size (used to be 0 for dual pane -->
-    <dimen name="preference_screen_side_margin">64dp</dimen>
+
+    <integer name="leftFragmentWeight">3</integer>
+    <integer name="rightFragmentWeight">7</integer>
+
 </resources>

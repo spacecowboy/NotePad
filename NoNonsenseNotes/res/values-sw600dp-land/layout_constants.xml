@@ -14,13 +14,11 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
+
+<!-- This is the density where Nexus7 will fall with 600x960 dp -->
 <resources>
 
-    <integer name="leftFragmentWeight">3</integer>
-    <integer name="rightFragmentWeight">7</integer>
-    <!-- Both fragments will be visible at all times -->
-    <integer name="fragmentWeightSum">10</integer>
-    <bool name="tabletLayout">true</bool>
-    <bool name="leftHideable">false</bool>
+    <integer name="leftFragmentWeight">2</integer>
+    <integer name="rightFragmentWeight">3</integer>
 
 </resources>
