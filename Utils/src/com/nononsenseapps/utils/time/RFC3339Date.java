@@ -35,6 +35,10 @@ import java.util.TimeZone;
 public class RFC3339Date {
 	public static java.util.Date parseRFC3339Date(String datestring)
 			throws java.text.ParseException, IndexOutOfBoundsException {
+		if (datestring == null || datestring.isEmpty()) {
+			return null;
+		}
+		
 		Date d = new Date();
 
 		// if there is no time zone, we don't need to do any special parsing.

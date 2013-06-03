@@ -211,6 +211,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					}
 					catch (ParseException e) {
 					}
+					catch (NullPointerException e) {
+					}
 
 					// completed must be converted
 					if (c.getString(4) != null
