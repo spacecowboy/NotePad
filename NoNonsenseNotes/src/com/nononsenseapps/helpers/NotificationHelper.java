@@ -398,6 +398,8 @@ public class NotificationHelper extends BroadcastReceiver {
 
 		// Open intent
 		final Intent openIntent = new Intent(Intent.ACTION_VIEW, Task.getUri(note.taskID));
+		// Should create a new instance to avoid fragment problems
+		openIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 		
 		// Delete intent on non-location repeats
 		if (!note.isLocationRepeat()) {

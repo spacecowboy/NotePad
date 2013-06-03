@@ -164,8 +164,6 @@ public class ActivityMain extends FragmentActivity implements
 		// Must do this before super.onCreate
 		ActivityHelper.readAndSetSettings(this);
 		super.onCreate(b);
-		// Schedule notifications
-		NotificationHelper.schedule(this);
 
 		syncStatusReceiver = new SyncStatusMonitor();
 
@@ -250,6 +248,13 @@ public class ActivityMain extends FragmentActivity implements
 			Log.d("nononsenseapps list", "Activity Saved not null: " + b);
 			this.state = b;
 		}
+		
+		// Clear possible notifications, schedule future ones
+		final Intent intent = getIntent();
+		// Clear notification if present
+		clearNotification(intent);
+		// Schedule notifications
+		NotificationHelper.schedule(this);
 	}
 
 	@Background
@@ -549,12 +554,11 @@ public class ActivityMain extends FragmentActivity implements
 	/**
 	 * Loads the appropriate fragments depending on state and intent.
 	 */
+	@UiThread
 	@AfterViews
 	protected void loadContent() {
 		loadLeftDrawer();
 		final Intent intent = getIntent();
-		// Clear notification if present
-		clearNotification(intent);
 
 		// Mandatory
 		Fragment left = null;
@@ -1146,6 +1150,9 @@ public class ActivityMain extends FragmentActivity implements
 	public void onNewIntent(Intent intent) {
 		setIntent(intent);
 		loadContent();
+		// Just to be sure it gets done
+		// Clear notification if present
+		clearNotification(intent);
 	}
 
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
