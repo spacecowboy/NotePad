@@ -229,14 +229,14 @@ public class ActivityMain extends FragmentActivity implements
 		getSupportFragmentManager().addOnBackStackChangedListener(
 				new FragmentManager.OnBackStackChangedListener() {
 					public void onBackStackChanged() {
-						// Update your UI here.
-						Log.d("nononsenseapps fragments",
-								"onBackStackChanged: " + showingEditor + ", "
-										+ isNoteIntent(getIntent()));
-
-						inputManager.hideSoftInputFromWindow(ActivityMain.this
-								.getCurrentFocus().getWindowToken(),
-								InputMethodManager.HIDE_NOT_ALWAYS);
+						// Crash report about null pointer, think it was this
+						final View focusView = ActivityMain.this
+								.getCurrentFocus();
+						if (focusView != null && inputManager != null) {
+							inputManager.hideSoftInputFromWindow(
+									focusView.getWindowToken(),
+									InputMethodManager.HIDE_NOT_ALWAYS);
+						}
 
 						if (showingEditor && !isNoteIntent(getIntent())) {
 							resetActionBar();
@@ -728,7 +728,8 @@ public class ActivityMain extends FragmentActivity implements
 						reverseAnimation = true;
 						Log.d("nononsenseapps fragment", "starting activity");
 
-						intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+						intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
+								| Intent.FLAG_ACTIVITY_NEW_TASK);
 						startActivity(intent);
 					}
 				});

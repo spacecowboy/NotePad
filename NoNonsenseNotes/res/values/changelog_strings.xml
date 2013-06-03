@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="changelog_5.0">\nApp has been rewritten from scratch
+\nUI has been updated
+\nSync has been rewritten
+\nSay note to self in Google search to create a new note
+\nLocation reminders
+\nReminders can be set to repeat
+\nItems dragged to be sorted manually
+\nLists can have individual sort options
+\nDeleted notes can be restored
+\nView and restore changes in the Time Machine
+\nCustomizable date formats
+\nWidget has been updated and given a preview configuration</string>
+
+</resources>

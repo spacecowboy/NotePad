@@ -99,8 +99,12 @@ limitations under the License.
 <string name="showcase_main_title">Rør for at administrere lister</string>
 <string name="showcase_main_msg">Eller swipe fra venstre kant</string>
 <string name="showcase_drawer_title">Langt tryk for at redigere eller slette</string>
+<string name="showcase_drawer_msg">Langt tryk for at redigere eller slette</string>
 <string name="showcase_timemachine_title">Gemmer alt</string>
 <string name="showcase_timemachine_msg">Dine ændringer gemmes altid ved exit. Brug tidsmaskinen for at genskabe en note til en tidligere version.</string>
+
+<string name="donate_to_unlock">Doner for at låse op</string>
+<string name="premiums_unlocked_and_thanks">Premium-funktioner låst op. Tak for din støtte!</string>
 
 <!--
 Use few if language need it. In English is the same.
@@ -212,6 +216,14 @@ Use few if language need it. In English is the same.
 <string name="priority">Prioritet</string>
 <string name="notifications">Notifikationer</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+<string name="dateformat_micro">MMM d</string>
+<string name="dateformat_weekday">EEEE</string>
+<string name="dateformat_short_1">E localtime, d MMM</string>
+<string name="dateformat_short_2">E, d MMM</string>
+<string name="dateformat_short_3">MMM d</string>
+<string name="dateformat_short_4">E, localtime</string>
+<string name="dateformat_long_1">EEEE localtime, MMMM d</string>
+<string name="dateformat_long_2">E localtime, MMM d</string>
 <string name="tasks">Opgaver</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Begræns til opgaver i en bestemt liste</string>
 <string name="dashclock_show_overdue_tasks">Vis forfaldne opgaver</string>

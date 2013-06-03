@@ -46,12 +46,12 @@ limitations under the License.
 <string name="editor_note_hint">Szöveg</string>
 <string name="resolve_edit">Szerkesztés</string>
 <string name="default_style">Alapértelemezett stílus</string>
-<string name="show_items_as_tasks">Elemek megjelenítése feladatokként</string>
-<string name="show_items_as_notes">Elemek megjelenítése jegyzetekként</string>
+<string name="show_items_as_tasks">Feladat stílus</string>
+<string name="show_items_as_notes">Jegyzet stílus</string>
 <string name="sort_list_default">Alapértelmezett rendezés</string>
-<string name="sort_list_alphabetical">Rendezés ábécé sorrendben</string>
-<string name="sort_list_due">Rendezés lejárati dátum szerint</string>
-<string name="sort_list_updated">Rendezés utolsó frissítés szerint</string>
+<string name="sort_list_alphabetical">Ábécé sorrend</string>
+<string name="sort_list_due">Lejárati dátum szerint</string>
+<string name="sort_list_updated">Utolsó frissítés szerint</string>
 <string name="sort_list_manual">Kézi rendezés</string>
 <string name="search_description">Jegyzetek és feladatok</string>
 <string name="archive">Archívum</string>
@@ -96,14 +96,15 @@ limitations under the License.
 <string name="imported_result">%1$d jegyzet importálása %2$d listába</string>
 <string name="import_error">Hiba: %s</string>
 
-<string name="showcase_main_title">A listák kezeléséhez kattintson</string>
-<string name="showcase_main_msg">Vagy csúsztassa a kezét a bal széltől</string>
-<string name="showcase_drawer_title">Szerkesztéshez vagy törléshez nyomjon hosszan</string>
+<string name="showcase_main_title">Tekintse meg listáit</string>
+<string name="showcase_main_msg">Koppintson az ikonra vagy csúsztasson a bal széltől</string>
+<string name="showcase_drawer_title">Kezelje listáit</string>
+<string name="showcase_drawer_msg">Szerkesztéshez vagy törléshez nyomjon hosszan</string>
 <string name="showcase_timemachine_title">Mindent ment</string>
-<string name="showcase_timemachine_msg">Kilépéskor minden változás mentésre kerül. Használd az időgépet hogy visszaállítsd az előző verzióra.</string>
+<string name="showcase_timemachine_msg">Kilépéskor minden változás mentésre kerül. Használja az időgépet hogy visszaállítsa az előző verzióra.</string>
 
-<string name="donate_to_unlock">Támogass a feloldáshoz</string>
-<string name="premiums_unlocked_and_thanks">Prémium funkciók feloldva. Köszönöm a támogatást.</string>
+<string name="donate_to_unlock">Támogasson a feloldáshoz</string>
+<string name="premiums_unlocked_and_thanks">Prémium funkciók feloldva. Köszönöm a támogatását.</string>
 
 <!--
 Use few if language need it. In English is the same.
@@ -221,6 +222,7 @@ Use few if language need it. In English is the same.
 <string name="dashclock_overdue_tasks_show">A lejárt feladatok meg fognak jelenni</string>
 <string name="dashclock_overdue_tasks_hide">A lejárt feladatok el lesznek rejtve</string>
 <string name="dashclock_title_activity_tasks_settings">Jegyzetek beállításai</string>
+<string name="dashclock_pref_header_general">Általános</string>
 <string name="dashclock_due_upper_limit_title">Legkésőbbi feladatok ideje</string>
 <string name="dashclock_today">Ma</string>
 <string name="dashclock_tomorrow">Holnap</string>
