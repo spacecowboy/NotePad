@@ -429,6 +429,7 @@ public class ActivityMain extends FragmentActivity implements
 	/**
 	 * Load a list of lists in the left
 	 */
+	@AfterViews
 	protected void loadLeftDrawer() {
 		// TODO handle being called repeatably better?
 		// Set a listener on drawer events
@@ -554,10 +555,17 @@ public class ActivityMain extends FragmentActivity implements
 	/**
 	 * Loads the appropriate fragments depending on state and intent.
 	 */
-	@UiThread
 	@AfterViews
 	protected void loadContent() {
-		loadLeftDrawer();
+		loadFragments();
+
+		if (!showingEditor || fragment2 != null) {
+			showcaseDrawer();
+		}
+	}
+
+	@UiThread
+	void loadFragments() {
 		final Intent intent = getIntent();
 
 		// Mandatory
@@ -690,10 +698,6 @@ public class ActivityMain extends FragmentActivity implements
 		transaction.commitAllowingStateLoss();
 		// Next go, always add
 		shouldAddToBackStack = true;
-
-		if (!showingEditor || fragment2 != null) {
-			showcaseDrawer();
-		}
 	}
 
 	void setDoneActionBar() {
@@ -1149,7 +1153,7 @@ public class ActivityMain extends FragmentActivity implements
 	@Override
 	public void onNewIntent(Intent intent) {
 		setIntent(intent);
-		loadContent();
+		loadFragments();
 		// Just to be sure it gets done
 		// Clear notification if present
 		clearNotification(intent);
