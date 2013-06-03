@@ -123,6 +123,9 @@ public class MyContentProvider extends ContentProvider {
 			result = item.insert(getContext(), db);
 			db.setTransactionSuccessful();
 		}
+		catch (SQLException e) {
+			// Crap...
+		}
 		finally {
 			db.endTransaction();
 		}
