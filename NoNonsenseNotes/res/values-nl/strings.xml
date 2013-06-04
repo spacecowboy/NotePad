@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2013 Jonas Kalderstam
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+<string name="app_name">Notities</string>
+<string name="title_create">Nieuwe notitie</string>
+<string name="time">Tijd</string>
+<string name="done">Klaar</string>
+<string name="saved">Opgeslagen</string>
+<string name="distance">Afstand</string>
+<string name="need_location_help">Lang indrukken om een locatie in te stellen</string>
+<string name="near">Vlakbij</string>
+<string name="menu_save_and_add">Opslaan en open nieuwe notitie</string>
+<string name="menu_delete">Verwijderen</string>
+<string name="menu_deletelist">Verwijder lijst</string>
+<string name="menu_sync">Herladen</string>
+<string name="menu_share">Delen</string>
+<string name="menu_preferences">Instellingen</string>
+<string name="menu_createlist">Nieuwe lijst</string>
+<string name="menu_clearcompleted">Wis voltooide notities</string>
+<string name="menu_setdefaultlist">Standaard lijst</string>
+<string name="menu_managelists">Lijsten beheren</string>
+<string name="add_item">Toevoegen</string>
+<string name="delete_question">Verwijderen?</string>
+<string name="editor_due_date_hint">Einddatum</string>
+<string name="editor_title_hint">Titel</string>
+<string name="editor_note_hint">Notitie</string>
+<string name="resolve_edit">Notitie bewerken</string>
+<string name="location">Plaats</string>
+<string name="restore">Herstellen</string>
+<string name="restore_to">Herstellen naar</string>
+<string name="search_hint">Zoeken</string>
+<string name="settings_theme">Huidig thema</string>
+<string name="settings_theme_dialog">Gebruik thema</string>
+<string name="settings_lang">Taal</string>
+<string name="settings_summary_theme_black">Zwart</string>
+<string name="settings_summary_theme_dark">Donker</string>
+<string name="settings_summary_theme_light">Licht</string>
+<string name="settings_summary_theme_classic">Klassiek</string>
+<string name="settings_cat_appearance">Opmaak</string>
+<string name="preference_preview_text">Dit is hoe de tekst eruit zal zien</string>
+<string name="settings_account_title">Selecteer een account</string>
+<string name="settings_account_summary">Verander account</string>
+<string name="settings_sync_enable_title">Google Tasks sync</string>
+<string name="settings_cat_syncing">Synchronisatie</string>
+<string name="show_from_all_lists">Alle lijsten</string>
+<string name="deleted">Verwijderd</string>
+<string name="once">Eenmalig</string>
+<string name="always">Altijd</string>
+<string name="permission_read_label">lees notities en lijsten</string>
+<string name="permission_read_desc">Staat de applicatie toe notities en gerelateerde lijsten te lezen.</string>
+<string name="permission_write_label">notities en lijsten bewerken</string>
+<string name="permission_write_desc">Staat de applicatie toe om notities en lijsten te maken, bewerken en verwijderen.</string>
+<string name="settings_list_dialog">Selecteer een lijst</string>
+<string name="settings_list">Lijst</string>
+
+
+
+
+<!--
+Use few if language need it. In English is the same.
+<item quantity="few">Copied 2 notes.</item>
+-->
+<plurals name="notecopied_msg">
+<item quantity="one">@string/notecopied_one</item>
+<item quantity="zero">@string/notecopied_zero</item>
+<item quantity="two">@string/notecopied_two</item>
+<item quantity="few">@string/notecopied_few</item>
+<item quantity="many">@string/notecopied_many</item>
+<item quantity="other">@string/notecopied_other</item>
+</plurals>
+<plurals name="notedeleted_msg">
+<item quantity="one">@string/notedeleted_one</item>
+<item quantity="zero">@string/notedeleted_zero</item>
+<item quantity="two">@string/notedeleted_two</item>
+<item quantity="few">@string/notedeleted_few</item>
+<item quantity="many">@string/notedeleted_many</item>
+<item quantity="other">@string/notedeleted_other</item>
+</plurals>
+<plurals name="mode_choose">
+<item quantity="one">@string/selected_one</item>
+<item quantity="zero">@string/selected_zero</item>
+<item quantity="two">@string/selected_two</item>
+<item quantity="few">@string/selected_few</item>
+<item quantity="many">@string/selected_many</item>
+<item quantity="other">@string/selected_other</item>
+</plurals>
+
+
+<string name="lock_note">Notitie vergrendelen</string>
+<string name="unlock_note">Notitie ontgrendelen</string>
+<string name="locked">Vergrendeld</string>
+<string name="unlocked">Ontgrendeld</string>
+<string name="password_required">Wachtwoord vereist</string>
+<string name="select_account">Selecteer een account</string>
+<string name="password">Wachtwoord</string>
+<string name="password_set">Wachtwoord instellen</string>
+<string name="password_cleared">Wachtwoord verwijderd</string>
+<string name="passwords_dont_match">Wachtwoorden komen niet overeen</string>
+<string name="password_incorrect">Ongeldig wachtwoord</string>
+<string name="enter_password">Wachtwoord invoeren</string>
+<string name="enter_new_password">Nieuw wachtwoord invoeren</string>
+<string name="confirm_new_password">Bevestig nieuw wachtwoord</string>
+<string name="apply">Toepassen</string>
+<string name="clear_password">Wachtwoord wissen</string>
+<string name="password_info">Na het instellen van een wachtwoord, zal je een wachtwoord in moeten voeren om vergrendelde notities te bekijken. Het zal alleen het notitieveld beschermen, dus je hebt wel onbeschermd toegang tot de titel en de einddatum. Het versleutelt de notitie niet, dus de notitie is gewoon zichtbaar in Google Mail/Agenda. Als je het wachtwoord vergeet, synchroniseer dan met Google en installeer de app opnieuw.</string>
+<string name="about">Over</string>
+<string name="sync_failed">Synchronisatie mislukt</string>
+<string name="sync_login_failed">Inloggen mislukt, kon niet verbinden met Google Tasks</string>
+<string name="changelog_full_title">Recente wijzigingen</string>
+<string name="changelog_title">Wat is er veranderd?</string>
+<string name="completed">Voltooid</string>
+<string name="date_header_overdue">Over tijd</string>
+<string name="date_header_today">Vandaag</string>
+<string name="date_header_tomorrow">Morgen</string>
+<string name="date_header_future">Later</string>
+<string name="date_header_none">Geen datum</string>
+<string name="date_header_completed">Voltooid</string>
+<string name="please_select_note">Selecteer of maak eerst een notitie</string>
+<string name="please_create_note">Maak eerst een notitie</string>
+<string name="hide_checkbox">Vinkje verbergen</string>
+<string name="hide_checkbox_summary_on">Vinkje wordt verborgen</string>
+<string name="hide_checkbox_summary_off">Vinkje wordt getoond</string>
+<string name="hide_date">Einddatum verbergen</string>
+<string name="localedefault">Standaard</string>
+
+<!-- settings string keys -->
+<string name="hide_header">Hele widget-kop verbergen</string>
+<string name="shortcut_help1">Indien ingeschakeld maakt snelkoppeling een nieuwe notitie in de gekozen lijst en opent de bewerker. Indien uitgeschakeld opent de snelkoppeling de gekozen lijst,</string>
+<string name="loading_widget">Laden widget&#8230;</string>
+<string name="notecopied_one">%d notitie gekopieerd</string>
+<string name="notecopied_other">%d notities gekopieerd</string>
+<string name="notedeleted_one">%d notitie verwijderd</string>
+<string name="notedeleted_other">%d notities verwijderd</string>
+<string name="selected_one">%d notitie geselecteerd</string>
+<string name="selected_other">%d notities geselecteerd</string>
+<string name="background_sync">Achtergrondsynchronisatie</string>
+<string name="background_sync_info">Synchoniseert een keer per uur</string>
+<string name="sync_on_change">Synchroniseer bij wijzigingen</string>
+<string name="sync_on_change_info">Synchroniseer kort nadat een notitie is gewijzigd</string>
+<string name="sync_on_start">Synchroniseer bij starten app</string>
+<string name="sync_on_start_info">Synchroniseert bij nieuwe start, niet bij hervatten app</string>
+<string name="sync_full_force">Volledige synchronisatie forceren de volgende keer</string>
+<string name="sync_full_force_info">Kies dit alleen als je denkt dat bij synchronisatie sommige items ontbreken.</string>
+<string name="silent">Stil</string>
+<string name="sound">Geluid</string>
+<string name="vibrate">Vibratie</string>
+<string name="reminders">Herinneringen</string>
+<string name="standard">Standaard	</string>
+<string name="notification_prio_high">Hoog: Bovenaan, uitgevouwen	</string>
+<string name="notification_prio_low">Laag: Verborgen, geminimaliseerd</string>
+<string name="priority">Prioriteit	</string>
+<string name="notifications">Meldingen</string>
+<!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+<string name="dateformat_micro">d MMM</string>
+<string name="dashclock_tasks">Taken</string>
+<string name="dashclock_restrict_to_tasks_in_a_specific_list">Beperk tot taken uit een specifieke lijst</string>
+<string name="dashclock_show_overdue_tasks">Toon verlopen taken</string>
+<string name="dashclock_overdue_tasks_show">Verlopen taken worden getoond</string>
+<string name="dashclock_overdue_tasks_hide">Verlopen taken worden verborgen</string>
+<string name="dashclock_title_activity_tasks_settings">NoNonsense Notes Instellingen</string>
+<string name="dashclock_pref_header_general">Algemeen</string>
+<string name="dashclock_due_upper_limit_title">Beperk tot taken die uiterlijk verlopen</string>
+<string name="dashclock_today">Vandaag</string>
+<string name="dashclock_tomorrow">Morgen</string>
+<string name="dashclock_next7">Volgende 7 dagen</string>
+<string name="dashclock_anytime">Willekeurig</string>
+<string name="dashclock_will_show_as_many_as_possible">Toont er zoveel mogelijk</string>
+<string name="dashclock_will_only_show_the_task_due_first">Toont alleen taken die het eerst verlopen</string>
+<string name="dashclock_show_only_the_next_task">Toon alleen de volgende taak</string>
+<string name="dashclock_header_shown">Lijstnamen worden vet getoond.  Als &quot;Alle Lijsten&quot; is geselecteerd,  &quot;Taken&quot; wordt getoond</string>
+<string name="dashclock_first_task_shown">Titel van de eerste taak wordt vet getoond</string>
+<string name="dashclock_display_header">Kop weergave</string>
+
+</resources>

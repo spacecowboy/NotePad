@@ -1,0 +1,19 @@
+#!/bin/bash
+
+echo 'Get remote translation files from web server.'
+rm -rf translate-temp
+mkdir -p translate-temp/res
+scp -r public:/www/translate.nononsenseapps.com/public_html/res translate-temp/
+
+rm -rf translate-temp/res/values
+rm -rf translate-temp/res/values-en
+
+echo 'Isolate newest translations.'
+php5 ./get-diff-translations.php
+
+echo 'Copy new translation files to dev dir.'
+cp -rf translate-temp/res ./
+#echo 'Fix for traditional chinese'
+#cp -rf /home/jonas/workspace/NotePad/res/values-zh-rHK/* /home/jonas/workspace/NotePad/res/values-zh-rTW/
+
+rm -rf translate-temp

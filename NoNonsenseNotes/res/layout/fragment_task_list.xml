@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res/com.nononsenseapps.notepad"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    style="?ListMarginStyle" >
+
+    <LinearLayout
+        android:id="@+id/hintContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/FragmentHint"
+            android:text="@string/please_create_note" />
+    </LinearLayout>
+
+    <FrameLayout
+        android:id="@+id/listContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" >
+
+        <com.mobeta.android.dslv.DragSortListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            style="?ListDividerStyle"
+            android:drawSelectorOnTop="true"
+            app:collapsed_height="1px"
+            app:drag_enabled="true"
+            app:drag_handle_id="@+id/drag_handle"
+            app:drag_scroll_start="0.33"
+            app:drag_start_mode="onMove"
+            app:float_alpha="1.0"
+            app:float_background_color="@android:color/holo_blue_dark"
+            app:remove_enabled="false"
+            app:remove_mode="flingRemove"
+            app:slide_shuffle_speed="0.3"
+            app:sort_enabled="true"
+            tools:ignore="PxUsage" >
+
+        </com.mobeta.android.dslv.DragSortListView>
+    </FrameLayout>
+
+</FrameLayout>

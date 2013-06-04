@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2013 Jonas Kalderstam
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+<string name="app_name">Заметки</string>
+<string name="title_create">Новая запись</string>
+<string name="menu_save_and_add">Записать и открыть новую заметку</string>
+<string name="menu_delete">Удалить</string>
+<string name="menu_deletelist">Удалить список</string>
+<string name="menu_sync">Синхронизировать</string>
+<string name="menu_share">Отправить</string>
+<string name="menu_preferences">Настройки</string>
+<string name="menu_createlist">Создать список</string>
+<string name="menu_clearcompleted">Очистить завершённые</string>
+<string name="menu_setdefaultlist">Задать как список по умолчанию</string>
+<string name="menu_managelists">Управление списками</string>
+<string name="editor_due_date_hint">Дата окончания</string>
+<string name="editor_title_hint">Заголовок</string>
+<string name="editor_note_hint">Заметка</string>
+<string name="resolve_edit">Редактировать запись</string>
+<string name="search_hint">Поиск</string>
+<string name="settings_theme">Текущая тема</string>
+<string name="settings_theme_dialog">Использовать тему</string>
+<string name="settings_lang">Язык</string>
+<string name="settings_lang_dialog">Настройки языка диалога</string>
+<string name="settings_summary_theme_black">Черная</string>
+<string name="settings_summary_theme_dark">Тёмная</string>
+<string name="settings_summary_theme_light">Светлая</string>
+<string name="settings_cat_appearance">Внешний вид</string>
+<string name="preference_preview_text">Так будет выглядеть текст при редактировании</string>
+<string name="settings_account_title">Выберите учётную запись</string>
+<string name="settings_account_summary">Нажмите для смены учётной записи</string>
+<string name="settings_sync_enable_title">Синхронизация Google Tasks</string>
+<string name="settings_cat_syncing">Синхронизация</string>
+<string name="show_from_all_lists">Все списки</string>
+<string name="deleted">Удалено</string>
+<string name="permission_read_label">читать записи и списки</string>
+<string name="permission_read_desc">Разрешить приложению читать записи и связанные списки.</string>
+<string name="permission_write_label">изменять записи и списки</string>
+<string name="permission_write_desc">Разрешить приложению добавлять, изменять и удалять записи и списки.</string>
+<string name="settings_list_dialog">Выберите список</string>
+<string name="settings_list">Список</string>
+
+
+
+<!--
+Use few if language need it. In English is the same.
+<item quantity="few">Copied 2 notes.</item>
+-->
+<plurals name="notecopied_msg">
+<item quantity="one">@string/notecopied_one</item>
+<item quantity="zero">@string/notecopied_zero</item>
+<item quantity="two">@string/notecopied_two</item>
+<item quantity="few">@string/notecopied_few</item>
+<item quantity="many">@string/notecopied_many</item>
+<item quantity="other">@string/notecopied_other</item>
+</plurals>
+<plurals name="notedeleted_msg">
+<item quantity="one">@string/notedeleted_one</item>
+<item quantity="zero">@string/notedeleted_zero</item>
+<item quantity="two">@string/notedeleted_two</item>
+<item quantity="few">@string/notedeleted_few</item>
+<item quantity="many">@string/notedeleted_many</item>
+<item quantity="other">@string/notedeleted_other</item>
+</plurals>
+<plurals name="mode_choose">
+<item quantity="one">@string/selected_one</item>
+<item quantity="zero">@string/selected_zero</item>
+<item quantity="two">@string/selected_two</item>
+<item quantity="few">@string/selected_few</item>
+<item quantity="many">@string/selected_many</item>
+<item quantity="other">@string/selected_other</item>
+</plurals>
+
+
+<string name="lock_note">Заблокировать запись</string>
+<string name="unlock_note">Разблокировать запись</string>
+<string name="locked">Заблокировано</string>
+<string name="unlocked">Разблокировано</string>
+<string name="password_required">Требуется пароль</string>
+<string name="select_account">Выберите учётную запись</string>
+<string name="password">Пароль</string>
+<string name="password_set">Пароль установлен</string>
+<string name="password_cleared">Пароль очищен</string>
+<string name="passwords_dont_match">Пароли не совпадают</string>
+<string name="password_incorrect">Неверный пароль</string>
+<string name="enter_password">Введите пароль</string>
+<string name="enter_new_password">Введите новый пароль</string>
+<string name="confirm_new_password">Подтвердите новый пароль</string>
+<string name="apply">Применить</string>
+<string name="clear_password">Очистить пароль</string>
+<string name="password_info">После установки пароля, его будет необходимо вводить для просмотра любой заблокированной записи. Это защищает только текст заметки, доступ до заголовка и даты окончания остаётся открытым. Это не шифрует заметку, она по-прежнему остаётся доступна в веб-приложениях Google. Если вы забыли свой пароль, синхронизируйтесь и переустановите приложение.</string>
+<string name="about">О программе</string>
+<string name="sync_failed">Ошибка синхронизации</string>
+<string name="sync_login_failed">Авторизация не выполнена, не удалось подключиться к Google Tasks</string>
+<string name="changelog_full_title">Список изменений</string>
+<string name="changelog_title">"Что нового?"</string>
+<string name="completed">Завершено</string>
+<string name="date_header_overdue">Сверх срока</string>
+<string name="date_header_today">Сегодня</string>
+<string name="date_header_tomorrow">Завтра</string>
+<string name="date_header_future">Позднее</string>
+<string name="date_header_none">Без даты</string>
+<string name="date_header_completed">Завершено</string>
+<string name="please_select_note">Выберите или создайте заметку, пожалуйста</string>
+<string name="please_create_note">Создайте заметку, пожалуйста</string>
+<string name="hide_checkbox">Скрыть отметку</string>
+<string name="hide_checkbox_summary_on">Отметка будет скрыта</string>
+<string name="hide_checkbox_summary_off">Отметка будет показана</string>
+<string name="hide_date">Скрыть дату окончания</string>
+<string name="localedefault">Язык по-умолчанию</string>
+
+<!-- settings string keys -->
+<string name="hide_header">Скрыть весь заголовок виджета</string>
+<string name="shortcut_help1">Если отмечено, ярлык будет создать новую заметку в выбранном списке и открывать редактор. Если флажок не установлен, ярлык будет открыть выбранный список.</string>
+<string name="loading_widget">Загрузка виджета</string>
+<string name="notecopied_one">Скопирована одна заметка</string>
+<string name="notecopied_other">Скопировано %d заметки</string>
+<string name="notedeleted_one">Удалена одна заметка</string>
+<string name="notedeleted_other">Выделено %d заметки</string>
+<string name="selected_one">Выделена одна заметка</string>
+<string name="selected_other">Выделено %d заметки</string>
+<string name="background_sync">Фоновая синхр.</string>
+<string name="background_sync_info">Синхронизировать каждый час</string>
+<string name="sync_on_change">Синхр. при изменениях</string>
+<string name="sync_on_change_info">Синхронизировать через некоторое время после изменения заметки</string>
+<string name="sync_on_start">Синхр. при запуске</string>
+<string name="sync_on_start_info">Синхронизировать при новом запуске, не при восстановлении из памяти</string>
+<string name="sync_full_force">Принудительная полная синхр. в следующий раз</string>
+<string name="sync_full_force_info">Отмечайте только если вы уверены, что отсутствуют какие-то заметки.</string>
+<string name="silent">Без звука</string>
+<string name="sound">Мелодия</string>
+<string name="vibrate">Вибрация</string>
+<string name="reminders">Напоминания</string>
+<string name="standard">Обычный</string>
+<string name="notification_prio_high">Высокий: сверху, расширенный</string>
+<string name="notification_prio_low">Низкий: скрытый, свернутый</string>
+<string name="priority">Приоритет</string>
+<string name="notifications">Уведомления</string>
+<!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+<string name="dashclock_tasks">Задачи</string>
+<string name="dashclock_show_overdue_tasks">Показать просроченные задачи</string>
+<string name="dashclock_overdue_tasks_show">Просроченные задачи будут отображаться</string>
+<string name="dashclock_overdue_tasks_hide">Просроченные задачи не будут показаны</string>
+<string name="dashclock_today">Сегодня</string>
+<string name="dashclock_tomorrow">Завтра</string>
+<string name="dashclock_next7">На семь дней вперед</string>
+<string name="dashclock_anytime">В любое время</string>
+<string name="dashclock_will_show_as_many_as_possible">Будет показано так много, как возможно</string>
+<string name="dashclock_show_only_the_next_task">Показывать только следующую задачу</string>
+<string name="dashclock_display_header">Отображать заголовок</string>
+
+</resources>

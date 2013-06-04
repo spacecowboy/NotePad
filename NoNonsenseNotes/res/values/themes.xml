@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2012 Jonas Kalderstam
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="ThemeHolo" parent="@android:style/Theme.Holo">
+        <item name="android:background">@null</item>
+        <item name="navigation_refresh">@drawable/navigation_refresh_dark </item>
+        <item name="action_search">@drawable/action_search_dark </item>
+        <item name="action_settings">@drawable/action_settings_dark </item>
+        <item name="content_new">@drawable/content_new_dark </item>
+        <item name="content_discard">@drawable/content_discard_dark </item>
+        <item name="content_copy">@drawable/content_copy_dark </item>
+        <item name="content_paste">@drawable/content_paste_dark </item>
+        <item name="content_undo">@drawable/content_remove_dark </item>
+        <item name="ab_cancel">@drawable/content_remove_dark </item>
+        <item name="content_remove">@drawable/content_remove_dark </item>
+        <item name="social_share">@drawable/social_share_dark </item>
+        <item name="device_access_secure">@drawable/device_access_secure_dark</item>
+        <item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
+        <item name="navigation_accept">@drawable/navigation_accept_dark</item>
+        <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+        <item name="my_list_background">@drawable/background_holo_dark</item>
+        <item name="editorBackgroundColor">@drawable/background_holo_dark</item>
+        <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
+        <item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
+        <item name="img_default_selector">@drawable/img_default_selector_dark</item>
+        <item name="SpinnerStyle">@android:style/Widget.Holo.Spinner</item>
+        <item name="expander_open_holo">@drawable/ic_action_big_expander_open_dark</item>
+        <item name="expander_close_holo">@drawable/ic_action_big_expander_close_dark</item>
+        <item name="list_divider_holo">@drawable/list_divider_holo_dark</item>
+        <item name="viewpager_bg">@android:drawable/dark_header</item>
+        <item name="textColorPrimary">?android:attr/textColorPrimary</item>
+        <item name="textColorSecondary">?android:attr/textColorSecondary</item>
+        <item name="labelAddItemTextColor">@color/labelItemTextColorDark</item>
+        <item name="list_item_card_background">@drawable/card_dark</item>
+        <item name="body_new">@drawable/content_new_dark </item>
+        <item name="body_remove">@drawable/content_remove_dark</item>
+        <item name="body_delete">@drawable/content_discard_dark</item>
+        <item name="android:actionBarStyle">@android:style/Widget.Holo.ActionBar.Solid</item>
+        <item name="drag_handle_color">@color/dragHandleColorDark</item>
+        <item name="TaskListItem">@style/TaskListItemDark</item>
+        <item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
+        <item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
+        <item name="ic_action_add_list">@drawable/ic_action_add_list_dark</item>
+        <item name="ic_action_list">@drawable/ic_action_list_dark</item>
+        
+        <item name="LeftDrawerStyle">@style/LeftDrawerStyleDark</item>
+        <item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleDark</item>
+        
+        <!-- For Square's Date picker -->
+        <item name="CalendarTitle">@style/CalendarTitleDark</item>
+        <item name="CalendarCell.DayHeader">@style/CalendarCell.DayHeaderDark</item>
+        <item name="CalendarCell.CalendarDate">@style/CalendarCell.CalendarDateDark</item>
+        <item name="CalendarPickerBackground">@color/googlenow_darkergrey</item>
+        
+        <!-- ShowCaseView -->
+        <item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>
+    </style>
+
+    <style name="ThemeHoloBlack" parent="@style/ThemeGoogleNowDark">
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:colorBackgroundCacheHint">@android:color/black</item>
+        <item name="editorBackgroundColor">@android:color/black</item>
+        <item name="TaskListItem">@style/TaskListItemBlack</item>
+        <item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
+         <item name="LeftDrawerStyle">@style/LeftDrawerStyleBlack</item>
+    </style>
+
+    <style name="ThemeGoogleNowDark" parent="@style/ThemeHolo">
+        <item name="android:actionBarStyle">@style/ActionBar.Solid.GoogleNowDark</item>
+        <item name="android:background">@null</item>
+        <item name="android:windowBackground">@color/googlenow_darkergrey</item>
+        <item name="android:colorBackgroundCacheHint">@color/googlenow_darkergrey</item>
+        <item name="viewpager_bg">@null</item>
+        <item name="editorBackgroundColor">@drawable/card_dark</item>
+        <item name="ListMarginStyle">@style/ListMarginStyleCard</item>
+    </style>
+
+    <!-- This theme doesn't exist in honeycomb -->
+    <style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+        <item name="android:background">@null</item>
+        <item name="android:windowBackground">@color/googlenow_grey</item>
+        <item name="android:colorBackgroundCacheHint">@color/googlenow_grey</item>
+        <item name="navigation_refresh">@drawable/navigation_refresh_dark </item>
+        <item name="action_search">@drawable/action_search_dark </item>
+        <item name="action_settings">@drawable/action_settings_dark </item>
+        <item name="content_new">@drawable/content_new_dark </item>
+        <item name="content_discard">@drawable/content_discard_dark </item>
+        <item name="content_copy">@drawable/content_copy_dark </item>
+        <item name="content_paste">@drawable/content_paste_dark </item>
+        <item name="content_undo">@drawable/content_remove_dark </item>
+        <item name="ab_cancel">@drawable/content_remove_dark </item>
+        <item name="content_remove">@drawable/content_remove_light </item>
+        <item name="social_share">@drawable/social_share_dark </item>
+        <item name="device_access_secure">@drawable/device_access_secure_dark</item>
+        <item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
+        <item name="navigation_accept">@drawable/navigation_accept_dark</item>
+
+        <!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
+        <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
+        <item name="my_list_background">@color/listLightBG</item>
+        <item name="editorBackgroundColor">@drawable/card_light</item>
+        <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
+        <item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
+        <item name="img_default_selector">@drawable/img_default_selector_light</item>
+        <item name="SpinnerStyle">@android:style/Widget.Holo.Light.Spinner</item>
+        <item name="expander_open_holo">@drawable/ic_action_big_expander_open_light</item>
+        <item name="expander_close_holo">@drawable/ic_action_big_expander_close_light</item>
+        <item name="list_divider_holo">@drawable/list_divider_holo_light</item>
+        <item name="ic_action_add_list">@drawable/ic_action_add_list_dark</item>
+        <item name="ic_action_list">@drawable/ic_action_list_dark</item>
+
+        <!-- <item name="viewpager_bg">@color/viewpager_darkgrey</item> -->
+        <item name="viewpager_bg">@color/googlenow_grey_trans</item>
+        <item name="textColorPrimary">?android:attr/textColorPrimary</item>
+        <item name="textColorSecondary">?android:attr/textColorSecondary</item>
+        <item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
+        <item name="body_new">@drawable/content_new_light </item>
+        <item name="body_remove">@drawable/content_remove_light</item>
+        <item name="body_delete">@drawable/content_discard_light</item>
+        <item name="list_item_card_background">@drawable/card_light</item>
+        <item name="drag_handle_color">@color/dragHandleColorLight</item>
+        <item name="TaskListItem">@style/TaskListItemLight</item>
+        <item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
+        <item name="ListMarginStyle">@style/ListMarginStyleCard</item>
+        
+         <item name="LeftDrawerStyle">@style/LeftDrawerStyleLight</item>
+        <item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleLight</item>
+        
+        <!-- For Square's Date picker -->
+        <item name="CalendarTitle">@style/CalendarTitleLight</item>
+        <item name="CalendarCell.DayHeader">@style/CalendarCell.DayHeaderLight</item>
+        <item name="CalendarCell.CalendarDate">@style/CalendarCell.CalendarDateLight</item>
+    	<item name="CalendarPickerBackground">#fff3f3f3</item>
+    	
+        <!-- ShowCaseView -->
+        <item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>
+    </style>
+
+    <style name="ThemeHoloLightClassic" parent="@style/ThemeHoloLightDarkActonBar">
+        <item name="TaskListItem">@style/TaskListItemLightClassic</item>
+        <item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
+        <item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
+    </style>
+
+    <style name="ThemeMapActivity" parent="@style/ThemeHoloLightDarkActonBar">
+        <!-- <item name="android:windowActionBarOverlay">true</item> -->
+        <!-- <item name="android:actionBarStyle">@android:style/Widget.Holo.ActionBar</item> -->
+    </style>
+
+    <!-- No theme background to let users wall paper shine through -->
+    <style name="ThemeWidgetConfig" parent="@style/ThemeHolo">
+        <item name="android:background">@null</item>
+        <item name="android:colorBackgroundCacheHint">@null</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowShowWallpaper">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+    </style>
+
+    <!-- Deprecated -->
+    <style name="ThemeHoloLight" parent="@style/ThemeHoloLightDarkActonBar" />
+
+    <style name="ActionBar.Solid.GoogleNowDark" parent="@android:style/Widget.Holo.ActionBar.Solid">
+        <item name="android:background">@null</item>
+        <item name="android:backgroundStacked">@null</item>
+        <item name="android:backgroundSplit">@null</item>
+    </style>
+
+</resources>

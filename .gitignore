@@ -1,9 +1,15 @@
+NotePad_ant
+NotePad_ant/*
+.factorypath
 bin/
 gen/
 NotePad.apk
 Notes_for_ICS_Market_Link.png
 icon/
 proguard/
+.apt_generated
 .settings*
 translate-temp/
 *~
+*iml
+.idea

@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2013 Jonas Kalderstam
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+<string name="app_name">Notes</string>
+<string name="title_create">新しいノート</string>
+<string name="time">時間</string>
+<string name="near">近くに</string>
+<string name="menu_save_and_add">デリート</string>
+<string name="menu_delete">削除</string>
+<string name="menu_deletelist">リストの削除</string>
+<string name="menu_sync">更新</string>
+<string name="menu_share">共有</string>
+<string name="menu_preferences">設定</string>
+<string name="menu_createlist">リストの作成</string>
+<string name="menu_clearcompleted">完了したノートの削除</string>
+<string name="menu_setdefaultlist">デフォルトのリスト</string>
+<string name="menu_managelists">リストの管理</string>
+<string name="delete_question">デリート？</string>
+<string name="editor_due_date_hint">期限</string>
+<string name="editor_title_hint">タイトル</string>
+<string name="editor_note_hint">ノート</string>
+<string name="resolve_edit">ノートの編集</string>
+<string name="search_description">ノートやタスク</string>
+<string name="search_hint">検索</string>
+<string name="settings_theme">現在のテーマ</string>
+<string name="settings_theme_dialog">テーマの選択</string>
+<string name="settings_lang">言語</string>
+<string name="settings_summary_theme_black">ブラック</string>
+<string name="settings_summary_theme_dark">ダーク</string>
+<string name="settings_summary_theme_light">ライト</string>
+<string name="settings_summary_theme_classic">クラシック</string>
+<string name="settings_cat_appearance">外観</string>
+<string name="preference_preview_text">ここで実際の見た目を確認することが出来ます</string>
+<string name="settings_account_title">アカウントを選択</string>
+<string name="settings_account_summary">タップしてアカウントを切り替える</string>
+<string name="settings_sync_enable_title">Google Tasksとの同期</string>
+<string name="settings_cat_syncing">同期</string>
+<string name="show_from_all_lists">すべてのノート</string>
+<string name="deleted">削除済み</string>
+<string name="once">一度</string>
+<string name="permission_read_label">ノートやリストを読み込む</string>
+<string name="permission_read_desc">アプリケーションがノートとリストを読み取ることを許可します。</string>
+<string name="permission_write_label">ノートやリストを変更</string>
+<string name="permission_write_desc">アプリケーションがノートやリストの挿入、更新、および削除することを許可します。</string>
+<string name="settings_list_dialog">リストの選択</string>
+<string name="settings_list">リスト</string>
+
+
+
+
+<!--
+Use few if language need it. In English is the same.
+<item quantity="few">Copied 2 notes.</item>
+-->
+<plurals name="notecopied_msg">
+<item quantity="one">@string/notecopied_one</item>
+<item quantity="zero">@string/notecopied_zero</item>
+<item quantity="two">@string/notecopied_two</item>
+<item quantity="few">@string/notecopied_few</item>
+<item quantity="many">@string/notecopied_many</item>
+<item quantity="other">@string/notecopied_other</item>
+</plurals>
+<plurals name="notedeleted_msg">
+<item quantity="one">@string/notedeleted_one</item>
+<item quantity="zero">@string/notedeleted_zero</item>
+<item quantity="two">@string/notedeleted_two</item>
+<item quantity="few">@string/notedeleted_few</item>
+<item quantity="many">@string/notedeleted_many</item>
+<item quantity="other">@string/notedeleted_other</item>
+</plurals>
+<plurals name="mode_choose">
+<item quantity="one">@string/selected_one</item>
+<item quantity="zero">@string/selected_zero</item>
+<item quantity="two">@string/selected_two</item>
+<item quantity="few">@string/selected_few</item>
+<item quantity="many">@string/selected_many</item>
+<item quantity="other">@string/selected_other</item>
+</plurals>
+
+<string name="move">動く</string>
+
+<string name="lock_note">ノートのロック</string>
+<string name="unlock_note">ロックの解除</string>
+<string name="locked">ロック済み</string>
+<string name="unlocked">未ロック</string>
+<string name="password_required">パスワードが必要です</string>
+<string name="select_account">アカウントを選択する</string>
+<string name="password">パスワード</string>
+<string name="password_set">パスワードを設定しました</string>
+<string name="password_cleared">パスワードをクリアしました</string>
+<string name="passwords_dont_match">パスワードが一致しません</string>
+<string name="password_incorrect">パスワードが違います</string>
+<string name="enter_password">パスワードを入力</string>
+<string name="enter_new_password">新しいパスワードを入力</string>
+<string name="confirm_new_password">新しいパスワードの確認</string>
+<string name="apply">適用</string>
+<string name="clear_password">パスワードをクリア</string>
+<string name="password_info">パスワードを設定すると、ロックされたノートを表示するのにパスワードを要求するようになります。ロックされたノートでは、タイトルや期限は保護されずに、ノート欄を保護します。ノートはGmailやGoogleカレンダーで表示する為、ノートを暗号化することはしません。パスワードを忘れた場合は、Googleと同期してから、アプリケーションを再インストールしてください。</string>
+<string name="about">このアプリについて</string>
+<string name="sync_failed">同期失敗</string>
+<string name="sync_login_failed">ログイン失敗。Google Tasksに接続できませんでした。</string>
+<string name="changelog_full_title">更新履歴</string>
+<string name="changelog_title">最新情報</string>
+<string name="completed">完了</string>
+<string name="date_header_overdue">期限切れ</string>
+<string name="date_header_today">今日</string>
+<string name="date_header_tomorrow">明日</string>
+<string name="date_header_future">後日</string>
+<string name="date_header_none">期限なし</string>
+<string name="date_header_completed">完了</string>
+<string name="please_select_note">ノートを選択、または作成してください</string>
+<string name="please_create_note">ノートを作成してください</string>
+<string name="hide_checkbox">チェックボックスを隠す</string>
+<string name="hide_checkbox_summary_on">現在の設定：非表示</string>
+<string name="hide_checkbox_summary_off">現在の設定：表示</string>
+<string name="hide_date">期限を隠す</string>
+<string name="localedefault">端末の設定を使用する</string>
+
+<!-- settings string keys -->
+<string name="hide_header">ヘッダ全体を隠す</string>
+<string name="shortcut_help1">チェックすると、ショートカットタップ時に選択したリストに新規ノートを作成し、エディタを開きます。チェックを外すと、ショートカットタップ時に選択したリストを開きます。</string>
+<string name="loading_widget">しばらくお待ち下さい&#8230;</string>
+<string name="notecopied_one">ノートをコピーしました</string>
+<string name="notecopied_other">%d 個のノートをコピーしました</string>
+<string name="notedeleted_one">ノートを削除しました</string>
+<string name="notedeleted_other">%d 個のノートを削除しました</string>
+<string name="selected_one">ノートを選択</string>
+<string name="selected_other">%d 個のノートを選択</string>
+<string name="background_sync">バックグラウンド同期</string>
+<string name="background_sync_info">1時間毎に同期されます</string>
+<string name="sync_on_change">変更後すぐに同期</string>
+<string name="sync_on_change_info">ノートが変更されるとすぐに同期されます</string>
+<string name="sync_on_start">アプリ起動時に同期</string>
+<string name="sync_on_start_info">アプリが復帰したときではなく、起動時に同期されます</string>
+<string name="sync_full_force">強制的に全て同期</string>
+<string name="sync_full_force_info">ノート等の同期がおかしい場合のみチェックをONにしてください</string>
+<string name="silent">サイレント</string>
+<string name="sound">通知音</string>
+<string name="vibrate">バイブレーション</string>
+<string name="reminders">リマインダー</string>
+<string name="standard">普通</string>
+<string name="notification_prio_high">高：通知領域の先頭、拡張</string>
+<string name="notification_prio_low">低：隠す、縮小</string>
+<string name="priority">優先度</string>
+<string name="notifications">通知</string>
+<!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+<string name="dateformat_micro">MM/dd</string>
+<string name="dateformat_short_1">kk:mm MM/dd(E)</string>
+<string name="dateformat_short_2">h:mm MM/dd(E)</string>
+<string name="dateformat_short_3">MM/dd(E)</string>
+<string name="dateformat_short_4">MM/dd</string>
+<string name="dateformat_long_1">kk:mm MM月dd日 (EEEE)</string>
+<string name="dateformat_long_2">h:mm MM月dd日 (EEEE)</string>
+
+</resources>

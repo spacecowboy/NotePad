@@ -1,252 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-Copyright (C) 2012 Jonas Kalderstam
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
-<resources xmlns:tools="http://schemas.android.com/tools">
-
-<string name="app_name">ملاحظات</string>
-<string name="title_create">ملاحظة جديدة</string>
-<string name="title_edit">تحرير %1$s</string>
-<string name="menu_add">ملاحظة جديدة</string>
-<string name="menu_save_and_add">لإضافة وحفظ مذكرة جديدة</string>
-<string name="menu_delete">حذف</string>
-<string name="menu_revert">تجاهل التغييرات</string>
-<string name="menu_copy">نسخ الملاحظة</string>
-<string name="menu_cancel">إلغاء</string>
-<string name="menu_setcompleted">تعليمها مُنجَزة</string>
-<string name="menu_setuncompleted">تعليمها غير مُنجَزة</string>
-<string name="menu_deletelist">حذف القائمة</string>
-<string name="menu_sync">تحديث</string>
-<string name="menu_share">مشاركة</string>
-<string name="menu_preferences">الإعدادات</string>
-<string name="menu_renamelist">إعادة تسمية القائمة</string>
-<string name="menu_createlist">إنشاء قائمة</string>
-<string name="menu_clearcompleted">مسح المهام المُنجَزة</string>
-<string name="menu_setdefaultlist">جعلها قائمة افتراضية</string>
-<string name="menu_managelists">إدارة القوائم</string>
-<string name="delete_list_warning">أمتأكد من أنك تريد حذف هذه القائمة؟ ستحذف القائمة ولن يمكنك إعادتها.</string>
-<string name="editor_due_date_hint">تاريخ الاستحقاق</string>
-<string name="editor_title_hint">العنوان</string>
-<string name="editor_note_hint">الملاحظة</string>
-<string name="resolve_edit">تحرير الملاحظة</string>
-<string name="error_title">خطأ</string>
-<string name="error_message">حدث خطأ أثناء تحميل الملاحظة</string>
-<string name="search_hint">بحث</string>
-<string name="settings_theme">السمة الحالية</string>
-<string name="settings_theme_dialog">استخدام السمة</string>
-<string name="settings_lang">اللغة</string>
-<string name="settings_lang_dialog">@string/settings_lang</string>
-<string name="settings_cat_theme">السمة</string>
-<string name="settings_cat_sorting">الترتيب</string>
-<string name="settings_sorting_type">الترتيب فعال</string>
-<string name="settings_sorting_type_dialog">الترتيب فعال</string>
-<string name="settings_sorting_order">الترتيب</string>
-<string name="settings_sorting_order_dialog">الترتيب بحسب</string>
-<string name="settings_summary_sort_type_alphabetic">العنوان</string>
-<string name="settings_summary_sort_type_modified">تاريخ آخر تعديل</string>
-<string name="settings_summary_sort_type_duedate">تاريخ الاستحقاق</string>
-<string name="settings_summary_sort_type_serverposition">ترتيبي الخاصّ</string>
-<string name="settings_summary_sort_order_asc">تصاعديًّا</string>
-<string name="settings_summary_sort_order_desc">تنازليًّا</string>
-<string name="settings_summary_theme_black">أسود</string>
-<string name="settings_summary_theme_dark">داكن</string>
-<string name="settings_summary_theme_light">فاتح</string>
-<string name="settings_summary_theme_light_dark_ab">فاتح، شريط الأفعال داكن</string>
-<string name="settings_cat_appearance">المظهر</string>
-<string name="settings_font_screen">إعدادات الخط</string>
-<string name="settings_font_screen_summary">يمكنك تغيير نمط وحجم الخطوط</string>
-<string name="settings_cat_font_editor">المحرر</string>
-<string name="settings_font_type">الخط</string>
-<string name="settings_font_type_dialog">اختر خطًّا</string>
-<string name="settings_font_size">حجم الخط</string>
-<string name="preference_preview_text">هكذا سيبدو النص في المحرّر</string>
-<string name="settings_text_preview_title">معاينة</string>
-<string name="monospace">أحادي المسافة</string>
-<string name="sans">Sans</string>
-<string name="serif">Serif</string>
-<string name="settings_sync_freq_title">نمط المزامنة</string>
-<string name="settings_account_title">اختر حسابًا</string>
-<string name="settings_account_summary">انقر لتغيير الحساب</string>
-<string name="settings_sync_enable_title">المزامنة مع مهام Google</string>
-<string name="settings_sync_enable_summary">مزامنة الملاحظات مع حساب Google</string>
-<string name="settings_cat_syncing">المزامنة</string>
-<string name="manual">يدويّة</string>
-<string name="minutes">دقائق</string>
-<string name="hours">ساعات</string>
-<string name="onehour">ساعة</string>
-<string name="oneday">يوم واحد</string>
-<string name="yes">نعم</string>
-<string name="no">لا</string>
-<string name="ok">حسنًا</string>
-<string name="show_from_all_lists">كل القوائم</string>
-<string name="default_list_needed_warning">عّين قائمة افتراضيّة أولاً</string>
-<string name="reverted">تُجُوهلت التغييرات</string>
-<string name="notecopied">نُسخت</string>
-<string name="deleted">حُذِفت</string>
-<string name="items">ملاحظة</string>
-<string name="permission_read_label">قراءة الملاحظات والقوائم</string>
-<string name="permission_read_desc">السماح للتطبيق بقراءة ملاحظاتك والقوائم المتعلقة.</string>
-<string name="permission_write_label">تعديل الملاحظات والقوائم</string>
-<string name="permission_write_desc">السماح للتطبيق بالإدراج، التحديث وحذف الملاحظات والقوائم.</string>
-<string name="settings_header_list">إعدادات القائمة</string>
-<string name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string name="settings_header_sync">@string/settings_cat_syncing</string>
-<string name="settings_list_dialog">أختر قائمة</string>
-<string name="settings_list">قائمة</string>
-<string name="automatic">تلقائي</string>
-<string name="preferences_week_start_day_dialog">يبدأ الاسبوع في</string>
-<string name="preferences_week_start_day_title">يبدأ الاسبوع في</string>
-
-<!--
-Use few if language need it. In English is the same.
-<item quantity="few">Copied 2 notes.</item>
--->
-<plurals name="notecopied_msg">
-<item quantity="one">@string/notecopied_one</item>
-<item quantity="other">@string/notecopied_other</item>
-</plurals>
-<plurals name="notedeleted_msg">
-<item quantity="one">@string/notedeleted_one</item>
-<item quantity="other">@string/notedeleted_other</item>
-</plurals>
-<plurals name="mode_choose">
-<item quantity="one">@string/selected_one</item>
-<item quantity="other">@string/selected_other</item>
-</plurals>
-
-<string name="lock_note">قفل ملاحظة</string>
-<string name="unlock_note">الغاء قفل ملاحظة</string>
-<string name="locked">مقفل</string>
-<string name="unlocked">مفتوح</string>
-<string name="password_required">مطلوب كلمة مرور</string>
-<string name="select_account">أختر حساب</string>
-<string name="password">كلمة المرور</string>
-<string name="password_set">إعداد كلمة المرور</string>
-<string name="password_cleared">مسح كلمة المرور</string>
-<string name="passwords_dont_match">كلمات المرور غير متطابقة</string>
-<string name="password_incorrect">كلمة المرور غير صحيحة</string>
-<string name="enter_password">أدخل كلمة المرور</string>
-<string name="enter_new_password">أدخل كلمة مرور جديدة</string>
-<string name="confirm_new_password">تأكيد كلمة المرور</string>
-<string name="apply">تطبيق</string>
-<string name="clear_password">مسح كلمة المرور</string>
-<string name="password_info">إعداد كلمة المرور سوف يتطلب منك ان تقوم بإدخال كلمة المرور لاظهار اي ملاحظات مقفلة. سوف يقوم فقط بحماية حقل الملاحظة لذا سوف يتم الاطلاع على عنوان الملاحظات وتاريخها. كلمة المرور لاتقوم بتشفير الملاحظة بأي حال ويمكن الاطلاع عليها في بريد جوجل او التقويم اذا نسيت كلمة المرور، قم بالمزامنة مع جوجل ثم اعد تركيب التطبيق. </string>
-<string name="about">حول</string>
-<string name="sync_failed">فشلت المزامنة</string>
-<string name="sync_login_failed">فشل الدخول، لايمكن الاتصال بـ Google Tasks</string>
-<string name="changelog_full_title">سجل التغييرات</string>
-<string name="changelog_title">مالجديد</string>
-<string name="changelog_ok_button">حسناً</string>
-<string name="changelog_show_full">عرض كامل</string>
-<string name="widget_pref_preview_note">عرض معاينة الملاحظة</string>
-<string name="widget_pref_preview_note_summary_off">العنوان سوف يكون من سطرين</string>
-<string name="widget_pref_preview_note_summary_on">الملاحظة سوف تكون في السطر الثاني</string>
-<string name="widget_pref_show_complete">زر علّم كـ منتهي</string>
-<string name="widget_pref_show_complete_summary_off">الزر سوف يتم إخفاؤه</string>
-<string name="widget_pref_show_complete_summary_on">الزر سوف يتم اظهاره</string>
-<string name="settings_listitem">عناوين من سطرين</string>
-<string name="settings_listitem_summary_on">@string/widget_pref_preview_note_summary_off</string>
-<string name="settings_listitem_summary_off">معاينة الملاحظة سوف تكون من سطرين</string>
-<string name="editor_details">أكثر</string>
-<string name="completed">أكتمل</string>
-<string name="subtask_of">مهمة فرعية</string>
-<string name="security">أمان</string>
-<string name="date_header_overdue">متأخر</string>
-<string name="date_header_today">اليوم</string>
-<string name="date_header_tomorrow">الغد</string>
-<string name="date_header_7days">الايام السبعة القادمة</string>
-<string name="date_header_future">لاحقاً</string>
-<string name="date_header_none">لا تاريخ</string>
-<string name="date_header_completed">أكتمل</string>
-<string name="mod_header_today">@string/date_header_today</string>
-<string name="mod_header_yesterday">أمس</string>
-<string name="mod_header_thisweek">هذا الاسبوع</string>
-<string name="mod_header_earlier">في قت سابق</string>
-<string name="settings_listheader">عند اظهار جميع القوائم</string>
-<string name="settings_listheader_off">أظهر كـ قائمة واحدة</string>
-<string name="settings_listheader_on">أظهر اسماء القائمة</string>
-<string name="please_create_list">الرجاء انشاء قائمة</string>
-<string name="please_select_note">الرجاء اختيار او انشاء ملاحظة</string>
-<string name="please_create_note">الرجاء انشاء ملاحظة</string>
-<string name="hide_checkbox">اخفاء مربع الاختيار</string>
-<string name="hide_checkbox_summary_on">مربع الاختيار سوف يتم إخفاؤه</string>
-<string name="hide_checkbox_summary_off">مربع الاختيار سوف يظهر</string>
-<string name="hide_note">اخفاء ملاحظة</string>
-<string name="hide_note_summary_on">الملاحظة سوف يتم إخفاؤها</string>
-<string name="hide_note_summary_off">الملاحظة سوف يتم إظهارها</string>
-<string name="hide_date">اخفاء تاريخ الاستحقاق</string>
-<string name="hide_date_summary_on">تاريخ الاستحقاق سوف يتم إخفاؤه</string>
-<string name="hide_date_summary_off">تاريخ الاستحقاق سوف يتم اظهاره</string>
-<string name="title_rows">اقصى ارتفاع للعنوان</string>
-<string name="title_rows_1">1 صف</string>
-<string name="title_rows_2">2 صف</string>
-<string name="title_rows_free">تقييد الملاحظة</string>
-<string name="saturday">السبت</string>
-<string name="sunday">الاحد</string>
-<string name="monday">الاثنين</string>
-<string name="localedefault">محلي افتراضياً</string>
-
-<!-- These should probably not be translated -->
-<string name="default_notetitle">مرحباً</string>
-<string name="default_notetext">للحصول على أقصى استفادة من هذا التطبيق أقترح عليك تمكين المزامنة اولاً. ابدأ في الضغط على زر المزامنة في شريط التطبيق عند العودة إلى القائمة. افتراضيا فإنه يتم تمكين المزامنة التلقائية التي سوف تكون مرة واحدة في الساعة\n\nلاحظ أن هذا يقترن مع تفضيلاتك للمزامنة. باختصار، إذا كان لديك بريد جوجل ولم تكن المزامنة تلقائية فإن هذا التطبيق لن يقوم بها ايضاً. يمكنك تعطيل المزامنة التلقائية وتذهب الى دليل الإعدادات للقيام للقيام بالمزامنة اليدوية\n\nاذا كان لديك اكثر من حساب واحد في لجوجل في جهازك نقترح القيام بالمزامنة اليدوية\n\nفي الواقع أوصي الدخول في إعدادات على أي حال لمجرد أن ترى ما هي الخيارات هناك. يمكنك ضبط الخط وحجم النص في هذا الإطار وتغيير السمة من فاتحة إلى غامقة.\n\nالتطبيق يشمل أيضا قطعة يمكن تغيير حجمها بالكامل. لتغيير حجم القطعة: انقر مع الاستمرار إصبعك لثانية واحدة على القطعة كما لو كنت ذاهب لنقلها. ثم، بدلا من نقله يمكنك سحب على جانبي القطعة لجعلها أكبر أو أصغر.\n\nوآمل أن تجد التطبيق مفيداً. نضع في اعتبارنا أنه مجاني تماماً، لا يوجد لدينا إعلانات ومفتوحة المصدر. إذا كان لديك أي أفكار كبيرة أو الشكاوى الرئيسية، أخبرني عنها.\n\n/Jonas</string>
-<string name="about_text">شكرا لكم لتحميل التطبيق الخاص بي! أحاول قصارى جهدي لجعل هذا التطبيق رائع في كل شيء ولكن سيكون هناك دائما بقية ويمكن الحصول على أشياء أكثر دائما اروع!\n\nإذا وجدت خطأالترجمة ، أو أن يكون مجرد فكرة حول كيفية جعل هذا التطبيق اكثر فعاليةأريد أن أسمع عن ذلك!\nإرسال لي بالبريد: jonas@nononsenseapps.com\n\n+1 لي: https://plus.google.com/u/0/111801385015192089838\n\nالإبلاغ عن ذلك في تعقب المشكلة: https://github.com/spacecowboy/NotePad/issues\n\nإذا كنت تود في المساعدة في ترجمة التطبيق، يرجى الذهاب الى http://translate.nononsenseapps.com\n\nمرة أخرى، شكرا لتحميل التطبيق!\nإذا كنت تود أن دعم المشروع بطريقة أقل نشاطا، يمكنك دائما شراء النسخة تبرع: https://play.google.com/store/apps/details؟id=com.nononsenseapps.notepad_donate</string>
-
-<!-- settings string keys -->
-<string name="menu_settings">الإعدادات</string>
-<string name="title_activity_list_widget_config">ترتيب القطعة</string>
-<string name="hide_appicon">ايقونة اخفاء التطبيق</string>
-<string name="hide_new">زر اخفاء جديد</string>
-<string name="hide_header">اخفاء رأس القطعة بالكامل</string>
-<string name="hide_widgetbg">خلفية شفافة</string>
-<string name="shortcut_help1">اذا تم تحديده، الاختصار سوف يقوم بإنشاء ملاحظة جديدة في القائمة التي تم اختيارها ويتم فتحها في المحرر. اذا لم يتم التحديد، الاختصار سيقوم بفتح القائمة التي تم اختيارها.</string>
-<string name="loading_widget">Loading widget&#8230;</string>
-<string name="default_list_set">مجموعة قائمة افتراضية</string>
-
-<string name="notecopied_one">نُسخت ملاحظة واحدة</string>
-<string name="notecopied_other">نُسخت %d ملاحظات</string>
-<string name="notedeleted_one">حُذفت ملاحظة واحدة</string>
-<string name="notedeleted_other">حُذفت %d ملاحظة</string>
-<string name="selected_one">اخُتيرت ملاحظة واحدة</string>
-<string name="selected_other">اخُتيرت %d ملاحظة</string>
-
-<string name="background_sync">مزامنة في الخلفية</string>
-<string name="background_sync_info">المزامنة مرة واحدة كل ساعة</string>
-<string name="sync_on_change">مزامنة عند حصول تغييرات</string>
-<string name="sync_on_change_info">عمل جدولة للمزامنة عاجلة بعد التغيير في الملاحظة</string>
-<string name="sync_on_start">مزامنة عند بدأ التطبيق</string>
-<string name="sync_on_start_info">سوف تبدأ المزامنة فقط عند بدء التطبيق وليس عند متابعة التطبيق</string>
-<string name="sync_full_force">الزِم بعمل مزامنة كاملة في المرة القادمة</string>
-<string name="sync_full_force_info">فقط قم بتحديد هذا اذا كنت واثق من ان بعض العناصر مفقودة</string>
-
-<string name="silent">صامت</string>
-<string name="sound">صوت</string>
-<string name="vibrate">اهتزاز</string>
-<string name="reminders">تذكيرات</string>
-<string name="add_reminder">اضافة تذكير</string>
-<string name="standard">أساسي</string>
-<string name="notification_prio_high">عالي: في الاعلى، متمدد</string>
-<string name="notification_prio_low">منخفض : مخفي، مصغّر</string>
-<string name="priority">الأولوية</string>
-<string name="group_on_list">مجموعة على قائمة</string>
-<string name="group_on_list_summary">سيتم جمع الاعلامات المتعددة سوياً اذا كانت تنتمي لنفس القائمة.</string>
-<string name="more">أكثر</string>
-<string name="notifications">إعلامات</string>
-<string name="dateformat_micro">MMM d</string>
-<string name="dateformat_short">E, d MMM</string>
-<string name="dateformat_long">EEEE, d MMMM</string>
-<string name="google_play_promo_80_char_limit">Good looking notes, tasks and to-do app with Google Tasks sync.</string>
-<string name="google_play_description">تطبيق ملاحظات ومهام مفتوح المصدر يعمل على الهواتف والاجهزة اللوحية . يقوم بالمزامنة عبر حسابك جوجل الخاص بك ويبقي ملاحظاتك ومهامك محفوظةبدون الحاجة الى ادخال كلمة مرور!\n\nالمميزات :\n* إعلامات/تذكير\n* إختيار اللغة\n* واجهة تطبيق قابلة للتعديل\n* قطعة، قابلة لتغيير الحجم والترتيب\n* دعم الاجهزة اللوحية بشكل رائع\n* سمة هولو بحيث تتوافق في الشكل مع معظم نظام الاندرويد\n* مزامنة تلقائية مع تطبيق Google Tasks\n* قابلية وضع كلمة مرور على الملاحظات\n* نقل الملاحظات بين القوائم المختلفة\n* تكامل مع قطعة الأجندة الخاصة بالاندرويد\n* بحث في جميع الملاحظات ليس فقط في العنوان\n* تغيير حجم ونوع الخط\n\nملاحظة:\nهناك خطأ في نظام الاندرويد 4.2 الذي يظهر في جميع تطبيقات التي تستخدم الاعلامات. اذا قمت بإعداد الاعلامات بدون اهتزاز (هذا هو الافتراضي ) اذا اعد هاتفك الى الوضع الصامت (اهتزاز فقط) الاعلامات سوف تقوم دائماً بالاهتزاز حتى وان اغلق.\nمرة اخرى ، هذا خطأ في نظام الاندرويد ، ليس خطأ في التطبيق.\n\nيمكنكم المساعدة في ترجمة التطبيق، واذهبوا إلى: http://translate.nononsenseapps.com\n\nإذا كان لديك أي مشاكل أو تريد الإبلاغ عن خطأ، دون تتردد قم بالاتصال بي!\n+ NoNonsenseApps\nأو\nالإبلاغ عنها في تعقب المشكلة: https://github.com/spacecowboy/NotePad/issues\n\nهذا التطبيق مفتوح المصدر، وهي متاحة على الانترنت على العنوان التالي: https://github.com/spacecowboy/NotePad\n\nهناك نسخة غير مجانية من هذا التطبيق متاحة لأولئك الذين يرغبون في الدعم لي في development.Link: https://market.android.com/details؟id=com.nononsenseapps.notepad_donate</string>
-</resources>

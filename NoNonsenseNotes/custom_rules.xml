@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="help" >
+<!-- Used for Jenkins -->
+<target name="fetch-test-report">
+    <xmlproperty
+      collapseAttributes="true"
+      file="AndroidManifest.xml"
+      prefix="mymanifest" />
+
+  <echo>Downloading XML test report…</echo>
+  <mkdir dir="junitreports"/>
+  <exec executable="${adb}" failonerror="true">
+    <arg line="${adb.device.arg}"/>
+    <arg value="pull" />
+    <arg value="/data/data/${mymanifest.manifest.package}/files/junit-report.xml" />
+    <arg value="junitreports/junit-report.xml" />
+  </exec>
+</target>
+
+  <!-- Android annotations -->
+  <property name="generated.dir" value=".apt_generated" />
+  <property name="generated.absolute.dir" location="${generated.dir}" />
+  <property name="java.compilerargs" value="-s &apos;${generated.absolute.dir}&apos;" />
+
+  <target name="-compile" depends="-pre-build, -build-setup, -code-gen, -pre-compile">
+        <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
+            <!-- merge the project's own classpath and the tested project's classpath -->
+            <path id="project.javac.classpath">
+                <path refid="project.all.jars.path" />
+                <path refid="tested.project.classpath" />
+                <fileset dir="compile-libs" includes="*.jar"/>
+            </path>
+            <javac encoding="${java.encoding}"
+                    source="${java.source}" target="${java.target}"
+                    debug="true" extdirs="" includeantruntime="false"
+                    destdir="${out.classes.absolute.dir}"
+                    bootclasspathref="project.target.class.path"
+                    verbose="${verbose}"
+                    classpathref="project.javac.classpath"
+                    fork="${need.javac.fork}">
+                <src path="${source.absolute.dir}" />
+                <src path="${gen.absolute.dir}" />
+                <compilerarg line="${java.compilerargs}" />
+            </javac>
+
+            <!-- if the project is instrumented, intrument the classes -->
+            <if condition="${build.is.instrumented}">
+                <then>
+                    <echo level="info">Instrumenting classes from ${out.absolute.dir}/classes...</echo>
+
+                    <!-- build the filter to remove R, Manifest, BuildConfig -->
+                    <getemmafilter
+                            appPackage="${project.app.package}"
+                            libraryPackagesRefId="project.library.packages"
+                            filterOut="emma.default.filter"/>
+
+                    <!-- define where the .em file is going. This may have been
+                         setup already if this is a library -->
+                    <property name="emma.coverage.absolute.file" location="${out.absolute.dir}/coverage.em" />
+
+                    <!-- It only instruments class files, not any external libs -->
+                    <emma enabled="true">
+                        <instr verbosity="${verbosity}"
+                               mode="overwrite"
+                               instrpath="${out.absolute.dir}/classes"
+                               outdir="${out.absolute.dir}/classes"
+                               metadatafile="${emma.coverage.absolute.file}">
+                            <filter excludes="${emma.default.filter}" />
+                            <filter value="${emma.filter}" />
+                        </instr>
+                    </emma>
+                </then>
+            </if>
+
+            <!-- if the project is a library then we generate a jar file -->
+            <if condition="${project.is.library}">
+                <then>
+                    <echo level="info">Creating library output jar file...</echo>
+                    <property name="out.library.jar.file" location="${out.absolute.dir}/classes.jar" />
+                    <if>
+                        <condition>
+                            <length string="${android.package.excludes}" trim="true" when="greater" length="0" />
+                        </condition>
+                        <then>
+                            <echo level="info">Custom jar packaging exclusion: ${android.package.excludes}</echo>
+                        </then>
+                    </if>
+
+                    <propertybyreplace name="project.app.package.path" input="${project.app.package}" replace="." with="/" />
+
+                    <jar destfile="${out.library.jar.file}">
+                        <fileset dir="${out.classes.absolute.dir}"
+                                includes="**/*.class"
+                                excludes="${project.app.package.path}/R.class ${project.app.package.path}/R$*.class ${project.app.package.path}/BuildConfig.class"/>
+                        <fileset dir="${source.absolute.dir}" excludes="**/*.java ${android.package.excludes}" />
+                    </jar>
+                </then>
+            </if>
+
+        </do-only-if-manifest-hasCode>
+    </target>
+
+<!-- To handle translations I have some scripts that fix some languages issues -->
+  <target name="config">
+    <!--
+    <echo>
+      Making list of available languages
+    </echo>
+    <exec executable="./listlang.py" />
+
+    <echo>
+      Fix missing escapes in string files
+    </echo>
+    <exec executable="./escapetranslations.py" />
+    -->
+	<echo>
+      Copying api key into source
+	</echo>
+
+    <property
+        name="config-target-path"
+        value="${source.dir}/com/nononsenseapps/build" />
+
+    <!-- Copy the configuration file, replacing tokens in the file. -->
+    <if condition="${build.is.packaging.debug}" >
+      <then>
+        <copy
+            failonerror="false"
+            encoding="utf-8"
+            file="../NotePad_ant/config/Config.java"
+            overwrite="true"
+            todir="${config-target-path}" >
+          <filterset>
+            <filter
+                token="CONFIG.LOGGING"
+                value="${config.logging.debug}" />
+
+            <filter
+                token="CONFIG.GTASKSAPIKEY"
+                value="${config.gtasksapikey.debug}" />
+
+            <filter
+                token="CONFIG.DROPBOXAPPKEY"
+                value="${config.dropboxappkey}" />
+
+            <filter
+                token="CONFIG.DROPBOXAPPSECRET"
+                value="${config.dropboxappsecret}" />
+
+          </filterset>
+        </copy>
+      </then>
+      <else>
+        <copy
+            failonerror="false"
+            encoding="utf-8"
+            file="../NotePad_ant/config/Config.java"
+            overwrite="true"
+            todir="${config-target-path}" >
+          <filterset>
+            <filter
+                token="CONFIG.LOGGING"
+                value="${config.logging.release}" />
+
+            <filter
+                token="CONFIG.GTASKSAPIKEY"
+                value="${config.gtasksapikey.release}" />
+
+            <filter
+                token="CONFIG.DROPBOXAPPKEY"
+                value="${config.dropboxappkey}" />
+
+            <filter
+                token="CONFIG.DROPBOXAPPSECRET"
+                value="${config.dropboxappsecret}" />
+
+        </filterset>
+        </copy>
+      </else>
+    </if>
+  </target>
+
+  <target
+      name="-pre-compile"
+      depends="config" />
+
+  <!-- for annotations -->
+  <mkdir dir="${generated.absolute.dir}" />
+
+  <!-- Copy the binary to a location that includes version number -->
+
+  <xmlproperty
+      collapseAttributes="true"
+      file="AndroidManifest.xml"
+      prefix="mymanifest" />
+
+  <property
+      name="build.dir"
+      value="/home/jonas/Dropbox/dev/NotePad/apks/alphas/${mymanifest.manifest.android:versionCode}_${mymanifest.manifest.android:versionName}/" />
+
+  <target name="-post-build">
+
+    <echo>
+      Version is ${mymanifest.manifest.android:versionName}, ${mymanifest.manifest.android:versionCode}
+    </echo>
+    <!-- Do the actual copying here -->
+    <copy toDir="${build.dir}" failonerror="false">
+      <fileset file="${out.final.file}" />
+    </copy>
+
+	<property
+        name="config-target-path"
+        value="${source.dir}/com/nononsenseapps/build" />
+
+	<echo>
+      Replacing dummy Config file again
+	</echo>
+
+	<copy
+        failonerror="false"
+        encoding="utf-8"
+        file="../NotePad_ant/config/Config.java"
+        overwrite="true"
+        todir="${config-target-path}" >
+
+      <filterset>
+
+        <filter
+            token="CONFIG.LOGGING"
+            value="true" />
+
+        <filter
+            token="CONFIG.GTASKSAPIKEY"
+            value="Put your key here" />
+	
+	<filter
+                token="CONFIG.DROPBOXAPPKEY"
+                value="Put your key here" />
+
+            <filter
+                token="CONFIG.DROPBOXAPPSECRET"
+                value="Put your key here" />
+   
+
+   </filterset>
+    </copy>
+  </target>
+
+
+</project>

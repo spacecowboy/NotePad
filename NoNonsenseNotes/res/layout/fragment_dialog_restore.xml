@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingTop="16dp"
+    android:orientation="vertical" >
+
+    <!-- <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif-light"
+        android:text="@string/select_restore_list"
+        android:layout_marginBottom="4dp"
+        android:textAppearance="@android:style/TextAppearance.Large" /> -->
+
+    <Spinner
+        android:id="@+id/listSpinner"
+        android:layout_width="fill_parent"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="16dp"
+        android:spinnerMode="dropdown"
+        
+        tools:listitem="@layout/spinner_item" />
+
+    <include
+        android:id="@+id/buttons"
+        android:layout_marginTop="16dp"
+        layout="@layout/dialog_ok_cancel" />
+
+</LinearLayout>

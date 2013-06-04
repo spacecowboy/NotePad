@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2013 Jonas Kalderstam
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+<string name="app_name">Notes</string>
+<string name="title_create">Nouvelle note</string>
+<string name="menu_save_and_add">Sauvegarder et ouvrir une nouvelle notenote</string>
+<string name="menu_delete">Supprimer</string>
+<string name="menu_deletelist">Supprimer la liste</string>
+<string name="menu_sync">Actualiser</string>
+<string name="menu_share">Partager</string>
+<string name="menu_preferences">Paramètres</string>
+<string name="menu_createlist">Créer une liste</string>
+<string name="menu_clearcompleted">Effacer les notes complétées</string>
+<string name="menu_setdefaultlist">Définir comme liste par défaut</string>
+<string name="menu_managelists">Gérer les listes</string>
+<string name="editor_due_date_hint">Échéance</string>
+<string name="editor_title_hint">Titre</string>
+<string name="editor_note_hint">Note</string>
+<string name="resolve_edit">Éditer la note</string>
+<string name="search_hint">Rechercher</string>
+<string name="settings_theme">Thème actuel</string>
+<string name="settings_theme_dialog">Choisir un thème</string>
+<string name="settings_lang">Langue</string>
+<string name="settings_summary_theme_black">Noir</string>
+<string name="settings_summary_theme_dark">Sombre</string>
+<string name="settings_summary_theme_light">Clair</string>
+<string name="settings_cat_appearance">Apparence</string>
+<string name="preference_preview_text">Voici comment le texte apparaîtra dans l\'éditeur</string>
+<string name="settings_account_title">Choisir un compte</string>
+<string name="settings_account_summary">Cliquer pour changer de compte</string>
+<string name="settings_sync_enable_title">Sync. Google Tâches</string>
+<string name="settings_cat_syncing">Synchronisation</string>
+<string name="show_from_all_lists">Toutes les listes</string>
+<string name="deleted">Supprimé</string>
+<string name="permission_read_label">lire les notes et les listes</string>
+<string name="permission_read_desc">Autorise l\'application à lire vos notes et listes.</string>
+<string name="permission_write_label">modifier les notes et les listes</string>
+<string name="permission_write_desc">Autorise l\'application à créer, modifier et supprimer des notes et listes.</string>
+<string name="settings_list_dialog">Choisir une liste</string>
+<string name="settings_list">Liste</string>
+
+
+
+
+<!--
+Use few if language need it. In English is the same.
+<item quantity="few">Copied 2 notes.</item>
+-->
+<plurals name="notecopied_msg">
+<item quantity="one">@string/notecopied_one</item>
+<item quantity="zero">@string/notecopied_zero</item>
+<item quantity="two">@string/notecopied_two</item>
+<item quantity="few">@string/notecopied_few</item>
+<item quantity="many">@string/notecopied_many</item>
+<item quantity="other">@string/notecopied_other</item>
+</plurals>
+<plurals name="notedeleted_msg">
+<item quantity="one">@string/notedeleted_one</item>
+<item quantity="zero">@string/notedeleted_zero</item>
+<item quantity="two">@string/notedeleted_two</item>
+<item quantity="few">@string/notedeleted_few</item>
+<item quantity="many">@string/notedeleted_many</item>
+<item quantity="other">@string/notedeleted_other</item>
+</plurals>
+<plurals name="mode_choose">
+<item quantity="one">@string/selected_one</item>
+<item quantity="zero">@string/selected_zero</item>
+<item quantity="two">@string/selected_two</item>
+<item quantity="few">@string/selected_few</item>
+<item quantity="many">@string/selected_many</item>
+<item quantity="other">@string/selected_other</item>
+</plurals>
+
+
+<string name="lock_note">Verrouiller la note</string>
+<string name="unlock_note">Déverrouiller la note</string>
+<string name="locked">Verrouillé</string>
+<string name="unlocked">Déverrouillé</string>
+<string name="password_required">Mot de passe requis</string>
+<string name="select_account">Choisir un compte</string>
+<string name="password">Mot de passe</string>
+<string name="password_set">Mot de passe défini</string>
+<string name="password_cleared">Mot de passe effacé</string>
+<string name="passwords_dont_match">Les mots de passe ne correspondent pas</string>
+<string name="password_incorrect">Mot de passe incorrect</string>
+<string name="enter_password">Entrer le mot de passe</string>
+<string name="enter_new_password">Entrer le nouveau mot de passe</string>
+<string name="confirm_new_password">Confirmer le nouveau mot de passe</string>
+<string name="apply">Appliquer</string>
+<string name="clear_password">Effacer le mot de passe</string>
+<string name="password_info">Après avoir défini un mot de passe, vous devrez le saisir pour voir les notes verrouillées. Le mot de passe protégera la note elle-même, mais pas le titre ni la date. La note ne sera pas cryptée donc pourra toujours être lue via Google Mail/Agenda. Si vous oubliez votre mot de passe, synchronisez les notes avec Google et réinstallez l\'application.</string>
+<string name="about">À propos</string>
+<string name="sync_failed">La synchronisation a échouée</string>
+<string name="sync_login_failed">La connexion à Google Tâches a échouée</string>
+<string name="changelog_full_title">Journal des modifications</string>
+<string name="changelog_title">Quoi de neuf</string>
+<string name="completed">Complété</string>
+<string name="date_header_overdue">En retard</string>
+<string name="date_header_today">Aujourd\'hui</string>
+<string name="date_header_tomorrow">Demain</string>
+<string name="date_header_future">Plus tard</string>
+<string name="date_header_none">Pas de date</string>
+<string name="date_header_completed">Complété</string>
+<string name="please_select_note">SVP sélectionner ou créer une note</string>
+<string name="please_create_note">SVP créer une note</string>
+<string name="hide_checkbox">Masquer la case à cocher</string>
+<string name="hide_checkbox_summary_on">La case sera masquée</string>
+<string name="hide_checkbox_summary_off">La case sera affichée</string>
+<string name="hide_date">Masquer la date d\'échéance</string>
+<string name="localedefault">Paramètres régionaux par défaut</string>
+
+<!-- settings string keys -->
+<string name="hide_header">Masquer l\'en-tête du widget</string>
+<string name="shortcut_help1">Si coché, le raccourci créera une nouvelle note dans la liste sélectionnée et ouvrira l\'éditeur. Si non coché, le raccourci ouvrira la liste sélectionnée.</string>
+<string name="loading_widget">Chargement du widget</string>
+<string name="notecopied_one">Une note copiée</string>
+<string name="notecopied_other">%d notes copiées</string>
+<string name="notedeleted_one">Une note supprimée</string>
+<string name="notedeleted_other">%d notes supprimées</string>
+<string name="selected_one">Une note sélectionnée</string>
+<string name="selected_other">%d notes sélectionnées</string>
+<string name="background_sync">Synchronisation en arrière-plan</string>
+<string name="background_sync_info">Synchroniser une fois l\'heure</string>
+<string name="sync_on_change">Synchronisation des changements</string>
+<string name="sync_on_change_info">Planifie une synchronisation peu de temps après la mise à jour d\'une note</string>
+<string name="sync_on_start">Synchronisation au démarrage</string>
+<string name="sync_on_start_info">Sera effectif seulement au prochain démarrage</string>
+<string name="sync_full_force">Forcer la synchronisation</string>
+<string name="sync_full_force_info">Cocher seulement si la synchronisation semble incomplète.</string>
+<string name="silent">Silence</string>
+<string name="sound">Sonnerie</string>
+<string name="vibrate">Vibreur</string>
+<string name="reminders">Rappels</string>
+<string name="standard">Normal</string>
+<string name="notification_prio_high">Haute: Au-dessus, élargie</string>
+<string name="notification_prio_low">Basse: Masquée, minimisée</string>
+<string name="priority">Priorité</string>
+<string name="notifications">Notifications</string>
+<!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+<string name="dashclock_tasks">Tâches</string>
+<string name="dashclock_restrict_to_tasks_in_a_specific_list">Restreindre les tâches à une liste spécifique</string>
+<string name="dashclock_show_overdue_tasks">Afficher les tâches passées dues</string>
+<string name="dashclock_overdue_tasks_show">Les tâches seront affichées</string>
+<string name="dashclock_overdue_tasks_hide">Les tâches passées dues seront masquées</string>
+<string name="dashclock_title_activity_tasks_settings">Paramètres de NoNonesense Notes</string>
+<string name="dashclock_pref_header_general">Général</string>
+<string name="dashclock_due_upper_limit_title">Limiter aux tâches dues prochainement</string>
+<string name="dashclock_today">Aujourd\'hui</string>
+<string name="dashclock_tomorrow">Demain</string>
+<string name="dashclock_next7">7 prochains jours</string>
+<string name="dashclock_anytime">N\'importe quand</string>
+<string name="dashclock_will_show_as_many_as_possible">En affichera autant que possible</string>
+<string name="dashclock_will_only_show_the_task_due_first">Affichera seulement les tâches dues</string>
+<string name="dashclock_show_only_the_next_task">Afficher seulement la prochaine tâche</string>
+<string name="dashclock_header_shown">Le nom de la liste s\'affichera en gras. Si &quot;Toutes les listes&quot; est sélectionné, affichera &quot;Tâches&quot;</string>
+<string name="dashclock_first_task_shown">Le titre de la première tâches s\'affichera en premier</string>
+<string name="dashclock_display_header">Afficher l\'en-tête</string>
+
+</resources>

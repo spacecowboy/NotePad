@@ -1,246 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-Copyright (C) 2012 Jonas Kalderstam
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
-<resources xmlns:tools="http://schemas.android.com/tools">
-
-<string name="app_name">便签</string>
-<string name="title_create">新便签</string>
-<string name="title_edit">编辑：%1$s</string>
-<string name="menu_add">新便签</string>
-<string name="menu_save_and_add">保存并打开一个新便签</string>
-<string name="menu_delete">删除</string>
-<string name="menu_revert">撤消更改</string>
-<string name="menu_copy">复制便签</string>
-<string name="menu_cancel">取消</string>
-<string name="menu_setcompleted">设为已完成</string>
-<string name="menu_setuncompleted">设为未完成</string>
-<string name="menu_deletelist">删除列表</string>
-<string name="menu_sync">刷新</string>
-<string name="menu_share">分享</string>
-<string name="menu_preferences">设置</string>
-<string name="menu_renamelist">重命名列表</string>
-<string name="menu_createlist">创建列表</string>
-<string name="menu_clearcompleted">清除已完成</string>
-<string name="menu_setdefaultlist">设为默认列表</string>
-<string name="menu_managelists">管理列表</string>
-<string name="delete_list_warning">确实要删除此列表吗？列表将被永久删除。</string>
-<string name="editor_due_date_hint">到期日</string>
-<string name="editor_title_hint">标题</string>
-<string name="editor_note_hint">便签</string>
-<string name="resolve_edit">编辑便签</string>
-<string name="error_title">错误</string>
-<string name="error_message">加载便签时出错</string>
-<string name="search_hint">搜索</string>
-<string name="settings_theme">当前主题</string>
-<string name="settings_theme_dialog">使用主题</string>
-<string name="settings_lang">语言</string>
-<string name="settings_cat_theme">主题</string>
-<string name="settings_cat_sorting">分类</string>
-<string name="settings_sorting_type">分类方式</string>
-<string name="settings_sorting_type_dialog">分类方式</string>
-<string name="settings_sorting_order">排序</string>
-<string name="settings_sorting_order_dialog">排序方式</string>
-<string name="settings_summary_sort_type_alphabetic">标题</string>
-<string name="settings_summary_sort_type_modified">最近修改</string>
-<string name="settings_summary_sort_type_duedate">到期时间</string>
-<string name="settings_summary_sort_type_serverposition">我的顺序</string>
-<string name="settings_summary_sort_order_asc">升序</string>
-<string name="settings_summary_sort_order_desc">降序</string>
-<string name="settings_summary_theme_black">黑色</string>
-<string name="settings_summary_theme_dark">深色</string>
-<string name="settings_summary_theme_light">浅色</string>
-<string name="settings_summary_theme_light_dark_ab">浅色界面，深色活动栏</string>
-<string name="settings_cat_appearance">外观</string>
-<string name="settings_font_screen">字体设置</string>
-<string name="settings_font_screen_summary">你可以更改字体的类型和大小</string>
-<string name="settings_cat_font_editor">编辑器</string>
-<string name="settings_font_type">字体</string>
-<string name="settings_font_type_dialog">选择一种字体</string>
-<string name="settings_font_size">字体大小</string>
-<string name="preference_preview_text">我能吞下玻璃而不伤身体。</string>
-<string name="settings_text_preview_title">预览</string>
-<string name="monospace">等宽字体</string>
-<string name="sans">无衬线字体</string>
-<string name="serif">衬线字体</string>
-<string name="settings_sync_freq_title">同步类型</string>
-<string name="settings_account_title">选择一个账户</string>
-<string name="settings_account_summary">点击切换账户</string>
-<string name="settings_sync_enable_title">Google 工作表同步</string>
-<string name="settings_sync_enable_summary">与 Google 账户同步便签</string>
-<string name="settings_cat_syncing">同步</string>
-<string name="manual">手动</string>
-<string name="minutes">分钟</string>
-<string name="hours">小时</string>
-<string name="onehour">1 小时</string>
-<string name="oneday">1 天</string>
-<string name="yes">是</string>
-<string name="no">否</string>
-<string name="ok">确认</string>
-<string name="show_from_all_lists">所有列表</string>
-<string name="default_list_needed_warning">设置一个默认列表</string>
-<string name="reverted">更改已撤消</string>
-<string name="notecopied">已复制</string>
-<string name="deleted">已删除</string>
-<string name="items">便签</string>
-<string name="permission_read_label">读取便签和列表</string>
-<string name="permission_read_desc">允许应用读取你的便签与相关列表。</string>
-<string name="permission_write_label">更改便签与列表</string>
-<string name="permission_write_desc">允许应用新增、更改和删除便签与列表。</string>
-<string name="settings_header_list">列表设置</string>
-<string name="settings_header_appearance">@string/settings_cat_appearance</string>
-<string name="settings_header_sync">@string/settings_cat_syncing</string>
-<string name="settings_list_dialog">选择一个列表</string>
-<string name="settings_list">列表</string>
-<string name="automatic">自动</string>
-<string name="preferences_week_start_day_dialog">每周开始于</string>
-<string name="preferences_week_start_day_title">每周开始于</string>
-
-<!--
-Use few if language need it. In English is the same.
-<item quantity="few">Copied 2 notes.</item>
--->
-<plurals name="notecopied_msg">
-<item quantity="one">@string/notecopied_one</item>
-<item quantity="other">@string/notecopied_other</item>
-</plurals>
-<plurals name="notedeleted_msg">
-<item quantity="one">@string/notedeleted_one</item>
-<item quantity="other">@string/notedeleted_other</item>
-</plurals>
-<plurals name="mode_choose">
-<item quantity="one">@string/selected_one</item>
-<item quantity="other">@string/selected_other</item>
-</plurals>
-
-<string name="lock_note">锁定便签</string>
-<string name="unlock_note">解锁便签</string>
-<string name="locked">已锁定</string>
-<string name="unlocked">已解锁</string>
-<string name="password_required">需要密码</string>
-<string name="select_account">选择一个账户</string>
-<string name="password">密码</string>
-<string name="password_set">密码已设置</string>
-<string name="password_cleared">密码已清除</string>
-<string name="passwords_dont_match">密码不匹配</string>
-<string name="password_incorrect">密码错误</string>
-<string name="enter_password">输入密码</string>
-<string name="enter_new_password">输入新密码</string>
-<string name="confirm_new_password">确认新密码</string>
-<string name="apply">应用</string>
-<string name="clear_password">清除密码</string>
-<string name="password_info">设置密码后，每次查看加锁便签需输入密码。只保护便签内容，标题和到期日仍可以显示。便签内容将不以任何形式加密，所以内容可以在 Google 邮箱和日历中查看。如果忘记了密码，先与 Google 同步然后重新安装软件。</string>
-<string name="about">关于</string>
-<string name="sync_failed">同步失败</string>
-<string name="sync_login_failed">登录失败，无法连接到 Google 工作表</string>
-<string name="changelog_full_title">更新日志</string>
-<string name="changelog_title">最近更新</string>
-<string name="changelog_ok_button">确认</string>
-<string name="changelog_show_full">显示完整内容</string>
-<string name="widget_pref_preview_note">显示便签预览</string>
-<string name="widget_pref_preview_note_summary_off">标题将会变成两行</string>
-<string name="widget_pref_preview_note_summary_on">标签内容将会放在第二行</string>
-<string name="widget_pref_show_complete">“设为已完成”按钮</string>
-<string name="widget_pref_show_complete_summary_off">按钮将被隐藏</string>
-<string name="widget_pref_show_complete_summary_on">按钮将会可见</string>
-<string name="settings_listitem">两行标题</string>
-<string name="settings_listitem_summary_off">便签预览将显示为 2 行</string>
-<string name="editor_details">更多</string>
-<string name="completed">已完成</string>
-<string name="subtask_of">属于任务</string>
-<string name="security">安全</string>
-<string name="date_header_overdue">已过期</string>
-<string name="date_header_today">今天</string>
-<string name="date_header_tomorrow">明天</string>
-<string name="date_header_7days">下周</string>
-<string name="date_header_future">晚些时候</string>
-<string name="date_header_none">无日期</string>
-<string name="date_header_completed">已完成</string>
-<string name="mod_header_yesterday">昨天</string>
-<string name="mod_header_thisweek">本周</string>
-<string name="mod_header_earlier">早些时候</string>
-<string name="settings_listheader">当显示所有列表时</string>
-<string name="settings_listheader_off">显示为一个列表</string>
-<string name="settings_listheader_on">显示列表名称</string>
-<string name="please_create_list">请创建一个列表</string>
-<string name="please_select_note">请选择或者创建一个便签</string>
-<string name="please_create_note">请创建一个便签</string>
-<string name="hide_checkbox">隐藏复选框</string>
-<string name="hide_checkbox_summary_on">复选框将被隐藏</string>
-<string name="hide_checkbox_summary_off">复选框将被显示</string>
-<string name="hide_note">隐藏便签</string>
-<string name="hide_note_summary_on">便签将被隐藏</string>
-<string name="hide_note_summary_off">便签将被显示</string>
-<string name="hide_date">隐藏过期时间</string>
-<string name="hide_date_summary_on">日期将被隐藏</string>
-<string name="hide_date_summary_off">日期将被显示</string>
-<string name="title_rows">标题最大高度</string>
-<string name="title_rows_1">1 行</string>
-<string name="title_rows_2">2 行</string>
-<string name="title_rows_free">无限制</string>
-<string name="saturday">周六</string>
-<string name="sunday">周日</string>
-<string name="monday">周一</string>
-<string name="localedefault">使用所在地区的默认值</string>
-
-<!-- These should probably not be translated -->
-<string name="default_notetitle">欢迎！</string>
-<string name="default_notetext">为了充分体验本应用，我建议您首先启用同步功能。当您前往列表界面后，点击活动栏中的同步按钮。默认情况下，这将启用自动同步功能，每小时进行一次同步操作。\n\n请注意，这个设置与您的全局同步选项相关联。简而言之，如果您的 Gmail 没有设置为自动同步，那么这个应用也就不会。您可以在设置中把自动同步关闭，完全手动控制同步。\n\n如果在您的设备上有多于一个 Google 账户，我建议前往设置界面并手动选择使用哪一个账户。\n\n总之，我推荐前往设置界面复查一下所有相关的选项。您可以在那里调整文字字体和字号，更换应用的深浅配色主题。\n\n本应用同时包含了可随意调整大小的窗口小部件，可以像调整其他小部件一样：用手指轻触小部件并按住片刻，与移动它的动作相似。随后，您便可以用手指拉动小部件的边角来调整它的大小了。\n\n希望您能充分利用这款应用。请记住，这款应用是完全免费的，不含广告并且开放源代码。如果您有任何想法与意见，请不吝提出，集思广益。\n\n/Jonas</string>
-<string name="about_text">感谢您下载我的应用！我一直在努力让这款应用变得强大，然而一定会有错误存在并且一切还可以变得更好！\n\n如果您发现了任何程序错误、翻译不当，或者想到可以完善这个应用的好点子，我愿洗耳恭听！\n\n给我发送邮件：jonas@nononsenseapps.com\n给我在G+上+1：https://plus.google.com/u/0/111801385015192089838\n报告错误：https://github.com/spacecowboy/NotePad/issues\n\n如果您愿意帮助翻译这个应用，请前往 http://translate.nononsenseapps.com\n\n再次感谢您下载这款应用！\n如果您愿意以“不太积极”的方式支持这个项目，可以在这里购买捐赠版本：https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
-
-<!-- settings string keys -->
-<string name="menu_settings">设置</string>
-<string name="title_activity_list_widget_config">窗口小部件配置</string>
-<string name="hide_appicon">隐藏应用图标</string>
-<string name="hide_new">隐藏新建按钮</string>
-<string name="hide_header">隐藏整个小部件标题行</string>
-<string name="hide_widgetbg">透明背景</string>
-<string name="shortcut_help1">如果选中，快捷方式将会在选中的列表创建一条便签并打开编辑器。如果不选中，快捷方式只打开选中列表。</string>
-<string name="loading_widget">正在加载小部件……</string>
-<string name="default_list_set">默认列表已设置</string>
-
-<string name="notecopied_one">已复制一条便签</string>
-<string name="notecopied_other">已复制 %d 条便签</string>
-<string name="notedeleted_one">已删除一条便签</string>
-<string name="notedeleted_other">已删除 %d 条便签</string>
-<string name="selected_one">已选定一条便签</string>
-<string name="selected_other">已选定 %d 条便签</string>
-
-<string name="background_sync">后台同步</string>
-<string name="background_sync_info">每小时同步一次</string>
-<string name="sync_on_change">更改时同步</string>
-<string name="sync_on_change_info">在更改便签后立刻同步</string>
-<string name="sync_on_start">应用启动时同步</string>
-<string name="sync_on_start_info">仅在初次启动时进行，再次打开时不再同步</string>
-<string name="sync_full_force">强制下次进行完整同步</string>
-<string name="sync_full_force_info">仅在您确信存在数据缺失时选择此项</string>
-
-<string name="silent">静音</string>
-<string name="sound">铃声</string>
-<string name="vibrate">震动</string>
-<string name="reminders">提醒</string>
-<string name="add_reminder">添加提醒</string>
-<string name="standard">标准</string>
-<string name="notification_prio_high">高：置顶并显示详细内容</string>
-<string name="notification_prio_low">低：隐藏并最小化显示</string>
-<string name="priority">优先级</string>
-<string name="group_on_list">列表内分组</string>
-<string name="group_on_list_summary">同一列表内的多个通知会被分组显示</string>
-<string name="more">更多</string>
-<string name="notifications">通知</string>
-<string name="google_play_promo_80_char_limit">支持 Google 工作表同步，美观易用的便签、任务与待办事项应用。</string>
-<string name="google_play_description">一款开源的记事本与待办事项应用，同时支持手机与平板界面。可与您现有的 Google 账户进行便签及任务同步，云端备份，无需提供密码！\n\n特色功能：\n* 通知/提醒设定\n* 多语言切换\n* 自定义界面\n* 桌面小工具，支持调整大小与功能\n* 与 Gmail 功能相近的完美平板支持\n* 与 Android 相融合的 Holo 主题\n* 与 Google 工作表同步\n* 为便签设定密码\n* 在多个列表间移动便签\n* 与 Android 日程小工具集成\n* 搜索便签（支持全文搜索）\n* 更改字体与字号\n\n提示：\n在 Android 4.2 中存在一个问题，影响到所有使用通知的应用。如果您设定通知时选择不震动（默认），一旦把设备切换到静音模式（仅震动），即便之前明确设置为关闭震动，收到通知时也会一直震动。\n再次重申，这是 Android 系统的缺陷，而不是应用的问题。\n\n您可以帮助翻译这个应用，只需前往：http://translate.nononsenseapps.com\n\n如果您有任何疑问或需要报告问题，请尽管联系我！\n+NoNonsenseApps\n或者，报告到事件跟踪：https://github.com/spacecowboy/NotePad/issues\n\n此应用为开源项目，请参见：https://github.com/spacecowboy/NotePad\n\n此应用有对应的收费版本，用于支持我的开发工作。链接：https://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
-</resources>

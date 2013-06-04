@@ -1,244 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
-Copyright (C) 2012 Jonas Kalderstam
-
-Licensed under the Apache License, Version 2.0 (the "License");
-you may not use this file except in compliance with the License.
-You may obtain a copy of the License at
-
-http://www.apache.org/licenses/LICENSE-2.0
-
-Unless required by applicable law or agreed to in writing, software
-distributed under the License is distributed on an "AS IS" BASIS,
-WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-See the License for the specific language governing permissions and
-limitations under the License.
--->
-
-<resources xmlns:tools="http://schemas.android.com/tools">
-
-<string name="app_name">Бележки</string>
-<string name="title_create">Нова бележка</string>
-<string name="title_edit">Редактиране: %1$s</string>
-<string name="menu_add">Нова бележка</string>
-<string name="menu_save_and_add">Запазване и отваряне на нова бележка</string>
-<string name="menu_delete">Изтриване</string>
-<string name="menu_revert">Отмяна на промените</string>
-<string name="menu_copy">Копиране на бележката</string>
-<string name="menu_cancel">Отказ</string>
-<string name="menu_setcompleted">Задав. като изпълнена</string>
-<string name="menu_setuncompleted">Задав. като не изпълнена</string>
-<string name="menu_deletelist">Изтриване на списъка</string>
-<string name="menu_sync">Опресняване</string>
-<string name="menu_share">Споделяне</string>
-<string name="menu_preferences">Настройки</string>
-<string name="menu_renamelist">Преименуване на списъка</string>
-<string name="menu_createlist">Създаване на списък</string>
-<string name="menu_clearcompleted">Изтриване на изпълнените</string>
-<string name="menu_setdefaultlist">Задаване списък по подразб.</string>
-<string name="menu_managelists">Управление на списъците</string>
-<string name="delete_list_warning">Сигурни ли сте, че искате да изтриете списъка? Той ще бъде изтрит безвъзвратно.</string>
-<string name="editor_due_date_hint">Дата за изпълнение</string>
-<string name="editor_title_hint">Заглавие</string>
-<string name="editor_note_hint">Бележка</string>
-<string name="resolve_edit">Редактиране на бележката</string>
-<string name="error_title">Грешка</string>
-<string name="error_message">Грешка при зареждане на бележката</string>
-<string name="search_hint">Търсене</string>
-<string name="settings_theme">Текуща тема</string>
-<string name="settings_theme_dialog">Използвана тема</string>
-<string name="settings_lang">Език</string>
-<string name="settings_cat_theme">Тема</string>
-<string name="settings_cat_sorting">Сортиране</string>
-<string name="settings_sorting_type">Сортиране по</string>
-<string name="settings_sorting_type_dialog">Сортиране по</string>
-<string name="settings_sorting_order">Ред</string>
-<string name="settings_sorting_order_dialog">Подреждане по</string>
-<string name="settings_summary_sort_type_alphabetic">Заглавие</string>
-<string name="settings_summary_sort_type_modified">Последна промяна</string>
-<string name="settings_summary_sort_type_duedate">Дата за изпълнение</string>
-<string name="settings_summary_sort_type_serverposition">Моят ред</string>
-<string name="settings_summary_sort_order_asc">Възходящ</string>
-<string name="settings_summary_sort_order_desc">Низходящ</string>
-<string name="settings_summary_theme_black">Черна</string>
-<string name="settings_summary_theme_dark">Тъмна</string>
-<string name="settings_summary_theme_light">Светла</string>
-<string name="settings_summary_theme_light_dark_ab">Светла с тъмна лента</string>
-<string name="settings_cat_appearance">Външен вид</string>
-<string name="settings_font_screen">Настройки на шрифта</string>
-<string name="settings_font_screen_summary">Можете да променяте вида и размера на шрифтовете</string>
-<string name="settings_cat_font_editor">Редактор</string>
-<string name="settings_font_type">Шрифт</string>
-<string name="settings_font_type_dialog">Изберете шрифт</string>
-<string name="settings_font_size">Размер на шрифта</string>
-<string name="preference_preview_text">Така ще изглежда текстът в текстовия редактор</string>
-<string name="settings_text_preview_title">Преглед</string>
-<string name="monospace">Eдноразряден</string>
-<string name="sans">Sans</string>
-<string name="serif">Серифен</string>
-<string name="settings_sync_freq_title">Вид синхронизация</string>
-<string name="settings_account_title">Изберете профил</string>
-<string name="settings_account_summary">От тук изберете профил</string>
-<string name="settings_sync_enable_title">Синхронизиране с Google Задачи</string>
-<string name="settings_sync_enable_summary">Синхронизиране на бележките с профила ви в Google</string>
-<string name="settings_cat_syncing">Синхронизация</string>
-<string name="manual">Ръчно</string>
-<string name="minutes">минути</string>
-<string name="hours">часа</string>
-<string name="onehour">Един час</string>
-<string name="oneday">Един ден</string>
-<string name="yes">Да</string>
-<string name="no">Не</string>
-<string name="ok">ОК</string>
-<string name="show_from_all_lists">Всички списъци</string>
-<string name="default_list_needed_warning">Първо задайте списък по подразбиране</string>
-<string name="reverted">Промените са отменени</string>
-<string name="notecopied">Копирана</string>
-<string name="deleted">Изтрита</string>
-<string name="items">бележки</string>
-<string name="permission_read_label">четене на бележки и списъци</string>
-<string name="permission_read_desc">Разрешава на приложението да чете вашите бележки и свързаните с тях списъци.</string>
-<string name="permission_write_label">промяна на бележки и списъци</string>
-<string name="permission_write_desc">Разрешава на приложението да вмъква, актуализира и изтрива бележки и списъци.</string>
-<string name="settings_header_list">Настройки на списъци</string>
-<string name="settings_list_dialog">Изберете списък</string>
-<string name="settings_list">Списък</string>
-<string name="automatic">Автоматично</string>
-<string name="preferences_week_start_day_dialog">Седмицата започва в</string>
-<string name="preferences_week_start_day_title">Седмицата започва в</string>
-
-<!--
-Use few if language need it. In English is the same.
-<item quantity="few">Copied 2 notes.</item>
--->
-<plurals name="notecopied_msg">
-<item quantity="one">@string/notecopied_one</item>
-<item quantity="other">@string/notecopied_other</item>
-</plurals>
-<plurals name="notedeleted_msg">
-<item quantity="one">@string/notedeleted_one</item>
-<item quantity="other">@string/notedeleted_other</item>
-</plurals>
-<plurals name="mode_choose">
-<item quantity="one">@string/selected_one</item>
-<item quantity="other">@string/selected_other</item>
-</plurals>
-
-<string name="lock_note">Заключи бележката</string>
-<string name="unlock_note">Отключи бележката</string>
-<string name="locked">Заключена</string>
-<string name="unlocked">Отключена</string>
-<string name="password_required">Изисква се парола</string>
-<string name="select_account">Изберете профил</string>
-<string name="password">Парола</string>
-<string name="password_set">Паролата е зададена</string>
-<string name="password_cleared">Паролата е изчистена</string>
-<string name="passwords_dont_match">Паролата не съвпада</string>
-<string name="password_incorrect">Неправилна парола</string>
-<string name="enter_password">Въведете парола</string>
-<string name="enter_new_password">Въведете нова парола</string>
-<string name="confirm_new_password">Потвърдете новата парола</string>
-<string name="apply">Приложи</string>
-<string name="clear_password">Изчисти паролата</string>
-<string name="password_info">Задаването на парола ще изисква от вас да въведете парола, за да се покажат заключените бележки. Това ще защити само полето за бележката, така че ще има незащитен достъп до заглавието и датата. Бележките не се кодират по никакъв начин, така че могат да бъдат видени в пощата и календара на Google. Ако сте забравили паролата си, синхронизирайте с Google и преинсталирайте приложението.</string>
-<string name="about">За приложението</string>
-<string name="sync_failed">Синхронизирането не успя</string>
-<string name="sync_login_failed">Влизането се провали, не може да се свърже с Google Задачи</string>
-<string name="changelog_full_title">Списък с промените</string>
-<string name="changelog_title">Какво е новото</string>
-<string name="changelog_ok_button">ОК</string>
-<string name="changelog_show_full">Покажи пълния</string>
-<string name="widget_pref_preview_note">Покажи визуализация бележката</string>
-<string name="widget_pref_preview_note_summary_off">Заглавието ще бъде на 2 реда</string>
-<string name="widget_pref_preview_note_summary_on">Бележката ще бъде на 2-рия ред</string>
-<string name="widget_pref_show_complete">Бутон „Изпълнена“</string>
-<string name="widget_pref_show_complete_summary_off">Бутонът ще бъде скрит</string>
-<string name="widget_pref_show_complete_summary_on">Бутонът ще бъде видим</string>
-<string name="settings_listitem">Заглавия на 2 реда</string>
-<string name="settings_listitem_summary_off">Визуализ. на бележката ще е на 2 реда </string>
-<string name="editor_details">Още</string>
-<string name="completed">Изпълнена</string>
-<string name="subtask_of">Подзадача на</string>
-<string name="security">Сигурност</string>
-<string name="date_header_overdue">Закъсняла</string>
-<string name="date_header_today">Днес</string>
-<string name="date_header_tomorrow">Утре</string>
-<string name="date_header_7days">Следващите 7 дни</string>
-<string name="date_header_future">По-късно</string>
-<string name="date_header_none">Без дата</string>
-<string name="date_header_completed">Изпълнена</string>
-<string name="mod_header_yesterday">Вчера</string>
-<string name="mod_header_thisweek">Тази седмица</string>
-<string name="mod_header_earlier">По-рано</string>
-<string name="settings_listheader">При показване на всички списъци</string>
-<string name="settings_listheader_off">Показване като един списък</string>
-<string name="settings_listheader_on">Показване имената на списъците</string>
-<string name="please_create_list">Създайте списък</string>
-<string name="please_select_note">Изберете или създайте бележка</string>
-<string name="please_create_note">Създайте бележка</string>
-<string name="hide_checkbox">Скриване на квадратчето</string>
-<string name="hide_checkbox_summary_on">Да се скрие</string>
-<string name="hide_checkbox_summary_off">Да се показва</string>
-<string name="hide_note">Скриване на бележката</string>
-<string name="hide_note_summary_on">Да се скрие</string>
-<string name="hide_note_summary_off">Да се показва</string>
-<string name="hide_date">Скриване на датата</string>
-<string name="hide_date_summary_on">Да се скрие</string>
-<string name="hide_date_summary_off">Да се показва</string>
-<string name="title_rows">Макс. височина на заглавието</string>
-<string name="title_rows_1">1 ред</string>
-<string name="title_rows_2">2 реда</string>
-<string name="title_rows_free">Без ограничение</string>
-<string name="saturday">Събота</string>
-<string name="sunday">Неделя</string>
-<string name="monday">Понеделник</string>
-<string name="localedefault">По подразбиране за локала</string>
-
-<!-- These should probably not be translated -->
-<string name="default_notetitle">Добре дошли!</string>
-<string name="default_notetext">За да получите най-доброто от това приложение, предлагаме първо да разрешите синхронизирането. Продължете и натиснете бутона „Синхронизиране“ в лентата за действия, когато се върнете към списъка. По подразбиране ще се включи автоматичното синхронизиране, което ще синхронизира веднъж на час.\n\nИмайте предвид, че това е съчетано с глобалното предпочитание за синхронизация. С две думи, ако вашият Gmail не се синхронизира автоматично, това приложение също няма да се синхронизира. Можете да забраните автоматичното синхронизиране в настройките и да го правите изцяло ръчно.\n\nАко имате повече от един профил в Google на вашето устройство, ви предлагаме да влезете в настройките и да изберете кой акаунт да използвате.\n\nВсъщност препоръчваме така или иначе да разгледате настройките, за да видите какви опции има там. Можете да промените шрифта и големината на текста в този прозорец и да промените темата от светла на тъмна.\n\nПриложението също така включва джаджа, коята е напълно преоразмеряема. Преоразмерява се точно както всички други джаджи: докоснете и задръжте пръста си за секунда върху джаджата, все едно ще я местите. След това, вместо да я преместите, дръпнете някоя от страните ѝ, за да я направите по-голяма или по-малка.\n\nНадяваме се, че ще намерите приложението за полезно. Имайте предвид, че е напълно безплатно, без реклами и е с отворен код. Ако имате някакви хубави идеи или сериозни оплаквания, съобщете ни за тях.</string>
-<string name="about_text">Благодарим ви, че изтеглихте приложението! Правим всичко по силите си, за да направим това приложение страхотно във всяко едно отношение, но винаги ще има грешки, а нещата винаги могат да се получат по-страхотно!\n\nАко откриете грешка или просто имате идея за подобряване на приложението, искаме да научим за нея!\nИзпратете ни имейл: jonas@nononsenseapps.com\n\nОзначете ни с +1:\nhttps://plus.google.com/u/0/111801385015192089838\n\nДокладвайте в сайта за проблеми:\nhttps://github.com/spacecowboy/NotePad/issues\n\nАко искате да помогнете с превода на приложението, посетете:\nhttp://translate.nononsenseapps.com\n\nОще веднъж, благодарим, че изтеглихте приложението!\nАко искате да подкрепите проекта чрез не толкова активен начин, винаги можете да закупите дарителската версия:\nhttps://play.google.com/store/apps/details?id=com.nononsenseapps.notepad_donate</string>
-
-<!-- settings string keys -->
-<string name="menu_settings">Настройки</string>
-<string name="title_activity_list_widget_config">Настройки на джаджата</string>
-<string name="hide_appicon">Скрий иконата на приложението</string>
-<string name="hide_new">Скрий бутона „Нова“</string>
-<string name="hide_header">Скрий целия хедър</string>
-<string name="hide_widgetbg">Прозрачен фон</string>
-<string name="shortcut_help1">Ако е избрано, прекият път ще създаде нова бележка в избрания списък и ще отвори редактора. Ако не е избрано,  ще отвори избрания списък.</string>
-<string name="loading_widget">Зареждане на джаджата</string>
-<string name="default_list_set">Списъкът по подразбиране е зададен</string>
-
-<string name="notecopied_one">Копирана е една бележка</string>
-<string name="notecopied_other">Копирани са %d бележки</string>
-<string name="notedeleted_one">Изтрита е една бележка</string>
-<string name="notedeleted_other">Изтрити са %d бележки</string>
-<string name="selected_one">Избрана е една бележка</string>
-<string name="selected_other">Избрани са %d бележки</string>
-
-<string name="background_sync">Синхр. на заден план</string>
-<string name="background_sync_info">Синхронизира веднъж на час</string>
-<string name="sync_on_change">Синхр. при промени</string>
-<string name="sync_on_change_info">Насрочва синхронизация малко след промяна на бележка</string>
-<string name="sync_on_start">Синхр. при стартиране</string>
-<string name="sync_on_start_info">Ще се задейства само при ново стартиране, а не при възобновяване</string>
-<string name="sync_full_force">Принудително пълно синхр. следващия път</string>
-<string name="sync_full_force_info">Изберете това, само ако смятате, че синхронизирането е пропуснало някои елементи.</string>
-
-<string name="silent">Безшумно</string>
-<string name="sound">Със звук</string>
-<string name="vibrate">Вибрация</string>
-<string name="reminders">Напомняния</string>
-<string name="add_reminder">Добави напомняне</string>
-<string name="standard">Стандартен</string>
-<string name="notification_prio_high">Висок: на преден план, разширено</string>
-<string name="notification_prio_low">Нисък: скрито, минимизирано</string>
-<string name="priority">Приоритет</string>
-<string name="group_on_list">Групиране по списък</string>
-<string name="group_on_list_summary">Няколко известия ще бъдат групирани заедно, ако те принадлежат към същия списък.</string>
-<string name="more">още</string>
-<string name="notifications">Известия</string>
-<string name="google_play_promo_80_char_limit">Приложение за бележки и задачи с красив вид и синхронизация с Google Задачи.</string>
-<string name="google_play_description">Приложение за бележки и задачи с отворен код, с интерфейс за смартфони и таблети. Синхронизира се с вашия профил в Google, за да пази вашите бележки и задачи на сигурно място в облака, без да изисква от вас да въвеждате пароли!\n\nВъзможности:\n* Известия / Напомняния\n* Избор на език\n* Възможност за промяна на интерфейса\n* Джаджа с преоразмеряване и конфигуриране\n* Превъзходна поддръжка на таблети, която наподобява функциите на Gmail\n* Holo теми, така че да съответства на останалата част от Android\n* Автоматично синхронизиране с Google Задачи\n* Възможност за задаване на пароли на бележките\n* Преместване на бележките между различни списъци\n* Интеграция с джаджата Дневен ред на Андроид\n* Търсене във вашите бележки (не само в заглавията)\n* Промяна на шрифта и размера на текста!\n\nЗабележка:\nИма бъг в Android 4.2, който се проявява във всички приложения, които използват известия. Ако зададете известията да не вибрират (това е по подразбиране), след което зададете телефона си на безшумен режим (само вибрация), известията винаги ще вибрират, въпреки че това е изрично изключено.\nОще веднъж, това е неизправност в Android, не е бъг в приложението.\n\nМожете да помогнете за превода на приложението, просто отидете на:\nhttp://translate.nononsenseapps.com\n\nАко имате някакви проблеми или искате да съобщите за грешки, не се колебайте да се свържете с нас!\n+NoNonsenseApps\nили\nги докладвайте в сайта за проблеми:\nhttps://github.com/spacecowboy/NotePad/issues\n\nТова приложение е с отворен код, достъпен онлайн на адрес:\nhttps://github.com/spacecowboy/NotePad\n\nИма и платена (дарителска) версия на това приложение за тези, които искат да ни подкрепят в разработките:\nhttps://market.android.com/details?id=com.nononsenseapps.notepad_donate</string>
-</resources>

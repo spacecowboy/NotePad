@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res/com.nononsenseapps.notepad"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/taskItem"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:clickable="false"
+    android:orientation="horizontal" >
+
+    <!-- Keeping as this class for compatibility with other layout -->
+
+    <com.nononsenseapps.utils.views.TitleNoteTextView
+        xmlns:ttv="http://schemas.android.com/apk/res/com.nononsenseapps.utils.views"
+        android:id="@android:id/text1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ellipsize="end"
+        android:fontFamily="sans-serif-light"
+        android:paddingLeft="16dp"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textColor="?textColorPrimary"
+        android:textIsSelectable="false"
+        custom:titleFontFamily="robotolight" />
+
+    <!-- Needed to support the same cursor as items . All hidden -->
+
+    <TextView
+        android:id="@+id/indent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+
+    <com.nononsenseapps.ui.NoteCheckBox
+        android:id="@+id/checkbox"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+
+    <com.nononsenseapps.ui.DateView
+        android:id="@+id/date"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/dragpadding"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+
+    <View
+        android:id="@+id/drag_handle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:visibility="gone" />
+
+</LinearLayout>

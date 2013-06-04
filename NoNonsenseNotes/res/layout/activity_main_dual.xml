@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/drawerLayout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <!-- The main content view -->
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
+        android:animateLayoutChanges="true"
+        android:baselineAligned="false"
+        android:orientation="horizontal"
+        android:showDividers="middle" >
+
+        <FrameLayout
+            android:id="@+id/fragment1"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="4dp"
+            android:layout_weight="@integer/leftFragmentWeight" />
+
+        <FrameLayout
+            android:id="@+id/fragment2"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="@integer/rightFragmentWeight" >
+
+            <TextView
+                android:id="@+id/taskHint"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:enabled="false"
+                android:fontFamily="sans-serif-light"
+                android:text="@string/please_select_note"
+                android:textAppearance="?android:attr/textAppearanceLarge" />
+        </FrameLayout>
+    </LinearLayout>
+
+    <!-- The navigation drawer -->
+
+    <include
+        android:id="@+id/leftDrawer"
+        android:layout_width="320dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        layout="@layout/drawer_layout" />
+
+</android.support.v4.widget.DrawerLayout>
