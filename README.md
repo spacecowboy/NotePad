@@ -5,7 +5,7 @@ Latest updates posted on [http://www.nononsenseapps.com](http://www.nononsenseap
 
 <img src="tablet.png" alt="Tablet UI" />
 
-<img src="phone.png" alt="Phone UI" height="320" width="180"/>
+<img src="phone.png" alt="Phone UI" height="720" />
 
 # Getting sync to work
 The app should work fine but sync will display an error message. To get it working you will need to put an API key in this file here:
