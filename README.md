@@ -3,9 +3,13 @@ Link to [Google Play](https://play.google.com/store/apps/details?id=com.nononsen
 
 Latest updates posted on [http://www.nononsenseapps.com](http://www.nononsenseapps.com)
 
+<img src="tablet.png" alt="Tablet UI" style="width: 200px;"/>
+
+<img src="phone.png" alt="Phone UI" style="height: 200px;"/>
+
 # Getting sync to work
 The app should work fine but sync will display an error message. To get it working you will need to put an API key in this file here:
-https://github.com/spacecowboy/NotePad/blob/master/src/com/nononsenseapps/build/Config.java
+https://github.com/spacecowboy/NotePad/blob/master/NoNonsenseNotes/src/com/nononsenseapps/build/Config.java
 
 You need to replace this line:
 
