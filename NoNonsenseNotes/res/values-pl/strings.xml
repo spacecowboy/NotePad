@@ -19,6 +19,14 @@ limitations under the License.
 
 <string name="app_name">Notatki</string>
 <string name="title_create">Nowa notatka</string>
+<string name="timemachine">Kapsuła czasu</string>
+<string name="time">Czas</string>
+<string name="done">Gotowe</string>
+<string name="saved">Zapisane</string>
+<string name="distance">Dystans</string>
+<string name="need_location_help">Przytrzymaj, by wybrać lokalizację</string>
+<string name="near">W pobliżu</string>
+<string name="menu_save_and_add">Zapisz i dodaj nową notatkę</string>
 <string name="menu_delete">Usuń</string>
 <string name="menu_deletelist">Usuń listę</string>
 <string name="menu_sync">Odśwież</string>
@@ -28,32 +36,64 @@ limitations under the License.
 <string name="menu_clearcompleted">Wyczyść zakończone</string>
 <string name="menu_setdefaultlist">Ustaw jako domyślną listę</string>
 <string name="menu_managelists">Zarządzaj listą</string>
+<string name="add_item">Dodaj</string>
+<string name="delete_question">Usunąć?</string>
+<string name="delete_items_message">Na pewno chcesz usunąć? </string>
+<string name="delete_item_message">Na pewno chcesz usunąć? </string>
+<string name="delete_list_message">Na pewno chcesz usunąć? </string>
 <string name="editor_due_date_hint">Termin</string>
 <string name="editor_title_hint">Tytuł</string>
 <string name="editor_note_hint">Notatka</string>
 <string name="resolve_edit">Edytuj notatkę</string>
+<string name="default_style">Wyświetlanie domyślne </string>
+<string name="show_items_as_tasks">Wyświetlaj jako zadania</string>
+<string name="show_items_as_notes">Wyświetlaj jako notatki</string>
+<string name="sort_list_default">Sortowanie domyślne</string>
+<string name="sort_list_alphabetical">Alfabetycznie</string>
+<string name="sort_list_due">Termin</string>
+<string name="sort_list_updated">Ostatnia modyfikacja</string>
+<string name="sort_list_manual">Własna kolejność</string>
+<string name="search_description">Notatki i zadania </string>
+<string name="archive">Archiwum</string>
+<string name="location">Lokalizacja</string>
+<string name="restore">Przywróć</string>
+<string name="restore_to">Przywróć do</string>
 <string name="search_hint">Szukaj</string>
-<string name="settings_theme">Obecny motyw</string>
+<string name="settings_theme">Motyw</string>
 <string name="settings_theme_dialog">Użyj motywu</string>
 <string name="settings_lang">Język</string>
 <string name="settings_summary_theme_black">Czarny</string>
 <string name="settings_summary_theme_dark">Ciemny</string>
 <string name="settings_summary_theme_light">Jasny</string>
+<string name="settings_summary_theme_classic">Klasyczny</string>
 <string name="settings_cat_appearance">Wygląd</string>
 <string name="preference_preview_text">Tak będzie wyglądał tekst w edytorze</string>
 <string name="settings_account_title">Wybierz konto</string>
 <string name="settings_account_summary">Kliknij, aby zmienić konto</string>
 <string name="settings_sync_enable_title">Synchronizacja z Google Tasks</string>
 <string name="settings_cat_syncing">Synchronizacja</string>
+<string name="dropbox_enable">Synchronizacja z Dropoboxem</string>
+<string name="dropbox_enable_summary">Utwórz folder "NoNonsense Notes"  w swoim Dropboxie</string>
 <string name="show_from_all_lists">Wszystkie listy</string>
 <string name="deleted">Usunięto</string>
+<string name="repeat">Powtarzanie</string>
+<string name="once">Jeden raz</string>
+<string name="always">Zawsze</string>
 <string name="permission_read_label">czytaj notatki i listy</string>
 <string name="permission_read_desc">Umożliwia aplikacji czytanie Twoich notatek i powiązanych list.</string>
 <string name="permission_write_label">zmodyfikuj notatki i listy</string>
 <string name="permission_write_desc">Umożliwia aplikacji dodawanie, aktualizację oraz usuwanie notatek i list.</string>
 <string name="settings_list_dialog">Wybierz listę</string>
 <string name="settings_list">Lista</string>
+<string name="drag_to_timetravel">Podróż w czasie </string>
 
+<string name="import_data_question">Skopiować dane?</string>
+<string name="import_started">Importowanie danych </string>
+
+<string name="showcase_drawer_title">Zarządzaj swoimi listami </string>
+<string name="showcase_drawer_msg">Przytrzymaj, by edytować lub usunąć </string>
+<string name="showcase_timemachine_title">Zachowaj  swoją notatkę</string>
+<string name="showcase_timemachine_msg">Zmiany zostały zapisane. Użyj Kapsuły czasu, by przywrócić poprzednią wersję</string>
 
 
 <!--
@@ -85,6 +125,8 @@ Use few if language need it. In English is the same.
 <item quantity="other">@string/selected_other</item>
 </plurals>
 
+<string name="move">Przenieś</string>
+<string name="move_to">Przenieś do</string>
 
 <string name="lock_note">Zablokuj notatkę</string>
 <string name="unlock_note">Odblokuj notatkę</string>
@@ -95,7 +137,7 @@ Use few if language need it. In English is the same.
 <string name="password">Hasło</string>
 <string name="password_set">Hasło ustawione</string>
 <string name="password_cleared">Hasło usunięte</string>
-<string name="passwords_dont_match">Hasła nie zgadzają się</string>
+<string name="passwords_dont_match">Hasła się nie zgadzają </string>
 <string name="password_incorrect">Hasło niepoprawne </string>
 <string name="enter_password">Wprowadź hasło</string>
 <string name="enter_new_password">Wprowadź nowe hasło</string>
@@ -121,12 +163,22 @@ Use few if language need it. In English is the same.
 <string name="hide_checkbox_summary_on">Pole wyboru będzie ukryte</string>
 <string name="hide_checkbox_summary_off">Pole wyboru będzie widoczne</string>
 <string name="hide_date">Ukryj termin</string>
+<string name="item_max_height">Maksymalna długość nagłówka</string>
+<string name="long_date_format">Długi format daty</string>
+<string name="short_date_format">Krótki format daty</string>
+<string name="rows">wiersze</string>
+<string name="select_date">Ustaw datę</string>
 <string name="localedefault">Domyślnie ustawienia regionalne</string>
+<string name="donate">Wspomóż</string>
+<string name="donate_thanks">Dziękuję za wsparcie!</string>
 
 <!-- settings string keys -->
 <string name="hide_header">Ukryj nagłówek widżetu</string>
+<string name="transparency">Przezroczystość</string>
+<string name="notes_shortcut">Skrót notatki</string>
 <string name="shortcut_help1">Jeżeli zaznaczone, skrót będzie tworzył nową notatkę w zaznaczonej liście i otwierał edytor. Jeżeli nie zaznaczone, skrót będzie otwierał zaznaczoną listę.  </string>
 <string name="loading_widget">Ładowanie widżetu&#8230;</string>
+<string name="default_list">Domyślna lista</string>
 <string name="notecopied_one">Skopiowano jedną notatkę </string>
 <string name="notecopied_other">Skopiowano %d notatki</string>
 <string name="notedeleted_one">Usunięto jedną notatkę </string>
@@ -141,6 +193,7 @@ Use few if language need it. In English is the same.
 <string name="sync_on_start_info">Uruchamiaj tylko przy świeżym starcie, nie przy wznawianiu</string>
 <string name="sync_full_force">Wymuś pełną synchronizację następnym razem</string>
 <string name="sync_full_force_info">Zaznacz tylko jeśli uważasz, że nie wszystkie pozycje są zsynchronizowane. </string>
+<string name="snooze">Drzemka</string>
 <string name="silent">Cichy</string>
 <string name="sound">Dźwięk </string>
 <string name="vibrate">Wibracje</string>
@@ -151,7 +204,7 @@ Use few if language need it. In English is the same.
 <string name="priority">Priorytet </string>
 <string name="notifications">Powiadomienia</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
-<string name="dashclock_tasks">Zadania</string>
+<string name="tasks">Zadania </string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Ogranicz zadania do określonej listy</string>
 <string name="dashclock_show_overdue_tasks">Wyświetlanie zaległych zadań</string>
 <string name="dashclock_overdue_tasks_show">Zaległe zadania będą wyświetlane</string>
