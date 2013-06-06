@@ -635,7 +635,7 @@ public class ActivityMain extends FragmentActivity implements
 				if (getNoteId(intent) > 0) {
 					right = TaskDetailFragment_.getInstance(getNoteId(intent));
 				}
-				else if (getNoteShareText(intent).length() > 0) {
+				else if (isNoteIntent(intent)) {
 					right = TaskDetailFragment_.getInstance(
 							getNoteShareText(intent),
 							TaskListViewPagerFragment.getAList(this,
