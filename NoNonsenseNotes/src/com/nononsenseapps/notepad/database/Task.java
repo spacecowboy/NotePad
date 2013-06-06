@@ -2,6 +2,7 @@ package com.nononsenseapps.notepad.database;
 
 import java.security.InvalidParameterException;
 import java.util.Calendar;
+import java.util.List;
 
 import android.annotation.SuppressLint;
 import android.app.SearchManager;
@@ -1105,19 +1106,32 @@ public class Task extends DAO {
 
 					+ " END;", TABLE_NAME, DELETE_TABLE_NAME);
 
-	public static String getSQLIndentedQuery(final String[] fields) {
-		return String.format("SELECT " + arrayToCommaString("T2.", fields, "")
+	public static String getSQLIndentedQuery(final String[] fields, final List<String>extraArgs) {
+		StringBuilder sb = new StringBuilder( String.format("SELECT " + arrayToCommaString("T2.", fields, "")
 				+ ", COUNT(T1.%4$s) AS %5$s " + " FROM %1$s AS T1, %1$s AS T2 "
 				+ " WHERE T2.%2$s BETWEEN T1.%2$s AND T1.%3$s " +
 				// Limit to list
-				" AND T2.%6$s IS ? AND T1.%6$s IS ? "
+				" AND T2.%6$s IS ? AND T1.%6$s IS ? ",
+				TABLE_NAME, Columns.LEFT, Columns.RIGHT, Columns._ID, INDENT,
+				Columns.DBLIST));
+				
+				// extra args
+				if (extraArgs != null) {
+					for (final String arg: extraArgs) {
+						// LIMIT Completed to null only
+						sb.append(String.format(" AND T2.%1$s IS NULL AND T1.%1$s IS NULL ", arg));
+					}
+				}
+				
 				// Count requires group
-				+ " GROUP BY T2.%4$s " +
+		sb.append(String.format(" GROUP BY T2.%4$s " +
 				// Sort on left
 				" ORDER BY T2.%2$s;",
 
 		TABLE_NAME, Columns.LEFT, Columns.RIGHT, Columns._ID, INDENT,
-				Columns.DBLIST);
+				Columns.DBLIST));
+		
+		return sb.toString();
 	}
 
 	// private boolean shouldMove(final ContentValues values) {

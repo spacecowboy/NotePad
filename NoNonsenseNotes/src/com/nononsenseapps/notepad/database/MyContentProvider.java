@@ -1,5 +1,7 @@
 package com.nononsenseapps.notepad.database;
 
+import java.util.ArrayList;
+
 import com.nononsenseapps.helpers.UpdateNotifier;
 
 import android.app.SearchManager;
@@ -409,16 +411,23 @@ public class MyContentProvider extends ContentProvider {
 			// Ignore selection param
 			// Selection arg must be the list id
 			// Sort order is left ASC, no exceptions
-			if (selectionArgs == null || selectionArgs.length != 1) {
+			if (selectionArgs == null || selectionArgs.length < 1) {
 				throw new SQLException(
-						"Indented URI requires only argument to be the list id!");
+						"Indented URI requires first argument to be the list id!");
+			}
+			// Can also restrict completed status
+			// TODO make more general. Now extra fields are forced to be NULL
+			ArrayList<String> extraArgs = null;
+			if (selection != null && selection.contains("AND")) {
+				extraArgs = new ArrayList<String>();
+				extraArgs.add(Task.Columns.COMPLETED);
 			}
 
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
-					.rawQuery(Task.getSQLIndentedQuery(projection),
-							new String[] { selectionArgs[0], selectionArgs[0] });
+					.rawQuery(Task.getSQLIndentedQuery(projection, extraArgs),
+							SQLUtils.repeatTwice(selectionArgs));
 			result.setNotificationUri(getContext().getContentResolver(),
 					Task.URI);
 			break;
