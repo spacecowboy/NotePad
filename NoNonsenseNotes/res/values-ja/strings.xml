@@ -19,7 +19,12 @@ limitations under the License.
 
 <string name="app_name">Notes</string>
 <string name="title_create">新しいノート</string>
+<string name="timemachine">タイムマシン</string>
 <string name="time">時間</string>
+<string name="done">完了</string>
+<string name="saved">保存済み</string>
+<string name="distance">半径</string>
+<string name="need_location_help">長押ししてロケーションを設定</string>
 <string name="near">近くに</string>
 <string name="menu_save_and_add">デリート</string>
 <string name="menu_delete">削除</string>
@@ -31,12 +36,28 @@ limitations under the License.
 <string name="menu_clearcompleted">完了したノートの削除</string>
 <string name="menu_setdefaultlist">デフォルトのリスト</string>
 <string name="menu_managelists">リストの管理</string>
-<string name="delete_question">デリート？</string>
+<string name="add_item">アイテムを追加</string>
+<string name="delete_question">削除しますか？</string>
+<string name="delete_items_message">これらのアイテムを削除しますか？</string>
+<string name="delete_item_message">このアイテムを削除しますか？</string>
+<string name="delete_list_message">リストを削除しますか？</string>
 <string name="editor_due_date_hint">期限</string>
 <string name="editor_title_hint">タイトル</string>
 <string name="editor_note_hint">ノート</string>
 <string name="resolve_edit">ノートの編集</string>
+<string name="default_style">デフォルトスタイル</string>
+<string name="show_items_as_tasks">アイテムをタスクとして表示</string>
+<string name="show_items_as_notes">アイテムをノートとして表示</string>
+<string name="sort_list_default">デフォルト並び順</string>
+<string name="sort_list_alphabetical">アルファベット順</string>
+<string name="sort_list_due">期限順</string>
+<string name="sort_list_updated">更新日時順</string>
+<string name="sort_list_manual">手動</string>
 <string name="search_description">ノートやタスク</string>
+<string name="archive">アーカイブ</string>
+<string name="location">ロケーション</string>
+<string name="restore">復元</string>
+<string name="restore_to">&#8230;へ復元</string>
 <string name="search_hint">検索</string>
 <string name="settings_theme">現在のテーマ</string>
 <string name="settings_theme_dialog">テーマの選択</string>
@@ -50,19 +71,40 @@ limitations under the License.
 <string name="settings_account_title">アカウントを選択</string>
 <string name="settings_account_summary">タップしてアカウントを切り替える</string>
 <string name="settings_sync_enable_title">Google Tasksとの同期</string>
+<string name="gtasks_sync_info">Google Tasksと同期されるのはノート、期限（時間を除く）、タスクの状態のみです。</string>
 <string name="settings_cat_syncing">同期</string>
+<string name="gtasks">Google Tasks</string>
+<string name="dropbox">Dropbox</string>
+<string name="dropbox_enable">Dropboxと同期</string>
+<string name="dropbox_enable_summary">Dropbox内にNoNonsense Notes専用フォルダを作成します</string>
 <string name="show_from_all_lists">すべてのノート</string>
 <string name="deleted">削除済み</string>
+<string name="repeat">繰り返し</string>
 <string name="once">一度</string>
+<string name="always">常に</string>
 <string name="permission_read_label">ノートやリストを読み込む</string>
 <string name="permission_read_desc">アプリケーションがノートとリストを読み取ることを許可します。</string>
 <string name="permission_write_label">ノートやリストを変更</string>
 <string name="permission_write_desc">アプリケーションがノートやリストの挿入、更新、および削除することを許可します。</string>
 <string name="settings_list_dialog">リストの選択</string>
 <string name="settings_list">リスト</string>
+<string name="drag_to_timetravel">ドラッグして遡る</string>
 
+<string name="import_data_question">データをインポートしますか？</string>
+<string name="import_started">データをインポート中。完了まで数秒程度要します。</string>
+<string name="import_data_msg">寄付版からノートをインポートしますか？完了した後、アンインストールするオプションが表示されます。</string>
+<string name="imported_result">%1$d個のノートを%2$dリストへインポートしました</string>
+<string name="import_error">エラーが発生しました： %s</string>
 
+<string name="showcase_main_title">リストにアクセス</string>
+<string name="showcase_main_msg">アイコンをタップまたは画面左端からスワイプ</string>
+<string name="showcase_drawer_title">リストを管理</string>
+<string name="showcase_drawer_msg">長押しで編集または削除</string>
+<string name="showcase_timemachine_title">ノートを保存</string>
+<string name="showcase_timemachine_msg">変更は常に保存されます。タイムマシン機能を利用すると以前の版を復元することができます。</string>
 
+<string name="donate_to_unlock">寄付して解除</string>
+<string name="premiums_unlocked_and_thanks">プレミアム機能が解除されました。ご支援感謝します！</string>
 
 <!--
 Use few if language need it. In English is the same.
@@ -93,7 +135,9 @@ Use few if language need it. In English is the same.
 <item quantity="other">@string/selected_other</item>
 </plurals>
 
-<string name="move">動く</string>
+<string name="move">移動</string>
+<string name="move_to">&#8230;へ移動</string>
+<string name="moved_x_to_list">%1$d を %2$s へ移動</string>
 
 <string name="lock_note">ノートのロック</string>
 <string name="unlock_note">ロックの解除</string>
@@ -126,16 +170,27 @@ Use few if language need it. In English is the same.
 <string name="date_header_completed">完了</string>
 <string name="please_select_note">ノートを選択、または作成してください</string>
 <string name="please_create_note">ノートを作成してください</string>
-<string name="hide_checkbox">チェックボックスを隠す</string>
+<string name="hide_checkbox">チェックボックスを表示しない</string>
 <string name="hide_checkbox_summary_on">現在の設定：非表示</string>
 <string name="hide_checkbox_summary_off">現在の設定：表示</string>
-<string name="hide_date">期限を隠す</string>
+<string name="hide_date">期限を表示しない</string>
+<string name="item_max_height">ノート/タスクの最大高さ</string>
+<string name="long_date_format">詳細日付書式</string>
+<string name="short_date_format">短縮日付書式</string>
+<string name="rows">行</string>
+<string name="select_date">日時を選択</string>
 <string name="localedefault">端末の設定を使用する</string>
+<string name="donate">寄付</string>
+<string name="donate_thanks">ご支援感謝します！</string>
 
 <!-- settings string keys -->
-<string name="hide_header">ヘッダ全体を隠す</string>
+<string name="hide_header">ヘッダを表示しない</string>
+<string name="transparency">透明度</string>
+<string name="notes_shortcut">Notesショートカット</string>
 <string name="shortcut_help1">チェックすると、ショートカットタップ時に選択したリストに新規ノートを作成し、エディタを開きます。チェックを外すと、ショートカットタップ時に選択したリストを開きます。</string>
-<string name="loading_widget">しばらくお待ち下さい&#8230;</string>
+<string name="loading_widget">ウィジェットを読み込み中&#8230;</string>
+<string name="default_list">デフォルトリスト</string>
+<string name="please_type_before_reminder">リマインダーを設定する前にテキストを入力してください</string>
 <string name="notecopied_one">ノートをコピーしました</string>
 <string name="notecopied_other">%d 個のノートをコピーしました</string>
 <string name="notedeleted_one">ノートを削除しました</string>
@@ -150,6 +205,7 @@ Use few if language need it. In English is the same.
 <string name="sync_on_start_info">アプリが復帰したときではなく、起動時に同期されます</string>
 <string name="sync_full_force">強制的に全て同期</string>
 <string name="sync_full_force_info">ノート等の同期がおかしい場合のみチェックをONにしてください</string>
+<string name="snooze">スヌーズ</string>
 <string name="silent">サイレント</string>
 <string name="sound">通知音</string>
 <string name="vibrate">バイブレーション</string>
@@ -165,7 +221,24 @@ Use few if language need it. In English is the same.
 <string name="dateformat_short_2">h:mm MM/dd(E)</string>
 <string name="dateformat_short_3">MM/dd(E)</string>
 <string name="dateformat_short_4">MM/dd</string>
-<string name="dateformat_long_1">kk:mm MM月dd日 (EEEE)</string>
-<string name="dateformat_long_2">h:mm MM月dd日 (EEEE)</string>
+<string name="dateformat_long_1">MM月dd日 (EEEE) kk:mm</string>
+<string name="dateformat_long_2">MM月dd日 (EEEE) h:mm </string>
+<string name="tasks">タスク</string>
+<string name="dashclock_restrict_to_tasks_in_a_specific_list">表示するタスクを限定</string>
+<string name="dashclock_show_overdue_tasks">期限切れタスクを表示</string>
+<string name="dashclock_overdue_tasks_show">期限切れタスクが表示されます</string>
+<string name="dashclock_overdue_tasks_hide">期限切れタスクが表示されません</string>
+<string name="dashclock_title_activity_tasks_settings">NoNonsense Notes設定</string>
+<string name="dashclock_pref_header_general">一般</string>
+<string name="dashclock_due_upper_limit_title">タスクの期限で限定</string>
+<string name="dashclock_today">今日</string>
+<string name="dashclock_tomorrow">明日</string>
+<string name="dashclock_next7">1週間以内</string>
+<string name="dashclock_anytime">無制限</string>
+<string name="dashclock_will_show_as_many_as_possible">可能な限り表示します</string>
+<string name="dashclock_show_only_the_next_task">次のタスクのみ表示</string>
+<string name="dashclock_header_shown">リスト名が太字で表示されます</string>
+<string name="dashclock_first_task_shown">最初のタスクが太字で表示されます</string>
+<string name="dashclock_display_header">リスト名を表示</string>
 
 </resources>
