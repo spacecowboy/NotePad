@@ -152,9 +152,9 @@ public class DBProviderMovementTest extends AndroidTestCase {
 
 	private ArrayList<Task> getTasks(final long listId) {
 		final ArrayList<Task> results = new ArrayList<Task>();
-		final Cursor c = resolver.query(Task.URI_INDENTED_QUERY,
+		final Cursor c = resolver.query(Task.URI,
 				Task.Columns.FIELDS, null,
-				new String[] { Long.toString(listId) }, null);
+				new String[] { Long.toString(listId) }, Task.Columns.LEFT);
 		assertCursorGood(c);
 		while (c.moveToNext()) {
 			results.add(new Task(c));
@@ -286,94 +286,6 @@ public class DBProviderMovementTest extends AndroidTestCase {
 		assertTaskLeftRightAreSequential(tl._id);
 
 		return getTasks(tl._id);
-	}
-
-	private ArrayList<Task> indentAndAssert(final Task orgTask,
-			boolean expectedSuccess) {
-		final ArrayList<Task> orgTasks = getTasks(orgTask.dblist);
-
-		orgTask.indent(resolver);
-		// resolver.update(orgTask.getUri(), orgTask.getIndentValues(), null,
-		// null);
-
-		final ArrayList<Task> resultTasks = getTasks(orgTask.dblist);
-
-		// Should be valid values
-		assertTaskLeftRightAreSequential(orgTask.dblist);
-
-		for (int i = 0; i < orgTasks.size(); i++) {
-			assertEquals("Indent shouldnt change linear order",
-					orgTasks.get(i)._id, resultTasks.get(i)._id);
-			if (expectedSuccess && resultTasks.get(i)._id == orgTask._id) {
-				assertTrue("Indent should mean left = preleft - 1",
-						orgTask.left - 1 == resultTasks.get(i).left);
-				assertTrue("Indent should mean right = left + 1",
-						resultTasks.get(i).right == resultTasks.get(i).left + 1);
-				assertEquals("Indent should increase level", orgTask.level + 1,
-						resultTasks.get(i).level);
-			}
-			else if (!expectedSuccess) {
-				assertEquals("Indent was expected to fail (left)",
-						orgTasks.get(i).left, resultTasks.get(i).left);
-				assertEquals("Indent was expected to fail (right)",
-						orgTasks.get(i).right, resultTasks.get(i).right);
-
-				if (resultTasks.get(i)._id == orgTask._id) {
-					assertEquals("Failed indent should not increase level",
-							orgTask.level, resultTasks.get(i).level);
-				}
-			}
-			else if (orgTasks.get(i).right != orgTask.left - 1) {
-				// Not the parent, should not change at all
-				assertEquals(
-						"Should not change values of posterior items (left)",
-						orgTasks.get(i).left, resultTasks.get(i).left);
-				assertEquals(
-						"Should not change values of posterior items (right)",
-						orgTasks.get(i).right, resultTasks.get(i).right);
-			}
-		}
-
-		return getTasks(orgTask.dblist);
-	}
-
-	private ArrayList<Task> unIndentAndAssert(final Task orgTask,
-			boolean expectedSuccess) {
-		final ArrayList<Task> orgTasks = getTasks(orgTask.dblist);
-
-		assertTrue("You can not expect a success if the task is a root!",
-				expectedSuccess == (orgTask.level > 1));
-
-		orgTask.unindent(resolver);
-
-		final ArrayList<Task> resultTasks = getTasks(orgTask.dblist);
-
-		// Should be valid values
-		assertTaskLeftRightAreSequential(orgTask.dblist);
-
-		for (int i = 0; i < orgTasks.size(); i++) {
-			assertEquals("Indent shouldnt change linear order",
-					orgTasks.get(i)._id, resultTasks.get(i)._id);
-			if (expectedSuccess && resultTasks.get(i)._id == orgTask._id) {
-				assertTrue("UnIndent should mean left = preleft + 1",
-						orgTask.left + 1 == resultTasks.get(i).left);
-				assertEquals("Indent should decrease level", orgTask.level - 1,
-						resultTasks.get(i).level);
-			}
-			else if (!expectedSuccess) {
-				assertEquals("UnIndent was expected to fail (left)",
-						orgTasks.get(i).left, resultTasks.get(i).left);
-				assertEquals("UnIndent was expected to fail (right)",
-						orgTasks.get(i).right, resultTasks.get(i).right);
-
-				if (resultTasks.get(i)._id == orgTask._id) {
-					assertEquals("Failed unindent should not change level",
-							orgTask.level, resultTasks.get(i).level);
-				}
-			}
-		}
-
-		return getTasks(orgTask.dblist);
 	}
 
 	/*
@@ -734,42 +646,6 @@ public class DBProviderMovementTest extends AndroidTestCase {
 
 		assertFalse(values.containsKey(Task.Columns.LEFT));
 		assertFalse(values.containsKey(Task.Columns.RIGHT));
-	}
-
-	public void testIndentedUri() {
-		// Not giving a list id should crash it
-		boolean failed;
-		Cursor c;
-
-		failed = false;
-		try {
-			c = resolver.query(Task.URI_INDENTED_QUERY, Task.Columns.FIELDS,
-					null, null, null);
-		}
-		catch (SQLException e) {
-			failed = true;
-		}
-		assertTrue("Null selection should give exception", failed);
-
-		failed = false;
-		try {
-			c = resolver.query(Task.URI_INDENTED_QUERY, Task.Columns.FIELDS,
-					null, new String[] {}, null);
-		}
-		catch (SQLException e) {
-			failed = true;
-		}
-		assertTrue("Empty selection should give exception", failed);
-
-		failed = false;
-		try {
-			c = resolver.query(Task.URI_INDENTED_QUERY, Task.Columns.FIELDS,
-					null, new String[] { "1", "2" }, null);
-		}
-		catch (SQLException e) {
-			failed = true;
-		}
-		assertTrue("More than one argument should give exception", failed);
 	}
 
 	public void testDeleteTrigger() {

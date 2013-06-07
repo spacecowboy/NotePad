@@ -88,9 +88,6 @@ public class DBProviderTest extends AndroidTestCase {
 		final List<Task> tasks = insertSomeTasks(list, taskCount);
 
 		assertUriReturnsResult(Task.URI, Task.Columns.FIELDS);
-		assertUriReturnsResult(Task.URI_INDENTED_QUERY, Task.Columns.FIELDS,
-				Task.Columns.DBLIST + " IS ?",
-				new String[] { Long.toString(list._id) }, taskCount);
 
 		// Sectioned Date query
 		assertUriReturnsResult(Task.URI_SECTIONED_BY_DATE, Task.Columns.FIELDS,

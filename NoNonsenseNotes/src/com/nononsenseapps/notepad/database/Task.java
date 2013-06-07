@@ -2,9 +2,7 @@ package com.nononsenseapps.notepad.database;
 
 import java.security.InvalidParameterException;
 import java.util.Calendar;
-import java.util.List;
 
-import android.annotation.SuppressLint;
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -19,7 +17,7 @@ import android.util.Log;
 
 /**
  * An object that represents the task information contained in the database.
- * Provides convenience methods for moving and indenting items.
+ * Provides convenience methods for moving items.
  */
 public class Task extends DAO {
 
@@ -79,12 +77,6 @@ public class Task extends DAO {
 
 	public static final int BASEURICODE = 201;
 	public static final int BASEITEMCODE = 202;
-	public static final int INDENTEDQUERYCODE = 203;
-	// public static final int MOVESUBTREECODE = 204;
-	public static final int INDENTCODE = 205;
-	public static final int INDENTITEMCODE = 206;
-	public static final int UNINDENTCODE = 207;
-	public static final int UNINDENTITEMCODE = 208;
 	public static final int DELETEDQUERYCODE = 209;
 	public static final int DELETEDITEMCODE = 210;
 	public static final int SECTIONEDDATEQUERYCODE = 211;
@@ -108,22 +100,10 @@ public class Task extends DAO {
 				BASEITEMCODE);
 
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ INDENTEDQUERY, INDENTEDQUERYCODE);
-		// sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-		// + MOVESUBTREE + "/#", MOVESUBTREECODE);
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
 				+ MOVEITEMLEFT + "/#", MOVEITEMLEFTCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
 				+ MOVEITEMRIGHT + "/#", MOVEITEMRIGHTCODE);
 
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ INDENT, INDENTCODE);
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ INDENT + "/#", INDENTITEMCODE);
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ UNINDENT, UNINDENTCODE);
-		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
-				+ UNINDENT + "/#", UNINDENTITEMCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
 				+ DELETEDQUERY, DELETEDQUERYCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/"
@@ -160,15 +140,7 @@ public class Task extends DAO {
 
 	}
 
-	// Used in indented query
-	public static final String INDENT = "indent";
-	public static final String UNINDENT = "unindent";
-	// public static final String TARGETLEFT = "targetleft";
-	// public static final String TARGETRIGHT = "targetright";
 	public static final String TARGETPOS = "targetpos";
-
-	private static final String INDENTEDQUERY = "indentedquery";
-	// private static final String MOVESUBTREE = "movesubtree";
 	private static final String MOVEITEMLEFT = "moveitemleft";
 	private static final String MOVEITEMRIGHT = "moveitemright";
 	private static final String DELETEDQUERY = "deletedquery";
@@ -176,10 +148,6 @@ public class Task extends DAO {
 	// Special URI to look at backup table
 	public static final Uri URI_DELETED_QUERY = Uri.withAppendedPath(URI,
 			DELETEDQUERY);
-
-	// Special URI where the last column will be a count
-	public static final Uri URI_INDENTED_QUERY = Uri.withAppendedPath(URI,
-			INDENTEDQUERY);
 
 	// Query the view with date section headers
 	public static final Uri URI_SECTIONED_BY_DATE = Uri.withAppendedPath(URI,
@@ -224,30 +192,6 @@ public class Task extends DAO {
 		}
 		return Uri
 				.withAppendedPath(URI_WRITE_MOVEITEMRIGHT, Long.toString(_id));
-	}
-
-	// Special URI to use when an indent action is requested
-	public static final Uri URI_WRITE_INDENT = Uri
-			.withAppendedPath(URI, INDENT);
-
-	public Uri getIndentUri() {
-		if (_id < 1) {
-			throw new InvalidParameterException(
-					"_ID of this object is not valid");
-		}
-		return Uri.withAppendedPath(URI_WRITE_INDENT, Long.toString(_id));
-	}
-
-	// Special URI to use when an unindent action is requested
-	public static final Uri URI_WRITE_UNINDENT = Uri.withAppendedPath(URI,
-			UNINDENT);
-
-	public Uri getUnIndentUri() {
-		if (_id < 1) {
-			throw new InvalidParameterException(
-					"_ID of this object is not valid");
-		}
-		return Uri.withAppendedPath(URI_WRITE_UNINDENT, Long.toString(_id));
 	}
 
 	public static class Columns implements BaseColumns {
@@ -749,11 +693,6 @@ public class Task extends DAO {
 	public Long right = null;
 	public Long dblist = null;
 
-	// A calculated value. Must use indented uri
-	// for this to be accurate
-	// It is read-only
-	public int level = 0;
-
 	public Task() {
 
 	}
@@ -830,10 +769,6 @@ public class Task extends DAO {
 		right = c.getLong(7);
 		dblist = c.getLong(8);
 		locked = c.getInt(9) == 1;
-
-		if (c.getColumnCount() > Columns.FIELDS.length) {
-			level = c.getInt(Columns.FIELDS.length);
-		}
 	}
 
 	public Task(final long id, final ContentValues values) {
@@ -875,19 +810,6 @@ public class Task extends DAO {
 	public ContentValues getMoveValues(final long targetPos) {
 		final ContentValues values = new ContentValues();
 		values.put(TARGETPOS, targetPos);
-		values.put(Columns.LEFT, left);
-		values.put(Columns.RIGHT, right);
-		values.put(Columns.DBLIST, dblist);
-		return values;
-	}
-
-	/**
-	 * An indent operation should be performed alone. No other information
-	 * should accompany such an update.
-	 */
-	public ContentValues getIndentValues() {
-		final ContentValues values = new ContentValues();
-		// values.put(INDENT, true);
 		values.put(Columns.LEFT, left);
 		values.put(Columns.RIGHT, right);
 		values.put(Columns.DBLIST, dblist);
@@ -1029,15 +951,11 @@ public class Task extends DAO {
 		return TABLE_NAME;
 	}
 
-	// TODO trigger pre-update, make room if list changes
-	// TODO trigger post-update, get rid of space if list changed
-
 	/**
 	 * Can't use unique constraint on positions because SQLite checks
 	 * constraints after every row is updated an not after each statement like
 	 * it should. So have to do the check in a trigger instead.
 	 */
-	// TODO
 	static final String countVals(final String col, final String ver) {
 		return String.format("SELECT COUNT(DISTINCT %2$s)"
 				+ " AS ColCount FROM %1$s WHERE %3$s=%4$s.%3$s", TABLE_NAME,
@@ -1105,208 +1023,6 @@ public class Task extends DAO {
 							"") + "); "
 
 					+ " END;", TABLE_NAME, DELETE_TABLE_NAME);
-
-	public static String getSQLIndentedQuery(final String[] fields, final List<String>extraArgs) {
-		StringBuilder sb = new StringBuilder( String.format("SELECT " + arrayToCommaString("T2.", fields, "")
-				+ ", COUNT(T1.%4$s) AS %5$s " + " FROM %1$s AS T1, %1$s AS T2 "
-				+ " WHERE T2.%2$s BETWEEN T1.%2$s AND T1.%3$s " +
-				// Limit to list
-				" AND T2.%6$s IS ? AND T1.%6$s IS ? ",
-				TABLE_NAME, Columns.LEFT, Columns.RIGHT, Columns._ID, INDENT,
-				Columns.DBLIST));
-				
-				// extra args
-				if (extraArgs != null) {
-					for (final String arg: extraArgs) {
-						// LIMIT Completed to null only
-						sb.append(String.format(" AND T2.%1$s IS NULL AND T1.%1$s IS NULL ", arg));
-					}
-				}
-				
-				// Count requires group
-		sb.append(String.format(" GROUP BY T2.%4$s " +
-				// Sort on left
-				" ORDER BY T2.%2$s;",
-
-		TABLE_NAME, Columns.LEFT, Columns.RIGHT, Columns._ID, INDENT,
-				Columns.DBLIST));
-		
-		return sb.toString();
-	}
-
-	// private boolean shouldMove(final ContentValues values) {
-	// return values.containsKey(TARGETLEFT)
-	// && values.containsKey(TARGETRIGHT) && left != null
-	// && right != null && dblist != null
-	// && values.getAsLong(TARGETLEFT) > 0
-	// && values.getAsLong(TARGETRIGHT) > values.getAsLong(TARGETLEFT);
-	// }
-
-	// public int move(final ContentResolver resolver, final long targetLeft,
-	// final long targetRight) {
-	// return resolver.update(getMoveSubTreeUri(),
-	// getMoveValues(targetLeft, targetRight), null, null);
-	// }
-
-	public boolean shouldIndent() {
-		return left != null && right != null && dblist != null;
-	}
-
-	public int indent(final ContentResolver resolver) {
-		return resolver.update(getIndentUri(), getIndentValues(), null, null);
-	}
-
-	public static int indentMany(final ContentResolver resolver,
-			final long[] idList) {
-		if (idList.length < 1) {
-			throw new InvalidParameterException("Must give some ids to indent");
-		}
-		// Ex: WHERE _id IN (15,27,2,94)
-		String whereClause = Columns._ID + " IN (";
-		for (long id : idList) {
-			whereClause += Long.toString(id) + ",";
-		}
-		whereClause = whereClause.substring(0, whereClause.length() - 1) + ")";
-		return resolver.update(URI_WRITE_INDENT, new ContentValues(),
-				whereClause, null);
-	}
-
-	public int unindent(final ContentResolver resolver) {
-		return resolver.update(getUnIndentUri(), getIndentValues(), null, null);
-	}
-
-	public static int unIndentMany(final ContentResolver resolver,
-			final long[] idList) {
-		if (idList.length < 1) {
-			throw new InvalidParameterException("Must give some ids to indent");
-		}
-		// Ex: WHERE _id IN (15,27,2,94)
-		String whereClause = Columns._ID + " IN (";
-		for (long id : idList) {
-			whereClause += Long.toString(id) + ",";
-		}
-		whereClause = whereClause.substring(0, whereClause.length() - 1) + ")";
-		return resolver.update(URI_WRITE_UNINDENT, new ContentValues(),
-				whereClause, null);
-	}
-
-	@SuppressLint("DefaultLocale")
-	public String getSQLUnIndentItem(final long parentRight) {
-		// final String GETPARENTRIGHT =
-		// "SELECT %3$s FROM %1$s WHERE %2$s < %4$s AND %3$s > %5$s AND %6$s IS %7$d ORDER BY (%3$s - %2$s) ASC LIMIT 1";
-		if (shouldIndent())
-			// First left value
-			return String.format("UPDATE %1$s SET %2$s = " +
-
-			" CASE " +
-			// Must exist a parent to be able to unindent
-			// Narrowest enclosing item
-			// " WHEN EXISTS(" + GETPARENTRIGHT + ") " +
-			// " THEN CASE " +
-			// PARENT left does not change. right gets my previous left
-			// Subtree takes one step right
-			// Root's left takes one step right
-					" WHEN %2$s >= %4$d AND %3$s <= %5$d " + " THEN %2$s + 1 " +
-					// Dont change others
-					// " ELSE %2$s END " +
-					// If no parent, no change
-					" ELSE %2$s END, " +
-
-					// Right value
-					" %3$s =  " +
-
-					" CASE " +
-					// Must exist a parent to be able to unindent
-					// Narrowest enclosing item
-					// " WHEN EXISTS(" + GETPARENTRIGHT + ") " +
-					// " THEN CASE " +
-					// PARENT left does not change. right gets my previous left
-					" WHEN %3$s IS (" + parentRight + ") " + " THEN %4$d " +
-					// Subtree takes one step right
-					" WHEN %2$s > %4$d AND %3$s < %5$d " + " THEN %3$s + 1 " +
-
-					// Root's right gets parent right
-					" WHEN %3$s IS %5$d " + " THEN (" + parentRight + ") " +
-
-					// Dont change others
-					" ELSE %3$s END " +
-					// If no parent, no change
-					// " ELSE %3$s END " +
-
-					// Restrict to list
-					" WHERE %6$s IS %7$d; "
-
-					// Enforce integrity
-					+ posUniqueConstraint("new", "pos not unique unindent")
-
-			, TABLE_NAME, Columns.LEFT, Columns.RIGHT, left, right,
-					Columns.DBLIST, dblist);
-
-		else
-			return null;
-	}
-
-	@SuppressLint("DefaultLocale")
-	public String getSQLIndentItem() {
-		if (shouldIndent())
-			// First left value
-			return String
-					.format("UPDATE %1$s SET %2$s = "
-							+
-
-							" CASE "
-							+
-							// Must exist a sibling to the left to indent at all
-							" WHEN EXISTS(SELECT 1 FROM %1$s WHERE %3$s IS (%4$s - 1) AND %6$s IS %7$d LIMIT 1) "
-							+ " THEN CASE "
-							+
-							// I move one step left, and leave my children
-							" WHEN %2$s IS %4$s "
-							+ " THEN (%4$s - 1) "
-							+
-							// Others are left
-							" ELSE %2$s END "
-							+
-							// If no sibling, can't indent
-							" ELSE %2$s END, "
-							+
-							// Right value
-							" %3$s =  "
-							+
-
-							" CASE "
-							+
-							// Must exist a sibling to the left to indent at all
-							" WHEN EXISTS(SELECT 1 FROM %1$s WHERE %3$s IS (%4$s - 1) AND %6$s IS %7$d LIMIT 1) "
-							+ " THEN CASE "
-							+
-							// sibling gets my right
-							" WHEN %3$s IS (%4$s - 1) " + " THEN %5$s "
-							+
-							// I move one step left, new width is one
-							" WHEN %2$s IS %4$s "
-							+ " THEN %4$s "
-							+
-							// Others are left
-							" ELSE %3$s END "
-							+
-							// If no sibling, can't indent
-							" ELSE %3$s END "
-							+
-
-							// Restrict to list
-							" WHERE %6$s IS %7$d; "
-
-							// Enforce integrity
-							+ posUniqueConstraint("new",
-									"pos not unique indent item")
-
-					, TABLE_NAME, Columns.LEFT, Columns.RIGHT, left, right,
-							Columns.DBLIST, dblist);
-
-		else
-			return null;
-	}
 
 	public String getSQLMoveItemLeft(final ContentValues values) {
 		if (!values.containsKey(TARGETPOS)

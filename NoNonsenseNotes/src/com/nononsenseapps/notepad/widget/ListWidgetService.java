@@ -315,8 +315,8 @@ class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 			if (sortType.equals(mContext.getString(R.string.const_possubsort))
 					&& listId > 0) {
-				targetUri = Task.URI_INDENTED_QUERY;
-				sortSpec = null;
+				targetUri = Task.URI;
+				sortSpec = Task.Columns.LEFT;
 			}
 			else if (sortType.equals(mContext
 					.getString(R.string.const_modified))) {

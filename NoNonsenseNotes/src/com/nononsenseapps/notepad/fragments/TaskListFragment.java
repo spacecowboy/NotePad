@@ -352,8 +352,8 @@ public class TaskListFragment extends Fragment implements
 					}
 					// manual sorting
 					else {
-						targetUri = Task.URI_INDENTED_QUERY;
-						sortSpec = null;
+						targetUri = Task.URI;
+						sortSpec = Task.Columns.LEFT;
 					}
 
 					// Task.URI_SECTIONED_BY_DATE

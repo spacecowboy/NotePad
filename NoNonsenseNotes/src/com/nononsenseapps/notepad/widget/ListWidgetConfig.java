@@ -23,7 +23,6 @@ import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.MatrixCursor;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
@@ -292,8 +291,8 @@ public class ListWidgetConfig extends FragmentActivity {
 
 					if (sortType.equals(getString(R.string.const_possubsort))
 							&& listId > 0) {
-						targetUri = Task.URI_INDENTED_QUERY;
-						sortSpec = null;
+						targetUri = Task.URI;
+						sortSpec = Task.Columns.LEFT;
 					}
 					else if (sortType
 							.equals(getString(R.string.const_modified))) {

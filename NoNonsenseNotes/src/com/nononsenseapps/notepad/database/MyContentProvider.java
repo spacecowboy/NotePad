@@ -1,6 +1,5 @@
 package com.nononsenseapps.notepad.database;
 
-import java.util.ArrayList;
 
 import com.nononsenseapps.helpers.UpdateNotifier;
 
@@ -14,8 +13,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
-import android.provider.BaseColumns;
-import android.util.Log;
 
 public class MyContentProvider extends ContentProvider {
 	public static final String AUTHORITY = "com.nononsenseapps.NotePad";
@@ -51,7 +48,6 @@ public class MyContentProvider extends ContentProvider {
 			return TaskList.CONTENT_TYPE;
 		case Task.BASEITEMCODE:
 		case Task.BASEURICODE:
-		case Task.INDENTEDQUERYCODE:
 		case Task.SECTIONEDDATEITEMCODE:
 		case Task.SECTIONEDDATEQUERYCODE:
 		case Task.LEGACYBASEITEMCODE:
@@ -159,50 +155,6 @@ public class MyContentProvider extends ContentProvider {
 						TaskList.whereIdIs(selection),
 						TaskList.whereIdArg(list._id, selectionArgs));
 				break;
-			case Task.INDENTITEMCODE:
-				// indent one
-
-				t = new Task(uri, values);
-				if (!t.shouldIndent()) {
-					throw new SQLException(
-							"Cant indent task without the correct information");
-				}
-
-				stmt = db.compileStatement(t.getSQLIndentItem());
-				result += stmt.executeUpdateDelete();
-				break;
-			case Task.UNINDENTITEMCODE:
-				// unindent one
-
-				t = new Task(uri, values);
-				if (!t.shouldIndent()) {
-					throw new SQLException(
-							"Cant unindent task without the correct information");
-				}
-
-				Task parent = null;
-				// Get the parent
-				final Cursor c = db
-						.query(Task.TABLE_NAME, Task.Columns.FIELDS, String
-								.format("%1$s < ? AND %2$s > ? AND %3$s IS ?",
-										Task.Columns.LEFT, Task.Columns.RIGHT,
-										Task.Columns.DBLIST), new String[] {
-								Long.toString(t.left), Long.toString(t.right),
-								Long.toString(t.dblist) }, null, null, String
-								.format("(%2$s - %1$s) ASC", Task.Columns.LEFT,
-										Task.Columns.RIGHT), "1");
-
-				if (c != null && c.getCount() == 1 && c.moveToFirst()) {
-					parent = new Task(c);
-				}
-				c.close();
-
-				if (parent != null) {
-					stmt = db.compileStatement(t
-							.getSQLUnIndentItem(parent.right));
-					result += stmt.executeUpdateDelete();
-				}
-				break;
 			case Task.MOVEITEMLEFTCODE:
 				t = new Task(values);
 				sql = t.getSQLMoveItemLeft(values);
@@ -219,18 +171,6 @@ public class MyContentProvider extends ContentProvider {
 					result += stmt.executeUpdateDelete();
 				}
 				break;
-			// case Task.MOVESUBTREECODE:
-			// // Move subtree
-			//
-			// t = new Task(uri, values);
-			// if (!t.shouldMove(values)) {
-			// throw new SQLException(
-			// "Cant move task without the correct information");
-			// }
-			//
-			// stmt = db.compileStatement(t.getSQLMoveSubTree(values));
-			// result += stmt.executeUpdateDelete();
-			// break;
 			case Task.BASEITEMCODE:
 				// regular update
 				t = new Task(uri, values);
@@ -407,38 +347,8 @@ public class MyContentProvider extends ContentProvider {
 							null, sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
-		case Task.INDENTEDQUERYCODE:
-			// Ignore selection param
-			// Selection arg must be the list id
-			// Sort order is left ASC, no exceptions
-			if (selectionArgs == null || selectionArgs.length < 1) {
-				throw new SQLException(
-						"Indented URI requires first argument to be the list id!");
-			}
-			// Can also restrict completed status
-			// TODO make more general. Now extra fields are forced to be NULL
-			ArrayList<String> extraArgs = null;
-			if (selection != null && selection.contains("AND")) {
-				extraArgs = new ArrayList<String>();
-				extraArgs.add(Task.Columns.COMPLETED);
-			}
-
-			result = DatabaseHandler
-					.getInstance(getContext())
-					.getReadableDatabase()
-					.rawQuery(Task.getSQLIndentedQuery(projection, extraArgs),
-							SQLUtils.repeatTwice(selectionArgs));
-			result.setNotificationUri(getContext().getContentResolver(),
-					Task.URI);
-			break;
 		case Task.DELETEDQUERYCODE:
 			final String[] query = sanitize(selectionArgs);
-//			Log.d("nononsenseapps delete", ((query[0].isEmpty() || query[0]
-//											.equals("'*'")) ? ")"
-//											: (" WHERE "
-//													+ Task.FTS3_DELETE_TABLE_NAME + " MATCH ?)")));
-//
-//			Log.d("nononsenseapps delete", "" + ((query[0].isEmpty() || query[0].equals("'*'")) ? null : query[0]));
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
@@ -459,19 +369,6 @@ public class MyContentProvider extends ContentProvider {
 			result.setNotificationUri(getContext().getContentResolver(),
 					Task.URI_DELETED_QUERY);
 			break;
-		// case Task.DELETEDITEMCODE:
-		// id = Long.parseLong(uri.getLastPathSegment());
-		// result = DatabaseHandler
-		// .getInstance(getContext())
-		// .getReadableDatabase()
-		// .query(Task.DELETE_TABLE_NAME,
-		// projection,
-		// Task.whereIdIs(selection),
-		// Task.joinArrays(selectionArgs,
-		// new String[] { String.valueOf(id) }), null,
-		// null, null);
-		// result.setNotificationUri(getContext().getContentResolver(), uri);
-		// break;
 		case Task.BASEURICODE:
 			result = DatabaseHandler
 					.getInstance(getContext())
