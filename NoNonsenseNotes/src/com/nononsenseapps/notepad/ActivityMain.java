@@ -451,12 +451,20 @@ public class ActivityMain extends FragmentActivity implements
 
 				/** Called when a drawer has settled in a completely open state. */
 				public void onDrawerOpened(View drawerView) {
-					getActionBar().setTitle(R.string.show_from_all_lists);
-					isDrawerClosed = false;
-					invalidateOptionsMenu(); // creates call to
-												// onPrepareOptionsMenu()
-
 					showcaseDrawerPress();
+				}
+				
+				public void onDrawerStateChanged(int newState) {
+					super.onDrawerStateChanged(newState);
+					
+					// If it's not idle, it isn't closed
+					if (DrawerLayout.STATE_IDLE != newState) {
+						getActionBar().setTitle(R.string.show_from_all_lists);
+						// Is in motion, hide action items
+						isDrawerClosed = false;
+						invalidateOptionsMenu(); // creates call to
+													// onPrepareOptionsMenu()
+					}
 				}
 			};
 
