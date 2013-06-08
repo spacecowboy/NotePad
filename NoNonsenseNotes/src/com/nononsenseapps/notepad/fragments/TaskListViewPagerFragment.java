@@ -1,26 +1,24 @@
 package com.nononsenseapps.notepad.fragments;
 
 import com.googlecode.androidannotations.annotations.AfterViews;
-import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.SystemService;
-import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
 
 import com.nononsenseapps.notepad.ActivityMain.ListOpener;
 import com.nononsenseapps.notepad.ActivitySearchDeleted_;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
-import com.nononsenseapps.notepad.prefs.MainPrefs;
 
 import com.nononsenseapps.utils.ViewsHelper;
 
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Bundle;
@@ -125,14 +123,17 @@ public class TaskListViewPagerFragment extends Fragment implements
 			@Override
 			public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
 				mTaskListsAdapter.swapCursor(c);
+				final int pos;
 				if (mListIdToSelect > 0) {
-					final int pos = mSectionsPagerAdapter
+					 pos = mSectionsPagerAdapter
 							.getItemPosition(mListIdToSelect);
-					if (pos >= 0) {
-						pager.setCurrentItem(pos);
-						// TODO here, or after if?
-						mListIdToSelect = -1;
-					}
+				}
+				else {
+					pos = 0;
+				}
+				if (pos >= 0) {
+					pager.setCurrentItem(pos);
+					mListIdToSelect = -1;
 				}
 			}
 
@@ -222,7 +223,13 @@ public class TaskListViewPagerFragment extends Fragment implements
 		mListIdToSelect = id;
 		Log.d("nononsenseapps list", "openList: " + mListIdToSelect);
 		if (mSectionsPagerAdapter != null) {
-			final int pos = mSectionsPagerAdapter.getItemPosition(id);
+			
+			final int pos;
+			if (id < 1)
+				pos = 0;
+			else
+				pos = mSectionsPagerAdapter.getItemPosition(id);
+			
 			if (pos > -1) {
 				pager.setCurrentItem(pos, true);
 				mListIdToSelect = -1;
@@ -269,7 +276,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 			final String defaultlistkey) {
 		long returnList = tempList;
 
-		if (returnList < 1) {
+		if (returnList == -1) {
 			// Then check if a default list is specified
 			returnList = Long.parseLong(PreferenceManager
 					.getDefaultSharedPreferences(context).getString(
@@ -287,7 +294,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 			c.close();
 		}
 
-		if (returnList < 1) {
+		if (returnList == -1) {
 			// Fetch a valid list from database if previous attempts are invalid
 			final Cursor c = context.getContentResolver().query(
 					TaskList.URI,
@@ -310,6 +317,9 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 		private final CursorAdapter wrappedAdapter;
 		private final DataSetObserver subObserver;
+		private final OnSharedPreferenceChangeListener prefListener;
+		
+		private long all_id = -2;
 
 		public SectionsPagerAdapter(final FragmentManager fm,
 				final CursorAdapter wrappedAdapter) {
@@ -331,26 +341,47 @@ public class TaskListViewPagerFragment extends Fragment implements
 			if (wrappedAdapter != null)
 				wrappedAdapter.registerDataSetObserver(subObserver);
 
+			// also monitor changes of all tasks choice
+			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+			
+			prefListener = new OnSharedPreferenceChangeListener() {
+				
+				@Override
+				public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
+						String key) {
+					if (TaskListFragment.LIST_ALL_ID_PREF_KEY.equals(key)) {
+						all_id = prefs.getLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, TaskListFragment.LIST_ID_WEEK);
+						notifyDataSetChanged();
+					}
+				}
+			};
+			prefs.registerOnSharedPreferenceChangeListener(prefListener);
+
+			// Set all value
+			all_id = prefs.getLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, TaskListFragment.LIST_ID_WEEK);
 		}
 
 		public void destroy() {
 			if (wrappedAdapter != null) {
 				wrappedAdapter.unregisterDataSetObserver(subObserver);
 			}
+			if (prefListener != null) {
+				PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(prefListener);
+			}
 		}
 
 		@Override
 		public Fragment getItem(int pos) {
 			long id = getItemId(pos);
-			if (id < 0) return null;
+			//if (id < 0) return null;
 			return TaskListFragment_.getInstance(id);
 		}
 
 		@Override
 		public long getItemId(int position) {
-			long id = -1;
-			if (wrappedAdapter != null) {
-				Cursor c = (Cursor) wrappedAdapter.getItem(position);
+			long id = all_id;
+			if (wrappedAdapter != null && position > 0) {
+				Cursor c = (Cursor) wrappedAdapter.getItem(position - 1);
 				if (c != null && !c.isAfterLast() && !c.isBeforeFirst()) {
 					id = c.getLong(0);
 				}
@@ -361,17 +392,35 @@ public class TaskListViewPagerFragment extends Fragment implements
 		@Override
 		public int getCount() {
 			if (wrappedAdapter != null)
-				return wrappedAdapter.getCount();
+				return 1 + wrappedAdapter.getCount();
 			else
-				return 0;
+				return 1;
 		}
 
 		@Override
 		public CharSequence getPageTitle(int position) {
 			if (position >= getCount()) return null;
-			CharSequence title = null;
-			if (wrappedAdapter != null) {
-				Cursor c = (Cursor) wrappedAdapter.getItem(position);
+			CharSequence title = "";
+			
+			if (position == 0) {
+				switch ((int) all_id) {
+				case TaskListFragment.LIST_ID_OVERDUE:
+					title = getString(R.string.date_header_overdue);
+					break;
+				case TaskListFragment.LIST_ID_TODAY:
+					title = getString(R.string.date_header_today);
+					break;
+				case TaskListFragment.LIST_ID_WEEK:
+					title = getString(R.string.next_5_days);
+					break;
+				case TaskListFragment.LIST_ID_ALL:
+				default:
+					title = getString(R.string.all_tasks);
+					break;
+				}
+			}
+			else if (wrappedAdapter != null) {
+				Cursor c = (Cursor) wrappedAdapter.getItem(position - 1);
 				if (c != null && !c.isAfterLast() && !c.isBeforeFirst()) {
 					title = c.getString(1);
 				}

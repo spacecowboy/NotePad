@@ -75,6 +75,7 @@
 	<attr name="ListMarginStyle" format="reference"/>
 	<attr name="LeftDrawerStyle" format="reference"/>
 	<attr name="LeftDrawerListItemStyle" format="reference" />
+	<attr name="LeftDrawerListItemSecondaryStyle" format="reference" />
 	
 	<!-- Square calendar picker -->
 	<attr name="CalendarPickerBackground" format="reference|color" />

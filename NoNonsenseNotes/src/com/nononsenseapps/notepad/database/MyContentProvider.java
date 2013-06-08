@@ -129,6 +129,8 @@ public class MyContentProvider extends ContentProvider {
 		}
 
 		if (result != null) {
+			DAO.notifyProviderOnChange(getContext(), uri);
+			DAO.notifyProviderOnChange(getContext(), TaskList.URI_WITH_COUNT);
 			UpdateNotifier.updateWidgets(getContext());
 		}
 
@@ -311,6 +313,7 @@ public class MyContentProvider extends ContentProvider {
 
 		if (result > 0) {
 			DAO.notifyProviderOnChange(getContext(), uri);
+			DAO.notifyProviderOnChange(getContext(), TaskList.URI_WITH_COUNT);
 			UpdateNotifier.updateWidgets(getContext());
 		}
 		return result;
@@ -346,6 +349,19 @@ public class MyContentProvider extends ContentProvider {
 									new String[] { String.valueOf(id) }), null,
 							null, sortOrder);
 			result.setNotificationUri(getContext().getContentResolver(), uri);
+			break;
+		case TaskList.VIEWCOUNTCODE:
+			// Create view if not exists
+			DatabaseHandler.getInstance(getContext()).getWritableDatabase()
+					.execSQL(TaskList.CREATE_COUNT_VIEW);
+			
+			result = DatabaseHandler
+			.getInstance(getContext())
+			.getReadableDatabase()
+			.query(TaskList.VIEWCOUNT_NAME, projection, selection,
+					selectionArgs, null, null, sortOrder);
+			result.setNotificationUri(getContext().getContentResolver(),
+			uri);
 			break;
 		case Task.DELETEDQUERYCODE:
 			final String[] query = sanitize(selectionArgs);

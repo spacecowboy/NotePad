@@ -45,8 +45,8 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	protected String[] from;
 	protected int[] to;
 
-	private int layout;
-	private int dropdownlayout;
+	protected int layout;
+	protected int dropdownlayout;
 
 	/**
 	 * Same as a cursoradapter except two extra arrays are taken (and a layout).
@@ -56,27 +56,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	 */
 	public ExtrasCursorAdapter(Context context, int layout, Cursor c,
 			String[] from, int[] to, int[] extraIds, int[] extraLabels, int dropdownlayout) {
-		super(context, layout, c);
-		this.cursor = c;
-		this.extraIds = extraIds;
-		this.extraLabels = extraLabels;
-		this.context = context;
-		this.from = from;
-		this.to = to;
-		this.layout = layout;
-		this.dropdownlayout = dropdownlayout;
-	}
-
-	/**
-	 * Same as a cursoradapter except two extra arrays are taken (and a layout).
-	 * The first is an array of what IDs you want to assign your items so you
-	 * can identify them later. Second is an array of ids to the String
-	 * resources to use as labels.
-	 */
-	public ExtrasCursorAdapter(Context context, int layout, Cursor c,
-			boolean autoRequery, String[] from, int[] to, int[] extraIds,
-			int[] extraLabels, int dropdownlayout) {
-		super(context, layout, c, autoRequery);
+		super(context, layout, c, 0);
 		this.cursor = c;
 		this.extraIds = extraIds;
 		this.extraLabels = extraLabels;
@@ -156,19 +136,26 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		if (convertView == null) {
 			// Make a new view
 			LayoutInflater mInflater = LayoutInflater.from(context);
-			convertView = mInflater.inflate(layout, parent, false);
-			//cursor.moveToFirst();
-			//convertView = super.newView(parent.getContext(), cursor, parent);
+			convertView = mInflater.inflate(getItemLayout(position), parent, false);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 		if (viewHolder == null) {
 			viewHolder = setViewHolder(convertView);
 		}
-		viewHolder.texts[0].setText(context.getText(extraLabels[position]));
+		setExtraText(viewHolder, position);
 
 		return convertView;
 	}
+	
+	/**
+	 * Only sets the first field
+	 */
+	protected void setExtraText(final ViewHolder viewHolder, final int position) {
+		viewHolder.texts[0].setText(context.getText(extraLabels[position]));
+	}
+	
+	// TODO method to update extra labels
 
 	@Override
 	public View getDropDownView(int position, View convertView, ViewGroup parent) {
@@ -180,17 +167,19 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 			// Make a new view
 			LayoutInflater mInflater = LayoutInflater.from(context);
 			convertView = mInflater.inflate(dropdownlayout, parent, false);
-			//cursor.moveToFirst();
-			//convertView = super.newDropDownView(parent.getContext(), cursor,parent);
 		} else {
 			viewHolder = (ViewHolder) convertView.getTag();
 		}
 		if (viewHolder == null) {
 			viewHolder = setViewHolder(convertView);
 		}
-		viewHolder.texts[0].setText(context.getText(extraLabels[position]));
+		setExtraText(viewHolder, position);
 
 		return convertView;
+	}
+	
+	protected int getItemLayout(final int position) {
+		return layout;
 	}
 
 	@Override
@@ -201,11 +190,6 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		else {
 			return super.getItemId(position - extraIds.length);
 		}
-//		if (position < super.getCount()) {
-//			return super.getItemId(position);
-//		} else {
-//			return extraIds[position - super.getCount()];
-//		}
 	}
 	
 	@Override
@@ -216,11 +200,6 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		else {
 			return super.getItem(position - extraIds.length);
 		}
-//		if (position < super.getCount()) {
-//			return super.getItem(position);
-//		} else {
-//			return getExtraItem(position);
-//		}
 	}
 
 	@Override
@@ -237,7 +216,6 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	 * @return
 	 */
 	public CharSequence getExtraItem(int realPos) {
-		//realPos -= super.getCount();
 		if (extraLabels.length == 0 || realPos < -1 || realPos > extraLabels.length)
 			return null;
 		else

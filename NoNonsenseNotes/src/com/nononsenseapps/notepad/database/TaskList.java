@@ -16,6 +16,9 @@ public class TaskList extends DAO {
 	public static final Uri URI = Uri.withAppendedPath(
 			Uri.parse(MyContentProvider.SCHEME + MyContentProvider.AUTHORITY),
 			TABLE_NAME);
+	
+	public static final String VIEWCOUNT_NAME = "lists_with_count";
+	public static final Uri URI_WITH_COUNT = Uri.withAppendedPath(URI, VIEWCOUNT_NAME);
 
 	public static Uri getUri(final long id) {
 		return Uri.withAppendedPath(URI, Long.toString(id));
@@ -25,6 +28,7 @@ public class TaskList extends DAO {
 
 	public static final int BASEURICODE = 101;
 	public static final int BASEITEMCODE = 102;
+	public static final int VIEWCOUNTCODE = 103;
 	// Legacy support, these also need to use legacy projections
 		public static final int LEGACYBASEURICODE = 111;
 		public static final int LEGACYBASEITEMCODE = 112;
@@ -39,6 +43,8 @@ public class TaskList extends DAO {
 				.addURI(MyContentProvider.AUTHORITY, TABLE_NAME, BASEURICODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/#",
 				BASEITEMCODE);
+		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/" + VIEWCOUNT_NAME,
+				VIEWCOUNTCODE);
 		
 		// Legacy URIs
 				sURIMatcher.addURI(MyContentProvider.AUTHORITY,
@@ -63,6 +69,8 @@ public class TaskList extends DAO {
 		public static final String UPDATED = "updated";
 		public static final String LISTTYPE = "tasktype";
 		public static final String SORTING = "sorting";
+		
+		public static final String VIEW_COUNT = "count";
 
 		// public static final String GTASKACCOUNT = "gtaskaccount";
 		// public static final String GTASKID = "gtaskid";
@@ -84,11 +92,22 @@ public class TaskList extends DAO {
 			.append(" INTEGER,").append(Columns.LISTTYPE)
 			.append(" TEXT DEFAULT NULL,").append(Columns.SORTING)
 			.append(" TEXT DEFAULT NULL")
-			// GTask fields
-			// .append(Columns.GTASKACCOUNT).append(" TEXT,").append(Columns.GTASKID).append(" TEXT,")
-			// Dropbox fields
-			// .append(Columns.DROPBOXACCOUNT).append(" TEXT,").append(Columns.DROPBOXID).append(" TEXT")
 			.append(")").toString();
+	
+	public static final String CREATE_COUNT_VIEW = new StringBuilder("CREATE TEMP VIEW IF NOT EXISTS ")
+	.append(VIEWCOUNT_NAME).append(" AS SELECT ")
+	.append(arrayToCommaString(Columns.FIELDS))
+	.append(",").append(Columns.VIEW_COUNT)
+	.append(" FROM ").append(TABLE_NAME)
+	.append(" INNER JOIN ")
+	// Select count statement
+	.append(" (SELECT COUNT(1) AS ").append(Columns.VIEW_COUNT).append(",").append(Task.Columns.DBLIST)
+	.append(" FROM ").append(Task.TABLE_NAME)
+	.append(" GROUP BY ").append(Task.Columns.DBLIST)
+	.append(") ")
+	.append(" ON ").append(TABLE_NAME).append(".").append(Columns._ID).append(" = ").append(Task.Columns.DBLIST)
+	.append(";")
+	.toString();
 
 	public String title = "";
 

@@ -60,6 +60,7 @@
         
         <item name="LeftDrawerStyle">@style/LeftDrawerStyleDark</item>
         <item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleDark</item>
+        <item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleDark</item>
         
         <!-- For Square's Date picker -->
         <item name="CalendarTitle">@style/CalendarTitleDark</item>
@@ -140,6 +141,7 @@
         
          <item name="LeftDrawerStyle">@style/LeftDrawerStyleLight</item>
         <item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleLight</item>
+        <item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleLight</item>
         
         <!-- For Square's Date picker -->
         <item name="CalendarTitle">@style/CalendarTitleLight</item>

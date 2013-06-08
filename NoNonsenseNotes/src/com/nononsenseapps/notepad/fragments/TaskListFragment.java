@@ -2,7 +2,6 @@ package com.nononsenseapps.notepad.fragments;
 
 import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -11,7 +10,6 @@ import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.ViewById;
 
-import com.mobeta.android.dslv.DragSortListView.DragSortListener;
 import com.mobeta.android.dslv.DragSortListView.DropListener;
 import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
@@ -52,9 +50,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.View.OnLongClickListener;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
@@ -68,6 +64,13 @@ import android.widget.Toast;
 @EFragment(R.layout.fragment_task_list)
 public class TaskListFragment extends Fragment implements
 		OnSharedPreferenceChangeListener {
+
+	// Must be less than -1
+	public static final String LIST_ALL_ID_PREF_KEY = "show_all_tasks_choice_id";
+	public static final int LIST_ID_ALL = -2;
+	public static final int LIST_ID_OVERDUE = -3;
+	public static final int LIST_ID_TODAY = -4;
+	public static final int LIST_ID_WEEK = -5;
 
 	public static final String LIST_ID = "list_id";
 
@@ -110,11 +113,10 @@ public class TaskListFragment extends Fragment implements
 
 		setHasOptionsMenu(true);
 
-		if (getArguments().getLong(LIST_ID, -1) < 1) {
+		if (getArguments().getLong(LIST_ID, -1) == -1) {
 			throw new InvalidParameterException(
 					"Must designate a list to open!");
 		}
-
 		mListId = getArguments().getLong(LIST_ID, -1);
 
 		// Start loading data
@@ -322,8 +324,8 @@ public class TaskListFragment extends Fragment implements
 				}
 				else {
 					// What sorting to use
-					final Uri targetUri;
-					final String sortSpec;
+					Uri targetUri;
+					String sortSpec;
 					if (mListType == null) {
 						mListType = prefs.getString(
 								getString(R.string.pref_listtype),
@@ -356,12 +358,38 @@ public class TaskListFragment extends Fragment implements
 						sortSpec = Task.Columns.LEFT;
 					}
 
-					// Task.URI_SECTIONED_BY_DATE
-					// Task.URI_INDENTED_QUERY
-					// Task.Columns.LEFT
+					String where = null;
+					String[] whereArgs = null;
+
+					if (mListId > 0) {
+						where = Task.Columns.DBLIST + " IS ?";
+						whereArgs = new String[] { Long.toString(mListId) };
+					}
+					else {
+						targetUri = Task.URI;
+						sortSpec = Task.Columns.DUE;
+						whereArgs = null;
+						where = Task.Columns.COMPLETED + " IS NULL";
+						switch ((int) mListId) {
+						case LIST_ID_OVERDUE:
+							where += andWhereOverdue();
+							break;
+						case LIST_ID_TODAY:
+							where += andWhereToday();
+							break;
+						case LIST_ID_WEEK:
+							where += andWhereWeek();
+							break;
+						case LIST_ID_ALL:
+						default:
+							// Show completed also in this case
+							where = null;
+							break;
+						}
+					}
+
 					return new CursorLoader(getActivity(), targetUri,
-							Task.Columns.FIELDS, Task.Columns.DBLIST + " IS ?",
-							new String[] { Long.toString(mListId) }, sortSpec);
+							Task.Columns.FIELDS, where, whereArgs, sortSpec);
 				}
 			}
 
@@ -392,7 +420,33 @@ public class TaskListFragment extends Fragment implements
 			}
 		};
 
-		getLoaderManager().restartLoader(0, null, mCallback);
+		if (mListId > 0) {
+			getLoaderManager().restartLoader(0, null, mCallback);
+		}
+		else {
+			// Setting sort types for all tasks always to due date
+			mSortType = getString(R.string.const_duedate);
+			getLoaderManager().restartLoader(1, null, mCallback);
+		}
+	}
+	
+	public static String whereOverDue() {
+		return Task.Columns.DUE + " BETWEEN " + Task.OVERDUE + " AND " + Task.TODAY_START;
+	}
+	public static String andWhereOverdue() {
+		return " AND " +  whereOverDue();
+	}
+	public static String whereToday() {
+		return Task.Columns.DUE + " BETWEEN " + Task.TODAY_START + " AND " + Task.TODAY_PLUS(1);
+	}
+	public static String andWhereToday() {
+		return " AND " + whereToday();
+	}
+	public static String whereWeek() {
+		return Task.Columns.DUE + " BETWEEN " + Task.TODAY_START+ " AND (" + Task.TODAY_PLUS(5) + " -1)";
+	}
+	public static String andWhereWeek() {
+		return " AND " + whereWeek();
 	}
 
 	@AfterViews
@@ -424,7 +478,7 @@ public class TaskListFragment extends Fragment implements
 		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 			final HashMap<Long, Task> tasks = new HashMap<Long, Task>();
 			ShareActionProvider mShareProvider;
-			//ActionMode mMode;
+			// ActionMode mMode;
 			final PasswordConfirmedListener pListener = new PasswordConfirmedListener() {
 				@Override
 				@Background
@@ -536,8 +590,9 @@ public class TaskListFragment extends Fragment implements
 					break;
 				case R.id.menu_switch_list:
 					// show move to list dialog
-					DialogMoveToList.getInstance(tasks.keySet().toArray(new Long[tasks.size()])).show(
-							getFragmentManager(), "move_to_list_dialog");
+					DialogMoveToList.getInstance(
+							tasks.keySet().toArray(new Long[tasks.size()]))
+							.show(getFragmentManager(), "move_to_list_dialog");
 					finish = true;
 					break;
 				default:
@@ -610,12 +665,13 @@ public class TaskListFragment extends Fragment implements
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasklist, menu);
 	}
-	
+
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		if (getActivity() instanceof MenuStateController) {
-			final boolean visible = ((MenuStateController) getActivity()).childItemsVisible();
-			
+			final boolean visible = ((MenuStateController) getActivity())
+					.childItemsVisible();
+
 			menu.setGroupVisible(R.id.list_menu_group, visible);
 			if (!visible) {
 				if (mMode != null) mMode.finish();
@@ -630,16 +686,19 @@ public class TaskListFragment extends Fragment implements
 			if (mListener != null && mListId > 0) {
 				mListener.addTaskInList("", mListId);
 			}
+			else if (mListener != null) {
+				mListener.addTaskInList("", TaskListViewPagerFragment.getAList(getActivity(), -1, getString(R.string.pref_defaultlist)));
+			}
 			return true;
-//		case R.id.menu_managelists:
-//			// Show fragment
-//			if (mListId > 0) {
-//				DialogEditList_ dialog = DialogEditList_.getInstance(mListId);
-//				dialog.show(getFragmentManager(), "fragment_edit_list");
-//			}
-//			return true;
+			// case R.id.menu_managelists:
+			// // Show fragment
+			// if (mListId > 0) {
+			// DialogEditList_ dialog = DialogEditList_.getInstance(mListId);
+			// dialog.show(getFragmentManager(), "fragment_edit_list");
+			// }
+			// return true;
 		case R.id.menu_clearcompleted:
-			if (mListId > 0) {
+			if (mListId != -1) {
 				DialogDeleteCompletedTasks.showDialog(getFragmentManager(),
 						mListId, null);
 			}

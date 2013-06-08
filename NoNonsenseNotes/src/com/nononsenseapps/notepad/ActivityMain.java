@@ -1,5 +1,6 @@
 package com.nononsenseapps.notepad;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.github.espiandev.showcaseview.ShowcaseView;
@@ -31,6 +32,7 @@ import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListene
 import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
+import com.nononsenseapps.notepad.fragments.TaskListFragment;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
@@ -39,6 +41,7 @@ import com.nononsenseapps.notepad.legacy.DonateMigrator_;
 import com.nononsenseapps.notepad.prefs.AccountDialog4;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
+import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
 import com.nononsenseapps.utils.ViewsHelper;
 
 import android.annotation.SuppressLint;
@@ -63,7 +66,6 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.widget.SimpleCursorAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -248,7 +250,7 @@ public class ActivityMain extends FragmentActivity implements
 			Log.d("nononsenseapps list", "Activity Saved not null: " + b);
 			this.state = b;
 		}
-		
+
 		// Clear possible notifications, schedule future ones
 		final Intent intent = getIntent();
 		// Clear notification if present
@@ -453,10 +455,10 @@ public class ActivityMain extends FragmentActivity implements
 				public void onDrawerOpened(View drawerView) {
 					showcaseDrawerPress();
 				}
-				
+
 				public void onDrawerStateChanged(int newState) {
 					super.onDrawerStateChanged(newState);
-					
+
 					// If it's not idle, it isn't closed
 					if (DrawerLayout.STATE_IDLE != newState) {
 						getActionBar().setTitle(R.string.show_from_all_lists);
@@ -475,17 +477,66 @@ public class ActivityMain extends FragmentActivity implements
 		getActionBar().setDisplayHomeAsUpEnabled(true);
 		getActionBar().setHomeButtonEnabled(true);
 
+		// Use extra items for All Lists
+		final int[] extraIds = new int[] { -1,
+				TaskListFragment.LIST_ID_OVERDUE,
+				TaskListFragment.LIST_ID_TODAY, TaskListFragment.LIST_ID_WEEK,
+				-1 };
+		// This is fine for initial conditions
+		final int[] extraStrings = new int[] { R.string.tasks,
+				R.string.date_header_overdue, R.string.date_header_today,
+				R.string.next_5_days, R.string.lists };
+		// Use this for real data
+		final ArrayList<ArrayList<Object>> extraData = new ArrayList<ArrayList<Object>>();
+		// Task header
+		extraData.add(new ArrayList<Object>());
+		extraData.get(0).add(R.string.tasks);
+		// Overdue
+		extraData.add(new ArrayList<Object>());
+		extraData.get(1).add(R.string.date_header_overdue);
+		// Today
+		extraData.add(new ArrayList<Object>());
+		extraData.get(2).add(R.string.date_header_today);
+		// Week
+		extraData.add(new ArrayList<Object>());
+		extraData.get(3).add(R.string.next_5_days);
+		// Lists header
+		extraData.add(new ArrayList<Object>());
+		extraData.get(4).add(R.string.lists);
+
+		final int[] extraTypes = new int[] { 1, 0, 0, 0, 1 };
+
+		final ExtraTypesCursorAdapter adapter = new ExtraTypesCursorAdapter(
+				this, R.layout.simple_light_list_item_2, null, new String[] {
+						TaskList.Columns.TITLE, TaskList.Columns.VIEW_COUNT },
+				new int[] { android.R.id.text1, android.R.id.text2 },
+				// id -1 for headers, ignore clicks on them
+				extraIds, extraStrings, extraTypes,
+				new int[] { R.layout.drawer_header });
+		adapter.setExtraData(extraData);
+
+		// Load count of tasks in each one
+		Log.d("nononsenseapps drawer", TaskList.CREATE_COUNT_VIEW);
+
 		// Adapter for list titles and ids
-		final SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-				R.layout.simple_light_list_item_1, null,
-				new String[] { TaskList.Columns.TITLE },
-				new int[] { android.R.id.text1 }, 0);
+		// final SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
+		// R.layout.simple_light_list_item_1, null,
+		// new String[] { TaskList.Columns.TITLE },
+		// new int[] { android.R.id.text1 }, 0);
 		leftDrawer.setAdapter(adapter);
 		// Set click handler
 		leftDrawer.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View v, int pos,
 					long id) {
+				if (id < -1) {
+					// Set preference which type was chosen
+					PreferenceManager
+							.getDefaultSharedPreferences(ActivityMain.this)
+							.edit()
+							.putLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, id)
+							.commit();
+				}
 				openList(id);
 			}
 		});
@@ -499,36 +550,116 @@ public class ActivityMain extends FragmentActivity implements
 					DialogEditList_ dialog = DialogEditList_.getInstance(id);
 					dialog.show(getSupportFragmentManager(),
 							"fragment_edit_list");
+					return true;
 				}
-				return true;
+				else if (id < -1) {
+					// Set as "default"
+					PreferenceManager
+							.getDefaultSharedPreferences(ActivityMain.this)
+							.edit()
+							.remove(getString(R.string.pref_defaultlist))
+							.putLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, id)
+							.commit();
+					Toast.makeText(ActivityMain.this, R.string.new_default_set,
+							Toast.LENGTH_SHORT).show();
+					// openList(id);
+					return true;
+				}
+				else {
+					return false;
+				}
 			}
 		});
+		// Define the callback handler
+		final LoaderCallbacks<Cursor> callbacks = new LoaderCallbacks<Cursor>() {
+			
+			final String[] COUNTROWS = new String[] {"COUNT(1)"};
+
+			@Override
+			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
+				// Normal lists
+				switch (id) {
+				case TaskListFragment.LIST_ID_OVERDUE:
+					return new CursorLoader(ActivityMain.this,
+							Task.URI,
+							COUNTROWS,
+							TaskListFragment.whereOverDue(), null, null);
+				case TaskListFragment.LIST_ID_TODAY:
+					return new CursorLoader(ActivityMain.this,
+							Task.URI,
+							COUNTROWS,
+							TaskListFragment.whereToday(), null, null);
+				case TaskListFragment.LIST_ID_WEEK:
+					return new CursorLoader(ActivityMain.this,
+							Task.URI,
+							COUNTROWS,
+							TaskListFragment.whereWeek(), null, null);
+				case 0:
+				default:
+					return new CursorLoader(ActivityMain.this,
+							TaskList.URI_WITH_COUNT, new String[] {
+									TaskList.Columns._ID,
+									TaskList.Columns.TITLE,
+									TaskList.Columns.VIEW_COUNT }, null, null,
+							getResources().getString(
+									R.string.const_as_alphabetic,
+									TaskList.Columns.TITLE));
+				}
+			}
+			
+			private void updateExtra(final int pos, final int count) {
+				while (extraData.get(pos).size() < 2) {
+					// To avoid crashes
+					extraData.get(pos).add("0");
+				}
+				extraData.get(pos).set(1, Integer.toString(count));
+				adapter.notifyDataSetChanged();
+			}
+
+			@Override
+			public void onLoadFinished(Loader<Cursor> l, Cursor c) {
+				switch (l.getId()) {
+				case TaskListFragment.LIST_ID_OVERDUE:
+					if (c.moveToFirst()) {
+						updateExtra(1, c.getInt(0));
+					}
+					break;
+				case TaskListFragment.LIST_ID_TODAY:
+					if (c.moveToFirst()) {
+						updateExtra(2, c.getInt(0));
+					}
+					break;
+				case TaskListFragment.LIST_ID_WEEK:
+					if (c.moveToFirst()) {
+						updateExtra(3, c.getInt(0));
+					}
+					break;
+				case 0:
+				default:
+					adapter.swapCursor(c);
+				}
+			}
+
+			@Override
+			public void onLoaderReset(Loader<Cursor> l) {
+				switch (l.getId()) {
+				case TaskListFragment.LIST_ID_OVERDUE:
+				case TaskListFragment.LIST_ID_TODAY:
+				case TaskListFragment.LIST_ID_WEEK:
+					break;
+				case 0:
+				default:
+					adapter.swapCursor(null);
+				}
+			}
+		};
 
 		// Load actual data
-		getSupportLoaderManager().restartLoader(0, null,
-				new LoaderCallbacks<Cursor>() {
-
-					@Override
-					public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
-						return new CursorLoader(ActivityMain.this,
-								TaskList.URI, new String[] {
-										TaskList.Columns._ID,
-										TaskList.Columns.TITLE }, null, null,
-								getResources().getString(
-										R.string.const_as_alphabetic,
-										TaskList.Columns.TITLE));
-					}
-
-					@Override
-					public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
-						adapter.swapCursor(c);
-					}
-
-					@Override
-					public void onLoaderReset(Loader<Cursor> arg0) {
-						adapter.swapCursor(null);
-					}
-				});
+		getSupportLoaderManager().restartLoader(0, null, callbacks);
+		// TODO special ones
+		getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_OVERDUE, null, callbacks);
+		getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_TODAY, null, callbacks);
+		getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_WEEK, null, callbacks);
 	}
 
 	/**
@@ -1154,8 +1285,9 @@ public class ActivityMain extends FragmentActivity implements
 	 */
 	long getListIdToShow(final Intent intent) {
 		long result = getListId(intent);
-		return TaskListViewPagerFragment.getAList(this, result,
-				getString(R.string.pref_defaultlist));
+		return result;
+		// return TaskListViewPagerFragment.getAList(this, result,
+		// getString(R.string.pref_defaultlist));
 	}
 
 	@Override

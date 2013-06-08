@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="64dp"
+    android:orientation="horizontal"
+    android:background="?android:attr/selectableItemBackground" >
+
+    <TextView
+        android:id="@android:id/text1"
+        style="?LeftDrawerListItemStyle"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="64dp"
+        android:fontFamily="sans-serif-light"
+        android:text="Overdue" />
+    
+    <TextView
+        android:id="@android:id/text2"
+        style="?LeftDrawerListItemSecondaryStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"
+        android:layout_gravity="right"
+        android:fontFamily="sans-serif-light"
+        android:text="7" />
+
+</LinearLayout>

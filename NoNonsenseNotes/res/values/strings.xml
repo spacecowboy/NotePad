@@ -35,6 +35,7 @@
     <string name="menu_createlist">Start new list</string>
     <string name="menu_clearcompleted">Clear completed</string>
     <string name="menu_setdefaultlist">Set as default list</string>
+    <string name="new_default_set">New default set</string>
     <string name="menu_managelists">Edit list</string>
     <string name="add_item">Add item</string>
     <string name="delete_question">Delete?</string>
@@ -80,6 +81,7 @@
     <string name="dropbox_enable">Sync with Dropbox</string>
     <string name="dropbox_enable_summary">Creates a special NoNonsense Notes folder in your Dropbox</string>
     <string name="show_from_all_lists">All lists</string>
+    <string name="lists">Lists</string>
     <string name="deleted">Deleted</string>
     <string name="repeat">Repeat</string>
     <string name="once">Once</string>
@@ -170,6 +172,8 @@
     <string name="date_header_future">Later</string>
     <string name="date_header_none">No date</string>
     <string name="date_header_completed">Completed</string>
+    <string name="next_5_days">Next 5 days</string>
+    <string name="this_week">This week</string>
     <string name="please_select_note">Please select or create a note</string>
     <string name="please_create_note">Please create a note</string>
     <string name="hide_checkbox">Hide checkbox</string>
@@ -239,6 +243,7 @@
     <string name="dateformat_long_1">EEEE localtime, MMMM d</string>
     <string name="dateformat_long_2">E localtime, MMM d</string>
     <string name="tasks">Tasks</string>
+    <string name="all_tasks">All tasks</string>
     <string name="dashclock_tasks">@string/tasks</string>
     <string name="dashclock_restrict_to_tasks_in_a_specific_list">Restrict to tasks in</string>
     <string name="dashclock_show_overdue_tasks">Show overdue tasks</string>
