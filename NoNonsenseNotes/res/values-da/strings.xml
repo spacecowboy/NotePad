@@ -78,6 +78,7 @@ limitations under the License.
 <string name="dropbox_enable">Synkroniser med Dropbox</string>
 <string name="dropbox_enable_summary">Opretter en special NoNonsense Notes mappe i din Dropbox</string>
 <string name="show_from_all_lists">Alle lister</string>
+<string name="lists">Lister</string>
 <string name="deleted">Slettet</string>
 <string name="repeat">Gentag</string>
 <string name="once">En gang</string>
@@ -168,6 +169,8 @@ Use few if language need it. In English is the same.
 <string name="date_header_future">Senere</string>
 <string name="date_header_none">Ingen dato</string>
 <string name="date_header_completed">Udført</string>
+<string name="next_5_days">Næste 5 dage</string>
+<string name="this_week">Denne uge</string>
 <string name="please_select_note">Vælg eller opret venligst en note</string>
 <string name="please_create_note">Opret venligst en note</string>
 <string name="hide_checkbox">Skjul afkrydsningsfejlt</string>
@@ -225,6 +228,7 @@ Use few if language need it. In English is the same.
 <string name="dateformat_long_1">EEEE localtime, MMMM d</string>
 <string name="dateformat_long_2">E localtime, MMM d</string>
 <string name="tasks">Opgaver</string>
+<string name="all_tasks">Alle opgaver</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Begræns til opgaver i en bestemt liste</string>
 <string name="dashclock_show_overdue_tasks">Vis forfaldne opgaver</string>
 <string name="dashclock_overdue_tasks_show">Forfaldne opgaver vil blive vist</string>

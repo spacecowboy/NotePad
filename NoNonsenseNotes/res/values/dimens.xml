@@ -15,13 +15,13 @@
      limitations under the License.
 -->
 <resources>
-    
     <dimen name="drag_grip_ridge_size">4dp</dimen>
     <dimen name="drag_grip_ridge_gap">2dp</dimen>
     <dimen name="drag_grip_width">32dp</dimen>
     <!-- it is 16dp from the edge, 8 dp padding always presetn -->
     <dimen name="drag_grip_avoid_padding">16dp</dimen>
 
+    <!-- List stuff -->
     <dimen name="listMargins">0dp</dimen>
     <dimen name="listMarginsPadded">8dp</dimen>
     

@@ -122,14 +122,15 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 			@Override
 			public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
+				Log.d("nononsenseapps list", "loadfinished");
 				mTaskListsAdapter.swapCursor(c);
 				final int pos;
-				if (mListIdToSelect > 0) {
-					 pos = mSectionsPagerAdapter
+				if (mListIdToSelect != -1) {
+					pos = mSectionsPagerAdapter
 							.getItemPosition(mListIdToSelect);
 				}
 				else {
-					pos = 0;
+					pos = -1;
 				}
 				if (pos >= 0) {
 					pager.setCurrentItem(pos);
@@ -223,13 +224,13 @@ public class TaskListViewPagerFragment extends Fragment implements
 		mListIdToSelect = id;
 		Log.d("nononsenseapps list", "openList: " + mListIdToSelect);
 		if (mSectionsPagerAdapter != null) {
-			
+
 			final int pos;
 			if (id < 1)
 				pos = 0;
 			else
 				pos = mSectionsPagerAdapter.getItemPosition(id);
-			
+
 			if (pos > -1) {
 				pager.setCurrentItem(pos, true);
 				mListIdToSelect = -1;
@@ -272,15 +273,15 @@ public class TaskListViewPagerFragment extends Fragment implements
 	 * 
 	 * Guarantees default list is valid
 	 */
-	public static long getAList(final Context context, final long tempList,
-			final String defaultlistkey) {
+	public static long getARealList(final Context context, final long tempList) {
 		long returnList = tempList;
 
 		if (returnList == -1) {
 			// Then check if a default list is specified
-			returnList = Long.parseLong(PreferenceManager
-					.getDefaultSharedPreferences(context).getString(
-							defaultlistkey, "-1"));
+			SharedPreferences prefs = PreferenceManager
+					.getDefaultSharedPreferences(context);
+			returnList = Long.parseLong(prefs.getString(context
+									.getString(R.string.pref_defaultlist), "-1"));
 		}
 
 		if (returnList > 0) {
@@ -290,6 +291,9 @@ public class TaskListViewPagerFragment extends Fragment implements
 					new String[] { Long.toString(returnList) }, null);
 			if (c.moveToFirst()) {
 				returnList = c.getLong(0);
+			}
+			else {
+				returnList = -1;
 			}
 			c.close();
 		}
@@ -312,13 +316,42 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 		return returnList;
 	}
+	
+	/**
+	 * Might be a meta list
+	 */
+	public static long getAShowList(final Context context, final long tempList) {
+		long returnList = tempList;
+
+		if (returnList == -1) {
+			// Then check if a default list is specified
+			SharedPreferences prefs = PreferenceManager
+					.getDefaultSharedPreferences(context);
+			returnList = prefs
+					.getLong(
+							context.getString(R.string.pref_defaultstartlist),
+							Long.parseLong(prefs.getString(context
+									.getString(R.string.pref_defaultlist), "-1")));
+		}
+
+		if (returnList == -1) {
+			returnList = getARealList(context, returnList);
+		}
+
+		// If nothing was found, show ALL
+		if (returnList == -1) {
+			returnList = TaskListFragment.LIST_ID_ALL;
+		}
+
+		return returnList;
+	}
 
 	public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
 		private final CursorAdapter wrappedAdapter;
 		private final DataSetObserver subObserver;
 		private final OnSharedPreferenceChangeListener prefListener;
-		
+
 		private long all_id = -2;
 
 		public SectionsPagerAdapter(final FragmentManager fm,
@@ -342,15 +375,18 @@ public class TaskListViewPagerFragment extends Fragment implements
 				wrappedAdapter.registerDataSetObserver(subObserver);
 
 			// also monitor changes of all tasks choice
-			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-			
+			final SharedPreferences prefs = PreferenceManager
+					.getDefaultSharedPreferences(getActivity());
+
 			prefListener = new OnSharedPreferenceChangeListener() {
-				
+
 				@Override
-				public void onSharedPreferenceChanged(SharedPreferences sharedPreferences,
-						String key) {
+				public void onSharedPreferenceChanged(
+						SharedPreferences sharedPreferences, String key) {
 					if (TaskListFragment.LIST_ALL_ID_PREF_KEY.equals(key)) {
-						all_id = prefs.getLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, TaskListFragment.LIST_ID_WEEK);
+						all_id = prefs.getLong(
+								TaskListFragment.LIST_ALL_ID_PREF_KEY,
+								TaskListFragment.LIST_ID_WEEK);
 						notifyDataSetChanged();
 					}
 				}
@@ -358,7 +394,8 @@ public class TaskListViewPagerFragment extends Fragment implements
 			prefs.registerOnSharedPreferenceChangeListener(prefListener);
 
 			// Set all value
-			all_id = prefs.getLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, TaskListFragment.LIST_ID_WEEK);
+			all_id = prefs.getLong(TaskListFragment.LIST_ALL_ID_PREF_KEY,
+					TaskListFragment.LIST_ID_WEEK);
 		}
 
 		public void destroy() {
@@ -366,14 +403,16 @@ public class TaskListViewPagerFragment extends Fragment implements
 				wrappedAdapter.unregisterDataSetObserver(subObserver);
 			}
 			if (prefListener != null) {
-				PreferenceManager.getDefaultSharedPreferences(getActivity()).unregisterOnSharedPreferenceChangeListener(prefListener);
+				PreferenceManager.getDefaultSharedPreferences(getActivity())
+						.unregisterOnSharedPreferenceChangeListener(
+								prefListener);
 			}
 		}
 
 		@Override
 		public Fragment getItem(int pos) {
 			long id = getItemId(pos);
-			//if (id < 0) return null;
+			// if (id < 0) return null;
 			return TaskListFragment_.getInstance(id);
 		}
 
@@ -401,7 +440,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 		public CharSequence getPageTitle(int position) {
 			if (position >= getCount()) return null;
 			CharSequence title = "";
-			
+
 			if (position == 0) {
 				switch ((int) all_id) {
 				case TaskListFragment.LIST_ID_OVERDUE:

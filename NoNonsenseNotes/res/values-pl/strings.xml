@@ -26,7 +26,7 @@ limitations under the License.
 <string name="distance">Dystans</string>
 <string name="need_location_help">Przytrzymaj, aby wybrać lokalizację</string>
 <string name="near">W pobliżu</string>
-<string name="menu_save_and_add">Zapisz i dodaj nową notatkę</string>
+<string name="menu_save_and_add">Utwórz nową notatkę</string>
 <string name="menu_delete">Usuń</string>
 <string name="menu_deletelist">Usuń listę</string>
 <string name="menu_sync">Odśwież</string>
@@ -35,6 +35,7 @@ limitations under the License.
 <string name="menu_createlist">Utwórz listę</string>
 <string name="menu_clearcompleted">Wyczyść zakończone</string>
 <string name="menu_setdefaultlist">Ustaw jako domyślną listę</string>
+<string name="new_default_set">Ustawiono domyślnie</string>
 <string name="menu_managelists">Zarządzaj listą</string>
 <string name="add_item">Dodaj</string>
 <string name="delete_question">Usunąć?</string>
@@ -49,7 +50,7 @@ limitations under the License.
 <string name="show_items_as_tasks">Wyświetlaj jako zadania</string>
 <string name="show_items_as_notes">Wyświetlaj jako notatki</string>
 <string name="sort_list_default">Sortowanie domyślne</string>
-<string name="sort_list_alphabetical">Alfabetyczne</string>
+<string name="sort_list_alphabetical">Alfabetycznie</string>
 <string name="sort_list_due">Według terminu</string>
 <string name="sort_list_updated">Według ostatniej modyfikacji</string>
 <string name="sort_list_manual">Własna kolejność</string>
@@ -76,6 +77,7 @@ limitations under the License.
 <string name="dropbox_enable">Synchronizacja z Dropoboxem</string>
 <string name="dropbox_enable_summary">Utwórz folder "NoNonsense Notes" w Twoim Dropboxie</string>
 <string name="show_from_all_lists">Wszystkie listy</string>
+<string name="lists">Listy</string>
 <string name="deleted">Usunięto</string>
 <string name="repeat">Powtarzanie</string>
 <string name="once">Jeden raz</string>
@@ -162,6 +164,8 @@ Use few if language need it. In English is the same.
 <string name="date_header_future">Później</string>
 <string name="date_header_none">Bez daty</string>
 <string name="date_header_completed">Zakończone</string>
+<string name="next_5_days">Następne 5 dni </string>
+<string name="this_week">Ten tydzień</string>
 <string name="please_select_note">Proszę zaznaczyć lub stworzyć notatkę</string>
 <string name="please_create_note">Proszę stworzyć notatkę</string>
 <string name="hide_checkbox">Ukryj pole wyboru</string>
@@ -171,7 +175,7 @@ Use few if language need it. In English is the same.
 <string name="item_max_height">Maksymalna długość nagłówka</string>
 <string name="long_date_format">Długi format daty</string>
 <string name="short_date_format">Krótki format daty</string>
-<string name="rows">wiersze(y)</string>
+<string name="rows">wiersze(-y)</string>
 <string name="select_date">Ustaw datę</string>
 <string name="localedefault">Domyślnie ustawienia regionalne</string>
 <string name="donate">Wspomóż</string>
@@ -211,6 +215,7 @@ Use few if language need it. In English is the same.
 <string name="notifications">Powiadomienia</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
 <string name="tasks">Zadania </string>
+<string name="all_tasks">Wszystkie zadania</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Ogranicz zadania do określonej listy</string>
 <string name="dashclock_show_overdue_tasks">Wyświetl zaległe zadania</string>
 <string name="dashclock_overdue_tasks_show">Zaległe zadania będą wyświetlane</string>

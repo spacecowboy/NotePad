@@ -15,6 +15,7 @@
      limitations under the License.
 -->
 <resources>
+    <!-- List stuff -->
     <dimen name="listMargins">16dp</dimen>
     <dimen name="listMarginsPadded">@dimen/listMargins</dimen>
     

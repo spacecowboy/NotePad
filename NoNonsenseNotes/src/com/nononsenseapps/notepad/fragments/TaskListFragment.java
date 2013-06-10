@@ -8,6 +8,7 @@ import java.util.HashMap;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.EFragment;
+import com.googlecode.androidannotations.annotations.SystemService;
 import com.googlecode.androidannotations.annotations.ViewById;
 
 import com.mobeta.android.dslv.DragSortListView.DropListener;
@@ -77,6 +78,9 @@ public class TaskListFragment extends Fragment implements
 	// DragSortListView listView;
 	@ViewById(android.R.id.list)
 	DragSortListView listView;
+	
+	@SystemService
+	LayoutInflater layoutInflater;
 
 	SimpleSectionsAdapter mAdapter;
 
@@ -687,7 +691,7 @@ public class TaskListFragment extends Fragment implements
 				mListener.addTaskInList("", mListId);
 			}
 			else if (mListener != null) {
-				mListener.addTaskInList("", TaskListViewPagerFragment.getAList(getActivity(), -1, getString(R.string.pref_defaultlist)));
+				mListener.addTaskInList("", TaskListViewPagerFragment.getARealList(getActivity(), -1));
 			}
 			return true;
 			// case R.id.menu_managelists:

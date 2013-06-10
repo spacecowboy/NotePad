@@ -11,8 +11,7 @@
         android:layout_width="0dp"
         android:layout_weight="1"
         android:layout_height="64dp"
-        android:fontFamily="sans-serif-light"
-        android:text="Overdue" />
+        android:fontFamily="sans-serif-light" />
     
     <TextView
         android:id="@android:id/text2"
@@ -20,7 +19,6 @@
         android:layout_width="wrap_content"
         android:layout_height="64dp"
         android:layout_gravity="right"
-        android:fontFamily="sans-serif-light"
-        android:text="7" />
+        android:fontFamily="sans-serif-light" />
 
 </LinearLayout>

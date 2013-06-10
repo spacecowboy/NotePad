@@ -35,6 +35,7 @@ limitations under the License.
 <string name="menu_createlist">Lista létrehozása</string>
 <string name="menu_clearcompleted">Kész jegyzetek törlése</string>
 <string name="menu_setdefaultlist">Alapértelmezett lista</string>
+<string name="new_default_set">Új alapértelmezett lista beállítva</string>
 <string name="menu_managelists">Lista kezelése</string>
 <string name="add_item">Elem hozzáadása</string>
 <string name="delete_question">Törlés?</string>
@@ -78,6 +79,7 @@ limitations under the License.
 <string name="dropbox_enable">Szinkronizálás Dropbox-al</string>
 <string name="dropbox_enable_summary">Létrehoz egy NoNonsense Notes mappát a Dropbox fiókjában</string>
 <string name="show_from_all_lists">Összes lista</string>
+<string name="lists">Listák</string>
 <string name="deleted">Törölve</string>
 <string name="repeat">Ismétlés</string>
 <string name="once">Egyszer</string>
@@ -168,6 +170,8 @@ Use few if language need it. In English is the same.
 <string name="date_header_future">Később</string>
 <string name="date_header_none">Nincs dátum</string>
 <string name="date_header_completed">Kész</string>
+<string name="next_5_days">A következő 5 nap</string>
+<string name="this_week">E hét</string>
 <string name="please_select_note">Válassz ki vagy hozz létre egy listát</string>
 <string name="please_create_note">Hozz létre egy jegyzetet</string>
 <string name="hide_checkbox">Jelölőnégyzet elrejtése</string>
@@ -217,6 +221,7 @@ Use few if language need it. In English is the same.
 <string name="notifications">Értesítések</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
 <string name="tasks">Feladatok</string>
+<string name="all_tasks">Minden feladat</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Megjelenő jegyzetek korlátozása lista szerint</string>
 <string name="dashclock_show_overdue_tasks">Lejárt feladatok megjelenítése</string>
 <string name="dashclock_overdue_tasks_show">A lejárt feladatok meg fognak jelenni</string>

@@ -103,6 +103,7 @@ public class TaskList extends DAO {
 	// Select count statement
 	.append(" (SELECT COUNT(1) AS ").append(Columns.VIEW_COUNT).append(",").append(Task.Columns.DBLIST)
 	.append(" FROM ").append(Task.TABLE_NAME)
+	.append(" WHERE ").append(Task.Columns.COMPLETED).append(" IS NULL ")
 	.append(" GROUP BY ").append(Task.Columns.DBLIST)
 	.append(") ")
 	.append(" ON ").append(TABLE_NAME).append(".").append(Columns._ID).append(" = ").append(Task.Columns.DBLIST)

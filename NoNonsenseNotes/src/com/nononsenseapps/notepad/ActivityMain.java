@@ -33,6 +33,7 @@ import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
 import com.nononsenseapps.notepad.fragments.TaskListFragment;
+import com.nononsenseapps.notepad.fragments.TaskListFragment_;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
@@ -557,7 +558,7 @@ public class ActivityMain extends FragmentActivity implements
 					PreferenceManager
 							.getDefaultSharedPreferences(ActivityMain.this)
 							.edit()
-							.remove(getString(R.string.pref_defaultlist))
+							.putLong(getString(R.string.pref_defaultstartlist), id)
 							.putLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, id)
 							.commit();
 					Toast.makeText(ActivityMain.this, R.string.new_default_set,
@@ -574,6 +575,7 @@ public class ActivityMain extends FragmentActivity implements
 		final LoaderCallbacks<Cursor> callbacks = new LoaderCallbacks<Cursor>() {
 			
 			final String[] COUNTROWS = new String[] {"COUNT(1)"};
+			final String NOTCOMPLETED = Task.Columns.COMPLETED + " IS NULL ";
 
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
@@ -583,17 +585,17 @@ public class ActivityMain extends FragmentActivity implements
 					return new CursorLoader(ActivityMain.this,
 							Task.URI,
 							COUNTROWS,
-							TaskListFragment.whereOverDue(), null, null);
+							NOTCOMPLETED + TaskListFragment.andWhereOverdue(), null, null);
 				case TaskListFragment.LIST_ID_TODAY:
 					return new CursorLoader(ActivityMain.this,
 							Task.URI,
 							COUNTROWS,
-							TaskListFragment.whereToday(), null, null);
+							NOTCOMPLETED + TaskListFragment.andWhereToday(), null, null);
 				case TaskListFragment.LIST_ID_WEEK:
 					return new CursorLoader(ActivityMain.this,
 							Task.URI,
 							COUNTROWS,
-							TaskListFragment.whereWeek(), null, null);
+							NOTCOMPLETED + TaskListFragment.andWhereWeek(), null, null);
 				case 0:
 				default:
 					return new CursorLoader(ActivityMain.this,
@@ -656,7 +658,7 @@ public class ActivityMain extends FragmentActivity implements
 
 		// Load actual data
 		getSupportLoaderManager().restartLoader(0, null, callbacks);
-		// TODO special ones
+		// special views
 		getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_OVERDUE, null, callbacks);
 		getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_TODAY, null, callbacks);
 		getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_WEEK, null, callbacks);
@@ -682,6 +684,7 @@ public class ActivityMain extends FragmentActivity implements
 		else {
 			// If not popped, then send the call to the fragment
 			// directly
+			Log.d("nononsenseapps list", "calling listOpener");
 			listOpener.openList(id);
 		}
 
@@ -777,9 +780,7 @@ public class ActivityMain extends FragmentActivity implements
 				else if (isNoteIntent(intent)) {
 					right = TaskDetailFragment_.getInstance(
 							getNoteShareText(intent),
-							TaskListViewPagerFragment.getAList(this,
-									getListId(intent),
-									getString(R.string.pref_defaultlist)));
+							TaskListViewPagerFragment.getAShowList(this,getListId(intent)));
 				}
 			}
 		}
@@ -795,8 +796,7 @@ public class ActivityMain extends FragmentActivity implements
 				// In a list (if specified, or default otherwise)
 				left = TaskDetailFragment_.getInstance(
 						getNoteShareText(intent), TaskListViewPagerFragment
-								.getAList(this, getListId(intent),
-										getString(R.string.pref_defaultlist)));
+								.getARealList(this, getListId(intent)));
 			}
 			// fucking stack
 			while (getSupportFragmentManager().popBackStackImmediate()) {
@@ -816,9 +816,9 @@ public class ActivityMain extends FragmentActivity implements
 			if (fragment2 == null) {
 				resetActionBar();
 			}
-
+			// TODO
 			showingEditor = false;
-
+			
 			left = TaskListViewPagerFragment
 					.getInstance(getListIdToShow(intent));
 			leftTag = LISTPAGERTAG;
@@ -1262,17 +1262,17 @@ public class ActivityMain extends FragmentActivity implements
 					retval = -1;
 				}
 			}
-			else if (0 < intent.getLongExtra(
+			else if (-1 != intent.getLongExtra(
 					LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1)) {
 				retval = intent.getLongExtra(
 						LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
 			}
-			else if (0 < intent.getLongExtra(
+			else if (-1 != intent.getLongExtra(
 					TaskDetailFragment.ARG_ITEM_LIST_ID, -1)) {
 				retval = intent.getLongExtra(
 						TaskDetailFragment.ARG_ITEM_LIST_ID, -1);
 			}
-			else if (0 < intent.getLongExtra(Task.Columns.DBLIST, -1)) {
+			else if (-1 != intent.getLongExtra(Task.Columns.DBLIST, -1)) {
 				retval = intent.getLongExtra(Task.Columns.DBLIST, -1);
 			}
 		}
@@ -1285,9 +1285,7 @@ public class ActivityMain extends FragmentActivity implements
 	 */
 	long getListIdToShow(final Intent intent) {
 		long result = getListId(intent);
-		return result;
-		// return TaskListViewPagerFragment.getAList(this, result,
-		// getString(R.string.pref_defaultlist));
+		return TaskListViewPagerFragment.getAShowList(this, result);
 	}
 
 	@Override
@@ -1345,6 +1343,10 @@ public class ActivityMain extends FragmentActivity implements
 	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@Override
 	public void addTaskInList(final String text, final long listId) {
+		if (listId < 1) {
+			// Cant add to invalid lists
+			return;
+		}
 		final Intent intent = new Intent().setAction(Intent.ACTION_INSERT)
 				.setClass(this, ActivityMain_.class).setData(Task.URI)
 				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)

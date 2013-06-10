@@ -194,6 +194,7 @@ public class DialogEditList extends DialogFragment {
 			PreferenceManager
 					.getDefaultSharedPreferences(getActivity())
 					.edit()
+					.putLong(getString(R.string.pref_defaultstartlist), mTaskList._id)
 					.putString(getString(R.string.pref_defaultlist),
 							Long.toString(mTaskList._id)).commit();
 		}
@@ -202,10 +203,18 @@ public class DialogEditList extends DialogFragment {
 			final long defList = Long.parseLong(PreferenceManager
 					.getDefaultSharedPreferences(getActivity()).getString(
 							getString(R.string.pref_defaultlist), "-1"));
+			final long defStartList = PreferenceManager
+					.getDefaultSharedPreferences(getActivity()).getLong(
+							getString(R.string.pref_defaultstartlist), -1);
 			if (defList == mTaskList._id) {
 				PreferenceManager.getDefaultSharedPreferences(getActivity())
 						.edit().remove(getString(R.string.pref_defaultlist))
 						.commit();
+			}
+			if (defStartList == mTaskList._id) {
+				PreferenceManager.getDefaultSharedPreferences(getActivity())
+				.edit().remove(getString(R.string.pref_defaultstartlist))
+				.commit();
 			}
 		}
 
