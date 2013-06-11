@@ -119,8 +119,6 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 			// Dummy key has a space in it. Only builds using real api keys
 			// should
 			// not have spaces
-			Log.d("nononsensenotes",
-					com.nononsenseapps.build.Config.GTASKS_API_KEY);
 			if (!com.nononsenseapps.build.Config.GTASKS_API_KEY.contains(" ")) {
 
 				if (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)

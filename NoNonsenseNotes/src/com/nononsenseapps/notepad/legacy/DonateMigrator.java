@@ -165,9 +165,7 @@ public class DonateMigrator extends IntentService {
 					t.due = RFC3339Date.parseRFC3339Date(
 							noteCursor.getString(3)).getTime();
 				}
-				catch (IndexOutOfBoundsException e) {
-				}
-				catch (ParseException e) {
+				catch (Exception e) {
 				}
 
 				// completed must be converted

@@ -837,7 +837,7 @@ public class GoogleAPITalker {
 		StringEntity se = null;
 		try {
 			se = new StringEntity(task.toJSON(), HTTP.UTF_8);
-			// Log.d(TAG + ".move", "Sending: " + task.toJSON());
+			//Log.d(TAG, "Sending: " + task.toJSON());
 		}
 		catch (UnsupportedEncodingException e) {
 			e.printStackTrace();

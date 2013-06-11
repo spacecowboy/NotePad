@@ -165,7 +165,7 @@ public class GoogleTaskSync {
 		catch (Exception e) {
 			// Something went wrong, don't punish the user
 			syncResult.stats.numAuthExceptions++;
-			Log.e(TAG, e.getLocalizedMessage());
+			Log.e(TAG, "bobs your uncle: " + e.getLocalizedMessage());
 		}
 		finally {
 			// This must always be called or we will leak resources
@@ -440,7 +440,7 @@ public class GoogleTaskSync {
 			}
 			// if deleted locally
 			else if (pair.second.isDeleted()) {
-				Log.d(TAG, "remotetasksync: isDeletedLocally");
+				//Log.d(TAG, "remotetasksync: isDeletedLocally");
 				// Delete remote also
 				pair.second.remotelydeleted = true;
 				apiTalker.uploadTask(pair.second, gTaskList);
@@ -564,27 +564,27 @@ public class GoogleTaskSync {
 			// b) it was created on the server
 			if (localTask == null) {
 				if (remoteTask.remotelydeleted) {
-					Log.d(TAG, "slocal: task was remotely deleted1: " + remoteTask.title);
+					//Log.d(TAG, "slocal: task was remotely deleted1: " + remoteTask.title);
 					// Nothing to do
 					remoteTask.delete(context);
 				}
 				else if (remoteTask.isDeleted()) {
-					Log.d(TAG, "slocal: task was locally deleted: " + remoteTask.remoteId);
+					//Log.d(TAG, "slocal: task was locally deleted: " + remoteTask.remoteId);
 					// upload change
 				}
 				else {
-					Log.d(TAG, "slocal: task was new: " + remoteTask.title);
+					//Log.d(TAG, "slocal: task was new: " + remoteTask.title);
 					// If no local, and updated is higher than latestupdate,
 					// create new
 					localTask = new Task();
 					localTask.title = remoteTask.title;
 					localTask.note = remoteTask.notes;
 					localTask.dblist = remoteTask.listdbid;
+					// Don't touch time
 					if (remoteTask.dueDate != null
 							&& !remoteTask.dueDate.isEmpty()) {
 						try {
-							localTask.due = RFC3339Date.parseRFC3339Date(
-									remoteTask.dueDate).getTime();
+							localTask.due = RFC3339Date.combineDateAndTime(remoteTask.dueDate, localTask.due);
 						}
 						catch (Exception e) {
 						}
@@ -601,10 +601,6 @@ public class GoogleTaskSync {
 				}
 			}
 			else {
-//				Log.d("nononsenseapps gtasksync", "l.updated: "
-//						+ localTask.updated);
-//				Log.d("nononsenseapps gtasksync", "r.updated: "
-//						+ remoteTask.updated);
 				// If local is newer, update remote object
 				if (localTask.updated > remoteTask.updated) {
 					remoteTask.fillFrom(localTask);
@@ -612,7 +608,7 @@ public class GoogleTaskSync {
 				}
 				// Remote is newer
 				else if (remoteTask.remotelydeleted) {
-					Log.d(TAG, "slocal: task was remotely deleted2: " + remoteTask.title);
+					//Log.d(TAG, "slocal: task was remotely deleted2: " + remoteTask.title);
 					localTask.delete(context);
 					localTask = null;
 					remoteTask.delete(context);
@@ -621,7 +617,7 @@ public class GoogleTaskSync {
 					// Nothing to do, we are already updated
 				}
 				else {
-					Log.d(TAG, "slocal: task was remotely updated: " + remoteTask.title);
+					//Log.d(TAG, "slocal: task was remotely updated: " + remoteTask.title);
 					// If remote is newer, update local and save to db
 					localTask.title = remoteTask.title;
 					localTask.note = remoteTask.notes;
@@ -629,8 +625,8 @@ public class GoogleTaskSync {
 					if (remoteTask.dueDate != null
 							&& !remoteTask.dueDate.isEmpty()) {
 						try {
-							localTask.due = RFC3339Date.parseRFC3339Date(
-									remoteTask.dueDate).getTime();
+							// dont touch time
+							localTask.due = RFC3339Date.combineDateAndTime(remoteTask.dueDate, localTask.due);
 						}
 						catch (Exception e) {
 							localTask.due = null;
@@ -656,17 +652,17 @@ public class GoogleTaskSync {
 			}
 			if (remoteTask.remotelydeleted) {
 				// Dont
-				Log.d("nononsenseapps gtasksync", "skipping remotely deleted");
+				//Log.d("nononsenseapps gtasksync", "skipping remotely deleted");
 			}
 			else if (localTask != null && remoteTask != null
 					&& localTask.updated.equals(remoteTask.updated)) {
-				Log.d("nononsenseapps gtasksync", "skipping equal update");
+				//Log.d("nononsenseapps gtasksync", "skipping equal update");
 				// Dont
 			}
 			else {
-				if (localTask != null) {
-					Log.d("nononsenseapps gtasksync", "going to upload: " + localTask.title + ", l." + localTask.updated + " r." + remoteTask.updated);
-				}
+//				if (localTask != null) {
+//					Log.d("nononsenseapps gtasksync", "going to upload: " + localTask.title + ", l." + localTask.updated + " r." + remoteTask.updated);
+//				}
 				taskPairs
 						.add(new Pair<Task, GoogleTask>(localTask, remoteTask));
 			}
@@ -675,7 +671,7 @@ public class GoogleTaskSync {
 		// Add local lists without a remote version to pairs
 		for (final Task t : loadNewTasksFromDB(context, listPair.first._id,
 				listPair.second.account)) {
-			Log.d("nononsenseapps gtasksync", "adding local only: " + t.title);
+			//Log.d("nononsenseapps gtasksync", "adding local only: " + t.title);
 			taskPairs.add(new Pair<Task, GoogleTask>(t, null));
 		}
 

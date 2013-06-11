@@ -110,7 +110,6 @@ public class GoogleTask extends RemoteTask {
 		remoteId = jsonTask.getString(ID);
 		try {
 			updated = RFC3339Date.parseRFC3339Date(jsonTask.getString(UPDATED)).getTime();
-			Log.d(TAG, "Updated: " + jsonTask.getString(UPDATED) + " -> " + updated);
 		}
 		catch (Exception e) {
 			updated = 0L;
@@ -155,7 +154,7 @@ public class GoogleTask extends RemoteTask {
 	public void fillFrom(final Task dbTask) {
 		title = dbTask.title;
 		notes = dbTask.note;
-		dueDate = RFC3339Date.asRFC3339(dbTask.due);
+		dueDate = RFC3339Date.asRFC3339ZuluDate(dbTask.due);
 		status = dbTask.completed != null ? GoogleTask.COMPLETED
 				: GoogleTask.NEEDSACTION;
 		remotelydeleted = false;

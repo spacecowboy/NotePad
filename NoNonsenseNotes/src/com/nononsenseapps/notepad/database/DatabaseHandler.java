@@ -207,11 +207,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 						t.due = RFC3339Date.parseRFC3339Date(c.getString(3))
 								.getTime();
 					}
-					catch (IndexOutOfBoundsException e) {
-					}
-					catch (ParseException e) {
-					}
-					catch (NullPointerException e) {
+					catch (Exception e) {
 					}
 
 					// completed must be converted
