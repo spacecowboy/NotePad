@@ -74,6 +74,8 @@ limitations under the License.
 <string name="settings_sync_enable_title">Synchronizacja z Google Tasks</string>
 <string name="gtasks_sync_info">Nie wszystkie informacje mogą być zscynchronizowane z Google Tasks. Wyłącznie notatki, terminy (bez czasu) oraz zadania.</string>
 <string name="settings_cat_syncing">Synchronizacja</string>
+<string name="gtasks">Zadania Google</string>
+<string name="dropbox">Dropbox</string>
 <string name="dropbox_enable">Synchronizacja z Dropoboxem</string>
 <string name="dropbox_enable_summary">Utwórz folder "NoNonsense Notes" w Twoim Dropboxie</string>
 <string name="show_from_all_lists">Wszystkie listy</string>
@@ -92,6 +94,9 @@ limitations under the License.
 
 <string name="import_data_question">Skopiować dane?</string>
 <string name="import_started">Importowanie danych. Może to zająć kilka sekund. </string>
+<string name="import_data_msg">Czy chcesz zaimportować notatki z płatnej wersji aplikacji? Po zakończeniu będziesz miał również możliwość jej usunięcia.</string>
+<string name="imported_result">Zaimporotwano %1$d notatek z %2$d list</string>
+<string name="import_error">Coś poszło nie tak: %s</string>
 
 <string name="showcase_main_title">Dostęp do Twoich list</string>
 <string name="showcase_main_msg">Dotknij ikonę lub przesuń palcem od lewej krawędzi ekranu</string>
@@ -134,6 +139,7 @@ Use few if language need it. In English is the same.
 
 <string name="move">Przenieś</string>
 <string name="move_to">Przenieś do</string>
+<string name="moved_x_to_list">Przeniesiono %1$d do %2$s</string>
 
 <string name="lock_note">Zablokuj notatkę</string>
 <string name="unlock_note">Odblokuj notatkę</string>
