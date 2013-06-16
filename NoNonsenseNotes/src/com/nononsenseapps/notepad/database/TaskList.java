@@ -99,7 +99,7 @@ public class TaskList extends DAO {
 	.append(arrayToCommaString(Columns.FIELDS))
 	.append(",").append(Columns.VIEW_COUNT)
 	.append(" FROM ").append(TABLE_NAME)
-	.append(" INNER JOIN ")
+	.append(" LEFT JOIN ")
 	// Select count statement
 	.append(" (SELECT COUNT(1) AS ").append(Columns.VIEW_COUNT).append(",").append(Task.Columns.DBLIST)
 	.append(" FROM ").append(Task.TABLE_NAME)
