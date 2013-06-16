@@ -77,8 +77,10 @@ public class DBProviderTest extends AndroidTestCase {
 
 	@SmallTest
 	public void testTaskListURIs() {
+		final TaskList list = getNewList();
 		assertUriReturnsResult(TaskList.URI, TaskList.Columns.FIELDS);
-		// TODO legacy
+		assertUriReturnsResult(TaskList.URI_WITH_COUNT, TaskList.Columns.FIELDS);
+		list.delete(mContext);
 	}
 
 	@SmallTest

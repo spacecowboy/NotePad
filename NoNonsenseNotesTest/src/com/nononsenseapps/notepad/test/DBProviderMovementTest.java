@@ -153,7 +153,7 @@ public class DBProviderMovementTest extends AndroidTestCase {
 	private ArrayList<Task> getTasks(final long listId) {
 		final ArrayList<Task> results = new ArrayList<Task>();
 		final Cursor c = resolver.query(Task.URI,
-				Task.Columns.FIELDS, null,
+				Task.Columns.FIELDS, Task.Columns.DBLIST + " IS ?",
 				new String[] { Long.toString(listId) }, Task.Columns.LEFT);
 		assertCursorGood(c);
 		while (c.moveToNext()) {
@@ -336,14 +336,15 @@ public class DBProviderMovementTest extends AndroidTestCase {
 		t.dblist = wrongId;
 
 		boolean thrown = false;
+		Uri uri = null;
 		try {
-			resolver.insert(Task.URI, t.getContent());
+			uri = resolver.insert(Task.URI, t.getContent());
 		}
 		catch (SQLException e) {
 			thrown = true;
 		}
 
-		assertTrue(thrown);
+		assertTrue(uri == null);
 		assertTasksCountIs(wrongId, 0);
 	}
 
