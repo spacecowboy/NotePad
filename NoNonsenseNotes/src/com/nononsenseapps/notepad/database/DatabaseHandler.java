@@ -31,7 +31,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		return singleton;
 	}
 
-	private static final int DATABASE_VERSION = 14;
+	private static final int DATABASE_VERSION = 15;
 	public static final String DATABASE_NAME = "nononsense_notes.db";
 
 	private final Context context;
@@ -108,45 +108,44 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	}
 
 	public static Cursor getLegacyLists(final SQLiteDatabase legacyDB) {
-		return legacyDB.rawQuery("SELECT lists." + BaseColumns._ID
-				+ ",lists.title,gtasklists.googleid,gtasklists.googleaccount"
-				+ " FROM " + LegacyDBHelper.NotePad.Lists.TABLE_NAME
-				+ " LEFT OUTER JOIN "
-				+ LegacyDBHelper.NotePad.GTaskLists.TABLE_NAME + " ON ("
-				+ LegacyDBHelper.NotePad.Lists.TABLE_NAME + "."
-				+ LegacyDBHelper.NotePad.Lists._ID + " = "
-				+ LegacyDBHelper.NotePad.GTaskLists.TABLE_NAME + "."
-				+ LegacyDBHelper.NotePad.GTaskLists.COLUMN_NAME_DB_ID + ")"
-				+ " WHERE lists.deleted IS NOT 1", null);
+		return legacyDB.rawQuery("SELECT lists."
+										+ BaseColumns._ID
+										+ ",lists.title,gtasklists.googleid,gtasklists.googleaccount"
+										+ " FROM " + LegacyDBHelper.NotePad.Lists.TABLE_NAME
+										+ " LEFT OUTER JOIN "
+										+ LegacyDBHelper.NotePad.GTaskLists.TABLE_NAME + " ON ("
+										+ LegacyDBHelper.NotePad.Lists.TABLE_NAME + "."
+										+ LegacyDBHelper.NotePad.Lists._ID + " = "
+										+ LegacyDBHelper.NotePad.GTaskLists.TABLE_NAME + "."
+										+ LegacyDBHelper.NotePad.GTaskLists.COLUMN_NAME_DB_ID + ")"
+										+ " WHERE lists.deleted IS NOT 1", null);
 	}
 
 	public static Cursor getLegacyNotes(final SQLiteDatabase legacyDB) {
-		return legacyDB
-				.rawQuery(
-						"SELECT notes."
-								+ BaseColumns._ID
-								+ ",notes.title,notes.note,notes.duedate,notes.gtaskstatus,notes.list,notes.modified,gtasks.googleid,gtasks.googleaccount"
-								+ " FROM "
-								+ LegacyDBHelper.NotePad.Notes.TABLE_NAME
-								+ " LEFT OUTER JOIN "
-								+ LegacyDBHelper.NotePad.GTasks.TABLE_NAME
-								+ " ON ("
-								+ LegacyDBHelper.NotePad.Notes.TABLE_NAME
-								+ "."
-								+ LegacyDBHelper.NotePad.Notes._ID
-								+ " = "
-								+ LegacyDBHelper.NotePad.GTasks.TABLE_NAME
-								+ "."
-								+ LegacyDBHelper.NotePad.GTasks.COLUMN_NAME_DB_ID
-								+ ")"
-								+ " WHERE notes.deleted IS NOT 1 AND notes.hiddenflag IS NOT 1",
-						null);
+		return legacyDB.rawQuery("SELECT notes."
+										+ BaseColumns._ID
+										+ ",notes.title,notes.note,notes.duedate,notes.gtaskstatus,notes.list,notes.modified,gtasks.googleid,gtasks.googleaccount"
+										+ " FROM "
+										+ LegacyDBHelper.NotePad.Notes.TABLE_NAME
+										+ " LEFT OUTER JOIN "
+										+ LegacyDBHelper.NotePad.GTasks.TABLE_NAME
+										+ " ON ("
+										+ LegacyDBHelper.NotePad.Notes.TABLE_NAME
+										+ "."
+										+ LegacyDBHelper.NotePad.Notes._ID
+										+ " = "
+										+ LegacyDBHelper.NotePad.GTasks.TABLE_NAME
+										+ "."
+										+ LegacyDBHelper.NotePad.GTasks.COLUMN_NAME_DB_ID
+										+ ")"
+										+ " WHERE notes.deleted IS NOT 1 AND notes.hiddenflag IS NOT 1",
+										null);
 	}
 
 	public static Cursor getLegacyNotifications(final SQLiteDatabase legacyDB) {
-		return legacyDB.query(LegacyDBHelper.NotePad.Notifications.TABLE_NAME,
-				new String[] { "time", "permanent", "noteid" }, null, null,
-				null, null, null);
+		return legacyDB.query(LegacyDBHelper.NotePad.Notifications.TABLE_NAME, new String[] {
+										"time", "permanent", "noteid" }, null, null, null, null,
+										null);
 	}
 
 	private void initializedDB(final SQLiteDatabase db) throws SQLiteException {
@@ -158,10 +157,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		try {
 			final HashMap<Long, Long> listIDMap = new HashMap<Long, Long>();
 			final HashMap<Long, Long> taskIDMap = new HashMap<Long, Long>();
-			final LegacyDBHelper legacyDBHelper = new LegacyDBHelper(context,
-					testPrefix);
-			final SQLiteDatabase legacyDB = legacyDBHelper
-					.getReadableDatabase();
+			final LegacyDBHelper legacyDBHelper = new LegacyDBHelper(context, testPrefix);
+			final SQLiteDatabase legacyDB = legacyDBHelper.getReadableDatabase();
 
 			// First copy lists
 			Cursor c = getLegacyLists(legacyDB);
@@ -178,10 +175,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 				// handle gtask info
 				GoogleTaskList rl = null;
-				if (c.getString(2) != null && !c.getString(2).isEmpty()
-						&& c.getString(3) != null && !c.getString(3).isEmpty()) {
-					rl = new GoogleTaskList(tl._id, c.getString(2), tl.updated,
-							c.getString(3));
+				if (c.getString(2) != null && !c.getString(2).isEmpty() && c.getString(3) != null
+												&& !c.getString(3).isEmpty()) {
+					rl = new GoogleTaskList(tl._id, c.getString(2), tl.updated, c.getString(3));
 					rl.insert(context, db);
 				}
 			}
@@ -204,15 +200,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					}
 
 					try {
-						t.due = RFC3339Date.parseRFC3339Date(c.getString(3))
-								.getTime();
-					}
-					catch (Exception e) {
+						t.due = RFC3339Date.parseRFC3339Date(c.getString(3)).getTime();
+					} catch (Exception e) {
 					}
 
 					// completed must be converted
-					if (c.getString(4) != null
-							&& "completed".equals(c.getString(4))) {
+					if (c.getString(4) != null && "completed".equals(c.getString(4))) {
 						t.setAsCompleted();
 					}
 					t.dblist = listIDMap.get(c.getLong(5));
@@ -230,8 +223,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 					// gtask
 					GoogleTask gt = null;
-					if (!c.isNull(7) && !c.getString(7).isEmpty()
-							&& !c.isNull(8) && !c.getString(8).isEmpty()) {
+					if (!c.isNull(7) && !c.getString(7).isEmpty() && !c.isNull(8)
+													&& !c.getString(8).isEmpty()) {
 						gt = new GoogleTask(t, c.getString(8));
 						gt.remoteId = c.getString(7);
 						gt.updated = t.updated;
@@ -249,8 +242,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				while (!c.isClosed() && c.moveToNext()) {
 					// Make sure id exists
 					if (taskIDMap.containsValue(c.getLong(2))) {
-						Notification n = new Notification(taskIDMap.get(c
-								.getLong(2)));
+						Notification n = new Notification(taskIDMap.get(c.getLong(2)));
 						n.time = c.getLong(0);
 						// permanent was not supported at the time
 						// insert
@@ -262,8 +254,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 			// Complete, close the legacy db
 			legacyDB.close();
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			// Database must have been empty. Ignore it
 			// Test reasons, throw it!
 			// throw e;
@@ -271,20 +262,18 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		// If no lists, insert a list and example note.
 
-		Cursor c = db.query(TaskList.TABLE_NAME, TaskList.Columns.FIELDS, null,
-				null, null, null, null);
+		Cursor c = db.query(TaskList.TABLE_NAME, TaskList.Columns.FIELDS, null, null, null, null,
+										null);
 
 		if (!c.isClosed() && c.getCount() > 0) {
 			// Done
-		}
-		else {
+		} else {
 			// If preferences has sync enabled, don't create this list
 			// The backup agent has restored a reinstallation
-			if (PreferenceManager.getDefaultSharedPreferences(context)
-					.contains(SyncPrefs.KEY_ACCOUNT)) {
+			if (PreferenceManager.getDefaultSharedPreferences(context).contains(
+											SyncPrefs.KEY_ACCOUNT)) {
 
-			}
-			else {
+			} else {
 
 				// Create a list
 				final TaskList tl = new TaskList();
@@ -308,8 +297,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		if (oldVersion < 10) {
 			// Notification locations
 			// Add columns
-			String preName = "ALTER TABLE " + Notification.TABLE_NAME
-					+ " ADD COLUMN ";
+			String preName = "ALTER TABLE " + Notification.TABLE_NAME + " ADD COLUMN ";
 			String postText = " TEXT";
 			String postReal = " REAL";
 			db.execSQL(preName + Notification.Columns.LOCATIONNAME + postText);
@@ -317,8 +305,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			db.execSQL(preName + Notification.Columns.LONGITUDE + postReal);
 			db.execSQL(preName + Notification.Columns.RADIUS + postReal);
 			// Drop view
-			db.execSQL("DROP VIEW IF EXISTS "
-					+ Notification.WITH_TASK_VIEW_NAME);
+			db.execSQL("DROP VIEW IF EXISTS " + Notification.WITH_TASK_VIEW_NAME);
 			// Recreate view with additional tables
 			db.execSQL(Notification.CREATE_JOINED_VIEW);
 		}
@@ -342,6 +329,10 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			// Update history update trigger
 			db.execSQL("DROP TRIGGER IF EXISTS " + Task.HISTORY_UPDATE_TRIGGER_NAME);
 			db.execSQL(Task.CREATE_HISTORY_UPDATE_TRIGGER);
+		}
+		if (oldVersion < 15) {
+			// Drop view, changing to temporary view instead
+			db.execSQL("DROP VIEW IF EXISTS " + Notification.WITH_TASK_VIEW_NAME);
 		}
 	}
 

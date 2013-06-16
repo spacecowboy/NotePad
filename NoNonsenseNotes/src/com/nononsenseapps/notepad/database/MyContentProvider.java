@@ -1,6 +1,5 @@
 package com.nononsenseapps.notepad.database;
 
-
 import com.nononsenseapps.helpers.UpdateNotifier;
 
 import android.app.SearchManager;
@@ -13,6 +12,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
+import android.util.Log;
 
 public class MyContentProvider extends ContentProvider {
 	public static final String AUTHORITY = "com.nononsenseapps.NotePad";
@@ -191,11 +191,11 @@ public class MyContentProvider extends ContentProvider {
 				break;
 			case Notification.BASEITEMCODE:
 			case Notification.WITHTASKQUERYITEMCODE:
-				//final Notification n = new Notification(uri, values);
-					result += db.update(Notification.TABLE_NAME,
-							values, Notification.whereIdIs(selection),
-							Notification.whereIdArg(Long.parseLong(uri.getLastPathSegment()),
-									selectionArgs));
+				// final Notification n = new Notification(uri, values);
+				result += db.update(Notification.TABLE_NAME, values,
+						Notification.whereIdIs(selection), Notification
+								.whereIdArg(Long.parseLong(uri
+										.getLastPathSegment()), selectionArgs));
 				break;
 			case Notification.BASEURICODE:
 				// No checks
@@ -324,9 +324,9 @@ public class MyContentProvider extends ContentProvider {
 			String selection, String[] selectionArgs, String sortOrder) {
 		Cursor result = null;
 		final long id;
-//		if (selection != null) Log.d("nononsenseapps", selection);
-//		if (selectionArgs != null)
-//			Log.d("nononsenseapps", DAO.arrayToCommaString(selectionArgs));
+		// if (selection != null) Log.d("nononsenseapps", selection);
+		// if (selectionArgs != null)
+		// Log.d("nononsenseapps", DAO.arrayToCommaString(selectionArgs));
 		switch (sURIMatcher.match(uri)) {
 		case TaskList.BASEURICODE:
 			result = DatabaseHandler
@@ -354,14 +354,13 @@ public class MyContentProvider extends ContentProvider {
 			// Create view if not exists
 			DatabaseHandler.getInstance(getContext()).getWritableDatabase()
 					.execSQL(TaskList.CREATE_COUNT_VIEW);
-			
+
 			result = DatabaseHandler
-			.getInstance(getContext())
-			.getReadableDatabase()
-			.query(TaskList.VIEWCOUNT_NAME, projection, selection,
-					selectionArgs, null, null, sortOrder);
-			result.setNotificationUri(getContext().getContentResolver(),
-			uri);
+					.getInstance(getContext())
+					.getReadableDatabase()
+					.query(TaskList.VIEWCOUNT_NAME, projection, selection,
+							selectionArgs, null, null, sortOrder);
+			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
 		case Task.DELETEDQUERYCODE:
 			final String[] query = sanitize(selectionArgs);
@@ -413,8 +412,8 @@ public class MyContentProvider extends ContentProvider {
 			final String listId;
 			if (selectionArgs == null || selectionArgs.length == 0) {
 				listId = null;
-//				throw new SQLException(
-//						"Need a listid as first arg at the moment for this view!");
+				// throw new SQLException(
+				// "Need a listid as first arg at the moment for this view!");
 			}
 			else {
 				listId = selectionArgs[0];
@@ -463,6 +462,9 @@ public class MyContentProvider extends ContentProvider {
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
 		case Notification.WITHTASKQUERYITEMCODE:
+			// Create view if not exists
+			DatabaseHandler.getInstance(getContext()).getWritableDatabase()
+					.execSQL(Notification.CREATE_JOINED_VIEW);
 			id = Long.parseLong(uri.getLastPathSegment());
 			result = DatabaseHandler
 					.getInstance(getContext())
@@ -484,6 +486,9 @@ public class MyContentProvider extends ContentProvider {
 			result.setNotificationUri(getContext().getContentResolver(), uri);
 			break;
 		case Notification.WITHTASKQUERYCODE:
+			// Create view if not exists
+			DatabaseHandler.getInstance(getContext()).getWritableDatabase()
+					.execSQL(Notification.CREATE_JOINED_VIEW);
 			result = DatabaseHandler
 					.getInstance(getContext())
 					.getReadableDatabase()
@@ -595,16 +600,12 @@ public class MyContentProvider extends ContentProvider {
 		case Task.LEGACYVISIBLEITEMCODE:
 		default:
 
-			// Log.d("nononsenseapps db", "default: " + uri);
-			// if
-			// (uri.toString().contains(SearchManager.SUGGEST_URI_PATH_QUERY)) {
-			//
-			// }
-			// // For Android Agenda Widget
-			// else {
-			throw new IllegalArgumentException("Faulty queryURI provided: "
-					+ uri.toString());
-			// }
+			Log.d("nononsenseapps db",
+					"Faulty queryURI provided: " + uri.toString());
+			return null;
+
+			// throw new IllegalArgumentException("Faulty queryURI provided: "
+			// + uri.toString());
 		}
 
 		return result;
@@ -615,11 +616,11 @@ public class MyContentProvider extends ContentProvider {
 
 		final StringBuilder result = new StringBuilder();
 		for (String query : args) {
-			//for (String part : query.split("\\s")) {
-				if (result.length() > 0) result.append(" AND ");
-				// Wrap each word in quotes and add star to the end
-				result.append("'" + query + "*'");
-			//}
+			// for (String part : query.split("\\s")) {
+			if (result.length() > 0) result.append(" AND ");
+			// Wrap each word in quotes and add star to the end
+			result.append("'" + query + "*'");
+			// }
 		}
 
 		return new String[] { result.toString() };

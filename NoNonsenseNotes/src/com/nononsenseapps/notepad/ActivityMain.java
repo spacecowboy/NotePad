@@ -365,7 +365,12 @@ public class ActivityMain extends FragmentActivity implements
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
-		if (mBillingHelper != null) mBillingHelper.dispose();
+		try {
+			if (mBillingHelper != null) mBillingHelper.dispose();
+		}
+		catch (Exception e) {
+			// We are destroying, ignore all errors at this point
+		}
 		mBillingHelper = null;
 	}
 
@@ -558,7 +563,8 @@ public class ActivityMain extends FragmentActivity implements
 					PreferenceManager
 							.getDefaultSharedPreferences(ActivityMain.this)
 							.edit()
-							.putLong(getString(R.string.pref_defaultstartlist), id)
+							.putLong(getString(R.string.pref_defaultstartlist),
+									id)
 							.putLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, id)
 							.commit();
 					Toast.makeText(ActivityMain.this, R.string.new_default_set,
@@ -573,8 +579,8 @@ public class ActivityMain extends FragmentActivity implements
 		});
 		// Define the callback handler
 		final LoaderCallbacks<Cursor> callbacks = new LoaderCallbacks<Cursor>() {
-			
-			final String[] COUNTROWS = new String[] {"COUNT(1)"};
+
+			final String[] COUNTROWS = new String[] { "COUNT(1)" };
 			final String NOTCOMPLETED = Task.Columns.COMPLETED + " IS NULL ";
 
 			@Override
@@ -582,20 +588,20 @@ public class ActivityMain extends FragmentActivity implements
 				// Normal lists
 				switch (id) {
 				case TaskListFragment.LIST_ID_OVERDUE:
-					return new CursorLoader(ActivityMain.this,
-							Task.URI,
-							COUNTROWS,
-							NOTCOMPLETED + TaskListFragment.andWhereOverdue(), null, null);
+					return new CursorLoader(ActivityMain.this, Task.URI,
+							COUNTROWS, NOTCOMPLETED
+									+ TaskListFragment.andWhereOverdue(), null,
+							null);
 				case TaskListFragment.LIST_ID_TODAY:
-					return new CursorLoader(ActivityMain.this,
-							Task.URI,
-							COUNTROWS,
-							NOTCOMPLETED + TaskListFragment.andWhereToday(), null, null);
+					return new CursorLoader(ActivityMain.this, Task.URI,
+							COUNTROWS, NOTCOMPLETED
+									+ TaskListFragment.andWhereToday(), null,
+							null);
 				case TaskListFragment.LIST_ID_WEEK:
-					return new CursorLoader(ActivityMain.this,
-							Task.URI,
-							COUNTROWS,
-							NOTCOMPLETED + TaskListFragment.andWhereWeek(), null, null);
+					return new CursorLoader(ActivityMain.this, Task.URI,
+							COUNTROWS, NOTCOMPLETED
+									+ TaskListFragment.andWhereWeek(), null,
+							null);
 				case 0:
 				default:
 					return new CursorLoader(ActivityMain.this,
@@ -608,7 +614,7 @@ public class ActivityMain extends FragmentActivity implements
 									TaskList.Columns.TITLE));
 				}
 			}
-			
+
 			private void updateExtra(final int pos, final int count) {
 				while (extraData.get(pos).size() < 2) {
 					// To avoid crashes
@@ -659,9 +665,12 @@ public class ActivityMain extends FragmentActivity implements
 		// Load actual data
 		getSupportLoaderManager().restartLoader(0, null, callbacks);
 		// special views
-		getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_OVERDUE, null, callbacks);
-		getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_TODAY, null, callbacks);
-		getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_WEEK, null, callbacks);
+		getSupportLoaderManager().restartLoader(
+				TaskListFragment.LIST_ID_OVERDUE, null, callbacks);
+		getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_TODAY,
+				null, callbacks);
+		getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_WEEK,
+				null, callbacks);
 	}
 
 	/**
@@ -779,8 +788,8 @@ public class ActivityMain extends FragmentActivity implements
 				}
 				else if (isNoteIntent(intent)) {
 					right = TaskDetailFragment_.getInstance(
-							getNoteShareText(intent),
-							TaskListViewPagerFragment.getAShowList(this,getListId(intent)));
+							getNoteShareText(intent), TaskListViewPagerFragment
+									.getAShowList(this, getListId(intent)));
 				}
 			}
 		}
@@ -818,7 +827,7 @@ public class ActivityMain extends FragmentActivity implements
 			}
 			// TODO
 			showingEditor = false;
-			
+
 			left = TaskListViewPagerFragment
 					.getInstance(getListIdToShow(intent));
 			leftTag = LISTPAGERTAG;
