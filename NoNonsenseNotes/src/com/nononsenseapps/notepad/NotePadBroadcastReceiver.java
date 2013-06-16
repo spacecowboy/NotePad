@@ -17,10 +17,14 @@ public class NotePadBroadcastReceiver extends BroadcastReceiver {
 		if (extras != null) {
 			if (extras.getLong(BaseColumns._ID, -1) > 0 && context != null) {
 				Task.setCompleted(context, true, extras.getLong(BaseColumns._ID, -1));
-				//UpdateNotifier.notifyChangeNote(context, NotesEditorFragment.getUriFrom(id));
-				
-				Toast.makeText(context, context.getString(R.string.completed),
-						Toast.LENGTH_SHORT).show();
+
+				Toast.makeText(context, context.getString(R.string.completed), Toast.LENGTH_SHORT)
+												.show();
+
+				// Broadcast that it has been completed, primarily for
+				// AndroidAgendaWidget
+				context.sendBroadcast(new Intent(
+												context.getString(R.string.note_completed_broadcast_intent)));
 			}
 		}
 
