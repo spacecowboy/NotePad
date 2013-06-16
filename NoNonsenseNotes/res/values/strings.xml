@@ -173,6 +173,7 @@
     <string name="date_header_none">No date</string>
     <string name="date_header_completed">Completed</string>
     <string name="next_5_days">Next 5 days</string>
+    <string name="next_n_days">Next %d days</string>
     <string name="this_week">This week</string>
     <string name="please_select_note">Please select or create a note</string>
     <string name="please_create_note">Please create a note</string>
