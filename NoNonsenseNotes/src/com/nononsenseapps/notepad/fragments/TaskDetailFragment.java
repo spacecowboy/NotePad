@@ -115,7 +115,7 @@ public class TaskDetailFragment extends Fragment implements
 		@Override
 		public void onLoadFinished(Loader<Cursor> ldr, Cursor c) {
 			if (LOADER_EDITOR_TASK == ldr.getId()) {
-				if (c.moveToFirst()) {
+				if (c != null && c.moveToFirst()) {
 					if (mTask == null) {
 						mTask = new Task(c);
 						if (mTaskOrg == null) {
@@ -149,7 +149,7 @@ public class TaskDetailFragment extends Fragment implements
 				}
 			}
 			else if (LOADER_EDITOR_NOTIFICATIONS == ldr.getId()) {
-				while (c.moveToNext()) {
+				while (c != null && c.moveToNext()) {
 					addNotification(new Notification(c));
 				}
 				// Don't update while editing
@@ -158,7 +158,7 @@ public class TaskDetailFragment extends Fragment implements
 			}
 			else if (LOADER_EDITOR_TASKLISTS == ldr.getId()) {
 				// At current only loading a single list
-				if (c.moveToFirst()) {
+				if (c != null && c.moveToFirst()) {
 					final TaskList list = new TaskList(c);
 					hideTaskParts(list);
 				}

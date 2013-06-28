@@ -759,6 +759,10 @@ public class IabHelper {
 
     // Workaround to bug where sometimes response codes come as Long instead of Integer
     int getResponseCodeFromBundle(Bundle b) {
+    	if (b == null) {
+    		logDebug("Bundle with null response code, assuming OK (known issue)");
+            return BILLING_RESPONSE_RESULT_OK;
+    	}
         Object o = b.get(RESPONSE_CODE);
         if (o == null) {
             logDebug("Bundle with null response code, assuming OK (known issue)");

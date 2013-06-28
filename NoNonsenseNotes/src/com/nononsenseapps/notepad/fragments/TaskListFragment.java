@@ -400,7 +400,7 @@ public class TaskListFragment extends Fragment implements
 			@Override
 			public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
 				if (loader.getId() == 0) {
-					if (c.moveToFirst()) {
+					if (c != null && c.moveToFirst()) {
 						final TaskList list = new TaskList(c);
 						mSortType = list.sorting;
 						mListType = list.listtype;

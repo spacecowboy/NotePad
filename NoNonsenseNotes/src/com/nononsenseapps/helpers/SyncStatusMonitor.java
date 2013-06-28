@@ -64,7 +64,12 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 	 * Call this in the activity's onPause
 	 */
 	public void stopMonitoring() {
-		activity.unregisterReceiver(this);
+		try {
+			activity.unregisterReceiver(this);
+		}
+		catch (Exception e) {
+			
+		}
 		try {
 			((OnSyncStartStopListener) activity).onSyncStartStop(false);
 		}
