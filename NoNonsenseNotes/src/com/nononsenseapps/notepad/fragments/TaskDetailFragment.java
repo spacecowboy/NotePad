@@ -744,8 +744,8 @@ public class TaskDetailFragment extends Fragment implements
 					ActivityLocation.EXTRA_LATITUDE);
 			pendingLocationNotification.longitude = data.getExtras().getDouble(
 					ActivityLocation.EXTRA_LONGITUDE);
-			pendingLocationNotification.radius = (double) data.getExtras()
-					.getInt(ActivityLocation.EXTRA_RADIUS);
+			pendingLocationNotification.radius = data.getExtras()
+					.getDouble(ActivityLocation.EXTRA_RADIUS);
 			pendingLocationNotification.locationName = data.getExtras()
 					.getString(ActivityLocation.EXTRA_LOCATION_NAME);
 			if (pendingLocationNotification.view != null
@@ -965,11 +965,11 @@ public class TaskDetailFragment extends Fragment implements
 					if (not.latitude != null && not.longitude != null
 							&& not.radius != null) {
 						i.putExtra(ActivityLocation.EXTRA_LATITUDE,
-								not.latitude)
+								(double) not.latitude)
 								.putExtra(ActivityLocation.EXTRA_LONGITUDE,
-										not.longitude)
+										(double) not.longitude)
 								.putExtra(ActivityLocation.EXTRA_RADIUS,
-										not.radius);
+										(double) not.radius);
 					}
 					startActivityForResult(i, 2);
 				}

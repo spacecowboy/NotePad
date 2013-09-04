@@ -21,6 +21,7 @@ import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerDragListener;
 
@@ -30,19 +31,25 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.SearchRecentSuggestions;
 import android.support.v4.content.LocalBroadcastManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.SearchView;
 import android.widget.SeekBar;
 import android.widget.Toast;
+import android.widget.SearchView.OnQueryTextListener;
 
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.LatLngBoundsCreator;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nononsenseapps.helpers.ActivityHelper;
@@ -53,12 +60,15 @@ import com.nononsenseapps.util.GeofenceRequester;
 import com.nononsenseapps.util.GeofenceUtils;
 import com.nononsenseapps.util.GeofenceUtils.REMOVE_TYPE;
 import com.nononsenseapps.util.GeofenceUtils.REQUEST_TYPE;
+import com.nononsenseapps.util.LocationSuggestionsProvider;
 
 import android.app.ActionBar;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
+import android.app.SearchManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -83,6 +93,12 @@ public class ActivityLocation extends Activity {
 	@SystemService
 	LocationManager locationManager;
 
+	@SystemService
+	SearchManager searchManager;
+	
+	@SystemService
+	InputMethodManager inputManager;
+
 	@FragmentById
 	MapFragment mapFragment;
 	GoogleMap mMap;
@@ -90,10 +106,15 @@ public class ActivityLocation extends Activity {
 	@ViewById
 	SeekBar radiusSeekBar;
 
+	@ViewById
+	SearchView searchView;
+
 	// Plus minimum
-	final int radiusMin = 200;
-	int radius = 200 + radiusMin;
+	final int radiusMin = 20;
+	double radius = 20 + radiusMin;
 	String locationName = "";
+
+	final int zoomLevel = 12;
 
 	Circle circle = null;
 	Marker marker = null;
@@ -114,9 +135,15 @@ public class ActivityLocation extends Activity {
 
 	private IntentFilter mIntentFilter;
 
+	private SearchRecentSuggestions suggestions;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+		suggestions = new SearchRecentSuggestions(this,
+				LocationSuggestionsProvider.AUTHORITY,
+				LocationSuggestionsProvider.MODE);
 
 		Intent i = getIntent();
 		if (i == null || i.getExtras() == null
@@ -129,6 +156,8 @@ public class ActivityLocation extends Activity {
 				startLatitude = i.getExtras().getDouble(EXTRA_LATITUDE);
 				startLongitude = i.getExtras().getDouble(EXTRA_LONGITUDE);
 				startRadius = i.getExtras().getDouble(EXTRA_RADIUS);
+				
+				Log.d("nononsenseapps", "JONAS 1: " + startLatitude + " " + startLongitude + " " + startRadius);
 			}
 			else {
 				Toast.makeText(this, R.string.need_location_help,
@@ -247,14 +276,125 @@ public class ActivityLocation extends Activity {
 	}
 
 	@AfterViews
+	protected void setupSearch() {
+		// Assumes current activity is the searchable activity
+		searchView.setSearchableInfo(searchManager
+				.getSearchableInfo(getComponentName()));
+		searchView.setQueryRefinementEnabled(true);
+		searchView.setSubmitButtonEnabled(false);
+		searchView.setIconifiedByDefault(false);
+
+		searchView.setOnQueryTextListener(new OnQueryTextListener() {
+			@Override
+			public boolean onQueryTextSubmit(final String query) {
+				// Run in background
+				// JONAS
+				
+				inputManager.hideSoftInputFromWindow(searchView
+	                    .getWindowToken(), 0);
+
+				final Geocoder geocoder = new Geocoder(getApplicationContext(),
+						ActivityHelper.getUserLocale(ActivityLocation.this));
+
+				try {
+					List<Address> places = geocoder.getFromLocationName(query,
+							10);
+
+					if (null == places || places.isEmpty()) {
+
+					}
+					else {
+						Address place = places.get(0);
+						final LatLng point = new LatLng(place.getLatitude(),
+								place.getLongitude());
+						// mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(point,
+						// zoomLevel));
+
+						refocusMap(point);
+						addFence(point);
+
+						String name = "";
+						// _Location += listAddresses.get(0).getAdminArea();
+						// _Location += " " +
+						// listAddresses.get(0).getFeatureName();
+						// _Location += " " +
+						// listAddresses.get(0).getThoroughfare();
+						for (int i = 0; i < place.getMaxAddressLineIndex(); i++) {
+							if (name.length() > 0) name += " ";
+							name += place.getAddressLine(i);
+						}
+
+						suggestions.saveRecentQuery(query, name);
+					}
+				}
+				catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+
+				return true;
+			}
+
+			@Override
+			public boolean onQueryTextChange(final String query) {
+				return false;
+			}
+		});
+		
+		// In case we have a search intent
+		onNewIntent(getIntent());
+	}
+
+	protected void onNewIntent(final Intent intent) {
+		if (intent == null) {
+			return;
+		}
+		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+			searchView.setQuery(intent.getStringExtra(SearchManager.QUERY),
+					true);
+		}
+	}
+
+	void refocusMap() {
+		// if (marker == null) {
+		refocusMap(mMap.getCameraPosition().target);
+		// } else {
+		// refocusMap(marker.getPosition());
+		// }
+	}
+	
+	LatLngBounds getBounds(final LatLng point) {
+		// This is a hack to calculate an inaccurate location roughly that
+				// distant
+				// Inaccurate but very quick to calculate
+				LatLng sw = new LatLng(point.latitude - 2 * radius / (1000.0 * 160),
+						point.longitude - 2 * radius / (1000.0 * 160));
+				LatLng ne = new LatLng(point.latitude + 2 * radius / (1000.0 * 160),
+						point.longitude + 2 * radius / (1000.0 * 160));
+				LatLngBounds bounds = new LatLngBounds(sw, ne);
+				
+				return bounds;
+	}
+
+	void refocusMap(final LatLng point) {
+		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(getBounds(point), 0));
+	}
+	
+	void moveMap(final LatLng point) {
+		//mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(getBounds(point), 0, 0, 0));
+		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(point, zoomLevel));
+	}
+
+	@AfterViews
 	protected void setupMap() {
 		mMap = mapFragment.getMap();
-		mMap.setMyLocationEnabled(true);
+		mMap.setMyLocationEnabled(false);
+		Log.d("nononsenseapps", "JONAS startRadius: " + startRadius);
 		if (startRadius > 0) {
-			radiusSeekBar.setProgress((int) startRadius);
+			radiusSeekBar.setProgress(calcRadiusProgress(startRadius));
 			// Zoom 14 is good
 			LatLng point = new LatLng(startLatitude, startLongitude);
-			mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(point, 14));
+			moveMap(point);
 			addFence(point);
 		}
 		else {
@@ -262,13 +402,19 @@ public class ActivityLocation extends Activity {
 			final Location startLocation = locationManager
 					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 			if (startLocation != null) {
-				mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(
-						new LatLng(startLocation.getLatitude(), startLocation
-								.getLongitude()), 13));
+				moveMap(new LatLng(startLocation.getLatitude(), startLocation
+								.getLongitude()));
 			}
 		}
 
 		// Handle clicks
+		mMap.setOnMapClickListener(new OnMapClickListener() {
+
+			@Override
+			public void onMapClick(LatLng point) {
+				addFence(point);
+			}
+		});
 		mMap.setOnMapLongClickListener(new OnMapLongClickListener() {
 
 			@Override
@@ -306,6 +452,16 @@ public class ActivityLocation extends Activity {
 		});
 	}
 
+	// Adds minimum
+	double calcRadius(final int progress) {
+		final double x = radiusMin + progress;
+		return x * x;
+	}
+
+	int calcRadiusProgress(final double radius) {
+		return (int) (Math.sqrt(radius) - radiusMin);
+	}
+
 	@SeekBarTouchStart(R.id.radiusSeekBar)
 	void onRadiusChangeStart(final SeekBar seekBar) {
 		if (circle != null) {
@@ -315,7 +471,7 @@ public class ActivityLocation extends Activity {
 
 	@SeekBarProgressChange(R.id.radiusSeekBar)
 	void onRadiusChanging(final SeekBar seekBar, final int progress) {
-		radius = radiusMin + progress;
+		radius = calcRadius(progress);
 		if (circle != null) {
 			circle.setRadius(radius);
 		}
@@ -323,11 +479,12 @@ public class ActivityLocation extends Activity {
 
 	@SeekBarTouchStop(R.id.radiusSeekBar)
 	void onRadiusChanged(final SeekBar seekBar) {
-		radius = radiusMin + seekBar.getProgress();
+		radius = calcRadius(seekBar.getProgress());
 		if (circle != null) {
 			circle.setFillColor(fillColor);
 			circle.setRadius(radius);
 		}
+		refocusMap();
 	}
 
 	@AfterViews
@@ -369,9 +526,9 @@ public class ActivityLocation extends Activity {
 		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
 				ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
 						| ActionBar.DISPLAY_SHOW_TITLE);
-		actionBar.setCustomView(customActionBarView, new ActionBar.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT));
+		actionBar.setCustomView(customActionBarView,
+				new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+						ViewGroup.LayoutParams.MATCH_PARENT));
 	}
 
 	/**
@@ -406,6 +563,11 @@ public class ActivityLocation extends Activity {
 				marker.getPosition().longitude);
 		values.put(Notification.Columns.RADIUS, radius);
 		values.put(Notification.Columns.LOCATIONNAME, locationName);
+		
+		if (locationName != null && !locationName.isEmpty()) {
+			suggestions.saveRecentQuery(locationName, null);
+		}
+		
 		getContentResolver().update(Notification.getUri(mId), values, null,
 				null);
 

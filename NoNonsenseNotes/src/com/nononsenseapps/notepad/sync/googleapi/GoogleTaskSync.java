@@ -263,8 +263,10 @@ public class GoogleTaskSync {
 			// Merge with hashmap
 			if (localVersions.containsKey(task.remoteId)) {
 				task.dbid = localVersions.get(task.remoteId).dbid;
-				Log.d(TAG, "merge: task was deleted locally");
 				task.setDeleted(localVersions.get(task.remoteId).isDeleted());
+				if (task.isDeleted()) {
+					Log.d(TAG, "merge1: deleting " + task.title);
+				}
 				localVersions.remove(task.remoteId);
 			}
 		}
@@ -272,6 +274,9 @@ public class GoogleTaskSync {
 		// Remaining ones
 		for (final GoogleTask task : localVersions.values()) {
 			remoteTasks.add(task);
+			if (task.isDeleted()) {
+				Log.d(TAG, "merge2: was deleted " + task.title);
+			}
 		}
 	}
 
@@ -440,7 +445,7 @@ public class GoogleTaskSync {
 			}
 			// if deleted locally
 			else if (pair.second.isDeleted()) {
-				//Log.d(TAG, "remotetasksync: isDeletedLocally");
+				Log.d(TAG, "remotetasksync: isDeletedLocally");
 				// Delete remote also
 				pair.second.remotelydeleted = true;
 				apiTalker.uploadTask(pair.second, gTaskList);
@@ -564,12 +569,12 @@ public class GoogleTaskSync {
 			// b) it was created on the server
 			if (localTask == null) {
 				if (remoteTask.remotelydeleted) {
-					//Log.d(TAG, "slocal: task was remotely deleted1: " + remoteTask.title);
+					Log.d(TAG, "slocal: task was remotely deleted1: " + remoteTask.title);
 					// Nothing to do
 					remoteTask.delete(context);
 				}
 				else if (remoteTask.isDeleted()) {
-					//Log.d(TAG, "slocal: task was locally deleted: " + remoteTask.remoteId);
+					Log.d(TAG, "slocal: task was locally deleted: " + remoteTask.remoteId);
 					// upload change
 				}
 				else {
@@ -608,7 +613,7 @@ public class GoogleTaskSync {
 				}
 				// Remote is newer
 				else if (remoteTask.remotelydeleted) {
-					//Log.d(TAG, "slocal: task was remotely deleted2: " + remoteTask.title);
+					Log.d(TAG, "slocal: task was remotely deleted2: " + remoteTask.title);
 					localTask.delete(context);
 					localTask = null;
 					remoteTask.delete(context);
@@ -652,7 +657,7 @@ public class GoogleTaskSync {
 			}
 			if (remoteTask.remotelydeleted) {
 				// Dont
-				//Log.d("nononsenseapps gtasksync", "skipping remotely deleted");
+				Log.d(TAG, "skipping remotely deleted");
 			}
 			else if (localTask != null && remoteTask != null
 					&& localTask.updated.equals(remoteTask.updated)) {
