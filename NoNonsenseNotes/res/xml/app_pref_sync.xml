@@ -17,23 +17,11 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="app_preference_screen_sync" >
 
-    <!--
-    <PreferenceScreen
-        android:key="pref_dropbox_section_key"
-        android:persistent="false"
-        android:title="@string/dropbox" >
-        <SwitchPreference
-            android:defaultValue="false"
-            android:key="@string/pref_dropbox"
-            android:summary="@string/dropbox_enable_summary"
-            android:title="@string/dropbox_enable" /> 
-        
-    </PreferenceScreen>
-    -->
-    <PreferenceScreen
+    
+    <!-- <PreferenceScreen
         android:key="pref_gtask_section_key"
         android:persistent="false"
-        android:title="@string/gtasks" >
+        android:title="@string/gtasks" > -->
         <SwitchPreference
             android:defaultValue="false"
             android:key="syncEnablePref"
@@ -70,6 +58,6 @@
             android:key="syncFull"
             android:summary="@string/sync_full_force_info"
             android:title="@string/sync_full_force" />
-    </PreferenceScreen>
+    <!-- </PreferenceScreen> -->
 
 </PreferenceScreen>

@@ -77,9 +77,6 @@
     <string name="gtasks_sync_info">Not all information can be synced with Google Tasks. Only notes, due date (not time) and todo-status is synced.</string>
     <string name="settings_cat_syncing">Synchronization</string>
     <string name="gtasks">Google Tasks</string>
-    <string name="dropbox">Dropbox</string>
-    <string name="dropbox_enable">Sync with Dropbox</string>
-    <string name="dropbox_enable_summary">Creates a special NoNonsense Notes folder in your Dropbox</string>
     <string name="show_from_all_lists">All lists</string>
     <string name="lists">Lists</string>
     <string name="deleted">Deleted</string>
