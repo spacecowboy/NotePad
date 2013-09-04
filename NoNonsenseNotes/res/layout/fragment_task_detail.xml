@@ -28,6 +28,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:hint="@string/editor_note_hint"
+                android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
                 custom:linkify="true"
                 custom:titleFontFamily="robotocondensed"
                 custom:titleFontStyle="bold"
