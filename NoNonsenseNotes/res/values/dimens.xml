@@ -26,6 +26,7 @@
     <dimen name="listMarginsPadded">8dp</dimen>
     
     <!-- Used in search where no note fragment exists ever -->
+    <!-- Also used by searchview in activitylocation -->
     <dimen name="listNoDetailWidth">@dimen/layout_match_parent</dimen>
     
     <!-- list item min size -->
