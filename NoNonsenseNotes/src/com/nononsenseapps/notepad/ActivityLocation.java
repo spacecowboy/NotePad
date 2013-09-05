@@ -95,7 +95,7 @@ public class ActivityLocation extends Activity {
 
 	@SystemService
 	SearchManager searchManager;
-	
+
 	@SystemService
 	InputMethodManager inputManager;
 
@@ -110,8 +110,9 @@ public class ActivityLocation extends Activity {
 	SearchView searchView;
 
 	// Plus minimum
-	final int radiusMin = 20;
-	double radius = 20 + radiusMin;
+	final int radiusMin = 100;
+	// Match xml progress of seekbar, 17*17 = 289 meters
+	double radius = 17*17 + radiusMin;
 	String locationName = "";
 
 	final int zoomLevel = 12;
@@ -156,8 +157,9 @@ public class ActivityLocation extends Activity {
 				startLatitude = i.getExtras().getDouble(EXTRA_LATITUDE);
 				startLongitude = i.getExtras().getDouble(EXTRA_LONGITUDE);
 				startRadius = i.getExtras().getDouble(EXTRA_RADIUS);
-				
-				Log.d("nononsenseapps", "JONAS 1: " + startLatitude + " " + startLongitude + " " + startRadius);
+
+				Log.d("nononsenseapps", "JONAS 1: " + startLatitude + " "
+						+ startLongitude + " " + startRadius);
 			}
 			else {
 				Toast.makeText(this, R.string.need_location_help,
@@ -289,9 +291,9 @@ public class ActivityLocation extends Activity {
 			public boolean onQueryTextSubmit(final String query) {
 				// Run in background
 				// JONAS
-				
-				inputManager.hideSoftInputFromWindow(searchView
-	                    .getWindowToken(), 0);
+
+				inputManager.hideSoftInputFromWindow(
+						searchView.getWindowToken(), 0);
 
 				final Geocoder geocoder = new Geocoder(getApplicationContext(),
 						ActivityHelper.getUserLocale(ActivityLocation.this));
@@ -340,7 +342,7 @@ public class ActivityLocation extends Activity {
 				return false;
 			}
 		});
-		
+
 		// In case we have a search intent
 		onNewIntent(getIntent());
 	}
@@ -356,32 +358,35 @@ public class ActivityLocation extends Activity {
 	}
 
 	void refocusMap() {
-		// if (marker == null) {
-		refocusMap(mMap.getCameraPosition().target);
-		// } else {
-		// refocusMap(marker.getPosition());
-		// }
+		if (marker == null) {
+			refocusMap(mMap.getCameraPosition().target);
+		}
+		else {
+			refocusMap(marker.getPosition());
+		}
 	}
-	
+
 	LatLngBounds getBounds(final LatLng point) {
 		// This is a hack to calculate an inaccurate location roughly that
-				// distant
-				// Inaccurate but very quick to calculate
-				LatLng sw = new LatLng(point.latitude - 2 * radius / (1000.0 * 160),
-						point.longitude - 2 * radius / (1000.0 * 160));
-				LatLng ne = new LatLng(point.latitude + 2 * radius / (1000.0 * 160),
-						point.longitude + 2 * radius / (1000.0 * 160));
-				LatLngBounds bounds = new LatLngBounds(sw, ne);
-				
-				return bounds;
+		// distant
+		// Inaccurate but very quick to calculate
+		LatLng sw = new LatLng(point.latitude - 2 * radius / (1000.0 * 160),
+				point.longitude - 2 * radius / (1000.0 * 160));
+		LatLng ne = new LatLng(point.latitude + 2 * radius / (1000.0 * 160),
+				point.longitude + 2 * radius / (1000.0 * 160));
+		LatLngBounds bounds = new LatLngBounds(sw, ne);
+
+		return bounds;
 	}
 
 	void refocusMap(final LatLng point) {
-		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(getBounds(point), 0));
+		mMap.animateCamera(CameraUpdateFactory.newLatLngBounds(
+				getBounds(point), 0));
 	}
-	
+
 	void moveMap(final LatLng point) {
-		//mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(getBounds(point), 0, 0, 0));
+		// mMap.moveCamera(CameraUpdateFactory.newLatLngBounds(getBounds(point),
+		// 0, 0, 0));
 		mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(point, zoomLevel));
 	}
 
@@ -402,8 +407,8 @@ public class ActivityLocation extends Activity {
 			final Location startLocation = locationManager
 					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
 			if (startLocation != null) {
-				moveMap(new LatLng(startLocation.getLatitude(), startLocation
-								.getLongitude()));
+				moveMap(new LatLng(startLocation.getLatitude(),
+						startLocation.getLongitude()));
 			}
 		}
 
@@ -454,12 +459,12 @@ public class ActivityLocation extends Activity {
 
 	// Adds minimum
 	double calcRadius(final int progress) {
-		final double x = radiusMin + progress;
-		return x * x;
+		final double x = progress;
+		return x * x + radiusMin;
 	}
 
 	int calcRadiusProgress(final double radius) {
-		return (int) (Math.sqrt(radius) - radiusMin);
+		return (int) (Math.sqrt(radius - radiusMin));
 	}
 
 	@SeekBarTouchStart(R.id.radiusSeekBar)
@@ -563,11 +568,11 @@ public class ActivityLocation extends Activity {
 				marker.getPosition().longitude);
 		values.put(Notification.Columns.RADIUS, radius);
 		values.put(Notification.Columns.LOCATIONNAME, locationName);
-		
+
 		if (locationName != null && !locationName.isEmpty()) {
 			suggestions.saveRecentQuery(locationName, null);
 		}
-		
+
 		getContentResolver().update(Notification.getUri(mId), values, null,
 				null);
 

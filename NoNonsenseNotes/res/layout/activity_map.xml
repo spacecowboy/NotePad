@@ -18,13 +18,12 @@
 
     <SearchView
         android:id="@+id/searchView"
-        android:background="@android:color/white"
+        android:background="@drawable/search_padded"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="top|center_horizontal"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginRight="2dp"
         android:iconifiedByDefault="false"
          />
 
@@ -58,7 +57,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:max="250"
-            android:progress="30" />
+            android:progress="17" />
     </LinearLayout>
 
 </FrameLayout>

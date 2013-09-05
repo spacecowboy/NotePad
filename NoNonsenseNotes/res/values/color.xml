@@ -36,6 +36,6 @@
 	
 	<color name="completedGrey">#aa888888</color>
 	
-	<color name="mapTransLight">#CCFFFFFF</color>
+	<color name="mapTransLight">#E0FFFFFF</color>
 	
 </resources>
