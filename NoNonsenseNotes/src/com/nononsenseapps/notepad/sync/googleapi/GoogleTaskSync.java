@@ -66,14 +66,15 @@ public class GoogleTaskSync {
 
 				try {
 					// IF full sync, download since start of all time
-					if (PreferenceManager.getDefaultSharedPreferences(context)
-							.getBoolean(SyncPrefs.KEY_FULLSYNC, false)) {
+					// Temporary fix for delete all bug
+//					if (PreferenceManager.getDefaultSharedPreferences(context)
+//							.getBoolean(SyncPrefs.KEY_FULLSYNC, false)) {
 						PreferenceManager.getDefaultSharedPreferences(context)
 								.edit()
 								.putBoolean(SyncPrefs.KEY_FULLSYNC, false)
 								.putLong(PREFS_GTASK_LAST_SYNC_TIME, 0)
 								.commit();
-					}
+//					}
 
 					// Download lists from server
 					Log.d(TAG, "download lists");
