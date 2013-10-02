@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="changelog_5.1">
+\nAdded search field to location reminders
+\nTemporary fix for bug which could clear all items on sync
+\nTranslations
+\nCrash fixes</string>
+    
     <string name="changelog_5.0">\nApp has been rewritten from scratch
 \nUI has been updated
 \nSync has been rewritten
