@@ -27,12 +27,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
-    android:versionCode="99"
-    android:versionName="5.1-beta" >
+    android:versionCode="100"
+    android:versionName="5.1-beta2" >
 
     <uses-sdk
         android:minSdkVersion="14"
-        android:targetSdkVersion="17" />
+        android:targetSdkVersion="18" />
 
     <uses-feature
         android:glEsVersion="0x00020000"
@@ -78,14 +78,12 @@
         android:name="com.nononsenseapps.notepad.permissions.read"
         android:description="@string/permission_read_desc"
         android:label="@string/permission_read_label"
-        android:permissionGroup="android.permission-group.PERSONAL_INFO"
-        android:protectionLevel="normal" />
+        android:permissionGroup="android.permission-group.PERSONAL_INFO" />
     <permission
         android:name="com.nononsenseapps.notepad.permissions.write"
         android:description="@string/permission_write_desc"
         android:label="@string/permission_write_label"
-        android:permissionGroup="android.permission-group.PERSONAL_INFO"
-        android:protectionLevel="normal" />
+        android:permissionGroup="android.permission-group.PERSONAL_INFO" />
 
     <uses-permission android:name="com.nononsenseapps.notepad.permissions.read" />
     <uses-permission android:name="com.nononsenseapps.notepad.permissions.write" />
@@ -399,6 +397,8 @@
             android:enabled="true"
             android:exported="true"
             android:grantUriPermissions="true"
+            android:permission="com.nononsenseapps.notepad.permissions.read"
+            android:readPermission="com.nononsenseapps.notepad.permissions.read"
             android:writePermission="com.nononsenseapps.notepad.permissions.write" >
         </provider>
 
@@ -406,6 +406,7 @@
         <provider
             android:name="com.nononsenseapps.util.LocationSuggestionsProvider"
             android:authorities="com.nononsenseapps.LocationSuggestions"
+            android:exported="false"
             android:enabled="true" >
         </provider>
 
