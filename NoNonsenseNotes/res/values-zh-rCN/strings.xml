@@ -77,6 +77,7 @@ limitations under the License.
 <string name="dropbox_enable">与 Dropbox 同步</string>
 <string name="dropbox_enable_summary">向您的 Dropbox 新建一个 NoNonsense Notes 文件夹</string>
 <string name="show_from_all_lists">所有列表</string>
+<string name="lists">列表</string>
 <string name="deleted">已删除</string>
 <string name="repeat">重复</string>
 <string name="once">一次性</string>
@@ -93,6 +94,15 @@ limitations under the License.
 <string name="imported_result">已将 %1$d 条便签导入 %2$d 列表</string>
 <string name="import_error">出现了一些问题：%s</string>
 
+<string name="showcase_main_title">访问列表</string>
+<string name="showcase_main_msg">点击图标，或是从左边缘滑动</string>
+<string name="showcase_drawer_title">管理列表</string>
+<string name="showcase_drawer_msg">长按以编辑或删除</string>
+<string name="showcase_timemachine_title">保存便签</string>
+<string name="showcase_timemachine_msg">任何更改都会立即保存下来。请使用时光机功能以恢复前一个版本。</string>
+
+<string name="donate_to_unlock">捐赠后解锁此功能</string>
+<string name="premiums_unlocked_and_thanks">高级功能已解锁。感谢您的支持！</string>
 
 <!--
 Use few if language need it. In English is the same.
@@ -123,6 +133,9 @@ Use few if language need it. In English is the same.
 <item quantity="other">@string/selected_other</item>
 </plurals>
 
+<string name="move">移动</string>
+<string name="move_to">移动到</string>
+<string name="moved_x_to_list">移动 %1$d到%2$s</string>
 
 <string name="lock_note">锁定便签</string>
 <string name="unlock_note">解锁便签</string>
@@ -153,6 +166,8 @@ Use few if language need it. In English is the same.
 <string name="date_header_future">晚些时候</string>
 <string name="date_header_none">无日期</string>
 <string name="date_header_completed">已完成</string>
+<string name="next_5_days">未来5天</string>
+<string name="this_week">本周</string>
 <string name="please_select_note">请选择或者创建一个便签</string>
 <string name="please_create_note">请创建一个便签</string>
 <string name="hide_checkbox">隐藏复选框</string>
@@ -163,6 +178,7 @@ Use few if language need it. In English is the same.
 <string name="long_date_format">长日期格式</string>
 <string name="short_date_format">短日期格式</string>
 <string name="rows">行</string>
+<string name="select_date">选择日期</string>
 <string name="localedefault">使用所在地区的默认值</string>
 <string name="donate">捐赠</string>
 <string name="donate_thanks">感谢您的支持！</string>
@@ -200,6 +216,8 @@ Use few if language need it. In English is the same.
 <string name="priority">优先级</string>
 <string name="notifications">通知</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+<string name="tasks">任务</string>
+<string name="all_tasks">所有任务</string>
 <string name="dashclock_tasks">任务</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">仅限特定列表中的任务</string>
 <string name="dashclock_show_overdue_tasks">显示过期任务</string>

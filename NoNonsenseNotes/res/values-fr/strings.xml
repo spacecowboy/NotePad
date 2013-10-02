@@ -19,7 +19,13 @@ limitations under the License.
 
 <string name="app_name">Notes</string>
 <string name="title_create">Nouvelle note</string>
-<string name="menu_save_and_add">Sauvegarder et ouvrir une nouvelle notenote</string>
+<string name="time">Heure</string>
+<string name="done">Fait</string>
+<string name="saved">Sauvegardé</string>
+<string name="distance">Distance</string>
+<string name="need_location_help">Appui long pour définir l\'emplacement</string>
+<string name="near">Près</string>
+<string name="menu_save_and_add">Sauvegarder et créer une nouvelle note</string>
 <string name="menu_delete">Supprimer</string>
 <string name="menu_deletelist">Supprimer la liste</string>
 <string name="menu_sync">Actualiser</string>
@@ -28,11 +34,30 @@ limitations under the License.
 <string name="menu_createlist">Créer une liste</string>
 <string name="menu_clearcompleted">Effacer les notes complétées</string>
 <string name="menu_setdefaultlist">Définir comme liste par défaut</string>
+<string name="new_default_set">Liste par défaut définie</string>
 <string name="menu_managelists">Gérer les listes</string>
+<string name="add_item">Ajouter un élément</string>
+<string name="delete_question">Supprimer?</string>
+<string name="delete_items_message">Êtes-vous sûr de vouloir supprimer ces éléments?</string>
+<string name="delete_item_message">Êtes-vous sûr de vouloir supprimer cet élément?</string>
+<string name="delete_list_message">Êtes-vous sûr de vouloir supprimer cette liste?</string>
 <string name="editor_due_date_hint">Échéance</string>
 <string name="editor_title_hint">Titre</string>
 <string name="editor_note_hint">Note</string>
 <string name="resolve_edit">Éditer la note</string>
+<string name="default_style">Style par défaut</string>
+<string name="show_items_as_tasks">Afficher les éléments comme tâches</string>
+<string name="show_items_as_notes">Afficher les éléments comme notes</string>
+<string name="sort_list_default">Ordre de tri par défault</string>
+<string name="sort_list_alphabetical">Ordonner alphabétiquement</string>
+<string name="sort_list_due">Ordonner par date d\'échéance</string>
+<string name="sort_list_updated">Ordonner par date de modification</string>
+<string name="sort_list_manual">Ordonner manuellement</string>
+<string name="search_description">Notes et tâches</string>
+<string name="archive">Archive</string>
+<string name="location">Emplacement</string>
+<string name="restore">Restaurer</string>
+<string name="restore_to">Restaurer à</string>
 <string name="search_hint">Rechercher</string>
 <string name="settings_theme">Thème actuel</string>
 <string name="settings_theme_dialog">Choisir un thème</string>
@@ -40,23 +65,47 @@ limitations under the License.
 <string name="settings_summary_theme_black">Noir</string>
 <string name="settings_summary_theme_dark">Sombre</string>
 <string name="settings_summary_theme_light">Clair</string>
+<string name="settings_summary_theme_classic">Classique</string>
 <string name="settings_cat_appearance">Apparence</string>
 <string name="preference_preview_text">Voici comment le texte apparaîtra dans l\'éditeur</string>
 <string name="settings_account_title">Choisir un compte</string>
 <string name="settings_account_summary">Cliquer pour changer de compte</string>
 <string name="settings_sync_enable_title">Sync. Google Tâches</string>
+<string name="gtasks_sync_info">Les informations ne peuvent toutes être synchronisées avec Google Tâches. Seulement les notes, dates d\'échéance et les statuts sont synchronisés.</string>
 <string name="settings_cat_syncing">Synchronisation</string>
+<string name="gtasks">Google Tâches</string>
+<string name="dropbox">Dropbox</string>
+<string name="dropbox_enable">Synchroniser avec Dropbox</string>
+<string name="dropbox_enable_summary">Crée un répertoire spécial NoNonsense Notes dans votre Dropbox</string>
 <string name="show_from_all_lists">Toutes les listes</string>
+<string name="lists">Listes</string>
 <string name="deleted">Supprimé</string>
+<string name="repeat">Répéter</string>
+<string name="once">Une fois</string>
+<string name="always">Toujours</string>
 <string name="permission_read_label">lire les notes et les listes</string>
 <string name="permission_read_desc">Autorise l\'application à lire vos notes et listes.</string>
 <string name="permission_write_label">modifier les notes et les listes</string>
 <string name="permission_write_desc">Autorise l\'application à créer, modifier et supprimer des notes et listes.</string>
 <string name="settings_list_dialog">Choisir une liste</string>
 <string name="settings_list">Liste</string>
+<string name="drag_to_timetravel">Glisser pour revenir en arrière</string>
 
+<string name="import_data_question">Importer les données?</string>
+<string name="import_started">Importation des données. Ceci prendra quelques secondes.</string>
+<string name="import_data_msg">Voulez-vous importe les notes depuis la version donation? Lorsque terminé, vous aurez l\'option de la désinstaller.</string>
+<string name="imported_result">%1$d notes importées dans %2$d listes</string>
+<string name="import_error">Quelque chose n\'a pas fonctionné: %s</string>
 
+<string name="showcase_main_title">Accéder à vos listes</string>
+<string name="showcase_main_msg">Toucher l\'icône ou glisser depuis le côté gauche de l\'écran</string>
+<string name="showcase_drawer_title">Gérer vos lites</string>
+<string name="showcase_drawer_msg">Appui long pour éditer ou supprimer</string>
+<string name="showcase_timemachine_title">Sauvegarder vos notes</string>
+<string name="showcase_timemachine_msg">Les changements sont toujours sauvegardés. Utiliser la time machine pour restaurer une version précédente.</string>
 
+<string name="donate_to_unlock">Donner pour déverrouiller</string>
+<string name="premiums_unlocked_and_thanks">Fonctions avancées déverrouillée. Merci pour votre soutien!</string>
 
 <!--
 Use few if language need it. In English is the same.
@@ -87,6 +136,9 @@ Use few if language need it. In English is the same.
 <item quantity="other">@string/selected_other</item>
 </plurals>
 
+<string name="move">Déplacer</string>
+<string name="move_to">Déplacer vers</string>
+<string name="moved_x_to_list">%1$d déplacé vers %2$s</string>
 
 <string name="lock_note">Verrouiller la note</string>
 <string name="unlock_note">Déverrouiller la note</string>
@@ -117,18 +169,31 @@ Use few if language need it. In English is the same.
 <string name="date_header_future">Plus tard</string>
 <string name="date_header_none">Pas de date</string>
 <string name="date_header_completed">Complété</string>
+<string name="next_5_days">5 prochains jours</string>
+<string name="this_week">Cette semaine</string>
 <string name="please_select_note">SVP sélectionner ou créer une note</string>
 <string name="please_create_note">SVP créer une note</string>
 <string name="hide_checkbox">Masquer la case à cocher</string>
 <string name="hide_checkbox_summary_on">La case sera masquée</string>
 <string name="hide_checkbox_summary_off">La case sera affichée</string>
 <string name="hide_date">Masquer la date d\'échéance</string>
+<string name="item_max_height">Hauteur maximale des notes/tâches</string>
+<string name="long_date_format">Format de date longue</string>
+<string name="short_date_format">Format de date courte</string>
+<string name="rows">Ligne</string>
+<string name="select_date">Date sélectionnée</string>
 <string name="localedefault">Paramètres régionaux par défaut</string>
+<string name="donate">Donner</string>
+<string name="donate_thanks">Merci pour votre soutien!</string>
 
 <!-- settings string keys -->
 <string name="hide_header">Masquer l\'en-tête du widget</string>
+<string name="transparency">Opacité</string>
+<string name="notes_shortcut">Raccourci</string>
 <string name="shortcut_help1">Si coché, le raccourci créera une nouvelle note dans la liste sélectionnée et ouvrira l\'éditeur. Si non coché, le raccourci ouvrira la liste sélectionnée.</string>
 <string name="loading_widget">Chargement du widget</string>
+<string name="default_list">Liste par défaut</string>
+<string name="please_type_before_reminder">SVP tapez du texte avant de régler un rappel</string>
 <string name="notecopied_one">Une note copiée</string>
 <string name="notecopied_other">%d notes copiées</string>
 <string name="notedeleted_one">Une note supprimée</string>
@@ -143,6 +208,7 @@ Use few if language need it. In English is the same.
 <string name="sync_on_start_info">Sera effectif seulement au prochain démarrage</string>
 <string name="sync_full_force">Forcer la synchronisation</string>
 <string name="sync_full_force_info">Cocher seulement si la synchronisation semble incomplète.</string>
+<string name="snooze">Répéter</string>
 <string name="silent">Silence</string>
 <string name="sound">Sonnerie</string>
 <string name="vibrate">Vibreur</string>
@@ -153,6 +219,8 @@ Use few if language need it. In English is the same.
 <string name="priority">Priorité</string>
 <string name="notifications">Notifications</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+<string name="tasks">Tâches</string>
+<string name="all_tasks">Toutes les tâches</string>
 <string name="dashclock_tasks">Tâches</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Restreindre les tâches à une liste spécifique</string>
 <string name="dashclock_show_overdue_tasks">Afficher les tâches passées dues</string>
@@ -168,7 +236,7 @@ Use few if language need it. In English is the same.
 <string name="dashclock_will_show_as_many_as_possible">En affichera autant que possible</string>
 <string name="dashclock_will_only_show_the_task_due_first">Affichera seulement les tâches dues</string>
 <string name="dashclock_show_only_the_next_task">Afficher seulement la prochaine tâche</string>
-<string name="dashclock_header_shown">Le nom de la liste s\'affichera en gras. Si &quot;Toutes les listes&quot; est sélectionné, affichera &quot;Tâches&quot;</string>
+<string name="dashclock_header_shown">Le nom de la liste s\'affichera en gras</string>
 <string name="dashclock_first_task_shown">Le titre de la première tâches s\'affichera en premier</string>
 <string name="dashclock_display_header">Afficher l\'en-tête</string>
 

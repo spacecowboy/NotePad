@@ -35,6 +35,7 @@ limitations under the License.
 <string name="menu_createlist">Създаване на списък</string>
 <string name="menu_clearcompleted">Изтриване на изпълнените</string>
 <string name="menu_setdefaultlist">Задаване списък по подразб.</string>
+<string name="new_default_set">Нов набор по подразбиране</string>
 <string name="menu_managelists">Управление на списъците</string>
 <string name="add_item">Добавяне на обект</string>
 <string name="delete_question">Изтриване?</string>
@@ -78,6 +79,7 @@ limitations under the License.
 <string name="dropbox_enable">Синхонизиране с Dropbox</string>
 <string name="dropbox_enable_summary">Създава специална папка NoNonsense Notes във вашия Dropbox</string>
 <string name="show_from_all_lists">Всички списъци</string>
+<string name="lists">Списъци</string>
 <string name="deleted">Изтрита</string>
 <string name="repeat">Повторение</string>
 <string name="once">Веднъж</string>
@@ -99,6 +101,7 @@ limitations under the License.
 <string name="showcase_main_title">Докоснете за управление на списъците</string>
 <string name="showcase_main_msg">Или плъзнете от левия край</string>
 <string name="showcase_drawer_title">Задръжте за редактиране или изтриване</string>
+<string name="showcase_drawer_msg">Задръжте, за да редактирате или изтриете</string>
 <string name="showcase_timemachine_title">Запазва всичко</string>
 <string name="showcase_timemachine_msg">Вашите промени са винаги запазени при изход. Използвайте машината на времето, за да върнете предишна версия на бележка.</string>
 
@@ -167,6 +170,8 @@ Use few if language need it. In English is the same.
 <string name="date_header_future">По-късно</string>
 <string name="date_header_none">Без дата</string>
 <string name="date_header_completed">Изпълнена</string>
+<string name="next_5_days">Следващите 5 дни</string>
+<string name="this_week">Тази седмица</string>
 <string name="please_select_note">Изберете или създайте бележка</string>
 <string name="please_create_note">Създайте бележка</string>
 <string name="hide_checkbox">Скриване на квадратчето</string>
@@ -216,6 +221,7 @@ Use few if language need it. In English is the same.
 <string name="notifications">Известия</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
 <string name="tasks">Задачи</string>
+<string name="all_tasks">Всички задачи</string>
 <string name="dashclock_tasks">Задачи</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Ограничаване до задачите в определен списък</string>
 <string name="dashclock_show_overdue_tasks">Показване на просрочените задачи</string>

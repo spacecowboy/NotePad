@@ -29,6 +29,9 @@ for dir in dirs:
 
         langs.append(isocode)
 
+if 'en' not in langs:
+    langs.append('en')
+
 #for isocode in sorted(langs):
 #    print(isocode)
 
@@ -36,7 +39,7 @@ replacing = False
 for line in fileinput.FileInput(arrayfile, inplace=1):
     if not replacing:
         print(line, end='')
-    
+
     if 'name="translated_langs"' in line:
         replacing = True
         #Print list of languages

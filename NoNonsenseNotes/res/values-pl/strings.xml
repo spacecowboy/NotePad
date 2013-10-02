@@ -26,7 +26,7 @@ limitations under the License.
 <string name="distance">Dystans</string>
 <string name="need_location_help">Przytrzymaj, aby wybrać lokalizację</string>
 <string name="near">W pobliżu</string>
-<string name="menu_save_and_add">Utwórz nową notatkę</string>
+<string name="menu_save_and_add">Nowa notatka</string>
 <string name="menu_delete">Usuń</string>
 <string name="menu_deletelist">Usuń listę</string>
 <string name="menu_sync">Odśwież</string>
@@ -38,10 +38,10 @@ limitations under the License.
 <string name="new_default_set">Nowe ustawienie domyślne</string>
 <string name="menu_managelists">Zarządzaj listą</string>
 <string name="add_item">Dodaj</string>
-<string name="delete_question">Usunąć?</string>
-<string name="delete_items_message">Na pewno chcesz usunąć? </string>
-<string name="delete_item_message">Na pewno chcesz usunąć? </string>
-<string name="delete_list_message">Na pewno chcesz usunąć? </string>
+<string name="delete_question">Usuwanie</string>
+<string name="delete_items_message">Na pewno chcesz usunąć wybrane elementy? </string>
+<string name="delete_item_message">Na pewno chcesz usunąć wybrany element? </string>
+<string name="delete_list_message">Na pewno chcesz usunąć listę? </string>
 <string name="editor_due_date_hint">Termin</string>
 <string name="editor_title_hint">Tytuł</string>
 <string name="editor_note_hint">Notatka</string>
@@ -72,9 +72,9 @@ limitations under the License.
 <string name="settings_account_title">Wybierz konto</string>
 <string name="settings_account_summary">Kliknij, aby zmienić konto</string>
 <string name="settings_sync_enable_title">Synchronizacja z Google Tasks</string>
-<string name="gtasks_sync_info">Nie wszystkie informacje mogą być zscynchronizowane z Google Tasks. Wyłącznie notatki, terminy (bez czasu) oraz zadania.</string>
+<string name="gtasks_sync_info">Nie wszystkie informacje mogą zostać zsynchronizowane. Wyłącznie notatki, terminy (bez czasu) oraz zadania.</string>
 <string name="settings_cat_syncing">Synchronizacja</string>
-<string name="gtasks">Zadania Google</string>
+<string name="gtasks">Google Tasks</string>
 <string name="dropbox">Dropbox</string>
 <string name="dropbox_enable">Synchronizacja z Dropoboxem</string>
 <string name="dropbox_enable_summary">Utwórz folder "NoNonsense Notes" w Twoim Dropboxie</string>
@@ -139,7 +139,7 @@ Use few if language need it. In English is the same.
 
 <string name="move">Przenieś</string>
 <string name="move_to">Przenieś do</string>
-<string name="moved_x_to_list">Przeniesiono %1$d do %2$s</string>
+<string name="moved_x_to_list">Przeniesiono do %2$s</string>
 
 <string name="lock_note">Zablokuj notatkę</string>
 <string name="unlock_note">Odblokuj notatkę</string>
@@ -158,7 +158,7 @@ Use few if language need it. In English is the same.
 <string name="apply">Zastosuj</string>
 <string name="clear_password">Usuń hasło</string>
 <string name="password_info">Ustawienie hasła będzie wymagało wprowadzania go za każdym razem, kiedy chcesz wyświetlić zablokowane notatki. Zabezpiecza to wyłącznie pole samej notatki, do pól "tytuł" oraz "termin" dostęp pozostanie niezabezpiezony. Metoda ta nie szyfruje w żaden sposób notatek, zatem cały czas mogą być one wyświetlanew poczcie/kalendarzu Google. Jeśli zapomnisz hasła, zsynchronizuj notatki z Google i przeinstaluj aplikację. </string>
-<string name="about">O aplikacji</string>
+<string name="about">O programie</string>
 <string name="sync_failed">Synchronizacja nieudana</string>
 <string name="sync_login_failed">Logowanie nieudane, nie można połaczyć się z Google Tasks</string>
 <string name="changelog_full_title">Lista zmian</string>
@@ -181,7 +181,7 @@ Use few if language need it. In English is the same.
 <string name="item_max_height">Maksymalna długość nagłówka</string>
 <string name="long_date_format">Długi format daty</string>
 <string name="short_date_format">Krótki format daty</string>
-<string name="rows">wiersze(-y)</string>
+<string name="rows">wiersze(y)</string>
 <string name="select_date">Ustaw datę</string>
 <string name="localedefault">Domyślnie ustawienia regionalne</string>
 <string name="donate">Wspomóż</string>

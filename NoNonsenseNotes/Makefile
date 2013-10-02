@@ -20,9 +20,10 @@ installrelease: bin/NotePad-release.apk
 	adb install -r bin/NotePad-release.apk
 
 translations:
-	get-diff-translations
+	sh get-diff-translations
 	python listlang.py
 	python escapetranslations.py
+	python deletemissingtranslations.py
 
 langs:
 	python listlang.py

@@ -98,9 +98,11 @@
         <item>cs</item>
         <item>da</item>
         <item>de</item>
+        <item>el</item>
         <item>en</item>
         <item>es</item>
         <item>et</item>
+        <item>fa</item>
         <item>fi_FI</item>
         <item>fr</item>
         <item>he</item>
@@ -120,6 +122,7 @@
         <item>sk</item>
         <item>sv</item>
         <item>tr</item>
+        <item>vi</item>
         <item>zh_CN</item>
         <item>zh_TW</item>
     </string-array>

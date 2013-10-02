@@ -19,17 +19,28 @@ limitations under the License.
 
 <string name="app_name">Muistiinpanot</string>
 <string name="title_create">Uusi muistiinpano</string>
+<string name="timemachine">Aikakone</string>
+<string name="time">Aika</string>
+<string name="done">Valmis</string>
+<string name="saved">Tallennettu</string>
+<string name="distance">Etäisyys</string>
+<string name="need_location_help">Paina pitkään asettaaksesi sijainnin</string>
+<string name="near">Lähellä</string>
 <string name="menu_save_and_add">Tallenna ja avaa uusi muistiinpano</string>
 <string name="menu_delete">Poista</string>
 <string name="menu_deletelist">Poista lista</string>
-<string name="menu_sync">Päivitä</string>
+<string name="menu_sync">Synkronoi</string>
 <string name="menu_share">Jaa</string>
 <string name="menu_preferences">Asetukset</string>
-<string name="menu_createlist">Luo lista</string>
+<string name="menu_createlist">Luo uusi lista</string>
 <string name="menu_clearcompleted">Tyhjennä valmiit</string>
 <string name="menu_setdefaultlist">Aseta oletuslistaksi</string>
+<string name="new_default_set">Uusi oletus asetettu</string>
 <string name="menu_managelists">Hallitse listoja</string>
 <string name="add_item">Lisää kohde</string>
+<string name="delete_question">Poista?</string>
+<string name="delete_items_message">Haluatko varmasti poistaa nämä kohteet?</string>
+<string name="delete_item_message">Haluatko varmasti poistaa tämän kohteen?</string>
 <string name="delete_list_message">Haluatko varmasti poistaa listan? Muistiinpanot arkistoidaan.</string>
 <string name="editor_due_date_hint">Eräpäivä</string>
 <string name="editor_title_hint">Otsikko</string>
@@ -43,6 +54,11 @@ limitations under the License.
 <string name="sort_list_due">Järjestä eräpäivän mukaan</string>
 <string name="sort_list_updated">Järjestä viimeksi päivitetyn mukaan</string>
 <string name="sort_list_manual">Järjestä itse</string>
+<string name="search_description">Muistiinpanot ja tehtävät</string>
+<string name="archive">Arkistoi</string>
+<string name="location">Sijainti</string>
+<string name="restore">Palauta</string>
+<string name="restore_to">Palauta sijaintiin</string>
 <string name="search_hint">Etsi</string>
 <string name="settings_theme">Nykyinen teema</string>
 <string name="settings_theme_dialog">Käytä teemaa</string>
@@ -50,22 +66,45 @@ limitations under the License.
 <string name="settings_summary_theme_black">Musta</string>
 <string name="settings_summary_theme_dark">Tumma</string>
 <string name="settings_summary_theme_light">Vaalea</string>
+<string name="settings_summary_theme_classic">Perinteinen</string>
 <string name="settings_cat_appearance">Ulkonäkö</string>
 <string name="preference_preview_text">Tältä editorin teksti näyttää</string>
 <string name="settings_account_title">Valitse käyttäjätili</string>
 <string name="settings_account_summary">Napauta vaihtaaksesi tiliä</string>
 <string name="settings_sync_enable_title">Google Tasks -synkronointi</string>
+<string name="gtasks_sync_info">Kaikkea tietoa ei voida synkronoida Google Tasksiin. Vain muistiinpanot, eräpäivämäärä (ei aika) ja tehtävälistojen tilat synkronoidaan.</string>
 <string name="settings_cat_syncing">Synkronointi</string>
+<string name="dropbox_enable">Synkronoi Dropboxiin</string>
+<string name="dropbox_enable_summary">Luo oman NoNonsense Notes -kansion Dropboxiisi</string>
 <string name="show_from_all_lists">Kaikki listat</string>
+<string name="lists">Listat</string>
 <string name="deleted">Poistettu</string>
+<string name="repeat">Toista</string>
+<string name="once">Kerran</string>
+<string name="always">Aina</string>
 <string name="permission_read_label">lue muistiinpanoja ja listoja</string>
 <string name="permission_read_desc">Sallii sovelluksen lukea muistiinpanojasi ja niihin liittyviä listoja.</string>
 <string name="permission_write_label">muokkaa muistiinpanoja ja listoja</string>
 <string name="permission_write_desc">Sallii sovelluksen lisätä, päivittää ja poistaa muistiinpanoja ja listoja.</string>
 <string name="settings_list_dialog">Valitse lista</string>
 <string name="settings_list">Lista</string>
+<string name="drag_to_timetravel">Vedä aikamatkustaaksesi</string>
 
+<string name="import_data_question">Tuo tietoa?</string>
+<string name="import_started">Tietoja tuodaan. Tämä voi viedä muutaman sekunnin.</string>
+<string name="import_data_msg">Haluatko tuoda muistiinpanot sovelluksen lahjoitusversiosta? Kun toiminto on suoritettu, voit myös poistaa kyseisen sovelluksen.</string>
+<string name="imported_result">Tuotiin %1$d muistiinpanoa %2$d listasta</string>
+<string name="import_error">Jokin meni vikaan: %s</string>
 
+<string name="showcase_main_title">Hallitse listojasi</string>
+<string name="showcase_main_msg">Kosketa ikonia tai pyyhkäise vasemmasta reunasta</string>
+<string name="showcase_drawer_title">Hallitse listojasi</string>
+<string name="showcase_drawer_msg">Paina pitkään muokataksesi tai poistaaksesi</string>
+<string name="showcase_timemachine_title">Tallenna muistiinpanosi</string>
+<string name="showcase_timemachine_msg">Muutokset tallennetaan aina. Käytä aikakonetta palauttaaksesi aikaisemman version.</string>
+
+<string name="donate_to_unlock">Lahjoista avataksesi</string>
+<string name="premiums_unlocked_and_thanks">Lisäominaisuudet avattu. Kiitos tuestasi!</string>
 
 <!--
 Use few if language need it. In English is the same.
@@ -96,6 +135,9 @@ Use few if language need it. In English is the same.
 <item quantity="other">@string/selected_other</item>
 </plurals>
 
+<string name="move">Siirrä</string>
+<string name="move_to">Siirrä sijaintiin</string>
+<string name="moved_x_to_list">Siirrettiin %1$d sijaintiin %2$d</string>
 
 <string name="lock_note">Lukitse muistiinpano</string>
 <string name="unlock_note">Avaa muistiinpanon lukitus</string>
@@ -126,6 +168,8 @@ Use few if language need it. In English is the same.
 <string name="date_header_future">Myöhemmin</string>
 <string name="date_header_none">Ei päivämäärää</string>
 <string name="date_header_completed">Valmis</string>
+<string name="next_5_days">Seuraavat 5 päivää</string>
+<string name="this_week">Tämä viikko</string>
 <string name="please_select_note">Valitse tai luo muistiinpano</string>
 <string name="please_create_note">Luo muistiinpano</string>
 <string name="hide_checkbox">Piilota valintaruutu</string>
@@ -135,12 +179,19 @@ Use few if language need it. In English is the same.
 <string name="item_max_height">Maksimikorkeus</string>
 <string name="long_date_format">Pitkä päivämäärä</string>
 <string name="short_date_format">Lyhyt päivämäärä</string>
+<string name="rows">riviä</string>
+<string name="select_date">Valitse päivämäärä</string>
 <string name="localedefault">Oletus</string>
+<string name="donate">Lahjoita</string>
+<string name="donate_thanks">Kiitos tuestasi!</string>
 
 <!-- settings string keys -->
 <string name="hide_header">Piilota koko lisäohjelmatunniste</string>
+<string name="transparency">Läpinäkyvyys</string>
+<string name="notes_shortcut">Muistiinpanojen pikakuvake</string>
 <string name="shortcut_help1">Jos valittu, pikakuvake luo uuden muistiinpanon valittuun listaan ja avaa editorin. Muuten pikakuvake avaa valitun listan.</string>
 <string name="loading_widget">Ladataan lisäohjelmaa</string>
+<string name="default_list">Oletuslista</string>
 <string name="please_type_before_reminder">Kirjoita jotakin ennen muistutuksen asettamista</string>
 <string name="notecopied_one">Muistiinpano kopioitu</string>
 <string name="notecopied_other">%d muistiinpanoa kopioitu</string>
@@ -167,6 +218,8 @@ Use few if language need it. In English is the same.
 <string name="priority">Prioriteetti</string>
 <string name="notifications">Ilmoitukset</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+<string name="tasks">Tehtävät</string>
+<string name="all_tasks">Kaikki tehtävät</string>
 <string name="dashclock_tasks">Tehtävät</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Rajaa tietyssä listassa oleviin tehtäviin</string>
 <string name="dashclock_show_overdue_tasks">Näytä erääntyneet tehtävät</string>
@@ -180,8 +233,8 @@ Use few if language need it. In English is the same.
 <string name="dashclock_next7">Seuraavat 7 päivää</string>
 <string name="dashclock_anytime">Milloin tahansa</string>
 <string name="dashclock_will_show_as_many_as_possible">Näyttää niin paljon kuin mahdollista</string>
-<string name="dashclock_will_only_show_the_task_due_first">Näyttää vain erääntyvän tehtävän ensin</string>
 <string name="dashclock_show_only_the_next_task">Näytä vain seuraava tehtävä</string>
+<string name="dashclock_header_shown">Listan nimi lihavoidaan</string>
 <string name="dashclock_first_task_shown">Ensimmäisen tehtävän otsikko lihavoidaan</string>
 <string name="dashclock_display_header">Näytön tunniste</string>
 
