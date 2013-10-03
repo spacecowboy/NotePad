@@ -216,6 +216,9 @@ public class SyncPrefs extends PreferenceFragment implements
 		if (accountName != null && !accountName.isEmpty()) {
 			if (enabled) {
 				// set syncable
+				ContentResolver.setSyncAutomatically(
+						getAccount(AccountManager.get(activity), accountName),
+						MyContentProvider.AUTHORITY, true);
 				ContentResolver.setIsSyncable(
 						getAccount(AccountManager.get(activity), accountName),
 						MyContentProvider.AUTHORITY, 1);
@@ -314,6 +317,8 @@ public class SyncPrefs extends PreferenceFragment implements
 							.putBoolean(KEY_SYNC_ENABLE, true).commit();
 
 					// Set it syncable
+					ContentResolver.setSyncAutomatically(account,
+							MyContentProvider.AUTHORITY, true);
 					ContentResolver.setIsSyncable(account,
 							MyContentProvider.AUTHORITY, 1);
 					// Set sync frequency

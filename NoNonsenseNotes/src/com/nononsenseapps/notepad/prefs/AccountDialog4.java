@@ -20,6 +20,7 @@ import android.support.v4.app.DialogFragment;
 
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.SyncHelper;
+import com.nononsenseapps.linksgcm.database.ItemProvider;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
@@ -105,6 +106,8 @@ public class AccountDialog4 extends DialogFragment implements
 						.putBoolean(SyncPrefs.KEY_SYNC_ENABLE, true).commit();
 
 				// Set it syncable
+				ContentResolver.setSyncAutomatically(account,
+						MyContentProvider.AUTHORITY, true);
 				ContentResolver.setIsSyncable(account,
 						MyContentProvider.AUTHORITY, 1);
 				// Set sync frequency
