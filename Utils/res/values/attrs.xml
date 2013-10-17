@@ -16,6 +16,12 @@
             <enum name="bold" value="1" />
             <enum name="italic" value="2" />
         </attr>
+        <attr name="bodyFontFamily" format="enum">
+            <enum name="robotosans" value="0" />
+            <enum name="robotocondensed" value="1" />
+            <enum name="robotolight" value="2" />
+            <enum name="robotothin" value="3" />
+        </attr>
         <attr name="secondaryColor" format="color" />
     </declare-styleable>
     

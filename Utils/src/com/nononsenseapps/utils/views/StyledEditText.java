@@ -17,6 +17,7 @@ import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
 import android.text.util.Linkify;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -31,9 +32,11 @@ public class StyledEditText extends EditText {
 	Object textBoldSpan;
 	Object textBigSpan;
 	Object textCondensedSpan;
+	Object textBodySpan;
 
 	private float mTitleRelativeSize;
 	private int mTitleFontFamily;
+	private int mBodyFontFamily;
 	private int mTitleFontStyle;
 	private boolean mLinkify;
 
@@ -50,38 +53,20 @@ public class StyledEditText extends EditText {
 			mTitleFontStyle = a.getInteger(
 					R.styleable.StyledTextView_titleFontStyle, 0);
 			mLinkify = a.getBoolean(R.styleable.StyledTextView_linkify, false);
-		} finally {
+			mBodyFontFamily = a.getInteger(
+					R.styleable.StyledTextView_bodyFontFamily, 0);
+		}
+		finally {
 			a.recycle();
 		}
 
 		textBigSpan = new RelativeSizeSpan(mTitleRelativeSize);
 
-		switch (mTitleFontFamily) {
-		case 1:
-			textCondensedSpan = new TypefaceSpan("sans-serif-condensed");
-			break;
-		case 2:
-			textCondensedSpan = new TypefaceSpan("sans-serif-light");
-			break;
-		case 3:
-			textCondensedSpan = new TypefaceSpan("sans-serif-thin");
-			break;
-		default:
-			textCondensedSpan = new TypefaceSpan("sans-serif");
-			break;
-		}
+		setTitleFontFamily(mTitleFontFamily);
 
-		switch (mTitleFontStyle) {
-		case 1:
-			textBoldSpan = new StyleSpan(android.graphics.Typeface.BOLD);
-			break;
-		case 2:
-			textBoldSpan = new StyleSpan(android.graphics.Typeface.ITALIC);
-			break;
-		default:
-			textBoldSpan = new StyleSpan(android.graphics.Typeface.NORMAL);
-			break;
-		}
+		setTitleFontStyle(mTitleFontStyle);
+		
+		setBodyFontFamily(mBodyFontFamily);
 
 		// Style on change
 		addTextChangedListener(new TextWatcher() {
@@ -108,13 +93,123 @@ public class StyledEditText extends EditText {
 			}
 		});
 	}
+	
+	/**
+	 * 
+	 * @param family matches order defined in xml
+	 */
+	public void setTitleFontFamily(final int family) {
+//		if (textCondensedSpan != null) {
+//			for (TypefaceSpan ts : getText().getSpans(0, getText().length(),
+//					TypefaceSpan.class)) {
+//				getText().removeSpan(ts);
+//			}
+//		}
+		switch (family) {
+		case 1:
+			textCondensedSpan = new TypefaceSpan("sans-serif-condensed");
+			break;
+		case 2:
+			textCondensedSpan = new TypefaceSpan("sans-serif-light");
+			break;
+		case 3:
+			textCondensedSpan = new TypefaceSpan("sans-serif-thin");
+			break;
+		default:
+			textCondensedSpan = new TypefaceSpan("sans-serif");
+			break;
+		}
+	}
+
+	/**
+	 * 
+	 * @param style
+	 *        matches order defined in xml
+	 */
+	public void setTitleFontStyle(final int style) {
+//		if (textBoldSpan != null) {
+//			for (StyleSpan ss : getText().getSpans(0, getText().length(),
+//					StyleSpan.class)) {
+//				getText().removeSpan(ss);
+//			}
+//		}
+		switch (style) {
+		case 1:
+			textBoldSpan = new StyleSpan(android.graphics.Typeface.BOLD);
+			break;
+		case 2:
+			textBoldSpan = new StyleSpan(android.graphics.Typeface.ITALIC);
+			break;
+		default:
+			textBoldSpan = new StyleSpan(android.graphics.Typeface.NORMAL);
+			break;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param family matches order defined in xml
+	 */
+	public void setBodyFontFamily(final int family) {
+//		if (textBodySpan != null) {
+//			for (TypefaceSpan ts : getText().getSpans(0, getText().length(),
+//					TypefaceSpan.class)) {
+//				getText().removeSpan(ts);
+//			}
+//		}
+		switch (family) {
+		case 1:
+			textBodySpan = new TypefaceSpan("sans-serif-condensed");
+			break;
+		case 2:
+			textBodySpan = new TypefaceSpan("sans-serif-light");
+			break;
+		case 3:
+			textBodySpan = new TypefaceSpan("sans-serif-thin");
+			break;
+		default:
+			textBodySpan = new TypefaceSpan("sans-serif");
+			break;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param size 0, 1 or 2 representing small/medium/large
+	 */
+	public void setTheTextSize(final int size) {
+		switch (size) {
+		case 0:
+			// small
+			super.setTextSize(14.0f);
+			break;
+		case 2:
+			// large
+			super.setTextSize(22.0f);
+			break;
+		case 1:
+		default:
+			// medium
+			super.setTextSize(18.0f);
+			break;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param mLinkify if links should be clickable
+	 */
+	public void setLinkify(final boolean clickable) {
+		this.mLinkify = clickable;
+	}
 
 	private void spannify(final Spannable s) {
 		// Clear this first, or it will multiply!
-		for (RelativeSizeSpan rs: s.getSpans(0, s.length(), RelativeSizeSpan.class)) {
+		for (RelativeSizeSpan rs : s.getSpans(0, s.length(),
+				RelativeSizeSpan.class)) {
 			s.removeSpan(rs);
 		}
-		
+
 		int titleEnd = s.toString().indexOf("\n");
 		if (titleEnd < 0) {
 			titleEnd = s.toString().length();
@@ -127,9 +222,14 @@ public class StyledEditText extends EditText {
 					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			s.setSpan(textCondensedSpan, 0, titleEnd,
 					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			
+			if (titleEnd < s.toString().length()) {
+				s.setSpan(textBodySpan, titleEnd, s.toString().length(),
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+			}
 		}
 	}
-	
+
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		TextView widget = (TextView) this;
@@ -140,8 +240,7 @@ public class StyledEditText extends EditText {
 			int action = event.getAction();
 
 			if (action == MotionEvent.ACTION_UP
-					|| action == MotionEvent.ACTION_DOWN
-					) {
+					|| action == MotionEvent.ACTION_DOWN) {
 				int x = (int) event.getX();
 				int y = (int) event.getY();
 
@@ -162,7 +261,8 @@ public class StyledEditText extends EditText {
 				if (line > 0 && link.length != 0) {
 					if (action == MotionEvent.ACTION_UP) {
 						link[0].onClick(widget);
-					} else if (action == MotionEvent.ACTION_DOWN) {
+					}
+					else if (action == MotionEvent.ACTION_DOWN) {
 						Selection.setSelection(buffer,
 								buffer.getSpanStart(link[0]),
 								buffer.getSpanEnd(link[0]));
@@ -175,4 +275,5 @@ public class StyledEditText extends EditText {
 
 		return super.onTouchEvent(event);
 	}
+	
 }

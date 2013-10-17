@@ -20,7 +20,6 @@ import android.support.v4.app.DialogFragment;
 
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.SyncHelper;
-import com.nononsenseapps.linksgcm.database.ItemProvider;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;

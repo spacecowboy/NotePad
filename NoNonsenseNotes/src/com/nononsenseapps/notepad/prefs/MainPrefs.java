@@ -77,7 +77,14 @@ public class MainPrefs extends PreferenceFragment {
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_dateformat_long)));
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_dateformat_short)));
-
+		PrefsActivity
+		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_title_fontfamily)));
+		PrefsActivity
+		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_title_fontstyle)));
+		PrefsActivity
+		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_body_fontfamily)));
+		PrefsActivity
+		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_fontsize)));
 		updateDonateStatus();
 	}
 

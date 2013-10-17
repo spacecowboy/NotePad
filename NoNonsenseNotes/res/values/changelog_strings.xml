@@ -2,6 +2,10 @@
 <resources>
 
     <string name="changelog_5.1">
+\nAdded text options for editor
+\nRemoved links from list
+\nAdjusted single line display to only show titles
+\nFixed the widget plus button when showing all
 \nAdded search field to location reminders
 \nTemporary fix for bug which could clear all items on sync
 \nTranslations

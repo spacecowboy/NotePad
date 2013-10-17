@@ -81,6 +81,51 @@
         <item>@string/dateformat_short_3</item>
         <item>@string/dateformat_short_4</item>
     </string-array>
+    
+    <!-- <attr name="titleFontFamily" format="enum">
+            <enum name="robotosans" value="0" />
+            <enum name="robotocondensed" value="1" />
+            <enum name="robotolight" value="2" />
+            <enum name="robotothin" value="3" />
+        </attr>
+        <attr name="titleFontStyle" format="enum">
+            <enum name="normal" value="0" />
+            <enum name="bold" value="1" />
+            <enum name="italic" value="2" />
+        </attr> -->
+    <string-array name="fontfamily_entries">
+        <item>Roboto</item>
+        <item>Roboto Condensed</item>
+        <item>Roboto Light</item>
+        <item>Roboto Thin</item>
+    </string-array>
+    <string-array name="fontfamily_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="fontstyle_entries">
+        <item>@string/normal</item>
+        <item>@string/bold</item>
+        <item>@string/italic</item>
+    </string-array>
+    <string-array name="fontstyle_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    <string-array name="fontsize_entries">
+        <item>@string/small</item>
+        <item>@string/medium</item>
+        <item>@string/large</item>
+    </string-array>
+    <string-array name="fontsize_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
+    
     <string-array name="notification_prio_entries">
         <item>@string/notification_prio_high</item>
         <item>@string/standard</item>

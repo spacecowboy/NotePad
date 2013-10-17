@@ -212,13 +212,13 @@ public class TaskListFragment extends Fragment implements
 					}
 					else {
 						// Set height of text for non-headers
-						if (mRowCount == 1) {
-							((TitleNoteTextView) view).setSingleLine(true);
-						}
-						else {
-							((TitleNoteTextView) view).setSingleLine(false);
-							((TitleNoteTextView) view).setMaxLines(mRowCount);
-						}
+						((TitleNoteTextView) view).setMaxLines(mRowCount);
+//						if (mRowCount == 1) {
+//							((TitleNoteTextView) view).setSingleLine(true);
+//						}
+//						else {
+//							((TitleNoteTextView) view).setSingleLine(false);
+//						}
 
 						// Change color based on complete status
 						((TitleNoteTextView) view).useSecondaryColor(!c

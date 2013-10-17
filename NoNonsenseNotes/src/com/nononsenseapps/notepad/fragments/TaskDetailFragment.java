@@ -41,6 +41,7 @@ import com.nononsenseapps.ui.WeekDaysView.onCheckedDaysChangeListener;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -216,11 +217,11 @@ public class TaskDetailFragment extends Fragment implements
 
 	private OnFragmentInteractionListener mListener;
 	private ShareActionProvider mShareActionProvider;
-	
+
 	/*
 	 * If in tablet and added, rotating to portrait actually recreats the
-	 * fragment even though it isn't visible. So if this is true, don't
-	 * load anything.
+	 * fragment even though it isn't visible. So if this is true, don't load
+	 * anything.
 	 */
 	private boolean dontLoad = false;
 
@@ -262,11 +263,11 @@ public class TaskDetailFragment extends Fragment implements
 	public TaskDetailFragment() {
 	}
 
-//	@Override
-//	public void onCreate(Bundle savedInstanceState) {
-//		super.onCreate(savedInstanceState);
-//
-//	}
+	// @Override
+	// public void onCreate(Bundle savedInstanceState) {
+	// super.onCreate(savedInstanceState);
+	//
+	// }
 
 	/**
 	 * Must handle this manually because annotations do not return null if
@@ -286,23 +287,30 @@ public class TaskDetailFragment extends Fragment implements
 	@Override
 	public void onActivityCreated(final Bundle state) {
 		super.onActivityCreated(state);
-		
+
 		if (dontLoad) {
 			return;
 		}
-		
+
 		boolean openKb = false;
 
 		final Bundle args = new Bundle();
 		if (getArguments().getLong(ARG_ITEM_ID, stateId) > 0) {
 			// Load data from database
-			args.putLong(ARG_ITEM_ID, getArguments().getLong(ARG_ITEM_ID, stateId));
+			args.putLong(ARG_ITEM_ID,
+					getArguments().getLong(ARG_ITEM_ID, stateId));
 			getLoaderManager().restartLoader(LOADER_EDITOR_TASK, args,
 					loaderCallbacks);
 			getLoaderManager().restartLoader(LOADER_EDITOR_NOTIFICATIONS, args,
 					loaderCallbacks);
 		}
 		else {
+			// If not valid, find a valid list
+			if (getArguments().getLong(ARG_ITEM_LIST_ID, stateListId) < 1) {
+				getArguments().putLong(ARG_ITEM_LIST_ID, 
+						TaskListViewPagerFragment.getARealList(getActivity(), -1));
+			}
+			// Fail if still not valid
 			if (getArguments().getLong(ARG_ITEM_LIST_ID, stateListId) < 1) {
 				// throw new InvalidParameterException(
 				// "Must specify a list id to create a note in!");
@@ -327,15 +335,15 @@ public class TaskDetailFragment extends Fragment implements
 
 		// showcase first time
 		final boolean showcasing = showcaseEditor();
-		
+
 		if (!showcasing && openKb) {
 			/**
-			 * Only show keyboard for new/empty notes
-			 * But not if the showcase view is showing
+			 * Only show keyboard for new/empty notes But not if the showcase
+			 * view is showing
 			 */
-				taskText.requestFocus();
-				inputManager.showSoftInput(taskText,
-						InputMethodManager.SHOW_IMPLICIT);
+			taskText.requestFocus();
+			inputManager.showSoftInput(taskText,
+					InputMethodManager.SHOW_IMPLICIT);
 		}
 	}
 
@@ -368,7 +376,21 @@ public class TaskDetailFragment extends Fragment implements
 		if (dontLoad) {
 			return;
 		}
-		
+
+		// Set chosen attributes on the text field
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(getActivity());
+
+		taskText.setTitleFontFamily(Integer.parseInt(
+				prefs.getString(getString(R.string.pref_editor_title_fontfamily), "0")));
+		taskText.setTitleFontStyle(Integer.parseInt(
+				prefs.getString(getString(R.string.pref_editor_title_fontstyle), "0")));
+		taskText.setBodyFontFamily(Integer.parseInt(
+				prefs.getString(getString(R.string.pref_editor_body_fontfamily), "0")));
+		taskText.setLinkify(prefs.getBoolean(getString(R.string.pref_editor_links), true));
+		taskText.setTheTextSize(Integer.parseInt(
+				prefs.getString(getString(R.string.pref_editor_fontsize), "1")));
+
 		taskText.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
@@ -562,7 +584,6 @@ public class TaskDetailFragment extends Fragment implements
 		// }, 100);
 		// }
 
-		
 	}
 
 	/**
@@ -744,8 +765,8 @@ public class TaskDetailFragment extends Fragment implements
 					ActivityLocation.EXTRA_LATITUDE);
 			pendingLocationNotification.longitude = data.getExtras().getDouble(
 					ActivityLocation.EXTRA_LONGITUDE);
-			pendingLocationNotification.radius = data.getExtras()
-					.getDouble(ActivityLocation.EXTRA_RADIUS);
+			pendingLocationNotification.radius = data.getExtras().getDouble(
+					ActivityLocation.EXTRA_RADIUS);
 			pendingLocationNotification.locationName = data.getExtras()
 					.getString(ActivityLocation.EXTRA_LOCATION_NAME);
 			if (pendingLocationNotification.view != null
@@ -822,7 +843,7 @@ public class TaskDetailFragment extends Fragment implements
 	void fixIntent() {
 		stateId = mTask._id;
 		stateListId = mTask.dblist;
-		
+
 		if (getActivity() == null) return;
 
 		final Intent orgIntent = getActivity().getIntent();
@@ -854,7 +875,7 @@ public class TaskDetailFragment extends Fragment implements
 		if (dontLoad) {
 			return;
 		}
-		
+
 		saveTask();
 		// Set locked again
 		mLocked = true;
