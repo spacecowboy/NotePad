@@ -122,33 +122,21 @@ public class TitleNoteTextView extends TextView {
 
 			// Need to link first so we can avoid the title
 			if (titleEnd > 0) {
-				// Set the body first
-				if (titleEnd < mStyledText.length()) {
-					SpannableString body = new SpannableString(
-							mStyledText.substring(titleEnd));
-					setText(body, BufferType.SPANNABLE);
-					// Linkify body
-					if (mLinkify) {
-						Linkify.addLinks(this, Linkify.ALL);
-						// Make sure links dont steal click focus everywhere
-						setMovementMethod(null);
-					}
+				SpannableString text = new SpannableString(mStyledText);
+				text.setSpan(textBoldSpan, 0, titleEnd,
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				text.setSpan(textBigSpan, 0, titleEnd,
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				text.setSpan(textCondensedSpan, 0, titleEnd,
+						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				
+				setText(text, BufferType.SPANNABLE);
+				
+				if (mLinkify) {
+					Linkify.addLinks(this, Linkify.ALL);
+					// Make sure links dont steal click focus everywhere
+					setMovementMethod(null);
 				}
-				else {
-					setText(new SpannableString(""), BufferType.SPANNABLE);
-				}
-				// combine title and body again
-				SpannableStringBuilder ss = new SpannableStringBuilder(
-						mStyledText.substring(0, titleEnd))
-						.append((SpannableString) getText());
-				ss.setSpan(textBoldSpan, 0, titleEnd,
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				ss.setSpan(textBigSpan, 0, titleEnd,
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				ss.setSpan(textCondensedSpan, 0, titleEnd,
-						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-
-				setText(ss, BufferType.SPANNABLE);
 			}
 			else {
 				// Emtpy string
@@ -254,7 +242,11 @@ public class TitleNoteTextView extends TextView {
 				ClickableSpan[] link = buffer.getSpans(off, off,
 						ClickableSpan.class);
 
-				if (link.length != 0) {
+				// Cant click to the right of a span, if the line ends with the span!
+				if (x > layout.getLineRight(line)) {
+					// Don't call the span
+				}
+				else if (link.length != 0) {
 					if (action == MotionEvent.ACTION_UP) {
 						link[0].onClick(widget);
 					}

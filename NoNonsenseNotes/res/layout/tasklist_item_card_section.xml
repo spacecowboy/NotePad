@@ -56,7 +56,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="?textColorPrimary"
         android:textIsSelectable="false"
-        custom:linkify="false"
+        custom:linkify="true"
         custom:secondaryColor="@color/completedGrey"
         custom:titleFontFamily="robotocondensed"
         custom:titleFontStyle="bold"

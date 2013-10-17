@@ -257,8 +257,11 @@ public class StyledEditText extends EditText {
 				ClickableSpan[] link = buffer.getSpans(off, off,
 						ClickableSpan.class);
 
-				// Dont care about first line!
-				if (line > 0 && link.length != 0) {
+				// Cant click to the right of a span, if the line ends with the span!
+				if (x > layout.getLineRight(line)) {
+					// Don't call the span
+				}
+				else if (link.length != 0) {
 					if (action == MotionEvent.ACTION_UP) {
 						link[0].onClick(widget);
 					}

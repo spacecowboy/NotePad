@@ -231,7 +231,8 @@ public class TaskListFragment extends Fragment implements
 					// Note
 					if (!isHeader) {
 						// Only if task it not locked
-						if (c.getInt(9) != 1) {
+						// or only one line
+						if (c.getInt(9) != 1 && mRowCount > 1) {
 							((TitleNoteTextView) view).setTextRest(c
 									.getString(colIndex));
 						}
