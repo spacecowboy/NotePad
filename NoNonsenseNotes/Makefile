@@ -19,6 +19,9 @@ install: bin/NotePad-debug.apk
 installrelease: bin/NotePad-release.apk
 	adb install -r bin/NotePad-release.apk
 
+send_translations:
+	sh send-base-translation-notes
+
 translations:
 	sh get-diff-translations
 	python listlang.py
