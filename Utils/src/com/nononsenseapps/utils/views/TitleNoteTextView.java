@@ -29,13 +29,15 @@ import android.widget.TextView;
  */
 public class TitleNoteTextView extends TextView {
 
-	Object textBoldSpan;
-	Object textBigSpan;
-	Object textCondensedSpan;
+	Object titleStyleSpan;
+	Object titleSizeSpan;
+	Object titleFamilySpan;
+	Object bodyFamilySpan;
 
 	private int primaryColor;
 	private int secondaryColor;
 	private float mTitleRelativeSize;
+	private int mBodyFontFamily;
 	private int mTitleFontFamily;
 	private int mTitleFontStyle;
 	private boolean mLinkify;
@@ -56,6 +58,8 @@ public class TitleNoteTextView extends TextView {
 					R.styleable.StyledTextView_titleFontFamily, 0);
 			mTitleFontStyle = a.getInteger(
 					R.styleable.StyledTextView_titleFontStyle, 0);
+			mBodyFontFamily = a.getInteger(
+					R.styleable.StyledTextView_bodyFontFamily, 0);
 			mStyledText = a.getString(R.styleable.StyledTextView_styledText);
 			mLinkify = a.getBoolean(R.styleable.StyledTextView_linkify, false);
 			primaryColor = super.getCurrentTextColor();
@@ -66,34 +70,14 @@ public class TitleNoteTextView extends TextView {
 			a.recycle();
 		}
 
-		textBigSpan = new RelativeSizeSpan(mTitleRelativeSize);
+		titleSizeSpan = new RelativeSizeSpan(mTitleRelativeSize);
 
-		switch (mTitleFontFamily) {
-		case 1:
-			textCondensedSpan = new TypefaceSpan("sans-serif-condensed");
-			break;
-		case 2:
-			textCondensedSpan = new TypefaceSpan("sans-serif-light");
-			break;
-		case 3:
-			textCondensedSpan = new TypefaceSpan("sans-serif-thin");
-			break;
-		default:
-			textCondensedSpan = new TypefaceSpan("sans-serif");
-			break;
-		}
+		setTitleFontFamily(mTitleFontFamily);
 
-		switch (mTitleFontStyle) {
-		case 1:
-			textBoldSpan = new StyleSpan(android.graphics.Typeface.BOLD);
-			break;
-		case 2:
-			textBoldSpan = new StyleSpan(android.graphics.Typeface.ITALIC);
-			break;
-		default:
-			textBoldSpan = new StyleSpan(android.graphics.Typeface.NORMAL);
-			break;
-		}
+		setTitleFontStyle(mTitleFontStyle);
+		
+		setBodyFontFamily(mBodyFontFamily);
+
 	}
 
 	public void useSecondaryColor(final boolean useSecondary) {
@@ -123,12 +107,17 @@ public class TitleNoteTextView extends TextView {
 			// Need to link first so we can avoid the title
 			if (titleEnd > 0) {
 				SpannableString text = new SpannableString(mStyledText);
-				text.setSpan(textBoldSpan, 0, titleEnd,
+				text.setSpan(titleStyleSpan, 0, titleEnd,
 						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				text.setSpan(textBigSpan, 0, titleEnd,
+				text.setSpan(titleSizeSpan, 0, titleEnd,
 						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-				text.setSpan(textCondensedSpan, 0, titleEnd,
+				text.setSpan(titleFamilySpan, 0, titleEnd,
 						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				
+				if (titleEnd < mStyledText.length()) {
+					text.setSpan(bodyFamilySpan, titleEnd, mStyledText.length(),
+							Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+				}
 				
 				setText(text, BufferType.SPANNABLE);
 				
@@ -291,6 +280,112 @@ public class TitleNoteTextView extends TextView {
 					title.length() - 1) : title);
 
 			setStyledText(mTitle + mRest);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param mLinkify if links should be clickable
+	 */
+	public void setLinkify(final boolean clickable) {
+		this.mLinkify = clickable;
+	}
+	
+	/**
+	 * 
+	 * @param family matches order defined in xml
+	 */
+	public void setTitleFontFamily(final int family) {
+		if (mTitleFontFamily == family)
+			return;
+		
+		mTitleFontFamily = family;
+		
+		switch (family) {
+		case 1:
+			titleFamilySpan = new TypefaceSpan("sans-serif-condensed");
+			break;
+		case 2:
+			titleFamilySpan = new TypefaceSpan("sans-serif-light");
+			break;
+		case 3:
+			titleFamilySpan = new TypefaceSpan("sans-serif-thin");
+			break;
+		default:
+			titleFamilySpan = new TypefaceSpan("sans-serif");
+			break;
+		}
+	}
+
+	/**
+	 * 
+	 * @param style
+	 *        matches order defined in xml
+	 */
+	public void setTitleFontStyle(final int style) {
+		if (mTitleFontStyle == style)
+			return;
+		
+		mTitleFontStyle = style;
+		
+		switch (style) {
+		case 1:
+			titleStyleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
+			break;
+		case 2:
+			titleStyleSpan = new StyleSpan(android.graphics.Typeface.ITALIC);
+			break;
+		default:
+			titleStyleSpan = new StyleSpan(android.graphics.Typeface.NORMAL);
+			break;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param family matches order defined in xml
+	 */
+	public void setBodyFontFamily(final int family) {
+		if (mBodyFontFamily == family)
+			return;
+		
+		mBodyFontFamily = family;
+		
+		switch (family) {
+		case 1:
+			bodyFamilySpan = new TypefaceSpan("sans-serif-condensed");
+			break;
+		case 2:
+			bodyFamilySpan = new TypefaceSpan("sans-serif-light");
+			break;
+		case 3:
+			bodyFamilySpan = new TypefaceSpan("sans-serif-thin");
+			break;
+		default:
+			bodyFamilySpan = new TypefaceSpan("sans-serif");
+			break;
+		}
+	}
+	
+	/**
+	 * 
+	 * @param size 0, 1 or 2 representing small/medium/large
+	 */
+	public void setTheTextSize(final int size) {
+		switch (size) {
+		case 0:
+			// small
+			super.setTextSize(14.0f);
+			break;
+		case 2:
+			// large
+			super.setTextSize(22.0f);
+			break;
+		case 1:
+		default:
+			// medium
+			super.setTextSize(18.0f);
+			break;
 		}
 	}
 }

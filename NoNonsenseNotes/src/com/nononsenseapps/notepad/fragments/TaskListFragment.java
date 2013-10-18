@@ -78,7 +78,7 @@ public class TaskListFragment extends Fragment implements
 	// DragSortListView listView;
 	@ViewById(android.R.id.list)
 	DragSortListView listView;
-	
+
 	@SystemService
 	LayoutInflater layoutInflater;
 
@@ -162,6 +162,7 @@ public class TaskListFragment extends Fragment implements
 			SimpleDateFormat weekdayFormatter = TimeFormatter
 					.getLocalFormatterWeekday(getActivity());
 			boolean isHeader = false;
+
 			final String manualsort = getString(R.string.const_possubsort);
 			final String notetype = getString(R.string.const_listtype_notes);
 			String sTemp = "";
@@ -213,12 +214,12 @@ public class TaskListFragment extends Fragment implements
 					else {
 						// Set height of text for non-headers
 						((TitleNoteTextView) view).setMaxLines(mRowCount);
-//						if (mRowCount == 1) {
-//							((TitleNoteTextView) view).setSingleLine(true);
-//						}
-//						else {
-//							((TitleNoteTextView) view).setSingleLine(false);
-//						}
+						// if (mRowCount == 1) {
+						// ((TitleNoteTextView) view).setSingleLine(true);
+						// }
+						// else {
+						// ((TitleNoteTextView) view).setSingleLine(false);
+						// }
 
 						// Change color based on complete status
 						((TitleNoteTextView) view).useSecondaryColor(!c
@@ -434,22 +435,30 @@ public class TaskListFragment extends Fragment implements
 			getLoaderManager().restartLoader(1, null, mCallback);
 		}
 	}
-	
+
 	public static String whereOverDue() {
-		return Task.Columns.DUE + " BETWEEN " + Task.OVERDUE + " AND " + Task.TODAY_START;
+		return Task.Columns.DUE + " BETWEEN " + Task.OVERDUE + " AND "
+				+ Task.TODAY_START;
 	}
+
 	public static String andWhereOverdue() {
-		return " AND " +  whereOverDue();
+		return " AND " + whereOverDue();
 	}
+
 	public static String whereToday() {
-		return Task.Columns.DUE + " BETWEEN " + Task.TODAY_START + " AND " + Task.TODAY_PLUS(1);
+		return Task.Columns.DUE + " BETWEEN " + Task.TODAY_START + " AND "
+				+ Task.TODAY_PLUS(1);
 	}
+
 	public static String andWhereToday() {
 		return " AND " + whereToday();
 	}
+
 	public static String whereWeek() {
-		return Task.Columns.DUE + " BETWEEN " + Task.TODAY_START+ " AND (" + Task.TODAY_PLUS(5) + " -1)";
+		return Task.Columns.DUE + " BETWEEN " + Task.TODAY_START + " AND ("
+				+ Task.TODAY_PLUS(5) + " -1)";
 	}
+
 	public static String andWhereWeek() {
 		return " AND " + whereWeek();
 	}
@@ -692,7 +701,8 @@ public class TaskListFragment extends Fragment implements
 				mListener.addTaskInList("", mListId);
 			}
 			else if (mListener != null) {
-				mListener.addTaskInList("", TaskListViewPagerFragment.getARealList(getActivity(), -1));
+				mListener.addTaskInList("", TaskListViewPagerFragment
+						.getARealList(getActivity(), -1));
 			}
 			return true;
 			// case R.id.menu_managelists:
@@ -755,12 +765,16 @@ public class TaskListFragment extends Fragment implements
 		final int mHeaderLayout;
 		final static int itemType = 0;
 		final static int headerType = 1;
+		final SharedPreferences prefs;
+		final Context context;
 
 		public SimpleSectionsAdapter(Context context, int layout,
 				int headerLayout, Cursor c, String[] from, int[] to, int flags) {
 			super(context, layout, c, from, to, flags);
+			this.context = context;
 			mItemLayout = layout;
 			mHeaderLayout = headerLayout;
+			prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		}
 
 		int getViewLayout(final int position) {
@@ -818,8 +832,24 @@ public class TaskListFragment extends Fragment implements
 				final LayoutInflater inflater = LayoutInflater.from(mContext);
 				convertView = inflater.inflate(getViewLayout(position), parent,
 						false);
+				if (itemType == getItemViewType(position)) {
+					setPrefsOnView((TitleNoteTextView) convertView.findViewById(android.R.id.text1));
+				}
 			}
 			return super.getView(position, convertView, parent);
+		}
+
+		private void setPrefsOnView(final TitleNoteTextView view) {
+			view.setTitleFontFamily(Integer.parseInt(prefs.getString(
+					context.getString(R.string.pref_list_title_fontfamily), "1")));
+			view.setTitleFontStyle(Integer.parseInt(prefs.getString(
+					context.getString(R.string.pref_list_title_fontstyle), "1")));
+			view.setBodyFontFamily(Integer.parseInt(prefs.getString(
+					context.getString(R.string.pref_list_body_fontfamily), "0")));
+			view.setLinkify(prefs.getBoolean(
+					context.getString(R.string.pref_list_links), true));
+			view.setTheTextSize(Integer.parseInt(prefs.getString(
+					context.getString(R.string.pref_list_fontsize), "1")));
 		}
 	}
 

@@ -57,6 +57,14 @@ public class ListPrefs extends PreferenceFragment {
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_sorttype)));
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_defaultlist)));
+		PrefsActivity
+		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_title_fontfamily)));
+		PrefsActivity
+		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_title_fontstyle)));
+		PrefsActivity
+		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_body_fontfamily)));
+		PrefsActivity
+		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_fontsize)));
 
 		//PrefsActivity
 		//		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_listtype)));

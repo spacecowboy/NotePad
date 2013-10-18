@@ -272,5 +272,6 @@
     <string name="medium">Medium</string>
     <string name="large">Large</string>
     <string name="text_size">Text size</string>
+    <string name="text">Text</string>
 
 </resources>

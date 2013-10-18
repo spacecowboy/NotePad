@@ -382,9 +382,9 @@ public class TaskDetailFragment extends Fragment implements
 				.getDefaultSharedPreferences(getActivity());
 
 		taskText.setTitleFontFamily(Integer.parseInt(
-				prefs.getString(getString(R.string.pref_editor_title_fontfamily), "0")));
+				prefs.getString(getString(R.string.pref_editor_title_fontfamily), "1")));
 		taskText.setTitleFontStyle(Integer.parseInt(
-				prefs.getString(getString(R.string.pref_editor_title_fontstyle), "0")));
+				prefs.getString(getString(R.string.pref_editor_title_fontstyle), "1")));
 		taskText.setBodyFontFamily(Integer.parseInt(
 				prefs.getString(getString(R.string.pref_editor_body_fontfamily), "0")));
 		taskText.setLinkify(prefs.getBoolean(getString(R.string.pref_editor_links), true));

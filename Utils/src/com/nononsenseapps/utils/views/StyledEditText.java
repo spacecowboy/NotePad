@@ -29,10 +29,10 @@ import android.widget.TextView;
  */
 public class StyledEditText extends EditText {
 
-	Object textBoldSpan;
-	Object textBigSpan;
-	Object textCondensedSpan;
-	Object textBodySpan;
+	Object titleStyleSpan;
+	Object titleSizeSpan;
+	Object titleFamilySpan;
+	Object bodyFamilySpan;
 
 	private float mTitleRelativeSize;
 	private int mTitleFontFamily;
@@ -60,7 +60,7 @@ public class StyledEditText extends EditText {
 			a.recycle();
 		}
 
-		textBigSpan = new RelativeSizeSpan(mTitleRelativeSize);
+		titleSizeSpan = new RelativeSizeSpan(mTitleRelativeSize);
 
 		setTitleFontFamily(mTitleFontFamily);
 
@@ -99,24 +99,18 @@ public class StyledEditText extends EditText {
 	 * @param family matches order defined in xml
 	 */
 	public void setTitleFontFamily(final int family) {
-//		if (textCondensedSpan != null) {
-//			for (TypefaceSpan ts : getText().getSpans(0, getText().length(),
-//					TypefaceSpan.class)) {
-//				getText().removeSpan(ts);
-//			}
-//		}
 		switch (family) {
 		case 1:
-			textCondensedSpan = new TypefaceSpan("sans-serif-condensed");
+			titleFamilySpan = new TypefaceSpan("sans-serif-condensed");
 			break;
 		case 2:
-			textCondensedSpan = new TypefaceSpan("sans-serif-light");
+			titleFamilySpan = new TypefaceSpan("sans-serif-light");
 			break;
 		case 3:
-			textCondensedSpan = new TypefaceSpan("sans-serif-thin");
+			titleFamilySpan = new TypefaceSpan("sans-serif-thin");
 			break;
 		default:
-			textCondensedSpan = new TypefaceSpan("sans-serif");
+			titleFamilySpan = new TypefaceSpan("sans-serif");
 			break;
 		}
 	}
@@ -127,21 +121,15 @@ public class StyledEditText extends EditText {
 	 *        matches order defined in xml
 	 */
 	public void setTitleFontStyle(final int style) {
-//		if (textBoldSpan != null) {
-//			for (StyleSpan ss : getText().getSpans(0, getText().length(),
-//					StyleSpan.class)) {
-//				getText().removeSpan(ss);
-//			}
-//		}
 		switch (style) {
 		case 1:
-			textBoldSpan = new StyleSpan(android.graphics.Typeface.BOLD);
+			titleStyleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
 			break;
 		case 2:
-			textBoldSpan = new StyleSpan(android.graphics.Typeface.ITALIC);
+			titleStyleSpan = new StyleSpan(android.graphics.Typeface.ITALIC);
 			break;
 		default:
-			textBoldSpan = new StyleSpan(android.graphics.Typeface.NORMAL);
+			titleStyleSpan = new StyleSpan(android.graphics.Typeface.NORMAL);
 			break;
 		}
 	}
@@ -151,24 +139,18 @@ public class StyledEditText extends EditText {
 	 * @param family matches order defined in xml
 	 */
 	public void setBodyFontFamily(final int family) {
-//		if (textBodySpan != null) {
-//			for (TypefaceSpan ts : getText().getSpans(0, getText().length(),
-//					TypefaceSpan.class)) {
-//				getText().removeSpan(ts);
-//			}
-//		}
 		switch (family) {
 		case 1:
-			textBodySpan = new TypefaceSpan("sans-serif-condensed");
+			bodyFamilySpan = new TypefaceSpan("sans-serif-condensed");
 			break;
 		case 2:
-			textBodySpan = new TypefaceSpan("sans-serif-light");
+			bodyFamilySpan = new TypefaceSpan("sans-serif-light");
 			break;
 		case 3:
-			textBodySpan = new TypefaceSpan("sans-serif-thin");
+			bodyFamilySpan = new TypefaceSpan("sans-serif-thin");
 			break;
 		default:
-			textBodySpan = new TypefaceSpan("sans-serif");
+			bodyFamilySpan = new TypefaceSpan("sans-serif");
 			break;
 		}
 	}
@@ -216,15 +198,15 @@ public class StyledEditText extends EditText {
 		}
 
 		if (titleEnd > 0) {
-			s.setSpan(textBoldSpan, 0, titleEnd,
+			s.setSpan(titleStyleSpan, 0, titleEnd,
 					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			s.setSpan(textBigSpan, 0, titleEnd,
+			s.setSpan(titleSizeSpan, 0, titleEnd,
 					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			s.setSpan(textCondensedSpan, 0, titleEnd,
+			s.setSpan(titleFamilySpan, 0, titleEnd,
 					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			
 			if (titleEnd < s.toString().length()) {
-				s.setSpan(textBodySpan, titleEnd, s.toString().length(),
+				s.setSpan(bodyFamilySpan, titleEnd, s.toString().length(),
 						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			}
 		}

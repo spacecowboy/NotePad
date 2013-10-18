@@ -52,5 +52,45 @@
         android:summaryOff="@string/hide_checkbox_summary_off"
         android:summaryOn="@string/hide_checkbox_summary_on"
         android:title="@string/hide_checkbox" />
+    
+    <PreferenceCategory android:title="@string/text" >
+        <SwitchPreference
+            android:key="@string/pref_list_links"
+            android:defaultValue="true"
+            android:title="@string/clickable_links"
+            android:summary="" />
+        <ListPreference
+            android:key="@string/pref_list_fontsize"
+            android:defaultValue="1"
+            android:dialogTitle="@string/text_size"
+            android:entries="@array/fontsize_entries"
+            android:entryValues="@array/fontsize_values"
+            android:summary="Selected option should be here"
+            android:title="@string/text_size" />
+        <ListPreference
+            android:key="@string/pref_list_title_fontstyle"
+            android:defaultValue="1"
+            android:dialogTitle="@string/title_style"
+            android:entries="@array/fontstyle_entries"
+            android:entryValues="@array/fontstyle_values"
+            android:summary="Selected option should be here"
+            android:title="@string/title_style" />
+        <ListPreference
+            android:key="@string/pref_list_title_fontfamily"
+            android:defaultValue="1"
+            android:dialogTitle="@string/title_font"
+            android:entries="@array/fontfamily_entries"
+            android:entryValues="@array/fontfamily_values"
+            android:summary="Selected option should be here"
+            android:title="@string/title_font" />
+        <ListPreference
+            android:key="@string/pref_list_body_fontfamily"
+            android:defaultValue="0"
+            android:dialogTitle="@string/body_font"
+            android:entries="@array/fontfamily_entries"
+            android:entryValues="@array/fontfamily_values"
+            android:summary="Selected option should be here"
+            android:title="@string/body_font" />
+    </PreferenceCategory>
 
 </PreferenceScreen>
