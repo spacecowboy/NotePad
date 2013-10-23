@@ -375,16 +375,16 @@ public class TitleNoteTextView extends TextView {
 		switch (size) {
 		case 0:
 			// small
-			super.setTextSize(14.0f);
+			super.setTextSize(12.0f);
 			break;
 		case 2:
 			// large
-			super.setTextSize(22.0f);
+			super.setTextSize(18.0f);
 			break;
 		case 1:
 		default:
 			// medium
-			super.setTextSize(18.0f);
+			super.setTextSize(14.0f);
 			break;
 		}
 	}
