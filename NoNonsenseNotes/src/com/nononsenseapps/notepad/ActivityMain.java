@@ -317,23 +317,6 @@ public class ActivityMain extends FragmentActivity implements
 
 		// Sync if appropriate
 		SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
-
-		// Check Google Play Services
-		// Check that Google Play services is available
-		int resultCode = GooglePlayServicesUtil
-				.isGooglePlayServicesAvailable(this);
-
-		// If Google Play services is not available
-		if (ConnectionResult.SUCCESS != resultCode && !BuildConfig.DEBUG) {
-			// Display an error dialog
-			Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode,
-					this, 0);
-			if (dialog != null) {
-				ErrorDialogFragment errorFragment = new ErrorDialogFragment();
-				errorFragment.setDialog(dialog);
-				errorFragment.show(getFragmentManager(), "Play_services_check");
-			}
-		}
 	}
 
 	private void restartAndRefresh() {

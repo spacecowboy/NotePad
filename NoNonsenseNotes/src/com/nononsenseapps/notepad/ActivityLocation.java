@@ -204,8 +204,25 @@ public class ActivityLocation extends Activity {
 	public void onResume() {
 		super.onResume();
 
+		// Check Google Play Services
+		// Check that Google Play services is available
+		int resultCode = GooglePlayServicesUtil
+				.isGooglePlayServicesAvailable(this);
+
+		// If Google Play services is not available
+		if (ConnectionResult.SUCCESS != resultCode) {
+			// Display an error dialog
+			Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode,
+					this, 0);
+			if (dialog != null) {
+				ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+				errorFragment.setDialog(dialog);
+				errorFragment.show(getFragmentManager(), "Play_services_check");
+			}
+		}
+
 		if (!servicesConnected()) {
-			finish();
+			//finish();
 		}
 
 		// Register the broadcast receiver to receive status updates
@@ -396,7 +413,7 @@ public class ActivityLocation extends Activity {
 			// Play Services probably out of date
 			Toast.makeText(this, R.string.open_maps_error, Toast.LENGTH_SHORT)
 					.show();
-			finish();
+			//finish();
 			return;
 		}
 
