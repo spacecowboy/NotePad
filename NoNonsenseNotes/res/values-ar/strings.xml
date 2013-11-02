@@ -17,7 +17,7 @@ limitations under the License.
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-<string name="app_name">ملاحظات</string>
+<string name="app_name">Lina</string>
 <string name="title_create">ملاحظة جديدة</string>
 <string name="menu_save_and_add">لإضافة وحفظ مذكرة جديدة</string>
 <string name="menu_delete">حذف</string>
@@ -63,6 +63,7 @@ limitations under the License.
 <string name="permission_write_desc">السماح للتطبيق بالإدراج، التحديث وحذف الملاحظات والقوائم.</string>
 <string name="settings_list_dialog">أختر قائمة</string>
 <string name="settings_list">قائمة</string>
+
 
 
 
