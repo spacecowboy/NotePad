@@ -411,8 +411,6 @@ public class ActivityLocation extends Activity {
 	protected void setupMap() {
 		if (mapFragment == null || mapFragment.getMap() == null) {
 			// Play Services probably out of date
-			Toast.makeText(this, R.string.open_maps_error, Toast.LENGTH_SHORT)
-					.show();
 			//finish();
 			return;
 		}
