@@ -5,6 +5,8 @@ import java.util.List;
 
 import com.github.espiandev.showcaseview.ShowcaseView;
 import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.EActivity;
@@ -22,6 +24,7 @@ import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
+import com.nononsenseapps.notepad.ActivityLocation.ErrorDialogFragment;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Notification;
@@ -43,11 +46,13 @@ import com.nononsenseapps.notepad.prefs.AccountDialog4;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
+import com.nononsenseapps.util.GeofenceUtils;
 import com.nononsenseapps.utils.ViewsHelper;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -312,6 +317,23 @@ public class ActivityMain extends FragmentActivity implements
 
 		// Sync if appropriate
 		SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
+
+		// Check Google Play Services
+		// Check that Google Play services is available
+		int resultCode = GooglePlayServicesUtil
+				.isGooglePlayServicesAvailable(this);
+
+		// If Google Play services is not available
+		if (ConnectionResult.SUCCESS != resultCode && !BuildConfig.DEBUG) {
+			// Display an error dialog
+			Dialog dialog = GooglePlayServicesUtil.getErrorDialog(resultCode,
+					this, 0);
+			if (dialog != null) {
+				ErrorDialogFragment errorFragment = new ErrorDialogFragment();
+				errorFragment.setDialog(dialog);
+				errorFragment.show(getFragmentManager(), "Play_services_check");
+			}
+		}
 	}
 
 	private void restartAndRefresh() {
@@ -1439,7 +1461,8 @@ public class ActivityMain extends FragmentActivity implements
 		if (key.equals(MainPrefs.KEY_THEME)
 				|| key.equals(getString(R.string.pref_locale))) {
 			shouldRestart = true;
-		} else if (key.startsWith("pref_restart")) {
+		}
+		else if (key.startsWith("pref_restart")) {
 			shouldRestart = true;
 		}
 	}

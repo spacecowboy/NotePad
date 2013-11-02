@@ -273,5 +273,6 @@
     <string name="large">Large</string>
     <string name="text_size">Text size</string>
     <string name="text">Text</string>
+    <string name="open_maps_error">Could not open Maps. Please make sure your Play Services are up to date.</string>
 
 </resources>

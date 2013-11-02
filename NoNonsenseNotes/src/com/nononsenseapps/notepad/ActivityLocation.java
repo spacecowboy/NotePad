@@ -112,7 +112,7 @@ public class ActivityLocation extends Activity {
 	// Plus minimum
 	final int radiusMin = 100;
 	// Match xml progress of seekbar, 17*17 = 289 meters
-	double radius = 17*17 + radiusMin;
+	double radius = 17 * 17 + radiusMin;
 	String locationName = "";
 
 	final int zoomLevel = 12;
@@ -392,7 +392,16 @@ public class ActivityLocation extends Activity {
 
 	@AfterViews
 	protected void setupMap() {
+		if (mapFragment == null || mapFragment.getMap() == null) {
+			// Play Services probably out of date
+			Toast.makeText(this, R.string.open_maps_error, Toast.LENGTH_SHORT)
+					.show();
+			finish();
+			return;
+		}
+
 		mMap = mapFragment.getMap();
+
 		mMap.setMyLocationEnabled(false);
 		Log.d("nononsenseapps", "JONAS startRadius: " + startRadius);
 		if (startRadius > 0) {
