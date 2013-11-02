@@ -59,6 +59,11 @@ public class TimeFormatter {
 			final long time) {
 		return getLocalFormatterLong(context).format(new Date(time));
 	}
+	
+	public static String getLocalDateOnlyStringLong(final Context context,
+			final long time) {
+		return getLocalFormatterLongDateOnly(context).format(new Date(time));
+	}
 
 	/**
 	 * Dont use for performance critical settings
@@ -83,6 +88,13 @@ public class TimeFormatter {
 			return formatString.replaceFirst("localtime", "h:mm a");
 		}
 	}
+	/**
+	 * Removes "localtime" in format string
+	 */
+	private static String withSuitableDateOnly(final Context context,
+			final String formatString) {
+		return formatString.replaceAll("\\s*localtime\\s*", " ");
+	}
 
 	private static SimpleDateFormat getLocalFormatter(final Context context,
 			final String lang, final String format) {
@@ -106,6 +118,21 @@ public class TimeFormatter {
 										context.getString(R.string.key_pref_dateformat_long),
 										context.getString(R.string.dateformat_long_1))));
 	}
+	public static SimpleDateFormat getLocalFormatterLongDateOnly(final Context context) {
+		return getLocalFormatter(
+				context,
+				PreferenceManager.getDefaultSharedPreferences(context)
+						.getString(context.getString(R.string.pref_locale), ""),
+				withSuitableDateOnly(
+						context,
+						PreferenceManager
+								.getDefaultSharedPreferences(context)
+								.getString(
+										context.getString(R.string.key_pref_dateformat_long),
+										context.getString(R.string.dateformat_long_1))));
+	}
+	
+	
 
 	/**
 	 * Good for performance critical situations, like lists
@@ -116,6 +143,19 @@ public class TimeFormatter {
 				PreferenceManager.getDefaultSharedPreferences(context)
 						.getString(context.getString(R.string.pref_locale), ""),
 				withSuitableTime(
+						context,
+						PreferenceManager
+								.getDefaultSharedPreferences(context)
+								.getString(
+										context.getString(R.string.key_pref_dateformat_short),
+										context.getString(R.string.dateformat_short_1))));
+	}
+	public static SimpleDateFormat getLocalFormatterShortDateOnly(final Context context) {
+		return getLocalFormatter(
+				context,
+				PreferenceManager.getDefaultSharedPreferences(context)
+						.getString(context.getString(R.string.pref_locale), ""),
+				withSuitableDateOnly(
 						context,
 						PreferenceManager
 								.getDefaultSharedPreferences(context)

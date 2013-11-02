@@ -52,14 +52,14 @@ public class DateView extends TextView {
 	public DateView(Context context) {
 		super(context);
 		this.mContext = context;
-		mDateFormatter = TimeFormatter.getLocalFormatterShort(context);
+		mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
 	}
 
 	@SuppressLint("SimpleDateFormat") public DateView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.mContext = context;
 		try {
-			mDateFormatter = TimeFormatter.getLocalFormatterShort(context);
+			mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
 		} catch(Exception e) {
 			// Just to function in view
 			mDateFormatter = new SimpleDateFormat();
@@ -69,7 +69,7 @@ public class DateView extends TextView {
 	public DateView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		this.mContext = context;
-		mDateFormatter = TimeFormatter.getLocalFormatterShort(context);
+		mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
 	}
 	
 	public void setTimeText(final long time) {
