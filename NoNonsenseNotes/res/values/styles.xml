@@ -6,14 +6,16 @@
         <item name="android:divider">?android:attr/listDivider</item>
         <item name="android:dividerHeight" tools:ignore="PxUsage">1px</item>
     </style>
+
     <style name="LeftDrawerStyleBlack" parent="@style/LeftDrawerStyleDark">
         <item name="android:background">@android:color/black</item>
     </style>
+
     <style name="LeftDrawerStyleLight" parent="@style/LeftDrawerStyleDark">
         <item name="android:background">@color/googlenow_grey</item>
         <item name="android:divider">?android:attr/listDivider</item>
     </style>
-    
+
     <style name="LeftDrawerListItemStyleDark">
         <item name="android:singleLine">true</item>
         <item name="android:gravity">center_vertical</item>
@@ -23,17 +25,18 @@
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
         <item name="android:textColor">@android:color/primary_text_dark</item>
     </style>
+
     <style name="LeftDrawerListItemStyleLight" parent="@style/LeftDrawerListItemStyleDark">
         <item name="android:textColor">@android:color/primary_text_light</item>
     </style>
+
     <style name="LeftDrawerListItemSecondaryStyleDark" parent="@style/LeftDrawerListItemStyleDark">
         <item name="android:textColor">@android:color/secondary_text_dark</item>
     </style>
+
     <style name="LeftDrawerListItemSecondaryStyleLight" parent="@style/LeftDrawerListItemSecondaryStyleDark">
         <item name="android:textColor">@android:color/secondary_text_light</item>
     </style>
-    
-    
 
     <style name="ViewPagerStyleDarkGrey">
         <item name="android:background">@android:drawable/dark_header</item>
@@ -73,14 +76,16 @@
         <item name="titleRelativeSize">1.3</item>
     </style>
 
-    <!-- <style name="ListIndicatorLight">
+    <!--
+    <style name="ListIndicatorLight">
         <item name="android:background">@drawable/card_light</item>
         <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
     </style>
 
     <style name="ListIndicatorDark">
         <item name="android:background">?android:attr/activatedBackgroundIndicator</item>
-    </style> -->
+    </style>
+    -->
 
     <style name="ActionBarDropDownItem.Dark" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
         <item name="android:textColor">#FFFFFF</item>
@@ -130,9 +135,26 @@
         <item name="android:divider">?android:attr/dividerVertical</item>
         <item name="android:dividerHeight" tools:ignore="PxUsage">1px</item>
     </style>
-    
+
     <style name="CustomShowcaseTheme" parent="ShowcaseView">
         <item name="sv_backgroundColor">#AA000000</item>
-  </style>
+    </style>
+
+    <!-- For Pull to refresh -->
+    <style name="PullToRefreshStyle" parent="android:Widget">
+        <!-- The background of the header view -->
+        <item name="ptrHeaderBackground">@color/googlenow_darkergrey</item>
+        <!-- The height of the header view. Please note, only set if in you really need to -->
+        <!-- <item name="ptrHeaderHeight">...</item> -->
+        <!-- TextAppearance of the header view's title text -->
+        <!-- <item name="ptrHeaderTitleTextAppearance">...</item> -->
+        <!-- Color to tint the progress bar -->
+        <!-- <item name="ptrProgressBarColor">...<item> -->
+        <!-- The strings to be displayed at the various states -->
+        <!-- <item name="ptrPullText">Keep going...</item> -->
+        <!-- <item name="ptrRefreshingText">Pulling down the internet</item> -->
+        <!-- <item name="ptrReleaseText">Let go if you want me to refresh!</item> -->
+
+    </style>
 
 </resources>

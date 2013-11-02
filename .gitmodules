@@ -19,3 +19,6 @@
 [submodule "android-times-square"]
 	path = android-times-square
 	url = git://github.com/spacecowboy/android-times-square.git
+[submodule "ActionBar-PullToRefresh"]
+	path = ActionBar-PullToRefresh
+	url = https://github.com/chrisbanes/ActionBar-PullToRefresh.git

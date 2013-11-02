@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.github.espiandev.showcaseview.ShowcaseView;
 import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.googlecode.androidannotations.annotations.AfterViews;
@@ -61,6 +62,7 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -166,6 +168,7 @@ public class ActivityMain extends FragmentActivity implements
 	// WIll only be the viewpager fragment
 	ListOpener listOpener = null;
 	private Bundle state;
+	private PullToRefreshAttacher pullToRefreshAttacher;
 
 	@Override
 	public void onCreate(Bundle b) {
@@ -247,6 +250,9 @@ public class ActivityMain extends FragmentActivity implements
 			Log.d("nononsenseapps list", "Activity Saved not null: " + b);
 			this.state = b;
 		}
+
+		// Create a PullToRefreshAttacher instance
+		pullToRefreshAttacher = PullToRefreshAttacher.get(this);
 
 		// Clear possible notifications, schedule future ones
 		final Intent intent = getIntent();
@@ -338,26 +344,6 @@ public class ActivityMain extends FragmentActivity implements
 		}
 	}
 
-	@UiThread
-	@Override
-	public void onSyncStartStop(final boolean ongoing) {
-		if (mMenu == null) {
-			return;
-		}
-		final MenuItem syncMenuItem = mMenu.findItem(R.id.menu_sync);
-		if (syncMenuItem == null) {
-			return;
-		}
-
-		if (ongoing) {
-			syncMenuItem
-					.setActionView(R.layout.actionbar_indeterminate_progress);
-		}
-		else {
-			syncMenuItem.setActionView(null);
-		}
-	}
-
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
@@ -415,6 +401,7 @@ public class ActivityMain extends FragmentActivity implements
 	protected boolean reverseAnimation = false;
 	private boolean shouldRestart = false;
 	private ShowcaseView sv;
+	private PullToRefreshAttacher.OnRefreshListener pullToRefreshListener;
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -1108,23 +1095,7 @@ public class ActivityMain extends FragmentActivity implements
 			}
 			return true;
 		case R.id.menu_sync:
-			if (SyncHelper.shouldSyncAtAll(this)) {
-				SyncHelper.requestSyncIf(this, SyncHelper.MANUAL);
-			}
-			else {
-				FragmentTransaction ft = getSupportFragmentManager()
-						.beginTransaction();
-				Fragment prev = getSupportFragmentManager().findFragmentByTag(
-						"accountdialog");
-				if (prev != null) {
-					ft.remove(prev);
-				}
-				ft.addToBackStack(null);
-
-				// Create and show the dialog.
-				AccountDialog4 newFragment = new AccountDialog4();
-				newFragment.show(ft, "accountdialog");
-			}
+			handleSyncRequest();
 			return true;
 		case R.id.menu_delete:
 		default:
@@ -1448,5 +1419,81 @@ public class ActivityMain extends FragmentActivity implements
 		else if (key.startsWith("pref_restart")) {
 			shouldRestart = true;
 		}
+	}
+
+	public void addRefreshableView(View view) {
+		pullToRefreshAttacher.addRefreshableView(view,
+				getPullToRefreshListener());
+	}
+
+	public void removeRefreshableView(View view) {
+		pullToRefreshAttacher.removeRefreshableView(view);
+	}
+
+	public PullToRefreshAttacher getPullToRefreshAttacher() {
+		return pullToRefreshAttacher;
+	}
+
+	public PullToRefreshAttacher.OnRefreshListener getPullToRefreshListener() {
+		if (pullToRefreshListener == null) {
+			pullToRefreshListener = new PullToRefreshAttacher.OnRefreshListener() {
+				@Override
+				public void onRefreshStarted(View view) {
+					handleSyncRequest();
+				}
+			};
+		}
+		return pullToRefreshListener;
+	}
+	
+	private void handleSyncRequest() {
+		if (SyncHelper.shouldSyncAtAll(ActivityMain.this)) {
+			SyncHelper.requestSyncIf(ActivityMain.this,
+					SyncHelper.MANUAL);
+		}
+		else {
+			FragmentTransaction ft = getSupportFragmentManager()
+					.beginTransaction();
+			Fragment prev = getSupportFragmentManager()
+					.findFragmentByTag("accountdialog");
+			if (prev != null) {
+				ft.remove(prev);
+			}
+			ft.addToBackStack(null);
+
+			// Create and show the dialog.
+			AccountDialog4 newFragment = new AccountDialog4();
+			newFragment.show(ft, "accountdialog");
+		}
+		// In case of connectivity problems, stop
+		// the progress bar
+		new AsyncTask<Void, Void, Void>() {
+
+            @Override
+            protected Void doInBackground(Void... params) {
+            	Log.d("JONAS", "bg start");
+                try {
+                    Thread.sleep(8000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                Log.d("JONAS", "bg done");
+                return null;
+            }
+
+            @Override
+            protected void onPostExecute(Void result) {
+            	Log.d("JONAS", "post done");
+                // Notify PullToRefreshAttacher that the refresh has finished
+                pullToRefreshAttacher.setRefreshComplete();
+            }
+        }.execute();
+	}
+	
+	@UiThread
+	@Override
+	public void onSyncStartStop(final boolean ongoing) {
+		// Notify PullToRefreshAttacher of the refresh state
+		pullToRefreshAttacher.setRefreshing(ongoing);
 	}
 }

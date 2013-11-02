@@ -17,6 +17,7 @@ import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
 import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
 import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -462,6 +463,15 @@ public class TaskListFragment extends Fragment implements
 	public static String andWhereWeek() {
 		return " AND " + whereWeek();
 	}
+	
+	@AfterViews
+	void setupPullToRefresh() {
+		// Now get the PullToRefresh attacher from the Activity. An exercise to the reader
+        // is to create an implicit interface instead of casting to the concrete Activity
+        // Now set the ScrollView as the refreshable view, and the refresh listener (this)
+		((ActivityMain) getActivity())
+			.addRefreshableView(listView);
+	}
 
 	@AfterViews
 	void loadList() {
@@ -736,6 +746,8 @@ public class TaskListFragment extends Fragment implements
 	public void onDestroy() {
 		super.onDestroy();
 		getLoaderManager().destroyLoader(0);
+		((ActivityMain) getActivity())
+		.removeRefreshableView(listView);
 	}
 
 	@Override
