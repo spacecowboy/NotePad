@@ -307,8 +307,10 @@ public class TaskDetailFragment extends Fragment implements
 		else {
 			// If not valid, find a valid list
 			if (getArguments().getLong(ARG_ITEM_LIST_ID, stateListId) < 1) {
-				getArguments().putLong(ARG_ITEM_LIST_ID, 
-						TaskListViewPagerFragment.getARealList(getActivity(), -1));
+				getArguments().putLong(
+						ARG_ITEM_LIST_ID,
+						TaskListViewPagerFragment.getARealList(getActivity(),
+								-1));
 			}
 			// Fail if still not valid
 			if (getArguments().getLong(ARG_ITEM_LIST_ID, stateListId) < 1) {
@@ -381,15 +383,16 @@ public class TaskDetailFragment extends Fragment implements
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 
-		taskText.setTitleFontFamily(Integer.parseInt(
-				prefs.getString(getString(R.string.pref_editor_title_fontfamily), "1")));
-		taskText.setTitleFontStyle(Integer.parseInt(
-				prefs.getString(getString(R.string.pref_editor_title_fontstyle), "1")));
-		taskText.setBodyFontFamily(Integer.parseInt(
-				prefs.getString(getString(R.string.pref_editor_body_fontfamily), "0")));
-		taskText.setLinkify(prefs.getBoolean(getString(R.string.pref_editor_links), true));
-		taskText.setTheTextSize(Integer.parseInt(
-				prefs.getString(getString(R.string.pref_editor_fontsize), "1")));
+		taskText.setTitleFontFamily(Integer.parseInt(prefs.getString(
+				getString(R.string.pref_editor_title_fontfamily), "1")));
+		taskText.setTitleFontStyle(Integer.parseInt(prefs.getString(
+				getString(R.string.pref_editor_title_fontstyle), "1")));
+		taskText.setBodyFontFamily(Integer.parseInt(prefs.getString(
+				getString(R.string.pref_editor_body_fontfamily), "0")));
+		taskText.setLinkify(prefs.getBoolean(
+				getString(R.string.pref_editor_links), true));
+		taskText.setTheTextSize(Integer.parseInt(prefs.getString(
+				getString(R.string.pref_editor_fontsize), "1")));
 
 		taskText.addTextChangedListener(new TextWatcher() {
 			@Override
@@ -629,8 +632,17 @@ public class TaskDetailFragment extends Fragment implements
 	// Call to update the share intent
 	private void setShareIntent(final String text) {
 		if (mShareActionProvider != null && taskText != null) {
-			mShareActionProvider.setShareIntent(new Intent(Intent.ACTION_SEND)
-					.setType("text/plain").putExtra(Intent.EXTRA_TEXT, text));
+			int titleEnd = text.indexOf("\n");
+			if (titleEnd < 0) {
+				titleEnd = text.length();
+			}
+
+			mShareActionProvider
+					.setShareIntent(new Intent(Intent.ACTION_SEND)
+							.setType("text/plain")
+							.putExtra(Intent.EXTRA_TEXT, text)
+							.putExtra(Intent.EXTRA_SUBJECT,
+									text.substring(0, titleEnd)));
 		}
 	}
 

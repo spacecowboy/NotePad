@@ -12,9 +12,10 @@
         android:icon="?ic_action_list"
         android:showAsAction="ifRoom"
         android:title="@string/move"/>
+    <!-- android:actionProviderClass="android.widget.ShareActionProvider" -->
     <item
         android:id="@+id/menu_share"
-        android:actionProviderClass="android.widget.ShareActionProvider"
+        android:icon="?ic_action_share"
         android:showAsAction="ifRoom"
         android:title="@string/menu_share"/>
     <item

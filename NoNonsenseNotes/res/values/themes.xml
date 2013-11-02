@@ -56,6 +56,7 @@
         <item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
         <item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
         <item name="ic_action_add_list">@drawable/ic_action_add_list_dark</item>
+        <item name="ic_action_share">@drawable/ic_action_share_dark</item>
         <item name="ic_action_list">@drawable/ic_action_list_dark</item>
         
         <item name="LeftDrawerStyle">@style/LeftDrawerStyleDark</item>
@@ -124,6 +125,7 @@
         <item name="list_divider_holo">@drawable/list_divider_holo_light</item>
         <item name="ic_action_add_list">@drawable/ic_action_add_list_dark</item>
         <item name="ic_action_list">@drawable/ic_action_list_dark</item>
+        <item name="ic_action_share">@drawable/ic_action_share_dark</item>
 
         <!-- <item name="viewpager_bg">@color/viewpager_darkgrey</item> -->
         <item name="viewpager_bg">@color/googlenow_grey_trans</item>

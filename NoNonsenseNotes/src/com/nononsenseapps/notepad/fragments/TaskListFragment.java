@@ -491,7 +491,6 @@ public class TaskListFragment extends Fragment implements
 
 		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 			final HashMap<Long, Task> tasks = new HashMap<Long, Task>();
-			ShareActionProvider mShareProvider;
 			// ActionMode mMode;
 			final PasswordConfirmedListener pListener = new PasswordConfirmedListener() {
 				@Override
@@ -546,12 +545,6 @@ public class TaskListFragment extends Fragment implements
 				// For password
 				mMode = mode;
 
-				final MenuItem actionItem = menu.findItem(R.id.menu_share);
-				mShareProvider = (ShareActionProvider) actionItem
-						.getActionProvider();
-				mShareProvider
-						.setShareHistoryFileName(ShareActionProvider.DEFAULT_SHARE_HISTORY_FILE_NAME);
-				mShareProvider.setShareIntent(getShareIntent());
 				return true;
 			}
 
@@ -609,6 +602,10 @@ public class TaskListFragment extends Fragment implements
 							.show(getFragmentManager(), "move_to_list_dialog");
 					finish = true;
 					break;
+				case R.id.menu_share:
+					startActivity(getShareIntent());
+					finish = true;
+					break;
 				default:
 					finish = false;
 				}
@@ -627,8 +624,6 @@ public class TaskListFragment extends Fragment implements
 				else {
 					tasks.remove(id);
 				}
-
-				mShareProvider.setShareIntent(getShareIntent());
 
 				try {
 					// Only show the title string on screens that are wide
@@ -663,11 +658,20 @@ public class TaskListFragment extends Fragment implements
 				}
 				return sb.toString();
 			}
+			
+			String getShareSubject() {
+				String result = "";
+				for (Task t: tasks.values()) {
+					result += ", " + t.title;
+				}
+				return result.length() > 0 ? result.substring(2) : result;
+			}
 
 			Intent getShareIntent() {
 				final Intent shareIntent = new Intent(Intent.ACTION_SEND);
 				shareIntent.setType("text/plain");
 				shareIntent.putExtra(Intent.EXTRA_TEXT, getShareText());
+				shareIntent.putExtra(Intent.EXTRA_SUBJECT, getShareSubject());
 				shareIntent
 						.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
 				return shareIntent;
