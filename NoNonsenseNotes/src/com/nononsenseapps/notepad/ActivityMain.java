@@ -230,15 +230,6 @@ public class ActivityMain extends FragmentActivity implements
 		getSupportFragmentManager().addOnBackStackChangedListener(
 				new FragmentManager.OnBackStackChangedListener() {
 					public void onBackStackChanged() {
-						// Crash report about null pointer, think it was this
-						final View focusView = ActivityMain.this
-								.getCurrentFocus();
-						if (focusView != null && inputManager != null) {
-							inputManager.hideSoftInputFromWindow(
-									focusView.getWindowToken(),
-									InputMethodManager.HIDE_NOT_ALWAYS);
-						}
-
 						if (showingEditor && !isNoteIntent(getIntent())) {
 							resetActionBar();
 						}
@@ -861,6 +852,13 @@ public class ActivityMain extends FragmentActivity implements
 					@Override
 					public void onClick(View v) {
 						// "Done"
+						final View focusView = ActivityMain.this
+								.getCurrentFocus();
+						if (inputManager != null && focusView != null) {
+							inputManager.hideSoftInputFromWindow(
+									focusView.getWindowToken(),
+									InputMethodManager.HIDE_NOT_ALWAYS);
+						}
 
 						// Should load the same list again
 						// Try getting the list from the original intent

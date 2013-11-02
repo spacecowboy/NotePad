@@ -292,7 +292,7 @@ public class TaskDetailFragment extends Fragment implements
 			return;
 		}
 
-		boolean openKb = false;
+		boolean openKb = true;
 
 		final Bundle args = new Bundle();
 		if (getArguments().getLong(ARG_ITEM_ID, stateId) > 0) {
