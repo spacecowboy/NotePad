@@ -1441,6 +1441,8 @@ public class ActivityMain extends FragmentActivity implements
 		if (key.equals(MainPrefs.KEY_THEME)
 				|| key.equals(getString(R.string.pref_locale))) {
 			shouldRestart = true;
+		} else if (key.startsWith("pref_restart")) {
+			shouldRestart = true;
 		}
 	}
 }
