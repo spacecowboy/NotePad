@@ -21,6 +21,7 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import com.nononsenseapps.notepad.ActivityMain;
+import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.helpers.TimeFormatter;
 
@@ -78,20 +79,21 @@ public class MainPrefs extends PreferenceFragment {
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_dateformat_short)));
 		PrefsActivity
-		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_title_fontfamily)));
+				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_title_fontfamily)));
 		PrefsActivity
-		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_title_fontstyle)));
+				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_title_fontstyle)));
 		PrefsActivity
-		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_body_fontfamily)));
+				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_body_fontfamily)));
 		PrefsActivity
-		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_fontsize)));
+				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_fontsize)));
 		updateDonateStatus();
 	}
 
 	private void updateDonateStatus() {
-		final boolean isPremium = PreferenceManager
-				.getDefaultSharedPreferences(getActivity()).getBoolean(
-						ActivityMain.PREMIUMSTATUS, false);
+		// Debug builds should be enabled
+		final boolean isPremium = BuildConfig.DEBUG
+				| PreferenceManager.getDefaultSharedPreferences(getActivity())
+						.getBoolean(ActivityMain.PREMIUMSTATUS, false);
 		Preference pref = findPreference(KEY_THEME);
 		findPreference(KEY_THEME).setEnabled(isPremium);
 		if (isPremium) {
