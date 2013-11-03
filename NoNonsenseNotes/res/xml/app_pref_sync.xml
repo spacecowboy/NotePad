@@ -52,12 +52,12 @@
             android:key="syncOnChange"
             android:summary="@string/sync_on_change_info"
             android:title="@string/sync_on_change" />
-        <CheckBoxPreference
+        <!-- <CheckBoxPreference
             android:defaultValue="false"
             android:dependency="syncEnablePref"
             android:key="syncFull"
             android:summary="@string/sync_full_force_info"
-            android:title="@string/sync_full_force" />
+            android:title="@string/sync_full_force" /> -->
     <!-- </PreferenceScreen> -->
 
 </PreferenceScreen>
