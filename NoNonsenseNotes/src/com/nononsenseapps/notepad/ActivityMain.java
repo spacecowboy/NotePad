@@ -239,7 +239,7 @@ public class ActivityMain extends FragmentActivity implements
 				new FragmentManager.OnBackStackChangedListener() {
 					public void onBackStackChanged() {
 						if (showingEditor && !isNoteIntent(getIntent())) {
-							resetActionBar();
+							setHomeAsDrawer(true);
 						}
 						// Always update menu
 						invalidateOptionsMenu();
@@ -719,7 +719,7 @@ public class ActivityMain extends FragmentActivity implements
 			// This is an instance state variable
 			if (showingEditor) {
 				// Portrait, with editor, modify action bar
-				setDoneActionBar();
+				setHomeAsDrawer(false);
 				// Done
 				return;
 			}
@@ -798,7 +798,7 @@ public class ActivityMain extends FragmentActivity implements
 				transaction.addToBackStack(null);
 			}
 
-			setDoneActionBar();
+			setHomeAsDrawer(false);
 		}
 		/*
 		 * Other case, is a list id or a tablet
@@ -806,7 +806,7 @@ public class ActivityMain extends FragmentActivity implements
 		if (!isNoteIntent(intent) || fragment2 != null) {
 			// If we're no longer in the editor, reset the action bar
 			if (fragment2 == null) {
-				resetActionBar();
+				setHomeAsDrawer(true);
 			}
 			// TODO
 			showingEditor = false;
@@ -831,62 +831,8 @@ public class ActivityMain extends FragmentActivity implements
 		shouldAddToBackStack = true;
 	}
 
-	void setDoneActionBar() {
-		// Courtesy of Mr Roman Nurik
-		// Inflate a "Done" custom action bar view to serve as the "Up"
-		// affordance.
-		LayoutInflater inflater = (LayoutInflater) getActionBar()
-				.getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-		final View customActionBarView = inflater.inflate(
-				R.layout.actionbar_custom_view_done, null);
-		customActionBarView.findViewById(R.id.actionbar_done)
-				.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						// "Done"
-						final View focusView = ActivityMain.this
-								.getCurrentFocus();
-						if (inputManager != null && focusView != null) {
-							inputManager.hideSoftInputFromWindow(
-									focusView.getWindowToken(),
-									InputMethodManager.HIDE_NOT_ALWAYS);
-						}
-
-						// Should load the same list again
-						// Try getting the list from the original intent
-						final long listId = getListId(getIntent());
-
-						final Intent intent = new Intent().setAction(
-								Intent.ACTION_VIEW).setClass(ActivityMain.this,
-								ActivityMain_.class);
-						if (listId > 0) {
-							intent.setData(TaskList.getUri(listId));
-						}
-
-						// Set the intent before, so we set the correct
-						// action bar
-						setIntent(intent);
-						while (getSupportFragmentManager()
-								.popBackStackImmediate()) {
-							// Need to pop the entire stack and then load
-						}
-
-						reverseAnimation = true;
-						Log.d("nononsenseapps fragment", "starting activity");
-
-						intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
-								| Intent.FLAG_ACTIVITY_NEW_TASK);
-						startActivity(intent);
-					}
-				});
-
-		// Show the custom action bar view and hide the normal Home icon and
-		// title.
-		final ActionBar actionBar = getActionBar();
-		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
-				ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-						| ActionBar.DISPLAY_SHOW_TITLE);
-		actionBar.setCustomView(customActionBarView);
+	void setHomeAsDrawer(final boolean value) {
+		mDrawerToggle.setDrawerIndicatorEnabled(value);
 	}
 
 	/**
@@ -983,18 +929,6 @@ public class ActivityMain extends FragmentActivity implements
 		return super.onKeyDown(keyCode, event);
 	}
 
-	void resetActionBar() {
-		// Reset Done button
-		final ActionBar actionBar = getActionBar();
-		if (actionBar != null) {
-			actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME
-					| ActionBar.DISPLAY_SHOW_TITLE,
-					ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-							| ActionBar.DISPLAY_SHOW_TITLE);
-			actionBar.setTitle(R.string.app_name);
-		}
-	}
-
 	@Override
 	public void onSaveInstanceState(Bundle outState) {
 		// Do absolutely NOT call super class here. Will bug out the viewpager!
@@ -1034,6 +968,43 @@ public class ActivityMain extends FragmentActivity implements
 		// Handle your other action bar items...
 		switch (item.getItemId()) {
 		case android.R.id.home:
+			if (showingEditor) {
+				// Only true in portrait mode
+				final View focusView = ActivityMain.this
+						.getCurrentFocus();
+				if (inputManager != null && focusView != null) {
+					inputManager.hideSoftInputFromWindow(
+							focusView.getWindowToken(),
+							InputMethodManager.HIDE_NOT_ALWAYS);
+				}
+
+				// Should load the same list again
+				// Try getting the list from the original intent
+				final long listId = getListId(getIntent());
+
+				final Intent intent = new Intent().setAction(
+						Intent.ACTION_VIEW).setClass(ActivityMain.this,
+						ActivityMain_.class);
+				if (listId > 0) {
+					intent.setData(TaskList.getUri(listId));
+				}
+
+				// Set the intent before, so we set the correct
+				// action bar
+				setIntent(intent);
+				while (getSupportFragmentManager()
+						.popBackStackImmediate()) {
+					// Need to pop the entire stack and then load
+				}
+
+				reverseAnimation = true;
+				Log.d("nononsenseapps fragment", "starting activity");
+
+				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP
+						| Intent.FLAG_ACTIVITY_NEW_TASK);
+				startActivity(intent);
+			}
+			//else
 			// Handled by drawer
 			return true;
 		case R.id.drawer_menu_createlist:
