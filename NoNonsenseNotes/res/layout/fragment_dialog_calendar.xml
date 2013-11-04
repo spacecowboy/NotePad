@@ -5,19 +5,23 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <com.squareup.timessquare.CalendarPickerView
-      android:id="@+id/calendarView"
-      android:layout_width="match_parent"
-      android:layout_height="0dp"
-      android:layout_weight="1"
-      android:paddingLeft="16dp"
-      android:paddingRight="16dp"
-      android:paddingBottom="16dp"
-      android:scrollbarStyle="outsideOverlay"
-      android:clipToPadding="false"
-      android:background="?CalendarPickerBackground"
-      />
-    <!-- TODO style dependent background -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" >
+
+        <com.squareup.timessquare.CalendarPickerView
+            android:id="@+id/calendarView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="?CalendarPickerBackground"
+            android:clipToPadding="false"
+            android:paddingBottom="16dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:scrollbarStyle="outsideOverlay" />
+        <!-- TODO style dependent background -->
+    </ScrollView>
 
     <include
         android:id="@+id/buttons"
