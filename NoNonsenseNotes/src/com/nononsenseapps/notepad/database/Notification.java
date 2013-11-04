@@ -3,6 +3,7 @@ package com.nononsenseapps.notepad.database;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
@@ -272,8 +273,22 @@ public class Notification extends DAO {
 	 * 
 	 */
 	public CharSequence getLocalDateTimeText(final Context context) {
-		// TODO respect global settings for 24 hour clock?
 		return TimeFormatter.getLocalDateStringLong(context, time);
+	}
+	
+	/**
+	 * Returns time formatted in text in local time zone
+	 * 
+	 */
+	public CharSequence getLocalTimeText(final Context context) {
+		return TimeFormatter.getLocalTimeOnlyString(context, time);
+	}
+	/**
+	 * Returns date formatted in text in local time zone
+	 * 
+	 */
+	public CharSequence getLocalDateText(final Context context) {
+		return TimeFormatter.getDateFormatter(context).format(new Date(time));
 	}
 
 	@Override

@@ -1,5 +1,7 @@
 package com.nononsenseapps.notepad.fragments;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Calendar;
 
 import com.doomonafireball.betterpickers.timepicker.TimePickerDialogFragment;
@@ -34,6 +36,7 @@ import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedList
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.ui.NotificationItemHelper;
 import com.nononsenseapps.ui.WeekDaysView;
 import com.nononsenseapps.utils.ViewsHelper;
 import com.nononsenseapps.utils.views.StyledEditText;
@@ -69,7 +72,10 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.ShareActionProvider;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -459,9 +465,9 @@ public class TaskDetailFragment extends Fragment implements
 		setDueText();
 
 		// Dont ask for time for due date
-		//final TimePickerDialogFragment picker = getTimePickerFragment();
-		//picker.setListener(this);
-		//picker.show(getFragmentManager(), "time");
+		// final TimePickerDialogFragment picker = getTimePickerFragment();
+		// picker.setListener(this);
+		// picker.show(getFragmentManager(), "time");
 	}
 
 	// @Override
@@ -526,7 +532,7 @@ public class TaskDetailFragment extends Fragment implements
 	/**
 	 * task.locked & mLocked
 	 */
-	boolean isLocked() {
+	public boolean isLocked() {
 		if (mTask != null) {
 			return mTask.locked & mLocked;
 		}
@@ -783,18 +789,8 @@ public class TaskDetailFragment extends Fragment implements
 					.getString(ActivityLocation.EXTRA_LOCATION_NAME);
 			if (pendingLocationNotification.view != null
 					&& pendingLocationNotification.locationName != null) {
-				pendingLocationNotification.view.findViewById(
-				// Hide time parts
-						R.id.notificationDateTime).setVisibility(View.GONE);
-				pendingLocationNotification.view.findViewById(R.id.weekdays)
-						.setVisibility(View.GONE);
-				// Show location reminder
-				pendingLocationNotification.view
-						.findViewById(R.id.repeatSwitch).setVisibility(
-								View.VISIBLE);
-				// Show repeat section
-				pendingLocationNotification.view.findViewById(
-						R.id.openRepeatField).setVisibility(View.VISIBLE);
+				NotificationItemHelper
+						.switchToLocation(pendingLocationNotification.view);
 
 				// Fill in location name
 				((TextView) pendingLocationNotification.view
@@ -931,244 +927,15 @@ public class TaskDetailFragment extends Fragment implements
 	@UiThread
 	void addNotification(final Notification not) {
 		if (getActivity() != null) {
-			View nv;// = notificationList.findViewById((int) not._id);
-			// if (nv == null) {
-			nv = LayoutInflater.from(getActivity()).inflate(
+			View nv = LayoutInflater.from(getActivity()).inflate(
 					R.layout.notification_view, null);
-			// nv.setId((int) not._id);
-			// }
-			// else {
-			// notificationList.removeView(nv);
-			// }
 
 			// So we can update the view later
 			not.view = nv;
 
-			// Hide this if it's a new notification
-			final TextView openRepeatField = (TextView) nv
-					.findViewById(R.id.openRepeatField);
-
-			// Set date time text
-			final TextView notTimeButton = (TextView) nv
-					.findViewById(R.id.notificationDateTime);
-			if (not.time != null) {
-				notTimeButton.setText(not.getLocalDateTimeText(getActivity()));
-			}
-
-			if (not.radius != null) {
-				notTimeButton.setVisibility(View.GONE);
-				openRepeatField.setVisibility(View.VISIBLE);
-			}
-
-			final View notRemoveButton = nv
-					.findViewById(R.id.notificationRemove);
-
-			// Remove button
-			notRemoveButton.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					if (!isLocked()) {
-						// Remove row from UI
-						notificationList.removeView((View) v.getParent());
-						// Remove from database and renotify
-						not.delete(getActivity());
-					}
-				}
-			});
-
-			// Location button
-			final TextView location = (TextView) nv
-					.findViewById(R.id.notificationLocation);
-			if (not.locationName != null) location.setText(not.locationName);
-
-			if (not.time != null && not.radius == null) {
-				location.setVisibility(View.GONE);
-			}
-
-			location.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					// TODO
-					pendingLocationNotification = not;
-
-					Intent i = new Intent(getActivity(),
-							ActivityLocation_.class);
-					i.putExtra(ActivityLocation.EXTRA_ID, not._id);
-					if (not.latitude != null && not.longitude != null
-							&& not.radius != null) {
-						i.putExtra(ActivityLocation.EXTRA_LATITUDE,
-								(double) not.latitude)
-								.putExtra(ActivityLocation.EXTRA_LONGITUDE,
-										(double) not.longitude)
-								.putExtra(ActivityLocation.EXTRA_RADIUS,
-										(double) not.radius);
-					}
-					startActivityForResult(i, 2);
-				}
-			});
-
-			final View closeRepeatField = nv
-					.findViewById(R.id.closeRepeatField);
-			final View repeatDetails = nv.findViewById(R.id.repeatDetails);
-			final View weekDays = nv.findViewById(R.id.weekdays);
-
-			// Location repeat
-			final Switch repeatSwitch = (Switch) nv
-					.findViewById(R.id.repeatSwitch);
-			repeatSwitch.setChecked(not.isLocationRepeat());
-			if (not.isLocationRepeat()) {
-				openRepeatField.setText(R.string.always);
-			}
-			else {
-				openRepeatField.setText(not.getRepeatAsText(getActivity()));
-			}
-			repeatSwitch
-					.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-						@Override
-						public void onCheckedChanged(CompoundButton buttonView,
-								boolean isChecked) {
-							not.setLocationRepeat(isChecked);
-							not.saveInBackground(getActivity(), true);
-							if (isChecked) {
-								openRepeatField.setText(R.string.always);
-							}
-							else {
-								openRepeatField.setText("");
-							}
-
-						}
-					});
-
-			if (not.time != null && not.radius == null) {
-				openRepeatField.setVisibility(View.VISIBLE);
-				weekDays.setVisibility(View.VISIBLE);
-				repeatSwitch.setVisibility(View.GONE);
-			}
-			else {
-				weekDays.setVisibility(View.GONE);
-				repeatSwitch.setVisibility(View.VISIBLE);
-			}
-
-			// Date button
-			notTimeButton.setOnClickListener(new OnClickListener() {
-
-				@Override
-				public void onClick(View v) {
-					if (!isLocked()) {
-						final DialogCalendar datePicker;
-
-						if (mTask != null && mTask.due != null) {
-							datePicker = DialogCalendar.getInstance(mTask.due);
-						}
-						else {
-							datePicker = DialogCalendar.getInstance();
-						}
-						datePicker.setListener(new DateSetListener() {
-
-							@Override
-							public void onDateSet(long time) {
-								final Calendar localTime = Calendar
-										.getInstance();
-								localTime.setTimeInMillis(time);
-								if (not.time != null) {
-									final Calendar notTime = Calendar
-											.getInstance();
-									notTime.setTimeInMillis(not.time);
-									localTime.set(Calendar.HOUR_OF_DAY,
-											notTime.get(Calendar.HOUR_OF_DAY));
-									localTime.set(Calendar.MINUTE,
-											notTime.get(Calendar.MINUTE));
-								}
-
-								not.time = localTime.getTimeInMillis();
-
-								// Enable repeat options
-								openRepeatField.setVisibility(View.VISIBLE);
-								weekDays.setVisibility(View.VISIBLE);
-								repeatSwitch.setVisibility(View.GONE);
-								// Fill in time so far
-								notTimeButton.setText(not
-										.getLocalDateTimeText(getActivity()));
-
-								// Hide location
-								location.setVisibility(View.GONE);
-
-								// Now display time picker
-								final TimePickerDialogFragment timePicker = getTimePickerFragment();
-								timePicker
-										.setListener(new TimePickerDialogHandler() {
-											@Override
-											public void onDialogTimeSet(
-													int hourOfDay, int minute) {
-												final Calendar localTime = Calendar
-														.getInstance();
-												if (not.time != null) {
-													localTime
-															.setTimeInMillis(not.time);
-												}
-												localTime.set(
-														Calendar.HOUR_OF_DAY,
-														hourOfDay);
-												localTime.set(Calendar.MINUTE,
-														minute);
-
-												not.time = localTime
-														.getTimeInMillis();
-
-												// Fill in time so far
-												notTimeButton.setText(not
-														.getLocalDateTimeText(getActivity()));
-
-												not.save(getActivity(), true);
-											}
-
-											@Override
-											public void onDialogTimeCancel() {
-												// TODO why is this not
-												// scheduling?
-												not.save(getActivity(), true);
-											}
-
-										});
-
-								timePicker.show(getFragmentManager(), "time");
-							}
-						});
-
-						datePicker.show(getFragmentManager(), "date");
-
-					}
-				}
-			});
-
-			openRepeatField.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					v.setVisibility(View.GONE);
-					repeatDetails.setVisibility(View.VISIBLE);
-				}
-			});
-			closeRepeatField.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					repeatDetails.setVisibility(View.GONE);
-					openRepeatField.setVisibility(View.VISIBLE);
-				}
-			});
-
-			WeekDaysView days = ((WeekDaysView) nv.findViewById(R.id.weekdays));
-			days.setCheckedDays(not.repeats);
-			days.setOnCheckedDaysChangedListener(new onCheckedDaysChangeListener() {
-
-				@Override
-				public void onChange(final long checkedDays) {
-					not.repeats = checkedDays;
-					openRepeatField.setText(not.getRepeatAsText(getActivity()));
-					not.saveInBackground(getActivity(), true);
-				}
-			});
+			// Setup all the listeners etc
+			NotificationItemHelper
+					.setup(this, notificationList, nv, not, mTask);
 
 			notificationList.addView(nv);
 		}
@@ -1203,7 +970,7 @@ public class TaskDetailFragment extends Fragment implements
 	/**
 	 * Returns an appropriately themed time picker fragment
 	 */
-	TimePickerDialogFragment getTimePickerFragment() {
+	public TimePickerDialogFragment getTimePickerFragment() {
 		final String theme = PreferenceManager.getDefaultSharedPreferences(
 				getActivity()).getString(MainPrefs.KEY_THEME,
 				getString(R.string.const_theme_light_ab));
@@ -1216,5 +983,14 @@ public class TaskDetailFragment extends Fragment implements
 			return TimePickerDialogFragment
 					.newInstance(R.style.BetterPickersDialogFragment);
 		}
+	}
+
+	public Notification getPendingLocationNotification() {
+		return pendingLocationNotification;
+	}
+
+	public void setPendingLocationNotification(
+			Notification pendingLocationNotification) {
+		this.pendingLocationNotification = pendingLocationNotification;
 	}
 }

@@ -21,135 +21,111 @@
         android:src="?attr/body_remove"
         tools:ignore="HardcodedText" />
 
+    <ImageButton
+        android:id="@+id/notificationTypeTime"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="40dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="Type of notification"
+        android:minWidth="8dp"
+        android:padding="0dp"
+        android:scaleType="center"
+        android:src="@drawable/ic_alarm"
+        tools:ignore="HardcodedText" />
+
     <TextView
-        android:id="@+id/notificationDateTime"
+        android:id="@+id/notificationDate"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/notificationRemove"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_toRightOf="@id/notificationTypeTime"
         android:background="?android:attr/selectableItemBackground"
-        android:drawableLeft="@drawable/ic_alarm"
         android:clickable="true"
         android:fontFamily="sans-serif-light"
-        android:gravity="center_vertical"
+        android:gravity="center"
         android:hint="@string/time"
         android:minHeight="48dp"
+        android:minWidth="48dp"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textIsSelectable="false" />
 
-        <TextView
-            android:id="@+id/notificationLocation"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_below="@id/notificationDateTime"
-            android:layout_toLeftOf="@id/notificationRemove"
-            android:background="?android:attr/selectableItemBackground"
-            android:layout_alignWithParentIfMissing="true"
-            android:clickable="true"
-            android:drawableLeft="@drawable/ic_location_red"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center_vertical"
-            android:hint="@string/location"
-            android:minHeight="48dp"
-            android:singleLine="true"
-            android:visibility="visible"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textIsSelectable="false" />
-
-    <View
-        android:id="@+id/dividerLine"
-        android:layout_width="wrap_content"
-        android:layout_height="1dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignLeft="@id/notificationDateTime"
-        android:layout_below="@id/notificationLocation"
-        android:background="?android:attr/dividerVertical" />
-
     <TextView
-        android:id="@+id/openRepeatField"
+        android:id="@+id/notificationTime"
         android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@id/dividerLine"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_toRightOf="@id/notificationDate"
         android:background="?android:attr/selectableItemBackground"
         android:clickable="true"
-        android:drawableRight="?attr/expander_open_holo"
+        android:fontFamily="sans-serif-light"
+        android:gravity="center"
+        android:hint="@string/time"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:singleLine="true"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:textIsSelectable="false" />
+
+    <ImageButton
+        android:id="@+id/notificationTypeLocation"
+        style="?android:attr/buttonBarButtonStyle"
+        android:layout_width="40dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/notificationTypeTime"
+        android:background="?android:attr/selectableItemBackground"
+        android:contentDescription="Type of notification"
+        android:minWidth="8dp"
+        android:padding="0dp"
+        android:scaleType="center"
+        android:visibility="gone"
+        android:src="@drawable/ic_location_red"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/notificationLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignWithParentIfMissing="true"
+        android:layout_below="@id/notificationTypeTime"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_toLeftOf="@id/notificationRemove"
+        android:layout_toRightOf="@id/notificationTypeLocation"
+        android:background="?android:attr/selectableItemBackground"
+        android:clickable="true"
         android:fontFamily="sans-serif-light"
         android:gravity="center_vertical"
-        android:hint="@string/once"
-        android:paddingRight="16dp"
-        android:paddingLeft="16dp"
+        android:hint="@string/location"
+        android:minHeight="48dp"
         android:singleLine="true"
-        android:text=""
-        android:textAllCaps="true"
-        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:textAppearance="?android:attr/textAppearanceMedium"
         android:textIsSelectable="false"
         android:visibility="gone" />
 
-    <!-- Click to unhide this -->
+    <com.nononsenseapps.ui.WeekDaysView
+        android:id="@+id/weekdays"
+        android:layout_width="match_parent"
+        android:paddingLeft="8dp"
+        android:paddingRight="16dp"
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@id/notificationLocation" />
 
-    <RelativeLayout
-        android:id="@+id/repeatDetails"
+    <CheckBox
+        android:id="@+id/repeatSwitch"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignLeft="@id/notificationDateTime"
-        android:layout_below="@id/openRepeatField"
-        android:visibility="gone" >
-
-        <TextView
-            android:id="@+id/temp1"
-            android:layout_width="wrap_content"
-            android:layout_height="36dp"
-            android:layout_alignWithParentIfMissing="true"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center_vertical"
-            android:singleLine="true"
-            android:text="@string/repeat"
-            android:textAllCaps="true"
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textIsSelectable="false" />
-
-        <com.nononsenseapps.ui.WeekDaysView
-            android:id="@+id/weekdays"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_below="@id/temp1" />
-        
-        <Switch 
-            android:id="@+id/repeatSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="48dp"
-            android:layout_below="@id/weekdays"
-            />
-
-        <View
-            android:id="@+id/temp2"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_below="@id/repeatSwitch"
-            android:layout_marginTop="4dp"
-            android:background="?android:attr/dividerVertical" />
-
-        <TextView
-            android:id="@+id/closeRepeatField"
-            android:layout_width="match_parent"
-            android:layout_height="36dp"
-            android:layout_below="@id/temp2"
-            android:background="?android:attr/selectableItemBackground"
-            android:clickable="true"
-            android:drawableRight="?attr/expander_close_holo"
-            android:fontFamily="sans-serif-light"
-            android:gravity="center_vertical"
-            android:hint=""
-            android:paddingRight="16dp"
-            android:singleLine="true"
-            android:text=""
-            android:textAppearance="?android:attr/textAppearanceSmall"
-            android:textIsSelectable="false" />
-    </RelativeLayout>
+        android:layout_height="48dp"
+        android:layout_alignParentLeft="true"
+        android:layout_toLeftOf="@id/notificationRemove"
+        android:layout_below="@id/weekdays"
+        android:layout_marginLeft="8dp"
+        android:visibility="gone"
+        android:text="@string/repeat" />
 
 </RelativeLayout>

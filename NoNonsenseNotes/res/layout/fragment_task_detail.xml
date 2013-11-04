@@ -27,8 +27,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
+                android:layout_marginTop="16dp"
+                android:minHeight="100dp"
                 android:hint="@string/editor_note_hint"
                 android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+                android:gravity="top"
                 custom:linkify="true"
                 custom:titleFontFamily="robotocondensed"
                 custom:titleFontStyle="bold"
@@ -41,22 +44,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/taskText"
-                android:layout_marginTop="16dp"
-                android:paddingLeft="8dp" >
-
-                <TextView
-                    android:id="@+id/dueHeader"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentTop="true"
-                    android:layout_marginBottom="4dp"
-                    android:fontFamily="sans-serif-light"
-                    android:paddingLeft="0dp"
-                    android:text="@string/editor_due_date_hint"
-                    android:textAllCaps="true"
-                    android:textAppearance="?android:attr/textAppearanceSmall"
-                    android:textColor="?textColorSecondary" />
+                android:layout_marginTop="16dp" >
 
                 <com.nononsenseapps.ui.DelegateFrame
                     xmlns:nononsenseapps="http://nononsenseapps.com"
@@ -64,7 +52,7 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_alignParentLeft="true"
-                    android:layout_below="@+id/dueHeader"
+                    android:layout_alignParentTop="true"
                     android:clickable="true"
                     nononsenseapps:enlargedView="@+id/taskCompleted" >
 
@@ -108,7 +96,7 @@
                 android:id="@+id/notificationAdd"
                 android:layout_width="wrap_content"
                 android:layout_height="48dp"
-                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
                 android:layout_alignParentLeft="true"
                 android:layout_alignWithParentIfMissing="true"
                 android:layout_below="@id/taskSection"
@@ -116,14 +104,14 @@
                 android:layout_marginTop="8dp"
                 android:background="?android:attr/selectableItemBackground"
                 android:clickable="true"
-                android:drawableRight="?attr/body_new"
+                android:drawableLeft="@drawable/ic_add_alarm_dark"
                 android:fontFamily="sans-serif-light"
                 android:gravity="center_vertical"
-                android:paddingLeft="8dp"
-                android:paddingRight="16dp"
-                android:text="@string/reminders"
-                android:textAllCaps="true"
-                android:textAppearance="?android:attr/textAppearanceSmall"
+                android:drawablePadding="8dp"
+                android:paddingRight="8dp"
+                android:text="Add a reminder"
+                android:textAllCaps="false"
+                android:textAppearance="?android:attr/textAppearanceMedium"
                 android:textColor="?textColorSecondary" />
 
             <LinearLayout
@@ -136,7 +124,7 @@
                 android:animateLayoutChanges="true"
                 android:orientation="vertical"
                 android:paddingBottom="8dp"
-                android:paddingLeft="8dp" >
+                android:paddingLeft="0dp" >
             </LinearLayout>
         </RelativeLayout>
 

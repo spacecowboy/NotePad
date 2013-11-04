@@ -240,6 +240,7 @@
     <string name="dateformat_short_4">E, localtime</string>
     <string name="dateformat_long_1">EEEE localtime, MMMM d</string>
     <string name="dateformat_long_2">E localtime, MMM d</string>
+    <string name="dateformat_just_date">MMMM d</string>
     <string name="tasks">Tasks</string>
     <string name="all_tasks">All tasks</string>
     <string name="dashclock_tasks">@string/tasks</string>
