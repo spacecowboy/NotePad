@@ -76,6 +76,7 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.PopupMenu.OnMenuItemClickListener;
+import android.widget.ScrollView;
 import android.widget.ShareActionProvider;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -191,6 +192,9 @@ public class TaskDetailFragment extends Fragment implements
 
 	@ViewById
 	View taskSection;
+
+	@ViewById
+	ScrollView editScrollView;
 
 	@SystemService
 	InputMethodManager inputManager;
@@ -390,9 +394,9 @@ public class TaskDetailFragment extends Fragment implements
 				.getDefaultSharedPreferences(getActivity());
 
 		taskText.setTitleFontFamily(Integer.parseInt(prefs.getString(
-				getString(R.string.pref_editor_title_fontfamily), "1")));
+				getString(R.string.pref_editor_title_fontfamily), "2")));
 		taskText.setTitleFontStyle(Integer.parseInt(prefs.getString(
-				getString(R.string.pref_editor_title_fontstyle), "1")));
+				getString(R.string.pref_editor_title_fontstyle), "0")));
 		taskText.setBodyFontFamily(Integer.parseInt(prefs.getString(
 				getString(R.string.pref_editor_body_fontfamily), "0")));
 		taskText.setLinkify(prefs.getBoolean(
@@ -526,6 +530,14 @@ public class TaskDetailFragment extends Fragment implements
 
 			// add item to UI
 			addNotification(not);
+
+			// And scroll to bottom. takes 300ms for item to appear.
+			editScrollView.postDelayed(new Runnable() {
+				@Override
+				public void run() {
+					editScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+				}
+			}, 300);
 		}
 	}
 
@@ -776,8 +788,10 @@ public class TaskDetailFragment extends Fragment implements
 	@OnActivityResult(2)
 	public void onLocationResult(int resultCode, Intent data) {
 		// Location
+		Log.d("JONAS", "onResult1");
 		if (resultCode == Activity.RESULT_OK
 				&& pendingLocationNotification != null) {
+			Log.d("JONAS", "onResult2");
 			// update text field and shit
 			pendingLocationNotification.latitude = data.getExtras().getDouble(
 					ActivityLocation.EXTRA_LATITUDE);
@@ -789,13 +803,12 @@ public class TaskDetailFragment extends Fragment implements
 					.getString(ActivityLocation.EXTRA_LOCATION_NAME);
 			if (pendingLocationNotification.view != null
 					&& pendingLocationNotification.locationName != null) {
+				Log.d("JONAS", "onResult3");
 				NotificationItemHelper
 						.switchToLocation(pendingLocationNotification.view);
 
-				// Fill in location name
-				((TextView) pendingLocationNotification.view
-						.findViewById(R.id.notificationLocation))
-						.setText(pendingLocationNotification.locationName);
+				NotificationItemHelper
+						.setLocationName(pendingLocationNotification);
 			}
 			// do in background
 			pendingLocationNotification.saveInBackground(getActivity(), false);

@@ -274,5 +274,6 @@
     <string name="large">Large</string>
     <string name="text_size">Text size</string>
     <string name="text">Text</string>
+    <string name="add_a_reminder">Add a reminder</string>
 
 </resources>

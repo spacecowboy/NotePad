@@ -43,6 +43,14 @@ public class NotificationItemHelper {
 		return TimeFormatter.getDateFormatter(context).format(new Date(time));
 	}
 
+	public static void setLocationName(final Notification not) {
+		if (not.view != null) {
+			// Fill in location name
+			((TextView) not.view.findViewById(R.id.notificationLocation))
+					.setText(not.locationName);
+		}
+	}
+
 	public static void switchToLocation(final View nv) {
 		hideViews(nv.findViewById(R.id.notificationTime),
 				nv.findViewById(R.id.notificationDate),
@@ -106,7 +114,7 @@ public class NotificationItemHelper {
 					.putExtra(ActivityLocation.EXTRA_RADIUS,
 							(double) not.radius);
 		}
-		fragment.getActivity().startActivityForResult(i, 2);
+		fragment.startActivityForResult(i, 2);
 	}
 
 	public static void setup(final TaskDetailFragment fragment,

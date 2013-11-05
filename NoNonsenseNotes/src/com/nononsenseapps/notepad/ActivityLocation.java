@@ -86,6 +86,9 @@ public class ActivityLocation extends Activity {
 	final static int fillColor = 0xaa33b5e5;
 	final static int lineColor = 0xff33b5e5;
 
+	// Millisecond delay of the responsiveness of geofences.
+	final static int LOCATION_PERIOD = 5 * 1000;
+	
 	double startLatitude = -999;
 	double startLongitude = -999;
 	double startRadius = -999;
@@ -621,6 +624,7 @@ public class ActivityLocation extends Activity {
 				.setCircularRegion(marker.getPosition().latitude,
 						marker.getPosition().longitude, (float) radius)
 				.setRequestId(Long.toString(mId))
+				.setNotificationResponsiveness(LOCATION_PERIOD)
 				// Detect both entry and exit transitions
 				.setTransitionTypes(
 						Geofence.GEOFENCE_TRANSITION_ENTER
