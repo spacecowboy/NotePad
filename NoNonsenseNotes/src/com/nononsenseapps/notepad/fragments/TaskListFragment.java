@@ -768,10 +768,10 @@ public class TaskListFragment extends Fragment implements
 
 	@Override
 	public void onDetach() {
-		super.onDetach();
 		mListener = null;
 		PreferenceManager.getDefaultSharedPreferences(getActivity())
 				.unregisterOnSharedPreferenceChangeListener(this);
+		super.onDetach();
 	}
 
 	static class SimpleSectionsAdapter extends SimpleDragSortCursorAdapter {
@@ -872,6 +872,10 @@ public class TaskListFragment extends Fragment implements
 	@Override
 	public void onSharedPreferenceChanged(final SharedPreferences prefs,
 			final String key) {
+		if (isDetached()) {
+			// Fix crash report
+			return;
+		}
 		boolean reload = false;
 		if (key.equals(getString(R.string.pref_sorttype))) {
 			mSortType = null;
