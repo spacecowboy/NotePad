@@ -468,10 +468,10 @@ public class TaskDetailFragment extends Fragment implements
 		mTask.due = localTime.getTimeInMillis();
 		setDueText();
 
-		// Dont ask for time for due date
-		// final TimePickerDialogFragment picker = getTimePickerFragment();
-		// picker.setListener(this);
-		// picker.show(getFragmentManager(), "time");
+		// and ask for time
+		 final TimePickerDialogFragment picker = getTimePickerFragment();
+		 picker.setListener(this);
+		 picker.show(getFragmentManager(), "time");
 	}
 
 	// @Override
@@ -486,7 +486,7 @@ public class TaskDetailFragment extends Fragment implements
 		}
 		else {
 			// Due date
-			dueDateBox.setText(TimeFormatter.getLocalDateOnlyStringLong(
+			dueDateBox.setText(TimeFormatter.getLocalDateStringLong(
 					getActivity(), mTask.due));
 		}
 	}

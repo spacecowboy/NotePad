@@ -28,7 +28,7 @@
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
     android:versionCode="103"
-    android:versionName="5.1" >
+    android:versionName="5.1-withduetime" >
 
     <uses-sdk
         android:minSdkVersion="14"
