@@ -342,6 +342,10 @@ public class ActivityMain extends FragmentActivity implements
 		if (syncStatusReceiver != null) {
 			syncStatusReceiver.stopMonitoring();
 		}
+		// deactivate any progress bar
+		if (pullToRefreshAttacher != null) {
+			pullToRefreshAttacher.setRefreshComplete();
+		}
 	}
 
 	@Override
@@ -970,8 +974,7 @@ public class ActivityMain extends FragmentActivity implements
 		case android.R.id.home:
 			if (showingEditor) {
 				// Only true in portrait mode
-				final View focusView = ActivityMain.this
-						.getCurrentFocus();
+				final View focusView = ActivityMain.this.getCurrentFocus();
 				if (inputManager != null && focusView != null) {
 					inputManager.hideSoftInputFromWindow(
 							focusView.getWindowToken(),
@@ -982,9 +985,9 @@ public class ActivityMain extends FragmentActivity implements
 				// Try getting the list from the original intent
 				final long listId = getListId(getIntent());
 
-				final Intent intent = new Intent().setAction(
-						Intent.ACTION_VIEW).setClass(ActivityMain.this,
-						ActivityMain_.class);
+				final Intent intent = new Intent()
+						.setAction(Intent.ACTION_VIEW).setClass(
+								ActivityMain.this, ActivityMain_.class);
 				if (listId > 0) {
 					intent.setData(TaskList.getUri(listId));
 				}
@@ -992,8 +995,7 @@ public class ActivityMain extends FragmentActivity implements
 				// Set the intent before, so we set the correct
 				// action bar
 				setIntent(intent);
-				while (getSupportFragmentManager()
-						.popBackStackImmediate()) {
+				while (getSupportFragmentManager().popBackStackImmediate()) {
 					// Need to pop the entire stack and then load
 				}
 
@@ -1004,7 +1006,7 @@ public class ActivityMain extends FragmentActivity implements
 						| Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
 			}
-			//else
+			// else
 			// Handled by drawer
 			return true;
 		case R.id.drawer_menu_createlist:
@@ -1416,17 +1418,16 @@ public class ActivityMain extends FragmentActivity implements
 		}
 		return pullToRefreshListener;
 	}
-	
+
 	private void handleSyncRequest() {
 		if (SyncHelper.shouldSyncAtAll(ActivityMain.this)) {
-			SyncHelper.requestSyncIf(ActivityMain.this,
-					SyncHelper.MANUAL);
+			SyncHelper.requestSyncIf(ActivityMain.this, SyncHelper.MANUAL);
 		}
 		else {
 			FragmentTransaction ft = getSupportFragmentManager()
 					.beginTransaction();
-			Fragment prev = getSupportFragmentManager()
-					.findFragmentByTag("accountdialog");
+			Fragment prev = getSupportFragmentManager().findFragmentByTag(
+					"accountdialog");
 			if (prev != null) {
 				ft.remove(prev);
 			}
@@ -1440,27 +1441,25 @@ public class ActivityMain extends FragmentActivity implements
 		// the progress bar
 		new AsyncTask<Void, Void, Void>() {
 
-            @Override
-            protected Void doInBackground(Void... params) {
-            	Log.d("JONAS", "bg start");
-                try {
-                    Thread.sleep(8000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                Log.d("JONAS", "bg done");
-                return null;
-            }
+			@Override
+			protected Void doInBackground(Void... params) {
+				try {
+					Thread.sleep(30000);
+				}
+				catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				return null;
+			}
 
-            @Override
-            protected void onPostExecute(Void result) {
-            	Log.d("JONAS", "post done");
-                // Notify PullToRefreshAttacher that the refresh has finished
-                pullToRefreshAttacher.setRefreshComplete();
-            }
-        }.execute();
+			@Override
+			protected void onPostExecute(Void result) {
+				// Notify PullToRefreshAttacher that the refresh has finished
+				pullToRefreshAttacher.setRefreshComplete();
+			}
+		}.execute();
 	}
-	
+
 	@UiThread
 	@Override
 	public void onSyncStartStop(final boolean ongoing) {
