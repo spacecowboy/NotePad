@@ -35,6 +35,7 @@ limitations under the License.
 <string name="menu_createlist">Skapa lista</string>
 <string name="menu_clearcompleted">Ta bort slutförda</string>
 <string name="menu_setdefaultlist">Sätt som standardlista</string>
+<string name="new_default_set">Nya inställningar sparade</string>
 <string name="menu_managelists">Editera lista</string>
 <string name="add_item">Ny</string>
 <string name="delete_question">Ta bort?</string>
@@ -73,9 +74,8 @@ limitations under the License.
 <string name="settings_sync_enable_title">Google Tasks synk</string>
 <string name="gtasks_sync_info">All information kan inte synkroniseras med Google Tasks. Endast anteckningar, förfallodatum (inte tid) och utfördstatus synkroniseras.</string>
 <string name="settings_cat_syncing">Synkronisering</string>
-<string name="dropbox_enable">Synka med Dropbox</string>
-<string name="dropbox_enable_summary">Lägger till en speciell NoNonsense Notes mapp i din Dropbox</string>
 <string name="show_from_all_lists">Alla listor</string>
+<string name="lists">Listor</string>
 <string name="deleted">Tog bort</string>
 <string name="repeat">Upprepa</string>
 <string name="once">En gång</string>
@@ -166,6 +166,9 @@ Use few if language need it. In English is the same.
 <string name="date_header_future">Senare</string>
 <string name="date_header_none">Inget datum</string>
 <string name="date_header_completed">Avklarade</string>
+<string name="next_5_days">Kommande 5 dagarna</string>
+<string name="next_n_days">Kommande %d dagarna</string>
+<string name="this_week">Denna veckan</string>
 <string name="please_select_note">Välj eller skapa en anteckning</string>
 <string name="please_create_note">Skapa en anteckning först</string>
 <string name="hide_checkbox">Dölj kryssruta</string>
@@ -214,6 +217,7 @@ Use few if language need it. In English is the same.
 <string name="notifications">Påminnelser</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
 <string name="tasks">Uppgifter</string>
+<string name="all_tasks">Alla uppgifter</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Endast uppgifter i</string>
 <string name="dashclock_show_overdue_tasks">Visa försenade uppgifter</string>
 <string name="dashclock_overdue_tasks_show">Försenade uppgifter visas</string>
@@ -230,5 +234,15 @@ Use few if language need it. In English is the same.
 <string name="dashclock_header_shown">Listans namn visas i fetstil</string>
 <string name="dashclock_first_task_shown">Den första uppgiftens titel visas i fetstil</string>
 <string name="dashclock_display_header">Visa listans namn</string>
+<string name="bold">Fetstil</string>
+<string name="italic">Kursiv</string>
+<string name="title_style">Titelstil</string>
+<string name="title_font">Titeltypsnitt</string>
+<string name="body_font">Anteckningens typsnitt</string>
+<string name="clickable_links">Klickbara länkar</string>
+<string name="small">Litet</string>
+<string name="large">Stort</string>
+<string name="text_size">Textstorlek</string>
+<string name="add_a_reminder">Lägg till påminnelse</string>
 
 </resources>
