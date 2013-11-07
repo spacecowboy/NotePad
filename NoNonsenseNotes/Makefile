@@ -16,6 +16,9 @@ clean:
 install: bin/NotePad-debug.apk
 	adb install -r bin/NotePad-debug.apk
 
+uninstall:
+	adb uninstall com.nononsenseapps.notepad
+
 installrelease: bin/NotePad-release.apk
 	adb install -r bin/NotePad-release.apk
 
@@ -39,5 +42,5 @@ res/values/arrays.xml:
 test:
 	cd ../NoNonsenseNotesTest; make test
 
-testinstall:
+testandinstall:
 	cd ../NoNonsenseNotesTest; make debug install test
