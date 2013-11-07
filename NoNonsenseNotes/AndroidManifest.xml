@@ -27,8 +27,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
-    android:versionCode="103"
-    android:versionName="5.1" >
+    android:versionCode="104"
+    android:versionName="5.1.1" >
 
     <uses-sdk
         android:minSdkVersion="14"
