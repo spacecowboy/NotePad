@@ -79,6 +79,7 @@ public class DialogCalendar extends DialogFragment {
 				selected.getTime());
 
 		getDialog().setTitle(R.string.select_date);
+		getDialog().requestWindowFeature(STYLE_NO_TITLE);
 	}
 
 	@Click(R.id.dialog_no)
