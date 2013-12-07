@@ -74,9 +74,6 @@ limitations under the License.
 <string name="gtasks_sync_info">Les informations ne peuvent toutes être synchronisées avec Google Tâches. Seulement les notes, dates d\'échéance et les statuts sont synchronisés.</string>
 <string name="settings_cat_syncing">Synchronisation</string>
 <string name="gtasks">Google Tâches</string>
-<string name="dropbox">Dropbox</string>
-<string name="dropbox_enable">Synchroniser avec Dropbox</string>
-<string name="dropbox_enable_summary">Crée un répertoire spécial NoNonsense Notes dans votre Dropbox</string>
 <string name="show_from_all_lists">Toutes les listes</string>
 <string name="lists">Listes</string>
 <string name="deleted">Supprimé</string>
@@ -93,7 +90,7 @@ limitations under the License.
 
 <string name="import_data_question">Importer les données?</string>
 <string name="import_started">Importation des données. Ceci prendra quelques secondes.</string>
-<string name="import_data_msg">Voulez-vous importe les notes depuis la version donation? Lorsque terminé, vous aurez l\'option de la désinstaller.</string>
+<string name="import_data_msg">Voulez-vous importer les notes depuis la version donation? Lorsque terminé, vous aurez l\'option de la désinstaller.</string>
 <string name="imported_result">%1$d notes importées dans %2$d listes</string>
 <string name="import_error">Quelque chose n\'a pas fonctionné: %s</string>
 
@@ -170,6 +167,7 @@ Use few if language need it. In English is the same.
 <string name="date_header_none">Pas de date</string>
 <string name="date_header_completed">Complété</string>
 <string name="next_5_days">5 prochains jours</string>
+<string name="next_n_days">%d prochains jours</string>
 <string name="this_week">Cette semaine</string>
 <string name="please_select_note">SVP sélectionner ou créer une note</string>
 <string name="please_create_note">SVP créer une note</string>
@@ -205,7 +203,7 @@ Use few if language need it. In English is the same.
 <string name="sync_on_change">Synchronisation des changements</string>
 <string name="sync_on_change_info">Planifie une synchronisation peu de temps après la mise à jour d\'une note</string>
 <string name="sync_on_start">Synchronisation au démarrage</string>
-<string name="sync_on_start_info">Sera effectif seulement au prochain démarrage</string>
+<string name="sync_on_start_info">Se synchronisera toutes les 5 minutes</string>
 <string name="sync_full_force">Forcer la synchronisation</string>
 <string name="sync_full_force_info">Cocher seulement si la synchronisation semble incomplète.</string>
 <string name="snooze">Répéter</string>
@@ -239,5 +237,19 @@ Use few if language need it. In English is the same.
 <string name="dashclock_header_shown">Le nom de la liste s\'affichera en gras</string>
 <string name="dashclock_first_task_shown">Le titre de la première tâches s\'affichera en premier</string>
 <string name="dashclock_display_header">Afficher l\'en-tête</string>
+<string name="editor">Éditeur</string>
+<string name="bold">Gras</string>
+<string name="italic">Italique</string>
+<string name="normal">Normal</string>
+<string name="title_style">Style du titre</string>
+<string name="title_font">Police du titre</string>
+<string name="body_font">Police du corps de texte</string>
+<string name="clickable_links">Liens cliquables</string>
+<string name="small">Petit</string>
+<string name="medium">Moyen</string>
+<string name="large">Grand</string>
+<string name="text_size">Taille du texte</string>
+<string name="text">Texte</string>
+<string name="add_a_reminder">Ajouter un rappel</string>
 
 </resources>
