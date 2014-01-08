@@ -9,6 +9,7 @@ import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.googlecode.androidannotations.annotations.rest.Post;
 import com.nononsenseapps.helpers.ActivityHelper;
+import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.R;
 import com.squareup.timessquare.CalendarPickerView;
 
@@ -34,7 +35,9 @@ public class DialogCalendar extends DialogFragment {
 	@ViewById(R.id.dialog_no)
 	Button cancelButton;
 
-	private DateSetListener listener;
+	private DateSetListener listener = null;
+
+	private long savedSelection = -1;
 
 	/**
 	 * Use to create new list
@@ -65,11 +68,6 @@ public class DialogCalendar extends DialogFragment {
 	public void onStart() {
 		super.onStart();
 		waitToFixDialog();
-//		if (calendarView != null) {
-//			//calendarView.unfixDialogDimens();
-//			
-//			calendarView.fixDialogDimens();
-//		}
 	}
 	
 	/**
@@ -88,9 +86,16 @@ public class DialogCalendar extends DialogFragment {
 	@UiThread
 	void fixDialog() {
 		if (calendarView != null) {
-			//calendarView.unfixDialogDimens();
 			calendarView.fixDialogDimens();
 		}
+	}
+	
+	@Override
+	public void onCreate(Bundle state) {
+		if (state != null) {
+			savedSelection  = state.getLong(SELECTED_DATE, -1);
+		}
+		super.onCreate(state);
 	}
 
 	@AfterViews
@@ -99,7 +104,11 @@ public class DialogCalendar extends DialogFragment {
 		future.add(Calendar.YEAR, 1);
 		final Calendar selected = Calendar.getInstance();
 		// Must be greater/equal to today
-		if (getArguments().getLong(SELECTED_DATE, -1) >= selected
+		if (savedSelection >= selected.getTimeInMillis()) {
+			// set date
+			selected.setTimeInMillis(savedSelection);
+		}
+		else if (getArguments().getLong(SELECTED_DATE, -1) >= selected
 				.getTimeInMillis()) {
 			// set date
 			selected.setTimeInMillis(getArguments().getLong(SELECTED_DATE, -1));
@@ -127,7 +136,18 @@ public class DialogCalendar extends DialogFragment {
 		if (listener != null) {
 			listener.onDateSet(calendarView.getSelectedDate().getTime());
 		}
+		else {
+			Log.d("JONAS", "No listener available to handle click");
+		}
 
 		this.dismiss();
 	}
+	
+	@Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        if (calendarView != null) {
+        	outState.putLong(SELECTED_DATE, calendarView.getSelectedDate().getTime());
+        }
+    }
 }

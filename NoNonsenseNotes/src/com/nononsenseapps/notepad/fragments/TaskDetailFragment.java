@@ -206,6 +206,8 @@ public class TaskDetailFragment extends Fragment implements
 	// A list id is necessary
 	public static final String ARG_ITEM_LIST_ID = "item_list_id";
 	private static final String SHOWCASED_EDITOR = "showcased_editor_window";
+	// Random identifier
+	private static final String DATE_DIALOG_TAG = "date_9374jf893jd893jt";
 
 	// To override intent values with
 	@InstanceState
@@ -433,7 +435,7 @@ public class TaskDetailFragment extends Fragment implements
 			datePicker = DialogCalendar.getInstance();
 		}
 		datePicker.setListener(this);
-		datePicker.show(getFragmentManager(), "date");
+		datePicker.show(getFragmentManager(), DATE_DIALOG_TAG);
 	}
 
 	@Override
@@ -964,6 +966,12 @@ public class TaskDetailFragment extends Fragment implements
 		// Hide data from snoopers
 		if (mTask != null && isLocked()) {
 			fillUIFromTask();
+		}
+		
+		// See if there was a dialog and set listener again
+		Fragment dateDialog = getFragmentManager().findFragmentByTag(DATE_DIALOG_TAG);
+		if (dateDialog != null) {
+			((DialogCalendar) dateDialog).setListener(this);
 		}
 	}
 
