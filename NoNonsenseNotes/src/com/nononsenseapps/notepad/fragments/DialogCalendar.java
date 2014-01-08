@@ -2,9 +2,12 @@ package com.nononsenseapps.notepad.fragments;
 
 import java.util.Calendar;
 import com.googlecode.androidannotations.annotations.AfterViews;
+import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.Click;
 import com.googlecode.androidannotations.annotations.EFragment;
+import com.googlecode.androidannotations.annotations.UiThread;
 import com.googlecode.androidannotations.annotations.ViewById;
+import com.googlecode.androidannotations.annotations.rest.Post;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.notepad.R;
 import com.squareup.timessquare.CalendarPickerView;
@@ -56,6 +59,38 @@ public class DialogCalendar extends DialogFragment {
 
 	public void setListener(final DateSetListener listener) {
 		this.listener = listener;
+	}
+	
+	@Override
+	public void onStart() {
+		super.onStart();
+		waitToFixDialog();
+//		if (calendarView != null) {
+//			//calendarView.unfixDialogDimens();
+//			
+//			calendarView.fixDialogDimens();
+//		}
+	}
+	
+	/**
+	 * This can only be called when the view has been shown.
+	 * Apparently it has not been shown when onStart is called, hence
+	 * the need for the delay.
+	 */
+	@Background
+	void waitToFixDialog() {
+		try {
+		Thread.sleep(1000);
+		fixDialog();
+		} catch (Exception e) {
+		}
+	}
+	@UiThread
+	void fixDialog() {
+		if (calendarView != null) {
+			//calendarView.unfixDialogDimens();
+			calendarView.fixDialogDimens();
+		}
 	}
 
 	@AfterViews
