@@ -78,7 +78,7 @@ public class DialogCalendar extends DialogFragment {
 	@Background
 	void waitToFixDialog() {
 		try {
-		Thread.sleep(1000);
+		Thread.sleep(100);
 		fixDialog();
 		} catch (Exception e) {
 		}
