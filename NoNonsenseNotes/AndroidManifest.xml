@@ -403,10 +403,7 @@
             android:authorities="com.nononsenseapps.NotePad"
             android:enabled="true"
             android:exported="true"
-            android:grantUriPermissions="true"
-            android:permission="com.nononsenseapps.notepad.permissions.read"
-            android:readPermission="com.nononsenseapps.notepad.permissions.read"
-            android:writePermission="com.nononsenseapps.notepad.permissions.write" >
+            android:grantUriPermissions="true" >
         </provider>
 
         <!-- Location suggestions -->
