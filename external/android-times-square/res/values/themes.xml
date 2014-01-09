@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <style name="DarkTheme" parent="@android:style/Theme.Black">
+        <item name="CalendarTitle">@style/CalendarTitleDark</item>
+        <item name="CalendarCell.DayHeader">@style/CalendarCell.DayHeaderDark</item>
+        <item name="CalendarCell.CalendarDate">@style/CalendarCell.CalendarDateDark</item>
+    </style>
+    <style name="LightTheme" parent="@android:style/Theme.Light">
+        <item name="CalendarTitle">@style/CalendarTitleLight</item>
+        <item name="CalendarCell.DayHeader">@style/CalendarCell.DayHeaderLight</item>
+        <item name="CalendarCell.CalendarDate">@style/CalendarCell.CalendarDateLight</item>
+    </style>
+</resources>
