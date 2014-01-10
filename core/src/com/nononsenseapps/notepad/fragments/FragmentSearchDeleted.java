@@ -31,7 +31,7 @@ import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedLis
 import com.nononsenseapps.notepad.fragments.DialogRestore.OnListSelectedListener;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
 
-@EFragment(R.layout.fragment_search)
+@EFragment(resName="fragment_search")
 public class FragmentSearchDeleted extends FragmentSearch {
 
 	@AfterViews

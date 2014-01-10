@@ -25,12 +25,12 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Switch;
 
-@EActivity(R.layout.activity_shortcut_config)
+@EActivity(resName="activity_shortcut_config")
 public class ShortcutConfig extends Activity {
 
-	@ViewById
+	@ViewById(resName="noteSwitch")
 	Switch noteSwitch;
-	@ViewById
+	@ViewById(resName="listSpinner")
 	Spinner listSpinner;
 
 	@AfterViews
@@ -40,7 +40,7 @@ public class ShortcutConfig extends Activity {
 		setListEntries(listSpinner);
 	}
 
-	@Click(R.id.ok)
+	@Click(resName="ok")
 	void onOK() {
 		final Intent shortcutIntent = new Intent();
 		// Set icon

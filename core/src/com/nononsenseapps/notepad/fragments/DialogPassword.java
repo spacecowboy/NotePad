@@ -35,17 +35,17 @@ import com.googlecode.androidannotations.annotations.ViewById;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 
-@EFragment(R.layout.fragment_dialog_password)
+@EFragment(resName="fragment_dialog_password")
 public class DialogPassword extends DialogFragment {
-	@ViewById
+	@ViewById(resName="passwordField")
 	EditText passwordField;
 
-	@ViewById
+	@ViewById(resName="passwordVerificationField")
 	EditText passwordVerificationField;
 
-	@ViewById
+	@ViewById(resName="dialog_yes")
 	View dialog_yes;
-	@ViewById
+	@ViewById(resName="dialog_no")
 	View dialog_no;
 
 	PasswordConfirmedListener listener = null;
@@ -89,12 +89,12 @@ public class DialogPassword extends DialogFragment {
 		}
 	}
 
-	@Click(R.id.dialog_no)
+	@Click(resName="dialog_no")
 	void cancel() {
 		dismiss();
 	}
 
-	@Click(R.id.dialog_yes)
+	@Click(resName="dialog_yes")
 	void confirm() {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());

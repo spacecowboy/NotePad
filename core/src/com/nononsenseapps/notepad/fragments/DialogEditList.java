@@ -30,7 +30,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-@EFragment(R.layout.fragment_dialog_editlist)
+@EFragment(resName="fragment_dialog_editlist")
 public class DialogEditList extends DialogFragment {
 
 	public interface EditListDialogListener {
@@ -39,25 +39,25 @@ public class DialogEditList extends DialogFragment {
 
 	static final String LIST_ID = "list_id";
 
-	@ViewById
+	@ViewById(resName="sortSpinner")
 	Spinner sortSpinner;
 
-	@ViewById
+	@ViewById(resName="modeSpinner")
 	Spinner modeSpinner;
 
-	@ViewById
+	@ViewById(resName="titleField")
 	EditText titleField;
 
-	@ViewById
+	@ViewById(resName="defaultListBox")
 	CheckBox defaultListBox;
 
-	@ViewById
+	@ViewById(resName="deleteButton")
 	TextView deleteButton;
 
-	@ViewById(R.id.dialog_yes)
+	@ViewById(resName="dialog_yes")
 	Button okButton;
 
-	@ViewById(R.id.dialog_no)
+	@ViewById(resName="dialog_no")
 	Button cancelButton;
 
 	private TaskList mTaskList;
@@ -156,12 +156,12 @@ public class DialogEditList extends DialogFragment {
 		}
 	}
 
-	@AfterTextChange(R.id.titleField)
+	@AfterTextChange(resName="titleField")
 	void titleChanged(Editable text, TextView v) {
 		okButton.setEnabled(text.length() > 0);
 	}
 
-	@Click(R.id.deleteButton)
+	@Click(resName="deleteButton")
 	void deleteClicked() {
 		if (mTaskList._id > 0) {
 			DialogDeleteList.showDialog(getFragmentManager(), mTaskList._id,
@@ -174,12 +174,12 @@ public class DialogEditList extends DialogFragment {
 		}
 	}
 
-	@Click(R.id.dialog_no)
+	@Click(resName="dialog_no")
 	void cancelClicked() {
 		dismiss();
 	}
 
-	@Click(R.id.dialog_yes)
+	@Click(resName="dialog_yes")
 	void okClicked() {
 		Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT)
 				.show();

@@ -39,14 +39,14 @@ import com.nononsenseapps.notepad.prefs.PasswordPrefs;
  * Full copy of DialogPassword, but extending native fragment class instead.
  *
  */
-@EFragment(R.layout.fragment_dialog_password)
+@EFragment(resName="fragment_dialog_password")
 public class DialogPasswordV11 extends DialogFragment {
-	@ViewById
+	@ViewById(resName="passwordField")
 	EditText passwordField;
 	
-	@ViewById
+	@ViewById(resName="dialog_yes")
 	View dialog_yes;
-	@ViewById
+	@ViewById(resName="dialog_no")
 	View dialog_no;
 
 	PasswordConfirmedListener listener = null;
@@ -63,12 +63,12 @@ public class DialogPasswordV11 extends DialogFragment {
 		return null;
 	}
 	
-	@Click(R.id.dialog_no)
+	@Click(resName="dialog_no")
 	void cancel() {
 		dismiss();
 	}
 	
-	@Click(R.id.dialog_yes)
+	@Click(resName="dialog_yes")
 	void confirm() {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());

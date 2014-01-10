@@ -6,5 +6,5 @@ package com.nononsenseapps.build;
  */
 public class Config {
 	public final static boolean LOGGING = true;
-	public final static String GTASKS_API_KEY = "Put your key here";
+	public final static String GTASKS_API_KEY = "AIzaSyAJQoa7u_V-j3AcFXa00LjyRcLFzLjcZJA";
 }

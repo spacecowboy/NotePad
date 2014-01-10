@@ -30,20 +30,20 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-@EActivity(R.layout.activity_task_history)
+@EActivity(resName="activity_task_history")
 public class ActivityTaskHistory extends FragmentActivity {
 	public static final String RESULT_TEXT_KEY = "task_text_key";
 	private long mTaskID;
 	private boolean loaded = false;
 	private Cursor mCursor;
 
-	@ViewById
+	@ViewById(resName="seekBar")
 	SeekBar seekBar;
 
-	@ViewById
+	@ViewById(resName="taskText")
 	TitleNoteTextView taskText;
 
-	@ViewById
+	@ViewById(resName="timestamp")
 	TextView timestamp;
 	private SimpleDateFormat timeFormatter;
 	private SimpleDateFormat dbTimeParser;
@@ -146,7 +146,7 @@ public class ActivityTaskHistory extends FragmentActivity {
 				});
 	}
 
-	@SeekBarProgressChange(R.id.seekBar)
+	@SeekBarProgressChange(resName="seekBar")
 	void onSeekBarChanged(int progress) {
 		if (mCursor != null) {
 			if (progress < mCursor.getCount()) {

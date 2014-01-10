@@ -43,13 +43,13 @@ import android.widget.SearchView;
  * one on startup.
  * 
  */
-@EFragment(R.layout.fragment_tasklist_viewpager)
+@EFragment(resName="fragment_tasklist_viewpager")
 public class TaskListViewPagerFragment extends Fragment implements
 		EditListDialogListener, ListOpener {
 
 	public static final String START_LIST_ID = "start_list_id";
 
-	@ViewById
+	@ViewById(resName="pager")
 	ViewPager pager;
 
 	@SystemService

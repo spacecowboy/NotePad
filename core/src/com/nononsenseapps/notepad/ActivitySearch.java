@@ -13,7 +13,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
-@EActivity(R.layout.fullscreen_fragment)
+@EActivity(resName="fullscreen_fragment")
 public class ActivitySearch extends FragmentActivity {
 
 	protected String mQuery = "";

@@ -17,7 +17,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.widget.Button;
 
-@EFragment(R.layout.fragment_dialog_calendar)
+@EFragment(resName="fragment_dialog_calendar")
 public class DialogCalendar extends DialogFragment {
 
 	public interface DateSetListener {
@@ -26,13 +26,13 @@ public class DialogCalendar extends DialogFragment {
 
 	static final String SELECTED_DATE = "selected_date";
 
-	@ViewById
+	@ViewById(resName="calendarView")
 	CalendarPickerView calendarView;
 
-	@ViewById(R.id.dialog_yes)
+	@ViewById(resName="dialog_yes")
 	Button okButton;
 
-	@ViewById(R.id.dialog_no)
+	@ViewById(resName="dialog_no")
 	Button cancelButton;
 
 	private DateSetListener listener = null;
@@ -126,12 +126,12 @@ public class DialogCalendar extends DialogFragment {
 		getDialog().requestWindowFeature(STYLE_NO_TITLE);
 	}
 
-	@Click(R.id.dialog_no)
+	@Click(resName="dialog_no")
 	void cancelClicked() {
 		dismiss();
 	}
 
-	@Click(R.id.dialog_yes)
+	@Click(resName="dialog_yes")
 	void okClicked() {
 		if (listener != null) {
 			listener.onDateSet(calendarView.getSelectedDate().getTime());

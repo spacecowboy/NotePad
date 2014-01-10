@@ -74,7 +74,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 
-@EActivity(R.layout.activity_map)
+@EActivity(resName="activity_map")
 public class ActivityLocation extends Activity {
 
 	public static final String EXTRA_ID = "extra_id";
@@ -102,14 +102,14 @@ public class ActivityLocation extends Activity {
 	@SystemService
 	InputMethodManager inputManager;
 
-	@FragmentById
+	@FragmentById(resName="mapFragment")
 	MapFragment mapFragment;
 	GoogleMap mMap;
 
-	@ViewById
+	@ViewById(resName="radiusSeekBar")
 	SeekBar radiusSeekBar;
 
-	@ViewById
+	@ViewById(resName="searchView")
 	SearchView searchView;
 
 	// Plus minimum
@@ -494,14 +494,14 @@ public class ActivityLocation extends Activity {
 		return (int) (Math.sqrt(radius - radiusMin));
 	}
 
-	@SeekBarTouchStart(R.id.radiusSeekBar)
+	@SeekBarTouchStart(resName="radiusSeekBar")
 	void onRadiusChangeStart(final SeekBar seekBar) {
 		if (circle != null) {
 			circle.setFillColor(Color.TRANSPARENT);
 		}
 	}
 
-	@SeekBarProgressChange(R.id.radiusSeekBar)
+	@SeekBarProgressChange(resName="radiusSeekBar")
 	void onRadiusChanging(final SeekBar seekBar, final int progress) {
 		radius = calcRadius(progress);
 		if (circle != null) {
@@ -509,7 +509,7 @@ public class ActivityLocation extends Activity {
 		}
 	}
 
-	@SeekBarTouchStop(R.id.radiusSeekBar)
+	@SeekBarTouchStop(resName="radiusSeekBar")
 	void onRadiusChanged(final SeekBar seekBar) {
 		radius = calcRadius(seekBar.getProgress());
 		if (circle != null) {

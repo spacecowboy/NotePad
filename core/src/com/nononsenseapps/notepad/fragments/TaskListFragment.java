@@ -63,7 +63,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 
-@EFragment(R.layout.fragment_task_list)
+@EFragment(resName="fragment_task_list")
 public class TaskListFragment extends Fragment implements
 		OnSharedPreferenceChangeListener {
 
@@ -77,7 +77,7 @@ public class TaskListFragment extends Fragment implements
 	public static final String LIST_ID = "list_id";
 
 	// DragSortListView listView;
-	@ViewById(android.R.id.list)
+	@ViewById(resName="list")//android.r.id.list
 	DragSortListView listView;
 
 	@SystemService

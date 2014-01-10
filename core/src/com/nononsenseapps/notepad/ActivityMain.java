@@ -88,7 +88,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-@EActivity(R.layout.activity_main)
+@EActivity(resName="activity_main")
 public class ActivityMain extends FragmentActivity implements
 		OnFragmentInteractionListener, OnSyncStartStopListener,
 		MenuStateController, OnSharedPreferenceChangeListener {
@@ -118,20 +118,20 @@ public class ActivityMain extends FragmentActivity implements
 	private static final String SHOWCASED_MAIN = "showcased_main_window";
 	private static final String SHOWCASED_DRAWER = "showcased_main_drawer";
 
-	@ViewById
+	@ViewById(resName="leftDrawer")
 	ListView leftDrawer;
-	@ViewById
+	@ViewById(resName="drawerLayout")
 	DrawerLayout drawerLayout;
 
-	@ViewById
+	@ViewById(resName="fragment1")
 	View fragment1;
 
 	// Only present on tablets
-	@ViewById
+	@ViewById(resName="fragment2")
 	View fragment2;
 
 	// Shown on tablets on start up. Hide on selection
-	@ViewById
+	@ViewById(resName="taskHint")
 	View taskHint;
 
 	@SystemService

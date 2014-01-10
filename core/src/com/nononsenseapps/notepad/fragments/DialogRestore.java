@@ -31,20 +31,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-@EFragment(R.layout.fragment_dialog_restore)
+@EFragment(resName="fragment_dialog_restore")
 public class DialogRestore extends DialogFragment {
 
 	public interface OnListSelectedListener {
 		void onListSelected(long listId);
 	}
 
-	@ViewById
+	@ViewById(resName="listSpinner")
 	Spinner listSpinner;
 
-	@ViewById(R.id.dialog_yes)
+	@ViewById(resName="dialog_yes")
 	Button okButton;
 
-	@ViewById(R.id.dialog_no)
+	@ViewById(resName="dialog_no")
 	Button cancelButton;
 
 	private OnListSelectedListener listener;
@@ -101,12 +101,12 @@ public class DialogRestore extends DialogFragment {
 				});
 	}
 
-	@Click(R.id.dialog_no)
+	@Click(resName="dialog_no")
 	void cancelClicked() {
 		dismiss();
 	}
 
-	@Click(R.id.dialog_yes)
+	@Click(resName="dialog_yes")
 	void okClicked() {
 		Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT)
 				.show();

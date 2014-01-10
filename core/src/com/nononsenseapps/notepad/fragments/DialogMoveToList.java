@@ -41,7 +41,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-@EFragment(R.layout.fragment_dialog_movetolist)
+@EFragment(resName="fragment_dialog_movetolist")
 public class DialogMoveToList extends DialogFragment {
 
 	// public interface EditListDialogListener {
@@ -50,13 +50,13 @@ public class DialogMoveToList extends DialogFragment {
 
 	static final String TASK_IDS = "task_ids";
 
-	@ViewById
+	@ViewById(resName="listView")
 	ListView listView;
 
-	@ViewById(R.id.dialog_yes)
+	@ViewById(resName="dialog_yes")
 	Button okButton;
 
-	@ViewById(R.id.dialog_no)
+	@ViewById(resName="dialog_no")
 	Button cancelButton;
 
 	private TaskList mTaskList;
@@ -181,12 +181,12 @@ public class DialogMoveToList extends DialogFragment {
 		getActivity().getContentResolver().update(Task.URI, val, whereId, null);
 	}
 
-	@Click(R.id.dialog_no)
+	@Click(resName="dialog_no")
 	void cancelClicked() {
 		dismiss();
 	}
 
-	@Click(R.id.dialog_yes)
+	@Click(resName="dialog_yes")
 	void okClicked() {
 		// move items
 		if (listView.getCheckedItemPosition() == listView.INVALID_POSITION) {

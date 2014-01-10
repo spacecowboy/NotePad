@@ -45,7 +45,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-@EActivity(R.layout.activity_widget_config)
+@EActivity(resName="activity_widget_config")
 public class ListWidgetConfig extends FragmentActivity {
 	private static final String TAG = "ListWidgetConfig";
 	public static final String KEY_LIST = "widget1_key_list";
@@ -83,43 +83,43 @@ public class ListWidgetConfig extends FragmentActivity {
 	// All lists id
 	public final static int ALL_LISTS_ID = -2;
 
-	@ViewById
+	@ViewById(resName="widgetPreviewWrapper")
 	View widgetPreviewWrapper;
 
-	@ViewById
+	@ViewById(resName="listSpinner")
 	Spinner listSpinner;
 
-	@ViewById
+	@ViewById(resName="sortingSpinner")
 	Spinner sortingSpinner;
 
-	@ViewById
+	@ViewById(resName="itemRowsSeekBar")
 	SeekBar itemRowsSeekBar;
 
-	@ViewById
+	@ViewById(resName="transparencySeekBar")
 	SeekBar transparencySeekBar;
 
-	@ViewById
+	@ViewById(resName="themeSpinner")
 	Spinner themeSpinner;
 
-	@ViewById
+	@ViewById(resName="shade")
 	ImageView shade;
 
-	@ViewById
+	@ViewById(resName="notesList")
 	ListView notesList;
 
-	@ViewById
+	@ViewById(resName="titleButton")
 	TextView titleButton;
 
-	@ViewById
+	@ViewById(resName="widgetHeader")
 	View widgetHeader;
 
-	@ViewById
+	@ViewById(resName="transparentHeaderCheckBox")
 	CheckBox transparentHeaderCheckBox;
 
-	@ViewById
+	@ViewById(resName="hideCheckBox")
 	CheckBox hideCheckBox;
 
-	@ViewById
+	@ViewById(resName="hideDateCheckBox")
 	CheckBox hideDateCheckBox;
 
 	private int appWidgetId;

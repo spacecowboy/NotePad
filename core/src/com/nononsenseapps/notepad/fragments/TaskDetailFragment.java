@@ -178,22 +178,22 @@ public class TaskDetailFragment extends Fragment implements
 		}
 	};
 
-	@ViewById
+	@ViewById(resName="taskText")
 	StyledEditText taskText;
 
-	@ViewById
+	@ViewById(resName="taskCompleted")
 	CheckBox taskCompleted;
 
-	@ViewById
+	@ViewById(resName="dueDateBox")
 	Button dueDateBox;
 
-	@ViewById
+	@ViewById(resName="notificationList")
 	LinearLayout notificationList;
 
-	@ViewById
+	@ViewById(resName="taskSection")
 	View taskSection;
 
-	@ViewById
+	@ViewById(resName="editScrollView")
 	ScrollView editScrollView;
 
 	@SystemService
@@ -424,7 +424,7 @@ public class TaskDetailFragment extends Fragment implements
 		});
 	}
 
-	@Click(R.id.dueDateBox)
+	@Click(resName="dueDateBox")
 	void onDateClick() {
 		final Calendar localTime = Calendar.getInstance();
 		final DialogCalendar datePicker;
@@ -493,7 +493,7 @@ public class TaskDetailFragment extends Fragment implements
 		}
 	}
 
-	@Click(R.id.dueCancelButton)
+	@Click(resName="dueCancelButton")
 	void onDueRemoveClick() {
 		if (!isLocked()) {
 			if (mTask != null) {
@@ -503,7 +503,7 @@ public class TaskDetailFragment extends Fragment implements
 		}
 	}
 
-	@Click(R.id.notificationAdd)
+	@Click(resName="notificationAdd")
 	void onAddReminder() {
 		if (mTask != null && !isLocked()) {
 			// IF no id, have to save first

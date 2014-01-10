@@ -30,7 +30,7 @@ import android.widget.SearchView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SearchView.OnQueryTextListener;
 
-@EFragment(R.layout.fragment_search)
+@EFragment(resName="fragment_search")
 public class FragmentSearch extends Fragment {
 	
 	public final static String QUERY  = "query";
@@ -39,7 +39,7 @@ public class FragmentSearch extends Fragment {
 	protected
 	SearchManager searchManager;
 
-	@ViewById
+	@ViewById(resName="list")
 	protected
 	ListView list;
 
