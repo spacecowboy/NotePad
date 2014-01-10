@@ -127,7 +127,7 @@
         <copy
             failonerror="false"
             encoding="utf-8"
-            file="../NotePad_ant/config/Config.java"
+            file="../_release_keys_/config/Config.java"
             overwrite="true"
             todir="${config-target-path}" >
           <filterset>
@@ -138,15 +138,6 @@
             <filter
                 token="CONFIG.GTASKSAPIKEY"
                 value="${config.gtasksapikey.debug}" />
-<!--
-            <filter
-                token="CONFIG.DROPBOXAPPKEY"
-                value="${config.dropboxappkey}" />
-
-            <filter
-                token="CONFIG.DROPBOXAPPSECRET"
-                value="${config.dropboxappsecret}" />
--->
           </filterset>
         </copy>
       </then>
@@ -154,7 +145,7 @@
         <copy
             failonerror="false"
             encoding="utf-8"
-            file="../NotePad_ant/config/Config.java"
+            file="../_release_keys_/config/Config.java"
             overwrite="true"
             todir="${config-target-path}" >
           <filterset>
@@ -165,15 +156,6 @@
             <filter
                 token="CONFIG.GTASKSAPIKEY"
                 value="${config.gtasksapikey.release}" />
-<!--
-            <filter
-                token="CONFIG.DROPBOXAPPKEY"
-                value="${config.dropboxappkey}" />
-
-            <filter
-                token="CONFIG.DROPBOXAPPSECRET"
-                value="${config.dropboxappsecret}" />
--->
         </filterset>
         </copy>
       </else>
@@ -219,7 +201,7 @@
 	<copy
         failonerror="false"
         encoding="utf-8"
-        file="../NotePad_ant/config/Config.java"
+        file="../_release_keys_/config/Config.java"
         overwrite="true"
         todir="${config-target-path}" >
 
@@ -232,16 +214,6 @@
         <filter
             token="CONFIG.GTASKSAPIKEY"
             value="Put your key here" />
-
-<!--
-	<filter
-                token="CONFIG.DROPBOXAPPKEY"
-                value="Put your key here" />
-
-            <filter
-                token="CONFIG.DROPBOXAPPSECRET"
-                value="Put your key here" />
-   -->
 
    </filterset>
     </copy>
