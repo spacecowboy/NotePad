@@ -16,7 +16,7 @@
 
 package com.google.android.apps.dashclock.ui;
 
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 
 import android.content.Context;
 import android.content.res.Resources;

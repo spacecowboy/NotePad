@@ -9,7 +9,7 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 
 public class ActivityHelper {

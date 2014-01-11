@@ -25,8 +25,8 @@ import com.nononsenseapps.notepad.ActivityLocation_;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.ActivityTaskHistory_;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.R.layout;
+import com.nononsenseapps.notepad.core.R;
+import com.nononsenseapps.notepad.core.R.layout;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -668,14 +668,14 @@ public class TaskDetailFragment extends Fragment implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_add:
+		int itemId = item.getItemId();
+		if (itemId == R.id.menu_add) {
 			// TODO should not call if in tablet mode
 			if (mListener != null && mTask != null && mTask.dblist > 0) {
 				mListener.addTaskInList("", mTask.dblist);
 			}
 			return true;
-		case R.id.menu_revert:
+		} else if (itemId == R.id.menu_revert) {
 			// set to null to prevent modifications
 			mTask = null;
 			// Request a close from activity
@@ -683,7 +683,7 @@ public class TaskDetailFragment extends Fragment implements
 				mListener.closeFragment(this);
 			}
 			return true;
-		case R.id.menu_timemachine:
+		} else if (itemId == R.id.menu_timemachine) {
 			if (mTask != null && mTask._id > 0) {
 				Intent timeIntent = new Intent(getActivity(),
 						ActivityTaskHistory_.class);
@@ -692,7 +692,7 @@ public class TaskDetailFragment extends Fragment implements
 				// ActivityTaskHistory.start(getActivity(), mTask._id);
 			}
 			return true;
-		case R.id.menu_delete:
+		} else if (itemId == R.id.menu_delete) {
 			if (mTask != null) {
 				if (mTask.locked) {
 					DialogPassword_ delpf = new DialogPassword_();
@@ -709,7 +709,7 @@ public class TaskDetailFragment extends Fragment implements
 				}
 			}
 			return true;
-		case R.id.menu_lock:
+		} else if (itemId == R.id.menu_lock) {
 			DialogPassword_ pflock = new DialogPassword_();
 			pflock.setListener(new PasswordConfirmedListener() {
 				@Override
@@ -726,7 +726,7 @@ public class TaskDetailFragment extends Fragment implements
 			});
 			pflock.show(getFragmentManager(), "lock_verify");
 			return true;
-		case R.id.menu_unlock:
+		} else if (itemId == R.id.menu_unlock) {
 			DialogPassword_ pf = new DialogPassword_();
 			pf.setListener(new PasswordConfirmedListener() {
 				@Override

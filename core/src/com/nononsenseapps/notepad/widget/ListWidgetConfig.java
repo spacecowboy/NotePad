@@ -8,7 +8,7 @@ import com.googlecode.androidannotations.annotations.EActivity;
 import com.googlecode.androidannotations.annotations.ViewById;
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.ui.ExtrasCursorAdapter;

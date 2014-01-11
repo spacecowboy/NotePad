@@ -7,7 +7,7 @@ import com.googlecode.androidannotations.annotations.ViewById;
 
 import com.nononsenseapps.notepad.ActivityMain.ListOpener;
 import com.nononsenseapps.notepad.ActivitySearchDeleted_;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
@@ -193,22 +193,16 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		// case R.id.menu_createlist:
-		// // Show fragment
-		// DialogEditList_ dialog = DialogEditList_.getInstance();
-		// dialog.setListener(this);
-		// dialog.show(getFragmentManager(), "fragment_create_list");
-		// return true;
-		case R.id.menu_search:
+		int itemId = item.getItemId();
+		if (itemId == R.id.menu_search) {
 			// Always visible, but do this if not visible
 			// getActivity().onSearchRequested();
 			return true;
-		case R.id.menu_deletedtasks:
+		} else if (itemId == R.id.menu_deletedtasks) {
 			startActivity(new Intent(getActivity(),
 					ActivitySearchDeleted_.class));
 			return true;
-		default:
+		} else {
 			return false;
 		}
 	}

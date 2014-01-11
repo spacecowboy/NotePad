@@ -24,7 +24,7 @@ import com.googlecode.androidannotations.annotations.AfterViews;
 import com.googlecode.androidannotations.annotations.Background;
 import com.googlecode.androidannotations.annotations.EFragment;
 import com.googlecode.androidannotations.annotations.UiThread;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.DAO;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
@@ -127,8 +127,8 @@ public class FragmentSearchDeleted extends FragmentSearch {
 			@Override
 			public boolean onActionItemClicked(final ActionMode mode,
 					final MenuItem item) {
-				switch (item.getItemId()) {
-				case R.id.menu_restore:
+				int itemId = item.getItemId();
+				if (itemId == R.id.menu_restore) {
 					DialogRestore d = DialogRestore.getInstance();
 					d.setListener(new OnListSelectedListener() {
 						@Override
@@ -140,7 +140,7 @@ public class FragmentSearchDeleted extends FragmentSearch {
 					});
 					d.show(getFragmentManager(), "listselect");
 					return true;
-				case R.id.menu_delete:
+				} else if (itemId == R.id.menu_delete) {
 					DialogDeleteTask.showDialog(getFragmentManager(), -1,
 							new DialogConfirmedListener() {
 								@Override

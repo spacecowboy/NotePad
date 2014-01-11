@@ -23,7 +23,7 @@ import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.NotePadBroadcastReceiver;
 import com.nononsenseapps.notepad.widget.ListWidgetProvider;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.prefs.MainPrefs;

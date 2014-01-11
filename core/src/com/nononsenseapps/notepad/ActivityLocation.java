@@ -54,6 +54,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.notepad.ActivityLocation.GeofenceSampleReceiver;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.util.GeofenceRemover;
 import com.nononsenseapps.util.GeofenceRequester;

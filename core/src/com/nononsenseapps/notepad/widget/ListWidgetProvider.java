@@ -34,7 +34,7 @@ import android.widget.RemoteViews;
 
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.NotePadBroadcastReceiver;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;

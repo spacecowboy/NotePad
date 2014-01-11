@@ -18,7 +18,7 @@ package com.nononsenseapps.support.app;
 
 import java.util.ArrayList;
 
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 
 import android.annotation.TargetApi;
 import android.app.Fragment;

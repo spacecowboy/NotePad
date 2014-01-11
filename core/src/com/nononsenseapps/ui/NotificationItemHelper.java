@@ -9,7 +9,7 @@ import java.util.GregorianCalendar;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityLocation;
 import com.nononsenseapps.notepad.ActivityLocation_;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.fragments.DialogCalendar;
@@ -147,15 +147,15 @@ public class NotificationItemHelper {
 
 			@Override
 			public boolean onMenuItemClick(MenuItem item) {
-				switch (item.getItemId()) {
-				case R.id.not_type_time:
+				int itemId = item.getItemId();
+				if (itemId == R.id.not_type_time) {
 					switchToTime(nv);
 					return true;
-				case R.id.not_type_location:
+				} else if (itemId == R.id.not_type_location) {
 					switchToLocation(nv);
 					startLocationActivity(fragment, not);
 					return true;
-				default:
+				} else {
 					return false;
 				}
 			}

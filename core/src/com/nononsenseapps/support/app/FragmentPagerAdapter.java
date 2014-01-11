@@ -17,7 +17,7 @@
 package com.nononsenseapps.support.app;
 
 import com.nononsenseapps.helpers.Log;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 
 import android.annotation.TargetApi;
 import android.app.Fragment;

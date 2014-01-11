@@ -18,7 +18,7 @@ import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
@@ -563,8 +563,8 @@ public class TaskListFragment extends Fragment implements
 					MenuItem item) {
 				// Respond to clicks on the actions in the CAB
 				boolean finish = false;
-				switch (item.getItemId()) {
-				case R.id.menu_copy:
+				int itemId = item.getItemId();
+				if (itemId == R.id.menu_copy) {
 					final ClipboardManager clipboard = (ClipboardManager) getActivity()
 							.getSystemService(Context.CLIPBOARD_SERVICE);
 					clipboard.setPrimaryClip(ClipData.newPlainText(
@@ -581,8 +581,7 @@ public class TaskListFragment extends Fragment implements
 						// Protect against faulty translations
 					}
 					finish = true;
-					break;
-				case R.id.menu_delete:
+				} else if (itemId == R.id.menu_delete) {
 					boolean locked = false;
 					for (final Task t : tasks.values()) {
 						if (t.locked) {
@@ -604,19 +603,16 @@ public class TaskListFragment extends Fragment implements
 									}
 								});
 					}
-					break;
-				case R.id.menu_switch_list:
+				} else if (itemId == R.id.menu_switch_list) {
 					// show move to list dialog
 					DialogMoveToList.getInstance(
 							tasks.keySet().toArray(new Long[tasks.size()]))
 							.show(getFragmentManager(), "move_to_list_dialog");
 					finish = true;
-					break;
-				case R.id.menu_share:
+				} else if (itemId == R.id.menu_share) {
 					startActivity(getShareIntent());
 					finish = true;
-					break;
-				default:
+				} else {
 					finish = false;
 				}
 
@@ -709,8 +705,8 @@ public class TaskListFragment extends Fragment implements
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case R.id.menu_add:
+		int itemId = item.getItemId();
+		if (itemId == R.id.menu_add) {
 			if (mListener != null && mListId > 0) {
 				mListener.addTaskInList("", mListId);
 			}
@@ -719,20 +715,13 @@ public class TaskListFragment extends Fragment implements
 						.getARealList(getActivity(), -1));
 			}
 			return true;
-			// case R.id.menu_managelists:
-			// // Show fragment
-			// if (mListId > 0) {
-			// DialogEditList_ dialog = DialogEditList_.getInstance(mListId);
-			// dialog.show(getFragmentManager(), "fragment_edit_list");
-			// }
-			// return true;
-		case R.id.menu_clearcompleted:
+		} else if (itemId == R.id.menu_clearcompleted) {
 			if (mListId != -1) {
 				DialogDeleteCompletedTasks.showDialog(getFragmentManager(),
 						mListId, null);
 			}
 			return true;
-		default:
+		} else {
 			return false;
 		}
 	}

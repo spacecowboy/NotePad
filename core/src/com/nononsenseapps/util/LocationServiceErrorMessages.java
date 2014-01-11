@@ -17,7 +17,7 @@
 package com.nononsenseapps.util;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 
 import android.content.Context;
 import android.content.res.Resources;

@@ -9,7 +9,7 @@ import java.util.List;
 
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.ui.WeekDaysView;
 import com.nononsenseapps.util.GeofenceRemover;
 import com.nononsenseapps.utils.views.GreyableToggleButton;

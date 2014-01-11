@@ -1,6 +1,6 @@
 package com.nononsenseapps.notepad.prefs;
 
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 
 import android.os.Bundle;
 import android.preference.PreferenceFragment;

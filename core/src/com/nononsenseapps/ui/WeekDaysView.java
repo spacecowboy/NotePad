@@ -6,7 +6,7 @@ import java.util.Locale;
 
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.utils.views.GreyableToggleButton;
 
 import android.content.Context;

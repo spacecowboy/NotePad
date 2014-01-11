@@ -31,7 +31,7 @@ import android.util.AttributeSet;
 import android.widget.TextView;
 
 import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 
 /**
  * A simple textview that can display time.

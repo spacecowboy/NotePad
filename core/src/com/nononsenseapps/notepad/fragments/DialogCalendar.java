@@ -10,7 +10,7 @@ import com.googlecode.androidannotations.annotations.ViewById;
 import com.googlecode.androidannotations.annotations.rest.Post;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.Log;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.squareup.timessquare.CalendarPickerView;
 
 import android.os.Bundle;

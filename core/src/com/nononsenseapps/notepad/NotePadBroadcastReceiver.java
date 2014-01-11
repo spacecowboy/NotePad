@@ -1,5 +1,6 @@
 package com.nononsenseapps.notepad;
 
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.Task;
 
 import android.content.BroadcastReceiver;

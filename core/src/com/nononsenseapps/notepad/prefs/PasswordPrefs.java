@@ -16,7 +16,7 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogPasswordV11_;
 

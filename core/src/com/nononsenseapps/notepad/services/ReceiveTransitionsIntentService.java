@@ -5,7 +5,7 @@ import com.google.android.gms.location.LocationClient;
 import com.googlecode.androidannotations.annotations.EService;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.notepad.ActivityMain_;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.util.GeofenceUtils;
 import com.nononsenseapps.util.LocationServiceErrorMessages;
 

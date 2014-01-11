@@ -15,7 +15,7 @@
      limitations under the License.
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:robobunny="http://schemas.android.com/apk/res/com.nononsenseapps.notepad"
+    xmlns:robobunny="http://schemas.android.com/apk/res-auto"
     android:key="preference_screen_list" >
 
     <ListPreference

@@ -26,6 +26,7 @@ import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
 import com.nononsenseapps.notepad.ActivityLocation.ErrorDialogFragment;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Notification;
@@ -970,8 +971,8 @@ public class ActivityMain extends FragmentActivity implements
 			return true;
 		}
 		// Handle your other action bar items...
-		switch (item.getItemId()) {
-		case android.R.id.home:
+		int itemId = item.getItemId();
+		if (itemId == android.R.id.home) {
 			if (showingEditor) {
 				// Only true in portrait mode
 				final View focusView = ActivityMain.this.getCurrentFocus();
@@ -1009,7 +1010,7 @@ public class ActivityMain extends FragmentActivity implements
 			// else
 			// Handled by drawer
 			return true;
-		case R.id.drawer_menu_createlist:
+		} else if (itemId == R.id.drawer_menu_createlist) {
 			// Show fragment
 			DialogEditList_ dialog = DialogEditList_.getInstance();
 			dialog.setListener(new EditListDialogListener() {
@@ -1021,12 +1022,12 @@ public class ActivityMain extends FragmentActivity implements
 			});
 			dialog.show(getSupportFragmentManager(), "fragment_create_list");
 			return true;
-		case R.id.menu_preferences:
+		} else if (itemId == R.id.menu_preferences) {
 			Intent intent = new Intent();
 			intent.setClass(this, PrefsActivity.class);
 			startActivity(intent);
 			return true;
-		case R.id.menu_donate:
+		} else if (itemId == R.id.menu_donate) {
 			try {
 				mBillingHelper.launchPurchaseFlow(this, SKU_INAPP_PREMIUM,
 						SKU_DONATE_REQUEST_CODE,
@@ -1067,11 +1068,12 @@ public class ActivityMain extends FragmentActivity implements
 								+ e.getLocalizedMessage());
 			}
 			return true;
-		case R.id.menu_sync:
+		} else if (itemId == R.id.menu_sync) {
 			handleSyncRequest();
 			return true;
-		case R.id.menu_delete:
-		default:
+		} else if (itemId == R.id.menu_delete) {
+			return false;
+		} else {
 			return false;
 		}
 	}

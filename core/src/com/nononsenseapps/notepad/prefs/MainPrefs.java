@@ -21,8 +21,8 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 import com.nononsenseapps.notepad.ActivityMain;
-import com.nononsenseapps.notepad.BuildConfig;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.BuildConfig;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.helpers.TimeFormatter;
 
 import android.os.Bundle;

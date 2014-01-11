@@ -2,7 +2,7 @@ package com.nononsenseapps.notepad.prefs;
 
 import java.util.List;
 import java.util.Locale;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 
 import android.app.ActionBar;
 import android.app.Activity;

@@ -25,7 +25,7 @@
 -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.nononsenseapps.notepad"
+    package="com.nononsenseapps.notepad.core"
     android:installLocation="internalOnly"
     android:versionCode="106"
     android:versionName="5.1.3" >

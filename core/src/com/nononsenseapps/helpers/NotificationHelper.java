@@ -7,7 +7,7 @@ import java.util.HashSet;
 import java.util.List;
 
 import com.nononsenseapps.notepad.ActivityMain;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.util.GeofenceRemover;
 

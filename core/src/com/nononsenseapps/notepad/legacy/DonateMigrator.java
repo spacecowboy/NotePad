@@ -6,7 +6,7 @@ import java.util.HashMap;
 import com.googlecode.androidannotations.annotations.EService;
 import com.googlecode.androidannotations.annotations.UiThread;
 import com.nononsenseapps.notepad.ActivityMain;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;

@@ -19,7 +19,7 @@ package com.nononsenseapps.notepad.prefs;
 import java.io.IOException;
 
 // import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;

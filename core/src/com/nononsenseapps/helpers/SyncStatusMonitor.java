@@ -10,7 +10,7 @@ import android.content.IntentFilter;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;

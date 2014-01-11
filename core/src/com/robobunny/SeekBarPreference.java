@@ -8,7 +8,7 @@ package com.robobunny;
  * It has been modified to handle attributes (strings etc) dynamically.
  */
 
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.core.R;
 
 import android.content.Context;
 import android.content.res.TypedArray;
