@@ -2,8 +2,8 @@ package com.nononsenseapps.notepad;
 
 import android.support.v4.app.Fragment;
 
-import com.googlecode.androidannotations.annotations.AfterViews;
-import com.googlecode.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
 import com.nononsenseapps.notepad.fragments.FragmentSearch;
 import com.nononsenseapps.notepad.fragments.FragmentSearchDeleted_;
 

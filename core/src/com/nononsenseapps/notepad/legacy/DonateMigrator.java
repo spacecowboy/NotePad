@@ -3,8 +3,8 @@ package com.nononsenseapps.notepad.legacy;
 import java.text.ParseException;
 import java.util.HashMap;
 
-import com.googlecode.androidannotations.annotations.EService;
-import com.googlecode.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.EService;
+import org.androidannotations.annotations.UiThread;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;

@@ -3,9 +3,9 @@ package com.nononsenseapps.notepad.widget;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import com.googlecode.androidannotations.annotations.AfterViews;
-import com.googlecode.androidannotations.annotations.EActivity;
-import com.googlecode.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.core.R;

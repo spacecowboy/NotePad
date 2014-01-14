@@ -1,7 +1,7 @@
 package com.nononsenseapps.notepad;
 
-import com.googlecode.androidannotations.annotations.AfterViews;
-import com.googlecode.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.fragments.FragmentSearch;

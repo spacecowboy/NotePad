@@ -22,7 +22,7 @@
   <property name="generated.absolute.dir" location="${generated.dir}" />
   <property name="java.compilerargs" value="-s &apos;${generated.absolute.dir}&apos;" />
 
-  <target name="-compile" depends="-pre-build, -build-setup, -code-gen, -pre-compile">
+  <target name="-compile" depends="-build-setup, -pre-build, -code-gen, -pre-compile">
         <do-only-if-manifest-hasCode elseText="hasCode = false. Skipping...">
             <!-- merge the project's own classpath and the tested project's classpath -->
             <path id="project.javac.classpath">
@@ -164,11 +164,10 @@
 
   <target
       name="-pre-compile"
-      depends="config" />
-
-  <!-- for annotations -->
-  <mkdir dir="${generated.absolute.dir}" />
-
+      depends="config" >
+    <!-- for annotations -->
+    <mkdir dir="${generated.absolute.dir}" />
+  </target>
   <!-- Copy the binary to a location that includes version number -->
 
   <xmlproperty

@@ -2,7 +2,7 @@ package com.nononsenseapps.notepad.services;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.LocationClient;
-import com.googlecode.androidannotations.annotations.EService;
+import org.androidannotations.annotations.EService;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.core.R;
