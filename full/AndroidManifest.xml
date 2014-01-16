@@ -63,7 +63,7 @@
     <permission
         android:name="com.nononsenseapps.notepad.permission.MAPS_RECEIVE"
         android:protectionLevel="signature" />
-    <!-- Maps crashed because it did not have this permission, wierd -->
+    <!-- Maps crashed because it did not have this permission, weird -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <uses-permission android:name="com.nononsenseapps.notepad.permission.MAPS_RECEIVE" />
