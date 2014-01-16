@@ -15,6 +15,7 @@ import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.UiThread.Propagation;
 import org.androidannotations.annotations.ViewById;
 import com.nononsenseapps.billing.IabHelper;
 import com.nononsenseapps.billing.IabResult;
@@ -703,7 +704,7 @@ public class ActivityMain extends FragmentActivity implements
 		}
 	}
 
-	@UiThread
+	@UiThread(propagation=Propagation.REUSE)
 	void loadFragments() {
 		final Intent intent = getIntent();
 

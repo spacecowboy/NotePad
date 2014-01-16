@@ -6,6 +6,8 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.UiThread.Propagation;
+
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -141,7 +143,7 @@ public class DialogEditList extends DialogFragment {
 		}
 	}
 
-	@UiThread
+	@UiThread(propagation=Propagation.REUSE)
 	void fillViews() {
 		titleField.setText(mTaskList.title);
 		selectSortKey();

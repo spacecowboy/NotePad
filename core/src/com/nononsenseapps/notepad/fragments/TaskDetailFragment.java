@@ -18,6 +18,8 @@ import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+import org.androidannotations.annotations.UiThread.Propagation;
+
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityLocation;
@@ -553,7 +555,7 @@ public class TaskDetailFragment extends Fragment implements
 		return false;
 	}
 
-	@UiThread
+	@UiThread(propagation=Propagation.REUSE)
 	void fillUIFromTask() {
 		Log.d("nononsenseapps editor", "fillUI, act: " + getActivity());
 		if (isLocked()) {
@@ -939,7 +941,7 @@ public class TaskDetailFragment extends Fragment implements
 	 * 
 	 * @param not
 	 */
-	@UiThread
+	@UiThread(propagation=Propagation.REUSE)
 	void addNotification(final Notification not) {
 		if (getActivity() != null) {
 			View nv = LayoutInflater.from(getActivity()).inflate(
