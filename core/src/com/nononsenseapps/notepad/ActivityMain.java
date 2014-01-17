@@ -426,7 +426,6 @@ public class ActivityMain extends FragmentActivity implements
 	/**
 	 * Load a list of lists in the left
 	 */
-	@AfterViews
 	protected void loadLeftDrawer() {
 		// TODO handle being called repeatably better?
 		// Set a listener on drawer events
@@ -697,6 +696,7 @@ public class ActivityMain extends FragmentActivity implements
 	 */
 	@AfterViews
 	protected void loadContent() {
+		loadLeftDrawer();
 		loadFragments();
 
 		if (!showingEditor || fragment2 != null) {

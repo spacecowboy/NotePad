@@ -153,6 +153,12 @@ public class TaskDetailFragment extends Fragment implements
 					args.putLong(ARG_ITEM_LIST_ID, mTask.dblist);
 					getLoaderManager().restartLoader(LOADER_EDITOR_TASKLISTS,
 							args, this);
+					
+					args.clear();
+					args.putLong(ARG_ITEM_ID,
+							getArguments().getLong(ARG_ITEM_ID, stateId));
+					getLoaderManager().restartLoader(LOADER_EDITOR_NOTIFICATIONS, args,
+							loaderCallbacks);
 				}
 				else {
 					// Should kill myself maybe?
@@ -314,8 +320,6 @@ public class TaskDetailFragment extends Fragment implements
 			args.putLong(ARG_ITEM_ID,
 					getArguments().getLong(ARG_ITEM_ID, stateId));
 			getLoaderManager().restartLoader(LOADER_EDITOR_TASK, args,
-					loaderCallbacks);
-			getLoaderManager().restartLoader(LOADER_EDITOR_NOTIFICATIONS, args,
 					loaderCallbacks);
 		}
 		else {
