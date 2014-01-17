@@ -3,6 +3,9 @@ package com.nononsenseapps.notepad.database;
 import java.security.InvalidParameterException;
 import java.util.Calendar;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.app.SearchManager;
 import android.content.ContentResolver;
 import android.content.ContentValues;
@@ -801,6 +804,27 @@ public class Task extends DAO {
 				this.right = values.getAsLong(Columns.RIGHT);
 			}
 		}
+	}
+	
+	public Task(final JSONObject json) throws JSONException {
+		if (json.has(Columns.TITLE))
+			this.title = json.getString(Columns.TITLE);
+		if (json.has(Columns.NOTE))
+			this.note = json.getString(Columns.NOTE);
+		if (json.has(Columns.COMPLETED))
+			this.completed = json.getLong(Columns.COMPLETED);
+		if (json.has(Columns.DUE))
+			this.due = json.getLong(Columns.DUE);
+		if (json.has(Columns.UPDATED))
+			this.updated = json.getLong(Columns.UPDATED);
+		if (json.has(Columns.LOCKED))
+			this.locked = json.getLong(Columns.LOCKED) == 1;
+		if (json.has(Columns.DBLIST))
+			this.dblist = json.getLong(Columns.DBLIST);
+		if (json.has(Columns.LEFT))
+			this.left = json.getLong(Columns.LEFT);
+		if (json.has(Columns.RIGHT))
+			this.right = json.getLong(Columns.RIGHT);
 	}
 
 	/**

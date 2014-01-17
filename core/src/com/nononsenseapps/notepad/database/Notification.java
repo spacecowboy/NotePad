@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.core.R;
@@ -228,6 +231,25 @@ public class Notification extends DAO {
 	public Notification(final long id, final ContentValues values) {
 		this(values);
 		_id = id;
+	}
+	
+	public Notification(final JSONObject json) throws JSONException {
+		if (json.has(Columns.TIME))
+			time = json.getLong(Columns.TIME);
+		if (json.has(Columns.PERMANENT))
+			permanent = 1 == json.getLong(Columns.PERMANENT);
+		if (json.has(Columns.TASKID))
+			taskID = json.getLong(Columns.TASKID);
+		if (json.has(Columns.REPEATS))
+			repeats = json.getLong(Columns.REPEATS);
+		if (json.has(Columns.LOCATIONNAME))
+			locationName = json.getString(Columns.LOCATIONNAME);
+		if (json.has(Columns.LATITUDE))
+			latitude = json.getDouble(Columns.LATITUDE);
+		if (json.has(Columns.LONGITUDE))
+			longitude = json.getDouble(Columns.LONGITUDE);
+		if (json.has(Columns.RADIUS))
+			radius = json.getDouble(Columns.RADIUS);
 	}
 
 	public Notification(final ContentValues values) {

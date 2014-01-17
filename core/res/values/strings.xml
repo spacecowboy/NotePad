@@ -275,5 +275,16 @@
     <string name="text_size">Text size</string>
     <string name="text">Text</string>
     <string name="add_a_reminder">Add a reminder</string>
+    
+    <string name="backup">Backup</string>
+    <string name="backup_import">Import backup</string>
+    <string name="backup_export">Export backup</string>
+    <string name="backup_import_msg">Try to import backup from %1$s? This will clear the current database.</string>
+    <string name="backup_export_msg">Export all notes to %1$s?</string>
+    <string name="backup_import_success">Backup imported successfully</string>
+    <string name="backup_file_not_found">The backup file could not be found</string>
+    <string name="backup_import_failed">Failed to read the backup file</string>
+    <string name="backup_export_success">Backup exported successfully</string>
+    <string name="backup_export_failed">Can\'t write to the backup file</string>
 
 </resources>

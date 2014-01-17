@@ -1,5 +1,10 @@
 package com.nononsenseapps.notepad.database;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.nononsenseapps.notepad.database.RemoteTaskList.Columns;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
@@ -183,6 +188,31 @@ public class RemoteTask extends DAO {
 	public RemoteTask(final long id, final ContentValues values) {
 		this(values);
 		_id = id;
+	}
+	
+	public RemoteTask(final JSONObject json) throws JSONException {
+		if (json.has(Columns.DBID))
+			dbid = json.getLong(Columns.DBID);
+		if (json.has(Columns.REMOTEID))
+			remoteId = json.getString(Columns.REMOTEID);
+		if (json.has(Columns.UPDATED))
+			updated = json.getLong(Columns.UPDATED);
+		if (json.has(Columns.ACCOUNT))
+			account = json.getString(Columns.ACCOUNT);
+		if (json.has(Columns.SERVICE))
+			service = json.getString(Columns.SERVICE);
+		if (json.has(Columns.LISTDBID))
+			listdbid = json.getLong(Columns.LISTDBID);
+		if (json.has(Columns.DELETED))
+			deleted = json.getString(Columns.DELETED);
+		if (json.has(Columns.FIELD2))
+			field2 = json.getString(Columns.FIELD2);
+		if (json.has(Columns.FIELD3))
+			field3 = json.getString(Columns.FIELD3);
+		if (json.has(Columns.FIELD4))
+			field4 = json.getString(Columns.FIELD4);
+		if (json.has(Columns.FIELD5))
+			field5 = json.getString(Columns.FIELD5);
 	}
 
 	public RemoteTask(final ContentValues values) {

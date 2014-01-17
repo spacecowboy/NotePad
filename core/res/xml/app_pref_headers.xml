@@ -42,6 +42,11 @@
         android:summary=""
         android:title="@string/password" />
     <header
+        android:fragment="com.nononsenseapps.notepad.prefs.BackupPrefs"
+        android:icon="@drawable/ic_action_device_access_sd_storage_dark"
+        android:summary=""
+        android:title="@string/backup" />
+    <header
         android:fragment="com.nononsenseapps.notepad.prefs.ChangelogPrefs"
         android:icon="@drawable/action_help_dark"
         android:summary=""
