@@ -526,12 +526,13 @@ public class GoogleTaskSync {
 	static List<GoogleTask> downloadChangedTasks(final Context context,
 			final GoogleAPITalker apiTalker, final GoogleTaskList remoteList)
 			throws ClientProtocolException, IOException, JSONException {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
+//		final SharedPreferences settings = PreferenceManager
+//				.getDefaultSharedPreferences(context);
+//		RFC3339Date.asRFC3339(settings.getLong(
+//				PREFS_GTASK_LAST_SYNC_TIME, 0))
 
 		final List<GoogleTask> remoteTasks = apiTalker.getModifiedTasks(
-				RFC3339Date.asRFC3339(settings.getLong(
-						PREFS_GTASK_LAST_SYNC_TIME, 0)), remoteList);
+				null, remoteList);
 
 		return remoteTasks;
 	}

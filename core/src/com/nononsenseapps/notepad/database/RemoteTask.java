@@ -57,7 +57,7 @@ public class RemoteTask extends DAO {
 		public static final String FIELD5 = "field5";
 
 		public static final String[] FIELDS = { _ID, DBID, REMOTEID, UPDATED,
-				ACCOUNT, LISTDBID, DELETED, FIELD2, FIELD3, FIELD4, FIELD5 };
+				ACCOUNT, LISTDBID, DELETED, FIELD2, FIELD3, FIELD4, FIELD5, SERVICE };
 	}
 
 	/**
@@ -135,7 +135,7 @@ public class RemoteTask extends DAO {
 	public String field5 = null;
 
 	public boolean isDeleted() {
-		return deleted != null && !deleted.isEmpty();
+		return deleted != null && deleted.equals("deleted");
 	}
 
 	public void setDeleted(final boolean deleted) {
@@ -179,6 +179,8 @@ public class RemoteTask extends DAO {
 		field3 = c.isNull(8) ? null : c.getString(8);
 		field4 = c.isNull(9) ? null : c.getString(9);
 		field5 = c.isNull(10) ? null : c.getString(10);
+		
+		service = c.getString(11);
 	}
 
 	public RemoteTask(final Uri uri, final ContentValues values) {

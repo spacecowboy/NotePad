@@ -17,6 +17,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.os.Environment;
+import android.util.Log;
 
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.notepad.database.Notification;
@@ -262,6 +263,8 @@ public class JSONBackup {
 
 			if (!jsonlist.isNull(KEY_REMOTES)) {
 				restoreRemotes(tasklist, jsonlist.getJSONArray(KEY_REMOTES));
+			}else {
+				Log.d("JONAS", "Remotes was null");
 			}
 			if (!jsonlist.isNull(KEY_TASKS)) {
 				restoreTasks(tasklist, jsonlist.getJSONArray(KEY_TASKS));
@@ -303,11 +306,13 @@ public class JSONBackup {
 
 	private void restoreRemotes(final TaskList tasklist,
 			final JSONArray jsonArray) throws JSONException {
+		Log.d("JONAS", "Remote length: " + jsonArray.length());
 		for (int i = 0; i < jsonArray.length(); i++) {
 			final JSONObject json = jsonArray.getJSONObject(i);
 			final RemoteTaskList remote = new RemoteTaskList(json);
 			remote.dbid = tasklist._id;
 			remote.save(context);
+			Log.d("JONAS", "RemoteL restored: " + remote._id);
 		}
 	}
 
@@ -339,6 +344,7 @@ public class JSONBackup {
 			remote.dbid = task._id;
 			remote.listdbid = task.dblist;
 			remote.save(context);
+			Log.d("JONAS", "RemoteT restored: " + remote._id);
 		}
 	}
 

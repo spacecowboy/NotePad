@@ -55,7 +55,9 @@ public class RemoteTaskList extends DAO {
 		public static final String FIELD4 = "field4";
 		public static final String FIELD5 = "field5";
 
-		public static final String[] FIELDS = { _ID, DBID, REMOTEID, UPDATED, ACCOUNT, DELETED, FIELD2, FIELD3, FIELD4, FIELD5 };
+		public static final String[] FIELDS = { _ID, DBID, REMOTEID, 
+			UPDATED, ACCOUNT, DELETED, FIELD2,
+			FIELD3, FIELD4, FIELD5, SERVICE };
 	}
 
 	/**
@@ -122,6 +124,8 @@ public class RemoteTaskList extends DAO {
 		field3  = c.isNull(7) ? null : c.getString(7);
 		field4  = c.isNull(8) ? null : c.getString(8);
 		field5  = c.isNull(9) ? null : c.getString(9);
+		
+		service = c.getString(10);
 	}
 
 	public RemoteTaskList(final Uri uri, final ContentValues values) {
