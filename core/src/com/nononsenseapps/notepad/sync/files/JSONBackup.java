@@ -275,6 +275,8 @@ public class JSONBackup {
 	}
 
 	private void clearDatabase() {
+		// TODO Remove geofences
+		
 		context.getContentResolver().delete(RemoteTask.URI, null, null);
 		context.getContentResolver().delete(RemoteTaskList.URI, null, null);
 
@@ -282,6 +284,7 @@ public class JSONBackup {
 
 		context.getContentResolver().delete(Task.URI, null, null);
 		context.getContentResolver().delete(Notification.URI, null, null);
+		
 	}
 
 	private JSONObject readBackup() throws JSONException, IOException,

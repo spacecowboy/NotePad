@@ -12,12 +12,13 @@ import com.nononsenseapps.notepad.ActivityLocation_;
 import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.fragments.DialogCalendar;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
-import com.doomonafireball.betterpickers.timepicker.TimePickerDialogFragment;
-import com.doomonafireball.betterpickers.timepicker.TimePickerDialogFragment.TimePickerDialogHandler;
-import com.nononsenseapps.notepad.fragments.DialogCalendar.DateSetListener;
 import com.nononsenseapps.ui.WeekDaysView.onCheckedDaysChangeListener;
+import com.android.datetimepicker.time.TimePickerDialog;
+import com.android.datetimepicker.time.TimePickerDialog.OnTimeSetListener;
+import com.android.datetimepicker.time.RadialPickerLayout;
+import com.android.datetimepicker.date.DatePickerDialog;
+import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 
 import android.content.Context;
 import android.content.Intent;
@@ -89,8 +90,7 @@ public class NotificationItemHelper {
 		// Start with date
 		if (mTask.due != null) {
 			cal.setTimeInMillis(mTask.due);
-		}
-		else {
+		} else {
 			cal.add(Calendar.DAY_OF_YEAR, 1);
 		}
 		// Now set a reasonable time of day like 9 AM
@@ -123,8 +123,7 @@ public class NotificationItemHelper {
 
 		if (not.radius == null) {
 			switchToTime(nv);
-		}
-		else {
+		} else {
 			switchToLocation(nv);
 		}
 
@@ -183,8 +182,7 @@ public class NotificationItemHelper {
 							break;
 						}
 					}
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				popup.setOnMenuItemClickListener(onTypeListener);
@@ -231,8 +229,7 @@ public class NotificationItemHelper {
 							break;
 						}
 					}
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				popup.setOnMenuItemClickListener(onTypeListener);
@@ -244,7 +241,8 @@ public class NotificationItemHelper {
 		// Location button
 		final TextView location = (TextView) nv
 				.findViewById(R.id.notificationLocation);
-		if (not.locationName != null) location.setText(not.locationName);
+		if (not.locationName != null)
+			location.setText(not.locationName);
 
 		location.setOnClickListener(new OnClickListener() {
 			@Override
@@ -275,37 +273,64 @@ public class NotificationItemHelper {
 			@Override
 			public void onClick(View v) {
 				if (!fragment.isLocked()) {
-					final DialogCalendar datePicker;
 
-					if (mTask != null && mTask.due != null) {
-						datePicker = DialogCalendar.getInstance(mTask.due);
+					final Calendar localTime = Calendar.getInstance();
+					if (not.time != null) {
+						localTime.setTimeInMillis(not.time);
 					}
-					else {
-						datePicker = DialogCalendar.getInstance();
-					}
-					datePicker.setListener(new DateSetListener() {
 
-						@Override
-						public void onDateSet(long time) {
-							final Calendar localTime = Calendar.getInstance();
-							localTime.setTimeInMillis(time);
-							if (not.time != null) {
-								final Calendar notTime = Calendar.getInstance();
-								notTime.setTimeInMillis(not.time);
-								localTime.set(Calendar.HOUR_OF_DAY,
-										notTime.get(Calendar.HOUR_OF_DAY));
-								localTime.set(Calendar.MINUTE,
-										notTime.get(Calendar.MINUTE));
-							}
-
-							not.time = localTime.getTimeInMillis();
-							notDateButton.setText(not.getLocalDateText(fragment
+					final DatePickerDialog datedialog = DatePickerDialog
+							.newInstance(new OnDateSetListener() {
+								@Override
+								public void onDateSet(DatePickerDialog dialog,
+										int year, int monthOfYear,
+										int dayOfMonth) {
+									localTime.set(Calendar.YEAR, year);
+									localTime.set(Calendar.MONTH, monthOfYear);
+									localTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+									
+									not.time = localTime.getTimeInMillis();
+									notDateButton.setText(not.getLocalDateText(fragment
 									.getActivity()));
-							not.save(fragment.getActivity(), true);
-						}
-					});
+									not.save(fragment.getActivity(), true);
+								}
+							}, localTime.get(Calendar.YEAR), localTime
+									.get(Calendar.MONTH), localTime
+									.get(Calendar.DAY_OF_MONTH));
+					
+					datedialog.show(fragment.getFragmentManager(), "date");
 
-					datePicker.show(fragment.getFragmentManager(), "date");
+					// final DialogCalendar datePicker;
+					//
+					// if (mTask != null && mTask.due != null) {
+					// datePicker = DialogCalendar.getInstance(mTask.due);
+					// }
+					// else {
+					// datePicker = DialogCalendar.getInstance();
+					// }
+					// datePicker.setListener(new DateSetListener() {
+					//
+					// @Override
+					// public void onDateSet(long time) {
+					// final Calendar localTime = Calendar.getInstance();
+					// localTime.setTimeInMillis(time);
+					// if (not.time != null) {
+					// final Calendar notTime = Calendar.getInstance();
+					// notTime.setTimeInMillis(not.time);
+					// localTime.set(Calendar.HOUR_OF_DAY,
+					// notTime.get(Calendar.HOUR_OF_DAY));
+					// localTime.set(Calendar.MINUTE,
+					// notTime.get(Calendar.MINUTE));
+					// }
+					//
+					// not.time = localTime.getTimeInMillis();
+					// notDateButton.setText(not.getLocalDateText(fragment
+					// .getActivity()));
+					// not.save(fragment.getActivity(), true);
+					// }
+					// });
+					//
+					// datePicker.show(fragment.getFragmentManager(), "date");
 
 				}
 			}
@@ -316,16 +341,21 @@ public class NotificationItemHelper {
 			@Override
 			public void onClick(View v) {
 				if (!fragment.isLocked()) {
-					// Now display time picker
-					final TimePickerDialogFragment timePicker = fragment
-							.getTimePickerFragment();
-					timePicker.setListener(new TimePickerDialogHandler() {
+					// Display time picker
+					final Calendar localTime = Calendar.getInstance();
+					if (not.time != null) {
+						localTime.setTimeInMillis(not.time);
+					}
+
+					final TimePickerDialog timedialog = fragment
+							.getTimePickerDialog();
+					timedialog.setStartTime(
+							localTime.get(Calendar.HOUR_OF_DAY),
+							localTime.get(Calendar.MINUTE));
+					timedialog.setOnTimeSetListener(new OnTimeSetListener() {
 						@Override
-						public void onDialogTimeSet(int hourOfDay, int minute) {
-							final Calendar localTime = Calendar.getInstance();
-							if (not.time != null) {
-								localTime.setTimeInMillis(not.time);
-							}
+						public void onTimeSet(RadialPickerLayout view,
+								int hourOfDay, int minute) {
 							localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
 							localTime.set(Calendar.MINUTE, minute);
 
@@ -336,14 +366,38 @@ public class NotificationItemHelper {
 
 							not.save(fragment.getActivity(), true);
 						}
-
-						@Override
-						public void onDialogTimeCancel() {
-						}
-
 					});
 
-					timePicker.show(fragment.getFragmentManager(), "time");
+					timedialog.show(fragment.getFragmentManager(), "time");
+
+					// // Now display time picker
+					// final TimePickerDialogFragment timePicker = fragment
+					// .getTimePickerFragment();
+					// timePicker.setListener(new TimePickerDialogHandler() {
+					// @Override
+					// public void onDialogTimeSet(int hourOfDay, int minute) {
+					// final Calendar localTime = Calendar.getInstance();
+					// if (not.time != null) {
+					// localTime.setTimeInMillis(not.time);
+					// }
+					// localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+					// localTime.set(Calendar.MINUTE, minute);
+					//
+					// not.time = localTime.getTimeInMillis();
+					//
+					// notTimeButton.setText(not.getLocalTimeText(fragment
+					// .getActivity()));
+					//
+					// not.save(fragment.getActivity(), true);
+					// }
+					//
+					// @Override
+					// public void onDialogTimeCancel() {
+					// }
+					//
+					// });
+					//
+					// timePicker.show(fragment.getFragmentManager(), "time");
 				}
 			}
 		});

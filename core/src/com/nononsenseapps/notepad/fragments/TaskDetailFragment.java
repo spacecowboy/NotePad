@@ -4,8 +4,6 @@ import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.Calendar;
 
-import com.doomonafireball.betterpickers.timepicker.TimePickerDialogFragment;
-import com.doomonafireball.betterpickers.timepicker.TimePickerDialogFragment.TimePickerDialogHandler;
 import com.github.espiandev.showcaseview.ShowcaseView;
 import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
 import com.github.espiandev.showcaseview.ShowcaseViews;
@@ -20,6 +18,10 @@ import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
 import org.androidannotations.annotations.UiThread.Propagation;
 
+import com.android.datetimepicker.time.TimePickerDialog;
+import com.android.datetimepicker.date.DatePickerDialog;
+import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
+
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityLocation;
@@ -32,7 +34,6 @@ import com.nononsenseapps.notepad.core.R.layout;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.fragments.DialogCalendar.DateSetListener;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
@@ -90,8 +91,7 @@ import android.widget.Toast;
  * {@link TaskDetailActivity} on handsets.
  */
 @EFragment
-public class TaskDetailFragment extends Fragment implements
-		TimePickerDialogHandler, DateSetListener {
+public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 
 	public static int LOADER_EDITOR_TASK = 3001;
 	public static int LOADER_EDITOR_TASKLISTS = 3002;
@@ -106,18 +106,15 @@ public class TaskDetailFragment extends Fragment implements
 						Notification.Columns.TASKID + " IS ?",
 						new String[] { Long.toString(args.getLong(ARG_ITEM_ID,
 								-1)) }, Notification.Columns.TIME);
-			}
-			else if (LOADER_EDITOR_TASK == id) {
+			} else if (LOADER_EDITOR_TASK == id) {
 				return new CursorLoader(getActivity(), Task.getUri(args
 						.getLong(ARG_ITEM_ID, -1)), Task.Columns.FIELDS, null,
 						null, null);
-			}
-			else if (LOADER_EDITOR_TASKLISTS == id) {
+			} else if (LOADER_EDITOR_TASKLISTS == id) {
 				return new CursorLoader(getActivity(), TaskList.getUri(args
 						.getLong(ARG_ITEM_LIST_ID)), TaskList.Columns.FIELDS,
 						null, null, null);
-			}
-			else {
+			} else {
 				return null;
 			}
 		}
@@ -134,8 +131,7 @@ public class TaskDetailFragment extends Fragment implements
 						fillUIFromTask();
 						// Don't want updates while editing
 						// getLoaderManager().destroyLoader(LOADER_EDITOR_TASK);
-					}
-					else {
+					} else {
 						// Don't want updates while editing
 						// getLoaderManager().destroyLoader(LOADER_EDITOR_TASK);
 						// Only update the list if that changes
@@ -153,26 +149,23 @@ public class TaskDetailFragment extends Fragment implements
 					args.putLong(ARG_ITEM_LIST_ID, mTask.dblist);
 					getLoaderManager().restartLoader(LOADER_EDITOR_TASKLISTS,
 							args, this);
-					
+
 					args.clear();
 					args.putLong(ARG_ITEM_ID,
 							getArguments().getLong(ARG_ITEM_ID, stateId));
-					getLoaderManager().restartLoader(LOADER_EDITOR_NOTIFICATIONS, args,
-							loaderCallbacks);
-				}
-				else {
+					getLoaderManager().restartLoader(
+							LOADER_EDITOR_NOTIFICATIONS, args, loaderCallbacks);
+				} else {
 					// Should kill myself maybe?
 				}
-			}
-			else if (LOADER_EDITOR_NOTIFICATIONS == ldr.getId()) {
+			} else if (LOADER_EDITOR_NOTIFICATIONS == ldr.getId()) {
 				while (c != null && c.moveToNext()) {
 					addNotification(new Notification(c));
 				}
 				// Don't update while editing
 				// TODO this allows updating of the location name etc
 				getLoaderManager().destroyLoader(LOADER_EDITOR_NOTIFICATIONS);
-			}
-			else if (LOADER_EDITOR_TASKLISTS == ldr.getId()) {
+			} else if (LOADER_EDITOR_TASKLISTS == ldr.getId()) {
 				// At current only loading a single list
 				if (c != null && c.moveToFirst()) {
 					final TaskList list = new TaskList(c);
@@ -186,22 +179,22 @@ public class TaskDetailFragment extends Fragment implements
 		}
 	};
 
-	@ViewById(resName="taskText")
+	@ViewById(resName = "taskText")
 	StyledEditText taskText;
 
-	@ViewById(resName="taskCompleted")
+	@ViewById(resName = "taskCompleted")
 	CheckBox taskCompleted;
 
-	@ViewById(resName="dueDateBox")
+	@ViewById(resName = "dueDateBox")
 	Button dueDateBox;
 
-	@ViewById(resName="notificationList")
+	@ViewById(resName = "notificationList")
 	LinearLayout notificationList;
 
-	@ViewById(resName="taskSection")
+	@ViewById(resName = "taskSection")
 	View taskSection;
 
-	@ViewById(resName="editScrollView")
+	@ViewById(resName = "editScrollView")
 	ScrollView editScrollView;
 
 	@SystemService
@@ -321,8 +314,7 @@ public class TaskDetailFragment extends Fragment implements
 					getArguments().getLong(ARG_ITEM_ID, stateId));
 			getLoaderManager().restartLoader(LOADER_EDITOR_TASK, args,
 					loaderCallbacks);
-		}
-		else {
+		} else {
 			// If not valid, find a valid list
 			if (getArguments().getLong(ARG_ITEM_LIST_ID, stateListId) < 1) {
 				getArguments().putLong(
@@ -430,44 +422,57 @@ public class TaskDetailFragment extends Fragment implements
 		});
 	}
 
-	@Click(resName="dueDateBox")
+	@Click(resName = "dueDateBox")
 	void onDateClick() {
 		final Calendar localTime = Calendar.getInstance();
-		final DialogCalendar datePicker;
 		if (mTask != null && mTask.due != null) {
-			datePicker = DialogCalendar.getInstance(mTask.due);
-		}
-		else {
-			datePicker = DialogCalendar.getInstance();
-		}
-		datePicker.setListener(this);
-		datePicker.show(getFragmentManager(), DATE_DIALOG_TAG);
+			//datePicker = DialogCalendar.getInstance(mTask.due);
+			localTime.setTimeInMillis(mTask.due);
+		}// else {
+		//	datePicker = DialogCalendar.getInstance();
+		//}
+
+		//final DialogCalendar datePicker;
+		//datePicker.setListener(this);
+		//datePicker.show(getFragmentManager(), DATE_DIALOG_TAG);
+		final DatePickerDialog datedialog = DatePickerDialog
+				.newInstance(this, localTime.get(Calendar.YEAR), localTime
+						.get(Calendar.MONTH), localTime
+						.get(Calendar.DAY_OF_MONTH));
+		datedialog.show(getFragmentManager(), DATE_DIALOG_TAG);
 	}
 
+	// @Override
+	// public void onDialogTimeSet(int hourOfDay, int minute) {
+	// final Calendar localTime = Calendar.getInstance();
+	// if (mTask.due != null) {
+	// localTime.setTimeInMillis(mTask.due);
+	// }
+	// localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+	// localTime.set(Calendar.MINUTE, minute);
+	//
+	// mTask.due = localTime.getTimeInMillis();
+	// setDueText();
+	// }
+	//
+	// @Override
+	// public void onDialogTimeCancel() {
+	// // TODO Auto-generated method stub
+	//
+	// }
+
 	@Override
-	public void onDialogTimeSet(int hourOfDay, int minute) {
+	public void onDateSet(DatePickerDialog dialog,
+			int year, int monthOfYear,
+			int dayOfMonth) {
 		final Calendar localTime = Calendar.getInstance();
 		if (mTask.due != null) {
 			localTime.setTimeInMillis(mTask.due);
 		}
-		localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-		localTime.set(Calendar.MINUTE, minute);
-
-		mTask.due = localTime.getTimeInMillis();
-		setDueText();
-	}
-
-	@Override
-	public void onDialogTimeCancel() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void onDateSet(final long time) {
-		final Calendar localTime = Calendar.getInstance();
-		localTime.setTimeInMillis(time);
-
+		localTime.set(Calendar.YEAR, year);
+		localTime.set(Calendar.MONTH, monthOfYear);
+		localTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+		
 		// set to 23:59 to be more or less consistent with earlier date only
 		// implementation
 		localTime.set(Calendar.HOUR_OF_DAY, 23);
@@ -491,15 +496,14 @@ public class TaskDetailFragment extends Fragment implements
 	private void setDueText() {
 		if (mTask.due == null) {
 			dueDateBox.setText("");
-		}
-		else {
+		} else {
 			// Due date
 			dueDateBox.setText(TimeFormatter.getLocalDateOnlyStringLong(
 					getActivity(), mTask.due));
 		}
 	}
 
-	@Click(resName="dueCancelButton")
+	@Click(resName = "dueCancelButton")
 	void onDueRemoveClick() {
 		if (!isLocked()) {
 			if (mTask != null) {
@@ -509,7 +513,7 @@ public class TaskDetailFragment extends Fragment implements
 		}
 	}
 
-	@Click(resName="notificationAdd")
+	@Click(resName = "notificationAdd")
 	void onAddReminder() {
 		if (mTask != null && !isLocked()) {
 			// IF no id, have to save first
@@ -559,7 +563,7 @@ public class TaskDetailFragment extends Fragment implements
 		return false;
 	}
 
-	@UiThread(propagation=Propagation.REUSE)
+	@UiThread(propagation = Propagation.REUSE)
 	void fillUIFromTask() {
 		Log.d("nononsenseapps editor", "fillUI, act: " + getActivity());
 		if (isLocked()) {
@@ -573,8 +577,7 @@ public class TaskDetailFragment extends Fragment implements
 				}
 			});
 			pflock.show(getFragmentManager(), "read_verify");
-		}
-		else {
+		} else {
 			taskText.setText(mTask.getText());
 		}
 		setDueText();
@@ -631,8 +634,7 @@ public class TaskDetailFragment extends Fragment implements
 			type = PreferenceManager.getDefaultSharedPreferences(getActivity())
 					.getString(getString(R.string.pref_listtype),
 							getString(R.string.default_listtype));
-		}
-		else {
+		} else {
 			type = list.listtype;
 		}
 		taskSection.setVisibility(type
@@ -709,8 +711,7 @@ public class TaskDetailFragment extends Fragment implements
 						}
 					});
 					delpf.show(getFragmentManager(), "delete_verify");
-				}
-				else {
+				} else {
 					deleteAndClose();
 				}
 			}
@@ -838,8 +839,7 @@ public class TaskDetailFragment extends Fragment implements
 							}
 						}
 					});
-		}
-		else {
+		} else {
 			// Prevents save attempts
 			mTask = null;
 			// Request a close from activity
@@ -873,13 +873,16 @@ public class TaskDetailFragment extends Fragment implements
 		stateId = mTask._id;
 		stateListId = mTask.dblist;
 
-		if (getActivity() == null) return;
+		if (getActivity() == null)
+			return;
 
 		final Intent orgIntent = getActivity().getIntent();
 		if (orgIntent == null || orgIntent.getAction() == null
-				|| !orgIntent.getAction().equals(Intent.ACTION_INSERT)) return;
+				|| !orgIntent.getAction().equals(Intent.ACTION_INSERT))
+			return;
 
-		if (mTask == null || mTask._id < 1) return;
+		if (mTask == null || mTask._id < 1)
+			return;
 
 		final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
 				.setClass(getActivity(), ActivityMain_.class)
@@ -922,8 +925,7 @@ public class TaskDetailFragment extends Fragment implements
 		}
 		try {
 			mListener = (OnFragmentInteractionListener) activity;
-		}
-		catch (ClassCastException e) {
+		} catch (ClassCastException e) {
 			// throw new ClassCastException(activity.toString()
 			// + " must implement OnFragmentInteractionListener");
 		}
@@ -945,7 +947,7 @@ public class TaskDetailFragment extends Fragment implements
 	 * 
 	 * @param not
 	 */
-	@UiThread(propagation=Propagation.REUSE)
+	@UiThread(propagation = Propagation.REUSE)
 	void addNotification(final Notification not) {
 		if (getActivity() != null) {
 			View nv = LayoutInflater.from(getActivity()).inflate(
@@ -973,11 +975,12 @@ public class TaskDetailFragment extends Fragment implements
 		if (mTask != null && isLocked()) {
 			fillUIFromTask();
 		}
-		
+
 		// See if there was a dialog and set listener again
-		Fragment dateDialog = getFragmentManager().findFragmentByTag(DATE_DIALOG_TAG);
+		Fragment dateDialog = getFragmentManager().findFragmentByTag(
+				DATE_DIALOG_TAG);
 		if (dateDialog != null) {
-			((DialogCalendar) dateDialog).setListener(this);
+			((DatePickerDialog) dateDialog).setOnDateSetListener(this);
 		}
 	}
 
@@ -997,19 +1000,35 @@ public class TaskDetailFragment extends Fragment implements
 	/**
 	 * Returns an appropriately themed time picker fragment
 	 */
-	public TimePickerDialogFragment getTimePickerFragment() {
+	// public TimePickerDialogFragment getTimePickerFragment() {
+	// final String theme = PreferenceManager.getDefaultSharedPreferences(
+	// getActivity()).getString(MainPrefs.KEY_THEME,
+	// getString(R.string.const_theme_light_ab));
+	// if (theme.contains("light")) {
+	// return TimePickerDialogFragment
+	// .newInstance(R.style.BetterPickersDialogFragment_Light);
+	// }
+	// else {
+	// // dark
+	// return TimePickerDialogFragment
+	// .newInstance(R.style.BetterPickersDialogFragment);
+	// }
+	// }
+
+	/**
+	 * Returns an appropriately themed time picker fragment. Up to caller to set
+	 * callback and desired starting time.
+	 */
+	public TimePickerDialog getTimePickerDialog() {
 		final String theme = PreferenceManager.getDefaultSharedPreferences(
 				getActivity()).getString(MainPrefs.KEY_THEME,
 				getString(R.string.const_theme_light_ab));
-		if (theme.contains("light")) {
-			return TimePickerDialogFragment
-					.newInstance(R.style.BetterPickersDialogFragment_Light);
-		}
-		else {
-			// dark
-			return TimePickerDialogFragment
-					.newInstance(R.style.BetterPickersDialogFragment);
-		}
+
+		final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(
+				null, 0, 0,
+				android.text.format.DateFormat.is24HourFormat(getActivity()));
+		timePickerDialog.setThemeDark(!theme.contains("light"));
+		return timePickerDialog;
 	}
 
 	public Notification getPendingLocationNotification() {

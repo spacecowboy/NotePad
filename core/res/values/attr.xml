@@ -80,7 +80,4 @@
 	
 	<attr name="ListHeaderSize" format="reference"/>
 	
-	<!-- Square calendar picker -->
-	<attr name="CalendarPickerBackground" format="reference|color" />
-	
 </resources>
