@@ -137,6 +137,7 @@
         <item>-2</item>
     </string-array>
     <string-array name="translated_langs" tools:ignore="MissingTranslation">
+        <item>af</item>
         <item>ar</item>
         <item>bg</item>
         <item>ca</item>

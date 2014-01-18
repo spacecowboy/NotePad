@@ -75,9 +75,6 @@ limitations under the License.
 <string name="gtasks_sync_info">Nem minden információ szinkronizálható a Google Feladatokal. Csak a jegyzetek, a lejárati dátum (az időpont nem) és a teendő állapot.</string>
 <string name="settings_cat_syncing">Szinkronizálás</string>
 <string name="gtasks">Google Feladatok</string>
-<string name="dropbox">Dropbox</string>
-<string name="dropbox_enable">Szinkronizálás Dropbox-al</string>
-<string name="dropbox_enable_summary">Létrehoz egy NoNonsense Notes mappát a Dropbox fiókjában</string>
 <string name="show_from_all_lists">Összes lista</string>
 <string name="lists">Listák</string>
 <string name="deleted">Törölve</string>
@@ -171,6 +168,7 @@ Use few if language need it. In English is the same.
 <string name="date_header_none">Nincs dátum</string>
 <string name="date_header_completed">Kész</string>
 <string name="next_5_days">A következő 5 nap</string>
+<string name="next_n_days">Elkövetkező %d nap</string>
 <string name="this_week">E hét</string>
 <string name="please_select_note">Válassz ki vagy hozz létre egy listát</string>
 <string name="please_create_note">Hozz létre egy jegyzetet</string>
@@ -239,5 +237,19 @@ Use few if language need it. In English is the same.
 <string name="dashclock_header_shown">A lista neve félkövéren jelenik meg. Ha minden lista látszik akkor a a lista neve helyett &quot;Feladatok&quot; jelenik meg.</string>
 <string name="dashclock_first_task_shown">Az első feladat címe lesz félkövér</string>
 <string name="dashclock_display_header">Fejléc megjelenítése</string>
+<string name="editor">Szerkesztő</string>
+<string name="bold">Félkövér</string>
+<string name="italic">Dőlt</string>
+<string name="normal">Normal</string>
+<string name="title_style">Cím stílusa</string>
+<string name="title_font">Cím betűtípusa</string>
+<string name="body_font">Szöveg típusa</string>
+<string name="clickable_links">Kattinható linkek</string>
+<string name="small">Kicsi</string>
+<string name="medium">Közepes</string>
+<string name="large">Nagy</string>
+<string name="text_size">Szöveg betűméret</string>
+<string name="text">Szöveg</string>
+<string name="add_a_reminder">Emlékeztető hozzáadása</string>
 
 </resources>

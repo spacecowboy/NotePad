@@ -74,9 +74,6 @@ limitations under the License.
 <string name="gtasks_sync_info">Ikke alle oplysninger kan blive synkroniseret med Google Tasks. Kun noter, forfaldsdato (ikke tidspunkt) og todo-status bliver synkroniseret.</string>
 <string name="settings_cat_syncing">Synkronisering</string>
 <string name="gtasks">Google Tasks</string>
-<string name="dropbox">Dropbox</string>
-<string name="dropbox_enable">Synkroniser med Dropbox</string>
-<string name="dropbox_enable_summary">Opretter en special NoNonsense Notes mappe i din Dropbox</string>
 <string name="show_from_all_lists">Alle lister</string>
 <string name="lists">Lister</string>
 <string name="deleted">Slettet</string>
@@ -170,6 +167,7 @@ Use few if language need it. In English is the same.
 <string name="date_header_none">Ingen dato</string>
 <string name="date_header_completed">Udført</string>
 <string name="next_5_days">Næste 5 dage</string>
+<string name="next_n_days">Næste %d dage</string>
 <string name="this_week">Denne uge</string>
 <string name="please_select_note">Vælg eller opret venligst en note</string>
 <string name="please_create_note">Opret venligst en note</string>
@@ -245,5 +243,16 @@ Use few if language need it. In English is the same.
 <string name="dashclock_header_shown">Liste navnet vil blive vist med fed skrift. Hvis &quot;Alle Lister&quot; er valgt, vil &quot;Opgaver&quot; vises</string>
 <string name="dashclock_first_task_shown">Titlen på første opgave vil blive vist med fed skrift</string>
 <string name="dashclock_display_header">Vis overskriften</string>
+<string name="editor">Editor</string>
+<string name="bold">Fed</string>
+<string name="italic">Kursiv</string>
+<string name="normal">Normal</string>
+<string name="clickable_links">Klikbare links</string>
+<string name="small">Lille</string>
+<string name="medium">Medium</string>
+<string name="large">Stor</string>
+<string name="text_size">Skriftstørrelse</string>
+<string name="text">Tekst</string>
+<string name="add_a_reminder">Tilføj en påmindelse</string>
 
 </resources>

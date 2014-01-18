@@ -19,6 +19,7 @@ limitations under the License.
 
 <string name="app_name">Notizen</string>
 <string name="title_create">Neue Notiz</string>
+<string name="timemachine">Zeitmaschine</string>
 <string name="time">Uhrzeit</string>
 <string name="done">Fertig</string>
 <string name="saved">Gespeichert</string>
@@ -34,6 +35,7 @@ limitations under the License.
 <string name="menu_createlist">Liste erstellen</string>
 <string name="menu_clearcompleted">Erledigte löschen</string>
 <string name="menu_setdefaultlist">Als Standardliste festlegen</string>
+<string name="new_default_set">Neuen Standard setzen</string>
 <string name="menu_managelists">Liste verwalten</string>
 <string name="add_item">Element hinzufügen</string>
 <string name="delete_question">Löschen?</string>
@@ -73,9 +75,9 @@ limitations under the License.
 <string name="settings_sync_enable_title">mit Google Tasks sync.</string>
 <string name="gtasks_sync_info">Nicht alle Informationen können mit Google Tasks synchronisiert werden. Lediglich Notizen, Fälligkeitsdaten (außer der Uhrzeit) und der Todo-Status werden synchronisiert</string>
 <string name="settings_cat_syncing">Synchronisation</string>
-<string name="dropbox_enable">Mit Dropbox synchronisieren</string>
-<string name="dropbox_enable_summary">Erstelle einen gesonderten NoNonesense Ordner in Deiner Dropbox</string>
+<string name="gtasks">Google Aufgaben</string>
 <string name="show_from_all_lists">Alle Listen</string>
+<string name="lists">Listen</string>
 <string name="deleted">Gelöscht</string>
 <string name="repeat">Wiederholen</string>
 <string name="once">Einmalig</string>
@@ -86,6 +88,7 @@ limitations under the License.
 <string name="permission_write_desc">Erlaubt der Anwendung Notizen und Listen hinzuzufügen zu aktualisieren oder zu löschen</string>
 <string name="settings_list_dialog">Wählen Sie eine Liste</string>
 <string name="settings_list">Liste</string>
+<string name="drag_to_timetravel">Verschieben für Zeitteise</string>
 
 <string name="import_data_question">Daten importieren?</string>
 <string name="import_started">Importieren Daten. Dies kann einige Sekunden dauern</string>
@@ -96,9 +99,12 @@ limitations under the License.
 <string name="showcase_main_title">Listen verwalten</string>
 <string name="showcase_main_msg">Tippe auf das Icon in der oberen linken Ecke, oder swipe vom linken Bildschirmrand um Deine Listen anzuzeigen.</string>
 <string name="showcase_drawer_title">Zum Bearbeiten, oder Löschen Item gedrückt halten</string>
+<string name="showcase_drawer_msg">Lang drücken zum bearbeiten/löschen</string>
 <string name="showcase_timemachine_title">Alle Änderungen werden gespeichert</string>
 <string name="showcase_timemachine_msg">Beim Bearbeiten einer Notiz werden alle Änderungen gespeichert. Um Notizen auf einen vorherigen Stand zu bringen, kannst Du die Time Machine benutzen.</string>
 
+<string name="donate_to_unlock">Spenden zum Entsperren</string>
+<string name="premiums_unlocked_and_thanks">Premium Funktionen freigeschaltet. Vielen Dank für deine Unterstützung!</string>
 
 <!--
 Use few if language need it. In English is the same.
@@ -131,6 +137,7 @@ Use few if language need it. In English is the same.
 
 <string name="move">Verschieben</string>
 <string name="move_to">Verschieben nach</string>
+<string name="moved_x_to_list">%1$d nach %2$s verschoben</string>
 
 <string name="lock_note">Notiz sperren</string>
 <string name="unlock_note">Notiz entsperren</string>
@@ -161,6 +168,9 @@ Use few if language need it. In English is the same.
 <string name="date_header_future">Später</string>
 <string name="date_header_none">Kein Datum</string>
 <string name="date_header_completed">Erledigt</string>
+<string name="next_5_days">nächste 5 Tage</string>
+<string name="next_n_days">nächste % Tage</string>
+<string name="this_week">Diese Woche</string>
 <string name="please_select_note">Bitte wähle oder erstelle eine Notiz</string>
 <string name="please_create_note">Bitte erstelle eine Notiz</string>
 <string name="hide_checkbox">Checkbox verbergen </string>
@@ -198,17 +208,18 @@ Use few if language need it. In English is the same.
 <string name="sync_on_start_info">Löst nur bei richtigen Starts aus, wenn die App vorher nicht im Hintergrund gelaufen ist</string>
 <string name="sync_full_force">Volle Synchronisation erzwingen</string>
 <string name="sync_full_force_info">Schalte dies ein, wenn du denkst, es fehlen einige Objekte.</string>
+<string name="snooze">Schlummern</string>
 <string name="silent">Lautlos</string>
 <string name="sound">Ton</string>
 <string name="vibrate">Vibration</string>
 <string name="reminders">Erinnerungen</string>
-<string name="standard">Standard</string>
 <string name="notification_prio_high">Hoch: immer oben, maximiert</string>
 <string name="notification_prio_low">Niedrig: versteckt, minimiert</string>
 <string name="priority">Priorität</string>
 <string name="notifications">Benachrichtigungen</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
 <string name="tasks">Aufgaben</string>
+<string name="all_tasks">Alle Aufgaben</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Auf Aufgaben in bestimmter Liste beschränken</string>
 <string name="dashclock_show_overdue_tasks">Überfällige Aufgaben anzeigen</string>
 <string name="dashclock_overdue_tasks_show">Überfällige Aufgaben werden angezeigt</string>
@@ -224,5 +235,12 @@ Use few if language need it. In English is the same.
 <string name="dashclock_header_shown">Listen Name wird fett dargestellt. Wenn &quot;Alle Listen&quot; ausgewählt wurden, werden &quot;Aufgaben&quot; angezeigt</string>
 <string name="dashclock_first_task_shown">Name der ersten Aufgabe wird fett geschrieben</string>
 <string name="dashclock_display_header">Zeige Header</string>
+<string name="title_style">Titel Style</string>
+<string name="title_font">Titel Schrift</string>
+<string name="clickable_links">Klickbare Links </string>
+<string name="small">Klein</string>
+<string name="large">Groß</string>
+<string name="text_size">Textgröße</string>
+<string name="add_a_reminder">Erinnerung hinzufügen</string>
 
 </resources>

@@ -95,7 +95,7 @@ limitations under the License.
 <string name="import_error">Jokin meni vikaan: %s</string>
 
 <string name="showcase_main_title">Hallitse listojasi</string>
-<string name="showcase_main_msg">Kosketa ikonia tai pyyhkäise vasemmasta reunasta</string>
+<string name="showcase_main_msg">Kosketa kuvaketta tai pyyhkäise vasemmasta reunasta</string>
 <string name="showcase_drawer_title">Hallitse listojasi</string>
 <string name="showcase_drawer_msg">Paina pitkään muokataksesi tai poistaaksesi</string>
 <string name="showcase_timemachine_title">Tallenna muistiinpanosi</string>

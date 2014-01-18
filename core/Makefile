@@ -30,6 +30,7 @@ translations:
 	python listlang.py
 	python escapetranslations.py
 	python deletemissingtranslations.py
+	python listlang.py
 
 langs:
 	python listlang.py

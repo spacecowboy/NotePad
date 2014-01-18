@@ -217,6 +217,15 @@ Use few if language need it. In English is the same.
 <string name="priority">Priorité</string>
 <string name="notifications">Notifications</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+<string name="dateformat_micro">d MMM</string>
+<string name="dateformat_weekday">EEEE</string>
+<string name="dateformat_short_1">E d MMM,  localtime</string>
+<string name="dateformat_short_2">E d MMM</string>
+<string name="dateformat_short_3">d MMM</string>
+<string name="dateformat_short_4">E, localtime</string>
+<string name="dateformat_long_1">EEEE d MMMM, localtime</string>
+<string name="dateformat_long_2">E d MMM, localtime</string>
+<string name="dateformat_just_date">d MMMM</string>
 <string name="tasks">Tâches</string>
 <string name="all_tasks">Toutes les tâches</string>
 <string name="dashclock_tasks">Tâches</string>
