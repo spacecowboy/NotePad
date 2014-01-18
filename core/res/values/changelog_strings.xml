@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     
+    <string name="changelog_5.2">
+\nExport and Import your notes to a text backup
+\nChanged date and time pickers
+\nTranslations</string>
+    
     <string name="changelog_5.1.3">
 \nCalendars now scrollable on small screens again
 \nTranslations</string>
