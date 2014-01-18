@@ -170,24 +170,7 @@
   </target>
   <!-- Copy the binary to a location that includes version number -->
 
-  <xmlproperty
-      collapseAttributes="true"
-      file="AndroidManifest.xml"
-      prefix="mymanifest" />
-
-  <property
-      name="build.dir"
-      value="/home/jonas/Dropbox/dev/NotePad/apks/alphas/${mymanifest.manifest.android:versionCode}_${mymanifest.manifest.android:versionName}/" />
-
   <target name="-post-build">
-
-    <echo>
-      Version is ${mymanifest.manifest.android:versionName}, ${mymanifest.manifest.android:versionCode}
-    </echo>
-    <!-- Do the actual copying here -->
-    <copy toDir="${build.dir}" failonerror="false">
-      <fileset file="${out.final.file}" />
-    </copy>
 
 	<property
         name="config-target-path"

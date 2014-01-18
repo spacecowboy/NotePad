@@ -28,6 +28,10 @@
          -->
     <property file="ant.properties" />
 
+    <!-- api keys -->
+    <property file="../_release_keys_/ant.properties" />
+
+
     <!-- if sdk.dir was not set from one of the property file, then
          get it from the ANDROID_HOME env var.
          This must be done before we load project.properties since

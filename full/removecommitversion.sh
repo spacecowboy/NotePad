@@ -6,10 +6,10 @@ MANIFEST=AndroidManifest.xml
 ORGMANIFEST=.orgmanifest.xml
 TMPMANIFEST=.tmpmanifest.xml
 
-rm $MANIFEST
-mv $ORGMANIFEST $MANIFEST
-
 # Remove commit version again
 # Get current commit
-#COMMIT=$(git rev-parse --short HEAD)
-#cat $MANIFEST | sed -r "s/-$COMMIT//" > $MANIFEST
+COMMIT=$(git rev-parse --short HEAD)
+cat $MANIFEST | sed -r "s/-$COMMIT//" > $ORGMANIFEST
+
+rm $MANIFEST
+mv $ORGMANIFEST $MANIFEST
