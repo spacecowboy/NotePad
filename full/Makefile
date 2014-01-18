@@ -1,8 +1,12 @@
 debug:
+	./addcommitversion.sh
 	ant debug
+	./removecommitversion.sh
 
 release:
+	./addcommitversion.sh
 	ant release
+	./removecommitversion.sh
 
 bin/NotePad-debug.apk:
 	ant debug
