@@ -1,6 +1,11 @@
 test: installapp installtest
 	cd test; make test
 
+debug:
+	cd full; make clean debug
+release:
+	cd full; make clean release
+
 installapp: updateall
 	cd full; make clean debug install
 
