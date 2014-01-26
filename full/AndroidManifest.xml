@@ -27,7 +27,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
-    android:versionCode="107"
+    android:versionCode="108"
     android:versionName="5.2" >
 
     <uses-sdk
@@ -431,6 +431,11 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDTgjabZVkiZOnokePNdYNAkRiaE73_MBs" />
+        
+        <!-- Service that syncs with files -->
+        <service android:name="com.nononsenseapps.notepad.sync.orgmode.OrgSyncService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>

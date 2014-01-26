@@ -122,7 +122,6 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 			@Override
 			public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
-				Log.d("nononsenseapps list", "loadfinished");
 				mTaskListsAdapter.swapCursor(c);
 				final int pos;
 				if (mListIdToSelect != -1) {

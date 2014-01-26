@@ -48,6 +48,7 @@ import com.nononsenseapps.notepad.legacy.DonateMigrator_;
 import com.nononsenseapps.notepad.prefs.AccountDialog4;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
+import com.nononsenseapps.notepad.sync.orgmode.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
 import com.nononsenseapps.util.GeofenceUtils;
 import com.nononsenseapps.utils.ViewsHelper;
@@ -1071,6 +1072,9 @@ public class ActivityMain extends FragmentActivity implements
 			return true;
 		} else if (itemId == R.id.menu_sync) {
 			handleSyncRequest();
+			return true;
+		} else if (itemId == R.id.menu_orgtest) {
+			OrgSyncService.startWrite(this);
 			return true;
 		} else if (itemId == R.id.menu_delete) {
 			return false;

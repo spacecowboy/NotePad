@@ -281,7 +281,7 @@ public class RemoteTask extends DAO {
 	}
 
 	/**
-	 * Returns a where clause that can be used to fetch the tasklist that is
+	 * Returns a where clause that can be used to fetch the task that is
 	 * associated with this remote object. As argument, use remoteid, account
 	 * 
 	 * @return
