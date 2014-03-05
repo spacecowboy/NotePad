@@ -240,4 +240,8 @@ public class OrgSyncer {
 	public void readChanges(final Context context) {
 		// TODO
 	}
+
+	public String getOrgDir() {
+		return ORG_DIR;
+	}
 }
