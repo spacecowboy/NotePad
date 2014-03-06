@@ -435,6 +435,7 @@
         <!-- Service that syncs with files -->
         <service android:name="com.nononsenseapps.notepad.sync.orgmode.OrgSyncService"
             android:exported="false"
+            android:label="File Watcher"
             android:enabled="true" >
         </service>
     </application>

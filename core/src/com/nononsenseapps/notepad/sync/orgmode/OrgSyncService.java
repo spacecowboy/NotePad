@@ -4,7 +4,10 @@ import java.util.Random;
 
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.prefs.PrefsActivity;
 
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -17,6 +20,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.os.IBinder;
+import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -73,34 +77,56 @@ public class OrgSyncService extends Service {
 		// Create a new orgSyncer to refresh the saved dir
 		orgSyncer = new OrgSyncer(this);
 
+		// Make sure the saved dir exists
+		if (!orgSyncer.createDir()) {
+			// Failed to create directory!
+			notifyError();
+			stopSelf();
+		}
+
+		// Setup the file monitor. Restart it to catch new directories.
+		stopFileWatcher();
+		fileWatcher = null;
+		startFileWatcher();
+
+		// Setup the database monitor, if not already present.
+		if (dbWatcher == null) {
+			startDBWatcher();
+		}
+
+		// On first start do a 2-way sync.
 		if (firstStart) {
 			firstStart = false;
-			Toast.makeText(this, "First start, call 2 way sync",
-					Toast.LENGTH_SHORT).show();
 			Message msg = serviceHandler.obtainMessage();
 			msg.arg1 = TWO_WAY_SYNC;
 			serviceHandler.sendMessage(msg);
-		}
-
-		// Setup the file monitor
-		// TODO
-		if (fileWatcher != null) {
-			fileWatcher.stopWatching();
-		}
-		fileWatcher = new FileWatcher(orgSyncer.getOrgDir(), serviceHandler);
-		fileWatcher.startWatching();
-
-		// Setup the database monitor
-		if (dbWatcher == null) {
-			registerDBWatcher();
 		}
 
 		// If we get killed, after returning from here, restart
 		return START_STICKY;
 	}
 
-	private void registerDBWatcher() {
-		// TODO
+	private void notifyError() {
+		NotificationCompat.Builder notBuilder = new NotificationCompat.Builder(
+				this)
+				.setContentTitle("Could not access files")
+				.setContentText("Please change the export directory")
+				.setContentIntent(
+						PendingIntent.getActivity(this, 0, new Intent(this,
+								PrefsActivity.class),
+								PendingIntent.FLAG_UPDATE_CURRENT));
+
+		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		notificationManager.notify(237388, notBuilder.build());
+	}
+
+	private void stopDBWatcher() {
+		if (dbWatcher != null) {
+			getContentResolver().unregisterContentObserver(dbWatcher);
+		}
+	}
+
+	private void startDBWatcher() {
 		if (dbWatcher == null) {
 			dbWatcher = new DBWatcher(serviceHandler);
 		}
@@ -110,12 +136,25 @@ public class OrgSyncService extends Service {
 		getContentResolver().registerContentObserver(Task.URI, true, dbWatcher);
 	}
 
+	private void stopFileWatcher() {
+		if (fileWatcher != null) {
+			fileWatcher.stopWatching();
+		}
+	}
+
+	private void startFileWatcher() {
+		if (fileWatcher == null) {
+			fileWatcher = new FileWatcher(orgSyncer.getOrgDir(), serviceHandler);
+		}
+		fileWatcher.startWatching();
+	}
+
 	@Override
 	public void onDestroy() {
 		Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
 		// Unregister observers
-		getContentResolver().unregisterContentObserver(dbWatcher);
-		fileWatcher.stopWatching();
+		stopFileWatcher();
+		stopDBWatcher();
 	}
 
 	@Override
@@ -136,7 +175,10 @@ public class OrgSyncService extends Service {
 		@Override
 		public void handleMessage(Message msg) {
 
-			// TODO
+			/*
+			 * Queues are used to delay operations until subsequent updates are
+			 * complete.
+			 */
 			switch (msg.arg1) {
 			case DB_TO_FS_QUEUE:
 				Log.d(TAG, "DB2FS-Queue: " + msg.arg2);
@@ -144,10 +186,13 @@ public class OrgSyncService extends Service {
 				break;
 			case DB_TO_FS_RUN:
 				if (msg.arg2 == lastDBChangeId) {
+					stopFileWatcher();
 					Log.d(TAG, "DB2FS-Run: " + msg.arg2);
 					Toast.makeText(OrgSyncService.this,
 							"DB2FS-Run: " + msg.arg2, Toast.LENGTH_SHORT)
 							.show();
+					// TODO actual work
+					startFileWatcher();
 				}
 				break;
 			case FS_TO_DB_QUEUE:
@@ -156,15 +201,23 @@ public class OrgSyncService extends Service {
 				break;
 			case FS_TO_DB_RUN:
 				if (msg.arg2 == lastFSChangeId) {
+					stopDBWatcher();
 					Log.d(TAG, "FS2DB-Run: " + msg.arg2);
 					Toast.makeText(OrgSyncService.this,
 							"FS2DB-Run: " + msg.arg2, Toast.LENGTH_SHORT)
 							.show();
+					// TODO actual work
+					startDBWatcher();
 				}
 				break;
 			case TWO_WAY_SYNC:
+				stopDBWatcher();
+				stopFileWatcher();
 				Toast.makeText(OrgSyncService.this, "Do 2WAY",
 						Toast.LENGTH_SHORT).show();
+				// TODO actual work
+				startDBWatcher();
+				startFileWatcher();
 				break;
 			}
 		}
@@ -241,9 +294,7 @@ public class OrgSyncService extends Service {
 				r.arg2 = changeId;
 				handler.sendMessageDelayed(r, DELAY_MSECS);
 			} catch (Exception e) {
-				Toast.makeText(OrgSyncService.this,
-						"OnEvent Exc: " + e.getLocalizedMessage(),
-						Toast.LENGTH_SHORT).show();
+				Log.e(TAG, e.getLocalizedMessage());
 			}
 		}
 
