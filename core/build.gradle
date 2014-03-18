@@ -1,0 +1,81 @@
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:0.9.+'
+    // the latest version of the android-apt plugin for annotations
+    classpath 'com.neenbedankt.gradle.plugins:android-apt:1.2'
+  }
+}
+
+apply plugin: 'android-library'
+// For annotations
+apply plugin: 'android-apt'
+def AAVersion = '3.0.1'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+configurations {
+    apt
+}
+
+dependencies {
+  compile fileTree(dir: 'libs', include: '*.jar')
+  compile 'com.android.support:support-v4:19.0.1+'
+  compile 'com.google.android.gms:play-services:4.2.42+'
+  compile project(':lib')
+  compile project(':external:ActionBar-PullToRefresh')
+  compile project(':external:datetimepicker')
+  compile project(':external:drag-sort-listview')
+  compile project(':external:ShowcaseView')
+  // annotations
+  apt "org.androidannotations:androidannotations:$AAVersion"
+  compile "org.androidannotations:androidannotations-api:$AAVersion"
+}
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "19.0.3"
+
+    defaultConfig {
+      // minSdkVersion 14
+      // targetSdkVersion 19
+      packageName "com.nononsenseapps.notepad.core"
+    }
+
+     sourceSets {
+         main {
+             manifest.srcFile 'AndroidManifest.xml'
+             java.srcDirs = ['src']
+             resources.srcDirs = ['src']
+             aidl.srcDirs = ['src']
+             renderscript.srcDirs = ['src']
+             res.srcDirs = ['res']
+             assets.srcDirs = ['assets']
+         }
+
+         debug.setRoot('build-types/debug')
+         release.setRoot('build-types/release')
+    }
+}
+
+// annotations
+apt {
+    arguments {
+        resourcePackageName android.defaultConfig.packageName
+        androidManifestFile variant.processResources.manifestFile
+        // If you're using Android NBS flavors you should use the
+        //following line instead of hard-coded packageName
+        //resourcePackageName android.defaultConfig.packageName
+        //resourcePackageName 'com.nononsenseapps'
+
+        // You can set optional annotation processing options here,
+        // like these commented options:
+        // logLevel 'INFO'
+        // logFile '/var/log/aa.log'
+    }
+}

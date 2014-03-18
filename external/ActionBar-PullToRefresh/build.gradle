@@ -1,16 +1,28 @@
-apply plugin: 'android-library'
-
-android {
-    compileSdkVersion 18
-    buildToolsVersion '17.0.0'
-
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            res.srcDirs = ['res']
-        }
-    }
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.android.tools.build:gradle:0.9.+'
+  }
 }
 
-apply from: '../maven_push.gradle'
+apply plugin: 'android-library'
+
+dependencies {
+  //compile fileTree(dir: 'libs', include: '*.jar')
+  compile 'com.android.support:support-v4:18.0.+'
+}
+
+android {
+  compileSdkVersion 19
+  buildToolsVersion "19.0.3"
+
+  sourceSets {
+    main {
+      manifest.srcFile 'AndroidManifest.xml'
+      java.srcDirs = ['src']
+      res.srcDirs = ['res']
+    }
+  }
+}

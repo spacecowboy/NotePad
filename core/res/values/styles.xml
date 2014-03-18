@@ -40,7 +40,6 @@
 
     <style name="ViewPagerStyleDarkGrey">
         <item name="android:background">@android:drawable/dark_header</item>
-        <item name="android:textColor">#fff</item>
         <item name="android:paddingTop">4dp</item>
         <item name="android:paddingBottom">4dp</item>
         <item name="android:textColor">?android:attr/textColorSecondary</item>

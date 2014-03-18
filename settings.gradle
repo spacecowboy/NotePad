@@ -1,0 +1,3 @@
+include ':full', ':core', ':lib', ':external:ActionBar-PullToRefresh', ':external:datetimepicker', ':external:drag-sort-listview', ':external:ShowcaseView'
+
+// 'external:Android-ViewPagerIndicator',
