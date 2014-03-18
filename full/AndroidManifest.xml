@@ -28,7 +28,7 @@
     package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly"
     android:versionCode="108"
-    android:versionName="5.2-f9964ca" >
+    android:versionName="5.2-f9964ca-3168de3-3168de3" >
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -433,7 +433,7 @@
             android:value="AIzaSyDTgjabZVkiZOnokePNdYNAkRiaE73_MBs" />
         
         <!-- Service that syncs with files -->
-        <service android:name="com.nononsenseapps.notepad.sync.orgmode.OrgSyncService"
+        <service android:name="com.nononsenseapps.notepad.sync.orgsync.OrgSyncService"
             android:exported="false"
             android:label="File Watcher"
             android:enabled="true" >

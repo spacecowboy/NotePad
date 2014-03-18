@@ -1,0 +1,387 @@
+package com.nononsenseapps.notepad.sync.orgsync;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+
+import org.cowboyprogrammer.org.OrgFile;
+import org.cowboyprogrammer.org.OrgNode;
+import org.cowboyprogrammer.org.OrgTimestamp;
+
+import android.content.ContentResolver;
+import android.content.Context;
+import android.database.Cursor;
+import android.util.Log;
+import android.util.Pair;
+
+import com.nononsenseapps.notepad.database.RemoteTask;
+import com.nononsenseapps.notepad.database.RemoteTaskList;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.database.RemoteTask.Columns;
+
+/**
+ * This class is suitable for synchronizers to inherit from. It contains the
+ * necessary logic to handle the database communication and conversions.
+ * 
+ */
+public abstract class DBSyncBase implements SynchronizerInterface {
+
+	protected Context context;
+	private ContentResolver resolver;
+
+	public DBSyncBase(final Context context) {
+		this.context = context;
+		this.resolver = context.getContentResolver();
+
+	}
+
+	/**
+	 * Reads the database and the OrgFile. Returns the matching Tasks and Nodes.
+	 * 
+	 * @param file
+	 *            The OrgFile containing all the tasks
+	 * @param list
+	 *            The TaskList corresponding to the OrgFile.
+	 * @return A list of all task-related objects necessary for synchronization.
+	 */
+	protected List<Pair<OrgNode, Pair<RemoteTask, Task>>> getNodesAndDBEntries(
+			OrgFile file, TaskList list) {
+		final List<Pair<OrgNode, Pair<RemoteTask, Task>>> result = new ArrayList<Pair<OrgNode, Pair<RemoteTask, Task>>>();
+
+		final HashMap<Long, Task> tasks = getTasks(list);
+
+		final HashMap<Long, RemoteTask> remotes = getRemoteTasks(list);
+
+		final HashMap<String, OrgNode> nodes = getNodes(file);
+
+		// Start with tasks
+		for (long dbid : tasks.keySet()) {
+			Task task = tasks.get(dbid);
+			RemoteTask remote = remotes.remove(dbid);
+			OrgNode node = null;
+			// Can be null
+			if (remote != null && nodes.containsKey(remote.remoteId)) {
+				node = nodes.remove(remote.remoteId);
+			}
+			result.add(new Pair<OrgNode, Pair<RemoteTask, Task>>(node,
+					new Pair<RemoteTask, Task>(remote, task)));
+		}
+		// Follow with remaining remotes where task is null
+		for (RemoteTask remote : remotes.values()) {
+			Task task = null;
+			OrgNode node = null;
+			if (nodes.containsKey(remote.remoteId)) {
+				node = nodes.remove(remote.remoteId);
+			}
+			result.add(new Pair<OrgNode, Pair<RemoteTask, Task>>(node,
+					new Pair<RemoteTask, Task>(remote, task)));
+		}
+		// Last, nodes with no database connections
+		for (OrgNode node : nodes.values()) {
+			Task task = null;
+			RemoteTask remote = null;
+			result.add(new Pair<OrgNode, Pair<RemoteTask, Task>>(node,
+					new Pair<RemoteTask, Task>(remote, task)));
+		}
+
+		return result;
+	}
+
+	private HashMap<String, OrgNode> getNodes(final OrgFile file) {
+		final HashMap<String, OrgNode> map = new HashMap<String, OrgNode>();
+
+		for (OrgNode node : file.getSubNodes()) {
+			addNodeToMap(node, map);
+		}
+
+		return map;
+	}
+
+	private void addNodeToMap(final OrgNode node,
+			final HashMap<String, OrgNode> map) {
+		String key = OrgConverter.getNodeId(node);
+		Log.d(Synchronizer.TAG, "Key: " + key + ", node: " + node.getComments());
+		if (key == null) {
+			// This key won't necessarily be used later.
+			key = OrgConverter.generateId();
+		}
+		map.put(key, node);
+
+		for (OrgNode subnode : node.getSubNodes()) {
+			addNodeToMap(subnode, map);
+		}
+	}
+
+	private HashMap<Long, RemoteTask> getRemoteTasks(final TaskList list) {
+		final HashMap<Long, RemoteTask> map = new HashMap<Long, RemoteTask>();
+		final Cursor c = resolver.query(
+				RemoteTask.URI,
+				RemoteTask.Columns.FIELDS,
+				RemoteTask.Columns.SERVICE + " IS ? AND "
+						+ RemoteTask.Columns.ACCOUNT + " IS ? AND "
+						+ RemoteTask.Columns.LISTDBID + " IS ?",
+				new String[] { getServiceName(), getAccountName(),
+						Long.toString(list._id) }, null);
+		try {
+			while (c.moveToNext()) {
+				RemoteTask remote = new RemoteTask(c);
+				map.put(remote.dbid, remote);
+			}
+		} finally {
+			if (c != null)
+				c.close();
+		}
+
+		return map;
+	}
+
+	private HashMap<Long, Task> getTasks(final TaskList list) {
+		final HashMap<Long, Task> map = new HashMap<Long, Task>();
+		final Cursor c = resolver.query(Task.URI, Task.Columns.FIELDS,
+				Task.Columns.DBLIST + " IS ?",
+				new String[] { Long.toString(list._id) }, null);
+		try {
+			while (c.moveToNext()) {
+				Task task = new Task(c);
+				map.put(task._id, task);
+			}
+		} finally {
+			if (c != null)
+				c.close();
+		}
+
+		return map;
+	}
+
+	/**
+	 * Reads the database and the remote source.
+	 * 
+	 * @return The matching TaskList and OrgFiles.
+	 * @throws ParseException
+	 * @throws IOException
+	 */
+	protected List<Pair<OrgFile, Pair<RemoteTaskList, TaskList>>> getFilesAndDBEntries()
+			throws IOException, ParseException {
+		final List<Pair<OrgFile, Pair<RemoteTaskList, TaskList>>> result = new ArrayList<Pair<OrgFile, Pair<RemoteTaskList, TaskList>>>();
+
+		// get all lists
+		final HashMap<Long, TaskList> lists = getLists();
+
+		// get all db entries
+		final HashMap<Long, RemoteTaskList> remotes = getRemoteTaskLists();
+
+		// get all files
+		final HashSet<String> filenames = getRemoteFilenames();
+		for (String filename: filenames) {
+			Log.d(Synchronizer.TAG, "Get Filename: " + filename);
+		}
+
+		// Construct pairs from lists first. This removes entries as it goes.
+		for (Long dbid : lists.keySet()) {
+			TaskList list = lists.get(dbid);
+			RemoteTaskList remote = remotes.remove(dbid);
+			OrgFile file = null;
+			// Can be null
+			if (remote != null && filenames.remove(remote.remoteId)) {
+				file = OrgFile.createFromBufferedReader(remote.remoteId,
+						getRemoteFile(remote.remoteId));
+			}
+			String l = list.title;
+			String r = null;
+			if (remote != null)
+				r = remote.remoteId;
+			String f = null;
+			if (file != null)
+				f = file.getFilename();
+			Log.d(Synchronizer.TAG, "Pair:" + l + ", " + r + ", " + f);
+			result.add(new Pair<OrgFile, Pair<RemoteTaskList, TaskList>>(file,
+					new Pair<RemoteTaskList, TaskList>(remote, list)));
+		}
+
+		// Add remotes that no longer have a list
+		for (RemoteTaskList remote : remotes.values()) {
+			TaskList list = null;
+			OrgFile file = null;
+			// Can be null
+			if (remote != null && filenames.remove(remote.remoteId)) {
+				file = OrgFile.createFromBufferedReader(remote.remoteId,
+						getRemoteFile(remote.remoteId));
+			}
+			String l = null;
+			String r = null;
+			if (remote != null)
+				r = remote.remoteId;
+			String f = null;
+			if (file != null)
+				f = file.getFilename();
+			Log.d(Synchronizer.TAG, "Pair:" + l + ", " + r + ", " + f);
+			result.add(new Pair<OrgFile, Pair<RemoteTaskList, TaskList>>(file,
+					new Pair<RemoteTaskList, TaskList>(remote, list)));
+		}
+
+		// Add files that do not exist in database
+		for (String filename : filenames) {
+			TaskList list = null;
+			RemoteTaskList remote = null;
+			OrgFile file = OrgFile.createFromBufferedReader(filename,
+					getRemoteFile(filename));
+			String l = null;
+			String r = null;
+			String f = null;
+			if (file != null)
+				f = file.getFilename();
+			Log.d(Synchronizer.TAG, "Pair:" + l + ", " + r + ", " + f);
+			result.add(new Pair<OrgFile, Pair<RemoteTaskList, TaskList>>(file,
+					new Pair<RemoteTaskList, TaskList>(remote, list)));
+		}
+
+		return result;
+	}
+
+	/**
+	 * 
+	 * @return a map from list-dbid to RemoteTaskList
+	 */
+	private HashMap<Long, RemoteTaskList> getRemoteTaskLists() {
+		final HashMap<Long, RemoteTaskList> map = new HashMap<Long, RemoteTaskList>();
+		final Cursor c = resolver.query(RemoteTaskList.URI,
+				RemoteTaskList.Columns.FIELDS, RemoteTaskList.Columns.SERVICE
+						+ " IS ? AND " + RemoteTask.Columns.ACCOUNT + " IS ?",
+				new String[] { getServiceName(), getAccountName() }, null);
+		try {
+			while (c.moveToNext()) {
+				RemoteTaskList remote = new RemoteTaskList(c);
+				Log.d(Synchronizer.TAG, "Get remote: " + remote.remoteId);
+				map.put(remote.dbid, remote);
+			}
+		} finally {
+			if (c != null)
+				c.close();
+		}
+
+		return map;
+	}
+
+	/**
+	 * 
+	 * @return a map from list-dbid to TaskList
+	 */
+	private HashMap<Long, TaskList> getLists() {
+		final HashMap<Long, TaskList> map = new HashMap<Long, TaskList>();
+		final Cursor c = resolver.query(TaskList.URI, TaskList.Columns.FIELDS,
+				null, null, null);
+		try {
+			while (c.moveToNext()) {
+				TaskList list = new TaskList(c);
+				Log.d(Synchronizer.TAG, "Get list: " + list.title);
+				map.put(list._id, list);
+			}
+		} finally {
+			if (c != null)
+				c.close();
+		}
+
+		return map;
+	}
+
+	/**
+	 * Make sure notifications are synchronized from node to database.
+	 */
+	protected void replaceNotifications(final Task task, final OrgNode node) {
+		// TODO Auto-generated method stub
+		// Remove existing notifications
+
+		// Add new notifications
+		for (OrgTimestamp ts : node.getTimestamps()) {
+			if (!ts.isInactive()) {
+
+			}
+		}
+	}
+
+	protected boolean wasRenamed(final TaskList list,
+			final RemoteTaskList dbEntry, final OrgFile file) {
+		return !(list.title + ".org").equals(file.getFilename());
+	}
+
+	/**
+	 * (re)Names a file to match the DB version's current name.
+	 * 
+	 * @param list
+	 *            Current version in the database
+	 * @param dbEntry
+	 *            Current remote version in the database which will also be
+	 *            renamed.
+	 * @param file
+	 *            File to rename.
+	 */
+	protected void renameFile(final TaskList list,
+			final RemoteTaskList dbEntry, final OrgFile file) {
+		if (list.title != null && list.title.length() > 0) {
+			file.setFilename(list.title + ".org");
+		}
+		dbEntry.remoteId = file.getFilename();
+		dbEntry.save(context);
+	}
+
+	/**
+	 * Delete remote versions of tasks to current service.
+	 * 
+	 * @param listdbid
+	 *            List they belong to.
+	 * @return Number of deletions made.
+	 */
+	private int deleteRemoteTasksIn(final long listdbid) {
+		return context.getContentResolver().delete(
+				RemoteTask.URI,
+				Columns.SERVICE + " IS ? AND " + RemoteTask.Columns.ACCOUNT
+						+ " IS ? AND " + Columns.LISTDBID + " IS ?",
+				new String[] { getServiceName(), getAccountName(),
+						Long.toString(listdbid) });
+	}
+
+	/**
+	 * Deletes a list and all tasks and related entries (to current service).
+	 * Call this when remote file has been deleted.
+	 * 
+	 * @param list
+	 *            List to delete. Can be null.
+	 * @param dbEntry
+	 *            RemoteEntry in DB to delete. Can be null.
+	 */
+	protected void deleteLocal(final TaskList list, final RemoteTaskList dbEntry) {
+		long listdbid = -1;
+		if (list != null) {
+			list.delete(context);
+			listdbid = list._id;
+		}
+		if (dbEntry != null) {
+			dbEntry.delete(context);
+			listdbid = dbEntry.dbid;
+		}
+		// Tasks are deleted automatically, but not the
+		// remote-versions
+		deleteRemoteTasksIn(listdbid);
+	}
+
+	/**
+	 * Deletes a task and dbEntry from database.
+	 * 
+	 * @param task
+	 *            Task to delete, can be null.
+	 * @param dbEntry
+	 *            dbEntry to delete, can be null.
+	 */
+	protected void deleteLocal(final Task task, final RemoteTask dbEntry) {
+		if (task != null) {
+			task.delete(context);
+		}
+		if (dbEntry != null) {
+			dbEntry.delete(context);
+		}
+	}
+}

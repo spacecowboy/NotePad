@@ -92,7 +92,7 @@ public class RemoteTaskList extends DAO {
 	public String field5 = null;
 	
 	// Should be overwritten by children
-	protected String service = null;	
+	public String service = null;	
 	
 	public RemoteTaskList() {
 		
@@ -226,6 +226,11 @@ public class RemoteTaskList extends DAO {
 					getContent(), null, null);
 		}
 		return result;
+	}
+	
+	public int save(final Context context, final long updateTime) {
+		updated = updateTime;
+		return save(context);
 	}
 	
 	/**

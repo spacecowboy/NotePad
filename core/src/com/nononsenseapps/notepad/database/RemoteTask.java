@@ -143,7 +143,7 @@ public class RemoteTask extends DAO {
 	}
 
 	// Should be overwritten by children
-	protected String service = null;
+	public String service = null;
 
 	public RemoteTask() {
 

@@ -1,6 +1,7 @@
-package com.nononsenseapps.notepad.sync.orgmode;
+package com.nononsenseapps.notepad.sync.orgsync;
 
-import java.util.Random;
+import java.io.IOException;
+import java.text.ParseException;
 
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -39,13 +40,9 @@ public class OrgSyncService extends Service {
 
 	private boolean firstStart = true;
 
-	// Use a random number to keep track of changes
-	private final Random rand;
-
 	private Looper serviceLooper;
 	private ServiceHandler serviceHandler;
-	private OrgSyncer orgSyncer;
-	private FileWatcher fileWatcher;
+	// private FileWatcher fileWatcher;
 	private DBWatcher dbWatcher;
 
 	public static void start(Context context) {
@@ -53,7 +50,11 @@ public class OrgSyncService extends Service {
 	}
 
 	public OrgSyncService() {
-		rand = new Random();
+	}
+
+	public SynchronizerInterface getSynchronizer() {
+		// TODO do something else
+		return new SDSynchronizer(this);
 	}
 
 	@Override
@@ -74,29 +75,34 @@ public class OrgSyncService extends Service {
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
-		// Create a new orgSyncer to refresh the saved dir
-		orgSyncer = new OrgSyncer(this);
+		SynchronizerInterface syncer = getSynchronizer();
 
-		// Make sure the saved dir exists
-		if (!orgSyncer.createDir()) {
-			// Failed to create directory!
-			notifyError();
-			stopSelf();
-		}
+		// TODO testing
+		syncer.isConfigured();
+		// if (!syncer.isConfigured()) {
+		// notifyError();
+		// stopSelf();
+		// }
 
 		// Setup the file monitor. Restart it to catch new directories.
-		stopFileWatcher();
-		fileWatcher = null;
-		startFileWatcher();
+		// stopFileWatcher();
+		// fileWatcher = null;
+		// startFileWatcher();
 
 		// Setup the database monitor, if not already present.
 		if (dbWatcher == null) {
-			startDBWatcher();
+			// TODO testing...
+			// startDBWatcher();
 		}
 
 		// On first start do a 2-way sync.
 		if (firstStart) {
 			firstStart = false;
+			Message msg = serviceHandler.obtainMessage();
+			msg.arg1 = TWO_WAY_SYNC;
+			serviceHandler.sendMessage(msg);
+		} else {
+			// TODO testing
 			Message msg = serviceHandler.obtainMessage();
 			msg.arg1 = TWO_WAY_SYNC;
 			serviceHandler.sendMessage(msg);
@@ -128,32 +134,32 @@ public class OrgSyncService extends Service {
 
 	private void startDBWatcher() {
 		if (dbWatcher == null) {
-			dbWatcher = new DBWatcher(serviceHandler);
+			//dbWatcher = new DBWatcher(serviceHandler);
 		}
 		// Monitor both lists and tasks
-		getContentResolver().registerContentObserver(TaskList.URI, true,
-				dbWatcher);
-		getContentResolver().registerContentObserver(Task.URI, true, dbWatcher);
+		//getContentResolver().registerContentObserver(TaskList.URI, true,
+		//		dbWatcher);
+		//getContentResolver().registerContentObserver(Task.URI, true, dbWatcher);
 	}
 
-	private void stopFileWatcher() {
-		if (fileWatcher != null) {
-			fileWatcher.stopWatching();
-		}
-	}
-
-	private void startFileWatcher() {
-		if (fileWatcher == null) {
-			fileWatcher = new FileWatcher(orgSyncer.getOrgDir(), serviceHandler);
-		}
-		fileWatcher.startWatching();
-	}
+	// private void stopFileWatcher() {
+	// if (fileWatcher != null) {
+	// fileWatcher.stopWatching();
+	// }
+	// }
+	//
+	// private void startFileWatcher() {
+	// if (fileWatcher == null) {
+	// fileWatcher = new FileWatcher(orgSyncer.getOrgDir(), serviceHandler);
+	// }
+	// fileWatcher.startWatching();
+	// }
 
 	@Override
 	public void onDestroy() {
 		Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
 		// Unregister observers
-		stopFileWatcher();
+		// stopFileWatcher();
 		stopDBWatcher();
 	}
 
@@ -175,50 +181,67 @@ public class OrgSyncService extends Service {
 		@Override
 		public void handleMessage(Message msg) {
 
-			/*
-			 * Queues are used to delay operations until subsequent updates are
-			 * complete.
-			 */
-			switch (msg.arg1) {
-			case DB_TO_FS_QUEUE:
-				Log.d(TAG, "DB2FS-Queue: " + msg.arg2);
-				lastDBChangeId = msg.arg2;
-				break;
-			case DB_TO_FS_RUN:
-				if (msg.arg2 == lastDBChangeId) {
-					stopFileWatcher();
-					Log.d(TAG, "DB2FS-Run: " + msg.arg2);
-					Toast.makeText(OrgSyncService.this,
-							"DB2FS-Run: " + msg.arg2, Toast.LENGTH_SHORT)
-							.show();
-					// TODO actual work
-					startFileWatcher();
-				}
-				break;
-			case FS_TO_DB_QUEUE:
-				Log.d(TAG, "FS2DB-Queue: " + msg.arg2);
-				lastFSChangeId = msg.arg2;
-				break;
-			case FS_TO_DB_RUN:
-				if (msg.arg2 == lastFSChangeId) {
+			try {
+
+				/*
+				 * Queues are used to delay operations until subsequent updates
+				 * are complete.
+				 */
+				switch (msg.arg1) {
+				case DB_TO_FS_QUEUE:
+					Log.d(TAG, "DB2FS-Queue: " + msg.arg2);
+					lastDBChangeId = msg.arg2;
+					break;
+				case DB_TO_FS_RUN:
+					if (msg.arg2 == lastDBChangeId) {
+						// stopFileWatcher();
+						Log.d(TAG, "DB2FS-Run: " + msg.arg2);
+						Toast.makeText(OrgSyncService.this,
+								"DB2FS-Run: " + msg.arg2, Toast.LENGTH_SHORT)
+								.show();
+
+						// TODO actual work
+						getSynchronizer().fullSync();
+
+						// startFileWatcher();
+					}
+					break;
+				case FS_TO_DB_QUEUE:
+					Log.d(TAG, "FS2DB-Queue: " + msg.arg2);
+					lastFSChangeId = msg.arg2;
+					break;
+				case FS_TO_DB_RUN:
+					if (msg.arg2 == lastFSChangeId) {
+						stopDBWatcher();
+						Log.d(TAG, "FS2DB-Run: " + msg.arg2);
+						Toast.makeText(OrgSyncService.this,
+								"FS2DB-Run: " + msg.arg2, Toast.LENGTH_SHORT)
+								.show();
+
+						// TODO actual work
+						getSynchronizer().fullSync();
+
+						startDBWatcher();
+					}
+					break;
+				case TWO_WAY_SYNC:
 					stopDBWatcher();
-					Log.d(TAG, "FS2DB-Run: " + msg.arg2);
-					Toast.makeText(OrgSyncService.this,
-							"FS2DB-Run: " + msg.arg2, Toast.LENGTH_SHORT)
-							.show();
+					// stopFileWatcher();
+					Toast.makeText(OrgSyncService.this, "Do 2WAY",
+							Toast.LENGTH_SHORT).show();
 					// TODO actual work
+					getSynchronizer().fullSync();
 					startDBWatcher();
+					// startFileWatcher();
+					break;
 				}
-				break;
-			case TWO_WAY_SYNC:
-				stopDBWatcher();
-				stopFileWatcher();
-				Toast.makeText(OrgSyncService.this, "Do 2WAY",
-						Toast.LENGTH_SHORT).show();
-				// TODO actual work
-				startDBWatcher();
-				startFileWatcher();
-				break;
+
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
 		}
 	}
