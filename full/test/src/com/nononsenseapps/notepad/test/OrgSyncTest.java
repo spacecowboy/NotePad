@@ -64,6 +64,36 @@ public class OrgSyncTest extends AndroidTestCase {
         }
     }
 
+    public ArrayList<TaskList> getTaskLists() {
+        ContentResolver resolver = getContext().getContentResolver();
+        Cursor c = resolver.query(TaskList.URI, TaskList.Columns
+                .FIELDS, null, null, null);
+
+        ArrayList<TaskList> result = new ArrayList<TaskList>();
+        while (c.moveToNext()) {
+            result.add(new TaskList(c));
+        }
+        c.close();
+
+        return result;
+    }
+
+    public ArrayList<Task> getTasks(final long listid) {
+        ContentResolver resolver = getContext().getContentResolver();
+        Cursor c = resolver.query(Task.URI, Task.Columns
+                        .FIELDS, Task.Columns.DBLIST + " IS ?",
+                new String[]{Long.toString(listid)}, null
+        );
+
+        ArrayList<Task> result = new ArrayList<Task>();
+        while (c.moveToNext()) {
+            result.add(new Task(c));
+        }
+        c.close();
+
+        return result;
+    }
+
     public ArrayList<RemoteTaskList> getRemoteTaskLists() {
         ContentResolver resolver = getContext().getContentResolver();
         Cursor c = resolver.query(RemoteTaskList.URI, RemoteTaskList.Columns
@@ -168,7 +198,17 @@ public class OrgSyncTest extends AndroidTestCase {
             assertTrue(e.getLocalizedMessage(), false);
         }
 
+        // It should NOT have written to disk at all
+        assertEquals("No changes should not be written!", 0,
+                synchronizer.getPutRemoteCount());
+
         // Check that the database is still correct
+        ArrayList<TaskList> lists = getTaskLists();
+        assertEquals("Should only be one list", 1, lists.size());
+
+        ArrayList<Task> tasks = getTasks(lists.get(0)._id);
+        assertEquals("Should be only 2 tasks in list", taskCount, tasks.size());
+
         ArrayList<RemoteTaskList> remoteLists = getRemoteTaskLists();
         assertEquals("Should only be one RemoteList!", 1, remoteLists.size());
 
@@ -179,6 +219,7 @@ public class OrgSyncTest extends AndroidTestCase {
     class TestSynchronizer extends Synchronizer {
 
         private final String DIR;
+        private int putRemoteCount = 0;
 
         public TestSynchronizer(Context context) {
             super(context);
@@ -220,6 +261,7 @@ public class OrgSyncTest extends AndroidTestCase {
          */
         @Override
         public void putRemoteFile(OrgFile orgFile) throws IOException {
+            putRemoteCount += 1;
             final File file = new File(DIR, orgFile.getFilename());
             final BufferedWriter bw = new BufferedWriter(new FileWriter(file));
             bw.write(orgFile.treeToString());
@@ -298,6 +340,14 @@ public class OrgSyncTest extends AndroidTestCase {
         @Override
         public void postSynchronize() {
 
+        }
+
+        public int getPutRemoteCount() {
+            return putRemoteCount;
+        }
+
+        public void setPutRemoteCount(final int putRemoteCount) {
+            this.putRemoteCount = putRemoteCount;
         }
     }
 }

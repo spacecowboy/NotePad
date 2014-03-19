@@ -1,16 +1,5 @@
 package com.nononsenseapps.notepad.sync.orgsync;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-
-import org.cowboyprogrammer.org.OrgFile;
-import org.cowboyprogrammer.org.OrgNode;
-import org.cowboyprogrammer.org.OrgTimestamp;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -18,10 +7,21 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.nononsenseapps.notepad.database.RemoteTask;
+import com.nononsenseapps.notepad.database.RemoteTask.Columns;
 import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.database.RemoteTask.Columns;
+
+import org.cowboyprogrammer.org.OrgFile;
+import org.cowboyprogrammer.org.OrgNode;
+import org.cowboyprogrammer.org.OrgTimestamp;
+
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * This class is suitable for synchronizers to inherit from. It contains the
@@ -41,8 +41,11 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 
 	/**
 	 * Reads the database and the OrgFile. Returns the matching Tasks and Nodes.
-	 * 
-	 * @param file
+     *
+     * TODO
+     * For gods' sake, test me!
+     *
+     * @param file
 	 *            The OrgFile containing all the tasks
 	 * @param list
 	 *            The TaskList corresponding to the OrgFile.
@@ -64,21 +67,18 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 			RemoteTask remote = remotes.remove(dbid);
 			OrgNode node = null;
 			// Can be null
-			if (remote != null && nodes.containsKey(remote.remoteId)) {
-				node = nodes.remove(remote.remoteId);
-			}
-			result.add(new Pair<OrgNode, Pair<RemoteTask, Task>>(node,
+            if (remote != null) {
+                node = nodes.remove(remote.remoteId.toUpperCase());
+            }
+            result.add(new Pair<OrgNode, Pair<RemoteTask, Task>>(node,
 					new Pair<RemoteTask, Task>(remote, task)));
 		}
 		// Follow with remaining remotes where task is null
 		for (RemoteTask remote : remotes.values()) {
 			Task task = null;
-			OrgNode node = null;
-			if (nodes.containsKey(remote.remoteId)) {
-				node = nodes.remove(remote.remoteId);
-			}
-			result.add(new Pair<OrgNode, Pair<RemoteTask, Task>>(node,
-					new Pair<RemoteTask, Task>(remote, task)));
+            OrgNode node = nodes.remove(remote.remoteId.toUpperCase());
+            result.add(new Pair<OrgNode, Pair<RemoteTask, Task>>(node,
+                    new Pair<RemoteTask, Task>(remote, task)));
 		}
 		// Last, nodes with no database connections
 		for (OrgNode node : nodes.values()) {
@@ -101,15 +101,18 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 		return map;
 	}
 
-	private void addNodeToMap(final OrgNode node,
-			final HashMap<String, OrgNode> map) {
+    /**
+     * By convention, all generated ids are stored in uppercase.
+     */
+    private void addNodeToMap(final OrgNode node,
+                              final HashMap<String, OrgNode> map) {
 		String key = OrgConverter.getNodeId(node);
 		Log.d(Synchronizer.TAG, "Key: " + key + ", node: " + node.getComments());
 		if (key == null) {
 			// This key won't necessarily be used later.
 			key = OrgConverter.generateId();
 		}
-		map.put(key, node);
+        map.put(key.toUpperCase(), node);
 
 		for (OrgNode subnode : node.getSubNodes()) {
 			addNodeToMap(subnode, map);

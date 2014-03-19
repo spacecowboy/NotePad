@@ -1,21 +1,20 @@
 package com.nononsenseapps.notepad.sync.orgsync;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.Calendar;
-import java.util.List;
+import android.content.Context;
+import android.util.Pair;
+
+import com.nononsenseapps.notepad.database.RemoteTask;
+import com.nononsenseapps.notepad.database.RemoteTaskList;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
 
 import org.cowboyprogrammer.org.OrgFile;
 import org.cowboyprogrammer.org.OrgNode;
 
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.database.RemoteTaskList;
-import com.nononsenseapps.notepad.database.RemoteTask;
-
-import android.content.Context;
-import android.util.Log;
-import android.util.Pair;
+import java.io.IOException;
+import java.text.ParseException;
+import java.util.Calendar;
+import java.util.List;
 
 public abstract class Synchronizer extends DBSyncBase implements
 		SynchronizerInterface {
@@ -119,10 +118,12 @@ public abstract class Synchronizer extends DBSyncBase implements
 						if (0 < (shouldSave & SAVEDB)) {
 							list.save(context);
 						}
-						OrgConverter.toRemoteFromFile(dbEntry, file);
-						dbEntry.updated = Calendar.getInstance()
-								.getTimeInMillis();
-						dbEntry.save(context);
+                        if (shouldSave != SAVENONE) {
+                            OrgConverter.toRemoteFromFile(dbEntry, file);
+                            dbEntry.updated = Calendar.getInstance()
+                                    .getTimeInMillis();
+                            dbEntry.save(context);
+                        }
 
 						// In both cases, sync tasks
 						if (syncTasks(context, list, file) || shouldSaveFile) {
