@@ -112,11 +112,11 @@ public abstract class Synchronizer extends DBSyncBase implements
 						//Log.d(TAG, "MERGE LISTS");
 						final int shouldSave = merge(list, dbEntry, file);
 
-						if (0 < (shouldSave | SAVEORG)) {
+						if (0 < (shouldSave & SAVEORG)) {
 							// UPDATE FILE DB
 							shouldSaveFile = true;
 						}
-						if (0 < (shouldSave | SAVEDB)) {
+						if (0 < (shouldSave & SAVEDB)) {
 							list.save(context);
 						}
 						OrgConverter.toRemoteFromFile(dbEntry, file);
@@ -274,12 +274,12 @@ public abstract class Synchronizer extends DBSyncBase implements
 						//Log.d(TAG, "MERGE TASKS");
 						final int shouldSave = merge(task, dbEntry, node);
 
-						if (0 < (shouldSave | SAVEORG)) {
+						if (0 < (shouldSave & SAVEORG)) {
 							// UPDATE NODE DB
 							OrgConverter.toNodeFromRemote(node, dbEntry);
 							shouldUpdateFile = true;
 						}
-						if (0 < (shouldSave | SAVEDB)) {
+						if (0 < (shouldSave & SAVEDB)) {
 							task.save(context);
 						}
 						dbEntry.updated = Calendar.getInstance()
