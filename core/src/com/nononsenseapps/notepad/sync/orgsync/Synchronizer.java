@@ -45,16 +45,23 @@ public abstract class Synchronizer extends DBSyncBase implements
 			if (dbEntry == null) {
 				if (file == null) {
 					// NEW CREATE FILE
-					//Log.d(TAG, "CREATE FILE DB");
 					// Create file
-					file = new OrgFile(list.title + ".org");
-					OrgConverter.toFileFromList(list, file);
+                    file = getNewFile(list.title);
+                    OrgConverter.toFileFromList(list, file);
 
 					// Add tasks to File
 					syncTasks(context, list, file);
 
 					// Save file
 					putRemoteFile(file);
+
+                    // If name was not available, rename list as well
+                    if (!file.getFilename().equals(OrgConverter
+                            .getTitleAsFilename(list))) {
+                        list.title = file.getFilename().substring(0,
+                                file.getFilename().length() - 4);
+                        list.save(context);
+                    }
 
 					// Create DbEntry
 					dbEntry = new RemoteTaskList();
@@ -66,7 +73,6 @@ public abstract class Synchronizer extends DBSyncBase implements
 
 				} else {
 					// NEW CREATE DB LIST
-					//Log.d(TAG, "CREATE LIST DB");
 					// Create TaskList
 					list = new TaskList();
 					OrgConverter.toListFromFile(list, file);
@@ -89,34 +95,33 @@ public abstract class Synchronizer extends DBSyncBase implements
 			} else {
 				if (list == null) {
 					// DELETE FILE DB
-					//Log.d(TAG, "DELETE FILE DB");
 					deleteRemoteFile(file);
 					deleteLocal(list, dbEntry);
 				} else {
 					if (file == null) {
 						// DELETE DB LIST
-						//Log.d(TAG, "DELETE LIST DB");
 						// List and entry
 						deleteLocal(list, dbEntry);
 					} else {
-						boolean shouldSaveFile = false;
+                        // UPDATE EXISTING LIST, IF CHANGED
+                        boolean shouldSaveFile = false;
 
 						if (wasRenamed(list, dbEntry, file)) {
-							//Log.d(TAG, "RENAMED LIST");
 							final String oldName = file.getFilename();
 							renameFile(list, dbEntry, file);
 							renameRemoteFile(oldName, file);
 						}
 
-						//Log.d(TAG, "MERGE LISTS");
-						final int shouldSave = merge(list, dbEntry, file);
+                        // Merge information in database and file
+                        final int shouldSave = merge(list, dbEntry, file);
 
 						if (0 < (shouldSave & SAVEORG)) {
 							// UPDATE FILE DB
 							shouldSaveFile = true;
 						}
 						if (0 < (shouldSave & SAVEDB)) {
-							list.save(context);
+                            // UPDATE LIST DB
+                            list.save(context);
 						}
                         if (shouldSave != SAVENONE) {
                             OrgConverter.toRemoteFromFile(dbEntry, file);

@@ -1,11 +1,11 @@
 package com.nononsenseapps.notepad.sync.orgsync;
 
+import org.cowboyprogrammer.org.OrgFile;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.HashSet;
-
-import org.cowboyprogrammer.org.OrgFile;
 
 /**
  * This interface defines an Org-Mode synchronizer.
@@ -32,6 +32,21 @@ public interface SynchronizerInterface {
 	 * account, folder etc...
 	 */
 	public boolean isConfigured();
+
+    /**
+     * Returns an OrgFile object with a filename set that is guaranteed to
+     * not already exist. Use this method to avoid having multiple objects
+     * pointing to the same file.
+     *
+     * @param desiredName The name you'd want. If it exists,
+     *                    it will be used as the base in desiredName1,
+     *                    desiredName2, etc. Limited to 99.
+     * @return an OrgFile guaranteed not to exist.
+     * @throws IOException
+     * @throws IllegalArgumentException
+     */
+    public OrgFile getNewFile(final String desiredName) throws IOException,
+            IllegalArgumentException;
 
 	/**
 	 * Replaces the file on the remote end with the given content.

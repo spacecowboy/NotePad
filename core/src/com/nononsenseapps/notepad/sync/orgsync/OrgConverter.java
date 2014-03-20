@@ -1,16 +1,5 @@
 package com.nononsenseapps.notepad.sync.orgsync;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Random;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.cowboyprogrammer.org.OrgFile;
-import org.cowboyprogrammer.org.OrgNode;
-import org.cowboyprogrammer.org.OrgTimestamp;
-
 import android.annotation.SuppressLint;
 
 import com.nononsenseapps.notepad.database.Notification;
@@ -19,13 +8,22 @@ import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 
+import org.cowboyprogrammer.org.OrgFile;
+import org.cowboyprogrammer.org.OrgNode;
+import org.cowboyprogrammer.org.OrgTimestamp;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * This class handles conversion from the internal database format to org-mode
  * fileformat
  */
 public class OrgConverter {
-
-	private static Random rand;
 
 	private static final String LISTSTYLECOMMENT = "# NONSENSESTYLE: ";
 	private static final String LISTSORTCOMMENT = "# NONSENSESORTING: ";
@@ -34,11 +32,12 @@ public class OrgConverter {
 			"#\\s*nonsensestyle:\\s*(\\w+)\\s*?\\n", Pattern.CASE_INSENSITIVE);
 	private static final Pattern PatternSorting = Pattern
 			.compile("#\\s*nonsensesorting:\\s*(\\w+)\\s*?\\n",
-					Pattern.CASE_INSENSITIVE);
+                    Pattern.CASE_INSENSITIVE);
 	// Ending white space used when removed
 	private static final String NonsenseIdPattern = "#\\s*NONSENSEID:\\s*(\\w+)\\s*";
 	private static final Pattern PatternId = Pattern.compile(NonsenseIdPattern,
 			Pattern.CASE_INSENSITIVE);
+    private static Random rand;
 
 	/**
 	 * Generates an id for RemoteTask(List) objects.
@@ -260,14 +259,13 @@ public class OrgConverter {
 	 * Fills in the information in the file from the list
 	 */
 	public static void toFileFromList(final TaskList list, final OrgFile file) {
-		setTitleAsFilename(list, file);
 		setSortingOnFile(list, file);
 		setListTypeOnFile(list, file);
 	}
 
-	public static void setTitleAsFilename(TaskList list, OrgFile file) {
-		file.setFilename(list.title + ".org");
-	}
+    public static String getTitleAsFilename(TaskList list) {
+        return list.title + ".org";
+    }
 
 	public static void setListTypeOnFile(TaskList list, OrgFile file) {
 		file.getComments().replaceAll(LISTSTYLECOMMENT, "");

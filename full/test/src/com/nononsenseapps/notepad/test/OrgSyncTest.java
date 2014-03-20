@@ -3,7 +3,6 @@ package com.nononsenseapps.notepad.test;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Environment;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
@@ -40,8 +39,7 @@ public class OrgSyncTest extends AndroidTestCase {
     public void setUp() throws Exception {
         super.setUp();
 
-        File d =  new File(Environment.getExternalStorageDirectory().getPath(),
-                "ORGSYNCTEST");
+        File d = getContext().getDir("ORGSYNCTEST", Context.MODE_PRIVATE);
 
         DIR = d.getPath();
 
@@ -59,7 +57,7 @@ public class OrgSyncTest extends AndroidTestCase {
         resolver.delete(RemoteTask.URI, null, null);
 
         File d = new File(DIR);
-        for (File f: d.listFiles()) {
+        for (File f : d.listFiles()) {
             f.delete();
         }
     }
@@ -98,7 +96,8 @@ public class OrgSyncTest extends AndroidTestCase {
         ContentResolver resolver = getContext().getContentResolver();
         Cursor c = resolver.query(RemoteTaskList.URI, RemoteTaskList.Columns
                         .FIELDS, RemoteTaskList.Columns.ACCOUNT + " IS ?",
-                new String[] {ACCOUNT}, null);
+                new String[]{ACCOUNT}, null
+        );
 
         ArrayList<RemoteTaskList> result = new ArrayList<RemoteTaskList>();
         while (c.moveToNext()) {
@@ -112,8 +111,9 @@ public class OrgSyncTest extends AndroidTestCase {
     public ArrayList<RemoteTask> getRemoteTasks() {
         ContentResolver resolver = getContext().getContentResolver();
         Cursor c = resolver.query(RemoteTask.URI, RemoteTask.Columns
-                .FIELDS, RemoteTask.Columns.ACCOUNT + " IS ?",
-                new String[] {ACCOUNT}, null);
+                        .FIELDS, RemoteTask.Columns.ACCOUNT + " IS ?",
+                new String[]{ACCOUNT}, null
+        );
 
         ArrayList<RemoteTask> result = new ArrayList<RemoteTask>();
         while (c.moveToNext()) {
@@ -170,7 +170,7 @@ public class OrgSyncTest extends AndroidTestCase {
         assertEquals("Only one list was created.", 1, filenames.size());
 
         String filename = null;
-        for (String f: filenames) {
+        for (String f : filenames) {
             filename = f;
         }
 
@@ -216,6 +216,47 @@ public class OrgSyncTest extends AndroidTestCase {
         assertEquals("Should be exactly 2 RemoteTasks", taskCount, remoteTasks.size());
     }
 
+    /**
+     * Having two lists with the same name is possible in the app,
+     * but obviously impossible at the filesystem level.
+     */
+    public void testDuplicateName() {
+        // Create first list
+        TaskList list1 = new TaskList();
+        list1.title = "TestList";
+        list1.save(getContext());
+        assertTrue(list1._id > 0);
+
+        // Create second list
+        TaskList list2 = new TaskList();
+        list2.title = "TestList";
+        list2.save(getContext());
+        assertTrue(list2._id > 0);
+
+        // Sync it
+        TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
+
+        // Make sure the second one was renamed!
+        for (TaskList tl : getTaskLists()) {
+            if (tl._id == list1._id) {
+                assertEquals(list1.title, tl.title);
+            } else if (tl._id == list2._id) {
+                assertEquals("List should have been renamed",
+                        list2.title + 1, tl.title);
+            }
+        }
+
+        HashSet<String> filenames = synchronizer.getRemoteFilenames();
+        assertEquals(2, filenames.size());
+        assertTrue(filenames.contains(list1.title + ".org"));
+        assertTrue(filenames.contains(list2.title + 1 + ".org"));
+    }
+
     class TestSynchronizer extends Synchronizer {
 
         private final String DIR;
@@ -252,6 +293,36 @@ public class OrgSyncTest extends AndroidTestCase {
         @Override
         public boolean isConfigured() {
             return true;
+        }
+
+        /**
+         * Returns an OrgFile object with a filename set that is guaranteed to
+         * not already exist. Use this method to avoid having multiple objects
+         * pointing to the same file.
+         *
+         * @param desiredName The name you'd want, minus the ".org" suffix. If
+         *                    it exists, it will be used as the base in
+         *                    desiredName1.org, desiredName2.org,
+         *                    etc. Limited to 99.
+         * @return an OrgFile guaranteed not to exist.
+         * @throws java.io.IOException
+         */
+        @Override
+        public OrgFile getNewFile(final String desiredName) throws
+                IOException, IllegalArgumentException {
+            String filename;
+            for (int i = 0; i < 100; i++) {
+                if (i == 0) {
+                    filename = desiredName + ".org";
+                } else {
+                    filename = desiredName + i + ".org";
+                }
+                File f = new File(DIR, filename);
+                if (!f.exists()) {
+                    return new OrgFile(filename);
+                }
+            }
+            throw new IllegalArgumentException("Filename not accessible");
         }
 
         /**
