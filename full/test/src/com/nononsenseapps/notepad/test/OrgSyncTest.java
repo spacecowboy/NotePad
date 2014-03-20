@@ -311,6 +311,57 @@ public class OrgSyncTest extends AndroidTestCase {
         assertTrue(renamed.exists());
     }
 
+    /**
+     * Deleting a list should delete the corresponding file and all tasks.
+     * Tested branches:
+     * - Delete File Db
+     */
+    public void testDeletedList() {
+        // Setup simple DB
+        final int taskCount = 2;
+        testFreshSimple();
+
+        // Delete list(s)
+        File file = null;
+        ArrayList<TaskList> lists = getTaskLists();
+        for (TaskList list: lists) {
+            file = new File(DIR, OrgConverter.getTitleAsFilename(list));
+
+            list.delete(getContext());
+        }
+
+        assertNotNull(file);
+        // Make sure it exists at this point
+        assertTrue(file.exists());
+        // And that the database still has a record of it
+        ArrayList<RemoteTaskList> remoteLists = getRemoteTaskLists();
+        assertEquals("Should be one RemoteList!", 1, remoteLists.size());
+
+        ArrayList<RemoteTask> remoteTasks = getRemoteTasks();
+        assertEquals("Should be exactly 2 RemoteTasks", taskCount, remoteTasks.size());
+
+        // Sync it again
+        TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
+
+        // Check that the database has removed it
+        lists = getTaskLists();
+        assertTrue("Should be no list", lists.isEmpty());
+
+        remoteLists = getRemoteTaskLists();
+        assertTrue("Should be no RemoteList!", remoteLists.isEmpty());
+
+        remoteTasks = getRemoteTasks();
+        assertTrue("Should be no RemoteTasks", remoteTasks.isEmpty());
+
+        // Make sure no file exists anymore
+        assertFalse(file.exists());
+    }
+
     class TestSynchronizer extends SDSynchronizer {
 
         private int putRemoteCount = 0;

@@ -7,7 +7,6 @@ import android.util.Log;
 import android.util.Pair;
 
 import com.nononsenseapps.notepad.database.RemoteTask;
-import com.nononsenseapps.notepad.database.RemoteTask.Columns;
 import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -342,8 +341,9 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	private int deleteRemoteTasksIn(final long listdbid) {
 		return context.getContentResolver().delete(
 				RemoteTask.URI,
-				Columns.SERVICE + " IS ? AND " + RemoteTask.Columns.ACCOUNT
-						+ " IS ? AND " + Columns.LISTDBID + " IS ?",
+				RemoteTask.Columns.SERVICE + " IS ? AND " + RemoteTask.Columns
+                        .ACCOUNT
+						+ " IS ? AND " + RemoteTask.Columns.LISTDBID + " IS ?",
 				new String[] { getServiceName(), getAccountName(),
 						Long.toString(listdbid) });
 	}
