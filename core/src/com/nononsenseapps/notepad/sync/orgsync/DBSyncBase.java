@@ -308,7 +308,8 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 
 	protected boolean wasRenamed(final TaskList list,
 			final RemoteTaskList dbEntry, final OrgFile file) {
-		return !(list.title + ".org").equals(file.getFilename());
+		return !(OrgConverter.getTitleAsFilename(list)).equals(file.getFilename
+                ());
 	}
 
 	/**
@@ -325,7 +326,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	protected void renameFile(final TaskList list,
 			final RemoteTaskList dbEntry, final OrgFile file) {
 		if (list.title != null && list.title.length() > 0) {
-			file.setFilename(list.title + ".org");
+			file.setFilename(OrgConverter.getTitleAsFilename(list));
 		}
 		dbEntry.remoteId = file.getFilename();
 		dbEntry.save(context);

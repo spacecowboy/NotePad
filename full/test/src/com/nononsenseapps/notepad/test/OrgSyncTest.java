@@ -10,6 +10,8 @@ import com.nononsenseapps.notepad.database.RemoteTask;
 import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.sync.orgsync.OrgConverter;
+import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
 import com.nononsenseapps.notepad.sync.orgsync.Synchronizer;
 
 import org.cowboyprogrammer.org.OrgFile;
@@ -138,6 +140,9 @@ public class OrgSyncTest extends AndroidTestCase {
 
     /**
      * End result: synced state of one tasklist with two tasks.
+     * Tested flow branches:
+     * - Lists: Create file
+     * - Tasks: Create node
      */
     public void testFreshSimple() {
         // First create a list with 2 tasks
@@ -186,6 +191,9 @@ public class OrgSyncTest extends AndroidTestCase {
 
     /**
      * Nothing has changed here.
+     * Tested flow branches:
+     * - Lists: Update Merge
+     * - Tasks: Update Merge
      */
     public void testNothingNew() {
         final int taskCount = 2;
@@ -219,6 +227,8 @@ public class OrgSyncTest extends AndroidTestCase {
     /**
      * Having two lists with the same name is possible in the app,
      * but obviously impossible at the filesystem level.
+     * Tested flow branches:
+     * - Lists: Create file
      */
     public void testDuplicateName() {
         // Create first list
@@ -257,15 +267,63 @@ public class OrgSyncTest extends AndroidTestCase {
         assertTrue(filenames.contains(list2.title + 1 + ".org"));
     }
 
-    class TestSynchronizer extends Synchronizer {
+    /**
+     * Renaming a list in the app should rename the file.
+     * Tested branches:
+     * - Update list, renamed
+     */
+    public void testRenamedList() {
+        // Create first list
+        TaskList list1 = new TaskList();
+        list1.title = "TestList";
+        list1.save(getContext());
+        assertTrue(list1._id > 0);
 
-        private final String DIR;
+        // Sync it
+        TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
+
+        File org = new File(DIR, OrgConverter.getTitleAsFilename
+                (list1));
+        // Make sure original file is there
+        assertTrue(org.exists());
+
+        // Rename the list
+        list1.title = "RenamedList";
+        list1.save(getContext());
+
+        // Sync it
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
+
+        // Make sure rename was successful
+        assertFalse(org.exists());
+
+        File renamed = new File(DIR, OrgConverter.getTitleAsFilename
+                (list1));
+        assertTrue(renamed.exists());
+    }
+
+    class TestSynchronizer extends SDSynchronizer {
+
         private int putRemoteCount = 0;
 
         public TestSynchronizer(Context context) {
             super(context);
 
-            DIR = OrgSyncTest.DIR;
+            ORG_DIR = OrgSyncTest.DIR;
+        }
+
+        @Override
+        public boolean isConfigured() {
+            return true;
         }
 
         /**
@@ -274,55 +332,12 @@ public class OrgSyncTest extends AndroidTestCase {
          */
         @Override
         public String getServiceName() {
-            return "TestSync";
-        }
-
-        /**
-         * @return The usename of the configured service. Likely an e-mail.
-         */
-        @Override
-        public String getAccountName() {
             return ACCOUNT;
         }
 
-        /**
-         * Returns true if the synchronizer has been configured. This is called
-         * before synchronization. It will be true if the user has selected an
-         * account, folder etc...
-         */
         @Override
-        public boolean isConfigured() {
-            return true;
-        }
-
-        /**
-         * Returns an OrgFile object with a filename set that is guaranteed to
-         * not already exist. Use this method to avoid having multiple objects
-         * pointing to the same file.
-         *
-         * @param desiredName The name you'd want, minus the ".org" suffix. If
-         *                    it exists, it will be used as the base in
-         *                    desiredName1.org, desiredName2.org,
-         *                    etc. Limited to 99.
-         * @return an OrgFile guaranteed not to exist.
-         * @throws java.io.IOException
-         */
-        @Override
-        public OrgFile getNewFile(final String desiredName) throws
-                IOException, IllegalArgumentException {
-            String filename;
-            for (int i = 0; i < 100; i++) {
-                if (i == 0) {
-                    filename = desiredName + ".org";
-                } else {
-                    filename = desiredName + i + ".org";
-                }
-                File f = new File(DIR, filename);
-                if (!f.exists()) {
-                    return new OrgFile(filename);
-                }
-            }
-            throw new IllegalArgumentException("Filename not accessible");
+        public String getAccountName() {
+            return ACCOUNT;
         }
 
         /**
@@ -333,84 +348,7 @@ public class OrgSyncTest extends AndroidTestCase {
         @Override
         public void putRemoteFile(OrgFile orgFile) throws IOException {
             putRemoteCount += 1;
-            final File file = new File(DIR, orgFile.getFilename());
-            final BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-            bw.write(orgFile.treeToString());
-            bw.close();
-        }
-
-        /**
-         * Delete the file on the remote end.
-         *
-         * @param orgFile The file to delete.
-         */
-        @Override
-        public void deleteRemoteFile(OrgFile orgFile) {
-            final File file = new File(DIR, orgFile.getFilename());
-            file.delete();
-        }
-
-        /**
-         * Rename the file on the remote end.
-         *
-         * @param oldName The name it is currently stored as on the remote end.
-         * @param orgFile
-         */
-        @Override
-        public void renameRemoteFile(String oldName, OrgFile orgFile) {
-            final File oldFile = new File(DIR, oldName);
-            final File newFile = new File(DIR, orgFile.getFilename());
-            oldFile.renameTo(newFile);
-        }
-
-        /**
-         * Returns a BufferedReader to the remote file. Null if it doesn't exist.
-         *
-         * @param filename Name of the file, without path
-         */
-        @Override
-        public BufferedReader getRemoteFile(String filename) {
-            final File file = new File(DIR, filename);
-            BufferedReader br = null;
-            if (file.exists()) {
-                try {
-                    br = new BufferedReader(new FileReader(file));
-                } catch (FileNotFoundException e) {
-                    br = null;
-                }
-            }
-
-            return br;
-        }
-
-        /**
-         * @return a set of all remote files.
-         */
-        @Override
-        public HashSet<String> getRemoteFilenames() {
-            final HashSet<String> filenames = new HashSet<String>();
-            final File dir = new File(DIR);
-            final File[] files = dir.listFiles(new FilenameFilter() {
-                public boolean accept(File dir, String name) {
-                    return name.toLowerCase().endsWith(".org");
-                }
-            });
-
-            if (files != null) {
-                for (File f : files) {
-                    filenames.add(f.getName());
-                }
-            }
-
-            return filenames;
-        }
-
-        /**
-         * Use this to disconnect from any services and cleanup.
-         */
-        @Override
-        public void postSynchronize() {
-
+            super.putRemoteFile(orgFile);
         }
 
         public int getPutRemoteCount() {

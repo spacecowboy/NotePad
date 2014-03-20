@@ -18,6 +18,10 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.HashSet;
 
+/**
+ * A synchronizer that that uses an external directory on the SD-card as
+ * destination.
+ */
 public class SDSynchronizer extends Synchronizer implements
 		SynchronizerInterface {
 
@@ -26,9 +30,9 @@ public class SDSynchronizer extends Synchronizer implements
 			.getExternalStorageDirectory().toString() + "/NoNonsenseNotes";
 	public static final String PREF_ORG_DIR = "pref_org_dir";
 	public static final String PREF_ORG_SD_ENABLED = "pref_org_sd_enabled";
-    private final static String SERVICENAME = "SDORG";
-    private final String ORG_DIR;
-	private final boolean configured;
+    public final static String SERVICENAME = "SDORG";
+    protected String ORG_DIR;
+    protected final boolean configured;
 
 	public SDSynchronizer(Context context) {
 		super(context);
@@ -37,17 +41,29 @@ public class SDSynchronizer extends Synchronizer implements
 		ORG_DIR = prefs.getString(PREF_ORG_DIR, DEFAULT_ORG_DIR);
 		configured = prefs.getBoolean(PREF_ORG_SD_ENABLED, false);
 	}
-	
+
+    /**
+     * @return A unique name for this service. Should be descriptive, like
+     * DropboxOrg, SDOrg or SSHOrg.
+     */
 	@Override
 	public String getAccountName() {
 		return SERVICENAME;
 	}
 
+    /**
+     * @return The username of the configured service. Likely an e-mail.
+     */
 	@Override
 	public String getServiceName() {
 		return SERVICENAME;
 	}
 
+    /**
+     * Returns true if the synchronizer has been configured. This is called
+     * before synchronization. It will be true if the user has selected an
+     * account, folder etc...
+     */
 	@Override
 	public boolean isConfigured() {
 		// TODO testing
@@ -75,8 +91,8 @@ public class SDSynchronizer extends Synchronizer implements
      * @throws java.io.IOException
      */
     @Override
-    public OrgFile getNewFile(final String desiredName) throws IOException,
-            IllegalArgumentException {
+    public OrgFile getNewFile(final String desiredName) throws
+            IOException, IllegalArgumentException {
         String filename;
         for (int i = 0; i < 100; i++) {
             if (i == 0) {
@@ -92,6 +108,11 @@ public class SDSynchronizer extends Synchronizer implements
         throw new IllegalArgumentException("Filename not accessible");
     }
 
+    /**
+     * Replaces the file on the remote end with the given content.
+     *
+     * @param orgFile The file to save. Uses the filename stored in the object.
+     */
     @Override
     public void putRemoteFile(OrgFile orgFile) throws IOException {
 		final File file = new File(ORG_DIR, orgFile.getFilename());
@@ -100,54 +121,76 @@ public class SDSynchronizer extends Synchronizer implements
 		bw.close();
 	}
 
-	@Override
-	public void deleteRemoteFile(OrgFile orgFile) {
-		final File file = new File(ORG_DIR, orgFile.getFilename());
-		file.delete();
-	}
+    /**
+     * Delete the file on the remote end.
+     *
+     * @param orgFile The file to delete.
+     */
+    @Override
+    public void deleteRemoteFile(OrgFile orgFile) {
+        final File file = new File(ORG_DIR, orgFile.getFilename());
+        file.delete();
+    }
 
-	@Override
-	public void renameRemoteFile(String oldName, OrgFile orgFile) {
-		final File oldFile = new File(ORG_DIR, oldName);
-		final File newFile = new File(ORG_DIR, orgFile.getFilename());
-		oldFile.renameTo(newFile);
-	}
+    /**
+     * Rename the file on the remote end.
+     *
+     * @param oldName The name it is currently stored as on the remote end.
+     * @param orgFile
+     */
+    @Override
+    public void renameRemoteFile(String oldName, OrgFile orgFile) {
+        final File oldFile = new File(ORG_DIR, oldName);
+        final File newFile = new File(ORG_DIR, orgFile.getFilename());
+        oldFile.renameTo(newFile);
+    }
 
-	@Override
-	public BufferedReader getRemoteFile(String filename) {
-		final File file = new File(ORG_DIR, filename);
-		BufferedReader br = null;
-		if (file.exists()) {
-			try {
-				br = new BufferedReader(new FileReader(file));
-			} catch (FileNotFoundException e) {
-				br = null;
-			}
-		}
+    /**
+     * Returns a BufferedReader to the remote file. Null if it doesn't exist.
+     *
+     * @param filename Name of the file, without path
+     */
+    @Override
+    public BufferedReader getRemoteFile(String filename) {
+        final File file = new File(ORG_DIR, filename);
+        BufferedReader br = null;
+        if (file.exists()) {
+            try {
+                br = new BufferedReader(new FileReader(file));
+            } catch (FileNotFoundException e) {
+                br = null;
+            }
+        }
 
-		return br;
-	}
+        return br;
+    }
 
-	@SuppressLint("DefaultLocale")
-	@Override
-	public HashSet<String> getRemoteFilenames() {
-		final HashSet<String> filenames = new HashSet<String>();
-		final File dir = new File(ORG_DIR);
-		final File[] files = dir.listFiles(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				return name.toLowerCase().endsWith(".org");
-			}
-		});
+    /**
+     * @return a set of all remote files.
+     */
+    @SuppressLint("DefaultLocale")
+    @Override
+    public HashSet<String> getRemoteFilenames() {
+        final HashSet<String> filenames = new HashSet<String>();
+        final File dir = new File(ORG_DIR);
+        final File[] files = dir.listFiles(new FilenameFilter() {
+            public boolean accept(File dir, String name) {
+                return name.toLowerCase().endsWith(".org");
+            }
+        });
 
-		if (files != null) {
-			for (File f : files) {
-				filenames.add(f.getName());
-			}
-		}
+        if (files != null) {
+            for (File f : files) {
+                filenames.add(f.getName());
+            }
+        }
 
-		return filenames;
-	}
+        return filenames;
+    }
 
+    /**
+     * Use this to disconnect from any services and cleanup.
+     */
 	@Override
 	public void postSynchronize() {
 		// Nothing to do
