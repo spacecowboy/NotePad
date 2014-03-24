@@ -1,7 +1,5 @@
 package com.nononsenseapps.notepad.database;
 
-import com.nononsenseapps.helpers.UpdateNotifier;
-
 import android.app.SearchManager;
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -14,22 +12,24 @@ import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.util.Log;
 
+import com.nononsenseapps.helpers.UpdateNotifier;
+
 public class MyContentProvider extends ContentProvider {
 	public static final String AUTHORITY = "com.nononsenseapps.NotePad";
 	public static final String SCHEME = "content://";
-
-	public MyContentProvider() {
-	}
-
 	private static final UriMatcher sURIMatcher = new UriMatcher(
 			UriMatcher.NO_MATCH);
-	static {
-		TaskList.addMatcherUris(sURIMatcher);
-		Task.addMatcherUris(sURIMatcher);
-		Notification.addMatcherUris(sURIMatcher);
-		RemoteTaskList.addMatcherUris(sURIMatcher);
-		RemoteTask.addMatcherUris(sURIMatcher);
-	}
+
+    static {
+        TaskList.addMatcherUris(sURIMatcher);
+        Task.addMatcherUris(sURIMatcher);
+        Notification.addMatcherUris(sURIMatcher);
+        RemoteTaskList.addMatcherUris(sURIMatcher);
+        RemoteTask.addMatcherUris(sURIMatcher);
+    }
+
+    public MyContentProvider() {
+    }
 
 	@Override
 	public String getType(Uri uri) {
@@ -204,13 +204,19 @@ public class MyContentProvider extends ContentProvider {
 				break;
 			case RemoteTaskList.BASEITEMCODE:
 				result += db.update(RemoteTaskList.TABLE_NAME, values,
-						selection, selectionArgs);
-				break;
-			case RemoteTask.BASEITEMCODE:
-				result += db.update(RemoteTask.TABLE_NAME, values, selection,
-						selectionArgs);
-				break;
-			default:
+                        RemoteTaskList.whereIdIs(selection),
+                        RemoteTaskList.whereIdArg(Long.parseLong(uri
+                                .getLastPathSegment()), selectionArgs)
+                );
+                break;
+                case RemoteTask.BASEITEMCODE:
+                    result += db.update(RemoteTask.TABLE_NAME, values,
+                            RemoteTask.whereIdIs(selection),
+                            RemoteTask.whereIdArg(Long.parseLong(uri
+                                    .getLastPathSegment()), selectionArgs)
+                    );
+                    break;
+                default:
 				throw new IllegalArgumentException("Faulty URI provided: "
 						+ uri.toString());
 			}

@@ -288,12 +288,12 @@ public abstract class Synchronizer extends DBSyncBase implements
 						if (0 < (shouldSave & SAVEDB)) {
 							task.save(context);
 						}
-						dbEntry.updated = Calendar.getInstance()
-								.getTimeInMillis();
-						// Remember this version for later
-						OrgConverter.toRemoteFromNode(dbEntry, node);
-						dbEntry.save(context);
-					}
+                        if (0 < shouldSave) {
+                            // Remember this version for later
+                            OrgConverter.toRemoteFromNode(dbEntry, node);
+                            dbEntry.save(context);
+                        }
+                    }
 				}
 			}
 

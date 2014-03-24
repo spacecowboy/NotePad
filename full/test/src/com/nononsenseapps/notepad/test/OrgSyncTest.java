@@ -12,17 +12,10 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.sync.orgsync.OrgConverter;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
-import com.nononsenseapps.notepad.sync.orgsync.Synchronizer;
 
 import org.cowboyprogrammer.org.OrgFile;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -187,18 +180,17 @@ public class OrgSyncTest extends AndroidTestCase {
 
         ArrayList<RemoteTask> remoteTasks = getRemoteTasks();
         assertEquals("Should be exactly 2 RemoteTasks", taskCount, remoteTasks.size());
+        long lastDbid = -1;
+        for (int i = 1; i < remoteTasks.size() + 1; i++) {
+            RemoteTask r = remoteTasks.remove(i - 1);
+            // Check for duplicates
+            assertEquals("Id is not correct", i, r._id);
+            assertTrue(lastDbid != r.dbid);
+            lastDbid = r.dbid;
+        }
     }
 
-    /**
-     * Nothing has changed here.
-     * Tested flow branches:
-     * - Lists: Update Merge
-     * - Tasks: Update Merge
-     */
-    public void testNothingNew() {
-        final int taskCount = 2;
-        testFreshSimple();
-
+    public void syncAndAssertNothingChanged(final int taskCount) {
         TestSynchronizer synchronizer = new TestSynchronizer(getContext());
         try {
             synchronizer.fullSync();
@@ -222,6 +214,30 @@ public class OrgSyncTest extends AndroidTestCase {
 
         ArrayList<RemoteTask> remoteTasks = getRemoteTasks();
         assertEquals("Should be exactly 2 RemoteTasks", taskCount, remoteTasks.size());
+        long lastDbid = -1;
+        for (int i = 1; i < remoteTasks.size() + 1; i++) {
+            RemoteTask r = remoteTasks.get(i - 1);
+            // Check for duplicates
+            assertEquals("Id is not correct", i, r._id);
+            assertTrue(lastDbid != r.dbid);
+            lastDbid = r.dbid;
+        }
+    }
+
+    /**
+     * Nothing has changed here.
+     * Tested flow branches:
+     * - Lists: Update Merge
+     * - Tasks: Update Merge
+     */
+    public void testNothingNew() {
+        final int taskCount = 2;
+        testFreshSimple();
+
+        syncAndAssertNothingChanged(taskCount);
+        syncAndAssertNothingChanged(taskCount);
+        syncAndAssertNothingChanged(taskCount);
+        syncAndAssertNothingChanged(taskCount);
     }
 
     /**
