@@ -53,12 +53,23 @@ apt {
     }
 }
 
+def getVersionName = { ->
+    def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+}
+
 android {
   compileSdkVersion 19
   buildToolsVersion "19.0.3"
 
   defaultConfig {
     packageName "com.nononsenseapps.notepad"
+    versionCode 108
+    versionName getVersionName()
 
     testPackageName "com.nononsenseapps.notepad.test"
     testInstrumentationRunner "android.test.InstrumentationTestRunner"
