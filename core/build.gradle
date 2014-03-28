@@ -36,6 +36,8 @@ dependencies {
   // annotations
   apt "org.androidannotations:androidannotations:$AAVersion"
   compile "org.androidannotations:androidannotations-api:$AAVersion"
+  // Dropbox
+  compile fileTree(dir: "$buildDir/native-libs", include: "*.jar")
 }
 
 android {
@@ -79,4 +81,17 @@ apt {
         // logLevel 'INFO'
         // logFile '/var/log/aa.log'
     }
+}
+
+// Dropbox
+task nativeLibsToJar(type: Zip) {
+    destinationDir file("$buildDir/native-libs")
+    baseName 'native-libs'
+    extension 'jar'
+    from fileTree(dir: 'libs', include: '**/*.so')
+    into 'lib/'
+}
+
+tasks.withType(Compile) {
+    compileTask -> compileTask.dependsOn(nativeLibsToJar)
 }

@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
+
 import org.cowboyprogrammer.org.OrgFile;
 
 import java.io.BufferedReader;
@@ -28,8 +30,8 @@ public class SDSynchronizer extends Synchronizer implements
 	// Where files are kept. User changeable in preferences.
 	public static final String DEFAULT_ORG_DIR = Environment
 			.getExternalStorageDirectory().toString() + "/NoNonsenseNotes";
-	public static final String PREF_ORG_DIR = "pref_org_dir";
-	public static final String PREF_ORG_SD_ENABLED = "pref_org_sd_enabled";
+	public static final String PREF_ORG_DIR = SyncPrefs.KEY_SD_DIR;
+	public static final String PREF_ORG_SD_ENABLED = SyncPrefs.KEY_SD_ENABLE;
     public final static String SERVICENAME = "SDORG";
     protected String ORG_DIR;
     protected final boolean configured;
@@ -66,8 +68,8 @@ public class SDSynchronizer extends Synchronizer implements
      */
 	@Override
 	public boolean isConfigured() {
-		// TODO testing
-		if (true || this.configured) {
+		// TODO handle errors
+		if (this.configured) {
 			File d = new File(ORG_DIR);
 			if (!d.isDirectory()) {
 				d.mkdir();

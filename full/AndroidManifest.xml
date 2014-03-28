@@ -23,6 +23,7 @@
      own application, the package name must be changed from "com.example.*"
      to come from a domain that you own or have control over.
 -->
+<!-- Note that versionCode and versionName are overwritten in build.gradle -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
@@ -431,13 +432,32 @@
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDTgjabZVkiZOnokePNdYNAkRiaE73_MBs" />
-        
+
         <!-- Service that syncs with files -->
         <service android:name="com.nononsenseapps.notepad.sync.orgsync.OrgSyncService"
             android:exported="false"
             android:label="File Watcher"
             android:enabled="true" >
         </service>
+        <!-- Dropbox -->
+        <activity android:name="com.dropbox.sync.android.DbxAuthActivity" />
+        <activity
+            android:name="com.dropbox.client2.android.AuthActivity"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <data android:scheme="db-yt0azqlcrdl2u22" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name="com.dropbox.sync.android.DbxSyncService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="Dropbox Sync" />
     </application>
 
 </manifest>

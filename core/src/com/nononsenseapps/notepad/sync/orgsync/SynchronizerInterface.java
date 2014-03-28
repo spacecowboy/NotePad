@@ -22,7 +22,7 @@ public interface SynchronizerInterface {
 	
 	/**
 	 * 
-	 * @return The usename of the configured service. Likely an e-mail.
+	 * @return The username of the configured service. Likely an e-mail.
 	 */
 	public String getAccountName();
 

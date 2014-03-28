@@ -2,6 +2,7 @@ package com.nononsenseapps.notepad.sync.orgsync;
 
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.ArrayList;
 
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -52,9 +53,27 @@ public class OrgSyncService extends Service {
 	public OrgSyncService() {
 	}
 
-	public SynchronizerInterface getSynchronizer() {
-		// TODO do something else
-		return new SDSynchronizer(this);
+    /**
+     *
+     * @return configured Synchronizers
+     */
+	public ArrayList<SynchronizerInterface> getSynchronizers() {
+		ArrayList<SynchronizerInterface> syncers = new
+                ArrayList<SynchronizerInterface>();
+
+        // Try SD
+        SynchronizerInterface sd = new SDSynchronizer(this);
+        if (sd.isConfigured()) {
+            syncers.add(sd);
+        }
+
+        // Try Dropbox
+        SynchronizerInterface db = new DropboxSynchronizer(this);
+        if (db.isConfigured()) {
+            syncers.add(db);
+        }
+
+        return syncers;
 	}
 
 	@Override
@@ -74,11 +93,7 @@ public class OrgSyncService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		Toast.makeText(this, "service starting", Toast.LENGTH_SHORT).show();
-		SynchronizerInterface syncer = getSynchronizer();
-
 		// TODO testing
-		syncer.isConfigured();
 		// if (!syncer.isConfigured()) {
 		// notifyError();
 		// stopSelf();
@@ -157,7 +172,6 @@ public class OrgSyncService extends Service {
 
 	@Override
 	public void onDestroy() {
-		Toast.makeText(this, "service done", Toast.LENGTH_SHORT).show();
 		// Unregister observers
 		// stopFileWatcher();
 		stopDBWatcher();
@@ -196,12 +210,8 @@ public class OrgSyncService extends Service {
 					if (msg.arg2 == lastDBChangeId) {
 						// stopFileWatcher();
 						Log.d(TAG, "DB2FS-Run: " + msg.arg2);
-						Toast.makeText(OrgSyncService.this,
-								"DB2FS-Run: " + msg.arg2, Toast.LENGTH_SHORT)
-								.show();
 
 						// TODO actual work
-						getSynchronizer().fullSync();
 
 						// startFileWatcher();
 					}
@@ -214,12 +224,8 @@ public class OrgSyncService extends Service {
 					if (msg.arg2 == lastFSChangeId) {
 						stopDBWatcher();
 						Log.d(TAG, "FS2DB-Run: " + msg.arg2);
-						Toast.makeText(OrgSyncService.this,
-								"FS2DB-Run: " + msg.arg2, Toast.LENGTH_SHORT)
-								.show();
 
 						// TODO actual work
-						getSynchronizer().fullSync();
 
 						startDBWatcher();
 					}
@@ -227,10 +233,11 @@ public class OrgSyncService extends Service {
 				case TWO_WAY_SYNC:
 					stopDBWatcher();
 					// stopFileWatcher();
-					Toast.makeText(OrgSyncService.this, "Do 2WAY",
-							Toast.LENGTH_SHORT).show();
 					// TODO actual work
-					getSynchronizer().fullSync();
+                    for (SynchronizerInterface syncer: getSynchronizers()) {
+                        syncer.fullSync();
+                        syncer.postSynchronize();
+                    }
 					startDBWatcher();
 					// startFileWatcher();
 					break;

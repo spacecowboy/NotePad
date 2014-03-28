@@ -286,5 +286,13 @@
     <string name="backup_import_failed">Failed to read the backup file</string>
     <string name="backup_export_success">Backup exported successfully</string>
     <string name="backup_export_failed">Can\'t write to the backup file</string>
+    <string name="sd_card">SD Card</string>
+    <string name="sd_card_sync">SD Card Sync</string>
+    <string name="sd_card_summary">Tasks are mirrored on the SD card. Changes are synchronized both ways. Note that deleting the files will delete the tasks in the app!</string>
+    <string name="directory">Directory</string>
+    <string name="directory_summary">Where files should be stored.</string>
+    <string name="dropbox">Dropbox</string>
+    <string name="dropbox_sync">Dropbox Sync</string>
+    <string name="dropbox_sync_summary">Keep your tasks and notes synchronized with text files in your Dropbox.</string>
 
 </resources>
