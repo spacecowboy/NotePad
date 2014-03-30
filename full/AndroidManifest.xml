@@ -292,6 +292,10 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name="com.nononsenseapps.utils.filepicker.FilePickerActivity"
+            android:theme="@style/FilePicker.Theme" />
+
         <service
             android:name="com.nononsenseapps.notepad.sync.SyncService"
             android:exported="true"

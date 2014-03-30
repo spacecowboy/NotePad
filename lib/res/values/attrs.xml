@@ -29,4 +29,8 @@
         <attr name="secondaryColor" />
     </declare-styleable>
 
+    <declare-styleable name="FilePickerTheme">
+        <attr name="isDialog" format="boolean" />
+    </declare-styleable>
+
 </resources>

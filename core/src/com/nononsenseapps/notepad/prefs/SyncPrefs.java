@@ -47,6 +47,7 @@ import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
 import com.nononsenseapps.notepad.sync.orgsync.DropboxSynchronizer;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
+import com.nononsenseapps.utils.filepicker.FilePickerActivity;
 
 import java.io.IOException;
 
@@ -167,7 +168,10 @@ public class SyncPrefs extends PreferenceFragment implements
         prefSdDir.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(final Preference preference) {
-                return false;
+                // TODO
+                startActivity(new Intent(getActivity(),
+                        FilePickerActivity.class));
+                return true;
             }
         });
 
@@ -177,6 +181,7 @@ public class SyncPrefs extends PreferenceFragment implements
         prefDropboxDir.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(final Preference preference) {
+                // TODO
                 return false;
             }
         });
