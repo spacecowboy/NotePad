@@ -39,16 +39,19 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.widget.Toast;
 
 import com.nononsenseapps.build.Config;
+import com.nononsenseapps.filepicker.DropboxFilePickerActivity;
+import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
 import com.nononsenseapps.notepad.sync.orgsync.DropboxSynchronizer;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
-import com.nononsenseapps.utils.filepicker.FilePickerActivity;
 
+import java.io.File;
 import java.io.IOException;
 
 // import com.nononsenseapps.notepad.NotePad;
@@ -69,11 +72,13 @@ public class SyncPrefs extends PreferenceFragment implements
     // SD sync
     public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
     public static final String KEY_SD_DIR = "pref_sync_sd_dir";
-
     // Dropbox sync
     public static final String KEY_DROPBOX_ENABLE = "pref_sync_dropbox_enabled";
     public static final String KEY_DROPBOX_DIR = "pref_sync_dropbox_dir";
+    private static final int PICK_SD_DIR_CODE = 1;
     private static final int DROPBOX_LINK_CODE = 3895;
+    private static final int PICK_DROPBOX_DIR_CODE = 2;
+
 
     private Activity activity;
 
@@ -140,7 +145,7 @@ public class SyncPrefs extends PreferenceFragment implements
         // prefSyncFreq = findPreference(KEY_SYNC_FREQ);
 
 
-        SharedPreferences sharedPrefs = PreferenceManager
+        final SharedPreferences sharedPrefs = PreferenceManager
                 .getDefaultSharedPreferences(activity);
         // Set up a listener whenever a key changes
         sharedPrefs.registerOnSharedPreferenceChangeListener(this);
@@ -168,9 +173,18 @@ public class SyncPrefs extends PreferenceFragment implements
         prefSdDir.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(final Preference preference) {
-                // TODO
-                startActivity(new Intent(getActivity(),
-                        FilePickerActivity.class));
+                // Start the filepicker
+                Intent i = new Intent(getActivity(), FilePickerActivity.class);
+
+                i.putExtra(FilePickerActivity.EXTRA_START_PATH,
+                        sharedPrefs.getString(KEY_SD_DIR,
+                                SDSynchronizer.DEFAULT_ORG_DIR)
+                )
+                        .putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)
+                        .putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true)
+                        .putExtra(FilePickerActivity.EXTRA_MODE,
+                                FilePickerActivity.MODE_DIR);
+                startActivityForResult(i, PICK_SD_DIR_CODE);
                 return true;
             }
         });
@@ -181,8 +195,18 @@ public class SyncPrefs extends PreferenceFragment implements
         prefDropboxDir.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(final Preference preference) {
-                // TODO
-                return false;
+                // Start the filepicker
+                Intent i = new Intent(getActivity(), DropboxFilePickerActivity.class);
+                i.putExtra(FilePickerActivity.EXTRA_START_PATH,
+                        sharedPrefs.getString(KEY_DROPBOX_DIR,
+                                DropboxSynchronizer.DEFAULT_DIR)
+                );
+                i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)
+                        .putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true)
+                        .putExtra(FilePickerActivity.EXTRA_MODE,
+                                FilePickerActivity.MODE_DIR);
+                startActivityForResult(i, PICK_DROPBOX_DIR_CODE);
+                return true;
             }
         });
     }
@@ -261,6 +285,25 @@ public class SyncPrefs extends PreferenceFragment implements
                 PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
                         .putBoolean(KEY_DROPBOX_ENABLE, false).commit();
             }
+        } else if (requestCode == PICK_DROPBOX_DIR_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                PreferenceManager.getDefaultSharedPreferences(getActivity
+                        ()).edit().putString(KEY_DROPBOX_DIR,
+                        data.getData().getPath()).commit();
+            } // else cancelled
+        } else if (requestCode == PICK_SD_DIR_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                // Set it
+                File path = new File(data.getData().getPath());
+                if (path.exists() && path.isDirectory() && path.canWrite()) {
+                    PreferenceManager.getDefaultSharedPreferences(getActivity
+                            ()).edit().putString(KEY_SD_DIR,
+                            path.toString()).commit();
+                } else {
+                    Toast.makeText(getActivity(), R.string.cannot_write_to_directory,
+                            Toast.LENGTH_SHORT).show();
+                }
+            } // else was cancelled
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }

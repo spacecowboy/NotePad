@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2013 Jonas Kalderstam
+  Copyright (c) 2014 Jonas Kalderstam.
 
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
 
-          http://www.apache.org/licenses/LICENSE-2.0
+      http://www.apache.org/licenses/LICENSE-2.0
 
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
 
 
 <!--
@@ -24,9 +24,10 @@
      to come from a domain that you own or have control over.
 -->
 <!-- Note that versionCode and versionName are overwritten in build.gradle -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<manifest
     package="com.nononsenseapps.notepad"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="internalOnly"
     android:versionCode="108"
     android:versionName="5.2-f9964ca-3168de3-3168de3" >
@@ -293,8 +294,15 @@
         </activity>
 
         <activity
-            android:name="com.nononsenseapps.utils.filepicker.FilePickerActivity"
-            android:theme="@style/FilePicker.Theme" />
+            android:name="com.nononsenseapps.filepicker.FilePickerActivity"
+            android:label="@string/app_name"
+            android:theme="@style/FilePicker.Theme">
+        </activity>
+        <activity
+            android:name="com.nononsenseapps.filepicker.DropboxFilePickerActivity"
+            android:label="@string/app_name"
+            android:theme="@style/FilePicker.Theme">
+        </activity>
 
         <service
             android:name="com.nononsenseapps.notepad.sync.SyncService"
@@ -439,9 +447,9 @@
 
         <!-- Service that syncs with files -->
         <service android:name="com.nononsenseapps.notepad.sync.orgsync.OrgSyncService"
+                 android:enabled="true"
             android:exported="false"
-            android:label="File Watcher"
-            android:enabled="true" >
+            android:label="File Watcher">
         </service>
         <!-- Dropbox -->
         <activity android:name="com.dropbox.sync.android.DbxAuthActivity" />
