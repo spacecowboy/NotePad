@@ -21,6 +21,8 @@ import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.nononsenseapps.build.Config;
+import com.nononsenseapps.notepad.*;
+import com.nononsenseapps.notepad.BuildConfig;
 
 import java.util.Properties;
 
@@ -47,14 +49,24 @@ public class ConfigTest  extends AndroidTestCase {
         Properties props = Config.getProperties(context);
 
         assertNotNull(props);
-        for (Object key: props.keySet()) {
-            String b = key.toString();
+
+        assertNotNull(Config.getGtasksApiKey(context));
+        assertFalse(Config.getGtasksApiKey(context).isEmpty());
+
+        assertNotNull(Config.getKeyDropboxSyncPublic(context));
+        assertFalse(Config.getKeyDropboxSyncPublic(context).isEmpty());
+
+        assertNotNull(Config.getKeyDropboxSyncSecret(context));
+        assertFalse(Config.getKeyDropboxSyncSecret(context).isEmpty());
+
+        // Only test the rest in debug builds since they will be set otherwise
+        if (BuildConfig.DEBUG) {
+            assertEquals("Put your key here", props.getProperty(Config
+                    .KEY_GTASKS_API_KEY));
+            assertEquals("Public key here", props.getProperty(Config
+                    .KEY_DROPBOX_SYNC_PUBLIC));
+            assertEquals("Secret key here", props.getProperty(Config
+                    .KEY_DROPBOX_SYNC_SECRET));
         }
-        assertEquals("Put your key here", props.getProperty(Config
-                .KEY_GTASKS_API_KEY));
-        assertEquals("Public key here", props.getProperty(Config
-                .KEY_DROPBOX_SYNC_PUBLIC));
-        assertEquals("Secret key here", props.getProperty(Config
-                .KEY_DROPBOX_SYNC_SECRET));
     }
 }
