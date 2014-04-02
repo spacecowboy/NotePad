@@ -16,16 +16,16 @@
 
 package com.nononsenseapps.notepad.sync.googleapi;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.URLEncoder;
-import java.text.ParseException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import android.accounts.Account;
+import android.accounts.AccountManager;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
+import android.content.Context;
+import android.net.http.AndroidHttpClient;
+
+import com.nononsenseapps.build.Config;
+import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.utils.time.RFC3339Date;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -41,16 +41,14 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import com.nononsenseapps.build.Config;
-
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
-import com.nononsenseapps.helpers.Log;
-import com.nononsenseapps.utils.time.RFC3339Date;
-
-import android.net.http.AndroidHttpClient; // Supports GZIP, apache's doesn't
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Helper class that sorts out all XML, JSON, HTTP bullshit for other classes.
@@ -61,7 +59,17 @@ import android.net.http.AndroidHttpClient; // Supports GZIP, apache's doesn't
  */
 public class GoogleAPITalker {
 
-	public static class PreconditionException extends Exception {
+    private final Context context;
+
+    /**
+     *
+     * @param context Need context to load api key from file
+     */
+    public GoogleAPITalker(final Context context) {
+        this.context = context;
+    }
+
+    public static class PreconditionException extends Exception {
 		private static final long serialVersionUID = 7317567246857384353L;
 
 		public PreconditionException() {
@@ -105,15 +113,15 @@ public class GoogleAPITalker {
 
 	private static final String NEXTPAGETOKEN = "nextPageToken";
 
-	public static String AuthUrlEnd() {
-		return "key=" + Config.GTASKS_API_KEY;
+	private String AuthUrlEnd() {
+		return "key=" + Config.getGtasksApiKey(context);
 	}
 
 	// public static final String AUTH_URL_END = "key=" + APIKEY;
 
-	public static final String BASE_URL = "https://www.googleapis.com/tasks/v1/users/@me/lists";
+	private static final String BASE_URL = "https://www.googleapis.com/tasks/v1/users/@me/lists";
 
-	public static String AllLists(final String pageToken) {
+	private String AllLists(final String pageToken) {
 		String result = BASE_URL + "?";
 
 		if (pageToken != null && !pageToken.isEmpty()) {
@@ -124,40 +132,40 @@ public class GoogleAPITalker {
 		return result;
 	}
 
-	public static String InsertLists() {
+	private String InsertLists() {
 		return BASE_URL + "?" + AuthUrlEnd();
 	}
 
 	// public static final String ALL_LISTS = BASE_URL + "?" + AUTH_URL_END;
 
-	public static String AllListsJustEtag() {
+	private String AllListsJustEtag() {
 		return BASE_URL + "?fields=etag&" + AuthUrlEnd();
 	}
 
 	// public static final String ALL_LISTS_JUST_ETAG = BASE_URL +
 	// "?fields=etag&"+ AUTH_URL_END;
 
-	public static String ListURL(String id) {
+	private String ListURL(String id) {
 		return BASE_URL + "/" + id + "?" + AuthUrlEnd();
 	}
 
 	public static final String LISTS = "/lists";
-	public static final String BASE_TASK_URL = "https://www.googleapis.com/tasks/v1/lists";
-	public static final String TASKS = "/tasks"; // Must be preceeded by
+	private static final String BASE_TASK_URL = "https://www.googleapis.com/tasks/v1/lists";
+	private static final String TASKS = "/tasks"; // Must be preceeded by
 
 	// only retrieve the fields we will save in the database or use
 	// https://www.googleapis.com/tasks/v1/lists/MDIwMzMwNjA0MjM5MzQ4MzIzMjU6MDow/tasks?showDeleted=true&showHidden=true&pp=1&key={YOUR_API_KEY}
 	// updatedMin=2012-02-07T14%3A59%3A05.000Z
-	private static String AllTasksInsert(String listId) {
+	private String AllTasksInsert(String listId) {
 		return BASE_TASK_URL + "/" + listId + TASKS + "?" + AuthUrlEnd();
 	}
 
-	private static String TaskURL(String taskId, String listId) {
+	private String TaskURL(String taskId, String listId) {
 		return BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId + "?"
 				+ AuthUrlEnd();
 	}
 
-	private static String TaskURL_ETAG_ID_UPDATED(final String taskId,
+	private String TaskURL_ETAG_ID_UPDATED(final String taskId,
 			final String listId) {
 		String url = BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId
 				+ "?fields=id,etag,updated";
@@ -165,7 +173,7 @@ public class GoogleAPITalker {
 		return url;
 	}
 
-	private static String TaskMoveURL_ETAG_UPDATED(final String taskId,
+	private String TaskMoveURL_ETAG_UPDATED(final String taskId,
 			final String listId, final String remoteparent,
 			final String remoteprevious) {
 		String url = BASE_TASK_URL + "/" + listId + TASKS + "/" + taskId
@@ -181,7 +189,7 @@ public class GoogleAPITalker {
 	/**
 	 * Set the pageToken to null to get the first page
 	 */
-	private static String allTasksUpdatedMin(final String listId,
+	private String allTasksUpdatedMin(final String listId,
 			final String timestamp, final String pageToken) {
 		// items,nextPageToken
 		String request = BASE_TASK_URL
@@ -222,14 +230,14 @@ public class GoogleAPITalker {
 	// + TASKID]]] + "?" + [POSSIBLE FIELDS + "&"] + AUTH_URL_END
 	// Where each enclosing parenthesis is optional
 
-	public String authToken;
+	private String authToken;
 
-	public AndroidHttpClient client;
+	private AndroidHttpClient client;
 	
 	public String accountName = null;
 
-	public static String getAuthToken(AccountManager accountManager,
-			Account account, String authTokenType, boolean notifyAuthFailure) {
+	private static String getAuthToken(AccountManager accountManager,
+                                       Account account, String authTokenType, boolean notifyAuthFailure) {
 
 		Log.d(TAG, "getAuthToken");
 		String authToken = "";
@@ -242,11 +250,11 @@ public class GoogleAPITalker {
 			authToken = accountManager.blockingGetAuthToken(account,
 					authTokenType, notifyAuthFailure);
 		}
-		catch (OperationCanceledException e) {
+		catch (OperationCanceledException ignored) {
 		}
-		catch (AuthenticatorException e) {
+		catch (AuthenticatorException ignored) {
 		}
-		catch (IOException e) {
+		catch (IOException ignored) {
 		}
 		return authToken;
 	}
@@ -266,12 +274,7 @@ public class GoogleAPITalker {
 				notifyAuthFailure);
 
 		Log.d(TAG, "authToken: " + authToken);
-		if (authToken != null && !authToken.equals("")) {
-			return true;
-		}
-		else {
-			return false;
-		}
+        return authToken != null && !authToken.equals("");
 	}
 
 	public void closeClient() {
@@ -313,7 +316,7 @@ public class GoogleAPITalker {
 	 * @throws JSONException 
 	 */
 	public String getListOfLists(ArrayList<GoogleTaskList> list)
-			throws ClientProtocolException, IOException, JSONException {
+			throws IOException, JSONException {
 		String eTag = "";
 		String pageToken = null;
 		do {
@@ -379,9 +382,9 @@ public class GoogleAPITalker {
 	 * @throws PreconditionException
 	 */
 	public GoogleTask getTask(GoogleTask gimpedTask, GoogleTaskList list)
-			throws ClientProtocolException, JSONException,
-			NotModifiedException, IOException, PreconditionException {
-		GoogleTask result = null;
+			throws JSONException,
+            IOException, PreconditionException {
+		GoogleTask result;
 		HttpGet httpget = new HttpGet(TaskURL(gimpedTask.remoteId,
 				list.remoteId));
 		setAuthHeader(httpget);
@@ -416,9 +419,9 @@ public class GoogleAPITalker {
 	 * @throws IOException
 	 */
 	public GoogleTaskList getList(GoogleTaskList gimpedList)
-			throws ClientProtocolException, JSONException,
-			NotModifiedException, IOException, PreconditionException {
-		GoogleTaskList result = null;
+			throws JSONException,
+            IOException, PreconditionException {
+		GoogleTaskList result;
 		HttpGet httpget = new HttpGet(ListURL(gimpedList.remoteId));
 		setAuthHeader(httpget);
 		// setHeaderWeakEtag(httpget, gimpedList.etag);
@@ -438,9 +441,9 @@ public class GoogleAPITalker {
 		return result;
 	}
 
-	public String getEtag() throws ClientProtocolException, JSONException,
+	public String getEtag() throws JSONException,
 			IOException, PreconditionException {
-		String eTag = "";
+		String eTag;
 		HttpGet httpget = new HttpGet(AllListsJustEtag());
 		httpget.setHeader("Authorization", "OAuth " + authToken);
 
@@ -466,13 +469,13 @@ public class GoogleAPITalker {
 	/**
 	 * Given a time, will fetch all tasks which were modified afterwards
 	 * 
-	 * @param googleTaskList
+	 * @param list
 	 * @throws IOException
 	 * @throws ClientProtocolException
 	 * @throws JSONException 
 	 */
 	public ArrayList<GoogleTask> getModifiedTasks(String lastUpdated,
-			GoogleTaskList list) throws ClientProtocolException, IOException, JSONException {
+			GoogleTaskList list) throws IOException, JSONException {
 		ArrayList<GoogleTask> moddedList = new ArrayList<GoogleTask>();
 
 		// If user has many tasks, they will not all be returned in same request
@@ -521,7 +524,6 @@ public class GoogleAPITalker {
 			}
 			catch (PreconditionException e) {
 				// // Can't happen
-				pageToken = null;
 				return null;
 				// } catch (NotModifiedException e) {
 				//
@@ -542,8 +544,8 @@ public class GoogleAPITalker {
 	 * @throws JSONException 
 	 */
 	public GoogleTask uploadTask(final GoogleTask task,
-			final GoogleTaskList pList) throws ClientProtocolException,
-			IOException, PreconditionException, JSONException {
+			final GoogleTaskList pList) throws
+            IOException, PreconditionException, JSONException {
 
 		if (pList.remoteId == null || pList.remoteId.isEmpty()) {
 			Log.d(TAG, "Invalid list ID found for uploadTask");
@@ -691,14 +693,12 @@ public class GoogleAPITalker {
 	 * delete the list instead of updating it.
 	 * 
 	 * @throws IOException
-	 * @throws NotModifiedException
 	 * @throws PreconditionException
 	 * @throws JSONException
 	 * @throws ClientProtocolException
-	 * @throws DefaultListDeleted
 	 */
 	public GoogleTaskList uploadList(final GoogleTaskList list)
-			throws ClientProtocolException, IOException, PreconditionException, JSONException {
+			throws IOException, PreconditionException, JSONException {
 		final HttpUriRequest httppost;
 		if (list.remoteId != null) {
 			//Log.d(TAG, "ID is not NULL!! " + ListURL(list.remoteId));
@@ -763,7 +763,7 @@ public class GoogleAPITalker {
 	/**
 	 * Sets the authorization header
 	 * 
-	 * @param url
+	 * @param request
 	 * @return
 	 */
 	private void setAuthHeader(HttpUriRequest request) {
@@ -831,7 +831,7 @@ public class GoogleAPITalker {
 	 * SUpports Post and Put. Anything else will not have any effect
 	 * 
 	 * @param httppost
-	 * @param list
+	 * @param task
 	 */
 	private void setPostBody(HttpUriRequest httppost, GoogleTask task) {
 		StringEntity se = null;
@@ -853,11 +853,11 @@ public class GoogleAPITalker {
 	/**
 	 * Parses a httpresponse and returns the string body of it. Throws
 	 * exceptions for select status codes.
-	 * 
+	 *
+     * @throws ClientProtocolException
 	 * @throws PreconditionException
-	 * @throws DefaultListDeleted
 	 */
-	public static String parseResponse(HttpResponse response)
+	private static String parseResponse(HttpResponse response)
 			throws ClientProtocolException, PreconditionException {
 		String page = "";
 		BufferedReader in = null;
@@ -911,11 +911,11 @@ public class GoogleAPITalker {
 							.getUngzippedContent(response.getEntity());
 					if (content != null) {
 						in = new BufferedReader(new InputStreamReader(content));
-						StringBuffer sb = new StringBuffer("");
-						String line = "";
+						StringBuilder sb = new StringBuilder("");
+						String line;
 						String NL = System.getProperty("line.separator");
 						while ((line = in.readLine()) != null) {
-							sb.append(line + NL);
+							sb.append(line).append(NL);
 						}
 						in.close();
 						page = sb.toString();
@@ -924,7 +924,7 @@ public class GoogleAPITalker {
 					}
 				}
 			}
-			catch (IOException e) {
+			catch (IOException ignored) {
 			}
 			finally {
 				if (in != null) {

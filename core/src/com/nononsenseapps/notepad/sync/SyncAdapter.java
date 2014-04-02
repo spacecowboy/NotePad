@@ -16,37 +16,19 @@
 
 package com.nononsenseapps.notepad.sync;
 
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker.PreconditionException;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
-import com.nononsenseapps.util.BiMap;
-
 import android.accounts.Account;
-import android.accounts.AccountManager;
 import android.content.AbstractThreadedSyncAdapter;
 import android.content.ContentProviderClient;
-import android.content.ContentProviderResult;
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.OperationApplicationException;
 import android.content.SharedPreferences;
 import android.content.SyncResult;
 import android.os.Bundle;
-import android.os.RemoteException;
 import android.preference.PreferenceManager;
-import com.nononsenseapps.helpers.Log;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
+import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
 
 /**
  * This adapter syncs with GoogleTasks API. Each sync is an incremental sync
@@ -116,11 +98,11 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		Intent doneIntent = new Intent(SYNC_FINISHED);
 		doneIntent.putExtra(SYNC_RESULT, ERROR);
 		try {
+            // Gtasks first
 			// Dummy key has a space in it. Only builds using real api keys
-			// should
-			// not have spaces
-			if (!com.nononsenseapps.build.Config.GTASKS_API_KEY.contains(" ")) {
-
+			// should not have spaces
+			if (!com.nononsenseapps.build.Config.getGtasksApiKey(mContext)
+                    .contains(" ")) {
 				if (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)
 						&& !settings.getString(SyncPrefs.KEY_ACCOUNT, "")
 								.isEmpty()
