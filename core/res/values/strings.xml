@@ -295,5 +295,7 @@
     <string name="dropbox_sync">Dropbox Sync</string>
     <string name="dropbox_sync_summary">Keep your tasks and notes synchronized with text files in your Dropbox.</string>
     <string name="cannot_write_to_directory">Cannot write to directory</string>
+    <string name="dropbox_first_sync_1">Dropbox is synchronizing for first the time. This might take a few seconds...</string>
+    <string name="dropbox_first_sync_2">Press back to exit. The sync will continue in the background.</string>
 
 </resources>
