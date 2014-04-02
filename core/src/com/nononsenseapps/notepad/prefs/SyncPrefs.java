@@ -48,6 +48,7 @@ import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.core.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
+import com.nononsenseapps.notepad.sync.orgsync.DropboxSyncHelper;
 import com.nononsenseapps.notepad.sync.orgsync.DropboxSynchronizer;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
 
@@ -189,23 +190,37 @@ public class SyncPrefs extends PreferenceFragment implements
             }
         });
 
-        // Dropbox
+        // Dropbox, disable if no key present
+        findPreference(KEY_DROPBOX_ENABLE).setEnabled(!Config
+                .getKeyDropboxSyncSecret(getActivity()).contains(" "));
         prefDropboxDir = findPreference(KEY_DROPBOX_DIR);
         setDropboxDirSummary(sharedPrefs);
         prefDropboxDir.setOnPreferenceClickListener(new OnPreferenceClickListener() {
             @Override
             public boolean onPreferenceClick(final Preference preference) {
-                // Start the filepicker
-                Intent i = new Intent(getActivity(), DropboxFilePickerActivity.class);
-                i.putExtra(FilePickerActivity.EXTRA_START_PATH,
-                        sharedPrefs.getString(KEY_DROPBOX_DIR,
-                                DropboxSynchronizer.DEFAULT_DIR)
-                );
-                i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)
-                        .putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true)
-                        .putExtra(FilePickerActivity.EXTRA_MODE,
-                                FilePickerActivity.MODE_DIR);
-                startActivityForResult(i, PICK_DROPBOX_DIR_CODE);
+                // See if initial sync is complete
+                if (DropboxSyncHelper.hasSynced(getActivity())) {
+                    // Start the filepicker
+                    Intent i = new Intent(getActivity(), DropboxFilePickerActivity.class);
+                    i.putExtra(FilePickerActivity.EXTRA_START_PATH,
+                            sharedPrefs.getString(KEY_DROPBOX_DIR,
+                                    DropboxSynchronizer.DEFAULT_DIR)
+                    );
+                    i.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)
+                            .putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true)
+                            .putExtra(FilePickerActivity.EXTRA_MODE,
+                                    FilePickerActivity.MODE_DIR);
+                    i.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
+                    startActivityForResult(i, PICK_DROPBOX_DIR_CODE);
+
+                } else {
+                    // Start first sync
+                    DropboxSyncHelper.doFirstSync(getActivity());
+                    // Notify the user to wait
+                    Toast.makeText(getActivity(), R.string.wait_for_dropbox,
+                            Toast.LENGTH_SHORT).show();
+                }
+
                 return true;
             }
         });
@@ -279,7 +294,11 @@ public class SyncPrefs extends PreferenceFragment implements
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == DROPBOX_LINK_CODE) {
             if (resultCode == Activity.RESULT_OK) {
-                // ... Start using Dropbox files.
+                // Start first sync
+                DropboxSyncHelper.doFirstSync(getActivity());
+                // Notify the user to wait
+                Toast.makeText(getActivity(), R.string.wait_for_dropbox,
+                        Toast.LENGTH_SHORT).show();
             } else {
                 // ... Link failed or was cancelled by the user.
                 PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
@@ -290,7 +309,7 @@ public class SyncPrefs extends PreferenceFragment implements
                 PreferenceManager.getDefaultSharedPreferences(getActivity
                         ()).edit().putString(KEY_DROPBOX_DIR,
                         data.getData().getPath()).commit();
-            } // else cancelled
+            } // else was cancelled
         } else if (requestCode == PICK_SD_DIR_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 // Set it

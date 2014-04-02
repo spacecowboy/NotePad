@@ -303,6 +303,10 @@
             android:label="@string/app_name"
             android:theme="@style/FilePicker.Theme">
         </activity>
+        <service
+            android:name="com.nononsenseapps.notepad.sync.orgsync.DropboxSyncHelper"
+            android:enabled="true"
+            android:exported="false" />
 
         <service
             android:name="com.nononsenseapps.notepad.sync.SyncService"
