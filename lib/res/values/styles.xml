@@ -1,55 +1,27 @@
+<!--
+  Copyright (c) 2014 Jonas Kalderstam.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <!--
-        Base application theme, dependent on API level. This theme is replaced
-        by AppBaseTheme from res/values-vXX/styles.xml on newer devices.
-    -->
-    <style name="AppBaseTheme" parent="android:Theme.Light">
-        <!--
-            Theme customizations available in newer API levels can go in
-            res/values-vXX/styles.xml, while customizations related to
-            backward-compatibility can go here.
-        -->
-    </style>
-
-    <!-- Application theme. -->
-    <style name="AppTheme" parent="AppBaseTheme">
-        <!-- All customizations that are NOT specific to a particular API-level can go here. -->
-    </style>
 
     <style name="GreyableButtonToggle" parent="android:Widget.Holo.Button.Toggle">
         <item name="android:background">@drawable/btn_toggle_bg</item>
-        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall
+        </item>
         <item name="android:gravity">center</item>
         <item name="android:padding">0dp</item>
-    </style>
-
-    <style name="FilePicker.Theme.Base" parent="android:Theme.Holo.Light">
-        <item name="isDialog">false</item>
-    </style>
-
-    <style name="FilePicker.Theme" parent="FilePicker.Theme.Base">
-        <item name="android:actionBarStyle">@style/FilePicker.ActionBar</item>
-        <item name="android:actionOverflowButtonStyle">@style/FilePicker.ActionButton.Overflow</item>
-        <!--<item name="android:actionBarItemBackground">@drawable
-        /configure_ab_item_background</item>-->
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowShowWallpaper">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <!--<item name="android:actionBarWidgetTheme">@android:style/Theme.Holo</item>-->
-        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
-    </style>
-
-    <style name="FilePicker.ActionBar" parent="android:Widget.Holo.Light.ActionBar.Solid.Inverse">
-        <!--<item name="android:background">@drawable/ab_background</item>-->
-        <item name="android:displayOptions">disableHome|showCustom</item>
-        <item name="android:windowContentOverlay">@null</item>
-        <item name="android:windowShowWallpaper">true</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-    </style>
-
-    <style name="FilePicker.ActionButton.Overflow" parent="android:Widget.Holo.ActionButton.Overflow">
-        <!--<item name="android:src">@drawable/ic_action_overflow</item>-->
     </style>
 
 </resources>
