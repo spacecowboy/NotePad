@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2014 Jonas Kalderstam.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.nononsenseapps.notepad.sync.orgsync;
 
 import android.app.Activity;
@@ -14,13 +30,13 @@ import com.dropbox.sync.android.DbxFile;
 import com.dropbox.sync.android.DbxFileInfo;
 import com.dropbox.sync.android.DbxFileSystem;
 import com.dropbox.sync.android.DbxPath;
+import com.nononsenseapps.build.Config;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 
 import org.cowboyprogrammer.org.OrgFile;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.HashSet;
 import java.util.List;
@@ -28,9 +44,6 @@ import java.util.List;
 
 public class DropboxSynchronizer extends Synchronizer implements
         SynchronizerInterface {
-
-    public static final String APP_KEY = "yt0azqlcrdl2u22";
-    public static final String APP_SECRET = "SECRET";
 
     // Where files are kept. User changeable in preferences.
     public static final String DEFAULT_DIR = "/NoNonsenseNotes/";
@@ -63,6 +76,8 @@ public class DropboxSynchronizer extends Synchronizer implements
      */
     public static void linkAccount(final Activity activity,
                                    final int requestCode) {
+        final String APP_KEY = Config.getKeyDropboxSyncPublic(activity);
+        final String APP_SECRET = Config.getKeyDropboxSyncSecret(activity);
         DbxAccountManager.getInstance(activity.getApplicationContext(),
                 APP_KEY, APP_SECRET).startLink(activity, requestCode);
     }
@@ -77,6 +92,8 @@ public class DropboxSynchronizer extends Synchronizer implements
      */
     public static void linkAccount(final Fragment fragment,
                                    final int requestCode) {
+        final String APP_KEY = Config.getKeyDropboxSyncPublic(fragment.getActivity());
+        final String APP_SECRET = Config.getKeyDropboxSyncSecret(fragment.getActivity());
         DbxAccountManager.getInstance(fragment.getActivity().getApplicationContext(),
                 APP_KEY, APP_SECRET).startLink(fragment, requestCode);
     }
@@ -87,6 +104,8 @@ public class DropboxSynchronizer extends Synchronizer implements
      * @param activity
      */
     public static void unlink(final Activity activity) {
+        final String APP_KEY = Config.getKeyDropboxSyncPublic(activity);
+        final String APP_SECRET = Config.getKeyDropboxSyncSecret(activity);
         DbxAccountManager.getInstance(activity.getApplicationContext(),
                 APP_KEY, APP_SECRET).unlink();
     }
@@ -119,6 +138,8 @@ public class DropboxSynchronizer extends Synchronizer implements
 
         // Need to ask dropbox if we are linked.
         if (accountManager == null) {
+            final String APP_KEY = Config.getKeyDropboxSyncPublic(context);
+            final String APP_SECRET = Config.getKeyDropboxSyncSecret(context);
             accountManager = DbxAccountManager.getInstance(context
                     .getApplicationContext(), APP_KEY, APP_SECRET);
 

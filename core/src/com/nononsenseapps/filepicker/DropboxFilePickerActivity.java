@@ -22,6 +22,7 @@ import com.dropbox.sync.android.DbxAccountManager;
 import com.dropbox.sync.android.DbxException;
 import com.dropbox.sync.android.DbxFileSystem;
 import com.dropbox.sync.android.DbxPath;
+import com.nononsenseapps.build.Config;
 import com.nononsenseapps.notepad.sync.orgsync.DropboxSynchronizer;
 
 public class DropboxFilePickerActivity extends
@@ -32,8 +33,8 @@ public class DropboxFilePickerActivity extends
     @Override
     public void onCreate(Bundle b) {// Make sure we are linked
         DbxAccountManager accountManager = DbxAccountManager.getInstance(getApplicationContext(),
-                DropboxSynchronizer.APP_KEY,
-                DropboxSynchronizer.APP_SECRET);
+                Config.getKeyDropboxSyncPublic(this),
+                Config.getKeyDropboxSyncSecret(this));
 
         if (accountManager.hasLinkedAccount()) {
             try {
