@@ -28,6 +28,7 @@ import com.dropbox.sync.android.DbxAccountManager;
 import com.dropbox.sync.android.DbxException;
 import com.dropbox.sync.android.DbxFile;
 import com.dropbox.sync.android.DbxFileInfo;
+import com.dropbox.sync.android.DbxFileStatus;
 import com.dropbox.sync.android.DbxFileSystem;
 import com.dropbox.sync.android.DbxPath;
 import com.nononsenseapps.build.Config;
@@ -274,19 +275,9 @@ public class DropboxSynchronizer extends Synchronizer implements
         try {
             if (fs.isFile(path)) {
                 DbxFile file = fs.open(path);
-                /*
-                while (!file.getSyncStatus().isLatest) {
-                    // TODO wait on downloads?
-                    Log.d(TAG, "Waiting on download: " + file.getNewerStatus
-                            ().bytesTransferred + " / " + file.getNewerStatus
-                            ().bytesTotal);
-                    try {
-                        Thread.sleep(1000);
-                    } catch (InterruptedException e) {
-                       // e.printStackTrace();
-                    }
-                }
-                file.update();*/
+                // Get latest version
+                waitUntilSynced(file);
+                // Read it
                 br = new BufferedReader(new StringReader(file.readString()));
                 file.close();
             }
@@ -299,6 +290,35 @@ public class DropboxSynchronizer extends Synchronizer implements
         }
 
         return br;
+    }
+
+    /**
+     * Wait until the file has been synced to the newest state. Will wait a
+     * maximum of 30s.
+     * @param file
+     */
+    private void waitUntilSynced(final DbxFile file) {
+        final long MAXTIME = 30*1000;
+        final long STARTTIME = System.currentTimeMillis();
+        try {
+            DbxFileStatus status = file.getNewerStatus();
+
+            while (MAXTIME > (System.currentTimeMillis() - STARTTIME) &&
+                    status != null && !status.isCached) {
+                Log.d(TAG, "Waiting on latest version: " + status
+                        .bytesTransferred + " / " + status.bytesTotal);
+                try {
+                    Thread.sleep(1000);
+                } catch (InterruptedException ignored) {
+                }
+                // Check latest
+                status = file.getNewerStatus();
+            }
+            // Update
+            file.update();
+        } catch (DbxException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -370,7 +390,9 @@ public class DropboxSynchronizer extends Synchronizer implements
 
         @Override
         public void pauseMonitor() {
-            fs.removePathListenerForAll(this);
+            if (fs != null) {
+                fs.removePathListenerForAll(this);
+            }
         }
 
         @Override

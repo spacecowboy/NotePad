@@ -46,9 +46,6 @@ public class SyncHelper {
 
 		switch (TYPE) {
 		case MANUAL:
-            if (syncOthersEnabled(context)) {
-                syncOthers(context);
-            }
 			if (isGTasksConfigured(context)) {
 				requestGTaskSyncNow(context);
 			}
@@ -64,9 +61,6 @@ public class SyncHelper {
 			}
 			break;
 		case ONAPPSTART:
-            if (syncOthersEnabled(context)) {
-                syncOthers(context);
-            }
 			if (shouldSyncGTasksOnAppStart(context)) {
 				requestGTaskSyncNow(context);
 			}
@@ -74,14 +68,6 @@ public class SyncHelper {
 		}
 
 	}
-
-    /**
-     * Sync services other than GTasks
-     * @param context
-     */
-    private static void syncOthers(final Context context) {
-        OrgSyncService.start(context);
-    }
 
     public static boolean isGTasksConfigured(final Context context) {
 		final SharedPreferences prefs = PreferenceManager
@@ -138,18 +124,15 @@ public class SyncHelper {
 	}
 
 	private static boolean shouldSyncGTasksOnAppStart(final Context context) {
-		boolean shouldSync = isGTasksConfigured(context);
+		final boolean shouldSync = isGTasksConfigured(context);
 
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
+        final boolean enoughTime = enoughTimeSinceLastSync(context);
 
-		// Let 5 mins elapse before sync on start again
-		final long now = Calendar.getInstance().getTimeInMillis();
-		final long lastSync = prefs.getLong(SyncPrefs.KEY_LAST_SYNC, 0);
-		final long fivemins = 5 * 60 * 1000;
+        final SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
 
 		return shouldSync & prefs.getBoolean(SyncPrefs.KEY_SYNC_ON_START, true)
-				& (fivemins < now - lastSync);
+				& enoughTime;
 	}
 
 	private static boolean shouldSyncBackground(final Context context) {
@@ -162,15 +145,15 @@ public class SyncHelper {
 				& prefs.getBoolean(SyncPrefs.KEY_BACKGROUND_SYNC, true);
 	}
 
-    /**
-     * Checks all services except GTasks.
-     * @param context
-     * @return True if any sync service has been configured and enabled
-     */
-    public static boolean syncOthersEnabled(final Context context) {
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+    public static boolean enoughTimeSinceLastSync(final Context context) {
+        final SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(context);
 
-        return prefs.getBoolean(SyncPrefs.KEY_DROPBOX_ENABLE, false) ||
-               prefs.getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
+        // Let 5 mins elapse before sync on start again
+        final long now = Calendar.getInstance().getTimeInMillis();
+        final long lastSync = prefs.getLong(SyncPrefs.KEY_LAST_SYNC, 0);
+        final long fivemins = 5 * 60 * 1000;
+
+        return fivemins < (now - lastSync);
     }
 }

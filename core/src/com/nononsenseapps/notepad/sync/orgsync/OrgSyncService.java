@@ -21,6 +21,7 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
@@ -29,27 +30,36 @@ import android.os.IBinder;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.notepad.sync.SyncAdapter;
 
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class OrgSyncService extends Service {
 
 	private static final String TAG = "OrgSyncService";
+
+    public static final String ACTION_START = "com.nononsenseapps.notepad" +
+                                              ".sync.START";
+    public static final String ACTION_PAUSE = "com.nononsenseapps.notepad" +
+                                              ".sync.PAUSE";
 
 	// Msg arguments
 	public static final int TWO_WAY_SYNC = 1;
 	public static final int SYNC_QUEUE = 2;
 	public static final int SYNC_RUN = 3;
 
-	private static final int DELAY_MSECS = 5000;
+	private static final int DELAY_MSECS = 30000;
 
 	private boolean firstStart = true;
 
@@ -59,17 +69,33 @@ public class OrgSyncService extends Service {
 	private DBWatcher dbWatcher;
 
     private final ArrayList<Monitor> monitors;
+    private final ArrayList<SynchronizerInterface> synchronizers;
 
-	public static void start(Context context) {
-		context.startService(new Intent(context, OrgSyncService.class));
+    public static void start(Context context) {
+		context.startService(new Intent(context, OrgSyncService.class)
+                                     .setAction(ACTION_START));
 	}
+
+    public static void pause(Context context) {
+        context.startService(new Intent(context, OrgSyncService.class)
+                                     .setAction(ACTION_PAUSE));
+    }
 
     public static void stop(Context context) {
         context.stopService(new Intent(context, OrgSyncService.class));
     }
 
+    public static boolean areAnyEnabled(Context context) {
+        SharedPreferences prefs =
+                PreferenceManager.getDefaultSharedPreferences(context);
+
+        return prefs.getBoolean(SyncPrefs.KEY_SD_ENABLE, false) ||
+               prefs.getBoolean(SyncPrefs.KEY_DROPBOX_ENABLE, false);
+    }
+
 	public OrgSyncService() {
         monitors = new ArrayList<Monitor>();
+        synchronizers = new ArrayList<SynchronizerInterface>();
 	}
 
     /**
@@ -112,21 +138,26 @@ public class OrgSyncService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-        if (getSynchronizers().isEmpty()) {
-            stopSelf();
-            return START_NOT_STICKY;
-        }
-        else {
+        if (ACTION_PAUSE.equals(intent.getAction())) {
+            pause();
+        } else {
             final Message msg = serviceHandler.obtainMessage();
             msg.arg1 = TWO_WAY_SYNC;
             serviceHandler.sendMessage(msg);
-
-            // If we get killed, after returning from here, restart
-            return START_STICKY;
         }
+
+        // If we get killed, after returning from here, restart
+        return START_STICKY;
 	}
 
-	private void notifyError() {
+    private void pause() {
+        // Pause monitors
+        for (Monitor monitor: monitors) {
+            monitor.pauseMonitor();
+        }
+    }
+
+    private void notifyError() {
 		NotificationCompat.Builder notBuilder = new NotificationCompat.Builder(
 				this)
                 // TODO hardcoded
@@ -184,12 +215,17 @@ public class OrgSyncService extends Service {
 
 		@Override
 		public void handleMessage(Message msg) {
+
+            if (synchronizers.isEmpty()) {
+                synchronizers.addAll(getSynchronizers());
+            }
+
             // Get monitors if empty
             if (monitors.isEmpty()) {
                 // First db watcher
                 monitors.add(new DBWatcher(this));
                 // Then remote sources
-                for (final SynchronizerInterface syncer: getSynchronizers()) {
+                for (final SynchronizerInterface syncer: synchronizers) {
                     final Monitor monitor = syncer.getMonitor();
                     if (monitor != null) {
                         monitors.add(monitor);
@@ -222,15 +258,24 @@ public class OrgSyncService extends Service {
                         monitor.pauseMonitor();
                     }
 					// Sync each
-                    for (final SynchronizerInterface syncer : getSynchronizers()) {
+                    for (final SynchronizerInterface syncer : synchronizers) {
+                        sendBroadcast(new Intent(SyncAdapter.SYNC_STARTED));
                         syncer.fullSync();
                         syncer.postSynchronize();
                     }
+                    sendBroadcast(new Intent(SyncAdapter.SYNC_FINISHED));
                     // Restart monitors
                     for (final Monitor monitor: monitors) {
                         monitor.startMonitor(this);
                     }
-					break;
+                    // Save last sync time
+                    PreferenceManager
+                            .getDefaultSharedPreferences(OrgSyncService.this)
+                            .edit().putLong(SyncPrefs.KEY_LAST_SYNC,
+                                            Calendar.getInstance()
+                                                    .getTimeInMillis())
+                            .commit();
+                    break;
 				}
 
 			} catch (IOException ignored) {

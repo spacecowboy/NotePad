@@ -50,6 +50,7 @@ import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
 import com.nononsenseapps.notepad.sync.orgsync.DropboxSyncHelper;
 import com.nononsenseapps.notepad.sync.orgsync.DropboxSynchronizer;
+import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
 
 import java.io.File;
@@ -266,7 +267,8 @@ public class SyncPrefs extends PreferenceFragment implements
                     prefAccount.setTitle(prefs.getString(
                             KEY_ACCOUNT, ""));
                 } else if (KEY_SD_ENABLE.equals(key)) {
-                    // TODO
+                    // Restart the sync service
+                    OrgSyncService.stop(getActivity());
                 } else if (KEY_SD_DIR.equals(key)) {
                     setSdDirSummary(prefs);
                 } else if (KEY_DROPBOX_ENABLE.equals(key)) {
@@ -276,6 +278,8 @@ public class SyncPrefs extends PreferenceFragment implements
                     } else {
                         DropboxSynchronizer.unlink(getActivity());
                     }
+                    // Restart sync service
+                    OrgSyncService.stop(getActivity());
                 } else if (KEY_DROPBOX_DIR.equals(key)) {
                     setDropboxDirSummary(prefs);
                 }
@@ -296,9 +300,6 @@ public class SyncPrefs extends PreferenceFragment implements
             if (resultCode == Activity.RESULT_OK) {
                 // Start first sync
                 DropboxSyncHelper.doFirstSync(getActivity());
-                // Notify the user to wait
-                Toast.makeText(getActivity(), R.string.wait_for_dropbox,
-                        Toast.LENGTH_SHORT).show();
             } else {
                 // ... Link failed or was cancelled by the user.
                 PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()

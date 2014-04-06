@@ -210,43 +210,6 @@ public class ActivityMain extends FragmentActivity implements
 		alreadyShowcased = prefs.getBoolean(SHOWCASED_MAIN, false);
 		alreadyShowcasedDrawer = prefs.getBoolean(SHOWCASED_DRAWER, false);
 
-		// For in-app billing
-		final String base64EncodedPublicKey = new StringBuilder(
-				"MIIBIjANBgkqhki")
-				.append("G9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkNMrvFQmGKm5YoSD7UMCvKMvlEguAHVNCzEb")
-				.append("Bww7T8iQHPr5H7Ltag03HLT4oToG1hDKsbEV7tks2tjwAm1ftzlud+gFMEG/GCL6G")
-				.append("F+aisWKLJJZtpODRzidAAJVjlDaIROJBsnDnBQ2f8uoukSrXNaT42k/plIjhCiCdZ")
-				.append("AmMb7Yb48v6aMvnB7FHXBffrkI2mpn4c8kSe721ROovZXNDw7/U94ZODKkOrnZGON")
-				.append("rJ1isUwibFA3MhOfRdemE1aZF6KwCMD2EvgV8y9KVOPwF3lE0ucsJ4I56eEQpmzzR")
-				.append("jItb/Gn8iHp0qa7IhSR/vXBL4p+byCcoQDlfvjeAmjY6dQIDAQAB")
-				.toString();
-		try {
-			mBillingHelper = new IabHelper(this, base64EncodedPublicKey);
-			mBillingHelper.enableDebugLogging(true, "nononsenseapps billing");
-			mBillingHelper
-					.startSetup(new IabHelper.OnIabSetupFinishedListener() {
-						public void onIabSetupFinished(IabResult result) {
-							if (!result.isSuccess()) {
-								// Oh noes, there was a problem.
-								Log.d("nononsenseapps billing",
-										"Problem setting up In-app Billing: "
-												+ result);
-								return;
-							}
-							// Hooray, IAB is fully set up!
-							mBillingHelper
-									.queryInventoryAsync(mBillingInventoryListener);
-						}
-					});
-		}
-		catch (Exception e) {
-			Log.d("nononsenseapps billing",
-					"InApp billing cant be allowed to crash app, EVER");
-		}
-
-		// See if the donate version is installed and offer to import if so
-		isOldDonateVersionInstalled();
-
 		// To listen on fragment changes
 		getSupportFragmentManager().addOnBackStackChangedListener(
 				new FragmentManager.OnBackStackChangedListener() {
@@ -274,6 +237,46 @@ public class ActivityMain extends FragmentActivity implements
 		// Schedule notifications
 		NotificationHelper.schedule(this);
 	}
+
+    @Background
+    void checkPremium() {
+        // For in-app billing
+        final String base64EncodedPublicKey = new StringBuilder(
+                "MIIBIjANBgkqhki")
+                .append("G9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkNMrvFQmGKm5YoSD7UMCvKMvlEguAHVNCzEb")
+                .append("Bww7T8iQHPr5H7Ltag03HLT4oToG1hDKsbEV7tks2tjwAm1ftzlud+gFMEG/GCL6G")
+                .append("F+aisWKLJJZtpODRzidAAJVjlDaIROJBsnDnBQ2f8uoukSrXNaT42k/plIjhCiCdZ")
+                .append("AmMb7Yb48v6aMvnB7FHXBffrkI2mpn4c8kSe721ROovZXNDw7/U94ZODKkOrnZGON")
+                .append("rJ1isUwibFA3MhOfRdemE1aZF6KwCMD2EvgV8y9KVOPwF3lE0ucsJ4I56eEQpmzzR")
+                .append("jItb/Gn8iHp0qa7IhSR/vXBL4p+byCcoQDlfvjeAmjY6dQIDAQAB")
+                .toString();
+        try {
+            mBillingHelper = new IabHelper(this, base64EncodedPublicKey);
+            //mBillingHelper.enableDebugLogging(true, "nononsenseapps billing");
+            mBillingHelper
+                    .startSetup(new IabHelper.OnIabSetupFinishedListener() {
+                        public void onIabSetupFinished(IabResult result) {
+                            if (!result.isSuccess()) {
+                                // Oh noes, there was a problem.
+                                Log.d("nononsenseapps billing",
+                                      "Problem setting up In-app Billing: "
+                                      + result);
+                                return;
+                            }
+                            // Hooray, IAB is fully set up!
+                            mBillingHelper
+                                    .queryInventoryAsync(mBillingInventoryListener);
+                        }
+                    });
+
+            // See if the donate version is installed and offer to import if so
+            isOldDonateVersionInstalled();
+        }
+        catch (Exception e) {
+            Log.d("nononsenseapps billing",
+                  "InApp billing cant be allowed to crash app, EVER");
+        }
+    }
 
 	@Background
 	void isOldDonateVersionInstalled() {
@@ -335,7 +338,13 @@ public class ActivityMain extends FragmentActivity implements
 		}
 
 		// Sync if appropriate
-		SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
+        if (SyncHelper.enoughTimeSinceLastSync(this)) {
+            SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
+            OrgSyncService.start(this);
+        }
+
+        // Check any upgrades
+        checkPremium();
 	}
 
 	private void restartAndRefresh() {
@@ -359,11 +368,14 @@ public class ActivityMain extends FragmentActivity implements
 		if (pullToRefreshAttacher != null) {
 			pullToRefreshAttacher.setRefreshComplete();
 		}
+        // Pause sync monitors
+        OrgSyncService.pause(this);
 	}
 
 	@Override
 	public void onDestroy() {
 		super.onDestroy();
+        OrgSyncService.stop(this);
 		try {
 			if (mBillingHelper != null) mBillingHelper.dispose();
 		}
@@ -1083,9 +1095,6 @@ public class ActivityMain extends FragmentActivity implements
 		} else if (itemId == R.id.menu_sync) {
 			handleSyncRequest();
 			return true;
-		} else if (itemId == R.id.menu_orgtest) {
-			OrgSyncService.start(this);
-			return true;
 		} else if (itemId == R.id.menu_delete) {
 			return false;
 		} else {
@@ -1438,8 +1447,20 @@ public class ActivityMain extends FragmentActivity implements
 	}
 
 	private void handleSyncRequest() {
+        boolean syncing = false;
+        // GTasks
 		if (SyncHelper.isGTasksConfigured(ActivityMain.this)) {
+            syncing = true;
             SyncHelper.requestSyncIf(ActivityMain.this, SyncHelper.MANUAL);
+        }
+
+        // Others
+        if (OrgSyncService.areAnyEnabled(this)) {
+            syncing = true;
+            OrgSyncService.start(this);
+        }
+
+        if (syncing) {
             // In case of connectivity problems, stop the progress bar
             new AsyncTask<Void, Void, Void>() {
 

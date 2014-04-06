@@ -7,6 +7,7 @@ import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.widget.Toast;
 
@@ -104,8 +105,12 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 					}
 				}
 			});
-			tellUser(context, intent.getExtras()
-					.getInt(SyncAdapter.SYNC_RESULT));
+            Bundle b = intent.getExtras();
+            if (b == null) {
+                b = new Bundle();
+            }
+			tellUser(context, b.getInt(SyncAdapter.SYNC_RESULT,
+                                       SyncAdapter.SUCCESS));
 		}
 	}
 
