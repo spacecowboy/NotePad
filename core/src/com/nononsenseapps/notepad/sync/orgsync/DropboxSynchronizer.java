@@ -55,7 +55,6 @@ public class DropboxSynchronizer extends Synchronizer implements
     private DbxAccountManager accountManager = null;
     private DbxAccount account = null;
     private DbxFileSystem fs = null;
-    private DbxFileSystem.PathListener pathListener = null;
 
     public DropboxSynchronizer(final Context context) {
         super(context);
@@ -140,6 +139,11 @@ public class DropboxSynchronizer extends Synchronizer implements
         if (accountManager == null) {
             final String APP_KEY = Config.getKeyDropboxSyncPublic(context);
             final String APP_SECRET = Config.getKeyDropboxSyncSecret(context);
+
+            if (APP_KEY.contains(" ") || APP_SECRET.contains(" ")) {
+                return false;
+            }
+
             accountManager = DbxAccountManager.getInstance(context
                     .getApplicationContext(), APP_KEY, APP_SECRET);
 
@@ -147,19 +151,12 @@ public class DropboxSynchronizer extends Synchronizer implements
                 account = accountManager.getLinkedAccount();
                 try {
                     fs = DbxFileSystem.forAccount(account);
+
+                    fs.syncNowAndWait();
+
                     if (!fs.isFolder(DIR)) {
                         fs.createFolder(DIR);
                     }
-                    pathListener = new DbxFileSystem.PathListener() {
-                        @Override
-                        public void onPathChange(DbxFileSystem fs, DbxPath registeredPath, Mode registeredMode) {
-                            Log.d(TAG, "Dropbox change detected");
-                        }
-                    };
-                    fs.addPathListener(pathListener, DIR,
-                            DbxFileSystem.PathListener.Mode.PATH_OR_CHILD);
-
-                    fs.syncNowAndWait();
                 } catch (DbxException.Unauthorized unauthorized) {
                     return false;
                 } catch (DbxException e) {
@@ -343,7 +340,51 @@ public class DropboxSynchronizer extends Synchronizer implements
      */
     @Override
     public void postSynchronize() {
-        fs.removePathListener(pathListener, DIR, DbxFileSystem.PathListener
-                .Mode.PATH_OR_CHILD);
+
+    }
+
+    @Override
+    public Monitor getMonitor() {
+        return new DropboxMonitor(fs, DIR);
+    }
+
+    public final class DropboxMonitor implements Monitor,
+    DbxFileSystem.PathListener {
+
+        private DbxFileSystem fs;
+        private final DbxPath dir;
+        private OrgSyncService.SyncHandler handler;
+
+        public DropboxMonitor(final DbxFileSystem fs, final DbxPath dir) {
+            this.fs = fs;
+            this.dir = dir;
+        }
+
+        @Override
+        public void startMonitor(final OrgSyncService.SyncHandler handler) {
+            this.handler = handler;
+            if (fs != null) {
+                fs.addPathListener(this, dir, DbxFileSystem.PathListener.Mode.PATH_OR_CHILD);
+            }
+        }
+
+        @Override
+        public void pauseMonitor() {
+            fs.removePathListenerForAll(this);
+        }
+
+        @Override
+        public void terminate() {
+            pauseMonitor();
+            fs = null;
+        }
+
+        @Override
+        public void onPathChange(final DbxFileSystem dbxFileSystem,
+                final DbxPath dbxPath, final Mode mode) {
+            if (handler != null) {
+                handler.onMonitorChange();
+            }
+        }
     }
 }

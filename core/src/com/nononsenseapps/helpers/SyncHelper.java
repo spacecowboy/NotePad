@@ -1,28 +1,35 @@
+/*
+ * Copyright (c) 2014 Jonas Kalderstam.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.nononsenseapps.helpers;
-
-import java.util.Calendar;
-
-import com.nononsenseapps.notepad.core.R;
-import com.nononsenseapps.notepad.database.MyContentProvider;
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.notepad.prefs.SyncPrefs.AccountDialog;
-import com.nononsenseapps.notepad.sync.SyncAdapter;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.BroadcastReceiver;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.widget.Toast;
+
+import com.nononsenseapps.notepad.database.MyContentProvider;
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
+
+import java.util.Calendar;
 
 /**
  * This class handles sync logic. No other class should request a sync.
@@ -39,8 +46,11 @@ public class SyncHelper {
 
 		switch (TYPE) {
 		case MANUAL:
-			if (shouldSyncAtAll(context)) {
-				requestSyncNow(context);
+            if (syncOthersEnabled(context)) {
+                syncOthers(context);
+            }
+			if (isGTasksConfigured(context)) {
+				requestGTaskSyncNow(context);
 			}
 			break;
 		case BACKGROUND:
@@ -49,26 +59,47 @@ public class SyncHelper {
 			// }
 			break;
 		case ONCHANGE:
-			if (shouldSyncOnChange(context)) {
-				requestDelayedSync(context);
+			if (shouldSyncGTasksOnChange(context)) {
+				requestDelayedGTasksSync(context);
 			}
 			break;
 		case ONAPPSTART:
-			if (shouldSyncOnAppStart(context)) {
-				requestSyncNow(context);
+            if (syncOthersEnabled(context)) {
+                syncOthers(context);
+            }
+			if (shouldSyncGTasksOnAppStart(context)) {
+				requestGTaskSyncNow(context);
 			}
 			break;
 		}
 
 	}
 
-	public static void setBackgroundSync(final Context context) {
+    /**
+     * Sync services other than GTasks
+     * @param context
+     */
+    private static void syncOthers(final Context context) {
+        OrgSyncService.start(context);
+    }
 
-	}
-
-	private static void requestSyncNow(final Context context) {
+    public static boolean isGTasksConfigured(final Context context) {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
+		final String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, "");
+		final boolean syncEnabled = prefs.getBoolean(SyncPrefs.KEY_SYNC_ENABLE,
+				false);
+		return syncEnabled & accountName != null & !accountName.equals("");
+	}
+
+	private static void requestGTaskSyncNow(final Context context) {
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+        // Do nothing if gtask not enabled
+        if (!prefs.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)) {
+            return;
+        }
+
 		final String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, "");
 
 		if (accountName != null && !"".equals(accountName)) {
@@ -92,21 +123,8 @@ public class SyncHelper {
 		}
 	}
 
-	private static void requestDelayedSync(final Context context) {
-		context.startService(new Intent(context, SyncDelay.class));
-	}
-
-	public static boolean shouldSyncAtAll(final Context context) {
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		final String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, "");
-		final boolean syncEnabled = prefs.getBoolean(SyncPrefs.KEY_SYNC_ENABLE,
-				false);
-		return syncEnabled & accountName != null & !accountName.equals("");
-	}
-
-	private static boolean shouldSyncOnChange(final Context context) {
-		boolean shouldSync = shouldSyncAtAll(context);
+	private static boolean shouldSyncGTasksOnChange(final Context context) {
+		boolean shouldSync = isGTasksConfigured(context);
 
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
@@ -115,18 +133,12 @@ public class SyncHelper {
 				& prefs.getBoolean(SyncPrefs.KEY_SYNC_ON_CHANGE, true);
 	}
 
-	private static boolean shouldSyncBackground(final Context context) {
-		boolean shouldSync = shouldSyncAtAll(context);
-
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-
-		return shouldSync
-				& prefs.getBoolean(SyncPrefs.KEY_BACKGROUND_SYNC, true);
+	private static void requestDelayedGTasksSync(final Context context) {
+		context.startService(new Intent(context, GTasksSyncDelay.class));
 	}
 
-	private static boolean shouldSyncOnAppStart(final Context context) {
-		boolean shouldSync = shouldSyncAtAll(context);
+	private static boolean shouldSyncGTasksOnAppStart(final Context context) {
+		boolean shouldSync = isGTasksConfigured(context);
 
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
@@ -139,4 +151,26 @@ public class SyncHelper {
 		return shouldSync & prefs.getBoolean(SyncPrefs.KEY_SYNC_ON_START, true)
 				& (fivemins < now - lastSync);
 	}
+
+	private static boolean shouldSyncBackground(final Context context) {
+		boolean shouldSync = isGTasksConfigured(context);
+
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
+
+		return shouldSync
+				& prefs.getBoolean(SyncPrefs.KEY_BACKGROUND_SYNC, true);
+	}
+
+    /**
+     * Checks all services except GTasks.
+     * @param context
+     * @return True if any sync service has been configured and enabled
+     */
+    public static boolean syncOthersEnabled(final Context context) {
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        return prefs.getBoolean(SyncPrefs.KEY_DROPBOX_ENABLE, false) ||
+               prefs.getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
+    }
 }

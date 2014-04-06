@@ -1,62 +1,23 @@
+/*
+ * Copyright (c) 2014 Jonas Kalderstam.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.nononsenseapps.notepad;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import com.github.espiandev.showcaseview.ShowcaseView;
-import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesUtil;
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Background;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.InstanceState;
-import org.androidannotations.annotations.OnActivityResult;
-import org.androidannotations.annotations.SystemService;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.UiThread.Propagation;
-import org.androidannotations.annotations.ViewById;
-import com.nononsenseapps.billing.IabHelper;
-import com.nononsenseapps.billing.IabResult;
-import com.nononsenseapps.billing.Inventory;
-import com.nononsenseapps.billing.Purchase;
-import com.nononsenseapps.helpers.ActivityHelper;
-import com.nononsenseapps.helpers.NotificationHelper;
-import com.nononsenseapps.helpers.SyncHelper;
-import com.nononsenseapps.helpers.SyncStatusMonitor;
-import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
-import com.nononsenseapps.notepad.ActivityLocation.ErrorDialogFragment;
-import com.nononsenseapps.notepad.core.R;
-import com.nononsenseapps.notepad.database.LegacyDBHelper;
-import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
-import com.nononsenseapps.notepad.database.Notification;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
-import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
-import com.nononsenseapps.notepad.fragments.DialogEditList_;
-import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
-import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
-import com.nononsenseapps.notepad.fragments.TaskListFragment;
-import com.nononsenseapps.notepad.fragments.TaskListFragment_;
-import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
-import com.nononsenseapps.notepad.interfaces.MenuStateController;
-import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
-import com.nononsenseapps.notepad.legacy.DonateMigrator;
-import com.nononsenseapps.notepad.legacy.DonateMigrator_;
-import com.nononsenseapps.notepad.prefs.AccountDialog4;
-import com.nononsenseapps.notepad.prefs.MainPrefs;
-import com.nononsenseapps.notepad.prefs.PrefsActivity;
-import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
-import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
-import com.nononsenseapps.util.GeofenceUtils;
-import com.nononsenseapps.utils.ViewsHelper;
 
 import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
-import android.app.ActionBar;
-import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -90,6 +51,55 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
+
+import com.github.espiandev.showcaseview.ShowcaseView;
+import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
+import com.nononsenseapps.billing.IabHelper;
+import com.nononsenseapps.billing.IabResult;
+import com.nononsenseapps.billing.Inventory;
+import com.nononsenseapps.billing.Purchase;
+import com.nononsenseapps.helpers.ActivityHelper;
+import com.nononsenseapps.helpers.NotificationHelper;
+import com.nononsenseapps.helpers.SyncHelper;
+import com.nononsenseapps.helpers.SyncStatusMonitor;
+import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
+import com.nononsenseapps.notepad.core.R;
+import com.nononsenseapps.notepad.database.LegacyDBHelper;
+import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
+import com.nononsenseapps.notepad.database.Notification;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
+import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
+import com.nononsenseapps.notepad.fragments.DialogEditList_;
+import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
+import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
+import com.nononsenseapps.notepad.fragments.TaskListFragment;
+import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
+import com.nononsenseapps.notepad.interfaces.MenuStateController;
+import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
+import com.nononsenseapps.notepad.legacy.DonateMigrator;
+import com.nononsenseapps.notepad.legacy.DonateMigrator_;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.PrefsActivity;
+import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
+import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
+import com.nononsenseapps.utils.ViewsHelper;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.InstanceState;
+import org.androidannotations.annotations.OnActivityResult;
+import org.androidannotations.annotations.SystemService;
+import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.UiThread.Propagation;
+import org.androidannotations.annotations.ViewById;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 @EActivity(resName="activity_main")
 public class ActivityMain extends FragmentActivity implements
@@ -1100,7 +1110,7 @@ public class ActivityMain extends FragmentActivity implements
 	/**
 	 * Returns a note id from an intent if it contains one, either as part of
 	 * its URI or as an extra
-	 * 
+	 *
 	 * Returns -1 if no id was contained, this includes insert actions
 	 */
 	long getNoteId(final Intent intent) {
@@ -1136,7 +1146,7 @@ public class ActivityMain extends FragmentActivity implements
 	/**
 	 * Returns the text that has been shared with the app. Does not check
 	 * anything other than EXTRA_SUBJECT AND EXTRA_TEXT
-	 * 
+	 *
 	 * If it is a Google Now intent, will ignore the subject which is
 	 * "Note to self"
 	 */
@@ -1202,7 +1212,7 @@ public class ActivityMain extends FragmentActivity implements
 	/**
 	 * Returns a list id from an intent if it contains one, either as part of
 	 * its URI or as an extra
-	 * 
+	 *
 	 * Returns -1 if no id was contained, this includes insert actions
 	 */
 	long getListId(final Intent intent) {
@@ -1402,6 +1412,7 @@ public class ActivityMain extends FragmentActivity implements
 	}
 
 	public void addRefreshableView(View view) {
+        // TODO Only if some sync is enabled
 		pullToRefreshAttacher.addRefreshableView(view,
 				getPullToRefreshListener());
 	}
@@ -1427,44 +1438,28 @@ public class ActivityMain extends FragmentActivity implements
 	}
 
 	private void handleSyncRequest() {
-		if (SyncHelper.shouldSyncAtAll(ActivityMain.this)) {
-			SyncHelper.requestSyncIf(ActivityMain.this, SyncHelper.MANUAL);
-		}
-		else {
-			FragmentTransaction ft = getSupportFragmentManager()
-					.beginTransaction();
-			Fragment prev = getSupportFragmentManager().findFragmentByTag(
-					"accountdialog");
-			if (prev != null) {
-				ft.remove(prev);
-			}
-			ft.addToBackStack(null);
+		if (SyncHelper.isGTasksConfigured(ActivityMain.this)) {
+            SyncHelper.requestSyncIf(ActivityMain.this, SyncHelper.MANUAL);
+            // In case of connectivity problems, stop the progress bar
+            new AsyncTask<Void, Void, Void>() {
 
-			// Create and show the dialog.
-			AccountDialog4 newFragment = new AccountDialog4();
-			newFragment.show(ft, "accountdialog");
-		}
-		// In case of connectivity problems, stop
-		// the progress bar
-		new AsyncTask<Void, Void, Void>() {
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        Thread.sleep(30000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
 
-			@Override
-			protected Void doInBackground(Void... params) {
-				try {
-					Thread.sleep(30000);
-				}
-				catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-				return null;
-			}
-
-			@Override
-			protected void onPostExecute(Void result) {
-				// Notify PullToRefreshAttacher that the refresh has finished
-				pullToRefreshAttacher.setRefreshComplete();
-			}
-		}.execute();
+                @Override
+                protected void onPostExecute(Void result) {
+                    // Notify PullToRefreshAttacher that the refresh has finished
+                    pullToRefreshAttacher.setRefreshComplete();
+                }
+            }.execute();
+        }
 	}
 
 	@UiThread
