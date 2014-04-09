@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2012 Jonas Kalderstam
+     Copyright (C) 2014 Jonas Kalderstam
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -16,9 +16,8 @@
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     android:key="app_preference_screen_sync" >
-
     
-    <PreferenceScreen
+    <PreferenceCategory
         android:key="pref_gtask_section_key"
         android:persistent="false"
         android:title="@string/gtasks" >
@@ -58,9 +57,9 @@
             android:key="syncFull"
             android:summary="@string/sync_full_force_info"
             android:title="@string/sync_full_force" /> -->
-    </PreferenceScreen>
+    </PreferenceCategory>
 
-    <PreferenceScreen
+    <PreferenceCategory
         android:key="pref_sdcard_section_key"
         android:persistent="false"
         android:title="@string/sd_card">
@@ -75,9 +74,9 @@
             android:summary="@string/directory_summary"
             android:title="@string/directory" />
 
-    </PreferenceScreen>
+    </PreferenceCategory>
 
-    <PreferenceScreen
+    <PreferenceCategory
         android:key="pref_dropbox_section_key"
         android:persistent="false"
         android:title="@string/dropbox">
@@ -92,6 +91,6 @@
             android:summary="@string/directory_summary"
             android:title="@string/directory" />
 
-    </PreferenceScreen>
+    </PreferenceCategory>
 
 </PreferenceScreen>

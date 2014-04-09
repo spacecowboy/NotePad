@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2012 Jonas Kalderstam
+ * Copyright (C) 2014 Jonas Kalderstam
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -192,8 +192,9 @@ public class SyncPrefs extends PreferenceFragment implements
         });
 
         // Dropbox, disable if no key present
-        findPreference(KEY_DROPBOX_ENABLE).setEnabled(!Config
-                .getKeyDropboxSyncSecret(getActivity()).contains(" "));
+        findPreference(KEY_DROPBOX_ENABLE).setEnabled(Config
+                .getKeyDropboxSyncSecret(getActivity()) != null &&
+        !Config.getKeyDropboxSyncSecret(getActivity()).contains(" "));
         prefDropboxDir = findPreference(KEY_DROPBOX_DIR);
         setDropboxDirSummary(sharedPrefs);
         prefDropboxDir.setOnPreferenceClickListener(new OnPreferenceClickListener() {
