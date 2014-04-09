@@ -84,7 +84,7 @@
     <!-- Strings that should not be translated -->
     <string name="libraries_used">Libraries used</string>
     <!-- Timessquare, betterpickers, dragsortlistview, showcaseview -->
-	<string name="app_about">NoNonsense Notes is open source and available at https://github.com/spacecowboy/NotePad\n\nReport bugs and issues: https://code.google.com/p/nononsense-notes/issues/\n\nHelp translate the app: http://translate.nononsenseapps.com\n\nKeep up with the latest progress: http://www.nononsenseapps.com</string>
+	<string name="app_about">NoNonsense Notes is open source and available at https://github.com/spacecowboy/NotePad\n\nReport bugs and issues: https://github.com/spacecowboy/NotePad/issues\n\nHelp translate the app: http://translate.nononsenseapps.com\n\nKeep up with the latest progress: http://www.nononsenseapps.com</string>
 	<string name="license">License</string>
 	<string name="license_text">
 Copyright (&#169;) 2013 Jonas Kalderstam

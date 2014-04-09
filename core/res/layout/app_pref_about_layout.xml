@@ -36,7 +36,7 @@
             android:autoLink="all"
             android:fontFamily="sans-serif-light"
             android:paddingTop="4dp"
-            android:text="Copyright (&#169;) 2013 Jonas Kalderstam"
+            android:text="Copyright (&#169;) 2014 Jonas Kalderstam"
             android:textAppearance="@android:style/TextAppearance.Holo.Small" />
 
         <TextView
@@ -57,7 +57,6 @@
             android:text="@string/libraries_used"
             android:textAppearance="@android:style/TextAppearance.Holo.Large"
             android:textColor="@android:color/holo_blue_dark" />
-        <!-- Timessquare, betterpickers, dragsortlistview, showcaseview -->
 
         <TextView
             android:layout_width="fill_parent"
@@ -65,16 +64,9 @@
             android:autoLink="all"
             android:fontFamily="sans-serif-light"
             android:paddingTop="4dp"
-            android:text="TimesSquare (&#169;) Square, Inc."
+            android:text="ActionBar-PullToRefresh (&#169;) Chris Banes"
             android:textAppearance="@android:style/TextAppearance.Holo.Medium" />
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="all"
-            android:fontFamily="sans-serif-light"
-            android:paddingTop="4dp"
-            android:text="BetterPickers (&#169;) Derek Brameyer"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium" />
+
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
