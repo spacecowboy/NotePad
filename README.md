@@ -1,4 +1,7 @@
 # NoNonsense Notes
+
+[![Build Status](https://travis-ci.org/spacecowboy/NotePad.svg?branch=master)](https://travis-ci.org/spacecowboy/NotePad)
+
 Link to [Google Play](https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad)
 
 Latest updates posted on [http://www.nononsenseapps.com](http://www.nononsenseapps.com)
