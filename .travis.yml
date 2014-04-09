@@ -21,8 +21,9 @@ before_install:
     - echo yes | android update sdk --filter android-19 --no-ui --force > /dev/null
     - echo yes | android update sdk --filter sysimg-19 --no-ui --force > /dev/null
     - echo yes | android update sdk --filter extra-android-support --no-ui --force > /dev/null
-    - echo yes | android update sdk --filter extra-android-m2repository --no-ui --force > /dev/null
     - echo yes | android update sdk --filter extra-google-google_play_services --no-ui --force > /dev/null
+    - echo yes | android update sdk --filter extra-android-m2repository --no-ui --force > /dev/null
+    - echo yes | android update sdk --filter extra-google-m2repository --no-ui --force > /dev/null
 
     # Create and start emulator
     - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
