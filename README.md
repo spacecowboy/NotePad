@@ -9,7 +9,7 @@ Latest updates posted on [http://www.nononsenseapps.com](http://www.nononsenseap
 
 # Getting sync to work
 You need to put your API keys in a file, like the sample here:
-https://github.com/spacecowboy/NotePad/blob/master/NoNonsenseNotes/core/assets/secretkeys.properties.sample
+https://github.com/spacecowboy/NotePad/blob/master/core/assets/secretkeys.properties.sample
 
 But first you will of course need to get yourself a key. Follow the instructions on this page:
 https://developers.google.com/google-apps/tasks/firstapp
