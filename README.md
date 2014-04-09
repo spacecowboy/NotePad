@@ -8,24 +8,24 @@ Latest updates posted on [http://www.nononsenseapps.com](http://www.nononsenseap
 <img src="phone.png" alt="Phone UI" height="720" />
 
 # Getting sync to work
-The app should work fine but sync will display an error message. To get it working you will need to put an API key in this file here:
-https://github.com/spacecowboy/NotePad/blob/master/NoNonsenseNotes/src/com/nononsenseapps/build/Config.java
-
-You need to replace this line:
-
-```java
-public final static String GTASKS_API_KEY = "Put your key here";
-```
+You need to put your API keys in a file, like the sample here:
+https://github.com/spacecowboy/NotePad/blob/master/NoNonsenseNotes/core/assets/secretkeys.properties.sample
 
 But first you will of course need to get yourself a key. Follow the instructions on this page:
 https://developers.google.com/google-apps/tasks/firstapp
 
 Scroll to the section named __Register your project__.
 
-Once you have put your key in the variable mention above, sync should work fine.
+And similar over here https://www.dropbox.com/developers/apps
+
+# Build the project
+
+Enter the full directory and call
+
+    gradle installDebug
 
 # License
-     Copyright (C) 2013 Jonas Kalderstam
+     Copyright (C) 2014 Jonas Kalderstam
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
