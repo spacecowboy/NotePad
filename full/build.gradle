@@ -121,10 +121,12 @@ android {
 
     signingConfigs {
         release {
+          if (hasProperty(STORE_FILE) && file(STORE_FILE).exists()) {
             storeFile file(STORE_FILE)
             storePassword STORE_PASSWORD
             keyAlias KEY_ALIAS
             keyPassword KEY_PASSWORD
+          }
         }
     }
 

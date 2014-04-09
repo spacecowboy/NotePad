@@ -1,5 +1,0 @@
-# Android signing
-STORE_FILE=dummy
-STORE_PASSWORD=dummy
-KEY_ALIAS=dummy
-KEY_PASSWORD=dummy 
