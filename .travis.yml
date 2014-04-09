@@ -27,6 +27,6 @@ before_script:
     - ./wait_for_emulator
 
 #script: mvn install -Pintegration-tests -Dandroid.device=test
-script: make test
+script: cd full;../gradlew connectedCheck
     #cd full; make clean debug install; cd ..
     #cd test; make clean debug install test

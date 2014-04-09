@@ -63,8 +63,6 @@ android {
     buildToolsVersion "19.0.3"
 
     defaultConfig {
-        // minSdkVersion 14
-        // targetSdkVersion 19
         packageName "com.nononsenseapps.notepad.core"
     }
 
