@@ -58,15 +58,5 @@ public class ConfigTest  extends AndroidTestCase {
 
         assertNotNull(Config.getKeyDropboxSyncSecret(context));
         assertFalse(Config.getKeyDropboxSyncSecret(context).isEmpty());
-
-        // Only test the rest in debug builds since they will be set otherwise
-        if (BuildConfig.DEBUG) {
-            assertEquals("Put your key here", props.getProperty(Config
-                    .KEY_GTASKS_API_KEY));
-            assertEquals("Public key here", props.getProperty(Config
-                    .KEY_DROPBOX_SYNC_PUBLIC));
-            assertEquals("Secret key here", props.getProperty(Config
-                    .KEY_DROPBOX_SYNC_SECRET));
-        }
     }
 }
