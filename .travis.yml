@@ -7,6 +7,8 @@ env:
     #- ANDROID_SDKS=sysimg-16            ANDROID_TARGET=android-16  ANDROID_ABI=armeabi-v7a
     - ANDROID_SDKS=android-19,sysimg-19 ANDROID_TARGET=android-19  ANDROID_ABI=armeabi-v7a
 before_install:
+    # Create dummy keys
+    - cp core/assets/secretkeys.properties.sample core/assets/secretkeys.properties
 
     # Install base Android SDK
     - sudo apt-get update -qq
