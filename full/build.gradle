@@ -119,20 +119,22 @@ android {
         }
     }
 
-    signingConfigs {
+    if (hasProperty('STORE_FILE')) {
+      signingConfigs {
         release {
-          if (hasProperty(STORE_FILE) && file(STORE_FILE).exists()) {
-            storeFile file(STORE_FILE)
-            storePassword STORE_PASSWORD
-            keyAlias KEY_ALIAS
-            keyPassword KEY_PASSWORD
-          }
+          storeFile file(STORE_FILE)
+          storePassword STORE_PASSWORD
+          keyAlias KEY_ALIAS
+          keyPassword KEY_PASSWORD
         }
-    }
+      }
 
-    buildTypes {
+      buildTypes {
         release {
-            signingConfig signingConfigs.release
+          signingConfig signingConfigs.release
         }
+      }
+    } else {
+      println "No key store defined. Signed release not available..."
     }
 }
