@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (C) 2013 Jonas Kalderstam
+Copyright (c) 2014 Jonas Kalderstam.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
 <string name="app_name">Anteckningar</string>
 <string name="title_create">Ny anteckning</string>
@@ -244,5 +244,24 @@ Use few if language need it. In English is the same.
 <string name="large">Stort</string>
 <string name="text_size">Textstorlek</string>
 <string name="add_a_reminder">Lägg till påminnelse</string>
+
+<string name="backup_import">Importera backup</string>
+<string name="backup_export">Gör backup</string>
+<string name="backup_import_msg">Försök att importera backup från %1$s? Detta kommer radera den nuvarande databasen.</string>
+<string name="backup_export_msg">Exportera alla anteckningar till %1$s?</string>
+<string name="backup_import_success">Backup importerad</string>
+<string name="backup_file_not_found">Backupfilen kunde inte hittas</string>
+<string name="backup_import_failed">Misslyckades med att läsa backupfilen</string>
+<string name="backup_export_success">Backup skriven</string>
+<string name="backup_export_failed">Kan inte skriva till backupfilen</string>
+<string name="sd_card">SD-kort</string>
+<string name="sd_card_sync">SD-synkronisering</string>
+<string name="sd_card_summary">Anteckningar kopieras till SD-kortet. Ändringar synkroniseras båda till och från SD-kortet. Notera att filer som raderas från SD-kortet även raderar listorna i appen!</string>
+<string name="directory">Mapp</string>
+<string name="directory_summary">Var filerna ska sparas</string>
+<string name="dropbox_sync">Dropbox-synkronisering</string>
+<string name="dropbox_sync_summary">Synkronisera dina anteckingar med filer i din Dropbox.</string>
+<string name="cannot_write_to_directory">Kan inte skriva till mapp</string>
+<string name="wait_for_dropbox">Vänligen vänta på att Dropbox slutför sin initiala synkronisering.</string>
 
 </resources>
