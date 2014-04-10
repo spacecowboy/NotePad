@@ -59,7 +59,7 @@ limitations under the License.
 <string name="location">Sijainti</string>
 <string name="restore">Palauta</string>
 <string name="restore_to">Palauta sijaintiin</string>
-<string name="search_hint">Etsi</string>
+<string name="search_hint">Hae</string>
 <string name="settings_theme">Nykyinen teema</string>
 <string name="settings_theme_dialog">Käytä teemaa</string>
 <string name="settings_lang">Kieli</string>
@@ -72,7 +72,7 @@ limitations under the License.
 <string name="settings_account_title">Valitse käyttäjätili</string>
 <string name="settings_account_summary">Napauta vaihtaaksesi tiliä</string>
 <string name="settings_sync_enable_title">Google Tasks -synkronointi</string>
-<string name="gtasks_sync_info">Kaikkea tietoa ei voida synkronoida Google Tasksiin. Vain muistiinpanot, eräpäivämäärä (ei aika) ja tehtävälistojen tilat synkronoidaan.</string>
+<string name="gtasks_sync_info">Kaikkea tietoa ei voida synkronoida Google Tasks -palveluun. Vain muistiinpanot, eräpäivämäärät (ei kellonaikoja) ja tehtävälistojen tilat synkronoidaan.</string>
 <string name="settings_cat_syncing">Synkronointi</string>
 <string name="show_from_all_lists">Kaikki listat</string>
 <string name="lists">Listat</string>
@@ -153,7 +153,7 @@ Use few if language need it. In English is the same.
 <string name="confirm_new_password">Vahvista uusi salasana</string>
 <string name="apply">Hyväksy</string>
 <string name="clear_password">Poista salasana</string>
-<string name="password_info">Kun asetat salasanan, voit tutkia lukittuja muistiinpanoja vain sen avulla. Se suojaa vain muistiinpanokenttää, joten otsikko ja eräpäivä jäävät suojaamattomiksi. Salasanan asettaminen ei myöskään salaa muistiinpanoa millään tavalla, joten se on edelleen nähtävissä Google sähköpostissa / kalenterissa. Jos unohdat salasanasi, synkronoi sovellus Google-tilisi kanssa ja asenna sovellus sitten uudelleen.</string>
+<string name="password_info">Muistiinpanon lukitseminen rajoittaa pääsyn sen katselemiseen ja muokkaamiseen. Muistiinpanot lukitaan yksitellen. Muistiinpanot ovat suojattu vain täällä ja muilla laitteilla on täysi pääsy niihin.</string>
 <string name="about">Tietoja</string>
 <string name="sync_failed">Synkronointi epäonnistui</string>
 <string name="sync_login_failed">Sisäänkirjautuminen epäonnistui, ei voitu yhdistää Google Tasks:iin</string>
@@ -167,6 +167,7 @@ Use few if language need it. In English is the same.
 <string name="date_header_none">Ei päivämäärää</string>
 <string name="date_header_completed">Valmis</string>
 <string name="next_5_days">Seuraavat 5 päivää</string>
+<string name="next_n_days">Seuraavat %d päivää</string>
 <string name="this_week">Tämä viikko</string>
 <string name="please_select_note">Valitse tai luo muistiinpano</string>
 <string name="please_create_note">Luo muistiinpano</string>
@@ -202,7 +203,7 @@ Use few if language need it. In English is the same.
 <string name="sync_on_change">Synkronoi muutosten yhteydessä</string>
 <string name="sync_on_change_info">Synkronoi, kun muistiinpano on muuttunut</string>
 <string name="sync_on_start">Synkronoi sovelluksen käynnistyessä</string>
-<string name="sync_on_start_info">Tapahtuu vain uusissa käynnistyksissä, ei sovellukseen palattaessa</string>
+<string name="sync_on_start_info">Synkronoi korkeintaan joka 5. minuutti</string>
 <string name="sync_full_force">Pakota täydellinen synkronointi seuraavalla kerralla</string>
 <string name="sync_full_force_info">Valitse tämä vain silloin, kun epäilet, että synkronoinnista puuttuu kohteita.</string>
 <string name="snooze">Torkku</string>
@@ -249,5 +250,16 @@ Use few if language need it. In English is the same.
 <string name="text_size">Tekstin koko</string>
 <string name="text">Teksti</string>
 <string name="add_a_reminder">Lisää muistutus</string>
+
+<string name="backup">Varmuuskopiointi</string>
+<string name="backup_import">Tuo varmuuskopio</string>
+<string name="backup_export">Vie varmuuskopio</string>
+<string name="backup_import_msg">Yritä tuoda varmuuskopio %1$s:sta? Tämä tyhjentää tämänhetkisen tietokannan.</string>
+<string name="backup_export_msg">Vie kaikki muistiinpanot %1$s:n?</string>
+<string name="backup_import_success">Varmuuskopio tuotu onnistuneesti</string>
+<string name="backup_file_not_found">Varmuuskopiotiedostoa ei löytynyt</string>
+<string name="backup_import_failed">Varmuuskopiotiedoston lukeminen epäonnistui</string>
+<string name="backup_export_success">Varmuuskopio viety onnistuneesti</string>
+<string name="backup_export_failed">Varmuuskopiotiedostoon ei voitu kirjoittaa</string>
 
 </resources>

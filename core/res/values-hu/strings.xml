@@ -89,7 +89,7 @@ limitations under the License.
 <string name="settings_list">Lista</string>
 <string name="drag_to_timetravel">Húzd az időutazáshoz</string>
 
-<string name="import_data_question">Adatok importálása?</string>
+<string name="import_data_question">Szeretné importálni az adatokat?</string>
 <string name="import_started">Adatok importálása folyamatban. A művelet eltarthat néhány másodpercig.</string>
 <string name="import_data_msg">Szeretné átimportálni a jegyzeteket a támogatott verzióból? Amikor kész, eltávolíthatja az alkalmazást.</string>
 <string name="imported_result">%1$d jegyzet importálása %2$d listába</string>
@@ -204,7 +204,7 @@ Use few if language need it. In English is the same.
 <string name="sync_on_change">Szinkronizálás változáskor</string>
 <string name="sync_on_change_info">Jegyzet változása után nem sokkal szinkronizál</string>
 <string name="sync_on_start">Szinkronizálás alkalmazás indításakor</string>
-<string name="sync_on_start_info">Csak indításkor, visszaváltáskor nem</string>
+<string name="sync_on_start_info">Nagyjából 5 percenként szinkronizál</string>
 <string name="sync_full_force">Teljes szinkronizálás következő alkalommal</string>
 <string name="sync_full_force_info">Csak akkor válassza ezt, ha úgy gondolja, hogy hiányzik néhány elem.</string>
 <string name="snooze">Szundi</string>
@@ -240,10 +240,10 @@ Use few if language need it. In English is the same.
 <string name="editor">Szerkesztő</string>
 <string name="bold">Félkövér</string>
 <string name="italic">Dőlt</string>
-<string name="normal">Normal</string>
+<string name="normal">Normál</string>
 <string name="title_style">Cím stílusa</string>
 <string name="title_font">Cím betűtípusa</string>
-<string name="body_font">Szöveg típusa</string>
+<string name="body_font">Szöveg betűtípusa</string>
 <string name="clickable_links">Kattinható linkek</string>
 <string name="small">Kicsi</string>
 <string name="medium">Közepes</string>
@@ -251,5 +251,16 @@ Use few if language need it. In English is the same.
 <string name="text_size">Szöveg betűméret</string>
 <string name="text">Szöveg</string>
 <string name="add_a_reminder">Emlékeztető hozzáadása</string>
+
+<string name="backup">Biztonsági mentés</string>
+<string name="backup_import">Importálás</string>
+<string name="backup_export">Exportálás</string>
+<string name="backup_import_msg">Szeretné importálni a biztonsági mentést a %1$ fájlból? Ez felülírja a jelenlegi adatbázist.</string>
+<string name="backup_export_msg">Szeretné exportálni az adatbázist a %1$ fájlba?</string>
+<string name="backup_import_success">Sikeres importálás</string>
+<string name="backup_file_not_found">A fájl nem található</string>
+<string name="backup_import_failed">A fájl nem olvasható</string>
+<string name="backup_export_success">Sikeres exportálás</string>
+<string name="backup_export_failed">Fájl nem írható</string>
 
 </resources>
