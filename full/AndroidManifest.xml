@@ -410,6 +410,7 @@
         <activity
             android:name="com.nononsenseapps.notepad.dashclock.TasksSettings"
             android:exported="true"
+            android:theme="@style/DashClockSettings.Theme"
             android:label="@string/dashclock_title_activity_tasks_settings"
             android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA" >
         </activity>
