@@ -119,7 +119,7 @@ android {
         }
     }
 
-    if (hasProperty('STORE_FILE')) {
+    if (project.hasProperty('STORE_FILE')) {
       signingConfigs {
         release {
           storeFile file(STORE_FILE)
