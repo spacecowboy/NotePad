@@ -363,6 +363,89 @@ public class ActivityMain extends FragmentActivity
         }
     }
 
+    @Override
+    public void finish() {
+        super.finish();
+        // Only animate when specified. Should be when it was animated "in"
+        if (mAnimateExit) {
+            overridePendingTransition(R.anim.activity_slide_in_right,
+                    R.anim.activity_slide_out_right_full);
+        }
+    }
+
+    /**
+     * Returns a list id from an intent if it contains one, either as part of
+     * its URI or as an extra
+     * <p/>
+     * Returns -1 if no id was contained, this includes insert actions
+     */
+    long getListId(final Intent intent) {
+        long retval = -1;
+        if (intent != null &&
+            intent.getData() != null &&
+            (Intent.ACTION_EDIT.equals(intent.getAction()) ||
+             Intent.ACTION_VIEW.equals(intent.getAction()) ||
+             Intent.ACTION_INSERT.equals(intent.getAction()))) {
+            if ((intent.getData().getPath()
+                         .startsWith(NotePad.Lists.PATH_VISIBLE_LISTS) ||
+                 intent.getData().getPath()
+                         .startsWith(NotePad.Lists.PATH_LISTS) ||
+                 intent.getData().getPath()
+                         .startsWith(TaskList.URI.getPath()))) {
+                try {
+                    retval = Long.parseLong(
+                            intent.getData().getLastPathSegment());
+                } catch (NumberFormatException e) {
+                    retval = -1;
+                }
+            } else if (-1 !=
+                       intent.getLongExtra(
+                               LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST,
+                               -1)) {
+                retval = intent.getLongExtra(
+                        LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
+            } else if (-1 !=
+                       intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
+                               -1)) {
+                retval =
+                        intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
+                                -1);
+            } else if (-1 != intent.getLongExtra(Task.Columns.DBLIST, -1)) {
+                retval = intent.getLongExtra(Task.Columns.DBLIST, -1);
+            }
+        }
+        return retval;
+    }
+
+    /**
+     * Opens the specified list and closes the left drawer
+     */
+    void openList(final long id) {
+        // Open list
+        Intent i = new Intent(ActivityMain.this, ActivityMain_.class);
+        i.setAction(Intent.ACTION_VIEW).setData(TaskList.getUri(id))
+                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+
+        // If editor is on screen, we need to reload fragments
+        if (listOpener == null) {
+            while (getSupportFragmentManager().popBackStackImmediate()) {
+                // Need to pop the entire stack and then load
+            }
+            reverseAnimation = true;
+            startActivity(i);
+        } else {
+            // If not popped, then send the call to the fragment
+            // directly
+            Log.d("nononsenseapps list", "calling listOpener");
+            listOpener.openList(id);
+        }
+
+        // And then close drawer
+        if (drawerLayout != null && leftDrawer != null) {
+            drawerLayout.closeDrawer(leftDrawer);
+        }
+    }
+
     void updateUiDonate() {
         // check correct variableF
         if (mDonatedInApp) {
@@ -404,16 +487,6 @@ public class ActivityMain extends FragmentActivity
                     pullToRefreshAttacher.setRefreshComplete();
                 }
             }.execute();
-        }
-    }
-
-    @Override
-    public void finish() {
-        super.finish();
-        // Only animate when specified. Should be when it was animated "in"
-        if (mAnimateExit) {
-            overridePendingTransition(R.anim.activity_slide_in_right,
-                    R.anim.activity_slide_out_right_full);
         }
     }
 
@@ -616,19 +689,25 @@ public class ActivityMain extends FragmentActivity
             // already unlocked
             return;
         }
-        PackageManager pm = getPackageManager();
-        List<ApplicationInfo> packages = pm.getInstalledApplications(0);
-        for (ApplicationInfo packageInfo : packages) {
-            if (packageInfo.packageName
-                    .equals("com.nononsenseapps.notepad_donate")) {
-                migrateDonateUser();
-                mHasPremiumAccess = true;
-                // Allow them to donate again
-                PreferenceManager.getDefaultSharedPreferences(ActivityMain.this)
-                        .edit().putBoolean(PREMIUMSTATUS, true).commit();
-                // Stop loop
-                break;
+        try {
+            PackageManager pm = getPackageManager();
+            List<ApplicationInfo> packages = pm.getInstalledApplications(0);
+            for (ApplicationInfo packageInfo : packages) {
+                if (packageInfo.packageName
+                        .equals("com.nononsenseapps.notepad_donate")) {
+                    migrateDonateUser();
+                    mHasPremiumAccess = true;
+                    // Allow them to donate again
+                    PreferenceManager
+                            .getDefaultSharedPreferences(ActivityMain.this)
+                            .edit().putBoolean(PREMIUMSTATUS, true).commit();
+                    // Stop loop
+                    break;
+                }
             }
+        } catch (Exception e) {
+            Log.d("nononsenseapps billing",
+                    "InApp billing cant be allowed to crash app, EVER");
         }
     }
 
@@ -663,6 +742,206 @@ public class ActivityMain extends FragmentActivity
     public void onSaveInstanceState(Bundle outState) {
         // Do absolutely NOT call super class here. Will bug out the viewpager!
         super.onSaveInstanceState(outState);
+    }
+
+    @UiThread(propagation = Propagation.REUSE)
+    void loadFragments() {
+        final Intent intent = getIntent();
+
+        // Mandatory
+        Fragment left = null;
+        String leftTag = null;
+        // Only if fragment2 is not null
+        Fragment right = null;
+
+        if (this.state != null) {
+            this.state = null;
+            if (showingEditor && fragment2 != null) {
+                // Should only be true in portrait
+                showingEditor = false;
+            }
+
+            // Find fragments
+            // This is an instance state variable
+            if (showingEditor) {
+                // Portrait, with editor, modify action bar
+                setHomeAsDrawer(false);
+                // Done
+                return;
+            } else {
+                // Find the listpager
+                left = getSupportFragmentManager()
+                        .findFragmentByTag(LISTPAGERTAG);
+                listOpener = (ListOpener) left;
+
+                if (left != null && fragment2 == null) {
+                    // Done
+                    return;
+                } else if (left != null && fragment2 != null) {
+                    right = getSupportFragmentManager()
+                            .findFragmentByTag(DETAILTAG);
+                }
+
+                if (left != null && right != null) {
+                    // Done
+                    return;
+                }
+            }
+        }
+
+        // Load stuff
+        final FragmentTransaction transaction =
+                getSupportFragmentManager().beginTransaction();
+        if (reverseAnimation) {
+            reverseAnimation = false;
+            transaction.setCustomAnimations(R.anim.slide_in_bottom,
+                    R.anim.slide_out_top, R.anim.slide_in_top,
+                    R.anim.slide_out_bottom);
+        } else {
+            transaction.setCustomAnimations(R.anim.slide_in_top,
+                    R.anim.slide_out_bottom, R.anim.slide_in_bottom,
+                    R.anim.slide_out_top);
+        }
+
+		/*
+         * If it contains a noteId, load an editor. If also tablet, load the
+		 * lists.
+		 */
+        if (fragment2 != null) {
+            if (right == null) {
+                if (getNoteId(intent) > 0) {
+                    right = TaskDetailFragment_.getInstance(getNoteId(intent));
+                } else if (isNoteIntent(intent)) {
+                    right = TaskDetailFragment_
+                            .getInstance(getNoteShareText(intent),
+                                    TaskListViewPagerFragment.getAShowList(this,
+                                            getListId(intent))
+                            );
+                }
+            }
+        } else if (isNoteIntent(intent)) {
+            showingEditor = true;
+            listOpener = null;
+            leftTag = DETAILTAG;
+            if (getNoteId(intent) > 0) {
+                left = TaskDetailFragment_.getInstance(getNoteId(intent));
+            } else {
+                // Get a share text (null safe)
+                // In a list (if specified, or default otherwise)
+                left = TaskDetailFragment_.getInstance(getNoteShareText(intent),
+                        TaskListViewPagerFragment
+                                .getARealList(this, getListId(intent))
+                );
+            }
+            // fucking stack
+            while (getSupportFragmentManager().popBackStackImmediate()) {
+                // Need to pop the entire stack and then load
+            }
+            if (shouldAddToBackStack) {
+                transaction.addToBackStack(null);
+            }
+
+            setHomeAsDrawer(false);
+        }
+		/*
+		 * Other case, is a list id or a tablet
+		 */
+        if (!isNoteIntent(intent) || fragment2 != null) {
+            // If we're no longer in the editor, reset the action bar
+            if (fragment2 == null) {
+                setHomeAsDrawer(true);
+            }
+            // TODO
+            showingEditor = false;
+
+            left = TaskListViewPagerFragment
+                    .getInstance(getListIdToShow(intent));
+            leftTag = LISTPAGERTAG;
+            listOpener = (ListOpener) left;
+        }
+
+        if (fragment2 != null && right != null) {
+            transaction.replace(R.id.fragment2, right, DETAILTAG);
+            taskHint.setVisibility(View.GONE);
+        }
+        transaction.replace(R.id.fragment1, left, leftTag);
+
+        // Commit transaction
+        // Allow state loss as workaround for bug
+        // https://code.google.com/p/android/issues/detail?id=19917
+        transaction.commitAllowingStateLoss();
+        // Next go, always add
+        shouldAddToBackStack = true;
+    }
+
+    /**
+     * Returns a note id from an intent if it contains one, either as part of
+     * its URI or as an extra
+     * <p/>
+     * Returns -1 if no id was contained, this includes insert actions
+     */
+    long getNoteId(final Intent intent) {
+        long retval = -1;
+        if (intent != null &&
+            intent.getData() != null &&
+            (Intent.ACTION_EDIT.equals(intent.getAction()) ||
+             Intent.ACTION_VIEW.equals(intent.getAction()))) {
+            if (intent.getData().getPath().startsWith(TaskList.URI.getPath())) {
+                // Find it in the extras. See DashClock extension for an example
+                retval = intent.getLongExtra(Task.TABLE_NAME, -1);
+            } else if ((intent.getData().getPath().startsWith(
+                    LegacyDBHelper.NotePad.Notes.PATH_VISIBLE_NOTES) ||
+                        intent.getData().getPath().startsWith(
+                                LegacyDBHelper.NotePad.Notes.PATH_NOTES) ||
+                        intent.getData().getPath()
+                                .startsWith(Task.URI.getPath()))) {
+                retval = Long.parseLong(intent.getData().getLastPathSegment());
+            }
+            // else if (null != intent
+            // .getStringExtra(TaskDetailFragment.ARG_ITEM_ID)) {
+            // retval = Long.parseLong(intent
+            // .getStringExtra(TaskDetailFragment.ARG_ITEM_ID));
+            // }
+        }
+        return retval;
+    }
+
+    /**
+     * Returns the text that has been shared with the app. Does not check
+     * anything other than EXTRA_SUBJECT AND EXTRA_TEXT
+     * <p/>
+     * If it is a Google Now intent, will ignore the subject which is
+     * "Note to self"
+     */
+    String getNoteShareText(final Intent intent) {
+        if (intent == null || intent.getExtras() == null) {
+            return "";
+        }
+
+        StringBuilder retval = new StringBuilder();
+        // possible title
+        if (intent.getExtras().containsKey(Intent.EXTRA_SUBJECT) &&
+            !"com.google.android.gm.action.AUTO_SEND"
+                    .equals(intent.getAction())) {
+            retval.append(intent.getExtras().get(Intent.EXTRA_SUBJECT));
+        }
+        // possible note
+        if (intent.getExtras().containsKey(Intent.EXTRA_TEXT)) {
+            if (retval.length() > 0) {
+                retval.append("\n");
+            }
+            retval.append(intent.getExtras().get(Intent.EXTRA_TEXT));
+        }
+        return retval.toString();
+    }
+
+    /**
+     * If intent contains a list_id, returns that. Else, checks preferences for
+     * default list setting. Else, -1.
+     */
+    long getListIdToShow(final Intent intent) {
+        long result = getListId(intent);
+        return TaskListViewPagerFragment.getAShowList(this, result);
     }
 
     /**
@@ -979,136 +1258,6 @@ public class ActivityMain extends FragmentActivity
                 .restartLoader(TaskListFragment.LIST_ID_WEEK, null, callbacks);
     }
 
-    @UiThread(propagation = Propagation.REUSE)
-    void loadFragments() {
-        final Intent intent = getIntent();
-
-        // Mandatory
-        Fragment left = null;
-        String leftTag = null;
-        // Only if fragment2 is not null
-        Fragment right = null;
-
-        if (this.state != null) {
-            this.state = null;
-            if (showingEditor && fragment2 != null) {
-                // Should only be true in portrait
-                showingEditor = false;
-            }
-
-            // Find fragments
-            // This is an instance state variable
-            if (showingEditor) {
-                // Portrait, with editor, modify action bar
-                setHomeAsDrawer(false);
-                // Done
-                return;
-            } else {
-                // Find the listpager
-                left = getSupportFragmentManager()
-                        .findFragmentByTag(LISTPAGERTAG);
-                listOpener = (ListOpener) left;
-
-                if (left != null && fragment2 == null) {
-                    // Done
-                    return;
-                } else if (left != null && fragment2 != null) {
-                    right = getSupportFragmentManager()
-                            .findFragmentByTag(DETAILTAG);
-                }
-
-                if (left != null && right != null) {
-                    // Done
-                    return;
-                }
-            }
-        }
-
-        // Load stuff
-        final FragmentTransaction transaction =
-                getSupportFragmentManager().beginTransaction();
-        if (reverseAnimation) {
-            reverseAnimation = false;
-            transaction.setCustomAnimations(R.anim.slide_in_bottom,
-                    R.anim.slide_out_top, R.anim.slide_in_top,
-                    R.anim.slide_out_bottom);
-        } else {
-            transaction.setCustomAnimations(R.anim.slide_in_top,
-                    R.anim.slide_out_bottom, R.anim.slide_in_bottom,
-                    R.anim.slide_out_top);
-        }
-
-		/*
-		 * If it contains a noteId, load an editor. If also tablet, load the
-		 * lists.
-		 */
-        if (fragment2 != null) {
-            if (right == null) {
-                if (getNoteId(intent) > 0) {
-                    right = TaskDetailFragment_.getInstance(getNoteId(intent));
-                } else if (isNoteIntent(intent)) {
-                    right = TaskDetailFragment_
-                            .getInstance(getNoteShareText(intent),
-                                    TaskListViewPagerFragment.getAShowList(this,
-                                            getListId(intent))
-                            );
-                }
-            }
-        } else if (isNoteIntent(intent)) {
-            showingEditor = true;
-            listOpener = null;
-            leftTag = DETAILTAG;
-            if (getNoteId(intent) > 0) {
-                left = TaskDetailFragment_.getInstance(getNoteId(intent));
-            } else {
-                // Get a share text (null safe)
-                // In a list (if specified, or default otherwise)
-                left = TaskDetailFragment_.getInstance(getNoteShareText(intent),
-                        TaskListViewPagerFragment
-                                .getARealList(this, getListId(intent))
-                );
-            }
-            // fucking stack
-            while (getSupportFragmentManager().popBackStackImmediate()) {
-                // Need to pop the entire stack and then load
-            }
-            if (shouldAddToBackStack) {
-                transaction.addToBackStack(null);
-            }
-
-            setHomeAsDrawer(false);
-        }
-		/*
-		 * Other case, is a list id or a tablet
-		 */
-        if (!isNoteIntent(intent) || fragment2 != null) {
-            // If we're no longer in the editor, reset the action bar
-            if (fragment2 == null) {
-                setHomeAsDrawer(true);
-            }
-            // TODO
-            showingEditor = false;
-
-            left = TaskListViewPagerFragment
-                    .getInstance(getListIdToShow(intent));
-            leftTag = LISTPAGERTAG;
-            listOpener = (ListOpener) left;
-        }
-
-        if (fragment2 != null && right != null) {
-            transaction.replace(R.id.fragment2, right, DETAILTAG);
-            taskHint.setVisibility(View.GONE);
-        }
-        transaction.replace(R.id.fragment1, left, leftTag);
-
-        // Commit transaction
-        // Allow state loss as workaround for bug
-        // https://code.google.com/p/android/issues/detail?id=19917
-        transaction.commitAllowingStateLoss();
-        // Next go, always add
-        shouldAddToBackStack = true;
-    }
-
     /**
      * On first load, show some functionality hints
      */
@@ -1162,149 +1311,6 @@ public class ActivityMain extends FragmentActivity
         PreferenceManager.getDefaultSharedPreferences(this).edit()
                 .putBoolean(SHOWCASED_DRAWER, true).commit();
         alreadyShowcasedDrawer = true;
-    }
-
-    /**
-     * Opens the specified list and closes the left drawer
-     */
-    void openList(final long id) {
-        // Open list
-        Intent i = new Intent(ActivityMain.this, ActivityMain_.class);
-        i.setAction(Intent.ACTION_VIEW).setData(TaskList.getUri(id))
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-
-        // If editor is on screen, we need to reload fragments
-        if (listOpener == null) {
-            while (getSupportFragmentManager().popBackStackImmediate()) {
-                // Need to pop the entire stack and then load
-            }
-            reverseAnimation = true;
-            startActivity(i);
-        } else {
-            // If not popped, then send the call to the fragment
-            // directly
-            Log.d("nononsenseapps list", "calling listOpener");
-            listOpener.openList(id);
-        }
-
-        // And then close drawer
-        if (drawerLayout != null && leftDrawer != null) {
-            drawerLayout.closeDrawer(leftDrawer);
-        }
-    }
-
-    /**
-     * Returns a note id from an intent if it contains one, either as part of
-     * its URI or as an extra
-     * <p/>
-     * Returns -1 if no id was contained, this includes insert actions
-     */
-    long getNoteId(final Intent intent) {
-        long retval = -1;
-        if (intent != null &&
-            intent.getData() != null &&
-            (Intent.ACTION_EDIT.equals(intent.getAction()) ||
-             Intent.ACTION_VIEW.equals(intent.getAction()))) {
-            if (intent.getData().getPath().startsWith(TaskList.URI.getPath())) {
-                // Find it in the extras. See DashClock extension for an example
-                retval = intent.getLongExtra(Task.TABLE_NAME, -1);
-            } else if ((intent.getData().getPath().startsWith(
-                    LegacyDBHelper.NotePad.Notes.PATH_VISIBLE_NOTES) ||
-                        intent.getData().getPath().startsWith(
-                                LegacyDBHelper.NotePad.Notes.PATH_NOTES) ||
-                        intent.getData().getPath()
-                                .startsWith(Task.URI.getPath()))) {
-                retval = Long.parseLong(intent.getData().getLastPathSegment());
-            }
-            // else if (null != intent
-            // .getStringExtra(TaskDetailFragment.ARG_ITEM_ID)) {
-            // retval = Long.parseLong(intent
-            // .getStringExtra(TaskDetailFragment.ARG_ITEM_ID));
-            // }
-        }
-        return retval;
-    }
-
-    /**
-     * Returns the text that has been shared with the app. Does not check
-     * anything other than EXTRA_SUBJECT AND EXTRA_TEXT
-     * <p/>
-     * If it is a Google Now intent, will ignore the subject which is
-     * "Note to self"
-     */
-    String getNoteShareText(final Intent intent) {
-        if (intent == null || intent.getExtras() == null) {
-            return "";
-        }
-
-        StringBuilder retval = new StringBuilder();
-        // possible title
-        if (intent.getExtras().containsKey(Intent.EXTRA_SUBJECT) &&
-            !"com.google.android.gm.action.AUTO_SEND"
-                    .equals(intent.getAction())) {
-            retval.append(intent.getExtras().get(Intent.EXTRA_SUBJECT));
-        }
-        // possible note
-        if (intent.getExtras().containsKey(Intent.EXTRA_TEXT)) {
-            if (retval.length() > 0) {
-                retval.append("\n");
-            }
-            retval.append(intent.getExtras().get(Intent.EXTRA_TEXT));
-        }
-        return retval.toString();
-    }
-
-    /**
-     * Returns a list id from an intent if it contains one, either as part of
-     * its URI or as an extra
-     * <p/>
-     * Returns -1 if no id was contained, this includes insert actions
-     */
-    long getListId(final Intent intent) {
-        long retval = -1;
-        if (intent != null &&
-            intent.getData() != null &&
-            (Intent.ACTION_EDIT.equals(intent.getAction()) ||
-             Intent.ACTION_VIEW.equals(intent.getAction()) ||
-             Intent.ACTION_INSERT.equals(intent.getAction()))) {
-            if ((intent.getData().getPath()
-                         .startsWith(NotePad.Lists.PATH_VISIBLE_LISTS) ||
-                 intent.getData().getPath()
-                         .startsWith(NotePad.Lists.PATH_LISTS) ||
-                 intent.getData().getPath()
-                         .startsWith(TaskList.URI.getPath()))) {
-                try {
-                    retval = Long.parseLong(
-                            intent.getData().getLastPathSegment());
-                } catch (NumberFormatException e) {
-                    retval = -1;
-                }
-            } else if (-1 !=
-                       intent.getLongExtra(
-                               LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST,
-                               -1)) {
-                retval = intent.getLongExtra(
-                        LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
-            } else if (-1 !=
-                       intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
-                               -1)) {
-                retval =
-                        intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
-                                -1);
-            } else if (-1 != intent.getLongExtra(Task.Columns.DBLIST, -1)) {
-                retval = intent.getLongExtra(Task.Columns.DBLIST, -1);
-            }
-        }
-        return retval;
-    }
-
-    /**
-     * If intent contains a list_id, returns that. Else, checks preferences for
-     * default list setting. Else, -1.
-     */
-    long getListIdToShow(final Intent intent) {
-        long result = getListId(intent);
-        return TaskListViewPagerFragment.getAShowList(this, result);
     }
 
     @OnActivityResult(SKU_DONATE_REQUEST_CODE)
