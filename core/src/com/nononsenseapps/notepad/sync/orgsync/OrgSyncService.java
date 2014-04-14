@@ -138,7 +138,8 @@ public class OrgSyncService extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-        if (ACTION_PAUSE.equals(intent.getAction())) {
+        if (intent != null && intent.getAction() != null &&
+            ACTION_PAUSE.equals(intent.getAction())) {
             pause();
         } else {
             final Message msg = serviceHandler.obtainMessage();
