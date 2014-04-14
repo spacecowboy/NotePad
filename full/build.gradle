@@ -88,7 +88,7 @@ android {
 
     defaultConfig {
         packageName "com.nononsenseapps.notepad"
-        versionCode 109
+        versionCode 110
         versionName getVersionName()
 
         testPackageName "com.nononsenseapps.notepad.test"
