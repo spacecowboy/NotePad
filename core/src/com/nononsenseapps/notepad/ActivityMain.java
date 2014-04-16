@@ -670,9 +670,15 @@ public class ActivityMain extends FragmentActivity
                                 );
                                 return;
                             }
-                            // Hooray, IAB is fully set up!
-                            mBillingHelper.queryInventoryAsync(
-                                    mBillingInventoryListener);
+                            try {
+                                // Hooray, IAB is fully set up!
+                                mBillingHelper.queryInventoryAsync(
+                                        mBillingInventoryListener);
+                            } catch (Exception ignored) {
+                                // Don't allow crashes
+                                Log.d("nononsenseapps billing",
+                                        "Error: " + ignored.getLocalizedMessage());
+                            }
                         }
                     });
 
