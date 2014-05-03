@@ -29,14 +29,15 @@ public class OrgConverter {
 	private static final String LISTSORTCOMMENT = "# NONSENSESORTING: ";
 	private static final String TASKNODEID = "# NONSENSEID: ";
 	private static final Pattern PatternStyle = Pattern.compile(
-			"#\\s*nonsensestyle:\\s*(\\w+)\\s*?\\n", Pattern.CASE_INSENSITIVE);
+			"#\\s*NONSENSESTYLE:\\s*(.+)\\s*?", Pattern.CASE_INSENSITIVE);
 	private static final Pattern PatternSorting = Pattern
-			.compile("#\\s*nonsensesorting:\\s*(\\w+)\\s*?\\n",
+			.compile("#\\s*NONSENSESORTING:\\s*(.+)\\s*?",
                     Pattern.CASE_INSENSITIVE);
 	// Ending white space used when removed
 	private static final String NonsenseIdPattern = "#\\s*NONSENSEID:\\s*(\\w+)\\s*";
 	private static final Pattern PatternId = Pattern.compile(NonsenseIdPattern,
 			Pattern.CASE_INSENSITIVE);
+    private static final String TAG = "OrgConverter";
     private static Random rand;
 
 	/**
@@ -72,7 +73,7 @@ public class OrgConverter {
 	 */
 	public static String getListTypeFromMeta(final OrgFile file) {
 		final Matcher m = PatternStyle.matcher(file.getComments());
-		if (m.matches()) {
+		if (m.find()) {
 			return m.group(1);
 		} else {
 			return null;
@@ -84,7 +85,7 @@ public class OrgConverter {
 	 */
 	public static String getListSortingFromMeta(final OrgFile file) {
 		final Matcher m = PatternSorting.matcher(file.getComments());
-		if (m.matches()) {
+		if (m.find()) {
 			return m.group(1);
 		} else {
 			return null;
@@ -248,7 +249,7 @@ public class OrgConverter {
 	@SuppressLint("DefaultLocale")
 	public static String getNodeId(final OrgNode node) {
 		final Matcher m = PatternId.matcher(node.getComments());
-		if (m.matches()) {
+		if (m.find()) {
 			return m.group(1).toUpperCase();
 		} else {
 			return null;
@@ -268,23 +269,23 @@ public class OrgConverter {
     }
 
 	public static void setListTypeOnFile(TaskList list, OrgFile file) {
-		file.getComments().replaceAll(LISTSTYLECOMMENT, "");
 		final StringBuilder comments = new StringBuilder();
 		if (list.listtype != null) {
 			comments.append(LISTSTYLECOMMENT).append(list.listtype)
 					.append("\n");
 		}
-		comments.append(file.getComments());
+		comments.append(PatternStyle.matcher(file.getComments()).replaceAll
+                ("").trim());
 		file.setComments(comments.toString());
 	}
 
 	public static void setSortingOnFile(final TaskList list, final OrgFile file) {
-		file.getComments().replaceAll(LISTSORTCOMMENT, "");
 		final StringBuilder comments = new StringBuilder();
 		if (list.sorting != null) {
 			comments.append(LISTSORTCOMMENT).append(list.sorting).append("\n");
 		}
-		comments.append(file.getComments());
+		comments.append(PatternSorting.matcher(file.getComments()).replaceAll
+                ("").trim());
 		file.setComments(comments.toString());
 	}
 }
