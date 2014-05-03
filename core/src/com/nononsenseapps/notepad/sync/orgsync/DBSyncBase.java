@@ -15,6 +15,7 @@ import org.cowboyprogrammer.org.OrgFile;
 import org.cowboyprogrammer.org.OrgNode;
 import org.cowboyprogrammer.org.OrgTimestamp;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;
@@ -189,8 +190,10 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 			OrgFile file = null;
 			// Can be null
 			if (remote != null && filenames.remove(remote.remoteId)) {
-				file = OrgFile.createFromBufferedReader(remote.remoteId,
-						getRemoteFile(remote.remoteId));
+                final BufferedReader br = getRemoteFile(remote.remoteId);
+                if (br != null) {
+                    file = OrgFile.createFromBufferedReader(remote.remoteId, br);
+                }
 			}
 			String l = list.title;
 			String r = null;
@@ -210,8 +213,10 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 			OrgFile file = null;
 			// Can be null
 			if (remote != null && filenames.remove(remote.remoteId)) {
-				file = OrgFile.createFromBufferedReader(remote.remoteId,
-						getRemoteFile(remote.remoteId));
+                final BufferedReader br = getRemoteFile(remote.remoteId);
+                if (br != null) {
+                    file = OrgFile.createFromBufferedReader(remote.remoteId, br);
+                }
 			}
 			String l = null;
 			String r = null;
@@ -229,16 +234,22 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 		for (String filename : filenames) {
 			TaskList list = null;
 			RemoteTaskList remote = null;
-			OrgFile file = OrgFile.createFromBufferedReader(filename,
-					getRemoteFile(filename));
+			OrgFile file = null;
+            final BufferedReader br = getRemoteFile(filename);
+            if (br != null) {
+                file = OrgFile.createFromBufferedReader(filename, br);
+            }
 			String l = null;
 			String r = null;
 			String f = null;
-			if (file != null)
-				f = file.getFilename();
-			Log.d(Synchronizer.TAG, "Pair:" + l + ", " + r + ", " + f);
-			result.add(new Pair<OrgFile, Pair<RemoteTaskList, TaskList>>(file,
-					new Pair<RemoteTaskList, TaskList>(remote, list)));
+            // An obvious precaution. If everything is null,
+            // there's nothing to add.
+			if (file != null) {
+                f = file.getFilename();
+                Log.d(Synchronizer.TAG, "Pair:" + l + ", " + r + ", " + f);
+                result.add(new Pair<OrgFile, Pair<RemoteTaskList, TaskList>>(file,
+                                new Pair<RemoteTaskList, TaskList>(remote, list)));
+            }
 		}
 
 		return result;
