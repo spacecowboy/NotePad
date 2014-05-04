@@ -82,6 +82,7 @@ import com.nononsenseapps.notepad.legacy.DonateMigrator;
 import com.nononsenseapps.notepad.legacy.DonateMigrator_;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
+import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
 import com.nononsenseapps.utils.ViewsHelper;
@@ -552,6 +553,8 @@ public class ActivityMain extends FragmentActivity
         clearNotification(intent);
         // Schedule notifications
         NotificationHelper.schedule(this);
+        // Schedule syncs
+        BackgroundSyncScheduler.scheduleSync(this);
     }
 
     @Override

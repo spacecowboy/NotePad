@@ -450,6 +450,16 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyDTgjabZVkiZOnokePNdYNAkRiaE73_MBs" />
 
+        <!-- Receiver that schedules background sync for File and Dropbox -->
+        <receiver
+            android:name="com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler"
+            android:enabled="true"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <action android:name="android.intent.action.RUN" />
+            </intent-filter>
+        </receiver>
         <!-- Service that syncs with files -->
         <service android:name="com.nononsenseapps.notepad.sync.orgsync.OrgSyncService"
                  android:enabled="true"
