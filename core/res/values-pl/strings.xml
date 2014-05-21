@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (C) 2013 Jonas Kalderstam
+Copyright (c) 2014 Jonas Kalderstam.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
 <string name="app_name">Notatki</string>
 <string name="title_create">Nowa notatka</string>
@@ -75,9 +75,6 @@ limitations under the License.
 <string name="gtasks_sync_info">Nie wszystkie informacje mogą zostać zsynchronizowane. Wyłącznie notatki, terminy (bez czasu) oraz zadania.</string>
 <string name="settings_cat_syncing">Synchronizacja</string>
 <string name="gtasks">Google Tasks</string>
-<string name="dropbox">Dropbox</string>
-<string name="dropbox_enable">Synchronizacja z Dropoboxem</string>
-<string name="dropbox_enable_summary">Utwórz folder "NoNonsense Notes" w Twoim Dropboxie</string>
 <string name="show_from_all_lists">Wszystkie listy</string>
 <string name="lists">Listy</string>
 <string name="deleted">Usunięto</string>
@@ -157,7 +154,7 @@ Use few if language need it. In English is the same.
 <string name="confirm_new_password">Potwierdź nowe hasło</string>
 <string name="apply">Zastosuj</string>
 <string name="clear_password">Usuń hasło</string>
-<string name="password_info">Ustawienie hasła będzie wymagało wprowadzania go za każdym razem, kiedy chcesz wyświetlić zablokowane notatki. Zabezpiecza to wyłącznie pole samej notatki, do pól "tytuł" oraz "termin" dostęp pozostanie niezabezpiezony. Metoda ta nie szyfruje w żaden sposób notatek, zatem cały czas mogą być one wyświetlanew poczcie/kalendarzu Google. Jeśli zapomnisz hasła, zsynchronizuj notatki z Google i przeinstaluj aplikację. </string>
+<string name="password_info">Ustawienie hasła będzie wymagało wprowadzania go za każdym razem, kiedy chcesz wyświetlić zablokowane notatki. Zabezpiecza to wyłącznie pole samej notatki, do pól "tytuł" oraz "termin" dostęp pozostanie niezabezpiezony. Metoda ta nie szyfruje w żaden sposób notatek, zatem cały czas mogą być one wyświetlane w poczcie/kalendarzu Google. Jeśli zapomnisz hasła, zsynchronizuj notatki z Google i przeinstaluj aplikację. </string>
 <string name="about">O programie</string>
 <string name="sync_failed">Synchronizacja nieudana</string>
 <string name="sync_login_failed">Logowanie nieudane, nie można połaczyć się z Google Tasks</string>
@@ -171,6 +168,7 @@ Use few if language need it. In English is the same.
 <string name="date_header_none">Bez daty</string>
 <string name="date_header_completed">Zakończone</string>
 <string name="next_5_days">Następne 5 dni </string>
+<string name="next_n_days">Następne %d dni</string>
 <string name="this_week">Ten tydzień</string>
 <string name="please_select_note">Proszę zaznaczyć lub stworzyć notatkę</string>
 <string name="please_create_note">Proszę stworzyć notatkę</string>
@@ -239,5 +237,40 @@ Use few if language need it. In English is the same.
 <string name="dashclock_header_shown">Nazwa listy będzie pogrubiona</string>
 <string name="dashclock_first_task_shown">Tytuł pierwszego zadania będzie pogrubiony</string>
 <string name="dashclock_display_header">Wyświetlaj nagłówek</string>
+<string name="editor">Edytor</string>
+<string name="bold">Pogrubienie</string>
+<string name="italic">Kursywa</string>
+<string name="normal">Normalny</string>
+<string name="title_style">Styl Tytułu</string>
+<string name="title_font">Czcionka Tytułu</string>
+<string name="body_font">Czcionka Tekstu</string>
+<string name="clickable_links">Klikalne linki</string>
+<string name="small">Mały</string>
+<string name="medium">Średni</string>
+<string name="large">Duży</string>
+<string name="text_size">Rozmiar tekstu</string>
+<string name="text">Tekst</string>
+<string name="add_a_reminder">Dodaj przypomnienie</string>
+
+<string name="backup">Kopia zapasowa</string>
+<string name="backup_import">Importuj kopię zapasową</string>
+<string name="backup_export">Eksportuj kopię zapasową</string>
+<string name="backup_import_msg">Spróbować zaimportować kopię zapasową z %1$s? Spowoduje to wyczyszczenie bierzącej bazy danych.</string>
+<string name="backup_export_msg">Eksportować wszystkie notatki do %1$s?</string>
+<string name="backup_import_success">Kopia zapasowa pomyślnie zaimportowana</string>
+<string name="backup_file_not_found">Plik kopi zapasowej nie został znaleziony</string>
+<string name="backup_import_failed">Nie można odczytać pliku kopi zapasowej</string>
+<string name="backup_export_success">Kopia zapasowa została pomyslnie zaimportowana</string>
+<string name="backup_export_failed">Nie\można zapisać do pliku kopii zapasowej.</string>
+<string name="sd_card">Karta SD</string>
+<string name="sd_card_sync">Synchronizacja Karty SD</string>
+<string name="sd_card_summary">Zadania są dublowane na karcie SD. Zmiany są synchronizowane w obie strony. Należy pamiętać, że usunięcie plików usunie zadania w aplikacji!</string>
+<string name="directory">Katalog</string>
+<string name="directory_summary">Gdzie powinny być trzymane pliki.</string>
+<string name="dropbox">Dropbox</string>
+<string name="dropbox_sync">Dropbox Sync</string>
+<string name="dropbox_sync_summary">Synchronizuj swoje notatki i zadania z plikami tekstowymi w twoim Dropboksie.</string>
+<string name="cannot_write_to_directory">Nie można zapisać do katalogu</string>
+<string name="wait_for_dropbox">Proszę, czekaj aż Dropbox skończy swoją inicjalizację.</string>
 
 </resources>

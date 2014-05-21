@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (C) 2013 Jonas Kalderstam
+Copyright (c) 2014 Jonas Kalderstam.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
 <string name="app_name">Noter</string>
 <string name="title_create">Ny note</string>
@@ -35,6 +35,7 @@ limitations under the License.
 <string name="menu_createlist">Opret liste</string>
 <string name="menu_clearcompleted">Slet udførte</string>
 <string name="menu_setdefaultlist">Vælg som standard liste</string>
+<string name="new_default_set">Nye indstillinger er gemt</string>
 <string name="menu_managelists">Administrer lister</string>
 <string name="add_item">Tilføj element</string>
 <string name="delete_question">Slet?</string>
@@ -254,5 +255,26 @@ Use few if language need it. In English is the same.
 <string name="text_size">Skriftstørrelse</string>
 <string name="text">Tekst</string>
 <string name="add_a_reminder">Tilføj en påmindelse</string>
+
+<string name="backup">Backup</string>
+<string name="backup_import">Importer backup</string>
+<string name="backup_export">Eksporter backup</string>
+<string name="backup_import_msg">Vil du importere backup fra %1$s? Dette vil slette den nuværende database.</string>
+<string name="backup_export_msg">Eksporter alle noter til %1$s?</string>
+<string name="backup_import_success">Backup importeret</string>
+<string name="backup_file_not_found">Backup-filen kunne ikke findes</string>
+<string name="backup_import_failed">Kunne ikke læse backup-filen</string>
+<string name="backup_export_success">Backup eksporteret</string>
+<string name="backup_export_failed">Kunne ikke skrive til backup-filen</string>
+<string name="sd_card">SD kort</string>
+<string name="sd_card_sync">SD kort synkronisering</string>
+<string name="sd_card_summary">Opgaver er spejlet på SD kortet. Ændringer synkroniseres begge veje. Bemærk at sletning af filerne også vil slette opgaverne i app\'et!</string>
+<string name="directory">Mappe</string>
+<string name="directory_summary">Hvor filerne skal gemmes.</string>
+<string name="dropbox">Dropbox</string>
+<string name="dropbox_sync">Dropbox synkronisering</string>
+<string name="dropbox_sync_summary">Hold dine opgaver og noter synkroniseret med tekst-filer i din Dropbox.</string>
+<string name="cannot_write_to_directory">Kan ikke skrive til mappe</string>
+<string name="wait_for_dropbox">Vent venligst på at Dropbox færdiggører dens initialisering.</string>
 
 </resources>
