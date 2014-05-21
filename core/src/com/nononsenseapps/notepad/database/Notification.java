@@ -381,37 +381,47 @@ public class Notification extends DAO {
 			final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
 				@Override
 				protected Void doInBackground(final Long... ids) {
-					String idStrings = "(";
-					ArrayList<String> idsToClear = new ArrayList<String>();
-					for (Long id : ids) {
-						idStrings += id + ",";
-						idsToClear.add(Long.toString(id));
-					}
-					idStrings = idStrings.substring(0, idStrings.length() - 1);
-					idStrings += ")";
-
-					final Cursor c = context.getContentResolver()
-													.query(URI,
-																					Columns.FIELDS,
-																					Columns.TASKID
-																													+ " IN "
-																													+ idStrings,
-																					null, null);
-
-					while (c.moveToNext()) {
-						// Yes dont just call delete in database
-						// We have to remove geofences (in delete)
-						Notification n = new Notification(c);
-						n.delete(context);
-					}
-					c.close();
-
+					removeWithTaskIdsSynced(context, ids);
 					return null;
 				}
 			};
 			task.execute(ids);
 		}
 	}
+
+    /**
+     * Removes all notifications associated with the specified tasks. Runs in
+     * the same thread as the caller.
+     * @param context
+     * @param ids
+     */
+    public static void removeWithTaskIdsSynced(final Context context,
+            final Long... ids) {
+        String idStrings = "(";
+        ArrayList<String> idsToClear = new ArrayList<String>();
+        for (Long id : ids) {
+            idStrings += id + ",";
+            idsToClear.add(Long.toString(id));
+        }
+        idStrings = idStrings.substring(0, idStrings.length() - 1);
+        idStrings += ")";
+
+        final Cursor c = context.getContentResolver()
+                .query(URI,
+                        Columns.FIELDS,
+                        Columns.TASKID
+                        + " IN "
+                        + idStrings,
+                        null, null);
+
+        while (c.moveToNext()) {
+            // Yes dont just call delete in database
+            // We have to remove geofences (in delete)
+            Notification n = new Notification(c);
+            n.delete(context);
+        }
+        c.close();
+    }
 
 	/**
 	 * Delete or reschedule a specific notification.

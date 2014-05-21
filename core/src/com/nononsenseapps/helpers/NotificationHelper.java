@@ -52,7 +52,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	/**
 	 * Fires notifications that have elapsed and sets an alarm to be woken at
 	 * the next notification.
-	 * 
+	 *
 	 * If the intent action is ACTION_DELETE, will delete the notification with
 	 * the indicated ID, and cancel it from any active notifications.
 	 */
@@ -82,13 +82,13 @@ public class NotificationHelper extends BroadcastReceiver {
 						delay30min + now.getTimeInMillis());
 			}
 			else if (ACTION_COMPLETE.equals(intent.getAction())) {
-				// Delete notifications with the same task id
-				com.nononsenseapps.notepad.database.Notification
-						.removeWithTaskIds(context,
-								intent.getLongExtra(ARG_TASKID, -1));
-				// Also complete note
-				Task.setCompleted(context, true,
-						intent.getLongExtra(ARG_TASKID, -1));
+                // Complete note
+                Task.setCompletedSynced(context, true,
+                        intent.getLongExtra(ARG_TASKID, -1));
+                // Delete notifications with the same task id
+                com.nononsenseapps.notepad.database.Notification
+                        .removeWithTaskIdsSynced(context,
+                                intent.getLongExtra(ARG_TASKID, -1));
 			}
 		}
 
@@ -318,7 +318,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * Remove from the database, and the specified list, duplicate
 	 * notifications. The result is that each note is only associated with ONE
 	 * EXPIRED notification.
-	 * 
+	 *
 	 * @param context
 	 * @param notifications
 	 */
@@ -342,7 +342,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	/**
 	 * Returns the first occurrence of each note's notification. Effectively the
 	 * returned list has unique elements with regard to the note id.
-	 * 
+	 *
 	 * @param notifications
 	 * @return
 	 */
@@ -377,7 +377,7 @@ public class NotificationHelper extends BroadcastReceiver {
 
 	/**
 	 * Needs the builder that contains non-note specific values.
-	 * 
+	 *
 	 */
 	private static void notifyBigText(final Context context,
 			final NotificationManager notificationManager,
@@ -400,7 +400,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		final Intent openIntent = new Intent(Intent.ACTION_VIEW, Task.getUri(note.taskID));
 		// Should create a new instance to avoid fragment problems
 		openIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-		
+
 		// Delete intent on non-location repeats
 		if (!note.isLocationRepeat()) {
 			// repeating location reminders should not have a delete intent, the
@@ -410,7 +410,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		}
 		// Opening always cancels the notification though
 		openIntent.putExtra(ActivityMain.NOTIFICATION_CANCEL_ARG, note._id);
-		
+
 		// Open note on click
 				PendingIntent clickIntent = PendingIntent.getActivity(context, 0,
 						openIntent,
@@ -439,7 +439,7 @@ public class NotificationHelper extends BroadcastReceiver {
 			// repeating location reminders should not have a delete intent, the
 			// rest do
 			builder.setDeleteIntent(deleteIntent);
-			
+
 		}
 
 		// Snooze button only on time non-repeating
@@ -575,7 +575,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	/**
 	 * Updates/Inserts notifications in the database. Immediately notifies and
 	 * schedules next wake up on finish.
-	 * 
+	 *
 	 * @param context
 	 * @param notifications
 	 */
@@ -605,9 +605,9 @@ public class NotificationHelper extends BroadcastReceiver {
 	/**
 	 * Deletes the indicated notification from the notification tray (does not
 	 * touch database)
-	 * 
+	 *
 	 * Called by notification.delete()
-	 * 
+	 *
 	 * @param context
 	 * @param id
 	 */

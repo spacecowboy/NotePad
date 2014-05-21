@@ -933,26 +933,40 @@ public class Task extends DAO {
 			final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
 				@Override
 				protected Void doInBackground(final Long... ids) {
-					final ContentValues values = new ContentValues();
-					values.put(Columns.COMPLETED, completed ? Calendar
-							.getInstance().getTimeInMillis() : null);
-					values.put(Columns.UPDATED, Calendar.getInstance()
-							.getTimeInMillis());
-					String idStrings = "(";
-					for (Long id : ids) {
-						idStrings += id + ",";
-					}
-					idStrings = idStrings.substring(0, idStrings.length() - 1);
-					idStrings += ")";
-					Log.d("JONAS", "where: " + Columns._ID + " IN " + idStrings);
-					context.getContentResolver().update(URI, values,
-							Columns._ID + " IN " + idStrings, null);
+					setCompletedSynced(context, completed, ids);
 					return null;
 				}
 			};
 			task.execute(ids);
 		}
 	}
+
+    /**
+     * Convenience method to complete tasks. Runs on the thread that called it.
+     * @param context
+     * @param completed
+     * @param ids
+     */
+    public static void setCompletedSynced(final Context context,
+            final boolean completed, final Long... ids) {
+        if (ids.length < 1) {
+            return;
+        }
+
+        final ContentValues values = new ContentValues();
+        values.put(Columns.COMPLETED, completed ? Calendar
+                .getInstance().getTimeInMillis() : null);
+        values.put(Columns.UPDATED, Calendar.getInstance()
+                .getTimeInMillis());
+        String idStrings = "(";
+        for (Long id : ids) {
+            idStrings += id + ",";
+        }
+        idStrings = idStrings.substring(0, idStrings.length() - 1);
+        idStrings += ")";
+        context.getContentResolver().update(URI, values,
+                Columns._ID + " IN " + idStrings, null);
+    }
 
 	public int moveTo(final ContentResolver resolver, final Task targetTask) {
 		if (targetTask.dblist == dblist) {
