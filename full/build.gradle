@@ -87,8 +87,8 @@ android {
     buildToolsVersion "19.1.0"
 
     defaultConfig {
-        packageName "com.nononsenseapps.notepad"
-        versionCode 113
+        applicationId "com.nononsenseapps.notepad"
+        versionCode 114
         versionName getVersionName()
 
         testPackageName "com.nononsenseapps.notepad.test"
