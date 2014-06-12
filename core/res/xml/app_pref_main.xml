@@ -54,7 +54,7 @@
             android:title="@string/short_date_format" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/editor" >
-        <SwitchPreference
+        <com.nononsenseapps.notepad.prefs.FixedSwitchPreference
             android:key="@string/pref_editor_links"
             android:defaultValue="true"
             android:title="@string/clickable_links"

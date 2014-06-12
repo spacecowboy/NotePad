@@ -54,7 +54,7 @@
         android:title="@string/hide_checkbox" />
     
     <PreferenceCategory android:title="@string/text" >
-        <SwitchPreference
+        <com.nononsenseapps.notepad.prefs.FixedSwitchPreference
             android:key="@string/pref_list_links"
             android:defaultValue="true"
             android:title="@string/clickable_links"

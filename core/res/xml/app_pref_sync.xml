@@ -21,7 +21,7 @@
         android:key="pref_gtask_section_key"
         android:persistent="false"
         android:title="@string/gtasks" >
-        <SwitchPreference
+        <com.nononsenseapps.notepad.prefs.FixedSwitchPreference
             android:defaultValue="false"
             android:key="syncEnablePref"
             android:summary="@string/gtasks_sync_info"
@@ -33,19 +33,19 @@
             android:summary=""
             android:title="@string/settings_account_title" />
 
-        <SwitchPreference
+        <com.nononsenseapps.notepad.prefs.FixedSwitchPreference
             android:defaultValue="true"
             android:dependency="syncEnablePref"
             android:key="syncInBackground"
             android:summary="@string/background_sync_info"
             android:title="@string/background_sync" />
-        <SwitchPreference
+        <com.nononsenseapps.notepad.prefs.FixedSwitchPreference
             android:defaultValue="true"
             android:dependency="syncEnablePref"
             android:key="syncOnStart"
             android:summary="@string/sync_on_start_info"
             android:title="@string/sync_on_start" />
-        <SwitchPreference
+        <com.nononsenseapps.notepad.prefs.FixedSwitchPreference
             android:defaultValue="true"
             android:dependency="syncEnablePref"
             android:key="syncOnChange"
@@ -63,7 +63,7 @@
         android:key="pref_sdcard_section_key"
         android:persistent="false"
         android:title="@string/sd_card">
-        <SwitchPreference
+        <com.nononsenseapps.notepad.prefs.FixedSwitchPreference
             android:defaultValue="false"
             android:key="pref_sync_sd_enabled"
             android:summary="@string/sd_card_summary"
@@ -80,7 +80,7 @@
         android:key="pref_dropbox_section_key"
         android:persistent="false"
         android:title="@string/dropbox">
-        <SwitchPreference
+        <com.nononsenseapps.notepad.prefs.FixedSwitchPreference
             android:defaultValue="false"
             android:key="pref_sync_dropbox_enabled"
             android:summary="@string/dropbox_sync_summary"
