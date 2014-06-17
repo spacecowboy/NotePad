@@ -216,6 +216,7 @@ public class DropboxSynchronizer extends Synchronizer implements
             DbxFile file;
             try {
                 file = fs.open(path);
+                waitUntilSynced(file);
             } catch (DbxException.NotFound e) {
                 file = fs.create(path);
             }
@@ -239,6 +240,12 @@ public class DropboxSynchronizer extends Synchronizer implements
         }
         DbxPath path = new DbxPath(DIR, orgFile.getFilename());
         try {
+            // Get latest version
+            DbxFile file = fs.open(path);
+            waitUntilSynced(file);
+            // Can close it again now
+            file.close();
+            // Now remove the updated file
             fs.delete(path);
         } catch (DbxException e) {
             //e.printStackTrace();
@@ -304,7 +311,7 @@ public class DropboxSynchronizer extends Synchronizer implements
             DbxFileStatus status = file.getNewerStatus();
 
             while (MAXTIME > (System.currentTimeMillis() - STARTTIME) &&
-                    status != null && !status.isCached) {
+                    status != null && !status.isCached && !status.isLatest) {
                 Log.d(TAG, "Waiting on latest version: " + status
                         .bytesTransferred + " / " + status.bytesTotal);
                 try {
@@ -312,6 +319,7 @@ public class DropboxSynchronizer extends Synchronizer implements
                 } catch (InterruptedException ignored) {
                 }
                 // Check latest
+                file.update();
                 status = file.getNewerStatus();
             }
             // Update
