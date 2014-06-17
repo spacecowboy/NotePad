@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (C) 2013 Jonas Kalderstam
+Copyright (c) 2014 Jonas Kalderstam.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
 <string name="app_name">Notizen</string>
 <string name="title_create">Neue Notiz</string>
@@ -218,6 +218,13 @@ Use few if language need it. In English is the same.
 <string name="priority">Priorität</string>
 <string name="notifications">Benachrichtigungen</string>
 <!-- "localtime" is replaced at runtime with 12/24 hour clock -->
+<string name="dateformat_micro">d. MMM</string>
+<string name="dateformat_short_1">E, d. MMM, localtime</string>
+<string name="dateformat_short_2">E,  d. MMM </string>
+<string name="dateformat_short_3">d. MMM </string>
+<string name="dateformat_long_1">EEEE, d. MMMM, localtime</string>
+<string name="dateformat_long_2">E, d. MMM, localtime</string>
+<string name="dateformat_just_date">d. MMMM </string>
 <string name="tasks">Aufgaben</string>
 <string name="all_tasks">Alle Aufgaben</string>
 <string name="dashclock_restrict_to_tasks_in_a_specific_list">Auf Aufgaben in bestimmter Liste beschränken</string>
@@ -242,5 +249,6 @@ Use few if language need it. In English is the same.
 <string name="large">Groß</string>
 <string name="text_size">Textgröße</string>
 <string name="add_a_reminder">Erinnerung hinzufügen</string>
+
 
 </resources>
