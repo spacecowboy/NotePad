@@ -1,31 +1,43 @@
 package com.nononsenseapps.notepad.fragments;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Calendar;
+import android.app.Activity;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager.LoaderCallbacks;
+import android.support.v4.content.CursorLoader;
+import android.support.v4.content.Loader;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.LinearLayout;
+import android.widget.ScrollView;
+import android.widget.ShareActionProvider;
+import android.widget.Toast;
 
-import com.github.espiandev.showcaseview.ShowcaseView;
-import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
-import com.github.espiandev.showcaseview.ShowcaseViews;
-import com.github.espiandev.showcaseview.ShowcaseViews.ItemViewProperties;
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.InstanceState;
-import org.androidannotations.annotations.OnActivityResult;
-import org.androidannotations.annotations.SystemService;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.UiThread.Propagation;
-
-import com.android.datetimepicker.time.TimePickerDialog;
 import com.android.datetimepicker.date.DatePickerDialog;
 import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
-
-import com.nononsenseapps.helpers.NotificationHelper;
+import com.android.datetimepicker.time.TimePickerDialog;
+import com.github.espiandev.showcaseview.ShowcaseView;
+import com.github.espiandev.showcaseview.ShowcaseViews;
+import com.github.espiandev.showcaseview.ShowcaseViews.ItemViewProperties;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityLocation;
-import com.nononsenseapps.notepad.ActivityLocation_;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.ActivityTaskHistory_;
@@ -40,55 +52,22 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.NotificationItemHelper;
-import com.nononsenseapps.ui.WeekDaysView;
-import com.nononsenseapps.utils.ViewsHelper;
 import com.nononsenseapps.utils.views.StyledEditText;
-import com.nononsenseapps.ui.WeekDaysView.onCheckedDaysChangeListener;
 
-import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.SystemClock;
-import android.preference.PreferenceManager;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.LoaderManager.LoaderCallbacks;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
-import android.view.KeyEvent;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.MotionEvent;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.PopupMenu;
-import android.widget.PopupMenu.OnMenuItemClickListener;
-import android.widget.ScrollView;
-import android.widget.ShareActionProvider;
-import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.InstanceState;
+import org.androidannotations.annotations.OnActivityResult;
+import org.androidannotations.annotations.SystemService;
+import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.UiThread.Propagation;
+import org.androidannotations.annotations.ViewById;
+
+import java.util.Calendar;
 
 /**
- * A fragment representing a single Note detail screen. This fragment is either
- * contained in a {@link TaskListActivity} in two-pane mode (on tablets) or a
- * {@link TaskDetailActivity} on handsets.
+ * A fragment representing a single Note detail screen.
  */
 @EFragment
 public class TaskDetailFragment extends Fragment implements OnDateSetListener {
@@ -563,7 +542,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		return false;
 	}
 
-	@UiThread(propagation = Propagation.REUSE)
+	@UiThread(propagation = Propagation.ENQUEUE)
 	void fillUIFromTask() {
 		Log.d("nononsenseapps editor", "fillUI, act: " + getActivity());
 		if (isLocked()) {
