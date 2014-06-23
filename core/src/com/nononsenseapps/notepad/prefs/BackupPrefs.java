@@ -16,51 +16,23 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import java.io.FileNotFoundException;
-import java.io.IOException;
-
-import org.json.JSONException;
-
-// import com.nononsenseapps.notepad.NotePad;
-import com.nononsenseapps.notepad.core.R;
-import com.nononsenseapps.notepad.database.MyContentProvider;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBaseV11.DialogConfirmedListener;
-import com.nononsenseapps.notepad.fragments.DialogExportBackup;
-import com.nononsenseapps.notepad.fragments.DialogRestoreBackup;
-import com.nononsenseapps.notepad.sync.SyncAdapter;
-import com.nononsenseapps.notepad.sync.files.JSONBackup;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
-
-import android.accounts.Account;
-import android.accounts.AccountManager;
-import android.accounts.AccountManagerCallback;
-import android.accounts.AccountManagerFuture;
-import android.accounts.AuthenticatorException;
-import android.accounts.OperationCanceledException;
-import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
-import android.content.ContentResolver;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.Preference.OnPreferenceChangeListener;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.preference.Preference.OnPreferenceClickListener;
-import android.preference.SwitchPreference;
+import android.preference.PreferenceFragment;
 import android.widget.Toast;
 
-import com.nononsenseapps.build.Config;
-import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.notepad.core.R;
+import com.nononsenseapps.notepad.fragments.DialogConfirmBaseV11.DialogConfirmedListener;
+import com.nononsenseapps.notepad.fragments.DialogExportBackup;
+import com.nononsenseapps.notepad.fragments.DialogRestoreBackup;
+import com.nononsenseapps.notepad.sync.files.JSONBackup;
+
+import java.io.FileNotFoundException;
+
+// import com.nononsenseapps.notepad.NotePad;
 
 public class BackupPrefs extends PreferenceFragment {
 
@@ -88,6 +60,10 @@ public class BackupPrefs extends PreferenceFragment {
 		}
 
 		protected void onPostExecute(final Integer result) {
+            Context context = getActivity();
+            if (context == null) {
+                return;
+            }
 			switch (result) {
 			case 0:
 				Toast.makeText(getActivity(), R.string.backup_import_success,
