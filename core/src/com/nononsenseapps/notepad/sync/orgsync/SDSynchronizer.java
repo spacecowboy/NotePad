@@ -147,8 +147,10 @@ public class SDSynchronizer extends Synchronizer implements
      */
     @Override
     public void deleteRemoteFile(OrgFile orgFile) {
-        final File file = new File(ORG_DIR, orgFile.getFilename());
-        file.delete();
+        if (orgFile != null && orgFile.getFilename() != null) {
+            final File file = new File(ORG_DIR, orgFile.getFilename());
+            file.delete();
+        }
     }
 
     /**
