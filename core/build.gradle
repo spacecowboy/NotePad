@@ -66,6 +66,10 @@ android {
         packageName "com.nononsenseapps.notepad.core"
     }
 
+    lintOptions {
+        abortOnError false
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'

@@ -86,6 +86,10 @@ android {
     compileSdkVersion 19
     buildToolsVersion "19.1.0"
 
+    lintOptions {
+        abortOnError false
+    }
+
     defaultConfig {
         applicationId "com.nononsenseapps.notepad"
         versionCode 119
