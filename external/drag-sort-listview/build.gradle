@@ -18,6 +18,10 @@ android {
     compileSdkVersion 19
     buildToolsVersion "19.1.0"
 
+    lintOptions {
+        abortOnError false
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'

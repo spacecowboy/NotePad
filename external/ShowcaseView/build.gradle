@@ -22,6 +22,10 @@ android {
   compileSdkVersion 19
   buildToolsVersion "19.1.0"
 
+    lintOptions {
+        abortOnError false
+    }
+
   //compileSdkVersion 18
   //buildToolsVersion "18.0.0"
 
