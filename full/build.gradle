@@ -3,13 +3,13 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.11.+'
+        classpath 'com.android.tools.build:gradle:0.12.1'
         // the latest version of the android-apt plugin for annotations
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.2'
     }
 }
 
-apply plugin: 'android'
+apply plugin: 'com.android.application'
 /*
  * Copyright (c) 2014 Jonas Kalderstam.
  *
@@ -92,10 +92,10 @@ android {
 
     defaultConfig {
         applicationId "com.nononsenseapps.notepad"
-        versionCode 119
+        versionCode 121
         versionName getVersionName()
 
-        testPackageName "com.nononsenseapps.notepad.test"
+        testApplicationId "com.nononsenseapps.notepad.test"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
     }
 

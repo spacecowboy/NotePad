@@ -3,13 +3,13 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.11.+'
+        classpath 'com.android.tools.build:gradle:0.12.1'
         // the latest version of the android-apt plugin for annotations
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.2'
     }
 }
 
-apply plugin: 'android-library'
+apply plugin: 'com.android.library'
 /*
  * Copyright (c) 2014 Jonas Kalderstam.
  *
@@ -63,7 +63,7 @@ android {
     buildToolsVersion "19.1.0"
 
     defaultConfig {
-        packageName "com.nononsenseapps.notepad.core"
+        applicationId "com.nononsenseapps.notepad.core"
     }
 
     lintOptions {
