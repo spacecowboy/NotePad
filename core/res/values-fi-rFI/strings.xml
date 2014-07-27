@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-Copyright (C) 2013 Jonas Kalderstam
+Copyright (c) 2014 Jonas Kalderstam.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 -->
 
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
 <string name="app_name">Muistiinpanot</string>
 <string name="title_create">Uusi muistiinpano</string>
@@ -72,7 +72,7 @@ limitations under the License.
 <string name="settings_account_title">Valitse käyttäjätili</string>
 <string name="settings_account_summary">Napauta vaihtaaksesi tiliä</string>
 <string name="settings_sync_enable_title">Google Tasks -synkronointi</string>
-<string name="gtasks_sync_info">Kaikkea tietoa ei voida synkronoida Google Tasks -palveluun. Vain muistiinpanot, eräpäivämäärät (ei kellonaikoja) ja tehtävälistojen tilat synkronoidaan.</string>
+<string name="gtasks_sync_info">Kaikkea tietoa ei voida synkronoida Google Tasks -palveluun: vain muistiinpanot, eräpäivämäärät (ei kellonaikoja) ja tehtävälistojen tilat synkronoidaan.</string>
 <string name="settings_cat_syncing">Synkronointi</string>
 <string name="show_from_all_lists">Kaikki listat</string>
 <string name="lists">Listat</string>
@@ -80,15 +80,15 @@ limitations under the License.
 <string name="repeat">Toista</string>
 <string name="once">Kerran</string>
 <string name="always">Aina</string>
-<string name="permission_read_label">lue muistiinpanoja ja listoja</string>
+<string name="permission_read_label">Lue muistiinpanoja ja listoja</string>
 <string name="permission_read_desc">Sallii sovelluksen lukea muistiinpanojasi ja niihin liittyviä listoja.</string>
-<string name="permission_write_label">muokkaa muistiinpanoja ja listoja</string>
+<string name="permission_write_label">Muokkaa muistiinpanoja ja listoja</string>
 <string name="permission_write_desc">Sallii sovelluksen lisätä, päivittää ja poistaa muistiinpanoja ja listoja.</string>
 <string name="settings_list_dialog">Valitse lista</string>
 <string name="settings_list">Lista</string>
-<string name="drag_to_timetravel">Vedä aikamatkustaaksesi</string>
+<string name="drag_to_timetravel">Raahaa aikamatkustaaksesi</string>
 
-<string name="import_data_question">Tuo tietoa?</string>
+<string name="import_data_question">Tuo tietoja?</string>
 <string name="import_started">Tietoja tuodaan. Tämä voi viedä muutaman sekunnin.</string>
 <string name="import_data_msg">Haluatko tuoda muistiinpanot sovelluksen lahjoitusversiosta? Kun toiminto on suoritettu, voit myös poistaa kyseisen sovelluksen.</string>
 <string name="imported_result">Tuotiin %1$d muistiinpanoa %2$d listasta</string>
@@ -101,7 +101,7 @@ limitations under the License.
 <string name="showcase_timemachine_title">Tallenna muistiinpanosi</string>
 <string name="showcase_timemachine_msg">Muutokset tallennetaan aina. Käytä aikakonetta palauttaaksesi aikaisemman version.</string>
 
-<string name="donate_to_unlock">Lahjoista avataksesi</string>
+<string name="donate_to_unlock">Lahjoita avataksesi</string>
 <string name="premiums_unlocked_and_thanks">Lisäominaisuudet avattu. Kiitos tuestasi!</string>
 
 <!--
@@ -153,7 +153,7 @@ Use few if language need it. In English is the same.
 <string name="confirm_new_password">Vahvista uusi salasana</string>
 <string name="apply">Hyväksy</string>
 <string name="clear_password">Poista salasana</string>
-<string name="password_info">Muistiinpanon lukitseminen rajoittaa pääsyn sen katselemiseen ja muokkaamiseen. Muistiinpanot lukitaan yksitellen. Muistiinpanot ovat suojattu vain täällä ja muilla laitteilla on täysi pääsy niihin.</string>
+<string name="password_info">Muistiinpanojen lukitseminen rajoittaa pääsyn niiden katselemiseen ja muokkaamiseen. Muistiinpanot lukitaan yksitellen. Muistiinpanot ovat suojattu vain täällä ja muilla laitteilla on täysi pääsy niihin.</string>
 <string name="about">Tietoja</string>
 <string name="sync_failed">Synkronointi epäonnistui</string>
 <string name="sync_login_failed">Sisäänkirjautuminen epäonnistui, ei voitu yhdistää Google Tasks:iin</string>
@@ -261,5 +261,14 @@ Use few if language need it. In English is the same.
 <string name="backup_import_failed">Varmuuskopiotiedoston lukeminen epäonnistui</string>
 <string name="backup_export_success">Varmuuskopio viety onnistuneesti</string>
 <string name="backup_export_failed">Varmuuskopiotiedostoon ei voitu kirjoittaa</string>
+<string name="sd_card">Muistikortti</string>
+<string name="sd_card_sync">Muistikorttisynkronointi</string>
+<string name="sd_card_summary">Tehtävät peilataan muistikortille. Muutokset synkronoidaan molempiin suuntiin. Huomaa, että tiedostojen poistaminen poistaa tehtävät myös sovelluksesta!</string>
+<string name="directory">Hakemisto</string>
+<string name="directory_summary">Minne tiedot tulisi tallentaa.</string>
+<string name="dropbox_sync">Dropbox-synkronointi</string>
+<string name="dropbox_sync_summary">Pidä tehtäväsi ja muistiinpanosi synkronoituna tekstiasiakirjoina Dropboxissa.</string>
+<string name="cannot_write_to_directory">Hakemistoon ei voitu kirjoittaa</string>
+<string name="wait_for_dropbox">Odota, että Dropbox lopettaa valmistelun</string>
 
 </resources>
