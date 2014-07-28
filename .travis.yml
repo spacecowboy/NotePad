@@ -31,4 +31,4 @@ before_script:
 
 script:
     - gradle assembleDebug
-    - gradle assembleDebug connectedAndroidTest
+    - gradle assembleDebug connectedAndroidTest --info
