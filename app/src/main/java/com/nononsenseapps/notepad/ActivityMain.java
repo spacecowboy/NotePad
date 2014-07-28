@@ -63,7 +63,6 @@ import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
-import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Notification;
@@ -209,8 +208,6 @@ public class ActivityMain extends FragmentActivity
     SyncStatusMonitor syncStatusReceiver = null;
     // WIll only be the viewpager fragment
     ListOpener listOpener = null;
-    // View mRefreshIndeterminateProgressView = null;
-    private Menu mMenu;
     private ActionBarDrawerToggle mDrawerToggle;
     // Only not if opening note directly
     private boolean shouldAddToBackStack = true;
@@ -233,8 +230,6 @@ public class ActivityMain extends FragmentActivity
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.activity_main, menu);
-
-        this.mMenu = menu;
 
         return true;
     }

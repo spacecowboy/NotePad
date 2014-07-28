@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2014 Jonas Kalderstam.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.robobunny;
 
 /**
@@ -8,19 +24,19 @@ package com.robobunny;
  * It has been modified to handle attributes (strings etc) dynamically.
  */
 
-import com.nononsenseapps.notepad.R;
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.Preference;
 import android.util.AttributeSet;
-import com.nononsenseapps.helpers.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
+
+import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.notepad.R;
 
 public class SeekBarPreference extends Preference implements
 		OnSeekBarChangeListener {
@@ -154,7 +170,7 @@ public class SeekBarPreference extends Preference implements
 	/**
 	 * Update a SeekBarPreference view with our current state
 	 * 
-	 * @param view
+	 * @param layout
 	 */
 	protected void updateView(View layout) {
 

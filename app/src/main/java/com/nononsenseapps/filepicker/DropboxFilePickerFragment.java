@@ -16,6 +16,7 @@
 
 package com.nononsenseapps.filepicker;
 
+import android.annotation.SuppressLint;
 import android.content.AsyncTaskLoader;
 import android.content.Loader;
 import android.net.Uri;
@@ -31,11 +32,13 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
+@SuppressLint("ValidFragment")
 public class DropboxFilePickerFragment extends
         AbstractFilePickerFragment<DbxPath> {
 
     private final DbxFileSystem fs;
 
+    @SuppressLint("ValidFragment")
     public DropboxFilePickerFragment(final DbxFileSystem fs) {
         super();
         if (fs == null) {

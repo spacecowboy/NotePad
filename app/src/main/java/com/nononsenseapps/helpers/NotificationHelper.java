@@ -1,15 +1,20 @@
+/*
+ * Copyright (c) 2014 Jonas Kalderstam.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.nononsenseapps.helpers;
-
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-
-import com.nononsenseapps.notepad.ActivityMain;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.util.GeofenceRemover;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -26,6 +31,17 @@ import android.net.Uri;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
+
+import com.nononsenseapps.notepad.ActivityMain;
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.util.GeofenceRemover;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 
 public class NotificationHelper extends BroadcastReceiver {
 
@@ -577,7 +593,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * schedules next wake up on finish.
 	 *
 	 * @param context
-	 * @param notifications
+	 * @param notification
 	 */
 	public static void updateNotification(final Context context,
 			final com.nononsenseapps.notepad.database.Notification notification) {
@@ -609,7 +625,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * Called by notification.delete()
 	 *
 	 * @param context
-	 * @param id
+	 * @param not
 	 */
 	public static void cancelNotification(final Context context,
 			final com.nononsenseapps.notepad.database.Notification not) {
