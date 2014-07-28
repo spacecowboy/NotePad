@@ -61,6 +61,13 @@ dependencies {
 
 }
 
+// Version number
+def versionMajor = 5 // Major UI overhauls
+def versionMinor = 3 // Some new functionality
+def versionPatch = 3 // Bug fixes
+def versionBuild = 0 // Bump for dogfood builds, public betas, etc.
+
+// Version name from git
 def getVersionName = { ->
   try {
   def stdout = new ByteArrayOutputStream()
@@ -86,7 +93,8 @@ android {
       applicationId "com.nononsenseapps.notepad"
       minSdkVersion 14
       targetSdkVersion 19
-      versionCode 122
+      versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
+      //versionName "${versionMajor}.${versionMinor}.${versionPatch}"
       versionName getVersionName()
 
       buildConfigField "boolean", "DROPBOX_ENABLED", "false"
@@ -95,6 +103,9 @@ android {
     productFlavors {
       standard {}
       beta {
+        // Beta runs at +1
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10 + 1
+
         buildConfigField "boolean", "DROPBOX_ENABLED", "true"
       }
     }
