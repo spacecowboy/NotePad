@@ -18,7 +18,9 @@ package com.nononsenseapps.notepad.test;
 
 import android.content.Context;
 import android.test.AndroidTestCase;
+import android.test.suitebuilder.annotation.MediumTest;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.test.suitebuilder.annotation.Suppress;
 
 import com.nononsenseapps.build.Config;
 import com.nononsenseapps.notepad.*;
@@ -44,7 +46,8 @@ public class ConfigTest  extends AndroidTestCase {
         super.tearDown();
     }
 
-    @SmallTest
+    @MediumTest
+    @Suppress
     public void testProps() {
         Properties props = Config.getProperties(context);
 

@@ -3,7 +3,7 @@ package com.nononsenseapps.notepad.test;
 import com.nononsenseapps.notepad.database.Task;
 
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+import android.test.suitebuilder.annotation.MediumTest;
 
 public class DaoTaskTest extends AndroidTestCase {
 
@@ -14,7 +14,7 @@ public class DaoTaskTest extends AndroidTestCase {
 		task2.due = task1.due;
 	}
 	
-	 @SmallTest
+	 @MediumTest
 	 public void testTask() {
 		 final Task task1 = new Task();
 		 task1.title = "title1";

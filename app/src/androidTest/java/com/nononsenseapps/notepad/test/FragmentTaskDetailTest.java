@@ -1,6 +1,5 @@
 package com.nononsenseapps.notepad.test;
 
-import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.database.Task;
 import com.squareup.spoon.Spoon;
@@ -10,10 +9,6 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.SmallTest;
-import android.view.View;
-import android.widget.TextView;
-
-//import static org.fest.assertions.api.ANDROID.assertThat;
 
 public class FragmentTaskDetailTest extends
 		ActivityInstrumentationTestCase2<ActivityMain_> {
@@ -48,6 +43,7 @@ public class FragmentTaskDetailTest extends
 		assertEquals("This should succeed", 1, 1);
 	}
 
+    @SmallTest
 	public void testFragmentLoaded() {
 		Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(com.nononsenseapps.notepad.ActivityMain.DETAILTAG);
 		Spoon.screenshot(getActivity(), "Editor_loaded");

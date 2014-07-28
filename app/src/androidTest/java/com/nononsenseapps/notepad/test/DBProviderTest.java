@@ -4,19 +4,15 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.nononsenseapps.notepad.database.DatabaseHandler;
-import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+import android.test.suitebuilder.annotation.MediumTest;
 
 public class DBProviderTest extends AndroidTestCase {
 
@@ -75,7 +71,7 @@ public class DBProviderTest extends AndroidTestCase {
 		return tasks;
 	}
 
-	@SmallTest
+	@MediumTest
 	public void testTaskListURIs() {
 		final TaskList list = getNewList();
 		assertUriReturnsResult(TaskList.URI, TaskList.Columns.FIELDS);
@@ -83,7 +79,7 @@ public class DBProviderTest extends AndroidTestCase {
 		list.delete(mContext);
 	}
 
-	@SmallTest
+	@MediumTest
 	public void testTaskURIs() {
 		final TaskList list = getNewList();
 		final int taskCount = 5;
