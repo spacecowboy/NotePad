@@ -2,11 +2,11 @@ language: android
 env:
   matrix:
     - ANDROID_SDKS=android-19,sysimg-19 ANDROID_TARGET=android-19 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-18
-    - ANDROID_TARGET=android-17
-    - ANDROID_TARGET=android-16
-    - ANDROID_TARGET=android-15
-    - ANDROID_TARGET=android-14
+    - ANDROID_TARGET=android-18 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-17 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-16 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-15 ANDROID_ABI=armeabi-v7a
+    - ANDROID_TARGET=android-14 ANDROID_ABI=armeabi-v7a
 android:
   components:
     - build-tools-19.1.0
@@ -27,3 +27,7 @@ before_install:
 before_script:
     # Make sure the emulator has started before running tests
     - ./wait_for_emulator
+
+script:
+    - gradle assembleDebug
+    - gradle assembleDebug connectedAndroidTest
