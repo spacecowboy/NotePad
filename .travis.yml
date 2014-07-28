@@ -6,7 +6,6 @@ env:
     - ANDROID_TARGET=android-17 ANDROID_ABI=armeabi-v7a
     - ANDROID_TARGET=android-16 ANDROID_ABI=armeabi-v7a
     - ANDROID_TARGET=android-15 ANDROID_ABI=armeabi-v7a
-    - ANDROID_TARGET=android-14 ANDROID_ABI=armeabi-v7a
 android:
   components:
     - build-tools-19.1.0
