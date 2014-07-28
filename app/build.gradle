@@ -84,11 +84,10 @@ android {
 
     defaultConfig {
       applicationId "com.nononsenseapps.notepad"
+      minSdkVersion 14
+      targetSdkVersion 19
       versionCode 121
       versionName getVersionName()
-
-      testApplicationId "com.nononsenseapps.notepad.test"
-      testInstrumentationRunner "android.test.InstrumentationTestRunner"
 
       buildConfigField "boolean", "DROPBOX_ENABLED", "false"
     }
