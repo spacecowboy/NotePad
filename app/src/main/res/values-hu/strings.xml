@@ -255,8 +255,8 @@ Use few if language need it. In English is the same.
 <string name="backup">Biztonsági mentés</string>
 <string name="backup_import">Importálás</string>
 <string name="backup_export">Exportálás</string>
-<string name="backup_import_msg">Szeretné importálni a biztonsági mentést a %1$ fájlból? Ez felülírja a jelenlegi adatbázist.</string>
-<string name="backup_export_msg">Szeretné exportálni az adatbázist a %1$ fájlba?</string>
+<string name="backup_import_msg">Szeretné importálni a biztonsági mentést a %1$s fájlból? Ez felülírja a jelenlegi adatbázist.</string>
+<string name="backup_export_msg">Szeretné exportálni az adatbázist a %1$s fájlba?</string>
 <string name="backup_import_success">Sikeres importálás</string>
 <string name="backup_file_not_found">A fájl nem található</string>
 <string name="backup_import_failed">A fájl nem olvasható</string>

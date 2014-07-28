@@ -12,7 +12,7 @@ echo 'Isolate newest translations.'
 php5 ./get-diff-translations.php
 
 echo 'Copy new translation files to dev dir.'
-cp -rf translate-temp/res ./
+cp -rf translate-temp/res ./src/main/
 #echo 'Fix for traditional chinese'
 #cp -rf /home/jonas/workspace/NotePad/res/values-zh-rHK/* /home/jonas/workspace/NotePad/res/values-zh-rTW/
 

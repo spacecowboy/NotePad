@@ -135,7 +135,7 @@ Use few if language need it. In English is the same.
 
 <string name="move">Siirrä</string>
 <string name="move_to">Siirrä sijaintiin</string>
-<string name="moved_x_to_list">Siirrettiin %1$d sijaintiin %2$d</string>
+<string name="moved_x_to_list">Siirrettiin %1$d sijaintiin %2$s</string>
 
 <string name="lock_note">Lukitse muistiinpano</string>
 <string name="unlock_note">Avaa muistiinpanon lukitus</string>

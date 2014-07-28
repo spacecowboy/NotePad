@@ -15,7 +15,7 @@ def fixfile(filename):
         print(line, end='')
 
 stringfile = 'strings.xml'
-resdir = './res/'
+resdir = './src/main/res/'
 
 # List dirs in res dir
 dirs = os.listdir(resdir)

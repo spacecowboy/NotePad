@@ -7,7 +7,7 @@ from __future__ import print_function, division
 import os, re, fileinput
 
 stringfile = 'strings.xml'
-resdir = './res/'
+resdir = './src/main/res/'
 englishdir = 'values/'
 
 def get_number_of_lines(fname):

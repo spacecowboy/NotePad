@@ -7,10 +7,10 @@ from __future__ import print_function
 import os, re, fileinput
 
 #Array file
-arrayfile = './res/values/arrays.xml'
+arrayfile = './src/main/res/values/arrays.xml'
 
 # List dirs in res dir
-dirs = os.listdir('./res/')
+dirs = os.listdir('./src/main/res/')
 
 langs = []
 
