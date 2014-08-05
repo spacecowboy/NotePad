@@ -161,6 +161,9 @@ public class SDSynchronizer extends Synchronizer implements
      */
     @Override
     public void renameRemoteFile(String oldName, OrgFile orgFile) {
+        if (orgFile == null || orgFile.getFilename() == null) {
+            throw new NullPointerException("No new filename");
+        }
         final File oldFile = new File(ORG_DIR, oldName);
         final File newFile = new File(ORG_DIR, orgFile.getFilename());
         oldFile.renameTo(newFile);

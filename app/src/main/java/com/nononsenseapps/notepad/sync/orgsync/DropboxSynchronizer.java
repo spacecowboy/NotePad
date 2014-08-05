@@ -234,7 +234,7 @@ public class DropboxSynchronizer extends Synchronizer implements
      */
     @Override
     public void deleteRemoteFile(final OrgFile orgFile) {
-        if (orgFile == null) {
+        if (orgFile == null || orgFile.getFilename() == null) {
             // Nothing to do
             return;
         }
@@ -260,6 +260,10 @@ public class DropboxSynchronizer extends Synchronizer implements
      */
     @Override
     public void renameRemoteFile(final String oldName, final OrgFile orgFile) {
+        if (orgFile == null || orgFile.getFilename() == null) {
+            throw new NullPointerException("No new filename");
+        }
+
         DbxPath newPath = new DbxPath(DIR, orgFile.getFilename());
         DbxPath oldPath = new DbxPath(DIR, oldName);
 
@@ -288,12 +292,16 @@ public class DropboxSynchronizer extends Synchronizer implements
                 br = new BufferedReader(new StringReader(file.readString()));
                 file.close();
             }
+            // In case of errors, throw null pointers. Trying to see if this
+            // the place that deletes files.
         } catch (DbxException e) {
             Log.d(TAG, e.getLocalizedMessage());
-            br = null;
+            //br = null;
+            throw new NullPointerException(e.getLocalizedMessage());
         } catch (IOException e) {
             Log.d(TAG, e.getLocalizedMessage());
-            br = null;
+            //br = null;
+            throw new NullPointerException(e.getLocalizedMessage());
         }
 
         return br;
@@ -358,6 +366,9 @@ public class DropboxSynchronizer extends Synchronizer implements
             }
         } catch (DbxException e) {
             Log.d(TAG, e.getLocalizedMessage());
+            // In case of errors, throw null pointers. Trying to see if this
+            // the place that deletes files.
+            throw new NullPointerException(e.getLocalizedMessage());
             //e.printStackTrace();
         }
         return filenames;
