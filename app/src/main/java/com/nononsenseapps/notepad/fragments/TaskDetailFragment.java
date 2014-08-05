@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2014 Jonas Kalderstam.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 package com.nononsenseapps.notepad.fragments;
 
 import android.app.Activity;
@@ -644,12 +660,16 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 				titleEnd = text.length();
 			}
 
-			mShareActionProvider
-					.setShareIntent(new Intent(Intent.ACTION_SEND)
-							.setType("text/plain")
-							.putExtra(Intent.EXTRA_TEXT, text)
-							.putExtra(Intent.EXTRA_SUBJECT,
-									text.substring(0, titleEnd)));
+            try {
+                mShareActionProvider.setShareIntent(
+                        new Intent(Intent.ACTION_SEND).setType("text/plain")
+                                .putExtra(Intent.EXTRA_TEXT, text)
+                                .putExtra(Intent.EXTRA_SUBJECT,
+                                        text.substring(0, titleEnd)));
+            } catch (RuntimeException e) {
+                // Can crash when too many transactions overflow the buffer
+                Log.d("nononsensenotes", e.getLocalizedMessage());
+            }
 		}
 	}
 
