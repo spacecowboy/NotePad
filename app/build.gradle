@@ -64,7 +64,7 @@ dependencies {
 // Version number
 def versionMajor = 5 // Major UI overhauls
 def versionMinor = 3 // Some new functionality
-def versionPatch = 3 // Bug fixes
+def versionPatch = 4 // Bug fixes
 def versionBuild = 0 // Bump for dogfood builds, public betas, etc.
 
 // Version name from git
@@ -180,6 +180,6 @@ task nativeLibsToJar(type: Zip) {
     into 'lib/'
 }
 
-tasks.withType(Compile) {
+tasks.withType(JavaCompile) {
     compileTask -> compileTask.dependsOn(nativeLibsToJar)
 }
