@@ -22,6 +22,7 @@ android:
     - '.*intel.+'
 
 before_install:
+  - chmod +x gradlew
   - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
   - emulator -avd test -no-skin -no-audio -no-window &
 
@@ -30,5 +31,5 @@ before_script:
     - ./wait_for_emulator
 
 script:
-    - gradle assembleDebug
-    - gradle assembleDebug connectedAndroidTest --info
+    - ./gradlew assembleDebug
+    - ./gradlew assembleDebug connectedAndroidTest --info
