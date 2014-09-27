@@ -54,10 +54,6 @@ import android.widget.Toast;
 
 import com.github.espiandev.showcaseview.ShowcaseView;
 import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
-import com.nononsenseapps.billing.IabHelper;
-import com.nononsenseapps.billing.IabResult;
-import com.nononsenseapps.billing.Inventory;
-import com.nononsenseapps.billing.Purchase;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.SyncHelper;
@@ -87,7 +83,6 @@ import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
 import com.nononsenseapps.utils.ViewsHelper;
 
 import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.OnActivityResult;
@@ -111,23 +106,15 @@ public class ActivityMain extends FragmentActivity
             "notification_cancel_arg";
     public static final String NOTIFICATION_DELETE_ARG =
             "notification_delete_arg";
-    // In-app donate identifier
-    public static final String SKU_INAPP_PREMIUM = "donate_inapp";
-    // User bought old donate version or in-app
-    public static final String PREMIUMSTATUS = "donate_inapp_or_oldversion";
+    // If donate version has been migrated
+    public static final String MIGRATED = "donate_inapp_or_oldversion";
     // Set to true in bundle if exits should be animated
     public static final String ANIMATEEXIT = "animateexit";
     // Using tags for test
     public static final String DETAILTAG = "detailfragment";
     public static final String LISTPAGERTAG = "listpagerfragment";
-    // For static testing
-    // static final String SKU_DONATE = "android.test.purchased";
-    // static final String SKU_DONATE = "android.test.cancelled";
-    static final int SKU_DONATE_REQUEST_CODE = 7331;
     private static final String SHOWCASED_MAIN = "showcased_main_window";
     private static final String SHOWCASED_DRAWER = "showcased_main_drawer";
-    // True if user donated in-app
-    protected boolean mDonatedInApp = false;
     protected boolean reverseAnimation = false;
     @ViewById(resName = "leftDrawer")
     ListView leftDrawer;
@@ -147,57 +134,6 @@ public class ActivityMain extends FragmentActivity
     InputMethodManager inputManager;
     // private MenuItem mSyncMenuItem;
     boolean mAnimateExit = false;
-    IabHelper mBillingHelper;
-    // True if user has access to premium features, through in-app purchase or
-    // old donate version
-    boolean mHasPremiumAccess = false;
-    // Listener that's called when we finish querying the items and
-    // subscriptions we own
-    IabHelper.QueryInventoryFinishedListener mBillingInventoryListener =
-            new IabHelper.QueryInventoryFinishedListener() {
-                public void onQueryInventoryFinished(IabResult result,
-                        Inventory inventory) {
-                    if (result.isFailure()) {
-                        Log.d("nononsenseapps billing",
-                                "Failed to query inventory: " + result);
-                        return;
-                    }
-
-                    Log.d("nononsenseapps billing",
-                            "Query inventory was successful.");
-
-			/*
-             * Check for items we own. Notice that for each purchase, we check
-			 * the developer payload to see if it's correct! See
-			 * verifyDeveloperPayload().
-			 */
-
-                    // Do we have the premium upgrade?
-                    // Purchase premiumPurchase = inventory.getPurchase(SKU_DONATE);
-                    // mIsDonate = (premiumPurchase != null);// &&
-                    // verifyDeveloperPayload(premiumPurchase));
-                    if (!mHasPremiumAccess) {
-                        mHasPremiumAccess =
-                                inventory.hasPurchase(SKU_INAPP_PREMIUM);
-
-                        if (mHasPremiumAccess) {
-                            // Save in prefs
-                            PreferenceManager.getDefaultSharedPreferences(
-                                    ActivityMain.this).edit()
-                                    .putBoolean(SKU_INAPP_PREMIUM, true)
-                                    .putBoolean(PREMIUMSTATUS,
-                                            mHasPremiumAccess).commit();
-                            // Update relevant parts of UI
-                            updateUiDonate();
-                        }
-
-                        Log.d("nononsenseapps billing", "User is " +
-                                                        (mHasPremiumAccess ?
-                                                         "PREMIUM" :
-                                                         "NOT PREMIUM"));
-                    }
-                }
-            };
     // Changes depending on what we're showing since the started activity can
     // receive new intents
     @InstanceState
@@ -238,11 +174,6 @@ public class ActivityMain extends FragmentActivity
     public boolean onPrepareOptionsMenu(Menu menu) {
         menu.setGroupVisible(R.id.activity_menu_group, isDrawerClosed);
         menu.setGroupVisible(R.id.activity_reverse_menu_group, !isDrawerClosed);
-
-        final MenuItem donateItem = menu.findItem(R.id.menu_donate);
-        if (donateItem != null) {
-            donateItem.setVisible(!mDonatedInApp);
-        }
 
         return super.onPrepareOptionsMenu(menu);
     }
@@ -309,45 +240,6 @@ public class ActivityMain extends FragmentActivity
             Intent intent = new Intent();
             intent.setClass(this, PrefsActivity.class);
             startActivity(intent);
-            return true;
-        } else if (itemId == R.id.menu_donate) {
-            try {
-                mBillingHelper.launchPurchaseFlow(this, SKU_INAPP_PREMIUM,
-                        SKU_DONATE_REQUEST_CODE,
-                        new IabHelper.OnIabPurchaseFinishedListener() {
-                            public void onIabPurchaseFinished(IabResult result,
-                                    Purchase purchase) {
-                                if (result.isFailure()) {
-                                    Log.d("nononsenseapps billing",
-                                            "Error purchasing: " + result);
-                                    return;
-                                } else if (purchase.getSku()
-                                        .equals(SKU_INAPP_PREMIUM)) {
-                                    mHasPremiumAccess = true;
-                                    mDonatedInApp = true;
-                                    // Save in prefs
-                                    PreferenceManager
-                                            .getDefaultSharedPreferences(
-                                                    ActivityMain.this).edit()
-                                            .putBoolean(SKU_INAPP_PREMIUM, true)
-                                            .putBoolean(PREMIUMSTATUS, true)
-                                            .commit();
-                                    // Update relevant parts of UI
-                                    updateUiDonate();
-                                    // Notify user of success
-                                    Toast.makeText(ActivityMain.this,
-                                            R.string.premiums_unlocked_and_thanks,
-                                            Toast.LENGTH_SHORT).show();
-                                }
-                            }
-                        }
-                );
-            } catch (Exception e) {
-                Log.d("nononsenseapps billing",
-                        "Shouldnt start two purchases! " +
-                        e.getLocalizedMessage()
-                );
-            }
             return true;
         } else if (itemId == R.id.menu_sync) {
             handleSyncRequest();
@@ -442,13 +334,6 @@ public class ActivityMain extends FragmentActivity
         }
     }
 
-    void updateUiDonate() {
-        // check correct variableF
-        if (mDonatedInApp) {
-            invalidateOptionsMenu();
-        }
-    }
-
     private void handleSyncRequest() {
         boolean syncing = false;
         // GTasks
@@ -515,9 +400,6 @@ public class ActivityMain extends FragmentActivity
         final SharedPreferences prefs =
                 PreferenceManager.getDefaultSharedPreferences(this);
 
-        mHasPremiumAccess = prefs.getBoolean(PREMIUMSTATUS, false);
-        mDonatedInApp = prefs.getBoolean(SKU_INAPP_PREMIUM, false);
-
         alreadyShowcased = prefs.getBoolean(SHOWCASED_MAIN, false);
         alreadyShowcasedDrawer = prefs.getBoolean(SHOWCASED_DRAWER, false);
 
@@ -556,14 +438,6 @@ public class ActivityMain extends FragmentActivity
     public void onDestroy() {
         super.onDestroy();
         OrgSyncService.stop(this);
-        try {
-            if (mBillingHelper != null) {
-                mBillingHelper.dispose();
-            }
-        } catch (Exception e) {
-            // We are destroying, ignore all errors at this point
-        }
-        mBillingHelper = null;
     }
 
     @Override
@@ -618,14 +492,6 @@ public class ActivityMain extends FragmentActivity
             SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
             OrgSyncService.start(this);
         }
-
-        // Check any upgrades
-        final SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(ActivityMain.this);
-
-        if (!prefs.getBoolean(PREMIUMSTATUS, false)) {
-            checkPremium();
-        }
     }
 
     private void restartAndRefresh() {
@@ -638,59 +504,11 @@ public class ActivityMain extends FragmentActivity
         startActivity(intent);
     }
 
-    @Background
-    void checkPremium() {
-        if (mHasPremiumAccess) {
-            // already unlocked
-            return;
-        }
-        // For in-app billing
-        final String base64EncodedPublicKey =
-                new StringBuilder("MIIBIjANBgkqhki")
-                        .append("G9w0BAQEFAAOCAQ8AMIIBCgKCAQEAkNMrvFQmGKm5YoSD7UMCvKMvlEguAHVNCzEb")
-                        .append("Bww7T8iQHPr5H7Ltag03HLT4oToG1hDKsbEV7tks2tjwAm1ftzlud+gFMEG/GCL6G")
-                        .append("F+aisWKLJJZtpODRzidAAJVjlDaIROJBsnDnBQ2f8uoukSrXNaT42k/plIjhCiCdZ")
-                        .append("AmMb7Yb48v6aMvnB7FHXBffrkI2mpn4c8kSe721ROovZXNDw7/U94ZODKkOrnZGON")
-                        .append("rJ1isUwibFA3MhOfRdemE1aZF6KwCMD2EvgV8y9KVOPwF3lE0ucsJ4I56eEQpmzzR")
-                        .append("jItb/Gn8iHp0qa7IhSR/vXBL4p+byCcoQDlfvjeAmjY6dQIDAQAB")
-                        .toString();
-        try {
-            mBillingHelper = new IabHelper(this, base64EncodedPublicKey);
-            //mBillingHelper.enableDebugLogging(true, "nononsenseapps billing");
-            mBillingHelper
-                    .startSetup(new IabHelper.OnIabSetupFinishedListener() {
-                        public void onIabSetupFinished(IabResult result) {
-                            if (!result.isSuccess()) {
-                                // Oh noes, there was a problem.
-                                Log.d("nononsenseapps billing",
-                                        "Problem setting up In-app Billing: " +
-                                        result
-                                );
-                                return;
-                            }
-                            try {
-                                // Hooray, IAB is fully set up!
-                                mBillingHelper.queryInventoryAsync(
-                                        mBillingInventoryListener);
-                            } catch (Exception ignored) {
-                                // Don't allow crashes
-                                Log.d("nononsenseapps billing",
-                                        "Error: " + ignored.getLocalizedMessage());
-                            }
-                        }
-                    });
-
-            // See if the donate version is installed and offer to import if so
-            isOldDonateVersionInstalled();
-        } catch (Exception e) {
-            Log.d("nononsenseapps billing",
-                    "InApp billing cant be allowed to crash app, EVER");
-        }
-    }
-
     void isOldDonateVersionInstalled() {
-        if (mHasPremiumAccess) {
-            // already unlocked
+        final SharedPreferences prefs =  PreferenceManager
+                .getDefaultSharedPreferences(ActivityMain.this);
+        if (prefs.getBoolean(MIGRATED, false)) {
+            // already migrated
             return;
         }
         try {
@@ -700,18 +518,14 @@ public class ActivityMain extends FragmentActivity
                 if (packageInfo.packageName
                         .equals("com.nononsenseapps.notepad_donate")) {
                     migrateDonateUser();
-                    mHasPremiumAccess = true;
-                    // Allow them to donate again
-                    PreferenceManager
-                            .getDefaultSharedPreferences(ActivityMain.this)
-                            .edit().putBoolean(PREMIUMSTATUS, true).commit();
+                    // Don't migrate again
+                   prefs.edit().putBoolean(MIGRATED, true).commit();
                     // Stop loop
                     break;
                 }
             }
         } catch (Exception e) {
-            Log.d("nononsenseapps billing",
-                    "InApp billing cant be allowed to crash app, EVER");
+            // Can't allow crashing
         }
     }
 
@@ -1315,15 +1129,6 @@ public class ActivityMain extends FragmentActivity
         PreferenceManager.getDefaultSharedPreferences(this).edit()
                 .putBoolean(SHOWCASED_DRAWER, true).commit();
         alreadyShowcasedDrawer = true;
-    }
-
-    @OnActivityResult(SKU_DONATE_REQUEST_CODE)
-    void onDonatePurchased(int resultCode, Intent data) {
-        if (mBillingHelper != null) {
-            mBillingHelper
-                    .handleActivityResult(SKU_DONATE_REQUEST_CODE, resultCode,
-                            data);
-        }
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

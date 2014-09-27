@@ -43,7 +43,7 @@ configurations {
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.android.support:support-v4:19.0.1+'
-    compile 'com.google.android.gms:play-services:4.2.42+'
+    compile 'com.google.android.gms:play-services:5.0.77'
     compile 'joda-time:joda-time:2.3'
     // FilePicker
     compile 'com.nononsenseapps:filepicker:1.1.3+'
@@ -63,8 +63,8 @@ dependencies {
 
 // Version number
 def versionMajor = 5 // Major UI overhauls
-def versionMinor = 3 // Some new functionality
-def versionPatch = 4 // Bug fixes
+def versionMinor = 4 // Some new functionality
+def versionPatch = 0 // Bug fixes
 def versionBuild = 0 // Bump for dogfood builds, public betas, etc.
 
 // Version name from git

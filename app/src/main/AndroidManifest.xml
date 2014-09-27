@@ -38,9 +38,6 @@
         android:glEsVersion="0x00020000"
         android:required="true" />
 
-    <!-- For in-app donation -->
-    <uses-permission android:name="com.android.vending.BILLING" />
-
     <!-- For connection -->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- Dropbox needs this -->
@@ -437,7 +434,7 @@
             android:label="@string/timemachine" >
         </activity>
 
-        <!-- Service for migrating date from donate app -->
+        <!-- Service for migrating from donate app -->
         <service
             android:name="com.nononsenseapps.notepad.legacy.DonateMigrator_"
             android:enabled="true"

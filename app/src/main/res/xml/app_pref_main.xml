@@ -20,11 +20,9 @@
 
     <PreferenceCategory android:title="@string/dashclock_pref_header_general" >
 
-        <!-- Should be disabled by default as a premium feature -->
         <ListPreference
             android:defaultValue="light_ab"
             android:dialogTitle="@string/settings_theme_dialog"
-            android:enabled="false"
             android:entries="@array/theme_preference"
             android:entryValues="@array/themevalues_preference"
             android:key="key_current_theme"
