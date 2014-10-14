@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="changelog_5.4.1">
+\nFixed bug with multiple widget where the plus icon would always add notes to the last configured list
+\nTranslations</string>
+
     <string name="changelog_5.4">
 \nRemoved ability to donate and unlocked themes for everyone
 \nTranslations</string>

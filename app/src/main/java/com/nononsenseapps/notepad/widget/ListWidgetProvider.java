@@ -260,7 +260,9 @@ public class ListWidgetProvider extends AppWidgetProvider {
 						Intent.FLAG_ACTIVITY_NEW_TASK
 								| Intent.FLAG_ACTIVITY_CLEAR_TASK)
 				.setClass(context, ActivityMain_.class)
-				.setAction(Intent.ACTION_INSERT).setData(Task.URI)
+                // Append a dummy path so we don't override this intent on 2nd, 3rd, etc, widgets.
+				.setAction(Intent.ACTION_INSERT).setData(Uri.withAppendedPath(Task.URI,
+                "/widget/" + appWidgetId + "/-1"))
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 
 		PendingIntent createPendingIntent = PendingIntent.getActivity(context,
