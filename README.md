@@ -23,9 +23,17 @@ And similar over here https://www.dropbox.com/developers/apps
 
 # Build the project
 
-Enter the full directory and call
+For free version:
 
-    gradle installDebug
+    ./gradlew installFreeDebug
+
+Or with play services and location reminders:
+
+    ./gradlew installPlayDebug
+
+Same as above but including Dropbox at the moment:
+
+    ./gradlew installPlayBetaDebug
 
 # License
      Copyright (C) 2014 Jonas Kalderstam
