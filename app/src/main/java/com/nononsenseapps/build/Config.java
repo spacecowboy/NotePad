@@ -55,7 +55,8 @@ public class Config {
     }
 
     public static String getGtasksApiKey(final Context context) {
-        return getProperties(context).getProperty(KEY_GTASKS_API_KEY);
+        return getProperties(context).getProperty(KEY_GTASKS_API_KEY,
+                "AIzaSyCAjRk2GfPARlIU3JsaEiExLMtj_rdN2i4");
     }
 
     public static String getKeyDropboxSyncPublic(final Context context) {

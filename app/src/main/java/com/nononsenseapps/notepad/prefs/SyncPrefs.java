@@ -168,6 +168,7 @@ public class SyncPrefs extends PreferenceFragment implements
 
         // Disable prefs if this is not correct build
         findPreference(KEY_SYNC_ENABLE).setEnabled(
+                null != Config.getGtasksApiKey(getActivity()) &&
                 !Config.getGtasksApiKey(getActivity()).contains(" "));
 
         // SD Card
