@@ -115,7 +115,7 @@ public class OrgSyncService extends Service {
         }
 
         // Try Dropbox
-        if (BuildConfig.DROPBOX_ENABLED) {
+        if (BuildConfig.DROPBOX_ENABLED && BuildConfig.NONFREE) {
             SynchronizerInterface db = new DropboxSynchronizer(this);
             if (db.isConfigured()) {
                 syncers.add(db);

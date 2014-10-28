@@ -192,7 +192,7 @@ public class SyncPrefs extends PreferenceFragment implements
             }
         });
 
-        if (BuildConfig.DROPBOX_ENABLED) {
+        if (BuildConfig.DROPBOX_ENABLED && BuildConfig.NONFREE) {
             // Dropbox, disable if no key present
             findPreference(KEY_DROPBOX_ENABLE)
                     .setEnabled(BuildConfig.DROPBOX_ENABLED &&

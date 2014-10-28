@@ -148,7 +148,7 @@ task nativeLibsToJar(type: Zip) {
     destinationDir file("$buildDir/native-libs")
     baseName 'native-libs'
     extension 'jar'
-    from fileTree(dir: 'libs', include: '**/*.so')
+    from fileTree(dir: 'src/playBeta/libs', include: '**/*.so')
     into 'lib/'
 }
 
@@ -171,6 +171,8 @@ dependencies {
     apt "org.androidannotations:androidannotations:$AAVersion"
     compile "org.androidannotations:androidannotations-api:$AAVersion"
     // Dropbox and non-free stuff
+    playCompile fileTree(dir: 'src/play/libs', include: '*.jar')
+    playBetaCompile fileTree(dir: 'src/play/libs', include: '*.jar')
     playCompile fileTree(dir: "$buildDir/native-libs", include: "*.jar")
     playCompile 'com.google.android.gms:play-services:+'
     playBetaCompile fileTree(dir: "$buildDir/native-libs", include: "*.jar")
