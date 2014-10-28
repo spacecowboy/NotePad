@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2014 Jonas Kalderstam.
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+  -->
+
+
+<!--
+     Declare the contents of this Android application.  The namespace
+     attribute brings in the Android platform namespace, and the package
+     supplies a unique name for the application.  When writing your
+     own application, the package name must be changed from "com.example.*"
+     to come from a domain that you own or have control over.
+-->
+<!-- Note that versionCode and versionName are overwritten in build.gradle -->
+<manifest
+    package="com.nononsenseapps.notepad"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:installLocation="internalOnly" >
+
+    <!-- maps -->
+    <uses-feature
+        android:glEsVersion="0x00020000"
+        android:required="true" />
+
+    <!-- Dropbox needs this -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- For maps -->
+    <permission
+        android:name="com.nononsenseapps.notepad.permission.MAPS_RECEIVE"
+        android:protectionLevel="signature" />
+    <!-- Maps crashed because it did not have this permission, weird -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
+    <uses-permission android:name="com.nononsenseapps.notepad.permission.MAPS_RECEIVE" />
+    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
+    <!--
+     The following two permissions are not required to use
+     Google Maps Android API v2, but are recommended. Necessary for geofences.
+    -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <application>
+        <!-- Play services now requires this -->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
+        <!-- To get maps working -->
+        <meta-data
+            android:name="com.google.android.maps.v2.API_KEY"
+            android:value="AIzaSyDTgjabZVkiZOnokePNdYNAkRiaE73_MBs" />
+
+        <!-- For location reminders -->
+        <activity
+            android:name="com.nononsenseapps.notepad.ActivityLocation_"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:theme="@style/ThemeMapActivity"
+            android:windowSoftInputMode="stateHidden" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchablelocation" />
+        </activity>
+        <service
+            android:name="com.nononsenseapps.notepad.services.ReceiveTransitionsIntentService"
+            android:exported="false"
+            android:label="@string/app_name" >
+        </service>
+
+        <!-- Location suggestions -->
+        <provider
+            android:name="com.nononsenseapps.util.LocationSuggestionsProvider"
+            android:authorities="com.nononsenseapps.LocationSuggestions"
+            android:enabled="true"
+            android:exported="false" >
+        </provider>
+
+        <!-- Dropbox stuff -->
+        <activity
+            android:name="com.nononsenseapps.filepicker.DropboxFilePickerActivity"
+            android:label="@string/app_name"
+            android:theme="@style/FilePicker.Theme">
+        </activity>
+        <service
+            android:name="com.nononsenseapps.notepad.sync.orgsync.DropboxSyncHelper"
+            android:enabled="true"
+            android:exported="false" />
+
+        <!-- Dropbox -->
+        <activity android:name="com.dropbox.sync.android.DbxAuthActivity" />
+        <activity
+            android:name="com.dropbox.client2.android.AuthActivity"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <data android:scheme="db-yt0azqlcrdl2u22" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <service
+            android:name="com.dropbox.sync.android.DbxSyncService"
+            android:enabled="true"
+            android:exported="false"
+            android:label="Dropbox Sync" />
+    </application>
+
+</manifest>

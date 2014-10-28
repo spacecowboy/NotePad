@@ -57,6 +57,7 @@ import com.nononsenseapps.notepad.ActivityLocation;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.ActivityTaskHistory_;
+import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.R.layout;
 import com.nononsenseapps.notepad.database.Notification;
@@ -797,30 +798,32 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	public void onLocationResult(int resultCode, Intent data) {
 		// Location
 		Log.d("JONAS", "onResult1");
-		if (resultCode == Activity.RESULT_OK
-				&& pendingLocationNotification != null) {
-			Log.d("JONAS", "onResult2");
-			// update text field and shit
-			pendingLocationNotification.latitude = data.getExtras().getDouble(
-					ActivityLocation.EXTRA_LATITUDE);
-			pendingLocationNotification.longitude = data.getExtras().getDouble(
-					ActivityLocation.EXTRA_LONGITUDE);
-			pendingLocationNotification.radius = data.getExtras().getDouble(
-					ActivityLocation.EXTRA_RADIUS);
-			pendingLocationNotification.locationName = data.getExtras()
-					.getString(ActivityLocation.EXTRA_LOCATION_NAME);
-			if (pendingLocationNotification.view != null
-					&& pendingLocationNotification.locationName != null) {
-				Log.d("JONAS", "onResult3");
-				NotificationItemHelper
-						.switchToLocation(pendingLocationNotification.view);
+        if (BuildConfig.NONFREE) {
+            if (resultCode == Activity.RESULT_OK
+                    && pendingLocationNotification != null) {
+                Log.d("JONAS", "onResult2");
+                // update text field and shit
+                pendingLocationNotification.latitude = data.getExtras().getDouble(
+                        ActivityLocation.EXTRA_LATITUDE);
+                pendingLocationNotification.longitude = data.getExtras().getDouble(
+                        ActivityLocation.EXTRA_LONGITUDE);
+                pendingLocationNotification.radius = data.getExtras().getDouble(
+                        ActivityLocation.EXTRA_RADIUS);
+                pendingLocationNotification.locationName = data.getExtras()
+                        .getString(ActivityLocation.EXTRA_LOCATION_NAME);
+                if (pendingLocationNotification.view != null
+                        && pendingLocationNotification.locationName != null) {
+                    Log.d("JONAS", "onResult3");
+                    NotificationItemHelper
+                            .switchToLocation(pendingLocationNotification.view);
 
-				NotificationItemHelper
-						.setLocationName(pendingLocationNotification);
-			}
-			// do in background
-			pendingLocationNotification.saveInBackground(getActivity(), false);
-		}
+                    NotificationItemHelper
+                            .setLocationName(pendingLocationNotification);
+                }
+                // do in background
+                pendingLocationNotification.saveInBackground(getActivity(), false);
+            }
+        }
 	}
 
 	private void deleteAndClose() {

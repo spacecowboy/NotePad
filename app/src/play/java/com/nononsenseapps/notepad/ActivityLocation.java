@@ -754,7 +754,15 @@ public class ActivityLocation extends Activity {
 		}
 	}
 
-	/**
+    /**
+     *
+     * @return class defined in manifest
+     */
+    public static Class getAnnotatedActivityClass() {
+        return ActivityLocation_.class;
+    }
+
+    /**
 	 * Define a Broadcast receiver that receives updates from connection
 	 * listeners and the geofence transition service.
 	 */

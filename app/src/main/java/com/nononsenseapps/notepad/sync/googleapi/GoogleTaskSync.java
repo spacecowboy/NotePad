@@ -448,6 +448,7 @@ public class GoogleTaskSync {
 
 			// if newly created locally
 			if (pair.second == null) {
+                Log.d(TAG, "Second was null");
 				final GoogleTask newTask = new GoogleTask(pair.first,
 						apiTalker.accountName);
 				apiTalker.uploadTask(newTask, gTaskList);
@@ -456,7 +457,7 @@ public class GoogleTaskSync {
 			}
 			// if deleted locally
 			else if (pair.second.isDeleted()) {
-				Log.d(TAG, "remotetasksync: isDeletedLocally");
+				Log.d(TAG, "Second isDeleted");
 				// Delete remote also
 				pair.second.remotelydeleted = true;
 				apiTalker.uploadTask(pair.second, gTaskList);
@@ -466,6 +467,7 @@ public class GoogleTaskSync {
 			// if local updated is different from remote,
 			// should update remote
 			else if (pair.first.updated > pair.second.updated) {
+                Log.d(TAG, "First updated after second");
 				apiTalker.uploadTask(pair.second, gTaskList);
 				// No need to save remote object here
 				pair.first.save(context, pair.second.updated);
@@ -673,13 +675,14 @@ public class GoogleTaskSync {
 			}
 			else if (localTask != null && remoteTask != null
 					&& localTask.updated.equals(remoteTask.updated)) {
-				//Log.d("nononsenseapps gtasksync", "skipping equal update");
+				Log.d(TAG, "skipping equal update");
 				// Dont
 			}
 			else {
 //				if (localTask != null) {
 //					Log.d("nononsenseapps gtasksync", "going to upload: " + localTask.title + ", l." + localTask.updated + " r." + remoteTask.updated);
 //				}
+                Log.d(TAG, "add to sync list: " + remoteTask.title);
 				taskPairs
 						.add(new Pair<Task, GoogleTask>(localTask, remoteTask));
 			}
