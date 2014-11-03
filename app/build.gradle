@@ -19,9 +19,9 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.13.0'
+        classpath 'com.android.tools.build:gradle:0.14.0'
         // the latest version of the android-apt plugin for annotations
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.2'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4+'
     }
 }
 
@@ -36,14 +36,10 @@ repositories {
     mavenLocal()
 }
 
-configurations {
-    apt
-}
-
 // Version number
 def versionMajor = 5 // Major UI overhauls
 def versionMinor = 5 // Some new functionality
-def versionPatch = 0 // Bug fixes
+def versionPatch = 1 // Bug fixes
 def versionBuild = 0 // Bump for dogfood builds, public betas, etc.
 
 // Version name from git
@@ -73,7 +69,6 @@ android {
       minSdkVersion 14
       targetSdkVersion 19
       versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
-      //versionName "${versionMajor}.${versionMinor}.${versionPatch}"
       versionName getVersionName()
 
         // If Non-Free libraries are to be used
@@ -131,15 +126,6 @@ apt {
     arguments {
         resourcePackageName android.defaultConfig.applicationId
         androidManifestFile variant.processResources.manifestFile
-        // If you're using Android NBS flavors you should use the
-        //following line instead of hard-coded packageName
-        //resourcePackageName android.defaultConfig.packageName
-        //resourcePackageName 'com.nononsenseapps'
-
-        // You can set optional annotation processing options here,
-        // like these commented options:
-        // logLevel 'INFO'
-        // logFile '/var/log/aa.log'
     }
 }
 
@@ -161,6 +147,8 @@ dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.android.support:support-v4:19.0.1+'
     compile 'joda-time:joda-time:2.3'
+    // Dashclock
+    compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     // FilePicker
     compile 'com.nononsenseapps:filepicker:1.1.3+'
     compile project(':external:ActionBar-PullToRefresh')
