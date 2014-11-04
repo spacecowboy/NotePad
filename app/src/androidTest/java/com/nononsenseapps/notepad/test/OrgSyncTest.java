@@ -378,6 +378,157 @@ public class OrgSyncTest extends AndroidTestCase {
         assertFalse(file.exists());
     }
 
+    /** Test moving 1 task from List A to List B
+     *
+     */
+    public void testMoveOne() {
+        // First create Two lists
+        TaskList listA = new TaskList();
+        listA.title = "TestListA";
+        listA.save(getContext());
+        assertTrue(listA._id > 0);
+
+        TaskList listB = new TaskList();
+        listB.title = "TestListB";
+        listB.save(getContext());
+        assertTrue(listB._id > 0);
+
+        // Add one task in ListA
+        Task t = new Task();
+           t.dblist = listA._id;
+            t.title = "Task";
+            t.note = "A body for the task";
+            t.save(getContext());
+            assertTrue(t._id > 0);
+
+        // Sync it
+        TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
+
+        // Check state of sync
+        ArrayList<RemoteTaskList> remoteLists = getRemoteTaskLists();
+        assertEquals("Should be two RemoteLists!", 2, remoteLists.size());
+
+        ArrayList<RemoteTask> remoteTasks = getRemoteTasks();
+        assertEquals("Should be exactly 1 RemoteTask", 1, remoteTasks.size());
+
+        assertEquals("RemoteTask is in wrong list!", listA._id,
+                (long) remoteTasks.get(0).listdbid);
+
+        // Move the task
+        t.dblist = listB._id;
+        t.save(getContext());
+
+        // Trigger should have deleted remotes now
+        remoteTasks = getRemoteTasks();
+        for (RemoteTask rt: remoteTasks) {
+            assertEquals("RemoteTask should be deleted after move before sync", "deleted", rt.deleted);
+        }
+
+        // Sync it
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
+
+        // Check state of sync
+        remoteLists = getRemoteTaskLists();
+        assertEquals("Should be two RemoteLists after move!", 2, remoteLists.size());
+
+        remoteTasks = getRemoteTasks();
+        assertEquals("Should be exactly 1 RemoteTask after move", 1, remoteTasks.size());
+
+        assertEquals("RemoteTask is in wrong list after move!", listB._id,
+                (long) remoteTasks.get(0).listdbid);
+    }
+
+    /** Test moving 20 tasks from List A to List B
+     *
+     */
+    public void testMoveMany() {
+        // First create Two lists
+        TaskList listA = new TaskList();
+        listA.title = "TestListA";
+        listA.save(getContext());
+        assertTrue(listA._id > 0);
+
+        TaskList listB = new TaskList();
+        listB.title = "TestListB";
+        listB.save(getContext());
+        assertTrue(listB._id > 0);
+
+        final int taskCount = 20;
+        ArrayList<Task> tasks = new ArrayList<Task>();
+        for (int i = 0; i < taskCount; i++) {
+            Task t = new Task();
+            t.dblist = listA._id;
+            t.title = "Task" + i;
+            t.note = "A body for the task";
+            t.save(getContext());
+            assertTrue(t._id > 0);
+
+            tasks.add(t);
+        }
+
+        // Sync it
+        TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
+
+        // Check state of sync
+        ArrayList<RemoteTaskList> remoteLists = getRemoteTaskLists();
+        assertEquals("Should be two RemoteLists!", 2, remoteLists.size());
+
+        ArrayList<RemoteTask> remoteTasks = getRemoteTasks();
+        assertEquals("Should be exactly x RemoteTask", taskCount, remoteTasks.size());
+
+        for (RemoteTask remoteTask: remoteTasks) {
+            assertEquals("RemoteTask is in wrong list!", listA._id,
+                    (long) remoteTask.listdbid);
+        }
+
+        // Move the tasks
+        for (Task t: tasks) {
+            t.dblist = listB._id;
+            t.save(getContext());
+        }
+
+        // Trigger should have deleted remotes now
+        remoteTasks = getRemoteTasks();
+        for (RemoteTask rt: remoteTasks) {
+            assertEquals("RemoteTask should be deleted after move before sync", "deleted", rt.deleted);
+        }
+
+        // Sync it
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
+
+        // Check state of sync
+        remoteLists = getRemoteTaskLists();
+        assertEquals("Should be two RemoteLists after move!", 2, remoteLists.size());
+
+        remoteTasks = getRemoteTasks();
+        assertEquals("Should be exactly x RemoteTask after move and sync", taskCount, remoteTasks.size());
+
+        for (RemoteTask remoteTask: remoteTasks) {
+            assertEquals("RemoteTask is in wrong list after move!", listB._id,
+                    (long) remoteTask.listdbid);
+        }
+    }
+
     class TestSynchronizer extends SDSynchronizer {
 
         private int putRemoteCount = 0;
