@@ -14,6 +14,8 @@ import android.util.Log;
 
 import com.nononsenseapps.helpers.UpdateNotifier;
 
+import java.util.ArrayList;
+
 public class MyContentProvider extends ContentProvider {
 	public static final String AUTHORITY = "com.nononsenseapps.NotePad";
 	public static final String SCHEME = "content://";
@@ -146,18 +148,22 @@ public class MyContentProvider extends ContentProvider {
 		final Task t;
 		final SQLiteStatement stmt;
 		final String sql;
+        final ArrayList<Uri> updateUris = new ArrayList<Uri>();
 		db.beginTransaction();
 
 		try {
 			// Do not add legacy URIs
 			switch (sURIMatcher.match(uri)) {
 			case TaskList.BASEITEMCODE:
+                updateUris.add(TaskList.URI);
+                updateUris.add(TaskList.URI_WITH_COUNT);
 				final TaskList list = new TaskList(uri, values);
 				result += db.update(TaskList.TABLE_NAME, list.getContent(),
 						TaskList.whereIdIs(selection),
 						TaskList.whereIdArg(list._id, selectionArgs));
 				break;
 			case Task.MOVEITEMLEFTCODE:
+                updateUris.add(Task.URI);
 				t = new Task(values);
 				sql = t.getSQLMoveItemLeft(values);
 				if (sql != null) {
@@ -166,6 +172,7 @@ public class MyContentProvider extends ContentProvider {
 				}
 				break;
 			case Task.MOVEITEMRIGHTCODE:
+                updateUris.add(Task.URI);
 				t = new Task(values);
 				sql = t.getSQLMoveItemRight(values);
 				if (sql != null) {
@@ -174,6 +181,11 @@ public class MyContentProvider extends ContentProvider {
 				}
 				break;
 			case Task.BASEITEMCODE:
+                updateUris.add(Task.URI);
+                updateUris.add(Task.URI_SECTIONED_BY_DATE);
+                updateUris.add(Task.URI_TASK_HISTORY);
+                updateUris.add(TaskList.URI);
+                updateUris.add(TaskList.URI_WITH_COUNT);
 				// regular update
 				t = new Task(uri, values);
 				if (t.getContent().size() > 0) {
@@ -185,12 +197,17 @@ public class MyContentProvider extends ContentProvider {
 				}
 				break;
 			case Task.BASEURICODE:
+                updateUris.add(Task.URI);
+                updateUris.add(TaskList.URI);
+                updateUris.add(TaskList.URI_WITH_COUNT);
 				// Batch. No checks made
 				result += db.update(Task.TABLE_NAME, values, selection,
 						selectionArgs);
 				break;
 			case Notification.BASEITEMCODE:
 			case Notification.WITHTASKQUERYITEMCODE:
+                updateUris.add(Notification.URI);
+                updateUris.add(Notification.URI_WITH_TASK_PATH);
 				// final Notification n = new Notification(uri, values);
 				result += db.update(Notification.TABLE_NAME, values,
 						Notification.whereIdIs(selection), Notification
@@ -198,11 +215,14 @@ public class MyContentProvider extends ContentProvider {
 										.getLastPathSegment()), selectionArgs));
 				break;
 			case Notification.BASEURICODE:
+                updateUris.add(Notification.URI);
+                updateUris.add(Notification.URI_WITH_TASK_PATH);
 				// No checks
 				result += db.update(Notification.TABLE_NAME, values, selection,
 						selectionArgs);
 				break;
 			case RemoteTaskList.BASEITEMCODE:
+                updateUris.add(RemoteTaskList.URI);
 				result += db.update(RemoteTaskList.TABLE_NAME, values,
                         RemoteTaskList.whereIdIs(selection),
                         RemoteTaskList.whereIdArg(Long.parseLong(uri
@@ -210,6 +230,7 @@ public class MyContentProvider extends ContentProvider {
                 );
                 break;
                 case RemoteTask.BASEITEMCODE:
+                    updateUris.add(RemoteTask.URI);
                     result += db.update(RemoteTask.TABLE_NAME, values,
                             RemoteTask.whereIdIs(selection),
                             RemoteTask.whereIdArg(Long.parseLong(uri
@@ -230,7 +251,9 @@ public class MyContentProvider extends ContentProvider {
 		}
 
 		if (result >= 0) {
-			DAO.notifyProviderOnChange(getContext(), uri);
+            for (Uri u: updateUris) {
+                DAO.notifyProviderOnChange(getContext(), u);
+            }
 			UpdateNotifier.updateWidgets(getContext());
 		}
 
