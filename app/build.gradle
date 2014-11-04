@@ -134,7 +134,7 @@ task nativeLibsToJar(type: Zip) {
     destinationDir file("$buildDir/native-libs")
     baseName 'native-libs'
     extension 'jar'
-    from fileTree(dir: 'src/playBeta/libs', include: '**/*.so')
+    from fileTree(dir: 'src/play/libs', include: '**/*.so')
     into 'lib/'
 }
 
