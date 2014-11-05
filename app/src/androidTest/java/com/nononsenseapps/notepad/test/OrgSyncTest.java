@@ -529,6 +529,132 @@ public class OrgSyncTest extends AndroidTestCase {
         }
     }
 
+    /** Test moving 12 tasks from List A to List B where there are 12 lists each with 20 tasks
+     *
+     */
+    public void testMoveManyAmongMany() {
+        final int listCount = 12;
+        final int taskCount = 20;
+        final int movedTaskCount = 12;
+        ArrayList<Task> tasksToMove = new ArrayList<Task>();
+        TaskList listA = null, listB = null;
+        // First create Lists
+        for (int listIndex = 0; listIndex < listCount; listIndex++) {
+            TaskList list = new TaskList();
+            list.title = "TestList" + listIndex;
+            list.save(getContext());
+            assertTrue(list._id > 0);
+
+            if (listA == null)
+                listA = list;
+            else if (listB == null)
+                listB = list;
+
+            for (int i = 0; i < taskCount; i++) {
+                Task t = new Task();
+                t.dblist = list._id;
+                t.title = "Task" + listIndex + "." + i;
+                t.note = "A body for the task";
+                t.save(getContext());
+                assertTrue(t._id > 0);
+
+                if (tasksToMove.size() < movedTaskCount) {
+                    tasksToMove.add(t);
+                }
+            }
+        }
+
+        // Sync it
+        TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
+
+        // Check state of sync
+        ArrayList<RemoteTaskList> remoteLists = getRemoteTaskLists();
+        assertEquals("Should be X RemoteLists!", listCount, remoteLists.size());
+
+        ArrayList<RemoteTask> remoteTasks = getRemoteTasks();
+        assertEquals("Should be exactly x RemoteTask", taskCount*listCount, remoteTasks.size());
+
+        // Move the tasks
+        assertNotNull(listA);
+        assertNotNull(listB);
+        assertTrue("List A and B should be different!", listA._id != listB._id);
+        assertEquals("Expected something to move", movedTaskCount, tasksToMove.size());
+        for (Task t: tasksToMove) {
+            assertEquals("Expected task to be in list A!", listA._id, (long) t.dblist);
+            t.dblist = listB._id;
+            t.save(getContext());
+        }
+
+        // Trigger should have deleted remotes now
+        remoteTasks = getRemoteTasks();
+        int deletecount = 0;
+        int realcount = 0;
+        for (RemoteTask rt: remoteTasks) {
+            if ("deleted".equals(rt.deleted)) {
+                deletecount += 1;
+            } else {
+                realcount += 1;
+            }
+        }
+
+        assertEquals("Deleted remotetasks did not match", movedTaskCount, deletecount);
+        assertEquals("Remaining remotetasks did not match", taskCount*listCount - movedTaskCount, realcount);
+
+        // Sync it
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
+
+        // Check state of sync
+        ArrayList<RemoteTaskList> remoteTaskLists = getRemoteTaskLists();
+        remoteTasks = getRemoteTasks();
+        deletecount = 0;
+        realcount = 0;
+        for (RemoteTask rt: remoteTasks) {
+            if ("deleted".equals(rt.deleted)) {
+                deletecount += 1;
+            } else {
+                realcount += 1;
+            }
+        }
+
+        assertEquals("Number of remote lits did not match", listCount, remoteTaskLists.size());
+        assertEquals("Deleted remotetasks did not match", 0, deletecount);
+        assertEquals("Remaining remotetasks did not match", taskCount*listCount, realcount);
+
+        int nowInB = 0;
+        for (RemoteTask remoteTask: remoteTasks) {
+            assertTrue(!"deleted".equals(remoteTask.deleted));
+            if (remoteTask.listdbid == listB._id) {
+                nowInB += 1;
+            }
+        }
+        assertEquals("RemoteTasks in b not expected count", taskCount + movedTaskCount,
+                nowInB);
+
+        // Check same things for local tasks
+        ArrayList<TaskList> taskLists = getTaskLists();
+        assertEquals("Number of lists did not match", listCount, taskLists.size());
+        for (TaskList list: taskLists) {
+            ArrayList<Task> tasks = getTasks(list._id);
+            if (listA._id == list._id) {
+                assertEquals("Not expected count in A", taskCount - movedTaskCount, tasks.size());
+            } else if (listB._id == list._id) {
+                assertEquals("Not expected count in B", taskCount + movedTaskCount, tasks.size());
+            } else {
+                assertEquals("Not expected count in C->", taskCount, tasks.size());
+            }
+        }
+    }
+
     class TestSynchronizer extends SDSynchronizer {
 
         private int putRemoteCount = 0;
