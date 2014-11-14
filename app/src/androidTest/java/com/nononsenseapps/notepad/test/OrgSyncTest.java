@@ -679,6 +679,80 @@ public class OrgSyncTest extends AndroidTestCase {
         assertEquals("Test_List_Slash_Name", listb.title);
     }
 
+    public void testContentStability() {
+        // Make sure content is not changed
+        // Create list
+        final TaskList lista = new TaskList();
+        lista.title = "TestList";
+        lista.save(getContext());
+        assertTrue(lista._id > 0);
+
+        final Task task1a = new Task();
+        task1a.title = "The title1";
+        task1a.note = "A note without newline";
+        task1a.dblist = lista._id;
+        task1a.save(getContext());
+        assertTrue(task1a._id > 0);
+
+        final Task task2a = new Task();
+        task2a.title = "The title2";
+        task2a.note = "Another note\non two lines";
+        task2a.dblist = lista._id;
+        task2a.save(getContext());
+        assertTrue(task2a._id > 0);
+
+        // Sync it
+        TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
+
+        // Check contents after sync
+        final TaskList listb = getTaskLists().get(0);
+
+        assertEquals(lista.title, listb.title);
+
+
+        for (Task taskb: getTasks(listb._id)) {
+            Task org;
+            if (taskb._id == task1a._id) {
+                org = task1a;
+            } else {
+                org = task2a;
+            }
+            // Compare title and note
+            assertEquals(org.title, taskb.title);
+            assertEquals(org.note, taskb.note);
+        }
+
+        // Sync it again
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
+
+        // Check contents after sync
+        final TaskList listc = getTaskLists().get(0);
+
+        assertEquals(lista.title, listc.title);
+
+        for (Task taskc: getTasks(listb._id)) {
+            Task org;
+            if (taskc._id == task1a._id) {
+                org = task1a;
+            } else {
+                org = task2a;
+            }
+            // Compare title and note
+            assertEquals(org.title, taskc.title);
+            assertEquals(org.note, taskc.note);
+        }
+    }
+
     class TestSynchronizer extends SDSynchronizer {
 
         private int putRemoteCount = 0;

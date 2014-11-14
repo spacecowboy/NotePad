@@ -109,10 +109,18 @@ public class OrgConverter {
 	 */
 	public static void toTaskFromNode(final Task task, final OrgNode node) {
 		task.title = node.getTitle();
-		task.note = node.getBody();
 		task.due = getDeadline(node);
 		task.completed = getCompleted(node);
-	}
+        task.note = node.getBody();
+
+        /*
+        * It's not possible to differentiate if the user added a trailing
+        * newline or the sync logic did. I will assume that the sync logic did.
+        */
+        if (task.note != null && !task.note.isEmpty() && task.note.endsWith("\n")) {
+            task.note = task.note.substring(0, task.note.length() - 1);
+        }
+    }
 
 	/**
 	 * Fill in all the properties of the nodes from the task object.

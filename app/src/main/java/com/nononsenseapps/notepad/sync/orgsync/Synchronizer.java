@@ -427,12 +427,25 @@ public abstract class Synchronizer extends DBSyncBase implements
 	private int mergeBodies(final Task task, final RemoteTask remote,
 			final OrgNode node) {
 		final int shouldSave;
-		if (!task.note.equals(RemoteTaskNode.getBody(remote))) {
+        boolean taskChanged = !task.note.equals(RemoteTaskNode.getBody(remote));
+        // Check with trailing newline also
+        if (taskChanged) {
+            taskChanged = !(task.note + "\n").equals(RemoteTaskNode.getBody(remote));
+        }
+
+		if (taskChanged) {
 			shouldSave = SAVEORG;
 			node.setBody(task.note);
 		} else if (!node.getBody().equals(RemoteTaskNode.getBody(remote))) {
 			shouldSave = SAVEDB;
 			task.note = node.getBody();
+             /*
+              * It's not possible to differentiate if the user added a trailing
+              * newline or the sync logic did. I will assume that the sync logic did.
+              */
+            if (task.note != null && !task.note.isEmpty() && task.note.endsWith("\n")) {
+                task.note = task.note.substring(0, task.note.length() - 1);
+            }
 		} else {
 			shouldSave = SAVENONE;
 		}
