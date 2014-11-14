@@ -101,7 +101,7 @@ public class SDSynchronizer extends Synchronizer implements
     /**
      * Returns an OrgFile object with a filename set that is guaranteed to
      * not already exist. Use this method to avoid having multiple objects
-     * pointing to the same file.
+     * pointing to the same file. Also prevents names with slashes.
      *
      * @param desiredName The name you'd want. If it exists,
      *                    it will be used as the base in desiredName1,
@@ -110,8 +110,10 @@ public class SDSynchronizer extends Synchronizer implements
      * @throws java.io.IOException
      */
     @Override
-    public OrgFile getNewFile(final String desiredName) throws
+    public OrgFile getNewFile(final String orgdesiredName) throws
             IOException, IllegalArgumentException {
+        // Replace slashes with underscores
+        String desiredName = orgdesiredName.replace("/", "_");
         String filename;
         for (int i = 0; i < 100; i++) {
             if (i == 0) {

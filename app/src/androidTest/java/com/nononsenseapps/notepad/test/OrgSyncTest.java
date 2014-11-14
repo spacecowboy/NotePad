@@ -655,6 +655,30 @@ public class OrgSyncTest extends AndroidTestCase {
         }
     }
 
+    public void testFilenameWithSlash() {
+        // Filenames with slashes are not permitted
+        final TaskList lista = new TaskList();
+        lista.title = "Test/List/Slash/Name";
+        lista.save(getContext());
+        assertTrue(lista._id > 0);
+
+        // Sync it
+        TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
+
+        // Check contents after sync
+        final TaskList listb = getTaskLists().get(0);
+
+        // Should no longer have slashes in name
+        assertTrue(!listb.title.contains("/"));
+        assertEquals("Test_List_Slash_Name", listb.title);
+    }
+
     class TestSynchronizer extends SDSynchronizer {
 
         private int putRemoteCount = 0;
