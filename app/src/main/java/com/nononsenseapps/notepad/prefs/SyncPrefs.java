@@ -114,19 +114,22 @@ public class SyncPrefs extends PreferenceFragment implements
                 KEY_BACKGROUND_SYNC, false);
 
         if (accountName != null && !accountName.isEmpty()) {
-            if (!backgroundSync) {
-                // Disable periodic syncing
-                ContentResolver.removePeriodicSync(
-                        getAccount(AccountManager.get(activity), accountName),
-                        MyContentProvider.AUTHORITY, new Bundle());
-            } else {
-                // Convert from minutes to seconds
-                long pollFrequency = 3600;
-                // Set periodic syncing
-                ContentResolver.addPeriodicSync(
-                        getAccount(AccountManager.get(activity), accountName),
-                        MyContentProvider.AUTHORITY, new Bundle(),
-                        pollFrequency);
+            Account account = getAccount(AccountManager.get(activity), accountName);
+            if (account != null) {
+                if (!backgroundSync) {
+                    // Disable periodic syncing
+                    ContentResolver.removePeriodicSync(
+                            account,
+                            MyContentProvider.AUTHORITY, new Bundle());
+                } else {
+                    // Convert from minutes to seconds
+                    long pollFrequency = 3600;
+                    // Set periodic syncing
+                    ContentResolver.addPeriodicSync(
+                            account,
+                            MyContentProvider.AUTHORITY, new Bundle(),
+                            pollFrequency);
+                }
             }
         }
     }
@@ -351,21 +354,24 @@ public class SyncPrefs extends PreferenceFragment implements
         String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
 
         if (accountName != null && !accountName.isEmpty()) {
-            if (enabled) {
-                // set syncable
-                ContentResolver.setSyncAutomatically(
-                        getAccount(AccountManager.get(activity), accountName),
-                        MyContentProvider.AUTHORITY, true);
-                ContentResolver.setIsSyncable(
-                        getAccount(AccountManager.get(activity), accountName),
-                        MyContentProvider.AUTHORITY, 1);
-                // Also set sync frequency
-                setSyncInterval(activity, sharedPreferences);
-            } else {
-                // set unsyncable
-                // ContentResolver.setIsSyncable(
-                // getAccount(AccountManager.get(activity), accountName),
-                // MyContentProvider.AUTHORITY, 0);
+            Account account = getAccount(AccountManager.get(activity), accountName);
+            if (account != null) {
+                if (enabled) {
+                    // set syncable
+                    ContentResolver.setSyncAutomatically(
+                            account,
+                            MyContentProvider.AUTHORITY, true);
+                    ContentResolver.setIsSyncable(
+                            account,
+                            MyContentProvider.AUTHORITY, 1);
+                    // Also set sync frequency
+                    setSyncInterval(activity, sharedPreferences);
+                } else {
+                    // set unsyncable
+                    // ContentResolver.setIsSyncable(
+                    // getAccount(AccountManager.get(activity), accountName),
+                    // MyContentProvider.AUTHORITY, 0);
+                }
             }
         } else if (enabled) {
             showAccountDialog();

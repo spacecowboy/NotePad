@@ -39,8 +39,8 @@ repositories {
 // Version number
 def versionMajor = 5 // Major UI overhauls
 def versionMinor = 5 // Some new functionality
-def versionPatch = 3 // Bug fixes
-def versionBuild = 1 // Bump for dogfood builds, public betas, etc.
+def versionPatch = 4 // Bug fixes
+def versionBuild = 0 // Bump for dogfood builds, public betas, etc.
 
 // Version name from git
 def getVersionName = { ->

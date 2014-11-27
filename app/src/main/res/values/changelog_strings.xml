@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="changelog_5_5_4">
+\nFixed possible crash when Google account is removed from device.</string>
     <string name="changelog_5_5_3">
 \nFixed bug when multiple items were moved/deleted, syncing with SD-card could recreate them.
 \nFixed bug where renaming a list or moving tasks would not update the list in side navigation bar.
