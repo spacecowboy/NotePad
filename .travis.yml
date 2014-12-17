@@ -16,9 +16,13 @@ android:
     - android-14
     - sysimg-14
     - extra-android-support
+# Additional components
+    - extra-google-google_play_services
+    - extra-google-m2repository
+    - extra-android-m2repository
   licenses:
-    - android-sdk-license-bcbbd656
-    - android-sdk-license-5be876d5
+    - 'android-sdk-license-.+'
+    - 'google-gdk-license-.+'
     - '.*intel.+'
 
 before_install:
