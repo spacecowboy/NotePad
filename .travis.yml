@@ -35,5 +35,5 @@ before_script:
     - ./wait_for_emulator
 
 script:
-    - ./gradlew assembleDebug
-    - ./gradlew assembleDebug connectedAndroidTest --info
+    - ./gradlew assembleFreeDebug
+    - ./gradlew assembleFreeDebug connectedAndroidTestFreeDebug --info
