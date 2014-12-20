@@ -2,6 +2,8 @@
 
 <a href="https://flattr.com/submit/auto?user_id=spacecowboy&url=https%3A%2F%2Fgithub.com%2Fspacecowboy%2Fnotepad%2F" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0"></a> [![Build Status](https://travis-ci.org/spacecowboy/NotePad.svg?branch=master)](https://travis-ci.org/spacecowboy/NotePad) [![Crowdin](https://d322cqt584bo4o.cloudfront.net/nononsensenotes/localized.png)](https://crowdin.com/project/nononsensenotes)
 
+[![F-Droid](https://f-droid.org/wiki/images/0/0f/F-Droid-button_smaller.png)](https://f-droid.org/repository/browse/?fdid=com.nononsenseapps.notepad) 
+
 Link to [Google Play](https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad)
 
 Latest updates posted on [http://www.nononsenseapps.com](http://www.nononsenseapps.com)
