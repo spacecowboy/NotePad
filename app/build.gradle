@@ -19,7 +19,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:0.14.0'
+        classpath 'com.android.tools.build:gradle:1.1.0'
         // the latest version of the android-apt plugin for annotations
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4+'
     }
@@ -125,7 +125,7 @@ android {
 apt {
     arguments {
         resourcePackageName android.defaultConfig.applicationId
-        androidManifestFile variant.processResources.manifestFile
+        androidManifestFile variant.outputs[0].processResources.manifestFile
     }
 }
 
