@@ -21,7 +21,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:1.1.0'
         // the latest version of the android-apt plugin for annotations
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4+'
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     }
 }
 
@@ -145,12 +145,12 @@ tasks.withType(JavaCompile) {
 
 dependencies {
     compile fileTree(dir: 'libs', include: '*.jar')
-    compile 'com.android.support:support-v4:19.0.1+'
+    compile 'com.android.support:support-v4:19.0.1'
     compile 'joda-time:joda-time:2.3'
     // Dashclock
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     // FilePicker
-    compile 'com.nononsenseapps:filepicker:1.1.3+'
+    compile 'com.nononsenseapps:filepicker:1.2.0'
     compile project(':external:ActionBar-PullToRefresh')
     compile project(':external:datetimepicker')
     compile project(':external:drag-sort-listview')
@@ -162,10 +162,10 @@ dependencies {
     playCompile fileTree(dir: 'src/play/libs', include: '*.jar')
     playBetaCompile fileTree(dir: 'src/play/libs', include: '*.jar')
     playCompile fileTree(dir: "$buildDir/native-libs", include: "*.jar")
-    playCompile 'com.google.android.gms:play-services:+'
+    playCompile 'com.google.android.gms:play-services:5.0.89'
     playBetaCompile fileTree(dir: "$buildDir/native-libs", include: "*.jar")
-    playBetaCompile 'com.google.android.gms:play-services:+'
+    playBetaCompile 'com.google.android.gms:play-services:5.0.89'
     // Tests
-    androidTestCompile 'com.squareup.spoon:spoon-client:1.1.1+'
+    androidTestCompile 'com.squareup.spoon:spoon-client:1.1.1'
 
 }
