@@ -144,13 +144,16 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
+    //compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.android.support:support-v4:19.0.1'
     compile 'joda-time:joda-time:2.3'
     // Dashclock
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     // FilePicker
     compile 'com.nononsenseapps:filepicker:1.2.0'
+    // OrgParser
+    compile 'org.cowboyprogrammer:orgparser:1.1'
+    // Included libraries
     compile project(':external:ActionBar-PullToRefresh')
     compile project(':external:datetimepicker')
     compile project(':external:drag-sort-listview')

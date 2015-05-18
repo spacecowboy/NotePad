@@ -1166,7 +1166,6 @@ public class ActivityMain extends FragmentActivity
 
             // }
             // else {
-            Log.d("nononsenseapps animation", "Not animating");
             startActivity(intent);
             // }
         }
