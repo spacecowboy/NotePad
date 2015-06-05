@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.nononsenseapps.notepad.fragments;
 
 import java.security.InvalidParameterException;
@@ -865,26 +882,28 @@ public class TaskListFragment extends Fragment implements
 			// Fix crash report
 			return;
 		}
-		boolean reload = false;
-		if (key.equals(getString(R.string.pref_sorttype))) {
-			mSortType = null;
-			reload = true;
-		}
-		else if (key.equals(getString(R.string.key_pref_item_max_height))) {
-			mRowCount = prefs.getInt(key, 3);
-			reload = true;
-		}
-		else if (key.equals(getString(R.string.pref_hidecheckboxes))) {
-			mHideCheckbox = prefs.getBoolean(key, false);
-			reload = true;
-		}
-		else if (key.equals(getString(R.string.pref_listtype))) {
-			mListType = null;
-			reload = true;
-		}
+		try {
+			boolean reload = false;
+			if (key.equals(getString(R.string.pref_sorttype))) {
+				mSortType = null;
+				reload = true;
+			} else if (key.equals(getString(R.string.key_pref_item_max_height))) {
+				mRowCount = prefs.getInt(key, 3);
+				reload = true;
+			} else if (key.equals(getString(R.string.pref_hidecheckboxes))) {
+				mHideCheckbox = prefs.getBoolean(key, false);
+				reload = true;
+			} else if (key.equals(getString(R.string.pref_listtype))) {
+				mListType = null;
+				reload = true;
+			}
 
-		if (reload && mCallback != null) {
-			getLoaderManager().restartLoader(0, null, mCallback);
+			if (reload && mCallback != null) {
+				getLoaderManager().restartLoader(0, null, mCallback);
+			}
+		} catch (IllegalStateException ignored) {
+			// Fix crash report
+            // Might get a race condition where fragment is detached when getString is called
 		}
 	}
 }
