@@ -50,6 +50,21 @@
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
+            android:text="\nVersion 5.5.5"
+            android:fontFamily="sans-serif-condensed"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:text="@string/changelog_5_5_5" />
+
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
             android:text="\nVersion 5.5.4"
             android:fontFamily="sans-serif-condensed"
             android:textColor="@android:color/holo_blue_dark"
@@ -121,7 +136,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:text="@string/changelog_5_3" />
-        
+
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -136,7 +151,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:text="@string/changelog_5_2" />
-        
+
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -151,7 +166,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:text="@string/changelog_5_1_3" />
-        
+
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -166,7 +181,7 @@
             android:paddingLeft="20dp"
             android:paddingRight="20dp"
             android:text="@string/changelog_5_1" />
-        
+
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"

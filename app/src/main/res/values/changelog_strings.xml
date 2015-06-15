@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="changelog_5_5_5">
+\nSome crash fixes.</string>
     <string name="changelog_5_5_4">
 \nFixed possible crash when Google account is removed from device.</string>
     <string name="changelog_5_5_3">
@@ -18,12 +20,12 @@
     <string name="changelog_5_3">
 \nNew Sync option: Dropbox
 \nNew Sync option: SD-card</string>
-    
+
     <string name="changelog_5_2">
 \nExport and Import your notes to a text backup
 \nChanged date and time pickers
 \nTranslations</string>
-    
+
     <string name="changelog_5_1_3">
 \nCalendars now scrollable on small screens again
 \nTranslations</string>
@@ -44,7 +46,7 @@
 \nSome various layout tweaks
 \nTranslations
 \nCrash fixes</string>
-    
+
     <string name="changelog_5_0">\nApp has been rewritten from scratch
 \nUI has been updated
 \nSync has been rewritten
