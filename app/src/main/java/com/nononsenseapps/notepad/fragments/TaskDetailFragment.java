@@ -390,6 +390,8 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 
+		taskText.setTitleRelativeLarger(prefs.getBoolean(
+				getString(R.string.pref_editor_biggertitles), true));
 		taskText.setTitleFontFamily(Integer.parseInt(prefs.getString(
 				getString(R.string.pref_editor_title_fontfamily), "2")));
 		taskText.setTitleFontStyle(Integer.parseInt(prefs.getString(
