@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (c) 2014 Jonas Kalderstam.
+  Copyright (c) 2015 Jonas Kalderstam.
 
   This program is free software: you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -297,5 +297,7 @@
     <string name="dropbox_sync_summary">Keep your tasks and notes synchronized with text files in your Dropbox.</string>
     <string name="cannot_write_to_directory">Cannot write to directory</string>
     <string name="wait_for_dropbox">Please wait for Dropbox to finish its initialization.</string>
+    <string name="bigger_titles">Title larger</string>
+    <string name="bigger_titles_summary">The title is the first line</string>
 
 </resources>
