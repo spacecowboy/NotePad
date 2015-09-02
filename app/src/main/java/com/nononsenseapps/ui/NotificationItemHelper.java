@@ -1,11 +1,41 @@
+/*
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.nononsenseapps.ui;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.Method;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+import android.content.Context;
+import android.content.Intent;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
+import android.widget.PopupMenu.OnMenuItemClickListener;
+import android.widget.TextView;
 
+import com.android.datetimepicker.date.DatePickerDialog;
+import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
+import com.android.datetimepicker.time.RadialPickerLayout;
+import com.android.datetimepicker.time.TimePickerDialog;
+import com.android.datetimepicker.time.TimePickerDialog.OnTimeSetListener;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityLocation;
 import com.nononsenseapps.notepad.BuildConfig;
@@ -14,25 +44,12 @@ import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.ui.WeekDaysView.onCheckedDaysChangeListener;
-import com.android.datetimepicker.time.TimePickerDialog;
-import com.android.datetimepicker.time.TimePickerDialog.OnTimeSetListener;
-import com.android.datetimepicker.time.RadialPickerLayout;
-import com.android.datetimepicker.date.DatePickerDialog;
-import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 
-import android.content.Context;
-import android.content.Intent;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.CompoundButton;
-import android.widget.ImageButton;
-import android.widget.LinearLayout;
-import android.widget.PopupMenu;
-import android.widget.CheckBox;
-import android.widget.TextView;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.PopupMenu.OnMenuItemClickListener;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 /**
  * Handle setting up all the listeners for a Notification list item
@@ -86,15 +103,14 @@ public class NotificationItemHelper {
 	private static void setTime(final Context context, final Notification not,
 			final Task mTask) {
 		final GregorianCalendar cal = TimeFormatter.getLocalCalendar(context);
-		// Start with date
-		if (mTask.due != null) {
+		// Start with date, either due date or today (default)
+        // If due date is in the past, default to today + 1hour
+		if (mTask.due != null && mTask.due > cal.getTimeInMillis()) {
 			cal.setTimeInMillis(mTask.due);
 		} else {
-			cal.add(Calendar.DAY_OF_YEAR, 1);
+			// Default to today, set time one hour from now
+			cal.add(Calendar.HOUR_OF_DAY, 1);
 		}
-		// Now set a reasonable time of day like 9 AM
-		cal.set(Calendar.HOUR_OF_DAY, 9);
-		cal.set(Calendar.MINUTE, 0);
 
 		// And set time on notification
 		not.time = cal.getTimeInMillis();

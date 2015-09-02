@@ -1,17 +1,18 @@
 /*
- * Copyright (c) 2014 Jonas Kalderstam.
+ * Copyright (c) 2015 Jonas Kalderstam.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.nononsenseapps.notepad.fragments;
@@ -524,16 +525,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 				return;
 			}
 			final Notification not = new Notification(mTask._id);
-			// TODO remove this, no need to default
-			// final Calendar local = Calendar.getInstance();
-			// local.add(Calendar.MINUTE, 1);
-			// final long soon = local.getTimeInMillis();
-			// if (mTask.due == null || mTask.due < soon) {
-			// not.time = soon;
-			// }
-			// else {
-			// not.time = mTask.due;
-			// }
 			not.save(getActivity(), true);
 
 			// add item to UI
