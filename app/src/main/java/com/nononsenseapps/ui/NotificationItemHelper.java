@@ -104,7 +104,8 @@ public class NotificationItemHelper {
 			final Task mTask) {
 		final GregorianCalendar cal = TimeFormatter.getLocalCalendar(context);
 		// Start with date, either due date or today (default)
-		if (mTask.due != null) {
+        // If due date is in the past, default to today + 1hour
+		if (mTask.due != null && mTask.due > cal.getTimeInMillis()) {
 			cal.setTimeInMillis(mTask.due);
 		} else {
 			// Default to today, set time one hour from now
