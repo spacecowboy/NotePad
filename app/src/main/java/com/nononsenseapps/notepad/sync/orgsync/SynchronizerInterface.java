@@ -78,7 +78,7 @@ public interface SynchronizerInterface {
 	 * @param orgFile
 	 *            The file to delete.
 	 */
-	public void deleteRemoteFile(final OrgFile orgFile);
+	public void deleteRemoteFile(final OrgFile orgFile) throws IOException;
 
 	/**
 	 * Rename the file on the remote end.
@@ -88,7 +88,7 @@ public interface SynchronizerInterface {
 	 * @param orgFile
 	 *            This contains the new name.
 	 */
-	public void renameRemoteFile(final String oldName, final OrgFile orgFile);
+	public void renameRemoteFile(final String oldName, final OrgFile orgFile) throws IOException;
 
 	/**
 	 * Returns a BufferedReader to the remote file. Null if it doesn't exist.
@@ -96,13 +96,13 @@ public interface SynchronizerInterface {
 	 * @param filename
 	 *            Name of the file, without path
 	 */
-	public BufferedReader getRemoteFile(final String filename);
+	public BufferedReader getRemoteFile(final String filename) throws IOException;
 	
 	/**
 	 * 
 	 * @return a set of all remote files.
 	 */
-	public HashSet<String> getRemoteFilenames();
+	public HashSet<String> getRemoteFilenames() throws IOException;
 	
 	/**
 	 * Do a full 2-way sync.

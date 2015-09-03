@@ -32,8 +32,8 @@ public class Config {
     public final static boolean LOGGING = true;
 
     public static final String KEY_GTASKS_API_KEY = "gtasks_api_key";
-    public static final String KEY_DROPBOX_SYNC_PUBLIC = "dropbox_sync_public";
-    public static final String KEY_DROPBOX_SYNC_SECRET = "dropbox_sync_secret";
+    public static final String KEY_DROPBOX_API = "dropbox_api";
+    public static final String KEY_DROPBOX_API_SECRET = "dropbox_api_secret";
 
     private static final String propFile = "secretkeys.properties";
     private static Properties props;
@@ -59,11 +59,11 @@ public class Config {
                 "AIzaSyCAjRk2GfPARlIU3JsaEiExLMtj_rdN2i4");
     }
 
-    public static String getKeyDropboxSyncPublic(final Context context) {
-        return getProperties(context).getProperty(KEY_DROPBOX_SYNC_PUBLIC);
+    public static String getKeyDropboxAPI(final Context context) {
+        return getProperties(context).getProperty(KEY_DROPBOX_API);
     }
 
-    public static String getKeyDropboxSyncSecret(final Context context) {
-        return getProperties(context).getProperty(KEY_DROPBOX_SYNC_SECRET);
+    public static String getKeyDropboxAPISecret(final Context context) {
+        return getProperties(context).getProperty(KEY_DROPBOX_API_SECRET);
     }
 }
