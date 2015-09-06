@@ -93,13 +93,6 @@
             android:value="AEdPqrEAAAAIZgz47Vv0rpsuH5ziPBpQsecAPAlZtw2P5-mgYw" />
 
         <!-- Broadcast receiver for accepting actions from widget for example -->
-        <receiver
-            android:name=".NotePadBroadcastReceiver"
-            tools:ignore="ExportedReceiver" >
-            <intent-filter>
-                <action android:name="com.nononsenseapps.completenote" />
-            </intent-filter>
-        </receiver>
 
         <activity
             android:name=".prefs.PrefsActivity"
@@ -120,51 +113,9 @@
             android:theme="@style/FilePickerTheme" >
         </activity>
 
-        <service
-            android:name=".sync.SyncService"
-            android:exported="true"
-            tools:ignore="ExportedService" >
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.content.SyncAdapter"
-                android:resource="@xml/syncadapter" />
-        </service>
-
-        <!-- Dashclock -->
-        <service
-            android:name=".dashclock.TasksExtension"
-            android:icon="@drawable/ic_stat_notification_edit"
-            android:label="@string/dashclock_nononsense_notes"
-            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA" >
-            <intent-filter>
-                <action android:name="com.google.android.apps.dashclock.Extension" />
-            </intent-filter>
-
-            <meta-data
-                android:name="protocolVersion"
-                android:value="1" />
-            <meta-data
-                android:name="description"
-                android:value="Displays your tasks from NoNonsense Notes." />
-            <meta-data
-                android:name="settingsActivity"
-                android:value="com.nononsenseapps.notepad.dashclock.TasksSettings" />
-        </service>
-
-        <activity
-            android:name=".dashclock.TasksSettings"
-            android:exported="true"
-            android:label="@string/dashclock_title_activity_tasks_settings"
-            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA"
-            android:theme="@style/DashClockSettings.Theme" >
-        </activity>
-
         <!-- DataBase provider -->
         <provider
-            android:name=".database.MyContentProvider"
+            android:name=".legacydatabase.MyContentProvider"
             android:authorities="com.nononsenseapps.NotePad"
             android:enabled="true"
             android:exported="true"

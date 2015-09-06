@@ -20,9 +20,9 @@ package com.nononsenseapps.helpers;
 import android.content.Context;
 import android.net.Uri;
 
-import com.nononsenseapps.notepad.database.Notification;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.legacydatabase.Notification;
+import com.nononsenseapps.notepad.legacydatabase.Task;
+import com.nononsenseapps.notepad.legacydatabase.TaskList;
 
 /**
  * The purpose here is to make it easy for other classes to notify that

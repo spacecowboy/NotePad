@@ -1,4 +1,4 @@
-package com.nononsenseapps.notepad.database;
+package com.nononsenseapps.notepad.legacydatabase;
 
 import android.content.ContentValues;
 import android.content.UriMatcher;

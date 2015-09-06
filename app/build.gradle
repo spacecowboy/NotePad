@@ -78,7 +78,7 @@ android {
         buildConfigField "boolean", "DROPBOX_ENABLED", "false"
     }
 
-    productFlavors {
+    /*productFlavors {
         free {}
         play {
             // If Non-Free libraries are to be used
@@ -93,16 +93,16 @@ android {
             // If Non-Free libraries are to be used
             buildConfigField "boolean", "NONFREE", "true"
         }
-    }
+    }*/
 
-    sourceSets {
+    /*sourceSets {
         playBeta {
             // Include play sources
             java.srcDirs = ['src/play/java']
             res.srcDirs = ['src/play/res', 'src/playBeta/res']
             manifest.srcFile 'src/play/AndroidManifest.xml'
         }
-    }
+    }*/
 
     if (project.hasProperty('STORE_FILE')) {
         signingConfigs {
@@ -140,8 +140,8 @@ dependencies {
     compile 'org.cowboyprogrammer:orgparser:1.1'
 
     // Dropbox and non-free stuff
-    playCompile fileTree(dir: 'src/play/libs', include: '*.jar')
-    playBetaCompile fileTree(dir: 'src/play/libs', include: '*.jar')
+    /*playCompile fileTree(dir: 'src/play/libs', include: '*.jar')
+    playBetaCompile fileTree(dir: 'src/play/libs', include: '*.jar')*/
     // Tests
     androidTestCompile 'com.squareup.spoon:spoon-client:1.1.1'
 

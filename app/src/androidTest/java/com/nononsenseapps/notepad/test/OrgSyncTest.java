@@ -6,10 +6,10 @@ import android.database.Cursor;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import com.nononsenseapps.notepad.database.RemoteTask;
-import com.nononsenseapps.notepad.database.RemoteTaskList;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.legacydatabase.RemoteTask;
+import com.nononsenseapps.notepad.legacydatabase.RemoteTaskList;
+import com.nononsenseapps.notepad.legacydatabase.Task;
+import com.nononsenseapps.notepad.legacydatabase.TaskList;
 import com.nononsenseapps.notepad.sync.orgsync.OrgConverter;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
 

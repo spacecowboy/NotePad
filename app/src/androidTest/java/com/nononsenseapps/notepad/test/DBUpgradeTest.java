@@ -1,25 +1,19 @@
 package com.nononsenseapps.notepad.test;
 
-import java.io.File;
+import com.nononsenseapps.notepad.legacydatabase.DatabaseHandler;
+import com.nononsenseapps.notepad.legacydatabase.LegacyDBHelper;
+import com.nononsenseapps.notepad.legacydatabase.LegacyDBHelper.NotePad;
+import com.nononsenseapps.notepad.legacydatabase.Notification;
+import com.nononsenseapps.notepad.legacydatabase.Task;
+import com.nononsenseapps.notepad.legacydatabase.TaskList;
 
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.DatabaseHandler;
-import com.nononsenseapps.notepad.database.LegacyDBHelper;
-import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
-import com.nononsenseapps.notepad.database.Notification;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
-
-import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.provider.BaseColumns;
 import android.test.AndroidTestCase;
-import android.test.RenamingDelegatingContext;
 import android.test.suitebuilder.annotation.MediumTest;
-import android.test.suitebuilder.annotation.SmallTest;
 
 public class DBUpgradeTest extends AndroidTestCase {
 	static final String PREFIX = "dbupgrade_test_";
