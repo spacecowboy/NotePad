@@ -44,21 +44,21 @@ def versionBuild = 0 // Bump for dogfood builds, public betas, etc.
 
 // Version name from git
 def getVersionName = { ->
-  try {
-  def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'describe', '--tags'
-        standardOutput = stdout
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'describe', '--tags'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    } catch (Exception e) {
+        return "GITFAILEDINGRADLE"
     }
-    return stdout.toString().trim()
-  } catch (Exception e) {
-    return "GITFAILEDINGRADLE"
-  }
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.0"
 
     lintOptions {
         abortOnError false
@@ -70,11 +70,14 @@ android {
     }
 
     defaultConfig {
-      applicationId "com.nononsenseapps.notepad"
-      minSdkVersion 14
-      targetSdkVersion 19
-      versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
-      versionName getVersionName()
+        applicationId "com.nononsenseapps.notepad"
+        minSdkVersion 14
+        targetSdkVersion 23
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
+        versionName getVersionName()
+
+        // Only keep high-res stuff that is actually used
+        resConfigs "nodpi", "hdpi", "xhdpi", "xxhdpi", "xxxhdpi"
 
         // If Non-Free libraries are to be used
         buildConfigField "boolean", "NONFREE", "false"
@@ -83,18 +86,18 @@ android {
 
     productFlavors {
         free {}
-      play {
-          // If Non-Free libraries are to be used
-          buildConfigField "boolean", "NONFREE", "true"
-      }
-      playBeta {
-        // Beta runs at +1
-        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10 + 1
+        play {
+            // If Non-Free libraries are to be used
+            buildConfigField "boolean", "NONFREE", "true"
+        }
+        playBeta {
+            // Beta runs at +1
+            versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10 + 1
 
-        buildConfigField "boolean", "DROPBOX_ENABLED", "true"
-        // If Non-Free libraries are to be used
-        buildConfigField "boolean", "NONFREE", "true"
-      }
+            buildConfigField "boolean", "DROPBOX_ENABLED", "true"
+            // If Non-Free libraries are to be used
+            buildConfigField "boolean", "NONFREE", "true"
+        }
     }
 
     sourceSets {
@@ -107,22 +110,22 @@ android {
     }
 
     if (project.hasProperty('STORE_FILE')) {
-      signingConfigs {
-        release {
-          storeFile file(STORE_FILE)
-          storePassword STORE_PASSWORD
-          keyAlias KEY_ALIAS
-          keyPassword KEY_PASSWORD
+        signingConfigs {
+            release {
+                storeFile file(STORE_FILE)
+                storePassword STORE_PASSWORD
+                keyAlias KEY_ALIAS
+                keyPassword KEY_PASSWORD
+            }
         }
-      }
 
-      buildTypes {
-        release {
-          signingConfig signingConfigs.release
+        buildTypes {
+            release {
+                signingConfig signingConfigs.release
+            }
         }
-      }
     } else {
-      println "No key store defined. Signed release not available..."
+        println "No key store defined. Signed release not available..."
     }
 }
 
@@ -136,7 +139,7 @@ apt {
 
 dependencies {
     //compile fileTree(dir: 'libs', include: '*.jar')
-    compile 'com.android.support:support-v4:19.0.1'
+    compile 'com.android.support:support-v4:23.0.0'
     compile 'joda-time:joda-time:2.3'
     // Dashclock
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'

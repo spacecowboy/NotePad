@@ -1,28 +1,26 @@
 /*
- * Copyright (c) 2014 Jonas Kalderstam.
+ * Copyright (c) 2015 Jonas Kalderstam.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.nononsenseapps.notepad;
 
-import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
@@ -64,7 +62,6 @@ import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
 import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
 import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
@@ -73,8 +70,6 @@ import com.nononsenseapps.notepad.fragments.TaskListFragment;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
-import com.nononsenseapps.notepad.legacy.DonateMigrator;
-import com.nononsenseapps.notepad.legacy.DonateMigrator_;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
@@ -85,14 +80,12 @@ import com.nononsenseapps.utils.ViewsHelper;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.InstanceState;
-import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.UiThread.Propagation;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
@@ -502,58 +495,6 @@ public class ActivityMain extends FragmentActivity
         finish();
         overridePendingTransition(0, 0);
         startActivity(intent);
-    }
-
-    void isOldDonateVersionInstalled() {
-        final SharedPreferences prefs =  PreferenceManager
-                .getDefaultSharedPreferences(ActivityMain.this);
-        if (prefs.getBoolean(MIGRATED, false)) {
-            // already migrated
-            return;
-        }
-        try {
-            PackageManager pm = getPackageManager();
-            List<ApplicationInfo> packages = pm.getInstalledApplications(0);
-            for (ApplicationInfo packageInfo : packages) {
-                if (packageInfo.packageName
-                        .equals("com.nononsenseapps.notepad_donate")) {
-                    migrateDonateUser();
-                    // Don't migrate again
-                   prefs.edit().putBoolean(MIGRATED, true).commit();
-                    // Stop loop
-                    break;
-                }
-            }
-        } catch (Exception e) {
-            // Can't allow crashing
-        }
-    }
-
-    @SuppressLint("ValidFragment")
-    @UiThread
-    void migrateDonateUser() {
-        // migrate user
-        if (!DonateMigrator.hasImported(this)) {
-            final DialogConfirmBase dialog = new DialogConfirmBase() {
-
-                @Override
-                public void onOKClick() {
-                    startService(new Intent(ActivityMain.this,
-                            DonateMigrator_.class));
-                }
-
-                @Override
-                public int getTitle() {
-                    return R.string.import_data_question;
-                }
-
-                @Override
-                public int getMessage() {
-                    return R.string.import_data_msg;
-                }
-            };
-            dialog.show(getSupportFragmentManager(), "migrate_question");
-        }
     }
 
     @Override
