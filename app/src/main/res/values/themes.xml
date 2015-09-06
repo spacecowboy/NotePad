@@ -63,9 +63,6 @@
         <item name="LeftDrawerStyle">@style/LeftDrawerStyleDark</item>
         <item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleDark</item>
         <item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleDark</item>
-        
-        <!-- Pull to refresh style -->
-        <item name="ptrHeaderStyle">@style/PullToRefreshStyle</item>
     </style>
 
     <style name="ThemeHoloBlack" parent="@style/ThemeGoogleNowDark">
@@ -139,20 +136,12 @@
          <item name="LeftDrawerStyle">@style/LeftDrawerStyleLight</item>
         <item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleLight</item>
         <item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleLight</item>
-        
-        <!-- Pull to refresh style -->
-        <item name="ptrHeaderStyle">@style/PullToRefreshStyle</item>
     </style>
 
     <style name="ThemeHoloLightClassic" parent="@style/ThemeHoloLightDarkActonBar">
         <item name="TaskListItem">@style/TaskListItemLightClassic</item>
         <item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
         <item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
-    </style>
-
-    <style name="ThemeMapActivity" parent="@style/ThemeHoloLightDarkActonBar">
-        <!-- <item name="android:windowActionBarOverlay">true</item> -->
-        <!-- <item name="android:actionBarStyle">@android:style/Widget.Holo.ActionBar</item> -->
     </style>
 
     <!-- No theme background to let users wall paper shine through -->

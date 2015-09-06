@@ -151,23 +151,6 @@
         <item name="android:dividerHeight" tools:ignore="PxUsage">1px</item>
     </style>
 
-    <!-- For Pull to refresh -->
-    <style name="PullToRefreshStyle" parent="android:Widget">
-        <!-- The background of the header view -->
-        <item name="ptrHeaderBackground">@color/googlenow_darkergrey</item>
-        <!-- The height of the header view. Please note, only set if in you really need to -->
-        <!-- <item name="ptrHeaderHeight">...</item> -->
-        <!-- TextAppearance of the header view's title text -->
-        <!-- <item name="ptrHeaderTitleTextAppearance">...</item> -->
-        <!-- Color to tint the progress bar -->
-        <!-- <item name="ptrProgressBarColor">...<item> -->
-        <!-- The strings to be displayed at the various states -->
-        <!-- <item name="ptrPullText">Keep going...</item> -->
-        <!-- <item name="ptrRefreshingText">Pulling down the internet</item> -->
-        <!-- <item name="ptrReleaseText">Let go if you want me to refresh!</item> -->
-
-    </style>
-
     <!-- For DashClock Settings -->
     <!-- This base is overridden for larger displays -->
     <style name="DashClockSettings.Theme.Base"

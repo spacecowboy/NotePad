@@ -17,35 +17,6 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import java.security.InvalidParameterException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
-
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Background;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.SystemService;
-import org.androidannotations.annotations.ViewById;
-
-import com.mobeta.android.dslv.DragSortListView.DropListener;
-import com.mobeta.android.dslv.DragSortListView.RemoveListener;
-import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
-import com.mobeta.android.dslv.DragSortListView;
-import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
-import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.ActivityMain;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
-import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
-import com.nononsenseapps.notepad.interfaces.MenuStateController;
-import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
-import com.nononsenseapps.ui.DateView;
-import com.nononsenseapps.ui.NoteCheckBox;
-import com.nononsenseapps.utils.views.TitleNoteTextView;
-
 import android.app.Activity;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -72,13 +43,40 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CompoundButton;
-import android.widget.ListView;
-import android.widget.ShareActionProvider;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ListView;
 import android.widget.Toast;
+
+import com.mobeta.android.dslv.DragSortListView;
+import com.mobeta.android.dslv.DragSortListView.DropListener;
+import com.mobeta.android.dslv.DragSortListView.RemoveListener;
+import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
+import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
+import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
+import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
+import com.nononsenseapps.notepad.interfaces.MenuStateController;
+import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
+import com.nononsenseapps.ui.DateView;
+import com.nononsenseapps.ui.NoteCheckBox;
+import com.nononsenseapps.utils.views.TitleNoteTextView;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.SystemService;
+import org.androidannotations.annotations.ViewById;
+
+import java.security.InvalidParameterException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 
 @EFragment(resName="fragment_task_list")
 public class TaskListFragment extends Fragment implements
@@ -480,15 +478,6 @@ public class TaskListFragment extends Fragment implements
 	public static String andWhereWeek() {
 		return " AND " + whereWeek();
 	}
-	
-	@AfterViews
-	void setupPullToRefresh() {
-		// Now get the PullToRefresh attacher from the Activity. An exercise to the reader
-        // is to create an implicit interface instead of casting to the concrete Activity
-        // Now set the ScrollView as the refreshable view, and the refresh listener (this)
-		((ActivityMain) getActivity())
-			.addRefreshableView(listView);
-	}
 
 	@AfterViews
 	void loadList() {
@@ -752,8 +741,6 @@ public class TaskListFragment extends Fragment implements
 	public void onDestroy() {
 		super.onDestroy();
 		getLoaderManager().destroyLoader(0);
-		((ActivityMain) getActivity())
-		.removeRefreshableView(listView);
 	}
 
 	@Override

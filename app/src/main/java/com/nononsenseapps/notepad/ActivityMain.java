@@ -84,8 +84,6 @@ import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
 
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
-
 @EActivity(resName = "activity_main")
 public class ActivityMain extends FragmentActivity
         implements OnFragmentInteractionListener, OnSyncStartStopListener,
@@ -136,9 +134,7 @@ public class ActivityMain extends FragmentActivity
     // Only not if opening note directly
     private boolean shouldAddToBackStack = true;
     private Bundle state;
-    private PullToRefreshAttacher pullToRefreshAttacher;
     private boolean shouldRestart = false;
-    private PullToRefreshAttacher.OnRefreshListener pullToRefreshListener;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -351,8 +347,6 @@ public class ActivityMain extends FragmentActivity
 
                 @Override
                 protected void onPostExecute(Void result) {
-                    // Notify PullToRefreshAttacher that the refresh has finished
-                    pullToRefreshAttacher.setRefreshComplete();
                 }
             }.execute();
         }
@@ -405,9 +399,6 @@ public class ActivityMain extends FragmentActivity
             this.state = b;
         }
 
-        // Create a PullToRefreshAttacher instance
-        pullToRefreshAttacher = PullToRefreshAttacher.get(this);
-
         // Clear possible notifications, schedule future ones
         final Intent intent = getIntent();
         // Clear notification if present
@@ -442,10 +433,6 @@ public class ActivityMain extends FragmentActivity
         // deactivate monitor
         if (syncStatusReceiver != null) {
             syncStatusReceiver.stopMonitoring();
-        }
-        // deactivate any progress bar
-        if (pullToRefreshAttacher != null) {
-            pullToRefreshAttacher.setRefreshComplete();
         }
         // Pause sync monitors
         OrgSyncService.pause(this);
@@ -1138,38 +1125,9 @@ public class ActivityMain extends FragmentActivity
         }
     }
 
-    public void addRefreshableView(View view) {
-        // TODO Only if some sync is enabled
-        pullToRefreshAttacher
-                .addRefreshableView(view, getPullToRefreshListener());
-    }
-
-    public PullToRefreshAttacher.OnRefreshListener getPullToRefreshListener() {
-        if (pullToRefreshListener == null) {
-            pullToRefreshListener =
-                    new PullToRefreshAttacher.OnRefreshListener() {
-                        @Override
-                        public void onRefreshStarted(View view) {
-                            handleSyncRequest();
-                        }
-                    };
-        }
-        return pullToRefreshListener;
-    }
-
-    public void removeRefreshableView(View view) {
-        pullToRefreshAttacher.removeRefreshableView(view);
-    }
-
-    public PullToRefreshAttacher getPullToRefreshAttacher() {
-        return pullToRefreshAttacher;
-    }
-
     @UiThread
     @Override
     public void onSyncStartStop(final boolean ongoing) {
-        // Notify PullToRefreshAttacher of the refresh state
-        pullToRefreshAttacher.setRefreshing(ongoing);
     }
 
     public static interface ListOpener {
