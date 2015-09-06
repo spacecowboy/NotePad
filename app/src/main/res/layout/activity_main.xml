@@ -29,6 +29,10 @@
          space available using match_parent in both dimensions. -->
     <include layout="@layout/include_activity_main_list" />
     <!-- Nav drawer -->
-    <include layout="@layout/include_navdrawer" />
+    <fragment android:id="@+id/navigation_drawer"
+        android:layout_width="@dimen/navigation_drawer_width" android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:name="com.nononsenseapps.notepad.FragmentNavigationDrawer"
+        tools:layout="@layout/fragment_navigation_drawer" />
 
 </android.support.v4.widget.DrawerLayout>

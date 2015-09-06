@@ -14,9 +14,7 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-
-
+-->
 <!--
      Declare the contents of this Android application.  The namespace
      attribute brings in the Android platform namespace, and the package
@@ -25,10 +23,9 @@
      to come from a domain that you own or have control over.
 -->
 <!-- Note that versionCode and versionName are overwritten in build.gradle -->
-<manifest
-    package="com.nononsenseapps.notepad"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    package="com.nononsenseapps.notepad"
     android:installLocation="internalOnly" >
 
     <!-- For connection -->
@@ -40,7 +37,7 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
     <!-- Writing sync files to SD card -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- For notifications -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -68,13 +65,13 @@
 
     <application
         android:allowBackup="true"
-        android:backupAgent="com.nononsenseapps.notepad.BackupAgent"
+        android:backupAgent=".BackupAgent"
         android:hardwareAccelerated="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:restoreAnyVersion="true"
         android:theme="@style/AppBaseTheme"
-        tools:replace="icon">
+        tools:replace="icon" >
 
         <!-- Main Activity -->
         <activity
@@ -97,7 +94,7 @@
 
         <!-- Broadcast receiver for accepting actions from widget for example -->
         <receiver
-            android:name="com.nononsenseapps.notepad.NotePadBroadcastReceiver"
+            android:name=".NotePadBroadcastReceiver"
             tools:ignore="ExportedReceiver" >
             <intent-filter>
                 <action android:name="com.nononsenseapps.completenote" />
@@ -105,9 +102,8 @@
         </receiver>
 
         <activity
-            android:name="com.nononsenseapps.notepad.prefs.PrefsActivity"
+            android:name=".prefs.PrefsActivity"
             tools:ignore="ExportedActivity" >
-
             <intent-filter>
                 <category android:name="android.intent.category.PREFERENCE" >
                 </category>
@@ -118,15 +114,14 @@
                 <action android:name="android.settings.SETTINGS" />
             </intent-filter>
         </activity>
-
         <activity
             android:name="com.nononsenseapps.filepicker.FilePickerActivity"
             android:label="@string/app_name"
-            android:theme="@style/FilePickerTheme">
+            android:theme="@style/FilePickerTheme" >
         </activity>
 
         <service
-            android:name="com.nononsenseapps.notepad.sync.SyncService"
+            android:name=".sync.SyncService"
             android:exported="true"
             tools:ignore="ExportedService" >
             <intent-filter>
@@ -140,7 +135,7 @@
 
         <!-- Dashclock -->
         <service
-            android:name="com.nononsenseapps.notepad.dashclock.TasksExtension"
+            android:name=".dashclock.TasksExtension"
             android:icon="@drawable/ic_stat_notification_edit"
             android:label="@string/dashclock_nononsense_notes"
             android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA" >
@@ -160,16 +155,16 @@
         </service>
 
         <activity
-            android:name="com.nononsenseapps.notepad.dashclock.TasksSettings"
+            android:name=".dashclock.TasksSettings"
             android:exported="true"
-            android:theme="@style/DashClockSettings.Theme"
             android:label="@string/dashclock_title_activity_tasks_settings"
-            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA" >
+            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA"
+            android:theme="@style/DashClockSettings.Theme" >
         </activity>
 
         <!-- DataBase provider -->
         <provider
-            android:name="com.nononsenseapps.notepad.database.MyContentProvider"
+            android:name=".database.MyContentProvider"
             android:authorities="com.nononsenseapps.NotePad"
             android:enabled="true"
             android:exported="true"
@@ -178,7 +173,7 @@
 
         <!-- Receiver that schedules background sync for File and Dropbox -->
         <receiver
-            android:name="com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler"
+            android:name=".sync.orgsync.BackgroundSyncScheduler"
             android:enabled="true"
             android:exported="true" >
             <intent-filter>
@@ -187,11 +182,13 @@
             </intent-filter>
         </receiver>
         <!-- Service that syncs with files -->
-        <service android:name="com.nononsenseapps.notepad.sync.orgsync.OrgSyncService"
-                 android:enabled="true"
+        <service
+            android:name=".sync.orgsync.OrgSyncService"
+            android:enabled="true"
             android:exported="false"
-            android:label="File Watcher">
+            android:label="File Watcher" >
         </service>
+
     </application>
 
 </manifest>
