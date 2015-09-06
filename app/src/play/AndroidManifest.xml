@@ -39,7 +39,7 @@
         <activity
             android:name="com.nononsenseapps.filepicker.DropboxFilePickerActivity"
             android:label="@string/app_name"
-            android:theme="@style/FilePicker.Theme">
+            android:theme="@style/FilePickerTheme">
         </activity>
 
         <!-- Dropbox -->

@@ -18,7 +18,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="LeftDrawerStyleDark">
-        <item name="android:background">@color/googlenow_darkergrey</item>
         <item name="android:divider">?android:attr/listDivider</item>
         <item name="android:dividerHeight" tools:ignore="PxUsage">1px</item>
     </style>
@@ -28,7 +27,6 @@
     </style>
 
     <style name="LeftDrawerStyleLight" parent="@style/LeftDrawerStyleDark">
-        <item name="android:background">@color/googlenow_grey</item>
         <item name="android:divider">?android:attr/listDivider</item>
     </style>
 
@@ -123,7 +121,6 @@
     </style>
 
     <style name="TaskListItemLightClassic">
-        <item name="android:background">@drawable/tasklist_item_lightclassic_bg</item>
     </style>
 
     <style name="ListMarginStyleCard">

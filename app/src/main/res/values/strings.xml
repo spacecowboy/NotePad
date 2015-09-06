@@ -300,4 +300,7 @@
     <string name="bigger_titles">Title larger</string>
     <string name="bigger_titles_summary">The title is the first line</string>
 
+<!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

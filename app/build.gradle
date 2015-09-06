@@ -127,18 +127,17 @@ android {
 dependencies {
     compile 'com.android.support:support-v4:23.0.0'
     compile 'com.android.support:recyclerview-v7:23.0.0'
-    compile "com.android.support:appcompat-v7:23.0.0"
+    compile 'com.android.support:appcompat-v7:23.0.0'
     compile 'com.android.support:design:23.0.0'
+    compile 'com.android.support:preference-v7:23.0.0'
 
     compile 'joda-time:joda-time:2.3'
     // Dashclock
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     // FilePicker
-    compile 'com.nononsenseapps:filepicker:1.2.0'
+    compile 'com.nononsenseapps:filepicker:2.4.0'
     // OrgParser
     compile 'org.cowboyprogrammer:orgparser:1.1'
-    // Included libraries
-    compile project(':external:datetimepicker')
 
     // Dropbox and non-free stuff
     playCompile fileTree(dir: 'src/play/libs', include: '*.jar')
