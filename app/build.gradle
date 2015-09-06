@@ -21,16 +21,10 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:1.3.0'
-        // the latest version of the android-apt plugin for annotations
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     }
 }
 
 apply plugin: 'com.android.application'
-
-// For annotations
-apply plugin: 'android-apt'
-def AAVersion = '3.0.1'
 
 repositories {
     jcenter()
@@ -130,17 +124,12 @@ android {
     }
 }
 
-// annotations
-/*apt {
-    arguments {
-        resourcePackageName android.defaultConfig.applicationId
-        androidManifestFile variant.outputs[0].processResources.manifestFile
-    }
-}*/
-
 dependencies {
-    //compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.android.support:support-v4:23.0.0'
+    compile 'com.android.support:recyclerview-v7:23.0.0'
+    compile "com.android.support:appcompat-v7:23.0.0"
+    compile 'com.android.support:design:23.0.0'
+
     compile 'joda-time:joda-time:2.3'
     // Dashclock
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
@@ -150,9 +139,7 @@ dependencies {
     compile 'org.cowboyprogrammer:orgparser:1.1'
     // Included libraries
     compile project(':external:datetimepicker')
-    // annotations
-    //apt "org.androidannotations:androidannotations:$AAVersion"
-    //compile "org.androidannotations:androidannotations-api:$AAVersion"
+
     // Dropbox and non-free stuff
     playCompile fileTree(dir: 'src/play/libs', include: '*.jar')
     playBetaCompile fileTree(dir: 'src/play/libs', include: '*.jar')
