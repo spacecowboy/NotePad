@@ -1,10 +1,21 @@
+/*
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.nononsenseapps.notepad.database;
-
-import java.security.InvalidParameterException;
-import java.util.Calendar;
-
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import android.app.SearchManager;
 import android.content.ContentResolver;
@@ -16,7 +27,12 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.text.format.Time;
-import android.util.Log;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.security.InvalidParameterException;
+import java.util.Calendar;
 
 /**
  * An object that represents the task information contained in the database.
@@ -1008,7 +1024,7 @@ public class Task extends DAO {
 						+ " RAISE (ABORT, '" + msg + "')" + " END;",
 				countVals(Columns._ID, ver), countVals(Columns.LEFT, ver),
 				countVals(Columns.RIGHT, ver));
-	};
+	}
 
 	// public static final String TRIGGER_POST_UPDATE = String.format(
 	// "CREATE TRIGGER task_post_update AFTER UPDATE ON %1$s BEGIN "

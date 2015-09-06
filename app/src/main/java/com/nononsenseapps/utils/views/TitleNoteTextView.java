@@ -297,7 +297,7 @@ public class TitleNoteTextView extends TextView {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        TextView widget = (TextView) this;
+        TextView widget = this;
         Object text = widget.getText();
         if (text instanceof Spanned) {
             Spannable buffer = (Spannable) text;

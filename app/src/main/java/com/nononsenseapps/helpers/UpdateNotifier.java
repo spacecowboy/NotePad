@@ -1,32 +1,28 @@
 /*
- * Copyright (c) 2014 Jonas Kalderstam.
+ * Copyright (c) 2015 Jonas Kalderstam.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.nononsenseapps.helpers;
 
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
 import android.content.Context;
 import android.net.Uri;
 
-import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.widget.ListWidgetProvider;
-import com.nononsenseapps.notepad.widget.WidgetPrefs;
 
 /**
  * The purpose here is to make it easy for other classes to notify that
@@ -86,7 +82,6 @@ public class UpdateNotifier {
 	private static void notifyChange(Context context, Uri uri) {
 		if (uri != null) {
 			context.getContentResolver().notifyChange(uri, null, false);
-			SyncHelper.requestSyncIf(context, SyncHelper.ONCHANGE);
 			context.getContentResolver().notifyChange(Notification.URI, null);
 		}
 	}
@@ -98,28 +93,6 @@ public class UpdateNotifier {
 	 * Update all widgets's views as this database has changed somehow
 	 */
 	public static void updateWidgets(Context context) {
-		final AppWidgetManager appWidgetManager = AppWidgetManager
-				.getInstance(context);
-		int[] appWidgetIds = appWidgetManager
-				.getAppWidgetIds(new ComponentName(context,
-						ListWidgetProvider.class));
-		if (appWidgetIds.length > 0) {
-			/*
-			 * Tell the widgets that the list items should be invalidated and
-			 * refreshed! Will call onDatasetChanged in ListWidgetService, doing
-			 * a new requery
-			 */
-			// appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds,
-			// R.id.notes_list);
-
-			// Only update widgets that exist
-			for (int widgetId : appWidgetIds) {
-				final WidgetPrefs prefs = new WidgetPrefs(context, widgetId);
-				if (prefs.isPresent()) {
-					appWidgetManager.notifyAppWidgetViewDataChanged(widgetId,
-							R.id.notesList);
-				}
-			}
-		}
+		// TODO
 	}
 }

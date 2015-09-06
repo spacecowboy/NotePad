@@ -26,7 +26,6 @@ import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.view.View;
 
-import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.ui.WeekDaysView;
 
@@ -354,9 +353,8 @@ public class Notification extends DAO {
 		int result = save(context);
 		if (schedule) {
 			// First cancel any potentially old versions
-			NotificationHelper.cancelNotification(context, this);
 			// Then reschedule
-			NotificationHelper.schedule(context);
+			// TODO
 		}
 		return result;
 	}
@@ -364,7 +362,7 @@ public class Notification extends DAO {
 	@Override
 	public int delete(final Context context) {
 		// Make sure existing notifications are cancelled.
-		NotificationHelper.cancelNotification(context, this);
+        // TODO
 		return super.delete(context);
 	}
 

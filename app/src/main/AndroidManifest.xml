@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (c) 2014 Jonas Kalderstam.
+  Copyright (c) 2015 Jonas Kalderstam.
 
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
 
-      http://www.apache.org/licenses/LICENSE-2.0
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  General Public License for more details.
 
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
 
@@ -29,10 +30,6 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="internalOnly" >
-
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="19" />
 
     <!-- For connection -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -94,87 +91,8 @@
         </receiver>
 
         <activity
-            android:name="com.nononsenseapps.notepad.ActivityMain_"
-            android:label="@string/app_name"
-            android:theme="@style/ThemeHoloLightDarkActonBar"
-            android:windowSoftInputMode="adjustResize" >
-            <meta-data
-                android:name="android.app.default_searchable"
-                android:value="com.nononsenseapps.notepad.ActivitySearch_" />
-
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-            <intent-filter android:label="@string/resolve_edit" >
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.list" />
-            </intent-filter>
-            <intent-filter android:label="@string/resolve_edit" >
-                <action android:name="android.intent.action.INSERT" />
-                <action android:name="android.intent.action.VIEW" />
-                <action android:name="android.intent.action.EDIT" />
-                <action android:name="com.nononsenseapps.completenote" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.SEND" />
-                <!-- Voice command "note to self" in google search -->
-                <action android:name="com.google.android.gm.action.AUTO_SEND" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="text/*" />
-                <!-- <data android:mimeType="text/*" android:path="*.txt" />  Would like to be able to open files in future -->
-            </intent-filter>
-        </activity>
-
-        <!-- Search activity -->
-        <activity
-            android:name="com.nononsenseapps.notepad.ActivitySearch_"
-            android:label="@string/search_hint"
-            android:launchMode="singleTop"
-            android:theme="@style/ThemeHoloLightDarkActonBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable" />
-        </activity>
-
-        <!-- Deleted tasks activity -->
-        <activity
-            android:name="com.nononsenseapps.notepad.ActivitySearchDeleted_"
-            android:label="@string/archive"
-            android:launchMode="singleTop"
-            android:theme="@style/ThemeHoloLightDarkActonBar" >
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchabledeleted" />
-        </activity>
-
-        <activity
             android:name="com.nononsenseapps.notepad.prefs.PrefsActivity"
-            android:parentActivityName="com.nononsenseapps.notepad.ActivityMain_"
-            android:theme="@style/ThemeGoogleNowDark"
             tools:ignore="ExportedActivity" >
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.nononsenseapps.notepad.ActivityMain_" />
 
             <intent-filter>
                 <category android:name="android.intent.category.PREFERENCE" >
@@ -205,71 +123,6 @@
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter" />
         </service>
-
-        <!-- List Widget -->
-        <receiver android:name="com.nononsenseapps.notepad.widget.ListWidgetProvider" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.appwidget.provider"
-                android:resource="@xml/listwidgetinfo" />
-        </receiver>
-
-        <service
-            android:name="com.nononsenseapps.notepad.widget.ListWidgetService"
-            android:exported="false"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
-
-        <activity
-            android:name="com.nononsenseapps.notepad.widget.ListWidgetConfig_"
-            android:theme="@style/ThemeWidgetConfig"
-            tools:ignore="ExportedActivity" >
-            <intent-filter>
-                <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name="com.nononsenseapps.notepad.ShortcutConfig_"
-            android:exported="true"
-            android:label="@string/notes_shortcut"
-            android:theme="@android:style/Theme.Holo.Dialog" >
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-
-        <service
-            android:name="com.nononsenseapps.helpers.GTasksSyncDelay"
-            android:exported="false" >
-            <intent-filter>
-                <action android:name="android.intent.action.RUN" />
-            </intent-filter>
-        </service>
-
-        <!-- Handles notifications associated with notes -->
-        <receiver
-            android:name="com.nononsenseapps.helpers.NotificationHelper"
-            android:exported="true"
-            tools:ignore="ExportedReceiver" >
-            <intent-filter>
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-                <action android:name="android.intent.action.RUN" />
-            </intent-filter>
-            <intent-filter>
-                <action android:name="android.intent.action.DELETE" />
-                <action android:name="com.nononsenseapps.notepad.ACTION.COMPLETE" />
-                <action android:name="com.nononsenseapps.notepad.ACTION.SNOOZE" />
-                <action android:name="com.nononsenseapps.notepad.ACTION.RESCHEDULE" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-
-                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.notification" />
-            </intent-filter>
-        </receiver>
 
         <!-- Dashclock -->
         <service
@@ -308,19 +161,6 @@
             android:exported="true"
             android:grantUriPermissions="true" >
         </provider>
-
-        <!-- Time Machine -->
-        <activity
-            android:name="com.nononsenseapps.notepad.ActivityTaskHistory_"
-            android:label="@string/timemachine" >
-        </activity>
-
-        <!-- Service for migrating from donate app -->
-        <service
-            android:name="com.nononsenseapps.notepad.legacy.DonateMigrator_"
-            android:enabled="true"
-            android:exported="false" >
-        </service>
 
         <!-- Receiver that schedules background sync for File and Dropbox -->
         <receiver
