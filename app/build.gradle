@@ -38,9 +38,9 @@ repositories {
 
 // Version number
 def versionMajor = 5 // Major UI overhauls
-def versionMinor = 6 // Some new functionality
+def versionMinor = 7 // Some new functionality
 def versionPatch = 0 // Bug fixes
-def versionBuild = 0 // Bump for dogfood builds, public betas, etc.
+def versionBuild = 1 // Bump for dogfood builds, public betas, etc.
 
 // Version name from git
 def getVersionName = { ->
@@ -62,6 +62,11 @@ android {
 
     lintOptions {
         abortOnError false
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
     }
 
     defaultConfig {
@@ -129,20 +134,6 @@ apt {
     }
 }
 
-// Dropbox
-task nativeLibsToJar(type: Zip) {
-    destinationDir file("$buildDir/native-libs")
-    baseName 'native-libs'
-    extension 'jar'
-    from fileTree(dir: 'src/play/libs', include: '**/*.so')
-    into 'lib/'
-}
-
-// If non-free, depend on dropbox
-tasks.withType(JavaCompile) {
-    compileTask -> if (compileTask.toString().contains("Play")) compileTask.dependsOn(nativeLibsToJar)
-}
-
 dependencies {
     //compile fileTree(dir: 'libs', include: '*.jar')
     compile 'com.android.support:support-v4:19.0.1'
@@ -164,9 +155,7 @@ dependencies {
     // Dropbox and non-free stuff
     playCompile fileTree(dir: 'src/play/libs', include: '*.jar')
     playBetaCompile fileTree(dir: 'src/play/libs', include: '*.jar')
-    playCompile fileTree(dir: "$buildDir/native-libs", include: "*.jar")
     playCompile 'com.google.android.gms:play-services:5.0.89'
-    playBetaCompile fileTree(dir: "$buildDir/native-libs", include: "*.jar")
     playBetaCompile 'com.google.android.gms:play-services:5.0.89'
     // Tests
     androidTestCompile 'com.squareup.spoon:spoon-client:1.1.1'

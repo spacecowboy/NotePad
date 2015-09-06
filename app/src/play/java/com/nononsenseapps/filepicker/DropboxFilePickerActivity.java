@@ -18,30 +18,21 @@ package com.nononsenseapps.filepicker;
 
 import android.os.Bundle;
 
-import com.dropbox.sync.android.DbxAccountManager;
-import com.dropbox.sync.android.DbxException;
-import com.dropbox.sync.android.DbxFileSystem;
-import com.dropbox.sync.android.DbxPath;
-import com.nononsenseapps.build.Config;
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.android.AndroidAuthSession;
+import com.nononsenseapps.notepad.sync.orgsync.DropboxSyncHelper;
 
 public class DropboxFilePickerActivity extends
-        AbstractFilePickerActivity<DbxPath> {
+        AbstractFilePickerActivity<DropboxAPI.Entry> {
 
-    private DbxFileSystem fs;
+    // In the class declaration section:
+    private DropboxAPI<AndroidAuthSession> mDBApi;
 
     @Override
-    public void onCreate(Bundle b) {// Make sure we are linked
-        DbxAccountManager accountManager = DbxAccountManager.getInstance(getApplicationContext(),
-                Config.getKeyDropboxSyncPublic(this),
-                Config.getKeyDropboxSyncSecret(this));
-
-        if (accountManager.hasLinkedAccount()) {
-            try {
-                fs = DbxFileSystem.forAccount(accountManager.getLinkedAccount());
-            } catch (DbxException.Unauthorized unauthorized) {
-                finish();
-            }
-        } else {
+    public void onCreate(Bundle b) {
+        mDBApi = DropboxSyncHelper.getDBApi(this);
+        if (!mDBApi.getSession().isLinked()) {
+            // No valid authentication
             finish();
         }
 
@@ -49,12 +40,19 @@ public class DropboxFilePickerActivity extends
     }
 
     @Override
-    protected AbstractFilePickerFragment<DbxPath> getFragment(final String startPath,
-                                                              final int mode,
-                                                              final boolean allowMultiple,
-                                                              final boolean allowCreateDir) {
-        DropboxFilePickerFragment fragment = new DropboxFilePickerFragment(fs);
+    protected AbstractFilePickerFragment<DropboxAPI.Entry> getFragment(
+            final String startPath, final int mode, final boolean allowMultiple,
+            final boolean allowCreateDir) {
+        if (mDBApi == null || !mDBApi.getSession().isLinked()) {
+            // No valid authentication
+            finish();
+            return null;
+        }
+
+        DropboxFilePickerFragment fragment =
+                new DropboxFilePickerFragment(mDBApi);
         fragment.setArgs(startPath, mode, allowMultiple, allowCreateDir);
         return fragment;
     }
+
 }

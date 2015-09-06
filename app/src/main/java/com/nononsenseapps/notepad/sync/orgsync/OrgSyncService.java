@@ -284,6 +284,7 @@ public class OrgSyncService extends Service {
 				}
 
 			} catch (IOException ignored) {
+                Log.e(TAG, ignored.getMessage());
 			} catch (ParseException ignored) {
 			}
 		}

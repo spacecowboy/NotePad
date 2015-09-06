@@ -20,114 +20,160 @@ import android.annotation.SuppressLint;
 import android.content.AsyncTaskLoader;
 import android.content.Loader;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.widget.Toast;
 
-import com.dropbox.sync.android.DbxException;
-import com.dropbox.sync.android.DbxFileInfo;
-import com.dropbox.sync.android.DbxFileSystem;
-import com.dropbox.sync.android.DbxPath;
+import com.dropbox.client2.DropboxAPI;
+import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.client2.exception.DropboxException;
 import com.nononsenseapps.notepad.R;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 @SuppressLint("ValidFragment")
-public class DropboxFilePickerFragment extends
-        AbstractFilePickerFragment<DbxPath> {
+public class DropboxFilePickerFragment
+        extends AbstractFilePickerFragment<DropboxAPI.Entry> {
 
-    private final DbxFileSystem fs;
+    private final DropboxAPI<AndroidAuthSession> dbApi;
+    private FolderCreator folderCreator;
 
     @SuppressLint("ValidFragment")
-    public DropboxFilePickerFragment(final DbxFileSystem fs) {
+    public DropboxFilePickerFragment(final DropboxAPI<AndroidAuthSession> api) {
         super();
-        if (fs == null) {
+        if (api == null) {
             throw new NullPointerException("FileSystem may not be null");
-        }
-        this.fs = fs;
-    }
-
-    @Override
-    protected boolean isDir(final DbxPath dbxPath) {
-        try {
-            return fs.isFolder(dbxPath);
-        } catch (DbxException e) {
-            return false;
-        }
-    }
-
-    @Override
-    protected DbxPath getParent(final DbxPath dbxPath) {
-        DbxPath parent = dbxPath.getParent();
-        if (parent == null) {
-            parent = dbxPath;
+        } else if (!api.getSession().isLinked()) {
+            throw new IllegalArgumentException("Must be linked with Dropbox");
         }
 
-        return parent;
+        this.dbApi = api;
+    }
+
+    public void onNewFolder(final String name) {
+        File folder = new File(currentPath.path, name);
+
+        if (folderCreator == null) {
+            folderCreator = new FolderCreator();
+        }
+
+        folderCreator.execute(folder.getPath());
+    }
+
+    private class FolderCreator extends AsyncTask<String, Void, Void> {
+
+        @Override
+        protected Void doInBackground(final String... paths) {
+            for (String path : paths) {
+                try {
+                    dbApi.createFolder(path);
+                    currentPath = dbApi.metadata(path, 1, null, false, null);
+                    refresh();
+                } catch (DropboxException e) {
+                    Toast.makeText(getActivity(), R.string.create_folder_error,
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+            return null;
+        }
     }
 
     @Override
-    protected DbxPath getPath(final String s) {
-        return new DbxPath(s);
+    protected boolean isDir(final DropboxAPI.Entry file) {
+        return file.isDir;
     }
 
     @Override
-    protected String getFullPath(final DbxPath dbxPath) {
-        return dbxPath.toString();
+    protected DropboxAPI.Entry getParent(final DropboxAPI.Entry from) {
+        // Take care of a slight limitation in Dropbox code:
+        if (from.path.length() > 1 && from.path.endsWith("/")) {
+            from.path = from.path.substring(0, from.path.length() - 1);
+        }
+        String parent = from.parentPath();
+        if (parent.isEmpty()) {
+            parent = "/";
+        }
+
+        return getPath(parent);
+
     }
 
     @Override
-    protected String getName(final DbxPath dbxPath) {
-        return dbxPath.getName();
+    protected DropboxAPI.Entry getPath(final String path) {
+        final DropboxAPI.Entry entry = new DropboxAPI.Entry();
+        entry.path = path;
+        entry.isDir = true;
+        return entry;
+
     }
 
     @Override
-    protected DbxPath getRoot() {
-        return new DbxPath("/");
+    protected String getFullPath(final DropboxAPI.Entry file) {
+        return file.path;
     }
 
     @Override
-    protected Uri toUri(final DbxPath dbxPath) {
-        return new Uri.Builder().scheme("dropbox")
-                .path(dbxPath.toString()).build();
+    protected String getName(final DropboxAPI.Entry file) {
+        return file.fileName();
     }
 
     @Override
-    protected Comparator<DbxPath> getComparator() {
-        return new Comparator<DbxPath>() {
+    protected DropboxAPI.Entry getRoot() {
+        return getPath("/");
+    }
+
+    @Override
+    protected Uri toUri(final DropboxAPI.Entry file) {
+        return new Uri.Builder().scheme("dropbox").path(file.path).build();
+    }
+
+    @Override
+    protected Comparator<DropboxAPI.Entry> getComparator() {
+        return new Comparator<DropboxAPI.Entry>() {
             @Override
-            public int compare(final DbxPath lhs, final DbxPath rhs) {
+            public int compare(final DropboxAPI.Entry lhs,
+                               final DropboxAPI.Entry rhs) {
                 if (isDir(lhs) && !isDir(rhs)) {
                     return -1;
                 } else if (isDir(rhs) && !isDir(lhs)) {
                     return 1;
                 } else {
-                    return lhs.getName().toLowerCase().compareTo(rhs.getName()
-                            .toLowerCase());
+                    return lhs.fileName().toLowerCase()
+                            .compareTo(rhs.fileName().toLowerCase());
                 }
             }
         };
     }
 
     @Override
-    protected Loader<List<DbxPath>> getLoader() {
-        return new AsyncTaskLoader<List<DbxPath>>(getActivity()) {
-            DbxPath listenPath;
-            public DbxFileSystem.PathListener pathListener;
+    protected Loader<List<DropboxAPI.Entry>> getLoader() {
+        return new AsyncTaskLoader<List<DropboxAPI.Entry>>(getActivity()) {
 
             @Override
-            public List<DbxPath> loadInBackground() {
-                ArrayList<DbxPath> files = new ArrayList<DbxPath>();
+            public List<DropboxAPI.Entry> loadInBackground() {
+                ArrayList<DropboxAPI.Entry> files =
+                        new ArrayList<DropboxAPI.Entry>();
                 try {
-                    for (DbxFileInfo fileInfo : fs.listFolder(currentPath)) {
-                        if ((mode == MODE_FILE || mode == MODE_FILE_AND_DIR)
-                                || fileInfo.isFolder) {
-                            files.add(fileInfo.path);
+
+                    if (!dbApi.metadata(currentPath.path, 1, null, false,
+                            null).isDir) {
+                        currentPath = getRoot();
+                    }
+
+                    DropboxAPI.Entry dirEntry =
+                            dbApi.metadata(currentPath.path, 0, null, true,
+                                    null);
+                    for (DropboxAPI.Entry entry : dirEntry.contents) {
+                        if ((mode == MODE_FILE || mode == MODE_FILE_AND_DIR) ||
+                                entry.isDir) {
+                            files.add(entry);
                         }
                     }
-                } catch (DbxException e) {
-                    // e.printStackTrace();
+                } catch (DropboxException e) {
                 }
+
                 return files;
             }
 
@@ -138,29 +184,9 @@ public class DropboxFilePickerFragment extends
             protected void onStartLoading() {
                 super.onStartLoading();
 
-                if (pathListener == null) {
-                    pathListener = new DbxFileSystem.PathListener() {
-                        @Override
-                        public void onPathChange(final DbxFileSystem dbxFileSystem, final DbxPath dbxPath, final Mode mode) {
-                            // Reload
-                            onContentChanged();
-                        }
-                    };
-                }
-
-                // Make sure it's valid
-                try {
-                    if (!fs.exists(currentPath)) {
-                        currentPath = getRoot();
-                    }
-                } catch (DbxException e) {
+                if (currentPath == null || !currentPath.isDir) {
                     currentPath = getRoot();
                 }
-
-                // Start watching for changes
-                listenPath = currentPath;
-                fs.addPathListener(pathListener, listenPath,
-                        DbxFileSystem.PathListener.Mode.PATH_OR_CHILD);
 
                 forceLoad();
             }
@@ -171,28 +197,9 @@ public class DropboxFilePickerFragment extends
             @Override
             protected void onReset() {
                 super.onReset();
-
-                // Stop watching
-                if (listenPath != null) {
-                    fs.removePathListener(pathListener, listenPath,
-                            DbxFileSystem.PathListener.Mode.PATH_OR_CHILD);
-                    listenPath = null;
-                }
             }
         };
     }
 
-    @Override
-    public void onNewFolder(final String s) {
-        DbxPath path = new DbxPath(s);
 
-        try {
-            fs.createFolder(path);
-            currentPath = path;
-            refresh();
-        } catch (DbxException e) {
-            Toast.makeText(getActivity(), R.string.create_folder_error,
-                    Toast.LENGTH_SHORT).show();
-        }
-    }
 }

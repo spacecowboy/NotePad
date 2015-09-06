@@ -56,10 +56,10 @@ public class ConfigTest  extends AndroidTestCase {
         assertNotNull(Config.getGtasksApiKey(context));
         assertFalse(Config.getGtasksApiKey(context).isEmpty());
 
-        assertNotNull(Config.getKeyDropboxSyncPublic(context));
-        assertFalse(Config.getKeyDropboxSyncPublic(context).isEmpty());
+        assertNotNull(Config.getKeyDropboxAPI(context));
+        assertFalse(Config.getKeyDropboxAPI(context).isEmpty());
 
-        assertNotNull(Config.getKeyDropboxSyncSecret(context));
-        assertFalse(Config.getKeyDropboxSyncSecret(context).isEmpty());
+        assertNotNull(Config.getKeyDropboxAPISecret(context));
+        assertFalse(Config.getKeyDropboxAPISecret(context).isEmpty());
     }
 }
