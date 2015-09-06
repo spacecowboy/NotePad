@@ -65,7 +65,9 @@ android {
 
     defaultConfig {
         applicationId "com.nononsenseapps.notepad"
-        minSdkVersion 14
+        // 17 is where start/end replaced left/right in layouts
+        // vector drawables were added in 21
+        minSdkVersion 21
         targetSdkVersion 23
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
         versionName getVersionName()
@@ -121,6 +123,20 @@ android {
         }
     } else {
         println "No key store defined. Signed release not available..."
+    }
+
+    buildTypes {
+        debug {
+            // True during dev process
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
     }
 }
 

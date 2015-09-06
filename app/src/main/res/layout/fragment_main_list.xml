@@ -16,13 +16,31 @@
   -->
 
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.nononsenseapps.notepad.FragmentMainList">
 
     <!-- TODO: Update blank fragment layout -->
     <TextView android:layout_width="match_parent" android:layout_height="match_parent"
         android:gravity="center"
         android:text="@string/hello_blank_fragment" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:scaleType="center"
+        android:layout_marginEnd="@dimen/fab_margin_end"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:clickable="true"
+        app:borderWidth="0dp"
+        app:fabSize="normal"
+        app:elevation="5dp"
+        app:pressedTranslationZ="7dp"
+        android:tint="@android:color/white"
+        android:src="@drawable/ic_add_24dp"/>
 
 </FrameLayout>
