@@ -50,9 +50,6 @@ import android.widget.Toast;
 import com.android.datetimepicker.date.DatePickerDialog;
 import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 import com.android.datetimepicker.time.TimePickerDialog;
-import com.github.espiandev.showcaseview.ShowcaseView;
-import com.github.espiandev.showcaseview.ShowcaseViews;
-import com.github.espiandev.showcaseview.ShowcaseViews.ItemViewProperties;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
@@ -337,10 +334,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			fillUIFromTask();
 		}
 
-		// showcase first time
-		final boolean showcasing = showcaseEditor();
-
-		if (!showcasing && openKb) {
+		if (openKb) {
 			/**
 			 * Only show keyboard for new/empty notes But not if the showcase
 			 * view is showing
@@ -349,30 +343,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			inputManager.showSoftInput(taskText,
 					InputMethodManager.SHOW_IMPLICIT);
 		}
-	}
-
-	/**
-	 * Returns true if showcase window is visible
-	 */
-	boolean showcaseEditor() {
-		final boolean alreadyShowcased = PreferenceManager
-				.getDefaultSharedPreferences(getActivity()).getBoolean(
-						SHOWCASED_EDITOR, false);
-
-		if (alreadyShowcased) {
-			return false;
-		}
-
-		ShowcaseViews views = new ShowcaseViews(getActivity(),
-				R.layout.showcase_view_template);
-		views.addView(new ItemViewProperties(ItemViewProperties.ID_OVERFLOW,
-				R.string.showcase_timemachine_title,
-				R.string.showcase_timemachine_msg,
-				ShowcaseView.ITEM_ACTION_OVERFLOW, 0.5f));
-		views.show();
-		PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
-				.putBoolean(SHOWCASED_EDITOR, true).commit();
-		return true;
 	}
 
 	@AfterViews
