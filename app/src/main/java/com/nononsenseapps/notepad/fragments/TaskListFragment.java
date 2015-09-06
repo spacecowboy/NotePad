@@ -33,7 +33,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -48,13 +47,9 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
+import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-import com.mobeta.android.dslv.DragSortListView;
-import com.mobeta.android.dslv.DragSortListView.DropListener;
-import com.mobeta.android.dslv.DragSortListView.RemoveListener;
-import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
-import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
@@ -93,7 +88,7 @@ public class TaskListFragment extends Fragment implements
 
 	// DragSortListView listView;
 	@ViewById(resName="list")//android.r.id.list
-	DragSortListView listView;
+	ListView listView;
 
 	@SystemService
 	LayoutInflater layoutInflater;
@@ -148,33 +143,9 @@ public class TaskListFragment extends Fragment implements
 						android.R.id.text1, android.R.id.text1, R.id.date,
 						R.id.checkbox, R.id.drag_handle, R.id.dragpadding }, 0);
 
-		// Set a drag listener
-		mAdapter.setDropListener(new DropListener() {
-			@Override
-			public void drop(int from, int to) {
-				Log.d("nononsenseapps drag", "Position from " + from + " to "
-						+ to);
 
-				final Task fromTask = new Task((Cursor) mAdapter.getItem(from));
-				final Task toTask = new Task((Cursor) mAdapter.getItem(to));
 
-				fromTask.moveTo(getActivity().getContentResolver(), toTask);
-			}
-		});
-		/*
-		 * listAdapter.setRemoveListener(new RemoveListener() {
-		 * 
-		 * @Override public void remove(int which) { Log.d(TAG, "Remove pos: " +
-		 * which); Log.d(TAG, "Remove id: " + listAdapter.getItemId(which));
-		 * 
-		 * getActivity().getContentResolver().delete(
-		 * Uri.withAppendedPath(Task.URI, "" + listAdapter.getItemId(which)),
-		 * null, null); }
-		 * 
-		 * });
-		 */
-
-		mAdapter.setViewBinder(new ViewBinder() {
+		mAdapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
 			SimpleDateFormat weekdayFormatter = TimeFormatter
 					.getLocalFormatterWeekday(getActivity());
 			boolean isHeader = false;
@@ -767,9 +738,7 @@ public class TaskListFragment extends Fragment implements
 		super.onDetach();
 	}
 
-	static class SimpleSectionsAdapter extends SimpleDragSortCursorAdapter {
-		DropListener dropListener = null;
-		RemoveListener removeListener = null;
+	static class SimpleSectionsAdapter extends SimpleCursorAdapter {
 		final int mItemLayout;
 		final int mHeaderLayout;
 		final static int itemType = 0;
@@ -796,29 +765,6 @@ public class TaskListFragment extends Fragment implements
 		}
 
 		@Override
-		public void remove(int which) {
-			if (removeListener != null) removeListener.remove(which);
-			super.remove(which);
-
-		}
-
-		@Override
-		public void drop(int from, int to) {
-			// Call any listener that has been defined
-			if (dropListener != null) dropListener.drop(from, to);
-			// Call super to handle UI mapping (for smoothness)
-			super.drop(from, to);
-		}
-
-		public void setDropListener(DropListener dropListener) {
-			this.dropListener = dropListener;
-		}
-
-		public void setRemoveListener(RemoveListener removeListener) {
-			this.removeListener = removeListener;
-		}
-
-		@Override
 		public int getViewTypeCount() {
 			return 2;
 		}
@@ -838,7 +784,7 @@ public class TaskListFragment extends Fragment implements
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				final LayoutInflater inflater = LayoutInflater.from(mContext);
+				final LayoutInflater inflater = LayoutInflater.from(context);
 				convertView = inflater.inflate(getViewLayout(position), parent,
 						false);
 				if (itemType == getItemViewType(position)) {
