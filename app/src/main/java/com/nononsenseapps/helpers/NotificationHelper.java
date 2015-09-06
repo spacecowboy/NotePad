@@ -1,17 +1,18 @@
 /*
- * Copyright (c) 2014 Jonas Kalderstam.
+ * Copyright (c) 2015 Jonas Kalderstam.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.nononsenseapps.helpers;
@@ -35,7 +36,6 @@ import android.support.v4.app.NotificationCompat;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.util.GeofenceRemover;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -184,12 +184,6 @@ public class NotificationHelper extends BroadcastReceiver {
 		}
 		finally {
 			c.close();
-		}
-
-		// For any geofence ids that were not found in the database, unregister
-		// monitoring of their location. They must have been deleted somehow
-		if (geofenceIdsToRemove.size() > 0) {
-			GeofenceRemover.removeFences(context, geofenceIdsToRemove);
 		}
 
 		final NotificationManager notificationManager = (NotificationManager) context
@@ -418,12 +412,9 @@ public class NotificationHelper extends BroadcastReceiver {
 		openIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
 		// Delete intent on non-location repeats
-		if (!note.isLocationRepeat()) {
-			// repeating location reminders should not have a delete intent, the
-			// rest do
-			// Opening the note should delete/reschedule the notification
-			openIntent.putExtra(ActivityMain.NOTIFICATION_DELETE_ARG, note._id);
-		}
+		// Opening the note should delete/reschedule the notification
+		openIntent.putExtra(ActivityMain.NOTIFICATION_DELETE_ARG, note._id);
+
 		// Opening always cancels the notification though
 		openIntent.putExtra(ActivityMain.NOTIFICATION_CANCEL_ARG, note._id);
 
@@ -451,12 +442,7 @@ public class NotificationHelper extends BroadcastReceiver {
 								.bigText(note.taskNote));
 
 		// Delete intent on non-location repeats
-		if (!note.isLocationRepeat()) {
-			// repeating location reminders should not have a delete intent, the
-			// rest do
-			builder.setDeleteIntent(deleteIntent);
-
-		}
+		builder.setDeleteIntent(deleteIntent);
 
 		// Snooze button only on time non-repeating
 		if (note.time != null && note.repeats == 0) {

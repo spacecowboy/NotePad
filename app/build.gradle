@@ -155,8 +155,6 @@ dependencies {
     // Dropbox and non-free stuff
     playCompile fileTree(dir: 'src/play/libs', include: '*.jar')
     playBetaCompile fileTree(dir: 'src/play/libs', include: '*.jar')
-    playCompile 'com.google.android.gms:play-services:5.0.89'
-    playBetaCompile 'com.google.android.gms:play-services:5.0.89'
     // Tests
     androidTestCompile 'com.squareup.spoon:spoon-client:1.1.1'
 

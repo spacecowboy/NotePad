@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (c) 2014 Jonas Kalderstam.
+  Copyright (c) 2015 Jonas Kalderstam.
 
-  Licensed under the Apache License, Version 2.0 (the "License");
-  you may not use this file except in compliance with the License.
-  You may obtain a copy of the License at
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
 
-      http://www.apache.org/licenses/LICENSE-2.0
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  General Public License for more details.
 
-  Unless required by applicable law or agreed to in writing, software
-  distributed under the License is distributed on an "AS IS" BASIS,
-  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-  See the License for the specific language governing permissions and
-  limitations under the License.
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
 
@@ -27,70 +28,12 @@
 <manifest
     package="com.nononsenseapps.notepad"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="internalOnly" >
-
-    <!-- maps -->
-    <uses-feature
-        android:glEsVersion="0x00020000"
-        android:required="true" />
 
     <!-- Dropbox needs this -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
-    <!-- For maps -->
-    <permission
-        android:name="com.nononsenseapps.notepad.permission.MAPS_RECEIVE"
-        android:protectionLevel="signature" />
-
-    <uses-permission android:name="com.nononsenseapps.notepad.permission.MAPS_RECEIVE" />
-    <uses-permission android:name="com.google.android.providers.gsf.permission.READ_GSERVICES" />
-    <!--
-     The following two permissions are not required to use
-     Google Maps Android API v2, but are recommended. Necessary for geofences.
-    -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <application>
-        <!-- Play services now requires this -->
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
-
-        <!-- To get maps working -->
-        <meta-data
-            android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDTgjabZVkiZOnokePNdYNAkRiaE73_MBs" />
-
-        <!-- For location reminders -->
-        <activity
-            android:name="com.nononsenseapps.notepad.ActivityLocation_"
-            android:label="@string/app_name"
-            android:launchMode="singleTop"
-            android:theme="@style/ThemeMapActivity"
-            android:windowSoftInputMode="stateHidden" >
-            <intent-filter>
-                <action android:name="android.intent.action.SEARCH" />
-            </intent-filter>
-
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchablelocation" />
-        </activity>
-        <service
-            android:name="com.nononsenseapps.notepad.services.ReceiveTransitionsIntentService"
-            android:exported="false"
-            android:label="@string/app_name" >
-        </service>
-
-        <!-- Location suggestions -->
-        <provider
-            android:name="com.nononsenseapps.util.LocationSuggestionsProvider"
-            android:authorities="com.nononsenseapps.LocationSuggestions"
-            android:enabled="true"
-            android:exported="false" >
-        </provider>
 
         <!-- Dropbox stuff -->
         <activity
