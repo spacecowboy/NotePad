@@ -17,6 +17,8 @@
 
 package com.nononsenseapps.notepad.provider;
 
+import android.support.annotation.StringDef;
+
 /**
  * This class defines some of the contract which a provider must adhere to.
  */
@@ -28,6 +30,15 @@ public class ProviderContract {
     /*
     * These are the columns a provider is expected to supply.
      */
+    @StringDef({
+            COLUMN_ID,
+            COLUMN_TYPEMASK,
+            COLUMN_TITLE,
+            COLUMN_DESCRIPTION,
+            COLUMN_STATUS,
+            COLUMN_DUE
+    })
+    public @interface ColumnName {}
     // Non-null
     public static final String COLUMN_ID = "id";
     // Non-null

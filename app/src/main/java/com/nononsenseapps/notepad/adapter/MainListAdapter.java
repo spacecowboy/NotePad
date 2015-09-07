@@ -18,6 +18,8 @@
 package com.nononsenseapps.notepad.adapter;
 
 import android.database.Cursor;
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.ViewGroup;
@@ -36,7 +38,7 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListViewHolder> {
 
     }
 
-    public void setData(Cursor cursor) {
+    public void setData(@Nullable Cursor cursor) {
         mCursor = cursor;
     }
 
@@ -72,11 +74,11 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListViewHolder> {
         return super.getItemId(position);
     }
 
-    private String getString(Cursor cursor, String columnName) {
+    private String getString(@NonNull Cursor cursor, @NonNull @ProviderContract.ColumnName String columnName) {
         return cursor.getString(cursor.getColumnIndex(columnName));
     }
 
-    private int getInt(Cursor cursor, String columnName) {
+    private int getInt(@NonNull Cursor cursor, @NonNull @ProviderContract.ColumnName String columnName) {
         return cursor.getInt(cursor.getColumnIndex(columnName));
     }
 }
