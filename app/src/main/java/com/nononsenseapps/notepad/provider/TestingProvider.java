@@ -20,6 +20,7 @@ package com.nononsenseapps.notepad.provider;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.MatrixCursor;
 import android.net.Uri;
 
 public class TestingProvider extends ContentProvider {
@@ -54,8 +55,15 @@ public class TestingProvider extends ContentProvider {
     @Override
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
+        int count = 20;
+        MatrixCursor mc = new MatrixCursor(new String[] {"id", "name"}, count);
+
+        for (int i = 0; i < count; i++) {
+            mc.addRow(new String[] {Integer.toString(i), "Item " + i});
+        }
+
+        return mc;
         // TODO: Implement this to handle query requests from clients.
-        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override

@@ -46,7 +46,7 @@
     <uses-permission android:name="android.permission.USE_CREDENTIALS" />
 
     <!-- Define my permissions for the provider -->
-    <permission
+    <!--<permission
         android:name="com.nononsenseapps.notepad.permissions.read"
         android:description="@string/permission_read_desc"
         android:label="@string/permission_read_label"
@@ -59,7 +59,7 @@
 
     <uses-permission android:name="com.nononsenseapps.notepad.permissions.read" />
     <uses-permission android:name="com.nononsenseapps.notepad.permissions.write" />
-
+-->
     <application
         android:hardwareAccelerated="true"
         android:icon="@drawable/app_icon"
@@ -84,7 +84,7 @@
         <provider
             android:name=".provider.TestingProvider"
             android:label="A Test Provider"
-            android:authorities="org.cowboyprogrammer.testing"
+            android:authorities="com.nononsenseapps.notepad.TESTPROVIDER"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
