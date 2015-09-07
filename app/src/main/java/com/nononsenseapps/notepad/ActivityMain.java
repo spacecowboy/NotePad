@@ -33,7 +33,6 @@ public class ActivityMain extends AppCompatActivity {
     private FragmentNavigationDrawer mNavigationDrawerFragment;
 
     @Override
-    @SuppressWarnings("unchecked")
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 

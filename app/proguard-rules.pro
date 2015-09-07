@@ -23,3 +23,6 @@
 # JodaTime
 -dontwarn org.joda.convert.FromString
 -dontwarn org.joda.convert.ToString
+
+# I only care about minimizing
+-dontobfuscate
