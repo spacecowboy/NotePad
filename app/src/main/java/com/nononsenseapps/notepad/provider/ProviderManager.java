@@ -32,7 +32,6 @@ import java.util.List;
  */
 public class ProviderManager {
 
-    private static final String ACTION_PROVIDER = "com.nononsenseapps.notepad.PROVIDER";
     private static ProviderManager sInstance;
     private final Context mApplicationContext;
 
@@ -55,7 +54,7 @@ public class ProviderManager {
     public List<Provider> getAvailableProviders() {
         List<Provider> availableUris = new ArrayList<>();
         PackageManager pm = mApplicationContext.getPackageManager();
-        List<ResolveInfo> resolveInfos = pm.queryIntentContentProviders(new Intent(ACTION_PROVIDER),
+        List<ResolveInfo> resolveInfos = pm.queryIntentContentProviders(new Intent(ProviderContract.ACTION_PROVIDER),
                 PackageManager.GET_META_DATA);
         for (ResolveInfo resolveInfo: resolveInfos) {
             try {

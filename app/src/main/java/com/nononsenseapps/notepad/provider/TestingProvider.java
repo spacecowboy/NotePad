@@ -56,10 +56,11 @@ public class TestingProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] projection, String selection,
                         String[] selectionArgs, String sortOrder) {
         int count = 20;
-        MatrixCursor mc = new MatrixCursor(new String[] {"id", "name"}, count);
+        // Projection is ProviderContract.sMainListProjection
+        MatrixCursor mc = new MatrixCursor(projection, count);
 
         for (int i = 0; i < count; i++) {
-            mc.addRow(new String[] {Integer.toString(i), "Item " + i});
+            mc.addRow(new Object[] {Integer.toString(i), 0, "Item " + i, null, null, null});
         }
 
         return mc;

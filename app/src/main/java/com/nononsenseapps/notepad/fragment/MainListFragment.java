@@ -32,6 +32,7 @@ import android.view.ViewGroup;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.adapter.MainListAdapter;
+import com.nononsenseapps.notepad.provider.ProviderContract;
 import com.nononsenseapps.notepad.provider.ProviderManager;
 
 
@@ -103,7 +104,8 @@ public class MainListFragment extends Fragment implements LoaderManager.LoaderCa
         ProviderManager pm = ProviderManager.getInstance(getContext());
         ProviderManager.Provider provider = pm.getAvailableProviders().get(0);
 
-        return new CursorLoader(getContext(), provider.uriBase, null, null, null, null);
+        return new CursorLoader(getContext(), provider.uriBase,
+                ProviderContract.sMainListProjection, null, null, null);
     }
 
     @Override

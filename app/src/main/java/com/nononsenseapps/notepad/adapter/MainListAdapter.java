@@ -23,6 +23,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.provider.ProviderContract;
 
 /**
  * Adapter to handle the display of notes/tasks.
@@ -48,7 +49,9 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListViewHolder> {
     @Override
     public void onBindViewHolder(MainListViewHolder vh, int position) {
         mCursor.moveToPosition(position);
-        vh.textView.setText(mCursor.getString(0) + " - " + mCursor.getString(1));
+
+        vh.textView.setText(getString(mCursor, ProviderContract.COLUMN_ID)
+                + " - " + getString(mCursor, ProviderContract.COLUMN_TITLE));
     }
 
     @Override
@@ -67,5 +70,13 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListViewHolder> {
     @Override
     public long getItemId(final int position) {
         return super.getItemId(position);
+    }
+
+    private String getString(Cursor cursor, String columnName) {
+        return cursor.getString(cursor.getColumnIndex(columnName));
+    }
+
+    private int getInt(Cursor cursor, String columnName) {
+        return cursor.getInt(cursor.getColumnIndex(columnName));
     }
 }
