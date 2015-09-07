@@ -23,6 +23,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 
 /**
@@ -57,7 +58,18 @@ public class FragmentMainList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_main_list, container, false);
+        View root =  inflater.inflate(R.layout.fragment_main_list, container, false);
+
+        TextView tv = (TextView) root.findViewById(android.R.id.text1);
+
+        StringBuilder sb = new StringBuilder("Providers:\n");
+        ProviderManager pm = ProviderManager.getInstance(getActivity());
+        for (ProviderManager.Provider provider: pm.getAvailableProviders()) {
+            sb.append(provider.name).append(" - ").append(provider.authority).append("\n");
+        }
+        tv.setText(sb.toString());
+
+        return root;
     }
 
 
