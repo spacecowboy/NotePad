@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.notepad;
+package com.nononsenseapps.notepad.fragment;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -32,6 +32,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.nononsenseapps.notepad.R;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.

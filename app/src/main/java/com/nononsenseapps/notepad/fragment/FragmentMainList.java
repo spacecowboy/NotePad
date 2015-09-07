@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.notepad;
+package com.nononsenseapps.notepad.fragment;
 
 
 import android.os.Bundle;
@@ -24,6 +24,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.provider.ProviderManager;
 
 
 /**

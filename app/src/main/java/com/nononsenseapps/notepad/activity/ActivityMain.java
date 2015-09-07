@@ -15,13 +15,17 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.notepad;
+package com.nononsenseapps.notepad.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.fragment.FragmentMainList;
+import com.nononsenseapps.notepad.fragment.FragmentNavigationDrawer;
 
 /**
  * This is the main activity. It is the one that is started by users when they press the icon.

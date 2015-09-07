@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.notepad;
+package com.nononsenseapps.notepad.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
