@@ -31,5 +31,9 @@
     <dimen name="keyline_1">16dp</dimen>
     <dimen name="fab_margin_end">16dp</dimen>
     <dimen name="fab_margin_bottom">16dp</dimen>
+    <dimen name="status_bar_height">24dp</dimen>
+    <dimen name="item_spacing">8dp</dimen>
+    <dimen name="navigation_drawer_header_sub_size">56dp</dimen>
+    <dimen name="navigation_drawer_header_minsize">80dp</dimen>
 
 </resources>
