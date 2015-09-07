@@ -65,7 +65,7 @@ public class FragmentMainList extends Fragment {
         StringBuilder sb = new StringBuilder("Providers:\n");
         ProviderManager pm = ProviderManager.getInstance(getActivity());
         for (ProviderManager.Provider provider: pm.getAvailableProviders()) {
-            sb.append(provider.name).append(" - ").append(provider.authority).append("\n");
+            sb.append(provider.label).append(" - ").append(provider.authority).append("\n");
         }
         tv.setText(sb.toString());
 

@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (c) 2015 Jonas Kalderstam.
 
   This program is free software: you can redistribute it and/or modify
@@ -14,19 +13,17 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-<!--
+--><!--
      Declare the contents of this Android application.  The namespace
      attribute brings in the Android platform namespace, and the package
      supplies a unique name for the application.  When writing your
      own application, the package name must be changed from "com.example.*"
      to come from a domain that you own or have control over.
--->
-<!-- Note that versionCode and versionName are overwritten in build.gradle -->
+--><!-- Note that versionCode and versionName are overwritten in build.gradle -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.nononsenseapps.notepad"
-    android:installLocation="auto" >
+    android:installLocation="auto">
 
     <!-- For connection -->
     <uses-permission android:name="android.permission.INTERNET" />
@@ -69,14 +66,14 @@
         android:label="@string/app_name"
         android:restoreAnyVersion="true"
         android:theme="@style/AppBaseTheme"
-        tools:replace="icon" >
+        tools:replace="icon">
 
         <!-- Main Activity -->
         <activity
             android:name=".ActivityMain"
             android:icon="@drawable/app_icon"
             android:label="@string/app_name"
-            android:theme="@style/AppBaseTheme" >
+            android:theme="@style/AppBaseTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -84,6 +81,16 @@
             </intent-filter>
         </activity>
 
+        <provider
+            android:name=".TestingProvider"
+            android:label="A Test Provider"
+            android:authorities="org.cowboyprogrammer.testing"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.nononsenseapps.notepad.PROVIDER" />
+            </intent-filter>
+        </provider>
     </application>
 
 </manifest>

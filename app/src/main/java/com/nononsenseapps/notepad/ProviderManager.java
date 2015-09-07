@@ -60,7 +60,7 @@ public class ProviderManager {
         for (ResolveInfo resolveInfo: resolveInfos) {
             try {
                 // URI is available in metadata
-                availableUris.add(new Provider(resolveInfo.providerInfo));
+                availableUris.add(new Provider(pm, resolveInfo.providerInfo));
                 // Service style
                 //Bundle metaData = resolveInfo.serviceInfo.metaData;
                 //availableUris.add(Uri.parse(metaData.getString("uri")));
@@ -75,12 +75,16 @@ public class ProviderManager {
     public static class Provider {
         public final String authority;
         public final Uri uriBase;
-        public final String name;
+        public final String label;
 
-        public Provider(final ProviderInfo providerInfo) {
-            name = providerInfo.name;
+        public Provider(final PackageManager pm, final ProviderInfo providerInfo) {
+            label = providerInfo.loadLabel(pm).toString();
             authority = providerInfo.authority;
             uriBase = Uri.parse("content://" + authority);
+            /*if (null != providerInfo.metaData) {
+                // Optional stuff like settingsActivity and capabilities
+                String settingsActivity = providerInfo.metaData.getString("settingsActivity");
+            }*/
         }
     }
 }
