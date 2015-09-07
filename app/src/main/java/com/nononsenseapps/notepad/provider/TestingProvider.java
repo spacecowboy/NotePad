@@ -59,8 +59,16 @@ public class TestingProvider extends ContentProvider {
         // Projection is ProviderContract.sMainListProjection
         MatrixCursor mc = new MatrixCursor(projection, count);
 
-        for (int i = 0; i < count; i++) {
-            mc.addRow(new Object[] {Integer.toString(i), 0, "Item " + i, null, null, null});
+        int i;
+        for (i = 0; i < count; i++) {
+            mc.addRow(new Object[] {Integer.toString(i),
+                    ProviderContract.getTypeMask(ProviderContract.TYPE_DATA),
+                    "Item " + i, null, null, null});
+        }
+        for (; i < count+4; i++) {
+            mc.addRow(new Object[] {Integer.toString(i),
+                    ProviderContract.getTypeMask(ProviderContract.TYPE_FOLDER),
+                    "Item " + i, null, null, null});
         }
 
         return mc;
