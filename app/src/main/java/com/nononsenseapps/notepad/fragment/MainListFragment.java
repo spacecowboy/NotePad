@@ -29,23 +29,23 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.adapter.MainListAdapter;
 import com.nononsenseapps.notepad.provider.ProviderManager;
 
 
 /**
  * A simple {@link Fragment} subclass.
- * Use the {@link FragmentMainList#newInstance} factory method to
+ * Use the {@link MainListFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FragmentMainList extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MainListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private RecyclerView mRecyclerView;
-    private TestAdapter mAdapter;
+    private MainListAdapter mAdapter;
 
-    public FragmentMainList() {
+    public MainListFragment() {
         // Required empty public constructor
     }
 
@@ -55,8 +55,8 @@ public class FragmentMainList extends Fragment implements LoaderManager.LoaderCa
      *
      * @return A new instance of fragment FragmentMainList.
      */
-    public static FragmentMainList newInstance() {
-        FragmentMainList fragment = new FragmentMainList();
+    public static MainListFragment newInstance() {
+        MainListFragment fragment = new MainListFragment();
         fragment.setArguments(Bundle.EMPTY);
         return fragment;
     }
@@ -81,7 +81,7 @@ public class FragmentMainList extends Fragment implements LoaderManager.LoaderCa
         mRecyclerView.setHasFixedSize(true);
         mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-        mAdapter = new TestAdapter();
+        mAdapter = new MainListAdapter();
         mRecyclerView.setAdapter(mAdapter);
 
         /*TextView tv = (TextView) root.findViewById(android.R.id.text1);
@@ -99,6 +99,7 @@ public class FragmentMainList extends Fragment implements LoaderManager.LoaderCa
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
+        // TODO just load first provider we find, change this later
         ProviderManager pm = ProviderManager.getInstance(getContext());
         ProviderManager.Provider provider = pm.getAvailableProviders().get(0);
 
@@ -114,59 +115,5 @@ public class FragmentMainList extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         mAdapter.setData(null);
-    }
-
-
-    public static class TestAdapter extends RecyclerView.Adapter<TestViewHolder> {
-
-        private Cursor mCursor = null;
-
-        public TestAdapter() {
-
-        }
-
-        public void setData(Cursor cursor) {
-            mCursor = cursor;
-        }
-
-        @Override
-        public TestViewHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
-            return new TestViewHolder(LayoutInflater.from(viewGroup.getContext())
-                    .inflate(R.layout.listitem_main_item, viewGroup, false));
-        }
-
-        @Override
-        public void onBindViewHolder(TestViewHolder vh, int position) {
-            mCursor.moveToPosition(position);
-            vh.textView.setText(mCursor.getString(0) + " - " + mCursor.getString(1));
-        }
-
-        @Override
-        public int getItemCount() {
-            if (mCursor == null) {
-                return 0;
-            }
-            return mCursor.getCount();
-        }
-
-        @Override
-        public int getItemViewType(int position) {
-            return 0;
-        }
-
-        @Override
-        public long getItemId(final int position) {
-            return super.getItemId(position);
-        }
-    }
-
-    public static class TestViewHolder extends RecyclerView.ViewHolder {
-
-        public final TextView textView;
-
-        public TestViewHolder(View itemView) {
-            super(itemView);
-            textView = (TextView) itemView.findViewById(android.R.id.text1);
-        }
     }
 }

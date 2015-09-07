@@ -24,17 +24,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.fragment.FragmentMainList;
-import com.nononsenseapps.notepad.fragment.FragmentNavigationDrawer;
+import com.nononsenseapps.notepad.fragment.MainListFragment;
+import com.nononsenseapps.notepad.fragment.NavigationDrawerFragment;
 
 /**
  * This is the main activity. It is the one that is started by users when they press the icon.
  */
-public class ActivityMain extends AppCompatActivity {
+public class MainListActivity extends AppCompatActivity {
 
     private Toolbar mToolbar;
     private Fragment mFragment;
-    private FragmentNavigationDrawer mNavigationDrawerFragment;
+    private NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +48,7 @@ public class ActivityMain extends AppCompatActivity {
             setSupportActionBar(mToolbar);
         }
 
-        mNavigationDrawerFragment = (FragmentNavigationDrawer)
+        mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         // Set up the drawer.
         mNavigationDrawerFragment.setUp(
@@ -58,7 +58,7 @@ public class ActivityMain extends AppCompatActivity {
 
         // Load main fragment
         if (savedInstanceState == null) {
-            mFragment = FragmentMainList.newInstance();
+            mFragment = MainListFragment.newInstance();
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.listframe, mFragment, "single_pane").commit();
         } else {
