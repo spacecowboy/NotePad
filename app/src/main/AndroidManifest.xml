@@ -88,10 +88,11 @@
 
         </activity>
 
+        <!-- A couple of providers -->
 
         <provider
             android:name=".provider.TextFileProvider"
-            android:label="Text files"
+            android:label="SD-card files"
             android:icon="@drawable/ic_sd_storage_24dp"
             android:authorities="com.nononsenseapps.notepad.TESTPROVIDER"
             android:enabled="true"
