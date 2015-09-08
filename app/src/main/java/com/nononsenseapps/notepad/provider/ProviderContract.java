@@ -45,6 +45,47 @@ public class ProviderContract {
     public static final String[] sMainListProjection = new String[]{COLUMN_ID,
             COLUMN_TYPEMASK, COLUMN_TITLE, COLUMN_DESCRIPTION, COLUMN_STATUS, COLUMN_DUE};
 
+    // Bitmasks for use with typemask
+    // Item has data (id, title, etc).
+    public static final long TYPE_DATA = 0x1;
+    // Item potentially contains sub-items. Note that either folder or data (or both) must be 1.
+    public static final long TYPE_FOLDER = 0x10;
+    // Item has a status associated with it (to-do, done, waiting, etc).
+    public static final long TYPE_STATUS = 0x100;
+    // Item supports due date.
+    public static final long TYPE_DUE_DATE = 0x1000;
+    // Item supports due time, in addition to due date.
+    public static final long TYPE_DUE_TIME = 0x10000;
+    // Item supports reminder date & time.
+    public static final long TYPE_REMINDER = 0x100000;
+    // Item supports description/content (otherwise only title).
+    public static final long TYPE_DESCRIPTION = 0x1000000;
+
+    /**
+     * Convenience method to OR together a bunch of bitmasks.
+     *
+     * @param bitvalues to combine
+     * @return a bitmask
+     */
+    public static long getTypeMask(@TypeMask long... bitvalues) {
+        long bitmask = 0x0;
+        for (long bitvalue : bitvalues) {
+            bitmask |= bitvalue;
+        }
+        return bitmask;
+    }
+
+    /**
+     * Convenience method to check if a bitmask contains a certain bitvalue.
+     *
+     * @param bitmask to check
+     * @param type    typemask bit to check
+     * @return true if bitmask has the bit set to 1, else false
+     */
+    public static boolean isType(long bitmask, @TypeMask long type) {
+        return 0 < (bitmask & type);
+    }
+
     @StringDef({
             COLUMN_ID,
             COLUMN_TYPEMASK,
@@ -56,22 +97,6 @@ public class ProviderContract {
     public @interface ColumnName {
     }
 
-    // Bitmasks for use with typemask
-    // Item has data (id, title, etc).
-    public static final long TYPE_DATA = 0x1;
-    // Item contains sub-items. Note that either folder or data (or both) must be 1.
-    public static final long TYPE_FOLDER = 0x10;
-    // Item has a status associated with it (to-do, done, waiting, etc).
-    public static final long TYPE_STATUS = 0x100;
-    // Item supports due date.
-    public static final long TYPE_DUE_DATE = 0x1000;
-    // Item supports due time, in addition to due date.
-    public static final long TYPE_DUE_TIME = 0x10000;
-    // Item supports reminder date & time.
-    public static final long TYPE_REMINDER = 0x100000;
-    // Item supports description (otherwise only title).
-    public static final long TYPE_DESCRIPTION = 0x1000000;
-
     @IntDef({
             TYPE_DATA,
             TYPE_FOLDER,
@@ -82,28 +107,5 @@ public class ProviderContract {
             TYPE_DESCRIPTION
     })
     public @interface TypeMask {
-    }
-
-    /**
-     * Convenience method to OR together a bunch of bitmasks.
-     * @param bitvalues to combine
-     * @return a bitmask
-     */
-    public static long getTypeMask(@TypeMask long... bitvalues) {
-        long bitmask = 0x0;
-        for (long bitvalue: bitvalues) {
-            bitmask |= bitvalue;
-        }
-        return bitmask;
-    }
-
-    /**
-     * Convenience method to check if a bitmask contains a certain bitvalue.
-     * @param bitmask to check
-     * @param type typemask bit to check
-     * @return true if bitmask has the bit set to 1, else false
-     */
-    public static boolean isType(long bitmask, @TypeMask long type) {
-        return 0 < (bitmask & type);
     }
 }

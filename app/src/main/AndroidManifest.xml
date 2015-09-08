@@ -82,7 +82,7 @@
         </activity>
 
         <provider
-            android:name=".provider.TestingProvider"
+            android:name=".provider.TextFileProvider"
             android:label="A Test Provider"
             android:authorities="com.nononsenseapps.notepad.TESTPROVIDER"
             android:enabled="true"
