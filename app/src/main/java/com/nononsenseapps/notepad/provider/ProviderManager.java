@@ -75,11 +75,13 @@ public class ProviderManager {
         public final String authority;
         public final Uri uriBase;
         public final String label;
+        public final int icon;
 
         public Provider(final PackageManager pm, final ProviderInfo providerInfo) {
             label = providerInfo.loadLabel(pm).toString();
             authority = providerInfo.authority;
             uriBase = Uri.parse("content://" + authority);
+            icon = providerInfo.getIconResource();
             /*if (null != providerInfo.metaData) {
                 // Optional stuff like settingsActivity and capabilities
                 String settingsActivity = providerInfo.metaData.getString("settingsActivity");
