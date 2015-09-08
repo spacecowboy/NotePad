@@ -18,7 +18,6 @@
 package com.nononsenseapps.notepad.adapter;
 
 import android.database.Cursor;
-import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
@@ -31,12 +30,16 @@ import com.nononsenseapps.notepad.provider.ProviderContract;
 /**
  * Adapter to handle the display of notes/tasks.
  */
-public class MainListAdapter extends RecyclerView.Adapter<MainListViewHolder> {
+public class MainListAdapter extends RecyclerView.Adapter<ItemViewHolder> {
 
+    private static final int VIEWTYPE_ITEM = 0;
+    private static final int VIEWTYPE_FOLDER = 1;
+
+    private final OnItemClickHandler mOnItemClickHandler;
     private Cursor mCursor = null;
 
-    public MainListAdapter() {
-
+    public MainListAdapter(OnItemClickHandler onItemClickHandler) {
+        mOnItemClickHandler = onItemClickHandler;
     }
 
     public void setData(@Nullable Cursor cursor) {
@@ -44,22 +47,26 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListViewHolder> {
     }
 
     @Override
-    public MainListViewHolder onCreateViewHolder(final ViewGroup viewGroup, final int viewType) {
-        MainListViewHolder vh = new MainListViewHolder(LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.listitem_main_item, viewGroup, false));
-        if (viewType == 0) {
-            return vh;
-        } else {
-            vh.textView.setTextColor(Color.RED);
+    public ItemViewHolder onCreateViewHolder(final ViewGroup viewGroup, final int viewType) {
+        switch (viewType) {
+            case VIEWTYPE_FOLDER:
+                return new FolderViewHolder(LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.listitem_main_item, viewGroup, false), mOnItemClickHandler);
+            case VIEWTYPE_ITEM:
+            default:
+                return new ItemViewHolder(LayoutInflater.from(viewGroup.getContext())
+                        .inflate(R.layout.listitem_main_item, viewGroup, false), mOnItemClickHandler);
+
         }
-        return vh;
     }
 
     @Override
-    public void onBindViewHolder(final MainListViewHolder vh, final int position) {
+    public void onBindViewHolder(final ItemViewHolder vh, final int position) {
         mCursor.moveToPosition(position);
+        // Set uri for item
+        vh.setUri(getString(mCursor, ProviderContract.COLUMN_URI));
 
-        vh.textView.setText(getString(mCursor, ProviderContract.COLUMN_ID)
+        vh.textView.setText(getString(mCursor, ProviderContract.COLUMN_URI)
                 + " - " + getString(mCursor, ProviderContract.COLUMN_TITLE));
     }
 
@@ -76,10 +83,10 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListViewHolder> {
         mCursor.moveToPosition(position);
         final long typemask = getLong(mCursor, ProviderContract.COLUMN_TYPEMASK);
         if (ProviderContract.isType(typemask, ProviderContract.TYPE_FOLDER)) {
-            return 1;
+            return VIEWTYPE_FOLDER;
         } else {
             // TODO check that data is checked, if not it is an error
-            return 0;
+            return VIEWTYPE_ITEM;
         }
     }
 
@@ -94,5 +101,11 @@ public class MainListAdapter extends RecyclerView.Adapter<MainListViewHolder> {
 
     private long getLong(@NonNull Cursor cursor, @NonNull @ProviderContract.ColumnName String columnName) {
         return cursor.getLong(cursor.getColumnIndex(columnName));
+    }
+
+    public interface OnItemClickHandler {
+        void onItemClick(ItemViewHolder viewHolder);
+
+        boolean onItemLongClick(ItemViewHolder viewHolder);
     }
 }

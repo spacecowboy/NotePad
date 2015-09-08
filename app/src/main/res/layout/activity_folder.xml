@@ -15,23 +15,15 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
+<!-- As the main content view, the view below consumes the entire
+     space available using match_parent in both dimensions. -->
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="?android:listPreferredItemHeightSmall"
-    android:background="?android:selectableItemBackground"
-    android:paddingLeft="@dimen/keyline_1"
-    android:paddingRight="@dimen/keyline_1"
-    android:focusable="true"
-    android:minHeight="?android:listPreferredItemHeightSmall">
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
 
-    <TextView
-        android:id="@android:id/text1"
+    <include
+        layout="@layout/include_activity_folder_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center_vertical"
-        android:text="Bob is the man!"
-        style="?android:textAppearanceLarge"
-        android:singleLine="true"
-        android:maxLines="1"/>
-
+        android:layout_height="match_parent" />
 </FrameLayout>

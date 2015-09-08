@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.FileFilter;
 
 public class TextFileProvider extends ContentProvider {
+    public static final String AUTHORITY = "com.nononsenseapps.notepad.TESTPROVIDER";
     private static final String TAG = "TextFileProvider";
     private String mRootPath;
     private FileFilter mFileFilter;
@@ -95,6 +96,7 @@ public class TextFileProvider extends ContentProvider {
 
         final File filePath = new File(join(mRootPath, relativePath));
         File[] files = filePath.listFiles(mFileFilter);
+        Log.d(TAG, "Listing: " + filePath.getPath() + ", files: " + (files == null ? 0 : files.length));
 
         if (files == null) {
             return null;
@@ -104,7 +106,7 @@ public class TextFileProvider extends ContentProvider {
         MatrixCursor mc = new MatrixCursor(projection, files.length);
 
         for (File file : files) {
-            mc.addRow(new Object[]{join(relativePath, file.getName()),
+            mc.addRow(new Object[]{Uri.withAppendedPath(uri, file.getName()).toString(),
                     ProviderContract.getTypeMask(file.isDirectory() ? ProviderContract.TYPE_FOLDER : ProviderContract.TYPE_DATA,
                             ProviderContract.TYPE_DESCRIPTION),
                     file.getName(), null, null, null});

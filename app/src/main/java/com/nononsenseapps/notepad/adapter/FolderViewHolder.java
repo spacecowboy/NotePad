@@ -17,19 +17,21 @@
 
 package com.nononsenseapps.notepad.adapter;
 
-import android.support.v7.widget.RecyclerView;
+import android.graphics.Color;
 import android.view.View;
-import android.widget.TextView;
 
 /**
- * ViewHolder class for items which go in the main list.
+ * ViewHolder class for folder-items which go in the main list.
  */
-public class MainListViewHolder extends RecyclerView.ViewHolder {
+public class FolderViewHolder extends ItemViewHolder {
 
-    public final TextView textView;
+    public FolderViewHolder(View itemView, MainListAdapter.OnItemClickHandler onItemClickHandler) {
+        super(itemView, onItemClickHandler);
+        // TODO remove this, just for dev
+        textView.setTextColor(Color.RED);
+    }
 
-    public MainListViewHolder(View itemView) {
-        super(itemView);
-        textView = (TextView) itemView.findViewById(android.R.id.text1);
+    public boolean isFolder() {
+        return true;
     }
 }

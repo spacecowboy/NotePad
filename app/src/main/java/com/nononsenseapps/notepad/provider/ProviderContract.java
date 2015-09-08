@@ -30,7 +30,7 @@ public class ProviderContract {
 
     // These are the columns a provider is expected to supply.
     // Non-null
-    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_URI = "uri";
     // Non-null
     public static final String COLUMN_TYPEMASK = "typemask";
     // Non-null
@@ -41,8 +41,10 @@ public class ProviderContract {
     public static final String COLUMN_STATUS = "status";
     // Nullable
     public static final String COLUMN_DUE = "due";
+    // Non-null
+    public static final String COLUMN_DELETED = "deleted";
     // Projection used by the main list
-    public static final String[] sMainListProjection = new String[]{COLUMN_ID,
+    public static final String[] sMainListProjection = new String[]{COLUMN_URI,
             COLUMN_TYPEMASK, COLUMN_TITLE, COLUMN_DESCRIPTION, COLUMN_STATUS, COLUMN_DUE};
 
     // Bitmasks for use with typemask
@@ -60,6 +62,7 @@ public class ProviderContract {
     public static final long TYPE_REMINDER = 0x100000;
     // Item supports description/content (otherwise only title).
     public static final long TYPE_DESCRIPTION = 0x1000000;
+    // Item which are deleted should not be
 
     /**
      * Convenience method to OR together a bunch of bitmasks.
@@ -87,12 +90,13 @@ public class ProviderContract {
     }
 
     @StringDef({
-            COLUMN_ID,
+            COLUMN_URI,
             COLUMN_TYPEMASK,
             COLUMN_TITLE,
             COLUMN_DESCRIPTION,
             COLUMN_STATUS,
-            COLUMN_DUE
+            COLUMN_DUE,
+            COLUMN_DELETED
     })
     public @interface ColumnName {
     }
