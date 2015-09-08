@@ -154,7 +154,7 @@ public class NavigationDrawerFragment extends Fragment {
 
         // TODO take configuration into account
         ProviderManager pm = ProviderManager.getInstance(getContext());
-        for (final ProviderManager.Provider provider: pm.getAvailableProviders()) {
+        for (final ProviderManager.Provider provider: pm.getConfiguredProviders()) {
             View view = inflater.inflate(R.layout.listitem_navdrawer_provider, mNavContainer, false);
             // provider might have icon
             ImageView im = (ImageView) view.findViewById(android.R.id.icon1);

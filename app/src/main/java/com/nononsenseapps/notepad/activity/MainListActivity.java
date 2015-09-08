@@ -61,14 +61,14 @@ public class MainListActivity extends AppCompatActivity implements NavigationDra
         if (savedInstanceState == null) {
 
             // TODO just load first provider we find, change this later
-            ProviderManager pm = ProviderManager.getInstance(this);
-            ProviderManager.Provider provider = pm.getAvailableProviders().get(0);
+            //ProviderManager pm = ProviderManager.getInstance(this);
+            //ProviderManager.Provider provider = pm.getAvailableProviders().get(0);
 
-            mNavigationDrawerFragment.selectProvider(provider);
+            //mNavigationDrawerFragment.selectProvider(provider);
 
-            mFragment = MainListFragment.newInstance(provider.uriBase);
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.listframe, mFragment, "single_pane").commit();
+            //mFragment = MainListFragment.newInstance(provider.uriBase);
+            //getSupportFragmentManager().beginTransaction()
+             //       .replace(R.id.listframe, mFragment, "single_pane").commit();
         } else {
             mFragment = getSupportFragmentManager().findFragmentByTag("single_pane");
         }

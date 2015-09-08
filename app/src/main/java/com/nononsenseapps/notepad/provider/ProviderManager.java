@@ -23,6 +23,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ProviderInfo;
 import android.content.pm.ResolveInfo;
 import android.net.Uri;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +33,10 @@ import java.util.List;
  * This singleton-class handles things related to (possibly 3rd party) providers.
  */
 public class ProviderManager {
+
+    public static final String METADATA_PROTOCOL_VERSION = "protocolVersion";
+    public static final String METADATA_REQUIRES_CONFIG = "requiresConfig";
+    public static final String METADATA_SETTINGS_ACTIVITY = "settingsActivity";
 
     private static ProviderManager sInstance;
     private final Context mApplicationContext;
@@ -49,7 +55,7 @@ public class ProviderManager {
 
     /**
      *
-     * @return a list of URIs, which installed providers provide.
+     * @return a list of providers which are available for use/setup.
      */
     public List<Provider> getAvailableProviders() {
         List<Provider> availableUris = new ArrayList<>();
@@ -58,17 +64,69 @@ public class ProviderManager {
                 PackageManager.GET_META_DATA);
         for (ResolveInfo resolveInfo: resolveInfos) {
             try {
-                // URI is available in metadata
-                availableUris.add(new Provider(pm, resolveInfo.providerInfo));
-                // Service style
-                //Bundle metaData = resolveInfo.serviceInfo.metaData;
-                //availableUris.add(Uri.parse(metaData.getString("uri")));
+                Bundle metadata = resolveInfo.providerInfo.metaData;
+                if (providerHasValidMetadata(metadata)) {
+                    availableUris.add(new Provider(pm, resolveInfo.providerInfo));
+                }
             } catch (NullPointerException ignored) {
                 // Instead of wrapping code in multiple ifs
             }
         }
 
         return availableUris;
+    }
+
+    /**
+     *
+     * @return a list of providers which are available for use. Note that a provider might appear
+     * more than once here, if it's been configured with different settings (different folders/user accounts, etc).
+     */
+    public List<Provider> getConfiguredProviders() {
+        List<Provider> availableUris = new ArrayList<>();
+        // First get all providers which do not require configuration
+        PackageManager pm = mApplicationContext.getPackageManager();
+        List<ResolveInfo> resolveInfos = pm.queryIntentContentProviders(new Intent(ProviderContract.ACTION_PROVIDER),
+                PackageManager.GET_META_DATA);
+        for (ResolveInfo resolveInfo: resolveInfos) {
+            try {
+                Bundle metadata = resolveInfo.providerInfo.metaData;
+                if (providerHasValidMetadata(metadata) && !providerRequiresConfig(metadata)) {
+                    availableUris.add(new Provider(pm, resolveInfo.providerInfo));
+                }
+            } catch (NullPointerException ignored) {
+                // Instead of wrapping code in multiple ifs
+            }
+        }
+
+        // TODO include providers which have been setup my user
+
+        return availableUris;
+    }
+
+    /**
+     * Checks that a provider specifies correct metadata.
+     * @param metadata for provider
+     * @return true or false
+     */
+    public boolean providerHasValidMetadata(@NonNull Bundle metadata) {
+        // Only one protocol level atm
+        boolean result = (1 == metadata.getInt(METADATA_PROTOCOL_VERSION, -1));
+
+        // If config is required, then a settingsactivity must be specified
+        if (result && metadata.getBoolean(METADATA_REQUIRES_CONFIG, false)) {
+            result = metadata.containsKey(METADATA_SETTINGS_ACTIVITY);
+        }
+
+        return result;
+    }
+
+    /**
+     *
+     * @param metadata for a given provider
+     * @return true if provider is valid and specifies no required config
+     */
+    public boolean providerRequiresConfig(@NonNull Bundle metadata) {
+        return metadata.getBoolean(METADATA_REQUIRES_CONFIG, false);
     }
 
     public static class Provider {
