@@ -20,6 +20,7 @@ package com.nononsenseapps.notepad.fragment;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
@@ -36,7 +37,6 @@ import com.nononsenseapps.notepad.activity.FolderListActivity;
 import com.nononsenseapps.notepad.adapter.ItemViewHolder;
 import com.nononsenseapps.notepad.adapter.MainListAdapter;
 import com.nononsenseapps.notepad.provider.ProviderContract;
-import com.nononsenseapps.notepad.provider.ProviderManager;
 
 
 /**
@@ -46,28 +46,34 @@ import com.nononsenseapps.notepad.provider.ProviderManager;
  */
 public class MainListFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>, MainListAdapter.OnItemClickHandler {
 
+    // Fragment arguments
+    private static final String ARG_URI = "arg_uri";
+
     private RecyclerView mRecyclerView;
     private MainListAdapter mAdapter;
+    private Uri mUri;
 
     public MainListFragment() {
         // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @return A new instance of fragment FragmentMainList.
+     * @param uri to list items in
+     * @return a new instance of this fragment
      */
-    public static MainListFragment newInstance() {
+    public static MainListFragment newInstance(Uri uri) {
         MainListFragment fragment = new MainListFragment();
-        fragment.setArguments(Bundle.EMPTY);
+        Bundle args = new Bundle();
+        args.putString(ARG_URI, uri.toString());
+        fragment.setArguments(args);
         return fragment;
     }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mUri = Uri.parse(getArguments().getString(ARG_URI));
 
         // Load data
         getLoaderManager().restartLoader(0, Bundle.EMPTY, this);
@@ -88,26 +94,12 @@ public class MainListFragment extends Fragment implements LoaderManager.LoaderCa
         mAdapter = new MainListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
 
-        /*TextView tv = (TextView) root.findViewById(android.R.id.text1);
-        StringBuilder sb = new StringBuilder("Providers:\n");
-        ProviderManager pm = ProviderManager.getInstance(getActivity());
-        for (ProviderManager.Provider provider: pm.getAvailableProviders()) {
-            sb.append(provider.label).append(" - ").append(provider.authority).append("\n");
-        }
-        tv.setText(sb.toString());
-*/
-
-
         return root;
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
-        // TODO just load first provider we find, change this later
-        ProviderManager pm = ProviderManager.getInstance(getContext());
-        ProviderManager.Provider provider = pm.getAvailableProviders().get(0);
-
-        return new CursorLoader(getContext(), provider.uriBase,
+        return new CursorLoader(getContext(), mUri,
                 ProviderContract.sMainListProjection, null, null, null);
     }
 

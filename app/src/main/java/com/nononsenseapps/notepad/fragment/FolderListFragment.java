@@ -58,6 +58,10 @@ public class FolderListFragment extends Fragment implements LoaderManager.Loader
     }
 
 
+    /**
+     * @param intent which was used to start the activity, must contain a uri in "data"
+     * @return a FolderListFragment
+     */
     public static FolderListFragment newInstance(final Intent intent) {
         FolderListFragment fragment = new FolderListFragment();
         Bundle args = new Bundle();
@@ -90,16 +94,6 @@ public class FolderListFragment extends Fragment implements LoaderManager.Loader
 
         mAdapter = new MainListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
-
-        /*TextView tv = (TextView) root.findViewById(android.R.id.text1);
-        StringBuilder sb = new StringBuilder("Providers:\n");
-        ProviderManager pm = ProviderManager.getInstance(getActivity());
-        for (ProviderManager.Provider provider: pm.getAvailableProviders()) {
-            sb.append(provider.label).append(" - ").append(provider.authority).append("\n");
-        }
-        tv.setText(sb.toString());
-*/
-
 
         return root;
     }

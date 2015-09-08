@@ -26,6 +26,7 @@ import android.support.v7.widget.Toolbar;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.fragment.MainListFragment;
 import com.nononsenseapps.notepad.fragment.NavigationDrawerFragment;
+import com.nononsenseapps.notepad.provider.ProviderManager;
 
 /**
  * This is the main activity. It is the one that is started by users when they press the icon.
@@ -58,7 +59,12 @@ public class MainListActivity extends AppCompatActivity {
 
         // Load main fragment
         if (savedInstanceState == null) {
-            mFragment = MainListFragment.newInstance();
+
+            // TODO just load first provider we find, change this later
+            ProviderManager pm = ProviderManager.getInstance(this);
+            ProviderManager.Provider provider = pm.getAvailableProviders().get(0);
+
+            mFragment = MainListFragment.newInstance(provider.uriBase);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.listframe, mFragment, "single_pane").commit();
         } else {
