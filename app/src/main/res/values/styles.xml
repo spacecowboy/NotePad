@@ -31,4 +31,10 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="android:fontFamily">sans-serif</item>
     </style>
+
+    <style name="TextAppearance.NavigationDrawer.Text3">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
 </resources>

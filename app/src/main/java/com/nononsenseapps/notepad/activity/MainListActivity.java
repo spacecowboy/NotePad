@@ -31,7 +31,7 @@ import com.nononsenseapps.notepad.provider.ProviderManager;
 /**
  * This is the main activity. It is the one that is started by users when they press the icon.
  */
-public class MainListActivity extends AppCompatActivity {
+public class MainListActivity extends AppCompatActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private Toolbar mToolbar;
     private Fragment mFragment;
@@ -64,6 +64,8 @@ public class MainListActivity extends AppCompatActivity {
             ProviderManager pm = ProviderManager.getInstance(this);
             ProviderManager.Provider provider = pm.getAvailableProviders().get(0);
 
+            mNavigationDrawerFragment.selectProvider(provider);
+
             mFragment = MainListFragment.newInstance(provider.uriBase);
             getSupportFragmentManager().beginTransaction()
                     .replace(R.id.listframe, mFragment, "single_pane").commit();
@@ -72,4 +74,12 @@ public class MainListActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void switchProvider(ProviderManager.Provider provider) {
+        // Called by navigation drawer
+        setTitle(provider.label);
+        mFragment = MainListFragment.newInstance(provider.uriBase);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.listframe, mFragment, "single_pane").commit();
+    }
 }

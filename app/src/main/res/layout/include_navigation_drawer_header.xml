@@ -32,8 +32,7 @@
         android:layout_height="64dp"
         android:layout_marginBottom="@dimen/item_spacing"
         android:layout_marginTop="32dp"
-        android:scaleType="fitCenter"
-        android:src="@drawable/app_icon" />
+        android:scaleType="fitCenter" />
 
     <RelativeLayout
         android:id="@+id/provider_info_box"

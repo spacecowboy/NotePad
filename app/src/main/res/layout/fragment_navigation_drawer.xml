@@ -19,20 +19,21 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#cccc"
+    android:background="#FFFFFF"
     tools:context="com.nononsenseapps.notepad.fragment.NavigationDrawerFragment">
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <LinearLayout
+            android:id="@+id/nav_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
             <include layout="@layout/include_navigation_drawer_header" />
-            <TextView android:layout_width="@dimen/match_parent"
-                android:layout_height="wrap_content" android:text="Nav drawer!" />
+
+            <!-- Rest of content is added programmatically -->
         </LinearLayout>
     </ScrollView>
 

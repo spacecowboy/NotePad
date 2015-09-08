@@ -32,8 +32,14 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.provider.ProviderManager;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -64,6 +70,9 @@ public class NavigationDrawerFragment extends Fragment {
     private int mCurrentSelectedPosition = 0;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    private LinearLayout mNavContainer;
+    private ImageView mMainAvatar;
+    private NavigationDrawerCallbacks mCallbacks;
 
     public NavigationDrawerFragment() {
     }
@@ -91,10 +100,97 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View mDrawerListView = inflater.inflate(
+        View rootView = inflater.inflate(
                 R.layout.fragment_navigation_drawer, container, false);
 
-        return mDrawerListView;
+        mNavContainer = (LinearLayout) rootView.findViewById(R.id.nav_container);
+        mMainAvatar = (ImageView) rootView.findViewById(R.id.main_avatar);
+
+        addProviders();
+
+        addFooterItems();
+
+        return rootView;
+    }
+
+    /**
+     * Add items which are always visible, such as "settings" and "add provider".
+     */
+    private void addFooterItems() {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+
+        // Add provider
+        View additem = inflater.inflate(R.layout.listitem_navdrawer_generic, mNavContainer, false);
+        ((ImageView) additem.findViewById(android.R.id.icon1)).setImageResource(R.drawable.ic_add_24dp);
+        ((TextView) additem.findViewById(android.R.id.text1)).setText("Add source");
+        additem.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Add provider was clicked
+                // TODO
+            }
+        });
+        mNavContainer.addView(additem);
+
+        // Manage providers
+        View manage = inflater.inflate(R.layout.listitem_navdrawer_generic, mNavContainer, false);
+        ((ImageView) manage.findViewById(android.R.id.icon1)).setImageResource(R.drawable.ic_settings_24dp);
+        ((TextView) manage.findViewById(android.R.id.text1)).setText("Manage sources");
+        manage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // Settings was clicked
+                // TODO
+            }
+        });
+        mNavContainer.addView(manage);
+    }
+
+    /**
+     * Populate the container with available & configured providers
+     */
+    private void addProviders() {
+        LayoutInflater inflater = LayoutInflater.from(getContext());
+
+        // TODO take configuration into account
+        ProviderManager pm = ProviderManager.getInstance(getContext());
+        for (final ProviderManager.Provider provider: pm.getAvailableProviders()) {
+            View view = inflater.inflate(R.layout.listitem_navdrawer_provider, mNavContainer, false);
+            // TODO provider might have icon
+            ((ImageView) view.findViewById(android.R.id.icon1))
+                    .setImageDrawable(TextDrawable.builder()
+                            .buildRect(provider.label.substring(0, 1),
+                                    ColorGenerator.MATERIAL.getColor(provider.label)));
+            ((TextView) view.findViewById(android.R.id.text1)).setText(provider.label);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Provider clicked
+                    selectProvider(provider);
+                }
+            });
+            mNavContainer.addView(view);
+        }
+    }
+
+    /**
+     * Change to the specified provider
+     * @param provider to switch to
+     */
+    public void selectProvider(ProviderManager.Provider provider) {
+        // Set main avatar
+        mMainAvatar.setImageDrawable(TextDrawable.builder()
+                .buildRect(provider.label.substring(0, 1),
+                        ColorGenerator.MATERIAL.getColor(provider.label)));
+        // TODO set labels
+
+        // Load new provider
+        mCallbacks.switchProvider(provider);
+
+        // Close drawer
+        if (isDrawerOpen() && mUserLearnedDrawer) {
+            mDrawerLayout.closeDrawers();
+        }
     }
 
     public boolean isDrawerOpen() {
@@ -178,11 +274,11 @@ public class NavigationDrawerFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        /*try {
-            mCallbacks = (NavigationDrawerCallbacks) activity;
+        try {
+            mCallbacks = (NavigationDrawerCallbacks) getActivity();
         } catch (ClassCastException e) {
             throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
-        }*/
+        }
     }
 
     @Override
@@ -205,5 +301,9 @@ public class NavigationDrawerFragment extends Fragment {
 
     private ActionBar getActionBar() {
         return ((AppCompatActivity) getActivity()).getSupportActionBar();
+    }
+
+    public interface NavigationDrawerCallbacks {
+        void switchProvider(ProviderManager.Provider provider);
     }
 }
