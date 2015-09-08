@@ -28,6 +28,9 @@ import android.util.Log;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 
 public class TextFileProvider extends ContentProvider {
     public static final String AUTHORITY = "com.nononsenseapps.notepad.TESTPROVIDER";
@@ -102,10 +105,14 @@ public class TextFileProvider extends ContentProvider {
             return null;
         }
 
-        // Projection is ProviderContract.sMainListProjection
-        MatrixCursor mc = new MatrixCursor(projection, files.length);
+        // Sort by name and path
+        List<File> fileList = Arrays.asList(files);
+        Collections.sort(fileList);
 
-        for (File file : files) {
+        // Projection is ProviderContract.sMainListProjection
+        MatrixCursor mc = new MatrixCursor(projection, fileList.size());
+
+        for (File file : fileList) {
             mc.addRow(new Object[]{Uri.withAppendedPath(uri, file.getName()).toString(),
                     ProviderContract.getTypeMask(file.isDirectory() ? ProviderContract.TYPE_FOLDER : ProviderContract.TYPE_DATA,
                             ProviderContract.TYPE_DESCRIPTION),
