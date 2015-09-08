@@ -66,8 +66,7 @@ public class MainListAdapter extends RecyclerView.Adapter<ItemViewHolder> {
         // Set uri for item
         vh.setUri(getString(mCursor, ProviderContract.COLUMN_URI));
 
-        vh.textView.setText(getString(mCursor, ProviderContract.COLUMN_URI)
-                + " - " + getString(mCursor, ProviderContract.COLUMN_TITLE));
+        vh.textView.setText(getString(mCursor, ProviderContract.COLUMN_TITLE));
     }
 
     @Override
