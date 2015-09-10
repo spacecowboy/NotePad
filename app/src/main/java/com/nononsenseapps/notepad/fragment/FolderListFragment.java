@@ -18,6 +18,7 @@
 package com.nononsenseapps.notepad.fragment;
 
 
+import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -97,6 +98,17 @@ public class FolderListFragment extends Fragment implements LoaderManager.Loader
 
         mAdapter = new MainListAdapter(this);
         mRecyclerView.setAdapter(mAdapter);
+
+        View fab = root.findViewById(R.id.fab_add);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // TODO do something more interesting
+                ContentValues values = new ContentValues();
+                values.put(ProviderContract.COLUMN_TITLE, "A random title");
+                getContext().getContentResolver().insert(mUri, values);
+            }
+        });
 
         return root;
     }

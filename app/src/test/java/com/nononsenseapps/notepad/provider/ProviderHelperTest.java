@@ -111,4 +111,15 @@ public class ProviderHelperTest {
         assertEquals(ProviderHelper.URI_NOMATCH,
                 ProviderHelper.matchPath("unknownpredicate/foo/bar"));
     }
+
+    @Test
+    public void testJoin() throws Exception {
+        assertEquals("/foo/bar", ProviderHelper.join("/foo", "bar"));
+        assertEquals("/foo/bar", ProviderHelper.join("/foo", "/bar"));
+        assertEquals("/foo/bar", ProviderHelper.join("/foo/", "/bar"));
+        assertEquals("/foo/bar", ProviderHelper.join("/foo/", "bar"));
+        assertEquals("/", ProviderHelper.join("/", "/"));
+        assertEquals("/", ProviderHelper.join("/", ""));
+        assertEquals("/", ProviderHelper.join("", "/"));
+    }
 }

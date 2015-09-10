@@ -169,4 +169,26 @@ public class ProviderHelper {
             }
         }
     }
+
+    /**
+     * Join two pieces together, separated by a /
+     * @param path1 like /foo
+     * @param path2 like bar
+     * @return /foo/bar
+     */
+    public static String join(@NonNull String path1, @NonNull String path2) {
+        if (path1.endsWith("/")) {
+            if (path2.startsWith("/")) {
+                return path1 + path2.substring(1);
+            } else {
+                return path1 + path2;
+            }
+        } else {
+            if (path2.startsWith("/")) {
+                return path1 + path2;
+            } else {
+                return path1 + "/" + path2;
+            }
+        }
+    }
 }

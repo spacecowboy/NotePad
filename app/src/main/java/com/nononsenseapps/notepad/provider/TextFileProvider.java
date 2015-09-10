@@ -24,7 +24,6 @@ import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 import android.util.Log;
 
 import java.io.File;
@@ -124,7 +123,7 @@ public class TextFileProvider extends ContentProvider {
                 throw new IllegalArgumentException("Unknown path: " + uri.toString());
         }
 
-        final File filePath = new File(join(mRootPath, relativePath));
+        final File filePath = new File(ProviderHelper.join(mRootPath, relativePath));
         File[] files = filePath.listFiles(mFileFilter);
         Log.d(TAG, "Listing: " + filePath.getPath() + ", files: " + (files == null ? 0 : files.length));
 
@@ -140,7 +139,7 @@ public class TextFileProvider extends ContentProvider {
         MatrixCursor mc = new MatrixCursor(projection, fileList.size());
 
         for (File file : fileList) {
-            mc.addRow(new Object[]{join(relativePath, file.getName()),
+            mc.addRow(new Object[]{ProviderHelper.join(relativePath, file.getName()),
                     ProviderContract.getTypeMask(file.isDirectory() ? ProviderContract.TYPE_FOLDER : ProviderContract.TYPE_DATA,
                             ProviderContract.TYPE_DESCRIPTION),
                     file.getName(), null, null, null});
@@ -154,21 +153,5 @@ public class TextFileProvider extends ContentProvider {
                       String[] selectionArgs) {
         // TODO: Implement this to handle requests to update one or more rows.
         throw new UnsupportedOperationException("Not yet implemented");
-    }
-
-    private String join(@NonNull String path1, @NonNull String path2) {
-        if (path1.endsWith("/")) {
-            if (path2.startsWith("/")) {
-                return path1 + path2.substring(1);
-            } else {
-                return path1 + path2;
-            }
-        } else {
-            if (path2.startsWith("/")) {
-                return path1 + path2;
-            } else {
-                return path1 + "/" + path2;
-            }
-        }
     }
 }

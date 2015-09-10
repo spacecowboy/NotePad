@@ -19,6 +19,7 @@ package com.nononsenseapps.notepad.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.Context;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
@@ -95,8 +96,31 @@ public class DummyProvider extends ContentProvider {
 
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
-        // TODO: Implement this to handle requests to insert a new row.
-        throw new UnsupportedOperationException("Not yet implemented");
+        String path;
+        switch (ProviderHelper.matchUri(uri)) {
+            case ProviderHelper.URI_LIST:
+                path = ProviderHelper.getRelativePath(uri);
+
+                final String parentPath;
+                final List<DummyItem> list;
+                if ("/".equals(path)) {
+                    parentPath = "/";
+                    list = mData;
+                } else {
+                    DummyItem parent = getNestedItem(path);
+                    parentPath = parent.path;
+                    list = parent.children;
+                }
+
+                DummyItem item = new DummyItem(ProviderHelper.join(parentPath, Integer.toString(list.size())),
+                        values);
+                list.add(item);
+
+                notifyOnChange(uri);
+                return ProviderHelper.getDetailsUri(ProviderHelper.getBase(uri), item.path);
+            default:
+                throw new IllegalArgumentException("Can't perform insert at: " + uri.toString());
+        }
     }
 
     @Override
@@ -104,20 +128,28 @@ public class DummyProvider extends ContentProvider {
                         String[] selectionArgs, String sortOrder) {
         Log.d(TAG, "Uri: " + uri.toString());
 
+        String path;
         MatrixCursor mc = new MatrixCursor(ProviderContract.sMainListProjection);
 
         switch (ProviderHelper.matchUri(uri)) {
             case ProviderHelper.URI_ROOT:
-                for (DummyItem item: mData) {
+                setNotificationUri(mc, ProviderHelper.getListUri(ProviderHelper.getBase(uri), ""));
+                for (DummyItem item : mData) {
                     mc.addRow(item.asRow());
                 }
                 break;
             case ProviderHelper.URI_LIST:
-                String path = ProviderHelper.getRelativePath(uri);
+                setNotificationUri(mc, uri);
+                path = ProviderHelper.getRelativePath(uri);
 
-                for (DummyItem item: getNestedList(path)) {
+                for (DummyItem item : getNestedList(path)) {
                     mc.addRow(item.asRow());
                 }
+                break;
+            case ProviderHelper.URI_DETAILS:
+                setNotificationUri(mc, uri);
+                path = ProviderHelper.getRelativePath(uri);
+                mc.addRow(getNestedItem(path).asRow());
                 break;
             default:
                 throw new IllegalArgumentException("Unknown path: " + uri.toString());
@@ -127,7 +159,21 @@ public class DummyProvider extends ContentProvider {
     }
 
     /**
+     * Sets the notifcation uri on the cursor.
+     *
+     * @param c
+     * @param uri
+     */
+    protected void setNotificationUri(Cursor c, Uri uri) {
+        Context context = getContext();
+        if (context != null) {
+            c.setNotificationUri(context.getContentResolver(), uri);
+        }
+    }
+
+    /**
      * Walk the tree, decomposing the path as we walk
+     *
      * @param path like /1/2/3/4
      * @return the list of children in item /1/2/3/4
      */
@@ -146,11 +192,45 @@ public class DummyProvider extends ContentProvider {
         return items;
     }
 
+    /**
+     * Walk the tree, decomposing the path as we walk
+     *
+     * @param path like /1/2/3/4
+     * @return the item /1/2/3/4
+     */
+    private DummyItem getNestedItem(String path) {
+        List<DummyItem> items = mData;
+        DummyItem item = null;
+        String first = ProviderHelper.firstPart(path);
+        path = ProviderHelper.restPart(path);
+        while (!first.isEmpty()) {
+            int index = Integer.parseInt(first);
+            item = items.get(index);
+            items = item.children;
+
+            first = ProviderHelper.firstPart(path);
+            path = ProviderHelper.restPart(path);
+        }
+
+        return item;
+    }
+
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
         // TODO: Implement this to handle requests to update one or more rows.
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    /**
+     * Call this after the data changes
+     * @param uri to notify updates on
+     */
+    protected void notifyOnChange(@NonNull Uri uri) {
+        Context context = getContext();
+        if (context != null) {
+            context.getContentResolver().notifyChange(uri, null);
+        }
     }
 
     /**
@@ -166,15 +246,22 @@ public class DummyProvider extends ContentProvider {
         protected String due = null;
         protected boolean deleted = false;
 
-        public DummyItem(String path, String title) {
+        public DummyItem(@NonNull String path, @NonNull String title) {
             this(path, title, ProviderContract.getTypeMask(ProviderContract.TYPE_DATA,
                     ProviderContract.TYPE_FOLDER));
         }
 
-        public DummyItem(String path, String title, long bitmask) {
+        public DummyItem(@NonNull String path, @NonNull String title, long bitmask) {
             this.path = path;
             this.title = title;
             this.typemask = bitmask;
+        }
+
+        public DummyItem(@NonNull String path, @NonNull ContentValues values) {
+            this.path = path;
+            this.title = values.getAsString(ProviderContract.COLUMN_TITLE);
+            this.typemask = ProviderContract.getTypeMask(ProviderContract.TYPE_DATA,
+                    ProviderContract.TYPE_FOLDER);
         }
 
         public Object[] asRow() {
