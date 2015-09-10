@@ -147,7 +147,7 @@ public class ProviderHelper {
      * @param path like /foo/bar/baz
      * @return type of the path
      */
-    static int matchPath(@Nullable String path) {
+    public static int matchPath(@Nullable String path) {
         if (path == null || path.isEmpty()) {
             return URI_ROOT;
         } else if (path.startsWith("/")) {

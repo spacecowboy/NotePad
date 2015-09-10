@@ -199,6 +199,17 @@ public class DummyProvider extends ContentProvider {
      * @return the item /1/2/3/4
      */
     private DummyItem getNestedItem(String path) {
+        return getNestedItem(path, false);
+    }
+
+    /**
+     * Walk the tree, decomposing the path as we walk
+     *
+     * @param path like /1/2/3/4
+     * @param popItem true if item should be removed from its parent list also
+     * @return the item /1/2/3/4
+     */
+    private DummyItem getNestedItem(String path, boolean popItem) {
         List<DummyItem> items = mData;
         DummyItem item = null;
         String first = ProviderHelper.firstPart(path);
@@ -212,14 +223,70 @@ public class DummyProvider extends ContentProvider {
             path = ProviderHelper.restPart(path);
         }
 
+        if (popItem) {
+            items.remove(item);
+        }
+
         return item;
     }
 
     @Override
     public int update(@NonNull Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
+        String path;
+        switch (ProviderHelper.matchUri(uri)) {
+            case ProviderHelper.URI_DETAILS:
+                path = ProviderHelper.getRelativePath(uri);
+
+                // Any queries?
+                if (uri.getQuery().isEmpty()) {
+                    // Update values
+                    getNestedItem(path).update(values);
+                } else {
+                    // Move query
+                    String previous = uri.getQueryParameter(ProviderContract.QUERY_MOVE_PREVIOUS);
+                    String parent = uri.getQueryParameter(ProviderContract.QUERY_MOVE_PARENT);
+
+                    if (previous!= null || parent != null) {
+                        moveDummyItem(path, previous, parent);
+                    }
+                }
+
+                notifyOnChange(uri);
+                break;
+            default:
+                throw new IllegalArgumentException("Can't perform insert at: " + uri.toString());
+        }
+
         // TODO: Implement this to handle requests to update one or more rows.
         throw new UnsupportedOperationException("Not yet implemented");
+    }
+
+    /**
+     *
+     * @param path relativepath to item to move
+     * @param previous relativepath to sibling which should be placed before item
+     * @param parent relativepath to parent item
+     */
+    private void moveDummyItem(String path, String previous, String parent) {
+        // Pop the item
+        DummyItem item = getNestedItem(path, true);
+
+        List<DummyItem> parentList;
+        if (parent == null || parent.isEmpty()) {
+            parentList = mData;
+        } else {
+            parentList = getNestedList(parent);
+        }
+
+        int prevIndex = -1;
+        if (previous != null && !previous.isEmpty()) {
+            DummyItem prevItem = getNestedItem(previous);
+            prevIndex = parentList.indexOf(prevItem);
+        }
+
+        // Insert into parentList at correct position
+        parentList.add(prevIndex + 1, item);
     }
 
     /**
@@ -323,6 +390,10 @@ public class DummyProvider extends ContentProvider {
 
         public void setPath(String path) {
             this.path = path;
+        }
+
+        public void update(ContentValues values) {
+            this.title = values.getAsString(ProviderContract.COLUMN_TITLE);
         }
     }
 }

@@ -62,6 +62,8 @@ public class ProviderContract {
     public static final long TYPE_REMINDER = 0x100000;
     // Item supports description/content (otherwise only title).
     public static final long TYPE_DESCRIPTION = 0x1000000;
+    public static final String QUERY_MOVE_PREVIOUS = "move_previous";
+    public static final String QUERY_MOVE_PARENT = "move_parent";
 
     /**
      * Convenience method to OR together a bunch of bitmasks.
