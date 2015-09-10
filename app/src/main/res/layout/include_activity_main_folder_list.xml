@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   ~ Copyright (c) 2015 Jonas Kalderstam.
   ~
   ~ This program is free software: you can redistribute it and/or modify
@@ -22,26 +21,24 @@
     android:layout_height="match_parent">
 
 
-  <android.support.design.widget.AppBarLayout
-      android:id="@+id/headerbar"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:theme="@style/ToolbarTheme">
-
-    <android.support.v7.widget.Toolbar
-        android:id="@+id/toolbar"
-        app:layout_scrollFlags="scroll|enterAlways"
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/headerbar"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/toolbar_height"
-        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
-  </android.support.design.widget.AppBarLayout>
+        android:layout_height="wrap_content"
+        android:theme="@style/ToolbarTheme">
 
-  <FrameLayout
-      android:id="@+id/listframe"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent">
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <!--<include layout="@layout/empty_feeds_at_all" />-->
-  </FrameLayout>
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/listframe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"></FrameLayout>
 
 </FrameLayout>

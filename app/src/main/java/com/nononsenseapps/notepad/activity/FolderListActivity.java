@@ -18,13 +18,16 @@
 package com.nononsenseapps.notepad.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.adapter.FragmentAdapter;
 import com.nononsenseapps.notepad.fragment.FolderListFragment;
 import com.nononsenseapps.notepad.provider.ProviderContract;
 
@@ -57,6 +60,13 @@ public class FolderListActivity extends AppCompatActivity {
             //ab.setDisplayShowTitleEnabled(false);
         }
 
+        // Setup tabs
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        setupViewPager(viewPager);
+
+        TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout.setupWithViewPager(viewPager);
+
         /*NavigationDrawerFragment navigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         // Set up the drawer.
@@ -70,15 +80,19 @@ public class FolderListActivity extends AppCompatActivity {
         if (getIntent().hasExtra(ProviderContract.COLUMN_TITLE)) {
             setTitle(getIntent().getStringExtra(ProviderContract.COLUMN_TITLE));
         }
+    }
 
-        // Load main fragment
-        if (savedInstanceState == null) {
-            mFragment = FolderListFragment.newInstance(getIntent());
-            getSupportFragmentManager().beginTransaction()
-                    .replace(R.id.listframe, mFragment, "single_pane").commit();
-        } else {
-            mFragment = getSupportFragmentManager().findFragmentByTag("single_pane");
-        }
+    protected void setupViewPager(ViewPager viewPager) {
+        // Load fragments
+        // TODO savedInstanceState?
+        FragmentAdapter adapter = new FragmentAdapter(getSupportFragmentManager());
+        adapter.addFragment(FolderListFragment.newInstance(getIntent()),
+                "Sub items");
+
+        // TODO Details fragment
+        adapter.addFragment(FolderListFragment.newInstance(getIntent()),
+                 "Details");
+        viewPager.setAdapter(adapter);
     }
 
     @Override
