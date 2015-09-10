@@ -26,6 +26,7 @@ import android.view.MenuItem;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.fragment.FolderListFragment;
+import com.nononsenseapps.notepad.provider.ProviderContract;
 
 /**
  * This activity displays the content of a folder-item (an item which contains sub-items).
@@ -65,6 +66,10 @@ public class FolderListActivity extends AppCompatActivity {
                     (DrawerLayout) findViewById(R.id.drawer_layout),
                     mToolbar);
         }*/
+
+        if (getIntent().hasExtra(ProviderContract.COLUMN_TITLE)) {
+            setTitle(getIntent().getStringExtra(ProviderContract.COLUMN_TITLE));
+        }
 
         // Load main fragment
         if (savedInstanceState == null) {

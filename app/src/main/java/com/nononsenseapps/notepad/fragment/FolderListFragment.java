@@ -135,6 +135,7 @@ public class FolderListFragment extends Fragment implements LoaderManager.Loader
     public void onItemClick(ItemViewHolder viewHolder) {
         if (viewHolder.isFolder()) {
             Intent i = new Intent(getContext(), FolderListActivity.class);
+            i.putExtra(ProviderContract.COLUMN_TITLE, viewHolder.textView.getText().toString());
             i.setData(ProviderHelper.getListUri(ProviderHelper.getBase(mUri),
                     viewHolder.getPath()));
             startActivity(i);
