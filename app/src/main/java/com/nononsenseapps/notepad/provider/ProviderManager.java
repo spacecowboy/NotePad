@@ -98,7 +98,7 @@ public class ProviderManager {
             }
         }
 
-        // TODO include providers which have been setup my user
+        // TODO include providers which have been setup by user
 
         return availableUris;
     }

@@ -28,6 +28,8 @@ import com.nononsenseapps.notepad.fragment.MainListFragment;
 import com.nononsenseapps.notepad.fragment.NavigationDrawerFragment;
 import com.nononsenseapps.notepad.provider.ProviderManager;
 
+import java.util.List;
+
 /**
  * This is the main activity. It is the one that is started by users when they press the icon.
  */
@@ -61,14 +63,12 @@ public class MainListActivity extends AppCompatActivity implements NavigationDra
         if (savedInstanceState == null) {
 
             // TODO just load first provider we find, change this later
-            //ProviderManager pm = ProviderManager.getInstance(this);
-            //ProviderManager.Provider provider = pm.getAvailableProviders().get(0);
+            ProviderManager pm = ProviderManager.getInstance(this);
+            List<ProviderManager.Provider> providers = pm.getConfiguredProviders();
 
-            //mNavigationDrawerFragment.selectProvider(provider);
-
-            //mFragment = MainListFragment.newInstance(provider.uriBase);
-            //getSupportFragmentManager().beginTransaction()
-             //       .replace(R.id.listframe, mFragment, "single_pane").commit();
+            if (providers.size() > 0) {
+                mNavigationDrawerFragment.selectProvider(providers.get(0));
+            }
         } else {
             mFragment = getSupportFragmentManager().findFragmentByTag("single_pane");
         }
