@@ -19,6 +19,7 @@ package com.nononsenseapps.notepad.provider;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
+import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.MatrixCursor;
 import android.net.Uri;
@@ -35,6 +36,26 @@ import java.util.List;
 public class TextFileProvider extends ContentProvider {
     public static final String AUTHORITY = "com.nononsenseapps.notepad.TESTPROVIDER";
     private static final String TAG = "TextFileProvider";
+
+    // This urimatcher converts incoming URIs to corresponding uricodes
+    private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+    private static final int URI_ROOT = 101;
+    private static final int URI_LIST = 102;
+    private static final int URI_DETAILS = 103;
+
+    private static final String TYPE_NONONSENSENOTES_ITEM = "vnd.android.cursor.item/vnd.nononsensenotes.item";
+
+    // Add uris to match (initial slash supported from JELLY_BEAN_MR2)
+    static {
+        // No item is specified, corresponds to listing all top-level items
+        sUriMatcher.addURI(AUTHORITY, "/list", URI_ROOT);
+        // List all items which are children of the URI (but not the URI-item itself)
+        sUriMatcher.addURI(AUTHORITY, "/list/*", URI_LIST);
+        // Return the single item at the specified URI
+        sUriMatcher.addURI(AUTHORITY, "/details/*", URI_DETAILS);
+    }
+
+
     private String mRootPath;
     private FileFilter mFileFilter;
 
@@ -91,10 +112,16 @@ public class TextFileProvider extends ContentProvider {
 
         Log.d(TAG, "Uri: " + uri.getAuthority() + ", " + uri.getPath() + ", " + uri.getQuery());
 
-        // If path is null, then display root
-        String relativePath = uri.getPath();
-        if (relativePath == null || relativePath.isEmpty()) {
-            relativePath = "/";
+        String relativePath;
+        switch (sUriMatcher.match(uri)) {
+            case URI_ROOT:
+                relativePath = "/";
+                break;
+            case URI_LIST:
+                relativePath = ProviderHelper.getRelativePath(uri);
+                break;
+            default:
+                throw new IllegalArgumentException("Unknown path: " + uri.toString());
         }
 
         final File filePath = new File(join(mRootPath, relativePath));
@@ -113,7 +140,7 @@ public class TextFileProvider extends ContentProvider {
         MatrixCursor mc = new MatrixCursor(projection, fileList.size());
 
         for (File file : fileList) {
-            mc.addRow(new Object[]{Uri.withAppendedPath(uri, file.getName()).toString(),
+            mc.addRow(new Object[]{join(relativePath, file.getName()),
                     ProviderContract.getTypeMask(file.isDirectory() ? ProviderContract.TYPE_FOLDER : ProviderContract.TYPE_DATA,
                             ProviderContract.TYPE_DESCRIPTION),
                     file.getName(), null, null, null});

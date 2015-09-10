@@ -78,7 +78,7 @@ public class MainListActivity extends AppCompatActivity implements NavigationDra
     public void switchProvider(ProviderManager.Provider provider) {
         // Called by navigation drawer
         setTitle(provider.label);
-        mFragment = MainListFragment.newInstance(provider.uriBase);
+        mFragment = MainListFragment.newInstance(provider.uriList);
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.listframe, mFragment, "single_pane").commit();
     }

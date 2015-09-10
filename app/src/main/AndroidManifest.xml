@@ -108,6 +108,25 @@
             <!--<meta-data android:name="settingsActivity"
                 android:value=".ExampleSettingsActivity" />-->
         </provider>
+
+        <provider
+            android:name=".provider.DummyProvider"
+            android:label="Dummy items"
+            android:icon="@drawable/app_icon"
+            android:authorities="com.nononsenseapps.notepad.DUMMYPROVIDER"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.nononsenseapps.notepad.PROVIDER" />
+            </intent-filter>
+            <!-- Required, only one possible value atm -->
+            <meta-data android:name="protocolVersion" android:value="1" />
+            <!-- Optional, if absent assumed to be false -->
+            <meta-data android:name="requiresConfig" android:value="false" />
+            <!-- Semi-Optional. If requiresConfig is true, this is mandatory. -->
+            <!--<meta-data android:name="settingsActivity"
+                android:value=".ExampleSettingsActivity" />-->
+        </provider>
     </application>
 
 </manifest>

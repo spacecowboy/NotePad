@@ -37,6 +37,7 @@ import com.nononsenseapps.notepad.activity.FolderListActivity;
 import com.nononsenseapps.notepad.adapter.ItemViewHolder;
 import com.nononsenseapps.notepad.adapter.MainListAdapter;
 import com.nononsenseapps.notepad.provider.ProviderContract;
+import com.nononsenseapps.notepad.provider.ProviderHelper;
 
 
 /**
@@ -118,7 +119,8 @@ public class MainListFragment extends Fragment implements LoaderManager.LoaderCa
     public void onItemClick(ItemViewHolder viewHolder) {
         if (viewHolder.isFolder()) {
             Intent i = new Intent(getContext(), FolderListActivity.class);
-            i.setData(viewHolder.getUri());
+            i.setData(ProviderHelper.getListUri(ProviderHelper.getBase(mUri),
+                    viewHolder.getPath()));
             startActivity(i);
         }
     }

@@ -64,7 +64,7 @@ public class MainListAdapter extends RecyclerView.Adapter<ItemViewHolder> {
     public void onBindViewHolder(final ItemViewHolder vh, final int position) {
         mCursor.moveToPosition(position);
         // Set uri for item
-        vh.setUri(getString(mCursor, ProviderContract.COLUMN_URI));
+        vh.setPath(getString(mCursor, ProviderContract.COLUMN_PATH));
 
         vh.textView.setText(getString(mCursor, ProviderContract.COLUMN_TITLE));
     }

@@ -17,7 +17,6 @@
 
 package com.nononsenseapps.notepad.adapter;
 
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.TextView;
@@ -28,7 +27,7 @@ import android.widget.TextView;
 public class ItemViewHolder extends RecyclerView.ViewHolder {
 
     public final TextView textView;
-    private Uri mUri = null;
+    private String mPath = null;
 
     public ItemViewHolder(final View itemView, final MainListAdapter.OnItemClickHandler onItemClickHandler) {
         super(itemView);
@@ -54,28 +53,19 @@ public class ItemViewHolder extends RecyclerView.ViewHolder {
     public boolean isFolder() {
         return false;
     }
-
     /**
      * Set the uri for this item. Should only be called in onBindViewHolder methods
-     * @param uri for the item.
+     * @param path for the item.
      */
-    public void setUri(Uri uri) {
-        mUri = uri;
-    }
-
-    /**
-     * Set the uri for this item. Should only be called in onBindViewHolder methods
-     * @param uri for the item.
-     */
-    public void setUri(String uri) {
-        setUri(Uri.parse(uri));
+    public void setPath(String path) {
+        mPath = path;
     }
 
     /**
      *
-     * @return uri for item backing this viewholder.
+     * @return path for item backing this viewholder.
      */
-    public Uri getUri() {
-        return mUri;
+    public String getPath() {
+        return mPath;
     }
 }

@@ -29,8 +29,8 @@ public class ProviderContract {
     public static final String ACTION_PROVIDER = "com.nononsenseapps.notepad.PROVIDER";
 
     // These are the columns a provider is expected to supply.
-    // Non-null
-    public static final String COLUMN_URI = "uri";
+    // Non-null, the uri to this item relative to the root, for example: /foo/bar
+    public static final String COLUMN_PATH = "uri";
     // Non-null
     public static final String COLUMN_TYPEMASK = "typemask";
     // Non-null
@@ -44,7 +44,7 @@ public class ProviderContract {
     // Non-null
     public static final String COLUMN_DELETED = "deleted";
     // Projection used by the main list
-    public static final String[] sMainListProjection = new String[]{COLUMN_URI,
+    public static final String[] sMainListProjection = new String[]{COLUMN_PATH,
             COLUMN_TYPEMASK, COLUMN_TITLE, COLUMN_DESCRIPTION, COLUMN_STATUS, COLUMN_DUE};
 
     // Bitmasks for use with typemask
@@ -62,7 +62,6 @@ public class ProviderContract {
     public static final long TYPE_REMINDER = 0x100000;
     // Item supports description/content (otherwise only title).
     public static final long TYPE_DESCRIPTION = 0x1000000;
-    // Item which are deleted should not be
 
     /**
      * Convenience method to OR together a bunch of bitmasks.
@@ -90,7 +89,7 @@ public class ProviderContract {
     }
 
     @StringDef({
-            COLUMN_URI,
+            COLUMN_PATH,
             COLUMN_TYPEMASK,
             COLUMN_TITLE,
             COLUMN_DESCRIPTION,

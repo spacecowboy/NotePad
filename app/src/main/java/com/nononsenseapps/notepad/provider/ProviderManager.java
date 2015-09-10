@@ -132,6 +132,8 @@ public class ProviderManager {
     public static class Provider {
         public final String authority;
         public final Uri uriBase;
+        public final Uri uriList;
+        public final Uri uriDetails;
         public final String label;
         public final int icon;
 
@@ -139,6 +141,8 @@ public class ProviderManager {
             label = providerInfo.loadLabel(pm).toString();
             authority = providerInfo.authority;
             uriBase = Uri.parse("content://" + authority);
+            uriList = Uri.withAppendedPath(uriBase, "/list");
+            uriDetails = Uri.withAppendedPath(uriBase, "/details");
             icon = providerInfo.getIconResource();
             /*if (null != providerInfo.metaData) {
                 // Optional stuff like settingsActivity and capabilities

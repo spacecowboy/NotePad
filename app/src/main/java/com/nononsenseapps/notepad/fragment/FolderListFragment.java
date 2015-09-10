@@ -28,6 +28,7 @@ import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,6 +38,7 @@ import com.nononsenseapps.notepad.activity.FolderListActivity;
 import com.nononsenseapps.notepad.adapter.ItemViewHolder;
 import com.nononsenseapps.notepad.adapter.MainListAdapter;
 import com.nononsenseapps.notepad.provider.ProviderContract;
+import com.nononsenseapps.notepad.provider.ProviderHelper;
 
 
 /**
@@ -48,6 +50,7 @@ public class FolderListFragment extends Fragment implements LoaderManager.Loader
 
     // Fragment arguments
     private static final String ARG_URI = "arg_uri";
+    private static final String TAG = "FolderListFragment";
 
     private RecyclerView mRecyclerView;
     private MainListAdapter mAdapter;
@@ -100,6 +103,7 @@ public class FolderListFragment extends Fragment implements LoaderManager.Loader
 
     @Override
     public Loader<Cursor> onCreateLoader(int i, Bundle args) {
+        Log.d(TAG, "Creating loader for: " + mUri.toString());
         return new CursorLoader(getContext(), mUri,
                 ProviderContract.sMainListProjection, null, null, null);
     }
@@ -119,7 +123,8 @@ public class FolderListFragment extends Fragment implements LoaderManager.Loader
     public void onItemClick(ItemViewHolder viewHolder) {
         if (viewHolder.isFolder()) {
             Intent i = new Intent(getContext(), FolderListActivity.class);
-            i.setData(viewHolder.getUri());
+            i.setData(ProviderHelper.getListUri(ProviderHelper.getBase(mUri),
+                    viewHolder.getPath()));
             startActivity(i);
         }
     }

@@ -161,4 +161,5 @@ dependencies {
     // Tests
     androidTestCompile 'com.squareup.spoon:spoon-client:1.1.1'
 
+    testCompile 'junit:junit:4.12'
 }
