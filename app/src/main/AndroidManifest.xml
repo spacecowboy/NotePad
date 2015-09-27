@@ -107,6 +107,12 @@
             <!-- Semi-Optional. If requiresConfig is true, this is mandatory. -->
             <!--<meta-data android:name="settingsActivity"
                 android:value=".ExampleSettingsActivity" />-->
+            <!-- Optional, specifies behavior of "+"-button in root view.
+                 Possible values: containers, items, containersAndItems, nestableItems-->
+            <!-- <meta-data android:name="fabBehaviorRoot" android:value="containersAndItems" /> -->
+            <!-- Optional, same values as root, but specifies behavior anywhere.
+                 Root-value takes precedence at root-level, otherwise this value is used. -->
+            <meta-data android:name="fabBehavior" android:value="containersAndItems" />
         </provider>
 
         <provider
@@ -126,6 +132,12 @@
             <!-- Semi-Optional. If requiresConfig is true, this is mandatory. -->
             <!--<meta-data android:name="settingsActivity"
                 android:value=".ExampleSettingsActivity" />-->
+            <!-- Optional, specifies behavior of "+"-button in root view.
+                 Possible values: containers, items, containersAndItems,nestableItems-->
+            <meta-data android:name="fabBehaviorRoot" android:value="nestableItems" />
+            <!-- Optional, same values as root, but specifies behavior anywhere.
+                 Root-value takes precedence at root-level, otherwise this value is used. -->
+            <meta-data android:name="fabBehavior" android:value="nestableItems" />
         </provider>
     </application>
 
