@@ -1,7 +1,7 @@
 package com.nononsenseapps.notepad.test;
 
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.legacydatabase.Task;
+import com.nononsenseapps.notepad.legacydatabase.TaskList;
 
 import android.content.Context;
 import android.database.Cursor;

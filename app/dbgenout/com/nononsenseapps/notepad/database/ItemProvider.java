@@ -1,5 +1,5 @@
 
-package com.nononsenseapps.notepad.database;
+package com.nononsenseapps.notepad.legacydatabase;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;

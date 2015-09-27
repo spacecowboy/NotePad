@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.legacydatabase.Task;
+import com.nononsenseapps.notepad.legacydatabase.TaskList;
 
 import android.content.ContentResolver;
 import android.content.Context;

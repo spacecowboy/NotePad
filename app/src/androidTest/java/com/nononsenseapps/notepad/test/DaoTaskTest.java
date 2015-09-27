@@ -1,6 +1,6 @@
 package com.nononsenseapps.notepad.test;
 
-import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.legacydatabase.Task;
 
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.MediumTest;

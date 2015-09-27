@@ -1,6 +1,21 @@
-package com.nononsenseapps.helpers;
+/*
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.util.Locale;
+package com.nononsenseapps.helpers;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,7 +25,8 @@ import android.content.res.Configuration;
 import android.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.prefs.MainPrefs;
+
+import java.util.Locale;
 
 public class ActivityHelper {
 
@@ -19,7 +35,7 @@ public class ActivityHelper {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(activity);
 
-		final String theme = prefs.getString(MainPrefs.KEY_THEME,
+		/*final String theme = prefs.getString(MainPrefs.KEY_THEME,
 				activity.getString(R.string.const_theme_light_ab));
 		if (activity.getString(R.string.const_theme_light_ab).equals(theme)) {
 			activity.setTheme(R.style.ThemeHoloLightDarkActonBar);
@@ -34,7 +50,7 @@ public class ActivityHelper {
 				// R.string.const_theme_googlenow_dark)))
 		{
 			activity.setTheme(R.style.ThemeGoogleNowDark);
-		}
+		}*/
 
 		// Set language
 		Configuration config = activity.getResources().getConfiguration();
