@@ -30,7 +30,7 @@ apply plugin: 'com.android.application'
 
 // For annotations
 apply plugin: 'android-apt'
-def AAVersion = '3.0.1'
+def AAVersion = '3.3.2'
 
 repositories {
   jcenter()
