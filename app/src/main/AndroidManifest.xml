@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (c) 2015 Jonas Kalderstam.
 
   This program is free software: you can redistribute it and/or modify
@@ -23,13 +22,12 @@
      supplies a unique name for the application.  When writing your
      own application, the package name must be changed from "com.example.*"
      to come from a domain that you own or have control over.
--->
-<!-- Note that versionCode and versionName are overwritten in build.gradle -->
+--><!-- Note that versionCode and versionName are overwritten in build.gradle -->
 <manifest
-    package="com.nononsenseapps.notepad"
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:installLocation="internalOnly" >
+    package="com.nononsenseapps.notepad"
+    android:installLocation="internalOnly">
 
     <uses-sdk
         android:minSdkVersion="14"
@@ -44,7 +42,7 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
 
     <!-- Writing sync files to SD card -->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <!-- For notifications -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
@@ -88,7 +86,7 @@
         <!-- Broadcast receiver for accepting actions from widget for example -->
         <receiver
             android:name="com.nononsenseapps.notepad.NotePadBroadcastReceiver"
-            tools:ignore="ExportedReceiver" >
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.nononsenseapps.completenote" />
             </intent-filter>
@@ -98,7 +96,7 @@
             android:name="com.nononsenseapps.notepad.ActivityMain_"
             android:label="@string/app_name"
             android:theme="@style/ThemeHoloLightDarkActonBar"
-            android:windowSoftInputMode="adjustResize" >
+            android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value="com.nononsenseapps.notepad.ActivitySearch_" />
@@ -108,7 +106,7 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            <intent-filter android:label="@string/resolve_edit" >
+            <intent-filter android:label="@string/resolve_edit">
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
 
@@ -116,7 +114,7 @@
 
                 <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.list" />
             </intent-filter>
-            <intent-filter android:label="@string/resolve_edit" >
+            <intent-filter android:label="@string/resolve_edit">
                 <action android:name="android.intent.action.INSERT" />
                 <action android:name="android.intent.action.VIEW" />
                 <action android:name="android.intent.action.EDIT" />
@@ -143,7 +141,7 @@
             android:name="com.nononsenseapps.notepad.ActivitySearch_"
             android:label="@string/search_hint"
             android:launchMode="singleTop"
-            android:theme="@style/ThemeHoloLightDarkActonBar" >
+            android:theme="@style/ThemeHoloLightDarkActonBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -158,7 +156,7 @@
             android:name="com.nononsenseapps.notepad.ActivitySearchDeleted_"
             android:label="@string/archive"
             android:launchMode="singleTop"
-            android:theme="@style/ThemeHoloLightDarkActonBar" >
+            android:theme="@style/ThemeHoloLightDarkActonBar">
             <intent-filter>
                 <action android:name="android.intent.action.SEARCH" />
             </intent-filter>
@@ -172,14 +170,13 @@
             android:name="com.nononsenseapps.notepad.prefs.PrefsActivity"
             android:parentActivityName="com.nononsenseapps.notepad.ActivityMain_"
             android:theme="@style/ThemeGoogleNowDark"
-            tools:ignore="ExportedActivity" >
+            tools:ignore="ExportedActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nononsenseapps.notepad.ActivityMain_" />
 
             <intent-filter>
-                <category android:name="android.intent.category.PREFERENCE" >
-                </category>
+                <category android:name="android.intent.category.PREFERENCE"></category>
 
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.EDIT" />
@@ -191,13 +188,12 @@
         <activity
             android:name="com.nononsenseapps.filepicker.FilePickerActivity"
             android:label="@string/app_name"
-            android:theme="@style/FilePicker.Theme">
-        </activity>
+            android:theme="@style/FilePickerTheme"></activity>
 
         <service
             android:name="com.nononsenseapps.notepad.sync.SyncService"
             android:exported="true"
-            tools:ignore="ExportedService" >
+            tools:ignore="ExportedService">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter" />
             </intent-filter>
@@ -208,7 +204,7 @@
         </service>
 
         <!-- List Widget -->
-        <receiver android:name="com.nononsenseapps.notepad.widget.ListWidgetProvider" >
+        <receiver android:name="com.nononsenseapps.notepad.widget.ListWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -226,7 +222,7 @@
         <activity
             android:name="com.nononsenseapps.notepad.widget.ListWidgetConfig_"
             android:theme="@style/ThemeWidgetConfig"
-            tools:ignore="ExportedActivity" >
+            tools:ignore="ExportedActivity">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
@@ -235,7 +231,7 @@
             android:name="com.nononsenseapps.notepad.ShortcutConfig_"
             android:exported="true"
             android:label="@string/notes_shortcut"
-            android:theme="@android:style/Theme.Holo.Dialog" >
+            android:theme="@android:style/Theme.Holo.Dialog">
             <intent-filter>
                 <action android:name="android.intent.action.CREATE_SHORTCUT" />
 
@@ -245,7 +241,7 @@
 
         <service
             android:name="com.nononsenseapps.helpers.GTasksSyncDelay"
-            android:exported="false" >
+            android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.RUN" />
             </intent-filter>
@@ -255,7 +251,7 @@
         <receiver
             android:name="com.nononsenseapps.helpers.NotificationHelper"
             android:exported="true"
-            tools:ignore="ExportedReceiver" >
+            tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.RUN" />
@@ -277,7 +273,7 @@
             android:name="com.nononsenseapps.notepad.dashclock.TasksExtension"
             android:icon="@drawable/ic_stat_notification_edit"
             android:label="@string/dashclock_nononsense_notes"
-            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA" >
+            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA">
             <intent-filter>
                 <action android:name="com.google.android.apps.dashclock.Extension" />
             </intent-filter>
@@ -296,10 +292,9 @@
         <activity
             android:name="com.nononsenseapps.notepad.dashclock.TasksSettings"
             android:exported="true"
-            android:theme="@style/DashClockSettings.Theme"
             android:label="@string/dashclock_title_activity_tasks_settings"
-            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA" >
-        </activity>
+            android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA"
+            android:theme="@style/DashClockSettings.Theme"></activity>
 
         <!-- DataBase provider -->
         <provider
@@ -307,38 +302,35 @@
             android:authorities="com.nononsenseapps.NotePad"
             android:enabled="true"
             android:exported="true"
-            android:grantUriPermissions="true" >
-        </provider>
+            android:grantUriPermissions="true"></provider>
 
         <!-- Time Machine -->
         <activity
             android:name="com.nononsenseapps.notepad.ActivityTaskHistory_"
-            android:label="@string/timemachine" >
-        </activity>
+            android:label="@string/timemachine"></activity>
 
         <!-- Service for migrating from donate app -->
         <service
             android:name="com.nononsenseapps.notepad.legacy.DonateMigrator_"
             android:enabled="true"
-            android:exported="false" >
-        </service>
+            android:exported="false"></service>
 
         <!-- Receiver that schedules background sync for File and Dropbox -->
         <receiver
             android:name="com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler"
             android:enabled="true"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
                 <action android:name="android.intent.action.RUN" />
             </intent-filter>
         </receiver>
         <!-- Service that syncs with files -->
-        <service android:name="com.nononsenseapps.notepad.sync.orgsync.OrgSyncService"
-                 android:enabled="true"
+        <service
+            android:name="com.nononsenseapps.notepad.sync.orgsync.OrgSyncService"
+            android:enabled="true"
             android:exported="false"
-            android:label="File Watcher">
-        </service>
+            android:label="File Watcher"></service>
     </application>
 
 </manifest>

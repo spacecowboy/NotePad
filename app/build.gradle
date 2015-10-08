@@ -59,6 +59,8 @@ def getVersionName = { ->
 android {
   compileSdkVersion 23
   buildToolsVersion "23.0.1"
+  // todo change this
+  useLibrary 'org.apache.http.legacy'
 
   lintOptions {
     abortOnError false
@@ -131,7 +133,7 @@ android {
 // annotations
 apt {
   arguments {
-    resourcePackageName android.defaultConfig.applicationId
+    //resourcePackageName android.defaultConfig.applicationId
     androidManifestFile variant.outputs[0].processResources.manifestFile
   }
 }
@@ -145,7 +147,7 @@ dependencies {
   // Dashclock
   compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
   // FilePicker
-  compile 'com.nononsenseapps:filepicker:1.2.0'
+  compile 'com.nononsenseapps:filepicker:2.4.2'
   // OrgParser
   compile 'org.cowboyprogrammer:orgparser:1.1'
   // Included libraries

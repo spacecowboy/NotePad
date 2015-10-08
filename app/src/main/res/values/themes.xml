@@ -32,6 +32,25 @@
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">@color/accent</item>
     </style>
+    
+    <style name="FilePickerTheme" parent="NNF_BaseTheme.Light">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+        <item name="alertDialogTheme">@style/FilePickerDialogTheme</item>
+        <!-- Make sure toolbar title is white -->^M
+        <item name="nnf_toolbarTheme">@style/FilePickerToolBarTheme</item>
+    </style>
+
+    <style name="FilePickerToolBarTheme" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
+
+    <style name="FilePickerDialogTheme" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+    </style>
 
     <style name="ThemeHolo" parent="@android:style/Theme.Holo">
         <item name="android:background">@null</item>
