@@ -3,8 +3,10 @@ sudo: false
 language: android
 env:
   global:
-    - ANDROID_SDKS=android-19,sysimg-19 ANDROID_ABI=armeabi-v7a
+    - ANDROID_SDKS=android-23,sysimg-23 ANDROID_ABI=armeabi-v7a
   matrix:
+    - ANDROID_TARGET=android-23
+    - ANDROID_TARGET=android-21
     - ANDROID_TARGET=android-19
     - ANDROID_TARGET=android-18
     - ANDROID_TARGET=android-17
@@ -12,9 +14,9 @@ env:
     - ANDROID_TARGET=android-15
 android:
   components:
-    - build-tools-19.1.0
-    - android-19
-    - sysimg-19
+    - build-tools-23.0.1
+    - android-23
+    - sysimg-123
     - android-14
     - sysimg-14
     - extra-android-support
