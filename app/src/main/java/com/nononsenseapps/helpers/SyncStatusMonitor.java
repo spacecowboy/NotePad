@@ -37,20 +37,20 @@ import com.nononsenseapps.notepad.sync.SyncAdapter;
 public class SyncStatusMonitor extends BroadcastReceiver {
     private static final String TAG = "SyncStatusMonitor";
     Activity activity;
+    OnSyncStartStopListener listener;
 
     /**
      * Call this in the activity's onResume
      */
-    public void startMonitoring(final Activity activity) {
+    public void startMonitoring(Activity activity, OnSyncStartStopListener listener) {
         this.activity = activity;
+        this.listener = listener;
 
-        activity.registerReceiver(this, new IntentFilter(
-                SyncAdapter.SYNC_FINISHED));
-        activity.registerReceiver(this, new IntentFilter(
-                SyncAdapter.SYNC_STARTED));
+        activity.registerReceiver(this, new IntentFilter(SyncAdapter.SYNC_FINISHED));
+        activity.registerReceiver(this, new IntentFilter(SyncAdapter.SYNC_STARTED));
 
-        final String accountName = PreferenceManager.getDefaultSharedPreferences(
-                activity).getString(SyncPrefs.KEY_ACCOUNT, "");
+        final String accountName = PreferenceManager.getDefaultSharedPreferences(activity)
+                .getString(SyncPrefs.KEY_ACCOUNT, "");
         Account account = null;
         if (accountName != null && !accountName.isEmpty()) {
             account = SyncPrefs.getAccount(AccountManager.get(activity), accountName);
@@ -58,12 +58,11 @@ public class SyncStatusMonitor extends BroadcastReceiver {
         // Sync state might have changed, make sure we're spinning when
         // we should
         try {
-            if (account != null
-                    && ContentResolver.isSyncActive(account,
-                    MyContentProvider.AUTHORITY)) {
-                ((OnSyncStartStopListener) activity).onSyncStartStop(true);
+            if (account != null && ContentResolver.isSyncActive(account, MyContentProvider
+                    .AUTHORITY)) {
+                listener.onSyncStartStop(true);
             } else {
-                ((OnSyncStartStopListener) activity).onSyncStartStop(false);
+                listener.onSyncStartStop(false);
             }
         } catch (Exception e) {
             Log.e(TAG, e.getLocalizedMessage());
@@ -80,7 +79,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
             Log.e(TAG, e.getLocalizedMessage());
         }
         try {
-            ((OnSyncStartStopListener) activity).onSyncStartStop(false);
+            listener.onSyncStartStop(false);
         } catch (Exception e) {
             Log.e(TAG, e.getLocalizedMessage());
         }
@@ -93,8 +92,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
                 @Override
                 public void run() {
                     try {
-                        ((OnSyncStartStopListener) activity)
-                                .onSyncStartStop(true);
+                        listener.onSyncStartStop(true);
                     } catch (Exception e) {
                         Log.e(TAG, e.getLocalizedMessage());
                     }
@@ -105,8 +103,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
                 @Override
                 public void run() {
                     try {
-                        ((OnSyncStartStopListener) activity)
-                                .onSyncStartStop(false);
+                        listener.onSyncStartStop(false);
                     } catch (Exception e) {
                         Log.e(TAG, e.getLocalizedMessage());
                     }
@@ -116,8 +113,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
             if (b == null) {
                 b = new Bundle();
             }
-            tellUser(context, b.getInt(SyncAdapter.SYNC_RESULT,
-                    SyncAdapter.SUCCESS));
+            tellUser(context, b.getInt(SyncAdapter.SYNC_RESULT, SyncAdapter.SUCCESS));
         }
     }
 
@@ -139,10 +135,10 @@ public class SyncStatusMonitor extends BroadcastReceiver {
         toast.show();
     }
 
-    public static interface OnSyncStartStopListener {
+    public interface OnSyncStartStopListener {
         /**
          * This is always called on the activity's UI thread.
          */
-        public void onSyncStartStop(final boolean ongoing);
+        void onSyncStartStop(final boolean ongoing);
     }
 }

@@ -51,4 +51,8 @@
     <color name="divider">#B6B6B6</color>
     <!-- End material -->
 
+    <color name="refresh_progress_1">#ffff1744</color>
+    <color name="refresh_progress_2">#ff00e676</color>
+    <color name="refresh_progress_3">#ff2979ff</color>
+
 </resources>
