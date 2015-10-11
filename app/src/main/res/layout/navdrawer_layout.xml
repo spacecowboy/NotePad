@@ -24,4 +24,5 @@
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:choiceMode="none"
+    android:background="@color/navdrawer_background"
     tools:listitem="@layout/simple_light_list_item_1"/>

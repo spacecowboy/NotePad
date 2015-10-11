@@ -77,7 +77,7 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
 
         final ActionBar ab = getSupportActionBar();
         if (ab != null) {
-            //ab.setHomeAsUpIndicator(R.drawable.ic_menu);
+            ab.setHomeAsUpIndicator(R.drawable.ic_menu_24dp_white);
             ab.setDisplayHomeAsUpEnabled(true);
             ab.setHomeButtonEnabled(true);
         }
@@ -164,6 +164,11 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                mDrawerLayout.openDrawer(GravityCompat.START);
+                return true;
+        }
         return super.onOptionsItemSelected(item);
     }
 
