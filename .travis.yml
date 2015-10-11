@@ -15,6 +15,7 @@ env:
 android:
   components:
     - build-tools-23.0.1
+    - build-tools-19.1.0
     - android-23
     - sysimg-23
     - android-14
