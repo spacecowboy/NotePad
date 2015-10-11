@@ -153,7 +153,6 @@ dependencies {
   // Included libraries
   compile project(':external:datetimepicker')
   compile project(':external:drag-sort-listview')
-  compile project(':external:ShowcaseView')
   // annotations
   apt "org.androidannotations:androidannotations:$AAVersion"
   compile "org.androidannotations:androidannotations-api:$AAVersion"

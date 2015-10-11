@@ -52,8 +52,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.github.espiandev.showcaseview.ShowcaseView;
-import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.SyncHelper;
@@ -78,7 +76,6 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
-import com.nononsenseapps.utils.ViewsHelper;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -107,8 +104,6 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
     // Using tags for test
     public static final String DETAILTAG = "detailfragment";
     public static final String LISTPAGERTAG = "listpagerfragment";
-    private static final String SHOWCASED_MAIN = "showcased_main_window";
-    private static final String SHOWCASED_DRAWER = "showcased_main_drawer";
     protected boolean reverseAnimation = false;
     @ViewById(resName = "leftDrawer")
     ListView leftDrawer;
@@ -133,8 +128,6 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
     @InstanceState
     boolean showingEditor = false;
     boolean isDrawerClosed = true;
-    boolean alreadyShowcased = false;
-    boolean alreadyShowcasedDrawer = false;
     // WIll only be the viewpager fragment
     ListOpener listOpener = null;
     private ActionBarDrawerToggle mDrawerToggle;
@@ -142,7 +135,6 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
     private boolean shouldAddToBackStack = true;
     private Bundle state;
     private boolean shouldRestart = false;
-    private ShowcaseView sv;
 
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
@@ -338,9 +330,6 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
         // If user has donated some other time
         final SharedPreferences prefs =
                 PreferenceManager.getDefaultSharedPreferences(this);
-
-        alreadyShowcased = prefs.getBoolean(SHOWCASED_MAIN, false);
-        alreadyShowcasedDrawer = prefs.getBoolean(SHOWCASED_DRAWER, false);
 
         // To listen on fragment changes
         getSupportFragmentManager().addOnBackStackChangedListener(
@@ -714,8 +703,8 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
                     .getUri(intent.getLongExtra(NOTIFICATION_DELETE_ARG, -1)));
         }
         if (intent != null && intent.getLongExtra(NOTIFICATION_CANCEL_ARG, -1) > 0) {
-            NotificationHelper.cancelNotification(this,
-                    (int) intent.getLongExtra(NOTIFICATION_CANCEL_ARG, -1));
+            NotificationHelper.cancelNotification(this, (int) intent.getLongExtra
+                    (NOTIFICATION_CANCEL_ARG, -1));
         }
 
     }
@@ -727,10 +716,6 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
     protected void loadContent() {
         loadLeftDrawer();
         loadFragments();
-
-        if (!showingEditor || fragment2 != null) {
-            showcaseDrawer();
-        }
     }
 
     /**
@@ -741,8 +726,8 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
         // Set a listener on drawer events
         // TODO strings
         if (mDrawerToggle == null) {
-            mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                    R.drawable.ic_drawer_dark, R.string.ok, R.string.about) {
+            mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable
+                    .ic_drawer_dark, android.R.string.ok, R.string.about) {
 
                 /**
                  * Called when a drawer has settled in a completely closed
@@ -757,7 +742,6 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
 
                 /** Called when a drawer has settled in a completely open state. */
                 public void onDrawerOpened(View drawerView) {
-                    showcaseDrawerPress();
                 }
 
                 public void onDrawerStateChanged(int newState) {
@@ -976,61 +960,6 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
                 .restartLoader(TaskListFragment.LIST_ID_TODAY, null, callbacks);
         getSupportLoaderManager()
                 .restartLoader(TaskListFragment.LIST_ID_WEEK, null, callbacks);
-    }
-
-    /**
-     * On first load, show some functionality hints
-     */
-    private void showcaseDrawer() {
-        if (alreadyShowcased) {
-            return;
-        }
-        final ConfigOptions options = new ConfigOptions();
-        options.shotType = ShowcaseView.TYPE_NO_LIMIT;
-        options.block = true;
-        // Used in saving state
-        options.showcaseId = 1;
-        final int vertDp = ViewsHelper.convertDip2Pixels(this, 200);
-        final int horDp = ViewsHelper.convertDip2Pixels(this, 200);
-        sv = ShowcaseView
-                .insertShowcaseViewWithType(ShowcaseView.ITEM_ACTION_HOME,
-                        android.R.id.home, this, R.string.showcase_main_title,
-                        R.string.showcase_main_msg, options);
-        sv.animateGesture(0, vertDp, horDp, vertDp);
-
-        PreferenceManager.getDefaultSharedPreferences(this).edit()
-                .putBoolean(SHOWCASED_MAIN, true).commit();
-        alreadyShowcased = true;
-    }
-
-    private void showcaseDrawerPress() {
-        // only show on first boot
-        if (alreadyShowcasedDrawer) {
-            return;
-        }
-
-        final int vertDp = ViewsHelper.convertDip2Pixels(this, 110);
-        final int horDp = ViewsHelper.convertDip2Pixels(this, 60);
-
-        if (sv != null) {
-            sv.setText(R.string.showcase_drawer_title,
-                    R.string.showcase_drawer_msg);
-            sv.setShowcasePosition(horDp, vertDp);
-            sv.show();
-        } else {
-            final ConfigOptions options = new ConfigOptions();
-            options.shotType = ShowcaseView.TYPE_NO_LIMIT;
-            options.block = true;
-            // Used in saving state
-            options.showcaseId = 2;
-            sv = ShowcaseView.insertShowcaseView(horDp, vertDp, this,
-                    R.string.showcase_drawer_title,
-                    R.string.showcase_drawer_msg, options);
-            sv.show();
-        }
-        PreferenceManager.getDefaultSharedPreferences(this).edit()
-                .putBoolean(SHOWCASED_DRAWER, true).commit();
-        alreadyShowcasedDrawer = true;
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)

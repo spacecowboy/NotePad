@@ -151,10 +151,6 @@
         <item name="android:dividerHeight" tools:ignore="PxUsage">1px</item>
     </style>
 
-    <style name="CustomShowcaseTheme" parent="ShowcaseView">
-        <item name="sv_backgroundColor">#AA000000</item>
-    </style>
-
     <!-- For DashClock Settings -->
     <!-- This base is overridden for larger displays -->
     <style name="DashClockSettings.Theme.Base"
