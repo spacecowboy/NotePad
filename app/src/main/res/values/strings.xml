@@ -92,6 +92,10 @@
     <string name="settings_list">List</string>
     <string name="drag_to_timetravel">Drag to time travel</string>
 
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
     <string name="import_data_question">Import data?</string>
     <string name="import_started">Importing data. This might take a few seconds.</string>
     <string name="import_data_msg">Would you like to import the notes from the donate version? When finished, you are given the option to uninstall it also.</string>

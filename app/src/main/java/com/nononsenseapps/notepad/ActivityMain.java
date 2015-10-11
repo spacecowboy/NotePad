@@ -30,15 +30,17 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -75,6 +77,7 @@ import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
+import com.nononsenseapps.notepad.util.PrefUtils;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
 
 import org.androidannotations.annotations.AfterViews;
@@ -89,14 +92,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @EActivity(resName = "activity_main")
-public class ActivityMain extends FragmentActivity implements OnFragmentInteractionListener,
+public class ActivityMain extends AppCompatActivity implements OnFragmentInteractionListener,
         MenuStateController, OnSharedPreferenceChangeListener {
 
     // Intent notification argument
-    public static final String NOTIFICATION_CANCEL_ARG =
-            "notification_cancel_arg";
-    public static final String NOTIFICATION_DELETE_ARG =
-            "notification_delete_arg";
+    public static final String NOTIFICATION_CANCEL_ARG = "notification_cancel_arg";
+    public static final String NOTIFICATION_DELETE_ARG = "notification_delete_arg";
     // If donate version has been migrated
     public static final String MIGRATED = "donate_inapp_or_oldversion";
     // Set to true in bundle if exits should be animated
@@ -107,10 +108,8 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
     protected boolean reverseAnimation = false;
     @ViewById(resName = "leftDrawer")
     ListView leftDrawer;
-    @ViewById(resName = "drawerLayout")
-    DrawerLayout drawerLayout;
-    @ViewById(resName = "fragment1")
-    View fragment1;
+
+    DrawerLayout mDrawerLayout;
     // Only present on tablets
     @ViewById(resName = "fragment2")
     View fragment2;
@@ -139,10 +138,102 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        if (mDrawerToggle != null) {
-            mDrawerToggle.syncState();
+        setupNavDrawer();
+    }
+
+    private void setupNavDrawer() {
+        // Show icon
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+            ab.setHomeButtonEnabled(true);
         }
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (mDrawerLayout == null) {
+            return;
+        }
+
+        /*if (selfItem == NAVDRAWER_ITEM_INVALID) {
+            // do not show a nav drawer
+            View navDrawer = mDrawerLayout.findViewById(R.id.navdrawer);
+            if (navDrawer != null) {
+                ((ViewGroup) navDrawer.getParent()).removeView(navDrawer);
+            }
+            mDrawerLayout = null;
+            return;
+        }*/
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string
+                .navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                isDrawerClosed = true;
+                // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu();
+                //onNavDrawerStateChanged(false, false);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                isDrawerClosed = false;
+                //onNavDrawerStateChanged(true, false);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                super.onDrawerStateChanged(newState);
+                /*onNavDrawerStateChanged(isNavDrawerOpen(), newState != DrawerLayout
+                        .STATE_IDLE);*/
+
+                if (DrawerLayout.STATE_IDLE != newState) {
+                    getActionBar().setTitle(R.string.show_from_all_lists);
+                    // Is in motion, hide action items
+                    isDrawerClosed = false;
+                    invalidateOptionsMenu(); // creates call to
+                    // onPrepareOptionsMenu()
+                }
+            }
+
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+            }
+        };
+
+        mDrawerToggle.syncState();
+
+        populateNavDrawer();
+
+        // Recycler view stuff
+        /*RecyclerView mRecyclerView = (RecyclerView) mDrawerLayout.findViewById(R.id
+        .navdrawer_list);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mNavAdapter = new FeedsAdapter();
+        mRecyclerView.setAdapter(mNavAdapter);
+
+        populateNavDrawer();*/
+
+        // When the user runs the app for the first time, we want to land them with the
+        // navigation drawer open. But just the first time.
+        if (!PrefUtils.isWelcomeDone(this)) {
+            // first run of the app starts with the nav drawer open
+            PrefUtils.markWelcomeDone(this);
+            mDrawerLayout.openDrawer(GravityCompat.START);
+        }
+    }
+
+    protected boolean isNavDrawerOpen() {
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START);
+    }
+
+    // Subclasses can override to decide what happens on nav item selection
+    protected void onNavigationDrawerItemSelected(long id, String title, String url, String tag) {
+        // TODO add default start activity with arguments
     }
 
     @Override
@@ -175,17 +266,16 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
                 // Only true in portrait mode
                 final View focusView = ActivityMain.this.getCurrentFocus();
                 if (inputManager != null && focusView != null) {
-                    inputManager
-                            .hideSoftInputFromWindow(focusView.getWindowToken(),
-                                    InputMethodManager.HIDE_NOT_ALWAYS);
+                    inputManager.hideSoftInputFromWindow(focusView.getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
                 }
 
                 // Should load the same list again
                 // Try getting the list from the original intent
                 final long listId = getListId(getIntent());
 
-                final Intent intent = new Intent().setAction(Intent.ACTION_VIEW)
-                        .setClass(ActivityMain.this, ActivityMain_.class);
+                final Intent intent = new Intent().setAction(Intent.ACTION_VIEW).setClass
+                        (ActivityMain.this, ActivityMain_.class);
                 if (listId > 0) {
                     intent.setData(TaskList.getUri(listId));
                 }
@@ -235,8 +325,8 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
         super.finish();
         // Only animate when specified. Should be when it was animated "in"
         if (mAnimateExit) {
-            overridePendingTransition(R.anim.activity_slide_in_right,
-                    R.anim.activity_slide_out_right_full);
+            overridePendingTransition(R.anim.activity_slide_in_right, R.anim
+                    .activity_slide_out_right_full);
         }
     }
 
@@ -257,18 +347,15 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
                     intent.getData().getPath().startsWith(NotePad.Lists.PATH_LISTS) ||
                     intent.getData().getPath().startsWith(TaskList.URI.getPath()))) {
                 try {
-                    retval = Long.parseLong(
-                            intent.getData().getLastPathSegment());
+                    retval = Long.parseLong(intent.getData().getLastPathSegment());
                 } catch (NumberFormatException e) {
                     retval = -1;
                 }
-            } else if (-1 != intent.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1)) {
-                retval = intent.getLongExtra(
-                        LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
+            } else if (-1 != intent.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST,
+                    -1)) {
+                retval = intent.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
             } else if (-1 != intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1)) {
-                retval =
-                        intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
-                                -1);
+                retval = intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1);
             } else if (-1 != intent.getLongExtra(Task.Columns.DBLIST, -1)) {
                 retval = intent.getLongExtra(Task.Columns.DBLIST, -1);
             }
@@ -282,8 +369,8 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
     void openList(final long id) {
         // Open list
         Intent i = new Intent(ActivityMain.this, ActivityMain_.class);
-        i.setAction(Intent.ACTION_VIEW).setData(TaskList.getUri(id))
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        i.setAction(Intent.ACTION_VIEW).setData(TaskList.getUri(id)).addFlags(Intent
+                .FLAG_ACTIVITY_SINGLE_TOP);
 
         // If editor is on screen, we need to reload fragments
         if (listOpener == null) {
@@ -300,8 +387,8 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
         }
 
         // And then close drawer
-        if (drawerLayout != null && leftDrawer != null) {
-            drawerLayout.closeDrawer(leftDrawer);
+        if (mDrawerLayout != null && leftDrawer != null) {
+            mDrawerLayout.closeDrawer(leftDrawer);
         }
     }
 
@@ -328,12 +415,12 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
         }
 
         // If user has donated some other time
-        final SharedPreferences prefs =
-                PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // To listen on fragment changes
-        getSupportFragmentManager().addOnBackStackChangedListener(
-                new FragmentManager.OnBackStackChangedListener() {
+        // TODO probably remove this?
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager
+                .OnBackStackChangedListener() {
                     public void onBackStackChanged() {
                         if (showingEditor && !isNoteIntent(getIntent())) {
                             setHomeAsDrawer(true);
@@ -341,8 +428,7 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
                         // Always update menu
                         invalidateOptionsMenu();
                     }
-                }
-        );
+        });
 
         if (b != null) {
             Log.d("nononsenseapps list", "Activity Saved not null: " + b);
@@ -418,8 +504,8 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
     }
 
     void isOldDonateVersionInstalled() {
-        final SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(ActivityMain.this);
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
+                (ActivityMain.this);
         if (prefs.getBoolean(MIGRATED, false)) {
             // already migrated
             return;
@@ -428,8 +514,7 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
             PackageManager pm = getPackageManager();
             List<ApplicationInfo> packages = pm.getInstalledApplications(0);
             for (ApplicationInfo packageInfo : packages) {
-                if (packageInfo.packageName
-                        .equals("com.nononsenseapps.notepad_donate")) {
+                if (packageInfo.packageName.equals("com.nononsenseapps.notepad_donate")) {
                     migrateDonateUser();
                     // Don't migrate again
                     prefs.edit().putBoolean(MIGRATED, true).commit();
@@ -451,8 +536,7 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
 
                 @Override
                 public void onOKClick() {
-                    startService(new Intent(ActivityMain.this,
-                            DonateMigrator_.class));
+                    startService(new Intent(ActivityMain.this, DonateMigrator_.class));
                 }
 
                 @Override
@@ -501,16 +585,14 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
                 return;
             } else {
                 // Find the listpager
-                left = getSupportFragmentManager()
-                        .findFragmentByTag(LISTPAGERTAG);
+                left = getSupportFragmentManager().findFragmentByTag(LISTPAGERTAG);
                 listOpener = (ListOpener) left;
 
                 if (left != null && fragment2 == null) {
                     // Done
                     return;
                 } else if (left != null && fragment2 != null) {
-                    right = getSupportFragmentManager()
-                            .findFragmentByTag(DETAILTAG);
+                    right = getSupportFragmentManager().findFragmentByTag(DETAILTAG);
                 }
 
                 if (left != null && right != null) {
@@ -521,17 +603,14 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
         }
 
         // Load stuff
-        final FragmentTransaction transaction =
-                getSupportFragmentManager().beginTransaction();
+        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (reverseAnimation) {
             reverseAnimation = false;
-            transaction.setCustomAnimations(R.anim.slide_in_bottom,
-                    R.anim.slide_out_top, R.anim.slide_in_top,
-                    R.anim.slide_out_bottom);
+            transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top, R.anim
+                    .slide_in_top, R.anim.slide_out_bottom);
         } else {
-            transaction.setCustomAnimations(R.anim.slide_in_top,
-                    R.anim.slide_out_bottom, R.anim.slide_in_bottom,
-                    R.anim.slide_out_top);
+            transaction.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom, R.anim
+                    .slide_in_bottom, R.anim.slide_out_top);
         }
 
 		/*
@@ -543,11 +622,8 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
                 if (getNoteId(intent) > 0) {
                     right = TaskDetailFragment_.getInstance(getNoteId(intent));
                 } else if (isNoteIntent(intent)) {
-                    right = TaskDetailFragment_
-                            .getInstance(getNoteShareText(intent),
-                                    TaskListViewPagerFragment.getAShowList(this,
-                                            getListId(intent))
-                            );
+                    right = TaskDetailFragment_.getInstance(getNoteShareText(intent),
+                            TaskListViewPagerFragment.getAShowList(this, getListId(intent)));
                 }
             }
         } else if (isNoteIntent(intent)) {
@@ -559,10 +635,7 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
             } else {
                 // Get a share text (null safe)
                 // In a list (if specified, or default otherwise)
-                left = TaskDetailFragment_.getInstance(getNoteShareText(intent),
-                        TaskListViewPagerFragment
-                                .getARealList(this, getListId(intent))
-                );
+                left = TaskDetailFragment_.getInstance(getNoteShareText(intent), TaskListViewPagerFragment.getARealList(this, getListId(intent)));
             }
             // fucking stack
             while (getSupportFragmentManager().popBackStackImmediate()) {
@@ -585,8 +658,7 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
             // TODO
             showingEditor = false;
 
-            left = TaskListViewPagerFragment
-                    .getInstance(getListIdToShow(intent));
+            left = TaskListViewPagerFragment.getInstance(getListIdToShow(intent));
             leftTag = LISTPAGERTAG;
             listOpener = (ListOpener) left;
         }
@@ -615,13 +687,15 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
         long retval = -1;
         if (intent != null &&
                 intent.getData() != null &&
-                (Intent.ACTION_EDIT.equals(intent.getAction()) || Intent.ACTION_VIEW.equals(intent.getAction()))) {
+                (Intent.ACTION_EDIT.equals(intent.getAction()) || Intent.ACTION_VIEW.equals
+                        (intent.getAction()))) {
             if (intent.getData().getPath().startsWith(TaskList.URI.getPath())) {
                 // Find it in the extras. See DashClock extension for an example
                 retval = intent.getLongExtra(Task.TABLE_NAME, -1);
-            } else if ((intent.getData().getPath().startsWith(
-                    LegacyDBHelper.NotePad.Notes.PATH_VISIBLE_NOTES) ||
-                    intent.getData().getPath().startsWith(LegacyDBHelper.NotePad.Notes.PATH_NOTES) ||
+            } else if ((intent.getData().getPath().startsWith(LegacyDBHelper.NotePad.Notes
+                    .PATH_VISIBLE_NOTES) ||
+                    intent.getData().getPath().startsWith(LegacyDBHelper.NotePad.Notes
+                            .PATH_NOTES) ||
                     intent.getData().getPath().startsWith(Task.URI.getPath()))) {
                 retval = Long.parseLong(intent.getData().getLastPathSegment());
             }
@@ -648,7 +722,8 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
 
         StringBuilder retval = new StringBuilder();
         // possible title
-        if (intent.getExtras().containsKey(Intent.EXTRA_SUBJECT) && !"com.google.android.gm.action.AUTO_SEND".equals(intent.getAction())) {
+        if (intent.getExtras().containsKey(Intent.EXTRA_SUBJECT) && !("com.google.android.gm" + "" +
+                ".action.AUTO_SEND").equals(intent.getAction())) {
             retval.append(intent.getExtras().get(Intent.EXTRA_SUBJECT));
         }
         // possible note
@@ -678,7 +753,8 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
         if (intent == null) {
             return false;
         }
-        if (Intent.ACTION_SEND.equals(intent.getAction()) || "com.google.android.gm.action.AUTO_SEND".equals(intent.getAction())) {
+        if (Intent.ACTION_SEND.equals(intent.getAction()) || ("com.google.android.gm.action" + "" +
+                ".AUTO_SEND").equals(intent.getAction())) {
             return true;
         }
 
@@ -699,8 +775,8 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
 
     private void clearNotification(final Intent intent) {
         if (intent != null && intent.getLongExtra(NOTIFICATION_DELETE_ARG, -1) > 0) {
-            Notification.deleteOrReschedule(this, Notification
-                    .getUri(intent.getLongExtra(NOTIFICATION_DELETE_ARG, -1)));
+            Notification.deleteOrReschedule(this, Notification.getUri(intent.getLongExtra
+                    (NOTIFICATION_DELETE_ARG, -1)));
         }
         if (intent != null && intent.getLongExtra(NOTIFICATION_CANCEL_ARG, -1) > 0) {
             NotificationHelper.cancelNotification(this, (int) intent.getLongExtra
@@ -714,72 +790,21 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
      */
     @AfterViews
     protected void loadContent() {
-        loadLeftDrawer();
         loadFragments();
     }
 
     /**
      * Load a list of lists in the left
      */
-    protected void loadLeftDrawer() {
-        // TODO handle being called repeatably better?
-        // Set a listener on drawer events
-        // TODO strings
-        if (mDrawerToggle == null) {
-            mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout, R.drawable
-                    .ic_drawer_dark, android.R.string.ok, R.string.about) {
-
-                /**
-                 * Called when a drawer has settled in a completely closed
-                 * state.
-                 */
-                public void onDrawerClosed(View view) {
-                    getActionBar().setTitle(R.string.app_name);
-                    isDrawerClosed = true;
-                    invalidateOptionsMenu(); // creates call to
-                    // onPrepareOptionsMenu()
-                }
-
-                /** Called when a drawer has settled in a completely open state. */
-                public void onDrawerOpened(View drawerView) {
-                }
-
-                public void onDrawerStateChanged(int newState) {
-                    super.onDrawerStateChanged(newState);
-
-                    // If it's not idle, it isn't closed
-                    if (DrawerLayout.STATE_IDLE != newState) {
-                        getActionBar().setTitle(R.string.show_from_all_lists);
-                        // Is in motion, hide action items
-                        isDrawerClosed = false;
-                        invalidateOptionsMenu(); // creates call to
-                        // onPrepareOptionsMenu()
-                    }
-                }
-            };
-
-            // Set the drawer toggle as the DrawerListener
-            drawerLayout.setDrawerListener(mDrawerToggle);
-        }
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
-
+    protected void populateNavDrawer() {
         // Use extra items for All Lists
-        final int[] extraIds = new int[]{-1,
-                TaskListFragment.LIST_ID_OVERDUE,
-                TaskListFragment.LIST_ID_TODAY,
-                TaskListFragment.LIST_ID_WEEK,
-                -1};
+        final int[] extraIds = new int[]{-1, TaskListFragment.LIST_ID_OVERDUE, TaskListFragment
+                .LIST_ID_TODAY, TaskListFragment.LIST_ID_WEEK, -1};
         // This is fine for initial conditions
-        final int[] extraStrings = new int[]{R.string.tasks,
-                R.string.date_header_overdue,
-                R.string.date_header_today,
-                R.string.next_5_days,
-                R.string.lists};
+        final int[] extraStrings = new int[]{R.string.tasks, R.string.date_header_overdue, R
+                .string.date_header_today, R.string.next_5_days, R.string.lists};
         // Use this for real data
-        final ArrayList<ArrayList<Object>> extraData =
-                new ArrayList<ArrayList<Object>>();
+        final ArrayList<ArrayList<Object>> extraData = new ArrayList<ArrayList<Object>>();
         // Task header
         extraData.add(new ArrayList<Object>());
         extraData.get(0).add(R.string.tasks);
@@ -798,16 +823,11 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
 
         final int[] extraTypes = new int[]{1, 0, 0, 0, 1};
 
-        final ExtraTypesCursorAdapter adapter =
-                new ExtraTypesCursorAdapter(this,
-                        R.layout.simple_light_list_item_2, null, new String[]{
-                        TaskList.Columns.TITLE,
-                        TaskList.Columns.VIEW_COUNT},
-                        new int[]{android.R.id.text1, android.R.id.text2},
-                        // id -1 for headers, ignore clicks on them
-                        extraIds, extraStrings, extraTypes,
-                        new int[]{R.layout.drawer_header}
-                );
+        final ExtraTypesCursorAdapter adapter = new ExtraTypesCursorAdapter(this, R.layout
+                .simple_light_list_item_2, null, new String[]{TaskList.Columns.TITLE, TaskList
+                .Columns.VIEW_COUNT}, new int[]{android.R.id.text1, android.R.id.text2},
+                // id -1 for headers, ignore clicks on them
+                extraIds, extraStrings, extraTypes, new int[]{R.layout.drawer_header});
         adapter.setExtraData(extraData);
 
         // Load count of tasks in each one
@@ -819,17 +839,15 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
         // new String[] { TaskList.Columns.TITLE },
         // new int[] { android.R.id.text1 }, 0);
         leftDrawer.setAdapter(adapter);
+        // Todo update what happens on click here
         // Set click handler
         leftDrawer.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View v, int pos, long id) {
                 if (id < -1) {
                     // Set preference which type was chosen
-                    PreferenceManager
-                            .getDefaultSharedPreferences(ActivityMain.this)
-                            .edit()
-                            .putLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, id)
-                            .commit();
+                    PreferenceManager.getDefaultSharedPreferences(ActivityMain.this).edit()
+                            .putLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, id).commit();
                 }
                 openList(id);
             }
@@ -841,20 +859,15 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
                 // Open dialog to edit list
                 if (id > 0) {
                     DialogEditList_ dialog = DialogEditList_.getInstance(id);
-                    dialog.show(getSupportFragmentManager(),
-                            "fragment_edit_list");
+                    dialog.show(getSupportFragmentManager(), "fragment_edit_list");
                     return true;
                 } else if (id < -1) {
                     // Set as "default"
-                    PreferenceManager
-                            .getDefaultSharedPreferences(ActivityMain.this)
-                            .edit()
-                            .putLong(getString(R.string.pref_defaultstartlist),
-                                    id)
-                            .putLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, id)
-                            .commit();
-                    Toast.makeText(ActivityMain.this, R.string.new_default_set,
-                            Toast.LENGTH_SHORT).show();
+                    PreferenceManager.getDefaultSharedPreferences(ActivityMain.this).edit()
+                            .putLong(getString(R.string.pref_defaultstartlist), id).putLong
+                            (TaskListFragment.LIST_ALL_ID_PREF_KEY, id).commit();
+                    Toast.makeText(ActivityMain.this, R.string.new_default_set, Toast
+                            .LENGTH_SHORT).show();
                     // openList(id);
                     return true;
                 } else {
@@ -863,122 +876,102 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
             }
         });
         // Define the callback handler
-        final LoaderCallbacks<Cursor> callbacks =
-                new LoaderCallbacks<Cursor>() {
+        final LoaderCallbacks<Cursor> callbacks = new LoaderCallbacks<Cursor>() {
 
-                    final String[] COUNTROWS = new String[]{"COUNT(1)"};
-                    final String NOTCOMPLETED =
-                            Task.Columns.COMPLETED + " IS NULL ";
+            final String[] COUNTROWS = new String[]{"COUNT(1)"};
+            final String NOTCOMPLETED = Task.Columns.COMPLETED + " IS NULL ";
 
-                    @Override
-                    public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
-                        // Normal lists
-                        switch (id) {
-                            case TaskListFragment.LIST_ID_OVERDUE:
-                                return new CursorLoader(ActivityMain.this,
-                                        Task.URI, COUNTROWS, NOTCOMPLETED + TaskListFragment.andWhereOverdue(),
-                                        null, null
-                                );
-                            case TaskListFragment.LIST_ID_TODAY:
-                                return new CursorLoader(ActivityMain.this,
-                                        Task.URI, COUNTROWS, NOTCOMPLETED + TaskListFragment.andWhereToday(),
-                                        null, null
-                                );
-                            case TaskListFragment.LIST_ID_WEEK:
-                                return new CursorLoader(ActivityMain.this,
-                                        Task.URI, COUNTROWS, NOTCOMPLETED + TaskListFragment.andWhereWeek(),
-                                        null, null
-                                );
-                            case 0:
-                            default:
-                                return new CursorLoader(ActivityMain.this,
-                                        TaskList.URI_WITH_COUNT, new String[]{
-                                        TaskList.Columns._ID,
-                                        TaskList.Columns.TITLE,
-                                        TaskList.Columns.VIEW_COUNT}, null,
-                                        null, getResources()
-                                        .getString(R.string.const_as_alphabetic,
-                                                TaskList.Columns.TITLE)
-                                );
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
+                // Normal lists
+                switch (id) {
+                    case TaskListFragment.LIST_ID_OVERDUE:
+                        return new CursorLoader(ActivityMain.this, Task.URI, COUNTROWS,
+                                NOTCOMPLETED + TaskListFragment.andWhereOverdue(), null, null);
+                    case TaskListFragment.LIST_ID_TODAY:
+                        return new CursorLoader(ActivityMain.this, Task.URI, COUNTROWS,
+                                NOTCOMPLETED + TaskListFragment.andWhereToday(), null, null);
+                    case TaskListFragment.LIST_ID_WEEK:
+                        return new CursorLoader(ActivityMain.this, Task.URI, COUNTROWS,
+                                NOTCOMPLETED + TaskListFragment.andWhereWeek(), null, null);
+                    case 0:
+                    default:
+                        return new CursorLoader(ActivityMain.this, TaskList.URI_WITH_COUNT, new
+                                String[]{TaskList.Columns._ID, TaskList.Columns.TITLE, TaskList
+                                .Columns.VIEW_COUNT}, null, null, getResources().getString(R
+                                .string.const_as_alphabetic, TaskList.Columns.TITLE));
+                }
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> l, Cursor c) {
+                switch (l.getId()) {
+                    case TaskListFragment.LIST_ID_OVERDUE:
+                        if (c.moveToFirst()) {
+                            updateExtra(1, c.getInt(0));
                         }
-                    }
-
-                    @Override
-                    public void onLoadFinished(Loader<Cursor> l, Cursor c) {
-                        switch (l.getId()) {
-                            case TaskListFragment.LIST_ID_OVERDUE:
-                                if (c.moveToFirst()) {
-                                    updateExtra(1, c.getInt(0));
-                                }
-                                break;
-                            case TaskListFragment.LIST_ID_TODAY:
-                                if (c.moveToFirst()) {
-                                    updateExtra(2, c.getInt(0));
-                                }
-                                break;
-                            case TaskListFragment.LIST_ID_WEEK:
-                                if (c.moveToFirst()) {
-                                    updateExtra(3, c.getInt(0));
-                                }
-                                break;
-                            case 0:
-                            default:
-                                adapter.swapCursor(c);
+                        break;
+                    case TaskListFragment.LIST_ID_TODAY:
+                        if (c.moveToFirst()) {
+                            updateExtra(2, c.getInt(0));
                         }
-                    }
-
-                    private void updateExtra(final int pos, final int count) {
-                        while (extraData.get(pos).size() < 2) {
-                            // To avoid crashes
-                            extraData.get(pos).add("0");
+                        break;
+                    case TaskListFragment.LIST_ID_WEEK:
+                        if (c.moveToFirst()) {
+                            updateExtra(3, c.getInt(0));
                         }
-                        extraData.get(pos).set(1, Integer.toString(count));
-                        adapter.notifyDataSetChanged();
-                    }
+                        break;
+                    case 0:
+                    default:
+                        adapter.swapCursor(c);
+                }
+            }
 
-                    @Override
-                    public void onLoaderReset(Loader<Cursor> l) {
-                        switch (l.getId()) {
-                            case TaskListFragment.LIST_ID_OVERDUE:
-                            case TaskListFragment.LIST_ID_TODAY:
-                            case TaskListFragment.LIST_ID_WEEK:
-                                break;
-                            case 0:
-                            default:
-                                adapter.swapCursor(null);
-                        }
-                    }
-                };
+            private void updateExtra(final int pos, final int count) {
+                while (extraData.get(pos).size() < 2) {
+                    // To avoid crashes
+                    extraData.get(pos).add("0");
+                }
+                extraData.get(pos).set(1, Integer.toString(count));
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> l) {
+                switch (l.getId()) {
+                    case TaskListFragment.LIST_ID_OVERDUE:
+                    case TaskListFragment.LIST_ID_TODAY:
+                    case TaskListFragment.LIST_ID_WEEK:
+                        break;
+                    case 0:
+                    default:
+                        adapter.swapCursor(null);
+                }
+            }
+        };
 
         // Load actual data
         getSupportLoaderManager().restartLoader(0, null, callbacks);
         // special views
-        getSupportLoaderManager()
-                .restartLoader(TaskListFragment.LIST_ID_OVERDUE, null,
-                        callbacks);
-        getSupportLoaderManager()
-                .restartLoader(TaskListFragment.LIST_ID_TODAY, null, callbacks);
-        getSupportLoaderManager()
-                .restartLoader(TaskListFragment.LIST_ID_WEEK, null, callbacks);
+        getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_OVERDUE, null, callbacks);
+        getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_TODAY, null, callbacks);
+        getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_WEEK, null, callbacks);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public void onFragmentInteraction(final Uri taskUri, final long listId, final View origin) {
-        final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
-                .setClass(this, ActivityMain_.class).setData(taskUri)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        final Intent intent = new Intent().setAction(Intent.ACTION_EDIT).setClass(this,
+                ActivityMain_.class).setData(taskUri).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 .putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
         // User clicked a task in the list
         // tablet
         if (fragment2 != null) {
             // Set the intent here also so rotations open the same item
             setIntent(intent);
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_top,
-                            R.anim.slide_out_bottom).replace(R.id.fragment2,
-                    TaskDetailFragment_.getInstance(taskUri))
-                    .commitAllowingStateLoss();
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim
+                    .slide_in_top, R.anim.slide_out_bottom).replace(R.id.fragment2,
+                    TaskDetailFragment_.getInstance(taskUri)).commitAllowingStateLoss();
             taskHint.setVisibility(View.GONE);
         }
         // phone
@@ -1008,19 +1001,16 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
             // Cant add to invalid lists
             return;
         }
-        final Intent intent = new Intent().setAction(Intent.ACTION_INSERT)
-                .setClass(this, ActivityMain_.class).setData(Task.URI)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        final Intent intent = new Intent().setAction(Intent.ACTION_INSERT).setClass(this,
+                ActivityMain_.class).setData(Task.URI).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 .putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
         if (fragment2 != null) {
             // Set intent to preserve state when rotating
             setIntent(intent);
             // Replace editor fragment
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_top,
-                            R.anim.slide_out_bottom).replace(R.id.fragment2,
-                    TaskDetailFragment_.getInstance(text, listId))
-                    .commitAllowingStateLoss();
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim
+                    .slide_in_top, R.anim.slide_out_bottom).replace(R.id.fragment2,
+                    TaskDetailFragment_.getInstance(text, listId)).commitAllowingStateLoss();
             taskHint.setVisibility(View.GONE);
         } else {
             // Open an activity
@@ -1043,9 +1033,8 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
     @Override
     public void closeFragment(final Fragment fragment) {
         if (fragment2 != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_top,
-                            R.anim.slide_out_bottom).remove(fragment)
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim
+                    .slide_in_top, R.anim.slide_out_bottom).remove(fragment)
                     .commitAllowingStateLoss();
             taskHint.setAlpha(0f);
             taskHint.setVisibility(View.VISIBLE);
@@ -1076,8 +1065,8 @@ public class ActivityMain extends FragmentActivity implements OnFragmentInteract
      */
     void finishSlideTop() {
         super.finish();
-        overridePendingTransition(R.anim.activity_slide_in_right_full,
-                R.anim.activity_slide_out_right);
+        overridePendingTransition(R.anim.activity_slide_in_right_full, R.anim
+                .activity_slide_out_right);
     }
 
     @Override

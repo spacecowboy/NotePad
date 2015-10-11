@@ -20,5 +20,4 @@
     android:id="@android:id/text1"
     android:layout_width="match_parent"
     android:layout_height="64dp"
-    android:fontFamily="sans-serif-light"
-    style="?LeftDrawerListItemStyle" />
+          android:fontFamily="sans-serif-light"/>

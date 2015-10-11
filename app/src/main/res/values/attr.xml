@@ -16,6 +16,10 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
+    <!-- Vetted -->
+    <attr name="NavDrawerStyle" format="reference"/>
+
+    <!-- Unknown -->
     <attr name="my_list_selector" format="reference" />
     <attr name="my_list_background" format="reference" />
     <attr name="editorBackgroundColor" format="reference" />
@@ -51,9 +55,6 @@
     <attr name="TaskListItem" format="reference" />
     <attr name="ListDividerStyle" format="reference"/>
     <attr name="ListMarginStyle" format="reference"/>
-    <attr name="LeftDrawerStyle" format="reference"/>
-    <attr name="LeftDrawerListItemStyle" format="reference" />
-    <attr name="LeftDrawerListItemSecondaryStyle" format="reference" />
 
     <attr name="ListHeaderSize" format="reference"/>
 

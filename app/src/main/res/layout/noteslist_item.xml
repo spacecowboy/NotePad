@@ -17,17 +17,15 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/noteItem"
-    style="?my_list_selector"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:minHeight="@dimen/list_item_min_size"
-    android:orientation="horizontal"
-    android:paddingTop="4dp"
-    android:paddingBottom="4dp"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp" >
+              android:id="@+id/noteItem"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:minHeight="@dimen/list_item_min_size"
+              android:orientation="horizontal"
+              android:paddingTop="4dp"
+              android:paddingBottom="4dp"
+              android:paddingLeft="8dp"
+              android:paddingRight="8dp">
 
     <TextView
         android:id="@+id/itemIndent"

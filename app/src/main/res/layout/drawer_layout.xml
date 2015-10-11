@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (c) 2015 Jonas Kalderstam.
 
   This program is free software: you can redistribute it and/or modify
@@ -16,12 +15,13 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<ListView xmlns:android="http://schemas.android.com/apk/res/android"
+<ListView
+    android:id="@+id/left_drawer"
+    style="?attr/NavDrawerStyle"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/leftDrawer"
-    android:layout_width="320dp"
+    android:layout_width="@dimen/navdrawer_width"
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:choiceMode="none"
-    style="?LeftDrawerStyle"
-    tools:listitem="@layout/simple_light_list_item_1" />
+    tools:listitem="@layout/simple_light_list_item_1"/>

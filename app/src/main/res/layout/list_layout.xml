@@ -19,8 +19,7 @@
          android:layout_width="match_parent"
          android:layout_height="match_parent"
          android:paddingLeft="0dp"
-         android:paddingRight="0dp"
-         android:background="?my_list_background" >
+              android:paddingRight="0dp">
          
      <!-- Standard ListFragment view added in code. Wrap it in container here for animation reasons -->
      <!-- If a background is wanted for the list, add it to the framelayout with for example
