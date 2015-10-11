@@ -16,12 +16,12 @@ android:
   components:
     - build-tools-23.0.1
     - android-23
-    - sysimg-123
+    - sysimg-23
     - android-14
     - sysimg-14
     - extra-android-support
 # Additional components
-    - extra-google-google_play_services
+#    - extra-google-google_play_services
     - extra-google-m2repository
     - extra-android-m2repository
   licenses:
@@ -31,13 +31,13 @@ android:
 
 before_install:
   - chmod +x gradlew
-  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
-  - emulator -avd test -no-skin -no-audio -no-window &
+#  - echo no | android create avd --force -n test -t $ANDROID_TARGET --abi $ANDROID_ABI
+#  - emulator -avd test -no-skin -no-audio -no-window &
 
-before_script:
-    # Make sure the emulator has started before running tests
-    - ./wait_for_emulator
+#before_script:
+#    # Make sure the emulator has started before running tests
+#    - ./wait_for_emulator
 
 script:
     - ./gradlew assembleFreeDebug
-    - ./gradlew assembleFreeDebug connectedAndroidTestFreeDebug --info
+#    - ./gradlew assembleFreeDebug connectedAndroidTestFreeDebug --info
