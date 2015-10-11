@@ -16,11 +16,12 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
    <item android:id="@+id/menu_search"
           android:title="@string/search_hint"
-          android:icon="?action_search"
-          android:showAsAction="always"
+         android:icon="@drawable/ic_search_24dp_white"
+         app:showAsAction="always"
           android:actionViewClass="android.widget.SearchView"
           android:orderInCategory="0"/> 
 </menu>

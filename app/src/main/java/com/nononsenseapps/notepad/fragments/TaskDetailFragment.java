@@ -55,7 +55,6 @@ import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.ActivityTaskHistory_;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.R.layout;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -282,7 +281,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			return null;
 		}
 		setHasOptionsMenu(true);
-		return inflater.inflate(layout.fragment_task_detail, container, false);
+		return inflater.inflate(R.layout.fragment_task_detail, container, false);
 	}
 
 	@Override

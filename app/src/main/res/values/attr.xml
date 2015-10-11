@@ -16,22 +16,6 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <attr name="navigation_refresh" format="reference" />
-    <attr name="action_search" format="reference" />
-    <attr name="action_settings" format="reference" />
-    <attr name="content_new" format="reference" />
-    <attr name="content_discard" format="reference" />
-    <attr name="content_copy" format="reference" />
-    <attr name="content_paste" format="reference" />
-    <attr name="content_undo" format="reference" />
-    <attr name="content_remove" format="reference" />
-    <attr name="ab_cancel" format="reference" />
-    <attr name="device_access_secure" format="reference" />
-    <attr name="device_access_not_secure" format="reference" />
-    <attr name="social_share" format="reference" />
-    <attr name="navigation_accept" format="reference" />
-
-
     <attr name="my_list_selector" format="reference" />
     <attr name="my_list_background" format="reference" />
     <attr name="editorBackgroundColor" format="reference" />
@@ -39,8 +23,6 @@
     <attr name="btn_default_selector" format="reference" />
     <attr name="img_default_selector" format="reference" />
     <attr name="SpinnerStyle" format="reference" />
-    <attr name="expander_open_holo" format="reference" />
-    <attr name="expander_close_holo" format="reference" />
     <attr name="list_divider_holo" format="reference" />
 
     <attr name="viewpager_bg" format="reference" />
@@ -51,12 +33,6 @@
     <attr name="list_item_card_background" format="reference" />
 
     <attr name="labelAddItemTextColor" format="reference|color" />
-    <attr name="body_new" format="reference" />
-    <attr name="body_remove" format="reference" />
-    <attr name="body_delete" format="reference" />
-    <attr name="ic_action_add_list" format="reference" />
-    <attr name="ic_action_list" format="reference" />
-    <attr name="ic_action_share" format="reference" />
 
     <!-- <attr name="task_list_divider_height" format="reference"/> -->
 

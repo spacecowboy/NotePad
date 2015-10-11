@@ -88,7 +88,7 @@
         android:layout_marginBottom="4dp"
         android:layout_marginTop="4dp"
         android:clickable="true"
-        android:drawableLeft="?attr/body_delete"
+        android:drawableLeft="@drawable/ic_delete_24dp_white"
         android:drawablePadding="8dp"
         android:fontFamily="sans-serif"
         android:gravity="center_vertical"

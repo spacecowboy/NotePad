@@ -164,7 +164,6 @@
         <!--<item name="android:actionBarItemBackground">@drawable/ab_solid_DashClockSettingstheme</item>-->
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowShowWallpaper">true</item>
-        <item name="android:homeAsUpIndicator">@drawable/ic_ab_back_holo_dark_am</item>
         <!--<item name="android:windowBackground">@android:color
         /transparent</item>-->
         <!--<item name="android:actionBarWidgetTheme">@android:style/Theme.Holo</item>-->

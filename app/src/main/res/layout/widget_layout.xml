@@ -79,7 +79,7 @@
             android:paddingRight="4dp"
             android:paddingTop="4dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/content_new_dark" />
+            android:src="@drawable/ic_add_24dp_white"/>
     </LinearLayout>
 
     <FrameLayout

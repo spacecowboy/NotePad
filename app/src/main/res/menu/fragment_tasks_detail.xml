@@ -16,38 +16,39 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    >
 
     <!-- Outside group to allow for action bar placement -->
     <item
         android:id="@+id/menu_delete"
-        android:icon="?content_discard"
+        android:icon="@drawable/ic_delete_24dp_white"
         android:orderInCategory="100"
         android:showAsAction="ifRoom"
         android:title="@string/menu_delete">
     </item>
     <item
         android:id="@+id/menu_revert"
-        android:icon="?content_undo"
+        android:icon="@drawable/ic_undo_24dp"
         android:orderInCategory="101"
         android:showAsAction="ifRoom"
         android:title="@android:string/cancel"/>
     <item
         android:id="@+id/menu_share"
         android:actionProviderClass="android.widget.ShareActionProvider"
-        android:icon="?social_share"
+        android:icon="@drawable/ic_share_24dp_white"
         android:orderInCategory="102"
         android:showAsAction="ifRoom"
         android:title="@string/menu_share"/>
     <item
         android:id="@+id/menu_lock"
-        android:icon="?device_access_secure"
+        android:icon="@drawable/ic_lock_outline_24dp_white"
         android:orderInCategory="103"
         android:showAsAction="ifRoom"
         android:title="@string/lock_note"/>
     <item
         android:id="@+id/menu_unlock"
-        android:icon="?device_access_not_secure"
+        android:icon="@drawable/ic_lock_open_24dp_white"
         android:orderInCategory="104"
         android:showAsAction="ifRoom"
         android:title="@string/unlock_note"/>
