@@ -22,7 +22,6 @@ import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
@@ -32,31 +31,28 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.fragments.NavigationDrawerFragment;
 import com.nononsenseapps.notepad.fragments.TaskListFragment;
 import com.nononsenseapps.notepad.fragments.TaskListFragment_;
-import com.nononsenseapps.notepad.util.PrefUtils;
 
 /**
  * Main List activity. Its purpose is to setup the views and layout for the benefit of
  * the underlying fragments.
  */
-public class ActivityList extends AppCompatActivity implements LoaderManager
-        .LoaderCallbacks<Cursor> {
+public class ActivityList extends AppCompatActivity implements LoaderManager.LoaderCallbacks
+        <Cursor>, NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private static final int LOADER_LISTS = 0;
     private static final String START_LIST_ID = "start_list_id";
@@ -66,6 +62,7 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
     private ViewPager mViewPager;
     private long mListIdToSelect = -1;
     private TabLayout mTabLayout;
+    private NavigationDrawerFragment mNavigationDrawerFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,19 +72,10 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        final ActionBar ab = getSupportActionBar();
-        if (ab != null) {
-            ab.setHomeAsUpIndicator(R.drawable.ic_menu_24dp_white);
-            ab.setDisplayHomeAsUpEnabled(true);
-            ab.setHomeButtonEnabled(true);
-        }
-
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ListView navView = (ListView) findViewById(R.id.left_drawer);
-
-        if (navView != null) {
-            setupDrawerContent(navView);
-        }
+        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
+                .findFragmentById(R.id.navigation_drawer);
+        // Set up the drawer.
+        mNavigationDrawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
         if (mViewPager != null) {
@@ -130,26 +118,6 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
         viewPager.setAdapter(mFragmentAdapter);
     }
 
-    /**
-     * Drawer and its content must be non-null
-     */
-    private void setupDrawerContent(@NonNull ListView navView) {
-        if (mDrawerLayout == null) {
-            return;
-        }
-
-        // TODO add content
-
-        // When the user runs the app for the first time, we want to land them with the
-        // navigation drawer open. But just the first time.
-        if (!PrefUtils.isWelcomeDone(this)) {
-            // first run of the app starts with the nav drawer open
-            PrefUtils.markWelcomeDone(this);
-            mDrawerLayout.openDrawer(GravityCompat.START);
-        }
-    }
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return super.onCreateOptionsMenu(menu);
@@ -164,11 +132,6 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                mDrawerLayout.openDrawer(GravityCompat.START);
-                return true;
-        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -200,16 +163,10 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
             case LOADER_LISTS:
                 mTaskListsAdapter.swapCursor(data);
                 mTabLayout.setupWithViewPager(mViewPager);
-                final int pos;
                 if (mListIdToSelect != -1) {
-                    pos = mFragmentAdapter.getItemPosition(mListIdToSelect);
-                } else {
-                    pos = -1;
+                    openList(mListIdToSelect);
                 }
-                if (pos >= 0) {
-                    mViewPager.setCurrentItem(pos);
-                    mListIdToSelect = -1;
-                }
+                mListIdToSelect = -1;
                 break;
         }
     }
@@ -237,6 +194,19 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
             case LOADER_LISTS:
                 mTaskListsAdapter.swapCursor(null);
                 break;
+        }
+    }
+
+    @Override
+    public void openList(long id) {
+        int pos;
+        if (id > 0) {
+            pos = mFragmentAdapter.getItemPosition(id);
+        } else {
+            pos = 0;
+        }
+        if (pos >= 0) {
+            mViewPager.setCurrentItem(pos);
         }
     }
 
@@ -280,6 +250,7 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
                         all_id = prefs.getLong(TaskListFragment.LIST_ALL_ID_PREF_KEY,
                                 TaskListFragment.LIST_ID_WEEK);
                         notifyDataSetChanged();
+                        mTabLayout.setupWithViewPager(mViewPager);
                     }
                 }
             };

@@ -61,6 +61,6 @@
     </LinearLayout>
 
     <!-- The navigation drawer -->
-    <include layout="@layout/navdrawer_layout"/>
+    <include layout="@layout/fragment_navdrawer"/>
 
 </android.support.v4.widget.DrawerLayout>

@@ -77,7 +77,6 @@ import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
-import com.nononsenseapps.notepad.util.PrefUtils;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
 
 import org.androidannotations.annotations.AfterViews;
@@ -217,14 +216,6 @@ public class ActivityMain extends AppCompatActivity implements OnFragmentInterac
         mRecyclerView.setAdapter(mNavAdapter);
 
         populateNavDrawer();*/
-
-        // When the user runs the app for the first time, we want to land them with the
-        // navigation drawer open. But just the first time.
-        if (!PrefUtils.isWelcomeDone(this)) {
-            // first run of the app starts with the nav drawer open
-            PrefUtils.markWelcomeDone(this);
-            mDrawerLayout.openDrawer(GravityCompat.START);
-        }
     }
 
     protected boolean isNavDrawerOpen() {

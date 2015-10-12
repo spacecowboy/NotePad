@@ -29,6 +29,11 @@
         android:layout_height="match_parent"/>
 
     <!-- The navigation drawer -->
-    <include layout="@layout/navdrawer_layout"/>
+    <fragment
+        android:id="@+id/navigation_drawer"
+        android:name="com.nononsenseapps.notepad.fragments.NavigationDrawerFragment"
+        android:layout_width="@dimen/navdrawer_width"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"/>
 
 </android.support.v4.widget.DrawerLayout>
