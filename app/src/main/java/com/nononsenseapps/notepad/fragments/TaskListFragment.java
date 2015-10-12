@@ -66,7 +66,6 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
-import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
@@ -112,7 +111,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
     private long mListId = -1;
 
-    private OnFragmentInteractionListener mListener;
+    private TaskListFragment.TaskListCallbacks mListener;
 
     private String mSortType = null;
 
@@ -555,7 +554,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
             @Override
             public void onItemClick(AdapterView<?> arg0, View origin, int pos, long id) {
                 if (mListener != null && id > 0) {
-                    mListener.onFragmentInteraction(Task.getUri(id), mListId, origin);
+                    mListener.openTask(Task.getUri(id), mListId, origin);
                 }
             }
         });
@@ -760,7 +759,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_add) {
+        // todo remove, moved to FAB
+        /*if (itemId == R.id.menu_add) {
             if (mListener != null && mListId > 0) {
                 mListener.addTaskInList("", mListId);
             } else if (mListener != null) {
@@ -768,7 +768,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
                         -1));
             }
             return true;
-        } else if (itemId == R.id.menu_clearcompleted) {
+        } else */
+        if (itemId == R.id.menu_clearcompleted) {
             if (mListId != -1) {
                 DialogDeleteCompletedTasks.showDialog(getFragmentManager(), mListId, null);
             }
@@ -793,17 +794,16 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
     }
 
     @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
+    public void onAttach(Context context) {
+        super.onAttach(context);
         try {
-            mListener = (OnFragmentInteractionListener) activity;
+            mListener = (TaskListFragment.TaskListCallbacks) getActivity();
         } catch (ClassCastException e) {
-            // throw new ClassCastException(activity.toString()
-            // + " must implement OnFragmentInteractionListener");
+            throw new ClassCastException("Activity must implement " + "OnFragmentInteractionListener");
         }
 
         // We want to be notified of future changes to auto refresh
-        PreferenceManager.getDefaultSharedPreferences(getActivity())
+        PreferenceManager.getDefaultSharedPreferences(context)
                 .registerOnSharedPreferenceChangeListener(this);
     }
 
@@ -867,7 +867,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
         RemoveListener removeListener = null;
 
         public SimpleSectionsAdapter(Context context, int layout, int headerLayout, Cursor c,
-                                     String[] from, int[] to, int flags) {
+                String[] from, int[] to, int flags) {
             super(context, layout, c, from, to, flags);
             this.context = context;
             mItemLayout = layout;
@@ -948,5 +948,14 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
             view.setTheTextSize(Integer.parseInt(prefs.getString(context.getString(R.string
                     .pref_list_fontsize), "1")));
         }
+    }
+
+    /**
+     * This interface must be implemented by activities that contain
+     * TaskListFragments to allow an interaction in this fragment to be communicated to
+     * the activity and potentially other fragments contained in that activity.
+     */
+    public interface TaskListCallbacks {
+        void openTask(final Uri uri, final long listId, final View origin);
     }
 }

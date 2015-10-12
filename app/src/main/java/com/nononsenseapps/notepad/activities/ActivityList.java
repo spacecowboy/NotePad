@@ -17,9 +17,11 @@
 
 package com.nononsenseapps.notepad.activities;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.DataSetObserver;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -41,28 +43,32 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.NavigationDrawerFragment;
+import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskListFragment;
 import com.nononsenseapps.notepad.fragments.TaskListFragment_;
+import com.nononsenseapps.util.ListHelper;
 
 /**
  * Main List activity. Its purpose is to setup the views and layout for the benefit of
  * the underlying fragments.
  */
-public class ActivityList extends AppCompatActivity implements LoaderManager.LoaderCallbacks
-        <Cursor>, NavigationDrawerFragment.NavigationDrawerCallbacks {
+public class ActivityList extends AppCompatActivity implements LoaderManager
+        .LoaderCallbacks<Cursor>, NavigationDrawerFragment.NavigationDrawerCallbacks,
+        TaskListFragment.TaskListCallbacks {
 
     private static final int LOADER_LISTS = 0;
     private static final String START_LIST_ID = "start_list_id";
-    DrawerLayout mDrawerLayout;
     private SimpleCursorAdapter mTaskListsAdapter;
     private Adapter mFragmentAdapter;
     private ViewPager mViewPager;
     private long mListIdToSelect = -1;
     private TabLayout mTabLayout;
-    private NavigationDrawerFragment mNavigationDrawerFragment;
+    private FloatingActionButton mFab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,8 +78,8 @@ public class ActivityList extends AppCompatActivity implements LoaderManager.Loa
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        mNavigationDrawerFragment = (NavigationDrawerFragment) getSupportFragmentManager()
-                .findFragmentById(R.id.navigation_drawer);
+        NavigationDrawerFragment mNavigationDrawerFragment = (NavigationDrawerFragment)
+                getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
         // Set up the drawer.
         mNavigationDrawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
 
@@ -82,17 +88,17 @@ public class ActivityList extends AppCompatActivity implements LoaderManager.Loa
             setupViewPager(mViewPager);
         }
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
+        mFab = (FloatingActionButton) findViewById(R.id.fab);
+        mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Here's a Snackbar", Snackbar.LENGTH_LONG).setAction
-                        ("Action", null).show();
+                Snackbar.make(view, "New task!", Snackbar.LENGTH_LONG).setAction("Action", null)
+                        .show();
+                addTask();
             }
         });
 
         mTabLayout = (TabLayout) findViewById(R.id.tabs);
-        //mTabLayout.setupWithViewPager(mViewPager);
 
         // Handle arguments
         handleArgs(savedInstanceState);
@@ -208,6 +214,61 @@ public class ActivityList extends AppCompatActivity implements LoaderManager.Loa
         if (pos >= 0) {
             mViewPager.setCurrentItem(pos);
         }
+    }
+
+    @Override
+    public void openTask(final Uri taskUri, final long listId, final View origin) {
+        // Todo change activity
+        final Intent intent = new Intent().setAction(Intent.ACTION_EDIT).setClass(this,
+                ActivityMain_.class).setData(taskUri).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                .putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
+        // User clicked a task in the list
+        // tablet
+        // todo tablet
+        /*if (fragment2 != null) {
+            // Set the intent here also so rotations open the same item
+            setIntent(intent);
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim
+                    .slide_in_top, R.anim.slide_out_bottom).replace(R.id.fragment2,
+                    TaskDetailFragment_.getInstance(taskUri)).commitAllowingStateLoss();
+            taskHint.setVisibility(View.GONE);
+        }
+        // phone
+        else {*/
+        startActivity(intent);
+        // }
+        //}
+    }
+
+    public void addTask() {
+        addTaskInList("", ListHelper.getARealList(this, mFragmentAdapter.getItemId(mViewPager
+                .getCurrentItem())));
+    }
+
+    public void addTaskInList(final String text, final long listId) {
+        if (listId < 1) {
+            // Cant add to invalid lists
+            Snackbar.make(mFab, "Invalid list id specified: " + listId, Snackbar.LENGTH_LONG)
+                    .show();
+            return;
+        }
+        // todo change activity
+        final Intent intent = new Intent().setAction(Intent.ACTION_INSERT).setClass(this,
+                ActivityMain_.class).setData(Task.URI).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+                .putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
+        // todo tablet
+        /*if (fragment2 != null) {
+            // Set intent to preserve state when rotating
+            setIntent(intent);
+            // Replace editor fragment
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim
+                    .slide_in_top, R.anim.slide_out_bottom).replace(R.id.fragment2,
+                    TaskDetailFragment_.getInstance(text, listId)).commitAllowingStateLoss();
+            taskHint.setVisibility(View.GONE);
+        } else {*/
+        // Open an activity
+        startActivity(intent);
+        //}
     }
 
     class Adapter extends FragmentPagerAdapter {

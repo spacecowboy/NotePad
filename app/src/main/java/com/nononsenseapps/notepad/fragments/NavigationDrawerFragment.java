@@ -33,7 +33,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -74,7 +73,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
     private NavigationDrawerCallbacks mCallbacks;
-    private ListView mList;
     private ExtraTypesCursorAdapter mAdapter;
 
     public NavigationDrawerFragment() {
@@ -125,8 +123,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_navdrawer, container, false);
 
-        // todo fill view
-        mList = (ListView) rootView.findViewById(R.id.left_drawer);
+        ListView list = (ListView) rootView.findViewById(R.id.left_drawer);
 
         // Use extra items for All Lists
         final int[] extraIds = new int[]{-1, TaskListFragment.LIST_ID_OVERDUE, TaskListFragment
@@ -161,18 +158,9 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
                 extraIds, extraStrings, extraTypes, new int[]{R.layout.drawer_header});
         mAdapter.setExtraData(mExtraData);
 
-        // Load count of tasks in each one
-        Log.d("nononsenseapps drawer", TaskList.CREATE_COUNT_VIEW);
-
-        // Adapter for list titles and ids
-        // final SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-        // R.layout.simple_light_list_item_1, null,
-        // new String[] { TaskList.Columns.TITLE },
-        // new int[] { android.R.id.text1 }, 0);
-        mList.setAdapter(mAdapter);
-        // Todo update what happens on click here
+        list.setAdapter(mAdapter);
         // Set click handler
-        mList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View v, int pos, long id) {
                 if (id < 0) {
@@ -184,7 +172,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
                 mDrawerLayout.closeDrawers();
             }
         });
-        mList.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
 
             @Override
             public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
@@ -236,7 +224,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         if (ab != null) {
             ab.setHomeAsUpIndicator(R.drawable.ic_menu_24dp_white);
             ab.setDisplayHomeAsUpEnabled(true);
-            ab.setHomeButtonEnabled(true);
         }
 
         // ActionBarDrawerToggle ties together the the proper interactions

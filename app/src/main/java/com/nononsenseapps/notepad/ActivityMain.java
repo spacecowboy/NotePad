@@ -70,7 +70,6 @@ import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
 import com.nononsenseapps.notepad.fragments.TaskListFragment;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
-import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.legacy.DonateMigrator;
 import com.nononsenseapps.notepad.legacy.DonateMigrator_;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
@@ -91,8 +90,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @EActivity(resName = "activity_main")
-public class ActivityMain extends AppCompatActivity implements OnFragmentInteractionListener,
-        MenuStateController, OnSharedPreferenceChangeListener {
+public class ActivityMain extends AppCompatActivity implements TaskListFragment
+        .TaskListCallbacks, MenuStateController, OnSharedPreferenceChangeListener,
+        TaskDetailFragment.TaskEditorCallbacks {
 
     // Intent notification argument
     public static final String NOTIFICATION_CANCEL_ARG = "notification_cancel_arg";
@@ -412,13 +412,13 @@ public class ActivityMain extends AppCompatActivity implements OnFragmentInterac
         // TODO probably remove this?
         getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager
                 .OnBackStackChangedListener() {
-                    public void onBackStackChanged() {
-                        if (showingEditor && !isNoteIntent(getIntent())) {
-                            setHomeAsDrawer(true);
-                        }
-                        // Always update menu
-                        invalidateOptionsMenu();
-                    }
+            public void onBackStackChanged() {
+                if (showingEditor && !isNoteIntent(getIntent())) {
+                    setHomeAsDrawer(true);
+                }
+                // Always update menu
+                invalidateOptionsMenu();
+            }
         });
 
         if (b != null) {
@@ -626,7 +626,8 @@ public class ActivityMain extends AppCompatActivity implements OnFragmentInterac
             } else {
                 // Get a share text (null safe)
                 // In a list (if specified, or default otherwise)
-                left = TaskDetailFragment_.getInstance(getNoteShareText(intent), TaskListViewPagerFragment.getARealList(this, getListId(intent)));
+                left = TaskDetailFragment_.getInstance(getNoteShareText(intent),
+                        TaskListViewPagerFragment.getARealList(this, getListId(intent)));
             }
             // fucking stack
             while (getSupportFragmentManager().popBackStackImmediate()) {
@@ -951,7 +952,7 @@ public class ActivityMain extends AppCompatActivity implements OnFragmentInterac
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public void onFragmentInteraction(final Uri taskUri, final long listId, final View origin) {
+    public void openTask(final Uri taskUri, final long listId, final View origin) {
         final Intent intent = new Intent().setAction(Intent.ACTION_EDIT).setClass(this,
                 ActivityMain_.class).setData(taskUri).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 .putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
@@ -985,8 +986,6 @@ public class ActivityMain extends AppCompatActivity implements OnFragmentInterac
         }
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    @Override
     public void addTaskInList(final String text, final long listId) {
         if (listId < 1) {
             // Cant add to invalid lists
@@ -1022,7 +1021,7 @@ public class ActivityMain extends AppCompatActivity implements OnFragmentInterac
     }
 
     @Override
-    public void closeFragment(final Fragment fragment) {
+    public void closeEditor(Fragment fragment) {
         if (fragment2 != null) {
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim
                     .slide_in_top, R.anim.slide_out_bottom).remove(fragment)

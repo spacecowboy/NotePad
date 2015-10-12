@@ -18,6 +18,7 @@
 package com.nononsenseapps.notepad.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -61,7 +62,6 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
-import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.NotificationItemHelper;
 import com.nononsenseapps.utils.views.StyledEditText;
@@ -215,8 +215,8 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	// unlocked, otherwise good to show
 	private boolean mLocked = true;
 
-	private OnFragmentInteractionListener mListener;
-	private ShareActionProvider mShareActionProvider;
+    private TaskEditorCallbacks mListener;
+    private ShareActionProvider mShareActionProvider;
 
 	/*
 	 * If in tablet and added, rotating to portrait actually recreats the
@@ -633,22 +633,23 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		int itemId = item.getItemId();
-		if (itemId == R.id.menu_add) {
-			// TODO should not call if in tablet mode
+        /*if (itemId == R.id.menu_add) {
+            // TODO should not call if in tablet mode
 			if (mListener != null && mTask != null && mTask.dblist > 0) {
 				mListener.addTaskInList("", mTask.dblist);
 			}
 			return true;
-		} else if (itemId == R.id.menu_revert) {
+		} else */
+        if (itemId == R.id.menu_revert) {
 			// set to null to prevent modifications
 			mTask = null;
 			// Request a close from activity
 			if (mListener != null) {
-				mListener.closeFragment(this);
-			}
+                mListener.closeEditor(this);
+            }
 			return true;
-		} else if (itemId == R.id.menu_timemachine) {
-			if (mTask != null && mTask._id > 0) {
+        } else if (itemId == R.id.menu_timemachine) {
+            if (mTask != null && mTask._id > 0) {
 				Intent timeIntent = new Intent(getActivity(),
 						ActivityTaskHistory_.class);
 				timeIntent.putExtra(Task.Columns._ID, mTask._id);
@@ -759,10 +760,10 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 							// Prevents save attempts
 							mTask = null;
 							// Request a close from activity
-							if (mListener != null) {
-								mListener
-										.closeFragment(TaskDetailFragment.this);
-							}
+                            // Todo let listener handle delete, and use Snack bar.
+                            if (mListener != null) {
+                                mListener.closeEditor(TaskDetailFragment.this);
+                            }
 						}
 					});
 		} else {
@@ -770,8 +771,8 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			mTask = null;
 			// Request a close from activity
 			if (mListener != null) {
-				mListener.closeFragment(this);
-			}
+                mListener.closeEditor(TaskDetailFragment.this);
+            }
 		}
 	}
 
@@ -844,17 +845,16 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	}
 
 	@Override
-	public void onAttach(Activity activity) {
-		super.onAttach(activity);
-		if (dontLoad) {
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (dontLoad) {
 			return;
 		}
 		try {
-			mListener = (OnFragmentInteractionListener) activity;
-		} catch (ClassCastException e) {
-			// throw new ClassCastException(activity.toString()
-			// + " must implement OnFragmentInteractionListener");
-		}
+            mListener = (TaskEditorCallbacks) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement TaskEditorCallbacks");
+        }
 	}
 
 	@Override
@@ -956,4 +956,8 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		timePickerDialog.setThemeDark(!theme.contains("light"));
 		return timePickerDialog;
 	}
+
+    public interface TaskEditorCallbacks {
+        void closeEditor(Fragment fragment);
+    }
 }
