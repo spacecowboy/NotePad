@@ -17,7 +17,9 @@
 
 package com.nononsenseapps.notepad.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +27,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.LegacyDBHelper;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 
 /**
@@ -36,7 +41,7 @@ public class ActivityEditor extends AppCompatActivity implements TaskDetailFragm
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_editor);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -68,7 +73,41 @@ public class ActivityEditor extends AppCompatActivity implements TaskDetailFragm
     }
 
     @Override
+    public long getEditorTaskId() {
+        return getNoteId(getIntent());
+    }
+
+    @Override
+    public long getListOfTask() {
+        return getIntent().getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1);
+    }
+
+    @Override
     public void closeEditor(Fragment fragment) {
         finish();
+    }
+
+    @NonNull
+    @Override
+    public String getInitialTaskText() {
+        return "";
+    }
+
+    long getNoteId(@NonNull final Intent intent) {
+        long retval = -1;
+        if (intent.getData() != null && (Intent.ACTION_EDIT.equals(intent.getAction()) || Intent
+                .ACTION_VIEW.equals(intent.getAction()))) {
+            if (intent.getData().getPath().startsWith(TaskList.URI.getPath())) {
+                // Find it in the extras. See DashClock extension for an example
+                retval = intent.getLongExtra(Task.TABLE_NAME, -1);
+            } else if ((intent.getData().getPath().startsWith(LegacyDBHelper.NotePad.Notes
+                    .PATH_VISIBLE_NOTES) ||
+                    intent.getData().getPath().startsWith(LegacyDBHelper.NotePad.Notes
+                            .PATH_NOTES) ||
+                    intent.getData().getPath().startsWith(Task.URI.getPath()))) {
+                retval = Long.parseLong(intent.getData().getLastPathSegment());
+            }
+        }
+        return retval;
     }
 }

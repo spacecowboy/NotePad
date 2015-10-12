@@ -30,6 +30,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
@@ -66,7 +67,6 @@ import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
 import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
 import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
-import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
 import com.nononsenseapps.notepad.fragments.TaskListFragment;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
@@ -608,7 +608,7 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
          * If it contains a noteId, load an editor. If also tablet, load the
 		 * lists.
 		 */
-        if (fragment2 != null) {
+        /*if (fragment2 != null) {
             if (right == null) {
                 if (getNoteId(intent) > 0) {
                     right = TaskDetailFragment_.getInstance(getNoteId(intent));
@@ -638,7 +638,7 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
             }
 
             setHomeAsDrawer(false);
-        }
+        }*/
         /*
          * Other case, is a list id or a tablet
 		 */
@@ -958,7 +958,7 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
                 .putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
         // User clicked a task in the list
         // tablet
-        if (fragment2 != null) {
+        /*if (fragment2 != null) {
             // Set the intent here also so rotations open the same item
             setIntent(intent);
             getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim
@@ -983,7 +983,7 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
             // else {
             startActivity(intent);
             // }
-        }
+        }*/
     }
 
     public void addTaskInList(final String text, final long listId) {
@@ -994,7 +994,7 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
         final Intent intent = new Intent().setAction(Intent.ACTION_INSERT).setClass(this,
                 ActivityMain_.class).setData(Task.URI).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 .putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
-        if (fragment2 != null) {
+        /*if (fragment2 != null) {
             // Set intent to preserve state when rotating
             setIntent(intent);
             // Replace editor fragment
@@ -1017,7 +1017,12 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
             // else {
             startActivity(intent);
             // }
-        }
+        }*/
+    }
+
+    @Override
+    public long getListOfTask() {
+        return 0;
     }
 
     @Override
@@ -1034,6 +1039,12 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
             // finish();
             simulateBack();
         }
+    }
+
+    @NonNull
+    @Override
+    public String getInitialTaskText() {
+        return null;
     }
 
     private void simulateBack() {
@@ -1071,6 +1082,11 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
         } else if (key.startsWith("pref_restart")) {
             shouldRestart = true;
         }
+    }
+
+    @Override
+    public long getEditorTaskId() {
+        return -1;
     }
 
     public interface ListOpener {

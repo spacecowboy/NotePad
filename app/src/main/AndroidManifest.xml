@@ -136,6 +136,13 @@
             </intent-filter>
         </activity>
 
+        <!-- Editor -->
+        <activity
+            android:name="com.nononsenseapps.notepad.activities.ActivityEditor"
+            android:label="@string/app_name"
+            android:theme="@style/LightTheme"
+            android:windowSoftInputMode="adjustResize"></activity>
+
         <!-- Search activity -->
         <activity
             android:name="com.nononsenseapps.notepad.ActivitySearch_"

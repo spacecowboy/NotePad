@@ -219,8 +219,7 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
     @Override
     public void openTask(final Uri taskUri, final long listId, final View origin) {
         // Todo change activity
-        final Intent intent = new Intent().setAction(Intent.ACTION_EDIT).setClass(this,
-                ActivityMain_.class).setData(taskUri).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        final Intent intent = new Intent().setAction(Intent.ACTION_EDIT).setClass(this, ActivityEditor.class).setData(taskUri).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 .putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
         // User clicked a task in the list
         // tablet
