@@ -45,6 +45,7 @@
         android:layout_height="match_parent"
         android:layout_marginLeft="@dimen/editor_side_margin"
         android:layout_marginRight="@dimen/editor_side_margin"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:fillViewport="@bool/fillEditor">
 
         <LinearLayout
