@@ -73,7 +73,7 @@
         android:textIsSelectable="false"
         custom:linkify="true"
         custom:secondaryColor="@color/completedGrey"
-        custom:titleFontFamily="robotocondensed"
+        custom:titleFontFamily="robotolight"
         custom:titleFontStyle="bold"
         custom:titleRelativeSize="1.2"/>
 
