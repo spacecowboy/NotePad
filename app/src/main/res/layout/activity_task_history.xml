@@ -55,7 +55,7 @@
         android:text="@string/drag_to_timetravel"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:fontFamily="sans-serif-light"
-        android:textColor="?textColorSecondary"
+        android:textColor="?android:attr/textColorSecondary"
         android:layout_marginBottom="4dp"
         />
     
@@ -65,21 +65,20 @@
     android:layout_weight="1"
     android:fillViewport="true" >
 
-    <com.nononsenseapps.utils.views.TitleNoteTextView
-        xmlns:ttv="http://schemas.android.com/apk/res/com.nononsenseapps.utils.views"
-        android:id="@+id/taskText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:paddingBottom="4dp"
-        android:singleLine="false"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="?textColorPrimary"
-        android:textIsSelectable="true"
-        custom:linkify="true"
-        custom:titleFontFamily="robotocondensed"
-        custom:titleFontStyle="bold"
-        custom:titleRelativeSize="1.4" />
+        <com.nononsenseapps.utils.views.TitleNoteTextView
+            android:id="@+id/taskText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:paddingBottom="4dp"
+            android:singleLine="false"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textIsSelectable="true"
+            custom:linkify="true"
+            custom:titleFontFamily="robotocondensed"
+            custom:titleFontStyle="bold"
+            custom:titleRelativeSize="1.4"/>
     </ScrollView>
 
 </LinearLayout>

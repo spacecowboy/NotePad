@@ -42,7 +42,7 @@
         android:fontFamily="sans-serif"
         android:text="@string/menu_setdefaultlist"
         android:textAppearance="@android:style/TextAppearance.Medium"
-        android:textColor="?textColorSecondary" />
+        android:textColor="?android:attr/textColorSecondary"/>
 
     <Spinner
         android:id="@+id/sortSpinner"
@@ -77,7 +77,7 @@
             android:hint="@string/add_item"
             android:singleLine="true"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="?textColorPrimary" />
+            android:textColor="?android:attr/textColorPrimary"/>
     </LinearLayout>
 
     <TextView
@@ -97,7 +97,7 @@
         android:text="@string/menu_deletelist"
         android:textAllCaps="true"
         android:textAppearance="@android:style/TextAppearance.Medium"
-        android:textColor="?attr/textColorSecondary"
+        android:textColor="?android:attr/textColorSecondary"
         android:textStyle="bold" />
 
     <include

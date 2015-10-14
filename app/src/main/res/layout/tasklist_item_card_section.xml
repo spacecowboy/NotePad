@@ -18,8 +18,7 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/taskitemCard"
+                android:id="@+id/taskitemCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/list_item_min_size"
@@ -57,7 +56,6 @@
         android:layout_alignParentRight="true" />
 
     <com.nononsenseapps.utils.views.TitleNoteTextView
-        xmlns:ttv="http://schemas.android.com/apk/res/com.nononsenseapps.utils.views"
         android:id="@android:id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -71,13 +69,13 @@
         android:paddingBottom="4dp"
         android:singleLine="false"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="?textColorPrimary"
+        android:textColor="?android:attr/textColorPrimary"
         android:textIsSelectable="false"
         custom:linkify="true"
         custom:secondaryColor="@color/completedGrey"
         custom:titleFontFamily="robotocondensed"
         custom:titleFontStyle="bold"
-        custom:titleRelativeSize="1.2" />
+        custom:titleRelativeSize="1.2"/>
 
     <com.nononsenseapps.ui.DateView
         android:id="@+id/date"
@@ -88,7 +86,7 @@
         android:layout_toLeftOf="@+id/dragpadding"
         android:fontFamily="sans-serif-light"
         android:gravity="right"
-        android:textColor="?textColorSecondary"
+        android:textColor="?android:attr/textColorSecondary"
         android:textSize="12sp"
         android:visibility="gone" />
 

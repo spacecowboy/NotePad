@@ -103,8 +103,6 @@
                             android:gravity="center"/>
                     </com.nononsenseapps.ui.DelegateFrame>
 
-                    <!-- android:background="?btn_default_selector" -->
-
                     <ImageButton
                         android:id="@+id/dueCancelButton"
                         style="?android:attr/buttonBarButtonStyle"
@@ -151,7 +149,7 @@
                     android:text="@string/add_a_reminder"
                     android:textAllCaps="false"
                     android:textAppearance="?android:attr/textAppearanceMedium"
-                    android:textColor="?textColorSecondary"/>
+                    android:textColor="?android:attr/textColorSecondary"/>
 
                 <LinearLayout
                     android:id="@+id/notificationList"

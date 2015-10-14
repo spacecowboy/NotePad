@@ -75,7 +75,6 @@
 
     <style name="EditorLayoutStyle">
         <item name="android:layout_marginTop">@dimen/editor_vertical_margin</item>
-        <item name="android:background">?editorBackgroundColor</item>
         <item name="android:paddingBottom">@dimen/editor_vertical_margin_bottom</item>
         <item name="android:paddingLeft">8dp</item>
         <item name="android:paddingRight">8dp</item>
@@ -84,7 +83,7 @@
     <style name="EditorTextStyle">
         <item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
-        <item name="android:textColor">?textColorPrimary</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
         <item name="linkify">true</item>
         <item name="titleFontFamily">robotocondensed</item>
         <item name="titleFontStyle">bold</item>

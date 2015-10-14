@@ -24,22 +24,13 @@
         <!--   theme UI controls like checkboxes and text fields -->
         <item name="colorAccent">@color/accent</item>
 
-        <item name="android:background">@null</item>
+        <!--<item name="android:background">@null</item>-->
 
         <item name="NavDrawerStyle">@style/LightNavbarTheme</item>
 
         <!-- Update these -->
-        <item name="editorBackgroundColor">@drawable/card_light</item>
-        <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
-        <item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
-        <item name="img_default_selector">@drawable/img_default_selector_light</item>
-        <item name="SpinnerStyle">@android:style/Widget.Holo.Light.Spinner</item>
-
-        <item name="list_divider_holo">@drawable/list_divider_holo_light</item>
 
         <!-- <item name="viewpager_bg">@color/viewpager_darkgrey</item> -->
-        <item name="textColorPrimary">?android:attr/textColorPrimary</item>
-        <item name="textColorSecondary">?android:attr/textColorSecondary</item>
         <item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
         <item name="list_item_card_background">@drawable/card_light</item>
         <item name="drag_handle_color">@color/dragHandleColorLight</item>
@@ -82,16 +73,8 @@
         <item name="android:background">@null</item>
         <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
         <item name="my_list_background">@drawable/background_holo_dark</item>
-        <item name="editorBackgroundColor">@drawable/background_holo_dark</item>
-        <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
-        <item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
-        <item name="img_default_selector">@drawable/img_default_selector_dark</item>
-        <item name="SpinnerStyle">@android:style/Widget.Holo.Spinner</item>
 
-        <item name="list_divider_holo">@drawable/list_divider_holo_dark</item>
         <item name="viewpager_bg">@android:drawable/dark_header</item>
-        <item name="textColorPrimary">?android:attr/textColorPrimary</item>
-        <item name="textColorSecondary">?android:attr/textColorSecondary</item>
         <item name="labelAddItemTextColor">@color/labelItemTextColorDark</item>
         <item name="list_item_card_background">@drawable/card_dark</item>
         <item name="android:actionBarStyle">@android:style/Widget.Holo.ActionBar.Solid</item>
@@ -106,7 +89,6 @@
     <style name="ThemeHoloBlack" parent="@style/ThemeGoogleNowDark">
         <item name="android:windowBackground">@android:color/black</item>
         <item name="android:colorBackgroundCacheHint">@android:color/black</item>
-        <item name="editorBackgroundColor">@android:color/black</item>
         <item name="TaskListItem">@style/TaskListItemBlack</item>
         <item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
     </style>
@@ -117,7 +99,6 @@
         <item name="android:windowBackground">@color/googlenow_darkergrey</item>
         <item name="android:colorBackgroundCacheHint">@color/googlenow_darkergrey</item>
         <item name="viewpager_bg">@null</item>
-        <item name="editorBackgroundColor">@drawable/card_dark</item>
         <item name="ListMarginStyle">@style/ListMarginStyleCard</item>
     </style>
 
@@ -130,18 +111,9 @@
         <!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
         <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
         <item name="my_list_background">@color/listLightBG</item>
-        <item name="editorBackgroundColor">@drawable/card_light</item>
-        <item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
-        <item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
-        <item name="img_default_selector">@drawable/img_default_selector_light</item>
-        <item name="SpinnerStyle">@android:style/Widget.Holo.Light.Spinner</item>
-
-        <item name="list_divider_holo">@drawable/list_divider_holo_light</item>
 
         <!-- <item name="viewpager_bg">@color/viewpager_darkgrey</item> -->
         <item name="viewpager_bg">@color/googlenow_grey_trans</item>
-        <item name="textColorPrimary">?android:attr/textColorPrimary</item>
-        <item name="textColorSecondary">?android:attr/textColorSecondary</item>
         <item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
         <item name="list_item_card_background">@drawable/card_light</item>
         <item name="drag_handle_color">@color/dragHandleColorLight</item>
