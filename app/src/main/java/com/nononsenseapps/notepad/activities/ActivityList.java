@@ -43,7 +43,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -251,9 +250,7 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
                     .show();
             return;
         }
-        // todo change activity
-        final Intent intent = new Intent().setAction(Intent.ACTION_INSERT).setClass(this,
-                ActivityMain_.class).setData(Task.URI).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        final Intent intent = new Intent().setAction(Intent.ACTION_INSERT).setClass(this, ActivityEditor.class).setData(Task.URI)//.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 .putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
         // todo tablet
         /*if (fragment2 != null) {
