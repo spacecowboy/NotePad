@@ -28,6 +28,8 @@
         android:layout_height="wrap_content"
         android:theme="@style/DarkToolbarTheme">
 
+        <!-- Scrolling views must be declared before pinned views -->
+
         <android.support.v7.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"

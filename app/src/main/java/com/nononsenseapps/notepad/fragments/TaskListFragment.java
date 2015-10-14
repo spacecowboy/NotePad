@@ -34,6 +34,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ActionMode;
@@ -489,6 +490,13 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
                 }
             }
         });
+    }
+
+    @AfterViews
+    void setupScrollBehavior() {
+        // ListView will only support scrolling ToolBar off-screen from Lollipop onwards.
+        // RecyclerView does not have this limitation
+        ViewCompat.setNestedScrollingEnabled(listView, true);
     }
 
     private boolean handleSyncRequest() {
