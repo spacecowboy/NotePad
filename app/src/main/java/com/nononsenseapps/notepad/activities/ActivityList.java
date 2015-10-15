@@ -83,6 +83,7 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
         mNavigationDrawerFragment.setUp((DrawerLayout) findViewById(R.id.drawer_layout), toolbar);
 
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
+        mTabLayout = (TabLayout) findViewById(R.id.tabs);
         if (mViewPager != null) {
             setupViewPager(mViewPager);
         }
@@ -97,7 +98,6 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
             }
         });
 
-        mTabLayout = (TabLayout) findViewById(R.id.tabs);
 
         // Handle arguments
         handleArgs(savedInstanceState);
@@ -107,10 +107,12 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
     }
 
     private void handleArgs(Bundle savedInstanceState) {
-        mListIdToSelect = getIntent().getLongExtra(START_LIST_ID, -1);
         if (savedInstanceState != null) {
             mListIdToSelect = savedInstanceState.getLong(START_LIST_ID);
+        } else {
+            mListIdToSelect = ListHelper.getListId(getIntent());
         }
+        mListIdToSelect = ListHelper.getARealList(this, mListIdToSelect);
     }
 
     private void setupViewPager(ViewPager viewPager) {
@@ -170,8 +172,8 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
                 mTabLayout.setupWithViewPager(mViewPager);
                 if (mListIdToSelect != -1) {
                     openList(mListIdToSelect);
+                    mListIdToSelect = -1;
                 }
-                mListIdToSelect = -1;
                 break;
         }
     }
@@ -370,7 +372,6 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
         @Override
         public Fragment getItem(int position) {
             long id = getItemId(position);
-            // todo cache?
             return TaskListFragment_.getInstance(id);
         }
 
