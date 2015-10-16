@@ -15,13 +15,18 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<android.support.v7.widget.RecyclerView
-    android:id="@+id/left_drawer"
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.NavigationView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="@dimen/navdrawer_width"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_gravity="start"
     android:background="@color/navdrawer_background"
-    android:choiceMode="none"
-    tools:listitem="@layout/simple_light_list_item_1"/>
+    tools:context="com.nononsenseapps.notepad.fragment.NavigationDrawerFragment">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/left_drawer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:choiceMode="none"
+        tools:listitem="@layout/simple_light_list_item_1"/>
+</android.support.design.widget.NavigationView>
