@@ -183,8 +183,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         mAdapter = new Adapter(new HeaderItem(TaskListFragment.LIST_ID_ALL, R.string
                 .show_from_all_lists));
         list.setAdapter(mAdapter);
-
-        //list.setHasFixedSize(true);
+        list.setHasFixedSize(true);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         list.setLayoutManager(layoutManager);
