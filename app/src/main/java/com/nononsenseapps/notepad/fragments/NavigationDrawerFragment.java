@@ -32,19 +32,18 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
 
 import java.util.ArrayList;
 
@@ -72,131 +71,10 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     private DrawerLayout mDrawerLayout;
     private boolean mFromSavedInstanceState;
     private boolean mUserLearnedDrawer;
+    private Adapter mAdapter;
     private NavigationDrawerCallbacks mCallbacks;
-    private ExtraTypesCursorAdapter mAdapter;
 
     public NavigationDrawerFragment() {
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // Read in the flag indicating whether or not the user has demonstrated awareness of the
-        // drawer. See PREF_USER_LEARNED_DRAWER for details.
-        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
-
-        if (savedInstanceState != null) {
-            //mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-            mFromSavedInstanceState = true;
-        }
-
-        // To get call to handle home button
-        hasOptionsMenu();
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        // Start loading
-        getLoaderManager().restartLoader(LOADER_NAVDRAWER_LISTS, null, this);
-        // special views
-        getLoaderManager().restartLoader(TaskListFragment.LIST_ID_OVERDUE, null, this);
-        getLoaderManager().restartLoader(TaskListFragment.LIST_ID_TODAY, null, this);
-        getLoaderManager().restartLoader(TaskListFragment.LIST_ID_WEEK, null, this);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (android.R.id.home == item.getItemId()) {
-            mDrawerLayout.openDrawer(GravityCompat.START);
-            return true;
-        } else {
-            return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-            savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_navdrawer, container, false);
-
-        ListView list = (ListView) rootView.findViewById(R.id.left_drawer);
-
-        // Use extra items for All Lists
-        final int[] extraIds = new int[]{-1, TaskListFragment.LIST_ID_OVERDUE, TaskListFragment
-                .LIST_ID_TODAY, TaskListFragment.LIST_ID_WEEK, -1};
-        // This is fine for initial conditions
-        final int[] extraStrings = new int[]{R.string.tasks, R.string.date_header_overdue, R
-                .string.date_header_today, R.string.next_5_days, R.string.lists};
-        // Use this for real data
-        mExtraData = new ArrayList<ArrayList<Object>>();
-        // Task header
-        mExtraData.add(new ArrayList<Object>());
-        mExtraData.get(0).add(R.string.tasks);
-        // Overdue
-        mExtraData.add(new ArrayList<Object>());
-        mExtraData.get(1).add(R.string.date_header_overdue);
-        // Today
-        mExtraData.add(new ArrayList<Object>());
-        mExtraData.get(2).add(R.string.date_header_today);
-        // Week
-        mExtraData.add(new ArrayList<Object>());
-        mExtraData.get(3).add(R.string.next_5_days);
-        // Lists header
-        mExtraData.add(new ArrayList<Object>());
-        mExtraData.get(4).add(R.string.lists);
-
-        final int[] extraTypes = new int[]{1, 0, 0, 0, 1};
-
-        mAdapter = new ExtraTypesCursorAdapter(getContext(), R.layout.simple_light_list_item_2,
-                null, new String[]{TaskList.Columns.TITLE, TaskList.Columns.VIEW_COUNT}, new
-                int[]{android.R.id.text1, android.R.id.text2},
-                // id -1 for headers, ignore clicks on them
-                extraIds, extraStrings, extraTypes, new int[]{R.layout.drawer_header});
-        mAdapter.setExtraData(mExtraData);
-
-        list.setAdapter(mAdapter);
-        // Set click handler
-        list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View v, int pos, long id) {
-                if (id < 0) {
-                    // Set preference which type was chosen
-                    PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putLong
-                            (TaskListFragment.LIST_ALL_ID_PREF_KEY, id).commit();
-                }
-                mCallbacks.openList(id);
-                mDrawerLayout.closeDrawers();
-            }
-        });
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-                // Open dialog to edit list
-                if (id > 0) {
-                    DialogEditList_ dialog = DialogEditList_.getInstance(id);
-                    dialog.show(getFragmentManager(), "fragment_edit_list");
-                    return true;
-                } else if (id < -1) {
-                    // Set as "default"
-                    PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putLong
-                            (getString(R.string.pref_defaultstartlist), id).putLong
-                            (TaskListFragment.LIST_ALL_ID_PREF_KEY, id).commit();
-                    Toast.makeText(getContext(), R.string.new_default_set, Toast.LENGTH_SHORT)
-                            .show();
-                    // openList(id);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });
-
-        return rootView;
     }
 
     private void updateExtra(final int pos, final int count) {
@@ -277,6 +155,126 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     }
 
     @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        // Read in the flag indicating whether or not the user has demonstrated awareness of the
+        // drawer. See PREF_USER_LEARNED_DRAWER for details.
+        SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
+
+        if (savedInstanceState != null) {
+            //mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
+            mFromSavedInstanceState = true;
+        }
+
+        // To get call to handle home button
+        hasOptionsMenu();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_navdrawer, container, false);
+
+        RecyclerView list = (RecyclerView) rootView.findViewById(R.id.left_drawer);
+
+        mAdapter = new Adapter();
+        list.setAdapter(mAdapter);
+
+        //list.setHasFixedSize(true);
+
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        list.setLayoutManager(layoutManager);
+
+        // todo remove
+        /*// Use extra items for All Lists
+        final int[] extraIds = new int[]{-1, TaskListFragment.LIST_ID_OVERDUE, TaskListFragment
+                .LIST_ID_TODAY, TaskListFragment.LIST_ID_WEEK, -1};
+        // This is fine for initial conditions
+        final int[] extraStrings = new int[]{R.string.tasks, R.string.date_header_overdue, R
+                .string.date_header_today, R.string.next_5_days, R.string.lists};
+        // Use this for real data
+        mExtraData = new ArrayList<ArrayList<Object>>();
+        // Task header
+        mExtraData.add(new ArrayList<Object>());
+        mExtraData.get(0).add(R.string.tasks);
+        // Overdue
+        mExtraData.add(new ArrayList<Object>());
+        mExtraData.get(1).add(R.string.date_header_overdue);
+        // Today
+        mExtraData.add(new ArrayList<Object>());
+        mExtraData.get(2).add(R.string.date_header_today);
+        // Week
+        mExtraData.add(new ArrayList<Object>());
+        mExtraData.get(3).add(R.string.next_5_days);
+        // Lists header
+        mExtraData.add(new ArrayList<Object>());
+        mExtraData.get(4).add(R.string.lists);
+
+        final int[] extraTypes = new int[]{1, 0, 0, 0, 1};
+
+        mAdapter = new ExtraTypesCursorAdapter(getContext(), R.layout.simple_light_list_item_2,
+                null, new String[]{TaskList.Columns.TITLE, TaskList.Columns.VIEW_COUNT}, new
+                int[]{android.R.id.text1, android.R.id.text2},
+                // id -1 for headers, ignore clicks on them
+                extraIds, extraStrings, extraTypes, new int[]{R.layout.drawer_header});
+        mAdapter.setExtraData(mExtraData);
+        list.setAdapter(mAdapter);*/
+        // Set click handler
+        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View v, int pos, long id) {
+                if (id < 0) {
+                    // Set preference which type was chosen
+                    PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putLong
+                            (TaskListFragment.LIST_ALL_ID_PREF_KEY, id).commit();
+                }
+                mCallbacks.openList(id);
+                mDrawerLayout.closeDrawers();
+            }
+        });
+        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
+                // Open dialog to edit list
+                if (id > 0) {
+                    DialogEditList_ dialog = DialogEditList_.getInstance(id);
+                    dialog.show(getFragmentManager(), "fragment_edit_list");
+                    return true;
+                } else if (id < -1) {
+                    // Set as "default"
+                    PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putLong
+                            (getString(R.string.pref_defaultstartlist), id).putLong
+                            (TaskListFragment.LIST_ALL_ID_PREF_KEY, id).commit();
+                    Toast.makeText(getContext(), R.string.new_default_set, Toast.LENGTH_SHORT)
+                            .show();
+                    // openList(id);
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        });*/
+
+        return rootView;
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+
+        // Start loading
+        getLoaderManager().restartLoader(LOADER_NAVDRAWER_LISTS, null, this);
+        // special views
+        // todo remove
+        /*getLoaderManager().restartLoader(TaskListFragment.LIST_ID_OVERDUE, null, this);
+        getLoaderManager().restartLoader(TaskListFragment.LIST_ID_TODAY, null, this);
+        getLoaderManager().restartLoader(TaskListFragment.LIST_ID_WEEK, null, this);*/
+    }
+
+    @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         // outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
@@ -287,6 +285,16 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         super.onConfigurationChanged(newConfig);
         // Forward the new configuration the drawer toggle component.
         mDrawerToggle.onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (android.R.id.home == item.getItemId()) {
+            mDrawerLayout.openDrawer(GravityCompat.START);
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private ActionBar getActionBar() {
@@ -313,7 +321,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             case TaskListFragment.LIST_ID_WEEK:
                 return new CursorLoader(getContext(), Task.URI, COUNTROWS, NOTCOMPLETED +
                         TaskListFragment.andWhereWeek(), null, null);
-            case 0:
+            case LOADER_NAVDRAWER_LISTS:
             default:
                 return new CursorLoader(getContext(), TaskList.URI_WITH_COUNT, new
                         String[]{TaskList.Columns._ID, TaskList.Columns.TITLE, TaskList.Columns
@@ -344,9 +352,9 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
                     updateExtra(3, c.getInt(0));
                 }
                 break;
-            case 0:
+            case LOADER_NAVDRAWER_LISTS:
             default:
-                mAdapter.swapCursor(c);
+                mAdapter.setData(c);
         }
     }
 
@@ -365,13 +373,156 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             case TaskListFragment.LIST_ID_WEEK:
                 break;
             case LOADER_NAVDRAWER_LISTS:
-                mAdapter.swapCursor(null);
+                mAdapter.setData(null);
                 break;
         }
     }
 
-
     public interface NavigationDrawerCallbacks {
         void openList(long id);
+    }
+
+    private class Adapter extends RecyclerView.Adapter<ViewHolder> {
+
+        private static final int VIEWTYPE_HEADER = 0;
+        private static final int VIEWTYPE_ITEM = 1;
+        private final HeaderItem[] headers;
+        Cursor mCursor = null;
+
+        public Adapter() {
+            setHasStableIds(true);
+            this.headers = new HeaderItem[]{};
+        }
+
+        public void setData(Cursor cursor) {
+            mCursor = cursor;
+            notifyDataSetChanged();
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            ViewHolder vh;
+            LayoutInflater inflater = LayoutInflater.from(getContext());
+            switch (viewType) {
+                case VIEWTYPE_HEADER:
+                case VIEWTYPE_ITEM:
+                default:
+                    vh = new ViewHolder(inflater.inflate(R.layout.simple_light_list_item_2,
+                            parent, false));
+                    break;
+            }
+            return vh;
+        }
+
+        @Override
+        public void onBindViewHolder(ViewHolder holder, int position) {
+            switch (holder.getItemViewType()) {
+                case VIEWTYPE_HEADER:
+                    mCursor.moveToPosition(position);
+                    break;
+                case VIEWTYPE_ITEM:
+                    mCursor.moveToPosition(actualPosition(position));
+                    break;
+            }
+            holder.bind(mCursor);
+        }
+
+        @Override
+        public int getItemViewType(int position) {
+            if (isHeader(position)) {
+                return VIEWTYPE_HEADER;
+            } else {
+                return VIEWTYPE_ITEM;
+            }
+        }
+
+        @Override
+        public long getItemId(int position) {
+            if (isHeader(position)) {
+                return headers[position].getItemId();
+            } else {
+                mCursor.moveToPosition(actualPosition(position));
+                return mCursor.getLong(0);
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            int result = headers.length;
+            if (mCursor != null) {
+                result += mCursor.getCount();
+            }
+            return result;
+        }
+
+        /**
+         * @param position as seen from the outside
+         * @return position as seen by internal data (header position if header, wrapped position
+         * if..)
+         */
+        public int actualPosition(int position) {
+            if (isHeader(position)) {
+                return position;
+            } else {
+                return position - headers.length;
+            }
+        }
+
+        /**
+         * @param position as seen from the outside
+         * @return true if position is on a header, false otherwise
+         */
+        public boolean isHeader(int position) {
+            return position < headers.length;
+        }
+    }
+
+    /**
+     * The interface of the extra items in this adapter.
+     */
+    public class HeaderItem {
+        public HeaderItem() {
+            // todo
+        }
+
+        /**
+         * @return The id of the item .
+         */
+        long getItemId() {
+            // todo
+            return -1;
+        }
+    }
+
+    private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+
+
+        private final TextView mTitle;
+        private final TextView mCount;
+        private long id = -1;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+            mTitle = (TextView) itemView.findViewById(android.R.id.text1);
+            mCount = (TextView) itemView.findViewById(android.R.id.text2);
+        }
+
+        public void bind(Cursor cursor) {
+            id = cursor.getLong(cursor.getColumnIndex(TaskList.Columns._ID));
+            mTitle.setText(cursor.getString(cursor.getColumnIndex(TaskList.Columns.TITLE)));
+            mCount.setText(cursor.getString(cursor.getColumnIndex(TaskList.Columns.VIEW_COUNT)));
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (id < 0) {
+                // Set preference which type was chosen
+                PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putLong
+                        (TaskListFragment.LIST_ALL_ID_PREF_KEY, id).commit();
+            }
+            mCallbacks.openList(id);
+            mDrawerLayout.closeDrawers();
+        }
     }
 }

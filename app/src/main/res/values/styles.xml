@@ -15,7 +15,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <style name="LeftDrawerStyleDark">
         <item name="android:background">@color/googlenow_darkergrey</item>
@@ -29,7 +29,6 @@
 
     <style name="LeftDrawerStyleLight" parent="@style/LeftDrawerStyleDark">
         <item name="android:background">@color/googlenow_grey</item>
-        <item name="android:divider">?android:attr/listDivider</item>
     </style>
 
     <style name="LeftDrawerListItemStyleDark">
