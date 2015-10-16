@@ -92,8 +92,6 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
         mFab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "New task!", Snackbar.LENGTH_LONG).setAction("Action", null)
-                        .show();
                 addTask();
             }
         });
@@ -104,6 +102,16 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
 
         // Start loading
         getSupportLoaderManager().restartLoader(LOADER_LISTS, Bundle.EMPTY, this);
+    }
+
+    @Override
+    public void onDestroy() {
+        if (mFragmentAdapter != null) {
+            mFragmentAdapter.destroy();
+        }
+        getLoaderManager().destroyLoader(LOADER_LISTS);
+
+        super.onDestroy();
     }
 
     private void handleArgs(Bundle savedInstanceState) {
@@ -130,12 +138,10 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
         return super.onCreateOptionsMenu(menu);
     }
 
-
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         return super.onPrepareOptionsMenu(menu);
     }
-
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -176,16 +182,6 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
                 }
                 break;
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        if (mFragmentAdapter != null) {
-            mFragmentAdapter.destroy();
-        }
-        getLoaderManager().destroyLoader(LOADER_LISTS);
-
-        super.onDestroy();
     }
 
     /**
@@ -331,28 +327,6 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
         }
 
         /**
-         * Called when the host view is attempting to determine if an item's position
-         * has changed. Returns {@link #POSITION_UNCHANGED} if the position of the given
-         * item has not changed or {@link #POSITION_NONE} if the item is no longer present
-         * in the adapter.
-         * <p/>
-         * <p>The default implementation assumes that items will never
-         * change position and always returns {@link #POSITION_UNCHANGED}.
-         *
-         * @param object Object representing an item, previously returned by a call to
-         *               {@link #instantiateItem(View, int)}.
-         * @return object's new position index from [0, {@link #getCount()}),
-         * {@link #POSITION_UNCHANGED} if the object's position has not changed,
-         * or {@link #POSITION_NONE} if the item is no longer present.
-         */
-        @Override
-        public int getItemPosition(Object object) {
-            Fragment f = (Fragment) object;
-            long listId = f.getArguments().getLong(TaskListFragment.LIST_ID);
-            return getItemPosition(listId);
-        }
-
-        /**
          * Returns a negative number if id wasn't found in adapter
          */
         public int getItemPosition(final long listId) {
@@ -402,6 +376,28 @@ public class ActivityList extends AppCompatActivity implements LoaderManager
                 return 1 + wrappedAdapter.getCount();
             else
                 return 1;
+        }
+
+        /**
+         * Called when the host view is attempting to determine if an item's position
+         * has changed. Returns {@link #POSITION_UNCHANGED} if the position of the given
+         * item has not changed or {@link #POSITION_NONE} if the item is no longer present
+         * in the adapter.
+         * <p/>
+         * <p>The default implementation assumes that items will never
+         * change position and always returns {@link #POSITION_UNCHANGED}.
+         *
+         * @param object Object representing an item, previously returned by a call to
+         *               {@link #instantiateItem(View, int)}.
+         * @return object's new position index from [0, {@link #getCount()}),
+         * {@link #POSITION_UNCHANGED} if the object's position has not changed,
+         * or {@link #POSITION_NONE} if the item is no longer present.
+         */
+        @Override
+        public int getItemPosition(Object object) {
+            Fragment f = (Fragment) object;
+            long listId = f.getArguments().getLong(TaskListFragment.LIST_ID);
+            return getItemPosition(listId);
         }
 
         @Override

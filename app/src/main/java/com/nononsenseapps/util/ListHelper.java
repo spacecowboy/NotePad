@@ -36,7 +36,7 @@ public class ListHelper {
     /**
      * If temp list is > 0, returns it. Else, checks if a default list is set
      * then returns that. If none set, then returns first (alphabetical) list
-     * Returns -1 if no lists in database. Note that ids < -1 are returned as is.
+     * Returns -1 if no lists in database.
      * <p/>
      * Guarantees default list is valid if you are unsure. (e.g. if you input garbage,
      * non-garbage will hopefully flow out)
@@ -44,7 +44,7 @@ public class ListHelper {
     public static long getARealList(final Context context, final long tempList) {
         long returnList = tempList;
 
-        if (returnList == -1) {
+        if (returnList < 1) {
             // Then check if a default list is specified
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             returnList = Long.parseLong(prefs.getString(context.getString(R.string
@@ -66,7 +66,7 @@ public class ListHelper {
             }
         }
 
-        if (returnList == -1) {
+        if (returnList < 1) {
             // Fetch a valid list from database if previous attempts are invalid
             final Cursor c = context.getContentResolver().query(TaskList.URI, TaskList.Columns
                     .FIELDS, null, null, context.getResources().getString(R.string
