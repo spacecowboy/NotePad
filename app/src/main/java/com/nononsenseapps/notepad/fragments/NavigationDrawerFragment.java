@@ -23,6 +23,7 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.StringRes;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -179,7 +180,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 
         RecyclerView list = (RecyclerView) rootView.findViewById(R.id.left_drawer);
 
-        mAdapter = new Adapter();
+        mAdapter = new Adapter(new HeaderItem(TaskListFragment.LIST_ID_ALL, R.string
+                .show_from_all_lists));
         list.setAdapter(mAdapter);
 
         //list.setHasFixedSize(true);
@@ -382,16 +384,16 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         void openList(long id);
     }
 
-    private class Adapter extends RecyclerView.Adapter<ViewHolder> {
+    private class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private static final int VIEWTYPE_HEADER = 0;
         private static final int VIEWTYPE_ITEM = 1;
         private final HeaderItem[] headers;
         Cursor mCursor = null;
 
-        public Adapter() {
+        public Adapter(HeaderItem... headers) {
             setHasStableIds(true);
-            this.headers = new HeaderItem[]{};
+            this.headers = headers;
         }
 
         public void setData(Cursor cursor) {
@@ -400,14 +402,17 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            ViewHolder vh;
+        public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            RecyclerView.ViewHolder vh;
             LayoutInflater inflater = LayoutInflater.from(getContext());
             switch (viewType) {
                 case VIEWTYPE_HEADER:
+                    vh = new HeaderViewHolder(inflater.inflate(R.layout.simple_light_list_item_2,
+                            parent, false));
+                    break;
                 case VIEWTYPE_ITEM:
                 default:
-                    vh = new ViewHolder(inflater.inflate(R.layout.simple_light_list_item_2,
+                    vh = new CursorViewHolder(inflater.inflate(R.layout.simple_light_list_item_2,
                             parent, false));
                     break;
             }
@@ -415,16 +420,16 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         }
 
         @Override
-        public void onBindViewHolder(ViewHolder holder, int position) {
+        public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
                 case VIEWTYPE_HEADER:
-                    mCursor.moveToPosition(position);
+                    ((HeaderViewHolder) holder).bind(headers[position]);
                     break;
                 case VIEWTYPE_ITEM:
                     mCursor.moveToPosition(actualPosition(position));
+                    ((CursorViewHolder) holder).bind(mCursor);
                     break;
             }
-            holder.bind(mCursor);
         }
 
         @Override
@@ -439,7 +444,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         @Override
         public long getItemId(int position) {
             if (isHeader(position)) {
-                return headers[position].getItemId();
+                return headers[position].id;
             } else {
                 mCursor.moveToPosition(actualPosition(position));
                 return mCursor.getLong(0);
@@ -481,27 +486,48 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
      * The interface of the extra items in this adapter.
      */
     public class HeaderItem {
-        public HeaderItem() {
-            // todo
-        }
+        public final long id;
+        public final int title;
 
-        /**
-         * @return The id of the item .
-         */
-        long getItemId() {
-            // todo
-            return -1;
+        public HeaderItem(long id, @StringRes int title) {
+            this.id = id;
+            this.title = title;
         }
     }
 
-    private class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class HeaderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private final TextView mTitle;
+        private final TextView mCount;
+        private HeaderItem mItem;
 
+        public HeaderViewHolder(View itemView) {
+            super(itemView);
+            itemView.setOnClickListener(this);
+            mTitle = (TextView) itemView.findViewById(android.R.id.text1);
+            mCount = (TextView) itemView.findViewById(android.R.id.text2);
+        }
 
+        public void bind(HeaderItem headerItem) {
+            mItem = headerItem;
+            mTitle.setText(headerItem.title);
+            mCount.setVisibility(View.GONE);
+        }
+
+        @Override
+        public void onClick(View v) {
+            PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putLong
+                    (TaskListFragment.LIST_ALL_ID_PREF_KEY, mItem.id).commit();
+            mCallbacks.openList(mItem.id);
+            mDrawerLayout.closeDrawers();
+        }
+    }
+
+    private class CursorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView mTitle;
         private final TextView mCount;
         private long id = -1;
 
-        public ViewHolder(View itemView) {
+        public CursorViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             mTitle = (TextView) itemView.findViewById(android.R.id.text1);
@@ -516,11 +542,12 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 
         @Override
         public void onClick(View v) {
-            if (id < 0) {
+            /*if (id < 0) {
                 // Set preference which type was chosen
+                // TODO move to sort/filter options
                 PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putLong
                         (TaskListFragment.LIST_ALL_ID_PREF_KEY, id).commit();
-            }
+            }*/
             mCallbacks.openList(id);
             mDrawerLayout.closeDrawers();
         }
