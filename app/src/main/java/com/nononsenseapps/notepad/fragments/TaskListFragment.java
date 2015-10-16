@@ -35,7 +35,6 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewCompat;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -100,8 +99,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
     @ViewById(resName = "list")//android.r.id.list
             DragSortListView listView;
 
-    @ViewById(resName = "swiperefresh")
-    SwipeRefreshLayout mSwipeRefreshLayout;
+    /*@ViewById(resName = "swiperefresh")
+    SwipeRefreshLayout mSwipeRefreshLayout;*/
 
     @SystemService
     LayoutInflater layoutInflater;
@@ -160,6 +159,286 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
     public static String andWhereWeek() {
         return " AND " + whereWeek();
+    }
+
+    @AfterViews
+    void setupScrollBehavior() {
+        // ListView will only support scrolling ToolBar off-screen from Lollipop onwards.
+        // RecyclerView does not have this limitation
+        ViewCompat.setNestedScrollingEnabled(listView, true);
+    }
+
+    private boolean handleSyncRequest() {
+        boolean syncing = false;
+        // GTasks
+        if (SyncHelper.isGTasksConfigured(getContext())) {
+            syncing = true;
+            SyncHelper.requestSyncIf(getContext(), SyncHelper.MANUAL);
+        }
+
+        // Others
+        if (OrgSyncService.areAnyEnabled(getContext())) {
+            syncing = true;
+            OrgSyncService.start(getContext());
+        }
+
+        if (syncing) {
+            // In case of connectivity problems, stop the progress bar
+            new AsyncTask<Void, Void, Void>() {
+
+                @Override
+                protected Void doInBackground(Void... params) {
+                    try {
+                        Thread.sleep(10000);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                }
+
+                @Override
+                protected void onPostExecute(Void result) {
+                    // Notify PullToRefreshAttacher that the refresh has finished
+                    // TODO replace with broadcast
+                    //mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }.execute();
+        }
+
+        return syncing;
+    }
+
+    @AfterViews
+    void loadList() {
+        listView.setAdapter(mAdapter);
+
+        listView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View origin, int pos, long id) {
+                if (mListener != null && id > 0) {
+                    mListener.openTask(Task.getUri(id), mListId, origin);
+                }
+            }
+        });
+
+        listView.setOnItemLongClickListener(new OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View view, int pos, long id) {
+                listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+                // Also select the item in question
+                listView.setItemChecked(pos, true);
+                return true;
+            }
+        });
+
+        listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
+            final HashMap<Long, Task> tasks = new HashMap<Long, Task>();
+            // ActionMode mMode;
+            final PasswordConfirmedListener pListener = new PasswordConfirmedListener() {
+                @Override
+                @Background
+                public void onPasswordConfirmed() {
+                    for (final Task t : tasks.values()) {
+                        try {
+                            t.delete(getActivity());
+                        } catch (Exception e) {
+                        }
+                    }
+                    try {
+                        Toast.makeText(getActivity(), getResources().getQuantityString(R.plurals
+                                .notedeleted_msg, tasks.size(), tasks.size()), Toast
+                                .LENGTH_SHORT).show();
+                    } catch (Exception e) {
+                        // Protect against faulty translations
+                    }
+                    if (mMode != null)
+                        mMode.finish();
+                }
+            };
+
+            @Override
+            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+                // Must setup the contextual action menu
+                final MenuInflater inflater = getActivity().getMenuInflater();
+                inflater.inflate(R.menu.fragment_tasklist_context, menu);
+
+                // Must clear for reuse
+                tasks.clear();
+
+                // For password
+                mMode = mode;
+
+                return true;
+            }
+
+            @Override
+            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+                // Here you can perform updates to the CAB due to
+                // an invalidate() request
+                return false;
+            }
+
+            @Override
+            public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
+                // Respond to clicks on the actions in the CAB
+                boolean finish = false;
+                int itemId = item.getItemId();
+                if (itemId == R.id.menu_copy) {
+                    final ClipboardManager clipboard = (ClipboardManager) getActivity()
+                            .getSystemService(Context.CLIPBOARD_SERVICE);
+                    clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.app_name),
+                            getShareText()));
+                    try {
+                        Toast.makeText(getActivity(), getResources().getQuantityString(R.plurals
+                                .notecopied_msg, tasks.size(), tasks.size()), Toast.LENGTH_SHORT)
+                                .show();
+                    } catch (Exception e) {
+                        // Protect against faulty translations
+                    }
+                    finish = true;
+                } else if (itemId == R.id.menu_delete) {
+                    boolean locked = false;
+                    for (final Task t : tasks.values()) {
+                        if (t.locked) {
+                            locked = true;
+                            break;
+                        }
+                    }
+                    if (locked) {
+                        DialogPassword_ delpf = new DialogPassword_();
+                        delpf.setListener(pListener);
+                        delpf.show(getFragmentManager(), "multi_delete_verify");
+                    } else {
+                        DialogDeleteTask.showDialog(getFragmentManager(), -1, new
+                                DialogConfirmedListener() {
+                            @Override
+                            public void onConfirm() {
+                                pListener.onPasswordConfirmed();
+                            }
+                        });
+                    }
+                } else if (itemId == R.id.menu_switch_list) {
+                    // show move to list dialog
+                    DialogMoveToList.getInstance(tasks.keySet().toArray(new Long[tasks.size()]))
+                            .show(getFragmentManager(), "move_to_list_dialog");
+                    finish = true;
+                } else if (itemId == R.id.menu_share) {
+                    startActivity(getShareIntent());
+                    finish = true;
+                } else {
+                    finish = false;
+                }
+
+                if (finish)
+                    mode.finish(); // Action picked, so close the CAB
+                return finish;
+            }
+
+            @Override
+            public void onDestroyActionMode(ActionMode mode) {
+                // Here you can make any necessary updates to the activity when
+                // the CAB is removed. By default, selected items are
+                // deselected/unchecked.
+                tasks.clear();
+            }
+
+            @Override
+            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean
+                    checked) {
+                if (checked) {
+                    tasks.put(id, new Task((Cursor) listView.getAdapter().getItem(position)));
+                } else {
+                    tasks.remove(id);
+                }
+
+                try {
+                    // Only show the title string on screens that are wide
+                    // enough
+                    // E.g. large screens or if you are in landscape
+                    final Configuration conf = getResources().getConfiguration();
+                    if (conf.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE) || conf
+                            .orientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        mode.setTitle(getResources().getQuantityString(R.plurals.mode_choose,
+                                tasks.size(), tasks.size()));
+                    }
+                } catch (Exception e) {
+                    // Protect against faulty translations
+                }
+            }
+
+            String getShareText() {
+                final StringBuilder sb = new StringBuilder();
+                for (Task t : tasks.values()) {
+                    if (sb.length() > 0) {
+                        sb.append("\n\n");
+                    }
+                    if (t.locked) {
+                        sb.append(t.title);
+                    } else {
+                        sb.append(t.getText());
+                    }
+                }
+                return sb.toString();
+            }
+
+            String getShareSubject() {
+                String result = "";
+                for (Task t : tasks.values()) {
+                    result += ", " + t.title;
+                }
+                return result.length() > 0 ? result.substring(2) : result;
+            }
+
+            Intent getShareIntent() {
+                final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, getShareText());
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, getShareSubject());
+                shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
+                return shareIntent;
+            }
+        });
+    }
+
+    /*@AfterViews
+    void setupSwipeToRefresh() {
+        // Set the offset so it comes out of the correct place
+        final int toolbarHeight = getResources().getDimensionPixelOffset(R.dimen.toolbar_height);
+        final int totalToolbarHeight = getResources().getDimensionPixelOffset(R.dimen
+                .total_toolbar_height);
+        mSwipeRefreshLayout.setProgressViewOffset(false, toolbarHeight, Math.round(1.5f *
+                totalToolbarHeight));
+
+        // The arrow will cycle between these colors (in order)
+        mSwipeRefreshLayout.setColorSchemeResources(R.color.refresh_progress_1, R.color
+                .refresh_progress_2, R.color.refresh_progress_3);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                boolean syncing = handleSyncRequest();
+
+                if (!syncing) {
+                    // Do not show refresh view
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
+    }*/
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mListener = (TaskListFragment.TaskListCallbacks) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement " +
+                    "OnFragmentInteractionListener");
+        }
+
+        // We want to be notified of future changes to auto refresh
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .registerOnSharedPreferenceChangeListener(this);
     }
 
     @Override
@@ -466,77 +745,9 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
         }
     }
 
-    @AfterViews
-    void setupSwipeToRefresh() {
-        // Set the offset so it comes out of the correct place
-        final int toolbarHeight = getResources().getDimensionPixelOffset(R.dimen.toolbar_height);
-        final int totalToolbarHeight = getResources().getDimensionPixelOffset(R.dimen
-                .total_toolbar_height);
-        mSwipeRefreshLayout.setProgressViewOffset(false, toolbarHeight, Math.round(1.5f *
-                totalToolbarHeight));
-
-        // The arrow will cycle between these colors (in order)
-        mSwipeRefreshLayout.setColorSchemeResources(R.color.refresh_progress_1, R.color
-                .refresh_progress_2, R.color.refresh_progress_3);
-
-        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                boolean syncing = handleSyncRequest();
-
-                if (!syncing) {
-                    // Do not show refresh view
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }
-        });
-    }
-
-    @AfterViews
-    void setupScrollBehavior() {
-        // ListView will only support scrolling ToolBar off-screen from Lollipop onwards.
-        // RecyclerView does not have this limitation
-        ViewCompat.setNestedScrollingEnabled(listView, true);
-    }
-
-    private boolean handleSyncRequest() {
-        boolean syncing = false;
-        // GTasks
-        if (SyncHelper.isGTasksConfigured(getContext())) {
-            syncing = true;
-            SyncHelper.requestSyncIf(getContext(), SyncHelper.MANUAL);
-        }
-
-        // Others
-        if (OrgSyncService.areAnyEnabled(getContext())) {
-            syncing = true;
-            OrgSyncService.start(getContext());
-        }
-
-        if (syncing) {
-            // In case of connectivity problems, stop the progress bar
-            new AsyncTask<Void, Void, Void>() {
-
-                @Override
-                protected Void doInBackground(Void... params) {
-                    try {
-                        Thread.sleep(10000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void result) {
-                    // Notify PullToRefreshAttacher that the refresh has finished
-                    // TODO replace with broadcast
-                    mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }.execute();
-        }
-
-        return syncing;
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 
     /**
@@ -546,204 +757,26 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
      */
     @Override
     public void onPause() {
-        mSwipeRefreshLayout.setRefreshing(false);// deactivate monitor
+        /*mSwipeRefreshLayout.setRefreshing(false);// deactivate monitor
         if (syncStatusReceiver != null) {
             syncStatusReceiver.stopMonitoring();
-        }
+        }*/
 
         super.onPause();
     }
 
-    @AfterViews
-    void loadList() {
-        listView.setAdapter(mAdapter);
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getLoaderManager().destroyLoader(0);
+    }
 
-        listView.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View origin, int pos, long id) {
-                if (mListener != null && id > 0) {
-                    mListener.openTask(Task.getUri(id), mListId, origin);
-                }
-            }
-        });
-
-        listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View view, int pos, long id) {
-                listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-                // Also select the item in question
-                listView.setItemChecked(pos, true);
-                return true;
-            }
-        });
-
-        listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-            final HashMap<Long, Task> tasks = new HashMap<Long, Task>();
-            // ActionMode mMode;
-            final PasswordConfirmedListener pListener = new PasswordConfirmedListener() {
-                @Override
-                @Background
-                public void onPasswordConfirmed() {
-                    for (final Task t : tasks.values()) {
-                        try {
-                            t.delete(getActivity());
-                        } catch (Exception e) {
-                        }
-                    }
-                    try {
-                        Toast.makeText(getActivity(), getResources().getQuantityString(R.plurals
-                                .notedeleted_msg, tasks.size(), tasks.size()), Toast
-                                .LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        // Protect against faulty translations
-                    }
-                    if (mMode != null)
-                        mMode.finish();
-                }
-            };
-
-            @Override
-            public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-                // Here you can perform updates to the CAB due to
-                // an invalidate() request
-                return false;
-            }
-
-            @Override
-            public void onDestroyActionMode(ActionMode mode) {
-                // Here you can make any necessary updates to the activity when
-                // the CAB is removed. By default, selected items are
-                // deselected/unchecked.
-                tasks.clear();
-            }
-
-            @Override
-            public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-                // Must setup the contextual action menu
-                final MenuInflater inflater = getActivity().getMenuInflater();
-                inflater.inflate(R.menu.fragment_tasklist_context, menu);
-
-                // Must clear for reuse
-                tasks.clear();
-
-                // For password
-                mMode = mode;
-
-                return true;
-            }
-
-            @Override
-            public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
-                // Respond to clicks on the actions in the CAB
-                boolean finish = false;
-                int itemId = item.getItemId();
-                if (itemId == R.id.menu_copy) {
-                    final ClipboardManager clipboard = (ClipboardManager) getActivity()
-                            .getSystemService(Context.CLIPBOARD_SERVICE);
-                    clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.app_name),
-                            getShareText()));
-                    try {
-                        Toast.makeText(getActivity(), getResources().getQuantityString(R.plurals
-                                .notecopied_msg, tasks.size(), tasks.size()), Toast.LENGTH_SHORT)
-                                .show();
-                    } catch (Exception e) {
-                        // Protect against faulty translations
-                    }
-                    finish = true;
-                } else if (itemId == R.id.menu_delete) {
-                    boolean locked = false;
-                    for (final Task t : tasks.values()) {
-                        if (t.locked) {
-                            locked = true;
-                            break;
-                        }
-                    }
-                    if (locked) {
-                        DialogPassword_ delpf = new DialogPassword_();
-                        delpf.setListener(pListener);
-                        delpf.show(getFragmentManager(), "multi_delete_verify");
-                    } else {
-                        DialogDeleteTask.showDialog(getFragmentManager(), -1, new
-                                DialogConfirmedListener() {
-                                    @Override
-                                    public void onConfirm() {
-                                        pListener.onPasswordConfirmed();
-                                    }
-                                });
-                    }
-                } else if (itemId == R.id.menu_switch_list) {
-                    // show move to list dialog
-                    DialogMoveToList.getInstance(tasks.keySet().toArray(new Long[tasks.size()]))
-                            .show(getFragmentManager(), "move_to_list_dialog");
-                    finish = true;
-                } else if (itemId == R.id.menu_share) {
-                    startActivity(getShareIntent());
-                    finish = true;
-                } else {
-                    finish = false;
-                }
-
-                if (finish)
-                    mode.finish(); // Action picked, so close the CAB
-                return finish;
-            }
-
-            @Override
-            public void onItemCheckedStateChanged(ActionMode mode, int position, long id, boolean
-                    checked) {
-                if (checked) {
-                    tasks.put(id, new Task((Cursor) listView.getAdapter().getItem(position)));
-                } else {
-                    tasks.remove(id);
-                }
-
-                try {
-                    // Only show the title string on screens that are wide
-                    // enough
-                    // E.g. large screens or if you are in landscape
-                    final Configuration conf = getResources().getConfiguration();
-                    if (conf.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE) || conf
-                            .orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                        mode.setTitle(getResources().getQuantityString(R.plurals.mode_choose,
-                                tasks.size(), tasks.size()));
-                    }
-                } catch (Exception e) {
-                    // Protect against faulty translations
-                }
-            }
-
-            String getShareText() {
-                final StringBuilder sb = new StringBuilder();
-                for (Task t : tasks.values()) {
-                    if (sb.length() > 0) {
-                        sb.append("\n\n");
-                    }
-                    if (t.locked) {
-                        sb.append(t.title);
-                    } else {
-                        sb.append(t.getText());
-                    }
-                }
-                return sb.toString();
-            }
-
-            String getShareSubject() {
-                String result = "";
-                for (Task t : tasks.values()) {
-                    result += ", " + t.title;
-                }
-                return result.length() > 0 ? result.substring(2) : result;
-            }
-
-            Intent getShareIntent() {
-                final Intent shareIntent = new Intent(Intent.ACTION_SEND);
-                shareIntent.setType("text/plain");
-                shareIntent.putExtra(Intent.EXTRA_TEXT, getShareText());
-                shareIntent.putExtra(Intent.EXTRA_SUBJECT, getShareSubject());
-                shareIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_WHEN_TASK_RESET);
-                return shareIntent;
-            }
-        });
+    @Override
+    public void onDetach() {
+        mListener = null;
+        PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .unregisterOnSharedPreferenceChangeListener(this);
+        super.onDetach();
     }
 
     @Override
@@ -791,39 +824,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
     }
 
     @Override
-    public void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        getLoaderManager().destroyLoader(0);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            mListener = (TaskListFragment.TaskListCallbacks) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement " + "OnFragmentInteractionListener");
-        }
-
-        // We want to be notified of future changes to auto refresh
-        PreferenceManager.getDefaultSharedPreferences(context)
-                .registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onDetach() {
-        mListener = null;
-        PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .unregisterOnSharedPreferenceChangeListener(this);
-        super.onDetach();
-    }
-
-    @Override
     public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
         if (isDetached()) {
             // Fix crash report
@@ -861,7 +861,16 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
      */
     @Override
     public void onSyncStartStop(boolean ongoing) {
-        mSwipeRefreshLayout.setRefreshing(ongoing);
+        //mSwipeRefreshLayout.setRefreshing(ongoing);
+    }
+
+    /**
+     * This interface must be implemented by activities that contain
+     * TaskListFragments to allow an interaction in this fragment to be communicated to
+     * the activity and potentially other fragments contained in that activity.
+     */
+    public interface TaskListCallbacks {
+        void openTask(final Uri uri, final long listId, final View origin);
     }
 
     static class SimpleSectionsAdapter extends SimpleDragSortCursorAdapter {
@@ -891,34 +900,12 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
             }
         }
 
-        @Override
-        public void remove(int which) {
-            if (removeListener != null)
-                removeListener.remove(which);
-            super.remove(which);
-
-        }
-
-        @Override
-        public void drop(int from, int to) {
-            // Call any listener that has been defined
-            if (dropListener != null)
-                dropListener.drop(from, to);
-            // Call super to handle UI mapping (for smoothness)
-            super.drop(from, to);
-        }
-
         public void setDropListener(DropListener dropListener) {
             this.dropListener = dropListener;
         }
 
         public void setRemoveListener(RemoveListener removeListener) {
             this.removeListener = removeListener;
-        }
-
-        @Override
-        public int getViewTypeCount() {
-            return 2;
         }
 
         @Override
@@ -930,6 +917,11 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
             } else {
                 return itemType;
             }
+        }
+
+        @Override
+        public int getViewTypeCount() {
+            return 2;
         }
 
         @Override
@@ -945,6 +937,23 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
             return super.getView(position, convertView, parent);
         }
 
+        @Override
+        public void drop(int from, int to) {
+            // Call any listener that has been defined
+            if (dropListener != null)
+                dropListener.drop(from, to);
+            // Call super to handle UI mapping (for smoothness)
+            super.drop(from, to);
+        }
+
+        @Override
+        public void remove(int which) {
+            if (removeListener != null)
+                removeListener.remove(which);
+            super.remove(which);
+
+        }
+
         private void setPrefsOnView(final TitleNoteTextView view) {
             view.setTitleFontFamily(Integer.parseInt(prefs.getString(context.getString(R.string
                     .pref_list_title_fontfamily), "1")));
@@ -956,14 +965,5 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
             view.setTheTextSize(Integer.parseInt(prefs.getString(context.getString(R.string
                     .pref_list_fontsize), "1")));
         }
-    }
-
-    /**
-     * This interface must be implemented by activities that contain
-     * TaskListFragments to allow an interaction in this fragment to be communicated to
-     * the activity and potentially other fragments contained in that activity.
-     */
-    public interface TaskListCallbacks {
-        void openTask(final Uri uri, final long listId, final View origin);
     }
 }
