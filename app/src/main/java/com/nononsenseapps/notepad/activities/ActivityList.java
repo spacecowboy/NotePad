@@ -85,7 +85,7 @@ public class ActivityList extends AppCompatActivity implements NavigationDrawerF
         } else {
             mListIdToSelect = ListHelper.getListId(getIntent());
         }
-        mListIdToSelect = ListHelper.getARealList(this, mListIdToSelect);
+        mListIdToSelect = ListHelper.getAViewList(this, mListIdToSelect);
 
         openList(mListIdToSelect);
     }
@@ -152,8 +152,7 @@ public class ActivityList extends AppCompatActivity implements NavigationDrawerF
     public void addTaskInList(final String text, final long listId) {
         if (listId < 1) {
             // Cant add to invalid lists
-            Snackbar.make(mFab, "Invalid list id specified: " + listId, Snackbar.LENGTH_LONG)
-                    .show();
+            Snackbar.make(mFab, "Please create a list first", Snackbar.LENGTH_LONG).show();
             return;
         }
         final Intent intent = new Intent().setAction(Intent.ACTION_INSERT).setClass(this,

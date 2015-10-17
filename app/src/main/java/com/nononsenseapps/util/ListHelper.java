@@ -34,10 +34,33 @@ import com.nononsenseapps.notepad.fragments.TaskListFragment;
  * Simple utility class to hold some general functions.
  */
 public class ListHelper {
+
     /**
      * If temp list is > 0, returns it if it exists. Else, checks if a default list is set
      * then returns that. If none set, then returns first (alphabetical) list
      * Returns #{TaskListFragment.LIST_ID_ALL} if no lists in database.
+     */
+    public static long getAViewList(final Context context, final long tempList) {
+        long returnList = tempList;
+        if (returnList == TaskListFragment.LIST_ID_ALL) {
+            // This is fine
+            return returnList;
+        }
+        // Otherwise, try and get a real list
+        returnList = getARealList(context, returnList);
+
+        if (returnList < 1) {
+            // Return all in this case
+            returnList = TaskListFragment.LIST_ID_ALL;
+        }
+
+        return returnList;
+    }
+
+    /**
+     * If temp list is > 0, returns it if it exists. Else, checks if a default list is set
+     * then returns that. If none set, then returns first (alphabetical) list.
+     * If no lists exist in the database, returns -1.
      */
     public static long getARealList(final Context context, final long tempList) {
         long returnList = tempList;
@@ -64,7 +87,7 @@ public class ListHelper {
             }
         }
 
-        if (returnList < 1 && returnList != TaskListFragment.LIST_ID_ALL) {
+        if (returnList < 1) {
             // Fetch a valid list from database if previous attempts are invalid
             final Cursor c = context.getContentResolver().query(TaskList.URI, TaskList.Columns
                     .FIELDS, null, null, context.getResources().getString(R.string
@@ -75,11 +98,6 @@ public class ListHelper {
                 }
                 c.close();
             }
-        }
-
-        if (returnList < 1 && returnList != TaskListFragment.LIST_ID_ALL) {
-            // No choice but to return ALL
-            returnList = TaskListFragment.LIST_ID_ALL;
         }
 
         return returnList;
