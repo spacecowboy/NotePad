@@ -94,7 +94,6 @@ public class TextDrawable extends ShapeDrawable {
         // drawable paint color
         Paint paint = getPaint();
         paint.setColor(color);
-
     }
 
     public static IShapeBuilder builder() {

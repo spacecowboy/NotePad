@@ -13,22 +13,28 @@
 
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
-
+  --><!--
 <android.support.design.widget.NavigationView
     android:id="@+id/navigation_view"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/navdrawer_background"
-    tools:context="com.nononsenseapps.notepad.fragment.NavigationDrawerFragment">
+    android:fitsSystemWindows="true"
+    app:headerLayout="@layout/nav_header"
+    tools:context="com.nononsenseapps.notepad.fragment.NavigationDrawerFragment">-->
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/left_drawer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:choiceMode="none"
-        tools:listitem="@layout/simple_light_list_item_1"/>
-</android.support.design.widget.NavigationView>
+<android.support.v7.widget.RecyclerView
+    android:id="@+id/left_drawer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="@color/navdrawer_background"
+    android:choiceMode="none"
+    android:fitsSystemWindows="true"
+    tools:context="com.nononsenseapps.notepad.fragment.NavigationDrawerFragment"
+    tools:listitem="@layout/simple_light_list_item_1"/>

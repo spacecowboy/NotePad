@@ -17,6 +17,11 @@
 <resources>
     <color name="navdrawer_background">@android:color/white</color>
 
+    <!-- 12% black in LIGHT THEME -->
+    <color name="light_separator_color">#1e000000</color>
+    <!-- 12% white in BLACK THEME -->
+    <color name="dark_separator_color">#1effffff</color>
+
     <color name="viewpager_darkgrey">#ff444444</color>
     <color name="viewpager_blue">#33b5e5</color>
     <color name="widgetItemBG_dark">#ee000000</color>

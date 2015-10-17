@@ -76,4 +76,10 @@
     <dimen name="activity_lone_vertical_margin">16dp</dimen>
     <dimen name="activity_lone_horizontal_padding">16dp</dimen>
 
+    <dimen name="keyline_1">16dp</dimen>
+    <dimen name="status_bar_height">24dp</dimen>
+    <dimen name="navigation_drawer_header_minsize">80dp</dimen>
+    <dimen name="item_spacing">8dp</dimen>
+    <dimen name="listitem_height_normal">48dp</dimen>
+
 </resources>

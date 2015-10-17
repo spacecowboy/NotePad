@@ -23,8 +23,9 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -41,13 +42,18 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amulyakhare.textdrawable.TextDrawable;
+import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 
 import java.util.ArrayList;
+
+import static com.nononsenseapps.util.ArrayHelper.toArray;
 
 /**
  * This fragment is the view which is displayed in the left drawer.
@@ -55,9 +61,17 @@ import java.util.ArrayList;
  */
 public class NavigationDrawerFragment extends Fragment implements LoaderManager
         .LoaderCallbacks<Cursor> {
+
+    static final int VIEWTYPE_ITEM = 0;
+    static final int VIEWTYPE_EXTRA_HEADER_ITEM = 1;
+    static final int VIEWTYPE_EXTRA_FOOTER_ITEM = 2;
+    static final int VIEWTYPE_SEPARATOR_HEADER = 3;
+    static final int VIEWTYPE_SEPARATOR_FOOTER = 4;
+    static final int VIEWTYPE_TOPLEVEL = 5;
     static final String[] COUNTROWS = new String[]{"COUNT(1)"};
     static final String NOTCOMPLETED = Task.Columns.COMPLETED + " IS NULL ";
-
+    private static final long EXTRA_ID_SETTINGS = -100;
+    private static final long EXTRA_ID_SEPARATOR_1 = -1001;
     private static final int LOADER_NAVDRAWER_LISTS = 0;
 
     /**
@@ -178,11 +192,11 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_navdrawer, container, false);
-        NavigationView navView = (NavigationView) rootView.findViewById(R.id.navigation_view);
         RecyclerView list = (RecyclerView) rootView.findViewById(R.id.left_drawer);
 
-        mAdapter = new Adapter(new HeaderItem(TaskListFragment.LIST_ID_ALL, R.string
-                .show_from_all_lists));
+        // TODO add separator, settings, about
+        mAdapter = new Adapter(toArray(new TopLevelItem(), new ExtraHeaderItem(TaskListFragment.LIST_ID_ALL, R.string.show_from_all_lists)), toArray(new SeparatorFooter(EXTRA_ID_SEPARATOR_1), new SettingsFooterItem()));
+
         list.setAdapter(mAdapter);
         list.setHasFixedSize(true);
 
@@ -384,16 +398,25 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         void openList(long id);
     }
 
+    /**
+     * The interface of the extra items in this adapter.
+     */
+    interface ExtraItem {
+        long getItemId();
+
+        int getViewType();
+    }
+
     private class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
-        private static final int VIEWTYPE_HEADER = 0;
-        private static final int VIEWTYPE_ITEM = 1;
-        private final HeaderItem[] headers;
+        private final ExtraItem[] headers;
+        private final ExtraItem[] footers;
         Cursor mCursor = null;
 
-        public Adapter(HeaderItem... headers) {
+        public Adapter(@NonNull ExtraItem[] headers, @NonNull ExtraItem[] footers) {
             setHasStableIds(true);
             this.headers = headers;
+            this.footers = footers;
         }
 
         public void setData(Cursor cursor) {
@@ -406,13 +429,26 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             RecyclerView.ViewHolder vh;
             LayoutInflater inflater = LayoutInflater.from(getContext());
             switch (viewType) {
-                case VIEWTYPE_HEADER:
-                    vh = new HeaderViewHolder(inflater.inflate(R.layout.simple_light_list_item_2,
+                case VIEWTYPE_TOPLEVEL:
+                    vh = new TopLevelItemViewHolder(inflater.inflate(R.layout
+                            .navigation_drawer_header, parent, false));
+                    break;
+                case VIEWTYPE_EXTRA_HEADER_ITEM:
+                    vh = new ExtraHeaderItemViewHolder(inflater.inflate(R.layout
+                                    .navigation_drawer_list_item,
                             parent, false));
+                    break;
+                case VIEWTYPE_EXTRA_FOOTER_ITEM:
+                    vh = new ExtraFooterItemViewHolder(inflater.inflate(R.layout
+                            .navigation_drawer_list_item, parent, false));
+                    break;
+                case VIEWTYPE_SEPARATOR_FOOTER:
+                    vh = new SeparatorFooterViewHolder(inflater.inflate(R.layout
+                            .navigation_drawer_list_separator, parent, false));
                     break;
                 case VIEWTYPE_ITEM:
                 default:
-                    vh = new CursorViewHolder(inflater.inflate(R.layout.simple_light_list_item_2,
+                    vh = new CursorViewHolder(inflater.inflate(R.layout.navigation_drawer_list_item,
                             parent, false));
                     break;
             }
@@ -422,8 +458,15 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             switch (holder.getItemViewType()) {
-                case VIEWTYPE_HEADER:
-                    ((HeaderViewHolder) holder).bind(headers[position]);
+                case VIEWTYPE_TOPLEVEL:
+                    ((TopLevelItemViewHolder) holder).bind((TopLevelItem) headers[position]);
+                    break;
+                case VIEWTYPE_EXTRA_HEADER_ITEM:
+                    ((ExtraHeaderItemViewHolder) holder).bind((ExtraHeaderItem) headers[position]);
+                    break;
+                case VIEWTYPE_EXTRA_FOOTER_ITEM:
+                    ((ExtraFooterItemViewHolder) holder).bind((ExtraFooterItem)
+                            footers[actualPosition(position)]);
                     break;
                 case VIEWTYPE_ITEM:
                     mCursor.moveToPosition(actualPosition(position));
@@ -435,7 +478,9 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         @Override
         public int getItemViewType(int position) {
             if (isHeader(position)) {
-                return VIEWTYPE_HEADER;
+                return headers[position].getViewType();
+            } else if (isFooter(position)) {
+                return footers[actualPosition(position)].getViewType();
             } else {
                 return VIEWTYPE_ITEM;
             }
@@ -444,7 +489,9 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         @Override
         public long getItemId(int position) {
             if (isHeader(position)) {
-                return headers[position].id;
+                return headers[position].getItemId();
+            } else if (isFooter(position)) {
+                return footers[actualPosition(position)].getItemId();
             } else {
                 mCursor.moveToPosition(actualPosition(position));
                 return mCursor.getLong(0);
@@ -453,7 +500,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 
         @Override
         public int getItemCount() {
-            int result = headers.length;
+            int result = headers.length + footers.length;
             if (mCursor != null) {
                 result += mCursor.getCount();
             }
@@ -468,9 +515,20 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         public int actualPosition(int position) {
             if (isHeader(position)) {
                 return position;
+            } else if (isFooter(position)) {
+                int cursorCount = mCursor == null ? 0 : mCursor.getCount();
+                return position - headers.length - cursorCount;
             } else {
                 return position - headers.length;
             }
+        }
+
+        /**
+         * @param position as seen from the outside
+         * @return true if position is on a footer, false otherwise
+         */
+        public boolean isFooter(int position) {
+            return (getItemCount() - position) <= footers.length;
         }
 
         /**
@@ -482,49 +540,197 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         }
     }
 
-    /**
-     * The interface of the extra items in this adapter.
-     */
-    public class HeaderItem {
-        public final long id;
-        public final int title;
+    class SeparatorFooter implements ExtraItem {
 
-        public HeaderItem(long id, @StringRes int title) {
-            this.id = id;
-            this.title = title;
+        private final long mId;
+
+        public SeparatorFooter(long id) {
+            this.mId = id;
+        }
+
+        @Override
+        public long getItemId() {
+            return mId;
+        }
+
+        @Override
+        public int getViewType() {
+            return VIEWTYPE_SEPARATOR_FOOTER;
         }
     }
 
-    private class HeaderViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        private final TextView mTitle;
-        private final TextView mCount;
-        private HeaderItem mItem;
+    class TopLevelItem implements ExtraItem {
 
-        public HeaderViewHolder(View itemView) {
+        @Override
+        public long getItemId() {
+            return 0;
+        }
+
+        @Override
+        public int getViewType() {
+            return VIEWTYPE_TOPLEVEL;
+        }
+    }
+
+    class ExtraHeaderItem implements ExtraItem {
+        public final long mId;
+        public final int mTitleRes;
+
+        public ExtraHeaderItem(long id, @StringRes int title) {
+            this.mId = id;
+            this.mTitleRes = title;
+        }
+
+        public String getTitle() {
+            return getString(mTitleRes);
+        }
+
+        @Override
+        public long getItemId() {
+            return mId;
+        }
+
+        @Override
+        public int getViewType() {
+            return VIEWTYPE_EXTRA_HEADER_ITEM;
+        }
+
+
+    }
+
+    class ExtraFooterItem extends ExtraHeaderItem {
+
+        final int mIconRes;
+
+        public ExtraFooterItem(long id, @StringRes int title) {
+            super(id, title);
+            mIconRes = -1;
+        }
+
+
+        public ExtraFooterItem(long id, @StringRes int title, @DrawableRes int icon) {
+            super(id, title);
+            this.mIconRes = icon;
+        }
+
+        @Override
+        public int getViewType() {
+            return VIEWTYPE_EXTRA_FOOTER_ITEM;
+        }
+
+        public int getIconRes() {
+            return mIconRes;
+        }
+
+        public void onClick() {
+        }
+    }
+
+    class SettingsFooterItem extends ExtraFooterItem {
+
+        public SettingsFooterItem() {
+            super(EXTRA_ID_SETTINGS, R.string.menu_preferences, R.drawable.ic_settings_24dp_black);
+        }
+
+        @Override
+        public void onClick() {
+            // todo open settings
+        }
+    }
+
+    private class SeparatorFooterViewHolder extends RecyclerView.ViewHolder {
+
+        public SeparatorFooterViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        public void bind(SeparatorFooter separatorFooter) {
+        }
+    }
+
+    private class TopLevelItemViewHolder extends RecyclerView.ViewHolder {
+
+        private final ImageView mAvatar;
+
+        public TopLevelItemViewHolder(View itemView) {
+            super(itemView);
+            mAvatar = (ImageView) itemView.findViewById(R.id.main_avatar);
+        }
+
+        public void bind(TopLevelItem topLevelItem) {
+            TextDrawable drawable = TextDrawable.builder().buildRound("N", ColorGenerator
+                    .MATERIAL.getColor("N"));
+
+            mAvatar.setImageDrawable(drawable);
+        }
+    }
+
+    private class ExtraHeaderItemViewHolder extends RecyclerView.ViewHolder implements View
+            .OnClickListener {
+        final TextView mTitle;
+        final TextView mCount;
+        final ImageView mAvatar;
+        private ExtraHeaderItem mItem;
+
+        public ExtraHeaderItemViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
             mTitle = (TextView) itemView.findViewById(android.R.id.text1);
             mCount = (TextView) itemView.findViewById(android.R.id.text2);
+            mAvatar = (ImageView) itemView.findViewById(R.id.item_avatar);
         }
 
-        public void bind(HeaderItem headerItem) {
+        public void bind(ExtraHeaderItem headerItem) {
             mItem = headerItem;
-            mTitle.setText(headerItem.title);
+            mTitle.setText(headerItem.mTitleRes);
             mCount.setVisibility(View.GONE);
+            TextDrawable drawable = TextDrawable.builder().buildRound(mItem.getTitle().substring
+                    (0, 1), ColorGenerator.MATERIAL.getColor(mItem.getTitle()));
+
+            mAvatar.setImageDrawable(drawable);
         }
 
         @Override
         public void onClick(View v) {
             PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putLong
-                    (TaskListFragment.LIST_ALL_ID_PREF_KEY, mItem.id).commit();
-            mCallbacks.openList(mItem.id);
+                    (TaskListFragment.LIST_ALL_ID_PREF_KEY, mItem.mId).commit();
+            mCallbacks.openList(mItem.mId);
             mDrawerLayout.closeDrawers();
+        }
+    }
+
+    private class ExtraFooterItemViewHolder extends ExtraHeaderItemViewHolder {
+
+        private ExtraFooterItem mItem;
+
+        public ExtraFooterItemViewHolder(View itemView) {
+            super(itemView);
+        }
+
+        public void bind(ExtraFooterItem headerItem) {
+            mItem = headerItem;
+            mTitle.setText(headerItem.mTitleRes);
+            mCount.setVisibility(View.GONE);
+            if (headerItem.getIconRes() < 1) {
+                TextDrawable drawable = TextDrawable.builder().buildRound(mItem.getTitle()
+                        .substring(0, 1), ColorGenerator.MATERIAL.getColor(mItem.getTitle()));
+
+                mAvatar.setImageDrawable(drawable);
+            } else {
+                mAvatar.setImageResource(headerItem.getIconRes());
+            }
+        }
+
+        @Override
+        public void onClick(View v) {
+            mItem.onClick();
         }
     }
 
     private class CursorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final TextView mTitle;
         private final TextView mCount;
+        private final ImageView mAvatar;
         private long id = -1;
 
         public CursorViewHolder(View itemView) {
@@ -532,12 +738,19 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             itemView.setOnClickListener(this);
             mTitle = (TextView) itemView.findViewById(android.R.id.text1);
             mCount = (TextView) itemView.findViewById(android.R.id.text2);
+            mAvatar = (ImageView) itemView.findViewById(R.id.item_avatar);
         }
 
         public void bind(Cursor cursor) {
+            final String title = cursor.getString(cursor.getColumnIndex(TaskList.Columns.TITLE));
             id = cursor.getLong(cursor.getColumnIndex(TaskList.Columns._ID));
-            mTitle.setText(cursor.getString(cursor.getColumnIndex(TaskList.Columns.TITLE)));
+            mTitle.setText(title);
             mCount.setText(cursor.getString(cursor.getColumnIndex(TaskList.Columns.VIEW_COUNT)));
+
+            TextDrawable drawable = TextDrawable.builder().buildRound(title.substring(0, 1),
+                    ColorGenerator.MATERIAL.getColor(title));
+
+            mAvatar.setImageDrawable(drawable);
         }
 
         @Override
