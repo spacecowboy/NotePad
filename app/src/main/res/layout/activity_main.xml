@@ -24,7 +24,7 @@
 
     <!-- The main content view -->
     <include
-        layout="@layout/include_list_viewpager"
+        layout="@layout/include_list_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

@@ -24,6 +24,7 @@ import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.StringRes;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -177,7 +178,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
             savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_navdrawer, container, false);
-
+        NavigationView navView = (NavigationView) rootView.findViewById(R.id.navigation_view);
         RecyclerView list = (RecyclerView) rootView.findViewById(R.id.left_drawer);
 
         mAdapter = new Adapter(new HeaderItem(TaskListFragment.LIST_ID_ALL, R.string

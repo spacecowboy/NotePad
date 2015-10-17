@@ -28,23 +28,21 @@ import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
+import com.nononsenseapps.notepad.fragments.TaskListFragment;
 
 /**
  * Simple utility class to hold some general functions.
  */
 public class ListHelper {
     /**
-     * If temp list is > 0, returns it. Else, checks if a default list is set
+     * If temp list is > 0, returns it if it exists. Else, checks if a default list is set
      * then returns that. If none set, then returns first (alphabetical) list
-     * Returns -1 if no lists in database.
-     * <p/>
-     * Guarantees default list is valid if you are unsure. (e.g. if you input garbage,
-     * non-garbage will hopefully flow out)
+     * Returns #{TaskListFragment.LIST_ID_ALL} if no lists in database.
      */
     public static long getARealList(final Context context, final long tempList) {
         long returnList = tempList;
 
-        if (returnList < 1) {
+        if (returnList < 1 && returnList != TaskListFragment.LIST_ID_ALL) {
             // Then check if a default list is specified
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
             returnList = Long.parseLong(prefs.getString(context.getString(R.string
@@ -66,7 +64,7 @@ public class ListHelper {
             }
         }
 
-        if (returnList < 1) {
+        if (returnList < 1 && returnList != TaskListFragment.LIST_ID_ALL) {
             // Fetch a valid list from database if previous attempts are invalid
             final Cursor c = context.getContentResolver().query(TaskList.URI, TaskList.Columns
                     .FIELDS, null, null, context.getResources().getString(R.string
@@ -77,6 +75,11 @@ public class ListHelper {
                 }
                 c.close();
             }
+        }
+
+        if (returnList < 1 && returnList != TaskListFragment.LIST_ID_ALL) {
+            // No choice but to return ALL
+            returnList = TaskListFragment.LIST_ID_ALL;
         }
 
         return returnList;

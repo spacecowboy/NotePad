@@ -35,7 +35,7 @@
         android:showDividers="middle">
 
         <include
-            layout="@layout/include_list_viewpager"
+            layout="@layout/include_list_layout"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="4dp"
