@@ -139,7 +139,7 @@
         <!-- Editor -->
         <activity
             android:name="com.nononsenseapps.notepad.activities.ActivityEditor"
-            android:label="@string/app_name"
+            android:label=""
             android:theme="@style/LightTheme"
             android:windowSoftInputMode="adjustResize"/>
 
@@ -176,8 +176,7 @@
         <activity
             android:name="com.nononsenseapps.notepad.prefs.PrefsActivity"
             android:parentActivityName="com.nononsenseapps.notepad.activities.ActivityList"
-            android:theme="@style/LightTheme"
-            tools:ignore="ExportedActivity,UnusedAttribute">
+            android:theme="@style/LightTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nononsenseapps.notepad.activities.ActivityList"/>
