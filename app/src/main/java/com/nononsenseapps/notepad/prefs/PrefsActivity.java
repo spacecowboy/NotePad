@@ -17,15 +17,9 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import java.util.List;
-import java.util.Locale;
-import com.nononsenseapps.notepad.R;
-
-import android.app.ActionBar;
-import android.app.Activity;
 import android.app.backup.BackupManager;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -35,96 +29,24 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
+import android.support.annotation.LayoutRes;
+import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatDelegate;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 
-import android.content.res.Configuration;
+import com.nononsenseapps.notepad.R;
+
+import java.util.List;
+import java.util.Locale;
 
 public class PrefsActivity extends PreferenceActivity {
-
-	private boolean mIsRoot = false;
-
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		// Set language
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
-
-		Configuration config = getResources().getConfiguration();
-
-		String lang = prefs.getString(getString(R.string.pref_locale), "");
-		if (!config.locale.toString().equals(lang)) {
-			Locale locale;
-			if ("".equals(lang))
-				locale = Locale.getDefault();
-			else if (lang.length() == 5) {
-				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
-			}
-			else {
-				locale = new Locale(lang.substring(0, 2));
-			}
-			// Locale.setDefault(locale);
-			config.locale = locale;
-			getResources().updateConfiguration(config,
-					getResources().getDisplayMetrics());
-		}
-
-		// Set up navigation (adds nice arrow to icon)
-		ActionBar actionBar = getActionBar();
-		if (actionBar != null) {
-			actionBar.setDisplayHomeAsUpEnabled(true);
-			// actionBar.setDisplayShowTitleEnabled(false);
-		}
-	}
-
-	@Override
-	protected void onDestroy() {
-		// Request a backup in case prefs changed
-		// Safe to call multiple times
-		new BackupManager(this).dataChanged();
-		super.onDestroy();
-	}
-
-	@Override
-	protected boolean isValidFragment(String fragmentName) {
-		return true;
-	}
-
-	/**
-	 * Populate the activity with the top-level headers.
-	 */
-	@Override
-	public void onBuildHeaders(List<Header> target) {
-		loadHeadersFromResource(R.xml.app_pref_headers, target);
-		// When headers show, it is the root activity which should
-		// navigate up and not back.
-		mIsRoot = true;
-	}
-
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-		case android.R.id.home:
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure. For
-			// more details, see the Navigation pattern on Android Design:
-			//
-			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-			//
-			// If Settings has multiple levels, Up should navigate up
-			// that hierarchy.
-			if (mIsRoot)
-				NavUtils.navigateUpFromSameTask(this);
-			else
-				finish();
-			return true;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 
 	/**
 	 * A preference value change listener that updates the preference's summary
@@ -180,6 +102,8 @@ public class PrefsActivity extends PreferenceActivity {
 			return true;
 		}
 	};
+    private AppCompatDelegate mDelegate;
+	private boolean mIsRoot = false;
 
 	/**
 	 * Binds a preference's summary to its value. More specifically, when the
@@ -187,7 +111,7 @@ public class PrefsActivity extends PreferenceActivity {
 	 * preference title) is updated to reflect the value. The summary is also
 	 * immediately updated upon calling this method. The exact display format is
 	 * dependent on the type of preference.
-	 * 
+	 *
 	 * @see #sBindPreferenceSummaryToValueListener
 	 */
 	public static void bindPreferenceSummaryToValue(Preference preference) {
@@ -203,4 +127,168 @@ public class PrefsActivity extends PreferenceActivity {
 						preference.getContext()).getString(preference.getKey(),
 						""));
 	}
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+        // Setup AppCompat stuff first
+        getDelegate().installViewFactory();
+        getDelegate().onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);
+
+		// Set language
+		SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(this);
+
+		Configuration config = getResources().getConfiguration();
+
+		String lang = prefs.getString(getString(R.string.pref_locale), "");
+		if (!config.locale.toString().equals(lang)) {
+			Locale locale;
+			if ("".equals(lang))
+				locale = Locale.getDefault();
+			else if (lang.length() == 5) {
+				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
+			}
+			else {
+				locale = new Locale(lang.substring(0, 2));
+			}
+			// Locale.setDefault(locale);
+			config.locale = locale;
+			getResources().updateConfiguration(config, getResources().getDisplayMetrics());
+		}
+	}
+
+	/**
+	 * Populate the activity with the top-level headers.
+	 */
+	@Override
+	public void onBuildHeaders(List<Header> target) {
+		loadHeadersFromResource(R.xml.app_pref_headers, target);
+		// When headers show, it is the root activity which should
+		// navigate up and not back.
+		mIsRoot = true;
+
+        setContentView(R.layout.activity_settings);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        // Set up navigation (adds nice arrow to icon)
+		ActionBar actionBar = getSupportActionBar();
+		if (actionBar != null) {
+			actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(R.string.menu_preferences);
+			// actionBar.setDisplayShowTitleEnabled(false);
+		}
+	}
+
+	@Override
+	protected boolean isValidFragment(String fragmentName) {
+		return true;
+	}
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        getDelegate().onStop();
+    }
+
+	@Override
+	protected void onDestroy() {
+		// Request a backup in case prefs changed
+		// Safe to call multiple times
+        // TODO is this still useful?
+		new BackupManager(this).dataChanged();
+		super.onDestroy();
+        getDelegate().onDestroy();
+	}
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        getDelegate().onPostCreate(savedInstanceState);
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        getDelegate().onPostResume();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        getDelegate().onConfigurationChanged(newConfig);
+    }
+
+    @Override
+    public void setContentView(@LayoutRes int layoutResID) {
+        getDelegate().setContentView(layoutResID);
+    }
+
+    @Override
+    public void setContentView(View view) {
+        getDelegate().setContentView(view);
+    }
+
+    @Override
+    public void setContentView(View view, ViewGroup.LayoutParams params) {
+        getDelegate().setContentView(view, params);
+    }
+
+    @Override
+    public void addContentView(View view, ViewGroup.LayoutParams params) {
+        getDelegate().addContentView(view, params);
+    }
+
+    public void invalidateOptionsMenu() {
+        getDelegate().invalidateOptionsMenu();
+    }
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch (item.getItemId()) {
+		case android.R.id.home:
+			// This ID represents the Home or Up button. In the case of this
+			// activity, the Up button is shown. Use NavUtils to allow users
+			// to navigate up one level in the application structure. For
+			// more details, see the Navigation pattern on Android Design:
+			//
+			// http://developer.android.com/design/patterns/navigation.html#up-vs-back
+			//
+			// If Settings has multiple levels, Up should navigate up
+			// that hierarchy.
+			if (mIsRoot)
+				NavUtils.navigateUpFromSameTask(this);
+			else
+				finish();
+			return true;
+		}
+		return super.onOptionsItemSelected(item);
+	}
+
+    @Override
+    public MenuInflater getMenuInflater() {
+        return getDelegate().getMenuInflater();
+    }
+
+    @Override
+    protected void onTitleChanged(CharSequence title, int color) {
+        super.onTitleChanged(title, color);
+        getDelegate().setTitle(title);
+    }
+
+    public ActionBar getSupportActionBar() {
+        return getDelegate().getSupportActionBar();
+    }
+
+    public void setSupportActionBar(@Nullable Toolbar toolbar) {
+        getDelegate().setSupportActionBar(toolbar);
+    }
+
+    private AppCompatDelegate getDelegate() {
+        if (mDelegate == null) {
+            mDelegate = AppCompatDelegate.create(this, null);
+        }
+        return mDelegate;
+    }
 }

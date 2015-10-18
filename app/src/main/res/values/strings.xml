@@ -275,6 +275,7 @@
     <string name="text">Text</string>
     <string name="add_a_reminder">Add a reminder</string>
 
+    <string name="legacy_backup">Legacy backup</string>
     <string name="backup">Backup</string>
     <string name="backup_import">Import backup</string>
     <string name="backup_export">Export backup</string>

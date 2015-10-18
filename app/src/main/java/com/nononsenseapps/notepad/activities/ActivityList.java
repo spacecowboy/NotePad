@@ -36,7 +36,6 @@ import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.NavigationDrawerFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskListFragment;
-import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.util.ListHelper;
 
 /**
@@ -140,7 +139,7 @@ public class ActivityList extends AppCompatActivity implements NavigationDrawerF
     @Override
     public void openSettings() {
         Intent intent = new Intent();
-        intent.setClass(this, PrefsActivity.class);
+        intent.setClass(this, ActivitySettings.class);
         startActivity(intent);
     }
 

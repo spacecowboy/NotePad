@@ -17,16 +17,22 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import java.util.ArrayList;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.helpers.TimeFormatter;
-
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
+import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.R;
+
+import java.util.ArrayList;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class MainPrefs extends PreferenceFragment {
 	public static final String KEY_THEME = "key_current_theme";
@@ -84,6 +90,24 @@ public class MainPrefs extends PreferenceFragment {
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_fontsize)));
         PrefsActivity.bindPreferenceSummaryToValue(findPreference(KEY_THEME));
 	}
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
+        View layout = inflater.inflate(R.layout.activity_settings, container, false);
+        if (layout != null) {
+            PrefsActivity activity = (PrefsActivity) getActivity();
+            Toolbar toolbar = (Toolbar) layout.findViewById(R.id.toolbar);
+            activity.setSupportActionBar(toolbar);
+
+            ActionBar actionBar = activity.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setTitle(getPreferenceScreen().getTitle());
+            }
+        }
+        return layout;
+    }
 
 	private void setDateEntries(ListPreference prefDate, int array) {
 		final String[] values = getResources().getStringArray(array);
