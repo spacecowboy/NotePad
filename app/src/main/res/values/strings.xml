@@ -33,6 +33,7 @@
     <string name="menu_sync">Sync</string>
     <string name="menu_share">Share</string>
     <string name="menu_preferences">Settings</string>
+    <string name="menu_createnew">Create new</string>
     <string name="menu_createlist">Start new list</string>
     <string name="menu_clearcompleted">Clear completed</string>
     <string name="menu_setdefaultlist">Set as default list</string>

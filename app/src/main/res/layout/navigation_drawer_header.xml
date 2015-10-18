@@ -49,8 +49,7 @@
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
             android:layout_centerInParent="true"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_settings_24dp_white"/>
+            android:scaleType="fitCenter"/>
 
         <TextView
             android:id="@android:id/text1"

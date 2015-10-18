@@ -71,7 +71,10 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     static final String[] COUNTROWS = new String[]{"COUNT(1)"};
     static final String NOTCOMPLETED = Task.Columns.COMPLETED + " IS NULL ";
     private static final long EXTRA_ID_SETTINGS = -100;
+    private static final long EXTRA_ID_ABOUT = -101;
+    private static final long EXTRA_ID_CREATE_LIST = -102;
     private static final long EXTRA_ID_SEPARATOR_1 = -1001;
+    private static final long EXTRA_ID_SEPARATOR_2 = -1002;
     private static final int LOADER_NAVDRAWER_LISTS = 0;
 
     /**
@@ -195,7 +198,10 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         RecyclerView list = (RecyclerView) rootView.findViewById(R.id.left_drawer);
 
         // TODO add separator, settings, about
-        mAdapter = new Adapter(toArray(new TopLevelItem(), new ExtraHeaderItem(TaskListFragment.LIST_ID_ALL, R.string.show_from_all_lists)), toArray(new SeparatorFooter(EXTRA_ID_SEPARATOR_1), new SettingsFooterItem()));
+        mAdapter = new Adapter(toArray(new TopLevelItem(), new ExtraHeaderItem(TaskListFragment
+                .LIST_ID_ALL, R.string.show_from_all_lists)), toArray(new SeparatorFooter
+                (EXTRA_ID_SEPARATOR_1), new CreateListFooter(), new SeparatorFooter
+                (EXTRA_ID_SEPARATOR_2), new SettingsFooterItem(), new AboutFooterItem()));
 
         list.setAdapter(mAdapter);
         list.setHasFixedSize(true);
@@ -629,12 +635,38 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     class SettingsFooterItem extends ExtraFooterItem {
 
         public SettingsFooterItem() {
-            super(EXTRA_ID_SETTINGS, R.string.menu_preferences, R.drawable.ic_settings_24dp_black);
+            super(EXTRA_ID_SETTINGS, R.string.menu_preferences, R.drawable
+                    .ic_settings_24dp_black_active);
         }
 
         @Override
         public void onClick() {
             // todo open settings
+        }
+    }
+
+    class AboutFooterItem extends ExtraFooterItem {
+
+        public AboutFooterItem() {
+            super(EXTRA_ID_ABOUT, R.string.about, R.drawable.ic_help_24dp_black_active);
+        }
+
+        @Override
+        public void onClick() {
+            // todo open about screen
+        }
+    }
+
+    class CreateListFooter extends ExtraFooterItem {
+
+        public CreateListFooter() {
+            super(EXTRA_ID_CREATE_LIST, R.string.menu_createnew, R.drawable
+                    .ic_add_24dp_black_active);
+        }
+
+        @Override
+        public void onClick() {
+            // todo open create list dialog
         }
     }
 
