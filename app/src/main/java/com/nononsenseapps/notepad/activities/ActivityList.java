@@ -31,9 +31,12 @@ import android.view.View;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.fragments.DialogEditList;
+import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.NavigationDrawerFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskListFragment;
+import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.util.ListHelper;
 
 /**
@@ -119,6 +122,32 @@ public class ActivityList extends AppCompatActivity implements NavigationDrawerF
         mCurrentList = id;
         getSupportFragmentManager().beginTransaction().replace(R.id.listfragment_container,
                 TaskListFragment.getInstance(id)).commit();
+    }
+
+    @Override
+    public void createList() {
+        DialogEditList_ dialog = DialogEditList_.getInstance();
+        dialog.setListener(new DialogEditList.EditListDialogListener() {
+
+            @Override
+            public void onFinishEditDialog(long id) {
+                openList(id);
+            }
+        });
+        dialog.show(getSupportFragmentManager(), "fragment_create_list");
+    }
+
+    @Override
+    public void openSettings() {
+        Intent intent = new Intent();
+        intent.setClass(this, PrefsActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    public void openAbout() {
+        // todo
+        Snackbar.make(mFab, "TODO Open about screen here", Snackbar.LENGTH_LONG).show();
     }
 
     @Override

@@ -197,7 +197,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         View rootView = inflater.inflate(R.layout.fragment_navdrawer, container, false);
         RecyclerView list = (RecyclerView) rootView.findViewById(R.id.left_drawer);
 
-        // TODO add separator, settings, about
+        // TODO add edit lists item?
         mAdapter = new Adapter(toArray(new TopLevelItem(), new ExtraHeaderItem(TaskListFragment
                 .LIST_ID_ALL, R.string.show_from_all_lists)), toArray(new SeparatorFooter
                 (EXTRA_ID_SEPARATOR_1), new CreateListFooter(), new SeparatorFooter
@@ -402,6 +402,12 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 
     public interface NavigationDrawerCallbacks {
         void openList(long id);
+
+        void createList();
+
+        void openSettings();
+
+        void openAbout();
     }
 
     /**
@@ -641,7 +647,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 
         @Override
         public void onClick() {
-            // todo open settings
+            mCallbacks.openSettings();
+            mDrawerLayout.closeDrawers();
         }
     }
 
@@ -653,7 +660,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 
         @Override
         public void onClick() {
-            // todo open about screen
+            mCallbacks.openAbout();
+            mDrawerLayout.closeDrawers();
         }
     }
 
@@ -666,7 +674,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 
         @Override
         public void onClick() {
-            // todo open create list dialog
+            mCallbacks.createList();
+            mDrawerLayout.closeDrawers();
         }
     }
 
