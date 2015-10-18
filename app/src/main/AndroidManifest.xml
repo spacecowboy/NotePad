@@ -193,6 +193,7 @@
         </activity>
         <activity
             android:name="com.nononsenseapps.notepad.activities.ActivitySettings"
+            android:label="@string/menu_preferences"
             android:parentActivityName="com.nononsenseapps.notepad.activities.ActivityList"
             android:theme="@style/LightTheme">
             <meta-data
