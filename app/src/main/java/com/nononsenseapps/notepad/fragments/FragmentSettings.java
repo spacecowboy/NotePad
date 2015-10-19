@@ -78,7 +78,7 @@ public class FragmentSettings extends PreferenceFragment {
 
                         @Override
                         public void onConfirm() {
-                            Backup.importLegacyBackup(getContext());
+                            Backup.importLegacyBackup(getActivity());
                         }
 
                     });
