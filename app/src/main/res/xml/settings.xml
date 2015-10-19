@@ -50,7 +50,7 @@
             android:showSilent="true"
             android:title="@string/sound"/>
 
-        <CheckBoxPreference
+        <SwitchPreference
             android:defaultValue="false"
             android:key="@string/const_preference_vibrate_key"
             android:title="@string/vibrate"/>
