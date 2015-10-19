@@ -31,6 +31,8 @@
     <string name="const_preference_sdcard_dir_key">pref_sync_sd_dir</string>
     <string name="const_preferencesdcard_enabled_key">pref_sync_sd_enabled</string>
 
+    <string name="const_preference_legacybackup_key">preference_legacybackup_key</string>
+
     <string name="pref_list_links">pref_restart_list_links</string>
     <string name="pref_editor_links">pref_editor_links</string>
 

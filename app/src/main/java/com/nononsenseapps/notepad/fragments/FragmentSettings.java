@@ -25,6 +25,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.StringRes;
 
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.legacy.Backup;
 import com.nononsenseapps.util.PreferenceHelper;
 
 import java.util.ArrayList;
@@ -45,12 +46,46 @@ public class FragmentSettings extends PreferenceFragment {
         setLangEntries((ListPreference) findPreference(getString(R.string
                 .const_preference_locale_key)));
 
+        setupAccount();
+        setupDirectory();
+        setupLegacyBackup();
+
         // Bind listeners to update summaries
         bindPreferenceSummaryToValue(R.string.const_preference_locale_key);
         bindPreferenceSummaryToValue(R.string.const_preference_theme_key);
         bindPreferenceSummaryToValue(R.string.const_preference_ringtone_key);
         bindPreferenceSummaryToValue(R.string.const_preference_gtask_account_key);
         bindPreferenceSummaryToValue(R.string.const_preference_sdcard_dir_key);
+    }
+
+    private void setupDirectory() {
+        // todo
+    }
+
+    private void setupAccount() {
+        // todo
+    }
+
+    private void setupLegacyBackup() {
+        Preference preference = findPreference(getString(R.string
+                .const_preference_legacybackup_key));
+        if (preference != null) {
+            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    DialogRestoreBackup.showDialog(getFragmentManager(), new DialogConfirmBaseV11
+                            .DialogConfirmedListener() {
+
+                        @Override
+                        public void onConfirm() {
+                            Backup.importLegacyBackup(getContext());
+                        }
+
+                    });
+                    return true;
+                }
+            });
+        }
     }
 
     private void bindPreferenceSummaryToValue(@StringRes int key) {

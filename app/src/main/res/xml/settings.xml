@@ -111,7 +111,7 @@
 
     <PreferenceCategory android:title="@string/legacy_backup">
         <Preference
-            android:key="backup_import"
+            android:key="@string/const_preference_legacybackup_key"
             android:title="@string/backup_import"/>
     </PreferenceCategory>
 
