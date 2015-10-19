@@ -65,59 +65,10 @@ public class NotificationHelper extends BroadcastReceiver {
 		return observer;
 	}
 
-	/**
-	 * Fires notifications that have elapsed and sets an alarm to be woken at
-	 * the next notification.
-	 *
-	 * If the intent action is ACTION_DELETE, will delete the notification with
-	 * the indicated ID, and cancel it from any active notifications.
-	 */
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())
-				|| Intent.ACTION_RUN.equals(intent.getAction())) {
-			// Can't cancel anything. Just schedule and notify at end
-		}
-		else {
-			// Always cancel
-			cancelNotification(context, intent.getData());
-
-			if (Intent.ACTION_DELETE.equals(intent.getAction())
-					|| ACTION_RESCHEDULE.equals(intent.getAction())) {
-				// Just a notification
-				com.nononsenseapps.notepad.database.Notification
-						.deleteOrReschedule(context, intent.getData());
-			}
-			else if (ACTION_SNOOZE.equals(intent.getAction())) {
-				// msec/sec * sec/min * 30
-				long delay30min = 1000 * 60 * 30;
-				final Calendar now = Calendar.getInstance();
-
-				com.nononsenseapps.notepad.database.Notification.setTime(
-						context, intent.getData(),
-						delay30min + now.getTimeInMillis());
-			}
-			else if (ACTION_COMPLETE.equals(intent.getAction())) {
-                // Complete note
-                Task.setCompletedSynced(context, true,
-                        intent.getLongExtra(ARG_TASKID, -1));
-                // Delete notifications with the same task id
-                com.nononsenseapps.notepad.database.Notification
-                        .removeWithTaskIdsSynced(context,
-                                intent.getLongExtra(ARG_TASKID, -1));
-			}
-		}
-
-		notifyPast(context, true);
-		scheduleNext(context);
-	}
-
 	private static void monitorUri(final Context context) {
-		context.getContentResolver().unregisterContentObserver(
-				getObserver(context));
-		context.getContentResolver().registerContentObserver(
-				com.nononsenseapps.notepad.database.Notification.URI, true,
-				getObserver(context));
+		context.getContentResolver().unregisterContentObserver(getObserver(context));
+		context.getContentResolver().registerContentObserver(com.nononsenseapps.notepad.database
+                .Notification.URI, true, getObserver(context));
 	}
 
 	public static void unnotifyGeofence(final Context context,
@@ -197,18 +148,16 @@ public class NotificationHelper extends BroadcastReceiver {
 		// Always use default lights
 		int lightAndVibrate = Notification.DEFAULT_LIGHTS;
 		// If vibrate on, use default vibration pattern also
-		if (prefs.getBoolean(context.getString(R.string.key_pref_vibrate),
-				false)) lightAndVibrate |= Notification.DEFAULT_VIBRATE;
+        if (prefs.getBoolean(context.getString(R.string.const_preference_vibrate_key), false))
+            lightAndVibrate |= Notification.DEFAULT_VIBRATE;
 
 		// Need to get a new one because the action buttons will duplicate
 		// otherwise
 		NotificationCompat.Builder builder;
 		for (com.nononsenseapps.notepad.database.Notification note : notifications) {
 			builder = getNotificationBuilder(context,
-					Integer.parseInt(prefs.getString(
-							context.getString(R.string.key_pref_prio), "0")),
-					lightAndVibrate, Uri.parse(prefs.getString(
-							context.getString(R.string.key_pref_ringtone),
+					lightAndVibrate, Uri.parse(prefs.getString(context.getString(R.string
+                                    .const_preference_ringtone_key),
 							"DEFAULT_NOTIFICATION_URI")), false);
 
 			notifyBigText(context, notificationManager, builder, note);
@@ -251,8 +200,8 @@ public class NotificationHelper extends BroadcastReceiver {
 			// Always use default lights
 			int lightAndVibrate = Notification.DEFAULT_LIGHTS;
 			// If vibrate on, use default vibration pattern also
-			if (prefs.getBoolean(context.getString(R.string.key_pref_vibrate),
-					false)) lightAndVibrate |= Notification.DEFAULT_VIBRATE;
+            if (prefs.getBoolean(context.getString(R.string.const_preference_vibrate_key), false)
+                    ) lightAndVibrate |= Notification.DEFAULT_VIBRATE;
 
 			// Need to get a new one because the action buttons will duplicate
 			// otherwise
@@ -293,10 +242,7 @@ public class NotificationHelper extends BroadcastReceiver {
 			for (com.nononsenseapps.notepad.database.Notification note : notifications) {
 				builder = getNotificationBuilder(
 						context,
-						Integer.parseInt(prefs.getString(
-								context.getString(R.string.key_pref_prio), "0")),
-						lightAndVibrate, Uri.parse(prefs.getString(
-								context.getString(R.string.key_pref_ringtone),
+						lightAndVibrate, Uri.parse(prefs.getString(context.getString(R.string.const_preference_ringtone_key),
 								"DEFAULT_NOTIFICATION_URI")), alertOnce);
 
 				notifyBigText(context, notificationManager, builder, note);
@@ -308,8 +254,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	/**
 	 * Returns a notification builder set with non-item specific properties.
 	 */
-	private static NotificationCompat.Builder getNotificationBuilder(
-			final Context context, final int priority,
+	private static NotificationCompat.Builder getNotificationBuilder(final Context context,
 			final int lightAndVibrate, final Uri ringtone,
 			final boolean alertOnce) {
 		final NotificationCompat.Builder builder = new NotificationCompat.Builder(
@@ -317,9 +262,8 @@ public class NotificationHelper extends BroadcastReceiver {
 				.setWhen(0)
 				.setSmallIcon(R.drawable.ic_stat_notification_edit)
 				.setLargeIcon(
-						BitmapFactory.decodeResource(context.getResources(),
-								R.drawable.app_icon)).setPriority(priority)
-				.setDefaults(lightAndVibrate).setAutoCancel(true)
+						BitmapFactory.decodeResource(context.getResources(), R.drawable.app_icon))
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT).setDefaults(lightAndVibrate).setAutoCancel(true)
 				.setOnlyAlertOnce(alertOnce).setSound(ringtone);
 		return builder;
 	}
@@ -460,7 +404,17 @@ public class NotificationHelper extends BroadcastReceiver {
 		notificationManager.notify((int) note._id, noti);
 	}
 
-	// private static void notifyInboxStyle(
+    private static long getLatestTime(final List<com.nononsenseapps.notepad.database
+            .Notification> notifications) {
+        long latest = 0;
+        for (com.nononsenseapps.notepad.database.Notification noti : notifications) {
+            if (noti.time > latest)
+                latest = noti.time;
+        }
+        return latest;
+    }
+
+    // private static void notifyInboxStyle(
 	// final Context context,
 	// final NotificationManager notificationManager,
 	// final NotificationCompat.Builder builder,
@@ -529,15 +483,6 @@ public class NotificationHelper extends BroadcastReceiver {
 	// final Notification noti = builder.setStyle(ib).build();
 	// notificationManager.notify(idToUse.intValue(), noti);
 	// }
-
-	private static long getLatestTime(
-			final List<com.nononsenseapps.notepad.database.Notification> notifications) {
-		long latest = 0;
-		for (com.nononsenseapps.notepad.database.Notification noti : notifications) {
-			if (noti.time > latest) latest = noti.time;
-		}
-		return latest;
-	}
 
 	/**
 	 * Schedules to be woken up at the next notification time.
@@ -638,20 +583,6 @@ public class NotificationHelper extends BroadcastReceiver {
 	}
 
 	/**
-	 * Modifies DB
-	 */
-	// public static void deleteNotification(final Context context, long listId,
-	// long maxTime) {
-	// com.nononsenseapps.notepad.database.Notification.removeWithListId(
-	// context, listId, maxTime);
-	//
-	// final NotificationManager notificationManager = (NotificationManager)
-	// context
-	// .getSystemService(Context.NOTIFICATION_SERVICE);
-	// notificationManager.cancel((int) listId);
-	// }
-
-	/**
 	 * Given a list of notifications, returns a list of the lists the notes
 	 * belong to.
 	 */
@@ -666,7 +597,21 @@ public class NotificationHelper extends BroadcastReceiver {
 	}
 
 	/**
-	 * Returns a list of those notifications that are associated to notes in the
+     * Modifies DB
+     */
+    // public static void deleteNotification(final Context context, long listId,
+    // long maxTime) {
+    // com.nononsenseapps.notepad.database.Notification.removeWithListId(
+    // context, listId, maxTime);
+    //
+    // final NotificationManager notificationManager = (NotificationManager)
+    // context
+    // .getSystemService(Context.NOTIFICATION_SERVICE);
+    // notificationManager.cancel((int) listId);
+    // }
+
+    /**
+     * Returns a list of those notifications that are associated to notes in the
 	 * specified list.
 	 */
 	private static List<com.nononsenseapps.notepad.database.Notification> getSubList(
@@ -680,7 +625,47 @@ public class NotificationHelper extends BroadcastReceiver {
 		}
 
 		return subList;
-	}
+    }
+
+    /**
+     * Fires notifications that have elapsed and sets an alarm to be woken at
+     * the next notification.
+     * <p/>
+     * If the intent action is ACTION_DELETE, will delete the notification with
+     * the indicated ID, and cancel it from any active notifications.
+     */
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction()) || Intent.ACTION_RUN.equals
+                (intent.getAction())) {
+            // Can't cancel anything. Just schedule and notify at end
+        } else {
+            // Always cancel
+            cancelNotification(context, intent.getData());
+
+            if (Intent.ACTION_DELETE.equals(intent.getAction()) || ACTION_RESCHEDULE.equals
+                    (intent.getAction())) {
+                // Just a notification
+                com.nononsenseapps.notepad.database.Notification.deleteOrReschedule(context,
+                        intent.getData());
+            } else if (ACTION_SNOOZE.equals(intent.getAction())) {
+                // msec/sec * sec/min * 30
+                long delay30min = 1000 * 60 * 30;
+                final Calendar now = Calendar.getInstance();
+
+                com.nononsenseapps.notepad.database.Notification.setTime(context, intent.getData
+                        (), delay30min + now.getTimeInMillis());
+            } else if (ACTION_COMPLETE.equals(intent.getAction())) {
+                // Complete note
+                Task.setCompletedSynced(context, true, intent.getLongExtra(ARG_TASKID, -1));
+                // Delete notifications with the same task id
+                com.nononsenseapps.notepad.database.Notification.removeWithTaskIdsSynced(context, intent.getLongExtra(ARG_TASKID, -1));
+            }
+        }
+
+        notifyPast(context, true);
+        scheduleNext(context);
+    }
 
 	private static class ContextObserver extends ContentObserver {
 		private final Context context;

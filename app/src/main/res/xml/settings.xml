@@ -20,17 +20,17 @@
     <PreferenceCategory android:title="@string/settings_cat_appearance">
 
         <ListPreference
-            android:defaultValue="light_ab"
+            android:defaultValue="@string/const_preference_theme_light"
             android:dialogTitle="@string/settings_theme_dialog"
-            android:entries="@array/theme_preference"
-            android:entryValues="@array/themevalues_preference"
-            android:key="key_current_theme"
+            android:entries="@array/preference_theme_entries"
+            android:entryValues="@array/preference_theme_values"
+            android:key="@string/const_preference_theme_key"
             android:summary="Selected option should be here"
             android:title="@string/settings_theme"/>
         <ListPreference
             android:defaultValue=""
             android:dialogTitle="@string/settings_lang_dialog"
-            android:key="@string/pref_locale"
+            android:key="@string/const_preference_locale_key"
             android:summary="Selected option should be here"
             android:title="@string/settings_lang"/>
 
@@ -44,7 +44,7 @@
 
     <PreferenceCategory android:title="@string/notifications">
         <RingtonePreference
-            android:key="@string/key_pref_ringtone"
+            android:key="@string/const_preference_ringtone_key"
             android:ringtoneType="notification"
             android:showDefault="true"
             android:showSilent="true"
@@ -52,7 +52,7 @@
 
         <CheckBoxPreference
             android:defaultValue="false"
-            android:key="@string/key_pref_vibrate"
+            android:key="@string/const_preference_vibrate_key"
             android:title="@string/vibrate"/>
     </PreferenceCategory>
 
@@ -68,7 +68,7 @@
 
         <Preference
             android:dependency="syncEnablePref"
-            android:key="accountPref"
+            android:key="@string/const_preference_gtask_account_key"
             android:summary=""
             android:title="@string/settings_account_title"/>
 
@@ -98,12 +98,12 @@
         android:title="@string/sd_card">
         <SwitchPreference
             android:defaultValue="false"
-            android:key="pref_sync_sd_enabled"
+            android:key="@string/const_preferencesdcard_enabled_key"
             android:summary="@string/sd_card_summary"
             android:title="@string/sd_card_sync"/>
         <Preference
-            android:dependency="pref_sync_sd_enabled"
-            android:key="pref_sync_sd_dir"
+            android:dependency="@string/const_preferencesdcard_enabled_key"
+            android:key="@string/const_preference_sdcard_dir_key"
             android:summary="@string/directory_summary"
             android:title="@string/directory"/>
 

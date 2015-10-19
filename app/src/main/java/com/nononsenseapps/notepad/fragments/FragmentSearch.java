@@ -17,14 +17,6 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.SystemService;
-import org.androidannotations.annotations.ViewById;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.utils.views.TitleNoteTextView;
-
 import android.app.SearchManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -42,10 +34,19 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SearchView.OnQueryTextListener;
+
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.utils.views.TitleNoteTextView;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.SystemService;
+import org.androidannotations.annotations.ViewById;
 
 @EFragment(resName="fragment_search")
 public class FragmentSearch extends Fragment {
@@ -220,8 +221,7 @@ public class FragmentSearch extends Fragment {
 				.getDefaultSharedPreferences(getActivity());
 
 		// Load pref for item height
-		final int rowCount = prefs.getInt(
-				getString(R.string.key_pref_item_max_height), 3);
+		final int rowCount = 3;
 
 		return new ViewBinder() {
 			String sTemp = "";

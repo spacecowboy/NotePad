@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -35,7 +34,7 @@ import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 /**
  * Container for editor fragment. Only used on phones.
  */
-public class ActivityEditor extends AppCompatActivity implements TaskDetailFragment
+public class ActivityEditor extends ActivityBase implements TaskDetailFragment
         .TaskEditorCallbacks {
 
     @Override

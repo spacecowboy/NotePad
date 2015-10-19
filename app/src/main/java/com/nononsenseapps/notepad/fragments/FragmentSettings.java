@@ -18,9 +18,17 @@
 package com.nononsenseapps.notepad.fragments;
 
 import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
+import android.preference.PreferenceManager;
+import android.support.annotation.StringRes;
 
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.util.PreferenceHelper;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 /**
  * Main top level settings fragment
@@ -34,10 +42,53 @@ public class FragmentSettings extends PreferenceFragment {
         // Load the preferences from an XML resource
         addPreferencesFromResource(R.xml.settings);
 
-        /*PrefsActivity
-                .bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_prio)));
-        PrefsActivity
-                .bindPreferenceSummaryToValue(findPreference(getString(R.string
-                .key_pref_ringtone)));*/
+        setLangEntries((ListPreference) findPreference(getString(R.string
+                .const_preference_locale_key)));
+
+        // Bind listeners to update summaries
+        bindPreferenceSummaryToValue(R.string.const_preference_locale_key);
+        bindPreferenceSummaryToValue(R.string.const_preference_theme_key);
+        bindPreferenceSummaryToValue(R.string.const_preference_ringtone_key);
+        bindPreferenceSummaryToValue(R.string.const_preference_gtask_account_key);
+        bindPreferenceSummaryToValue(R.string.const_preference_sdcard_dir_key);
+    }
+
+    private void bindPreferenceSummaryToValue(@StringRes int key) {
+        Preference preference = findPreference(getString(key));
+        if (preference != null) {
+            // Set change listener
+            preference.setOnPreferenceChangeListener(PreferenceHelper.sSummaryUpdater);
+            // Trigger the listener immediately with the preference's  current value.
+            PreferenceHelper.sSummaryUpdater.onPreferenceChange(preference, PreferenceManager
+                    .getDefaultSharedPreferences(preference.getContext()).getString(preference
+                            .getKey(), ""));
+        }
+    }
+
+    private void setLangEntries(ListPreference prefLang) {
+        ArrayList<CharSequence> entries = new ArrayList<>();
+        ArrayList<CharSequence> values = new ArrayList<>();
+
+        entries.add(getString(R.string.localedefault));
+        values.add("");
+
+        String[] langs = getResources().getStringArray(R.array.translated_langs);
+
+        for (String lang : langs) {
+            Locale l;
+            if (lang.length() == 5) {
+                l = new Locale(lang.substring(0, 2), lang.substring(3, 5));
+            } else {
+                l = new Locale(lang.substring(0, 2));
+            }
+
+            entries.add(l.getDisplayName(l));
+            values.add(lang);
+        }
+        prefLang.setEntries(entries.toArray(new CharSequence[entries.size()]));
+        prefLang.setEntryValues(values.toArray(new CharSequence[values.size()]));
+
+        // Set summary
+        prefLang.setSummary(prefLang.getEntry());
     }
 }

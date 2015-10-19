@@ -15,25 +15,21 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.notepad.prefs;
+package com.nononsenseapps.notepad.activities;
 
 import android.os.Bundle;
-import android.preference.PreferenceFragment;
+import android.support.v7.app.AppCompatActivity;
 
-import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.util.ActivityHelper;
 
-public class NotificationPrefs extends PreferenceFragment {
+/**
+ * A base activity which sets the user's configured language and theme.
+ */
+public abstract class ActivityBase extends AppCompatActivity {
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		// Load the preferences from an XML resource
-		addPreferencesFromResource(R.xml.app_pref_notifications);
-
-		/*PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_prio)));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_ringtone)));*/
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        ActivityHelper.useUserConfiguration(this);
+        super.onCreate(savedInstanceState);
+    }
 }

@@ -18,7 +18,6 @@
 package com.nononsenseapps.notepad.prefs;
 
 import android.app.backup.BackupManager;
-import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -44,7 +43,6 @@ import android.view.ViewGroup;
 import com.nononsenseapps.notepad.R;
 
 import java.util.List;
-import java.util.Locale;
 
 public class PrefsActivity extends PreferenceActivity {
 
@@ -136,8 +134,8 @@ public class PrefsActivity extends PreferenceActivity {
 		super.onCreate(savedInstanceState);
 
 		// Set language
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
+        /*SharedPreferences prefs = PreferenceManager
+                .getDefaultSharedPreferences(this);
 
 		Configuration config = getResources().getConfiguration();
 
@@ -155,7 +153,7 @@ public class PrefsActivity extends PreferenceActivity {
 			// Locale.setDefault(locale);
 			config.locale = locale;
 			getResources().updateConfiguration(config, getResources().getDisplayMetrics());
-		}
+		}*/
 	}
 
 	/**

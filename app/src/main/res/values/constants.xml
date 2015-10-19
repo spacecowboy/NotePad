@@ -17,6 +17,29 @@
   -->
 <!-- Provides constants and default values -->
 <resources>
+    <!-- 6.0+ values -->
+    <string name="const_preference_theme_light">light</string>
+    <string name="const_preference_theme_dark">dark</string>
+    <string name="const_preference_theme_black">black</string>
+
+    <string name="const_preference_theme_key">preference_theme_key</string>
+    <string name="const_preference_ringtone_key">global_ringtone</string>
+    <string name="const_preference_vibrate_key">global_vibrate</string>
+    <string name="const_preference_locale_key">pref_key_locale</string>
+
+    <string name="const_preference_gtask_account_key">accountPref</string>
+    <string name="const_preference_sdcard_dir_key">pref_sync_sd_dir</string>
+    <string name="const_preferencesdcard_enabled_key">pref_sync_sd_enabled</string>
+
+    <string name="pref_list_links">pref_restart_list_links</string>
+    <string name="pref_editor_links">pref_editor_links</string>
+
+    <!-- Legacy values -->
+    <string name="pref_sorttype">key_sort_type</string>
+    <string name="pref_defaultlist">key_default_list_id</string>
+    <string name="pref_defaultstartlist">key_default_list_to_open_id</string>
+    <string name="pref_hidecheckboxes">key_hiddencheckbox</string>
+
     <integer name="layout_horizontal">0</integer>
     <integer name="layout_vertical">1</integer>
     <integer name="layout_best_orientation">@integer/layout_vertical</integer>
@@ -48,32 +71,8 @@
     <string name="const_sans">Sans</string>
     <string name="const_serif">Serif</string>
     <string name="const_monospace">Monospace</string>
-    <string name="key_pref_ringtone">global_ringtone</string>
-    <string name="key_pref_vibrate">global_vibrate</string>
-    <string name="key_pref_prio">global_prio</string>
     <!-- <string name="key_pref_group_on_lists">group_on_lists</string> -->
-    <string name="pref_locale">pref_key_locale</string>
-    <string name="key_pref_item_max_height">item_max_height</string>
-    <string name="key_pref_dateformat_long">dateformat_long</string>
-    <string name="key_pref_dateformat_short">dateformat_short</string>
-    
-	<string name="pref_editor_title_fontfamily">pref_editor_title_fontfamily</string>
-	<string name="pref_editor_title_fontstyle">pref_editor_title_fontstyle</string>
-	<string name="pref_editor_body_fontfamily">pref_editor_body_fontfamily</string>
-	<string name="pref_editor_links">pref_editor_links</string>
-	<string name="pref_editor_fontsize">pref_editor_fontsize</string>
-    <string name="pref_editor_biggertitles">pref_editor_biggertitles</string>
-	
-	<string name="pref_list_title_fontfamily">pref_restart_list_title_fontfamily</string>
-	<string name="pref_list_title_fontstyle">pref_restart_list_title_fontstyle</string>
-	<string name="pref_list_body_fontfamily">pref_restart_list_body_fontfamily</string>
-	<string name="pref_list_links">pref_restart_list_links</string>
-	<string name="pref_list_fontsize">pref_restart_list_fontsize</string>
-    
-    <string name="pref_sorttype">key_sort_type</string>
-    <string name="pref_defaultlist">key_default_list_id</string>
-    <string name="pref_defaultstartlist">key_default_list_to_open_id</string>
-    <string name="pref_hidecheckboxes">key_hiddencheckbox</string>
+
     <string name="preferences_week_start_day_default">-1</string>
     <string name="dashclock_nononsense_notes">NoNonsense Notes</string>
     <string name="dashclock_tasks_count">%d</string>

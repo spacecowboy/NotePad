@@ -182,7 +182,7 @@
     <string name="short_date_format">Short date format</string>
     <string name="rows">rows</string>
     <string name="select_date">Select date</string>
-    <string name="localedefault">Locale default</string>
+    <string name="localedefault">Device default</string>
     <string name="donate">Donate</string>
     <string name="donate_thanks">Thank you for your support!</string>
 

@@ -17,10 +17,7 @@
 
 package com.nononsenseapps.helpers;
 
-import java.util.Locale;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
@@ -29,8 +26,10 @@ import android.preference.PreferenceManager;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 
-public class ActivityHelper {
+import java.util.Locale;
 
+public class ActivityHelper {
+// can be deleted, moved to new activity helper
 	public static void readAndSetSettings(Activity activity) {
 		// Read settings and set
 		final SharedPreferences prefs = PreferenceManager
@@ -56,7 +55,7 @@ public class ActivityHelper {
 		// Set language
 		Configuration config = activity.getResources().getConfiguration();
 
-		String lang = prefs.getString(activity.getString(R.string.pref_locale),
+		String lang = prefs.getString(activity.getString(R.string.const_preference_locale_key),
 				"");
 		if (!config.locale.toString().equals(lang)) {
 			Locale locale;
@@ -79,21 +78,4 @@ public class ActivityHelper {
 		}
 	}
 
-	public static Locale getUserLocale(Context activity) {
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(activity);
-		String lang = prefs.getString(activity.getString(R.string.pref_locale),
-				"");
-		final Locale locale;
-		if (lang == null || lang.isEmpty())
-			locale = Locale.getDefault();
-		else if (lang.length() == 5) {
-			locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
-		}
-		else {
-			locale = new Locale(lang.substring(0, 2));
-		}
-
-		return locale;
-	}
 }

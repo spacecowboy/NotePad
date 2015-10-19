@@ -17,15 +17,15 @@
 
 package com.nononsenseapps.helpers;
 
+import android.content.Context;
+import android.preference.PreferenceManager;
+
+import com.nononsenseapps.notepad.R;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Locale;
-
-import com.nononsenseapps.notepad.R;
-
-import android.content.Context;
-import android.preference.PreferenceManager;
 
 /**
  * A class that helps with displaying locale and preference specific dates
@@ -66,7 +66,7 @@ public class TimeFormatter {
 		return getLocalDateString(
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
-						.getString(context.getString(R.string.pref_locale), ""),
+						.getString(context.getString(R.string.const_preference_locale_key), ""),
 				format, timeInMillis);
 	}
 
@@ -96,7 +96,7 @@ public class TimeFormatter {
 		}
 		return new SimpleDateFormat(format, getLocale(PreferenceManager
 				.getDefaultSharedPreferences(context).getString(
-						context.getString(R.string.pref_locale), "")))
+						context.getString(R.string.const_preference_locale_key), "")))
 				.format(new Date(time));
 	}
 
@@ -141,7 +141,7 @@ public class TimeFormatter {
 	public static GregorianCalendar getLocalCalendar(final Context context) {
 		final Locale locale = getLocale(PreferenceManager
 				.getDefaultSharedPreferences(context).getString(
-						context.getString(R.string.pref_locale), ""));
+						context.getString(R.string.const_preference_locale_key), ""));
 		return new GregorianCalendar(locale);
 	}
 
@@ -149,24 +149,21 @@ public class TimeFormatter {
 	 * Good for performance critical situations, like lists
 	 */
 	public static SimpleDateFormat getLocalFormatterLong(final Context context) {
+        // TODO
 		return getLocalFormatter(
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
-						.getString(context.getString(R.string.pref_locale), ""),
+						.getString(context.getString(R.string.const_preference_locale_key), ""),
 				withSuitableTime(
 						context,
-						PreferenceManager
-								.getDefaultSharedPreferences(context)
-								.getString(
-										context.getString(R.string.key_pref_dateformat_long),
-										context.getString(R.string.dateformat_long_1))));
+                        context.getString(R.string.dateformat_long_1)));
 	}
 
 	public static SimpleDateFormat getDateFormatter(final Context context) {
 		return getLocalFormatter(
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
-						.getString(context.getString(R.string.pref_locale), ""),
+						.getString(context.getString(R.string.const_preference_locale_key), ""),
 				context.getString(R.string.dateformat_just_date));
 	}
 
@@ -175,14 +172,10 @@ public class TimeFormatter {
 		return getLocalFormatter(
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
-						.getString(context.getString(R.string.pref_locale), ""),
+						.getString(context.getString(R.string.const_preference_locale_key), ""),
 				withSuitableDateOnly(
 						context,
-						PreferenceManager
-								.getDefaultSharedPreferences(context)
-								.getString(
-										context.getString(R.string.key_pref_dateformat_long),
-										context.getString(R.string.dateformat_long_1))));
+										context.getString(R.string.dateformat_long_1)));
 	}
 
 	/**
@@ -192,14 +185,10 @@ public class TimeFormatter {
 		return getLocalFormatter(
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
-						.getString(context.getString(R.string.pref_locale), ""),
+						.getString(context.getString(R.string.const_preference_locale_key), ""),
 				withSuitableTime(
 						context,
-						PreferenceManager
-								.getDefaultSharedPreferences(context)
-								.getString(
-										context.getString(R.string.key_pref_dateformat_short),
-										context.getString(R.string.dateformat_short_1))));
+										context.getString(R.string.dateformat_short_1)));
 	}
 
 	public static SimpleDateFormat getLocalFormatterShortDateOnly(
@@ -207,23 +196,17 @@ public class TimeFormatter {
 		return getLocalFormatter(
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
-						.getString(context.getString(R.string.pref_locale), ""),
+						.getString(context.getString(R.string.const_preference_locale_key), ""),
 				withSuitableDateOnly(
 						context,
-						PreferenceManager
-								.getDefaultSharedPreferences(context)
-								.getString(
-										context.getString(R.string.key_pref_dateformat_short),
-										context.getString(R.string.dateformat_short_1))));
+										context.getString(R.string.dateformat_short_1)));
 	}
 
 	public static SimpleDateFormat getLocalFormatterMicro(final Context context) {
 		return getLocalFormatter(
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
-						.getString(context.getString(R.string.pref_locale), ""),
-				withSuitableTime(context,
-						context.getString(R.string.dateformat_micro)));
+						.getString(context.getString(R.string.const_preference_locale_key), ""), withSuitableTime(context, context.getString(R.string.dateformat_micro)));
 	}
 
 	/**
@@ -234,7 +217,7 @@ public class TimeFormatter {
 		return getLocalFormatter(
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
-						.getString(context.getString(R.string.pref_locale), ""),
+						.getString(context.getString(R.string.const_preference_locale_key), ""),
 				context.getString(R.string.dateformat_weekday));
 	}
 
@@ -246,7 +229,7 @@ public class TimeFormatter {
 		return getLocalFormatter(
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
-						.getString(context.getString(R.string.pref_locale), ""),
+						.getString(context.getString(R.string.const_preference_locale_key), ""),
 				WEEKDAY_SHORTEST_FORMAT);
 	}
 }

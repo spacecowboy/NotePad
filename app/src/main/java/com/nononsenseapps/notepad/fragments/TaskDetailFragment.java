@@ -20,7 +20,6 @@ package com.nononsenseapps.notepad.fragments;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -203,6 +202,271 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
         setArguments(new Bundle());
     }
 
+    void setListeners() {
+        if (dontLoad) {
+            return;
+        }
+
+        taskText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                setShareIntent(s.toString());
+            }
+        });
+    }
+
+    void onDateClick() {
+        final Calendar localTime = Calendar.getInstance();
+        if (mTask != null && mTask.due != null) {
+            //datePicker = DialogCalendar.getInstance(mTask.due);
+            localTime.setTimeInMillis(mTask.due);
+        }// else {
+        //	datePicker = DialogCalendar.getInstance();
+        //}
+
+        //final DialogCalendar datePicker;
+        //datePicker.setListener(this);
+        //datePicker.show(getFragmentManager(), DATE_DIALOG_TAG);
+        final DatePickerDialog datedialog = DatePickerDialog.newInstance(this, localTime.get
+                (Calendar.YEAR), localTime.get(Calendar.MONTH), localTime.get(Calendar
+                .DAY_OF_MONTH));
+        datedialog.show(getFragmentManager(), DATE_DIALOG_TAG);
+    }
+
+    @Override
+    public void onDateSet(DatePickerDialog dialog, int year, int monthOfYear, int dayOfMonth) {
+        final Calendar localTime = Calendar.getInstance();
+        if (mTask.due != null) {
+            localTime.setTimeInMillis(mTask.due);
+        }
+        localTime.set(Calendar.YEAR, year);
+        localTime.set(Calendar.MONTH, monthOfYear);
+        localTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+        // set to 23:59 to be more or less consistent with earlier date only
+        // implementation
+        localTime.set(Calendar.HOUR_OF_DAY, 23);
+        localTime.set(Calendar.MINUTE, 59);
+
+        mTask.due = localTime.getTimeInMillis();
+        setDueText();
+
+        // Dont ask for time for due date
+        // final TimePickerDialogFragment picker = getTimePickerFragment();
+        // picker.setListener(this);
+        // picker.show(getFragmentManager(), "time");
+    }
+
+    private void setDueText() {
+        if (mTask.due == null) {
+            dueDateBox.setText("");
+        } else {
+            // Due date
+            dueDateBox.setText(TimeFormatter.getLocalDateOnlyStringLong(getActivity(), mTask.due));
+        }
+    }
+
+    void onDueRemoveClick() {
+        if (!isLocked()) {
+            if (mTask != null) {
+                mTask.due = null;
+            }
+            setDueText();
+        }
+    }
+
+    // @Override
+    // public void onDialogTimeSet(int hourOfDay, int minute) {
+    // final Calendar localTime = Calendar.getInstance();
+    // if (mTask.due != null) {
+    // localTime.setTimeInMillis(mTask.due);
+    // }
+    // localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+    // localTime.set(Calendar.MINUTE, minute);
+    //
+    // mTask.due = localTime.getTimeInMillis();
+    // setDueText();
+    // }
+    //
+    // @Override
+    // public void onDialogTimeCancel() {
+    // // TODO Auto-generated method stub
+    //
+    // }
+
+    void onAddReminder() {
+        if (mTask != null && !isLocked()) {
+            // IF no id, have to save first
+            if (mTask._id < 1) {
+                saveTask();
+            }
+            // Only allow if save succeeded
+            if (mTask._id < 1) {
+                Toast.makeText(getActivity(), R.string.please_type_before_reminder, Toast
+                        .LENGTH_SHORT).show();
+                return;
+            }
+            final Notification not = new Notification(mTask._id);
+            not.save(getActivity(), true);
+
+            // add item to UI
+            addNotification(not);
+
+            // And scroll to bottom. takes 300ms for item to appear.
+            editScrollView.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    editScrollView.fullScroll(ScrollView.FOCUS_DOWN);
+                }
+            }, 300);
+        }
+    }
+
+    // @Override
+    // public void onDateTimeSet(final long time) {
+    // mTask.due = time;
+    // setDueText();
+    // }
+
+    /**
+     * task.locked & mLocked
+     */
+    public boolean isLocked() {
+        if (mTask != null) {
+            return mTask.locked & mLocked;
+        }
+        return false;
+    }
+
+    void fillUIFromTask() {
+        Log.d("nononsenseapps editor", "fillUI, act: " + getActivity());
+        if (isLocked()) {
+            taskText.setText(mTask.title);
+            DialogPassword_ pflock = new DialogPassword_();
+            pflock.setListener(new PasswordConfirmedListener() {
+                @Override
+                public void onPasswordConfirmed() {
+                    mLocked = false;
+                    fillUIFromTask();
+                }
+            });
+            pflock.show(getFragmentManager(), "read_verify");
+        } else {
+            taskText.setText(mTask.getText());
+        }
+        setDueText();
+        taskCompleted.setChecked(mTask.completed != null);
+        taskCompleted.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked)
+                    mTask.completed = Calendar.getInstance().getTimeInMillis();
+                else
+                    mTask.completed = null;
+            }
+        });
+        // Lock fields
+        setFieldStatus();
+
+        // Open keyboard on new notes so users can start typing directly
+        // need small delay (100ms) for it to open consistently
+        // TODO
+        // if (mTask._id < 1) {
+        // (new Handler()).postDelayed(new Runnable() {
+        // public void run() {
+        // MotionEvent e = MotionEvent.obtain(
+        // SystemClock.uptimeMillis(),
+        // SystemClock.uptimeMillis(),
+        // MotionEvent.ACTION_DOWN, 0, 0, 0);
+        // taskText.dispatchTouchEvent(e);
+        // e.recycle();
+        // e = MotionEvent.obtain(SystemClock.uptimeMillis(),
+        // SystemClock.uptimeMillis(), MotionEvent.ACTION_UP,
+        // 0, 0, 0);
+        // taskText.dispatchTouchEvent(e);
+        // e.recycle();
+        // }
+        // }, 100);
+        // }
+
+    }
+
+    /**
+     * Set fields to enabled/disabled depending on lockstate
+     */
+    void setFieldStatus() {
+        final boolean status = !isLocked();
+        taskText.setEnabled(status);
+        taskCompleted.setEnabled(status);
+        dueDateBox.setEnabled(status);
+    }
+
+    void hideTaskParts(final TaskList list) {
+        String type;
+        if (list.listtype == null) {
+            type = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString
+                    (getString(R.string.pref_listtype), getString(R.string.default_listtype));
+        } else {
+            type = list.listtype;
+        }
+        taskSection.setVisibility(type.equals(getString(R.string.const_listtype_notes)) ? View
+                .GONE : View.VISIBLE);
+    }
+
+    // Call to update the share intent
+    private void setShareIntent(final String text) {
+        if (mShareActionProvider != null && taskText != null) {
+            int titleEnd = text.indexOf("\n");
+            if (titleEnd < 0) {
+                titleEnd = text.length();
+            }
+
+            try {
+                // Todo fix for support library version
+                /*mShareActionProvider.setShareIntent(new Intent(Intent.ACTION_SEND).setType
+                        ("text/plain").putExtra(Intent.EXTRA_TEXT, text).putExtra(Intent
+                        .EXTRA_SUBJECT, text.substring(0, titleEnd)));*/
+            } catch (RuntimeException e) {
+                // Can crash when too many transactions overflow the buffer
+                Log.d("nononsensenotes", e.getLocalizedMessage());
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode) {
+            case 1:
+                if (resultCode == Activity.RESULT_OK) {
+                    onTimeTravel(data);
+                }
+                break;
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (dontLoad) {
+            return;
+        }
+        try {
+            mListener = (TaskEditorCallbacks) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement TaskEditorCallbacks");
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -307,239 +571,50 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
         }
     }
 
-    void setListeners() {
+    @Override
+    public void onResume() {
+        super.onResume();
         if (dontLoad) {
             return;
         }
 
-        // Set chosen attributes on the text field
-        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity
-                ());
+        // Hide data from snoopers
+        if (mTask != null && isLocked()) {
+            fillUIFromTask();
+        }
 
-        taskText.setTitleRelativeLarger(prefs.getBoolean(getString(R.string
-                .pref_editor_biggertitles), true));
-        taskText.setTitleFontFamily(Integer.parseInt(prefs.getString(getString(R.string
-                .pref_editor_title_fontfamily), "2")));
-        taskText.setTitleFontStyle(Integer.parseInt(prefs.getString(getString(R.string
-                .pref_editor_title_fontstyle), "0")));
-        taskText.setBodyFontFamily(Integer.parseInt(prefs.getString(getString(R.string
-                .pref_editor_body_fontfamily), "0")));
-        taskText.setLinkify(prefs.getBoolean(getString(R.string.pref_editor_links), true));
-        taskText.setTheTextSize(Integer.parseInt(prefs.getString(getString(R.string
-                .pref_editor_fontsize), "1")));
-
-        taskText.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void afterTextChanged(Editable s) {
-                setShareIntent(s.toString());
-            }
-        });
+        // See if there was a dialog and set listener again
+        Fragment dateDialog = getFragmentManager().findFragmentByTag(DATE_DIALOG_TAG);
+        if (dateDialog != null) {
+            ((DatePickerDialog) dateDialog).setOnDateSetListener(this);
+        }
     }
-
-    void onDateClick() {
-        final Calendar localTime = Calendar.getInstance();
-        if (mTask != null && mTask.due != null) {
-            //datePicker = DialogCalendar.getInstance(mTask.due);
-            localTime.setTimeInMillis(mTask.due);
-        }// else {
-        //	datePicker = DialogCalendar.getInstance();
-        //}
-
-        //final DialogCalendar datePicker;
-        //datePicker.setListener(this);
-        //datePicker.show(getFragmentManager(), DATE_DIALOG_TAG);
-        final DatePickerDialog datedialog = DatePickerDialog.newInstance(this, localTime.get
-                (Calendar.YEAR), localTime.get(Calendar.MONTH), localTime.get(Calendar
-                .DAY_OF_MONTH));
-        datedialog.show(getFragmentManager(), DATE_DIALOG_TAG);
-    }
-
-    // @Override
-    // public void onDialogTimeSet(int hourOfDay, int minute) {
-    // final Calendar localTime = Calendar.getInstance();
-    // if (mTask.due != null) {
-    // localTime.setTimeInMillis(mTask.due);
-    // }
-    // localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-    // localTime.set(Calendar.MINUTE, minute);
-    //
-    // mTask.due = localTime.getTimeInMillis();
-    // setDueText();
-    // }
-    //
-    // @Override
-    // public void onDialogTimeCancel() {
-    // // TODO Auto-generated method stub
-    //
-    // }
 
     @Override
-    public void onDateSet(DatePickerDialog dialog, int year, int monthOfYear, int dayOfMonth) {
-        final Calendar localTime = Calendar.getInstance();
-        if (mTask.due != null) {
-            localTime.setTimeInMillis(mTask.due);
-        }
-        localTime.set(Calendar.YEAR, year);
-        localTime.set(Calendar.MONTH, monthOfYear);
-        localTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-        // set to 23:59 to be more or less consistent with earlier date only
-        // implementation
-        localTime.set(Calendar.HOUR_OF_DAY, 23);
-        localTime.set(Calendar.MINUTE, 59);
-
-        mTask.due = localTime.getTimeInMillis();
-        setDueText();
-
-        // Dont ask for time for due date
-        // final TimePickerDialogFragment picker = getTimePickerFragment();
-        // picker.setListener(this);
-        // picker.show(getFragmentManager(), "time");
+    public void onSaveInstanceState(final Bundle state) {
+        super.onSaveInstanceState(state);
     }
 
-    // @Override
-    // public void onDateTimeSet(final long time) {
-    // mTask.due = time;
-    // setDueText();
-    // }
-
-    private void setDueText() {
-        if (mTask.due == null) {
-            dueDateBox.setText("");
-        } else {
-            // Due date
-            dueDateBox.setText(TimeFormatter.getLocalDateOnlyStringLong(getActivity(), mTask.due));
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (dontLoad) {
+            return;
         }
-    }
 
-    void onDueRemoveClick() {
-        if (!isLocked()) {
-            if (mTask != null) {
-                mTask.due = null;
-            }
-            setDueText();
-        }
-    }
-
-    void onAddReminder() {
-        if (mTask != null && !isLocked()) {
-            // IF no id, have to save first
-            if (mTask._id < 1) {
-                saveTask();
-            }
-            // Only allow if save succeeded
-            if (mTask._id < 1) {
-                Toast.makeText(getActivity(), R.string.please_type_before_reminder, Toast
-                        .LENGTH_SHORT).show();
-                return;
-            }
-            final Notification not = new Notification(mTask._id);
-            not.save(getActivity(), true);
-
-            // add item to UI
-            addNotification(not);
-
-            // And scroll to bottom. takes 300ms for item to appear.
-            editScrollView.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    editScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-                }
-            }, 300);
-        }
-    }
-
-    /**
-     * task.locked & mLocked
-     */
-    public boolean isLocked() {
-        if (mTask != null) {
-            return mTask.locked & mLocked;
-        }
-        return false;
-    }
-
-    void fillUIFromTask() {
-        Log.d("nononsenseapps editor", "fillUI, act: " + getActivity());
-        if (isLocked()) {
+        saveTask();
+        // Set locked again
+        mLocked = true;
+        // If task is actually locked, remove text
+        if (isLocked() && mTask != null && taskText != null) {
             taskText.setText(mTask.title);
-            DialogPassword_ pflock = new DialogPassword_();
-            pflock.setListener(new PasswordConfirmedListener() {
-                @Override
-                public void onPasswordConfirmed() {
-                    mLocked = false;
-                    fillUIFromTask();
-                }
-            });
-            pflock.show(getFragmentManager(), "read_verify");
-        } else {
-            taskText.setText(mTask.getText());
         }
-        setDueText();
-        taskCompleted.setChecked(mTask.completed != null);
-        taskCompleted.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked)
-                    mTask.completed = Calendar.getInstance().getTimeInMillis();
-                else
-                    mTask.completed = null;
-            }
-        });
-        // Lock fields
-        setFieldStatus();
-
-        // Open keyboard on new notes so users can start typing directly
-        // need small delay (100ms) for it to open consistently
-        // TODO
-        // if (mTask._id < 1) {
-        // (new Handler()).postDelayed(new Runnable() {
-        // public void run() {
-        // MotionEvent e = MotionEvent.obtain(
-        // SystemClock.uptimeMillis(),
-        // SystemClock.uptimeMillis(),
-        // MotionEvent.ACTION_DOWN, 0, 0, 0);
-        // taskText.dispatchTouchEvent(e);
-        // e.recycle();
-        // e = MotionEvent.obtain(SystemClock.uptimeMillis(),
-        // SystemClock.uptimeMillis(), MotionEvent.ACTION_UP,
-        // 0, 0, 0);
-        // taskText.dispatchTouchEvent(e);
-        // e.recycle();
-        // }
-        // }, 100);
-        // }
-
     }
 
-    /**
-     * Set fields to enabled/disabled depending on lockstate
-     */
-    void setFieldStatus() {
-        final boolean status = !isLocked();
-        taskText.setEnabled(status);
-        taskCompleted.setEnabled(status);
-        dueDateBox.setEnabled(status);
-    }
-
-    void hideTaskParts(final TaskList list) {
-        String type;
-        if (list.listtype == null) {
-            type = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString
-                    (getString(R.string.pref_listtype), getString(R.string.default_listtype));
-        } else {
-            type = list.listtype;
-        }
-        taskSection.setVisibility(type.equals(getString(R.string.const_listtype_notes)) ? View
-                .GONE : View.VISIBLE);
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mListener = null;
     }
 
     @Override
@@ -556,23 +631,30 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
         }
     }
 
-    // Call to update the share intent
-    private void setShareIntent(final String text) {
-        if (mShareActionProvider != null && taskText != null) {
-            int titleEnd = text.indexOf("\n");
-            if (titleEnd < 0) {
-                titleEnd = text.length();
-            }
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        menu.findItem(R.id.menu_timemachine).setEnabled(mTask != null && mTask._id > 0 &&
+                !isLocked());
+        menu.findItem(R.id.menu_lock).setVisible(mTask != null && !mTask.locked);
+        menu.findItem(R.id.menu_unlock).setVisible(mTask != null && mTask.locked);
+        menu.findItem(R.id.menu_share).setEnabled(!isLocked());
 
-            try {
-                // Todo fix for support library version
-                /*mShareActionProvider.setShareIntent(new Intent(Intent.ACTION_SEND).setType
-                        ("text/plain").putExtra(Intent.EXTRA_TEXT, text).putExtra(Intent
-                        .EXTRA_SUBJECT, text.substring(0, titleEnd)));*/
-            } catch (RuntimeException e) {
-                // Can crash when too many transactions overflow the buffer
-                Log.d("nononsensenotes", e.getLocalizedMessage());
-            }
+        if (getActivity() instanceof MenuStateController) {
+            final boolean visible = ((MenuStateController) getActivity()).childItemsVisible();
+
+            menu.setGroupVisible(R.id.editor_menu_group, visible);
+            // Outside group to allow for action bar placement
+            if (menu.findItem(R.id.menu_delete) != null)
+                menu.findItem(R.id.menu_delete).setVisible(visible);
+            if (menu.findItem(R.id.menu_revert) != null)
+                menu.findItem(R.id.menu_revert).setVisible(visible);
+            if (menu.findItem(R.id.menu_share) != null)
+                menu.findItem(R.id.menu_share).setVisible(visible);
+            if (menu.findItem(R.id.menu_lock) != null)
+                menu.findItem(R.id.menu_lock).setVisible(visible && mTask != null && !mTask.locked);
+            if (menu.findItem(R.id.menu_unlock) != null)
+                menu.findItem(R.id.menu_unlock).setVisible(visible && mTask != null && mTask
+                        .locked);
         }
     }
 
@@ -656,46 +738,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.menu_timemachine).setEnabled(mTask != null && mTask._id > 0 &&
-                !isLocked());
-        menu.findItem(R.id.menu_lock).setVisible(mTask != null && !mTask.locked);
-        menu.findItem(R.id.menu_unlock).setVisible(mTask != null && mTask.locked);
-        menu.findItem(R.id.menu_share).setEnabled(!isLocked());
-
-        if (getActivity() instanceof MenuStateController) {
-            final boolean visible = ((MenuStateController) getActivity()).childItemsVisible();
-
-            menu.setGroupVisible(R.id.editor_menu_group, visible);
-            // Outside group to allow for action bar placement
-            if (menu.findItem(R.id.menu_delete) != null)
-                menu.findItem(R.id.menu_delete).setVisible(visible);
-            if (menu.findItem(R.id.menu_revert) != null)
-                menu.findItem(R.id.menu_revert).setVisible(visible);
-            if (menu.findItem(R.id.menu_share) != null)
-                menu.findItem(R.id.menu_share).setVisible(visible);
-            if (menu.findItem(R.id.menu_lock) != null)
-                menu.findItem(R.id.menu_lock).setVisible(visible && mTask != null && !mTask.locked);
-            if (menu.findItem(R.id.menu_unlock) != null)
-                menu.findItem(R.id.menu_unlock).setVisible(visible && mTask != null && mTask
-                        .locked);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-            case 1:
-                if (resultCode == Activity.RESULT_OK) {
-                    onTimeTravel(data);
-                }
-                break;
-        }
-    }
-
     private void deleteAndClose() {
         if (mTask != null && mTask._id > 0 && !isLocked()) {
             DialogDeleteTask.showDialog(getFragmentManager(), mTask._id, new
@@ -772,46 +814,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
         return result;
     }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        if (dontLoad) {
-            return;
-        }
-
-        saveTask();
-        // Set locked again
-        mLocked = true;
-        // If task is actually locked, remove text
-        if (isLocked() && mTask != null && taskText != null) {
-            taskText.setText(mTask.title);
-        }
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        if (dontLoad) {
-            return;
-        }
-        try {
-            mListener = (TaskEditorCallbacks) getActivity();
-        } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement TaskEditorCallbacks");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mListener = null;
-    }
-
-    @Override
-    public void onSaveInstanceState(final Bundle state) {
-        super.onSaveInstanceState(state);
-    }
-
     /**
      * Inserts a notification item in the UI
      *
@@ -828,25 +830,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
             NotificationItemHelper.setup(this, notificationList, nv, not, mTask);
 
             notificationList.addView(nv);
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        if (dontLoad) {
-            return;
-        }
-
-        // Hide data from snoopers
-        if (mTask != null && isLocked()) {
-            fillUIFromTask();
-        }
-
-        // See if there was a dialog and set listener again
-        Fragment dateDialog = getFragmentManager().findFragmentByTag(DATE_DIALOG_TAG);
-        if (dateDialog != null) {
-            ((DatePickerDialog) dateDialog).setOnDateSetListener(this);
         }
     }
 

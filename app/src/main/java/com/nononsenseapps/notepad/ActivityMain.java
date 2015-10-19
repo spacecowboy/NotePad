@@ -134,12 +134,6 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
     private Bundle state;
     private boolean shouldRestart = false;
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        setupNavDrawer();
-    }
-
     private void setupNavDrawer() {
         // Show icon
         ActionBar ab = getSupportActionBar();
@@ -166,12 +160,8 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
         mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string
                 .navigation_drawer_open, R.string.navigation_drawer_close) {
             @Override
-            public void onDrawerClosed(View drawerView) {
-                super.onDrawerClosed(drawerView);
-                isDrawerClosed = true;
-                // creates call to onPrepareOptionsMenu()
-                invalidateOptionsMenu();
-                //onNavDrawerStateChanged(false, false);
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
             }
 
             @Override
@@ -179,6 +169,15 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
                 super.onDrawerOpened(drawerView);
                 isDrawerClosed = false;
                 //onNavDrawerStateChanged(true, false);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                isDrawerClosed = true;
+                // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu();
+                //onNavDrawerStateChanged(false, false);
             }
 
             @Override
@@ -194,11 +193,6 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
                     invalidateOptionsMenu(); // creates call to
                     // onPrepareOptionsMenu()
                 }
-            }
-
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-                super.onDrawerSlide(drawerView, slideOffset);
             }
         };
 
@@ -384,14 +378,6 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (mDrawerToggle != null) {
-            mDrawerToggle.onConfigurationChanged(newConfig);
-        }
-    }
-
-    @Override
     public void onCreate(Bundle b) {
         // Must do this before super.onCreate
         ActivityHelper.readAndSetSettings(this);
@@ -434,6 +420,20 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
         NotificationHelper.schedule(this);
         // Schedule syncs
         BackgroundSyncScheduler.scheduleSync(this);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        setupNavDrawer();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (mDrawerToggle != null) {
+            mDrawerToggle.onConfigurationChanged(newConfig);
+        }
     }
 
     @Override
@@ -484,6 +484,12 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // Do absolutely NOT call super class here. Will bug out the viewpager!
+        super.onSaveInstanceState(outState);
+    }
+
     private void restartAndRefresh() {
         shouldRestart = false;
         Intent intent = getIntent();
@@ -526,11 +532,6 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
             final DialogConfirmBase dialog = new DialogConfirmBase() {
 
                 @Override
-                public void onOKClick() {
-                    startService(new Intent(ActivityMain.this, DonateMigrator_.class));
-                }
-
-                @Override
                 public int getTitle() {
                     return R.string.import_data_question;
                 }
@@ -539,15 +540,14 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
                 public int getMessage() {
                     return R.string.import_data_msg;
                 }
+
+                @Override
+                public void onOKClick() {
+                    startService(new Intent(ActivityMain.this, DonateMigrator_.class));
+                }
             };
             dialog.show(getSupportFragmentManager(), "migrate_question");
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        // Do absolutely NOT call super class here. Will bug out the viewpager!
-        super.onSaveInstanceState(outState);
     }
 
     @UiThread(propagation = Propagation.REUSE)
@@ -919,15 +919,6 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
                 }
             }
 
-            private void updateExtra(final int pos, final int count) {
-                while (extraData.get(pos).size() < 2) {
-                    // To avoid crashes
-                    extraData.get(pos).add("0");
-                }
-                extraData.get(pos).set(1, Integer.toString(count));
-                adapter.notifyDataSetChanged();
-            }
-
             @Override
             public void onLoaderReset(Loader<Cursor> l) {
                 switch (l.getId()) {
@@ -939,6 +930,15 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
                     default:
                         adapter.swapCursor(null);
                 }
+            }
+
+            private void updateExtra(final int pos, final int count) {
+                while (extraData.get(pos).size() < 2) {
+                    // To avoid crashes
+                    extraData.get(pos).add("0");
+                }
+                extraData.get(pos).set(1, Integer.toString(count));
+                adapter.notifyDataSetChanged();
             }
         };
 
@@ -1020,33 +1020,6 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
         }*/
     }
 
-    @Override
-    public long getListOfTask() {
-        return 0;
-    }
-
-    @Override
-    public void closeEditor(Fragment fragment) {
-        if (fragment2 != null) {
-            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim
-                    .slide_in_top, R.anim.slide_out_bottom).remove(fragment)
-                    .commitAllowingStateLoss();
-            taskHint.setAlpha(0f);
-            taskHint.setVisibility(View.VISIBLE);
-            taskHint.animate().alpha(1f).setStartDelay(500);
-        } else {
-            // Phone case, simulate back button
-            // finish();
-            simulateBack();
-        }
-    }
-
-    @NonNull
-    @Override
-    public String getInitialTaskText() {
-        return null;
-    }
-
     private void simulateBack() {
         if (getSupportFragmentManager().getBackStackEntryCount() <= 1) {
             setIntent(new Intent(this, ActivityMain_.class));
@@ -1077,7 +1050,8 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
 
     @Override
     public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
-        if (key.equals(MainPrefs.KEY_THEME) || key.equals(getString(R.string.pref_locale))) {
+        if (key.equals(MainPrefs.KEY_THEME) || key.equals(getString(R.string
+                .const_preference_locale_key))) {
             shouldRestart = true;
         } else if (key.startsWith("pref_restart")) {
             shouldRestart = true;
@@ -1087,6 +1061,33 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
     @Override
     public long getEditorTaskId() {
         return -1;
+    }
+
+    @Override
+    public long getListOfTask() {
+        return 0;
+    }
+
+    @Override
+    public void closeEditor(Fragment fragment) {
+        if (fragment2 != null) {
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim
+                    .slide_in_top, R.anim.slide_out_bottom).remove(fragment)
+                    .commitAllowingStateLoss();
+            taskHint.setAlpha(0f);
+            taskHint.setVisibility(View.VISIBLE);
+            taskHint.animate().alpha(1f).setStartDelay(500);
+        } else {
+            // Phone case, simulate back button
+            // finish();
+            simulateBack();
+        }
+    }
+
+    @NonNull
+    @Override
+    public String getInitialTaskText() {
+        return null;
     }
 
     public interface ListOpener {

@@ -640,7 +640,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
                 ());
 
         // Load pref for item height
-        mRowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
+        //mRowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
         mHideCheckbox = prefs.getBoolean(getString(R.string.pref_hidecheckboxes), false);
 
         // mSortType = prefs.getString(getString(R.string.pref_sorttype),
@@ -855,10 +855,12 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
             if (key.equals(getString(R.string.pref_sorttype))) {
                 mSortType = null;
                 reload = true;
-            } else if (key.equals(getString(R.string.key_pref_item_max_height))) {
+            }
+           /* else if (key.equals(getString(R.string.key_pref_item_max_height))) {
                 mRowCount = prefs.getInt(key, 3);
                 reload = true;
-            } else if (key.equals(getString(R.string.pref_hidecheckboxes))) {
+            } */
+            else if (key.equals(getString(R.string.pref_hidecheckboxes))) {
                 mHideCheckbox = prefs.getBoolean(key, false);
                 reload = true;
             } else if (key.equals(getString(R.string.pref_listtype))) {
@@ -951,8 +953,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
                 final LayoutInflater inflater = LayoutInflater.from(mContext);
                 convertView = inflater.inflate(getViewLayout(position), parent, false);
                 if (itemType == getItemViewType(position)) {
-                    setPrefsOnView((TitleNoteTextView) convertView.findViewById(android.R.id
-                            .text1));
+                    /*setPrefsOnView((TitleNoteTextView) convertView.findViewById(android.R.id
+                            .text1));*/
                 }
             }
             return super.getView(position, convertView, parent);
@@ -975,7 +977,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
         }
 
-        private void setPrefsOnView(final TitleNoteTextView view) {
+        /*private void setPrefsOnView(final TitleNoteTextView view) {
             view.setTitleFontFamily(Integer.parseInt(prefs.getString(context.getString(R.string
                     .pref_list_title_fontfamily), "1")));
             view.setTitleFontStyle(Integer.parseInt(prefs.getString(context.getString(R.string
@@ -985,6 +987,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
             view.setLinkify(prefs.getBoolean(context.getString(R.string.pref_list_links), true));
             view.setTheTextSize(Integer.parseInt(prefs.getString(context.getString(R.string
                     .pref_list_fontsize), "1")));
-        }
+        }*/
     }
 }

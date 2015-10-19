@@ -35,8 +35,8 @@ import java.util.GregorianCalendar;
 import java.util.Locale;
 
 public class MainPrefs extends PreferenceFragment {
-	public static final String KEY_THEME = "key_current_theme";
-	// public static final String KEY_WEEK_START_DAY =
+    public static final String KEY_THEME = "preference_theme";
+    // public static final String KEY_WEEK_START_DAY =
 	// "preferences_week_start_day";
 
 	public static final String SANS = "Sans";
@@ -60,13 +60,13 @@ public class MainPrefs extends PreferenceFragment {
 		addPreferencesFromResource(R.xml.app_pref_main);
 
 		// Fill listpreferences
-		setLangEntries((ListPreference) findPreference(getString(R.string.pref_locale)));
-		setDateEntries(
-				(ListPreference) findPreference(getString(R.string.key_pref_dateformat_short)),
+        /*setLangEntries((ListPreference) findPreference(getString(R.string.pref_locale)));
+*//*		setDateEntries(
+                (ListPreference) findPreference(getString(R.string.key_pref_dateformat_short)),
 				R.array.dateformat_short_values);
 		setDateEntries(
 				(ListPreference) findPreference(getString(R.string.key_pref_dateformat_long)),
-				R.array.dateformat_long_values);
+				R.array.dateformat_long_values);*//*
 
 		// Bind summaries
 		// PrefsActivity
@@ -88,8 +88,8 @@ public class MainPrefs extends PreferenceFragment {
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_body_fontfamily)));
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_fontsize)));
-        PrefsActivity.bindPreferenceSummaryToValue(findPreference(KEY_THEME));
-	}
+        PrefsActivity.bindPreferenceSummaryToValue(findPreference(KEY_THEME));*/
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle
