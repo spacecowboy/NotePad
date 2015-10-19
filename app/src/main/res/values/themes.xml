@@ -16,7 +16,6 @@
   -->
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
-
     <style name="LightTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="colorPrimary">@color/primary</item>
         <!--   darker variant of colorPrimary (for status bar, contextual app bars) -->
@@ -40,7 +39,36 @@
 
     </style>
 
-    <style name="LightNavbarTheme" parent="LightTheme"/>
+    <style name="DarkTheme" parent="Theme.AppCompat.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <!--   darker variant of colorPrimary (for status bar, contextual app bars) -->
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">@color/accent</item>
+
+        <!--<item name="android:background">@null</item>-->
+
+        <item name="NavDrawerStyle">@style/DarkNavbarTheme</item>
+
+        <!-- Update these -->
+
+        <!-- <item name="viewpager_bg">@color/viewpager_darkgrey</item> -->
+        <item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
+        <item name="list_item_card_background">@drawable/card_light</item>
+        <item name="drag_handle_color">@color/dragHandleColorLight</item>
+        <item name="TaskListItem">@style/TaskListItemLight</item>
+        <item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
+        <item name="ListMarginStyle">@style/ListMarginStyleCard</item>
+
+    </style>
+
+    <style name="LightNavbarTheme" parent="LightTheme">
+        <item name="android:background">@color/navdrawer_background_light</item>
+    </style>
+
+    <style name="DarkNavbarTheme" parent="DarkTheme">
+        <item name="android:background">@color/navdrawer_background_dark</item>
+    </style>
 
     <style name="DarkToolbarThemeOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
         <item name="colorPrimary">@color/primary</item>

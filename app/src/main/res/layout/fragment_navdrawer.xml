@@ -28,13 +28,10 @@
 
 <android.support.v7.widget.RecyclerView
     android:id="@+id/left_drawer"
+    style="?NavDrawerStyle"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="start"
-    android:background="@color/navdrawer_background"
     android:choiceMode="none"
-    android:fitsSystemWindows="true"
-    tools:context="com.nononsenseapps.notepad.fragment.NavigationDrawerFragment"
-    tools:listitem="@layout/simple_light_list_item_1"/>
+    android:fitsSystemWindows="true"/>

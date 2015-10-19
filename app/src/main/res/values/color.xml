@@ -15,7 +15,10 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <color name="navdrawer_background">@android:color/white</color>
+    <color name="navdrawer_background_light">@android:color/white</color>
+    <color name="navdrawer_background_dark">@color/material_dark_background</color>
+
+    <color name="material_dark_background">#303030</color>
 
     <!-- 12% black in LIGHT THEME -->
     <color name="light_separator_color">#1e000000</color>

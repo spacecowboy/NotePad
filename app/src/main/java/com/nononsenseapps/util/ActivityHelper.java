@@ -59,7 +59,7 @@ public class ActivityHelper {
         final String black = context.getString(R.string.const_preference_theme_black);
 
         if (dark.equals(selectedTheme)) {
-            // todo
+            context.setTheme(R.style.DarkTheme);
         } else if (black.equals(selectedTheme)) {
             // todo
         } else {
