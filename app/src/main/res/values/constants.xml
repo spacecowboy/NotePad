@@ -29,7 +29,9 @@
 
     <string name="const_preference_gtask_account_key">accountPref</string>
     <string name="const_preference_sdcard_dir_key">pref_sync_sd_dir</string>
-    <string name="const_preferencesdcard_enabled_key">pref_sync_sd_enabled</string>
+    <string name="const_preference_sdcard_enabled_key">pref_sync_sd_enabled</string>
+
+    <string name="const_preference_gtask_enabled_key">syncEnablePref</string>
 
     <string name="const_preference_legacybackup_key">preference_legacybackup_key</string>
 

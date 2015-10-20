@@ -76,7 +76,6 @@
     <string name="settings_account_title">Select an account</string>
     <string name="settings_account_summary">Touch to switch account</string>
     <string name="settings_sync_enable_title">Google Tasks sync</string>
-    <string name="gtasks_sync_info">Not all information can be synced with Google Tasks. Only notes, due date (not time) and todo-status is synced.</string>
     <string name="settings_cat_syncing">Synchronization</string>
     <string name="gtasks">Google Tasks</string>
     <string name="show_from_all_lists">All lists</string>
@@ -138,6 +137,8 @@
     <string name="move">Move</string>
     <string name="move_to">Move to</string>
     <string name="moved_x_to_list">Moved %1$d to %2$s</string>
+
+    <string name="account">Account</string>
 
     <string name="lock_note">Lock note</string>
     <string name="unlock_note">Unlock note</string>
@@ -298,5 +299,6 @@
     <string name="wait_for_dropbox">Please wait for Dropbox to finish its initialization.</string>
     <string name="bigger_titles">Title larger</string>
     <string name="bigger_titles_summary">The title is the first line</string>
+    <string name="sd_card_touch_hint">Touch to change directory</string>
 
 </resources>

@@ -57,55 +57,19 @@
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:key="pref_gtask_section_key"
+        android:key="pref_sync_section_key"
         android:persistent="false"
-        android:title="@string/gtasks">
+        android:title="@string/settings_cat_syncing">
         <SwitchPreference
             android:defaultValue="false"
-            android:key="syncEnablePref"
-            android:summary="@string/gtasks_sync_info"
+            android:key="@string/const_preference_gtask_enabled_key"
+            android:summary="@string/settings_account_summary"
             android:title="@string/settings_sync_enable_title"/>
-
-        <Preference
-            android:dependency="syncEnablePref"
-            android:key="@string/const_preference_gtask_account_key"
-            android:summary=""
-            android:title="@string/settings_account_title"/>
-
-        <SwitchPreference
-            android:defaultValue="true"
-            android:dependency="syncEnablePref"
-            android:key="syncInBackground"
-            android:summary="@string/background_sync_info"
-            android:title="@string/background_sync"/>
-        <SwitchPreference
-            android:defaultValue="true"
-            android:dependency="syncEnablePref"
-            android:key="syncOnStart"
-            android:summary="@string/sync_on_start_info"
-            android:title="@string/sync_on_start"/>
-        <SwitchPreference
-            android:defaultValue="true"
-            android:dependency="syncEnablePref"
-            android:key="syncOnChange"
-            android:summary="@string/sync_on_change_info"
-            android:title="@string/sync_on_change"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:key="pref_sdcard_section_key"
-        android:persistent="false"
-        android:title="@string/sd_card">
         <SwitchPreference
             android:defaultValue="false"
-            android:key="@string/const_preferencesdcard_enabled_key"
-            android:summary="@string/sd_card_summary"
+            android:key="@string/const_preference_sdcard_enabled_key"
+            android:summary="@string/sd_card_touch_hint"
             android:title="@string/sd_card_sync"/>
-        <Preference
-            android:dependency="@string/const_preferencesdcard_enabled_key"
-            android:key="@string/const_preference_sdcard_dir_key"
-            android:summary="@string/directory_summary"
-            android:title="@string/directory"/>
 
     </PreferenceCategory>
 

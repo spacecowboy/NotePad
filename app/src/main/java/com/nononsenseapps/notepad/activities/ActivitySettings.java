@@ -17,7 +17,15 @@
 
 package com.nononsenseapps.notepad.activities;
 
+import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
+import android.accounts.AccountManagerFuture;
+import android.accounts.AuthenticatorException;
+import android.accounts.OperationCanceledException;
+import android.annotation.SuppressLint;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
@@ -25,11 +33,14 @@ import android.view.MenuItem;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.fragments.FragmentSettings;
+import com.nononsenseapps.util.SyncGtaskHelper;
+
+import java.io.IOException;
 
 /**
  * Main Settings activity. Loads the suitable fragment.
  */
-public class ActivitySettings extends ActivityBase {
+public class ActivitySettings extends ActivityBase implements AccountManagerCallback<Bundle> {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -56,6 +67,36 @@ public class ActivitySettings extends ActivityBase {
             return true;
         } else {
             return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /**
+     * Called when the user has selected a Google account when pressing the enable Gtask switch.
+     */
+    @SuppressLint("CommitPrefEdits")
+    @Override
+    public void run(AccountManagerFuture<Bundle> future) {
+        try {
+            // If the user has authorized
+            // your application to use the
+            // tasks API
+            // a token is available.
+            String token = future.getResult().getString(AccountManager.KEY_AUTHTOKEN);
+            // Now we are authorized by the user.
+
+            if (token != null && !token.isEmpty()) {
+                // Also mark enabled as true, as the dialog was shown from enable button
+                SharedPreferences sharedPreferences = PreferenceManager
+                        .getDefaultSharedPreferences(this);
+                sharedPreferences.edit().putBoolean(getString(R.string
+                        .const_preference_gtask_enabled_key), true).commit();
+
+                // Set it syncable
+                SyncGtaskHelper.toggleSync(this, sharedPreferences);
+            }
+        } catch (OperationCanceledException | AuthenticatorException | IOException ignored) {
+            // if the request was canceled for any reason, or something went wrong
+            SyncGtaskHelper.disableSync(this);
         }
     }
 }
