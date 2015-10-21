@@ -60,6 +60,29 @@
                 android:layout_weight="1"
                 tools:context=".TaskDetailFragment">
 
+                <!--           <EditText
+                               android:id="@+id/titleText"
+                               android:layout_marginTop="16dp"
+                               android:layout_alignParentTop="true"
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:inputType="textCapSentences|textAutoCorrect"
+                               android:singleLine="true"
+                               android:maxLines="1"
+                               android:nextFocusDown="@+id/bodyText"
+                               android:hint="@string/editor_title_hint"
+                               style="@style/TextAppearance.AppCompat.Title"/>
+
+                           <EditText
+                               android:id="@+id/bodyText"
+                               android:nextFocusDown="@+id/taskCompleted"
+                               android:layout_below="@id/titleText"
+                               android:layout_width="match_parent"
+                               android:layout_height="wrap_content"
+                               android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
+                               android:hint="@string/editor_note_hint"
+                               style="@style/TextAppearance.AppCompat.Subhead"/>-->
+
                 <com.nononsenseapps.utils.views.StyledEditText
                     android:id="@+id/taskText"
                     style="@style/EditorTextStyle"
@@ -71,6 +94,7 @@
                     android:hint="@string/editor_note_hint"
                     android:inputType="textCapSentences|textAutoCorrect|textMultiLine"
                     android:minHeight="100dp"
+                    android:nextFocusDown="@+id/taskCompleted"
                     app:linkify="true"
                     app:titleFontFamily="robotocondensed"
                     app:titleFontStyle="bold"
@@ -100,7 +124,9 @@
                             android:layout_width="wrap_content"
                             android:layout_height="48dp"
                             android:layout_centerInParent="true"
-                            android:gravity="center"/>
+                            android:gravity="center"
+                            android:nextFocusDown="@+id/notificationAdd"
+                            android:nextFocusRight="@+id/dueDateBox"/>
                     </com.nononsenseapps.ui.DelegateFrame>
 
                     <ImageButton
@@ -111,6 +137,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_alignParentTop="true"
                         android:contentDescription="Remove due date"
+                        android:nextFocusDown="@+id/notificationAdd"
                         android:src="@drawable/ic_clear_24dp"
                         tools:ignore="HardcodedText"/>
 
@@ -125,6 +152,8 @@
                         android:fontFamily="sans-serif-light"
                         android:hint="@string/editor_due_date_hint"
                         android:minHeight="48dp"
+                        android:nextFocusDown="@+id/notificationAdd"
+                        android:nextFocusRight="@+id/dueCancelButton"
                         android:paddingLeft="16dp"
                         android:textAppearance="?android:attr/textAppearanceMedium"/>
                 </RelativeLayout>
@@ -145,6 +174,7 @@
                     android:drawablePadding="8dp"
                     android:fontFamily="sans-serif-light"
                     android:gravity="center_vertical"
+                    android:nextFocusDown="@+id/notificationList"
                     android:paddingRight="8dp"
                     android:text="@string/add_a_reminder"
                     android:textAllCaps="false"

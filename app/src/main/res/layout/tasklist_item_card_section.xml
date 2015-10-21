@@ -16,9 +16,10 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    android:id="@+id/taskitemCard"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/taskitemCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:minHeight="@dimen/list_item_min_size"
@@ -28,8 +29,8 @@
     android:paddingTop="4dp" >
 
     <com.nononsenseapps.ui.DelegateFrame
-        xmlns:nononsenseapps="http://nononsenseapps.com"
         android:id="@+id/checkboxcontainer"
+        xmlns:nononsenseapps="http://nononsenseapps.com"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -39,8 +40,8 @@
         nononsenseapps:enlargedView="@+id/itemDone" >
 
         <com.nononsenseapps.ui.NoteCheckBox
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/checkbox"
+            xmlns:android="http://schemas.android.com/apk/res/android"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
@@ -53,6 +54,7 @@
         android:id="@+id/dragpadding"
         android:layout_width="@dimen/drag_grip_avoid_padding"
         android:layout_height="1dp"
+        android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true" />
 
     <com.nononsenseapps.utils.views.TitleNoteTextView
@@ -82,10 +84,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@android:id/text1"
-        android:paddingTop="2dp"
         android:layout_toLeftOf="@+id/dragpadding"
         android:fontFamily="sans-serif-light"
         android:gravity="right"
+        android:paddingTop="2dp"
         android:textColor="?android:attr/textColorSecondary"
         android:textSize="12sp"
         android:visibility="gone" />
