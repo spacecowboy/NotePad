@@ -58,6 +58,12 @@ public class ActivitySettings extends ActivityBase implements AccountManagerCall
                 .commit();
     }
 
+    /**
+     * Restart prefs immediately since the change is made here
+     */
+    protected void onThemeOrLocaleChange() {
+        restartActivity();
+    }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

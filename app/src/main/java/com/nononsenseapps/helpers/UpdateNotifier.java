@@ -28,6 +28,7 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.widget.ListWidgetProvider;
 import com.nononsenseapps.notepad.widget.WidgetPrefs;
+import com.nononsenseapps.util.SyncGtaskHelper;
 
 /**
  * The purpose here is to make it easy for other classes to notify that
@@ -87,8 +88,8 @@ public class UpdateNotifier {
 	private static void notifyChange(Context context, Uri uri) {
 		if (uri != null) {
 			context.getContentResolver().notifyChange(uri, null, false);
-			SyncHelper.requestSyncIf(context, SyncHelper.ONCHANGE);
-			context.getContentResolver().notifyChange(Notification.URI, null);
+            SyncGtaskHelper.requestSyncIf(context, SyncGtaskHelper.ONCHANGE);
+            context.getContentResolver().notifyChange(Notification.URI, null);
 		}
 	}
 

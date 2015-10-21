@@ -22,18 +22,54 @@ import android.accounts.AccountManager;
 import android.annotation.SuppressLint;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 
+import com.nononsenseapps.helpers.GTasksSyncDelay;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 
+import java.util.Calendar;
+
 /**
- * Helper methods related to Google Tasks synchronization.
+ * Helper methods related to Google Tasks synchronization. This should be the only place where
+ * sync is requested/managed.
  */
 public class SyncGtaskHelper {
+    // Sync types
+    public static final int MANUAL = 0;
+    public static final int ONCHANGE = 2;
+
+    public static final String KEY_LAST_SYNC = "lastSync";
+
+    public static void requestSyncIf(final Context context, final int TYPE) {
+        if (!isGTasksConfigured(context)) {
+            return;
+        }
+
+        switch (TYPE) {
+            case MANUAL:
+                forceGTaskSyncNow(context);
+                break;
+            case ONCHANGE:
+                requestDelayedGTasksSync(context);
+                break;
+        }
+
+    }
+
+    public static boolean isGTasksConfigured(final Context context) {
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        final String accountName = prefs.getString(context.getString(R.string
+                .const_preference_gtask_account_key), "");
+        final boolean syncEnabled = prefs.getBoolean(context.getString(R.string
+                .const_preference_gtask_enabled_key), false);
+        return syncEnabled & !accountName.isEmpty();
+    }
+
     /**
      * Finds and returns the account of the name given
      *
@@ -105,6 +141,20 @@ public class SyncGtaskHelper {
     }
 
     /**
+     * Returns true if at least 5 minutes have passed since last sync.
+     */
+    public static boolean enoughTimeSinceLastSync(final Context context) {
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        // Let 5 mins elapse before sync on start again
+        final long now = Calendar.getInstance().getTimeInMillis();
+        final long lastSync = prefs.getLong(KEY_LAST_SYNC, 0);
+        final long fivemins = 5 * 60 * 1000;
+
+        return fivemins < (now - lastSync);
+    }
+
+    /**
      * Disables gtask sync, but only if it's not already disabled (so
      * we don't call listeners on removal of already removed values)
      */
@@ -130,5 +180,39 @@ public class SyncGtaskHelper {
                     .const_preference_gtask_account_key)).apply();
 
         }
+    }
+
+    /**
+     * Request sync right now.
+     */
+    private static void forceGTaskSyncNow(final Context context) {
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+        // Do nothing if gtask not enabled
+        if (!isGTasksConfigured(context)) {
+            return;
+        }
+
+        final String accountName = prefs.getString(context.getString(R.string
+                .const_preference_gtask_account_key), "");
+
+        if (!accountName.isEmpty()) {
+            Account account = getAccount(AccountManager.get(context), accountName);
+            // Don't start a new sync if one is already going
+            if (!ContentResolver.isSyncActive(account, MyContentProvider.AUTHORITY)) {
+                Bundle options = new Bundle();
+                // This will force a sync regardless of what the setting is
+                // in accounts manager. Only use it here where the user has
+                // manually desired a sync to happen NOW.
+                options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+                ContentResolver.requestSync(account, MyContentProvider.AUTHORITY, options);
+                // Set last sync time to now
+                prefs.edit().putLong(KEY_LAST_SYNC, Calendar.getInstance().getTimeInMillis())
+                        .apply();
+            }
+        }
+    }
+
+    private static void requestDelayedGTasksSync(final Context context) {
+        context.startService(new Intent(context, GTasksSyncDelay.class));
     }
 }
