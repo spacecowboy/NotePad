@@ -24,7 +24,6 @@ import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -40,6 +39,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import com.nononsenseapps.build.Config;
@@ -139,6 +139,21 @@ public class SyncPrefs extends PreferenceFragment implements
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = activity;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mDropboxHelper != null) {
+            if (mDropboxHelper.handleLinkResult()) {
+                // Success
+            } else {
+                // Link failed or was cancelled by the user.
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean
+                        (KEY_DROPBOX_ENABLE, false).commit();
+            }
+        }
     }
 
     @Override
@@ -251,6 +266,30 @@ public class SyncPrefs extends PreferenceFragment implements
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_DROPBOX_DIR_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString
+                        (KEY_DROPBOX_DIR, data.getData().getPath()).commit();
+            } // else was cancelled
+        } else if (requestCode == PICK_SD_DIR_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                // Set it
+                File path = new File(data.getData().getPath());
+                if (path.exists() && path.isDirectory() && path.canWrite()) {
+                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString
+                            (KEY_SD_DIR, path.toString()).commit();
+                } else {
+                    Toast.makeText(getActivity(), R.string.cannot_write_to_directory, Toast
+                            .LENGTH_SHORT).show();
+                }
+            } // else was cancelled
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
     private void showAccountDialog() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("accountdialog");
@@ -316,47 +355,6 @@ public class SyncPrefs extends PreferenceFragment implements
             // stupid
         }
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (mDropboxHelper != null) {
-            if (mDropboxHelper.handleLinkResult()) {
-                // Success
-            } else {
-                // Link failed or was cancelled by the user.
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
-                        .putBoolean(KEY_DROPBOX_ENABLE, false).commit();
-            }
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_DROPBOX_DIR_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                PreferenceManager.getDefaultSharedPreferences(getActivity
-                        ()).edit().putString(KEY_DROPBOX_DIR,
-                        data.getData().getPath()).commit();
-            } // else was cancelled
-        } else if (requestCode == PICK_SD_DIR_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                // Set it
-                File path = new File(data.getData().getPath());
-                if (path.exists() && path.isDirectory() && path.canWrite()) {
-                    PreferenceManager.getDefaultSharedPreferences(getActivity
-                            ()).edit().putString(KEY_SD_DIR,
-                            path.toString()).commit();
-                } else {
-                    Toast.makeText(getActivity(), R.string.cannot_write_to_directory,
-                            Toast.LENGTH_SHORT).show();
-                }
-            } // else was cancelled
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     private void toggleSync(SharedPreferences sharedPreferences) {

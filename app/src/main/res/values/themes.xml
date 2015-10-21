@@ -27,10 +27,10 @@
         <!--<item name="android:background">@null</item>-->
 
         <item name="NavDrawerStyle">@style/LightNavbarTheme</item>
+        <item name="alertDialogTheme">@style/LightDialogStyle</item>
 
         <!-- Update these -->
 
-        <!-- <item name="viewpager_bg">@color/viewpager_darkgrey</item> -->
         <item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
         <item name="list_item_card_background">@drawable/card_light</item>
         <item name="drag_handle_color">@color/dragHandleColorLight</item>
@@ -51,6 +51,7 @@
         <!--<item name="android:background">@null</item>-->
 
         <item name="NavDrawerStyle">@style/DarkNavbarTheme</item>
+        <item name="alertDialogTheme">@style/DarkDialogStyle</item>
 
         <!-- Update these -->
 
@@ -62,6 +63,18 @@
         <item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
         <item name="ListMarginStyle">@style/ListMarginStyleCard</item>
 
+    </style>
+
+    <style name="LightDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
+    </style>
+
+    <style name="DarkDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <item name="colorAccent">@color/accent</item>
     </style>
 
     <style name="LightNavbarTheme" parent="LightTheme">

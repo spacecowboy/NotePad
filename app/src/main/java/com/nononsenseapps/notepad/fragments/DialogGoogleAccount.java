@@ -22,13 +22,13 @@ import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;

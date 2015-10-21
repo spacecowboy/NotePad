@@ -209,77 +209,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         list.setLayoutManager(layoutManager);
 
-        // todo remove
-        /*// Use extra items for All Lists
-        final int[] extraIds = new int[]{-1, TaskListFragment.LIST_ID_OVERDUE, TaskListFragment
-                .LIST_ID_TODAY, TaskListFragment.LIST_ID_WEEK, -1};
-        // This is fine for initial conditions
-        final int[] extraStrings = new int[]{R.string.tasks, R.string.date_header_overdue, R
-                .string.date_header_today, R.string.next_5_days, R.string.lists};
-        // Use this for real data
-        mExtraData = new ArrayList<ArrayList<Object>>();
-        // Task header
-        mExtraData.add(new ArrayList<Object>());
-        mExtraData.get(0).add(R.string.tasks);
-        // Overdue
-        mExtraData.add(new ArrayList<Object>());
-        mExtraData.get(1).add(R.string.date_header_overdue);
-        // Today
-        mExtraData.add(new ArrayList<Object>());
-        mExtraData.get(2).add(R.string.date_header_today);
-        // Week
-        mExtraData.add(new ArrayList<Object>());
-        mExtraData.get(3).add(R.string.next_5_days);
-        // Lists header
-        mExtraData.add(new ArrayList<Object>());
-        mExtraData.get(4).add(R.string.lists);
-
-        final int[] extraTypes = new int[]{1, 0, 0, 0, 1};
-
-        mAdapter = new ExtraTypesCursorAdapter(getContext(), R.layout.simple_light_list_item_2,
-                null, new String[]{TaskList.Columns.TITLE, TaskList.Columns.VIEW_COUNT}, new
-                int[]{android.R.id.text1, android.R.id.text2},
-                // id -1 for headers, ignore clicks on them
-                extraIds, extraStrings, extraTypes, new int[]{R.layout.drawer_header});
-        mAdapter.setExtraData(mExtraData);
-        list.setAdapter(mAdapter);*/
-        // Set click handler
-        /*list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View v, int pos, long id) {
-                if (id < 0) {
-                    // Set preference which type was chosen
-                    PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putLong
-                            (TaskListFragment.LIST_ALL_ID_PREF_KEY, id).commit();
-                }
-                mCallbacks.openList(id);
-                mDrawerLayout.closeDrawers();
-            }
-        });
-        list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-
-            @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-                // Open dialog to edit list
-                if (id > 0) {
-                    DialogEditList_ dialog = DialogEditList_.getInstance(id);
-                    dialog.show(getFragmentManager(), "fragment_edit_list");
-                    return true;
-                } else if (id < -1) {
-                    // Set as "default"
-                    PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putLong
-                            (getString(R.string.pref_defaultstartlist), id).putLong
-                            (TaskListFragment.LIST_ALL_ID_PREF_KEY, id).commit();
-                    Toast.makeText(getContext(), R.string.new_default_set, Toast.LENGTH_SHORT)
-                            .show();
-                    // openList(id);
-                    return true;
-                } else {
-                    return false;
-                }
-            }
-        });*/
-
         return rootView;
     }
 
@@ -289,17 +218,11 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 
         // Start loading
         getLoaderManager().restartLoader(LOADER_NAVDRAWER_LISTS, null, this);
-        // special views
-        // todo remove
-        /*getLoaderManager().restartLoader(TaskListFragment.LIST_ID_OVERDUE, null, this);
-        getLoaderManager().restartLoader(TaskListFragment.LIST_ID_TODAY, null, this);
-        getLoaderManager().restartLoader(TaskListFragment.LIST_ID_WEEK, null, this);*/
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        // outState.putInt(STATE_SELECTED_POSITION, mCurrentSelectedPosition);
     }
 
     @Override
@@ -334,21 +257,13 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         // Normal lists
         switch (id) {
-            case TaskListFragment.LIST_ID_OVERDUE:
-                return new CursorLoader(getContext(), Task.URI, COUNTROWS, NOTCOMPLETED +
-                        TaskListFragment.andWhereOverdue(), null, null);
-            case TaskListFragment.LIST_ID_TODAY:
-                return new CursorLoader(getContext(), Task.URI, COUNTROWS, NOTCOMPLETED +
-                        TaskListFragment.andWhereToday(), null, null);
-            case TaskListFragment.LIST_ID_WEEK:
-                return new CursorLoader(getContext(), Task.URI, COUNTROWS, NOTCOMPLETED +
-                        TaskListFragment.andWhereWeek(), null, null);
             case LOADER_NAVDRAWER_LISTS:
-            default:
                 return new CursorLoader(getContext(), TaskList.URI_WITH_COUNT, new
                         String[]{TaskList.Columns._ID, TaskList.Columns.TITLE, TaskList.Columns
                         .VIEW_COUNT}, null, null, getResources().getString(R.string
                         .const_as_alphabetic, TaskList.Columns.TITLE));
+            default:
+                return null;
         }
     }
 
@@ -359,24 +274,9 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
         switch (loader.getId()) {
-            case TaskListFragment.LIST_ID_OVERDUE:
-                if (c.moveToFirst()) {
-                    updateExtra(1, c.getInt(0));
-                }
-                break;
-            case TaskListFragment.LIST_ID_TODAY:
-                if (c.moveToFirst()) {
-                    updateExtra(2, c.getInt(0));
-                }
-                break;
-            case TaskListFragment.LIST_ID_WEEK:
-                if (c.moveToFirst()) {
-                    updateExtra(3, c.getInt(0));
-                }
-                break;
             case LOADER_NAVDRAWER_LISTS:
-            default:
                 mAdapter.setData(c);
+                break;
         }
     }
 
@@ -390,10 +290,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         switch (loader.getId()) {
-            case TaskListFragment.LIST_ID_OVERDUE:
-            case TaskListFragment.LIST_ID_TODAY:
-            case TaskListFragment.LIST_ID_WEEK:
-                break;
             case LOADER_NAVDRAWER_LISTS:
                 mAdapter.setData(null);
                 break;
@@ -768,7 +664,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         }
     }
 
-    private class CursorViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private class CursorViewHolder extends RecyclerView.ViewHolder implements View
+            .OnClickListener, View.OnLongClickListener {
         private final TextView mTitle;
         private final TextView mCount;
         private final ImageView mAvatar;
@@ -777,6 +674,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         public CursorViewHolder(View itemView) {
             super(itemView);
             itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
             mTitle = (TextView) itemView.findViewById(android.R.id.text1);
             mCount = (TextView) itemView.findViewById(android.R.id.text2);
             mAvatar = (ImageView) itemView.findViewById(R.id.item_avatar);
@@ -795,15 +693,25 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         }
 
         @Override
+        public boolean onLongClick(View v) {
+            DialogDeleteList.showDialog(getFragmentManager(), id, new DialogConfirmBase
+                    .DialogConfirmedListener() {
+
+
+                @Override
+                public void onConfirm() {
+                    // todo move me
+                }
+            });
+            return true;
+        }
+
+        @Override
         public void onClick(View v) {
-            /*if (id < 0) {
-                // Set preference which type was chosen
-                // TODO move to sort/filter options
-                PreferenceManager.getDefaultSharedPreferences(getContext()).edit().putLong
-                        (TaskListFragment.LIST_ALL_ID_PREF_KEY, id).commit();
-            }*/
             mCallbacks.openList(id);
             mDrawerLayout.closeDrawers();
         }
+
+
     }
 }

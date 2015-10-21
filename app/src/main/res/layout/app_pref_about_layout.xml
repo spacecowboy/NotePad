@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (c) 2015 Jonas Kalderstam.
 
   This program is free software: you can redistribute it and/or modify
@@ -15,50 +14,45 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/pass_scroll_cont"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    tools:ignore="HardcodedText" >
 
-    <LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/dialog_keyline1"
+    android:paddingLeft="@dimen/dialog_keyline1"
+    android:paddingRight="@dimen/dialog_keyline1">
+
+    <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:paddingBottom="4dp"
-        android:paddingLeft="@dimen/preference_screen_side_margin"
-        android:paddingTop="8dp" >
+        android:autoLink="all"
+        android:paddingTop="8dp"
+        android:text="@string/app_about"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="all"
-            android:fontFamily="sans-serif-light"
-            android:paddingTop="8dp"
-            android:text="@string/app_about"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="all"
+        android:paddingTop="16dp"
+        android:text="@string/libraries_used"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="all"
-            android:fontFamily="sans-serif-light"
-            android:paddingTop="16dp"
-            android:text="@string/libraries_used"
-            android:textAppearance="@android:style/TextAppearance.Holo.Large"
-            android:textColor="@android:color/holo_blue_dark" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="all"
+        android:paddingTop="4dp"
+        android:text="NoNonsense FilePicker (&#169;) Jonas Kalderstam"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="all"
-            android:fontFamily="sans-serif-light"
-            android:paddingTop="4dp"
-            android:text="DragSortListView (&#169;) Carl Bauer"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium" />
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="all"
+        android:paddingTop="4dp"
+        android:text="DragSortListView (&#169;) Carl Bauer"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
 
-
-    </LinearLayout>
-
-</ScrollView>
+</LinearLayout>

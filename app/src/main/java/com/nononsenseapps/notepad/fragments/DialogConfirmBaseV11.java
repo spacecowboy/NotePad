@@ -17,11 +17,11 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 
 /**
  * Simple confirm dialog fragment, extending from V11 fragment
@@ -29,17 +29,13 @@ import android.os.Bundle;
  */
 public abstract class DialogConfirmBaseV11 extends DialogFragment {
 
-	public interface DialogConfirmedListener {
-		void onConfirm();
-	}
-
 	DialogConfirmedListener listener;
+
+    public DialogConfirmBaseV11() {
+    }
 
 	public void setListener(final DialogConfirmedListener l) {
 		listener = l;
-	}
-
-	public DialogConfirmBaseV11() {
 	}
 
 	@Override
@@ -68,4 +64,8 @@ public abstract class DialogConfirmBaseV11 extends DialogFragment {
 	public abstract CharSequence getMessage();
 
 	public abstract void onOKClick();
+
+    public interface DialogConfirmedListener {
+        void onConfirm();
+    }
 }

@@ -31,6 +31,7 @@ import android.view.View;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.fragments.DialogAbout;
 import com.nononsenseapps.notepad.fragments.DialogEditList;
 import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.NavigationDrawerFragment;
@@ -170,7 +171,8 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
     @Override
     public void openAbout() {
         // todo
-        Snackbar.make(mFab, "TODO Open about screen here", Snackbar.LENGTH_LONG).show();
+        //Snackbar.make(mFab, "TODO Open about screen here", Snackbar.LENGTH_LONG).show();
+        DialogAbout.showDialog(getSupportFragmentManager());
     }
 
     @Override

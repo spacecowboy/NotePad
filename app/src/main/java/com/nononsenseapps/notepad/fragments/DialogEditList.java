@@ -61,7 +61,6 @@ public class DialogEditList extends DialogFragment {
     private EditListDialogListener listener;
 
     public DialogEditList() {
-
     }
 
     /**

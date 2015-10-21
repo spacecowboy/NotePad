@@ -17,8 +17,6 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import java.io.IOException;
-
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.accounts.AccountManagerCallback;
@@ -26,7 +24,6 @@ import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
 import android.content.DialogInterface;
@@ -34,12 +31,15 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
+import android.support.v7.app.AlertDialog;
 
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
+
+import java.io.IOException;
 
 /**
  * A copy of AccountDialog in SyncPrefs, but extending from support library
