@@ -28,6 +28,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.fragments.DialogEditList;
@@ -35,6 +36,7 @@ import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.NavigationDrawerFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskListFragment;
+import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.util.ListHelper;
 
 /**
@@ -75,8 +77,35 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        OrgSyncService.pause(this);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        // Sync if appropriate
+        if (SyncHelper.enoughTimeSinceLastSync(this)) {
+            SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
+            OrgSyncService.start(this);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        if (outState == null) {
+            outState = new Bundle();
+        }
+        outState.putLong(START_LIST_ID, mCurrentList);
+        super.onSaveInstanceState(outState);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
+        OrgSyncService.stop(this);
     }
 
     private void handleArgs(Bundle savedInstanceState) {
@@ -104,15 +133,6 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        if (outState == null) {
-            outState = new Bundle();
-        }
-        outState.putLong(START_LIST_ID, mCurrentList);
-        super.onSaveInstanceState(outState);
     }
 
     @Override
