@@ -26,6 +26,13 @@
     <dimen name="card_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
 
+    <!-- Material dialog -->
+    <dimen name="dialog_button_height">36dp</dimen>
+    <dimen name="dialog_button_area_height">52dp</dimen>
+    <dimen name="dialog_button_min_width">64dp</dimen>
+    <dimen name="dialog_keyline1">24dp</dimen>
+
+    <!-- Stuff -->
     <dimen name="drag_grip_ridge_size">4dp</dimen>
     <dimen name="drag_grip_ridge_gap">2dp</dimen>
     <dimen name="drag_grip_width">32dp</dimen>

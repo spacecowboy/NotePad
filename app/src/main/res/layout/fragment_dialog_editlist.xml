@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (c) 2015 Jonas Kalderstam.
 
   This program is free software: you can redistribute it and/or modify
@@ -17,68 +16,36 @@
   -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="16dp"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:paddingTop="@dimen/dialog_keyline1">
 
     <EditText
         android:id="@+id/titleField"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="@dimen/dialog_keyline1"
+        android:layout_marginRight="@dimen/dialog_keyline1"
         android:fontFamily="sans-serif"
         android:hint="@string/editor_title_hint"
         android:inputType="textCapSentences"
         android:singleLine="true"
-        android:textStyle="normal"
-        android:textAppearance="@android:style/TextAppearance.Large" />
+        android:textAppearance="@android:style/TextAppearance.Large"
+        android:textStyle="normal"/>
 
-    <CheckBox
+    <Switch
         android:id="@+id/defaultListBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:minHeight="48dp"
+        android:layout_marginLeft="@dimen/dialog_keyline1"
+        android:layout_marginRight="@dimen/dialog_keyline1"
         android:fontFamily="sans-serif"
+        android:minHeight="48dp"
         android:text="@string/menu_setdefaultlist"
         android:textAppearance="@android:style/TextAppearance.Medium"
         android:textColor="?android:attr/textColorSecondary"/>
-
-    <Spinner
-        android:id="@+id/sortSpinner"
-        android:layout_width="fill_parent"
-        android:layout_height="48dp"
-        android:spinnerMode="dropdown"
-        
-        tools:listitem="@layout/spinner_item" />
-
-    <Spinner
-        android:id="@+id/modeSpinner"
-        android:layout_width="fill_parent"
-        android:layout_height="48dp"
-        android:spinnerMode="dropdown"
-        tools:listitem="@layout/spinner_item" />
-
-    <LinearLayout
-        android:id="@+id/taskList"
-        android:visibility="gone"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginTop="4dp"
-        android:orientation="vertical" >
-
-        <EditText
-            android:id="@+id/quickAddFirst"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:paddingLeft="16dp"
-            android:hint="@string/add_item"
-            android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="?android:attr/textColorPrimary"/>
-    </LinearLayout>
 
     <TextView
         android:id="@+id/deleteButton"
@@ -98,13 +65,13 @@
         android:textAllCaps="true"
         android:textAppearance="@android:style/TextAppearance.Medium"
         android:textColor="?android:attr/textColorSecondary"
-        android:textStyle="bold" />
+        android:textStyle="bold"/>
 
     <include
         android:id="@+id/buttons"
-        android:layout_marginTop="16dp"
+        layout="@layout/dialog_ok_cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/dialog_ok_cancel" />
+        android:layout_marginTop="@dimen/dialog_keyline1"/>
 
 </LinearLayout>

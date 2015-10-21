@@ -18,6 +18,7 @@
 <resources>
     <!-- Vetted -->
     <attr name="NavDrawerStyle" format="reference"/>
+    <attr name="separatorColor" format="color"/>
 
     <!-- Unknown -->
     <attr name="my_list_selector" format="reference" />

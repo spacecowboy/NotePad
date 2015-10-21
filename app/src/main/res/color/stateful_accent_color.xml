@@ -14,9 +14,8 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="1dp"
-    android:layout_marginBottom="8dp"
-    android:layout_marginTop="8dp"
-    android:background="?separatorColor"/>
+
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:color="?android:textColorHint" android:state_enabled="false"/>
+    <item android:color="?colorAccent"/>
+</selector>
