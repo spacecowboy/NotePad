@@ -73,7 +73,10 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory android:title="@string/legacy_backup">
+    <PreferenceCategory android:title="@string/legacy">
+        <Preference
+            android:key="@string/const_preference_password_key"
+            android:title="@string/password"/>
         <Preference
             android:key="@string/const_preference_legacybackup_key"
             android:title="@string/backup_import"/>

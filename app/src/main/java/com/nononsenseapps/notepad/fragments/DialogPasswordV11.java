@@ -29,12 +29,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
+
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
-import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 
 /**
  * Full copy of DialogPassword, but extending native fragment class instead.
@@ -73,7 +73,7 @@ public class DialogPasswordV11 extends DialogFragment {
 	void confirm() {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
-		String currentPassword = settings.getString(PasswordPrefs.KEY_PASSWORD,
+		String currentPassword = settings.getString(DialogPasswordSettings.KEY_PASSWORD,
 				"");
 		String enteredPassword = passwordField.getText().toString();
 

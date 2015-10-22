@@ -300,5 +300,9 @@
     <string name="bigger_titles">Title larger</string>
     <string name="bigger_titles_summary">The title is the first line</string>
     <string name="sd_card_touch_hint">Touch to change directory</string>
+    <string name="new_password">New password</string>
+    <string name="current_password">Current password</string>
+    <string name="const_preference_password_key">preference_password_key</string>
+    <string name="legacy">Legacy</string>
 
 </resources>

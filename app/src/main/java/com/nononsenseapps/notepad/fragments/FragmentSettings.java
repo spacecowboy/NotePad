@@ -31,6 +31,7 @@ import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.support.annotation.StringRes;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.nononsenseapps.build.Config;
@@ -73,6 +74,7 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         buildGuard();
         setupAccount(sharedPreferences);
         setupDirectory(sharedPreferences);
+        setupPassword();
         setupLegacyBackup();
 
         // Bind listeners to update summaries
@@ -175,6 +177,20 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         DialogFragment newFragment = new DialogGoogleAccount();
         newFragment.setArguments(Bundle.EMPTY);
         newFragment.show(ft, "accountdialog");
+    }
+
+    private void setupPassword() {
+        Preference preference = findPreference(getString(R.string.const_preference_password_key));
+        if (preference != null) {
+            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+                @Override
+                public boolean onPreferenceClick(Preference preference) {
+                    DialogPasswordSettings.showDialog(((AppCompatActivity) getActivity())
+                            .getSupportFragmentManager());
+                    return true;
+                }
+            });
+        }
     }
 
     private void setupLegacyBackup() {

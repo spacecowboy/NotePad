@@ -29,12 +29,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.nononsenseapps.notepad.R;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 
 @EFragment(resName="fragment_dialog_password")
 public class DialogPassword extends DialogFragment {
@@ -51,10 +51,6 @@ public class DialogPassword extends DialogFragment {
 
 	PasswordConfirmedListener listener = null;
 
-	public static interface PasswordConfirmedListener {
-		public void onPasswordConfirmed();
-	}
-
 	public void setListener(final PasswordConfirmedListener listener) {
 		this.listener = listener;
 	}
@@ -65,7 +61,7 @@ public class DialogPassword extends DialogFragment {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 		final String currentPassword = settings.getString(
-				PasswordPrefs.KEY_PASSWORD, "");
+				DialogPasswordSettings.KEY_PASSWORD, "");
 		if (currentPassword.isEmpty()) {
 			getDialog().setTitle(R.string.enter_new_password);
 		}
@@ -81,7 +77,7 @@ public class DialogPassword extends DialogFragment {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 		final String currentPassword = settings.getString(
-				PasswordPrefs.KEY_PASSWORD, "");
+				DialogPasswordSettings.KEY_PASSWORD, "");
 		if (currentPassword.isEmpty()) {
 			passwordVerificationField.setVisibility(View.VISIBLE);
 		}
@@ -99,7 +95,7 @@ public class DialogPassword extends DialogFragment {
 	void confirm() {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
-		final String currentPassword = settings.getString(PasswordPrefs.KEY_PASSWORD,
+		final String currentPassword = settings.getString(DialogPasswordSettings.KEY_PASSWORD,
 				"");
 		final String enteredPassword = passwordField.getText().toString();
 		final String verifiedPassword = passwordVerificationField.getText()
@@ -135,7 +131,7 @@ public class DialogPassword extends DialogFragment {
 	private void setPassword(final String pass1, final String pass2) {
 		if (pass1 != null && !pass1.isEmpty() && pass1.equals(pass2)) {
 			PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
-					.putString(PasswordPrefs.KEY_PASSWORD, pass1).commit();
+					.putString(DialogPasswordSettings.KEY_PASSWORD, pass1).commit();
 			if (listener != null) {
 				listener.onPasswordConfirmed();
 			}
@@ -149,5 +145,9 @@ public class DialogPassword extends DialogFragment {
 					getText(R.string.passwords_dont_match), Toast.LENGTH_SHORT)
 					.show();
 		}
+	}
+
+	public interface PasswordConfirmedListener {
+		void onPasswordConfirmed();
 	}
 }

@@ -23,9 +23,9 @@
         android:summary=""
         android:title="@string/settings_cat_appearance" />
     <header
-        android:summary=""
-        android:icon="@drawable/ic_folder_24dp_white"
         android:fragment="com.nononsenseapps.notepad.prefs.ListPrefs"
+        android:icon="@drawable/ic_folder_24dp_white"
+        android:summary=""
         android:title="@string/settings_list" />
     <header
         android:fragment="com.nononsenseapps.notepad.prefs.SyncPrefs"
@@ -38,7 +38,7 @@
         android:summary=""
         android:title="@string/notifications" />
     <header
-        android:fragment="com.nononsenseapps.notepad.prefs.PasswordPrefs"
+        android:fragment="com.nononsenseapps.notepad.fragments.DialogPasswordSettings"
         android:icon="@drawable/ic_lock_outline_24dp_white"
         android:summary=""
         android:title="@string/password" />
