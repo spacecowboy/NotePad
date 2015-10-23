@@ -59,12 +59,12 @@ import java.util.Random;
  */
 public class GoogleAPITalker {
 
-    private final Context context;
+    /*private final Context context;
 
-    /**
+    *//**
      *
      * @param context Need context to load api key from file
-     */
+     *//*
     public GoogleAPITalker(final Context context) {
         this.context = context;
     }
@@ -186,9 +186,9 @@ public class GoogleAPITalker {
 		return url;
 	}
 
-	/**
+	*//**
 	 * Set the pageToken to null to get the first page
-	 */
+	 *//*
 	private String allTasksUpdatedMin(final String listId,
 			final String timestamp, final String pageToken) {
 		// items,nextPageToken
@@ -231,8 +231,6 @@ public class GoogleAPITalker {
 	// Where each enclosing parenthesis is optional
 
 	private String authToken;
-
-	private AndroidHttpClient client;
 	
 	public String accountName = null;
 
@@ -264,17 +262,15 @@ public class GoogleAPITalker {
 
 		Log.d(TAG, "initialize");
 		accountName = account.name;
-		// HttpParams params = new BasicHttpParams();
-		// params.setParameter(CoreProtocolPNames.PROTOCOL_VERSION,
-		// HttpVersion.HTTP_1_1);
-		// client = new AndroidHttpClientHttpClient(params);
-		client = AndroidHttpClient.newInstance(USERAGENT);
-
 		authToken = getAuthToken(accountManager, account, authTokenType,
 				notifyAuthFailure);
 
 		Log.d(TAG, "authToken: " + authToken);
-        return authToken != null && !authToken.equals("");
+        if ( authToken != null && !authToken.isEmpty()) {
+
+        } else {
+
+        }
 	}
 
 	public void closeClient() {
@@ -283,25 +279,7 @@ public class GoogleAPITalker {
 		}
 	}
 
-	/*
-	 * User methods
-	 */
-
-	// This is not necessary unless I really want the etags of each list
-	// public ArrayList<GoogleTaskList> getAllLists()
-	// throws ClientProtocolException, JSONException,
-	// PreconditionException, NotModifiedException, IOException {
-	// ArrayList<GoogleTaskList> list = new ArrayList<GoogleTaskList>();
-	//
-	// // Lists will not carry etags, must fetch them individually
-	// for (GoogleTaskList gimpedList : getListOfLists()) {
-	// list.add(getList(gimpedList));
-	// }
-	//
-	// return list;
-	// }
-
-	/**
+	*//**
 	 * The entries in this does only one net-call, and such the list items do
 	 * not contain e-tags. useful to get an id-list.
 	 * 
@@ -314,7 +292,7 @@ public class GoogleAPITalker {
 	 * @throws PreconditionException
 	 * @throws ClientProtocolException
 	 * @throws JSONException 
-	 */
+	 *//*
 	public String getListOfLists(ArrayList<GoogleTaskList> list)
 			throws IOException, JSONException {
 		String eTag = "";
@@ -369,111 +347,14 @@ public class GoogleAPITalker {
 		return eTag;
 	}
 
-	/**
-	 * If etag is present, will make a if-none-match request. Expects only id
-	 * and possibly etag to be present in the object
-	 * 
-	 * @param gimpedTask
-	 * @return
-	 * @throws IOException
-	 * @throws NotModifiedException
-	 * @throws JSONException
-	 * @throws ClientProtocolException
-	 * @throws PreconditionException
-	 */
-	public GoogleTask getTask(GoogleTask gimpedTask, GoogleTaskList list)
-			throws JSONException,
-            IOException, PreconditionException {
-		GoogleTask result;
-		HttpGet httpget = new HttpGet(TaskURL(gimpedTask.remoteId,
-				list.remoteId));
-		setAuthHeader(httpget);
-		// setHeaderWeakEtag(httpget, gimpedTask.etag);
-		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
-
-		// Log.d(TAG, "request: " + TaskURL(gimpedTask.id, list.id));
-
-		JSONObject jsonResponse = (JSONObject) new JSONTokener(
-				parseResponse(client.execute(httpget))).nextValue();
-
-		// Log.d(TAG, jsonResponse.toString());
-		result = new GoogleTask(jsonResponse, accountName);
-		// } catch (PreconditionException e) {
-		// // Can not happen since we are not doing a PUT/POST
-		// }
-
-		result.listdbid = list.dbid;
-		return result;
-	}
-
-	/**
-	 * Takes a list object because the etag is optional here. If one is present,
-	 * will make a if-none-match request.
-	 * 
-	 * @param gimpedList
-	 * @return
-	 * @throws ClientProtocolException
-	 * @throws JSONException
-	 * @throws PreconditionException
-	 * @throws NotModifiedException
-	 * @throws IOException
-	 */
-	public GoogleTaskList getList(GoogleTaskList gimpedList)
-			throws JSONException,
-            IOException, PreconditionException {
-		GoogleTaskList result;
-		HttpGet httpget = new HttpGet(ListURL(gimpedList.remoteId));
-		setAuthHeader(httpget);
-		// setHeaderWeakEtag(httpget, gimpedList.etag);
-		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
-
-		// Log.d(TAG, "request: " + ListURL(gimpedList.id));
-
-		JSONObject jsonResponse = (JSONObject) new JSONTokener(
-				parseResponse(client.execute(httpget))).nextValue();
-
-		// Log.d(TAG, jsonResponse.toString());
-		result = new GoogleTaskList(jsonResponse, accountName);
-		// } catch (PreconditionException e) {
-		// // Can not happen since we are not doing a PUT/POST
-		// }
-
-		return result;
-	}
-
-	public String getEtag() throws JSONException,
-			IOException, PreconditionException {
-		String eTag;
-		HttpGet httpget = new HttpGet(AllListsJustEtag());
-		httpget.setHeader("Authorization", "OAuth " + authToken);
-
-		// Log.d(TAG, "request: " + AllLists());
-		AndroidHttpClient.modifyRequestToAcceptGzipResponse(httpget);
-
-		JSONObject jsonResponse = (JSONObject) new JSONTokener(
-				parseResponse(client.execute(httpget))).nextValue();
-
-		// Log.d(TAG, jsonResponse.toString());
-
-		eTag = jsonResponse.getString("etag");
-
-		// } catch (PreconditionException e) {
-		// // Can not happen in this case since we don't have any etag!
-		// } catch (NotModifiedException e) {
-		// // Can not happen in this case since we don't have any etag!
-		// }
-
-		return eTag;
-	}
-
-	/**
+	*//**
 	 * Given a time, will fetch all tasks which were modified afterwards
 	 * 
 	 * @param list
 	 * @throws IOException
 	 * @throws ClientProtocolException
 	 * @throws JSONException 
-	 */
+	 *//*
 	public ArrayList<GoogleTask> getModifiedTasks(String lastUpdated,
 			GoogleTaskList list) throws IOException, JSONException {
 		ArrayList<GoogleTask> moddedList = new ArrayList<GoogleTask>();
@@ -534,7 +415,7 @@ public class GoogleAPITalker {
 		return moddedList;
 	}
 
-	/**
+	*//**
 	 * Returns an object if all went well. Returns null if no upload was done.
 	 * Will set only remote id, etag, position and parent fields.
 	 * 
@@ -542,7 +423,7 @@ public class GoogleAPITalker {
 	 * 
 	 * @throws PreconditionException
 	 * @throws JSONException 
-	 */
+	 *//*
 	public GoogleTask uploadTask(final GoogleTask task,
 			final GoogleTaskList pList) throws
             IOException, PreconditionException, JSONException {
@@ -630,64 +511,7 @@ public class GoogleAPITalker {
 		return task;
 	}
 
-	/**
-	 * Calls the GTasks API and tries to move a task to its target position.
-	 * 
-	 * @param task
-	 * @throws ClientProtocolException
-	 * @throws JSONException
-	 * @throws IOException
-	 * @throws PreconditionException
-	 */
-	// private void moveTask(final GoogleTask task, final GoogleTaskList pList)
-	// throws ClientProtocolException, JSONException, IOException,
-	// PreconditionException {
-	//
-	// if (pList.id == null || pList.id.isEmpty() || task.id == null
-	// || task.id.isEmpty()) {
-	// Log.d(TAG + ".move", "Invalid list ID found for uploadTask");
-	// return;
-	// }
-	//
-	// HttpUriRequest httppost = new HttpPost(TaskMoveURL_ETAG_UPDATED(
-	// task.id, pList.id, task.parent, task.remoteprevious));
-	//
-	// setAuthHeader(httppost);
-	// AndroidHttpClient.modifyRequestToAcceptGzipResponse(httppost);
-	//
-	// // No need since this is only done on sucessful updates
-	// // setHeaderStrongEtag(httppost, task.etag);
-	//
-	// Log.d(TAG + ".move", httppost.getRequestLine().toString());
-	// for (Header header : httppost.getAllHeaders()) {
-	// Log.d(TAG + ".move", header.getName() + ": " + header.getValue());
-	// }
-	//
-	// String stringResponse = parseResponse(client.execute(httppost));
-	//
-	// JSONObject jsonResponse = new JSONObject(stringResponse);
-	//
-	// Log.d(TAG + ".move", jsonResponse.toString());
-	//
-	// // Will return a task, containing id and etag. always update
-	// // fields
-	// task.etag = jsonResponse.getString("etag");
-	// if (jsonResponse.has(GoogleTask.UPDATED))
-	// task.updated = jsonResponse.getString(GoogleTask.UPDATED);
-	// task.moveUploaded = true;
-	// if (jsonResponse.has(GoogleTask.PARENT)) {
-	// task.remoteparent = jsonResponse.getString(GoogleTask.PARENT);
-	// Log.d(TAG + ".move", jsonResponse.getString(GoogleTask.PARENT));
-	// } else
-	// task.remoteparent = null;
-	// if (jsonResponse.has(GoogleTask.POSITION)) {
-	// task.position = jsonResponse.getString(GoogleTask.POSITION);
-	// Log.d(TAG + ".move", jsonResponse.getString(GoogleTask.POSITION));
-	// } else
-	// task.position = null;
-	// }
-
-	/**
+	*//**
 	 * Returns an object if all went well. Returns null if a conflict was
 	 * detected. If the list has deleted set to 1, will call the server and
 	 * delete the list instead of updating it.
@@ -696,7 +520,7 @@ public class GoogleAPITalker {
 	 * @throws PreconditionException
 	 * @throws JSONException
 	 * @throws ClientProtocolException
-	 */
+	 *//*
 	public GoogleTaskList uploadList(final GoogleTaskList list)
 			throws IOException, PreconditionException, JSONException {
 		final HttpUriRequest httppost;
@@ -754,190 +578,5 @@ public class GoogleAPITalker {
 		}
 
 		return list;
-	}
-
-	/*
-	 * Communication methods
-	 */
-
-	/**
-	 * Sets the authorization header
-	 * 
-	 * @param request
-	 * @return
-	 */
-	private void setAuthHeader(HttpUriRequest request) {
-		if (request != null)
-			request.setHeader("Authorization", "OAuth " + authToken);
-	}
-
-	/**
-	 * Does nothing if etag is null or "" Sets an if-match header for strong
-	 * etag comparisons.
-	 * 
-	 * @param etag
-	 */
-	private void setHeaderStrongEtag(final HttpUriRequest httppost,
-			final String etag) {
-		if (etag != null && !etag.isEmpty()) {
-			httppost.setHeader("If-Match", etag);
-
-			//Log.d(TAG, "If-Match: " + etag);
-		}
-		else {
-			//Log.d(TAG, "No ETAG could be found!");
-		}
-	}
-
-	/**
-	 * Does nothing if etag is null or "" Sets an if-none-match header for weak
-	 * etag comparisons.
-	 * 
-	 * If-None-Match: W/"D08FQn8-eil7ImA9WxZbFEw."
-	 * 
-	 * @param etag
-	 */
-	private void setHeaderWeakEtag(HttpUriRequest httpget, String etag) {
-		if (etag != null && !etag.equals("")) {
-			httpget.setHeader("If-None-Match", etag);
-
-			//Log.d(TAG, "If-None-Match: " + etag);
-		}
-	}
-
-	/**
-	 * SUpports Post and Put. Anything else will not have any effect
-	 * 
-	 * @param httppost
-	 * @param list
-	 */
-	private void setPostBody(HttpUriRequest httppost, GoogleTaskList list) {
-		StringEntity se = null;
-		try {
-			se = new StringEntity(list.toJSON(), HTTP.UTF_8);
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
-		se.setContentType("application/json");
-		if (httppost instanceof HttpPost)
-			((HttpPost) httppost).setEntity(se);
-		else if (httppost instanceof HttpPut)
-			((HttpPut) httppost).setEntity(se);
-	}
-
-	/**
-	 * SUpports Post and Put. Anything else will not have any effect
-	 * 
-	 * @param httppost
-	 * @param task
-	 */
-	private void setPostBody(HttpUriRequest httppost, GoogleTask task) {
-		StringEntity se = null;
-		try {
-			se = new StringEntity(task.toJSON(), HTTP.UTF_8);
-			//Log.d(TAG, "Sending: " + task.toJSON());
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-
-		se.setContentType("application/json");
-		if (httppost instanceof HttpPost)
-			((HttpPost) httppost).setEntity(se);
-		else if (httppost instanceof HttpPut)
-			((HttpPut) httppost).setEntity(se);
-	}
-
-	/**
-	 * Parses a httpresponse and returns the string body of it. Throws
-	 * exceptions for select status codes.
-	 *
-     * @throws ClientProtocolException
-	 * @throws PreconditionException
-	 */
-	private static String parseResponse(HttpResponse response)
-			throws ClientProtocolException, PreconditionException {
-		String page = "";
-		BufferedReader in = null;
-
-		Log.d(TAG, "HTTP Response Code: "
-				+ response.getStatusLine().getStatusCode());
-
-		if (response.getStatusLine().getStatusCode() == 403) {
-			// Invalid authtoken
-			throw new ClientProtocolException("Status: 403, Invalid authcode");
-		}
-
-		else if (response.getStatusLine().getStatusCode() == 412) { //
-			/*
-			 * Precondition failed. Object has been modified on server, can't do
-			 * update
-			 */
-			throw new PreconditionException(
-					"Etags don't match, can not perform update. Resolve the conflict then update without etag");
-		}
-
-		/*
-		 * else if (response.getStatusLine().getStatusCode() == 304) { throw new
-		 * NotModifiedException(); }
-		 */
-		else if (response.getStatusLine().getStatusCode() == 400) {
-			// Warning: can happen for a legitimate case
-			// This happens if you try to delete the default list.
-			// Resolv it by considering the delete successful. List will still
-			// exist on server, but all tasks will be deleted from it.
-			// A successful delete returns an empty response.
-			// Make a log entry about it anyway though
-			Log.d(TAG,
-					"Response was 400. Either we deleted the default list in app or did something really bad");
-			throw new PreconditionException(
-					"Tried to delete default list, undelete it");
-		}
-		else if (response.getStatusLine().getStatusCode() == 204) {
-			// Successful delete of a tasklist. return empty string as that is
-			// expected from delete
-
-			Log.d(TAG, "Response was 204: Successful delete");
-			return "";
-		}
-		else {
-
-			try {
-				if (response.getEntity() != null) {
-					// Only call getContent ONCE
-					InputStream content = AndroidHttpClient
-							.getUngzippedContent(response.getEntity());
-					if (content != null) {
-						in = new BufferedReader(new InputStreamReader(content));
-						StringBuilder sb = new StringBuilder("");
-						String line;
-						String NL = System.getProperty("line.separator");
-						while ((line = in.readLine()) != null) {
-							sb.append(line).append(NL);
-						}
-						in.close();
-						page = sb.toString();
-						//
-						// System.out.println(page);
-					}
-				}
-			}
-			catch (IOException ignored) {
-			}
-			finally {
-				if (in != null) {
-					try {
-						in.close();
-					}
-					catch (IOException e) {
-						e.printStackTrace();
-					}
-				}
-			}
-		}
-
-		return page;
-	}
+	}*/
 }
