@@ -32,6 +32,7 @@ import android.support.v7.app.AlertDialog;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
 
 /**
  * Dialog which allows the user to select a Google account. Requests permission to handle tasks
@@ -99,8 +100,7 @@ public class DialogGoogleAccount extends DialogFragment {
             sharedPreferences.edit().putString(getString(R.string
                     .const_preference_gtask_account_key), account.name).commit();
             // Request user's permission
-            AccountManager.get(activity).getAuthToken(account, GoogleTaskSync.AUTH_TOKEN_TYPE,
-                    null, activity, callbacks, null);
+            GoogleTasksClient.getAuthTokenAsync(activity, account, callbacks);
             // work continues in callback, method run()
         }
     }

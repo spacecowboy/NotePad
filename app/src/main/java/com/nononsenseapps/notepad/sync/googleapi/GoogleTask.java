@@ -17,17 +17,9 @@
 
 package com.nononsenseapps.notepad.sync.googleapi;
 
-import java.text.ParseException;
-import java.util.Comparator;
-import java.util.HashMap;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.RemoteTask;
 import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.util.BiMap;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
 import android.content.ContentValues;
@@ -36,37 +28,6 @@ import android.database.Cursor;
 import com.nononsenseapps.helpers.Log;
 
 public class GoogleTask extends RemoteTask {
-
-	/*
-	public static class RemoteOrder implements Comparator<GoogleTask> {
-
-		final HashMap<String, Integer> levels;
-
-		public RemoteOrder(final HashMap<String, Integer> levels) {
-			this.levels = levels;
-		}
-
-		@Override
-		public int compare(GoogleTask lhs, GoogleTask rhs) {
-			Log.d("remotesort", "Comparing: " + lhs.title + " and " + rhs.title);
-			final Integer leftLevel = levels.get(lhs.id);
-			final Integer rightLevel = levels.get(rhs.id);
-			
-			Log.d("remotesort", "lhs level: " + leftLevel + ", rhs level: " + rightLevel);
-			
-			if (leftLevel == null || rightLevel == null)
-				return 0;
-
-			if (leftLevel == rightLevel) {
-				// Share parents, compare their positions
-				return lhs.position.compareTo(rhs.position);
-			} else if (leftLevel < rightLevel) {
-				return -1;
-			} else {
-				return 1;
-			}
-		}
-	}*/
 
 	private static final String TAG = "nononsenseapps GoogleTask";
 	public static final String ID = "id";
@@ -104,42 +65,48 @@ public class GoogleTask extends RemoteTask {
 		this.service = GoogleTaskList.SERVICENAME;
 	}
 
-	public GoogleTask(final JSONObject jsonTask, final String accountName) throws JSONException {
+	public GoogleTask(final GoogleTasksAPI.TaskResource taskResource, final String accountName) {
 		super();
 		this.service = GoogleTaskList.SERVICENAME;
 		account = accountName;
-		remoteId = jsonTask.getString(ID);
-		try {
-			updated = RFC3339Date.parseRFC3339Date(jsonTask.getString(UPDATED)).getTime();
-		}
-		catch (Exception e) {
-			updated = 0L;
-		}
-		//etag = jsonTask.getString("etag");
-		
-		if (jsonTask.has(TITLE))
-			title = jsonTask.getString(TITLE);
-		if (jsonTask.has(NOTES))
-			notes = jsonTask.getString(NOTES);
-		if (jsonTask.has(STATUS))
-			status = jsonTask.getString(STATUS);
-		if (jsonTask.has(PARENT))
-			parent = jsonTask.getString(PARENT);
-		else
-			parent = null;
-		if (jsonTask.has(POSITION))
-			position = jsonTask.getString(POSITION);
-		if (jsonTask.has(DUE))
-			dueDate = jsonTask.getString(DUE);
-		if (jsonTask.has(DELETED) && jsonTask.getBoolean(DELETED))
-			remotelydeleted = true;
-		if (jsonTask.has(HIDDEN) && jsonTask.getBoolean(HIDDEN))
-			remotelydeleted = true;
 
-//		json = jsonTask;
+		updateFromTaskResource(taskResource);
 	}
 
-	public GoogleTask(final Task dbTask, final String accountName) {
+    /**
+     * Fill in fields from taskresource
+     */
+    public void updateFromTaskResource(GoogleTasksAPI.TaskResource taskResource) {
+        remoteId = taskResource.id;
+        try {
+            updated = RFC3339Date.parseRFC3339Date(taskResource.updated).getTime();
+        }
+        catch (Exception e) {
+            updated = 0L;
+        }
+        //etag = jsonTask.getString("etag");
+
+        if (taskResource.title != null)
+            title = taskResource.title;
+        if (taskResource.notes != null)
+            notes = taskResource.notes;
+        if (taskResource.status != null)
+            status = taskResource.status;
+        if (taskResource.parent != null)
+            parent = taskResource.parent;
+        else
+            parent = null;
+        if (taskResource.position != null)
+            position = taskResource.position;
+        if (taskResource.due != null)
+            dueDate = taskResource.due;
+        if (taskResource.deleted != null && taskResource.deleted)
+            remotelydeleted = true;
+        if (taskResource.hidden != null && taskResource.hidden)
+            remotelydeleted = true;
+    }
+
+    public GoogleTask(final Task dbTask, final String accountName) {
 		super();
 		this.service = GoogleTaskList.SERVICENAME;
 		account = accountName;
@@ -165,44 +132,17 @@ public class GoogleTask extends RemoteTask {
 	}
 
 	/**
-	 * Special tricks because google api actually want 'null' while JSONObject
-	 * doesnt allow them. do not include read-only fields
-	 * 
-	 * @return
+	 * Return a taskresource version of this task. Does not include id.
 	 */
-	public String toJSON() {
-		String returnString = "";
-		try {
-			JSONObject json = new JSONObject();
-			String nullAppendage = "";
-			// if (id != null)
-			// json.put(ID, id);
+	public GoogleTasksAPI.TaskResource toTaskResource() {
+        GoogleTasksAPI.TaskResource result = new GoogleTasksAPI.TaskResource();
 
-			json.put(TITLE, title);
-			json.put(NOTES, notes);
+        result.title = title;
+        result.notes = notes;
+        result.due = dueDate;
+        result.status = status;
 
-			if (dueDate != null && !dueDate.equals(""))
-				json.put(DUE, dueDate);
-			else
-				nullAppendage += ", \"" + DUE + "\": null";
-
-			json.put(STATUS, status);
-			if (status != null && status.equals(NEEDSACTION)) {
-				// We must reset this also in this case
-				nullAppendage += ", \"" + COMPLETED + "\": null";
-			}
-
-			nullAppendage += "}";
-
-			String jsonString = json.toString();
-			returnString = jsonString.substring(0, jsonString.length() - 1)
-					+ nullAppendage;
-
-		} catch (JSONException e) {
-			Log.d(TAG, e.getLocalizedMessage());
-		}
-
-		return returnString;
+		return result;
 	}
 
 	/**

@@ -204,6 +204,7 @@ public class SyncGtaskHelper {
                 // in accounts manager. Only use it here where the user has
                 // manually desired a sync to happen NOW.
                 options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+                options.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
                 ContentResolver.requestSync(account, MyContentProvider.AUTHORITY, options);
                 // Set last sync time to now
                 prefs.edit().putLong(KEY_LAST_SYNC, Calendar.getInstance().getTimeInMillis())

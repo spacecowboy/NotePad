@@ -17,6 +17,9 @@
   -->
 
 <resources>
+    <string name="changelog_5_7_1">
+\nFix Google Tasks sync.
+\nFix bug which would delete all notes during Google Tasks sync.</string>
     <string name="changelog_5_6_0">
 \nNew setting: enable/disable first line in notes to be bigger font.
 \nReminders: Now default to today instead of tomorrow.</string>

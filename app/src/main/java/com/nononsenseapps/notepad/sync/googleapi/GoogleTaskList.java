@@ -17,22 +17,11 @@
 
 package com.nononsenseapps.notepad.sync.googleapi;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.util.ArrayList;
-
-import org.apache.http.client.ClientProtocolException;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.util.BiMap;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
-import android.content.ContentValues;
 import android.database.Cursor;
-import android.os.RemoteException;
 import com.nononsenseapps.helpers.Log;
 
 public class GoogleTaskList extends RemoteTaskList {
@@ -54,25 +43,13 @@ public class GoogleTaskList extends RemoteTaskList {
 
 	// private GoogleAPITalker api;
 
-	public GoogleTaskList(final JSONObject jsonList, final String accountName) throws JSONException {
-		super();
-		this.service = SERVICENAME;
-		// this.api = ;
+    public GoogleTaskList(GoogleTasksAPI.TaskListResource taskListResource, String accountName) {
+        super();
+        this.service = SERVICENAME;
+        account = accountName;
 
-		remoteId = jsonList.getString("id");
-		title = jsonList.getString("title");
-		account = accountName;
-		
-		try {
-			updated = RFC3339Date.parseRFC3339Date(jsonList.getString("updated")).getTime();
-		}
-		catch (Exception e) {
-			Log.d(TAG, e.getLocalizedMessage());
-			updated = 0L;
-		}
-
-		//json = jsonList;
-	}
+        updateFromTaskListResource(taskListResource);
+    }
 	
 	public GoogleTaskList(final TaskList dbList, final String accountName) {
 		super();
@@ -93,49 +70,37 @@ public class GoogleTaskList extends RemoteTaskList {
 		this.service = SERVICENAME;
 	}
 
-//	public String toString() {
-//		String res = "";
-//		JSONObject json = new JSONObject();
-//		try {
-//			json.put("title", title);
-//			json.put("id", remoteId);
-//			// json.put("etag", etag);
-//			json.put("dbid", dbId);
-//			json.put("deleted", deleted);
-//			json.put("updated", updated);
-//
-//			res = json.toString(2);
-//		} catch (JSONException e) {
-//			Log.d(TAG, e.getLocalizedMessage());
-//		}
-//		return res;
-//	}
-
 	public GoogleTaskList(final Long dbid, final String remoteId, final Long updated, final String account) {
 		super(dbid, remoteId, updated, account);
 		this.service = SERVICENAME;
 	}
 
-	/**
-	 * Returns a JSON formatted version of this list. Includes title and not id
-	 * 
-	 * @return
-	 * @throws JSONException
+    /**
+	 * Includes title and not id
 	 */
-	public String toJSON() {
-		JSONObject json = new JSONObject();
-		try {
-			json.put("title", title);
+	public GoogleTasksAPI.TaskListResource toTaskListResource() {
+        GoogleTasksAPI.TaskListResource taskListResource = new GoogleTasksAPI.TaskListResource();
 
-			// if (id != null)
-			// json.put("id", id);
+        taskListResource.title = title;
 
-		} catch (JSONException e) {
-			Log.d(TAG, e.getLocalizedMessage());
-		}
-
-		return json.toString();
+        return taskListResource;
 	}
+
+    /**
+     * Update all fields from the resource
+     */
+    public void updateFromTaskListResource(GoogleTasksAPI.TaskListResource taskListResource) {
+        remoteId = taskListResource.id;
+        title = taskListResource.title;
+
+        try {
+            updated = RFC3339Date.parseRFC3339Date(taskListResource.updated).getTime();
+        }
+        catch (Exception e) {
+            Log.d(TAG, e.getLocalizedMessage());
+            updated = 0L;
+        }
+    }
 
 	/**
 	 * Returns true if the TaskList has the same remote id or the same database

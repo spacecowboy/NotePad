@@ -23,6 +23,7 @@ import android.accounts.AccountManagerCallback;
 import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
 import android.app.DialogFragment;
@@ -49,7 +50,7 @@ import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
 import com.nononsenseapps.notepad.sync.orgsync.DropboxSyncHelper;
 import com.nononsenseapps.notepad.sync.orgsync.DropboxSynchronizer;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
@@ -440,14 +441,12 @@ public class SyncPrefs extends PreferenceFragment implements
          *
          * @param account
          */
-        public void accountSelected(Account account) {
+        public void accountSelected(final Account account) {
             if (account != null) {
                 Log.d("prefsActivity", "step one");
                 this.account = account;
                 // Request user's permission
-                AccountManager.get(activity).getAuthToken(account,
-                        GoogleTaskSync.AUTH_TOKEN_TYPE, null, activity, this,
-                        null);
+                GoogleTasksClient.getAuthTokenAsync(activity, account, this);
                 // work continues in callback, method run()
             }
         }
@@ -456,6 +455,7 @@ public class SyncPrefs extends PreferenceFragment implements
          * User wants to select an account to sync with. If we get an approval,
          * activate sync and set periodicity also.
          */
+        @SuppressLint("CommitPrefEdits")
         @Override
         public void run(AccountManagerFuture<Bundle> future) {
             try {
@@ -467,8 +467,9 @@ public class SyncPrefs extends PreferenceFragment implements
                 String token = future.getResult().getString(
                         AccountManager.KEY_AUTHTOKEN);
                 // Now we are authorized by the user.
+                Log.d("prefsActivity", "step two-b: " + token);
 
-                if (token != null && !token.equals("") && account != null) {
+                if (token != null && !token.isEmpty() && account != null) {
                     Log.d("prefsActivity", "step three: " + account.name);
                     SharedPreferences customSharedPreference = PreferenceManager
                             .getDefaultSharedPreferences(activity);

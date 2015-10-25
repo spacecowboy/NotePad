@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015 Jonas Kalderstam.
+ * Copyright (c) 2015. Jonas Kalderstam
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -8,8 +8,8 @@
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * General Public License for more details.
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
@@ -28,11 +28,11 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Pair;
 
+import com.nononsenseapps.build.Config;
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleAPITalker.PreconditionException;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
 import org.apache.http.client.ClientProtocolException;
@@ -44,9 +44,10 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import retrofit.RetrofitError;
+
 public class GoogleTaskSync {
 	static final String TAG = "nononsenseapps gtasksync";
-	public static final String AUTH_TOKEN_TYPE = "Manage your tasks";
 	public static final boolean NOTIFY_AUTH_FAILURE = true;
 	public static final String PREFS_LAST_SYNC_ETAG = "lastserveretag";
 	public static final String PREFS_GTASK_LAST_SYNC_TIME = "gtasklastsync";
@@ -65,131 +66,101 @@ public class GoogleTaskSync {
 		boolean success = false;
 		// Initialize necessary stuff
 		final AccountManager accountManager = AccountManager.get(context);
-		final GoogleAPITalker apiTalker = new GoogleAPITalker(context);
 
-		try {
-			boolean connected = apiTalker.initialize(accountManager, account,
-					AUTH_TOKEN_TYPE, NOTIFY_AUTH_FAILURE);
+        try {
+            GoogleTasksClient client = new GoogleTasksClient(GoogleTasksClient.getAuthToken
+                    (accountManager, account, NOTIFY_AUTH_FAILURE), Config
+                    .getGtasksApiKey(context), account.name);
 
-			if (connected) {
+            Log.d(TAG, "AuthToken acquired, we are connected...");
 
-				Log.d(TAG, "AuthToken acquired, we are connected...");
-
-				try {
-					// IF full sync, download since start of all time
-					// Temporary fix for delete all bug
+            // IF full sync, download since start of all time
+            // Temporary fix for delete all bug
 //					if (PreferenceManager.getDefaultSharedPreferences(context)
 //							.getBoolean(SyncPrefs.KEY_FULLSYNC, false)) {
-						PreferenceManager.getDefaultSharedPreferences(context)
-								.edit()
-								.putBoolean(SyncPrefs.KEY_FULLSYNC, false)
-								.putLong(PREFS_GTASK_LAST_SYNC_TIME, 0)
-								.commit();
+            PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(SyncPrefs
+                    .KEY_FULLSYNC, false).putLong(PREFS_GTASK_LAST_SYNC_TIME, 0).commit();
 //					}
 
-					// Download lists from server
-					Log.d(TAG, "download lists");
-					final List<GoogleTaskList> remoteLists = downloadLists(apiTalker);
+            // Download lists from server
+            Log.d(TAG, "download lists");
+            final List<GoogleTaskList> remoteLists = downloadLists(client);
 
-					// merge with local complement
-					Log.d(TAG, "merge lists");
-					mergeListsWithLocalDB(context, account.name, remoteLists);
+            // merge with local complement
+            Log.d(TAG, "merge lists");
+            mergeListsWithLocalDB(context, account.name, remoteLists);
 
-					// Synchronize lists locally
-					Log.d(TAG, "sync lists locally");
-					final List<Pair<TaskList, GoogleTaskList>> listPairs = synchronizeListsLocally(
-							context, remoteLists);
+            // Synchronize lists locally
+            Log.d(TAG, "sync lists locally");
+            final List<Pair<TaskList, GoogleTaskList>> listPairs = synchronizeListsLocally
+                    (context, remoteLists);
 
-					// Synchronize lists remotely
-					Log.d(TAG, "sync lists remotely");
-					final List<Pair<TaskList, GoogleTaskList>> syncedPairs = synchronizeListsRemotely(
-							context, listPairs, apiTalker);
+            // Synchronize lists remotely
+            Log.d(TAG, "sync lists remotely");
+            final List<Pair<TaskList, GoogleTaskList>> syncedPairs = synchronizeListsRemotely
+                    (context, listPairs, client);
 
-					// For each list
-					for (Pair<TaskList, GoogleTaskList> syncedPair : syncedPairs) {
-						// Download tasks from server
-						Log.d(TAG, "download tasks");
-						final List<GoogleTask> remoteTasks = downloadChangedTasks(
-								context, apiTalker, syncedPair.second);
+            // For each list
+            for (Pair<TaskList, GoogleTaskList> syncedPair : syncedPairs) {
+                // Download tasks from server
+                Log.d(TAG, "download tasks");
+                final List<GoogleTask> remoteTasks = downloadChangedTasks(context, client,
+                        syncedPair.second);
 
-						// merge with local complement
-						Log.d(TAG, "merge tasks");
-						mergeTasksWithLocalDB(context, account.name,
-								remoteTasks, syncedPair.first._id);
+                // merge with local complement
+                Log.d(TAG, "merge tasks");
+                mergeTasksWithLocalDB(context, account.name, remoteTasks, syncedPair.first._id);
 
-						// Synchronize tasks locally
-						Log.d(TAG, "sync tasks locally");
-						final List<Pair<Task, GoogleTask>> taskPairs = synchronizeTasksLocally(
-								context, remoteTasks, syncedPair);
-						// Synchronize tasks remotely
-						Log.d(TAG, "sync tasks remotely");
-						synchronizeTasksRemotely(context, taskPairs,
-								syncedPair.second, apiTalker);
-					}
+                // Synchronize tasks locally
+                Log.d(TAG, "sync tasks locally");
+                final List<Pair<Task, GoogleTask>> taskPairs = synchronizeTasksLocally(context,
+                        remoteTasks, syncedPair);
+                // Synchronize tasks remotely
+                Log.d(TAG, "sync tasks remotely");
+                synchronizeTasksRemotely(context, taskPairs, syncedPair.second, client);
+            }
 
-					Log.d(TAG, "Sync Complete!");
-					success = true;
-					PreferenceManager.getDefaultSharedPreferences(context)
-							.edit()
-							.putLong(PREFS_GTASK_LAST_SYNC_TIME, startTime)
-							.commit();
+            Log.d(TAG, "Sync Complete!");
+            success = true;
+            PreferenceManager.getDefaultSharedPreferences(context).edit().putLong
+                    (PREFS_GTASK_LAST_SYNC_TIME, startTime).commit();
+        } catch (RetrofitError e) {
+            Log.d(TAG, "Retrofit: " + e);
+            final int status;
+            if (e.getResponse() != null) {
+                Log.e(TAG, "" +
+                        e.getResponse().getStatus() +
+                        "; " +
+                        e.getResponse().getReason());
+                status = e.getResponse().getStatus();
+            } else {
+                status = 999;
+            }
+            // An HTTP error was encountered.
+            switch (status) {
+                case 404: // No such item, should never happen, programming error
+                case 415: // Not proper body, programming error
+                case 400: // Didn't specify url, programming error
+                    //syncResult.databaseError = true;
+                case 401: // Unauthorized, token could possibly just be stale
+                    // auth-exceptions are hard errors, and if the token is stale,
+                    // that's too harsh
+                    //syncResult.stats.numAuthExceptions++;
+                    // Instead, report ioerror, which is a soft error
+                default: // Default is to consider it a networking/server issue
+                    syncResult.stats.numIoExceptions++;
+                    break;
+            }
+        } catch (Exception e) {
+            // Something went wrong, don't punish the user
+            Log.e(TAG, "Exception: " + e);
+            syncResult.stats.numIoExceptions++;
+        } finally {
+            Log.d(TAG, "SyncResult: " + syncResult.toDebugString());
+        }
 
-					/*
-					 * Tasks Step 1: Download changes from the server Step 2:
-					 * Iterate and compare with local content Step 2a: If both
-					 * versions changed, choose the latest Step 2b: If remote is
-					 * newer, put info in local task, save Step 2c: If local is
-					 * newer, upload it (in background) Step 3: For remote items
-					 * that do not exist locally, save Step 4: For local items
-					 * that do not exist remotely, upload
-					 */
-
-				}
-				catch (ClientProtocolException e) {
-
-					Log.e(TAG,
-							"ClientProtocolException: "
-									+ e.getLocalizedMessage());
-					syncResult.stats.numAuthExceptions++;
-				}
-				catch (IOException e) {
-					syncResult.stats.numIoExceptions++;
-
-					Log.e(TAG, "IOException: " + e.getLocalizedMessage());
-				}
-				catch (ClassCastException e) {
-					// GetListofLists will cast this if it returns a string.
-					// It should not return a string but it did...
-					syncResult.stats.numAuthExceptions++;
-					Log.e(TAG, "ClassCastException: " + e.getLocalizedMessage());
-				}
-
-			}
-			else {
-				// return real failure
-
-				Log.d(TAG, "Could not get authToken. Reporting authException");
-				syncResult.stats.numAuthExceptions++;
-				// doneIntent.putExtra(SYNC_RESULT, LOGIN_FAIL);
-			}
-
-		}
-		catch (Exception e) {
-			// Something went wrong, don't punish the user
-			syncResult.stats.numAuthExceptions++;
-			Log.e(TAG, "bobs your uncle: " + e.getLocalizedMessage());
-		}
-		finally {
-			// This must always be called or we will leak resources
-			if (apiTalker != null) {
-				apiTalker.closeClient();
-			}
-
-			Log.d(TAG, "SyncResult: " + syncResult.toDebugString());
-		}
-
-		return success;
-	}
+        return success;
+    }
 
 	/**
 	 * Loads the remote lists from the database and merges the two lists. If the
@@ -212,7 +183,7 @@ public class GoogleTaskSync {
 						+ GoogleTaskList.Columns.SERVICE + " IS ?",
 				new String[] { account, GoogleTaskList.SERVICENAME }, null);
 		try {
-			while (c.moveToNext()) {
+			while (c != null && c.moveToNext()) {
 				GoogleTaskList list = new GoogleTaskList(c);
 				localVersions.put(list.remoteId, list);
 			}
@@ -224,9 +195,8 @@ public class GoogleTaskSync {
 		for (final GoogleTaskList remotelist : remoteLists) {
 			// Merge with hashmap
 			if (localVersions.containsKey(remotelist.remoteId)) {
-				//Log.d(TAG, "Setting merge id");
+                remotelist._id = localVersions.get(remotelist.remoteId)._id;
 				remotelist.dbid = localVersions.get(remotelist.remoteId).dbid;
-				//Log.d(TAG, "Setting merge delete status");
 				remotelist.setDeleted(localVersions.get(remotelist.remoteId)
 						.isDeleted());
 				localVersions.remove(remotelist.remoteId);
@@ -260,7 +230,7 @@ public class GoogleTaskSync {
 				new String[] { Long.toString(listDbId), account,
 						GoogleTaskList.SERVICENAME }, null);
 		try {
-			while (c.moveToNext()) {
+			while (c != null && c.moveToNext()) {
 				GoogleTask task = new GoogleTask(c);
 				localVersions.put(task.remoteId, task);
 			}
@@ -298,12 +268,14 @@ public class GoogleTaskSync {
 	 * @throws IOException
 	 * @throws ClientProtocolException
 	 * @throws JSONException
+     * @param client
 	 */
-	static List<GoogleTaskList> downloadLists(final GoogleAPITalker apiTalker)
-			throws ClientProtocolException, IOException, JSONException {
+	static List<GoogleTaskList> downloadLists(final GoogleTasksClient client)
+			throws IOException, RetrofitError {
 		// Do the actual download
 		final ArrayList<GoogleTaskList> remoteLists = new ArrayList<GoogleTaskList>();
-		apiTalker.getListOfLists(remoteLists);
+
+        client.listLists(remoteLists);
 
 		// Return list of TaskLists
 		return remoteLists;
@@ -322,8 +294,6 @@ public class GoogleTaskSync {
 	 */
 	public static List<Pair<TaskList, GoogleTaskList>> synchronizeListsLocally(
 			final Context context, final List<GoogleTaskList> remoteLists) {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
 		final ArrayList<Pair<TaskList, GoogleTaskList>> listPairs = new ArrayList<Pair<TaskList, GoogleTaskList>>();
 		// For every list
 		for (final GoogleTaskList remoteList : remoteLists) {
@@ -393,8 +363,7 @@ public class GoogleTaskSync {
 	static List<Pair<TaskList, GoogleTaskList>> synchronizeListsRemotely(
 			final Context context,
 			final List<Pair<TaskList, GoogleTaskList>> listPairs,
-			final GoogleAPITalker apiTalker) throws ClientProtocolException,
-			IOException, PreconditionException, JSONException {
+			final GoogleTasksClient client) throws IOException, RetrofitError {
 		final List<Pair<TaskList, GoogleTaskList>> syncedPairs = new ArrayList<Pair<TaskList, GoogleTaskList>>();
 		// For every list
 		for (final Pair<TaskList, GoogleTaskList> pair : listPairs) {
@@ -402,8 +371,8 @@ public class GoogleTaskSync {
 			if (pair.second == null) {
 				// New list to create
 				final GoogleTaskList newList = new GoogleTaskList(pair.first,
-						apiTalker.accountName);
-				apiTalker.uploadList(newList);
+                        client.accountName);
+                client.insertList(newList);
 				// Save to db also
 				newList.save(context);
 				pair.first.save(context, newList.updated);
@@ -415,10 +384,15 @@ public class GoogleTaskSync {
 				// Deleted locally, delete remotely also
 				pair.second.remotelyDeleted = true;
 				try {
-					apiTalker.uploadList(pair.second);
+					client.deleteList(pair.second);
 				}
-				catch (PreconditionException e) {
-					// Deleted the default list. Ignore error
+				catch (RetrofitError e) {
+                    if (e.getResponse() != null && e.getResponse().getStatus() == 400) {
+                        // Deleted the default list. Ignore error
+                        Log.d(TAG, "Error when deleting list. This is expected for the default list: " + e);
+                    } else {
+                        throw e;
+                    }
 				}
 				// and delete from db if it exists there
 				pair.second.delete(context);
@@ -427,7 +401,7 @@ public class GoogleTaskSync {
 			else if (pair.first.updated > pair.second.updated) {
 				// If local update is different than remote, that means we
 				// should update
-				apiTalker.uploadList(pair.second);
+				client.patchList(pair.second);
 				// No need to save remote object
 				pair.first.save(context, pair.second.updated);
 			}
@@ -442,17 +416,16 @@ public class GoogleTaskSync {
 
 	static void synchronizeTasksRemotely(final Context context,
 			final List<Pair<Task, GoogleTask>> taskPairs,
-			final GoogleTaskList gTaskList, final GoogleAPITalker apiTalker)
-			throws ClientProtocolException, IOException, PreconditionException,
-			JSONException {
+			final GoogleTaskList gTaskList, final GoogleTasksClient client)
+			throws IOException, RetrofitError {
 		for (final Pair<Task, GoogleTask> pair : taskPairs) {
 
 			// if newly created locally
 			if (pair.second == null) {
                 Log.d(TAG, "Second was null");
 				final GoogleTask newTask = new GoogleTask(pair.first,
-						apiTalker.accountName);
-				apiTalker.uploadTask(newTask, gTaskList);
+						client.accountName);
+				client.insertTask(newTask, gTaskList);
 				newTask.save(context);
 				pair.first.save(context, newTask.updated);
 			}
@@ -461,7 +434,7 @@ public class GoogleTaskSync {
 				Log.d(TAG, "Second isDeleted");
 				// Delete remote also
 				pair.second.remotelydeleted = true;
-				apiTalker.uploadTask(pair.second, gTaskList);
+				client.deleteTask(pair.second, gTaskList);
 				// Remove from db
 				pair.second.delete(context);
 			}
@@ -469,7 +442,7 @@ public class GoogleTaskSync {
 			// should update remote
 			else if (pair.first.updated > pair.second.updated) {
                 Log.d(TAG, "First updated after second");
-				apiTalker.uploadTask(pair.second, gTaskList);
+				client.patchTask(pair.second, gTaskList);
 				// No need to save remote object here
 				pair.first.save(context, pair.second.updated);
 			}
@@ -485,7 +458,7 @@ public class GoogleTaskSync {
 				null, null, null);
 		TaskList tl = null;
 		try {
-			if (c.moveToFirst()) {
+			if (c != null && c.moveToFirst()) {
 				tl = new TaskList(c);
 			}
 		}
@@ -504,7 +477,7 @@ public class GoogleTaskSync {
 				remoteList.getTaskListWithoutRemoteArgs(), null);
 		final ArrayList<TaskList> lists = new ArrayList<TaskList>();
 		try {
-			while (c.moveToNext()) {
+			while (c != null && c.moveToNext()) {
 				lists.add(new TaskList(c));
 			}
 		}
@@ -525,7 +498,7 @@ public class GoogleTaskSync {
 						GoogleTaskList.SERVICENAME), null);
 		final ArrayList<Task> tasks = new ArrayList<Task>();
 		try {
-			while (c.moveToNext()) {
+			while (c != null && c.moveToNext()) {
 				tasks.add(new Task(c));
 			}
 		}
@@ -537,17 +510,14 @@ public class GoogleTaskSync {
 	}
 
 	static List<GoogleTask> downloadChangedTasks(final Context context,
-			final GoogleAPITalker apiTalker, final GoogleTaskList remoteList)
-			throws ClientProtocolException, IOException, JSONException {
+			final GoogleTasksClient client, final GoogleTaskList remoteList)
+			throws IOException, RetrofitError {
 //		final SharedPreferences settings = PreferenceManager
 //				.getDefaultSharedPreferences(context);
 //		RFC3339Date.asRFC3339(settings.getLong(
 //				PREFS_GTASK_LAST_SYNC_TIME, 0))
 
-		final List<GoogleTask> remoteTasks = apiTalker.getModifiedTasks(
-				null, remoteList);
-
-		return remoteTasks;
+        return client.listTasks(remoteList);
 	}
 
 	static Task loadRemoteTaskFromDB(final Context context,
@@ -557,7 +527,7 @@ public class GoogleTaskSync {
 				remoteTask.getTaskWithRemoteArgs(), null);
 		Task t = null;
 		try {
-			if (c.moveToFirst()) {
+			if (c != null && c.moveToFirst()) {
 				t = new Task(c);
 			}
 		}
@@ -606,7 +576,7 @@ public class GoogleTaskSync {
 						try {
 							localTask.due = RFC3339Date.combineDateAndTime(remoteTask.dueDate, localTask.due);
 						}
-						catch (Exception e) {
+						catch (Exception ignored) {
 						}
 					}
 					if (remoteTask.status != null
@@ -699,43 +669,4 @@ public class GoogleTaskSync {
 		// return pairs
 		return taskPairs;
 	}
-
-	// private void sortByRemoteParent(final ArrayList<GoogleTask> tasks) {
-	// final HashMap<String, Integer> levels = new HashMap<String, Integer>();
-	// levels.put(null, -1);
-	// final ArrayList<GoogleTask> tasksToDo = (ArrayList<GoogleTask>) tasks
-	// .clone();
-	// GoogleTask lastFailed = null;
-	// int current = -1;
-	// Log.d("remoteorder", "Doing remote sorting with size: " + tasks.size());
-	// while (!tasksToDo.isEmpty()) {
-	// current = current >= (tasksToDo.size() - 1) ? 0 : current + 1;
-	// Log.d("remoteorder", "current: " + current);
-	//
-	// if (levels.containsKey(tasksToDo.get(current).parent)) {
-	// Log.d("remoteorder", "parent in levelmap");
-	// levels.put(tasksToDo.get(current).id,
-	// levels.get(tasksToDo.get(current).parent) + 1);
-	// tasksToDo.remove(current);
-	// current -= 1;
-	// lastFailed = null;
-	// }
-	// else if (lastFailed == null) {
-	// Log.d("remoteorder", "lastFailed null, now " + current);
-	// lastFailed = tasksToDo.get(current);
-	// }
-	// else if (lastFailed.equals(tasksToDo.get(current))) {
-	// Log.d("remoteorder", "lastFailed == current");
-	// // Did full lap, parent is not new
-	// levels.put(tasksToDo.get(current).id, 99);
-	// levels.put(tasksToDo.get(current).parent, 98);
-	// tasksToDo.remove(current);
-	// current -= 1;
-	// lastFailed = null;
-	// }
-	// }
-	//
-	// // Just to make sure that new notes appear first in insertion order
-	// Collections.sort(tasks, new GoogleTask.RemoteOrder(levels));
-	// }
 }

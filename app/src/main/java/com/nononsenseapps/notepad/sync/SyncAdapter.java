@@ -61,9 +61,6 @@ import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
-	// public static final String AUTH_TOKEN_TYPE =
-	// "oauth2:https://www.googleapis.com/auth/tasks";
-
 	public static final String SYNC_STARTED = "com.nononsenseapps.notepad.sync.SYNC_STARTED";
 	public static final String SYNC_FINISHED = "com.nononsenseapps.notepad.sync.SYNC_FINISHED";
 
