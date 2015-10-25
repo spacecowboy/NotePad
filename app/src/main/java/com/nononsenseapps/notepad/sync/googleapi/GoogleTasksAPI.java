@@ -57,7 +57,7 @@ public interface GoogleTasksAPI {
             taskListResource, @Query("key") String key);
 
     @DELETE("/users/@me/lists/{tasklist}")
-    void deleteList(@Path("tasklist") String tasklist, @Query("key") String key);
+    VoidResponse deleteList(@Path("tasklist") String tasklist, @Query("key") String key);
 
     // Tasks
     @POST("/lists/{tasklist}/tasks")
@@ -69,7 +69,7 @@ public interface GoogleTasksAPI {
     TaskResource taskResource, @Query("key") String key);
 
     @DELETE("/lists/{tasklist}/tasks/{task}")
-    void deleteTask(@Path("tasklist") String tasklist, @Path("task") String task, @Query("key")
+    VoidResponse deleteTask(@Path("tasklist") String tasklist, @Path("task") String task, @Query("key")
     String key);
 
     class ListListsResponse {
@@ -125,5 +125,8 @@ public interface GoogleTasksAPI {
         public String title; // Title of the task list.
         public String selfLink; // URL pointing to this task list.
         public String updated; // Last modification time of the task list (as a RFC 3339 timestamp).
+    }
+
+    class VoidResponse {
     }
 }
