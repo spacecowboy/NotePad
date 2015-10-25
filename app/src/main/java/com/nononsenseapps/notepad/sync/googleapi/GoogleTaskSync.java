@@ -47,7 +47,6 @@ import retrofit.RetrofitError;
 
 public class GoogleTaskSync {
 	static final String TAG = "nononsenseapps gtasksync";
-	public static final String AUTH_TOKEN_TYPE = "Manage your tasks";
 	public static final boolean NOTIFY_AUTH_FAILURE = true;
 	public static final String PREFS_LAST_SYNC_ETAG = "lastserveretag";
 	public static final String PREFS_GTASK_LAST_SYNC_TIME = "gtasklastsync";
@@ -69,7 +68,7 @@ public class GoogleTaskSync {
 
         try {
             GoogleTasksClient client = new GoogleTasksClient(GoogleTasksClient.getAuthToken
-                    (accountManager, account, AUTH_TOKEN_TYPE, NOTIFY_AUTH_FAILURE), Config
+                    (accountManager, account, NOTIFY_AUTH_FAILURE), Config
                     .getGtasksApiKey(context), account.name);
 
             Log.d(TAG, "AuthToken acquired, we are connected...");
@@ -154,19 +153,10 @@ public class GoogleTaskSync {
                     syncResult.stats.numIoExceptions++;
                     break;
             }
-        } catch (ClientProtocolException e) {
-            Log.e(TAG, "ClientProtocolException: " + e.getLocalizedMessage());
-            syncResult.stats.numIoExceptions++;
-        } catch (IOException e) {
-            syncResult.stats.numIoExceptions++;
-            Log.e(TAG, "IOException: " + e.getLocalizedMessage());
-        } catch (ClassCastException e) {
-            syncResult.stats.numIoExceptions++;
-            Log.e(TAG, "ClassCastException: " + e.getLocalizedMessage());
         } catch (Exception e) {
             // Something went wrong, don't punish the user
+            Log.e(TAG, "Exception: " + e);
             syncResult.stats.numIoExceptions++;
-            Log.e(TAG, e.toString());
         } finally {
             Log.d(TAG, "SyncResult: " + syncResult.toDebugString());
         }

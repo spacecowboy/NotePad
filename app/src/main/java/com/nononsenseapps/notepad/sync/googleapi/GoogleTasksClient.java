@@ -19,8 +19,11 @@ package com.nononsenseapps.notepad.sync.googleapi;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
+import android.accounts.AccountManagerCallback;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
+import android.app.Activity;
+import android.os.Bundle;
 
 import com.nononsenseapps.helpers.Log;
 
@@ -36,6 +39,8 @@ import retrofit.RestAdapter;
  */
 public class GoogleTasksClient {
     static final String BASE_URL = "https://www.googleapis.com/tasks/v1";
+    // https://www.googleapis.com/auth/tasks.readonly
+    private static final String OAUTH_SCOPE = "oauth2:https://www.googleapis.com/auth/tasks";
     private static final String TAG = "GoogleTasksClient";
     final GoogleTasksAPI api;
     final String accountName;
@@ -47,29 +52,37 @@ public class GoogleTasksClient {
         this.accountName = accountName;
     }
 
-    static String getAuthToken(AccountManager accountManager, Account account, String
-            authTokenType, boolean notifyAuthFailure) {
+    public static String getAuthToken(AccountManager accountManager, Account account, boolean notifyAuthFailure) throws AuthenticatorException, OperationCanceledException, IOException {
         Log.d(TAG, "getAuthToken");
         String authToken = null;
-        try {
-            // Might be invalid in the cache
-            authToken = accountManager.blockingGetAuthToken(account, authTokenType,
-                    notifyAuthFailure);
-            accountManager.invalidateAuthToken("com.google", authToken);
+        // Might be invalid in the cache
+        authToken = accountManager.blockingGetAuthToken(account, OAUTH_SCOPE, notifyAuthFailure);
 
-            authToken = accountManager.blockingGetAuthToken(account, authTokenType,
-                    notifyAuthFailure);
-        } catch (OperationCanceledException ignored) {
-        } catch (AuthenticatorException ignored) {
-        } catch (IOException ignored) {
-        }
+        Log.d(TAG, "invalidate auth token: " + authToken);
+        accountManager.invalidateAuthToken("com.google", authToken);
+
+        authToken = accountManager.blockingGetAuthToken(account, OAUTH_SCOPE, notifyAuthFailure);
+        Log.d(TAG, "fresh auth token: " + authToken);
+
         return authToken;
+    }
+
+    /**
+     * Get an AuthToken asynchronously. Use this in a foreground activity which will ask the user
+     * for permission.
+     */
+    public static void getAuthTokenAsync(Activity activity, Account account,
+            AccountManagerCallback<Bundle> callback) {
+        Log.d(TAG, "getAuthTokenAsync");
+        AccountManager.get(activity).getAuthToken(account, OAUTH_SCOPE, Bundle.EMPTY, activity,
+                callback, null);
     }
 
     static GoogleTasksAPI GetGoogleTasksAPI(final String token) throws IllegalArgumentException {
         if (token == null || token.isEmpty()) {
             throw new IllegalArgumentException("Auth token can't be empty!");
         }
+        Log.d(TAG, "Using token: " + token);
         // Create a very simple REST adapter, with oauth header
         RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(BASE_URL)
                 .setRequestInterceptor(new RequestInterceptor() {
@@ -77,7 +90,8 @@ public class GoogleTasksClient {
                     public void intercept(RequestFacade request) {
                         request.addHeader("Authorization", "Bearer " + token);
                     }
-                }).build();
+                })
+                .build();
         // Create an instance of the interface
         return restAdapter.create(GoogleTasksAPI.class);
     }

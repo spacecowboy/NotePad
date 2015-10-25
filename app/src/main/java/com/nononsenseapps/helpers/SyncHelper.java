@@ -75,7 +75,7 @@ public class SyncHelper {
 		final String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, "");
 		final boolean syncEnabled = prefs.getBoolean(SyncPrefs.KEY_SYNC_ENABLE,
 				false);
-		return syncEnabled & accountName != null & !accountName.equals("");
+		return syncEnabled && !accountName.isEmpty();
 	}
 
 	private static void requestGTaskSyncNow(final Context context) {
@@ -88,7 +88,7 @@ public class SyncHelper {
 
 		final String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, "");
 
-		if (accountName != null && !"".equals(accountName)) {
+		if (!accountName.isEmpty()) {
 			Account account = SyncPrefs.getAccount(AccountManager.get(context),
 					accountName);
 			// Don't start a new sync if one is already going
@@ -98,6 +98,7 @@ public class SyncHelper {
 				// in accounts manager. Only use it here where the user has
 				// manually desired a sync to happen NOW.
 				options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+                options.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
 				ContentResolver
 						.requestSync(account, MyContentProvider.AUTHORITY, options);
 				// Set last sync time to now
