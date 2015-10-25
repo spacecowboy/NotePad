@@ -1,17 +1,18 @@
 /*
- * Copyright (c) 2014 Jonas Kalderstam.
+ * Copyright (c) 2015. Jonas Kalderstam
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.nononsenseapps.notepad.sync.googleapi;
@@ -137,18 +138,15 @@ public class GoogleTaskSync {
             }
             // An HTTP error was encountered.
             switch (status) {
+                case 404: // No such item, should never happen, programming error
+                case 415: // Not proper body, programming error
+                case 400: // Didn't specify url, programming error
+                    //syncResult.databaseError = true;
                 case 401: // Unauthorized, token could possibly just be stale
                     // auth-exceptions are hard errors, and if the token is stale,
                     // that's too harsh
                     //syncResult.stats.numAuthExceptions++;
                     // Instead, report ioerror, which is a soft error
-                    syncResult.stats.numIoExceptions++;
-                    break;
-                case 404: // No such item, should never happen, programming error
-                case 415: // Not proper body, programming error
-                case 400: // Didn't specify url, programming error
-                    syncResult.databaseError = true;
-                    break;
                 default: // Default is to consider it a networking/server issue
                     syncResult.stats.numIoExceptions++;
                     break;
@@ -197,9 +195,8 @@ public class GoogleTaskSync {
 		for (final GoogleTaskList remotelist : remoteLists) {
 			// Merge with hashmap
 			if (localVersions.containsKey(remotelist.remoteId)) {
-				//Log.d(TAG, "Setting merge id");
+                remotelist._id = localVersions.get(remotelist.remoteId)._id;
 				remotelist.dbid = localVersions.get(remotelist.remoteId).dbid;
-				//Log.d(TAG, "Setting merge delete status");
 				remotelist.setDeleted(localVersions.get(remotelist.remoteId)
 						.isDeleted());
 				localVersions.remove(remotelist.remoteId);
@@ -297,8 +294,6 @@ public class GoogleTaskSync {
 	 */
 	public static List<Pair<TaskList, GoogleTaskList>> synchronizeListsLocally(
 			final Context context, final List<GoogleTaskList> remoteLists) {
-		final SharedPreferences settings = PreferenceManager
-				.getDefaultSharedPreferences(context);
 		final ArrayList<Pair<TaskList, GoogleTaskList>> listPairs = new ArrayList<Pair<TaskList, GoogleTaskList>>();
 		// For every list
 		for (final GoogleTaskList remoteList : remoteLists) {
@@ -392,8 +387,9 @@ public class GoogleTaskSync {
 					client.deleteList(pair.second);
 				}
 				catch (RetrofitError e) {
-                    if (e.getResponse() != null && e.getResponse().getStatus() == 412) {
-                        // Deleted the default list. Ignore error (Precondition Error)
+                    if (e.getResponse() != null && e.getResponse().getStatus() == 400) {
+                        // Deleted the default list. Ignore error
+                        Log.d(TAG, "Error when deleting list. This is expected for the default list: " + e);
                     } else {
                         throw e;
                     }

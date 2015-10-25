@@ -1,7 +1,23 @@
+/*
+ * Copyright (c) 2015. Jonas Kalderstam
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.nononsenseapps.notepad.database;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -10,7 +26,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
-import android.util.Log;
 
 public abstract class DAO {
 
@@ -340,9 +355,10 @@ public abstract class DAO {
 	 * Delete object from database
 	 */
 	public int delete(final Context context) {
-		if (_id > 0)
-			return context.getContentResolver().delete(getUri(), null, null);
-		else
-			return 0;
+		if (_id > 0) {
+            return context.getContentResolver().delete(getUri(), null, null);
+        } else {
+            return 0;
+        }
 	}
 }
