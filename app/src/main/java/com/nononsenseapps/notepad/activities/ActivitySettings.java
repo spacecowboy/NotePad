@@ -99,6 +99,8 @@ public class ActivitySettings extends ActivityBase implements AccountManagerCall
 
                 // Set it syncable
                 SyncGtaskHelper.toggleSync(this, sharedPreferences);
+                // And schedule an immediate sync
+                SyncGtaskHelper.requestSyncIf(this, SyncGtaskHelper.MANUAL);
             }
         } catch (OperationCanceledException | AuthenticatorException | IOException ignored) {
             // if the request was canceled for any reason, or something went wrong

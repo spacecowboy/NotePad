@@ -31,7 +31,6 @@ import android.preference.PreferenceManager;
 import android.support.v7.app.AlertDialog;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
 
 /**
@@ -39,14 +38,12 @@ import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
  * on selected.
  */
 public class DialogGoogleAccount extends DialogFragment {
-    private Activity activity;
     private AccountManagerCallback<Bundle> callbacks;
     private boolean accountSelected = false;
 
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        this.activity = activity;
 
         // Crash if not possible to cast
         callbacks = (AccountManagerCallback<Bundle>) activity;
@@ -54,9 +51,9 @@ public class DialogGoogleAccount extends DialogFragment {
 
     @Override
     public Dialog onCreateDialog(Bundle args) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(activity);
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.select_account);
-        final Account[] accounts = AccountManager.get(activity).getAccountsByType("com.google");
+        final Account[] accounts = AccountManager.get(getActivity()).getAccountsByType("com.google");
         final int size = accounts.length;
         String[] names = new String[size];
         for (int i = 0; i < size; i++) {
@@ -80,7 +77,7 @@ public class DialogGoogleAccount extends DialogFragment {
         // If no account was selected, disable the toggle switch in preferences possibly
         if (!accountSelected) {
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
-                    (activity);
+                    (getActivity());
             if (!sharedPreferences.contains(getString(R.string
                     .const_preference_gtask_account_key))) {
                 sharedPreferences.edit().putBoolean(getString(R.string
@@ -96,11 +93,11 @@ public class DialogGoogleAccount extends DialogFragment {
             this.accountSelected = true;
             // Store name for future use in callback and later
             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
-                    (activity);
+                    (getActivity());
             sharedPreferences.edit().putString(getString(R.string
                     .const_preference_gtask_account_key), account.name).commit();
             // Request user's permission
-            GoogleTasksClient.getAuthTokenAsync(activity, account, callbacks);
+            GoogleTasksClient.getAuthTokenAsync(getActivity(), account, callbacks);
             // work continues in callback, method run()
         }
     }

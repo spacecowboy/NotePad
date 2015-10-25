@@ -38,21 +38,29 @@ public class SharedPreferencesHelper {
     }
 
     public static void setSortingDue(@NonNull Context context) {
-        putStringString(context, R.string.pref_sorttype, R.string.const_duedate);
+        putString(context, R.string.pref_sorttype, R.string.const_duedate);
     }
 
     public static void setSortingManual(@NonNull Context context) {
-        putStringString(context, R.string.pref_sorttype, R.string.const_possubsort);
+        putString(context, R.string.pref_sorttype, R.string.const_possubsort);
     }
     public static void setSortingAlphabetic(Context context) {
-        putStringString(context, R.string.pref_sorttype, R.string.const_alphabetic);
+        putString(context, R.string.pref_sorttype, R.string.const_alphabetic);
     }
 
-    public static void putStringString(@NonNull Context context, @StringRes int key, @StringRes int value) {
+    public static void putString(@NonNull Context context, @StringRes int key, @StringRes int value) {
         put(context, S(context, key), S(context, value));
     }
 
     public static void put(@NonNull Context context, @NonNull String key, @NonNull String value) {
         Prefs(context).edit().putString(key, value).apply();
+    }
+
+    public static void put(@NonNull Context context, @NonNull String key, boolean value) {
+        Prefs(context).edit().putBoolean(key, value).apply();
+    }
+
+    public static void put(@NonNull Context context, @StringRes int key, boolean value) {
+        put(context, S(context, key), value);
     }
 }

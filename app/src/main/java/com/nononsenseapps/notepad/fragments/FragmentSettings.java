@@ -18,18 +18,22 @@
 package com.nononsenseapps.notepad.fragments;
 
 import android.annotation.SuppressLint;
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
+import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
@@ -40,12 +44,16 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.legacy.Backup;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
+import com.nononsenseapps.util.PermissionsHelper;
 import com.nononsenseapps.util.PreferenceHelper;
+import com.nononsenseapps.util.SharedPreferencesHelper;
 import com.nononsenseapps.util.SyncGtaskHelper;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
+
+import static com.nononsenseapps.util.PermissionsHelper.hasPermissions;
 
 /**
  * Main top level settings fragment
@@ -54,6 +62,7 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         .OnSharedPreferenceChangeListener {
 
     private static final int ACTIVITY_CODE_PICK_SD_DIR = 1;
+    private static final int PERMISSION_CODE_GTASKS = 1;
     private SwitchPreference preferenceSdDir;
     private SwitchPreference preferenceSyncGTasks;
 
@@ -166,17 +175,57 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
     }
 
     private void showAccountDialog() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        Fragment prev = getFragmentManager().findFragmentByTag("accountdialog");
-        if (prev != null) {
-            ft.remove(prev);
-        }
-        ft.addToBackStack(null);
+        if (hasGoogleAccountPermissions()) {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            Fragment prev = getFragmentManager().findFragmentByTag("accountdialog");
+            if (prev != null) {
+                ft.remove(prev);
+            }
+            ft.addToBackStack(null);
 
-        // Create and show the dialog.
-        DialogFragment newFragment = new DialogGoogleAccount();
-        newFragment.setArguments(Bundle.EMPTY);
-        newFragment.show(ft, "accountdialog");
+            // Create and show the dialog.
+            DialogFragment newFragment = new DialogGoogleAccount();
+            newFragment.setArguments(Bundle.EMPTY);
+            newFragment.show(ft, "accountdialog");
+        } else {
+            requestGoogleAccountPermissions();
+        }
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    private void requestGoogleAccountPermissions() {
+        requestPermissions(PermissionsHelper.PERMISSIONS_GTASKS, PERMISSION_CODE_GTASKS);
+    }
+
+    boolean allEqual(int value, int[] items) {
+        for (int item: items) {
+            if (value != item) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
+            grantResults) {
+        switch (requestCode) {
+            case PERMISSION_CODE_GTASKS:
+                if (permissions.length > 0 && allEqual(PackageManager.PERMISSION_GRANTED, grantResults)) {
+                    // Success, open dialog
+                    showAccountDialog();
+                } else {
+                    Toast.makeText(getActivity(), "Permission denied :(. Show explanation for contacts",
+                            Toast.LENGTH_LONG).show();
+                    SharedPreferencesHelper.put(getActivity(),
+                            R.string.const_preference_gtask_enabled_key, false);
+                }
+                break;
+        }
+    }
+
+    private boolean hasGoogleAccountPermissions() {
+        return hasPermissions(getActivity(), PermissionsHelper.PERMISSIONS_GTASKS);
     }
 
     private void setupPassword() {
