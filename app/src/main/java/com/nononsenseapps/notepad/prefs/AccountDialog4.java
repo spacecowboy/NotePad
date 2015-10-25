@@ -22,7 +22,7 @@ import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
 
 /**
  * A copy of AccountDialog in SyncPrefs, but extending from support library
@@ -69,13 +69,12 @@ public class AccountDialog4 extends DialogFragment implements
 	 * 
 	 * @param account
 	 */
-	public void accountSelected(Account account) {
+	public void accountSelected(final Account account) {
 		if (account != null) {
-			Log.d("prefsActivity", "step one");
+			Log.d("prefsActivityDialog", "step one");
 			this.account = account;
 			// Request user's permission
-			AccountManager.get(activity).getAuthToken(account,
-					GoogleTaskSync.AUTH_TOKEN_TYPE, null, activity, this, null);
+            GoogleTasksClient.getAuthTokenAsync(activity, account, this);
 			// work continues in callback, method run()
 		}
 	}
@@ -87,7 +86,7 @@ public class AccountDialog4 extends DialogFragment implements
 	@Override
 	public void run(AccountManagerFuture<Bundle> future) {
 		try {
-			Log.d("prefsActivity", "step two");
+			Log.d("prefsActivityDialog", "step two");
 			// If the user has authorized
 			// your application to use the
 			// tasks API
@@ -95,9 +94,10 @@ public class AccountDialog4 extends DialogFragment implements
 			String token = future.getResult().getString(
 					AccountManager.KEY_AUTHTOKEN);
 			// Now we are authorized by the user.
+            Log.d("prefsActivityDialog", "step two-b: " + token);
 
 			if (token != null && !token.equals("") && account != null) {
-				Log.d("prefsActivity", "step three: " + account.name);
+				Log.d("prefsActivityDialog", "step three: " + account.name);
 				SharedPreferences customSharedPreference = PreferenceManager
 						.getDefaultSharedPreferences(activity);
 				customSharedPreference.edit()
