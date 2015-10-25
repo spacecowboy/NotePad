@@ -57,7 +57,6 @@ import android.widget.Toast;
 
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NotificationHelper;
-import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Notification;
@@ -478,10 +477,6 @@ public class ActivityMain extends AppCompatActivity implements TaskListFragment
         super.onResume();
 
         // Sync if appropriate
-        if (SyncHelper.enoughTimeSinceLastSync(this)) {
-            SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
-            OrgSyncService.start(this);
-        }
     }
 
     @Override

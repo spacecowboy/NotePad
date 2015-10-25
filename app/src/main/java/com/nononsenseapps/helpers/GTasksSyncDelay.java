@@ -24,6 +24,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.IBinder;
 
+import com.nononsenseapps.util.SyncGtaskHelper;
+
 import java.util.Calendar;
 
 public class GTasksSyncDelay extends Service {
@@ -34,7 +36,7 @@ public class GTasksSyncDelay extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         /* Schedule a sync if settings say so */
         if (intent != null && Intent.ACTION_RUN.equals(intent.getAction())) {
-            SyncHelper.requestSyncIf(this, SyncHelper.MANUAL);
+            SyncGtaskHelper.requestSyncIf(this, SyncGtaskHelper.MANUAL);
         } else {
             scheduleSync();
         }

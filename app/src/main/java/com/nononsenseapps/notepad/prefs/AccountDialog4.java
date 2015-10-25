@@ -34,10 +34,10 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 
 import com.nononsenseapps.helpers.Log;
-import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
+import com.nononsenseapps.util.SyncGtaskHelper;
 
 import java.io.IOException;
 
@@ -130,7 +130,7 @@ public class AccountDialog4 extends DialogFragment implements
 				SyncPrefs.setSyncInterval(activity, customSharedPreference);
 				
 				// And trigger an immediate sync
-				SyncHelper.requestSyncIf(activity, SyncHelper.MANUAL);
+				SyncGtaskHelper.requestSyncIf(activity, SyncGtaskHelper.MANUAL);
 			}
 		}
 		catch (OperationCanceledException e) {

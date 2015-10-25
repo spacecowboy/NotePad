@@ -27,7 +27,6 @@ import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
@@ -58,7 +57,6 @@ import com.mobeta.android.dslv.DragSortListView.DropListener;
 import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
-import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
@@ -67,7 +65,6 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
-import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
@@ -93,6 +90,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
     public static final int LIST_ID_WEEK = -5;
 
     public static final String LIST_ID = "list_id";
+    public static final int LOADER_TASKS = 1;
+    public static final int LOADER_CURRENT_LIST = 0;
 
     DragSortListView listView;
 
@@ -153,46 +152,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
     public static String andWhereWeek() {
         return " AND " + whereWeek();
-    }
-
-    private boolean handleSyncRequest() {
-        boolean syncing = false;
-        // GTasks
-        if (SyncHelper.isGTasksConfigured(getContext())) {
-            syncing = true;
-            SyncHelper.requestSyncIf(getContext(), SyncHelper.MANUAL);
-        }
-
-        // Others
-        if (OrgSyncService.areAnyEnabled(getContext())) {
-            syncing = true;
-            OrgSyncService.start(getContext());
-        }
-
-        if (syncing) {
-            // In case of connectivity problems, stop the progress bar
-            new AsyncTask<Void, Void, Void>() {
-
-                @Override
-                protected Void doInBackground(Void... params) {
-                    try {
-                        Thread.sleep(10000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void result) {
-                    // Notify PullToRefreshAttacher that the refresh has finished
-                    // TODO replace with broadcast
-                    //mSwipeRefreshLayout.setRefreshing(false);
-                }
-            }.execute();
-        }
-
-        return syncing;
     }
 
     void loadList() {
@@ -651,7 +610,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
         mCallback = new LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
-                if (id == 0) {
+                if (id == LOADER_CURRENT_LIST) {
                     return new CursorLoader(getActivity(), TaskList.getUri(mListId), TaskList
                             .Columns.FIELDS, null, null, null);
                 } else {
@@ -719,36 +678,20 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
             @Override
             public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
-                if (loader.getId() == 0) {
-                    if (c != null && c.moveToFirst()) {
-                        final TaskList list = new TaskList(c);
-                        mSortType = list.sorting;
-                        mListType = list.listtype;
-                        // Reload tasks with new sorting
-                        getLoaderManager().restartLoader(1, null, this);
-                    }
-                } else {
+                if (loader.getId() == LOADER_TASKS) {
                     mAdapter.swapCursor(c);
                 }
             }
 
             @Override
             public void onLoaderReset(Loader<Cursor> loader) {
-                if (loader.getId() == 0) {
-                    // Nothing to do
-                } else {
+                if (loader.getId() == LOADER_TASKS) {
                     mAdapter.swapCursor(null);
                 }
             }
         };
 
-        if (mListId > 0) {
-            getLoaderManager().restartLoader(0, null, mCallback);
-        } else {
-            // Setting sort types for all tasks always to due date
-            mSortType = getString(R.string.const_duedate);
-            getLoaderManager().restartLoader(1, null, mCallback);
-        }
+        getLoaderManager().restartLoader(LOADER_TASKS, null, mCallback);
     }
 
     /**
@@ -820,27 +763,14 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
-        // todo remove, moved to FAB
-        /*if (itemId == R.id.menu_add) {
-            if (mListener != null && mListId > 0) {
-                mListener.addTaskInList("", mListId);
-            } else if (mListener != null) {
-                mListener.addTaskInList("", TaskListViewPagerFragment.getARealList(getActivity(),
-                        -1));
-            }
-            return true;
-        } else */
-        if (itemId == R.id.menu_clearcompleted) {
-            if (mListId != -1) {
-                DialogDeleteCompletedTasks.showDialog(getFragmentManager(), mListId, null);
-            }
-            return true;
-        } else if (itemId == R.id.menu_sync) {
-            handleSyncRequest();
-            return true;
-        } else {
-            return false;
+        switch (item.getItemId()) {
+            case R.id.menu_clearcompleted:
+                if (mListId != -1) {
+                    DialogDeleteCompletedTasks.showDialog(getFragmentManager(), mListId, null);
+                }
+                return true;
+            default:
+                return false;
         }
     }
 
@@ -869,7 +799,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
             }
 
             if (reload && mCallback != null) {
-                getLoaderManager().restartLoader(0, null, mCallback);
+                getLoaderManager().restartLoader(LOADER_TASKS, null, mCallback);
             }
         } catch (IllegalStateException ignored) {
             // Fix crash report

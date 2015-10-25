@@ -29,6 +29,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.nononsenseapps.helpers.NotificationHelper;
+import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.fragments.DialogAbout;
@@ -40,6 +41,7 @@ import com.nononsenseapps.notepad.fragments.TaskListFragment;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.util.ListHelper;
+import com.nononsenseapps.util.SharedPreferencesHelper;
 
 /**
  * Main List activity. Its purpose is to setup the views and layout for the benefit of
@@ -128,7 +130,9 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
+        super.onCreateOptionsMenu(menu);
+        getMenuInflater().inflate(R.menu.activity_list, menu);
+        return true;
     }
 
     @Override
@@ -138,14 +142,34 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.menu_sync:
+                handleSyncRequest();
+                break;
+            case R.id.menu_filter_due:
+                SharedPreferencesHelper.setSortingDue(this);
+                break;
+            case R.id.menu_filter_manual:
+                SharedPreferencesHelper.setSortingManual(this);
+                break;
+            case R.id.menu_filter_title:
+                SharedPreferencesHelper.setSortingAlphabetic(this);
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+        return true;
+    }
+
+
+    private void handleSyncRequest() {
+        SyncHelper.onManualSyncRequest(this);
     }
 
     @Override
     public void openList(long id) {
         mCurrentList = id;
-        getSupportFragmentManager().beginTransaction().replace(R.id.listfragment_container,
-                TaskListFragment.getInstance(id)).commit();
+        getSupportFragmentManager().beginTransaction().replace(R.id.listfragment_container, TaskListFragment.getInstance(id)).commit();
     }
 
     @Override
