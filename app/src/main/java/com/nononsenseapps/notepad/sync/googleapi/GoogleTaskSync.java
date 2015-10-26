@@ -35,7 +35,6 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
-import org.apache.http.client.ClientProtocolException;
 import org.json.JSONException;
 
 import java.io.IOException;

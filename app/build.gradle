@@ -59,8 +59,6 @@ def getVersionName = { ->
 android {
   compileSdkVersion 23
   buildToolsVersion "23.0.1"
-  // todo change this
-  useLibrary 'org.apache.http.legacy'
 
   lintOptions {
     abortOnError false
