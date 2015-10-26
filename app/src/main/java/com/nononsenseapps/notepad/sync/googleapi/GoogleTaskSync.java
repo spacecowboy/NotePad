@@ -33,6 +33,8 @@ import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.util.PermissionsHelper;
+import com.nononsenseapps.util.SyncGtaskHelper;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
 import org.json.JSONException;
@@ -57,8 +59,13 @@ public class GoogleTaskSync {
 	public static boolean fullSync(final Context context,
 			final Account account, final Bundle extras, final String authority,
 			final ContentProviderClient provider, final SyncResult syncResult) {
-
 		Log.d(TAG, "fullSync");
+        if (!PermissionsHelper.hasPermissions(context, PermissionsHelper.PERMISSIONS_GTASKS)) {
+            Log.d(TAG, "Missing permissions, disabling sync");
+            SyncGtaskHelper.disableSync(context);
+            return false;
+        }
+
 		// Is saved at a successful sync
 		final long startTime = Calendar.getInstance().getTimeInMillis();
 
