@@ -34,4 +34,5 @@
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:choiceMode="none"
-    android:fitsSystemWindows="true"/>
+    android:fitsSystemWindows="false"/>
+<!-- fitsSystemWindows should be false so statusBar is not drawn over -->
