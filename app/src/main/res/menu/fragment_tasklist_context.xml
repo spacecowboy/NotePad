@@ -37,7 +37,7 @@
         android:title="@string/menu_share"/>
     <item
         android:id="@+id/menu_copy"
-        android:icon="@drawable/ic_content_copy_24dp"
+        android:icon="@drawable/ic_content_copy_24dp_white"
         android:showAsAction="ifRoom"
         android:title="@android:string/copy"/>
 

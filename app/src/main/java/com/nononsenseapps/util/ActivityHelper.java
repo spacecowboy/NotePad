@@ -39,22 +39,15 @@ public class ActivityHelper {
      * @param context
      */
     public static void useUserConfiguration(@NonNull Context context) {
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        setSelectedTheme(context, prefs);
-        setSelectedLanguage(context, prefs);
+        setSelectedTheme(context);
+        setSelectedLanguage(context);
     }
 
     /**
-     * Should probably use useUserConfiguration instead.
-     *
-     * @param context
+     * Set the configured theme on the current context
      */
-    public static void setSelectedTheme(@NonNull Context context, @NonNull SharedPreferences
-            prefs) {
-        final String key = context.getString(R.string.const_preference_theme_key);
-        final String selectedTheme = prefs.getString(key, "");
-
+    public static void setSelectedTheme(@NonNull Context context) {
+        final String selectedTheme = SharedPreferencesHelper.getCurrentTheme(context, "");
         final String dark = context.getString(R.string.const_preference_theme_dark);
         final String black = context.getString(R.string.const_preference_theme_black);
 
@@ -69,12 +62,10 @@ public class ActivityHelper {
     }
 
     /**
-     * Should probably use useUserConfiguration instead.
-     *
-     * @param context
+     * Set configured locale on current context
      */
-    public static void setSelectedLanguage(@NonNull Context context, @NonNull SharedPreferences
-            prefs) {
+    public static void setSelectedLanguage(@NonNull Context context) {
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
         Configuration config = context.getResources().getConfiguration();
 
         String lang = prefs.getString(context.getString(R.string.const_preference_locale_key), "");

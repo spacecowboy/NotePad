@@ -24,6 +24,7 @@
         <item name="colorAccent">@color/accent</item>
 
         <item name="separatorColor">@color/light_separator_color</item>
+        <item name="iconTint">@color/icon_tint_light</item>
         <!--<item name="android:background">@null</item>-->
 
         <item name="NavDrawerStyle">@style/LightNavbarTheme</item>
@@ -48,6 +49,7 @@
         <item name="colorAccent">@color/accent</item>
 
         <item name="separatorColor">@color/dark_separator_color</item>
+        <item name="iconTint">@color/icon_tint_dark</item>
         <!--<item name="android:background">@null</item>-->
 
         <item name="NavDrawerStyle">@style/DarkNavbarTheme</item>
@@ -69,12 +71,14 @@
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
+        <item name="iconTint">@color/icon_tint_light</item>
     </style>
 
     <style name="DarkDialogStyle" parent="Theme.AppCompat.Dialog.Alert">
         <item name="colorPrimary">@color/primary</item>
         <item name="colorPrimaryDark">@color/primary_dark</item>
         <item name="colorAccent">@color/accent</item>
+        <item name="iconTint">@color/icon_tint_dark</item>
     </style>
 
     <style name="LightNavbarTheme" parent="LightTheme">

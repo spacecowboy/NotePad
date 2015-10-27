@@ -37,6 +37,20 @@ public class SharedPreferencesHelper {
         return context.getString(id);
     }
 
+    public static boolean isCurrentThemeLight(@NonNull Context context) {
+        final String selectedTheme = getCurrentTheme(context, "");
+
+        final String dark = S(context, R.string.const_preference_theme_dark);
+        final String black = S(context, R.string.const_preference_theme_black);
+
+       return !dark.equals(selectedTheme) && !black.equals(selectedTheme);
+    }
+
+    public static @NonNull String getCurrentTheme(@NonNull Context context, @NonNull String defaultValue) {
+        final String key = S(context, R.string.const_preference_theme_key);
+        return Prefs(context).getString(key, defaultValue);
+    }
+
     public static void setSortingDue(@NonNull Context context) {
         putString(context, R.string.pref_sorttype, R.string.const_duedate);
     }

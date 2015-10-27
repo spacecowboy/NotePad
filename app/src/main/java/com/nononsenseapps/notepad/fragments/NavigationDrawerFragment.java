@@ -50,6 +50,7 @@ import com.amulyakhare.textdrawable.util.ColorGenerator;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.util.SharedPreferencesHelper;
 
 import java.util.ArrayList;
 
@@ -92,6 +93,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     private boolean mUserLearnedDrawer;
     private Adapter mAdapter;
     private NavigationDrawerCallbacks mCallbacks;
+    private boolean mIsThemeLight;
 
     public NavigationDrawerFragment() {
     }
@@ -176,6 +178,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        mIsThemeLight = SharedPreferencesHelper.isCurrentThemeLight(getActivity());
 
         // Read in the flag indicating whether or not the user has demonstrated awareness of the
         // drawer. See PREF_USER_LEARNED_DRAWER for details.
@@ -343,8 +347,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
                     break;
                 case VIEWTYPE_EXTRA_HEADER_ITEM:
                     vh = new ExtraHeaderItemViewHolder(inflater.inflate(R.layout
-                                    .navigation_drawer_list_item,
-                            parent, false));
+                            .navigation_drawer_list_item, parent, false));
                     break;
                 case VIEWTYPE_EXTRA_FOOTER_ITEM:
                     vh = new ExtraFooterItemViewHolder(inflater.inflate(R.layout
@@ -356,8 +359,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
                     break;
                 case VIEWTYPE_ITEM:
                 default:
-                    vh = new CursorViewHolder(inflater.inflate(R.layout.navigation_drawer_list_item,
-                            parent, false));
+                    vh = new CursorViewHolder(inflater.inflate(R.layout
+                            .navigation_drawer_list_item, parent, false));
                     break;
             }
             return vh;
@@ -515,7 +518,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             mIconRes = -1;
         }
 
-
         public ExtraFooterItem(long id, @StringRes int title, @DrawableRes int icon) {
             super(id, title);
             this.mIconRes = icon;
@@ -537,8 +539,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     class SettingsFooterItem extends ExtraFooterItem {
 
         public SettingsFooterItem() {
-            super(EXTRA_ID_SETTINGS, R.string.menu_preferences, R.drawable
-                    .ic_settings_24dp_black_active);
+            super(EXTRA_ID_SETTINGS, R.string.menu_preferences, mIsThemeLight ? R.drawable
+                    .ic_settings_24dp_black_active : R.drawable.ic_settings_24dp_white);
         }
 
         @Override
@@ -551,7 +553,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     class AboutFooterItem extends ExtraFooterItem {
 
         public AboutFooterItem() {
-            super(EXTRA_ID_ABOUT, R.string.about, R.drawable.ic_help_24dp_black_active);
+            super(EXTRA_ID_ABOUT, R.string.about, mIsThemeLight ? R.drawable
+                    .ic_help_24dp_black_active : R.drawable.ic_help_24dp_white);
         }
 
         @Override
@@ -564,8 +567,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     class CreateListFooter extends ExtraFooterItem {
 
         public CreateListFooter() {
-            super(EXTRA_ID_CREATE_LIST, R.string.menu_createnew, R.drawable
-                    .ic_add_24dp_black_active);
+            super(EXTRA_ID_CREATE_LIST, R.string.menu_createnew, mIsThemeLight ? R.drawable
+                    .ic_add_24dp_black_active : R.drawable.ic_add_24dp_white);
         }
 
         @Override

@@ -315,7 +315,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		}
 		// Complete button only on non-repeating, both time and location
 		if (note.repeats == 0) {
-			builder.addAction(R.drawable.ic_check_24dp,
+			builder.addAction(R.drawable.ic_check_24dp_white,
 					context.getText(R.string.completed), completeIntent);
 		}
 
