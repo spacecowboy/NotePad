@@ -24,6 +24,9 @@
     <color name="light_separator_color">#1e000000</color>
     <!-- 12% white in BLACK THEME -->
     <color name="dark_separator_color">#1effffff</color>
+    <!-- Should be lighter/darker than above -->
+    <color name="light_selected_item_color">#15000000</color>
+    <color name="dark_selected_item_color">#28ffffff</color>
 
     <color name="icon_tint_light">#8a000000</color>
     <color name="icon_tint_dark">#ffffffff</color>

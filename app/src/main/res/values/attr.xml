@@ -19,6 +19,7 @@
     <!-- Vetted -->
     <attr name="NavDrawerStyle" format="reference"/>
     <attr name="separatorColor" format="color"/>
+    <attr name="selectedItemColor" format="color"/>
     <attr name="iconTint" format="color"/>
 
     <!-- Unknown -->
