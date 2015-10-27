@@ -18,8 +18,6 @@
 package com.nononsenseapps.notepad.fragments;
 
 import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -228,20 +226,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
                 // Respond to clicks on the actions in the CAB
                 boolean finish = false;
                 int itemId = item.getItemId();
-                if (itemId == R.id.menu_copy) {
-                    final ClipboardManager clipboard = (ClipboardManager) getActivity()
-                            .getSystemService(Context.CLIPBOARD_SERVICE);
-                    clipboard.setPrimaryClip(ClipData.newPlainText(getString(R.string.app_name),
-                            getShareText()));
-                    try {
-                        Toast.makeText(getActivity(), getResources().getQuantityString(R.plurals
-                                .notecopied_msg, tasks.size(), tasks.size()), Toast.LENGTH_SHORT)
-                                .show();
-                    } catch (Exception e) {
-                        // Protect against faulty translations
-                    }
-                    finish = true;
-                } else if (itemId == R.id.menu_delete) {
+                if (itemId == R.id.menu_delete) {
                     boolean locked = false;
                     for (final Task t : tasks.values()) {
                         if (t.locked) {

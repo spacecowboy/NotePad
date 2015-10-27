@@ -17,28 +17,23 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    >
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
         android:id="@+id/menu_delete"
         android:icon="@drawable/ic_delete_24dp_white"
-        android:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:title="@string/menu_delete"/>
-    <item
-        android:id="@+id/menu_switch_list"
-        android:icon="@drawable/folder_move_24dp_white"
-        android:showAsAction="ifRoom"
-        android:title="@string/move"/>
-    <!-- android:actionProviderClass="android.widget.ShareActionProvider" -->
     <item
         android:id="@+id/menu_share"
         android:icon="@drawable/ic_share_24dp_white"
-        android:showAsAction="ifRoom"
+        app:showAsAction="ifRoom"
         android:title="@string/menu_share"/>
     <item
-        android:id="@+id/menu_copy"
-        android:icon="@drawable/ic_content_copy_24dp_white"
-        android:showAsAction="ifRoom"
-        android:title="@android:string/copy"/>
+        android:id="@+id/menu_switch_list"
+        android:icon="@drawable/folder_move_24dp_white"
+        app:showAsAction="always"
+        android:title="@string/move"/>
+    <!-- android:actionProviderClass="android.widget.ShareActionProvider" -->
 
 </menu>
