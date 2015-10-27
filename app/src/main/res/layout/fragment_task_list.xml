@@ -50,7 +50,8 @@
 
         <com.mobeta.android.dslv.DragSortListView
             android:id="@android:id/list"
-            style="?ListDividerStyle"
+            android:dividerHeight="1dp"
+            android:divider="?separatorColor"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:drawSelectorOnTop="true"

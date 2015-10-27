@@ -35,7 +35,6 @@
     <attr name="drag_handle_color" format="reference|color" />
 
     <attr name="TaskListItem" format="reference" />
-    <attr name="ListDividerStyle" format="reference"/>
     <attr name="ListMarginStyle" format="reference"/>
 
     <attr name="ListHeaderSize" format="reference"/>
