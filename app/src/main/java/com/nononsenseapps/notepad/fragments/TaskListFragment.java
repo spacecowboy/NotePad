@@ -721,10 +721,10 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
      */
     @Override
     public void onPause() {
-        /*mSwipeRefreshLayout.setRefreshing(false);// deactivate monitor
+        //mSwipeRefreshLayout.setRefreshing(false);// deactivate monitor
         if (syncStatusReceiver != null) {
             syncStatusReceiver.stopMonitoring();
-        }*/
+        }
 
         super.onPause();
     }
