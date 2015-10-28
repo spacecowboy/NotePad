@@ -22,7 +22,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
@@ -41,6 +40,7 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
+import com.nononsenseapps.util.SharedPreferencesHelper;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -88,12 +88,9 @@ public class OrgSyncService extends Service {
     }
 
     public static boolean areAnyEnabled(Context context) {
-        SharedPreferences prefs =
-                PreferenceManager.getDefaultSharedPreferences(context);
-
-        return prefs.getBoolean(SyncPrefs.KEY_SD_ENABLE, false) ||
+        return SharedPreferencesHelper.isSdSyncEnabled(context) ||
                (BuildConfig.DROPBOX_ENABLED &&
-               prefs.getBoolean(SyncPrefs.KEY_DROPBOX_ENABLE, false));
+               SharedPreferencesHelper.isDropboxSyncEnabled(context));
     }
 
 	public OrgSyncService() {

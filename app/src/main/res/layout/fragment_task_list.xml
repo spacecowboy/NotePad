@@ -51,7 +51,7 @@
                 android:id="@android:id/list"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="?separatorColor"
+                android:divider="@android:color/transparent"
                 android:dividerHeight="1dp"
                 android:drawSelectorOnTop="true"
                 app:collapsed_height="1px"

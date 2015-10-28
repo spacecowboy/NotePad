@@ -37,6 +37,16 @@ public class SharedPreferencesHelper {
         return context.getString(id);
     }
 
+    public static boolean isSdSyncEnabled(@NonNull Context context) {
+        return Prefs(context).getBoolean(S(context, R.string.const_preference_sdcard_enabled_key)
+                , false);
+    }
+
+    public static boolean isDropboxSyncEnabled(@NonNull Context context) {
+        return Prefs(context).getBoolean(S(context, R.string.const_preference_dropbox_enabled_key)
+                , false);
+    }
+
     public static boolean isCurrentThemeLight(@NonNull Context context) {
         final String selectedTheme = getCurrentTheme(context, "");
 

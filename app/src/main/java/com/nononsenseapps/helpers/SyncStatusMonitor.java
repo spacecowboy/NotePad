@@ -111,7 +111,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
             });
             Bundle b = intent.getExtras();
             if (b == null) {
-                b = new Bundle();
+                b = Bundle.EMPTY;
             }
             tellUser(context, b.getInt(SyncAdapter.SYNC_RESULT, SyncAdapter.SUCCESS));
         }
@@ -131,6 +131,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
                 return;
         }
 
+        Log.d("JONAS", "SYNC: " + result);
         Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
         toast.show();
     }

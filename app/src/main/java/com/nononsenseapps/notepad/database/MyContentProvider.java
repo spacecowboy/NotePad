@@ -151,6 +151,7 @@ public class MyContentProvider extends ContentProvider {
 			DAO.notifyProviderOnChange(getContext(), uri);
 			DAO.notifyProviderOnChange(getContext(), TaskList.URI_WITH_COUNT);
 			UpdateNotifier.updateWidgets(getContext());
+            UpdateNotifier.notifyChangeList(getContext());
 		}
 
 		return result;
@@ -272,6 +273,7 @@ public class MyContentProvider extends ContentProvider {
                 DAO.notifyProviderOnChange(getContext(), u);
             }
 			UpdateNotifier.updateWidgets(getContext());
+            UpdateNotifier.notifyChangeList(getContext());
 		}
 
 		return result;
@@ -361,6 +363,7 @@ public class MyContentProvider extends ContentProvider {
 			DAO.notifyProviderOnChange(getContext(), uri);
 			DAO.notifyProviderOnChange(getContext(), TaskList.URI_WITH_COUNT);
 			UpdateNotifier.updateWidgets(getContext());
+            UpdateNotifier.notifyChangeList(getContext());
 		}
 		return result;
 	}
