@@ -24,7 +24,6 @@
     android:layout_height="wrap_content"
     android:minHeight="@dimen/list_item_min_size"
     android:paddingBottom="4dp"
-    android:paddingLeft="4dp"
     android:paddingRight="@dimen/listMarginsPadded"
     android:paddingTop="4dp" >
 
@@ -37,6 +36,7 @@
         android:clickable="true"
         android:minHeight="40dp"
         android:paddingRight="4dp"
+        android:paddingLeft="@dimen/keyline_1"
         nononsenseapps:enlargedView="@+id/itemDone" >
 
         <com.nononsenseapps.ui.NoteCheckBox
