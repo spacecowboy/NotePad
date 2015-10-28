@@ -15,8 +15,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -43,31 +42,31 @@
         android:layout_height="match_parent"
         android:visibility="visible">
 
-        <!--<android.support.v4.widget.SwipeRefreshLayout
+        <android.support.v4.widget.SwipeRefreshLayout
             android:id="@+id/swiperefresh"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">-->
+            android:layout_height="match_parent">
 
-        <com.mobeta.android.dslv.DragSortListView
-            android:id="@android:id/list"
-            android:dividerHeight="1dp"
-            android:divider="?separatorColor"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:drawSelectorOnTop="true"
-            app:collapsed_height="1px"
-            app:drag_enabled="true"
-            app:drag_handle_id="@+id/drag_handle"
-            app:drag_scroll_start="0.33"
-            app:drag_start_mode="onMove"
-            app:float_alpha="1.0"
-            app:float_background_color="@android:color/holo_blue_dark"
-            app:remove_enabled="false"
-            app:remove_mode="flingRemove"
-            app:slide_shuffle_speed="0.3"
-            app:sort_enabled="true"
-            tools:ignore="PxUsage"/>
-        <!--</android.support.v4.widget.SwipeRefreshLayout>-->
+            <com.mobeta.android.dslv.DragSortListView
+                android:id="@android:id/list"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:divider="?separatorColor"
+                android:dividerHeight="1dp"
+                android:drawSelectorOnTop="true"
+                app:collapsed_height="1px"
+                app:drag_enabled="true"
+                app:drag_handle_id="@+id/drag_handle"
+                app:drag_scroll_start="0.33"
+                app:drag_start_mode="onMove"
+                app:float_alpha="1.0"
+                app:float_background_color="@android:color/holo_blue_dark"
+                app:remove_enabled="false"
+                app:remove_mode="flingRemove"
+                app:slide_shuffle_speed="0.3"
+                app:sort_enabled="true"
+                tools:ignore="PxUsage"/>
+        </android.support.v4.widget.SwipeRefreshLayout>
     </FrameLayout>
 
 </FrameLayout>

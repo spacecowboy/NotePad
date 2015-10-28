@@ -33,6 +33,7 @@ import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -55,6 +56,7 @@ import com.mobeta.android.dslv.DragSortListView.DropListener;
 import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
+import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
@@ -114,6 +116,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
     private LoaderCallbacks<Cursor> mCallback = null;
 
     private ActionMode mMode;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
 
     public TaskListFragment() {
         super();
@@ -345,14 +348,10 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
                 .registerOnSharedPreferenceChangeListener(this);
     }
 
-    /*@AfterViews
     void setupSwipeToRefresh() {
         // Set the offset so it comes out of the correct place
         final int toolbarHeight = getResources().getDimensionPixelOffset(R.dimen.toolbar_height);
-        final int totalToolbarHeight = getResources().getDimensionPixelOffset(R.dimen
-                .total_toolbar_height);
-        mSwipeRefreshLayout.setProgressViewOffset(false, toolbarHeight, Math.round(1.5f *
-                totalToolbarHeight));
+        mSwipeRefreshLayout.setProgressViewOffset(false, -toolbarHeight, Math.round(0.7f * toolbarHeight));
 
         // The arrow will cycle between these colors (in order)
         mSwipeRefreshLayout.setColorSchemeResources(R.color.refresh_progress_1, R.color
@@ -361,7 +360,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                boolean syncing = handleSyncRequest();
+                boolean syncing = SyncHelper.onManualSyncRequest(getActivity());
 
                 if (!syncing) {
                     // Do not show refresh view
@@ -369,7 +368,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
                 }
             }
         });
-    }*/
+    }
 
     @Override
     public void onCreate(Bundle savedState) {
@@ -571,6 +570,10 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
         // ListView will only support scrolling ToolBar off-screen from Lollipop onwards.
         // RecyclerView does not have this limitation
         ViewCompat.setNestedScrollingEnabled(listView, true);
+
+        // setup swipe to refresh
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
+        setupSwipeToRefresh();
 
         return rootView;
     }
@@ -793,13 +796,12 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
     }
 
     /**
-     * This is always called on the activity's UI thread.
      *
      * @param ongoing
      */
     @Override
     public void onSyncStartStop(boolean ongoing) {
-        //mSwipeRefreshLayout.setRefreshing(ongoing);
+        mSwipeRefreshLayout.setRefreshing(ongoing);
     }
 
     /**
