@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -283,20 +282,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
                 } else {
                     tasks.remove(id);
                 }
-
-                try {
-                    // Only show the title string on screens that are wide
-                    // enough
-                    // E.g. large screens or if you are in landscape
-                    final Configuration conf = getResources().getConfiguration();
-                    if (conf.isLayoutSizeAtLeast(Configuration.SCREENLAYOUT_SIZE_LARGE) || conf
-                            .orientation == Configuration.ORIENTATION_LANDSCAPE) {
-                        mode.setTitle(getResources().getQuantityString(R.plurals.mode_choose,
-                                tasks.size(), tasks.size()));
-                    }
-                } catch (Exception e) {
-                    // Protect against faulty translations
-                }
+                // Display in action bar total number of selected items
+                mode.setTitle(Integer.toString(tasks.size()));
             }
 
             String getShareText() {
