@@ -251,17 +251,6 @@
                 <action android:name="android.appwidget.action.APPWIDGET_CONFIGURE" />
             </intent-filter>
         </activity>
-        <activity
-            android:name="com.nononsenseapps.notepad.ShortcutConfig_"
-            android:exported="true"
-            android:label="@string/notes_shortcut"
-            android:theme="@android:style/Theme.Holo.Dialog">
-            <intent-filter>
-                <action android:name="android.intent.action.CREATE_SHORTCUT" />
-
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
 
         <service
             android:name="com.nononsenseapps.helpers.GTasksSyncDelay"
