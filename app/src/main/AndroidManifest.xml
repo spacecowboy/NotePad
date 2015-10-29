@@ -317,11 +317,6 @@
             android:exported="true"
             android:grantUriPermissions="true"></provider>
 
-        <!-- Time Machine -->
-        <activity
-            android:name="com.nononsenseapps.notepad.ActivityTaskHistory_"
-            android:label="@string/timemachine"></activity>
-
         <!-- Service for migrating from donate app -->
         <service
             android:name="com.nononsenseapps.notepad.legacy.DonateMigrator_"

@@ -17,7 +17,6 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
@@ -54,8 +53,6 @@ import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 import com.android.datetimepicker.time.TimePickerDialog;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
-import com.nononsenseapps.notepad.ActivityTaskHistory;
-import com.nononsenseapps.notepad.ActivityTaskHistory_;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
@@ -442,19 +439,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (requestCode) {
-            case 1:
-                if (resultCode == Activity.RESULT_OK) {
-                    onTimeTravel(data);
-                }
-                break;
-        }
-    }
-
-    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (dontLoad) {
@@ -633,8 +617,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.menu_timemachine).setEnabled(mTask != null && mTask._id > 0 &&
-                !isLocked());
         menu.findItem(R.id.menu_lock).setVisible(mTask != null && !mTask.locked);
         menu.findItem(R.id.menu_unlock).setVisible(mTask != null && mTask.locked);
         menu.findItem(R.id.menu_share).setEnabled(!isLocked());
@@ -642,7 +624,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
         if (getActivity() instanceof MenuStateController) {
             final boolean visible = ((MenuStateController) getActivity()).childItemsVisible();
 
-            menu.setGroupVisible(R.id.editor_menu_group, visible);
             // Outside group to allow for action bar placement
             if (menu.findItem(R.id.menu_delete) != null)
                 menu.findItem(R.id.menu_delete).setVisible(visible);
@@ -674,14 +655,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
             // Request a close from activity
             if (mListener != null) {
                 mListener.closeEditor(this);
-            }
-            return true;
-        } else if (itemId == R.id.menu_timemachine) {
-            if (mTask != null && mTask._id > 0) {
-                Intent timeIntent = new Intent(getActivity(), ActivityTaskHistory_.class);
-                timeIntent.putExtra(Task.Columns._ID, mTask._id);
-                startActivityForResult(timeIntent, 1);
-                // ActivityTaskHistory.start(getActivity(), mTask._id);
             }
             return true;
         } else if (itemId == R.id.menu_delete) {
@@ -830,17 +803,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
             NotificationItemHelper.setup(this, notificationList, nv, not, mTask);
 
             notificationList.addView(nv);
-        }
-    }
-
-    // @Override
-    public void onTimeTravel(Intent data) {
-        if (taskText != null) {
-            taskText.setText(data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
-        }
-        // Need to set here also for password to work
-        if (mTask != null) {
-            mTask.setText(data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
         }
     }
 
