@@ -17,19 +17,19 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import com.nononsenseapps.notepad.R;
-
 import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.nononsenseapps.notepad.R;
+
 public class AboutPrefs extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		View layout = inflater.inflate(R.layout.app_pref_about_layout,
+		View layout = inflater.inflate(R.layout.dialog_about,
 				container, false);
 		
 		return layout;

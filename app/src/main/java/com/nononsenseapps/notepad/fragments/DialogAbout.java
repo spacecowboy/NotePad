@@ -38,6 +38,6 @@ public class DialogAbout extends DialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new AlertDialog.Builder(getActivity()).setTitle(R.string.about).setView(R.layout
-                .app_pref_about_layout).create();
+                .dialog_about).create();
     }
 }
