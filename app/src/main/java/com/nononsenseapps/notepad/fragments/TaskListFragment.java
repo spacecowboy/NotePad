@@ -27,6 +27,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
@@ -48,7 +49,6 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
-import android.widget.Toast;
 
 import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.DragSortListView.DropListener;
@@ -61,14 +61,13 @@ import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
+import com.nononsenseapps.util.AsyncTaskHelper;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
 
-import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.SystemService;
 
@@ -76,6 +75,7 @@ import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 @EFragment
 public class TaskListFragment extends Fragment implements OnSharedPreferenceChangeListener,
@@ -116,6 +116,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
     private ActionMode mMode;
     private SwipeRefreshLayout mSwipeRefreshLayout;
+    private boolean mDeleteWasUndone = false;
 
     public TaskListFragment() {
         super();
@@ -179,27 +180,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
         listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
             final HashMap<Long, Task> tasks = new HashMap<Long, Task>();
             // ActionMode mMode;
-            final PasswordConfirmedListener pListener = new PasswordConfirmedListener() {
-                @Override
-                @Background
-                public void onPasswordConfirmed() {
-                    for (final Task t : tasks.values()) {
-                        try {
-                            t.delete(getActivity());
-                        } catch (Exception e) {
-                        }
-                    }
-                    try {
-                        Toast.makeText(getActivity(), getResources().getQuantityString(R.plurals
-                                .notedeleted_msg, tasks.size(), tasks.size()), Toast
-                                .LENGTH_SHORT).show();
-                    } catch (Exception e) {
-                        // Protect against faulty translations
-                    }
-                    if (mMode != null)
-                        mMode.finish();
-                }
-            };
 
             @Override
             public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -229,26 +209,9 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
                 boolean finish = false;
                 int itemId = item.getItemId();
                 if (itemId == R.id.menu_delete) {
-                    boolean locked = false;
-                    for (final Task t : tasks.values()) {
-                        if (t.locked) {
-                            locked = true;
-                            break;
-                        }
-                    }
-                    if (locked) {
-                        DialogPassword_ delpf = new DialogPassword_();
-                        delpf.setListener(pListener);
-                        delpf.show(getFragmentManager(), "multi_delete_verify");
-                    } else {
-                        DialogDeleteTask.showDialog(getFragmentManager(), -1, new
-                                DialogConfirmedListener() {
-                            @Override
-                            public void onConfirm() {
-                                pListener.onPasswordConfirmed();
-                            }
-                        });
-                    }
+                    deleteTasks(tasks);
+                    finish = true;
+
                 } else if (itemId == R.id.menu_switch_list) {
                     // show move to list dialog
                     DialogMoveToList.getInstance(tasks.keySet().toArray(new Long[tasks.size()]))
@@ -318,6 +281,83 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
                 return shareIntent;
             }
         });
+    }
+
+    /**
+     * Delete tasks and display a snackbar with an undo action
+     * @param taskMap
+     */
+    private void deleteTasks(final Map<Long, Task> taskMap) {
+        final Task[] tasks = taskMap.values().toArray(new Task[taskMap.size()]);
+
+        // If any are locked, ask for password first
+        boolean locked = false;
+        for (final Task t : tasks) {
+            if (t.locked) {
+                locked = true;
+                break;
+            }
+        }
+
+        // Reset undo flag
+        mDeleteWasUndone = false;
+
+        // Dismiss callback
+        final Snackbar.Callback dismissCallback = new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar snackbar, int event) {
+                // Do nothing if dismissed because action was pressed
+                // Dismiss wil be called more than once if undo is pressed
+                if (Snackbar.Callback.DISMISS_EVENT_ACTION != event && !mDeleteWasUndone) {
+                    // Delete them
+                    AsyncTaskHelper.background(new AsyncTaskHelper.Job() {
+                        @Override
+                        public void doInBackground() {
+                            for (Task t : tasks) {
+                                try {
+                                    t.delete(getActivity());
+                                } catch (Exception ignored) {
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        };
+
+        // Undo callback
+        final View.OnClickListener undoListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDeleteWasUndone = true;
+                // Returns removed items to view
+                mAdapter.reset();
+            }
+        };
+
+        final PasswordConfirmedListener pListener = new PasswordConfirmedListener() {
+            @Override
+            public void onPasswordConfirmed() {
+                removeTasksFromList(tasks);
+                mListener.deleteTasksWithUndo(dismissCallback, undoListener, tasks);
+            }
+        };
+
+        if (locked) {
+            DialogPassword_ delpf = new DialogPassword_();
+            delpf.setListener(pListener);
+            delpf.show(getFragmentManager(), "multi_delete_verify");
+        } else {
+            // Just run it directly
+            removeTasksFromList(tasks);
+            mListener.deleteTasksWithUndo(dismissCallback, undoListener, tasks);
+        }
+    }
+
+    private void removeTasksFromList(Task... tasks) {
+        for (Task task: tasks) {
+            mAdapter.remove(mAdapter.getItemPosition(task._id));
+        }
     }
 
     @Override
@@ -798,6 +838,11 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
      */
     public interface TaskListCallbacks {
         void openTask(final Uri uri, final long listId, final View origin);
+        /**
+         * Show a snackbar indicating that items were deleted, together with an undo button.
+         */
+        void deleteTasksWithUndo(Snackbar.Callback dismissCallback,
+                View.OnClickListener listener, Task... tasks);
     }
 
     static class SimpleSectionsAdapter extends SimpleDragSortCursorAdapter {
@@ -879,6 +924,21 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
                 removeListener.remove(which);
             super.remove(which);
 
+        }
+
+        public int getItemPosition(final long id) {
+            if (mCursor == null) {
+                return -1;
+            }
+            mCursor.moveToPosition(-1);
+            int i = 0;
+            while (mCursor.moveToNext()) {
+                if (id == mCursor.getLong(0)) {
+                    return i;
+                }
+                i += 1;
+            }
+            return -1;
         }
 
         /*private void setPrefsOnView(final TitleNoteTextView view) {

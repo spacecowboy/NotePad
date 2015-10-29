@@ -305,5 +305,6 @@
     <string name="const_preference_password_key">preference_password_key</string>
     <string name="legacy">Legacy</string>
     <string name="sorting">Sorting</string>
+    <string name="undo">Undo</string>
 
 </resources>
