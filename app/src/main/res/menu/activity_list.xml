@@ -18,20 +18,20 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_filter"
-        android:icon="@drawable/ic_filter_list_24dp_white"
+        android:id="@+id/menu_sort"
+        android:icon="@drawable/ic_sort_24dp_white"
         android:orderInCategory="0"
         android:title="@string/sorting"
         app:showAsAction="always">
         <menu>
             <item
-                android:id="@+id/menu_filter_title"
+                android:id="@+id/menu_sort_title"
                 android:title="@string/sort_list_alphabetical"/>
             <item
-                android:id="@+id/menu_filter_due"
+                android:id="@+id/menu_sort_due"
                 android:title="@string/sort_list_due"/>
             <item
-                android:id="@+id/menu_filter_manual"
+                android:id="@+id/menu_sort_manual"
                 android:title="@string/sort_list_manual"/>
         </menu>
     </item>

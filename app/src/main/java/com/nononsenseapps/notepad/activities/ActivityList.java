@@ -146,13 +146,13 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
             case R.id.menu_sync:
                 handleSyncRequest();
                 break;
-            case R.id.menu_filter_due:
+            case R.id.menu_sort_due:
                 SharedPreferencesHelper.setSortingDue(this);
                 break;
-            case R.id.menu_filter_manual:
+            case R.id.menu_sort_manual:
                 SharedPreferencesHelper.setSortingManual(this);
                 break;
-            case R.id.menu_filter_title:
+            case R.id.menu_sort_title:
                 SharedPreferencesHelper.setSortingAlphabetic(this);
                 break;
             default:
