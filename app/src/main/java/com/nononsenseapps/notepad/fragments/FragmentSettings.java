@@ -25,7 +25,6 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
@@ -54,6 +53,9 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import static com.nononsenseapps.util.PermissionsHelper.hasPermissions;
+import static com.nononsenseapps.util.PermissionsHelper.permissionsGranted;
+import static com.nononsenseapps.util.SharedPreferencesHelper.disableSdCardSync;
+import static com.nononsenseapps.util.SharedPreferencesHelper.getSdDir;
 
 /**
  * Main top level settings fragment
@@ -63,6 +65,7 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
 
     private static final int ACTIVITY_CODE_PICK_SD_DIR = 1;
     private static final int PERMISSION_CODE_GTASKS = 1;
+    private static final int PERMISSION_CODE_SDCARD = 2;
     private SwitchPreference preferenceSdDir;
     private SwitchPreference preferenceSyncGTasks;
 
@@ -106,7 +109,7 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
                 if (resultCode == Activity.RESULT_OK) {
                     saveNewDirectoryPath(data);
                 } else {
-                    disableSdCardSync();
+                    disableSdCardSync(getActivity());
                 }
                 break;
             default:
@@ -127,16 +130,17 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         setSdDirectorySummary(sharedPreferences);
     }
 
-    private void showFilePicker(SharedPreferences sharedPreferences) {
-        // Start the filepicker
-        Intent i = new Intent(getActivity(), FilePickerActivity.class);
+    private void showFilePicker() {
+        if (hasSDCardPermissions()) {
+            // Start the filepicker
+            Intent i = new Intent(getActivity(), FilePickerActivity.class);
 
-        i.putExtra(FilePickerActivity.EXTRA_START_PATH, sharedPreferences.getString
-                (getSdDirectoryKey(), SDSynchronizer.DEFAULT_ORG_DIR)).putExtra
-                (FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false).putExtra(FilePickerActivity
-                .EXTRA_ALLOW_CREATE_DIR, true).putExtra(FilePickerActivity.EXTRA_MODE,
-                FilePickerActivity.MODE_DIR);
-        startActivityForResult(i, ACTIVITY_CODE_PICK_SD_DIR);
+            i.putExtra(FilePickerActivity.EXTRA_START_PATH, getSdDir(getActivity())).putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false).putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true).putExtra(FilePickerActivity.EXTRA_MODE, FilePickerActivity.MODE_DIR);
+
+            startActivityForResult(i, ACTIVITY_CODE_PICK_SD_DIR);
+        } else {
+            requestSDCardPermissions();
+        }
     }
 
     private void setSdDirectorySummary(final SharedPreferences sharedPreferences) {
@@ -155,13 +159,8 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         } else {
             Toast.makeText(getActivity(), R.string.cannot_write_to_directory, Toast.LENGTH_SHORT)
                     .show();
-            disableSdCardSync();
+            disableSdCardSync(getActivity());
         }
-    }
-
-    private void disableSdCardSync() {
-        PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean(getString
-                (R.string.const_preference_sdcard_enabled_key), false).apply();
     }
 
     private String getSdDirectoryKey() {
@@ -197,6 +196,11 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         requestPermissions(PermissionsHelper.PERMISSIONS_GTASKS, PERMISSION_CODE_GTASKS);
     }
 
+    @TargetApi(Build.VERSION_CODES.M)
+    private void requestSDCardPermissions() {
+        requestPermissions(PermissionsHelper.PERMISSIONS_SD, PERMISSION_CODE_SDCARD);
+    }
+
     boolean allEqual(int value, int[] items) {
         for (int item: items) {
             if (value != item) {
@@ -211,7 +215,7 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
             grantResults) {
         switch (requestCode) {
             case PERMISSION_CODE_GTASKS:
-                if (permissions.length > 0 && allEqual(PackageManager.PERMISSION_GRANTED, grantResults)) {
+                if (permissionsGranted(permissions, grantResults)) {
                     // Success, open dialog
                     showAccountDialog();
                 } else {
@@ -221,11 +225,25 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
                             R.string.const_preference_gtask_enabled_key, false);
                 }
                 break;
+            case PERMISSION_CODE_SDCARD:
+                if (permissionsGranted(permissions, grantResults)) {
+                    // Success, open picker
+                    showFilePicker();
+                } else {
+                    Toast.makeText(getActivity(), "Permission denied :(. Show explanation for SD card",
+                            Toast.LENGTH_LONG).show();
+                    disableSdCardSync(getActivity());
+                }
+                break;
         }
     }
 
     private boolean hasGoogleAccountPermissions() {
         return hasPermissions(getActivity(), PermissionsHelper.PERMISSIONS_GTASKS);
+    }
+
+    private boolean hasSDCardPermissions() {
+        return hasPermissions(getActivity(), PermissionsHelper.PERMISSIONS_SD);
     }
 
     private void setupPassword() {
@@ -338,7 +356,7 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
                 final boolean enabled = sharedPreferences.getBoolean(getString(R.string
                         .const_preference_sdcard_enabled_key), false);
                 if (enabled) {
-                    showFilePicker(sharedPreferences);
+                    showFilePicker();
                 } else {
                     // Restart the service (started in activities)
                     OrgSyncService.stop(getActivity());

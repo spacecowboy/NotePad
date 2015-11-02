@@ -32,6 +32,9 @@ public class PermissionsHelper {
             Manifest.permission.WRITE_SYNC_SETTINGS, Manifest.permission.READ_SYNC_SETTINGS,
             Manifest.permission.READ_SYNC_STATS, Manifest.permission.INTERNET};
 
+    public static final String[] PERMISSIONS_SD =
+            new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE};
+
     public static boolean hasPermissions(@NonNull Context context, String... permissions) {
         for (String permission : permissions) {
             if (!hasPermission(context, permission)) {
@@ -43,5 +46,25 @@ public class PermissionsHelper {
 
     public static boolean hasPermission(@NonNull Context context, @NonNull String permission) {
         return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(context, permission);
+    }
+
+    /**
+     *
+     * @param permissions that were requested
+     * @param grantResults of the request
+     * @return true if all results were granted, false otherwise
+     */
+    public static boolean permissionsGranted(@NonNull String[] permissions,
+            @NonNull int[] grantResults) {
+        return permissions.length > 0 && allEqual(PackageManager.PERMISSION_GRANTED, grantResults);
+    }
+
+    public static boolean allEqual(int value, int[] items) {
+        for (int item: items) {
+            if (value != item) {
+                return false;
+            }
+        }
+        return true;
     }
 }

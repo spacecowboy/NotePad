@@ -19,12 +19,11 @@ package com.nononsenseapps.notepad.sync.orgsync;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Environment;
 import android.os.FileObserver;
-import android.preference.PreferenceManager;
 
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.util.PermissionsHelper;
+import com.nononsenseapps.util.SharedPreferencesHelper;
 
 import org.cowboyprogrammer.org.OrgFile;
 
@@ -48,18 +47,20 @@ public class SDSynchronizer extends Synchronizer implements
 	// Where files are kept. User changeable in preferences.
 	public static final String DEFAULT_ORG_DIR = Environment
 			.getExternalStorageDirectory().toString() + "/NoNonsenseNotes";
-	public static final String PREF_ORG_DIR = SyncPrefs.KEY_SD_DIR;
-	public static final String PREF_ORG_SD_ENABLED = SyncPrefs.KEY_SD_ENABLE;
     public final static String SERVICENAME = "SDORG";
     protected String ORG_DIR;
     protected final boolean configured;
 
 	public SDSynchronizer(Context context) {
 		super(context);
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		ORG_DIR = prefs.getString(PREF_ORG_DIR, DEFAULT_ORG_DIR);
-		configured = prefs.getBoolean(PREF_ORG_SD_ENABLED, false);
+		ORG_DIR = SharedPreferencesHelper.getSdDir(context);
+        final boolean permitted = PermissionsHelper.hasPermissions(context, PermissionsHelper.PERMISSIONS_SD);
+        if (permitted) {
+            configured = SharedPreferencesHelper.isSdSyncEnabled(context);
+        } else  {
+            configured = false;
+            SharedPreferencesHelper.disableSdCardSync(context);
+        }
 	}
 
     /**

@@ -24,6 +24,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
 
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
 
 /**
  * Helper class to save common options to shared preferences.
@@ -40,6 +41,16 @@ public class SharedPreferencesHelper {
     public static boolean isSdSyncEnabled(@NonNull Context context) {
         return Prefs(context).getBoolean(S(context, R.string.const_preference_sdcard_enabled_key)
                 , false);
+    }
+
+    public static void disableSdCardSync(@NonNull Context context) {
+        Prefs(context).edit().putBoolean(S(context, R.string.const_preference_sdcard_enabled_key)
+                , false).apply();
+    }
+
+    public static String getSdDir(@NonNull Context context) {
+        return Prefs(context).getString(S(context, R.string.const_preference_sdcard_dir_key),
+                SDSynchronizer.DEFAULT_ORG_DIR);
     }
 
     public static boolean isDropboxSyncEnabled(@NonNull Context context) {
