@@ -137,6 +137,9 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
 
     @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
+        // hide manual sort for all item
+        menu.findItem(R.id.menu_sort_manual).setVisible(mCurrentList > 0)
+                .setEnabled(mCurrentList > 0);
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -169,6 +172,7 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
     @Override
     public void openList(long id) {
         mCurrentList = id;
+        invalidateOptionsMenu();
         getSupportFragmentManager().beginTransaction().replace(R.id.listfragment_container, TaskListFragment.getInstance(id)).commit();
     }
 
