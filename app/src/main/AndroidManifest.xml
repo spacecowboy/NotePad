@@ -29,10 +29,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:installLocation="internalOnly">
 
-    <uses-sdk
-        android:minSdkVersion="14"
-        android:targetSdkVersion="19" />
-
     <!-- For connection -->
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -103,7 +99,6 @@
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
             <intent-filter android:label="@string/resolve_edit">
@@ -135,6 +130,46 @@
                 <!-- <data android:mimeType="text/*" android:path="*.txt" />  Would like to be able to open files in future -->
             </intent-filter>
         </activity>
+
+        <!-- use an alias in case we want to change the launch activity later without breaking
+             homescreen shortcuts.  Note must be defined after the targetActivity -->
+        <activity-alias
+            android:name="com.nononsenseapps.notepad.ActivityMain_"
+            android:label="@string/app_name"
+            android:targetActivity="com.nononsenseapps.notepad.activities.ActivityList">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter android:label="@string/resolve_edit">
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.list" />
+            </intent-filter>
+            <intent-filter android:label="@string/resolve_edit">
+                <action android:name="android.intent.action.INSERT" />
+                <action android:name="android.intent.action.VIEW" />
+                <action android:name="android.intent.action.EDIT" />
+                <action android:name="com.nononsenseapps.completenote" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="vnd.android.cursor.item/vnd.nononsenseapps.note" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <!-- Voice command "note to self" in google search -->
+                <action android:name="com.google.android.gm.action.AUTO_SEND" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="text/*" />
+                <!-- <data android:mimeType="text/*" android:path="*.txt" />  Would like to be able to open files in future -->
+            </intent-filter>
+        </activity-alias>
 
         <!-- Editor -->
         <activity
