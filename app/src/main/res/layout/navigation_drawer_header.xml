@@ -32,7 +32,7 @@
         android:layout_width="64dp"
         android:layout_height="64dp"
         android:layout_marginBottom="@dimen/item_spacing"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:scaleType="fitCenter"/>
 
     <RelativeLayout
@@ -63,7 +63,7 @@
             android:layout_toLeftOf="@id/indicator_image"
             android:layout_toStartOf="@id/indicator_image"
             android:gravity="center_vertical"
-            android:text="This is my header"/>
+            android:text=""/>
 
         <TextView
             android:id="@android:id/text2"
@@ -76,7 +76,8 @@
             android:layout_marginTop="2dp"
             android:layout_toLeftOf="@id/indicator_image"
             android:layout_toStartOf="@id/indicator_image"
+            android:visibility="gone"
             android:gravity="center_vertical"
-            android:text="Sub title here"/>
+            android:text=""/>
     </RelativeLayout>
 </LinearLayout>

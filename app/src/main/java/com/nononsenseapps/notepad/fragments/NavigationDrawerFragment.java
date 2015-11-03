@@ -472,6 +472,10 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 
     class TopLevelItem implements ExtraItem {
 
+        public String getAvatarName() {
+            return SharedPreferencesHelper.getGoogleAccount(getActivity());
+        }
+
         @Override
         public long getItemId() {
             return 0;
@@ -591,17 +595,23 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     private class TopLevelItemViewHolder extends RecyclerView.ViewHolder {
 
         private final ImageView mAvatar;
+        private final TextView mText1;
 
         public TopLevelItemViewHolder(View itemView) {
             super(itemView);
             mAvatar = (ImageView) itemView.findViewById(R.id.main_avatar);
+            mText1 = (TextView) itemView.findViewById(android.R.id.text1);
         }
 
         public void bind(TopLevelItem topLevelItem) {
-            TextDrawable drawable = TextDrawable.builder().buildRound("N", ColorGenerator
-                    .MATERIAL.getColor("N"));
+            final String name = topLevelItem.getAvatarName();
+            final String imageName = name.isEmpty() ? "N" : name;
+            TextDrawable drawable = TextDrawable.builder()
+                    .buildRound(imageName.toUpperCase().substring(0, 1), ColorGenerator
+                    .MATERIAL.getColor(imageName));
 
             mAvatar.setImageDrawable(drawable);
+            mText1.setText(name);
         }
     }
 
@@ -624,7 +634,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             mItem = headerItem;
             mTitle.setText(headerItem.mTitleRes);
             mCount.setVisibility(View.GONE);
-            TextDrawable drawable = TextDrawable.builder().buildRound(mItem.getTitle().substring
+            TextDrawable drawable = TextDrawable.builder()
+                    .buildRound(mItem.getTitle().toUpperCase().substring
                     (0, 1), ColorGenerator.MATERIAL.getColor(mItem.getTitle()));
 
             mAvatar.setImageDrawable(drawable);
@@ -653,7 +664,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             mCount.setVisibility(View.GONE);
             if (headerItem.getIconRes() < 1) {
                 TextDrawable drawable = TextDrawable.builder().buildRound(mItem.getTitle()
-                        .substring(0, 1), ColorGenerator.MATERIAL.getColor(mItem.getTitle()));
+                        .toUpperCase().substring(0, 1),
+                        ColorGenerator.MATERIAL.getColor(mItem.getTitle()));
 
                 mAvatar.setImageDrawable(drawable);
             } else {
@@ -689,7 +701,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             mTitle.setText(title);
             mCount.setText(cursor.getString(cursor.getColumnIndex(TaskList.Columns.VIEW_COUNT)));
 
-            TextDrawable drawable = TextDrawable.builder().buildRound(title.substring(0, 1),
+            TextDrawable drawable = TextDrawable.builder()
+                    .buildRound(title.toUpperCase().substring(0, 1),
                     ColorGenerator.MATERIAL.getColor(title));
 
             mAvatar.setImageDrawable(drawable);
