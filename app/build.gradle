@@ -36,25 +36,11 @@ repositories {
   jcenter()
 }
 
-// Version number
-def versionMajor = 6 // Major UI overhauls
-def versionMinor = 0 // Some new functionality
-def versionPatch = 0 // Bug fixes
-def versionBuild = 0 // Bump for dogfood builds, public betas, etc.
-
-// Version name from git
-def getVersionName = { ->
-  try {
-    def stdout = new ByteArrayOutputStream()
-    exec {
-      commandLine 'git', 'describe', '--tags'
-      standardOutput = stdout
-    }
-    return stdout.toString().trim()
-  } catch (Exception e) {
-    return "GITFAILEDINGRADLE"
-  }
-}
+// query git for the the SHA, Tag and commit count. Use these to automate versioning.
+def gitSha = 'git rev-parse --short HEAD'.execute([], project.rootDir).text.trim()
+def gitTag = 'git describe --tags'.execute([], project.rootDir).text.trim()
+def gitCommitCount =
+        Integer.parseInt('git rev-list --count HEAD'.execute([], project.rootDir).text.trim())
 
 android {
   compileSdkVersion 23
@@ -73,9 +59,12 @@ android {
     applicationId "com.nononsenseapps.notepad"
     minSdkVersion 14
     targetSdkVersion 23
-    versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
-    versionName getVersionName()
+    // 60000 to be above all previous versions before gitCommitCount was used
+    versionCode 60000 + gitCommitCount
+    versionName gitTag
+    archivesBaseName = "nononsensenotes-${gitTag}".toString()
 
+    buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
     // If Non-Free libraries are to be used
     buildConfigField "boolean", "NONFREE", "false"
     buildConfigField "boolean", "DROPBOX_ENABLED", "false"
@@ -89,7 +78,7 @@ android {
     }
     playBeta {
       // Beta runs at +1
-      versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10 + 1
+      versionCode 60001 + gitCommitCount
 
       buildConfigField "boolean", "DROPBOX_ENABLED", "true"
       // If Non-Free libraries are to be used
