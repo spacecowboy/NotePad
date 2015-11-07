@@ -110,8 +110,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
     private int mRowCount = 3;
     private boolean mHideCheckbox = false;
 
-    private String mListType = null;
-
     private LoaderCallbacks<Cursor> mCallback = null;
 
     private ActionMode mMode;
@@ -520,29 +518,18 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
                             ((NoteCheckBox) view).setChecked(!c.isNull(colIndex));
                             ((NoteCheckBox) view).setNoteId(c.getLong(0));
                             ((NoteCheckBox) view).setOnCheckedChangeListener(checkBoxListener);
-                            if (mHideCheckbox || (mListType != null && mListType.equals(notetype)
-                            )) {
-                                view.setVisibility(View.GONE);
-                            } else {
-                                view.setVisibility(View.VISIBLE);
-                            }
+
+                            view.setVisibility(mHideCheckbox ? View.GONE : View.VISIBLE);
                         }
                         return true;
                     case 4:
                         // Due date
                         if (!isHeader) {
-                            // Always hide for note type
-                            if (mListType != null && mListType.equals(notetype)) {
+                            if (c.isNull(colIndex)) {
                                 view.setVisibility(View.GONE);
-                            }
-                            // Show for tasks if present
-                            else {
-                                if (c.isNull(colIndex)) {
-                                    view.setVisibility(View.GONE);
-                                } else {
-                                    view.setVisibility(View.VISIBLE);
-                                    ((DateView) view).setTimeText(c.getLong(colIndex));
-                                }
+                            } else {
+                                view.setVisibility(View.VISIBLE);
+                                ((DateView) view).setTimeText(c.getLong(colIndex));
                             }
                         }
                         return true;
@@ -632,15 +619,17 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
                     // What sorting to use
                     Uri targetUri;
                     String sortSpec;
-                    if (mListType == null) {
-                        mListType = prefs.getString(getString(R.string.pref_listtype), getString
-                                (R.string.default_listtype));
-                    }
 
                     if (mSortType == null) {
                         mSortType = prefs.getString(getString(R.string.pref_sorttype), getString
                                 (R.string.default_sorttype));
                     }
+
+                    // All-view can't use manual sorting
+                    if (mListId < 1 && mSortType.equals(getString(R.string.const_possubsort))) {
+                        mSortType = getString(R.string.const_all_default_sorting);
+                    }
+
                     if (mSortType.equals(getString(R.string.const_alphabetic))) {
                         targetUri = Task.URI;
                         sortSpec = getString(R.string.const_as_alphabetic, Task.Columns.TITLE);
@@ -807,9 +796,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
             } */
             else if (key.equals(getString(R.string.pref_hidecheckboxes))) {
                 mHideCheckbox = prefs.getBoolean(key, false);
-                reload = true;
-            } else if (key.equals(getString(R.string.pref_listtype))) {
-                mListType = null;
                 reload = true;
             }
 
