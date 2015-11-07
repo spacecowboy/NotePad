@@ -32,8 +32,8 @@ import android.os.Message;
 import android.os.Process;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
+import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -113,7 +113,7 @@ public class OrgSyncService extends Service {
         }
 
         // Try Dropbox
-        if (BuildConfig.DROPBOX_ENABLED && BuildConfig.NONFREE) {
+        if (BuildConfig.DROPBOX_ENABLED) {
             SynchronizerInterface db = new DropboxSynchronizer(this);
             if (db.isConfigured()) {
                 syncers.add(db);

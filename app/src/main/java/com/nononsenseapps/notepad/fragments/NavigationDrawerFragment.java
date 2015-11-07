@@ -51,6 +51,7 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.util.SharedPreferencesHelper;
+import com.nononsenseapps.util.SyncGtaskHelper;
 
 import java.util.ArrayList;
 
@@ -474,7 +475,23 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     class TopLevelItem implements ExtraItem {
 
         public String getAvatarName() {
-            return SharedPreferencesHelper.getGoogleAccount(getActivity());
+            // Try google account first
+            String result = "";
+            if (SyncGtaskHelper.isGTasksConfigured(getActivity())) {
+                result = SharedPreferencesHelper.getGoogleAccount(getActivity());
+            }
+
+            if (result.isEmpty() && SharedPreferencesHelper.isDropboxSyncEnabled(getActivity())) {
+                // Then try dropbox
+                result = SharedPreferencesHelper.getDropboxAccount(getActivity());
+            }
+
+            if (result.isEmpty() && SharedPreferencesHelper.isSdSyncEnabled(getActivity())) {
+                // Then try folder
+                result = SharedPreferencesHelper.getSdDir(getActivity());
+            }
+
+            return result;
         }
 
         @Override
@@ -606,7 +623,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 
         public void bind(TopLevelItem topLevelItem) {
             final String name = topLevelItem.getAvatarName();
-            final String imageName = name.isEmpty() ? "N" : name;
+            final String imageName = (name.isEmpty() || name.startsWith("/")) ? "N" : name;
             TextDrawable drawable = TextDrawable.builder()
                     .buildRound(imageName.toUpperCase().substring(0, 1), ColorGenerator.MATERIAL
                             .getColor(imageName));
@@ -720,7 +737,5 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             mCallbacks.openList(id);
             mDrawerLayout.closeDrawers();
         }
-
-
     }
 }

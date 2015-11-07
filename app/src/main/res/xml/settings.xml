@@ -70,6 +70,11 @@
             android:key="@string/const_preference_sdcard_enabled_key"
             android:summary="@string/sd_card_touch_hint"
             android:title="@string/sd_card_sync"/>
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="@string/const_preference_dropbox_enabled_key"
+            android:summary="@string/sd_card_touch_hint"
+            android:title="@string/dropbox_sync"/>
 
     </PreferenceCategory>
 

@@ -85,6 +85,8 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
         NotificationHelper.schedule(this);
         // Schedule syncs
         BackgroundSyncScheduler.scheduleSync(this);
+        // Sync if appropriate
+        OrgSyncService.start(this);
     }
 
     @Override
@@ -96,9 +98,6 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
     @Override
     protected void onResume() {
         super.onResume();
-
-        // Sync if appropriate
-        OrgSyncService.start(this);
     }
 
     @Override

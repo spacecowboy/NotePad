@@ -25,6 +25,8 @@ import android.support.annotation.StringRes;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.fragments.DialogPasswordSettings;
+import com.nononsenseapps.notepad.sync.orgsync.DropboxSyncHelper;
+import com.nononsenseapps.notepad.sync.orgsync.DropboxSynchronizer;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
 
 /**
@@ -57,6 +59,25 @@ public class SharedPreferencesHelper {
     public static boolean isDropboxSyncEnabled(@NonNull Context context) {
         return Prefs(context).getBoolean(S(context, R.string
                 .const_preference_dropbox_enabled_key), false);
+    }
+
+    public static void disableDropboxSync(@NonNull Context context) {
+        Prefs(context).edit().putBoolean(S(context, R.string
+                .const_preference_dropbox_enabled_key), false)
+                .remove(S(context, R.string.const_preference_dropbox_account_key))
+                .apply();
+        DropboxSyncHelper dropboxSyncHelper = new DropboxSyncHelper(context);
+        dropboxSyncHelper.unlinkAccount();
+    }
+
+    public static String getDropboxAccount(@NonNull Context context) {
+        return Prefs(context).getString(S(context, R.string.const_preference_dropbox_account_key),
+                "");
+    }
+
+    public static String getDropboxDir(@NonNull Context context) {
+        return Prefs(context).getString(S(context, R.string.const_preference_dropbox_dir_key),
+                DropboxSynchronizer.DEFAULT_DIR);
     }
 
     public static boolean isCurrentThemeLight(@NonNull Context context) {
@@ -107,5 +128,9 @@ public class SharedPreferencesHelper {
 
     public static boolean isPasswordSet(@NonNull Context context) {
         return !Prefs(context).getString(DialogPasswordSettings.KEY_PASSWORD, "").isEmpty();
+    }
+
+    public static void setDropboxAccount(@NonNull Context context, @NonNull String account) {
+        put(context, S(context, R.string.const_preference_dropbox_account_key), account);
     }
 }

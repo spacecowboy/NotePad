@@ -16,8 +16,6 @@
 
 package com.nononsenseapps.notepad.sync.orgsync;
 
-import android.app.Activity;
-import android.app.Fragment;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
@@ -27,7 +25,6 @@ import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxServerException;
-import com.nononsenseapps.build.Config;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 
 import org.cowboyprogrammer.org.OrgFile;
@@ -39,7 +36,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.nio.charset.StandardCharsets;
+import java.nio.charset.Charset;
 import java.util.HashSet;
 
 
@@ -194,8 +191,8 @@ public class DropboxSynchronizer extends Synchronizer implements
     @Override
     public void putRemoteFile(final OrgFile orgFile) throws IOException {
         try {
-            byte[] bytes = orgFile.treeToString().getBytes(StandardCharsets.UTF_8);
-            InputStream stream = new ByteArrayInputStream(orgFile.treeToString().getBytes(StandardCharsets.UTF_8));
+            byte[] bytes = orgFile.treeToString().getBytes(Charset.forName("UTF-8"));
+            InputStream stream = new ByteArrayInputStream(orgFile.treeToString().getBytes(Charset.forName("UTF-8")));
             mDBApi.putFileOverwrite(join(folderpath, orgFile.getFilename()), stream, bytes.length, null);
         }  catch (DropboxServerException e) {
             throw new IOException("" + e.reason);

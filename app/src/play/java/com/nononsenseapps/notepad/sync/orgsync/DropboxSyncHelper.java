@@ -17,12 +17,13 @@
 
 package com.nononsenseapps.notepad.sync.orgsync;
 
-import android.app.Activity;
 import android.content.Context;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
+import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.session.AppKeyPair;
 import com.nononsenseapps.build.Config;
 
@@ -40,13 +41,12 @@ import com.nononsenseapps.build.Config;
 public class DropboxSyncHelper {
 
     public static final String PREF_DROPBOX_TOKEN = "dropboxtoken";
-    private final Context mActivity;
+    private final Context mContext;
 
     public DropboxAPI<AndroidAuthSession> mDBApi = null;
 
-    public DropboxSyncHelper(Activity activity) {
-        mActivity = activity;
-        // TODO
+    public DropboxSyncHelper(Context context) {
+        mContext = context;
     }
 
     public static DropboxAPI<AndroidAuthSession> getDBApi(
@@ -86,12 +86,12 @@ public class DropboxSyncHelper {
      */
     public boolean linkAccount() {
         if (mDBApi == null) {
-            mDBApi = getDBApi(mActivity);
+            mDBApi = getDBApi(mContext);
         }
 
         // If not authorized, then ask user for login/permission
         if (!mDBApi.getSession().isLinked()) {
-            mDBApi.getSession().startOAuth2Authentication(mActivity);
+            mDBApi.getSession().startOAuth2Authentication(mContext);
             return false;
         } else {
             return true;
@@ -104,11 +104,27 @@ public class DropboxSyncHelper {
      */
     public boolean isLinked() {
         if (mDBApi == null) {
-            mDBApi = getDBApi(mActivity);
+            mDBApi = getDBApi(mContext);
         }
 
         // If not authorized, then ask user for login/permission
         return mDBApi.getSession().isLinked();
+    }
+
+    /**
+     *
+     * @return Account string if linked and configured
+     */
+    public @NonNull String getAccount() {
+        if (isLinked()) {
+            try {
+                return mDBApi.accountInfo().email;
+            } catch (DropboxException e) {
+                return "";
+            }
+        } else {
+            return "";
+        }
     }
 
     /**
@@ -122,7 +138,7 @@ public class DropboxSyncHelper {
                 mDBApi.getSession().finishAuthentication();
 
                 String accessToken = mDBApi.getSession().getOAuth2AccessToken();
-                saveToken(mActivity, accessToken);
+                saveToken(mContext, accessToken);
                 return true;
             } catch (IllegalStateException e) {
                 //Log.i("DbAuthLog", "Error authenticating", e);
@@ -136,7 +152,7 @@ public class DropboxSyncHelper {
      */
     public void unlinkAccount() {
         if (mDBApi == null) {
-            mDBApi = getDBApi(mActivity);
+            mDBApi = getDBApi(mContext);
         }
 
         if (mDBApi.getSession().isLinked()) {

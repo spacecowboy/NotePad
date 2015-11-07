@@ -63,6 +63,9 @@
             android:layout_toLeftOf="@id/indicator_image"
             android:layout_toStartOf="@id/indicator_image"
             android:gravity="center_vertical"
+            android:singleLine="true"
+            android:ellipsize="middle"
+            android:lines="1"
             android:text=""/>
 
         <TextView

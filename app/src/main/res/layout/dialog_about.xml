@@ -58,5 +58,13 @@
         android:text="DragSortListView (&#169;) Carl Bauer"
         android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
 
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:autoLink="all"
+        android:paddingTop="4dp"
+        android:text="TextDrawable (&#169;) Amulya Khare"
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+
 </LinearLayout>
 </ScrollView>

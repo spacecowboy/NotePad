@@ -38,11 +38,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
 import com.nononsenseapps.build.Config;
+import com.nononsenseapps.filepicker.DropboxFilePickerActivity;
 import com.nononsenseapps.filepicker.FilePickerActivity;
+import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.legacy.Backup;
+import com.nononsenseapps.notepad.sync.orgsync.DropboxSyncHelper;
+import com.nononsenseapps.notepad.sync.orgsync.DropboxSynchronizer;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
+import com.nononsenseapps.util.AsyncTaskHelper;
 import com.nononsenseapps.util.PermissionsHelper;
 import com.nononsenseapps.util.PreferenceHelper;
 import com.nononsenseapps.util.SharedPreferencesHelper;
@@ -54,7 +59,9 @@ import java.util.Locale;
 
 import static com.nononsenseapps.util.PermissionsHelper.hasPermissions;
 import static com.nononsenseapps.util.PermissionsHelper.permissionsGranted;
+import static com.nononsenseapps.util.SharedPreferencesHelper.disableDropboxSync;
 import static com.nononsenseapps.util.SharedPreferencesHelper.disableSdCardSync;
+import static com.nononsenseapps.util.SharedPreferencesHelper.getDropboxDir;
 import static com.nononsenseapps.util.SharedPreferencesHelper.getSdDir;
 
 /**
@@ -64,10 +71,14 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         .OnSharedPreferenceChangeListener {
 
     private static final int ACTIVITY_CODE_PICK_SD_DIR = 1;
+    private static final int ACTIVITY_CODE_PICK_DROPBOX_DIR = 2;
     private static final int PERMISSION_CODE_GTASKS = 1;
     private static final int PERMISSION_CODE_SDCARD = 2;
-    private SwitchPreference preferenceSdDir;
+    private SwitchPreference preferenceSyncSdCard;
     private SwitchPreference preferenceSyncGTasks;
+    private SwitchPreference preferenceSyncDropbox;
+
+    private DropboxSyncHelper mDropboxHelper = null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -86,6 +97,7 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         buildGuard();
         setupAccount(sharedPreferences);
         setupDirectory(sharedPreferences);
+        setupDropbox(sharedPreferences);
         setupPassword();
         setupLegacyBackup();
 
@@ -112,6 +124,13 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
                     disableSdCardSync(getActivity());
                 }
                 break;
+            case ACTIVITY_CODE_PICK_DROPBOX_DIR:
+                if (resultCode == Activity.RESULT_OK) {
+                    saveNewDropboxPath(data);
+                } else {
+                    disableDropboxSync(getActivity());
+                }
+                break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
         }
@@ -125,9 +144,19 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
     }
 
     private void setupDirectory(final SharedPreferences sharedPreferences) {
-        preferenceSdDir = (SwitchPreference) findPreference(getString(R.string
+        preferenceSyncSdCard = (SwitchPreference) findPreference(getString(R.string
                 .const_preference_sdcard_enabled_key));
         setSdDirectorySummary(sharedPreferences);
+    }
+
+    private void setupDropbox(final SharedPreferences sharedPreferences) {
+        preferenceSyncDropbox = (SwitchPreference) findPreference(getString(R.string
+                .const_preference_dropbox_enabled_key));
+        setDropboxDirectorySummary(sharedPreferences);
+
+        preferenceSyncDropbox.setEnabled((BuildConfig.DROPBOX_ENABLED && Config.getKeyDropboxAPI
+                (getActivity()) != null &&
+                !Config.getKeyDropboxAPISecret(getActivity()).contains(" ")));
     }
 
     private void showFilePicker() {
@@ -143,9 +172,35 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         }
     }
 
+    private void showDropboxFilePicker() {
+        if (mDropboxHelper == null) {
+            mDropboxHelper = new DropboxSyncHelper(getActivity());
+        }
+        if (mDropboxHelper.isLinked()) {
+            saveDropboxAccountInBackground();
+            // Start the filepicker
+            Intent i = new Intent(getActivity(), DropboxFilePickerActivity.class);
+
+            i.putExtra(FilePickerActivity.EXTRA_START_PATH, getDropboxDir(getActivity()))
+                    .putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false).putExtra
+                    (FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true).putExtra(FilePickerActivity
+                    .EXTRA_MODE, FilePickerActivity.MODE_DIR);
+
+            startActivityForResult(i, ACTIVITY_CODE_PICK_DROPBOX_DIR);
+        } else {
+            mDropboxHelper.linkAccount();
+            // See onResume for result
+        }
+    }
+
     private void setSdDirectorySummary(final SharedPreferences sharedPreferences) {
-        preferenceSdDir.setSummary(sharedPreferences.getString(getSdDirectoryKey(),
+        preferenceSyncSdCard.setSummary(sharedPreferences.getString(getSdDirectoryKey(),
                 SDSynchronizer.DEFAULT_ORG_DIR));
+    }
+
+    private void setDropboxDirectorySummary(final SharedPreferences sharedPreferences) {
+        preferenceSyncDropbox.setSummary(sharedPreferences.getString(getDropboxDirectoryKey(),
+                DropboxSynchronizer.DEFAULT_DIR));
     }
 
     @SuppressLint("CommitPrefEdits")
@@ -163,8 +218,21 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         }
     }
 
+    @SuppressLint("CommitPrefEdits")
+    private void saveNewDropboxPath(Intent data) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
+                (getActivity());
+        sharedPreferences.edit().putString(getDropboxDirectoryKey(), data.getData().getPath())
+                .commit();
+        setDropboxDirectorySummary(sharedPreferences);
+    }
+
     private String getSdDirectoryKey() {
         return getString(R.string.const_preference_sdcard_dir_key);
+    }
+
+    private String getDropboxDirectoryKey() {
+        return getString(R.string.const_preference_dropbox_dir_key);
     }
 
     private void setupAccount(SharedPreferences sharedPreferences) {
@@ -201,15 +269,6 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         requestPermissions(PermissionsHelper.PERMISSIONS_SD, PERMISSION_CODE_SDCARD);
     }
 
-    boolean allEqual(int value, int[] items) {
-        for (int item: items) {
-            if (value != item) {
-                return false;
-            }
-        }
-        return true;
-    }
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
             grantResults) {
@@ -236,6 +295,32 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mDropboxHelper != null && !mDropboxHelper.isLinked()) {
+            if (mDropboxHelper.handleLinkResult()) {
+                // Success, show file picker
+                showDropboxFilePicker();
+            } else {
+                // Link failed or was cancelled by the user.
+                SharedPreferencesHelper.disableDropboxSync(getActivity());
+            }
+        }
+    }
+
+    private void saveDropboxAccountInBackground() {
+        // Save account name. Needs to be done in background
+        AsyncTaskHelper.background(new AsyncTaskHelper.Job() {
+            @Override
+            public void doInBackground() {
+                SharedPreferencesHelper.setDropboxAccount(getActivity(),
+                        mDropboxHelper.getAccount());
+            }
+        });
     }
 
     private boolean hasGoogleAccountPermissions() {
@@ -361,8 +446,29 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
                     // Restart the service (started in activities)
                     OrgSyncService.stop(getActivity());
                     // Synchronize view also
-                    if (preferenceSdDir.isChecked()) {
-                        preferenceSdDir.setChecked(false);
+                    if (preferenceSyncSdCard.isChecked()) {
+                        preferenceSyncSdCard.setChecked(false);
+                    }
+                }
+            } else if (key.equals(getString(R.string.const_preference_dropbox_enabled_key))) {
+                if (!(BuildConfig.DROPBOX_ENABLED && Config.getKeyDropboxAPI(getActivity()) !=
+                        null &&
+                        !Config.getKeyDropboxAPISecret(getActivity()).contains(" "))) {
+                    return;
+                }
+
+                final boolean enabled = sharedPreferences.getBoolean(getString(R.string
+                        .const_preference_dropbox_enabled_key), false);
+
+                if (enabled) {
+                    showDropboxFilePicker();
+                } else {
+                    SharedPreferencesHelper.disableDropboxSync(getActivity());
+                    // Restart the service (started in activities)
+                    OrgSyncService.stop(getActivity());
+                    // Synchronize view also
+                    if (preferenceSyncDropbox.isChecked()) {
+                        preferenceSyncDropbox.setChecked(false);
                     }
                 }
             }

@@ -17,12 +17,12 @@
 
 package com.nononsenseapps.helpers;
 
-import com.nononsenseapps.build.Config;
+import com.nononsenseapps.notepad.BuildConfig;
 
 public final class Log {
 
 	public static void d(String t, String m) {
-		if (Config.LOGGING || true)
+		if (BuildConfig.DEBUG)
 			android.util.Log.d(t, m);
 	}
 
