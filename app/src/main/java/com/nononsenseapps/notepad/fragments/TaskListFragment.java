@@ -66,6 +66,7 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
 import com.nononsenseapps.util.AsyncTaskHelper;
+import com.nononsenseapps.util.SharedPreferencesHelper;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
 
 import org.androidannotations.annotations.EFragment;
@@ -249,11 +250,12 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
             String getShareText() {
                 final StringBuilder sb = new StringBuilder();
+                final boolean locked = SharedPreferencesHelper.isPasswordSet(getActivity());
                 for (Task t : tasks.values()) {
                     if (sb.length() > 0) {
                         sb.append("\n\n");
                     }
-                    if (t.locked) {
+                    if (locked) {
                         sb.append(t.title);
                     } else {
                         sb.append(t.getText());
@@ -289,13 +291,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
         final Task[] tasks = taskMap.values().toArray(new Task[taskMap.size()]);
 
         // If any are locked, ask for password first
-        boolean locked = false;
-        for (final Task t : tasks) {
-            if (t.locked) {
-                locked = true;
-                break;
-            }
-        }
+        final boolean locked = SharedPreferencesHelper.isPasswordSet(getActivity());
 
         // Reset undo flag
         mDeleteWasUndone = false;

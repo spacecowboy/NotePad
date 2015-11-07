@@ -62,6 +62,8 @@ import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedList
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.NotificationItemHelper;
+import com.nononsenseapps.util.FragmentHelper;
+import com.nononsenseapps.util.SharedPreferencesHelper;
 import com.nononsenseapps.utils.views.StyledEditText;
 
 import java.util.Calendar;
@@ -337,25 +339,27 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
      * task.locked & mLocked
      */
     public boolean isLocked() {
-        if (mTask != null) {
-            return mTask.locked & mLocked;
-        }
-        return false;
+        return SharedPreferencesHelper.isPasswordSet(getActivity()) & mLocked;
     }
 
     void fillUIFromTask() {
         Log.d("nononsenseapps editor", "fillUI, act: " + getActivity());
         if (isLocked()) {
-            taskText.setText(mTask.title);
-            DialogPassword_ pflock = new DialogPassword_();
-            pflock.setListener(new PasswordConfirmedListener() {
+            FragmentHelper.handle(new Runnable() {
                 @Override
-                public void onPasswordConfirmed() {
-                    mLocked = false;
-                    fillUIFromTask();
+                public void run() {
+                    taskText.setText(mTask.title);
+                    DialogPassword_ pflock = new DialogPassword_();
+                    pflock.setListener(new PasswordConfirmedListener() {
+                        @Override
+                        public void onPasswordConfirmed() {
+                            mLocked = false;
+                            fillUIFromTask();
+                        }
+                    });
+                    pflock.show(getFragmentManager(), "read_verify");
                 }
             });
-            pflock.show(getFragmentManager(), "read_verify");
         } else {
             taskText.setText(mTask.getText());
         }
@@ -372,27 +376,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
         });
         // Lock fields
         setFieldStatus();
-
-        // Open keyboard on new notes so users can start typing directly
-        // need small delay (100ms) for it to open consistently
-        // TODO
-        // if (mTask._id < 1) {
-        // (new Handler()).postDelayed(new Runnable() {
-        // public void run() {
-        // MotionEvent e = MotionEvent.obtain(
-        // SystemClock.uptimeMillis(),
-        // SystemClock.uptimeMillis(),
-        // MotionEvent.ACTION_DOWN, 0, 0, 0);
-        // taskText.dispatchTouchEvent(e);
-        // e.recycle();
-        // e = MotionEvent.obtain(SystemClock.uptimeMillis(),
-        // SystemClock.uptimeMillis(), MotionEvent.ACTION_UP,
-        // 0, 0, 0);
-        // taskText.dispatchTouchEvent(e);
-        // e.recycle();
-        // }
-        // }, 100);
-        // }
 
     }
 
@@ -617,8 +600,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 
     @Override
     public void onPrepareOptionsMenu(Menu menu) {
-        menu.findItem(R.id.menu_lock).setVisible(mTask != null && !mTask.locked);
-        menu.findItem(R.id.menu_unlock).setVisible(mTask != null && mTask.locked);
         menu.findItem(R.id.menu_share).setEnabled(!isLocked());
 
         if (getActivity() instanceof MenuStateController) {
@@ -631,11 +612,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
                 menu.findItem(R.id.menu_revert).setVisible(visible);
             if (menu.findItem(R.id.menu_share) != null)
                 menu.findItem(R.id.menu_share).setVisible(visible);
-            if (menu.findItem(R.id.menu_lock) != null)
-                menu.findItem(R.id.menu_lock).setVisible(visible && mTask != null && !mTask.locked);
-            if (menu.findItem(R.id.menu_unlock) != null)
-                menu.findItem(R.id.menu_unlock).setVisible(visible && mTask != null && mTask
-                        .locked);
         }
     }
 
@@ -659,7 +635,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
             return true;
         } else if (itemId == R.id.menu_delete) {
             if (mTask != null) {
-                if (mTask.locked) {
+                if (isLocked()) {
                     DialogPassword_ delpf = new DialogPassword_();
                     delpf.setListener(new PasswordConfirmedListener() {
                         @Override
@@ -672,40 +648,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
                     deleteAndClose();
                 }
             }
-            return true;
-        } else if (itemId == R.id.menu_lock) {
-            DialogPassword_ pflock = new DialogPassword_();
-            pflock.setListener(new PasswordConfirmedListener() {
-                @Override
-                public void onPasswordConfirmed() {
-                    if (mTask != null) {
-                        mLocked = true;
-                        mTask.locked = true;
-                        mTask.save(getActivity());
-                        fillUIFromTask();
-                        Toast.makeText(getActivity(), R.string.locked, Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-            pflock.show(getFragmentManager(), "lock_verify");
-            return true;
-        } else if (itemId == R.id.menu_unlock) {
-            DialogPassword_ pf = new DialogPassword_();
-            pf.setListener(new PasswordConfirmedListener() {
-                @Override
-                public void onPasswordConfirmed() {
-                    if (mTask != null) {
-                        mTask.locked = false;
-                        Toast.makeText(getActivity(), R.string.unlocked, Toast.LENGTH_SHORT).show();
-
-                        if (mLocked) {
-                            mLocked = false;
-                            fillUIFromTask();
-                        }
-                    }
-                }
-            });
-            pf.show(getFragmentManager(), "unlock_verify");
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -782,7 +724,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
         boolean result = false;
         result |= taskText.getText().length() > 0;
         result |= dueDateBox.getText().length() > 0;
-        result |= (mTask.locked != mTaskOrg.locked);
 
         return result;
     }

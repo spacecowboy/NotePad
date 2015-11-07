@@ -22,9 +22,9 @@ import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.StringRes;
-import android.support.v4.app.FragmentActivity;
 
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.fragments.DialogPasswordSettings;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
 
 /**
@@ -55,8 +55,8 @@ public class SharedPreferencesHelper {
     }
 
     public static boolean isDropboxSyncEnabled(@NonNull Context context) {
-        return Prefs(context).getBoolean(S(context, R.string.const_preference_dropbox_enabled_key)
-                , false);
+        return Prefs(context).getBoolean(S(context, R.string
+                .const_preference_dropbox_enabled_key), false);
     }
 
     public static boolean isCurrentThemeLight(@NonNull Context context) {
@@ -103,5 +103,9 @@ public class SharedPreferencesHelper {
     public static @NonNull String getGoogleAccount(@NonNull Context context) {
         return Prefs(context).getString(S(context,
                 R.string.const_preference_gtask_account_key), "");
+    }
+
+    public static boolean isPasswordSet(@NonNull Context context) {
+        return !Prefs(context).getString(DialogPasswordSettings.KEY_PASSWORD, "").isEmpty();
     }
 }
