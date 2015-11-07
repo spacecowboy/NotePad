@@ -85,14 +85,7 @@ android {
     play {
       // If Non-Free libraries are to be used
       buildConfigField "boolean", "NONFREE", "true"
-    }
-    playBeta {
-      // Beta runs at +1
-      versionCode 60001 + gitCommitCount
-
       buildConfigField "boolean", "DROPBOX_ENABLED", "true"
-      // If Non-Free libraries are to be used
-      buildConfigField "boolean", "NONFREE", "true"
     }
   }
 
