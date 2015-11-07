@@ -41,7 +41,7 @@ repositories {
 }
 
 play {
-  track = 'alpha'
+  track = 'beta'
   serviceAccountEmail = '724886095148-vib4jepvj4q8snt1hrqtopncijipk1eu@developer.gserviceaccount.com'
   pk12File = file('/home/jonas/.ssh/Google Play Android Developer-bda1f9b450d2.p12')
 }
