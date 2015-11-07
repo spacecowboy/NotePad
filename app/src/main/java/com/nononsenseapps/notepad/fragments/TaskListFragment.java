@@ -652,27 +652,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
                     if (mListId > 0) {
                         where = Task.Columns.DBLIST + " IS ?";
                         whereArgs = new String[]{Long.toString(mListId)};
-                    } else {
-                        targetUri = Task.URI;
-                        sortSpec = Task.Columns.DUE;
-                        whereArgs = null;
-                        where = Task.Columns.COMPLETED + " IS NULL";
-                        switch ((int) mListId) {
-                            case LIST_ID_OVERDUE:
-                                where += andWhereOverdue();
-                                break;
-                            case LIST_ID_TODAY:
-                                where += andWhereToday();
-                                break;
-                            case LIST_ID_WEEK:
-                                where += andWhereWeek();
-                                break;
-                            case LIST_ID_ALL:
-                            default:
-                                // Show completed also in this case
-                                where = null;
-                                break;
-                        }
                     }
 
                     return new CursorLoader(getActivity(), targetUri, Task.Columns.FIELDS, where,
