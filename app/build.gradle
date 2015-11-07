@@ -23,10 +23,14 @@ buildscript {
     classpath 'com.android.tools.build:gradle:1.4.0-beta4'
     // the latest version of the android-apt plugin for annotations
     classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+    // For publishing stuff to Google Play
+    classpath 'com.github.triplet.gradle:play-publisher:1.1.2'
   }
 }
 
+// Apply android plugin first
 apply plugin: 'com.android.application'
+apply plugin: 'com.github.triplet.play'
 
 // For annotations
 apply plugin: 'android-apt'
@@ -34,6 +38,12 @@ def AAVersion = '3.3.2'
 
 repositories {
   jcenter()
+}
+
+play {
+  track = 'alpha'
+  serviceAccountEmail = '724886095148-vib4jepvj4q8snt1hrqtopncijipk1eu@developer.gserviceaccount.com'
+  pk12File = file('/home/jonas/.ssh/Google Play Android Developer-bda1f9b450d2.p12')
 }
 
 // query git for the the SHA, Tag and commit count. Use these to automate versioning.
