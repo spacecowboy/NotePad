@@ -304,6 +304,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         void openList(long id);
 
         void createList();
+        void editList(long id);
 
         void openSettings();
 
@@ -607,8 +608,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             final String name = topLevelItem.getAvatarName();
             final String imageName = name.isEmpty() ? "N" : name;
             TextDrawable drawable = TextDrawable.builder()
-                    .buildRound(imageName.toUpperCase().substring(0, 1), ColorGenerator
-                    .MATERIAL.getColor(imageName));
+                    .buildRound(imageName.toUpperCase().substring(0, 1), ColorGenerator.MATERIAL
+                            .getColor(imageName));
 
             mAvatar.setImageDrawable(drawable);
             mText1.setText(name);
@@ -635,8 +636,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             mTitle.setText(headerItem.mTitleRes);
             mCount.setVisibility(View.GONE);
             TextDrawable drawable = TextDrawable.builder()
-                    .buildRound(mItem.getTitle().toUpperCase().substring
-                    (0, 1), ColorGenerator.MATERIAL.getColor(mItem.getTitle()));
+                    .buildRound(mItem.getTitle().toUpperCase().substring(0, 1), ColorGenerator
+                            .MATERIAL.getColor(mItem.getTitle()));
 
             mAvatar.setImageDrawable(drawable);
         }
@@ -702,23 +703,15 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             mCount.setText(cursor.getString(cursor.getColumnIndex(TaskList.Columns.VIEW_COUNT)));
 
             TextDrawable drawable = TextDrawable.builder()
-                    .buildRound(title.toUpperCase().substring(0, 1),
-                    ColorGenerator.MATERIAL.getColor(title));
+                    .buildRound(title.toUpperCase().substring(0, 1), ColorGenerator.MATERIAL
+                            .getColor(title));
 
             mAvatar.setImageDrawable(drawable);
         }
 
         @Override
         public boolean onLongClick(View v) {
-            DialogDeleteList.showDialog(getFragmentManager(), id, new DialogConfirmBase
-                    .DialogConfirmedListener() {
-
-
-                @Override
-                public void onConfirm() {
-                    // todo move me
-                }
-            });
+            mCallbacks.editList(id);
             return true;
         }
 

@@ -68,7 +68,7 @@ public class DialogEditList extends DialogFragment {
      */
     public static DialogEditList_ getInstance() {
         DialogEditList_ dialog = new DialogEditList_();
-        dialog.setArguments(new Bundle());
+        dialog.setArguments(Bundle.EMPTY);
         return dialog;
     }
 

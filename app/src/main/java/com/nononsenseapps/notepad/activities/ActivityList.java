@@ -190,6 +190,19 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
     }
 
     @Override
+    public void editList(long id) {
+        DialogEditList_ dialog = DialogEditList_.getInstance(id);
+        dialog.setListener(new DialogEditList.EditListDialogListener() {
+
+            @Override
+            public void onFinishEditDialog(long id) {
+                //openList(id);
+            }
+        });
+        dialog.show(getSupportFragmentManager(), "fragment_create_list");
+    }
+
+    @Override
     public void openSettings() {
         Intent intent = new Intent();
         intent.setClass(this, ActivitySettings.class);

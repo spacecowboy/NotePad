@@ -48,22 +48,20 @@
     <TextView
         android:id="@+id/deleteButton"
         style="?android:attr/buttonBarButtonStyle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="48dp"
         android:layout_marginBottom="4dp"
         android:layout_marginTop="4dp"
         android:clickable="true"
-        android:drawableLeft="@drawable/ic_delete_24dp_white"
+        android:drawableRight="@drawable/ic_delete_24dp_red"
         android:drawablePadding="8dp"
-        android:fontFamily="sans-serif"
-        android:gravity="center_vertical"
+        android:layout_gravity="right"
+        android:gravity="center_vertical|right"
         android:paddingLeft="16dp"
         android:paddingRight="20dp"
         android:text="@string/menu_deletelist"
-        android:textAllCaps="true"
-        android:textAppearance="@android:style/TextAppearance.Medium"
-        android:textColor="?android:attr/textColorSecondary"
-        android:textStyle="bold"/>
+        android:textAppearance="@style/TextAppearance.AppCompat.Subhead"
+        android:textColor="@color/material_red"/>
 
     <include
         android:id="@+id/buttons"
