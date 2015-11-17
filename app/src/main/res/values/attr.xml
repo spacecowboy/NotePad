@@ -24,6 +24,7 @@
 
     <attr name="ic_clear_24dp_active" format="reference"/>
     <attr name="ic_alarm_add_24dp_active" format="reference"/>
+    <attr name="ic_alarm_24dp_active" format="reference"/>
 
     <!-- Unknown -->
     <attr name="my_list_selector" format="reference" />
