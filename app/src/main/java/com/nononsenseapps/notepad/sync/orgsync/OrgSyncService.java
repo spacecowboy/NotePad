@@ -1,17 +1,18 @@
 /*
- * Copyright (c) 2014 Jonas Kalderstam.
+ * Copyright (c) 2015 Jonas Kalderstam.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.nononsenseapps.notepad.sync.orgsync;
@@ -21,7 +22,6 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.net.Uri;
 import android.os.Handler;
@@ -32,14 +32,15 @@ import android.os.Message;
 import android.os.Process;
 import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
+import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
+import com.nononsenseapps.util.SharedPreferencesHelper;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -87,12 +88,9 @@ public class OrgSyncService extends Service {
     }
 
     public static boolean areAnyEnabled(Context context) {
-        SharedPreferences prefs =
-                PreferenceManager.getDefaultSharedPreferences(context);
-
-        return prefs.getBoolean(SyncPrefs.KEY_SD_ENABLE, false) ||
+        return SharedPreferencesHelper.isSdSyncEnabled(context) ||
                (BuildConfig.DROPBOX_ENABLED &&
-               prefs.getBoolean(SyncPrefs.KEY_DROPBOX_ENABLE, false));
+               SharedPreferencesHelper.isDropboxSyncEnabled(context));
     }
 
 	public OrgSyncService() {
@@ -115,7 +113,7 @@ public class OrgSyncService extends Service {
         }
 
         // Try Dropbox
-        if (BuildConfig.DROPBOX_ENABLED && BuildConfig.NONFREE) {
+        if (BuildConfig.DROPBOX_ENABLED) {
             SynchronizerInterface db = new DropboxSynchronizer(this);
             if (db.isConfigured()) {
                 syncers.add(db);

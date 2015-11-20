@@ -1,6 +1,21 @@
-package com.nononsenseapps.notepad.fragments;
+/*
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 
-import java.util.HashSet;
+package com.nononsenseapps.notepad.fragments;
 
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -16,20 +31,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Background;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.UiThread;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.DAO;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogRestore.OnListSelectedListener;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.UiThread;
+
+import java.util.HashSet;
 
 @EFragment(resName="fragment_search")
 public class FragmentSearchDeleted extends FragmentSearch {
@@ -42,20 +60,49 @@ public class FragmentSearchDeleted extends FragmentSearch {
 			HashSet<Long> selectedItems = new HashSet<Long>();
 
 			@Override
+			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
+				final MenuInflater inflater = getActivity().getMenuInflater();
+				inflater.inflate(R.menu.activity_deleted_context, menu);
+				return true;
+			}
+
+			@Override
 			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
+				return false;
+			}
+
+			@Override
+			public boolean onActionItemClicked(final ActionMode mode,
+					final MenuItem item) {
+				int itemId = item.getItemId();
+				if (itemId == R.id.menu_restore) {
+					DialogRestore d = DialogRestore.getInstance();
+					d.setListener(new OnListSelectedListener() {
+						@Override
+						public void onListSelected(long listId) {
+							if (listId > 0) {
+								restoreSelected(mode, listId);
+							}
+						}
+					});
+					d.show(getFragmentManager(), "listselect");
+					return true;
+				} else if (itemId == R.id.menu_delete) {
+					DialogDeleteTask.showDialog(getFragmentManager(), -1,
+							new DialogConfirmedListener() {
+								@Override
+								public void onConfirm() {
+									deleteSelected(mode);
+								}
+							});
+					return true;
+				}
 				return false;
 			}
 
 			@Override
 			public void onDestroyActionMode(ActionMode mode) {
 				selectedItems.clear();
-			}
-
-			@Override
-			public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-				final MenuInflater inflater = getActivity().getMenuInflater();
-				inflater.inflate(R.menu.activity_deleted_context, menu);
-				return true;
 			}
 
 			String[] getIdArray() {
@@ -125,35 +172,6 @@ public class FragmentSearchDeleted extends FragmentSearch {
 			}
 
 			@Override
-			public boolean onActionItemClicked(final ActionMode mode,
-					final MenuItem item) {
-				int itemId = item.getItemId();
-				if (itemId == R.id.menu_restore) {
-					DialogRestore d = DialogRestore.getInstance();
-					d.setListener(new OnListSelectedListener() {
-						@Override
-						public void onListSelected(long listId) {
-							if (listId > 0) {
-								restoreSelected(mode, listId);
-							}
-						}
-					});
-					d.show(getFragmentManager(), "listselect");
-					return true;
-				} else if (itemId == R.id.menu_delete) {
-					DialogDeleteTask.showDialog(getFragmentManager(), -1,
-							new DialogConfirmedListener() {
-								@Override
-								public void onConfirm() {
-									deleteSelected(mode);
-								}
-							});
-					return true;
-				}
-				return false;
-			}
-
-			@Override
 			public void onItemCheckedStateChanged(ActionMode mode,
 					int position, long id, boolean checked) {
 				if (checked) {
@@ -192,17 +210,6 @@ public class FragmentSearchDeleted extends FragmentSearch {
 	}
 
 	@Override
-	protected OnItemClickListener getOnItemClickListener() {
-		return new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View origin, int pos,
-					long id) {
-				list.setItemChecked(pos, true);
-			}
-		};
-	}
-
-	@Override
 	protected SimpleCursorAdapter getAdapter() {
 		return new SimpleCursorAdapter(getActivity(),
 				R.layout.tasklist_item_rich, null, new String[] {
@@ -214,14 +221,24 @@ public class FragmentSearchDeleted extends FragmentSearch {
 	}
 
 	@Override
+	protected OnItemClickListener getOnItemClickListener() {
+		return new OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> arg0, View origin, int pos,
+					long id) {
+				list.setItemChecked(pos, true);
+			}
+		};
+	}
+
+	@Override
 	protected ViewBinder getViewBinder() {
 		// Get the global list settings
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 
 		// Load pref for item height
-		final int rowCount = prefs.getInt(
-				getString(R.string.key_pref_item_max_height), 3);
+		final int rowCount = 3;
 
 		return new ViewBinder() {
 			String sTemp = "";

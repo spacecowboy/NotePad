@@ -17,14 +17,15 @@
 
 package com.nononsenseapps.notepad.sync.orgsync;
 
-import android.app.Activity;
+import android.content.Context;
+import android.support.annotation.NonNull;
 
 /**
  * Dummy file, see play flavor.
  */
 public class DropboxSyncHelper {
 
-    public DropboxSyncHelper(Activity activity) {
+    public DropboxSyncHelper(Context context) {
 
     }
 
@@ -42,5 +43,9 @@ public class DropboxSyncHelper {
 
     public boolean handleLinkResult() {
         return false;
+    }
+
+    public @NonNull String getAccount() {
+        return "";
     }
 }

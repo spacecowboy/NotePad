@@ -1,82 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2014 Jonas Kalderstam
+  Copyright (c) 2015 Jonas Kalderstam.
 
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-  
-          http://www.apache.org/licenses/LICENSE-2.0
-  
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
 <resources>
-    <attr name="navigation_refresh" format="reference" />
-    <attr name="action_search" format="reference" />
-    <attr name="action_settings" format="reference" />
-    <attr name="content_new" format="reference" />
-    <attr name="content_discard" format="reference" />
-    <attr name="content_copy" format="reference" />
-    <attr name="content_paste" format="reference" />
-    <attr name="content_undo" format="reference" />
-    <attr name="content_remove" format="reference" />
-    <attr name="ab_cancel" format="reference" />
-    <attr name="device_access_secure" format="reference" />
-    <attr name="device_access_not_secure" format="reference" />
-    <attr name="social_share" format="reference" />
-    <attr name="navigation_accept" format="reference" />
+    <!-- Vetted -->
+    <attr name="NavDrawerStyle" format="reference"/>
+    <attr name="separatorColor" format="color"/>
+    <attr name="selectedItemColor" format="color"/>
+    <attr name="iconTint" format="color"/>
 
+    <attr name="ic_clear_24dp_active" format="reference"/>
+    <attr name="ic_alarm_add_24dp_active" format="reference"/>
+    <attr name="ic_alarm_24dp_active" format="reference"/>
 
+    <attr name="drag_handle_color" format="color" />
+
+    <!-- Unknown -->
     <attr name="my_list_selector" format="reference" />
     <attr name="my_list_background" format="reference" />
-    <attr name="editorBackgroundColor" format="reference" />
-    <attr name="ActionBarDropDownItem" format="reference" />
-    <attr name="btn_default_selector" format="reference" />
-    <attr name="img_default_selector" format="reference" />
-    <attr name="SpinnerStyle" format="reference" />
-    <attr name="expander_open_holo" format="reference" />
-    <attr name="expander_close_holo" format="reference" />
-    <attr name="list_divider_holo" format="reference" />
 
     <attr name="viewpager_bg" format="reference" />
-
-    <attr name="textColorPrimary" format="reference|color" />
-    <attr name="textColorSecondary" format="reference|color" />
 
     <attr name="list_item_card_background" format="reference" />
 
     <attr name="labelAddItemTextColor" format="reference|color" />
-    <attr name="body_new" format="reference" />
-    <attr name="body_remove" format="reference" />
-    <attr name="body_delete" format="reference" />
-    <attr name="ic_action_add_list" format="reference" />
-    <attr name="ic_action_list" format="reference" />
-    <attr name="ic_action_share" format="reference" />
 
-    <!-- <attr name="task_list_divider_height" format="reference"/> -->
-
-    <attr name="drag_handle_color" format="reference|color" />
-
-    <declare-styleable name="SeekBarPreference">
-        <attr name="max" format="integer" />
-        <attr name="min" format="integer" />
-        <attr name="unitsLeft" format="string" />
-        <attr name="unitsRight" format="string" />
-        <attr name="units" format="string" />
-        <attr name="summary" format="string" />
-        <attr name="interval" format="integer" />
-    </declare-styleable>
 
     <attr name="TaskListItem" format="reference" />
-    <attr name="ListDividerStyle" format="reference"/>
     <attr name="ListMarginStyle" format="reference"/>
-    <attr name="LeftDrawerStyle" format="reference"/>
-    <attr name="LeftDrawerListItemStyle" format="reference" />
-    <attr name="LeftDrawerListItemSecondaryStyle" format="reference" />
 
     <attr name="ListHeaderSize" format="reference"/>
 

@@ -1,17 +1,18 @@
 /*
- * Copyright (c) 2014 Jonas Kalderstam.
+ * Copyright (c) 2015 Jonas Kalderstam.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.nononsenseapps.notepad;
@@ -26,19 +27,22 @@ import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.ActionBarDrawerToggle;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -52,13 +56,8 @@ import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
-import com.github.espiandev.showcaseview.ShowcaseView;
-import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NotificationHelper;
-import com.nononsenseapps.helpers.SyncHelper;
-import com.nononsenseapps.helpers.SyncStatusMonitor;
-import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Notification;
@@ -68,11 +67,9 @@ import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
 import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
 import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
-import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
 import com.nononsenseapps.notepad.fragments.TaskListFragment;
 import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
-import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.legacy.DonateMigrator;
 import com.nononsenseapps.notepad.legacy.DonateMigrator_;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
@@ -80,12 +77,10 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
-import com.nononsenseapps.utils.ViewsHelper;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.InstanceState;
-import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.UiThread.Propagation;
@@ -94,18 +89,14 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
-
 @EActivity(resName = "activity_main")
-public class ActivityMain extends FragmentActivity
-        implements OnFragmentInteractionListener, OnSyncStartStopListener,
-        MenuStateController, OnSharedPreferenceChangeListener {
+public class ActivityMain extends AppCompatActivity implements TaskListFragment
+        .TaskListCallbacks, MenuStateController, OnSharedPreferenceChangeListener,
+        TaskDetailFragment.TaskEditorCallbacks {
 
     // Intent notification argument
-    public static final String NOTIFICATION_CANCEL_ARG =
-            "notification_cancel_arg";
-    public static final String NOTIFICATION_DELETE_ARG =
-            "notification_delete_arg";
+    public static final String NOTIFICATION_CANCEL_ARG = "notification_cancel_arg";
+    public static final String NOTIFICATION_DELETE_ARG = "notification_delete_arg";
     // If donate version has been migrated
     public static final String MIGRATED = "donate_inapp_or_oldversion";
     // Set to true in bundle if exits should be animated
@@ -113,15 +104,11 @@ public class ActivityMain extends FragmentActivity
     // Using tags for test
     public static final String DETAILTAG = "detailfragment";
     public static final String LISTPAGERTAG = "listpagerfragment";
-    private static final String SHOWCASED_MAIN = "showcased_main_window";
-    private static final String SHOWCASED_DRAWER = "showcased_main_drawer";
     protected boolean reverseAnimation = false;
     @ViewById(resName = "leftDrawer")
     ListView leftDrawer;
-    @ViewById(resName = "drawerLayout")
-    DrawerLayout drawerLayout;
-    @ViewById(resName = "fragment1")
-    View fragment1;
+
+    DrawerLayout mDrawerLayout;
     // Only present on tablets
     @ViewById(resName = "fragment2")
     View fragment2;
@@ -139,27 +126,99 @@ public class ActivityMain extends FragmentActivity
     @InstanceState
     boolean showingEditor = false;
     boolean isDrawerClosed = true;
-    boolean alreadyShowcased = false;
-    boolean alreadyShowcasedDrawer = false;
-    SyncStatusMonitor syncStatusReceiver = null;
     // WIll only be the viewpager fragment
     ListOpener listOpener = null;
     private ActionBarDrawerToggle mDrawerToggle;
     // Only not if opening note directly
     private boolean shouldAddToBackStack = true;
     private Bundle state;
-    private PullToRefreshAttacher pullToRefreshAttacher;
     private boolean shouldRestart = false;
-    private ShowcaseView sv;
-    private PullToRefreshAttacher.OnRefreshListener pullToRefreshListener;
 
-    @Override
-    protected void onPostCreate(Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
-        // Sync the toggle state after onRestoreInstanceState has occurred.
-        if (mDrawerToggle != null) {
-            mDrawerToggle.syncState();
+    private void setupNavDrawer() {
+        // Show icon
+        ActionBar ab = getSupportActionBar();
+        if (ab != null) {
+            ab.setDisplayHomeAsUpEnabled(true);
+            ab.setHomeButtonEnabled(true);
         }
+
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (mDrawerLayout == null) {
+            return;
+        }
+
+        /*if (selfItem == NAVDRAWER_ITEM_INVALID) {
+            // do not show a nav drawer
+            View navDrawer = mDrawerLayout.findViewById(R.id.navdrawer);
+            if (navDrawer != null) {
+                ((ViewGroup) navDrawer.getParent()).removeView(navDrawer);
+            }
+            mDrawerLayout = null;
+            return;
+        }*/
+
+        mDrawerToggle = new ActionBarDrawerToggle(this, mDrawerLayout, R.string
+                .navigation_drawer_open, R.string.navigation_drawer_close) {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+                super.onDrawerSlide(drawerView, slideOffset);
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                super.onDrawerOpened(drawerView);
+                isDrawerClosed = false;
+                //onNavDrawerStateChanged(true, false);
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+                super.onDrawerClosed(drawerView);
+                isDrawerClosed = true;
+                // creates call to onPrepareOptionsMenu()
+                invalidateOptionsMenu();
+                //onNavDrawerStateChanged(false, false);
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+                super.onDrawerStateChanged(newState);
+                /*onNavDrawerStateChanged(isNavDrawerOpen(), newState != DrawerLayout
+                        .STATE_IDLE);*/
+
+                if (DrawerLayout.STATE_IDLE != newState) {
+                    getActionBar().setTitle(R.string.show_from_all_lists);
+                    // Is in motion, hide action items
+                    isDrawerClosed = false;
+                    invalidateOptionsMenu(); // creates call to
+                    // onPrepareOptionsMenu()
+                }
+            }
+        };
+
+        mDrawerToggle.syncState();
+
+        populateNavDrawer();
+
+        // Recycler view stuff
+        /*RecyclerView mRecyclerView = (RecyclerView) mDrawerLayout.findViewById(R.id
+        .navdrawer_list);
+        mRecyclerView.setHasFixedSize(true);
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        mNavAdapter = new FeedsAdapter();
+        mRecyclerView.setAdapter(mNavAdapter);
+
+        populateNavDrawer();*/
+    }
+
+    protected boolean isNavDrawerOpen() {
+        return mDrawerLayout != null && mDrawerLayout.isDrawerOpen(GravityCompat.START);
+    }
+
+    // Subclasses can override to decide what happens on nav item selection
+    protected void onNavigationDrawerItemSelected(long id, String title, String url, String tag) {
+        // TODO add default start activity with arguments
     }
 
     @Override
@@ -192,17 +251,16 @@ public class ActivityMain extends FragmentActivity
                 // Only true in portrait mode
                 final View focusView = ActivityMain.this.getCurrentFocus();
                 if (inputManager != null && focusView != null) {
-                    inputManager
-                            .hideSoftInputFromWindow(focusView.getWindowToken(),
-                                    InputMethodManager.HIDE_NOT_ALWAYS);
+                    inputManager.hideSoftInputFromWindow(focusView.getWindowToken(),
+                            InputMethodManager.HIDE_NOT_ALWAYS);
                 }
 
                 // Should load the same list again
                 // Try getting the list from the original intent
                 final long listId = getListId(getIntent());
 
-                final Intent intent = new Intent().setAction(Intent.ACTION_VIEW)
-                        .setClass(ActivityMain.this, ActivityMain_.class);
+                final Intent intent = new Intent().setAction(Intent.ACTION_VIEW).setClass
+                        (ActivityMain.this, ActivityMain_.class);
                 if (listId > 0) {
                     intent.setData(TaskList.getUri(listId));
                 }
@@ -217,8 +275,7 @@ public class ActivityMain extends FragmentActivity
                 reverseAnimation = true;
                 Log.d("nononsenseapps fragment", "starting activity");
 
-                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP |
-                                Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
             }
             // else
@@ -241,9 +298,6 @@ public class ActivityMain extends FragmentActivity
             intent.setClass(this, PrefsActivity.class);
             startActivity(intent);
             return true;
-        } else if (itemId == R.id.menu_sync) {
-            handleSyncRequest();
-            return true;
         } else if (itemId == R.id.menu_delete) {
             return false;
         } else {
@@ -256,8 +310,8 @@ public class ActivityMain extends FragmentActivity
         super.finish();
         // Only animate when specified. Should be when it was animated "in"
         if (mAnimateExit) {
-            overridePendingTransition(R.anim.activity_slide_in_right,
-                    R.anim.activity_slide_out_right_full);
+            overridePendingTransition(R.anim.activity_slide_in_right, R.anim
+                    .activity_slide_out_right_full);
         }
     }
 
@@ -270,34 +324,23 @@ public class ActivityMain extends FragmentActivity
     long getListId(final Intent intent) {
         long retval = -1;
         if (intent != null &&
-            intent.getData() != null &&
-            (Intent.ACTION_EDIT.equals(intent.getAction()) ||
-             Intent.ACTION_VIEW.equals(intent.getAction()) ||
-             Intent.ACTION_INSERT.equals(intent.getAction()))) {
-            if ((intent.getData().getPath()
-                         .startsWith(NotePad.Lists.PATH_VISIBLE_LISTS) ||
-                 intent.getData().getPath()
-                         .startsWith(NotePad.Lists.PATH_LISTS) ||
-                 intent.getData().getPath()
-                         .startsWith(TaskList.URI.getPath()))) {
+                intent.getData() != null &&
+                (Intent.ACTION_EDIT.equals(intent.getAction()) ||
+                        Intent.ACTION_VIEW.equals(intent.getAction()) ||
+                        Intent.ACTION_INSERT.equals(intent.getAction()))) {
+            if ((intent.getData().getPath().startsWith(NotePad.Lists.PATH_VISIBLE_LISTS) ||
+                    intent.getData().getPath().startsWith(NotePad.Lists.PATH_LISTS) ||
+                    intent.getData().getPath().startsWith(TaskList.URI.getPath()))) {
                 try {
-                    retval = Long.parseLong(
-                            intent.getData().getLastPathSegment());
+                    retval = Long.parseLong(intent.getData().getLastPathSegment());
                 } catch (NumberFormatException e) {
                     retval = -1;
                 }
-            } else if (-1 !=
-                       intent.getLongExtra(
-                               LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST,
-                               -1)) {
-                retval = intent.getLongExtra(
-                        LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
-            } else if (-1 !=
-                       intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
-                               -1)) {
-                retval =
-                        intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
-                                -1);
+            } else if (-1 != intent.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST,
+                    -1)) {
+                retval = intent.getLongExtra(LegacyDBHelper.NotePad.Notes.COLUMN_NAME_LIST, -1);
+            } else if (-1 != intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1)) {
+                retval = intent.getLongExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, -1);
             } else if (-1 != intent.getLongExtra(Task.Columns.DBLIST, -1)) {
                 retval = intent.getLongExtra(Task.Columns.DBLIST, -1);
             }
@@ -311,8 +354,8 @@ public class ActivityMain extends FragmentActivity
     void openList(final long id) {
         // Open list
         Intent i = new Intent(ActivityMain.this, ActivityMain_.class);
-        i.setAction(Intent.ACTION_VIEW).setData(TaskList.getUri(id))
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        i.setAction(Intent.ACTION_VIEW).setData(TaskList.getUri(id)).addFlags(Intent
+                .FLAG_ACTIVITY_SINGLE_TOP);
 
         // If editor is on screen, we need to reload fragments
         if (listOpener == null) {
@@ -329,53 +372,8 @@ public class ActivityMain extends FragmentActivity
         }
 
         // And then close drawer
-        if (drawerLayout != null && leftDrawer != null) {
-            drawerLayout.closeDrawer(leftDrawer);
-        }
-    }
-
-    private void handleSyncRequest() {
-        boolean syncing = false;
-        // GTasks
-        if (SyncHelper.isGTasksConfigured(ActivityMain.this)) {
-            syncing = true;
-            SyncHelper.requestSyncIf(ActivityMain.this, SyncHelper.MANUAL);
-        }
-
-        // Others
-        if (OrgSyncService.areAnyEnabled(this)) {
-            syncing = true;
-            OrgSyncService.start(this);
-        }
-
-        if (syncing) {
-            // In case of connectivity problems, stop the progress bar
-            new AsyncTask<Void, Void, Void>() {
-
-                @Override
-                protected Void doInBackground(Void... params) {
-                    try {
-                        Thread.sleep(30000);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                }
-
-                @Override
-                protected void onPostExecute(Void result) {
-                    // Notify PullToRefreshAttacher that the refresh has finished
-                    pullToRefreshAttacher.setRefreshComplete();
-                }
-            }.execute();
-        }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        if (mDrawerToggle != null) {
-            mDrawerToggle.onConfigurationChanged(newConfig);
+        if (mDrawerLayout != null && leftDrawer != null) {
+            mDrawerLayout.closeDrawer(leftDrawer);
         }
     }
 
@@ -385,44 +383,34 @@ public class ActivityMain extends FragmentActivity
         ActivityHelper.readAndSetSettings(this);
         super.onCreate(b);
 
-        syncStatusReceiver = new SyncStatusMonitor();
-
         // First load, then don't add to backstack
         shouldAddToBackStack = false;
 
         // To know if we should animate exits
-        if (getIntent() != null &&
-            getIntent().getBooleanExtra(ANIMATEEXIT, false)) {
+        if (getIntent() != null && getIntent().getBooleanExtra(ANIMATEEXIT, false)) {
             mAnimateExit = true;
         }
 
         // If user has donated some other time
-        final SharedPreferences prefs =
-                PreferenceManager.getDefaultSharedPreferences(this);
-
-        alreadyShowcased = prefs.getBoolean(SHOWCASED_MAIN, false);
-        alreadyShowcasedDrawer = prefs.getBoolean(SHOWCASED_DRAWER, false);
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 
         // To listen on fragment changes
-        getSupportFragmentManager().addOnBackStackChangedListener(
-                new FragmentManager.OnBackStackChangedListener() {
-                    public void onBackStackChanged() {
-                        if (showingEditor && !isNoteIntent(getIntent())) {
-                            setHomeAsDrawer(true);
-                        }
-                        // Always update menu
-                        invalidateOptionsMenu();
-                    }
+        // TODO probably remove this?
+        getSupportFragmentManager().addOnBackStackChangedListener(new FragmentManager
+                .OnBackStackChangedListener() {
+            public void onBackStackChanged() {
+                if (showingEditor && !isNoteIntent(getIntent())) {
+                    setHomeAsDrawer(true);
                 }
-        );
+                // Always update menu
+                invalidateOptionsMenu();
+            }
+        });
 
         if (b != null) {
             Log.d("nononsenseapps list", "Activity Saved not null: " + b);
             this.state = b;
         }
-
-        // Create a PullToRefreshAttacher instance
-        pullToRefreshAttacher = PullToRefreshAttacher.get(this);
 
         // Clear possible notifications, schedule future ones
         final Intent intent = getIntent();
@@ -432,6 +420,20 @@ public class ActivityMain extends FragmentActivity
         NotificationHelper.schedule(this);
         // Schedule syncs
         BackgroundSyncScheduler.scheduleSync(this);
+    }
+
+    @Override
+    protected void onPostCreate(Bundle savedInstanceState) {
+        super.onPostCreate(savedInstanceState);
+        setupNavDrawer();
+    }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if (mDrawerToggle != null) {
+            mDrawerToggle.onConfigurationChanged(newConfig);
+        }
     }
 
     @Override
@@ -455,14 +457,6 @@ public class ActivityMain extends FragmentActivity
     @Override
     public void onPause() {
         super.onPause();
-        // deactivate monitor
-        if (syncStatusReceiver != null) {
-            syncStatusReceiver.stopMonitoring();
-        }
-        // deactivate any progress bar
-        if (pullToRefreshAttacher != null) {
-            pullToRefreshAttacher.setRefreshComplete();
-        }
         // Pause sync monitors
         OrgSyncService.pause(this);
     }
@@ -482,16 +476,14 @@ public class ActivityMain extends FragmentActivity
             restartAndRefresh();
         }
         super.onResume();
-        // activate monitor
-        if (syncStatusReceiver != null) {
-            syncStatusReceiver.startMonitoring(this);
-        }
 
         // Sync if appropriate
-        if (SyncHelper.enoughTimeSinceLastSync(this)) {
-            SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
-            OrgSyncService.start(this);
-        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        // Do absolutely NOT call super class here. Will bug out the viewpager!
+        super.onSaveInstanceState(outState);
     }
 
     private void restartAndRefresh() {
@@ -505,8 +497,8 @@ public class ActivityMain extends FragmentActivity
     }
 
     void isOldDonateVersionInstalled() {
-        final SharedPreferences prefs =  PreferenceManager
-                .getDefaultSharedPreferences(ActivityMain.this);
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences
+                (ActivityMain.this);
         if (prefs.getBoolean(MIGRATED, false)) {
             // already migrated
             return;
@@ -515,11 +507,10 @@ public class ActivityMain extends FragmentActivity
             PackageManager pm = getPackageManager();
             List<ApplicationInfo> packages = pm.getInstalledApplications(0);
             for (ApplicationInfo packageInfo : packages) {
-                if (packageInfo.packageName
-                        .equals("com.nononsenseapps.notepad_donate")) {
+                if (packageInfo.packageName.equals("com.nononsenseapps.notepad_donate")) {
                     migrateDonateUser();
                     // Don't migrate again
-                   prefs.edit().putBoolean(MIGRATED, true).commit();
+                    prefs.edit().putBoolean(MIGRATED, true).commit();
                     // Stop loop
                     break;
                 }
@@ -537,12 +528,6 @@ public class ActivityMain extends FragmentActivity
             final DialogConfirmBase dialog = new DialogConfirmBase() {
 
                 @Override
-                public void onOKClick() {
-                    startService(new Intent(ActivityMain.this,
-                            DonateMigrator_.class));
-                }
-
-                @Override
                 public int getTitle() {
                     return R.string.import_data_question;
                 }
@@ -551,15 +536,14 @@ public class ActivityMain extends FragmentActivity
                 public int getMessage() {
                     return R.string.import_data_msg;
                 }
+
+                @Override
+                public void onOKClick() {
+                    startService(new Intent(ActivityMain.this, DonateMigrator_.class));
+                }
             };
             dialog.show(getSupportFragmentManager(), "migrate_question");
         }
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle outState) {
-        // Do absolutely NOT call super class here. Will bug out the viewpager!
-        super.onSaveInstanceState(outState);
     }
 
     @UiThread(propagation = Propagation.REUSE)
@@ -588,16 +572,14 @@ public class ActivityMain extends FragmentActivity
                 return;
             } else {
                 // Find the listpager
-                left = getSupportFragmentManager()
-                        .findFragmentByTag(LISTPAGERTAG);
+                left = getSupportFragmentManager().findFragmentByTag(LISTPAGERTAG);
                 listOpener = (ListOpener) left;
 
                 if (left != null && fragment2 == null) {
                     // Done
                     return;
                 } else if (left != null && fragment2 != null) {
-                    right = getSupportFragmentManager()
-                            .findFragmentByTag(DETAILTAG);
+                    right = getSupportFragmentManager().findFragmentByTag(DETAILTAG);
                 }
 
                 if (left != null && right != null) {
@@ -608,33 +590,27 @@ public class ActivityMain extends FragmentActivity
         }
 
         // Load stuff
-        final FragmentTransaction transaction =
-                getSupportFragmentManager().beginTransaction();
+        final FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         if (reverseAnimation) {
             reverseAnimation = false;
-            transaction.setCustomAnimations(R.anim.slide_in_bottom,
-                    R.anim.slide_out_top, R.anim.slide_in_top,
-                    R.anim.slide_out_bottom);
+            transaction.setCustomAnimations(R.anim.slide_in_bottom, R.anim.slide_out_top, R.anim
+                    .slide_in_top, R.anim.slide_out_bottom);
         } else {
-            transaction.setCustomAnimations(R.anim.slide_in_top,
-                    R.anim.slide_out_bottom, R.anim.slide_in_bottom,
-                    R.anim.slide_out_top);
+            transaction.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom, R.anim
+                    .slide_in_bottom, R.anim.slide_out_top);
         }
 
 		/*
          * If it contains a noteId, load an editor. If also tablet, load the
 		 * lists.
 		 */
-        if (fragment2 != null) {
+        /*if (fragment2 != null) {
             if (right == null) {
                 if (getNoteId(intent) > 0) {
                     right = TaskDetailFragment_.getInstance(getNoteId(intent));
                 } else if (isNoteIntent(intent)) {
-                    right = TaskDetailFragment_
-                            .getInstance(getNoteShareText(intent),
-                                    TaskListViewPagerFragment.getAShowList(this,
-                                            getListId(intent))
-                            );
+                    right = TaskDetailFragment_.getInstance(getNoteShareText(intent),
+                            TaskListViewPagerFragment.getAShowList(this, getListId(intent)));
                 }
             }
         } else if (isNoteIntent(intent)) {
@@ -647,9 +623,7 @@ public class ActivityMain extends FragmentActivity
                 // Get a share text (null safe)
                 // In a list (if specified, or default otherwise)
                 left = TaskDetailFragment_.getInstance(getNoteShareText(intent),
-                        TaskListViewPagerFragment
-                                .getARealList(this, getListId(intent))
-                );
+                        TaskListViewPagerFragment.getARealList(this, getListId(intent)));
             }
             // fucking stack
             while (getSupportFragmentManager().popBackStackImmediate()) {
@@ -660,9 +634,9 @@ public class ActivityMain extends FragmentActivity
             }
 
             setHomeAsDrawer(false);
-        }
-		/*
-		 * Other case, is a list id or a tablet
+        }*/
+        /*
+         * Other case, is a list id or a tablet
 		 */
         if (!isNoteIntent(intent) || fragment2 != null) {
             // If we're no longer in the editor, reset the action bar
@@ -672,8 +646,7 @@ public class ActivityMain extends FragmentActivity
             // TODO
             showingEditor = false;
 
-            left = TaskListViewPagerFragment
-                    .getInstance(getListIdToShow(intent));
+            left = TaskListViewPagerFragment.getInstance(getListIdToShow(intent));
             leftTag = LISTPAGERTAG;
             listOpener = (ListOpener) left;
         }
@@ -701,18 +674,17 @@ public class ActivityMain extends FragmentActivity
     long getNoteId(final Intent intent) {
         long retval = -1;
         if (intent != null &&
-            intent.getData() != null &&
-            (Intent.ACTION_EDIT.equals(intent.getAction()) ||
-             Intent.ACTION_VIEW.equals(intent.getAction()))) {
+                intent.getData() != null &&
+                (Intent.ACTION_EDIT.equals(intent.getAction()) || Intent.ACTION_VIEW.equals
+                        (intent.getAction()))) {
             if (intent.getData().getPath().startsWith(TaskList.URI.getPath())) {
                 // Find it in the extras. See DashClock extension for an example
                 retval = intent.getLongExtra(Task.TABLE_NAME, -1);
-            } else if ((intent.getData().getPath().startsWith(
-                    LegacyDBHelper.NotePad.Notes.PATH_VISIBLE_NOTES) ||
-                        intent.getData().getPath().startsWith(
-                                LegacyDBHelper.NotePad.Notes.PATH_NOTES) ||
-                        intent.getData().getPath()
-                                .startsWith(Task.URI.getPath()))) {
+            } else if ((intent.getData().getPath().startsWith(LegacyDBHelper.NotePad.Notes
+                    .PATH_VISIBLE_NOTES) ||
+                    intent.getData().getPath().startsWith(LegacyDBHelper.NotePad.Notes
+                            .PATH_NOTES) ||
+                    intent.getData().getPath().startsWith(Task.URI.getPath()))) {
                 retval = Long.parseLong(intent.getData().getLastPathSegment());
             }
             // else if (null != intent
@@ -738,9 +710,8 @@ public class ActivityMain extends FragmentActivity
 
         StringBuilder retval = new StringBuilder();
         // possible title
-        if (intent.getExtras().containsKey(Intent.EXTRA_SUBJECT) &&
-            !"com.google.android.gm.action.AUTO_SEND"
-                    .equals(intent.getAction())) {
+        if (intent.getExtras().containsKey(Intent.EXTRA_SUBJECT) && !("com.google.android.gm" + "" +
+                ".action.AUTO_SEND").equals(intent.getAction())) {
             retval.append(intent.getExtras().get(Intent.EXTRA_SUBJECT));
         }
         // possible note
@@ -770,26 +741,20 @@ public class ActivityMain extends FragmentActivity
         if (intent == null) {
             return false;
         }
-        if (Intent.ACTION_SEND.equals(intent.getAction()) ||
-            "com.google.android.gm.action.AUTO_SEND"
-                    .equals(intent.getAction())) {
+        if (Intent.ACTION_SEND.equals(intent.getAction()) || ("com.google.android.gm.action" + "" +
+                ".AUTO_SEND").equals(intent.getAction())) {
             return true;
         }
 
-        if (intent.getData() != null &&
-            (Intent.ACTION_EDIT.equals(intent.getAction()) ||
-             Intent.ACTION_VIEW.equals(intent.getAction()) ||
-             Intent.ACTION_INSERT.equals(intent.getAction())) &&
-            (intent.getData().getPath().startsWith(
-                    LegacyDBHelper.NotePad.Notes.PATH_VISIBLE_NOTES) ||
-             intent.getData().getPath()
-                     .startsWith(LegacyDBHelper.NotePad.Notes.PATH_NOTES) ||
-             intent.getData().getPath().startsWith(Task.URI.getPath())) &&
-            !intent.getData().getPath().startsWith(TaskList.URI.getPath())) {
-            return true;
-        }
+        return intent.getData() != null &&
+                (Intent.ACTION_EDIT.equals(intent.getAction()) ||
+                        Intent.ACTION_VIEW.equals(intent.getAction()) ||
+                        Intent.ACTION_INSERT.equals(intent.getAction())) &&
+                (intent.getData().getPath().startsWith(NotePad.Notes.PATH_VISIBLE_NOTES) ||
+                        intent.getData().getPath().startsWith(NotePad.Notes.PATH_NOTES) ||
+                        intent.getData().getPath().startsWith(Task.URI.getPath())) &&
+                !intent.getData().getPath().startsWith(TaskList.URI.getPath());
 
-        return false;
     }
 
     void setHomeAsDrawer(final boolean value) {
@@ -797,15 +762,13 @@ public class ActivityMain extends FragmentActivity
     }
 
     private void clearNotification(final Intent intent) {
-        if (intent != null &&
-            intent.getLongExtra(NOTIFICATION_DELETE_ARG, -1) > 0) {
-            Notification.deleteOrReschedule(this, Notification
-                    .getUri(intent.getLongExtra(NOTIFICATION_DELETE_ARG, -1)));
+        if (intent != null && intent.getLongExtra(NOTIFICATION_DELETE_ARG, -1) > 0) {
+            Notification.deleteOrReschedule(this, Notification.getUri(intent.getLongExtra
+                    (NOTIFICATION_DELETE_ARG, -1)));
         }
-        if (intent != null &&
-            intent.getLongExtra(NOTIFICATION_CANCEL_ARG, -1) > 0) {
-            NotificationHelper.cancelNotification(this,
-                    (int) intent.getLongExtra(NOTIFICATION_CANCEL_ARG, -1));
+        if (intent != null && intent.getLongExtra(NOTIFICATION_CANCEL_ARG, -1) > 0) {
+            NotificationHelper.cancelNotification(this, (int) intent.getLongExtra
+                    (NOTIFICATION_CANCEL_ARG, -1));
         }
 
     }
@@ -815,77 +778,21 @@ public class ActivityMain extends FragmentActivity
      */
     @AfterViews
     protected void loadContent() {
-        loadLeftDrawer();
         loadFragments();
-
-        if (!showingEditor || fragment2 != null) {
-            showcaseDrawer();
-        }
     }
 
     /**
      * Load a list of lists in the left
      */
-    protected void loadLeftDrawer() {
-        // TODO handle being called repeatably better?
-        // Set a listener on drawer events
-        // TODO strings
-        if (mDrawerToggle == null) {
-            mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-                    R.drawable.ic_drawer_dark, R.string.ok, R.string.about) {
-
-                /**
-                 * Called when a drawer has settled in a completely closed
-                 * state.
-                 */
-                public void onDrawerClosed(View view) {
-                    getActionBar().setTitle(R.string.app_name);
-                    isDrawerClosed = true;
-                    invalidateOptionsMenu(); // creates call to
-                    // onPrepareOptionsMenu()
-                }
-
-                /** Called when a drawer has settled in a completely open state. */
-                public void onDrawerOpened(View drawerView) {
-                    showcaseDrawerPress();
-                }
-
-                public void onDrawerStateChanged(int newState) {
-                    super.onDrawerStateChanged(newState);
-
-                    // If it's not idle, it isn't closed
-                    if (DrawerLayout.STATE_IDLE != newState) {
-                        getActionBar().setTitle(R.string.show_from_all_lists);
-                        // Is in motion, hide action items
-                        isDrawerClosed = false;
-                        invalidateOptionsMenu(); // creates call to
-                        // onPrepareOptionsMenu()
-                    }
-                }
-            };
-
-            // Set the drawer toggle as the DrawerListener
-            drawerLayout.setDrawerListener(mDrawerToggle);
-        }
-
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        getActionBar().setHomeButtonEnabled(true);
-
+    protected void populateNavDrawer() {
         // Use extra items for All Lists
-        final int[] extraIds = new int[]{-1,
-                TaskListFragment.LIST_ID_OVERDUE,
-                TaskListFragment.LIST_ID_TODAY,
-                TaskListFragment.LIST_ID_WEEK,
-                -1};
+        final int[] extraIds = new int[]{-1, TaskListFragment.LIST_ID_OVERDUE, TaskListFragment
+                .LIST_ID_TODAY, TaskListFragment.LIST_ID_WEEK, -1};
         // This is fine for initial conditions
-        final int[] extraStrings = new int[]{R.string.tasks,
-                R.string.date_header_overdue,
-                R.string.date_header_today,
-                R.string.next_5_days,
-                R.string.lists};
+        final int[] extraStrings = new int[]{R.string.tasks, R.string.date_header_overdue, R
+                .string.date_header_today, R.string.next_5_days, R.string.lists};
         // Use this for real data
-        final ArrayList<ArrayList<Object>> extraData =
-                new ArrayList<ArrayList<Object>>();
+        final ArrayList<ArrayList<Object>> extraData = new ArrayList<ArrayList<Object>>();
         // Task header
         extraData.add(new ArrayList<Object>());
         extraData.get(0).add(R.string.tasks);
@@ -904,16 +811,11 @@ public class ActivityMain extends FragmentActivity
 
         final int[] extraTypes = new int[]{1, 0, 0, 0, 1};
 
-        final ExtraTypesCursorAdapter adapter =
-                new ExtraTypesCursorAdapter(this,
-                        R.layout.simple_light_list_item_2, null, new String[]{
-                        TaskList.Columns.TITLE,
-                        TaskList.Columns.VIEW_COUNT},
-                        new int[]{android.R.id.text1, android.R.id.text2},
-                        // id -1 for headers, ignore clicks on them
-                        extraIds, extraStrings, extraTypes,
-                        new int[]{R.layout.drawer_header}
-                );
+        final ExtraTypesCursorAdapter adapter = new ExtraTypesCursorAdapter(this, R.layout
+                .simple_light_list_item_2, null, new String[]{TaskList.Columns.TITLE, TaskList
+                .Columns.VIEW_COUNT}, new int[]{android.R.id.text1, android.R.id.text2},
+                // id -1 for headers, ignore clicks on them
+                extraIds, extraStrings, extraTypes, new int[]{R.layout.drawer_header});
         adapter.setExtraData(extraData);
 
         // Load count of tasks in each one
@@ -925,18 +827,15 @@ public class ActivityMain extends FragmentActivity
         // new String[] { TaskList.Columns.TITLE },
         // new int[] { android.R.id.text1 }, 0);
         leftDrawer.setAdapter(adapter);
+        // Todo update what happens on click here
         // Set click handler
         leftDrawer.setOnItemClickListener(new OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> arg0, View v, int pos,
-                    long id) {
+            public void onItemClick(AdapterView<?> arg0, View v, int pos, long id) {
                 if (id < -1) {
                     // Set preference which type was chosen
-                    PreferenceManager
-                            .getDefaultSharedPreferences(ActivityMain.this)
-                            .edit()
-                            .putLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, id)
-                            .commit();
+                    PreferenceManager.getDefaultSharedPreferences(ActivityMain.this).edit()
+                            .putLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, id).commit();
                 }
                 openList(id);
             }
@@ -944,25 +843,19 @@ public class ActivityMain extends FragmentActivity
         leftDrawer.setOnItemLongClickListener(new OnItemLongClickListener() {
 
             @Override
-            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-                    int pos, long id) {
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
                 // Open dialog to edit list
                 if (id > 0) {
                     DialogEditList_ dialog = DialogEditList_.getInstance(id);
-                    dialog.show(getSupportFragmentManager(),
-                            "fragment_edit_list");
+                    dialog.show(getSupportFragmentManager(), "fragment_edit_list");
                     return true;
                 } else if (id < -1) {
                     // Set as "default"
-                    PreferenceManager
-                            .getDefaultSharedPreferences(ActivityMain.this)
-                            .edit()
-                            .putLong(getString(R.string.pref_defaultstartlist),
-                                    id)
-                            .putLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, id)
-                            .commit();
-                    Toast.makeText(ActivityMain.this, R.string.new_default_set,
-                            Toast.LENGTH_SHORT).show();
+                    PreferenceManager.getDefaultSharedPreferences(ActivityMain.this).edit()
+                            .putLong(getString(R.string.pref_defaultstartlist), id).putLong
+                            (TaskListFragment.LIST_ALL_ID_PREF_KEY, id).commit();
+                    Toast.makeText(ActivityMain.this, R.string.new_default_set, Toast
+                            .LENGTH_SHORT).show();
                     // openList(id);
                     return true;
                 } else {
@@ -971,184 +864,102 @@ public class ActivityMain extends FragmentActivity
             }
         });
         // Define the callback handler
-        final LoaderCallbacks<Cursor> callbacks =
-                new LoaderCallbacks<Cursor>() {
+        final LoaderCallbacks<Cursor> callbacks = new LoaderCallbacks<Cursor>() {
 
-                    final String[] COUNTROWS = new String[]{"COUNT(1)"};
-                    final String NOTCOMPLETED =
-                            Task.Columns.COMPLETED + " IS NULL ";
+            final String[] COUNTROWS = new String[]{"COUNT(1)"};
+            final String NOTCOMPLETED = Task.Columns.COMPLETED + " IS NULL ";
 
-                    @Override
-                    public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
-                        // Normal lists
-                        switch (id) {
-                            case TaskListFragment.LIST_ID_OVERDUE:
-                                return new CursorLoader(ActivityMain.this,
-                                        Task.URI, COUNTROWS, NOTCOMPLETED +
-                                                             TaskListFragment
-                                                                     .andWhereOverdue(),
-                                        null, null
-                                );
-                            case TaskListFragment.LIST_ID_TODAY:
-                                return new CursorLoader(ActivityMain.this,
-                                        Task.URI, COUNTROWS, NOTCOMPLETED +
-                                                             TaskListFragment
-                                                                     .andWhereToday(),
-                                        null, null
-                                );
-                            case TaskListFragment.LIST_ID_WEEK:
-                                return new CursorLoader(ActivityMain.this,
-                                        Task.URI, COUNTROWS, NOTCOMPLETED +
-                                                             TaskListFragment
-                                                                     .andWhereWeek(),
-                                        null, null
-                                );
-                            case 0:
-                            default:
-                                return new CursorLoader(ActivityMain.this,
-                                        TaskList.URI_WITH_COUNT, new String[]{
-                                        TaskList.Columns._ID,
-                                        TaskList.Columns.TITLE,
-                                        TaskList.Columns.VIEW_COUNT}, null,
-                                        null, getResources()
-                                        .getString(R.string.const_as_alphabetic,
-                                                TaskList.Columns.TITLE)
-                                );
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
+                // Normal lists
+                switch (id) {
+                    case TaskListFragment.LIST_ID_OVERDUE:
+                        return new CursorLoader(ActivityMain.this, Task.URI, COUNTROWS,
+                                NOTCOMPLETED + TaskListFragment.andWhereOverdue(), null, null);
+                    case TaskListFragment.LIST_ID_TODAY:
+                        return new CursorLoader(ActivityMain.this, Task.URI, COUNTROWS,
+                                NOTCOMPLETED + TaskListFragment.andWhereToday(), null, null);
+                    case TaskListFragment.LIST_ID_WEEK:
+                        return new CursorLoader(ActivityMain.this, Task.URI, COUNTROWS,
+                                NOTCOMPLETED + TaskListFragment.andWhereWeek(), null, null);
+                    case 0:
+                    default:
+                        return new CursorLoader(ActivityMain.this, TaskList.URI_WITH_COUNT, new
+                                String[]{TaskList.Columns._ID, TaskList.Columns.TITLE, TaskList
+                                .Columns.VIEW_COUNT}, null, null, getResources().getString(R
+                                .string.const_as_alphabetic, TaskList.Columns.TITLE));
+                }
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> l, Cursor c) {
+                switch (l.getId()) {
+                    case TaskListFragment.LIST_ID_OVERDUE:
+                        if (c.moveToFirst()) {
+                            updateExtra(1, c.getInt(0));
                         }
-                    }
-
-                    @Override
-                    public void onLoadFinished(Loader<Cursor> l, Cursor c) {
-                        switch (l.getId()) {
-                            case TaskListFragment.LIST_ID_OVERDUE:
-                                if (c.moveToFirst()) {
-                                    updateExtra(1, c.getInt(0));
-                                }
-                                break;
-                            case TaskListFragment.LIST_ID_TODAY:
-                                if (c.moveToFirst()) {
-                                    updateExtra(2, c.getInt(0));
-                                }
-                                break;
-                            case TaskListFragment.LIST_ID_WEEK:
-                                if (c.moveToFirst()) {
-                                    updateExtra(3, c.getInt(0));
-                                }
-                                break;
-                            case 0:
-                            default:
-                                adapter.swapCursor(c);
+                        break;
+                    case TaskListFragment.LIST_ID_TODAY:
+                        if (c.moveToFirst()) {
+                            updateExtra(2, c.getInt(0));
                         }
-                    }
-
-                    private void updateExtra(final int pos, final int count) {
-                        while (extraData.get(pos).size() < 2) {
-                            // To avoid crashes
-                            extraData.get(pos).add("0");
+                        break;
+                    case TaskListFragment.LIST_ID_WEEK:
+                        if (c.moveToFirst()) {
+                            updateExtra(3, c.getInt(0));
                         }
-                        extraData.get(pos).set(1, Integer.toString(count));
-                        adapter.notifyDataSetChanged();
-                    }
+                        break;
+                    case 0:
+                    default:
+                        adapter.swapCursor(c);
+                }
+            }
 
-                    @Override
-                    public void onLoaderReset(Loader<Cursor> l) {
-                        switch (l.getId()) {
-                            case TaskListFragment.LIST_ID_OVERDUE:
-                            case TaskListFragment.LIST_ID_TODAY:
-                            case TaskListFragment.LIST_ID_WEEK:
-                                break;
-                            case 0:
-                            default:
-                                adapter.swapCursor(null);
-                        }
-                    }
-                };
+            @Override
+            public void onLoaderReset(Loader<Cursor> l) {
+                switch (l.getId()) {
+                    case TaskListFragment.LIST_ID_OVERDUE:
+                    case TaskListFragment.LIST_ID_TODAY:
+                    case TaskListFragment.LIST_ID_WEEK:
+                        break;
+                    case 0:
+                    default:
+                        adapter.swapCursor(null);
+                }
+            }
+
+            private void updateExtra(final int pos, final int count) {
+                while (extraData.get(pos).size() < 2) {
+                    // To avoid crashes
+                    extraData.get(pos).add("0");
+                }
+                extraData.get(pos).set(1, Integer.toString(count));
+                adapter.notifyDataSetChanged();
+            }
+        };
 
         // Load actual data
         getSupportLoaderManager().restartLoader(0, null, callbacks);
         // special views
-        getSupportLoaderManager()
-                .restartLoader(TaskListFragment.LIST_ID_OVERDUE, null,
-                        callbacks);
-        getSupportLoaderManager()
-                .restartLoader(TaskListFragment.LIST_ID_TODAY, null, callbacks);
-        getSupportLoaderManager()
-                .restartLoader(TaskListFragment.LIST_ID_WEEK, null, callbacks);
-    }
-
-    /**
-     * On first load, show some functionality hints
-     */
-    private void showcaseDrawer() {
-        if (alreadyShowcased) {
-            return;
-        }
-        final ConfigOptions options = new ConfigOptions();
-        options.shotType = ShowcaseView.TYPE_NO_LIMIT;
-        options.block = true;
-        // Used in saving state
-        options.showcaseId = 1;
-        final int vertDp = ViewsHelper.convertDip2Pixels(this, 200);
-        final int horDp = ViewsHelper.convertDip2Pixels(this, 200);
-        sv = ShowcaseView
-                .insertShowcaseViewWithType(ShowcaseView.ITEM_ACTION_HOME,
-                        android.R.id.home, this, R.string.showcase_main_title,
-                        R.string.showcase_main_msg, options);
-        sv.animateGesture(0, vertDp, horDp, vertDp);
-
-        PreferenceManager.getDefaultSharedPreferences(this).edit()
-                .putBoolean(SHOWCASED_MAIN, true).commit();
-        alreadyShowcased = true;
-    }
-
-    private void showcaseDrawerPress() {
-        // only show on first boot
-        if (alreadyShowcasedDrawer) {
-            return;
-        }
-
-        final int vertDp = ViewsHelper.convertDip2Pixels(this, 110);
-        final int horDp = ViewsHelper.convertDip2Pixels(this, 60);
-
-        if (sv != null) {
-            sv.setText(R.string.showcase_drawer_title,
-                    R.string.showcase_drawer_msg);
-            sv.setShowcasePosition(horDp, vertDp);
-            sv.show();
-        } else {
-            final ConfigOptions options = new ConfigOptions();
-            options.shotType = ShowcaseView.TYPE_NO_LIMIT;
-            options.block = true;
-            // Used in saving state
-            options.showcaseId = 2;
-            sv = ShowcaseView.insertShowcaseView(horDp, vertDp, this,
-                    R.string.showcase_drawer_title,
-                    R.string.showcase_drawer_msg, options);
-            sv.show();
-        }
-        PreferenceManager.getDefaultSharedPreferences(this).edit()
-                .putBoolean(SHOWCASED_DRAWER, true).commit();
-        alreadyShowcasedDrawer = true;
+        getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_OVERDUE, null, callbacks);
+        getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_TODAY, null, callbacks);
+        getSupportLoaderManager().restartLoader(TaskListFragment.LIST_ID_WEEK, null, callbacks);
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
-    public void onFragmentInteraction(final Uri taskUri, final long listId,
-            final View origin) {
-        final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
-                .setClass(this, ActivityMain_.class).setData(taskUri)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+    public void openTask(final Uri taskUri, final long listId, final View origin) {
+        final Intent intent = new Intent().setAction(Intent.ACTION_EDIT).setClass(this,
+                ActivityMain_.class).setData(taskUri).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 .putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
         // User clicked a task in the list
         // tablet
-        if (fragment2 != null) {
+        /*if (fragment2 != null) {
             // Set the intent here also so rotations open the same item
             setIntent(intent);
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_top,
-                            R.anim.slide_out_bottom).replace(R.id.fragment2,
-                    TaskDetailFragment_.getInstance(taskUri))
-                    .commitAllowingStateLoss();
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim
+                    .slide_in_top, R.anim.slide_out_bottom).replace(R.id.fragment2,
+                    TaskDetailFragment_.getInstance(taskUri)).commitAllowingStateLoss();
             taskHint.setVisibility(View.GONE);
         }
         // phone
@@ -1168,29 +979,29 @@ public class ActivityMain extends FragmentActivity
             // else {
             startActivity(intent);
             // }
-        }
+        }*/
     }
 
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Override
+    public void deleteTasksWithUndo(Snackbar.Callback dismissCallback, View.OnClickListener listener, Task... tasks) {
+
+    }
+
     public void addTaskInList(final String text, final long listId) {
         if (listId < 1) {
             // Cant add to invalid lists
             return;
         }
-        final Intent intent = new Intent().setAction(Intent.ACTION_INSERT)
-                .setClass(this, ActivityMain_.class).setData(Task.URI)
-                .addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+        final Intent intent = new Intent().setAction(Intent.ACTION_INSERT).setClass(this,
+                ActivityMain_.class).setData(Task.URI).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
                 .putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
-        if (fragment2 != null) {
+        /*if (fragment2 != null) {
             // Set intent to preserve state when rotating
             setIntent(intent);
             // Replace editor fragment
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_top,
-                            R.anim.slide_out_bottom).replace(R.id.fragment2,
-                    TaskDetailFragment_.getInstance(text, listId))
-                    .commitAllowingStateLoss();
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim
+                    .slide_in_top, R.anim.slide_out_bottom).replace(R.id.fragment2,
+                    TaskDetailFragment_.getInstance(text, listId)).commitAllowingStateLoss();
             taskHint.setVisibility(View.GONE);
         } else {
             // Open an activity
@@ -1207,24 +1018,7 @@ public class ActivityMain extends FragmentActivity
             // else {
             startActivity(intent);
             // }
-        }
-    }
-
-    @Override
-    public void closeFragment(final Fragment fragment) {
-        if (fragment2 != null) {
-            getSupportFragmentManager().beginTransaction()
-                    .setCustomAnimations(R.anim.slide_in_top,
-                            R.anim.slide_out_bottom).remove(fragment)
-                    .commitAllowingStateLoss();
-            taskHint.setAlpha(0f);
-            taskHint.setVisibility(View.VISIBLE);
-            taskHint.animate().alpha(1f).setStartDelay(500);
-        } else {
-            // Phone case, simulate back button
-            // finish();
-            simulateBack();
-        }
+        }*/
     }
 
     private void simulateBack() {
@@ -1246,8 +1040,8 @@ public class ActivityMain extends FragmentActivity
      */
     void finishSlideTop() {
         super.finish();
-        overridePendingTransition(R.anim.activity_slide_in_right_full,
-                R.anim.activity_slide_out_right);
+        overridePendingTransition(R.anim.activity_slide_in_right_full, R.anim
+                .activity_slide_out_right);
     }
 
     @Override
@@ -1256,51 +1050,48 @@ public class ActivityMain extends FragmentActivity
     }
 
     @Override
-    public void onSharedPreferenceChanged(final SharedPreferences prefs,
-            final String key) {
-        if (key.equals(MainPrefs.KEY_THEME) ||
-            key.equals(getString(R.string.pref_locale))) {
+    public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
+        if (key.equals(MainPrefs.KEY_THEME) || key.equals(getString(R.string
+                .const_preference_locale_key))) {
             shouldRestart = true;
         } else if (key.startsWith("pref_restart")) {
             shouldRestart = true;
         }
     }
 
-    public void addRefreshableView(View view) {
-        // TODO Only if some sync is enabled
-        pullToRefreshAttacher
-                .addRefreshableView(view, getPullToRefreshListener());
-    }
-
-    public PullToRefreshAttacher.OnRefreshListener getPullToRefreshListener() {
-        if (pullToRefreshListener == null) {
-            pullToRefreshListener =
-                    new PullToRefreshAttacher.OnRefreshListener() {
-                        @Override
-                        public void onRefreshStarted(View view) {
-                            handleSyncRequest();
-                        }
-                    };
-        }
-        return pullToRefreshListener;
-    }
-
-    public void removeRefreshableView(View view) {
-        pullToRefreshAttacher.removeRefreshableView(view);
-    }
-
-    public PullToRefreshAttacher getPullToRefreshAttacher() {
-        return pullToRefreshAttacher;
-    }
-
-    @UiThread
     @Override
-    public void onSyncStartStop(final boolean ongoing) {
-        // Notify PullToRefreshAttacher of the refresh state
-        pullToRefreshAttacher.setRefreshing(ongoing);
+    public long getEditorTaskId() {
+        return -1;
     }
 
-    public static interface ListOpener {
-        public void openList(final long id);
+    @Override
+    public long getListOfTask() {
+        return 0;
+    }
+
+    @Override
+    public void closeEditor(Fragment fragment) {
+        if (fragment2 != null) {
+            getSupportFragmentManager().beginTransaction().setCustomAnimations(R.anim
+                    .slide_in_top, R.anim.slide_out_bottom).remove(fragment)
+                    .commitAllowingStateLoss();
+            taskHint.setAlpha(0f);
+            taskHint.setVisibility(View.VISIBLE);
+            taskHint.animate().alpha(1f).setStartDelay(500);
+        } else {
+            // Phone case, simulate back button
+            // finish();
+            simulateBack();
+        }
+    }
+
+    @NonNull
+    @Override
+    public String getInitialTaskText() {
+        return null;
+    }
+
+    public interface ListOpener {
+        void openList(final long id);
     }
 }

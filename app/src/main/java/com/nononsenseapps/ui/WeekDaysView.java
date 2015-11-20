@@ -1,13 +1,21 @@
+/*
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.nononsenseapps.ui;
-
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-
-import com.nononsenseapps.helpers.ActivityHelper;
-import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.utils.views.GreyableToggleButton;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -16,12 +24,17 @@ import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 
+import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.util.LocaleHelper;
+import com.nononsenseapps.utils.views.GreyableToggleButton;
+
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+import java.util.Locale;
+
 public class WeekDaysView extends LinearLayout implements
 		OnCheckedChangeListener {
-
-	public static interface onCheckedDaysChangeListener {
-		public void onChange(long checkedDays);
-	}
 
 	public static final int mon = 0x1;
 	public static final int tue = 0x10;
@@ -30,7 +43,6 @@ public class WeekDaysView extends LinearLayout implements
 	public static final int fri = 0x10000;
 	public static final int sat = 0x100000;
 	public static final int sun = 0x1000000;
-
 	GreyableToggleButton monday;
 	GreyableToggleButton tuesday;
 	GreyableToggleButton wednesday;
@@ -38,10 +50,8 @@ public class WeekDaysView extends LinearLayout implements
 	GreyableToggleButton friday;
 	GreyableToggleButton saturday;
 	GreyableToggleButton sunday;
-
 	private onCheckedDaysChangeListener listener = null;
 	private Locale mLocale;
-
 	public WeekDaysView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		LayoutInflater mInflater = (LayoutInflater) context
@@ -51,8 +61,8 @@ public class WeekDaysView extends LinearLayout implements
 		// TODO respect locale settings regarding first day of week
 
 		try {
-			mLocale = ActivityHelper.getUserLocale(context);
-			
+			mLocale = LocaleHelper.getUserLocale(context);
+
 			SimpleDateFormat dayFormat = TimeFormatter
 					.getLocalFormatterWeekdayShort(context);
 			// 2013-05-13 was a monday
@@ -137,6 +147,10 @@ public class WeekDaysView extends LinearLayout implements
 	public void setOnCheckedDaysChangedListener(
 			onCheckedDaysChangeListener listener) {
 		this.listener = listener;
+	}
+
+	public interface onCheckedDaysChangeListener {
+		void onChange(long checkedDays);
 	}
 
 }

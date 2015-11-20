@@ -1,17 +1,18 @@
 /*
- * Copyright (C) 2014 Jonas Kalderstam
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.nononsenseapps.notepad.prefs;
@@ -24,7 +25,6 @@ import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.annotation.SuppressLint;
 import android.app.Activity;
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.Fragment;
@@ -40,6 +40,7 @@ import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.support.v7.app.AlertDialog;
 import android.widget.Toast;
 
 import com.nononsenseapps.build.Config;
@@ -139,6 +140,21 @@ public class SyncPrefs extends PreferenceFragment implements
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         this.activity = activity;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        if (mDropboxHelper != null) {
+            if (mDropboxHelper.handleLinkResult()) {
+                // Success
+            } else {
+                // Link failed or was cancelled by the user.
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putBoolean
+                        (KEY_DROPBOX_ENABLE, false).commit();
+            }
+        }
     }
 
     @Override
@@ -251,6 +267,30 @@ public class SyncPrefs extends PreferenceFragment implements
                 .unregisterOnSharedPreferenceChangeListener(this);
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_DROPBOX_DIR_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString
+                        (KEY_DROPBOX_DIR, data.getData().getPath()).commit();
+            } // else was cancelled
+        } else if (requestCode == PICK_SD_DIR_CODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                // Set it
+                File path = new File(data.getData().getPath());
+                if (path.exists() && path.isDirectory() && path.canWrite()) {
+                    PreferenceManager.getDefaultSharedPreferences(getActivity()).edit().putString
+                            (KEY_SD_DIR, path.toString()).commit();
+                } else {
+                    Toast.makeText(getActivity(), R.string.cannot_write_to_directory, Toast
+                            .LENGTH_SHORT).show();
+                }
+            } // else was cancelled
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
+
     private void showAccountDialog() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         Fragment prev = getFragmentManager().findFragmentByTag("accountdialog");
@@ -316,47 +356,6 @@ public class SyncPrefs extends PreferenceFragment implements
             // stupid
         }
 
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-        if (mDropboxHelper != null) {
-            if (mDropboxHelper.handleLinkResult()) {
-                // Success
-            } else {
-                // Link failed or was cancelled by the user.
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
-                        .putBoolean(KEY_DROPBOX_ENABLE, false).commit();
-            }
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_DROPBOX_DIR_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                PreferenceManager.getDefaultSharedPreferences(getActivity
-                        ()).edit().putString(KEY_DROPBOX_DIR,
-                        data.getData().getPath()).commit();
-            } // else was cancelled
-        } else if (requestCode == PICK_SD_DIR_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                // Set it
-                File path = new File(data.getData().getPath());
-                if (path.exists() && path.isDirectory() && path.canWrite()) {
-                    PreferenceManager.getDefaultSharedPreferences(getActivity
-                            ()).edit().putString(KEY_SD_DIR,
-                            path.toString()).commit();
-                } else {
-                    Toast.makeText(getActivity(), R.string.cannot_write_to_directory,
-                            Toast.LENGTH_SHORT).show();
-                }
-            } // else was cancelled
-        } else {
-            super.onActivityResult(requestCode, resultCode, data);
-        }
     }
 
     private void toggleSync(SharedPreferences sharedPreferences) {

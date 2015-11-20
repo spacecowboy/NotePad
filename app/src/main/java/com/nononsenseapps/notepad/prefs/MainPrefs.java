@@ -1,35 +1,42 @@
 /*
- * Copyright (C) 2012 Jonas Kalderstam
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.nononsenseapps.notepad.prefs;
+
+import android.os.Bundle;
+import android.preference.ListPreference;
+import android.preference.PreferenceFragment;
+import android.support.annotation.NonNull;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.R;
 
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.helpers.TimeFormatter;
-
-import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.PreferenceFragment;
-
 public class MainPrefs extends PreferenceFragment {
-	public static final String KEY_THEME = "key_current_theme";
-	// public static final String KEY_WEEK_START_DAY =
+    public static final String KEY_THEME = "preference_theme";
+    // public static final String KEY_WEEK_START_DAY =
 	// "preferences_week_start_day";
 
 	public static final String SANS = "Sans";
@@ -53,13 +60,13 @@ public class MainPrefs extends PreferenceFragment {
 		addPreferencesFromResource(R.xml.app_pref_main);
 
 		// Fill listpreferences
-		setLangEntries((ListPreference) findPreference(getString(R.string.pref_locale)));
-		setDateEntries(
-				(ListPreference) findPreference(getString(R.string.key_pref_dateformat_short)),
+        /*setLangEntries((ListPreference) findPreference(getString(R.string.pref_locale)));
+*//*		setDateEntries(
+                (ListPreference) findPreference(getString(R.string.key_pref_dateformat_short)),
 				R.array.dateformat_short_values);
 		setDateEntries(
 				(ListPreference) findPreference(getString(R.string.key_pref_dateformat_long)),
-				R.array.dateformat_long_values);
+				R.array.dateformat_long_values);*//*
 
 		// Bind summaries
 		// PrefsActivity
@@ -81,8 +88,26 @@ public class MainPrefs extends PreferenceFragment {
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_body_fontfamily)));
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_fontsize)));
-        PrefsActivity.bindPreferenceSummaryToValue(findPreference(KEY_THEME));
-	}
+        PrefsActivity.bindPreferenceSummaryToValue(findPreference(KEY_THEME));*/
+    }
+
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle
+            savedInstanceState) {
+        View layout = inflater.inflate(R.layout.activity_settings, container, false);
+        if (layout != null) {
+            PrefsActivity activity = (PrefsActivity) getActivity();
+            Toolbar toolbar = (Toolbar) layout.findViewById(R.id.toolbar);
+            activity.setSupportActionBar(toolbar);
+
+            ActionBar actionBar = activity.getSupportActionBar();
+            if (actionBar != null) {
+                actionBar.setDisplayHomeAsUpEnabled(true);
+                actionBar.setTitle(getPreferenceScreen().getTitle());
+            }
+        }
+        return layout;
+    }
 
 	private void setDateEntries(ListPreference prefDate, int array) {
 		final String[] values = getResources().getStringArray(array);

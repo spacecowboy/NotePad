@@ -1,28 +1,21 @@
-package com.nononsenseapps.utils.time;
-
 /*
- * I was working on an Atom (http://www.w3.org/2005/Atom) parser and discovered
- * that I could not parse dates in the format defined by RFC 3339 using the
- * SimpleDateFormat class. The reason was the ':' in the time zone. This code
- * strips out the colon if it's there and tries four different formats on the
- * resulting string depending on if it has a time zone, or if it has a
- * fractional second part. There is a probably a better way to do this, and a
- * more proper way. But this is a really small addition to a codebase (You don't
- * need a jar, just throw this function in some static Utility class if you have
- * one).
- * 
- * Feel free to use this in your code, but I'd appreciate it if you keep this
- * note in the code if you distribute it. Thanks!
- * 
- * For people who might be googling: The date format parsed by this goes by:
- * atomDateConstruct, xsd:dateTime, RFC3339 and is compatable with:
- * ISO.8601.1988, W3C.NOTE-datetime-19980827 and W3C.REC-xmlschema-2-20041028
- * (that I know of)
- * 
- * 
- * Copyright 2007, Chad Okere (ceothrow1 at gmail dotcom) OMG NO WARRENTY
- * EXPRESSED OR IMPLIED!!!1
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+package com.nononsenseapps.utils.time;
 
 // package org.doubango.imsdroid.utils;
 

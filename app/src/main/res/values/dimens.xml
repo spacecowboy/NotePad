@@ -1,20 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2012 Jonas Kalderstam
+  Copyright (c) 2015 Jonas Kalderstam.
 
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
-  
-          http://www.apache.org/licenses/LICENSE-2.0
-  
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
--->
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
 <resources>
+    <!-- Material values -->
+
+    <!-- Screen edge left and right margins: 16dp -->
+    <!-- Horizontal margins on mobile: 16dp. -->
+    <dimen name="keyline_1">16dp</dimen>
+    <!-- Content associated with an icon or avatar left margin: 72dp -->
+    <dimen name="keyline_2">72dp</dimen>
+    <!-- keyline2 - 2*keyline1 -->
+    <dimen name="keylined_avatar_width">40dp</dimen>
+    <dimen name="status_bar_height">24dp</dimen>
+    <dimen name="navigation_drawer_header_minsize">80dp</dimen>
+    <dimen name="item_spacing">8dp</dimen>
+    <dimen name="listitem_height_normal">48dp</dimen>
+
+
+    <!-- 56 dp + 48 dp -->
+    <dimen name="total_toolbar_height">104dp</dimen>
+    <dimen name="toolbar_height">56dp</dimen>
+    <dimen name="subtoolbar_height">48dp</dimen>
+
+    <dimen name="navdrawer_width">300dp</dimen>
+    <dimen name="card_margin">16dp</dimen>
+    <dimen name="fab_margin">16dp</dimen>
+
+    <!-- Material dialog -->
+    <dimen name="dialog_button_height">36dp</dimen>
+    <dimen name="dialog_button_area_height">52dp</dimen>
+    <dimen name="dialog_button_min_width">64dp</dimen>
+    <dimen name="dialog_keyline1">24dp</dimen>
+
+    <!-- Stuff -->
     <dimen name="drag_grip_ridge_size">4dp</dimen>
     <dimen name="drag_grip_ridge_gap">2dp</dimen>
     <dimen name="drag_grip_width">32dp</dimen>
@@ -64,5 +96,6 @@
     <dimen name="activity_lone_horizontal_margin">0dp</dimen>
     <dimen name="activity_lone_vertical_margin">16dp</dimen>
     <dimen name="activity_lone_horizontal_padding">16dp</dimen>
+
 
 </resources>

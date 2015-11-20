@@ -1,32 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2015 Jonas Kalderstam.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/taskItem"
-    style="?TaskListItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/selectable_item_background"
     android:minHeight="@dimen/list_item_min_size" >
-
-    <!--
-         <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="@dimen/list_item_min_size" >
-
-        <TextView
-            android:id="@+id/indent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:singleLine="true"
-            tools:ignore="SelectableText" />
-    -->
 
     <include
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         layout="@layout/tasklist_item_card_section" />
-    <!-- </RelativeLayout> -->
 
     <com.google.android.apps.dashclock.ui.DragGripView
         android:id="@+id/drag_handle"
@@ -37,6 +37,6 @@
         android:paddingBottom="12dp"
         android:paddingRight="4dp"
         android:paddingTop="12dp"
-        android:color="?attr/drag_handle_color" />
+        android:color="?drag_handle_color" />
 
 </FrameLayout>

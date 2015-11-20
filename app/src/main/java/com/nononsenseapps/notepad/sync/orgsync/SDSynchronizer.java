@@ -1,29 +1,29 @@
 /*
- * Copyright (c) 2014 Jonas Kalderstam.
+ * Copyright (c) 2015 Jonas Kalderstam.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.nononsenseapps.notepad.sync.orgsync;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Environment;
 import android.os.FileObserver;
-import android.preference.PreferenceManager;
 
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.util.PermissionsHelper;
+import com.nononsenseapps.util.SharedPreferencesHelper;
 
 import org.cowboyprogrammer.org.OrgFile;
 
@@ -47,18 +47,20 @@ public class SDSynchronizer extends Synchronizer implements
 	// Where files are kept. User changeable in preferences.
 	public static final String DEFAULT_ORG_DIR = Environment
 			.getExternalStorageDirectory().toString() + "/NoNonsenseNotes";
-	public static final String PREF_ORG_DIR = SyncPrefs.KEY_SD_DIR;
-	public static final String PREF_ORG_SD_ENABLED = SyncPrefs.KEY_SD_ENABLE;
     public final static String SERVICENAME = "SDORG";
     protected String ORG_DIR;
     protected final boolean configured;
 
 	public SDSynchronizer(Context context) {
 		super(context);
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		ORG_DIR = prefs.getString(PREF_ORG_DIR, DEFAULT_ORG_DIR);
-		configured = prefs.getBoolean(PREF_ORG_SD_ENABLED, false);
+		ORG_DIR = SharedPreferencesHelper.getSdDir(context);
+        final boolean permitted = PermissionsHelper.hasPermissions(context, PermissionsHelper.PERMISSIONS_SD);
+        if (permitted) {
+            configured = SharedPreferencesHelper.isSdSyncEnabled(context);
+        } else  {
+            configured = false;
+            SharedPreferencesHelper.disableSdCardSync(context);
+        }
 	}
 
     /**

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Copyright (c) 2015 Jonas Kalderstam.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="?colorPrimaryDark"
+    android:minHeight="@dimen/navigation_drawer_header_minsize"
+    android:orientation="vertical"
+    android:paddingBottom="@dimen/item_spacing"
+    android:paddingLeft="@dimen/keyline_1"
+    android:paddingRight="@dimen/keyline_1"
+    android:paddingTop="@dimen/status_bar_height"
+    android:theme="@style/DarkToolbarThemeOverlay">
+
+    <ImageView
+        android:id="@+id/main_avatar"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginBottom="@dimen/item_spacing"
+        android:layout_marginTop="8dp"
+        android:scaleType="fitCenter"/>
+
+    <RelativeLayout
+        android:id="@+id/provider_info_box"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackgroundBorderless"
+        android:clickable="true">
+
+        <ImageView
+            android:id="@+id/indicator_image"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_centerInParent="true"
+            android:scaleType="fitCenter"/>
+
+        <TextView
+            android:id="@android:id/text1"
+            style="@style/TextAppearance.AppCompat.Body2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginBottom="2dp"
+            android:layout_toLeftOf="@id/indicator_image"
+            android:layout_toStartOf="@id/indicator_image"
+            android:gravity="center_vertical"
+            android:singleLine="true"
+            android:ellipsize="middle"
+            android:lines="1"
+            android:text=""/>
+
+        <TextView
+            android:id="@android:id/text2"
+            style="@style/TextAppearance.AppCompat.Body1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@android:id/text1"
+            android:layout_marginTop="2dp"
+            android:layout_toLeftOf="@id/indicator_image"
+            android:layout_toStartOf="@id/indicator_image"
+            android:visibility="gone"
+            android:gravity="center_vertical"
+            android:text=""/>
+    </RelativeLayout>
+</LinearLayout>

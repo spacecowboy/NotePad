@@ -1,17 +1,18 @@
 /*
- * Copyright (C) 2012 Jonas Kalderstam
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- * 
- * http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.nononsenseapps.notepad.fragments;
@@ -20,6 +21,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,12 +31,12 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.nononsenseapps.notepad.R;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 
 @EFragment(resName="fragment_dialog_password")
 public class DialogPassword extends DialogFragment {
@@ -50,10 +53,6 @@ public class DialogPassword extends DialogFragment {
 
 	PasswordConfirmedListener listener = null;
 
-	public static interface PasswordConfirmedListener {
-		public void onPasswordConfirmed();
-	}
-
 	public void setListener(final PasswordConfirmedListener listener) {
 		this.listener = listener;
 	}
@@ -64,7 +63,7 @@ public class DialogPassword extends DialogFragment {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 		final String currentPassword = settings.getString(
-				PasswordPrefs.KEY_PASSWORD, "");
+				DialogPasswordSettings.KEY_PASSWORD, "");
 		if (currentPassword.isEmpty()) {
 			getDialog().setTitle(R.string.enter_new_password);
 		}
@@ -80,13 +79,28 @@ public class DialogPassword extends DialogFragment {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 		final String currentPassword = settings.getString(
-				PasswordPrefs.KEY_PASSWORD, "");
+				DialogPasswordSettings.KEY_PASSWORD, "");
 		if (currentPassword.isEmpty()) {
 			passwordVerificationField.setVisibility(View.VISIBLE);
 		}
 		else {
 			passwordVerificationField.setVisibility(View.GONE);
 		}
+
+        passwordField.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                dialog_yes.setEnabled(s.length() > 0);
+            }
+        });
 	}
 
 	@Click(resName="dialog_no")
@@ -98,7 +112,7 @@ public class DialogPassword extends DialogFragment {
 	void confirm() {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
-		final String currentPassword = settings.getString(PasswordPrefs.KEY_PASSWORD,
+		final String currentPassword = settings.getString(DialogPasswordSettings.KEY_PASSWORD,
 				"");
 		final String enteredPassword = passwordField.getText().toString();
 		final String verifiedPassword = passwordVerificationField.getText()
@@ -134,7 +148,7 @@ public class DialogPassword extends DialogFragment {
 	private void setPassword(final String pass1, final String pass2) {
 		if (pass1 != null && !pass1.isEmpty() && pass1.equals(pass2)) {
 			PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
-					.putString(PasswordPrefs.KEY_PASSWORD, pass1).commit();
+					.putString(DialogPasswordSettings.KEY_PASSWORD, pass1).commit();
 			if (listener != null) {
 				listener.onPasswordConfirmed();
 			}
@@ -148,5 +162,9 @@ public class DialogPassword extends DialogFragment {
 					getText(R.string.passwords_dont_match), Toast.LENGTH_SHORT)
 					.show();
 		}
+	}
+
+	public interface PasswordConfirmedListener {
+		void onPasswordConfirmed();
 	}
 }

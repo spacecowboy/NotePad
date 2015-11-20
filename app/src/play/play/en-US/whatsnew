@@ -1,0 +1,17 @@
+# 5.7.1
+
+Fix Google Tasks sync
+
+# 5.6.0
+
+New setting: enable/disable first line in notes to be bigger font.
+
+Reminders: Now default to today instead of tomorrow.
+
+# 5.5.5
+
+Some crash fixes.
+
+# 5.5.4
+
+Crash fix when Google account was removed from device

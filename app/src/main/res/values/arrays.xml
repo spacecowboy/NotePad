@@ -17,19 +17,17 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
 <resources xmlns:tools="http://schemas.android.com/tools">
-
-    <string-array name="theme_preference">
+    <string-array name="preference_theme_entries">
         <item>@string/settings_summary_theme_light</item>
         <item>@string/settings_summary_theme_dark</item>
-        <item>@string/settings_summary_theme_classic</item>
         <item>@string/settings_summary_theme_black</item>
     </string-array>
-    <string-array name="themevalues_preference" tools:ignore="MissingTranslation">
-        <item>@string/const_theme_light_ab</item>
-        <item>@string/const_theme_googlenow_dark</item>
-        <item>@string/const_theme_classic</item>
-        <item>@string/const_theme_black</item>
+    <string-array name="preference_theme_values" tools:ignore="MissingTranslation">
+        <item>@string/const_preference_theme_light</item>
+        <item>@string/const_preference_theme_dark</item>
+        <item>@string/const_preference_theme_black</item>
     </string-array>
+
     <string-array name="widget_theme_preference">
         <item>@string/settings_summary_theme_dark</item>
         <item>@string/settings_summary_theme_light</item>
@@ -71,72 +69,6 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
         <item>@string/sort_list_manual</item>
     </string-array>
 
-    <string-array name="dateformat_long_values">
-        <item>@string/dateformat_long_1</item>
-        <item>@string/dateformat_long_2</item>
-    </string-array>
-
-    <string-array name="dateformat_short_values">
-        <item>@string/dateformat_short_1</item>
-        <item>@string/dateformat_short_2</item>
-        <item>@string/dateformat_short_3</item>
-        <item>@string/dateformat_short_4</item>
-    </string-array>
-
-    <!-- <attr name="titleFontFamily" format="enum">
-            <enum name="robotosans" value="0" />
-            <enum name="robotocondensed" value="1" />
-            <enum name="robotolight" value="2" />
-            <enum name="robotothin" value="3" />
-        </attr>
-        <attr name="titleFontStyle" format="enum">
-            <enum name="normal" value="0" />
-            <enum name="bold" value="1" />
-            <enum name="italic" value="2" />
-        </attr> -->
-    <string-array name="fontfamily_entries">
-        <item>Roboto</item>
-        <item>Roboto Condensed</item>
-        <item>Roboto Light</item>
-        <item>Roboto Thin</item>
-    </string-array>
-    <string-array name="fontfamily_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    <string-array name="fontstyle_entries">
-        <item>@string/normal</item>
-        <item>@string/bold</item>
-        <item>@string/italic</item>
-    </string-array>
-    <string-array name="fontstyle_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="fontsize_entries">
-        <item>@string/small</item>
-        <item>@string/medium</item>
-        <item>@string/large</item>
-    </string-array>
-    <string-array name="fontsize_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-
-    <string-array name="notification_prio_entries">
-        <item>@string/notification_prio_high</item>
-        <item>@string/standard</item>
-        <item>@string/notification_prio_low</item>
-    </string-array>
-    <string-array name="notification_prio_values">
-        <item>2</item>
-        <item>0</item>
-        <item>-2</item>
-    </string-array>
     <string-array name="translated_langs" tools:ignore="MissingTranslation">
         <item>af</item>
         <item>ar</item>

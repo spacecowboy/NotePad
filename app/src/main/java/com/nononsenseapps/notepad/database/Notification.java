@@ -1,4 +1,37 @@
+/*
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.nononsenseapps.notepad.database;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.UriMatcher;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.provider.BaseColumns;
+import android.view.View;
+
+import com.nononsenseapps.helpers.NotificationHelper;
+import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.ui.WeekDaysView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -6,30 +39,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.nononsenseapps.helpers.NotificationHelper;
-import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.ui.WeekDaysView;
-import com.nononsenseapps.util.GeofenceRemover;
-import com.nononsenseapps.utils.views.GreyableToggleButton;
-
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.UriMatcher;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-import android.provider.BaseColumns;
-import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
 public class Notification extends DAO {
 	// These match WeekDaysView's values
@@ -356,8 +365,6 @@ public class Notification extends DAO {
 	public int delete(final Context context) {
 		// Make sure existing notifications are cancelled.
 		NotificationHelper.cancelNotification(context, this);
-		// Also remove any associated geofences
-		GeofenceRemover.removeFences(context, Long.toString(_id));
 		return super.delete(context);
 	}
 
@@ -474,11 +481,6 @@ public class Notification extends DAO {
 					}
 					c.close();
 
-					if (idsToClear.size() > 0) {
-						// Remove geofences as well
-						GeofenceRemover.removeFences(context, idsToClear);
-					}
-
 					// context.getContentResolver().delete(URI,
 					// Columns.TASKID + " IN " + idStrings +
 					// " AND " + Columns.TIME + " <= " + maxTime, null);
@@ -550,16 +552,16 @@ public class Notification extends DAO {
 									final long time, final boolean before) {
 		final String comparison = before ? " <= ?" : " > ?";
 		return getNotificationsWithTasks(
-										context,
-										new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
-																		.append(comparison)
-																		.append(" AND ")
-																		.append(com.nononsenseapps.notepad.database.Notification.Columns.RADIUS)
-																		.append(" IS NULL")
-																		.toString(),
-										new String[] { Long.toString(time) },
-										new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
-																		.toString());
+				context,
+				new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
+						.append(comparison)
+						.append(" AND ")
+						.append(com.nononsenseapps.notepad.database.Notification.Columns.RADIUS)
+						.append(" IS NULL")
+						.toString(),
+				new String[]{Long.toString(time)},
+				new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
+						.toString());
 	}
 
 	public static List<Notification> getNotificationsWithTasks(final Context context,
@@ -676,10 +678,6 @@ public class Notification extends DAO {
 	}
 
 	public void deleteOrReschedule(final Context context) {
-		if (isLocationRepeat()) {
-			return;
-		}
-
 		if (repeats == 0 || time == null) {
 			delete(context);
 		} else {
@@ -738,20 +736,5 @@ public class Notification extends DAO {
 		}
 
 		return sb.toString();
-	}
-
-	/**
-	 * This overrides ALL other repeat fields!
-	 */
-	public void setLocationRepeat(final boolean b) {
-		if (b) {
-			this.repeats = locationRepeat;
-		} else {
-			this.repeats = 0;
-		}
-	}
-
-	public boolean isLocationRepeat() {
-		return 0 < (this.repeats & locationRepeat);
 	}
 }
