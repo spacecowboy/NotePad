@@ -438,7 +438,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
         mAdapter.setViewBinder(new ViewBinder() {
             final String manualsort = getString(R.string.const_possubsort);
-            final String notetype = getString(R.string.const_listtype_notes);
             final OnCheckedChangeListener checkBoxListener = new OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {

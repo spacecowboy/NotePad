@@ -18,11 +18,14 @@
 package com.nononsenseapps.ui;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import com.nononsenseapps.helpers.Log;
 import android.view.View;
-import android.widget.RelativeLayout;
 import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
+
+import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.notepad.R;
 
 /**
  * This class is designed to act as a simple version of the touch delegate. E.g.
@@ -48,38 +51,39 @@ import android.view.View.OnClickListener;
  *
  */
 public class DelegateFrame extends RelativeLayout implements OnClickListener {
-	public static final String NONONSENSEAPPSNS = "http://nononsenseapps.com";
-	public static final String ATTR_ENLARGEDVIEW = "enlargedView";
-	
-	private int enlargedViewId;
+    private static final int UNDEFINED = -1;
+    private final int enlargedViewId;
+    private View cachedView;
 
 	public DelegateFrame(Context context) {
-		super(context);
+		this(context, null);
 	}
 
 	public DelegateFrame(Context context, AttributeSet attrs) {
-		super(context, attrs);
-		setValuesFromXML(attrs);
+		this(context, attrs, 0);
 	}
 
 	public DelegateFrame(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		setValuesFromXML(attrs);
-	}
-	
-	private void setValuesFromXML(AttributeSet attrs) {
-		enlargedViewId = attrs.getAttributeResourceValue(NONONSENSEAPPSNS, ATTR_ENLARGEDVIEW, -1);
-		Log.d("delegate", "setting xml values! view: " + enlargedViewId);
-		setOnClickListener(this);
+
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DelegateFrame);
+        Log.d("delegate", "setting xml values! pre");
+
+        enlargedViewId = a.getResourceId(R.styleable.DelegateFrame_enlargedView, UNDEFINED);
+        // enlargedViewId = attrs.getAttributeResourceValue(NONONSENSEAPPSNS, ATTR_ENLARGEDVIEW, UNDEFINED);
+        Log.d("delegate", "setting xml values! view: " + enlargedViewId);
+        setOnClickListener(this);
+
+        a.recycle();
 	}
 
 	@Override
 	public void onClick(View v) {
-		if (enlargedViewId > -1) {
-			View enlargedView = findViewById(enlargedViewId);
-			Log.d("delegate", "onTouchEvent! view is null?: " + Boolean.toString(enlargedView == null));
-			if (enlargedView != null)
-				enlargedView.performClick();
+        if (cachedView == null && enlargedViewId != UNDEFINED) {
+            cachedView = findViewById(enlargedViewId);
+        }
+		if (cachedView != null) {
+            cachedView.performClick();
 		}
 	}
 }

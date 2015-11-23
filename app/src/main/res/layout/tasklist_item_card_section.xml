@@ -29,7 +29,6 @@
 
     <com.nononsenseapps.ui.DelegateFrame
         android:id="@+id/checkboxcontainer"
-        xmlns:nononsenseapps="http://nononsenseapps.com"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
@@ -37,11 +36,10 @@
         android:minHeight="40dp"
         android:paddingRight="4dp"
         android:paddingLeft="@dimen/keyline_1"
-        nononsenseapps:enlargedView="@+id/itemDone" >
+        custom:enlargedView="@+id/checkbox" >
 
         <com.nononsenseapps.ui.NoteCheckBox
-            android:id="@+id/checkbox"
-            xmlns:android="http://schemas.android.com/apk/res/android"
+            android:id="@id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
