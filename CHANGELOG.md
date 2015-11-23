@@ -8,6 +8,10 @@
 - Remove "sort by due date" for list ot type "notes" [\#302](https://github.com/spacecowboy/NotePad/issues/302)
 - Update to material design [\#311](https://github.com/spacecowboy/NotePad/pull/311) ([spacecowboy](https://github.com/spacecowboy))
 
+**Fixed bugs:**
+
+- 6.0 beta 2 crash on 4.4.4 [\#333](https://github.com/spacecowboy/NotePad/issues/333)
+
 **Closed issues:**
 
 - Material design branch \( version 6 \) issues [\#317](https://github.com/spacecowboy/NotePad/issues/317)
