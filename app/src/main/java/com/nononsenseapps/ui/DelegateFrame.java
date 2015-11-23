@@ -34,7 +34,7 @@ import com.nononsenseapps.notepad.R;
  * Define it entirely in XML as the following example demonstrates:
  * 
  * <com.nononsenseapps.ui.DelegateFrame
-        xmlns:nononsenseapps="http://nononsenseapps.com"
+        xmlns:custom="http://schemas.android.com/apk/res-auto"
         android:id="@+id/datecheckcontainer"
         android:layout_width="wrap_content"
         android:layout_height="fill_parent"
@@ -44,10 +44,10 @@ import com.nononsenseapps.notepad.R;
         android:paddingRight="4dp"
         android:paddingTop="8dp"
         android:clickable="true"
-        nononsenseapps:enlargedView="@+id/itemDone" >
+        custom:enlargedView="@+id/itemDone" >
         
         It's important to add android:clickable="true" and 
-        nononsenseapps:enlargedView="@+id/YOURIDHERE"
+        custom:enlargedView="@+id/YOURIDHERE"
  *
  */
 public class DelegateFrame extends RelativeLayout implements OnClickListener {
