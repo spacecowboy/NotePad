@@ -1,8 +1,7 @@
 # Change Log
 
-## [Unreleased](https://github.com/spacecowboy/Notepad/tree/HEAD)
-
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/6.0.0-beta.2...HEAD)
+## [6.0.0-beta.3](https://github.com/spacecowboy/Notepad/tree/6.0.0-beta.3) (2015-11-23)
+[Full Changelog](https://github.com/spacecowboy/Notepad/compare/6.0.0-beta.2...6.0.0-beta.3)
 
 **Implemented enhancements:**
 
