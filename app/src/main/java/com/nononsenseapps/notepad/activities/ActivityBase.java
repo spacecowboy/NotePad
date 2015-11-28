@@ -45,11 +45,15 @@ public abstract class ActivityBase extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        ActivityHelper.useUserConfiguration(this);
+        useConfiguration();
         super.onCreate(savedInstanceState);
 
         PreferenceManager.getDefaultSharedPreferences(this)
                 .registerOnSharedPreferenceChangeListener(mThemeLocaleChangeListener);
+    }
+
+    protected void useConfiguration() {
+        ActivityHelper.useUserConfigurationFullscreen(this);
     }
 
     @Override

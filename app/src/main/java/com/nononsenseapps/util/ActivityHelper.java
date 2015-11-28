@@ -34,30 +34,41 @@ import java.util.Locale;
 public class ActivityHelper {
     /**
      * Set up the activity according to the user's configuration.
-     * Sets the theme and language of the activity.
+     * Sets the fullscreen theme and language of the activity.
      *
      * @param context
      */
-    public static void useUserConfiguration(@NonNull Context context) {
-        setSelectedTheme(context);
+    public static void useUserConfigurationFullscreen(@NonNull Context context) {
+        setSelectedTheme(context, true);
+        setSelectedLanguage(context);
+    }
+
+    /**
+     * Set up the activity according to the user's configuration.
+     * Sets the dialogWhenLarge theme and language of the activity.
+     *
+     * @param context
+     */
+    public static void useUserConfigurationDialogWhenLarge(@NonNull Context context) {
+        setSelectedTheme(context, false);
         setSelectedLanguage(context);
     }
 
     /**
      * Set the configured theme on the current context
      */
-    public static void setSelectedTheme(@NonNull Context context) {
+    public static void setSelectedTheme(@NonNull Context context, boolean fullscreen) {
         final String selectedTheme = SharedPreferencesHelper.getCurrentTheme(context, "");
         final String dark = context.getString(R.string.const_preference_theme_dark);
         final String black = context.getString(R.string.const_preference_theme_black);
 
         if (dark.equals(selectedTheme)) {
-            context.setTheme(R.style.DarkTheme);
+            context.setTheme(fullscreen ? R.style.DarkTheme : R.style.DarkTheme_DialogWhenLarge);
         } else if (black.equals(selectedTheme)) {
-            context.setTheme(R.style.BlackTheme);
+            context.setTheme(fullscreen ? R.style.BlackTheme : R.style.BlackTheme_DialogWhenLarge);
         } else {
             // light
-            context.setTheme(R.style.LightTheme);
+            context.setTheme(fullscreen ? R.style.LightTheme : R.style.LightTheme_DialogWhenLarge);
         }
     }
 

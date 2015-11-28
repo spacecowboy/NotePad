@@ -34,7 +34,7 @@ import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 /**
  * Container for editor fragment. Only used on phones.
  */
-public class ActivityEditor extends ActivityBase implements TaskDetailFragment
+public class ActivityEditor extends ActivityEditorBase implements TaskDetailFragment
         .TaskEditorCallbacks {
 
     @Override

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  Copyright (c) 2015. Jonas Kalderstam
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+<FrameLayout android:id="@+id/listContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:visibility="visible">
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swiperefresh"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.mobeta.android.dslv.DragSortListView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="1dp"
+            android:drawSelectorOnTop="true"
+            app:collapsed_height="1px"
+            app:drag_enabled="true"
+            app:drag_handle_id="@+id/drag_handle"
+            app:drag_scroll_start="0.33"
+            app:drag_start_mode="onMove"
+            app:float_alpha="1.0"
+            app:float_background_color="@android:color/holo_blue_dark"
+            app:remove_enabled="false"
+            app:remove_mode="flingRemove"
+            app:slide_shuffle_speed="0.3"
+            app:sort_enabled="true"
+            tools:ignore="PxUsage"/>
+    </android.support.v4.widget.SwipeRefreshLayout>
+</FrameLayout>

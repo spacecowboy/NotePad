@@ -78,10 +78,80 @@
 
     </style>
 
+    <style name="LightTheme.DialogWhenLarge" parent="Theme.AppCompat.Light.DialogWhenLarge">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="colorPrimary">@color/primary</item>
+        <!--   darker variant of colorPrimary (for status bar, contextual app bars) -->
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">@color/accent</item>
+
+        <item name="separatorColor">@color/light_separator_color</item>
+        <item name="selectable_item_background">@drawable/selectable_item_background_light</item>
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/primary_dark</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <item name="iconTint">@color/icon_tint_light</item>
+        <item name="ic_clear_24dp_active">@drawable/ic_clear_24dp_black_active</item>
+        <item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_black_active</item>
+        <item name="ic_alarm_24dp_active">@drawable/ic_alarm_24dp_black_active</item>
+
+        <item name="NavDrawerStyle">@style/LightNavbarTheme</item>
+        <item name="alertDialogTheme">@style/LightDialogStyle</item>
+
+        <item name="drag_handle_color">@color/dragHandleColorLight</item>
+        <!-- Update these -->
+
+        <item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
+        <item name="list_item_card_background">@drawable/card_light</item>
+        <item name="TaskListItem">@style/TaskListItemLight</item>
+    </style>
+    <style name="DarkTheme.DialogWhenLarge" parent="Theme.AppCompat.DialogWhenLarge">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="colorPrimary">@color/primary</item>
+        <!--   darker variant of colorPrimary (for status bar, contextual app bars) -->
+        <item name="colorPrimaryDark">@color/primary_dark</item>
+        <!--   theme UI controls like checkboxes and text fields -->
+        <item name="colorAccent">@color/accent</item>
+
+        <item name="separatorColor">@color/dark_separator_color</item>
+        <item name="selectable_item_background">@drawable/selectable_item_background_dark</item>
+        <item name="iconTint">@color/icon_tint_dark</item>
+        <item name="ic_clear_24dp_active">@drawable/ic_clear_24dp_white</item>
+        <item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_white</item>
+        <item name="ic_alarm_24dp_active">@drawable/ic_alarm_24dp_white</item>
+
+        <item name="windowActionModeOverlay">true</item>
+        <item name="actionModeBackground">@color/primary_dark</item>
+        <item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
+        <!--<item name="android:background">@null</item>-->
+
+        <item name="NavDrawerStyle">@style/DarkNavbarTheme</item>
+        <item name="alertDialogTheme">@style/DarkDialogStyle</item>
+
+        <item name="drag_handle_color">@color/dragHandleColorDark</item>
+
+        <!-- Update these -->
+
+        <!-- <item name="viewpager_bg">@color/viewpager_darkgrey</item> -->
+        <item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
+        <item name="list_item_card_background">@drawable/card_light</item>
+        <item name="TaskListItem">@style/TaskListItemLight</item>
+    </style>
+
     <style name="BlackTheme" parent="DarkTheme">
         <item name="android:windowBackground">@android:color/black</item>
         <item name="android:colorBackgroundCacheHint">@android:color/black</item>
     </style>
+    <style name="BlackTheme.DialogWhenLarge" parent="DarkTheme.DialogWhenLarge">
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:colorBackgroundCacheHint">@android:color/black</item>
+    </style>
+
 
     <style name="LightDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorPrimary">@color/primary</item>

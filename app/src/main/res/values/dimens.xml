@@ -21,7 +21,7 @@
     <!-- Screen edge left and right margins: 16dp -->
     <!-- Horizontal margins on mobile: 16dp. -->
     <dimen name="keyline_1">16dp</dimen>
-    <!-- Content associated with an icon or avatar left margin: 72dp -->
+    <!-- Content associated with an icon or avatar left margin: 72dp (16 + 56) -->
     <dimen name="keyline_2">72dp</dimen>
     <!-- keyline2 - 2*keyline1 -->
     <dimen name="keylined_avatar_width">40dp</dimen>
@@ -38,7 +38,7 @@
 
     <dimen name="navdrawer_width">300dp</dimen>
     <dimen name="card_margin">16dp</dimen>
-    <dimen name="fab_margin">16dp</dimen>
+    <dimen name="fab_margin">@dimen/keyline_1</dimen>
 
     <!-- Material dialog -->
     <dimen name="dialog_button_height">36dp</dimen>
@@ -56,6 +56,8 @@
     <!-- List stuff -->
     <dimen name="listMargins">0dp</dimen>
     <dimen name="listMarginsPadded">8dp</dimen>
+    <!-- Width only applies to tablet -->
+    <dimen name="list_width">500dp</dimen>
     
     <!-- Used in search where no note fragment exists ever -->
     <!-- Also used by searchview in activitylocation -->

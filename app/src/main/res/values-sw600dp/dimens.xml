@@ -16,6 +16,17 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
+    <!-- Material values -->
+    <dimen name="navdrawer_width">380dp</dimen>
+
+    <!--Screen edge left and right margins: 24dp
+    Content left margin from screen edge: 80dp
+    Card left and right padding: 24dp
+    Card content left padding: 104dp-->
+    <dimen name="keyline_1">24dp</dimen>
+    <!-- Content associated with an icon or avatar left margin: (56 + 24 + 24) -->
+    <dimen name="keyline_2">104dp</dimen>
+
     <!-- List stuff -->
     <dimen name="listMargins">16dp</dimen>
     <dimen name="listMarginsPadded">@dimen/listMargins</dimen>

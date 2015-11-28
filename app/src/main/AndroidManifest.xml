@@ -135,7 +135,7 @@
         <activity
             android:name="com.nononsenseapps.notepad.activities.ActivityEditor"
             android:label=""
-            android:theme="@style/LightTheme"
+            android:theme="@style/LightTheme.DialogWhenLarge"
             android:windowSoftInputMode="adjustResize"/>
 
         <!-- Search activity -->
