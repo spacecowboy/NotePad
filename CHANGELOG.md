@@ -1,5 +1,18 @@
 # Change Log
 
+## [6.0.0-beta.4](https://github.com/spacecowboy/Notepad/tree/6.0.0-beta.4) (2015-11-28)
+[Full Changelog](https://github.com/spacecowboy/Notepad/compare/6.0.0-beta.3...6.0.0-beta.4)
+
+**Implemented enhancements:**
+
+- Link to Github changelog [\#331](https://github.com/spacecowboy/NotePad/issues/331)
+- Add app version to About [\#330](https://github.com/spacecowboy/NotePad/issues/330)
+- Update tablet interface [\#326](https://github.com/spacecowboy/NotePad/issues/326)
+
+**Fixed bugs:**
+
+- Crash on large devices [\#332](https://github.com/spacecowboy/NotePad/issues/332)
+
 ## [6.0.0-beta.3](https://github.com/spacecowboy/Notepad/tree/6.0.0-beta.3) (2015-11-23)
 [Full Changelog](https://github.com/spacecowboy/Notepad/compare/6.0.0-beta.2...6.0.0-beta.3)
 
