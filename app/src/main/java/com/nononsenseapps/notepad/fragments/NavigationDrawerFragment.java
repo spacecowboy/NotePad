@@ -75,6 +75,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     private static final long EXTRA_ID_SETTINGS = -100;
     private static final long EXTRA_ID_ABOUT = -101;
     private static final long EXTRA_ID_CREATE_LIST = -102;
+    private static final long EXTRA_ID_CHANGELOG = -103;
     private static final long EXTRA_ID_SEPARATOR_1 = -1001;
     private static final long EXTRA_ID_SEPARATOR_2 = -1002;
     private static final int LOADER_NAVDRAWER_LISTS = 0;
@@ -206,7 +207,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         mAdapter = new Adapter(toArray(new TopLevelItem(), new ExtraHeaderItem(TaskListFragment
                 .LIST_ID_ALL, R.string.show_from_all_lists)), toArray(new SeparatorFooter
                 (EXTRA_ID_SEPARATOR_1), new CreateListFooter(), new SeparatorFooter
-                (EXTRA_ID_SEPARATOR_2), new SettingsFooterItem(), new AboutFooterItem()));
+                (EXTRA_ID_SEPARATOR_2), new SettingsFooterItem(), new AboutFooterItem(),
+                new ChangelogFooterItem()));
 
         list.setAdapter(mAdapter);
         list.setHasFixedSize(true);
@@ -310,6 +312,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         void openSettings();
 
         void openAbout();
+        void openChangelog();
     }
 
     /**
@@ -582,6 +585,20 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         @Override
         public void onClick() {
             mCallbacks.openAbout();
+            mDrawerLayout.closeDrawers();
+        }
+    }
+
+    class ChangelogFooterItem extends ExtraFooterItem {
+
+        public ChangelogFooterItem() {
+            super(EXTRA_ID_CHANGELOG, R.string.changelog, mIsThemeLight ? R.drawable
+                    .ic_info_24dp_black_active : R.drawable.ic_info_24dp_white);
+        }
+
+        @Override
+        public void onClick() {
+            mCallbacks.openChangelog();
             mDrawerLayout.closeDrawers();
         }
     }

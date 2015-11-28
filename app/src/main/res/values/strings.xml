@@ -307,5 +307,6 @@
     <string name="legacy">Legacy</string>
     <string name="sorting">Sorting</string>
     <string name="undo">Undo</string>
+    <string name="changelog">Changelog</string>
 
 </resources>

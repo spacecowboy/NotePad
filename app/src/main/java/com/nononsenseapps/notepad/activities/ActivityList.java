@@ -214,6 +214,12 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
     }
 
     @Override
+    public void openChangelog() {
+        startActivity(new Intent(Intent.ACTION_VIEW,
+                Uri.parse("https://github.com/spacecowboy/NotePad/blob/master/CHANGELOG.md")));
+    }
+
+    @Override
     public void openTask(final Uri taskUri, final long listId, final View origin) {
         // Todo change activity
         final Intent intent = new Intent().setAction(Intent.ACTION_EDIT).setClass(this,

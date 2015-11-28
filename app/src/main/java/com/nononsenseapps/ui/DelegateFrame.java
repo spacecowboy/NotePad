@@ -24,7 +24,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 
-import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.R;
 
 /**
@@ -67,11 +66,8 @@ public class DelegateFrame extends RelativeLayout implements OnClickListener {
 		super(context, attrs, defStyle);
 
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.DelegateFrame);
-        Log.d("delegate", "setting xml values! pre");
 
         enlargedViewId = a.getResourceId(R.styleable.DelegateFrame_enlargedView, UNDEFINED);
-        // enlargedViewId = attrs.getAttributeResourceValue(NONONSENSEAPPSNS, ATTR_ENLARGEDVIEW, UNDEFINED);
-        Log.d("delegate", "setting xml values! view: " + enlargedViewId);
         setOnClickListener(this);
 
         a.recycle();
