@@ -41,17 +41,5 @@
         android:orderInCategory="102"
         app:showAsAction="ifRoom"
         android:title="@string/menu_share"/>
-    <item
-        android:id="@+id/menu_lock"
-        android:icon="@drawable/ic_lock_outline_24dp_white"
-        android:orderInCategory="103"
-        app:showAsAction="ifRoom"
-        android:title="@string/lock_note"/>
-    <item
-        android:id="@+id/menu_unlock"
-        android:icon="@drawable/ic_lock_open_24dp_white"
-        android:orderInCategory="104"
-        app:showAsAction="ifRoom"
-        android:title="@string/unlock_note"/>
 
 </menu>
