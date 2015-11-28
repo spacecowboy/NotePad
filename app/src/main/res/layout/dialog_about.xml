@@ -29,6 +29,20 @@
     <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:text="@string/nononsense_notes"
+        android:textAppearance="@style/TextAppearance.AppCompat.Headline"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="8dp"
+        android:text="@string/VERSION_NAME"
+        android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+    <TextView
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
         android:autoLink="all"
         android:paddingTop="8dp"
         android:text="@string/app_about"

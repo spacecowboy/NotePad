@@ -74,6 +74,8 @@ android {
     versionName gitTag
     archivesBaseName = "nononsensenotes-${gitTag}".toString()
 
+    resValue "string", "VERSION_NAME", "${gitTag}"
+    resValue "string", "GIT_SHA", "${gitSha}"
     buildConfigField "String", "GIT_SHA", "\"${gitSha}\""
     // If Non-Free libraries are to be used
     buildConfigField "boolean", "NONFREE", "false"
