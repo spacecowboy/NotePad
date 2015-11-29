@@ -1,27 +1,39 @@
+/*
+ * Copyright (c) 2015. Jonas Kalderstam
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.nononsenseapps.notepad.test;
 
 import android.app.Instrumentation;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.SmallTest;
-import android.view.View;
 import android.widget.ListView;
 
 import com.nononsenseapps.notepad.R;
-
-import com.nononsenseapps.notepad.ActivityMain_;
-import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
+import com.nononsenseapps.notepad.activities.ActivityList;
 import com.squareup.spoon.Spoon;
 
 public class FragmentTaskListsTest extends
-		ActivityInstrumentationTestCase2<ActivityMain_> {
+		ActivityInstrumentationTestCase2<ActivityList> {
 
 	private Instrumentation mInstrumentation;
 
 	public FragmentTaskListsTest() {
-		super(ActivityMain_.class);
+		super(ActivityList.class);
 	}
 
 	@Override
@@ -44,7 +56,7 @@ public class FragmentTaskListsTest extends
 	}
 
 	@SmallTest
-	public void testFragmentLoaded() throws InterruptedException {
+	public void testFragmentLoaded() throws Exception {
 		mInstrumentation.waitForIdleSync();
 		
 		Spoon.screenshot(getActivity(), "List_loaded");
