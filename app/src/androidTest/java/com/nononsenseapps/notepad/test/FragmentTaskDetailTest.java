@@ -23,50 +23,49 @@ import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.SmallTest;
 
+import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.activities.ActivityEditor;
 import com.nononsenseapps.notepad.database.Task;
 import com.squareup.spoon.Spoon;
 
-public class FragmentTaskDetailTest extends
-		ActivityInstrumentationTestCase2<ActivityEditor> {
+public class FragmentTaskDetailTest extends ActivityInstrumentationTestCase2<ActivityEditor> {
 
-	protected Instrumentation mInstrumentation;
+    protected Instrumentation mInstrumentation;
 
-	public FragmentTaskDetailTest() {
-		super(ActivityEditor.class);
-	}
+    public FragmentTaskDetailTest() {
+        super(ActivityEditor.class);
+    }
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		mInstrumentation = getInstrumentation();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        mInstrumentation = getInstrumentation();
 
-		setActivityInitialTouchMode(false);
+        setActivityInitialTouchMode(false);
 
-		// Set activity Intent
-		// Intent should be task id
-		Intent i = new Intent();
-		i.setAction(Intent.ACTION_EDIT).setData(Task.getUri(1L));
+        // Set activity Intent
+        // Intent should be task id
+        Intent i = new Intent();
+        i.setAction(Intent.ACTION_EDIT).setData(Task.getUri(1L));
 
-		setActivityIntent(i);
-	}
+        setActivityIntent(i);
+    }
 
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
-
-	@SmallTest
-	public void testSanity() {
-		assertEquals("This should succeed", 1, 1);
-	}
+    protected void tearDown() throws Exception {
+        super.tearDown();
+    }
 
     @SmallTest
-	public void testFragmentLoaded() {
-		Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(com.nononsenseapps.notepad.ActivityMain.DETAILTAG);
-		Spoon.screenshot(getActivity(), "Editor_loaded");
-		assertNotNull("Editor should NOT be null", fragment);
-		assertTrue("Editor should be visible", fragment.isAdded() && fragment.isVisible());
-		//assertThat(fragment).isUserVisible();
-		//assertNotNull("Could not find the editor!", taskText);
-	}
+    public void testSanity() {
+        assertEquals("This should succeed", 1, 1);
+    }
+
+    @SmallTest
+    public void testFragmentLoaded() {
+        Fragment fragment = getActivity().getSupportFragmentManager().findFragmentById(R.id
+                .fragment);
+        Spoon.screenshot(getActivity(), "Editor_loaded");
+        assertNotNull("Editor should NOT be null", fragment);
+        assertTrue("Editor should be visible", fragment.isAdded() && fragment.isVisible());
+    }
 }

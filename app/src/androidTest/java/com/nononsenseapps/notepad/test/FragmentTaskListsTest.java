@@ -27,51 +27,48 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.activities.ActivityList;
 import com.squareup.spoon.Spoon;
 
-public class FragmentTaskListsTest extends
-		ActivityInstrumentationTestCase2<ActivityList> {
+public class FragmentTaskListsTest extends ActivityInstrumentationTestCase2<ActivityList> {
 
-	private Instrumentation mInstrumentation;
+    static final int LISTFRAGMENT_CONTAINER = R.id.listfragment_container;
+    private Instrumentation mInstrumentation;
 
-	public FragmentTaskListsTest() {
-		super(ActivityList.class);
-	}
+    public FragmentTaskListsTest() {
+        super(ActivityList.class);
+    }
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		mInstrumentation = getInstrumentation();
+    @Override
+    protected void setUp() throws Exception {
+        super.setUp();
+        mInstrumentation = getInstrumentation();
 
-		setActivityInitialTouchMode(false);
-	}
+        setActivityInitialTouchMode(false);
+    }
 
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
+    protected void tearDown() throws Exception {
+        super.tearDown();
+    }
 
-	@SmallTest
-	public void testSanity() {
-		assertEquals("This should succeed", 1, 1);
-		assertNotNull("Fragment1-holder should always be present",
-				getActivity().findViewById(R.id.fragment1));
-	}
+    @SmallTest
+    public void testSanity() {
+        assertEquals("This should succeed", 1, 1);
+        assertNotNull("Fragment1-holder should always be present", getActivity().findViewById
+                (LISTFRAGMENT_CONTAINER));
+    }
 
-	@SmallTest
-	public void testFragmentLoaded() throws Exception {
-		mInstrumentation.waitForIdleSync();
-		
-		Spoon.screenshot(getActivity(), "List_loaded");
-		Fragment listPagerFragment = getActivity().getSupportFragmentManager()
-					.findFragmentByTag(
-							com.nononsenseapps.notepad.ActivityMain.LISTPAGERTAG);
+    @SmallTest
+    public void testFragmentLoaded() throws Exception {
+        mInstrumentation.waitForIdleSync();
 
-		assertNotNull("List pager fragment should not be null",
-				listPagerFragment);
-		assertTrue("List pager fragment should be visible",
-				listPagerFragment.isAdded() && listPagerFragment.isVisible());
+        Spoon.screenshot(getActivity(), "List_loaded");
+        Fragment listFragment = getActivity().getSupportFragmentManager().findFragmentById
+                (LISTFRAGMENT_CONTAINER);
 
-		ListView taskList = (ListView) listPagerFragment.getView()
-				.findViewById(android.R.id.list);
+        assertNotNull("List fragment should not be null", listFragment);
+        assertTrue("List fragment should be visible", listFragment.isAdded() && listFragment
+                .isVisible());
 
-		assertNotNull("Could not find the list!", taskList);
-	}
+        ListView taskList = (ListView) listFragment.getView().findViewById(android.R.id.list);
+
+        assertNotNull("Could not find the list!", taskList);
+    }
 }
