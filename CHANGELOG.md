@@ -1,7 +1,15 @@
 # Change Log
 
-## [6.0.0-beta.4](https://github.com/spacecowboy/Notepad/tree/6.0.0-beta.4) (2015-11-28)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/6.0.0-beta.3...6.0.0-beta.4)
+## [6.0.0-beta.5](https://github.com/spacecowboy/NotePad/tree/6.0.0-beta.5) (2015-11-30)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/6.0.0-beta.4...6.0.0-beta.5)
+
+**Fixed bugs:**
+
+- Task with no title gets its body parsed as the title [\#340](https://github.com/spacecowboy/NotePad/issues/340)
+- Empty title/first line becomes "TODO" on 2-nd resync [\#339](https://github.com/spacecowboy/NotePad/issues/339)
+
+## [6.0.0-beta.4](https://github.com/spacecowboy/NotePad/tree/6.0.0-beta.4) (2015-11-28)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/6.0.0-beta.3...6.0.0-beta.4)
 
 **Implemented enhancements:**
 
@@ -13,8 +21,8 @@
 
 - Crash on large devices [\#332](https://github.com/spacecowboy/NotePad/issues/332)
 
-## [6.0.0-beta.3](https://github.com/spacecowboy/Notepad/tree/6.0.0-beta.3) (2015-11-23)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/6.0.0-beta.2...6.0.0-beta.3)
+## [6.0.0-beta.3](https://github.com/spacecowboy/NotePad/tree/6.0.0-beta.3) (2015-11-23)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/6.0.0-beta.2...6.0.0-beta.3)
 
 **Implemented enhancements:**
 
@@ -23,27 +31,27 @@
 
 **Fixed bugs:**
 
-- 6.0 beta 2 crash on 4.4.4 [\#333](https://github.com/spacecowboy/NotePad/issues/333)
+- Crash on 4.4.4 [\#333](https://github.com/spacecowboy/NotePad/issues/333)
 
 **Closed issues:**
 
 - Material design branch \( version 6 \) issues [\#317](https://github.com/spacecowboy/NotePad/issues/317)
 
-## [6.0.0-beta.2](https://github.com/spacecowboy/Notepad/tree/6.0.0-beta.2) (2015-11-17)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/6.0.0-beta.1...6.0.0-beta.2)
+## [6.0.0-beta.2](https://github.com/spacecowboy/NotePad/tree/6.0.0-beta.2) (2015-11-17)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/6.0.0-beta.1...6.0.0-beta.2)
 
-## [6.0.0-beta.1](https://github.com/spacecowboy/Notepad/tree/6.0.0-beta.1) (2015-11-07)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.7.1...6.0.0-beta.1)
+## [6.0.0-beta.1](https://github.com/spacecowboy/NotePad/tree/6.0.0-beta.1) (2015-11-07)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.7.1...6.0.0-beta.1)
 
 **Closed issues:**
 
 - Failed to sync with Google Account [\#315](https://github.com/spacecowboy/NotePad/issues/315)
 
-## [5.7.1](https://github.com/spacecowboy/Notepad/tree/5.7.1) (2015-10-25)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.7.1-beta1...5.7.1)
+## [5.7.1](https://github.com/spacecowboy/NotePad/tree/5.7.1) (2015-10-25)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.7.1-beta1...5.7.1)
 
-## [5.7.1-beta1](https://github.com/spacecowboy/Notepad/tree/5.7.1-beta1) (2015-10-25)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.7.0...5.7.1-beta1)
+## [5.7.1-beta1](https://github.com/spacecowboy/NotePad/tree/5.7.1-beta1) (2015-10-25)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.7.0...5.7.1-beta1)
 
 **Implemented enhancements:**
 
@@ -57,15 +65,15 @@
 
 - Update api key and fix sync error [\#314](https://github.com/spacecowboy/NotePad/pull/314) ([spacecowboy](https://github.com/spacecowboy))
 
-## [5.7.0](https://github.com/spacecowboy/Notepad/tree/5.7.0) (2015-09-06)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.6.0...5.7.0)
+## [5.7.0](https://github.com/spacecowboy/NotePad/tree/5.7.0) (2015-09-06)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.6.0...5.7.0)
 
 **Merged pull requests:**
 
 - Switch to Dropbox Core API [\#307](https://github.com/spacecowboy/NotePad/pull/307) ([spacecowboy](https://github.com/spacecowboy))
 
-## [5.6.0](https://github.com/spacecowboy/Notepad/tree/5.6.0) (2015-09-02)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.5.5...5.6.0)
+## [5.6.0](https://github.com/spacecowboy/NotePad/tree/5.6.0) (2015-09-02)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.5.5...5.6.0)
 
 **Implemented enhancements:**
 
@@ -76,8 +84,8 @@
 - New option: disable/enable relative title size [\#300](https://github.com/spacecowboy/NotePad/pull/300) ([spacecowboy](https://github.com/spacecowboy))
 - Change default notification time to \(today + 1hour\) [\#299](https://github.com/spacecowboy/NotePad/pull/299) ([spacecowboy](https://github.com/spacecowboy))
 
-## [5.5.5](https://github.com/spacecowboy/Notepad/tree/5.5.5) (2015-06-15)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.5.4...5.5.5)
+## [5.5.5](https://github.com/spacecowboy/NotePad/tree/5.5.5) (2015-06-15)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.5.4...5.5.5)
 
 **Fixed bugs:**
 
@@ -96,61 +104,61 @@
 - Add a Gitter chat badge to README.md [\#288](https://github.com/spacecowboy/NotePad/pull/288) ([gitter-badger](https://github.com/gitter-badger))
 - Fix travis config [\#278](https://github.com/spacecowboy/NotePad/pull/278) ([spacecowboy](https://github.com/spacecowboy))
 
-## [5.5.4](https://github.com/spacecowboy/Notepad/tree/5.5.4) (2014-11-27)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.5.3...5.5.4)
+## [5.5.4](https://github.com/spacecowboy/NotePad/tree/5.5.4) (2014-11-27)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.5.3...5.5.4)
 
 **Fixed bugs:**
 
 - Excessive new line is added to a multi-line note after synchronization [\#274](https://github.com/spacecowboy/NotePad/issues/274)
 - Lists with "/" \(slash\) in the name are not synchronized to SD card [\#273](https://github.com/spacecowboy/NotePad/issues/273)
 
-## [5.5.3](https://github.com/spacecowboy/Notepad/tree/5.5.3) (2014-11-04)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.5.2...5.5.3)
+## [5.5.3](https://github.com/spacecowboy/NotePad/tree/5.5.3) (2014-11-04)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.5.2...5.5.3)
 
-## [5.5.2](https://github.com/spacecowboy/Notepad/tree/5.5.2) (2014-11-04)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.5.1...5.5.2)
+## [5.5.2](https://github.com/spacecowboy/NotePad/tree/5.5.2) (2014-11-04)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.5.1...5.5.2)
 
 **Closed issues:**
 
 - Navigation drawer shows old list name after it has been renamed [\#271](https://github.com/spacecowboy/NotePad/issues/271)
 - Can't export backup to internal storage \(F-Droid version\) [\#270](https://github.com/spacecowboy/NotePad/issues/270)
 
-## [5.5.1](https://github.com/spacecowboy/Notepad/tree/5.5.1) (2014-11-03)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.5...5.5.1)
+## [5.5.1](https://github.com/spacecowboy/NotePad/tree/5.5.1) (2014-11-03)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.5...5.5.1)
 
-## [5.5](https://github.com/spacecowboy/Notepad/tree/5.5) (2014-10-28)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.4.1...5.5)
+## [5.5](https://github.com/spacecowboy/NotePad/tree/5.5) (2014-10-28)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.4.1...5.5)
 
 **Implemented enhancements:**
 
 - Make proprietary dependencies optional [\#269](https://github.com/spacecowboy/NotePad/issues/269)
 
-## [5.4.1](https://github.com/spacecowboy/Notepad/tree/5.4.1) (2014-10-14)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.4...5.4.1)
+## [5.4.1](https://github.com/spacecowboy/NotePad/tree/5.4.1) (2014-10-14)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.4...5.4.1)
 
 **Fixed bugs:**
 
 - Add from widget can add to wrong list [\#267](https://github.com/spacecowboy/NotePad/issues/267)
 - Widget: New note will save in wrong list [\#264](https://github.com/spacecowboy/NotePad/issues/264)
 
-## [5.4](https://github.com/spacecowboy/Notepad/tree/5.4) (2014-09-27)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.3.2...5.4)
+## [5.4](https://github.com/spacecowboy/NotePad/tree/5.4) (2014-09-27)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.3.2...5.4)
 
 **Fixed bugs:**
 
 - New sync options SD/Dropbox are removing spaces [\#263](https://github.com/spacecowboy/NotePad/issues/263)
 
-## [5.3.2](https://github.com/spacecowboy/Notepad/tree/5.3.2) (2014-06-23)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.3.1...5.3.2)
+## [5.3.2](https://github.com/spacecowboy/NotePad/tree/5.3.2) (2014-06-23)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.3.1...5.3.2)
 
-## [5.3.1](https://github.com/spacecowboy/Notepad/tree/5.3.1) (2014-06-18)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.4-beta...5.3.1)
+## [5.3.1](https://github.com/spacecowboy/NotePad/tree/5.3.1) (2014-06-18)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.4-beta...5.3.1)
 
-## [5.4-beta](https://github.com/spacecowboy/Notepad/tree/5.4-beta) (2014-06-17)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.3...5.4-beta)
+## [5.4-beta](https://github.com/spacecowboy/NotePad/tree/5.4-beta) (2014-06-17)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.3...5.4-beta)
 
-## [5.3](https://github.com/spacecowboy/Notepad/tree/5.3) (2014-06-17)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.3-beta...5.3)
+## [5.3](https://github.com/spacecowboy/NotePad/tree/5.3) (2014-06-17)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.3-beta...5.3)
 
 **Implemented enhancements:**
 
@@ -164,8 +172,8 @@
 
 - Plain file storage [\#220](https://github.com/spacecowboy/NotePad/issues/220)
 
-## [5.3-beta](https://github.com/spacecowboy/Notepad/tree/5.3-beta) (2014-04-10)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.1.3...5.3-beta)
+## [5.3-beta](https://github.com/spacecowboy/NotePad/tree/5.3-beta) (2014-04-10)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.1.3...5.3-beta)
 
 **Implemented enhancements:**
 
@@ -175,23 +183,23 @@
 
 - Have a new translation! [\#253](https://github.com/spacecowboy/NotePad/issues/253)
 
-## [5.1.3](https://github.com/spacecowboy/Notepad/tree/5.1.3) (2013-12-07)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.1.2...5.1.3)
+## [5.1.3](https://github.com/spacecowboy/NotePad/tree/5.1.3) (2013-12-07)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.1.2...5.1.3)
 
-## [5.1.2](https://github.com/spacecowboy/Notepad/tree/5.1.2) (2013-11-07)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.1.1...5.1.2)
+## [5.1.2](https://github.com/spacecowboy/NotePad/tree/5.1.2) (2013-11-07)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.1.1...5.1.2)
 
-## [5.1.1](https://github.com/spacecowboy/Notepad/tree/5.1.1) (2013-11-07)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.1-withduetime...5.1.1)
+## [5.1.1](https://github.com/spacecowboy/NotePad/tree/5.1.1) (2013-11-07)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.1-withduetime...5.1.1)
 
-## [5.1-withduetime](https://github.com/spacecowboy/Notepad/tree/5.1-withduetime) (2013-11-06)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/release-5.1...5.1-withduetime)
+## [5.1-withduetime](https://github.com/spacecowboy/NotePad/tree/5.1-withduetime) (2013-11-06)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/release-5.1...5.1-withduetime)
 
-## [release-5.1](https://github.com/spacecowboy/Notepad/tree/release-5.1) (2013-11-06)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/5.1-withduetimes...release-5.1)
+## [release-5.1](https://github.com/spacecowboy/NotePad/tree/release-5.1) (2013-11-06)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.1-withduetimes...release-5.1)
 
-## [5.1-withduetimes](https://github.com/spacecowboy/Notepad/tree/5.1-withduetimes) (2013-11-06)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.4.1-donate...5.1-withduetimes)
+## [5.1-withduetimes](https://github.com/spacecowboy/NotePad/tree/5.1-withduetimes) (2013-11-06)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.4.1-donate...5.1-withduetimes)
 
 **Implemented enhancements:**
 
@@ -249,43 +257,43 @@
 - DateFormat L10N \(Task List view\) [\#227](https://github.com/spacecowboy/NotePad/pull/227) ([keima](https://github.com/keima))
 - DateFormat L10N \(Task Detail view\) [\#226](https://github.com/spacecowboy/NotePad/pull/226) ([keima](https://github.com/keima))
 
-## [4.4.1-donate](https://github.com/spacecowboy/Notepad/tree/4.4.1-donate) (2013-01-07)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.4.1-release...4.4.1-donate)
+## [4.4.1-donate](https://github.com/spacecowboy/NotePad/tree/4.4.1-donate) (2013-01-07)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.4.1-release...4.4.1-donate)
 
-## [4.4.1-release](https://github.com/spacecowboy/Notepad/tree/4.4.1-release) (2013-01-07)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.4.1-dev...4.4.1-release)
+## [4.4.1-release](https://github.com/spacecowboy/NotePad/tree/4.4.1-release) (2013-01-07)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.4.1-dev...4.4.1-release)
 
-## [4.4.1-dev](https://github.com/spacecowboy/Notepad/tree/4.4.1-dev) (2013-01-07)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.4-donate-withbugfix...4.4.1-dev)
+## [4.4.1-dev](https://github.com/spacecowboy/NotePad/tree/4.4.1-dev) (2013-01-07)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.4-donate-withbugfix...4.4.1-dev)
 
-## [4.4-donate-withbugfix](https://github.com/spacecowboy/Notepad/tree/4.4-donate-withbugfix) (2013-01-06)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.4-release-withbugfix...4.4-donate-withbugfix)
+## [4.4-donate-withbugfix](https://github.com/spacecowboy/NotePad/tree/4.4-donate-withbugfix) (2013-01-06)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.4-release-withbugfix...4.4-donate-withbugfix)
 
-## [4.4-release-withbugfix](https://github.com/spacecowboy/Notepad/tree/4.4-release-withbugfix) (2013-01-06)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.4-dev-actual...4.4-release-withbugfix)
+## [4.4-release-withbugfix](https://github.com/spacecowboy/NotePad/tree/4.4-release-withbugfix) (2013-01-06)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.4-dev-actual...4.4-release-withbugfix)
 
-## [4.4-dev-actual](https://github.com/spacecowboy/Notepad/tree/4.4-dev-actual) (2013-01-06)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.4-release...4.4-dev-actual)
+## [4.4-dev-actual](https://github.com/spacecowboy/NotePad/tree/4.4-dev-actual) (2013-01-06)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.4-release...4.4-dev-actual)
 
-## [4.4-release](https://github.com/spacecowboy/Notepad/tree/4.4-release) (2013-01-06)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.3-donate...4.4-release)
+## [4.4-release](https://github.com/spacecowboy/NotePad/tree/4.4-release) (2013-01-06)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.3-donate...4.4-release)
 
-## [4.3-donate](https://github.com/spacecowboy/Notepad/tree/4.3-donate) (2013-01-06)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.4-dev...4.3-donate)
+## [4.3-donate](https://github.com/spacecowboy/NotePad/tree/4.3-donate) (2013-01-06)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.4-dev...4.3-donate)
 
-## [4.4-dev](https://github.com/spacecowboy/Notepad/tree/4.4-dev) (2013-01-06)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.3-release...4.4-dev)
+## [4.4-dev](https://github.com/spacecowboy/NotePad/tree/4.4-dev) (2013-01-06)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.3-release...4.4-dev)
 
 **Closed issues:**
 
 - Is it possible to have due date using hours and minutes? [\#130](https://github.com/spacecowboy/NotePad/issues/130)
 - Notifications [\#91](https://github.com/spacecowboy/NotePad/issues/91)
 
-## [4.3-release](https://github.com/spacecowboy/Notepad/tree/4.3-release) (2012-12-22)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.3-dev...4.3-release)
+## [4.3-release](https://github.com/spacecowboy/NotePad/tree/4.3-release) (2012-12-22)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.3-dev...4.3-release)
 
-## [4.3-dev](https://github.com/spacecowboy/Notepad/tree/4.3-dev) (2012-12-22)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.2.1-donate...4.3-dev)
+## [4.3-dev](https://github.com/spacecowboy/NotePad/tree/4.3-dev) (2012-12-22)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.2.1-donate...4.3-dev)
 
 **Fixed bugs:**
 
@@ -296,23 +304,23 @@
 
 - F-Droid version: force-close on sync [\#214](https://github.com/spacecowboy/NotePad/issues/214)
 
-## [4.2.1-donate](https://github.com/spacecowboy/Notepad/tree/4.2.1-donate) (2012-12-09)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.2.1-release...4.2.1-donate)
+## [4.2.1-donate](https://github.com/spacecowboy/NotePad/tree/4.2.1-donate) (2012-12-09)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.2.1-release...4.2.1-donate)
 
-## [4.2.1-release](https://github.com/spacecowboy/Notepad/tree/4.2.1-release) (2012-12-09)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.2.1-dev...4.2.1-release)
+## [4.2.1-release](https://github.com/spacecowboy/NotePad/tree/4.2.1-release) (2012-12-09)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.2.1-dev...4.2.1-release)
 
-## [4.2.1-dev](https://github.com/spacecowboy/Notepad/tree/4.2.1-dev) (2012-12-09)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.2-donate...4.2.1-dev)
+## [4.2.1-dev](https://github.com/spacecowboy/NotePad/tree/4.2.1-dev) (2012-12-09)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.2-donate...4.2.1-dev)
 
-## [4.2-donate](https://github.com/spacecowboy/Notepad/tree/4.2-donate) (2012-12-09)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.2-release...4.2-donate)
+## [4.2-donate](https://github.com/spacecowboy/NotePad/tree/4.2-donate) (2012-12-09)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.2-release...4.2-donate)
 
-## [4.2-release](https://github.com/spacecowboy/Notepad/tree/4.2-release) (2012-12-09)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.2-dev...4.2-release)
+## [4.2-release](https://github.com/spacecowboy/NotePad/tree/4.2-release) (2012-12-09)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.2-dev...4.2-release)
 
-## [4.2-dev](https://github.com/spacecowboy/Notepad/tree/4.2-dev) (2012-12-09)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.1-donate...4.2-dev)
+## [4.2-dev](https://github.com/spacecowboy/NotePad/tree/4.2-dev) (2012-12-09)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.1-donate...4.2-dev)
 
 **Fixed bugs:**
 
@@ -331,14 +339,14 @@
 - Unnecessary permission? [\#113](https://github.com/spacecowboy/NotePad/issues/113)
 - Due date dialog should display current selection by default [\#83](https://github.com/spacecowboy/NotePad/issues/83)
 
-## [4.1-donate](https://github.com/spacecowboy/Notepad/tree/4.1-donate) (2012-12-02)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.1-rel...4.1-donate)
+## [4.1-donate](https://github.com/spacecowboy/NotePad/tree/4.1-donate) (2012-12-02)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.1-rel...4.1-donate)
 
-## [4.1-rel](https://github.com/spacecowboy/Notepad/tree/4.1-rel) (2012-12-02)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.1-dev...4.1-rel)
+## [4.1-rel](https://github.com/spacecowboy/NotePad/tree/4.1-rel) (2012-12-02)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.1-dev...4.1-rel)
 
-## [4.1-dev](https://github.com/spacecowboy/Notepad/tree/4.1-dev) (2012-12-02)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.0-donate...4.1-dev)
+## [4.1-dev](https://github.com/spacecowboy/NotePad/tree/4.1-dev) (2012-12-02)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.0-donate...4.1-dev)
 
 **Closed issues:**
 
@@ -346,41 +354,41 @@
 - Can you reopen issue \#204? [\#210](https://github.com/spacecowboy/NotePad/issues/210)
 - Rotating tablet will clear editor [\#193](https://github.com/spacecowboy/NotePad/issues/193)
 
-## [4.0-donate](https://github.com/spacecowboy/Notepad/tree/4.0-donate) (2012-11-28)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.0-release...4.0-donate)
+## [4.0-donate](https://github.com/spacecowboy/NotePad/tree/4.0-donate) (2012-11-28)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.0-release...4.0-donate)
 
-## [4.0-release](https://github.com/spacecowboy/Notepad/tree/4.0-release) (2012-11-28)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/4.0-dev...4.0-release)
+## [4.0-release](https://github.com/spacecowboy/NotePad/tree/4.0-release) (2012-11-28)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.0-dev...4.0-release)
 
-## [4.0-dev](https://github.com/spacecowboy/Notepad/tree/4.0-dev) (2012-11-28)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.5-donate...4.0-dev)
+## [4.0-dev](https://github.com/spacecowboy/NotePad/tree/4.0-dev) (2012-11-28)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.5-donate...4.0-dev)
 
 **Fixed bugs:**
 
 - "Create list" not found, if lists "roster" is empty [\#196](https://github.com/spacecowboy/NotePad/issues/196)
 
-## [3.6.5-donate](https://github.com/spacecowboy/Notepad/tree/3.6.5-donate) (2012-11-27)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.5-release...3.6.5-donate)
+## [3.6.5-donate](https://github.com/spacecowboy/NotePad/tree/3.6.5-donate) (2012-11-27)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.5-release...3.6.5-donate)
 
-## [3.6.5-release](https://github.com/spacecowboy/Notepad/tree/3.6.5-release) (2012-11-27)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.5-dev...3.6.5-release)
+## [3.6.5-release](https://github.com/spacecowboy/NotePad/tree/3.6.5-release) (2012-11-27)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.5-dev...3.6.5-release)
 
-## [3.6.5-dev](https://github.com/spacecowboy/Notepad/tree/3.6.5-dev) (2012-11-27)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.4-release...3.6.5-dev)
+## [3.6.5-dev](https://github.com/spacecowboy/NotePad/tree/3.6.5-dev) (2012-11-27)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.4-release...3.6.5-dev)
 
 **Closed issues:**
 
 - Default language should be English [\#204](https://github.com/spacecowboy/NotePad/issues/204)
 - Sync failed [\#200](https://github.com/spacecowboy/NotePad/issues/200)
 
-## [3.6.4-release](https://github.com/spacecowboy/Notepad/tree/3.6.4-release) (2012-11-26)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.4-donate...3.6.4-release)
+## [3.6.4-release](https://github.com/spacecowboy/NotePad/tree/3.6.4-release) (2012-11-26)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.4-donate...3.6.4-release)
 
-## [3.6.4-donate](https://github.com/spacecowboy/Notepad/tree/3.6.4-donate) (2012-11-26)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.4-dev...3.6.4-donate)
+## [3.6.4-donate](https://github.com/spacecowboy/NotePad/tree/3.6.4-donate) (2012-11-26)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.4-dev...3.6.4-donate)
 
-## [3.6.4-dev](https://github.com/spacecowboy/Notepad/tree/3.6.4-dev) (2012-11-26)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.3-donate...3.6.4-dev)
+## [3.6.4-dev](https://github.com/spacecowboy/NotePad/tree/3.6.4-dev) (2012-11-26)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.3-donate...3.6.4-dev)
 
 **Closed issues:**
 
@@ -388,40 +396,40 @@
 - Export to and Import from MS Outlook [\#202](https://github.com/spacecowboy/NotePad/issues/202)
 - Export to and Import from simple text file [\#201](https://github.com/spacecowboy/NotePad/issues/201)
 
-## [3.6.3-donate](https://github.com/spacecowboy/Notepad/tree/3.6.3-donate) (2012-11-13)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.3-release...3.6.3-donate)
+## [3.6.3-donate](https://github.com/spacecowboy/NotePad/tree/3.6.3-donate) (2012-11-13)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.3-release...3.6.3-donate)
 
-## [3.6.3-release](https://github.com/spacecowboy/Notepad/tree/3.6.3-release) (2012-11-13)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.3-dev...3.6.3-release)
+## [3.6.3-release](https://github.com/spacecowboy/NotePad/tree/3.6.3-release) (2012-11-13)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.3-dev...3.6.3-release)
 
-## [3.6.3-dev](https://github.com/spacecowboy/Notepad/tree/3.6.3-dev) (2012-11-13)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.2-donate...3.6.3-dev)
+## [3.6.3-dev](https://github.com/spacecowboy/NotePad/tree/3.6.3-dev) (2012-11-13)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.2-donate...3.6.3-dev)
 
 **Closed issues:**
 
 - Crash on sync if default list is removed [\#198](https://github.com/spacecowboy/NotePad/issues/198)
 
-## [3.6.2-donate](https://github.com/spacecowboy/Notepad/tree/3.6.2-donate) (2012-11-12)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.2-release...3.6.2-donate)
+## [3.6.2-donate](https://github.com/spacecowboy/NotePad/tree/3.6.2-donate) (2012-11-12)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.2-release...3.6.2-donate)
 
-## [3.6.2-release](https://github.com/spacecowboy/Notepad/tree/3.6.2-release) (2012-11-12)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.2...3.6.2-release)
+## [3.6.2-release](https://github.com/spacecowboy/NotePad/tree/3.6.2-release) (2012-11-12)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.2...3.6.2-release)
 
-## [3.6.2](https://github.com/spacecowboy/Notepad/tree/3.6.2) (2012-11-12)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.1-donate...3.6.2)
+## [3.6.2](https://github.com/spacecowboy/NotePad/tree/3.6.2) (2012-11-12)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.1-donate...3.6.2)
 
 **Closed issues:**
 
 - Problem of synchronization [\#195](https://github.com/spacecowboy/NotePad/issues/195)
 
-## [3.6.1-donate](https://github.com/spacecowboy/Notepad/tree/3.6.1-donate) (2012-11-11)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.1-release...3.6.1-donate)
+## [3.6.1-donate](https://github.com/spacecowboy/NotePad/tree/3.6.1-donate) (2012-11-11)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.1-release...3.6.1-donate)
 
-## [3.6.1-release](https://github.com/spacecowboy/Notepad/tree/3.6.1-release) (2012-11-11)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6.1-dev...3.6.1-release)
+## [3.6.1-release](https://github.com/spacecowboy/NotePad/tree/3.6.1-release) (2012-11-11)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6.1-dev...3.6.1-release)
 
-## [3.6.1-dev](https://github.com/spacecowboy/Notepad/tree/3.6.1-dev) (2012-11-11)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6-release...3.6.1-dev)
+## [3.6.1-dev](https://github.com/spacecowboy/NotePad/tree/3.6.1-dev) (2012-11-11)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6-release...3.6.1-dev)
 
 **Fixed bugs:**
 
@@ -446,14 +454,14 @@
 - Tablets: menu to delete tasks appears twice [\#98](https://github.com/spacecowboy/NotePad/issues/98)
 - Completed Tasks show up again in GTasks [\#58](https://github.com/spacecowboy/NotePad/issues/58)
 
-## [3.6-release](https://github.com/spacecowboy/Notepad/tree/3.6-release) (2012-11-11)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6-donate...3.6-release)
+## [3.6-release](https://github.com/spacecowboy/NotePad/tree/3.6-release) (2012-11-11)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6-donate...3.6-release)
 
-## [3.6-donate](https://github.com/spacecowboy/Notepad/tree/3.6-donate) (2012-11-11)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/3.6-dev...3.6-donate)
+## [3.6-donate](https://github.com/spacecowboy/NotePad/tree/3.6-donate) (2012-11-11)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/3.6-dev...3.6-donate)
 
-## [3.6-dev](https://github.com/spacecowboy/Notepad/tree/3.6-dev) (2012-11-11)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.2.4...3.6-dev)
+## [3.6-dev](https://github.com/spacecowboy/NotePad/tree/3.6-dev) (2012-11-11)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.2.4...3.6-dev)
 
 **Fixed bugs:**
 
@@ -547,8 +555,8 @@
 - Sync messages translated to spanish [\#92](https://github.com/spacecowboy/NotePad/pull/92) ([fmelado](https://github.com/fmelado))
 - Russian: new string translations \(Sync\) [\#79](https://github.com/spacecowboy/NotePad/pull/79) ([OlegKrikun](https://github.com/OlegKrikun))
 
-## [market3.2.4](https://github.com/spacecowboy/Notepad/tree/market3.2.4) (2012-03-29)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.2.3...market3.2.4)
+## [market3.2.4](https://github.com/spacecowboy/NotePad/tree/market3.2.4) (2012-03-29)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.2.3...market3.2.4)
 
 **Closed issues:**
 
@@ -560,8 +568,8 @@
 - First day of the week customization [\#77](https://github.com/spacecowboy/NotePad/pull/77) ([arenl](https://github.com/arenl))
 - Minor corrections in spanish translation [\#73](https://github.com/spacecowboy/NotePad/pull/73) ([fmelado](https://github.com/fmelado))
 
-## [market3.2.3](https://github.com/spacecowboy/Notepad/tree/market3.2.3) (2012-03-21)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.2.2...market3.2.3)
+## [market3.2.3](https://github.com/spacecowboy/NotePad/tree/market3.2.3) (2012-03-21)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.2.2...market3.2.3)
 
 **Closed issues:**
 
@@ -576,14 +584,14 @@
 - Used more natural language in some spanish sentences [\#71](https://github.com/spacecowboy/NotePad/pull/71) ([fmelado](https://github.com/fmelado))
 - Updated German translation [\#61](https://github.com/spacecowboy/NotePad/pull/61) ([jonasdiemer](https://github.com/jonasdiemer))
 
-## [market3.2.2](https://github.com/spacecowboy/Notepad/tree/market3.2.2) (2012-03-11)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.2.1...market3.2.2)
+## [market3.2.2](https://github.com/spacecowboy/NotePad/tree/market3.2.2) (2012-03-11)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.2.1...market3.2.2)
 
-## [market3.2.1](https://github.com/spacecowboy/Notepad/tree/market3.2.1) (2012-03-11)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.2...market3.2.1)
+## [market3.2.1](https://github.com/spacecowboy/NotePad/tree/market3.2.1) (2012-03-11)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.2...market3.2.1)
 
-## [market3.2](https://github.com/spacecowboy/Notepad/tree/market3.2) (2012-03-11)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.1...market3.2)
+## [market3.2](https://github.com/spacecowboy/NotePad/tree/market3.2) (2012-03-11)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.1...market3.2)
 
 **Closed issues:**
 
@@ -601,48 +609,48 @@
 - Add Russian translation [\#55](https://github.com/spacecowboy/NotePad/pull/55) ([OlegKrikun](https://github.com/OlegKrikun))
 - Attempt to fix DatePicker [\#54](https://github.com/spacecowboy/NotePad/pull/54) ([jonasdiemer](https://github.com/jonasdiemer))
 
-## [market3.1](https://github.com/spacecowboy/Notepad/tree/market3.1) (2012-03-02)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.0.7-second...market3.1)
+## [market3.1](https://github.com/spacecowboy/NotePad/tree/market3.1) (2012-03-02)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.0.7-second...market3.1)
 
 **Merged pull requests:**
 
 - Czech translation [\#46](https://github.com/spacecowboy/NotePad/pull/46) ([ekuler](https://github.com/ekuler))
 
-## [market3.0.7-second](https://github.com/spacecowboy/Notepad/tree/market3.0.7-second) (2012-02-25)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.0.7...market3.0.7-second)
+## [market3.0.7-second](https://github.com/spacecowboy/NotePad/tree/market3.0.7-second) (2012-02-25)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.0.7...market3.0.7-second)
 
-## [market3.0.7](https://github.com/spacecowboy/Notepad/tree/market3.0.7) (2012-02-25)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.0.6...market3.0.7)
+## [market3.0.7](https://github.com/spacecowboy/NotePad/tree/market3.0.7) (2012-02-25)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.0.6...market3.0.7)
 
-## [market3.0.6](https://github.com/spacecowboy/Notepad/tree/market3.0.6) (2012-02-23)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.0.5...market3.0.6)
+## [market3.0.6](https://github.com/spacecowboy/NotePad/tree/market3.0.6) (2012-02-23)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.0.5...market3.0.6)
 
-## [market3.0.5](https://github.com/spacecowboy/Notepad/tree/market3.0.5) (2012-02-19)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.0.4_final...market3.0.5)
+## [market3.0.5](https://github.com/spacecowboy/NotePad/tree/market3.0.5) (2012-02-19)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.0.4_final...market3.0.5)
 
-## [market3.0.4_final](https://github.com/spacecowboy/Notepad/tree/market3.0.4_final) (2012-02-17)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.0.4actual_with_manifest...market3.0.4_final)
+## [market3.0.4_final](https://github.com/spacecowboy/NotePad/tree/market3.0.4_final) (2012-02-17)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.0.4actual_with_manifest...market3.0.4_final)
 
-## [market3.0.4actual_with_manifest](https://github.com/spacecowboy/Notepad/tree/market3.0.4actual_with_manifest) (2012-02-17)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.0.4actual...market3.0.4actual_with_manifest)
+## [market3.0.4actual_with_manifest](https://github.com/spacecowboy/NotePad/tree/market3.0.4actual_with_manifest) (2012-02-17)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.0.4actual...market3.0.4actual_with_manifest)
 
-## [market3.0.4actual](https://github.com/spacecowboy/Notepad/tree/market3.0.4actual) (2012-02-17)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.0.4...market3.0.4actual)
+## [market3.0.4actual](https://github.com/spacecowboy/NotePad/tree/market3.0.4actual) (2012-02-17)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.0.4...market3.0.4actual)
 
-## [market3.0.4](https://github.com/spacecowboy/Notepad/tree/market3.0.4) (2012-02-17)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.0.3-actual...market3.0.4)
+## [market3.0.4](https://github.com/spacecowboy/NotePad/tree/market3.0.4) (2012-02-17)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.0.3-actual...market3.0.4)
 
-## [market3.0.3-actual](https://github.com/spacecowboy/Notepad/tree/market3.0.3-actual) (2012-02-17)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.0.3...market3.0.3-actual)
+## [market3.0.3-actual](https://github.com/spacecowboy/NotePad/tree/market3.0.3-actual) (2012-02-17)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.0.3...market3.0.3-actual)
 
-## [market3.0.3](https://github.com/spacecowboy/Notepad/tree/market3.0.3) (2012-02-16)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.0.2...market3.0.3)
+## [market3.0.3](https://github.com/spacecowboy/NotePad/tree/market3.0.3) (2012-02-16)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.0.2...market3.0.3)
 
-## [market3.0.2](https://github.com/spacecowboy/Notepad/tree/market3.0.2) (2012-02-14)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.0.1...market3.0.2)
+## [market3.0.2](https://github.com/spacecowboy/NotePad/tree/market3.0.2) (2012-02-14)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.0.1...market3.0.2)
 
-## [market3.0.1](https://github.com/spacecowboy/Notepad/tree/market3.0.1) (2012-02-14)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market3.0...market3.0.1)
+## [market3.0.1](https://github.com/spacecowboy/NotePad/tree/market3.0.1) (2012-02-14)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market3.0...market3.0.1)
 
 **Closed issues:**
 
@@ -656,8 +664,8 @@
 
 - Bugfixes [\#45](https://github.com/spacecowboy/NotePad/pull/45) ([WishuKaiser](https://github.com/WishuKaiser))
 
-## [market3.0](https://github.com/spacecowboy/Notepad/tree/market3.0) (2012-02-14)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market2.2...market3.0)
+## [market3.0](https://github.com/spacecowboy/NotePad/tree/market3.0) (2012-02-14)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market2.2...market3.0)
 
 **Fixed bugs:**
 
@@ -679,8 +687,8 @@
 
 - Now you can release it ;\)  [\#44](https://github.com/spacecowboy/NotePad/pull/44) ([WishuKaiser](https://github.com/WishuKaiser))
 
-## [market2.2](https://github.com/spacecowboy/Notepad/tree/market2.2) (2012-01-27)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market2.1.1...market2.2)
+## [market2.2](https://github.com/spacecowboy/NotePad/tree/market2.2) (2012-01-27)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market2.1.1...market2.2)
 
 **Fixed bugs:**
 
@@ -690,15 +698,15 @@
 
 - add a font size thing, and perhaps a font changer [\#19](https://github.com/spacecowboy/NotePad/issues/19)
 
-## [market2.1.1](https://github.com/spacecowboy/Notepad/tree/market2.1.1) (2012-01-25)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market2.1...market2.1.1)
+## [market2.1.1](https://github.com/spacecowboy/NotePad/tree/market2.1.1) (2012-01-25)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market2.1...market2.1.1)
 
 **Fixed bugs:**
 
 - Crash on quick settings change [\#35](https://github.com/spacecowboy/NotePad/issues/35)
 
-## [market2.1](https://github.com/spacecowboy/Notepad/tree/market2.1) (2012-01-24)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market2.0...market2.1)
+## [market2.1](https://github.com/spacecowboy/NotePad/tree/market2.1) (2012-01-24)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market2.0...market2.1)
 
 **Closed issues:**
 
@@ -711,8 +719,8 @@
 - Enable multiselection and CAB [\#17](https://github.com/spacecowboy/NotePad/issues/17)
 - Delete should show a warning before deleting. [\#10](https://github.com/spacecowboy/NotePad/issues/10)
 
-## [market2.0](https://github.com/spacecowboy/Notepad/tree/market2.0) (2012-01-24)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market1.1...market2.0)
+## [market2.0](https://github.com/spacecowboy/NotePad/tree/market2.0) (2012-01-24)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market1.1...market2.0)
 
 **Closed issues:**
 
@@ -720,8 +728,8 @@
 - Use CAB in action bar instead of popup menu [\#8](https://github.com/spacecowboy/NotePad/issues/8)
 - Add tablet UI support [\#3](https://github.com/spacecowboy/NotePad/issues/3)
 
-## [market1.1](https://github.com/spacecowboy/Notepad/tree/market1.1) (2012-01-16)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/market1.0...market1.1)
+## [market1.1](https://github.com/spacecowboy/NotePad/tree/market1.1) (2012-01-16)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/market1.0...market1.1)
 
 **Closed issues:**
 
@@ -731,26 +739,26 @@
 - Save button is redundant. Remove it. [\#9](https://github.com/spacecowboy/NotePad/issues/9)
 - Something crashed. Likely it was onResume or somewhere following. [\#7](https://github.com/spacecowboy/NotePad/issues/7)
 
-## [market1.0](https://github.com/spacecowboy/Notepad/tree/market1.0) (2012-01-14)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/v2.0_Search...market1.0)
+## [market1.0](https://github.com/spacecowboy/NotePad/tree/market1.0) (2012-01-14)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/v2.0_Search...market1.0)
 
-## [v2.0_Search](https://github.com/spacecowboy/Notepad/tree/v2.0_Search) (2012-01-13)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/v1.1_showdate...v2.0_Search)
+## [v2.0_Search](https://github.com/spacecowboy/NotePad/tree/v2.0_Search) (2012-01-13)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/v1.1_showdate...v2.0_Search)
 
 **Closed issues:**
 
 - Add search to action bar in list [\#4](https://github.com/spacecowboy/NotePad/issues/4)
 - Add button to add note content to clipboard \(a real copy button\) [\#2](https://github.com/spacecowboy/NotePad/issues/2)
 
-## [v1.1_showdate](https://github.com/spacecowboy/Notepad/tree/v1.1_showdate) (2012-01-13)
-[Full Changelog](https://github.com/spacecowboy/Notepad/compare/v1.0_Actionbar...v1.1_showdate)
+## [v1.1_showdate](https://github.com/spacecowboy/NotePad/tree/v1.1_showdate) (2012-01-13)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/v1.0_Actionbar...v1.1_showdate)
 
 **Closed issues:**
 
 - Add back navigation to action bar to icon [\#5](https://github.com/spacecowboy/NotePad/issues/5)
 - Show date of edit in the notes list view [\#1](https://github.com/spacecowboy/NotePad/issues/1)
 
-## [v1.0_Actionbar](https://github.com/spacecowboy/Notepad/tree/v1.0_Actionbar) (2012-01-13)
+## [v1.0_Actionbar](https://github.com/spacecowboy/NotePad/tree/v1.0_Actionbar) (2012-01-13)
 
 
 \* *This Change Log was automatically generated by [github_changelog_generator](https://github.com/skywinder/Github-Changelog-Generator)*
