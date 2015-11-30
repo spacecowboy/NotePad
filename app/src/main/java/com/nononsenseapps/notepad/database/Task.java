@@ -767,10 +767,8 @@ public class Task extends DAO {
 			result += title;
 		}
 		if (note != null && !note.isEmpty()) {
-			if (result.length() > 0) {
-				result += "\n";
-			}
-			result += note;
+            // If title is empty, it should remain so
+			result += "\n" + note;
 		}
 		return result;
 	}
