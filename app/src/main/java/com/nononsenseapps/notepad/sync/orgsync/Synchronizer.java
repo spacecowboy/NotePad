@@ -241,7 +241,7 @@ public abstract class Synchronizer extends DBSyncBase implements
 				if (node == null) {
 					// CREATE NODE DB
 					//Log.d(TAG, "CREATE NODE DB");
-					node = new OrgNode();
+					node = new OrgNode(file.getParser());
 					node.setLevel(1);
 					node.setParent(file);
 					int idx = -1;

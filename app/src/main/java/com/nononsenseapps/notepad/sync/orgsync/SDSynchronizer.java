@@ -26,6 +26,8 @@ import com.nononsenseapps.util.PermissionsHelper;
 import com.nononsenseapps.util.SharedPreferencesHelper;
 
 import org.cowboyprogrammer.org.OrgFile;
+import org.cowboyprogrammer.org.parser.OrgParser;
+import org.cowboyprogrammer.org.parser.RegexParser;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -114,6 +116,7 @@ public class SDSynchronizer extends Synchronizer implements
     @Override
     public OrgFile getNewFile(final String orgdesiredName) throws
             IOException, IllegalArgumentException {
+        OrgParser orgParser = new RegexParser();
         // Replace slashes with underscores
         String desiredName = orgdesiredName.replace("/", "_");
         String filename;
@@ -125,7 +128,7 @@ public class SDSynchronizer extends Synchronizer implements
             }
             File f = new File(ORG_DIR, filename);
             if (!f.exists()) {
-                return new OrgFile(filename);
+                return new OrgFile(orgParser, filename);
             }
         }
         throw new IllegalArgumentException("Filename not accessible");

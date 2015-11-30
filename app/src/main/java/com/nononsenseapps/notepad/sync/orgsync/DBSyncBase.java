@@ -28,6 +28,8 @@ import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 
+import org.cowboyprogrammer.org.parser.OrgParser;
+import org.cowboyprogrammer.org.parser.RegexParser;
 import org.cowboyprogrammer.org.OrgFile;
 import org.cowboyprogrammer.org.OrgNode;
 import org.cowboyprogrammer.org.OrgTimestamp;
@@ -237,6 +239,8 @@ public abstract class DBSyncBase implements SynchronizerInterface {
             Log.d(Synchronizer.TAG, "Get Filename: " + filename);
         }
 
+        OrgParser parser = new RegexParser();
+
         // Construct pairs from lists first. This removes entries as it goes.
         for (Long dbid : lists.keySet()) {
             TaskList list = lists.get(dbid);
@@ -246,7 +250,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
             if (remote != null && filenames.remove(remote.remoteId)) {
                 final BufferedReader br = getRemoteFile(remote.remoteId);
                 if (br != null) {
-                    file = OrgFile.createFromBufferedReader(remote.remoteId, br);
+                    file = OrgFile.createFromBufferedReader(parser, remote.remoteId, br);
                 }
             }
             String l = list.title;
@@ -269,7 +273,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
             if (remote != null && filenames.remove(remote.remoteId)) {
                 final BufferedReader br = getRemoteFile(remote.remoteId);
                 if (br != null) {
-                    file = OrgFile.createFromBufferedReader(remote.remoteId, br);
+                    file = OrgFile.createFromBufferedReader(parser, remote.remoteId, br);
                 }
             }
             String l = null;
@@ -291,7 +295,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
             OrgFile file = null;
             final BufferedReader br = getRemoteFile(filename);
             if (br != null) {
-                file = OrgFile.createFromBufferedReader(filename, br);
+                file = OrgFile.createFromBufferedReader(parser, filename, br);
             }
             String l = null;
             String r = null;

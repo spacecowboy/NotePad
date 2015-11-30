@@ -28,6 +28,8 @@ import com.dropbox.client2.exception.DropboxServerException;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 
 import org.cowboyprogrammer.org.OrgFile;
+import org.cowboyprogrammer.org.parser.OrgParser;
+import org.cowboyprogrammer.org.parser.RegexParser;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -135,6 +137,7 @@ public class DropboxSynchronizer extends Synchronizer implements
         if (desiredName.contains("/")) {
             throw new IOException("Filename can't contain /");
         }
+        OrgParser orgParser = new RegexParser();
         String filename;
         try {
             for (int i = 0; i < 100; i++) {
@@ -149,7 +152,7 @@ public class DropboxSynchronizer extends Synchronizer implements
                 } catch (DropboxServerException e) {
                     if (404 == e.error) {
                         // No such file exists, great!
-                        return new OrgFile(filename);
+                        return new OrgFile(orgParser, filename);
                     } else {
                         throw e;
                     }
