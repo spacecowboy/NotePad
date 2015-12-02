@@ -61,7 +61,7 @@
         <!-- To get maps working -->
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyDTgjabZVkiZOnokePNdYNAkRiaE73_MBs" />
+            android:value="AIzaSyBULvM_SJQFK1qWDg5LgV99jvpHpRey8zE" />
 
         <!-- For location reminders -->
         <activity
