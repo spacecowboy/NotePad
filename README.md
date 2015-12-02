@@ -4,7 +4,7 @@
 
 <a href="https://flattr.com/submit/auto?user_id=spacecowboy&url=https%3A%2F%2Fgithub.com%2Fspacecowboy%2Fnotepad%2F" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0"></a> [![Build Status](https://travis-ci.org/spacecowboy/NotePad.svg?branch=master)](https://travis-ci.org/spacecowboy/NotePad) [![Crowdin](https://d322cqt584bo4o.cloudfront.net/nononsensenotes/localized.png)](https://crowdin.com/project/nononsensenotes)
 
-[![F-Droid](https://f-droid.org/wiki/images/0/0f/F-Droid-button_smaller.png)](https://f-droid.org/repository/browse/?fdid=com.nononsenseapps.notepad) 
+[![F-Droid](https://f-droid.org/wiki/images/0/0f/F-Droid-button_smaller.png)](https://f-droid.org/repository/browse/?fdid=com.nononsenseapps.notepad)
 
 Link to [Google Play](https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad)
 
@@ -35,7 +35,7 @@ Expected result:
 Note should have the due date I set earlier.
 ```
 
-If relevant, please say if you're using a phone or a tablet (UI-issues), or what you're sync settings are (odd stuff happening in general).
+If relevant, please say if you're using a phone or a tablet (UI-issues), or what your sync settings are (odd stuff happening in general).
 
 # Getting sync to work
 You need to put your API keys in a file, like the sample here:
@@ -54,18 +54,14 @@ For free version:
 
     ./gradlew installFreeDebug
 
-Or with play services and location reminders:
+Same as above but including Dropbox support:
 
     ./gradlew installPlayDebug
-
-Same as above but including Dropbox at the moment:
-
-    ./gradlew installPlayBetaDebug
 
 # License
 
 ```
-Copyright (C) 2014 Jonas Kalderstam
+Copyright (C) 2015 Jonas Kalderstam
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
