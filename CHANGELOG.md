@@ -1,5 +1,12 @@
 # Change Log
 
+## [5.7.2](https://github.com/spacecowboy/NotePad/tree/5.7.2) (2015-12-02)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/6.0.0-beta.5...5.7.2)
+
+**Fixed bugs:**
+
+- Map does not appear for location-based reminders [\#343](https://github.com/spacecowboy/NotePad/issues/343)
+
 ## [6.0.0-beta.5](https://github.com/spacecowboy/NotePad/tree/6.0.0-beta.5) (2015-11-30)
 [Full Changelog](https://github.com/spacecowboy/NotePad/compare/6.0.0-beta.4...6.0.0-beta.5)
 
@@ -193,13 +200,13 @@
 [Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.1-withduetime...5.1.1)
 
 ## [5.1-withduetime](https://github.com/spacecowboy/NotePad/tree/5.1-withduetime) (2013-11-06)
-[Full Changelog](https://github.com/spacecowboy/NotePad/compare/release-5.1...5.1-withduetime)
-
-## [release-5.1](https://github.com/spacecowboy/NotePad/tree/release-5.1) (2013-11-06)
-[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.1-withduetimes...release-5.1)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/5.1-withduetimes...5.1-withduetime)
 
 ## [5.1-withduetimes](https://github.com/spacecowboy/NotePad/tree/5.1-withduetimes) (2013-11-06)
-[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.4.1-donate...5.1-withduetimes)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/release-5.1...5.1-withduetimes)
+
+## [release-5.1](https://github.com/spacecowboy/NotePad/tree/release-5.1) (2013-11-06)
+[Full Changelog](https://github.com/spacecowboy/NotePad/compare/4.4.1-donate...release-5.1)
 
 **Implemented enhancements:**
 
