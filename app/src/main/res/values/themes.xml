@@ -32,11 +32,11 @@
         <item name="ic_clear_24dp_active">@drawable/ic_clear_24dp_black_active</item>
         <item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_black_active</item>
         <item name="ic_alarm_24dp_active">@drawable/ic_alarm_24dp_black_active</item>
+        <item name="ic_reorder_24dp">@drawable/ic_reorder_24dp_black</item>
 
         <item name="NavDrawerStyle">@style/LightNavbarTheme</item>
         <item name="alertDialogTheme">@style/LightDialogStyle</item>
 
-        <item name="drag_handle_color">@color/dragHandleColorLight</item>
         <!-- Update these -->
 
         <item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
@@ -58,6 +58,7 @@
         <item name="ic_clear_24dp_active">@drawable/ic_clear_24dp_white</item>
         <item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_white</item>
         <item name="ic_alarm_24dp_active">@drawable/ic_alarm_24dp_white</item>
+        <item name="ic_reorder_24dp">@drawable/ic_reorder_24dp_white</item>
 
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/primary_dark</item>
@@ -66,8 +67,6 @@
 
         <item name="NavDrawerStyle">@style/DarkNavbarTheme</item>
         <item name="alertDialogTheme">@style/DarkDialogStyle</item>
-
-        <item name="drag_handle_color">@color/dragHandleColorDark</item>
 
         <!-- Update these -->
 
@@ -97,11 +96,11 @@
         <item name="ic_clear_24dp_active">@drawable/ic_clear_24dp_black_active</item>
         <item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_black_active</item>
         <item name="ic_alarm_24dp_active">@drawable/ic_alarm_24dp_black_active</item>
+        <item name="ic_reorder_24dp">@drawable/ic_reorder_24dp_black</item>
 
         <item name="NavDrawerStyle">@style/LightNavbarTheme</item>
         <item name="alertDialogTheme">@style/LightDialogStyle</item>
 
-        <item name="drag_handle_color">@color/dragHandleColorLight</item>
         <!-- Update these -->
 
         <item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
@@ -124,6 +123,7 @@
         <item name="ic_clear_24dp_active">@drawable/ic_clear_24dp_white</item>
         <item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_white</item>
         <item name="ic_alarm_24dp_active">@drawable/ic_alarm_24dp_white</item>
+        <item name="ic_reorder_24dp">@drawable/ic_reorder_24dp_white</item>
 
         <item name="windowActionModeOverlay">true</item>
         <item name="actionModeBackground">@color/primary_dark</item>
@@ -132,8 +132,6 @@
 
         <item name="NavDrawerStyle">@style/DarkNavbarTheme</item>
         <item name="alertDialogTheme">@style/DarkDialogStyle</item>
-
-        <item name="drag_handle_color">@color/dragHandleColorDark</item>
 
         <!-- Update these -->
 
@@ -211,7 +209,6 @@
         <item name="labelAddItemTextColor">@color/labelItemTextColorDark</item>
         <item name="list_item_card_background">@drawable/card_dark</item>
         <item name="android:actionBarStyle">@android:style/Widget.Holo.ActionBar.Solid</item>
-        <item name="drag_handle_color">@color/dragHandleColorDark</item>
         <item name="TaskListItem">@style/TaskListItemDark</item>
         <item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
 
@@ -247,7 +244,6 @@
         <item name="viewpager_bg">@color/googlenow_grey_trans</item>
         <item name="labelAddItemTextColor">@color/labelItemTextColorLight</item>
         <item name="list_item_card_background">@drawable/card_light</item>
-        <item name="drag_handle_color">@color/dragHandleColorLight</item>
         <item name="TaskListItem">@style/TaskListItemLight</item>
         <item name="ListMarginStyle">@style/ListMarginStyleCard</item>
 

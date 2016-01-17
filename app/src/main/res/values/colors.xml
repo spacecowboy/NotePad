@@ -47,9 +47,6 @@
     <color name="labelItemTextColorLight">#555555</color>
     <color name="labelItemTextColorDark">#cccccc</color>
 
-    <color name="dragHandleColorLight">#30000000</color>
-    <color name="dragHandleColorDark">#8affffff</color>
-
     <color name="completedGrey">#aa888888</color>
 
     <color name="mapTransLight">#E0FFFFFF</color>
