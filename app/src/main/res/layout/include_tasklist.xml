@@ -17,7 +17,6 @@
 
 <FrameLayout android:id="@+id/listContainer"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -28,24 +27,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.mobeta.android.dslv.DragSortListView
+        <android.support.v7.widget.RecyclerView
             android:id="@android:id/list"
+            android:scrollbars="vertical"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="1dp"
-            android:drawSelectorOnTop="true"
-            app:collapsed_height="1px"
-            app:drag_enabled="true"
-            app:drag_handle_id="@+id/drag_handle"
-            app:drag_scroll_start="0.33"
-            app:drag_start_mode="onMove"
-            app:float_alpha="1.0"
-            app:float_background_color="@android:color/holo_blue_dark"
-            app:remove_enabled="false"
-            app:remove_mode="flingRemove"
-            app:slide_shuffle_speed="0.3"
-            app:sort_enabled="true"
             tools:ignore="PxUsage"/>
     </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>

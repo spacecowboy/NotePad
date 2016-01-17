@@ -15,4 +15,4 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-include ':app', ':external:datetimepicker', ':external:drag-sort-listview'
+include ':app', ':external:datetimepicker'
