@@ -38,4 +38,6 @@
         android:minHeight="@dimen/list_item_min_size"
         android:paddingRight="4dp"/>
 
+
+
 </FrameLayout>

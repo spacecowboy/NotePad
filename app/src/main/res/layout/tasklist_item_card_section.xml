@@ -51,8 +51,8 @@
 
     <View
         android:id="@+id/dragpadding"
-        android:layout_width="@dimen/drag_grip_avoid_padding"
-        android:layout_height="1dp"
+        android:layout_width="@dimen/drag_grip_width"
+        android:layout_height="24dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true" />
 

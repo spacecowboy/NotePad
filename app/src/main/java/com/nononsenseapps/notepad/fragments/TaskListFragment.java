@@ -31,16 +31,19 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
+import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
@@ -82,6 +85,7 @@ public class TaskListFragment extends Fragment
   public static final String LIST_ID = "list_id";
   public static final int LOADER_TASKS = 1;
   public static final int LOADER_CURRENT_LIST = 0;
+  private static final String TAG = "TaskListFragment";
 
   RecyclerView listView;
 
@@ -104,6 +108,7 @@ public class TaskListFragment extends Fragment
   private ActionMode mMode;
   private SwipeRefreshLayout mSwipeRefreshLayout;
   private boolean mDeleteWasUndone = false;
+  private ItemTouchHelper touchHelper;
 
   public TaskListFragment() {
     super();
@@ -144,8 +149,11 @@ public class TaskListFragment extends Fragment
 
   void loadList() {
     listView.setLayoutManager(new LinearLayoutManager(getActivity()));
+    listView.setHasFixedSize(true);
     // TODO separators
+    touchHelper = new ItemTouchHelper(new DragHandler());
     listView.setAdapter(mAdapter);
+    touchHelper.attachToRecyclerView(listView);
 
     // TODO jonas
     /*listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
@@ -506,6 +514,8 @@ public class TaskListFragment extends Fragment
       @Override
       public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
         if (loader.getId() == LOADER_TASKS) {
+          Log.d(TAG,
+              "onLoadFinished() called");
           mAdapter.swapCursor(c);
         }
       }
@@ -655,6 +665,7 @@ public class TaskListFragment extends Fragment
   class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
       View.OnLongClickListener {
 
+    private static final String TAG = "ViewHolder";
     final TitleNoteTextView title;
     final DateView date;
     final NoteCheckBox checkbox;
@@ -673,6 +684,18 @@ public class TaskListFragment extends Fragment
 
       itemView.setOnClickListener(this);
       itemView.setOnLongClickListener(this);
+
+      dragHandle.setOnTouchListener(new View.OnTouchListener() {
+        @Override
+        public boolean onTouch(final View v, final MotionEvent event) {
+          Log.d(TAG, "onTouch() called with: " + "v = [" + v + "], event = [" + event + "]");
+          if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+            Log.d(TAG, "onTouch: starting Drag");
+            touchHelper.startDrag(ViewHolder.this);
+          }
+          return false;
+        }
+      });
     }
 
     void onBind(final Cursor cursor) {
@@ -743,10 +766,7 @@ public class TaskListFragment extends Fragment
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int position) {
-      Log.d(TAG, "onBindViewHolder() called with: " + "holder = [" + holder + "], position = [" +
-          position + "]");
       if (!cursor.moveToPosition(position)) {
-        Log.d(TAG, "onBindViewHolder: failed to move to position");
         return;
       }
 
@@ -864,6 +884,49 @@ public class TaskListFragment extends Fragment
         cursor.moveToPosition(position);
       }
       return cursor;
+    }
+  }
+
+  class DragHandler extends ItemTouchHelper.Callback {
+
+    private static final String TAG = "DragHandler";
+
+    public DragHandler() {
+      super();
+    }
+
+    @Override
+    public boolean isLongPressDragEnabled() {
+      return false;
+    }
+
+    @Override
+    public boolean isItemViewSwipeEnabled() {
+      return false;
+    }
+
+    @Override
+    public int getMovementFlags(final RecyclerView recyclerView,
+                                final RecyclerView.ViewHolder viewHolder) {
+      int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+      int swipeFlags = 0;
+      return makeMovementFlags(dragFlags, swipeFlags);
+    }
+
+    @Override
+    public boolean onMove(final RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder,
+                          final RecyclerView.ViewHolder target) {
+      final Task fromTask = new Task(mAdapter.getCursor(viewHolder.getAdapterPosition()));
+      final Task toTask = new Task(mAdapter.getCursor(target.getAdapterPosition()));
+
+      mAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+      fromTask.moveTo(getActivity().getContentResolver(), toTask);
+      return true;
+    }
+
+    @Override
+    public void onSwiped(final RecyclerView.ViewHolder viewHolder, final int direction) {
+
     }
   }
 }

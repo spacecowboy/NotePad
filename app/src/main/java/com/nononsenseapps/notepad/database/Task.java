@@ -53,8 +53,9 @@ public class Task extends DAO {
 	public static final String HISTORY_TABLE_NAME = "history";
 	private static final String SECTIONED_DATE_VIEW = "sectioned_date_view";
 	public static final String FTS3_TABLE_NAME = "fts3_task";
+  private static final String TAG = "Task";
 
-	public static String getSECTION_DATE_VIEW_NAME(final String listId) {
+  public static String getSECTION_DATE_VIEW_NAME(final String listId) {
 		// listId CAN be null. Hence the string concat hack
 		return new StringBuilder().append(SECTIONED_DATE_VIEW).append("_")
 				.append("" + listId).toString();
@@ -984,7 +985,7 @@ public class Task extends DAO {
     }
 
 	public int moveTo(final ContentResolver resolver, final Task targetTask) {
-		if (targetTask.dblist == dblist) {
+		if (targetTask.dblist.longValue() == dblist.longValue()) {
 			if (targetTask.left < left) {
 				// moving left
 				return resolver.update(getMoveItemLeftUri(),
