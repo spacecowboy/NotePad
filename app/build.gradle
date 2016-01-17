@@ -20,7 +20,7 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.0.0-alpha1'
+    classpath 'com.android.tools.build:gradle:2.0.0-alpha3'
     // the latest version of the android-apt plugin for annotations
     classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     // For publishing stuff to Google Play
