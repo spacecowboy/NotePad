@@ -153,23 +153,23 @@ public class NavigationDrawerFragment extends Fragment {
         LayoutInflater inflater = LayoutInflater.from(getContext());
 
         // TODO take configuration into account
-        ProviderManager pm = ProviderManager.getInstance(getContext());
+        ProviderManager pm = new ProviderManager(getContext());
         for (final ProviderManager.Provider provider: pm.getConfiguredProviders()) {
             View view = inflater.inflate(R.layout.listitem_navdrawer_provider, mNavContainer, false);
             // provider might have icon
             ImageView im = (ImageView) view.findViewById(android.R.id.icon1);
-            if (provider.icon > 0) {
+            if (provider.getIcon() > 0) {
                 // An icon is specifed by the provider
-                im.setImageResource(provider.icon);
+                im.setImageResource(provider.getIcon());
                 // Don't clip icons
                 im.setClipToOutline(false);
             } else {
                 // No icon specified, use first letter as icon
                 im.setImageDrawable(TextDrawable.builder()
-                        .buildRect(provider.label.substring(0, 1),
-                                ColorGenerator.MATERIAL.getColor(provider.label)));
+                        .buildRect(provider.getLabel().substring(0, 1),
+                                ColorGenerator.MATERIAL.getColor(provider.getLabel())));
             }
-            ((TextView) view.findViewById(android.R.id.text1)).setText(provider.label);
+            ((TextView) view.findViewById(android.R.id.text1)).setText(provider.getLabel());
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -187,16 +187,16 @@ public class NavigationDrawerFragment extends Fragment {
      */
     public void selectProvider(ProviderManager.Provider provider) {
         // Set main avatar
-        if (provider.icon > 0) {
+        if (provider.getIcon() > 0) {
             // An icon is specifed by the provider
-            mMainAvatar.setImageResource(provider.icon);
+            mMainAvatar.setImageResource(provider.getIcon());
             // Don't clip icons
             mMainAvatar.setClipToOutline(false);
         } else {
             // No icon specified, use first letter as icon
             mMainAvatar.setImageDrawable(TextDrawable.builder()
-                    .buildRect(provider.label.substring(0, 1),
-                            ColorGenerator.MATERIAL.getColor(provider.label)));
+                    .buildRect(provider.getLabel().substring(0, 1),
+                            ColorGenerator.MATERIAL.getColor(provider.getLabel())));
         }
         // TODO set labels
 

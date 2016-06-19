@@ -63,7 +63,7 @@ public class MainListActivity extends AppCompatActivity implements NavigationDra
         if (savedInstanceState == null) {
 
             // TODO just load first provider we find, change this later
-            ProviderManager pm = ProviderManager.getInstance(this);
+            ProviderManager pm = new ProviderManager(this);
             List<ProviderManager.Provider> providers = pm.getConfiguredProviders();
 
             if (providers.size() > 0) {
@@ -77,8 +77,8 @@ public class MainListActivity extends AppCompatActivity implements NavigationDra
     @Override
     public void switchProvider(ProviderManager.Provider provider) {
         // Called by navigation drawer
-        setTitle(provider.label);
-        mFragment = MainListFragment.newInstance(provider.uriList);
+        setTitle(provider.getLabel());
+        mFragment = MainListFragment.newInstance(provider.getUriList());
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.listframe, mFragment, "single_pane").commit();
     }
