@@ -117,13 +117,13 @@ public class TextFileProvider extends ContentProvider {
                 relativePath = "/";
                 break;
             case URI_LIST:
-                relativePath = ProviderHelper.getRelativePath(uri);
+                relativePath = ProviderHelperKt.getRelativePath(uri);
                 break;
             default:
                 throw new IllegalArgumentException("Unknown path: " + uri.toString());
         }
 
-        final File filePath = new File(ProviderHelper.join(mRootPath, relativePath));
+        final File filePath = new File(ProviderHelperKt.join(mRootPath, relativePath));
         File[] files = filePath.listFiles(mFileFilter);
         Log.d(TAG, "Listing: " + filePath.getPath() + ", files: " + (files == null ? 0 : files.length));
 
@@ -139,7 +139,7 @@ public class TextFileProvider extends ContentProvider {
         MatrixCursor mc = new MatrixCursor(projection, fileList.size());
 
         for (File file : fileList) {
-            mc.addRow(new Object[]{ProviderHelper.join(relativePath, file.getName()),
+            mc.addRow(new Object[]{ProviderHelperKt.join(relativePath, file.getName()),
                     ProviderContract.getTypeMask(file.isDirectory() ? ProviderContract.TYPE_FOLDER : ProviderContract.TYPE_DATA,
                             ProviderContract.TYPE_DESCRIPTION),
                     file.getName(), null, null, null});

@@ -78,8 +78,8 @@ public class DummyProvider extends ContentProvider {
 
     @Override
     public String getType(@NonNull Uri uri) {
-        switch (ProviderHelper.matchUri(uri)) {
-            case ProviderHelper.URI_NOMATCH:
+        switch (ProviderHelperKt.matchUri(uri)) {
+            case ProviderHelperKt.URI_NOMATCH:
                 throw new IllegalArgumentException("Unknown path: " + uri.getPath());
             default:
                 return TYPE_NONONSENSENOTES_ITEM;
@@ -97,9 +97,9 @@ public class DummyProvider extends ContentProvider {
     @Override
     public Uri insert(@NonNull Uri uri, ContentValues values) {
         String path;
-        switch (ProviderHelper.matchUri(uri)) {
-            case ProviderHelper.URI_LIST:
-                path = ProviderHelper.getRelativePath(uri);
+        switch (ProviderHelperKt.matchUri(uri)) {
+            case ProviderHelperKt.URI_LIST:
+                path = ProviderHelperKt.getRelativePath(uri);
 
                 final String parentPath;
                 final List<DummyItem> list;
@@ -112,12 +112,12 @@ public class DummyProvider extends ContentProvider {
                     list = parent.children;
                 }
 
-                DummyItem item = new DummyItem(ProviderHelper.join(parentPath, Integer.toString(list.size())),
+                DummyItem item = new DummyItem(ProviderHelperKt.join(parentPath, Integer.toString(list.size())),
                         values);
                 list.add(item);
 
                 notifyOnChange(uri);
-                return ProviderHelper.getDetailsUri(ProviderHelper.getBase(uri), item.path);
+                return ProviderHelperKt.getDetailsUri(ProviderHelperKt.getBase(uri), item.path);
             default:
                 throw new IllegalArgumentException("Can't perform insert at: " + uri.toString());
         }
@@ -131,24 +131,24 @@ public class DummyProvider extends ContentProvider {
         String path;
         MatrixCursor mc = new MatrixCursor(ProviderContract.sMainListProjection);
 
-        switch (ProviderHelper.matchUri(uri)) {
-            case ProviderHelper.URI_ROOT:
-                setNotificationUri(mc, ProviderHelper.getListUri(ProviderHelper.getBase(uri), ""));
+        switch (ProviderHelperKt.matchUri(uri)) {
+            case ProviderHelperKt.URI_ROOT:
+                setNotificationUri(mc, ProviderHelperKt.getListUri(ProviderHelperKt.getBase(uri), ""));
                 for (DummyItem item : mData) {
                     mc.addRow(item.asRow());
                 }
                 break;
-            case ProviderHelper.URI_LIST:
+            case ProviderHelperKt.URI_LIST:
                 setNotificationUri(mc, uri);
-                path = ProviderHelper.getRelativePath(uri);
+                path = ProviderHelperKt.getRelativePath(uri);
 
                 for (DummyItem item : getNestedList(path)) {
                     mc.addRow(item.asRow());
                 }
                 break;
-            case ProviderHelper.URI_DETAILS:
+            case ProviderHelperKt.URI_DETAILS:
                 setNotificationUri(mc, uri);
-                path = ProviderHelper.getRelativePath(uri);
+                path = ProviderHelperKt.getRelativePath(uri);
                 mc.addRow(getNestedItem(path).asRow());
                 break;
             default:
@@ -179,14 +179,14 @@ public class DummyProvider extends ContentProvider {
      */
     private List<DummyItem> getNestedList(String path) {
         List<DummyItem> items = mData;
-        String first = ProviderHelper.firstPart(path);
-        path = ProviderHelper.restPart(path);
+        String first = ProviderHelperKt.firstPart(path);
+        path = ProviderHelperKt.restPart(path);
         while (!first.isEmpty()) {
             int index = Integer.parseInt(first);
             items = items.get(index).children;
 
-            first = ProviderHelper.firstPart(path);
-            path = ProviderHelper.restPart(path);
+            first = ProviderHelperKt.firstPart(path);
+            path = ProviderHelperKt.restPart(path);
         }
 
         return items;
@@ -212,15 +212,15 @@ public class DummyProvider extends ContentProvider {
     private DummyItem getNestedItem(String path, boolean popItem) {
         List<DummyItem> items = mData;
         DummyItem item = null;
-        String first = ProviderHelper.firstPart(path);
-        path = ProviderHelper.restPart(path);
+        String first = ProviderHelperKt.firstPart(path);
+        path = ProviderHelperKt.restPart(path);
         while (!first.isEmpty()) {
             int index = Integer.parseInt(first);
             item = items.get(index);
             items = item.children;
 
-            first = ProviderHelper.firstPart(path);
-            path = ProviderHelper.restPart(path);
+            first = ProviderHelperKt.firstPart(path);
+            path = ProviderHelperKt.restPart(path);
         }
 
         if (popItem) {
@@ -234,9 +234,9 @@ public class DummyProvider extends ContentProvider {
     public int update(@NonNull Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
         String path;
-        switch (ProviderHelper.matchUri(uri)) {
-            case ProviderHelper.URI_DETAILS:
-                path = ProviderHelper.getRelativePath(uri);
+        switch (ProviderHelperKt.matchUri(uri)) {
+            case ProviderHelperKt.URI_DETAILS:
+                path = ProviderHelperKt.getRelativePath(uri);
 
                 // Any queries?
                 if (uri.getQuery().isEmpty()) {

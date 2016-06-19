@@ -38,7 +38,7 @@ import com.nononsenseapps.notepad.android.activity.FolderListActivity;
 import com.nononsenseapps.notepad.android.adapter.ItemViewHolder;
 import com.nononsenseapps.notepad.android.adapter.MainListAdapter;
 import com.nononsenseapps.notepad.android.provider.ProviderContract;
-import com.nononsenseapps.notepad.android.provider.ProviderHelper;
+import com.nononsenseapps.notepad.android.provider.ProviderHelperKt;
 
 
 /**
@@ -132,7 +132,7 @@ public class MainListFragment extends Fragment implements LoaderManager.LoaderCa
         if (viewHolder.isFolder()) {
             Intent i = new Intent(getContext(), FolderListActivity.class);
             i.putExtra(ProviderContract.COLUMN_TITLE, viewHolder.textView.getText().toString());
-            i.setData(ProviderHelper.getListUri(ProviderHelper.getBase(mUri),
+            i.setData(ProviderHelperKt.getListUri(ProviderHelperKt.getBase(mUri),
                     viewHolder.getPath()));
             startActivity(i);
         }

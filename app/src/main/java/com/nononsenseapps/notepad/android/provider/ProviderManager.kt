@@ -27,7 +27,7 @@ import android.os.Bundle
 import java.util.ArrayList
 
 /**
- * This singleton-class handles things related to (possibly 3rd party) providers.
+ * This class handles things related to (possibly 3rd party) providers.
  */
 class ProviderManager(context: Context) {
     val METADATA_PROTOCOL_VERSION = "protocolVersion"
@@ -48,14 +48,10 @@ class ProviderManager(context: Context) {
             val resolveInfos = pm.queryIntentContentProviders(Intent(ProviderContract.ACTION_PROVIDER),
                     PackageManager.GET_META_DATA)
             for (resolveInfo in resolveInfos) {
-                try {
-                    val metadata = resolveInfo.providerInfo.metaData
-                    if (providerHasValidMetadata(metadata)) {
-                        availableUris.add(Provider(pm, resolveInfo.providerInfo))
-                    }
-                } catch (ignored: NullPointerException) {
+                val metadata = resolveInfo.providerInfo.metaData
+                if (providerHasValidMetadata(metadata)) {
+                    availableUris.add(Provider(pm, resolveInfo.providerInfo))
                 }
-
             }
 
             return availableUris
@@ -76,14 +72,10 @@ class ProviderManager(context: Context) {
             val resolveInfos = pm.queryIntentContentProviders(Intent(ProviderContract.ACTION_PROVIDER),
                     PackageManager.GET_META_DATA)
             for (resolveInfo in resolveInfos) {
-                try {
-                    val metadata = resolveInfo.providerInfo.metaData
-                    if (providerHasValidMetadata(metadata) && !providerRequiresConfig(metadata)) {
-                        availableUris.add(Provider(pm, resolveInfo.providerInfo))
-                    }
-                } catch (ignored: NullPointerException) {
+                val metadata = resolveInfo.providerInfo.metaData
+                if (providerHasValidMetadata(metadata) && !providerRequiresConfig(metadata)) {
+                    availableUris.add(Provider(pm, resolveInfo.providerInfo))
                 }
-
             }
 
             return availableUris
