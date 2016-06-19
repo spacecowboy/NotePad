@@ -1,4 +1,4 @@
-package com.nononsenseapps.notepad.legacydatabase;
+package com.nononsenseapps.notepad.android.legacydatabase;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -21,7 +21,7 @@
     android:layout_height="?android:listPreferredItemHeight"
     android:background="?android:selectableItemBackground">
     
-    <com.nononsenseapps.notepad.widget.CircularImageView
+    <com.nononsenseapps.notepad.android.widget.CircularImageView
         android:id="@android:id/icon1"
         android:layout_width="40dp"
         android:layout_height="40dp"

@@ -26,7 +26,7 @@
     android:paddingRight="@dimen/keyline_1"
     android:paddingTop="@dimen/status_bar_height">
 
-    <com.nononsenseapps.notepad.widget.CircularImageView
+    <com.nononsenseapps.notepad.android.widget.CircularImageView
         android:id="@+id/main_avatar"
         android:layout_width="64dp"
         android:layout_height="64dp"

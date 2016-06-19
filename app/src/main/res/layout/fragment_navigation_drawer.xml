@@ -20,7 +20,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#FFFFFF"
-    tools:context="com.nononsenseapps.notepad.fragment.NavigationDrawerFragment">
+    tools:context=".android.fragment.NavigationDrawerFragment">
 
     <ScrollView
         android:layout_width="match_parent"

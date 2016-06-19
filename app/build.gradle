@@ -129,14 +129,17 @@ android {
 
     buildTypes {
         debug {
+            lintOptions {
+                abortOnError false
+            }
             // True during dev process
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
         release {
-            minifyEnabled true
-            shrinkResources true
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -148,7 +151,6 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.0.1'
     compile 'com.android.support:design:23.0.1'
     compile 'com.android.support:preference-v7:23.0.1'
-
     compile 'joda-time:joda-time:2.3'
     // Dashclock
     compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
@@ -156,12 +158,10 @@ dependencies {
     compile 'com.nononsenseapps:filepicker:2.4.0'
     // OrgParser
     compile 'org.cowboyprogrammer:orgparser:1.1'
-
     // Dropbox and non-free stuff
     /*playCompile fileTree(dir: 'src/play/libs', include: '*.jar')
-    playBetaCompile fileTree(dir: 'src/play/libs', include: '*.jar')*/
+        playBetaCompile fileTree(dir: 'src/play/libs', include: '*.jar')*/
     // Tests
     androidTestCompile 'com.squareup.spoon:spoon-client:1.1.1'
-
     testCompile 'junit:junit:4.12'
 }
