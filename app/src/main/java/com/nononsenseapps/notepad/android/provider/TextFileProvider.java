@@ -25,6 +25,7 @@ import android.database.MatrixCursor;
 import android.net.Uri;
 import android.os.Environment;
 import android.util.Log;
+import com.nononsenseapps.notepad.providercontract.ProviderContract;
 
 import java.io.File;
 import java.io.FileFilter;

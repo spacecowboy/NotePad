@@ -15,7 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package com.nononsenseapps.notepad.android.provider;
+package com.nononsenseapps.notepad.providercontract;
 
 import android.support.annotation.IntDef;
 import android.support.annotation.StringDef;

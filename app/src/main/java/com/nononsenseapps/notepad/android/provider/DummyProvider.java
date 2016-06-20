@@ -26,6 +26,7 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import com.nononsenseapps.notepad.providercontract.ProviderContract;
 
 import java.util.ArrayList;
 import java.util.List;

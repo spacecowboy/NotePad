@@ -25,7 +25,7 @@ import android.view.LayoutInflater;
 import android.view.ViewGroup;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.android.provider.ProviderContract;
+import com.nononsenseapps.notepad.providercontract.ProviderContract;
 
 /**
  * Adapter to handle the display of notes/tasks.

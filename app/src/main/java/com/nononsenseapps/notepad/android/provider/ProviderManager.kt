@@ -45,7 +45,7 @@ class ProviderManager(context: Context) {
         get() {
             val availableUris = ArrayList<Provider>()
             val pm = applicationContext.packageManager
-            val resolveInfos = pm.queryIntentContentProviders(Intent(ProviderContract.ACTION_PROVIDER),
+            val resolveInfos = pm.queryIntentContentProviders(Intent(com.nononsenseapps.notepad.providercontract.ProviderContract.ACTION_PROVIDER),
                     PackageManager.GET_META_DATA)
             for (resolveInfo in resolveInfos) {
                 val metadata = resolveInfo.providerInfo.metaData
@@ -69,7 +69,7 @@ class ProviderManager(context: Context) {
         get() {
             val availableUris = ArrayList<Provider>()
             val pm = applicationContext.packageManager
-            val resolveInfos = pm.queryIntentContentProviders(Intent(ProviderContract.ACTION_PROVIDER),
+            val resolveInfos = pm.queryIntentContentProviders(Intent(com.nononsenseapps.notepad.providercontract.ProviderContract.ACTION_PROVIDER),
                     PackageManager.GET_META_DATA)
             for (resolveInfo in resolveInfos) {
                 val metadata = resolveInfo.providerInfo.metaData

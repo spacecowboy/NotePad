@@ -37,8 +37,8 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.android.activity.FolderListActivity;
 import com.nononsenseapps.notepad.android.adapter.ItemViewHolder;
 import com.nononsenseapps.notepad.android.adapter.MainListAdapter;
-import com.nononsenseapps.notepad.android.provider.ProviderContract;
 import com.nononsenseapps.notepad.android.provider.ProviderHelperKt;
+import com.nononsenseapps.notepad.providercontract.ProviderContract;
 
 
 /**

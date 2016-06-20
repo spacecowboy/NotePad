@@ -29,7 +29,7 @@ import android.view.MenuItem;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.android.adapter.FragmentAdapter;
 import com.nononsenseapps.notepad.android.fragment.FolderListFragment;
-import com.nononsenseapps.notepad.android.provider.ProviderContract;
+import com.nononsenseapps.notepad.providercontract.ProviderContract;
 
 /**
  * This activity displays the content of a folder-item (an item which contains sub-items).
