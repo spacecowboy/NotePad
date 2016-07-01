@@ -21,6 +21,7 @@ import android.app.Instrumentation;
 import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.SmallTest;
+import android.view.View;
 import android.widget.ListView;
 
 import com.nononsenseapps.notepad.R;
@@ -67,7 +68,7 @@ public class FragmentTaskListsTest extends ActivityInstrumentationTestCase2<Acti
         assertTrue("List fragment should be visible", listFragment.isAdded() && listFragment
                 .isVisible());
 
-        ListView taskList = (ListView) listFragment.getView().findViewById(android.R.id.list);
+        View taskList = listFragment.getView().findViewById(android.R.id.list);
 
         assertNotNull("Could not find the list!", taskList);
     }

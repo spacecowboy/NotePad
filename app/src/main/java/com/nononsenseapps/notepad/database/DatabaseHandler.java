@@ -28,6 +28,7 @@ import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
 
 import com.nononsenseapps.utils.time.RFC3339Date;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -36,10 +37,12 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
+import android.support.annotation.NonNull;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
-	private static DatabaseHandler singleton;
+    public static final String DEFAULT_TEXT_PREFIX = "test";
+    private static DatabaseHandler singleton;
 
 	public static DatabaseHandler getInstance(final Context context) {
 		if (singleton == null) {
@@ -47,6 +50,125 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		}
 		return singleton;
 	}
+
+    /**
+     * Convenience method for {@link #setTestDatabase(Context, String)} with
+     * {@link #DEFAULT_TEXT_PREFIX} as the prefix.
+     * @param context
+     */
+    public static void setTestDatabase(@NonNull final Context context) {
+        setTestDatabase(context, DEFAULT_TEXT_PREFIX);
+    }
+
+    /**
+     * Configure the databasehandler to point to a test database instead of the regular database.
+     * Please see {@link #resetTestDatabase(Context, String)} as well. Note that reset should be
+     * called BEFORE this method if you intend to use the test database afterwards.
+     *
+     * @param context
+     * @param testPrefix non-empty prefix to add to the database name
+     */
+	public static void setTestDatabase(@NonNull final Context context,
+                                       @NonNull final String testPrefix) {
+        if (testPrefix.isEmpty()) {
+            throw new IllegalArgumentException("No testPrefix given. If you want to set the " +
+                    "default database, call resetTestDatabase() instead.");
+        }
+        if (singleton != null) {
+            singleton.close();
+            singleton = null;
+        }
+        singleton = new DatabaseHandler(context, testPrefix);
+    }
+
+    /**
+     * A convenience method which combines {@link #resetTestDatabase(Context, String)} and
+     * {@link #setTestDatabase(Context, String)}. When this method returns, a test database has
+     * been set, and it is guaranteed to be in a state matching a newly installed app.
+     *
+     * @param context
+     */
+    public static void setFreshTestDatabase(@NonNull final Context context) {
+        resetTestDatabase(context, DEFAULT_TEXT_PREFIX);
+        setTestDatabase(context, DEFAULT_TEXT_PREFIX);
+    }
+
+    /**
+     * A convenience method which combines {@link #resetTestDatabase(Context, String)} and
+     * {@link #setTestDatabase(Context, String)}. When this method returns, a test database has
+     * been set, and it is guaranteed to be in a state matching a newly installed app.
+     *
+     * @param context
+     * @param testPrefix non-empty prefix to add to the database name
+     */
+    public static void setFreshTestDatabase(@NonNull final Context context,
+                                            @NonNull final String testPrefix) {
+        resetTestDatabase(context, testPrefix);
+        setTestDatabase(context, testPrefix);
+    }
+
+    /**
+     * A convenience method which combines {@link #resetTestDatabase(Context, String)} and
+     * {@link #setTestDatabase(Context, String)}. When this method returns, a test database has
+     * been set, and it is guaranteed to be empty.
+     *
+     * @param context
+     */
+    public static void setEmptyTestDatabase(@NonNull final Context context) {
+        setEmptyTestDatabase(context, DEFAULT_TEXT_PREFIX);
+    }
+
+    /**
+     * A convenience method which combines {@link #resetTestDatabase(Context, String)} and
+     * {@link #setTestDatabase(Context, String)}. When this method returns, a test database has
+     * been set, and it is guaranteed to be empty.
+     *
+     * @param context
+     * @param testPrefix non-empty prefix to add to the database name
+     */
+    public static void setEmptyTestDatabase(@NonNull final Context context,
+                                            @NonNull final String testPrefix) {
+        resetTestDatabase(context, testPrefix);
+        setTestDatabase(context, testPrefix);
+        // TODO don't use content resolver here
+        ContentResolver resolver = context.getContentResolver();
+        resolver.delete(TaskList.URI, null, null);
+        resolver.delete(Task.URI, null, null);
+        resolver.delete(RemoteTaskList.URI, null, null);
+        resolver.delete(RemoteTask.URI, null, null);
+    }
+
+    /**
+     * Convenience method for {@link #resetTestDatabase(Context, String)} with
+     * {@link #DEFAULT_TEXT_PREFIX} as the prefix.
+     *
+     * @param context
+     * @return true if a database was deleted, false otherwise
+     */
+    public static boolean resetTestDatabase(@NonNull final Context context) {
+        return resetTestDatabase(context, DEFAULT_TEXT_PREFIX);
+    }
+
+    /**
+     * Delete the given database and reset to the default state. Note that giving an empty "" prefix
+     * is not allowed.
+     *
+     * @param context
+     * @param testPrefix non-empty prefix to add to the database name
+     * @return true if a database was deleted, false otherwise
+     */
+    public static boolean resetTestDatabase(@NonNull final Context context,
+                                            @NonNull final String testPrefix) {
+        if (testPrefix.isEmpty()) {
+            throw new IllegalArgumentException("No testPrefix given, this would actually delete " +
+                    "the standard database which is probably not what you want...");
+        }
+        if (singleton != null) {
+            singleton.close();
+            singleton = null;
+        }
+        return context.deleteDatabase(testPrefix + DATABASE_NAME);
+    }
 
 	private static final int DATABASE_VERSION = 15;
 	public static final String DATABASE_NAME = "nononsense_notes.db";

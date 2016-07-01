@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
+import com.nononsenseapps.notepad.database.DatabaseHandler;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
@@ -16,6 +17,11 @@ import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Log;
 import android.util.Pair;
+
+import static com.nononsenseapps.notepad.database.DatabaseHandler.resetTestDatabase;
+import static com.nononsenseapps.notepad.database.DatabaseHandler.setEmptyTestDatabase;
+import static com.nononsenseapps.notepad.database.DatabaseHandler.setFreshTestDatabase;
+import static com.nononsenseapps.notepad.database.DatabaseHandler.setTestDatabase;
 
 public class GTaskSyncTest extends AndroidTestCase {
 	String balle = "balle";
@@ -40,17 +46,10 @@ public class GTaskSyncTest extends AndroidTestCase {
 
 	@Override
 	public void setUp() throws Exception {
-		super.setUp();
 		localListNewestCount = 0;
 		remoteListNewestCount = 0;
 		// Delete all existing lists
-		mContext.getContentResolver().delete(TaskList.URI,
-				TaskList.Columns._ID + " IS NOT 0", null);
-		mContext.getContentResolver().delete(GoogleTaskList.URI,
-				GoogleTaskList.Columns.ACCOUNT + " IS ?",
-				new String[] { account });
-		mContext.getContentResolver().delete(GoogleTask.URI,
-				GoogleTask.Columns.ACCOUNT + " IS ?", new String[] { account });
+		setEmptyTestDatabase(getContext(), getClass().getName());
 
 		// First insert some lists and remote stuff
 		localLists = new ArrayList<TaskList>();
@@ -180,17 +179,8 @@ public class GTaskSyncTest extends AndroidTestCase {
 
 	@Override
 	public void tearDown() throws Exception {
-		super.tearDown();
 		// remote items that were inserted
-		mContext.getContentResolver().delete(GoogleTaskList.URI,
-				GoogleTaskList.Columns.ACCOUNT + " IS ?",
-				new String[] { account });
-		mContext.getContentResolver().delete(GoogleTask.URI,
-				GoogleTask.Columns.ACCOUNT + " IS ?", new String[] { account });
-
-		for (TaskList l : localLists) {
-			l.delete(mContext);
-		}
+		resetTestDatabase(getContext(), getClass().getName());
 	}
 
 	@SmallTest
