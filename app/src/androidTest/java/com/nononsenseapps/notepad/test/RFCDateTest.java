@@ -1,14 +1,11 @@
 package com.nononsenseapps.notepad.test;
 
-import java.text.ParseException;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 import android.test.AndroidTestCase;
 import android.util.Log;
 
-import com.nononsenseapps.utils.time.RFC3339Date;
+import com.nononsenseapps.notepad.util.RFC3339Date;
 
 public class RFCDateTest extends AndroidTestCase {
 

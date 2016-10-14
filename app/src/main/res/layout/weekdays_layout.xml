@@ -21,7 +21,7 @@
     android:layout_height="36dp"
     android:orientation="horizontal" >
 
-    <com.nononsenseapps.utils.views.GreyableToggleButton
+    <com.nononsenseapps.notepad.ui.common.GreyableToggleButton
         android:id="@+id/day1"
         style="@style/GreyableButtonToggle"
         android:layout_width="0dp"
@@ -30,7 +30,7 @@
         android:textOff="WED"
         android:textColor="?android:attr/textColorPrimary" />
 
-    <com.nononsenseapps.utils.views.GreyableToggleButton
+    <com.nononsenseapps.notepad.ui.common.GreyableToggleButton
         android:id="@+id/day2"
         style="@style/GreyableButtonToggle"
         android:layout_width="0dp"
@@ -39,7 +39,7 @@
         android:textOff="WED"
         android:textColor="?android:attr/textColorPrimary" />
 
-    <com.nononsenseapps.utils.views.GreyableToggleButton
+    <com.nononsenseapps.notepad.ui.common.GreyableToggleButton
         android:id="@+id/day3"
         style="@style/GreyableButtonToggle"
         android:layout_width="0dp"
@@ -48,7 +48,7 @@
         android:textOff="WED"
         android:textColor="?android:attr/textColorPrimary" />
 
-    <com.nononsenseapps.utils.views.GreyableToggleButton
+    <com.nononsenseapps.notepad.ui.common.GreyableToggleButton
         android:id="@+id/day4"
         style="@style/GreyableButtonToggle"
         android:layout_width="0dp"
@@ -57,7 +57,7 @@
         android:textOff="WED"
         android:textColor="?android:attr/textColorPrimary" />
 
-    <com.nononsenseapps.utils.views.GreyableToggleButton
+    <com.nononsenseapps.notepad.ui.common.GreyableToggleButton
         android:id="@+id/day5"
         style="@style/GreyableButtonToggle"
         android:layout_width="0dp"
@@ -66,7 +66,7 @@
         android:textOff="WED"
         android:textColor="?android:attr/textColorPrimary" />
 
-    <com.nononsenseapps.utils.views.GreyableToggleButton
+    <com.nononsenseapps.notepad.ui.common.GreyableToggleButton
         android:id="@+id/day6"
         style="@style/GreyableButtonToggle"
         android:layout_width="0dp"
@@ -75,7 +75,7 @@
         android:textOff="WED"
         android:textColor="?android:attr/textColorPrimary" />
 
-    <com.nononsenseapps.utils.views.GreyableToggleButton
+    <com.nononsenseapps.notepad.ui.common.GreyableToggleButton
         android:id="@+id/day7"
         style="@style/GreyableButtonToggle"
         android:layout_width="0dp"

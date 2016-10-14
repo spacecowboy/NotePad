@@ -82,9 +82,6 @@
         <Preference
             android:key="@string/const_preference_password_key"
             android:title="@string/password"/>
-        <Preference
-            android:key="@string/const_preference_legacybackup_key"
-            android:title="@string/backup_import"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

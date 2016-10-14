@@ -25,7 +25,7 @@
 
     <!-- Keeping as this class for compatibility with other layout -->
 
-    <com.nononsenseapps.utils.views.TitleNoteTextView
+    <com.nononsenseapps.notepad.ui.common.TitleNoteTextView
         android:id="@android:id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,13 +46,13 @@
         android:layout_height="0dp"
         android:visibility="gone" />
 
-    <com.nononsenseapps.ui.NoteCheckBox
+    <com.nononsenseapps.notepad.ui.common.NoteCheckBox
         android:id="@+id/checkbox"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:visibility="gone" />
 
-    <com.nononsenseapps.ui.DateView
+    <com.nononsenseapps.notepad.ui.common.DateView
         android:id="@+id/date"
         android:layout_width="0dp"
         android:layout_height="0dp"

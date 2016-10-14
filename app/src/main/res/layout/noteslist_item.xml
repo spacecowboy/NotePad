@@ -34,7 +34,7 @@
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <com.nononsenseapps.ui.DelegateFrame
+    <com.nononsenseapps.notepad.ui.common.DelegateFrame
         xmlns:nononsenseapps="http://nononsenseapps.com"
         android:id="@+id/datecheckcontainer"
         android:layout_width="wrap_content"
@@ -45,7 +45,7 @@
         android:padding = "0dp"
         nononsenseapps:enlargedView="@+id/itemDone" >
 
-        <com.nononsenseapps.ui.NoteCheckBox
+        <com.nononsenseapps.notepad.ui.common.NoteCheckBox
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/itemDone"
             android:layout_width="wrap_content"
@@ -55,7 +55,7 @@
             android:focusableInTouchMode="false"
             android:gravity="center"
             android:padding = "0dp" />
-    </com.nononsenseapps.ui.DelegateFrame>
+    </com.nononsenseapps.notepad.ui.common.DelegateFrame>
 
     <RelativeLayout
         android:id="@+id/title_note_container"
@@ -76,7 +76,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="?android:attr/textColorPrimary" />
 
-        <com.nononsenseapps.ui.DateView
+        <com.nononsenseapps.notepad.ui.common.DateView
             android:id="@+id/itemDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

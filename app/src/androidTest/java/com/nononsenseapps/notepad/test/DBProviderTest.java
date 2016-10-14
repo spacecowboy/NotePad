@@ -4,9 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.nononsenseapps.notepad.database.DatabaseHandler;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.data.model.sql.Task;
+import com.nononsenseapps.notepad.data.model.sql.TaskList;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -15,10 +14,10 @@ import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 
-import static com.nononsenseapps.notepad.database.DatabaseHandler.resetTestDatabase;
-import static com.nononsenseapps.notepad.database.DatabaseHandler.setEmptyTestDatabase;
-import static com.nononsenseapps.notepad.database.DatabaseHandler.setFreshTestDatabase;
-import static com.nononsenseapps.notepad.database.DatabaseHandler.setTestDatabase;
+import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.resetTestDatabase;
+import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.setEmptyTestDatabase;
+import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.setFreshTestDatabase;
+import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.setTestDatabase;
 
 public class DBProviderTest extends AndroidTestCase {
 

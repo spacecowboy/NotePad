@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (c) 2015 Jonas Kalderstam.
 
   This program is free software: you can redistribute it and/or modify
@@ -16,33 +15,35 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    style="?ListMarginStyle" >
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- <SearchView
-        android:id="@+id/searchBox"
-        android:layout_width="@dimen/listNoDetailWidth"
-        android:layout_height="48dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:iconifiedByDefault="false"
-        android:queryHint="@string/search_hint" >
-    </SearchView> -->
-
-    <ListView
-        android:id="@android:id/list"
-        android:dividerHeight="1dp"
-        android:divider="?separatorColor"
-        android:layout_width="@dimen/listNoDetailWidth"
+    <LinearLayout
+        style="?ListMarginStyle"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center_horizontal"
-        android:drawSelectorOnTop="true"
-        tools:listitem="@layout/tasklist_item_rich" >
-    </ListView>
+        android:orientation="vertical">
 
-</LinearLayout>
+        <!-- <SearchView
+            android:id="@+id/searchBox"
+            android:layout_width="@dimen/listNoDetailWidth"
+            android:layout_height="48dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="16dp"
+            android:iconifiedByDefault="false"
+            android:queryHint="@string/search_hint" >
+        </SearchView> -->
+
+        <ListView
+            android:id="@+id/list"
+            android:layout_width="@dimen/listNoDetailWidth"
+            android:layout_height="match_parent"
+            android:layout_gravity="center_horizontal"
+            android:divider="?separatorColor"
+            android:dividerHeight="1dp"
+            android:drawSelectorOnTop="true"
+            tools:listitem="@layout/tasklist_item_rich"></ListView>
+
+    </LinearLayout>
+</layout>

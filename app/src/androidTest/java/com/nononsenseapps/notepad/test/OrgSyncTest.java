@@ -6,12 +6,12 @@ import android.database.Cursor;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import com.nononsenseapps.notepad.database.RemoteTask;
-import com.nononsenseapps.notepad.database.RemoteTaskList;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.sync.orgsync.OrgConverter;
-import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
+import com.nononsenseapps.notepad.data.model.sql.RemoteTask;
+import com.nononsenseapps.notepad.data.model.sql.RemoteTaskList;
+import com.nononsenseapps.notepad.data.model.sql.Task;
+import com.nononsenseapps.notepad.data.model.sql.TaskList;
+import com.nononsenseapps.notepad.data.local.orgmode.OrgConverter;
+import com.nononsenseapps.notepad.data.local.orgmode.SDSynchronizer;
 
 import org.cowboyprogrammer.org.OrgFile;
 
@@ -21,9 +21,9 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import static com.nononsenseapps.notepad.database.DatabaseHandler.resetTestDatabase;
-import static com.nononsenseapps.notepad.database.DatabaseHandler.setEmptyTestDatabase;
-import static com.nononsenseapps.notepad.database.DatabaseHandler.setTestDatabase;
+import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.resetTestDatabase;
+import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.setEmptyTestDatabase;
+import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.setTestDatabase;
 
 /**
  * Test the synchronizer code.

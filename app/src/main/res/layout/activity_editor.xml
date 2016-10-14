@@ -17,6 +17,6 @@
 
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
           android:id="@+id/fragment"
-          android:name="com.nononsenseapps.notepad.fragments.TaskDetailFragment"
+          android:name="com.nononsenseapps.notepad.ui.editor.TaskDetailFragment"
           android:layout_width="match_parent"
           android:layout_height="match_parent"/>

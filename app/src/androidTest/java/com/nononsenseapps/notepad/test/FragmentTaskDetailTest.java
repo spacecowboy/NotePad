@@ -24,8 +24,8 @@ import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.activities.ActivityEditor;
-import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.ui.editor.ActivityEditor;
+import com.nononsenseapps.notepad.data.model.sql.Task;
 import com.squareup.spoon.Spoon;
 
 public class FragmentTaskDetailTest extends ActivityInstrumentationTestCase2<ActivityEditor> {

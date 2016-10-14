@@ -30,7 +30,7 @@
     <!-- The navigation drawer -->
     <fragment
         android:id="@+id/navigation_drawer"
-        android:name="com.nononsenseapps.notepad.fragments.NavigationDrawerFragment"
+        android:name="com.nononsenseapps.notepad.ui.common.NavigationDrawerFragment"
         android:layout_width="@dimen/navdrawer_width"
         android:layout_height="match_parent"
         android:layout_gravity="start"/>
