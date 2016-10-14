@@ -15,55 +15,57 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<RelativeLayout
-    android:id="@+id/button_container"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <FrameLayout
-        android:id="@+id/divider"
+    <RelativeLayout
+        android:id="@+id/button_container"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_alignParentTop="true"
-        android:background="?separatorColor"/>
+        android:layout_height="wrap_content">
 
-    <TextView
-        android:id="@+id/dialog_yes"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dialog_button_height"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@id/divider"
-        android:layout_margin="8dp"
-        android:background="?selectableItemBackground"
-        android:enabled="false"
-        android:gravity="center"
-        android:minWidth="@dimen/dialog_button_min_width"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:text="@android:string/ok"
-        android:textAllCaps="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Button"
-        android:textColor="@color/stateful_accent_color"/>
+        <FrameLayout
+            android:id="@+id/divider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentTop="true"
+            android:background="?separatorColor" />
 
-    <TextView
-        android:id="@+id/dialog_no"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dialog_button_height"
-        android:layout_below="@id/divider"
-        android:layout_marginBottom="4dp"
-        android:layout_marginTop="8dp"
-        android:layout_toLeftOf="@id/dialog_yes"
-        android:layout_toStartOf="@id/dialog_yes"
-        android:background="?selectableItemBackground"
-        android:gravity="center"
-        android:minWidth="@dimen/dialog_button_min_width"
-        android:paddingLeft="8dp"
-        android:paddingRight="8dp"
-        android:text="@android:string/cancel"
-        android:textAllCaps="true"
-        android:textAppearance="@style/TextAppearance.AppCompat.Button"
-        android:textColor="?colorAccent"/>
+        <TextView
+            android:id="@+id/dialog_yes"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dialog_button_height"
+            android:layout_alignParentEnd="true"
+            android:layout_alignParentRight="true"
+            android:layout_below="@id/divider"
+            android:layout_margin="8dp"
+            android:background="?selectableItemBackground"
+            android:enabled="false"
+            android:gravity="center"
+            android:minWidth="@dimen/dialog_button_min_width"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="@android:string/ok"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="@color/stateful_accent_color" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/dialog_no"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dialog_button_height"
+            android:layout_below="@id/divider"
+            android:layout_marginBottom="4dp"
+            android:layout_marginTop="8dp"
+            android:layout_toLeftOf="@id/dialog_yes"
+            android:layout_toStartOf="@id/dialog_yes"
+            android:background="?selectableItemBackground"
+            android:gravity="center"
+            android:minWidth="@dimen/dialog_button_min_width"
+            android:paddingLeft="8dp"
+            android:paddingRight="8dp"
+            android:text="@android:string/cancel"
+            android:textAllCaps="true"
+            android:textAppearance="@style/TextAppearance.AppCompat.Button"
+            android:textColor="?colorAccent" />
+
+    </RelativeLayout>
+</layout>

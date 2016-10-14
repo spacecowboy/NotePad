@@ -20,7 +20,7 @@ import android.app.Instrumentation;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import com.nononsenseapps.notepad.dashclock.TasksSettings;
+import com.nononsenseapps.notepad.ui.dashclock.TasksSettings;
 import com.squareup.spoon.Spoon;
 
 /**

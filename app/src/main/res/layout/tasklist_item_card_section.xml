@@ -28,7 +28,7 @@
     android:paddingRight="@dimen/listMarginsPadded"
     android:paddingTop="4dp" >
 
-    <com.nononsenseapps.ui.DelegateFrame
+    <com.nononsenseapps.notepad.ui.common.DelegateFrame
         android:id="@+id/checkboxcontainer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -39,7 +39,7 @@
         android:paddingLeft="@dimen/keyline_1"
         custom:enlargedView="@+id/checkbox" >
 
-        <com.nononsenseapps.ui.NoteCheckBox
+        <com.nononsenseapps.notepad.ui.common.NoteCheckBox
             android:id="@id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             android:focusable="false"
             android:focusableInTouchMode="false"
             android:text="" />
-    </com.nononsenseapps.ui.DelegateFrame>
+    </com.nononsenseapps.notepad.ui.common.DelegateFrame>
 
     <View
         android:id="@+id/dragpadding"
@@ -56,7 +56,7 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true" />
 
-    <com.nononsenseapps.utils.views.TitleNoteTextView
+    <com.nononsenseapps.notepad.ui.common.TitleNoteTextView
         android:id="@android:id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -79,7 +79,7 @@
         custom:titleFontStyle="bold"
         custom:titleRelativeSize="1.2"/>
 
-    <com.nononsenseapps.ui.DateView
+    <com.nononsenseapps.notepad.ui.common.DateView
         android:id="@+id/date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

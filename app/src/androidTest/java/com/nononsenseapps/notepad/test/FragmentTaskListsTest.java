@@ -22,10 +22,9 @@ import android.support.v4.app.Fragment;
 import android.test.ActivityInstrumentationTestCase2;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.view.View;
-import android.widget.ListView;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.activities.ActivityList;
+import com.nononsenseapps.notepad.ui.list.ActivityList;
 import com.squareup.spoon.Spoon;
 
 public class FragmentTaskListsTest extends ActivityInstrumentationTestCase2<ActivityList> {

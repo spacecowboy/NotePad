@@ -18,42 +18,42 @@
 <preference-headers xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <header
-        android:fragment="com.nononsenseapps.notepad.prefs.MainPrefs"
+        android:fragment="com.nononsenseapps.notepad.ui.settings.MainPrefs"
         android:icon="@drawable/ic_brightness_6_24dp_white"
         android:summary=""
         android:title="@string/settings_cat_appearance" />
     <header
-        android:fragment="com.nononsenseapps.notepad.prefs.ListPrefs"
+        android:fragment="com.nononsenseapps.notepad.ui.settings.ListPrefs"
         android:icon="@drawable/ic_folder_24dp_white"
         android:summary=""
         android:title="@string/settings_list" />
     <header
-        android:fragment="com.nononsenseapps.notepad.prefs.SyncPrefs"
+        android:fragment="com.nononsenseapps.notepad.ui.settings.SyncPrefs"
         android:icon="@drawable/ic_refresh_24dp_white"
         android:summary=""
         android:title="@string/settings_cat_syncing" />
     <header
-        android:fragment="com.nononsenseapps.notepad.prefs.NotificationPrefs"
+        android:fragment="com.nononsenseapps.notepad.ui.settings.NotificationPrefs"
         android:icon="@drawable/ic_alarm_24dp_white"
         android:summary=""
         android:title="@string/notifications" />
     <header
-        android:fragment="com.nononsenseapps.notepad.fragments.DialogPasswordSettings"
+        android:fragment="com.nononsenseapps.notepad.ui.common.DialogPasswordSettings"
         android:icon="@drawable/ic_lock_outline_24dp_white"
         android:summary=""
         android:title="@string/password" />
     <header
-        android:fragment="com.nononsenseapps.notepad.prefs.BackupPrefs"
+        android:fragment="com.nononsenseapps.notepad.ui.settings.BackupPrefs"
         android:icon="@drawable/ic_sd_storage_24dp_white"
         android:summary=""
         android:title="@string/backup" />
     <header
-        android:fragment="com.nononsenseapps.notepad.prefs.ChangelogPrefs"
+        android:fragment="com.nononsenseapps.notepad.ui.settings.ChangelogPrefs"
         android:icon="@drawable/ic_help_24dp_white"
         android:summary=""
         android:title="@string/changelog_full_title" />
     <header
-        android:fragment="com.nononsenseapps.notepad.prefs.AboutPrefs"
+        android:fragment="com.nononsenseapps.notepad.ui.settings.AboutPrefs"
         android:icon="@drawable/ic_info_24dp_white"
         android:summary=""
         android:title="@string/about" />

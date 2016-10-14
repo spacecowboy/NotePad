@@ -87,7 +87,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textIsSelectable="false" />
 
-    <com.nononsenseapps.ui.WeekDaysView
+    <com.nononsenseapps.notepad.ui.common.WeekDaysView
         android:id="@+id/weekdays"
         android:layout_width="match_parent"
         android:paddingLeft="8dp"

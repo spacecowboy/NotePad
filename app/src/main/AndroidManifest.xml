@@ -66,22 +66,15 @@
 
     <application
         android:allowBackup="true"
-        android:backupAgent="com.nononsenseapps.notepad.BackupAgent"
         android:hardwareAccelerated="true"
         android:icon="@drawable/app_icon"
         android:label="@string/app_name"
         android:restoreAnyVersion="true"
         tools:replace="icon">
 
-        <!-- For the Android Backup Service -->
-
-        <meta-data
-            android:name="com.google.android.backup.api_key"
-            android:value="AEdPqrEAAAAIZgz47Vv0rpsuH5ziPBpQsecAPAlZtw2P5-mgYw" />
-
         <!-- Broadcast receiver for accepting actions from widget for example -->
         <receiver
-            android:name="com.nononsenseapps.notepad.NotePadBroadcastReceiver"
+            android:name="com.nononsenseapps.notepad.data.receiver.NotePadBroadcastReceiver"
             tools:ignore="ExportedReceiver">
             <intent-filter>
                 <action android:name="com.nononsenseapps.completenote" />
@@ -89,14 +82,13 @@
         </receiver>
 
         <activity
-            android:name="com.nononsenseapps.notepad.activities.ActivityList"
+            android:name="com.nononsenseapps.notepad.ui.list.ActivityList"
             android:label="@string/app_name"
             android:theme="@style/LightTheme"
             android:windowSoftInputMode="adjustResize">
             <meta-data
                 android:name="android.app.default_searchable"
                 android:value="com.nononsenseapps.notepad.ActivitySearch_" />
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -127,13 +119,12 @@
                 <category android:name="android.intent.category.DEFAULT" />
 
                 <data android:mimeType="text/*" />
-                <!-- <data android:mimeType="text/*" android:path="*.txt" />  Would like to be able to open files in future -->
             </intent-filter>
         </activity>
 
         <!-- Editor -->
         <activity
-            android:name="com.nononsenseapps.notepad.activities.ActivityEditor"
+            android:name="com.nononsenseapps.notepad.ui.editor.ActivityEditor"
             android:label=""
             android:theme="@style/LightTheme.DialogWhenLarge"
             android:windowSoftInputMode="adjustResize"/>
@@ -169,12 +160,12 @@
         </activity>
 
         <activity
-            android:name="com.nononsenseapps.notepad.prefs.PrefsActivity"
-            android:parentActivityName="com.nononsenseapps.notepad.activities.ActivityList"
+            android:name="com.nononsenseapps.notepad.ui.settings.PrefsActivity"
+            android:parentActivityName="com.nononsenseapps.notepad.ui.list.ActivityList"
             android:theme="@style/LightTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.nononsenseapps.notepad.activities.ActivityList"/>
+                android:value="com.nononsenseapps.notepad.ui.list.ActivityList"/>
 
             <intent-filter>
                 <category android:name="android.intent.category.PREFERENCE"/>
@@ -186,13 +177,13 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.nononsenseapps.notepad.activities.ActivitySettings"
+            android:name="com.nononsenseapps.notepad.ui.settings.ActivitySettings"
             android:label="@string/menu_preferences"
-            android:parentActivityName="com.nononsenseapps.notepad.activities.ActivityList"
+            android:parentActivityName="com.nononsenseapps.notepad.ui.list.ActivityList"
             android:theme="@style/LightTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.nononsenseapps.notepad.activities.ActivityList"/>
+                android:value="com.nononsenseapps.notepad.ui.list.ActivityList"/>
 
             <intent-filter>
                 <category android:name="android.intent.category.PREFERENCE"/>
@@ -210,7 +201,7 @@
             android:theme="@style/FilePickerTheme"/>
 
         <service
-            android:name="com.nononsenseapps.notepad.sync.SyncService"
+            android:name="com.nononsenseapps.notepad.data.service.gtasks.SyncService"
             android:exported="true"
             tools:ignore="ExportedService">
             <intent-filter>
@@ -223,7 +214,7 @@
         </service>
 
         <!-- List Widget -->
-        <receiver android:name="com.nononsenseapps.notepad.widget.ListWidgetProvider">
+        <receiver android:name="com.nononsenseapps.notepad.ui.widget.ListWidgetProvider">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
@@ -234,7 +225,7 @@
         </receiver>
 
         <service
-            android:name="com.nononsenseapps.notepad.widget.ListWidgetService"
+            android:name="com.nononsenseapps.notepad.ui.widget.ListWidgetService"
             android:exported="false"
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
@@ -248,7 +239,7 @@
         </activity>
 
         <service
-            android:name="com.nononsenseapps.helpers.GTasksSyncDelay"
+            android:name=".data.service.gtasks.GTasksSyncDelay"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.RUN" />
@@ -257,7 +248,7 @@
 
         <!-- Handles notifications associated with notes -->
         <receiver
-            android:name="com.nononsenseapps.helpers.NotificationHelper"
+            android:name=".data.receiver.NotificationHelper"
             android:exported="true"
             tools:ignore="ExportedReceiver">
             <intent-filter>
@@ -278,7 +269,7 @@
 
         <!-- Dashclock -->
         <service
-            android:name="com.nononsenseapps.notepad.dashclock.TasksExtension"
+            android:name="com.nononsenseapps.notepad.ui.dashclock.TasksExtension"
             android:icon="@drawable/ic_stat_notification_edit"
             android:label="@string/dashclock_nononsense_notes"
             android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA">
@@ -298,7 +289,7 @@
         </service>
 
         <activity
-            android:name="com.nononsenseapps.notepad.dashclock.TasksSettings"
+            android:name="com.nononsenseapps.notepad.ui.dashclock.TasksSettings"
             android:exported="true"
             android:label="@string/dashclock_title_activity_tasks_settings"
             android:permission="com.google.android.apps.dashclock.permission.READ_EXTENSION_DATA"
@@ -306,21 +297,15 @@
 
         <!-- DataBase provider -->
         <provider
-            android:name="com.nononsenseapps.notepad.database.MyContentProvider"
+            android:name="com.nononsenseapps.notepad.data.local.sql.MyContentProvider"
             android:authorities="com.nononsenseapps.NotePad"
             android:enabled="true"
             android:exported="true"
             android:grantUriPermissions="true"></provider>
 
-        <!-- Service for migrating from donate app -->
-        <service
-            android:name="com.nononsenseapps.notepad.legacy.DonateMigrator_"
-            android:enabled="true"
-            android:exported="false"></service>
-
         <!-- Receiver that schedules background sync for File and Dropbox -->
         <receiver
-            android:name="com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler"
+            android:name="com.nononsenseapps.notepad.data.receiver.BackgroundSyncScheduler"
             android:enabled="true"
             android:exported="true">
             <intent-filter>
@@ -330,7 +315,7 @@
         </receiver>
         <!-- Service that syncs with files -->
         <service
-            android:name="com.nononsenseapps.notepad.sync.orgsync.OrgSyncService"
+            android:name="com.nononsenseapps.notepad.data.service.OrgSyncService"
             android:enabled="true"
             android:exported="false"
             android:label="File Watcher"></service>
