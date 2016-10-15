@@ -22,7 +22,6 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
-import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -51,8 +50,6 @@ import com.nononsenseapps.notepad.data.model.sql.Task;
 import com.nononsenseapps.notepad.data.model.sql.TaskList;
 import com.nononsenseapps.notepad.data.receiver.SyncStatusMonitor;
 import com.nononsenseapps.notepad.data.service.gtasks.SyncHelper;
-import com.nononsenseapps.notepad.databinding.TasklistHeaderBinding;
-import com.nononsenseapps.notepad.databinding.TasklistItemRichBinding;
 import com.nononsenseapps.notepad.ui.common.DialogDeleteCompletedTasks;
 import com.nononsenseapps.notepad.ui.common.DialogPassword;
 import com.nononsenseapps.notepad.ui.common.DialogPassword.PasswordConfirmedListener;
@@ -97,6 +94,7 @@ public class TaskListFragment extends Fragment
     private SwipeRefreshLayout mSwipeRefreshLayout;
     private boolean mDeleteWasUndone = false;
     private ItemTouchHelper touchHelper;
+    private final SelectedItemHandler selectedItemHandler = new SelectedItemHandler();
 
     public TaskListFragment() {
         super();
@@ -378,7 +376,7 @@ public class TaskListFragment extends Fragment
         mListId = getArguments().getLong(LIST_ID, -1);
 
         // Start loading data
-        mAdapter = new SimpleSectionsAdapter(getActivity());
+        mAdapter = new SimpleSectionsAdapter(this, getActivity());
 
         // Set a drag listener
         // TODO jonas
@@ -501,6 +499,10 @@ public class TaskListFragment extends Fragment
                 if (loader.getId() == LOADER_TASKS) {
                     Log.d(TAG,
                             "onLoadFinished() called");
+                    for (int i = 0; i < c.getCount(); i++) {
+                        c.moveToPosition(i);
+                        Log.d(TAG, "onLoadFinished " + i + ": " + c.getLong(0));
+                    }
                     mAdapter.swapCursor(c);
                 }
             }
@@ -648,6 +650,14 @@ public class TaskListFragment extends Fragment
         return mListener;
     }
 
+    public SelectedItemHandler getSelectedItemHandler() {
+        return selectedItemHandler;
+    }
+
+    public long getListId() {
+        return mListId;
+    }
+
     /**
      * This interface must be implemented by activities that contain TaskListFragments to allow an
      * interaction in this fragment to be communicated to the activity and potentially other fragments
@@ -661,77 +671,6 @@ public class TaskListFragment extends Fragment
          */
         void deleteTasksWithUndo(Snackbar.Callback dismissCallback, View.OnClickListener listener,
                                  Task... tasks);
-    }
-
-    class SimpleSectionsAdapter extends RecyclerView.Adapter<ViewHolder> {
-        final static int itemType = 0;
-        final static int headerType = 1;
-        private static final String TAG = "SimpleSectionsAdapter";
-        final SharedPreferences prefs;
-        final Context context;
-        Cursor cursor = null;
-
-        public SimpleSectionsAdapter(Context context) {
-            super();
-            setHasStableIds(true);
-            this.context = context;
-            prefs = PreferenceManager.getDefaultSharedPreferences(context);
-
-        }
-
-        @Override
-        public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-            switch (viewType) {
-                case headerType:
-                    return new HeaderViewHolder(TaskListFragment.this, (TasklistHeaderBinding) DataBindingUtil.inflate(LayoutInflater.from(context),
-                            R.layout.tasklist_header, parent, false));
-                case itemType:
-                default:
-                    return new ItemViewHolder(TaskListFragment.this,
-                            (TasklistItemRichBinding) DataBindingUtil.inflate(LayoutInflater.from(context),
-                            R.layout.tasklist_item_rich, parent, false), mListId);
-            }
-        }
-
-        @Override
-        public void onBindViewHolder(final ViewHolder holder, final int position) {
-            if (!cursor.moveToPosition(position)) {
-                return;
-            }
-            holder.onBind(cursor);
-        }
-
-        @Override
-        public int getItemViewType(final int position) {
-            cursor.moveToPosition(position);
-            // If the id is invalid, it's a header
-            if (cursor.getLong(0) < 1) {
-                return headerType;
-            } else {
-                return itemType;
-            }
-        }
-
-        @Override
-        public int getItemCount() {
-            if (cursor == null) {
-                return 0;
-            } else {
-                return cursor.getCount();
-            }
-        }
-
-        public void swapCursor(final Cursor cursor) {
-            this.cursor = cursor;
-            notifyDataSetChanged();
-        }
-
-        public Cursor getCursor(final int position) {
-            if (cursor != null) {
-                cursor.moveToPosition(position);
-            }
-            return cursor;
-        }
     }
 
     class DragHandler extends ItemTouchHelper.Callback {

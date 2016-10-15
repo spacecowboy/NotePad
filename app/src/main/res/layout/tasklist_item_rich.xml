@@ -21,7 +21,7 @@
         android:id="@+id/taskItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="?android:selectableItemBackground"
+        android:background="?attr/selectableItemBackground"
         android:minHeight="@dimen/list_item_min_size">
 
         <include

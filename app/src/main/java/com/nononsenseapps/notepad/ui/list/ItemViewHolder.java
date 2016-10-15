@@ -2,7 +2,6 @@ package com.nononsenseapps.notepad.ui.list;
 
 import android.database.Cursor;
 import android.support.v4.view.MotionEventCompat;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
@@ -16,6 +15,7 @@ class ItemViewHolder extends ViewHolder implements View.OnClickListener,
         View.OnLongClickListener {
 
     private static final String TAG = "ViewHolder";
+    private final SelectedItemHandler selectedItemHandler;
     private TaskListFragment taskListFragment;
     private final TasklistItemRichBinding binding;
     private final NoteCheckBox checkbox;
@@ -24,22 +24,23 @@ class ItemViewHolder extends ViewHolder implements View.OnClickListener,
     long id = -1;
 
     public ItemViewHolder(final TaskListFragment taskListFragment,
-                          final TasklistItemRichBinding binding, final long listId) {
+                          final TasklistItemRichBinding binding,
+                          final long listId) {
         super(binding.getRoot());
         this.taskListFragment = taskListFragment;
         this.listId = listId;
         this.binding = binding;
+        this.selectedItemHandler = taskListFragment.getSelectedItemHandler();
         checkbox = (NoteCheckBox) binding.cardSection.getRoot().findViewById(R.id.checkbox);
 
         itemView.setOnClickListener(this);
         itemView.setOnLongClickListener(this);
+        itemView.setLongClickable(true);
 
         binding.dragHandle.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(final View v, final MotionEvent event) {
-                Log.d(TAG, "onTouch() called with: " + "v = [" + v + "], event = [" + event + "]");
                 if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                    Log.d(TAG, "onTouch: starting Drag");
                     taskListFragment.getTouchHelper().startDrag(ItemViewHolder.this);
                 }
                 return false;
@@ -96,6 +97,8 @@ class ItemViewHolder extends ViewHolder implements View.OnClickListener,
             binding.dragHandle.setVisibility(View.GONE);
             binding.cardSection.dragPadding.setVisibility(View.GONE);
         }
+
+        binding.getRoot().setActivated(selectedItemHandler.isItemSelected(id));
     }
 
     @Override
@@ -107,11 +110,17 @@ class ItemViewHolder extends ViewHolder implements View.OnClickListener,
 
     @Override
     public boolean onLongClick(final View v) {
+        if (id < 1) {
+            return false;
+        }
         // TODO
         //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         // Also select the item in question
         //listView.setItemChecked(pos, true);
 
-        return false;
+        selectedItemHandler.toggleSelection(id);
+        binding.getRoot().setActivated(selectedItemHandler.isItemSelected(id));
+
+        return true;
     }
 }
