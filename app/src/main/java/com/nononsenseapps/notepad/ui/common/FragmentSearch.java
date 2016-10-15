@@ -201,7 +201,7 @@ public class FragmentSearch extends Fragment {
 				Task.Columns.DUE, Task.Columns.COMPLETED,
 				Task.Columns.LEFT, Task.Columns.RIGHT }, new int[] { android.R.id.text1,
 				android.R.id.text1, R.id.date, R.id.checkbox,
-				R.id.drag_handle, R.id.dragpadding }, 0);
+				R.id.drag_handle, R.id.drag_padding }, 0);
 	}
 	
 	/**

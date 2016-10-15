@@ -22,6 +22,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
+import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -54,13 +55,13 @@ import com.nononsenseapps.notepad.data.model.sql.Task;
 import com.nononsenseapps.notepad.data.model.sql.TaskList;
 import com.nononsenseapps.notepad.data.receiver.SyncStatusMonitor;
 import com.nononsenseapps.notepad.data.service.gtasks.SyncHelper;
-import com.nononsenseapps.notepad.ui.common.DateView;
+import com.nononsenseapps.notepad.databinding.TasklistHeaderBinding;
+import com.nononsenseapps.notepad.databinding.TasklistItemRichBinding;
 import com.nononsenseapps.notepad.ui.common.DialogDeleteCompletedTasks;
 import com.nononsenseapps.notepad.ui.common.DialogPassword;
 import com.nononsenseapps.notepad.ui.common.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.ui.common.MenuStateController;
 import com.nononsenseapps.notepad.ui.common.NoteCheckBox;
-import com.nononsenseapps.notepad.ui.common.TitleNoteTextView;
 import com.nononsenseapps.notepad.util.AsyncTaskHelper;
 import com.nononsenseapps.notepad.util.SharedPreferencesHelper;
 import com.nononsenseapps.notepad.util.TimeFormatter;
@@ -71,86 +72,86 @@ import java.util.Date;
 import java.util.Map;
 
 public class TaskListFragment extends Fragment
-    implements OnSharedPreferenceChangeListener, SyncStatusMonitor.OnSyncStartStopListener {
+        implements OnSharedPreferenceChangeListener, SyncStatusMonitor.OnSyncStartStopListener {
 
-  // Must be less than -1
-  public static final String LIST_ALL_ID_PREF_KEY = "show_all_tasks_choice_id";
-  public static final int LIST_ID_ALL = -2;
-  public static final int LIST_ID_OVERDUE = -3;
-  public static final int LIST_ID_TODAY = -4;
-  public static final int LIST_ID_WEEK = -5;
+    // Must be less than -1
+    public static final String LIST_ALL_ID_PREF_KEY = "show_all_tasks_choice_id";
+    public static final int LIST_ID_ALL = -2;
+    public static final int LIST_ID_OVERDUE = -3;
+    public static final int LIST_ID_TODAY = -4;
+    public static final int LIST_ID_WEEK = -5;
 
-  public static final String LIST_ID = "list_id";
-  public static final int LOADER_TASKS = 1;
-  public static final int LOADER_CURRENT_LIST = 0;
-  private static final String TAG = "TaskListFragment";
+    public static final String LIST_ID = "list_id";
+    public static final int LOADER_TASKS = 1;
+    public static final int LOADER_CURRENT_LIST = 0;
+    private static final String TAG = "TaskListFragment";
 
-  RecyclerView listView;
+    RecyclerView listView;
 
-  SimpleSectionsAdapter mAdapter;
+    SimpleSectionsAdapter mAdapter;
 
-  SyncStatusMonitor syncStatusReceiver = null;
+    SyncStatusMonitor syncStatusReceiver = null;
 
-  private long mListId = -1;
+    private long mListId = -1;
 
-  private TaskListFragment.TaskListCallbacks mListener;
+    private TaskListFragment.TaskListCallbacks mListener;
 
-  private String mSortType = null;
-  private int mRowCount = 3;
+    private String mSortType = null;
+    private int mRowCount = 3;
 
-  private LoaderCallbacks<Cursor> mCallback = null;
+    private LoaderCallbacks<Cursor> mCallback = null;
 
-  private ActionMode mMode;
-  private SwipeRefreshLayout mSwipeRefreshLayout;
-  private boolean mDeleteWasUndone = false;
-  private ItemTouchHelper touchHelper;
+    private ActionMode mMode;
+    private SwipeRefreshLayout mSwipeRefreshLayout;
+    private boolean mDeleteWasUndone = false;
+    private ItemTouchHelper touchHelper;
 
-  public TaskListFragment() {
-    super();
-  }
+    public TaskListFragment() {
+        super();
+    }
 
-  public static TaskListFragment getInstance(final long listId) {
-    TaskListFragment f = new TaskListFragment();
-    Bundle args = new Bundle();
-    args.putLong(LIST_ID, listId);
-    f.setArguments(args);
-    return f;
-  }
+    public static TaskListFragment getInstance(final long listId) {
+        TaskListFragment f = new TaskListFragment();
+        Bundle args = new Bundle();
+        args.putLong(LIST_ID, listId);
+        f.setArguments(args);
+        return f;
+    }
 
-  public static String whereOverDue() {
-    return Task.Columns.DUE + " BETWEEN " + Task.OVERDUE + " AND " + Task.TODAY_START;
-  }
+    public static String whereOverDue() {
+        return Task.Columns.DUE + " BETWEEN " + Task.OVERDUE + " AND " + Task.TODAY_START;
+    }
 
-  public static String andWhereOverdue() {
-    return " AND " + whereOverDue();
-  }
+    public static String andWhereOverdue() {
+        return " AND " + whereOverDue();
+    }
 
-  public static String whereToday() {
-    return Task.Columns.DUE + " BETWEEN " + Task.TODAY_START + " AND " + Task.TODAY_PLUS(1);
-  }
+    public static String whereToday() {
+        return Task.Columns.DUE + " BETWEEN " + Task.TODAY_START + " AND " + Task.TODAY_PLUS(1);
+    }
 
-  public static String andWhereToday() {
-    return " AND " + whereToday();
-  }
+    public static String andWhereToday() {
+        return " AND " + whereToday();
+    }
 
-  public static String whereWeek() {
-    return Task.Columns.DUE + " BETWEEN " + Task.TODAY_START + " AND (" + Task.TODAY_PLUS(5) +
-        " -1)";
-  }
+    public static String whereWeek() {
+        return Task.Columns.DUE + " BETWEEN " + Task.TODAY_START + " AND (" + Task.TODAY_PLUS(5) +
+                " -1)";
+    }
 
-  public static String andWhereWeek() {
-    return " AND " + whereWeek();
-  }
+    public static String andWhereWeek() {
+        return " AND " + whereWeek();
+    }
 
-  void loadList() {
-    listView.setLayoutManager(new LinearLayoutManager(getActivity()));
-    listView.setHasFixedSize(true);
-    // TODO separators
-    touchHelper = new ItemTouchHelper(new DragHandler());
-    listView.setAdapter(mAdapter);
-    touchHelper.attachToRecyclerView(listView);
+    void loadList() {
+        listView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        listView.setHasFixedSize(true);
+        // TODO separators
+        touchHelper = new ItemTouchHelper(new DragHandler());
+        listView.setAdapter(mAdapter);
+        touchHelper.attachToRecyclerView(listView);
 
-    // TODO jonas
+        // TODO jonas
     /*listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
       final HashMap<Long, Task> tasks = new HashMap<Long, Task>();
       // ActionMode mMode;
@@ -257,138 +258,138 @@ public class TaskListFragment extends Fragment
         return shareIntent;
       }
     });*/
-  }
+    }
 
-  /**
-   * Delete tasks and display a snackbar with an undo action
-   *
-   * @param taskMap
-   */
-  private void deleteTasks(final Map<Long, Task> taskMap) {
-    final Task[] tasks = taskMap.values().toArray(new Task[taskMap.size()]);
+    /**
+     * Delete tasks and display a snackbar with an undo action
+     *
+     * @param taskMap
+     */
+    private void deleteTasks(final Map<Long, Task> taskMap) {
+        final Task[] tasks = taskMap.values().toArray(new Task[taskMap.size()]);
 
-    // If any are locked, ask for password first
-    final boolean locked = SharedPreferencesHelper.isPasswordSet(getActivity());
+        // If any are locked, ask for password first
+        final boolean locked = SharedPreferencesHelper.isPasswordSet(getActivity());
 
-    // Reset undo flag
-    mDeleteWasUndone = false;
+        // Reset undo flag
+        mDeleteWasUndone = false;
 
-    // Dismiss callback
-    final Snackbar.Callback dismissCallback = new Snackbar.Callback() {
-      @Override
-      public void onDismissed(Snackbar snackbar, int event) {
-        // Do nothing if dismissed because action was pressed
-        // Dismiss wil be called more than once if undo is pressed
-        if (Snackbar.Callback.DISMISS_EVENT_ACTION != event && !mDeleteWasUndone) {
-          // Delete them
-          AsyncTaskHelper.background(new AsyncTaskHelper.Job() {
+        // Dismiss callback
+        final Snackbar.Callback dismissCallback = new Snackbar.Callback() {
             @Override
-            public void doInBackground() {
-              for (Task t : tasks) {
-                try {
-                  t.delete(getActivity());
-                } catch (Exception ignored) {
+            public void onDismissed(Snackbar snackbar, int event) {
+                // Do nothing if dismissed because action was pressed
+                // Dismiss wil be called more than once if undo is pressed
+                if (Snackbar.Callback.DISMISS_EVENT_ACTION != event && !mDeleteWasUndone) {
+                    // Delete them
+                    AsyncTaskHelper.background(new AsyncTaskHelper.Job() {
+                        @Override
+                        public void doInBackground() {
+                            for (Task t : tasks) {
+                                try {
+                                    t.delete(getActivity());
+                                } catch (Exception ignored) {
+                                }
+                            }
+                        }
+                    });
                 }
-              }
             }
-          });
-        }
-      }
-    };
+        };
 
-    // Undo callback
-    final View.OnClickListener undoListener = new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        mDeleteWasUndone = true;
-        // Returns removed items to view
+        // Undo callback
+        final View.OnClickListener undoListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDeleteWasUndone = true;
+                // Returns removed items to view
+                // TODO jonas
+                // mAdapter.reset();
+            }
+        };
+
+        final PasswordConfirmedListener pListener = new PasswordConfirmedListener() {
+            @Override
+            public void onPasswordConfirmed() {
+                removeTasksFromList(tasks);
+                mListener.deleteTasksWithUndo(dismissCallback, undoListener, tasks);
+            }
+        };
+
+        if (locked) {
+            DialogPassword delpf = new DialogPassword();
+            delpf.setListener(pListener);
+            delpf.show(getFragmentManager(), "multi_delete_verify");
+        } else {
+            // Just run it directly
+            removeTasksFromList(tasks);
+            mListener.deleteTasksWithUndo(dismissCallback, undoListener, tasks);
+        }
+    }
+
+    private void removeTasksFromList(Task... tasks) {
+        for (Task task : tasks) {
+            // TODO jonas
+            // mAdapter.remove(mAdapter.getItemPosition(task._id));
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            mListener = (TaskListFragment.TaskListCallbacks) getActivity();
+        } catch (ClassCastException e) {
+            throw new ClassCastException("Activity must implement " + "OnFragmentInteractionListener");
+        }
+
+        // We want to be notified of future changes to auto refresh
+        PreferenceManager.getDefaultSharedPreferences(context)
+                .registerOnSharedPreferenceChangeListener(this);
+    }
+
+    void setupSwipeToRefresh() {
+        // Set the offset so it comes out of the correct place
+        final int toolbarHeight = getResources().getDimensionPixelOffset(R.dimen.toolbar_height);
+        mSwipeRefreshLayout
+                .setProgressViewOffset(false, -toolbarHeight, Math.round(0.7f * toolbarHeight));
+
+        // The arrow will cycle between these colors (in order)
+        mSwipeRefreshLayout
+                .setColorSchemeResources(R.color.refresh_progress_1, R.color.refresh_progress_2,
+                        R.color.refresh_progress_3);
+
+        mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                boolean syncing = SyncHelper.onManualSyncRequest(getActivity());
+
+                if (!syncing) {
+                    // Do not show refresh view
+                    mSwipeRefreshLayout.setRefreshing(false);
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onCreate(Bundle savedState) {
+        super.onCreate(savedState);
+
+        setHasOptionsMenu(true);
+
+        syncStatusReceiver = new SyncStatusMonitor();
+
+        if (getArguments().getLong(LIST_ID, -1) == -1) {
+            throw new InvalidParameterException("Must designate a list to open!");
+        }
+        mListId = getArguments().getLong(LIST_ID, -1);
+
+        // Start loading data
+        mAdapter = new SimpleSectionsAdapter(getActivity());
+
+        // Set a drag listener
         // TODO jonas
-        // mAdapter.reset();
-      }
-    };
-
-    final PasswordConfirmedListener pListener = new PasswordConfirmedListener() {
-      @Override
-      public void onPasswordConfirmed() {
-        removeTasksFromList(tasks);
-        mListener.deleteTasksWithUndo(dismissCallback, undoListener, tasks);
-      }
-    };
-
-    if (locked) {
-      DialogPassword delpf = new DialogPassword();
-      delpf.setListener(pListener);
-      delpf.show(getFragmentManager(), "multi_delete_verify");
-    } else {
-      // Just run it directly
-      removeTasksFromList(tasks);
-      mListener.deleteTasksWithUndo(dismissCallback, undoListener, tasks);
-    }
-  }
-
-  private void removeTasksFromList(Task... tasks) {
-    for (Task task : tasks) {
-      // TODO jonas
-      // mAdapter.remove(mAdapter.getItemPosition(task._id));
-    }
-  }
-
-  @Override
-  public void onAttach(Context context) {
-    super.onAttach(context);
-    try {
-      mListener = (TaskListFragment.TaskListCallbacks) getActivity();
-    } catch (ClassCastException e) {
-      throw new ClassCastException("Activity must implement " + "OnFragmentInteractionListener");
-    }
-
-    // We want to be notified of future changes to auto refresh
-    PreferenceManager.getDefaultSharedPreferences(context)
-        .registerOnSharedPreferenceChangeListener(this);
-  }
-
-  void setupSwipeToRefresh() {
-    // Set the offset so it comes out of the correct place
-    final int toolbarHeight = getResources().getDimensionPixelOffset(R.dimen.toolbar_height);
-    mSwipeRefreshLayout
-        .setProgressViewOffset(false, -toolbarHeight, Math.round(0.7f * toolbarHeight));
-
-    // The arrow will cycle between these colors (in order)
-    mSwipeRefreshLayout
-        .setColorSchemeResources(R.color.refresh_progress_1, R.color.refresh_progress_2,
-            R.color.refresh_progress_3);
-
-    mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-      @Override
-      public void onRefresh() {
-        boolean syncing = SyncHelper.onManualSyncRequest(getActivity());
-
-        if (!syncing) {
-          // Do not show refresh view
-          mSwipeRefreshLayout.setRefreshing(false);
-        }
-      }
-    });
-  }
-
-  @Override
-  public void onCreate(Bundle savedState) {
-    super.onCreate(savedState);
-
-    setHasOptionsMenu(true);
-
-    syncStatusReceiver = new SyncStatusMonitor();
-
-    if (getArguments().getLong(LIST_ID, -1) == -1) {
-      throw new InvalidParameterException("Must designate a list to open!");
-    }
-    mListId = getArguments().getLong(LIST_ID, -1);
-
-    // Start loading data
-    mAdapter = new SimpleSectionsAdapter(getActivity());
-
-    // Set a drag listener
-    // TODO jonas
     /*mAdapter.setDropListener(new DropListener() {
       @Override
       public void drop(int from, int to) {
@@ -400,222 +401,219 @@ public class TaskListFragment extends Fragment
         fromTask.moveTo(getActivity().getContentResolver(), toTask);
       }
     });*/
-  }
-
-  /**
-   * Called to have the fragment instantiate its user interface view. This is optional, and
-   * non-graphical fragments can return null (which is the default implementation).  This will be
-   * called between {@link #onCreate(Bundle)} and {@link #onActivityCreated(Bundle)}. <p/> <p>If you
-   * return a View from here, you will later be called in {@link #onDestroyView} when the view is
-   * being released.
-   *
-   * @param inflater
-   *     The LayoutInflater object that can be used to inflate any views in the fragment,
-   * @param container
-   *     If non-null, this is the parent view that the fragment's UI should be attached to.  The
-   *     fragment should not add the view itself, but this can be used to generate the LayoutParams
-   *     of the view.
-   * @param savedInstanceState
-   *     If non-null, this fragment is being re-constructed from a previous saved state as given
-   *     here.
-   * @return Return the View for the fragment's UI, or null.
-   */
-  @Nullable
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                           Bundle savedInstanceState) {
-    //return super.onCreateView(inflater, container, savedInstanceState);
-    View rootView = inflater.inflate(R.layout.fragment_task_list, container, false);
-
-    listView = (RecyclerView) rootView.findViewById(android.R.id.list);
-    loadList();
-    // ListView will only support scrolling ToolBar off-screen from Lollipop onwards.
-    // RecyclerView does not have this limitation
-    ViewCompat.setNestedScrollingEnabled(listView, true);
-
-    // setup swipe to refresh
-    mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
-    setupSwipeToRefresh();
-
-    return rootView;
-  }
-
-  @Override
-  public void onActivityCreated(final Bundle state) {
-    super.onActivityCreated(state);
-
-    // Get the global list settings
-    final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-
-    // Load pref for item height
-    //mRowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
-    //mHideCheckbox = prefs.getBoolean(getString(R.string.pref_hidecheckboxes), false);
-
-    // mSortType = prefs.getString(getString(R.string.pref_sorttype),
-    // getString(R.string.default_sorttype));
-    // mListType = prefs.getString(getString(R.string.pref_listtype),
-    // getString(R.string.default_listtype));
-
-    mCallback = new LoaderCallbacks<Cursor>() {
-      @Override
-      public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
-        if (id == LOADER_CURRENT_LIST) {
-          return new CursorLoader(getActivity(), TaskList.getUri(mListId), TaskList.Columns.FIELDS,
-              null, null, null);
-        } else {
-          // What sorting to use
-          Uri targetUri;
-          String sortSpec;
-
-          if (mSortType == null) {
-            mSortType = prefs
-                .getString(getString(R.string.pref_sorttype), getString(R.string.default_sorttype));
-          }
-
-          // All-view can't use manual sorting
-          if (mListId < 1 && mSortType.equals(getString(R.string.const_possubsort))) {
-            mSortType = getString(R.string.const_all_default_sorting);
-          }
-
-          if (mSortType.equals(getString(R.string.const_alphabetic))) {
-            targetUri = Task.URI;
-            sortSpec = getString(R.string.const_as_alphabetic, Task.Columns.TITLE);
-          } else if (mSortType.equals(getString(R.string.const_duedate))) {
-            targetUri = Task.URI_SECTIONED_BY_DATE;
-            sortSpec = null;
-          } else if (mSortType.equals(getString(R.string.const_modified))) {
-            targetUri = Task.URI;
-            sortSpec = Task.Columns.UPDATED + " DESC";
-          }
-          // manual sorting
-          else {
-            targetUri = Task.URI;
-            sortSpec = Task.Columns.LEFT;
-          }
-
-          String where = null;
-          String[] whereArgs = null;
-
-          if (mListId > 0) {
-            where = Task.Columns.DBLIST + " IS ?";
-            whereArgs = new String[]{Long.toString(mListId)};
-          }
-
-          return new CursorLoader(getActivity(), targetUri, Task.Columns.FIELDS, where, whereArgs,
-              sortSpec);
-        }
-      }
-
-      @Override
-      public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
-        if (loader.getId() == LOADER_TASKS) {
-          Log.d(TAG,
-              "onLoadFinished() called");
-          mAdapter.swapCursor(c);
-        }
-      }
-
-      @Override
-      public void onLoaderReset(Loader<Cursor> loader) {
-        if (loader.getId() == LOADER_TASKS) {
-          mAdapter.swapCursor(null);
-        }
-      }
-    };
-
-    getLoaderManager().restartLoader(LOADER_TASKS, null, mCallback);
-  }
-
-  /**
-   * Called when the fragment is visible to the user and actively running. This is generally tied to
-   * {@link Activity#onResume() Activity.onResume} of the containing Activity's lifecycle.
-   */
-  @Override
-  public void onResume() {
-    super.onResume();
-    // activate monitor
-    if (syncStatusReceiver != null) {
-      syncStatusReceiver.startMonitoring(getActivity(), this);
-    }
-  }
-
-  @Override
-  public void onSaveInstanceState(Bundle outState) {
-    super.onSaveInstanceState(outState);
-  }
-
-  /**
-   * Called when the Fragment is no longer resumed.  This is generally tied to {@link
-   * Activity#onPause() Activity.onPause} of the containing Activity's lifecycle.
-   */
-  @Override
-  public void onPause() {
-    //mSwipeRefreshLayout.setRefreshing(false);// deactivate monitor
-    if (syncStatusReceiver != null) {
-      syncStatusReceiver.stopMonitoring();
     }
 
-    super.onPause();
-  }
+    /**
+     * Called to have the fragment instantiate its user interface view. This is optional, and
+     * non-graphical fragments can return null (which is the default implementation).  This will be
+     * called between {@link #onCreate(Bundle)} and {@link #onActivityCreated(Bundle)}. <p/> <p>If you
+     * return a View from here, you will later be called in {@link #onDestroyView} when the view is
+     * being released.
+     *
+     * @param inflater           The LayoutInflater object that can be used to inflate any views in the fragment,
+     * @param container          If non-null, this is the parent view that the fragment's UI should be attached to.  The
+     *                           fragment should not add the view itself, but this can be used to generate the LayoutParams
+     *                           of the view.
+     * @param savedInstanceState If non-null, this fragment is being re-constructed from a previous saved state as given
+     *                           here.
+     * @return Return the View for the fragment's UI, or null.
+     */
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
+        //return super.onCreateView(inflater, container, savedInstanceState);
+        View rootView = inflater.inflate(R.layout.fragment_task_list, container, false);
 
-  @Override
-  public void onDestroy() {
-    super.onDestroy();
-    getLoaderManager().destroyLoader(0);
-  }
+        listView = (RecyclerView) rootView.findViewById(android.R.id.list);
+        loadList();
+        // ListView will only support scrolling ToolBar off-screen from Lollipop onwards.
+        // RecyclerView does not have this limitation
+        ViewCompat.setNestedScrollingEnabled(listView, true);
 
-  @Override
-  public void onDetach() {
-    mListener = null;
-    PreferenceManager.getDefaultSharedPreferences(getActivity())
-        .unregisterOnSharedPreferenceChangeListener(this);
-    super.onDetach();
-  }
+        // setup swipe to refresh
+        mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
+        setupSwipeToRefresh();
 
-  @Override
-  public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-    inflater.inflate(R.menu.fragment_tasklist, menu);
-  }
+        return rootView;
+    }
 
-  @Override
-  public void onPrepareOptionsMenu(Menu menu) {
-    if (getActivity() instanceof MenuStateController) {
-      final boolean visible = ((MenuStateController) getActivity()).childItemsVisible();
+    @Override
+    public void onActivityCreated(final Bundle state) {
+        super.onActivityCreated(state);
 
-      menu.setGroupVisible(R.id.list_menu_group, visible);
-      if (!visible) {
-        if (mMode != null) {
-          mMode.finish();
+        // Get the global list settings
+        final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+        // Load pref for item height
+        //mRowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
+        //mHideCheckbox = prefs.getBoolean(getString(R.string.pref_hidecheckboxes), false);
+
+        // mSortType = prefs.getString(getString(R.string.pref_sorttype),
+        // getString(R.string.default_sorttype));
+        // mListType = prefs.getString(getString(R.string.pref_listtype),
+        // getString(R.string.default_listtype));
+
+        mCallback = new LoaderCallbacks<Cursor>() {
+            @Override
+            public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
+                if (id == LOADER_CURRENT_LIST) {
+                    return new CursorLoader(getActivity(), TaskList.getUri(mListId), TaskList.Columns.FIELDS,
+                            null, null, null);
+                } else {
+                    // What sorting to use
+                    Uri targetUri;
+                    String sortSpec;
+
+                    if (mSortType == null) {
+                        mSortType = prefs
+                                .getString(getString(R.string.pref_sorttype), getString(R.string.default_sorttype));
+                    }
+
+                    // All-view can't use manual sorting
+                    if (mListId < 1 && mSortType.equals(getString(R.string.const_possubsort))) {
+                        mSortType = getString(R.string.const_all_default_sorting);
+                    }
+
+                    if (mSortType.equals(getString(R.string.const_alphabetic))) {
+                        targetUri = Task.URI;
+                        sortSpec = getString(R.string.const_as_alphabetic, Task.Columns.TITLE);
+                    } else if (mSortType.equals(getString(R.string.const_duedate))) {
+                        targetUri = Task.URI_SECTIONED_BY_DATE;
+                        sortSpec = null;
+                    } else if (mSortType.equals(getString(R.string.const_modified))) {
+                        targetUri = Task.URI;
+                        sortSpec = Task.Columns.UPDATED + " DESC";
+                    }
+                    // manual sorting
+                    else {
+                        targetUri = Task.URI;
+                        sortSpec = Task.Columns.LEFT;
+                    }
+
+                    String where = null;
+                    String[] whereArgs = null;
+
+                    if (mListId > 0) {
+                        where = Task.Columns.DBLIST + " IS ?";
+                        whereArgs = new String[]{Long.toString(mListId)};
+                    }
+
+                    return new CursorLoader(getActivity(), targetUri, Task.Columns.FIELDS, where, whereArgs,
+                            sortSpec);
+                }
+            }
+
+            @Override
+            public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
+                if (loader.getId() == LOADER_TASKS) {
+                    Log.d(TAG,
+                            "onLoadFinished() called");
+                    mAdapter.swapCursor(c);
+                }
+            }
+
+            @Override
+            public void onLoaderReset(Loader<Cursor> loader) {
+                if (loader.getId() == LOADER_TASKS) {
+                    mAdapter.swapCursor(null);
+                }
+            }
+        };
+
+        getLoaderManager().restartLoader(LOADER_TASKS, null, mCallback);
+    }
+
+    /**
+     * Called when the fragment is visible to the user and actively running. This is generally tied to
+     * {@link Activity#onResume() Activity.onResume} of the containing Activity's lifecycle.
+     */
+    @Override
+    public void onResume() {
+        super.onResume();
+        // activate monitor
+        if (syncStatusReceiver != null) {
+            syncStatusReceiver.startMonitoring(getActivity(), this);
         }
-      }
     }
-  }
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    switch (item.getItemId()) {
-      case R.id.menu_clearcompleted:
-        if (mListId != -1) {
-          DialogDeleteCompletedTasks.showDialog(getFragmentManager(), mListId, null);
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
+
+    /**
+     * Called when the Fragment is no longer resumed.  This is generally tied to {@link
+     * Activity#onPause() Activity.onPause} of the containing Activity's lifecycle.
+     */
+    @Override
+    public void onPause() {
+        //mSwipeRefreshLayout.setRefreshing(false);// deactivate monitor
+        if (syncStatusReceiver != null) {
+            syncStatusReceiver.stopMonitoring();
         }
-        return true;
-      default:
-        return false;
-    }
-  }
 
-  @Override
-  public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
-    if (isDetached()) {
-      // Fix crash report
-      return;
+        super.onPause();
     }
-    try {
-      boolean reload = false;
-      if (key.equals(getString(R.string.pref_sorttype))) {
-        mSortType = null;
-        reload = true;
-      }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getLoaderManager().destroyLoader(0);
+    }
+
+    @Override
+    public void onDetach() {
+        mListener = null;
+        PreferenceManager.getDefaultSharedPreferences(getActivity())
+                .unregisterOnSharedPreferenceChangeListener(this);
+        super.onDetach();
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.fragment_tasklist, menu);
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        if (getActivity() instanceof MenuStateController) {
+            final boolean visible = ((MenuStateController) getActivity()).childItemsVisible();
+
+            menu.setGroupVisible(R.id.list_menu_group, visible);
+            if (!visible) {
+                if (mMode != null) {
+                    mMode.finish();
+                }
+            }
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.menu_clearcompleted:
+                if (mListId != -1) {
+                    DialogDeleteCompletedTasks.showDialog(getFragmentManager(), mListId, null);
+                }
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
+        if (isDetached()) {
+            // Fix crash report
+            return;
+        }
+        try {
+            boolean reload = false;
+            if (key.equals(getString(R.string.pref_sorttype))) {
+                mSortType = null;
+                reload = true;
+            }
            /* else if (key.equals(getString(R.string.key_pref_item_max_height))) {
                 mRowCount = prefs.getInt(key, 3);
                 reload = true;
@@ -625,303 +623,297 @@ public class TaskListFragment extends Fragment
         reload = true;
       }*/
 
-      if (reload && mCallback != null) {
-        getLoaderManager().restartLoader(LOADER_TASKS, null, mCallback);
-      }
-    } catch (IllegalStateException ignored) {
-      // Fix crash report
-      // Might get a race condition where fragment is detached when getString is called
+            if (reload && mCallback != null) {
+                getLoaderManager().restartLoader(LOADER_TASKS, null, mCallback);
+            }
+        } catch (IllegalStateException ignored) {
+            // Fix crash report
+            // Might get a race condition where fragment is detached when getString is called
+        }
     }
-  }
-
-  /**
-   * @param ongoing
-   */
-  @Override
-  public void onSyncStartStop(boolean ongoing) {
-    mSwipeRefreshLayout.setRefreshing(ongoing);
-  }
-
-  /**
-   * This interface must be implemented by activities that contain TaskListFragments to allow an
-   * interaction in this fragment to be communicated to the activity and potentially other fragments
-   * contained in that activity.
-   */
-  public interface TaskListCallbacks {
-    void openTask(final Uri uri, final long listId, final View origin);
 
     /**
-     * Show a snackbar indicating that items were deleted, together with an undo button.
+     * @param ongoing
      */
-    void deleteTasksWithUndo(Snackbar.Callback dismissCallback, View.OnClickListener listener,
-                             Task... tasks);
-  }
+    @Override
+    public void onSyncStartStop(boolean ongoing) {
+        mSwipeRefreshLayout.setRefreshing(ongoing);
+    }
 
-  class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener,
-      View.OnLongClickListener {
+    /**
+     * This interface must be implemented by activities that contain TaskListFragments to allow an
+     * interaction in this fragment to be communicated to the activity and potentially other fragments
+     * contained in that activity.
+     */
+    public interface TaskListCallbacks {
+        void openTask(final Uri uri, final long listId, final View origin);
 
-    private static final String TAG = "ViewHolder";
-    final TitleNoteTextView title;
-    final DateView date;
-    final NoteCheckBox checkbox;
-    final View dragHandle;
-    final View dragPadding;
-    long id = -1;
+        /**
+         * Show a snackbar indicating that items were deleted, together with an undo button.
+         */
+        void deleteTasksWithUndo(Snackbar.Callback dismissCallback, View.OnClickListener listener,
+                                 Task... tasks);
+    }
 
-    public ViewHolder(View itemView) {
-      super(itemView);
+    abstract class ViewHolder extends RecyclerView.ViewHolder {
+        public ViewHolder(View itemView) {
+            super(itemView);
+        }
 
-      title = (TitleNoteTextView) itemView.findViewById(android.R.id.text1);
-      date = (DateView) itemView.findViewById(R.id.date);
-      checkbox = (NoteCheckBox) itemView.findViewById(R.id.checkbox);
-      dragHandle = itemView.findViewById(R.id.drag_handle);
-      dragPadding = itemView.findViewById(R.id.dragpadding);
+        public abstract void onBind(Cursor cursor);
+    }
 
-      itemView.setOnClickListener(this);
-      itemView.setOnLongClickListener(this);
+    class HeaderViewHolder extends ViewHolder {
 
-      dragHandle.setOnTouchListener(new View.OnTouchListener() {
+        private final TasklistHeaderBinding binding;
+        private final SimpleDateFormat weekdayFormatter;
+
+
+        public HeaderViewHolder(TasklistHeaderBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+            weekdayFormatter = TimeFormatter.getLocalFormatterWeekday(getContext());
+        }
+
         @Override
-        public boolean onTouch(final View v, final MotionEvent event) {
-          Log.d(TAG, "onTouch() called with: " + "v = [" + v + "], event = [" + event + "]");
-          if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-            Log.d(TAG, "onTouch: starting Drag");
-            touchHelper.startDrag(ViewHolder.this);
-          }
-          return false;
+        public void onBind(final Cursor cursor) {
+            switch (cursor.getString(cursor.getColumnIndex(Task.Columns.TITLE))) {
+                case Task.HEADER_KEY_OVERDUE:
+                    binding.text.setText(getContext().getString(R.string.date_header_overdue));
+                    break;
+                case Task.HEADER_KEY_TODAY:
+                    binding.text.setText(getContext().getString(R.string.date_header_today));
+                    break;
+                case Task.HEADER_KEY_PLUS1:
+                    binding.text.setText(getContext().getString(R.string.date_header_tomorrow));
+                    break;
+                case Task.HEADER_KEY_PLUS2:
+                case Task.HEADER_KEY_PLUS4:
+                case Task.HEADER_KEY_PLUS3:
+                    binding.text.setText(weekdayFormatter.format(new Date(cursor.getLong(4))));
+                    break;
+                case Task.HEADER_KEY_LATER:
+                    binding.text.setText(getContext().getString(R.string.date_header_future));
+                    break;
+                case Task.HEADER_KEY_NODATE:
+                    binding.text.setText(getContext().getString(R.string.date_header_none));
+                    break;
+                case Task.HEADER_KEY_COMPLETE:
+                    binding.text.setText(getContext().getString(R.string.date_header_completed));
+                    break;
+            }
         }
-      });
     }
 
-    void onBind(final Cursor cursor) {
-      id = cursor.getLong(0);
-      //listId = cursor.getLong(cursor.getColumnIndex(Task.Columns.DBLIST));
-      //this.callbacks = callbacks;
-    }
+    class ItemViewHolder extends ViewHolder implements View.OnClickListener,
+            View.OnLongClickListener {
 
-    @Override
-    public void onClick(final View v) {
-      if (mListener != null && id > 0) {
-        mListener.openTask(Task.getUri(id), mListId, v);
-      }
-    }
+        private static final String TAG = "ViewHolder";
+        private final TasklistItemRichBinding binding;
+        private final NoteCheckBox checkbox;
+        private final OnCheckedChangeListener checkBoxListener;
+        long id = -1;
 
-    @Override
-    public boolean onLongClick(final View v) {
-      // TODO
-      //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-      // Also select the item in question
-      //listView.setItemChecked(pos, true);
-      return false;
-    }
-  }
+        public ItemViewHolder(TasklistItemRichBinding binding) {
+            super(binding.getRoot());
 
-  class SimpleSectionsAdapter extends RecyclerView.Adapter<ViewHolder> {
-    final static int itemType = 0;
-    final static int headerType = 1;
-    private static final String TAG = "SimpleSectionsAdapter";
-    final SharedPreferences prefs;
-    final Context context;
-    private final SimpleDateFormat weekdayFormatter;
-    Cursor cursor = null;
+            this.binding = binding;
+            checkbox = (NoteCheckBox) binding.cardSection.getRoot().findViewById(R.id.checkbox);
 
-    final OnCheckedChangeListener checkBoxListener = new OnCheckedChangeListener() {
-      @Override
-      public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        Task.setCompleted(context, isChecked, ((NoteCheckBox) buttonView).getNoteId());
-      }
-    };
+            itemView.setOnClickListener(this);
+            itemView.setOnLongClickListener(this);
 
-    public SimpleSectionsAdapter(Context context) {
-      super();
-      setHasStableIds(true);
-      this.context = context;
-      prefs = PreferenceManager.getDefaultSharedPreferences(context);
-      weekdayFormatter = TimeFormatter.getLocalFormatterWeekday(context);
-    }
+            binding.dragHandle.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(final View v, final MotionEvent event) {
+                    Log.d(TAG, "onTouch() called with: " + "v = [" + v + "], event = [" + event + "]");
+                    if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
+                        Log.d(TAG, "onTouch: starting Drag");
+                        touchHelper.startDrag(ItemViewHolder.this);
+                    }
+                    return false;
+                }
+            });
 
-    int getViewLayout(final int viewType) {
-      switch (viewType) {
-        case headerType:
-          return R.layout.tasklist_header;
-        case itemType:
-        default:
-          return R.layout.tasklist_item_rich;
-      }
-    }
-
-    @Override
-    public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-      final View view =
-          LayoutInflater.from(context).inflate(getViewLayout(viewType), parent, false);
-
-      ViewHolder viewHolder = new ViewHolder(view);
-      return viewHolder;
-    }
-
-    @Override
-    public void onBindViewHolder(final ViewHolder holder, final int position) {
-      if (!cursor.moveToPosition(position)) {
-        return;
-      }
-
-      holder.onBind(cursor);
-
-      if (headerType == getItemViewType(position)) {
-        switch (cursor.getString(cursor.getColumnIndex(Task.Columns.TITLE))) {
-          case Task.HEADER_KEY_OVERDUE:
-            holder.title.setText(context.getString(R.string.date_header_overdue));
-            break;
-          case Task.HEADER_KEY_TODAY:
-            holder.title.setText(context.getString(R.string.date_header_today));
-            break;
-          case Task.HEADER_KEY_PLUS1:
-            holder.title.setText(context.getString(R.string.date_header_tomorrow));
-            break;
-          case Task.HEADER_KEY_PLUS2:
-          case Task.HEADER_KEY_PLUS4:
-          case Task.HEADER_KEY_PLUS3:
-            holder.title.setText(weekdayFormatter.format(new Date(cursor.getLong(4))));
-            break;
-          case Task.HEADER_KEY_LATER:
-            holder.title.setText(context.getString(R.string.date_header_future));
-            break;
-          case Task.HEADER_KEY_NODATE:
-            holder.title.setText(context.getString(R.string.date_header_none));
-            break;
-          case Task.HEADER_KEY_COMPLETE:
-            holder.title.setText(context.getString(R.string.date_header_completed));
-            break;
-        }
-      } else {
-        // Title
-        holder.title.setMaxLines(mRowCount);
-        holder.title
-            .useSecondaryColor(!cursor.isNull(cursor.getColumnIndex(Task.Columns.COMPLETED)));
-        holder.title.setTextTitle(cursor.getString(cursor.getColumnIndex(Task.Columns.TITLE)));
-
-        // Note
-        // Only if task it not locked
-        // or only one line
-        if (cursor.getInt(9) != 1 && mRowCount > 1) {
-          holder.title.setTextRest(cursor.getString(cursor.getColumnIndex(Task.Columns.NOTE)));
-        } else {
-          holder.title.setTextRest("");
+            checkBoxListener = new OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                    Task.setCompleted(getContext(), isChecked, ((NoteCheckBox) buttonView).getNoteId());
+                }
+            };
         }
 
-        // Checkbox
-        holder.checkbox.setOnCheckedChangeListener(null);
-        holder.checkbox.setChecked(!cursor.isNull(cursor.getColumnIndex(Task.Columns.COMPLETED)));
-        holder.checkbox.setNoteId(cursor.getLong(0));
-        holder.checkbox.setOnCheckedChangeListener(checkBoxListener);
-        //holder.checkbox.setVisibility(mHideCheckbox ? View.GONE : View.VISIBLE);
+        @Override
+        public void onBind(final Cursor cursor) {
+            id = cursor.getLong(0);
 
-        // Due
-        if (cursor.isNull(cursor.getColumnIndex(Task.Columns.DUE))) {
-          holder.date.setVisibility(View.GONE);
-        } else {
-          holder.date.setVisibility(View.VISIBLE);
-          holder.date.setTimeText(cursor.getLong(cursor.getColumnIndex(Task.Columns.DUE)));
+            // Title
+            binding.cardSection.text.setMaxLines(mRowCount);
+            binding.cardSection.text
+                    .useSecondaryColor(!cursor.isNull(cursor.getColumnIndex(Task.Columns.COMPLETED)));
+            binding.cardSection.text.setTextTitle(cursor.getString(cursor.getColumnIndex(Task.Columns.TITLE)));
+
+            // Note
+            // Only if task it not locked
+            // or only one line
+            if (cursor.getInt(9) != 1 && mRowCount > 1) {
+                binding.cardSection.text.setTextRest(cursor.getString(cursor.getColumnIndex(Task.Columns.NOTE)));
+            } else {
+                binding.cardSection.text.setTextRest("");
+            }
+
+            // Checkbox
+            checkbox.setOnCheckedChangeListener(null);
+            checkbox.setChecked(!cursor.isNull(cursor.getColumnIndex(Task.Columns.COMPLETED)));
+            checkbox.setNoteId(cursor.getLong(0));
+            checkbox.setOnCheckedChangeListener(checkBoxListener);
+            //holder.checkbox.setVisibility(mHideCheckbox ? View.GONE : View.VISIBLE);
+
+            // Due
+            if (cursor.isNull(cursor.getColumnIndex(Task.Columns.DUE))) {
+                binding.cardSection.date.setVisibility(View.GONE);
+            } else {
+                binding.cardSection.date.setVisibility(View.VISIBLE);
+                binding.cardSection.date.setTimeText(cursor.getLong(cursor.getColumnIndex(Task.Columns.DUE)));
+            }
+
+            if (mSortType != null && getString(R.string.const_possubsort).equals(mSortType)) {
+                binding.dragHandle.setVisibility(View.VISIBLE);
+                binding.cardSection.dragPadding.setVisibility(View.VISIBLE);
+            } else {
+                binding.dragHandle.setVisibility(View.GONE);
+                binding.cardSection.dragPadding.setVisibility(View.GONE);
+            }
         }
 
-        if (mSortType != null && getString(R.string.const_possubsort).equals(mSortType)) {
-          holder.dragHandle.setVisibility(View.VISIBLE);
-          holder.dragPadding.setVisibility(View.VISIBLE);
-        } else {
-          holder.dragHandle.setVisibility(View.GONE);
-          holder.dragPadding.setVisibility(View.GONE);
+        @Override
+        public void onClick(final View v) {
+            if (mListener != null && id > 0) {
+                mListener.openTask(Task.getUri(id), mListId, v);
+            }
         }
-      }
-    }
 
-    @Override
-    public int getItemViewType(final int position) {
-      cursor.moveToPosition(position);
-      // If the id is invalid, it's a header
-      if (cursor.getLong(0) < 1) {
-        return headerType;
-      } else {
-        return itemType;
-      }
-    }
+        @Override
+        public boolean onLongClick(final View v) {
+            // TODO
+            //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+            // Also select the item in question
+            //listView.setItemChecked(pos, true);
 
-    @Override
-    public int getItemCount() {
-      if (cursor == null) {
-        return 0;
-      } else {
-        return cursor.getCount();
-      }
-    }
-
-    /*private int getItemPosition(final long id) {
-      if (mCursor == null) {
-        return -1;
-      }
-      mCursor.moveToPosition(-1);
-      int i = 0;
-      while (mCursor.moveToNext()) {
-        if (id == mCursor.getLong(0)) {
-          return i;
+            return false;
         }
-        i += 1;
-      }
-      return -1;
-    }*/
-
-    public void swapCursor(final Cursor cursor) {
-      this.cursor = cursor;
-      notifyDataSetChanged();
     }
 
-    public Cursor getCursor(final int position) {
-      if (cursor != null) {
-        cursor.moveToPosition(position);
-      }
-      return cursor;
+    class SimpleSectionsAdapter extends RecyclerView.Adapter<ViewHolder> {
+        final static int itemType = 0;
+        final static int headerType = 1;
+        private static final String TAG = "SimpleSectionsAdapter";
+        final SharedPreferences prefs;
+        final Context context;
+        Cursor cursor = null;
+
+        public SimpleSectionsAdapter(Context context) {
+            super();
+            setHasStableIds(true);
+            this.context = context;
+            prefs = PreferenceManager.getDefaultSharedPreferences(context);
+
+        }
+
+        @Override
+        public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
+            switch (viewType) {
+                case headerType:
+                    return new HeaderViewHolder((TasklistHeaderBinding) DataBindingUtil.inflate(LayoutInflater.from(context),
+                            R.layout.tasklist_header, parent, false));
+                case itemType:
+                default:
+                    return new ItemViewHolder((TasklistItemRichBinding) DataBindingUtil.inflate(LayoutInflater.from(context),
+                            R.layout.tasklist_item_rich, parent, false));
+            }
+        }
+
+        @Override
+        public void onBindViewHolder(final ViewHolder holder, final int position) {
+            if (!cursor.moveToPosition(position)) {
+                return;
+            }
+            holder.onBind(cursor);
+        }
+
+        @Override
+        public int getItemViewType(final int position) {
+            cursor.moveToPosition(position);
+            // If the id is invalid, it's a header
+            if (cursor.getLong(0) < 1) {
+                return headerType;
+            } else {
+                return itemType;
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            if (cursor == null) {
+                return 0;
+            } else {
+                return cursor.getCount();
+            }
+        }
+
+        public void swapCursor(final Cursor cursor) {
+            this.cursor = cursor;
+            notifyDataSetChanged();
+        }
+
+        public Cursor getCursor(final int position) {
+            if (cursor != null) {
+                cursor.moveToPosition(position);
+            }
+            return cursor;
+        }
     }
-  }
 
-  class DragHandler extends ItemTouchHelper.Callback {
+    class DragHandler extends ItemTouchHelper.Callback {
 
-    private static final String TAG = "DragHandler";
+        private static final String TAG = "DragHandler";
 
-    public DragHandler() {
-      super();
+        public DragHandler() {
+            super();
+        }
+
+        @Override
+        public boolean isLongPressDragEnabled() {
+            return false;
+        }
+
+        @Override
+        public boolean isItemViewSwipeEnabled() {
+            return false;
+        }
+
+        @Override
+        public int getMovementFlags(final RecyclerView recyclerView,
+                                    final RecyclerView.ViewHolder viewHolder) {
+            int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
+            int swipeFlags = 0;
+            return makeMovementFlags(dragFlags, swipeFlags);
+        }
+
+        @Override
+        public boolean onMove(final RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder,
+                              final RecyclerView.ViewHolder target) {
+            final Task fromTask = new Task(mAdapter.getCursor(viewHolder.getAdapterPosition()));
+            final Task toTask = new Task(mAdapter.getCursor(target.getAdapterPosition()));
+
+            mAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
+            fromTask.moveTo(getActivity().getContentResolver(), toTask);
+            return true;
+        }
+
+        @Override
+        public void onSwiped(final RecyclerView.ViewHolder viewHolder, final int direction) {
+
+        }
     }
-
-    @Override
-    public boolean isLongPressDragEnabled() {
-      return false;
-    }
-
-    @Override
-    public boolean isItemViewSwipeEnabled() {
-      return false;
-    }
-
-    @Override
-    public int getMovementFlags(final RecyclerView recyclerView,
-                                final RecyclerView.ViewHolder viewHolder) {
-      int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN;
-      int swipeFlags = 0;
-      return makeMovementFlags(dragFlags, swipeFlags);
-    }
-
-    @Override
-    public boolean onMove(final RecyclerView recyclerView, final RecyclerView.ViewHolder viewHolder,
-                          final RecyclerView.ViewHolder target) {
-      final Task fromTask = new Task(mAdapter.getCursor(viewHolder.getAdapterPosition()));
-      final Task toTask = new Task(mAdapter.getCursor(target.getAdapterPosition()));
-
-      mAdapter.notifyItemMoved(viewHolder.getAdapterPosition(), target.getAdapterPosition());
-      fromTask.moveTo(getActivity().getContentResolver(), toTask);
-      return true;
-    }
-
-    @Override
-    public void onSwiped(final RecyclerView.ViewHolder viewHolder, final int direction) {
-
-    }
-  }
 }

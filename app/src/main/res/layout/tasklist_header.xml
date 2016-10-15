@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (c) 2015 Jonas Kalderstam.
 
   This program is free software: you can redistribute it and/or modify
@@ -15,59 +14,62 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:custom="http://schemas.android.com/apk/res-auto"
-              android:id="@+id/taskItem"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:clickable="false"
-              android:orientation="horizontal">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:custom="http://schemas.android.com/apk/res-auto">
 
-    <!-- Keeping as this class for compatibility with other layout -->
-
-    <com.nononsenseapps.notepad.ui.common.TitleNoteTextView
-        android:id="@android:id/text1"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/taskItem"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:fontFamily="sans-serif-light"
-        android:paddingLeft="16dp"
-        android:singleLine="true"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="?android:attr/textColorPrimary"
-        android:textIsSelectable="false"
-        custom:titleFontFamily="robotolight" />
+        android:clickable="false"
+        android:orientation="horizontal">
 
-    <!-- Needed to support the same cursor as items . All hidden -->
+        <!-- Keeping as this class for compatibility with other layout -->
 
-    <TextView
-        android:id="@+id/indent"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone" />
+        <com.nononsenseapps.notepad.ui.common.TitleNoteTextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:fontFamily="sans-serif-light"
+            android:paddingLeft="16dp"
+            android:singleLine="true"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:textColor="?android:attr/textColorPrimary"
+            android:textIsSelectable="false"
+            custom:titleFontFamily="robotolight" />
 
-    <com.nononsenseapps.notepad.ui.common.NoteCheckBox
-        android:id="@+id/checkbox"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone" />
+        <!-- Needed to support the same cursor as items . All hidden -->
 
-    <com.nononsenseapps.notepad.ui.common.DateView
-        android:id="@+id/date"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone" />
+        <TextView
+            android:id="@+id/indent"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
 
-    <View
-        android:id="@+id/dragpadding"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone" />
+        <com.nononsenseapps.notepad.ui.common.NoteCheckBox
+            android:id="@+id/checkbox"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
 
-    <View
-        android:id="@+id/drag_handle"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:visibility="gone" />
+        <com.nononsenseapps.notepad.ui.common.DateView
+            android:id="@+id/date"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
 
-</LinearLayout>
+        <View
+            android:id="@+id/drag_padding"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/drag_handle"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="gone" />
+
+    </LinearLayout>
+</layout>
