@@ -103,6 +103,11 @@ class ItemViewHolder extends ViewHolder implements View.OnClickListener,
 
     @Override
     public void onClick(final View v) {
+        if (selectedItemHandler.isActiveSelectionMode()) {
+            // same as long press
+            onLongClick(v);
+            return;
+        }
         if (taskListFragment.getListener() != null && id > 0) {
             taskListFragment.getListener().openTask(Task.getUri(id), listId, v);
         }
@@ -113,10 +118,6 @@ class ItemViewHolder extends ViewHolder implements View.OnClickListener,
         if (id < 1) {
             return false;
         }
-        // TODO
-        //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-        // Also select the item in question
-        //listView.setItemChecked(pos, true);
 
         selectedItemHandler.toggleSelection(id);
         binding.getRoot().setActivated(selectedItemHandler.isItemSelected(id));

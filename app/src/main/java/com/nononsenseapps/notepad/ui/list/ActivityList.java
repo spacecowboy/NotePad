@@ -244,26 +244,6 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
         //}
     }
 
-    /**
-     * Show a snackbar indicating that items were deleted, together with an undo button.
-     */
-    @Override
-    public void deleteTasksWithUndo(Snackbar.Callback dismissCallback,
-            final View.OnClickListener listener, final Task... tasks) {
-        CharSequence text;
-        try {
-            text = getResources().getQuantityString(R.plurals.notedeleted_msg, tasks.length,
-                    tasks.length);
-        } catch (Exception e) {
-            // Protect against faulty translations
-            text = getResources().getString(R.string.deleted);
-        }
-        Snackbar.make(mFab, text, Snackbar.LENGTH_LONG)
-                .setAction(R.string.undo, listener)
-                .setCallback(dismissCallback)
-                .show();
-    }
-
     public void addTask() {
         addTaskInList("", ListHelper.getARealList(this, mCurrentList));
     }

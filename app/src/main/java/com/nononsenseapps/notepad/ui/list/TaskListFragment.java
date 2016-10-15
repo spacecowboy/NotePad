@@ -19,6 +19,7 @@ package com.nononsenseapps.notepad.ui.list;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.database.Cursor;
@@ -26,18 +27,18 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.view.ActionMode;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.util.Log;
-import android.view.ActionMode;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -46,22 +47,28 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.data.model.sql.DAO;
 import com.nononsenseapps.notepad.data.model.sql.Task;
 import com.nononsenseapps.notepad.data.model.sql.TaskList;
 import com.nononsenseapps.notepad.data.receiver.SyncStatusMonitor;
 import com.nononsenseapps.notepad.data.service.gtasks.SyncHelper;
 import com.nononsenseapps.notepad.ui.common.DialogDeleteCompletedTasks;
+import com.nononsenseapps.notepad.ui.common.DialogMoveToList;
 import com.nononsenseapps.notepad.ui.common.DialogPassword;
 import com.nononsenseapps.notepad.ui.common.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.ui.common.MenuStateController;
+import com.nononsenseapps.notepad.util.ArrayHelper;
 import com.nononsenseapps.notepad.util.AsyncTaskHelper;
 import com.nononsenseapps.notepad.util.SharedPreferencesHelper;
 
 import java.security.InvalidParameterException;
-import java.util.Map;
+import java.util.Collection;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class TaskListFragment extends Fragment
-        implements OnSharedPreferenceChangeListener, SyncStatusMonitor.OnSyncStartStopListener {
+        implements OnSharedPreferenceChangeListener, SyncStatusMonitor.OnSyncStartStopListener,
+        ActionMode.Callback {
 
     // Must be less than -1
     public static final String LIST_ALL_ID_PREF_KEY = "show_all_tasks_choice_id";
@@ -92,9 +99,8 @@ public class TaskListFragment extends Fragment
 
     private ActionMode mMode;
     private SwipeRefreshLayout mSwipeRefreshLayout;
-    private boolean mDeleteWasUndone = false;
     private ItemTouchHelper touchHelper;
-    private final SelectedItemHandler selectedItemHandler = new SelectedItemHandler();
+    private SelectedItemHandler selectedItemHandler;
 
     public TaskListFragment() {
         super();
@@ -253,56 +259,30 @@ public class TaskListFragment extends Fragment
     /**
      * Delete tasks and display a snackbar with an undo action
      *
-     * @param taskMap
      */
-    private void deleteTasks(final Map<Long, Task> taskMap) {
-        final Task[] tasks = taskMap.values().toArray(new Task[taskMap.size()]);
-
+    private void deleteTasks(final Set<Long> orgItemIds) {
         // If any are locked, ask for password first
         final boolean locked = SharedPreferencesHelper.isPasswordSet(getActivity());
 
-        // Reset undo flag
-        mDeleteWasUndone = false;
-
-        // Dismiss callback
-        final Snackbar.Callback dismissCallback = new Snackbar.Callback() {
-            @Override
-            public void onDismissed(Snackbar snackbar, int event) {
-                // Do nothing if dismissed because action was pressed
-                // Dismiss wil be called more than once if undo is pressed
-                if (Snackbar.Callback.DISMISS_EVENT_ACTION != event && !mDeleteWasUndone) {
-                    // Delete them
-                    AsyncTaskHelper.background(new AsyncTaskHelper.Job() {
-                        @Override
-                        public void doInBackground() {
-                            for (Task t : tasks) {
-                                try {
-                                    t.delete(getActivity());
-                                } catch (Exception ignored) {
-                                }
-                            }
-                        }
-                    });
-                }
-            }
-        };
-
-        // Undo callback
-        final View.OnClickListener undoListener = new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mDeleteWasUndone = true;
-                // Returns removed items to view
-                // TODO jonas
-                // mAdapter.reset();
-            }
-        };
+        // copy to avoid threading issues
+        final Set<Long> itemIds = new TreeSet<>();
+        itemIds.addAll(orgItemIds);
 
         final PasswordConfirmedListener pListener = new PasswordConfirmedListener() {
             @Override
             public void onPasswordConfirmed() {
-                removeTasksFromList(tasks);
-                mListener.deleteTasksWithUndo(dismissCallback, undoListener, tasks);
+                AsyncTaskHelper.background(new AsyncTaskHelper.Job() {
+                    @Override
+                    public void doInBackground() {
+                        for (Long id: itemIds) {
+                            try {
+                                Task.delete(id, getActivity());
+                            } catch (Exception ignored) {
+                                Log.e(TAG, "doInBackground:" + ignored.getMessage());
+                            }
+                        }
+                    }
+                });
             }
         };
 
@@ -312,15 +292,8 @@ public class TaskListFragment extends Fragment
             delpf.show(getFragmentManager(), "multi_delete_verify");
         } else {
             // Just run it directly
-            removeTasksFromList(tasks);
-            mListener.deleteTasksWithUndo(dismissCallback, undoListener, tasks);
-        }
-    }
-
-    private void removeTasksFromList(Task... tasks) {
-        for (Task task : tasks) {
-            // TODO jonas
-            // mAdapter.remove(mAdapter.getItemPosition(task._id));
+            Log.d(TAG, "deleteTasks: run it");
+            pListener.onPasswordConfirmed();
         }
     }
 
@@ -367,6 +340,8 @@ public class TaskListFragment extends Fragment
         super.onCreate(savedState);
 
         setHasOptionsMenu(true);
+
+        selectedItemHandler = new SelectedItemHandler((AppCompatActivity) getActivity(), this);
 
         syncStatusReceiver = new SyncStatusMonitor();
 
@@ -435,15 +410,6 @@ public class TaskListFragment extends Fragment
         // Get the global list settings
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
 
-        // Load pref for item height
-        //mRowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
-        //mHideCheckbox = prefs.getBoolean(getString(R.string.pref_hidecheckboxes), false);
-
-        // mSortType = prefs.getString(getString(R.string.pref_sorttype),
-        // getString(R.string.default_sorttype));
-        // mListType = prefs.getString(getString(R.string.pref_listtype),
-        // getString(R.string.default_listtype));
-
         mCallback = new LoaderCallbacks<Cursor>() {
             @Override
             public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
@@ -497,12 +463,6 @@ public class TaskListFragment extends Fragment
             @Override
             public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
                 if (loader.getId() == LOADER_TASKS) {
-                    Log.d(TAG,
-                            "onLoadFinished() called");
-                    for (int i = 0; i < c.getCount(); i++) {
-                        c.moveToPosition(i);
-                        Log.d(TAG, "onLoadFinished " + i + ": " + c.getLong(0));
-                    }
                     mAdapter.swapCursor(c);
                 }
             }
@@ -608,14 +568,6 @@ public class TaskListFragment extends Fragment
                 mSortType = null;
                 reload = true;
             }
-           /* else if (key.equals(getString(R.string.key_pref_item_max_height))) {
-                mRowCount = prefs.getInt(key, 3);
-                reload = true;
-            } */
-      /*else if (key.equals(getString(R.string.pref_hidecheckboxes))) {
-        mHideCheckbox = prefs.getBoolean(key, false);
-        reload = true;
-      }*/
 
             if (reload && mCallback != null) {
                 getLoaderManager().restartLoader(LOADER_TASKS, null, mCallback);
@@ -658,6 +610,98 @@ public class TaskListFragment extends Fragment
         return mListId;
     }
 
+    @Override
+    public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
+        actionMode.getMenuInflater().inflate(R.menu.fragment_tasklist_context, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onPrepareActionMode(ActionMode actionMode, Menu menu) {
+        return false;
+    }
+
+    @Override
+    public boolean onActionItemClicked(ActionMode actionMode, MenuItem item) {
+        // Respond to clicks on the actions in the CAB
+        final boolean finish;
+        int itemId = item.getItemId();
+        if (itemId == R.id.menu_delete) {
+            deleteTasks(selectedItemHandler.getSelected());
+            finish = true;
+        }
+        else if (itemId == R.id.menu_switch_list) {
+            // show move to list dialog
+            DialogMoveToList.getInstance(selectedItemHandler.getSelected())
+                    .show(getFragmentManager(), "move_to_list_dialog");
+            finish = true;
+        } else if (itemId == R.id.menu_share) {
+            shareSelected(selectedItemHandler.getSelected());
+            finish = true;
+        } else {
+            finish = false;
+        }
+
+        if (finish) {
+            actionMode.finish(); // Action picked, so close the CAB
+        }
+        return finish;
+    }
+
+    private void shareSelected(Collection<Long> orgItemIds) {
+        // This solves threading issues
+        final long[] itemIds = ArrayHelper.toArray(orgItemIds);
+
+        AsyncTaskHelper.background(new AsyncTaskHelper.Job() {
+            @Override
+            public void doInBackground() {
+                final StringBuilder shareSubject = new StringBuilder();
+                final StringBuilder shareText = new StringBuilder();
+
+                final String whereId = new StringBuilder(Task.Columns._ID)
+                        .append(" IN (").append(DAO.arrayToCommaString(itemIds))
+                        .append(")").toString();
+
+                Cursor c = getContext().getContentResolver().query(Task.URI,
+                        new String[] {Task.Columns._ID, Task.Columns.TITLE, Task.Columns.NOTE},
+                        whereId, null, null);
+
+                if (c != null) {
+                    while (c.moveToNext()) {
+                        if (shareText.length() > 0) {
+                            shareText.append("\n\n");
+                        }
+                        if (shareSubject.length() > 0) {
+                            shareSubject.append(", ");
+                        }
+
+                        shareSubject.append(c.getString(1));
+                        shareText.append(c.getString(1));
+
+                        if (!c.getString(2).isEmpty()) {
+                            shareText.append("\n").append(c.getString(2));
+                        }
+                    }
+
+                    c.close();
+                }
+
+                final Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                shareIntent.setType("text/plain");
+                shareIntent.putExtra(Intent.EXTRA_TEXT, shareText.toString());
+                shareIntent.putExtra(Intent.EXTRA_SUBJECT, shareSubject.toString());
+                startActivity(shareIntent);
+            }
+        });
+    }
+
+    @Override
+    public void onDestroyActionMode(ActionMode actionMode) {
+        //jonas
+        selectedItemHandler.clear();
+        mAdapter.notifyDataSetChanged();
+    }
+
     /**
      * This interface must be implemented by activities that contain TaskListFragments to allow an
      * interaction in this fragment to be communicated to the activity and potentially other fragments
@@ -665,12 +709,6 @@ public class TaskListFragment extends Fragment
      */
     public interface TaskListCallbacks {
         void openTask(final Uri uri, final long listId, final View origin);
-
-        /**
-         * Show a snackbar indicating that items were deleted, together with an undo button.
-         */
-        void deleteTasksWithUndo(Snackbar.Callback dismissCallback, View.OnClickListener listener,
-                                 Task... tasks);
     }
 
     class DragHandler extends ItemTouchHelper.Callback {
