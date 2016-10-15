@@ -17,9 +17,21 @@
 
 package com.nononsenseapps.notepad.util;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 public class ArrayHelper {
 
     public static <T> T[] toArray(T... items) {
         return items;
+    }
+
+    public static long[] toArray(Collection<Long> longs) {
+        Iterator<Long> it = longs.iterator();
+        long[] result = new long[longs.size()];
+        for (int i = 0; i < result.length; i++) {
+            result[i] = it.next();
+        }
+        return result;
     }
 }

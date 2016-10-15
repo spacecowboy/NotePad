@@ -39,35 +39,24 @@ import com.nononsenseapps.notepad.data.model.sql.DAO;
 import com.nononsenseapps.notepad.data.model.sql.Task;
 import com.nononsenseapps.notepad.data.model.sql.TaskList;
 import com.nononsenseapps.notepad.databinding.FragmentDialogMovetolistBinding;
+import com.nononsenseapps.notepad.util.ArrayHelper;
+import com.nononsenseapps.notepad.util.AsyncTaskHelper;
+
+import java.util.Collection;
 
 public class DialogMoveToList extends DialogFragment {
 
-	// public interface EditListDialogListener {
-	// void onFinishEditDialog(long id);
-	// }
-
 	static final String TASK_IDS = "task_ids";
-
-	private TaskList mTaskList;
 
 	private long[] taskIds = null;
 	private FragmentDialogMovetolistBinding binding;
 
-	// private EditListDialogListener listener;
 
-	public static DialogMoveToList getInstance(final Long... tasks) {
-		long[] taskIds = new long[tasks.length];
-		for (int i = 0; i < tasks.length; i++) {
-			taskIds[i] = tasks[i].longValue();
-		}
-
-		return getInstance(taskIds);
-	}
-
-	public static DialogMoveToList getInstance(final long... taskIds) {
+	public static DialogMoveToList getInstance(final Collection<Long> taskIds) {
 		DialogMoveToList dialog = new DialogMoveToList();
 		Bundle args = new Bundle();
-		args.putLongArray(TASK_IDS, taskIds);
+        // To array fixes threading issues
+		args.putLongArray(TASK_IDS, ArrayHelper.toArray(taskIds));
 		dialog.setArguments(args);
 		return dialog;
 	}
@@ -165,35 +154,20 @@ public class DialogMoveToList extends DialogFragment {
 	}
 
 	void moveItems(final long toListId, final long[] taskIds) {
-        // TODO do in background
-		// for (long id: taskIds) {
-		// final Cursor c =
-		// getActivity().getContentResolver().query(Task.getUri(id),
-		// Task.Columns.FIELDS, null, null, null);
-		//
-		// if (c.moveToFirst()) {
-		// Task t = new Task(c);
-		// // Remove from old location
-		// t.delete(getActivity());
-		// // Reset, and set new list
-		// t.resetForInsertion();
-		// t.dblist = toListId;
-		// // And save anew
-		// t.save(getActivity());
-		// }
-		//
-		// c.close();
-		// }
+        final ContentValues val = new ContentValues();
+        val.put(Task.Columns.DBLIST, toListId);
 
-		final ContentValues val = new ContentValues();
-		val.put(Task.Columns.DBLIST, toListId);
+        // where _ID in (1, 2, 3)
+        final String whereId = new StringBuilder(Task.Columns._ID)
+                .append(" IN (").append(DAO.arrayToCommaString(taskIds))
+                .append(")").toString();
 
-		// where _ID in (1, 2, 3)
-		final String whereId = new StringBuilder(Task.Columns._ID)
-				.append(" IN (").append(DAO.arrayToCommaString(taskIds))
-				.append(")").toString();
-
-		getActivity().getContentResolver().update(Task.URI, val, whereId, null);
+        AsyncTaskHelper.background(new AsyncTaskHelper.Job() {
+            @Override
+            public void doInBackground() {
+                getActivity().getContentResolver().update(Task.URI, val, whereId, null);
+            }
+        });
 	}
 
 	void okClicked() {

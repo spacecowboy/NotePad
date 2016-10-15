@@ -217,6 +217,18 @@ public class Task extends DAO {
 				.withAppendedPath(URI_WRITE_MOVEITEMRIGHT, Long.toString(_id));
 	}
 
+    public static int delete(final long id, Context context) {
+        if (id > 0) {
+            return context.getContentResolver()
+                    .delete(Uri.withAppendedPath(Uri.withAppendedPath(
+                            Uri.parse(MyContentProvider.SCHEME + MyContentProvider.AUTHORITY),
+                            TABLE_NAME), Long.toString(id)),
+                            null,
+                            null);
+        }
+        throw new IllegalArgumentException("Can only delete positive ids");
+    }
+
 	public static class Columns implements BaseColumns {
 
 		private Columns() {
@@ -346,13 +358,13 @@ public class Task extends DAO {
 			.append(" AFTER UPDATE OF ")
 			.append(arrayToCommaString(new String[] { Columns.TITLE,
 					Columns.NOTE })).append(" ON ").append(TABLE_NAME)
-					
+
 			.append(" WHEN old.")
 			.append(Columns.TITLE).append(" IS NOT new.")
 			.append(Columns.TITLE).append(" OR old.")
 			.append(Columns.NOTE).append(" IS NOT new.")
 			.append(Columns.NOTE)
-			
+
 			.append(" BEGIN ").append(HISTORY_TRIGGER_BODY).append(" END;")
 			.toString();
 	public static final String CREATE_HISTORY_INSERT_TRIGGER = new StringBuilder(
@@ -438,7 +450,7 @@ public class Task extends DAO {
 	 * This is a view which returns the tasks in the specified list with headers
 	 * suitable for dates, if any tasks would be sorted under them. Provider
 	 * hardcodes the sort order for this.
-	 * 
+	 *
 	 * if listId is null, will return for all lists
 	 */
 	public static final String CREATE_SECTIONED_DATE_VIEW(final String listId) {
@@ -742,7 +754,7 @@ public class Task extends DAO {
 
 	/**
 	 * Set first line as title, rest as note.
-	 * 
+	 *
 	 * @param text
 	 */
 	public void setText(final String text) {
@@ -823,7 +835,7 @@ public class Task extends DAO {
 			}
 		}
 	}
-	
+
 	public Task(final JSONObject json) throws JSONException {
 		if (json.has(Columns.TITLE))
 			this.title = json.getString(Columns.TITLE);
@@ -885,7 +897,7 @@ public class Task extends DAO {
 	 * Compares this task to another and returns true if their contents are the
 	 * same. Content is defined as: title, note, duedate, completed != null
 	 * Returns false if title or note are null.
-	 * 
+	 *
 	 * The intended usage is the editor where content and not id's or position
 	 * are of importance.
 	 */
@@ -1129,7 +1141,7 @@ public class Task extends DAO {
 					.format("UPDATE %1$s SET %2$s = 1, %3$s = 2 WHERE %4$s IS new.%4$s;",
 							TABLE_NAME, Columns.LEFT, Columns.RIGHT,
 							Columns._ID))
-						
+
 			.append(posUniqueConstraint("new", "Moving list, new positions not unique/ordered"))
 			.append(posUniqueConstraint("old", "Moving list, old positions not unique/ordered"))
 
@@ -1138,7 +1150,7 @@ public class Task extends DAO {
 	/**
 	 * If moving left, then edgeCol is left and vice-versa. Values should come
 	 * from getMoveValues
-	 * 
+	 *
 	 * 1 = table name 2 = left 3 = right 4 = edgecol 5 = old.left 6 = old.right
 	 * 7 = target.pos (actually target.edgecol) 8 = dblist 9 = old.dblist
 	 */

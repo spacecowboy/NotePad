@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!--
+<?xml version="1.0" encoding="utf-8"?><!--
   Copyright (c) 2015 Jonas Kalderstam.
 
   This program is free software: you can redistribute it and/or modify
@@ -16,28 +15,31 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<FrameLayout android:id="@+id/taskItem"
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="?android:selectableItemBackground"
-    android:minHeight="@dimen/list_item_min_size">
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <include
-        layout="@layout/tasklist_item_card_section"
+    <FrameLayout
+        android:id="@+id/taskItem"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:minHeight="@dimen/list_item_min_size">
 
-    <ImageView
-        android:id="@+id/drag_handle"
-        android:layout_width="@dimen/drag_grip_width"
-        android:layout_height="match_parent"
-        android:layout_gravity="fill_vertical|end"
-        android:scaleType="center"
-        android:src="?ic_reorder_24dp"
-        android:minHeight="@dimen/list_item_min_size"
-        android:paddingRight="4dp"/>
+        <include
+            android:id="@+id/card_section"
+            layout="@layout/tasklist_item_card_section"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <ImageView
+            android:id="@+id/drag_handle"
+            android:layout_width="@dimen/drag_grip_width"
+            android:layout_height="match_parent"
+            android:layout_gravity="fill_vertical|end"
+            android:minHeight="@dimen/list_item_min_size"
+            android:paddingRight="4dp"
+            android:scaleType="center"
+            android:src="?ic_reorder_24dp" />
 
 
-
-</FrameLayout>
+    </FrameLayout>
+</layout>
