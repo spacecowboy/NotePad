@@ -32,7 +32,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager.LoaderCallbacks;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
-import android.support.v4.view.MotionEventCompat;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
@@ -44,11 +43,8 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.data.model.sql.Task;
@@ -61,14 +57,10 @@ import com.nononsenseapps.notepad.ui.common.DialogDeleteCompletedTasks;
 import com.nononsenseapps.notepad.ui.common.DialogPassword;
 import com.nononsenseapps.notepad.ui.common.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.ui.common.MenuStateController;
-import com.nononsenseapps.notepad.ui.common.NoteCheckBox;
 import com.nononsenseapps.notepad.util.AsyncTaskHelper;
 import com.nononsenseapps.notepad.util.SharedPreferencesHelper;
-import com.nononsenseapps.notepad.util.TimeFormatter;
 
 import java.security.InvalidParameterException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.Map;
 
 public class TaskListFragment extends Fragment
@@ -640,6 +632,22 @@ public class TaskListFragment extends Fragment
         mSwipeRefreshLayout.setRefreshing(ongoing);
     }
 
+    public ItemTouchHelper getTouchHelper() {
+        return touchHelper;
+    }
+
+    public int getRowCount() {
+        return mRowCount;
+    }
+
+    public String getSortType() {
+        return mSortType;
+    }
+
+    public TaskListCallbacks getListener() {
+        return mListener;
+    }
+
     /**
      * This interface must be implemented by activities that contain TaskListFragments to allow an
      * interaction in this fragment to be communicated to the activity and potentially other fragments
@@ -653,155 +661,6 @@ public class TaskListFragment extends Fragment
          */
         void deleteTasksWithUndo(Snackbar.Callback dismissCallback, View.OnClickListener listener,
                                  Task... tasks);
-    }
-
-    abstract class ViewHolder extends RecyclerView.ViewHolder {
-        public ViewHolder(View itemView) {
-            super(itemView);
-        }
-
-        public abstract void onBind(Cursor cursor);
-    }
-
-    class HeaderViewHolder extends ViewHolder {
-
-        private final TasklistHeaderBinding binding;
-        private final SimpleDateFormat weekdayFormatter;
-
-
-        public HeaderViewHolder(TasklistHeaderBinding binding) {
-            super(binding.getRoot());
-            this.binding = binding;
-            weekdayFormatter = TimeFormatter.getLocalFormatterWeekday(getContext());
-        }
-
-        @Override
-        public void onBind(final Cursor cursor) {
-            switch (cursor.getString(cursor.getColumnIndex(Task.Columns.TITLE))) {
-                case Task.HEADER_KEY_OVERDUE:
-                    binding.text.setText(getContext().getString(R.string.date_header_overdue));
-                    break;
-                case Task.HEADER_KEY_TODAY:
-                    binding.text.setText(getContext().getString(R.string.date_header_today));
-                    break;
-                case Task.HEADER_KEY_PLUS1:
-                    binding.text.setText(getContext().getString(R.string.date_header_tomorrow));
-                    break;
-                case Task.HEADER_KEY_PLUS2:
-                case Task.HEADER_KEY_PLUS4:
-                case Task.HEADER_KEY_PLUS3:
-                    binding.text.setText(weekdayFormatter.format(new Date(cursor.getLong(4))));
-                    break;
-                case Task.HEADER_KEY_LATER:
-                    binding.text.setText(getContext().getString(R.string.date_header_future));
-                    break;
-                case Task.HEADER_KEY_NODATE:
-                    binding.text.setText(getContext().getString(R.string.date_header_none));
-                    break;
-                case Task.HEADER_KEY_COMPLETE:
-                    binding.text.setText(getContext().getString(R.string.date_header_completed));
-                    break;
-            }
-        }
-    }
-
-    class ItemViewHolder extends ViewHolder implements View.OnClickListener,
-            View.OnLongClickListener {
-
-        private static final String TAG = "ViewHolder";
-        private final TasklistItemRichBinding binding;
-        private final NoteCheckBox checkbox;
-        private final OnCheckedChangeListener checkBoxListener;
-        long id = -1;
-
-        public ItemViewHolder(TasklistItemRichBinding binding) {
-            super(binding.getRoot());
-
-            this.binding = binding;
-            checkbox = (NoteCheckBox) binding.cardSection.getRoot().findViewById(R.id.checkbox);
-
-            itemView.setOnClickListener(this);
-            itemView.setOnLongClickListener(this);
-
-            binding.dragHandle.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(final View v, final MotionEvent event) {
-                    Log.d(TAG, "onTouch() called with: " + "v = [" + v + "], event = [" + event + "]");
-                    if (MotionEventCompat.getActionMasked(event) == MotionEvent.ACTION_DOWN) {
-                        Log.d(TAG, "onTouch: starting Drag");
-                        touchHelper.startDrag(ItemViewHolder.this);
-                    }
-                    return false;
-                }
-            });
-
-            checkBoxListener = new OnCheckedChangeListener() {
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    Task.setCompleted(getContext(), isChecked, ((NoteCheckBox) buttonView).getNoteId());
-                }
-            };
-        }
-
-        @Override
-        public void onBind(final Cursor cursor) {
-            id = cursor.getLong(0);
-
-            // Title
-            binding.cardSection.text.setMaxLines(mRowCount);
-            binding.cardSection.text
-                    .useSecondaryColor(!cursor.isNull(cursor.getColumnIndex(Task.Columns.COMPLETED)));
-            binding.cardSection.text.setTextTitle(cursor.getString(cursor.getColumnIndex(Task.Columns.TITLE)));
-
-            // Note
-            // Only if task it not locked
-            // or only one line
-            if (cursor.getInt(9) != 1 && mRowCount > 1) {
-                binding.cardSection.text.setTextRest(cursor.getString(cursor.getColumnIndex(Task.Columns.NOTE)));
-            } else {
-                binding.cardSection.text.setTextRest("");
-            }
-
-            // Checkbox
-            checkbox.setOnCheckedChangeListener(null);
-            checkbox.setChecked(!cursor.isNull(cursor.getColumnIndex(Task.Columns.COMPLETED)));
-            checkbox.setNoteId(cursor.getLong(0));
-            checkbox.setOnCheckedChangeListener(checkBoxListener);
-            //holder.checkbox.setVisibility(mHideCheckbox ? View.GONE : View.VISIBLE);
-
-            // Due
-            if (cursor.isNull(cursor.getColumnIndex(Task.Columns.DUE))) {
-                binding.cardSection.date.setVisibility(View.GONE);
-            } else {
-                binding.cardSection.date.setVisibility(View.VISIBLE);
-                binding.cardSection.date.setTimeText(cursor.getLong(cursor.getColumnIndex(Task.Columns.DUE)));
-            }
-
-            if (mSortType != null && getString(R.string.const_possubsort).equals(mSortType)) {
-                binding.dragHandle.setVisibility(View.VISIBLE);
-                binding.cardSection.dragPadding.setVisibility(View.VISIBLE);
-            } else {
-                binding.dragHandle.setVisibility(View.GONE);
-                binding.cardSection.dragPadding.setVisibility(View.GONE);
-            }
-        }
-
-        @Override
-        public void onClick(final View v) {
-            if (mListener != null && id > 0) {
-                mListener.openTask(Task.getUri(id), mListId, v);
-            }
-        }
-
-        @Override
-        public boolean onLongClick(final View v) {
-            // TODO
-            //listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-            // Also select the item in question
-            //listView.setItemChecked(pos, true);
-
-            return false;
-        }
     }
 
     class SimpleSectionsAdapter extends RecyclerView.Adapter<ViewHolder> {
@@ -824,12 +683,13 @@ public class TaskListFragment extends Fragment
         public ViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
             switch (viewType) {
                 case headerType:
-                    return new HeaderViewHolder((TasklistHeaderBinding) DataBindingUtil.inflate(LayoutInflater.from(context),
+                    return new HeaderViewHolder(TaskListFragment.this, (TasklistHeaderBinding) DataBindingUtil.inflate(LayoutInflater.from(context),
                             R.layout.tasklist_header, parent, false));
                 case itemType:
                 default:
-                    return new ItemViewHolder((TasklistItemRichBinding) DataBindingUtil.inflate(LayoutInflater.from(context),
-                            R.layout.tasklist_item_rich, parent, false));
+                    return new ItemViewHolder(TaskListFragment.this,
+                            (TasklistItemRichBinding) DataBindingUtil.inflate(LayoutInflater.from(context),
+                            R.layout.tasklist_item_rich, parent, false), mListId);
             }
         }
 
