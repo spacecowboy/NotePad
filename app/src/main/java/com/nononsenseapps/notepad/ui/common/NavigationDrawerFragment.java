@@ -346,6 +346,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             RecyclerView.ViewHolder vh;
             LayoutInflater inflater = LayoutInflater.from(getContext());
+            Log.i(TAG, "NavigationDrawerFragment.onCreateViewHolder switchcase uses viewType which is: "
+                    + viewType + "");
             switch (viewType) {
                 case VIEWTYPE_TOPLEVEL:
                     vh = new TopLevelItemViewHolder(inflater.inflate(R.layout

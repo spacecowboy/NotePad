@@ -22,6 +22,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.util.ActivityHelper;
@@ -32,6 +33,7 @@ import com.nononsenseapps.notepad.util.ActivityHelper;
 public abstract class ActivityBase extends AppCompatActivity {
 
     private boolean shouldRestart = false;
+    private final static String TAG = "RICKSMESSAGE";
     private final SharedPreferences.OnSharedPreferenceChangeListener mThemeLocaleChangeListener =
             new SharedPreferences.OnSharedPreferenceChangeListener() {
         @Override
@@ -39,6 +41,7 @@ public abstract class ActivityBase extends AppCompatActivity {
             if (key.equals(getString(R.string.const_preference_theme_key)) || key.equals
                     (getString(R.string.const_preference_locale_key))) {
                 onThemeOrLocaleChange();
+                Log.i(TAG, "ln#44, ActivityBase.onSharedPreferenceChanged calls onThemeOrLocaleChange() in if()");
             }
         }
     };
@@ -50,18 +53,25 @@ public abstract class ActivityBase extends AppCompatActivity {
 
         PreferenceManager.getDefaultSharedPreferences(this)
                 .registerOnSharedPreferenceChangeListener(mThemeLocaleChangeListener);
+        Log.i(TAG, "ln#56, ActivityBase.onCreate calls useConfiguration();\n" + "// super.onCreate(savedInstanceState) " +
+                " // PreferenceManager.getDefaultSharedPreferences(this)\n" +
+                ".registerOnSharedPreferenceChangeListener(mThemeLocaleChangeListener) where mThemeLocaleChangeListener is: " + mThemeLocaleChangeListener);
     }
 
     protected void useConfiguration() {
         ActivityHelper.useUserConfigurationFullscreen(this);
+        Log.i(TAG, "ln#61, ActivityBase.useConfiguration ActivityHelper.useUserConfigurationFullscreen(this)");
     }
 
     @Override
     protected void onDestroy() {
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(mThemeLocaleChangeListener);
-
+        Log.i(TAG, "ln#68, ActivityBase.onDestroy calls PreferenceManager.getDefaultSharedPreferences(this)\n" +
+                ".unregisterOnSharedPreferenceChangeListener(mThemeLocaleChangeListener) and" +
+                "mThemeLocaleChangeListener is: " + mThemeLocaleChangeListener);
         super.onDestroy();
+
     }
 
     @Override
@@ -69,8 +79,12 @@ public abstract class ActivityBase extends AppCompatActivity {
         if (shouldRestart) {
             shouldRestart = false;
             restartActivity();
+            Log.i(TAG, "ln#80, ActivityBase.onResume in if(shouldRestart) sets shouldRestart to false" +
+                    "and calls restartActivity()");
         }
+        Log.i(TAG, "ln#83, ActivityBase.onResume calls super.onResume()");
         super.onResume();
+
     }
 
     /**
@@ -84,6 +98,8 @@ public abstract class ActivityBase extends AppCompatActivity {
         finish();
         overridePendingTransition(0, 0);
         startActivity(intent);
+        Log.i(TAG, "ln#96, ActivityBase.restartActivity Restarts the activity using the same intent" +
+                "that started it. Disables animations to get a seamless restart.");
     }
 
     /**
@@ -91,5 +107,6 @@ public abstract class ActivityBase extends AppCompatActivity {
      */
     protected void onThemeOrLocaleChange() {
         shouldRestart = true;
+        Log.i(TAG, "ln#104, ActivityBase.onThemeOrLocaleChange sets shouldRestart to true on a change when called");
     }
 }
