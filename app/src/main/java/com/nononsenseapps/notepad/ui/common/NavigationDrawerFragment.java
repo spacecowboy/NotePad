@@ -44,7 +44,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.util.Log;
 
 import com.amulyakhare.textdrawable.TextDrawable;
 import com.amulyakhare.textdrawable.util.ColorGenerator;
@@ -81,8 +80,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
     private static final long EXTRA_ID_SEPARATOR_1 = -1001;
     private static final long EXTRA_ID_SEPARATOR_2 = -1002;
     private static final int LOADER_NAVDRAWER_LISTS = 0;
-    private static final String TAG = "RICKSMESSAGE";
-
 
     /**
      * Per the design guidelines, you should show the drawer on launch until the user manually
@@ -210,8 +207,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         // TODO add edit lists item?
         mAdapter = new Adapter(toArray(new TopLevelItem(), new ExtraHeaderItem(TaskListFragment
                 .LIST_ID_ALL, R.string.show_from_all_lists)), toArray(new SeparatorFooter
-                        (EXTRA_ID_SEPARATOR_1), new CreateListFooter(), new SeparatorFooter
-                        (EXTRA_ID_SEPARATOR_2), new SettingsFooterItem(), new AboutFooterItem(),
+                (EXTRA_ID_SEPARATOR_1), new CreateListFooter(), new SeparatorFooter
+                (EXTRA_ID_SEPARATOR_2), new SettingsFooterItem(), new AboutFooterItem(),
                 new ChangelogFooterItem()));
 
         list.setAdapter(mAdapter);
@@ -289,8 +286,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
                 mAdapter.setData(c);
                 break;
         }
-        Log.i(TAG,"NavigationDrawerFragment.onLoadFinished(Loader<Cursor> loader, Cursor c) switch(loader.getId) that on LOADER" +
-                " NAVDRAWER_LISTS and calls mAdapter.setData(c)");
     }
 
     /**
@@ -307,13 +302,11 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
                 mAdapter.setData(null);
                 break;
         }
-        Log.i(TAG,"NavigationDrawerFragment.onLoaderReset switch(loader.getId) that on LOADER" +
-                " NAVDRAWER_LISTS calls mAdapter.setData(null)");
     }
 
     public interface NavigationDrawerCallbacks {
-
         void openList(long id);
+
         void createList();
         void editList(long id);
 
@@ -321,7 +314,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 
         void openAbout();
         void openChangelog();
-
     }
 
     /**
@@ -348,14 +340,14 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         public void setData(Cursor cursor) {
             mCursor = cursor;
             notifyDataSetChanged();
-            Log.i(TAG,"NavigationDrawerFragment.setData sets mCursor = cursor, cursor is: " + cursor
-                    + " and calls notifyDataSetChanged()");
         }
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             RecyclerView.ViewHolder vh;
             LayoutInflater inflater = LayoutInflater.from(getContext());
+            Log.i(TAG, "NavigationDrawerFragment.onCreateViewHolder switchcase uses viewType which is: "
+                    + viewType + "");
             switch (viewType) {
                 case VIEWTYPE_TOPLEVEL:
                     vh = new TopLevelItemViewHolder(inflater.inflate(R.layout
@@ -379,8 +371,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
                             .navigation_drawer_list_item, parent, false));
                     break;
             }
-            Log.i(TAG, "NavigationDrawerFragment.onCreateViewHolder switchcase uses viewType which is: "
-                    + viewType + " and parent which is: " + parent + " and uses both to set and return vh which is: " + vh);
             return vh;
         }
 
@@ -402,24 +392,15 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
                     ((CursorViewHolder) holder).bind(mCursor);
                     break;
             }
-            Log.i(TAG, "NavigationDrawerFragment.onCreateViewHolder switchcase(holder.getItemViewType()) // " +
-                    "some cases use position which is: " + position + " and RecyclerView.ViewHolder" +
-                    "holder which is: " + holder);
         }
 
         @Override
         public int getItemViewType(int position) {
             if (isHeader(position)) {
-                Log.i(TAG, "NavigationDrawerFragment.getItemViewType if (isHeader(position)) it returns headers[position].getViewType()" +
-                        "\nand uses position wjhich is: " + position);
                 return headers[position].getViewType();
             } else if (isFooter(position)) {
-                Log.i(TAG, "NavigationDrawerFragment.getItemViewType if (isFooter(position)) it returns footers[actualPosition(position)].getViewType()" +
-                        "\nand uses position wjhich is: " + position);
                 return footers[actualPosition(position)].getViewType();
             } else {
-                Log.i(TAG, "NavigationDrawerFragment.getItemViewType else it returns VIEWTYPE_ITEM" +
-                        "\nand uses VIEWTYPE_ITEM wjhich is: " + VIEWTYPE_ITEM);
                 return VIEWTYPE_ITEM;
             }
         }
@@ -427,18 +408,10 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         @Override
         public long getItemId(int position) {
             if (isHeader(position)) {
-                Log.i(TAG, "NavigationDrawerFragment.getItemId else it returns headers[position].getItemId()" +
-                        "\nand uses position which is: " + position + "// \nand headers[position].getItemId()" +
-                        " is: " + headers[position].getItemId());
                 return headers[position].getItemId();
             } else if (isFooter(position)) {
-                Log.i(TAG, "NavigationDrawerFragment.getItemId else it returns footers[actualPosition(position)].getItemId()" +
-                        "\nand uses position which is: " + position + "// \nand footers[actualPosition(position)].getItemId()" +
-                        " is: " + footers[actualPosition(position)].getItemId());
                 return footers[actualPosition(position)].getItemId();
             } else {
-                Log.i(TAG, "NavigationDrawerFragment.getItemId else it returns mCursor.getLong(0)" +
-                        "\nand uses mCursor.getLong(0) which is: " + mCursor.getLong(0));
                 mCursor.moveToPosition(actualPosition(position));
                 return mCursor.getLong(0);
             }
@@ -450,9 +423,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             if (mCursor != null) {
                 result += mCursor.getCount();
             }
-            Log.i(TAG, "NavigationDrawerFragment.getItemCount sets result = headers.length + footers.length which is: " + result
-                    + "\nand if(mCursor != null) which is: " + (mCursor != null) + " then result +=" +
-                    " mCursor.getCount() and returns result which is now: " + result);
             return result;
         }
 
@@ -526,9 +496,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
                 // Then try folder
                 result = SharedPreferencesHelper.getSdDir(getActivity());
             }
-            Log.i(TAG, "NavigationDrawerFragment.getAvatarName sets result = \nSharedPreferencesHelper.getGoogleAccount(getActivity()) for if 1 which is: " + result
-                    + "\nor SharedPreferencesHelper.getDropboxAccount(getActivity()) for if 2 which is: " + result
-                    + "\nor SharedPreferencesHelper.getSdDir(getActivity()) for if 3 which is now: " + result);
+
             return result;
         }
 
@@ -553,19 +521,16 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         }
 
         public String getTitle() {
-            Log.i(TAG, "NavigationDrawerFragment.getTitle returns getString(mTitleRes) which is: " + getString(mTitleRes));
             return getString(mTitleRes);
         }
 
         @Override
         public long getItemId() {
-            Log.i(TAG, "NavigationDrawerFragment.getItemId returns mId which is: " + mId);
             return mId;
         }
 
         @Override
         public int getViewType() {
-            Log.i(TAG, "NavigationDrawerFragment.getViewType returns VIEWTYPE_EXTRA_HEADER_ITEM which is: " + VIEWTYPE_EXTRA_HEADER_ITEM);
             return VIEWTYPE_EXTRA_HEADER_ITEM;
         }
 
@@ -674,9 +639,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             super(itemView);
             mAvatar = (ImageView) itemView.findViewById(R.id.main_avatar);
             mText1 = (TextView) itemView.findViewById(android.R.id.text1);
-            Log.i(TAG, "NavigationDrawerFragment.TopLevelItemViewHolder which sets " +
-                    "\nmAvatar = (ImageView) itemView.findViewById(R.id.main_avatar) which is: " + mAvatar +
-                    "\nmText1 = (TextView) itemView.findViewById(android.R.id.text1) which is: " + mText1);
         }
 
         public void bind(TopLevelItem topLevelItem) {
@@ -685,17 +647,9 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             TextDrawable drawable = TextDrawable.builder()
                     .buildRound(imageName.toUpperCase().substring(0, 1), ColorGenerator.MATERIAL
                             .getColor(imageName));
-            Log.i(TAG, "NavigationDrawerFragment.bind(TopLevelItemViewHolder) which sets " +
-                    "\nname = topLevelItem.getAvatarName() which is: " + name + " and " +
-                    "\nimageName = (name.isEmpty() || name.startsWith(\"/\")) ? \"N\" : name which is: " + imageName +
-                    "\nTextDrawable drawable = TextDrawable.builder().buildRound(imageName.toUpperCase().substring(0, 1), " +
-                    "\n                             ColorGenerator.MATERIAL.getColor(imageName)) " +
-                    "\nwhich is: " + drawable);
+
             mAvatar.setImageDrawable(drawable);
             mText1.setText(name);
-            Log.i(TAG, "NavigationDrawerFragment.bind(TopLevelItem topLevelItem) which calls " +
-                    "\nmAvatar.setImageDrawable(drawable) and " +
-                    "\nmText1.setText(name)");
         }
     }
 
@@ -721,13 +675,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             TextDrawable drawable = TextDrawable.builder()
                     .buildRound(mItem.getTitle().toUpperCase().substring(0, 1), ColorGenerator
                             .MATERIAL.getColor(mItem.getTitle()));
-            Log.i(TAG, "NavigationDrawerFragment.bind(TopLevelItemViewHolder) which sets " +
-                    "\nmItem = headerItem; which is: " + mItem + " and calls" +
-                    "\nmTitle.setText(headerItem.mTitleRes) and " +
-                    "\nmCount.setVisibility(View.GONE)" +
-                    "\nTextDrawable drawable = TextDrawable.builder().buildRound(mItem.getTitle().toUpperCase().substring(0, 1), " +
-                    "\n                             ColorGenerator.MATERIAL.getColor(mItem.getTitle())) " +
-                    "\nwhich is: " + drawable + " then calls mAvatar.setImageDrawable(drawable)");
+
             mAvatar.setImageDrawable(drawable);
         }
 
@@ -754,7 +702,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             mCount.setVisibility(View.GONE);
             if (headerItem.getIconRes() < 1) {
                 TextDrawable drawable = TextDrawable.builder().buildRound(mItem.getTitle()
-                                .toUpperCase().substring(0, 1),
+                        .toUpperCase().substring(0, 1),
                         ColorGenerator.MATERIAL.getColor(mItem.getTitle()));
 
                 mAvatar.setImageDrawable(drawable);
