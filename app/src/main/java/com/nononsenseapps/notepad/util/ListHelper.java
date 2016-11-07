@@ -22,6 +22,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.data.local.sql.LegacyDBHelper;
@@ -34,6 +35,7 @@ import com.nononsenseapps.notepad.ui.list.TaskListFragment;
  * Simple utility class to hold some general functions.
  */
 public class ListHelper {
+    private final static String TAG = "RICKSMESSAGE";
 
     /**
      * If temp list is > 0, returns it if it exists. Else, checks if a default list is set
@@ -44,14 +46,18 @@ public class ListHelper {
         long returnList = tempList;
         if (returnList == TaskListFragment.LIST_ID_ALL) {
             // This is fine
+            Log.i(TAG, "ln#49, listHelper.getAViewList if statement that returns returnList which is: " + returnList);
             return returnList;
         }
         // Otherwise, try and get a real list
         returnList = getARealList(context, returnList);
+        Log.i(TAG, "ln#54, listHelper.getAViewList sets returnList = getARealList(context, returnList) which returnList is: " + returnList);
 
         if (returnList < 1) {
             // Return all in this case
             returnList = TaskListFragment.LIST_ID_ALL;
+            Log.i(TAG, "ln#59, listHelper.getAViewList if(returnList < 1) than return" +
+                    " returnList = TaskListFragment.LIST_ID_ALL // returnList is: " + returnList);
         }
 
         return returnList;
@@ -135,6 +141,7 @@ public class ListHelper {
                 retval = intent.getLongExtra(Task.Columns.DBLIST, -1);
             }
         }
+        Log.i(TAG, "ln#144, listHelper.getListId returns retval which is: " + retval);
         return retval;
     }
 }

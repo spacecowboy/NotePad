@@ -47,6 +47,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Toast;
+import android.util.Log;
 
 import com.android.datetimepicker.date.DatePickerDialog;
 import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
@@ -76,6 +77,7 @@ import static com.nononsenseapps.notepad.util.ListHelper.getARealList;
  */
 public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 
+    private final static String TAG = "RICKSMESSAGE";
     // Id of task to open
     public static final String ARG_ITEM_ID = "item_id";
     // If no id is given, a string can be accepted as initial state
@@ -745,6 +747,8 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
             NotificationItemHelper.setup(this, notificationList, nv, not, mTask);
 
             notificationList.addView(nv);
+            Log.i(TAG, "Add notificaation @TaskDetailFragment Ln#750");
+
         }
     }
 

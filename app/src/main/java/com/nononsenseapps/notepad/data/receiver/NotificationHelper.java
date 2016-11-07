@@ -32,10 +32,11 @@ import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.data.model.sql.Task;
-import com.nononsenseapps.notepad.util.Log;
+//import com.nononsenseapps.notepad.util.Log; AK comment out original code
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -54,7 +55,8 @@ public class NotificationHelper extends BroadcastReceiver {
 	private static final String ACTION_COMPLETE = "com.nononsenseapps.notepad.ACTION.COMPLETE";
 	private static final String ACTION_SNOOZE = "com.nononsenseapps.notepad.ACTION.SNOOZE";
 	private static final String ACTION_RESCHEDULE = "com.nononsenseapps.notepad.ACTION.RESCHEDULE";
-	private static final String TAG = "nononsenseapps.NotificationHelper";
+    private final static String TAG = "RICKSMESSAGE";
+	//private static final String TAG = "nononsenseapps.NotificationHelper"; AK comment out
 
 	private static ContextObserver observer = null;
 
@@ -100,7 +102,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		final NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		Log.d(TAG, "Number of notifications: " + notifications.size());
+		//Log.d(TAG, "Number of notifications: " + notifications.size());
 
 		// If empty, cancel
 		if (notifications.isEmpty()) {
@@ -289,6 +291,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		PendingIntent completeIntent = PendingIntent.getBroadcast(context, 0,
 				new Intent(ACTION_COMPLETE, note.getUri()).putExtra(ARG_TASKID,
 						note.taskID), PendingIntent.FLAG_UPDATE_CURRENT);
+        Log.i(TAG, "Action to Complete @ NotificationHelper Ln#294");
 
 		// Action to snooze
 		PendingIntent snoozeIntent = PendingIntent.getBroadcast(context, 0,
@@ -302,6 +305,7 @@ public class NotificationHelper extends BroadcastReceiver {
 				.setStyle(
 						new NotificationCompat.BigTextStyle()
 								.bigText(note.taskNote));
+        Log.i(TAG, "Build notifications at NotificationHelper Ln# 307");
 
 		// Delete intent on non-location repeats
 		builder.setDeleteIntent(deleteIntent);
