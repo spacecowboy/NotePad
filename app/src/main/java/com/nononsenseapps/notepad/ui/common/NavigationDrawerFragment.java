@@ -207,8 +207,8 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         // TODO add edit lists item?
         mAdapter = new Adapter(toArray(new TopLevelItem(), new ExtraHeaderItem(TaskListFragment
                 .LIST_ID_ALL, R.string.show_from_all_lists)), toArray(new SeparatorFooter
-                (EXTRA_ID_SEPARATOR_1), new CreateListFooter(), new SeparatorFooter
-                (EXTRA_ID_SEPARATOR_2), new SettingsFooterItem(), new AboutFooterItem(),
+                        (EXTRA_ID_SEPARATOR_1), new CreateListFooter(), new SeparatorFooter
+                        (EXTRA_ID_SEPARATOR_2), new SettingsFooterItem(), new AboutFooterItem(),
                 new ChangelogFooterItem()));
 
         list.setAdapter(mAdapter);
@@ -346,8 +346,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             RecyclerView.ViewHolder vh;
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            Log.i(TAG, "NavigationDrawerFragment.onCreateViewHolder switchcase uses viewType which is: "
-                    + viewType + "");
             switch (viewType) {
                 case VIEWTYPE_TOPLEVEL:
                     vh = new TopLevelItemViewHolder(inflater.inflate(R.layout
@@ -702,7 +700,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
             mCount.setVisibility(View.GONE);
             if (headerItem.getIconRes() < 1) {
                 TextDrawable drawable = TextDrawable.builder().buildRound(mItem.getTitle()
-                        .toUpperCase().substring(0, 1),
+                                .toUpperCase().substring(0, 1),
                         ColorGenerator.MATERIAL.getColor(mItem.getTitle()));
 
                 mAvatar.setImageDrawable(drawable);
