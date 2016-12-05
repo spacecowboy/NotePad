@@ -27,6 +27,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.util.Log;
 
 import com.nononsenseapps.notepad.ui.settings.ActivitySettings;
 import com.nononsenseapps.notepad.data.receiver.NotificationHelper;
@@ -54,6 +55,7 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
     private static final String START_LIST_ID = "start_list_id";
     private FloatingActionButton mFab;
     private long mCurrentList = TaskListFragment.LIST_ID_ALL;
+    private static final String TAG = "RICKSMESSAGE";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,23 +90,27 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
         BackgroundSyncScheduler.scheduleSync(this);
         // Sync if appropriate
         OrgSyncService.start(this);
+        Log.i(TAG, "ln#93, ActivityList.onCreate");
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         OrgSyncService.stop(this);
+        Log.i(TAG, "ln#100, ActivityList.onDestroy");
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i(TAG, "ln#106, ActivityList.onResume");
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         OrgSyncService.pause(this);
+        Log.i(TAG, "ln#113, ActivityList.onPause");
     }
 
     @Override
@@ -114,6 +120,7 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
         }
         outState.putLong(START_LIST_ID, mCurrentList);
         super.onSaveInstanceState(outState);
+        Log.i(TAG, "ln#123, ActivityList.onSaveInstanceState calls--maybe delete list issue area--");
     }
 
     private void handleArgs(Bundle savedInstanceState) {
@@ -126,12 +133,15 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
         mListIdToSelect = ListHelper.getAViewList(this, mListIdToSelect);
 
         openList(mListIdToSelect);
+        Log.i(TAG, "ln#136, ActivityList.handleArgs gets mListIdToSelect which is: " + mListIdToSelect +
+                " and calls openList(mListIdToSelect) ??so possible start point??");
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getMenuInflater().inflate(R.menu.activity_list, menu);
+        Log.i(TAG, "ln#144, ActivityList.onCreateOptionsMenu");
         return true;
     }
 
@@ -140,6 +150,7 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
         // hide manual sort for all item
         menu.findItem(R.id.menu_sort_manual).setVisible(mCurrentList > 0)
                 .setEnabled(mCurrentList > 0);
+        Log.i(TAG, "ln#153, ActivityList.onPrepareOptionsMenu");
         return super.onPrepareOptionsMenu(menu);
     }
 
@@ -159,8 +170,11 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
                 SharedPreferencesHelper.setSortingAlphabetic(this);
                 break;
             default:
+                Log.i(TAG, "ln#173, ActivityList.onOptionsItemSelected default returns super.oOIS(item)");
                 return super.onOptionsItemSelected(item);
         }
+        Log.i(TAG, "ln#176, ActivityList.onOptionsItemSelected switch brings in item which is: " + item
+                + "&& uses item.getItemId() which is" + item.getItemId());
         return true;
     }
 
@@ -174,6 +188,10 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
         mCurrentList = id;
         invalidateOptionsMenu();
         getSupportFragmentManager().beginTransaction().replace(R.id.listfragment_container, TaskListFragment.getInstance(id)).commit();
+        Log.i(TAG, "ln#191, ActivityList.openList(long id) id is: " + id + " && calls mCurrentList = id//"
+                + " invalidateOptionsMenu(); // getSupportFragmentManager(this returns mFragments.getSupportFragmentManager())which is: "
+                + getSupportFragmentManager() + " //.beginTransaction().replace(R.id.listfragment_container," +
+                " TaskListFragment.getInstance(id)).commit()");
     }
 
     @Override
@@ -207,6 +225,8 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
         Intent intent = new Intent();
         intent.setClass(this, ActivitySettings.class);
         startActivity(intent);
+        Log.i(TAG, "ln#227, ActivityList.openSettings() calls Intent intent = new Intent() and intent is: " + intent + "\n"
+                + "// intent.setClass(this, ActivitySettings.class) and // startActivity(intent)");
     }
 
     @Override
@@ -246,6 +266,8 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
 
     public void addTask() {
         addTaskInList("", ListHelper.getARealList(this, mCurrentList));
+        Log.i(TAG, "ln#266, ActivityList.addTask() calls addTaskInList(\"\", ListHelper.getARealList(this," +
+                "mCurrentList)) and mCurrentList is: " + mCurrentList);
     }
 
     public void addTaskInList(final String text, final long listId) {
@@ -270,5 +292,8 @@ public class ActivityList extends ActivityBase implements NavigationDrawerFragme
         // Open an activity
         startActivity(intent);
         //}
+        Log.i(TAG, "ln#292, ActivityList.addTaskInList() calls final Intent intent = new Intent().setAction(Intent.ACTION_INSERT).setClass(this,\n" +
+                "                ActivityEditor.class).setData(Task.URI)//.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)\n" +
+                "                .putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId)and intent is: " + intent + " also calls startActivity(with intent)");
     }
 }

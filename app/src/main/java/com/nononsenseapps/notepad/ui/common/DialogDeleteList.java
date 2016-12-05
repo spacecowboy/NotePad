@@ -20,6 +20,7 @@ package com.nononsenseapps.notepad.ui.common;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
+import android.util.Log;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.data.model.sql.TaskList;
@@ -28,6 +29,7 @@ import com.nononsenseapps.notepad.ui.base.DialogConfirmBase;
 public class DialogDeleteList extends DialogConfirmBase {
 	static final String ID = "id";
 	static final String TAG = "deletelistok";
+	static final String TAG2 = "RICKSMESSAGE";
 
 	public static void showDialog(final FragmentManager fm, final long listId, final DialogConfirmedListener listener) {
 		DialogDeleteList d = new DialogDeleteList();
@@ -36,6 +38,8 @@ public class DialogDeleteList extends DialogConfirmBase {
 		args.putLong(ID, listId);
 		d.setArguments(args);
 		d.show(fm, TAG);
+		Log.i(TAG2, "Ln#41, DialogDeleteList.DialogDeleteList.showDialog(final FragmentManager fm, final long listId, final DialogConfirmedListener listener)" +
+				"\ncreates new dialogDeleteList instance, creates a listener for it and shows it");
 	}
 
 	@Override
@@ -56,6 +60,9 @@ public class DialogDeleteList extends DialogConfirmBase {
 							null, null)) {
 				Toast.makeText(getActivity(), R.string.deleted,
 						Toast.LENGTH_SHORT).show();
+				NavigationDrawerFragment.NavigationDrawerCallbacks gCallbacks;
+				gCallbacks = (NavigationDrawerFragment.NavigationDrawerCallbacks) getActivity();
+				gCallbacks.openList(-2);
 			}
 		}
 		if (listener != null) {
