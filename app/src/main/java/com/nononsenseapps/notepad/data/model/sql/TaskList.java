@@ -28,6 +28,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import com.nononsenseapps.notepad.data.local.sql.LegacyDBHelper;
 import com.nononsenseapps.notepad.data.local.sql.MyContentProvider;
@@ -35,7 +36,10 @@ import com.nononsenseapps.notepad.data.local.sql.MyContentProvider;
 public class TaskList extends DAO {
 
 	// SQL convention says Table name should be "singular"
+
 	public static final String TABLE_NAME = "tasklist";
+	private static final String TAG = "RICKSMESSAGE";
+
 	public static final Uri URI = Uri.withAppendedPath(
 			Uri.parse(MyContentProvider.SCHEME + MyContentProvider.AUTHORITY),
 			TABLE_NAME);
@@ -63,6 +67,8 @@ public class TaskList extends DAO {
 	 * TaskList URIs start at 101, up to 199
 	 */
 	public static void addMatcherUris(UriMatcher sURIMatcher) {
+		//Log.i(TAG, "Ln#42, TaskList.TaskList.addMatcherUris(UriMatcher sURIMatcher) TaskList URIs start at 101, up to 199" +
+		//		"\nTABLE_NAME is: " + TABLE_NAME);
 		sURIMatcher
 				.addURI(MyContentProvider.AUTHORITY, TABLE_NAME, BASEURICODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/#",
@@ -173,6 +179,9 @@ public class TaskList extends DAO {
 	public TaskList(final long id, final ContentValues values) {
 		this(values);
 		this._id = id;
+		Log.i(TAG, "Ln#182, TaskList.TaskList.TaskList(final long id, final ContentValues values) calls:" +
+				"\nthis(values) and" +
+				"\nthis._id = id which id is " + id);
 	}
 
 	public TaskList(final JSONObject json) throws JSONException {
@@ -191,7 +200,11 @@ public class TaskList extends DAO {
 		updated = values.getAsLong(Columns.UPDATED);
 		listtype = values.getAsString(Columns.LISTTYPE);
 		sorting = values.getAsString(Columns.SORTING);
-
+		Log.i(TAG, "Ln#203, TaskList.TaskList.TaskList(final ContentValues values) sets:" +
+				"\ntitle = values.getAsString(Columns.TITLE) which is: " + title +
+				"\nupdated = values.getAsLong(Columns.UPDATED) which is: " + updated +
+				"\nlisttype = values.getAsString(Columns.LISTTYPE) which is: " + listtype +
+				"\nsorting = values.getAsString(Columns.SORTING) which is: " + sorting);
 		// gtaskaccount = values.getAsString(Columns.GTASKACCOUNT);
 		// gtaskid = values.getAsString(Columns.GTASKID);
 		// dropboxaccount = values.getAsString(Columns.DROPBOXACCOUNT);
@@ -216,6 +229,7 @@ public class TaskList extends DAO {
 
 	@Override
 	protected String getTableName() {
+		Log.i(TAG, "Ln#232, TaskList.TaskList.getTableName() returns TABLE_NAME which is: " + TABLE_NAME);
 		return TABLE_NAME;
 	}
 
