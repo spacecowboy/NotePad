@@ -56,6 +56,9 @@ public class DialogDeleteList extends DialogConfirmBase {
 							null, null)) {
 				Toast.makeText(getActivity(), R.string.deleted,
 						Toast.LENGTH_SHORT).show();
+				NavigationDrawerFragment.NavigationDrawerCallbacks gCallbacks;
+				gCallbacks = (NavigationDrawerFragment.NavigationDrawerCallbacks) getActivity();
+				gCallbacks.openList(-2);
 			}
 		}
 		if (listener != null) {
