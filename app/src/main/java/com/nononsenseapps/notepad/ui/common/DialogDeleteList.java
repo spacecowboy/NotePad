@@ -20,10 +20,11 @@ package com.nononsenseapps.notepad.ui.common;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.widget.Toast;
-
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.data.model.sql.TaskList;
 import com.nononsenseapps.notepad.ui.base.DialogConfirmBase;
+
+import static com.nononsenseapps.notepad.ui.list.TaskListFragment.LIST_ID_ALL;
 
 public class DialogDeleteList extends DialogConfirmBase {
 	static final String ID = "id";
@@ -56,9 +57,7 @@ public class DialogDeleteList extends DialogConfirmBase {
 							null, null)) {
 				Toast.makeText(getActivity(), R.string.deleted,
 						Toast.LENGTH_SHORT).show();
-				NavigationDrawerFragment.NavigationDrawerCallbacks gCallbacks;
-				gCallbacks = (NavigationDrawerFragment.NavigationDrawerCallbacks) getActivity();
-				gCallbacks.openList(-2);
+				((NavigationDrawerFragment.NavigationDrawerCallbacks) getActivity()).openList(LIST_ID_ALL);
 			}
 		}
 		if (listener != null) {
