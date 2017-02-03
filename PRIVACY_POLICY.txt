@@ -1,0 +1,6 @@
+Your privacy is your own and I (NoNonsenseApps) retain NO rights to do shit with anything of your data.
+
+Those bits of personal information which are requested, such as permission to list accounts, it used, for example,
+to retrieve which Google account to sync to Google Tasks with. Any information retained from said permissions are
+store strictly locally and not uploaded anywhere which already doesn't have this information (e.g. Google already
+knows your Google account).
