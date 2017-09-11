@@ -17,10 +17,25 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <item
+        android:id="@+id/menu_clearcompleted"
+        android:icon="@drawable/ic_clear_24dp_white"
+        android:orderInCategory="0"
+        android:title="Clear complete"
+        app:showAsAction="always"
+        />
+
+    <item
+        android:id="@+id/menu_sync"
+        android:icon="@drawable/ic_refresh_24dp_white"
+        android:orderInCategory="2"
+        android:title="@string/menu_sync"
+        app:showAsAction="always"/>
     <item
         android:id="@+id/menu_sort"
         android:icon="@drawable/ic_sort_24dp_white"
-        android:orderInCategory="0"
+        android:orderInCategory="1"
         android:title="@string/sorting"
         app:showAsAction="always">
         <menu>
@@ -35,11 +50,5 @@
                 android:title="@string/sort_list_manual"/>
         </menu>
     </item>
-    <item
-        android:id="@+id/menu_sync"
-        android:icon="@drawable/ic_refresh_24dp_white"
-        android:orderInCategory="1"
-        android:title="@string/menu_sync"
-        app:showAsAction="ifRoom"/>
 
 </menu>
