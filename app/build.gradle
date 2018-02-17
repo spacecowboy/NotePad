@@ -20,11 +20,11 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.2.1'
+    classpath 'com.android.tools.build:gradle:3.0.1'
     // the latest version of the android-apt plugin for annotations
     classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     // For publishing stuff to Google Play
-    classpath 'com.github.triplet.gradle:play-publisher:1.1.4'
+    classpath 'com.github.triplet.gradle:play-publisher:1.2.0'
   }
 }
 
@@ -50,7 +50,6 @@ def gitCommitCount =
 
 android {
   compileSdkVersion 23
-  buildToolsVersion '23.0.3'
 
   dataBinding.enabled = true
 
@@ -81,12 +80,16 @@ android {
     testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
   }
 
+  flavorDimensions "tier"
   productFlavors {
-    free {}
+    free {
+        dimension "tier"
+    }
     play {
-      // If Non-Free libraries are to be used
-      buildConfigField "boolean", "NONFREE", "true"
-      buildConfigField "boolean", "DROPBOX_ENABLED", "true"
+        dimension "tier"
+        // If Non-Free libraries are to be used
+        buildConfigField "boolean", "NONFREE", "true"
+        buildConfigField "boolean", "DROPBOX_ENABLED", "true"
     }
   }
 
