@@ -21,20 +21,20 @@ buildscript {
     jcenter()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:2.2.1'
+    classpath 'com.android.tools.build:gradle:3.0.1'
   }
 }
 
 apply plugin: 'com.android.library'
 
 dependencies {
-  //compile fileTree(dir: 'libs', include: '*.jar')
-  compile 'com.android.support:support-v4:19.0.1+'
+  //implementation fileTree(dir: 'libs', include: '*.jar')
+  implementation 'com.android.support:support-v4:19.0.1+'
 }
 
 android {
     compileSdkVersion 19
-    buildToolsVersion "19.1.0"
+    buildToolsVersion '26.0.2'
 
     lintOptions {
         abortOnError false

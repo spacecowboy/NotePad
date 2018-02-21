@@ -5,6 +5,7 @@ NotePad_ant/*
 .factorypath
 bin/
 build/
+release/
 .gradle
 gen/
 NotePad.apk

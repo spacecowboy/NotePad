@@ -104,6 +104,7 @@ public class ActivitySettings extends ActivityBase implements AccountManagerCall
             }
         } catch (OperationCanceledException | AuthenticatorException | IOException ignored) {
             // if the request was canceled for any reason, or something went wrong
+            // TODO add better handling of error.
             SyncGtaskHelper.disableSync(this);
         }
     }
