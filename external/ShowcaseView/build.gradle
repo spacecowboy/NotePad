@@ -17,9 +17,10 @@
 buildscript {
   repositories {
     mavenCentral()
+    google()
   }
   dependencies {
-    classpath 'com.android.tools.build:gradle:1.0.0'
+    classpath 'com.android.tools.build:gradle:7.3.1'
   }
 }
 
@@ -27,20 +28,21 @@ apply plugin: 'com.android.library'
 
 repositories {
     mavenCentral()
+    google()
 }
 
 dependencies {
-  compile 'com.android.support:support-v4:19.0.1+'
-  compile 'com.nineoldandroids:library:2.4.0+'
+  implementation 'com.android.support:support-v4:19.0.1+'
+  implementation 'com.nineoldandroids:library:2.4.0+'
 }
 
 android {
-  compileSdkVersion 19
-  buildToolsVersion '23.0.2'
+  compileSdkVersion 28
+  buildToolsVersion '32.0.0'
 
-    lintOptions {
-        abortOnError false
-    }
+  lint {
+    abortOnError false
+  }
 
   //compileSdkVersion 18
   //buildToolsVersion '23.0.2'

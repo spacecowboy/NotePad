@@ -17,22 +17,21 @@
 
 buildscript {
     repositories {
-        jcenter()
+        mavenCentral()
+        google()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:1.1.0'
+        classpath 'com.android.tools.build:gradle:7.3.1'
         // the latest version of the android-apt plugin for annotations
-        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+        // classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
     }
 }
 
 apply plugin: 'com.android.application'
 
-// For annotations
-apply plugin: 'android-apt'
-def AAVersion = '3.0.1'
-
 repositories {
+    mavenCentral()
+    google()
     jcenter()
 }
 
@@ -51,16 +50,17 @@ def getVersionName = { ->
         standardOutput = stdout
     }
     return stdout.toString().trim()
-  } catch (Exception e) {
+  } catch (ignored) {
     return "GITFAILEDINGRADLE"
   }
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '23.0.2'
+    compileSdkVersion 28
+    buildToolsVersion '32.0.0'
+    useLibrary  'org.apache.http.legacy'
 
-    lintOptions {
+    lint {
         abortOnError false
     }
 
@@ -81,28 +81,10 @@ android {
         buildConfigField "boolean", "DROPBOX_ENABLED", "false"
     }
 
+    flavorDimensions "uselessname"
     productFlavors {
-        free {}
-      play {
-          // If Non-Free libraries are to be used
-          buildConfigField "boolean", "NONFREE", "true"
-      }
-      playBeta {
-        // Beta runs at +1
-        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10 + 1
-
-        buildConfigField "boolean", "DROPBOX_ENABLED", "true"
-        // If Non-Free libraries are to be used
-        buildConfigField "boolean", "NONFREE", "true"
-      }
-    }
-
-    sourceSets {
-        playBeta {
-            // Include play sources
-            java.srcDirs = ['src/play/java']
-            res.srcDirs = ['src/play/res', 'src/playBeta/res']
-            manifest.srcFile 'src/play/AndroidManifest.xml'
+        free {
+            dimension "uselessname"
         }
     }
 
@@ -117,36 +99,28 @@ android {
     }
 }
 
-// annotations
-apt {
-    arguments {
-        resourcePackageName android.defaultConfig.applicationId
-        androidManifestFile variant.outputs[0].processResources.manifestFile
-    }
-}
-
 dependencies {
     //compile fileTree(dir: 'libs', include: '*.jar')
-    compile 'com.android.support:support-v4:19.0.1'
-    compile 'joda-time:joda-time:2.3'
+    implementation 'com.android.support:support-v4:19.0.1'
+    implementation 'joda-time:joda-time:2.3'
     // Dashclock
-    compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
+    implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     // FilePicker
-    compile 'com.nononsenseapps:filepicker:1.2.0'
+    implementation 'com.nononsenseapps:filepicker:1.2.0'
     // OrgParser
-    compile 'org.cowboyprogrammer:orgparser:1.1'
+    implementation 'org.cowboyprogrammer:orgparser:1.1'
     // For Sync
-    compile 'com.squareup.retrofit:retrofit:1.6.1'
+    implementation 'com.squareup.retrofit:retrofit:1.6.1'
     // Included libraries
-    compile project(':external:ActionBar-PullToRefresh')
-    compile project(':external:datetimepicker')
-    compile project(':external:drag-sort-listview')
-    compile project(':external:ShowcaseView')
+    implementation project(':external:ActionBar-PullToRefresh')
+    implementation project(':external:datetimepicker')
+    implementation project(':external:drag-sort-listview')
+    implementation project(':external:ShowcaseView')
     // annotations
-    apt "org.androidannotations:androidannotations:$AAVersion"
-    compile "org.androidannotations:androidannotations-api:$AAVersion"
+    annotationProcessor "org.androidannotations:androidannotations:4.8.0"
+    implementation "org.androidannotations:androidannotations-api:4.8.0"
     // Dropbox and non-free stuff
     // Tests
-    androidTestCompile 'com.squareup.spoon:spoon-client:1.1.1'
+    androidTestImplementation 'com.squareup.spoon:spoon-client:1.1.1'
 
 }
