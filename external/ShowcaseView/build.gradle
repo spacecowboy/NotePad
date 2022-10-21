@@ -36,14 +36,14 @@ dependencies {
 
 android {
   compileSdkVersion 19
-  buildToolsVersion "19.1.0"
+  buildToolsVersion '23.0.2'
 
     lintOptions {
         abortOnError false
     }
 
   //compileSdkVersion 18
-  //buildToolsVersion "18.0.0"
+  //buildToolsVersion '23.0.2'
 
   sourceSets {
     main {
