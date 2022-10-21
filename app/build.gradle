@@ -1,0 +1,165 @@
+/*
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:1.1.0'
+        // the latest version of the android-apt plugin for annotations
+        classpath 'com.neenbedankt.gradle.plugins:android-apt:1.4'
+    }
+}
+
+apply plugin: 'com.android.application'
+
+// For annotations
+apply plugin: 'android-apt'
+def AAVersion = '3.0.1'
+
+repositories {
+    jcenter()
+}
+
+// Version number
+def versionMajor = 5 // Major UI overhauls
+def versionMinor = 7 // Some new functionality
+def versionPatch = 1 // Bug fixes
+def versionBuild = 3 // Bump for dogfood builds, public betas, etc.
+
+// Version name from git
+def getVersionName = { ->
+  try {
+  def stdout = new ByteArrayOutputStream()
+    exec {
+        commandLine 'git', 'describe', '--tags'
+        standardOutput = stdout
+    }
+    return stdout.toString().trim()
+  } catch (Exception e) {
+    return "GITFAILEDINGRADLE"
+  }
+}
+
+android {
+    compileSdkVersion 19
+    buildToolsVersion "19.1.0"
+
+    lintOptions {
+        abortOnError false
+    }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE.txt'
+        exclude 'META-INF/NOTICE.txt'
+    }
+
+    defaultConfig {
+      applicationId "com.nononsenseapps.notepad"
+      minSdkVersion 14
+      targetSdkVersion 19
+      versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
+      versionName getVersionName()
+
+        // If Non-Free libraries are to be used
+        buildConfigField "boolean", "NONFREE", "false"
+        buildConfigField "boolean", "DROPBOX_ENABLED", "false"
+    }
+
+    productFlavors {
+        free {}
+      play {
+          // If Non-Free libraries are to be used
+          buildConfigField "boolean", "NONFREE", "true"
+      }
+      playBeta {
+        // Beta runs at +1
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10 + 1
+
+        buildConfigField "boolean", "DROPBOX_ENABLED", "true"
+        // If Non-Free libraries are to be used
+        buildConfigField "boolean", "NONFREE", "true"
+      }
+    }
+
+    sourceSets {
+        playBeta {
+            // Include play sources
+            java.srcDirs = ['src/play/java']
+            res.srcDirs = ['src/play/res', 'src/playBeta/res']
+            manifest.srcFile 'src/play/AndroidManifest.xml'
+        }
+    }
+
+    if (project.hasProperty('STORE_FILE')) {
+      signingConfigs {
+        release {
+          storeFile file(STORE_FILE)
+          storePassword STORE_PASSWORD
+          keyAlias KEY_ALIAS
+          keyPassword KEY_PASSWORD
+        }
+      }
+
+      buildTypes {
+        release {
+          signingConfig signingConfigs.release
+        }
+      }
+    } else {
+      println "No key store defined. Signed release not available..."
+    }
+}
+
+// annotations
+apt {
+    arguments {
+        resourcePackageName android.defaultConfig.applicationId
+        androidManifestFile variant.outputs[0].processResources.manifestFile
+    }
+}
+
+dependencies {
+    //compile fileTree(dir: 'libs', include: '*.jar')
+    compile 'com.android.support:support-v4:19.0.1'
+    compile 'joda-time:joda-time:2.3'
+    // Dashclock
+    compile 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
+    // FilePicker
+    compile 'com.nononsenseapps:filepicker:1.2.0'
+    // OrgParser
+    compile 'org.cowboyprogrammer:orgparser:1.1'
+    // For Sync
+    compile 'com.squareup.retrofit:retrofit:1.6.1'
+    // Included libraries
+    compile project(':external:ActionBar-PullToRefresh')
+    compile project(':external:datetimepicker')
+    compile project(':external:drag-sort-listview')
+    compile project(':external:ShowcaseView')
+    // annotations
+    apt "org.androidannotations:androidannotations:$AAVersion"
+    compile "org.androidannotations:androidannotations-api:$AAVersion"
+    // Dropbox and non-free stuff
+    playCompile fileTree(dir: 'src/play/libs', include: '*.jar')
+    playBetaCompile fileTree(dir: 'src/play/libs', include: '*.jar')
+    playCompile 'com.google.android.gms:play-services:5.0.89'
+    playBetaCompile 'com.google.android.gms:play-services:5.0.89'
+    // Tests
+    androidTestCompile 'com.squareup.spoon:spoon-client:1.1.1'
+
+}

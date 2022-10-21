@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    style="?ListMarginStyle" >
+
+    <!-- <SearchView
+        android:id="@+id/searchBox"
+        android:layout_width="@dimen/listNoDetailWidth"
+        android:layout_height="48dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:iconifiedByDefault="false"
+        android:queryHint="@string/search_hint" >
+    </SearchView> -->
+
+    <ListView
+        android:id="@android:id/list"
+        style="?ListDividerStyle"
+        android:layout_width="@dimen/listNoDetailWidth"
+        android:layout_height="match_parent"
+        android:layout_gravity="center_horizontal"
+        android:drawSelectorOnTop="true"
+        tools:listitem="@layout/tasklist_item_rich" >
+    </ListView>
+
+</LinearLayout>

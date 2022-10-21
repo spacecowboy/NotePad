@@ -1,0 +1,7 @@
+-keepclassmembers class com.android.datetimepicker.time.RadialSelectorView {
+  *** setAnimationRadiusMultiplier(...);
+}
+
+-keepclassmembers class com.android.datetimepicker.time.RadialTextsView {
+  *** setAnimationRadiusMultiplier(...);
+}

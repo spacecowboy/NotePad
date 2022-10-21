@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2012 Jonas Kalderstam
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:robobunny="http://schemas.android.com/apk/res-auto"
+    android:key="preference_screen_list" >
+
+    <ListPreference
+        android:key="key_default_list_id"
+        android:title="@string/default_list" />
+
+    <com.robobunny.SeekBarPreference
+        android:defaultValue="3"
+        android:key="@string/key_pref_item_max_height"
+        android:title="@string/item_max_height"
+        robobunny:max="50"
+        robobunny:min="1"
+        robobunny:unitsRight="@string/rows" />
+
+    <ListPreference
+        android:defaultValue="@string/default_sorttype"
+        android:entries="@array/sorting_preference"
+        android:entryValues="@array/sortingvalues_preference"
+        android:key="@string/pref_sorttype"
+        android:summary="Selected option should be here"
+        android:title="@string/sort_list_default" />
+    <ListPreference
+        android:defaultValue="@string/default_listtype"
+        android:entries="@array/listtype_preference"
+        android:entryValues="@array/listtypevalues_preference"
+        android:key="@string/pref_listtype"
+        android:summary="Selected option should be here"
+        android:title="@string/default_style" />
+
+    <!-- Depends on listtype in code -->
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:key="@string/pref_hidecheckboxes"
+        android:summaryOff="@string/hide_checkbox_summary_off"
+        android:summaryOn="@string/hide_checkbox_summary_on"
+        android:title="@string/hide_checkbox" />
+    
+    <PreferenceCategory android:title="@string/text" >
+        <com.nononsenseapps.notepad.prefs.FixedSwitchPreference
+            android:key="@string/pref_list_links"
+            android:defaultValue="true"
+            android:title="@string/clickable_links"
+            android:summary="" />
+        <ListPreference
+            android:key="@string/pref_list_fontsize"
+            android:defaultValue="1"
+            android:dialogTitle="@string/text_size"
+            android:entries="@array/fontsize_entries"
+            android:entryValues="@array/fontsize_values"
+            android:summary="Selected option should be here"
+            android:title="@string/text_size" />
+        <ListPreference
+            android:key="@string/pref_list_title_fontstyle"
+            android:defaultValue="1"
+            android:dialogTitle="@string/title_style"
+            android:entries="@array/fontstyle_entries"
+            android:entryValues="@array/fontstyle_values"
+            android:summary="Selected option should be here"
+            android:title="@string/title_style" />
+        <ListPreference
+            android:key="@string/pref_list_title_fontfamily"
+            android:defaultValue="1"
+            android:dialogTitle="@string/title_font"
+            android:entries="@array/fontfamily_entries"
+            android:entryValues="@array/fontfamily_values"
+            android:summary="Selected option should be here"
+            android:title="@string/title_font" />
+        <ListPreference
+            android:key="@string/pref_list_body_fontfamily"
+            android:defaultValue="0"
+            android:dialogTitle="@string/body_font"
+            android:entries="@array/fontfamily_entries"
+            android:entryValues="@array/fontfamily_values"
+            android:summary="Selected option should be here"
+            android:title="@string/body_font" />
+    </PreferenceCategory>
+
+</PreferenceScreen>
