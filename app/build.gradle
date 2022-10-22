@@ -105,8 +105,9 @@ dependencies {
     implementation 'joda-time:joda-time:2.12.0'
     // Dashclock
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    // FilePicker
-    implementation 'com.nononsenseapps:filepicker:2.4.2'
+    // FilePicker library and its dependencies
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    implementation 'com.nononsenseapps:filepicker:3.1.0'
     // OrgParser
     implementation 'org.cowboyprogrammer:orgparser:1.3.1'
     // For Sync
