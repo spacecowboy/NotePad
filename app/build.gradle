@@ -101,8 +101,8 @@ android {
 
 dependencies {
     //compile fileTree(dir: 'libs', include: '*.jar')
-    implementation 'com.android.support:support-v4:19.0.1'
-    implementation 'joda-time:joda-time:2.3'
+    implementation 'com.android.support:support-v4:28.0.0'
+    implementation 'joda-time:joda-time:2.12.0'
     // Dashclock
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     // FilePicker
@@ -110,7 +110,7 @@ dependencies {
     // OrgParser
     implementation 'org.cowboyprogrammer:orgparser:1.1'
     // For Sync
-    implementation 'com.squareup.retrofit:retrofit:1.6.1'
+    implementation 'com.squareup.retrofit:retrofit:1.9.0'
     // Included libraries
     implementation project(':external:ActionBar-PullToRefresh')
     implementation project(':external:datetimepicker')
@@ -121,6 +121,6 @@ dependencies {
     implementation "org.androidannotations:androidannotations-api:4.8.0"
     // Dropbox and non-free stuff
     // Tests
-    androidTestImplementation 'com.squareup.spoon:spoon-client:1.1.1'
+    androidTestImplementation 'com.squareup.spoon:spoon-client:1.7.1'
 
 }

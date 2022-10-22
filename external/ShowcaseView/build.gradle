@@ -32,8 +32,8 @@ repositories {
 }
 
 dependencies {
-  implementation 'com.android.support:support-v4:19.0.1+'
-  implementation 'com.nineoldandroids:library:2.4.0+'
+  implementation 'com.android.support:support-v4:28.0.0'
+  implementation 'com.nineoldandroids:library:2.4.0'
 }
 
 android {
