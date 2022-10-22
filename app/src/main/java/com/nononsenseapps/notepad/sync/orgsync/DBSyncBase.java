@@ -14,6 +14,7 @@ import com.nononsenseapps.notepad.database.TaskList;
 import org.cowboyprogrammer.org.OrgFile;
 import org.cowboyprogrammer.org.OrgNode;
 import org.cowboyprogrammer.org.OrgTimestamp;
+import org.cowboyprogrammer.org.parser.RegexParser;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -229,7 +230,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
             if (remote != null && filenames.remove(remote.remoteId)) {
                 final BufferedReader br = getRemoteFile(remote.remoteId);
                 if (br != null) {
-                    file = OrgFile.createFromBufferedReader(remote.remoteId, br);
+                    file = OrgFile.createFromBufferedReader(new RegexParser(),remote.remoteId, br);
                 }
             }
             String l = list.title;
@@ -252,7 +253,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
             if (remote != null && filenames.remove(remote.remoteId)) {
                 final BufferedReader br = getRemoteFile(remote.remoteId);
                 if (br != null) {
-                    file = OrgFile.createFromBufferedReader(remote.remoteId, br);
+                    file = OrgFile.createFromBufferedReader(new RegexParser(),remote.remoteId, br);
                 }
             }
             String l = null;
@@ -274,7 +275,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
             OrgFile file = null;
             final BufferedReader br = getRemoteFile(filename);
             if (br != null) {
-                file = OrgFile.createFromBufferedReader(filename, br);
+                file = OrgFile.createFromBufferedReader(new RegexParser(),filename, br);
             }
             String l = null;
             String r = null;

@@ -26,6 +26,7 @@ import android.preference.PreferenceManager;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 
 import org.cowboyprogrammer.org.OrgFile;
+import org.cowboyprogrammer.org.parser.RegexParser;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -103,7 +104,7 @@ public class SDSynchronizer extends Synchronizer implements
      * not already exist. Use this method to avoid having multiple objects
      * pointing to the same file. Also prevents names with slashes.
      *
-     * @param desiredName The name you'd want. If it exists,
+     * @param orgdesiredName The name you'd want. If it exists,
      *                    it will be used as the base in desiredName1,
      *                    desiredName2, etc. Limited to 99.
      * @return an OrgFile guaranteed not to exist.
@@ -123,7 +124,7 @@ public class SDSynchronizer extends Synchronizer implements
             }
             File f = new File(ORG_DIR, filename);
             if (!f.exists()) {
-                return new OrgFile(filename);
+                return new OrgFile(new RegexParser(),filename);
             }
         }
         throw new IllegalArgumentException("Filename not accessible");

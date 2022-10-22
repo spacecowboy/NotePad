@@ -26,6 +26,7 @@ import com.nononsenseapps.notepad.database.TaskList;
 
 import org.cowboyprogrammer.org.OrgFile;
 import org.cowboyprogrammer.org.OrgNode;
+import org.cowboyprogrammer.org.parser.RegexParser;
 
 import java.io.IOException;
 import java.text.ParseException;
@@ -240,7 +241,7 @@ public abstract class Synchronizer extends DBSyncBase implements
 				if (node == null) {
 					// CREATE NODE DB
 					//Log.d(TAG, "CREATE NODE DB");
-					node = new OrgNode();
+					node = new OrgNode(new RegexParser());
 					node.setLevel(1);
 					node.setParent(file);
 					int idx = -1;
