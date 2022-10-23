@@ -239,6 +239,8 @@ public class NotificationHelper extends BroadcastReceiver {
 		final NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
+		// TODO here we should make the notification channel
+
 		Log.d(TAG, "Number of notifications: " + notifications.size());
 
 		// If empty, cancel
