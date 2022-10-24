@@ -108,6 +108,10 @@
     <string name="donate_to_unlock">Donate to unlock</string>
     <string name="premiums_unlocked_and_thanks">Premium features unlocked. Thank you for your support!</string>
 
+    <!-- new strings added since 2022 -->
+    <string name="notification_channel_name">Reminders for notes</string>
+    <string name="notification_channel_description">Shows the content of the note when the time of the reminder is reached</string>
+
     <!--
         Use few if language need it. In English is the same.
         <item quantity="few">Copied 2 notes.</item>

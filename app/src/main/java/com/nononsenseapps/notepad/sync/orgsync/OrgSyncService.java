@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.IBinder;
@@ -34,6 +35,7 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -168,12 +170,20 @@ public class OrgSyncService extends Service {
                 // TODO hardcoded
 				.setContentTitle("Could not access files")
 				.setContentText("Please change directory")
+                .setChannelId(NotificationHelper.CHANNEL_ID)
 				.setContentIntent(
 						PendingIntent.getActivity(this, 0, new Intent(this,
 								PrefsActivity.class),
 								PendingIntent.FLAG_UPDATE_CURRENT));
 
-		NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+		NotificationManager notificationManager = (NotificationManager)
+                getSystemService(Context.NOTIFICATION_SERVICE);
+
+        // probably this is not optimal, but this function seems useless anyway
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationHelper.createNotificationChannel(this, notificationManager);
+        }
+
 		notificationManager.notify(237388, notBuilder.build());
 	}
 

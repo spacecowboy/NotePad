@@ -16,8 +16,10 @@
 
 package com.nononsenseapps.helpers;
 
+import android.annotation.TargetApi;
 import android.app.AlarmManager;
 import android.app.Notification;
+import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
@@ -28,8 +30,10 @@ import android.database.ContentObserver;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+import android.support.annotation.RequiresApi;
 import android.support.v4.app.NotificationCompat;
 
 import com.nononsenseapps.notepad.ActivityMain;
@@ -53,6 +57,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	private static final String ACTION_COMPLETE = "com.nononsenseapps.notepad.ACTION.COMPLETE";
 	private static final String ACTION_SNOOZE = "com.nononsenseapps.notepad.ACTION.SNOOZE";
 	private static final String ACTION_RESCHEDULE = "com.nononsenseapps.notepad.ACTION.RESCHEDULE";
+	public static final String CHANNEL_ID = "remindersNotificationChannelId";
 
 	private static final String TAG = "nononsenseapps.NotificationHelper";
 
@@ -110,6 +115,22 @@ public class NotificationHelper extends BroadcastReceiver {
 
 		notifyPast(context, true);
 		scheduleNext(context);
+	}
+
+	/** creates the notification channel needed on API 26 and higher to show notifications.
+	 * This is safe to call multiple times
+	 */
+	@TargetApi(Build.VERSION_CODES.O)
+	@RequiresApi(Build.VERSION_CODES.O)
+	public static void createNotificationChannel(final Context context, NotificationManager nm) {
+		// TODO test if it is used everywhere we need. everything should work ??
+		String name = context.getString(R.string.notification_channel_name);
+		String description = context.getString(R.string.notification_channel_description);
+		int importance = NotificationManager.IMPORTANCE_DEFAULT; // TODO maybe HIGH importance ?
+
+		NotificationChannel channel	= new NotificationChannel(CHANNEL_ID, name, importance);
+		channel.setDescription(description);
+		nm.createNotificationChannel(channel);
 	}
 
 	private static void monitorUri(final Context context) {
@@ -210,12 +231,12 @@ public class NotificationHelper extends BroadcastReceiver {
 		// otherwise
 		NotificationCompat.Builder builder;
 		for (com.nononsenseapps.notepad.database.Notification note : notifications) {
-			builder = getNotificationBuilder(context,
-					Integer.parseInt(prefs.getString(
-							context.getString(R.string.key_pref_prio), "0")),
-					lightAndVibrate, Uri.parse(prefs.getString(
-							context.getString(R.string.key_pref_ringtone),
-							"DEFAULT_NOTIFICATION_URI")), false);
+			builder = getNotificationBuilder(
+					context,
+					Integer.parseInt(prefs.getString(context.getString(R.string.key_pref_prio), "0")),
+					lightAndVibrate,
+					Uri.parse(prefs.getString(context.getString(R.string.key_pref_ringtone), "DEFAULT_NOTIFICATION_URI")),
+					false);
 
 			notifyBigText(context, notificationManager, builder, note);
 		}
@@ -230,7 +251,8 @@ public class NotificationHelper extends BroadcastReceiver {
 		// Get list of past notifications
 		final Calendar now = Calendar.getInstance();
 
-		final List<com.nononsenseapps.notepad.database.Notification> notifications = com.nononsenseapps.notepad.database.Notification
+		final List<com.nononsenseapps.notepad.database.Notification> notifications
+				= com.nononsenseapps.notepad.database.Notification
 				.getNotificationsWithTime(context, now.getTimeInMillis(), true);
 
 		// Remove duplicates
@@ -239,7 +261,9 @@ public class NotificationHelper extends BroadcastReceiver {
 		final NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 
-		// TODO here we should make the notification channel
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+			createNotificationChannel(context, notificationManager);
+		}
 
 		Log.d(TAG, "Number of notifications: " + notifications.size());
 
@@ -301,12 +325,10 @@ public class NotificationHelper extends BroadcastReceiver {
 			for (com.nononsenseapps.notepad.database.Notification note : notifications) {
 				builder = getNotificationBuilder(
 						context,
-						Integer.parseInt(prefs.getString(
-								context.getString(R.string.key_pref_prio), "0")),
-						lightAndVibrate, Uri.parse(prefs.getString(
-								context.getString(R.string.key_pref_ringtone),
-								"DEFAULT_NOTIFICATION_URI")), alertOnce);
-
+						Integer.parseInt(prefs.getString(context.getString(R.string.key_pref_prio), "0")),
+						lightAndVibrate,
+						Uri.parse(prefs.getString(context.getString(R.string.key_pref_ringtone), "DEFAULT_NOTIFICATION_URI")),
+						alertOnce);
 				notifyBigText(context, notificationManager, builder, note);
 			}
 			// }
@@ -326,9 +348,13 @@ public class NotificationHelper extends BroadcastReceiver {
 				.setSmallIcon(R.drawable.ic_stat_notification_edit)
 				.setLargeIcon(
 						BitmapFactory.decodeResource(context.getResources(),
-								R.drawable.app_icon)).setPriority(priority)
-				.setDefaults(lightAndVibrate).setAutoCancel(true)
-				.setOnlyAlertOnce(alertOnce).setSound(ringtone);
+								R.drawable.app_icon))
+				.setPriority(priority)
+				.setDefaults(lightAndVibrate)
+				.setAutoCancel(true)
+				.setOnlyAlertOnce(alertOnce)
+				.setSound(ringtone)
+				.setChannelId(CHANNEL_ID); // i do not think we need more than 1 channel
 		return builder;
 	}
 
@@ -447,6 +473,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		// Build notification
 		builder.setContentTitle(note.taskTitle)
 				.setContentText(note.taskNote)
+				.setChannelId(CHANNEL_ID)
 				.setContentIntent(clickIntent)
 				.setStyle(
 						new NotificationCompat.BigTextStyle()
@@ -472,7 +499,6 @@ public class NotificationHelper extends BroadcastReceiver {
 		}
 
 		final Notification noti = builder.build();
-
 		notificationManager.notify((int) note._id, noti);
 	}
 
