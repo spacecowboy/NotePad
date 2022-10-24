@@ -447,8 +447,7 @@ public class NotificationHelper extends BroadcastReceiver {
 
 		// Delete intent on non-location repeats
 		if (!note.isLocationRepeat()) {
-			// repeating location reminders should not have a delete intent, the
-			// rest do
+			// repeating location reminders should not have a delete intent, the rest do.
 			// Opening the note should delete/reschedule the notification
 			openIntent.putExtra(ActivityMain.NOTIFICATION_DELETE_ARG, note._id);
 		}
@@ -456,19 +455,24 @@ public class NotificationHelper extends BroadcastReceiver {
 		openIntent.putExtra(ActivityMain.NOTIFICATION_CANCEL_ARG, note._id);
 
 		// Open note on click
-				PendingIntent clickIntent = PendingIntent.getActivity(context, 0,
-						openIntent,
-						PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent clickIntent = PendingIntent.getActivity(context, 0,
+						openIntent, PendingIntent.FLAG_UPDATE_CURRENT);
 
 		// Action to complete
-		PendingIntent completeIntent = PendingIntent.getBroadcast(context, 0,
-				new Intent(ACTION_COMPLETE, note.getUri()).putExtra(ARG_TASKID,
-						note.taskID), PendingIntent.FLAG_UPDATE_CURRENT);
+		Intent iComplete = new Intent(context, NotificationHelper.class)
+				.setAction(ACTION_COMPLETE)
+				.setData(note.getUri())
+				.putExtra(ARG_TASKID, note.taskID);
+		PendingIntent piComplete = PendingIntent.getBroadcast(context, 0,
+				iComplete, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
 		// Action to snooze
-		PendingIntent snoozeIntent = PendingIntent.getBroadcast(context, 0,
-				new Intent(ACTION_SNOOZE, note.getUri()).putExtra(ARG_TASKID,
-						note.taskID), PendingIntent.FLAG_UPDATE_CURRENT);
+		Intent iSnooze = new Intent(context, NotificationHelper.class)
+				.setAction(ACTION_SNOOZE)
+				.setData(note.getUri())
+				.putExtra(ARG_TASKID, note.taskID);
+		PendingIntent piSnooze = PendingIntent.getBroadcast(context, 0,
+				iSnooze, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
 		// Build notification
 		builder.setContentTitle(note.taskTitle)
@@ -490,12 +494,12 @@ public class NotificationHelper extends BroadcastReceiver {
 		// Snooze button only on time non-repeating
 		if (note.time != null && note.repeats == 0) {
 			builder.addAction(R.drawable.ic_stat_snooze,
-					context.getText(R.string.snooze), snoozeIntent);
+					context.getText(R.string.snooze), piSnooze);
 		}
 		// Complete button only on non-repeating, both time and location
 		if (note.repeats == 0) {
 			builder.addAction(R.drawable.navigation_accept_dark,
-					context.getText(R.string.completed), completeIntent);
+					context.getText(R.string.completed), piComplete);
 		}
 
 		final Notification noti = builder.build();
