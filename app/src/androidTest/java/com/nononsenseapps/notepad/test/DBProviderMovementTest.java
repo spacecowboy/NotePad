@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 
-import com.nononsenseapps.notepad.data.model.sql.DAO;
-import com.nononsenseapps.notepad.data.model.sql.Task;
-import com.nononsenseapps.notepad.data.model.sql.TaskList;
+import com.nononsenseapps.notepad.database.DAO;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;

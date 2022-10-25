@@ -18,7 +18,6 @@
 
 <resources>
 
-    <string name="nononsense_notes" translatable="false">NoNonsense Notes</string>
     <string name="app_name">Notes</string>
     <string name="title_create">New note</string>
     <string name="timemachine">Time machine</string>
@@ -34,7 +33,6 @@
     <string name="menu_sync">Sync</string>
     <string name="menu_share">Share</string>
     <string name="menu_preferences">Settings</string>
-    <string name="menu_createnew">Create new</string>
     <string name="menu_createlist">Start new list</string>
     <string name="menu_clearcompleted">Clear completed</string>
     <string name="menu_setdefaultlist">Set as default list</string>
@@ -77,6 +75,7 @@
     <string name="settings_account_title">Select an account</string>
     <string name="settings_account_summary">Touch to switch account</string>
     <string name="settings_sync_enable_title">Google Tasks sync</string>
+    <string name="gtasks_sync_info">Not all information can be synced with Google Tasks. Only notes, due date (not time) and todo-status is synced.</string>
     <string name="settings_cat_syncing">Synchronization</string>
     <string name="gtasks">Google Tasks</string>
     <string name="show_from_all_lists">All lists</string>
@@ -93,18 +92,25 @@
     <string name="settings_list">List</string>
     <string name="drag_to_timetravel">Drag to time travel</string>
 
-
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-
     <string name="import_data_question">Import data?</string>
     <string name="import_started">Importing data. This might take a few seconds.</string>
     <string name="import_data_msg">Would you like to import the notes from the donate version? When finished, you are given the option to uninstall it also.</string>
     <string name="imported_result">Imported %1$d notes in %2$d lists</string>
     <string name="import_error">Something went wrong: %s</string>
 
+    <string name="showcase_main_title">Access your lists</string>
+    <string name="showcase_main_msg">Touch the icon or swipe from the left edge</string>
+    <string name="showcase_drawer_title">Manage your lists</string>
+    <string name="showcase_drawer_msg">Long press to edit or delete</string>
+    <string name="showcase_timemachine_title">Save your notes</string>
+    <string name="showcase_timemachine_msg">Changes are always saved. Use the time machine to restore a previous version.</string>
+
     <string name="donate_to_unlock">Donate to unlock</string>
     <string name="premiums_unlocked_and_thanks">Premium features unlocked. Thank you for your support!</string>
+
+    <!-- new strings added since 2022 -->
+    <string name="notification_channel_name">Reminders for notes</string>
+    <string name="notification_channel_description">Shows the content of the note when the time of the reminder is reached</string>
 
     <!--
         Use few if language need it. In English is the same.
@@ -138,8 +144,6 @@
     <string name="move">Move</string>
     <string name="move_to">Move to</string>
     <string name="moved_x_to_list">Moved %1$d to %2$s</string>
-
-    <string name="account">Account</string>
 
     <string name="lock_note">Lock note</string>
     <string name="unlock_note">Unlock note</string>
@@ -184,7 +188,7 @@
     <string name="short_date_format">Short date format</string>
     <string name="rows">rows</string>
     <string name="select_date">Select date</string>
-    <string name="localedefault">Device default</string>
+    <string name="localedefault">Locale default</string>
     <string name="donate">Donate</string>
     <string name="donate_thanks">Thank you for your support!</string>
 
@@ -277,7 +281,6 @@
     <string name="text">Text</string>
     <string name="add_a_reminder">Add a reminder</string>
 
-    <string name="legacy_backup">Legacy backup</string>
     <string name="backup">Backup</string>
     <string name="backup_import">Import backup</string>
     <string name="backup_export">Export backup</string>
@@ -289,24 +292,16 @@
     <string name="backup_export_success">Backup exported successfully</string>
     <string name="backup_export_failed">Can\'t write to the backup file</string>
     <string name="sd_card">SD Card</string>
-    <string name="sd_card_sync">SD Card sync</string>
+    <string name="sd_card_sync">SD Card Sync</string>
     <string name="sd_card_summary">Tasks are mirrored on the SD card. Changes are synchronized both ways. Note that deleting the files will delete the tasks in the app!</string>
     <string name="directory">Directory</string>
     <string name="directory_summary">Where files should be stored.</string>
     <string name="dropbox">Dropbox</string>
-    <string name="dropbox_sync">Dropbox sync</string>
+    <string name="dropbox_sync">Dropbox Sync</string>
     <string name="dropbox_sync_summary">Keep your tasks and notes synchronized with text files in your Dropbox.</string>
     <string name="cannot_write_to_directory">Cannot write to directory</string>
     <string name="wait_for_dropbox">Please wait for Dropbox to finish its initialization.</string>
     <string name="bigger_titles">Title larger</string>
     <string name="bigger_titles_summary">The title is the first line</string>
-    <string name="sd_card_touch_hint">Touch to change directory</string>
-    <string name="new_password">New password</string>
-    <string name="current_password">Current password</string>
-    <string name="const_preference_password_key">preference_password_key</string>
-    <string name="legacy">Legacy</string>
-    <string name="sorting">Sorting</string>
-    <string name="undo">Undo</string>
-    <string name="changelog">Changelog</string>
 
 </resources>

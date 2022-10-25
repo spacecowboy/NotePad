@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Copyright (c) 2015 Jonas Kalderstam.
+     Copyright (C) 2012 Jonas Kalderstam
 
-  This program is free software: you can redistribute it and/or modify
-  it under the terms of the GNU General Public License as published by
-  the Free Software Foundation, either version 3 of the License, or
-  (at your option) any later version.
-
-  This program is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-  General Public License for more details.
-
-  You should have received a copy of the GNU General Public License
-  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-  -->
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+  
+          http://www.apache.org/licenses/LICENSE-2.0
+  
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:id="@+id/noteItem"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              android:minHeight="@dimen/list_item_min_size"
-              android:orientation="horizontal"
-              android:paddingTop="4dp"
-              android:paddingBottom="4dp"
-              android:paddingLeft="8dp"
-              android:paddingRight="8dp">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/noteItem"
+    style="?my_list_selector"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:minHeight="@dimen/list_item_min_size"
+    android:orientation="horizontal"
+    android:paddingTop="4dp"
+    android:paddingBottom="4dp"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp" >
 
     <TextView
         android:id="@+id/itemIndent"
@@ -34,7 +35,7 @@
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <com.nononsenseapps.notepad.ui.common.DelegateFrame
+    <com.nononsenseapps.ui.DelegateFrame
         xmlns:nononsenseapps="http://nononsenseapps.com"
         android:id="@+id/datecheckcontainer"
         android:layout_width="wrap_content"
@@ -45,7 +46,7 @@
         android:padding = "0dp"
         nononsenseapps:enlargedView="@+id/itemDone" >
 
-        <com.nononsenseapps.notepad.ui.common.NoteCheckBox
+        <com.nononsenseapps.ui.NoteCheckBox
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/itemDone"
             android:layout_width="wrap_content"
@@ -55,7 +56,7 @@
             android:focusableInTouchMode="false"
             android:gravity="center"
             android:padding = "0dp" />
-    </com.nononsenseapps.notepad.ui.common.DelegateFrame>
+    </com.nononsenseapps.ui.DelegateFrame>
 
     <RelativeLayout
         android:id="@+id/title_note_container"
@@ -76,7 +77,7 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:textColor="?android:attr/textColorPrimary" />
 
-        <com.nononsenseapps.notepad.ui.common.DateView
+        <com.nononsenseapps.ui.DateView
             android:id="@+id/itemDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

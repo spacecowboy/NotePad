@@ -5,22 +5,17 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import com.nononsenseapps.notepad.data.model.sql.Task;
-import com.nononsenseapps.notepad.data.model.sql.TaskList;
-import com.nononsenseapps.notepad.data.model.gtasks.GoogleTask;
-import com.nononsenseapps.notepad.data.model.gtasks.GoogleTaskList;
-import com.nononsenseapps.notepad.data.remote.gtasks.GoogleTaskSync;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
 
 import android.database.Cursor;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 import android.util.Log;
 import android.util.Pair;
-
-import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.resetTestDatabase;
-import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.setEmptyTestDatabase;
-import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.setFreshTestDatabase;
-import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.setTestDatabase;
 
 public class GTaskSyncTest extends AndroidTestCase {
 	String balle = "balle";
@@ -45,10 +40,17 @@ public class GTaskSyncTest extends AndroidTestCase {
 
 	@Override
 	public void setUp() throws Exception {
+		super.setUp();
 		localListNewestCount = 0;
 		remoteListNewestCount = 0;
 		// Delete all existing lists
-		setEmptyTestDatabase(getContext(), getClass().getName());
+		mContext.getContentResolver().delete(TaskList.URI,
+				TaskList.Columns._ID + " IS NOT 0", null);
+		mContext.getContentResolver().delete(GoogleTaskList.URI,
+				GoogleTaskList.Columns.ACCOUNT + " IS ?",
+				new String[] { account });
+		mContext.getContentResolver().delete(GoogleTask.URI,
+				GoogleTask.Columns.ACCOUNT + " IS ?", new String[] { account });
 
 		// First insert some lists and remote stuff
 		localLists = new ArrayList<TaskList>();
@@ -178,8 +180,17 @@ public class GTaskSyncTest extends AndroidTestCase {
 
 	@Override
 	public void tearDown() throws Exception {
+		super.tearDown();
 		// remote items that were inserted
-		resetTestDatabase(getContext(), getClass().getName());
+		mContext.getContentResolver().delete(GoogleTaskList.URI,
+				GoogleTaskList.Columns.ACCOUNT + " IS ?",
+				new String[] { account });
+		mContext.getContentResolver().delete(GoogleTask.URI,
+				GoogleTask.Columns.ACCOUNT + " IS ?", new String[] { account });
+
+		for (TaskList l : localLists) {
+			l.delete(mContext);
+		}
 	}
 
 	@SmallTest

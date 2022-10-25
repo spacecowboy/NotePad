@@ -1,14 +1,18 @@
 package com.nononsenseapps.notepad.test;
 
-import com.nononsenseapps.notepad.data.local.sql.DatabaseHandler;
-import com.nononsenseapps.notepad.data.local.sql.LegacyDBHelper;
-import com.nononsenseapps.notepad.data.model.sql.Task;
-import com.nononsenseapps.notepad.data.model.sql.TaskList;
+import com.nononsenseapps.notepad.database.DatabaseHandler;
+import com.nononsenseapps.notepad.database.LegacyDBHelper;
+import com.nononsenseapps.notepad.database.MyContentProvider;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
 
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
+import android.test.ProviderTestCase2;
+import android.test.RenamingDelegatingContext;
+import android.test.mock.MockContentResolver;
 import android.test.suitebuilder.annotation.SmallTest;
 
 public class DBFreshTest extends AndroidTestCase {

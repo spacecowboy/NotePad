@@ -6,24 +6,19 @@ import android.database.Cursor;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.SmallTest;
 
-import com.nononsenseapps.notepad.data.model.sql.RemoteTask;
-import com.nononsenseapps.notepad.data.model.sql.RemoteTaskList;
-import com.nononsenseapps.notepad.data.model.sql.Task;
-import com.nononsenseapps.notepad.data.model.sql.TaskList;
-import com.nononsenseapps.notepad.data.local.orgmode.OrgConverter;
-import com.nononsenseapps.notepad.data.local.orgmode.SDSynchronizer;
+import com.nononsenseapps.notepad.database.RemoteTask;
+import com.nononsenseapps.notepad.database.RemoteTaskList;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.sync.orgsync.OrgConverter;
+import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
 
 import org.cowboyprogrammer.org.OrgFile;
 
 import java.io.File;
 import java.io.IOException;
-import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashSet;
-
-import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.resetTestDatabase;
-import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.setEmptyTestDatabase;
-import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.setTestDatabase;
 
 /**
  * Test the synchronizer code.
@@ -37,24 +32,24 @@ public class OrgSyncTest extends AndroidTestCase {
 
     @Override
     public void setUp() throws Exception {
+        super.setUp();
+
         File d = getContext().getDir("ORGSYNCTEST", Context.MODE_PRIVATE);
+
         DIR = d.getPath();
 
         if (!d.exists()) {
             d.mkdirs();
         }
-
-        reset();
-        setEmptyTestDatabase(getContext(), getClass().getName());
     }
 
     @Override
     public void tearDown() {
-        reset();
-    }
-
-    private void reset() {
-        resetTestDatabase(getContext(), getClass().getName());
+        ContentResolver resolver = getContext().getContentResolver();
+        resolver.delete(TaskList.URI, null, null);
+        resolver.delete(Task.URI, null, null);
+        resolver.delete(RemoteTaskList.URI, null, null);
+        resolver.delete(RemoteTask.URI, null, null);
 
         File d = new File(DIR);
         for (File f : d.listFiles()) {
@@ -251,7 +246,7 @@ public class OrgSyncTest extends AndroidTestCase {
      * Tested flow branches:
      * - Lists: Create file
      */
-    public void testDuplicateName() throws IOException, ParseException {
+    public void testDuplicateName() {
         // Create first list
         TaskList list1 = new TaskList();
         list1.title = "TestList";
@@ -266,7 +261,11 @@ public class OrgSyncTest extends AndroidTestCase {
 
         // Sync it
         TestSynchronizer synchronizer = new TestSynchronizer(getContext());
-        synchronizer.fullSync();
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
 
         // Make sure the second one was renamed!
         for (TaskList tl : getTaskLists()) {
@@ -289,7 +288,7 @@ public class OrgSyncTest extends AndroidTestCase {
      * Tested branches:
      * - Update list, renamed
      */
-    public void testRenamedList() throws IOException, ParseException {
+    public void testRenamedList() {
         // Create first list
         TaskList list1 = new TaskList();
         list1.title = "TestList";
@@ -298,7 +297,11 @@ public class OrgSyncTest extends AndroidTestCase {
 
         // Sync it
         TestSynchronizer synchronizer = new TestSynchronizer(getContext());
-        synchronizer.fullSync();
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
 
         File org = new File(DIR, OrgConverter.getTitleAsFilename
                 (list1));
@@ -329,7 +332,7 @@ public class OrgSyncTest extends AndroidTestCase {
      * Tested branches:
      * - Delete File Db
      */
-    public void testDeletedList() throws IOException, ParseException {
+    public void testDeletedList() {
         // Setup simple DB
         final int taskCount = 2;
         testFreshSimple();
@@ -355,7 +358,11 @@ public class OrgSyncTest extends AndroidTestCase {
 
         // Sync it again
         TestSynchronizer synchronizer = new TestSynchronizer(getContext());
-        synchronizer.fullSync();
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
 
         // Check that the database has removed it
         lists = getTaskLists();
@@ -374,7 +381,7 @@ public class OrgSyncTest extends AndroidTestCase {
     /** Test moving 1 task from List A to List B
      *
      */
-    public void testMoveOne() throws IOException, ParseException {
+    public void testMoveOne() {
         // First create Two lists
         TaskList listA = new TaskList();
         listA.title = "TestListA";
@@ -397,7 +404,11 @@ public class OrgSyncTest extends AndroidTestCase {
         // Sync it
         TestSynchronizer synchronizer = new TestSynchronizer(getContext());
 
-        synchronizer.fullSync();
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
 
         // Check state of sync
         ArrayList<RemoteTaskList> remoteLists = getRemoteTaskLists();
@@ -420,7 +431,11 @@ public class OrgSyncTest extends AndroidTestCase {
         }
 
         // Sync it
-        synchronizer.fullSync();
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
 
         // Check state of sync
         remoteLists = getRemoteTaskLists();
@@ -436,7 +451,7 @@ public class OrgSyncTest extends AndroidTestCase {
     /** Test moving 20 tasks from List A to List B
      *
      */
-    public void testMoveMany() throws IOException, ParseException {
+    public void testMoveMany() {
         // First create Two lists
         TaskList listA = new TaskList();
         listA.title = "TestListA";
@@ -464,7 +479,11 @@ public class OrgSyncTest extends AndroidTestCase {
         // Sync it
         TestSynchronizer synchronizer = new TestSynchronizer(getContext());
 
-        synchronizer.fullSync();
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
 
         // Check state of sync
         ArrayList<RemoteTaskList> remoteLists = getRemoteTaskLists();
@@ -513,7 +532,7 @@ public class OrgSyncTest extends AndroidTestCase {
     /** Test moving 12 tasks from List A to List B where there are 12 lists each with 20 tasks
      *
      */
-    public void testMoveManyAmongMany() throws IOException, ParseException {
+    public void testMoveManyAmongMany() {
         final int listCount = 12;
         final int taskCount = 20;
         final int movedTaskCount = 12;
@@ -548,7 +567,11 @@ public class OrgSyncTest extends AndroidTestCase {
         // Sync it
         TestSynchronizer synchronizer = new TestSynchronizer(getContext());
 
-        synchronizer.fullSync();
+        try {
+            synchronizer.fullSync();
+        } catch (Exception e) {
+            assertTrue(e.getLocalizedMessage(), false);
+        }
 
         // Check state of sync
         ArrayList<RemoteTaskList> remoteLists = getRemoteTaskLists();

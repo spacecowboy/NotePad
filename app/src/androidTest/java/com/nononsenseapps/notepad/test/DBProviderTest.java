@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
-import com.nononsenseapps.notepad.data.model.sql.Task;
-import com.nononsenseapps.notepad.data.model.sql.TaskList;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -14,11 +14,6 @@ import android.net.Uri;
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
 
-import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.resetTestDatabase;
-import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.setEmptyTestDatabase;
-import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.setFreshTestDatabase;
-import static com.nononsenseapps.notepad.data.local.sql.DatabaseHandler.setTestDatabase;
-
 public class DBProviderTest extends AndroidTestCase {
 
 	private Context context;
@@ -26,14 +21,14 @@ public class DBProviderTest extends AndroidTestCase {
 
 	@Override
 	public void setUp() throws Exception {
+		super.setUp();
 		context = getContext();
-		setEmptyTestDatabase(context, getClass().getName());
 		resolver = context.getContentResolver();
 	}
 
 	@Override
 	public void tearDown() throws Exception {
-        resetTestDatabase(context, getClass().getName());
+		super.tearDown();
 	}
 
 	private void assertUriReturnsResult(final Uri uri, final String[] fields) {

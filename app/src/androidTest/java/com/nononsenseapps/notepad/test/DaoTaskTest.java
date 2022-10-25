@@ -1,6 +1,6 @@
 package com.nononsenseapps.notepad.test;
 
-import com.nononsenseapps.notepad.data.model.sql.Task;
+import com.nononsenseapps.notepad.database.Task;
 
 import android.test.AndroidTestCase;
 import android.test.suitebuilder.annotation.MediumTest;
