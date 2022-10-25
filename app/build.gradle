@@ -59,6 +59,10 @@ android {
     buildToolsVersion '32.0.0'
     useLibrary  'org.apache.http.legacy'
 
+    useLibrary 'android.test.runner'
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+
     lint {
         abortOnError false
         explainIssues true
