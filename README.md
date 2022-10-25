@@ -1,18 +1,27 @@
 # NoNonsense Notes
 
-[![Join the chat at https://gitter.im/spacecowboy/NotePad](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/spacecowboy/NotePad?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+a note taking app for android, with reminders.
+The app is currently being updated, and old versions are still available on f-droid:
 
-<a href="https://flattr.com/submit/auto?user_id=spacecowboy&url=https%3A%2F%2Fgithub.com%2Fspacecowboy%2Fnotepad%2F" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0"></a> [![Build Status](https://travis-ci.org/spacecowboy/NotePad.svg?branch=master)](https://travis-ci.org/spacecowboy/NotePad) [![Crowdin](https://d322cqt584bo4o.cloudfront.net/nononsensenotes/localized.png)](https://crowdin.com/project/nononsensenotes)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
+    alt="Get it on F-Droid"
+    height="80">
+](https://f-droid.org/repository/browse/?fdid=com.nononsenseapps.notepad) 
 
-[![F-Droid](https://f-droid.org/wiki/images/0/0f/F-Droid-button_smaller.png)](https://f-droid.org/repository/browse/?fdid=com.nononsenseapps.notepad) 
+[![Crowdin](https://d322cqt584bo4o.cloudfront.net/nononsensenotes/localized.png)](https://crowdin.com/project/nononsensenotes)
 
-Link to [Google Play](https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad)
+Dead links:
+* [![Join the chat at https://gitter.im/spacecowboy/NotePad](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/spacecowboy/NotePad?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+* <a href="https://flattr.com/submit/auto?user_id=spacecowboy&url=https%3A%2F%2Fgithub.com%2Fspacecowboy%2Fnotepad%2F" target="_blank"><img src="http://api.flattr.com/button/flattr-badge-large.png" alt="Flattr this" title="Flattr this" border="0"></a> 
+* [![Build Status](https://travis-ci.org/spacecowboy/NotePad.svg?branch=master)](https://travis-ci.org/spacecowboy/NotePad) 
+* Link to [Google Play](https://play.google.com/store/apps/details?id=com.nononsenseapps.notepad)
+* [http://www.nononsenseapps.com](http://www.nononsenseapps.com) for updates
 
-Latest updates posted on [http://www.nononsenseapps.com](http://www.nononsenseapps.com)
+How it looks like:
 
-<img src="tablet.png" alt="Tablet UI" />
+<img src="tablet.png" alt="Tablet UI" height="360" />
 
-<img src="phone.png" alt="Phone UI" height="720" />
+<img src="phone.png" alt="Phone UI" height="480" />
 
 # Reporting bugs
 Please report bugs by creating an [issue here](https://github.com/spacecowboy/NotePad/issues).
@@ -46,21 +55,15 @@ https://developers.google.com/google-apps/tasks/firstapp
 
 Scroll to the section named __Register your project__.
 
-And similar over here https://www.dropbox.com/developers/apps
 
 # Build the project
 
-For free version:
-
-    ./gradlew installFreeDebug
-
-Or with play services and location reminders:
-
-    ./gradlew installPlayDebug
-
-Same as above but including Dropbox at the moment:
-
-    ./gradlew installPlayBetaDebug
+```powershell
+git clone https://github.com/spacecowboy/NotePad
+cd NotePad
+./gradlew installFreeDebug
+```
+if it does not work, open an [issue here](https://github.com/spacecowboy/NotePad/issues)
 
 # License
 
