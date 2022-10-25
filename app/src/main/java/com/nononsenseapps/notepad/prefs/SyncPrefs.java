@@ -192,10 +192,6 @@ public class SyncPrefs extends PreferenceFragment implements
                 return true;
             }
         });
-
-        if (BuildConfig.DROPBOX_ENABLED && BuildConfig.NONFREE) {
-            // dropbox integration was removed because it is non-free
-        }
     }
 
     @Override

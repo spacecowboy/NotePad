@@ -89,15 +89,11 @@ android {
     }
 
     defaultConfig {
-      applicationId "com.nononsenseapps.notepad"
-      minSdkVersion 23 // https://apilevels.com/ says most people have at least android 7.1, anyway
-      targetSdkVersion 28 // the max that still works well with the android support library. good enough for now
-      versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
-      versionName getVersionName()
-
-        // If Non-Free libraries are to be used
-        buildConfigField "boolean", "NONFREE", "false"
-        buildConfigField "boolean", "DROPBOX_ENABLED", "false"
+        applicationId "com.nononsenseapps.notepad"
+        minSdkVersion 23 // most people have at least android 7.1 anyway: https://apilevels.com/
+        targetSdkVersion 28 // see https://github.com/spacecowboy/NotePad/issues/387
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
+        versionName getVersionName()
     }
 
     compileOptions {

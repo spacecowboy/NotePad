@@ -123,7 +123,7 @@ public class NotificationItemHelper {
 			final LinearLayout notificationList, final View nv,
 			final Notification not, final Task mTask) {
 
-		if (not.radius == null || !BuildConfig.NONFREE) {
+		if (not.radius == null || !false) {
 			switchToTime(nv);
 		} else {
 			switchToLocation(nv);
@@ -153,7 +153,7 @@ public class NotificationItemHelper {
 					switchToTime(nv);
 					return true;
 				} else if (itemId == R.id.not_type_location) {
-                    if (BuildConfig.NONFREE) {
+                    if (false) {
                         switchToLocation(nv);
                         startLocationActivity(fragment, not);
                         return true;
@@ -167,7 +167,7 @@ public class NotificationItemHelper {
 
 		};
 		// Time menu, if locations enabled
-        if (BuildConfig.NONFREE) {
+        if (false) {
             final ImageButton notTimeMenu = (ImageButton) nv
                     .findViewById(R.id.notificationTypeTime);
             notTimeMenu.setOnClickListener(new OnClickListener() {
@@ -216,7 +216,7 @@ public class NotificationItemHelper {
 		});
 
 		// Location menu
-        if (BuildConfig.NONFREE) {
+        if (false) {
             final ImageButton notLocationMenu = (ImageButton) nv
                     .findViewById(R.id.notificationTypeLocation);
             notLocationMenu.setOnClickListener(new OnClickListener() {
