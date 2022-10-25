@@ -39,7 +39,6 @@ import android.support.v4.app.NotificationCompat;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.util.GeofenceRemover;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -211,7 +210,8 @@ public class NotificationHelper extends BroadcastReceiver {
 		// For any geofence ids that were not found in the database, unregister
 		// monitoring of their location. They must have been deleted somehow
 		if (geofenceIdsToRemove.size() > 0) {
-			GeofenceRemover.removeFences(context, geofenceIdsToRemove);
+			// location-based features were removed because they need non-free google services
+			// GeofenceRemover.removeFences(context, geofenceIdsToRemove);
 		}
 
 		final NotificationManager notificationManager = (NotificationManager) context

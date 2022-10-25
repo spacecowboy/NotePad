@@ -14,7 +14,6 @@ import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.ui.WeekDaysView;
-import com.nononsenseapps.util.GeofenceRemover;
 import com.nononsenseapps.utils.views.GreyableToggleButton;
 
 import android.content.ContentValues;
@@ -356,8 +355,8 @@ public class Notification extends DAO {
 	public int delete(final Context context) {
 		// Make sure existing notifications are cancelled.
 		NotificationHelper.cancelNotification(context, this);
-		// Also remove any associated geofences
-		GeofenceRemover.removeFences(context, Long.toString(_id));
+		// Also remove any associated geofences. USELESS, this would require non-free google services
+		// GeofenceRemover.removeFences(context, Long.toString(_id));
 		return super.delete(context);
 	}
 
@@ -475,8 +474,8 @@ public class Notification extends DAO {
 					c.close();
 
 					if (idsToClear.size() > 0) {
-						// Remove geofences as well
-						GeofenceRemover.removeFences(context, idsToClear);
+						// Remove geofences as well. USELESS, this requires non-free google services
+						// GeofenceRemover.removeFences(context, idsToClear);
 					}
 
 					// context.getContentResolver().delete(URI,

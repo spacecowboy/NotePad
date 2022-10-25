@@ -37,7 +37,6 @@ import com.android.datetimepicker.time.RadialPickerLayout;
 import com.android.datetimepicker.time.TimePickerDialog;
 import com.android.datetimepicker.time.TimePickerDialog.OnTimeSetListener;
 import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.ActivityLocation;
 import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Notification;
@@ -116,22 +115,8 @@ public class NotificationItemHelper {
 		not.time = cal.getTimeInMillis();
 	}
 
-	private static void startLocationActivity(
-			final TaskDetailFragment fragment, final Notification not) {
-        if (BuildConfig.NONFREE) {
-            fragment.setPendingLocationNotification(not);
-
-            Intent i = new Intent(fragment.getActivity(), ActivityLocation.getAnnotatedActivityClass());
-            i.putExtra(ActivityLocation.EXTRA_ID, not._id);
-            if (not.latitude != null && not.longitude != null && not.radius != null) {
-                i.putExtra(ActivityLocation.EXTRA_LATITUDE, (double) not.latitude)
-                        .putExtra(ActivityLocation.EXTRA_LONGITUDE,
-                                (double) not.longitude)
-                        .putExtra(ActivityLocation.EXTRA_RADIUS,
-                                (double) not.radius);
-            }
-            fragment.startActivityForResult(i, 2);
-        }
+	private static void startLocationActivity(final TaskDetailFragment fragment, final Notification not) {
+		// location-based features were removed because they need non-free google services
 	}
 
 	public static void setup(final TaskDetailFragment fragment,
