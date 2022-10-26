@@ -786,12 +786,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		}
 	}
 
-	@OnActivityResult(2)
-	public void onLocationResult(int resultCode, Intent data) {
-		Log.d("JONAS", "onResult1");
-		// location-based features were removed because they need non-free google services
-	}
-
 	private void deleteAndClose() {
 		if (mTask != null && mTask._id > 0 && !isLocked()) {
 			DialogDeleteTask.showDialog(getFragmentManager(), mTask._id,

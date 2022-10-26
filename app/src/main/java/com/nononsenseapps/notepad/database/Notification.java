@@ -471,14 +471,6 @@ public class Notification extends DAO {
 					}
 					c.close();
 
-					if (idsToClear.size() > 0) {
-						// Remove geofences as well. USELESS, this requires non-free google services
-						// GeofenceRemover.removeFences(context, idsToClear);
-					}
-
-					// context.getContentResolver().delete(URI,
-					// Columns.TASKID + " IN " + idStrings +
-					// " AND " + Columns.TIME + " <= " + maxTime, null);
 					return null;
 				}
 			};
