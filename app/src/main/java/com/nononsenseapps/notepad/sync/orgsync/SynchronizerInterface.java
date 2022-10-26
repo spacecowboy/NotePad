@@ -32,7 +32,7 @@ public interface SynchronizerInterface {
 	/**
 	 * 
 	 * @return A unique name for this service. Should be descriptive, like
-	 *         DropboxOrg, SDOrg or SSHOrg.
+	 *         SDOrg or SSHOrg.
 	 */
 	public String getServiceName();
 	

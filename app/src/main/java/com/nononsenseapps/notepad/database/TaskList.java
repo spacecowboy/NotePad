@@ -77,14 +77,11 @@ public class TaskList extends DAO {
 
 		// public static final String GTASKACCOUNT = "gtaskaccount";
 		// public static final String GTASKID = "gtaskid";
-		//
-		// // Future proofing
-		// public static final String DROPBOXACCOUNT = "dropboxaccount";
-		// public static final String DROPBOXID = "dropboxid";
+		//		
 
 		public static final String[] FIELDS = { _ID, TITLE, UPDATED, LISTTYPE,
 				SORTING };
-		// GTASKACCOUNT, GTASKID, DROPBOXACCOUNT, DROPBOXID };
+		// GTASKACCOUNT, GTASKID };
 		public static final String[] SHALLOWFIELDS = { _ID, TITLE, UPDATED };
 	}
 
@@ -126,9 +123,7 @@ public class TaskList extends DAO {
 
 	// Sync stuff
 	// public String gtaskaccount = null;
-	// public String gtaskid = null;
-	// public String dropboxaccount = null;
-	// public String dropboxid = null;
+	// public String gtaskid = null;	
 
 	public TaskList() {
 	}
@@ -142,8 +137,6 @@ public class TaskList extends DAO {
 		// sync stuff
 		// gtaskaccount = c.getString(3);
 		// gtaskid = c.getString(4);
-		// dropboxaccount = c.getString(5);
-		// dropboxid = c.getString(6);
 	}
 
 	public TaskList(final Uri uri, final ContentValues values) {
@@ -173,9 +166,7 @@ public class TaskList extends DAO {
 		sorting = values.getAsString(Columns.SORTING);
 
 		// gtaskaccount = values.getAsString(Columns.GTASKACCOUNT);
-		// gtaskid = values.getAsString(Columns.GTASKID);
-		// dropboxaccount = values.getAsString(Columns.DROPBOXACCOUNT);
-		// dropboxid = values.getAsString(Columns.DROPBOXID);
+		// gtaskid = values.getAsString(Columns.GTASKID);		
 	}
 
 	public ContentValues getContent() {
@@ -188,8 +179,6 @@ public class TaskList extends DAO {
 
 		// values.put(Columns.GTASKACCOUNT, gtaskaccount);
 		// values.put(Columns.GTASKID, gtaskid);
-		// values.put(Columns.DROPBOXACCOUNT, dropboxaccount);
-		// values.put(Columns.DROPBOXID, dropboxid);
 
 		return values;
 	}

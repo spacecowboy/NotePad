@@ -142,7 +142,6 @@ dependencies {
     // annotations
     annotationProcessor "org.androidannotations:androidannotations:4.8.0"
     implementation "org.androidannotations:androidannotations-api:4.8.0"
-    // Dropbox and non-free stuff will not be kept
     // Tests
     androidTestImplementation 'com.squareup.spoon:spoon-client:1.7.1'
     // newer versions require JAVA 11 and gradle plugin version > 7.4

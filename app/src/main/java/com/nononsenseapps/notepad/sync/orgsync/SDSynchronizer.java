@@ -64,7 +64,7 @@ public class SDSynchronizer extends Synchronizer implements
 
     /**
      * @return A unique name for this service. Should be descriptive, like
-     * DropboxOrg, SDOrg or SSHOrg.
+     * SDOrg or SSHOrg.
      */
 	@Override
 	public String getAccountName() {
