@@ -218,8 +218,5 @@
   <string name="sd_card_summary">Opgaver er spejlet på SD kortet. Ændringer synkroniseres begge veje. Bemærk at sletning af filerne også vil slette opgaverne i app\'et!</string>
   <string name="directory">Mappe</string>
   <string name="directory_summary">Hvor filerne skal gemmes.</string>
-  <string name="dropbox_sync">Dropbox synkronisering</string>
-  <string name="dropbox_sync_summary">Hold dine opgaver og noter synkroniseret med tekst-filer i din Dropbox.</string>
   <string name="cannot_write_to_directory">Kan ikke skrive til mappe</string>
-  <string name="wait_for_dropbox">Vent venligst på at Dropbox færdiggører dens initialisering.</string>
 </resources>

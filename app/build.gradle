@@ -59,8 +59,13 @@ android {
     buildToolsVersion '32.0.0'
     useLibrary  'org.apache.http.legacy'
 
+    useLibrary 'android.test.runner'
+    useLibrary 'android.test.base'
+    useLibrary 'android.test.mock'
+
     lint {
         abortOnError false
+        explainIssues true
     }
 
     packagingOptions {
@@ -68,16 +73,34 @@ android {
         exclude 'META-INF/NOTICE.txt'
     }
 
-    defaultConfig {
-      applicationId "com.nononsenseapps.notepad"
-      minSdkVersion 23 // https://apilevels.com/ says most people have at least android 7.1, anyway
-      targetSdkVersion 28 // the max that still works well with the android support library. good enough for now
-      versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
-      versionName getVersionName()
+    // disable code shrinking in debug, enable it in release mode
+    buildTypes {
+        debug {
+            minifyEnabled false
+            shrinkResources false
+            pseudoLocalesEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+        release {
+            minifyEnabled true
+            shrinkResources true
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
 
-        // If Non-Free libraries are to be used
-        buildConfigField "boolean", "NONFREE", "false"
-        buildConfigField "boolean", "DROPBOX_ENABLED", "false"
+    defaultConfig {
+        applicationId "com.nononsenseapps.notepad"
+        minSdkVersion 23 // most people have at least android 7.1 anyway: https://apilevels.com/
+        targetSdkVersion 28 // see https://github.com/spacecowboy/NotePad/issues/387
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
+        versionName getVersionName()
+    }
+
+    compileOptions {
+        // coreLibraryDesugaringEnabled true    // enable support for the new language APIs
+        // for java 9+ we need target SDK version > 30
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     flavorDimensions "uselessname"
@@ -119,8 +142,9 @@ dependencies {
     // annotations
     annotationProcessor "org.androidannotations:androidannotations:4.8.0"
     implementation "org.androidannotations:androidannotations-api:4.8.0"
-    // Dropbox and non-free stuff will not be kept
     // Tests
     androidTestImplementation 'com.squareup.spoon:spoon-client:1.7.1'
+    // newer versions require JAVA 11 and gradle plugin version > 7.4
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 
 }

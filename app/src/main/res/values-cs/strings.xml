@@ -214,9 +214,5 @@
   <string name="sd_card_summary">Úkoly jsou zrcadleny na SD kartu. Změny se synchronizují oběma směry. Všimněte si, že smazání souborů odstraní úkoly v aplikaci!</string>
   <string name="directory">Adresář</string>
   <string name="directory_summary">Kde by měly být uloženy soubory.</string>
-  <string name="dropbox">Dropbox</string>
-  <string name="dropbox_sync">Synchronizace s Dropboxem</string>
-  <string name="dropbox_sync_summary">Udržujte své úkoly a poznámky synchronizovány s textovými soubory v úložišti Dropbox.</string>
   <string name="cannot_write_to_directory">Nelze zapisovat do adresáře</string>
-  <string name="wait_for_dropbox">Počkejte prosím na dokončení inicializace úložiště Dropbox.</string>
 </resources>

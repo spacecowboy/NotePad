@@ -296,11 +296,7 @@
     <string name="sd_card_summary">Tasks are mirrored on the SD card. Changes are synchronized both ways. Note that deleting the files will delete the tasks in the app!</string>
     <string name="directory">Directory</string>
     <string name="directory_summary">Where files should be stored.</string>
-    <string name="dropbox">Dropbox</string>
-    <string name="dropbox_sync">Dropbox Sync</string>
-    <string name="dropbox_sync_summary">Keep your tasks and notes synchronized with text files in your Dropbox.</string>
     <string name="cannot_write_to_directory">Cannot write to directory</string>
-    <string name="wait_for_dropbox">Please wait for Dropbox to finish its initialization.</string>
     <string name="bigger_titles">Title larger</string>
     <string name="bigger_titles_summary">The title is the first line</string>
 

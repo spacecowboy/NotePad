@@ -220,8 +220,5 @@
   <string name="sd_card_summary">Anteckningar kopieras till SD-kortet. Ändringar synkroniseras båda till och från SD-kortet. Notera att filer som raderas från SD-kortet även raderar listorna i appen!</string>
   <string name="directory">Mapp</string>
   <string name="directory_summary">Var filerna ska sparas</string>
-  <string name="dropbox_sync">Dropbox-synkronisering</string>
-  <string name="dropbox_sync_summary">Synkronisera dina anteckingar med filer i din Dropbox.</string>
   <string name="cannot_write_to_directory">Kan inte skriva till mapp</string>
-  <string name="wait_for_dropbox">Vänligen vänta på att Dropbox slutför sin initiala synkronisering.</string>
 </resources>

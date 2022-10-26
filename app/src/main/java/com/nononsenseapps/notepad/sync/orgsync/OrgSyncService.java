@@ -92,9 +92,7 @@ public class OrgSyncService extends Service {
         SharedPreferences prefs =
                 PreferenceManager.getDefaultSharedPreferences(context);
 
-        return prefs.getBoolean(SyncPrefs.KEY_SD_ENABLE, false) ||
-               (BuildConfig.DROPBOX_ENABLED &&
-               prefs.getBoolean(SyncPrefs.KEY_DROPBOX_ENABLE, false));
+        return prefs.getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
     }
 
 	public OrgSyncService() {
@@ -116,13 +114,7 @@ public class OrgSyncService extends Service {
             syncers.add(sd);
         }
 
-        // Try Dropbox
-        if (BuildConfig.DROPBOX_ENABLED && BuildConfig.NONFREE) {
-            SynchronizerInterface db = new DropboxSynchronizer(this);
-            if (db.isConfigured()) {
-                syncers.add(db);
-            }
-        }
+        // if we add another synchronization service, add code here
 
         return syncers;
 	}

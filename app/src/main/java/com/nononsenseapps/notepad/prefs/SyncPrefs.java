@@ -43,15 +43,12 @@ import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import com.nononsenseapps.build.Config;
-import com.nononsenseapps.filepicker.DropboxFilePickerActivity;
 import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
-import com.nononsenseapps.notepad.sync.orgsync.DropboxSyncHelper;
-import com.nononsenseapps.notepad.sync.orgsync.DropboxSynchronizer;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
 
@@ -76,19 +73,14 @@ public class SyncPrefs extends PreferenceFragment implements
     // SD sync
     public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
     public static final String KEY_SD_DIR = "pref_sync_sd_dir";
-    // Dropbox sync
-    public static final String KEY_DROPBOX_ENABLE = "pref_sync_dropbox_enabled";
-    public static final String KEY_DROPBOX_DIR = "pref_sync_dropbox_dir";
     private static final int PICK_SD_DIR_CODE = 1;
-    private static final int PICK_DROPBOX_DIR_CODE = 2;
 
 
     private Activity activity;
 
     private Preference prefAccount;
     private Preference prefSdDir;
-    private Preference prefDropboxDir;
-    private DropboxSyncHelper mDropboxHelper = null;
+
 
     // private Preference prefSyncFreq;
 
@@ -196,52 +188,6 @@ public class SyncPrefs extends PreferenceFragment implements
                 return true;
             }
         });
-
-        if (BuildConfig.DROPBOX_ENABLED && BuildConfig.NONFREE) {
-            // Dropbox, disable if no key present
-            findPreference(KEY_DROPBOX_ENABLE)
-                    .setEnabled(BuildConfig.DROPBOX_ENABLED &&
-                                Config.getKeyDropboxAPI(getActivity()) !=
-                                null &&
-                                !Config.getKeyDropboxAPISecret(getActivity())
-                                        .contains(" "));
-            prefDropboxDir = findPreference(KEY_DROPBOX_DIR);
-            prefDropboxDir.setEnabled(BuildConfig.DROPBOX_ENABLED);
-            setDropboxDirSummary(sharedPrefs);
-            prefDropboxDir.setOnPreferenceClickListener(
-                    new OnPreferenceClickListener() {
-                        @Override
-                        public boolean onPreferenceClick(
-                                final Preference preference) {
-                            // See if initial sync is complete
-                            if (mDropboxHelper == null) {
-                                mDropboxHelper = new DropboxSyncHelper(getActivity());
-                            }
-                            if (mDropboxHelper.isLinked()) {
-                                // Start the filepicker
-                                Intent i = new Intent(getActivity(),
-                                        DropboxFilePickerActivity.class);
-                                i.putExtra(FilePickerActivity.EXTRA_START_PATH,
-                                        sharedPrefs.getString(KEY_DROPBOX_DIR,
-                                                DropboxSynchronizer.DEFAULT_DIR));
-                                i.putExtra(
-                                        FilePickerActivity.EXTRA_ALLOW_MULTIPLE,
-                                        false).putExtra(
-                                        FilePickerActivity.EXTRA_ALLOW_CREATE_DIR,
-                                        true)
-                                        .putExtra(FilePickerActivity.EXTRA_MODE,
-                                                FilePickerActivity.MODE_DIR);
-                                i.addFlags(
-                                        Intent.FLAG_ACTIVITY_REORDER_TO_FRONT);
-                                startActivityForResult(i,
-                                        PICK_DROPBOX_DIR_CODE);
-
-                            }
-
-                            return true;
-                        }
-                    });
-        }
     }
 
     @Override
@@ -267,8 +213,7 @@ public class SyncPrefs extends PreferenceFragment implements
         newFragment.show(ft, "accountdialog");
     }
 
-    public void onSharedPreferenceChanged(SharedPreferences prefs,
-                                          String key) {
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
         try {
             Log.d("syncPrefs", "onChanged");
             if (activity.isFinishing()) {
@@ -288,32 +233,12 @@ public class SyncPrefs extends PreferenceFragment implements
                     OrgSyncService.stop(getActivity());
                 } else if (KEY_SD_DIR.equals(key)) {
                     setSdDirSummary(prefs);
-                } else if (KEY_DROPBOX_ENABLE.equals(key)) {
-                    // TODO
-                    if (mDropboxHelper == null) {
-                        mDropboxHelper = new DropboxSyncHelper(getActivity());
-                    }
-                    if (prefs.getBoolean(key, false)) {
-                        // authorize the user
-                        mDropboxHelper.linkAccount();
-//                        DropboxSynchronizer.linkAccount(this,
-//                                DROPBOX_LINK_CODE);
-                    } else {
-                        mDropboxHelper.unlinkAccount();
-//                        DropboxSynchronizer.unlink(getActivity());
-                    }
-                    // Restart sync service
-                    OrgSyncService.stop(getActivity());
-                } else if (KEY_DROPBOX_DIR.equals(key)) {
-                    setDropboxDirSummary(prefs);
                 }
             }
         } catch (IllegalStateException e) {
             // This is just in case the "isFinishing" wouldn't be enough
-            // The isFinishing will try to prevent us from doing something
-            // stupid
-            // This catch prevents the app from crashing if we do something
-            // stupid
+            // The isFinishing will try to prevent us from doing something stupid
+            // This catch prevents the app from crashing if we do something stupid
         }
 
     }
@@ -321,27 +246,11 @@ public class SyncPrefs extends PreferenceFragment implements
     @Override
     public void onResume() {
         super.onResume();
-
-        if (mDropboxHelper != null) {
-            if (mDropboxHelper.handleLinkResult()) {
-                // Success
-            } else {
-                // Link failed or was cancelled by the user.
-                PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
-                        .putBoolean(KEY_DROPBOX_ENABLE, false).commit();
-            }
-        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_DROPBOX_DIR_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                PreferenceManager.getDefaultSharedPreferences(getActivity
-                        ()).edit().putString(KEY_DROPBOX_DIR,
-                        data.getData().getPath()).commit();
-            } // else was cancelled
-        } else if (requestCode == PICK_SD_DIR_CODE) {
+        if (requestCode == PICK_SD_DIR_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 // Set it
                 File path = new File(data.getData().getPath());
@@ -396,12 +305,6 @@ public class SyncPrefs extends PreferenceFragment implements
     private void setSdDirSummary(final SharedPreferences sharedPreferences) {
         prefSdDir.setSummary(sharedPreferences.getString(KEY_SD_DIR,
                 SDSynchronizer.DEFAULT_ORG_DIR));
-    }
-
-    private void setDropboxDirSummary(final SharedPreferences
-                                              sharedPreferences) {
-        prefDropboxDir.setSummary(sharedPreferences.getString(KEY_DROPBOX_DIR,
-                DropboxSynchronizer.DEFAULT_DIR));
     }
 
     public static class AccountDialog extends DialogFragment implements

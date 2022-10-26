@@ -44,9 +44,6 @@ android {
     abortOnError false
   }
 
-  //compileSdkVersion 18
-  //buildToolsVersion '23.0.2'
-
   sourceSets {
     main {
       manifest.srcFile 'AndroidManifest.xml'

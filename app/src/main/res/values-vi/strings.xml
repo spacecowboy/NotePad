@@ -234,8 +234,5 @@
   <string name="sd_card_summary">Các ghi chú được lưu cả trên thẻ SD và trong ứng dụng. Cảnh báo: Nếu xoá tập tin đồng bộ, các ghi chú sẽ bị mất.</string>
   <string name="directory">Đường dẫn</string>
   <string name="directory_summary">Nơi lưu tập tin đồng bộ</string>
-  <string name="dropbox_sync">Đồng bộ hoá với Dropbox</string>
-  <string name="dropbox_sync_summary">Các ghi chú được lưu thành tập tin văn bản trên Dropbox của bạn.</string>
   <string name="cannot_write_to_directory">Không thể ghi vào đường đẫn</string>
-  <string name="wait_for_dropbox">Hãy đợi để Dropbox chạy lần đầu tiên.</string>
 </resources>

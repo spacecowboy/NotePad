@@ -234,9 +234,5 @@
   <string name="sd_card_summary">Aufgaben werden auf die SD-Karte gespiegelt. Änderungen werden in beide Richtungen synchronisiert. Wenn die Dateien gelöscht werden, werden auf die Aufgaben in der App gelöscht!</string>
   <string name="directory">Ordner</string>
   <string name="directory_summary">Wo die Dateien gespeichert werden sollen.</string>
-  <string name="dropbox">Dropbox</string>
-  <string name="dropbox_sync">Dropbox-Sync</string>
-  <string name="dropbox_sync_summary">Synchronisieren Sie Ihre Aufgaben und Notizen mit Text-Dateien in Ihrer Dropbox.</string>
   <string name="cannot_write_to_directory">In Ordner kann nicht geschrieben werden</string>
-  <string name="wait_for_dropbox">Bitte warten Sie, während Dropbox die Initialisierung beendet.</string>
 </resources>

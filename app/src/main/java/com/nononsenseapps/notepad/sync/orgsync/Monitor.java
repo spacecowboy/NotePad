@@ -18,8 +18,7 @@ package com.nononsenseapps.notepad.sync.orgsync;
 
 /**
  * An interface which defines a "Monitor". A monitor is an object which
- * monitors a specific sync source for changes, such as a FileMonitor or
- * Dropbox PathListener.
+ * monitors a specific sync source for changes, such as a FileMonitor.
  */
 public interface Monitor {
     /**

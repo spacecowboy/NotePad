@@ -228,8 +228,5 @@
   <string name="sd_card_summary">Tehtävät peilataan muistikortille. Muutokset synkronoidaan molempiin suuntiin. Huomaa, että tiedostojen poistaminen poistaa tehtävät myös sovelluksesta!</string>
   <string name="directory">Hakemisto</string>
   <string name="directory_summary">Minne tiedot tulisi tallentaa.</string>
-  <string name="dropbox_sync">Dropbox-synkronointi</string>
-  <string name="dropbox_sync_summary">Pidä tehtäväsi ja muistiinpanosi synkronoituna tekstiasiakirjoina Dropboxissa.</string>
   <string name="cannot_write_to_directory">Hakemistoon ei voitu kirjoittaa</string>
-  <string name="wait_for_dropbox">Odota, että Dropbox lopettaa valmistelun</string>
 </resources>

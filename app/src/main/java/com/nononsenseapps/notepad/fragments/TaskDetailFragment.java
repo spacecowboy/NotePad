@@ -54,7 +54,6 @@ import com.github.espiandev.showcaseview.ShowcaseView;
 import com.github.espiandev.showcaseview.ShowcaseViews;
 import com.github.espiandev.showcaseview.ShowcaseViews.ItemViewProperties;
 import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.ActivityLocation;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.ActivityTaskHistory_;
@@ -785,38 +784,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		if (resultCode == Activity.RESULT_OK) {
 			onTimeTravel(data);
 		}
-	}
-
-	@OnActivityResult(2)
-	public void onLocationResult(int resultCode, Intent data) {
-		// Location
-		Log.d("JONAS", "onResult1");
-        if (BuildConfig.NONFREE) {
-            if (resultCode == Activity.RESULT_OK
-                    && pendingLocationNotification != null) {
-                Log.d("JONAS", "onResult2");
-                // update text field and shit
-                pendingLocationNotification.latitude = data.getExtras().getDouble(
-                        ActivityLocation.EXTRA_LATITUDE);
-                pendingLocationNotification.longitude = data.getExtras().getDouble(
-                        ActivityLocation.EXTRA_LONGITUDE);
-                pendingLocationNotification.radius = data.getExtras().getDouble(
-                        ActivityLocation.EXTRA_RADIUS);
-                pendingLocationNotification.locationName = data.getExtras()
-                        .getString(ActivityLocation.EXTRA_LOCATION_NAME);
-                if (pendingLocationNotification.view != null
-                        && pendingLocationNotification.locationName != null) {
-                    Log.d("JONAS", "onResult3");
-                    NotificationItemHelper
-                            .switchToLocation(pendingLocationNotification.view);
-
-                    NotificationItemHelper
-                            .setLocationName(pendingLocationNotification);
-                }
-                // do in background
-                pendingLocationNotification.saveInBackground(getActivity(), false);
-            }
-        }
 	}
 
 	private void deleteAndClose() {

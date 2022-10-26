@@ -39,7 +39,6 @@ import android.support.v4.app.NotificationCompat;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.util.GeofenceRemover;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -49,7 +48,7 @@ import java.util.List;
 
 public class NotificationHelper extends BroadcastReceiver {
 
-	public static final int NOTIFICATION_ID = 4364;
+	//public static final int NOTIFICATION_ID = 4364;
 
 	// static final String ARG_MAX_TIME = "maxtime";
 	// static final String ARG_LISTID = "listid";
@@ -123,10 +122,11 @@ public class NotificationHelper extends BroadcastReceiver {
 	@TargetApi(Build.VERSION_CODES.O)
 	@RequiresApi(Build.VERSION_CODES.O)
 	public static void createNotificationChannel(final Context context, NotificationManager nm) {
-		// TODO test if it is used everywhere we need. everything should work ??
 		String name = context.getString(R.string.notification_channel_name);
 		String description = context.getString(R.string.notification_channel_description);
-		int importance = NotificationManager.IMPORTANCE_DEFAULT; // TODO maybe HIGH importance ?
+
+		// not higher, not lower. This is equivalent to notifications before API 24
+		int importance = NotificationManager.IMPORTANCE_DEFAULT;
 
 		NotificationChannel channel	= new NotificationChannel(CHANNEL_ID, name, importance);
 		channel.setDescription(description);
@@ -161,8 +161,8 @@ public class NotificationHelper extends BroadcastReceiver {
 
 		try {
 			while (c.moveToNext()) {
-				com.nononsenseapps.notepad.database.Notification not = new com.nononsenseapps.notepad.database.Notification(
-						c);
+				com.nononsenseapps.notepad.database.Notification not
+						= new com.nononsenseapps.notepad.database.Notification(c);
 				if (not.taskID != null) {
 					notificationManager.cancel(not.taskID.intValue());
 				}
@@ -170,75 +170,6 @@ public class NotificationHelper extends BroadcastReceiver {
 		}
 		finally {
 			c.close();
-		}
-	}
-
-	public static void notifyGeofence(final Context context, final long... ids) {
-		Log.d(TAG, "notifyGeofence");
-		ArrayList<String> geofenceIdsToRemove = new ArrayList<String>();
-		String idStrings = "(";
-		for (Long id : ids) {
-			geofenceIdsToRemove.add(Long.toString(id));
-			idStrings += id + ",";
-		}
-		idStrings = idStrings.substring(0, idStrings.length() - 1);
-		idStrings += ")";
-
-		Log.d(TAG, "ids: " + idStrings);
-
-		final Cursor c = context
-				.getContentResolver()
-				.query(com.nononsenseapps.notepad.database.Notification.URI_WITH_TASK_PATH,
-						com.nononsenseapps.notepad.database.Notification.ColumnsWithTask.FIELDS,
-						com.nononsenseapps.notepad.database.Notification.Columns._ID
-								+ " IN " + idStrings, null, null);
-
-		List<com.nononsenseapps.notepad.database.Notification> notifications = new ArrayList<com.nononsenseapps.notepad.database.Notification>();
-		try {
-			while (c.moveToNext()) {
-				final com.nononsenseapps.notepad.database.Notification not = new com.nononsenseapps.notepad.database.Notification(
-						c);
-				notifications.add(not);
-				// Keep track of which ones are added
-				geofenceIdsToRemove.remove(Long.toString(not._id));
-			}
-		}
-		finally {
-			c.close();
-		}
-
-		// For any geofence ids that were not found in the database, unregister
-		// monitoring of their location. They must have been deleted somehow
-		if (geofenceIdsToRemove.size() > 0) {
-			GeofenceRemover.removeFences(context, geofenceIdsToRemove);
-		}
-
-		final NotificationManager notificationManager = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-
-		Log.d(TAG, "geofence: Number of notifications: " + notifications.size());
-		// Fetch sound and vibrate settings
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-
-		// Always use default lights
-		int lightAndVibrate = Notification.DEFAULT_LIGHTS;
-		// If vibrate on, use default vibration pattern also
-		if (prefs.getBoolean(context.getString(R.string.key_pref_vibrate),
-				false)) lightAndVibrate |= Notification.DEFAULT_VIBRATE;
-
-		// Need to get a new one because the action buttons will duplicate
-		// otherwise
-		NotificationCompat.Builder builder;
-		for (com.nononsenseapps.notepad.database.Notification note : notifications) {
-			builder = getNotificationBuilder(
-					context,
-					Integer.parseInt(prefs.getString(context.getString(R.string.key_pref_prio), "0")),
-					lightAndVibrate,
-					Uri.parse(prefs.getString(context.getString(R.string.key_pref_ringtone), "DEFAULT_NOTIFICATION_URI")),
-					false);
-
-			notifyBigText(context, notificationManager, builder, note);
 		}
 	}
 
@@ -342,8 +273,8 @@ public class NotificationHelper extends BroadcastReceiver {
 			final Context context, final int priority,
 			final int lightAndVibrate, final Uri ringtone,
 			final boolean alertOnce) {
-		final NotificationCompat.Builder builder = new NotificationCompat.Builder(
-				context)
+		final NotificationCompat.Builder builder = new NotificationCompat
+				.Builder(context, CHANNEL_ID) // let's use only 1 channel in this app
 				.setWhen(0)
 				.setSmallIcon(R.drawable.ic_stat_notification_edit)
 				.setLargeIcon(
@@ -353,8 +284,7 @@ public class NotificationHelper extends BroadcastReceiver {
 				.setDefaults(lightAndVibrate)
 				.setAutoCancel(true)
 				.setOnlyAlertOnce(alertOnce)
-				.setSound(ringtone)
-				.setChannelId(CHANNEL_ID); // i do not think we need more than 1 channel
+				.setSound(ringtone);
 		return builder;
 	}
 
@@ -362,9 +292,6 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * Remove from the database, and the specified list, duplicate
 	 * notifications. The result is that each note is only associated with ONE
 	 * EXPIRED notification.
-	 *
-	 * @param context
-	 * @param notifications
 	 */
 	private static void makeUnique(
 			final Context context,
@@ -386,14 +313,11 @@ public class NotificationHelper extends BroadcastReceiver {
 	/**
 	 * Returns the first occurrence of each note's notification. Effectively the
 	 * returned list has unique elements with regard to the note id.
-	 *
-	 * @param notifications
-	 * @return
 	 */
 	private static List<com.nononsenseapps.notepad.database.Notification> getLatestOccurence(
 			final List<com.nononsenseapps.notepad.database.Notification> notifications) {
-		final ArrayList<Long> seenIds = new ArrayList<Long>();
-		final ArrayList<com.nononsenseapps.notepad.database.Notification> firsts = new ArrayList<com.nononsenseapps.notepad.database.Notification>();
+		final ArrayList<Long> seenIds = new ArrayList<>();
+		final ArrayList<com.nononsenseapps.notepad.database.Notification> firsts = new ArrayList<>();
 
 		com.nononsenseapps.notepad.database.Notification noti;
 		for (int i = notifications.size() - 1; i >= 0; i--) {
@@ -409,7 +333,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	private static List<com.nononsenseapps.notepad.database.Notification> getDuplicates(
 			final com.nononsenseapps.notepad.database.Notification first,
 			final List<com.nononsenseapps.notepad.database.Notification> notifications) {
-		final ArrayList<com.nononsenseapps.notepad.database.Notification> dups = new ArrayList<com.nononsenseapps.notepad.database.Notification>();
+		final ArrayList<com.nononsenseapps.notepad.database.Notification> dups = new ArrayList<>();
 
 		for (com.nononsenseapps.notepad.database.Notification noti : notifications) {
 			if (noti.taskID == first.taskID && noti._id != first._id) {
@@ -427,36 +351,37 @@ public class NotificationHelper extends BroadcastReceiver {
 			final NotificationManager notificationManager,
 			final NotificationCompat.Builder builder,
 			final com.nononsenseapps.notepad.database.Notification note) {
-		final Intent delIntent = new Intent(Intent.ACTION_DELETE, note.getUri());
+		// create the intent that reacts to deleting the notification
+		final Intent iDelete = new Intent(context, NotificationHelper.class)
+				.setAction(Intent.ACTION_DELETE)
+				.setData(note.getUri());
 		if (note.repeats != 0) {
-			delIntent.setAction(ACTION_RESCHEDULE);
+			iDelete.setAction(ACTION_RESCHEDULE);
 		}
 		// Add extra so we don't delete all
 		// if (note.time != null) {
-		// delIntent.putExtra(ARG_MAX_TIME, note.time);
+		// iDelete.putExtra(ARG_MAX_TIME, note.time);
 		// }
-		delIntent.putExtra(ARG_TASKID, note.taskID);
+		iDelete.putExtra(ARG_TASKID, note.taskID);
 		// Delete it on clear
-		PendingIntent deleteIntent = PendingIntent.getBroadcast(context, 0,
-				delIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+		PendingIntent piDelete = PendingIntent.getBroadcast(context, 0,
+				iDelete, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
 		// Open intent
 		final Intent openIntent = new Intent(Intent.ACTION_VIEW, Task.getUri(note.taskID));
 		// Should create a new instance to avoid fragment problems
 		openIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-		// Delete intent on non-location repeats
-		if (!note.isLocationRepeat()) {
-			// repeating location reminders should not have a delete intent, the rest do.
-			// Opening the note should delete/reschedule the notification
-			openIntent.putExtra(ActivityMain.NOTIFICATION_DELETE_ARG, note._id);
-		}
+		// Repeating reminders should have a delete intent:
+		// opening the note should delete/reschedule the notification
+		openIntent.putExtra(ActivityMain.NOTIFICATION_DELETE_ARG, note._id);
+
 		// Opening always cancels the notification though
 		openIntent.putExtra(ActivityMain.NOTIFICATION_CANCEL_ARG, note._id);
 
 		// Open note on click
 		PendingIntent clickIntent = PendingIntent.getActivity(context, 0,
-						openIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+						openIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
 		// Action to complete
 		Intent iComplete = new Intent(context, NotificationHelper.class)
@@ -485,10 +410,8 @@ public class NotificationHelper extends BroadcastReceiver {
 
 		// Delete intent on non-location repeats
 		if (!note.isLocationRepeat()) {
-			// repeating location reminders should not have a delete intent, the
-			// rest do
-			builder.setDeleteIntent(deleteIntent);
-
+			// repeating location reminders should not have a delete intent, the rest do
+			builder.setDeleteIntent(piDelete);
 		}
 
 		// Snooze button only on time non-repeating
@@ -591,8 +514,9 @@ public class NotificationHelper extends BroadcastReceiver {
 	private static void scheduleNext(Context context) {
 		// Get first future notification
 		final Calendar now = Calendar.getInstance();
-		final List<com.nononsenseapps.notepad.database.Notification> notifications = com.nononsenseapps.notepad.database.Notification
-				.getNotificationsWithTime(context, now.getTimeInMillis(), false);
+		final List<com.nononsenseapps.notepad.database.Notification> notifications
+				= com.nononsenseapps.notepad.database.Notification
+					.getNotificationsWithTime(context, now.getTimeInMillis(), false);
 
 		// if not empty, schedule alarm wake up
 		if (!notifications.isEmpty()) {
@@ -683,9 +607,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		notificationManager.cancel(notId);
 	}
 
-	/**
-	 * Modifies DB
-	 */
+	// Modifies DB
 	// public static void deleteNotification(final Context context, long listId,
 	// long maxTime) {
 	// com.nononsenseapps.notepad.database.Notification.removeWithListId(
@@ -718,7 +640,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	private static List<com.nononsenseapps.notepad.database.Notification> getSubList(
 			final long listId,
 			final List<com.nononsenseapps.notepad.database.Notification> notifications) {
-		final ArrayList<com.nononsenseapps.notepad.database.Notification> subList = new ArrayList<com.nononsenseapps.notepad.database.Notification>();
+		final ArrayList<com.nononsenseapps.notepad.database.Notification> subList = new ArrayList<>();
 		for (com.nononsenseapps.notepad.database.Notification not : notifications) {
 			if (not.listID == listId) {
 				subList.add(not);

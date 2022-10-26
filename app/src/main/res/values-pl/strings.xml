@@ -228,7 +228,5 @@
   <string name="sd_card_summary">Zadania są dublowane na karcie SD. Zmiany są synchronizowane w obie strony. Należy pamiętać, że usunięcie plików usunie zadania w aplikacji!</string>
   <string name="directory">Katalog</string>
   <string name="directory_summary">Gdzie powinny być trzymane pliki.</string>
-  <string name="dropbox_sync_summary">Synchronizuj swoje notatki i zadania z plikami tekstowymi w twoim Dropboksie.</string>
   <string name="cannot_write_to_directory">Nie można zapisać do katalogu</string>
-  <string name="wait_for_dropbox">Proszę, czekaj aż Dropbox skończy swoją inicjalizację.</string>
 </resources>

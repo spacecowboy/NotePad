@@ -227,8 +227,5 @@
   <string name="sd_card_summary">Naloge se zrcalijo na SD kartico. Spremembe se sinhronizirajo obeh načinov. Upoštevajte, da bo izbris pila izbrisati opravila v uporabi!</string>
   <string name="directory">Imenik</string>
   <string name="directory_summary">Kam naj se datoteke shranijo.</string>
-  <string name="dropbox_sync">Dropbox sinhronizacije</string>
-  <string name="dropbox_sync_summary">Naj bodo vaše naloge in zapiske sinhronizirane z besedilne datoteke v vašem Dropbox.</string>
   <string name="cannot_write_to_directory">Ne more pisati v imenik</string>
-  <string name="wait_for_dropbox">Prosimo, počakajte, Dropbox, da konča svojo inicializacijo.</string>
 </resources>

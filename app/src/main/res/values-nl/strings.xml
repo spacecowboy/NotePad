@@ -236,9 +236,5 @@
   <string name="sd_card_summary">De taken in de app zijn een afspiegeling van de SD-kaart. Wijzigingen in beide worden direct doorgevoerd. Als je de bestanden verwijderd, verdwijnen ook de taken in de app!</string>
   <string name="directory">Directory</string>
   <string name="directory_summary">Waar bestanden moeten worden opgeslagen.</string>
-  <string name="dropbox">Dropbox</string>
-  <string name="dropbox_sync">Dropbox Sync</string>
-  <string name="dropbox_sync_summary">Houd uw taken en notities gesynchroniseerd met tekstbestanden in je Dropbox.</string>
   <string name="cannot_write_to_directory">Kan niet schrijven naar directory</string>
-  <string name="wait_for_dropbox">Gelieve te wachten tot Dropbox zijn initialisatie heeft voltooid.</string>
 </resources>

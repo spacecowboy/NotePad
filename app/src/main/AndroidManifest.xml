@@ -314,7 +314,7 @@
             android:exported="false" >
         </service>
 
-        <!-- Receiver that schedules background sync for File and Dropbox -->
+        <!-- Receiver that schedules background sync for File -->
         <receiver
             android:name="com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler"
             android:enabled="true"
