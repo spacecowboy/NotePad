@@ -355,8 +355,6 @@ public class Notification extends DAO {
 	public int delete(final Context context) {
 		// Make sure existing notifications are cancelled.
 		NotificationHelper.cancelNotification(context, this);
-		// Also remove any associated geofences. USELESS, this would require non-free google services
-		// GeofenceRemover.removeFences(context, Long.toString(_id));
 		return super.delete(context);
 	}
 

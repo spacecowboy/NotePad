@@ -173,76 +173,6 @@ public class NotificationHelper extends BroadcastReceiver {
 		}
 	}
 
-	public static void notifyGeofence(final Context context, final long... ids) {
-		Log.d(TAG, "notifyGeofence");
-		ArrayList<String> geofenceIdsToRemove = new ArrayList<>();
-		String idStrings = "(";
-		for (Long id : ids) {
-			geofenceIdsToRemove.add(Long.toString(id));
-			idStrings += id + ",";
-		}
-		idStrings = idStrings.substring(0, idStrings.length() - 1);
-		idStrings += ")";
-
-		Log.d(TAG, "ids: " + idStrings);
-
-		final Cursor c = context
-				.getContentResolver()
-				.query(com.nononsenseapps.notepad.database.Notification.URI_WITH_TASK_PATH,
-						com.nononsenseapps.notepad.database.Notification.ColumnsWithTask.FIELDS,
-						com.nononsenseapps.notepad.database.Notification.Columns._ID
-								+ " IN " + idStrings, null, null);
-
-		List<com.nononsenseapps.notepad.database.Notification> notifications = new ArrayList<com.nononsenseapps.notepad.database.Notification>();
-		try {
-			while (c.moveToNext()) {
-				final com.nononsenseapps.notepad.database.Notification not = new com.nononsenseapps.notepad.database.Notification(
-						c);
-				notifications.add(not);
-				// Keep track of which ones are added
-				geofenceIdsToRemove.remove(Long.toString(not._id));
-			}
-		}
-		finally {
-			c.close();
-		}
-
-		// For any geofence ids that were not found in the database, unregister
-		// monitoring of their location. They must have been deleted somehow
-		if (geofenceIdsToRemove.size() > 0) {
-			// location-based features were removed because they need non-free google services
-			// GeofenceRemover.removeFences(context, geofenceIdsToRemove);
-		}
-
-		final NotificationManager notificationManager = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-
-		Log.d(TAG, "geofence: Number of notifications: " + notifications.size());
-		// Fetch sound and vibrate settings
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-
-		// Always use default lights
-		int lightAndVibrate = Notification.DEFAULT_LIGHTS;
-		// If vibrate on, use default vibration pattern also
-		if (prefs.getBoolean(context.getString(R.string.key_pref_vibrate),
-				false)) lightAndVibrate |= Notification.DEFAULT_VIBRATE;
-
-		// Need to get a new one because the action buttons will duplicate
-		// otherwise
-		NotificationCompat.Builder builder;
-		for (com.nononsenseapps.notepad.database.Notification note : notifications) {
-			builder = getNotificationBuilder(
-					context,
-					Integer.parseInt(prefs.getString(context.getString(R.string.key_pref_prio), "0")),
-					lightAndVibrate,
-					Uri.parse(prefs.getString(context.getString(R.string.key_pref_ringtone), "DEFAULT_NOTIFICATION_URI")),
-					false);
-
-			notifyBigText(context, notificationManager, builder, note);
-		}
-	}
-
 	/**
 	 * Displays notifications that have a time occurring in the past (and no
 	 * location). If no notifications like that exist, will make sure to cancel
@@ -442,12 +372,10 @@ public class NotificationHelper extends BroadcastReceiver {
 		// Should create a new instance to avoid fragment problems
 		openIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
 
-		// Delete intent on non-location repeats
-		if (!note.isLocationRepeat()) {
-			// repeating location reminders should not have a delete intent, the rest do.
-			// Opening the note should delete/reschedule the notification
-			openIntent.putExtra(ActivityMain.NOTIFICATION_DELETE_ARG, note._id);
-		}
+		// Repeating reminders should have a delete intent:
+		// opening the note should delete/reschedule the notification
+		openIntent.putExtra(ActivityMain.NOTIFICATION_DELETE_ARG, note._id);
+
 		// Opening always cancels the notification though
 		openIntent.putExtra(ActivityMain.NOTIFICATION_CANCEL_ARG, note._id);
 

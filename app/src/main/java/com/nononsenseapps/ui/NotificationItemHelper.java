@@ -115,19 +115,11 @@ public class NotificationItemHelper {
 		not.time = cal.getTimeInMillis();
 	}
 
-	private static void startLocationActivity(final TaskDetailFragment fragment, final Notification not) {
-		// location-based features were removed because they need non-free google services
-	}
-
 	public static void setup(final TaskDetailFragment fragment,
 			final LinearLayout notificationList, final View nv,
 			final Notification not, final Task mTask) {
 
-		if (not.radius == null || !false) {
-			switchToTime(nv);
-		} else {
-			switchToLocation(nv);
-		}
+		switchToTime(nv);
 
 		// Set time on notification if not set already
 		if (not.time == null) {
@@ -135,13 +127,11 @@ public class NotificationItemHelper {
 		}
 
 		// Set time text
-		final TextView notTimeButton = (TextView) nv
-				.findViewById(R.id.notificationTime);
+		final TextView notTimeButton = (TextView) nv.findViewById(R.id.notificationTime);
 		notTimeButton.setText(not.getLocalTimeText(fragment.getActivity()));
 
 		// Set date text
-		final TextView notDateButton = (TextView) nv
-				.findViewById(R.id.notificationDate);
+		final TextView notDateButton = (TextView) nv.findViewById(R.id.notificationDate);
 		notDateButton.setText(getDateString(fragment.getActivity(), not.time));
 
 		final OnMenuItemClickListener onTypeListener = new OnMenuItemClickListener() {
@@ -152,52 +142,12 @@ public class NotificationItemHelper {
 				if (itemId == R.id.not_type_time) {
 					switchToTime(nv);
 					return true;
-				} else if (itemId == R.id.not_type_location) {
-                    if (false) {
-                        switchToLocation(nv);
-                        startLocationActivity(fragment, not);
-                        return true;
-                    } else {
-                        return false;
-                    }
 				} else {
 					return false;
 				}
 			}
 
 		};
-		// Time menu, if locations enabled
-        if (false) {
-            final ImageButton notTimeMenu = (ImageButton) nv
-                    .findViewById(R.id.notificationTypeTime);
-            notTimeMenu.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final PopupMenu popup = new PopupMenu(fragment.getActivity(), v);
-                    try {
-                        Field[] fields = popup.getClass().getDeclaredFields();
-                        for (Field field : fields) {
-                            if ("mPopup".equals(field.getName())) {
-                                field.setAccessible(true);
-                                Object menuPopupHelper = field.get(popup);
-                                Class<?> classPopupHelper = Class
-                                        .forName(menuPopupHelper.getClass()
-                                                .getName());
-                                Method setForceIcons = classPopupHelper.getMethod(
-                                        "setForceShowIcon", boolean.class);
-                                setForceIcons.invoke(menuPopupHelper, true);
-                                break;
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    popup.setOnMenuItemClickListener(onTypeListener);
-                    popup.inflate(R.menu.notification_types);
-                    popup.show();
-                }
-            });
-        }
 
 		final View notRemoveButton = nv.findViewById(R.id.notificationRemove);
 
@@ -214,68 +164,6 @@ public class NotificationItemHelper {
 				}
 			}
 		});
-
-		// Location menu
-        if (false) {
-            final ImageButton notLocationMenu = (ImageButton) nv
-                    .findViewById(R.id.notificationTypeLocation);
-            notLocationMenu.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    final PopupMenu popup = new PopupMenu(fragment.getActivity(), v);
-                    try {
-                        Field[] fields = popup.getClass().getDeclaredFields();
-                        for (Field field : fields) {
-                            if ("mPopup".equals(field.getName())) {
-                                field.setAccessible(true);
-                                Object menuPopupHelper = field.get(popup);
-                                Class<?> classPopupHelper = Class
-                                        .forName(menuPopupHelper.getClass()
-                                                .getName());
-                                Method setForceIcons = classPopupHelper.getMethod(
-                                        "setForceShowIcon", boolean.class);
-                                setForceIcons.invoke(menuPopupHelper, true);
-                                break;
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    popup.setOnMenuItemClickListener(onTypeListener);
-                    popup.inflate(R.menu.notification_types);
-                    popup.show();
-                }
-            });
-
-            // Location button
-            final TextView location = (TextView) nv
-                    .findViewById(R.id.notificationLocation);
-            if (not.locationName != null)
-                location.setText(not.locationName);
-
-            location.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    startLocationActivity(fragment, not);
-                }
-            });
-
-
-            // Location repeat
-            final CheckBox repeatSwitch = (CheckBox) nv
-                    .findViewById(R.id.repeatSwitch);
-            repeatSwitch.setChecked(not.isLocationRepeat());
-            repeatSwitch.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView,
-                                             boolean isChecked) {
-                    not.setLocationRepeat(isChecked);
-                    not.saveInBackground(fragment.getActivity(), true);
-                }
-            });
-
-        }
 
 		// Date button
 		notDateButton.setOnClickListener(new OnClickListener() {
