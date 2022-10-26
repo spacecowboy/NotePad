@@ -229,8 +229,5 @@
   <string name="sd_card_summary">A bejegyzések az SD kártyára vannak tükrözve. A változások mind két irányban szinronizálva vannak. A fájlok törlésével a bejegyzések is törlődnek az alkalmazásból!</string>
   <string name="directory">Mappa</string>
   <string name="directory_summary">Ahol a fájlok tárolásra kerülnek.</string>
-  <string name="dropbox_sync">Dropbox szinkronizálás</string>
-  <string name="dropbox_sync_summary">Bejegyzések szinkronizálása szövegfájlokba egy Dropbox fiókjába.</string>
   <string name="cannot_write_to_directory">Mappa nem írható!</string>
-  <string name="wait_for_dropbox">Várjon amíg a Dropbox befejezi az inicializálást.</string>
 </resources>

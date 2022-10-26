@@ -174,7 +174,5 @@
   <string name="sd_card">Tarxeta SD</string>
   <string name="sd_card_sync">Sincronizar tarxeta SD</string>
   <string name="directory">Directorio</string>
-  <string name="dropbox">Dropbox</string>
-  <string name="dropbox_sync">Sincronizar Dropbox</string>
   <string name="cannot_write_to_directory">Non se pode escribir no directorio</string>
 </resources>
