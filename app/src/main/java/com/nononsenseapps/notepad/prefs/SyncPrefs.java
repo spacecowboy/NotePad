@@ -73,18 +73,14 @@ public class SyncPrefs extends PreferenceFragment implements
     // SD sync
     public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
     public static final String KEY_SD_DIR = "pref_sync_sd_dir";
-    // Dropbox sync
-    public static final String KEY_DROPBOX_ENABLE = "pref_sync_dropbox_enabled";
-    public static final String KEY_DROPBOX_DIR = "pref_sync_dropbox_dir";
     private static final int PICK_SD_DIR_CODE = 1;
-    private static final int PICK_DROPBOX_DIR_CODE = 2;
 
 
     private Activity activity;
 
     private Preference prefAccount;
     private Preference prefSdDir;
-    private Preference prefDropboxDir;
+
 
     // private Preference prefSyncFreq;
 
@@ -237,20 +233,12 @@ public class SyncPrefs extends PreferenceFragment implements
                     OrgSyncService.stop(getActivity());
                 } else if (KEY_SD_DIR.equals(key)) {
                     setSdDirSummary(prefs);
-                } else if (KEY_DROPBOX_ENABLE.equals(key)) {
-                    // unlikely to ever get called: dropbox integration was disabled
-                    // Restart sync service
-                    OrgSyncService.stop(getActivity());
-                } else if (KEY_DROPBOX_DIR.equals(key)) {
-                    setDropboxDirSummary(prefs);
                 }
             }
         } catch (IllegalStateException e) {
             // This is just in case the "isFinishing" wouldn't be enough
-            // The isFinishing will try to prevent us from doing something
-            // stupid
-            // This catch prevents the app from crashing if we do something
-            // stupid
+            // The isFinishing will try to prevent us from doing something stupid
+            // This catch prevents the app from crashing if we do something stupid
         }
 
     }
@@ -262,13 +250,7 @@ public class SyncPrefs extends PreferenceFragment implements
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_DROPBOX_DIR_CODE) {
-            if (resultCode == Activity.RESULT_OK) {
-                PreferenceManager.getDefaultSharedPreferences(getActivity
-                        ()).edit().putString(KEY_DROPBOX_DIR,
-                        data.getData().getPath()).commit();
-            } // else was cancelled
-        } else if (requestCode == PICK_SD_DIR_CODE) {
+        if (requestCode == PICK_SD_DIR_CODE) {
             if (resultCode == Activity.RESULT_OK) {
                 // Set it
                 File path = new File(data.getData().getPath());
@@ -323,10 +305,6 @@ public class SyncPrefs extends PreferenceFragment implements
     private void setSdDirSummary(final SharedPreferences sharedPreferences) {
         prefSdDir.setSummary(sharedPreferences.getString(KEY_SD_DIR,
                 SDSynchronizer.DEFAULT_ORG_DIR));
-    }
-
-    private void setDropboxDirSummary(final SharedPreferences sharedPreferences) {
-        // useless: dropbox is not available because it is non-free
     }
 
     public static class AccountDialog extends DialogFragment implements
