@@ -11,3 +11,6 @@
 
 # Everything in the app is essential
 -keep class com.nononsenseapps.** { *; }
+
+# may be needed
+#-keep class com.google.appengine.api.urlfetch.** { *; }

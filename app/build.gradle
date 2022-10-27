@@ -22,7 +22,6 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.1'
-        // the android-apt plugin for annotations is deprecated, we don't need it anymore
     }
 }
 
@@ -63,6 +62,9 @@ android {
     useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
     useLibrary 'android.test.mock'
+
+    // dataBinding.enabled = true
+    // testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 
     lint {
         abortOnError false
@@ -124,7 +126,8 @@ android {
 }
 
 dependencies {
-    //compile fileTree(dir: 'libs', include: '*.jar')
+    // implementation 'com.android.support:design:28.0.0'
+    // implementation 'com.android.support:recyclerview-v7:28.0.0'
     implementation 'com.android.support:support-v4:28.0.0'
     implementation 'joda-time:joda-time:2.12.0'
     // Dashclock
@@ -144,9 +147,18 @@ dependencies {
     // annotations
     annotationProcessor "org.androidannotations:androidannotations:4.8.0"
     implementation "org.androidannotations:androidannotations-api:4.8.0"
-    // Tests
+    // Tests. this library seems abandoned
     androidTestImplementation 'com.squareup.spoon:spoon-client:1.7.1'
-    // newer versions require JAVA 11 and gradle plugin version > 7.4
+    // libraries to help us migrate to the new format for tests
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    }
+    androidTestImplementation 'com.android.support.test.espresso:espresso-contrib:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+        exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'design'
+        exclude group: 'com.android.support', module: 'recyclerview-v7'
+    }
+    // newer versions would require JAVA 11 and gradle plugin version > 7.4
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
-
 }
