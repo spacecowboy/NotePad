@@ -57,6 +57,7 @@ def getVersionName = { ->
 android {
     compileSdkVersion 28
     buildToolsVersion '32.0.0'
+    namespace 'com.nononsenseapps.notepad' // for R and BuildConfig
     useLibrary  'org.apache.http.legacy'
 
     useLibrary 'android.test.runner'
