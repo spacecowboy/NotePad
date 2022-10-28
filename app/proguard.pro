@@ -14,3 +14,4 @@
 
 # may be needed
 #-keep class com.google.appengine.api.urlfetch.** { *; }
+#-keep class com.squareup.okhttp.** { *; }
