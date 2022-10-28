@@ -15,12 +15,11 @@
      limitations under the License.
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:key="app_preference_backup" >
+    android:key="app_preference_backup">
 
     <Preference android:key="backup_import"
         android:title="@string/backup_import"/>
     <Preference android:key="backup_export"
         android:title="@string/backup_export"/>
-    
 
 </PreferenceScreen>

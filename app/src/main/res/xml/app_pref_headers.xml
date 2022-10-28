@@ -14,48 +14,48 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<preference-headers xmlns:android="http://schemas.android.com/apk/res/android" >
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
     <header
         android:fragment="com.nononsenseapps.notepad.prefs.MainPrefs"
         android:icon="@drawable/device_access_brightness_medium_dark"
         android:summary=""
-        android:title="@string/settings_cat_appearance" />
+        android:title="@string/settings_cat_appearance"/>
     <header
-        android:summary=""
-        android:icon="@drawable/ic_action_list_prefs_dark"
         android:fragment="com.nononsenseapps.notepad.prefs.ListPrefs"
-        android:title="@string/settings_list" />
+        android:icon="@drawable/ic_action_list_prefs_dark"
+        android:summary=""
+        android:title="@string/settings_list"/>
     <header
         android:fragment="com.nononsenseapps.notepad.prefs.SyncPrefs"
         android:icon="@drawable/navigation_refresh_dark"
         android:summary=""
-        android:title="@string/settings_cat_syncing" />
+        android:title="@string/settings_cat_syncing"/>
     <header
         android:fragment="com.nononsenseapps.notepad.prefs.NotificationPrefs"
         android:icon="@drawable/device_access_alarms_dark"
         android:summary=""
-        android:title="@string/notifications" />
+        android:title="@string/notifications"/>
     <header
         android:fragment="com.nononsenseapps.notepad.prefs.PasswordPrefs"
         android:icon="@drawable/device_access_secure_dark"
         android:summary=""
-        android:title="@string/password" />
+        android:title="@string/password"/>
     <header
         android:fragment="com.nononsenseapps.notepad.prefs.BackupPrefs"
         android:icon="@drawable/ic_action_device_access_sd_storage_dark"
         android:summary=""
-        android:title="@string/backup" />
+        android:title="@string/backup"/>
     <header
         android:fragment="com.nononsenseapps.notepad.prefs.ChangelogPrefs"
         android:icon="@drawable/action_help_dark"
         android:summary=""
-        android:title="@string/changelog_full_title" />
+        android:title="@string/changelog_full_title"/>
     <header
         android:fragment="com.nononsenseapps.notepad.prefs.AboutPrefs"
         android:icon="@drawable/action_about_dark"
         android:summary=""
-        android:title="@string/about" />
+        android:title="@string/about"/>
 
     <!--
     <header android:fragment="com.nononsenseapps.notepad.widget.ListWidgetConfigure$ThemeFragment"
