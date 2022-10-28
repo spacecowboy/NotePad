@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="?ListMarginStyle"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    style="?ListMarginStyle" >
+    android:orientation="vertical">
 
     <!-- <SearchView
         android:id="@+id/searchBox"
@@ -24,7 +25,7 @@
         android:layout_height="match_parent"
         android:layout_gravity="center_horizontal"
         android:drawSelectorOnTop="true"
-        tools:listitem="@layout/tasklist_item_rich" >
+        tools:listitem="@layout/tasklist_item_rich">
     </ListView>
 
 </LinearLayout>

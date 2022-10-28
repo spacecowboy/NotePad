@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawerLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <!-- The main content view -->
 
@@ -15,31 +16,30 @@
         android:animateLayoutChanges="true"
         android:baselineAligned="false"
         android:orientation="horizontal"
-        android:showDividers="middle" >
+        android:showDividers="middle">
 
         <fragment
             android:id="@+id/fragment1"
+            class="com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment_"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginRight="4dp"
             android:layout_weight="@integer/leftFragmentWeight"
-            class="com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment_"
-            tools:layout="@layout/fragment_tasklist_viewpager" />
+            tools:layout="@layout/fragment_tasklist_viewpager"/>
 
         <fragment
             android:id="@+id/fragment2"
+            class="com.nononsenseapps.notepad.fragments.TaskDetailFragment_"
             android:layout_width="0dp"
             android:layout_height="match_parent"
-    		android:layout_marginLeft="@dimen/editor_side_margin"
-    		android:layout_marginRight="@dimen/editor_side_margin"
+            android:layout_marginLeft="@dimen/editor_side_margin"
+            android:layout_marginRight="@dimen/editor_side_margin"
             android:layout_weight="@integer/rightFragmentWeight"
-            class="com.nononsenseapps.notepad.fragments.TaskDetailFragment_"
-            tools:layout="@layout/fragment_task_detail" />
+            tools:layout="@layout/fragment_task_detail"/>
 
     </LinearLayout>
 
     <!-- The navigation drawer -->
-
 
     <!--
          <include

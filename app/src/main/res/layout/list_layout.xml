@@ -14,14 +14,15 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
- <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-         android:layout_width="match_parent"
-         android:layout_height="match_parent"
-         android:paddingLeft="0dp"
-         android:paddingRight="0dp"
-         android:background="?my_list_background" >
-         
-     <!-- Standard ListFragment view added in code. Wrap it in container here for animation reasons -->
-     <!-- If a background is wanted for the list, add it to the framelayout with for example
-      android:background="?my_list_background" -->
- </FrameLayout>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?my_list_background"
+    android:paddingLeft="0dp"
+    android:paddingRight="0dp">
+
+    <!-- Standard ListFragment view added in code. Wrap it in container here for animation reasons -->
+    <!-- If a background is wanted for the list, add it to the framelayout with for example
+     android:background="?my_list_background" -->
+</FrameLayout>

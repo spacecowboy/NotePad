@@ -14,13 +14,14 @@
   limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
     android:divider="?android:attr/dividerVertical"
-    android:showDividers="end"
-    android:dividerPadding="12dp">
+    android:dividerPadding="12dp"
+    android:orientation="horizontal"
+    android:showDividers="end">
 
-    <include layout="@layout/actionbar_done_button" />
+    <include layout="@layout/actionbar_done_button"/>
 </LinearLayout>

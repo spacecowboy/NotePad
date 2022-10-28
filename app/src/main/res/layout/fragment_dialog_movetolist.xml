@@ -15,11 +15,12 @@
   limitations under the License.
   -->
 
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <ListView
         android:id="@+id/listView"
@@ -30,13 +31,13 @@
         android:divider="?android:attr/listDivider"
         android:dividerHeight="1px"
         tools:ignore="PxUsage"
-        tools:listitem="@layout/simple_light_list_item_1" />
+        tools:listitem="@layout/simple_light_list_item_1"/>
 
     <include
         android:id="@+id/buttons"
-        android:layout_marginTop="16dp"
+        layout="@layout/dialog_ok_cancel"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        layout="@layout/dialog_ok_cancel" />
+        android:layout_marginTop="16dp"/>
 
 </LinearLayout>

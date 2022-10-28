@@ -15,13 +15,14 @@
      limitations under the License.
      
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_margin="@dimen/widget_margin"
     android:orientation="vertical"
-    tools:ignore="HardcodedText" >
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:id="@+id/widgetHeader"
@@ -29,7 +30,7 @@
         android:layout_height="wrap_content"
         android:background="@color/googlenow_darkergrey_trans"
         android:orientation="horizontal"
-        android:padding="0dp" >
+        android:padding="0dp">
 
         <ImageView
             android:id="@+id/widgetConfigButton"
@@ -38,18 +39,18 @@
             android:layout_gravity="center"
             android:background="@drawable/img_default_selector_dark"
             android:contentDescription="Configure widget"
-            android:paddingBottom="8dp"
             android:paddingLeft="0dp"
-            android:paddingRight="0dp"
             android:paddingTop="8dp"
-            android:src="@drawable/app_icon" />
+            android:paddingRight="0dp"
+            android:paddingBottom="8dp"
+            android:src="@drawable/app_icon"/>
 
         <LinearLayout
             android:id="@+id/header_spacer"
             android:layout_width="8dp"
             android:layout_height="fill_parent"
             android:orientation="vertical"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/titleButton"
@@ -60,13 +61,13 @@
             android:background="@drawable/img_default_selector_dark"
             android:gravity="center_vertical"
             android:maxLines="2"
-            android:paddingBottom="4dp"
             android:paddingLeft="0dp"
-            android:paddingRight="4dp"
             android:paddingTop="4dp"
+            android:paddingRight="4dp"
+            android:paddingBottom="4dp"
             android:text="@string/loading_widget"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/primary_text_dark" />
+            android:textColor="@android:color/primary_text_dark"/>
 
         <ImageButton
             android:id="@+id/createNoteButton"
@@ -74,12 +75,12 @@
             android:layout_height="match_parent"
             android:background="@drawable/img_default_selector_dark"
             android:contentDescription="Create new note"
-            android:paddingBottom="4dp"
             android:paddingLeft="0dp"
-            android:paddingRight="4dp"
             android:paddingTop="4dp"
+            android:paddingRight="4dp"
+            android:paddingBottom="4dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/content_new_dark" />
+            android:src="@drawable/content_new_dark"/>
     </LinearLayout>
 
     <FrameLayout
@@ -87,14 +88,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="0dp" >
+        android:padding="0dp">
 
         <ImageView
             android:id="@+id/shade"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="BackgroundColor"
-            android:visibility="gone" />
+            android:visibility="gone"/>
 
         <ListView
             android:id="@+id/notesList"
@@ -103,7 +104,7 @@
             android:divider="@null"
             android:dividerHeight="1px"
             tools:ignore="PxUsage"
-            tools:listitem="@layout/widgetlist_item" />
+            tools:listitem="@layout/widgetlist_item"/>
 
         <TextView
             android:id="@+id/empty_view"
@@ -111,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:visibility="gone" />
+            android:visibility="gone"/>
     </FrameLayout>
 
 </LinearLayout>

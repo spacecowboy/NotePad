@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- Outside group to allow for action bar placement -->
     <item
@@ -22,7 +22,7 @@
         android:showAsAction="ifRoom"
         android:title="@string/menu_createlist"/> -->
 
-    <group android:id="@+id/viewpager_menu_group" >
+    <group android:id="@+id/viewpager_menu_group">
         <item
             android:id="@+id/menu_deletedtasks"
             android:orderInCategory="203"
