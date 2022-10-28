@@ -25,12 +25,12 @@ import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Parcelable;
-import android.support.v4.view.PagerAdapter;
+import androidx.viewpager.widget.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
 /**
- * Implementation of {@link android.support.v4.view.PagerAdapter} that
+ * Implementation of {@link androidx.viewpager.widget.PagerAdapter} that
  * represents each page as a {@link Fragment} that is persistently kept in the
  * fragment manager as long as the user can return to the page.
  *
