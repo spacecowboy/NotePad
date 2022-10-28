@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.androidannotations.annotations.EService;
 import org.androidannotations.annotations.UiThread;
+
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
@@ -76,8 +77,7 @@ public class DonateMigrator extends IntentService {
 		importNotes();
 		if (mError != null) {
 			reportFailure(mError);
-		}
-		else {
+		} else {
 			PreferenceManager.getDefaultSharedPreferences(this).edit()
 					.putBoolean(PREFS_ALREADY_IMPORTED, true).commit();
 			reportCompleteStatus(mNotesImportedCount, mListsImportedCount);
@@ -126,21 +126,17 @@ public class DonateMigrator extends IntentService {
 						gl.updated = tl.updated;
 						gl.save(this);
 					}
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					mError = e.getLocalizedMessage();
 					return;
-				}
-				finally {
+				} finally {
 					if (gtasklistCursor != null) gtasklistCursor.close();
 				}
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			mError = e.getLocalizedMessage();
 			return;
-		}
-		finally {
+		} finally {
 			if (listCursor != null) listCursor.close();
 		}
 
@@ -164,8 +160,7 @@ public class DonateMigrator extends IntentService {
 				try {
 					t.due = RFC3339Date.parseRFC3339Date(
 							noteCursor.getString(3)).getTime();
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 				}
 
 				// completed must be converted
@@ -197,21 +192,17 @@ public class DonateMigrator extends IntentService {
 						gt.updated = t.updated;
 						gt.save(this);
 					}
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					mError = e.getLocalizedMessage();
 					return;
-				}
-				finally {
+				} finally {
 					if (gtaskCursor != null) gtaskCursor.close();
 				}
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			mError = e.getLocalizedMessage();
 			return;
-		}
-		finally {
+		} finally {
 			if (noteCursor != null) noteCursor.close();
 		}
 	}
@@ -226,8 +217,7 @@ public class DonateMigrator extends IntentService {
 			Toast.makeText(this,
 					getString(R.string.imported_result, noteCount, listCount),
 					Toast.LENGTH_LONG).show();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// In case of bad translations
 		}
 	}
@@ -239,8 +229,7 @@ public class DonateMigrator extends IntentService {
 			Toast.makeText(this,
 					getString(R.string.import_error, errorMessage),
 					Toast.LENGTH_LONG).show();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// In case of bad translations
 		}
 	}
@@ -250,8 +239,7 @@ public class DonateMigrator extends IntentService {
 		try {
 			Toast.makeText(this, getString(R.string.import_started),
 					Toast.LENGTH_SHORT).show();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// In case of bad translations
 		}
 	}

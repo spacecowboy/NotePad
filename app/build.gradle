@@ -41,23 +41,23 @@ def versionBuild = 3 // Bump for dogfood builds, public betas, etc.
 
 // Version name from git
 def getVersionName = { ->
-  try {
-  def stdout = new ByteArrayOutputStream()
-    exec {
-        commandLine 'git', 'describe', '--tags'
-        standardOutput = stdout
+    try {
+        def stdout = new ByteArrayOutputStream()
+        exec {
+            commandLine 'git', 'describe', '--tags'
+            standardOutput = stdout
+        }
+        return stdout.toString().trim()
+    } catch (ignored) {
+        return "GITFAILEDINGRADLE"
     }
-    return stdout.toString().trim()
-  } catch (ignored) {
-    return "GITFAILEDINGRADLE"
-  }
 }
 
 android {
     compileSdkVersion 28
     buildToolsVersion '32.0.0'
     namespace 'com.nononsenseapps.notepad' // for R and BuildConfig
-    useLibrary  'org.apache.http.legacy'
+    useLibrary 'org.apache.http.legacy'
 
     useLibrary 'android.test.runner'
     useLibrary 'android.test.base'
@@ -114,14 +114,14 @@ android {
         }
     }
 
-    if (project.hasProperty('STORE_FILE')) {     
+    if (project.hasProperty('STORE_FILE')) {
 
-      buildTypes {
-        release {
+        buildTypes {
+            release {
+            }
         }
-      }
     } else {
-      println "No key store defined. Signed release not available..."
+        println "No key store defined. Signed release not available..."
     }
 }
 

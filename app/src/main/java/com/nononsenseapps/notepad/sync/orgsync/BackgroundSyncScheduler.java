@@ -24,46 +24,46 @@ import android.content.Intent;
 import android.os.SystemClock;
 
 public class BackgroundSyncScheduler extends BroadcastReceiver {
-    // Unique ID for schedule
-    private final static int scheduleCode = 2832;
-    private static final String TAG = "BackgroundSyncScheduler";
+	// Unique ID for schedule
+	private final static int scheduleCode = 2832;
+	private static final String TAG = "BackgroundSyncScheduler";
 
-    public BackgroundSyncScheduler() {
-    }
+	public BackgroundSyncScheduler() {
+	}
 
-    @Override
-    public void onReceive(Context context, Intent intent) {
-        final boolean enabled = OrgSyncService.areAnyEnabled(context);
-        if (enabled && intent != null && Intent.ACTION_RUN.equals(intent
-                .getAction())) {
-            // Run sync
-            OrgSyncService.start(context);
-        } else {
-            scheduleSync(context);
-        }
-    }
+	@Override
+	public void onReceive(Context context, Intent intent) {
+		final boolean enabled = OrgSyncService.areAnyEnabled(context);
+		if (enabled && intent != null && Intent.ACTION_RUN.equals(intent
+				.getAction())) {
+			// Run sync
+			OrgSyncService.start(context);
+		} else {
+			scheduleSync(context);
+		}
+	}
 
-    /**
-     * Schedule a synchronization for later.
-     */
-    public static void scheduleSync(final Context context) {
-        final AlarmManager alarmManager =
-                (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        final Intent action = new Intent(context, BackgroundSyncScheduler
-                .class);
-        action.setAction(Intent.ACTION_RUN);
-        final PendingIntent operation = PendingIntent
-                .getBroadcast(context, scheduleCode, action,
-                        PendingIntent.FLAG_UPDATE_CURRENT);
-        if (OrgSyncService.areAnyEnabled(context)) {
-            // Schedule syncs
-            // Repeat at inexact intervals and do NOT wake the device up.
-            alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
-                    SystemClock.elapsedRealtime(),
-                    AlarmManager.INTERVAL_HALF_HOUR, operation);
-        } else {
-            // Remove schedule
-            alarmManager.cancel(operation);
-        }
-    }
+	/**
+	 * Schedule a synchronization for later.
+	 */
+	public static void scheduleSync(final Context context) {
+		final AlarmManager alarmManager =
+				(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		final Intent action = new Intent(context, BackgroundSyncScheduler
+				.class);
+		action.setAction(Intent.ACTION_RUN);
+		final PendingIntent operation = PendingIntent
+				.getBroadcast(context, scheduleCode, action,
+						PendingIntent.FLAG_UPDATE_CURRENT);
+		if (OrgSyncService.areAnyEnabled(context)) {
+			// Schedule syncs
+			// Repeat at inexact intervals and do NOT wake the device up.
+			alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
+					SystemClock.elapsedRealtime(),
+					AlarmManager.INTERVAL_HALF_HOUR, operation);
+		} else {
+			// Remove schedule
+			alarmManager.cancel(operation);
+		}
+	}
 }

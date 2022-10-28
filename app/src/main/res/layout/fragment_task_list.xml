@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     style="?ListMarginStyle"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" >
+    android:layout_height="match_parent">
 
     <LinearLayout
         android:id="@+id/hintContainer"
@@ -12,26 +13,26 @@
         android:layout_height="match_parent"
         android:gravity="center"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="gone">
 
         <TextView
             style="@style/FragmentHint"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="@string/please_create_note" />
+            android:text="@string/please_create_note"/>
     </LinearLayout>
 
     <FrameLayout
         android:id="@+id/listContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible" >
+        android:visibility="visible">
 
         <uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
             xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/ptrLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <com.mobeta.android.dslv.DragSortListView
                 android:id="@android:id/list"
@@ -50,7 +51,7 @@
                 app:remove_mode="flingRemove"
                 app:slide_shuffle_speed="0.3"
                 app:sort_enabled="true"
-                tools:ignore="PxUsage" >
+                tools:ignore="PxUsage">
             </com.mobeta.android.dslv.DragSortListView>
         </uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
     </FrameLayout>

@@ -10,9 +10,8 @@ import com.nononsenseapps.notepad.R;
 /**
  * A Checkbox like textview. It displays it's two states by toggling between two
  * textcolors.
- * 
+ *
  * Default secondary color is grey.
- * 
  */
 public class GreyableToggleButton extends ToggleButton {
 
@@ -21,9 +20,9 @@ public class GreyableToggleButton extends ToggleButton {
 
 //	private float defTextSize = 16.0f;
 //	private int currentWidth = 0;
-	
+
 	//Attributes
-    //private Paint mTestPaint;
+	//private Paint mTestPaint;
 
 	public GreyableToggleButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -38,14 +37,13 @@ public class GreyableToggleButton extends ToggleButton {
 			secondaryColor = a.getColor(
 					R.styleable.GreyableToggleButton_secondaryColor,
 					getResources().getColor(R.color.uncheckedGrey));
-		}
-		finally {
+		} finally {
 			a.recycle();
 		}
-		
+
 //		mTestPaint = new Paint();
 //        mTestPaint.set(this.getPaint());
-        //max size defaults to the initially specified text size unless it is too small
+		//max size defaults to the initially specified text size unless it is too small
 	}
 
 	@Override
@@ -56,8 +54,7 @@ public class GreyableToggleButton extends ToggleButton {
 		if (secondaryColor != primaryColor) {
 			if (checked) {
 				super.setTextColor(primaryColor);
-			}
-			else {
+			} else {
 				super.setTextColor(secondaryColor);
 			}
 		}

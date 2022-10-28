@@ -6,6 +6,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -31,20 +32,20 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-@EFragment(resName="fragment_dialog_restore")
+@EFragment(resName = "fragment_dialog_restore")
 public class DialogRestore extends DialogFragment {
 
 	public interface OnListSelectedListener {
 		void onListSelected(long listId);
 	}
 
-	@ViewById(resName="listSpinner")
+	@ViewById(resName = "listSpinner")
 	Spinner listSpinner;
 
-	@ViewById(resName="dialog_yes")
+	@ViewById(resName = "dialog_yes")
 	Button okButton;
 
-	@ViewById(resName="dialog_no")
+	@ViewById(resName = "dialog_no")
 	Button cancelButton;
 
 	private OnListSelectedListener listener;
@@ -69,21 +70,21 @@ public class DialogRestore extends DialogFragment {
 	@AfterViews
 	void setup() {
 		getDialog().setTitle(R.string.restore_to);
-		
-		final SimpleCursorAdapter adapter = 
-				new SimpleCursorAdapter(getActivity(), 
-						R.layout.spinner_item, null, 
-						new String[] {TaskList.Columns.TITLE}, 
-						new int[] {R.id.textViewSpinnerItem}, 0);
-		
+
+		final SimpleCursorAdapter adapter =
+				new SimpleCursorAdapter(getActivity(),
+						R.layout.spinner_item, null,
+						new String[] { TaskList.Columns.TITLE },
+						new int[] { R.id.textViewSpinnerItem }, 0);
+
 		listSpinner.setAdapter(adapter);
-		
+
 		getLoaderManager().restartLoader(0, null,
 				new LoaderCallbacks<Cursor>() {
 
 					@Override
 					public Loader<Cursor> onCreateLoader(int arg0,
-							Bundle arg1) {
+														 Bundle arg1) {
 						return new CursorLoader(getActivity(),
 								TaskList.URI,
 								TaskList.Columns.FIELDS, null, null, TaskList.Columns.TITLE);
@@ -101,12 +102,12 @@ public class DialogRestore extends DialogFragment {
 				});
 	}
 
-	@Click(resName="dialog_no")
+	@Click(resName = "dialog_no")
 	void cancelClicked() {
 		dismiss();
 	}
 
-	@Click(resName="dialog_yes")
+	@Click(resName = "dialog_yes")
 	void okClicked() {
 		Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT)
 				.show();
@@ -115,7 +116,7 @@ public class DialogRestore extends DialogFragment {
 		if (listener != null) {
 			listener.onListSelected(listSpinner.getSelectedItemId());
 		}
-		
+
 		this.dismiss();
 	}
 }

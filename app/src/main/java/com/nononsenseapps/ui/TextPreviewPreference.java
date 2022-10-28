@@ -39,7 +39,7 @@ public class TextPreviewPreference extends Preference {
 	}
 
 	public TextPreviewPreference(Context context, AttributeSet attrs,
-			int defStyle) {
+								 int defStyle) {
 		super(context, attrs, defStyle);
 	}
 
@@ -57,9 +57,9 @@ public class TextPreviewPreference extends Preference {
 		} catch (Exception e) {
 			//Log.e(TAG, "Error creating seek bar preference", e);
 		}
-		
+
 		mText = (TextView) layout.findViewById(R.id.prefTextPreview);
-		
+
 		// Retrieve settings here and set them on the text
 		int size = getContext().getResources().getInteger(R.integer.default_editor_font_size);
 		mText.setTextSize(getSharedPreferences().getInt("removed", size));
@@ -75,7 +75,7 @@ public class TextPreviewPreference extends Preference {
 
 		//mText = (TextView) view.findViewById(R.id.prefTextPreview);
 	}
-	
+
 	public static Typeface getTypeface(String type) {
 		Typeface font;
 		if (MainPrefs.MONOSPACE.equals(type)) {
@@ -90,7 +90,7 @@ public class TextPreviewPreference extends Preference {
 
 	public void setTextType(String type) {
 		if (mText != null) {
-			
+
 			mText.setTypeface(getTypeface(type));
 //			mText.post(new Runnable() {
 //
@@ -115,7 +115,7 @@ public class TextPreviewPreference extends Preference {
 					mText.setTextSize(mySize);
 					mText.setText("Size changed in runnable");
 				}
-				
+
 			});
 		}
 	}

@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2012 Jonas Kalderstam
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -81,7 +81,7 @@ public class MainPrefs extends PreferenceFragment {
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_body_fontfamily)));
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_fontsize)));
-        PrefsActivity.bindPreferenceSummaryToValue(findPreference(KEY_THEME));
+		PrefsActivity.bindPreferenceSummaryToValue(findPreference(KEY_THEME));
 	}
 
 	private void setDateEntries(ListPreference prefDate, int array) {
@@ -114,8 +114,7 @@ public class MainPrefs extends PreferenceFragment {
 			Locale l;
 			if (lang.length() == 5) {
 				l = new Locale(lang.substring(0, 2), lang.substring(3, 5));
-			}
-			else {
+			} else {
 				l = new Locale(lang.substring(0, 2));
 			}
 

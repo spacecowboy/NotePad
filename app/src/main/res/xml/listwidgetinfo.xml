@@ -16,15 +16,15 @@
 -->
 <appwidget-provider xmlns:android="http://schemas.android.com/apk/res/android"
     android:configure="com.nononsenseapps.notepad.widget.ListWidgetConfig_"
+    android:initialKeyguardLayout="@layout/widget_layout"
     android:initialLayout="@layout/widget_layout"
-    android:minHeight="110dp"
-    android:minResizeHeight="110dp"
-    android:minResizeWidth="110dp"
     android:minWidth="180dp"
+    android:minHeight="110dp"
+    android:minResizeWidth="110dp"
+    android:minResizeHeight="110dp"
     android:previewImage="@drawable/preview_ori_portrait"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="86400000"
-    android:initialKeyguardLayout="@layout/widget_layout"
-    android:widgetCategory="keyguard|home_screen" >
+    android:widgetCategory="keyguard|home_screen">
 
 </appwidget-provider>

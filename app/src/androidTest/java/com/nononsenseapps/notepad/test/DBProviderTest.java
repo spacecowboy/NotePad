@@ -36,15 +36,14 @@ public class DBProviderTest extends AndroidTestCase {
 	}
 
 	private void assertUriReturnsResult(final Uri uri, final String[] fields,
-			final String where, final String[] whereArgs, final int count) {
+										final String where, final String[] whereArgs, final int count) {
 		final Cursor c = resolver.query(uri, fields, where, whereArgs, null);
 		final int cursorCount = c.getCount();
 		c.close();
 		if (count < 0) {
 			assertTrue("Uri did not return a result: " + uri.getEncodedPath(),
 					cursorCount > 0);
-		}
-		else {
+		} else {
 			assertEquals("Uri did not return expected number of results",
 					count, cursorCount);
 		}

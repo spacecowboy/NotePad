@@ -57,11 +57,10 @@ public abstract class DAO {
 	 * Append the id argument to array
 	 */
 	public static String[] whereIdArg(final long _id,
-			final String[] orgWhereArgs) {
+									  final String[] orgWhereArgs) {
 		if (orgWhereArgs == null) {
 			return whereIdArg(_id);
-		}
-		else {
+		} else {
 			return joinArrays(orgWhereArgs, whereIdArg(_id));
 		}
 	}
@@ -92,7 +91,6 @@ public abstract class DAO {
 	// public static String arrayToCommaString(final String[] array) {
 	// return arrayToCommaString("", array);
 	// }
-
 	public static String arrayToCommaString(final long... array) {
 		StringBuilder result = new StringBuilder();
 		for (final long val : array) {
@@ -111,26 +109,26 @@ public abstract class DAO {
 	 * Example (prefix=t.): [] -> "" [a] -> "t.a" [a, b] -> "t.a,t.b"
 	 */
 	public static String arrayToCommaString(final String prefix,
-			final String[] array) {
+											final String[] array) {
 		return arrayToCommaString(prefix, array, "");
 	}
 
 	/**
 	 * Example (prefix=t., suffix=.45): [] -> "" [a] -> "t.a.45" [a, b] ->
 	 * "t.a.45,t.b.45"
-	 * 
+	 *
 	 * In addition, the txt itself can be referenced using %1$s in either prefix
 	 * or suffix. The prefix can be referenced as %2$s in suffix, and
 	 * vice-versa.
-	 * 
+	 *
 	 * So the following is valid:
-	 * 
+	 *
 	 * (prefix='t.', suffix=' AS %2$s%1$s')
-	 * 
+	 *
 	 * [listId] -> t.listId AS t.listId
 	 */
 	protected static String arrayToCommaString(final String pfx,
-			final String[] array, final String sfx) {
+											   final String[] array, final String sfx) {
 		StringBuilder result = new StringBuilder();
 		for (final String txt : array) {
 			if (result.length() > 0) result.append(",");
@@ -145,23 +143,20 @@ public abstract class DAO {
 	 * Second and Third value is wrapped in '' ticks, NOT the first.
 	 */
 	protected static String asEmptyCommaStringExcept(final String[] asColumns,
-			final String exceptCol1, final String asValue1,
-			final String exceptCol2, final String asValue2,
-			final String exceptCol3, final String asValue3) {
+													 final String exceptCol1, final String asValue1,
+													 final String exceptCol2, final String asValue2,
+													 final String exceptCol3, final String asValue3) {
 		StringBuilder result = new StringBuilder();
 		for (final String colName : asColumns) {
 			if (result.length() > 0) result.append(",");
 
 			if (colName.equals(exceptCol2)) {
 				result.append("'").append(asValue2).append("'");
-			}
-			else if (colName.equals(exceptCol3)) {
+			} else if (colName.equals(exceptCol3)) {
 				result.append("'").append(asValue3).append("'");
-			}
-			else if (colName.equals(exceptCol1)) {
+			} else if (colName.equals(exceptCol1)) {
 				result.append(asValue1);
-			}
-			else {
+			} else {
 				result.append("null");
 			}
 		}
@@ -172,27 +167,23 @@ public abstract class DAO {
 	 * Third and Fourth value is wrapped in '' ticks, NOT the first and second.
 	 */
 	protected static String asEmptyCommaStringExcept(final String[] asColumns,
-			final String exceptCol1, final String asValue1,
-			final String exceptCol2, final String asValue2,
-			final String exceptCol3, final String asValue3,
-			final String exceptCol4, final String asValue4) {
+													 final String exceptCol1, final String asValue1,
+													 final String exceptCol2, final String asValue2,
+													 final String exceptCol3, final String asValue3,
+													 final String exceptCol4, final String asValue4) {
 		StringBuilder result = new StringBuilder();
 		for (final String colName : asColumns) {
 			if (result.length() > 0) result.append(",");
 
 			if (colName.equals(exceptCol3)) {
 				result.append("'").append(asValue3).append("'");
-			}
-			else if (colName.equals(exceptCol4)) {
+			} else if (colName.equals(exceptCol4)) {
 				result.append("'").append(asValue4).append("'");
-			}
-			else if (colName.equals(exceptCol2)) {
+			} else if (colName.equals(exceptCol2)) {
 				result.append(asValue2);
-			}
-			else if (colName.equals(exceptCol1)) {
+			} else if (colName.equals(exceptCol1)) {
 				result.append(asValue1);
-			}
-			else {
+			} else {
 				result.append("null");
 			}
 		}
@@ -212,7 +203,7 @@ public abstract class DAO {
 	public long _id = -1;
 
 	public synchronized boolean update(final Context context,
-			final SQLiteDatabase db) {
+									   final SQLiteDatabase db) {
 		int result = 0;
 		db.beginTransaction();
 
@@ -227,11 +218,9 @@ public abstract class DAO {
 				db.setTransactionSuccessful();
 			}
 
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw e;
-		}
-		finally {
+		} finally {
 			db.endTransaction();
 		}
 
@@ -243,7 +232,7 @@ public abstract class DAO {
 	}
 
 	public synchronized Uri insert(final Context context,
-			final SQLiteDatabase db) {
+								   final SQLiteDatabase db) {
 		Uri retval = null;
 		db.beginTransaction();
 		try {
@@ -253,18 +242,15 @@ public abstract class DAO {
 
 			if (id == -1) {
 				throw new SQLException("Insert failed in " + getTableName());
-			}
-			else {
+			} else {
 				_id = id;
 				afterInsert(context, db);
 				db.setTransactionSuccessful();
 				retval = getUri();
 			}
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			throw e;
-		}
-		finally {
+		} finally {
 			db.endTransaction();
 		}
 
@@ -275,7 +261,7 @@ public abstract class DAO {
 	}
 
 	public synchronized int remove(final Context context,
-			final SQLiteDatabase db) {
+								   final SQLiteDatabase db) {
 		final int result = db.delete(getTableName(), BaseColumns._ID + " IS ?",
 				new String[] { Long.toString(_id) });
 
@@ -287,11 +273,10 @@ public abstract class DAO {
 	}
 
 	public static void notifyProviderOnChange(final Context context,
-			final Uri uri) {
+											  final Uri uri) {
 		try {
 			context.getContentResolver().notifyChange(uri, null, false);
-		}
-		catch (UnsupportedOperationException e) {
+		} catch (UnsupportedOperationException e) {
 			// Catch this for test suite. Mock provider cant notify
 		}
 	}
@@ -356,9 +341,9 @@ public abstract class DAO {
 	 */
 	public int delete(final Context context) {
 		if (_id > 0) {
-            return context.getContentResolver().delete(getUri(), null, null);
-        } else {
-            return 0;
-        }
+			return context.getContentResolver().delete(getUri(), null, null);
+		} else {
+			return 0;
+		}
 	}
 }

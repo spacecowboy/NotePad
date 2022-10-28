@@ -40,51 +40,51 @@ import com.nononsenseapps.notepad.R;
  */
 public class TasksSettings extends Activity {
 
-    public void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_ACTION_BAR);
-        setupFauxDialog();
-        super.onCreate(savedInstanceState);
+	public void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_ACTION_BAR);
+		setupFauxDialog();
+		super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_dashclock_settings);
+		setContentView(R.layout.activity_dashclock_settings);
 
-        setupActionBar();
-    }
+		setupActionBar();
+	}
 
-    protected void setupFauxDialog() {
-        // Check if this should be a dialog
-        TypedValue tv = new TypedValue();
-        if (!getTheme().resolveAttribute(R.attr.isDialog, tv, true) ||
-            tv.data == 0) {
-            return;
-        }
+	protected void setupFauxDialog() {
+		// Check if this should be a dialog
+		TypedValue tv = new TypedValue();
+		if (!getTheme().resolveAttribute(R.attr.isDialog, tv, true) ||
+				tv.data == 0) {
+			return;
+		}
 
-        // Should be a dialog; set up the window parameters.
-        DisplayMetrics dm = getResources().getDisplayMetrics();
+		// Should be a dialog; set up the window parameters.
+		DisplayMetrics dm = getResources().getDisplayMetrics();
 
-        WindowManager.LayoutParams params = getWindow().getAttributes();
-        params.width = getResources()
-                .getDimensionPixelSize(R.dimen.configure_dialog_width);
-        params.height = Math.min(getResources()
-                .getDimensionPixelSize(R.dimen.configure_dialog_max_height),
-                dm.heightPixels * 3 / 4);
-        params.alpha = 1.0f;
-        params.dimAmount = 0.5f;
-        getWindow().setAttributes(params);
-    }
+		WindowManager.LayoutParams params = getWindow().getAttributes();
+		params.width = getResources()
+				.getDimensionPixelSize(R.dimen.configure_dialog_width);
+		params.height = Math.min(getResources()
+						.getDimensionPixelSize(R.dimen.configure_dialog_max_height),
+				dm.heightPixels * 3 / 4);
+		params.alpha = 1.0f;
+		params.dimAmount = 0.5f;
+		getWindow().setAttributes(params);
+	}
 
-    protected void setupActionBar() {
-        getActionBar().setIcon(R.drawable.ic_stat_notification_edit);
-        getActionBar().setDisplayHomeAsUpEnabled(true);
-        //getActionBar().setTitle(R.string.dashclock_title_activity_tasks_settings);
-    }
+	protected void setupActionBar() {
+		getActionBar().setIcon(R.drawable.ic_stat_notification_edit);
+		getActionBar().setDisplayHomeAsUpEnabled(true);
+		//getActionBar().setTitle(R.string.dashclock_title_activity_tasks_settings);
+	}
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            finish();
-            return true;
-        }
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		if (item.getItemId() == android.R.id.home) {
+			finish();
+			return true;
+		}
 
-        return super.onOptionsItemSelected(item);
-    }
+		return super.onOptionsItemSelected(item);
+	}
 }

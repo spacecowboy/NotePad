@@ -21,6 +21,7 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
 import android.database.Cursor;
+
 import com.nononsenseapps.helpers.Log;
 
 public class GoogleTaskList extends RemoteTaskList {
@@ -42,14 +43,14 @@ public class GoogleTaskList extends RemoteTaskList {
 
 	// private GoogleAPITalker api;
 
-    public GoogleTaskList(GoogleTasksAPI.TaskListResource taskListResource, String accountName) {
-        super();
-        this.service = SERVICENAME;
-        account = accountName;
+	public GoogleTaskList(GoogleTasksAPI.TaskListResource taskListResource, String accountName) {
+		super();
+		this.service = SERVICENAME;
+		account = accountName;
 
-        updateFromTaskListResource(taskListResource);
-    }
-	
+		updateFromTaskListResource(taskListResource);
+	}
+
 	public GoogleTaskList(final TaskList dbList, final String accountName) {
 		super();
 		this.title = dbList.title;
@@ -63,7 +64,7 @@ public class GoogleTaskList extends RemoteTaskList {
 		this.account = accountName;
 		this.service = SERVICENAME;
 	}
-	
+
 	public GoogleTaskList(final Cursor c) {
 		super(c);
 		this.service = SERVICENAME;
@@ -74,32 +75,31 @@ public class GoogleTaskList extends RemoteTaskList {
 		this.service = SERVICENAME;
 	}
 
-    /**
+	/**
 	 * Includes title and not id
 	 */
 	public GoogleTasksAPI.TaskListResource toTaskListResource() {
-        GoogleTasksAPI.TaskListResource taskListResource = new GoogleTasksAPI.TaskListResource();
+		GoogleTasksAPI.TaskListResource taskListResource = new GoogleTasksAPI.TaskListResource();
 
-        taskListResource.title = title;
+		taskListResource.title = title;
 
-        return taskListResource;
+		return taskListResource;
 	}
 
-    /**
-     * Update all fields from the resource
-     */
-    public void updateFromTaskListResource(GoogleTasksAPI.TaskListResource taskListResource) {
-        remoteId = taskListResource.id;
-        title = taskListResource.title;
+	/**
+	 * Update all fields from the resource
+	 */
+	public void updateFromTaskListResource(GoogleTasksAPI.TaskListResource taskListResource) {
+		remoteId = taskListResource.id;
+		title = taskListResource.title;
 
-        try {
-            updated = RFC3339Date.parseRFC3339Date(taskListResource.updated).getTime();
-        }
-        catch (Exception e) {
-            Log.d(TAG, e.getLocalizedMessage());
-            updated = 0L;
-        }
-    }
+		try {
+			updated = RFC3339Date.parseRFC3339Date(taskListResource.updated).getTime();
+		} catch (Exception e) {
+			Log.d(TAG, e.getLocalizedMessage());
+			updated = 0L;
+		}
+	}
 
 	/**
 	 * Returns true if the TaskList has the same remote id or the same database

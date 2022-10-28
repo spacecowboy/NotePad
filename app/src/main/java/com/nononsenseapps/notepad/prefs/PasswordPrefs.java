@@ -58,7 +58,7 @@ public class PasswordPrefs extends Fragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+							 Bundle savedInstanceState) {
 		View layout = inflater.inflate(R.layout.app_pref_password_layout,
 				container, false);
 

@@ -7,6 +7,7 @@ public class ViewsHelper {
 
 	/**
 	 * Convert DPs to Pixels for the current resolution
+	 *
 	 * @param context
 	 * @param dip
 	 * @return

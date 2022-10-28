@@ -41,7 +41,6 @@ import com.nononsenseapps.notepad.R;
 /**
  * An EditText field that highlights the first line and makes links clickable in
  * the text. The text is still selectable, movable etc.
- * 
  */
 public class StyledEditText extends EditText {
 
@@ -72,8 +71,7 @@ public class StyledEditText extends EditText {
 			mLinkify = a.getBoolean(R.styleable.StyledTextView_linkify, false);
 			mBodyFontFamily = a.getInteger(
 					R.styleable.StyledTextView_bodyFontFamily, 0);
-		}
-		finally {
+		} finally {
 			a.recycle();
 		}
 
@@ -82,7 +80,7 @@ public class StyledEditText extends EditText {
 		setTitleFontFamily(mTitleFontFamily);
 
 		setTitleFontStyle(mTitleFontStyle);
-		
+
 		setBodyFontFamily(mBodyFontFamily);
 
 		// Style on change
@@ -90,12 +88,12 @@ public class StyledEditText extends EditText {
 
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
+									  int count) {
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
+										  int after) {
 			}
 
 			@Override
@@ -112,99 +110,92 @@ public class StyledEditText extends EditText {
 	}
 
 	/**
-	 *
 	 * @param larger true will use layout defined size, else same size
 	 */
 	public void setTitleRelativeLarger(final boolean larger) {
 		mTitleLarger = larger;
 		titleSizeSpan = new RelativeSizeSpan(larger ? mTitleRelativeSize : 1.0f);
 	}
-	
+
 	/**
-	 * 
 	 * @param family matches order defined in xml
 	 */
 	public void setTitleFontFamily(final int family) {
 		switch (family) {
-		case 1:
-			titleFamilySpan = new TypefaceSpan("sans-serif-condensed");
-			break;
-		case 2:
-			titleFamilySpan = new TypefaceSpan("sans-serif-light");
-			break;
-		case 3:
-			titleFamilySpan = new TypefaceSpan("sans-serif-thin");
-			break;
-		default:
-			titleFamilySpan = new TypefaceSpan("sans-serif");
-			break;
+			case 1:
+				titleFamilySpan = new TypefaceSpan("sans-serif-condensed");
+				break;
+			case 2:
+				titleFamilySpan = new TypefaceSpan("sans-serif-light");
+				break;
+			case 3:
+				titleFamilySpan = new TypefaceSpan("sans-serif-thin");
+				break;
+			default:
+				titleFamilySpan = new TypefaceSpan("sans-serif");
+				break;
 		}
 	}
 
 	/**
-	 * 
-	 * @param style
-	 *        matches order defined in xml
+	 * @param style matches order defined in xml
 	 */
 	public void setTitleFontStyle(final int style) {
 		switch (style) {
-		case 1:
-			titleStyleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
-			break;
-		case 2:
-			titleStyleSpan = new StyleSpan(android.graphics.Typeface.ITALIC);
-			break;
-		default:
-			titleStyleSpan = new StyleSpan(android.graphics.Typeface.NORMAL);
-			break;
+			case 1:
+				titleStyleSpan = new StyleSpan(android.graphics.Typeface.BOLD);
+				break;
+			case 2:
+				titleStyleSpan = new StyleSpan(android.graphics.Typeface.ITALIC);
+				break;
+			default:
+				titleStyleSpan = new StyleSpan(android.graphics.Typeface.NORMAL);
+				break;
 		}
 	}
-	
+
 	/**
-	 * 
 	 * @param family matches order defined in xml
 	 */
 	public void setBodyFontFamily(final int family) {
 		switch (family) {
-		case 1:
-			bodyFamilySpan = new TypefaceSpan("sans-serif-condensed");
-			break;
-		case 2:
-			bodyFamilySpan = new TypefaceSpan("sans-serif-light");
-			break;
-		case 3:
-			bodyFamilySpan = new TypefaceSpan("sans-serif-thin");
-			break;
-		default:
-			bodyFamilySpan = new TypefaceSpan("sans-serif");
-			break;
+			case 1:
+				bodyFamilySpan = new TypefaceSpan("sans-serif-condensed");
+				break;
+			case 2:
+				bodyFamilySpan = new TypefaceSpan("sans-serif-light");
+				break;
+			case 3:
+				bodyFamilySpan = new TypefaceSpan("sans-serif-thin");
+				break;
+			default:
+				bodyFamilySpan = new TypefaceSpan("sans-serif");
+				break;
 		}
 	}
-	
+
 	/**
-	 * 
 	 * @param size 0, 1 or 2 representing small/medium/large
 	 */
 	public void setTheTextSize(final int size) {
 		switch (size) {
-		case 0:
-			// small
-			super.setTextSize(14.0f);
-			break;
-		case 2:
-			// large
-			super.setTextSize(22.0f);
-			break;
-		case 1:
-		default:
-			// medium
-			super.setTextSize(18.0f);
-			break;
+			case 0:
+				// small
+				super.setTextSize(14.0f);
+				break;
+			case 2:
+				// large
+				super.setTextSize(22.0f);
+				break;
+			case 1:
+			default:
+				// medium
+				super.setTextSize(18.0f);
+				break;
 		}
 	}
-	
+
 	/**
-	 * 
 	 * @param clickable if links should be clickable
 	 */
 	public void setLinkify(final boolean clickable) {
@@ -230,7 +221,7 @@ public class StyledEditText extends EditText {
 					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 			s.setSpan(titleFamilySpan, 0, titleEnd,
 					Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-			
+
 			if (titleEnd < s.toString().length()) {
 				s.setSpan(bodyFamilySpan, titleEnd, s.toString().length(),
 						Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
@@ -268,12 +259,10 @@ public class StyledEditText extends EditText {
 				// Cant click to the right of a span, if the line ends with the span!
 				if (x > layout.getLineRight(line)) {
 					// Don't call the span
-				}
-				else if (link.length != 0) {
+				} else if (link.length != 0) {
 					if (action == MotionEvent.ACTION_UP) {
 						link[0].onClick(widget);
-					}
-					else if (action == MotionEvent.ACTION_DOWN) {
+					} else if (action == MotionEvent.ACTION_DOWN) {
 						Selection.setSelection(buffer,
 								buffer.getSpanStart(link[0]),
 								buffer.getSpanEnd(link[0]));
@@ -286,5 +275,5 @@ public class StyledEditText extends EditText {
 
 		return super.onTouchEvent(event);
 	}
-	
+
 }

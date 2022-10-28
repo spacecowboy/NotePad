@@ -14,24 +14,25 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/list_header_title"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:paddingBottom="2dip"
         android:paddingLeft="8dip"
         android:paddingTop="2dip"
+        android:paddingBottom="2dip"
         android:textAllCaps="true"
         android:textColor="?android:attr/textColorSecondary"
         android:textSize="14sp"
         android:textStyle="bold"
-        tools:ignore="SelectableText" />
+        tools:ignore="SelectableText"/>
 
 </LinearLayout>

@@ -4,6 +4,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -26,12 +27,12 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Switch;
 
-@EActivity(resName="activity_shortcut_config")
+@EActivity(resName = "activity_shortcut_config")
 public class ShortcutConfig extends Activity {
 
-	@ViewById(resName="noteSwitch")
+	@ViewById(resName = "noteSwitch")
 	Switch noteSwitch;
-	@ViewById(resName="listSpinner")
+	@ViewById(resName = "listSpinner")
 	Spinner listSpinner;
 
 	@AfterViews
@@ -41,7 +42,7 @@ public class ShortcutConfig extends Activity {
 		setListEntries(listSpinner);
 	}
 
-	@Click(resName="ok")
+	@Click(resName = "ok")
 	void onOK() {
 		final Intent shortcutIntent = new Intent();
 		// Set icon
@@ -60,8 +61,7 @@ public class ShortcutConfig extends Activity {
 					.setAction(Intent.ACTION_INSERT)
 					.putExtra(Task.Columns.DBLIST,
 							listSpinner.getSelectedItemId());
-		}
-		else {
+		} else {
 			final Cursor c = (Cursor) listSpinner.getSelectedItem();
 
 			if (c != null && !c.isClosed() && !c.isAfterLast()) {
@@ -100,8 +100,8 @@ public class ShortcutConfig extends Activity {
 					public Loader<Cursor> onCreateLoader(int id, Bundle args) {
 						return new CursorLoader(ShortcutConfig.this,
 								TaskList.URI, new String[] {
-										TaskList.Columns._ID,
-										TaskList.Columns.TITLE }, null, null,
+								TaskList.Columns._ID,
+								TaskList.Columns.TITLE }, null, null,
 								TaskList.Columns.TITLE);
 					}
 

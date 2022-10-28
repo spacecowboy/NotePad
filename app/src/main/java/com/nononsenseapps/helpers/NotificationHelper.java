@@ -81,8 +81,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())
 				|| Intent.ACTION_RUN.equals(intent.getAction())) {
 			// Can't cancel anything. Just schedule and notify at end
-		}
-		else {
+		} else {
 			// Always cancel
 			cancelNotification(context, intent.getData());
 
@@ -91,8 +90,7 @@ public class NotificationHelper extends BroadcastReceiver {
 				// Just a notification
 				com.nononsenseapps.notepad.database.Notification
 						.deleteOrReschedule(context, intent.getData());
-			}
-			else if (ACTION_SNOOZE.equals(intent.getAction())) {
+			} else if (ACTION_SNOOZE.equals(intent.getAction())) {
 				// msec/sec * sec/min * 30
 				long delay30min = 1000 * 60 * 30;
 				final Calendar now = Calendar.getInstance();
@@ -100,15 +98,14 @@ public class NotificationHelper extends BroadcastReceiver {
 				com.nononsenseapps.notepad.database.Notification.setTime(
 						context, intent.getData(),
 						delay30min + now.getTimeInMillis());
-			}
-			else if (ACTION_COMPLETE.equals(intent.getAction())) {
-                // Complete note
-                Task.setCompletedSynced(context, true,
-                        intent.getLongExtra(ARG_TASKID, -1));
-                // Delete notifications with the same task id
-                com.nononsenseapps.notepad.database.Notification
-                        .removeWithTaskIdsSynced(context,
-                                intent.getLongExtra(ARG_TASKID, -1));
+			} else if (ACTION_COMPLETE.equals(intent.getAction())) {
+				// Complete note
+				Task.setCompletedSynced(context, true,
+						intent.getLongExtra(ARG_TASKID, -1));
+				// Delete notifications with the same task id
+				com.nononsenseapps.notepad.database.Notification
+						.removeWithTaskIdsSynced(context,
+								intent.getLongExtra(ARG_TASKID, -1));
 			}
 		}
 
@@ -116,7 +113,8 @@ public class NotificationHelper extends BroadcastReceiver {
 		scheduleNext(context);
 	}
 
-	/** creates the notification channel needed on API 26 and higher to show notifications.
+	/**
+	 * creates the notification channel needed on API 26 and higher to show notifications.
 	 * This is safe to call multiple times
 	 */
 	@TargetApi(Build.VERSION_CODES.O)
@@ -128,7 +126,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		// not higher, not lower. This is equivalent to notifications before API 24
 		int importance = NotificationManager.IMPORTANCE_DEFAULT;
 
-		NotificationChannel channel	= new NotificationChannel(CHANNEL_ID, name, importance);
+		NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
 		channel.setDescription(description);
 		nm.createNotificationChannel(channel);
 	}
@@ -142,7 +140,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	}
 
 	public static void unnotifyGeofence(final Context context,
-			final long... ids) {
+										final long... ids) {
 		final NotificationManager notificationManager = (NotificationManager) context
 				.getSystemService(Context.NOTIFICATION_SERVICE);
 		String idStrings = "(";
@@ -167,8 +165,7 @@ public class NotificationHelper extends BroadcastReceiver {
 					notificationManager.cancel(not.taskID.intValue());
 				}
 			}
-		}
-		finally {
+		} finally {
 			c.close();
 		}
 	}
@@ -204,8 +201,7 @@ public class NotificationHelper extends BroadcastReceiver {
 			// implemented. Don't touch others.
 			// Dont do this, it clears location
 			// notificationManager.cancelAll();
-		}
-		else {
+		} else {
 			// else, notify
 			// Fetch sound and vibrate settings
 			final SharedPreferences prefs = PreferenceManager
@@ -345,12 +341,11 @@ public class NotificationHelper extends BroadcastReceiver {
 
 	/**
 	 * Needs the builder that contains non-note specific values.
-	 *
 	 */
 	private static void notifyBigText(final Context context,
-			final NotificationManager notificationManager,
-			final NotificationCompat.Builder builder,
-			final com.nononsenseapps.notepad.database.Notification note) {
+									  final NotificationManager notificationManager,
+									  final NotificationCompat.Builder builder,
+									  final com.nononsenseapps.notepad.database.Notification note) {
 		// create the intent that reacts to deleting the notification
 		final Intent iDelete = new Intent(context, NotificationHelper.class)
 				.setAction(Intent.ACTION_DELETE)
@@ -381,7 +376,7 @@ public class NotificationHelper extends BroadcastReceiver {
 
 		// Open note on click
 		PendingIntent clickIntent = PendingIntent.getActivity(context, 0,
-						openIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+				openIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 
 		// Action to complete
 		Intent iComplete = new Intent(context, NotificationHelper.class)
@@ -516,7 +511,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		final Calendar now = Calendar.getInstance();
 		final List<com.nononsenseapps.notepad.database.Notification> notifications
 				= com.nononsenseapps.notepad.database.Notification
-					.getNotificationsWithTime(context, now.getTimeInMillis(), false);
+				.getNotificationsWithTime(context, now.getTimeInMillis(), false);
 
 		// if not empty, schedule alarm wake up
 		if (!notifications.isEmpty()) {
@@ -552,7 +547,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * @param notification
 	 */
 	public static void updateNotification(final Context context,
-			final com.nononsenseapps.notepad.database.Notification notification) {
+										  final com.nononsenseapps.notepad.database.Notification notification) {
 		/*
 		 * Only don't insert if update is success This way the editor can update
 		 * a deleted notification and still have it persisted in the database
@@ -584,7 +579,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * @param not
 	 */
 	public static void cancelNotification(final Context context,
-			final com.nononsenseapps.notepad.database.Notification not) {
+										  final com.nononsenseapps.notepad.database.Notification not) {
 		if (not != null) {
 			cancelNotification(context, not.getUri());
 		}

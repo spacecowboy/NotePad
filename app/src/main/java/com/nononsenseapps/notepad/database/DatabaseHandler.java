@@ -109,43 +109,43 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 	public static Cursor getLegacyLists(final SQLiteDatabase legacyDB) {
 		return legacyDB.rawQuery("SELECT lists."
-										+ BaseColumns._ID
-										+ ",lists.title,gtasklists.googleid,gtasklists.googleaccount"
-										+ " FROM " + LegacyDBHelper.NotePad.Lists.TABLE_NAME
-										+ " LEFT OUTER JOIN "
-										+ LegacyDBHelper.NotePad.GTaskLists.TABLE_NAME + " ON ("
-										+ LegacyDBHelper.NotePad.Lists.TABLE_NAME + "."
-										+ LegacyDBHelper.NotePad.Lists._ID + " = "
-										+ LegacyDBHelper.NotePad.GTaskLists.TABLE_NAME + "."
-										+ LegacyDBHelper.NotePad.GTaskLists.COLUMN_NAME_DB_ID + ")"
-										+ " WHERE lists.deleted IS NOT 1", null);
+				+ BaseColumns._ID
+				+ ",lists.title,gtasklists.googleid,gtasklists.googleaccount"
+				+ " FROM " + LegacyDBHelper.NotePad.Lists.TABLE_NAME
+				+ " LEFT OUTER JOIN "
+				+ LegacyDBHelper.NotePad.GTaskLists.TABLE_NAME + " ON ("
+				+ LegacyDBHelper.NotePad.Lists.TABLE_NAME + "."
+				+ LegacyDBHelper.NotePad.Lists._ID + " = "
+				+ LegacyDBHelper.NotePad.GTaskLists.TABLE_NAME + "."
+				+ LegacyDBHelper.NotePad.GTaskLists.COLUMN_NAME_DB_ID + ")"
+				+ " WHERE lists.deleted IS NOT 1", null);
 	}
 
 	public static Cursor getLegacyNotes(final SQLiteDatabase legacyDB) {
 		return legacyDB.rawQuery("SELECT notes."
-										+ BaseColumns._ID
-										+ ",notes.title,notes.note,notes.duedate,notes.gtaskstatus,notes.list,notes.modified,gtasks.googleid,gtasks.googleaccount"
-										+ " FROM "
-										+ LegacyDBHelper.NotePad.Notes.TABLE_NAME
-										+ " LEFT OUTER JOIN "
-										+ LegacyDBHelper.NotePad.GTasks.TABLE_NAME
-										+ " ON ("
-										+ LegacyDBHelper.NotePad.Notes.TABLE_NAME
-										+ "."
-										+ LegacyDBHelper.NotePad.Notes._ID
-										+ " = "
-										+ LegacyDBHelper.NotePad.GTasks.TABLE_NAME
-										+ "."
-										+ LegacyDBHelper.NotePad.GTasks.COLUMN_NAME_DB_ID
-										+ ")"
-										+ " WHERE notes.deleted IS NOT 1 AND notes.hiddenflag IS NOT 1",
-										null);
+						+ BaseColumns._ID
+						+ ",notes.title,notes.note,notes.duedate,notes.gtaskstatus,notes.list,notes.modified,gtasks.googleid,gtasks.googleaccount"
+						+ " FROM "
+						+ LegacyDBHelper.NotePad.Notes.TABLE_NAME
+						+ " LEFT OUTER JOIN "
+						+ LegacyDBHelper.NotePad.GTasks.TABLE_NAME
+						+ " ON ("
+						+ LegacyDBHelper.NotePad.Notes.TABLE_NAME
+						+ "."
+						+ LegacyDBHelper.NotePad.Notes._ID
+						+ " = "
+						+ LegacyDBHelper.NotePad.GTasks.TABLE_NAME
+						+ "."
+						+ LegacyDBHelper.NotePad.GTasks.COLUMN_NAME_DB_ID
+						+ ")"
+						+ " WHERE notes.deleted IS NOT 1 AND notes.hiddenflag IS NOT 1",
+				null);
 	}
 
 	public static Cursor getLegacyNotifications(final SQLiteDatabase legacyDB) {
 		return legacyDB.query(LegacyDBHelper.NotePad.Notifications.TABLE_NAME, new String[] {
-										"time", "permanent", "noteid" }, null, null, null, null,
-										null);
+						"time", "permanent", "noteid" }, null, null, null, null,
+				null);
 	}
 
 	private void initializedDB(final SQLiteDatabase db) throws SQLiteException {
@@ -176,7 +176,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				// handle gtask info
 				GoogleTaskList rl = null;
 				if (c.getString(2) != null && !c.getString(2).isEmpty() && c.getString(3) != null
-												&& !c.getString(3).isEmpty()) {
+						&& !c.getString(3).isEmpty()) {
 					rl = new GoogleTaskList(tl._id, c.getString(2), tl.updated, c.getString(3));
 					rl.insert(context, db);
 				}
@@ -224,7 +224,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					// gtask
 					GoogleTask gt = null;
 					if (!c.isNull(7) && !c.getString(7).isEmpty() && !c.isNull(8)
-													&& !c.getString(8).isEmpty()) {
+							&& !c.getString(8).isEmpty()) {
 						gt = new GoogleTask(t, c.getString(8));
 						gt.remoteId = c.getString(7);
 						gt.updated = t.updated;
@@ -263,7 +263,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		// If no lists, insert a list and example note.
 
 		Cursor c = db.query(TaskList.TABLE_NAME, TaskList.Columns.FIELDS, null, null, null, null,
-										null);
+				null);
 
 		if (!c.isClosed() && c.getCount() > 0) {
 			// Done
@@ -271,7 +271,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 			// If preferences has sync enabled, don't create this list
 			// The backup agent has restored a reinstallation
 			if (PreferenceManager.getDefaultSharedPreferences(context).contains(
-											SyncPrefs.KEY_ACCOUNT)) {
+					SyncPrefs.KEY_ACCOUNT)) {
 
 			} else {
 

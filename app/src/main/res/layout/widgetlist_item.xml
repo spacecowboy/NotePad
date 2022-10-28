@@ -14,7 +14,8 @@
      See the License for the specific language governing permissions and
      limitations under the License.
 -->
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/widget_item_container"
     android:layout_width="match_parent"
@@ -22,7 +23,7 @@
     android:minHeight="@dimen/widget_item_min_size"
     android:orientation="horizontal"
     android:paddingRight="12dp"
-    tools:ignore="HardcodedText" >
+    tools:ignore="HardcodedText">
 
     <RelativeLayout
         android:id="@+id/widget_item"
@@ -31,7 +32,7 @@
         android:layout_gravity="center_vertical|left"
         android:background="@drawable/img_default_selector_dark"
         android:gravity="center_vertical"
-        android:paddingLeft="16dp" >
+        android:paddingLeft="16dp">
 
         <LinearLayout
             android:id="@+id/itemSpacer"
@@ -39,25 +40,25 @@
             android:layout_height="1dp"
             android:layout_alignParentLeft="true"
             android:orientation="vertical"
-            android:visibility="visible" />
+            android:visibility="visible"/>
 
         <TextView
             android:id="@android:id/text1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
             android:layout_alignWithParentIfMissing="true"
+            android:layout_alignParentTop="true"
             android:layout_toLeftOf="@+id/dueDate"
             android:layout_toRightOf="@id/itemSpacer"
             android:gravity="center_vertical"
             android:maxLines="2"
-            android:paddingBottom="2dp"
-            android:paddingRight="4dp"
             android:paddingTop="2dp"
+            android:paddingRight="4dp"
+            android:paddingBottom="2dp"
             android:text="a title  see very plainly with a second line like so which should be too long ideally"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:textColor="@android:color/primary_text_dark"
-            android:textStyle="normal" />
+            android:textStyle="normal"/>
 
         <TextView
             android:id="@+id/dueDate"
@@ -69,7 +70,7 @@
             android:gravity="center_vertical"
             android:text="12 mar"
             android:textColor="@android:color/primary_text_dark"
-            android:textSize="12sp" />
+            android:textSize="12sp"/>
     </RelativeLayout>
 
     <!-- Two to support theme switching. Cant change image src through remoteviews -->
@@ -83,7 +84,7 @@
         android:contentDescription="Complete task"
         android:padding="0dp"
         android:scaleType="fitStart"
-        android:src="@drawable/btn_check_selector_dark" />
+        android:src="@drawable/btn_check_selector_dark"/>
 
     <ImageButton
         android:id="@+id/completedCheckBoxLight"
@@ -95,6 +96,6 @@
         android:padding="0dp"
         android:scaleType="fitStart"
         android:src="@drawable/btn_check_selector_light"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
 </FrameLayout>

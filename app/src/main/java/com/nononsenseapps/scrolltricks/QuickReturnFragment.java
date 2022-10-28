@@ -24,89 +24,90 @@ import android.view.ViewTreeObserver;
 /**
  * A simple fragment that handles the quick return bindings. Just implement the
  * methods.
- * 
- * Make sure to have a layout much like the one seen in layout/quick_return_example.xml
  *
+ * Make sure to have a layout much like the one seen in layout/quick_return_example.xml
  */
 public abstract class QuickReturnFragment extends Fragment implements ObservableScrollView.Callbacks {
-    private static final int STATE_ONSCREEN = 0;
-    private static final int STATE_OFFSCREEN = 1;
-    private static final int STATE_RETURNING = 2;
+	private static final int STATE_ONSCREEN = 0;
+	private static final int STATE_OFFSCREEN = 1;
+	private static final int STATE_RETURNING = 2;
 
-    private View mQuickReturnView;
-    private View mPlaceholderView;
-    private ObservableScrollView mObservableScrollView;
-    private int mMinRawY = 0;
-    private int mState = STATE_ONSCREEN;
-    private int mQuickReturnHeight;
-    private int mCachedVerticalScrollRange;
+	private View mQuickReturnView;
+	private View mPlaceholderView;
+	private ObservableScrollView mObservableScrollView;
+	private int mMinRawY = 0;
+	private int mState = STATE_ONSCREEN;
+	private int mQuickReturnHeight;
+	private int mCachedVerticalScrollRange;
 
-    public void setupQuickReturnView() {
-        mObservableScrollView = getScrollView();
-        mObservableScrollView.setCallbacks(this);
+	public void setupQuickReturnView() {
+		mObservableScrollView = getScrollView();
+		mObservableScrollView.setCallbacks(this);
 
-        mQuickReturnView = getQuickReturnView();
-        mPlaceholderView = getPlaceHolderView();
+		mQuickReturnView = getQuickReturnView();
+		mPlaceholderView = getPlaceHolderView();
 
-        mObservableScrollView.getViewTreeObserver().addOnGlobalLayoutListener(
-                new ViewTreeObserver.OnGlobalLayoutListener() {
-                    @Override
-                    public void onGlobalLayout() {
-                        onScrollChanged();
-                        mCachedVerticalScrollRange = mObservableScrollView.computeVerticalScrollRange();
-                        mQuickReturnHeight = mQuickReturnView.getHeight();
-                    }
-                });
-    }
-    
-    protected abstract ObservableScrollView getScrollView();
-    protected abstract View getQuickReturnView();
-    protected abstract View getPlaceHolderView();
+		mObservableScrollView.getViewTreeObserver().addOnGlobalLayoutListener(
+				new ViewTreeObserver.OnGlobalLayoutListener() {
+					@Override
+					public void onGlobalLayout() {
+						onScrollChanged();
+						mCachedVerticalScrollRange = mObservableScrollView.computeVerticalScrollRange();
+						mQuickReturnHeight = mQuickReturnView.getHeight();
+					}
+				});
+	}
 
-    @Override
-    public void onScrollChanged() {
-        int rawY = mPlaceholderView.getTop() - Math.min(
-                mCachedVerticalScrollRange - mObservableScrollView.getHeight(),
-                mObservableScrollView.getScrollY());
-        int translationY = 0;
+	protected abstract ObservableScrollView getScrollView();
 
-        switch (mState) {
-            case STATE_OFFSCREEN:
-                if (rawY <= mMinRawY) {
-                    mMinRawY = rawY;
-                } else {
-                    mState = STATE_RETURNING;
-                }
-                translationY = rawY;
-                break;
+	protected abstract View getQuickReturnView();
 
-            case STATE_ONSCREEN:
-                if (rawY < -mQuickReturnHeight) {
-                    mState = STATE_OFFSCREEN;
-                    mMinRawY = rawY;
-                }
-                translationY = rawY;
-                break;
+	protected abstract View getPlaceHolderView();
 
-            case STATE_RETURNING:
-                translationY = (rawY - mMinRawY) - mQuickReturnHeight;
-                if (translationY > 0) {
-                    translationY = 0;
-                    mMinRawY = rawY - mQuickReturnHeight;
-                }
+	@Override
+	public void onScrollChanged() {
+		int rawY = mPlaceholderView.getTop() - Math.min(
+				mCachedVerticalScrollRange - mObservableScrollView.getHeight(),
+				mObservableScrollView.getScrollY());
+		int translationY = 0;
 
-                if (rawY > 0) {
-                    mState = STATE_ONSCREEN;
-                    translationY = rawY;
-                }
+		switch (mState) {
+			case STATE_OFFSCREEN:
+				if (rawY <= mMinRawY) {
+					mMinRawY = rawY;
+				} else {
+					mState = STATE_RETURNING;
+				}
+				translationY = rawY;
+				break;
 
-                if (translationY < -mQuickReturnHeight) {
-                    mState = STATE_OFFSCREEN;
-                    mMinRawY = rawY;
-                }
-                break;
-        }
+			case STATE_ONSCREEN:
+				if (rawY < -mQuickReturnHeight) {
+					mState = STATE_OFFSCREEN;
+					mMinRawY = rawY;
+				}
+				translationY = rawY;
+				break;
 
-        mQuickReturnView.setTranslationY(translationY);
-    }
+			case STATE_RETURNING:
+				translationY = (rawY - mMinRawY) - mQuickReturnHeight;
+				if (translationY > 0) {
+					translationY = 0;
+					mMinRawY = rawY - mQuickReturnHeight;
+				}
+
+				if (rawY > 0) {
+					mState = STATE_ONSCREEN;
+					translationY = rawY;
+				}
+
+				if (translationY < -mQuickReturnHeight) {
+					mState = STATE_OFFSCREEN;
+					mMinRawY = rawY;
+				}
+				break;
+		}
+
+		mQuickReturnView.setTranslationY(translationY);
+	}
 }

@@ -11,7 +11,9 @@ import com.nononsenseapps.notepad.R;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
+
 import com.nononsenseapps.helpers.Log;
+
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
@@ -42,10 +44,10 @@ public class SectionAdapter extends BaseAdapter {
 	 * you at any time try to access methods that are special to either case
 	 * while being in the other case, and exception will be thrown! This should
 	 * only be an issue with fetching CursorLoaders.
-	 * 
+	 *
 	 * One exception is the "GetSubItemId" method which will return the
 	 * appropriate Id in both cases.
-	 * 
+	 *
 	 * @param context
 	 */
 	public SectionAdapter(Context context, SimpleCursorAdapter wrappedAdapter) {
@@ -93,7 +95,7 @@ public class SectionAdapter extends BaseAdapter {
 		}
 		return sectionIds.get(section);
 	}
-	
+
 	/**
 	 * Get the Id of the section a position is contained in
 	 */
@@ -133,7 +135,7 @@ public class SectionAdapter extends BaseAdapter {
 	 * using getSectionId()
 	 */
 	public void addSection(long sectionId, String section,
-			SimpleCursorAdapter adapter, Comparator<String> comp) {
+						   SimpleCursorAdapter adapter, Comparator<String> comp) {
 		if (headers == null) {
 			throw new InvalidParameterException(ERRORMSG);
 		}
@@ -146,7 +148,7 @@ public class SectionAdapter extends BaseAdapter {
 	 * Add a section to the list with corresponding adapter and defined sorting
 	 */
 	public void addSection(String section, SimpleCursorAdapter adapter,
-			Comparator<String> comp) {
+						   Comparator<String> comp) {
 		if (headers == null) {
 			throw new InvalidParameterException(ERRORMSG);
 		}
@@ -341,7 +343,7 @@ public class SectionAdapter extends BaseAdapter {
 
 	/**
 	 * Guaranteed to be non null
-	 * 
+	 *
 	 * @return
 	 */
 	public String getState() {
@@ -352,7 +354,7 @@ public class SectionAdapter extends BaseAdapter {
 
 	/**
 	 * Will also clear existing adapters etc
-	 * 
+	 *
 	 * @param state
 	 */
 	public void changeState(String state) {

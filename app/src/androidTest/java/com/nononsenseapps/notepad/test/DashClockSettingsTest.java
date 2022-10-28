@@ -27,31 +27,31 @@ import com.squareup.spoon.Spoon;
  * Verify that the activity opens OK on any screensize.
  */
 public class DashClockSettingsTest extends
-        ActivityInstrumentationTestCase2<TasksSettings> {
+		ActivityInstrumentationTestCase2<TasksSettings> {
 
-    private Instrumentation mInstrumentation;
+	private Instrumentation mInstrumentation;
 
-    public DashClockSettingsTest() {
-        super(TasksSettings.class);
-    }
+	public DashClockSettingsTest() {
+		super(TasksSettings.class);
+	}
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
 
-        mInstrumentation = getInstrumentation();
+		mInstrumentation = getInstrumentation();
 
-        setActivityInitialTouchMode(false);
-    }
+		setActivityInitialTouchMode(false);
+	}
 
-    @Override
-    public void tearDown() throws Exception {
-        super.tearDown();
-    }
+	@Override
+	public void tearDown() throws Exception {
+		super.tearDown();
+	}
 
-    @SmallTest
-    public void testLoadOK() {
-        assertNotNull(getActivity());
-        Spoon.screenshot(getActivity(), "Activity_loaded");
-    }
+	@SmallTest
+	public void testLoadOK() {
+		assertNotNull(getActivity());
+		Spoon.screenshot(getActivity(), "Activity_loaded");
+	}
 }

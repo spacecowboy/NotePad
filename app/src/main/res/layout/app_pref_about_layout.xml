@@ -15,20 +15,21 @@
      limitations under the License.
 
 -->
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pass_scroll_cont"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    tools:ignore="HardcodedText" >
+    tools:ignore="HardcodedText">
 
     <LinearLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingBottom="4dp"
         android:paddingLeft="@dimen/preference_screen_side_margin"
-        android:paddingTop="8dp" >
+        android:paddingTop="8dp"
+        android:paddingBottom="4dp">
 
         <TextView
             android:layout_width="fill_parent"
@@ -37,7 +38,7 @@
             android:fontFamily="sans-serif-light"
             android:paddingTop="4dp"
             android:text="Copyright (&#169;) 2014 Jonas Kalderstam"
-            android:textAppearance="@android:style/TextAppearance.Holo.Small" />
+            android:textAppearance="@android:style/TextAppearance.Holo.Small"/>
 
         <TextView
             android:layout_width="fill_parent"
@@ -46,7 +47,7 @@
             android:fontFamily="sans-serif-light"
             android:paddingTop="8dp"
             android:text="@string/app_about"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium" />
+            android:textAppearance="@android:style/TextAppearance.Holo.Medium"/>
 
         <TextView
             android:layout_width="fill_parent"
@@ -56,7 +57,7 @@
             android:paddingTop="16dp"
             android:text="@string/libraries_used"
             android:textAppearance="@android:style/TextAppearance.Holo.Large"
-            android:textColor="@android:color/holo_blue_dark" />
+            android:textColor="@android:color/holo_blue_dark"/>
 
         <TextView
             android:layout_width="fill_parent"
@@ -65,7 +66,7 @@
             android:fontFamily="sans-serif-light"
             android:paddingTop="4dp"
             android:text="ActionBar-PullToRefresh (&#169;) Chris Banes"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium" />
+            android:textAppearance="@android:style/TextAppearance.Holo.Medium"/>
 
         <TextView
             android:layout_width="fill_parent"
@@ -74,7 +75,8 @@
             android:fontFamily="sans-serif-light"
             android:paddingTop="4dp"
             android:text="DragSortListView (&#169;) Carl Bauer"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium" />
+            android:textAppearance="@android:style/TextAppearance.Holo.Medium"/>
+
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -82,8 +84,7 @@
             android:fontFamily="sans-serif-light"
             android:paddingTop="4dp"
             android:text="ShowcaseView (&#169;) Alex Curran"
-            android:textAppearance="@android:style/TextAppearance.Holo.Medium" />
-
+            android:textAppearance="@android:style/TextAppearance.Holo.Medium"/>
 
     </LinearLayout>
 

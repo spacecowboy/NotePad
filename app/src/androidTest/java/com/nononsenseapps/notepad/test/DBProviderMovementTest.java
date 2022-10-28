@@ -44,7 +44,7 @@ public class DBProviderMovementTest extends AndroidTestCase {
 	}
 
 	private void assertUriReturnsResult(final Uri uri, final String[] fields,
-			final String where, final String[] whereArgs) {
+										final String where, final String[] whereArgs) {
 		final Cursor c = resolver.query(uri, fields, where, whereArgs, null);
 		final boolean notEmpty = c.moveToFirst();
 		c.close();
@@ -74,8 +74,7 @@ public class DBProviderMovementTest extends AndroidTestCase {
 					prev < (long) t.left);
 			if (t.right == t.left + 1) {
 				prev = t.right;
-			}
-			else {
+			} else {
 				prev = t.left;
 			}
 		}
@@ -207,14 +206,14 @@ public class DBProviderMovementTest extends AndroidTestCase {
 		for (int i = 0; i < ts.length; i++) {
 			ids[i] = ts[i]._id;
 		}
-		
+
 		final ContentValues val = new ContentValues();
 		val.put(Task.Columns.DBLIST, tl._id);
-		
+
 		// where _ID in (1, 2, 3)
 		final String whereId = new StringBuilder(Task.Columns._ID).append(" IN (")
 				.append(DAO.arrayToCommaString(ids)).append(")").toString();
-		
+
 		mContext.getContentResolver().update(Task.URI, val, whereId, null);
 
 		// Verify that task was moved
@@ -223,7 +222,7 @@ public class DBProviderMovementTest extends AndroidTestCase {
 	}
 
 	private ArrayList<Task> moveAndAssert(final TaskList tl, final int fromPos,
-			final int toPos) {
+										  final int toPos) {
 		Log.i("nononsenseapps test", "Testing move from: " + fromPos + " to "
 				+ toPos);
 		// Get ordered
@@ -268,8 +267,7 @@ public class DBProviderMovementTest extends AndroidTestCase {
 					newone.left);
 			assertEquals("Right value does not equal target left + 1",
 					targetTask.left + 1, (long) newone.right);
-		}
-		else if (targetTask.right > movingTask.right) {
+		} else if (targetTask.right > movingTask.right) {
 			assertEquals("Left value does not equal target right - 1",
 					targetTask.right - 1, (long) newone.left);
 			assertEquals("Right value does not equal target", targetTask.right,
@@ -339,8 +337,7 @@ public class DBProviderMovementTest extends AndroidTestCase {
 		Uri uri = null;
 		try {
 			uri = resolver.insert(Task.URI, t.getContent());
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			thrown = true;
 		}
 
@@ -362,8 +359,7 @@ public class DBProviderMovementTest extends AndroidTestCase {
 		boolean failed = false;
 		try {
 			resolver.update(t.getUri(), t.getContent(), null, null);
-		}
-		catch (SQLiteConstraintException e) {
+		} catch (SQLiteConstraintException e) {
 			failed = true;
 		}
 
@@ -374,8 +370,7 @@ public class DBProviderMovementTest extends AndroidTestCase {
 		failed = false;
 		try {
 			resolver.update(t.getUri(), t.getContent(), null, null);
-		}
-		catch (SQLiteConstraintException e) {
+		} catch (SQLiteConstraintException e) {
 			failed = true;
 		}
 		//assertTrue("Setting right to 0 should throw exception", failed);
@@ -445,8 +440,7 @@ public class DBProviderMovementTest extends AndroidTestCase {
 				moveTasksToList(tl2, t1, t2);
 				tasks2.add(t1);
 				tasks2.add(t2);
-			}
-			else if (tasks2.size() > 1) {
+			} else if (tasks2.size() > 1) {
 				int taskIndex = rand.nextInt(tasks2.size());
 				Task t1 = tasks2.remove(taskIndex);
 				taskIndex = rand.nextInt(tasks2.size());

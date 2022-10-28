@@ -6,5 +6,5 @@
     -->
     <!-- Editor fragment stuff -->
     <dimen name="editor_side_margin">32dp</dimen>
-    
+
 </resources>

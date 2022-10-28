@@ -26,16 +26,16 @@ import android.util.AttributeSet;
  * due to platform bug: https://code.google.com/p/android/issues/detail?id=26194
  */
 public class FixedSwitchPreference extends SwitchPreference {
-    public FixedSwitchPreference(Context context) {
-        super(context);
-    }
+	public FixedSwitchPreference(Context context) {
+		super(context);
+	}
 
-    public FixedSwitchPreference(Context context, AttributeSet attrs) {
-        super(context, attrs);
-    }
+	public FixedSwitchPreference(Context context, AttributeSet attrs) {
+		super(context, attrs);
+	}
 
-    public FixedSwitchPreference(Context context, AttributeSet attrs, int defStyle) {
-        super(context, attrs, defStyle);
-    }
+	public FixedSwitchPreference(Context context, AttributeSet attrs, int defStyle) {
+		super(context, attrs, defStyle);
+	}
 
 }

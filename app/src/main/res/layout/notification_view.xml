@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="2dp"
-    android:paddingTop="2dp" >
+    android:paddingTop="2dp"
+    android:paddingBottom="2dp">
 
     <!-- style="?android:attr/spinnerStyle" -->
     <!-- android:background="@android:drawable/btn_default_holo_dark" -->
@@ -19,7 +20,7 @@
         android:contentDescription="Remove reminder"
         android:scaleType="center"
         android:src="?attr/body_remove"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText"/>
 
     <ImageButton
         android:id="@+id/notificationTypeTime"
@@ -33,7 +34,7 @@
         android:padding="0dp"
         android:scaleType="center"
         android:src="@drawable/ic_alarm"
-        tools:ignore="HardcodedText" />
+        tools:ignore="HardcodedText"/>
 
     <TextView
         android:id="@+id/notificationDate"
@@ -47,11 +48,11 @@
         android:fontFamily="sans-serif-light"
         android:gravity="center"
         android:hint="@string/time"
-        android:minHeight="48dp"
         android:minWidth="48dp"
+        android:minHeight="48dp"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textIsSelectable="false" />
+        android:textIsSelectable="false"/>
 
     <TextView
         android:id="@+id/notificationTime"
@@ -65,27 +66,27 @@
         android:fontFamily="sans-serif-light"
         android:gravity="center"
         android:hint="@string/time"
-        android:minHeight="48dp"
         android:minWidth="48dp"
+        android:minHeight="48dp"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:textIsSelectable="false" />
+        android:textIsSelectable="false"/>
 
     <ImageButton
         android:id="@+id/notificationTypeLocation"
         style="?android:attr/buttonBarButtonStyle"
         android:layout_width="40dp"
         android:layout_height="48dp"
-        android:layout_alignParentLeft="true"
         android:layout_below="@id/notificationTypeTime"
+        android:layout_alignParentLeft="true"
         android:background="?android:attr/selectableItemBackground"
         android:contentDescription="Type of notification"
         android:minWidth="8dp"
         android:padding="0dp"
         android:scaleType="center"
-        android:visibility="gone"
         android:src="@drawable/ic_location_red"
-        tools:ignore="HardcodedText" />
+        android:visibility="gone"
+        tools:ignore="HardcodedText"/>
 
     <TextView
         android:id="@+id/notificationLocation"
@@ -106,26 +107,26 @@
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearanceMedium"
         android:textIsSelectable="false"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <com.nononsenseapps.ui.WeekDaysView
         android:id="@+id/weekdays"
         android:layout_width="match_parent"
-        android:paddingLeft="8dp"
-        android:paddingRight="16dp"
         android:layout_height="48dp"
+        android:layout_below="@id/notificationLocation"
         android:layout_alignParentLeft="true"
-        android:layout_below="@id/notificationLocation" />
+        android:paddingLeft="8dp"
+        android:paddingRight="16dp"/>
 
     <CheckBox
         android:id="@+id/repeatSwitch"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_alignParentLeft="true"
-        android:layout_toLeftOf="@id/notificationRemove"
         android:layout_below="@id/weekdays"
+        android:layout_alignParentLeft="true"
         android:layout_marginLeft="8dp"
-        android:visibility="gone"
-        android:text="@string/repeat" />
+        android:layout_toLeftOf="@id/notificationRemove"
+        android:text="@string/repeat"
+        android:visibility="gone"/>
 
 </RelativeLayout>

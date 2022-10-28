@@ -284,7 +284,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+							 Bundle savedInstanceState) {
 		if (container == null) {
 			dontLoad = true;
 			return null;
@@ -405,12 +405,12 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		taskText.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void onTextChanged(CharSequence s, int start, int before,
-					int count) {
+									  int count) {
 			}
 
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count,
-					int after) {
+										  int after) {
 			}
 
 			@Override
@@ -461,8 +461,8 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 
 	@Override
 	public void onDateSet(DatePickerDialog dialog,
-			int year, int monthOfYear,
-			int dayOfMonth) {
+						  int year, int monthOfYear,
+						  int dayOfMonth) {
 		final Calendar localTime = Calendar.getInstance();
 		if (mTask.due != null) {
 			localTime.setTimeInMillis(mTask.due);
@@ -470,7 +470,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		localTime.set(Calendar.YEAR, year);
 		localTime.set(Calendar.MONTH, monthOfYear);
 		localTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-		
+
 		// set to 23:59 to be more or less consistent with earlier date only
 		// implementation
 		localTime.set(Calendar.HOUR_OF_DAY, 23);
@@ -573,7 +573,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		taskCompleted.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
+										 boolean isChecked) {
 				if (isChecked)
 					mTask.completed = Calendar.getInstance().getTimeInMillis();
 				else
@@ -653,16 +653,16 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 				titleEnd = text.length();
 			}
 
-            try {
-                mShareActionProvider.setShareIntent(
-                        new Intent(Intent.ACTION_SEND).setType("text/plain")
-                                .putExtra(Intent.EXTRA_TEXT, text)
-                                .putExtra(Intent.EXTRA_SUBJECT,
-                                        text.substring(0, titleEnd)));
-            } catch (RuntimeException e) {
-                // Can crash when too many transactions overflow the buffer
-                Log.d("nononsensenotes", e.getLocalizedMessage());
-            }
+			try {
+				mShareActionProvider.setShareIntent(
+						new Intent(Intent.ACTION_SEND).setType("text/plain")
+								.putExtra(Intent.EXTRA_TEXT, text)
+								.putExtra(Intent.EXTRA_SUBJECT,
+										text.substring(0, titleEnd)));
+			} catch (RuntimeException e) {
+				// Can crash when too many transactions overflow the buffer
+				Log.d("nononsensenotes", e.getLocalizedMessage());
+			}
 		}
 	}
 
@@ -906,7 +906,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 
 	/**
 	 * Inserts a notification item in the UI
-	 * 
+	 *
 	 * @param not
 	 */
 	@UiThread(propagation = Propagation.REUSE)

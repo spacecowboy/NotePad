@@ -12,7 +12,7 @@ public class DialogDeleteTask extends DialogConfirmBase {
 	static final String TAG = "deletetaskok";
 
 	public static void showDialog(final FragmentManager fm, final long taskId,
-			final DialogConfirmedListener listener) {
+								  final DialogConfirmedListener listener) {
 		DialogDeleteTask d = new DialogDeleteTask();
 		d.setListener(listener);
 		Bundle args = new Bundle();

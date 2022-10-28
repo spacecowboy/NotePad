@@ -27,10 +27,10 @@ import android.view.ViewGroup;
 public class ChangelogPrefs extends Fragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+							 Bundle savedInstanceState) {
 		View layout = inflater.inflate(R.layout.changelog,
 				container, false);
-		
+
 		return layout;
 	}
 }

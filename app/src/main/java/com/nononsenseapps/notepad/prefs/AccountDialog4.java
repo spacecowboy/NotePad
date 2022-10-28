@@ -27,9 +27,8 @@ import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
 /**
  * A copy of AccountDialog in SyncPrefs, but extending from support library
  * fragment.
- * 
+ *
  * In addition, a successful account choice will trigger an immediate sync.
- * 
  */
 public class AccountDialog4 extends DialogFragment implements
 		AccountManagerCallback<Bundle> {
@@ -66,7 +65,7 @@ public class AccountDialog4 extends DialogFragment implements
 
 	/**
 	 * Called from the activity, since that one builds the dialog
-	 * 
+	 *
 	 * @param account
 	 */
 	public void accountSelected(final Account account) {
@@ -74,7 +73,7 @@ public class AccountDialog4 extends DialogFragment implements
 			Log.d("prefsActivityDialog", "step one");
 			this.account = account;
 			// Request user's permission
-            GoogleTasksClient.getAuthTokenAsync(activity, account, this);
+			GoogleTasksClient.getAuthTokenAsync(activity, account, this);
 			// work continues in callback, method run()
 		}
 	}
@@ -94,7 +93,7 @@ public class AccountDialog4 extends DialogFragment implements
 			String token = future.getResult().getString(
 					AccountManager.KEY_AUTHTOKEN);
 			// Now we are authorized by the user.
-            Log.d("prefsActivityDialog", "step two-b: " + token);
+			Log.d("prefsActivityDialog", "step two-b: " + token);
 
 			if (token != null && !token.equals("") && account != null) {
 				Log.d("prefsActivityDialog", "step three: " + account.name);
@@ -111,19 +110,16 @@ public class AccountDialog4 extends DialogFragment implements
 						MyContentProvider.AUTHORITY, 1);
 				// Set sync frequency
 				SyncPrefs.setSyncInterval(activity, customSharedPreference);
-				
+
 				// And trigger an immediate sync
 				SyncHelper.requestSyncIf(activity, SyncHelper.MANUAL);
 			}
-		}
-		catch (OperationCanceledException e) {
+		} catch (OperationCanceledException e) {
 			// if the request was canceled for any reason
-		}
-		catch (AuthenticatorException e) {
+		} catch (AuthenticatorException e) {
 			// if there was an error communicating with the authenticator or
 			// if the authenticator returned an invalid response
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			// if the authenticator returned an error response that
 			// indicates that it encountered an IOException while
 			// communicating with the authentication server

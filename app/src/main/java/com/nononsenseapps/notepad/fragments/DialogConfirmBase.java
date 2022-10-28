@@ -8,7 +8,6 @@ import android.support.v4.app.DialogFragment;
 
 /**
  * Simple confirm dialog fragment.
- * 
  */
 public abstract class DialogConfirmBase extends DialogFragment {
 
@@ -40,7 +39,7 @@ public abstract class DialogConfirmBase extends DialogFragment {
 						new DialogInterface.OnClickListener() {
 							@Override
 							public void onClick(DialogInterface dialog,
-									int which) {
+												int which) {
 								dialog.dismiss();
 							}
 						}).create();

@@ -15,14 +15,15 @@
      limitations under the License.
 -->
 
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<TextView
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@android:id/text1"
+    style="?android:attr/listSeparatorTextViewStyle"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
-    android:paddingBottom="2dip"
     android:paddingLeft="16dip"
     android:paddingTop="2dip"
-    style="?android:attr/listSeparatorTextViewStyle"
-    tools:ignore="SelectableText" />
+    android:paddingBottom="2dip"
+    tools:ignore="SelectableText"/>

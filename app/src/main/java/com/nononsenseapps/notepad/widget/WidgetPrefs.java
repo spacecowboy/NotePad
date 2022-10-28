@@ -70,8 +70,7 @@ public class WidgetPrefs {
 		if (prefs != null) {
 			try {
 				return prefs.getBoolean(keyWrap(key), defValue);
-			}
-			catch (ClassCastException e) {
+			} catch (ClassCastException e) {
 				// Return default value
 			}
 		}
@@ -93,8 +92,7 @@ public class WidgetPrefs {
 		if (prefs != null) {
 			try {
 				return prefs.getString(keyWrap(key), defValue);
-			}
-			catch (ClassCastException e) {
+			} catch (ClassCastException e) {
 				// Return default value
 			}
 		}
@@ -105,8 +103,7 @@ public class WidgetPrefs {
 		if (prefs != null) {
 			try {
 				return prefs.getInt(keyWrap(key), defValue);
-			}
-			catch (ClassCastException e) {
+			} catch (ClassCastException e) {
 				// Return default value
 			}
 		}
@@ -139,8 +136,7 @@ public class WidgetPrefs {
 		if (prefs != null) {
 			try {
 				return prefs.getLong(keyWrap(key), defValue);
-			}
-			catch (ClassCastException e) {
+			} catch (ClassCastException e) {
 				// Return default value
 			}
 		}

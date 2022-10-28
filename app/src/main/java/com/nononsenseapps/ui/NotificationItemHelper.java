@@ -100,10 +100,10 @@ public class NotificationItemHelper {
 	}
 
 	private static void setTime(final Context context, final Notification not,
-			final Task mTask) {
+								final Task mTask) {
 		final GregorianCalendar cal = TimeFormatter.getLocalCalendar(context);
 		// Start with date, either due date or today (default)
-        // If due date is in the past, default to today + 1hour
+		// If due date is in the past, default to today + 1hour
 		if (mTask.due != null && mTask.due > cal.getTimeInMillis()) {
 			cal.setTimeInMillis(mTask.due);
 		} else {
@@ -116,8 +116,8 @@ public class NotificationItemHelper {
 	}
 
 	public static void setup(final TaskDetailFragment fragment,
-			final LinearLayout notificationList, final View nv,
-			final Notification not, final Task mTask) {
+							 final LinearLayout notificationList, final View nv,
+							 final Notification not, final Task mTask) {
 
 		switchToTime(nv);
 
@@ -181,21 +181,21 @@ public class NotificationItemHelper {
 							.newInstance(new OnDateSetListener() {
 								@Override
 								public void onDateSet(DatePickerDialog dialog,
-										int year, int monthOfYear,
-										int dayOfMonth) {
+													  int year, int monthOfYear,
+													  int dayOfMonth) {
 									localTime.set(Calendar.YEAR, year);
 									localTime.set(Calendar.MONTH, monthOfYear);
 									localTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-									
+
 									not.time = localTime.getTimeInMillis();
 									notDateButton.setText(not.getLocalDateText(fragment
-									.getActivity()));
+											.getActivity()));
 									not.save(fragment.getActivity(), true);
 								}
 							}, localTime.get(Calendar.YEAR), localTime
 									.get(Calendar.MONTH), localTime
 									.get(Calendar.DAY_OF_MONTH));
-					
+
 					datedialog.show(fragment.getFragmentManager(), "date");
 
 					// final DialogCalendar datePicker;
@@ -253,7 +253,7 @@ public class NotificationItemHelper {
 					timedialog.setOnTimeSetListener(new OnTimeSetListener() {
 						@Override
 						public void onTimeSet(RadialPickerLayout view,
-								int hourOfDay, int minute) {
+											  int hourOfDay, int minute) {
 							localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
 							localTime.set(Calendar.MINUTE, minute);
 

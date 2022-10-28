@@ -14,7 +14,7 @@
   limitations under the License.
   -->
 
-<resources xmlns:tools="http://schemas.android.com/tools" xmlns:android="http://schemas.android.com/apk/res/android">
+<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
 
     <style name="LeftDrawerStyleDark">
         <item name="android:background">@color/googlenow_darkergrey</item>
@@ -174,13 +174,15 @@
     <!-- For DashClock Settings -->
     <!-- This base is overridden for larger displays -->
     <style name="DashClockSettings.Theme.Base"
-           parent="android:Theme.Holo.Light">
+        parent="android:Theme.Holo.Light">
         <item name="isDialog">false</item>
     </style>
 
     <style name="DashClockSettings.Theme" parent="DashClockSettings.Theme.Base">
         <item name="android:actionBarStyle">@style/DashClockSettings.ActionBar</item>
-        <item name="android:actionOverflowButtonStyle">@style/DashClockSettings.ActionButton.Overflow</item>
+        <item name="android:actionOverflowButtonStyle">
+            @style/DashClockSettings.ActionButton.Overflow
+        </item>
         <!--<item name="android:actionBarItemBackground">@drawable/ab_solid_DashClockSettingstheme</item>-->
         <item name="android:windowContentOverlay">@null</item>
         <item name="android:windowShowWallpaper">true</item>
@@ -192,7 +194,7 @@
     </style>
 
     <style name="DashClockSettings.ActionBar"
-           parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
+        parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
         <!--<item name="android:background">@drawable/ab_solid_DashClockSettingstheme</item>-->
         <item name="android:displayOptions">showTitle</item>
         <item name="android:windowContentOverlay">@null</item>

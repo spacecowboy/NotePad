@@ -258,7 +258,7 @@ public class DBUpgradeTest extends AndroidTestCase {
 		final SQLiteDatabase legacyDB = new LegacyDBHelper(context, PREFIX)
 				.getWritableDatabase();
 		initializeDB(legacyDB);
-		
+
 		// Check that things exist
 		Cursor c = DatabaseHandler.getLegacyLists(legacyDB);
 
@@ -270,7 +270,7 @@ public class DBUpgradeTest extends AndroidTestCase {
 		assertEquals("LegacyDB not correct for tests", numOfLegacyLists
 				* numOfLegacyNotes, c.getCount());
 		c.close();
-		
+
 		c = DatabaseHandler.getLegacyNotifications(legacyDB);
 		assertEquals("LegacyDB not correct for tests", numOfLegacyLists
 				* numOfLegacyNotes, c.getCount());
@@ -278,12 +278,12 @@ public class DBUpgradeTest extends AndroidTestCase {
 
 		// Check that new database correctly converts old
 		final SQLiteDatabase db = new DatabaseHandler(context, PREFIX).getReadableDatabase();
-		
+
 		c = db.query(TaskList.TABLE_NAME, TaskList.Columns.FIELDS, null, null,
 				null, null, null);
 		assertEquals("Unexpected amount of lists returned", numOfLegacyLists,
 				c.getCount());
-		
+
 		// TODO Examine details
 		c.close();
 
@@ -291,7 +291,7 @@ public class DBUpgradeTest extends AndroidTestCase {
 				null, null);
 		assertEquals("Incorrect number of notes converted", numOfLegacyLists
 				* numOfLegacyNotes, c.getCount());
-		
+
 		// TODO examine details
 		c.close();
 
@@ -304,7 +304,7 @@ public class DBUpgradeTest extends AndroidTestCase {
 
 		db.close();
 		legacyDB.close();
-		
+
 		assertTrue(
 				"Could not delete database",
 				context.deleteDatabase(PREFIX

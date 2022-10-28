@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2012 Jonas Kalderstam
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -32,20 +32,21 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
+
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 
-@EFragment(resName="fragment_dialog_password")
+@EFragment(resName = "fragment_dialog_password")
 public class DialogPassword extends DialogFragment {
-	@ViewById(resName="passwordField")
+	@ViewById(resName = "passwordField")
 	EditText passwordField;
 
-	@ViewById(resName="passwordVerificationField")
+	@ViewById(resName = "passwordVerificationField")
 	EditText passwordVerificationField;
 
-	@ViewById(resName="dialog_yes")
+	@ViewById(resName = "dialog_yes")
 	View dialog_yes;
-	@ViewById(resName="dialog_no")
+	@ViewById(resName = "dialog_no")
 	View dialog_no;
 
 	PasswordConfirmedListener listener = null;
@@ -60,15 +61,14 @@ public class DialogPassword extends DialogFragment {
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+							 Bundle savedInstanceState) {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 		final String currentPassword = settings.getString(
 				PasswordPrefs.KEY_PASSWORD, "");
 		if (currentPassword.isEmpty()) {
 			getDialog().setTitle(R.string.enter_new_password);
-		}
-		else {
+		} else {
 			getDialog().setTitle(R.string.password_required);
 		}
 		// Let annotations deal with it
@@ -83,18 +83,17 @@ public class DialogPassword extends DialogFragment {
 				PasswordPrefs.KEY_PASSWORD, "");
 		if (currentPassword.isEmpty()) {
 			passwordVerificationField.setVisibility(View.VISIBLE);
-		}
-		else {
+		} else {
 			passwordVerificationField.setVisibility(View.GONE);
 		}
 	}
 
-	@Click(resName="dialog_no")
+	@Click(resName = "dialog_no")
 	void cancel() {
 		dismiss();
 	}
 
-	@Click(resName="dialog_yes")
+	@Click(resName = "dialog_yes")
 	void confirm() {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
@@ -106,8 +105,7 @@ public class DialogPassword extends DialogFragment {
 
 		if (currentPassword.isEmpty()) {
 			setPassword(enteredPassword, verifiedPassword);
-		}
-		else {
+		} else {
 			// We want to return true or false, user has entered correct
 			// password
 			checkPassword(enteredPassword, currentPassword);
@@ -115,14 +113,13 @@ public class DialogPassword extends DialogFragment {
 	}
 
 	private void checkPassword(final String enteredPassword,
-			final String currentPassword) {
+							   final String currentPassword) {
 		if (currentPassword.equals(enteredPassword)) {
 			if (listener != null) {
 				listener.onPasswordConfirmed();
 			}
 			dismiss();
-		}
-		else {
+		} else {
 			Animation shake = AnimationUtils.loadAnimation(getActivity(),
 					R.anim.shake);
 			passwordField.startAnimation(shake);
@@ -139,13 +136,12 @@ public class DialogPassword extends DialogFragment {
 				listener.onPasswordConfirmed();
 			}
 			dismiss();
-		}
-		else {
+		} else {
 			Animation shake = AnimationUtils.loadAnimation(getActivity(),
 					R.anim.shake);
 			passwordVerificationField.startAnimation(shake);
 			Toast.makeText(getActivity(),
-					getText(R.string.passwords_dont_match), Toast.LENGTH_SHORT)
+							getText(R.string.passwords_dont_match), Toast.LENGTH_SHORT)
 					.show();
 		}
 	}

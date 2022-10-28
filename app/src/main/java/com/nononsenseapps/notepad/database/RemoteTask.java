@@ -151,14 +151,14 @@ public class RemoteTask extends DAO {
 
 	/**
 	 * None of the fields may be null!
-	 * 
+	 *
 	 * @param dbid
 	 * @param remoteId
 	 * @param updated
 	 * @param account
 	 */
 	public RemoteTask(final Long dbid, final Long listdbid,
-			final String remoteId, final Long updated, final String account) {
+					  final String remoteId, final Long updated, final String account) {
 		this.dbid = dbid;
 		this.listdbid = listdbid;
 		this.remoteId = remoteId;
@@ -179,7 +179,7 @@ public class RemoteTask extends DAO {
 		field3 = c.isNull(8) ? null : c.getString(8);
 		field4 = c.isNull(9) ? null : c.getString(9);
 		field5 = c.isNull(10) ? null : c.getString(10);
-		
+
 		service = c.getString(11);
 	}
 
@@ -191,7 +191,7 @@ public class RemoteTask extends DAO {
 		this(values);
 		_id = id;
 	}
-	
+
 	public RemoteTask(final JSONObject json) throws JSONException {
 		if (json.has(Columns.DBID))
 			dbid = json.getLong(Columns.DBID);
@@ -272,8 +272,7 @@ public class RemoteTask extends DAO {
 				_id = Long.parseLong(uri.getLastPathSegment());
 				result++;
 			}
-		}
-		else {
+		} else {
 			result += context.getContentResolver().update(getUri(),
 					getContent(), null, null);
 		}
@@ -283,7 +282,7 @@ public class RemoteTask extends DAO {
 	/**
 	 * Returns a where clause that can be used to fetch the task that is
 	 * associated with this remote object. As argument, use remoteid, account
-	 * 
+	 *
 	 * @return
 	 */
 	public String getTaskWithRemoteClause() {
@@ -302,7 +301,7 @@ public class RemoteTask extends DAO {
 	/**
 	 * Returns a where clause that limits the tasklists to those that do not
 	 * have a remote version.
-	 * 
+	 *
 	 * Combine with account
 	 */
 	public static String getTaskWithoutRemoteClause() {
@@ -314,7 +313,7 @@ public class RemoteTask extends DAO {
 	}
 
 	public static String[] getTaskWithoutRemoteArgs(final long listdbid,
-			final String account, final String service) {
+													final String account, final String service) {
 		return new String[] { Long.toString(listdbid), account, service };
 	}
 

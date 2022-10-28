@@ -21,19 +21,20 @@ package com.nononsenseapps.notepad.sync.orgsync;
  * monitors a specific sync source for changes, such as a FileMonitor.
  */
 public interface Monitor {
-    /**
-     * Start monitoring. Call handler on changes.
-     * @param handler
-     */
-    public void startMonitor(final OrgSyncService.SyncHandler handler);
+	/**
+	 * Start monitoring. Call handler on changes.
+	 *
+	 * @param handler
+	 */
+	public void startMonitor(final OrgSyncService.SyncHandler handler);
 
-    /**
-     * Pausing, it might be restarted later.
-     */
-    public void pauseMonitor();
+	/**
+	 * Pausing, it might be restarted later.
+	 */
+	public void pauseMonitor();
 
-    /**
-     * Service is destroying itself. Remove any references.
-     */
-    public void terminate();
+	/**
+	 * Service is destroying itself. Remove any references.
+	 */
+	public void terminate();
 }

@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="36dp"
-    android:orientation="horizontal" >
+    android:orientation="horizontal">
 
     <com.nononsenseapps.utils.views.GreyableToggleButton
         android:id="@+id/day1"
@@ -10,8 +11,8 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textOff="WED"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:textColor="?android:attr/textColorPrimary"
+        android:textOff="WED"/>
 
     <com.nononsenseapps.utils.views.GreyableToggleButton
         android:id="@+id/day2"
@@ -19,8 +20,8 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textOff="WED"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:textColor="?android:attr/textColorPrimary"
+        android:textOff="WED"/>
 
     <com.nononsenseapps.utils.views.GreyableToggleButton
         android:id="@+id/day3"
@@ -28,8 +29,8 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textOff="WED"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:textColor="?android:attr/textColorPrimary"
+        android:textOff="WED"/>
 
     <com.nononsenseapps.utils.views.GreyableToggleButton
         android:id="@+id/day4"
@@ -37,8 +38,8 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textOff="WED"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:textColor="?android:attr/textColorPrimary"
+        android:textOff="WED"/>
 
     <com.nononsenseapps.utils.views.GreyableToggleButton
         android:id="@+id/day5"
@@ -46,8 +47,8 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textOff="WED"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:textColor="?android:attr/textColorPrimary"
+        android:textOff="WED"/>
 
     <com.nononsenseapps.utils.views.GreyableToggleButton
         android:id="@+id/day6"
@@ -55,8 +56,8 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textOff="WED"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:textColor="?android:attr/textColorPrimary"
+        android:textOff="WED"/>
 
     <com.nononsenseapps.utils.views.GreyableToggleButton
         android:id="@+id/day7"
@@ -64,7 +65,7 @@
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="1"
-        android:textOff="WED"
-        android:textColor="?android:attr/textColorPrimary" />
+        android:textColor="?android:attr/textColorPrimary"
+        android:textOff="WED"/>
 
 </LinearLayout>

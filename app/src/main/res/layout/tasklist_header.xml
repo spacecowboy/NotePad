@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/taskItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:clickable="false"
-    android:orientation="horizontal" >
+    android:orientation="horizontal">
 
     <!-- Keeping as this class for compatibility with other layout -->
 
@@ -22,7 +23,7 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:textColor="?textColorPrimary"
         android:textIsSelectable="false"
-        custom:titleFontFamily="robotolight" />
+        custom:titleFontFamily="robotolight"/>
 
     <!-- Needed to support the same cursor as items . All hidden -->
 
@@ -30,30 +31,30 @@
         android:id="@+id/indent"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <com.nononsenseapps.ui.NoteCheckBox
         android:id="@+id/checkbox"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <com.nononsenseapps.ui.DateView
         android:id="@+id/date"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <View
         android:id="@+id/dragpadding"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
     <View
         android:id="@+id/drag_handle"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone" />
+        android:visibility="gone"/>
 
 </LinearLayout>

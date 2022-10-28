@@ -15,42 +15,42 @@
      limitations under the License.
 -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:key="app_preference_screen_sync" >
-    
+    android:key="app_preference_screen_sync">
+
     <PreferenceCategory
         android:key="pref_gtask_section_key"
         android:persistent="false"
-        android:title="@string/gtasks" >
+        android:title="@string/gtasks">
         <com.nononsenseapps.notepad.prefs.FixedSwitchPreference
             android:defaultValue="false"
             android:key="syncEnablePref"
             android:summary="@string/gtasks_sync_info"
-            android:title="@string/settings_sync_enable_title" />
+            android:title="@string/settings_sync_enable_title"/>
 
         <Preference
             android:dependency="syncEnablePref"
             android:key="accountPref"
             android:summary=""
-            android:title="@string/settings_account_title" />
+            android:title="@string/settings_account_title"/>
 
         <com.nononsenseapps.notepad.prefs.FixedSwitchPreference
             android:defaultValue="true"
             android:dependency="syncEnablePref"
             android:key="syncInBackground"
             android:summary="@string/background_sync_info"
-            android:title="@string/background_sync" />
+            android:title="@string/background_sync"/>
         <com.nononsenseapps.notepad.prefs.FixedSwitchPreference
             android:defaultValue="true"
             android:dependency="syncEnablePref"
             android:key="syncOnStart"
             android:summary="@string/sync_on_start_info"
-            android:title="@string/sync_on_start" />
+            android:title="@string/sync_on_start"/>
         <com.nononsenseapps.notepad.prefs.FixedSwitchPreference
             android:defaultValue="true"
             android:dependency="syncEnablePref"
             android:key="syncOnChange"
             android:summary="@string/sync_on_change_info"
-            android:title="@string/sync_on_change" />
+            android:title="@string/sync_on_change"/>
         <!-- <CheckBoxPreference
             android:defaultValue="false"
             android:dependency="syncEnablePref"
@@ -67,12 +67,12 @@
             android:defaultValue="false"
             android:key="pref_sync_sd_enabled"
             android:summary="@string/sd_card_summary"
-            android:title="@string/sd_card_sync" />
+            android:title="@string/sd_card_sync"/>
         <Preference
             android:dependency="pref_sync_sd_enabled"
             android:key="pref_sync_sd_dir"
             android:summary="@string/directory_summary"
-            android:title="@string/directory" />
+            android:title="@string/directory"/>
 
     </PreferenceCategory>
 

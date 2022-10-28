@@ -2,6 +2,7 @@ package com.nononsenseapps.notepad;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
+
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.fragments.FragmentSearch;
@@ -14,7 +15,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.MenuItem;
 
-@EActivity(resName="fullscreen_fragment")
+@EActivity(resName = "fullscreen_fragment")
 public class ActivitySearch extends FragmentActivity {
 
 	protected String mQuery = "";
@@ -31,7 +32,7 @@ public class ActivitySearch extends FragmentActivity {
 
 		handleIntent(getIntent());
 	}
-	
+
 	/**
 	 * To allow child classes to override content
 	 */
@@ -58,8 +59,7 @@ public class ActivitySearch extends FragmentActivity {
 
 		if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
 			mQuery = intent.getStringExtra(SearchManager.QUERY);
-		}
-		else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
+		} else if (Intent.ACTION_VIEW.equals(intent.getAction())) {
 			intent.setClass(getApplicationContext(), ActivityMain_.class);
 			startActivity(intent);
 			finish();
@@ -69,11 +69,11 @@ public class ActivitySearch extends FragmentActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
-		case android.R.id.home:
-			finish();
-			return true;
-		default:
-			return false;
+			case android.R.id.home:
+				finish();
+				return true;
+			default:
+				return false;
 		}
 	}
 }

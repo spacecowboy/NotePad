@@ -75,8 +75,7 @@ public class GTaskSyncTest extends AndroidTestCase {
 				if (i % 2 == 0) {
 					gl.updated = l.updated - 1;
 					// localListNewestCount++;
-				}
-				else {
+				} else {
 					gl.updated = l.updated + 1;
 					// remoteListNewestCount++;
 				}
@@ -90,8 +89,7 @@ public class GTaskSyncTest extends AndroidTestCase {
 					remoteListsSubset.add(gl);
 					if (i % 2 == 0) {
 						localListNewestCount++;
-					}
-					else {
+					} else {
 						remoteListNewestCount++;
 					}
 				}
@@ -143,8 +141,7 @@ public class GTaskSyncTest extends AndroidTestCase {
 					gt.updated = t.updated + 1;
 					remoteTasksSubSet.get(gl).add(gt);
 					remoteTaskNewestCount++;
-				}
-				else {
+				} else {
 					localTaskNewestCount++;
 					gt.updated = t.updated - 1;
 				}
@@ -218,8 +215,7 @@ public class GTaskSyncTest extends AndroidTestCase {
 				}
 			}
 			assertTrue("List was not returned in simple case!", found);
-		}
-		finally {
+		} finally {
 			if (cc != null) cc.close();
 		}
 
@@ -241,8 +237,7 @@ public class GTaskSyncTest extends AndroidTestCase {
 				}
 			}
 			assertTrue("List was not returned!", found);
-		}
-		finally {
+		} finally {
 			if (c != null) c.close();
 		}
 
@@ -261,8 +256,7 @@ public class GTaskSyncTest extends AndroidTestCase {
 			assertNotNull(c);
 			assertEquals("Cursor of remote lists not expected size",
 					remoteListsInDB.size(), c.getCount());
-		}
-		finally {
+		} finally {
 			if (c != null) c.close();
 		}
 	}
@@ -295,8 +289,7 @@ public class GTaskSyncTest extends AndroidTestCase {
 			// See that all has local id, except the two remote only
 			if (gt.remoteId.contains("99")) {
 				remoteCount++;
-			}
-			else {
+			} else {
 				assertNotNull("Local id was not set", gt.dbid);
 				assertTrue("Local id was not set", gt.dbid > 0);
 			}
@@ -344,12 +337,10 @@ public class GTaskSyncTest extends AndroidTestCase {
 			if (pair.first == null) {
 				assertNotNull(pair.second);
 				localNullCount++;
-			}
-			else if (pair.second == null) {
+			} else if (pair.second == null) {
 				assertNotNull(pair.first);
 				remoteNullCount++;
-			}
-			else {
+			} else {
 				assertEquals("Titles should be the same", pair.first.title,
 						pair.second.title);
 				assertEquals("local id should be set", (Long) pair.first._id,
@@ -357,8 +348,7 @@ public class GTaskSyncTest extends AndroidTestCase {
 				// REverse check to avoid .equals fuckup
 				if (pair.first.updated > pair.second.updated) {
 					localNewestCount++;
-				}
-				else {
+				} else {
 					remoteNewestCount++;
 					assertEquals("Update time should be the same",
 							pair.second.updated, pair.first.updated);
@@ -405,26 +395,23 @@ public class GTaskSyncTest extends AndroidTestCase {
 			if (pair.first == null) {
 				assertNotNull(pair.second);
 				localNullCount++;
-			}
-			else if (pair.second == null) {
+			} else if (pair.second == null) {
 				assertNotNull(pair.first);
 				remoteNullCount++;
-			}
-			else {
+			} else {
 				assertEquals("Titles should be the same", pair.first.title,
 						pair.second.title);
 				assertEquals("local id should be set", (Long) pair.first._id,
 						pair.second.dbid);
 				assertEquals("list id should be set", (Long) pair.first.dblist,
 						pair.second.listdbid);
-				
-				if (pair.first.updated > pair.second.updated){
+
+				if (pair.first.updated > pair.second.updated) {
 					localNewestCount++;
 
 					Log.d("nononsenseapps gtasksync", "local newest: "
 							+ pair.first.title + " : " + pair.second.title);
-				}
-				else {
+				} else {
 					remoteNewestCount++;
 					assertEquals("Update time should be the same",
 							pair.second.updated, pair.first.updated);
@@ -457,7 +444,7 @@ public class GTaskSyncTest extends AndroidTestCase {
 		assertEquals("lUpdate time incorrect", localTaskNewestCount, localNewestCount);
 		assertEquals("rUpdate time incorrect", 0, remoteNewestCount);
 	}
-	
+
 	@SmallTest
 	public void testSyncTasksLocallyCompleteBug() {
 		// TODO

@@ -56,20 +56,20 @@
     <string name="key_pref_item_max_height">item_max_height</string>
     <string name="key_pref_dateformat_long">dateformat_long</string>
     <string name="key_pref_dateformat_short">dateformat_short</string>
-    
-	<string name="pref_editor_title_fontfamily">pref_editor_title_fontfamily</string>
-	<string name="pref_editor_title_fontstyle">pref_editor_title_fontstyle</string>
-	<string name="pref_editor_body_fontfamily">pref_editor_body_fontfamily</string>
-	<string name="pref_editor_links">pref_editor_links</string>
-	<string name="pref_editor_fontsize">pref_editor_fontsize</string>
+
+    <string name="pref_editor_title_fontfamily">pref_editor_title_fontfamily</string>
+    <string name="pref_editor_title_fontstyle">pref_editor_title_fontstyle</string>
+    <string name="pref_editor_body_fontfamily">pref_editor_body_fontfamily</string>
+    <string name="pref_editor_links">pref_editor_links</string>
+    <string name="pref_editor_fontsize">pref_editor_fontsize</string>
     <string name="pref_editor_biggertitles">pref_editor_biggertitles</string>
-	
-	<string name="pref_list_title_fontfamily">pref_restart_list_title_fontfamily</string>
-	<string name="pref_list_title_fontstyle">pref_restart_list_title_fontstyle</string>
-	<string name="pref_list_body_fontfamily">pref_restart_list_body_fontfamily</string>
-	<string name="pref_list_links">pref_restart_list_links</string>
-	<string name="pref_list_fontsize">pref_restart_list_fontsize</string>
-    
+
+    <string name="pref_list_title_fontfamily">pref_restart_list_title_fontfamily</string>
+    <string name="pref_list_title_fontstyle">pref_restart_list_title_fontstyle</string>
+    <string name="pref_list_body_fontfamily">pref_restart_list_body_fontfamily</string>
+    <string name="pref_list_links">pref_restart_list_links</string>
+    <string name="pref_list_fontsize">pref_restart_list_fontsize</string>
+
     <string name="pref_sorttype">key_sort_type</string>
     <string name="pref_defaultlist">key_default_list_id</string>
     <string name="pref_defaultstartlist">key_default_list_to_open_id</string>
@@ -86,9 +86,9 @@
     <!-- Strings that should not be translated -->
     <string name="libraries_used">Libraries used</string>
     <!-- Timessquare, betterpickers, dragsortlistview, showcaseview -->
-	<string name="app_about">NoNonsense Notes is open source and available at https://github.com/spacecowboy/NotePad\n\nReport bugs and issues: https://github.com/spacecowboy/NotePad/issues\n\nHelp translate the app: http://translate.nononsenseapps.com\n\nKeep up with the latest progress: http://www.nononsenseapps.com</string>
-	<string name="license">License</string>
-	<string name="license_text">
+    <string name="app_about">NoNonsense Notes is open source and available at https://github.com/spacecowboy/NotePad\n\nReport bugs and issues: https://github.com/spacecowboy/NotePad/issues\n\nHelp translate the app: http://translate.nononsenseapps.com\n\nKeep up with the latest progress: http://www.nononsenseapps.com</string>
+    <string name="license">License</string>
+    <string name="license_text">
 Copyright (&#169;) 2013 Jonas Kalderstam
 
 Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at

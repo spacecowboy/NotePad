@@ -43,7 +43,7 @@ public class FragmentTaskDetailTest extends
 		assertEquals("This should succeed", 1, 1);
 	}
 
-    @SmallTest
+	@SmallTest
 	public void testFragmentLoaded() {
 		Fragment fragment = getActivity().getSupportFragmentManager().findFragmentByTag(com.nononsenseapps.notepad.ActivityMain.DETAILTAG);
 		Spoon.screenshot(getActivity(), "Editor_loaded");

@@ -2,20 +2,20 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:drawable="@drawable/list_arrow_activated_holo"
-        android:state_activated="true" />
-    
+        android:state_activated="true"/>
+
     <item
         android:drawable="@drawable/list_arrow_focused_holo"
         android:state_focused="true"/>
-    
+
     <item
         android:drawable="@drawable/list_arrow_pressed_holo"
         android:state_pressed="true"/>
-    
+
     <item
         android:drawable="@drawable/list_arrow_selected_holo"
-        android:state_selected="true" />
-    
+        android:state_selected="true"/>
+
     <item
-        android:drawable="@drawable/list_read_holo" />
+        android:drawable="@drawable/list_read_holo"/>
 </selector>

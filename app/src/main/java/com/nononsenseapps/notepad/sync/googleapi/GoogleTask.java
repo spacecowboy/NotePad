@@ -72,47 +72,46 @@ public class GoogleTask extends RemoteTask {
 		updateFromTaskResource(taskResource);
 	}
 
-    /**
-     * Fill in fields from taskresource
-     */
-    public void updateFromTaskResource(GoogleTasksAPI.TaskResource taskResource) {
-        remoteId = taskResource.id;
-        try {
-            updated = RFC3339Date.parseRFC3339Date(taskResource.updated).getTime();
-        }
-        catch (Exception e) {
-            updated = 0L;
-        }
-        //etag = jsonTask.getString("etag");
+	/**
+	 * Fill in fields from taskresource
+	 */
+	public void updateFromTaskResource(GoogleTasksAPI.TaskResource taskResource) {
+		remoteId = taskResource.id;
+		try {
+			updated = RFC3339Date.parseRFC3339Date(taskResource.updated).getTime();
+		} catch (Exception e) {
+			updated = 0L;
+		}
+		//etag = jsonTask.getString("etag");
 
-        if (taskResource.title != null)
-            title = taskResource.title;
-        if (taskResource.notes != null)
-            notes = taskResource.notes;
-        if (taskResource.status != null)
-            status = taskResource.status;
-        if (taskResource.parent != null)
-            parent = taskResource.parent;
-        else
-            parent = null;
-        if (taskResource.position != null)
-            position = taskResource.position;
-        if (taskResource.due != null)
-            dueDate = taskResource.due;
-        if (taskResource.deleted != null && taskResource.deleted)
-            remotelydeleted = true;
-        if (taskResource.hidden != null && taskResource.hidden)
-            remotelydeleted = true;
-    }
+		if (taskResource.title != null)
+			title = taskResource.title;
+		if (taskResource.notes != null)
+			notes = taskResource.notes;
+		if (taskResource.status != null)
+			status = taskResource.status;
+		if (taskResource.parent != null)
+			parent = taskResource.parent;
+		else
+			parent = null;
+		if (taskResource.position != null)
+			position = taskResource.position;
+		if (taskResource.due != null)
+			dueDate = taskResource.due;
+		if (taskResource.deleted != null && taskResource.deleted)
+			remotelydeleted = true;
+		if (taskResource.hidden != null && taskResource.hidden)
+			remotelydeleted = true;
+	}
 
-    public GoogleTask(final Task dbTask, final String accountName) {
+	public GoogleTask(final Task dbTask, final String accountName) {
 		super();
 		this.service = GoogleTaskList.SERVICENAME;
 		account = accountName;
 		if (dbTask != null)
 			fillFrom(dbTask);
 	}
-	
+
 	public GoogleTask(final Cursor c) {
 		super(c);
 		this.service = GoogleTaskList.SERVICENAME;
@@ -134,12 +133,12 @@ public class GoogleTask extends RemoteTask {
 	 * Return a taskresource version of this task. Does not include id.
 	 */
 	public GoogleTasksAPI.TaskResource toTaskResource() {
-        GoogleTasksAPI.TaskResource result = new GoogleTasksAPI.TaskResource();
+		GoogleTasksAPI.TaskResource result = new GoogleTasksAPI.TaskResource();
 
-        result.title = title;
-        result.notes = notes;
-        result.due = dueDate;
-        result.status = status;
+		result.title = title;
+		result.notes = notes;
+		result.due = dueDate;
+		result.status = status;
 
 		return result;
 	}
@@ -148,7 +147,7 @@ public class GoogleTask extends RemoteTask {
 	 * Returns a ContentValues hashmap suitable for database insertion in the
 	 * Lists table Includes modified flag and list id as specified in the
 	 * arguments
-	 * 
+	 *
 	 * @return
 	 */
 	public ContentValues toNotesContentValues(int modified, long listDbId) {

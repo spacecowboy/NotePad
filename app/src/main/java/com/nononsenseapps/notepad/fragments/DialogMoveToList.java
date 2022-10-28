@@ -9,6 +9,7 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.ViewById;
+
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.DAO;
@@ -41,7 +42,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-@EFragment(resName="fragment_dialog_movetolist")
+@EFragment(resName = "fragment_dialog_movetolist")
 public class DialogMoveToList extends DialogFragment {
 
 	// public interface EditListDialogListener {
@@ -50,13 +51,13 @@ public class DialogMoveToList extends DialogFragment {
 
 	static final String TASK_IDS = "task_ids";
 
-	@ViewById(resName="listView")
+	@ViewById(resName = "listView")
 	ListView listView;
 
-	@ViewById(resName="dialog_yes")
+	@ViewById(resName = "dialog_yes")
 	Button okButton;
 
-	@ViewById(resName="dialog_no")
+	@ViewById(resName = "dialog_no")
 	Button cancelButton;
 
 	private TaskList mTaskList;
@@ -118,7 +119,7 @@ public class DialogMoveToList extends DialogFragment {
 
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
-					long id) {
+									long id) {
 				okButton.setEnabled(true);
 			}
 		});
@@ -181,12 +182,12 @@ public class DialogMoveToList extends DialogFragment {
 		getActivity().getContentResolver().update(Task.URI, val, whereId, null);
 	}
 
-	@Click(resName="dialog_no")
+	@Click(resName = "dialog_no")
 	void cancelClicked() {
 		dismiss();
 	}
 
-	@Click(resName="dialog_yes")
+	@Click(resName = "dialog_yes")
 	void okClicked() {
 		// move items
 		if (listView.getCheckedItemPosition() == listView.INVALID_POSITION) {
@@ -208,8 +209,7 @@ public class DialogMoveToList extends DialogFragment {
 						getActivity(),
 						getString(R.string.moved_x_to_list, taskIds.length,
 								targetListTitle), Toast.LENGTH_SHORT).show();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				// Guard against translations
 			}
 		}
