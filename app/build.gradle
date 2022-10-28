@@ -107,13 +107,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    flavorDimensions "uselessname"
-    productFlavors {
-        free {
-            dimension "uselessname"
-        }
-    }
-
     if (project.hasProperty('STORE_FILE')) {
 
         buildTypes {
