@@ -23,10 +23,10 @@
     <bool name="atLeast15">false</bool>
     <bool name="atLeast16">false</bool>
     <bool name="atLeast17">false</bool>
-    
+
     <!-- Scrollview in editor -->
     <bool name="fillEditor">true</bool>
-    
+
     <bool name="yes">true</bool>
     <bool name="no">false</bool>
 </resources>

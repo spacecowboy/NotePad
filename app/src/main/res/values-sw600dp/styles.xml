@@ -16,8 +16,9 @@
   -->
 
 <resources>
+
     <style name="DashClockSettings.Theme.Base"
-           parent="android:Theme.Holo.Light.Dialog">
+        parent="android:Theme.Holo.Light.Dialog">
         <item name="isDialog">true</item>
         <item name="android:windowIsFloating">false</item>
         <item name="android:windowContentOverlay">@null</item>

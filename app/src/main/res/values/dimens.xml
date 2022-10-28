@@ -24,11 +24,11 @@
     <!-- List stuff -->
     <dimen name="listMargins">0dp</dimen>
     <dimen name="listMarginsPadded">8dp</dimen>
-    
+
     <!-- Used in search where no note fragment exists ever -->
     <!-- Also used by searchview in activitylocation -->
     <dimen name="listNoDetailWidth">@dimen/layout_match_parent</dimen>
-    
+
     <!-- list item min size -->
     <dimen name="list_item_min_size">48dp</dimen>
     <dimen name="widget_item_min_size">35dp</dimen>
@@ -38,7 +38,7 @@
 
     <!-- For widget -->
     <dimen name="widget_margin">8dp</dimen>
-    
+
     <!-- WidgetConfig -->
     <dimen name="widget_conf_preview_land_width">250dp</dimen>
     <dimen name="widget_conf_preview_port_height">150dp</dimen>

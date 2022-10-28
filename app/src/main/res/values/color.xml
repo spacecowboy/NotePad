@@ -38,5 +38,5 @@
 
     <color name="mapTransLight">#E0FFFFFF</color>
 
-	<color name="uncheckedGrey">#aa888888</color>
+    <color name="uncheckedGrey">#aa888888</color>
 </resources>

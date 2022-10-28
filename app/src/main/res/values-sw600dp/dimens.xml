@@ -18,29 +18,27 @@
     <!-- List stuff -->
     <dimen name="listMargins">16dp</dimen>
     <dimen name="listMarginsPadded">@dimen/listMargins</dimen>
-    
+
     <!-- Used in search where no note fragment exists ever -->
     <dimen name="listNoDetailWidth">500dp</dimen>
-    
+
     <!-- Editor fragment stuff -->
     <dimen name="editor_side_margin">16dp</dimen>
     <dimen name="editor_vertical_margin">32dp</dimen>
     <dimen name="editor_vertical_margin_bottom">16dp</dimen>
-    
+
     <!-- For card in editor -->
     <dimen name="card_editor_shadow_bottom">16dp</dimen>
     <dimen name="card_editor_top_bottom">18dp</dimen>
-    
+
     <dimen name="activity_lone_horizontal_margin">100dp</dimen>
-    
-    
+
     <!-- WidgetConfig -->
     <dimen name="widget_conf_preview_land_width">500dp</dimen>
     <dimen name="widget_conf_preview_port_height">300dp</dimen>
 
-
     <!-- For dashclock settings -->
     <dimen name="configure_dialog_width">480dp</dimen>
     <dimen name="configure_dialog_max_height">600dp</dimen>
-    
+
 </resources>
