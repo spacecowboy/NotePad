@@ -95,14 +95,14 @@ android {
     defaultConfig {
         applicationId "com.nononsenseapps.notepad"
         minSdkVersion 23 // most people have at least android 7.1 anyway: https://apilevels.com/
-        targetSdkVersion 32 // see https://github.com/spacecowboy/NotePad/issues/387
+        targetSdkVersion 32
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
         versionName getVersionName()
     }
 
     compileOptions {
-        // coreLibraryDesugaringEnabled true    // enable support for the new language APIs
-        // for java 9+ we need target SDK version > 30
+        // enable support for new language APIs in old devices
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_11
         targetCompatibility JavaVersion.VERSION_11
     }
@@ -142,6 +142,6 @@ dependencies {
     implementation "org.androidannotations:androidannotations-api:4.8.0"
     // Tests. this library seems abandoned
     androidTestImplementation 'com.squareup.spoon:spoon-client:1.7.1'
-    // newer versions would require JAVA 11 and gradle plugin version > 7.4
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
+    // needs android gradle plugin v7.4+ to upgrade
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.0'
 }
