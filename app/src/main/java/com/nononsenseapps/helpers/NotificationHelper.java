@@ -519,7 +519,7 @@ public class NotificationHelper extends BroadcastReceiver {
 			// Create a new PendingIntent and add it to the AlarmManager
 			Intent intent = new Intent(Intent.ACTION_RUN);
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-					1, intent, PendingIntent.FLAG_CANCEL_CURRENT);
+					1, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 			AlarmManager am = (AlarmManager) context
 					.getSystemService(Context.ALARM_SERVICE);
 			am.cancel(pendingIntent);

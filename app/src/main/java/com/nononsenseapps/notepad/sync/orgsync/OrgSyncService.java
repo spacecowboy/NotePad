@@ -165,9 +165,9 @@ public class OrgSyncService extends Service {
 				.setContentText("Please change directory")
 				.setChannelId(NotificationHelper.CHANNEL_ID)
 				.setContentIntent(
-						PendingIntent.getActivity(this, 0, new Intent(this,
-										PrefsActivity.class),
-								PendingIntent.FLAG_UPDATE_CURRENT));
+						PendingIntent.getActivity(this, 0,
+								new Intent(this, PrefsActivity.class),
+								PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
 
 		NotificationManager notificationManager = (NotificationManager)
 				getSystemService(Context.NOTIFICATION_SERVICE);

@@ -95,7 +95,7 @@ android {
     defaultConfig {
         applicationId "com.nononsenseapps.notepad"
         minSdkVersion 23 // most people have at least android 7.1 anyway: https://apilevels.com/
-        targetSdkVersion 28 // see https://github.com/spacecowboy/NotePad/issues/387
+        targetSdkVersion 32 // see https://github.com/spacecowboy/NotePad/issues/387
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
         versionName getVersionName()
     }

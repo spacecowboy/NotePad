@@ -54,7 +54,7 @@ public class BackgroundSyncScheduler extends BroadcastReceiver {
 		action.setAction(Intent.ACTION_RUN);
 		final PendingIntent operation = PendingIntent
 				.getBroadcast(context, scheduleCode, action,
-						PendingIntent.FLAG_UPDATE_CURRENT);
+						PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 		if (OrgSyncService.areAnyEnabled(context)) {
 			// Schedule syncs
 			// Repeat at inexact intervals and do NOT wake the device up.
