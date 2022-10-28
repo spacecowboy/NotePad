@@ -103,8 +103,8 @@ android {
     compileOptions {
         // coreLibraryDesugaringEnabled true    // enable support for the new language APIs
         // for java 9+ we need target SDK version > 30
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     if (project.hasProperty('STORE_FILE')) {
@@ -119,6 +119,7 @@ android {
 }
 
 dependencies {
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'joda-time:joda-time:2.12.0'
     implementation "androidx.cursoradapter:cursoradapter:1.0.0"
     implementation 'androidx.fragment:fragment:1.5.4'
