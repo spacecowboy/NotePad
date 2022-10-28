@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.view.ViewPager
+<androidx.viewpager.widget.ViewPager
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/pager"
@@ -11,7 +11,7 @@
     titles for adjacent pages.
     -->
 
-    <android.support.v4.view.PagerTitleStrip
+    <androidx.viewpager.widget.PagerTitleStrip
         android:id="@+id/pager_title_strip"
         android:layout_width="match_parent"
         android:layout_height="32dp"
@@ -21,4 +21,4 @@
         android:paddingBottom="4dp"
         android:textColor="?android:attr/textColorSecondary"/>
 
-</android.support.v4.view.ViewPager>
+</androidx.viewpager.widget.ViewPager>
