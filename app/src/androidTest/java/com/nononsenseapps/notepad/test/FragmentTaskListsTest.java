@@ -46,11 +46,11 @@ public class FragmentTaskListsTest extends
 	@SmallTest
 	public void testFragmentLoaded() throws InterruptedException {
 		mInstrumentation.waitForIdleSync();
-		
+
 		Spoon.screenshot(getActivity(), "List_loaded");
 		Fragment listPagerFragment = getActivity().getSupportFragmentManager()
-					.findFragmentByTag(
-							com.nononsenseapps.notepad.ActivityMain.LISTPAGERTAG);
+				.findFragmentByTag(
+						com.nononsenseapps.notepad.ActivityMain.LISTPAGERTAG);
 
 		assertNotNull("List pager fragment should not be null",
 				listPagerFragment);

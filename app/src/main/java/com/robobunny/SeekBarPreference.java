@@ -18,9 +18,9 @@ package com.robobunny;
 
 /**
  * Found this on http://robobunny.com/wp/2011/08/13/android-seekbar-preference/
- * 
+ *
  * A great thank you to Kirk Baucom for posting it online for others to use!
- * 
+ *
  * It has been modified to handle attributes (strings etc) dynamically.
  */
 
@@ -43,7 +43,7 @@ public class SeekBarPreference extends Preference implements
 
 	private final String TAG = getClass().getName();
 
-//	private static final String ANDROIDNS = "http://schemas.android.com/apk/res/android";
+	//	private static final String ANDROIDNS = "http://schemas.android.com/apk/res/android";
 //	private static final String ROBOBUNNYNS = "http://robobunny.com";
 	private static final int DEFAULT_VALUE = 50;
 
@@ -72,13 +72,13 @@ public class SeekBarPreference extends Preference implements
 		//mSeekBar = new SeekBar(context, attrs);
 		//mSeekBar.setMax(mMaxValue - mMinValue);
 		//mSeekBar.setOnSeekBarChangeListener(this);	
-		}
+	}
 
 	private void setValuesFromXml(final Context context, final AttributeSet attrs) {
-		
+
 		TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
 				R.styleable.SeekBarPreference, 0, 0);
-		
+
 		try {
 			mMaxValue = a.getInt(R.styleable.SeekBarPreference_max, 100);
 			mMinValue = a.getInt(R.styleable.SeekBarPreference_min, 0);
@@ -96,11 +96,10 @@ public class SeekBarPreference extends Preference implements
 			}
 			mCurrentValue = a.getInt(R.styleable.SeekBarPreference_summary, 100);
 			mInterval = a.getInt(R.styleable.SeekBarPreference_interval, 1);
-		}
-		finally {
+		} finally {
 			a.recycle();
 		}
-		
+
 //		mMaxValue = attrs.getAttributeIntValue(ANDROIDNS, "max", 100);
 //		mMinValue = attrs.getAttributeIntValue(ROBOBUNNYNS, "min", 0);
 //
@@ -141,9 +140,10 @@ public class SeekBarPreference extends Preference implements
 			LayoutInflater mInflater = (LayoutInflater) parent.getContext()
 					.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-			layout =  mInflater.inflate(
+			layout = mInflater.inflate(
 					R.layout.preference_widget_seekbar, parent, false);
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			Log.e(TAG, "Error creating seek bar preference", e);
 		}
 
@@ -151,16 +151,16 @@ public class SeekBarPreference extends Preference implements
 
 	}
 
-	
+
 	@Override
 	public void onBindView(View view) {
 		super.onBindView(view);
-		
+
 		// Set seekbar
 		mSeekBar = (SeekBar) view.findViewById(R.id.prefSeekBar);
 		mSeekBar.setMax(mMaxValue - mMinValue);
 		mSeekBar.setOnSeekBarChangeListener(this);
-		
+
 		mStatusText = (TextView) view.findViewById(R.id.seekbarPrefValue);
 
 		// Sets the text etc
@@ -169,14 +169,14 @@ public class SeekBarPreference extends Preference implements
 
 	/**
 	 * Update a SeekBarPreference view with our current state
-	 * 
+	 *
 	 * @param layout
 	 */
 	protected void updateView(View layout) {
 
 		try {
 			//RelativeLayout layout = (RelativeLayout) view;
-			
+
 
 			//mStatusText = (TextView) layout.findViewById(android.R.id.summary);
 			mStatusText.setText(String.valueOf(mCurrentValue));
@@ -191,7 +191,8 @@ public class SeekBarPreference extends Preference implements
 					.findViewById(R.id.seekBarPrefUnitsLeft);
 			unitsLeft.setText(mUnitsLeft);
 
-		} catch (Exception e) {
+		}
+		catch (Exception e) {
 			Log.e(TAG, "Error updating seek bar preference", e);
 		}
 
@@ -199,7 +200,7 @@ public class SeekBarPreference extends Preference implements
 
 	@Override
 	public void onProgressChanged(SeekBar seekBar, int progress,
-			boolean fromUser) {
+								  boolean fromUser) {
 		int newValue = progress + mMinValue;
 
 		if (newValue > mMaxValue)
@@ -248,7 +249,8 @@ public class SeekBarPreference extends Preference implements
 			int temp = 0;
 			try {
 				temp = (Integer) defaultValue;
-			} catch (Exception ex) {
+			}
+			catch (Exception ex) {
 				Log.e(TAG, "Invalid default value: " + defaultValue.toString());
 			}
 

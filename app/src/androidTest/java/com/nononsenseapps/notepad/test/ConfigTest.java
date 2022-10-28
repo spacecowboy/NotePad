@@ -31,30 +31,30 @@ import java.util.Properties;
 /**
  * Make sure the properties file with api keys can be read correctly
  */
-public class ConfigTest  extends AndroidTestCase {
+public class ConfigTest extends AndroidTestCase {
 
-    private Context context;
+	private Context context;
 
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        context = getContext();
-    }
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+		context = getContext();
+	}
 
-    @Override
-    public void tearDown() throws Exception {
-        super.tearDown();
-    }
+	@Override
+	public void tearDown() throws Exception {
+		super.tearDown();
+	}
 
-    @MediumTest
-    @Suppress
-    public void testProps() {
-        Properties props = Config.getProperties(context);
+	@MediumTest
+	@Suppress
+	public void testProps() {
+		Properties props = Config.getProperties(context);
 
-        assertNotNull(props);
+		assertNotNull(props);
 
-        assertNotNull(Config.getGtasksApiKey(context));
-        assertFalse(Config.getGtasksApiKey(context).isEmpty());
+		assertNotNull(Config.getGtasksApiKey(context));
+		assertFalse(Config.getGtasksApiKey(context).isEmpty());
 
-    }
+	}
 }
