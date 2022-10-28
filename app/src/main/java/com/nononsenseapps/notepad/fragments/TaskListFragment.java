@@ -80,7 +80,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.Toast;
 
-@EFragment(resName="fragment_task_list")
+@EFragment(resName = "fragment_task_list")
 public class TaskListFragment extends Fragment implements
 		OnSharedPreferenceChangeListener {
 
@@ -94,8 +94,8 @@ public class TaskListFragment extends Fragment implements
 	public static final String LIST_ID = "list_id";
 
 	// DragSortListView listView;
-	@ViewById(resName="list")//android.r.id.list
-	DragSortListView listView;
+	@ViewById(resName = "list")//android.r.id.list
+			DragSortListView listView;
 
 	@SystemService
 	LayoutInflater layoutInflater;
@@ -147,8 +147,8 @@ public class TaskListFragment extends Fragment implements
 				new String[] { Task.Columns.TITLE, Task.Columns.NOTE,
 						Task.Columns.DUE, Task.Columns.COMPLETED,
 						Task.Columns.LEFT, Task.Columns.RIGHT }, new int[] {
-						android.R.id.text1, android.R.id.text1, R.id.date,
-						R.id.checkbox, R.id.drag_handle, R.id.dragpadding }, 0);
+				android.R.id.text1, android.R.id.text1, R.id.date,
+				R.id.checkbox, R.id.drag_handle, R.id.dragpadding }, 0);
 
 		// Set a drag listener
 		mAdapter.setDropListener(new DropListener() {
@@ -165,14 +165,14 @@ public class TaskListFragment extends Fragment implements
 		});
 		/*
 		 * listAdapter.setRemoveListener(new RemoveListener() {
-		 * 
+		 *
 		 * @Override public void remove(int which) { Log.d(TAG, "Remove pos: " +
 		 * which); Log.d(TAG, "Remove id: " + listAdapter.getItemId(which));
-		 * 
+		 *
 		 * getActivity().getContentResolver().delete(
 		 * Uri.withAppendedPath(Task.URI, "" + listAdapter.getItemId(which)),
 		 * null, null); }
-		 * 
+		 *
 		 * });
 		 */
 
@@ -187,7 +187,7 @@ public class TaskListFragment extends Fragment implements
 			final OnCheckedChangeListener checkBoxListener = new OnCheckedChangeListener() {
 				@Override
 				public void onCheckedChanged(CompoundButton buttonView,
-						boolean isChecked) {
+											 boolean isChecked) {
 					Task.setCompleted(getActivity(), isChecked,
 							((NoteCheckBox) buttonView).getNoteId());
 				}
@@ -199,120 +199,109 @@ public class TaskListFragment extends Fragment implements
 				isHeader = c.getLong(0) == -1;
 
 				switch (colIndex) {
-				// Matches order in Task.Columns.Fields
-				case 1:
-					// Title
-					sTemp = c.getString(colIndex);
-					if (isHeader) {
-						if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {
-							sTemp = getString(R.string.date_header_overdue);
-						}
-						else if (Task.HEADER_KEY_TODAY.equals(sTemp)) {
-							sTemp = getString(R.string.date_header_today);
-						}
-						else if (Task.HEADER_KEY_PLUS1.equals(sTemp)) {
-							sTemp = getString(R.string.date_header_tomorrow);
-						}
-						else if (Task.HEADER_KEY_PLUS2.equals(sTemp)
-								|| Task.HEADER_KEY_PLUS3.equals(sTemp)
-								|| Task.HEADER_KEY_PLUS4.equals(sTemp)) {
-							sTemp = weekdayFormatter.format(new Date(c
-									.getLong(4)));
-						}
-						else if (Task.HEADER_KEY_LATER.equals(sTemp)) {
-							sTemp = getString(R.string.date_header_future);
-						}
-						else if (Task.HEADER_KEY_NODATE.equals(sTemp)) {
-							sTemp = getString(R.string.date_header_none);
-						}
-						else if (Task.HEADER_KEY_COMPLETE.equals(sTemp)) {
-							sTemp = getString(R.string.date_header_completed);
-						}
-					}
-					else {
-						// Set height of text for non-headers
-						((TitleNoteTextView) view).setMaxLines(mRowCount);
-						// if (mRowCount == 1) {
-						// ((TitleNoteTextView) view).setSingleLine(true);
-						// }
-						// else {
-						// ((TitleNoteTextView) view).setSingleLine(false);
-						// }
+					// Matches order in Task.Columns.Fields
+					case 1:
+						// Title
+						sTemp = c.getString(colIndex);
+						if (isHeader) {
+							if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {
+								sTemp = getString(R.string.date_header_overdue);
+							} else if (Task.HEADER_KEY_TODAY.equals(sTemp)) {
+								sTemp = getString(R.string.date_header_today);
+							} else if (Task.HEADER_KEY_PLUS1.equals(sTemp)) {
+								sTemp = getString(R.string.date_header_tomorrow);
+							} else if (Task.HEADER_KEY_PLUS2.equals(sTemp)
+									|| Task.HEADER_KEY_PLUS3.equals(sTemp)
+									|| Task.HEADER_KEY_PLUS4.equals(sTemp)) {
+								sTemp = weekdayFormatter.format(new Date(c
+										.getLong(4)));
+							} else if (Task.HEADER_KEY_LATER.equals(sTemp)) {
+								sTemp = getString(R.string.date_header_future);
+							} else if (Task.HEADER_KEY_NODATE.equals(sTemp)) {
+								sTemp = getString(R.string.date_header_none);
+							} else if (Task.HEADER_KEY_COMPLETE.equals(sTemp)) {
+								sTemp = getString(R.string.date_header_completed);
+							}
+						} else {
+							// Set height of text for non-headers
+							((TitleNoteTextView) view).setMaxLines(mRowCount);
+							// if (mRowCount == 1) {
+							// ((TitleNoteTextView) view).setSingleLine(true);
+							// }
+							// else {
+							// ((TitleNoteTextView) view).setSingleLine(false);
+							// }
 
-						// Change color based on complete status
-						((TitleNoteTextView) view).useSecondaryColor(!c
-								.isNull(3));
+							// Change color based on complete status
+							((TitleNoteTextView) view).useSecondaryColor(!c
+									.isNull(3));
 
-					}
-					((TitleNoteTextView) view).setTextTitle(sTemp);
-					return true;
-				case 2:
-					// Note
-					if (!isHeader) {
-						// Only if task it not locked
-						// or only one line
-						if (c.getInt(9) != 1 && mRowCount > 1) {
-							((TitleNoteTextView) view).setTextRest(c
-									.getString(colIndex));
 						}
-						else {
-							((TitleNoteTextView) view).setTextRest("");
+						((TitleNoteTextView) view).setTextTitle(sTemp);
+						return true;
+					case 2:
+						// Note
+						if (!isHeader) {
+							// Only if task it not locked
+							// or only one line
+							if (c.getInt(9) != 1 && mRowCount > 1) {
+								((TitleNoteTextView) view).setTextRest(c
+										.getString(colIndex));
+							} else {
+								((TitleNoteTextView) view).setTextRest("");
+							}
 						}
-					}
-					return true;
-				case 3:
-					// Checkbox
-					if (!isHeader) {
-						((NoteCheckBox) view).setOnCheckedChangeListener(null);
-						((NoteCheckBox) view).setChecked(!c.isNull(colIndex));
-						((NoteCheckBox) view).setNoteId(c.getLong(0));
-						((NoteCheckBox) view)
-								.setOnCheckedChangeListener(checkBoxListener);
-						if (mHideCheckbox
-								|| (mListType != null && mListType
-										.equals(notetype))) {
-							view.setVisibility(View.GONE);
+						return true;
+					case 3:
+						// Checkbox
+						if (!isHeader) {
+							((NoteCheckBox) view).setOnCheckedChangeListener(null);
+							((NoteCheckBox) view).setChecked(!c.isNull(colIndex));
+							((NoteCheckBox) view).setNoteId(c.getLong(0));
+							((NoteCheckBox) view)
+									.setOnCheckedChangeListener(checkBoxListener);
+							if (mHideCheckbox
+									|| (mListType != null && mListType
+									.equals(notetype))) {
+								view.setVisibility(View.GONE);
+							} else {
+								view.setVisibility(View.VISIBLE);
+							}
 						}
-						else {
-							view.setVisibility(View.VISIBLE);
-						}
-					}
-					return true;
-				case 4:
-					// Due date
-					if (!isHeader) {
-						// Always hide for note type
-						if (mListType != null && mListType.equals(notetype)) {
-							view.setVisibility(View.GONE);
-						}
-						// Show for tasks if present
-						else {
-							if (c.isNull(colIndex)) {
+						return true;
+					case 4:
+						// Due date
+						if (!isHeader) {
+							// Always hide for note type
+							if (mListType != null && mListType.equals(notetype)) {
 								view.setVisibility(View.GONE);
 							}
+							// Show for tasks if present
 							else {
-								view.setVisibility(View.VISIBLE);
-								((DateView) view).setTimeText(c
-										.getLong(colIndex));
+								if (c.isNull(colIndex)) {
+									view.setVisibility(View.GONE);
+								} else {
+									view.setVisibility(View.VISIBLE);
+									((DateView) view).setTimeText(c
+											.getLong(colIndex));
+								}
 							}
 						}
-					}
-					return true;
-				case 6:
-					// left, handle
-				case 7:
-					// right, padding
-					if (!isHeader) {
-						if (mSortType != null && mSortType.equals(manualsort)) {
-							view.setVisibility(View.VISIBLE);
+						return true;
+					case 6:
+						// left, handle
+					case 7:
+						// right, padding
+						if (!isHeader) {
+							if (mSortType != null && mSortType.equals(manualsort)) {
+								view.setVisibility(View.VISIBLE);
+							} else {
+								view.setVisibility(View.GONE);
+							}
 						}
-						else {
-							view.setVisibility(View.GONE);
-						}
-					}
-					return true;
-				default:
-					break;
+						return true;
+					default:
+						break;
 				}
 				return false;
 			}
@@ -345,8 +334,7 @@ public class TaskListFragment extends Fragment implements
 					return new CursorLoader(getActivity(),
 							TaskList.getUri(mListId), TaskList.Columns.FIELDS,
 							null, null, null);
-				}
-				else {
+				} else {
 					// What sorting to use
 					Uri targetUri;
 					String sortSpec;
@@ -365,13 +353,11 @@ public class TaskListFragment extends Fragment implements
 						targetUri = Task.URI;
 						sortSpec = getString(R.string.const_as_alphabetic,
 								Task.Columns.TITLE);
-					}
-					else if (mSortType
+					} else if (mSortType
 							.equals(getString(R.string.const_duedate))) {
 						targetUri = Task.URI_SECTIONED_BY_DATE;
 						sortSpec = null;
-					}
-					else if (mSortType
+					} else if (mSortType
 							.equals(getString(R.string.const_modified))) {
 						targetUri = Task.URI;
 						sortSpec = Task.Columns.UPDATED + " DESC";
@@ -388,27 +374,26 @@ public class TaskListFragment extends Fragment implements
 					if (mListId > 0) {
 						where = Task.Columns.DBLIST + " IS ?";
 						whereArgs = new String[] { Long.toString(mListId) };
-					}
-					else {
+					} else {
 						targetUri = Task.URI;
 						sortSpec = Task.Columns.DUE;
 						whereArgs = null;
 						where = Task.Columns.COMPLETED + " IS NULL";
 						switch ((int) mListId) {
-						case LIST_ID_OVERDUE:
-							where += andWhereOverdue();
-							break;
-						case LIST_ID_TODAY:
-							where += andWhereToday();
-							break;
-						case LIST_ID_WEEK:
-							where += andWhereWeek();
-							break;
-						case LIST_ID_ALL:
-						default:
-							// Show completed also in this case
-							where = null;
-							break;
+							case LIST_ID_OVERDUE:
+								where += andWhereOverdue();
+								break;
+							case LIST_ID_TODAY:
+								where += andWhereToday();
+								break;
+							case LIST_ID_WEEK:
+								where += andWhereWeek();
+								break;
+							case LIST_ID_ALL:
+							default:
+								// Show completed also in this case
+								where = null;
+								break;
 						}
 					}
 
@@ -427,8 +412,7 @@ public class TaskListFragment extends Fragment implements
 						// Reload tasks with new sorting
 						getLoaderManager().restartLoader(1, null, this);
 					}
-				}
-				else {
+				} else {
 					mAdapter.swapCursor(c);
 				}
 			}
@@ -437,8 +421,7 @@ public class TaskListFragment extends Fragment implements
 			public void onLoaderReset(Loader<Cursor> loader) {
 				if (loader.getId() == 0) {
 					// Nothing to do
-				}
-				else {
+				} else {
 					mAdapter.swapCursor(null);
 				}
 			}
@@ -446,8 +429,7 @@ public class TaskListFragment extends Fragment implements
 
 		if (mListId > 0) {
 			getLoaderManager().restartLoader(0, null, mCallback);
-		}
-		else {
+		} else {
 			// Setting sort types for all tasks always to due date
 			mSortType = getString(R.string.const_duedate);
 			getLoaderManager().restartLoader(1, null, mCallback);
@@ -480,14 +462,14 @@ public class TaskListFragment extends Fragment implements
 	public static String andWhereWeek() {
 		return " AND " + whereWeek();
 	}
-	
+
 	@AfterViews
 	void setupPullToRefresh() {
 		// Now get the PullToRefresh attacher from the Activity. An exercise to the reader
-        // is to create an implicit interface instead of casting to the concrete Activity
-        // Now set the ScrollView as the refreshable view, and the refresh listener (this)
+		// is to create an implicit interface instead of casting to the concrete Activity
+		// Now set the ScrollView as the refreshable view, and the refresh listener (this)
 		((ActivityMain) getActivity())
-			.addRefreshableView(listView);
+				.addRefreshableView(listView);
 	}
 
 	@AfterViews
@@ -497,7 +479,7 @@ public class TaskListFragment extends Fragment implements
 		listView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View origin, int pos,
-					long id) {
+									long id) {
 				if (mListener != null && id > 0) {
 					mListener.onFragmentInteraction(Task.getUri(id), mListId,
 							origin);
@@ -508,7 +490,7 @@ public class TaskListFragment extends Fragment implements
 		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
 			@Override
 			public boolean onItemLongClick(AdapterView<?> arg0, View view,
-					int pos, long id) {
+										   int pos, long id) {
 				listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 				// Also select the item in question
 				listView.setItemChecked(pos, true);
@@ -526,8 +508,7 @@ public class TaskListFragment extends Fragment implements
 					for (final Task t : tasks.values()) {
 						try {
 							t.delete(getActivity());
-						}
-						catch (Exception e) {
+						} catch (Exception e) {
 						}
 					}
 					try {
@@ -537,8 +518,7 @@ public class TaskListFragment extends Fragment implements
 										R.plurals.notedeleted_msg,
 										tasks.size(), tasks.size()),
 								Toast.LENGTH_SHORT).show();
-					}
-					catch (Exception e) {
+					} catch (Exception e) {
 						// Protect against faulty translations
 					}
 					if (mMode != null) mMode.finish();
@@ -577,7 +557,7 @@ public class TaskListFragment extends Fragment implements
 
 			@Override
 			public boolean onActionItemClicked(final ActionMode mode,
-					MenuItem item) {
+											   MenuItem item) {
 				// Respond to clicks on the actions in the CAB
 				boolean finish = false;
 				int itemId = item.getItemId();
@@ -588,13 +568,12 @@ public class TaskListFragment extends Fragment implements
 							getString(R.string.app_name), getShareText()));
 					try {
 						Toast.makeText(
-								getActivity(),
-								getResources().getQuantityString(
-										R.plurals.notecopied_msg, tasks.size(),
-										tasks.size()), Toast.LENGTH_SHORT)
+										getActivity(),
+										getResources().getQuantityString(
+												R.plurals.notecopied_msg, tasks.size(),
+												tasks.size()), Toast.LENGTH_SHORT)
 								.show();
-					}
-					catch (Exception e) {
+					} catch (Exception e) {
 						// Protect against faulty translations
 					}
 					finish = true;
@@ -610,8 +589,7 @@ public class TaskListFragment extends Fragment implements
 						DialogPassword_ delpf = new DialogPassword_();
 						delpf.setListener(pListener);
 						delpf.show(getFragmentManager(), "multi_delete_verify");
-					}
-					else {
+					} else {
 						DialogDeleteTask.showDialog(getFragmentManager(), -1,
 								new DialogConfirmedListener() {
 									@Override
@@ -623,7 +601,7 @@ public class TaskListFragment extends Fragment implements
 				} else if (itemId == R.id.menu_switch_list) {
 					// show move to list dialog
 					DialogMoveToList.getInstance(
-							tasks.keySet().toArray(new Long[tasks.size()]))
+									tasks.keySet().toArray(new Long[tasks.size()]))
 							.show(getFragmentManager(), "move_to_list_dialog");
 					finish = true;
 				} else if (itemId == R.id.menu_share) {
@@ -639,12 +617,11 @@ public class TaskListFragment extends Fragment implements
 
 			@Override
 			public void onItemCheckedStateChanged(ActionMode mode,
-					int position, long id, boolean checked) {
+												  int position, long id, boolean checked) {
 				if (checked) {
 					tasks.put(id, new Task((Cursor) listView.getAdapter()
 							.getItem(position)));
-				}
-				else {
+				} else {
 					tasks.remove(id);
 				}
 
@@ -660,8 +637,7 @@ public class TaskListFragment extends Fragment implements
 								R.plurals.mode_choose, tasks.size(),
 								tasks.size()));
 					}
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					// Protect against faulty translations
 				}
 			}
@@ -674,17 +650,16 @@ public class TaskListFragment extends Fragment implements
 					}
 					if (t.locked) {
 						sb.append(t.title);
-					}
-					else {
+					} else {
 						sb.append(t.getText());
 					}
 				}
 				return sb.toString();
 			}
-			
+
 			String getShareSubject() {
 				String result = "";
-				for (Task t: tasks.values()) {
+				for (Task t : tasks.values()) {
 					result += ", " + t.title;
 				}
 				return result.length() > 0 ? result.substring(2) : result;
@@ -726,8 +701,7 @@ public class TaskListFragment extends Fragment implements
 		if (itemId == R.id.menu_add) {
 			if (mListener != null && mListId > 0) {
 				mListener.addTaskInList("", mListId);
-			}
-			else if (mListener != null) {
+			} else if (mListener != null) {
 				mListener.addTaskInList("", TaskListViewPagerFragment
 						.getARealList(getActivity(), -1));
 			}
@@ -753,7 +727,7 @@ public class TaskListFragment extends Fragment implements
 		super.onDestroy();
 		getLoaderManager().destroyLoader(0);
 		((ActivityMain) getActivity())
-		.removeRefreshableView(listView);
+				.removeRefreshableView(listView);
 	}
 
 	@Override
@@ -761,8 +735,7 @@ public class TaskListFragment extends Fragment implements
 		super.onAttach(activity);
 		try {
 			mListener = (OnFragmentInteractionListener) activity;
-		}
-		catch (ClassCastException e) {
+		} catch (ClassCastException e) {
 			// throw new ClassCastException(activity.toString()
 			// + " must implement OnFragmentInteractionListener");
 		}
@@ -791,7 +764,7 @@ public class TaskListFragment extends Fragment implements
 		final Context context;
 
 		public SimpleSectionsAdapter(Context context, int layout,
-				int headerLayout, Cursor c, String[] from, int[] to, int flags) {
+									 int headerLayout, Cursor c, String[] from, int[] to, int flags) {
 			super(context, layout, c, from, to, flags);
 			this.context = context;
 			mItemLayout = layout;
@@ -802,8 +775,7 @@ public class TaskListFragment extends Fragment implements
 		int getViewLayout(final int position) {
 			if (itemType == getItemViewType(position)) {
 				return mItemLayout;
-			}
-			else {
+			} else {
 				return mHeaderLayout;
 			}
 		}
@@ -842,8 +814,7 @@ public class TaskListFragment extends Fragment implements
 			// If the id is invalid, it's a header
 			if (c.getLong(0) < 1) {
 				return headerType;
-			}
-			else {
+			} else {
 				return itemType;
 			}
 		}
@@ -877,7 +848,7 @@ public class TaskListFragment extends Fragment implements
 
 	@Override
 	public void onSharedPreferenceChanged(final SharedPreferences prefs,
-			final String key) {
+										  final String key) {
 		if (isDetached()) {
 			// Fix crash report
 			return;
@@ -903,7 +874,7 @@ public class TaskListFragment extends Fragment implements
 			}
 		} catch (IllegalStateException ignored) {
 			// Fix crash report
-            // Might get a race condition where fragment is detached when getString is called
+			// Might get a race condition where fragment is detached when getString is called
 		}
 	}
 }

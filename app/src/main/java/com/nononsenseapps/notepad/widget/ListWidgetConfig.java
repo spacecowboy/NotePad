@@ -6,6 +6,7 @@ import java.util.Date;
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.ViewById;
+
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
@@ -45,7 +46,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-@EActivity(resName="activity_widget_config")
+@EActivity(resName = "activity_widget_config")
 public class ListWidgetConfig extends FragmentActivity {
 	private static final String TAG = "ListWidgetConfig";
 	public static final String KEY_LIST = "widget1_key_list";
@@ -83,43 +84,43 @@ public class ListWidgetConfig extends FragmentActivity {
 	// All lists id
 	public final static int ALL_LISTS_ID = -2;
 
-	@ViewById(resName="widgetPreviewWrapper")
+	@ViewById(resName = "widgetPreviewWrapper")
 	View widgetPreviewWrapper;
 
-	@ViewById(resName="listSpinner")
+	@ViewById(resName = "listSpinner")
 	Spinner listSpinner;
 
-	@ViewById(resName="sortingSpinner")
+	@ViewById(resName = "sortingSpinner")
 	Spinner sortingSpinner;
 
-	@ViewById(resName="itemRowsSeekBar")
+	@ViewById(resName = "itemRowsSeekBar")
 	SeekBar itemRowsSeekBar;
 
-	@ViewById(resName="transparencySeekBar")
+	@ViewById(resName = "transparencySeekBar")
 	SeekBar transparencySeekBar;
 
-	@ViewById(resName="themeSpinner")
+	@ViewById(resName = "themeSpinner")
 	Spinner themeSpinner;
 
-	@ViewById(resName="shade")
+	@ViewById(resName = "shade")
 	ImageView shade;
 
-	@ViewById(resName="notesList")
+	@ViewById(resName = "notesList")
 	ListView notesList;
 
-	@ViewById(resName="titleButton")
+	@ViewById(resName = "titleButton")
 	TextView titleButton;
 
-	@ViewById(resName="widgetHeader")
+	@ViewById(resName = "widgetHeader")
 	View widgetHeader;
 
-	@ViewById(resName="transparentHeaderCheckBox")
+	@ViewById(resName = "transparentHeaderCheckBox")
 	CheckBox transparentHeaderCheckBox;
 
-	@ViewById(resName="hideCheckBox")
+	@ViewById(resName = "hideCheckBox")
 	CheckBox hideCheckBox;
 
-	@ViewById(resName="hideDateCheckBox")
+	@ViewById(resName = "hideDateCheckBox")
 	CheckBox hideDateCheckBox;
 
 	private int appWidgetId;
@@ -140,8 +141,7 @@ public class ListWidgetConfig extends FragmentActivity {
 			appWidgetId = intent.getExtras().getInt(
 					AppWidgetManager.EXTRA_APPWIDGET_ID,
 					AppWidgetManager.INVALID_APPWIDGET_ID);
-		}
-		else {
+		} else {
 			appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
 			Log.d(TAG, "Invalid ID given in the intent");
 			Intent resultValue = new Intent();
@@ -162,9 +162,9 @@ public class ListWidgetConfig extends FragmentActivity {
 				new String[] { Task.Columns.TITLE, Task.Columns.DUE,
 						Task.Columns.COMPLETED, Task.Columns.COMPLETED,
 						Task.Columns.COMPLETED }, new int[] {
-						android.R.id.text1, R.id.dueDate,
-						R.id.completedCheckBoxDark, R.id.itemSpacer,
-						R.id.completedCheckBoxLight }, 0);
+				android.R.id.text1, R.id.dueDate,
+				R.id.completedCheckBoxDark, R.id.itemSpacer,
+				R.id.completedCheckBoxLight }, 0);
 		mNotesAdapter.setViewBinder(new ViewBinder() {
 			final WidgetPrefs widgetPrefs = new WidgetPrefs(
 					ListWidgetConfig.this, appWidgetId);
@@ -180,89 +180,79 @@ public class ListWidgetConfig extends FragmentActivity {
 				// Check for headers, they have invalid ids
 				isHeader = c.getLong(0) == -1;
 				switch (colIndex) {
-				case 1:
-					if (isHeader) {
-						sTemp = c.getString(1);
+					case 1:
+						if (isHeader) {
+							sTemp = c.getString(1);
 
-						if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {
-							sTemp = getString(R.string.date_header_overdue);
-						}
-						else if (Task.HEADER_KEY_TODAY.equals(sTemp)) {
-							sTemp = getString(R.string.date_header_today);
-						}
-						else if (Task.HEADER_KEY_PLUS1.equals(sTemp)) {
-							sTemp = getString(R.string.date_header_tomorrow);
-						}
-						else if (Task.HEADER_KEY_PLUS2.equals(sTemp)
-								|| Task.HEADER_KEY_PLUS3.equals(sTemp)
-								|| Task.HEADER_KEY_PLUS4.equals(sTemp)) {
-							sTemp = weekdayFormatter.format(new Date(c
-									.getLong(4)));
-						}
-						else if (Task.HEADER_KEY_LATER.equals(sTemp)) {
-							sTemp = getString(R.string.date_header_future);
-						}
-						else if (Task.HEADER_KEY_NODATE.equals(sTemp)) {
-							sTemp = getString(R.string.date_header_none);
-						}
-						else if (Task.HEADER_KEY_COMPLETE.equals(sTemp)) {
-							sTemp = getString(R.string.date_header_completed);
-						}
+							if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {
+								sTemp = getString(R.string.date_header_overdue);
+							} else if (Task.HEADER_KEY_TODAY.equals(sTemp)) {
+								sTemp = getString(R.string.date_header_today);
+							} else if (Task.HEADER_KEY_PLUS1.equals(sTemp)) {
+								sTemp = getString(R.string.date_header_tomorrow);
+							} else if (Task.HEADER_KEY_PLUS2.equals(sTemp)
+									|| Task.HEADER_KEY_PLUS3.equals(sTemp)
+									|| Task.HEADER_KEY_PLUS4.equals(sTemp)) {
+								sTemp = weekdayFormatter.format(new Date(c
+										.getLong(4)));
+							} else if (Task.HEADER_KEY_LATER.equals(sTemp)) {
+								sTemp = getString(R.string.date_header_future);
+							} else if (Task.HEADER_KEY_NODATE.equals(sTemp)) {
+								sTemp = getString(R.string.date_header_none);
+							} else if (Task.HEADER_KEY_COMPLETE.equals(sTemp)) {
+								sTemp = getString(R.string.date_header_completed);
+							}
 
-						((TextView) view).setText(sTemp);
-						// ((TextView) view).setText(TitleNoteTextView
-						// .getStyledText(sTemp, 1.3f, 1, 1));
-					}
-					else {
-						((TextView) view).setText(TitleNoteTextView
-								.getStyledText(c.getString(1), c.getString(2),
-										1.0f, 1, 1));
-						final int rows = widgetPrefs.getInt(KEY_TITLEROWS,
-								DEFAULT_ROWS);
-						((TextView) view).setMaxLines(rows < 1 ? 1 : rows);
-					}
-					// Set color
-					((TextView) view).setTextColor(widgetPrefs.getInt(
-							KEY_TEXTPRIMARY, DEFAULT_TEXTPRIMARY));
-					return true;
-				case 2:
-					// already done.
-					return true;
-				case 3:
-					// Complete checkbox
-					boolean visible;
-					if (view.getId() == R.id.completedCheckBoxLight) {
-						visible = THEME_LIGHT == widgetPrefs.getInt(KEY_THEME,
-								DEFAULT_THEME);
-					}
-					else if (view.getId() == R.id.completedCheckBoxDark) {
-						visible = THEME_DARK == widgetPrefs.getInt(KEY_THEME,
-								DEFAULT_THEME);
-					}
-					else {
-						// Spacer
-						visible = true;
-					}
-					visible &= !widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX,
-							false);
-					view.setVisibility(visible ? View.VISIBLE : View.GONE);
-					return true;
-				case 4:
-					// Date
-					view.setVisibility(widgetPrefs.getBoolean(KEY_HIDDENDATE,
-							false) ? View.GONE : View.VISIBLE);
-					if (c.isNull(colIndex)) {
-						((TextView) view).setText("");
-					}
-					else {
-						((TextView) view).setText(dateFormatter
-								.format(new Date(c.getLong(colIndex))));
-					}
-					((TextView) view).setTextColor(widgetPrefs.getInt(
-							KEY_TEXTPRIMARY, DEFAULT_TEXTPRIMARY));
-					return true;
-				default:
-					return false;
+							((TextView) view).setText(sTemp);
+							// ((TextView) view).setText(TitleNoteTextView
+							// .getStyledText(sTemp, 1.3f, 1, 1));
+						} else {
+							((TextView) view).setText(TitleNoteTextView
+									.getStyledText(c.getString(1), c.getString(2),
+											1.0f, 1, 1));
+							final int rows = widgetPrefs.getInt(KEY_TITLEROWS,
+									DEFAULT_ROWS);
+							((TextView) view).setMaxLines(rows < 1 ? 1 : rows);
+						}
+						// Set color
+						((TextView) view).setTextColor(widgetPrefs.getInt(
+								KEY_TEXTPRIMARY, DEFAULT_TEXTPRIMARY));
+						return true;
+					case 2:
+						// already done.
+						return true;
+					case 3:
+						// Complete checkbox
+						boolean visible;
+						if (view.getId() == R.id.completedCheckBoxLight) {
+							visible = THEME_LIGHT == widgetPrefs.getInt(KEY_THEME,
+									DEFAULT_THEME);
+						} else if (view.getId() == R.id.completedCheckBoxDark) {
+							visible = THEME_DARK == widgetPrefs.getInt(KEY_THEME,
+									DEFAULT_THEME);
+						} else {
+							// Spacer
+							visible = true;
+						}
+						visible &= !widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX,
+								false);
+						view.setVisibility(visible ? View.VISIBLE : View.GONE);
+						return true;
+					case 4:
+						// Date
+						view.setVisibility(widgetPrefs.getBoolean(KEY_HIDDENDATE,
+								false) ? View.GONE : View.VISIBLE);
+						if (c.isNull(colIndex)) {
+							((TextView) view).setText("");
+						} else {
+							((TextView) view).setText(dateFormatter
+									.format(new Date(c.getLong(colIndex))));
+						}
+						((TextView) view).setTextColor(widgetPrefs.getInt(
+								KEY_TEXTPRIMARY, DEFAULT_TEXTPRIMARY));
+						return true;
+					default:
+						return false;
 				}
 			}
 		});
@@ -278,8 +268,7 @@ public class ListWidgetConfig extends FragmentActivity {
 					return new CursorLoader(ListWidgetConfig.this,
 							TaskList.URI, TaskList.Columns.FIELDS, null, null,
 							getString(R.string.const_as_alphabetic, TaskList.Columns.TITLE));
-				}
-				else {
+				} else {
 					final Uri targetUri;
 
 					final long listId = widgetPrefs.getLong(KEY_LIST,
@@ -293,8 +282,7 @@ public class ListWidgetConfig extends FragmentActivity {
 							&& listId > 0) {
 						targetUri = Task.URI;
 						sortSpec = Task.Columns.LEFT;
-					}
-					else if (sortType
+					} else if (sortType
 							.equals(getString(R.string.const_modified))) {
 						targetUri = Task.URI;
 						sortSpec = Task.Columns.UPDATED + " DESC";
@@ -309,15 +297,14 @@ public class ListWidgetConfig extends FragmentActivity {
 						targetUri = Task.URI;
 						sortSpec = getString(R.string.const_as_alphabetic, Task.Columns.TITLE);
 					}
-					
+
 					String listWhere = null;
 					String[] listArg = null;
 					if (listId > 0) {
 						listWhere = Task.Columns.DBLIST + " IS ? AND "
 								+ Task.Columns.COMPLETED + " IS NULL";
 						listArg = new String[] { Long.toString(listId) };
-					}
-					else {
+					} else {
 						listWhere = Task.Columns.COMPLETED + " IS NULL";
 						listArg = null;
 					}
@@ -339,8 +326,7 @@ public class ListWidgetConfig extends FragmentActivity {
 					// Set current item
 					listSpinner.setSelection(pos);
 					//}
-				}
-				else {
+				} else {
 					mNotesAdapter.swapCursor(c);
 				}
 			}
@@ -349,8 +335,7 @@ public class ListWidgetConfig extends FragmentActivity {
 			public void onLoaderReset(Loader<Cursor> l) {
 				if (l.getId() == 1) {
 					mListAdapter.swapCursor(null);
-				}
-				else {
+				} else {
 					mNotesAdapter.swapCursor(null);
 				}
 			}
@@ -422,8 +407,7 @@ public class ListWidgetConfig extends FragmentActivity {
 
 		if (themeValues == null) {
 			Log.d(TAG, "themevalues null");
-		}
-		else {
+		} else {
 			for (String s : themeValues) {
 				Log.d(TAG, "themevalue: " + s);
 			}
@@ -432,7 +416,7 @@ public class ListWidgetConfig extends FragmentActivity {
 		sortingSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view,
-					int pos, long id) {
+									   int pos, long id) {
 				widgetPrefs.putString(KEY_SORT_TYPE, sortTypeValues[pos]);
 				// Need to recreate loader for this
 				reloadTasks();
@@ -449,7 +433,7 @@ public class ListWidgetConfig extends FragmentActivity {
 		themeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> parent, View view,
-					int pos, long id) {
+									   int pos, long id) {
 				final String theme = parent.getItemAtPosition(pos).toString();
 				final int mTheme;
 				final int primaryTextColor;
@@ -461,8 +445,7 @@ public class ListWidgetConfig extends FragmentActivity {
 							android.R.color.primary_text_light);
 					secondaryTextColor = getResources().getColor(
 							android.R.color.secondary_text_light);
-				}
-				else {
+				} else {
 					mTheme = THEME_DARK;
 					primaryTextColor = getResources().getColor(
 							android.R.color.primary_text_dark);
@@ -482,8 +465,7 @@ public class ListWidgetConfig extends FragmentActivity {
 		final String currentThemeString;
 		if (widgetPrefs.getInt(KEY_THEME, DEFAULT_THEME) == THEME_LIGHT) {
 			currentThemeString = getString(R.string.settings_summary_theme_light);
-		}
-		else {
+		} else {
 			currentThemeString = getString(R.string.settings_summary_theme_dark);
 		}
 		themeSpinner.setSelection(getSpinnerPositionOf(
@@ -502,7 +484,7 @@ public class ListWidgetConfig extends FragmentActivity {
 
 					@Override
 					public void onProgressChanged(SeekBar seekBar,
-							int progress, boolean fromUser) {
+												  int progress, boolean fromUser) {
 						// Plus one since seekbars start at zero
 						widgetPrefs.putInt(KEY_TITLEROWS, progress + 1);
 						// Only need to reload existing loader
@@ -526,7 +508,7 @@ public class ListWidgetConfig extends FragmentActivity {
 
 					@Override
 					public void onProgressChanged(SeekBar seekBar,
-							int progress, boolean fromUser) {
+												  int progress, boolean fromUser) {
 						// final int color =
 						// getHomescreenBackgroundColor(progress, 0xffffff);
 						final int color = getHomescreenBackgroundColor(
@@ -549,13 +531,12 @@ public class ListWidgetConfig extends FragmentActivity {
 		listSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
 			public void onItemSelected(AdapterView<?> adapter, View arg1,
-					int pos, long id) {
+									   int pos, long id) {
 				widgetPrefs.putLong(KEY_LIST, id);
 				try {
 					widgetPrefs.putString(KEY_LIST_TITLE, ((Cursor) adapter
 							.getItemAtPosition(pos)).getString(1));
-				}
-				catch (ClassCastException e) {
+				} catch (ClassCastException e) {
 					// Its the all lists item
 					widgetPrefs.putString(KEY_LIST_TITLE,
 							((String) adapter.getItemAtPosition(pos)));
@@ -588,7 +569,7 @@ public class ListWidgetConfig extends FragmentActivity {
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
+												 boolean isChecked) {
 						widgetHeader.setVisibility(isChecked ? View.GONE
 								: View.VISIBLE);
 						widgetPrefs.putBoolean(KEY_HIDDENHEADER, isChecked);
@@ -600,7 +581,7 @@ public class ListWidgetConfig extends FragmentActivity {
 		hideCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 			@Override
 			public void onCheckedChanged(CompoundButton buttonView,
-					boolean isChecked) {
+										 boolean isChecked) {
 				widgetPrefs.putBoolean(KEY_HIDDENCHECKBOX, isChecked);
 				if (mNotesAdapter != null)
 					mNotesAdapter.notifyDataSetChanged();
@@ -613,7 +594,7 @@ public class ListWidgetConfig extends FragmentActivity {
 				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 					@Override
 					public void onCheckedChanged(CompoundButton buttonView,
-							boolean isChecked) {
+												 boolean isChecked) {
 						widgetPrefs.putBoolean(KEY_HIDDENDATE, isChecked);
 						if (mNotesAdapter != null)
 							mNotesAdapter.notifyDataSetChanged();
@@ -673,14 +654,14 @@ public class ListWidgetConfig extends FragmentActivity {
 		// Isolate alpha channel
 		alpha = 0xff000000 & alpha;
 		switch (theme) {
-		case THEME_LIGHT:
-			// WHITE
-			color = 0xffffff;
-			break;
-		case THEME_DARK:
-		default:
-			color = 0;
-			break;
+			case THEME_LIGHT:
+				// WHITE
+				color = 0xffffff;
+				break;
+			case THEME_DARK:
+			default:
+				color = 0;
+				break;
 		}
 		// Add alpha
 		color = alpha | color;
@@ -703,11 +684,9 @@ public class ListWidgetConfig extends FragmentActivity {
 
 		if (opacity >= 100) {
 			return 0xff000000;
-		}
-		else if (opacity <= 0) {
+		} else if (opacity <= 0) {
 			return 0;
-		}
-		else {
+		} else {
 			return (opacity * 256 / 100) << 24;
 		}
 	}
@@ -717,7 +696,7 @@ public class ListWidgetConfig extends FragmentActivity {
 	 * have its alpha overwritten.
 	 */
 	public static int getHomescreenBackgroundColor(final int opacity,
-			final int color) {
+												   final int color) {
 		// Get rid of possible alpha
 		int retColor = color & 0x00ffffff;
 
@@ -731,7 +710,7 @@ public class ListWidgetConfig extends FragmentActivity {
 		final static int headerType = 1;
 
 		public SimpleWidgetPreviewAdapter(Context context, int layout,
-				int headerLayout, Cursor c, String[] from, int[] to, int flags) {
+										  int headerLayout, Cursor c, String[] from, int[] to, int flags) {
 			super(context, layout, c, from, to, flags);
 			mItemLayout = layout;
 			mHeaderLayout = headerLayout;
@@ -740,8 +719,7 @@ public class ListWidgetConfig extends FragmentActivity {
 		int getViewLayout(final int position) {
 			if (itemType == getItemViewType(position)) {
 				return mItemLayout;
-			}
-			else {
+			} else {
 				return mHeaderLayout;
 			}
 		}
@@ -757,8 +735,7 @@ public class ListWidgetConfig extends FragmentActivity {
 			// If the id is invalid, it's a header
 			if (c.getLong(0) < 1) {
 				return headerType;
-			}
-			else {
+			} else {
 				return itemType;
 			}
 		}

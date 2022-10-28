@@ -56,8 +56,8 @@ public class GoogleTaskSync {
 	 * Returns true if sync was successful, false otherwise
 	 */
 	public static boolean fullSync(final Context context,
-			final Account account, final Bundle extras, final String authority,
-			final ContentProviderClient provider, final SyncResult syncResult) {
+								   final Account account, final Bundle extras, final String authority,
+								   final ContentProviderClient provider, final SyncResult syncResult) {
 
 		Log.d(TAG, "fullSync");
 		// Is saved at a successful sync
@@ -67,112 +67,112 @@ public class GoogleTaskSync {
 		// Initialize necessary stuff
 		final AccountManager accountManager = AccountManager.get(context);
 
-        try {
-            GoogleTasksClient client = new GoogleTasksClient(GoogleTasksClient.getAuthToken
-                    (accountManager, account, NOTIFY_AUTH_FAILURE), Config
-                    .getGtasksApiKey(context), account.name);
+		try {
+			GoogleTasksClient client = new GoogleTasksClient(GoogleTasksClient.getAuthToken
+					(accountManager, account, NOTIFY_AUTH_FAILURE), Config
+					.getGtasksApiKey(context), account.name);
 
-            Log.d(TAG, "AuthToken acquired, we are connected...");
+			Log.d(TAG, "AuthToken acquired, we are connected...");
 
-            // IF full sync, download since start of all time
-            // Temporary fix for delete all bug
+			// IF full sync, download since start of all time
+			// Temporary fix for delete all bug
 //					if (PreferenceManager.getDefaultSharedPreferences(context)
 //							.getBoolean(SyncPrefs.KEY_FULLSYNC, false)) {
-            PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(SyncPrefs
-                    .KEY_FULLSYNC, false).putLong(PREFS_GTASK_LAST_SYNC_TIME, 0).commit();
+			PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(SyncPrefs
+					.KEY_FULLSYNC, false).putLong(PREFS_GTASK_LAST_SYNC_TIME, 0).commit();
 //					}
 
-            // Download lists from server
-            Log.d(TAG, "download lists");
-            final List<GoogleTaskList> remoteLists = downloadLists(client);
+			// Download lists from server
+			Log.d(TAG, "download lists");
+			final List<GoogleTaskList> remoteLists = downloadLists(client);
 
-            // merge with local complement
-            Log.d(TAG, "merge lists");
-            mergeListsWithLocalDB(context, account.name, remoteLists);
+			// merge with local complement
+			Log.d(TAG, "merge lists");
+			mergeListsWithLocalDB(context, account.name, remoteLists);
 
-            // Synchronize lists locally
-            Log.d(TAG, "sync lists locally");
-            final List<Pair<TaskList, GoogleTaskList>> listPairs = synchronizeListsLocally
-                    (context, remoteLists);
+			// Synchronize lists locally
+			Log.d(TAG, "sync lists locally");
+			final List<Pair<TaskList, GoogleTaskList>> listPairs = synchronizeListsLocally
+					(context, remoteLists);
 
-            // Synchronize lists remotely
-            Log.d(TAG, "sync lists remotely");
-            final List<Pair<TaskList, GoogleTaskList>> syncedPairs = synchronizeListsRemotely
-                    (context, listPairs, client);
+			// Synchronize lists remotely
+			Log.d(TAG, "sync lists remotely");
+			final List<Pair<TaskList, GoogleTaskList>> syncedPairs = synchronizeListsRemotely
+					(context, listPairs, client);
 
-            // For each list
-            for (Pair<TaskList, GoogleTaskList> syncedPair : syncedPairs) {
-                // Download tasks from server
-                Log.d(TAG, "download tasks");
-                final List<GoogleTask> remoteTasks = downloadChangedTasks(context, client,
-                        syncedPair.second);
+			// For each list
+			for (Pair<TaskList, GoogleTaskList> syncedPair : syncedPairs) {
+				// Download tasks from server
+				Log.d(TAG, "download tasks");
+				final List<GoogleTask> remoteTasks = downloadChangedTasks(context, client,
+						syncedPair.second);
 
-                // merge with local complement
-                Log.d(TAG, "merge tasks");
-                mergeTasksWithLocalDB(context, account.name, remoteTasks, syncedPair.first._id);
+				// merge with local complement
+				Log.d(TAG, "merge tasks");
+				mergeTasksWithLocalDB(context, account.name, remoteTasks, syncedPair.first._id);
 
-                // Synchronize tasks locally
-                Log.d(TAG, "sync tasks locally");
-                final List<Pair<Task, GoogleTask>> taskPairs = synchronizeTasksLocally(context,
-                        remoteTasks, syncedPair);
-                // Synchronize tasks remotely
-                Log.d(TAG, "sync tasks remotely");
-                synchronizeTasksRemotely(context, taskPairs, syncedPair.second, client);
-            }
+				// Synchronize tasks locally
+				Log.d(TAG, "sync tasks locally");
+				final List<Pair<Task, GoogleTask>> taskPairs = synchronizeTasksLocally(context,
+						remoteTasks, syncedPair);
+				// Synchronize tasks remotely
+				Log.d(TAG, "sync tasks remotely");
+				synchronizeTasksRemotely(context, taskPairs, syncedPair.second, client);
+			}
 
-            Log.d(TAG, "Sync Complete!");
-            success = true;
-            PreferenceManager.getDefaultSharedPreferences(context).edit().putLong
-                    (PREFS_GTASK_LAST_SYNC_TIME, startTime).commit();
-        } catch (RetrofitError e) {
-            Log.d(TAG, "Retrofit: " + e);
-            final int status;
-            if (e.getResponse() != null) {
-                Log.e(TAG, "" +
-                        e.getResponse().getStatus() +
-                        "; " +
-                        e.getResponse().getReason());
-                status = e.getResponse().getStatus();
-            } else {
-                status = 999;
-            }
-            // An HTTP error was encountered.
-            switch (status) {
-                case 404: // No such item, should never happen, programming error
-                case 415: // Not proper body, programming error
-                case 400: // Didn't specify url, programming error
-                    //syncResult.databaseError = true;
-                case 401: // Unauthorized, token could possibly just be stale
-                    // auth-exceptions are hard errors, and if the token is stale,
-                    // that's too harsh
-                    //syncResult.stats.numAuthExceptions++;
-                    // Instead, report ioerror, which is a soft error
-                default: // Default is to consider it a networking/server issue
-                    syncResult.stats.numIoExceptions++;
-                    break;
-            }
-        } catch (Exception e) {
-            // Something went wrong, don't punish the user
-            Log.e(TAG, "Exception: " + e);
-            syncResult.stats.numIoExceptions++;
-        } finally {
-            Log.d(TAG, "SyncResult: " + syncResult.toDebugString());
-        }
+			Log.d(TAG, "Sync Complete!");
+			success = true;
+			PreferenceManager.getDefaultSharedPreferences(context).edit().putLong
+					(PREFS_GTASK_LAST_SYNC_TIME, startTime).commit();
+		} catch (RetrofitError e) {
+			Log.d(TAG, "Retrofit: " + e);
+			final int status;
+			if (e.getResponse() != null) {
+				Log.e(TAG, "" +
+						e.getResponse().getStatus() +
+						"; " +
+						e.getResponse().getReason());
+				status = e.getResponse().getStatus();
+			} else {
+				status = 999;
+			}
+			// An HTTP error was encountered.
+			switch (status) {
+				case 404: // No such item, should never happen, programming error
+				case 415: // Not proper body, programming error
+				case 400: // Didn't specify url, programming error
+					//syncResult.databaseError = true;
+				case 401: // Unauthorized, token could possibly just be stale
+					// auth-exceptions are hard errors, and if the token is stale,
+					// that's too harsh
+					//syncResult.stats.numAuthExceptions++;
+					// Instead, report ioerror, which is a soft error
+				default: // Default is to consider it a networking/server issue
+					syncResult.stats.numIoExceptions++;
+					break;
+			}
+		} catch (Exception e) {
+			// Something went wrong, don't punish the user
+			Log.e(TAG, "Exception: " + e);
+			syncResult.stats.numIoExceptions++;
+		} finally {
+			Log.d(TAG, "SyncResult: " + syncResult.toDebugString());
+		}
 
-        return success;
-    }
+		return success;
+	}
 
 	/**
 	 * Loads the remote lists from the database and merges the two lists. If the
 	 * remote list contains all lists, then this method only adds local db-ids
 	 * to the items. If it does not contain all of them, this loads whatever
 	 * extra items are known in the db to the list also.
-	 * 
+	 *
 	 * Since all lists are expected to be downloaded, any non-existing entries
 	 * are assumed to be deleted and marked as such.
 	 */
 	public static void mergeListsWithLocalDB(final Context context,
-			final String account, final List<GoogleTaskList> remoteLists) {
+											 final String account, final List<GoogleTaskList> remoteLists) {
 		Log.d(TAG, "mergeList starting with: " + remoteLists.size());
 
 		final HashMap<String, GoogleTaskList> localVersions = new HashMap<String, GoogleTaskList>();
@@ -187,15 +187,14 @@ public class GoogleTaskSync {
 				GoogleTaskList list = new GoogleTaskList(c);
 				localVersions.put(list.remoteId, list);
 			}
-		}
-		finally {
+		} finally {
 			if (c != null) c.close();
 		}
 
 		for (final GoogleTaskList remotelist : remoteLists) {
 			// Merge with hashmap
 			if (localVersions.containsKey(remotelist.remoteId)) {
-                remotelist._id = localVersions.get(remotelist.remoteId)._id;
+				remotelist._id = localVersions.get(remotelist.remoteId)._id;
 				remotelist.dbid = localVersions.get(remotelist.remoteId).dbid;
 				remotelist.setDeleted(localVersions.get(remotelist.remoteId)
 						.isDeleted());
@@ -218,8 +217,8 @@ public class GoogleTaskSync {
 	 * extra items are known in the db to the list also.
 	 */
 	public static void mergeTasksWithLocalDB(final Context context,
-			final String account, final List<GoogleTask> remoteTasks,
-			long listDbId) {
+											 final String account, final List<GoogleTask> remoteTasks,
+											 long listDbId) {
 		final HashMap<String, GoogleTask> localVersions = new HashMap<String, GoogleTask>();
 		final Cursor c = context.getContentResolver().query(
 				GoogleTask.URI,
@@ -234,8 +233,7 @@ public class GoogleTaskSync {
 				GoogleTask task = new GoogleTask(c);
 				localVersions.put(task.remoteId, task);
 			}
-		}
-		finally {
+		} finally {
 			if (c != null) c.close();
 		}
 
@@ -264,18 +262,18 @@ public class GoogleTaskSync {
 
 	/**
 	 * Downloads all lists in GTasks and returns them
-	 * 
+	 *
+	 * @param client
 	 * @throws IOException
 	 * @throws ClientProtocolException
 	 * @throws JSONException
-     * @param client
 	 */
 	static List<GoogleTaskList> downloadLists(final GoogleTasksClient client)
 			throws IOException, RetrofitError {
 		// Do the actual download
 		final ArrayList<GoogleTaskList> remoteLists = new ArrayList<GoogleTaskList>();
 
-        client.listLists(remoteLists);
+		client.listLists(remoteLists);
 
 		// Return list of TaskLists
 		return remoteLists;
@@ -285,11 +283,11 @@ public class GoogleTaskSync {
 	 * Given a list of remote GTaskLists, iterates through it and their versions
 	 * (if any) in the local database. If the remote version is newer, the local
 	 * version is updated.
-	 * 
+	 *
 	 * If local list has a remote id, but it does not exist in the list of
 	 * remote lists, then it has been deleted remotely and is deleted locally as
 	 * well.
-	 * 
+	 *
 	 * Returns a list of pairs (local, remote).
 	 */
 	public static List<Pair<TaskList, GoogleTaskList>> synchronizeListsLocally(
@@ -306,12 +304,10 @@ public class GoogleTaskSync {
 					Log.d(TAG, "List was remotely deleted1");
 					// Deleted locally AND on server
 					remoteList.delete(context);
-				}
-				else if (remoteList.isDeleted()) {
+				} else if (remoteList.isDeleted()) {
 					Log.d(TAG, "List was locally deleted");
 					// Was deleted locally
-				}
-				else {
+				} else {
 					// is a new list
 					Log.d(TAG, "Inserting new list: " + remoteList.title);
 					localList = new TaskList();
@@ -321,24 +317,20 @@ public class GoogleTaskSync {
 					remoteList.dbid = localList._id;
 					remoteList.save(context);
 				}
-			}
-			else {
+			} else {
 				// If local is newer, update remote object
 				if (remoteList.remotelyDeleted) {
 					Log.d(TAG, "Remote list was deleted2: " + remoteList.title);
 					localList.delete(context);
 					localList = null;
 					remoteList.delete(context);
-				}
-				else if (localList.updated > remoteList.updated) {
+				} else if (localList.updated > remoteList.updated) {
 					Log.d(TAG, "Local list newer");
 					remoteList.title = localList.title;
 					// Updated is set by Google
-				}
-				else if (localList.updated.equals(remoteList.updated)) {
+				} else if (localList.updated.equals(remoteList.updated)) {
 					// Nothing to do
-				}
-				else {
+				} else {
 					Log.d(TAG, "Updating local list: " + remoteList.title);
 					// If remote is newer, update local and save to db
 					localList.title = remoteList.title;
@@ -371,34 +363,31 @@ public class GoogleTaskSync {
 			if (pair.second == null) {
 				// New list to create
 				final GoogleTaskList newList = new GoogleTaskList(pair.first,
-                        client.accountName);
-                client.insertList(newList);
+						client.accountName);
+				client.insertList(newList);
 				// Save to db also
 				newList.save(context);
 				pair.first.save(context, newList.updated);
 				syncedPair = new Pair<TaskList, GoogleTaskList>(pair.first,
 						newList);
-			}
-			else if (pair.second.isDeleted()) {
+			} else if (pair.second.isDeleted()) {
 				Log.d(TAG, "remotesync: isDeletedLocally");
 				// Deleted locally, delete remotely also
 				pair.second.remotelyDeleted = true;
 				try {
 					client.deleteList(pair.second);
-				}
-				catch (RetrofitError e) {
-                    if (e.getResponse() != null && e.getResponse().getStatus() == 400) {
-                        // Deleted the default list. Ignore error
-                        Log.d(TAG, "Error when deleting list. This is expected for the default list: " + e);
-                    } else {
-                        throw e;
-                    }
+				} catch (RetrofitError e) {
+					if (e.getResponse() != null && e.getResponse().getStatus() == 400) {
+						// Deleted the default list. Ignore error
+						Log.d(TAG, "Error when deleting list. This is expected for the default list: " + e);
+					} else {
+						throw e;
+					}
 				}
 				// and delete from db if it exists there
 				pair.second.delete(context);
 				syncedPair = null;
-			}
-			else if (pair.first.updated > pair.second.updated) {
+			} else if (pair.first.updated > pair.second.updated) {
 				// If local update is different than remote, that means we
 				// should update
 				client.patchList(pair.second);
@@ -415,14 +404,14 @@ public class GoogleTaskSync {
 	}
 
 	static void synchronizeTasksRemotely(final Context context,
-			final List<Pair<Task, GoogleTask>> taskPairs,
-			final GoogleTaskList gTaskList, final GoogleTasksClient client)
+										 final List<Pair<Task, GoogleTask>> taskPairs,
+										 final GoogleTaskList gTaskList, final GoogleTasksClient client)
 			throws IOException, RetrofitError {
 		for (final Pair<Task, GoogleTask> pair : taskPairs) {
 
 			// if newly created locally
 			if (pair.second == null) {
-                Log.d(TAG, "Second was null");
+				Log.d(TAG, "Second was null");
 				final GoogleTask newTask = new GoogleTask(pair.first,
 						client.accountName);
 				client.insertTask(newTask, gTaskList);
@@ -441,7 +430,7 @@ public class GoogleTaskSync {
 			// if local updated is different from remote,
 			// should update remote
 			else if (pair.first.updated > pair.second.updated) {
-                Log.d(TAG, "First updated after second");
+				Log.d(TAG, "First updated after second");
 				client.patchTask(pair.second, gTaskList);
 				// No need to save remote object here
 				pair.first.save(context, pair.second.updated);
@@ -450,7 +439,7 @@ public class GoogleTaskSync {
 	}
 
 	static TaskList loadRemoteListFromDB(final Context context,
-			final GoogleTaskList remoteList) {
+										 final GoogleTaskList remoteList) {
 		if (remoteList.dbid == null || remoteList.dbid < 1) return null;
 
 		final Cursor c = context.getContentResolver().query(
@@ -461,8 +450,7 @@ public class GoogleTaskSync {
 			if (c != null && c.moveToFirst()) {
 				tl = new TaskList(c);
 			}
-		}
-		finally {
+		} finally {
 			if (c != null) c.close();
 		}
 
@@ -470,7 +458,7 @@ public class GoogleTaskSync {
 	}
 
 	static List<TaskList> loadNewListsFromDB(final Context context,
-			final GoogleTaskList remoteList) {
+											 final GoogleTaskList remoteList) {
 		final Cursor c = context.getContentResolver().query(TaskList.URI,
 				TaskList.Columns.FIELDS,
 				GoogleTaskList.getTaskListWithoutRemoteClause(),
@@ -480,8 +468,7 @@ public class GoogleTaskSync {
 			while (c != null && c.moveToNext()) {
 				lists.add(new TaskList(c));
 			}
-		}
-		finally {
+		} finally {
 			if (c != null) c.close();
 		}
 
@@ -489,7 +476,7 @@ public class GoogleTaskSync {
 	}
 
 	static List<Task> loadNewTasksFromDB(final Context context,
-			final long listdbid, final String account) {
+										 final long listdbid, final String account) {
 		final Cursor c = context.getContentResolver().query(
 				Task.URI,
 				Task.Columns.FIELDS,
@@ -501,8 +488,7 @@ public class GoogleTaskSync {
 			while (c != null && c.moveToNext()) {
 				tasks.add(new Task(c));
 			}
-		}
-		finally {
+		} finally {
 			if (c != null) c.close();
 		}
 
@@ -510,18 +496,18 @@ public class GoogleTaskSync {
 	}
 
 	static List<GoogleTask> downloadChangedTasks(final Context context,
-			final GoogleTasksClient client, final GoogleTaskList remoteList)
+												 final GoogleTasksClient client, final GoogleTaskList remoteList)
 			throws IOException, RetrofitError {
 //		final SharedPreferences settings = PreferenceManager
 //				.getDefaultSharedPreferences(context);
 //		RFC3339Date.asRFC3339(settings.getLong(
 //				PREFS_GTASK_LAST_SYNC_TIME, 0))
 
-        return client.listTasks(remoteList);
+		return client.listTasks(remoteList);
 	}
 
 	static Task loadRemoteTaskFromDB(final Context context,
-			final GoogleTask remoteTask) {
+									 final GoogleTask remoteTask) {
 		final Cursor c = context.getContentResolver().query(Task.URI,
 				Task.Columns.FIELDS, remoteTask.getTaskWithRemoteClause(),
 				remoteTask.getTaskWithRemoteArgs(), null);
@@ -530,8 +516,7 @@ public class GoogleTaskSync {
 			if (c != null && c.moveToFirst()) {
 				t = new Task(c);
 			}
-		}
-		finally {
+		} finally {
 			if (c != null) c.close();
 		}
 
@@ -557,12 +542,10 @@ public class GoogleTaskSync {
 					Log.d(TAG, "slocal: task was remotely deleted1: " + remoteTask.title);
 					// Nothing to do
 					remoteTask.delete(context);
-				}
-				else if (remoteTask.isDeleted()) {
+				} else if (remoteTask.isDeleted()) {
 					Log.d(TAG, "slocal: task was locally deleted: " + remoteTask.remoteId);
 					// upload change
-				}
-				else {
+				} else {
 					//Log.d(TAG, "slocal: task was new: " + remoteTask.title);
 					// If no local, and updated is higher than latestupdate,
 					// create new
@@ -575,8 +558,7 @@ public class GoogleTaskSync {
 							&& !remoteTask.dueDate.isEmpty()) {
 						try {
 							localTask.due = RFC3339Date.combineDateAndTime(remoteTask.dueDate, localTask.due);
-						}
-						catch (Exception ignored) {
+						} catch (Exception ignored) {
 						}
 					}
 					if (remoteTask.status != null
@@ -589,8 +571,7 @@ public class GoogleTaskSync {
 					remoteTask.dbid = localTask._id;
 					remoteTask.save(context);
 				}
-			}
-			else {
+			} else {
 				// If local is newer, update remote object
 				if (localTask.updated > remoteTask.updated) {
 					remoteTask.fillFrom(localTask);
@@ -602,11 +583,9 @@ public class GoogleTaskSync {
 					localTask.delete(context);
 					localTask = null;
 					remoteTask.delete(context);
-				}
-				else if (localTask.updated.equals(remoteTask.updated)) {
+				} else if (localTask.updated.equals(remoteTask.updated)) {
 					// Nothing to do, we are already updated
-				}
-				else {
+				} else {
 					//Log.d(TAG, "slocal: task was remotely updated: " + remoteTask.title);
 					// If remote is newer, update local and save to db
 					localTask.title = remoteTask.title;
@@ -617,23 +596,20 @@ public class GoogleTaskSync {
 						try {
 							// dont touch time
 							localTask.due = RFC3339Date.combineDateAndTime(remoteTask.dueDate, localTask.due);
-						}
-						catch (Exception e) {
+						} catch (Exception e) {
 							localTask.due = null;
 						}
-					}
-					else {
+					} else {
 						localTask.due = null;
 					}
-					
+
 					if (remoteTask.status != null
 							&& remoteTask.status.equals(GoogleTask.COMPLETED)) {
 						// Only change this if it is not already completed
 						if (localTask.completed == null) {
 							localTask.completed = remoteTask.updated;
 						}
-					}
-					else {
+					} else {
 						localTask.completed = null;
 					}
 
@@ -643,17 +619,15 @@ public class GoogleTaskSync {
 			if (remoteTask.remotelydeleted) {
 				// Dont
 				Log.d(TAG, "skipping remotely deleted");
-			}
-			else if (localTask != null && remoteTask != null
+			} else if (localTask != null && remoteTask != null
 					&& localTask.updated.equals(remoteTask.updated)) {
 				Log.d(TAG, "skipping equal update");
 				// Dont
-			}
-			else {
+			} else {
 //				if (localTask != null) {
 //					Log.d("nononsenseapps gtasksync", "going to upload: " + localTask.title + ", l." + localTask.updated + " r." + remoteTask.updated);
 //				}
-                Log.d(TAG, "add to sync list: " + remoteTask.title);
+				Log.d(TAG, "add to sync list: " + remoteTask.title);
 				taskPairs
 						.add(new Pair<Task, GoogleTask>(localTask, remoteTask));
 			}

@@ -93,8 +93,7 @@ public class TasksExtension extends DashClockExtension {
 
 		if (notes.isEmpty()) {
 			publishUpdate(null);
-		}
-		else {
+		} else {
 
 			final String short_header = getString(
 					R.string.dashclock_tasks_count, notes.size());
@@ -104,8 +103,7 @@ public class TasksExtension extends DashClockExtension {
 			// If no header is to be displayed, show title of first
 			if (showHeader) {
 				long_header = getHeader(listId);
-			}
-			else {
+			} else {
 				long_header = notes.get(0).title;
 			}
 
@@ -116,8 +114,7 @@ public class TasksExtension extends DashClockExtension {
 						.setData(
 								TaskList.getUri(notes.get(0).dblist.longValue()))
 						.putExtra(Task.TABLE_NAME, notes.get(0)._id);
-			}
-			else {
+			} else {
 				noteIntent
 						.setAction(Intent.ACTION_EDIT)
 						.setData(Task.getUri(notes.get(0)._id))
@@ -153,8 +150,7 @@ public class TasksExtension extends DashClockExtension {
 				result += "\n";
 			}
 			result += notes.get(0).note;
-		}
-		else {
+		} else {
 			boolean first = true;
 			boolean skippable = true;
 			for (Task note : notes) {
@@ -175,7 +171,7 @@ public class TasksExtension extends DashClockExtension {
 	 * Return a list of notes respecting the constraints set in preferences.
 	 */
 	private ArrayList<Task> getNotesFromDB(final long list,
-			final String upperLimit) {
+										   final String upperLimit) {
 		// WHERE_LIST_IS, toA(list)
 		String where = "";
 		String[] whereArgs = new String[0];
@@ -234,7 +230,7 @@ public class TasksExtension extends DashClockExtension {
 	}
 
 	private String[] getUpperQueryLimitWhereArgs(final String[] whereArgs,
-			final String upperLimit) {
+												 final String upperLimit) {
 		final GregorianCalendar gc = new GregorianCalendar();
 		gc.set(GregorianCalendar.HOUR_OF_DAY, 23);
 		gc.set(GregorianCalendar.MINUTE, 59);
@@ -242,16 +238,13 @@ public class TasksExtension extends DashClockExtension {
 		final long day = 24 * 60 * 60 * 1000;
 		if (getString(R.string.dashclock_pref_today).equals(upperLimit)) {
 			return appendTo(whereArgs, Long.toString(gc.getTimeInMillis()));
-		}
-		else if (getString(R.string.dashclock_pref_tomorrow).equals(upperLimit)) {
+		} else if (getString(R.string.dashclock_pref_tomorrow).equals(upperLimit)) {
 			gc.setTimeInMillis(base + 1 * day);
 			return appendTo(whereArgs, Long.toString(gc.getTimeInMillis()));
-		}
-		else if (getString(R.string.dashclock_pref_next7).equals(upperLimit)) {
+		} else if (getString(R.string.dashclock_pref_next7).equals(upperLimit)) {
 			gc.setTimeInMillis(base + 7 * day);
 			return appendTo(whereArgs, Long.toString(gc.getTimeInMillis()));
-		}
-		else {
+		} else {
 			return whereArgs;
 		}
 	}

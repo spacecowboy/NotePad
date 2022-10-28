@@ -158,8 +158,7 @@ public class OrgSyncTest extends AndroidTestCase {
 
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 
@@ -195,8 +194,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		TestSynchronizer synchronizer = new TestSynchronizer(getContext());
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 
@@ -265,8 +263,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		TestSynchronizer synchronizer = new TestSynchronizer(getContext());
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 
@@ -302,8 +299,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		TestSynchronizer synchronizer = new TestSynchronizer(getContext());
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 
@@ -319,8 +315,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		// Sync it
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 
@@ -365,8 +360,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		TestSynchronizer synchronizer = new TestSynchronizer(getContext());
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 
@@ -412,8 +406,7 @@ public class OrgSyncTest extends AndroidTestCase {
 
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 
@@ -440,8 +433,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		// Sync it
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 
@@ -489,8 +481,7 @@ public class OrgSyncTest extends AndroidTestCase {
 
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 
@@ -521,8 +512,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		// Sync it
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 
@@ -579,8 +569,7 @@ public class OrgSyncTest extends AndroidTestCase {
 
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 
@@ -620,8 +609,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		// Sync it
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 
@@ -679,8 +667,7 @@ public class OrgSyncTest extends AndroidTestCase {
 
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 
@@ -719,8 +706,7 @@ public class OrgSyncTest extends AndroidTestCase {
 
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 
@@ -745,8 +731,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		// Sync it again
 		try {
 			synchronizer.fullSync();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			assertTrue(e.getLocalizedMessage(), false);
 		}
 

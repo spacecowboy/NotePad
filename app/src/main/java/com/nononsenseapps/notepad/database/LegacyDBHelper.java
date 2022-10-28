@@ -18,10 +18,9 @@ import com.nononsenseapps.utils.time.RFC3339Date;
  * upgrade the database. Upgrades should be saved here as plain text to enable a
  * linear progression from 1.0 to current version without problems even if the
  * entire database is changed.
- * 
+ *
  * onUpgrade should be called first from the databaseopenhelper's onUpgrade
  * method.
- * 
  */
 public class LegacyDBHelper extends SQLiteOpenHelper {
 
@@ -163,8 +162,7 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 						+ "."
 						+ "noteid"
 						+ "   = " + "new." + BaseColumns._ID + ";" + " END");
-			}
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				// Log.d(TAG,
 				// "Creating trigger failed. It probably already existed:\n " +
 				// e.getLocalizedMessage());
@@ -185,8 +183,7 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 						+ BaseColumns._ID
 						+ ";"
 						+ " END");
-			}
-			catch (SQLException e) {
+			} catch (SQLException e) {
 				// Log.d(TAG,
 				// "Creating trigger failed. It probably already existed:\n " +
 				// e.getLocalizedMessage());
@@ -905,17 +902,13 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			// Tasks
 			else if (NotePad.Notes.COLUMN_NAME_TITLE.equals(col)) {
 				newCol = Task.Columns.TITLE;
-			}
-			else if (NotePad.Notes.COLUMN_NAME_NOTE.equals(col)) {
+			} else if (NotePad.Notes.COLUMN_NAME_NOTE.equals(col)) {
 				newCol = Task.Columns.NOTE;
-			}
-			else if (NotePad.Notes.COLUMN_NAME_LIST.equals(col)) {
+			} else if (NotePad.Notes.COLUMN_NAME_LIST.equals(col)) {
 				newCol = Task.Columns.DBLIST;
-			}
-			else if (NotePad.Notes.COLUMN_NAME_DUE_DATE.equals(col)) {
+			} else if (NotePad.Notes.COLUMN_NAME_DUE_DATE.equals(col)) {
 				newCol = Task.Columns.DUE;
-			}
-			else if (NotePad.Notes.COLUMN_NAME_GTASKS_STATUS.equals(col)) {
+			} else if (NotePad.Notes.COLUMN_NAME_GTASKS_STATUS.equals(col)) {
 				newCol = Task.Columns.COMPLETED;
 			}
 
@@ -925,9 +918,9 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 		return newCols;
 	}
 
-	/** 
+	/**
 	 * Convert new values to old, but using old or new column names
-	 * 
+	 *
 	 * TaskProjection: new String[] { "_id", "title", "note", "list", "duedate",
 	 * "gtaskstatus"};
 	 */
@@ -939,25 +932,23 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			if (NotePad.Notes.COLUMN_NAME_DUE_DATE.equals(colName) ||
 					Task.Columns.DUE.equals(colName)) {
 				val = cursor.isNull(i) ? "" : RFC3339Date.asRFC3339(cursor.getLong(i));
-			}
-			else if (NotePad.Notes.COLUMN_NAME_GTASKS_STATUS.equals(colName) ||
+			} else if (NotePad.Notes.COLUMN_NAME_GTASKS_STATUS.equals(colName) ||
 					Task.Columns.COMPLETED.equals(colName)) {
 				val = cursor.isNull(i) ? "needsAction" : "completed";
-			}
-			else {
+			} else {
 				switch (cursor.getType(i)) {
-				case Cursor.FIELD_TYPE_FLOAT:
-					val = cursor.getFloat(i);
-					break;
-				case Cursor.FIELD_TYPE_INTEGER:
-					val = cursor.getLong(i);
-					break;
-				case Cursor.FIELD_TYPE_STRING:
-					val = cursor.getString(i);
-					break;
-				case Cursor.FIELD_TYPE_NULL:
-				default:
-					val = null;
+					case Cursor.FIELD_TYPE_FLOAT:
+						val = cursor.getFloat(i);
+						break;
+					case Cursor.FIELD_TYPE_INTEGER:
+						val = cursor.getLong(i);
+						break;
+					case Cursor.FIELD_TYPE_STRING:
+						val = cursor.getString(i);
+						break;
+					case Cursor.FIELD_TYPE_NULL:
+					default:
+						val = null;
 				}
 			}
 			//Log.d("nononsenseapps db", "legacy notes col: " + val);

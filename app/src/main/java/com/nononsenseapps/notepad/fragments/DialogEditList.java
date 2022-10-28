@@ -32,7 +32,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-@EFragment(resName="fragment_dialog_editlist")
+@EFragment(resName = "fragment_dialog_editlist")
 public class DialogEditList extends DialogFragment {
 
 	public interface EditListDialogListener {
@@ -41,25 +41,25 @@ public class DialogEditList extends DialogFragment {
 
 	static final String LIST_ID = "list_id";
 
-	@ViewById(resName="sortSpinner")
+	@ViewById(resName = "sortSpinner")
 	Spinner sortSpinner;
 
-	@ViewById(resName="modeSpinner")
+	@ViewById(resName = "modeSpinner")
 	Spinner modeSpinner;
 
-	@ViewById(resName="titleField")
+	@ViewById(resName = "titleField")
 	EditText titleField;
 
-	@ViewById(resName="defaultListBox")
+	@ViewById(resName = "defaultListBox")
 	CheckBox defaultListBox;
 
-	@ViewById(resName="deleteButton")
+	@ViewById(resName = "deleteButton")
 	TextView deleteButton;
 
-	@ViewById(resName="dialog_yes")
+	@ViewById(resName = "dialog_yes")
 	Button okButton;
 
-	@ViewById(resName="dialog_no")
+	@ViewById(resName = "dialog_no")
 	Button cancelButton;
 
 	private TaskList mTaskList;
@@ -101,11 +101,11 @@ public class DialogEditList extends DialogFragment {
 
 		modeSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),
 				R.layout.spinner_item, getActivity().getResources()
-						.getStringArray(R.array.show_list_as)));
+				.getStringArray(R.array.show_list_as)));
 
 		sortSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),
 				R.layout.spinner_item, getActivity().getResources()
-						.getStringArray(R.array.sort_list_by)));
+				.getStringArray(R.array.sort_list_by)));
 
 		if (getArguments().getLong(LIST_ID, -1) > 0) {
 			getDialog().setTitle(R.string.menu_managelists);
@@ -114,7 +114,7 @@ public class DialogEditList extends DialogFragment {
 
 						@Override
 						public Loader<Cursor> onCreateLoader(int arg0,
-								Bundle arg1) {
+															 Bundle arg1) {
 							return new CursorLoader(getActivity(),
 									TaskList.getUri(getArguments().getLong(
 											LIST_ID, -1)),
@@ -136,14 +136,13 @@ public class DialogEditList extends DialogFragment {
 
 						}
 					});
-		}
-		else {
+		} else {
 			getDialog().setTitle(R.string.menu_createlist);
 			mTaskList = new TaskList();
 		}
 	}
 
-	@UiThread(propagation=Propagation.REUSE)
+	@UiThread(propagation = Propagation.REUSE)
 	void fillViews() {
 		titleField.setText(mTaskList.title);
 		selectSortKey();
@@ -158,12 +157,12 @@ public class DialogEditList extends DialogFragment {
 		}
 	}
 
-	@AfterTextChange(resName="titleField")
+	@AfterTextChange(resName = "titleField")
 	void titleChanged(Editable text, TextView v) {
 		okButton.setEnabled(text.length() > 0);
 	}
 
-	@Click(resName="deleteButton")
+	@Click(resName = "deleteButton")
 	void deleteClicked() {
 		if (mTaskList._id > 0) {
 			DialogDeleteList.showDialog(getFragmentManager(), mTaskList._id,
@@ -176,12 +175,12 @@ public class DialogEditList extends DialogFragment {
 		}
 	}
 
-	@Click(resName="dialog_no")
+	@Click(resName = "dialog_no")
 	void cancelClicked() {
 		dismiss();
 	}
 
-	@Click(resName="dialog_yes")
+	@Click(resName = "dialog_yes")
 	void okClicked() {
 		Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT)
 				.show();
@@ -199,8 +198,7 @@ public class DialogEditList extends DialogFragment {
 					.putLong(getString(R.string.pref_defaultstartlist), mTaskList._id)
 					.putString(getString(R.string.pref_defaultlist),
 							Long.toString(mTaskList._id)).commit();
-		}
-		else if (mTaskList._id > 0) {
+		} else if (mTaskList._id > 0) {
 			// Remove pref if it is the default list currently
 			final long defList = Long.parseLong(PreferenceManager
 					.getDefaultSharedPreferences(getActivity()).getString(
@@ -215,8 +213,8 @@ public class DialogEditList extends DialogFragment {
 			}
 			if (defStartList == mTaskList._id) {
 				PreferenceManager.getDefaultSharedPreferences(getActivity())
-				.edit().remove(getString(R.string.pref_defaultstartlist))
-				.commit();
+						.edit().remove(getString(R.string.pref_defaultstartlist))
+						.commit();
 			}
 		}
 
@@ -234,17 +232,13 @@ public class DialogEditList extends DialogFragment {
 			final String key = (String) sortSpinner.getSelectedItem();
 			if (key.equals(getString(R.string.sort_list_alphabetical))) {
 				result = getString(R.string.const_alphabetic);
-			}
-			else if (key.equals(getString(R.string.sort_list_due))) {
+			} else if (key.equals(getString(R.string.sort_list_due))) {
 				result = getString(R.string.const_duedate);
-			}
-			else if (key.equals(getString(R.string.sort_list_manual))) {
+			} else if (key.equals(getString(R.string.sort_list_manual))) {
 				result = getString(R.string.const_possubsort);
-			}
-			else if (key.equals(getString(R.string.sort_list_updated))) {
+			} else if (key.equals(getString(R.string.sort_list_updated))) {
 				result = getString(R.string.const_modified);
-			}
-			else {
+			} else {
 				// Default from global prefs
 				result = null;
 			}
@@ -256,20 +250,16 @@ public class DialogEditList extends DialogFragment {
 		if (sortSpinner != null && mTaskList != null) {
 			if (mTaskList.sorting == null) {
 				sortSpinner.setSelection(0);
-			}
-			else if (mTaskList.sorting
+			} else if (mTaskList.sorting
 					.equals(getString(R.string.const_alphabetic))) {
 				sortSpinner.setSelection(1);
-			}
-			else if (mTaskList.sorting
+			} else if (mTaskList.sorting
 					.equals(getString(R.string.const_modified))) {
 				sortSpinner.setSelection(2);
-			}
-			else if (mTaskList.sorting
+			} else if (mTaskList.sorting
 					.equals(getString(R.string.const_duedate))) {
 				sortSpinner.setSelection(3);
-			}
-			else if (mTaskList.sorting
+			} else if (mTaskList.sorting
 					.equals(getString(R.string.const_possubsort))) {
 				sortSpinner.setSelection(4);
 			}
@@ -282,11 +272,9 @@ public class DialogEditList extends DialogFragment {
 			final String key = (String) modeSpinner.getSelectedItem();
 			if (key.equals(getString(R.string.show_items_as_notes))) {
 				result = getString(R.string.const_listtype_notes);
-			}
-			else if (key.equals(getString(R.string.show_items_as_tasks))) {
+			} else if (key.equals(getString(R.string.show_items_as_tasks))) {
 				result = getString(R.string.const_listtype_tasks);
-			}
-			else {
+			} else {
 				// Default from global prefs
 				result = null;
 			}
@@ -298,12 +286,10 @@ public class DialogEditList extends DialogFragment {
 		if (modeSpinner != null && mTaskList != null) {
 			if (mTaskList.listtype == null) {
 				modeSpinner.setSelection(0);
-			}
-			else if (mTaskList.listtype
+			} else if (mTaskList.listtype
 					.equals(getString(R.string.const_listtype_tasks))) {
 				modeSpinner.setSelection(1);
-			}
-			else if (mTaskList.listtype
+			} else if (mTaskList.listtype
 					.equals(getString(R.string.const_listtype_notes))) {
 				modeSpinner.setSelection(2);
 			}

@@ -142,8 +142,7 @@ public class SeekBarPreference extends Preference implements
 
 			layout = mInflater.inflate(
 					R.layout.preference_widget_seekbar, parent, false);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			Log.e(TAG, "Error creating seek bar preference", e);
 		}
 
@@ -191,8 +190,7 @@ public class SeekBarPreference extends Preference implements
 					.findViewById(R.id.seekBarPrefUnitsLeft);
 			unitsLeft.setText(mUnitsLeft);
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			Log.e(TAG, "Error updating seek bar preference", e);
 		}
 
@@ -249,8 +247,7 @@ public class SeekBarPreference extends Preference implements
 			int temp = 0;
 			try {
 				temp = (Integer) defaultValue;
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				Log.e(TAG, "Invalid default value: " + defaultValue.toString());
 			}
 

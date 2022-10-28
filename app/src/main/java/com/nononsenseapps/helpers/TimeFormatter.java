@@ -12,7 +12,6 @@ import android.preference.PreferenceManager;
 
 /**
  * A class that helps with displaying locale and preference specific dates
- * 
  */
 public class TimeFormatter {
 
@@ -22,11 +21,9 @@ public class TimeFormatter {
 		final Locale locale;
 		if (lang == null || lang.isEmpty()) {
 			locale = Locale.getDefault();
-		}
-		else if (lang.length() == 5) {
+		} else if (lang.length() == 5) {
 			locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
-		}
-		else {
+		} else {
 			locale = new Locale(lang.substring(0, 2));
 		}
 		return locale;
@@ -36,7 +33,7 @@ public class TimeFormatter {
 	 * Formats date according to the designated locale
 	 */
 	public static String getLocalDateString(final Context context,
-			final String lang, final String format, final long timeInMillis) {
+											final String lang, final String format, final long timeInMillis) {
 		return getLocalFormatter(context, lang, format).format(
 				new Date(timeInMillis));
 	}
@@ -45,7 +42,7 @@ public class TimeFormatter {
 	 * Formats the date according to the locale the user has defined in settings
 	 */
 	public static String getLocalDateString(final Context context,
-			final String format, final long timeInMillis) {
+											final String format, final long timeInMillis) {
 		return getLocalDateString(
 				context,
 				PreferenceManager.getDefaultSharedPreferences(context)
@@ -57,23 +54,22 @@ public class TimeFormatter {
 	 * Dont use for performance critical settings
 	 */
 	public static String getLocalDateStringLong(final Context context,
-			final long time) {
+												final long time) {
 		return getLocalFormatterLong(context).format(new Date(time));
 	}
 
 	public static String getLocalDateOnlyStringLong(final Context context,
-			final long time) {
+													final long time) {
 		return getLocalFormatterLongDateOnly(context).format(new Date(time));
 	}
 
 	public static String getLocalTimeOnlyString(final Context context,
-			final long time) {
+												final long time) {
 		final String format;
 		if (android.text.format.DateFormat.is24HourFormat(context)) {
 			// 00:59
 			format = "HH:mm";
-		}
-		else {
+		} else {
 			// 12:59 am
 			format = "h:mm a";
 		}
@@ -87,7 +83,7 @@ public class TimeFormatter {
 	 * Dont use for performance critical settings
 	 */
 	public static String getLocalDateStringShort(final Context context,
-			final long time) {
+												 final long time) {
 		return getLocalFormatterShort(context).format(new Date(time));
 	}
 
@@ -96,12 +92,11 @@ public class TimeFormatter {
 	 * global 24h setting.
 	 */
 	private static String withSuitableTime(final Context context,
-			final String formatString) {
+										   final String formatString) {
 		if (android.text.format.DateFormat.is24HourFormat(context)) {
 			// 00:59
 			return formatString.replaceFirst("localtime", "HH:mm");
-		}
-		else {
+		} else {
 			// 12:59 am
 			return formatString.replaceFirst("localtime", "h:mm a");
 		}
@@ -111,12 +106,12 @@ public class TimeFormatter {
 	 * Removes "localtime" in format string
 	 */
 	private static String withSuitableDateOnly(final Context context,
-			final String formatString) {
+											   final String formatString) {
 		return formatString.replaceAll("\\s*localtime\\s*", " ");
 	}
 
 	private static SimpleDateFormat getLocalFormatter(final Context context,
-			final String lang, final String format) {
+													  final String lang, final String format) {
 		final Locale locale = getLocale(lang);
 		return new SimpleDateFormat(withSuitableTime(context, format), locale);
 	}

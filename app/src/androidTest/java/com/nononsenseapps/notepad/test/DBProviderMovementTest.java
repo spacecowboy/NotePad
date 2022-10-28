@@ -337,8 +337,7 @@ public class DBProviderMovementTest extends AndroidTestCase {
 		Uri uri = null;
 		try {
 			uri = resolver.insert(Task.URI, t.getContent());
-		}
-		catch (SQLException e) {
+		} catch (SQLException e) {
 			thrown = true;
 		}
 
@@ -360,8 +359,7 @@ public class DBProviderMovementTest extends AndroidTestCase {
 		boolean failed = false;
 		try {
 			resolver.update(t.getUri(), t.getContent(), null, null);
-		}
-		catch (SQLiteConstraintException e) {
+		} catch (SQLiteConstraintException e) {
 			failed = true;
 		}
 
@@ -372,8 +370,7 @@ public class DBProviderMovementTest extends AndroidTestCase {
 		failed = false;
 		try {
 			resolver.update(t.getUri(), t.getContent(), null, null);
-		}
-		catch (SQLiteConstraintException e) {
+		} catch (SQLiteConstraintException e) {
 			failed = true;
 		}
 		//assertTrue("Setting right to 0 should throw exception", failed);

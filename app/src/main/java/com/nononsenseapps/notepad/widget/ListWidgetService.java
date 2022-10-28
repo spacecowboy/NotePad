@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2013 Jonas Kalderstam
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -148,34 +148,27 @@ public class ListWidgetService extends RemoteViewsService {
 					if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {
 						sTemp = mContext
 								.getString(R.string.date_header_overdue);
-					}
-					else if (Task.HEADER_KEY_TODAY.equals(sTemp)) {
+					} else if (Task.HEADER_KEY_TODAY.equals(sTemp)) {
 						sTemp = mContext.getString(R.string.date_header_today);
-					}
-					else if (Task.HEADER_KEY_PLUS1.equals(sTemp)) {
+					} else if (Task.HEADER_KEY_PLUS1.equals(sTemp)) {
 						sTemp = mContext
 								.getString(R.string.date_header_tomorrow);
-					}
-					else if (Task.HEADER_KEY_PLUS2.equals(sTemp)
+					} else if (Task.HEADER_KEY_PLUS2.equals(sTemp)
 							|| Task.HEADER_KEY_PLUS3.equals(sTemp)
 							|| Task.HEADER_KEY_PLUS4.equals(sTemp)) {
 						sTemp = weekdayFormatter.format(new Date(mCursor
 								.getLong(4)));
-					}
-					else if (Task.HEADER_KEY_LATER.equals(sTemp)) {
+					} else if (Task.HEADER_KEY_LATER.equals(sTemp)) {
 						sTemp = mContext.getString(R.string.date_header_future);
-					}
-					else if (Task.HEADER_KEY_NODATE.equals(sTemp)) {
+					} else if (Task.HEADER_KEY_NODATE.equals(sTemp)) {
 						sTemp = mContext.getString(R.string.date_header_none);
-					}
-					else if (Task.HEADER_KEY_COMPLETE.equals(sTemp)) {
+					} else if (Task.HEADER_KEY_COMPLETE.equals(sTemp)) {
 						sTemp = mContext
 								.getString(R.string.date_header_completed);
 					}
 					// Set text
 					rv.setTextViewText(android.R.id.text1, sTemp);
-				}
-				else {
+				} else {
 					final int itemId = R.layout.widgetlist_item;
 
 					rv = new RemoteViews(mContext.getPackageName(), itemId);
@@ -186,8 +179,7 @@ public class ListWidgetService extends RemoteViewsService {
 					if (theme == ListWidgetConfig.THEME_LIGHT) {
 						hiddenCheckBox = R.id.completedCheckBoxDark;
 						visibleCheckBox = R.id.completedCheckBoxLight;
-					}
-					else {
+					} else {
 						hiddenCheckBox = R.id.completedCheckBoxLight;
 						visibleCheckBox = R.id.completedCheckBoxDark;
 					}
@@ -202,8 +194,7 @@ public class ListWidgetService extends RemoteViewsService {
 					if (mCursor.isNull(4)) {
 						rv.setTextViewText(R.id.dueDate, "");
 						isDateHidden = true;
-					}
-					else {
+					} else {
 						rv.setTextViewText(R.id.dueDate, mDateFormatter
 								.format(new Date(mCursor.getLong(4))));
 					}
@@ -221,8 +212,7 @@ public class ListWidgetService extends RemoteViewsService {
 								TitleNoteTextView.getStyledText(
 										mCursor.getString(1),
 										mCursor.getString(2), 1.0f, 1, 0));
-					}
-					else {
+					} else {
 						// Just title
 						rv.setTextViewText(
 								android.R.id.text1,
@@ -240,8 +230,7 @@ public class ListWidgetService extends RemoteViewsService {
 								.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
 										listId);
 						rv.setOnClickFillInIntent(R.id.widget_item, clickIntent);
-					}
-					else {
+					} else {
 						final Intent fillInIntent = new Intent();
 						fillInIntent.setAction(ListWidgetProvider.CLICK_ACTION);
 						fillInIntent.putExtra(ListWidgetProvider.EXTRA_NOTE_ID,
@@ -263,8 +252,7 @@ public class ListWidgetService extends RemoteViewsService {
 								.setData(Task.getUri(mCursor.getLong(0)))
 								.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
 										listId);
-					}
-					else {
+					} else {
 						completeIntent.setAction(
 								ListWidgetProvider.COMPLETE_ACTION).putExtra(
 								ListWidgetProvider.EXTRA_NOTE_ID,
@@ -333,8 +321,7 @@ public class ListWidgetService extends RemoteViewsService {
 						.getString(R.string.const_possubsort)) && listId > 0) {
 					targetUri = Task.URI;
 					sortSpec = Task.Columns.LEFT;
-				}
-				else if (sortType.equals(mContext
+				} else if (sortType.equals(mContext
 						.getString(R.string.const_modified))) {
 					targetUri = Task.URI;
 					sortSpec = Task.Columns.UPDATED + " DESC";
@@ -359,8 +346,7 @@ public class ListWidgetService extends RemoteViewsService {
 					listWhere = Task.Columns.DBLIST + " IS ? AND "
 							+ Task.Columns.COMPLETED + " IS NULL";
 					listArg = new String[] { Long.toString(listId) };
-				}
-				else {
+				} else {
 					listWhere = Task.Columns.COMPLETED + " IS NULL";
 					listArg = null;
 				}
