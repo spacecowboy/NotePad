@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2012 Jonas Kalderstam
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -45,7 +45,6 @@ public class BackupPrefs extends PreferenceFragment {
 	/**
 	 * Run the backup in the background. Locking the UI-thread for up to a few
 	 * seconds is not nice...
-	 * 
 	 */
 	private class RestoreBackupTask extends AsyncTask<Void, Void, Integer> {
 		protected Integer doInBackground(Void... params) {
@@ -60,23 +59,23 @@ public class BackupPrefs extends PreferenceFragment {
 		}
 
 		protected void onPostExecute(final Integer result) {
-            Context context = getActivity();
-            if (context == null) {
-                return;
-            }
+			Context context = getActivity();
+			if (context == null) {
+				return;
+			}
 			switch (result) {
-			case 0:
-				Toast.makeText(getActivity(), R.string.backup_import_success,
-						Toast.LENGTH_SHORT).show();
-				break;
-			case 1:
-				Toast.makeText(getActivity(), R.string.backup_file_not_found,
-						Toast.LENGTH_SHORT).show();
-				break;
-			case 2:
-				Toast.makeText(getActivity(), R.string.backup_import_failed,
-						Toast.LENGTH_SHORT).show();
-				break;
+				case 0:
+					Toast.makeText(getActivity(), R.string.backup_import_success,
+							Toast.LENGTH_SHORT).show();
+					break;
+				case 1:
+					Toast.makeText(getActivity(), R.string.backup_file_not_found,
+							Toast.LENGTH_SHORT).show();
+					break;
+				case 2:
+					Toast.makeText(getActivity(), R.string.backup_import_failed,
+							Toast.LENGTH_SHORT).show();
+					break;
 			}
 		}
 	}
@@ -115,9 +114,9 @@ public class BackupPrefs extends PreferenceFragment {
 
 					@Override
 					public boolean onPreferenceClick(Preference preference) {
-						
+
 						DialogExportBackup.showDialog(getFragmentManager(), new DialogConfirmedListener() {
-							
+
 							@Override
 							public void onConfirm() {
 								try {

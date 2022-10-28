@@ -55,197 +55,197 @@ import android.view.ViewGroup;
  * lists:
  *
  * {@sample development/samples/Support13Demos/src/com/example/android/supportv13/app/FragmentStatePagerSupport.java
- *      complete}
+ * complete}
  *
  * <p>The <code>R.layout.fragment_pager</code> resource of the top-level fragment is:
  *
  * {@sample development/samples/Support13Demos/res/layout/fragment_pager.xml
- *      complete}
+ * complete}
  *
  * <p>The <code>R.layout.fragment_pager_list</code> resource containing each
  * individual fragment's layout is:
  *
  * {@sample development/samples/Support13Demos/res/layout/fragment_pager_list.xml
- *      complete}
+ * complete}
  */
 public abstract class FragmentStatePagerAdapter extends PagerAdapter {
-    private static final String TAG = "FragmentStatePagerAdapter";
-    private static final boolean DEBUG = false;
+	private static final String TAG = "FragmentStatePagerAdapter";
+	private static final boolean DEBUG = false;
 
-    private final FragmentManager mFragmentManager;
-    private FragmentTransaction mCurTransaction = null;
+	private final FragmentManager mFragmentManager;
+	private FragmentTransaction mCurTransaction = null;
 
-    private ArrayList<Fragment.SavedState> mSavedState = new ArrayList<Fragment.SavedState>();
-    private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
-    private Fragment mCurrentPrimaryItem = null;
+	private ArrayList<Fragment.SavedState> mSavedState = new ArrayList<Fragment.SavedState>();
+	private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
+	private Fragment mCurrentPrimaryItem = null;
 
 	private final Context context;
 
-    public Fragment getCurrentPrimaryItem() {
+	public Fragment getCurrentPrimaryItem() {
 		return mCurrentPrimaryItem;
 	}
 
-	
-    public FragmentStatePagerAdapter(Context context, FragmentManager fm) {
+
+	public FragmentStatePagerAdapter(Context context, FragmentManager fm) {
 		this.context = context;
-        mFragmentManager = fm;
-    }
+		mFragmentManager = fm;
+	}
 
-    /**
-     * Return the Fragment associated with a specified position.
-     */
-    public abstract Fragment getItem(int position);
-    
-    public abstract long getItemId(int position);
+	/**
+	 * Return the Fragment associated with a specified position.
+	 */
+	public abstract Fragment getItem(int position);
 
-    @Override
-    public void startUpdate(ViewGroup container) {
-    }
+	public abstract long getItemId(int position);
 
-    @Override
-    public Object instantiateItem(ViewGroup container, int position) {
-        // If we already have this item instantiated, there is nothing
-        // to do.  This can happen when we are restoring the entire pager
-        // from its saved state, where the fragment manager has already
-        // taken care of restoring the fragments we previously had instantiated.
-        if (mFragments.size() > position) {
-            Fragment f = mFragments.get(position);
-            if (f != null) {
-                return f;
-            }
-        }
+	@Override
+	public void startUpdate(ViewGroup container) {
+	}
 
-        if (mCurTransaction == null) {
-            mCurTransaction = mFragmentManager.beginTransaction();
-        }
+	@Override
+	public Object instantiateItem(ViewGroup container, int position) {
+		// If we already have this item instantiated, there is nothing
+		// to do.  This can happen when we are restoring the entire pager
+		// from its saved state, where the fragment manager has already
+		// taken care of restoring the fragments we previously had instantiated.
+		if (mFragments.size() > position) {
+			Fragment f = mFragments.get(position);
+			if (f != null) {
+				return f;
+			}
+		}
 
-        Fragment fragment = getItem(position);
-        if (DEBUG) Log.v(TAG, "Adding item #" + position + ": f=" + fragment);
-        if (mSavedState.size() > position) {
-            Fragment.SavedState fss = mSavedState.get(position);
-            if (fss != null) {
-                fragment.setInitialSavedState(fss);
-            }
-        }
-        while (mFragments.size() <= position) {
-            mFragments.add(null);
-        }
-        setMenuVisibility(fragment, false);
-        mFragments.set(position, fragment);
-        mCurTransaction.add(container.getId(), fragment);
+		if (mCurTransaction == null) {
+			mCurTransaction = mFragmentManager.beginTransaction();
+		}
 
-        return fragment;
-    }
-    
-    @TargetApi(14)
+		Fragment fragment = getItem(position);
+		if (DEBUG) Log.v(TAG, "Adding item #" + position + ": f=" + fragment);
+		if (mSavedState.size() > position) {
+			Fragment.SavedState fss = mSavedState.get(position);
+			if (fss != null) {
+				fragment.setInitialSavedState(fss);
+			}
+		}
+		while (mFragments.size() <= position) {
+			mFragments.add(null);
+		}
+		setMenuVisibility(fragment, false);
+		mFragments.set(position, fragment);
+		mCurTransaction.add(container.getId(), fragment);
+
+		return fragment;
+	}
+
+	@TargetApi(14)
 	private void setMenuVisibility(final Fragment fragment, final boolean value) {
-    	if (fragment != null && context.getResources().getBoolean(R.bool.atLeast14))
-    		fragment.setMenuVisibility(value);
-    }
-    
-    @TargetApi(15)
+		if (fragment != null && context.getResources().getBoolean(R.bool.atLeast14))
+			fragment.setMenuVisibility(value);
+	}
+
+	@TargetApi(15)
 	private void setUserVisibleHint(final Fragment fragment, final boolean value) {
-    	if (fragment != null && context.getResources().getBoolean(R.bool.atLeast15))
-    		fragment.setUserVisibleHint(value);
-    }
+		if (fragment != null && context.getResources().getBoolean(R.bool.atLeast15))
+			fragment.setUserVisibleHint(value);
+	}
 
-    @Override
-    public void destroyItem(ViewGroup container, int position, Object object) {
-        Fragment fragment = (Fragment)object;
+	@Override
+	public void destroyItem(ViewGroup container, int position, Object object) {
+		Fragment fragment = (Fragment) object;
 
-        if (mCurTransaction == null) {
-            mCurTransaction = mFragmentManager.beginTransaction();
-        }
-        if (DEBUG) Log.v(TAG, "Removing item #" + position + ": f=" + object
-                + " v=" + ((Fragment)object).getView());
-        while (mSavedState.size() <= position) {
-            mSavedState.add(null);
-        }
-        mSavedState.set(position, mFragmentManager.saveFragmentInstanceState(fragment));
-        mFragments.set(position, null);
+		if (mCurTransaction == null) {
+			mCurTransaction = mFragmentManager.beginTransaction();
+		}
+		if (DEBUG) Log.v(TAG, "Removing item #" + position + ": f=" + object
+				+ " v=" + ((Fragment) object).getView());
+		while (mSavedState.size() <= position) {
+			mSavedState.add(null);
+		}
+		mSavedState.set(position, mFragmentManager.saveFragmentInstanceState(fragment));
+		mFragments.set(position, null);
 
-        mCurTransaction.remove(fragment);
-    }
+		mCurTransaction.remove(fragment);
+	}
 
-    @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        Fragment fragment = (Fragment)object;
-        if (fragment != mCurrentPrimaryItem) {
-            if (mCurrentPrimaryItem != null) {
-            	setMenuVisibility(mCurrentPrimaryItem, false);
-            }
-            if (fragment != null) {
-            	setMenuVisibility(fragment, true);
-            }
-            mCurrentPrimaryItem = fragment;
-        }
-    }
+	@Override
+	public void setPrimaryItem(ViewGroup container, int position, Object object) {
+		Fragment fragment = (Fragment) object;
+		if (fragment != mCurrentPrimaryItem) {
+			if (mCurrentPrimaryItem != null) {
+				setMenuVisibility(mCurrentPrimaryItem, false);
+			}
+			if (fragment != null) {
+				setMenuVisibility(fragment, true);
+			}
+			mCurrentPrimaryItem = fragment;
+		}
+	}
 
-    @Override
-    public void finishUpdate(ViewGroup container) {
-        if (mCurTransaction != null) {
-            mCurTransaction.commitAllowingStateLoss();
-            mCurTransaction = null;
-            mFragmentManager.executePendingTransactions();
-        }
-    }
+	@Override
+	public void finishUpdate(ViewGroup container) {
+		if (mCurTransaction != null) {
+			mCurTransaction.commitAllowingStateLoss();
+			mCurTransaction = null;
+			mFragmentManager.executePendingTransactions();
+		}
+	}
 
-    @Override
-    public boolean isViewFromObject(View view, Object object) {
-        return ((Fragment)object).getView() == view;
-    }
+	@Override
+	public boolean isViewFromObject(View view, Object object) {
+		return ((Fragment) object).getView() == view;
+	}
 
-    @Override
-    public Parcelable saveState() {
-        Bundle state = null;
-        if (mSavedState.size() > 0) {
-            state = new Bundle();
-            Fragment.SavedState[] fss = new Fragment.SavedState[mSavedState.size()];
-            mSavedState.toArray(fss);
-            state.putParcelableArray("states", fss);
-        }
-        for (int i=0; i<mFragments.size(); i++) {
-            Fragment f = mFragments.get(i);
-            if (f != null) {
-                if (state == null) {
-                    state = new Bundle();
-                }
-                String key = "f" + i;
-                mFragmentManager.putFragment(state, key, f);
-            }
-        }
-        return state;
-    }
+	@Override
+	public Parcelable saveState() {
+		Bundle state = null;
+		if (mSavedState.size() > 0) {
+			state = new Bundle();
+			Fragment.SavedState[] fss = new Fragment.SavedState[mSavedState.size()];
+			mSavedState.toArray(fss);
+			state.putParcelableArray("states", fss);
+		}
+		for (int i = 0; i < mFragments.size(); i++) {
+			Fragment f = mFragments.get(i);
+			if (f != null) {
+				if (state == null) {
+					state = new Bundle();
+				}
+				String key = "f" + i;
+				mFragmentManager.putFragment(state, key, f);
+			}
+		}
+		return state;
+	}
 
-    @Override
-    public void restoreState(Parcelable state, ClassLoader loader) {
-        if (state != null) {
-            Bundle bundle = (Bundle)state;
-            bundle.setClassLoader(loader);
-            Parcelable[] fss = bundle.getParcelableArray("states");
-            mSavedState.clear();
-            mFragments.clear();
-            if (fss != null) {
-                for (int i=0; i<fss.length; i++) {
-                    mSavedState.add((Fragment.SavedState)fss[i]);
-                }
-            }
-            Iterable<String> keys = bundle.keySet();
-            for (String key: keys) {
-                if (key.startsWith("f")) {
-                    int index = Integer.parseInt(key.substring(1));
-                    Fragment f = mFragmentManager.getFragment(bundle, key);
-                    if (f != null) {
-                        while (mFragments.size() <= index) {
-                            mFragments.add(null);
-                        }
-                        setMenuVisibility(f, false);
-                        mFragments.set(index, f);
-                    } else {
-                        Log.w(TAG, "Bad fragment at key " + key);
-                    }
-                }
-            }
-        }
-    }
+	@Override
+	public void restoreState(Parcelable state, ClassLoader loader) {
+		if (state != null) {
+			Bundle bundle = (Bundle) state;
+			bundle.setClassLoader(loader);
+			Parcelable[] fss = bundle.getParcelableArray("states");
+			mSavedState.clear();
+			mFragments.clear();
+			if (fss != null) {
+				for (int i = 0; i < fss.length; i++) {
+					mSavedState.add((Fragment.SavedState) fss[i]);
+				}
+			}
+			Iterable<String> keys = bundle.keySet();
+			for (String key : keys) {
+				if (key.startsWith("f")) {
+					int index = Integer.parseInt(key.substring(1));
+					Fragment f = mFragmentManager.getFragment(bundle, key);
+					if (f != null) {
+						while (mFragments.size() <= index) {
+							mFragments.add(null);
+						}
+						setMenuVisibility(f, false);
+						mFragments.set(index, f);
+					} else {
+						Log.w(TAG, "Bad fragment at key " + key);
+					}
+				}
+			}
+		}
+	}
 }

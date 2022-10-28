@@ -232,7 +232,7 @@ public class Task extends DAO {
 		public static final String[] HISTORY_COLUMNS = { Columns.HIST_TASK_ID,
 				Columns.TITLE, Columns.NOTE };
 		public static final String[] HISTORY_COLUMNS_UPDATED = { Columns.HIST_TASK_ID,
-			Columns.TITLE, Columns.NOTE, Columns.UPDATED };
+				Columns.TITLE, Columns.NOTE, Columns.UPDATED };
 
 	}
 
@@ -326,13 +326,13 @@ public class Task extends DAO {
 			.append(" AFTER UPDATE OF ")
 			.append(arrayToCommaString(new String[] { Columns.TITLE,
 					Columns.NOTE })).append(" ON ").append(TABLE_NAME)
-					
+
 			.append(" WHEN old.")
 			.append(Columns.TITLE).append(" IS NOT new.")
 			.append(Columns.TITLE).append(" OR old.")
 			.append(Columns.NOTE).append(" IS NOT new.")
 			.append(Columns.NOTE)
-			
+
 			.append(" BEGIN ").append(HISTORY_TRIGGER_BODY).append(" END;")
 			.toString();
 	public static final String CREATE_HISTORY_INSERT_TRIGGER = new StringBuilder(
@@ -418,7 +418,7 @@ public class Task extends DAO {
 	 * This is a view which returns the tasks in the specified list with headers
 	 * suitable for dates, if any tasks would be sorted under them. Provider
 	 * hardcodes the sort order for this.
-	 * 
+	 *
 	 * if listId is null, will return for all lists
 	 */
 	public static final String CREATE_SECTIONED_DATE_VIEW(final String listId) {
@@ -722,7 +722,7 @@ public class Task extends DAO {
 
 	/**
 	 * Set first line as title, rest as note.
-	 * 
+	 *
 	 * @param text
 	 */
 	public void setText(final String text) {
@@ -735,8 +735,7 @@ public class Task extends DAO {
 		title = text.substring(0, titleEnd);
 		if (titleEnd + 1 < text.length()) {
 			note = text.substring(titleEnd + 1, text.length());
-		}
-		else {
+		} else {
 			note = "";
 		}
 	}
@@ -790,8 +789,7 @@ public class Task extends DAO {
 				this.left = values.getAsLong(Columns.LEFT);
 				this.right = values.getAsLong(Columns.RIGHT);
 				this.dblist = values.getAsLong(Columns.DBLIST);
-			}
-			else {
+			} else {
 				this.title = values.getAsString(Columns.TITLE);
 				this.note = values.getAsString(Columns.NOTE);
 				this.completed = values.getAsLong(Columns.COMPLETED);
@@ -805,7 +803,7 @@ public class Task extends DAO {
 			}
 		}
 	}
-	
+
 	public Task(final JSONObject json) throws JSONException {
 		if (json.has(Columns.TITLE))
 			this.title = json.getString(Columns.TITLE);
@@ -867,7 +865,7 @@ public class Task extends DAO {
 	 * Compares this task to another and returns true if their contents are the
 	 * same. Content is defined as: title, note, duedate, completed != null
 	 * Returns false if title or note are null.
-	 * 
+	 *
 	 * The intended usage is the editor where content and not id's or position
 	 * are of importance.
 	 */
@@ -884,8 +882,7 @@ public class Task extends DAO {
 			result &= (due == other.due);
 			result &= ((completed != null) == (other.completed != null));
 
-		}
-		else {
+		} else {
 			result = super.equals(o);
 		}
 
@@ -906,8 +903,7 @@ public class Task extends DAO {
 				_id = Long.parseLong(uri.getLastPathSegment());
 				result++;
 			}
-		}
-		else {
+		} else {
 			result += context.getContentResolver().update(getUri(),
 					getContent(), null, null);
 		}
@@ -928,7 +924,7 @@ public class Task extends DAO {
 	 * asynctask to do the operation in the background.
 	 */
 	public static void setCompleted(final Context context,
-			final boolean completed, final Long... ids) {
+									final boolean completed, final Long... ids) {
 		if (ids.length > 0) {
 			final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
 				@Override
@@ -941,32 +937,33 @@ public class Task extends DAO {
 		}
 	}
 
-    /**
-     * Convenience method to complete tasks. Runs on the thread that called it.
-     * @param context
-     * @param completed
-     * @param ids
-     */
-    public static void setCompletedSynced(final Context context,
-            final boolean completed, final Long... ids) {
-        if (ids.length < 1) {
-            return;
-        }
+	/**
+	 * Convenience method to complete tasks. Runs on the thread that called it.
+	 *
+	 * @param context
+	 * @param completed
+	 * @param ids
+	 */
+	public static void setCompletedSynced(final Context context,
+										  final boolean completed, final Long... ids) {
+		if (ids.length < 1) {
+			return;
+		}
 
-        final ContentValues values = new ContentValues();
-        values.put(Columns.COMPLETED, completed ? Calendar
-                .getInstance().getTimeInMillis() : null);
-        values.put(Columns.UPDATED, Calendar.getInstance()
-                .getTimeInMillis());
-        String idStrings = "(";
-        for (Long id : ids) {
-            idStrings += id + ",";
-        }
-        idStrings = idStrings.substring(0, idStrings.length() - 1);
-        idStrings += ")";
-        context.getContentResolver().update(URI, values,
-                Columns._ID + " IN " + idStrings, null);
-    }
+		final ContentValues values = new ContentValues();
+		values.put(Columns.COMPLETED, completed ? Calendar
+				.getInstance().getTimeInMillis() : null);
+		values.put(Columns.UPDATED, Calendar.getInstance()
+				.getTimeInMillis());
+		String idStrings = "(";
+		for (Long id : ids) {
+			idStrings += id + ",";
+		}
+		idStrings = idStrings.substring(0, idStrings.length() - 1);
+		idStrings += ")";
+		context.getContentResolver().update(URI, values,
+				Columns._ID + " IN " + idStrings, null);
+	}
 
 	public int moveTo(final ContentResolver resolver, final Task targetTask) {
 		if (targetTask.dblist == dblist) {
@@ -974,8 +971,7 @@ public class Task extends DAO {
 				// moving left
 				return resolver.update(getMoveItemLeftUri(),
 						getMoveValues(targetTask.left), null, null);
-			}
-			else if (targetTask.right > right) {
+			} else if (targetTask.right > right) {
 				// moving right
 				return resolver.update(getMoveItemRightUri(),
 						getMoveValues(targetTask.right), null, null);
@@ -996,7 +992,7 @@ public class Task extends DAO {
 	 */
 	static final String countVals(final String col, final String ver) {
 		return String.format("SELECT COUNT(DISTINCT %2$s)"
-				+ " AS ColCount FROM %1$s WHERE %3$s=%4$s.%3$s", TABLE_NAME,
+						+ " AS ColCount FROM %1$s WHERE %3$s=%4$s.%3$s", TABLE_NAME,
 				col, Columns.DBLIST, ver);
 	}
 
@@ -1008,7 +1004,9 @@ public class Task extends DAO {
 						+ " RAISE (ABORT, '" + msg + "')" + " END;",
 				countVals(Columns._ID, ver), countVals(Columns.LEFT, ver),
 				countVals(Columns.RIGHT, ver));
-	};
+	}
+
+	;
 
 	// public static final String TRIGGER_POST_UPDATE = String.format(
 	// "CREATE TRIGGER task_post_update AFTER UPDATE ON %1$s BEGIN "
@@ -1022,7 +1020,7 @@ public class Task extends DAO {
 			"CREATE TRIGGER task_pre_insert BEFORE INSERT ON %s BEGIN ",
 			TABLE_NAME)
 			+ String.format(BUMP_TO_RIGHT, TABLE_NAME, Columns.RIGHT,
-					Columns.LEFT, Columns.DBLIST) + " END;";
+			Columns.LEFT, Columns.DBLIST) + " END;";
 
 	public static final String TRIGGER_POST_INSERT = String.format(
 			"CREATE TRIGGER task_post_insert AFTER INSERT ON %s BEGIN ",
@@ -1042,9 +1040,9 @@ public class Task extends DAO {
 			// + String.format(UPGRADE_CHILDREN, TABLE_NAME, Columns.LEFT,
 			// Columns.RIGHT, Columns.DBLIST)
 			+ String.format(BUMP_TO_LEFT, TABLE_NAME, Columns.LEFT,
-					Columns.RIGHT, Columns.DBLIST)
+			Columns.RIGHT, Columns.DBLIST)
 			+ String.format(BUMP_TO_LEFT, TABLE_NAME, Columns.RIGHT,
-					Columns.RIGHT, Columns.DBLIST)
+			Columns.RIGHT, Columns.DBLIST)
 
 			// Enforce integrity
 			+ posUniqueConstraint("old", "pos not unique post delete")
@@ -1058,7 +1056,7 @@ public class Task extends DAO {
 					+ ") "
 					+ " VALUES("
 					+ arrayToCommaString("old.", Columns.DELETEFIELDS_TRIGGER,
-							"") + "); "
+					"") + "); "
 
 					+ " END;", TABLE_NAME, DELETE_TABLE_NAME);
 
@@ -1111,7 +1109,7 @@ public class Task extends DAO {
 					.format("UPDATE %1$s SET %2$s = 1, %3$s = 2 WHERE %4$s IS new.%4$s;",
 							TABLE_NAME, Columns.LEFT, Columns.RIGHT,
 							Columns._ID))
-						
+
 			.append(posUniqueConstraint("new", "Moving list, new positions not unique/ordered"))
 			.append(posUniqueConstraint("old", "Moving list, old positions not unique/ordered"))
 
@@ -1120,7 +1118,7 @@ public class Task extends DAO {
 	/**
 	 * If moving left, then edgeCol is left and vice-versa. Values should come
 	 * from getMoveValues
-	 * 
+	 *
 	 * 1 = table name 2 = left 3 = right 4 = edgecol 5 = old.left 6 = old.right
 	 * 7 = target.pos (actually target.edgecol) 8 = dblist 9 = old.dblist
 	 */
@@ -1128,64 +1126,64 @@ public class Task extends DAO {
 		boolean movingLeft = Columns.LEFT.equals(edgeCol);
 		return String
 				.format(new StringBuilder("UPDATE %1$s SET ")
-						/*
-						 * Left item follows Left = Left + ...
-						 */
-						.append("%2$s = %2$s + ")
-						.append(" CASE ")
-						// Moving item jumps to target pos
-						.append(" WHEN %2$s IS %5$d ")
-						// ex: left = 5, target = 2, --> left = 5 + (2 - 5) == 2
-						// ex left = 5, target = 9(right), --> left = 5 + (9 - 5
-						// - 1) = 8
-						.append(" THEN ")
-						.append(" (%7$d - %5$d")
-						.append(movingLeft ? ") " : " -1) ")
-						// Sub items take one step opposite
-						// Careful if moving inside subtree, which can only
-						// happen when moving right.
-						// Then only left position changes
-						.append(" WHEN %2$s BETWEEN (%5$d + 1) AND (%6$d - 1) ")
-						.append(" THEN ")
-						.append(movingLeft ? " 1 " : " -1 ")
-						// Items in between from and to positions take two steps
-						// opposite
-						.append(" WHEN %2$s BETWEEN ")
-						.append(movingLeft ? "%7$d" : "%6$d")
-						.append(" AND ")
-						.append(movingLeft ? "%5$d" : "%7$d")
-						.append(" THEN ")
-						.append(movingLeft ? " 2 " : " -2 ")
-						// Not in target range, no change
-						.append(" ELSE 0 END, ")
-						/*
-						 * Right item follows Right = Right + ...
-						 */
-						.append(" %3$s = %3$s + ")
-						.append(" CASE ")
-						// Moving item jumps to target pos
-						.append(" WHEN %3$s IS %6$d ")
-						// ex: right = 7, target = 3(left), --> right = 7 + (3 -
-						// 7 + 1) == 4
-						// ex right = 2, target = 9(right), --> right = 2 + (9 -
-						// 2) = 9
-						.append(" THEN ")
-						.append(" (%7$d - %6$d")
-						.append(movingLeft ? " +1) " : ") ")
-						// Sub items take one step opposite
-						.append(" WHEN %3$s BETWEEN (%5$d + 1) AND (%6$d - 1) ")
-						.append(" THEN ")
-						.append(movingLeft ? " 1 " : " -1 ")
-						// Items in between from and to positions take two steps
-						// opposite
-						.append(" WHEN %3$s BETWEEN ")
-						.append(movingLeft ? "%7$d" : "%6$d").append(" AND ")
-						.append(movingLeft ? "%5$d" : "%7$d").append(" THEN ")
-						.append(movingLeft ? " 2 " : " -2 ")
-						// Not in target range, no change
-						.append(" ELSE 0 END ")
-						// And limit to the list in question
-						.append(" WHERE %8$s IS %9$d;").toString(), TABLE_NAME,
+								/*
+								 * Left item follows Left = Left + ...
+								 */
+								.append("%2$s = %2$s + ")
+								.append(" CASE ")
+								// Moving item jumps to target pos
+								.append(" WHEN %2$s IS %5$d ")
+								// ex: left = 5, target = 2, --> left = 5 + (2 - 5) == 2
+								// ex left = 5, target = 9(right), --> left = 5 + (9 - 5
+								// - 1) = 8
+								.append(" THEN ")
+								.append(" (%7$d - %5$d")
+								.append(movingLeft ? ") " : " -1) ")
+								// Sub items take one step opposite
+								// Careful if moving inside subtree, which can only
+								// happen when moving right.
+								// Then only left position changes
+								.append(" WHEN %2$s BETWEEN (%5$d + 1) AND (%6$d - 1) ")
+								.append(" THEN ")
+								.append(movingLeft ? " 1 " : " -1 ")
+								// Items in between from and to positions take two steps
+								// opposite
+								.append(" WHEN %2$s BETWEEN ")
+								.append(movingLeft ? "%7$d" : "%6$d")
+								.append(" AND ")
+								.append(movingLeft ? "%5$d" : "%7$d")
+								.append(" THEN ")
+								.append(movingLeft ? " 2 " : " -2 ")
+								// Not in target range, no change
+								.append(" ELSE 0 END, ")
+								/*
+								 * Right item follows Right = Right + ...
+								 */
+								.append(" %3$s = %3$s + ")
+								.append(" CASE ")
+								// Moving item jumps to target pos
+								.append(" WHEN %3$s IS %6$d ")
+								// ex: right = 7, target = 3(left), --> right = 7 + (3 -
+								// 7 + 1) == 4
+								// ex right = 2, target = 9(right), --> right = 2 + (9 -
+								// 2) = 9
+								.append(" THEN ")
+								.append(" (%7$d - %6$d")
+								.append(movingLeft ? " +1) " : ") ")
+								// Sub items take one step opposite
+								.append(" WHEN %3$s BETWEEN (%5$d + 1) AND (%6$d - 1) ")
+								.append(" THEN ")
+								.append(movingLeft ? " 1 " : " -1 ")
+								// Items in between from and to positions take two steps
+								// opposite
+								.append(" WHEN %3$s BETWEEN ")
+								.append(movingLeft ? "%7$d" : "%6$d").append(" AND ")
+								.append(movingLeft ? "%5$d" : "%7$d").append(" THEN ")
+								.append(movingLeft ? " 2 " : " -2 ")
+								// Not in target range, no change
+								.append(" ELSE 0 END ")
+								// And limit to the list in question
+								.append(" WHERE %8$s IS %9$d;").toString(), TABLE_NAME,
 						Columns.LEFT, Columns.RIGHT, edgeCol, left, right,
 						edgeVal, Columns.DBLIST, dblist);
 	}
@@ -1194,9 +1192,9 @@ public class Task extends DAO {
 	 * @SuppressLint("DefaultLocale") public String getSQLMoveSubTree(final
 	 * ContentValues values) { return
 	 * String.format("UPDATE %1$s SET %2$s = %2$s + " +
-	 * 
+	 *
 	 * " CASE " + // Tasks are moving left " WHEN (%4$d < %6$d) " +
-	 * 
+	 *
 	 * " THEN CASE " + " WHEN %2$s BETWEEN %4$d AND (%6$d - 1) " + // Then they
 	 * must flow [width] to the right " THEN %7$d - %6$d + 1 " +
 	 * " WHEN %2$s BETWEEN %6$d AND %7$d " + // Tasks in subtree jump to the
@@ -1206,15 +1204,15 @@ public class Task extends DAO {
 	 * them [width] to the left " THEN %6$d - %7$d - 1" +
 	 * " WHEN %2$s BETWEEN %6$d AND %7$d " + // Tasks in subtree jump to the
 	 * right // targetleft - left
-	 * 
+	 *
 	 * // Depends on if we are moving inside a task or // moving an entire one
 	 * " THEN CASE WHEN %5$d > (%4$d + 1) " + " THEN %4$d - %7$d " +
 	 * " ELSE %4$d - %7$d + 1 END " + // Do nothing otherwise " ELSE 0 END " +
 	 * // No move actually performed. comma to do right next " ELSE 0 END, " +
-	 * 
+	 *
 	 * " %3$s = %3$s + " + " CASE " + // Tasks are moving left
 	 * " WHEN (%4$d < %6$d) " +
-	 * 
+	 *
 	 * " THEN CASE " + // but only if right is left of originleft
 	 * " WHEN %3$s BETWEEN %4$d AND (%6$d - 1)" + // Then they must flow [width]
 	 * to the right " THEN %7$d - %6$d + 1" +
@@ -1230,13 +1228,13 @@ public class Task extends DAO {
 	 * " ELSE %4$d - %7$d + 1 END " + // Do nothing otherwise " ELSE 0 END " +
 	 * // No move actually performed. End update with semicolon " ELSE 0 END " +
 	 * " WHERE %8$s IS %9$d; "
-	 * 
+	 *
 	 * //Enforce integrity + posUniqueConstraint("new",
 	 * "pos not unique move sub tree") ,
-	 * 
+	 *
 	 * TABLE_NAME, Columns.LEFT, Columns.RIGHT, values.getAsLong(TARGETLEFT),
 	 * values.getAsLong(TARGETRIGHT), left, right, Columns.DBLIST, dblist
-	 * 
+	 *
 	 * ); }
 	 */
 

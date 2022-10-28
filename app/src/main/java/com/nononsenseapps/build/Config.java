@@ -29,32 +29,32 @@ import java.util.Properties;
  * values for the secretkeys.properties file in the assets directory.
  */
 public class Config {
-    public final static boolean LOGGING = true;
+	public final static boolean LOGGING = true;
 
-    public static final String KEY_GTASKS_API_KEY = "gtasks_api_key";
+	public static final String KEY_GTASKS_API_KEY = "gtasks_api_key";
 
-    private static final String propFile = "secretkeys.properties";
-    private static Properties props;
+	private static final String propFile = "secretkeys.properties";
+	private static Properties props;
 
-    public static Properties getProperties(final Context context) {
-        if (props == null) {
-            props = new Properties();
+	public static Properties getProperties(final Context context) {
+		if (props == null) {
+			props = new Properties();
 
-            try {
-                final AssetManager assetManager = context.getAssets();
-                final InputStream inputStream = assetManager.open(propFile);
-                props.load(inputStream);
-                inputStream.close();
-            } catch (IOException e) {
-                Log.e("NoNonsenseNotes Props:", e.getLocalizedMessage());
-            }
-        }
-        return props;
-    }
+			try {
+				final AssetManager assetManager = context.getAssets();
+				final InputStream inputStream = assetManager.open(propFile);
+				props.load(inputStream);
+				inputStream.close();
+			} catch (IOException e) {
+				Log.e("NoNonsenseNotes Props:", e.getLocalizedMessage());
+			}
+		}
+		return props;
+	}
 
-    public static String getGtasksApiKey(final Context context) {
-        return getProperties(context).getProperty(KEY_GTASKS_API_KEY,
-                "AIzaSyBtUvSWg41WVi9E3W1VaqDMlJ07a3B6JOs");
-    }
+	public static String getGtasksApiKey(final Context context) {
+		return getProperties(context).getProperty(KEY_GTASKS_API_KEY,
+				"AIzaSyBtUvSWg41WVi9E3W1VaqDMlJ07a3B6JOs");
+	}
 
 }

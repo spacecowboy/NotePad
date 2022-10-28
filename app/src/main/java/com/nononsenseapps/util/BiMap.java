@@ -6,32 +6,32 @@ import java.util.Map;
 /**
  * This class is a Bi-directional Map. It works just like a HashMap with the added restriction that both keys and values must be unique.
  * This means you can query the Map for a value and get the key.
- * 
- * Implemented with two HashMaps and validity checks on the arguments.
  *
+ * Implemented with two HashMaps and validity checks on the arguments.
  */
 public class BiMap<K, V> extends HashMap<K, V> {
 	private static final long serialVersionUID = 1207460403477674827L;
 	private final HashMap<V, K> valueToKey;
-	
+
 	public BiMap() {
 		super();
-		
+
 		valueToKey = new HashMap<V, K>();
 	}
-	
+
 	/**
 	 * Reverse GET
-	 * 
+	 *
 	 * @param value to retrieve the key for
 	 * @return the key associated with the value or NULL if none exists
 	 */
 	public K getKey(Object value) {
 		return valueToKey.get(value);
 	}
-	
+
 	/**
 	 * Just for grammatical consistency. Maps directly to GET.
+	 *
 	 * @param key to retrieve the value for
 	 * @return the value the key is associated with or NULL if none exists
 	 */

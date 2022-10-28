@@ -2,7 +2,6 @@ package com.nononsenseapps.notepad.interfaces;
 
 /**
  * Used to control the menu items for the navigation drawer.
- * 
  */
 public interface MenuStateController {
 

@@ -25,19 +25,16 @@ import java.util.HashSet;
 
 /**
  * This interface defines an Org-Mode synchronizer.
- * 
  */
 public interface SynchronizerInterface {
 
 	/**
-	 * 
 	 * @return A unique name for this service. Should be descriptive, like
-	 *         SDOrg or SSHOrg.
+	 * SDOrg or SSHOrg.
 	 */
 	public String getServiceName();
-	
+
 	/**
-	 * 
 	 * @return The username of the configured service. Likely an e-mail.
 	 */
 	public String getAccountName();
@@ -49,74 +46,67 @@ public interface SynchronizerInterface {
 	 */
 	public boolean isConfigured();
 
-    /**
-     * Returns an OrgFile object with a filename set that is guaranteed to
-     * not already exist. Use this method to avoid having multiple objects
-     * pointing to the same file.
-     *
-     * @param desiredName The name you'd want. If it exists,
-     *                    it will be used as the base in desiredName1,
-     *                    desiredName2, etc. Limited to 99.
-     * @return an OrgFile guaranteed not to exist.
-     * @throws IOException
-     * @throws IllegalArgumentException
-     */
-    public OrgFile getNewFile(final String desiredName) throws IOException,
-            IllegalArgumentException;
+	/**
+	 * Returns an OrgFile object with a filename set that is guaranteed to
+	 * not already exist. Use this method to avoid having multiple objects
+	 * pointing to the same file.
+	 *
+	 * @param desiredName The name you'd want. If it exists,
+	 *                    it will be used as the base in desiredName1,
+	 *                    desiredName2, etc. Limited to 99.
+	 * @return an OrgFile guaranteed not to exist.
+	 * @throws IOException
+	 * @throws IllegalArgumentException
+	 */
+	public OrgFile getNewFile(final String desiredName) throws IOException,
+			IllegalArgumentException;
 
 	/**
 	 * Replaces the file on the remote end with the given content.
-	 * 
-	 * @param orgFile
-	 *            The file to save. Uses the filename stored in the object.
+	 *
+	 * @param orgFile The file to save. Uses the filename stored in the object.
 	 */
 	public void putRemoteFile(final OrgFile orgFile) throws IOException;
 
 	/**
 	 * Delete the file on the remote end.
-	 * 
-	 * @param orgFile
-	 *            The file to delete.
+	 *
+	 * @param orgFile The file to delete.
 	 */
 	public void deleteRemoteFile(final OrgFile orgFile) throws IOException;
 
 	/**
 	 * Rename the file on the remote end.
-	 * 
-	 * @param oldName
-	 *            The name it is currently stored as on the remote end.
-	 * @param orgFile
-	 *            This contains the new name.
+	 *
+	 * @param oldName The name it is currently stored as on the remote end.
+	 * @param orgFile This contains the new name.
 	 */
 	public void renameRemoteFile(final String oldName, final OrgFile orgFile) throws IOException;
 
 	/**
 	 * Returns a BufferedReader to the remote file. Null if it doesn't exist.
-	 * 
-	 * @param filename
-	 *            Name of the file, without path
+	 *
+	 * @param filename Name of the file, without path
 	 */
 	public BufferedReader getRemoteFile(final String filename) throws IOException;
-	
+
 	/**
-	 * 
 	 * @return a set of all remote files.
 	 */
 	public HashSet<String> getRemoteFilenames() throws IOException;
-	
+
 	/**
 	 * Do a full 2-way sync.
 	 */
 	public void fullSync() throws IOException, ParseException;
-	
+
 	/**
 	 * Use this to disconnect from any services and cleanup.
 	 */
 	public void postSynchronize();
 
-    /**
-     *
-     * @return a Monitor for this source. May be null.
-     */
-    public Monitor getMonitor();
+	/**
+	 * @return a Monitor for this source. May be null.
+	 */
+	public Monitor getMonitor();
 }

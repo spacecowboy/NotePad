@@ -20,12 +20,12 @@ public class NotePadBroadcastReceiver extends BroadcastReceiver {
 				Task.setCompleted(context, true, extras.getLong(BaseColumns._ID, -1));
 
 				Toast.makeText(context, context.getString(R.string.completed), Toast.LENGTH_SHORT)
-												.show();
+						.show();
 
 				// Broadcast that it has been completed, primarily for
 				// AndroidAgendaWidget
 				context.sendBroadcast(new Intent(
-												context.getString(R.string.note_completed_broadcast_intent)));
+						context.getString(R.string.note_completed_broadcast_intent)));
 			}
 		}
 

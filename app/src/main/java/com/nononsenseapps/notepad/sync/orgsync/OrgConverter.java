@@ -32,13 +32,13 @@ public class OrgConverter {
 			"#\\s*NONSENSESTYLE:\\s*(.+)\\s*?", Pattern.CASE_INSENSITIVE);
 	private static final Pattern PatternSorting = Pattern
 			.compile("#\\s*NONSENSESORTING:\\s*(.+)\\s*?",
-                    Pattern.CASE_INSENSITIVE);
+					Pattern.CASE_INSENSITIVE);
 	// Ending white space used when removed
 	private static final String NonsenseIdPattern = "#\\s*NONSENSEID:\\s*(\\w+)\\s*";
 	private static final Pattern PatternId = Pattern.compile(NonsenseIdPattern,
 			Pattern.CASE_INSENSITIVE);
-    private static final String TAG = "OrgConverter";
-    private static Random rand;
+	private static final String TAG = "OrgConverter";
+	private static Random rand;
 
 	/**
 	 * Generates an id for RemoteTask(List) objects.
@@ -97,7 +97,7 @@ public class OrgConverter {
 	 * RemoteTaskList object.
 	 */
 	public static void toRemoteFromFile(final RemoteTaskList entry,
-			final OrgFile file) {
+										final OrgFile file) {
 		entry.remoteId = file.getFilename();
 		RemoteTaskListFile.setSorting(entry, getListSortingFromMeta(file));
 		RemoteTaskListFile.setListType(entry, getListTypeFromMeta(file));
@@ -111,16 +111,16 @@ public class OrgConverter {
 		task.title = node.getTitle();
 		task.due = getDeadline(node);
 		task.completed = getCompleted(node);
-        task.note = node.getBody();
+		task.note = node.getBody();
 
-        /*
-        * It's not possible to differentiate if the user added a trailing
-        * newline or the sync logic did. I will assume that the sync logic did.
-        */
-        if (task.note != null && !task.note.isEmpty() && task.note.endsWith("\n")) {
-            task.note = task.note.substring(0, task.note.length() - 1);
-        }
-    }
+		/*
+		 * It's not possible to differentiate if the user added a trailing
+		 * newline or the sync logic did. I will assume that the sync logic did.
+		 */
+		if (task.note != null && !task.note.isEmpty() && task.note.endsWith("\n")) {
+			task.note = task.note.substring(0, task.note.length() - 1);
+		}
+	}
 
 	/**
 	 * Fill in all the properties of the nodes from the task object.
@@ -135,7 +135,7 @@ public class OrgConverter {
 	}
 
 	private static void setNotifications(final OrgNode node,
-			final List<Notification> reminders) {
+										 final List<Notification> reminders) {
 		if (reminders == null)
 			return;
 
@@ -207,7 +207,7 @@ public class OrgConverter {
 	 * should be updated in file.
 	 */
 	public static boolean toRemoteFromNode(final RemoteTask dbEntry,
-			final OrgNode node) {
+										   final OrgNode node) {
 		boolean addedToNode = false;
 		if (dbEntry.remoteId == null) {
 			String id = getNodeId(node);
@@ -247,7 +247,7 @@ public class OrgConverter {
 	 */
 	@SuppressLint("DefaultLocale")
 	public static void toNodeFromRemote(final OrgNode node,
-			final RemoteTask dbEntry) {
+										final RemoteTask dbEntry) {
 		node.setComments(TASKNODEID + dbEntry.remoteId.toUpperCase() + "\n");
 	}
 
@@ -272,9 +272,9 @@ public class OrgConverter {
 		setListTypeOnFile(list, file);
 	}
 
-    public static String getTitleAsFilename(TaskList list) {
-        return list.title + ".org";
-    }
+	public static String getTitleAsFilename(TaskList list) {
+		return list.title + ".org";
+	}
 
 	public static void setListTypeOnFile(TaskList list, OrgFile file) {
 		final StringBuilder comments = new StringBuilder();
@@ -283,7 +283,7 @@ public class OrgConverter {
 					.append("\n");
 		}
 		comments.append(PatternStyle.matcher(file.getComments()).replaceAll
-                ("").trim());
+				("").trim());
 		file.setComments(comments.toString());
 	}
 
@@ -293,7 +293,7 @@ public class OrgConverter {
 			comments.append(LISTSORTCOMMENT).append(list.sorting).append("\n");
 		}
 		comments.append(PatternSorting.matcher(file.getComments()).replaceAll
-                ("").trim());
+				("").trim());
 		file.setComments(comments.toString());
 	}
 }

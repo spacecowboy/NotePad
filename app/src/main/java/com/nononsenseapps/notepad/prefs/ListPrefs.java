@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2012 Jonas Kalderstam
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -58,17 +58,17 @@ public class ListPrefs extends PreferenceFragment {
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_defaultlist)));
 		PrefsActivity
-		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_title_fontfamily)));
+				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_title_fontfamily)));
 		PrefsActivity
-		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_title_fontstyle)));
+				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_title_fontstyle)));
 		PrefsActivity
-		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_body_fontfamily)));
+				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_body_fontfamily)));
 		PrefsActivity
-		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_fontsize)));
+				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_list_fontsize)));
 
 		//PrefsActivity
 		//		.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_listtype)));
-		
+
 		// Make the show checkbox dependant on the list type preference
 		final Preference hideCheckboxes = findPreference(getString(R.string.pref_hidecheckboxes));
 		Preference.OnPreferenceChangeListener listener = new Preference.OnPreferenceChangeListener() {
@@ -87,21 +87,19 @@ public class ListPrefs extends PreferenceFragment {
 							.setSummary(index >= 0 ? listPreference.getEntries()[index]
 									: null);
 
-				}
-				else {
+				} else {
 					// For all other preferences, set the summary to the value's
 					// simple string representation.
 					preference.setSummary(stringValue);
 				}
-				
+
 				if (stringValue.equals(getString(R.string.const_listtype_tasks))) {
 					hideCheckboxes.setEnabled(true);
-				}
-				else {
+				} else {
 					hideCheckboxes.setEnabled(false);
 				}
-				
-				
+
+
 				return true;
 			}
 		};
@@ -114,7 +112,7 @@ public class ListPrefs extends PreferenceFragment {
 
 	/**
 	 * Reads the lists from database. Also adds "All lists" as the first item.
-	 * 
+	 *
 	 * @return
 	 */
 	private void setEntries(ListPreference listSpinner) {

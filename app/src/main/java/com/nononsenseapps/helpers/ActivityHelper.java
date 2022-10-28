@@ -23,15 +23,12 @@ public class ActivityHelper {
 				activity.getString(R.string.const_theme_light_ab));
 		if (activity.getString(R.string.const_theme_light_ab).equals(theme)) {
 			activity.setTheme(R.style.ThemeHoloLightDarkActonBar);
-		}
-		else if (activity.getString(R.string.const_theme_black).equals(theme)) {
+		} else if (activity.getString(R.string.const_theme_black).equals(theme)) {
 			activity.setTheme(R.style.ThemeHoloBlack);
-		}
-		else if (activity.getString(R.string.const_theme_classic).equals(theme)) {
+		} else if (activity.getString(R.string.const_theme_classic).equals(theme)) {
 			activity.setTheme(R.style.ThemeHoloLightClassic);
-		}
-		else // if (theme.equals(getResources().getString(
-				// R.string.const_theme_googlenow_dark)))
+		} else // if (theme.equals(getResources().getString(
+		// R.string.const_theme_googlenow_dark)))
 		{
 			activity.setTheme(R.style.ThemeGoogleNowDark);
 		}
@@ -47,8 +44,7 @@ public class ActivityHelper {
 				locale = Locale.getDefault();
 			else if (lang.length() == 5) {
 				locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
-			}
-			else {
+			} else {
 				locale = new Locale(lang.substring(0, 2));
 			}
 			// Locale.setDefault(locale);
@@ -56,7 +52,7 @@ public class ActivityHelper {
 			activity.getResources().updateConfiguration(config,
 					activity.getResources().getDisplayMetrics());
 		}
-		
+
 		if (activity instanceof OnSharedPreferenceChangeListener) {
 			prefs.registerOnSharedPreferenceChangeListener((OnSharedPreferenceChangeListener) activity);
 		}
@@ -72,8 +68,7 @@ public class ActivityHelper {
 			locale = Locale.getDefault();
 		else if (lang.length() == 5) {
 			locale = new Locale(lang.substring(0, 2), lang.substring(3, 5));
-		}
-		else {
+		} else {
 			locale = new Locale(lang.substring(0, 2));
 		}
 

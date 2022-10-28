@@ -49,16 +49,16 @@ public class Notification extends DAO {
 	public static final String WITH_TASK_PATH = TABLE_NAME + "/with_task_info";
 
 	public static final String CONTENT_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps."
-									+ TABLE_NAME;
+			+ TABLE_NAME;
 
 	public static final Uri URI = Uri.withAppendedPath(
-									Uri.parse(MyContentProvider.SCHEME
-																	+ MyContentProvider.AUTHORITY),
-									TABLE_NAME);
+			Uri.parse(MyContentProvider.SCHEME
+					+ MyContentProvider.AUTHORITY),
+			TABLE_NAME);
 	public static final Uri URI_WITH_TASK_PATH = Uri.withAppendedPath(
-									Uri.parse(MyContentProvider.SCHEME
-																	+ MyContentProvider.AUTHORITY),
-									WITH_TASK_PATH);
+			Uri.parse(MyContentProvider.SCHEME
+					+ MyContentProvider.AUTHORITY),
+			WITH_TASK_PATH);
 
 	public static final int BASEURICODE = 301;
 	public static final int BASEITEMCODE = 302;
@@ -70,7 +70,7 @@ public class Notification extends DAO {
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, TABLE_NAME + "/#", BASEITEMCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, WITH_TASK_PATH, WITHTASKQUERYCODE);
 		sURIMatcher.addURI(MyContentProvider.AUTHORITY, WITH_TASK_PATH + "/#",
-										WITHTASKQUERYITEMCODE);
+				WITHTASKQUERYITEMCODE);
 	}
 
 	public static Uri getUri(final long id) {
@@ -92,7 +92,7 @@ public class Notification extends DAO {
 		public static final String LOCATIONNAME = "locationname";
 
 		public static final String[] FIELDS = { _ID, TIME, PERMANENT, TASKID, REPEATS,
-										LOCATIONNAME, LATITUDE, LONGITUDE, RADIUS };
+				LOCATIONNAME, LATITUDE, LONGITUDE, RADIUS };
 	}
 
 	public static class ColumnsWithTask extends Columns {
@@ -105,73 +105,73 @@ public class Notification extends DAO {
 		public static final String listPrefix = "l_";
 
 		public static final String[] FIELDS = joinArrays(
-										// prefixArray(notificationPrefix,
-										// Columns.FIELDS),
-										Columns.FIELDS,
-										prefixArray(taskPrefix, Task.Columns.SHALLOWFIELDS),
-										prefixArray(listPrefix, TaskList.Columns.SHALLOWFIELDS));
+				// prefixArray(notificationPrefix,
+				// Columns.FIELDS),
+				Columns.FIELDS,
+				prefixArray(taskPrefix, Task.Columns.SHALLOWFIELDS),
+				prefixArray(listPrefix, TaskList.Columns.SHALLOWFIELDS));
 	}
 
 	/**
 	 * Main table to store notification data
 	 */
 	public static final String CREATE_TABLE = new StringBuilder("CREATE TABLE ")
-									.append(TABLE_NAME)
-									.append("(")
-									.append(Columns._ID)
-									.append(" INTEGER PRIMARY KEY,")
-									.append(Columns.TIME)
-									.append(" INTEGER,")
-									.append(Columns.PERMANENT)
-									.append(" INTEGER NOT NULL DEFAULT 0,")
-									.append(Columns.TASKID)
-									.append(" INTEGER,")
-									// Interpreted binary
-									.append(Columns.REPEATS)
-									.append(" INTEGER NOT NULL DEFAULT 0,")
-									// Location data
-									.append(Columns.LOCATIONNAME).append(" TEXT,")
-									.append(Columns.LATITUDE).append(" REAL, ")
-									.append(Columns.LONGITUDE)
-									.append(" REAL, ")
-									.append(Columns.RADIUS)
-									.append(" REAL, ")
-									// Foreign key for task
-									.append("FOREIGN KEY(").append(Columns.TASKID)
-									.append(") REFERENCES ").append(Task.TABLE_NAME).append("(")
-									.append(Task.Columns._ID).append(") ON DELETE CASCADE")
-									.append(")").toString();
+			.append(TABLE_NAME)
+			.append("(")
+			.append(Columns._ID)
+			.append(" INTEGER PRIMARY KEY,")
+			.append(Columns.TIME)
+			.append(" INTEGER,")
+			.append(Columns.PERMANENT)
+			.append(" INTEGER NOT NULL DEFAULT 0,")
+			.append(Columns.TASKID)
+			.append(" INTEGER,")
+			// Interpreted binary
+			.append(Columns.REPEATS)
+			.append(" INTEGER NOT NULL DEFAULT 0,")
+			// Location data
+			.append(Columns.LOCATIONNAME).append(" TEXT,")
+			.append(Columns.LATITUDE).append(" REAL, ")
+			.append(Columns.LONGITUDE)
+			.append(" REAL, ")
+			.append(Columns.RADIUS)
+			.append(" REAL, ")
+			// Foreign key for task
+			.append("FOREIGN KEY(").append(Columns.TASKID)
+			.append(") REFERENCES ").append(Task.TABLE_NAME).append("(")
+			.append(Task.Columns._ID).append(") ON DELETE CASCADE")
+			.append(")").toString();
 
 	/**
 	 * View that joins relevant data from tasks and lists tables
 	 */
 	public static final String CREATE_JOINED_VIEW = new StringBuilder()
-									.append("CREATE TEMP VIEW IF NOT EXISTS ")
-									.append(WITH_TASK_VIEW_NAME)
-									.append(" AS ")
-									.append(" SELECT ")
-									// Notifications as normal column names
-									.append(arrayToCommaString(TABLE_NAME + ".", Columns.FIELDS))
-									.append(",")
-									// Rest gets prefixed
-									.append(arrayToCommaString("t.",
-																	Task.Columns.SHALLOWFIELDS,
-																	" AS "
-																									+ ColumnsWithTask.taskPrefix
-																									+ "%1$s"))
-									.append(",")
-									.append(arrayToCommaString("l.",
-																	TaskList.Columns.SHALLOWFIELDS,
-																	" AS "
-																									+ ColumnsWithTask.listPrefix
-																									+ "%1$s"))
-									.append(" FROM ").append(TABLE_NAME).append(",")
-									.append(Task.TABLE_NAME).append(" AS t,")
-									.append(TaskList.TABLE_NAME).append(" AS l ").append(" WHERE ")
-									.append(TABLE_NAME).append(".").append(Columns.TASKID)
-									.append(" = t.").append(Task.Columns._ID).append(" AND t.")
-									.append(Task.Columns.DBLIST).append(" = l.")
-									.append(TaskList.Columns._ID).append(";").toString();
+			.append("CREATE TEMP VIEW IF NOT EXISTS ")
+			.append(WITH_TASK_VIEW_NAME)
+			.append(" AS ")
+			.append(" SELECT ")
+			// Notifications as normal column names
+			.append(arrayToCommaString(TABLE_NAME + ".", Columns.FIELDS))
+			.append(",")
+			// Rest gets prefixed
+			.append(arrayToCommaString("t.",
+					Task.Columns.SHALLOWFIELDS,
+					" AS "
+							+ ColumnsWithTask.taskPrefix
+							+ "%1$s"))
+			.append(",")
+			.append(arrayToCommaString("l.",
+					TaskList.Columns.SHALLOWFIELDS,
+					" AS "
+							+ ColumnsWithTask.listPrefix
+							+ "%1$s"))
+			.append(" FROM ").append(TABLE_NAME).append(",")
+			.append(Task.TABLE_NAME).append(" AS t,")
+			.append(TaskList.TABLE_NAME).append(" AS l ").append(" WHERE ")
+			.append(TABLE_NAME).append(".").append(Columns.TASKID)
+			.append(" = t.").append(Task.Columns._ID).append(" AND t.")
+			.append(Task.Columns.DBLIST).append(" = l.")
+			.append(TaskList.Columns._ID).append(";").toString();
 
 	// milliseconds since 1970-01-01 UTC
 	public Long time = null;
@@ -215,10 +215,10 @@ public class Notification extends DAO {
 		// the WITH_TASKS view query
 		if (c.getColumnCount() > 9) {
 			listTitle = c.getString(c.getColumnIndex(ColumnsWithTask.listPrefix
-											+ TaskList.Columns.TITLE));
+					+ TaskList.Columns.TITLE));
 			listID = c.getLong(c.getColumnIndex(ColumnsWithTask.listPrefix + TaskList.Columns._ID));
 			taskTitle = c.getString(c.getColumnIndex(ColumnsWithTask.taskPrefix
-											+ Task.Columns.TITLE));
+					+ Task.Columns.TITLE));
 			taskNote = c.getString(c.getColumnIndex(ColumnsWithTask.taskPrefix + Task.Columns.NOTE));
 		}
 	}
@@ -231,7 +231,7 @@ public class Notification extends DAO {
 		this(values);
 		_id = id;
 	}
-	
+
 	public Notification(final JSONObject json) throws JSONException {
 		if (json.has(Columns.TIME))
 			time = json.getLong(Columns.TIME);
@@ -291,22 +291,20 @@ public class Notification extends DAO {
 
 	/**
 	 * Returns date and time formatted in text in local time zone
-	 * 
 	 */
 	public CharSequence getLocalDateTimeText(final Context context) {
 		return TimeFormatter.getLocalDateStringLong(context, time);
 	}
-	
+
 	/**
 	 * Returns time formatted in text in local time zone
-	 * 
 	 */
 	public CharSequence getLocalTimeText(final Context context) {
 		return TimeFormatter.getLocalTimeOnlyString(context, time);
 	}
+
 	/**
 	 * Returns date formatted in text in local time zone
-	 * 
 	 */
 	public CharSequence getLocalDateText(final Context context) {
 		return TimeFormatter.getDateFormatter(context).format(new Date(time));
@@ -386,39 +384,40 @@ public class Notification extends DAO {
 		}
 	}
 
-    /**
-     * Removes all notifications associated with the specified tasks. Runs in
-     * the same thread as the caller.
-     * @param context
-     * @param ids
-     */
-    public static void removeWithTaskIdsSynced(final Context context,
-            final Long... ids) {
-        String idStrings = "(";
-        ArrayList<String> idsToClear = new ArrayList<String>();
-        for (Long id : ids) {
-            idStrings += id + ",";
-            idsToClear.add(Long.toString(id));
-        }
-        idStrings = idStrings.substring(0, idStrings.length() - 1);
-        idStrings += ")";
+	/**
+	 * Removes all notifications associated with the specified tasks. Runs in
+	 * the same thread as the caller.
+	 *
+	 * @param context
+	 * @param ids
+	 */
+	public static void removeWithTaskIdsSynced(final Context context,
+											   final Long... ids) {
+		String idStrings = "(";
+		ArrayList<String> idsToClear = new ArrayList<String>();
+		for (Long id : ids) {
+			idStrings += id + ",";
+			idsToClear.add(Long.toString(id));
+		}
+		idStrings = idStrings.substring(0, idStrings.length() - 1);
+		idStrings += ")";
 
-        final Cursor c = context.getContentResolver()
-                .query(URI,
-                        Columns.FIELDS,
-                        Columns.TASKID
-                        + " IN "
-                        + idStrings,
-                        null, null);
+		final Cursor c = context.getContentResolver()
+				.query(URI,
+						Columns.FIELDS,
+						Columns.TASKID
+								+ " IN "
+								+ idStrings,
+						null, null);
 
-        while (c.moveToNext()) {
-            // Yes dont just call delete in database
-            // We have to remove geofences (in delete)
-            Notification n = new Notification(c);
-            n.delete(context);
-        }
-        c.close();
-    }
+		while (c.moveToNext()) {
+			// Yes dont just call delete in database
+			// We have to remove geofences (in delete)
+			Notification n = new Notification(c);
+			n.delete(context);
+		}
+		c.close();
+	}
 
 	/**
 	 * Delete or reschedule a specific notification.
@@ -438,7 +437,7 @@ public class Notification extends DAO {
 	 * the specified tasks up to the specified time.
 	 */
 	public static void removeWithMaxTimeAndTaskIds(final Context context, final long maxTime,
-									final boolean reschedule, final Long... ids) {
+												   final boolean reschedule, final Long... ids) {
 		if (ids.length > 0) {
 			final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
 				@Override
@@ -451,13 +450,13 @@ public class Notification extends DAO {
 					idStrings += ")";
 
 					final Cursor c = context.getContentResolver().query(
-													URI,
-													Columns.FIELDS,
-													Columns.TASKID + " IN " + idStrings + " AND "
-																					+ Columns.TIME
-																					+ " <= "
-																					+ maxTime,
-													null, null);
+							URI,
+							Columns.FIELDS,
+							Columns.TASKID + " IN " + idStrings + " AND "
+									+ Columns.TIME
+									+ " <= "
+									+ maxTime,
+							null, null);
 
 					ArrayList<String> idsToClear = new ArrayList<String>();
 					while (c.moveToNext()) {
@@ -522,12 +521,12 @@ public class Notification extends DAO {
 	 */
 	public static List<Notification> getNotificationsOfTask(final Context context, final long taskId) {
 		return getNotificationsWithTasks(
-										context,
-										new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TASKID)
-																		+ " IS ?",
-										new String[] { Long.toString(taskId) },
-										new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
-																		.toString());
+				context,
+				new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TASKID)
+						+ " IS ?",
+				new String[] { Long.toString(taskId) },
+				new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
+						.toString());
 	}
 
 	/**
@@ -536,28 +535,28 @@ public class Notification extends DAO {
 	 * ascending
 	 */
 	public static List<Notification> getNotificationsWithTime(final Context context,
-									final long time, final boolean before) {
+															  final long time, final boolean before) {
 		final String comparison = before ? " <= ?" : " > ?";
 		return getNotificationsWithTasks(
-										context,
-										new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
-																		.append(comparison)
-																		.append(" AND ")
-																		.append(com.nononsenseapps.notepad.database.Notification.Columns.RADIUS)
-																		.append(" IS NULL")
-																		.toString(),
-										new String[] { Long.toString(time) },
-										new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
-																		.toString());
+				context,
+				new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
+						.append(comparison)
+						.append(" AND ")
+						.append(com.nononsenseapps.notepad.database.Notification.Columns.RADIUS)
+						.append(" IS NULL")
+						.toString(),
+				new String[] { Long.toString(time) },
+				new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
+						.toString());
 	}
 
 	public static List<Notification> getNotificationsWithTasks(final Context context,
-									final String where, final String[] whereArgs,
-									final String sortOrder) {
+															   final String where, final String[] whereArgs,
+															   final String sortOrder) {
 		ArrayList<Notification> list = new ArrayList<Notification>();
 
 		final Cursor c = context.getContentResolver().query(URI_WITH_TASK_PATH, null, where,
-										whereArgs, sortOrder);
+				whereArgs, sortOrder);
 
 		if (c != null) {
 			while (c.moveToNext()) {
@@ -577,27 +576,27 @@ public class Notification extends DAO {
 		values.put(Columns.TIME, newTime);
 		// Use base ID to bypass type checks
 		return context.getContentResolver().update(URI, values, Columns._ID + " IS ?",
-										new String[] { uri.getLastPathSegment() });
+				new String[] { uri.getLastPathSegment() });
 	}
 
 	/**
 	 * Used for snooze
 	 */
 	public static void setTimeForListAndBefore(final Context context, final long listId,
-									final long maxTime, final long newTime) {
+											   final long maxTime, final long newTime) {
 		final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
 			@Override
 			protected Void doInBackground(final Long... ids) {
 				// First get the list of tasks in that list
 				final Cursor c = context.getContentResolver()
-												.query(Task.URI,
-																				Task.Columns.FIELDS,
-																				Task.Columns.DBLIST
-																												+ " IS ? AND "
-																												+ com.nononsenseapps.notepad.database.Notification.Columns.RADIUS
-																												+ " IS NULL",
-																				new String[] { Long.toString(listId) },
-																				null);
+						.query(Task.URI,
+								Task.Columns.FIELDS,
+								Task.Columns.DBLIST
+										+ " IS ? AND "
+										+ com.nononsenseapps.notepad.database.Notification.Columns.RADIUS
+										+ " IS NULL",
+								new String[] { Long.toString(listId) },
+								null);
 
 				String idStrings = "(";
 				while (c.moveToNext()) {
@@ -611,12 +610,12 @@ public class Notification extends DAO {
 				values.put(Columns.TIME, newTime);
 
 				context.getContentResolver().update(
-												URI,
-												values,
-												Columns.TIME + " <= " + maxTime + " AND "
-																				+ Columns.TASKID
-																				+ " IN "
-																				+ idStrings, null);
+						URI,
+						values,
+						Columns.TIME + " <= " + maxTime + " AND "
+								+ Columns.TASKID
+								+ " IN "
+								+ idStrings, null);
 				return null;
 			}
 		};
@@ -624,7 +623,7 @@ public class Notification extends DAO {
 	}
 
 	public static void completeTasksInList(final Context context, final long listId,
-									final long maxTime) {
+										   final long maxTime) {
 
 	}
 
@@ -636,29 +635,29 @@ public class Notification extends DAO {
 		int day;
 
 		switch (calendarDay) {
-		case Calendar.MONDAY:
-			day = WeekDaysView.mon;
-			break;
-		case Calendar.TUESDAY:
-			day = WeekDaysView.tue;
-			break;
-		case Calendar.WEDNESDAY:
-			day = WeekDaysView.wed;
-			break;
-		case Calendar.THURSDAY:
-			day = WeekDaysView.thu;
-			break;
-		case Calendar.FRIDAY:
-			day = WeekDaysView.fri;
-			break;
-		case Calendar.SATURDAY:
-			day = WeekDaysView.sat;
-			break;
-		case Calendar.SUNDAY:
-			day = WeekDaysView.sun;
-			break;
-		default:
-			day = 0;
+			case Calendar.MONDAY:
+				day = WeekDaysView.mon;
+				break;
+			case Calendar.TUESDAY:
+				day = WeekDaysView.tue;
+				break;
+			case Calendar.WEDNESDAY:
+				day = WeekDaysView.wed;
+				break;
+			case Calendar.THURSDAY:
+				day = WeekDaysView.thu;
+				break;
+			case Calendar.FRIDAY:
+				day = WeekDaysView.fri;
+				break;
+			case Calendar.SATURDAY:
+				day = WeekDaysView.sat;
+				break;
+			case Calendar.SUNDAY:
+				day = WeekDaysView.sun;
+				break;
+			default:
+				day = 0;
 		}
 
 		return (0 < (day & repeats));

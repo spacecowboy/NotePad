@@ -4,6 +4,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.ViewById;
+
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
@@ -30,16 +31,16 @@ import android.widget.SearchView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SearchView.OnQueryTextListener;
 
-@EFragment(resName="fragment_search")
+@EFragment(resName = "fragment_search")
 public class FragmentSearch extends Fragment {
-	
-	public final static String QUERY  = "query";
+
+	public final static String QUERY = "query";
 
 	@SystemService
 	protected
 	SearchManager searchManager;
 
-	@ViewById(resName="list")
+	@ViewById(resName = "list")
 	protected
 	ListView list;
 
@@ -50,7 +51,7 @@ public class FragmentSearch extends Fragment {
 	protected String mQuery = "";
 
 	protected SearchView mSearchView;
-	
+
 	public static FragmentSearch_ getInstance(final String initialQuery) {
 		FragmentSearch_ f = new FragmentSearch_();
 		Bundle args = new Bundle();
@@ -58,21 +59,21 @@ public class FragmentSearch extends Fragment {
 		f.setArguments(args);
 		return f;
 	}
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		if (getArguments() != null) {
 			if (getArguments().containsKey(QUERY))
 				mQuery = getArguments().getString(QUERY);
 		}
-		
+
 		setHasOptionsMenu(true);
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater){
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 		inflater.inflate(R.menu.fragment_search, menu);
 
@@ -83,10 +84,10 @@ public class FragmentSearch extends Fragment {
 		mSearchView.setSearchableInfo(searchManager
 				.getSearchableInfo(getActivity().getComponentName()));
 		mSearchView.setIconifiedByDefault(false); // Do not iconify the widget;
-													// expand it by default
+		// expand it by default
 		mSearchView.setQueryRefinementEnabled(true);
 		mSearchView.setSubmitButtonEnabled(false);
-		
+
 		// Disable suggestions in search activity
 		mSearchView.setSuggestionsAdapter(null);
 
@@ -168,7 +169,7 @@ public class FragmentSearch extends Fragment {
 	protected String getSortOrder() {
 		return Task.Columns.TITLE;
 	}
-	
+
 	/**
 	 * Override to get different search behaviour
 	 */
@@ -180,7 +181,7 @@ public class FragmentSearch extends Fragment {
 				android.R.id.text1, R.id.date, R.id.checkbox,
 				R.id.drag_handle, R.id.dragpadding }, 0);
 	}
-	
+
 	/**
 	 * Override to give different search behaviour
 	 */
@@ -188,7 +189,7 @@ public class FragmentSearch extends Fragment {
 		return new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View origin, int pos,
-					long id) {
+									long id) {
 				startActivity(new Intent(Intent.ACTION_EDIT, Task.getUri(id)));
 			}
 		};
@@ -212,40 +213,38 @@ public class FragmentSearch extends Fragment {
 			@Override
 			public boolean setViewValue(View view, Cursor c, int colIndex) {
 				switch (colIndex) {
-				// Matches order in Task.Columns.Fields
-				case 1:
-					// Title
-					sTemp = c.getString(colIndex);
+					// Matches order in Task.Columns.Fields
+					case 1:
+						// Title
+						sTemp = c.getString(colIndex);
 
-					// Set height of text for non-headers
-					if (rowCount == 1) {
-						((TitleNoteTextView) view).setSingleLine(true);
-					}
-					else {
-						((TitleNoteTextView) view).setSingleLine(false);
-						((TitleNoteTextView) view).setMaxLines(rowCount);
-					}
+						// Set height of text for non-headers
+						if (rowCount == 1) {
+							((TitleNoteTextView) view).setSingleLine(true);
+						} else {
+							((TitleNoteTextView) view).setSingleLine(false);
+							((TitleNoteTextView) view).setMaxLines(rowCount);
+						}
 
-					// Change color based on complete status
-					((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
+						// Change color based on complete status
+						((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
 
-					((TitleNoteTextView) view).setTextTitle(sTemp);
-					return true;
-				case 2:
-					// Note
-					// Only if task it not locked
-					if (c.getInt(9) != 1) {
-						((TitleNoteTextView) view).setTextRest(c
-								.getString(colIndex));
-					}
-					else {
-						((TitleNoteTextView) view).setTextRest("");
-					}
-					return true;
-				default:
-					// Checkbox
-					view.setVisibility(View.GONE);
-					return true;
+						((TitleNoteTextView) view).setTextTitle(sTemp);
+						return true;
+					case 2:
+						// Note
+						// Only if task it not locked
+						if (c.getInt(9) != 1) {
+							((TitleNoteTextView) view).setTextRest(c
+									.getString(colIndex));
+						} else {
+							((TitleNoteTextView) view).setTextRest("");
+						}
+						return true;
+					default:
+						// Checkbox
+						view.setVisibility(View.GONE);
+						return true;
 				}
 			}
 		};

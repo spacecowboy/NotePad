@@ -8,6 +8,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.SeekBarProgressChange;
 import org.androidannotations.annotations.ViewById;
+
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
@@ -31,20 +32,20 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
-@EActivity(resName="activity_task_history")
+@EActivity(resName = "activity_task_history")
 public class ActivityTaskHistory extends FragmentActivity {
 	public static final String RESULT_TEXT_KEY = "task_text_key";
 	private long mTaskID;
 	private boolean loaded = false;
 	private Cursor mCursor;
 
-	@ViewById(resName="seekBar")
+	@ViewById(resName = "seekBar")
 	SeekBar seekBar;
 
-	@ViewById(resName="taskText")
+	@ViewById(resName = "taskText")
 	TitleNoteTextView taskText;
 
-	@ViewById(resName="timestamp")
+	@ViewById(resName = "timestamp")
 	TextView timestamp;
 	private SimpleDateFormat timeFormatter;
 	private SimpleDateFormat dbTimeParser;
@@ -62,8 +63,7 @@ public class ActivityTaskHistory extends FragmentActivity {
 			setResult(RESULT_CANCELED, new Intent());
 			finish();
 			return;
-		}
-		else {
+		} else {
 			mTaskID = getIntent().getLongExtra(Task.Columns._ID, -1);
 		}
 
@@ -147,7 +147,7 @@ public class ActivityTaskHistory extends FragmentActivity {
 				});
 	}
 
-	@SeekBarProgressChange(resName="seekBar")
+	@SeekBarProgressChange(resName = "seekBar")
 	void onSeekBarChanged(int progress) {
 		if (mCursor != null) {
 			if (progress < mCursor.getCount()) {
@@ -157,8 +157,7 @@ public class ActivityTaskHistory extends FragmentActivity {
 				try {
 					timestamp.setText(timeFormatter.format(dbTimeParser
 							.parse(mCursor.getString(3))));
-				}
-				catch (ParseException e) {
+				} catch (ParseException e) {
 					Log.d("nononsenseapps time", e.getLocalizedMessage());
 				}
 			}
@@ -169,8 +168,7 @@ public class ActivityTaskHistory extends FragmentActivity {
 		if (mCursor == null) {
 			seekBar.setEnabled(false);
 			seekBar.setMax(0);
-		}
-		else {
+		} else {
 			seekBar.setEnabled(true);
 			seekBar.setMax(mCursor.getCount() - 1);
 		}

@@ -18,7 +18,9 @@ package com.nononsenseapps.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
+
 import com.nononsenseapps.helpers.Log;
+
 import android.view.View;
 import android.widget.RelativeLayout;
 import android.view.View.OnClickListener;
@@ -26,30 +28,29 @@ import android.view.View.OnClickListener;
 /**
  * This class is designed to act as a simple version of the touch delegate. E.g.
  * it is intended to enlarge the touch area for a specified child view.
- * 
- * Define it entirely in XML as the following example demonstrates:
- * 
- * <com.nononsenseapps.ui.DelegateFrame
-        xmlns:nononsenseapps="http://nononsenseapps.com"
-        android:id="@+id/datecheckcontainer"
-        android:layout_width="wrap_content"
-        android:layout_height="fill_parent"
-        android:minWidth="44dp"
-        android:paddingBottom="4dp"
-        android:paddingLeft="8dp"
-        android:paddingRight="4dp"
-        android:paddingTop="8dp"
-        android:clickable="true"
-        nononsenseapps:enlargedView="@+id/itemDone" >
-        
-        It's important to add android:clickable="true" and 
-        nononsenseapps:enlargedView="@+id/YOURIDHERE"
  *
+ * Define it entirely in XML as the following example demonstrates:
+ *
+ * <com.nononsenseapps.ui.DelegateFrame
+ * xmlns:nononsenseapps="http://nononsenseapps.com"
+ * android:id="@+id/datecheckcontainer"
+ * android:layout_width="wrap_content"
+ * android:layout_height="fill_parent"
+ * android:minWidth="44dp"
+ * android:paddingBottom="4dp"
+ * android:paddingLeft="8dp"
+ * android:paddingRight="4dp"
+ * android:paddingTop="8dp"
+ * android:clickable="true"
+ * nononsenseapps:enlargedView="@+id/itemDone" >
+ *
+ * It's important to add android:clickable="true" and
+ * nononsenseapps:enlargedView="@+id/YOURIDHERE"
  */
 public class DelegateFrame extends RelativeLayout implements OnClickListener {
 	public static final String NONONSENSEAPPSNS = "http://nononsenseapps.com";
 	public static final String ATTR_ENLARGEDVIEW = "enlargedView";
-	
+
 	private int enlargedViewId;
 
 	public DelegateFrame(Context context) {
@@ -65,7 +66,7 @@ public class DelegateFrame extends RelativeLayout implements OnClickListener {
 		super(context, attrs, defStyle);
 		setValuesFromXML(attrs);
 	}
-	
+
 	private void setValuesFromXML(AttributeSet attrs) {
 		enlargedViewId = attrs.getAttributeResourceValue(NONONSENSEAPPSNS, ATTR_ENLARGEDVIEW, -1);
 		Log.d("delegate", "setting xml values! view: " + enlargedViewId);

@@ -41,15 +41,14 @@ import android.widget.SearchView;
 /**
  * Displays many listfragments across a viewpager. Supports selecting a certain
  * one on startup.
- * 
  */
-@EFragment(resName="fragment_tasklist_viewpager")
+@EFragment(resName = "fragment_tasklist_viewpager")
 public class TaskListViewPagerFragment extends Fragment implements
 		EditListDialogListener, ListOpener {
 
 	public static final String START_LIST_ID = "start_list_id";
 
-	@ViewById(resName="pager")
+	@ViewById(resName = "pager")
 	ViewPager pager;
 
 	@SystemService
@@ -127,8 +126,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 				if (mListIdToSelect != -1) {
 					pos = mSectionsPagerAdapter
 							.getItemPosition(mListIdToSelect);
-				}
-				else {
+				} else {
 					pos = -1;
 				}
 				if (pos >= 0) {
@@ -240,7 +238,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 			Log.d("nononsenseapps list",
 					"Save state: "
 							+ mTaskListsAdapter.getItemId(pager
-									.getCurrentItem()));
+							.getCurrentItem()));
 		}
 	}
 
@@ -263,7 +261,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 	 * If temp list is > 0, returns it. Else, checks if a default list is set
 	 * then returns that. If none set, then returns first (alphabetical) list
 	 * Returns -1 if no lists in database.
-	 * 
+	 *
 	 * Guarantees default list is valid
 	 */
 	public static long getARealList(final Context context, final long tempList) {
@@ -274,7 +272,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 			SharedPreferences prefs = PreferenceManager
 					.getDefaultSharedPreferences(context);
 			returnList = Long.parseLong(prefs.getString(context
-									.getString(R.string.pref_defaultlist), "-1"));
+					.getString(R.string.pref_defaultlist), "-1"));
 		}
 
 		if (returnList > 0) {
@@ -284,8 +282,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 					new String[] { Long.toString(returnList) }, null);
 			if (c.moveToFirst()) {
 				returnList = c.getLong(0);
-			}
-			else {
+			} else {
 				returnList = -1;
 			}
 			c.close();
@@ -309,7 +306,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 		return returnList;
 	}
-	
+
 	/**
 	 * Might be a meta list
 	 */
@@ -348,7 +345,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 		private long all_id = -2;
 
 		public SectionsPagerAdapter(final FragmentManager fm,
-				final CursorAdapter wrappedAdapter) {
+									final CursorAdapter wrappedAdapter) {
 			super(fm);
 			this.wrappedAdapter = wrappedAdapter;
 
@@ -436,22 +433,21 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 			if (position == 0) {
 				switch ((int) all_id) {
-				case TaskListFragment.LIST_ID_OVERDUE:
-					title = getString(R.string.date_header_overdue);
-					break;
-				case TaskListFragment.LIST_ID_TODAY:
-					title = getString(R.string.date_header_today);
-					break;
-				case TaskListFragment.LIST_ID_WEEK:
-					title = getString(R.string.next_5_days);
-					break;
-				case TaskListFragment.LIST_ID_ALL:
-				default:
-					title = getString(R.string.all_tasks);
-					break;
+					case TaskListFragment.LIST_ID_OVERDUE:
+						title = getString(R.string.date_header_overdue);
+						break;
+					case TaskListFragment.LIST_ID_TODAY:
+						title = getString(R.string.date_header_today);
+						break;
+					case TaskListFragment.LIST_ID_WEEK:
+						title = getString(R.string.next_5_days);
+						break;
+					case TaskListFragment.LIST_ID_ALL:
+					default:
+						title = getString(R.string.all_tasks);
+						break;
 				}
-			}
-			else if (wrappedAdapter != null) {
+			} else if (wrappedAdapter != null) {
 				Cursor c = (Cursor) wrappedAdapter.getItem(position - 1);
 				if (c != null && !c.isAfterLast() && !c.isBeforeFirst()) {
 					title = c.getString(1);
@@ -463,12 +459,12 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 		/**
 		 * {@inheritDoc}
-		 * 
+		 *
 		 * Called when the host view is attempting to determine if an item's
 		 * position has changed. Returns POSITION_UNCHANGED if the position of
 		 * the given item has not changed or POSITION_NONE if the item is no
 		 * longer present in the adapter.
-		 * 
+		 *
 		 * Argument is the object previously returned by instantiateItem
 		 */
 		@Override

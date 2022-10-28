@@ -45,31 +45,31 @@ public class SyncHelper {
 	public static void requestSyncIf(final Context context, final int TYPE) {
 
 		switch (TYPE) {
-		case MANUAL:
-			if (isGTasksConfigured(context)) {
-				requestGTaskSyncNow(context);
-			}
-			break;
-		case BACKGROUND:
-			// if (shouldSyncBackground(context)) {
-			// //requestSync(context);
-			// }
-			break;
-		case ONCHANGE:
-			if (shouldSyncGTasksOnChange(context)) {
-				requestDelayedGTasksSync(context);
-			}
-			break;
-		case ONAPPSTART:
-			if (shouldSyncGTasksOnAppStart(context)) {
-				requestGTaskSyncNow(context);
-			}
-			break;
+			case MANUAL:
+				if (isGTasksConfigured(context)) {
+					requestGTaskSyncNow(context);
+				}
+				break;
+			case BACKGROUND:
+				// if (shouldSyncBackground(context)) {
+				// //requestSync(context);
+				// }
+				break;
+			case ONCHANGE:
+				if (shouldSyncGTasksOnChange(context)) {
+					requestDelayedGTasksSync(context);
+				}
+				break;
+			case ONAPPSTART:
+				if (shouldSyncGTasksOnAppStart(context)) {
+					requestGTaskSyncNow(context);
+				}
+				break;
 		}
 
 	}
 
-    public static boolean isGTasksConfigured(final Context context) {
+	public static boolean isGTasksConfigured(final Context context) {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
 		final String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, "");
@@ -81,10 +81,10 @@ public class SyncHelper {
 	private static void requestGTaskSyncNow(final Context context) {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(context);
-        // Do nothing if gtask not enabled
-        if (!prefs.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)) {
-            return;
-        }
+		// Do nothing if gtask not enabled
+		if (!prefs.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)) {
+			return;
+		}
 
 		final String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, "");
 
@@ -98,7 +98,7 @@ public class SyncHelper {
 				// in accounts manager. Only use it here where the user has
 				// manually desired a sync to happen NOW.
 				options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-                options.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+				options.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
 				ContentResolver
 						.requestSync(account, MyContentProvider.AUTHORITY, options);
 				// Set last sync time to now
@@ -127,10 +127,10 @@ public class SyncHelper {
 	private static boolean shouldSyncGTasksOnAppStart(final Context context) {
 		final boolean shouldSync = isGTasksConfigured(context);
 
-        final boolean enoughTime = enoughTimeSinceLastSync(context);
+		final boolean enoughTime = enoughTimeSinceLastSync(context);
 
-        final SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
 
 		return shouldSync & prefs.getBoolean(SyncPrefs.KEY_SYNC_ON_START, true)
 				& enoughTime;
@@ -146,15 +146,15 @@ public class SyncHelper {
 				& prefs.getBoolean(SyncPrefs.KEY_BACKGROUND_SYNC, true);
 	}
 
-    public static boolean enoughTimeSinceLastSync(final Context context) {
-        final SharedPreferences prefs = PreferenceManager
-                .getDefaultSharedPreferences(context);
+	public static boolean enoughTimeSinceLastSync(final Context context) {
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(context);
 
-        // Let 5 mins elapse before sync on start again
-        final long now = Calendar.getInstance().getTimeInMillis();
-        final long lastSync = prefs.getLong(SyncPrefs.KEY_LAST_SYNC, 0);
-        final long fivemins = 5 * 60 * 1000;
+		// Let 5 mins elapse before sync on start again
+		final long now = Calendar.getInstance().getTimeInMillis();
+		final long lastSync = prefs.getLong(SyncPrefs.KEY_LAST_SYNC, 0);
+		final long fivemins = 5 * 60 * 1000;
 
-        return fivemins < (now - lastSync);
-    }
+		return fivemins < (now - lastSync);
+	}
 }

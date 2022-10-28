@@ -154,7 +154,7 @@ public class JSONBackup {
 	}
 
 	private void addAllContentToJSON(final ContentValues content,
-			final JSONObject json) throws JSONException {
+									 final JSONObject json) throws JSONException {
 		for (String key : content.keySet()) {
 			json.put(key, content.get(key));
 		}
@@ -217,7 +217,7 @@ public class JSONBackup {
 	/**
 	 * Backs up the entire database to a JSON file. The location and name of the
 	 * file are hardcoded.
-	 * 
+	 *
 	 * @throws JSONException
 	 * @throws IOException
 	 */
@@ -241,7 +241,7 @@ public class JSONBackup {
 	/**
 	 * Clears the database and restores the backup. Throws exceptions on
 	 * failure.
-	 * 
+	 *
 	 * @throws JSONException
 	 * @throws IOException
 	 * @throws FileNotFoundException
@@ -263,7 +263,7 @@ public class JSONBackup {
 
 			if (!jsonlist.isNull(KEY_REMOTES)) {
 				restoreRemotes(tasklist, jsonlist.getJSONArray(KEY_REMOTES));
-			}else {
+			} else {
 				Log.d("JONAS", "Remotes was null");
 			}
 			if (!jsonlist.isNull(KEY_TASKS)) {
@@ -279,7 +279,7 @@ public class JSONBackup {
 
 	private void clearDatabase() {
 		// TODO Remove geofences
-		
+
 		context.getContentResolver().delete(RemoteTask.URI, null, null);
 		context.getContentResolver().delete(RemoteTaskList.URI, null, null);
 
@@ -287,7 +287,7 @@ public class JSONBackup {
 
 		context.getContentResolver().delete(Task.URI, null, null);
 		context.getContentResolver().delete(Notification.URI, null, null);
-		
+
 	}
 
 	private JSONObject readBackup() throws JSONException, IOException,
@@ -305,7 +305,7 @@ public class JSONBackup {
 	}
 
 	private void restoreRemotes(final TaskList tasklist,
-			final JSONArray jsonArray) throws JSONException {
+								final JSONArray jsonArray) throws JSONException {
 		Log.d("JONAS", "Remote length: " + jsonArray.length());
 		for (int i = 0; i < jsonArray.length(); i++) {
 			final JSONObject json = jsonArray.getJSONObject(i);

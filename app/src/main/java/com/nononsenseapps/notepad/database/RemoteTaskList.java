@@ -70,9 +70,9 @@ public class RemoteTaskList extends DAO {
 		public static final String FIELD4 = "field4";
 		public static final String FIELD5 = "field5";
 
-		public static final String[] FIELDS = { _ID, DBID, REMOTEID, 
-			UPDATED, ACCOUNT, DELETED, FIELD2,
-			FIELD3, FIELD4, FIELD5, SERVICE };
+		public static final String[] FIELDS = { _ID, DBID, REMOTEID,
+				UPDATED, ACCOUNT, DELETED, FIELD2,
+				FIELD3, FIELD4, FIELD5, SERVICE };
 	}
 
 	/**
@@ -93,7 +93,7 @@ public class RemoteTaskList extends DAO {
 			.append(Columns.FIELD5).append(" TEXT")
 			// Cant delete on cascade, since then we cant remember to sync it!
 			.append(")").toString();
-	
+
 	// milliseconds since 1970-01-01 UTC
 	public Long updated = null;
 
@@ -105,16 +105,17 @@ public class RemoteTaskList extends DAO {
 	public String field3 = null;
 	public String field4 = null;
 	public String field5 = null;
-	
+
 	// Should be overwritten by children
-	public String service = null;	
-	
+	public String service = null;
+
 	public RemoteTaskList() {
-		
+
 	}
 
 	/**
 	 * None of the fields may be null!
+	 *
 	 * @param dbid
 	 * @param remoteId
 	 * @param updated
@@ -132,14 +133,14 @@ public class RemoteTaskList extends DAO {
 		dbid = c.getLong(1);
 		remoteId = c.getString(2);
 		updated = c.getLong(3);
-		account  = c.getString(4);
-		
-		deleted  = c.isNull(5) ? null : c.getString(5);
-		field2  = c.isNull(6) ? null : c.getString(6);
-		field3  = c.isNull(7) ? null : c.getString(7);
-		field4  = c.isNull(8) ? null : c.getString(8);
-		field5  = c.isNull(9) ? null : c.getString(9);
-		
+		account = c.getString(4);
+
+		deleted = c.isNull(5) ? null : c.getString(5);
+		field2 = c.isNull(6) ? null : c.getString(6);
+		field3 = c.isNull(7) ? null : c.getString(7);
+		field4 = c.isNull(8) ? null : c.getString(8);
+		field5 = c.isNull(9) ? null : c.getString(9);
+
 		service = c.getString(10);
 	}
 
@@ -151,7 +152,7 @@ public class RemoteTaskList extends DAO {
 		this(values);
 		_id = id;
 	}
-	
+
 	public RemoteTaskList(final JSONObject json) throws JSONException {
 		if (json.has(Columns.DBID))
 			dbid = json.getLong(Columns.DBID);
@@ -181,17 +182,18 @@ public class RemoteTaskList extends DAO {
 		updated = values.getAsLong(Columns.UPDATED);
 		account = values.getAsString(Columns.ACCOUNT);
 		service = values.getAsString(Columns.SERVICE);
-		
+
 		deleted = values.getAsString(Columns.DELETED);
 		field2 = values.getAsString(Columns.FIELD2);
 		field3 = values.getAsString(Columns.FIELD3);
 		field4 = values.getAsString(Columns.FIELD4);
 		field5 = values.getAsString(Columns.FIELD5);
 	}
-	
+
 	public boolean isDeleted() {
 		return deleted != null && !deleted.isEmpty();
 	}
+
 	public void setDeleted(final boolean deleted) {
 		this.deleted = deleted ? "deleted" : null;
 	}
@@ -202,7 +204,7 @@ public class RemoteTaskList extends DAO {
 
 		values.put(Columns.DBID, dbid);
 		values.put(Columns.REMOTEID, remoteId);
-		values.put(Columns.UPDATED,updated);
+		values.put(Columns.UPDATED, updated);
 		values.put(Columns.ACCOUNT, account);
 		values.put(Columns.SERVICE, service);
 		values.put(Columns.DELETED, deleted);
@@ -235,60 +237,63 @@ public class RemoteTaskList extends DAO {
 				_id = Long.parseLong(uri.getLastPathSegment());
 				result++;
 			}
-		}
-		else {
+		} else {
 			result += context.getContentResolver().update(getUri(),
 					getContent(), null, null);
 		}
 		return result;
 	}
-	
+
 	public int save(final Context context, final long updateTime) {
 		updated = updateTime;
 		return save(context);
 	}
-	
+
 	/**
 	 * Returns a where clause that can be used to fetch the tasklist that
 	 * is associated with this remote object.
 	 * As argument, use remoteid, account, service
+	 *
 	 * @return
 	 */
 	public String getTaskListWithRemoteClause() {
 		return new StringBuilder(BaseColumns._ID).append(" IN (SELECT ").
-		append(Columns.DBID).append(" FROM ").append(TABLE_NAME).append(" WHERE ")
-		.append(Columns.REMOTEID).append(" IS ? AND ")
-		.append(Columns.ACCOUNT).append(" IS ? AND ")
-		.append(Columns.SERVICE).append(" IS ?)")
-		.toString();
+				append(Columns.DBID).append(" FROM ").append(TABLE_NAME).append(" WHERE ")
+				.append(Columns.REMOTEID).append(" IS ? AND ")
+				.append(Columns.ACCOUNT).append(" IS ? AND ")
+				.append(Columns.SERVICE).append(" IS ?)")
+				.toString();
 	}
+
 	public String[] getTaskListWithRemoteArgs() {
-		return new String[] {remoteId, account, service};
+		return new String[] { remoteId, account, service };
 	}
+
 	/**
 	 * Returns a where clause that limits the tasklists to those that do not
 	 * have a remote version.
-	 * 
+	 *
 	 * Combine with account, service
 	 */
 	public static String getTaskListWithoutRemoteClause() {
 		return new StringBuilder(BaseColumns._ID).append(" NOT IN (SELECT ").
-		append(Columns.DBID).append(" FROM ").append(TABLE_NAME).append(" WHERE ")
-		.append(Columns.ACCOUNT).append(" IS ? AND ")
-		.append(Columns.SERVICE).append(" IS ?)").toString();
+				append(Columns.DBID).append(" FROM ").append(TABLE_NAME).append(" WHERE ")
+				.append(Columns.ACCOUNT).append(" IS ? AND ")
+				.append(Columns.SERVICE).append(" IS ?)").toString();
 	}
+
 	public String[] getTaskListWithoutRemoteArgs() {
-		return new String[] {account, service};
+		return new String[] { account, service };
 	}
-	
+
 	/*
 	 * Trigger to delete items when their list is deleted
 	 */
 	public static final String TRIGGER_REALDELETE_MARK = new StringBuilder()
-	.append("CREATE TRIGGER trigger_real_deletemark_").append(TABLE_NAME)
-	.append(" AFTER DELETE ON ").append(TaskList.TABLE_NAME).append(" BEGIN ")
-	.append(" UPDATE ").append(TABLE_NAME).append(" SET ").append(Columns.DELETED).append(" = 'deleted' ")
-	.append(" WHERE ").append(Columns.DBID).append(" IS old.").append(TaskList.Columns._ID)
-	.append(";")
-	.append(" END;").toString();
+			.append("CREATE TRIGGER trigger_real_deletemark_").append(TABLE_NAME)
+			.append(" AFTER DELETE ON ").append(TaskList.TABLE_NAME).append(" BEGIN ")
+			.append(" UPDATE ").append(TABLE_NAME).append(" SET ").append(Columns.DELETED).append(" = 'deleted' ")
+			.append(" WHERE ").append(Columns.DBID).append(" IS old.").append(TaskList.Columns._ID)
+			.append(";")
+			.append(" END;").toString();
 }

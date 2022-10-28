@@ -24,6 +24,7 @@ import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
+
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.DAO;
 import com.nononsenseapps.notepad.database.Task;
@@ -31,7 +32,7 @@ import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedLis
 import com.nononsenseapps.notepad.fragments.DialogRestore.OnListSelectedListener;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
 
-@EFragment(resName="fragment_search")
+@EFragment(resName = "fragment_search")
 public class FragmentSearchDeleted extends FragmentSearch {
 
 	@AfterViews
@@ -126,7 +127,7 @@ public class FragmentSearchDeleted extends FragmentSearch {
 
 			@Override
 			public boolean onActionItemClicked(final ActionMode mode,
-					final MenuItem item) {
+											   final MenuItem item) {
 				int itemId = item.getItemId();
 				if (itemId == R.id.menu_restore) {
 					DialogRestore d = DialogRestore.getInstance();
@@ -155,11 +156,10 @@ public class FragmentSearchDeleted extends FragmentSearch {
 
 			@Override
 			public void onItemCheckedStateChanged(ActionMode mode,
-					int position, long id, boolean checked) {
+												  int position, long id, boolean checked) {
 				if (checked) {
 					selectedItems.add(id);
-				}
-				else {
+				} else {
 					selectedItems.remove(id);
 				}
 			}
@@ -196,7 +196,7 @@ public class FragmentSearchDeleted extends FragmentSearch {
 		return new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> arg0, View origin, int pos,
-					long id) {
+									long id) {
 				list.setItemChecked(pos, true);
 			}
 		};
@@ -206,9 +206,9 @@ public class FragmentSearchDeleted extends FragmentSearch {
 	protected SimpleCursorAdapter getAdapter() {
 		return new SimpleCursorAdapter(getActivity(),
 				R.layout.tasklist_item_rich, null, new String[] {
-						Task.Columns.TITLE, Task.Columns.NOTE,
-						Task.Columns.DUE, Task.Columns.COMPLETED,
-						Task.Columns.TRIG_DELETED, Task.Columns.TRIG_DELETED },
+				Task.Columns.TITLE, Task.Columns.NOTE,
+				Task.Columns.DUE, Task.Columns.COMPLETED,
+				Task.Columns.TRIG_DELETED, Task.Columns.TRIG_DELETED },
 				new int[] { android.R.id.text1, android.R.id.text1, R.id.date,
 						R.id.checkbox, R.id.drag_handle, R.id.dragpadding }, 0);
 	}
@@ -229,32 +229,31 @@ public class FragmentSearchDeleted extends FragmentSearch {
 			@Override
 			public boolean setViewValue(View view, Cursor c, int colIndex) {
 				switch (colIndex) {
-				// Matches order in Task.Columns.Fields
-				case 1:
-					// Title
-					sTemp = c.getString(colIndex);
+					// Matches order in Task.Columns.Fields
+					case 1:
+						// Title
+						sTemp = c.getString(colIndex);
 
-					// Set height of text for non-headers
-					if (rowCount == 1) {
-						((TitleNoteTextView) view).setSingleLine(true);
-					}
-					else {
-						((TitleNoteTextView) view).setSingleLine(false);
-						((TitleNoteTextView) view).setMaxLines(rowCount);
-					}
+						// Set height of text for non-headers
+						if (rowCount == 1) {
+							((TitleNoteTextView) view).setSingleLine(true);
+						} else {
+							((TitleNoteTextView) view).setSingleLine(false);
+							((TitleNoteTextView) view).setMaxLines(rowCount);
+						}
 
-					// Change color based on complete status
-					((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
+						// Change color based on complete status
+						((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
 
-					((TitleNoteTextView) view).setTextTitle(sTemp);
-					return true;
-				case 2:
-					// Note
-					((TitleNoteTextView) view).setTextRest("");
-					return true;
-				default:
-					view.setVisibility(View.GONE);
-					return true;
+						((TitleNoteTextView) view).setTextTitle(sTemp);
+						return true;
+					case 2:
+						// Note
+						((TitleNoteTextView) view).setTextRest("");
+						return true;
+					default:
+						view.setVisibility(View.GONE);
+						return true;
 				}
 			}
 		};

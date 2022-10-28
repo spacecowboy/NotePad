@@ -1,14 +1,14 @@
 package com.nononsenseapps.util;
 
 import android.text.format.Time;
+
 import com.nononsenseapps.helpers.Log;
 
 /**
  * Has a few helper functions for dealing with dates. Google Tasks API is crap
  * because it throws away the time part and sets to UTC.
- * 
+ *
  * @author Jonas
- * 
  */
 public class TimeHelper {
 
@@ -23,7 +23,7 @@ public class TimeHelper {
 		time.setToNow();
 		int julianToday = Time.getJulianDay(time.toMillis(false), time.gmtoff);
 		time.setJulianDay(julianToday + 1);
-		
+
 		return time.format(dateFormat);
 	}
 
@@ -35,7 +35,7 @@ public class TimeHelper {
 		time.setToNow();
 		int julianToday = Time.getJulianDay(time.toMillis(false), time.gmtoff);
 		time.setJulianDay(julianToday + 8);
-		
+
 		return time.format(dateFormat);
 	}
 
@@ -45,7 +45,7 @@ public class TimeHelper {
 	public static String dateToday() {
 		Time time = new Time(Time.getCurrentTimezone());
 		time.setToNow();
-		
+
 		return time.format(dateFormat);
 	}
 
@@ -58,7 +58,7 @@ public class TimeHelper {
 		time.hour = 0;
 		time.minute = 0;
 		time.second = 0;
-		
+
 		return Long.toString(time.toMillis(false));
 	}
 
@@ -71,7 +71,7 @@ public class TimeHelper {
 		time.hour = 0;
 		time.minute = 0;
 		time.second = 0;
-		
+
 		return time.toMillis(false);
 	}
 
@@ -86,7 +86,7 @@ public class TimeHelper {
 		time.hour = 0;
 		time.minute = 0;
 		time.second = 0;
-		
+
 		return Long.toString(time.toMillis(false));
 	}
 
@@ -101,7 +101,7 @@ public class TimeHelper {
 		time.hour = 0;
 		time.minute = 0;
 		time.second = 0;
-		
+
 		return time.toMillis(false);
 	}
 
@@ -116,7 +116,7 @@ public class TimeHelper {
 		time.hour = 0;
 		time.minute = 0;
 		time.second = 0;
-		
+
 		return Long.toString(time.toMillis(false));
 	}
 
@@ -131,7 +131,7 @@ public class TimeHelper {
 		time.hour = 0;
 		time.minute = 0;
 		time.second = 0;
-		
+
 		return time.toMillis(false);
 	}
 
@@ -156,7 +156,7 @@ public class TimeHelper {
 	}
 
 	public static boolean dateBefore(final String itemDate,
-			final String referenceDate) {
+									 final String referenceDate) {
 		// Fix for timezone issue. We don't care about them
 		// A date like 2013-03-05T00:00 will be abbreviated
 		// to 2013-03-05
@@ -183,7 +183,7 @@ public class TimeHelper {
 	}
 
 	public static boolean dateIs(final String itemDate,
-			final String referenceDate) {
+								 final String referenceDate) {
 		// Fix for timezone issue. We don't care about them
 		// A date like 2013-03-05T00:00 will be abbreviated
 		// to 2013-03-05

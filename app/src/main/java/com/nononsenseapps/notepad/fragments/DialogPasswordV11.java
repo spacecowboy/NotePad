@@ -31,44 +31,44 @@ import android.widget.Toast;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
+
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 
 /**
  * Full copy of DialogPassword, but extending native fragment class instead.
- *
  */
-@EFragment(resName="fragment_dialog_password")
+@EFragment(resName = "fragment_dialog_password")
 public class DialogPasswordV11 extends DialogFragment {
-	@ViewById(resName="passwordField")
+	@ViewById(resName = "passwordField")
 	EditText passwordField;
-	
-	@ViewById(resName="dialog_yes")
+
+	@ViewById(resName = "dialog_yes")
 	View dialog_yes;
-	@ViewById(resName="dialog_no")
+	@ViewById(resName = "dialog_no")
 	View dialog_no;
 
 	PasswordConfirmedListener listener = null;
-	
+
 	public void setListener(final PasswordConfirmedListener listener) {
 		this.listener = listener;
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
+							 Bundle savedInstanceState) {
 		getDialog().setTitle(R.string.password_required);
 		// Let annotations deal with it
 		return null;
 	}
-	
-	@Click(resName="dialog_no")
+
+	@Click(resName = "dialog_no")
 	void cancel() {
 		dismiss();
 	}
-	
-	@Click(resName="dialog_yes")
+
+	@Click(resName = "dialog_yes")
 	void confirm() {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());

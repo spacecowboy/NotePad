@@ -32,7 +32,6 @@ import com.nononsenseapps.notepad.widget.WidgetPrefs;
  * The purpose here is to make it easy for other classes to notify that
  * something has changed in the database. Will also call update on the widgets
  * appropriately.
- * 
  */
 public class UpdateNotifier {
 
@@ -46,9 +45,8 @@ public class UpdateNotifier {
 
 	/**
 	 * Will update all notes and specific uri if present
-	 * 
-	 * @param uri
-	 *            optional uri
+	 *
+	 * @param uri optional uri
 	 */
 	public static void notifyChangeNote(Context context, Uri uri) {
 		notifyChange(context, uri);
@@ -57,7 +55,7 @@ public class UpdateNotifier {
 
 	/**
 	 * Will update all notes
-	 * 
+	 *
 	 * @param context
 	 */
 	public static void notifyChangeList(Context context) {
@@ -67,9 +65,8 @@ public class UpdateNotifier {
 
 	/**
 	 * Will update all lists and specific uri if present
-	 * 
-	 * @param uri
-	 *            optional uri
+	 *
+	 * @param uri optional uri
 	 */
 	public static void notifyChangeList(Context context, Uri uri) {
 		notifyChange(context, uri);
@@ -79,9 +76,8 @@ public class UpdateNotifier {
 	/**
 	 * Will update all lists and specific uri if present
 	 * Always updates notifications
-	 * 
-	 * @param uri
-	 *            optional uri
+	 *
+	 * @param uri optional uri
 	 */
 	private static void notifyChange(Context context, Uri uri) {
 		if (uri != null) {
@@ -94,7 +90,7 @@ public class UpdateNotifier {
 	/**
 	 * Instead of doing this in a service which might be killed, simply call
 	 * this whenever something is changed in here
-	 * 
+	 *
 	 * Update all widgets's views as this database has changed somehow
 	 */
 	public static void updateWidgets(Context context) {

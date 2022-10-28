@@ -29,9 +29,8 @@ import android.widget.TextView;
  * the beginning. When asked for id for the extra items, the defined ids are returned.
  * Make sure to set them to negative values (< -1) in order not to confuse them with
  * database IDs.
- * 
+ *
  * @author Jonas
- * 
  */
 public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	// private static final String TAG = "ExtrasCursorAdapter";
@@ -55,7 +54,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	 * resources to use as labels.
 	 */
 	public ExtrasCursorAdapter(Context context, int layout, Cursor c,
-			String[] from, int[] to, int[] extraIds, int[] extraLabels, int dropdownlayout) {
+							   String[] from, int[] to, int[] extraIds, int[] extraLabels, int dropdownlayout) {
 		super(context, layout, c, 0);
 		this.cursor = c;
 		this.extraIds = extraIds;
@@ -74,8 +73,8 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	 * resources to use as labels.
 	 */
 	public ExtrasCursorAdapter(Context context, int layout, Cursor c,
-			int flags, String[] from, int[] to, int[] extraIds,
-			int[] extraLabels, int dropdownlayout) {
+							   int flags, String[] from, int[] to, int[] extraIds,
+							   int[] extraLabels, int dropdownlayout) {
 		super(context, layout, c, flags);
 		this.cursor = c;
 		this.extraIds = extraIds;
@@ -88,7 +87,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	}
 
 	/**
-	 * 
+	 *
 	 */
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
@@ -106,7 +105,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 
 	/**
 	 * Initializes the viewholder according to the specified from/to arrays.
-	 * 
+	 *
 	 * @param view
 	 * @return
 	 */
@@ -147,14 +146,14 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 
 		return convertView;
 	}
-	
+
 	/**
 	 * Only sets the first field
 	 */
 	protected void setExtraText(final ViewHolder viewHolder, final int position) {
 		viewHolder.texts[0].setText(context.getText(extraLabels[position]));
 	}
-	
+
 	// TODO method to update extra labels
 
 	@Override
@@ -177,7 +176,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 
 		return convertView;
 	}
-	
+
 	protected int getItemLayout(final int position) {
 		return layout;
 	}
@@ -186,18 +185,16 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	public long getItemId(int position) {
 		if (position < extraIds.length) {
 			return extraIds[position];
-		}
-		else {
+		} else {
 			return super.getItemId(position - extraIds.length);
 		}
 	}
-	
+
 	@Override
 	public Object getItem(int position) {
 		if (position < extraIds.length) {
 			return getExtraItem(position);
-		}
-		else {
+		} else {
 			return super.getItem(position - extraIds.length);
 		}
 	}
@@ -209,9 +206,10 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		else
 			return super.getCount();
 	}
-	
+
 	/**
 	 * Should be a number >= count of the wrapped cursor
+	 *
 	 * @param realPos
 	 * @return
 	 */

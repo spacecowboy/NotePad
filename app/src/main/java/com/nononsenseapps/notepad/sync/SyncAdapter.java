@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2012 Jonas Kalderstam
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -38,24 +38,24 @@ import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
  * on server. Hence, we can know that there is nothing to download. If the etag
  * has changed, the adapter requests, for all lists, all tasks which have been
  * updated since the latest synced task in the database.
- * 
+ *
  * Before any changes are committed either way, we should have two DISJOINT
  * sets:
- * 
+ *
  * TasksFromServer and TasksToServer.
- * 
+ *
  * Due to the conflict resolution, no task should exist in both sets. We then
  * upload TasksToServer. For each upload the server will return the current
  * state of the task with some fields updated. These changes we want to save of
  * course, so we add them to TasksFromServer. Which means that after uploading
  * we have a single set:
- * 
+ *
  * TasksFromServer
- * 
+ *
  * Which now contains all tasks that were modified either locally or remotely.
  * In other words, this set is now the union of the two initially disjoint sets,
  * with some fields updated by the server.
- * 
+ *
  * These tasks are then committed to the database in a single transaction.
  */
 public class SyncAdapter extends AbstractThreadedSyncAdapter {
@@ -77,7 +77,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 
 	@Override
 	public void onPerformSync(Account account, Bundle extras, String authority,
-			ContentProviderClient provider, SyncResult syncResult) {
+							  ContentProviderClient provider, SyncResult syncResult) {
 
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(mContext);
@@ -95,17 +95,17 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 		Intent doneIntent = new Intent(SYNC_FINISHED);
 		doneIntent.putExtra(SYNC_RESULT, ERROR);
 		try {
-            // Gtasks first
+			// Gtasks first
 			// Dummy key has a space in it. Only builds using real api keys
 			// should not have spaces
 			if (com.nononsenseapps.build.Config.getGtasksApiKey(mContext) !=
-                null && !com.nononsenseapps.build.Config
-                    .getGtasksApiKey(mContext).contains(" ")) {
+					null && !com.nononsenseapps.build.Config
+					.getGtasksApiKey(mContext).contains(" ")) {
 				if (settings.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)
 						&& !settings.getString(SyncPrefs.KEY_ACCOUNT, "")
-								.isEmpty()
+						.isEmpty()
 						&& account.name.equals(settings.getString(
-								SyncPrefs.KEY_ACCOUNT, ""))) {
+						SyncPrefs.KEY_ACCOUNT, ""))) {
 
 					Log.d("nononsenseapps notes sync", "onPerformSync");
 					mContext.sendBroadcast(new Intent(SYNC_STARTED));
@@ -117,8 +117,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 					}
 				}
 			}
-		}
-		finally {
+		} finally {
 			mContext.sendBroadcast(doneIntent);
 		}
 	}

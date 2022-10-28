@@ -52,7 +52,7 @@ public class WeekDaysView extends LinearLayout implements
 
 		try {
 			mLocale = ActivityHelper.getUserLocale(context);
-			
+
 			SimpleDateFormat dayFormat = TimeFormatter
 					.getLocalFormatterWeekdayShort(context);
 			// 2013-05-13 was a monday
@@ -87,8 +87,7 @@ public class WeekDaysView extends LinearLayout implements
 			sunday = ((GreyableToggleButton) findViewById(R.id.day7));
 			gc.setTimeInMillis(base + 6 * day);
 			initializeToggleButton(dayFormat.format(gc.getTime()), sunday);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// For UI editor's sake
 			mLocale = Locale.getDefault();
 		}
@@ -96,7 +95,7 @@ public class WeekDaysView extends LinearLayout implements
 	}
 
 	void initializeToggleButton(final String text,
-			final GreyableToggleButton button) {
+								final GreyableToggleButton button) {
 		button.setText(text.toUpperCase(mLocale));
 		button.setTextOn(text.toUpperCase(mLocale));
 		button.setTextOff(text.toUpperCase(mLocale));

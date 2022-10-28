@@ -1,12 +1,12 @@
 /*
  * Copyright (C) 2013 Jonas Kalderstam
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
  * the License at
- * 
+ *
  * http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
  * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
@@ -35,7 +35,6 @@ import com.nononsenseapps.notepad.R;
 
 /**
  * A simple textview that can display time.
- * 
  */
 public class DateView extends TextView {
 	private static final int SECONDS_PER_DAY = 3600;
@@ -44,9 +43,9 @@ public class DateView extends TextView {
 	//public static final String time = "kk:mm";
 
 	private final Context mContext;
-	
+
 	//private final Calendar mCalendar;
-	
+
 	SimpleDateFormat mDateFormatter;
 
 	public DateView(Context context) {
@@ -55,12 +54,13 @@ public class DateView extends TextView {
 		mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
 	}
 
-	@SuppressLint("SimpleDateFormat") public DateView(Context context, AttributeSet attrs) {
+	@SuppressLint("SimpleDateFormat")
+	public DateView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.mContext = context;
 		try {
 			mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
-		} catch(Exception e) {
+		} catch (Exception e) {
 			// Just to function in view
 			mDateFormatter = new SimpleDateFormat();
 		}
@@ -71,7 +71,7 @@ public class DateView extends TextView {
 		this.mContext = context;
 		mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
 	}
-	
+
 	public void setTimeText(final long time) {
 		super.setText(mDateFormatter.format(new Date(time)));
 	}
@@ -100,8 +100,7 @@ public class DateView extends TextView {
 			c.setTimeInMillis(msecs);
 
 			return DateFormat.format(format, c);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return "";
 		}
 	}
@@ -125,8 +124,7 @@ public class DateView extends TextView {
 		// Adding half a day
 		if (difference >= 0) {
 			difference += SECONDS_PER_DAY / 2; // plus half a day in seconds
-		}
-		else {
+		} else {
 			difference -= SECONDS_PER_DAY / 2; // minus half a day in seconds
 		}
 		// Rounding down to days
@@ -142,8 +140,8 @@ public class DateView extends TextView {
 		// TODO change this
 		if (d instanceof java.sql.Date) {
 			return d; // java.sql.Date is already truncated to date. And raises
-						// an
-						// Exception if we try to set hours, minutes or seconds.
+			// an
+			// Exception if we try to set hours, minutes or seconds.
 		}
 		d = (Date) d.clone();
 		d.setHours(0);
