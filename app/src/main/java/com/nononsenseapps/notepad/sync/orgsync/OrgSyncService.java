@@ -32,7 +32,7 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.preference.PreferenceManager;
-import android.support.v4.app.NotificationCompat;
+import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
 import com.nononsenseapps.helpers.NotificationHelper;
@@ -165,9 +165,9 @@ public class OrgSyncService extends Service {
 				.setContentText("Please change directory")
 				.setChannelId(NotificationHelper.CHANNEL_ID)
 				.setContentIntent(
-						PendingIntent.getActivity(this, 0, new Intent(this,
-										PrefsActivity.class),
-								PendingIntent.FLAG_UPDATE_CURRENT));
+						PendingIntent.getActivity(this, 0,
+								new Intent(this, PrefsActivity.class),
+								PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
 
 		NotificationManager notificationManager = (NotificationManager)
 				getSystemService(Context.NOTIFICATION_SERVICE);

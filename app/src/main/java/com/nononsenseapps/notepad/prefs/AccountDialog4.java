@@ -16,7 +16,7 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.v4.app.DialogFragment;
+import androidx.fragment.app.DialogFragment;
 
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.helpers.SyncHelper;

@@ -214,7 +214,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 					| Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
 			PendingIntent onClickPendingIntent = PendingIntent.getActivity(
-					context, 0, itemIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+					context, 0, itemIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 			rv.setPendingIntentTemplate(R.id.notesList, onClickPendingIntent);
 		} else {
 			// To handle complete, we use broadcasts
@@ -225,7 +225,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 
 			PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(
 					context, 0, onClickIntent,
-					PendingIntent.FLAG_UPDATE_CURRENT);
+					PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 			rv.setPendingIntentTemplate(R.id.notesList, onClickPendingIntent);
 		}
 
@@ -237,7 +237,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 				.setClass(context, ActivityMain_.class)
 				.setAction(Intent.ACTION_VIEW).setData(TaskList.getUri(listId));
 		PendingIntent openAppPendingIntent = PendingIntent.getActivity(context,
-				0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+				0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 		rv.setOnClickPendingIntent(R.id.titleButton, openAppPendingIntent);
 
 		final Intent configIntent = new Intent();
@@ -248,7 +248,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 				.setClass(context, ListWidgetConfig_.class).setData(data)
 				.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		PendingIntent openConfigPendingIntent = PendingIntent.getActivity(
-				context, 0, configIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+				context, 0, configIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 		rv.setOnClickPendingIntent(R.id.widgetConfigButton,
 				openConfigPendingIntent);
 
@@ -264,7 +264,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 
 		PendingIntent createPendingIntent = PendingIntent.getActivity(context,
-				0, createIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+				0, createIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 		rv.setOnClickPendingIntent(R.id.createNoteButton, createPendingIntent);
 
 		return rv;

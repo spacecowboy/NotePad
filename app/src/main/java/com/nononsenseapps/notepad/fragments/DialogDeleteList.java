@@ -1,7 +1,7 @@
 package com.nononsenseapps.notepad.fragments;
 
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
+import androidx.fragment.app.FragmentManager;
 import android.widget.Toast;
 
 import com.nononsenseapps.notepad.R;

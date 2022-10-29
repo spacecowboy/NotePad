@@ -20,7 +20,7 @@ import android.animation.ObjectAnimator;
 import android.app.Activity;
 import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
+import androidx.fragment.app.DialogFragment;
 import android.text.format.DateUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
