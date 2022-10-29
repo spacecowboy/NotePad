@@ -1,10 +1,12 @@
 package com.nononsenseapps.notepad.test;
 
+import static org.junit.Assert.*;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
+
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.nononsenseapps.notepad.database.RemoteTask;
 import com.nononsenseapps.notepad.database.RemoteTaskList;
@@ -14,6 +16,9 @@ import com.nononsenseapps.notepad.sync.orgsync.OrgConverter;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
 
 import org.cowboyprogrammer.org.OrgFile;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,40 +30,49 @@ import java.util.HashSet;
  * Methods starting with 'testFresh' are meant to be reused in higher-order
  * tests.
  */
-public class OrgSyncTest extends AndroidTestCase {
+public class OrgSyncTest {
 
 	private static final String ACCOUNT = "bobtester";
 	private static String DIR;
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
+	/**
+	 * @return a Context to use during testing. It reports the same packagename of the
+	 * app: com.nononsenseapps.notepad
+	 */
+	private static Context getTheContext() {
+		// VERY IMPORTANT: it should NOT be .getContext(), because that one uses the namespace
+		// com.nononsenseapps.notepad.test which saves the files on a wrong path, which makes
+		// every test in this class fail! ApplicationProvider.getApplicationContext() seems fine.
+		return InstrumentationRegistry.getInstrumentation().getTargetContext();
+	}
 
-		File d = getContext().getDir("ORGSYNCTEST", Context.MODE_PRIVATE);
-
+	@Before
+	public void setUp() {
+		File d = getTheContext().getDir("ORGSYNCTEST", Context.MODE_PRIVATE);
 		DIR = d.getPath();
 
 		if (!d.exists()) {
-			d.mkdirs();
+			assertTrue(d.mkdirs());
 		}
 	}
 
-	@Override
+	@After
 	public void tearDown() {
-		ContentResolver resolver = getContext().getContentResolver();
+		ContentResolver resolver = getTheContext().getContentResolver();
 		resolver.delete(TaskList.URI, null, null);
 		resolver.delete(Task.URI, null, null);
 		resolver.delete(RemoteTaskList.URI, null, null);
 		resolver.delete(RemoteTask.URI, null, null);
 
 		File d = new File(DIR);
+		assertNotNull("Can not get files in folder", d.listFiles());
 		for (File f : d.listFiles()) {
 			f.delete();
 		}
 	}
 
 	public ArrayList<TaskList> getTaskLists() {
-		ContentResolver resolver = getContext().getContentResolver();
+		ContentResolver resolver = getTheContext().getContentResolver();
 		Cursor c = resolver.query(TaskList.URI, TaskList.Columns
 				.FIELDS, null, null, null);
 
@@ -72,7 +86,7 @@ public class OrgSyncTest extends AndroidTestCase {
 	}
 
 	public ArrayList<Task> getTasks(final long listid) {
-		ContentResolver resolver = getContext().getContentResolver();
+		ContentResolver resolver = getTheContext().getContentResolver();
 		Cursor c = resolver.query(Task.URI, Task.Columns
 						.FIELDS, Task.Columns.DBLIST + " IS ?",
 				new String[] { Long.toString(listid) }, null
@@ -88,7 +102,7 @@ public class OrgSyncTest extends AndroidTestCase {
 	}
 
 	public ArrayList<RemoteTaskList> getRemoteTaskLists() {
-		ContentResolver resolver = getContext().getContentResolver();
+		ContentResolver resolver = getTheContext().getContentResolver();
 		Cursor c = resolver.query(RemoteTaskList.URI, RemoteTaskList.Columns
 						.FIELDS, RemoteTaskList.Columns.ACCOUNT + " IS ?",
 				new String[] { ACCOUNT }, null
@@ -104,7 +118,7 @@ public class OrgSyncTest extends AndroidTestCase {
 	}
 
 	public ArrayList<RemoteTask> getRemoteTasks() {
-		ContentResolver resolver = getContext().getContentResolver();
+		ContentResolver resolver = getTheContext().getContentResolver();
 		Cursor c = resolver.query(RemoteTask.URI, RemoteTask.Columns
 						.FIELDS, RemoteTask.Columns.ACCOUNT + " IS ?",
 				new String[] { ACCOUNT }, null
@@ -119,15 +133,15 @@ public class OrgSyncTest extends AndroidTestCase {
 		return result;
 	}
 
-	@SmallTest
+	@Test
 	public void testPass() {
 		// This always passes
 		assertTrue(true);
 	}
 
-	@SmallTest
+	@Test
 	public void testTester() {
-		TestSynchronizer tester = new TestSynchronizer(getContext());
+		TestSynchronizer tester = new TestSynchronizer(getTheContext());
 		assertTrue(tester.isConfigured());
 	}
 
@@ -137,11 +151,12 @@ public class OrgSyncTest extends AndroidTestCase {
 	 * - Lists: Create file
 	 * - Tasks: Create node
 	 */
+	@Test
 	public void testFreshSimple() {
 		// First create a list with 2 tasks
 		TaskList list = new TaskList();
 		list.title = "TestList";
-		list.save(getContext());
+		list.save(getTheContext());
 		assertTrue(list._id > 0);
 
 		final int taskCount = 2;
@@ -150,11 +165,11 @@ public class OrgSyncTest extends AndroidTestCase {
 			t.dblist = list._id;
 			t.title = "Task" + i;
 			t.note = "A body for the task";
-			t.save(getContext());
+			t.save(getTheContext());
 			assertTrue(t._id > 0);
 		}
 
-		TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+		TestSynchronizer synchronizer = new TestSynchronizer(getTheContext());
 
 		try {
 			synchronizer.fullSync();
@@ -191,7 +206,7 @@ public class OrgSyncTest extends AndroidTestCase {
 	}
 
 	public void syncAndAssertNothingChanged(final int taskCount) {
-		TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+		TestSynchronizer synchronizer = new TestSynchronizer(getTheContext());
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
@@ -230,6 +245,7 @@ public class OrgSyncTest extends AndroidTestCase {
 	 * - Lists: Update Merge
 	 * - Tasks: Update Merge
 	 */
+	@Test
 	public void testNothingNew() {
 		final int taskCount = 2;
 		testFreshSimple();
@@ -246,21 +262,22 @@ public class OrgSyncTest extends AndroidTestCase {
 	 * Tested flow branches:
 	 * - Lists: Create file
 	 */
+	@Test
 	public void testDuplicateName() {
 		// Create first list
 		TaskList list1 = new TaskList();
 		list1.title = "TestList";
-		list1.save(getContext());
+		list1.save(getTheContext());
 		assertTrue(list1._id > 0);
 
 		// Create second list
 		TaskList list2 = new TaskList();
 		list2.title = "TestList";
-		list2.save(getContext());
+		list2.save(getTheContext());
 		assertTrue(list2._id > 0);
 
 		// Sync it
-		TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+		TestSynchronizer synchronizer = new TestSynchronizer(getTheContext());
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
@@ -288,15 +305,16 @@ public class OrgSyncTest extends AndroidTestCase {
 	 * Tested branches:
 	 * - Update list, renamed
 	 */
+	@Test
 	public void testRenamedList() {
 		// Create first list
 		TaskList list1 = new TaskList();
 		list1.title = "TestList";
-		list1.save(getContext());
+		list1.save(getTheContext());
 		assertTrue(list1._id > 0);
 
 		// Sync it
-		TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+		TestSynchronizer synchronizer = new TestSynchronizer(getTheContext());
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
@@ -310,7 +328,7 @@ public class OrgSyncTest extends AndroidTestCase {
 
 		// Rename the list
 		list1.title = "RenamedList";
-		list1.save(getContext());
+		list1.save(getTheContext());
 
 		// Sync it
 		try {
@@ -332,6 +350,7 @@ public class OrgSyncTest extends AndroidTestCase {
 	 * Tested branches:
 	 * - Delete File Db
 	 */
+	@Test
 	public void testDeletedList() {
 		// Setup simple DB
 		final int taskCount = 2;
@@ -343,7 +362,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		for (TaskList list : lists) {
 			file = new File(DIR, OrgConverter.getTitleAsFilename(list));
 
-			list.delete(getContext());
+			list.delete(getTheContext());
 		}
 
 		assertNotNull(file);
@@ -357,7 +376,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		assertEquals("Should be exactly 2 RemoteTasks", taskCount, remoteTasks.size());
 
 		// Sync it again
-		TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+		TestSynchronizer synchronizer = new TestSynchronizer(getTheContext());
 		try {
 			synchronizer.fullSync();
 		} catch (Exception e) {
@@ -381,16 +400,17 @@ public class OrgSyncTest extends AndroidTestCase {
 	/**
 	 * Test moving 1 task from List A to List B
 	 */
+	@Test
 	public void testMoveOne() {
 		// First create Two lists
 		TaskList listA = new TaskList();
 		listA.title = "TestListA";
-		listA.save(getContext());
+		listA.save(getTheContext());
 		assertTrue(listA._id > 0);
 
 		TaskList listB = new TaskList();
 		listB.title = "TestListB";
-		listB.save(getContext());
+		listB.save(getTheContext());
 		assertTrue(listB._id > 0);
 
 		// Add one task in ListA
@@ -398,11 +418,11 @@ public class OrgSyncTest extends AndroidTestCase {
 		t.dblist = listA._id;
 		t.title = "Task";
 		t.note = "A body for the task";
-		t.save(getContext());
+		t.save(getTheContext());
 		assertTrue(t._id > 0);
 
 		// Sync it
-		TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+		TestSynchronizer synchronizer = new TestSynchronizer(getTheContext());
 
 		try {
 			synchronizer.fullSync();
@@ -422,7 +442,7 @@ public class OrgSyncTest extends AndroidTestCase {
 
 		// Move the task
 		t.dblist = listB._id;
-		t.save(getContext());
+		t.save(getTheContext());
 
 		// Trigger should have deleted remotes now
 		remoteTasks = getRemoteTasks();
@@ -451,16 +471,17 @@ public class OrgSyncTest extends AndroidTestCase {
 	/**
 	 * Test moving 20 tasks from List A to List B
 	 */
+	@Test
 	public void testMoveMany() {
 		// First create Two lists
 		TaskList listA = new TaskList();
 		listA.title = "TestListA";
-		listA.save(getContext());
+		listA.save(getTheContext());
 		assertTrue(listA._id > 0);
 
 		TaskList listB = new TaskList();
 		listB.title = "TestListB";
-		listB.save(getContext());
+		listB.save(getTheContext());
 		assertTrue(listB._id > 0);
 
 		final int taskCount = 20;
@@ -470,14 +491,14 @@ public class OrgSyncTest extends AndroidTestCase {
 			t.dblist = listA._id;
 			t.title = "Task" + i;
 			t.note = "A body for the task";
-			t.save(getContext());
+			t.save(getTheContext());
 			assertTrue(t._id > 0);
 
 			tasks.add(t);
 		}
 
 		// Sync it
-		TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+		TestSynchronizer synchronizer = new TestSynchronizer(getTheContext());
 
 		try {
 			synchronizer.fullSync();
@@ -500,7 +521,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		// Move the tasks
 		for (Task t : tasks) {
 			t.dblist = listB._id;
-			t.save(getContext());
+			t.save(getTheContext());
 		}
 
 		// Trigger should have deleted remotes now
@@ -532,6 +553,7 @@ public class OrgSyncTest extends AndroidTestCase {
 	/**
 	 * Test moving 12 tasks from List A to List B where there are 12 lists each with 20 tasks
 	 */
+	@Test
 	public void testMoveManyAmongMany() {
 		final int listCount = 12;
 		final int taskCount = 20;
@@ -542,7 +564,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		for (int listIndex = 0; listIndex < listCount; listIndex++) {
 			TaskList list = new TaskList();
 			list.title = "TestList" + listIndex;
-			list.save(getContext());
+			list.save(getTheContext());
 			assertTrue(list._id > 0);
 
 			if (listA == null)
@@ -555,7 +577,7 @@ public class OrgSyncTest extends AndroidTestCase {
 				t.dblist = list._id;
 				t.title = "Task" + listIndex + "." + i;
 				t.note = "A body for the task";
-				t.save(getContext());
+				t.save(getTheContext());
 				assertTrue(t._id > 0);
 
 				if (tasksToMove.size() < movedTaskCount) {
@@ -565,7 +587,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		}
 
 		// Sync it
-		TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+		TestSynchronizer synchronizer = new TestSynchronizer(getTheContext());
 
 		try {
 			synchronizer.fullSync();
@@ -588,7 +610,7 @@ public class OrgSyncTest extends AndroidTestCase {
 		for (Task t : tasksToMove) {
 			assertEquals("Expected task to be in list A!", listA._id, (long) t.dblist);
 			t.dblist = listB._id;
-			t.save(getContext());
+			t.save(getTheContext());
 		}
 
 		// Trigger should have deleted remotes now
@@ -655,15 +677,16 @@ public class OrgSyncTest extends AndroidTestCase {
 		}
 	}
 
+	@Test
 	public void testFilenameWithSlash() {
 		// Filenames with slashes are not permitted
 		final TaskList lista = new TaskList();
 		lista.title = "Test/List/Slash/Name";
-		lista.save(getContext());
+		lista.save(getTheContext());
 		assertTrue(lista._id > 0);
 
 		// Sync it
-		TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+		TestSynchronizer synchronizer = new TestSynchronizer(getTheContext());
 
 		try {
 			synchronizer.fullSync();
@@ -679,30 +702,31 @@ public class OrgSyncTest extends AndroidTestCase {
 		assertEquals("Test_List_Slash_Name", listb.title);
 	}
 
+	@Test
 	public void testContentStability() {
 		// Make sure content is not changed
 		// Create list
 		final TaskList lista = new TaskList();
 		lista.title = "TestList";
-		lista.save(getContext());
+		lista.save(getTheContext());
 		assertTrue(lista._id > 0);
 
 		final Task task1a = new Task();
 		task1a.title = "The title1";
 		task1a.note = "A note without newline";
 		task1a.dblist = lista._id;
-		task1a.save(getContext());
+		task1a.save(getTheContext());
 		assertTrue(task1a._id > 0);
 
 		final Task task2a = new Task();
 		task2a.title = "The title2";
 		task2a.note = "Another note\non two lines";
 		task2a.dblist = lista._id;
-		task2a.save(getContext());
+		task2a.save(getTheContext());
 		assertTrue(task2a._id > 0);
 
 		// Sync it
-		TestSynchronizer synchronizer = new TestSynchronizer(getContext());
+		TestSynchronizer synchronizer = new TestSynchronizer(getTheContext());
 
 		try {
 			synchronizer.fullSync();

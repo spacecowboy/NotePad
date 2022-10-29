@@ -1,9 +1,12 @@
 package com.nononsenseapps.notepad.test;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
-import java.util.List;
+import android.content.Context;
+import android.database.Cursor;
+import android.util.Log;
+import android.util.Pair;
+
+import androidx.test.filters.SmallTest;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -11,13 +14,14 @@ import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
 
-import android.database.Cursor;
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.SmallTest;
-import android.util.Log;
-import android.util.Pair;
+import junit.framework.TestCase;
 
-public class GTaskSyncTest extends AndroidTestCase {
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.HashMap;
+import java.util.List;
+
+public class GTaskSyncTest extends TestCase {
 	String balle = "balle";
 	String balleRemote = "balleremote";
 	String account = "balleman";
@@ -37,6 +41,10 @@ public class GTaskSyncTest extends AndroidTestCase {
 	int remoteListNewestCount = 0;
 	int localTaskNewestCount = 0;
 	int remoteTaskNewestCount = 0;
+
+	Context mContext;
+
+	public GTaskSyncTest() { mContext = InstrumentationRegistry.getInstrumentation().getTargetContext(); }
 
 	@Override
 	public void setUp() throws Exception {

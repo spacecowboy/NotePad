@@ -1,13 +1,5 @@
 package com.nononsenseapps.notepad.test;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Random;
-
-import com.nononsenseapps.notepad.database.DAO;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
-
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -15,10 +7,21 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteConstraintException;
 import android.net.Uri;
-import android.test.AndroidTestCase;
 import android.util.Log;
 
-public class DBProviderMovementTest extends AndroidTestCase {
+import androidx.test.platform.app.InstrumentationRegistry;
+
+import com.nononsenseapps.notepad.database.DAO;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
+
+import junit.framework.TestCase;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Random;
+
+public class DBProviderMovementTest extends TestCase {
 
 	private ContentResolver resolver;
 	private Context context;
@@ -26,7 +29,7 @@ public class DBProviderMovementTest extends AndroidTestCase {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		context = getContext();
+		context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 		resolver = context.getContentResolver();
 	}
 
@@ -214,6 +217,7 @@ public class DBProviderMovementTest extends AndroidTestCase {
 		final String whereId = new StringBuilder(Task.Columns._ID).append(" IN (")
 				.append(DAO.arrayToCommaString(ids)).append(")").toString();
 
+		var mContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
 		mContext.getContentResolver().update(Task.URI, val, whereId, null);
 
 		// Verify that task was moved

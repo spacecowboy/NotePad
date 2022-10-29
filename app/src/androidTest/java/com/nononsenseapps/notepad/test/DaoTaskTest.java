@@ -1,11 +1,12 @@
 package com.nononsenseapps.notepad.test;
 
+import androidx.test.filters.MediumTest;
+
 import com.nononsenseapps.notepad.database.Task;
 
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.MediumTest;
+import junit.framework.TestCase;
 
-public class DaoTaskTest extends AndroidTestCase {
+public class DaoTaskTest extends TestCase {
 
 	private void copyValsFromTo(final Task task1, final Task task2) {
 		task2.title = task1.title;

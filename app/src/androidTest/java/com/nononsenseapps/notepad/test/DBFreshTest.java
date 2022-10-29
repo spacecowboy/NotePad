@@ -1,21 +1,20 @@
 package com.nononsenseapps.notepad.test;
 
-import com.nononsenseapps.notepad.database.DatabaseHandler;
-import com.nononsenseapps.notepad.database.LegacyDBHelper;
-import com.nononsenseapps.notepad.database.MyContentProvider;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.test.AndroidTestCase;
-import android.test.ProviderTestCase2;
-import android.test.RenamingDelegatingContext;
-import android.test.mock.MockContentResolver;
-import android.test.suitebuilder.annotation.SmallTest;
 
-public class DBFreshTest extends AndroidTestCase {
+import androidx.test.filters.SmallTest;
+import androidx.test.platform.app.InstrumentationRegistry;
+
+import com.nononsenseapps.notepad.database.DatabaseHandler;
+import com.nononsenseapps.notepad.database.LegacyDBHelper;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
+
+import junit.framework.TestCase;
+
+public class DBFreshTest extends TestCase {
 
 	static final String PREFIX = "fresh_test_";
 
@@ -24,7 +23,7 @@ public class DBFreshTest extends AndroidTestCase {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		context = getContext();
+		context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 	}
 
 	@Override

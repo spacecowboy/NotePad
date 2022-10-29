@@ -1,20 +1,23 @@
 package com.nononsenseapps.notepad.test;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
-
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
 import android.net.Uri;
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.MediumTest;
 
-public class DBProviderTest extends AndroidTestCase {
+import androidx.test.filters.MediumTest;
+import androidx.test.platform.app.InstrumentationRegistry;
+
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
+
+import junit.framework.TestCase;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+public class DBProviderTest extends TestCase {
 
 	private Context context;
 	private ContentResolver resolver;
@@ -22,7 +25,7 @@ public class DBProviderTest extends AndroidTestCase {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		context = getContext();
+		context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 		resolver = context.getContentResolver();
 	}
 
@@ -75,7 +78,7 @@ public class DBProviderTest extends AndroidTestCase {
 		final TaskList list = getNewList();
 		assertUriReturnsResult(TaskList.URI, TaskList.Columns.FIELDS);
 		assertUriReturnsResult(TaskList.URI_WITH_COUNT, TaskList.Columns.FIELDS);
-		list.delete(mContext);
+		list.delete(context);
 	}
 
 	@MediumTest
@@ -96,7 +99,7 @@ public class DBProviderTest extends AndroidTestCase {
 		final int histCount = 22;
 		for (int i = 0; i < 22; i++) {
 			t.title += " hist" + i;
-			t.save(getContext());
+			t.save(InstrumentationRegistry.getInstrumentation().getTargetContext());
 		}
 		// Should return insert (1) + update count (histCount)
 		assertUriReturnsResult(Task.URI_TASK_HISTORY,

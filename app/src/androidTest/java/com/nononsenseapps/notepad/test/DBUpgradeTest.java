@@ -1,8 +1,14 @@
 package com.nononsenseapps.notepad.test;
 
-import java.io.File;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.provider.BaseColumns;
 
-import com.nononsenseapps.notepad.R;
+import androidx.test.filters.MediumTest;
+import androidx.test.platform.app.InstrumentationRegistry;
+
 import com.nononsenseapps.notepad.database.DatabaseHandler;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
@@ -10,18 +16,9 @@ import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 
-import android.annotation.SuppressLint;
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.provider.BaseColumns;
-import android.test.AndroidTestCase;
-import android.test.RenamingDelegatingContext;
-import android.test.suitebuilder.annotation.MediumTest;
-import android.test.suitebuilder.annotation.SmallTest;
+import junit.framework.TestCase;
 
-public class DBUpgradeTest extends AndroidTestCase {
+public class DBUpgradeTest extends TestCase {
 	static final String PREFIX = "dbupgrade_test_";
 
 	String aTime = "2013-03-23T02:43:35.000Z";
@@ -36,7 +33,7 @@ public class DBUpgradeTest extends AndroidTestCase {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		context = getContext();
+		context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 	}
 
 	@Override
