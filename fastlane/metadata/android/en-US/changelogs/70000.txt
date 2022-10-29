@@ -4,9 +4,6 @@ Changes:
 - added compatibility to new android versions
 - added notification channel
 
-Bugfix:
-- fixed a bug where the app would show a warning "this app is very old" on newer android version
-
 Developer:
 - raised target and compile SDK to version 32
 - upgraded to AndroidX libraries
