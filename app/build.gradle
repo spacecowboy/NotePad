@@ -59,12 +59,7 @@ android {
     namespace 'com.nononsenseapps.notepad' // for R and BuildConfig
     useLibrary 'org.apache.http.legacy'
 
-    useLibrary 'android.test.runner'
-    useLibrary 'android.test.base'
-    useLibrary 'android.test.mock'
-
     // dataBinding.enabled = true
-    // testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 
     lint {
         abortOnError false
@@ -98,6 +93,8 @@ android {
         targetSdkVersion 32
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
         versionName getVersionName()
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
     compileOptions {
@@ -144,6 +141,8 @@ dependencies {
     implementation "org.androidannotations:androidannotations-api:4.8.0"
     // Tests library, open source & abandoned
     androidTestImplementation 'com.squareup.spoon:spoon-client:1.7.1'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test:rules:1.4.0'
     // Desugaring library, needs android gradle plugin v7.4+ to upgrade
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.0'
 }
