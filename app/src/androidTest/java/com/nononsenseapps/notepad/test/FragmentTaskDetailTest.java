@@ -11,7 +11,6 @@ import androidx.test.rule.ActivityTestRule;
 
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.database.Task;
-import com.squareup.spoon.Spoon;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -56,10 +55,10 @@ public class FragmentTaskDetailTest {
 				.getActivity()
 				.getSupportFragmentManager()
 				.findFragmentByTag(com.nononsenseapps.notepad.ActivityMain.DETAILTAG);
-		Spoon.screenshot(mActivityRule.getActivity(), "Editor_loaded");
 		assertNotNull("Editor should NOT be null", fragment);
-		assertTrue("Editor should be visible", fragment.isAdded() && fragment.isVisible());
-		//assertThat(fragment).isUserVisible();
-		//assertNotNull("Could not find the editor!", taskText);
+		assertTrue("Editor should be visible",
+				fragment.isAdded() && fragment.isVisible());
+
+		FragmentTaskListsTest.takeScreenshot("Editor_loaded");
 	}
 }

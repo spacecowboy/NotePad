@@ -16,7 +16,7 @@
 
 package com.nononsenseapps.notepad.test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertNotNull;
 
 import android.Manifest;
 
@@ -24,27 +24,26 @@ import androidx.test.rule.ActivityTestRule;
 import androidx.test.rule.GrantPermissionRule;
 
 import com.nononsenseapps.notepad.dashclock.TasksSettings;
-import com.squareup.spoon.Spoon;
 
-import org.junit.*;
+import org.junit.Rule;
+import org.junit.Test;
 
 /**
  * Verify that the activity opens OK on any screensize.
  */
-
 public class DashClockSettingsTest {
 
 	@Rule
 	public ActivityTestRule<TasksSettings> mActivityRule
-			= new ActivityTestRule<>(TasksSettings.class,false);
+			= new ActivityTestRule<>(TasksSettings.class, false);
 
 	@Rule
-	public GrantPermissionRule permissionToSaveScreenshots = GrantPermissionRule.grant(
-			Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE);
+	public GrantPermissionRule writePermission
+			= GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
 	@Test
 	public void testLoadOK() {
 		assertNotNull(mActivityRule.getActivity());
-		Spoon.screenshot(mActivityRule.getActivity(), "Activity_loaded");
+		FragmentTaskListsTest.takeScreenshot("Activity_loaded");
 	}
 }
