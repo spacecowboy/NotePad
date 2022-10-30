@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android" 
+        xmlns:aapt="http://schemas.android.com/aapt"
+        android:width="200dp"
+        android:height="200dp"
+        android:viewportWidth="200"
+        android:viewportHeight="200">
+
+<!-- This drawable is a gradient to show behind the symbol in the app's icon.
+ See https://stackoverflow.com/a/58043191/6307322 -->
+
+  <path android:pathData="M0,200l0,-200l200,0l0,200z">
+    <aapt:attr name="android:fillColor">
+      <gradient
+          android:startY="0"
+          android:endY="200"                   
+          android:type="linear">
+
+        <!-- The following tags decide the colors of the gradient, from top to bottom. 'offset' is
+         a number from 0 (TOP) to 1 (BOTTOM) that represents the coordinate where the 'color' is
+          centered. To add a color, simply add an 'item' tag with the 2 fields -->
+
+        <item
+            android:color="#FF9010"
+            android:offset="0.3" />
+        <item
+            android:color="#80947E"
+            android:offset="0.31" />
+        <item
+            android:color="#A2C3D0"
+            android:offset="0.35" />
+        <item
+            android:color="#FEFEFE"
+            android:offset="0.36" />
+        <item
+            android:color="#E8E8E8"
+            android:offset="0.5" />
+      </gradient>
+    </aapt:attr>
+  </path>
+</vector>
