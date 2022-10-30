@@ -44,6 +44,6 @@ public class DashClockSettingsTest {
 	@Test
 	public void testLoadOK() {
 		assertNotNull(mActivityRule.getActivity());
-		FragmentTaskListsTest.takeScreenshot("Activity_loaded");
+		Helper.takeScreenshot("Activity_loaded");
 	}
 }

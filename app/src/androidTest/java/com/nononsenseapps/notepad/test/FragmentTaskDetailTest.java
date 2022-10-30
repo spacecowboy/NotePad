@@ -59,6 +59,6 @@ public class FragmentTaskDetailTest {
 		assertTrue("Editor should be visible",
 				fragment.isAdded() && fragment.isVisible());
 
-		FragmentTaskListsTest.takeScreenshot("Editor_loaded");
+		Helper.takeScreenshot("Editor_loaded");
 	}
 }
