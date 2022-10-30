@@ -17,9 +17,9 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-    <string name="app_name">Note</string>
+    <string name="app_name">No Nonsense Notes</string>
     <string name="title_create">Nuova nota</string>
-    <string name="timemachine">Macchina del tempo</string>
+    <string name="timemachine">Cronologia Nota</string>
     <string name="time">Tempo</string>
     <string name="done">Fatto</string>
     <string name="saved">Salvata</string>
@@ -71,7 +71,7 @@
     <string name="settings_account_title">Seleziona un account</string>
     <string name="settings_account_summary">Clicca per cambiare account</string>
     <string name="settings_sync_enable_title">Sincronizza con Google Tasks</string>
-    <string name="gtasks_sync_info">Con Google Tasks non è possibile sincronizzare tutte le informazioni. Verranno sincronizzate solo le note, la data di scadenza (non l\'ora) e lo stato-todo.</string>
+    <string name="gtasks_sync_info">Con Google Tasks non è possibile sincronizzare tutte le informazioni. Verranno sincronizzate solo le note, la data di scadenza (non l\'ora) e lo stato (da fare o fatta).</string>
     <string name="settings_cat_syncing">Sincronizzazione</string>
     <string name="show_from_all_lists">Tutti gli elenchi</string>
     <string name="deleted">Eliminata</string>
@@ -85,16 +85,16 @@
     <string name="settings_list_dialog">Seleziona un elenco</string>
     <string name="settings_list">Elenco</string>
     <string name="showcase_main_title">Accedi ai tuoi elenchi</string>
-    <string name="showcase_main_msg">Toccare l\'icona o fare swipe dal bordo sinistro</string>
+    <string name="showcase_main_msg">Toccare l\'icona o trascinare dal bordo sinistro</string>
     <string name="showcase_drawer_title">Gestisci i tuoi elenchi</string>
     <string name="showcase_drawer_msg">Pressione lunga per modificare o eliminare</string>
     <string name="showcase_timemachine_title">Salva le tue note</string>
-    <string name="showcase_timemachine_msg">Le modifiche vengono sempre salvate. Usa la macchina del tempo per ripristinare una versione precedente.</string>
+    <string name="showcase_timemachine_msg">Le modifiche vengono sempre salvate. Usa la cronologia per ripristinare una versione precedente.</string>
     <string name="donate_to_unlock">Dona per sbloccare</string>
     <string name="premiums_unlocked_and_thanks">Funzioni premium sbloccate. Grazie per il tuo supporto</string>
     <string name="move">Sposta</string>
     <string name="move_to">Sposta in</string>
-    <string name="moved_x_to_list">Spostato %1$d in in %2$s</string>
+    <string name="moved_x_to_list">Spostato %1$d in %2$s</string>
     <string name="lock_note">Blocca nota</string>
     <string name="unlock_note">Sblocca nota</string>
     <string name="locked">Bloccata</string>
@@ -102,7 +102,7 @@
     <string name="password_required">Password richiesta</string>
     <string name="select_account">Seleziona un account</string>
     <string name="password_set">Password impostata</string>
-    <string name="password_cleared">Password azzerata</string>
+    <string name="password_cleared">Password eliminata</string>
     <string name="passwords_dont_match">Le password non corrispondono</string>
     <string name="password_incorrect">Password errata</string>
     <string name="enter_password">Inserisci la password</string>
@@ -147,7 +147,7 @@
     <string name="notecopied_one">Copiata una nota</string>
     <string name="notecopied_other">Copiate %d note</string>
     <string name="notedeleted_one">Eliminata una nota</string>
-    <string name="notedeleted_other">Eliminate % d note</string>
+    <string name="notedeleted_other">Eliminate %d note</string>
     <string name="selected_one">Selezionata una nota</string>
     <string name="selected_other">Selezionate %d note</string>
     <string name="background_sync">Sincronizza in background</string>
