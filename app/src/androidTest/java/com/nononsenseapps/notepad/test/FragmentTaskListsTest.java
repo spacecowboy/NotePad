@@ -1,65 +1,58 @@
 package com.nononsenseapps.notepad.test;
 
-import android.app.Instrumentation;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import androidx.fragment.app.Fragment;
-import android.test.ActivityInstrumentationTestCase2;
-import android.test.suitebuilder.annotation.SmallTest;
-import android.view.View;
+import static org.junit.Assert.*;
+
+import android.Manifest;
 import android.widget.ListView;
 
-import com.nononsenseapps.notepad.R;
+import androidx.fragment.app.Fragment;
+import androidx.test.platform.app.InstrumentationRegistry;
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
 
 import com.nononsenseapps.notepad.ActivityMain_;
-import com.nononsenseapps.notepad.fragments.TaskListViewPagerFragment;
-import com.squareup.spoon.Spoon;
+import com.nononsenseapps.notepad.R;
 
-public class FragmentTaskListsTest extends
-		ActivityInstrumentationTestCase2<ActivityMain_> {
+import org.junit.Rule;
+import org.junit.Test;
 
-	private Instrumentation mInstrumentation;
+public class FragmentTaskListsTest {
 
-	public FragmentTaskListsTest() {
-		super(ActivityMain_.class);
-	}
+	@Rule
+	public ActivityTestRule<ActivityMain_> mActivityRule
+			= new ActivityTestRule<>(ActivityMain_.class, false);
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		mInstrumentation = getInstrumentation();
+	@Rule
+	public GrantPermissionRule mRuntimePermissionRule
+			= GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-		setActivityInitialTouchMode(false);
-	}
-
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
-
-	@SmallTest
+	@Test
 	public void testSanity() {
 		assertEquals("This should succeed", 1, 1);
 		assertNotNull("Fragment1-holder should always be present",
-				getActivity().findViewById(R.id.fragment1));
+				mActivityRule.getActivity().findViewById(R.id.fragment1));
 	}
 
-	@SmallTest
-	public void testFragmentLoaded() throws InterruptedException {
-		mInstrumentation.waitForIdleSync();
+	@Test
+	public void testFragmentLoaded() {
+		InstrumentationRegistry.getInstrumentation().waitForIdleSync();
+		assertNotNull(mActivityRule.getActivity());
 
-		Spoon.screenshot(getActivity(), "List_loaded");
-		Fragment listPagerFragment = getActivity().getSupportFragmentManager()
-				.findFragmentByTag(
-						com.nononsenseapps.notepad.ActivityMain.LISTPAGERTAG);
+		Fragment listPagerFragment = mActivityRule
+				.getActivity()
+				.getSupportFragmentManager()
+				.findFragmentByTag(com.nononsenseapps.notepad.ActivityMain.LISTPAGERTAG);
 
-		assertNotNull("List pager fragment should not be null",
-				listPagerFragment);
+		assertNotNull("List pager fragment should not be null", listPagerFragment);
 		assertTrue("List pager fragment should be visible",
 				listPagerFragment.isAdded() && listPagerFragment.isVisible());
 
-		ListView taskList = (ListView) listPagerFragment.getView()
+		ListView taskList = (ListView) listPagerFragment
+				.getView()
 				.findViewById(android.R.id.list);
 
 		assertNotNull("Could not find the list!", taskList);
+
+		Helper.takeScreenshot("List_loaded");
 	}
 }

@@ -1,0 +1,11 @@
+v7.0.0: NoNonsense Notes
+
+Changes:
+- added compatibility to new android versions
+- added notification channel
+
+Developer:
+- raised target and compile SDK to version 32
+- upgraded to AndroidX libraries
+- fixed all tests
+- upgraded dependencies and gradle

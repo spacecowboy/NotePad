@@ -27,7 +27,6 @@ buildscript {
 apply plugin: 'com.android.library'
 
 dependencies {
-  //compile fileTree(dir: 'libs', include: '*.jar')
   implementation 'androidx.legacy:legacy-support-v4:1.0.0'
 }
 

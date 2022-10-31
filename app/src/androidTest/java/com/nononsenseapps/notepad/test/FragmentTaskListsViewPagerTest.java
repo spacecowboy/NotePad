@@ -1,40 +1,27 @@
 package com.nononsenseapps.notepad.test;
 
-import android.app.Instrumentation;
-import android.content.pm.ActivityInfo;
-import androidx.fragment.app.Fragment;
-import android.test.ActivityInstrumentationTestCase2;
-import android.test.suitebuilder.annotation.SmallTest;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+
+import androidx.test.rule.ActivityTestRule;
 
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.R;
-import com.squareup.spoon.Spoon;
 
-public class FragmentTaskListsViewPagerTest extends
-		ActivityInstrumentationTestCase2<ActivityMain_> {
+import org.junit.Rule;
+import org.junit.Test;
 
-	private Instrumentation mInstrumentation;
+public class FragmentTaskListsViewPagerTest {
 
-	public FragmentTaskListsViewPagerTest() {
-		super(ActivityMain_.class);
-	}
+	@Rule
+	public ActivityTestRule<ActivityMain_> mActivityRule
+			= new ActivityTestRule<>(ActivityMain_.class,false);
 
-	@Override
-	protected void setUp() throws Exception {
-		super.setUp();
-		mInstrumentation = getInstrumentation();
-
-		setActivityInitialTouchMode(false);
-	}
-
-	protected void tearDown() throws Exception {
-		super.tearDown();
-	}
-
-	@SmallTest
+	@Test
 	public void testSanity() {
 		assertEquals("This should succeed", 1, 1);
+		assertNotNull("Error in the activityrule", mActivityRule.getActivity());
 		assertNotNull("Fragment1-holder should always be present",
-				getActivity().findViewById(R.id.fragment1));
+				mActivityRule.getActivity().findViewById(R.id.fragment1));
 	}
 }

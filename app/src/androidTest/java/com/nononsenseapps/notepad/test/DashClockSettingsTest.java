@@ -16,42 +16,34 @@
 
 package com.nononsenseapps.notepad.test;
 
-import android.app.Instrumentation;
-import android.test.ActivityInstrumentationTestCase2;
-import android.test.suitebuilder.annotation.SmallTest;
+import static org.junit.Assert.assertNotNull;
+
+import android.Manifest;
+
+import androidx.test.rule.ActivityTestRule;
+import androidx.test.rule.GrantPermissionRule;
 
 import com.nononsenseapps.notepad.dashclock.TasksSettings;
-import com.squareup.spoon.Spoon;
+
+import org.junit.Rule;
+import org.junit.Test;
 
 /**
  * Verify that the activity opens OK on any screensize.
  */
-public class DashClockSettingsTest extends
-		ActivityInstrumentationTestCase2<TasksSettings> {
+public class DashClockSettingsTest {
 
-	private Instrumentation mInstrumentation;
+	@Rule
+	public ActivityTestRule<TasksSettings> mActivityRule
+			= new ActivityTestRule<>(TasksSettings.class, false);
 
-	public DashClockSettingsTest() {
-		super(TasksSettings.class);
-	}
+	@Rule
+	public GrantPermissionRule writePermission
+			= GrantPermissionRule.grant(Manifest.permission.WRITE_EXTERNAL_STORAGE);
 
-	@Override
-	public void setUp() throws Exception {
-		super.setUp();
-
-		mInstrumentation = getInstrumentation();
-
-		setActivityInitialTouchMode(false);
-	}
-
-	@Override
-	public void tearDown() throws Exception {
-		super.tearDown();
-	}
-
-	@SmallTest
+	@Test
 	public void testLoadOK() {
-		assertNotNull(getActivity());
-		Spoon.screenshot(getActivity(), "Activity_loaded");
+		assertNotNull(mActivityRule.getActivity());
+		Helper.takeScreenshot("Activity_loaded");
 	}
 }

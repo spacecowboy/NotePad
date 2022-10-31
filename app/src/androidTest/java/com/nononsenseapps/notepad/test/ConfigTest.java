@@ -17,28 +17,27 @@
 package com.nononsenseapps.notepad.test;
 
 import android.content.Context;
-import android.test.AndroidTestCase;
-import android.test.suitebuilder.annotation.MediumTest;
-import android.test.suitebuilder.annotation.SmallTest;
-import android.test.suitebuilder.annotation.Suppress;
+
+import androidx.test.filters.*;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.nononsenseapps.build.Config;
-import com.nononsenseapps.notepad.*;
-import com.nononsenseapps.notepad.BuildConfig;
+
+import junit.framework.TestCase;
 
 import java.util.Properties;
 
 /**
  * Make sure the properties file with api keys can be read correctly
  */
-public class ConfigTest extends AndroidTestCase {
+public class ConfigTest extends TestCase {
 
 	private Context context;
 
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		context = getContext();
+		context = InstrumentationRegistry.getInstrumentation().getTargetContext();
 	}
 
 	@Override

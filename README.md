@@ -13,9 +13,9 @@ The app is currently being updated, and old versions are still available on f-dr
 
 How it looks like:
 
-<img src="tablet.png" alt="Tablet UI" height="360" />
+<img src="fastlane/metadata/android/en-US/images/tenInchScreenshots/1.png" alt="Tablet UI" height="360" />
 
-<img src="phone.png" alt="Phone UI" height="480" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Phone UI" height="480" />
 
 # Reporting bugs
 Please report bugs by creating an [issue here](https://github.com/spacecowboy/NotePad/issues).

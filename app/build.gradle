@@ -57,14 +57,8 @@ android {
     compileSdkVersion 32
     buildToolsVersion '32.0.0'
     namespace 'com.nononsenseapps.notepad' // for R and BuildConfig
-    useLibrary 'org.apache.http.legacy'
-
-    useLibrary 'android.test.runner'
-    useLibrary 'android.test.base'
-    useLibrary 'android.test.mock'
 
     // dataBinding.enabled = true
-    // testInstrumentationRunner 'android.support.test.runner.AndroidJUnitRunner'
 
     lint {
         abortOnError false
@@ -98,6 +92,10 @@ android {
         targetSdkVersion 32
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
         versionName getVersionName()
+        vectorDrawables.useSupportLibrary = true
+
+        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunnerArguments disableAnalytics: 'true'
     }
 
     compileOptions {
@@ -119,29 +117,32 @@ android {
 }
 
 dependencies {
+    // AndroidX
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-    implementation 'joda-time:joda-time:2.12.0'
     implementation "androidx.cursoradapter:cursoradapter:1.0.0"
     implementation 'androidx.fragment:fragment:1.5.4'
-    // Dashclock
-    implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
-    // FilePicker library and its mandatory dependency
     implementation 'androidx.appcompat:appcompat:1.5.1'
+    // Time library, open source & updated
+    implementation 'joda-time:joda-time:2.12.0'
+    // Dashclock API, open source & abandoned, but it still works
+    implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
+    // FilePicker, open source & abandoned
     implementation 'com.nononsenseapps:filepicker:3.1.0'
-    // OrgParser
+    // OrgParser, open source & abandoned, but it still works
     implementation 'org.cowboyprogrammer:orgparser:1.3.1'
-    // For Sync
+    // Http library for Google Task Sync, open source & abandoned, should upgrade to retrofit2
     implementation 'com.squareup.retrofit:retrofit:1.9.0'
-    // Included libraries
+    // Included projects
     implementation project(':external:ActionBar-PullToRefresh')
     implementation project(':external:datetimepicker')
     implementation project(':external:drag-sort-listview')
     implementation project(':external:ShowcaseView')
-    // annotations
+    // annotations library, open source & abandoned
     annotationProcessor "org.androidannotations:androidannotations:4.8.0"
     implementation "org.androidannotations:androidannotations-api:4.8.0"
-    // Tests. this library seems abandoned
-    androidTestImplementation 'com.squareup.spoon:spoon-client:1.7.1'
-    // needs android gradle plugin v7.4+ to upgrade
+    // Tests libraries
+    androidTestImplementation 'androidx.test.ext:junit:1.1.3'
+    androidTestImplementation 'androidx.test:rules:1.4.0'
+    // Desugaring library, needs android gradle plugin v7.4+ to upgrade
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.0'
 }
