@@ -76,7 +76,7 @@ public class SyncPrefs extends PreferenceFragment implements
 
 	// SD sync
 	public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
-	public static final String KEY_SD_DIR = "pref_sync_sd_dir";
+	public static final String KEY_SD_DIR_URI = "pref_sync_sd_dir_uri";
 	private static final int PICK_SD_DIR_CODE = 1;
 
 
@@ -168,7 +168,7 @@ public class SyncPrefs extends PreferenceFragment implements
 						!Config.getGtasksApiKey(getActivity()).contains(" "));
 
 		// SD Card
-		prefSdDir = findPreference(KEY_SD_DIR);
+		prefSdDir = findPreference(KEY_SD_DIR_URI);
 		setSdDirSummary(sharedPrefs);
 		prefSdDir.setOnPreferenceClickListener(preference -> {
 
@@ -177,7 +177,8 @@ public class SyncPrefs extends PreferenceFragment implements
 			var i = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
 
 			// get the previously selected Uri
-			String oldSetting = sharedPrefs.getString(KEY_SD_DIR, SDSynchronizer.DEFAULT_ORG_DIR);
+			String defaultDir = SDSynchronizer.getDefaultOrgDir(this.getContext());
+			String oldSetting = sharedPrefs.getString(KEY_SD_DIR_URI, defaultDir);
 			Uri uriToLoad = Uri.parse(oldSetting);
 
 			// don't add this: it stops working on some devices, like the emulator with API 25!
@@ -236,7 +237,7 @@ public class SyncPrefs extends PreferenceFragment implements
 				} else if (KEY_SD_ENABLE.equals(key)) {
 					// Restart the sync service
 					OrgSyncService.stop(getActivity());
-				} else if (KEY_SD_DIR.equals(key)) {
+				} else if (KEY_SD_DIR_URI.equals(key)) {
 					setSdDirSummary(prefs);
 				}
 			}
@@ -277,7 +278,7 @@ public class SyncPrefs extends PreferenceFragment implements
 			PreferenceManager
 					.getDefaultSharedPreferences(getActivity())
 					.edit()
-					.putString(KEY_SD_DIR, uri.toString())
+					.putString(KEY_SD_DIR_URI, uri.toString())
 					.commit();
 		} else {
 			Toast.makeText(getActivity(), R.string.cannot_write_to_directory, Toast.LENGTH_SHORT)
@@ -320,8 +321,8 @@ public class SyncPrefs extends PreferenceFragment implements
 	}
 
 	private void setSdDirSummary(final SharedPreferences sharedPreferences) {
-		prefSdDir.setSummary(sharedPreferences.getString(KEY_SD_DIR,
-				SDSynchronizer.DEFAULT_ORG_DIR));
+		String defaultDir = SDSynchronizer.getDefaultOrgDir(this.getContext());
+		prefSdDir.setSummary(sharedPreferences.getString(KEY_SD_DIR_URI, defaultDir));
 	}
 
 	public static class AccountDialog extends DialogFragment implements
