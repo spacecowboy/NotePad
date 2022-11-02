@@ -98,6 +98,11 @@ android {
         testInstrumentationRunnerArguments disableAnalytics: 'true'
     }
 
+    testOptions {
+        // androidx espresso tests require this
+        animationsDisabled = true
+    }
+
     compileOptions {
         // enable support for new language APIs in old devices
         coreLibraryDesugaringEnabled true
@@ -143,6 +148,8 @@ dependencies {
     // Tests libraries
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test:rules:1.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
     // Desugaring library, needs android gradle plugin v7.4+ to upgrade
     coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.0'
 }
