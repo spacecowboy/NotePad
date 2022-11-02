@@ -55,6 +55,7 @@ public class TestCompletedTasksAreCleared extends BaseTestClass {
 				.check(doesNotExist());
 	}
 
+	// this one expects the list to have 4 children
 	private void clickCheckBoxAt(int position) {
 		var i = onData(anything())
 				.inAdapterView(allOf(withId(android.R.id.list), hasChildCount(4)))
