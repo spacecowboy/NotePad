@@ -104,20 +104,17 @@ public class SyncPrefs extends PreferenceFragment implements
 		return null;
 	}
 
-	public static void setSyncInterval(Context activity,
-									   SharedPreferences sharedPreferences) {
+	public static void setSyncInterval(Context activity, SharedPreferences sharedPreferences) {
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
-		boolean backgroundSync = sharedPreferences.getBoolean(
-				KEY_BACKGROUND_SYNC, false);
+		boolean backgroundSync = sharedPreferences.getBoolean(KEY_BACKGROUND_SYNC, false);
 
 		if (accountName != null && !accountName.isEmpty()) {
 			Account account = getAccount(AccountManager.get(activity), accountName);
 			if (account != null) {
 				if (!backgroundSync) {
 					// Disable periodic syncing
-					ContentResolver.removePeriodicSync(
-							account,
-							MyContentProvider.AUTHORITY, new Bundle());
+					ContentResolver
+							.removePeriodicSync(account, MyContentProvider.AUTHORITY, new Bundle());
 				} else {
 					// Convert from minutes to seconds
 					long pollFrequency = 3600;
@@ -325,8 +322,7 @@ public class SyncPrefs extends PreferenceFragment implements
 		prefSdDir.setSummary(sharedPreferences.getString(KEY_SD_DIR_URI, defaultDir));
 	}
 
-	public static class AccountDialog extends DialogFragment implements
-			AccountManagerCallback<Bundle> {
+	public static class AccountDialog extends DialogFragment implements AccountManagerCallback<Bundle> {
 		private Activity activity;
 		private Account account;
 
@@ -348,7 +344,7 @@ public class SyncPrefs extends PreferenceFragment implements
 				names[i] = accounts[i].name;
 			}
 			// TODO
-			// Could add a clear alternative here
+			//  Could add a clear alternative here
 			builder.setItems(names, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					// Stuff to do when the account is selected by the user
