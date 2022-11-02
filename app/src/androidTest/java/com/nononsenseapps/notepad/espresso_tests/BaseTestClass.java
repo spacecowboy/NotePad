@@ -16,7 +16,8 @@ public class BaseTestClass {
 
     // INFO: ActivityMain_ was renamed to ActivityList in release 6.0.0 beta,
     // it has to do with getting rid of the annotations library
-    @Rule
+    // the replacement, ActivityScenarioRule does not work
+    @SuppressWarnings("deprecation") @Rule
     public ActivityTestRule<ActivityMain_> myActivityRule
             = new ActivityTestRule<>(ActivityMain_.class);
 

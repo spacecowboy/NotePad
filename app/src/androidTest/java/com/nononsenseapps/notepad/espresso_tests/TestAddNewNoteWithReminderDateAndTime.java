@@ -23,12 +23,6 @@ public class TestAddNewNoteWithReminderDateAndTime extends BaseTestClass{
         noteName1 = "prepare food";
     }
 
-//    @Rule
-//    public ActivityTestRule<ActivityList> myActivityRule =
-//            new ActivityTestRule<ActivityList>(ActivityList.class);
-
-
-
     @Test
     public void testAddNewNoteWithReminderDateAndTime() {
 
@@ -53,15 +47,5 @@ public class TestAddNewNoteWithReminderDateAndTime extends BaseTestClass{
         //check that the date field is visible
         onView(withText(noteName1)).perform(click());
         onView(withId(R.id.notificationDate)).check(matches(isDisplayed()));
-        /*
-        //check that current month is visible
-        String currentMonth = EspressoHelper.getCurrentMonthName();
-
-        //todo should we just make sure in here that the text field is not empty, not worry about correct date?
-        onView(withText(currentMonth)).check(matches(isDisplayed()));
-        */
-
-
-
     }
 }
