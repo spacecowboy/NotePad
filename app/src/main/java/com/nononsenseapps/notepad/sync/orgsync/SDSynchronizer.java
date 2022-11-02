@@ -42,24 +42,30 @@ import java.util.HashSet;
  * A synchronizer that that uses an external directory on the SD-card as
  * destination.
  */
-public class SDSynchronizer extends Synchronizer implements
-		SynchronizerInterface {
+public class SDSynchronizer extends Synchronizer implements SynchronizerInterface {
+
+	private static final String PREF_ORG_DIR_URI = SyncPrefs.KEY_SD_DIR_URI;
+	private static final String PREF_ORG_SD_ENABLED = SyncPrefs.KEY_SD_ENABLE;
+	private final static String SERVICENAME = "SDORG";
+	protected final boolean configured;
 
 	// Where files are kept. User changeable in preferences.
-	public static final String DEFAULT_ORG_DIR = Environment
-			.getExternalStorageDirectory().toString() + "/NoNonsenseNotes";
-	public static final String PREF_ORG_DIR = SyncPrefs.KEY_SD_DIR;
-	public static final String PREF_ORG_SD_ENABLED = SyncPrefs.KEY_SD_ENABLE;
-	public final static String SERVICENAME = "SDORG";
 	protected String ORG_DIR;
-	protected final boolean configured;
 
 	public SDSynchronizer(Context context) {
 		super(context);
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(context);
-		ORG_DIR = prefs.getString(PREF_ORG_DIR, DEFAULT_ORG_DIR);
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		ORG_DIR = prefs.getString(PREF_ORG_DIR_URI, getDefaultOrgDir(context));
 		configured = prefs.getBoolean(PREF_ORG_SD_ENABLED, false);
+	}
+
+	/**
+	 * @return the path of the default directory where ORG files are saved. It's something like
+	 * /storage/emulated/0/Android/data/packagename/files/orgfiles/
+	 */
+	public static String getDefaultOrgDir(Context ctx) {
+		File dir = ctx.getExternalFilesDir("orgfiles");
+		return dir.getAbsolutePath();
 	}
 
 	/**
