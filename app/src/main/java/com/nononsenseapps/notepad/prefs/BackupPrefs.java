@@ -54,6 +54,9 @@ public class BackupPrefs extends PreferenceFragment {
 			}
 		}
 
+		// TODO instead of using the hardcoded path, let the user pick a file.
+		//  See https://stackoverflow.com/questions/58662166
+
 		protected void onPostExecute(final Integer result) {
 			Context context = getActivity();
 			if (context == null) {
