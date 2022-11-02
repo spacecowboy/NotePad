@@ -19,6 +19,7 @@ package com.nononsenseapps.notepad.sync.orgsync;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Environment;
 import android.os.FileObserver;
 import android.preference.PreferenceManager;
@@ -49,13 +50,19 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 	private final static String SERVICENAME = "SDORG";
 	protected final boolean configured;
 
-	// Where files are kept. User changeable in preferences.
+	/** Filesystem path of the folder where files are kept. User changeable in preferences.
+	 */
 	protected String ORG_DIR;
 
 	public SDSynchronizer(Context context) {
 		super(context);
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		ORG_DIR = prefs.getString(PREF_ORG_DIR_URI, getDefaultOrgDir(context));
+
+		// TODO actually use the user-selected directory for ORG files
+		// android's framework forces the use of URIs instead of file paths, so for now we ignore
+		// the user's choice and stick to the default directory, which can be used in File classes
+		// Uri favoriteOrgDir = Uri.parse(prefs.getString(PREF_ORG_DIR_URI, null));
+		ORG_DIR = getDefaultOrgDir(context);
 		configured = prefs.getBoolean(PREF_ORG_SD_ENABLED, false);
 	}
 
