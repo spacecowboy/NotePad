@@ -19,14 +19,11 @@ package com.nononsenseapps.notepad.prefs;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
 
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBaseV11.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogExportBackup;
 import com.nononsenseapps.notepad.fragments.DialogRestoreBackup;
 import com.nononsenseapps.notepad.sync.files.JSONBackup;

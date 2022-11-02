@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,8 @@ import android.database.Cursor;
 import android.os.Environment;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.RemoteTask;
@@ -27,10 +30,6 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 
 public class JSONBackup {
-	private static final String DEFAULT_BACKUP_DIR = Environment.getExternalStorageDirectory().toString() + "/NoNonsenseNotes";
-	private static final String DEFAULT_BACKUP_FILENAME = "/backup.json";
-	private static final String DEFAULT_BACKUP_FILEPATH = DEFAULT_BACKUP_DIR
-			+ DEFAULT_BACKUP_FILENAME;
 
 	private static final String KEY_REMINDERS = "reminders";
 	private static final String KEY_TASKS = "tasks";
@@ -43,8 +42,24 @@ public class JSONBackup {
 		this.context = context;
 	}
 
-	public static String getBackupFilePath(Context ctx) {
-		return DEFAULT_BACKUP_FILEPATH;
+	/**
+	 * @return the absolute path of the JSON file for backups, located in:
+	 * /storage/emulated/0/Android/data/com.nononsenseapps.notepad/files/Backups/backup.json
+	 */
+	@NonNull
+	public static String getBackupFilePath(@NonNull Context ctx) {
+		var backupDir = ctx.getExternalFilesDir("Backups");
+		var backupFile = new File(backupDir,"backup.json");
+
+		// TODO the old code saved the backup JSON file in the external storage directory. It is
+		//  more convenient, but to do it we need the user's permission. Eventually we should
+		//  show a file picker to let the user choose where to save the file, and keep this path
+		//  as a default, fallback value. See:
+		//  https://developer.android.com/training/data-storage/app-specific
+		//  https://developer.android.com/training/data-storage/shared/documents-files#grant-access-directory
+		//  https://stackoverflow.com/questions/58662166
+		//  https://stackoverflow.com/questions/71725859/
+		return backupFile.getAbsolutePath();
 	}
 
 	private List<TaskList> getTaskLists() {
@@ -229,7 +244,7 @@ public class JSONBackup {
 		final JSONObject backup = getJSONBackup();
 
 		// Serialise the JSON object to a file
-		final File backupFile = new File(DEFAULT_BACKUP_FILEPATH);
+		final File backupFile = new File(getBackupFilePath(this.context));
 		if (backupFile.exists()) {
 			backupFile.delete();
 		}
@@ -296,7 +311,7 @@ public class JSONBackup {
 	private JSONObject readBackup() throws JSONException, IOException,
 			FileNotFoundException {
 		// Try to read the backup file
-		final File backupFile = new File(DEFAULT_BACKUP_FILEPATH);
+		final File backupFile = new File(getBackupFilePath(this.context));
 		final StringBuilder sb = new StringBuilder();
 		String line;
 		BufferedReader reader = new BufferedReader(new FileReader(backupFile));
