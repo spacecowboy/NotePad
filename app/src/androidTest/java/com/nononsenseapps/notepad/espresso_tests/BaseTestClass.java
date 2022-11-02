@@ -3,6 +3,7 @@ package com.nononsenseapps.notepad.espresso_tests;
 import android.content.Context;
 import android.preference.PreferenceManager;
 
+import androidx.test.core.app.ApplicationProvider;
 import androidx.test.rule.ActivityTestRule;
 
 import com.nononsenseapps.notepad.ActivityMain_;
@@ -21,7 +22,7 @@ public class BaseTestClass {
 
     @After
     public void tearDown(){
-        Context context = myActivityRule.getActivity().getApplicationContext();
+        Context context = ApplicationProvider.getApplicationContext();
 
         //clear the app's data as the test is finishing
         PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit();

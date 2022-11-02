@@ -66,20 +66,22 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 
 	private static int getNumberOfNotesInList() {
 		final int[] numberOfAdapterItems = new int[1];
-		onView(allOf(isDisplayed(), withId(android.R.id.list))).check(matches(new TypeSafeMatcher<>() {
+
+		var myMatcher = new TypeSafeMatcher<View>() {
 			@Override
 			public boolean matchesSafely(View view) {
 				ListView listView = (ListView) view;
 
 				//here we assume the adapter has been fully loaded already
 				numberOfAdapterItems[0] = listView.getAdapter().getCount();
-
 				return true;
 			}
 
 			@Override
 			public void describeTo(Description description) {}
-		}));
+		};
+
+		onView(allOf(isDisplayed(), withId(android.R.id.list))).check(matches(myMatcher));
 		return numberOfAdapterItems[0];
 	}
 

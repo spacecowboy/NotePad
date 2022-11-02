@@ -68,7 +68,8 @@ public class EspressoHelper {
 			// if Espresso can find the blue button, then the overlay is currently visible
 			onView(withId(R.id.showcase_button)).check(ViewAssertions.matches(isDisplayed()));
 			return true;
-		} catch (Exception ignored) {
+		} catch (Throwable ignored) {
+			// has to be Throwable, not Exception
 			return false;
 		}
 	}

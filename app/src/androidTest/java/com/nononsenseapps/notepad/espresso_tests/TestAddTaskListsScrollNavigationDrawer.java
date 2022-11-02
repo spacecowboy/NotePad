@@ -44,16 +44,11 @@ public class TestAddTaskListsScrollNavigationDrawer extends BaseTestClass {
 			EspressoHelper.createTaskList(name);
 			EspressoHelper.openDrawer();
 		}
-
 		EspressoHelper.openDrawer();
-
-		onData(anything())
-				.inAdapterView(hasMinimumChildCount(11))
-				.atPosition(21)
-				.perform(scrollTo());
 
 		onData(CursorMatchers.withRowString("title", "ut "))
 				.inAdapterView(withId(R.id.leftDrawer))
+				.perform(scrollTo())
 				.check(matches(isDisplayed()));
 
 		// open the preferences page and check that it is visible
