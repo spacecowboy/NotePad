@@ -27,10 +27,9 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 
 public class JSONBackup {
-	public static final String DEFAULT_BACKUP_DIR = Environment
-			.getExternalStorageDirectory().toString() + "/NoNonsenseNotes";
-	public static final String DEFAULT_BACKUP_FILENAME = "/backup.json";
-	public static final String DEFAULT_BACKUP_FILEPATH = DEFAULT_BACKUP_DIR
+	private static final String DEFAULT_BACKUP_DIR = Environment.getExternalStorageDirectory().toString() + "/NoNonsenseNotes";
+	private static final String DEFAULT_BACKUP_FILENAME = "/backup.json";
+	private static final String DEFAULT_BACKUP_FILEPATH = DEFAULT_BACKUP_DIR
 			+ DEFAULT_BACKUP_FILENAME;
 
 	private static final String KEY_REMINDERS = "reminders";
@@ -42,6 +41,10 @@ public class JSONBackup {
 
 	public JSONBackup(final Context context) {
 		this.context = context;
+	}
+
+	public static String getBackupFilePath(Context ctx) {
+		return DEFAULT_BACKUP_FILEPATH;
 	}
 
 	private List<TaskList> getTaskLists() {
