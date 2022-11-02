@@ -42,10 +42,11 @@ public class Espresso_TestAddNewNoteShouldShowNameInNotesScreen extends BaseTest
     @Test
     public void testAddNewNoteShouldShowNameInNotesScreen(){
 
-        Helper.closeDrawer();
+        EspressoHelper.closeDrawer();
+        EspressoHelper.hideShowCaseViewIfShown();
 
-        Helper.createNoteWithName(noteName1);
-        Helper.navigateUp();
+        EspressoHelper.createNoteWithName(noteName1);
+        EspressoHelper.navigateUp();
 
         //onView(withText(noteName1)).check(matches(withText(noteName1)));
         onView(withText(noteName1)).check(matches(isDisplayed()));

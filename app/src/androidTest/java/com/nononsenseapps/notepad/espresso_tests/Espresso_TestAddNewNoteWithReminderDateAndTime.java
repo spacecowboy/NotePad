@@ -30,10 +30,12 @@ public class Espresso_TestAddNewNoteWithReminderDateAndTime extends BaseTestClas
 
 
     @Test
-    public void testAddNewNoteWithReminderDateAndTime(){
+    public void testAddNewNoteWithReminderDateAndTime() {
 
-        Helper.closeDrawer();
-        Helper.createNoteWithName(noteName1);
+        EspressoHelper.closeDrawer();
+        EspressoHelper.hideShowCaseViewIfShown();
+
+        EspressoHelper.createNoteWithName(noteName1);
 
         //add reminder
         onView(withId(com.nononsenseapps.notepad.R.id.notificationAdd)).perform(click());
@@ -46,14 +48,14 @@ public class Espresso_TestAddNewNoteWithReminderDateAndTime extends BaseTestClas
         onView(withId(com.nononsenseapps.notepad.R.id.notificationTime)).perform(click());
         onView(withId(com.nononsenseapps.notepad.R.id.done_button)).perform(click());
 
-        Helper.navigateUp();
+        EspressoHelper.navigateUp();
 
         //check that the date field is visible
         onView(withText(noteName1)).perform(click());
         onView(withId(R.id.notificationDate)).check(matches(isDisplayed()));
         /*
         //check that current month is visible
-        String currentMonth = Helper.getCurrentMonthName();
+        String currentMonth = EspressoHelper.getCurrentMonthName();
 
         //todo should we just make sure in here that the text field is not empty, not worry about correct date?
         onView(withText(currentMonth)).check(matches(isDisplayed()));

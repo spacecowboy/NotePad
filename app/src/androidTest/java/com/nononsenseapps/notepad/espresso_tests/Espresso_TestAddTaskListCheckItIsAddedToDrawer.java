@@ -1,44 +1,38 @@
 package com.nononsenseapps.notepad.espresso_tests;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.*;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.fail;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.filters.LargeTest;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 @LargeTest
-public class Espresso_TestAddTaskListCheckItIsAddedToDrawer extends BaseTestClass{
+public class Espresso_TestAddTaskListCheckItIsAddedToDrawer extends BaseTestClass {
 
+	private String taskListName;
 
-    private String taskListName, noteName1;
+	@Before
+	public void initStrings() {
+		taskListName = "a random task list";
+	}
 
-//    @Rule
-//    public ActivityTestRule<ActivityList> myActivityRule =
-//            new ActivityTestRule<ActivityList>(ActivityList.class);
+	@Test
+	public void testAddTaskListCheckItIsAddedToDrawer() {
+		EspressoHelper.hideShowCaseViewIfShown();
 
-    @Before
-    public void initStrings(){
-        taskListName = "a random task list";
-        noteName1 = "prepare food";
-    }
+		EspressoHelper.createTaskList(taskListName);
+		EspressoHelper.openDrawer();
 
-
-    @Test
-    public void testAddTaskListCheckItIsAddedToDrawer(){
-
-        Helper.createTaskList(taskListName);
-        Helper.openDrawer();
-
-        //check that the new note is found and has the correct text
-        onView(withText(taskListName)).check(matches(isDisplayed()));
-    }
-
-
+		//check that the new note is found and has the correct text
+		onView(allOf(withText(taskListName), withId(android.R.id.text1)))
+				.check(matches(isDisplayed()));
+	}
 
 
 }

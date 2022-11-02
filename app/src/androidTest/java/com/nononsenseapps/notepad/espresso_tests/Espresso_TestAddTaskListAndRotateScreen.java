@@ -1,48 +1,46 @@
 package com.nononsenseapps.notepad.espresso_tests;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.*;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.fail;
+import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static com.nononsenseapps.notepad.espresso_tests.OrientationChangeAction.orientationLandscape;
+import static com.nononsenseapps.notepad.espresso_tests.OrientationChangeAction.orientationPortrait;
+import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.filters.LargeTest;
 
-import org.junit.*;
-
-import static com.nononsenseapps.notepad.espresso_tests.OrientationChangeAction.*;
+import org.junit.Before;
+import org.junit.Test;
 
 @LargeTest
-public class Espresso_TestAddTaskListAndRotateScreen extends BaseTestClass{
+public class Espresso_TestAddTaskListAndRotateScreen extends BaseTestClass {
 
-    private String taskListName;
+	private String taskListName;
 
-//    @Rule
-//    public ActivityTestRule<ActivityList> myActivityRule =
-//            new ActivityTestRule<ActivityList>(ActivityList.class);
+	@Before
+	public void initStrings() {
+		taskListName = "a random task list";
+	}
 
-    @Before
-    public void initStrings(){
-        taskListName = "a random task list";
-    }
+	@Test
+	public void testAddTaskListAndRotateScreen() {
+		EspressoHelper.hideShowCaseViewIfShown();
+		EspressoHelper.createTaskList(taskListName);
 
-    @Test
-    public void testAddTaskListAndRotateScreen(){
+		EspressoHelper.openDrawer();
 
-        Helper.createTaskList(taskListName);
+		// rotate to landscape and back to portrait
+		onView(isRoot()).perform(orientationLandscape());
+		onView(isRoot()).perform(orientationPortrait());
 
-        Helper.openDrawer();
-
-        // rotate to landscape and back to portrait
-        onView(isRoot()).perform(orientationLandscape());
-        onView(isRoot()).perform(orientationPortrait());
-
-        //make sure the task list is still visible
-
-        RecyclerViewActions.scrollTo(hasDescendant(withText(taskListName)));
-        onView(withText(taskListName)).check(matches(isDisplayed()));
-
-    }
+		// make sure the task list is still visible
+		RecyclerViewActions.scrollTo(hasDescendant(withText(taskListName)));
+		onView(allOf(withText(taskListName), withId(android.R.id.text1)))
+				.check(matches(isDisplayed()));
+	}
 }

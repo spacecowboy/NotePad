@@ -4,49 +4,47 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.longClick;
 import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
-import static androidx.test.espresso.matcher.ViewMatchers.*;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.fail;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.filters.LargeTest;
 
 import com.nononsenseapps.notepad.R;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 @LargeTest
-public class Espresso_TestCreateTaskListAndDeleteIt extends BaseTestClass{
+public class Espresso_TestCreateTaskListAndDeleteIt extends BaseTestClass {
 
-    private String taskListName;
+	private String taskListName;
 
-//    @Rule
-//    public ActivityTestRule<ActivityList> myActivityRule =
-//            new ActivityTestRule<ActivityList>(ActivityList.class);
+	@Before
+	public void initStrings() {
+		taskListName = "a random task list";
 
-    @Before
-    public void initStrings(){
-        taskListName = "a random task list";
+	}
 
-    }
+	@Test
+	public void testCreateTaskListAndDeleteIt() {
 
-    @Test
-    public void testCreateTaskListAndDeleteIt(){
+		EspressoHelper.hideShowCaseViewIfShown();
+		EspressoHelper.createTaskList(taskListName);
 
-        Helper.createTaskList(taskListName);
+		EspressoHelper.openDrawer();
 
-        Helper.openDrawer();
+		onView(allOf(withText(taskListName), withId(android.R.id.text1)))
+				.perform(longClick());
 
-        onView(withText(taskListName))
-                .perform(longClick());
+		onView(withId(R.id.deleteButton))
+				.perform(click());
 
-        onView(withId(R.id.deleteButton))
-                .perform(click());
+		onView(withText("OK"))
+				.perform(click());
 
-        onView(withText("OK"))
-                .perform(click());
-
-        onView(withText(taskListName))
-                .check(doesNotExist());
-    }
+		onView(withText(taskListName))
+				.check(doesNotExist());
+	}
 
 }

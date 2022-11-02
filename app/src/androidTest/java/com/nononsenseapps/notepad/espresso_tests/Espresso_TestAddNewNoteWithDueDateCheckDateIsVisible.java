@@ -3,24 +3,22 @@ package com.nononsenseapps.notepad.espresso_tests;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.*;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.fail;
+import static androidx.test.espresso.matcher.ViewMatchers.isCompletelyDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.filters.LargeTest;
 
 import com.nononsenseapps.notepad.R;
 
-import org.junit.*;
+import org.junit.Before;
+import org.junit.Test;
 
 @LargeTest
 public class Espresso_TestAddNewNoteWithDueDateCheckDateIsVisible extends BaseTestClass{
 
     private String noteName1;
-
-//    @Rule
-//    public ActivityTestRule<ActivityList> myActivityRule =
-//            new ActivityTestRule<ActivityList>(ActivityList.class);
 
     @Before
     public void initStrings() {
@@ -31,13 +29,17 @@ public class Espresso_TestAddNewNoteWithDueDateCheckDateIsVisible extends BaseTe
     @Test
     public void testAddNewNoteWithDueDateCheckDateIsVisible() {
 
-        Helper.closeDrawer();
+        EspressoHelper.closeDrawer();
+        EspressoHelper.hideShowCaseViewIfShown();
 
-        Helper.createNoteWithName(noteName1);
+        EspressoHelper.createNoteWithName(noteName1);
         onView(withId(R.id.dueDateBox)).perform(click());
         onView(withId(R.id.done)).perform(click());
 
-        Helper.navigateUp();
-        onView(withId(R.id.date)).check(matches(isDisplayed()));
+        EspressoHelper.navigateUp();
+
+        // target only the dateview in the note shown in the "tasks" list
+        var dateView = onView(allOf(withId(R.id.date),isCompletelyDisplayed()));
+        dateView.check(matches(isDisplayed()));
     }
 }

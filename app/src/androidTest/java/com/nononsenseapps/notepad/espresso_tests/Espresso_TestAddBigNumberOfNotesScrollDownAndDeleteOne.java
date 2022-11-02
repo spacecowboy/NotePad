@@ -1,85 +1,112 @@
 package com.nononsenseapps.notepad.espresso_tests;
 
+import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertTrue;
-import static junit.framework.Assert.fail;
+import static androidx.test.espresso.action.ViewActions.*;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.*;
+import static junit.framework.Assert.*;
 
 import android.view.View;
+import android.widget.ListView;
 
-import androidx.recyclerview.widget.RecyclerView;
-import androidx.test.espresso.NoMatchingViewException;
 import androidx.test.espresso.ViewAssertion;
-import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.espresso.matcher.ViewMatchers;
 import androidx.test.filters.LargeTest;
 
-import com.nononsenseapps.notepad.R;
-
-import org.hamcrest.Matchers;
+import org.hamcrest.Description;
+import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
+
 import static android.view.View.FIND_VIEWS_WITH_TEXT;
+
+
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.containsString;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
+
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.Task;
 
 import java.util.ArrayList;
 
 @LargeTest
-public class Espresso_TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass{
+public class Espresso_TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass {
 
-    private String[] noteNameList =
-            {"prepare food", "take dogs out", "water plants", "sleep",
-            "go for a jog", "do some work", "play with the dog",
-            "work out", "do weird stuff", "read a book", "drink water",
-            "write a book", "proofread the book", "publish the book",
-            "ponder life", "build a house", "repair the house", "call contractor",
-            "write another book", "scrap the book project", "start a blog",
-            "  ", "     "
-            };
+	private final String[] noteNameList = {
+			"prepare food", "take dogs out", "water plants", "sleep",
+			"go for a jog", "do some work", "play with the dog",
+			"work out", "do weird stuff", "read a book", "drink water",
+			"write a book", "proofread the book", "publish the book",
+			"ponder life", "build a house", "repair the house", "call contractor",
+			"write another book", "scrap the book project", "start a blog",
+			"  ", "     "
+	};
 
+	@Test
+	public void testAddBigNumberOfNotesScrollDownAndDeleteOne() {
+		EspressoHelper.closeDrawer();
+		EspressoHelper.hideShowCaseViewIfShown();
 
+		if (getNumberOfNotesInList() < noteNameList.length) {
+			EspressoHelper.createNotes(noteNameList);
+		}
 
-    @Test
-    public void testAddBigNumberOfNotesScrollDownAndDeleteOne(){
+		onData(anything())
+				.inAdapterView(allOf(hasMinimumChildCount(10), withId(android.R.id.list)))
+				.atPosition(getNumberOfNotesInList() - 1) // last note in list
+				.perform(scrollTo())
+				.perform(click());
 
-        Helper.closeDrawer();
-        //create the notes
-        Helper.createNotes(noteNameList);
+		// delete the note
+		onView(withId(R.id.menu_delete)).perform(click());
+		onView(withId(android.R.id.button1)).perform(click());
 
-        onView(withId(android.R.id.list)).perform(RecyclerViewActions.actionOnItem(
-                hasDescendant(withText(noteNameList[0])), click()
-        ));
+		// check that the 1° note added was deleted
+		onView(allOf(withId(android.R.id.list), isDisplayed()))
+				.check(doesntHaveViewWithText(noteNameList[0]));
+	}
 
-        //delete the last note
-        onView(withId(R.id.menu_delete)).perform(click());
-        onView(withId(android.R.id.button1)).perform(click());
+	private static int getNumberOfNotesInList() {
+		final int[] numberOfAdapterItems = new int[1];
+		onView(allOf(isDisplayed(), withId(android.R.id.list))).check(matches(new TypeSafeMatcher<View>() {
+			@Override
+			public boolean matchesSafely(View view) {
+				ListView listView = (ListView) view;
 
-        onView(withId(android.R.id.list)).check(doesntHaveViewWithText(noteNameList[0]));
+				//here we assume the adapter has been fully loaded already
+				numberOfAdapterItems[0] = listView.getAdapter().getCount();
 
-    }
+				return true;
+			}
 
-    //credit to Chemouna @ GitHub,
-    // https://gist.github.com/chemouna/00b10369eb1d5b00401b
-    private static ViewAssertion doesntHaveViewWithText(final String text) {
-        return new ViewAssertion() {
-            @Override public void check(View view, NoMatchingViewException e) {
-                if (!(view instanceof RecyclerView)) {
-                    throw e;
-                }
-                RecyclerView rv = (RecyclerView) view;
-                ArrayList<View> outviews = new ArrayList<>();
-                for (int index = 0; index < rv.getAdapter().getItemCount(); index++) {
-                    rv.findViewHolderForAdapterPosition(index).itemView.findViewsWithText(outviews, text,
-                            FIND_VIEWS_WITH_TEXT);
-                    if (outviews.size() > 0) break;
-                }
-                // assertThat(outviews).isEmpty(); unspecified where assertThat() is supposed to be
-                assertTrue(outviews.isEmpty());
-            }
-        };
-    }
+			@Override
+			public void describeTo(Description description) {}
+		}));
+		return numberOfAdapterItems[0];
+	}
+
+	/**
+	 * credit to Chemouna @ GitHub https://gist.github.com/chemouna/00b10369eb1d5b00401b
+	 */
+	private static ViewAssertion doesntHaveViewWithText(final String text) {
+		return (view, e) -> {
+			if (!(view instanceof ListView)) {
+				throw e;
+			}
+			ListView rv = (ListView) view;
+			ArrayList<View> outviews = new ArrayList<>();
+			for (int index = 0; index < rv.getAdapter().getCount(); index++) {
+				rv
+						//.findViewHolderForAdapterPosition(index)
+						//.itemView
+						.findViewsWithText(outviews, text, FIND_VIEWS_WITH_TEXT);
+				if (outviews.size() > 0) break;
+			}
+			assertTrue(outviews.isEmpty());
+		};
+	}
 
 
 }
