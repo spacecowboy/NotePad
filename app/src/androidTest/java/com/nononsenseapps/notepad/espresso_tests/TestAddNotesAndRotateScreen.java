@@ -2,45 +2,50 @@ package com.nononsenseapps.notepad.espresso_tests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
-import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.nononsenseapps.notepad.espresso_tests.OrientationChangeAction.orientationLandscape;
 import static com.nononsenseapps.notepad.espresso_tests.OrientationChangeAction.orientationPortrait;
-import static org.hamcrest.Matchers.allOf;
 
-import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.filters.LargeTest;
 
 import org.junit.Before;
 import org.junit.Test;
 
-@LargeTest
-public class Espresso_TestAddTaskListAndRotateScreen extends BaseTestClass {
 
-	private String taskListName;
+@LargeTest
+public class TestAddNotesAndRotateScreen extends BaseTestClass {
+
+	String noteName1, noteName2, noteName3, noteName4;
 
 	@Before
 	public void initStrings() {
-		taskListName = "a random task list";
+		noteName1 = "prepare food";
+		noteName2 = "take dogs out";
+		noteName3 = "water plants";
+		noteName4 = "sleep";
 	}
 
 	@Test
-	public void testAddTaskListAndRotateScreen() {
+	public void testAddNotesAndRotateScreen() {
 		EspressoHelper.hideShowCaseViewIfShown();
-		EspressoHelper.createTaskList(taskListName);
 
-		EspressoHelper.openDrawer();
+		String[] noteNames = { noteName1, noteName2, noteName3, noteName4 };
 
-		// rotate to landscape and back to portrait
+		EspressoHelper.closeDrawer();
+		EspressoHelper.createNotes(noteNames);
+
+		// rotate screen
 		onView(isRoot()).perform(orientationLandscape());
 		onView(isRoot()).perform(orientationPortrait());
 
-		// make sure the task list is still visible
-		RecyclerViewActions.scrollTo(hasDescendant(withText(taskListName)));
-		onView(allOf(withText(taskListName), withId(android.R.id.text1)))
-				.check(matches(isDisplayed()));
+		//check that textviews still show up
+		onView(withText(noteNames[0])).check(matches(isDisplayed()));
+		onView(withText(noteNames[1])).check(matches(isDisplayed()));
+		onView(withText(noteNames[2])).check(matches(isDisplayed()));
+		onView(withText(noteNames[3])).check(matches(isDisplayed()));
 	}
 }
+
+

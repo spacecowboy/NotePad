@@ -1,50 +1,39 @@
 package com.nononsenseapps.notepad.espresso_tests;
 
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
-import static androidx.test.espresso.action.ViewActions.longClick;
-import static androidx.test.espresso.assertion.ViewAssertions.doesNotExist;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
 
 import androidx.test.filters.LargeTest;
 
-import com.nononsenseapps.notepad.R;
-
 import org.junit.Before;
 import org.junit.Test;
 
 @LargeTest
-public class Espresso_TestCreateTaskListAndDeleteIt extends BaseTestClass {
+public class TestAddTaskListCheckItIsAddedToDrawer extends BaseTestClass {
 
 	private String taskListName;
 
 	@Before
 	public void initStrings() {
 		taskListName = "a random task list";
-
 	}
 
 	@Test
-	public void testCreateTaskListAndDeleteIt() {
-
+	public void testAddTaskListCheckItIsAddedToDrawer() {
 		EspressoHelper.hideShowCaseViewIfShown();
-		EspressoHelper.createTaskList(taskListName);
 
+		EspressoHelper.createTaskList(taskListName);
 		EspressoHelper.openDrawer();
 
+		//check that the new note is found and has the correct text
 		onView(allOf(withText(taskListName), withId(android.R.id.text1)))
-				.perform(longClick());
-
-		onView(withId(R.id.deleteButton))
-				.perform(click());
-
-		onView(withText("OK"))
-				.perform(click());
-
-		onView(withText(taskListName))
-				.check(doesNotExist());
+				.check(matches(isDisplayed()));
 	}
 
+
 }
+

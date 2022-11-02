@@ -22,7 +22,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 @LargeTest
-public class Espresso_TestAddTaskListsScrollNavigationDrawer extends BaseTestClass {
+public class TestAddTaskListsScrollNavigationDrawer extends BaseTestClass {
 
 	String[] taskListNames = { "Lorem", "ipsum ", "dolor ", "sit ", "amet", "consectetur ",
 			"adipiscing ", "elit", "sed ", "do ", "eiusmod ", "tempor ", "incididunt ",

@@ -19,7 +19,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 @LargeTest
-public class Espresso_TestCompletedTasksAreCleared extends BaseTestClass {
+public class TestCompletedTasksAreCleared extends BaseTestClass {
 
 	String noteName1, noteName2, noteName3, noteName4;
 

@@ -14,7 +14,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 @LargeTest
-public class Espresso_TestAddNoteToTaskList extends BaseTestClass {
+public class TestAddNoteToTaskList extends BaseTestClass {
 
 	private String taskListName, noteName1;
 

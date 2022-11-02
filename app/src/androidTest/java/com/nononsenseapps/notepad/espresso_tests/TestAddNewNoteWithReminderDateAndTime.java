@@ -14,7 +14,7 @@ import com.nononsenseapps.notepad.R;
 import org.junit.*;
 
 @LargeTest
-public class Espresso_TestAddNewNoteWithReminderDateAndTime extends BaseTestClass{
+public class TestAddNewNoteWithReminderDateAndTime extends BaseTestClass{
 
     private String noteName1;
 

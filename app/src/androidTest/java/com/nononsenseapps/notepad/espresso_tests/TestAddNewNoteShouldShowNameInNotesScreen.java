@@ -12,7 +12,7 @@ import androidx.test.filters.LargeTest;
 import org.junit.*;
 
 @LargeTest
-public class Espresso_TestAddNewNoteShouldShowNameInNotesScreen extends BaseTestClass{
+public class TestAddNewNoteShouldShowNameInNotesScreen extends BaseTestClass{
 
     private String noteName1;
 

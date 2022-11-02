@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 @LargeTest
-public class Espresso_TestCreateNoteAndDeleteIt extends BaseTestClass {
+public class TestCreateNoteAndDeleteIt extends BaseTestClass {
 
 	private String noteName1;
 

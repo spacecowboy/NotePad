@@ -16,7 +16,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 @LargeTest
-public class Espresso_TestAddNewNoteWithDueDateCheckDateIsVisible extends BaseTestClass{
+public class TestAddNewNoteWithDueDateCheckDateIsVisible extends BaseTestClass{
 
     private String noteName1;
 

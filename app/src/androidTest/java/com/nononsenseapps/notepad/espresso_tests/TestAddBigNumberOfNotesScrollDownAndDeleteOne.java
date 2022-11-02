@@ -1,11 +1,17 @@
 package com.nononsenseapps.notepad.espresso_tests;
 
+import static android.view.View.FIND_VIEWS_WITH_TEXT;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.*;
+import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.*;
-import static junit.framework.Assert.*;
+import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
+import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static junit.framework.Assert.assertTrue;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.anything;
 
 import android.view.View;
 import android.widget.ListView;
@@ -13,26 +19,16 @@ import android.widget.ListView;
 import androidx.test.espresso.ViewAssertion;
 import androidx.test.filters.LargeTest;
 
+import com.nononsenseapps.notepad.R;
+
 import org.hamcrest.Description;
 import org.hamcrest.TypeSafeMatcher;
 import org.junit.Test;
 
-import static android.view.View.FIND_VIEWS_WITH_TEXT;
-
-
-import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
-import static org.hamcrest.Matchers.containsString;
-import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
-
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.Task;
-
 import java.util.ArrayList;
 
 @LargeTest
-public class Espresso_TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass {
+public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass {
 
 	private final String[] noteNameList = {
 			"prepare food", "take dogs out", "water plants", "sleep",
@@ -70,7 +66,7 @@ public class Espresso_TestAddBigNumberOfNotesScrollDownAndDeleteOne extends Base
 
 	private static int getNumberOfNotesInList() {
 		final int[] numberOfAdapterItems = new int[1];
-		onView(allOf(isDisplayed(), withId(android.R.id.list))).check(matches(new TypeSafeMatcher<View>() {
+		onView(allOf(isDisplayed(), withId(android.R.id.list))).check(matches(new TypeSafeMatcher<>() {
 			@Override
 			public boolean matchesSafely(View view) {
 				ListView listView = (ListView) view;
