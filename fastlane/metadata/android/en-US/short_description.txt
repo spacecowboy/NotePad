@@ -1,1 +1,1 @@
-Notepad and todo app with an excellent navigation
+Notepad and to-do app with an excellent navigation

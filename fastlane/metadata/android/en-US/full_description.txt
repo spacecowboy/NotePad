@@ -1,5 +1,5 @@
 Now updated to use the latest android technologies,
-this open source Notepad and todo list app has these Features:
+this open source Notepad and to-do list app has these Features:
 
 * Dash Clock support (yes, it still works)
 * Notifications (repeatable)
