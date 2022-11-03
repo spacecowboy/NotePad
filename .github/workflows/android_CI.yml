@@ -1,0 +1,78 @@
+name: Android CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  # job 1 - build and upload the apk
+  build:
+    runs-on: ubuntu-latest    
+    permissions:
+      contents: read    
+    steps:
+    - name: perform the checkout
+      uses: actions/checkout@v3
+      
+    - name: perform the validation
+      uses: gradle/wrapper-validation-action@v1
+      
+    - name: perform the JDK setup
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: perform the Gradle build
+      run: ./gradlew build
+
+    - name: perform the APK upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: app_debug
+        path: app/build/outputs/apk/debug/*.apk
+
+  # job 2 - run tests
+  test-android:    
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    strategy:
+      matrix:        
+        api-level: [ 23, 32 ]
+
+    permissions:
+      contents: read
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: set up JDK 11
+        uses: actions/setup-java@v3
+        with:
+          java-version: 11
+          distribution: "temurin"
+          cache: 'gradle'
+
+      - name: Run android tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          # workaround to emulator bug: https://github.com/ReactiveCircus/android-emulator-runner/issues/160
+          emulator-build: 7425822
+          script: ./gradlew connectedCheck --stacktrace
+
+      - name: Upload test report when tests fail 
+        # because the printed out stacktrace (console) is too short
+        uses: actions/upload-artifact@v3
+        if: failure()
+        with:
+          name: android-test-report-api${{ matrix.api-level }}
+          path: app/build/reports/androidTests/connected/**
+
+
