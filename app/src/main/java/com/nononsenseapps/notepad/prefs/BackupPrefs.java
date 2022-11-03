@@ -19,20 +19,16 @@ package com.nononsenseapps.notepad.prefs;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.Preference;
-import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
 
+import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBaseV11.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogExportBackup;
 import com.nononsenseapps.notepad.fragments.DialogRestoreBackup;
 import com.nononsenseapps.notepad.sync.files.JSONBackup;
 
 import java.io.FileNotFoundException;
-
-// import com.nononsenseapps.notepad.NotePad;
 
 public class BackupPrefs extends PreferenceFragment {
 
@@ -57,6 +53,9 @@ public class BackupPrefs extends PreferenceFragment {
 				return 2;
 			}
 		}
+
+		// TODO instead of using the hardcoded path, let the user pick a file.
+		//  See https://stackoverflow.com/questions/58662166
 
 		protected void onPostExecute(final Integer result) {
 			Context context = getActivity();
@@ -90,51 +89,30 @@ public class BackupPrefs extends PreferenceFragment {
 		backupMaker = new JSONBackup(getActivity());
 
 		findPreference(KEY_IMPORT).setOnPreferenceClickListener(
-				new OnPreferenceClickListener() {
-
-					@Override
-					public boolean onPreferenceClick(Preference preference) {
-
-						DialogRestoreBackup.showDialog(getFragmentManager(),
-								new DialogConfirmedListener() {
-
-									@Override
-									public void onConfirm() {
-										bgTask = new RestoreBackupTask();
-										bgTask.execute();
-									}
-
-								});
-
-						return true;
-					}
+				preference -> {
+					DialogRestoreBackup.showDialog(getFragmentManager(),
+							() -> {
+								bgTask = new RestoreBackupTask();
+								bgTask.execute();
+							});
+					return true;
 				});
+
 		findPreference(KEY_EXPORT).setOnPreferenceClickListener(
-				new OnPreferenceClickListener() {
+				preference -> {
+					DialogExportBackup.showDialog(getFragmentManager(), () -> {
+						try {
+							backupMaker.writeBackup();
+							Toast.makeText(getActivity(), R.string.backup_export_success, Toast.LENGTH_SHORT)
+									.show();
+						} catch (Exception e) {
+							Log.exception(e);
+							Toast.makeText(getActivity(), R.string.backup_export_failed, Toast.LENGTH_SHORT)
+									.show();
+						}
+					});
 
-					@Override
-					public boolean onPreferenceClick(Preference preference) {
-
-						DialogExportBackup.showDialog(getFragmentManager(), new DialogConfirmedListener() {
-
-							@Override
-							public void onConfirm() {
-								try {
-									backupMaker.writeBackup();
-									Toast.makeText(getActivity(),
-											R.string.backup_export_success,
-											Toast.LENGTH_SHORT).show();
-								} catch (Exception e) {
-									Toast.makeText(getActivity(),
-											R.string.backup_export_failed,
-											Toast.LENGTH_SHORT).show();
-								}
-							}
-						});
-
-						return true;
-					}
+					return true;
 				});
-
 	}
 }

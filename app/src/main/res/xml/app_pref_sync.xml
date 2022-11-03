@@ -70,7 +70,7 @@
             android:title="@string/sd_card_sync"/>
         <Preference
             android:dependency="pref_sync_sd_enabled"
-            android:key="pref_sync_sd_dir"
+            android:key="pref_sync_sd_dir_uri"
             android:summary="@string/directory_summary"
             android:title="@string/directory"/>
 

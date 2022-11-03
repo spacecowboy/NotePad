@@ -847,10 +847,13 @@ public class TaskListFragment extends Fragment implements
 	}
 
 	@Override
-	public void onSharedPreferenceChanged(final SharedPreferences prefs,
-										  final String key) {
+	public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
 		if (isDetached()) {
 			// Fix crash report
+			return;
+		}
+		if (key == null) {
+			// it happens sometimes during Espresso tests
 			return;
 		}
 		try {

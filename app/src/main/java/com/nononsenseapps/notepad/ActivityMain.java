@@ -1088,6 +1088,8 @@ public class ActivityMain extends FragmentActivity
 		options.block = true;
 		// Used in saving state
 		options.showcaseId = 1;
+		// close the showcase even if the user does not click exactly on the button
+		options.hideOnClickOutside = true;
 		final int vertDp = ViewsHelper.convertDip2Pixels(this, 200);
 		final int horDp = ViewsHelper.convertDip2Pixels(this, 200);
 		sv = ShowcaseView
@@ -1119,6 +1121,8 @@ public class ActivityMain extends FragmentActivity
 			final ConfigOptions options = new ConfigOptions();
 			options.shotType = ShowcaseView.TYPE_NO_LIMIT;
 			options.block = true;
+			// close the showcase even if the user does not click exactly on the button
+			options.hideOnClickOutside = true;
 			// Used in saving state
 			options.showcaseId = 2;
 			sv = ShowcaseView.insertShowcaseView(horDp, vertDp, this,
@@ -1256,10 +1260,12 @@ public class ActivityMain extends FragmentActivity
 	}
 
 	@Override
-	public void onSharedPreferenceChanged(final SharedPreferences prefs,
-										  final String key) {
-		if (key.equals(MainPrefs.KEY_THEME) ||
-				key.equals(getString(R.string.pref_locale))) {
+	public void onSharedPreferenceChanged(final SharedPreferences prefs, final String key) {
+		if (key == null) {
+			// it happens sometimes during Espresso tests
+			return;
+		}
+		if (key.equals(MainPrefs.KEY_THEME) || key.equals(getString(R.string.pref_locale))) {
 			shouldRestart = true;
 		} else if (key.startsWith("pref_restart")) {
 			shouldRestart = true;

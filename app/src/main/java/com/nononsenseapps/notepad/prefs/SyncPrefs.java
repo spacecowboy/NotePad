@@ -35,15 +35,19 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.provider.DocumentsContract;
 import android.widget.Toast;
 
+import androidx.documentfile.provider.DocumentFile;
+
 import com.nononsenseapps.build.Config;
-import com.nononsenseapps.filepicker.FilePickerActivity;
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.R;
@@ -72,7 +76,7 @@ public class SyncPrefs extends PreferenceFragment implements
 
 	// SD sync
 	public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
-	public static final String KEY_SD_DIR = "pref_sync_sd_dir";
+	public static final String KEY_SD_DIR_URI = "pref_sync_sd_dir_uri";
 	private static final int PICK_SD_DIR_CODE = 1;
 
 
@@ -100,20 +104,17 @@ public class SyncPrefs extends PreferenceFragment implements
 		return null;
 	}
 
-	public static void setSyncInterval(Context activity,
-									   SharedPreferences sharedPreferences) {
+	public static void setSyncInterval(Context activity, SharedPreferences sharedPreferences) {
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
-		boolean backgroundSync = sharedPreferences.getBoolean(
-				KEY_BACKGROUND_SYNC, false);
+		boolean backgroundSync = sharedPreferences.getBoolean(KEY_BACKGROUND_SYNC, false);
 
 		if (accountName != null && !accountName.isEmpty()) {
 			Account account = getAccount(AccountManager.get(activity), accountName);
 			if (account != null) {
 				if (!backgroundSync) {
 					// Disable periodic syncing
-					ContentResolver.removePeriodicSync(
-							account,
-							MyContentProvider.AUTHORITY, new Bundle());
+					ContentResolver
+							.removePeriodicSync(account, MyContentProvider.AUTHORITY, new Bundle());
 				} else {
 					// Convert from minutes to seconds
 					long pollFrequency = 3600;
@@ -150,17 +151,13 @@ public class SyncPrefs extends PreferenceFragment implements
 		sharedPrefs.registerOnSharedPreferenceChangeListener(this);
 
 		// Set summaries
-
 		setAccountTitle(sharedPrefs);
 
-		prefAccount
-				.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-					public boolean onPreferenceClick(Preference preference) {
-						// Show dialog
-						showAccountDialog();
-						return true;
-					}
-				});
+		prefAccount.setOnPreferenceClickListener(preference -> {
+			// Show dialog
+			showAccountDialog();
+			return true;
+		});
 
 		// Disable prefs if this is not correct build
 		findPreference(KEY_SYNC_ENABLE).setEnabled(
@@ -168,25 +165,31 @@ public class SyncPrefs extends PreferenceFragment implements
 						!Config.getGtasksApiKey(getActivity()).contains(" "));
 
 		// SD Card
-		prefSdDir = findPreference(KEY_SD_DIR);
+		prefSdDir = findPreference(KEY_SD_DIR_URI);
 		setSdDirSummary(sharedPrefs);
-		prefSdDir.setOnPreferenceClickListener(new OnPreferenceClickListener() {
-			@Override
-			public boolean onPreferenceClick(final Preference preference) {
-				// Start the filepicker
-				Intent i = new Intent(getActivity(), FilePickerActivity.class);
+		prefSdDir.setOnPreferenceClickListener(preference -> {
 
-				i.putExtra(FilePickerActivity.EXTRA_START_PATH,
-								sharedPrefs.getString(KEY_SD_DIR,
-										SDSynchronizer.DEFAULT_ORG_DIR)
-						)
-						.putExtra(FilePickerActivity.EXTRA_ALLOW_MULTIPLE, false)
-						.putExtra(FilePickerActivity.EXTRA_ALLOW_CREATE_DIR, true)
-						.putExtra(FilePickerActivity.EXTRA_MODE,
-								FilePickerActivity.MODE_DIR);
-				startActivityForResult(i, PICK_SD_DIR_CODE);
-				return true;
+			// Let the user choose a directory using the system's file picker. See
+			// https://developer.android.com/training/data-storage/shared/documents-files#grant-access-directory
+			var i = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
+
+			// get the previously selected Uri
+			String defaultDir = SDSynchronizer.getDefaultOrgDir(this.getContext());
+			String oldSetting = sharedPrefs.getString(KEY_SD_DIR_URI, defaultDir);
+			Uri uriToLoad = Uri.parse(oldSetting);
+
+			// don't add this: it stops working on some devices, like the emulator with API 25!
+			// i.setType(DocumentsContract.Document.MIME_TYPE_DIR);
+
+			// specify a URI for the directory that should be opened in
+			// the system file picker when it loads.
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+				i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uriToLoad);
 			}
+
+			// Start the filepicker
+			startActivityForResult(i, PICK_SD_DIR_CODE);
+			return true;
 		});
 	}
 
@@ -231,7 +234,7 @@ public class SyncPrefs extends PreferenceFragment implements
 				} else if (KEY_SD_ENABLE.equals(key)) {
 					// Restart the sync service
 					OrgSyncService.stop(getActivity());
-				} else if (KEY_SD_DIR.equals(key)) {
+				} else if (KEY_SD_DIR_URI.equals(key)) {
 					setSdDirSummary(prefs);
 				}
 			}
@@ -250,21 +253,33 @@ public class SyncPrefs extends PreferenceFragment implements
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-		if (requestCode == PICK_SD_DIR_CODE) {
-			if (resultCode == Activity.RESULT_OK) {
-				// Set it
-				File path = new File(data.getData().getPath());
-				if (path.exists() && path.isDirectory() && path.canWrite()) {
-					PreferenceManager.getDefaultSharedPreferences(getActivity
-							()).edit().putString(KEY_SD_DIR,
-							path.toString()).commit();
-				} else {
-					Toast.makeText(getActivity(), R.string.cannot_write_to_directory,
-							Toast.LENGTH_SHORT).show();
-				}
-			} // else was cancelled
-		} else {
+		if (requestCode != PICK_SD_DIR_CODE) {
 			super.onActivityResult(requestCode, resultCode, data);
+			return;
+		}
+
+		if (resultCode != Activity.RESULT_OK) {
+			// it was cancelled by the user. Let's ignore it
+			return;
+		}
+
+		// "data" contains the URI for the directory (A.K.A. the "document tree")
+		// that the user selected
+		Uri uri = data.getData();
+
+		// represents the directory that the user just picked. Use this instead of the "File" class
+		var docDir = DocumentFile.fromTreeUri(this.getContext(), uri);
+
+		boolean isOk = docDir != null && docDir.exists() && docDir.isDirectory() && docDir.canWrite();
+		if (isOk) {
+			PreferenceManager
+					.getDefaultSharedPreferences(getActivity())
+					.edit()
+					.putString(KEY_SD_DIR_URI, uri.toString())
+					.commit();
+		} else {
+			Toast.makeText(getActivity(), R.string.cannot_write_to_directory, Toast.LENGTH_SHORT)
+					.show();
 		}
 	}
 
@@ -303,12 +318,11 @@ public class SyncPrefs extends PreferenceFragment implements
 	}
 
 	private void setSdDirSummary(final SharedPreferences sharedPreferences) {
-		prefSdDir.setSummary(sharedPreferences.getString(KEY_SD_DIR,
-				SDSynchronizer.DEFAULT_ORG_DIR));
+		String defaultDir = SDSynchronizer.getDefaultOrgDir(this.getContext());
+		prefSdDir.setSummary(sharedPreferences.getString(KEY_SD_DIR_URI, defaultDir));
 	}
 
-	public static class AccountDialog extends DialogFragment implements
-			AccountManagerCallback<Bundle> {
+	public static class AccountDialog extends DialogFragment implements AccountManagerCallback<Bundle> {
 		private Activity activity;
 		private Account account;
 
@@ -330,7 +344,7 @@ public class SyncPrefs extends PreferenceFragment implements
 				names[i] = accounts[i].name;
 			}
 			// TODO
-			// Could add a clear alternative here
+			//  Could add a clear alternative here
 			builder.setItems(names, new DialogInterface.OnClickListener() {
 				public void onClick(DialogInterface dialog, int which) {
 					// Stuff to do when the account is selected by the user

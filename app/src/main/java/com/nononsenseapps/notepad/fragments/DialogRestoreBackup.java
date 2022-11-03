@@ -26,7 +26,8 @@ public class DialogRestoreBackup extends DialogConfirmBaseV11 {
 
 	@Override
 	public CharSequence getMessage() {
-		return getString(R.string.backup_import_msg, JSONBackup.DEFAULT_BACKUP_FILEPATH);
+		String backupFilepath = JSONBackup.getBackupFilePath(this.getContext());
+		return getString(R.string.backup_import_msg, backupFilepath);
 	}
 
 	@Override
