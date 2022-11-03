@@ -8,9 +8,11 @@ import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
+import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
+import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
 
 import androidx.test.InstrumentationRegistry;
@@ -55,6 +57,7 @@ public class TestAddTaskListsScrollNavigationDrawer extends BaseTestClass {
 		// open the preferences page and check that it is visible
 		openContextualActionModeOverflowMenu();
 		onView(withText(SETTINGS_TEXT)).perform(click());
-		onView(withText(SETTINGS_APPEARANCE_TEXT)).check(matches(isDisplayed()));
+		onView(allOf(withText(SETTINGS_APPEARANCE_TEXT), isClickable()))
+				.check(matches(isDisplayed()));
 	}
 }
