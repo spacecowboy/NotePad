@@ -1,4 +1,4 @@
-name: Android build and tests
+name: Android tests
 
 on:
   push:
@@ -7,53 +7,18 @@ on:
     branches: [ "master" ]
 
 jobs:
-  # job 1 - build and upload the apk
-  build_the_apk:
-    # there's no need to run it on forks
-    if: github.repository == 'spacecowboy/NotePad'
-    runs-on: ubuntu-latest    
-    permissions:
-      contents: read    
-    steps:
-    - name: perform the checkout
-      uses: actions/checkout@v3
-      
-    - name: perform the validation
-      uses: gradle/wrapper-validation-action@v1
-      
-    - name: perform the JDK setup
-      uses: actions/setup-java@v3
-      with:
-        java-version: '11'
-        distribution: 'temurin'
-        cache: gradle
-
-    - name: Grant execute permission for gradlew
-      run: chmod +x gradlew
-      
-    - name: perform the Gradle build
-      run: ./gradlew build
-
-    - name: perform the APK upload
-      uses: actions/upload-artifact@v3
-      with:
-        name: app_debug
-        path: app/build/outputs/apk/debug/*.apk
-        retention-days: 1
-
-  # job 2 - run tests
+  # this job runs all the tests
   test_on_android:
     # there's no need to run it on forks
     if: github.repository == 'spacecowboy/NotePad'
     runs-on: macos-latest # it has hardware acceleration
     timeout-minutes: 15
     strategy:
-      matrix:        
+      matrix:
+        # test the app on emulators with these OS versions installed
         api-level: [ 23, 29, 30, 31, 32 ] # TODO keep only 23 and 32 if they both work
-
     permissions:
       contents: read
-
     steps:
       - name: perform the checkout
         uses: actions/checkout@v3
@@ -93,7 +58,7 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -no-boot-anim -camera-back none
           script: ./gradlew connectedCheck --stacktrace
 
-      - name: Upload test report when tests fail 
+      - name: Upload test report when tests fail
         # because the printed out stacktrace (console) is too short
         uses: actions/upload-artifact@v3
         if: failure()
