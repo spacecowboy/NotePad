@@ -58,10 +58,16 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 		super(context);
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-		// TODO actually use the user-selected directory for ORG files
-		// android's framework forces the use of URIs instead of file paths, so for now we ignore
-		// the user's choice and stick to the default directory, which can be used in File classes
-		// Uri favoriteOrgDir = Uri.parse(prefs.getString(PREF_ORG_DIR_URI, null));
+		Uri favoriteOrgDir;
+		String favoriteUriStr = prefs.getString(PREF_ORG_DIR_URI, null);
+		if (favoriteUriStr == null)
+			favoriteOrgDir = Uri.fromFile(new File(getDefaultOrgDir(context))); // TODO does it even work ??
+		else favoriteOrgDir = Uri.parse(favoriteUriStr);
+
+		// TODO actually use the user-selected directory for ORG files in "favoriteOrgDir":
+		//  android's framework forces the use of URIs instead of file paths, so for now we ignore
+		//  the user's choice and stick to the default directory, which can be used in File classes
+
 		ORG_DIR = getDefaultOrgDir(context);
 		configured = prefs.getBoolean(PREF_ORG_SD_ENABLED, false);
 	}
