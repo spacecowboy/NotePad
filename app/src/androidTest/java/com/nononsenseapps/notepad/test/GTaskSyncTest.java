@@ -44,7 +44,7 @@ public class GTaskSyncTest extends TestCase {
 
 	Context mContext;
 
-	public GTaskSyncTest() { mContext = InstrumentationRegistry.getInstrumentation().getTargetContext(); }
+	public GTaskSyncTest() {mContext = InstrumentationRegistry.getInstrumentation().getTargetContext();}
 
 	@Override
 	public void setUp() throws Exception {

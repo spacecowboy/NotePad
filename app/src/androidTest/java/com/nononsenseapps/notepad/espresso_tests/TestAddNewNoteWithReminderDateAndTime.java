@@ -14,38 +14,38 @@ import com.nononsenseapps.notepad.R;
 import org.junit.*;
 
 @LargeTest
-public class TestAddNewNoteWithReminderDateAndTime extends BaseTestClass{
+public class TestAddNewNoteWithReminderDateAndTime extends BaseTestClass {
 
-    private String noteName1;
+	private String noteName1;
 
-    @Before
-    public void initStrings(){
-        noteName1 = "prepare food";
-    }
+	@Before
+	public void initStrings() {
+		noteName1 = "prepare food";
+	}
 
-    @Test
-    public void testAddNewNoteWithReminderDateAndTime() {
+	@Test
+	public void testAddNewNoteWithReminderDateAndTime() {
 
-        EspressoHelper.closeDrawer();
-        EspressoHelper.hideShowCaseViewIfShown();
+		EspressoHelper.closeDrawer();
+		EspressoHelper.hideShowCaseViewIfShown();
 
-        EspressoHelper.createNoteWithName(noteName1);
+		EspressoHelper.createNoteWithName(noteName1);
 
-        //add reminder
-        onView(withId(com.nononsenseapps.notepad.R.id.notificationAdd)).perform(click());
+		//add reminder
+		onView(withId(com.nononsenseapps.notepad.R.id.notificationAdd)).perform(click());
 
-        //add date
-        onView(withId(com.nononsenseapps.notepad.R.id.notificationDate)).perform(click());
-        onView(withId(com.nononsenseapps.notepad.R.id.done)).perform(click());
+		//add date
+		onView(withId(com.nononsenseapps.notepad.R.id.notificationDate)).perform(click());
+		onView(withId(com.nononsenseapps.notepad.R.id.done)).perform(click());
 
-        //add time
-        onView(withId(com.nononsenseapps.notepad.R.id.notificationTime)).perform(click());
-        onView(withId(com.nononsenseapps.notepad.R.id.done_button)).perform(click());
+		//add time
+		onView(withId(com.nononsenseapps.notepad.R.id.notificationTime)).perform(click());
+		onView(withId(com.nononsenseapps.notepad.R.id.done_button)).perform(click());
 
-        EspressoHelper.navigateUp();
+		EspressoHelper.navigateUp();
 
-        //check that the date field is visible
-        onView(withText(noteName1)).perform(click());
-        onView(withId(R.id.notificationDate)).check(matches(isDisplayed()));
-    }
+		//check that the date field is visible
+		onView(withText(noteName1)).perform(click());
+		onView(withId(R.id.notificationDate)).check(matches(isDisplayed()));
+	}
 }

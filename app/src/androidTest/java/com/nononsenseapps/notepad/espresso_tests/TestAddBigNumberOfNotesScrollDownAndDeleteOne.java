@@ -40,33 +40,6 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 			"  ", "     "
 	};
 
-	@Test
-	public void testAddBigNumberOfNotesScrollDownAndDeleteOne() {
-		EspressoHelper.closeDrawer();
-		EspressoHelper.hideShowCaseViewIfShown();
-
-		if (getNumberOfNotesInList() < noteNameList.length) {
-			EspressoHelper.createNotes(noteNameList);
-		}
-
-		// a lower number makes it more likely for the test to succeed
-		int minChildCount = 3;
-
-		onData(anything())
-				.inAdapterView(allOf(hasMinimumChildCount(minChildCount), withId(android.R.id.list)))
-				.atPosition(getNumberOfNotesInList() - 1) // last note in list
-				.perform(scrollTo())
-				.perform(click());
-
-		// delete the note
-		onView(withId(R.id.menu_delete)).perform(click());
-		onView(withId(android.R.id.button1)).perform(click());
-
-		// check that the 1° note added was deleted
-		onView(allOf(withId(android.R.id.list), isDisplayed()))
-				.check(doesntHaveViewWithText(noteNameList[0]));
-	}
-
 	private static int getNumberOfNotesInList() {
 		final int[] numberOfAdapterItems = new int[1];
 
@@ -107,6 +80,33 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 			}
 			assertTrue(outviews.isEmpty());
 		};
+	}
+
+	@Test
+	public void testAddBigNumberOfNotesScrollDownAndDeleteOne() {
+		EspressoHelper.closeDrawer();
+		EspressoHelper.hideShowCaseViewIfShown();
+
+		if (getNumberOfNotesInList() < noteNameList.length) {
+			EspressoHelper.createNotes(noteNameList);
+		}
+
+		// a lower number makes it more likely for the test to succeed
+		int minChildCount = 3;
+
+		onData(anything())
+				.inAdapterView(allOf(hasMinimumChildCount(minChildCount), withId(android.R.id.list)))
+				.atPosition(getNumberOfNotesInList() - 1) // last note in list
+				.perform(scrollTo())
+				.perform(click());
+
+		// delete the note
+		onView(withId(R.id.menu_delete)).perform(click());
+		onView(withId(android.R.id.button1)).perform(click());
+
+		// check that the 1° note added was deleted
+		onView(allOf(withId(android.R.id.list), isDisplayed()))
+				.check(doesntHaveViewWithText(noteNameList[0]));
 	}
 
 

@@ -14,20 +14,21 @@ import org.junit.Rule;
 
 public class BaseTestClass {
 
-    // INFO: ActivityMain_ was renamed to ActivityList in release 6.0.0 beta,
-    // it has to do with getting rid of the annotations library
-    // the replacement, ActivityScenarioRule does not work
-    @SuppressWarnings("deprecation") @Rule
-    public ActivityTestRule<ActivityMain_> myActivityRule
-            = new ActivityTestRule<>(ActivityMain_.class);
+	// INFO: ActivityMain_ was renamed to ActivityList in release 6.0.0 beta,
+	// it has to do with getting rid of the annotations library
+	// the replacement, ActivityScenarioRule does not work
+	@SuppressWarnings("deprecation")
+	@Rule
+	public ActivityTestRule<ActivityMain_> myActivityRule
+			= new ActivityTestRule<>(ActivityMain_.class);
 
-    @After
-    public void tearDown(){
-        Context context = ApplicationProvider.getApplicationContext();
+	@After
+	public void tearDown() {
+		Context context = ApplicationProvider.getApplicationContext();
 
-        //clear the app's data as the test is finishing
-        PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit();
-        DatabaseHandler.resetDatabase(context);
-    }
+		//clear the app's data as the test is finishing
+		PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit();
+		DatabaseHandler.resetDatabase(context);
+	}
 
 }

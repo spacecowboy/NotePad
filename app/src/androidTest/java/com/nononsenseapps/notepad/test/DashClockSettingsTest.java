@@ -34,7 +34,8 @@ import org.junit.Test;
 public class DashClockSettingsTest {
 
 	// the replacement, ActivityScenarioRule does not work
-	@SuppressWarnings("deprecation") @Rule
+	@SuppressWarnings("deprecation")
+	@Rule
 	public ActivityTestRule<TasksSettings> mActivityRule
 			= new ActivityTestRule<>(TasksSettings.class, false);
 

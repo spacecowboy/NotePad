@@ -16,30 +16,30 @@ import org.junit.Before;
 import org.junit.Test;
 
 @LargeTest
-public class TestAddNewNoteWithDueDateCheckDateIsVisible extends BaseTestClass{
+public class TestAddNewNoteWithDueDateCheckDateIsVisible extends BaseTestClass {
 
-    private String noteName1;
+	private String noteName1;
 
-    @Before
-    public void initStrings() {
-        noteName1 = "prepare food";
+	@Before
+	public void initStrings() {
+		noteName1 = "prepare food";
 
-    }
+	}
 
-    @Test
-    public void testAddNewNoteWithDueDateCheckDateIsVisible() {
+	@Test
+	public void testAddNewNoteWithDueDateCheckDateIsVisible() {
 
-        EspressoHelper.closeDrawer();
-        EspressoHelper.hideShowCaseViewIfShown();
+		EspressoHelper.closeDrawer();
+		EspressoHelper.hideShowCaseViewIfShown();
 
-        EspressoHelper.createNoteWithName(noteName1);
-        onView(withId(R.id.dueDateBox)).perform(click());
-        onView(withId(R.id.done)).perform(click());
+		EspressoHelper.createNoteWithName(noteName1);
+		onView(withId(R.id.dueDateBox)).perform(click());
+		onView(withId(R.id.done)).perform(click());
 
-        EspressoHelper.navigateUp();
+		EspressoHelper.navigateUp();
 
-        // target only the dateview in the note shown in the "tasks" list
-        var dateView = onView(allOf(withId(R.id.date),isCompletelyDisplayed()));
-        dateView.check(matches(isDisplayed()));
-    }
+		// target only the dateview in the note shown in the "tasks" list
+		var dateView = onView(allOf(withId(R.id.date), isCompletelyDisplayed()));
+		dateView.check(matches(isDisplayed()));
+	}
 }
