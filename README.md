@@ -1,6 +1,6 @@
 # NoNonsense Notes
 
-[![Crowdin](https://d322cqt584bo4o.cloudfront.net/nononsensenotes/localized.png)](https://crowdin.com/project/nononsensenotes)   [![Android CI](https://github.com/spacecowboy/NotePad/actions/workflows/android_CI.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_CI.yml)
+[![Crowdin](https://d322cqt584bo4o.cloudfront.net/nononsensenotes/localized.png)](https://crowdin.com/project/nononsensenotes)       [![Android build](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml)      [![Android tests](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml)
 
 a note taking app for android, with reminders.
 The app is currently being updated, and old versions are still available on f-droid:
