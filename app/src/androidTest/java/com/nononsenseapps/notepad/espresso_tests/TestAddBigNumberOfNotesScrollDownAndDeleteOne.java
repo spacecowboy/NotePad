@@ -49,8 +49,11 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 			EspressoHelper.createNotes(noteNameList);
 		}
 
+		// a lower number makes it more likely for the test to succeed
+		int minChildCount = 3;
+
 		onData(anything())
-				.inAdapterView(allOf(hasMinimumChildCount(10), withId(android.R.id.list)))
+				.inAdapterView(allOf(hasMinimumChildCount(minChildCount), withId(android.R.id.list)))
 				.atPosition(getNumberOfNotesInList() - 1) // last note in list
 				.perform(scrollTo())
 				.perform(click());

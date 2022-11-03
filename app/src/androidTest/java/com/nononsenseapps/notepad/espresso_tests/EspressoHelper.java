@@ -7,8 +7,11 @@ import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 
+import androidx.test.espresso.AmbiguousViewMatcherException;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.contrib.DrawerActions;
+import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.nononsenseapps.notepad.R;
 
@@ -23,26 +26,30 @@ public class EspressoHelper {
 	/**
 	 * open the drawer on the left
 	 */
-	public static void openDrawer(){
+	public static void openDrawer() {
 		onView(withId(R.id.drawerLayout)).perform(DrawerActions.open());
 	}
 
 	public static void createNoteWithName(String noteName) {
 		onView(withId(R.id.menu_add)).perform(click());
+		EspressoHelper.hideShowCaseViewIfShown();
 		onView(withId(com.nononsenseapps.notepad.R.id.taskText)).perform(typeText(noteName));
 	}
 
-	public static void createNotes(String[] noteNames){
+	/**
+	 * Presses "+" and writes text for each note given in noteNames
+	 */
+	public static void createNotes(String[] noteNames) {
 		for (String noteName : noteNames) {
 			createNoteWithName(noteName);
-			navigateUp();
 		}
 	}
 
 	/**
 	 * Add a new task list. The drawer should be open when this is called
+	 *
 	 * @param taskListName name of the task list
-     */
+	 */
 	public static void createTaskList(String taskListName) {
 
 		EspressoHelper.openDrawer();
@@ -57,10 +64,27 @@ public class EspressoHelper {
 		onView(withId(com.nononsenseapps.notepad.R.id.dialog_yes)).perform(click());
 	}
 
+	/**
+	 * @return TRUE if the app is in tablet mode, FALSE in phone mode
+	 */
+	public static boolean isInTabletMode() {
+		boolean isInPortraitMode = InstrumentationRegistry
+				.getInstrumentation()
+				.getTargetContext()
+				.getResources()
+				.getBoolean(R.bool.fillEditor);
+		return !isInPortraitMode;
+	}
+
 	public static void navigateUp() {
-		//var backButton = onView(withContentDescription(EspressoHelper.NAVIGATE_UP_TEXT));
-		var backButton = onView(withId( android.R.id.home));
-		backButton.perform(click());
+		if (isInTabletMode()) {
+			// we are in tablet mode: press "+" to make a note appear in the list
+			onView(withId(R.id.menu_add)).perform(click());
+		} else {
+			// we are in phone mode: press the back button on the toolbar
+			var backButton = onView(withId(android.R.id.home));
+			backButton.perform(click());
+		}
 	}
 
 	private static Boolean isShowCaseOverlayVisible() {
@@ -68,8 +92,11 @@ public class EspressoHelper {
 			// if Espresso can find the blue button, then the overlay is currently visible
 			onView(withId(R.id.showcase_button)).check(ViewAssertions.matches(isDisplayed()));
 			return true;
+		} catch (AmbiguousViewMatcherException ignored) {
+			// we have at least one, so it counts as visible
+			return true;
 		} catch (Throwable ignored) {
-			// has to be Throwable, not Exception
+			// it has to be "Throwable", not "Exception"
 			return false;
 		}
 	}
