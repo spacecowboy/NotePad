@@ -1,15 +1,14 @@
 # NoNonsense Notes
 
+[![Crowdin](https://d322cqt584bo4o.cloudfront.net/nononsensenotes/localized.png)](https://crowdin.com/project/nononsensenotes)   [![Android CI](https://github.com/spacecowboy/NotePad/actions/workflows/android_CI.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_CI.yml)
+
 a note taking app for android, with reminders.
 The app is currently being updated, and old versions are still available on f-droid:
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
     alt="Get it on F-Droid"
     height="80">
-](https://f-droid.org/repository/browse/?fdid=com.nononsenseapps.notepad) 
-
-[![Crowdin](https://d322cqt584bo4o.cloudfront.net/nononsensenotes/localized.png)](https://crowdin.com/project/nononsensenotes)
-
+](https://f-droid.org/repository/browse/?fdid=com.nononsenseapps.notepad)
 
 How it looks like:
 
@@ -17,11 +16,12 @@ How it looks like:
 
 <img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Phone UI" height="480" />
 
-# Reporting bugs
+## Reporting bugs
+
 Please report bugs by creating an [issue here](https://github.com/spacecowboy/NotePad/issues).
 I'd very much appreciate it if you could write clear steps to reproduce the bug. An example would be:
 
-```
+```text
 Title: Wrong due date set for completed notes
 
 Steps to reproduce:
@@ -40,7 +40,8 @@ Note should have the due date I set earlier.
 
 If relevant, please say if you're using a phone or a tablet (UI-issues), or what you're sync settings are (odd stuff happening in general).
 
-# Getting sync to work
+## Getting sync to work
+
 You need to put your API keys in a file, like the sample here:
 https://github.com/spacecowboy/NotePad/blob/master/core/assets/secretkeys.properties.sample
 
@@ -49,19 +50,19 @@ https://developers.google.com/google-apps/tasks/firstapp
 
 Scroll to the section named __Register your project__.
 
+## Build the project
 
-# Build the project
-
-```powershell
+```sh
 git clone https://github.com/spacecowboy/NotePad
 cd NotePad
-./gradlew installFreeDebug
+./gradlew installDebug
 ```
+
 if it does not work, open an [issue here](https://github.com/spacecowboy/NotePad/issues)
 
-# License
+## License
 
-```
+```text
 Copyright (C) 2014 Jonas Kalderstam
 
 This program is free software: you can redistribute it and/or modify
@@ -77,6 +78,7 @@ GNU General Public License for more details.
 You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ```
-# FAQ
+
+## FAQ
 
 see [the FAQ page](app/FAQ.md)
