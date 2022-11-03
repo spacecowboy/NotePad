@@ -3,6 +3,7 @@ package com.nononsenseapps.notepad.espresso_tests;
 import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
+import static androidx.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
@@ -52,7 +53,7 @@ public class TestAddTaskListsScrollNavigationDrawer extends BaseTestClass {
 				.check(matches(isDisplayed()));
 
 		// open the preferences page and check that it is visible
-		openActionBarOverflowOrOptionsMenu(InstrumentationRegistry.getInstrumentation().getTargetContext());
+		openContextualActionModeOverflowMenu();
 		onView(withText(SETTINGS_TEXT)).perform(click());
 		onView(withText(SETTINGS_APPEARANCE_TEXT)).check(matches(isDisplayed()));
 	}

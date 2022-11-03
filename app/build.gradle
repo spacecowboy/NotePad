@@ -105,7 +105,7 @@ android {
 
     testOptions {
         // androidx espresso tests require this
-        animationsDisabled = true
+        animationsDisabled true
     }
 
     compileOptions {
