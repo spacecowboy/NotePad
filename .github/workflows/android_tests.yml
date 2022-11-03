@@ -12,7 +12,7 @@ jobs:
     # there's no need to run it on forks
     if: github.repository == 'spacecowboy/NotePad'
     runs-on: macos-latest # it has hardware acceleration
-    timeout-minutes: 15
+    timeout-minutes: 35
     strategy:
       matrix:
         # test the app on emulators with these OS versions installed
@@ -47,8 +47,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          target: google_apis
-          arch: x86_64
+          target: google_apis # the images for API 32 only have this target
+          arch: x86_64        # the only one available for images of all API versions
           force-avd-creation: false
           script: echo "Generated AVD snapshot for caching."
 
