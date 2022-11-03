@@ -1,4 +1,4 @@
-name: Android CI
+name: Android build and tests
 
 on:
   push:
@@ -8,7 +8,9 @@ on:
 
 jobs:
   # job 1 - build and upload the apk
-  build:
+  build_the_apk:
+    # there's no need to run it on forks
+    if: github.repository == 'spacecowboy/NotePad'
     runs-on: ubuntu-latest    
     permissions:
       contents: read    
@@ -40,32 +42,55 @@ jobs:
         retention-days: 1
 
   # job 2 - run tests
-  test-android:    
-    runs-on: macos-latest # for hardware acceleration
-    timeout-minutes: 20
+  test_on_android:
+    # there's no need to run it on forks
+    if: github.repository == 'spacecowboy/NotePad'
+    runs-on: macos-latest # it has hardware acceleration
+    timeout-minutes: 15
     strategy:
       matrix:        
-        api-level: [ 23, 29 ]
+        api-level: [ 23, 29, 30, 31, 32 ] # TODO keep only 23 and 32 if they both work
 
     permissions:
       contents: read
 
     steps:
-      - uses: actions/checkout@v3
+      - name: perform the checkout
+        uses: actions/checkout@v3
 
-      - name: set up JDK 11
+      - name: perform the set up for the JDK
         uses: actions/setup-java@v3
         with:
           java-version: 11
           distribution: "temurin"
           cache: 'gradle'
 
-      - name: Run android tests
+      - name: Gradle cache
+        uses: gradle/gradle-build-action@v2
+
+      - name: AVD cache
+        uses: actions/cache@v3
+        id: avd-cache
+        with:
+          path: |
+            ~/.android/avd/*
+            ~/.android/adb*
+          key: avd-${{ matrix.api-level }}
+
+      - name: create AVD and generate snapshot for caching
+        if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
-          # workaround to emulator bug: https://github.com/ReactiveCircus/android-emulator-runner/issues/160
-          # emulator-build: 7425822
+          force-avd-creation: false
+          script: echo "Generated AVD snapshot for caching."
+
+      - name: run the tests
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: ${{ matrix.api-level }}
+          force-avd-creation: false
+          emulator-options: -no-snapshot-save -no-window -no-boot-anim -camera-back none
           script: ./gradlew connectedCheck --stacktrace
 
       - name: Upload test report when tests fail 
@@ -75,5 +100,3 @@ jobs:
         with:
           name: android-test-report-api${{ matrix.api-level }}
           path: app/build/reports/androidTests/connected/**
-
-
