@@ -2,16 +2,16 @@
  * Copyright (c) 2015. Jonas Kalderstam
  *
  * This program is free software: you can redistribute it and/or modify
- * it under the terms of the GNU Lesser General Public License as published by
+ * it under the terms of the GNU General Public License as published by
  * the Free Software Foundation, either version 3 of the License, or
  * (at your option) any later version.
  *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU Lesser General Public License for more details.
+ * GNU General Public License for more details.
  *
- * You should have received a copy of the GNU Lesser General Public License
+ * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
@@ -33,6 +33,8 @@ import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.util.PermissionsHelper;
+import com.nononsenseapps.util.SyncGtaskHelper;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
 import org.json.JSONException;
@@ -57,8 +59,13 @@ public class GoogleTaskSync {
 	public static boolean fullSync(final Context context,
 								   final Account account, final Bundle extras, final String authority,
 								   final ContentProviderClient provider, final SyncResult syncResult) {
-
 		Log.d(TAG, "fullSync");
+		if (!PermissionsHelper.hasPermissions(context, PermissionsHelper.PERMISSIONS_GTASKS)) {
+			Log.d(TAG, "Missing permissions, disabling sync");
+			SyncGtaskHelper.disableSync(context);
+			return false;
+		}
+
 		// Is saved at a successful sync
 		final long startTime = Calendar.getInstance().getTimeInMillis();
 

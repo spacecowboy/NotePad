@@ -1,0 +1,42 @@
+name: Android build
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+
+jobs:
+  # this job builds and uploads the apk
+  build_the_apk:
+    # there's no need to run it on forks
+    if: github.repository == 'spacecowboy/NotePad'
+    runs-on: ubuntu-latest    
+    permissions:
+      contents: read    
+    steps:
+    - name: perform the checkout
+      uses: actions/checkout@v3
+      
+    - name: perform the validation
+      uses: gradle/wrapper-validation-action@v1
+      
+    - name: perform the JDK setup
+      uses: actions/setup-java@v3
+      with:
+        java-version: '11'
+        distribution: 'temurin'
+        cache: gradle
+
+    - name: Grant execute permission for gradlew
+      run: chmod +x gradlew
+      
+    - name: perform the Gradle build
+      run: ./gradlew build
+
+    - name: perform the APK upload
+      uses: actions/upload-artifact@v3
+      with:
+        name: app_debug
+        path: app/build/outputs/apk/debug/app-debug.apk
+        retention-days: 1

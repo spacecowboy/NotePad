@@ -277,6 +277,7 @@ public class SyncPrefs extends PreferenceFragment implements
 					.edit()
 					.putString(KEY_SD_DIR_URI, uri.toString())
 					.commit();
+			Toast.makeText(getActivity(), "Custom directories are still W.I.P.", Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(getActivity(), R.string.cannot_write_to_directory, Toast.LENGTH_SHORT)
 					.show();

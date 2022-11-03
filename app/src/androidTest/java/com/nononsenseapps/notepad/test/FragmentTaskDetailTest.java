@@ -31,9 +31,10 @@ public class FragmentTaskDetailTest {
 	 * the {@link ActivityTestRule#getActivity()} method.
 	 */
 	// the replacement, ActivityScenarioRule does not work
-	@SuppressWarnings("deprecation") @Rule
+	@SuppressWarnings("deprecation")
+	@Rule
 	public ActivityTestRule<ActivityMain_> mActivityRule
-			= new ActivityTestRule<>(ActivityMain_.class,false);
+			= new ActivityTestRule<>(ActivityMain_.class, false);
 
 	@Before
 	public void setUp() {

@@ -19,7 +19,8 @@ import org.junit.Test;
 public class FragmentTaskListsTest {
 
 	// the replacement, ActivityScenarioRule does not work
-	@SuppressWarnings("deprecation") @Rule
+	@SuppressWarnings("deprecation")
+	@Rule
 	public ActivityTestRule<ActivityMain_> mActivityRule
 			= new ActivityTestRule<>(ActivityMain_.class, false);
 

@@ -24,10 +24,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -69,6 +71,7 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.NotificationItemHelper;
+import com.nononsenseapps.utils.ViewsHelper;
 import com.nononsenseapps.utils.views.StyledEditText;
 
 import org.androidannotations.annotations.AfterViews;
@@ -360,22 +363,32 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	 */
 	boolean showcaseEditor() {
 		final boolean alreadyShowcased = PreferenceManager
-				.getDefaultSharedPreferences(getActivity()).getBoolean(
-						SHOWCASED_EDITOR, false);
+				.getDefaultSharedPreferences(getActivity())
+				.getBoolean(SHOWCASED_EDITOR, false);
 
 		if (alreadyShowcased) {
 			return false;
 		}
 
-		ShowcaseViews views = new ShowcaseViews(getActivity(),
-				R.layout.showcase_view_template);
-		views.addView(new ItemViewProperties(ItemViewProperties.ID_OVERFLOW,
+		// options to configure the showcase view
+		final var options = new ShowcaseView.ConfigOptions();
+		options.shotType = ShowcaseView.TYPE_NO_LIMIT;
+		options.block = true;
+		options.hideOnClickOutside = true; // mandatory to make tests work
+
+		ShowcaseView sv = ShowcaseView.insertShowcaseViewWithType(
+				ShowcaseView.ITEM_ACTION_OVERFLOW, // focus on the overflow menu, the "vertical ..."
+				0, // ignored because we focus on the overflow menu
+				this.getActivity(), // show the view above this fragment's activity
 				R.string.showcase_timemachine_title,
 				R.string.showcase_timemachine_msg,
-				ShowcaseView.ITEM_ACTION_OVERFLOW, 0.5f));
-		views.show();
-		PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
-				.putBoolean(SHOWCASED_EDITOR, true).commit();
+				options);
+		sv.show();
+
+		PreferenceManager.getDefaultSharedPreferences(getActivity())
+				.edit()
+				.putBoolean(SHOWCASED_EDITOR, true)
+				.commit();
 		return true;
 	}
 

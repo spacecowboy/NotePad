@@ -14,9 +14,10 @@ import org.junit.Test;
 public class FragmentTaskListsViewPagerTest {
 
 	// the replacement, ActivityScenarioRule does not work
-	@SuppressWarnings("deprecation") @Rule
+	@SuppressWarnings("deprecation")
+	@Rule
 	public ActivityTestRule<ActivityMain_> mActivityRule
-			= new ActivityTestRule<>(ActivityMain_.class,false);
+			= new ActivityTestRule<>(ActivityMain_.class, false);
 
 	@Test
 	public void testSanity() {

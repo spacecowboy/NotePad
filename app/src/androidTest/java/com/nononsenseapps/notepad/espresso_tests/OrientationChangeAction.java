@@ -25,6 +25,14 @@ public class OrientationChangeAction implements ViewAction {
 		this.orientation = orientation;
 	}
 
+	public static ViewAction orientationLandscape() {
+		return new OrientationChangeAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+	}
+
+	public static ViewAction orientationPortrait() {
+		return new OrientationChangeAction(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+	}
+
 	@Override
 	public Matcher<View> getConstraints() {
 		return isRoot();
@@ -47,13 +55,5 @@ public class OrientationChangeAction implements ViewAction {
 		if (resumedActivities.isEmpty()) {
 			throw new RuntimeException("Could not change orientation");
 		}
-	}
-
-	public static ViewAction orientationLandscape() {
-		return new OrientationChangeAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
-	}
-
-	public static ViewAction orientationPortrait() {
-		return new OrientationChangeAction(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 	}
 }

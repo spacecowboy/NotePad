@@ -61,8 +61,13 @@ android {
     // dataBinding.enabled = true
 
     lint {
+        htmlReport false
+        textReport false
         abortOnError false
         explainIssues true
+        checkTestSources true
+        // turn off checking the given issue id's
+        // disable += ['RtlHardcoded', 'MissingSuperCall']
     }
 
     packagingOptions {
@@ -100,7 +105,7 @@ android {
 
     testOptions {
         // androidx espresso tests require this
-        animationsDisabled = true
+        animationsDisabled true
     }
 
     compileOptions {
@@ -127,6 +132,7 @@ dependencies {
     implementation "androidx.cursoradapter:cursoradapter:1.0.0"
     implementation 'androidx.fragment:fragment:1.5.4'
     implementation 'androidx.appcompat:appcompat:1.5.1'
+    implementation "androidx.startup:startup-runtime:1.1.1" // it just fixes a build warning
     // Time library, open source & updated
     implementation 'joda-time:joda-time:2.12.0'
     // Dashclock API, open source & abandoned, but it still works

@@ -45,7 +45,7 @@ public class Helper {
 	 */
 	public static void takeScreenshot(String fileName) {
 		// wait a second for the activity to load.
-		try { Thread.sleep(1000); } catch (InterruptedException ignored) {}
+		try {Thread.sleep(1000);} catch (InterruptedException ignored) {}
 
 		var tool = InstrumentationRegistry.getInstrumentation();
 		Bitmap bmp = tool.getUiAutomation().takeScreenshot();
@@ -56,9 +56,9 @@ public class Helper {
 		}
 
 		// the png file
-		Path filePath = Paths.get(dir.getAbsolutePath(), fileName + ".png");
+		var file = new File(dir, fileName + ".png");
 
-		try (var out = new FileOutputStream(filePath.toString())) {
+		try (var out = new FileOutputStream(file.getAbsolutePath())) {
 			bmp.compress(Bitmap.CompressFormat.PNG, 100, out);
 		} catch (IOException e) {
 			fail("Could not save png screenshot");
