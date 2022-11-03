@@ -16,7 +16,7 @@ jobs:
     strategy:
       matrix:
         # test the app on emulators with these OS versions installed
-        api-level: [ 23, 29, 30, 31, 32 ] # TODO keep only 23 and 32 if they both work
+        api-level: [ 23, 32 ]
     permissions:
       contents: read
     steps:
@@ -47,6 +47,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          target: google_apis
+          arch: x86_64
           force-avd-creation: false
           script: echo "Generated AVD snapshot for caching."
 
@@ -54,6 +56,8 @@ jobs:
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
+          target: google_apis
+          arch: x86_64
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -no-boot-anim -camera-back none
           script: ./gradlew connectedCheck --stacktrace
