@@ -61,8 +61,13 @@ android {
     // dataBinding.enabled = true
 
     lint {
+        htmlReport false
+        textReport false
         abortOnError false
         explainIssues true
+        checkTestSources true
+        // turn off checking the given issue id's
+        // disable += ['RtlHardcoded', 'MissingSuperCall']
     }
 
     packagingOptions {

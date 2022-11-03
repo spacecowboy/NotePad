@@ -39,9 +39,15 @@ android {
     minSdkVersion 14
   }
 
-    lint {
-      abortOnError false
-    }
+  lint {
+    htmlReport false
+    textReport false
+    abortOnError false
+    explainIssues true
+    checkTestSources true
+    // turn off checking the given issue id's
+    // disable += ['RtlHardcoded', 'MissingSuperCall']
+  }
 
   sourceSets {
     main {
