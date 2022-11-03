@@ -15,13 +15,13 @@
  */
 
 buildscript {
-  repositories {
-    mavenCentral()
-    google()
-  }
-  dependencies {
-    classpath 'com.android.tools.build:gradle:7.3.1'
-  }
+    repositories {
+        mavenCentral()
+        google()
+    }
+    dependencies {
+        classpath 'com.android.tools.build:gradle:7.3.1'
+    }
 }
 
 apply plugin: 'com.android.library'
@@ -32,35 +32,35 @@ repositories {
 }
 
 dependencies {
-  implementation 'androidx.legacy:legacy-support-v4:1.0.0'
-  // Animations library, open source & abandoned
-  implementation 'com.nineoldandroids:library:2.4.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    // Animations library, open source & abandoned
+    implementation 'com.nineoldandroids:library:2.4.0'
 }
 
 android {
-  compileSdkVersion 28
-  buildToolsVersion '32.0.0'
+    compileSdkVersion 28
+    buildToolsVersion '32.0.0'
 
-  defaultConfig {
-    targetSdkVersion 17
-    minSdkVersion 14
-  }
-
-  lint {
-    htmlReport false
-    textReport false
-    abortOnError false
-    explainIssues true
-    checkTestSources true
-    // turn off checking the given issue id's
-    // disable += ['RtlHardcoded', 'MissingSuperCall']
-  }
-
-  sourceSets {
-    main {
-      manifest.srcFile 'AndroidManifest.xml'
-      java.srcDirs = ['src']
-      res.srcDirs = ['res']
+    defaultConfig {
+        targetSdkVersion 17
+        minSdkVersion 14
     }
-  }
+
+    lint {
+        htmlReport false
+        textReport false
+        abortOnError false
+        explainIssues true
+        checkTestSources true
+        // turn off checking the given issue id's
+        // disable += ['RtlHardcoded', 'MissingSuperCall']
+    }
+
+    sourceSets {
+        main {
+            manifest.srcFile 'AndroidManifest.xml'
+            java.srcDirs = ['src']
+            res.srcDirs = ['res']
+        }
+    }
 }
