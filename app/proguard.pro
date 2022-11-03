@@ -13,5 +13,6 @@
 -keep class com.nononsenseapps.** { *; }
 
 # may be needed
-#-keep class com.google.appengine.api.urlfetch.** { *; }
-#-keep class com.squareup.okhttp.** { *; }
+-keep class com.google.appengine.api.urlfetch.** { *; }
+-keep class com.squareup.okhttp.** { *; }
+-keep class org.joda.convert.** { *; }
