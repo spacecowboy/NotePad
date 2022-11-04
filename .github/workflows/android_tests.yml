@@ -36,6 +36,12 @@ jobs:
       - name: perform Gradle caching
         uses: gradle/gradle-build-action@v2
 
+      - name: perform HAXM installation
+        run: brew install --cask intel-haxm
+
+      - name: perform ffmpeg installation
+        run: brew install ffmpeg
+
       - name: perform AVD caching
         uses: actions/cache@v3
         id: avd-cache
@@ -57,6 +63,10 @@ jobs:
           disable-animations: true
           script: echo " - - - Generated AVD snapshot for caching - - - "
 
+#      - name: record a video of the session
+#        run: |
+#          ffmpeg -f avfoundation -i 0 -t 120 video.mov &
+
       - name: run the tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
@@ -67,7 +77,31 @@ jobs:
           force-avd-creation: false
           disable-animations: true
           emulator-options: -no-snapshot-save -no-window -no-boot-anim -camera-back none
-          script: ./gradlew connectedCheck --stacktrace
+          script: |
+            # take a screenshot of the VM to verify that the emulator started
+            screencapture screenshot1.jpg
+            # build and test
+            ./gradlew connectedCheck --stacktrace
+            # take a screenshot at the end
+            screencapture screenshot2.jpg
+
+#      - name: upload the video
+#        uses: actions/upload-artifact@v3
+#        with:
+#          name: video.mov
+#          path: video.mov
+
+      - name: upload the screenshot n°1
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshot1.jpg
+          path: screenshot1.jpg
+
+      - name: upload the screenshot n°2
+        uses: actions/upload-artifact@v3
+        with:
+          name: screenshot2.jpg
+          path: screenshot2.jpg
 
       - name: Upload test report when tests fail
         # because the printed out stacktrace (console) is too short
