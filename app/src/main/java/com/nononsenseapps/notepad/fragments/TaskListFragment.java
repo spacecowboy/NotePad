@@ -58,10 +58,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+
 import android.util.Log;
 import android.view.ActionMode;
 import android.view.LayoutInflater;
@@ -712,6 +714,16 @@ public class TaskListFragment extends Fragment implements
 						mListId, null);
 			}
 			return true;
+		} else if (itemId == R.id.menu_sort_title) {
+			// TODO reorder the notes like we do in DialogEditList
+			Toast.makeText(this.getContext(), R.string.feature_is_WIP, Toast.LENGTH_SHORT).show();
+			return true;
+		} else if (itemId == R.id.menu_sort_due) {
+			Toast.makeText(this.getContext(), R.string.feature_is_WIP, Toast.LENGTH_SHORT).show();
+			return true;
+		} else if (itemId == R.id.menu_sort_manual) {
+			Toast.makeText(this.getContext(), R.string.feature_is_WIP, Toast.LENGTH_SHORT).show();
+			return true;
 		} else {
 			return false;
 		}
@@ -822,7 +834,7 @@ public class TaskListFragment extends Fragment implements
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				final LayoutInflater inflater = LayoutInflater.from(mContext);
+				final LayoutInflater inflater = LayoutInflater.from(this.context);
 				convertView = inflater.inflate(getViewLayout(position), parent,
 						false);
 				if (itemType == getItemViewType(position)) {

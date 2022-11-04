@@ -26,7 +26,7 @@
         <item
             android:id="@+id/menu_deletedtasks"
             android:orderInCategory="203"
-            android:showAsAction="never"
+            android:showAsAction="ifRoom"
             android:title="@string/view_deletedtasks"/>
     </group>
 
