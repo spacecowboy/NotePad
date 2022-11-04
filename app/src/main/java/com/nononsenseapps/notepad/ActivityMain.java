@@ -31,6 +31,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.NonNull;
 import androidx.legacy.app.ActionBarDrawerToggle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -703,10 +704,9 @@ public class ActivityMain extends FragmentActivity
 	 * <p/>
 	 * Returns -1 if no id was contained, this includes insert actions
 	 */
-	long getNoteId(final Intent intent) {
+	long getNoteId(@NonNull final Intent intent) {
 		long retval = -1;
-		if (intent != null &&
-				intent.getData() != null &&
+		if (intent.getData() != null &&
 				(Intent.ACTION_EDIT.equals(intent.getAction()) ||
 						Intent.ACTION_VIEW.equals(intent.getAction()))) {
 			if (intent.getData().getPath().startsWith(TaskList.URI.getPath())) {
@@ -720,11 +720,6 @@ public class ActivityMain extends FragmentActivity
 							.startsWith(Task.URI.getPath()))) {
 				retval = Long.parseLong(intent.getData().getLastPathSegment());
 			}
-			// else if (null != intent
-			// .getStringExtra(TaskDetailFragment.ARG_ITEM_ID)) {
-			// retval = Long.parseLong(intent
-			// .getStringExtra(TaskDetailFragment.ARG_ITEM_ID));
-			// }
 		}
 		return retval;
 	}

@@ -22,6 +22,8 @@ import android.os.Bundle;
 import android.preference.PreferenceFragment;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+
 import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.fragments.DialogExportBackup;
@@ -43,6 +45,17 @@ public class BackupPrefs extends PreferenceFragment {
 	 * seconds is not nice...
 	 */
 	private class RestoreBackupTask extends AsyncTask<Void, Void, Integer> {
+		// TODO move this class into its own java file
+		private final JSONBackup backupMaker;
+
+		/**
+		 * Creates a new asynchronous task. This constructor must be invoked on the UI thread.
+		 */
+		public RestoreBackupTask(@NonNull Context context, @NonNull JSONBackup backupMaker) {
+			super();
+			this.backupMaker = backupMaker;
+		}
+
 		protected Integer doInBackground(Void... params) {
 			try {
 				backupMaker.restoreBackup();
@@ -92,7 +105,7 @@ public class BackupPrefs extends PreferenceFragment {
 				preference -> {
 					DialogRestoreBackup.showDialog(getFragmentManager(),
 							() -> {
-								bgTask = new RestoreBackupTask();
+								bgTask = new RestoreBackupTask(super.getContext(),backupMaker);
 								bgTask.execute();
 							});
 					return true;

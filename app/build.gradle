@@ -134,6 +134,7 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation "androidx.startup:startup-runtime:1.1.1" // it just fixes a build warning
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
+    implementation 'com.google.android.material:material:1.7.0'
     // Time library, open source & updated
     implementation 'joda-time:joda-time:2.12.0'
     // Dashclock API, open source & abandoned, but it still works
