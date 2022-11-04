@@ -42,6 +42,8 @@ public class PasswordPrefs extends Fragment {
 	private EditText password1;
 	private EditText password2;
 
+	// TODO copy from DialogPasswordSettings.java and delete that file
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);

@@ -38,6 +38,7 @@ import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 
 /**
  * Full copy of DialogPassword, but extending native fragment class instead.
+ * It is called when the user changes the existing password. It asks to input the old password.
  */
 @EFragment(resName = "fragment_dialog_password")
 public class DialogPasswordV11 extends DialogFragment {

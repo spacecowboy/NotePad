@@ -27,6 +27,9 @@ import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Switch;
 
+/** Shows a window to configure the app's smaller widget, letting the user choose which note list
+ *  will be opened
+ */
 @EActivity(resName = "activity_shortcut_config")
 public class ShortcutConfig extends Activity {
 
