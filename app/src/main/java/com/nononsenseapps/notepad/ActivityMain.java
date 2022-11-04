@@ -30,6 +30,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
 import androidx.legacy.app.ActionBarDrawerToggle;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
@@ -39,17 +40,21 @@ import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 import androidx.drawerlayout.widget.DrawerLayout;
+
+import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.github.espiandev.showcaseview.ShowcaseView;
@@ -1084,6 +1089,9 @@ public class ActivityMain extends FragmentActivity
 			return;
 		}
 		final ConfigOptions options = new ConfigOptions();
+
+		// the "OK" button is useless, and it even overlaps with the navigation bar on the bottom!
+		options.noButton = true;
 		options.shotType = ShowcaseView.TYPE_NO_LIMIT;
 		options.block = true;
 		// Used in saving state
@@ -1119,6 +1127,8 @@ public class ActivityMain extends FragmentActivity
 			sv.show();
 		} else {
 			final ConfigOptions options = new ConfigOptions();
+			// it's useless, and it even overlaps with the navigation bar on the bottom!
+			options.noButton = true;
 			options.shotType = ShowcaseView.TYPE_NO_LIMIT;
 			options.block = true;
 			// close the showcase even if the user does not click exactly on the button
