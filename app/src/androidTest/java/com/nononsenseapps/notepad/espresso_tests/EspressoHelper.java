@@ -3,16 +3,18 @@ package com.nononsenseapps.notepad.espresso_tests;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.typeText;
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.is;
 
 import androidx.test.espresso.AmbiguousViewMatcherException;
-import androidx.test.espresso.Espresso;
-import androidx.test.espresso.assertion.ViewAssertions;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.platform.app.InstrumentationRegistry;
 
+import com.github.espiandev.showcaseview.ShowcaseView;
 import com.nononsenseapps.notepad.R;
 
 
@@ -87,10 +89,13 @@ public class EspressoHelper {
 		}
 	}
 
+	/**
+	 * @return TRUE if the {@link ShowcaseView} is currently shown, FALSE otherwise
+	 */
 	private static Boolean isShowCaseOverlayVisible() {
 		try {
-			// if Espresso can find the blue button, then the overlay is currently visible
-			onView(withId(R.id.showcase_button)).check(ViewAssertions.matches(isDisplayed()));
+			onView(is(instanceOf(ShowcaseView.class)))
+					.check(matches(isDisplayed()));
 			return true;
 		} catch (AmbiguousViewMatcherException ignored) {
 			// we have at least one, so it counts as visible
@@ -102,8 +107,8 @@ public class EspressoHelper {
 	}
 
 	/**
-	 * If the showcaseview is shown, touch the screen to hide it, so that tests can interact
-	 * with the app.
+	 * If the {@link ShowcaseView} is shown, touch the screen to hide it, so that tests
+	 * can then interact with the app.
 	 */
 	public static void hideShowCaseViewIfShown() {
 		if (EspressoHelper.isShowCaseOverlayVisible()) {

@@ -38,8 +38,8 @@ public class DBProviderTest extends TestCase {
 		assertUriReturnsResult(uri, fields, null, null, -1);
 	}
 
-	private void assertUriReturnsResult(final Uri uri, final String[] fields,
-										final String where, final String[] whereArgs, final int count) {
+	private void assertUriReturnsResult(final Uri uri, final String[] fields, final String where,
+										final String[] whereArgs, final int count) {
 		final Cursor c = resolver.query(uri, fields, where, whereArgs, null);
 		final int cursorCount = c.getCount();
 		c.close();

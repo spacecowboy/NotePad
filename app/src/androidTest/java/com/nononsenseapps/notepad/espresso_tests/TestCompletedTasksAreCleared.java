@@ -40,6 +40,7 @@ public class TestCompletedTasksAreCleared extends BaseTestClass {
 		String[] noteNames = { noteName1, noteName2, noteName3, noteName4 };
 		EspressoHelper.createNotes(noteNames);
 
+		EspressoHelper.navigateUp();
 		clickCheckBoxAt(1);
 		clickCheckBoxAt(3);
 
