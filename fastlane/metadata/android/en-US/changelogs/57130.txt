@@ -1,5 +1,5 @@
 v5.7.1: NoNonsense Notes
 
-Bugfix:
+Highlights:
 - Fix Google Tasks sync.
 - Fix bug which would delete all notes during Google Tasks sync.
