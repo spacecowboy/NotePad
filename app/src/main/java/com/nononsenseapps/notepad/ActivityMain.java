@@ -30,36 +30,32 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
-import androidx.annotation.NonNull;
-import androidx.legacy.app.ActionBarDrawerToggle;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-import androidx.loader.app.LoaderManager.LoaderCallbacks;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.drawerlayout.widget.DrawerLayout;
-
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.legacy.app.ActionBarDrawerToggle;
+import androidx.loader.app.LoaderManager.LoaderCallbacks;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
 import com.github.espiandev.showcaseview.ShowcaseView;
 import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.SyncHelper;
@@ -67,7 +63,6 @@ import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
-import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
@@ -86,12 +81,12 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
+import com.nononsenseapps.util.ListHelper;
 import com.nononsenseapps.utils.ViewsHelper;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
 import org.androidannotations.annotations.InstanceState;
-import org.androidannotations.annotations.OnActivityResult;
 import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.UiThread.Propagation;
@@ -107,11 +102,6 @@ public class ActivityMain extends FragmentActivity
 		implements OnFragmentInteractionListener, OnSyncStartStopListener,
 		MenuStateController, OnSharedPreferenceChangeListener {
 
-	// Intent notification argument
-	public static final String NOTIFICATION_CANCEL_ARG =
-			"notification_cancel_arg";
-	public static final String NOTIFICATION_DELETE_ARG =
-			"notification_delete_arg";
 	// If donate version has been migrated
 	public static final String MIGRATED = "donate_inapp_or_oldversion";
 	// Set to true in bundle if exits should be animated
@@ -158,6 +148,7 @@ public class ActivityMain extends FragmentActivity
 	private boolean shouldRestart = false;
 	private ShowcaseView sv;
 	private PullToRefreshAttacher.OnRefreshListener pullToRefreshListener;
+	private FloatingActionButton mFab;
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -233,13 +224,7 @@ public class ActivityMain extends FragmentActivity
 		} else if (itemId == R.id.drawer_menu_createlist) {
 			// Show fragment
 			DialogEditList_ dialog = DialogEditList_.getInstance();
-			dialog.setListener(new EditListDialogListener() {
-
-				@Override
-				public void onFinishEditDialog(long id) {
-					openList(id);
-				}
-			});
+			dialog.setListener(id -> openList(id));
 			dialog.show(getSupportFragmentManager(), "fragment_create_list");
 			return true;
 		} else if (itemId == R.id.menu_preferences) {
@@ -317,8 +302,9 @@ public class ActivityMain extends FragmentActivity
 	void openList(final long id) {
 		// Open list
 		Intent i = new Intent(ActivityMain.this, ActivityMain_.class);
-		i.setAction(Intent.ACTION_VIEW).setData(TaskList.getUri(id))
-				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		i.setAction(Intent.ACTION_VIEW);
+		i.setData(TaskList.getUri(id));
+		i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
 
 		// If editor is on screen, we need to reload fragments
 		if (listOpener == null) {
@@ -341,6 +327,13 @@ public class ActivityMain extends FragmentActivity
 	}
 
 	private void handleSyncRequest() {
+		/*
+		{
+			// in version 6.0.0, it does this:
+			SyncHelper.onManualSyncRequest(this);
+			return;
+		}
+		*/
 		boolean syncing = false;
 		// GTasks
 		if (SyncHelper.isGTasksConfigured(ActivityMain.this)) {
@@ -397,8 +390,7 @@ public class ActivityMain extends FragmentActivity
 		shouldAddToBackStack = false;
 
 		// To know if we should animate exits
-		if (getIntent() != null &&
-				getIntent().getBooleanExtra(ANIMATEEXIT, false)) {
+		if (getIntent() != null && getIntent().getBooleanExtra(ANIMATEEXIT, false)) {
 			mAnimateExit = true;
 		}
 
@@ -411,14 +403,12 @@ public class ActivityMain extends FragmentActivity
 
 		// To listen on fragment changes
 		getSupportFragmentManager().addOnBackStackChangedListener(
-				new FragmentManager.OnBackStackChangedListener() {
-					public void onBackStackChanged() {
-						if (showingEditor && !isNoteIntent(getIntent())) {
-							setHomeAsDrawer(true);
-						}
-						// Always update menu
-						invalidateOptionsMenu();
+				() -> {
+					if (showingEditor && !isNoteIntent(getIntent())) {
+						setHomeAsDrawer(true);
 					}
+					// Always update menu
+					invalidateOptionsMenu();
 				}
 		);
 
@@ -427,17 +417,25 @@ public class ActivityMain extends FragmentActivity
 			this.state = b;
 		}
 
+		// Setup FAB. TODO are we going to add one ?
+//		 mFab = (FloatingActionButton) findViewById(R.id.fab);
+//		 mFab.setOnClickListener(view -> {
+//			 //addTaskInList("", ListHelper.getARealList(this, id_of_the_list));
+//		 });
+
 		// Create a PullToRefreshAttacher instance
 		pullToRefreshAttacher = PullToRefreshAttacher.get(this);
 
 		// Clear possible notifications, schedule future ones
 		final Intent intent = getIntent();
 		// Clear notification if present
-		clearNotification(intent);
+		NotificationHelper.clearNotification(this, intent);
 		// Schedule notifications
 		NotificationHelper.schedule(this);
 		// Schedule syncs
 		BackgroundSyncScheduler.scheduleSync(this);
+		// Sync if appropriate
+		OrgSyncService.start(this);
 	}
 
 	@Override
@@ -475,11 +473,13 @@ public class ActivityMain extends FragmentActivity
 
 	@Override
 	public void onNewIntent(Intent intent) {
+		super.onNewIntent(intent);
+
 		setIntent(intent);
 		loadFragments();
 		// Just to be sure it gets done
 		// Clear notification if present
-		clearNotification(intent);
+		NotificationHelper.clearNotification(this, intent);
 	}
 
 	@Override
@@ -563,7 +563,7 @@ public class ActivityMain extends FragmentActivity
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(@NonNull Bundle outState) {
 		// Do absolutely NOT call super class here. Will bug out the viewpager!
 		super.onSaveInstanceState(outState);
 	}
@@ -594,16 +594,14 @@ public class ActivityMain extends FragmentActivity
 				return;
 			} else {
 				// Find the listpager
-				left = getSupportFragmentManager()
-						.findFragmentByTag(LISTPAGERTAG);
+				left = getSupportFragmentManager().findFragmentByTag(LISTPAGERTAG);
 				listOpener = (ListOpener) left;
 
 				if (left != null && fragment2 == null) {
 					// Done
 					return;
 				} else if (left != null && fragment2 != null) {
-					right = getSupportFragmentManager()
-							.findFragmentByTag(DETAILTAG);
+					right = getSupportFragmentManager().findFragmentByTag(DETAILTAG);
 				}
 
 				if (left != null && right != null) {
@@ -796,20 +794,6 @@ public class ActivityMain extends FragmentActivity
 		mDrawerToggle.setDrawerIndicatorEnabled(value);
 	}
 
-	private void clearNotification(final Intent intent) {
-		if (intent != null &&
-				intent.getLongExtra(NOTIFICATION_DELETE_ARG, -1) > 0) {
-			Notification.deleteOrReschedule(this, Notification
-					.getUri(intent.getLongExtra(NOTIFICATION_DELETE_ARG, -1)));
-		}
-		if (intent != null &&
-				intent.getLongExtra(NOTIFICATION_CANCEL_ARG, -1) > 0) {
-			NotificationHelper.cancelNotification(this,
-					(int) intent.getLongExtra(NOTIFICATION_CANCEL_ARG, -1));
-		}
-
-	}
-
 	/**
 	 * Loads the appropriate fragments depending on state and intent.
 	 */
@@ -945,13 +929,11 @@ public class ActivityMain extends FragmentActivity
 		leftDrawer.setOnItemLongClickListener(new OnItemLongClickListener() {
 
 			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
-										   int pos, long id) {
+			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
 				// Open dialog to edit list
 				if (id > 0) {
 					DialogEditList_ dialog = DialogEditList_.getInstance(id);
-					dialog.show(getSupportFragmentManager(),
-							"fragment_edit_list");
+					dialog.show(getSupportFragmentManager(), "fragment_edit_list");
 					return true;
 				} else if (id < -1) {
 					// Set as "default"
@@ -1141,12 +1123,12 @@ public class ActivityMain extends FragmentActivity
 		alreadyShowcasedDrawer = true;
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@Override
-	public void onFragmentInteraction(final Uri taskUri, final long listId,
-									  final View origin) {
-		final Intent intent = new Intent().setAction(Intent.ACTION_EDIT)
-				.setClass(this, ActivityMain_.class).setData(taskUri)
+	public void onFragmentInteraction(final Uri taskUri, final long listId, final View origin) {
+		final Intent intent = new Intent()
+				.setAction(Intent.ACTION_EDIT)
+				.setClass(this, ActivityMain_.class)
+				.setData(taskUri)
 				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 		// User clicked a task in the list
@@ -1181,15 +1163,17 @@ public class ActivityMain extends FragmentActivity
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@Override
 	public void addTaskInList(final String text, final long listId) {
 		if (listId < 1) {
 			// Cant add to invalid lists
+			// Snackbar.make(mFab, "Please create a list first", Snackbar.LENGTH_LONG).show();
 			return;
 		}
-		final Intent intent = new Intent().setAction(Intent.ACTION_INSERT)
-				.setClass(this, ActivityMain_.class).setData(Task.URI)
+		final Intent intent = new Intent()
+				.setAction(Intent.ACTION_INSERT)
+				.setClass(this, ActivityMain_.class)
+				.setData(Task.URI)
 				.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 		if (fragment2 != null) {
