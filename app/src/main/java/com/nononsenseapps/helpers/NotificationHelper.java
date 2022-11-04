@@ -33,6 +33,8 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 import android.preference.PreferenceManager;
+
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
@@ -132,11 +134,27 @@ public class NotificationHelper extends BroadcastReceiver {
 	}
 
 	private static void monitorUri(final Context context) {
-		context.getContentResolver().unregisterContentObserver(
-				getObserver(context));
+		context.getContentResolver().unregisterContentObserver(getObserver(context));
 		context.getContentResolver().registerContentObserver(
 				com.nononsenseapps.notepad.database.Notification.URI, true,
 				getObserver(context));
+	}
+
+	// Intent notification argument
+	public static final String NOTIFICATION_CANCEL_ARG = "notification_cancel_arg";
+	public static final String NOTIFICATION_DELETE_ARG = "notification_delete_arg";
+
+	public static void clearNotification(@NonNull final Context context, @NonNull final Intent
+			intent) {
+		if (intent.getLongExtra(NOTIFICATION_DELETE_ARG, -1) > 0) {
+			com.nononsenseapps.notepad.database.Notification.deleteOrReschedule(context, com
+					.nononsenseapps.notepad.database.Notification.getUri(intent.getLongExtra
+							(NOTIFICATION_DELETE_ARG, -1)));
+		}
+		if (intent.getLongExtra(NOTIFICATION_CANCEL_ARG, -1) > 0) {
+			NotificationHelper.cancelNotification(context, (int) intent.getLongExtra
+					(NOTIFICATION_CANCEL_ARG, -1));
+		}
 	}
 
 	public static void unnotifyGeofence(final Context context,
@@ -369,10 +387,10 @@ public class NotificationHelper extends BroadcastReceiver {
 
 		// Repeating reminders should have a delete intent:
 		// opening the note should delete/reschedule the notification
-		openIntent.putExtra(ActivityMain.NOTIFICATION_DELETE_ARG, note._id);
+		openIntent.putExtra(NOTIFICATION_DELETE_ARG, note._id);
 
 		// Opening always cancels the notification though
-		openIntent.putExtra(ActivityMain.NOTIFICATION_CANCEL_ARG, note._id);
+		openIntent.putExtra(NOTIFICATION_CANCEL_ARG, note._id);
 
 		// Open note on click
 		PendingIntent clickIntent = PendingIntent.getActivity(context, 0,

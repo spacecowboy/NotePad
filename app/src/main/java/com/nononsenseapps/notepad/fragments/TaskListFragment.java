@@ -17,21 +17,44 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import java.security.InvalidParameterException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.res.Configuration;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.ActionMode;
+import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView.MultiChoiceModeListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.AdapterView.OnItemLongClickListener;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.ListView;
+import android.widget.Toast;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Background;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.SystemService;
-import org.androidannotations.annotations.ViewById;
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager.LoaderCallbacks;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
 
+import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.DragSortListView.DropListener;
 import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
-import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain;
@@ -46,41 +69,16 @@ import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
 
-import android.app.Activity;
-import android.content.ClipData;
-import android.content.ClipboardManager;
-import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.res.Configuration;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.Bundle;
-import android.preference.PreferenceManager;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Background;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.SystemService;
+import org.androidannotations.annotations.ViewById;
 
-import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager.LoaderCallbacks;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-
-import android.util.Log;
-import android.view.ActionMode;
-import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.CompoundButton;
-import android.widget.ListView;
-import android.widget.ShareActionProvider;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.CompoundButton.OnCheckedChangeListener;
-import android.widget.Toast;
+import java.security.InvalidParameterException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
 
 @EFragment(resName = "fragment_task_list")
 public class TaskListFragment extends Fragment implements
@@ -513,16 +511,21 @@ public class TaskListFragment extends Fragment implements
 						} catch (Exception e) {
 						}
 					}
+
+					String msg;
 					try {
-						Toast.makeText(
-								getActivity(),
-								getResources().getQuantityString(
-										R.plurals.notedeleted_msg,
-										tasks.size(), tasks.size()),
-								Toast.LENGTH_SHORT).show();
+						msg = getResources()
+								.getQuantityString(R.plurals.notedeleted_msg, tasks.size(), tasks.size());
+
 					} catch (Exception e) {
 						// Protect against faulty translations
+						msg = getResources().getString(R.string.deleted);
 					}
+
+					// TODO should use a FAB instead
+					// Snackbar.make(mFab, msg, Snackbar.LENGTH_LONG).setAction(R.string.undo, listener).setCallback(dismissCallback).show();
+					Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
+
 					if (mMode != null) mMode.finish();
 				}
 			};
@@ -717,12 +720,15 @@ public class TaskListFragment extends Fragment implements
 		} else if (itemId == R.id.menu_sort_title) {
 			// TODO reorder the notes like we do in DialogEditList
 			Toast.makeText(this.getContext(), R.string.feature_is_WIP, Toast.LENGTH_SHORT).show();
+			// SharedPreferencesHelper.setSortingAlphabetic(this);
 			return true;
 		} else if (itemId == R.id.menu_sort_due) {
 			Toast.makeText(this.getContext(), R.string.feature_is_WIP, Toast.LENGTH_SHORT).show();
+			// SharedPreferencesHelper.setSortingDue(this);
 			return true;
 		} else if (itemId == R.id.menu_sort_manual) {
 			Toast.makeText(this.getContext(), R.string.feature_is_WIP, Toast.LENGTH_SHORT).show();
+			// SharedPreferencesHelper.setSortingManual(this);
 			return true;
 		} else {
 			return false;
