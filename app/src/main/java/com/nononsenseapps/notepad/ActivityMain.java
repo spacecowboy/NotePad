@@ -909,16 +909,17 @@ public class ActivityMain extends FragmentActivity
 
 		final int[] extraTypes = new int[] { 1, 0, 0, 0, 1 };
 
-		final ExtraTypesCursorAdapter adapter =
-				new ExtraTypesCursorAdapter(this,
-						R.layout.simple_light_list_item_2, null, new String[] {
-						TaskList.Columns.TITLE,
-						TaskList.Columns.VIEW_COUNT },
-						new int[] { android.R.id.text1, android.R.id.text2 },
-						// id -1 for headers, ignore clicks on them
-						extraIds, extraStrings, extraTypes,
-						new int[] { R.layout.drawer_header }
-				);
+		final ExtraTypesCursorAdapter adapter = new ExtraTypesCursorAdapter(
+				this,
+				R.layout.simple_light_list_item_2,
+				null,
+				new String[] { TaskList.Columns.TITLE, TaskList.Columns.VIEW_COUNT },
+				new int[] { android.R.id.text1, android.R.id.text2 },
+				extraIds, // id -1 for headers, ignore clicks on them
+				extraStrings,
+				extraTypes,
+				new int[] { R.layout.drawer_header }
+		);
 		adapter.setExtraData(extraData);
 
 		// Load count of tasks in each one
