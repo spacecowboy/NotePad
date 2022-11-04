@@ -79,6 +79,11 @@ You should have received a copy of the GNU General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ```
 
-## FAQ
+See also [the full license](LICENSE)
 
-see [the FAQ page](app/FAQ.md)
+## Useful links
+
+* the [FAQ page](app/FAQ.md)
+* our [contributions guide](CONTRIBUTING.md)
+* the list of [releases](https://github.com/spacecowboy/NotePad/releases)
+* our [privacy policy](PRIVACY_POLICY.txt)
