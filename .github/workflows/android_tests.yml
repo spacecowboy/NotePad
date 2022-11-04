@@ -23,6 +23,9 @@ jobs:
       - name: perform the checkout
         uses: actions/checkout@v3
 
+      - name: perform the validation
+        uses: gradle/wrapper-validation-action@v1
+
       - name: perform the set up for the JDK
         uses: actions/setup-java@v3
         with:
@@ -30,10 +33,10 @@ jobs:
           distribution: "temurin"
           cache: 'gradle'
 
-      - name: Gradle cache
+      - name: perform Gradle caching
         uses: gradle/gradle-build-action@v2
 
-      - name: AVD cache
+      - name: perform AVD caching
         uses: actions/cache@v3
         id: avd-cache
         with:
@@ -49,8 +52,10 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: google_apis # the images for API 32 only have this target
           arch: x86_64        # the only one available for images of all API versions
+          profile: Nexus 5X
           force-avd-creation: false
-          script: echo "Generated AVD snapshot for caching."
+          disable-animations: true
+          script: echo " - - - Generated AVD snapshot for caching - - - "
 
       - name: run the tests
         uses: reactivecircus/android-emulator-runner@v2
@@ -58,7 +63,9 @@ jobs:
           api-level: ${{ matrix.api-level }}
           target: google_apis
           arch: x86_64
+          profile: Nexus 5X
           force-avd-creation: false
+          disable-animations: true
           emulator-options: -no-snapshot-save -no-window -no-boot-anim -camera-back none
           script: ./gradlew connectedCheck --stacktrace
 
