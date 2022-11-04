@@ -92,6 +92,9 @@
     <string name="showcase_timemachine_msg">Le modifiche vengono sempre salvate. Usa la cronologia per ripristinare una versione precedente.</string>
     <string name="donate_to_unlock">Dona per sbloccare</string>
     <string name="premiums_unlocked_and_thanks">Funzioni premium sbloccate. Grazie per il tuo supporto</string>
+    <string name="notification_channel_name">Promemoria delle note</string>
+    <string name="notification_channel_description">Mostra il contenuto della nota quando arriva l\'ora segnata nel promemoria</string>
+    <string name="feature_is_WIP">Ci stiamo ancora lavorando...</string>
     <string name="move">Sposta</string>
     <string name="move_to">Sposta in</string>
     <string name="moved_x_to_list">Spostato %1$d in %2$s</string>

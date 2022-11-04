@@ -277,7 +277,7 @@ public class SyncPrefs extends PreferenceFragment implements
 					.edit()
 					.putString(KEY_SD_DIR_URI, uri.toString())
 					.commit();
-			Toast.makeText(getActivity(), "Custom directories are still W.I.P.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), R.string.feature_is_WIP, Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(getActivity(), R.string.cannot_write_to_directory, Toast.LENGTH_SHORT)
 					.show();
@@ -319,8 +319,20 @@ public class SyncPrefs extends PreferenceFragment implements
 	}
 
 	private void setSdDirSummary(final SharedPreferences sharedPreferences) {
-		String defaultDir = SDSynchronizer.getDefaultOrgDir(this.getContext());
-		prefSdDir.setSummary(sharedPreferences.getString(KEY_SD_DIR_URI, defaultDir));
+		final String defaultDir = SDSynchronizer.getDefaultOrgDir(this.getContext());
+		String valToSet = sharedPreferences.getString(KEY_SD_DIR_URI, null);
+		if (valToSet == null) {
+			// show the default directory in the setting's description
+			valToSet = defaultDir;
+		} else {
+			// show the file path that the uri is pointing to
+			valToSet = "Uri: " + Uri.parse(valToSet).getPath();
+
+			// TODO instead of moving this to a string resource, fix the code! Maybe it would be
+			//  easier to just remove the option to set a custom folder?
+			valToSet += "\nwhile we fix this, " + defaultDir + "\nwill be used instead";
+		}
+		prefSdDir.setSummary(valToSet);
 	}
 
 	public static class AccountDialog extends DialogFragment implements AccountManagerCallback<Bundle> {
