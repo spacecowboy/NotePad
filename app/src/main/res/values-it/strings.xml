@@ -29,7 +29,7 @@
     <string name="menu_save_and_add">Salva e apre una nuova nota</string>
     <string name="menu_delete">Elimina</string>
     <string name="menu_deletelist">Elimina elenco</string>
-    <string name="menu_sync">Aggiorna</string>
+    <string name="menu_sync">Aggiorna sincronizzazione</string>
     <string name="menu_share">Condividi</string>
     <string name="menu_preferences">Impostazioni</string>
     <string name="menu_createlist">Crea elenco</string>
@@ -54,7 +54,7 @@
     <string name="sort_list_updated">Ordina per ultima modifica</string>
     <string name="sort_list_manual">Ordina manualmente</string>
     <string name="search_description">Note e attività</string>
-    <string name="archive">Archivia</string>
+    <string name="archive">Vedi archivio</string>
     <string name="location">Posizione</string>
     <string name="restore">Ripristina</string>
     <string name="restore_to">Ripristina in</string>
