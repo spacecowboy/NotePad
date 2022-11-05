@@ -33,6 +33,7 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.SyncAdapter;
+import com.nononsenseapps.util.SyncGtaskHelper;
 
 public class SyncStatusMonitor extends BroadcastReceiver {
 	private static final String TAG = "SyncStatusMonitor";
@@ -54,7 +55,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 				.getString(SyncPrefs.KEY_ACCOUNT, "");
 		Account account = null;
 		if (accountName != null && !accountName.isEmpty()) {
-			account = SyncPrefs.getAccount(AccountManager.get(activity), accountName);
+			account = SyncGtaskHelper.getAccount(AccountManager.get(activity), accountName);
 		}
 		// Sync state might have changed, make sure we're spinning when
 		// we should

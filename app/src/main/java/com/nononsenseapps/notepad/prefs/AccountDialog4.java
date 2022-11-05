@@ -1,6 +1,20 @@
+/*
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.nononsenseapps.notepad.prefs;
-
-import java.io.IOException;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
@@ -16,13 +30,16 @@ import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
 import androidx.fragment.app.DialogFragment;
 
 import com.nononsenseapps.helpers.Log;
-import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
+import com.nononsenseapps.util.SyncGtaskHelper;
+
+import java.io.IOException;
 
 /**
  * A copy of AccountDialog in SyncPrefs, but extending from support library
@@ -53,7 +70,7 @@ public class AccountDialog4 extends DialogFragment implements
 			names[i] = accounts[i].name;
 		}
 		// TODO
-		// Could add a clear alternative here
+		//  Could add a clear alternative here
 		builder.setItems(names, new DialogInterface.OnClickListener() {
 			public void onClick(DialogInterface dialog, int which) {
 				// Stuff to do when the account is selected by the user
@@ -112,7 +129,7 @@ public class AccountDialog4 extends DialogFragment implements
 				SyncPrefs.setSyncInterval(activity, customSharedPreference);
 
 				// And trigger an immediate sync
-				SyncHelper.requestSyncIf(activity, SyncHelper.MANUAL);
+				SyncGtaskHelper.requestSyncIf(activity, SyncGtaskHelper.MANUAL);
 			}
 		} catch (OperationCanceledException e) {
 			// if the request was canceled for any reason

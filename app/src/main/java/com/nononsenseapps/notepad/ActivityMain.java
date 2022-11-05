@@ -17,7 +17,6 @@
 package com.nononsenseapps.notepad;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -27,7 +26,6 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -58,7 +56,6 @@ import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NotificationHelper;
-import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
@@ -66,7 +63,6 @@ import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
-import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
 import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
@@ -81,7 +77,7 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
-import com.nononsenseapps.util.ListHelper;
+import com.nononsenseapps.util.SyncGtaskHelper;
 import com.nononsenseapps.utils.ViewsHelper;
 
 import org.androidannotations.annotations.AfterViews;
@@ -336,9 +332,9 @@ public class ActivityMain extends FragmentActivity
 		*/
 		boolean syncing = false;
 		// GTasks
-		if (SyncHelper.isGTasksConfigured(ActivityMain.this)) {
+		if (SyncGtaskHelper.isGTasksConfigured(ActivityMain.this)) {
 			syncing = true;
-			SyncHelper.requestSyncIf(ActivityMain.this, SyncHelper.MANUAL);
+			SyncGtaskHelper.requestSyncIf(ActivityMain.this, SyncGtaskHelper.MANUAL);
 		}
 
 		// Others
@@ -490,12 +486,12 @@ public class ActivityMain extends FragmentActivity
 		super.onResume();
 		// activate monitor
 		if (syncStatusReceiver != null) {
-			syncStatusReceiver.startMonitoring(this,this);
+			syncStatusReceiver.startMonitoring(this, this);
 		}
 
 		// Sync if appropriate
-		if (SyncHelper.enoughTimeSinceLastSync(this)) {
-			SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
+		if (SyncGtaskHelper.enoughTimeSinceLastSync(this)) {
+			SyncGtaskHelper.requestSyncIf(this, SyncGtaskHelper.ONAPPSTART);
 			OrgSyncService.start(this);
 		}
 	}
