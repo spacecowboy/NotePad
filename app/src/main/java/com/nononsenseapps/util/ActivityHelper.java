@@ -41,7 +41,7 @@ public class ActivityHelper {
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 		Configuration config = context.getResources().getConfiguration();
 
-		String lang = prefs.getString(context.getString(R.string.const_preference_locale_key), "");
+		String lang = prefs.getString(context.getString(R.string.pref_locale), "");
 		if (!config.locale.toString().equals(lang)) {
 			Locale locale;
 			if ("".equals(lang))

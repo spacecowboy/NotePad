@@ -19,6 +19,7 @@ package com.nononsenseapps.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
@@ -26,6 +27,7 @@ import androidx.annotation.StringRes;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
 
 /**
@@ -36,55 +38,46 @@ public class SharedPreferencesHelper {
 		return PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
-	private static String S(@NonNull Context context, @StringRes int id) {
-		return context.getString(id);
-	}
-
 	public static boolean isSdSyncEnabled(@NonNull Context context) {
-		return Prefs(context).getBoolean(S(context, R.string.const_preference_sdcard_enabled_key)
-				, false);
+		return Prefs(context).getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
 	}
 
 	public static void disableSdCardSync(@NonNull Context context) {
-		Prefs(context).edit().putBoolean(S(context, R.string.const_preference_sdcard_enabled_key)
-				, false).apply();
+		Prefs(context).edit().putBoolean(SyncPrefs.KEY_SD_ENABLE, false).apply();
 	}
 
-	public static String getSdDir(@NonNull Context context) {
-		return Prefs(context).getString(S(context, R.string.const_preference_sdcard_dir_key),
-				SDSynchronizer.getDefaultOrgDir(context));
+	public static Uri getSdDirUri(@NonNull Context context) {
+		return Uri.parse(
+				Prefs(context).getString(
+						SyncPrefs.KEY_SD_DIR_URI,
+						SDSynchronizer.getDefaultOrgDir(context)));
 	}
 
-	public static boolean isCurrentThemeLight(@NonNull Context context) {
-		final String selectedTheme = getCurrentTheme(context, "");
-
-		final String dark = S(context, R.string.const_preference_theme_dark);
-		final String black = S(context, R.string.const_preference_theme_black);
-
-		return !dark.equals(selectedTheme) && !black.equals(selectedTheme);
-	}
-
-	public static @NonNull
-	String getCurrentTheme(@NonNull Context context, @NonNull String defaultValue) {
-		final String key = S(context, R.string.const_preference_theme_key);
-		return Prefs(context).getString(key, defaultValue);
+	private static String getStr(@NonNull Context c, int id) {
+		return c.getResources().getString(id);
 	}
 
 	public static void setSortingDue(@NonNull Context context) {
-		putString(context, R.string.pref_sorttype, R.string.const_duedate);
+		Prefs(context)
+				.edit()
+				.putString(getStr(context, R.string.pref_sorttype), getStr(context, R.string.const_duedate))
+				.commit();
 	}
 
 	public static void setSortingManual(@NonNull Context context) {
-		putString(context, R.string.pref_sorttype, R.string.const_possubsort);
+		Prefs(context)
+				.edit()
+				.putString(getStr(context, R.string.pref_sorttype), getStr(context, R.string.const_possubsort))
+				.commit();
 	}
 
 	public static void setSortingAlphabetic(Context context) {
-		putString(context, R.string.pref_sorttype, R.string.const_alphabetic);
+		Prefs(context)
+				.edit()
+				.putString(getStr(context, R.string.pref_sorttype), getStr(context, R.string.const_alphabetic))
+				.commit();
 	}
 
-	public static void putString(@NonNull Context context, @StringRes int key, @StringRes int value) {
-		put(context, S(context, key), S(context, value));
-	}
 
 	public static void put(@NonNull Context context, @NonNull String key, @NonNull String value) {
 		Prefs(context).edit().putString(key, value).apply();
@@ -94,21 +87,14 @@ public class SharedPreferencesHelper {
 		Prefs(context).edit().putBoolean(key, value).apply();
 	}
 
-	public static void put(@NonNull Context context, @StringRes int key, boolean value) {
-		put(context, S(context, key), value);
-	}
 
 	public static @NonNull
 	String getGoogleAccount(@NonNull Context context) {
-		return Prefs(context).getString(S(context,
-				R.string.const_preference_gtask_account_key), "");
+		return Prefs(context).getString(SyncPrefs.KEY_ACCOUNT, "");
 	}
 
 	public static boolean isPasswordSet(@NonNull Context context) {
 		return !Prefs(context).getString(PasswordPrefs.KEY_PASSWORD, "").isEmpty();
 	}
 
-	public static void setDropboxAccount(@NonNull Context context, @NonNull String account) {
-		put(context, S(context, R.string.const_preference_dropbox_account_key), account);
-	}
 }
