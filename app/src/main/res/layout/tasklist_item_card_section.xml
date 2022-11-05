@@ -1,8 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2015 Jonas Kalderstam.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
+
+
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/taskitemCard"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -24,24 +41,23 @@
         nononsenseapps:enlargedView="@+id/itemDone">
 
         <com.nononsenseapps.ui.NoteCheckBox
-            xmlns:android="http://schemas.android.com/apk/res/android"
             android:id="@+id/checkbox"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:focusable="false"
             android:focusableInTouchMode="false"
-            android:text=""/>
+            android:text="" />
     </com.nononsenseapps.ui.DelegateFrame>
 
     <View
         android:id="@+id/dragpadding"
         android:layout_width="@dimen/drag_grip_avoid_padding"
         android:layout_height="1dp"
-        android:layout_alignParentRight="true"/>
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true" />
 
     <com.nononsenseapps.utils.views.TitleNoteTextView
-        xmlns:ttv="http://schemas.android.com/apk/res/com.nononsenseapps.utils.views"
         android:id="@android:id/text1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -50,12 +66,13 @@
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/dragpadding"
         android:layout_toRightOf="@+id/checkboxcontainer"
+        android:layout_alignParentLeft="true"
         android:ellipsize="end"
         android:maxLines="4"
         android:paddingBottom="4dp"
         android:singleLine="false"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:textColor="?textColorPrimary"
+        android:textColor="?android:attr/textColorPrimary"
         android:textIsSelectable="false"
         custom:linkify="true"
         custom:secondaryColor="@color/completedGrey"
@@ -72,8 +89,8 @@
         android:fontFamily="sans-serif-light"
         android:gravity="right"
         android:paddingTop="2dp"
-        android:textColor="?textColorSecondary"
+        android:textColor="?android:attr/textColorSecondary"
         android:textSize="12sp"
-        android:visibility="gone"/>
+        android:visibility="gone" />
 
 </RelativeLayout>
