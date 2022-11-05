@@ -55,6 +55,7 @@ import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
+import com.nononsenseapps.util.SyncGtaskHelper;
 
 import java.io.File;
 import java.io.IOException;
@@ -277,7 +278,7 @@ public class SyncPrefs extends PreferenceFragment implements
 					.edit()
 					.putString(KEY_SD_DIR_URI, uri.toString())
 					.commit();
-			Toast.makeText(getActivity(), "Custom directories are still W.I.P.", Toast.LENGTH_SHORT).show();
+			Toast.makeText(getActivity(), R.string.feature_is_WIP, Toast.LENGTH_SHORT).show();
 		} else {
 			Toast.makeText(getActivity(), R.string.cannot_write_to_directory, Toast.LENGTH_SHORT)
 					.show();
@@ -319,8 +320,20 @@ public class SyncPrefs extends PreferenceFragment implements
 	}
 
 	private void setSdDirSummary(final SharedPreferences sharedPreferences) {
-		String defaultDir = SDSynchronizer.getDefaultOrgDir(this.getContext());
-		prefSdDir.setSummary(sharedPreferences.getString(KEY_SD_DIR_URI, defaultDir));
+		final String defaultDir = SDSynchronizer.getDefaultOrgDir(this.getContext());
+		String valToSet = sharedPreferences.getString(KEY_SD_DIR_URI, null);
+		if (valToSet == null) {
+			// show the default directory in the setting's description
+			valToSet = defaultDir;
+		} else {
+			// show the file path that the uri is pointing to
+			valToSet = "Uri: " + Uri.parse(valToSet).getPath();
+
+			// TODO instead of moving this to a string resource, fix the code! Maybe it would be
+			//  easier to just remove the option to set a custom folder?
+			valToSet += "\nwhile we fix this, " + defaultDir + "\nwill be used instead";
+		}
+		prefSdDir.setSummary(valToSet);
 	}
 
 	public static class AccountDialog extends DialogFragment implements AccountManagerCallback<Bundle> {
@@ -371,10 +384,10 @@ public class SyncPrefs extends PreferenceFragment implements
 		}
 
 		/**
+		 * Called when the user has selected a Google account when pressing the enable Gtask switch.
 		 * User wants to select an account to sync with. If we get an approval,
 		 * activate sync and set periodicity also.
 		 */
-		@SuppressLint("CommitPrefEdits")
 		@Override
 		public void run(AccountManagerFuture<Bundle> future) {
 			try {
@@ -383,17 +396,21 @@ public class SyncPrefs extends PreferenceFragment implements
 				// your application to use the
 				// tasks API
 				// a token is available.
-				String token = future.getResult().getString(
-						AccountManager.KEY_AUTHTOKEN);
+				String token = future.getResult().getString(AccountManager.KEY_AUTHTOKEN);
+
 				// Now we are authorized by the user.
 				Log.d("prefsActivity", "step two-b: " + token);
 
 				if (token != null && !token.isEmpty() && account != null) {
+
+					// Also mark enabled as true, as the dialog was shown from enable button
 					Log.d("prefsActivity", "step three: " + account.name);
+
 					SharedPreferences customSharedPreference = PreferenceManager
 							.getDefaultSharedPreferences(activity);
 					customSharedPreference.edit()
 							.putString(SyncPrefs.KEY_ACCOUNT, account.name)
+							.putBoolean(getString(R.string.const_preference_gtask_enabled_key), true)
 							.putBoolean(KEY_SYNC_ENABLE, true).commit();
 
 					// Set it syncable
@@ -403,16 +420,24 @@ public class SyncPrefs extends PreferenceFragment implements
 							MyContentProvider.AUTHORITY, 1);
 					// Set sync frequency
 					SyncPrefs.setSyncInterval(activity, customSharedPreference);
+
+					// Set it syncable
+					SyncGtaskHelper.toggleSync(this.activity, customSharedPreference);
+					// And schedule an immediate sync
+					SyncGtaskHelper.requestSyncIf(this.activity, SyncGtaskHelper.MANUAL);
 				}
 			} catch (OperationCanceledException e) {
 				// if the request was canceled for any reason
+				SyncGtaskHelper.disableSync(this.activity);
 			} catch (AuthenticatorException e) {
 				// if there was an error communicating with the authenticator or
 				// if the authenticator returned an invalid response
+				SyncGtaskHelper.disableSync(this.activity);
 			} catch (IOException e) {
 				// if the authenticator returned an error response that
 				// indicates that it encountered an IOException while
 				// communicating with the authentication server
+				SyncGtaskHelper.disableSync(this.activity);
 			}
 
 		}

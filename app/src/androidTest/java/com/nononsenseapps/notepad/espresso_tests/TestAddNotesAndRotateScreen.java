@@ -8,6 +8,8 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.nononsenseapps.notepad.espresso_tests.OrientationChangeAction.orientationLandscape;
 import static com.nononsenseapps.notepad.espresso_tests.OrientationChangeAction.orientationPortrait;
 
+import android.os.SystemClock;
+
 import androidx.test.filters.LargeTest;
 
 import org.junit.Before;
@@ -35,10 +37,14 @@ public class TestAddNotesAndRotateScreen extends BaseTestClass {
 
 		EspressoHelper.closeDrawer();
 		EspressoHelper.createNotes(noteNames);
+		EspressoHelper.navigateUp();
 
 		// rotate screen
 		onView(isRoot()).perform(orientationLandscape());
 		onView(isRoot()).perform(orientationPortrait());
+
+		// wait for it to finish the rotation(s)
+		SystemClock.sleep(1500);
 
 		//check that textviews still show up
 		onView(withText(noteNames[0])).check(matches(isDisplayed()));

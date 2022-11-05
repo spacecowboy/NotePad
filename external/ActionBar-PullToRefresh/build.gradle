@@ -31,12 +31,12 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 32
     buildToolsVersion '32.0.0'
 
     defaultConfig {
-        targetSdkVersion 18
-        minSdkVersion 14
+        targetSdkVersion 32
+        minSdkVersion 23
     }
 
     lint {

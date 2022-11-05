@@ -2,20 +2,21 @@ Now updated to use the latest android technologies,
 this open source Notepad and to-do list app has these Features:
 
 * Dash Clock support (yes, it still works)
-* Notifications (repeatable)
+* Notifications: set reminders at a certain time, with optional repetition at certain days of the week
 * Language selection
-* Widget, lockscreen-support, resizeable and configurable.
+* Widget, with lockscreen support, resizeable and configurable.
 * Automatic synchronization with Google Tasks
-* Ability to set passwords on notes
+* Ability to set passwords to protect important notes
 * Move tasks between different lists
 * Drag to reorder your tasks
 * Integration with Android Agenda Widget
 * Search
 * Themes: light and dark are available
 * Backup (import & export) notes to a json file
-* Sync with a file on the local storage
+* Sync with an ORG file on the local storage
 
-If you want to improve this app, or simply share ideas, come vist us on github.
+If you want to improve this app, or simply share ideas, come vist us
+at https://github.com/spacecowboy/NotePad
 
 For a possible replacement, check https://f-droid.org/packages/com.orgzly
 Orgzly is an actively developed note app that can also import your old notes.

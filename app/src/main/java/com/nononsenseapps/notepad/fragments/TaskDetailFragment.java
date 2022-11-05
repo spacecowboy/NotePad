@@ -375,6 +375,8 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		options.shotType = ShowcaseView.TYPE_NO_LIMIT;
 		options.block = true;
 		options.hideOnClickOutside = true; // mandatory to make tests work
+		// the "OK" button is useless, and it even overlaps with the navigation bar on the bottom!
+		options.noButton = true;
 
 		ShowcaseView sv = ShowcaseView.insertShowcaseViewWithType(
 				ShowcaseView.ITEM_ACTION_OVERFLOW, // focus on the overflow menu, the "vertical ..."

@@ -15,15 +15,14 @@
      limitations under the License.
 -->
 
+<!-- The header of a section in the drawer: as of now we have "TASKS" and then "LISTS" -->
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@android:id/text1"
     style="?android:attr/listSeparatorTextViewStyle"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:gravity="center_vertical"
     android:paddingLeft="16dip"
-    android:paddingTop="2dip"
-    android:paddingBottom="2dip"
-    tools:ignore="SelectableText"/>
+    android:paddingTop="16dip"
+    android:paddingBottom="2dip"/>

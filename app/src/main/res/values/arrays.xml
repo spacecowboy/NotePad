@@ -18,13 +18,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <!-- shown to the user -->
     <string-array name="theme_preference">
         <item>@string/settings_summary_theme_light</item>
         <item>@string/settings_summary_theme_dark</item>
         <item>@string/settings_summary_theme_classic</item>
         <item>@string/settings_summary_theme_black</item>
     </string-array>
-    <string-array name="themevalues_preference" tools:ignore="MissingTranslation">
+    <!-- Used by the code -->
+    <string-array name="themevalues_preference" translatable="false">
         <item>@string/const_theme_light_ab</item>
         <item>@string/const_theme_googlenow_dark</item>
         <item>@string/const_theme_classic</item>

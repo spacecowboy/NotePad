@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- Seems to be used ONLY at design time -->
 <TextView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"

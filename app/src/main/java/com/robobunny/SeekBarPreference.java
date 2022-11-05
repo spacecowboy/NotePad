@@ -41,6 +41,8 @@ import com.nononsenseapps.notepad.R;
 public class SeekBarPreference extends Preference implements
 		OnSeekBarChangeListener {
 
+	// TODO use a different control in the preferences screen, maybe let the user input a number directly. Then delete this class
+
 	private final String TAG = getClass().getName();
 
 	//	private static final String ANDROIDNS = "http://schemas.android.com/apk/res/android";

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- TODO this file seems useless. delete it ? -->
+<useless_delete_this></useless_delete_this>
+<!--
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:drawable="@drawable/list_arrow_activated_holo"
@@ -19,3 +22,4 @@
     <item
         android:drawable="@drawable/list_read_holo"/>
 </selector>
+-->

@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- This represents a "list of notes" shown in the drawer menu on the left.
+ See also drawer_layout.xml which hosts these list items -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
@@ -6,12 +9,28 @@
     android:background="?android:attr/selectableItemBackground"
     android:orientation="horizontal">
 
+    <!-- TODO use amulyakhare TextDrawable like in version 6.0.0.
+    <ImageView
+        android:id="@+id/item_avatar"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_gravity="start|center_vertical"
+        android:layout_marginEnd="42dp"
+        android:layout_marginRight="42dp"
+        android:scaleType="fitCenter"
+        android:visibility="gone"/>
+    -->
+
     <TextView
         android:id="@android:id/text1"
         style="?LeftDrawerListItemStyle"
         android:layout_width="0dp"
         android:layout_height="64dp"
+        android:layout_gravity="start|center_vertical"
         android:layout_weight="1"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
         android:fontFamily="sans-serif-light"/>
 
     <TextView
@@ -19,7 +38,12 @@
         style="?LeftDrawerListItemSecondaryStyle"
         android:layout_width="wrap_content"
         android:layout_height="64dp"
-        android:layout_gravity="right"
+        android:layout_gravity="end|center_vertical"
+        android:ellipsize="end"
+        android:maxLines="1"
+        android:singleLine="true"
         android:fontFamily="sans-serif-light"/>
+
+    <!-- TODO here you should add a button which, once pressed, will show the popup to edit the note list -->
 
 </LinearLayout>

@@ -1,12 +1,12 @@
 v7.0.0: NoNonsense Notes
 
-Changes:
+Highlights:
 - added compatibility to new android versions
-- added notification channel
-- Json backup are now saved in Android/data/.../ so the folder NoNonsenseNotes/ is useless
+- Json backups and .org files are now saved in Android/data/.../ making the folder NoNonsenseNotes/ is useless
 
-Developer:
-- raised target and compile SDK to version 32
+Details:
+- raised target SDK to version 32
 - upgraded to AndroidX libraries
 - fixed all tests
 - upgraded dependencies and gradle
+- general code cleanup
