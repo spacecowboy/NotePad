@@ -53,8 +53,7 @@
     <View
         android:id="@+id/dragpadding"
         android:layout_width="@dimen/drag_grip_avoid_padding"
-        android:layout_height="1dp"
-        android:layout_alignParentEnd="true"
+        android:layout_height="1dp"        
         android:layout_alignParentRight="true" />
 
     <com.nononsenseapps.utils.views.TitleNoteTextView
@@ -65,8 +64,7 @@
         android:layout_alignBaseline="@+id/checkboxcontainer"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@+id/dragpadding"
-        android:layout_toRightOf="@+id/checkboxcontainer"
-        android:layout_alignParentLeft="true"
+        android:layout_toRightOf="@+id/checkboxcontainer"        
         android:ellipsize="end"
         android:maxLines="4"
         android:paddingBottom="4dp"

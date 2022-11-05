@@ -24,9 +24,6 @@
 	android:paddingTop="2dp"
 	android:paddingBottom="2dp">
 
-	<!-- style="?android:attr/spinnerStyle" -->
-	<!-- android:background="@android:drawable/btn_default_holo_dark" -->
-
 	<ImageButton
 		android:id="@+id/notificationRemove"
 		style="?android:attr/buttonBarButtonStyle"
@@ -36,7 +33,7 @@
 		android:layout_marginLeft="4dp"
 		android:contentDescription="Remove reminder"
 		android:scaleType="center"
-		android:src="?ic_clear_24dp_active"
+		android:src="?attr/ic_clear_24dp_active"
 		tools:ignore="HardcodedText"/>
 
 	<ImageButton
@@ -50,7 +47,7 @@
 		android:minWidth="8dp"
 		android:padding="0dp"
 		android:scaleType="center"
-		android:src="?ic_alarm_24dp_active"
+		android:src="?attr/ic_alarm_24dp_active"
 		tools:ignore="HardcodedText"/>
 
 	<TextView

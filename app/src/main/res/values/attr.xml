@@ -99,14 +99,9 @@
 	<attr name="list_item_card_background" format="reference"/>
 
 	<attr name="labelAddItemTextColor" format="reference|color"/>
-	<attr name="body_new" format="reference"/>
-	<attr name="body_remove" format="reference"/>
-	<attr name="body_delete" format="reference"/>
 	<attr name="ic_action_add_list" format="reference"/>
 	<attr name="ic_action_list" format="reference"/>
 	<attr name="ic_action_share" format="reference"/>
-
-	<!-- <attr name="task_list_divider_height" format="reference"/> -->
 
 	<attr name="drag_handle_color" format="reference|color"/>
 

@@ -85,7 +85,6 @@
 						android:nextFocusDown="@+id/notificationAdd"/>
 				</com.nononsenseapps.ui.DelegateFrame>
 
-				<!-- android:background="?btn_default_selector" -->
 
 				<ImageButton
 					android:id="@+id/dueCancelButton"
@@ -96,9 +95,9 @@
 					android:layout_alignParentRight="true"
 					android:contentDescription="Remove due date"
 					android:nextFocusDown="@+id/notificationAdd"
-					android:src="?ic_clear_24dp_active"
-					android:tint="?iconTint"
-					tools:ignore="HardcodedText"/>
+					android:src="?attr/ic_clear_24dp_active"
+					app:tint="?attr/iconTint"
+                    tools:ignore="HardcodedText"/>
 
 				<Button
 					android:id="@+id/dueDateBox"
@@ -130,7 +129,7 @@
 				android:layout_marginBottom="0dp"
 				android:background="?android:attr/selectableItemBackground"
 				android:clickable="true"
-				android:drawableLeft="?ic_alarm_add_24dp_active"
+				android:drawableLeft="@drawable/ic_add_alarm_dark"
 				android:drawablePadding="8dp"
 				android:fontFamily="sans-serif-light"
 				android:gravity="center_vertical"
@@ -139,7 +138,7 @@
 				android:text="@string/add_a_reminder"
 				android:textAllCaps="false"
 				android:textAppearance="?android:attr/textAppearanceMedium"
-				android:textColor="?android:attr/textColorSecondary"/>
+				android:textColor="?attr/textColorSecondary"/>
 
 			<LinearLayout
 				android:id="@+id/notificationList"
