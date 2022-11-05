@@ -42,6 +42,7 @@ public class SharedPreferencesHelper {
 		return Prefs(context).getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
 	}
 
+	/** Disable SD synchronization in the settings */
 	public static void disableSdCardSync(@NonNull Context context) {
 		Prefs(context).edit().putBoolean(SyncPrefs.KEY_SD_ENABLE, false).apply();
 	}
