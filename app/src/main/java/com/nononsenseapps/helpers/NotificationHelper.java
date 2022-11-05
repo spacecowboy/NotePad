@@ -1,17 +1,18 @@
 /*
- * Copyright (c) 2014 Jonas Kalderstam.
+ * Copyright (c) 2015 Jonas Kalderstam.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.nononsenseapps.helpers;
@@ -28,6 +29,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
@@ -50,10 +52,10 @@ import java.util.List;
 
 public class NotificationHelper extends BroadcastReceiver {
 
-	//public static final int NOTIFICATION_ID = 4364;
+	// Intent notification argument
+	public static final String NOTIFICATION_CANCEL_ARG = "notification_cancel_arg";
+	public static final String NOTIFICATION_DELETE_ARG = "notification_delete_arg";
 
-	// static final String ARG_MAX_TIME = "maxtime";
-	// static final String ARG_LISTID = "listid";
 	static final String ARG_TASKID = "taskid";
 	private static final String ACTION_COMPLETE = "com.nononsenseapps.notepad.ACTION.COMPLETE";
 	private static final String ACTION_SNOOZE = "com.nononsenseapps.notepad.ACTION.SNOOZE";
@@ -97,17 +99,15 @@ public class NotificationHelper extends BroadcastReceiver {
 				long delay30min = 1000 * 60 * 30;
 				final Calendar now = Calendar.getInstance();
 
-				com.nononsenseapps.notepad.database.Notification.setTime(
-						context, intent.getData(),
-						delay30min + now.getTimeInMillis());
+				com.nononsenseapps.notepad.database.Notification
+						.setTime(context, intent.getData(), delay30min + now.getTimeInMillis());
 			} else if (ACTION_COMPLETE.equals(intent.getAction())) {
 				// Complete note
 				Task.setCompletedSynced(context, true,
 						intent.getLongExtra(ARG_TASKID, -1));
 				// Delete notifications with the same task id
 				com.nononsenseapps.notepad.database.Notification
-						.removeWithTaskIdsSynced(context,
-								intent.getLongExtra(ARG_TASKID, -1));
+						.removeWithTaskIdsSynced(context, intent.getLongExtra(ARG_TASKID, -1));
 			}
 		}
 
@@ -140,20 +140,18 @@ public class NotificationHelper extends BroadcastReceiver {
 				getObserver(context));
 	}
 
-	// Intent notification argument
-	public static final String NOTIFICATION_CANCEL_ARG = "notification_cancel_arg";
-	public static final String NOTIFICATION_DELETE_ARG = "notification_delete_arg";
+
 
 	public static void clearNotification(@NonNull final Context context, @NonNull final Intent
 			intent) {
 		if (intent.getLongExtra(NOTIFICATION_DELETE_ARG, -1) > 0) {
-			com.nononsenseapps.notepad.database.Notification.deleteOrReschedule(context, com
-					.nononsenseapps.notepad.database.Notification.getUri(intent.getLongExtra
-							(NOTIFICATION_DELETE_ARG, -1)));
+			com.nononsenseapps.notepad.database.Notification.deleteOrReschedule(context,
+					com.nononsenseapps.notepad.database.Notification.getUri(
+							intent.getLongExtra(NOTIFICATION_DELETE_ARG, -1)));
 		}
 		if (intent.getLongExtra(NOTIFICATION_CANCEL_ARG, -1) > 0) {
-			NotificationHelper.cancelNotification(context, (int) intent.getLongExtra
-					(NOTIFICATION_CANCEL_ARG, -1));
+			NotificationHelper.cancelNotification(context,
+					(int) intent.getLongExtra(NOTIFICATION_CANCEL_ARG, -1));
 		}
 	}
 
@@ -266,14 +264,15 @@ public class NotificationHelper extends BroadcastReceiver {
 			// }
 			// }
 			// else {
+
+			final int priority = Integer.parseInt(
+					prefs.getString(context.getString(R.string.key_pref_prio), "0"));
+			final Uri ringtone = Uri.parse(
+					prefs.getString(context.getString(R.string.key_pref_ringtone), "DEFAULT_NOTIFICATION_URI"));
+
 			// Notify for each individually
 			for (com.nononsenseapps.notepad.database.Notification note : notifications) {
-				builder = getNotificationBuilder(
-						context,
-						Integer.parseInt(prefs.getString(context.getString(R.string.key_pref_prio), "0")),
-						lightAndVibrate,
-						Uri.parse(prefs.getString(context.getString(R.string.key_pref_ringtone), "DEFAULT_NOTIFICATION_URI")),
-						alertOnce);
+				builder = getNotificationBuilder(context, priority, lightAndVibrate, ringtone, alertOnce);
 				notifyBigText(context, notificationManager, builder, note);
 			}
 			// }
@@ -287,14 +286,16 @@ public class NotificationHelper extends BroadcastReceiver {
 			final Context context, final int priority,
 			final int lightAndVibrate, final Uri ringtone,
 			final boolean alertOnce) {
+		// useless ? the small icon should be enough
+		final Bitmap largeIcon = BitmapFactory
+				.decodeResource(context.getResources(), R.drawable.app_icon);
+
 		final NotificationCompat.Builder builder = new NotificationCompat
 				.Builder(context, CHANNEL_ID) // let's use only 1 channel in this app
 				.setWhen(0)
 				.setSmallIcon(R.drawable.ic_stat_notification_edit)
-				.setLargeIcon(
-						BitmapFactory.decodeResource(context.getResources(),
-								R.drawable.app_icon))
-				.setPriority(priority)
+				.setLargeIcon(largeIcon)
+				.setPriority(priority) // TODO always use NotificationCompat.PRIORITY_DEFAULT instead ?
 				.setDefaults(lightAndVibrate)
 				.setAutoCancel(true)
 				.setOnlyAlertOnce(alertOnce)
@@ -429,13 +430,11 @@ public class NotificationHelper extends BroadcastReceiver {
 
 		// Snooze button only on time non-repeating
 		if (note.time != null && note.repeats == 0) {
-			builder.addAction(R.drawable.ic_stat_snooze,
-					context.getText(R.string.snooze), piSnooze);
+			builder.addAction(R.drawable.ic_alarm_24dp_white, context.getText(R.string.snooze), piSnooze);
 		}
 		// Complete button only on non-repeating, both time and location
 		if (note.repeats == 0) {
-			builder.addAction(R.drawable.navigation_accept_dark,
-					context.getText(R.string.completed), piComplete);
+			builder.addAction(R.drawable.ic_check_24dp_white, context.getText(R.string.completed), piComplete);
 		}
 
 		final Notification noti = builder.build();
