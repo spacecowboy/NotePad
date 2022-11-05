@@ -184,7 +184,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		mIsThemeLight = SharedPreferencesHelper.isCurrentThemeLight(getActivity());
+		mIsThemeLight = true;//SharedPreferencesHelper.isCurrentThemeLight(getActivity());
 
 		// Read in the flag indicating whether or not the user has demonstrated awareness of the
 		// drawer. See PREF_USER_LEARNED_DRAWER for details.
@@ -469,7 +469,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 
 			if (result.isEmpty() && SharedPreferencesHelper.isSdSyncEnabled(getActivity())) {
 				// Then try folder
-				result = SharedPreferencesHelper.getSdDir(getActivity());
+				result = null;// SharedPreferencesHelper.getSdDirUri(getActivity());
 			}
 
 			return result;

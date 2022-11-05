@@ -522,7 +522,7 @@ public class TaskListFragment extends Fragment implements
 						msg = getResources().getString(R.string.deleted);
 					}
 
-					// TODO should use a FAB instead
+					// TODO should use a Snackbar instead
 					// Snackbar.make(mFab, msg, Snackbar.LENGTH_LONG).setAction(R.string.undo, listener).setCallback(dismissCallback).show();
 					Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
 
