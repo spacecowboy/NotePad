@@ -490,7 +490,7 @@ public class ActivityMain extends FragmentActivity
 		super.onResume();
 		// activate monitor
 		if (syncStatusReceiver != null) {
-			syncStatusReceiver.startMonitoring(this);
+			syncStatusReceiver.startMonitoring(this,this);
 		}
 
 		// Sync if appropriate

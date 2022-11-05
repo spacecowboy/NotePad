@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.nononsenseapps.helpers;
 
 import android.accounts.Account;
@@ -20,20 +37,21 @@ import com.nononsenseapps.notepad.sync.SyncAdapter;
 public class SyncStatusMonitor extends BroadcastReceiver {
 	private static final String TAG = "SyncStatusMonitor";
 	Activity activity;
+	OnSyncStartStopListener listener;
 
 	/**
 	 * Call this in the activity's onResume
 	 */
-	public void startMonitoring(final Activity activity) {
+	public void startMonitoring(Activity activity, OnSyncStartStopListener listener) {
+		// in the caller, the activity acts also as the listener, anyway
 		this.activity = activity;
+		this.listener = listener;
 
-		activity.registerReceiver(this, new IntentFilter(
-				SyncAdapter.SYNC_FINISHED));
-		activity.registerReceiver(this, new IntentFilter(
-				SyncAdapter.SYNC_STARTED));
+		activity.registerReceiver(this, new IntentFilter(SyncAdapter.SYNC_FINISHED));
+		activity.registerReceiver(this, new IntentFilter(SyncAdapter.SYNC_STARTED));
 
-		final String accountName = PreferenceManager.getDefaultSharedPreferences(
-				activity).getString(SyncPrefs.KEY_ACCOUNT, "");
+		final String accountName = PreferenceManager.getDefaultSharedPreferences(activity)
+				.getString(SyncPrefs.KEY_ACCOUNT, "");
 		Account account = null;
 		if (accountName != null && !accountName.isEmpty()) {
 			account = SyncPrefs.getAccount(AccountManager.get(activity), accountName);
@@ -41,12 +59,11 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 		// Sync state might have changed, make sure we're spinning when
 		// we should
 		try {
-			if (account != null
-					&& ContentResolver.isSyncActive(account,
-					MyContentProvider.AUTHORITY)) {
-				((OnSyncStartStopListener) activity).onSyncStartStop(true);
+			if (account != null && ContentResolver.isSyncActive(account, MyContentProvider
+					.AUTHORITY)) {
+				listener.onSyncStartStop(true);
 			} else {
-				((OnSyncStartStopListener) activity).onSyncStartStop(false);
+				listener.onSyncStartStop(false);
 			}
 		} catch (Exception e) {
 			Log.e(TAG, e.getLocalizedMessage());
@@ -63,7 +80,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 			Log.e(TAG, e.getLocalizedMessage());
 		}
 		try {
-			((OnSyncStartStopListener) activity).onSyncStartStop(false);
+			listener.onSyncStartStop(false);
 		} catch (Exception e) {
 			Log.e(TAG, e.getLocalizedMessage());
 		}
@@ -76,8 +93,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 				@Override
 				public void run() {
 					try {
-						((OnSyncStartStopListener) activity)
-								.onSyncStartStop(true);
+						listener.onSyncStartStop(true);
 					} catch (Exception e) {
 						Log.e(TAG, e.getLocalizedMessage());
 					}
@@ -88,8 +104,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 				@Override
 				public void run() {
 					try {
-						((OnSyncStartStopListener) activity)
-								.onSyncStartStop(false);
+						listener.onSyncStartStop(false);
 					} catch (Exception e) {
 						Log.e(TAG, e.getLocalizedMessage());
 					}
@@ -97,10 +112,9 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 			});
 			Bundle b = intent.getExtras();
 			if (b == null) {
-				b = new Bundle();
+				b = Bundle.EMPTY;
 			}
-			tellUser(context, b.getInt(SyncAdapter.SYNC_RESULT,
-					SyncAdapter.SUCCESS));
+			tellUser(context, b.getInt(SyncAdapter.SYNC_RESULT, SyncAdapter.SUCCESS));
 		}
 	}
 
@@ -118,14 +132,15 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 				return;
 		}
 
+		Log.d("JONAS", "SYNC: " + result);
 		Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
 		toast.show();
 	}
 
-	public static interface OnSyncStartStopListener {
+	public interface OnSyncStartStopListener {
 		/**
 		 * This is always called on the activity's UI thread.
 		 */
-		public void onSyncStartStop(final boolean ongoing);
+		void onSyncStartStop(final boolean ongoing);
 	}
 }
