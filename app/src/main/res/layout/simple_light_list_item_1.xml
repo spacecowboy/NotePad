@@ -20,7 +20,7 @@
 <TextView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:id="@android:id/text1"
-	style="?LeftDrawerListItemStyle"
+	style="?attr/LeftDrawerListItemStyle"
 	android:layout_width="match_parent"
 	android:layout_height="64dp"
 	android:fontFamily="sans-serif-light"/>

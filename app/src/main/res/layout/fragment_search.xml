@@ -19,7 +19,7 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	style="?ListMarginStyle"
+	style="?attr/ListMarginStyle"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
 	android:orientation="vertical">
@@ -37,7 +37,7 @@
 
 	<ListView
 		android:id="@android:id/list"
-        style="?ListDividerStyle"
+        style="?attr/ListDividerStyle"
 		android:layout_width="@dimen/listNoDetailWidth"
 		android:layout_height="match_parent"
 		android:layout_gravity="center_horizontal"

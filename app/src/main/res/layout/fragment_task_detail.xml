@@ -129,7 +129,7 @@
 				android:layout_marginBottom="0dp"
 				android:background="?android:attr/selectableItemBackground"
 				android:clickable="true"
-				android:drawableLeft="@drawable/ic_add_alarm_dark"
+				android:drawableLeft="?attr/ic_alarm_add_24dp_active"
 				android:drawablePadding="8dp"
 				android:fontFamily="sans-serif-light"
 				android:gravity="center_vertical"

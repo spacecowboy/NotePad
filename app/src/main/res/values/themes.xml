@@ -32,7 +32,7 @@
 		<item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
 		<item name="iconTint">@color/icon_tint_light</item>
 
-		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_black_active</item>
+
 
 
 		<item name="NavDrawerStyle">@style/LightNavbarTheme</item>
@@ -58,7 +58,7 @@
 		<item name="selectable_item_background">@drawable/selectable_item_background_dark</item>
 		<item name="iconTint">@color/icon_tint_dark</item>
 
-		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_white</item>
+
 
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">@color/primary_dark</item>
@@ -96,7 +96,6 @@
 		<item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
 		<item name="iconTint">@color/icon_tint_light</item>
 		<item name="ic_clear_24dp_active">@drawable/ic_clear_24dp_black_active</item>
-		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_black_active</item>
 
 
 		<item name="NavDrawerStyle">@style/LightNavbarTheme</item>
@@ -124,7 +123,6 @@
 		<item name="selectable_item_background">@drawable/selectable_item_background_dark</item>
 		<item name="iconTint">@color/icon_tint_dark</item>
 		<item name="ic_clear_24dp_active">@drawable/ic_clear_24dp_white</item>
-		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_white</item>
 
 
 		<item name="windowActionModeOverlay">true</item>
@@ -202,6 +200,7 @@
 		<item name="device_access_secure">@drawable/device_access_secure_dark</item>
 		<item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
 		<item name="navigation_accept">@drawable/navigation_accept_dark</item>
+		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_white</item>
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="my_list_background">@drawable/background_holo_dark</item>
 		<item name="editorBackgroundColor">@drawable/background_holo_dark</item>
@@ -280,7 +279,7 @@
 		<item name="device_access_secure">@drawable/device_access_secure_dark</item>
 		<item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
 		<item name="navigation_accept">@drawable/navigation_accept_dark</item>
-
+		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_black_active</item>
 		<!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="my_list_background">@color/listLightBG</item>
