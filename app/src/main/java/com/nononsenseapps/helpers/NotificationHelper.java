@@ -141,7 +141,6 @@ public class NotificationHelper extends BroadcastReceiver {
 	}
 
 
-
 	public static void clearNotification(@NonNull final Context context, @NonNull final Intent
 			intent) {
 		if (intent.getLongExtra(NOTIFICATION_DELETE_ARG, -1) > 0) {
@@ -422,11 +421,8 @@ public class NotificationHelper extends BroadcastReceiver {
 						new NotificationCompat.BigTextStyle()
 								.bigText(note.taskNote));
 
-		// Delete intent on non-location repeats
-		if (!note.isLocationRepeat()) {
-			// repeating location reminders should not have a delete intent, the rest do
-			builder.setDeleteIntent(piDelete);
-		}
+		// the Delete intent for non-location repeats
+		builder.setDeleteIntent(piDelete);
 
 		// Snooze button only on time non-repeating
 		if (note.time != null && note.repeats == 0) {
