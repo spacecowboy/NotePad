@@ -18,23 +18,6 @@
 <!-- Provides constants and default values -->
 <resources>
     <!-- 6.0+ values -->
-    <string name="const_preference_theme_light">light</string>
-    <string name="const_preference_theme_dark">dark</string>
-    <string name="const_preference_theme_black">black</string>
-
-    <string name="const_preference_theme_key">preference_theme_key</string>
-    <string name="const_preference_ringtone_key">global_ringtone</string>
-    <string name="const_preference_vibrate_key">global_vibrate</string>
-    <string name="const_preference_locale_key">pref_key_locale</string>
-
-    <string name="const_preference_gtask_account_key">accountPref</string>
-    <string name="const_preference_sdcard_dir_key">pref_sync_sd_dir</string>
-    <string name="const_preference_sdcard_enabled_key">pref_sync_sd_enabled</string>
-    <string name="const_preference_dropbox_enabled_key">pref_sync_dropbox_enabled</string>
-    <string name="const_preference_dropbox_dir_key">pref_sync_dropbox_dir</string>
-    <string name="const_preference_dropbox_account_key">const_preference_dropbox_account_key</string>
-
-    <string name="const_preference_gtask_enabled_key">syncEnablePref</string>
 
     <string name="const_preference_legacybackup_key">preference_legacybackup_key</string>
 
