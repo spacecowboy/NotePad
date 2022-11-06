@@ -17,33 +17,34 @@
 
 package com.nononsenseapps.notepad.fragments;
 
+import static com.nononsenseapps.util.PermissionsHelper.hasPermissions;
+import static com.nononsenseapps.util.PermissionsHelper.permissionsGranted;
+import static com.nononsenseapps.util.SharedPreferencesHelper.disableSdCardSync;
+
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
-
 import android.widget.Toast;
 
-import com.nononsenseapps.build.Config;
-import com.nononsenseapps.notepad.BuildConfig;
-import com.nononsenseapps.notepad.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.nononsenseapps.build.Config;
+import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.notepad.sync.files.JSONBackup;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
-import com.nononsenseapps.util.AsyncTaskHelper;
 import com.nononsenseapps.util.PermissionsHelper;
 import com.nononsenseapps.util.PreferenceHelper;
 import com.nononsenseapps.util.SharedPreferencesHelper;
@@ -52,15 +53,6 @@ import com.nononsenseapps.util.SyncGtaskHelper;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
-
-import static com.nononsenseapps.util.PermissionsHelper.hasPermissions;
-import static com.nononsenseapps.util.PermissionsHelper.permissionsGranted;
-
-import static com.nononsenseapps.util.SharedPreferencesHelper.disableSdCardSync;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
 
 /**
  * Main top level settings fragment

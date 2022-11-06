@@ -17,18 +17,18 @@
 
 package com.nononsenseapps.support.app;
 
-import com.nononsenseapps.helpers.Log;
-import com.nononsenseapps.notepad.R;
-
-import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.os.Parcelable;
-import androidx.viewpager.widget.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
+
+import androidx.viewpager.widget.PagerAdapter;
+
+import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.notepad.R;
 
 /**
  * Implementation of {@link androidx.viewpager.widget.PagerAdapter} that
@@ -138,14 +138,12 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 		mCurTransaction.detach((Fragment) object);
 	}
 
-	@TargetApi(14)
 	private void setMenuVisibility(final Fragment fragment, final boolean value) {
 		if (fragment != null
 				&& context.getResources().getBoolean(R.bool.atLeast14))
 			fragment.setMenuVisibility(value);
 	}
 
-	@TargetApi(15)
 	private void setUserVisibleHint(final Fragment fragment, final boolean value) {
 		if (fragment != null
 				&& context.getResources().getBoolean(R.bool.atLeast15))

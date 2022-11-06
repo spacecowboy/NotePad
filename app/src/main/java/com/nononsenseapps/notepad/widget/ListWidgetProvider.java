@@ -17,7 +17,6 @@
 
 package com.nononsenseapps.notepad.widget;
 
-import android.annotation.TargetApi;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -27,12 +26,10 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-
-import com.nononsenseapps.helpers.Log;
-
 import android.view.View;
 import android.widget.RemoteViews;
 
+import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.NotePadBroadcastReceiver;
 import com.nononsenseapps.notepad.R;
@@ -141,9 +138,9 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 	public static RemoteViews buildRemoteViews(final Context context,
-											   final AppWidgetManager appWidgetManager, final int appWidgetId,
+											   final AppWidgetManager appWidgetManager,
+											   final int appWidgetId,
 											   final WidgetPrefs settings) {
 		// Hack: We must set this widget's id in the URI to prevent the
 		// situation
