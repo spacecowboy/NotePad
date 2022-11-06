@@ -99,8 +99,8 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		}
 		// Fetch from database
 		for (i = 0; i < from.length; i++) {
-			viewHolder.texts[i].setText(cursor.getString(cursor
-					.getColumnIndex(from[i])));
+			String txt = cursor.getString(cursor.getColumnIndex(from[i]));
+			viewHolder.texts[i].setText(txt);
 		}
 	}
 

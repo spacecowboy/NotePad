@@ -17,33 +17,24 @@
 
 package com.nononsenseapps.notepad.widget;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import com.nononsenseapps.helpers.Log;
-import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.NotePadBroadcastReceiver;
-import com.nononsenseapps.notepad.widget.ListWidgetProvider;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
-import com.nononsenseapps.notepad.prefs.MainPrefs;
-import com.nononsenseapps.ui.DateView;
-import com.nononsenseapps.utils.views.TitleNoteTextView;
-
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.media.audiofx.BassBoost.Settings;
 import android.net.Uri;
 import android.os.Binder;
-import android.os.Build;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
-import android.widget.TextView;
+
+import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
+import com.nononsenseapps.utils.views.TitleNoteTextView;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 /**
  * This is the service that provides the factory to be bound to the collection
