@@ -16,31 +16,31 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:key="app_preference_screen_notifications" >
+	android:key="app_preference_screen_notifications">
 
-        <RingtonePreference
-            android:key="@string/key_pref_ringtone"
-            android:ringtoneType="notification"
-            android:showDefault="true"
-            android:showSilent="true"
-            android:title="@string/sound" />
+	<RingtonePreference
+		android:key="@string/key_pref_ringtone"
+		android:ringtoneType="notification"
+		android:showDefault="true"
+		android:showSilent="true"
+		android:title="@string/sound"/>
 
-        <CheckBoxPreference
-            android:defaultValue="false"
-            android:key="@string/key_pref_vibrate"
-            android:title="@string/vibrate" />
+	<CheckBoxPreference
+		android:defaultValue="false"
+		android:key="@string/key_pref_vibrate"
+		android:title="@string/vibrate"/>
 
-        <ListPreference
-            android:defaultValue="0"
-            android:entries="@array/notification_prio_entries"
-            android:entryValues="@array/notification_prio_values"
-            android:key="@string/key_pref_prio"
-            android:title="@string/priority"/>
-    
-    <!-- <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="@string/key_pref_group_on_lists"
-        android:title="@string/group_on_list"
-        android:summary="@string/group_on_list_summary" /> -->
+	<ListPreference
+		android:defaultValue="0"
+		android:entries="@array/notification_prio_entries"
+		android:entryValues="@array/notification_prio_values"
+		android:key="@string/key_pref_prio"
+		android:title="@string/priority"/>
+
+	<!-- <CheckBoxPreference
+		android:defaultValue="false"
+		android:key="@string/key_pref_group_on_lists"
+		android:title="@string/group_on_list"
+		android:summary="@string/group_on_list_summary" /> -->
 
 </PreferenceScreen>

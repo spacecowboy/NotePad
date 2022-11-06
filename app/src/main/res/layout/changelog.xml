@@ -17,159 +17,159 @@
   -->
 
 <ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="10dp"
-        tools:ignore="HardcodedText">
+	<LinearLayout
+		android:layout_width="fill_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical"
+		android:padding="10dp"
+		tools:ignore="HardcodedText">
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="15dp"
-            android:autoLink="web|email|map"
-            android:text="For latest information go to https://github.com/spacecowboy/NotePad"
-            android:textStyle="bold"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="15dp"
+			android:autoLink="web|email|map"
+			android:text="For latest information go to https://github.com/spacecowboy/NotePad"
+			android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="Help translate the app"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:fontFamily="sans-serif-condensed"
+			android:text="Help translate the app"
+			android:textColor="@android:color/holo_blue_dark"
+			android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="web|email|map"
-            android:text="Go to https://crowdin.com/project/nononsensenotes to help translate the app to your native language."/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:autoLink="web|email|map"
+			android:text="Go to https://crowdin.com/project/nononsensenotes to help translate the app to your native language."/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nFaster updates? Join the beta community"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:fontFamily="sans-serif-condensed"
+			android:text="\nFaster updates? Join the beta community"
+			android:textColor="@android:color/holo_blue_dark"
+			android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:autoLink="web|email|map"
-            android:text="http://goo.gl/Ocjjl"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:autoLink="web|email|map"
+			android:text="http://goo.gl/Ocjjl"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nVersion 5.7.1"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:fontFamily="sans-serif-condensed"
+			android:text="\nVersion 5.7.1"
+			android:textColor="@android:color/holo_blue_dark"
+			android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/changelog_5_7_1"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
+			android:text="@string/changelog_5_7_1"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nVersion 5.6.0"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:fontFamily="sans-serif-condensed"
+			android:text="\nVersion 5.6.0"
+			android:textColor="@android:color/holo_blue_dark"
+			android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/changelog_5_6_0"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
+			android:text="@string/changelog_5_6_0"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nVersion 5.5.5"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:fontFamily="sans-serif-condensed"
+			android:text="\nVersion 5.5.5"
+			android:textColor="@android:color/holo_blue_dark"
+			android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/changelog_5_5_5"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
+			android:text="@string/changelog_5_5_5"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nVersion 5.5.4"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:fontFamily="sans-serif-condensed"
+			android:text="\nVersion 5.5.4"
+			android:textColor="@android:color/holo_blue_dark"
+			android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/changelog_5_5_4"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
+			android:text="@string/changelog_5_5_4"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nVersion 5.5.3"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:fontFamily="sans-serif-condensed"
+			android:text="\nVersion 5.5.3"
+			android:textColor="@android:color/holo_blue_dark"
+			android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/changelog_5_5_3"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
+			android:text="@string/changelog_5_5_3"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nVersion 5.4.1"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:fontFamily="sans-serif-condensed"
+			android:text="\nVersion 5.4.1"
+			android:textColor="@android:color/holo_blue_dark"
+			android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/changelog_5_4_1"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
+			android:text="@string/changelog_5_4_1"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-condensed"
-            android:text="\nVersion 5.4"
-            android:textColor="@android:color/holo_blue_dark"
-            android:textStyle="bold"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:fontFamily="sans-serif-condensed"
+			android:text="\nVersion 5.4"
+			android:textColor="@android:color/holo_blue_dark"
+			android:textStyle="bold"/>
 
-        <TextView
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
-            android:text="@string/changelog_5_4"/>
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
+			android:text="@string/changelog_5_4"/>
 
-    </LinearLayout>
+	</LinearLayout>
 
 </ScrollView>

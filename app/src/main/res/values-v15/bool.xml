@@ -16,7 +16,7 @@
 -->
 <resources>
 
-    <!-- True if running under IceCreamSandwich or later. -->
-    <bool name="atLeast15">true</bool>
+	<!-- True if running under IceCreamSandwich or later. -->
+	<bool name="atLeast15">true</bool>
 
 </resources>

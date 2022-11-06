@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="due_upper_limit_entries">
-        <item>@string/dashclock_today</item>
-        <item>@string/dashclock_tomorrow</item>
-        <item>@string/dashclock_next7</item>
-        <item>@string/dashclock_anytime</item>
-    </string-array>
+	<string-array name="due_upper_limit_entries">
+		<item>@string/dashclock_today</item>
+		<item>@string/dashclock_tomorrow</item>
+		<item>@string/dashclock_next7</item>
+		<item>@string/dashclock_anytime</item>
+	</string-array>
 
-    <string-array name="due_upper_limit_values">
-        <item>@string/dashclock_pref_today</item>
-        <item>@string/dashclock_pref_tomorrow</item>
-        <item>@string/dashclock_pref_next7</item>
-        <item>@string/dashclock_pref_none</item>
-    </string-array>
+	<string-array name="due_upper_limit_values">
+		<item>@string/dashclock_pref_today</item>
+		<item>@string/dashclock_pref_tomorrow</item>
+		<item>@string/dashclock_pref_next7</item>
+		<item>@string/dashclock_pref_none</item>
+	</string-array>
 </resources>

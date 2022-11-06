@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
-  <!-- This is an adaptive icon for android API >= 26. The background is a gradient and the
-   foreground is a symbol (a vector drawable). See their xml files to edit them separately -->
-  <background android:drawable="@drawable/icon_gradient"/>
-  <foreground android:drawable="@drawable/icon_foreground_symbol"/>
+	<!-- This is an adaptive icon for android API >= 26. The background is a gradient and the
+	 foreground is a symbol (a vector drawable). See their xml files to edit them separately -->
+	<background android:drawable="@drawable/icon_gradient"/>
+	<foreground android:drawable="@drawable/icon_foreground_symbol"/>
 </adaptive-icon>

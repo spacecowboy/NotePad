@@ -2,12 +2,12 @@
 
 <!-- Sequence of clickable "note list names" which makes up the entirety of the drawer menu -->
 <ListView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/leftDrawer"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/leftDrawer"
 	style="?LeftDrawerStyle"
-    android:layout_width="320dp"
-    android:layout_height="match_parent"
-    android:layout_gravity="start"
-    android:choiceMode="none"
-    tools:listitem="@layout/simple_light_list_item_1"/>
+	android:layout_width="320dp"
+	android:layout_height="match_parent"
+	android:layout_gravity="start"
+	android:choiceMode="none"
+	tools:listitem="@layout/simple_light_list_item_1"/>

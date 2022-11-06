@@ -16,6 +16,6 @@
 -->
 <resources>
 
-    <bool name="atLeast14">true</bool>
+	<bool name="atLeast14">true</bool>
 
 </resources>

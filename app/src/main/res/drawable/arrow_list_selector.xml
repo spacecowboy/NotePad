@@ -1,25 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- TODO this file seems useless. delete it ? -->
 <useless_delete_this></useless_delete_this>
-<!--
-<selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item
-        android:drawable="@drawable/list_arrow_activated_holo"
-        android:state_activated="true"/>
+	<!--
+	<selector xmlns:android="http://schemas.android.com/apk/res/android">
+		<item
+			android:drawable="@drawable/list_arrow_activated_holo"
+			android:state_activated="true"/>
 
-    <item
-        android:drawable="@drawable/list_arrow_focused_holo"
-        android:state_focused="true"/>
+		<item
+			android:drawable="@drawable/list_arrow_focused_holo"
+			android:state_focused="true"/>
 
-    <item
-        android:drawable="@drawable/list_arrow_pressed_holo"
-        android:state_pressed="true"/>
+		<item
+			android:drawable="@drawable/list_arrow_pressed_holo"
+			android:state_pressed="true"/>
 
-    <item
-        android:drawable="@drawable/list_arrow_selected_holo"
-        android:state_selected="true"/>
+		<item
+			android:drawable="@drawable/list_arrow_selected_holo"
+			android:state_selected="true"/>
 
-    <item
-        android:drawable="@drawable/list_read_holo"/>
-</selector>
--->
+		<item
+			android:drawable="@drawable/list_read_holo"/>
+	</selector>
+	-->

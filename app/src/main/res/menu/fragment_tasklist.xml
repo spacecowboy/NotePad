@@ -18,34 +18,34 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <group android:id="@+id/list_menu_group" >
+	<group android:id="@+id/list_menu_group">
 
-        <!-- TODO add an icon for this action -->
-        <item
-            android:id="@+id/menu_clearcompleted"
-            android:orderInCategory="300"
-            android:showAsAction="ifRoom"
-            android:title="@string/menu_clearcompleted"/>
+		<!-- TODO add an icon for this action -->
+		<item
+			android:id="@+id/menu_clearcompleted"
+			android:orderInCategory="300"
+			android:showAsAction="ifRoom"
+			android:title="@string/menu_clearcompleted"/>
 
-        <item
-            android:id="@+id/menu_sort"
-            android:icon="@drawable/ic_sort_24dp_white"
-            android:orderInCategory="400"
-            android:title="@string/sorting"
-            android:showAsAction="ifRoom">
-            <menu>
-                <item
-                    android:id="@+id/menu_sort_title"
-                    android:title="@string/sort_list_alphabetical"/>
-                <item
-                    android:id="@+id/menu_sort_due"
-                    android:title="@string/sort_list_due"/>
-                <item
-                    android:id="@+id/menu_sort_manual"
-                    android:title="@string/sort_list_manual"/>
-            </menu>
-        </item>
+		<item
+			android:id="@+id/menu_sort"
+			android:icon="@drawable/ic_sort_24dp_white"
+			android:orderInCategory="400"
+			android:showAsAction="ifRoom"
+			android:title="@string/sorting">
+			<menu>
+				<item
+					android:id="@+id/menu_sort_title"
+					android:title="@string/sort_list_alphabetical"/>
+				<item
+					android:id="@+id/menu_sort_due"
+					android:title="@string/sort_list_due"/>
+				<item
+					android:id="@+id/menu_sort_manual"
+					android:title="@string/sort_list_manual"/>
+			</menu>
+		</item>
 
-    </group>
+	</group>
 
 </menu>

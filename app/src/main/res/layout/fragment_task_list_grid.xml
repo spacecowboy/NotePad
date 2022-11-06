@@ -1,50 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:paddingLeft="@dimen/listMargins"
-    android:paddingRight="@dimen/listMargins">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:paddingLeft="@dimen/listMargins"
+	android:paddingRight="@dimen/listMargins">
 
-    <LinearLayout
-        android:id="@+id/hintContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+	<LinearLayout
+		android:id="@+id/hintContainer"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="center"
+		android:orientation="vertical"
+		android:visibility="gone">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:fontFamily="sans-serif-light"
-            android:paddingTop="4dip"
-            android:text="@string/please_create_note"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:textColor="?android:attr/textColorSecondary"/>
-    </LinearLayout>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:enabled="false"
+			android:fontFamily="sans-serif-light"
+			android:paddingTop="4dip"
+			android:text="@string/please_create_note"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			android:textColor="?android:attr/textColorSecondary"/>
+	</LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/listContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible">
+	<FrameLayout
+		android:id="@+id/listContainer"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:visibility="visible">
 
-        <GridView
-            android:id="@android:id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:divider="@android:color/transparent"
-            android:dividerHeight="1dp"
-            android:drawSelectorOnTop="true"
-            android:horizontalSpacing="16dp"
-            android:numColumns="2"
-            android:verticalSpacing="16dp"
-            tools:listitem="@layout/tasklist_item_rich">
+		<GridView
+			android:id="@android:id/list"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:divider="@android:color/transparent"
+			android:dividerHeight="1dp"
+			android:drawSelectorOnTop="true"
+			android:horizontalSpacing="16dp"
+			android:numColumns="2"
+			android:verticalSpacing="16dp"
+			tools:listitem="@layout/tasklist_item_rich">
 
-        </GridView>
-    </FrameLayout>
+		</GridView>
+	</FrameLayout>
 
 </FrameLayout>

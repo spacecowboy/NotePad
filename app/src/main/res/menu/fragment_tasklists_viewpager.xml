@@ -18,35 +18,35 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <!-- Outside group to allow for action bar placement -->
-    <item
-        android:id="@+id/menu_search"
-        android:actionViewClass="android.widget.SearchView"
-        android:icon="@drawable/ic_search_24dp_white"
-        android:orderInCategory="200"
-        android:showAsAction="ifRoom|collapseActionView"
-        android:title="@string/search_hint"/>
-    <item
-        android:id="@+id/menu_sync"
-        android:icon="@drawable/ic_refresh_24dp_white"
-        android:orderInCategory="201"
-        android:showAsAction="ifRoom"
-        android:title="@string/menu_sync"/>
-    <!-- <item
-        android:id="@+id/menu_createlist"
-        android:icon="?ic_action_add_list"
-        android:orderInCategory="202"
-        android:showAsAction="ifRoom"
-        android:title="@string/menu_createlist"/> -->
+	<!-- Outside group to allow for action bar placement -->
+	<item
+		android:id="@+id/menu_search"
+		android:actionViewClass="android.widget.SearchView"
+		android:icon="@drawable/ic_search_24dp_white"
+		android:orderInCategory="200"
+		android:showAsAction="ifRoom|collapseActionView"
+		android:title="@string/search_hint"/>
+	<item
+		android:id="@+id/menu_sync"
+		android:icon="@drawable/ic_refresh_24dp_white"
+		android:orderInCategory="201"
+		android:showAsAction="ifRoom"
+		android:title="@string/menu_sync"/>
+	<!-- <item
+		android:id="@+id/menu_createlist"
+		android:icon="?ic_action_add_list"
+		android:orderInCategory="202"
+		android:showAsAction="ifRoom"
+		android:title="@string/menu_createlist"/> -->
 
-    <group android:id="@+id/viewpager_menu_group" >
+	<group android:id="@+id/viewpager_menu_group">
 
-        <!-- TODO add an icon for the "archive" action -->
-        <item
-            android:id="@+id/menu_deletedtasks"
-            android:orderInCategory="203"
-            android:showAsAction="ifRoom"
-            android:title="@string/view_deletedtasks"/>
-    </group>
+		<!-- TODO add an icon for the "archive" action -->
+		<item
+			android:id="@+id/menu_deletedtasks"
+			android:orderInCategory="203"
+			android:showAsAction="ifRoom"
+			android:title="@string/view_deletedtasks"/>
+	</group>
 
 </menu>

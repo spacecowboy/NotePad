@@ -16,28 +16,28 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
 
-    <ListView
-        android:id="@+id/listView"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:choiceMode="singleChoice"
-        android:divider="?android:attr/listDivider"
-        android:dividerHeight="1px"
-        tools:ignore="PxUsage"
-        tools:listitem="@layout/simple_light_list_item_1"/>
+	<ListView
+		android:id="@+id/listView"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		android:layout_weight="1"
+		android:choiceMode="singleChoice"
+		android:divider="?android:attr/listDivider"
+		android:dividerHeight="1px"
+		tools:ignore="PxUsage"
+		tools:listitem="@layout/simple_light_list_item_1"/>
 
-    <include
-        android:id="@+id/buttons"
-        layout="@layout/dialog_ok_cancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+	<include
+		android:id="@+id/buttons"
+		layout="@layout/dialog_ok_cancel"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="16dp"/>
 
 </LinearLayout>

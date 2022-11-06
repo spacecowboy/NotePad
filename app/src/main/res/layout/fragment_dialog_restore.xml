@@ -16,36 +16,36 @@
   -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingTop="16dp">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical"
+	android:paddingTop="16dp">
 
-    <!-- <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-light"
-        android:text="@string/select_restore_list"
-        android:layout_marginBottom="4dp"
-        android:textAppearance="@android:style/TextAppearance.Large" /> -->
+	<!-- <TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:fontFamily="sans-serif-light"
+		android:text="@string/select_restore_list"
+		android:layout_marginBottom="4dp"
+		android:textAppearance="@android:style/TextAppearance.Large" /> -->
 
-    <Spinner
-        android:id="@+id/listSpinner"
-        android:layout_width="fill_parent"
-        android:layout_height="48dp"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="16dp"
-        android:spinnerMode="dropdown"
+	<Spinner
+		android:id="@+id/listSpinner"
+		android:layout_width="fill_parent"
+		android:layout_height="48dp"
+		android:layout_marginTop="4dp"
+		android:layout_marginBottom="16dp"
+		android:spinnerMode="dropdown"
 
-        tools:listitem="@layout/spinner_item"/>
+		tools:listitem="@layout/spinner_item"/>
 
-    <include
-        android:id="@+id/buttons"
-        layout="@layout/dialog_ok_cancel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"/>
+	<include
+		android:id="@+id/buttons"
+		layout="@layout/dialog_ok_cancel"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="16dp"/>
 
 </LinearLayout>

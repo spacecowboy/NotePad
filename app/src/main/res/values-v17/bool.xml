@@ -15,5 +15,5 @@
      limitations under the License.
 -->
 <resources>
-    <bool name="atLeast17">true</bool>
+	<bool name="atLeast17">true</bool>
 </resources>

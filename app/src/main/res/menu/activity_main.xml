@@ -17,33 +17,33 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:ignore="AppCompatResource">
+	xmlns:tools="http://schemas.android.com/tools"
+	tools:ignore="AppCompatResource">
 
-    <group android:id="@+id/activity_menu_group" >
-        <item
-            android:id="@+id/menu_add"
-            android:icon="@drawable/ic_add_24dp_white"
-            android:orderInCategory="0"
-            android:showAsAction="ifRoom"
-            android:title="@string/menu_save_and_add"/>
-    </group>
-    <group
-        android:id="@+id/activity_reverse_menu_group"
-        android:visible="false" >
-        <item
-            android:id="@+id/drawer_menu_createlist"
-            android:icon="?attr/ic_folder_plus_24dp"
-            android:orderInCategory="997"
-            android:showAsAction="ifRoom"
-            android:title="@string/menu_createlist"/>
-    </group>
+	<group android:id="@+id/activity_menu_group">
+		<item
+			android:id="@+id/menu_add"
+			android:icon="@drawable/ic_add_24dp_white"
+			android:orderInCategory="0"
+			android:showAsAction="ifRoom"
+			android:title="@string/menu_save_and_add"/>
+	</group>
+	<group
+		android:id="@+id/activity_reverse_menu_group"
+		android:visible="false">
+		<item
+			android:id="@+id/drawer_menu_createlist"
+			android:icon="?attr/ic_folder_plus_24dp"
+			android:orderInCategory="997"
+			android:showAsAction="ifRoom"
+			android:title="@string/menu_createlist"/>
+	</group>
 
-    <item
-        android:id="@+id/menu_preferences"
-        android:icon="?attr/ic_settings_24dp"
-        android:orderInCategory="999"
-        android:showAsAction="never"
-        android:title="@string/menu_preferences"/>
+	<item
+		android:id="@+id/menu_preferences"
+		android:icon="?attr/ic_settings_24dp"
+		android:orderInCategory="999"
+		android:showAsAction="never"
+		android:title="@string/menu_preferences"/>
 
 </menu>
