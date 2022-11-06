@@ -24,12 +24,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
-import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager.LoaderCallbacks;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -49,17 +43,19 @@ import android.widget.ScrollView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+import androidx.loader.app.LoaderManager.LoaderCallbacks;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+
 import com.android.datetimepicker.date.DatePickerDialog;
 import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 import com.android.datetimepicker.time.TimePickerDialog;
 import com.github.espiandev.showcaseview.ShowcaseView;
-import com.github.espiandev.showcaseview.ShowcaseViews;
-import com.github.espiandev.showcaseview.ShowcaseViews.ItemViewProperties;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.ActivityTaskHistory_;
-import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.R.layout;
 import com.nononsenseapps.notepad.database.Notification;
@@ -71,7 +67,7 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.NotificationItemHelper;
-import com.nononsenseapps.utils.ViewsHelper;
+import com.nononsenseapps.util.SharedPreferencesHelper;
 import com.nononsenseapps.utils.views.StyledEditText;
 
 import org.androidannotations.annotations.AfterViews;
@@ -273,21 +269,25 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	 * fragment (e.g. upon screen orientation changes).
 	 */
 	public TaskDetailFragment() {
+		// Make sure arguments are non-null
+		if (getArguments() == null)
+			setArguments(new Bundle());
 	}
 
-	// @Override
-	// public void onCreate(Bundle savedInstanceState) {
-	// super.onCreate(savedInstanceState);
-	//
-	// }
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+
+		// TODO useless ?
+		// inputManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+	}
 
 	/**
 	 * Must handle this manually because annotations do not return null if
 	 * container is null
 	 */
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savInstState) {
 		if (container == null) {
 			dontLoad = true;
 			return null;
@@ -475,9 +475,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	// }
 
 	@Override
-	public void onDateSet(DatePickerDialog dialog,
-						  int year, int monthOfYear,
-						  int dayOfMonth) {
+	public void onDateSet(DatePickerDialog dialog, int year, int monthOfYear, int dayOfMonth) {
 		final Calendar localTime = Calendar.getInstance();
 		if (mTask.due != null) {
 			localTime.setTimeInMillis(mTask.due);
@@ -560,6 +558,10 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	 * task.locked & mLocked
 	 */
 	public boolean isLocked() {
+		// TODO check and use this
+		boolean hasPassword = SharedPreferencesHelper.isPasswordSet(getActivity());
+		// if (!hasPassword) return false;
+
 		if (mTask != null) {
 			return mTask.locked & mLocked;
 		}
@@ -572,12 +574,9 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		if (isLocked()) {
 			taskText.setText(mTask.title);
 			DialogPassword_ pflock = new DialogPassword_();
-			pflock.setListener(new PasswordConfirmedListener() {
-				@Override
-				public void onPasswordConfirmed() {
-					mLocked = false;
-					fillUIFromTask();
-				}
+			pflock.setListener(() -> {
+				mLocked = false;
+				fillUIFromTask();
 			});
 			pflock.show(getFragmentManager(), "read_verify");
 		} else {
@@ -654,8 +653,8 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 
 		if (item != null) {
 			// Fetch and store ShareActionProvider
-			mShareActionProvider = (ShareActionProvider) item
-					.getActionProvider();
+			// TODO use MenuItemCompat.getActionProvider(item);
+			mShareActionProvider = (ShareActionProvider) item.getActionProvider();
 			setShareIntent("");
 		}
 	}
@@ -725,17 +724,14 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			return true;
 		} else if (itemId == R.id.menu_lock) {
 			DialogPassword_ pflock = new DialogPassword_();
-			pflock.setListener(new PasswordConfirmedListener() {
-				@Override
-				public void onPasswordConfirmed() {
-					if (mTask != null) {
-						mLocked = true;
-						mTask.locked = true;
-						mTask.save(getActivity());
-						fillUIFromTask();
-						Toast.makeText(getActivity(), R.string.locked,
-								Toast.LENGTH_SHORT).show();
-					}
+			pflock.setListener(() -> {
+				if (mTask != null) {
+					mLocked = true;
+					mTask.locked = true;
+					mTask.save(getActivity());
+					fillUIFromTask();
+					Toast.makeText(getActivity(), R.string.locked,
+							Toast.LENGTH_SHORT).show();
 				}
 			});
 			pflock.show(getFragmentManager(), "lock_verify");
@@ -747,8 +743,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 				public void onPasswordConfirmed() {
 					if (mTask != null) {
 						mTask.locked = false;
-						Toast.makeText(getActivity(), R.string.unlocked,
-								Toast.LENGTH_SHORT).show();
+						Toast.makeText(getActivity(), R.string.unlocked, Toast.LENGTH_SHORT).show();
 
 						if (mLocked) {
 							mLocked = false;
@@ -903,8 +898,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		try {
 			mListener = (OnFragmentInteractionListener) activity;
 		} catch (ClassCastException e) {
-			// throw new ClassCastException(activity.toString()
-			// + " must implement OnFragmentInteractionListener");
+			// the activity must implement OnFragmentInteractionListener!
 		}
 	}
 

@@ -1,17 +1,18 @@
 /*
- * Copyright (C) 2014 Jonas Kalderstam
+ * Copyright (c) 2015 Jonas Kalderstam.
  *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.nononsenseapps.notepad.prefs;
@@ -89,28 +90,13 @@ public class SyncPrefs extends PreferenceFragment implements
 
 	// private Preference prefSyncFreq;
 
-	/**
-	 * Finds and returns the account of the name given
-	 *
-	 * @param accountName
-	 * @return
-	 */
-	public static Account getAccount(AccountManager manager, String accountName) {
-		Account[] accounts = manager.getAccountsByType("com.google");
-		for (Account account : accounts) {
-			if (account.name.equals(accountName)) {
-				return account;
-			}
-		}
-		return null;
-	}
 
 	public static void setSyncInterval(Context activity, SharedPreferences sharedPreferences) {
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
 		boolean backgroundSync = sharedPreferences.getBoolean(KEY_BACKGROUND_SYNC, false);
 
 		if (accountName != null && !accountName.isEmpty()) {
-			Account account = getAccount(AccountManager.get(activity), accountName);
+			Account account = SyncGtaskHelper.getAccount(AccountManager.get(activity), accountName);
 			if (account != null) {
 				if (!backgroundSync) {
 					// Disable periodic syncing
@@ -248,11 +234,6 @@ public class SyncPrefs extends PreferenceFragment implements
 	}
 
 	@Override
-	public void onResume() {
-		super.onResume();
-	}
-
-	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		if (requestCode != PICK_SD_DIR_CODE) {
 			super.onActivityResult(requestCode, resultCode, data);
@@ -290,7 +271,7 @@ public class SyncPrefs extends PreferenceFragment implements
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
 
 		if (accountName != null && !accountName.isEmpty()) {
-			Account account = getAccount(AccountManager.get(activity), accountName);
+			Account account = SyncGtaskHelper.getAccount(AccountManager.get(activity), accountName);
 			if (account != null) {
 				if (enabled) {
 					// set syncable
@@ -410,8 +391,8 @@ public class SyncPrefs extends PreferenceFragment implements
 							.getDefaultSharedPreferences(activity);
 					customSharedPreference.edit()
 							.putString(SyncPrefs.KEY_ACCOUNT, account.name)
-							.putBoolean(getString(R.string.const_preference_gtask_enabled_key), true)
-							.putBoolean(KEY_SYNC_ENABLE, true).commit();
+							.putBoolean(KEY_SYNC_ENABLE, true)
+							.commit();
 
 					// Set it syncable
 					ContentResolver.setSyncAutomatically(account,

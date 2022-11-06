@@ -6,6 +6,8 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
 
+    <!-- TODO There should be an androidX class that builds this: remove and use that -->
+
     <View
         android:id="@+id/divider"
         android:layout_width="match_parent"

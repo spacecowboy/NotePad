@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-     Copyright (C) 2013 Jonas Kalderstam
+  Copyright (c) 2015 Jonas Kalderstam.
 
-     Licensed under the Apache License, Version 2.0 (the "License");
-     you may not use this file except in compliance with the License.
-     You may obtain a copy of the License at
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
 
-          http://www.apache.org/licenses/LICENSE-2.0
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  General Public License for more details.
 
-     Unless required by applicable law or agreed to in writing, software
-     distributed under the License is distributed on an "AS IS" BASIS,
-     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-     See the License for the specific language governing permissions and
-     limitations under the License.
-     
--->
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -22,7 +22,7 @@
     android:layout_height="match_parent"
     android:layout_margin="@dimen/widget_margin"
     android:orientation="vertical"
-    tools:ignore="HardcodedText">
+    tools:ignore="HardcodedText" >
 
     <LinearLayout
         android:id="@+id/widgetHeader"
@@ -30,7 +30,7 @@
         android:layout_height="wrap_content"
         android:background="@color/googlenow_darkergrey_trans"
         android:orientation="horizontal"
-        android:padding="0dp">
+        android:padding="0dp" >
 
         <ImageView
             android:id="@+id/widgetConfigButton"
@@ -39,18 +39,18 @@
             android:layout_gravity="center"
             android:background="@drawable/img_default_selector_dark"
             android:contentDescription="Configure widget"
-            android:paddingLeft="0dp"
-            android:paddingTop="8dp"
-            android:paddingRight="0dp"
             android:paddingBottom="8dp"
-            android:src="@drawable/app_icon"/>
+            android:paddingLeft="0dp"
+            android:paddingRight="0dp"
+            android:paddingTop="8dp"
+            android:src="@drawable/app_icon" />
 
         <LinearLayout
             android:id="@+id/header_spacer"
             android:layout_width="8dp"
             android:layout_height="fill_parent"
             android:orientation="vertical"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/titleButton"
@@ -61,13 +61,13 @@
             android:background="@drawable/img_default_selector_dark"
             android:gravity="center_vertical"
             android:maxLines="2"
-            android:paddingLeft="0dp"
-            android:paddingTop="4dp"
-            android:paddingRight="4dp"
             android:paddingBottom="4dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="4dp"
+            android:paddingTop="4dp"
             android:text="@string/loading_widget"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:textColor="@android:color/primary_text_dark"/>
+            android:textColor="@android:color/primary_text_dark" />
 
         <ImageButton
             android:id="@+id/createNoteButton"
@@ -75,12 +75,12 @@
             android:layout_height="match_parent"
             android:background="@drawable/img_default_selector_dark"
             android:contentDescription="Create new note"
-            android:paddingLeft="0dp"
-            android:paddingTop="4dp"
-            android:paddingRight="4dp"
             android:paddingBottom="4dp"
+            android:paddingLeft="0dp"
+            android:paddingRight="4dp"
+            android:paddingTop="4dp"
             android:scaleType="fitCenter"
-            android:src="@drawable/content_new_dark"/>
+            android:src="@drawable/ic_add_24dp_white"/>
     </LinearLayout>
 
     <FrameLayout
@@ -88,14 +88,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:padding="0dp">
+        android:padding="0dp" >
 
         <ImageView
             android:id="@+id/shade"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:contentDescription="BackgroundColor"
-            android:visibility="gone"/>
+            android:visibility="gone" />
 
         <ListView
             android:id="@+id/notesList"
@@ -104,7 +104,7 @@
             android:divider="@null"
             android:dividerHeight="1px"
             tools:ignore="PxUsage"
-            tools:listitem="@layout/widgetlist_item"/>
+            tools:listitem="@layout/widgetlist_item" />
 
         <TextView
             android:id="@+id/empty_view"
@@ -112,7 +112,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:visibility="gone"/>
+            android:visibility="gone" />
     </FrameLayout>
 
 </LinearLayout>

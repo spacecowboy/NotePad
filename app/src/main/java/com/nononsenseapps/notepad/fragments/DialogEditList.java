@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.nononsenseapps.notepad.fragments;
 
 import org.androidannotations.annotations.AfterTextChange;
@@ -17,6 +34,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
@@ -112,9 +131,9 @@ public class DialogEditList extends DialogFragment {
 			getLoaderManager().restartLoader(0, null,
 					new LoaderCallbacks<Cursor>() {
 
+						@NonNull
 						@Override
-						public Loader<Cursor> onCreateLoader(int arg0,
-															 Bundle arg1) {
+						public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 							return new CursorLoader(getActivity(),
 									TaskList.getUri(getArguments().getLong(
 											LIST_ID, -1)),
@@ -165,13 +184,7 @@ public class DialogEditList extends DialogFragment {
 	@Click(resName = "deleteButton")
 	void deleteClicked() {
 		if (mTaskList._id > 0) {
-			DialogDeleteList.showDialog(getFragmentManager(), mTaskList._id,
-					new DialogConfirmedListener() {
-						@Override
-						public void onConfirm() {
-							dismiss();
-						}
-					});
+			DialogDeleteList.showDialog(getFragmentManager(), mTaskList._id, () -> dismiss());
 		}
 	}
 
@@ -182,8 +195,7 @@ public class DialogEditList extends DialogFragment {
 
 	@Click(resName = "dialog_yes")
 	void okClicked() {
-		Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT)
-				.show();
+		Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT).show();
 
 		mTaskList.title = titleField.getText().toString();
 		mTaskList.sorting = getSortValue();
@@ -197,7 +209,8 @@ public class DialogEditList extends DialogFragment {
 					.edit()
 					.putLong(getString(R.string.pref_defaultstartlist), mTaskList._id)
 					.putString(getString(R.string.pref_defaultlist),
-							Long.toString(mTaskList._id)).commit();
+							Long.toString(mTaskList._id))
+					.commit();
 		} else if (mTaskList._id > 0) {
 			// Remove pref if it is the default list currently
 			final long defList = Long.parseLong(PreferenceManager

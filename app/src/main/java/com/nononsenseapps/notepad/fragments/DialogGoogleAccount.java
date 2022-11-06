@@ -82,10 +82,8 @@ public class DialogGoogleAccount extends DialogFragment {
 		if (!accountSelected) {
 			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
 					(getActivity());
-			if (!sharedPreferences.contains(getString(R.string
-					.const_preference_gtask_account_key))) {
-				sharedPreferences.edit().putBoolean(getString(R.string
-						.const_preference_gtask_enabled_key), false).apply();
+			if (!sharedPreferences.contains(SyncPrefs.KEY_ACCOUNT)) {
+				sharedPreferences.edit().putBoolean(SyncPrefs.KEY_SYNC_ENABLE, false).apply();
 			}
 		}
 		super.onDestroy();
@@ -98,8 +96,7 @@ public class DialogGoogleAccount extends DialogFragment {
 			// Store name for future use in callback and later
 			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
 					(getActivity());
-			sharedPreferences.edit().putString(getString(R.string
-					.const_preference_gtask_account_key), account.name).commit();
+			sharedPreferences.edit().putString(SyncPrefs.KEY_ACCOUNT, account.name).commit();
 			// Request user's permission
 			GoogleTasksClient.getAuthTokenAsync(getActivity(), account, callbacks);
 			// work continues in callback, method run()

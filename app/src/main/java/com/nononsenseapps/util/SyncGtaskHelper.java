@@ -32,6 +32,7 @@ import androidx.annotation.NonNull;
 import com.nononsenseapps.helpers.GTasksSyncDelay;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
 
 import java.util.Calendar;
 
@@ -42,8 +43,9 @@ import java.util.Calendar;
 public class SyncGtaskHelper {
 	// Sync types
 	public static final int MANUAL = 0;
+	private static final int BACKGROUND = 1;
 	public static final int ONCHANGE = 2;
-
+	public static final int ONAPPSTART = 3;
 	public static final String KEY_LAST_SYNC = "lastSync";
 
 	public static void requestSyncIf(final Context context, final int TYPE) {
@@ -55,19 +57,28 @@ public class SyncGtaskHelper {
 			case MANUAL:
 				forceGTaskSyncNow(context);
 				break;
+			case BACKGROUND:
+				if (shouldSyncBackground(context)) {
+					requestDelayedGTasksSync(context);
+				}
+				break;
 			case ONCHANGE:
-				requestDelayedGTasksSync(context);
+				if (shouldSyncGTasksOnChange(context)) {
+					requestDelayedGTasksSync(context);
+				}
+				break;
+			case ONAPPSTART:
+				if (shouldSyncGTasksOnAppStart(context)) {
+					forceGTaskSyncNow(context);
+				}
 				break;
 		}
-
 	}
 
 	public static boolean isGTasksConfigured(final Context context) {
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		final String accountName = prefs.getString(context.getString(R.string
-				.const_preference_gtask_account_key), "");
-		final boolean syncEnabled = prefs.getBoolean(context.getString(R.string
-				.const_preference_gtask_enabled_key), false);
+		final String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, "");
+		final boolean syncEnabled = prefs.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
 		return syncEnabled & !accountName.isEmpty();
 	}
 
@@ -94,8 +105,7 @@ public class SyncGtaskHelper {
 	public static void disableSync(@NonNull Context context) {
 		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
 				(context);
-		sharedPreferences.edit().putBoolean(context.getString(R.string
-				.const_preference_gtask_enabled_key), false).commit();
+		sharedPreferences.edit().putBoolean(SyncPrefs.KEY_SYNC_ENABLE, false).commit();
 		toggleSync(context, sharedPreferences);
 	}
 
@@ -107,10 +117,8 @@ public class SyncGtaskHelper {
 	 */
 	public static boolean toggleSync(@NonNull Context context, @NonNull SharedPreferences
 			sharedPreferences) {
-		final boolean enabled = sharedPreferences.getBoolean(context.getString(R.string
-				.const_preference_gtask_enabled_key), false);
-		String accountName = sharedPreferences.getString(context.getString(R.string
-				.const_preference_gtask_account_key), "");
+		final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_ACCOUNT, false);
+		String accountName = sharedPreferences.getString(SyncPrefs.KEY_ACCOUNT, "");
 
 		boolean currentlyEnabled = false;
 
@@ -161,11 +169,8 @@ public class SyncGtaskHelper {
 	 */
 	private static void disableSyncOnce(@NonNull Context context, @NonNull SharedPreferences
 			sharedPreferences) {
-		if (sharedPreferences.getBoolean(context.getString(R.string
-				.const_preference_gtask_enabled_key), false)) {
-			sharedPreferences.edit().putBoolean(context.getString(R.string
-					.const_preference_gtask_enabled_key), false).apply();
-
+		if (sharedPreferences.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)) {
+			sharedPreferences.edit().putBoolean(SyncPrefs.KEY_SYNC_ENABLE, false).apply();
 		}
 	}
 
@@ -175,11 +180,8 @@ public class SyncGtaskHelper {
 	 */
 	private static void forgetAccountOnce(@NonNull Context context, @NonNull SharedPreferences
 			sharedPreferences) {
-		if (sharedPreferences.contains(context.getString(R.string
-				.const_preference_gtask_account_key))) {
-			sharedPreferences.edit().remove(context.getString(R.string
-					.const_preference_gtask_account_key)).apply();
-
+		if (sharedPreferences.contains(SyncPrefs.KEY_ACCOUNT)) {
+			sharedPreferences.edit().remove(SyncPrefs.KEY_ACCOUNT).apply();
 		}
 	}
 
@@ -193,28 +195,49 @@ public class SyncGtaskHelper {
 			return;
 		}
 
-		final String accountName = prefs.getString(context.getString(R.string
-				.const_preference_gtask_account_key), "");
+		// isGTasksConfigured() guarantees that this is not null
+		final String accountName = prefs.getString(SyncPrefs.KEY_ACCOUNT, null);
 
-		if (!accountName.isEmpty()) {
-			Account account = getAccount(AccountManager.get(context), accountName);
-			// Don't start a new sync if one is already going
-			if (!ContentResolver.isSyncActive(account, MyContentProvider.AUTHORITY)) {
-				Bundle options = new Bundle();
-				// This will force a sync regardless of what the setting is
-				// in accounts manager. Only use it here where the user has
-				// manually desired a sync to happen NOW.
-				options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
-				options.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
-				ContentResolver.requestSync(account, MyContentProvider.AUTHORITY, options);
-				// Set last sync time to now
-				prefs.edit().putLong(KEY_LAST_SYNC, Calendar.getInstance().getTimeInMillis())
-						.apply();
-			}
+		Account account = getAccount(AccountManager.get(context), accountName);
+		// Don't start a new sync if one is already going
+		if (!ContentResolver.isSyncActive(account, MyContentProvider.AUTHORITY)) {
+			Bundle options = new Bundle();
+			// This will force a sync regardless of what the setting is
+			// in accounts manager. Only use it here where the user has
+			// manually desired a sync to happen NOW.
+			options.putBoolean(ContentResolver.SYNC_EXTRAS_MANUAL, true);
+			options.putBoolean(ContentResolver.SYNC_EXTRAS_EXPEDITED, true);
+			ContentResolver.requestSync(account, MyContentProvider.AUTHORITY, options);
+			// Set last sync time to now
+			prefs.edit()
+					.putLong(KEY_LAST_SYNC, Calendar.getInstance().getTimeInMillis())
+					.apply();
 		}
+
 	}
 
 	private static void requestDelayedGTasksSync(final Context context) {
 		context.startService(new Intent(context, GTasksSyncDelay.class));
+	}
+
+	private static boolean shouldSyncGTasksOnChange(final Context context) {
+		boolean shouldSync = isGTasksConfigured(context);
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		return shouldSync & prefs.getBoolean(SyncPrefs.KEY_SYNC_ON_CHANGE, true);
+	}
+
+	private static boolean shouldSyncGTasksOnAppStart(final Context context) {
+		final boolean shouldSync = isGTasksConfigured(context);
+		final boolean enoughTime = enoughTimeSinceLastSync(context);
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		return shouldSync
+				& prefs.getBoolean(SyncPrefs.KEY_SYNC_ON_START, true)
+				& enoughTime;
+	}
+
+	private static boolean shouldSyncBackground(final Context context) {
+		boolean shouldSync = isGTasksConfigured(context);
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
+		return shouldSync & prefs.getBoolean(SyncPrefs.KEY_BACKGROUND_SYNC, true);
 	}
 }

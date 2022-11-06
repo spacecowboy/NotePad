@@ -38,9 +38,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
@@ -50,12 +47,16 @@ import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
+import com.google.android.material.snackbar.Snackbar;
 import com.mobeta.android.dslv.DragSortListView;
 import com.mobeta.android.dslv.DragSortListView.DropListener;
 import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
+import com.nononsenseapps.helpers.SyncHelper;
+import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
@@ -67,6 +68,8 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.ui.DateView;
 import com.nononsenseapps.ui.NoteCheckBox;
+import com.nononsenseapps.util.AsyncTaskHelper;
+import com.nononsenseapps.util.SharedPreferencesHelper;
 import com.nononsenseapps.utils.views.TitleNoteTextView;
 
 import org.androidannotations.annotations.AfterViews;
@@ -79,10 +82,10 @@ import java.security.InvalidParameterException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 @EFragment(resName = "fragment_task_list")
-public class TaskListFragment extends Fragment implements
-		OnSharedPreferenceChangeListener {
+public class TaskListFragment extends Fragment implements OnSharedPreferenceChangeListener {
 
 	// Must be less than -1
 	public static final String LIST_ALL_ID_PREF_KEY = "show_all_tasks_choice_id";
@@ -93,9 +96,11 @@ public class TaskListFragment extends Fragment implements
 
 	public static final String LIST_ID = "list_id";
 
-	// DragSortListView listView;
-	@ViewById(resName = "list")//android.r.id.list
-			DragSortListView listView;
+	/**
+	 * {@link android.R.id.list }
+	 */
+	@ViewById(resName = "list")
+	DragSortListView listView;
 
 	@SystemService
 	LayoutInflater layoutInflater;
@@ -117,6 +122,9 @@ public class TaskListFragment extends Fragment implements
 
 	private ActionMode mMode;
 
+	private SwipeRefreshLayout mSwipeRefreshLayout;
+	private boolean mDeleteWasUndone = false;
+
 	public static TaskListFragment_ getInstance(final long listId) {
 		TaskListFragment_ f = new TaskListFragment_();
 		Bundle args = new Bundle();
@@ -136,33 +144,32 @@ public class TaskListFragment extends Fragment implements
 		setHasOptionsMenu(true);
 
 		if (getArguments().getLong(LIST_ID, -1) == -1) {
-			throw new InvalidParameterException(
-					"Must designate a list to open!");
+			throw new InvalidParameterException("Must designate a list to open!");
 		}
 		mListId = getArguments().getLong(LIST_ID, -1);
 
 		// Start loading data
 		mAdapter = new SimpleSectionsAdapter(getActivity(),
-				R.layout.tasklist_item_rich, R.layout.tasklist_header, null,
+				R.layout.tasklist_item_rich,
+				R.layout.tasklist_header,
+				null,
 				new String[] { Task.Columns.TITLE, Task.Columns.NOTE,
 						Task.Columns.DUE, Task.Columns.COMPLETED,
-						Task.Columns.LEFT, Task.Columns.RIGHT }, new int[] {
-				android.R.id.text1, android.R.id.text1, R.id.date,
-				R.id.checkbox, R.id.drag_handle, R.id.dragpadding }, 0);
+						Task.Columns.LEFT, Task.Columns.RIGHT },
+				new int[] { android.R.id.text1, android.R.id.text1, R.id.date,
+						R.id.checkbox, R.id.drag_handle, R.id.dragpadding },
+				0);
 
 		// Set a drag listener
-		mAdapter.setDropListener(new DropListener() {
-			@Override
-			public void drop(int from, int to) {
-				Log.d("nononsenseapps drag", "Position from " + from + " to "
-						+ to);
+		mAdapter.setDropListener((from, to) -> {
+			Log.d("nononsenseapps drag", "Position from " + from + " to " + to);
 
-				final Task fromTask = new Task((Cursor) mAdapter.getItem(from));
-				final Task toTask = new Task((Cursor) mAdapter.getItem(to));
+			final Task fromTask = new Task((Cursor) mAdapter.getItem(from));
+			final Task toTask = new Task((Cursor) mAdapter.getItem(to));
 
-				fromTask.moveTo(getActivity().getContentResolver(), toTask);
-			}
+			fromTask.moveTo(getActivity().getContentResolver(), toTask);
 		});
+
 		/*
 		 * listAdapter.setRemoveListener(new RemoveListener() {
 		 *
@@ -308,6 +315,46 @@ public class TaskListFragment extends Fragment implements
 		});
 	}
 
+	/**
+	 * Called to have the fragment instantiate its user interface view.
+	 * This is optional, and non-graphical fragments can return null (which
+	 * is the default implementation).  This will be called between
+	 * {@link #onCreate(Bundle)} and {@link #onActivityCreated(Bundle)}.
+	 *
+	 * If you return a View from here, you will later be called in
+	 * {@link #onDestroyView} when the view is being released.
+	 *
+	 * @param inflater           The LayoutInflater object that can be used to inflate
+	 *                           any views in the fragment,
+	 * @param container          If non-null, this is the parent view that the fragment's
+	 *                           UI should be attached to.  The fragment should not add the view
+	 *                           itself,
+	 *                           but this can be used to generate the LayoutParams of the view.
+	 * @param savedInstanceState If non-null, this fragment is being re-constructed
+	 *                           from a previous saved state as given here.
+	 * @return Return the View for the fragment's UI, or null.
+	 */
+	/*@Nullable
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
+			savedInstanceState) {
+		//return super.onCreateView(inflater, container, savedInstanceState);
+		View rootView = inflater.inflate(R.layout.fragment_task_list, container, false);
+
+		listView = (DragSortListView) rootView.findViewById(android.R.id.list);
+		loadList();
+		// ListView will only support scrolling ToolBar off-screen from Lollipop onwards.
+		// RecyclerView does not have this limitation
+		ViewCompat.setNestedScrollingEnabled(listView, true);
+
+		// setup swipe to refresh
+		mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
+		setupSwipeToRefresh();
+
+		return rootView;
+	}
+	*/
+
 	@Override
 	public void onActivityCreated(final Bundle state) {
 		super.onActivityCreated(state);
@@ -317,10 +364,8 @@ public class TaskListFragment extends Fragment implements
 				.getDefaultSharedPreferences(getActivity());
 
 		// Load pref for item height
-		mRowCount = prefs.getInt(getString(R.string.key_pref_item_max_height),
-				3);
-		mHideCheckbox = prefs.getBoolean(
-				getString(R.string.pref_hidecheckboxes), false);
+		mRowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
+		mHideCheckbox = prefs.getBoolean(getString(R.string.pref_hidecheckboxes), false);
 
 		// mSortType = prefs.getString(getString(R.string.pref_sorttype),
 		// getString(R.string.default_sorttype));
@@ -330,7 +375,7 @@ public class TaskListFragment extends Fragment implements
 		mCallback = new LoaderCallbacks<Cursor>() {
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
-				if (id == 0) {
+				if (id == 0 /* LOADER_CURRENT_LIST */) {
 					return new CursorLoader(getActivity(),
 							TaskList.getUri(mListId), TaskList.Columns.FIELDS,
 							null, null, null);
@@ -412,7 +457,7 @@ public class TaskListFragment extends Fragment implements
 						// Reload tasks with new sorting
 						getLoaderManager().restartLoader(1, null, this);
 					}
-				} else {
+				} else { // loader.getId() == LOADER_TASKS
 					mAdapter.swapCursor(c);
 				}
 			}
@@ -476,31 +521,66 @@ public class TaskListFragment extends Fragment implements
 	void loadList() {
 		listView.setAdapter(mAdapter);
 
-		listView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View origin, int pos,
-									long id) {
-				if (mListener != null && id > 0) {
-					mListener.onFragmentInteraction(Task.getUri(id), mListId,
-							origin);
-				}
+		listView.setOnItemClickListener((arg0, origin, pos, id) -> {
+			if (mListener != null && id > 0) {
+				mListener.onFragmentInteraction(Task.getUri(id), mListId, origin);
 			}
 		});
 
-		listView.setOnItemLongClickListener(new OnItemLongClickListener() {
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View view,
-										   int pos, long id) {
-				listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
-				// Also select the item in question
-				listView.setItemChecked(pos, true);
-				return true;
-			}
+		listView.setOnItemLongClickListener((arg0, view, pos, id) -> {
+			listView.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+			// Also select the item in question
+			listView.setItemChecked(pos, true);
+			return true;
 		});
 
 		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 			final HashMap<Long, Task> tasks = new HashMap<Long, Task>();
-			// ActionMode mMode;
+
+			/**
+			 * Delete tasks and display a snackbar with an undo action
+			 * @param taskMap
+			 */
+			private void deleteTasks(final Map<Long, Task> taskMap) {
+				final Task[] tasks = taskMap.values().toArray(new Task[taskMap.size()]);
+
+				// If any are locked, ask for password first
+				final boolean locked = SharedPreferencesHelper.isPasswordSet(getActivity());
+
+				// Reset undo flag
+				mDeleteWasUndone = false;
+
+				// Dismiss callback
+				final Snackbar.Callback dismissCallback = new Snackbar.Callback() {
+					@Override
+					public void onDismissed(Snackbar snackbar, int event) {
+						// Do nothing if dismissed because action was pressed
+						// Dismiss wil be called more than once if undo is pressed
+						if (Snackbar.Callback.DISMISS_EVENT_ACTION != event && !mDeleteWasUndone) {
+							// Delete them
+							AsyncTaskHelper.background(() -> {
+								for (Task t : tasks) {
+									try {
+										t.delete(getActivity());
+									} catch (Exception ignored) {
+									}
+								}
+							});
+						}
+					}
+				};
+			}
+
+			// Undo callback
+			final View.OnClickListener undoListener = new View.OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					mDeleteWasUndone = true;
+					// Returns removed items to view
+					mAdapter.reset();
+				}
+			};
+
 			final PasswordConfirmedListener pListener = new PasswordConfirmedListener() {
 				@Override
 				@Background
@@ -522,7 +602,7 @@ public class TaskListFragment extends Fragment implements
 						msg = getResources().getString(R.string.deleted);
 					}
 
-					// TODO should use a FAB instead
+					// TODO should use a Snackbar instead
 					// Snackbar.make(mFab, msg, Snackbar.LENGTH_LONG).setAction(R.string.undo, listener).setCallback(dismissCallback).show();
 					Toast.makeText(getActivity(), msg, Toast.LENGTH_SHORT).show();
 
@@ -561,8 +641,7 @@ public class TaskListFragment extends Fragment implements
 			}
 
 			@Override
-			public boolean onActionItemClicked(final ActionMode mode,
-											   MenuItem item) {
+			public boolean onActionItemClicked(final ActionMode mode, MenuItem item) {
 				// Respond to clicks on the actions in the CAB
 				boolean finish = false;
 				int itemId = item.getItemId();
@@ -748,20 +827,42 @@ public class TaskListFragment extends Fragment implements
 				.removeRefreshableView(listView);
 	}
 
+	void setupSwipeToRefresh() {
+		// Set the offset so it comes out of the correct place
+		final int toolbarHeight = getResources().getDimensionPixelOffset(R.dimen.toolbar_height);
+		mSwipeRefreshLayout
+				.setProgressViewOffset(false, -toolbarHeight, Math.round(0.7f * toolbarHeight));
+
+		// The arrow will cycle between these colors (in order)
+		mSwipeRefreshLayout.setColorSchemeResources(
+				R.color.refresh_progress_1,
+				R.color.refresh_progress_2,
+				R.color.refresh_progress_3);
+
+		mSwipeRefreshLayout.setOnRefreshListener(() -> {
+			boolean syncing = SyncHelper.onManualSyncRequest(getActivity());
+
+			if (!syncing) {
+				// Do not show refresh view
+				mSwipeRefreshLayout.setRefreshing(false);
+			}
+		});
+	}
+
 	@Override
 	public void onAttach(Activity activity) {
 		super.onAttach(activity);
 		try {
 			mListener = (OnFragmentInteractionListener) activity;
 		} catch (ClassCastException e) {
-			// throw new ClassCastException(activity.toString()
-			// + " must implement OnFragmentInteractionListener");
+			// the activity must implement OnFragmentInteractionListener!
 		}
 
 		// We want to be notified of future changes to auto refresh
 		PreferenceManager.getDefaultSharedPreferences(getActivity())
 				.registerOnSharedPreferenceChangeListener(this);
 	}
+
 
 	@Override
 	public void onDetach() {
@@ -862,6 +963,7 @@ public class TaskListFragment extends Fragment implements
 			view.setTheTextSize(Integer.parseInt(prefs.getString(
 					context.getString(R.string.pref_list_fontsize), "1")));
 		}
+
 	}
 
 	@Override

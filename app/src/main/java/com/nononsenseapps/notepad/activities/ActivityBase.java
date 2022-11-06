@@ -35,14 +35,10 @@ public final /* used to be abstract! */ class ActivityBase extends AppCompatActi
 
 	private boolean shouldRestart = false;
 	private final SharedPreferences.OnSharedPreferenceChangeListener mThemeLocaleChangeListener =
-			new SharedPreferences.OnSharedPreferenceChangeListener() {
-				@Override
-				public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-					if (key.equals(getString(R.string.const_preference_theme_key)) || key.equals
-							(getString(R.string.const_preference_locale_key))) {
-						onThemeOrLocaleChange();
-					}
-				}
+			(sharedPreferences, key) -> {
+
+					onThemeOrLocaleChange();
+
 			};
 
 	@Override

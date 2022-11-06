@@ -15,6 +15,7 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
 package com.nononsenseapps.notepad.sync.orgsync;
 
 import android.annotation.SuppressLint;
@@ -26,6 +27,8 @@ import android.os.FileObserver;
 import android.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.util.PermissionsHelper;
+import com.nononsenseapps.util.SharedPreferencesHelper;
 
 import org.cowboyprogrammer.org.OrgFile;
 import org.cowboyprogrammer.org.parser.OrgParser;
@@ -47,13 +50,12 @@ import java.util.HashSet;
  */
 public class SDSynchronizer extends Synchronizer implements SynchronizerInterface {
 
-	private static final String PREF_ORG_DIR_URI = SyncPrefs.KEY_SD_DIR_URI;
-	private static final String PREF_ORG_SD_ENABLED = SyncPrefs.KEY_SD_ENABLE;
 	private final static String SERVICENAME = "SDORG";
+
+	/** if SD sync is enabled */
 	protected final boolean configured;
 
-	/** Filesystem path of the folder where files are kept. User changeable in preferences.
-	 */
+	/** Filesystem path of the folder where files are kept. User changeable in preferences. */
 	protected String ORG_DIR;
 
 	public SDSynchronizer(Context context) {
@@ -61,7 +63,7 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
 		Uri favoriteOrgDir;
-		String favoriteUriStr = prefs.getString(PREF_ORG_DIR_URI, null);
+		String favoriteUriStr = prefs.getString(SyncPrefs.KEY_SD_DIR_URI, null);
 		if (favoriteUriStr == null)
 			favoriteOrgDir = Uri.fromFile(new File(getDefaultOrgDir(context))); // TODO does it even work ??
 		else favoriteOrgDir = Uri.parse(favoriteUriStr);
@@ -71,7 +73,15 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 		//  the user's choice and stick to the default directory, which can be used in File classes
 
 		ORG_DIR = getDefaultOrgDir(context);
-		configured = prefs.getBoolean(PREF_ORG_SD_ENABLED, false);
+		final boolean permitted = PermissionsHelper.hasPermissions(context, PermissionsHelper.PERMISSIONS_SD);
+		if (permitted) {
+			configured = SharedPreferencesHelper.isSdSyncEnabled(context);
+		} else  {
+			configured = false;
+			// disable SD
+			SharedPreferencesHelper.disableSdCardSync(context);
+		}
+
 	}
 
 	/**

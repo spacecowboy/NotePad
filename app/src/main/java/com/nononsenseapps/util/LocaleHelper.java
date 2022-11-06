@@ -34,7 +34,7 @@ public class LocaleHelper {
 	 */
 	public static Locale getUserLocale(Context context) {
 		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
-		String lang = prefs.getString(context.getString(R.string.const_preference_locale_key), "");
+		String lang = prefs.getString(context.getString(R.string.pref_locale), null);
 		final Locale locale;
 		if (lang == null || lang.isEmpty())
 			locale = Locale.getDefault();

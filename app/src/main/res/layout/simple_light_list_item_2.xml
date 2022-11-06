@@ -1,49 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright (c) 2015 Jonas Kalderstam.
+
+  This program is free software: you can redistribute it and/or modify
+  it under the terms of the GNU General Public License as published by
+  the Free Software Foundation, either version 3 of the License, or
+  (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+  General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+  -->
 
 <!-- This represents a "list of notes" shown in the drawer menu on the left.
  See also drawer_layout.xml which hosts these list items -->
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="64dp"
-    android:background="?android:attr/selectableItemBackground"
-    android:orientation="horizontal">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="64dp"
+	android:background="?android:attr/selectableItemBackground"
+	android:orientation="horizontal">
 
-    <!-- TODO use amulyakhare TextDrawable like in version 6.0.0.
-    <ImageView
-        android:id="@+id/item_avatar"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
-        android:layout_gravity="start|center_vertical"
-        android:layout_marginEnd="42dp"
-        android:layout_marginRight="42dp"
-        android:scaleType="fitCenter"
-        android:visibility="gone"/>
-    -->
+	<!-- TODO use amulyakhare TextDrawable like in version 6.0.0.
+<ImageView
+	android:id="@+id/item_avatar"
+	android:layout_width="24dp"
+	android:layout_height="24dp"
+	android:layout_gravity="start|center_vertical"
+	android:layout_marginEnd="42dp"
+	android:layout_marginRight="42dp"
+	android:scaleType="fitCenter"
+	android:visibility="gone"/>
+-->
 
-    <TextView
-        android:id="@android:id/text1"
+	<TextView
+		android:id="@android:id/text1"
         style="?LeftDrawerListItemStyle"
-        android:layout_width="0dp"
-        android:layout_height="64dp"
+		android:layout_width="0dp"
+		android:layout_height="64dp"
         android:layout_gravity="start|center_vertical"
-        android:layout_weight="1"
+		android:layout_weight="1"
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
-        android:fontFamily="sans-serif-light"/>
+		android:fontFamily="sans-serif-light"/>
 
-    <TextView
-        android:id="@android:id/text2"
+	<TextView
+		android:id="@android:id/text2"
         style="?LeftDrawerListItemSecondaryStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="64dp"
+		android:layout_width="wrap_content"
+		android:layout_height="64dp"
         android:layout_gravity="end|center_vertical"
         android:ellipsize="end"
         android:maxLines="1"
         android:singleLine="true"
-        android:fontFamily="sans-serif-light"/>
+		android:fontFamily="sans-serif-light"/>
 
-    <!-- TODO here you should add a button which, once pressed, will show the popup to edit the note list -->
+	<!-- TODO here you should add a button which, once pressed, will show the popup to edit the note list -->
 
 </LinearLayout>

@@ -59,24 +59,6 @@ public class NotificationItemHelper {
 		return TimeFormatter.getDateFormatter(context).format(new Date(time));
 	}
 
-	public static void setLocationName(final Notification not) {
-		if (not.view != null) {
-			// Fill in location name
-			((TextView) not.view.findViewById(R.id.notificationLocation))
-					.setText(not.locationName);
-		}
-	}
-
-	public static void switchToLocation(final View nv) {
-		hideViews(nv.findViewById(R.id.notificationTime),
-				nv.findViewById(R.id.notificationDate),
-				nv.findViewById(R.id.notificationTypeTime),
-				nv.findViewById(R.id.weekdays));
-		showViews(nv.findViewById(R.id.notificationTypeLocation),
-				nv.findViewById(R.id.notificationLocation),
-				nv.findViewById(R.id.repeatSwitch));
-	}
-
 	private static void switchToTime(final View nv) {
 		showViews(nv.findViewById(R.id.notificationTime),
 				nv.findViewById(R.id.notificationDate),

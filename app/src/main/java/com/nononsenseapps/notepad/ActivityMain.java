@@ -1,23 +1,23 @@
 /*
- * Copyright (c) 2014 Jonas Kalderstam.
+ * Copyright (c) 2015 Jonas Kalderstam.
  *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
  *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
 package com.nononsenseapps.notepad;
 
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -27,7 +27,6 @@ import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -58,7 +57,6 @@ import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NotificationHelper;
-import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
 import com.nononsenseapps.notepad.database.LegacyDBHelper;
@@ -66,7 +64,6 @@ import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
-import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
 import com.nononsenseapps.notepad.fragments.DialogEditList_;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment_;
@@ -81,7 +78,7 @@ import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
-import com.nononsenseapps.util.ListHelper;
+import com.nononsenseapps.util.SyncGtaskHelper;
 import com.nononsenseapps.utils.ViewsHelper;
 
 import org.androidannotations.annotations.AfterViews;
@@ -336,9 +333,9 @@ public class ActivityMain extends FragmentActivity
 		*/
 		boolean syncing = false;
 		// GTasks
-		if (SyncHelper.isGTasksConfigured(ActivityMain.this)) {
+		if (SyncGtaskHelper.isGTasksConfigured(ActivityMain.this)) {
 			syncing = true;
-			SyncHelper.requestSyncIf(ActivityMain.this, SyncHelper.MANUAL);
+			SyncGtaskHelper.requestSyncIf(ActivityMain.this, SyncGtaskHelper.MANUAL);
 		}
 
 		// Others
@@ -490,12 +487,12 @@ public class ActivityMain extends FragmentActivity
 		super.onResume();
 		// activate monitor
 		if (syncStatusReceiver != null) {
-			syncStatusReceiver.startMonitoring(this);
+			syncStatusReceiver.startMonitoring(this, this);
 		}
 
 		// Sync if appropriate
-		if (SyncHelper.enoughTimeSinceLastSync(this)) {
-			SyncHelper.requestSyncIf(this, SyncHelper.ONAPPSTART);
+		if (SyncGtaskHelper.enoughTimeSinceLastSync(this)) {
+			SyncGtaskHelper.requestSyncIf(this, SyncGtaskHelper.ONAPPSTART);
 			OrgSyncService.start(this);
 		}
 	}
@@ -562,11 +559,6 @@ public class ActivityMain extends FragmentActivity
 		}
 	}
 
-	@Override
-	public void onSaveInstanceState(@NonNull Bundle outState) {
-		// Do absolutely NOT call super class here. Will bug out the viewpager!
-		super.onSaveInstanceState(outState);
-	}
 
 	@UiThread(propagation = Propagation.REUSE)
 	void loadFragments() {

@@ -39,6 +39,7 @@ import com.nononsenseapps.build.Config;
 import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.R;
 
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.files.JSONBackup;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
@@ -56,8 +57,6 @@ import static com.nononsenseapps.util.PermissionsHelper.hasPermissions;
 import static com.nononsenseapps.util.PermissionsHelper.permissionsGranted;
 
 import static com.nononsenseapps.util.SharedPreferencesHelper.disableSdCardSync;
-
-import static com.nononsenseapps.util.SharedPreferencesHelper.getSdDir;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
@@ -86,10 +85,9 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         super.onCreate(savedInstanceState);
 
         // Load the preferences from an XML resource
-        addPreferencesFromResource(R.xml.settings);
+        // addPreferencesFromResource(R.xml.settings);
 
-        setLangEntries((ListPreference) findPreference(getString(R.string
-                .const_preference_locale_key)));
+        // setLangEntries((ListPreference) findPreference(getString(R.string.const_preference_locale_key)));
 
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
                 (getActivity());
@@ -102,10 +100,7 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         setupPassword();
         setupLegacyBackup();
 
-        // Bind listeners to update summaries
-        bindPreferenceSummaryToValue(R.string.const_preference_locale_key);
-        bindPreferenceSummaryToValue(R.string.const_preference_theme_key);
-        bindPreferenceSummaryToValue(R.string.const_preference_ringtone_key);
+
     }
 
     @Override
@@ -133,14 +128,13 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
 
     private void buildGuard() {
         // Disable prefs if this is not correct build
-        findPreference(getString(R.string.const_preference_gtask_enabled_key)).setEnabled(null !=
-                Config.getGtasksApiKey(getActivity()) && !Config.getGtasksApiKey(getActivity())
+        findPreference(null)//getString(R.string.const_preference_gtask_enabled_key))
+                .setEnabled(null != Config.getGtasksApiKey(getActivity()) && !Config.getGtasksApiKey(getActivity())
                 .contains(" "));
     }
 
     private void setupDirectory(final SharedPreferences sharedPreferences) {
-        preferenceSyncSdCard = (SwitchPreference) findPreference(getString(R.string
-                .const_preference_sdcard_enabled_key));
+        preferenceSyncSdCard = (SwitchPreference) findPreference(getString(-1));//R.string.const_preference_sdcard_enabled_key));
         setSdDirectorySummary(sharedPreferences);
     }
 
@@ -179,13 +173,12 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
 
 
     private String getSdDirectoryKey() {
-        return getString(R.string.const_preference_sdcard_dir_key);
+        return getString(-1);//R.string.const_preference_sdcard_dir_key);
     }
 
 
     private void setupAccount(SharedPreferences sharedPreferences) {
-        preferenceSyncGTasks = (SwitchPreference) findPreference(getString(R.string
-                .const_preference_gtask_enabled_key));
+        preferenceSyncGTasks = (SwitchPreference) findPreference(getString(-1));//R.string.const_preference_gtask_enabled_key));
         setAccountSummary(sharedPreferences);
     }
 
@@ -228,8 +221,8 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
                 } else {
                     Toast.makeText(getActivity(), "Permission denied :(. Show explanation for contacts",
                             Toast.LENGTH_LONG).show();
-                    SharedPreferencesHelper.put(getActivity(),
-                            R.string.const_preference_gtask_enabled_key, false);
+                    SharedPreferencesHelper.put(getActivity(), null, false);
+                            //R.string.const_preference_gtask_enabled_key, false);
                 }
                 break;
             case PERMISSION_CODE_SDCARD:
@@ -353,9 +346,8 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
                 return;
             }
 
-            if (key.equals(getString(R.string.const_preference_gtask_enabled_key))) {
-                final boolean enabled = sharedPreferences.getBoolean(getString(R.string
-                        .const_preference_gtask_enabled_key), false);
+            if (key.equals(SyncPrefs.KEY_SYNC_ENABLE)) {
+                final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
                 if (enabled) {
                     showAccountDialog();
                 } else {
@@ -365,11 +357,10 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
                         preferenceSyncGTasks.setChecked(false);
                     }
                 }
-            } else if (key.equals(getString(R.string.const_preference_gtask_account_key))) {
+            } else if (key.equals(SyncPrefs.KEY_ACCOUNT)) {
                 setAccountSummary(sharedPreferences);
-            } else if (key.equals(getString(R.string.const_preference_sdcard_enabled_key))) {
-                final boolean enabled = sharedPreferences.getBoolean(getString(R.string
-                        .const_preference_sdcard_enabled_key), false);
+            } else if (key.equals(SyncPrefs.KEY_SD_ENABLE)) {
+                final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
                 if (enabled) {
                     showFilePicker();
                 } else {
@@ -387,8 +378,7 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
     }
 
     private void setAccountSummary(SharedPreferences sharedPreferences) {
-        preferenceSyncGTasks.setSummary(sharedPreferences.getString(getString(R.string
-                .const_preference_gtask_account_key), getString(R.string
+        preferenceSyncGTasks.setSummary(sharedPreferences.getString(SyncPrefs.KEY_ACCOUNT, getString(R.string
                 .settings_account_summary)));
     }
 }

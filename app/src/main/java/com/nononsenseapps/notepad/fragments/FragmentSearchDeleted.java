@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.nononsenseapps.notepad.fragments;
 
 import java.util.HashSet;
@@ -73,8 +90,7 @@ public class FragmentSearchDeleted extends FragmentSearch {
 			void deleteSelected(final ActionMode mode) {
 				getActivity().getContentResolver().delete(
 						Task.URI_DELETED_QUERY,
-						Task.Columns._ID + " IN ("
-								+ DAO.arrayToCommaString(getIdArray()) + ")",
+						Task.Columns._ID + " IN (" + DAO.arrayToCommaString(getIdArray()) + ")",
 						null);
 				selectedItems.clear();
 				mode.finish();
@@ -121,34 +137,24 @@ public class FragmentSearchDeleted extends FragmentSearch {
 
 			@UiThread
 			void notifySuccess() {
-				Toast.makeText(getActivity(), R.string.saved,
-						Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT).show();
 			}
 
 			@Override
-			public boolean onActionItemClicked(final ActionMode mode,
-											   final MenuItem item) {
+			public boolean onActionItemClicked(final ActionMode mode, final MenuItem item) {
 				int itemId = item.getItemId();
 				if (itemId == R.id.menu_restore) {
 					DialogRestore d = DialogRestore.getInstance();
-					d.setListener(new OnListSelectedListener() {
-						@Override
-						public void onListSelected(long listId) {
-							if (listId > 0) {
-								restoreSelected(mode, listId);
-							}
+					d.setListener(listId -> {
+						if (listId > 0) {
+							restoreSelected(mode, listId);
 						}
 					});
 					d.show(getFragmentManager(), "listselect");
 					return true;
 				} else if (itemId == R.id.menu_delete) {
-					DialogDeleteTask.showDialog(getFragmentManager(), -1,
-							new DialogConfirmedListener() {
-								@Override
-								public void onConfirm() {
-									deleteSelected(mode);
-								}
-							});
+					DialogDeleteTask
+							.showDialog(getFragmentManager(), -1, () -> deleteSelected(mode));
 					return true;
 				}
 				return false;
@@ -165,11 +171,6 @@ public class FragmentSearchDeleted extends FragmentSearch {
 			}
 		});
 	}
-
-	// @Override
-	// public boolean onCreateOptionsMenu(Menu menu) {
-	// return super.onCreateOptionsMenu(menu);
-	// }
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -193,13 +194,7 @@ public class FragmentSearchDeleted extends FragmentSearch {
 
 	@Override
 	protected OnItemClickListener getOnItemClickListener() {
-		return new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View origin, int pos,
-									long id) {
-				list.setItemChecked(pos, true);
-			}
-		};
+		return (arg0, origin, pos, id) -> list.setItemChecked(pos, true);
 	}
 
 	@Override
@@ -219,9 +214,8 @@ public class FragmentSearchDeleted extends FragmentSearch {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 
-		// Load pref for item height
-		final int rowCount = prefs.getInt(
-				getString(R.string.key_pref_item_max_height), 3);
+		// Load pref for item height, or show 3 lines if it was not set
+		final int rowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
 
 		return new ViewBinder() {
 			String sTemp = "";

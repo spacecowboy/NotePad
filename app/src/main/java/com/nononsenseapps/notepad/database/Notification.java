@@ -1,3 +1,20 @@
+/*
+ * Copyright (c) 2015 Jonas Kalderstam.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ * General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ */
+
 package com.nononsenseapps.notepad.database;
 
 import java.text.SimpleDateFormat;
@@ -214,12 +231,14 @@ public class Notification extends DAO {
 		// if cursor has more fields, then assume it was constructed with
 		// the WITH_TASKS view query
 		if (c.getColumnCount() > 9) {
-			listTitle = c.getString(c.getColumnIndex(ColumnsWithTask.listPrefix
-					+ TaskList.Columns.TITLE));
-			listID = c.getLong(c.getColumnIndex(ColumnsWithTask.listPrefix + TaskList.Columns._ID));
-			taskTitle = c.getString(c.getColumnIndex(ColumnsWithTask.taskPrefix
-					+ Task.Columns.TITLE));
-			taskNote = c.getString(c.getColumnIndex(ColumnsWithTask.taskPrefix + Task.Columns.NOTE));
+			int idx_list = c.getColumnIndex(ColumnsWithTask.listPrefix + TaskList.Columns.TITLE);
+			int idx_id = c.getColumnIndex(ColumnsWithTask.listPrefix + TaskList.Columns._ID);
+			int idx_title = c.getColumnIndex(ColumnsWithTask.taskPrefix + Task.Columns.TITLE);
+			int idx_note = c.getColumnIndex(ColumnsWithTask.taskPrefix + Task.Columns.NOTE);
+			listTitle = c.getString(idx_list);
+			listID = c.getLong(idx_id);
+			taskTitle = c.getString(idx_title);
+			taskNote = c.getString(idx_note);
 		}
 	}
 
@@ -664,9 +683,6 @@ public class Notification extends DAO {
 	}
 
 	public void deleteOrReschedule(final Context context) {
-		if (isLocationRepeat()) {
-			return;
-		}
 
 		if (repeats == 0 || time == null) {
 			delete(context);
@@ -726,20 +742,5 @@ public class Notification extends DAO {
 		}
 
 		return sb.toString();
-	}
-
-	/**
-	 * This overrides ALL other repeat fields!
-	 */
-	public void setLocationRepeat(final boolean b) {
-		if (b) {
-			this.repeats = locationRepeat;
-		} else {
-			this.repeats = 0;
-		}
-	}
-
-	public boolean isLocationRepeat() {
-		return 0 < (this.repeats & locationRepeat);
 	}
 }
