@@ -139,12 +139,12 @@ public abstract class FragmentStatePagerAdapter extends PagerAdapter {
 	}
 
 	private void setMenuVisibility(final Fragment fragment, final boolean value) {
-		if (fragment != null && context.getResources().getBoolean(R.bool.atLeast14))
+		if (fragment != null)
 			fragment.setMenuVisibility(value);
 	}
 
 	private void setUserVisibleHint(final Fragment fragment, final boolean value) {
-		if (fragment != null && context.getResources().getBoolean(R.bool.atLeast15))
+		if (fragment != null)
 			fragment.setUserVisibleHint(value);
 	}
 

@@ -2,6 +2,7 @@
 
 	<!-- These settings headers are only used on tablets. -->
 
+	<!-- TODO useless file ?? -->
 	<header
 		android:fragment="${packageName}.${activityClass}$GeneralPreferenceFragment"
 		android:title="@string/dashclock_pref_header_general"/>
