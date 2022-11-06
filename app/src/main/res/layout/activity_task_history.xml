@@ -50,7 +50,6 @@
 		android:fillViewport="true">
 
 		<com.nononsenseapps.utils.views.TitleNoteTextView
-			xmlns:ttv="http://schemas.android.com/apk/res/com.nononsenseapps.utils.views"
 			android:id="@+id/taskText"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"

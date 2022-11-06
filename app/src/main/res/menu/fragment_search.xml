@@ -18,7 +18,6 @@
 
 <!-- Shown in the main activity and in the "archive of deleted notes" activity -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools">
 	<item android:id="@+id/menu_search"
 		android:actionViewClass="android.widget.SearchView"

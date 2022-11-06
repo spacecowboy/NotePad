@@ -153,7 +153,7 @@
 			</LinearLayout>
 		</RelativeLayout>
 
-		<Space
+		<android.widget.Space
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/editor_vertical_margin"/>
 	</LinearLayout>

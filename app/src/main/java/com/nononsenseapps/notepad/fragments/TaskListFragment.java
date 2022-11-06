@@ -97,7 +97,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	public static final String LIST_ID = "list_id";
 
 	/**
-	 * {@link android.R.id.list }
+	 * {@link android.R.id#list }
 	 */
 	@ViewById(resName = "list")
 	DragSortListView listView;
@@ -315,7 +315,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		});
 	}
 
-	/**
+	/*
 	 * Called to have the fragment instantiate its user interface view.
 	 * This is optional, and non-graphical fragments can return null (which
 	 * is the default implementation).  This will be called between
@@ -334,6 +334,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	 *                           from a previous saved state as given here.
 	 * @return Return the View for the fragment's UI, or null.
 	 */
+
 	/*@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
