@@ -27,7 +27,7 @@
 	android:minHeight="48dp"
 	android:paddingLeft="16dp"
 	android:textAppearance="?android:attr/textAppearanceMedium"
-	android:textColor="?android:attr/textColorSecondary"
+	android:textColor="?attr/textColorSecondary"
 	tools:ignore="SelectableText">
 
 </TextView>

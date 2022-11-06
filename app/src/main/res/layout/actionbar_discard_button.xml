@@ -28,7 +28,7 @@
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_gravity="center"
-		android:drawableLeft="@drawable/ic_clear_24dp_black_active"
+		android:drawableLeft="?attr/ic_clear_24dp_active"
 		android:drawablePadding="8dp"
 		android:gravity="center_vertical"
 		android:paddingRight="20dp"
