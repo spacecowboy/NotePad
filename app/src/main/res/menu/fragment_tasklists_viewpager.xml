@@ -40,6 +40,8 @@
         android:title="@string/menu_createlist"/> -->
 
     <group android:id="@+id/viewpager_menu_group" >
+
+        <!-- TODO add an icon for the "archive" action -->
         <item
             android:id="@+id/menu_deletedtasks"
             android:orderInCategory="203"

@@ -90,13 +90,13 @@ public class DialogEditList extends DialogFragment {
 	 */
 	public static DialogEditList_ getInstance() {
 		DialogEditList_ dialog = new DialogEditList_();
-		dialog.setArguments(Bundle.EMPTY);
+		dialog.setArguments(new Bundle());
 		return dialog;
 	}
 
 	public static DialogEditList_ getInstance(final long listid) {
 		DialogEditList_ dialog = new DialogEditList_();
-		Bundle args = Bundle.EMPTY;
+		Bundle args = new Bundle();
 		args.putLong(LIST_ID, listid);
 		dialog.setArguments(args);
 		return dialog;

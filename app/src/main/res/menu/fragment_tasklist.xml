@@ -19,6 +19,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:id="@+id/list_menu_group" >
+
+        <!-- TODO add an icon for this action -->
         <item
             android:id="@+id/menu_clearcompleted"
             android:orderInCategory="300"
