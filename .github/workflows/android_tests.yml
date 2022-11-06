@@ -17,7 +17,7 @@ jobs:
     strategy:
       matrix:
         # test the app on emulators with these OS versions installed
-        api-level: [ 32 ] # add API 23 only once we get the tests to run correctly
+        api-level: 23 # TODO change to [ 23, 32 ] once this works
     permissions:
       contents: read
     steps:
