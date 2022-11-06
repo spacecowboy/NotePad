@@ -122,7 +122,7 @@ android {
             }
         }
     } else {
-        println "No key store defined. Signed release not available..."
+        // println "No key store defined. Signed release not available..."
     }
 }
 
