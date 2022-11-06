@@ -190,7 +190,7 @@
 		<item name="ic_settings_24dp">@drawable/ic_settings_24dp_white</item>
 		<item name="ic_add_24dp">@drawable/ic_add_24dp_white</item>
 
-
+		<item name="content_copy">@drawable/content_copy_dark</item>
 		<item name="content_paste">@drawable/content_paste_dark</item>
 		<item name="ic_folder_plus_24dp">@drawable/folder_plus_24dp_white</item>
 		<item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
@@ -258,7 +258,7 @@
 		<item name="android:colorBackgroundCacheHint">@color/googlenow_grey</item>
 
 		<item name="ic_settings_24dp">@drawable/ic_settings_24dp_white</item>
-
+		<item name="content_copy">@drawable/content_copy_dark</item>
 		<item name="ic_add_24dp">@drawable/ic_add_24dp_black_active</item>
 
 
@@ -311,6 +311,7 @@
 		<item name="ptrHeaderStyle">@style/PullToRefreshStyle</item>
 	</style>
 
+	<!-- Shows a more condensed note list, with smaller separators, by design! -->
 	<style name="ThemeHoloLightClassic" parent="@style/ThemeHoloLightDarkActonBar">
 		<item name="TaskListItem">@style/TaskListItemLightClassic</item>
 		<item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>

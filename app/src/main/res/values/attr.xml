@@ -91,6 +91,7 @@
 	<attr name="ic_folder_plus_24dp" format="reference"/>
 	<attr name="ic_settings_24dp" format="reference"/>
 	<attr name="ic_add_24dp" format="reference"/>
+	<attr name="content_copy" format="reference"/>
 
 	<attr name="drag_handle_color" format="reference|color"/>
 
