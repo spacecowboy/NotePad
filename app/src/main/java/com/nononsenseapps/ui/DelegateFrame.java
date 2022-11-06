@@ -18,12 +18,11 @@ package com.nononsenseapps.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.RelativeLayout;
 
 import com.nononsenseapps.helpers.Log;
-
-import android.view.View;
-import android.widget.RelativeLayout;
-import android.view.View.OnClickListener;
 
 /**
  * This class is designed to act as a simple version of the touch delegate. E.g.
@@ -52,9 +51,10 @@ public class DelegateFrame extends RelativeLayout implements OnClickListener {
 	public static final String ATTR_ENLARGEDVIEW = "enlargedView";
 
 	private int enlargedViewId;
+	private View cachedView;
 
 	public DelegateFrame(Context context) {
-		super(context);
+		super(context, null);
 	}
 
 	public DelegateFrame(Context context, AttributeSet attrs) {
@@ -75,11 +75,13 @@ public class DelegateFrame extends RelativeLayout implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		if (enlargedViewId > -1) {
-			View enlargedView = findViewById(enlargedViewId);
-			Log.d("delegate", "onTouchEvent! view is null?: " + Boolean.toString(enlargedView == null));
-			if (enlargedView != null)
-				enlargedView.performClick();
+		int UNDEFINED = -1;
+		if (cachedView == null && enlargedViewId != UNDEFINED) {
+			cachedView = findViewById(enlargedViewId);
+		}
+		Log.d("delegate", "onTouchEvent! view is null?: " + Boolean.toString(cachedView == null));
+		if (cachedView != null) {
+			cachedView.performClick();
 		}
 	}
 }

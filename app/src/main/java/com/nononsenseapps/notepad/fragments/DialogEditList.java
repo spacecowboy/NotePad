@@ -34,6 +34,8 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
@@ -88,13 +90,13 @@ public class DialogEditList extends DialogFragment {
 	 */
 	public static DialogEditList_ getInstance() {
 		DialogEditList_ dialog = new DialogEditList_();
-		dialog.setArguments(new Bundle());
+		dialog.setArguments(Bundle.EMPTY);
 		return dialog;
 	}
 
 	public static DialogEditList_ getInstance(final long listid) {
 		DialogEditList_ dialog = new DialogEditList_();
-		Bundle args = new Bundle();
+		Bundle args = Bundle.EMPTY;
 		args.putLong(LIST_ID, listid);
 		dialog.setArguments(args);
 		return dialog;
@@ -129,9 +131,9 @@ public class DialogEditList extends DialogFragment {
 			getLoaderManager().restartLoader(0, null,
 					new LoaderCallbacks<Cursor>() {
 
+						@NonNull
 						@Override
-						public Loader<Cursor> onCreateLoader(int arg0,
-															 Bundle arg1) {
+						public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 							return new CursorLoader(getActivity(),
 									TaskList.getUri(getArguments().getLong(
 											LIST_ID, -1)),
@@ -182,13 +184,7 @@ public class DialogEditList extends DialogFragment {
 	@Click(resName = "deleteButton")
 	void deleteClicked() {
 		if (mTaskList._id > 0) {
-			DialogDeleteList.showDialog(getFragmentManager(), mTaskList._id,
-					new DialogConfirmedListener() {
-						@Override
-						public void onConfirm() {
-							dismiss();
-						}
-					});
+			DialogDeleteList.showDialog(getFragmentManager(), mTaskList._id, () -> dismiss());
 		}
 	}
 
@@ -199,8 +195,7 @@ public class DialogEditList extends DialogFragment {
 
 	@Click(resName = "dialog_yes")
 	void okClicked() {
-		Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT)
-				.show();
+		Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT).show();
 
 		mTaskList.title = titleField.getText().toString();
 		mTaskList.sorting = getSortValue();
@@ -214,7 +209,8 @@ public class DialogEditList extends DialogFragment {
 					.edit()
 					.putLong(getString(R.string.pref_defaultstartlist), mTaskList._id)
 					.putString(getString(R.string.pref_defaultlist),
-							Long.toString(mTaskList._id)).commit();
+							Long.toString(mTaskList._id))
+					.commit();
 		} else if (mTaskList._id > 0) {
 			// Remove pref if it is the default list currently
 			final long defList = Long.parseLong(PreferenceManager

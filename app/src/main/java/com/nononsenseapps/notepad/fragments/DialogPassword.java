@@ -19,7 +19,6 @@ package com.nononsenseapps.notepad.fragments;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import androidx.fragment.app.DialogFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,13 +27,15 @@ import android.view.animation.AnimationUtils;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import androidx.fragment.app.DialogFragment;
+
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.prefs.PasswordPrefs;
+
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.ViewById;
-
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 
 @EFragment(resName = "fragment_dialog_password")
 public class DialogPassword extends DialogFragment {

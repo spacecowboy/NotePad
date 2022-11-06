@@ -47,7 +47,7 @@ public class SharedPreferencesHelper {
 		Prefs(context).edit().putBoolean(SyncPrefs.KEY_SD_ENABLE, false).apply();
 	}
 
-	public static Uri getSdDirUri(@NonNull Context context) {
+	private static Uri getSdDirUri(@NonNull Context context) {
 		return Uri.parse(
 				Prefs(context).getString(
 						SyncPrefs.KEY_SD_DIR_URI,
@@ -80,7 +80,7 @@ public class SharedPreferencesHelper {
 	}
 
 
-	public static void put(@NonNull Context context, @NonNull String key, @NonNull String value) {
+	private static void put(@NonNull Context context, @NonNull String key, @NonNull String value) {
 		Prefs(context).edit().putString(key, value).apply();
 	}
 

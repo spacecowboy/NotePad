@@ -193,8 +193,8 @@ public class PrefsActivity extends PreferenceActivity {
 		// current value.
 		sBindPreferenceSummaryToValueListener.onPreferenceChange(
 				preference,
-				PreferenceManager.getDefaultSharedPreferences(
-						preference.getContext()).getString(preference.getKey(),
-						""));
+				PreferenceManager
+						.getDefaultSharedPreferences(preference.getContext())
+						.getString(preference.getKey(), ""));
 	}
 }
