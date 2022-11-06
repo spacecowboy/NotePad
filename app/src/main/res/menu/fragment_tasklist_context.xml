@@ -26,8 +26,8 @@
         android:title="@string/menu_delete"/>
 	<item
 		android:id="@+id/menu_switch_list"
-		android:icon="?ic_action_list"
-		android:showAsAction="ifRoom"
+		android:icon="?attr/ic_folder_plus_24dp"
+		app:showAsAction="ifRoom"
 		android:title="@string/move"/>
 	<!-- android:actionProviderClass="android.widget.ShareActionProvider" -->
 	<item

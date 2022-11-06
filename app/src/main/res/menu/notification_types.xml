@@ -20,13 +20,8 @@
 
     <item
         android:id="@+id/not_type_time"
-        android:icon="@drawable/ic_alarm_24dp_white"
+        android:icon="?attr/ic_alarm_24dp_active"
         android:orderInCategory="1"
         android:title="@string/time"/>
-    <item
-        android:id="@+id/not_type_location"
-        android:icon="@drawable/ic_location_red"
-        android:orderInCategory="2"
-        android:title="@string/location"/>
 
 </menu>
