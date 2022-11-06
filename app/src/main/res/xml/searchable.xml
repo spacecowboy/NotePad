@@ -15,13 +15,13 @@
      limitations under the License.
 -->
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
-    android:hint="@string/search_hint"
-    android:includeInGlobalSearch="true"
-    android:label="@string/app_name"
-    android:searchSettingsDescription="@string/search_description"
-    android:searchSuggestAuthority="com.nononsenseapps.NotePad"
-    android:searchSuggestIntentAction="android.intent.action.VIEW"
-    android:searchSuggestIntentData="content://com.nononsenseapps.NotePad/task"
-    android:searchSuggestSelection="dummyline"
-    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer">
+	android:hint="@string/search_hint"
+	android:includeInGlobalSearch="true"
+	android:label="@string/app_name"
+	android:searchSettingsDescription="@string/search_description"
+	android:searchSuggestAuthority="com.nononsenseapps.NotePad"
+	android:searchSuggestIntentAction="android.intent.action.VIEW"
+	android:searchSuggestIntentData="content://com.nononsenseapps.NotePad/task"
+	android:searchSuggestSelection="dummyline"
+	android:voiceSearchMode="showVoiceSearchButton|launchRecognizer">
 </searchable>

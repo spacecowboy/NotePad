@@ -16,7 +16,7 @@
 -->
 <resources>
 
-    <integer name="leftFragmentWeight">3</integer>
-    <integer name="rightFragmentWeight">7</integer>
+	<integer name="leftFragmentWeight">3</integer>
+	<integer name="rightFragmentWeight">7</integer>
 
 </resources>

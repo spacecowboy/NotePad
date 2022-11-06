@@ -18,7 +18,7 @@
 <!-- This is the density where Nexus7 will fall with 600x960 dp -->
 <resources>
 
-    <integer name="leftFragmentWeight">2</integer>
-    <integer name="rightFragmentWeight">3</integer>
+	<integer name="leftFragmentWeight">2</integer>
+	<integer name="rightFragmentWeight">3</integer>
 
 </resources>

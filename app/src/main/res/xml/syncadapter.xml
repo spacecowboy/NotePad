@@ -22,8 +22,8 @@
 -->
 
 <sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-    android:accountType="com.google"
-    android:contentAuthority="com.nononsenseapps.NotePad"
-    android:supportsUploading="true"
-    android:userVisible="true"
-    />
+	android:accountType="com.google"
+	android:contentAuthority="com.nononsenseapps.NotePad"
+	android:supportsUploading="true"
+	android:userVisible="true"
+	/>
