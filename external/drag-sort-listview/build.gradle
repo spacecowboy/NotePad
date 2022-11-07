@@ -33,6 +33,7 @@ dependencies {
 android {
     compileSdkVersion 32
     buildToolsVersion '32.0.0'
+    namespace "com.mobeta.android.dslv"
 
     defaultConfig {
         targetSdkVersion 32
