@@ -96,5 +96,27 @@
 			android:text="TextDrawable (&#169;) Amulya Khare"
 			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:autoLink="all"
+			android:fontFamily="sans-serif-light"
+			android:paddingTop="16dp"
+			android:text="@string/special_thanks"
+			android:textAppearance="@style/TextAppearance.AppCompat.Large"
+			android:textColor="@android:color/holo_blue_dark"/>
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:autoLink="all"
+			android:fontFamily="sans-serif-light"
+			android:paddingTop="4dp"
+			android:text="Campello Manuel @CampelloManuel"
+			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+		<!-- contributors can add their name here by opening a pull request on github,
+		 simply copy that last textview -->
+
 	</LinearLayout>
 </ScrollView>

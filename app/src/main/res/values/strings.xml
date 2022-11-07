@@ -118,6 +118,7 @@
 	<string name="notification_channel_description">Shows the content of the note when the time of the reminder is reached</string>
 	<string name="feature_is_WIP">This feature is a W.I.P.</string>
 	<string name="permission_denied">Can not proceed: you denied the permission</string>
+	<string name="special_thanks">Special thanks</string>
 
 	<!--
 		Use few if language need it. In English is the same.

@@ -55,15 +55,16 @@
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:fontFamily="sans-serif-condensed"
-			android:text="\nFaster updates? Join the beta community"
+			android:text="\nVersion 7.0.0"
 			android:textColor="@android:color/holo_blue_dark"
 			android:textStyle="bold"/>
 
 		<TextView
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:autoLink="web|email|map"
-			android:text="http://goo.gl/Ocjjl"/>
+			android:paddingLeft="20dp"
+			android:paddingRight="20dp"
+			android:text="@string/changelog_7_0_0"/>
 
 		<TextView
 			android:layout_width="fill_parent"
@@ -94,81 +95,6 @@
 			android:paddingLeft="20dp"
 			android:paddingRight="20dp"
 			android:text="@string/changelog_5_6_0"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:fontFamily="sans-serif-condensed"
-			android:text="\nVersion 5.5.5"
-			android:textColor="@android:color/holo_blue_dark"
-			android:textStyle="bold"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:paddingLeft="20dp"
-			android:paddingRight="20dp"
-			android:text="@string/changelog_5_5_5"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:fontFamily="sans-serif-condensed"
-			android:text="\nVersion 5.5.4"
-			android:textColor="@android:color/holo_blue_dark"
-			android:textStyle="bold"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:paddingLeft="20dp"
-			android:paddingRight="20dp"
-			android:text="@string/changelog_5_5_4"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:fontFamily="sans-serif-condensed"
-			android:text="\nVersion 5.5.3"
-			android:textColor="@android:color/holo_blue_dark"
-			android:textStyle="bold"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:paddingLeft="20dp"
-			android:paddingRight="20dp"
-			android:text="@string/changelog_5_5_3"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:fontFamily="sans-serif-condensed"
-			android:text="\nVersion 5.4.1"
-			android:textColor="@android:color/holo_blue_dark"
-			android:textStyle="bold"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:paddingLeft="20dp"
-			android:paddingRight="20dp"
-			android:text="@string/changelog_5_4_1"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:fontFamily="sans-serif-condensed"
-			android:text="\nVersion 5.4"
-			android:textColor="@android:color/holo_blue_dark"
-			android:textStyle="bold"/>
-
-		<TextView
-			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
-			android:paddingLeft="20dp"
-			android:paddingRight="20dp"
-			android:text="@string/changelog_5_4"/>
 
 	</LinearLayout>
 
