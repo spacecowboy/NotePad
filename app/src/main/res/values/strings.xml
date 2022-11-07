@@ -117,6 +117,7 @@
 	<string name="notification_channel_name">Reminders for notes</string>
 	<string name="notification_channel_description">Shows the content of the note when the time of the reminder is reached</string>
 	<string name="feature_is_WIP">This feature is a W.I.P.</string>
+	<string name="unexpected_too_many_accounts">Unexpected: got %1$d accounts instead of 1</string>
 
 	<!--
 		Use few if language need it. In English is the same.
