@@ -20,7 +20,7 @@ import java.nio.file.Paths;
 
 public class Helper {
 
-	public static Task getATask(final Context context) {
+	private static Task getATask(final Context context) {
 		Cursor c = context.getContentResolver().query(Task.URI, Task.Columns.FIELDS, null, null, null);
 		Task result = null;
 		if (c.moveToFirst())
@@ -28,7 +28,7 @@ public class Helper {
 		return result;
 	}
 
-	public static TaskList getATaskList(final Context context) {
+	private static TaskList getATaskList(final Context context) {
 		Cursor c = context.getContentResolver().query(TaskList.URI, TaskList.Columns.FIELDS, null, null, null);
 		TaskList result = null;
 		if (c.moveToFirst())

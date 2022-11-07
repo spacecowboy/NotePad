@@ -507,32 +507,6 @@ public class ActivityMain extends FragmentActivity
 		startActivity(intent);
 	}
 
-	void isOldDonateVersionInstalled() {
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(ActivityMain.this);
-		if (prefs.getBoolean(MIGRATED, false)) {
-			// already migrated
-			return;
-		}
-		try {
-			PackageManager pm = getPackageManager();
-			List<ApplicationInfo> packages = pm.getInstalledApplications(0);
-			for (ApplicationInfo packageInfo : packages) {
-				if (packageInfo.packageName
-						.equals("com.nononsenseapps.notepad_donate")) {
-					migrateDonateUser();
-					// Don't migrate again
-					prefs.edit().putBoolean(MIGRATED, true).commit();
-					// Stop loop
-					break;
-				}
-			}
-		} catch (Exception e) {
-			// Can't allow crashing
-		}
-	}
-
-	@SuppressLint("ValidFragment")
 	@UiThread
 	void migrateDonateUser() {
 		// migrate user

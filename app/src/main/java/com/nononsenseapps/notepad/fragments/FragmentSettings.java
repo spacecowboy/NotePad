@@ -66,18 +66,6 @@ class FragmentSettings extends PreferenceFragment implements SharedPreferences
     private SwitchPreference preferenceSyncSdCard;
     private SwitchPreference preferenceSyncGTasks;
 
-
-
-
-
-
-    private void buildGuard() {
-        // Disable prefs if this is not correct build
-        findPreference(null)//getString(R.string.const_preference_gtask_enabled_key))
-                .setEnabled(null != Config.getGtasksApiKey(getActivity()) && !Config.getGtasksApiKey(getActivity())
-                .contains(" "));
-    }
-
     private void setupDirectory(final SharedPreferences sharedPreferences) {
         preferenceSyncSdCard = (SwitchPreference) findPreference(getString(-1));//R.string.const_preference_sdcard_enabled_key));
         setSdDirectorySummary(sharedPreferences);

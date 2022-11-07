@@ -66,8 +66,7 @@ public class TasksExtension extends DashClockExtension {
 		return result;
 	}
 
-	final static String[] NOTEFIELDS = new String[] { "_id", "title", "note",
-			"duedate" };
+	final static String[] NOTEFIELDS = new String[] { "_id", "title", "note", "duedate" };
 
 	@Override
 	protected void onInitialize(boolean isReconnect) {
