@@ -511,11 +511,9 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
 	@AfterViews
 	void setupPullToRefresh() {
-		// Now get the PullToRefresh attacher from the Activity. An exercise to the reader
-		// is to create an implicit interface instead of casting to the concrete Activity
-		// Now set the ScrollView as the refreshable view, and the refresh listener (this)
-		((ActivityMain) getActivity())
-				.addRefreshableView(listView);
+		// Since the pull-to-refresh layout is defined in fragment_task_list.xml, only now we
+		// can save it in a variable and add a listener
+		((ActivityMain) getActivity()).initializePullToRefreshLayout();
 	}
 
 	@AfterViews
@@ -563,8 +561,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 								for (Task t : tasks) {
 									try {
 										t.delete(getActivity());
-									} catch (Exception ignored) {
-									}
+									} catch (Exception ignored) {}
 								}
 							});
 						}
@@ -824,8 +821,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	public void onDestroy() {
 		super.onDestroy();
 		getLoaderManager().destroyLoader(0);
-		((ActivityMain) getActivity())
-				.removeRefreshableView(listView);
 	}
 
 	void setupSwipeToRefresh() {

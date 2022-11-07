@@ -143,7 +143,7 @@ dependencies {
     // Http library for Google Task Sync, open source & abandoned, should upgrade to retrofit2
     implementation 'com.squareup.retrofit:retrofit:1.9.0'
     // Included projects
-    implementation project(':external:ActionBar-PullToRefresh')
+    // implementation project(':external:ActionBar-PullToRefresh')
     implementation project(':external:datetimepicker')
     implementation project(':external:drag-sort-listview')
     implementation project(':external:ShowcaseView')

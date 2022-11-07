@@ -16,7 +16,7 @@
  */
 
 include ':app',
-        ':external:ActionBar-PullToRefresh',
+        // ':external:ActionBar-PullToRefresh',
         ':external:datetimepicker',
         ':external:drag-sort-listview',
         ':external:ShowcaseView'

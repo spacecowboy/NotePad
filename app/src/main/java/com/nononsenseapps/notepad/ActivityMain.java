@@ -51,7 +51,8 @@ import androidx.legacy.app.ActionBarDrawerToggle;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
-
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import com.github.espiandev.showcaseview.ShowcaseView;
 import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -92,7 +93,6 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 import java.util.List;
 
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 @EActivity(resName = "activity_main")
 public class ActivityMain extends FragmentActivity
@@ -141,11 +141,14 @@ public class ActivityMain extends FragmentActivity
 	// Only not if opening note directly
 	private boolean shouldAddToBackStack = true;
 	private Bundle state;
-	private PullToRefreshAttacher pullToRefreshAttacher;
+
 	private boolean shouldRestart = false;
 	private ShowcaseView sv;
-	private PullToRefreshAttacher.OnRefreshListener pullToRefreshListener;
+
 	private FloatingActionButton mFab;
+
+	// it is initialized in the fragment, because it's defined in fragment_task_list.xml
+	SwipeRefreshLayout ptrLayout = null;
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -360,8 +363,8 @@ public class ActivityMain extends FragmentActivity
 
 				@Override
 				protected void onPostExecute(Void result) {
-					// Notify PullToRefreshAttacher that the refresh has finished
-					pullToRefreshAttacher.setRefreshComplete();
+					// Notify that the refresh has finished
+					if (ptrLayout!= null) ptrLayout.setRefreshing(false);
 				}
 			}.execute();
 		}
@@ -420,8 +423,7 @@ public class ActivityMain extends FragmentActivity
 //			 //addTaskInList("", ListHelper.getARealList(this, id_of_the_list));
 //		 });
 
-		// Create a PullToRefreshAttacher instance
-		pullToRefreshAttacher = PullToRefreshAttacher.get(this);
+
 
 		// Clear possible notifications, schedule future ones
 		final Intent intent = getIntent();
@@ -461,9 +463,7 @@ public class ActivityMain extends FragmentActivity
 			syncStatusReceiver.stopMonitoring();
 		}
 		// deactivate any progress bar
-		if (pullToRefreshAttacher != null) {
-			pullToRefreshAttacher.setRefreshComplete();
-		}
+		if (ptrLayout != null) ptrLayout.setRefreshing(false);
 		// Pause sync monitors
 		OrgSyncService.pause(this);
 	}
@@ -1228,38 +1228,30 @@ public class ActivityMain extends FragmentActivity
 		}
 	}
 
-	public void addRefreshableView(View view) {
-		// TODO Only if some sync is enabled
-		pullToRefreshAttacher
-				.addRefreshableView(view, getPullToRefreshListener());
-	}
+	public void initializePullToRefreshLayout() {
+		// TODO do this Only if some sync is enabled
 
-	public PullToRefreshAttacher.OnRefreshListener getPullToRefreshListener() {
-		if (pullToRefreshListener == null) {
-			pullToRefreshListener =
-					new PullToRefreshAttacher.OnRefreshListener() {
-						@Override
-						public void onRefreshStarted(View view) {
-							handleSyncRequest();
-						}
-					};
-		}
-		return pullToRefreshListener;
-	}
+		// because NOW it's available
+		if (ptrLayout == null)
+			ptrLayout = findViewById(R.id.ptrLayout);
 
-	public void removeRefreshableView(View view) {
-		pullToRefreshAttacher.removeRefreshableView(view);
-	}
+		// Sets up a Listener that is invoked when the user performs a swipe-to-refresh gesture.
+		ptrLayout.setOnRefreshListener(
+				() -> {
+					Log.i("NNN", "onRefresh called from SwipeRefreshLayout");
 
-	public PullToRefreshAttacher getPullToRefreshAttacher() {
-		return pullToRefreshAttacher;
+					// This method performs the actual data-refresh operation.
+					// The method must call setRefreshing(false) when it's finished.
+					handleSyncRequest();
+				}
+		);
 	}
 
 	@UiThread
 	@Override
 	public void onSyncStartStop(final boolean ongoing) {
 		// Notify PullToRefreshAttacher of the refresh state
-		pullToRefreshAttacher.setRefreshing(ongoing);
+		if (ptrLayout != null) ptrLayout.setRefreshing(ongoing);
 	}
 
 	public static interface ListOpener {

@@ -227,8 +227,7 @@
 		<!-- ShowCaseView -->
 		<item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>
 
-		<!-- Pull to refresh style -->
-		<item name="ptrHeaderStyle">@style/PullToRefreshStyle</item>
+
 	</style>
 
 	<style name="ThemeHoloBlack" parent="@style/ThemeGoogleNowDark">
@@ -303,8 +302,7 @@
 		<!-- ShowCaseView -->
 		<item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>
 
-		<!-- Pull to refresh style -->
-		<item name="ptrHeaderStyle">@style/PullToRefreshStyle</item>
+
 	</style>
 
 	<!-- Shows a more condensed note list, with smaller separators, by design! -->
