@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Changes depending on screen values -->
-    <dimen name="widget_conf_preview_height">@dimen/layout_match_parent</dimen>
-    <dimen name="widget_conf_preview_width">@dimen/widget_conf_preview_land_width</dimen>
+	<!-- Changes depending on screen values -->
+	<dimen name="widget_conf_preview_height">@dimen/layout_match_parent</dimen>
+	<dimen name="widget_conf_preview_width">@dimen/widget_conf_preview_land_width</dimen>
 </resources>

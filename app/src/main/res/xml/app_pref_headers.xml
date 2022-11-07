@@ -15,57 +15,57 @@
   You should have received a copy of the GNU General Public License
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
-<preference-headers xmlns:android="http://schemas.android.com/apk/res/android" >
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <header
-        android:fragment="com.nononsenseapps.notepad.prefs.MainPrefs"
-        android:icon="@drawable/ic_brightness_6_24dp_white"
-        android:summary=""
-        android:title="@string/settings_cat_appearance" />
-    <header
-        android:fragment="com.nononsenseapps.notepad.prefs.ListPrefs"
-        android:icon="@drawable/ic_folder_24dp_white"
-        android:summary=""
-        android:title="@string/settings_list" />
-    <header
-        android:fragment="com.nononsenseapps.notepad.prefs.SyncPrefs"
-        android:icon="@drawable/ic_refresh_24dp_white"
-        android:summary=""
-        android:title="@string/settings_cat_syncing" />
-    <header
-        android:fragment="com.nononsenseapps.notepad.prefs.NotificationPrefs"
-        android:icon="@drawable/ic_alarm_24dp_white"
-        android:summary=""
-        android:title="@string/notifications" />
-    <header
-        android:fragment="com.nononsenseapps.notepad.prefs.PasswordPrefs"
-        android:icon="@drawable/ic_lock_outline_24dp_white"
-        android:summary=""
-        android:title="@string/password" />
-    <header
-        android:fragment="com.nononsenseapps.notepad.prefs.BackupPrefs"
-        android:icon="@drawable/ic_sd_storage_24dp_white"
-        android:summary=""
-        android:title="@string/backup" />
-    <header
-        android:fragment="com.nononsenseapps.notepad.prefs.ChangelogPrefs"
-        android:icon="@drawable/ic_help_24dp_white"
-        android:summary=""
-        android:title="@string/changelog_full_title" />
-    <header
-        android:fragment="com.nononsenseapps.notepad.prefs.AboutPrefs"
-        android:icon="@drawable/ic_info_24dp_white"
-        android:summary=""
-        android:title="@string/about" />
+	<header
+		android:fragment="com.nononsenseapps.notepad.prefs.MainPrefs"
+		android:icon="@drawable/ic_brightness_6_24dp_white"
+		android:summary=""
+		android:title="@string/settings_cat_appearance"/>
+	<header
+		android:fragment="com.nononsenseapps.notepad.prefs.ListPrefs"
+		android:icon="@drawable/ic_folder_24dp_white"
+		android:summary=""
+		android:title="@string/settings_list"/>
+	<header
+		android:fragment="com.nononsenseapps.notepad.prefs.SyncPrefs"
+		android:icon="@drawable/ic_refresh_24dp_white"
+		android:summary=""
+		android:title="@string/settings_cat_syncing"/>
+	<header
+		android:fragment="com.nononsenseapps.notepad.prefs.NotificationPrefs"
+		android:icon="@drawable/ic_alarm_24dp_white"
+		android:summary=""
+		android:title="@string/notifications"/>
+	<header
+		android:fragment="com.nononsenseapps.notepad.prefs.PasswordPrefs"
+		android:icon="@drawable/ic_lock_outline_24dp_white"
+		android:summary=""
+		android:title="@string/password"/>
+	<header
+		android:fragment="com.nononsenseapps.notepad.prefs.BackupPrefs"
+		android:icon="@drawable/ic_sd_storage_24dp_white"
+		android:summary=""
+		android:title="@string/backup"/>
+	<header
+		android:fragment="com.nononsenseapps.notepad.prefs.ChangelogPrefs"
+		android:icon="@drawable/ic_help_24dp_white"
+		android:summary=""
+		android:title="@string/changelog_full_title"/>
+	<header
+		android:fragment="com.nononsenseapps.notepad.prefs.AboutPrefs"
+		android:icon="@drawable/ic_info_24dp_white"
+		android:summary=""
+		android:title="@string/about"/>
 
-    <!--
-    <header android:fragment="com.nononsenseapps.notepad.widget.ListWidgetConfigure$ThemeFragment"
-            android:title="Appereance"
-            android:summary="Set the theme and background transparency">
-        Arbitrary key/value pairs can be included with a header as
-             arguments to its fragment.
-        <extra android:name="someKey" android:value="someHeaderValue" />
-    </header>
-    -->
+	<!--
+	<header android:fragment="com.nononsenseapps.notepad.widget.ListWidgetConfigure$ThemeFragment"
+			android:title="Appereance"
+			android:summary="Set the theme and background transparency">
+		Arbitrary key/value pairs can be included with a header as
+			 arguments to its fragment.
+		<extra android:name="someKey" android:value="someHeaderValue" />
+	</header>
+	-->
 
 </preference-headers>

@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import kotlin.jvm.internal.Lambda;
 import retrofit.RequestInterceptor;
 import retrofit.RestAdapter;
 
@@ -74,8 +75,9 @@ public class GoogleTasksClient {
 	public static void getAuthTokenAsync(Activity activity, Account account,
 										 AccountManagerCallback<Bundle> callback) {
 		Log.d(TAG, "getAuthTokenAsync");
-		AccountManager.get(activity).getAuthToken(account, OAUTH_SCOPE, Bundle.EMPTY, activity,
-				callback, null);
+
+		AccountManager.get(activity)
+				.getAuthToken(account, OAUTH_SCOPE, Bundle.EMPTY, activity, callback, null);
 	}
 
 	static GoogleTasksAPI GetGoogleTasksAPI(final String token) throws IllegalArgumentException {

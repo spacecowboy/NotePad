@@ -17,33 +17,34 @@
 
 package com.nononsenseapps.notepad.fragments;
 
+import static com.nononsenseapps.util.PermissionsHelper.hasPermissions;
+import static com.nononsenseapps.util.PermissionsHelper.permissionsGranted;
+import static com.nononsenseapps.util.SharedPreferencesHelper.disableSdCardSync;
+
 import android.annotation.SuppressLint;
-import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.DialogFragment;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Build;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
-
 import android.widget.Toast;
 
-import com.nononsenseapps.build.Config;
-import com.nononsenseapps.notepad.BuildConfig;
-import com.nononsenseapps.notepad.R;
+import androidx.annotation.NonNull;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
 
+import com.nononsenseapps.build.Config;
+import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.notepad.sync.files.JSONBackup;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
-import com.nononsenseapps.util.AsyncTaskHelper;
 import com.nononsenseapps.util.PermissionsHelper;
 import com.nononsenseapps.util.PreferenceHelper;
 import com.nononsenseapps.util.SharedPreferencesHelper;
@@ -53,100 +54,23 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.Locale;
 
-import static com.nononsenseapps.util.PermissionsHelper.hasPermissions;
-import static com.nononsenseapps.util.PermissionsHelper.permissionsGranted;
-
-import static com.nononsenseapps.util.SharedPreferencesHelper.disableSdCardSync;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
 /**
  * Main top level settings fragment
  */
-public class FragmentSettings extends PreferenceFragment implements SharedPreferences
+class FragmentSettings extends PreferenceFragment implements SharedPreferences
         .OnSharedPreferenceChangeListener {
 
     // TODO useless ? you may want to delete this
 
-    private static final int ACTIVITY_CODE_PICK_SD_DIR = 1;
-    private static final int ACTIVITY_CODE_PICK_DROPBOX_DIR = 2;
-    private static final int PERMISSION_CODE_GTASKS = 1;
-    private static final int PERMISSION_CODE_SDCARD = 2;
+
     private SwitchPreference preferenceSyncSdCard;
     private SwitchPreference preferenceSyncGTasks;
-    private SwitchPreference preferenceSyncDropbox;
-
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        // Load the preferences from an XML resource
-        // addPreferencesFromResource(R.xml.settings);
-
-        // setLangEntries((ListPreference) findPreference(getString(R.string.const_preference_locale_key)));
-
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
-                (getActivity());
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-
-        buildGuard();
-        setupAccount(sharedPreferences);
-        setupDirectory(sharedPreferences);
-
-        setupPassword();
-        setupLegacyBackup();
-
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case ACTIVITY_CODE_PICK_SD_DIR:
-                if (resultCode == Activity.RESULT_OK) {
-                    saveNewDirectoryPath(data);
-                } else {
-                    disableSdCardSync(getActivity());
-                }
-                break;
-
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
-
-    private void buildGuard() {
-        // Disable prefs if this is not correct build
-        findPreference(null)//getString(R.string.const_preference_gtask_enabled_key))
-                .setEnabled(null != Config.getGtasksApiKey(getActivity()) && !Config.getGtasksApiKey(getActivity())
-                .contains(" "));
-    }
 
     private void setupDirectory(final SharedPreferences sharedPreferences) {
         preferenceSyncSdCard = (SwitchPreference) findPreference(getString(-1));//R.string.const_preference_sdcard_enabled_key));
         setSdDirectorySummary(sharedPreferences);
     }
 
-    private void showFilePicker() {
-        if (hasSDCardPermissions()) {
-            // Start the filepicker
-            Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-            startActivityForResult(i, ACTIVITY_CODE_PICK_SD_DIR);
-        } else {
-            requestSDCardPermissions();
-        }
-    }
 
 
 
@@ -182,77 +106,7 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         setAccountSummary(sharedPreferences);
     }
 
-    private void showAccountDialog() {
-        if (hasGoogleAccountPermissions()) {
-            FragmentTransaction ft = getFragmentManager().beginTransaction();
-            Fragment prev = getFragmentManager().findFragmentByTag("accountdialog");
-            if (prev != null) {
-                ft.remove(prev);
-            }
-            ft.addToBackStack(null);
 
-            // Create and show the dialog.
-            DialogFragment newFragment = new DialogGoogleAccount();
-            newFragment.setArguments(Bundle.EMPTY);
-            newFragment.show(ft, "accountdialog");
-        } else {
-            requestGoogleAccountPermissions();
-        }
-    }
-
-
-    private void requestGoogleAccountPermissions() {
-        requestPermissions(PermissionsHelper.PERMISSIONS_GTASKS, PERMISSION_CODE_GTASKS);
-    }
-
-
-    private void requestSDCardPermissions() {
-        requestPermissions(PermissionsHelper.PERMISSIONS_SD, PERMISSION_CODE_SDCARD);
-    }
-
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[]
-            grantResults) {
-        switch (requestCode) {
-            case PERMISSION_CODE_GTASKS:
-                if (permissionsGranted(permissions, grantResults)) {
-                    // Success, open dialog
-                    showAccountDialog();
-                } else {
-                    Toast.makeText(getActivity(), "Permission denied :(. Show explanation for contacts",
-                            Toast.LENGTH_LONG).show();
-                    SharedPreferencesHelper.put(getActivity(), null, false);
-                            //R.string.const_preference_gtask_enabled_key, false);
-                }
-                break;
-            case PERMISSION_CODE_SDCARD:
-                if (permissionsGranted(permissions, grantResults)) {
-                    // Success, open picker
-                    showFilePicker();
-                } else {
-                    Toast.makeText(getActivity(), "Permission denied :(. Show explanation for SD card",
-                            Toast.LENGTH_LONG).show();
-                    disableSdCardSync(getActivity());
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
-
-    }
-
-
-    private boolean hasGoogleAccountPermissions() {
-        return hasPermissions(getActivity(), PermissionsHelper.PERMISSIONS_GTASKS);
-    }
-
-    private boolean hasSDCardPermissions() {
-        return hasPermissions(getActivity(), PermissionsHelper.PERMISSIONS_SD);
-    }
 
     private void setupPassword() {
         Preference preference = findPreference(getString(R.string.const_preference_password_key));
@@ -349,7 +203,7 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
             if (key.equals(SyncPrefs.KEY_SYNC_ENABLE)) {
                 final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
                 if (enabled) {
-                    showAccountDialog();
+                    //showAccountDialog();
                 } else {
                     SyncGtaskHelper.toggleSync(getActivity(), sharedPreferences);
                     // Synchronize view also
@@ -362,7 +216,7 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
             } else if (key.equals(SyncPrefs.KEY_SD_ENABLE)) {
                 final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
                 if (enabled) {
-                    showFilePicker();
+//                     showFilePicker();
                 } else {
                     // Restart the service (started in activities)
                     OrgSyncService.stop(getActivity());

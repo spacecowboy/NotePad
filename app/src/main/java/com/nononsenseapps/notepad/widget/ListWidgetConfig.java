@@ -17,36 +17,13 @@
 
 package com.nononsenseapps.notepad.widget;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
-
-import com.nononsenseapps.helpers.Log;
-import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.ui.ExtrasCursorAdapter;
-import com.nononsenseapps.utils.views.TitleNoteTextView;
-
-import android.net.Uri;
-import android.os.Build;
-import android.os.Bundle;
-import android.annotation.TargetApi;
 import android.app.ActionBar;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import androidx.fragment.app.FragmentActivity;
-import androidx.loader.app.LoaderManager.LoaderCallbacks;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.cursoradapter.widget.SimpleCursorAdapter;
-import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
+import android.net.Uri;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,6 +39,28 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
+
+import androidx.cursoradapter.widget.SimpleCursorAdapter;
+import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
+import androidx.fragment.app.FragmentActivity;
+import androidx.loader.app.LoaderManager.LoaderCallbacks;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+
+import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.ui.ExtrasCursorAdapter;
+import com.nononsenseapps.utils.views.TitleNoteTextView;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 @EActivity(resName = "activity_widget_config")
 public class ListWidgetConfig extends FragmentActivity {
@@ -169,7 +168,6 @@ public class ListWidgetConfig extends FragmentActivity {
 		}
 	}
 
-	@TargetApi(Build.VERSION_CODES.JELLY_BEAN)
 	@AfterViews
 	void setupPreview() {
 		final WidgetPrefs widgetPrefs = new WidgetPrefs(this, appWidgetId);

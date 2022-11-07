@@ -13,9 +13,9 @@ public class RFCDateTest extends TestCase {
 	static final String TAG = "nononsenseapps rfctest";
 
 	// Sun May  5 23:53:10 2013
-	static final long atime = 1367790790000L;
+	//static final long atime = 1367790790000L;
 	// 2 Hours in milli seconds, for MY TIMEZONE
-	static final long twohours = 7200000L;
+	//static final long twohours = 7200000L;
 
 //	public void testCalendar() {
 //		Calendar c = Calendar.getInstance();

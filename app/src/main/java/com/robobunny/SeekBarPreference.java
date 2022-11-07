@@ -136,6 +136,7 @@ public class SeekBarPreference extends Preference implements
 	@Override
 	protected View onCreateView(ViewGroup parent) {
 
+		super.onCreateView(parent);
 		View layout = null;
 
 		try {

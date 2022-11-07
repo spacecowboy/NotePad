@@ -36,6 +36,9 @@ public class PermissionsHelper {
 	public static final String[] PERMISSIONS_SD =
 			new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE };
 
+	public static final int REQUEST_CODE_SD_PERMISSIONS = 1;
+	public static final int REQUEST_CODE_GTASKS_PERMISSIONS = 2;
+
 	public static boolean hasPermissions(@NonNull Context context, String... permissions) {
 		for (String permission : permissions) {
 			if (!hasPermission(context, permission)) {
@@ -45,7 +48,7 @@ public class PermissionsHelper {
 		return true;
 	}
 
-	public static boolean hasPermission(@NonNull Context context, @NonNull String permission) {
+	private static boolean hasPermission(@NonNull Context context, @NonNull String permission) {
 		return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(context, permission);
 	}
 
@@ -58,7 +61,7 @@ public class PermissionsHelper {
 		return permissions.length > 0 && allEqual(PackageManager.PERMISSION_GRANTED, grantResults);
 	}
 
-	public static boolean allEqual(int value, int[] items) {
+	private static boolean allEqual(int value, int[] items) {
 		for (int item : items) {
 			if (value != item) {
 				return false;

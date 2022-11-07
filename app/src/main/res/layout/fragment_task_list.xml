@@ -19,7 +19,6 @@
 <FrameLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
-	xmlns:tools="http://schemas.android.com/tools"
 	style="?attr/ListMarginStyle"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
@@ -45,21 +44,14 @@
 		android:layout_height="match_parent"
 		android:visibility="visible">
 
-		<!-- TODO replace PullToRefreshLayout with this, test, then remove the external project
 		<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-			android:id="@+id/swiperefresh"
-			android:layout_width="match_parent"
-			android:layout_height="match_parent">
-		-->
-
-		<uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout
 			android:id="@+id/ptrLayout"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent">
 
 			<com.mobeta.android.dslv.DragSortListView
 				android:id="@android:id/list"
-				style="?ListDividerStyle"
+				style="?attr/ListDividerStyle"
 				android:layout_width="match_parent"
 				android:layout_height="match_parent"
 				android:drawSelectorOnTop="true"
@@ -73,10 +65,9 @@
 				app:remove_enabled="false"
 				app:remove_mode="flingRemove"
 				app:slide_shuffle_speed="0.3"
-				app:sort_enabled="true"
-				tools:ignore="PxUsage"/>
-		</uk.co.senab.actionbarpulltorefresh.library.PullToRefreshLayout>
-		<!-- </androidx.swiperefreshlayout.widget.SwipeRefreshLayout> -->
+				app:sort_enabled="true"/>
+
+		</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 	</FrameLayout>
 
 </FrameLayout>

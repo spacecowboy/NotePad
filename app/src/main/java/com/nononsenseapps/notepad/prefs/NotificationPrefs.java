@@ -17,10 +17,14 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import com.nononsenseapps.notepad.R;
-
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.preference.PreferenceFragment;
+import android.provider.Settings;
+
+import com.nononsenseapps.notepad.R;
 
 public class NotificationPrefs extends PreferenceFragment {
 
@@ -36,4 +40,18 @@ public class NotificationPrefs extends PreferenceFragment {
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_ringtone)));
 	}
+
+	// TODO add a settings button to carry the user to the right page in the device's settings app
+	public static void OnClickAssociaSistema(Context context)
+	{
+		PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+
+		boolean ok = pm.isIgnoringBatteryOptimizations(context.getPackageName());
+		if(ok) return;
+
+		Intent myIntent = new Intent();
+		myIntent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+		context.startActivity(myIntent);
+	}
+
 }

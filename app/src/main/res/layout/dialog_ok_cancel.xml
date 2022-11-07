@@ -1,40 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/button_container"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/button_container"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:orientation="vertical">
 
-    <!-- TODO There should be an androidX class that builds this: remove and use that -->
+	<!-- TODO There should be an androidX class that builds this: remove and use that -->
 
-    <View
-        android:id="@+id/divider"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="?android:attr/dividerHorizontal"/>
+	<View
+		android:id="@+id/divider"
+		android:layout_width="match_parent"
+		android:layout_height="1dp"
+		android:background="?android:attr/dividerHorizontal"/>
 
-    <LinearLayout
-        style="?android:attr/buttonBarStyle"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
+	<LinearLayout
+		style="?android:attr/buttonBarStyle"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="horizontal">
 
-        <Button
-            android:id="@+id/dialog_no"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@android:string/cancel"/>
+		<Button
+			android:id="@+id/dialog_no"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="@android:string/cancel"/>
 
-        <Button
-            android:id="@+id/dialog_yes"
-            style="?android:attr/buttonBarButtonStyle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="@android:string/ok"/>
-    </LinearLayout>
+		<Button
+			android:id="@+id/dialog_yes"
+			style="?android:attr/buttonBarButtonStyle"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1"
+			android:text="@android:string/ok"/>
+	</LinearLayout>
 
 </LinearLayout>

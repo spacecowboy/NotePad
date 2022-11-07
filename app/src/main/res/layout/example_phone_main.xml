@@ -1,31 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/drawerLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/drawerLayout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
-    <!-- The main content view -->
+	<!-- The main content view -->
 
-    <fragment
-        android:id="@+id/fragment1"
-        class="com.nononsenseapps.notepad.fragments.TaskDetailFragment_"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/editor_side_margin"
-        android:layout_marginRight="@dimen/editor_side_margin"
-        tools:layout="@layout/fragment_task_detail"/>
+	<fragment
+		android:id="@+id/fragment1"
+		class="com.nononsenseapps.notepad.fragments.TaskDetailFragment_"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_marginLeft="@dimen/editor_side_margin"
+		android:layout_marginRight="@dimen/editor_side_margin"
+		tools:layout="@layout/fragment_task_detail"/>
 
-    <!-- The navigation drawer -->
+	<!-- The navigation drawer -->
 
-    <!--
-         <include
-        android:id="@+id/leftDrawer"
-        android:layout_width="320dp"
-        android:layout_height="match_parent"
-        android:layout_gravity="start"
-        layout="@layout/drawer_layout" />
-    -->
+	<!--
+		 <include
+		android:id="@+id/leftDrawer"
+		android:layout_width="320dp"
+		android:layout_height="match_parent"
+		android:layout_gravity="start"
+		layout="@layout/drawer_layout" />
+	-->
 
 </FrameLayout>

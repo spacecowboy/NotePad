@@ -97,7 +97,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	public static final String LIST_ID = "list_id";
 
 	/**
-	 * {@link android.R.id.list }
+	 * {@link android.R.id#list }
 	 */
 	@ViewById(resName = "list")
 	DragSortListView listView;
@@ -315,7 +315,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		});
 	}
 
-	/**
+	/*
 	 * Called to have the fragment instantiate its user interface view.
 	 * This is optional, and non-graphical fragments can return null (which
 	 * is the default implementation).  This will be called between
@@ -334,6 +334,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	 *                           from a previous saved state as given here.
 	 * @return Return the View for the fragment's UI, or null.
 	 */
+
 	/*@Nullable
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
@@ -510,11 +511,13 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
 	@AfterViews
 	void setupPullToRefresh() {
-		// Now get the PullToRefresh attacher from the Activity. An exercise to the reader
-		// is to create an implicit interface instead of casting to the concrete Activity
-		// Now set the ScrollView as the refreshable view, and the refresh listener (this)
-		((ActivityMain) getActivity())
-				.addRefreshableView(listView);
+		// every list gets its own instance of the swipetorefresh layout
+		var ptrL = (SwipeRefreshLayout)this.getView().findViewById(R.id.ptrLayout);
+
+		// The pull-to-refresh layout is defined in fragment_task_list.xml
+
+		// now we add it to ActivityMain, which will take care of it
+		((ActivityMain) getActivity()).addSwipeRefreshLayoutToList(ptrL);
 	}
 
 	@AfterViews
@@ -562,8 +565,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 								for (Task t : tasks) {
 									try {
 										t.delete(getActivity());
-									} catch (Exception ignored) {
-									}
+									} catch (Exception ignored) {}
 								}
 							});
 						}
@@ -823,8 +825,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	public void onDestroy() {
 		super.onDestroy();
 		getLoaderManager().destroyLoader(0);
-		((ActivityMain) getActivity())
-				.removeRefreshableView(listView);
 	}
 
 	void setupSwipeToRefresh() {

@@ -16,48 +16,48 @@
 */
 -->
 <FrameLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/hintContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:gravity="center"
-        android:orientation="vertical"
-        android:visibility="gone">
+	<LinearLayout
+		android:id="@+id/hintContainer"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:gravity="center"
+		android:orientation="vertical"
+		android:visibility="gone">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:enabled="false"
-            android:paddingTop="4dip"
-            android:text="@string/please_create_note"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
-    </LinearLayout>
+		<TextView
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:enabled="false"
+			android:paddingTop="4dip"
+			android:text="@string/please_create_note"
+			android:textAppearance="?android:attr/textAppearanceMedium"/>
+	</LinearLayout>
 
-    <FrameLayout
-        android:id="@+id/listContainer"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="visible">
+	<FrameLayout
+		android:id="@+id/listContainer"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:visibility="visible">
 
-        <ListView
-            android:id="@android:id/list"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:drawSelectorOnTop="false"/>
+		<ListView
+			android:id="@android:id/list"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:drawSelectorOnTop="false"/>
 
-        <TextView
-            android:id="@+id/internalEmpty"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            tools:ignore="SelectableText"/>
+		<TextView
+			android:id="@+id/internalEmpty"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:gravity="center"
+			android:textAppearance="?android:attr/textAppearanceLarge"
+			tools:ignore="SelectableText"/>
 
-    </FrameLayout>
+	</FrameLayout>
 
 </FrameLayout>

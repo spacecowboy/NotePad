@@ -16,10 +16,10 @@
 
 -->
 <searchable xmlns:android="http://schemas.android.com/apk/res/android"
-    android:hint="@string/location"
-    android:label="@string/app_name"
-    android:searchSuggestAuthority="com.nononsenseapps.LocationSuggestions"
-    android:searchSuggestSelection=" ?"
-    android:voiceSearchMode="showVoiceSearchButton|launchRecognizer">
+	android:hint="@string/location"
+	android:label="@string/app_name"
+	android:searchSuggestAuthority="com.nononsenseapps.LocationSuggestions"
+	android:searchSuggestSelection=" ?"
+	android:voiceSearchMode="showVoiceSearchButton|launchRecognizer">
 
 </searchable>

@@ -16,11 +16,11 @@
 -->
 <resources>
 
-    <integer name="leftFragmentWeight">1</integer>
-    <integer name="rightFragmentWeight">1</integer>
-    <!-- Only one fragment visible at a time -->
-    <integer name="fragmentWeightSum">1</integer>
-    <bool name="tabletLayout">false</bool>
-    <bool name="leftHideable">false</bool>
+	<integer name="leftFragmentWeight">1</integer>
+	<integer name="rightFragmentWeight">1</integer>
+	<!-- Only one fragment visible at a time -->
+	<integer name="fragmentWeightSum">1</integer>
+	<bool name="tabletLayout">false</bool>
+	<bool name="leftHideable">false</bool>
 
 </resources>

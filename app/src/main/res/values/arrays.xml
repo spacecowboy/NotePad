@@ -18,152 +18,152 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- shown to the user -->
-    <string-array name="theme_preference">
-        <item>@string/settings_summary_theme_light</item>
-        <item>@string/settings_summary_theme_dark</item>
-        <item>@string/settings_summary_theme_classic</item>
-        <item>@string/settings_summary_theme_black</item>
-    </string-array>
-    <!-- Used by the code -->
-    <string-array name="themevalues_preference" translatable="false">
-        <item>@string/const_theme_light_ab</item>
-        <item>@string/const_theme_googlenow_dark</item>
-        <item>@string/const_theme_classic</item>
-        <item>@string/const_theme_black</item>
-    </string-array>
-    <string-array name="widget_theme_preference">
-        <item>@string/settings_summary_theme_dark</item>
-        <item>@string/settings_summary_theme_light</item>
-    </string-array>
-    <string-array name="widget_themevalues_preference" tools:ignore="MissingTranslation">
-        <item>@string/const_theme_dark</item>
-        <item>@string/const_theme_light</item>
-    </string-array>
-    <string-array name="sorting_preference">
-        <item>@string/sort_list_alphabetical</item>
-        <item>@string/sort_list_due</item>
-        <item>@string/sort_list_updated</item>
-        <item>@string/sort_list_manual</item>
-    </string-array>
-    <string-array name="sortingvalues_preference" tools:ignore="MissingTranslation">
-        <item>@string/const_alphabetic</item>
-        <item>@string/const_duedate</item>
-        <item>@string/const_modified</item>
-        <item>@string/const_possubsort</item>
-    </string-array>
-    <string-array name="show_list_as">
-        <item>@string/default_style</item>
-        <item>@string/show_items_as_tasks</item>
-        <item>@string/show_items_as_notes</item>
-    </string-array>
-    <string-array name="listtype_preference">
-        <item>@string/show_items_as_tasks</item>
-        <item>@string/show_items_as_notes</item>
-    </string-array>
-    <string-array name="listtypevalues_preference">
-        <item>@string/const_listtype_tasks</item>
-        <item>@string/const_listtype_notes</item>
-    </string-array>
-    <string-array name="sort_list_by">
-        <item>@string/sort_list_default</item>
-        <item>@string/sort_list_alphabetical</item>
-        <item>@string/sort_list_updated</item>
-        <item>@string/sort_list_due</item>
-        <item>@string/sort_list_manual</item>
-    </string-array>
+	<!-- shown to the user -->
+	<string-array name="theme_preference">
+		<item>@string/settings_summary_theme_light</item>
+		<item>@string/settings_summary_theme_dark</item>
+		<item>@string/settings_summary_theme_classic</item>
+		<item>@string/settings_summary_theme_black</item>
+	</string-array>
+	<!-- Used by the code -->
+	<string-array name="themevalues_preference" translatable="false">
+		<item>@string/const_theme_light_ab</item>
+		<item>@string/const_theme_googlenow_dark</item>
+		<item>@string/const_theme_classic</item>
+		<item>@string/const_theme_black</item>
+	</string-array>
+	<string-array name="widget_theme_preference">
+		<item>@string/settings_summary_theme_dark</item>
+		<item>@string/settings_summary_theme_light</item>
+	</string-array>
+	<string-array name="widget_themevalues_preference" tools:ignore="MissingTranslation">
+		<item>@string/const_theme_dark</item>
+		<item>@string/const_theme_light</item>
+	</string-array>
+	<string-array name="sorting_preference">
+		<item>@string/sort_list_alphabetical</item>
+		<item>@string/sort_list_due</item>
+		<item>@string/sort_list_updated</item>
+		<item>@string/sort_list_manual</item>
+	</string-array>
+	<string-array name="sortingvalues_preference" tools:ignore="MissingTranslation">
+		<item>@string/const_alphabetic</item>
+		<item>@string/const_duedate</item>
+		<item>@string/const_modified</item>
+		<item>@string/const_possubsort</item>
+	</string-array>
+	<string-array name="show_list_as">
+		<item>@string/default_style</item>
+		<item>@string/show_items_as_tasks</item>
+		<item>@string/show_items_as_notes</item>
+	</string-array>
+	<string-array name="listtype_preference">
+		<item>@string/show_items_as_tasks</item>
+		<item>@string/show_items_as_notes</item>
+	</string-array>
+	<string-array name="listtypevalues_preference">
+		<item>@string/const_listtype_tasks</item>
+		<item>@string/const_listtype_notes</item>
+	</string-array>
+	<string-array name="sort_list_by">
+		<item>@string/sort_list_default</item>
+		<item>@string/sort_list_alphabetical</item>
+		<item>@string/sort_list_updated</item>
+		<item>@string/sort_list_due</item>
+		<item>@string/sort_list_manual</item>
+	</string-array>
 
-    <string-array name="dateformat_long_values">
-        <item>@string/dateformat_long_1</item>
-        <item>@string/dateformat_long_2</item>
-    </string-array>
+	<string-array name="dateformat_long_values">
+		<item>@string/dateformat_long_1</item>
+		<item>@string/dateformat_long_2</item>
+	</string-array>
 
-    <string-array name="dateformat_short_values">
-        <item>@string/dateformat_short_1</item>
-        <item>@string/dateformat_short_2</item>
-        <item>@string/dateformat_short_3</item>
-        <item>@string/dateformat_short_4</item>
-    </string-array>
+	<string-array name="dateformat_short_values">
+		<item>@string/dateformat_short_1</item>
+		<item>@string/dateformat_short_2</item>
+		<item>@string/dateformat_short_3</item>
+		<item>@string/dateformat_short_4</item>
+	</string-array>
 
-    <!-- <attr name="titleFontFamily" format="enum">
-            <enum name="robotosans" value="0" />
-            <enum name="robotocondensed" value="1" />
-            <enum name="robotolight" value="2" />
-            <enum name="robotothin" value="3" />
-        </attr>
-        <attr name="titleFontStyle" format="enum">
-            <enum name="normal" value="0" />
-            <enum name="bold" value="1" />
-            <enum name="italic" value="2" />
-        </attr> -->
-    <string-array name="fontfamily_entries">
-        <item>Roboto</item>
-        <item>Roboto Condensed</item>
-        <item>Roboto Light</item>
-        <item>Roboto Thin</item>
-    </string-array>
-    <string-array name="fontfamily_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-    <string-array name="fontstyle_entries">
-        <item>@string/normal</item>
-        <item>@string/bold</item>
-        <item>@string/italic</item>
-    </string-array>
-    <string-array name="fontstyle_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-    <string-array name="fontsize_entries">
-        <item>@string/small</item>
-        <item>@string/medium</item>
-        <item>@string/large</item>
-    </string-array>
-    <string-array name="fontsize_values">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
+	<!-- <attr name="titleFontFamily" format="enum">
+			<enum name="robotosans" value="0" />
+			<enum name="robotocondensed" value="1" />
+			<enum name="robotolight" value="2" />
+			<enum name="robotothin" value="3" />
+		</attr>
+		<attr name="titleFontStyle" format="enum">
+			<enum name="normal" value="0" />
+			<enum name="bold" value="1" />
+			<enum name="italic" value="2" />
+		</attr> -->
+	<string-array name="fontfamily_entries">
+		<item>Roboto</item>
+		<item>Roboto Condensed</item>
+		<item>Roboto Light</item>
+		<item>Roboto Thin</item>
+	</string-array>
+	<string-array name="fontfamily_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+		<item>3</item>
+	</string-array>
+	<string-array name="fontstyle_entries">
+		<item>@string/normal</item>
+		<item>@string/bold</item>
+		<item>@string/italic</item>
+	</string-array>
+	<string-array name="fontstyle_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
+	<string-array name="fontsize_entries">
+		<item>@string/small</item>
+		<item>@string/medium</item>
+		<item>@string/large</item>
+	</string-array>
+	<string-array name="fontsize_values">
+		<item>0</item>
+		<item>1</item>
+		<item>2</item>
+	</string-array>
 
-    <string-array name="notification_prio_entries">
-        <item>@string/notification_prio_high</item>
-        <item>@string/standard</item>
-        <item>@string/notification_prio_low</item>
-    </string-array>
-    <string-array name="notification_prio_values">
-        <item>2</item>
-        <item>0</item>
-        <item>-2</item>
-    </string-array>
-    <string-array name="translated_langs" tools:ignore="MissingTranslation">
-        <item>af</item>
-        <item>ar</item>
-        <item>bg</item>
-        <item>cs</item>
-        <item>da</item>
-        <item>de</item>
-        <item>en</item>
-        <item>es</item>
-        <item>fi_FI</item>
-        <item>fr</item>
-        <item>gl</item>
-        <item>hu</item>
-        <item>it</item>
-        <item>ja</item>
-        <item>nl</item>
-        <item>pl</item>
-        <item>pt_BR</item>
-        <item>ru</item>
-        <item>sk</item>
-        <item>sl</item>
-        <item>sv</item>
-        <item>vi</item>
-        <item>zh_CN</item>
-        <item>zh_TW</item>
-    </string-array>
+	<string-array name="notification_prio_entries">
+		<item>@string/notification_prio_high</item>
+		<item>@string/standard</item>
+		<item>@string/notification_prio_low</item>
+	</string-array>
+	<string-array name="notification_prio_values">
+		<item>2</item>
+		<item>0</item>
+		<item>-2</item>
+	</string-array>
+	<string-array name="translated_langs" tools:ignore="MissingTranslation">
+		<item>af</item>
+		<item>ar</item>
+		<item>bg</item>
+		<item>cs</item>
+		<item>da</item>
+		<item>de</item>
+		<item>en</item>
+		<item>es</item>
+		<item>fi_FI</item>
+		<item>fr</item>
+		<item>gl</item>
+		<item>hu</item>
+		<item>it</item>
+		<item>ja</item>
+		<item>nl</item>
+		<item>pl</item>
+		<item>pt_BR</item>
+		<item>ru</item>
+		<item>sk</item>
+		<item>sl</item>
+		<item>sv</item>
+		<item>vi</item>
+		<item>zh_CN</item>
+		<item>zh_TW</item>
+	</string-array>
 
 </resources>

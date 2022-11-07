@@ -91,6 +91,9 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 			EspressoHelper.createNotes(noteNameList);
 		}
 
+		// exit the note editing mode
+		EspressoHelper.navigateUp();
+
 		// a lower number makes it more likely for the test to succeed
 		int minChildCount = 3;
 

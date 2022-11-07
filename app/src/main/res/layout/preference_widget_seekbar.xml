@@ -24,86 +24,86 @@
 <!-- 	Modified to include units and current value / SciencyGuy -->
 
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:baselineAligned="false"
-    android:gravity="center_vertical"
-    android:key="preference_screen"
-    android:minHeight="?android:attr/listPreferredItemHeight"
-    android:paddingLeft="@dimen/preference_screen_side_margin"
-    android:paddingTop="8dp"
-    android:paddingRight="@dimen/preference_screen_side_margin"
-    android:paddingBottom="4dp">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content"
+	android:baselineAligned="false"
+	android:gravity="center_vertical"
+	android:key="preference_screen"
+	android:minHeight="?android:attr/listPreferredItemHeight"
+	android:paddingLeft="@dimen/preference_screen_side_margin"
+	android:paddingTop="8dp"
+	android:paddingRight="@dimen/preference_screen_side_margin"
+	android:paddingBottom="4dp">
 
-    <RelativeLayout
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="0dp"
-        android:layout_marginRight="8dip"
-        android:layout_marginBottom="0dp"
-        android:layout_weight="1">
+	<RelativeLayout
+		android:layout_width="0dp"
+		android:layout_height="wrap_content"
+		android:layout_marginTop="0dp"
+		android:layout_marginRight="8dip"
+		android:layout_marginBottom="0dp"
+		android:layout_weight="1">
 
-        <TextView
-            android:id="@android:id/title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:ellipsize="marquee"
-            android:fadingEdge="horizontal"
-            android:singleLine="true"
-            android:textAppearance="?android:attr/textAppearanceMedium"/>
+		<TextView
+			android:id="@android:id/title"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:ellipsize="marquee"
+			android:fadingEdge="horizontal"
+			android:singleLine="true"
+			android:textAppearance="?android:attr/textAppearanceMedium"/>
 
-        <!-- Preference should place its actual preference widget here. -->
+		<!-- Preference should place its actual preference widget here. -->
 
-        <LinearLayout
-            android:id="@+id/widget_frame"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_below="@android:id/title"
-            android:layout_alignLeft="@android:id/title"
-            android:gravity="center"
-            android:minWidth="50dp"
-            android:orientation="horizontal">
+		<LinearLayout
+			android:id="@+id/widget_frame"
+			android:layout_width="wrap_content"
+			android:layout_height="match_parent"
+			android:layout_below="@android:id/title"
+			android:layout_alignLeft="@android:id/title"
+			android:gravity="center"
+			android:minWidth="50dp"
+			android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/seekBarPrefUnitsLeft"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?android:attr/textColorSecondary">
-            </TextView>
+			<TextView
+				android:id="@+id/seekBarPrefUnitsLeft"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:textColor="?android:attr/textColorSecondary">
+			</TextView>
 
-            <TextView
-                android:id="@+id/seekbarPrefValue"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:text="100"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?android:attr/textColorSecondary"
-                tools:ignore="HardcodedText">
-            </TextView>
+			<TextView
+				android:id="@+id/seekbarPrefValue"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:text="100"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:textColor="?android:attr/textColorSecondary"
+				tools:ignore="HardcodedText">
+			</TextView>
 
-            <TextView
-                android:id="@+id/seekBarPrefUnitsRight"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:paddingLeft="4dp"
-                android:text="%"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="?android:attr/textColorSecondary"
-                tools:ignore="HardcodedText">
+			<TextView
+				android:id="@+id/seekBarPrefUnitsRight"
+				android:layout_width="wrap_content"
+				android:layout_height="match_parent"
+				android:paddingLeft="4dp"
+				android:text="%"
+				android:textAppearance="?android:attr/textAppearanceSmall"
+				android:textColor="?android:attr/textColorSecondary"
+				tools:ignore="HardcodedText">
 
-            </TextView>
-        </LinearLayout>
+			</TextView>
+		</LinearLayout>
 
-        <SeekBar
-            android:id="@+id/prefSeekBar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@android:id/title"
-            android:layout_alignParentRight="true"
-            android:layout_toRightOf="@id/widget_frame"/>
-    </RelativeLayout>
+		<SeekBar
+			android:id="@+id/prefSeekBar"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@android:id/title"
+			android:layout_alignParentRight="true"
+			android:layout_toRightOf="@id/widget_frame"/>
+	</RelativeLayout>
 
 </LinearLayout>

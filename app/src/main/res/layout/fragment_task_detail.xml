@@ -85,7 +85,6 @@
 						android:nextFocusDown="@+id/notificationAdd"/>
 				</com.nononsenseapps.ui.DelegateFrame>
 
-
 				<ImageButton
 					android:id="@+id/dueCancelButton"
 					style="?android:attr/buttonBarButtonStyle"
@@ -97,7 +96,7 @@
 					android:nextFocusDown="@+id/notificationAdd"
 					android:src="?attr/ic_clear_24dp_active"
 					app:tint="?attr/iconTint"
-                    tools:ignore="HardcodedText"/>
+					tools:ignore="HardcodedText"/>
 
 				<Button
 					android:id="@+id/dueDateBox"
@@ -154,7 +153,7 @@
 			</LinearLayout>
 		</RelativeLayout>
 
-		<Space
+		<android.widget.Space
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/editor_vertical_margin"/>
 	</LinearLayout>

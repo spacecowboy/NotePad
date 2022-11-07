@@ -17,12 +17,9 @@
 
 package com.nononsenseapps.notepad;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
@@ -51,6 +48,7 @@ import androidx.legacy.app.ActionBarDrawerToggle;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.github.espiandev.showcaseview.ShowcaseView;
 import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
@@ -90,9 +88,7 @@ import org.androidannotations.annotations.UiThread.Propagation;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import uk.co.senab.actionbarpulltorefresh.library.PullToRefreshAttacher;
 
 @EActivity(resName = "activity_main")
 public class ActivityMain extends FragmentActivity
@@ -141,10 +137,10 @@ public class ActivityMain extends FragmentActivity
 	// Only not if opening note directly
 	private boolean shouldAddToBackStack = true;
 	private Bundle state;
-	private PullToRefreshAttacher pullToRefreshAttacher;
+
 	private boolean shouldRestart = false;
 	private ShowcaseView sv;
-	private PullToRefreshAttacher.OnRefreshListener pullToRefreshListener;
+
 	private FloatingActionButton mFab;
 
 	@Override
@@ -360,10 +356,14 @@ public class ActivityMain extends FragmentActivity
 
 				@Override
 				protected void onPostExecute(Void result) {
-					// Notify PullToRefreshAttacher that the refresh has finished
-					pullToRefreshAttacher.setRefreshComplete();
+					// Notify that the refresh has finished
+					setRefreshOfAllSwipeLayoutsTo(false);
 				}
 			}.execute();
+		} else {
+			// explain to the user why the swipe-refresh was canceled
+			Toast.makeText(this, R.string.no_sync_method_chosen, Toast.LENGTH_SHORT).show();
+			setRefreshOfAllSwipeLayoutsTo(false);
 		}
 	}
 
@@ -420,8 +420,6 @@ public class ActivityMain extends FragmentActivity
 //			 //addTaskInList("", ListHelper.getARealList(this, id_of_the_list));
 //		 });
 
-		// Create a PullToRefreshAttacher instance
-		pullToRefreshAttacher = PullToRefreshAttacher.get(this);
 
 		// Clear possible notifications, schedule future ones
 		final Intent intent = getIntent();
@@ -461,9 +459,7 @@ public class ActivityMain extends FragmentActivity
 			syncStatusReceiver.stopMonitoring();
 		}
 		// deactivate any progress bar
-		if (pullToRefreshAttacher != null) {
-			pullToRefreshAttacher.setRefreshComplete();
-		}
+		setRefreshOfAllSwipeLayoutsTo(false);
 		// Pause sync monitors
 		OrgSyncService.pause(this);
 	}
@@ -507,32 +503,6 @@ public class ActivityMain extends FragmentActivity
 		startActivity(intent);
 	}
 
-	void isOldDonateVersionInstalled() {
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(ActivityMain.this);
-		if (prefs.getBoolean(MIGRATED, false)) {
-			// already migrated
-			return;
-		}
-		try {
-			PackageManager pm = getPackageManager();
-			List<ApplicationInfo> packages = pm.getInstalledApplications(0);
-			for (ApplicationInfo packageInfo : packages) {
-				if (packageInfo.packageName
-						.equals("com.nononsenseapps.notepad_donate")) {
-					migrateDonateUser();
-					// Don't migrate again
-					prefs.edit().putBoolean(MIGRATED, true).commit();
-					// Stop loop
-					break;
-				}
-			}
-		} catch (Exception e) {
-			// Can't allow crashing
-		}
-	}
-
-	@SuppressLint("ValidFragment")
 	@UiThread
 	void migrateDonateUser() {
 		// migrate user
@@ -1254,38 +1224,45 @@ public class ActivityMain extends FragmentActivity
 		}
 	}
 
-	public void addRefreshableView(View view) {
-		// TODO Only if some sync is enabled
-		pullToRefreshAttacher
-				.addRefreshableView(view, getPullToRefreshListener());
+	private ArrayList<SwipeRefreshLayout> swpRefLayouts = new ArrayList<>();
+
+
+	/**
+	 * every {@link TaskListFragment} has its own instance of a {@link SwipeRefreshLayout},
+	 * so here they're all added to a private list. Then, the {@link ActivityMain} will update
+	 * them all when necessary
+	 */
+	public void addSwipeRefreshLayoutToList(SwipeRefreshLayout newSwpRefLayout) {
+		// TODO do this Only if some sync is enabled
+
+		// Sets up a Listener that is invoked when the user performs a swipe-to-refresh gesture.
+		newSwpRefLayout.setOnRefreshListener(
+				() -> {
+					Log.i("NNN", "onRefresh called from SwipeRefreshLayout");
+
+					// This method performs the actual data-refresh operation.
+					// The method must call setRefreshing(false) when it's finished.
+					handleSyncRequest();
+				}
+		);
+		swpRefLayouts.add(newSwpRefLayout);
 	}
 
-	public PullToRefreshAttacher.OnRefreshListener getPullToRefreshListener() {
-		if (pullToRefreshListener == null) {
-			pullToRefreshListener =
-					new PullToRefreshAttacher.OnRefreshListener() {
-						@Override
-						public void onRefreshStarted(View view) {
-							handleSyncRequest();
-						}
-					};
+	/**
+	 * sets the refreshing status of all {@link SwipeRefreshLayout} in this activity:
+	 * FALSE if they should stop the animation, TRUE if they should show it
+	 */
+	private void setRefreshOfAllSwipeLayoutsTo(boolean newState) {
+		for (SwipeRefreshLayout layout : swpRefLayouts) {
+			layout.setRefreshing(newState);
 		}
-		return pullToRefreshListener;
-	}
-
-	public void removeRefreshableView(View view) {
-		pullToRefreshAttacher.removeRefreshableView(view);
-	}
-
-	public PullToRefreshAttacher getPullToRefreshAttacher() {
-		return pullToRefreshAttacher;
 	}
 
 	@UiThread
 	@Override
-	public void onSyncStartStop(final boolean ongoing) {
+	public void onSyncStartStop(final boolean isOngoing) {
 		// Notify PullToRefreshAttacher of the refresh state
-		pullToRefreshAttacher.setRefreshing(ongoing);
+		setRefreshOfAllSwipeLayoutsTo(isOngoing);
 	}
 
 	public static interface ListOpener {

@@ -37,7 +37,7 @@
 
 	<ListView
 		android:id="@android:id/list"
-        style="?attr/ListDividerStyle"
+		style="?attr/ListDividerStyle"
 		android:layout_width="@dimen/listNoDetailWidth"
 		android:layout_height="match_parent"
 		android:layout_gravity="center_horizontal"

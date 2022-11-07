@@ -34,10 +34,9 @@ repositories {
 }
 
 // Version number
-def versionMajor = 5 // Major UI overhauls
-def versionMinor = 7 // Some new functionality
-def versionPatch = 1 // Bug fixes
-def versionBuild = 3 // Bump for dogfood builds, public betas, etc.
+def versionMajor = 7 // Major UI overhauls
+def versionMinor = 0 // Some new functionality
+def versionPatch = 0 // Bug fixes
 
 // Version name from git
 def getVersionName = { ->
@@ -67,7 +66,7 @@ android {
         explainIssues true
         checkTestSources true
         // turn off checking the given issue id's
-        // disable += ['RtlHardcoded', 'MissingSuperCall']
+        disable += ['RtlHardcoded', 'ApplySharedPref']
     }
 
     packagingOptions {
@@ -95,7 +94,7 @@ android {
         applicationId "com.nononsenseapps.notepad"
         minSdkVersion 23 // most people have at least android 7.1 anyway: https://apilevels.com/
         targetSdkVersion 32
-        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild * 10
+        versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100
         versionName getVersionName()
         vectorDrawables.useSupportLibrary = true
 
@@ -122,7 +121,7 @@ android {
             }
         }
     } else {
-        println "No key store defined. Signed release not available..."
+        // println "No key store defined. Signed release not available..."
     }
 }
 
@@ -144,7 +143,6 @@ dependencies {
     // Http library for Google Task Sync, open source & abandoned, should upgrade to retrofit2
     implementation 'com.squareup.retrofit:retrofit:1.9.0'
     // Included projects
-    implementation project(':external:ActionBar-PullToRefresh')
     implementation project(':external:datetimepicker')
     implementation project(':external:drag-sort-listview')
     implementation project(':external:ShowcaseView')
@@ -157,5 +155,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.4.0'
     // Desugaring library, needs android gradle plugin v7.4+ to upgrade
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.0'
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }

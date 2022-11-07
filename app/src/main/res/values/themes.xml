@@ -219,7 +219,6 @@
 		<item name="ListDividerStyle">@style/ListSpaceDividerStyle</item>
 		<item name="ListMarginStyle">@style/ListMarginStyleClassic</item>
 
-
 		<item name="LeftDrawerStyle">@style/LeftDrawerStyleDark</item>
 		<item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleDark</item>
 		<item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleDark
@@ -228,8 +227,7 @@
 		<!-- ShowCaseView -->
 		<item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>
 
-		<!-- Pull to refresh style -->
-		<item name="ptrHeaderStyle">@style/PullToRefreshStyle</item>
+
 	</style>
 
 	<style name="ThemeHoloBlack" parent="@style/ThemeGoogleNowDark">
@@ -261,7 +259,6 @@
 		<item name="content_copy">@drawable/content_copy_dark</item>
 		<item name="ic_add_24dp">@drawable/ic_add_24dp_black_active</item>
 
-
 		<item name="content_paste">@drawable/content_paste_dark</item>
 
 		<item name="content_remove">@drawable/content_remove_light</item>
@@ -281,8 +278,6 @@
 		<item name="expander_open_holo">@drawable/ic_action_big_expander_open_light</item>
 		<item name="expander_close_holo">@drawable/ic_action_big_expander_close_light</item>
 		<item name="list_divider_holo">@drawable/list_divider_holo_light</item>
-
-
 
 		<!-- <item name="viewpager_bg">@color/viewpager_darkgrey</item> -->
 		<item name="viewpager_bg">@color/googlenow_grey_trans</item>
@@ -307,8 +302,7 @@
 		<!-- ShowCaseView -->
 		<item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>
 
-		<!-- Pull to refresh style -->
-		<item name="ptrHeaderStyle">@style/PullToRefreshStyle</item>
+
 	</style>
 
 	<!-- Shows a more condensed note list, with smaller separators, by design! -->

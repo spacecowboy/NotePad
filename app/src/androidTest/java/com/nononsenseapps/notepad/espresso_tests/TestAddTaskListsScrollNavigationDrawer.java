@@ -1,22 +1,16 @@
 package com.nononsenseapps.notepad.espresso_tests;
 
-import static androidx.test.espresso.Espresso.onData;
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.Espresso.openActionBarOverflowOrOptionsMenu;
 import static androidx.test.espresso.Espresso.openContextualActionModeOverflowMenu;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.hasMinimumChildCount;
 import static androidx.test.espresso.matcher.ViewMatchers.isClickable;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static org.hamcrest.Matchers.allOf;
-import static org.hamcrest.Matchers.anything;
 
-import androidx.test.InstrumentationRegistry;
-import androidx.test.espresso.matcher.CursorMatchers;
 import androidx.test.filters.LargeTest;
 
 import com.nononsenseapps.notepad.R;
@@ -31,16 +25,11 @@ public class TestAddTaskListsScrollNavigationDrawer extends BaseTestClass {
 			"adipiscing ", "elit", "sed ", "do ", "eiusmod ", "tempor ", "incididunt ",
 			"ut ", "labore " };
 
-	String SETTINGS_TEXT, SETTINGS_APPEARANCE_TEXT;
-
-	@Before
-	public void initStrings() {
-		SETTINGS_TEXT = myActivityRule.getActivity().getString(R.string.menu_preferences);
-		SETTINGS_APPEARANCE_TEXT = myActivityRule.getActivity().getString(R.string.settings_cat_appearance);
-	}
-
 	@Test
 	public void testAddTaskListsScrollNavigationDrawer() {
+		String SETTINGS_TEXT = myActivityRule.getActivity().getString(R.string.menu_preferences);
+		String SETTINGS_APPEARANCE_TEXT = myActivityRule.getActivity().getString(R.string.settings_cat_appearance);
+
 		EspressoHelper.hideShowCaseViewIfShown();
 
 		for (String name : taskListNames) {
@@ -49,15 +38,14 @@ public class TestAddTaskListsScrollNavigationDrawer extends BaseTestClass {
 		}
 		EspressoHelper.openDrawer();
 
-		onData(CursorMatchers.withRowString("title", "ut "))
-				.inAdapterView(withId(R.id.leftDrawer))
+		onView(allOf(withText("ut "), withId(android.R.id.text1)))
 				.perform(scrollTo())
 				.check(matches(isDisplayed()));
 
 		// open the preferences page and check that it is visible
 		openContextualActionModeOverflowMenu();
 		onView(withText(SETTINGS_TEXT)).perform(click());
-		onView(allOf(withText(SETTINGS_APPEARANCE_TEXT), isClickable()))
+		onView(withText(SETTINGS_APPEARANCE_TEXT))
 				.check(matches(isDisplayed()));
 	}
 }
