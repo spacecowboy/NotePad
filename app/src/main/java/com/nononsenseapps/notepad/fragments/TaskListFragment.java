@@ -511,9 +511,13 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
 	@AfterViews
 	void setupPullToRefresh() {
-		// Since the pull-to-refresh layout is defined in fragment_task_list.xml, only now we
-		// can save it in a variable and add a listener
-		((ActivityMain) getActivity()).initializePullToRefreshLayout();
+		// every list gets its own instance of the swipetorefresh layout
+		var ptrL = (SwipeRefreshLayout)this.getView().findViewById(R.id.ptrLayout);
+
+		// The pull-to-refresh layout is defined in fragment_task_list.xml
+
+		// now we add it to ActivityMain, which will take care of it
+		((ActivityMain) getActivity()).addSwipeRefreshLayoutToList(ptrL);
 	}
 
 	@AfterViews

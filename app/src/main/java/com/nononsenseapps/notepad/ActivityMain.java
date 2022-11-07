@@ -17,12 +17,9 @@
 
 package com.nononsenseapps.notepad;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
-import android.content.pm.ApplicationInfo;
-import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.database.Cursor;
 import android.net.Uri;
@@ -52,7 +49,7 @@ import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 import com.github.espiandev.showcaseview.ShowcaseView;
 import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -91,7 +88,6 @@ import org.androidannotations.annotations.UiThread.Propagation;
 import org.androidannotations.annotations.ViewById;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 @EActivity(resName = "activity_main")
@@ -146,9 +142,6 @@ public class ActivityMain extends FragmentActivity
 	private ShowcaseView sv;
 
 	private FloatingActionButton mFab;
-
-	// it is initialized in the fragment, because it's defined in fragment_task_list.xml
-	SwipeRefreshLayout ptrLayout = null;
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -364,9 +357,13 @@ public class ActivityMain extends FragmentActivity
 				@Override
 				protected void onPostExecute(Void result) {
 					// Notify that the refresh has finished
-					if (ptrLayout!= null) ptrLayout.setRefreshing(false);
+					setRefreshOfAllSwipeLayoutsTo(false);
 				}
 			}.execute();
+		} else {
+			// explain to the user why the swipe-refresh was canceled
+			Toast.makeText(this, R.string.no_sync_method_chosen, Toast.LENGTH_SHORT).show();
+			setRefreshOfAllSwipeLayoutsTo(false);
 		}
 	}
 
@@ -424,7 +421,6 @@ public class ActivityMain extends FragmentActivity
 //		 });
 
 
-
 		// Clear possible notifications, schedule future ones
 		final Intent intent = getIntent();
 		// Clear notification if present
@@ -463,7 +459,7 @@ public class ActivityMain extends FragmentActivity
 			syncStatusReceiver.stopMonitoring();
 		}
 		// deactivate any progress bar
-		if (ptrLayout != null) ptrLayout.setRefreshing(false);
+		setRefreshOfAllSwipeLayoutsTo(false);
 		// Pause sync monitors
 		OrgSyncService.pause(this);
 	}
@@ -1228,15 +1224,19 @@ public class ActivityMain extends FragmentActivity
 		}
 	}
 
-	public void initializePullToRefreshLayout() {
+	private ArrayList<SwipeRefreshLayout> swpRefLayouts = new ArrayList<>();
+
+
+	/**
+	 * every {@link TaskListFragment} has its own instance of a {@link SwipeRefreshLayout},
+	 * so here they're all added to a private list. Then, the {@link ActivityMain} will update
+	 * them all when necessary
+	 */
+	public void addSwipeRefreshLayoutToList(SwipeRefreshLayout newSwpRefLayout) {
 		// TODO do this Only if some sync is enabled
 
-		// because NOW it's available
-		if (ptrLayout == null)
-			ptrLayout = findViewById(R.id.ptrLayout);
-
 		// Sets up a Listener that is invoked when the user performs a swipe-to-refresh gesture.
-		ptrLayout.setOnRefreshListener(
+		newSwpRefLayout.setOnRefreshListener(
 				() -> {
 					Log.i("NNN", "onRefresh called from SwipeRefreshLayout");
 
@@ -1245,13 +1245,24 @@ public class ActivityMain extends FragmentActivity
 					handleSyncRequest();
 				}
 		);
+		swpRefLayouts.add(newSwpRefLayout);
+	}
+
+	/**
+	 * sets the refreshing status of all {@link SwipeRefreshLayout} in this activity:
+	 * FALSE if they should stop the animation, TRUE if they should show it
+	 */
+	private void setRefreshOfAllSwipeLayoutsTo(boolean newState) {
+		for (SwipeRefreshLayout layout : swpRefLayouts) {
+			layout.setRefreshing(newState);
+		}
 	}
 
 	@UiThread
 	@Override
-	public void onSyncStartStop(final boolean ongoing) {
+	public void onSyncStartStop(final boolean isOngoing) {
 		// Notify PullToRefreshAttacher of the refresh state
-		if (ptrLayout != null) ptrLayout.setRefreshing(ongoing);
+		setRefreshOfAllSwipeLayoutsTo(isOngoing);
 	}
 
 	public static interface ListOpener {

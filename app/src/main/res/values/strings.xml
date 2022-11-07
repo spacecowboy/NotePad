@@ -119,6 +119,7 @@
 	<string name="feature_is_WIP">This feature is a W.I.P.</string>
 	<string name="permission_denied">Can not proceed: you denied the permission</string>
 	<string name="special_thanks">Special thanks</string>
+	<string name="no_sync_method_chosen">You did not choose a sync method</string>
 
 	<!--
 		Use few if language need it. In English is the same.
