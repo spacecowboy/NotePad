@@ -45,10 +45,9 @@ If relevant, please say if you're using a phone or a tablet (UI-issues), or what
 You need to put your API keys in a file, like the sample here:
 https://github.com/spacecowboy/NotePad/blob/master/core/assets/secretkeys.properties.sample
 
-But first you will of course need to get yourself a key. Follow the instructions on this page:
-https://developers.google.com/google-apps/tasks/firstapp
-
-Scroll to the section named __Register your project__.
+But first you will of course need to get yourself a key. 
+Follow the instructions on this page:
+https://developers.google.com/tasks/firstapp#register
 
 ## Build the project
 

@@ -233,7 +233,8 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 
 		if (requestCode == PICK_ACCOUNT_CODE) {
 			// the user has confirmed with a valid account
-			accountSelected();
+			String chosenAccountName = data.getStringExtra(AccountManager.KEY_ACCOUNT_NAME);
+			userChoseAnAccountWithName(chosenAccountName);
 			return;
 		}
 
@@ -266,25 +267,23 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	/**
 	 * Called when the user chooses one {@link Account} from the system popup
 	 */
-	private void accountSelected() {
+	private void userChoseAnAccountWithName(String chosenAccountName) {
 		Account[] allAccounts = AccountManager.get(this.activity).getAccountsByType("com.google");
 
-		if (allAccounts.length == 1) {
-			Account chosenAccount = allAccounts[0];
-			if (chosenAccount != null) {
-				Log.d("prefsActivity", "step one");
+		for (var chosenAccount : allAccounts) {
+			if (!chosenAccount.name.equalsIgnoreCase(chosenAccountName)) continue;
 
-				// work continues in callback, method run()
-				AccountManagerCallback<Bundle> callback = (b) -> afterGettingAuthToken(b, chosenAccount);
+			// we got the 1° (and hopefully only) match: proceed
+			Log.d("prefsActivity", "step one");
 
-				// Request user's permission
-				GoogleTasksClient.getAuthTokenAsync(activity, chosenAccount, callback);
-			}
-		} else {
-			// warn the user so we know that it happens
-			// TODO does it even happen ?
-			String msg = this.getString(R.string.unexpected_too_many_accounts, allAccounts.length);
-			Toast.makeText(this.activity, msg, Toast.LENGTH_SHORT).show();
+			// work continues in callback, method afterGettingAuthToken()
+			AccountManagerCallback<Bundle> callback = (b) -> afterGettingAuthToken(b, chosenAccount);
+
+			// Request user's permission
+			GoogleTasksClient.getAuthTokenAsync(activity, chosenAccount, callback);
+
+			// do that only for the 1° match
+			return;
 		}
 	}
 

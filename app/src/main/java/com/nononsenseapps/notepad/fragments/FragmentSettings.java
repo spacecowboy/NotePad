@@ -57,13 +57,11 @@ import java.util.Locale;
 /**
  * Main top level settings fragment
  */
-public class FragmentSettings extends PreferenceFragment implements SharedPreferences
+class FragmentSettings extends PreferenceFragment implements SharedPreferences
         .OnSharedPreferenceChangeListener {
 
     // TODO useless ? you may want to delete this
 
-    private static final int ACTIVITY_CODE_PICK_SD_DIR = 1;
-    private static final int ACTIVITY_CODE_PICK_DROPBOX_DIR = 2;
     private static final int PERMISSION_CODE_GTASKS = 1;
     private static final int PERMISSION_CODE_SDCARD = 2;
     private SwitchPreference preferenceSyncSdCard;
@@ -72,51 +70,7 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
 
 
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
 
-        // Load the preferences from an XML resource
-        // addPreferencesFromResource(R.xml.settings);
-
-        // setLangEntries((ListPreference) findPreference(getString(R.string.const_preference_locale_key)));
-
-        final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
-                (getActivity());
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
-
-        buildGuard();
-        setupAccount(sharedPreferences);
-        setupDirectory(sharedPreferences);
-
-        setupPassword();
-        setupLegacyBackup();
-
-
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        PreferenceManager.getDefaultSharedPreferences(getActivity())
-                .unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case ACTIVITY_CODE_PICK_SD_DIR:
-                if (resultCode == Activity.RESULT_OK) {
-                    saveNewDirectoryPath(data);
-                } else {
-                    disableSdCardSync(getActivity());
-                }
-                break;
-
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-        }
-    }
 
     private void buildGuard() {
         // Disable prefs if this is not correct build
@@ -134,7 +88,7 @@ public class FragmentSettings extends PreferenceFragment implements SharedPrefer
         if (hasSDCardPermissions()) {
             // Start the filepicker
             Intent i = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
-            startActivityForResult(i, ACTIVITY_CODE_PICK_SD_DIR);
+            //startActivityForResult(i, ACTIVITY_CODE_PICK_SD_DIR);
         } else {
             requestSDCardPermissions();
         }
