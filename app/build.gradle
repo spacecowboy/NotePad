@@ -67,7 +67,7 @@ android {
         explainIssues true
         checkTestSources true
         // turn off checking the given issue id's
-        // disable += ['RtlHardcoded', 'MissingSuperCall']
+        disable += ['RtlHardcoded', 'ApplySharedPref']
     }
 
     packagingOptions {

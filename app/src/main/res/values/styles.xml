@@ -151,6 +151,7 @@
 		<item name="android:dividerHeight" tools:ignore="PxUsage">1px</item>
 	</style>
 
+	<!-- Shows a custom background color in the showcaseview (a semi-transparent black) -->
 	<style name="CustomShowcaseTheme" parent="ShowcaseView">
 		<item name="sv_backgroundColor">#AA000000</item>
 	</style>
