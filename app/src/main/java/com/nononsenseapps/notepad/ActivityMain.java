@@ -40,11 +40,11 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.legacy.app.ActionBarDrawerToggle;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -778,7 +778,7 @@ public class ActivityMain extends FragmentActivity
 		// TODO strings
 		if (mDrawerToggle == null) {
 			mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-					R.drawable.ic_drawer_dark, R.string.ok, R.string.about) {
+					R.string.ok, R.string.about) {
 
 				/**
 				 * Called when a drawer has settled in a completely closed
