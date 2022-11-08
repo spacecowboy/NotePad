@@ -17,22 +17,22 @@
 
 package com.nononsenseapps.ui;
 
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
+import android.preference.PreferenceManager;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu.OnMenuItemClickListener;
 import android.widget.TextView;
 
-import com.android.datetimepicker.date.DatePickerDialog;
-import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
-import com.android.datetimepicker.time.RadialPickerLayout;
-import com.android.datetimepicker.time.TimePickerDialog;
-import com.android.datetimepicker.time.TimePickerDialog.OnTimeSetListener;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
+import com.nononsenseapps.notepad.prefs.MainPrefs;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -133,9 +133,9 @@ public class NotificationItemHelper {
 					localTime.setTimeInMillis(not.time);
 				}
 
-				var onDateSetListnr = new OnDateSetListener() {
+				var onDateSetListnr = new DatePickerDialog.OnDateSetListener() {
 					@Override
-					public void onDateSet(DatePickerDialog dialog, int year, int monthOfYear, int dayOfMonth) {
+					public void onDateSet(DatePicker dialog, int year, int monthOfYear, int dayOfMonth) {
 						localTime.set(Calendar.YEAR, year);
 						localTime.set(Calendar.MONTH, monthOfYear);
 						localTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -146,13 +146,24 @@ public class NotificationItemHelper {
 					}
 				};
 
-				final DatePickerDialog datedialog = DatePickerDialog
-						.newInstance(onDateSetListnr,
-								localTime.get(Calendar.YEAR),
-								localTime.get(Calendar.MONTH),
-								localTime.get(Calendar.DAY_OF_MONTH));
+				// choose a dark or white theme depending on the settings
+				final String theme = PreferenceManager
+						.getDefaultSharedPreferences(fragment.getContext())
+						.getString(MainPrefs.KEY_THEME, fragment.getString(R.string.const_theme_light_ab));
+				final int themeResId = theme.contains("light")
+						? android.R.style.Theme_Material_Light_Dialog
+						: android.R.style.Theme_Material_Dialog;
 
-				datedialog.show(fragment.getFragmentManager(), "date");
+				final DatePickerDialog datedialog = new DatePickerDialog(
+						fragment.getContext(),
+						themeResId,
+						onDateSetListnr,
+						localTime.get(Calendar.YEAR),
+						localTime.get(Calendar.MONTH),
+						localTime.get(Calendar.DAY_OF_MONTH));
+				datedialog.setTitle(R.string.select_date);
+
+				datedialog.show();
 
 				// final DialogCalendar datePicker;
 				//
@@ -197,20 +208,17 @@ public class NotificationItemHelper {
 					localTime.setTimeInMillis(not.time);
 				}
 
-				final TimePickerDialog timedialog = fragment.getTimePickerDialog();
-				timedialog.setStartTime(localTime.get(Calendar.HOUR_OF_DAY), localTime.get(Calendar.MINUTE));
-				timedialog.setOnTimeSetListener(new OnTimeSetListener() {
-					@Override
-					public void onTimeSet(RadialPickerLayout view, int hourOfDay, int minute) {
-						localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-						localTime.set(Calendar.MINUTE, minute);
-						not.time = localTime.getTimeInMillis();
-						notTimeButton.setText(not.getLocalTimeText(fragment.getActivity()));
-						not.save(fragment.getActivity(), true);
-					}
-				});
+				TimePickerDialog.OnTimeSetListener onTimeSetListener = (view, hourOfDay, minute) -> {
+					localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+					localTime.set(Calendar.MINUTE, minute);
+					not.time = localTime.getTimeInMillis();
+					notTimeButton.setText(not.getLocalTimeText(fragment.getActivity()));
+					not.save(fragment.getActivity(), true);
+				};
 
-				timedialog.show(fragment.getFragmentManager(), "time");
+				final TimePickerDialog timedialog = fragment.getTimePickerDialog(localTime, onTimeSetListener);
+				timedialog.setTitle(R.string.time);
+				timedialog.show();
 
 				// // Now display time picker
 				// final TimePickerDialogFragment timePicker = fragment
@@ -249,5 +257,15 @@ public class NotificationItemHelper {
 			not.repeats = checkedDays;
 			not.saveInBackground(fragment.getActivity(), true);
 		});
+	}
+
+	/**
+	 * Returns a correctly configured {@link TimePickerDialog} to show in a popup.
+	 * An alternative is {@link com.google.android.material.timepicker.MaterialTimePicker}, which
+	 * is 99% identical, but it requires an app theme with parent="Theme.MaterialComponents",
+	 * which does not work in our app
+	 */
+	private static TimePickerDialog getTimePickerPopup() {
+		return null;
 	}
 }

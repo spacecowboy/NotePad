@@ -16,6 +16,6 @@
  */
 
 include ':app',
-        ':external:datetimepicker',
+        //':external:datetimepicker',
         ':external:drag-sort-listview',
         ':external:ShowcaseView'

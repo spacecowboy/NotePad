@@ -18,6 +18,8 @@
 package com.nononsenseapps.notepad.fragments;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -26,6 +28,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,8 +39,7 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.ShareActionProvider;
@@ -49,10 +51,8 @@ import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
-
-import com.android.datetimepicker.date.DatePickerDialog;
-import com.android.datetimepicker.time.TimePickerDialog;
 import com.github.espiandev.showcaseview.ShowcaseView;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
@@ -62,8 +62,6 @@ import com.nononsenseapps.notepad.R.layout;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
-import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
@@ -87,7 +85,7 @@ import java.util.Calendar;
  * A fragment representing a single Note detail screen.
  */
 @EFragment
-public class TaskDetailFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
+public class TaskDetailFragment extends Fragment {
 
 	public static int LOADER_EDITOR_TASK = 3001;
 	public static int LOADER_EDITOR_TASKLISTS = 3002;
@@ -202,8 +200,6 @@ public class TaskDetailFragment extends Fragment implements DatePickerDialog.OnD
 	// A list id is necessary
 	public static final String ARG_ITEM_LIST_ID = "item_list_id";
 	private static final String SHOWCASED_EDITOR = "showcased_editor_window";
-	// Random identifier
-	private static final String DATE_DIALOG_TAG = "date_9374jf893jd893jt";
 
 	// To override intent values with
 	@InstanceState
@@ -438,12 +434,24 @@ public class TaskDetailFragment extends Fragment implements DatePickerDialog.OnD
 		//final DialogCalendar datePicker;
 		//datePicker.setListener(this);
 		//datePicker.show(getFragmentManager(), DATE_DIALOG_TAG);
-		final DatePickerDialog datedialog = DatePickerDialog.newInstance(
-				this,
+
+		// choose a dark or white theme depending on the settings
+		final String theme = PreferenceManager
+				.getDefaultSharedPreferences(this.getContext())
+				.getString(MainPrefs.KEY_THEME, this.getString(R.string.const_theme_light_ab));
+		final int themeResId = theme.contains("light")
+				? android.R.style.Theme_Material_Light_Dialog
+				: android.R.style.Theme_Material_Dialog;
+
+		var dpDiag = new DatePickerDialog(
+				this.getActivity(),
+				themeResId,
+				this::onDateSet,
 				localTime.get(Calendar.YEAR),
 				localTime.get(Calendar.MONTH),
 				localTime.get(Calendar.DAY_OF_MONTH));
-		datedialog.show(getFragmentManager(), DATE_DIALOG_TAG);
+		dpDiag.setTitle(R.string.select_date);
+		dpDiag.show();
 	}
 
 	// @Override
@@ -465,8 +473,7 @@ public class TaskDetailFragment extends Fragment implements DatePickerDialog.OnD
 	//
 	// }
 
-	@Override
-	public void onDateSet(DatePickerDialog dialog, int year, int monthOfYear, int dayOfMonth) {
+	private void onDateSet(DatePicker dialog, int year, int monthOfYear, int dayOfMonth) {
 		final Calendar localTime = Calendar.getInstance();
 		if (mTask.due != null) {
 			localTime.setTimeInMillis(mTask.due);
@@ -494,6 +501,16 @@ public class TaskDetailFragment extends Fragment implements DatePickerDialog.OnD
 	// mTask.due = time;
 	// setDueText();
 	// }
+
+	/**
+	 * Returns a properly configured {@link DatePickerDialog} to let the user pick a day in
+	 * a calendar view. An alternative very similar to this is
+	 * {@link com.google.android.material.datepicker.MaterialDatePicker} but it requires an app
+	 * theme with parent="Theme.MaterialComponents", which does not work in our app
+	 */
+	private static DatePickerDialog getDatePickerPopup() {
+		return null;
+	}
 
 	private void setDueText() {
 		if (mTask.due == null) {
@@ -774,14 +791,13 @@ public class TaskDetailFragment extends Fragment implements DatePickerDialog.OnD
 	private void deleteAndClose() {
 		if (mTask != null && mTask._id > 0 && !isLocked()) {
 			DialogDeleteTask.showDialog(getFragmentManager(), mTask._id, () -> {
-						// Prevents save attempts
-						mTask = null;
-						// Request a close from activity
-						if (mListener != null) {
-							mListener
-									.closeFragment(TaskDetailFragment.this);
-						}
-					});
+				// Prevents save attempts
+				mTask = null;
+				// Request a close from activity
+				if (mListener != null) {
+					mListener.closeFragment(TaskDetailFragment.this);
+				}
+			});
 		} else {
 			// Prevents save attempts
 			mTask = null;
@@ -916,13 +932,6 @@ public class TaskDetailFragment extends Fragment implements DatePickerDialog.OnD
 		if (mTask != null && isLocked()) {
 			fillUIFromTask();
 		}
-
-		// See if there was a dialog and set listener again
-		Fragment dateDialog = getFragmentManager().findFragmentByTag(
-				DATE_DIALOG_TAG);
-		if (dateDialog != null) {
-			((DatePickerDialog) dateDialog).setOnDateSetListener(this);
-		}
 	}
 
 	// @Override
@@ -955,18 +964,28 @@ public class TaskDetailFragment extends Fragment implements DatePickerDialog.OnD
 	// }
 
 	/**
-	 * Returns an appropriately themed time picker fragment. Up to caller to set
-	 * callback and desired starting time.
+	 * Returns an appropriately themed time picker fragment, also setting the callback and desired
+	 * starting time through the given parameters
 	 */
-	public TimePickerDialog getTimePickerDialog() {
+	public TimePickerDialog getTimePickerDialog(Calendar localTime,
+												TimePickerDialog.OnTimeSetListener listener) {
+		// choose a dark or white theme depending on the settings
 		final String theme = PreferenceManager
 				.getDefaultSharedPreferences(getActivity())
 				.getString(MainPrefs.KEY_THEME, getString(R.string.const_theme_light_ab));
+		final int themeResId = theme.contains("light")
+				? android.R.style.Theme_Material_Light_Dialog
+				: android.R.style.Theme_Material_Dialog;
 
-		final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(
-				null, 0, 0, android.text.format.DateFormat.is24HourFormat(getActivity()));
-		timePickerDialog.setThemeDark(!theme.contains("light"));
-		return timePickerDialog;
+		boolean shouldShowIn24HourMode = DateFormat.is24HourFormat(getActivity());
+		final TimePickerDialog timePickDiag = new TimePickerDialog(
+				this.getActivity(),
+				themeResId,
+				listener, // set the callback for when the user chooses a time
+				localTime.get(Calendar.HOUR_OF_DAY), // set the initial hour & minute
+				localTime.get(Calendar.MINUTE),
+				shouldShowIn24HourMode);
+		return timePickDiag;
 	}
 
 	public Notification getPendingLocationNotification() {
