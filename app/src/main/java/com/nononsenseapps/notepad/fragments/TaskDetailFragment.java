@@ -43,13 +43,14 @@ import android.widget.ScrollView;
 import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
+
 import com.android.datetimepicker.date.DatePickerDialog;
-import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
 import com.android.datetimepicker.time.TimePickerDialog;
 import com.github.espiandev.showcaseview.ShowcaseView;
 import com.nononsenseapps.helpers.TimeFormatter;
@@ -86,13 +87,13 @@ import java.util.Calendar;
  * A fragment representing a single Note detail screen.
  */
 @EFragment
-public class TaskDetailFragment extends Fragment implements OnDateSetListener {
+public class TaskDetailFragment extends Fragment implements DatePickerDialog.OnDateSetListener {
 
 	public static int LOADER_EDITOR_TASK = 3001;
 	public static int LOADER_EDITOR_TASKLISTS = 3002;
 	public static int LOADER_EDITOR_NOTIFICATIONS = 3003;
 
-	LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<Cursor>() {
+	LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<>() {
 		@Override
 		public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
 			if (LOADER_EDITOR_NOTIFICATIONS == id) {
@@ -170,8 +171,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		}
 
 		@Override
-		public void onLoaderReset(Loader<Cursor> arg0) {
-		}
+		public void onLoaderReset(Loader<Cursor> arg0) {}
 	};
 
 	@ViewById(resName = "taskText")
@@ -287,7 +287,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	 * container is null
 	 */
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savInstState) {
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savInstState) {
 		if (container == null) {
 			dontLoad = true;
 			return null;
@@ -323,8 +323,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			}
 			// Fail if still not valid
 			if (getArguments().getLong(ARG_ITEM_LIST_ID, stateListId) < 1) {
-				// throw new InvalidParameterException(
-				// "Must specify a list id to create a note in!");
 				Toast.makeText(getActivity(),
 						"Must specify a list id to create a note in!",
 						Toast.LENGTH_SHORT).show();
@@ -348,13 +346,9 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		final boolean showcasing = showcaseEditor();
 
 		if (!showcasing && openKb) {
-			/**
-			 * Only show keyboard for new/empty notes But not if the showcase
-			 * view is showing
-			 */
+			// Only show keyboard for new/empty notes, but not if the showcaseview is showing
 			taskText.requestFocus();
-			inputManager.showSoftInput(taskText,
-					InputMethodManager.SHOW_IMPLICIT);
+			inputManager.showSoftInput(taskText, InputMethodManager.SHOW_IMPLICIT);
 		}
 	}
 
@@ -419,14 +413,10 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 
 		taskText.addTextChangedListener(new TextWatcher() {
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-									  int count) {
-			}
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-										  int after) {
-			}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
 			@Override
 			public void afterTextChanged(Editable s) {
@@ -448,10 +438,11 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		//final DialogCalendar datePicker;
 		//datePicker.setListener(this);
 		//datePicker.show(getFragmentManager(), DATE_DIALOG_TAG);
-		final DatePickerDialog datedialog = DatePickerDialog
-				.newInstance(this, localTime.get(Calendar.YEAR), localTime
-						.get(Calendar.MONTH), localTime
-						.get(Calendar.DAY_OF_MONTH));
+		final DatePickerDialog datedialog = DatePickerDialog.newInstance(
+				this,
+				localTime.get(Calendar.YEAR),
+				localTime.get(Calendar.MONTH),
+				localTime.get(Calendar.DAY_OF_MONTH));
 		datedialog.show(getFragmentManager(), DATE_DIALOG_TAG);
 	}
 
@@ -560,7 +551,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	public boolean isLocked() {
 		// TODO check and use this
 		boolean hasPassword = SharedPreferencesHelper.isPasswordSet(getActivity());
-		// if (!hasPassword) return false;
+		// if (!hasPassword) return false; // TODO check
 
 		if (mTask != null) {
 			return mTask.locked & mLocked;
@@ -584,15 +575,11 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		}
 		setDueText();
 		taskCompleted.setChecked(mTask.completed != null);
-		taskCompleted.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-										 boolean isChecked) {
-				if (isChecked)
-					mTask.completed = Calendar.getInstance().getTimeInMillis();
-				else
-					mTask.completed = null;
-			}
+		taskCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> {
+			if (isChecked)
+				mTask.completed = Calendar.getInstance().getTimeInMillis();
+			else
+				mTask.completed = null;
 		});
 		// Lock fields
 		setFieldStatus();
@@ -634,14 +621,11 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		String type;
 		if (list.listtype == null) {
 			type = PreferenceManager.getDefaultSharedPreferences(getActivity())
-					.getString(getString(R.string.pref_listtype),
-							getString(R.string.default_listtype));
+					.getString(getString(R.string.pref_listtype), getString(R.string.default_listtype));
 		} else {
 			type = list.listtype;
 		}
-		taskSection.setVisibility(type
-				.equals(getString(R.string.const_listtype_notes)) ? View.GONE
-				: View.VISIBLE);
+		taskSection.setVisibility(type.equals(getString(R.string.const_listtype_notes)) ? View.GONE : View.VISIBLE);
 	}
 
 	@Override
@@ -699,8 +683,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			return true;
 		} else if (itemId == R.id.menu_timemachine) {
 			if (mTask != null && mTask._id > 0) {
-				Intent timeIntent = new Intent(getActivity(),
-						ActivityTaskHistory_.class);
+				Intent timeIntent = new Intent(getActivity(), ActivityTaskHistory_.class);
 				timeIntent.putExtra(Task.Columns._ID, mTask._id);
 				startActivityForResult(timeIntent, 1);
 				// ActivityTaskHistory.start(getActivity(), mTask._id);
@@ -710,12 +693,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			if (mTask != null) {
 				if (mTask.locked) {
 					DialogPassword_ delpf = new DialogPassword_();
-					delpf.setListener(new PasswordConfirmedListener() {
-						@Override
-						public void onPasswordConfirmed() {
-							deleteAndClose();
-						}
-					});
+					delpf.setListener(() -> deleteAndClose());
 					delpf.show(getFragmentManager(), "delete_verify");
 				} else {
 					deleteAndClose();
@@ -738,17 +716,14 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			return true;
 		} else if (itemId == R.id.menu_unlock) {
 			DialogPassword_ pf = new DialogPassword_();
-			pf.setListener(new PasswordConfirmedListener() {
-				@Override
-				public void onPasswordConfirmed() {
-					if (mTask != null) {
-						mTask.locked = false;
-						Toast.makeText(getActivity(), R.string.unlocked, Toast.LENGTH_SHORT).show();
+			pf.setListener(() -> {
+				if (mTask != null) {
+					mTask.locked = false;
+					Toast.makeText(getActivity(), R.string.unlocked, Toast.LENGTH_SHORT).show();
 
-						if (mLocked) {
-							mLocked = false;
-							fillUIFromTask();
-						}
+					if (mLocked) {
+						mLocked = false;
+						fillUIFromTask();
 					}
 				}
 			});
@@ -781,11 +756,11 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			if (menu.findItem(R.id.menu_share) != null)
 				menu.findItem(R.id.menu_share).setVisible(visible);
 			if (menu.findItem(R.id.menu_lock) != null)
-				menu.findItem(R.id.menu_lock).setVisible(
-						visible && mTask != null && !mTask.locked);
+				menu.findItem(R.id.menu_lock)
+						.setVisible(visible && mTask != null && !mTask.locked);
 			if (menu.findItem(R.id.menu_unlock) != null)
-				menu.findItem(R.id.menu_unlock).setVisible(
-						visible && mTask != null && mTask.locked);
+				menu.findItem(R.id.menu_unlock)
+						.setVisible(visible && mTask != null && mTask.locked);
 		}
 	}
 
@@ -798,17 +773,13 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 
 	private void deleteAndClose() {
 		if (mTask != null && mTask._id > 0 && !isLocked()) {
-			DialogDeleteTask.showDialog(getFragmentManager(), mTask._id,
-					new DialogConfirmedListener() {
-						@Override
-						public void onConfirm() {
-							// Prevents save attempts
-							mTask = null;
-							// Request a close from activity
-							if (mListener != null) {
-								mListener
-										.closeFragment(TaskDetailFragment.this);
-							}
+			DialogDeleteTask.showDialog(getFragmentManager(), mTask._id, () -> {
+						// Prevents save attempts
+						mTask = null;
+						// Request a close from activity
+						if (mListener != null) {
+							mListener
+									.closeFragment(TaskDetailFragment.this);
 						}
 					});
 		} else {
@@ -890,7 +861,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	}
 
 	@Override
-	public void onAttach(Activity activity) {
+	public void onAttach(@NonNull Activity activity) {
 		super.onAttach(activity);
 		if (dontLoad) {
 			return;
@@ -909,7 +880,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	}
 
 	@Override
-	public void onSaveInstanceState(final Bundle state) {
+	public void onSaveInstanceState(@NonNull final Bundle state) {
 		super.onSaveInstanceState(state);
 	}
 
@@ -928,8 +899,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			not.view = nv;
 
 			// Setup all the listeners etc
-			NotificationItemHelper
-					.setup(this, notificationList, nv, not, mTask);
+			NotificationItemHelper.setup(this, notificationList, nv, not, mTask);
 
 			notificationList.addView(nv);
 		}
@@ -958,13 +928,11 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	// @Override
 	public void onTimeTravel(Intent data) {
 		if (taskText != null) {
-			taskText.setText(data
-					.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
+			taskText.setText(data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
 		}
 		// Need to set here also for password to work
 		if (mTask != null) {
-			mTask.setText(data
-					.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
+			mTask.setText(data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
 		}
 	}
 
@@ -991,13 +959,12 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	 * callback and desired starting time.
 	 */
 	public TimePickerDialog getTimePickerDialog() {
-		final String theme = PreferenceManager.getDefaultSharedPreferences(
-				getActivity()).getString(MainPrefs.KEY_THEME,
-				getString(R.string.const_theme_light_ab));
+		final String theme = PreferenceManager
+				.getDefaultSharedPreferences(getActivity())
+				.getString(MainPrefs.KEY_THEME, getString(R.string.const_theme_light_ab));
 
 		final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(
-				null, 0, 0,
-				android.text.format.DateFormat.is24HourFormat(getActivity()));
+				null, 0, 0, android.text.format.DateFormat.is24HourFormat(getActivity()));
 		timePickerDialog.setThemeDark(!theme.contains("light"));
 		return timePickerDialog;
 	}
@@ -1006,8 +973,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		return pendingLocationNotification;
 	}
 
-	public void setPendingLocationNotification(
-			Notification pendingLocationNotification) {
+	public void setPendingLocationNotification(Notification pendingLocationNotification) {
 		this.pendingLocationNotification = pendingLocationNotification;
 	}
 }
