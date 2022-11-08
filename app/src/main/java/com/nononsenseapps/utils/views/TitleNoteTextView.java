@@ -24,15 +24,19 @@ import android.text.Selection;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.Spanned;
+import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
+import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.nononsenseapps.helpers.Log;
 import com.nononsenseapps.notepad.R;
 
 /**
@@ -61,25 +65,26 @@ public class TitleNoteTextView extends TextView {
 	public TitleNoteTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-		TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
-				R.styleable.StyledTextView, 0, 0);
+		TypedArray attributes = context
+				.getTheme()
+				.obtainStyledAttributes(attrs, R.styleable.StyledTextView, 0, 0);
 
 		try {
-			mTitleRelativeSize = a.getFloat(
-					R.styleable.StyledTextView_titleRelativeSize, 1.0f);
-			mTitleFontFamily = a.getInteger(
-					R.styleable.StyledTextView_titleFontFamily, 0);
-			mTitleFontStyle = a.getInteger(
-					R.styleable.StyledTextView_titleFontStyle, 0);
-			mBodyFontFamily = a.getInteger(
-					R.styleable.StyledTextView_bodyFontFamily, 0);
-			mStyledText = a.getString(R.styleable.StyledTextView_styledText);
-			mLinkify = a.getBoolean(R.styleable.StyledTextView_linkify, false);
+			mTitleRelativeSize = attributes
+					.getFloat(R.styleable.StyledTextView_titleRelativeSize, 1.0f);
+			mTitleFontFamily = attributes
+					.getInteger(R.styleable.StyledTextView_titleFontFamily, 0);
+			mTitleFontStyle = attributes
+					.getInteger(R.styleable.StyledTextView_titleFontStyle, 0);
+			mBodyFontFamily = attributes
+					.getInteger(R.styleable.StyledTextView_bodyFontFamily, 0);
+			mStyledText = attributes.getString(R.styleable.StyledTextView_styledText);
+			mLinkify = attributes.getBoolean(R.styleable.StyledTextView_linkify, false);
+
 			primaryColor = super.getCurrentTextColor();
-			secondaryColor = a.getColor(
-					R.styleable.StyledTextView_secondaryColor, primaryColor);
+			secondaryColor = attributes.getColor(R.styleable.StyledTextView_secondaryColor, primaryColor);
 		} finally {
-			a.recycle();
+			attributes.recycle();
 		}
 
 		titleSizeSpan = new RelativeSizeSpan(mTitleRelativeSize);
