@@ -945,23 +945,27 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 				convertView = inflater.inflate(getViewLayout(position), parent,
 						false);
 				if (itemType == getItemViewType(position)) {
-					setPrefsOnView((TitleNoteTextView) convertView.findViewById(android.R.id.text1));
+					setPrefsOnView(convertView.findViewById(android.R.id.text1));
 				}
 			}
 			return super.getView(position, convertView, parent);
 		}
 
 		private void setPrefsOnView(final TitleNoteTextView view) {
-			view.setTitleFontFamily(Integer.parseInt(prefs.getString(
-					context.getString(R.string.pref_list_title_fontfamily), "1")));
-			view.setTitleFontStyle(Integer.parseInt(prefs.getString(
-					context.getString(R.string.pref_list_title_fontstyle), "1")));
-			view.setBodyFontFamily(Integer.parseInt(prefs.getString(
-					context.getString(R.string.pref_list_body_fontfamily), "0")));
-			view.setLinkify(prefs.getBoolean(
-					context.getString(R.string.pref_list_links), true));
-			view.setTheTextSize(Integer.parseInt(prefs.getString(
-					context.getString(R.string.pref_list_fontsize), "1")));
+			String fontPref1 = prefs.getString(context.getString(R.string.pref_list_title_fontfamily), "1");
+			view.setTitleFontFamily(Integer.parseInt(fontPref1));
+
+			String fontPref2 = prefs.getString(context.getString(R.string.pref_list_title_fontstyle), "1");
+			view.setTitleFontStyle(Integer.parseInt(fontPref2));
+
+			String fontPref3 = prefs.getString(context.getString(R.string.pref_list_body_fontfamily), "0");
+			view.setBodyFontFamily(Integer.parseInt(fontPref3));
+
+			boolean shouldShowLinks = prefs.getBoolean(context.getString(R.string.pref_list_links), true);
+			view.setLinkify(shouldShowLinks);
+
+			String fontPref4 = prefs.getString(context.getString(R.string.pref_list_fontsize), "1");
+			view.setTheTextSize(Integer.parseInt(fontPref4));
 		}
 
 	}

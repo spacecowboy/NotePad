@@ -42,10 +42,11 @@ import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.ShareActionProvider;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
@@ -654,8 +655,7 @@ public class TaskDetailFragment extends Fragment {
 
 		if (item != null) {
 			// Fetch and store ShareActionProvider
-			// TODO use MenuItemCompat.getActionProvider(item);
-			mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+			mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
 			setShareIntent("");
 		}
 	}
@@ -669,11 +669,13 @@ public class TaskDetailFragment extends Fragment {
 			}
 
 			try {
-				mShareActionProvider.setShareIntent(
-						new Intent(Intent.ACTION_SEND).setType("text/plain")
-								.putExtra(Intent.EXTRA_TEXT, text)
-								.putExtra(Intent.EXTRA_SUBJECT,
-										text.substring(0, titleEnd)));
+				// TODO try sharing a note with the email app: it should put the title as subject,
+				//  in my opinion
+				Intent i = new Intent(Intent.ACTION_SEND)
+						.setType("text/plain")
+						.putExtra(Intent.EXTRA_TEXT, text)
+						.putExtra(Intent.EXTRA_SUBJECT, text.substring(0, titleEnd));
+				mShareActionProvider.setShareIntent(i);
 			} catch (RuntimeException e) {
 				// Can crash when too many transactions overflow the buffer
 				Log.d("nononsensenotes", e.getLocalizedMessage());
