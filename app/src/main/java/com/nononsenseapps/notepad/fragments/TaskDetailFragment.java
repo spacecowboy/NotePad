@@ -53,7 +53,6 @@ import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
 import com.github.espiandev.showcaseview.ShowcaseView;
-import com.google.android.material.datepicker.MaterialDatePicker;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
@@ -93,7 +92,7 @@ public class TaskDetailFragment extends Fragment {
 	public static int LOADER_EDITOR_NOTIFICATIONS = 3003;
 
 	LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<>() {
-		@Override
+		@Override @NonNull
 		public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
 			if (LOADER_EDITOR_NOTIFICATIONS == id) {
 				return new CursorLoader(getActivity(), Notification.URI,
@@ -170,7 +169,7 @@ public class TaskDetailFragment extends Fragment {
 		}
 
 		@Override
-		public void onLoaderReset(Loader<Cursor> arg0) {}
+		public void onLoaderReset(@NonNull Loader<Cursor> arg0) {}
 	};
 
 	@ViewById(resName = "taskText")
@@ -216,9 +215,6 @@ public class TaskDetailFragment extends Fragment {
 	// AND with task.locked. If result is true, note is locked and has not been
 	// unlocked, otherwise good to show
 	private boolean mLocked = true;
-
-	// This is the notification we are setting a location for
-	private Notification pendingLocationNotification = null;
 
 	private OnFragmentInteractionListener mListener;
 	private ShareActionProvider mShareActionProvider;
@@ -468,11 +464,6 @@ public class TaskDetailFragment extends Fragment {
 	// setDueText();
 	// }
 	//
-	// @Override
-	// public void onDialogTimeCancel() {
-	// // TODO Auto-generated method stub
-	//
-	// }
 
 	private void onDateSet(DatePicker dialog, int year, int monthOfYear, int dayOfMonth) {
 		final Calendar localTime = Calendar.getInstance();
@@ -490,11 +481,6 @@ public class TaskDetailFragment extends Fragment {
 
 		mTask.due = localTime.getTimeInMillis();
 		setDueText();
-
-		// Dont ask for time for due date
-		// final TimePickerDialogFragment picker = getTimePickerFragment();
-		// picker.setListener(this);
-		// picker.show(getFragmentManager(), "time");
 	}
 
 	// @Override
@@ -554,12 +540,8 @@ public class TaskDetailFragment extends Fragment {
 			addNotification(not);
 
 			// And scroll to bottom. takes 300ms for item to appear.
-			editScrollView.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					editScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-				}
-			}, 300);
+			editScrollView.postDelayed(
+					() -> editScrollView.fullScroll(ScrollView.FOCUS_DOWN), 300);
 		}
 	}
 
@@ -599,30 +581,9 @@ public class TaskDetailFragment extends Fragment {
 			else
 				mTask.completed = null;
 		});
+
 		// Lock fields
 		setFieldStatus();
-
-		// Open keyboard on new notes so users can start typing directly
-		// need small delay (100ms) for it to open consistently
-		// TODO
-		// if (mTask._id < 1) {
-		// (new Handler()).postDelayed(new Runnable() {
-		// public void run() {
-		// MotionEvent e = MotionEvent.obtain(
-		// SystemClock.uptimeMillis(),
-		// SystemClock.uptimeMillis(),
-		// MotionEvent.ACTION_DOWN, 0, 0, 0);
-		// taskText.dispatchTouchEvent(e);
-		// e.recycle();
-		// e = MotionEvent.obtain(SystemClock.uptimeMillis(),
-		// SystemClock.uptimeMillis(), MotionEvent.ACTION_UP,
-		// 0, 0, 0);
-		// taskText.dispatchTouchEvent(e);
-		// e.recycle();
-		// }
-		// }, 100);
-		// }
-
 	}
 
 	/**
@@ -647,7 +608,7 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasks_detail, menu);
 
 		// Locate MenuItem with ShareActionProvider
@@ -948,26 +909,11 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	/**
-	 * Returns an appropriately themed time picker fragment
-	 */
-	// public TimePickerDialogFragment getTimePickerFragment() {
-	// final String theme = PreferenceManager.getDefaultSharedPreferences(
-	// getActivity()).getString(MainPrefs.KEY_THEME,
-	// getString(R.string.const_theme_light_ab));
-	// if (theme.contains("light")) {
-	// return TimePickerDialogFragment
-	// .newInstance(R.style.BetterPickersDialogFragment_Light);
-	// }
-	// else {
-	// // dark
-	// return TimePickerDialogFragment
-	// .newInstance(R.style.BetterPickersDialogFragment);
-	// }
-	// }
-
-	/**
-	 * Returns an appropriately themed time picker fragment, also setting the callback and desired
-	 * starting time through the given parameters
+	 * Returns an appropriately themed {@link TimePickerDialog}, which will be shown in a
+	 * popup, also setting the callback and desired starting time through the given parameters.
+	 * An alternative is {@link com.google.android.material.timepicker.MaterialTimePicker}, which
+	 * is 99% identical, but it requires an app theme with parent="Theme.MaterialComponents",
+	 * which does not work in our app, due to the auto-generated code of the annotations library
 	 */
 	public TimePickerDialog getTimePickerDialog(Calendar localTime,
 												TimePickerDialog.OnTimeSetListener listener) {
@@ -990,11 +936,4 @@ public class TaskDetailFragment extends Fragment {
 		return timePickDiag;
 	}
 
-	public Notification getPendingLocationNotification() {
-		return pendingLocationNotification;
-	}
-
-	public void setPendingLocationNotification(Notification pendingLocationNotification) {
-		this.pendingLocationNotification = pendingLocationNotification;
-	}
 }

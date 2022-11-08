@@ -126,129 +126,72 @@ public class NotificationItemHelper {
 
 		// Date button
 		notDateButton.setOnClickListener(v -> {
-			if (!fragment.isLocked()) {
-
-				final Calendar localTime = Calendar.getInstance();
-				if (not.time != null) {
-					localTime.setTimeInMillis(not.time);
-				}
-
-				var onDateSetListnr = new DatePickerDialog.OnDateSetListener() {
-					@Override
-					public void onDateSet(DatePicker dialog, int year, int monthOfYear, int dayOfMonth) {
-						localTime.set(Calendar.YEAR, year);
-						localTime.set(Calendar.MONTH, monthOfYear);
-						localTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-
-						not.time = localTime.getTimeInMillis();
-						notDateButton.setText(not.getLocalDateText(fragment.getActivity()));
-						not.save(fragment.getActivity(), true);
-					}
-				};
-
-				// choose a dark or white theme depending on the settings
-				final String theme = PreferenceManager
-						.getDefaultSharedPreferences(fragment.getContext())
-						.getString(MainPrefs.KEY_THEME, fragment.getString(R.string.const_theme_light_ab));
-				final int themeResId = theme.contains("light")
-						? android.R.style.Theme_Material_Light_Dialog
-						: android.R.style.Theme_Material_Dialog;
-
-				final DatePickerDialog datedialog = new DatePickerDialog(
-						fragment.getContext(),
-						themeResId,
-						onDateSetListnr,
-						localTime.get(Calendar.YEAR),
-						localTime.get(Calendar.MONTH),
-						localTime.get(Calendar.DAY_OF_MONTH));
-				datedialog.setTitle(R.string.select_date);
-
-				datedialog.show();
-
-				// final DialogCalendar datePicker;
-				//
-				// if (mTask != null && mTask.due != null) {
-				// datePicker = DialogCalendar.getInstance(mTask.due);
-				// }
-				// else {
-				// datePicker = DialogCalendar.getInstance();
-				// }
-				// datePicker.setListener(new DateSetListener() {
-				//
-				// @Override
-				// public void onDateSet(long time) {
-				// final Calendar localTime = Calendar.getInstance();
-				// localTime.setTimeInMillis(time);
-				// if (not.time != null) {
-				// final Calendar notTime = Calendar.getInstance();
-				// notTime.setTimeInMillis(not.time);
-				// localTime.set(Calendar.HOUR_OF_DAY,
-				// notTime.get(Calendar.HOUR_OF_DAY));
-				// localTime.set(Calendar.MINUTE,
-				// notTime.get(Calendar.MINUTE));
-				// }
-				//
-				// not.time = localTime.getTimeInMillis();
-				// notDateButton.setText(not.getLocalDateText(fragment
-				// .getActivity()));
-				// not.save(fragment.getActivity(), true);
-				// }
-				// });
-				//
-				// datePicker.show(fragment.getFragmentManager(), "date");
-
+			if (fragment.isLocked()) {
+				return;
 			}
+
+			final Calendar localTime = Calendar.getInstance();
+			if (not.time != null) {
+				localTime.setTimeInMillis(not.time);
+			}
+
+			var onDateSetListnr = new DatePickerDialog.OnDateSetListener() {
+				@Override
+				public void onDateSet(DatePicker dialog, int year, int monthOfYear, int dayOfMonth) {
+					localTime.set(Calendar.YEAR, year);
+					localTime.set(Calendar.MONTH, monthOfYear);
+					localTime.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+
+					not.time = localTime.getTimeInMillis();
+					notDateButton.setText(not.getLocalDateText(fragment.getActivity()));
+					not.save(fragment.getActivity(), true);
+				}
+			};
+
+			// choose a dark or white theme depending on the settings
+			final String theme = PreferenceManager
+					.getDefaultSharedPreferences(fragment.getContext())
+					.getString(MainPrefs.KEY_THEME, fragment.getString(R.string.const_theme_light_ab));
+			final int themeResId = theme.contains("light")
+					? android.R.style.Theme_Material_Light_Dialog
+					: android.R.style.Theme_Material_Dialog;
+
+			final DatePickerDialog datedialog = new DatePickerDialog(
+					fragment.getContext(),
+					themeResId,
+					onDateSetListnr,
+					localTime.get(Calendar.YEAR),
+					localTime.get(Calendar.MONTH),
+					localTime.get(Calendar.DAY_OF_MONTH));
+			datedialog.setTitle(R.string.select_date);
+
+			datedialog.show();
 		});
+
 		// Time button
 		notTimeButton.setOnClickListener(v -> {
-			if (!fragment.isLocked()) {
-				// Display time picker
-				final Calendar localTime = Calendar.getInstance();
-				if (not.time != null) {
-					localTime.setTimeInMillis(not.time);
-				}
-
-				TimePickerDialog.OnTimeSetListener onTimeSetListener = (view, hourOfDay, minute) -> {
-					localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-					localTime.set(Calendar.MINUTE, minute);
-					not.time = localTime.getTimeInMillis();
-					notTimeButton.setText(not.getLocalTimeText(fragment.getActivity()));
-					not.save(fragment.getActivity(), true);
-				};
-
-				final TimePickerDialog timedialog = fragment.getTimePickerDialog(localTime, onTimeSetListener);
-				timedialog.setTitle(R.string.time);
-				timedialog.show();
-
-				// // Now display time picker
-				// final TimePickerDialogFragment timePicker = fragment
-				// .getTimePickerFragment();
-				// timePicker.setListener(new TimePickerDialogHandler() {
-				// @Override
-				// public void onDialogTimeSet(int hourOfDay, int minute) {
-				// final Calendar localTime = Calendar.getInstance();
-				// if (not.time != null) {
-				// localTime.setTimeInMillis(not.time);
-				// }
-				// localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-				// localTime.set(Calendar.MINUTE, minute);
-				//
-				// not.time = localTime.getTimeInMillis();
-				//
-				// notTimeButton.setText(not.getLocalTimeText(fragment
-				// .getActivity()));
-				//
-				// not.save(fragment.getActivity(), true);
-				// }
-				//
-				// @Override
-				// public void onDialogTimeCancel() {
-				// }
-				//
-				// });
-				//
-				// timePicker.show(fragment.getFragmentManager(), "time");
+			if (fragment.isLocked()) {
+				return;
 			}
+
+			// Display time picker
+			final Calendar localTime = Calendar.getInstance();
+			if (not.time != null) {
+				localTime.setTimeInMillis(not.time);
+			}
+
+			TimePickerDialog.OnTimeSetListener onTimeSetListener = (view, hourOfDay, minute) -> {
+				localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+				localTime.set(Calendar.MINUTE, minute);
+				not.time = localTime.getTimeInMillis();
+				notTimeButton.setText(not.getLocalTimeText(fragment.getActivity()));
+				not.save(fragment.getActivity(), true);
+			};
+
+			final TimePickerDialog timedialog = fragment
+					.getTimePickerDialog(localTime, onTimeSetListener);
+			timedialog.setTitle(R.string.time);
+			timedialog.show();
 		});
 
 		WeekDaysView days = nv.findViewById(R.id.weekdays);
@@ -257,15 +200,5 @@ public class NotificationItemHelper {
 			not.repeats = checkedDays;
 			not.saveInBackground(fragment.getActivity(), true);
 		});
-	}
-
-	/**
-	 * Returns a correctly configured {@link TimePickerDialog} to show in a popup.
-	 * An alternative is {@link com.google.android.material.timepicker.MaterialTimePicker}, which
-	 * is 99% identical, but it requires an app theme with parent="Theme.MaterialComponents",
-	 * which does not work in our app
-	 */
-	private static TimePickerDialog getTimePickerPopup() {
-		return null;
 	}
 }
