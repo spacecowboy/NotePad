@@ -281,7 +281,10 @@ public class TitleNoteTextView extends TextView {
 					setText(text, BufferType.SPANNABLE);
 
 					if (mLinkify) {
+						// this adds the clickable links to the notes in the lists. adding a custom
+						// method to open those links would start from here, but we don't need it
 						Linkify.addLinks(this, Linkify.ALL);
+
 						// Make sure links dont steal click focus everywhere
 						setMovementMethod(null);
 					}
