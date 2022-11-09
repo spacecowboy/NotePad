@@ -1065,7 +1065,7 @@ public class ActivityMain extends FragmentActivity
 	private void showcaseDrawerPress() {
 		// only show on first boot
 		if (alreadyShowcasedDrawer) {
-			 return;
+			return;
 		}
 
 		showTheShowCaseView(this, R.id.drawer_menu_createlist,
@@ -1137,35 +1137,23 @@ public class ActivityMain extends FragmentActivity
 			setIntent(intent);
 			// Replace editor fragment
 			getSupportFragmentManager().beginTransaction()
-					.setCustomAnimations(R.anim.slide_in_top,
-							R.anim.slide_out_bottom).replace(R.id.fragment2,
-							TaskDetailFragment_.getInstance(text, listId))
+					.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom)
+					.replace(R.id.fragment2, TaskDetailFragment_.getInstance(text, listId))
 					.commitAllowingStateLoss();
 			taskHint.setVisibility(View.GONE);
 		} else {
 			// Open an activity
-
-			// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-			// Log.d("nononsenseapps animation", "Animating");
-			// intent.putExtra(ANIMATEEXIT, true);
-			// startActivity(
-			// intent,
-			// ActivityOptions.makeCustomAnimation(this,
-			// R.anim.activity_slide_in_left,
-			// R.anim.activity_slide_out_left).toBundle());
-			// }
-			// else {
 			startActivity(intent);
-			// }
 		}
 	}
 
 	@Override
 	public void closeFragment(final Fragment fragment) {
 		if (fragment2 != null) {
-			getSupportFragmentManager().beginTransaction()
-					.setCustomAnimations(R.anim.slide_in_top,
-							R.anim.slide_out_bottom).remove(fragment)
+			getSupportFragmentManager()
+					.beginTransaction()
+					.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom)
+					.remove(fragment)
 					.commitAllowingStateLoss();
 			taskHint.setAlpha(0f);
 			taskHint.setVisibility(View.VISIBLE);
@@ -1218,8 +1206,8 @@ public class ActivityMain extends FragmentActivity
 		}
 	}
 
+	// holds all the swipe-to-refresh layouts of the various TaskListFragments
 	private ArrayList<SwipeRefreshLayout> swpRefLayouts = new ArrayList<>();
-
 
 	/**
 	 * every {@link TaskListFragment} has its own instance of a {@link SwipeRefreshLayout},
@@ -1259,7 +1247,7 @@ public class ActivityMain extends FragmentActivity
 		setRefreshOfAllSwipeLayoutsTo(isOngoing);
 	}
 
-	public static interface ListOpener {
-		public void openList(final long id);
+	public interface ListOpener {
+		void openList(final long id);
 	}
 }

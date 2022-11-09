@@ -366,6 +366,7 @@ public class TaskDetailFragment extends Fragment {
 				// Maybe this works ?
 				// (switch to appcompatactivity, then in onCreate() you run the following)
 				// Toolbar tb = (Toolbar) activity.getSupportActionBar().getCustomView();
+				// Toolbar tb = activity.findViewById(androidx.appcompat.R.id.action_bar);
 				// TapTarget.forToolbarOverflow(tb,...)
 				android.R.id.home,
 				R.string.showcase_timemachine_title,
