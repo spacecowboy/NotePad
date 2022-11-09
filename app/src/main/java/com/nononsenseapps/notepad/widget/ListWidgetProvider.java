@@ -186,7 +186,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		final long listId = settings.getLong(ListWidgetConfig.KEY_LIST, -1);
 		final String listTitle = settings.getString(
 				ListWidgetConfig.KEY_LIST_TITLE,
-				context.getString(R.string.app_name));
+				context.getString(R.string.app_name_short));
 		rv.setTextViewText(R.id.titleButton, listTitle);
 
 		// Hide header if we should

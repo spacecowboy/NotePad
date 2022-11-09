@@ -17,7 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-	<string name="app_name">Бележки</string>
+	<string name="app_name_short">Бележки</string>
 	<string name="title_create">Нова бележка</string>
 	<string name="timemachine">Машина на времето</string>
 	<string name="time">Време</string>

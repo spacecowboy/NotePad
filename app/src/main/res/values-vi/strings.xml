@@ -17,7 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-	<string name="app_name">Ghi chú</string>
+	<string name="app_name_short">Ghi chú</string>
 	<string name="title_create">Ghi chú mới</string>
 	<string name="timemachine">Máy thời gian</string>
 	<string name="time">Thời gian</string>

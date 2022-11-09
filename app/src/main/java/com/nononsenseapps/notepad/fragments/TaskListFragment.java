@@ -56,7 +56,6 @@ import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
 import com.nononsenseapps.helpers.SyncHelper;
-import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
@@ -651,7 +650,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 					final ClipboardManager clipboard = (ClipboardManager) getActivity()
 							.getSystemService(Context.CLIPBOARD_SERVICE);
 					clipboard.setPrimaryClip(ClipData.newPlainText(
-							getString(R.string.app_name), getShareText()));
+							getString(R.string.app_name_short), getShareText()));
 					try {
 						Toast.makeText(
 										getActivity(),

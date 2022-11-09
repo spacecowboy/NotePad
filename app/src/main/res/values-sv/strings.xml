@@ -17,7 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-	<string name="app_name">Anteckningar</string>
+	<string name="app_name_short">Anteckningar</string>
 	<string name="title_create">Ny anteckning</string>
 	<string name="timemachine">Tidsmaskin</string>
 	<string name="time">Tid</string>
