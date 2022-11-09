@@ -511,7 +511,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	@AfterViews
 	void setupPullToRefresh() {
 		// every list gets its own instance of the swipetorefresh layout
-		var ptrL = (SwipeRefreshLayout)this.getView().findViewById(R.id.ptrLayout);
+		var ptrL = (SwipeRefreshLayout) this.getView().findViewById(R.id.ptrLayout);
 
 		// The pull-to-refresh layout is defined in fragment_task_list.xml
 
@@ -652,12 +652,10 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 					clipboard.setPrimaryClip(ClipData.newPlainText(
 							getString(R.string.app_name_short), getShareText()));
 					try {
-						Toast.makeText(
-										getActivity(),
-										getResources().getQuantityString(
+						Toast.makeText(getActivity(), getResources().getQuantityString(
 												R.plurals.notecopied_msg, tasks.size(),
-												tasks.size()), Toast.LENGTH_SHORT)
-								.show();
+												tasks.size()),
+										Toast.LENGTH_SHORT).show();
 					} catch (Exception e) {
 						// Protect against faulty translations
 					}
@@ -676,12 +674,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						delpf.show(getFragmentManager(), "multi_delete_verify");
 					} else {
 						DialogDeleteTask.showDialog(getFragmentManager(), -1,
-								new DialogConfirmedListener() {
-									@Override
-									public void onConfirm() {
-										pListener.onPasswordConfirmed();
-									}
-								});
+								() -> pListener.onPasswordConfirmed());
 					}
 				} else if (itemId == R.id.menu_switch_list) {
 					// show move to list dialog

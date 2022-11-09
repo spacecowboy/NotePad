@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.notepad;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -50,8 +51,8 @@ import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.github.espiandev.showcaseview.ShowcaseView;
-import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NotificationHelper;
@@ -77,7 +78,6 @@ import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
 import com.nononsenseapps.util.SyncGtaskHelper;
-import com.nononsenseapps.utils.ViewsHelper;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -139,7 +139,7 @@ public class ActivityMain extends FragmentActivity
 	private Bundle state;
 
 	private boolean shouldRestart = false;
-	private ShowcaseView sv;
+
 
 	private FloatingActionButton mFab;
 
@@ -778,14 +778,14 @@ public class ActivityMain extends FragmentActivity
 		// TODO strings
 		if (mDrawerToggle == null) {
 			mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-					R.string.ok, R.string.about) {
+					android.R.string.ok, R.string.about) {
 
 				/**
 				 * Called when a drawer has settled in a completely closed
 				 * state.
 				 */
 				public void onDrawerClosed(View view) {
-					getActionBar().setTitle(R.string.app_name);
+					getActionBar().setTitle(R.string.app_name_short);
 					isDrawerClosed = true;
 					invalidateOptionsMenu(); // creates call to
 					// onPrepareOptionsMenu()
@@ -1022,66 +1022,60 @@ public class ActivityMain extends FragmentActivity
 	}
 
 	/**
+	 * Create, configure and show a view to highlight a functionality, using an appropriate
+	 * library. The view is shown above the given {@link Activity} and features a title and a
+	 * short description
+	 */
+	public static void showTheShowCaseView(Activity activity, int idOfTheViewToHighlight,
+										   int titleStringId, int descriptionStringId) {
+		// TODO can *you* make it prettier ? See also https://github.com/KeepSafe/TapTargetView
+		var target2 = TapTarget
+				.forView(activity.findViewById(idOfTheViewToHighlight),
+						activity.getString(titleStringId),
+						activity.getString(descriptionStringId))
+				.outerCircleAlpha(0.9f)
+				.drawShadow(true)
+				.cancelable(true) // tap outside the circle to dismiss the showcaseView
+				.textColor(R.color.accent);
+
+		TapTargetView.showFor(activity, target2);
+	}
+
+	/**
 	 * On first load, show some functionality hints
 	 */
 	private void showcaseDrawer() {
 		if (alreadyShowcased) {
 			return;
 		}
-		final ConfigOptions options = new ConfigOptions();
 
-		// the "OK" button is useless, and it even overlaps with the navigation bar on the bottom!
-		options.noButton = true;
-		options.shotType = ShowcaseView.TYPE_NO_LIMIT;
-		options.block = true;
-		// Used in saving state
-		options.showcaseId = 1;
-		// close the showcase even if the user does not click exactly on the button
-		options.hideOnClickOutside = true;
-		final int vertDp = ViewsHelper.convertDip2Pixels(this, 200);
-		final int horDp = ViewsHelper.convertDip2Pixels(this, 200);
-		sv = ShowcaseView
-				.insertShowcaseViewWithType(ShowcaseView.ITEM_ACTION_HOME,
-						android.R.id.home, this, R.string.showcase_main_title,
-						R.string.showcase_main_msg, options);
-		sv.animateGesture(0, vertDp, horDp, vertDp);
+		showTheShowCaseView(this,
+				android.R.id.home,
+				R.string.showcase_main_title,
+				R.string.showcase_main_msg);
 
-		PreferenceManager.getDefaultSharedPreferences(this).edit()
-				.putBoolean(SHOWCASED_MAIN, true).commit();
+		PreferenceManager
+				.getDefaultSharedPreferences(this)
+				.edit()
+				.putBoolean(SHOWCASED_MAIN, true)
+				.commit();
 		alreadyShowcased = true;
 	}
 
 	private void showcaseDrawerPress() {
 		// only show on first boot
 		if (alreadyShowcasedDrawer) {
-			return;
+			 return;
 		}
 
-		final int vertDp = ViewsHelper.convertDip2Pixels(this, 110);
-		final int horDp = ViewsHelper.convertDip2Pixels(this, 60);
+		showTheShowCaseView(this, R.id.drawer_menu_createlist,
+				R.string.showcase_drawer_title, R.string.showcase_drawer_msg);
 
-		if (sv != null) {
-			sv.setText(R.string.showcase_drawer_title,
-					R.string.showcase_drawer_msg);
-			sv.setShowcasePosition(horDp, vertDp);
-			sv.show();
-		} else {
-			final ConfigOptions options = new ConfigOptions();
-			// it's useless, and it even overlaps with the navigation bar on the bottom!
-			options.noButton = true;
-			options.shotType = ShowcaseView.TYPE_NO_LIMIT;
-			options.block = true;
-			// close the showcase even if the user does not click exactly on the button
-			options.hideOnClickOutside = true;
-			// Used in saving state
-			options.showcaseId = 2;
-			sv = ShowcaseView.insertShowcaseView(horDp, vertDp, this,
-					R.string.showcase_drawer_title,
-					R.string.showcase_drawer_msg, options);
-			sv.show();
-		}
-		PreferenceManager.getDefaultSharedPreferences(this).edit()
-				.putBoolean(SHOWCASED_DRAWER, true).commit();
+		PreferenceManager
+				.getDefaultSharedPreferences(this)
+				.edit()
+				.putBoolean(SHOWCASED_DRAWER, true)
+				.commit();
 		alreadyShowcasedDrawer = true;
 	}
 

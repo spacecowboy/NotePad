@@ -143,9 +143,10 @@ dependencies {
     implementation 'org.cowboyprogrammer:orgparser:1.3.1'
     // Http library for Google Task Sync, open source & abandoned, should upgrade to retrofit2
     implementation 'com.squareup.retrofit:retrofit:1.9.0'
-    // Included projects, open source & abandoned
+    // for manual sorting, local source copy, open source & abandoned
     implementation project(':external:drag-sort-listview')
-    implementation project(':external:ShowcaseView')
+    // for highlighting functionality on 1° launch, open source & up to date
+    implementation 'com.getkeepsafe.taptargetview:taptargetview:1.13.3'
     // annotations library, open source & abandoned
     annotationProcessor "org.androidannotations:androidannotations:4.8.0"
     implementation "org.androidannotations:androidannotations-api:4.8.0"

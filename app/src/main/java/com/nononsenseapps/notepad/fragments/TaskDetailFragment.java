@@ -52,8 +52,8 @@ import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
-import com.github.espiandev.showcaseview.ShowcaseView;
 import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.ActivityTaskHistory_;
@@ -358,22 +358,18 @@ public class TaskDetailFragment extends Fragment {
 			return false;
 		}
 
-		// options to configure the showcase view
-		final var options = new ShowcaseView.ConfigOptions();
-		options.shotType = ShowcaseView.TYPE_NO_LIMIT;
-		options.block = true;
-		options.hideOnClickOutside = true; // mandatory to make tests work
-		// the "OK" button is useless, and it even overlaps with the navigation bar on the bottom!
-		options.noButton = true;
-
-		ShowcaseView sv = ShowcaseView.insertShowcaseViewWithType(
-				ShowcaseView.ITEM_ACTION_OVERFLOW, // focus on the overflow menu, the "vertical ..."
-				0, // ignored because we focus on the overflow menu
-				this.getActivity(), // show the view above this fragment's activity
+		ActivityMain.showTheShowCaseView(
+				this.getActivity(),
+				// it would be better to focus the showcaseview on the overflow menu (the 3
+				// vertical dots) but TapTargetView needs a toolbar, which needs appcompatactivity,
+				// which need Theme.AppCompat, which needs ...
+				// Maybe this works ?
+				// (switch to appcompatactivity, then in onCreate() you run the following)
+				// Toolbar tb = (Toolbar) activity.getSupportActionBar().getCustomView();
+				// TapTarget.forToolbarOverflow(tb,...)
+				android.R.id.home,
 				R.string.showcase_timemachine_title,
-				R.string.showcase_timemachine_msg,
-				options);
-		sv.show();
+				R.string.showcase_timemachine_msg);
 
 		PreferenceManager.getDefaultSharedPreferences(getActivity())
 				.edit()
@@ -614,7 +610,6 @@ public class TaskDetailFragment extends Fragment {
 
 		// Locate MenuItem with ShareActionProvider
 		MenuItem item = menu.findItem(R.id.menu_share);
-
 		if (item != null) {
 			// Fetch and store ShareActionProvider
 			mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
