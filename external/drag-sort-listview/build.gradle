@@ -27,7 +27,7 @@ buildscript {
 apply plugin: 'com.android.library'
 
 dependencies {
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "androidx.cursoradapter:cursoradapter:1.0.0"
 }
 
 android {
