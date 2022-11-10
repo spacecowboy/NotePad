@@ -14,8 +14,10 @@ import androidx.test.espresso.AmbiguousViewMatcherException;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.github.espiandev.showcaseview.ShowcaseView;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.nononsenseapps.notepad.R;
+
+import org.junit.Assert;
 
 
 public class EspressoHelper {
@@ -90,11 +92,11 @@ public class EspressoHelper {
 	}
 
 	/**
-	 * @return TRUE if the {@link ShowcaseView} is currently shown, FALSE otherwise
+	 * @return TRUE if the {@link TapTargetView} is currently shown, FALSE otherwise
 	 */
 	private static Boolean isShowCaseOverlayVisible() {
 		try {
-			onView(is(instanceOf(ShowcaseView.class)))
+			onView(instanceOf(TapTargetView.class))
 					.check(matches(isDisplayed()));
 			return true;
 		} catch (AmbiguousViewMatcherException ignored) {
@@ -107,13 +109,29 @@ public class EspressoHelper {
 	}
 
 	/**
-	 * If the {@link ShowcaseView} is shown, touch the screen to hide it, so that tests
+	 * If the {@link TapTargetView} is shown, touch the screen to hide it, so that tests
 	 * can then interact with the app.
 	 */
 	public static void hideShowCaseViewIfShown() {
 		if (EspressoHelper.isShowCaseOverlayVisible()) {
-			// clicking somewhere on the screen is enough to hide it
-			onView(isRoot()).perform(click());
+			// if it is there, it's highlighting one of these views => click on them to dismiss it
+			try {
+				// if the "add list" button is displayed, click on it and you're done
+				onView(withId(R.id.drawer_menu_createlist))
+						.check(matches(isDisplayed()))
+						.perform(click());
+				return;
+			} catch (Exception ignored) { }
+
+			try {
+				// if that did not work, try clicking on the home button of the toolbar
+				onView(withId(android.R.id.home))
+						.check(matches(isDisplayed()))
+						.perform(click());
+				return;
+			} catch (Exception ignored) {}
+
+			Assert.fail("Could not dismiss the TapTargetView");
 		}
 	}
 
