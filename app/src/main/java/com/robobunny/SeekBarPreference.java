@@ -145,7 +145,7 @@ public class SeekBarPreference extends Preference implements
 			layout = mInflater.inflate(
 					R.layout.preference_widget_seekbar, parent, false);
 		} catch (Exception e) {
-			NnnLogger.error(SeekBarPreference.class,"Error creating seek bar preference:");
+			NnnLogger.error(SeekBarPreference.class, "Error creating seek bar preference:");
 			NnnLogger.exception(e);
 		}
 
@@ -194,7 +194,7 @@ public class SeekBarPreference extends Preference implements
 			unitsLeft.setText(mUnitsLeft);
 
 		} catch (Exception e) {
-			NnnLogger.error(SeekBarPreference.class,"Error updating seek bar preference");
+			NnnLogger.error(SeekBarPreference.class, "Error updating seek bar preference");
 			NnnLogger.exception(e);
 		}
 

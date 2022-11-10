@@ -37,7 +37,7 @@ public final /* used to be abstract! */ class ActivityBase extends AppCompatActi
 	private final SharedPreferences.OnSharedPreferenceChangeListener mThemeLocaleChangeListener =
 			(sharedPreferences, key) -> {
 
-					onThemeOrLocaleChange();
+				onThemeOrLocaleChange();
 
 			};
 

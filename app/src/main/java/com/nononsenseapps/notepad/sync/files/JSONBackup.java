@@ -66,7 +66,7 @@ public class JSONBackup {
 	@NonNull
 	public static String getBackupFilePath(@NonNull Context ctx) {
 		var backupDir = ctx.getExternalFilesDir("Backups");
-		var backupFile = new File(backupDir,"backup.json");
+		var backupFile = new File(backupDir, "backup.json");
 
 		// TODO the old code saved the backup JSON file in the external storage directory. It is
 		//  more convenient, but to do it we need the user's permission. Eventually we should

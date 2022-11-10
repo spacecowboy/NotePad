@@ -53,7 +53,7 @@ public class GoogleTasksClient {
 	}
 
 	public static String getAuthToken(AccountManager accountManager, Account account, boolean notifyAuthFailure) throws AuthenticatorException, OperationCanceledException, IOException {
-		NnnLogger.debugOnly(GoogleTasksClient.class,"getAuthToken");
+		NnnLogger.debugOnly(GoogleTasksClient.class, "getAuthToken");
 		String authToken = null;
 		// Might be invalid in the cache
 		authToken = accountManager.blockingGetAuthToken(account, OAUTH_SCOPE, notifyAuthFailure);

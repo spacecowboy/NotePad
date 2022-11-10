@@ -92,7 +92,6 @@ public class DialogPasswordSettings extends DialogFragment implements DialogInte
 		confirmPasswordText = (EditText) dialog.findViewById(R.id.tempPassword2);
 
 
-
 		currentPasswordText.addTextChangedListener(new TextWatcher() {
 			@Override
 			public void beforeTextChanged(CharSequence s, int start, int count, int after) {

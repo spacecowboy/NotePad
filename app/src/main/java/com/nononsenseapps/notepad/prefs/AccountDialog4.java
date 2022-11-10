@@ -87,7 +87,7 @@ public class AccountDialog4 extends DialogFragment implements
 	 */
 	public void accountSelected(final Account account) {
 		if (account != null) {
-			NnnLogger.debugOnly(AccountDialog4.class,"step one");
+			NnnLogger.debugOnly(AccountDialog4.class, "step one");
 			this.account = account;
 			// Request user's permission
 			GoogleTasksClient.getAuthTokenAsync(activity, account, this);
@@ -102,7 +102,7 @@ public class AccountDialog4 extends DialogFragment implements
 	@Override
 	public void run(AccountManagerFuture<Bundle> future) {
 		try {
-			NnnLogger.debugOnly(AccountDialog4.class,"step two");
+			NnnLogger.debugOnly(AccountDialog4.class, "step two");
 			// If the user has authorized
 			// your application to use the
 			// tasks API
@@ -113,7 +113,7 @@ public class AccountDialog4 extends DialogFragment implements
 			NnnLogger.debugOnly(AccountDialog4.class, "step two-b: " + token);
 
 			if (token != null && !token.equals("") && account != null) {
-				NnnLogger.debugOnly(AccountDialog4.class,"step three: " + account.name);
+				NnnLogger.debugOnly(AccountDialog4.class, "step three: " + account.name);
 				SharedPreferences customSharedPreference = PreferenceManager
 						.getDefaultSharedPreferences(activity);
 				customSharedPreference.edit()

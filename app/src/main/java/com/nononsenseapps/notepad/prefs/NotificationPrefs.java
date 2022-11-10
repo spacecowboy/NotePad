@@ -42,16 +42,15 @@ public class NotificationPrefs extends PreferenceFragment {
 	}
 
 	// TODO add a settings button to carry the user to the right page in the device's settings app
-	public static void OnClickAssociaSistema(Context context)
-	{
+	public static void showRequestIgnoreBatteryOptimizations(Context context) {
 		PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
 
 		boolean ok = pm.isIgnoringBatteryOptimizations(context.getPackageName());
-		if(ok) return;
+		if (ok) return;
 
-		Intent myIntent = new Intent();
-		myIntent.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-		context.startActivity(myIntent);
+		Intent i = new Intent();
+		i.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+		context.startActivity(i);
 	}
 
 }

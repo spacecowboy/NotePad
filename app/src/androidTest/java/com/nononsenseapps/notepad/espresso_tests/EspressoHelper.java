@@ -121,7 +121,7 @@ public class EspressoHelper {
 						.check(matches(isDisplayed()))
 						.perform(click());
 				return;
-			} catch (Exception ignored) { }
+			} catch (Exception ignored) {}
 
 			try {
 				// if that did not work, try clicking on the home button of the toolbar

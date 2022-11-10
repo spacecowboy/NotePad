@@ -105,7 +105,7 @@ public class BackupPrefs extends PreferenceFragment {
 				preference -> {
 					DialogRestoreBackup.showDialog(getFragmentManager(),
 							() -> {
-								bgTask = new RestoreBackupTask(super.getContext(),backupMaker);
+								bgTask = new RestoreBackupTask(super.getContext(), backupMaker);
 								bgTask.execute();
 							});
 					return true;

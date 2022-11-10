@@ -78,7 +78,7 @@ public class GoogleTaskSync {
 					(accountManager, account, NOTIFY_AUTH_FAILURE), Config
 					.getGtasksApiKey(context), account.name);
 
-			NnnLogger.debugOnly(GoogleTaskSync.class,"AuthToken acquired, we are connected...");
+			NnnLogger.debugOnly(GoogleTaskSync.class, "AuthToken acquired, we are connected...");
 
 			// IF full sync, download since start of all time
 			// Temporary fix for delete all bug

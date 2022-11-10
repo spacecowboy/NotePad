@@ -42,7 +42,7 @@ public final class NnnLogger {
 	 * Logs the given error message with tag "NNN". If you have an {@link Exception} object,
 	 * please use {@link NnnLogger#exception(Exception)} instead
 	 *
-	 * @param caller the class who's calling this function. Its name is added to the message
+	 * @param caller  the class who's calling this function. Its name is added to the message
 	 * @param message the additional message sent to logcat
 	 */
 	public static void error(@NonNull Class caller, @NonNull String message) {
@@ -54,7 +54,7 @@ public final class NnnLogger {
 	 * Logs the given message with tag "NNN", but only in debug mode and if
 	 * {@link Config#LOGGING} is set
 	 *
-	 * @param caller the class who's calling this function. Its name is added to the message
+	 * @param caller  the class who's calling this function. Its name is added to the message
 	 * @param message the additional message sent to logcat
 	 */
 	public static void debugOnly(@NonNull Class caller, @NonNull String message) {

@@ -357,7 +357,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 	 * Used by Espresso tests to remove the whole database
 	 * when cleaning up after tests
 	 */
-	public static void resetDatabase(Context context){
+	public static void resetDatabase(Context context) {
 		context.deleteDatabase(DatabaseHandler.DATABASE_NAME);
 		singleton = new DatabaseHandler(context);
 		DatabaseHandler.getInstance(context).getWritableDatabase();

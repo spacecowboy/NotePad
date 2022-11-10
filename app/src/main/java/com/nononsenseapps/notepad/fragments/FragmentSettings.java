@@ -58,176 +58,173 @@ import java.util.Locale;
  * Main top level settings fragment
  */
 class FragmentSettings extends PreferenceFragment implements SharedPreferences
-        .OnSharedPreferenceChangeListener {
+		.OnSharedPreferenceChangeListener {
 
-    // TODO useless ? you may want to delete this
-
-
-    private SwitchPreference preferenceSyncSdCard;
-    private SwitchPreference preferenceSyncGTasks;
-
-    private void setupDirectory(final SharedPreferences sharedPreferences) {
-        preferenceSyncSdCard = (SwitchPreference) findPreference(getString(-1));//R.string.const_preference_sdcard_enabled_key));
-        setSdDirectorySummary(sharedPreferences);
-    }
+	// TODO useless ? you may want to delete this
 
 
+	private SwitchPreference preferenceSyncSdCard;
+	private SwitchPreference preferenceSyncGTasks;
+
+	private void setupDirectory(final SharedPreferences sharedPreferences) {
+		preferenceSyncSdCard = (SwitchPreference) findPreference(getString(-1));//R.string.const_preference_sdcard_enabled_key));
+		setSdDirectorySummary(sharedPreferences);
+	}
 
 
-    private void setSdDirectorySummary(final SharedPreferences sharedPreferences) {
-        preferenceSyncSdCard.setSummary(sharedPreferences.getString(SyncPrefs.KEY_SD_DIR_URI,
-                SDSynchronizer.getDefaultOrgDir(getContext())));
-    }
+	private void setSdDirectorySummary(final SharedPreferences sharedPreferences) {
+		preferenceSyncSdCard.setSummary(sharedPreferences.getString(SyncPrefs.KEY_SD_DIR_URI,
+				SDSynchronizer.getDefaultOrgDir(getContext())));
+	}
 
 
-    @SuppressLint("CommitPrefEdits")
-    private void saveNewDirectoryPath(Intent data) {
-        File path = new File(data.getData().getPath());
-        if (path.exists() && path.isDirectory() && path.canWrite()) {
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
-                    (getActivity());
-            sharedPreferences.edit().putString(SyncPrefs.KEY_SD_DIR_URI, path.toString()).commit();
-            setSdDirectorySummary(sharedPreferences);
-        } else {
-            Toast.makeText(getActivity(), R.string.cannot_write_to_directory, Toast.LENGTH_SHORT)
-                    .show();
-            disableSdCardSync(getActivity());
-        }
-    }
+	@SuppressLint("CommitPrefEdits")
+	private void saveNewDirectoryPath(Intent data) {
+		File path = new File(data.getData().getPath());
+		if (path.exists() && path.isDirectory() && path.canWrite()) {
+			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
+					(getActivity());
+			sharedPreferences.edit().putString(SyncPrefs.KEY_SD_DIR_URI, path.toString()).commit();
+			setSdDirectorySummary(sharedPreferences);
+		} else {
+			Toast.makeText(getActivity(), R.string.cannot_write_to_directory, Toast.LENGTH_SHORT)
+					.show();
+			disableSdCardSync(getActivity());
+		}
+	}
 
 
-    private void setupAccount(SharedPreferences sharedPreferences) {
-        preferenceSyncGTasks = (SwitchPreference) findPreference(getString(-1));//R.string.const_preference_gtask_enabled_key));
-        setAccountSummary(sharedPreferences);
-    }
+	private void setupAccount(SharedPreferences sharedPreferences) {
+		preferenceSyncGTasks = (SwitchPreference) findPreference(getString(-1));//R.string.const_preference_gtask_enabled_key));
+		setAccountSummary(sharedPreferences);
+	}
 
 
+	private void setupPassword() {
+		Preference preference = findPreference(getString(R.string.const_preference_password_key));
+		if (preference != null) {
+			preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					DialogPasswordSettings.showDialog(((AppCompatActivity) getActivity())
+							.getSupportFragmentManager());
+					return true;
+				}
+			});
+		}
+	}
 
-    private void setupPassword() {
-        Preference preference = findPreference(getString(R.string.const_preference_password_key));
-        if (preference != null) {
-            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    DialogPasswordSettings.showDialog(((AppCompatActivity) getActivity())
-                            .getSupportFragmentManager());
-                    return true;
-                }
-            });
-        }
-    }
+	private void setupLegacyBackup() {
+		Preference preference = findPreference(getString(R.string
+				.const_preference_legacybackup_key));
+		if (preference != null) {
+			preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
+				@Override
+				public boolean onPreferenceClick(Preference preference) {
+					DialogRestoreBackup.showDialog(getFragmentManager(), new DialogConfirmBaseV11
+							.DialogConfirmedListener() {
 
-    private void setupLegacyBackup() {
-        Preference preference = findPreference(getString(R.string
-                .const_preference_legacybackup_key));
-        if (preference != null) {
-            preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-                @Override
-                public boolean onPreferenceClick(Preference preference) {
-                    DialogRestoreBackup.showDialog(getFragmentManager(), new DialogConfirmBaseV11
-                            .DialogConfirmedListener() {
+						@Override
+						public void onConfirm() {
+							// (JSON) Backup.importLegacyBackup(getActivity());
+						}
 
-                        @Override
-                        public void onConfirm() {
-                            // (JSON) Backup.importLegacyBackup(getActivity());
-                        }
+					});
+					return true;
+				}
+			});
+		}
+	}
 
-                    });
-                    return true;
-                }
-            });
-        }
-    }
+	private void bindPreferenceSummaryToValue(@StringRes int key) {
+		Preference preference = findPreference(getString(key));
+		if (preference != null) {
+			// Set change listener
+			preference.setOnPreferenceChangeListener(PreferenceHelper.sSummaryUpdater);
+			// Trigger the listener immediately with the preference's  current value.
+			PreferenceHelper.sSummaryUpdater.onPreferenceChange(preference, PreferenceManager
+					.getDefaultSharedPreferences(preference.getContext()).getString(preference
+							.getKey(), ""));
+		}
+	}
 
-    private void bindPreferenceSummaryToValue(@StringRes int key) {
-        Preference preference = findPreference(getString(key));
-        if (preference != null) {
-            // Set change listener
-            preference.setOnPreferenceChangeListener(PreferenceHelper.sSummaryUpdater);
-            // Trigger the listener immediately with the preference's  current value.
-            PreferenceHelper.sSummaryUpdater.onPreferenceChange(preference, PreferenceManager
-                    .getDefaultSharedPreferences(preference.getContext()).getString(preference
-                            .getKey(), ""));
-        }
-    }
+	private void setLangEntries(ListPreference prefLang) {
+		ArrayList<CharSequence> entries = new ArrayList<>();
+		ArrayList<CharSequence> values = new ArrayList<>();
 
-    private void setLangEntries(ListPreference prefLang) {
-        ArrayList<CharSequence> entries = new ArrayList<>();
-        ArrayList<CharSequence> values = new ArrayList<>();
+		entries.add(getString(R.string.localedefault));
+		values.add("");
 
-        entries.add(getString(R.string.localedefault));
-        values.add("");
+		String[] langs = getResources().getStringArray(R.array.translated_langs);
 
-        String[] langs = getResources().getStringArray(R.array.translated_langs);
+		for (String lang : langs) {
+			Locale l;
+			if (lang.length() == 5) {
+				l = new Locale(lang.substring(0, 2), lang.substring(3, 5));
+			} else {
+				l = new Locale(lang.substring(0, 2));
+			}
 
-        for (String lang : langs) {
-            Locale l;
-            if (lang.length() == 5) {
-                l = new Locale(lang.substring(0, 2), lang.substring(3, 5));
-            } else {
-                l = new Locale(lang.substring(0, 2));
-            }
+			entries.add(l.getDisplayName(l));
+			values.add(lang);
+		}
+		prefLang.setEntries(entries.toArray(new CharSequence[entries.size()]));
+		prefLang.setEntryValues(values.toArray(new CharSequence[values.size()]));
 
-            entries.add(l.getDisplayName(l));
-            values.add(lang);
-        }
-        prefLang.setEntries(entries.toArray(new CharSequence[entries.size()]));
-        prefLang.setEntryValues(values.toArray(new CharSequence[values.size()]));
+		// Set summary
+		prefLang.setSummary(prefLang.getEntry());
+	}
 
-        // Set summary
-        prefLang.setSummary(prefLang.getEntry());
-    }
+	/**
+	 * Called when a shared preference is changed, added, or removed. This
+	 * may be called even if a preference is set to its existing value.
+	 * <p/>
+	 * <p>This callback will be run on your main thread.
+	 *
+	 * @param sharedPreferences The {@link SharedPreferences} that received
+	 *                          the change.
+	 * @param key               The key of the preference that was changed, added, or
+	 */
+	@Override
+	public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+		try {
+			if (getActivity().isFinishing()) {
+				return;
+			}
 
-    /**
-     * Called when a shared preference is changed, added, or removed. This
-     * may be called even if a preference is set to its existing value.
-     * <p/>
-     * <p>This callback will be run on your main thread.
-     *
-     * @param sharedPreferences The {@link SharedPreferences} that received
-     *                          the change.
-     * @param key               The key of the preference that was changed, added, or
-     */
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        try {
-            if (getActivity().isFinishing()) {
-                return;
-            }
-
-            if (key.equals(SyncPrefs.KEY_SYNC_ENABLE)) {
-                final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
-                if (enabled) {
-                    //showAccountDialog();
-                } else {
-                    SyncGtaskHelper.toggleSync(getActivity(), sharedPreferences);
-                    // Synchronize view also
-                    if (preferenceSyncGTasks.isChecked()) {
-                        preferenceSyncGTasks.setChecked(false);
-                    }
-                }
-            } else if (key.equals(SyncPrefs.KEY_ACCOUNT)) {
-                setAccountSummary(sharedPreferences);
-            } else if (key.equals(SyncPrefs.KEY_SD_ENABLE)) {
-                final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
-                if (enabled) {
+			if (key.equals(SyncPrefs.KEY_SYNC_ENABLE)) {
+				final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
+				if (enabled) {
+					//showAccountDialog();
+				} else {
+					SyncGtaskHelper.toggleSync(getActivity(), sharedPreferences);
+					// Synchronize view also
+					if (preferenceSyncGTasks.isChecked()) {
+						preferenceSyncGTasks.setChecked(false);
+					}
+				}
+			} else if (key.equals(SyncPrefs.KEY_ACCOUNT)) {
+				setAccountSummary(sharedPreferences);
+			} else if (key.equals(SyncPrefs.KEY_SD_ENABLE)) {
+				final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
+				if (enabled) {
 //                     showFilePicker();
-                } else {
-                    // Restart the service (started in activities)
-                    OrgSyncService.stop(getActivity());
-                    // Synchronize view also
-                    if (preferenceSyncSdCard.isChecked()) {
-                        preferenceSyncSdCard.setChecked(false);
-                    }
-                }
-            }
-        } catch (IllegalStateException ignored) {
-            // In case isFinishing isn't guard enough
-        }
-    }
+				} else {
+					// Restart the service (started in activities)
+					OrgSyncService.stop(getActivity());
+					// Synchronize view also
+					if (preferenceSyncSdCard.isChecked()) {
+						preferenceSyncSdCard.setChecked(false);
+					}
+				}
+			}
+		} catch (IllegalStateException ignored) {
+			// In case isFinishing isn't guard enough
+		}
+	}
 
-    private void setAccountSummary(SharedPreferences sharedPreferences) {
-        preferenceSyncGTasks.setSummary(sharedPreferences.getString(SyncPrefs.KEY_ACCOUNT, getString(R.string
-                .settings_account_summary)));
-    }
+	private void setAccountSummary(SharedPreferences sharedPreferences) {
+		preferenceSyncGTasks.setSummary(sharedPreferences.getString(SyncPrefs.KEY_ACCOUNT, getString(R.string
+				.settings_account_summary)));
+	}
 }

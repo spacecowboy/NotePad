@@ -206,7 +206,7 @@ public class NotificationHelper extends BroadcastReceiver {
 			createNotificationChannel(context, notificationManager);
 		}
 
-		NnnLogger.debugOnly(NotificationHelper.class,"Number of notifications: " + notifications.size());
+		NnnLogger.debugOnly(NotificationHelper.class, "Number of notifications: " + notifications.size());
 
 		// If empty, cancel
 		if (notifications.isEmpty()) {

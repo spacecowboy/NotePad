@@ -266,7 +266,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 				} else if (KEY_BACKGROUND_SYNC.equals(key)) {
 					setSyncInterval(activity, prefs);
 				} else if (KEY_ACCOUNT.equals(key)) {
-					NnnLogger.debugOnly(SyncPrefs.class,"account");
+					NnnLogger.debugOnly(SyncPrefs.class, "account");
 					prefAccount.setTitle(prefs.getString(KEY_ACCOUNT, ""));
 				} else if (KEY_SD_ENABLE.equals(key)) {
 					// Restart the sync service
@@ -353,13 +353,13 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	 */
 	private void afterGettingAuthToken(AccountManagerFuture<Bundle> future, Account account) {
 		try {
-			NnnLogger.debugOnly(SyncPrefs.class,"step two");
+			NnnLogger.debugOnly(SyncPrefs.class, "step two");
 			// If the user has authorized your application to use the tasks API a token is available.
 			// TODO here it crashes because the app is not registered into some kind of console
 			String token = future.getResult().getString(AccountManager.KEY_AUTHTOKEN);
 
 			// Now we are authorized by the user.
-			NnnLogger.debugOnly(SyncPrefs.class,"step two-b: " + token);
+			NnnLogger.debugOnly(SyncPrefs.class, "step two-b: " + token);
 
 			if (token != null && !token.isEmpty() && account != null) {
 

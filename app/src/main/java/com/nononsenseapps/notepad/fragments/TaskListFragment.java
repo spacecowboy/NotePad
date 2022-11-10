@@ -653,9 +653,9 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 							getString(R.string.app_name_short), getShareText()));
 					try {
 						Toast.makeText(getActivity(), getResources().getQuantityString(
-												R.plurals.notecopied_msg, tasks.size(),
-												tasks.size()),
-										Toast.LENGTH_SHORT).show();
+										R.plurals.notecopied_msg, tasks.size(),
+										tasks.size()),
+								Toast.LENGTH_SHORT).show();
 					} catch (Exception e) {
 						// Protect against faulty translations
 					}

@@ -817,7 +817,7 @@ public class ActivityMain extends FragmentActivity
 		// TODO crashes when inheriting fron newer themes => we need the support actionbar & AppCompatActivity as parent
 		var ab = getActionBar();
 		if (ab == null) {
-			Log.e("NNN","Coding error: actionbar is null in ActivityMain. A crash will follow!");
+			Log.e("NNN", "Coding error: actionbar is null in ActivityMain. A crash will follow!");
 		} else {
 			getActionBar().setDisplayHomeAsUpEnabled(true);
 			getActionBar().setHomeButtonEnabled(true);
