@@ -67,6 +67,16 @@ android {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src']
             res.srcDirs = ['res']
+
+            // everything below is useless ?
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            assets.srcDirs = ['assets']
         }
+
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
     }
+
 }
