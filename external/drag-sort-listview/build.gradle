@@ -30,6 +30,11 @@ dependencies {
     implementation "androidx.cursoradapter:cursoradapter:1.0.0"
 }
 
+// suppress (most) warnings related to javadocs that we don't care about
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
+}
+
 android {
     compileSdkVersion 32
     buildToolsVersion '32.0.0'
