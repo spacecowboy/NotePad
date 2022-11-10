@@ -86,10 +86,11 @@ public class FragmentSearchDeleted extends FragmentSearch {
 
 			@Background
 			void deleteSelected(final ActionMode mode) {
-				getActivity().getContentResolver().delete(
-						Task.URI_DELETED_QUERY,
-						Task.Columns._ID + " IN (" + DAO.arrayToCommaString(getIdArray()) + ")",
-						null);
+				String whereCondition = Task.Columns._ID + " IN ("
+						+ DAO.arrayToCommaString(getIdArray()) + ")";
+				getActivity()
+						.getContentResolver()
+						.delete(Task.URI_DELETED_QUERY, whereCondition, null);
 				selectedItems.clear();
 				mode.finish();
 			}
@@ -151,16 +152,16 @@ public class FragmentSearchDeleted extends FragmentSearch {
 					d.show(getFragmentManager(), "listselect");
 					return true;
 				} else if (itemId == R.id.menu_delete) {
-					DialogDeleteTask
-							.showDialog(getFragmentManager(), -1, () -> deleteSelected(mode));
+					DialogDeleteTask.showDialog(getFragmentManager(), -1,
+							() -> deleteSelected(mode));
 					return true;
 				}
 				return false;
 			}
 
 			@Override
-			public void onItemCheckedStateChanged(ActionMode mode,
-												  int position, long id, boolean checked) {
+			public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
+												  boolean checked) {
 				if (checked) {
 					selectedItems.add(id);
 				} else {

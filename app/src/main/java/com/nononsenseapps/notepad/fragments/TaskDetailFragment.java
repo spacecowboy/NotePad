@@ -20,6 +20,7 @@ package com.nononsenseapps.notepad.fragments;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -272,8 +273,9 @@ public class TaskDetailFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// TODO useless ?
-		// inputManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+		// TODO should we get it manually instead of using the annotation ?
+		// inputManager = (InputMethodManager) getContext()
+		// 		.getSystemService(Context.INPUT_METHOD_SERVICE);
 	}
 
 	/**
@@ -281,7 +283,8 @@ public class TaskDetailFragment extends Fragment {
 	 * container is null
 	 */
 	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savInstState) {
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
+							 Bundle savInstState) {
 		if (container == null) {
 			dontLoad = true;
 			return null;
@@ -340,7 +343,8 @@ public class TaskDetailFragment extends Fragment {
 		final boolean showcasing = showcaseEditor();
 
 		if (!showcasing && openKb) {
-			// Only show keyboard for new/empty notes, but not if the showcaseview is showing
+			// Only show keyboard for new/empty notes,
+			// but not if the showcaseview is showing
 			taskText.requestFocus();
 			inputManager.showSoftInput(taskText, InputMethodManager.SHOW_IMPLICIT);
 		}
@@ -360,9 +364,9 @@ public class TaskDetailFragment extends Fragment {
 
 		ActivityMain.showTheShowCaseView(
 				this.getActivity(),
-				// it would be better to focus the showcaseview on the overflow menu (the 3
-				// vertical dots) but TapTargetView needs a toolbar, which needs appcompatactivity,
-				// which need Theme.AppCompat, which needs ...
+				// it would be better to focus the showcaseview on the overflow menu
+				// (the 3 vertical dots) but TapTargetView needs a toolbar, which needs
+				// appcompatactivity, which need Theme.AppCompat, which needs ...
 				// Maybe this works ?
 				// (switch to appcompatactivity, then in onCreate() you run the following)
 				// Toolbar tb = (Toolbar) activity.getSupportActionBar().getCustomView();
@@ -488,10 +492,10 @@ public class TaskDetailFragment extends Fragment {
 	// }
 
 	/**
-	 * Returns a properly configured {@link DatePickerDialog} to let the user pick a day in
-	 * a calendar view. An alternative very similar to this is
-	 * {@link com.google.android.material.datepicker.MaterialDatePicker} but it requires an app
-	 * theme with parent="Theme.MaterialComponents", which does not work in our app
+	 * Returns a properly configured {@link DatePickerDialog} to let the user pick a
+	 * day in a calendar view. An alternative very similar to this is
+	 * {@link com.google.android.material.datepicker.MaterialDatePicker} but it requires
+	 * a theme with parent="Theme.MaterialComponents", which does not work in our app
 	 */
 	private static DatePickerDialog getDatePickerPopup() {
 		return null;
@@ -539,7 +543,8 @@ public class TaskDetailFragment extends Fragment {
 
 			// And scroll to bottom. takes 300ms for item to appear.
 			editScrollView.postDelayed(
-					() -> editScrollView.fullScroll(ScrollView.FOCUS_DOWN), 300);
+					() -> editScrollView.fullScroll(ScrollView.FOCUS_DOWN),
+					300);
 		}
 	}
 
@@ -627,8 +632,8 @@ public class TaskDetailFragment extends Fragment {
 			}
 
 			try {
-				// TODO try sharing a note with the email app: it should put the title as subject,
-				//  in my opinion
+				// TODO try sharing a note with the email app: it should put the title
+				//  as subject, in my opinion
 				Intent i = new Intent(Intent.ACTION_SEND)
 						.setType("text/plain")
 						.putExtra(Intent.EXTRA_TEXT, text)
@@ -696,7 +701,8 @@ public class TaskDetailFragment extends Fragment {
 			pf.setListener(() -> {
 				if (mTask != null) {
 					mTask.locked = false;
-					Toast.makeText(getActivity(), R.string.unlocked, Toast.LENGTH_SHORT).show();
+					Toast.makeText(getActivity(), R.string.unlocked, Toast.LENGTH_SHORT)
+							.show();
 
 					if (mLocked) {
 						mLocked = false;
@@ -875,7 +881,8 @@ public class TaskDetailFragment extends Fragment {
 			not.view = nv;
 
 			// Setup all the listeners etc
-			NotificationItemHelper.setup(this, notificationList, nv, not, mTask);
+			NotificationItemHelper
+					.setup(this, notificationList, nv, not, mTask);
 
 			notificationList.addView(nv);
 		}
@@ -906,11 +913,13 @@ public class TaskDetailFragment extends Fragment {
 	}
 
 	/**
-	 * Returns an appropriately themed {@link TimePickerDialog}, which will be shown in a
-	 * popup, also setting the callback and desired starting time through the given parameters.
-	 * An alternative is {@link com.google.android.material.timepicker.MaterialTimePicker}, which
-	 * is 99% identical, but it requires an app theme with parent="Theme.MaterialComponents",
-	 * which does not work in our app, due to the auto-generated code of the annotations library
+	 * Returns an appropriately themed {@link TimePickerDialog}, which will be shown
+	 * in a popup, also setting the callback and desired starting time through the
+	 * given parameters. An alternative is
+	 * {@link com.google.android.material.timepicker.MaterialTimePicker}, which is 99%
+	 * identical, but it requires an app theme with parent="Theme.MaterialComponents",
+	 * which does not work in our app, due to the auto-generated code of the annotations
+	 * library
 	 */
 	public TimePickerDialog getTimePickerDialog(Calendar localTime,
 												TimePickerDialog.OnTimeSetListener listener) {

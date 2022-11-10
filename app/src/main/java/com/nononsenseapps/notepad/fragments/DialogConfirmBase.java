@@ -19,9 +19,9 @@ package com.nononsenseapps.notepad.fragments;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 /**
@@ -42,25 +42,15 @@ public abstract class DialogConfirmBase extends DialogFragment {
 	public DialogConfirmBase() {
 	}
 
+	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
 		return new AlertDialog.Builder(getActivity())
 				.setTitle(getTitle())
 				.setMessage(getMessage())
-				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						onOKClick();
-					}
-				})
-				.setNegativeButton(android.R.string.cancel,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog,
-												int which) {
-								dialog.dismiss();
-							}
-						}).create();
+				.setPositiveButton(android.R.string.ok, (dialog, which) -> onOKClick())
+				.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
+				.create();
 	}
 
 	public abstract int getTitle();

@@ -141,8 +141,8 @@ public class FragmentSearch extends Fragment {
 		mCallback = new LoaderCallbacks<>() {
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
-				return new CursorLoader(getActivity(), getSearchUri(), getFields(), null,
-						new String[] { mQuery }, getSortOrder());
+				return new CursorLoader(getActivity(), getSearchUri(), getFields(),
+						null, new String[] { mQuery }, getSortOrder());
 			}
 
 			@Override
@@ -207,7 +207,8 @@ public class FragmentSearch extends Fragment {
 	 * Override to give different search behaviour
 	 */
 	protected OnItemClickListener getOnItemClickListener() {
-		return (arg0, origin, pos, id) -> startActivity(new Intent(Intent.ACTION_EDIT, Task.getUri(id)));
+		return (arg0, origin, pos, id)
+				-> startActivity(new Intent(Intent.ACTION_EDIT, Task.getUri(id)));
 	}
 
 	/**
@@ -215,7 +216,8 @@ public class FragmentSearch extends Fragment {
 	 */
 	protected ViewBinder getViewBinder() {
 		// Get the global list settings
-		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
+		final SharedPreferences prefs = PreferenceManager
+				.getDefaultSharedPreferences(getActivity());
 
 		// Load pref for item height, or show 3 lines if it was not set
 		final int rowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);

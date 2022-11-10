@@ -30,7 +30,8 @@ public class DialogDeleteList extends DialogConfirmBase {
 	static final String ID = "id";
 	static final String TAG = "deletelistok";
 
-	public static void showDialog(final FragmentManager fm, final long listId, final DialogConfirmedListener listener) {
+	public static void showDialog(final FragmentManager fm, final long listId,
+								  final DialogConfirmedListener listener) {
 		DialogDeleteList d = new DialogDeleteList();
 		d.setListener(listener);
 		Bundle args = new Bundle();

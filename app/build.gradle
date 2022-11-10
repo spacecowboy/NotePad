@@ -136,7 +136,7 @@ dependencies {
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.google.android.material:material:1.7.0'
     // Time library, open source & up to date
-    implementation 'joda-time:joda-time:2.12.0'
+    implementation 'joda-time:joda-time:2.12.1'
     // Dashclock API, open source & abandoned, but it still works
     implementation 'com.google.android.apps.dashclock:dashclock-api:2.0.0'
     // OrgParser, open source & abandoned, but it still works

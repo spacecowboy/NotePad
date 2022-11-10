@@ -46,20 +46,9 @@ public abstract class DialogConfirmBaseV11 extends DialogFragment {
 		return new AlertDialog.Builder(getActivity())
 				.setTitle(getTitle())
 				.setMessage(getMessage())
-				.setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						onOKClick();
-					}
-				})
-				.setNegativeButton(android.R.string.cancel,
-						new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog,
-												int which) {
-								dialog.dismiss();
-							}
-						}).create();
+				.setPositiveButton(android.R.string.ok, (dialog, which) -> onOKClick())
+				.setNegativeButton(android.R.string.cancel, (dialog, which) -> dialog.dismiss())
+				.create();
 	}
 
 	public abstract int getTitle();

@@ -62,7 +62,7 @@ import java.util.ArrayList;
  * This fragment is the view which is displayed in the left drawer.
  * Any activity containing it must implement NavigationDrawerCallbacks.
  */
-public class NavigationDrawerFragment extends Fragment implements LoaderManager
+class NavigationDrawerFragment extends Fragment implements LoaderManager
 		.LoaderCallbacks<Cursor> {
 
 	// TODO useless ? you may want to delete this

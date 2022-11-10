@@ -47,10 +47,6 @@ import org.androidannotations.annotations.ViewById;
 @EFragment(resName = "fragment_dialog_movetolist")
 public class DialogMoveToList extends DialogFragment {
 
-	// public interface EditListDialogListener {
-	// void onFinishEditDialog(long id);
-	// }
-
 	static final String TASK_IDS = "task_ids";
 
 	@ViewById(resName = "listView")
@@ -89,10 +85,6 @@ public class DialogMoveToList extends DialogFragment {
 
 	}
 
-	// public void setListener(final EditListDialogListener listener) {
-	// this.listener = listener;
-	// }
-
 	@AfterViews
 	void setup() {
 		if (!getArguments().containsKey(TASK_IDS)) {
@@ -117,14 +109,7 @@ public class DialogMoveToList extends DialogFragment {
 		// Set it to the view
 		listView.setAdapter(adapter);
 
-		listView.setOnItemClickListener(new OnItemClickListener() {
-
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int pos,
-									long id) {
-				okButton.setEnabled(true);
-			}
-		});
+		listView.setOnItemClickListener((arg0, arg1, pos, id) -> okButton.setEnabled(true));
 
 		// Load content
 		getLoaderManager().restartLoader(0, null,
@@ -207,10 +192,9 @@ public class DialogMoveToList extends DialogFragment {
 			}
 
 			try {
-				Toast.makeText(
-						getActivity(),
-						getString(R.string.moved_x_to_list, taskIds.length,
-								targetListTitle), Toast.LENGTH_SHORT).show();
+				Toast.makeText(getActivity(),
+						getString(R.string.moved_x_to_list, taskIds.length, targetListTitle),
+						Toast.LENGTH_SHORT).show();
 			} catch (Exception e) {
 				// Guard against translations
 			}

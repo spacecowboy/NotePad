@@ -65,8 +65,7 @@ public class DialogPassword extends DialogFragment {
 							 Bundle savedInstanceState) {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
-		final String currentPassword = settings.getString(
-				PasswordPrefs.KEY_PASSWORD, "");
+		final String currentPassword = settings.getString(PasswordPrefs.KEY_PASSWORD, "");
 		if (currentPassword.isEmpty()) {
 			getDialog().setTitle(R.string.enter_new_password);
 		} else {
@@ -80,8 +79,7 @@ public class DialogPassword extends DialogFragment {
 	public void showField() {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
-		final String currentPassword = settings.getString(
-				PasswordPrefs.KEY_PASSWORD, "");
+		final String currentPassword = settings.getString(PasswordPrefs.KEY_PASSWORD, "");
 		if (currentPassword.isEmpty()) {
 			passwordVerificationField.setVisibility(View.VISIBLE);
 		} else {
@@ -101,20 +99,17 @@ public class DialogPassword extends DialogFragment {
 		final String currentPassword = settings.getString(PasswordPrefs.KEY_PASSWORD,
 				"");
 		final String enteredPassword = passwordField.getText().toString();
-		final String verifiedPassword = passwordVerificationField.getText()
-				.toString();
+		final String verifiedPassword = passwordVerificationField.getText().toString();
 
 		if (currentPassword.isEmpty()) {
 			setPassword(enteredPassword, verifiedPassword);
 		} else {
-			// We want to return true or false, user has entered correct
-			// password
+			// We want to return true or false, user has entered correct password
 			checkPassword(enteredPassword, currentPassword);
 		}
 	}
 
-	private void checkPassword(final String enteredPassword,
-							   final String currentPassword) {
+	private void checkPassword(final String enteredPassword, final String currentPassword) {
 		if (currentPassword.equals(enteredPassword)) {
 			if (listener != null) {
 				listener.onPasswordConfirmed();
@@ -131,19 +126,19 @@ public class DialogPassword extends DialogFragment {
 
 	private void setPassword(final String pass1, final String pass2) {
 		if (pass1 != null && !pass1.isEmpty() && pass1.equals(pass2)) {
-			PreferenceManager.getDefaultSharedPreferences(getActivity()).edit()
-					.putString(PasswordPrefs.KEY_PASSWORD, pass1).commit();
+			PreferenceManager.getDefaultSharedPreferences(getActivity())
+					.edit()
+					.putString(PasswordPrefs.KEY_PASSWORD, pass1)
+					.commit();
 			if (listener != null) {
 				listener.onPasswordConfirmed();
 			}
 			dismiss();
 		} else {
-			Animation shake = AnimationUtils.loadAnimation(getActivity(),
-					R.anim.shake);
+			Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
 			passwordVerificationField.startAnimation(shake);
-			Toast.makeText(getActivity(),
-							getText(R.string.passwords_dont_match), Toast.LENGTH_SHORT)
-					.show();
+			Toast.makeText(getActivity(), getText(R.string.passwords_dont_match),
+					Toast.LENGTH_SHORT).show();
 		}
 	}
 }

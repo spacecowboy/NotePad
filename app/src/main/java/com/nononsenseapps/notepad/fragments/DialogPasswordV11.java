@@ -57,8 +57,7 @@ public class DialogPasswordV11 extends DialogFragment {
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savInstState) {
 		getDialog().setTitle(R.string.password_required);
 		// Let annotations deal with it
 		return null;
@@ -83,15 +82,13 @@ public class DialogPasswordV11 extends DialogFragment {
 	}
 
 	private void checkPassword(String enteredPassword, String currentPassword) {
-		if ("".equals(currentPassword)
-				|| currentPassword.equals(enteredPassword)) {
+		if ("".equals(currentPassword) || currentPassword.equals(enteredPassword)) {
 			if (listener != null) {
 				listener.onPasswordConfirmed();
 			}
 			dismiss();
 		} else {
-			Animation shake = AnimationUtils.loadAnimation(getActivity(),
-					R.anim.shake);
+			Animation shake = AnimationUtils.loadAnimation(getActivity(), R.anim.shake);
 			passwordField.startAnimation(shake);
 			Toast.makeText(getActivity(), getText(R.string.password_incorrect),
 					Toast.LENGTH_SHORT).show();

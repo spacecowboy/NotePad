@@ -63,20 +63,15 @@ public class DialogPasswordSettings extends DialogFragment implements DialogInte
 	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle savedInstanceState) {
-		final AlertDialog d = new AlertDialog.Builder(getActivity()).setTitle(R.string.password)
-				.setView(-1).setNegativeButton(android.R.string
-						.cancel, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						dialog.dismiss();
-					}
-				}).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						// Not used, see OnShow
-						onOK(dialog);
-					}
-				}).create();
+		final AlertDialog d = new AlertDialog
+				.Builder(getActivity())
+				.setTitle(R.string.password)
+				.setView(-1)
+				.setNegativeButton(android.R.string.cancel,
+						(dialog, which) -> dialog.dismiss())
+				.setPositiveButton(android.R.string.ok,
+						(dialog, which) -> {/* Not used, see OnShow() */ onOK(dialog);})
+				.create();
 
 		d.setOnShowListener(this);
 
@@ -88,18 +83,16 @@ public class DialogPasswordSettings extends DialogFragment implements DialogInte
 		super.onStart();
 		Dialog dialog = getDialog();
 
-		newPasswordText = (EditText) dialog.findViewById(R.id.tempPassword1);
-		confirmPasswordText = (EditText) dialog.findViewById(R.id.tempPassword2);
+		newPasswordText = dialog.findViewById(R.id.tempPassword1);
+		confirmPasswordText = dialog.findViewById(R.id.tempPassword2);
 
 
 		currentPasswordText.addTextChangedListener(new TextWatcher() {
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-			}
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
 			@Override
 			public void afterTextChanged(Editable s) {
@@ -109,12 +102,10 @@ public class DialogPasswordSettings extends DialogFragment implements DialogInte
 
 		confirmPasswordText.addTextChangedListener(new TextWatcher() {
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-			}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before, int count) {
-			}
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
 			@Override
 			public void afterTextChanged(Editable s) {
@@ -128,17 +119,12 @@ public class DialogPasswordSettings extends DialogFragment implements DialogInte
 		final AlertDialog d = (AlertDialog) dialog;
 		Button ok = d.getButton(AlertDialog.BUTTON_POSITIVE);
 		// Override the actual on click listener to prevent dismissal of dialog
-		ok.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View view) {
-				onOK(d);
-			}
-		});
+		ok.setOnClickListener(view -> onOK(d));
 	}
 
 	private void onOK(DialogInterface dialog) {
-		SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
-				(getContext());
+		SharedPreferences sharedPreferences = PreferenceManager
+				.getDefaultSharedPreferences(getContext());
 		if (verifyCurrentPassword(sharedPreferences) && verifyNewPassword()) {
 			savePassword(sharedPreferences);
 			dialog.dismiss();
@@ -149,8 +135,10 @@ public class DialogPasswordSettings extends DialogFragment implements DialogInte
 		if (newPasswordIsEmpty()) {
 			sharedPreferences.edit().remove(KEY_PASSWORD).apply();
 		} else {
-			sharedPreferences.edit().putString(KEY_PASSWORD, newPasswordText.getText().toString()
-			).apply();
+			sharedPreferences
+					.edit()
+					.putString(KEY_PASSWORD, newPasswordText.getText().toString())
+					.apply();
 		}
 	}
 
@@ -159,7 +147,9 @@ public class DialogPasswordSettings extends DialogFragment implements DialogInte
 	}
 
 	private boolean verifyNewPassword() {
-		if (newPasswordText.getText().toString().equals(confirmPasswordText.getText().toString())) {
+		String newPass = newPasswordText.getText().toString();
+		String confirmPass = confirmPasswordText.getText().toString();
+		if (newPass.equals(confirmPass)) {
 			return true;
 		}
 
@@ -168,7 +158,8 @@ public class DialogPasswordSettings extends DialogFragment implements DialogInte
 	}
 
 	private boolean verifyCurrentPassword(SharedPreferences sharedPreferences) {
-		final String currentPassword = sharedPreferences.getString(KEY_PASSWORD, "");
+		final String currentPassword = sharedPreferences
+				.getString(KEY_PASSWORD, "");
 		if (currentPassword.equals(currentPasswordText.getText().toString())) {
 			return true;
 		}
