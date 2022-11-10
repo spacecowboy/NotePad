@@ -17,16 +17,10 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import java.util.List;
-import java.util.Locale;
-
-import com.nononsenseapps.notepad.R;
-
 import android.app.ActionBar;
-import android.app.Activity;
 import android.app.backup.BackupManager;
-import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
@@ -36,13 +30,15 @@ import android.preference.Preference;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.preference.RingtonePreference;
-
-import androidx.core.app.NavUtils;
-
 import android.text.TextUtils;
 import android.view.MenuItem;
 
-import android.content.res.Configuration;
+import androidx.core.app.NavUtils;
+
+import com.nononsenseapps.notepad.R;
+
+import java.util.List;
+import java.util.Locale;
 
 public class PrefsActivity extends PreferenceActivity {
 
@@ -132,8 +128,8 @@ public class PrefsActivity extends PreferenceActivity {
 	 * A preference value change listener that updates the preference's summary
 	 * to reflect its new value.
 	 */
-	private static final Preference.OnPreferenceChangeListener sBindPreferenceSummaryToValueListener
-			= (preference, value) -> {
+	private static final Preference.OnPreferenceChangeListener
+			sBindPreferenceSummaryToValueListener = (preference, value) -> {
 		String stringValue = value.toString();
 
 		if (preference instanceof ListPreference) {
