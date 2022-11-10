@@ -17,39 +17,35 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import java.util.HashSet;
-
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
-import androidx.cursoradapter.widget.SimpleCursorAdapter;
-import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
-
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
+
+import androidx.cursoradapter.widget.SimpleCursorAdapter;
+import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
+
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.DAO;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.utils.views.TitleNoteTextView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
 
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.DAO;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
-import com.nononsenseapps.notepad.fragments.DialogRestore.OnListSelectedListener;
-import com.nononsenseapps.utils.views.TitleNoteTextView;
+import java.util.HashSet;
 
 @EFragment(resName = "fragment_search")
 public class FragmentSearchDeleted extends FragmentSearch {
@@ -202,12 +198,14 @@ public class FragmentSearchDeleted extends FragmentSearch {
 	@Override
 	protected SimpleCursorAdapter getAdapter() {
 		return new SimpleCursorAdapter(getActivity(),
-				R.layout.tasklist_item_rich, null, new String[] {
-				Task.Columns.TITLE, Task.Columns.NOTE,
-				Task.Columns.DUE, Task.Columns.COMPLETED,
-				Task.Columns.TRIG_DELETED, Task.Columns.TRIG_DELETED },
-				new int[] { android.R.id.text1, android.R.id.text1, R.id.date,
-						R.id.checkbox, R.id.drag_handle, R.id.dragpadding }, 0);
+				R.layout.tasklist_item_rich,
+				null,
+				new String[] { Task.Columns.TITLE, Task.Columns.NOTE, Task.Columns.DUE,
+						Task.Columns.COMPLETED, Task.Columns.TRIG_DELETED,
+						Task.Columns.TRIG_DELETED },
+				new int[] { android.R.id.text1, android.R.id.text1, R.id.date, R.id.checkbox,
+						R.id.drag_handle, R.id.dragpadding },
+				0);
 	}
 
 	@Override
@@ -219,38 +217,36 @@ public class FragmentSearchDeleted extends FragmentSearch {
 		// Load pref for item height, or show 3 lines if it was not set
 		final int rowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
 
-		return new ViewBinder() {
-			String sTemp = "";
+		return (view, c, colIndex) -> {
+			switch (colIndex) {
+				// TODO the code here decides how the notes on the archive look like. Fix it so
+				//  that notes appear as in the drag-sort-listview of the main activity
 
-			@Override
-			public boolean setViewValue(View view, Cursor c, int colIndex) {
-				switch (colIndex) {
-					// Matches order in Task.Columns.Fields
-					case 1:
-						// Title
-						sTemp = c.getString(colIndex);
+				// Matches order in Task.Columns.Fields
+				case 1:
+					// Title
+					String sTemp = c.getString(colIndex);
 
-						// Set height of text for non-headers
-						if (rowCount == 1) {
-							((TitleNoteTextView) view).setSingleLine(true);
-						} else {
-							((TitleNoteTextView) view).setSingleLine(false);
-							((TitleNoteTextView) view).setMaxLines(rowCount);
-						}
+					// Set height of text for non-headers
+					if (rowCount == 1) {
+						((TitleNoteTextView) view).setSingleLine(true);
+					} else {
+						((TitleNoteTextView) view).setSingleLine(false);
+						((TitleNoteTextView) view).setMaxLines(rowCount);
+					}
 
-						// Change color based on complete status
-						((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
+					// Change color based on complete status
+					((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
 
-						((TitleNoteTextView) view).setTextTitle(sTemp);
-						return true;
-					case 2:
-						// Note
-						((TitleNoteTextView) view).setTextRest("");
-						return true;
-					default:
-						view.setVisibility(View.GONE);
-						return true;
-				}
+					((TitleNoteTextView) view).setTextTitle(sTemp);
+					return true;
+				case 2:
+					// Note
+					((TitleNoteTextView) view).setTextRest("");
+					return true;
+				default:
+					view.setVisibility(View.GONE);
+					return true;
 			}
 		};
 	}

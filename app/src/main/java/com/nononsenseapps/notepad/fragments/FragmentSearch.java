@@ -138,12 +138,11 @@ public class FragmentSearch extends Fragment {
 		list.setOnItemClickListener(getOnItemClickListener());
 
 		// Start loading data
-		mCallback = new LoaderCallbacks<Cursor>() {
+		mCallback = new LoaderCallbacks<>() {
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
-				return new CursorLoader(getActivity(), getSearchUri(),
-						getFields(), null, new String[] { mQuery },
-						getSortOrder());
+				return new CursorLoader(getActivity(), getSearchUri(), getFields(), null,
+						new String[] { mQuery }, getSortOrder());
 			}
 
 			@Override
@@ -193,25 +192,22 @@ public class FragmentSearch extends Fragment {
 	 * Override to get different search behaviour
 	 */
 	protected SimpleCursorAdapter getAdapter() {
-		return new SimpleCursorAdapter(getActivity(), R.layout.tasklist_item_rich,
-				null, new String[] { Task.Columns.TITLE, Task.Columns.NOTE,
-				Task.Columns.DUE, Task.Columns.COMPLETED,
-				Task.Columns.LEFT, Task.Columns.RIGHT }, new int[] { android.R.id.text1,
-				android.R.id.text1, R.id.date, R.id.checkbox,
-				R.id.drag_handle, R.id.dragpadding }, 0);
+		return new SimpleCursorAdapter(
+				getActivity(),
+				R.layout.tasklist_item_rich,
+				null,
+				new String[] { Task.Columns.TITLE, Task.Columns.NOTE, Task.Columns.DUE,
+						Task.Columns.COMPLETED, Task.Columns.LEFT, Task.Columns.RIGHT },
+				new int[] { android.R.id.text1, android.R.id.text1, R.id.date, R.id.checkbox,
+						R.id.drag_handle, R.id.dragpadding },
+				0);
 	}
 
 	/**
 	 * Override to give different search behaviour
 	 */
 	protected OnItemClickListener getOnItemClickListener() {
-		return new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View origin, int pos,
-									long id) {
-				startActivity(new Intent(Intent.ACTION_EDIT, Task.getUri(id)));
-			}
-		};
+		return (arg0, origin, pos, id) -> startActivity(new Intent(Intent.ACTION_EDIT, Task.getUri(id)));
 	}
 
 	/**
@@ -224,45 +220,40 @@ public class FragmentSearch extends Fragment {
 		// Load pref for item height, or show 3 lines if it was not set
 		final int rowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
 
-		return new ViewBinder() {
-			String sTemp = "";
+		return (view, c, colIndex) -> {
+			switch (colIndex) {
+				// Matches order in Task.Columns.Fields
+				case 1:
+					// Title
+					String sTemp = c.getString(colIndex);
 
-			@Override
-			public boolean setViewValue(View view, Cursor c, int colIndex) {
-				switch (colIndex) {
-					// Matches order in Task.Columns.Fields
-					case 1:
-						// Title
-						sTemp = c.getString(colIndex);
+					// Set height of text for non-headers
+					if (rowCount == 1) {
+						((TitleNoteTextView) view).setSingleLine(true);
+					} else {
+						((TitleNoteTextView) view).setSingleLine(false);
+						((TitleNoteTextView) view).setMaxLines(rowCount);
+					}
 
-						// Set height of text for non-headers
-						if (rowCount == 1) {
-							((TitleNoteTextView) view).setSingleLine(true);
-						} else {
-							((TitleNoteTextView) view).setSingleLine(false);
-							((TitleNoteTextView) view).setMaxLines(rowCount);
-						}
+					// Change color based on complete status
+					((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
 
-						// Change color based on complete status
-						((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
-
-						((TitleNoteTextView) view).setTextTitle(sTemp);
-						return true;
-					case 2:
-						// Note
-						// Only if task it not locked
-						if (c.getInt(9) != 1) {
-							((TitleNoteTextView) view).setTextRest(c
-									.getString(colIndex));
-						} else {
-							((TitleNoteTextView) view).setTextRest("");
-						}
-						return true;
-					default:
-						// Checkbox
-						view.setVisibility(View.GONE);
-						return true;
-				}
+					((TitleNoteTextView) view).setTextTitle(sTemp);
+					return true;
+				case 2:
+					// Note
+					// Only if task it not locked
+					if (c.getInt(9) != 1) {
+						((TitleNoteTextView) view).setTextRest(c
+								.getString(colIndex));
+					} else {
+						((TitleNoteTextView) view).setTextRest("");
+					}
+					return true;
+				default:
+					// Checkbox
+					view.setVisibility(View.GONE);
+					return true;
 			}
 		};
 	}
