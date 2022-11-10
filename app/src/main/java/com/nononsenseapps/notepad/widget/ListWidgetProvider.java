@@ -38,7 +38,7 @@ import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
 
 /**
- * Thewidget's AppWidgetProvider.
+ * The widget's AppWidgetProvider.
  */
 public class ListWidgetProvider extends AppWidgetProvider {
 	// private static final String TAG = "WIDGETPROVIDER";
@@ -64,6 +64,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
 				| Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
+		// TODO here it receives action == null when the user clicks on a checkbox in the widget's note => fix it !
 		if (action.equals(CLICK_ACTION)) {
 			NnnLogger.debugOnly(ListWidgetProvider.class, "CLICK ACTION RECEIVED");
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
@@ -82,8 +83,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
 			// This will complete the note
 			if (noteId > -1) {
-				Intent bintent = new Intent(context,
-						NotePadBroadcastReceiver.class);
+				Intent bintent = new Intent(context, NotePadBroadcastReceiver.class);
 				bintent.setAction(context
 						.getString(R.string.complete_note_broadcast_intent));
 				bintent.putExtra(Task.Columns._ID, noteId);
