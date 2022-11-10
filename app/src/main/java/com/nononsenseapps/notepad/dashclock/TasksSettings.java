@@ -17,7 +17,6 @@
 
 package com.nononsenseapps.notepad.dashclock;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
 import android.util.DisplayMetrics;
@@ -25,6 +24,8 @@ import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.nononsenseapps.notepad.R;
 
@@ -39,11 +40,11 @@ import com.nononsenseapps.notepad.R;
  * href="http://developer.android.com/guide/topics/ui/settings.html">Settings
  * API Guide</a> for more information on developing a Settings UI.
  */
-public class TasksSettings extends Activity {
+public class TasksSettings extends AppCompatActivity {
 
 	public void onCreate(Bundle savedInstanceState) {
 		requestWindowFeature(Window.FEATURE_ACTION_BAR);
-		setupFauxDialog();
+
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_dashclock_settings);
@@ -51,32 +52,10 @@ public class TasksSettings extends Activity {
 		setupActionBar();
 	}
 
-	protected void setupFauxDialog() {
-		// Check if this should be a dialog
-		TypedValue tv = new TypedValue();
-		if (!getTheme().resolveAttribute(R.attr.isDialog, tv, true) ||
-				tv.data == 0) {
-			return;
-		}
-
-		// Should be a dialog; set up the window parameters.
-		DisplayMetrics dm = getResources().getDisplayMetrics();
-
-		WindowManager.LayoutParams params = getWindow().getAttributes();
-		params.width = getResources()
-				.getDimensionPixelSize(R.dimen.configure_dialog_width);
-		params.height = Math.min(getResources()
-						.getDimensionPixelSize(R.dimen.configure_dialog_max_height),
-				dm.heightPixels * 3 / 4);
-		params.alpha = 1.0f;
-		params.dimAmount = 0.5f;
-		getWindow().setAttributes(params);
-	}
-
 	protected void setupActionBar() {
-		getActionBar().setIcon(R.drawable.ic_stat_notification_edit);
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		//getActionBar().setTitle(R.string.dashclock_title_activity_tasks_settings);
+		if (getSupportActionBar() == null) return;
+		getSupportActionBar().setIcon(R.drawable.ic_stat_notification_edit);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 	}
 
 	@Override
