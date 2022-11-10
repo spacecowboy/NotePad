@@ -184,7 +184,8 @@
 	</style>
  -->
 
-	<style name="ThemeHolo" parent="@android:style/Theme.Holo">
+	<!-- The dark theme -->
+	<style name="ThemeHolo" parent="Theme.AppCompat">
 		<item name="android:background">@null</item>
 
 		<item name="ic_settings_24dp">@drawable/ic_settings_24dp_white</item>
@@ -226,6 +227,7 @@
 
 	</style>
 
+	<!-- The full black theme -->
 	<style name="ThemeHoloBlack" parent="@style/ThemeGoogleNowDark">
 		<item name="android:windowBackground">@android:color/black</item>
 		<item name="android:colorBackgroundCacheHint">@android:color/black</item>
@@ -245,8 +247,8 @@
 		<item name="ListMarginStyle">@style/ListMarginStyleCard</item>
 	</style>
 
-	<!-- This theme doesn't exist in honeycomb -->
-	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+	<!-- The light (white, day) theme -->
+	<style name="ThemeHoloLightDarkActonBar" parent="Theme.AppCompat.Light.DarkActionBar">
 		<item name="android:background">@null</item>
 		<item name="android:windowBackground">@color/googlenow_grey</item>
 		<item name="android:colorBackgroundCacheHint">@color/googlenow_grey</item>
@@ -312,9 +314,6 @@
 		<item name="android:windowShowWallpaper">true</item>
 		<item name="android:windowBackground">@android:color/transparent</item>
 	</style>
-
-	<!-- Deprecated -->
-	<style name="ThemeHoloLight" parent="@style/ThemeHoloLightDarkActonBar"/>
 
 	<style name="ActionBar.Solid.GoogleNowDark" parent="@android:style/Widget.Holo.ActionBar.Solid">
 		<item name="android:background">@null</item>

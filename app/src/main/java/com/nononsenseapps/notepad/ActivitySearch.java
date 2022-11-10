@@ -63,8 +63,8 @@ public class ActivitySearch extends FragmentActivity {
 	void loadContent() {
 		getSupportFragmentManager()
 				.beginTransaction()
-				.add(R.id.fragmentPlaceHolder,
-						getFragment()).commit();
+				.add(R.id.fragmentPlaceHolder, getFragment())
+				.commit();
 	}
 
 	@Override

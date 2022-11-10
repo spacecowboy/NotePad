@@ -42,9 +42,9 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
@@ -91,7 +91,7 @@ import java.util.ArrayList;
 
 
 @EActivity(resName = "activity_main")
-public class ActivityMain extends FragmentActivity
+public class ActivityMain extends AppCompatActivity
 		implements OnFragmentInteractionListener, OnSyncStartStopListener,
 		MenuStateController, OnSharedPreferenceChangeListener {
 
@@ -785,7 +785,8 @@ public class ActivityMain extends FragmentActivity
 				 * state.
 				 */
 				public void onDrawerClosed(View view) {
-					getActionBar().setTitle(R.string.app_name_short);
+
+					getSupportActionBar().setTitle(R.string.app_name_short);
 					isDrawerClosed = true;
 					invalidateOptionsMenu(); // creates call to
 					// onPrepareOptionsMenu()
@@ -801,7 +802,7 @@ public class ActivityMain extends FragmentActivity
 
 					// If it's not idle, it isn't closed
 					if (DrawerLayout.STATE_IDLE != newState) {
-						getActionBar().setTitle(R.string.show_from_all_lists);
+						getSupportActionBar().setTitle(R.string.show_from_all_lists);
 						// Is in motion, hide action items
 						isDrawerClosed = false;
 						invalidateOptionsMenu(); // creates call to
@@ -815,12 +816,11 @@ public class ActivityMain extends FragmentActivity
 		}
 
 		// TODO crashes when inheriting fron newer themes => we need the support actionbar & AppCompatActivity as parent
-		var ab = getActionBar();
-		if (ab == null) {
+		if (getSupportActionBar() == null) {
 			Log.e("NNN", "Coding error: actionbar is null in ActivityMain. A crash will follow!");
 		} else {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
-			getActionBar().setHomeButtonEnabled(true);
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+			getSupportActionBar().setHomeButtonEnabled(true);
 		}
 
 
