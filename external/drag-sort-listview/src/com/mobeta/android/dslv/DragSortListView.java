@@ -731,8 +731,7 @@ public class DragSortListView extends ListView implements OnTouchListener {
 
             DragSortItemView v;
             View child;
-            // Log.d("mobeta",
-            // "getView: position="+position+" convertView="+convertView);
+            // Log.d("mobeta", "getView: position="+position+" convertView="+convertView);
             if (convertView != null) {
                 v = (DragSortItemView) convertView;
                 View oldChild = v.getChildAt(0);
@@ -754,7 +753,7 @@ public class DragSortListView extends ListView implements OnTouchListener {
                     v = new DragSortItemView(getContext());
                 }
                 v.setLayoutParams(new AbsListView.LayoutParams(
-                        ViewGroup.LayoutParams.FILL_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT));
                 v.addView(child);
             }
@@ -777,26 +776,26 @@ public class DragSortListView extends ListView implements OnTouchListener {
             final ViewGroup expItem = (ViewGroup) getChildAt(expPosition
                     - getFirstVisiblePosition());
             if (expItem != null) {
-                final int l = getPaddingLeft();
-                final int r = getWidth() - getPaddingRight();
-                final int t;
-                final int b;
+                final int left = getPaddingLeft();
+                final int right = getWidth() - getPaddingRight();
+                final int top;
+                final int bottom;
 
                 final int childHeight = expItem.getChildAt(0).getHeight();
 
                 if (expPosition > mSrcPos) {
-                    t = expItem.getTop() + childHeight;
-                    b = t + dividerHeight;
+                    top = expItem.getTop() + childHeight;
+                    bottom = top + dividerHeight;
                 } else {
-                    b = expItem.getBottom() - childHeight;
-                    t = b - dividerHeight;
+                    bottom = expItem.getBottom() - childHeight;
+                    top = bottom - dividerHeight;
                 }
                 // Log.d("mobeta", "l="+l+" t="+t+" r="+r+" b="+b);
 
                 // Have to clip to support ColorDrawable on <= Gingerbread
                 canvas.save();
-                canvas.clipRect(l, t, r, b);
-                divider.setBounds(l, t, r, b);
+                canvas.clipRect(left, top, right, bottom);
+                divider.setBounds(left, top, right, bottom);
                 divider.draw(canvas);
                 canvas.restore();
             }
@@ -824,12 +823,12 @@ public class DragSortListView extends ListView implements OnTouchListener {
 
             int x = mFloatLoc.x;
 
-            int width = getWidth();
+            final int lvWidth = getWidth();
             if (x < 0)
                 x = -x;
             float alphaMod;
-            if (x < width) {
-                alphaMod = ((float) (width - x)) / ((float) width);
+            if (x < lvWidth) {
+                alphaMod = ((float) (lvWidth - x)) / ((float) lvWidth);
                 alphaMod *= alphaMod;
             } else {
                 alphaMod = 0;
