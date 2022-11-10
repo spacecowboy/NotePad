@@ -70,7 +70,10 @@ public class DialogPasswordSettings extends DialogFragment implements DialogInte
 				.setNegativeButton(android.R.string.cancel,
 						(dialog, which) -> dialog.dismiss())
 				.setPositiveButton(android.R.string.ok,
-						(dialog, which) -> {/* Not used, see OnShow() */ onOK(dialog);})
+						(dialog, which) -> {
+							// Not used, see OnShow()
+							onOK(dialog);
+						})
 				.create();
 
 		d.setOnShowListener(this);

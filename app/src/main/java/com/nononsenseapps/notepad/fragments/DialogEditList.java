@@ -210,7 +210,7 @@ public class DialogEditList extends DialogFragment {
 			// Remove pref if it is the default list currently
 			final long defList = Long
 					.parseLong(PreferenceManager
-					.getDefaultSharedPreferences(getActivity())
+							.getDefaultSharedPreferences(getActivity())
 							.getString(getString(R.string.pref_defaultlist), "-1"));
 			final long defStartList = PreferenceManager
 					.getDefaultSharedPreferences(getActivity())

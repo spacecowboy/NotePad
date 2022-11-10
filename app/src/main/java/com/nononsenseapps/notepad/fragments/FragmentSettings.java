@@ -67,8 +67,6 @@ class FragmentSettings_USELESS extends PreferenceFragment implements SharedPrefe
 	private SwitchPreference preferenceSyncGTasks;
 
 
-
-
 	private void setSdDirectorySummary(final SharedPreferences sharedPreferences) {
 		preferenceSyncSdCard.setSummary(sharedPreferences.getString(SyncPrefs.KEY_SD_DIR_URI,
 				SDSynchronizer.getDefaultOrgDir(getContext())));
@@ -89,9 +87,6 @@ class FragmentSettings_USELESS extends PreferenceFragment implements SharedPrefe
 			disableSdCardSync(getActivity());
 		}
 	}
-
-
-
 
 
 	private void setupPassword() {
