@@ -15,7 +15,9 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<resources xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools">
+<resources
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools">
 
 	<style name="LeftDrawerStyleDark">
 		<item name="android:background">@color/googlenow_darkergrey</item>
@@ -46,11 +48,13 @@
 		<item name="android:textColor">@android:color/primary_text_light</item>
 	</style>
 
-	<style name="LeftDrawerListItemSecondaryStyleDark" parent="@style/LeftDrawerListItemStyleDark">
+	<style name="LeftDrawerListItemSecondaryStyleDark"
+		parent="@style/LeftDrawerListItemStyleDark">
 		<item name="android:textColor">@android:color/secondary_text_dark</item>
 	</style>
 
-	<style name="LeftDrawerListItemSecondaryStyleLight" parent="@style/LeftDrawerListItemSecondaryStyleDark">
+	<style name="LeftDrawerListItemSecondaryStyleLight"
+		parent="@style/LeftDrawerListItemSecondaryStyleDark">
 		<item name="android:textColor">@android:color/secondary_text_light</item>
 	</style>
 
@@ -102,11 +106,13 @@
 	</style>
 	-->
 
-	<style name="ActionBarDropDownItem.Dark" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+	<style name="ActionBarDropDownItem.Dark"
+		parent="@android:style/Widget.Holo.DropDownItem.Spinner">
 		<item name="android:textColor">#FFFFFF</item>
 	</style>
 
-	<style name="ActionBarDropDownItem.Light" parent="@android:style/Widget.Holo.Light.DropDownItem.Spinner">
+	<style name="ActionBarDropDownItem.Light"
+		parent="@android:style/Widget.Holo.Light.DropDownItem.Spinner">
 		<item name="android:textColor">#000000</item>
 	</style>
 
@@ -152,40 +158,13 @@
 	</style>
 
 	<!-- For DashClock Settings -->
-	<!-- This base is overridden for larger displays -->
-	<style name="DashClockSettings.Theme.Base"
-		parent="android:Theme.Holo.Light">
-		<item name="isDialog">false</item>
+	<style name="DashClockSettings.Theme" parent="Theme.AppCompat.Light">
+		<!-- It is used in the manifest. Note that it MUST inherit from a .Light theme, because
+			 dashclock forces a white background, so the text must be black -->
+		<!-- There's no need to customize anything, the defaults are good enough -->
 	</style>
 
-	<style name="DashClockSettings.Theme" parent="DashClockSettings.Theme.Base">
-		<item name="android:actionBarStyle">@style/DashClockSettings.ActionBar</item>
-		<item name="android:actionOverflowButtonStyle">
-			@style/DashClockSettings.ActionButton.Overflow
-		</item>
-		<!--<item name="android:actionBarItemBackground">@drawable/ab_solid_DashClockSettingstheme</item>-->
-		<item name="android:windowContentOverlay">@null</item>
-		<item name="android:windowShowWallpaper">true</item>
-		<item name="android:homeAsUpIndicator">@drawable/ic_ab_back_holo_dark_am</item>
-		<!--<item name="android:windowBackground">@android:color
-		/transparent</item>-->
-		<!--<item name="android:actionBarWidgetTheme">@android:style/Theme.Holo</item>-->
-		<item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
-	</style>
-
-	<style name="DashClockSettings.ActionBar"
-		parent="@android:style/Widget.Holo.Light.ActionBar.Solid.Inverse">
-		<!--<item name="android:background">@drawable/ab_solid_DashClockSettingstheme</item>-->
-		<item name="android:displayOptions">showTitle</item>
-		<item name="android:windowContentOverlay">@null</item>
-		<item name="android:windowShowWallpaper">true</item>
-		<item name="android:windowBackground">@android:color/transparent</item>
-	</style>
-
-	<style name="DashClockSettings.ActionButton.Overflow" parent="android:Widget.Holo.ActionButton.Overflow">
-		<!--<item name="android:src">@drawable/ic_action_overflow</item>-->
-	</style>
-
+	<!-- Used only in weekdays_layout.xml -->
 	<style name="GreyableButtonToggle" parent="android:Widget.Holo.Button.Toggle">
 		<item name="android:background">@drawable/btn_toggle_bg</item>
 		<item name="android:textAppearance">?android:attr/textAppearanceSmall
