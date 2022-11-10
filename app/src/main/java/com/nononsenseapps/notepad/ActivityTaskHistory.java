@@ -1,31 +1,9 @@
 package com.nononsenseapps.notepad;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
-
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.SeekBarProgressChange;
-import org.androidannotations.annotations.ViewById;
-
-import com.nononsenseapps.helpers.ActivityHelper;
-import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.utils.views.TitleNoteTextView;
-
-import android.os.Bundle;
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.content.Intent;
 import android.database.Cursor;
-
-import androidx.fragment.app.FragmentActivity;
-import androidx.loader.app.LoaderManager.LoaderCallbacks;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-
+import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,8 +12,29 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.loader.app.LoaderManager.LoaderCallbacks;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+
+import com.nononsenseapps.helpers.ActivityHelper;
+import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.utils.views.TitleNoteTextView;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.SeekBarProgressChange;
+import org.androidannotations.annotations.ViewById;
+
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
 @EActivity(resName = "activity_task_history")
-public class ActivityTaskHistory extends FragmentActivity {
+public class ActivityTaskHistory extends AppCompatActivity {
 	public static final String RESULT_TEXT_KEY = "task_text_key";
 	private long mTaskID;
 	private boolean loaded = false;
@@ -49,6 +48,7 @@ public class ActivityTaskHistory extends FragmentActivity {
 
 	@ViewById(resName = "timestamp")
 	TextView timestamp;
+
 	private SimpleDateFormat timeFormatter;
 	private SimpleDateFormat dbTimeParser;
 
@@ -60,8 +60,7 @@ public class ActivityTaskHistory extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 
 		// Intent must contain a task id
-		if (getIntent() == null
-				|| getIntent().getLongExtra(Task.Columns._ID, -1) < 1) {
+		if (getIntent() == null || getIntent().getLongExtra(Task.Columns._ID, -1) < 1) {
 			setResult(RESULT_CANCELED, new Intent());
 			finish();
 			return;
@@ -80,40 +79,36 @@ public class ActivityTaskHistory extends FragmentActivity {
 		// Prepare for failure
 		setResult(RESULT_CANCELED, new Intent());
 		// Inflate a "Done/Discard" custom action bar view.
-		LayoutInflater inflater = (LayoutInflater) getActionBar()
-				.getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
-		final View customActionBarView = inflater.inflate(
-				R.layout.actionbar_custom_view_done_discard, null);
-		customActionBarView.findViewById(R.id.actionbar_done)
-				.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						// "Done"
-						final Intent returnIntent = new Intent();
-						returnIntent.putExtra(RESULT_TEXT_KEY, taskText
-								.getText().toString());
-						setResult(RESULT_OK, returnIntent);
-						finish();
-					}
+		LayoutInflater inflater = (LayoutInflater) getSupportActionBar()
+				.getThemedContext()
+				.getSystemService(LAYOUT_INFLATER_SERVICE);
+		final View customActionBarView = inflater
+				.inflate(R.layout.actionbar_custom_view_done_discard, null);
+		customActionBarView
+				.findViewById(R.id.actionbar_done)
+				.setOnClickListener(v -> {
+					// "Done"
+					final Intent returnIntent = new Intent();
+					returnIntent.putExtra(RESULT_TEXT_KEY, taskText.getText().toString());
+					setResult(RESULT_OK, returnIntent);
+					finish();
 				});
-		customActionBarView.findViewById(R.id.actionbar_discard)
-				.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						// "Cancel result already set"
-						finish();
-					}
+		customActionBarView
+				.findViewById(R.id.actionbar_discard)
+				.setOnClickListener(v -> {
+					// "Cancel result already set"
+					finish();
 				});
 
-		// Show the custom action bar view and hide the normal Home icon and
-		// title.
-		final ActionBar actionBar = getActionBar();
-		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
-				ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-						| ActionBar.DISPLAY_SHOW_TITLE);
-		actionBar.setCustomView(customActionBarView,
-				new ActionBar.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-						ViewGroup.LayoutParams.MATCH_PARENT));
+		// Show the custom action bar view and hide the normal Home icon and title.
+
+		getSupportActionBar()
+				.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
+						ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
+								| ActionBar.DISPLAY_SHOW_TITLE);
+		getSupportActionBar()
+				.setCustomView(customActionBarView, new ActionBar.LayoutParams(
+						ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 	}
 
 	@Override
@@ -125,8 +120,7 @@ public class ActivityTaskHistory extends FragmentActivity {
 					@Override
 					public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 						return new CursorLoader(ActivityTaskHistory.this,
-								Task.URI_TASK_HISTORY,
-								Task.Columns.HISTORY_COLUMNS_UPDATED,
+								Task.URI_TASK_HISTORY, Task.Columns.HISTORY_COLUMNS_UPDATED,
 								Task.Columns.HIST_TASK_ID + " IS ?",
 								new String[] { Long.toString(mTaskID) }, null);
 					}
@@ -151,17 +145,17 @@ public class ActivityTaskHistory extends FragmentActivity {
 
 	@SeekBarProgressChange(resName = "seekBar")
 	void onSeekBarChanged(int progress) {
-		if (mCursor != null) {
-			if (progress < mCursor.getCount()) {
-				mCursor.moveToPosition(progress);
-				taskText.setTextTitle(mCursor.getString(1));
-				taskText.setTextRest(mCursor.getString(2));
-				try {
-					timestamp.setText(timeFormatter.format(dbTimeParser
-							.parse(mCursor.getString(3))));
-				} catch (ParseException e) {
-					Log.d("nononsenseapps time", e.getLocalizedMessage());
-				}
+		if (mCursor == null) return;
+
+		if (progress < mCursor.getCount()) {
+			mCursor.moveToPosition(progress);
+			taskText.setTextTitle(mCursor.getString(1));
+			taskText.setTextRest(mCursor.getString(2));
+			try {
+				Date x = dbTimeParser.parse(mCursor.getString(3));
+				timestamp.setText(timeFormatter.format(x));
+			} catch (ParseException e) {
+				Log.d("nononsenseapps time", e.getLocalizedMessage());
 			}
 		}
 	}

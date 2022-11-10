@@ -17,7 +17,6 @@
 
 package com.nononsenseapps.notepad.widget;
 
-import android.app.ActionBar;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -40,9 +39,10 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
-import androidx.fragment.app.FragmentActivity;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -63,7 +63,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @EActivity(resName = "activity_widget_config")
-public class ListWidgetConfig extends FragmentActivity {
+public class ListWidgetConfig extends AppCompatActivity {
 	public static final String KEY_LIST = "widget1_key_list";
 	public static final String KEY_LIST_TITLE = "widget1_key_list_title";
 	public static final String KEY_SORT_TYPE = "widget1_key_sort_type";
@@ -366,45 +366,38 @@ public class ListWidgetConfig extends FragmentActivity {
 	void setupActionBar() {
 		final WidgetPrefs widgetPrefs = new WidgetPrefs(this, appWidgetId);
 
-		LayoutInflater inflater = (LayoutInflater) getActionBar()
-				.getThemedContext().getSystemService(LAYOUT_INFLATER_SERVICE);
+		LayoutInflater inflater = (LayoutInflater) getSupportActionBar()
+				.getThemedContext()
+				.getSystemService(LAYOUT_INFLATER_SERVICE);
 		final View customActionBarView = inflater.inflate(
 				R.layout.actionbar_custom_view_done, null);
 		customActionBarView.findViewById(R.id.actionbar_done)
-				.setOnClickListener(new View.OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						// "Done"
-						// // Set success
-						widgetPrefs.setPresent();
-						Intent resultValue = new Intent();
-						resultValue.putExtra(
-								AppWidgetManager.EXTRA_APPWIDGET_ID,
-								appWidgetId);
-						setResult(RESULT_OK, resultValue);
-						// Build/Update widget
-						AppWidgetManager appWidgetManager = AppWidgetManager
-								.getInstance(getApplicationContext());
-						// Log.d(TAG, "finishing WidgetId " + appWidgetId);
-						appWidgetManager.updateAppWidget(appWidgetId,
-								ListWidgetProvider.buildRemoteViews(
-										getApplicationContext(),
-										appWidgetManager, appWidgetId,
-										widgetPrefs));
-						// Update list items
-						appWidgetManager.notifyAppWidgetViewDataChanged(
-								appWidgetId, R.id.notesList);
-						// Destroy activity
-						finish();
-					}
+				.setOnClickListener(v -> {
+					// "Done"
+					// // Set success
+					widgetPrefs.setPresent();
+					Intent resultValue = new Intent();
+					resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+					setResult(RESULT_OK, resultValue);
+					// Build/Update widget
+					AppWidgetManager appWidgetManager = AppWidgetManager
+							.getInstance(getApplicationContext());
+					// Log.d(TAG, "finishing WidgetId " + appWidgetId);
+					appWidgetManager.updateAppWidget(appWidgetId,
+							ListWidgetProvider.buildRemoteViews(
+									getApplicationContext(), appWidgetManager, appWidgetId,
+									widgetPrefs));
+
+					// Update list items
+					appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetId, R.id.notesList);
+					// Destroy activity
+					finish();
 				});
-		// Show the custom action bar view and hide the normal Home icon and
-		// title.
-		final ActionBar actionBar = getActionBar();
-		actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
-				ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME
-						| ActionBar.DISPLAY_SHOW_TITLE);
-		actionBar.setCustomView(customActionBarView);
+		// Show the custom action bar view and hide the normal Home icon and title.
+		getSupportActionBar().setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
+				ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME |
+						ActionBar.DISPLAY_SHOW_TITLE);
+		getSupportActionBar().setCustomView(customActionBarView);
 	}
 
 	@AfterViews

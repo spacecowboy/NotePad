@@ -17,25 +17,22 @@
 
 package com.nononsenseapps.notepad;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EActivity;
-
-import com.nononsenseapps.helpers.ActivityHelper;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.fragments.FragmentSearch;
-
-import android.app.ActionBar;
 import android.app.SearchManager;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-
 import android.view.MenuItem;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+
+import com.nononsenseapps.helpers.ActivityHelper;
+import com.nononsenseapps.notepad.fragments.FragmentSearch;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EActivity;
+
 @EActivity(resName = "fullscreen_fragment")
-public class ActivitySearch extends FragmentActivity {
+public class ActivitySearch extends AppCompatActivity {
 
 	protected String mQuery = "";
 
@@ -45,9 +42,8 @@ public class ActivitySearch extends FragmentActivity {
 		ActivityHelper.readAndSetSettings(this);
 		super.onCreate(savedInstanceState);
 
-		final ActionBar actionBar = getActionBar();
-		actionBar.setDisplayShowTitleEnabled(true);
-		actionBar.setDisplayHomeAsUpEnabled(true);
+		getSupportActionBar().setDisplayShowTitleEnabled(true);
+		getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 		handleIntent(getIntent());
 	}

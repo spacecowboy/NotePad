@@ -213,11 +213,12 @@
 				<action android:name="android.appwidget.action.APPWIDGET_CONFIGURE"/>
 			</intent-filter>
 		</activity>
+
 		<activity
 			android:name="com.nononsenseapps.notepad.ShortcutConfig_"
 			android:exported="true"
 			android:label="@string/notes_shortcut"
-			android:theme="@android:style/Theme.Holo.Dialog">
+			android:theme="@style/Theme.AppCompat.Dialog">
 			<intent-filter>
 				<action android:name="android.intent.action.CREATE_SHORTCUT"/>
 
