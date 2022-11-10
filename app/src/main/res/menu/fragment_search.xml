@@ -25,5 +25,5 @@
 		android:orderInCategory="0"
 		android:showAsAction="always"
 		android:title="@string/search_hint"
-		tools:ignore="AppCompatResource"/>
+		/>
 </menu>

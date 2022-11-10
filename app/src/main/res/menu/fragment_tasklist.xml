@@ -18,7 +18,7 @@
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
-	tools:ignore="AppCompatResource">
+	>
 
 	<group android:id="@+id/list_menu_group">
 
