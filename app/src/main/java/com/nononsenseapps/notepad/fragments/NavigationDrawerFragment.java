@@ -466,7 +466,6 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 			}
 
 
-
 			if (result.isEmpty() && SharedPreferencesHelper.isSdSyncEnabled(getActivity())) {
 				// Then try folder
 				result = null;// SharedPreferencesHelper.getSdDirUri(getActivity());
@@ -612,7 +611,7 @@ public class NavigationDrawerFragment extends Fragment implements LoaderManager
 
 		public TopLevelItemViewHolder(View itemView) {
 			super(itemView);
-			mAvatar =null;// (ImageView) itemView.findViewById(R.id.main_avatar);
+			mAvatar = null;// (ImageView) itemView.findViewById(R.id.main_avatar);
 			mText1 = (TextView) itemView.findViewById(android.R.id.text1);
 		}
 

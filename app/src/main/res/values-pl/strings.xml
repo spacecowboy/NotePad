@@ -17,7 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-	<string name="app_name">Notatki</string>
+	<string name="app_name_short">Notatki</string>
 	<string name="title_create">Nowa notatka</string>
 	<string name="timemachine">Kapsuła czasu</string>
 	<string name="time">Czas</string>

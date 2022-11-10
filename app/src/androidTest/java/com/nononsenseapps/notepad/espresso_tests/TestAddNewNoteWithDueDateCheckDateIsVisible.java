@@ -34,7 +34,7 @@ public class TestAddNewNoteWithDueDateCheckDateIsVisible extends BaseTestClass {
 
 		EspressoHelper.createNoteWithName(noteName1);
 		onView(withId(R.id.dueDateBox)).perform(click());
-		onView(withId(R.id.done)).perform(click());
+		onView(withId(android.R.id.button1)).perform(click());
 
 		EspressoHelper.navigateUp();
 

@@ -27,7 +27,7 @@ import android.view.ViewGroup;
 
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 
 /**
@@ -74,7 +74,6 @@ import com.nononsenseapps.notepad.R;
  * complete}
  */
 public abstract class FragmentPagerAdapter extends PagerAdapter {
-	private static final String TAG = "FragmentPagerAdapter";
 
 	private final FragmentManager mFragmentManager;
 	private FragmentTransaction mCurTransaction = null;
@@ -112,11 +111,11 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 		String name = makeFragmentName(container.getId(), itemId);
 		Fragment fragment = mFragmentManager.findFragmentByTag(name);
 		if (fragment != null) {
-			Log.d(TAG, "Attaching item #" + itemId + ": f=" + fragment);
+			NnnLogger.debugOnly(FragmentPagerAdapter.class, "Attaching item #" + itemId + ": f=" + fragment);
 			mCurTransaction.attach(fragment);
 		} else {
 			fragment = getItem(position);
-			Log.d(TAG, "Adding item #" + itemId + ": f=" + fragment);
+			NnnLogger.debugOnly(FragmentPagerAdapter.class, "Adding item #" + itemId + ": f=" + fragment);
 			mCurTransaction.add(container.getId(), fragment,
 					makeFragmentName(container.getId(), itemId));
 		}
@@ -133,8 +132,8 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 		if (mCurTransaction == null) {
 			mCurTransaction = mFragmentManager.beginTransaction();
 		}
-		Log.d(TAG, "Detaching item #" + getItemId(position) + ": f=" + object
-				+ " v=" + ((Fragment) object).getView());
+		NnnLogger.debugOnly(FragmentPagerAdapter.class,
+				"Detaching item #" + getItemId(position) + ": f=" + object + " v=" + ((Fragment) object).getView());
 		mCurTransaction.detach((Fragment) object);
 	}
 

@@ -52,10 +52,14 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 
 	private final static String SERVICENAME = "SDORG";
 
-	/** if SD sync is enabled */
+	/**
+	 * if SD sync is enabled
+	 */
 	protected final boolean configured;
 
-	/** Filesystem path of the folder where files are kept. User changeable in preferences. */
+	/**
+	 * Filesystem path of the folder where files are kept. User changeable in preferences.
+	 */
 	protected String ORG_DIR;
 
 	public SDSynchronizer(Context context) {
@@ -76,7 +80,7 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 		final boolean permitted = PermissionsHelper.hasPermissions(context, PermissionsHelper.PERMISSIONS_SD);
 		if (permitted) {
 			configured = SharedPreferencesHelper.isSdSyncEnabled(context);
-		} else  {
+		} else {
 			configured = false;
 			// disable SD
 			SharedPreferencesHelper.disableSdCardSync(context);

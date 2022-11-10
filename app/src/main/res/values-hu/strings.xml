@@ -17,7 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-	<string name="app_name">Jegyzetek</string>
+	<string name="app_name_short">Jegyzetek</string>
 	<string name="title_create">Új jegyzet</string>
 	<string name="timemachine">Időgép</string>
 	<string name="time">Idő</string>

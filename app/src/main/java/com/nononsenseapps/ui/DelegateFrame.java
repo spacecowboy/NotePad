@@ -22,7 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.RelativeLayout;
 
-import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NnnLogger;
 
 /**
  * This class is designed to act as a simple version of the touch delegate. E.g.
@@ -69,7 +69,7 @@ public class DelegateFrame extends RelativeLayout implements OnClickListener {
 
 	private void setValuesFromXML(AttributeSet attrs) {
 		enlargedViewId = attrs.getAttributeResourceValue(NONONSENSEAPPSNS, ATTR_ENLARGEDVIEW, -1);
-		Log.d("delegate", "setting xml values! view: " + enlargedViewId);
+		NnnLogger.debugOnly(DelegateFrame.class, "setting xml values! view: " + enlargedViewId);
 		setOnClickListener(this);
 	}
 
@@ -79,7 +79,8 @@ public class DelegateFrame extends RelativeLayout implements OnClickListener {
 		if (cachedView == null && enlargedViewId != UNDEFINED) {
 			cachedView = findViewById(enlargedViewId);
 		}
-		Log.d("delegate", "onTouchEvent! view is null?: " + Boolean.toString(cachedView == null));
+		NnnLogger.debugOnly(DelegateFrame.class,
+				"onTouchEvent! view is null?: " + (cachedView == null));
 		if (cachedView != null) {
 			cachedView.performClick();
 		}

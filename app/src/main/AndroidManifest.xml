@@ -61,7 +61,7 @@
 		android:backupAgent="com.nononsenseapps.notepad.BackupAgent"
 		android:hardwareAccelerated="true"
 		android:icon="@drawable/app_icon"
-		android:label="@string/app_name"
+		android:label="@string/nononsense_notes"
 		android:restoreAnyVersion="true">
 
 		<!-- For the Android Backup Service -->
@@ -82,7 +82,7 @@
 		<activity
 			android:name="com.nononsenseapps.notepad.ActivityMain_"
 			android:exported="true"
-			android:label="@string/app_name"
+			android:label="@string/app_name_short"
 			android:theme="@style/ThemeHoloLightDarkActonBar"
 			android:windowSoftInputMode="adjustResize">
 			<meta-data

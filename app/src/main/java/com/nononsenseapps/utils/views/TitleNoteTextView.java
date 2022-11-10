@@ -61,25 +61,26 @@ public class TitleNoteTextView extends TextView {
 	public TitleNoteTextView(Context context, AttributeSet attrs) {
 		super(context, attrs);
 
-		TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
-				R.styleable.StyledTextView, 0, 0);
+		TypedArray attributes = context
+				.getTheme()
+				.obtainStyledAttributes(attrs, R.styleable.StyledTextView, 0, 0);
 
 		try {
-			mTitleRelativeSize = a.getFloat(
-					R.styleable.StyledTextView_titleRelativeSize, 1.0f);
-			mTitleFontFamily = a.getInteger(
-					R.styleable.StyledTextView_titleFontFamily, 0);
-			mTitleFontStyle = a.getInteger(
-					R.styleable.StyledTextView_titleFontStyle, 0);
-			mBodyFontFamily = a.getInteger(
-					R.styleable.StyledTextView_bodyFontFamily, 0);
-			mStyledText = a.getString(R.styleable.StyledTextView_styledText);
-			mLinkify = a.getBoolean(R.styleable.StyledTextView_linkify, false);
+			mTitleRelativeSize = attributes
+					.getFloat(R.styleable.StyledTextView_titleRelativeSize, 1.0f);
+			mTitleFontFamily = attributes
+					.getInteger(R.styleable.StyledTextView_titleFontFamily, 0);
+			mTitleFontStyle = attributes
+					.getInteger(R.styleable.StyledTextView_titleFontStyle, 0);
+			mBodyFontFamily = attributes
+					.getInteger(R.styleable.StyledTextView_bodyFontFamily, 0);
+			mStyledText = attributes.getString(R.styleable.StyledTextView_styledText);
+			mLinkify = attributes.getBoolean(R.styleable.StyledTextView_linkify, false);
+
 			primaryColor = super.getCurrentTextColor();
-			secondaryColor = a.getColor(
-					R.styleable.StyledTextView_secondaryColor, primaryColor);
+			secondaryColor = attributes.getColor(R.styleable.StyledTextView_secondaryColor, primaryColor);
 		} finally {
-			a.recycle();
+			attributes.recycle();
 		}
 
 		titleSizeSpan = new RelativeSizeSpan(mTitleRelativeSize);
@@ -276,7 +277,9 @@ public class TitleNoteTextView extends TextView {
 					setText(text, BufferType.SPANNABLE);
 
 					if (mLinkify) {
+						// this makes the links clickable in the notes in the lists.
 						Linkify.addLinks(this, Linkify.ALL);
+
 						// Make sure links dont steal click focus everywhere
 						setMovementMethod(null);
 					}
@@ -297,46 +300,48 @@ public class TitleNoteTextView extends TextView {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		TextView widget = (TextView) this;
-		Object text = widget.getText();
-		if (text instanceof Spanned) {
-			Spannable buffer = (Spannable) text;
+		TextView thisWidget = (TextView) this;
 
-			int action = event.getAction();
+		if (!(thisWidget.getText() instanceof Spanned)) {
+			return false;
+		}
 
-			if (action == MotionEvent.ACTION_UP
-					|| action == MotionEvent.ACTION_DOWN) {
-				int x = (int) event.getX();
-				int y = (int) event.getY();
+		int action = event.getAction();
+		if (action != MotionEvent.ACTION_UP && action != MotionEvent.ACTION_DOWN) {
+			return false;
+		}
 
-				x -= widget.getTotalPaddingLeft();
-				y -= widget.getTotalPaddingTop();
+		int x = (int) event.getX();
+		int y = (int) event.getY();
 
-				x += widget.getScrollX();
-				y += widget.getScrollY();
+		x -= thisWidget.getTotalPaddingLeft();
+		y -= thisWidget.getTotalPaddingTop();
 
-				Layout layout = widget.getLayout();
-				int line = layout.getLineForVertical(y);
-				int off = layout.getOffsetForHorizontal(line, x);
+		x += thisWidget.getScrollX();
+		y += thisWidget.getScrollY();
 
-				ClickableSpan[] link = buffer.getSpans(off, off,
-						ClickableSpan.class);
+		Layout layout = thisWidget.getLayout();
+		int line = layout.getLineForVertical(y);
+		int off = layout.getOffsetForHorizontal(line, x);
 
-				// Cant click to the right of a span, if the line ends with the span!
-				if (x > layout.getLineRight(line)) {
-					// Don't call the span
-				} else if (link.length != 0) {
-					if (action == MotionEvent.ACTION_UP) {
-						link[0].onClick(widget);
-					} else if (action == MotionEvent.ACTION_DOWN) {
-						Selection.setSelection(buffer,
-								buffer.getSpanStart(link[0]),
-								buffer.getSpanEnd(link[0]));
-					}
-					return true;
-				}
+		Spannable buffer = (Spannable) thisWidget.getText();
+		ClickableSpan[] link = buffer.getSpans(off, off, ClickableSpan.class);
+
+		// Cant click to the right of a span, if the line ends with the span!
+		if (x > layout.getLineRight(line)) {
+			// Don't call the span
+		} else if (link.length != 0) {
+			if (action == MotionEvent.ACTION_UP) {
+				// TODO here you should edit how the browser tabs are launched.
+				//  See the source code for URLSpan.onClick()
+				link[0].onClick(thisWidget);
+			} else if (action == MotionEvent.ACTION_DOWN) {
+				Selection.setSelection(buffer,
+						buffer.getSpanStart(link[0]), buffer.getSpanEnd(link[0]));
 			}
 
+			// ONLY in this case we can say that the event was handled
+			return true;
 		}
 
 		return false;

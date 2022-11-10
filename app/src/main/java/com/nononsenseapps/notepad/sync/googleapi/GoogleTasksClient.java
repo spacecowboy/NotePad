@@ -25,7 +25,7 @@ import android.accounts.OperationCanceledException;
 import android.app.Activity;
 import android.os.Bundle;
 
-import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NnnLogger;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -42,7 +42,6 @@ public class GoogleTasksClient {
 	static final String BASE_URL = "https://www.googleapis.com/tasks/v1";
 	// https://www.googleapis.com/auth/tasks.readonly
 	private static final String OAUTH_SCOPE = "oauth2:https://www.googleapis.com/auth/tasks";
-	private static final String TAG = "GoogleTasksClient";
 	final GoogleTasksAPI api;
 	final String accountName;
 	private final String key;
@@ -54,16 +53,16 @@ public class GoogleTasksClient {
 	}
 
 	public static String getAuthToken(AccountManager accountManager, Account account, boolean notifyAuthFailure) throws AuthenticatorException, OperationCanceledException, IOException {
-		Log.d(TAG, "getAuthToken");
+		NnnLogger.debugOnly(GoogleTasksClient.class, "getAuthToken");
 		String authToken = null;
 		// Might be invalid in the cache
 		authToken = accountManager.blockingGetAuthToken(account, OAUTH_SCOPE, notifyAuthFailure);
 
-		Log.d(TAG, "invalidate auth token: " + authToken);
+		NnnLogger.debugOnly(GoogleTasksClient.class, "invalidate auth token: " + authToken);
 		accountManager.invalidateAuthToken("com.google", authToken);
 
 		authToken = accountManager.blockingGetAuthToken(account, OAUTH_SCOPE, notifyAuthFailure);
-		Log.d(TAG, "fresh auth token: " + authToken);
+		NnnLogger.debugOnly(GoogleTasksClient.class, "fresh auth token: " + authToken);
 
 		return authToken;
 	}
@@ -74,7 +73,7 @@ public class GoogleTasksClient {
 	 */
 	public static void getAuthTokenAsync(Activity activity, Account account,
 										 AccountManagerCallback<Bundle> callback) {
-		Log.d(TAG, "getAuthTokenAsync");
+		NnnLogger.debugOnly(GoogleTasksClient.class, "getAuthTokenAsync");
 
 		AccountManager.get(activity)
 				.getAuthToken(account, OAUTH_SCOPE, Bundle.EMPTY, activity, callback, null);
@@ -84,7 +83,7 @@ public class GoogleTasksClient {
 		if (token == null || token.isEmpty()) {
 			throw new IllegalArgumentException("Auth token can't be empty!");
 		}
-		Log.d(TAG, "Using token: " + token);
+		NnnLogger.debugOnly(GoogleTasksClient.class, "Using token: " + token);
 		// Create a very simple REST adapter, with oauth header
 		RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(BASE_URL)
 				.setRequestInterceptor(new RequestInterceptor() {

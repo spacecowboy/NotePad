@@ -36,16 +36,19 @@ public class TestAddNewNoteWithReminderDateAndTime extends BaseTestClass {
 
 		//add date
 		onView(withId(com.nononsenseapps.notepad.R.id.notificationDate)).perform(click());
-		onView(withId(com.nononsenseapps.notepad.R.id.done)).perform(click());
+		onView(withId(android.R.id.button1)).perform(click());
 
 		//add time
 		onView(withId(com.nononsenseapps.notepad.R.id.notificationTime)).perform(click());
-		onView(withId(com.nononsenseapps.notepad.R.id.done_button)).perform(click());
+		onView(withId(android.R.id.button1)).perform(click());
 
 		EspressoHelper.navigateUp();
 
 		//check that the date field is visible
 		onView(withText(noteName1)).perform(click());
 		onView(withId(R.id.notificationDate)).check(matches(isDisplayed()));
+
+		// maybe we should also check someting like
+		// onView(withId(R.id.notificationDate)).check(matches(withText("november 10")));
 	}
 }

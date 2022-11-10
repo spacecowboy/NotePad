@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.notepad;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -40,18 +41,18 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.legacy.app.ActionBarDrawerToggle;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.github.espiandev.showcaseview.ShowcaseView;
-import com.github.espiandev.showcaseview.ShowcaseView.ConfigOptions;
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NotificationHelper;
@@ -77,7 +78,6 @@ import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
 import com.nononsenseapps.util.SyncGtaskHelper;
-import com.nononsenseapps.utils.ViewsHelper;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -139,7 +139,7 @@ public class ActivityMain extends FragmentActivity
 	private Bundle state;
 
 	private boolean shouldRestart = false;
-	private ShowcaseView sv;
+
 
 	private FloatingActionButton mFab;
 
@@ -778,14 +778,14 @@ public class ActivityMain extends FragmentActivity
 		// TODO strings
 		if (mDrawerToggle == null) {
 			mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-					R.drawable.ic_drawer_dark, R.string.ok, R.string.about) {
+					android.R.string.ok, R.string.about) {
 
 				/**
 				 * Called when a drawer has settled in a completely closed
 				 * state.
 				 */
 				public void onDrawerClosed(View view) {
-					getActionBar().setTitle(R.string.app_name);
+					getActionBar().setTitle(R.string.app_name_short);
 					isDrawerClosed = true;
 					invalidateOptionsMenu(); // creates call to
 					// onPrepareOptionsMenu()
@@ -814,8 +814,15 @@ public class ActivityMain extends FragmentActivity
 			drawerLayout.setDrawerListener(mDrawerToggle);
 		}
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
+		// TODO crashes when inheriting fron newer themes => we need the support actionbar & AppCompatActivity as parent
+		var ab = getActionBar();
+		if (ab == null) {
+			Log.e("NNN", "Coding error: actionbar is null in ActivityMain. A crash will follow!");
+		} else {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+			getActionBar().setHomeButtonEnabled(true);
+		}
+
 
 		// Use extra items for All Lists
 		final int[] extraIds = new int[] { -1,
@@ -1022,32 +1029,50 @@ public class ActivityMain extends FragmentActivity
 	}
 
 	/**
+	 * Create, configure and show a view to highlight a functionality, using an appropriate
+	 * library. The view is shown above the given {@link Activity} and features a title and a
+	 * short description
+	 */
+	public static void showTheShowCaseView(Activity activity, int idOfTheViewToHighlight,
+										   int titleStringId, int descriptionStringId) {
+		View ourTarget = activity.findViewById(idOfTheViewToHighlight);
+		if (ourTarget == null) {
+			// always a good idea to check
+			Log.e("NNN", "Can't show TapTargetView for view id= " + idOfTheViewToHighlight);
+			return;
+		}
+
+		// TODO can *you* make it prettier ? See also https://github.com/KeepSafe/TapTargetView
+		var target2 = TapTarget
+				.forView(activity.findViewById(idOfTheViewToHighlight),
+						activity.getString(titleStringId),
+						activity.getString(descriptionStringId))
+				.outerCircleAlpha(0.9f)
+				.drawShadow(true)
+				.cancelable(true) // tap outside the circle to dismiss the showcaseView
+				.textColor(R.color.accent);
+
+		TapTargetView.showFor(activity, target2);
+	}
+
+	/**
 	 * On first load, show some functionality hints
 	 */
 	private void showcaseDrawer() {
 		if (alreadyShowcased) {
 			return;
 		}
-		final ConfigOptions options = new ConfigOptions();
 
-		// the "OK" button is useless, and it even overlaps with the navigation bar on the bottom!
-		options.noButton = true;
-		options.shotType = ShowcaseView.TYPE_NO_LIMIT;
-		options.block = true;
-		// Used in saving state
-		options.showcaseId = 1;
-		// close the showcase even if the user does not click exactly on the button
-		options.hideOnClickOutside = true;
-		final int vertDp = ViewsHelper.convertDip2Pixels(this, 200);
-		final int horDp = ViewsHelper.convertDip2Pixels(this, 200);
-		sv = ShowcaseView
-				.insertShowcaseViewWithType(ShowcaseView.ITEM_ACTION_HOME,
-						android.R.id.home, this, R.string.showcase_main_title,
-						R.string.showcase_main_msg, options);
-		sv.animateGesture(0, vertDp, horDp, vertDp);
+		showTheShowCaseView(this,
+				android.R.id.home,
+				R.string.showcase_main_title,
+				R.string.showcase_main_msg);
 
-		PreferenceManager.getDefaultSharedPreferences(this).edit()
-				.putBoolean(SHOWCASED_MAIN, true).commit();
+		PreferenceManager
+				.getDefaultSharedPreferences(this)
+				.edit()
+				.putBoolean(SHOWCASED_MAIN, true)
+				.commit();
 		alreadyShowcased = true;
 	}
 
@@ -1057,31 +1082,14 @@ public class ActivityMain extends FragmentActivity
 			return;
 		}
 
-		final int vertDp = ViewsHelper.convertDip2Pixels(this, 110);
-		final int horDp = ViewsHelper.convertDip2Pixels(this, 60);
+		showTheShowCaseView(this, R.id.drawer_menu_createlist,
+				R.string.showcase_drawer_title, R.string.showcase_drawer_msg);
 
-		if (sv != null) {
-			sv.setText(R.string.showcase_drawer_title,
-					R.string.showcase_drawer_msg);
-			sv.setShowcasePosition(horDp, vertDp);
-			sv.show();
-		} else {
-			final ConfigOptions options = new ConfigOptions();
-			// it's useless, and it even overlaps with the navigation bar on the bottom!
-			options.noButton = true;
-			options.shotType = ShowcaseView.TYPE_NO_LIMIT;
-			options.block = true;
-			// close the showcase even if the user does not click exactly on the button
-			options.hideOnClickOutside = true;
-			// Used in saving state
-			options.showcaseId = 2;
-			sv = ShowcaseView.insertShowcaseView(horDp, vertDp, this,
-					R.string.showcase_drawer_title,
-					R.string.showcase_drawer_msg, options);
-			sv.show();
-		}
-		PreferenceManager.getDefaultSharedPreferences(this).edit()
-				.putBoolean(SHOWCASED_DRAWER, true).commit();
+		PreferenceManager
+				.getDefaultSharedPreferences(this)
+				.edit()
+				.putBoolean(SHOWCASED_DRAWER, true)
+				.commit();
 		alreadyShowcasedDrawer = true;
 	}
 
@@ -1143,35 +1151,23 @@ public class ActivityMain extends FragmentActivity
 			setIntent(intent);
 			// Replace editor fragment
 			getSupportFragmentManager().beginTransaction()
-					.setCustomAnimations(R.anim.slide_in_top,
-							R.anim.slide_out_bottom).replace(R.id.fragment2,
-							TaskDetailFragment_.getInstance(text, listId))
+					.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom)
+					.replace(R.id.fragment2, TaskDetailFragment_.getInstance(text, listId))
 					.commitAllowingStateLoss();
 			taskHint.setVisibility(View.GONE);
 		} else {
 			// Open an activity
-
-			// if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
-			// Log.d("nononsenseapps animation", "Animating");
-			// intent.putExtra(ANIMATEEXIT, true);
-			// startActivity(
-			// intent,
-			// ActivityOptions.makeCustomAnimation(this,
-			// R.anim.activity_slide_in_left,
-			// R.anim.activity_slide_out_left).toBundle());
-			// }
-			// else {
 			startActivity(intent);
-			// }
 		}
 	}
 
 	@Override
 	public void closeFragment(final Fragment fragment) {
 		if (fragment2 != null) {
-			getSupportFragmentManager().beginTransaction()
-					.setCustomAnimations(R.anim.slide_in_top,
-							R.anim.slide_out_bottom).remove(fragment)
+			getSupportFragmentManager()
+					.beginTransaction()
+					.setCustomAnimations(R.anim.slide_in_top, R.anim.slide_out_bottom)
+					.remove(fragment)
 					.commitAllowingStateLoss();
 			taskHint.setAlpha(0f);
 			taskHint.setVisibility(View.VISIBLE);
@@ -1224,8 +1220,8 @@ public class ActivityMain extends FragmentActivity
 		}
 	}
 
+	// holds all the swipe-to-refresh layouts of the various TaskListFragments
 	private ArrayList<SwipeRefreshLayout> swpRefLayouts = new ArrayList<>();
-
 
 	/**
 	 * every {@link TaskListFragment} has its own instance of a {@link SwipeRefreshLayout},
@@ -1265,7 +1261,7 @@ public class ActivityMain extends FragmentActivity
 		setRefreshOfAllSwipeLayoutsTo(isOngoing);
 	}
 
-	public static interface ListOpener {
-		public void openList(final long id);
+	public interface ListOpener {
+		void openList(final long id);
 	}
 }

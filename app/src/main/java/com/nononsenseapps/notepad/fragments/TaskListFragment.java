@@ -56,7 +56,6 @@ import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
 import com.nononsenseapps.helpers.SyncHelper;
-import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
@@ -512,7 +511,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	@AfterViews
 	void setupPullToRefresh() {
 		// every list gets its own instance of the swipetorefresh layout
-		var ptrL = (SwipeRefreshLayout)this.getView().findViewById(R.id.ptrLayout);
+		var ptrL = (SwipeRefreshLayout) this.getView().findViewById(R.id.ptrLayout);
 
 		// The pull-to-refresh layout is defined in fragment_task_list.xml
 
@@ -651,14 +650,12 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 					final ClipboardManager clipboard = (ClipboardManager) getActivity()
 							.getSystemService(Context.CLIPBOARD_SERVICE);
 					clipboard.setPrimaryClip(ClipData.newPlainText(
-							getString(R.string.app_name), getShareText()));
+							getString(R.string.app_name_short), getShareText()));
 					try {
-						Toast.makeText(
-										getActivity(),
-										getResources().getQuantityString(
-												R.plurals.notecopied_msg, tasks.size(),
-												tasks.size()), Toast.LENGTH_SHORT)
-								.show();
+						Toast.makeText(getActivity(), getResources().getQuantityString(
+										R.plurals.notecopied_msg, tasks.size(),
+										tasks.size()),
+								Toast.LENGTH_SHORT).show();
 					} catch (Exception e) {
 						// Protect against faulty translations
 					}
@@ -677,12 +674,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						delpf.show(getFragmentManager(), "multi_delete_verify");
 					} else {
 						DialogDeleteTask.showDialog(getFragmentManager(), -1,
-								new DialogConfirmedListener() {
-									@Override
-									public void onConfirm() {
-										pListener.onPasswordConfirmed();
-									}
-								});
+								() -> pListener.onPasswordConfirmed());
 					}
 				} else if (itemId == R.id.menu_switch_list) {
 					// show move to list dialog
@@ -945,23 +937,27 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 				convertView = inflater.inflate(getViewLayout(position), parent,
 						false);
 				if (itemType == getItemViewType(position)) {
-					setPrefsOnView((TitleNoteTextView) convertView.findViewById(android.R.id.text1));
+					setPrefsOnView(convertView.findViewById(android.R.id.text1));
 				}
 			}
 			return super.getView(position, convertView, parent);
 		}
 
 		private void setPrefsOnView(final TitleNoteTextView view) {
-			view.setTitleFontFamily(Integer.parseInt(prefs.getString(
-					context.getString(R.string.pref_list_title_fontfamily), "1")));
-			view.setTitleFontStyle(Integer.parseInt(prefs.getString(
-					context.getString(R.string.pref_list_title_fontstyle), "1")));
-			view.setBodyFontFamily(Integer.parseInt(prefs.getString(
-					context.getString(R.string.pref_list_body_fontfamily), "0")));
-			view.setLinkify(prefs.getBoolean(
-					context.getString(R.string.pref_list_links), true));
-			view.setTheTextSize(Integer.parseInt(prefs.getString(
-					context.getString(R.string.pref_list_fontsize), "1")));
+			String fontPref1 = prefs.getString(context.getString(R.string.pref_list_title_fontfamily), "1");
+			view.setTitleFontFamily(Integer.parseInt(fontPref1));
+
+			String fontPref2 = prefs.getString(context.getString(R.string.pref_list_title_fontstyle), "1");
+			view.setTitleFontStyle(Integer.parseInt(fontPref2));
+
+			String fontPref3 = prefs.getString(context.getString(R.string.pref_list_body_fontfamily), "0");
+			view.setBodyFontFamily(Integer.parseInt(fontPref3));
+
+			boolean shouldShowLinks = prefs.getBoolean(context.getString(R.string.pref_list_links), true);
+			view.setLinkify(shouldShowLinks);
+
+			String fontPref4 = prefs.getString(context.getString(R.string.pref_list_fontsize), "1");
+			view.setTheTextSize(Integer.parseInt(fontPref4));
 		}
 
 	}

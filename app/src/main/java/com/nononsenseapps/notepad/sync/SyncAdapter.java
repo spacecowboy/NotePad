@@ -27,7 +27,7 @@ import android.content.SyncResult;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
-import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
 
@@ -108,7 +108,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						&& account.name.equals(settings.getString(
 						SyncPrefs.KEY_ACCOUNT, ""))) {
 
-					Log.d("nononsenseapps notes sync", "onPerformSync");
+					NnnLogger.debugOnly(SyncAdapter.class, "onPerformSync");
 					mContext.sendBroadcast(new Intent(SYNC_STARTED));
 
 					if (GoogleTaskSync.fullSync(mContext,

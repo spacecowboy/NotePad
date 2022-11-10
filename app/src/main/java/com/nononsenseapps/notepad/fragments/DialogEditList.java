@@ -17,31 +17,10 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import org.androidannotations.annotations.AfterTextChange;
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.UiThread;
-import org.androidannotations.annotations.ViewById;
-import org.androidannotations.annotations.UiThread.Propagation;
-
-import com.nononsenseapps.notepad.ActivityMain;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
-
 import android.database.Cursor;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.DialogFragment;
-import androidx.loader.app.LoaderManager.LoaderCallbacks;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import android.text.Editable;
-import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -50,6 +29,23 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.DialogFragment;
+import androidx.loader.app.LoaderManager.LoaderCallbacks;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.TaskList;
+
+import org.androidannotations.annotations.AfterTextChange;
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.UiThread;
+import org.androidannotations.annotations.UiThread.Propagation;
+import org.androidannotations.annotations.ViewById;
 
 @EFragment(resName = "fragment_dialog_editlist")
 public class DialogEditList extends DialogFragment {

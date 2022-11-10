@@ -17,7 +17,7 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
-	<string name="app_name">No Nonsense Notes</string>
+	<string name="app_name_short">Note</string>
 	<string name="title_create">Nuova nota</string>
 	<string name="timemachine">Cronologia Nota</string>
 	<string name="time">Tempo</string>
@@ -87,7 +87,7 @@
 	<string name="showcase_main_title">Accedi ai tuoi elenchi</string>
 	<string name="showcase_main_msg">Toccare l\'icona o trascinare dal bordo sinistro</string>
 	<string name="showcase_drawer_title">Gestisci i tuoi elenchi</string>
-	<string name="showcase_drawer_msg">Pressione lunga per modificare o eliminare</string>
+	<string name="showcase_drawer_msg">Pressione lunga su un nome di lista per modificarla o eliminarla</string>
 	<string name="showcase_timemachine_title">Salva le tue note</string>
 	<string name="showcase_timemachine_msg">Le modifiche vengono sempre salvate. Usa la cronologia per ripristinare una versione precedente.</string>
 	<string name="donate_to_unlock">Dona per sbloccare</string>

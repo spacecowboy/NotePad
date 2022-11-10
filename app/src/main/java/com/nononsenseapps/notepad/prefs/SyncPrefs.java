@@ -42,7 +42,7 @@ import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
 
 import com.nononsenseapps.build.Config;
-import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
@@ -256,7 +256,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 
 	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 		try {
-			Log.d("syncPrefs", "onChanged");
+			NnnLogger.debugOnly(SyncPrefs.class, "onChanged");
 			if (activity.isFinishing()) {
 				// Setting the summary now would crash it with
 				// IllegalStateException since we are not attached to a view
@@ -266,7 +266,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 				} else if (KEY_BACKGROUND_SYNC.equals(key)) {
 					setSyncInterval(activity, prefs);
 				} else if (KEY_ACCOUNT.equals(key)) {
-					Log.d("syncPrefs", "account");
+					NnnLogger.debugOnly(SyncPrefs.class, "account");
 					prefAccount.setTitle(prefs.getString(KEY_ACCOUNT, ""));
 				} else if (KEY_SD_ENABLE.equals(key)) {
 					// Restart the sync service
@@ -333,7 +333,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 			if (!chosenAccount.name.equalsIgnoreCase(chosenAccountName)) continue;
 
 			// we got the 1° (and hopefully only) match: proceed
-			Log.d("prefsActivity", "step one");
+			NnnLogger.debugOnly(SyncPrefs.class, "step one");
 
 			// work continues in callback, method afterGettingAuthToken()
 			AccountManagerCallback<Bundle> callback = (b) -> afterGettingAuthToken(b, chosenAccount);
@@ -353,18 +353,18 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	 */
 	private void afterGettingAuthToken(AccountManagerFuture<Bundle> future, Account account) {
 		try {
-			Log.d("prefsActivity", "step two");
+			NnnLogger.debugOnly(SyncPrefs.class, "step two");
 			// If the user has authorized your application to use the tasks API a token is available.
 			// TODO here it crashes because the app is not registered into some kind of console
 			String token = future.getResult().getString(AccountManager.KEY_AUTHTOKEN);
 
 			// Now we are authorized by the user.
-			Log.d("prefsActivity", "step two-b: " + token);
+			NnnLogger.debugOnly(SyncPrefs.class, "step two-b: " + token);
 
 			if (token != null && !token.isEmpty() && account != null) {
 
 				// Also mark enabled as true, as the dialog was shown from enable button
-				Log.d("prefsActivity", "step three: " + account.name);
+				NnnLogger.debugOnly(SyncPrefs.class, "step three: " + account.name);
 
 				SharedPreferences customSharedPreference = PreferenceManager
 						.getDefaultSharedPreferences(activity);

@@ -17,26 +17,24 @@
 
 package com.nononsenseapps.ui;
 
-import java.security.InvalidParameterException;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
-
-import com.nononsenseapps.notepad.R;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.DataSetObserver;
-
-import com.nononsenseapps.helpers.Log;
-
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.SimpleCursorAdapter;
+
+import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.notepad.R;
+
+import java.security.InvalidParameterException;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class SectionAdapter extends BaseAdapter {
 	private final static String ERRORMSG = "This adapter is in the wrong state for that method to be used!";
@@ -175,7 +173,7 @@ public class SectionAdapter extends BaseAdapter {
 		this.headers.add(section);
 		SimpleCursorAdapter prev = this.sections.put(section, adapter);
 		if (prev != null) {
-			Log.d("listproto", "killing previous adapter");
+			NnnLogger.debugOnly(SectionAdapter.class, "killing previous adapter");
 			prev.unregisterDataSetObserver(subObserver);
 			prev.swapCursor(null);
 		}
@@ -195,7 +193,7 @@ public class SectionAdapter extends BaseAdapter {
 		this.headers.remove(section);
 		SimpleCursorAdapter prev = this.sections.remove(section);
 		if (prev != null) {
-			Log.d("listproto", "killing previous adapter");
+			NnnLogger.debugOnly(SectionAdapter.class, "killing previous adapter");
 			prev.unregisterDataSetObserver(subObserver);
 			prev.swapCursor(null);
 		}

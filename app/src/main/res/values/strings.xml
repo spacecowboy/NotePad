@@ -19,7 +19,7 @@
 <resources>
 
 	<string name="nononsense_notes" translatable="false">NoNonsense Notes</string>
-	<string name="app_name">Notes</string>
+	<string name="app_name_short">Notes</string>
 	<string name="title_create">New note</string>
 	<string name="timemachine">Time machine</string>
 	<string name="time">Time</string>
@@ -106,7 +106,7 @@
 	<string name="showcase_main_title">Access your lists</string>
 	<string name="showcase_main_msg">Touch the icon or swipe from the left edge</string>
 	<string name="showcase_drawer_title">Manage your lists</string>
-	<string name="showcase_drawer_msg">Long press to edit or delete</string>
+	<string name="showcase_drawer_msg">Long press on a list name to edit or delete it</string>
 	<string name="showcase_timemachine_title">Save your notes</string>
 	<string name="showcase_timemachine_msg">Changes are always saved. Use the time machine to restore a previous version.</string>
 

@@ -18,6 +18,8 @@
 package com.nononsenseapps.notepad.fragments;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -26,6 +28,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -36,23 +39,21 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
+import android.widget.DatePicker;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
-import android.widget.ShareActionProvider;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.widget.ShareActionProvider;
+import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
-import com.android.datetimepicker.date.DatePickerDialog;
-import com.android.datetimepicker.date.DatePickerDialog.OnDateSetListener;
-import com.android.datetimepicker.time.TimePickerDialog;
-import com.github.espiandev.showcaseview.ShowcaseView;
 import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.ActivityTaskHistory_;
@@ -61,8 +62,6 @@ import com.nononsenseapps.notepad.R.layout;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
-import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
@@ -86,14 +85,15 @@ import java.util.Calendar;
  * A fragment representing a single Note detail screen.
  */
 @EFragment
-public class TaskDetailFragment extends Fragment implements OnDateSetListener {
+public class TaskDetailFragment extends Fragment {
 
 	public static int LOADER_EDITOR_TASK = 3001;
 	public static int LOADER_EDITOR_TASKLISTS = 3002;
 	public static int LOADER_EDITOR_NOTIFICATIONS = 3003;
 
-	LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<Cursor>() {
+	LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<>() {
 		@Override
+		@NonNull
 		public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
 			if (LOADER_EDITOR_NOTIFICATIONS == id) {
 				return new CursorLoader(getActivity(), Notification.URI,
@@ -170,8 +170,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		}
 
 		@Override
-		public void onLoaderReset(Loader<Cursor> arg0) {
-		}
+		public void onLoaderReset(@NonNull Loader<Cursor> arg0) {}
 	};
 
 	@ViewById(resName = "taskText")
@@ -202,8 +201,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	// A list id is necessary
 	public static final String ARG_ITEM_LIST_ID = "item_list_id";
 	private static final String SHOWCASED_EDITOR = "showcased_editor_window";
-	// Random identifier
-	private static final String DATE_DIALOG_TAG = "date_9374jf893jd893jt";
 
 	// To override intent values with
 	@InstanceState
@@ -219,9 +216,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	// AND with task.locked. If result is true, note is locked and has not been
 	// unlocked, otherwise good to show
 	private boolean mLocked = true;
-
-	// This is the notification we are setting a location for
-	private Notification pendingLocationNotification = null;
 
 	private OnFragmentInteractionListener mListener;
 	private ShareActionProvider mShareActionProvider;
@@ -287,7 +281,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	 * container is null
 	 */
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savInstState) {
+	public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savInstState) {
 		if (container == null) {
 			dontLoad = true;
 			return null;
@@ -323,8 +317,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			}
 			// Fail if still not valid
 			if (getArguments().getLong(ARG_ITEM_LIST_ID, stateListId) < 1) {
-				// throw new InvalidParameterException(
-				// "Must specify a list id to create a note in!");
 				Toast.makeText(getActivity(),
 						"Must specify a list id to create a note in!",
 						Toast.LENGTH_SHORT).show();
@@ -348,13 +340,9 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		final boolean showcasing = showcaseEditor();
 
 		if (!showcasing && openKb) {
-			/**
-			 * Only show keyboard for new/empty notes But not if the showcase
-			 * view is showing
-			 */
+			// Only show keyboard for new/empty notes, but not if the showcaseview is showing
 			taskText.requestFocus();
-			inputManager.showSoftInput(taskText,
-					InputMethodManager.SHOW_IMPLICIT);
+			inputManager.showSoftInput(taskText, InputMethodManager.SHOW_IMPLICIT);
 		}
 	}
 
@@ -370,22 +358,19 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			return false;
 		}
 
-		// options to configure the showcase view
-		final var options = new ShowcaseView.ConfigOptions();
-		options.shotType = ShowcaseView.TYPE_NO_LIMIT;
-		options.block = true;
-		options.hideOnClickOutside = true; // mandatory to make tests work
-		// the "OK" button is useless, and it even overlaps with the navigation bar on the bottom!
-		options.noButton = true;
-
-		ShowcaseView sv = ShowcaseView.insertShowcaseViewWithType(
-				ShowcaseView.ITEM_ACTION_OVERFLOW, // focus on the overflow menu, the "vertical ..."
-				0, // ignored because we focus on the overflow menu
-				this.getActivity(), // show the view above this fragment's activity
+		ActivityMain.showTheShowCaseView(
+				this.getActivity(),
+				// it would be better to focus the showcaseview on the overflow menu (the 3
+				// vertical dots) but TapTargetView needs a toolbar, which needs appcompatactivity,
+				// which need Theme.AppCompat, which needs ...
+				// Maybe this works ?
+				// (switch to appcompatactivity, then in onCreate() you run the following)
+				// Toolbar tb = (Toolbar) activity.getSupportActionBar().getCustomView();
+				// Toolbar tb = activity.findViewById(androidx.appcompat.R.id.action_bar);
+				// TapTarget.forToolbarOverflow(tb,...)
+				android.R.id.home,
 				R.string.showcase_timemachine_title,
-				R.string.showcase_timemachine_msg,
-				options);
-		sv.show();
+				R.string.showcase_timemachine_msg);
 
 		PreferenceManager.getDefaultSharedPreferences(getActivity())
 				.edit()
@@ -419,14 +404,10 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 
 		taskText.addTextChangedListener(new TextWatcher() {
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-									  int count) {
-			}
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-										  int after) {
-			}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
 			@Override
 			public void afterTextChanged(Editable s) {
@@ -448,11 +429,24 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		//final DialogCalendar datePicker;
 		//datePicker.setListener(this);
 		//datePicker.show(getFragmentManager(), DATE_DIALOG_TAG);
-		final DatePickerDialog datedialog = DatePickerDialog
-				.newInstance(this, localTime.get(Calendar.YEAR), localTime
-						.get(Calendar.MONTH), localTime
-						.get(Calendar.DAY_OF_MONTH));
-		datedialog.show(getFragmentManager(), DATE_DIALOG_TAG);
+
+		// choose a dark or white theme depending on the settings
+		final String theme = PreferenceManager
+				.getDefaultSharedPreferences(this.getContext())
+				.getString(MainPrefs.KEY_THEME, this.getString(R.string.const_theme_light_ab));
+		final int themeResId = theme.contains("light")
+				? android.R.style.Theme_Material_Light_Dialog
+				: android.R.style.Theme_Material_Dialog;
+
+		var dpDiag = new DatePickerDialog(
+				this.getActivity(),
+				themeResId,
+				this::onDateSet,
+				localTime.get(Calendar.YEAR),
+				localTime.get(Calendar.MONTH),
+				localTime.get(Calendar.DAY_OF_MONTH));
+		dpDiag.setTitle(R.string.select_date);
+		dpDiag.show();
 	}
 
 	// @Override
@@ -468,14 +462,8 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	// setDueText();
 	// }
 	//
-	// @Override
-	// public void onDialogTimeCancel() {
-	// // TODO Auto-generated method stub
-	//
-	// }
 
-	@Override
-	public void onDateSet(DatePickerDialog dialog, int year, int monthOfYear, int dayOfMonth) {
+	private void onDateSet(DatePicker dialog, int year, int monthOfYear, int dayOfMonth) {
 		final Calendar localTime = Calendar.getInstance();
 		if (mTask.due != null) {
 			localTime.setTimeInMillis(mTask.due);
@@ -491,11 +479,6 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 
 		mTask.due = localTime.getTimeInMillis();
 		setDueText();
-
-		// Dont ask for time for due date
-		// final TimePickerDialogFragment picker = getTimePickerFragment();
-		// picker.setListener(this);
-		// picker.show(getFragmentManager(), "time");
 	}
 
 	// @Override
@@ -503,6 +486,16 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	// mTask.due = time;
 	// setDueText();
 	// }
+
+	/**
+	 * Returns a properly configured {@link DatePickerDialog} to let the user pick a day in
+	 * a calendar view. An alternative very similar to this is
+	 * {@link com.google.android.material.datepicker.MaterialDatePicker} but it requires an app
+	 * theme with parent="Theme.MaterialComponents", which does not work in our app
+	 */
+	private static DatePickerDialog getDatePickerPopup() {
+		return null;
+	}
 
 	private void setDueText() {
 		if (mTask.due == null) {
@@ -545,12 +538,8 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			addNotification(not);
 
 			// And scroll to bottom. takes 300ms for item to appear.
-			editScrollView.postDelayed(new Runnable() {
-				@Override
-				public void run() {
-					editScrollView.fullScroll(ScrollView.FOCUS_DOWN);
-				}
-			}, 300);
+			editScrollView.postDelayed(
+					() -> editScrollView.fullScroll(ScrollView.FOCUS_DOWN), 300);
 		}
 	}
 
@@ -560,7 +549,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	public boolean isLocked() {
 		// TODO check and use this
 		boolean hasPassword = SharedPreferencesHelper.isPasswordSet(getActivity());
-		// if (!hasPassword) return false;
+		// if (!hasPassword) return false; // TODO check
 
 		if (mTask != null) {
 			return mTask.locked & mLocked;
@@ -584,40 +573,15 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		}
 		setDueText();
 		taskCompleted.setChecked(mTask.completed != null);
-		taskCompleted.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-										 boolean isChecked) {
-				if (isChecked)
-					mTask.completed = Calendar.getInstance().getTimeInMillis();
-				else
-					mTask.completed = null;
-			}
+		taskCompleted.setOnCheckedChangeListener((buttonView, isChecked) -> {
+			if (isChecked)
+				mTask.completed = Calendar.getInstance().getTimeInMillis();
+			else
+				mTask.completed = null;
 		});
+
 		// Lock fields
 		setFieldStatus();
-
-		// Open keyboard on new notes so users can start typing directly
-		// need small delay (100ms) for it to open consistently
-		// TODO
-		// if (mTask._id < 1) {
-		// (new Handler()).postDelayed(new Runnable() {
-		// public void run() {
-		// MotionEvent e = MotionEvent.obtain(
-		// SystemClock.uptimeMillis(),
-		// SystemClock.uptimeMillis(),
-		// MotionEvent.ACTION_DOWN, 0, 0, 0);
-		// taskText.dispatchTouchEvent(e);
-		// e.recycle();
-		// e = MotionEvent.obtain(SystemClock.uptimeMillis(),
-		// SystemClock.uptimeMillis(), MotionEvent.ACTION_UP,
-		// 0, 0, 0);
-		// taskText.dispatchTouchEvent(e);
-		// e.recycle();
-		// }
-		// }, 100);
-		// }
-
 	}
 
 	/**
@@ -634,27 +598,22 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		String type;
 		if (list.listtype == null) {
 			type = PreferenceManager.getDefaultSharedPreferences(getActivity())
-					.getString(getString(R.string.pref_listtype),
-							getString(R.string.default_listtype));
+					.getString(getString(R.string.pref_listtype), getString(R.string.default_listtype));
 		} else {
 			type = list.listtype;
 		}
-		taskSection.setVisibility(type
-				.equals(getString(R.string.const_listtype_notes)) ? View.GONE
-				: View.VISIBLE);
+		taskSection.setVisibility(type.equals(getString(R.string.const_listtype_notes)) ? View.GONE : View.VISIBLE);
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasks_detail, menu);
 
 		// Locate MenuItem with ShareActionProvider
 		MenuItem item = menu.findItem(R.id.menu_share);
-
 		if (item != null) {
 			// Fetch and store ShareActionProvider
-			// TODO use MenuItemCompat.getActionProvider(item);
-			mShareActionProvider = (ShareActionProvider) item.getActionProvider();
+			mShareActionProvider = (ShareActionProvider) MenuItemCompat.getActionProvider(item);
 			setShareIntent("");
 		}
 	}
@@ -668,11 +627,13 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			}
 
 			try {
-				mShareActionProvider.setShareIntent(
-						new Intent(Intent.ACTION_SEND).setType("text/plain")
-								.putExtra(Intent.EXTRA_TEXT, text)
-								.putExtra(Intent.EXTRA_SUBJECT,
-										text.substring(0, titleEnd)));
+				// TODO try sharing a note with the email app: it should put the title as subject,
+				//  in my opinion
+				Intent i = new Intent(Intent.ACTION_SEND)
+						.setType("text/plain")
+						.putExtra(Intent.EXTRA_TEXT, text)
+						.putExtra(Intent.EXTRA_SUBJECT, text.substring(0, titleEnd));
+				mShareActionProvider.setShareIntent(i);
 			} catch (RuntimeException e) {
 				// Can crash when too many transactions overflow the buffer
 				Log.d("nononsensenotes", e.getLocalizedMessage());
@@ -699,8 +660,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			return true;
 		} else if (itemId == R.id.menu_timemachine) {
 			if (mTask != null && mTask._id > 0) {
-				Intent timeIntent = new Intent(getActivity(),
-						ActivityTaskHistory_.class);
+				Intent timeIntent = new Intent(getActivity(), ActivityTaskHistory_.class);
 				timeIntent.putExtra(Task.Columns._ID, mTask._id);
 				startActivityForResult(timeIntent, 1);
 				// ActivityTaskHistory.start(getActivity(), mTask._id);
@@ -710,12 +670,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			if (mTask != null) {
 				if (mTask.locked) {
 					DialogPassword_ delpf = new DialogPassword_();
-					delpf.setListener(new PasswordConfirmedListener() {
-						@Override
-						public void onPasswordConfirmed() {
-							deleteAndClose();
-						}
-					});
+					delpf.setListener(() -> deleteAndClose());
 					delpf.show(getFragmentManager(), "delete_verify");
 				} else {
 					deleteAndClose();
@@ -738,17 +693,14 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			return true;
 		} else if (itemId == R.id.menu_unlock) {
 			DialogPassword_ pf = new DialogPassword_();
-			pf.setListener(new PasswordConfirmedListener() {
-				@Override
-				public void onPasswordConfirmed() {
-					if (mTask != null) {
-						mTask.locked = false;
-						Toast.makeText(getActivity(), R.string.unlocked, Toast.LENGTH_SHORT).show();
+			pf.setListener(() -> {
+				if (mTask != null) {
+					mTask.locked = false;
+					Toast.makeText(getActivity(), R.string.unlocked, Toast.LENGTH_SHORT).show();
 
-						if (mLocked) {
-							mLocked = false;
-							fillUIFromTask();
-						}
+					if (mLocked) {
+						mLocked = false;
+						fillUIFromTask();
 					}
 				}
 			});
@@ -781,11 +733,11 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			if (menu.findItem(R.id.menu_share) != null)
 				menu.findItem(R.id.menu_share).setVisible(visible);
 			if (menu.findItem(R.id.menu_lock) != null)
-				menu.findItem(R.id.menu_lock).setVisible(
-						visible && mTask != null && !mTask.locked);
+				menu.findItem(R.id.menu_lock)
+						.setVisible(visible && mTask != null && !mTask.locked);
 			if (menu.findItem(R.id.menu_unlock) != null)
-				menu.findItem(R.id.menu_unlock).setVisible(
-						visible && mTask != null && mTask.locked);
+				menu.findItem(R.id.menu_unlock)
+						.setVisible(visible && mTask != null && mTask.locked);
 		}
 	}
 
@@ -798,19 +750,14 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 
 	private void deleteAndClose() {
 		if (mTask != null && mTask._id > 0 && !isLocked()) {
-			DialogDeleteTask.showDialog(getFragmentManager(), mTask._id,
-					new DialogConfirmedListener() {
-						@Override
-						public void onConfirm() {
-							// Prevents save attempts
-							mTask = null;
-							// Request a close from activity
-							if (mListener != null) {
-								mListener
-										.closeFragment(TaskDetailFragment.this);
-							}
-						}
-					});
+			DialogDeleteTask.showDialog(getFragmentManager(), mTask._id, () -> {
+				// Prevents save attempts
+				mTask = null;
+				// Request a close from activity
+				if (mListener != null) {
+					mListener.closeFragment(TaskDetailFragment.this);
+				}
+			});
 		} else {
 			// Prevents save attempts
 			mTask = null;
@@ -890,7 +837,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	}
 
 	@Override
-	public void onAttach(Activity activity) {
+	public void onAttach(@NonNull Activity activity) {
 		super.onAttach(activity);
 		if (dontLoad) {
 			return;
@@ -909,7 +856,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 	}
 
 	@Override
-	public void onSaveInstanceState(final Bundle state) {
+	public void onSaveInstanceState(@NonNull final Bundle state) {
 		super.onSaveInstanceState(state);
 	}
 
@@ -928,8 +875,7 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 			not.view = nv;
 
 			// Setup all the listeners etc
-			NotificationItemHelper
-					.setup(this, notificationList, nv, not, mTask);
+			NotificationItemHelper.setup(this, notificationList, nv, not, mTask);
 
 			notificationList.addView(nv);
 		}
@@ -946,68 +892,45 @@ public class TaskDetailFragment extends Fragment implements OnDateSetListener {
 		if (mTask != null && isLocked()) {
 			fillUIFromTask();
 		}
-
-		// See if there was a dialog and set listener again
-		Fragment dateDialog = getFragmentManager().findFragmentByTag(
-				DATE_DIALOG_TAG);
-		if (dateDialog != null) {
-			((DatePickerDialog) dateDialog).setOnDateSetListener(this);
-		}
 	}
 
 	// @Override
 	public void onTimeTravel(Intent data) {
 		if (taskText != null) {
-			taskText.setText(data
-					.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
+			taskText.setText(data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
 		}
 		// Need to set here also for password to work
 		if (mTask != null) {
-			mTask.setText(data
-					.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
+			mTask.setText(data.getStringExtra(ActivityTaskHistory.RESULT_TEXT_KEY));
 		}
 	}
 
 	/**
-	 * Returns an appropriately themed time picker fragment
+	 * Returns an appropriately themed {@link TimePickerDialog}, which will be shown in a
+	 * popup, also setting the callback and desired starting time through the given parameters.
+	 * An alternative is {@link com.google.android.material.timepicker.MaterialTimePicker}, which
+	 * is 99% identical, but it requires an app theme with parent="Theme.MaterialComponents",
+	 * which does not work in our app, due to the auto-generated code of the annotations library
 	 */
-	// public TimePickerDialogFragment getTimePickerFragment() {
-	// final String theme = PreferenceManager.getDefaultSharedPreferences(
-	// getActivity()).getString(MainPrefs.KEY_THEME,
-	// getString(R.string.const_theme_light_ab));
-	// if (theme.contains("light")) {
-	// return TimePickerDialogFragment
-	// .newInstance(R.style.BetterPickersDialogFragment_Light);
-	// }
-	// else {
-	// // dark
-	// return TimePickerDialogFragment
-	// .newInstance(R.style.BetterPickersDialogFragment);
-	// }
-	// }
+	public TimePickerDialog getTimePickerDialog(Calendar localTime,
+												TimePickerDialog.OnTimeSetListener listener) {
+		// choose a dark or white theme depending on the settings
+		final String theme = PreferenceManager
+				.getDefaultSharedPreferences(getActivity())
+				.getString(MainPrefs.KEY_THEME, getString(R.string.const_theme_light_ab));
+		final int themeResId = theme.contains("light")
+				? android.R.style.Theme_Material_Light_Dialog
+				: android.R.style.Theme_Material_Dialog;
 
-	/**
-	 * Returns an appropriately themed time picker fragment. Up to caller to set
-	 * callback and desired starting time.
-	 */
-	public TimePickerDialog getTimePickerDialog() {
-		final String theme = PreferenceManager.getDefaultSharedPreferences(
-				getActivity()).getString(MainPrefs.KEY_THEME,
-				getString(R.string.const_theme_light_ab));
-
-		final TimePickerDialog timePickerDialog = TimePickerDialog.newInstance(
-				null, 0, 0,
-				android.text.format.DateFormat.is24HourFormat(getActivity()));
-		timePickerDialog.setThemeDark(!theme.contains("light"));
-		return timePickerDialog;
+		boolean shouldShowIn24HourMode = DateFormat.is24HourFormat(getActivity());
+		final TimePickerDialog timePickDiag = new TimePickerDialog(
+				this.getActivity(),
+				themeResId,
+				listener, // set the callback for when the user chooses a time
+				localTime.get(Calendar.HOUR_OF_DAY), // set the initial hour & minute
+				localTime.get(Calendar.MINUTE),
+				shouldShowIn24HourMode);
+		return timePickDiag;
 	}
 
-	public Notification getPendingLocationNotification() {
-		return pendingLocationNotification;
-	}
-
-	public void setPendingLocationNotification(
-			Notification pendingLocationNotification) {
-		this.pendingLocationNotification = pendingLocationNotification;
-	}
 }

@@ -1,7 +1,9 @@
 package com.nononsenseapps.notepad.interfaces;
 
 import android.net.Uri;
+
 import androidx.fragment.app.Fragment;
+
 import android.view.View;
 
 /**

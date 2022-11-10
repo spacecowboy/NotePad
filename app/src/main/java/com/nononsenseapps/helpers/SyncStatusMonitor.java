@@ -36,7 +36,6 @@ import com.nononsenseapps.notepad.sync.SyncAdapter;
 import com.nononsenseapps.util.SyncGtaskHelper;
 
 public class SyncStatusMonitor extends BroadcastReceiver {
-	private static final String TAG = "SyncStatusMonitor";
 	Activity activity;
 	OnSyncStartStopListener listener;
 
@@ -67,7 +66,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 				listener.onSyncStartStop(false);
 			}
 		} catch (Exception e) {
-			Log.e(TAG, e.getLocalizedMessage());
+			NnnLogger.debugOnly(SyncStatusMonitor.class, e.getLocalizedMessage());
 		}
 	}
 
@@ -78,12 +77,12 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 		try {
 			activity.unregisterReceiver(this);
 		} catch (Exception e) {
-			Log.e(TAG, e.getLocalizedMessage());
+			NnnLogger.exception(e);
 		}
 		try {
 			listener.onSyncStartStop(false);
 		} catch (Exception e) {
-			Log.e(TAG, e.getLocalizedMessage());
+			NnnLogger.exception(e);
 		}
 	}
 
@@ -96,7 +95,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 					try {
 						listener.onSyncStartStop(true);
 					} catch (Exception e) {
-						Log.e(TAG, e.getLocalizedMessage());
+						NnnLogger.exception(e);
 					}
 				}
 			});
@@ -107,7 +106,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 					try {
 						listener.onSyncStartStop(false);
 					} catch (Exception e) {
-						Log.e(TAG, e.getLocalizedMessage());
+						NnnLogger.exception(e);
 					}
 				}
 			});
@@ -133,7 +132,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 				return;
 		}
 
-		Log.d("JONAS", "SYNC: " + result);
+		NnnLogger.debugOnly(SyncStatusMonitor.class, "SYNC: " + result);
 		Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
 		toast.show();
 	}

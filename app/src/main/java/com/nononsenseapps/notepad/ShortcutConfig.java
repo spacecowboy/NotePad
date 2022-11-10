@@ -1,17 +1,5 @@
 package com.nononsenseapps.notepad;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.Click;
-import org.androidannotations.annotations.EActivity;
-import org.androidannotations.annotations.ViewById;
-
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
-
-import android.net.Uri;
-import android.os.Bundle;
-import android.app.ActionBar;
 import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
@@ -19,16 +7,22 @@ import android.content.Intent;
 import android.content.Intent.ShortcutIconResource;
 import android.content.Loader;
 import android.database.Cursor;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.CheckBox;
+import android.os.Bundle;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Spinner;
 import android.widget.Switch;
 
-/** Shows a window to configure the app's smaller widget, letting the user choose which note list
- *  will be opened
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.Click;
+import org.androidannotations.annotations.EActivity;
+import org.androidannotations.annotations.ViewById;
+
+/**
+ * Shows a window to configure the app's smaller widget, letting the user choose which note list
+ * will be opened
  */
 @EActivity(resName = "activity_shortcut_config")
 public class ShortcutConfig extends Activity {
@@ -62,8 +56,7 @@ public class ShortcutConfig extends Activity {
 			intent.setClass(ShortcutConfig.this, ActivityMain_.class)
 					.setData(Task.URI)
 					.setAction(Intent.ACTION_INSERT)
-					.putExtra(Task.Columns.DBLIST,
-							listSpinner.getSelectedItemId());
+					.putExtra(Task.Columns.DBLIST, listSpinner.getSelectedItemId());
 		} else {
 			final Cursor c = (Cursor) listSpinner.getSelectedItem();
 

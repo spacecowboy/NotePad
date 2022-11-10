@@ -19,6 +19,7 @@ package com.nononsenseapps.scrolltricks;
 
 
 import androidx.fragment.app.Fragment;
+
 import android.view.View;
 import android.view.ViewTreeObserver;
 

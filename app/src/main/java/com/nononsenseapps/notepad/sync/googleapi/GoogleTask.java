@@ -17,19 +17,17 @@
 
 package com.nononsenseapps.notepad.sync.googleapi;
 
+import android.content.ContentValues;
+import android.database.Cursor;
+
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.RemoteTask;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
-import android.content.ContentValues;
-import android.database.Cursor;
-
-import com.nononsenseapps.helpers.Log;
-
 public class GoogleTask extends RemoteTask {
 
-	private static final String TAG = "nononsenseapps GoogleTask";
+
 	public static final String ID = "id";
 	public static final String TITLE = "title";
 	public static final String UPDATED = "updated";

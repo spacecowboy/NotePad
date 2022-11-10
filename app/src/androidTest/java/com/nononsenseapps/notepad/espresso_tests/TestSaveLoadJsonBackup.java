@@ -58,9 +58,12 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 		// check & delete both notes
 		clickCheckBoxAt(0);
 		clickCheckBoxAt(1);
+
+		// clear completed notes
 		openContextualActionModeOverflowMenu();
-		onView(withText("Clear completed")).perform(click());
-		onView(withText("OK")).perform(click());
+		String CLEAR_COMPLETED = myActivityRule.getActivity().getString(R.string.menu_clearcompleted);
+		onView(withText(CLEAR_COMPLETED)).perform(click());
+		onView(withId(android.R.id.button1)).perform(click());
 
 		// restore the backup
 		openContextualActionModeOverflowMenu();

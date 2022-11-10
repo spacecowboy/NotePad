@@ -19,7 +19,7 @@ package com.nononsenseapps.util;
 
 import android.text.format.Time;
 
-import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NnnLogger;
 
 /**
  * Has a few helper functions for dealing with dates. Google Tasks API is crap
@@ -167,7 +167,8 @@ public class TimeHelper {
 		time.hour = 0;
 		time.minute = 0;
 		time.second = 0;
-		Log.d("dragdate", "" + i + " days ago: " + time.format3339(false));
+		NnnLogger.debugOnly(TimeHelper.class,
+				"Dragdate: " + i + " days ago: " + time.format3339(false));
 
 		return time.format3339(false);
 	}

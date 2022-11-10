@@ -15,75 +15,75 @@ import android.util.Log;
  */
 public class SimpleFloatViewManager implements DragSortListView.FloatViewManager {
 
-    private Bitmap mFloatBitmap;
+	private Bitmap mFloatBitmap;
 
-    private ImageView mImageView;
+	private ImageView mImageView;
 
-    private int mFloatBGColor = Color.BLACK;
+	private int mFloatBGColor = Color.BLACK;
 
-    private ListView mListView;
+	private ListView mListView;
 
-    public SimpleFloatViewManager(ListView lv) {
-        mListView = lv;
-    }
+	public SimpleFloatViewManager(ListView lv) {
+		mListView = lv;
+	}
 
-    public void setBackgroundColor(int color) {
-        mFloatBGColor = color;
-    }
+	public void setBackgroundColor(int color) {
+		mFloatBGColor = color;
+	}
 
-    /**
-     * This simple implementation creates a Bitmap copy of the
-     * list item currently shown at ListView <code>position</code>.
-     */
-    @Override
-    public View onCreateFloatView(int position) {
-        // Guaranteed that this will not be null? I think so. Nope, got
-        // a NullPointerException once...
-        View v = mListView.getChildAt(position + mListView.getHeaderViewsCount() - mListView.getFirstVisiblePosition());
+	/**
+	 * This simple implementation creates a Bitmap copy of the
+	 * list item currently shown at ListView <code>position</code>.
+	 */
+	@Override
+	public View onCreateFloatView(int position) {
+		// Guaranteed that this will not be null? I think so. Nope, got
+		// a NullPointerException once...
+		View v = mListView.getChildAt(position + mListView.getHeaderViewsCount() - mListView.getFirstVisiblePosition());
 
-        if (v == null) {
-            return null;
-        }
+		if (v == null) {
+			return null;
+		}
 
-        v.setPressed(false);
+		v.setPressed(false);
 
-        // Create a copy of the drawing cache so that it does not get
-        // recycled by the framework when the list tries to clean up memory
-        //v.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
-        v.setDrawingCacheEnabled(true);
-        mFloatBitmap = Bitmap.createBitmap(v.getDrawingCache());
-        v.setDrawingCacheEnabled(false);
+		// Create a copy of the drawing cache so that it does not get
+		// recycled by the framework when the list tries to clean up memory
+		//v.setDrawingCacheQuality(View.DRAWING_CACHE_QUALITY_HIGH);
+		v.setDrawingCacheEnabled(true);
+		mFloatBitmap = Bitmap.createBitmap(v.getDrawingCache());
+		v.setDrawingCacheEnabled(false);
 
-        if (mImageView == null) {
-            mImageView = new ImageView(mListView.getContext());
-        }
-        mImageView.setBackgroundColor(mFloatBGColor);
-        mImageView.setPadding(0, 0, 0, 0);
-        mImageView.setImageBitmap(mFloatBitmap);
-        mImageView.setLayoutParams(new ViewGroup.LayoutParams(v.getWidth(), v.getHeight()));
+		if (mImageView == null) {
+			mImageView = new ImageView(mListView.getContext());
+		}
+		mImageView.setBackgroundColor(mFloatBGColor);
+		mImageView.setPadding(0, 0, 0, 0);
+		mImageView.setImageBitmap(mFloatBitmap);
+		mImageView.setLayoutParams(new ViewGroup.LayoutParams(v.getWidth(), v.getHeight()));
 
-        return mImageView;
-    }
+		return mImageView;
+	}
 
-    /**
-     * This does nothing
-     */
-    @Override
-    public void onDragFloatView(View floatView, Point position, Point touch) {
-        // do nothing
-    }
+	/**
+	 * This does nothing
+	 */
+	@Override
+	public void onDragFloatView(View floatView, Point position, Point touch) {
+		// do nothing
+	}
 
-    /**
-     * Removes the Bitmap from the ImageView created in
-     * onCreateFloatView() and tells the system to recycle it.
-     */
-    @Override
-    public void onDestroyFloatView(View floatView) {
-        ((ImageView) floatView).setImageDrawable(null);
+	/**
+	 * Removes the Bitmap from the ImageView created in
+	 * onCreateFloatView() and tells the system to recycle it.
+	 */
+	@Override
+	public void onDestroyFloatView(View floatView) {
+		((ImageView) floatView).setImageDrawable(null);
 
-        mFloatBitmap.recycle();
-        mFloatBitmap = null;
-    }
+		mFloatBitmap.recycle();
+		mFloatBitmap = null;
+	}
 
 }
 

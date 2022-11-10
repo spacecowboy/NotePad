@@ -33,11 +33,11 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Process;
 import android.preference.PreferenceManager;
-import androidx.core.app.NotificationCompat;
 import android.util.Log;
 
+import androidx.core.app.NotificationCompat;
+
 import com.nononsenseapps.helpers.NotificationHelper;
-import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;

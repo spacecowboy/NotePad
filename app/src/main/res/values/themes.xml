@@ -224,10 +224,6 @@
 		<item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleDark
 		</item>
 
-		<!-- ShowCaseView -->
-		<item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>
-
-
 	</style>
 
 	<style name="ThemeHoloBlack" parent="@style/ThemeGoogleNowDark">
@@ -298,10 +294,6 @@
 		<item name="LeftDrawerListItemStyle">@style/LeftDrawerListItemStyleLight</item>
 		<item name="LeftDrawerListItemSecondaryStyle">@style/LeftDrawerListItemSecondaryStyleLight
 		</item>
-
-		<!-- ShowCaseView -->
-		<item name="showcaseViewStyle">@style/CustomShowcaseTheme</item>
-
 
 	</style>
 

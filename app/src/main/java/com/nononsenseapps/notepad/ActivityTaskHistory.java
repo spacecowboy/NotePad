@@ -20,10 +20,12 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.database.Cursor;
+
 import androidx.fragment.app.FragmentActivity;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;

@@ -33,7 +33,7 @@ import android.preference.PreferenceManager;
 
 import androidx.fragment.app.DialogFragment;
 
-import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
@@ -87,7 +87,7 @@ public class AccountDialog4 extends DialogFragment implements
 	 */
 	public void accountSelected(final Account account) {
 		if (account != null) {
-			Log.d("prefsActivityDialog", "step one");
+			NnnLogger.debugOnly(AccountDialog4.class, "step one");
 			this.account = account;
 			// Request user's permission
 			GoogleTasksClient.getAuthTokenAsync(activity, account, this);
@@ -102,7 +102,7 @@ public class AccountDialog4 extends DialogFragment implements
 	@Override
 	public void run(AccountManagerFuture<Bundle> future) {
 		try {
-			Log.d("prefsActivityDialog", "step two");
+			NnnLogger.debugOnly(AccountDialog4.class, "step two");
 			// If the user has authorized
 			// your application to use the
 			// tasks API
@@ -110,10 +110,10 @@ public class AccountDialog4 extends DialogFragment implements
 			String token = future.getResult().getString(
 					AccountManager.KEY_AUTHTOKEN);
 			// Now we are authorized by the user.
-			Log.d("prefsActivityDialog", "step two-b: " + token);
+			NnnLogger.debugOnly(AccountDialog4.class, "step two-b: " + token);
 
 			if (token != null && !token.equals("") && account != null) {
-				Log.d("prefsActivityDialog", "step three: " + account.name);
+				NnnLogger.debugOnly(AccountDialog4.class, "step three: " + account.name);
 				SharedPreferences customSharedPreference = PreferenceManager
 						.getDefaultSharedPreferences(activity);
 				customSharedPreference.edit()

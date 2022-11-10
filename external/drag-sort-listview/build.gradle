@@ -27,7 +27,12 @@ buildscript {
 apply plugin: 'com.android.library'
 
 dependencies {
-    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
+    implementation "androidx.cursoradapter:cursoradapter:1.0.0"
+}
+
+// suppress (most) warnings related to javadocs that we don't care about
+tasks.withType(Javadoc) {
+    options.addStringOption('Xdoclint:none', '-quiet')
 }
 
 android {
@@ -50,18 +55,18 @@ android {
         // disable += ['RtlHardcoded', 'MissingSuperCall']
     }
 
+    compileOptions {
+        // enable support for new language APIs in old devices
+        coreLibraryDesugaringEnabled true
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src']
-            resources.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
             res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
         }
-
-        debug.setRoot('build-types/debug')
-        release.setRoot('build-types/release')
     }
 }

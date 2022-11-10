@@ -62,8 +62,6 @@ public class NotificationHelper extends BroadcastReceiver {
 	private static final String ACTION_RESCHEDULE = "com.nononsenseapps.notepad.ACTION.RESCHEDULE";
 	public static final String CHANNEL_ID = "remindersNotificationChannelId";
 
-	private static final String TAG = "nononsenseapps.NotificationHelper";
-
 	private static ContextObserver observer = null;
 
 	private static ContextObserver getObserver(final Context context) {
@@ -208,7 +206,7 @@ public class NotificationHelper extends BroadcastReceiver {
 			createNotificationChannel(context, notificationManager);
 		}
 
-		Log.d(TAG, "Number of notifications: " + notifications.size());
+		NnnLogger.debugOnly(NotificationHelper.class, "Number of notifications: " + notifications.size());
 
 		// If empty, cancel
 		if (notifications.isEmpty()) {
