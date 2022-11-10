@@ -177,12 +177,13 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 		if (menu.findItem(R.id.menu_search) != null) {
 			SearchView searchView = (SearchView) menu
-					.findItem(R.id.menu_search).getActionView();
+					.findItem(R.id.menu_search)
+					.getActionView();
 			// Assumes current activity is the searchable activity
 			searchView.setSearchableInfo(searchManager
 					.getSearchableInfo(getActivity().getComponentName()));
-			// searchView.setIconifiedByDefault(false); // Do not iconify the
-			// widget; expand it by default
+			// Do not iconify the widget; expand it by default
+			// searchView.setIconifiedByDefault(false);
 			searchView.setQueryRefinementEnabled(true);
 			searchView.setSubmitButtonEnabled(false);
 		}

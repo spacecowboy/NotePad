@@ -814,8 +814,15 @@ public class ActivityMain extends FragmentActivity
 			drawerLayout.setDrawerListener(mDrawerToggle);
 		}
 
-		getActionBar().setDisplayHomeAsUpEnabled(true);
-		getActionBar().setHomeButtonEnabled(true);
+		// TODO crashes when inheriting fron newer themes => we need the support actionbar & AppCompatActivity as parent
+		var ab = getActionBar();
+		if (ab == null) {
+			Log.e("NNN","Coding error: actionbar is null in ActivityMain. A crash will follow!");
+		} else {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+			getActionBar().setHomeButtonEnabled(true);
+		}
+
 
 		// Use extra items for All Lists
 		final int[] extraIds = new int[] { -1,
@@ -1028,6 +1035,13 @@ public class ActivityMain extends FragmentActivity
 	 */
 	public static void showTheShowCaseView(Activity activity, int idOfTheViewToHighlight,
 										   int titleStringId, int descriptionStringId) {
+		View ourTarget = activity.findViewById(idOfTheViewToHighlight);
+		if (ourTarget == null) {
+			// always a good idea to check
+			Log.e("NNN", "Can't show TapTargetView for view id= " + idOfTheViewToHighlight);
+			return;
+		}
+
 		// TODO can *you* make it prettier ? See also https://github.com/KeepSafe/TapTargetView
 		var target2 = TapTarget
 				.forView(activity.findViewById(idOfTheViewToHighlight),
