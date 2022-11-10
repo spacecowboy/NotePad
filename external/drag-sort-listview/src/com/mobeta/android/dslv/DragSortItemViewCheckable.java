@@ -18,38 +18,38 @@ import android.util.Log;
  * the width MeasureSpec given to ItemView is passed directly
  * to the child, and the ItemView measured width is set to the
  * child's measured width). The height of ItemView can be anything;
- * the 
- * 
+ * the
+ *
  *
  * The purpose of this class is to optimize slide
  * shuffle animations.
  */
 public class DragSortItemViewCheckable extends DragSortItemView implements Checkable {
 
-    public DragSortItemViewCheckable(Context context) {
-        super(context);
-    }
+	public DragSortItemViewCheckable(Context context) {
+		super(context);
+	}
 
-    @Override
-    public boolean isChecked() {
-        View child = getChildAt(0);
-        if (child instanceof Checkable)
-            return ((Checkable) child).isChecked();
-        else
-            return false;
-    }
+	@Override
+	public boolean isChecked() {
+		View child = getChildAt(0);
+		if (child instanceof Checkable)
+			return ((Checkable) child).isChecked();
+		else
+			return false;
+	}
 
-    @Override
-    public void setChecked(boolean checked) {
-        View child = getChildAt(0);
-        if (child instanceof Checkable)
-            ((Checkable) child).setChecked(checked);
-    }
+	@Override
+	public void setChecked(boolean checked) {
+		View child = getChildAt(0);
+		if (child instanceof Checkable)
+			((Checkable) child).setChecked(checked);
+	}
 
-    @Override
-    public void toggle() {
-        View child = getChildAt(0);
-        if (child instanceof Checkable)
-            ((Checkable) child).toggle();
-    }
+	@Override
+	public void toggle() {
+		View child = getChildAt(0);
+		if (child instanceof Checkable)
+			((Checkable) child).toggle();
+	}
 }
