@@ -47,7 +47,7 @@ import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
-import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
@@ -64,7 +64,6 @@ import java.util.Date;
 
 @EActivity(resName = "activity_widget_config")
 public class ListWidgetConfig extends FragmentActivity {
-	private static final String TAG = "ListWidgetConfig";
 	public static final String KEY_LIST = "widget1_key_list";
 	public static final String KEY_LIST_TITLE = "widget1_key_list_title";
 	public static final String KEY_SORT_TYPE = "widget1_key_sort_type";
@@ -159,7 +158,7 @@ public class ListWidgetConfig extends FragmentActivity {
 					AppWidgetManager.INVALID_APPWIDGET_ID);
 		} else {
 			appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-			Log.d(TAG, "Invalid ID given in the intent");
+			NnnLogger.debugOnly(ListWidgetConfig.class, "Invalid ID given in the intent");
 			Intent resultValue = new Intent();
 			resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 					appWidgetId);
@@ -421,10 +420,10 @@ public class ListWidgetConfig extends FragmentActivity {
 				R.array.widget_themevalues_preference);
 
 		if (themeValues == null) {
-			Log.d(TAG, "themevalues null");
+			NnnLogger.debugOnly(ListWidgetConfig.class, "themevalues null");
 		} else {
 			for (String s : themeValues) {
-				Log.d(TAG, "themevalue: " + s);
+				NnnLogger.debugOnly(ListWidgetConfig.class, "themevalue: " + s);
 			}
 		}
 

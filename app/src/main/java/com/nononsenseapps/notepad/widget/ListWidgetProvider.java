@@ -29,7 +29,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
 
-import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.NotePadBroadcastReceiver;
 import com.nononsenseapps.notepad.R;
@@ -65,7 +65,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 				| Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
 		if (action.equals(CLICK_ACTION)) {
-			Log.d("widgetwork", "CLICK ACTION RECEIVED");
+			NnnLogger.debugOnly(ListWidgetProvider.class, "CLICK ACTION RECEIVED");
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
 			if (noteId > -1) {
 				appIntent
@@ -78,7 +78,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			}
 		} else if (action.equals(COMPLETE_ACTION)) {
 			// Should send broadcast here
-			Log.d("widgetwork", "COMPLETE ACTION RECEIVED");
+			NnnLogger.debugOnly(ListWidgetProvider.class, "COMPLETE ACTION RECEIVED");
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
 			// This will complete the note
 			if (noteId > -1) {
@@ -109,8 +109,8 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onDeleted(Context context, int[] appWidgetIds) {
 		super.onDeleted(context, appWidgetIds);
-		Log.d("ListWidgetProvider", "onDeleted, appWidgetIds.length = "
-				+ String.valueOf(appWidgetIds.length));
+		NnnLogger.debugOnly(ListWidgetProvider.class,
+				"onDeleted, appWidgetIds.length = " + appWidgetIds.length);
 
 		for (int widgetId : appWidgetIds) {
 			WidgetPrefs.delete(context, widgetId);

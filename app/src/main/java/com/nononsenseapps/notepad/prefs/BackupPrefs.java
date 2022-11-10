@@ -24,7 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
-import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.fragments.DialogExportBackup;
 import com.nononsenseapps.notepad.fragments.DialogRestoreBackup;
@@ -119,7 +119,7 @@ public class BackupPrefs extends PreferenceFragment {
 							Toast.makeText(getActivity(), R.string.backup_export_success, Toast.LENGTH_SHORT)
 									.show();
 						} catch (Exception e) {
-							Log.exception(e);
+							NnnLogger.exception(e);
 							Toast.makeText(getActivity(), R.string.backup_export_failed, Toast.LENGTH_SHORT)
 									.show();
 						}

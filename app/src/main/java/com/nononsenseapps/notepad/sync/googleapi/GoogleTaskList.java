@@ -23,11 +23,10 @@ import com.nononsenseapps.utils.time.RFC3339Date;
 
 import android.database.Cursor;
 
-import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NnnLogger;
 
 public class GoogleTaskList extends RemoteTaskList {
 
-	private static final String TAG = "nononsenseapps";
 	public static final String SERVICENAME = "googletasks";
 	//public String id = null;
 	public String title = null;
@@ -97,7 +96,7 @@ public class GoogleTaskList extends RemoteTaskList {
 		try {
 			updated = RFC3339Date.parseRFC3339Date(taskListResource.updated).getTime();
 		} catch (Exception e) {
-			Log.d(TAG, e.getLocalizedMessage());
+			NnnLogger.exception(e);
 			updated = 0L;
 		}
 	}

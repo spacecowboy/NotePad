@@ -35,15 +35,14 @@ import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.TextView;
 
-import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 
 public class SeekBarPreference extends Preference implements
 		OnSeekBarChangeListener {
 
-	// TODO use a different control in the preferences screen, maybe let the user input a number directly. Then delete this class
-
-	private final String TAG = getClass().getName();
+	// TODO use a different control in the preferences screen, maybe let the user input a number
+	//  directly. Then delete this class
 
 	//	private static final String ANDROIDNS = "http://schemas.android.com/apk/res/android";
 //	private static final String ROBOBUNNYNS = "http://robobunny.com";
@@ -146,7 +145,8 @@ public class SeekBarPreference extends Preference implements
 			layout = mInflater.inflate(
 					R.layout.preference_widget_seekbar, parent, false);
 		} catch (Exception e) {
-			Log.e(TAG, "Error creating seek bar preference", e);
+			NnnLogger.error(SeekBarPreference.class,"Error creating seek bar preference:");
+			NnnLogger.exception(e);
 		}
 
 		return layout;
@@ -194,7 +194,8 @@ public class SeekBarPreference extends Preference implements
 			unitsLeft.setText(mUnitsLeft);
 
 		} catch (Exception e) {
-			Log.e(TAG, "Error updating seek bar preference", e);
+			NnnLogger.error(SeekBarPreference.class,"Error updating seek bar preference");
+			NnnLogger.exception(e);
 		}
 
 	}
@@ -251,7 +252,9 @@ public class SeekBarPreference extends Preference implements
 			try {
 				temp = (Integer) defaultValue;
 			} catch (Exception ex) {
-				Log.e(TAG, "Invalid default value: " + defaultValue.toString());
+				NnnLogger.error(SeekBarPreference.class,
+						"Invalid default value: " + defaultValue.toString());
+				NnnLogger.exception(ex);
 			}
 
 			persistInt(temp);

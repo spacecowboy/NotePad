@@ -27,7 +27,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-import com.nononsenseapps.helpers.Log;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
 /**
@@ -59,8 +59,8 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 	}
 
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		Log.d("LegacyHelper", "onUpgrade " + "Upgrading database from version "
-				+ oldVersion + " to " + newVersion);
+		NnnLogger.debugOnly(LegacyDBHelper.class,
+				"onUpgrade " + "Upgrading database from version " + oldVersion + " to " + newVersion);
 
 		if (oldVersion < 3) {
 			// FIrst add columns to Notes table
