@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.notepad.widget;
 
+import android.annotation.SuppressLint;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -25,7 +26,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -36,6 +36,8 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
+
+import java.util.Objects;
 
 /**
  * The widget's AppWidgetProvider.
@@ -50,9 +52,8 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	public static final String EXTRA_NOTE_ID = "com.nononsenseapps.notepad.widget.note_id";
 	public static final String EXTRA_LIST_ID = "com.nononsenseapps.notepad.widget.list_id";
 
-	public ListWidgetProvider() {
-
-	}
+	// gets called by android.app.AppComponentFactory
+	public ListWidgetProvider() {}
 
 	/**
 	 * Complete note calls go here
@@ -60,16 +61,14 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onReceive(Context context, Intent intent) {
 		String action = intent.getAction();
-		Intent appIntent = new Intent();
-		appIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-				| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+		Objects.requireNonNull(action);
 
-		// TODO here it receives action == null when the user clicks on a checkbox in the widget's note => fix it !
 		if (action.equals(CLICK_ACTION)) {
 			NnnLogger.debugOnly(ListWidgetProvider.class, "CLICK ACTION RECEIVED");
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
 			if (noteId > -1) {
-				appIntent
+				Intent appIntent = new Intent()
+						.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
 						.setAction(Intent.ACTION_EDIT)
 						.setData(Task.getUri(noteId))
 						.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
@@ -118,20 +117,16 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	}
 
 	@Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager,
-						 int[] appWidgetIds) {
-		// This is not called on start up if we are using a configuration
-		// activity
+	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+		// This is not called on start up if we are using a configuration activity
 
 		// Update each of the widgets with the remote adapter
-		for (int i = 0; i < appWidgetIds.length; ++i) {
-			int widgetId = appWidgetIds[i];
+		for (int widgetId : appWidgetIds) {
 			// Load widget prefs
 			final WidgetPrefs prefs = new WidgetPrefs(context, widgetId);
 
 			// Build view update
-			RemoteViews updateViews = buildRemoteViews(context,
-					appWidgetManager, widgetId, prefs);
+			RemoteViews updateViews = buildRemoteViews(context, appWidgetManager, widgetId, prefs);
 
 			// Tell the AppWidgetManager to perform an update
 			appWidgetManager.updateAppWidget(widgetId, updateViews);
@@ -142,64 +137,51 @@ public class ListWidgetProvider extends AppWidgetProvider {
 											   final AppWidgetManager appWidgetManager,
 											   final int appWidgetId,
 											   final WidgetPrefs settings) {
-		// Hack: We must set this widget's id in the URI to prevent the
-		// situation
+		// Hack: We must set this widget's id in the URI to prevent the situation
 		// where the last widget added will be used for everything
 		final Uri data = Uri.withAppendedPath(Uri.parse("STUPIDWIDGETS"
 				+ "://widget/id/"), String.valueOf(appWidgetId));
 
-		boolean isKeyguard = false;
+		// Get the value of OPTION_APPWIDGET_HOST_CATEGORY
+		int category = appWidgetManager
+				.getAppWidgetOptions(appWidgetId)
+				.getInt(AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY, -1);
 
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-			Bundle myOptions = appWidgetManager
-					.getAppWidgetOptions(appWidgetId);
+		// If the value is WIDGET_CATEGORY_KEYGUARD, it's a lockscreen widget
+		boolean isKeyguard = category == AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD;
 
-			// Get the value of OPTION_APPWIDGET_HOST_CATEGORY
-			int category = myOptions.getInt(
-					AppWidgetManager.OPTION_APPWIDGET_HOST_CATEGORY, -1);
-
-			// If the value is WIDGET_CATEGORY_KEYGUARD, it's a lockscreen
-			// widget
-			isKeyguard = category == AppWidgetProviderInfo.WIDGET_CATEGORY_KEYGUARD;
-		}
 		if (isKeyguard) {
 			settings.putBoolean(ListWidgetConfig.KEY_LOCKSCREEN, true);
 		}
 
-		// Specify the service to provide data for the collection widget. Note
-		// that we need to
+		// Specify the service to provide data for the collection widget. Note that we need to
 		// embed the appWidgetId via the data otherwise it will be ignored.
 		final Intent intent = new Intent(context, ListWidgetService.class);
 		intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
 		intent.setData(Uri.parse(intent.toUri(Intent.URI_INTENT_SCHEME)));
 
-		RemoteViews rv = new RemoteViews(context.getPackageName(),
-				R.layout.widget_layout);
-
+		RemoteViews rv = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
 		rv.setRemoteAdapter(R.id.notesList, intent);
 
-		// Set the empty view to be displayed if the collection is empty. It
-		// must be a sibling
+		// Set the empty view to be displayed if the collection is empty. It must be a sibling
 		// view of the collection view.
 		rv.setEmptyView(R.id.notesList, R.id.empty_view);
 
 		final long listId = settings.getLong(ListWidgetConfig.KEY_LIST, -1);
-		final String listTitle = settings.getString(
-				ListWidgetConfig.KEY_LIST_TITLE,
+		final String listTitle = settings.getString(ListWidgetConfig.KEY_LIST_TITLE,
 				context.getString(R.string.app_name_short));
 		rv.setTextViewText(R.id.titleButton, listTitle);
 
 		// Hide header if we should
-		rv.setViewVisibility(R.id.widgetHeader, settings.getBoolean(
-				ListWidgetConfig.KEY_HIDDENHEADER, false) ? View.GONE
-				: View.VISIBLE);
+		rv.setViewVisibility(R.id.widgetHeader,
+				settings.getBoolean(ListWidgetConfig.KEY_HIDDENHEADER, false)
+						? View.GONE : View.VISIBLE);
 
 		// Set background color
-		final int color = settings.getInt(ListWidgetConfig.KEY_SHADE_COLOR,
-				ListWidgetConfig.DEFAULT_SHADE);
+		final int color = settings
+				.getInt(ListWidgetConfig.KEY_SHADE_COLOR, ListWidgetConfig.DEFAULT_SHADE);
 		rv.setInt(R.id.shade, "setBackgroundColor", color);
-		rv.setViewVisibility(R.id.shade, (color & 0xff000000) == 0 ? View.GONE
-				: View.VISIBLE);
+		rv.setViewVisibility(R.id.shade, (color & 0xff000000) == 0 ? View.GONE : View.VISIBLE);
 
 		/*
 		 * Bind a click listener template for the contents of the list. Note
@@ -208,63 +190,89 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		 */
 		if (isKeyguard) {
 			final Intent itemIntent = new Intent(context, ActivityMain_.class);
-			itemIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-					| Intent.FLAG_ACTIVITY_CLEAR_TASK);
+			itemIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
 
-			PendingIntent onClickPendingIntent = PendingIntent.getActivity(
-					context, 0, itemIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+			PendingIntent onClickPendingIntent = getThePendingIntentForActivity(itemIntent, context);
 			rv.setPendingIntentTemplate(R.id.notesList, onClickPendingIntent);
 		} else {
 			// To handle complete, we use broadcasts
 			Intent onClickIntent = new Intent(context, ListWidgetProvider.class);
 			onClickIntent
 					.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId)
-					.putExtra(Task.Columns.DBLIST, listId).setData(data);
+					.putExtra(Task.Columns.DBLIST, listId)
+					.setData(data);
 
-			PendingIntent onClickPendingIntent = PendingIntent.getBroadcast(
-					context, 0, onClickIntent,
-					PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+			PendingIntent onClickPendingIntent =
+					getThePendingIntentForBroadcast(onClickIntent,context);
 			rv.setPendingIntentTemplate(R.id.notesList, onClickPendingIntent);
 		}
 
 		final Intent appIntent = new Intent();
 		appIntent
-				.setFlags(
-						Intent.FLAG_ACTIVITY_NEW_TASK
-								| Intent.FLAG_ACTIVITY_CLEAR_TASK)
+				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
 				.setClass(context, ActivityMain_.class)
-				.setAction(Intent.ACTION_VIEW).setData(TaskList.getUri(listId));
-		PendingIntent openAppPendingIntent = PendingIntent.getActivity(context,
-				0, appIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+				.setAction(Intent.ACTION_VIEW)
+				.setData(TaskList.getUri(listId));
+		PendingIntent openAppPendingIntent = getThePendingIntentForActivity(appIntent, context);
 		rv.setOnClickPendingIntent(R.id.titleButton, openAppPendingIntent);
 
 		final Intent configIntent = new Intent();
 		configIntent
-				.setFlags(
-						Intent.FLAG_ACTIVITY_NEW_TASK
-								| Intent.FLAG_ACTIVITY_CLEAR_TASK)
-				.setClass(context, ListWidgetConfig_.class).setData(data)
+				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
+				.setClass(context, ListWidgetConfig_.class)
+				.setData(data)
 				.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-		PendingIntent openConfigPendingIntent = PendingIntent.getActivity(
-				context, 0, configIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-		rv.setOnClickPendingIntent(R.id.widgetConfigButton,
-				openConfigPendingIntent);
+		PendingIntent openConfigPendingIntent = getThePendingIntentForActivity(configIntent, context);
+		rv.setOnClickPendingIntent(R.id.widgetConfigButton, openConfigPendingIntent);
 
 		final Intent createIntent = new Intent();
 		createIntent
-				.setFlags(
-						Intent.FLAG_ACTIVITY_NEW_TASK
-								| Intent.FLAG_ACTIVITY_CLEAR_TASK)
+				.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK)
 				.setClass(context, ActivityMain_.class)
 				// Append a dummy path so we don't override this intent on 2nd, 3rd, etc, widgets.
-				.setAction(Intent.ACTION_INSERT).setData(Uri.withAppendedPath(Task.URI,
-						"/widget/" + appWidgetId + "/-1"))
+				.setAction(Intent.ACTION_INSERT)
+				.setData(Uri.withAppendedPath(Task.URI, "/widget/" + appWidgetId + "/-1"))
 				.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 
-		PendingIntent createPendingIntent = PendingIntent.getActivity(context,
-				0, createIntent, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+		PendingIntent createPendingIntent = getThePendingIntentForActivity(createIntent, context);
 		rv.setOnClickPendingIntent(R.id.createNoteButton, createPendingIntent);
 
 		return rv;
 	}
+
+	/**
+	 * This uses getActivity(), not getBroadcast() !
+	 *
+	 * @return a properly configured {@link PendingIntent} for the given {@link Intent}
+	 */
+	@SuppressLint("UnspecifiedImmutableFlag")
+	private static PendingIntent getThePendingIntentForActivity(Intent i, Context c) {
+		PendingIntent pi;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+			// on API 31 and higher the mutability must be explicitly set
+			pi = PendingIntent.getActivity(c, 0, i,
+					PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+		} else {
+			// on lower API levels, the mutability is implied
+			pi = PendingIntent.getActivity(c, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+		}
+		return pi;
+	}
+
+	/**
+	 * Like {@link ListWidgetProvider#getThePendingIntentForActivity(Intent, Context)}
+	 * but this one uses getBroadcast(), not getActivity() !
+	 */
+	@SuppressLint("UnspecifiedImmutableFlag")
+	private static PendingIntent getThePendingIntentForBroadcast(Intent i, Context c) {
+		PendingIntent pi;
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+			pi = PendingIntent.getBroadcast(c, 0, i,
+					PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_MUTABLE);
+		} else {
+			pi = PendingIntent.getBroadcast(c, 0, i, PendingIntent.FLAG_UPDATE_CURRENT);
+		}
+		return pi;
+	}
+
 }
