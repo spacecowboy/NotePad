@@ -131,10 +131,13 @@ dependencies {
     implementation "androidx.cursoradapter:cursoradapter:1.0.0"
     implementation 'androidx.fragment:fragment:1.5.4'
     implementation 'androidx.appcompat:appcompat:1.5.1'
-    implementation "androidx.preference:preference:1.1.0"
+    implementation "androidx.preference:preference:1.2.0"
     implementation "androidx.startup:startup-runtime:1.1.1" // it just fixes a build warning
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.google.android.material:material:1.7.0'
+    // yes we need both. It solves a dependency problem with androidx.preference
+    implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     // Time library, open source & up to date
     implementation 'joda-time:joda-time:2.12.1'
     // Dashclock API, open source & abandoned, but it still works
