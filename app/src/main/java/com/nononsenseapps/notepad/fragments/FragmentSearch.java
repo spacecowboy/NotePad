@@ -50,6 +50,9 @@ import android.widget.SearchView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SearchView.OnQueryTextListener;
 
+/**
+ * This is used only in the "Archive" view, for deleted notes
+ */
 @EFragment(resName = "fragment_search")
 public class FragmentSearch extends Fragment {
 
@@ -94,6 +97,8 @@ public class FragmentSearch extends Fragment {
 	@Override
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
+
+		// allow the user to search among the previously deleted notes
 		inflater.inflate(R.menu.fragment_search, menu);
 
 		// Get the SearchView and set the searchable configuration
