@@ -24,7 +24,8 @@
 	android:layout_height="match_parent"
 	android:orientation="vertical">
 
-	<!-- <SearchView
+	<!-- TODO do take a look, but it should be deleted, probably
+	<SearchView
 		android:id="@+id/searchBox"
 		android:layout_width="@dimen/listNoDetailWidth"
 		android:layout_height="48dp"

@@ -19,6 +19,8 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto">
 
+	<!-- this menu is shown only in the main activity -->
+
 	<!-- Outside group to allow for action bar placement -->
 	<item
 		android:id="@+id/menu_search"
@@ -27,6 +29,7 @@
 		android:title="@string/search_hint"
 		app:actionViewClass="android.widget.SearchView"
 		app:showAsAction="ifRoom|collapseActionView"/>
+
 	<item
 		android:id="@+id/menu_sync"
 		android:icon="@drawable/ic_refresh_24dp_white"
