@@ -236,8 +236,12 @@ public class FragmentSearchDeleted extends FragmentSearch {
 						((TitleNoteTextView) view).setMaxLines(rowCount);
 					}
 
-					// Change color based on complete status
+					// Change color based on complete status (column 3 is the "completed" status)
 					((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
+
+					// TODO yes, completed note appear in dark gray in the archive view. I didn't
+					//  know this. Make a TapTargetView to explain this to users. It could target
+					//  the search icon, it doesn't matter. Just put it in onResume() or somewhere reasonable
 
 					((TitleNoteTextView) view).setTextTitle(noteTitle);
 					return true;
