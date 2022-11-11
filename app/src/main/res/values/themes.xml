@@ -235,6 +235,12 @@
 		<item name="TaskListItem">@style/TaskListItemBlack</item>
 		<item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
 		<item name="LeftDrawerStyle">@style/LeftDrawerStyleBlack</item>
+		<!-- The one with the back & home buttons  -->
+		<item name="android:navigationBarColor">@android:color/black</item>
+		<!-- The one with the notification badges -->
+		<item name="android:statusBarColor">@android:color/black</item>
+		<!-- Used ONLY for the actionbar background color -->
+		<item name="colorPrimary">@android:color/black</item>
 	</style>
 
 	<style name="ThemeGoogleNowDark" parent="@style/ThemeHolo">
@@ -306,7 +312,8 @@
 
 	</style>
 
-	<!-- Shows a more condensed note list, with smaller separators, by design! -->
+	<!-- Shows a more condensed note list, with smaller separators, by design!
+	 	That aside, it's 99% similar to the light theme -->
 	<style name="ThemeHoloLightClassic" parent="@style/ThemeHoloLightDarkActonBar">
 		<item name="TaskListItem">@style/TaskListItemLightClassic</item>
 		<item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
