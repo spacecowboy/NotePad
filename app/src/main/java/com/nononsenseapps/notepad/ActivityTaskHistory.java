@@ -101,7 +101,6 @@ public class ActivityTaskHistory extends AppCompatActivity {
 				});
 
 		// Show the custom action bar view and hide the normal Home icon and title.
-
 		getSupportActionBar()
 				.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM,
 						ActionBar.DISPLAY_SHOW_CUSTOM | ActionBar.DISPLAY_SHOW_HOME

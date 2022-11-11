@@ -85,6 +85,11 @@
 						android:nextFocusDown="@+id/notificationAdd"/>
 				</com.nononsenseapps.ui.DelegateFrame>
 
+				<!-- TODO it had app:tint="?attr/iconTint" but that makes it white on a white
+				      backround with the classic theme. In the future, instead of using this
+				      "double icon through an attribute, for every icon" stuff, just take 1
+				      white icon and use iconTint everywhere. So one day you should delete all
+				      ic_... in attr.xml -->
 				<ImageButton
 					android:id="@+id/dueCancelButton"
 					style="?android:attr/buttonBarButtonStyle"
@@ -95,7 +100,7 @@
 					android:contentDescription="Remove due date"
 					android:nextFocusDown="@+id/notificationAdd"
 					android:src="?attr/ic_clear_24dp_active"
-					app:tint="?attr/iconTint"
+
 					tools:ignore="HardcodedText"/>
 
 				<Button
