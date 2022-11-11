@@ -215,18 +215,18 @@ public class FragmentSearchDeleted extends FragmentSearch {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 
-		// Load pref for item height, or show 3 lines if it was not set
+		// Load preference for note height, or show 3 lines if it was not set
 		final int rowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
 
 		return (view, c, colIndex) -> {
 			switch (colIndex) {
-				// TODO the code here decides how the notes on the archive look like. Fix it so
-				//  that notes appear as in the drag-sort-listview of the main activity
-
-				// Matches order in Task.Columns.Fields
+				// the code here decides how the notes on the archive look like.
+				// Each number in the "case" instruction matches the order in Task.Columns.Fields,
+				// in fact c.getColumnNames() returns the fields of the note in the database:
+				// ["_id", "title", "note", "completed", "due", "dblist", "deletedtime" ]
 				case 1:
-					// Title
-					String sTemp = c.getString(colIndex);
+					// Title, in column "title"
+					String noteTitle = c.getString(colIndex);
 
 					// Set height of text for non-headers
 					if (rowCount == 1) {
@@ -239,13 +239,17 @@ public class FragmentSearchDeleted extends FragmentSearch {
 					// Change color based on complete status
 					((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
 
-					((TitleNoteTextView) view).setTextTitle(sTemp);
+					((TitleNoteTextView) view).setTextTitle(noteTitle);
 					return true;
 				case 2:
-					// Note
-					((TitleNoteTextView) view).setTextRest("");
+					// Note content, in column "note". Let's show it even in the "Archive" view,
+					// so that the user can distinguish 2 deleted notes with the same title
+					String noteContent = c.getString(colIndex);
+					((TitleNoteTextView) view).setTextRest(noteContent);
 					return true;
 				default:
+					// we won't show any other field of the note. Maybe it would be nice to show
+					// the due date ? But it's an archived note, so I guess the user does not care?
 					view.setVisibility(View.GONE);
 					return true;
 			}
