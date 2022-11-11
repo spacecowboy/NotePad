@@ -39,7 +39,7 @@
 	<string name="menu_clearcompleted">Clear completed</string>
 	<string name="menu_setdefaultlist">Set as default list</string>
 	<string name="new_default_set">New default set</string>
-	<string name="menu_managelists">Edit list</string>
+	<string name="menu_managelists">Edit lists</string>
 	<string name="add_item">Add item</string>
 	<string name="delete_question">Delete?</string>
 	<string name="delete_items_message">Are  you sure you want to delete these items?</string>

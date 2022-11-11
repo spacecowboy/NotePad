@@ -98,9 +98,7 @@ public class DialogEditList extends DialogFragment {
 		return dialog;
 	}
 
-	public DialogEditList() {
-
-	}
+	protected DialogEditList() {}
 
 	public void setListener(final EditListDialogListener listener) {
 		this.listener = listener;
@@ -147,9 +145,7 @@ public class DialogEditList extends DialogFragment {
 						}
 
 						@Override
-						public void onLoaderReset(Loader<Cursor> arg0) {
-
-						}
+						public void onLoaderReset(@NonNull Loader<Cursor> arg0) {}
 					});
 		} else {
 			getDialog().setTitle(R.string.menu_createlist);
@@ -164,9 +160,9 @@ public class DialogEditList extends DialogFragment {
 		selectListTypeKey();
 
 		// Check if this is the default list
-		final long defList = Long.parseLong(PreferenceManager
-				.getDefaultSharedPreferences(getActivity()).getString(
-						getString(R.string.pref_defaultlist), "-1"));
+		final long defList = Long.parseLong(
+				PreferenceManager.getDefaultSharedPreferences(getActivity())
+						.getString(getString(R.string.pref_defaultlist), "-1"));
 		if (mTaskList._id > 0 && defList == mTaskList._id) {
 			defaultListBox.setChecked(true);
 		}
@@ -300,4 +296,5 @@ public class DialogEditList extends DialogFragment {
 			}
 		}
 	}
+
 }

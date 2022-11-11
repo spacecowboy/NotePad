@@ -895,126 +895,121 @@ public class ActivityMain extends AppCompatActivity
 				openList(id);
 			}
 		});
-		leftDrawer.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-			@Override
-			public boolean onItemLongClick(AdapterView<?> arg0, View arg1, int pos, long id) {
-				// Open dialog to edit list
-				if (id > 0) {
-					DialogEditList_ dialog = DialogEditList_.getInstance(id);
-					dialog.show(getSupportFragmentManager(), "fragment_edit_list");
-					return true;
-				} else if (id < -1) {
-					// Set as "default"
-					PreferenceManager
-							.getDefaultSharedPreferences(ActivityMain.this)
-							.edit()
-							.putLong(getString(R.string.pref_defaultstartlist),
-									id)
-							.putLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, id)
-							.commit();
-					Toast.makeText(ActivityMain.this, R.string.new_default_set,
-							Toast.LENGTH_SHORT).show();
-					// openList(id);
-					return true;
-				} else {
-					return false;
-				}
+		leftDrawer.setOnItemLongClickListener((arg0, arg1, pos, id) -> {
+			// Open dialog to edit list
+			if (id > 0) {
+				DialogEditList_ dialog = DialogEditList_.getInstance(id);
+				dialog.show(getSupportFragmentManager(), "fragment_edit_list");
+				return true;
+			} else if (id < -1) {
+				// Set as "default"
+				PreferenceManager
+						.getDefaultSharedPreferences(ActivityMain.this)
+						.edit()
+						.putLong(getString(R.string.pref_defaultstartlist), id)
+						.putLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, id)
+						.commit();
+				Toast.makeText(ActivityMain.this, R.string.new_default_set,
+						Toast.LENGTH_SHORT).show();
+				// openList(id);
+				return true;
+			} else {
+				return false;
 			}
 		});
 		// Define the callback handler
-		final LoaderCallbacks<Cursor> callbacks =
-				new LoaderCallbacks<Cursor>() {
+		final LoaderCallbacks<Cursor> callbacks = new LoaderCallbacks<>() {
 
-					final String[] COUNTROWS = new String[] { "COUNT(1)" };
-					final String NOTCOMPLETED =
-							Task.Columns.COMPLETED + " IS NULL ";
+			final String[] COUNTROWS = new String[] { "COUNT(1)" };
+			final String NOTCOMPLETED =
+					Task.Columns.COMPLETED + " IS NULL ";
 
-					@Override
-					public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
-						// Normal lists
-						switch (id) {
-							case TaskListFragment.LIST_ID_OVERDUE:
-								return new CursorLoader(ActivityMain.this,
-										Task.URI, COUNTROWS, NOTCOMPLETED +
-										TaskListFragment
-												.andWhereOverdue(),
-										null, null
-								);
-							case TaskListFragment.LIST_ID_TODAY:
-								return new CursorLoader(ActivityMain.this,
-										Task.URI, COUNTROWS, NOTCOMPLETED +
-										TaskListFragment
-												.andWhereToday(),
-										null, null
-								);
-							case TaskListFragment.LIST_ID_WEEK:
-								return new CursorLoader(ActivityMain.this,
-										Task.URI, COUNTROWS, NOTCOMPLETED +
-										TaskListFragment
-												.andWhereWeek(),
-										null, null
-								);
-							case 0:
-							default:
-								return new CursorLoader(ActivityMain.this,
-										TaskList.URI_WITH_COUNT, new String[] {
-										TaskList.Columns._ID,
-										TaskList.Columns.TITLE,
-										TaskList.Columns.VIEW_COUNT }, null,
-										null, getResources()
-										.getString(R.string.const_as_alphabetic,
-												TaskList.Columns.TITLE)
-								);
+			@NonNull
+			@Override
+			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
+				// Normal lists
+				switch (id) {
+					case TaskListFragment.LIST_ID_OVERDUE:
+						return new CursorLoader(ActivityMain.this,
+								Task.URI, COUNTROWS, NOTCOMPLETED +
+								TaskListFragment
+										.andWhereOverdue(),
+								null, null
+						);
+					case TaskListFragment.LIST_ID_TODAY:
+						return new CursorLoader(ActivityMain.this,
+								Task.URI, COUNTROWS, NOTCOMPLETED +
+								TaskListFragment
+										.andWhereToday(),
+								null, null
+						);
+					case TaskListFragment.LIST_ID_WEEK:
+						return new CursorLoader(ActivityMain.this,
+								Task.URI, COUNTROWS, NOTCOMPLETED +
+								TaskListFragment
+										.andWhereWeek(),
+								null, null
+						);
+					case 0:
+					default:
+						return new CursorLoader(ActivityMain.this,
+								TaskList.URI_WITH_COUNT, new String[] {
+								TaskList.Columns._ID,
+								TaskList.Columns.TITLE,
+								TaskList.Columns.VIEW_COUNT }, null,
+								null, getResources()
+								.getString(R.string.const_as_alphabetic,
+										TaskList.Columns.TITLE)
+						);
+				}
+			}
+
+			@Override
+			public void onLoadFinished(Loader<Cursor> l, Cursor c) {
+				switch (l.getId()) {
+					case TaskListFragment.LIST_ID_OVERDUE:
+						if (c.moveToFirst()) {
+							updateExtra(1, c.getInt(0));
 						}
-					}
-
-					@Override
-					public void onLoadFinished(Loader<Cursor> l, Cursor c) {
-						switch (l.getId()) {
-							case TaskListFragment.LIST_ID_OVERDUE:
-								if (c.moveToFirst()) {
-									updateExtra(1, c.getInt(0));
-								}
-								break;
-							case TaskListFragment.LIST_ID_TODAY:
-								if (c.moveToFirst()) {
-									updateExtra(2, c.getInt(0));
-								}
-								break;
-							case TaskListFragment.LIST_ID_WEEK:
-								if (c.moveToFirst()) {
-									updateExtra(3, c.getInt(0));
-								}
-								break;
-							case 0:
-							default:
-								adapter.swapCursor(c);
+						break;
+					case TaskListFragment.LIST_ID_TODAY:
+						if (c.moveToFirst()) {
+							updateExtra(2, c.getInt(0));
 						}
-					}
-
-					private void updateExtra(final int pos, final int count) {
-						while (extraData.get(pos).size() < 2) {
-							// To avoid crashes
-							extraData.get(pos).add("0");
+						break;
+					case TaskListFragment.LIST_ID_WEEK:
+						if (c.moveToFirst()) {
+							updateExtra(3, c.getInt(0));
 						}
-						extraData.get(pos).set(1, Integer.toString(count));
-						adapter.notifyDataSetChanged();
-					}
+						break;
+					case 0:
+					default:
+						adapter.swapCursor(c);
+				}
+			}
 
-					@Override
-					public void onLoaderReset(Loader<Cursor> l) {
-						switch (l.getId()) {
-							case TaskListFragment.LIST_ID_OVERDUE:
-							case TaskListFragment.LIST_ID_TODAY:
-							case TaskListFragment.LIST_ID_WEEK:
-								break;
-							case 0:
-							default:
-								adapter.swapCursor(null);
-						}
-					}
-				};
+			private void updateExtra(final int pos, final int count) {
+				while (extraData.get(pos).size() < 2) {
+					// To avoid crashes
+					extraData.get(pos).add("0");
+				}
+				extraData.get(pos).set(1, Integer.toString(count));
+				adapter.notifyDataSetChanged();
+			}
+
+			@Override
+			public void onLoaderReset(Loader<Cursor> l) {
+				switch (l.getId()) {
+					case TaskListFragment.LIST_ID_OVERDUE:
+					case TaskListFragment.LIST_ID_TODAY:
+					case TaskListFragment.LIST_ID_WEEK:
+						break;
+					case 0:
+					default:
+						adapter.swapCursor(null);
+				}
+			}
+		};
 
 		// Load actual data
 		getSupportLoaderManager().restartLoader(0, null, callbacks);
