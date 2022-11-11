@@ -20,10 +20,10 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="wrap_content">
 
 	<LinearLayout
-		android:layout_width="fill_parent"
+		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:orientation="vertical"
 		android:padding="10dp"
@@ -33,7 +33,7 @@
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
 			android:layout_marginBottom="15dp"
-			android:autoLink="web|email|map"
+			android:autoLink="web"
 			android:text="For latest information go to https://github.com/spacecowboy/NotePad"
 			android:textStyle="bold"/>
 
@@ -42,13 +42,13 @@
 			android:layout_height="wrap_content"
 			android:fontFamily="sans-serif-condensed"
 			android:text="Help translate the app"
-			android:textColor="@android:color/holo_blue_dark"
+			android:textColor="@color/accent"
 			android:textStyle="bold"/>
 
 		<TextView
 			android:layout_width="fill_parent"
 			android:layout_height="wrap_content"
-			android:autoLink="web|email|map"
+			android:autoLink="web"
 			android:text="Go to https://crowdin.com/project/nononsensenotes to help translate the app to your native language."/>
 
 		<TextView
@@ -56,7 +56,7 @@
 			android:layout_height="wrap_content"
 			android:fontFamily="sans-serif-condensed"
 			android:text="\nVersion 7.0.0"
-			android:textColor="@android:color/holo_blue_dark"
+			android:textColor="@color/accent"
 			android:textStyle="bold"/>
 
 		<TextView
@@ -71,7 +71,7 @@
 			android:layout_height="wrap_content"
 			android:fontFamily="sans-serif-condensed"
 			android:text="\nVersion 5.7.1"
-			android:textColor="@android:color/holo_blue_dark"
+			android:textColor="@color/accent"
 			android:textStyle="bold"/>
 
 		<TextView
@@ -86,7 +86,7 @@
 			android:layout_height="wrap_content"
 			android:fontFamily="sans-serif-condensed"
 			android:text="\nVersion 5.6.0"
-			android:textColor="@android:color/holo_blue_dark"
+			android:textColor="@color/accent"
 			android:textStyle="bold"/>
 
 		<TextView

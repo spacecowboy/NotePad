@@ -24,6 +24,8 @@
 	android:layout_height="wrap_content"
 	tools:ignore="HardcodedText">
 
+	<!-- Represents the "about" page in the settings -->
+
 	<LinearLayout
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
@@ -38,8 +40,7 @@
 			android:autoLink="all"
 			android:fontFamily="sans-serif-light"
 			android:paddingTop="4dp"
-			android:text="Copyright (&#169;) 2014 Jonas Kalderstam"
-			android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+			android:text="Copyright (&#169;) 2014 Jonas Kalderstam"/>
 
 		<TextView
 			android:layout_width="fill_parent"
@@ -58,7 +59,7 @@
 			android:paddingTop="16dp"
 			android:text="@string/libraries_used"
 			android:textAppearance="@style/TextAppearance.AppCompat.Large"
-			android:textColor="@android:color/holo_blue_dark"/>
+			android:textColor="@color/accent"/>
 
 		<TextView
 			android:layout_width="fill_parent"
@@ -66,7 +67,7 @@
 			android:autoLink="all"
 			android:fontFamily="sans-serif-light"
 			android:paddingTop="4dp"
-			android:text="ActionBar-PullToRefresh (&#169;) Chris Banes"
+			android:text="Androidx"
 			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
 		<TextView
@@ -84,7 +85,7 @@
 			android:autoLink="all"
 			android:fontFamily="sans-serif-light"
 			android:paddingTop="4dp"
-			android:text="ShowcaseView (&#169;) Alex Curran"
+			android:text="TapTargetView (&#169;) KeepSafe"
 			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
 		<TextView
@@ -104,7 +105,7 @@
 			android:paddingTop="16dp"
 			android:text="@string/special_thanks"
 			android:textAppearance="@style/TextAppearance.AppCompat.Large"
-			android:textColor="@android:color/holo_blue_dark"/>
+			android:textColor="@color/accent"/>
 
 		<TextView
 			android:layout_width="fill_parent"
