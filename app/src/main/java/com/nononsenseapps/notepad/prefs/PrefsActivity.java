@@ -17,7 +17,6 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import android.app.ActionBar;
 import android.app.backup.BackupManager;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
@@ -47,11 +46,17 @@ public class PrefsActivity extends PreferenceActivity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		setLanguage();
 
-		// Set language
-		SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(this);
+		// Add the arrow to go back
+		if (getActionBar() != null) {
+			getActionBar().setDisplayHomeAsUpEnabled(true);
+		}
+		// TODO we should migrate to androidx preferences, and then use getSupportActionbar() with an appcompat theme. see the xml manifest
+	}
 
+	private void setLanguage() {
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		Configuration config = getResources().getConfiguration();
 
 		String lang = prefs.getString(getString(R.string.pref_locale), "");
@@ -66,15 +71,7 @@ public class PrefsActivity extends PreferenceActivity {
 			}
 			// Locale.setDefault(locale);
 			config.locale = locale;
-			getResources().updateConfiguration(config,
-					getResources().getDisplayMetrics());
-		}
-
-		// Set up navigation (adds nice arrow to icon)
-		ActionBar actionBar = getActionBar();
-		if (actionBar != null) {
-			actionBar.setDisplayHomeAsUpEnabled(true);
-			// actionBar.setDisplayShowTitleEnabled(false);
+			getResources().updateConfiguration(config, getResources().getDisplayMetrics());
 		}
 	}
 
@@ -97,29 +94,21 @@ public class PrefsActivity extends PreferenceActivity {
 	@Override
 	public void onBuildHeaders(List<Header> target) {
 		loadHeadersFromResource(R.xml.app_pref_headers, target);
-		// When headers show, it is the root activity which should
-		// navigate up and not back.
-		mIsRoot = true;
+		// When headers show, it is the root activity which should navigate up and not back.
+		mIsRoot = true; // TODO but nobody ever sets it to false ??
 	}
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch (item.getItemId()) {
-			case android.R.id.home:
-				// This ID represents the Home or Up button. In the case of this
-				// activity, the Up button is shown. Use NavUtils to allow users
-				// to navigate up one level in the application structure. For
-				// more details, see the Navigation pattern on Android Design:
-				//
-				// http://developer.android.com/design/patterns/navigation.html#up-vs-back
-				//
-				// If Settings has multiple levels, Up should navigate up
-				// that hierarchy.
-				if (mIsRoot)
-					NavUtils.navigateUpFromSameTask(this);
-				else
-					finish();
-				return true;
+		if (item.getItemId() == android.R.id.home) {
+			// This ID represents the Home or Up button. In the case of this
+			// activity, the Up button is shown. Use NavUtils to allow users
+			// to navigate up one level in the application structure.
+			if (mIsRoot)
+				NavUtils.navigateUpFromSameTask(this);
+			else
+				finish();
+			return true;
 		}
 		return super.onOptionsItemSelected(item);
 	}
