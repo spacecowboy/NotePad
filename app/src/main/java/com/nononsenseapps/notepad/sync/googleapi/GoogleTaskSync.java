@@ -45,8 +45,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import retrofit.RetrofitError;
-
 public class GoogleTaskSync {
 
 	public static final boolean NOTIFY_AUTH_FAILURE = true;
@@ -84,8 +82,11 @@ public class GoogleTaskSync {
 			// Temporary fix for delete all bug
 //					if (PreferenceManager.getDefaultSharedPreferences(context)
 //							.getBoolean(SyncPrefs.KEY_FULLSYNC, false)) {
-			PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(SyncPrefs
-					.KEY_FULLSYNC, false).putLong(PREFS_GTASK_LAST_SYNC_TIME, 0).commit();
+			PreferenceManager.getDefaultSharedPreferences(context)
+					.edit()
+					.putBoolean(SyncPrefs.KEY_FULLSYNC, false)
+					.putLong(PREFS_GTASK_LAST_SYNC_TIME, 0)
+					.commit();
 //					}
 
 			// Download lists from server
@@ -128,9 +129,15 @@ public class GoogleTaskSync {
 
 			NnnLogger.debugOnly(GoogleTaskSync.class, "Sync Complete!");
 			success = true;
-			PreferenceManager.getDefaultSharedPreferences(context).edit().putLong
-					(PREFS_GTASK_LAST_SYNC_TIME, startTime).commit();
-		} catch (RetrofitError e) {
+			PreferenceManager.getDefaultSharedPreferences(context)
+					.edit()
+					.putLong(PREFS_GTASK_LAST_SYNC_TIME, startTime)
+					.commit();
+		}
+		/*
+		TODO re-enable this block once you understand how to handle errors in retrofit2.
+		 In the original retrofit (1.9.0), using RetrofitError was enough
+		catch (RetrofitError e) {
 			NnnLogger.debugOnly(GoogleTaskSync.class, "Retrofit: " + e);
 			final int status;
 			if (e.getResponse() != null) {
@@ -155,7 +162,8 @@ public class GoogleTaskSync {
 					syncResult.stats.numIoExceptions++;
 					break;
 			}
-		} catch (Exception e) {
+		}
+		*/ catch (Exception e) {
 			// Something went wrong, don't punish the user
 			NnnLogger.exception(e);
 			syncResult.stats.numIoExceptions++;
@@ -175,9 +183,10 @@ public class GoogleTaskSync {
 	 * Since all lists are expected to be downloaded, any non-existing entries
 	 * are assumed to be deleted and marked as such.
 	 */
-	public static void mergeListsWithLocalDB(final Context context,
-											 final String account, final List<GoogleTaskList> remoteLists) {
-		NnnLogger.debugOnly(GoogleTaskSync.class, "mergeList starting with: " + remoteLists.size());
+	public static void mergeListsWithLocalDB(final Context context, final String account,
+											 final List<GoogleTaskList> remoteLists) {
+		NnnLogger.debugOnly(GoogleTaskSync.class,
+				"mergeList starting with: " + remoteLists.size());
 
 		final HashMap<String, GoogleTaskList> localVersions = new HashMap<String, GoogleTaskList>();
 		final Cursor c = context.getContentResolver().query(
@@ -269,11 +278,9 @@ public class GoogleTaskSync {
 	 *
 	 * @param client
 	 * @throws IOException
-	 * @throws RetrofitError
 	 * @throws JSONException
 	 */
-	static List<GoogleTaskList> downloadLists(final GoogleTasksClient client)
-			throws IOException, RetrofitError {
+	static List<GoogleTaskList> downloadLists(final GoogleTasksClient client) {
 		// Do the actual download
 		final ArrayList<GoogleTaskList> remoteLists = new ArrayList<GoogleTaskList>();
 
@@ -356,11 +363,11 @@ public class GoogleTaskSync {
 		return listPairs;
 	}
 
-	static List<Pair<TaskList, GoogleTaskList>> synchronizeListsRemotely(
-			final Context context,
-			final List<Pair<TaskList, GoogleTaskList>> listPairs,
-			final GoogleTasksClient client) throws IOException, RetrofitError {
-		final List<Pair<TaskList, GoogleTaskList>> syncedPairs = new ArrayList<Pair<TaskList, GoogleTaskList>>();
+	static List<Pair<TaskList, GoogleTaskList>> synchronizeListsRemotely(final Context context,
+																		 final List<Pair<TaskList, GoogleTaskList>> listPairs, final GoogleTasksClient client) {
+
+		final List<Pair<TaskList, GoogleTaskList>> syncedPairs = new ArrayList<>();
+
 		// For every list
 		for (final Pair<TaskList, GoogleTaskList> pair : listPairs) {
 			Pair<TaskList, GoogleTaskList> syncedPair = pair;
@@ -378,16 +385,22 @@ public class GoogleTaskSync {
 				NnnLogger.debugOnly(GoogleTaskSync.class, "remotesync: isDeletedLocally");
 				// Deleted locally, delete remotely also
 				pair.second.remotelyDeleted = true;
-				try {
+
+				// TODO understand how to handle errors in that .deleteList() call, and then
+				//  replace the catch{} block with something appropriate
+				// try {
 					client.deleteList(pair.second);
+				/*
 				} catch (RetrofitError e) {
 					if (e.getResponse() != null && e.getResponse().getStatus() == 400) {
 						// Deleted the default list. Ignore error
-						NnnLogger.debugOnly(GoogleTaskSync.class, "Error when deleting list. This is expected for the default list: " + e);
+						NnnLogger.debugOnly(GoogleTaskSync.class,
+								"Error when deleting list. This is expected for the default list: " + e);
 					} else {
 						throw e;
 					}
 				}
+				 */
 				// and delete from db if it exists there
 				pair.second.delete(context);
 				syncedPair = null;
@@ -409,15 +422,14 @@ public class GoogleTaskSync {
 
 	static void synchronizeTasksRemotely(final Context context,
 										 final List<Pair<Task, GoogleTask>> taskPairs,
-										 final GoogleTaskList gTaskList, final GoogleTasksClient client)
-			throws IOException, RetrofitError {
+										 final GoogleTaskList gTaskList,
+										 final GoogleTasksClient client) {
 		for (final Pair<Task, GoogleTask> pair : taskPairs) {
 
 			// if newly created locally
 			if (pair.second == null) {
 				NnnLogger.debugOnly(GoogleTaskSync.class, "Second was null");
-				final GoogleTask newTask = new GoogleTask(pair.first,
-						client.accountName);
+				final GoogleTask newTask = new GoogleTask(pair.first, client.accountName);
 				client.insertTask(newTask, gTaskList);
 				newTask.save(context);
 				pair.first.save(context, newTask.updated);
@@ -500,8 +512,8 @@ public class GoogleTaskSync {
 	}
 
 	static List<GoogleTask> downloadChangedTasks(final Context context,
-												 final GoogleTasksClient client, final GoogleTaskList remoteList)
-			throws IOException, RetrofitError {
+												 final GoogleTasksClient client,
+												 final GoogleTaskList remoteList) {
 //		final SharedPreferences settings = PreferenceManager
 //				.getDefaultSharedPreferences(context);
 //		RFC3339Date.asRFC3339(settings.getLong(
