@@ -118,8 +118,8 @@ public class ListPrefs extends PreferenceFragment {
 	 */
 	private void setEntries(ListPreference listSpinner) {
 
-		ArrayList<CharSequence> entries = new ArrayList<CharSequence>();
-		ArrayList<CharSequence> values = new ArrayList<CharSequence>();
+		ArrayList<CharSequence> entries = new ArrayList<>();
+		ArrayList<CharSequence> values = new ArrayList<>();
 
 		// TODO fix from old version
 		// listSpinner.setDefaultValue(Long.toString(MainActivity.getAList(

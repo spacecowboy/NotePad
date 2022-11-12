@@ -107,8 +107,8 @@ public class DonateMigrator extends IntentService {
 	 * is updated in fields.
 	 */
 	void importNotes() {
-		final HashMap<Long, Long> listIDMap = new HashMap<Long, Long>();
-		final HashMap<Long, Long> taskIDMap = new HashMap<Long, Long>();
+		final HashMap<Long, Long> listIDMap = new HashMap<>();
+		final HashMap<Long, Long> taskIDMap = new HashMap<>();
 
 		// Work through, list by list
 		final Cursor listCursor = getContentResolver().query(

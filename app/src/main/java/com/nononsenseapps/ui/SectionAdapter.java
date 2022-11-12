@@ -39,9 +39,9 @@ import java.util.Map;
 public class SectionAdapter extends BaseAdapter {
 	private final static String ERRORMSG = "This adapter is in the wrong state for that method to be used!";
 
-	public final Map<String, SimpleCursorAdapter> sections = new LinkedHashMap<String, SimpleCursorAdapter>();
+	public final Map<String, SimpleCursorAdapter> sections = new LinkedHashMap<>();
 	public final ArrayAdapter<String> headers;
-	public final Map<String, Long> sectionIds = new HashMap<String, Long>();
+	public final Map<String, Long> sectionIds = new HashMap<>();
 	private final SimpleCursorAdapter wrappedAdapter;
 	public final static int TYPE_SECTION_HEADER = -39567;
 	public final static int TYPE_ITEM = -892746;
@@ -83,7 +83,7 @@ public class SectionAdapter extends BaseAdapter {
 		};
 
 		if (wrappedAdapter == null) {
-			headers = new ArrayAdapter<String>(context, R.layout.list_header,
+			headers = new ArrayAdapter<>(context, R.layout.list_header,
 					R.id.list_header_title);
 			headers.registerDataSetObserver(subObserver);
 			this.wrappedAdapter = null;

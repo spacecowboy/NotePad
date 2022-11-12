@@ -163,7 +163,7 @@ public class MyContentProvider extends ContentProvider {
 		final Task t;
 		final SQLiteStatement stmt;
 		final String sql;
-		final ArrayList<Uri> updateUris = new ArrayList<Uri>();
+		final ArrayList<Uri> updateUris = new ArrayList<>();
 		db.beginTransaction();
 
 		try {

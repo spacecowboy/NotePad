@@ -33,7 +33,7 @@ public class BiMap<K, V> extends HashMap<K, V> {
 	public BiMap() {
 		super();
 
-		valueToKey = new HashMap<V, K>();
+		valueToKey = new HashMap<>();
 	}
 
 	/**

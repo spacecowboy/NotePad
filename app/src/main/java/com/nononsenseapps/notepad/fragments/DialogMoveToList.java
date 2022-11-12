@@ -67,7 +67,7 @@ public class DialogMoveToList extends DialogFragment {
 	public static DialogMoveToList getInstance(final Long... tasks) {
 		long[] taskIds = new long[tasks.length];
 		for (int i = 0; i < tasks.length; i++) {
-			taskIds[i] = tasks[i].longValue();
+			taskIds[i] = tasks[i];
 		}
 
 		return getInstance(taskIds);

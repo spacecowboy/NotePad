@@ -88,7 +88,7 @@ public class MainPrefs extends PreferenceFragment {
 	private void setDateEntries(ListPreference prefDate, int array) {
 		final String[] values = getResources().getStringArray(array);
 
-		final ArrayList<CharSequence> entries = new ArrayList<CharSequence>();
+		final ArrayList<CharSequence> entries = new ArrayList<>();
 
 		final GregorianCalendar cal = new GregorianCalendar(2099, 2, 27, 0, 59);
 
@@ -102,8 +102,8 @@ public class MainPrefs extends PreferenceFragment {
 	}
 
 	private void setLangEntries(ListPreference prefLang) {
-		ArrayList<CharSequence> entries = new ArrayList<CharSequence>();
-		ArrayList<CharSequence> values = new ArrayList<CharSequence>();
+		ArrayList<CharSequence> entries = new ArrayList<>();
+		ArrayList<CharSequence> values = new ArrayList<>();
 
 		entries.add(getString(R.string.localedefault));
 		values.add("");

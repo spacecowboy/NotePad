@@ -933,7 +933,7 @@ public class Task extends DAO {
 	public static void setCompleted(final Context context,
 									final boolean completed, final Long... ids) {
 		if (ids.length > 0) {
-			final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
+			final AsyncTask<Long, Void, Void> task = new AsyncTask<>() {
 				@Override
 				protected Void doInBackground(final Long... ids) {
 					setCompletedSynced(context, completed, ids);

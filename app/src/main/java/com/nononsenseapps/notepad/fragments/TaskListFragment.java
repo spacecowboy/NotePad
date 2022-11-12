@@ -372,7 +372,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		// mListType = prefs.getString(getString(R.string.pref_listtype),
 		// getString(R.string.default_listtype));
 
-		mCallback = new LoaderCallbacks<Cursor>() {
+		mCallback = new LoaderCallbacks<>() {
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
 				if (id == 0 /* LOADER_CURRENT_LIST */) {
@@ -537,7 +537,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		});
 
 		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-			final HashMap<Long, Task> tasks = new HashMap<Long, Task>();
+			final HashMap<Long, Task> tasks = new HashMap<>();
 
 			/**
 			 * Delete tasks and display a snackbar with an undo action

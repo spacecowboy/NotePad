@@ -127,7 +127,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 	public void onActivityCreated(final Bundle state) {
 		super.onActivityCreated(state);
 
-		loaderCallbacks = new LoaderCallbacks<Cursor>() {
+		loaderCallbacks = new LoaderCallbacks<>() {
 
 			@Override
 			public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {

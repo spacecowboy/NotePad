@@ -188,7 +188,7 @@ public class GoogleTaskSync {
 		NnnLogger.debugOnly(GoogleTaskSync.class,
 				"mergeList starting with: " + remoteLists.size());
 
-		final HashMap<String, GoogleTaskList> localVersions = new HashMap<String, GoogleTaskList>();
+		final HashMap<String, GoogleTaskList> localVersions = new HashMap<>();
 		final Cursor c = context.getContentResolver().query(
 				GoogleTaskList.URI,
 				GoogleTaskList.Columns.FIELDS,
@@ -232,7 +232,7 @@ public class GoogleTaskSync {
 	public static void mergeTasksWithLocalDB(final Context context,
 											 final String account, final List<GoogleTask> remoteTasks,
 											 long listDbId) {
-		final HashMap<String, GoogleTask> localVersions = new HashMap<String, GoogleTask>();
+		final HashMap<String, GoogleTask> localVersions = new HashMap<>();
 		final Cursor c = context.getContentResolver().query(
 				GoogleTask.URI,
 				GoogleTask.Columns.FIELDS,
@@ -282,7 +282,7 @@ public class GoogleTaskSync {
 	 */
 	static List<GoogleTaskList> downloadLists(final GoogleTasksClient client) {
 		// Do the actual download
-		final ArrayList<GoogleTaskList> remoteLists = new ArrayList<GoogleTaskList>();
+		final ArrayList<GoogleTaskList> remoteLists = new ArrayList<>();
 
 		client.listLists(remoteLists);
 
@@ -303,7 +303,7 @@ public class GoogleTaskSync {
 	 */
 	public static List<Pair<TaskList, GoogleTaskList>> synchronizeListsLocally(
 			final Context context, final List<GoogleTaskList> remoteLists) {
-		final ArrayList<Pair<TaskList, GoogleTaskList>> listPairs = new ArrayList<Pair<TaskList, GoogleTaskList>>();
+		final ArrayList<Pair<TaskList, GoogleTaskList>> listPairs = new ArrayList<>();
 		// For every list
 		for (final GoogleTaskList remoteList : remoteLists) {
 			// Compare with local
@@ -349,14 +349,14 @@ public class GoogleTaskSync {
 				}
 			}
 			if (!remoteList.remotelyDeleted)
-				listPairs.add(new Pair<TaskList, GoogleTaskList>(localList,
+				listPairs.add(new Pair<>(localList,
 						remoteList));
 		}
 
 		// Add local lists without a remote version to pairs
 		for (final TaskList tl : loadNewListsFromDB(context, remoteLists.get(0))) {
 			NnnLogger.debugOnly(GoogleTaskSync.class, "loading new list db: " + tl.title);
-			listPairs.add(new Pair<TaskList, GoogleTaskList>(tl, null));
+			listPairs.add(new Pair<>(tl, null));
 		}
 
 		// return pairs
@@ -379,7 +379,7 @@ public class GoogleTaskSync {
 				// Save to db also
 				newList.save(context);
 				pair.first.save(context, newList.updated);
-				syncedPair = new Pair<TaskList, GoogleTaskList>(pair.first,
+				syncedPair = new Pair<>(pair.first,
 						newList);
 			} else if (pair.second.isDeleted()) {
 				NnnLogger.debugOnly(GoogleTaskSync.class, "remotesync: isDeletedLocally");
@@ -479,7 +479,7 @@ public class GoogleTaskSync {
 				TaskList.Columns.FIELDS,
 				GoogleTaskList.getTaskListWithoutRemoteClause(),
 				remoteList.getTaskListWithoutRemoteArgs(), null);
-		final ArrayList<TaskList> lists = new ArrayList<TaskList>();
+		final ArrayList<TaskList> lists = new ArrayList<>();
 		try {
 			while (c != null && c.moveToNext()) {
 				lists.add(new TaskList(c));
@@ -499,7 +499,7 @@ public class GoogleTaskSync {
 				GoogleTask.getTaskWithoutRemoteClause(),
 				GoogleTask.getTaskWithoutRemoteArgs(listdbid, account,
 						GoogleTaskList.SERVICENAME), null);
-		final ArrayList<Task> tasks = new ArrayList<Task>();
+		final ArrayList<Task> tasks = new ArrayList<>();
 		try {
 			while (c != null && c.moveToNext()) {
 				tasks.add(new Task(c));
@@ -544,7 +544,7 @@ public class GoogleTaskSync {
 			final Pair<TaskList, GoogleTaskList> listPair) {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		final ArrayList<Pair<Task, GoogleTask>> taskPairs = new ArrayList<Pair<Task, GoogleTask>>();
+		final ArrayList<Pair<Task, GoogleTask>> taskPairs = new ArrayList<>();
 		// For every list
 		for (final GoogleTask remoteTask : remoteTasks) {
 			// Compare with local
@@ -645,7 +645,7 @@ public class GoogleTaskSync {
 //				}
 				NnnLogger.debugOnly(GoogleTaskSync.class, "add to sync list: " + remoteTask.title);
 				taskPairs
-						.add(new Pair<Task, GoogleTask>(localTask, remoteTask));
+						.add(new Pair<>(localTask, remoteTask));
 			}
 		}
 
@@ -653,7 +653,7 @@ public class GoogleTaskSync {
 		for (final Task t : loadNewTasksFromDB(context, listPair.first._id,
 				listPair.second.account)) {
 			//Log.d("nononsenseapps gtasksync", "adding local only: " + t.title);
-			taskPairs.add(new Pair<Task, GoogleTask>(t, null));
+			taskPairs.add(new Pair<>(t, null));
 		}
 
 		// return pairs

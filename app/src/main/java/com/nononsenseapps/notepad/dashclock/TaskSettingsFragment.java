@@ -130,8 +130,8 @@ public class TaskSettingsFragment extends PreferenceFragment {
 	 */
 	private static void setEntries(Activity activity, ListPreference listSpinner) {
 
-		ArrayList<CharSequence> entries = new ArrayList<CharSequence>();
-		ArrayList<CharSequence> values = new ArrayList<CharSequence>();
+		ArrayList<CharSequence> entries = new ArrayList<>();
+		ArrayList<CharSequence> values = new ArrayList<>();
 
 		// Start with all lists
 		entries.add("All lists");

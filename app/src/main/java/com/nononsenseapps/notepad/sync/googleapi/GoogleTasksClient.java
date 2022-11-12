@@ -167,7 +167,7 @@ public class GoogleTasksClient {
 	}
 
 	public List<GoogleTask> listTasks(GoogleTaskList taskList) {
-		ArrayList<GoogleTask> remoteTasks = new ArrayList<GoogleTask>();
+		ArrayList<GoogleTask> remoteTasks = new ArrayList<>();
 		GoogleTasksAPI.ListTasksResponse response;
 		String pageToken = null;
 		do {

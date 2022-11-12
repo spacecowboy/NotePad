@@ -95,8 +95,8 @@ public class OrgSyncService extends Service {
 	}
 
 	public OrgSyncService() {
-		monitors = new ArrayList<Monitor>();
-		synchronizers = new ArrayList<SynchronizerInterface>();
+		monitors = new ArrayList<>();
+		synchronizers = new ArrayList<>();
 	}
 
 	/**
@@ -106,7 +106,7 @@ public class OrgSyncService extends Service {
 	 */
 	public ArrayList<SynchronizerInterface> getSynchronizers() {
 		ArrayList<SynchronizerInterface> syncers = new
-				ArrayList<SynchronizerInterface>();
+				ArrayList<>();
 
 		// Try SD
 		SynchronizerInterface sd = new SDSynchronizer(this);

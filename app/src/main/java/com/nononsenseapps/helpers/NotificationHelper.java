@@ -629,7 +629,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	 */
 	private static Collection<Long> getRelatedLists(
 			final List<com.nononsenseapps.notepad.database.Notification> notifications) {
-		final HashSet<Long> lists = new HashSet<Long>();
+		final HashSet<Long> lists = new HashSet<>();
 		for (com.nononsenseapps.notepad.database.Notification not : notifications) {
 			lists.add(not.listID);
 		}

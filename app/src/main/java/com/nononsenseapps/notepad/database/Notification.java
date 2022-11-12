@@ -375,7 +375,7 @@ public class Notification extends DAO {
 	}
 
 	public void saveInBackground(final Context context, final boolean schedule) {
-		final AsyncTask<Void, Void, Void> task = new AsyncTask<Void, Void, Void>() {
+		final AsyncTask<Void, Void, Void> task = new AsyncTask<>() {
 			@Override
 			protected Void doInBackground(Void... voids) {
 				save(context, schedule);
@@ -391,7 +391,7 @@ public class Notification extends DAO {
 	 */
 	public static void removeWithTaskIds(final Context context, final Long... ids) {
 		if (ids.length > 0) {
-			final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
+			final AsyncTask<Long, Void, Void> task = new AsyncTask<>() {
 				@Override
 				protected Void doInBackground(final Long... ids) {
 					removeWithTaskIdsSynced(context, ids);
@@ -412,7 +412,7 @@ public class Notification extends DAO {
 	public static void removeWithTaskIdsSynced(final Context context,
 											   final Long... ids) {
 		String idStrings = "(";
-		ArrayList<String> idsToClear = new ArrayList<String>();
+		ArrayList<String> idsToClear = new ArrayList<>();
 		for (Long id : ids) {
 			idStrings += id + ",";
 			idsToClear.add(Long.toString(id));
@@ -457,7 +457,7 @@ public class Notification extends DAO {
 	public static void removeWithMaxTimeAndTaskIds(final Context context, final long maxTime,
 												   final boolean reschedule, final Long... ids) {
 		if (ids.length > 0) {
-			final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
+			final AsyncTask<Long, Void, Void> task = new AsyncTask<>() {
 				@Override
 				protected Void doInBackground(final Long... ids) {
 					String idStrings = "(";
@@ -476,7 +476,7 @@ public class Notification extends DAO {
 									+ maxTime,
 							null, null);
 
-					ArrayList<String> idsToClear = new ArrayList<String>();
+					ArrayList<String> idsToClear = new ArrayList<>();
 					while (c.moveToNext()) {
 						Notification n = new Notification(c);
 						idsToClear.add(Long.toString(n._id));
@@ -568,7 +568,7 @@ public class Notification extends DAO {
 	public static List<Notification> getNotificationsWithTasks(final Context context,
 															   final String where, final String[] whereArgs,
 															   final String sortOrder) {
-		ArrayList<Notification> list = new ArrayList<Notification>();
+		ArrayList<Notification> list = new ArrayList<>();
 
 		final Cursor c = context.getContentResolver().query(URI_WITH_TASK_PATH, null, where,
 				whereArgs, sortOrder);
@@ -599,7 +599,7 @@ public class Notification extends DAO {
 	 */
 	public static void setTimeForListAndBefore(final Context context, final long listId,
 											   final long maxTime, final long newTime) {
-		final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void, Void>() {
+		final AsyncTask<Long, Void, Void> task = new AsyncTask<>() {
 			@Override
 			protected Void doInBackground(final Long... ids) {
 				// First get the list of tasks in that list

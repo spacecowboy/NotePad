@@ -127,8 +127,7 @@ public class TasksExtension extends DashClockExtension {
 			if (notes.size() > 1) {
 				noteIntent
 						.setAction(Intent.ACTION_VIEW)
-						.setData(
-								TaskList.getUri(notes.get(0).dblist.longValue()))
+						.setData(TaskList.getUri(notes.get(0).dblist))
 						.putExtra(Task.TABLE_NAME, notes.get(0)._id);
 			} else {
 				noteIntent
@@ -202,7 +201,7 @@ public class TasksExtension extends DashClockExtension {
 		final Cursor cursor = getContentResolver().query(Task.URI,
 				Task.Columns.FIELDS, where, whereArgs, DUEDATE_SORT_TYPE);
 
-		final ArrayList<Task> result = new ArrayList<Task>();
+		final ArrayList<Task> result = new ArrayList<>();
 		if (cursor != null) {
 			while (cursor.moveToNext()) {
 				result.add(new Task(cursor));

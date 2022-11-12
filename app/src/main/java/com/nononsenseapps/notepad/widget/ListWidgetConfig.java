@@ -272,7 +272,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 
 		notesList.setAdapter(mNotesAdapter);
 
-		mCallback = new LoaderCallbacks<Cursor>() {
+		mCallback = new LoaderCallbacks<>() {
 
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {

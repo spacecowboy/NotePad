@@ -172,8 +172,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		db.beginTransaction();
 		try {
-			final HashMap<Long, Long> listIDMap = new HashMap<Long, Long>();
-			final HashMap<Long, Long> taskIDMap = new HashMap<Long, Long>();
+			final HashMap<Long, Long> listIDMap = new HashMap<>();
+			final HashMap<Long, Long> taskIDMap = new HashMap<>();
 			final LegacyDBHelper legacyDBHelper = new LegacyDBHelper(context, testPrefix);
 			final SQLiteDatabase legacyDB = legacyDBHelper.getReadableDatabase();
 

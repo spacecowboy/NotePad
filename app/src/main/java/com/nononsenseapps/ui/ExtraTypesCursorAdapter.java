@@ -49,7 +49,7 @@ public class ExtraTypesCursorAdapter extends ExtrasCursorAdapter {
 	}
 
 	private int countTypes() {
-		HashSet<Integer> types = new HashSet<Integer>();
+		HashSet<Integer> types = new HashSet<>();
 		for (int type : extraTypes) {
 			types.add(type);
 		}

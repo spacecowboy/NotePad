@@ -169,30 +169,36 @@ class FragmentSettings_USELESS extends PreferenceFragment implements SharedPrefe
 				return;
 			}
 
-			if (key.equals(SyncPrefs.KEY_SYNC_ENABLE)) {
-				final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
-				if (enabled) {
-					//showAccountDialog();
-				} else {
-					SyncGtaskHelper.toggleSync(getActivity(), sharedPreferences);
-					// Synchronize view also
-					if (preferenceSyncGTasks.isChecked()) {
-						preferenceSyncGTasks.setChecked(false);
+			switch (key) {
+				case SyncPrefs.KEY_SYNC_ENABLE: {
+					final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
+					if (enabled) {
+						//showAccountDialog();
+					} else {
+						SyncGtaskHelper.toggleSync(getActivity(), sharedPreferences);
+						// Synchronize view also
+						if (preferenceSyncGTasks.isChecked()) {
+							preferenceSyncGTasks.setChecked(false);
+						}
 					}
+					break;
 				}
-			} else if (key.equals(SyncPrefs.KEY_ACCOUNT)) {
-				setAccountSummary(sharedPreferences);
-			} else if (key.equals(SyncPrefs.KEY_SD_ENABLE)) {
-				final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
-				if (enabled) {
+				case SyncPrefs.KEY_ACCOUNT:
+					setAccountSummary(sharedPreferences);
+					break;
+				case SyncPrefs.KEY_SD_ENABLE: {
+					final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
+					if (enabled) {
 //                     showFilePicker();
-				} else {
-					// Restart the service (started in activities)
-					OrgSyncService.stop(getActivity());
-					// Synchronize view also
-					if (preferenceSyncSdCard.isChecked()) {
-						preferenceSyncSdCard.setChecked(false);
+					} else {
+						// Restart the service (started in activities)
+						OrgSyncService.stop(getActivity());
+						// Synchronize view also
+						if (preferenceSyncSdCard.isChecked()) {
+							preferenceSyncSdCard.setChecked(false);
+						}
 					}
+					break;
 				}
 			}
 		} catch (IllegalStateException ignored) {
