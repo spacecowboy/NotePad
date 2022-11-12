@@ -698,12 +698,14 @@ public class ListWidgetConfig extends AppCompatActivity {
 		final int mHeaderLayout;
 		final static int itemType = 0;
 		final static int headerType = 1;
+		final Context mContext;
 
 		public SimpleWidgetPreviewAdapter(Context context, int layout,
 										  int headerLayout, Cursor c, String[] from, int[] to, int flags) {
 			super(context, layout, c, from, to, flags);
 			mItemLayout = layout;
 			mHeaderLayout = headerLayout;
+			mContext = context;
 		}
 
 		int getViewLayout(final int position) {
@@ -733,9 +735,9 @@ public class ListWidgetConfig extends AppCompatActivity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				final LayoutInflater inflater = LayoutInflater.from(mContext);
-				convertView = inflater.inflate(getViewLayout(position), parent,
-						false);
+				final LayoutInflater inflater = LayoutInflater.from(this.mContext);
+				convertView = inflater
+						.inflate(getViewLayout(position), parent, false);
 			}
 			return super.getView(position, convertView, parent);
 		}

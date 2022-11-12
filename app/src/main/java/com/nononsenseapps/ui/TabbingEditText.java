@@ -25,7 +25,7 @@ import android.widget.EditText;
 /**
  * And editText which catches TABs and inserts \t in the text
  */
-public class TabbingEditText extends EditText {
+public class TabbingEditText extends androidx.appcompat.widget.AppCompatEditText {
 	// Unfortunately, this doesn't work so well
 	//private static final String TAB = "\t";
 	// Which is why I use spaces instead

@@ -30,7 +30,7 @@ import com.nononsenseapps.notepad.R;
  *
  * Default secondary color is grey.
  */
-public class GreyableToggleButton extends ToggleButton {
+public class GreyableToggleButton extends androidx.appcompat.widget.AppCompatToggleButton {
 
 	private int primaryColor;
 	private int secondaryColor;

@@ -40,7 +40,7 @@ import com.nononsenseapps.notepad.R;
  * is not selectable. This is intended to be used in a ListView where the text
  * on items is not intended to be selectable.
  */
-public class TitleNoteTextView extends TextView {
+public class TitleNoteTextView extends androidx.appcompat.widget.AppCompatTextView {
 
 	Object titleStyleSpan;
 	Object titleSizeSpan;

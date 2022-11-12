@@ -37,7 +37,7 @@ import com.nononsenseapps.notepad.R;
 /**
  * A simple textview that can display time.
  */
-public class DateView extends TextView {
+public class DateView extends androidx.appcompat.widget.AppCompatTextView {
 	private static final int SECONDS_PER_DAY = 3600;
 	// private String day = "E, d MMM";
 	//public static final String day = "MMM d";

@@ -42,7 +42,7 @@ import com.nononsenseapps.notepad.R;
  * An EditText field that highlights the first line and makes links clickable in
  * the text. The text is still selectable, movable etc.
  */
-public class StyledEditText extends EditText {
+public class StyledEditText extends androidx.appcompat.widget.AppCompatEditText {
 
 	Object titleStyleSpan;
 	Object titleSizeSpan;
