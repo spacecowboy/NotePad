@@ -31,9 +31,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import kotlin.jvm.internal.Lambda;
-import retrofit.RequestInterceptor;
-import retrofit.RestAdapter;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import retrofit2.Retrofit;
 
 /**
  * Communication client with Google Tasks API.
@@ -84,19 +84,33 @@ public class GoogleTasksClient {
 			throw new IllegalArgumentException("Auth token can't be empty!");
 		}
 		NnnLogger.debugOnly(GoogleTasksClient.class, "Using token: " + token);
-		// Create a very simple REST adapter, with oauth header
-		RestAdapter restAdapter = new RestAdapter.Builder().setEndpoint(BASE_URL)
-				.setRequestInterceptor(new RequestInterceptor() {
-					@Override
-					public void intercept(RequestFacade request) {
-						request.addHeader("Authorization", "Bearer " + token);
-					}
+
+		// TODO untested! try to get it working
+		OkHttpClient httpClient = new OkHttpClient.Builder()
+				.addInterceptor(chain -> {
+					Request original = chain.request();
+
+					// Customize the request
+					Request newRequest = original.newBuilder()
+							.header("Authorization", "Bearer " + token)
+							.method(original.method(), original.body())
+							.build();
+
+					// TODO here you may want to add some logging code
+					okhttp3.Response response = chain.proceed(newRequest);
+					return response;
 				})
 				.build();
+
+		// Create a very simple REST adapter, with oauth header
+		Retrofit restAdapter = new Retrofit.Builder()
+				.baseUrl(BASE_URL)
+				.client(httpClient)
+				.build();
+
 		// Create an instance of the interface
 		return restAdapter.create(GoogleTasksAPI.class);
 	}
-
 
 	public void listLists(final ArrayList<GoogleTaskList> remoteLists) {
 		GoogleTasksAPI.ListListsResponse response;
