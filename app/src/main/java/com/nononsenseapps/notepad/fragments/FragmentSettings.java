@@ -95,8 +95,8 @@ class FragmentSettings_USELESS extends PreferenceFragment implements SharedPrefe
 			preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
 				@Override
 				public boolean onPreferenceClick(Preference preference) {
-					DialogPasswordSettings.showDialog(((AppCompatActivity) getActivity())
-							.getSupportFragmentManager());
+					// DialogPasswordSettings.showDialog(((AppCompatActivity) getActivity())
+//							.getSupportFragmentManager());
 					return true;
 				}
 			});

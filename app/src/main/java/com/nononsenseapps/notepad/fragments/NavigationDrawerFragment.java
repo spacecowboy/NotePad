@@ -619,7 +619,7 @@ class NavigationDrawerFragment extends Fragment implements LoaderManager
 			final String name = topLevelItem.getAvatarName();
 			final String imageName = (name.isEmpty() || name.startsWith("/")) ? "N" : name;
 			TextDrawable drawable = TextDrawable.builder()
-					.buildRound(imageName.toUpperCase().substring(0, 1), ColorGenerator.MATERIAL
+					.buildRound(imageName.toUpperCase().substring(0, 1), ColorGenerator.Companion.getMATERIAL()
 							.getColor(imageName));
 
 			mAvatar.setImageDrawable(drawable);
@@ -647,8 +647,9 @@ class NavigationDrawerFragment extends Fragment implements LoaderManager
 			mTitle.setText(headerItem.mTitleRes);
 			mCount.setVisibility(View.GONE);
 			TextDrawable drawable = TextDrawable.builder()
-					.buildRound(mItem.getTitle().toUpperCase().substring(0, 1), ColorGenerator
-							.MATERIAL.getColor(mItem.getTitle()));
+					.buildRound(mItem.getTitle().toUpperCase().substring(0, 1),
+							ColorGenerator.Companion.getMATERIAL().getColor(
+							mItem.getTitle()));
 
 			mAvatar.setImageDrawable(drawable);
 		}
@@ -677,7 +678,9 @@ class NavigationDrawerFragment extends Fragment implements LoaderManager
 			if (headerItem.getIconRes() < 1) {
 				TextDrawable drawable = TextDrawable.builder().buildRound(mItem.getTitle()
 								.toUpperCase().substring(0, 1),
-						ColorGenerator.MATERIAL.getColor(mItem.getTitle()));
+						ColorGenerator.Companion.getMATERIAL().getColor(mItem.getTitle()));
+
+
 
 				mAvatar.setImageDrawable(drawable);
 			} else {
@@ -714,7 +717,7 @@ class NavigationDrawerFragment extends Fragment implements LoaderManager
 			mCount.setText(cursor.getString(cursor.getColumnIndex(TaskList.Columns.VIEW_COUNT)));
 
 			TextDrawable drawable = TextDrawable.builder()
-					.buildRound(title.toUpperCase().substring(0, 1), ColorGenerator.MATERIAL
+					.buildRound(title.toUpperCase().substring(0, 1), ColorGenerator.Companion.getMATERIAL()
 							.getColor(title));
 
 			mAvatar.setImageDrawable(drawable);

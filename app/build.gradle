@@ -19,8 +19,6 @@ buildscript {
     repositories {
         mavenCentral()
         google()
-        // for TextDrawable
-        maven { url 'https://jitpack.io' }
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:7.3.1'
@@ -32,6 +30,8 @@ apply plugin: 'com.android.application'
 repositories {
     mavenCentral()
     google()
+    // for TextDrawable
+    maven { url 'https://jitpack.io' }
 }
 
 // Version number
@@ -136,7 +136,7 @@ dependencies {
     implementation "androidx.preference:preference:1.2.0"
     implementation "androidx.startup:startup-runtime:1.1.1" // it just fixes a build warning
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
-    //implementation 'com.google.android.material:material:1.7.0'
+    implementation 'com.google.android.material:material:1.7.0'
     // yes we need both. It solves a dependency problem with androidx.preference
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"

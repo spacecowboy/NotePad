@@ -53,7 +53,6 @@ import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.getkeepsafe.taptargetview.TapTarget;
 import com.getkeepsafe.taptargetview.TapTargetView;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.nononsenseapps.helpers.ActivityHelper;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
@@ -140,8 +139,8 @@ public class ActivityMain extends AppCompatActivity
 
 	private boolean shouldRestart = false;
 
-
-	private FloatingActionButton mFab;
+	// TODO should we add a FAB ? it's ~useless
+	// private FloatingActionButton mFab;
 
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
