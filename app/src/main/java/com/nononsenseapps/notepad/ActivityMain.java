@@ -17,7 +17,6 @@
 
 package com.nononsenseapps.notepad;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -34,15 +33,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.AdapterView.OnItemLongClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
@@ -51,9 +48,8 @@ import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.getkeepsafe.taptargetview.TapTarget;
-import com.getkeepsafe.taptargetview.TapTargetView;
 import com.nononsenseapps.helpers.ActivityHelper;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.helpers.SyncStatusMonitor;
 import com.nononsenseapps.helpers.SyncStatusMonitor.OnSyncStartStopListener;
@@ -77,6 +73,7 @@ import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.ui.ExtraTypesCursorAdapter;
 import com.nononsenseapps.util.SyncGtaskHelper;
+import com.nononsenseapps.utils.ShowcaseHelper;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.EActivity;
@@ -814,44 +811,42 @@ public class ActivityMain extends AppCompatActivity
 			drawerLayout.setDrawerListener(mDrawerToggle);
 		}
 
-		// TODO crashes when inheriting fron newer themes => we need the support actionbar & AppCompatActivity as parent
 		if (getSupportActionBar() == null) {
-			Log.e("NNN", "Coding error: actionbar is null in ActivityMain. A crash will follow!");
+			NnnLogger.error(ActivityMain.class,
+					"Coding error: actionbar is null. A crash will follow");
 		} else {
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 			getSupportActionBar().setHomeButtonEnabled(true);
 		}
 
+		// Use extra items. From top to bottom, they are "TASKS", "Overdue", "Today",
+		// "Next 5 days", "Lists". Note that 2 of those are used as section titles & dividers
+		final int[] extraIds = new int[] { -1, TaskListFragment.LIST_ID_OVERDUE,
+				TaskListFragment.LIST_ID_TODAY, TaskListFragment.LIST_ID_WEEK, -1 };
 
-		// Use extra items for All Lists
-		final int[] extraIds = new int[] { -1,
-				TaskListFragment.LIST_ID_OVERDUE,
-				TaskListFragment.LIST_ID_TODAY,
-				TaskListFragment.LIST_ID_WEEK,
-				-1 };
-		// This is fine for initial conditions
+		// The corresponding names. This is fine for initial conditions
 		final int[] extraStrings = new int[] { R.string.tasks,
 				R.string.date_header_overdue,
 				R.string.date_header_today,
 				R.string.next_5_days,
 				R.string.lists };
+
 		// Use this for real data
-		final ArrayList<ArrayList<Object>> extraData =
-				new ArrayList<ArrayList<Object>>();
+		final ArrayList<ArrayList<Object>> extraData = new ArrayList<>();
 		// Task header
-		extraData.add(new ArrayList<Object>());
+		extraData.add(new ArrayList<>());
 		extraData.get(0).add(R.string.tasks);
 		// Overdue
-		extraData.add(new ArrayList<Object>());
+		extraData.add(new ArrayList<>());
 		extraData.get(1).add(R.string.date_header_overdue);
 		// Today
-		extraData.add(new ArrayList<Object>());
+		extraData.add(new ArrayList<>());
 		extraData.get(2).add(R.string.date_header_today);
 		// Week
-		extraData.add(new ArrayList<Object>());
+		extraData.add(new ArrayList<>());
 		extraData.get(3).add(R.string.next_5_days);
 		// Lists header
-		extraData.add(new ArrayList<Object>());
+		extraData.add(new ArrayList<>());
 		extraData.get(4).add(R.string.lists);
 
 		final int[] extraTypes = new int[] { 1, 0, 0, 0, 1 };
@@ -879,21 +874,18 @@ public class ActivityMain extends AppCompatActivity
 		// new int[] { android.R.id.text1 }, 0);
 		leftDrawer.setAdapter(adapter);
 		// Set click handler
-		leftDrawer.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View v, int pos,
-									long id) {
-				if (id < -1) {
-					// Set preference which type was chosen
-					PreferenceManager
-							.getDefaultSharedPreferences(ActivityMain.this)
-							.edit()
-							.putLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, id)
-							.commit();
-				}
-				openList(id);
+		leftDrawer.setOnItemClickListener((arg0, v, pos, id) -> {
+			if (id < -1) {
+				// Set preference which type was chosen
+				PreferenceManager
+						.getDefaultSharedPreferences(ActivityMain.this)
+						.edit()
+						.putLong(TaskListFragment.LIST_ALL_ID_PREF_KEY, id)
+						.commit();
 			}
+			openList(id);
 		});
+
 		leftDrawer.setOnItemLongClickListener((arg0, arg1, pos, id) -> {
 			// Open dialog to edit list
 			if (id > 0) {
@@ -1014,40 +1006,13 @@ public class ActivityMain extends AppCompatActivity
 		getSupportLoaderManager().restartLoader(0, null, callbacks);
 		// special views
 		getSupportLoaderManager()
-				.restartLoader(TaskListFragment.LIST_ID_OVERDUE, null,
-						callbacks);
+				.restartLoader(TaskListFragment.LIST_ID_OVERDUE, null, callbacks);
 		getSupportLoaderManager()
 				.restartLoader(TaskListFragment.LIST_ID_TODAY, null, callbacks);
 		getSupportLoaderManager()
 				.restartLoader(TaskListFragment.LIST_ID_WEEK, null, callbacks);
 	}
 
-	/**
-	 * Create, configure and show a view to highlight a functionality, using an appropriate
-	 * library. The view is shown above the given {@link Activity} and features a title and a
-	 * short description
-	 */
-	public static void showTheShowCaseView(Activity activity, int idOfTheViewToHighlight,
-										   int titleStringId, int descriptionStringId) {
-		View ourTarget = activity.findViewById(idOfTheViewToHighlight);
-		if (ourTarget == null) {
-			// always a good idea to check
-			Log.e("NNN", "Can't show TapTargetView for view id= " + idOfTheViewToHighlight);
-			return;
-		}
-
-		// TODO can *you* make it prettier ? See also https://github.com/KeepSafe/TapTargetView
-		var target2 = TapTarget
-				.forView(activity.findViewById(idOfTheViewToHighlight),
-						activity.getString(titleStringId),
-						activity.getString(descriptionStringId))
-				.outerCircleAlpha(0.9f)
-				.drawShadow(true)
-				.cancelable(true) // tap outside the circle to dismiss the showcaseView
-				.textColor(R.color.accent);
-
-		TapTargetView.showFor(activity, target2);
-	}
 
 	/**
 	 * On first load, show some functionality hints
@@ -1057,10 +1022,19 @@ public class ActivityMain extends AppCompatActivity
 			return;
 		}
 
-		showTheShowCaseView(this,
-				android.R.id.home,
-				R.string.showcase_main_title,
-				R.string.showcase_main_msg);
+		// the ID of the actionbar icon that opens the drawer menu is not known, so we have to
+		// get it in this way
+		var tBar = (Toolbar) this.findViewById(androidx.appcompat.R.id.action_bar);
+		if (tBar != null) {
+			// this view is the "hamburger menu" icon that opens the drawer
+			View hmv = tBar.getChildAt(1);
+			if (hmv != null) {
+				ShowcaseHelper.showForView(this, hmv, R.string.showcase_main_title,
+						R.string.showcase_main_msg);
+			}
+		} else {
+			// whatever, the user won't see the showcase view
+		}
 
 		PreferenceManager
 				.getDefaultSharedPreferences(this)
@@ -1076,8 +1050,10 @@ public class ActivityMain extends AppCompatActivity
 			return;
 		}
 
-		showTheShowCaseView(this, R.id.drawer_menu_createlist,
-				R.string.showcase_drawer_title, R.string.showcase_drawer_msg);
+		ShowcaseHelper.showForView(this,
+				this.findViewById(R.id.drawer_menu_createlist),
+				R.string.showcase_drawer_title,
+				R.string.showcase_drawer_msg);
 
 		PreferenceManager
 				.getDefaultSharedPreferences(this)

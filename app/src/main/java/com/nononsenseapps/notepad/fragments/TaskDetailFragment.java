@@ -47,12 +47,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.widget.ShareActionProvider;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.MenuItemCompat;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
+import com.getkeepsafe.taptargetview.TapTarget;
+import com.getkeepsafe.taptargetview.TapTargetView;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityMain_;
@@ -68,6 +71,7 @@ import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.NotificationItemHelper;
 import com.nononsenseapps.util.SharedPreferencesHelper;
+import com.nononsenseapps.utils.ShowcaseHelper;
 import com.nononsenseapps.utils.views.StyledEditText;
 
 import org.androidannotations.annotations.AfterViews;
@@ -362,17 +366,7 @@ public class TaskDetailFragment extends Fragment {
 			return false;
 		}
 
-		ActivityMain.showTheShowCaseView(
-				this.getActivity(),
-				// it would be better to focus the showcaseview on the overflow menu
-				// (the 3 vertical dots) but TapTargetView needs a toolbar, which needs
-				// appcompatactivity, which need Theme.AppCompat, which needs ...
-				// Maybe this works ?
-				// (switch to appcompatactivity, then in onCreate() you run the following)
-				// Toolbar tb = (Toolbar) activity.getSupportActionBar().getCustomView();
-				// Toolbar tb = activity.findViewById(androidx.appcompat.R.id.action_bar);
-				// TapTarget.forToolbarOverflow(tb,...)
-				android.R.id.home,
+		ShowcaseHelper.showForOverflowMenu(this.getActivity(),
 				R.string.showcase_timemachine_title,
 				R.string.showcase_timemachine_msg);
 
