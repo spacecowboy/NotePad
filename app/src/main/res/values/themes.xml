@@ -197,15 +197,11 @@
 		<item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
 		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_white</item>
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
-		<item name="my_list_background">@drawable/background_holo_dark</item>
-		<item name="editorBackgroundColor">@drawable/background_holo_dark</item>
-		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
+
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
 		<item name="img_default_selector">@drawable/img_default_selector_dark</item>
 		<item name="SpinnerStyle">@android:style/Widget.Holo.Spinner</item>
-		<item name="expander_open_holo">@drawable/ic_action_big_expander_open_dark</item>
-		<item name="expander_close_holo">@drawable/ic_action_big_expander_close_dark</item>
-		<item name="list_divider_holo">@drawable/list_divider_holo_dark</item>
+
 		<item name="viewpager_bg">@android:drawable/dark_header</item>
 		<item name="textColorPrimary">?android:attr/textColorPrimary</item>
 		<item name="textColorSecondary">?android:attr/textColorSecondary</item>
@@ -278,17 +274,14 @@
 		<item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
 		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_black_active</item>
 		<item name="ic_check_24dp">@drawable/ic_check_24dp_white</item>
-		<!-- <item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item> -->
+
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
-		<item name="my_list_background">@color/listLightBG</item>
+
 		<item name="editorBackgroundColor">@drawable/card_light</item>
-		<item name="ActionBarDropDownItem">@style/ActionBarDropDownItem.Dark</item>
+
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
 		<item name="img_default_selector">@drawable/img_default_selector_light</item>
 		<item name="SpinnerStyle">@android:style/Widget.Holo.Light.Spinner</item>
-		<item name="expander_open_holo">@drawable/ic_action_big_expander_open_light</item>
-		<item name="expander_close_holo">@drawable/ic_action_big_expander_close_light</item>
-		<item name="list_divider_holo">@drawable/list_divider_holo_light</item>
 
 		<!-- <item name="viewpager_bg">@color/viewpager_darkgrey</item> -->
 		<item name="viewpager_bg">@color/googlenow_grey_trans</item>
