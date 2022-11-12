@@ -68,6 +68,37 @@ public final class ShowcaseHelper {
 				.cancelable(true) // tap outside the circle to dismiss the showcaseView
 				.textColor(R.color.accent);
 
-		TapTargetView.showFor(activity, target);
+		// this listener will always dismiss the taptargetview, regardless of where you click.
+		// It's less frustrating to use, and above all it makes the espresso tests work.
+		var listener = new TapTargetView.Listener() {
+
+			@Override
+			public void onTargetClick(TapTargetView view) {
+				view.dismiss(true);
+			}
+
+			@Override
+			public void onTargetLongClick(TapTargetView view) {
+				this.onTargetClick(view);
+			}
+
+			@Override
+			public void onTargetCancel(TapTargetView view) {
+				view.dismiss(false);
+			}
+
+			@Override
+			public void onOuterCircleClick(TapTargetView view) {
+				// this is probably the only important method to override, the rest is boilerplate
+				view.dismiss(false);
+			}
+
+			@Override
+			public void onTargetDismissed(TapTargetView view, boolean userInitiated) {
+				view.dismiss(false);
+			}
+		};
+
+		TapTargetView.showFor(activity, target, listener);
 	}
 }
