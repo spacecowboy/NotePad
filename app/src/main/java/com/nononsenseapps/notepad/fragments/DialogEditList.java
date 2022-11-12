@@ -98,9 +98,7 @@ public class DialogEditList extends DialogFragment {
 		return dialog;
 	}
 
-	public DialogEditList() {
-
-	}
+	protected DialogEditList() {}
 
 	public void setListener(final EditListDialogListener listener) {
 		this.listener = listener;
@@ -114,11 +112,11 @@ public class DialogEditList extends DialogFragment {
 			okButton.setEnabled(false);
 		}
 
-		modeSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),
+		modeSpinner.setAdapter(new ArrayAdapter<>(getActivity(),
 				R.layout.spinner_item, getActivity().getResources()
 				.getStringArray(R.array.show_list_as)));
 
-		sortSpinner.setAdapter(new ArrayAdapter<String>(getActivity(),
+		sortSpinner.setAdapter(new ArrayAdapter<>(getActivity(),
 				R.layout.spinner_item, getActivity().getResources()
 				.getStringArray(R.array.sort_list_by)));
 
@@ -131,9 +129,9 @@ public class DialogEditList extends DialogFragment {
 						@Override
 						public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 							return new CursorLoader(getActivity(),
-									TaskList.getUri(getArguments().getLong(
-											LIST_ID, -1)),
-									TaskList.Columns.FIELDS, null, null, null);
+									TaskList.getUri(getArguments().getLong(LIST_ID, -1)),
+									TaskList.Columns.FIELDS, null, null,
+									null);
 						}
 
 						@Override
@@ -147,9 +145,7 @@ public class DialogEditList extends DialogFragment {
 						}
 
 						@Override
-						public void onLoaderReset(Loader<Cursor> arg0) {
-
-						}
+						public void onLoaderReset(@NonNull Loader<Cursor> arg0) {}
 					});
 		} else {
 			getDialog().setTitle(R.string.menu_createlist);
@@ -164,9 +160,9 @@ public class DialogEditList extends DialogFragment {
 		selectListTypeKey();
 
 		// Check if this is the default list
-		final long defList = Long.parseLong(PreferenceManager
-				.getDefaultSharedPreferences(getActivity()).getString(
-						getString(R.string.pref_defaultlist), "-1"));
+		final long defList = Long.parseLong(
+				PreferenceManager.getDefaultSharedPreferences(getActivity())
+						.getString(getString(R.string.pref_defaultlist), "-1"));
 		if (mTaskList._id > 0 && defList == mTaskList._id) {
 			defaultListBox.setChecked(true);
 		}
@@ -204,25 +200,27 @@ public class DialogEditList extends DialogFragment {
 					.getDefaultSharedPreferences(getActivity())
 					.edit()
 					.putLong(getString(R.string.pref_defaultstartlist), mTaskList._id)
-					.putString(getString(R.string.pref_defaultlist),
-							Long.toString(mTaskList._id))
+					.putString(getString(R.string.pref_defaultlist), Long.toString(mTaskList._id))
 					.commit();
 		} else if (mTaskList._id > 0) {
 			// Remove pref if it is the default list currently
-			final long defList = Long.parseLong(PreferenceManager
-					.getDefaultSharedPreferences(getActivity()).getString(
-							getString(R.string.pref_defaultlist), "-1"));
+			final long defList = Long
+					.parseLong(PreferenceManager
+							.getDefaultSharedPreferences(getActivity())
+							.getString(getString(R.string.pref_defaultlist), "-1"));
 			final long defStartList = PreferenceManager
-					.getDefaultSharedPreferences(getActivity()).getLong(
-							getString(R.string.pref_defaultstartlist), -1);
+					.getDefaultSharedPreferences(getActivity())
+					.getLong(getString(R.string.pref_defaultstartlist), -1);
 			if (defList == mTaskList._id) {
 				PreferenceManager.getDefaultSharedPreferences(getActivity())
-						.edit().remove(getString(R.string.pref_defaultlist))
+						.edit()
+						.remove(getString(R.string.pref_defaultlist))
 						.commit();
 			}
 			if (defStartList == mTaskList._id) {
 				PreferenceManager.getDefaultSharedPreferences(getActivity())
-						.edit().remove(getString(R.string.pref_defaultstartlist))
+						.edit()
+						.remove(getString(R.string.pref_defaultstartlist))
 						.commit();
 			}
 		}
@@ -259,17 +257,13 @@ public class DialogEditList extends DialogFragment {
 		if (sortSpinner != null && mTaskList != null) {
 			if (mTaskList.sorting == null) {
 				sortSpinner.setSelection(0);
-			} else if (mTaskList.sorting
-					.equals(getString(R.string.const_alphabetic))) {
+			} else if (mTaskList.sorting.equals(getString(R.string.const_alphabetic))) {
 				sortSpinner.setSelection(1);
-			} else if (mTaskList.sorting
-					.equals(getString(R.string.const_modified))) {
+			} else if (mTaskList.sorting.equals(getString(R.string.const_modified))) {
 				sortSpinner.setSelection(2);
-			} else if (mTaskList.sorting
-					.equals(getString(R.string.const_duedate))) {
+			} else if (mTaskList.sorting.equals(getString(R.string.const_duedate))) {
 				sortSpinner.setSelection(3);
-			} else if (mTaskList.sorting
-					.equals(getString(R.string.const_possubsort))) {
+			} else if (mTaskList.sorting.equals(getString(R.string.const_possubsort))) {
 				sortSpinner.setSelection(4);
 			}
 		}
@@ -295,13 +289,12 @@ public class DialogEditList extends DialogFragment {
 		if (modeSpinner != null && mTaskList != null) {
 			if (mTaskList.listtype == null) {
 				modeSpinner.setSelection(0);
-			} else if (mTaskList.listtype
-					.equals(getString(R.string.const_listtype_tasks))) {
+			} else if (mTaskList.listtype.equals(getString(R.string.const_listtype_tasks))) {
 				modeSpinner.setSelection(1);
-			} else if (mTaskList.listtype
-					.equals(getString(R.string.const_listtype_notes))) {
+			} else if (mTaskList.listtype.equals(getString(R.string.const_listtype_notes))) {
 				modeSpinner.setSelection(2);
 			}
 		}
 	}
+
 }

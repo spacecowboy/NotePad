@@ -29,7 +29,8 @@ public class DialogRestoreBackup extends DialogConfirmBaseV11 {
 	static final String ID = "id";
 	static final String TAG = "deletelistok";
 
-	public static void showDialog(final FragmentManager fm, final DialogConfirmedListener listener) {
+	public static void showDialog(final FragmentManager fm,
+								  final DialogConfirmedListener listener) {
 		DialogRestoreBackup d = new DialogRestoreBackup();
 		d.setListener(listener);
 		d.setArguments(new Bundle());

@@ -57,7 +57,7 @@ import java.util.Locale;
 /**
  * Main top level settings fragment
  */
-class FragmentSettings extends PreferenceFragment implements SharedPreferences
+class FragmentSettings_USELESS extends PreferenceFragment implements SharedPreferences
 		.OnSharedPreferenceChangeListener {
 
 	// TODO useless ? you may want to delete this
@@ -65,11 +65,6 @@ class FragmentSettings extends PreferenceFragment implements SharedPreferences
 
 	private SwitchPreference preferenceSyncSdCard;
 	private SwitchPreference preferenceSyncGTasks;
-
-	private void setupDirectory(final SharedPreferences sharedPreferences) {
-		preferenceSyncSdCard = (SwitchPreference) findPreference(getString(-1));//R.string.const_preference_sdcard_enabled_key));
-		setSdDirectorySummary(sharedPreferences);
-	}
 
 
 	private void setSdDirectorySummary(final SharedPreferences sharedPreferences) {
@@ -91,12 +86,6 @@ class FragmentSettings extends PreferenceFragment implements SharedPreferences
 					.show();
 			disableSdCardSync(getActivity());
 		}
-	}
-
-
-	private void setupAccount(SharedPreferences sharedPreferences) {
-		preferenceSyncGTasks = (SwitchPreference) findPreference(getString(-1));//R.string.const_preference_gtask_enabled_key));
-		setAccountSummary(sharedPreferences);
 	}
 
 

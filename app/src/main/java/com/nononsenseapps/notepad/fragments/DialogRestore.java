@@ -23,6 +23,7 @@ import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.fragment.app.DialogFragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
@@ -87,21 +88,24 @@ public class DialogRestore extends DialogFragment {
 		getLoaderManager().restartLoader(0, null,
 				new LoaderCallbacks<Cursor>() {
 
+					@NonNull
 					@Override
-					public Loader<Cursor> onCreateLoader(int arg0,
-														 Bundle arg1) {
+					public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 						return new CursorLoader(getActivity(),
 								TaskList.URI,
-								TaskList.Columns.FIELDS, null, null, TaskList.Columns.TITLE);
+								TaskList.Columns.FIELDS,
+								null,
+								null,
+								TaskList.Columns.TITLE);
 					}
 
 					@Override
-					public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
+					public void onLoadFinished(@NonNull Loader<Cursor> arg0, Cursor c) {
 						adapter.swapCursor(c);
 					}
 
 					@Override
-					public void onLoaderReset(Loader<Cursor> arg0) {
+					public void onLoaderReset(@NonNull Loader<Cursor> arg0) {
 						adapter.swapCursor(null);
 					}
 				});
@@ -114,8 +118,7 @@ public class DialogRestore extends DialogFragment {
 
 	@Click(resName = "dialog_yes")
 	void okClicked() {
-		Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT)
-				.show();
+		Toast.makeText(getActivity(), R.string.saved, Toast.LENGTH_SHORT).show();
 
 		// TODO do something
 		if (listener != null) {

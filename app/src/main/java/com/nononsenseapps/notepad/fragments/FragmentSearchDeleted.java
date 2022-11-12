@@ -17,39 +17,35 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import java.util.HashSet;
-
 import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
-import androidx.cursoradapter.widget.SimpleCursorAdapter;
-import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
-
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
+
+import androidx.cursoradapter.widget.SimpleCursorAdapter;
+import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
+
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.DAO;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.utils.views.TitleNoteTextView;
 
 import org.androidannotations.annotations.AfterViews;
 import org.androidannotations.annotations.Background;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.UiThread;
 
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.DAO;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
-import com.nononsenseapps.notepad.fragments.DialogRestore.OnListSelectedListener;
-import com.nononsenseapps.utils.views.TitleNoteTextView;
+import java.util.HashSet;
 
 @EFragment(resName = "fragment_search")
 public class FragmentSearchDeleted extends FragmentSearch {
@@ -90,10 +86,11 @@ public class FragmentSearchDeleted extends FragmentSearch {
 
 			@Background
 			void deleteSelected(final ActionMode mode) {
-				getActivity().getContentResolver().delete(
-						Task.URI_DELETED_QUERY,
-						Task.Columns._ID + " IN (" + DAO.arrayToCommaString(getIdArray()) + ")",
-						null);
+				String whereCondition = Task.Columns._ID + " IN ("
+						+ DAO.arrayToCommaString(getIdArray()) + ")";
+				getActivity()
+						.getContentResolver()
+						.delete(Task.URI_DELETED_QUERY, whereCondition, null);
 				selectedItems.clear();
 				mode.finish();
 			}
@@ -155,16 +152,16 @@ public class FragmentSearchDeleted extends FragmentSearch {
 					d.show(getFragmentManager(), "listselect");
 					return true;
 				} else if (itemId == R.id.menu_delete) {
-					DialogDeleteTask
-							.showDialog(getFragmentManager(), -1, () -> deleteSelected(mode));
+					DialogDeleteTask.showDialog(getFragmentManager(), -1,
+							() -> deleteSelected(mode));
 					return true;
 				}
 				return false;
 			}
 
 			@Override
-			public void onItemCheckedStateChanged(ActionMode mode,
-												  int position, long id, boolean checked) {
+			public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
+												  boolean checked) {
 				if (checked) {
 					selectedItems.add(id);
 				} else {
@@ -202,12 +199,14 @@ public class FragmentSearchDeleted extends FragmentSearch {
 	@Override
 	protected SimpleCursorAdapter getAdapter() {
 		return new SimpleCursorAdapter(getActivity(),
-				R.layout.tasklist_item_rich, null, new String[] {
-				Task.Columns.TITLE, Task.Columns.NOTE,
-				Task.Columns.DUE, Task.Columns.COMPLETED,
-				Task.Columns.TRIG_DELETED, Task.Columns.TRIG_DELETED },
-				new int[] { android.R.id.text1, android.R.id.text1, R.id.date,
-						R.id.checkbox, R.id.drag_handle, R.id.dragpadding }, 0);
+				R.layout.tasklist_item_rich,
+				null,
+				new String[] { Task.Columns.TITLE, Task.Columns.NOTE, Task.Columns.DUE,
+						Task.Columns.COMPLETED, Task.Columns.TRIG_DELETED,
+						Task.Columns.TRIG_DELETED },
+				new int[] { android.R.id.text1, android.R.id.text1, R.id.date, R.id.checkbox,
+						R.id.drag_handle, R.id.dragpadding },
+				0);
 	}
 
 	@Override
@@ -216,41 +215,47 @@ public class FragmentSearchDeleted extends FragmentSearch {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(getActivity());
 
-		// Load pref for item height, or show 3 lines if it was not set
+		// Load preference for note height, or show 3 lines if it was not set
 		final int rowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
 
-		return new ViewBinder() {
-			String sTemp = "";
+		return (view, c, colIndex) -> {
+			switch (colIndex) {
+				// the code here decides how the notes on the archive look like.
+				// Each number in the "case" instruction matches the order in Task.Columns.Fields,
+				// in fact c.getColumnNames() returns the fields of the note in the database:
+				// ["_id", "title", "note", "completed", "due", "dblist", "deletedtime" ]
+				case 1:
+					// Title, in column "title"
+					String noteTitle = c.getString(colIndex);
 
-			@Override
-			public boolean setViewValue(View view, Cursor c, int colIndex) {
-				switch (colIndex) {
-					// Matches order in Task.Columns.Fields
-					case 1:
-						// Title
-						sTemp = c.getString(colIndex);
+					// Set height of text for non-headers
+					if (rowCount == 1) {
+						((TitleNoteTextView) view).setSingleLine(true);
+					} else {
+						((TitleNoteTextView) view).setSingleLine(false);
+						((TitleNoteTextView) view).setMaxLines(rowCount);
+					}
 
-						// Set height of text for non-headers
-						if (rowCount == 1) {
-							((TitleNoteTextView) view).setSingleLine(true);
-						} else {
-							((TitleNoteTextView) view).setSingleLine(false);
-							((TitleNoteTextView) view).setMaxLines(rowCount);
-						}
+					// Change color based on complete status (column 3 is the "completed" status)
+					((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
 
-						// Change color based on complete status
-						((TitleNoteTextView) view).useSecondaryColor(!c.isNull(3));
+					// TODO yes, completed note appear in dark gray in the archive view. I didn't
+					//  know this. Make a TapTargetView to explain this to users. It could target
+					//  the search icon, it doesn't matter. Just put it in onResume() or somewhere reasonable
 
-						((TitleNoteTextView) view).setTextTitle(sTemp);
-						return true;
-					case 2:
-						// Note
-						((TitleNoteTextView) view).setTextRest("");
-						return true;
-					default:
-						view.setVisibility(View.GONE);
-						return true;
-				}
+					((TitleNoteTextView) view).setTextTitle(noteTitle);
+					return true;
+				case 2:
+					// Note content, in column "note". Let's show it even in the "Archive" view,
+					// so that the user can distinguish 2 deleted notes with the same title
+					String noteContent = c.getString(colIndex);
+					((TitleNoteTextView) view).setTextRest(noteContent);
+					return true;
+				default:
+					// we won't show any other field of the note. Maybe it would be nice to show
+					// the due date ? But it's an archived note, so I guess the user does not care?
+					view.setVisibility(View.GONE);
+					return true;
 			}
 		};
 	}

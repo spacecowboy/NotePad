@@ -17,8 +17,7 @@
   -->
 
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools"
-	tools:ignore="AppCompatResource">
+	xmlns:app="http://schemas.android.com/apk/res-auto">
 
 	<group android:id="@+id/list_menu_group">
 
@@ -26,14 +25,14 @@
 		<item
 			android:id="@+id/menu_clearcompleted"
 			android:orderInCategory="300"
-			android:showAsAction="ifRoom"
-			android:title="@string/menu_clearcompleted"/>
+			android:title="@string/menu_clearcompleted"
+			app:showAsAction="ifRoom"/>
 
 		<item
 			android:id="@+id/menu_sort"
 			android:icon="@drawable/ic_sort_24dp_white"
 			android:orderInCategory="400"
-			android:showAsAction="ifRoom"
+			app:showAsAction="ifRoom"
 			android:title="@string/sorting">
 			<menu>
 				<item

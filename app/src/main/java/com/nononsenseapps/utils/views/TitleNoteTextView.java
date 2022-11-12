@@ -59,6 +59,7 @@ public class TitleNoteTextView extends TextView {
 	private String mRest = "";
 
 	public TitleNoteTextView(Context context, AttributeSet attrs) {
+		// TODO it crashes here in the editor. check activity_task_history.xml in design mode
 		super(context, attrs);
 
 		TypedArray attributes = context

@@ -12,7 +12,9 @@
 # Everything in the app is essential
 -keep class com.nononsenseapps.** { *; }
 
-# may be needed
--keep class com.google.appengine.api.urlfetch.** { *; }
--keep class com.squareup.okhttp.** { *; }
--keep class org.joda.convert.** { *; }
+# gradle (and stackoverflow) agree that suppressing the warning is appropriate
+-dontwarn com.google.appengine.api.urlfetch.**
+-dontwarn com.squareup.okhttp.**
+-dontwarn org.joda.convert.**
+-dontwarn rx.Observable$OnSubscribe
+-dontwarn rx.Observable

@@ -16,14 +16,15 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<!-- Shown in the main activity and in the "archive of deleted notes" activity -->
+<!-- Shown only in the "archive of deleted notes" activity -->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:tools="http://schemas.android.com/tools">
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
 	<item android:id="@+id/menu_search"
-		android:actionViewClass="android.widget.SearchView"
 		android:icon="@drawable/ic_search_24dp_white"
 		android:orderInCategory="0"
-		android:showAsAction="always"
+		app:showAsAction="always"
 		android:title="@string/search_hint"
-		tools:ignore="AppCompatResource"/>
+		app:actionViewClass="android.widget.SearchView"/>
+
 </menu>

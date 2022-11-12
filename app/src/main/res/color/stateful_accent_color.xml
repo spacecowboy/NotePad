@@ -16,6 +16,8 @@
   -->
 
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
+	<!-- TODO can we delete this ?? -->
+
 	<item android:color="?android:textColorHint" android:state_enabled="false"/>
 	<item android:color="?colorAccent"/>
 </selector>

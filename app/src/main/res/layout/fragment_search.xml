@@ -24,25 +24,18 @@
 	android:layout_height="match_parent"
 	android:orientation="vertical">
 
-	<!-- <SearchView
-		android:id="@+id/searchBox"
-		android:layout_width="@dimen/listNoDetailWidth"
-		android:layout_height="48dp"
-		android:layout_gravity="center_horizontal"
-		android:layout_marginTop="16dp"
-		android:layout_marginBottom="16dp"
-		android:iconifiedByDefault="false"
-		android:queryHint="@string/search_hint" >
-	</SearchView> -->
+	<!-- Layout file for the "archive" activity of deleted notes. Shows a list of those.
+	 See FragmentSearchDeleted, which decides what gets shown in the listitem -->
 
 	<ListView
 		android:id="@android:id/list"
 		style="?attr/ListDividerStyle"
-		android:layout_width="@dimen/listNoDetailWidth"
+		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:layout_gravity="center_horizontal"
+		android:layout_marginVertical="4dp"
 		android:drawSelectorOnTop="true"
 		tools:listitem="@layout/tasklist_item_rich">
+		<!-- every height is "match_parent" because the ListView can show the scrollbar by itself -->
 	</ListView>
 
 </LinearLayout>

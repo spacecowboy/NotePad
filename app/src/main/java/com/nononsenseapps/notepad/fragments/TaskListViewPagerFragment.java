@@ -177,35 +177,40 @@ public class TaskListViewPagerFragment extends Fragment implements
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasklists_viewpager, menu);
 
-		if (menu.findItem(R.id.menu_search) != null) {
-			SearchView searchView = (SearchView) menu
-					.findItem(R.id.menu_search)
-					.getActionView();
-			// Assumes current activity is the searchable activity
-			searchView.setSearchableInfo(searchManager
-					.getSearchableInfo(getActivity().getComponentName()));
-			// Do not iconify the widget; expand it by default
-			// searchView.setIconifiedByDefault(false);
-			searchView.setQueryRefinementEnabled(true);
-			searchView.setSubmitButtonEnabled(false);
+		if (menu.findItem(R.id.menu_search) == null) {
+			return;
 		}
+
+		SearchView searchView = (SearchView) menu
+				.findItem(R.id.menu_search)
+				.getActionView();
+
+		// Assumes current activity is the searchable activity
+		searchView.setSearchableInfo(searchManager
+				.getSearchableInfo(getActivity().getComponentName()));
+		// expand the searchview by default when the user clicks on the icon
+		searchView.setIconifiedByDefault(false);
+		searchView.setQueryRefinementEnabled(true);
+		searchView.setSubmitButtonEnabled(false);
 	}
 
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
-		if (getActivity() instanceof MenuStateController) {
-			final boolean visible = ((MenuStateController) getActivity())
-					.childItemsVisible();
-
-			menu.setGroupVisible(R.id.viewpager_menu_group, visible);
-			// Outside group to allow for action bar placement
-			if (menu.findItem(R.id.menu_search) != null)
-				menu.findItem(R.id.menu_search).setVisible(visible);
-			if (menu.findItem(R.id.menu_sync) != null)
-				menu.findItem(R.id.menu_sync).setVisible(visible);
-			// if (menu.findItem(R.id.menu_createlist) != null)
-			// menu.findItem(R.id.menu_createlist).setVisible(visible);
+		if (!(getActivity() instanceof MenuStateController)) {
+			return;
 		}
+
+		final boolean visible = ((MenuStateController) getActivity()).childItemsVisible();
+		menu.setGroupVisible(R.id.viewpager_menu_group, visible);
+
+		// Outside group to allow for action bar placement
+		if (menu.findItem(R.id.menu_search) != null)
+			menu.findItem(R.id.menu_search).setVisible(visible);
+		if (menu.findItem(R.id.menu_sync) != null)
+			menu.findItem(R.id.menu_sync).setVisible(visible);
+		// if (menu.findItem(R.id.menu_createlist) != null)
+		// menu.findItem(R.id.menu_createlist).setVisible(visible);
+
 	}
 
 	@Override

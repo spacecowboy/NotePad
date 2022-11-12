@@ -50,12 +50,12 @@ public class ListWidgetService extends RemoteViewsService {
 	/**
 	 * This is the factory that will provide data to the collection widget.
 	 */
-	static class ListRemoteViewsFactory implements
-			RemoteViewsService.RemoteViewsFactory {
-		private Context mContext;
+	static class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+
+		final private Context mContext;
 		// private HeaderCursor mCursor;
 		private Cursor mCursor;
-		private int mAppWidgetId;
+		final private int mAppWidgetId;
 		private SimpleDateFormat mDateFormatter = null;
 		private SimpleDateFormat weekdayFormatter;
 
@@ -64,14 +64,12 @@ public class ListWidgetService extends RemoteViewsService {
 
 		public ListRemoteViewsFactory(Context context, Intent intent) {
 			mContext = context;
-			mAppWidgetId = intent.getIntExtra(
-					AppWidgetManager.EXTRA_APPWIDGET_ID,
+			mAppWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 					AppWidgetManager.INVALID_APPWIDGET_ID);
 		}
 
 		@Override
-		public void onCreate() {
-		}
+		public void onCreate() {}
 
 		@Override
 		public void onDestroy() {
@@ -91,8 +89,7 @@ public class ListWidgetService extends RemoteViewsService {
 		@Override
 		public RemoteViews getViewAt(int position) {
 			// Get widget settings
-			final WidgetPrefs widgetPrefs = new WidgetPrefs(mContext,
-					mAppWidgetId);
+			final WidgetPrefs widgetPrefs = new WidgetPrefs(mContext, mAppWidgetId);
 
 			if (!widgetPrefs.isPresent()) {
 				return null;
@@ -103,27 +100,25 @@ public class ListWidgetService extends RemoteViewsService {
 				mDateFormatter = TimeFormatter.getLocalFormatterMicro(mContext);
 			}
 
-			final long listId = widgetPrefs.getLong(ListWidgetConfig.KEY_LIST,
-					ListWidgetConfig.ALL_LISTS_ID);
-			final int theme = widgetPrefs.getInt(ListWidgetConfig.KEY_THEME,
-					ListWidgetConfig.DEFAULT_THEME);
-			final int primaryTextColor = widgetPrefs.getInt(
-					ListWidgetConfig.KEY_TEXTPRIMARY,
-					ListWidgetConfig.DEFAULT_TEXTPRIMARY);
-			final int rows = widgetPrefs.getInt(ListWidgetConfig.KEY_TITLEROWS,
-					ListWidgetConfig.DEFAULT_ROWS);
-			final boolean isCheckboxHidden = widgetPrefs.getBoolean(
-					ListWidgetConfig.KEY_HIDDENCHECKBOX, false);
-			boolean isDateHidden = widgetPrefs.getBoolean(
-					ListWidgetConfig.KEY_HIDDENDATE, false);
+			final long listId = widgetPrefs
+					.getLong(ListWidgetConfig.KEY_LIST, ListWidgetConfig.ALL_LISTS_ID);
+			final int theme = widgetPrefs
+					.getInt(ListWidgetConfig.KEY_THEME, ListWidgetConfig.DEFAULT_THEME);
+			final int primaryTextColor = widgetPrefs
+					.getInt(ListWidgetConfig.KEY_TEXTPRIMARY, ListWidgetConfig.DEFAULT_TEXTPRIMARY);
+			final int rows = widgetPrefs
+					.getInt(ListWidgetConfig.KEY_TITLEROWS, ListWidgetConfig.DEFAULT_ROWS);
+			final boolean isCheckboxHidden = widgetPrefs
+					.getBoolean(ListWidgetConfig.KEY_HIDDENCHECKBOX, false);
+			boolean isDateHidden = widgetPrefs
+					.getBoolean(ListWidgetConfig.KEY_HIDDENDATE, false);
 
 			// TODO rest
 
 			// boolean isHeader = false;
-			String sTemp = "";
+
 			if (weekdayFormatter == null) {
-				weekdayFormatter = TimeFormatter
-						.getLocalFormatterWeekday(mContext);
+				weekdayFormatter = TimeFormatter.getLocalFormatterWeekday(mContext);
 			}
 
 			RemoteViews rv = null;
@@ -136,7 +131,7 @@ public class ListWidgetService extends RemoteViewsService {
 					rv.setTextColor(android.R.id.text1, primaryTextColor);
 					rv.setBoolean(itemId, "setClickable", false);
 
-					sTemp = mCursor.getString(1);
+					String sTemp = mCursor.getString(1);
 					if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {
 						sTemp = mContext
 								.getString(R.string.date_header_overdue);
@@ -190,71 +185,55 @@ public class ListWidgetService extends RemoteViewsService {
 						rv.setTextViewText(R.id.dueDate, mDateFormatter
 								.format(new Date(mCursor.getLong(4))));
 					}
-					rv.setViewVisibility(R.id.dueDate, isDateHidden ? View.GONE
-							: View.VISIBLE);
+					rv.setViewVisibility(R.id.dueDate, isDateHidden ? View.GONE : View.VISIBLE);
 					rv.setTextColor(R.id.dueDate, primaryTextColor);
 
 					// Text
 					rv.setTextColor(android.R.id.text1, primaryTextColor);
 					rv.setInt(android.R.id.text1, "setMaxLines", rows);
+
 					// Only if task it not locked
 					if (mCursor.getInt(9) != 1) {
-						rv.setTextViewText(
-								android.R.id.text1,
-								TitleNoteTextView.getStyledText(
-										mCursor.getString(1),
-										mCursor.getString(2), 1.0f, 1, 0));
+						rv.setTextViewText(android.R.id.text1, TitleNoteTextView.getStyledText(
+								mCursor.getString(1), mCursor.getString(2),
+								1.0f, 1, 0));
 					} else {
 						// Just title
-						rv.setTextViewText(
-								android.R.id.text1,
-								TitleNoteTextView.getStyledText(
-										mCursor.getString(1), 1.0f, 1, 0));
+						rv.setTextViewText(android.R.id.text1, TitleNoteTextView.getStyledText(
+								mCursor.getString(1), 1.0f, 1, 0));
 					}
 
 					// Set the click intent
-					if (widgetPrefs.getBoolean(ListWidgetConfig.KEY_LOCKSCREEN,
-							false)) {
-						final Intent clickIntent = new Intent();
-						clickIntent
+					if (widgetPrefs.getBoolean(ListWidgetConfig.KEY_LOCKSCREEN, false)) {
+						final Intent clickIntent = new Intent()
 								.setAction(Intent.ACTION_EDIT)
 								.setData(Task.getUri(mCursor.getLong(0)))
-								.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
-										listId);
+								.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 						rv.setOnClickFillInIntent(R.id.widget_item, clickIntent);
 					} else {
-						final Intent fillInIntent = new Intent();
-						fillInIntent.setAction(ListWidgetProvider.CLICK_ACTION);
-						fillInIntent.putExtra(ListWidgetProvider.EXTRA_NOTE_ID,
-								mCursor.getLong(0));
-						fillInIntent.putExtra(ListWidgetProvider.EXTRA_LIST_ID,
-								listId);
-						rv.setOnClickFillInIntent(R.id.widget_item,
-								fillInIntent);
+						final Intent fillInIntent = new Intent()
+								.setAction(ListWidgetProvider.CLICK_ACTION)
+								.putExtra(ListWidgetProvider.EXTRA_NOTE_ID, mCursor.getLong(0))
+								.putExtra(ListWidgetProvider.EXTRA_LIST_ID, listId);
+						rv.setOnClickFillInIntent(R.id.widget_item, fillInIntent);
 					}
 
 					// Set complete broadcast
 					// If not on lock screen, send broadcast to complete.
 					// Otherwise, have to open note
 					final Intent completeIntent = new Intent();
-					if (widgetPrefs.getBoolean(ListWidgetConfig.KEY_LOCKSCREEN,
-							false)) {
+					if (widgetPrefs.getBoolean(ListWidgetConfig.KEY_LOCKSCREEN, false)) {
 						completeIntent
 								.setAction(Intent.ACTION_EDIT)
 								.setData(Task.getUri(mCursor.getLong(0)))
-								.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID,
-										listId);
+								.putExtra(TaskDetailFragment.ARG_ITEM_LIST_ID, listId);
 					} else {
-						completeIntent.setAction(
-								ListWidgetProvider.COMPLETE_ACTION).putExtra(
-								ListWidgetProvider.EXTRA_NOTE_ID,
-								mCursor.getLong(0));
-
+						completeIntent
+								.setAction(ListWidgetProvider.COMPLETE_ACTION)
+								.putExtra(ListWidgetProvider.EXTRA_NOTE_ID, mCursor.getLong(0));
 					}
-					rv.setOnClickFillInIntent(R.id.completedCheckBoxDark,
-							completeIntent);
-					rv.setOnClickFillInIntent(R.id.completedCheckBoxLight,
-							completeIntent);
+					rv.setOnClickFillInIntent(R.id.completedCheckBoxDark, completeIntent);
+					rv.setOnClickFillInIntent(R.id.completedCheckBoxLight, completeIntent);
 				}
 			}
 
@@ -297,56 +276,52 @@ public class ListWidgetService extends RemoteViewsService {
 			mDateFormatter = TimeFormatter.getLocalFormatterMicro(mContext);
 
 			// Get widget settings
-			final WidgetPrefs widgetPrefs = new WidgetPrefs(mContext,
-					mAppWidgetId);
-			if (widgetPrefs != null) {
-				final Uri targetUri;
-				final long listId = widgetPrefs.getLong(
-						ListWidgetConfig.KEY_LIST,
-						ListWidgetConfig.ALL_LISTS_ID);
-				final String sortSpec;
-				final String sortType = widgetPrefs.getString(
-						ListWidgetConfig.KEY_SORT_TYPE,
-						mContext.getString(R.string.default_sorttype));
+			final WidgetPrefs widgetPrefs = new WidgetPrefs(mContext, mAppWidgetId);
 
-				if (sortType.equals(mContext
-						.getString(R.string.const_possubsort)) && listId > 0) {
-					targetUri = Task.URI;
-					sortSpec = Task.Columns.LEFT;
-				} else if (sortType.equals(mContext
-						.getString(R.string.const_modified))) {
-					targetUri = Task.URI;
-					sortSpec = Task.Columns.UPDATED + " DESC";
-				}
-				// due date sorting
-				else if (sortType.equals(mContext
-						.getString(R.string.const_duedate))) {
-					targetUri = Task.URI_SECTIONED_BY_DATE;
-					sortSpec = null;
-				}
-				// Alphabetic
-				else {
-					targetUri = Task.URI;
-					sortSpec = mContext.getString(R.string.const_as_alphabetic,
-							Task.Columns.TITLE);
-					;
-				}
+			final Uri targetUri;
+			final long listId = widgetPrefs.getLong(
+					ListWidgetConfig.KEY_LIST,
+					ListWidgetConfig.ALL_LISTS_ID);
+			final String sortSpec;
+			final String sortType = widgetPrefs.getString(ListWidgetConfig.KEY_SORT_TYPE,
+					mContext.getString(R.string.default_sorttype));
 
-				String listWhere = null;
-				String[] listArg = null;
-				if (listId > 0) {
-					listWhere = Task.Columns.DBLIST + " IS ? AND "
-							+ Task.Columns.COMPLETED + " IS NULL";
-					listArg = new String[] { Long.toString(listId) };
-				} else {
-					listWhere = Task.Columns.COMPLETED + " IS NULL";
-					listArg = null;
-				}
-
-				mCursor = mContext.getContentResolver().query(targetUri,
-						Task.Columns.FIELDS, listWhere, listArg, sortSpec);
-
+			if (sortType.equals(mContext
+					.getString(R.string.const_possubsort)) && listId > 0) {
+				targetUri = Task.URI;
+				sortSpec = Task.Columns.LEFT;
+			} else if (sortType.equals(mContext
+					.getString(R.string.const_modified))) {
+				targetUri = Task.URI;
+				sortSpec = Task.Columns.UPDATED + " DESC";
 			}
+			// due date sorting
+			else if (sortType.equals(mContext
+					.getString(R.string.const_duedate))) {
+				targetUri = Task.URI_SECTIONED_BY_DATE;
+				sortSpec = null;
+			}
+			// Alphabetic
+			else {
+				targetUri = Task.URI;
+				sortSpec = mContext.getString(R.string.const_as_alphabetic,
+						Task.Columns.TITLE);
+			}
+
+			String listWhere;
+			String[] listArg;
+			if (listId > 0) {
+				listWhere = Task.Columns.DBLIST + " IS ? AND " + Task.Columns.COMPLETED + " IS NULL";
+				listArg = new String[] { Long.toString(listId) };
+			} else {
+				listWhere = Task.Columns.COMPLETED + " IS NULL";
+				listArg = null;
+			}
+
+			mCursor = mContext
+					.getContentResolver()
+					.query(targetUri, Task.Columns.FIELDS, listWhere, listArg, sortSpec);
+
 			// Restore the identity - not sure if it's needed since we're going
 			// to return right here, but it just *seems* cleaner
 			Binder.restoreCallingIdentity(identityToken);

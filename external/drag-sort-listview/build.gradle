@@ -28,6 +28,9 @@ apply plugin: 'com.android.library'
 
 dependencies {
     implementation "androidx.cursoradapter:cursoradapter:1.0.0"
+    // Desugaring library, needs android gradle plugin v7.4+ to upgrade
+    //noinspection GradleDependency
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }
 
 // suppress (most) warnings related to javadocs that we don't care about
@@ -67,6 +70,16 @@ android {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src']
             res.srcDirs = ['res']
+
+            // everything below is useless ?
+            resources.srcDirs = ['src']
+            aidl.srcDirs = ['src']
+            renderscript.srcDirs = ['src']
+            assets.srcDirs = ['assets']
         }
+
+        debug.setRoot('build-types/debug')
+        release.setRoot('build-types/release')
     }
+
 }

@@ -37,8 +37,8 @@ public class ActivityHelper {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(activity);
 
-		final String theme = prefs.getString(MainPrefs.KEY_THEME,
-				activity.getString(R.string.const_theme_light_ab));
+		final String theme = prefs
+				.getString(MainPrefs.KEY_THEME, activity.getString(R.string.const_theme_light_ab));
 		if (activity.getString(R.string.const_theme_light_ab).equals(theme)) {
 			activity.setTheme(R.style.ThemeHoloLightDarkActonBar);
 		} else if (activity.getString(R.string.const_theme_black).equals(theme)) {

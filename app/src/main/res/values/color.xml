@@ -60,7 +60,10 @@
 	<color name="primary">#FF9800</color>
 	<color name="primary_dark">#F57C00</color>
 	<color name="primary_light">#FFE0B2</color>
-	<color name="accent">#FF5722</color>
+
+	<!-- the only useful one! -->
+	<color name="accent">@android:color/holo_blue_dark</color>
+
 	<color name="primary_text">#212121</color>
 	<color name="secondary_text">#727272</color>
 	<color name="icons">#212121</color>

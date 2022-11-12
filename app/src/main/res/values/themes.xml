@@ -30,7 +30,7 @@
 		<item name="windowActionModeOverlay">true</item>
 		<item name="actionModeBackground">@color/primary_dark</item>
 		<item name="actionBarPopupTheme">@style/ThemeOverlay.AppCompat.Light</item>
-		<item name="iconTint">@color/icon_tint_light</item>
+
 
 
 
@@ -164,7 +164,7 @@
 		<item name="colorPrimary">@color/primary</item>
 		<item name="colorPrimaryDark">@color/primary_dark</item>
 		<item name="colorAccent">@color/accent</item>
-		<item name="iconTint">@color/icon_tint_dark</item>
+
 	</style>
 
 	<style name="LightNavbarTheme" parent="LightTheme">
@@ -184,9 +184,10 @@
 	</style>
  -->
 
-	<style name="ThemeHolo" parent="@android:style/Theme.Holo">
+	<!-- The dark theme -->
+	<style name="ThemeHolo" parent="Theme.AppCompat">
 		<item name="android:background">@null</item>
-
+		<item name="iconTint">@color/icon_tint_dark</item>
 		<item name="ic_settings_24dp">@drawable/ic_settings_24dp_white</item>
 		<item name="ic_add_24dp">@drawable/ic_add_24dp_white</item>
 
@@ -226,6 +227,7 @@
 
 	</style>
 
+	<!-- The full black theme -->
 	<style name="ThemeHoloBlack" parent="@style/ThemeGoogleNowDark">
 		<item name="android:windowBackground">@android:color/black</item>
 		<item name="android:colorBackgroundCacheHint">@android:color/black</item>
@@ -233,6 +235,12 @@
 		<item name="TaskListItem">@style/TaskListItemBlack</item>
 		<item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
 		<item name="LeftDrawerStyle">@style/LeftDrawerStyleBlack</item>
+		<!-- The one with the back & home buttons  -->
+		<item name="android:navigationBarColor">@android:color/black</item>
+		<!-- The one with the notification badges -->
+		<item name="android:statusBarColor">@android:color/black</item>
+		<!-- Used ONLY for the actionbar background color -->
+		<item name="colorPrimary">@android:color/black</item>
 	</style>
 
 	<style name="ThemeGoogleNowDark" parent="@style/ThemeHolo">
@@ -245,11 +253,18 @@
 		<item name="ListMarginStyle">@style/ListMarginStyleCard</item>
 	</style>
 
-	<!-- This theme doesn't exist in honeycomb -->
-	<style name="ThemeHoloLightDarkActonBar" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+	<!-- The light (white, day) theme -->
+	<style name="ThemeHoloLightDarkActonBar" parent="Theme.AppCompat.Light.DarkActionBar">
 		<item name="android:background">@null</item>
 		<item name="android:windowBackground">@color/googlenow_grey</item>
 		<item name="android:colorBackgroundCacheHint">@color/googlenow_grey</item>
+
+		<!-- TODO setting this to icon_tint_light (see commented line below) would allow to have
+		      black icons on the actionbar when using this light theme. But we don't yet control
+		      the actionbar color, so it would be black icons on a black bar! Shall we use a
+		      light actionbar too ? -->
+		<item name="iconTint">@color/icon_tint_dark</item>
+		<!-- <item name="iconTint">@color/icon_tint_light</item> -->
 
 		<item name="ic_settings_24dp">@drawable/ic_settings_24dp_white</item>
 		<item name="content_copy">@drawable/content_copy_dark</item>
@@ -297,7 +312,8 @@
 
 	</style>
 
-	<!-- Shows a more condensed note list, with smaller separators, by design! -->
+	<!-- Shows a more condensed note list, with smaller separators, by design!
+	 	That aside, it's 99% similar to the light theme -->
 	<style name="ThemeHoloLightClassic" parent="@style/ThemeHoloLightDarkActonBar">
 		<item name="TaskListItem">@style/TaskListItemLightClassic</item>
 		<item name="ListDividerStyle">@style/ListOnePxDividerStyle</item>
@@ -313,10 +329,7 @@
 		<item name="android:windowBackground">@android:color/transparent</item>
 	</style>
 
-	<!-- Deprecated -->
-	<style name="ThemeHoloLight" parent="@style/ThemeHoloLightDarkActonBar"/>
-
-	<style name="ActionBar.Solid.GoogleNowDark" parent="@android:style/Widget.Holo.ActionBar.Solid">
+	<style name="ActionBar.Solid.GoogleNowDark" parent="Widget.AppCompat.ActionBar.Solid">
 		<item name="android:background">@null</item>
 		<item name="android:backgroundStacked">@null</item>
 		<item name="android:backgroundSplit">@null</item>

@@ -16,50 +16,49 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
-<menu xmlns:tools="http://schemas.android.com/tools"
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	tools:ignore="AppCompatResource">
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<!-- Outside group to allow for action bar placement -->
 	<item
 		android:id="@+id/menu_delete"
 		android:icon="@drawable/ic_delete_24dp_white"
 		android:orderInCategory="100"
-		android:showAsAction="ifRoom"
-		android:title="@string/menu_delete">
+		android:title="@string/menu_delete"
+		app:showAsAction="ifRoom">
 	</item>
 	<item
 		android:id="@+id/menu_revert"
 		android:icon="@drawable/ic_undo_24dp_white"
 		android:orderInCategory="101"
-		android:showAsAction="ifRoom"
-		android:title="@android:string/cancel"/>
+		android:title="@android:string/cancel"
+		app:showAsAction="ifRoom"/>
 	<item
 		android:id="@+id/menu_share"
-		android:actionProviderClass="android.widget.ShareActionProvider"
 		android:icon="@drawable/ic_share_24dp_white"
 		android:orderInCategory="102"
-		android:showAsAction="ifRoom"
-		android:title="@string/menu_share"/>
+		android:title="@string/menu_share"
+		app:actionProviderClass="androidx.appcompat.widget.ShareActionProvider"
+		app:showAsAction="ifRoom"/>
 	<item
 		android:id="@+id/menu_lock"
 		android:icon="?device_access_secure"
 		android:orderInCategory="103"
-		android:showAsAction="ifRoom"
-		android:title="@string/lock_note"/>
+		android:title="@string/lock_note"
+		app:showAsAction="ifRoom"/>
 	<item
 		android:id="@+id/menu_unlock"
 		android:icon="?device_access_not_secure"
 		android:orderInCategory="104"
-		android:showAsAction="ifRoom"
-		android:title="@string/unlock_note"/>
+		android:title="@string/unlock_note"
+		app:showAsAction="ifRoom"/>
 
 	<group android:id="@+id/editor_menu_group">
 		<item
 			android:id="@+id/menu_timemachine"
 			android:orderInCategory="105"
-			android:showAsAction="never"
-			android:title="@string/timemachine"/>
+			android:title="@string/timemachine"
+			app:showAsAction="never"/>
 	</group>
 
 </menu>

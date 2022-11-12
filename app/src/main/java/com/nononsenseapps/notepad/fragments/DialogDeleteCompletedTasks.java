@@ -47,7 +47,6 @@ public class DialogDeleteCompletedTasks extends DialogDeleteTask {
 		String where = Task.Columns.COMPLETED + " IS NOT NULL";
 		String[] whereArgs = null;
 
-
 		switch ((int) getArguments().getLong(ID, -1)) {
 			case TaskListFragment.LIST_ID_ALL:
 				// Nothing to do. Take all completed
@@ -68,12 +67,9 @@ public class DialogDeleteCompletedTasks extends DialogDeleteTask {
 				break;
 		}
 
-		if (0 < getActivity().getContentResolver().delete(
-				Task.URI,
-				where,
-				whereArgs)) {
-			Toast.makeText(getActivity(), R.string.deleted,
-					Toast.LENGTH_SHORT).show();
+		int rowsDeleted = getActivity().getContentResolver().delete(Task.URI, where, whereArgs);
+		if (0 < rowsDeleted) {
+			Toast.makeText(getActivity(), R.string.deleted, Toast.LENGTH_SHORT).show();
 		}
 		if (listener != null) {
 			listener.onConfirm();

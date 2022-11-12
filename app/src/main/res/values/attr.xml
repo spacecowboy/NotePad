@@ -56,7 +56,7 @@
 		<attr name="secondaryColor" format="color"/>
 	</declare-styleable>
 
-	<attr name="isDialog" format="boolean"/>
+
 
 	<attr name="content_paste" format="reference"/>
 

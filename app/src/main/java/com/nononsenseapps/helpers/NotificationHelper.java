@@ -415,9 +415,7 @@ public class NotificationHelper extends BroadcastReceiver {
 				.setContentText(note.taskNote)
 				.setChannelId(CHANNEL_ID)
 				.setContentIntent(clickIntent)
-				.setStyle(
-						new NotificationCompat.BigTextStyle()
-								.bigText(note.taskNote));
+				.setStyle(new NotificationCompat.BigTextStyle().bigText(note.taskNote));
 
 		// the Delete intent for non-location repeats
 		builder.setDeleteIntent(piDelete);
