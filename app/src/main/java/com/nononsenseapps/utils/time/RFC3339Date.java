@@ -145,12 +145,10 @@ public class RFC3339Date {
 		cal.setTimeInMillis(time);
 
 		// Extract the date
-		return new StringBuilder(String.format("%d", cal.get(Calendar.YEAR)))
-				.append("-").append(String.format("%02d", (1 + cal.get(Calendar.MONTH))))
-				.append("-").append(String.format("%02d", cal.get(Calendar.DAY_OF_MONTH)))
-				.append("T00:00:00Z")
-
-				.toString();
+		return String.format("%d", cal.get(Calendar.YEAR)) +
+				"-" + String.format("%02d", (1 + cal.get(Calendar.MONTH))) +
+				"-" + String.format("%02d", cal.get(Calendar.DAY_OF_MONTH)) +
+				"T00:00:00Z";
 	}
 
 	private static String asRFC3339(final java.util.Date date) {

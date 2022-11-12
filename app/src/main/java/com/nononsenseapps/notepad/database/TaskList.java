@@ -102,32 +102,31 @@ public class TaskList extends DAO {
 		public static final String[] SHALLOWFIELDS = { _ID, TITLE, UPDATED };
 	}
 
-	public static final String CREATE_TABLE = new StringBuilder("CREATE TABLE ")
-			.append(TABLE_NAME).append("(").append(Columns._ID)
-			.append(" INTEGER PRIMARY KEY,").append(Columns.TITLE)
-			.append(" TEXT NOT NULL DEFAULT '',").append(Columns.UPDATED)
-			.append(" INTEGER,").append(Columns.LISTTYPE)
-			.append(" TEXT DEFAULT NULL,").append(Columns.SORTING)
-			.append(" TEXT DEFAULT NULL").append(")").toString();
+	public static final String CREATE_TABLE = "CREATE TABLE " +
+			TABLE_NAME + "(" + Columns._ID +
+			" INTEGER PRIMARY KEY," + Columns.TITLE +
+			" TEXT NOT NULL DEFAULT ''," + Columns.UPDATED +
+			" INTEGER," + Columns.LISTTYPE +
+			" TEXT DEFAULT NULL," + Columns.SORTING +
+			" TEXT DEFAULT NULL" + ")";
 
-	public static final String CREATE_COUNT_VIEW = new StringBuilder(
-			"CREATE TEMP VIEW IF NOT EXISTS ")
-			.append(VIEWCOUNT_NAME)
-			.append(" AS SELECT ")
-			.append(arrayToCommaString(Columns.FIELDS))
-			.append(",")
-			.append(Columns.VIEW_COUNT)
-			.append(" FROM ")
-			.append(TABLE_NAME)
-			.append(" LEFT JOIN ")
+	public static final String CREATE_COUNT_VIEW = "CREATE TEMP VIEW IF NOT EXISTS " +
+			VIEWCOUNT_NAME +
+			" AS SELECT " +
+			arrayToCommaString(Columns.FIELDS) +
+			"," +
+			Columns.VIEW_COUNT +
+			" FROM " +
+			TABLE_NAME +
+			" LEFT JOIN " +
 			// Select count statement
-			.append(" (SELECT COUNT(1) AS ").append(Columns.VIEW_COUNT)
-			.append(",").append(Task.Columns.DBLIST).append(" FROM ")
-			.append(Task.TABLE_NAME).append(" WHERE ")
-			.append(Task.Columns.COMPLETED).append(" IS NULL ")
-			.append(" GROUP BY ").append(Task.Columns.DBLIST).append(") ")
-			.append(" ON ").append(TABLE_NAME).append(".").append(Columns._ID)
-			.append(" = ").append(Task.Columns.DBLIST).append(";").toString();
+			" (SELECT COUNT(1) AS " + Columns.VIEW_COUNT +
+			"," + Task.Columns.DBLIST + " FROM " +
+			Task.TABLE_NAME + " WHERE " +
+			Task.Columns.COMPLETED + " IS NULL " +
+			" GROUP BY " + Task.Columns.DBLIST + ") " +
+			" ON " + TABLE_NAME + "." + Columns._ID +
+			" = " + Task.Columns.DBLIST + ";";
 
 	public String title = "";
 

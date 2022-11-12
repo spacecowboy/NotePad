@@ -132,63 +132,62 @@ public class Notification extends DAO {
 	/**
 	 * Main table to store notification data
 	 */
-	public static final String CREATE_TABLE = new StringBuilder("CREATE TABLE ")
-			.append(TABLE_NAME)
-			.append("(")
-			.append(Columns._ID)
-			.append(" INTEGER PRIMARY KEY,")
-			.append(Columns.TIME)
-			.append(" INTEGER,")
-			.append(Columns.PERMANENT)
-			.append(" INTEGER NOT NULL DEFAULT 0,")
-			.append(Columns.TASKID)
-			.append(" INTEGER,")
+	public static final String CREATE_TABLE = "CREATE TABLE " +
+			TABLE_NAME +
+			"(" +
+			Columns._ID +
+			" INTEGER PRIMARY KEY," +
+			Columns.TIME +
+			" INTEGER," +
+			Columns.PERMANENT +
+			" INTEGER NOT NULL DEFAULT 0," +
+			Columns.TASKID +
+			" INTEGER," +
 			// Interpreted binary
-			.append(Columns.REPEATS)
-			.append(" INTEGER NOT NULL DEFAULT 0,")
+			Columns.REPEATS +
+			" INTEGER NOT NULL DEFAULT 0," +
 			// Location data
-			.append(Columns.LOCATIONNAME).append(" TEXT,")
-			.append(Columns.LATITUDE).append(" REAL, ")
-			.append(Columns.LONGITUDE)
-			.append(" REAL, ")
-			.append(Columns.RADIUS)
-			.append(" REAL, ")
+			Columns.LOCATIONNAME + " TEXT," +
+			Columns.LATITUDE + " REAL, " +
+			Columns.LONGITUDE +
+			" REAL, " +
+			Columns.RADIUS +
+			" REAL, " +
 			// Foreign key for task
-			.append("FOREIGN KEY(").append(Columns.TASKID)
-			.append(") REFERENCES ").append(Task.TABLE_NAME).append("(")
-			.append(Task.Columns._ID).append(") ON DELETE CASCADE")
-			.append(")").toString();
+			"FOREIGN KEY(" + Columns.TASKID +
+			") REFERENCES " + Task.TABLE_NAME + "(" +
+			Task.Columns._ID + ") ON DELETE CASCADE" +
+			")";
 
 	/**
 	 * View that joins relevant data from tasks and lists tables
 	 */
-	public static final String CREATE_JOINED_VIEW = new StringBuilder()
-			.append("CREATE TEMP VIEW IF NOT EXISTS ")
-			.append(WITH_TASK_VIEW_NAME)
-			.append(" AS ")
-			.append(" SELECT ")
+	public static final String CREATE_JOINED_VIEW = "CREATE TEMP VIEW IF NOT EXISTS " +
+			WITH_TASK_VIEW_NAME +
+			" AS " +
+			" SELECT " +
 			// Notifications as normal column names
-			.append(arrayToCommaString(TABLE_NAME + ".", Columns.FIELDS))
-			.append(",")
+			arrayToCommaString(TABLE_NAME + ".", Columns.FIELDS) +
+			"," +
 			// Rest gets prefixed
-			.append(arrayToCommaString("t.",
+			arrayToCommaString("t.",
 					Task.Columns.SHALLOWFIELDS,
 					" AS "
 							+ ColumnsWithTask.taskPrefix
-							+ "%1$s"))
-			.append(",")
-			.append(arrayToCommaString("l.",
+							+ "%1$s") +
+			"," +
+			arrayToCommaString("l.",
 					TaskList.Columns.SHALLOWFIELDS,
 					" AS "
 							+ ColumnsWithTask.listPrefix
-							+ "%1$s"))
-			.append(" FROM ").append(TABLE_NAME).append(",")
-			.append(Task.TABLE_NAME).append(" AS t,")
-			.append(TaskList.TABLE_NAME).append(" AS l ").append(" WHERE ")
-			.append(TABLE_NAME).append(".").append(Columns.TASKID)
-			.append(" = t.").append(Task.Columns._ID).append(" AND t.")
-			.append(Task.Columns.DBLIST).append(" = l.")
-			.append(TaskList.Columns._ID).append(";").toString();
+							+ "%1$s") +
+			" FROM " + TABLE_NAME + "," +
+			Task.TABLE_NAME + " AS t," +
+			TaskList.TABLE_NAME + " AS l " + " WHERE " +
+			TABLE_NAME + "." + Columns.TASKID +
+			" = t." + Task.Columns._ID + " AND t." +
+			Task.Columns.DBLIST + " = l." +
+			TaskList.Columns._ID + ";";
 
 	// milliseconds since 1970-01-01 UTC
 	public Long time = null;
@@ -541,11 +540,10 @@ public class Notification extends DAO {
 	public static List<Notification> getNotificationsOfTask(final Context context, final long taskId) {
 		return getNotificationsWithTasks(
 				context,
-				new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TASKID)
+				Columns.TASKID
 						+ " IS ?",
 				new String[] { Long.toString(taskId) },
-				new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
-						.toString());
+				Columns.TIME);
 	}
 
 	/**
@@ -558,15 +556,13 @@ public class Notification extends DAO {
 		final String comparison = before ? " <= ?" : " > ?";
 		return getNotificationsWithTasks(
 				context,
-				new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
-						.append(comparison)
-						.append(" AND ")
-						.append(com.nononsenseapps.notepad.database.Notification.Columns.RADIUS)
-						.append(" IS NULL")
-						.toString(),
+				Columns.TIME +
+						comparison +
+						" AND " +
+						Columns.RADIUS +
+						" IS NULL",
 				new String[] { Long.toString(time) },
-				new StringBuilder().append(com.nononsenseapps.notepad.database.Notification.Columns.TIME)
-						.toString());
+				Columns.TIME);
 	}
 
 	public static List<Notification> getNotificationsWithTasks(final Context context,

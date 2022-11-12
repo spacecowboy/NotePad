@@ -443,7 +443,7 @@ public abstract class Synchronizer extends DBSyncBase implements
 			 * It's not possible to differentiate if the user added a trailing
 			 * newline or the sync logic did. I will assume that the sync logic did.
 			 */
-			if (task.note != null && !task.note.isEmpty() && task.note.endsWith("\n")) {
+			if (task.note != null && task.note.endsWith("\n")) {
 				task.note = task.note.substring(0, task.note.length() - 1);
 			}
 		} else {

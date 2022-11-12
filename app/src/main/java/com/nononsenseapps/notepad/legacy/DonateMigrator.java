@@ -17,33 +17,28 @@
 
 package com.nononsenseapps.notepad.legacy;
 
-import java.text.ParseException;
-import java.util.HashMap;
-
-import org.androidannotations.annotations.EService;
-import org.androidannotations.annotations.UiThread;
-
-import com.nononsenseapps.notepad.ActivityMain;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.MyContentProvider;
-import com.nononsenseapps.notepad.database.Task;
-import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBase;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
-import com.nononsenseapps.utils.time.RFC3339Date;
-
 import android.app.IntentService;
-import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
-import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
+import com.nononsenseapps.notepad.database.MyContentProvider;
+import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
+import com.nononsenseapps.utils.time.RFC3339Date;
+
+import org.androidannotations.annotations.EService;
+import org.androidannotations.annotations.UiThread;
+
+import java.util.HashMap;
 
 @EService
 public class DonateMigrator extends IntentService {
@@ -218,7 +213,6 @@ public class DonateMigrator extends IntentService {
 			}
 		} catch (Exception e) {
 			mError = e.getLocalizedMessage();
-			return;
 		} finally {
 			if (noteCursor != null) noteCursor.close();
 		}

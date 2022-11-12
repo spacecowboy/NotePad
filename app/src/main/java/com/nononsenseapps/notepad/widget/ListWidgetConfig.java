@@ -224,9 +224,8 @@ public class ListWidgetConfig extends AppCompatActivity {
 							((TextView) view).setText(TitleNoteTextView
 									.getStyledText(c.getString(1), c.getString(2),
 											1.0f, 1, 1));
-							final int rows = widgetPrefs.getInt(KEY_TITLEROWS,
-									DEFAULT_ROWS);
-							((TextView) view).setMaxLines(rows < 1 ? 1 : rows);
+							final int rows = widgetPrefs.getInt(KEY_TITLEROWS, DEFAULT_ROWS);
+							((TextView) view).setMaxLines(Math.max(rows, 1));
 						}
 						// Set color
 						((TextView) view).setTextColor(widgetPrefs.getInt(

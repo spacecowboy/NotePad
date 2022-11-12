@@ -56,8 +56,7 @@ public class Task extends DAO {
 
 	public static String getSECTION_DATE_VIEW_NAME(final String listId) {
 		// listId CAN be null. Hence the string concat hack
-		return new StringBuilder().append(SECTIONED_DATE_VIEW).append("_")
-				.append("" + listId).toString();
+		return SECTIONED_DATE_VIEW + "_" + listId;
 	}
 
 	// Used in sectioned view date
@@ -253,109 +252,104 @@ public class Task extends DAO {
 
 	}
 
-	public static final String CREATE_TABLE = new StringBuilder("CREATE TABLE ")
-			.append(TABLE_NAME)
-			.append("(")
-			.append(Columns._ID)
-			.append(" INTEGER PRIMARY KEY,")
-			.append(Columns.TITLE)
-			.append(" TEXT NOT NULL DEFAULT '',")
-			.append(Columns.NOTE)
-			.append(" TEXT NOT NULL DEFAULT '',")
+	public static final String CREATE_TABLE = "CREATE TABLE " +
+			TABLE_NAME +
+			"(" +
+			Columns._ID +
+			" INTEGER PRIMARY KEY," +
+			Columns.TITLE +
+			" TEXT NOT NULL DEFAULT ''," +
+			Columns.NOTE +
+			" TEXT NOT NULL DEFAULT ''," +
 			// These are all msec times
-			.append(Columns.COMPLETED)
-			.append(" INTEGER DEFAULT NULL,")
-			.append(Columns.UPDATED)
-			.append(" INTEGER DEFAULT NULL,")
-			.append(Columns.DUE)
-			.append(" INTEGER DEFAULT NULL,")
+			Columns.COMPLETED +
+			" INTEGER DEFAULT NULL," +
+			Columns.UPDATED +
+			" INTEGER DEFAULT NULL," +
+			Columns.DUE +
+			" INTEGER DEFAULT NULL," +
 			// boolean, 1 for locked, unlocked otherwise
-			.append(Columns.LOCKED)
-			.append(" INTEGER NOT NULL DEFAULT 0,")
+			Columns.LOCKED +
+			" INTEGER NOT NULL DEFAULT 0," +
 
 			// position stuff
-			.append(Columns.LEFT)
-			.append(" INTEGER NOT NULL DEFAULT 1,")
-			.append(Columns.RIGHT)
-			.append(" INTEGER NOT NULL DEFAULT 2,")
-			.append(Columns.DBLIST)
-			.append(" INTEGER NOT NULL,")
+			Columns.LEFT +
+			" INTEGER NOT NULL DEFAULT 1," +
+			Columns.RIGHT +
+			" INTEGER NOT NULL DEFAULT 2," +
+			Columns.DBLIST +
+			" INTEGER NOT NULL," +
 
 			// Positions must be positive and ordered!
-			.append(" CHECK(")
-			.append(Columns.LEFT)
-			.append(" > 0), ")
-			.append(" CHECK(")
-			.append(Columns.RIGHT)
-			.append(" > 1), ")
+			" CHECK(" +
+			Columns.LEFT +
+			" > 0), " +
+			" CHECK(" +
+			Columns.RIGHT +
+			" > 1), " +
 			// Each side's value should be unique in it's list
 			// Handled in trigger
 			// ).append(" UNIQUE(").append(Columns.LEFT).append(", ").append(Columns.DBLIST).append(")"
 			// ).append(" UNIQUE(").append(Columns.RIGHT).append(", ").append(Columns.DBLIST).append(")"
 
 			// Foreign key for list
-			.append("FOREIGN KEY(").append(Columns.DBLIST)
-			.append(") REFERENCES ").append(TaskList.TABLE_NAME).append("(")
-			.append(TaskList.Columns._ID).append(") ON DELETE CASCADE")
-			.append(")")
-
-			.toString();
+			"FOREIGN KEY(" + Columns.DBLIST +
+			") REFERENCES " + TaskList.TABLE_NAME + "(" +
+			TaskList.Columns._ID + ") ON DELETE CASCADE" +
+			")";
 
 	// Delete table has no constraints. In fact, list values and positions
 	// should not even be thought of as valid.
-	public static final String CREATE_DELETE_TABLE = new StringBuilder(
-			"CREATE TABLE ").append(DELETE_TABLE_NAME).append("(")
-			.append(Columns._ID).append(" INTEGER PRIMARY KEY,")
-			.append(Columns.TITLE).append(" TEXT NOT NULL DEFAULT '',")
-			.append(Columns.NOTE).append(" TEXT NOT NULL DEFAULT '',")
-			.append(Columns.COMPLETED).append(" INTEGER DEFAULT NULL,")
-			.append(Columns.DUE).append(" INTEGER DEFAULT NULL,")
-			.append(Columns.DBLIST).append(" INTEGER DEFAULT NULL,")
-			.append(Columns.TRIG_DELETED)
-			.append(" TIMESTAMP NOT NULL DEFAULT current_timestamp")
-			.append(")").toString();
+	public static final String CREATE_DELETE_TABLE = "CREATE TABLE " +
+			DELETE_TABLE_NAME + "(" +
+			Columns._ID + " INTEGER PRIMARY KEY," +
+			Columns.TITLE + " TEXT NOT NULL DEFAULT ''," +
+			Columns.NOTE + " TEXT NOT NULL DEFAULT ''," +
+			Columns.COMPLETED + " INTEGER DEFAULT NULL," +
+			Columns.DUE + " INTEGER DEFAULT NULL," +
+			Columns.DBLIST + " INTEGER DEFAULT NULL," +
+			Columns.TRIG_DELETED +
+			" TIMESTAMP NOT NULL DEFAULT current_timestamp" +
+			")";
 
 	// Every change to a note gets saved here
-	public static final String CREATE_HISTORY_TABLE = new StringBuilder(
-			"CREATE TABLE ").append(HISTORY_TABLE_NAME).append("(")
-			.append(Columns._ID).append(" INTEGER PRIMARY KEY,")
-			.append(Columns.HIST_TASK_ID).append(" INTEGER NOT NULL,")
-			.append(Columns.TITLE).append(" TEXT NOT NULL DEFAULT '',")
-			.append(Columns.NOTE).append(" TEXT NOT NULL DEFAULT '',")
-			.append(Columns.UPDATED)
-			.append(" TIMESTAMP NOT NULL DEFAULT current_timestamp,")
-			.append(" FOREIGN KEY(").append(Columns.HIST_TASK_ID)
-			.append(" ) REFERENCES ").append(TABLE_NAME).append(" ( ")
-			.append(Columns._ID).append(") ON DELETE CASCADE ").append(" ) ")
-			.toString();
-	static final String HISTORY_TRIGGER_BODY = new StringBuilder(
-			" INSERT INTO ")
-			.append(HISTORY_TABLE_NAME)
-			.append(" (")
-			.append(arrayToCommaString(Columns.HISTORY_COLUMNS))
-			.append(")")
-			.append(" VALUES (")
-			.append(arrayToCommaString("new.", new String[] { Columns._ID,
-					Columns.TITLE, Columns.NOTE })).append(");").toString();
+	public static final String CREATE_HISTORY_TABLE = "CREATE TABLE " +
+			HISTORY_TABLE_NAME + "(" +
+			Columns._ID + " INTEGER PRIMARY KEY," +
+			Columns.HIST_TASK_ID + " INTEGER NOT NULL," +
+			Columns.TITLE + " TEXT NOT NULL DEFAULT ''," +
+			Columns.NOTE + " TEXT NOT NULL DEFAULT ''," +
+			Columns.UPDATED +
+			" TIMESTAMP NOT NULL DEFAULT current_timestamp," +
+			" FOREIGN KEY(" + Columns.HIST_TASK_ID +
+			" ) REFERENCES " + TABLE_NAME + " ( " +
+			Columns._ID + ") ON DELETE CASCADE " + " ) ";
+	static final String HISTORY_TRIGGER_BODY = " INSERT INTO " +
+			HISTORY_TABLE_NAME +
+			" (" +
+			arrayToCommaString(Columns.HISTORY_COLUMNS) +
+			")" +
+			" VALUES (" +
+			arrayToCommaString("new.", new String[] { Columns._ID,
+					Columns.TITLE, Columns.NOTE }) +
+			");";
 	public static final String HISTORY_UPDATE_TRIGGER_NAME = "trigger_update_" + HISTORY_TABLE_NAME;
-	public static final String CREATE_HISTORY_UPDATE_TRIGGER = new StringBuilder(
-			"CREATE TRIGGER ").append(HISTORY_UPDATE_TRIGGER_NAME)
-			.append(" AFTER UPDATE OF ")
-			.append(arrayToCommaString(new String[] { Columns.TITLE,
-					Columns.NOTE })).append(" ON ").append(TABLE_NAME)
-
-			.append(" WHEN old.")
-			.append(Columns.TITLE).append(" IS NOT new.")
-			.append(Columns.TITLE).append(" OR old.")
-			.append(Columns.NOTE).append(" IS NOT new.")
-			.append(Columns.NOTE)
-
-			.append(" BEGIN ").append(HISTORY_TRIGGER_BODY).append(" END;")
-			.toString();
-	public static final String CREATE_HISTORY_INSERT_TRIGGER = new StringBuilder(
-			"CREATE TRIGGER trigger_insert_").append(HISTORY_TABLE_NAME)
-			.append(" AFTER INSERT ON ").append(TABLE_NAME).append(" BEGIN ")
-			.append(HISTORY_TRIGGER_BODY).append(" END;").toString();
+	public static final String CREATE_HISTORY_UPDATE_TRIGGER = "CREATE TRIGGER " +
+			HISTORY_UPDATE_TRIGGER_NAME +
+			" AFTER UPDATE OF " +
+			arrayToCommaString(Columns.TITLE, Columns.NOTE) +
+			" ON " +
+			TABLE_NAME +
+			" WHEN old." +
+			Columns.TITLE + " IS NOT new." +
+			Columns.TITLE + " OR old." +
+			Columns.NOTE + " IS NOT new." +
+			Columns.NOTE +
+			" BEGIN " + HISTORY_TRIGGER_BODY + " END;";
+	public static final String CREATE_HISTORY_INSERT_TRIGGER = "CREATE TRIGGER trigger_insert_" +
+			HISTORY_TABLE_NAME +
+			" AFTER INSERT ON " + TABLE_NAME + " BEGIN " +
+			HISTORY_TRIGGER_BODY + " END;";
 
 	// Delete search table
 	public static final String CREATE_FTS3_DELETE_TABLE = "CREATE VIRTUAL TABLE "
@@ -364,72 +358,70 @@ public class Task extends DAO {
 			+ Columns._ID
 			+ ", "
 			+ Columns.TITLE + ", " + Columns.NOTE + ");";
-	public static final String CREATE_FTS3_DELETED_INSERT_TRIGGER = new StringBuilder()
-			.append("CREATE TRIGGER deletedtask_fts3_insert AFTER INSERT ON ")
-			.append(DELETE_TABLE_NAME)
-			.append(" BEGIN ")
-			.append(" INSERT INTO ")
-			.append(FTS3_DELETE_TABLE_NAME)
-			.append(" (")
-			.append(arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE))
-			.append(") VALUES (")
-			.append(arrayToCommaString("new.", new String[] { Columns._ID,
-					Columns.TITLE, Columns.NOTE })).append(");")
-			.append(" END;").toString();
+	public static final String CREATE_FTS3_DELETED_INSERT_TRIGGER = "CREATE TRIGGER deletedtask_fts3_insert AFTER INSERT ON " +
+			DELETE_TABLE_NAME +
+			" BEGIN " +
+			" INSERT INTO " +
+			FTS3_DELETE_TABLE_NAME +
+			" (" +
+			arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE) +
+			") VALUES (" +
+			arrayToCommaString("new.", new String[] { Columns._ID,
+					Columns.TITLE, Columns.NOTE }) +
+			");" +
+			" END;";
 
-	public static final String CREATE_FTS3_DELETED_UPDATE_TRIGGER = new StringBuilder()
-			.append("CREATE TRIGGER deletedtask_fts3_update AFTER UPDATE OF ")
-			.append(arrayToCommaString(new String[] { Columns.TITLE,
-					Columns.NOTE })).append(" ON ").append(DELETE_TABLE_NAME)
-			.append(" BEGIN ").append(" UPDATE ")
-			.append(FTS3_DELETE_TABLE_NAME).append(" SET ")
-			.append(Columns.TITLE).append(" = new.").append(Columns.TITLE)
-			.append(",").append(Columns.NOTE).append(" = new.")
-			.append(Columns.NOTE).append(" WHERE ").append(Columns._ID)
-			.append(" IS new.").append(Columns._ID).append(";").append(" END;")
-			.toString();
-	public static final String CREATE_FTS3_DELETED_DELETE_TRIGGER = new StringBuilder()
-			.append("CREATE TRIGGER deletedtask_fts3_delete AFTER DELETE ON ")
-			.append(DELETE_TABLE_NAME).append(" BEGIN ")
-			.append(" DELETE FROM ").append(FTS3_DELETE_TABLE_NAME)
-			.append(" WHERE ").append(Columns._ID).append(" IS old.")
-			.append(Columns._ID).append(";").append(" END;").toString();
+	public static final String CREATE_FTS3_DELETED_UPDATE_TRIGGER = "CREATE TRIGGER deletedtask_fts3_update AFTER UPDATE OF " +
+			arrayToCommaString(Columns.TITLE, Columns.NOTE) +
+			" ON " +
+			DELETE_TABLE_NAME +
+			" BEGIN " +
+			" UPDATE " +
+			FTS3_DELETE_TABLE_NAME +
+			" SET " +
+			Columns.TITLE + " = new." + Columns.TITLE +
+			"," + Columns.NOTE + " = new." +
+			Columns.NOTE + " WHERE " + Columns._ID +
+			" IS new." + Columns._ID + ";" + " END;";
+	public static final String CREATE_FTS3_DELETED_DELETE_TRIGGER = "CREATE TRIGGER deletedtask_fts3_delete AFTER DELETE ON " +
+			DELETE_TABLE_NAME + " BEGIN " +
+			" DELETE FROM " + FTS3_DELETE_TABLE_NAME +
+			" WHERE " + Columns._ID + " IS old." +
+			Columns._ID + ";" + " END;";
 
 	// Search table
 	public static final String CREATE_FTS3_TABLE = "CREATE VIRTUAL TABLE "
 			+ FTS3_TABLE_NAME + " USING FTS3(" + Columns._ID + ", "
 			+ Columns.TITLE + ", " + Columns.NOTE + ");";
 
-	public static final String CREATE_FTS3_INSERT_TRIGGER = new StringBuilder()
-			.append("CREATE TRIGGER task_fts3_insert AFTER INSERT ON ")
-			.append(TABLE_NAME)
-			.append(" BEGIN ")
-			.append(" INSERT INTO ")
-			.append(FTS3_TABLE_NAME)
-			.append(" (")
-			.append(arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE))
-			.append(") VALUES (")
-			.append(arrayToCommaString("new.", new String[] { Columns._ID,
-					Columns.TITLE, Columns.NOTE })).append(");")
-			.append(" END;").toString();
+	public static final String CREATE_FTS3_INSERT_TRIGGER = "CREATE TRIGGER task_fts3_insert AFTER INSERT ON " +
+			TABLE_NAME +
+			" BEGIN " +
+			" INSERT INTO " +
+			FTS3_TABLE_NAME +
+			" (" +
+			arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE) +
+			") VALUES (" +
+			arrayToCommaString("new.", new String[] { Columns._ID,
+					Columns.TITLE, Columns.NOTE }) +
+			");" +
+			" END;";
 
-	public static final String CREATE_FTS3_UPDATE_TRIGGER = new StringBuilder()
-			.append("CREATE TRIGGER task_fts3_update AFTER UPDATE OF ")
-			.append(arrayToCommaString(new String[] { Columns.TITLE,
-					Columns.NOTE })).append(" ON ").append(TABLE_NAME)
-			.append(" BEGIN ").append(" UPDATE ").append(FTS3_TABLE_NAME)
-			.append(" SET ").append(Columns.TITLE).append(" = new.")
-			.append(Columns.TITLE).append(",").append(Columns.NOTE)
-			.append(" = new.").append(Columns.NOTE).append(" WHERE ")
-			.append(Columns._ID).append(" IS new.").append(Columns._ID)
-			.append(";").append(" END;").toString();
+	public static final String CREATE_FTS3_UPDATE_TRIGGER = "CREATE TRIGGER task_fts3_update AFTER UPDATE OF " +
+			arrayToCommaString(Columns.TITLE, Columns.NOTE) +
+			" ON " +
+			TABLE_NAME +
+			" BEGIN " + " UPDATE " + FTS3_TABLE_NAME +
+			" SET " + Columns.TITLE + " = new." +
+			Columns.TITLE + "," + Columns.NOTE +
+			" = new." + Columns.NOTE + " WHERE " +
+			Columns._ID + " IS new." + Columns._ID +
+			";" + " END;";
 
-	public static final String CREATE_FTS3_DELETE_TRIGGER = new StringBuilder()
-			.append("CREATE TRIGGER task_fts3_delete AFTER DELETE ON ")
-			.append(TABLE_NAME).append(" BEGIN ").append(" DELETE FROM ")
-			.append(FTS3_TABLE_NAME).append(" WHERE ").append(Columns._ID)
-			.append(" IS old.").append(Columns._ID).append(";").append(" END;")
-			.toString();
+	public static final String CREATE_FTS3_DELETE_TRIGGER = "CREATE TRIGGER task_fts3_delete AFTER DELETE ON " +
+			TABLE_NAME + " BEGIN " + " DELETE FROM " +
+			FTS3_TABLE_NAME + " WHERE " + Columns._ID +
+			" IS old." + Columns._ID + ";" + " END;";
 
 	/**
 	 * This is a view which returns the tasks in the specified list with headers
@@ -441,262 +433,260 @@ public class Task extends DAO {
 	public static final String CREATE_SECTIONED_DATE_VIEW(final String listId) {
 		final String sListId = listId == null ? " NOT NULL " : "'" + listId
 				+ "'";
-		return new StringBuilder()
-				.append("CREATE TEMP VIEW IF NOT EXISTS ")
-				.append(getSECTION_DATE_VIEW_NAME(listId))
+		return "CREATE TEMP VIEW IF NOT EXISTS " +
+				getSECTION_DATE_VIEW_NAME(listId) +
 				// Tasks WITH dates NOT completed, secret 0
-				.append(" AS SELECT ")
-				.append(arrayToCommaString(Columns.FIELDS))
-				.append(",0")
-				.append(" AS ")
-				.append(SECRET_TYPEID)
-				.append(",1")
-				.append(" AS ")
-				.append(SECRET_TYPEID2)
-				.append(" FROM ")
-				.append(TABLE_NAME)
-				.append(" WHERE ")
-				.append(Columns.COMPLETED)
-				.append(" IS null ")
-				.append(" AND ")
-				.append(Columns.DUE)
-				.append(" IS NOT null ")
-				.append(" UNION ALL ")
+				" AS SELECT " +
+				arrayToCommaString(Columns.FIELDS) +
+				",0" +
+				" AS " +
+				SECRET_TYPEID +
+				",1" +
+				" AS " +
+				SECRET_TYPEID2 +
+				" FROM " +
+				TABLE_NAME +
+				" WHERE " +
+				Columns.COMPLETED +
+				" IS null " +
+				" AND " +
+				Columns.DUE +
+				" IS NOT null " +
+				" UNION ALL " +
 				// Tasks NO dates NOT completed, secret 1
-				.append(" SELECT ")
-				.append(arrayToCommaString(Columns.FIELDS))
-				.append(",1")
-				.append(" AS ")
-				.append(SECRET_TYPEID)
-				.append(",1")
-				.append(" AS ")
-				.append(SECRET_TYPEID2)
-				.append(" FROM ")
-				.append(TABLE_NAME)
-				.append(" WHERE ")
-				.append(Columns.COMPLETED)
-				.append(" IS null ")
-				.append(" AND ")
-				.append(Columns.DUE)
-				.append(" IS null ")
-				.append(" UNION ALL ")
+				" SELECT " +
+				arrayToCommaString(Columns.FIELDS) +
+				",1" +
+				" AS " +
+				SECRET_TYPEID +
+				",1" +
+				" AS " +
+				SECRET_TYPEID2 +
+				" FROM " +
+				TABLE_NAME +
+				" WHERE " +
+				Columns.COMPLETED +
+				" IS null " +
+				" AND " +
+				Columns.DUE +
+				" IS null " +
+				" UNION ALL " +
 				// Tasks completed, secret 2 + 1
-				.append(" SELECT ")
-				.append(arrayToCommaString(Columns.FIELDS))
-				.append(",3")
-				.append(" AS ")
-				.append(SECRET_TYPEID)
-				.append(",1")
-				.append(" AS ")
-				.append(SECRET_TYPEID2)
-				.append(" FROM ")
-				.append(TABLE_NAME)
-				.append(" WHERE ")
-				.append(Columns.COMPLETED)
-				.append(" IS NOT null ")
+				" SELECT " +
+				arrayToCommaString(Columns.FIELDS) +
+				",3" +
+				" AS " +
+				SECRET_TYPEID +
+				",1" +
+				" AS " +
+				SECRET_TYPEID2 +
+				" FROM " +
+				TABLE_NAME +
+				" WHERE " +
+				Columns.COMPLETED +
+				" IS NOT null " +
 				// TODAY
-				.append(" UNION ALL ")
-				.append(" SELECT -1,")
-				.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				" UNION ALL " +
+				" SELECT -1," +
+				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
 						Columns.DUE, TODAY_START, Columns.TITLE,
-						HEADER_KEY_TODAY, Columns.DBLIST, listId))
-				.append(",0,0")
+						HEADER_KEY_TODAY, Columns.DBLIST, listId) +
+				",0,0" +
 				// Only show header if there are tasks under it
-				.append(" WHERE EXISTS(SELECT _ID FROM ")
-				.append(TABLE_NAME)
-				.append(" WHERE ")
-				.append(Columns.COMPLETED)
-				.append(" IS NULL ")
-				.append(" AND ")
-				.append(Columns.DBLIST)
-				.append(" IS ")
-				.append(sListId)
-				.append(" AND ")
-				.append(Columns.DUE)
-				.append(" BETWEEN ")
-				.append(TODAY_START)
-				.append(" AND ")
-				.append(TODAY_PLUS(1))
-				.append(") ")
+				" WHERE EXISTS(SELECT _ID FROM " +
+				TABLE_NAME +
+				" WHERE " +
+				Columns.COMPLETED +
+				" IS NULL " +
+				" AND " +
+				Columns.DBLIST +
+				" IS " +
+				sListId +
+				" AND " +
+				Columns.DUE +
+				" BETWEEN " +
+				TODAY_START +
+				" AND " +
+				TODAY_PLUS(1) +
+				") " +
 				// TOMORROW (Today + 1)
-				.append(" UNION ALL ")
-				.append(" SELECT -1,")
-				.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				" UNION ALL " +
+				" SELECT -1," +
+				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
 						Columns.DUE, TODAY_PLUS(1), Columns.TITLE,
-						HEADER_KEY_PLUS1, Columns.DBLIST, listId))
-				.append(",0,0")
+						HEADER_KEY_PLUS1, Columns.DBLIST, listId) +
+				",0,0" +
 				// Only show header if there are tasks under it
-				.append(" WHERE EXISTS(SELECT _ID FROM ")
-				.append(TABLE_NAME)
-				.append(" WHERE ")
-				.append(Columns.COMPLETED)
-				.append(" IS NULL ")
-				.append(" AND ")
-				.append(Columns.DBLIST)
-				.append(" IS ")
-				.append(sListId)
-				.append(" AND ")
-				.append(Columns.DUE)
-				.append(" BETWEEN ")
-				.append(TODAY_PLUS(1))
-				.append(" AND ")
-				.append(TODAY_PLUS(2))
-				.append(") ")
+				" WHERE EXISTS(SELECT _ID FROM " +
+				TABLE_NAME +
+				" WHERE " +
+				Columns.COMPLETED +
+				" IS NULL " +
+				" AND " +
+				Columns.DBLIST +
+				" IS " +
+				sListId +
+				" AND " +
+				Columns.DUE +
+				" BETWEEN " +
+				TODAY_PLUS(1) +
+				" AND " +
+				TODAY_PLUS(2) +
+				") " +
 				// Today + 2
-				.append(" UNION ALL ")
-				.append(" SELECT -1,")
-				.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				" UNION ALL " +
+				" SELECT -1," +
+				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
 						Columns.DUE, TODAY_PLUS(2), Columns.TITLE,
-						HEADER_KEY_PLUS2, Columns.DBLIST, listId))
-				.append(",0,0")
+						HEADER_KEY_PLUS2, Columns.DBLIST, listId) +
+				",0,0" +
 				// Only show header if there are tasks under it
-				.append(" WHERE EXISTS(SELECT _ID FROM ")
-				.append(TABLE_NAME)
-				.append(" WHERE ")
-				.append(Columns.COMPLETED)
-				.append(" IS NULL ")
-				.append(" AND ")
-				.append(Columns.DBLIST)
-				.append(" IS ")
-				.append(sListId)
-				.append(" AND ")
-				.append(Columns.DUE)
-				.append(" BETWEEN ")
-				.append(TODAY_PLUS(2))
-				.append(" AND ")
-				.append(TODAY_PLUS(3))
-				.append(") ")
+				" WHERE EXISTS(SELECT _ID FROM " +
+				TABLE_NAME +
+				" WHERE " +
+				Columns.COMPLETED +
+				" IS NULL " +
+				" AND " +
+				Columns.DBLIST +
+				" IS " +
+				sListId +
+				" AND " +
+				Columns.DUE +
+				" BETWEEN " +
+				TODAY_PLUS(2) +
+				" AND " +
+				TODAY_PLUS(3) +
+				") " +
 				// Today + 3
-				.append(" UNION ALL ")
-				.append(" SELECT -1,")
-				.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				" UNION ALL " +
+				" SELECT -1," +
+				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
 						Columns.DUE, TODAY_PLUS(3), Columns.TITLE,
-						HEADER_KEY_PLUS3, Columns.DBLIST, listId))
-				.append(",0,0")
+						HEADER_KEY_PLUS3, Columns.DBLIST, listId) +
+				",0,0" +
 				// Only show header if there are tasks under it
-				.append(" WHERE EXISTS(SELECT _ID FROM ")
-				.append(TABLE_NAME)
-				.append(" WHERE ")
-				.append(Columns.COMPLETED)
-				.append(" IS NULL ")
-				.append(" AND ")
-				.append(Columns.DBLIST)
-				.append(" IS ")
-				.append(sListId)
-				.append(" AND ")
-				.append(Columns.DUE)
-				.append(" BETWEEN ")
-				.append(TODAY_PLUS(3))
-				.append(" AND ")
-				.append(TODAY_PLUS(4))
-				.append(") ")
+				" WHERE EXISTS(SELECT _ID FROM " +
+				TABLE_NAME +
+				" WHERE " +
+				Columns.COMPLETED +
+				" IS NULL " +
+				" AND " +
+				Columns.DBLIST +
+				" IS " +
+				sListId +
+				" AND " +
+				Columns.DUE +
+				" BETWEEN " +
+				TODAY_PLUS(3) +
+				" AND " +
+				TODAY_PLUS(4) +
+				") " +
 				// Today + 4
-				.append(" UNION ALL ")
-				.append(" SELECT -1,")
-				.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				" UNION ALL " +
+				" SELECT -1," +
+				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
 						Columns.DUE, TODAY_PLUS(4), Columns.TITLE,
-						HEADER_KEY_PLUS4, Columns.DBLIST, listId))
-				.append(",0,0")
+						HEADER_KEY_PLUS4, Columns.DBLIST, listId) +
+				",0,0" +
 				// Only show header if there are tasks under it
-				.append(" WHERE EXISTS(SELECT _ID FROM ")
-				.append(TABLE_NAME)
-				.append(" WHERE ")
-				.append(Columns.COMPLETED)
-				.append(" IS NULL ")
-				.append(" AND ")
-				.append(Columns.DBLIST)
-				.append(" IS ")
-				.append(sListId)
-				.append(" AND ")
-				.append(Columns.DUE)
-				.append(" BETWEEN ")
-				.append(TODAY_PLUS(4))
-				.append(" AND ")
-				.append(TODAY_PLUS(5))
-				.append(") ")
+				" WHERE EXISTS(SELECT _ID FROM " +
+				TABLE_NAME +
+				" WHERE " +
+				Columns.COMPLETED +
+				" IS NULL " +
+				" AND " +
+				Columns.DBLIST +
+				" IS " +
+				sListId +
+				" AND " +
+				Columns.DUE +
+				" BETWEEN " +
+				TODAY_PLUS(4) +
+				" AND " +
+				TODAY_PLUS(5) +
+				") " +
 				// Overdue (0)
-				.append(" UNION ALL ")
-				.append(" SELECT -1,")
-				.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				" UNION ALL " +
+				" SELECT -1," +
+				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
 						Columns.DUE, OVERDUE, Columns.TITLE,
-						HEADER_KEY_OVERDUE, Columns.DBLIST, listId))
-				.append(",0,0")
+						HEADER_KEY_OVERDUE, Columns.DBLIST, listId) +
+				",0,0" +
 				// Only show header if there are tasks under it
-				.append(" WHERE EXISTS(SELECT _ID FROM ")
-				.append(TABLE_NAME)
-				.append(" WHERE ")
-				.append(Columns.COMPLETED)
-				.append(" IS NULL ")
-				.append(" AND ")
-				.append(Columns.DBLIST)
-				.append(" IS ")
-				.append(sListId)
-				.append(" AND ")
-				.append(Columns.DUE)
-				.append(" BETWEEN ")
-				.append(OVERDUE)
-				.append(" AND ")
-				.append(TODAY_START)
-				.append(") ")
+				" WHERE EXISTS(SELECT _ID FROM " +
+				TABLE_NAME +
+				" WHERE " +
+				Columns.COMPLETED +
+				" IS NULL " +
+				" AND " +
+				Columns.DBLIST +
+				" IS " +
+				sListId +
+				" AND " +
+				Columns.DUE +
+				" BETWEEN " +
+				OVERDUE +
+				" AND " +
+				TODAY_START +
+				") " +
 				// Later
-				.append(" UNION ALL ")
-				.append(" SELECT '-1',")
-				.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				" UNION ALL " +
+				" SELECT '-1'," +
+				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
 						Columns.DUE, TODAY_PLUS(5), Columns.TITLE,
-						HEADER_KEY_LATER, Columns.DBLIST, listId))
-				.append(",0,0")
+						HEADER_KEY_LATER, Columns.DBLIST, listId) +
+				",0,0" +
 				// Only show header if there are tasks under it
-				.append(" WHERE EXISTS(SELECT _ID FROM ")
-				.append(TABLE_NAME)
-				.append(" WHERE ")
-				.append(Columns.COMPLETED)
-				.append(" IS NULL ")
-				.append(" AND ")
-				.append(Columns.DBLIST)
-				.append(" IS ")
-				.append(sListId)
-				.append(" AND ")
-				.append(Columns.DUE)
-				.append(" >= ")
-				.append(TODAY_PLUS(5))
-				.append(") ")
+				" WHERE EXISTS(SELECT _ID FROM " +
+				TABLE_NAME +
+				" WHERE " +
+				Columns.COMPLETED +
+				" IS NULL " +
+				" AND " +
+				Columns.DBLIST +
+				" IS " +
+				sListId +
+				" AND " +
+				Columns.DUE +
+				" >= " +
+				TODAY_PLUS(5) +
+				") " +
 				// No date
-				.append(" UNION ALL ")
-				.append(" SELECT -1,")
-				.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				" UNION ALL " +
+				" SELECT -1," +
+				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
 						Columns.DUE, "null", Columns.TITLE, HEADER_KEY_NODATE,
-						Columns.DBLIST, listId))
-				.append(",1,0")
+						Columns.DBLIST, listId) +
+				",1,0" +
 				// Only show header if there are tasks under it
-				.append(" WHERE EXISTS(SELECT _ID FROM ")
-				.append(TABLE_NAME)
-				.append(" WHERE ")
-				.append(Columns.DBLIST)
-				.append(" IS ")
-				.append(sListId)
-				.append(" AND ")
-				.append(Columns.DUE)
-				.append(" IS null ")
-				.append(" AND ")
-				.append(Columns.COMPLETED)
-				.append(" IS null ")
-				.append(") ")
+				" WHERE EXISTS(SELECT _ID FROM " +
+				TABLE_NAME +
+				" WHERE " +
+				Columns.DBLIST +
+				" IS " +
+				sListId +
+				" AND " +
+				Columns.DUE +
+				" IS null " +
+				" AND " +
+				Columns.COMPLETED +
+				" IS null " +
+				") " +
 				// Complete, overdue to catch all
 				// Set complete time to 1
-				.append(" UNION ALL ")
-				.append(" SELECT -1,")
-				.append(asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
+				" UNION ALL " +
+				" SELECT -1," +
+				asEmptyCommaStringExcept(Columns.FIELDS_NO_ID,
 						Columns.DUE, OVERDUE, Columns.COMPLETED, "1",
 						Columns.TITLE, HEADER_KEY_COMPLETE, Columns.DBLIST,
-						listId))
-				.append(",2,0")
+						listId) +
+				",2,0" +
 				// Only show header if there are tasks under it
-				.append(" WHERE EXISTS(SELECT _ID FROM ").append(TABLE_NAME)
-				.append(" WHERE ").append(Columns.DBLIST).append(" IS ")
-				.append(sListId).append(" AND ").append(Columns.COMPLETED)
-				.append(" IS NOT null ").append(") ")
-
-				.append(";").toString();
+				" WHERE EXISTS(SELECT _ID FROM " + TABLE_NAME +
+				" WHERE " + Columns.DBLIST + " IS " +
+				sListId + " AND " + Columns.COMPLETED +
+				" IS NOT null " + ") " +
+				";";
 	}
 
 	public String title = null;
@@ -751,7 +741,7 @@ public class Task extends DAO {
 
 		title = text.substring(0, titleEnd);
 		if (titleEnd + 1 < text.length()) {
-			note = text.substring(titleEnd + 1, text.length());
+			note = text.substring(titleEnd + 1);
 		} else {
 			note = "";
 		}
@@ -1096,41 +1086,38 @@ public class Task extends DAO {
 	/*
 	 * Trigger to move between lists
 	 */
-	public static final String TRIGGER_MOVE_LIST = new StringBuilder()
-			.append("CREATE TRIGGER trigger_post_move_list_")
-			.append(TABLE_NAME)
-			.append(" AFTER UPDATE OF ")
-			.append(Task.Columns.DBLIST)
-			.append(" ON ")
-			.append(Task.TABLE_NAME)
-			.append(" WHEN old.")
-			.append(Task.Columns.DBLIST)
-			.append(" IS NOT new.")
-			.append(Task.Columns.DBLIST)
-			.append(" BEGIN ")
+	public static final String TRIGGER_MOVE_LIST = "CREATE TRIGGER trigger_post_move_list_" +
+			TABLE_NAME +
+			" AFTER UPDATE OF " +
+			Columns.DBLIST +
+			" ON " +
+			Task.TABLE_NAME +
+			" WHEN old." +
+			Columns.DBLIST +
+			" IS NOT new." +
+			Columns.DBLIST +
+			" BEGIN " +
 			// Bump everything to the right, except the item itself (in same
 			// list)
-			.append(String
+			String
 					.format("UPDATE %1$s SET %2$s = %2$s + 2, %3$s = %3$s + 2 WHERE %4$s IS new.%4$s AND %5$s IS NOT new.%5$s;",
 							TABLE_NAME, Columns.LEFT, Columns.RIGHT,
-							Columns.DBLIST, Columns._ID))
+							Columns.DBLIST, Columns._ID) +
 
 			// Bump everything left in the old list, to the right of position
-			.append(String
+			String
 					.format("UPDATE %1$s SET %2$s = %2$s - 2, %3$s = %3$s - 2 WHERE %2$s > old.%3$s AND %4$s IS old.%4$s;",
 							TABLE_NAME, Columns.LEFT, Columns.RIGHT,
-							Columns.DBLIST))
+							Columns.DBLIST) +
 
 			// Set positions to 1 and 2 for item
-			.append(String
+			String
 					.format("UPDATE %1$s SET %2$s = 1, %3$s = 2 WHERE %4$s IS new.%4$s;",
 							TABLE_NAME, Columns.LEFT, Columns.RIGHT,
-							Columns._ID))
-
-			.append(posUniqueConstraint("new", "Moving list, new positions not unique/ordered"))
-			.append(posUniqueConstraint("old", "Moving list, old positions not unique/ordered"))
-
-			.append(" END;").toString();
+							Columns._ID) +
+			posUniqueConstraint("new", "Moving list, new positions not unique/ordered") +
+			posUniqueConstraint("old", "Moving list, old positions not unique/ordered") +
+			" END;";
 
 	/**
 	 * If moving left, then edgeCol is left and vice-versa. Values should come
@@ -1142,65 +1129,65 @@ public class Task extends DAO {
 	private String getSQLMoveItem(final String edgeCol, final Long edgeVal) {
 		boolean movingLeft = Columns.LEFT.equals(edgeCol);
 		return String
-				.format(new StringBuilder("UPDATE %1$s SET ")
+				.format("UPDATE %1$s SET " +
 								/*
 								 * Left item follows Left = Left + ...
 								 */
-								.append("%2$s = %2$s + ")
-								.append(" CASE ")
+								"%2$s = %2$s + " +
+								" CASE " +
 								// Moving item jumps to target pos
-								.append(" WHEN %2$s IS %5$d ")
+								" WHEN %2$s IS %5$d " +
 								// ex: left = 5, target = 2, --> left = 5 + (2 - 5) == 2
 								// ex left = 5, target = 9(right), --> left = 5 + (9 - 5
 								// - 1) = 8
-								.append(" THEN ")
-								.append(" (%7$d - %5$d")
-								.append(movingLeft ? ") " : " -1) ")
+								" THEN " +
+								" (%7$d - %5$d" +
+								(movingLeft ? ") " : " -1) ") +
 								// Sub items take one step opposite
 								// Careful if moving inside subtree, which can only
 								// happen when moving right.
 								// Then only left position changes
-								.append(" WHEN %2$s BETWEEN (%5$d + 1) AND (%6$d - 1) ")
-								.append(" THEN ")
-								.append(movingLeft ? " 1 " : " -1 ")
+								" WHEN %2$s BETWEEN (%5$d + 1) AND (%6$d - 1) " +
+								" THEN " +
+								(movingLeft ? " 1 " : " -1 ") +
 								// Items in between from and to positions take two steps
 								// opposite
-								.append(" WHEN %2$s BETWEEN ")
-								.append(movingLeft ? "%7$d" : "%6$d")
-								.append(" AND ")
-								.append(movingLeft ? "%5$d" : "%7$d")
-								.append(" THEN ")
-								.append(movingLeft ? " 2 " : " -2 ")
+								" WHEN %2$s BETWEEN " +
+								(movingLeft ? "%7$d" : "%6$d") +
+								" AND " +
+								(movingLeft ? "%5$d" : "%7$d") +
+								" THEN " +
+								(movingLeft ? " 2 " : " -2 ") +
 								// Not in target range, no change
-								.append(" ELSE 0 END, ")
+								" ELSE 0 END, " +
 								/*
 								 * Right item follows Right = Right + ...
 								 */
-								.append(" %3$s = %3$s + ")
-								.append(" CASE ")
+								" %3$s = %3$s + " +
+								" CASE " +
 								// Moving item jumps to target pos
-								.append(" WHEN %3$s IS %6$d ")
+								" WHEN %3$s IS %6$d " +
 								// ex: right = 7, target = 3(left), --> right = 7 + (3 -
 								// 7 + 1) == 4
 								// ex right = 2, target = 9(right), --> right = 2 + (9 -
 								// 2) = 9
-								.append(" THEN ")
-								.append(" (%7$d - %6$d")
-								.append(movingLeft ? " +1) " : ") ")
+								" THEN " +
+								" (%7$d - %6$d" +
+								(movingLeft ? " +1) " : ") ") +
 								// Sub items take one step opposite
-								.append(" WHEN %3$s BETWEEN (%5$d + 1) AND (%6$d - 1) ")
-								.append(" THEN ")
-								.append(movingLeft ? " 1 " : " -1 ")
+								" WHEN %3$s BETWEEN (%5$d + 1) AND (%6$d - 1) " +
+								" THEN " +
+								(movingLeft ? " 1 " : " -1 ") +
 								// Items in between from and to positions take two steps
 								// opposite
-								.append(" WHEN %3$s BETWEEN ")
-								.append(movingLeft ? "%7$d" : "%6$d").append(" AND ")
-								.append(movingLeft ? "%5$d" : "%7$d").append(" THEN ")
-								.append(movingLeft ? " 2 " : " -2 ")
+								" WHEN %3$s BETWEEN " +
+								(movingLeft ? "%7$d" : "%6$d") + " AND " +
+								(movingLeft ? "%5$d" : "%7$d") + " THEN " +
+								(movingLeft ? " 2 " : " -2 ") +
 								// Not in target range, no change
-								.append(" ELSE 0 END ")
+								" ELSE 0 END " +
 								// And limit to the list in question
-								.append(" WHERE %8$s IS %9$d;").toString(), TABLE_NAME,
+								" WHERE %8$s IS %9$d;", TABLE_NAME,
 						Columns.LEFT, Columns.RIGHT, edgeCol, left, right,
 						edgeVal, Columns.DBLIST, dblist);
 	}

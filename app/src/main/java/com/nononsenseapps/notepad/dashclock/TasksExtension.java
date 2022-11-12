@@ -38,16 +38,16 @@ public class TasksExtension extends DashClockExtension {
 	// .parse("content://com.nononsenseapps.NotePad/visiblenotes");
 	// final static Uri VISIBLE_LISTS_URI = Uri
 	// .parse("content://com.nononsenseapps.NotePad/visiblelists");
-	public static final String DUEDATE_SORT_TYPE = new StringBuilder(
-			"CASE WHEN ").append(Task.Columns.DUE).append(" IS NULL OR ")
-			.append(Task.Columns.DUE).append(" IS '' THEN 1 ELSE 0 END, ")
-			.append(Task.Columns.DUE).toString();
+	public static final String DUEDATE_SORT_TYPE = "CASE WHEN " +
+			Task.Columns.DUE + " IS NULL OR " +
+			Task.Columns.DUE + " IS '' THEN 1 ELSE 0 END, " +
+			Task.Columns.DUE;
 	private static final String WHERE_LIST_IS_AND = Task.Columns.DBLIST
 			+ " IS ? AND ";
-	private static final String WHERE_DATE_IS = new StringBuilder(
-			Task.Columns.COMPLETED).append(" IS NULL AND ")
-			.append(Task.Columns.DUE).append(" IS NOT NULL AND ")
-			.append(Task.Columns.DUE).append(" <= ? ").toString();
+	private static final String WHERE_DATE_IS = Task.Columns.COMPLETED +
+			" IS NULL AND " +
+			Task.Columns.DUE + " IS NOT NULL AND " +
+			Task.Columns.DUE + " <= ? ";
 	private static final String WHERE_ALL_NOTDONE = Task.Columns.COMPLETED
 			+ " IS NULL";
 

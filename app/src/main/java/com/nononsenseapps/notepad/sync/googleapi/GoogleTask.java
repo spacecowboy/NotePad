@@ -213,7 +213,7 @@ public class GoogleTask extends RemoteTask {
 	@Override
 	public boolean equals(Object o) {
 		boolean equal = false;
-		if (GoogleTask.class.isInstance(o)) {
+		if (o instanceof GoogleTask) {
 			// It's a list!
 			GoogleTask task = (GoogleTask) o;
 			if (dbid != -1 && dbid == task.dbid) {

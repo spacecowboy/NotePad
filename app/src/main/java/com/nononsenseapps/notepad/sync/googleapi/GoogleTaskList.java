@@ -108,7 +108,7 @@ public class GoogleTaskList extends RemoteTaskList {
 	@Override
 	public boolean equals(Object o) {
 		boolean equal = false;
-		if (GoogleTaskList.class.isInstance(o)) {
+		if (o instanceof GoogleTaskList) {
 			// It's a list!
 			GoogleTaskList list = (GoogleTaskList) o;
 			if (dbid != -1 && dbid == list.dbid) {

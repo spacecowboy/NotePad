@@ -162,9 +162,7 @@ public class DialogMoveToList extends DialogFragment {
 		val.put(Task.Columns.DBLIST, toListId);
 
 		// where _ID in (1, 2, 3)
-		final String whereId = new StringBuilder(Task.Columns._ID)
-				.append(" IN (").append(DAO.arrayToCommaString(taskIds))
-				.append(")").toString();
+		final String whereId = Task.Columns._ID + " IN (" + DAO.arrayToCommaString(taskIds) + ")";
 
 		getActivity().getContentResolver().update(Task.URI, val, whereId, null);
 	}
