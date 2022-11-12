@@ -38,7 +38,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -48,7 +47,6 @@ import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
-
 
 import com.google.android.material.snackbar.Snackbar;
 import com.mobeta.android.dslv.DragSortListView;
@@ -190,14 +188,9 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			final String manualsort = getString(R.string.const_possubsort);
 			final String notetype = getString(R.string.const_listtype_notes);
 			String sTemp = "";
-			final OnCheckedChangeListener checkBoxListener = new OnCheckedChangeListener() {
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView,
-											 boolean isChecked) {
-					Task.setCompleted(getActivity(), isChecked,
-							((NoteCheckBox) buttonView).getNoteId());
-				}
-			};
+			final OnCheckedChangeListener checkBoxListener =
+					(buttonView, isChecked) -> Task.setCompleted(
+							getActivity(), isChecked, ((NoteCheckBox) buttonView).getNoteId());
 
 			@Override
 			public boolean setViewValue(View view, Cursor c, int colIndex) {

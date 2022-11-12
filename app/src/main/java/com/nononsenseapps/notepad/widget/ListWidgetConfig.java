@@ -572,42 +572,26 @@ public class ListWidgetConfig extends AppCompatActivity {
 		listSpinner.setAdapter(mListAdapter);
 
 		transparentHeaderCheckBox
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-												 boolean isChecked) {
-						widgetHeader.setVisibility(isChecked ? View.GONE
-								: View.VISIBLE);
-						widgetPrefs.putBoolean(KEY_HIDDENHEADER, isChecked);
-					}
+				.setOnCheckedChangeListener((buttonView, isChecked) -> {
+					widgetHeader.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+					widgetPrefs.putBoolean(KEY_HIDDENHEADER, isChecked);
 				});
-		transparentHeaderCheckBox.setChecked(widgetPrefs.getBoolean(
-				KEY_HIDDENHEADER, false));
+		transparentHeaderCheckBox
+				.setChecked(widgetPrefs.getBoolean(KEY_HIDDENHEADER, false));
 
-		hideCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-										 boolean isChecked) {
-				widgetPrefs.putBoolean(KEY_HIDDENCHECKBOX, isChecked);
-				if (mNotesAdapter != null)
-					mNotesAdapter.notifyDataSetChanged();
-			}
+		hideCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+			widgetPrefs.putBoolean(KEY_HIDDENCHECKBOX, isChecked);
+			if (mNotesAdapter != null)
+				mNotesAdapter.notifyDataSetChanged();
 		});
-		hideCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX,
-				false));
+		hideCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX, false));
 
-		hideDateCheckBox
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-												 boolean isChecked) {
-						widgetPrefs.putBoolean(KEY_HIDDENDATE, isChecked);
-						if (mNotesAdapter != null)
-							mNotesAdapter.notifyDataSetChanged();
-					}
-				});
-		hideDateCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENDATE,
-				false));
+		hideDateCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+			widgetPrefs.putBoolean(KEY_HIDDENDATE, isChecked);
+			if (mNotesAdapter != null)
+				mNotesAdapter.notifyDataSetChanged();
+		});
+		hideDateCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENDATE, false));
 	}
 
 	private int getListPositionOf(final Adapter adapter, final long id) {

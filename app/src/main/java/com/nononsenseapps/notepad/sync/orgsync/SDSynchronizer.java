@@ -236,11 +236,7 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 	public HashSet<String> getRemoteFilenames() {
 		final HashSet<String> filenames = new HashSet<>();
 		final File dir = new File(ORG_DIR);
-		final File[] files = dir.listFiles(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				return name.toLowerCase().endsWith(".org");
-			}
-		});
+		final File[] files = dir.listFiles((dir1, name) -> name.toLowerCase().endsWith(".org"));
 
 		if (files != null) {
 			for (File f : files) {

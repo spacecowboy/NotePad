@@ -110,14 +110,9 @@ public class TextPreviewPreference extends Preference {
 	public void setTextSize(float size) {
 		if (mText != null) {
 			final float mySize = size;
-			mText.post(new Runnable() {
-
-				@Override
-				public void run() {
-					mText.setTextSize(mySize);
-					mText.setText("Size changed in runnable");
-				}
-
+			mText.post(() -> {
+				mText.setTextSize(mySize);
+				mText.setText("Size changed in runnable");
 			});
 		}
 	}

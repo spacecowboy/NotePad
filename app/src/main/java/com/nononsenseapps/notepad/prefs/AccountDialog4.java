@@ -71,11 +71,9 @@ public class AccountDialog4 extends DialogFragment implements
 		}
 		// TODO
 		//  Could add a clear alternative here
-		builder.setItems(names, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				// Stuff to do when the account is selected by the user
-				accountSelected(accounts[which]);
-			}
+		builder.setItems(names, (dialog, which) -> {
+			// Stuff to do when the account is selected by the user
+			accountSelected(accounts[which]);
 		});
 		return builder.create();
 	}

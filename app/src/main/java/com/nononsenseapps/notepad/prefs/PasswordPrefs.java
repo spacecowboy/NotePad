@@ -68,20 +68,8 @@ public class PasswordPrefs extends Fragment {
 		password1 = (EditText) layout.findViewById(R.id.tempPassword1);
 		password2 = (EditText) layout.findViewById(R.id.tempPassword2);
 
-		layout.findViewById(R.id.applyPassword).setOnClickListener(
-				new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						applyPassword();
-					}
-				});
-		layout.findViewById(R.id.clearPassword).setOnClickListener(
-				new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						clearPassword();
-					}
-				});
+		layout.findViewById(R.id.applyPassword).setOnClickListener(v -> applyPassword());
+		layout.findViewById(R.id.clearPassword).setOnClickListener(v -> clearPassword());
 
 		return layout;
 	}
@@ -141,19 +129,16 @@ public class PasswordPrefs extends Fragment {
 
 	private void showPasswordDialog(final String newPassword) {
 		final DialogPasswordV11_ pd = new DialogPasswordV11_();
-		pd.setListener(new PasswordConfirmedListener() {
-			@Override
-			public void onPasswordConfirmed() {
-				PreferenceManager
-						.getDefaultSharedPreferences(getActivity()).edit()
-						.putString(PasswordPrefs.KEY_PASSWORD, newPassword)
-						.commit();
-				Toast.makeText(
-						getActivity(),
-						("".equals(newPassword)) ? getText(R.string.password_cleared)
-								: getText(R.string.password_set),
-						Toast.LENGTH_SHORT).show();
-			}
+		pd.setListener(() -> {
+			PreferenceManager
+					.getDefaultSharedPreferences(getActivity()).edit()
+					.putString(PasswordPrefs.KEY_PASSWORD, newPassword)
+					.commit();
+			Toast.makeText(
+					getActivity(),
+					("".equals(newPassword)) ? getText(R.string.password_cleared)
+							: getText(R.string.password_set),
+					Toast.LENGTH_SHORT).show();
 		});
 		pd.show(getFragmentManager(), "pw-verify");
 	}

@@ -72,37 +72,32 @@ public class ListPrefs extends PreferenceFragment {
 
 		// Make the show checkbox dependant on the list type preference
 		final Preference hideCheckboxes = findPreference(getString(R.string.pref_hidecheckboxes));
-		Preference.OnPreferenceChangeListener listener = new Preference.OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object value) {
-				String stringValue = value.toString();
+		Preference.OnPreferenceChangeListener listener = (preference, value) -> {
+			String stringValue = value.toString();
 
-				if (preference instanceof ListPreference) {
-					// For list preferences, look up the correct display value in
-					// the preference's 'entries' list.
-					ListPreference listPreference = (ListPreference) preference;
-					int index = listPreference.findIndexOfValue(stringValue);
+			if (preference instanceof ListPreference) {
+				// For list preferences, look up the correct display value in
+				// the preference's 'entries' list.
+				ListPreference listPreference = (ListPreference) preference;
+				int index = listPreference.findIndexOfValue(stringValue);
 
-					// Set the summary to reflect the new value.
-					preference
-							.setSummary(index >= 0 ? listPreference.getEntries()[index]
-									: null);
+				// Set the summary to reflect the new value.
+				preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
 
-				} else {
-					// For all other preferences, set the summary to the value's
-					// simple string representation.
-					preference.setSummary(stringValue);
-				}
-
-				if (stringValue.equals(getString(R.string.const_listtype_tasks))) {
-					hideCheckboxes.setEnabled(true);
-				} else {
-					hideCheckboxes.setEnabled(false);
-				}
-
-
-				return true;
+			} else {
+				// For all other preferences, set the summary to the value's
+				// simple string representation.
+				preference.setSummary(stringValue);
 			}
+
+			if (stringValue.equals(getString(R.string.const_listtype_tasks))) {
+				hideCheckboxes.setEnabled(true);
+			} else {
+				hideCheckboxes.setEnabled(false);
+			}
+
+
+			return true;
 		};
 		final Preference listtype = findPreference(getString(R.string.pref_listtype));
 		listtype.setOnPreferenceChangeListener(listener);

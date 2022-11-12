@@ -50,13 +50,10 @@ public abstract class QuickReturnFragment extends Fragment implements Observable
 		mPlaceholderView = getPlaceHolderView();
 
 		mObservableScrollView.getViewTreeObserver().addOnGlobalLayoutListener(
-				new ViewTreeObserver.OnGlobalLayoutListener() {
-					@Override
-					public void onGlobalLayout() {
-						onScrollChanged();
-						mCachedVerticalScrollRange = mObservableScrollView.computeVerticalScrollRange();
-						mQuickReturnHeight = mQuickReturnView.getHeight();
-					}
+				() -> {
+					onScrollChanged();
+					mCachedVerticalScrollRange = mObservableScrollView.computeVerticalScrollRange();
+					mQuickReturnHeight = mQuickReturnView.getHeight();
 				});
 	}
 

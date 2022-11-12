@@ -160,12 +160,7 @@ class NavigationDrawerFragment extends Fragment implements LoaderManager
 		}
 
 		// Defer code dependent on restoration of previous instance state.
-		mDrawerLayout.post(new Runnable() {
-			@Override
-			public void run() {
-				mDrawerToggle.syncState();
-			}
-		});
+		mDrawerLayout.post(() -> mDrawerToggle.syncState());
 
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 	}
