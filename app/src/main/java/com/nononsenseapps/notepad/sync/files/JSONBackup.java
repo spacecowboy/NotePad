@@ -325,8 +325,7 @@ public class JSONBackup {
 
 	}
 
-	private JSONObject readBackup() throws JSONException, IOException,
-			FileNotFoundException {
+	private JSONObject readBackup() throws JSONException, IOException {
 		// Try to read the backup file
 		final File backupFile = new File(getBackupFilePath(this.context));
 		final StringBuilder sb = new StringBuilder();

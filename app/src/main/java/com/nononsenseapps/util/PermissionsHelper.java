@@ -58,12 +58,12 @@ public class PermissionsHelper {
 	 * @return true if all results were granted, false otherwise
 	 */
 	public static boolean permissionsGranted(@NonNull String[] permissions, @NonNull int[] grantResults) {
-		return permissions.length > 0 && allEqual(PackageManager.PERMISSION_GRANTED, grantResults);
+		return permissions.length > 0 && allGranted(grantResults);
 	}
 
-	private static boolean allEqual(int value, int[] items) {
+	private static boolean allGranted(int[] items) {
 		for (int item : items) {
-			if (value != item) {
+			if (PackageManager.PERMISSION_GRANTED != item) {
 				return false;
 			}
 		}

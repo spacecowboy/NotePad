@@ -181,7 +181,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		 */
 
 		mAdapter.setViewBinder(new ViewBinder() {
-			SimpleDateFormat weekdayFormatter = TimeFormatter
+			final SimpleDateFormat weekdayFormatter = TimeFormatter
 					.getLocalFormatterWeekday(getActivity());
 			boolean isHeader = false;
 

@@ -17,22 +17,19 @@
 
 package com.nononsenseapps.ui;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.text.format.DateFormat;
+import android.text.format.Time;
+import android.util.AttributeSet;
+
+import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.R;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
-
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.text.format.DateFormat;
-import android.text.format.Time;
-import android.util.AttributeSet;
-import android.widget.TextView;
-
-import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.R;
 
 /**
  * A simple textview that can display time.

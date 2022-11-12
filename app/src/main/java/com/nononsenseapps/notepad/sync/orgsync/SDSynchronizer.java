@@ -260,7 +260,7 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 		return new FileWatcher(ORG_DIR);
 	}
 
-	public class FileWatcher extends FileObserver implements Monitor {
+	public static class FileWatcher extends FileObserver implements Monitor {
 
 		public OrgSyncService.SyncHandler handler;
 		private int changeId = 0;

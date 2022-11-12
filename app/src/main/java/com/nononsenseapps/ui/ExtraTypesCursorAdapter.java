@@ -28,8 +28,8 @@ import android.database.Cursor;
 
 public class ExtraTypesCursorAdapter extends ExtrasCursorAdapter {
 
-	protected int[] extraTypes;
-	protected int[] extraLayouts;
+	protected final int[] extraTypes;
+	protected final int[] extraLayouts;
 	protected ArrayList<ArrayList<Object>> extraData = null;
 
 	private int typeCount = 1;

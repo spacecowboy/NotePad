@@ -1191,7 +1191,7 @@ public class ActivityMain extends AppCompatActivity
 	}
 
 	// holds all the swipe-to-refresh layouts of the various TaskListFragments
-	private ArrayList<SwipeRefreshLayout> swpRefLayouts = new ArrayList<>();
+	private final ArrayList<SwipeRefreshLayout> swpRefLayouts = new ArrayList<>();
 
 	/**
 	 * every {@link TaskListFragment} has its own instance of a {@link SwipeRefreshLayout},

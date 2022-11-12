@@ -17,30 +17,17 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.helpers.TimeFormatter;
-
-import android.app.Activity;
 import android.database.Cursor;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
-import android.text.format.DateFormat;
-import android.text.format.Time;
+
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.TaskList;
+
+import java.util.ArrayList;
 
 public class ListPrefs extends PreferenceFragment {
 	@Override

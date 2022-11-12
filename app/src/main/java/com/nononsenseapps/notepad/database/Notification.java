@@ -17,35 +17,28 @@
 
 package com.nononsenseapps.notepad.database;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.content.UriMatcher;
+import android.database.Cursor;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.provider.BaseColumns;
+import android.view.View;
+
+import com.nononsenseapps.helpers.NotificationHelper;
+import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.ui.WeekDaysView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import com.nononsenseapps.helpers.NotificationHelper;
-import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.ui.WeekDaysView;
-import com.nononsenseapps.utils.views.GreyableToggleButton;
-
-import android.content.ContentValues;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.content.UriMatcher;
-import android.database.Cursor;
-import android.net.Uri;
-import android.os.AsyncTask;
-import android.preference.PreferenceManager;
-import android.provider.BaseColumns;
-import android.text.format.DateFormat;
-import android.util.Log;
-import android.view.View;
-import android.widget.TextView;
 
 public class Notification extends DAO {
 	// These match WeekDaysView's values

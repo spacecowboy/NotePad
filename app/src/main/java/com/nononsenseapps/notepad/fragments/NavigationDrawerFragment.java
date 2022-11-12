@@ -196,17 +196,23 @@ class NavigationDrawerFragment extends Fragment implements LoaderManager
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-			savedInstanceState) {
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savInstState) {
 		View rootView = inflater.inflate(0, container, false);
 		RecyclerView list = null;//(RecyclerView) rootView.findViewById(R.id.leftDrawer);
 
 		// TODO add edit lists item?
-		mAdapter = new Adapter(toArray(new TopLevelItem(), new ExtraHeaderItem(TaskListFragment
-				.LIST_ID_ALL, R.string.show_from_all_lists)), toArray(new SeparatorFooter
-						(EXTRA_ID_SEPARATOR_1), new CreateListFooter(), new SeparatorFooter
-						(EXTRA_ID_SEPARATOR_2), new SettingsFooterItem(), new AboutFooterItem(),
-				new ChangelogFooterItem()));
+		mAdapter = new Adapter(
+				toArray(
+						new TopLevelItem(),
+						new ExtraHeaderItem(TaskListFragment.LIST_ID_ALL, R.string.show_from_all_lists)),
+				toArray(
+						new SeparatorFooter(EXTRA_ID_SEPARATOR_1),
+						new CreateListFooter(),
+						new SeparatorFooter(EXTRA_ID_SEPARATOR_2),
+						new SettingsFooterItem(),
+						new AboutFooterItem(),
+						new ChangelogFooterItem())
+		);
 
 		list.setAdapter(mAdapter);
 		list.setHasFixedSize(true);
@@ -432,7 +438,7 @@ class NavigationDrawerFragment extends Fragment implements LoaderManager
 		}
 	}
 
-	class SeparatorFooter implements ExtraItem {
+	static class SeparatorFooter implements ExtraItem {
 
 		private final long mId;
 

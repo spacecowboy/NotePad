@@ -47,8 +47,8 @@ import java.util.List;
  */
 public abstract class DBSyncBase implements SynchronizerInterface {
 
-	protected Context context;
-	private ContentResolver resolver;
+	protected final Context context;
+	private final ContentResolver resolver;
 
 	public DBSyncBase(final Context context) {
 		this.context = context;

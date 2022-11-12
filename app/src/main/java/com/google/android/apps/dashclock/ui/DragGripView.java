@@ -39,10 +39,10 @@ public class DragGripView extends View {
 	private int mGravity = Gravity.END;
 	private int mColor = 0x33333333;
 
-	private Paint mRidgePaint;
+	private final Paint mRidgePaint;
 
-	private float mRidgeSize;
-	private float mRidgeGap;
+	private final float mRidgeSize;
+	private final float mRidgeGap;
 
 	private int mWidth;
 	private int mHeight;

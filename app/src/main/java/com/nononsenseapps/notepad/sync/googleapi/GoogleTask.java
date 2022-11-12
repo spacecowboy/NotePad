@@ -51,7 +51,7 @@ public class GoogleTask extends RemoteTask {
 	//public int hidden = 0;
 	//public boolean didRemoteInsert = false;
 
-	public String possort = "";
+	public final String possort = "";
 	//public int indentLevel = 0;
 
 //	public JSONObject json = null;

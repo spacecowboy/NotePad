@@ -92,11 +92,11 @@ import java.util.Calendar;
 @EFragment
 public class TaskDetailFragment extends Fragment {
 
-	public static int LOADER_EDITOR_TASK = 3001;
-	public static int LOADER_EDITOR_TASKLISTS = 3002;
-	public static int LOADER_EDITOR_NOTIFICATIONS = 3003;
+	public static final int LOADER_EDITOR_TASK = 3001;
+	public static final int LOADER_EDITOR_TASKLISTS = 3002;
+	public static final int LOADER_EDITOR_NOTIFICATIONS = 3003;
 
-	LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<>() {
+	final LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<>() {
 		@Override
 		@NonNull
 		public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {

@@ -55,7 +55,7 @@ public class FragmentSearchDeleted extends FragmentSearch {
 		list.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
 		list.setMultiChoiceModeListener(new MultiChoiceModeListener() {
 
-			HashSet<Long> selectedItems = new HashSet<>();
+			final HashSet<Long> selectedItems = new HashSet<>();
 
 			@Override
 			public boolean onPrepareActionMode(ActionMode mode, Menu menu) {

@@ -175,7 +175,7 @@ public class DialogMoveToList extends DialogFragment {
 	@Click(resName = "dialog_yes")
 	void okClicked() {
 		// move items
-		if (listView.getCheckedItemPosition() == listView.INVALID_POSITION) {
+		if (listView.getCheckedItemPosition() == AdapterView.INVALID_POSITION) {
 			return;
 		}
 

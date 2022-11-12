@@ -37,16 +37,16 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	// private static final String TAG = "ExtrasCursorAdapter";
 
 	private Cursor cursor;
-	protected Context context;
+	protected final Context context;
 
-	protected int[] extraIds;
-	protected int[] extraLabels;
+	protected final int[] extraIds;
+	protected final int[] extraLabels;
 
-	protected String[] from;
-	protected int[] to;
+	protected final String[] from;
+	protected final int[] to;
 
-	protected int layout;
-	protected int dropdownlayout;
+	protected final int layout;
+	protected final int dropdownlayout;
 
 	/**
 	 * Same as a cursoradapter except two extra arrays are taken (and a layout).
