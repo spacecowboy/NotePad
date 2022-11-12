@@ -15,6 +15,20 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 <resources>
+	<!-- Things I confirm to be useful -->
+
+	<color name="accent">@android:color/holo_blue_dark</color>
+	<color name="icon_tint_light">#8a000000</color>
+	<color name="icon_tint_dark">#ffffffff</color>
+
+	<!-- used by the swipe-to-refresh layout -->
+	<color name="refresh_progress_1">#ffff1744</color>
+	<color name="refresh_progress_2">#ff00e676</color>
+	<color name="refresh_progress_3">#ff2979ff</color>
+
+
+
+	<!-- Unchecked. some of these should be deleted -->
 	<color name="navdrawer_background_light">@android:color/white</color>
 	<color name="navdrawer_background_dark">@color/material_dark_background</color>
 
@@ -28,8 +42,7 @@
 	<color name="light_selected_item_color">#15000000</color>
 	<color name="dark_selected_item_color">#28ffffff</color>
 
-	<color name="icon_tint_light">#8a000000</color>
-	<color name="icon_tint_dark">#ffffffff</color>
+
 
 	<color name="viewpager_darkgrey">#ff444444</color>
 	<color name="viewpager_blue">#33b5e5</color>
@@ -61,8 +74,7 @@
 	<color name="primary_dark">#F57C00</color>
 	<color name="primary_light">#FFE0B2</color>
 
-	<!-- the only useful one! -->
-	<color name="accent">@android:color/holo_blue_dark</color>
+
 
 	<color name="primary_text">#212121</color>
 	<color name="secondary_text">#727272</color>
@@ -71,8 +83,5 @@
 	<color name="material_red">#ffff1744</color>
 	<!-- End material -->
 
-	<color name="refresh_progress_1">#ffff1744</color>
-	<color name="refresh_progress_2">#ff00e676</color>
-	<color name="refresh_progress_3">#ff2979ff</color>
 
 </resources>

@@ -37,8 +37,7 @@ public class ActivityHelper {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(activity);
 
-		final String theme = prefs
-				.getString(MainPrefs.KEY_THEME, activity.getString(R.string.const_theme_light_ab));
+		final String theme = prefs.getString(MainPrefs.KEY_THEME, activity.getString(R.string.const_theme_light_ab));
 		if (activity.getString(R.string.const_theme_light_ab).equals(theme)) {
 			activity.setTheme(R.style.ThemeHoloLightDarkActonBar);
 		} else if (activity.getString(R.string.const_theme_black).equals(theme)) {
@@ -54,8 +53,7 @@ public class ActivityHelper {
 		// Set language
 		Configuration config = activity.getResources().getConfiguration();
 
-		String lang = prefs.getString(activity.getString(R.string.pref_locale),
-				"");
+		String lang = prefs.getString(activity.getString(R.string.pref_locale), "");
 		if (!config.locale.toString().equals(lang)) {
 			Locale locale;
 			if (lang == null || lang.isEmpty())
@@ -72,15 +70,14 @@ public class ActivityHelper {
 		}
 
 		if (activity instanceof OnSharedPreferenceChangeListener) {
-			prefs.registerOnSharedPreferenceChangeListener((OnSharedPreferenceChangeListener) activity);
+			prefs.registerOnSharedPreferenceChangeListener(
+					(OnSharedPreferenceChangeListener) activity);
 		}
 	}
 
 	public static Locale getUserLocale(Context activity) {
-		final SharedPreferences prefs = PreferenceManager
-				.getDefaultSharedPreferences(activity);
-		String lang = prefs.getString(activity.getString(R.string.pref_locale),
-				"");
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(activity);
+		String lang = prefs.getString(activity.getString(R.string.pref_locale), "");
 		final Locale locale;
 		if (lang == null || lang.isEmpty())
 			locale = Locale.getDefault();
