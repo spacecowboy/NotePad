@@ -26,7 +26,8 @@
 		<item name="content_copy">@drawable/content_copy_dark</item>
 		<item name="content_paste">@drawable/content_paste_dark</item>
 		<item name="ic_folder_plus_24dp">@drawable/folder_plus_24dp_white</item>
-		<item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
+		<item name="ic_lock_open_24dp">@drawable/ic_lock_open_24dp_white</item>
+		<item name="ic_lock_closed_24dp">@drawable/ic_lock_closed_24dp_white</item>
 		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_white</item>
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
 		<item name="btn_default_selector">@drawable/btn_default_selector_dark</item>
@@ -100,9 +101,13 @@
 		<item name="content_copy">@drawable/content_copy_dark</item>
 		<item name="ic_add_24dp">@drawable/ic_add_24dp_black_active</item>
 		<item name="content_paste">@drawable/content_paste_dark</item>
-		<item name="content_remove">@drawable/content_remove_light</item>
+
 		<item name="ic_folder_plus_24dp">@drawable/folder_plus_24dp_white</item>
-		<item name="device_access_not_secure">@drawable/device_access_not_secure_dark</item>
+
+		<item name="ic_lock_open_24dp">@drawable/ic_lock_open_24dp_white</item>
+		<item name="ic_lock_closed_24dp">@drawable/ic_lock_closed_24dp_white</item>
+
+
 		<item name="ic_alarm_add_24dp_active">@drawable/ic_alarm_add_24dp_black_active</item>
 		<item name="ic_check_24dp">@drawable/ic_check_24dp_white</item>
 		<item name="my_list_selector">?android:attr/activatedBackgroundIndicator</item>
