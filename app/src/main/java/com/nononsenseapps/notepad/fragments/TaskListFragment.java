@@ -103,23 +103,14 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	LayoutInflater layoutInflater;
 
 	SimpleSectionsAdapter mAdapter;
-
 	private long mListId = -1;
-
 	private OnFragmentInteractionListener mListener;
-
 	private String mSortType = null;
-
 	private int mRowCount = 3;
 	private boolean mHideCheckbox = false;
-
 	private String mListType = null;
-
 	private LoaderCallbacks<Cursor> mCallback = null;
-
 	private ActionMode mMode;
-
-	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private boolean mDeleteWasUndone = false;
 
 	public static TaskListFragment_ getInstance(final long listId) {
@@ -771,28 +762,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	public void onDestroy() {
 		super.onDestroy();
 		getLoaderManager().destroyLoader(0);
-	}
-
-	void setupSwipeToRefresh() {
-		// Set the offset so it comes out of the correct place
-		final int toolbarHeight = getResources().getDimensionPixelOffset(R.dimen.toolbar_height);
-		mSwipeRefreshLayout
-				.setProgressViewOffset(false, -toolbarHeight, Math.round(0.7f * toolbarHeight));
-
-		// The arrow will cycle between these colors (in order)
-		mSwipeRefreshLayout.setColorSchemeResources(
-				R.color.refresh_progress_1,
-				R.color.refresh_progress_2,
-				R.color.refresh_progress_3);
-
-		mSwipeRefreshLayout.setOnRefreshListener(() -> {
-			boolean syncing = SyncHelper.onManualSyncRequest(getActivity());
-
-			if (!syncing) {
-				// Do not show refresh view
-				mSwipeRefreshLayout.setRefreshing(false);
-			}
-		});
 	}
 
 	@Override

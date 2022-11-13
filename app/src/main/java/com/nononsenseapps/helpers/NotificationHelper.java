@@ -151,34 +151,6 @@ public class NotificationHelper extends BroadcastReceiver {
 		}
 	}
 
-	public static void unnotifyGeofence(final Context context,
-										final long... ids) {
-		final NotificationManager notificationManager = (NotificationManager) context
-				.getSystemService(Context.NOTIFICATION_SERVICE);
-		String idStrings = "(";
-		for (Long id : ids) {
-			idStrings += id + ",";
-		}
-		idStrings = idStrings.substring(0, idStrings.length() - 1);
-		idStrings += ")";
-
-		// automatically closes the cursor, like using(){} in C#
-		try (Cursor c = context
-				.getContentResolver()
-				.query(com.nononsenseapps.notepad.database.Notification.URI_WITH_TASK_PATH,
-						com.nononsenseapps.notepad.database.Notification.ColumnsWithTask.FIELDS,
-						com.nononsenseapps.notepad.database.Notification.Columns._ID
-								+ " IN " + idStrings, null, null)) {
-			while (c.moveToNext()) {
-				com.nononsenseapps.notepad.database.Notification not
-						= new com.nononsenseapps.notepad.database.Notification(c);
-				if (not.taskID != null) {
-					notificationManager.cancel(not.taskID.intValue());
-				}
-			}
-		}
-	}
-
 	/**
 	 * Displays notifications that have a time occurring in the past (and no
 	 * location). If no notifications like that exist, will make sure to cancel

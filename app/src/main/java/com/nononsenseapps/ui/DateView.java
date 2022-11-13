@@ -38,22 +38,18 @@ public class DateView extends androidx.appcompat.widget.AppCompatTextView {
 
 	private static final int SECONDS_PER_DAY = 3600;
 
-	private final Context mContext;
-
-	//private final Calendar mCalendar;
-
 	SimpleDateFormat mDateFormatter;
 
 	public DateView(Context context) {
 		super(context);
-		this.mContext = context;
+
 		mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
 	}
 
 	@SuppressLint("SimpleDateFormat")
 	public DateView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		this.mContext = context;
+
 		try {
 			mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
 		} catch (Exception e) {
@@ -64,7 +60,7 @@ public class DateView extends androidx.appcompat.widget.AppCompatTextView {
 
 	public DateView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		this.mContext = context;
+
 		mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
 	}
 

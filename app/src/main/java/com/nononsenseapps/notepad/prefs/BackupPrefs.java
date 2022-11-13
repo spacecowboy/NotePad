@@ -44,9 +44,10 @@ public class BackupPrefs extends PreferenceFragment {
 	 * Run the backup in the background. Locking the UI-thread for up to a few
 	 * seconds is not nice...
 	 */
-	private class RestoreBackupTask extends AsyncTask<Void, Void, Integer> {
+	private static class RestoreBackupTask extends AsyncTask<Void, Void, Integer> {
 		// TODO move this class into its own java file
 		private final JSONBackup backupMaker;
+		private final Context mContext;
 
 		/**
 		 * Creates a new asynchronous task. This constructor must be invoked on the UI thread.
@@ -54,6 +55,7 @@ public class BackupPrefs extends PreferenceFragment {
 		public RestoreBackupTask(@NonNull Context context, @NonNull JSONBackup backupMaker) {
 			super();
 			this.backupMaker = backupMaker;
+			mContext = context;
 		}
 
 		protected Integer doInBackground(Void... params) {
@@ -71,21 +73,20 @@ public class BackupPrefs extends PreferenceFragment {
 		//  See https://stackoverflow.com/questions/58662166
 
 		protected void onPostExecute(final Integer result) {
-			Context context = getActivity();
-			if (context == null) {
+			if (mContext == null) {
 				return;
 			}
 			switch (result) {
 				case 0:
-					Toast.makeText(getActivity(), R.string.backup_import_success,
+					Toast.makeText(mContext, R.string.backup_import_success,
 							Toast.LENGTH_SHORT).show();
 					break;
 				case 1:
-					Toast.makeText(getActivity(), R.string.backup_file_not_found,
+					Toast.makeText(mContext, R.string.backup_file_not_found,
 							Toast.LENGTH_SHORT).show();
 					break;
 				case 2:
-					Toast.makeText(getActivity(), R.string.backup_import_failed,
+					Toast.makeText(mContext, R.string.backup_import_failed,
 							Toast.LENGTH_SHORT).show();
 					break;
 			}

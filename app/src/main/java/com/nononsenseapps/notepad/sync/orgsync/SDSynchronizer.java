@@ -261,7 +261,7 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 	public static class FileWatcher extends FileObserver implements Monitor {
 
 		public OrgSyncService.SyncHandler handler;
-		private final int changeId = 0;
+
 
 		public FileWatcher(String path) {
 			super(path, FileObserver.CREATE | FileObserver.DELETE
