@@ -50,13 +50,22 @@ public final class NnnLogger {
 	}
 
 	/**
-	 * Logs the given message with tag "NNN", but only in debug mode and if
-	 * {@link Config#LOGGING} is set
+	 * Logs the given warning message with tag "NNN".
 	 *
 	 * @param caller  the class who's calling this function. Its name is added to the message
 	 * @param message the additional message sent to logcat
 	 */
-	public static <T> void debugOnly(@NonNull T caller, @NonNull String message) {
-		if (Config.LOGGING) Log.d("NNN", caller.getClass().getSimpleName() + ": " + message);
+	public static <T> void warning(@NonNull T caller, @NonNull String message) {
+		Log.w("NNN", caller.getClass().getSimpleName() + ": " + message);
+	}
+
+	/**
+	 * Logs the given message with tag "NNN", but only in debug mode
+	 *
+	 * @param caller  the class who's calling this function. Its name is added to the message
+	 * @param message the additional message sent to logcat
+	 */
+	public static <T> void debug(@NonNull T caller, @NonNull String message) {
+		Log.d("NNN", caller.getClass().getSimpleName() + ": " + message);
 	}
 }
