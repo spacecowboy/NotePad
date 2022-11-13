@@ -91,8 +91,6 @@ public class ActivityMain extends AppCompatActivity
 		implements OnFragmentInteractionListener, OnSyncStartStopListener,
 		MenuStateController, OnSharedPreferenceChangeListener {
 
-	// If donate version has been migrated
-	public static final String MIGRATED = "donate_inapp_or_oldversion";
 	// Set to true in bundle if exits should be animated
 	public static final String ANIMATEEXIT = "animateexit";
 	// Using tags for test
@@ -321,6 +319,12 @@ public class ActivityMain extends AppCompatActivity
 			// in version 6.0.0, it does this:
 			SyncHelper.onManualSyncRequest(this);
 			return;
+		}
+
+		// or you have this:
+		{
+			boolean syncing = SyncHelper.onManualSyncRequest(this);
+			if (!syncing) setRefreshOfAllSwipeLayoutsTo(false);
 		}
 		*/
 		boolean syncing = false;
@@ -1155,16 +1159,6 @@ public class ActivityMain extends AppCompatActivity
 		}
 	}
 
-	/**
-	 * Only call this when pressing the up-navigation. Makes sure the new
-	 * activity comes in on top of this one.
-	 */
-	void finishSlideTop() {
-		super.finish();
-		overridePendingTransition(R.anim.activity_slide_in_right_full,
-				R.anim.activity_slide_out_right);
-	}
-
 	@Override
 	public boolean childItemsVisible() {
 		return isDrawerClosed;
@@ -1193,6 +1187,15 @@ public class ActivityMain extends AppCompatActivity
 	 */
 	public void addSwipeRefreshLayoutToList(SwipeRefreshLayout newSwpRefLayout) {
 		// TODO do this Only if some sync is enabled
+
+		// Show the accent color on the arrow while loading
+		newSwpRefLayout.setColorSchemeResources(R.color.accent);
+
+		// TODO the swipe-to-refresh layouts have been disabled because they make it impossible
+		//  to manually drag down the 1° note. When you find a solution for this, such as
+		//  selectively enabling the swipe-to-refresh layout when the gesture is in the center-left
+		//  part of the screen, delete this line
+		newSwpRefLayout.setEnabled(false);
 
 		// Sets up a Listener that is invoked when the user performs a swipe-to-refresh gesture.
 		newSwpRefLayout.setOnRefreshListener(
