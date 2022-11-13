@@ -27,10 +27,9 @@ public class BaseTestClass {
 	 *
 	 * <br/>
 	 * NOTE: the replacement, {@link androidx.test.ext.junit.rules.ActivityScenarioRule},
-	 * does not work
+	 * is used as in {@link com.nononsenseapps.notepad.test.FragmentTaskDetailTest}
 	 *
 	 */
-	@SuppressWarnings("deprecation")
 	@Rule
 	// INFO: ActivityMain_ was renamed to ActivityList in release 6.0.0 beta,
 	// it has to do with getting rid of the annotations library
