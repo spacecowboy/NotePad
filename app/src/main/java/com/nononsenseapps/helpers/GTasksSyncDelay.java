@@ -37,7 +37,7 @@ public class GTasksSyncDelay extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		/* Schedule a sync if settings say so */
 		if (intent != null && Intent.ACTION_RUN.equals(intent.getAction())) {
-			NnnLogger.debugOnly(GTasksSyncDelay.class, "Requesting sync NOW");
+			NnnLogger.debug(GTasksSyncDelay.class, "Requesting sync NOW");
 			//SyncHelper.requestSyncIf(this, SyncHelper.MANUAL);
 			SyncGtaskHelper.requestSyncIf(this, SyncGtaskHelper.MANUAL);
 		} else {
@@ -68,6 +68,6 @@ public class GTasksSyncDelay extends Service {
 		am.cancel(pendingIntent);
 		// Yes, use local time
 		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
-		NnnLogger.debugOnly(GTasksSyncDelay.class, "Scheduled sync");
+		NnnLogger.debug(GTasksSyncDelay.class, "Scheduled sync");
 	}
 }

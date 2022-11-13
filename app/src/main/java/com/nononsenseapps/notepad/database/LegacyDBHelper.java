@@ -60,7 +60,7 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 	}
 
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		NnnLogger.debugOnly(LegacyDBHelper.class,
+		NnnLogger.debug(LegacyDBHelper.class,
 				"onUpgrade " + "Upgrading database from version " + oldVersion + " to " + newVersion);
 
 		if (oldVersion < 3) {

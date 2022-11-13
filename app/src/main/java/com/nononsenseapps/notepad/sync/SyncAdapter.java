@@ -108,7 +108,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
 						&& account.name.equals(settings.getString(
 						SyncPrefs.KEY_ACCOUNT, ""))) {
 
-					NnnLogger.debugOnly(SyncAdapter.class, "onPerformSync");
+					NnnLogger.debug(SyncAdapter.class, "onPerformSync");
 					mContext.sendBroadcast(new Intent(SYNC_STARTED));
 
 					if (GoogleTaskSync.fullSync(mContext,

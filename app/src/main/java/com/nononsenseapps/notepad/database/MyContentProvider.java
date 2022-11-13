@@ -27,7 +27,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
-import android.util.Log;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.UpdateNotifier;
@@ -631,7 +630,7 @@ public class MyContentProvider extends ContentProvider {
 			case Task.LEGACYBASEITEMCODE:
 			case Task.LEGACYVISIBLEITEMCODE:
 			default:
-				NnnLogger.debugOnly(MyContentProvider.class,
+				NnnLogger.debug(MyContentProvider.class,
 						"Faulty queryURI provided: " + uri.toString());
 				return null;
 		}

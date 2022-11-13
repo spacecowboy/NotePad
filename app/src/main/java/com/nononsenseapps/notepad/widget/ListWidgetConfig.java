@@ -156,7 +156,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 					AppWidgetManager.INVALID_APPWIDGET_ID);
 		} else {
 			appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-			NnnLogger.debugOnly(ListWidgetConfig.class, "Invalid ID given in the intent");
+			NnnLogger.debug(ListWidgetConfig.class, "Invalid ID given in the intent");
 			Intent resultValue = new Intent();
 			resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 					appWidgetId);
@@ -408,10 +408,10 @@ public class ListWidgetConfig extends AppCompatActivity {
 				R.array.widget_themevalues_preference);
 
 		if (themeValues == null) {
-			NnnLogger.debugOnly(ListWidgetConfig.class, "themevalues null");
+			NnnLogger.debug(ListWidgetConfig.class, "themevalues null");
 		} else {
 			for (String s : themeValues) {
-				NnnLogger.debugOnly(ListWidgetConfig.class, "themevalue: " + s);
+				NnnLogger.debug(ListWidgetConfig.class, "themevalue: " + s);
 			}
 		}
 

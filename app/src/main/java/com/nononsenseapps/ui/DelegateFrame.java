@@ -69,7 +69,7 @@ public class DelegateFrame extends RelativeLayout implements OnClickListener {
 
 	private void setValuesFromXML(AttributeSet attrs) {
 		enlargedViewId = attrs.getAttributeResourceValue(NONONSENSEAPPSNS, ATTR_ENLARGEDVIEW, -1);
-		NnnLogger.debugOnly(DelegateFrame.class, "setting xml values! view: " + enlargedViewId);
+		NnnLogger.debug(DelegateFrame.class, "setting xml values! view: " + enlargedViewId);
 		setOnClickListener(this);
 	}
 
@@ -79,7 +79,7 @@ public class DelegateFrame extends RelativeLayout implements OnClickListener {
 		if (cachedView == null && enlargedViewId != UNDEFINED) {
 			cachedView = findViewById(enlargedViewId);
 		}
-		NnnLogger.debugOnly(DelegateFrame.class,
+		NnnLogger.debug(DelegateFrame.class,
 				"onTouchEvent! view is null?: " + (cachedView == null));
 		if (cachedView != null) {
 			cachedView.performClick();

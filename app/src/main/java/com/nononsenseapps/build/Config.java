@@ -30,7 +30,7 @@ import java.util.Properties;
  * values for the secretkeys.properties file in the assets directory.
  */
 public class Config {
-	public final static boolean LOGGING = true;
+
 
 	public static final String KEY_GTASKS_API_KEY = "gtasks_api_key";
 

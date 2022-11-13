@@ -28,7 +28,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.ContentObserver;
-import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -174,7 +173,7 @@ public class NotificationHelper extends BroadcastReceiver {
 			createNotificationChannel(context, notificationManager);
 		}
 
-		NnnLogger.debugOnly(NotificationHelper.class, "Number of notifications: " + notifications.size());
+		NnnLogger.debug(NotificationHelper.class, "Number of notifications: " + notifications.size());
 
 		// If empty, cancel
 		if (notifications.isEmpty()) {

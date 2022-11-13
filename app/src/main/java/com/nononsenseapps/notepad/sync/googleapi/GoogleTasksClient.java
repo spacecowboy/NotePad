@@ -53,16 +53,16 @@ public class GoogleTasksClient {
 	}
 
 	public static String getAuthToken(AccountManager accountManager, Account account, boolean notifyAuthFailure) throws AuthenticatorException, OperationCanceledException, IOException {
-		NnnLogger.debugOnly(GoogleTasksClient.class, "getAuthToken");
+		NnnLogger.debug(GoogleTasksClient.class, "getAuthToken");
 		String authToken = null;
 		// Might be invalid in the cache
 		authToken = accountManager.blockingGetAuthToken(account, OAUTH_SCOPE, notifyAuthFailure);
 
-		NnnLogger.debugOnly(GoogleTasksClient.class, "invalidate auth token: " + authToken);
+		NnnLogger.debug(GoogleTasksClient.class, "invalidate auth token: " + authToken);
 		accountManager.invalidateAuthToken("com.google", authToken);
 
 		authToken = accountManager.blockingGetAuthToken(account, OAUTH_SCOPE, notifyAuthFailure);
-		NnnLogger.debugOnly(GoogleTasksClient.class, "fresh auth token: " + authToken);
+		NnnLogger.debug(GoogleTasksClient.class, "fresh auth token: " + authToken);
 
 		return authToken;
 	}
@@ -73,7 +73,7 @@ public class GoogleTasksClient {
 	 */
 	public static void getAuthTokenAsync(Activity activity, Account account,
 										 AccountManagerCallback<Bundle> callback) {
-		NnnLogger.debugOnly(GoogleTasksClient.class, "getAuthTokenAsync");
+		NnnLogger.debug(GoogleTasksClient.class, "getAuthTokenAsync");
 
 		AccountManager.get(activity)
 				.getAuthToken(account, OAUTH_SCOPE, Bundle.EMPTY, activity, callback, null);
@@ -83,7 +83,7 @@ public class GoogleTasksClient {
 		if (token == null || token.isEmpty()) {
 			throw new IllegalArgumentException("Auth token can't be empty!");
 		}
-		NnnLogger.debugOnly(GoogleTasksClient.class, "Using token: " + token);
+		NnnLogger.debug(GoogleTasksClient.class, "Using token: " + token);
 
 		// TODO untested! try to get it working
 		OkHttpClient httpClient = new OkHttpClient.Builder()

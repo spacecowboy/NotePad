@@ -173,7 +173,7 @@ public class SectionAdapter extends BaseAdapter {
 		this.headers.add(section);
 		SimpleCursorAdapter prev = this.sections.put(section, adapter);
 		if (prev != null) {
-			NnnLogger.debugOnly(SectionAdapter.class, "killing previous adapter");
+			NnnLogger.debug(SectionAdapter.class, "killing previous adapter");
 			prev.unregisterDataSetObserver(subObserver);
 			prev.swapCursor(null);
 		}
@@ -193,7 +193,7 @@ public class SectionAdapter extends BaseAdapter {
 		this.headers.remove(section);
 		SimpleCursorAdapter prev = this.sections.remove(section);
 		if (prev != null) {
-			NnnLogger.debugOnly(SectionAdapter.class, "killing previous adapter");
+			NnnLogger.debug(SectionAdapter.class, "killing previous adapter");
 			prev.unregisterDataSetObserver(subObserver);
 			prev.swapCursor(null);
 		}
