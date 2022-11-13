@@ -26,5 +26,5 @@ public interface MenuStateController {
 	 * If true, menu items should be hidden/removed. Items relevant to the
 	 * navigation drawer should be visible
 	 */
-	public boolean childItemsVisible();
+	boolean childItemsVisible();
 }

@@ -26,15 +26,15 @@ public interface Monitor {
 	 *
 	 * @param handler
 	 */
-	public void startMonitor(final OrgSyncService.SyncHandler handler);
+	void startMonitor(final OrgSyncService.SyncHandler handler);
 
 	/**
 	 * Pausing, it might be restarted later.
 	 */
-	public void pauseMonitor();
+	void pauseMonitor();
 
 	/**
 	 * Service is destroying itself. Remove any references.
 	 */
-	public void terminate();
+	void terminate();
 }
