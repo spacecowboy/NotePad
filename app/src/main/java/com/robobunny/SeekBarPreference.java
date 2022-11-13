@@ -41,8 +41,7 @@ import com.nononsenseapps.notepad.R;
 public class SeekBarPreference extends Preference implements
 		OnSeekBarChangeListener {
 
-	// TODO use a different control in the preferences screen, maybe let the user input a number
-	//  directly. Then delete this class
+	// TODO useless, see app_pref_list.xml for instructions on how to remove this
 
 	//	private static final String ANDROIDNS = "http://schemas.android.com/apk/res/android";
 //	private static final String ROBOBUNNYNS = "http://robobunny.com";
