@@ -40,8 +40,8 @@ public class TestAddNotesAndRotateScreen extends BaseTestClass {
 		EspressoHelper.navigateUp();
 
 		// rotate screen
-		onView(isRoot()).perform(orientationLandscape());
-		onView(isRoot()).perform(orientationPortrait());
+		onView(isRoot()).perform(orientationLandscape(myActivityRule.getActivity()));
+		onView(isRoot()).perform(orientationPortrait(myActivityRule.getActivity()));
 
 		// wait for it to finish the rotation(s)
 		SystemClock.sleep(1500);
