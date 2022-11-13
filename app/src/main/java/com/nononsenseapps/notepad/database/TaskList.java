@@ -92,12 +92,7 @@ public class TaskList extends DAO {
 
 		public static final String VIEW_COUNT = "count";
 
-		// public static final String GTASKACCOUNT = "gtaskaccount";
-		// public static final String GTASKID = "gtaskid";
-		//		
-
-		public static final String[] FIELDS = { _ID, TITLE, UPDATED, LISTTYPE,
-				SORTING };
+		public static final String[] FIELDS = { _ID, TITLE, UPDATED, LISTTYPE, SORTING };
 		// GTASKACCOUNT, GTASKID };
 		public static final String[] SHALLOWFIELDS = { _ID, TITLE, UPDATED };
 	}
@@ -137,10 +132,6 @@ public class TaskList extends DAO {
 	public String listtype = null;
 	public String sorting = null;
 
-	// Sync stuff
-	// public String gtaskaccount = null;
-	// public String gtaskid = null;	
-
 	public TaskList() {
 	}
 
@@ -150,9 +141,6 @@ public class TaskList extends DAO {
 		this.updated = c.getLong(2);
 		this.listtype = c.getString(3);
 		this.sorting = c.getString(4);
-		// sync stuff
-		// gtaskaccount = c.getString(3);
-		// gtaskid = c.getString(4);
 	}
 
 	public TaskList(final Uri uri, final ContentValues values) {
@@ -180,9 +168,6 @@ public class TaskList extends DAO {
 		updated = values.getAsLong(Columns.UPDATED);
 		listtype = values.getAsString(Columns.LISTTYPE);
 		sorting = values.getAsString(Columns.SORTING);
-
-		// gtaskaccount = values.getAsString(Columns.GTASKACCOUNT);
-		// gtaskid = values.getAsString(Columns.GTASKID);		
 	}
 
 	public ContentValues getContent() {
@@ -192,10 +177,6 @@ public class TaskList extends DAO {
 		values.put(Columns.UPDATED, updated);
 		values.put(Columns.LISTTYPE, listtype);
 		values.put(Columns.SORTING, sorting);
-
-		// values.put(Columns.GTASKACCOUNT, gtaskaccount);
-		// values.put(Columns.GTASKID, gtaskid);
-
 		return values;
 	}
 

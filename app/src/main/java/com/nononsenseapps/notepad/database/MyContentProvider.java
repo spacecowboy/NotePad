@@ -29,6 +29,7 @@ import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
 import android.util.Log;
 
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.UpdateNotifier;
 
 import java.util.ArrayList;
@@ -630,13 +631,9 @@ public class MyContentProvider extends ContentProvider {
 			case Task.LEGACYBASEITEMCODE:
 			case Task.LEGACYVISIBLEITEMCODE:
 			default:
-
-				Log.d("nononsenseapps db",
+				NnnLogger.debugOnly(MyContentProvider.class,
 						"Faulty queryURI provided: " + uri.toString());
 				return null;
-
-			// throw new IllegalArgumentException("Faulty queryURI provided: "
-			// + uri.toString());
 		}
 
 		return result;

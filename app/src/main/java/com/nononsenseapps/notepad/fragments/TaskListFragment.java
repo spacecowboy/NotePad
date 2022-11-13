@@ -319,6 +319,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		mRowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
 		mHideCheckbox = prefs.getBoolean(getString(R.string.pref_hidecheckboxes), false);
 
+		// TODO do we NEED this ?
 		// mSortType = prefs.getString(getString(R.string.pref_sorttype),
 		// getString(R.string.default_sorttype));
 		// mListType = prefs.getString(getString(R.string.pref_listtype),

@@ -30,16 +30,11 @@ import java.util.Locale;
 
 public class MainPrefs extends PreferenceFragment {
 	public static final String KEY_THEME = "key_current_theme";
-	// public static final String KEY_WEEK_START_DAY =
-	// "preferences_week_start_day";
 
 	public static final String SANS = "Sans";
 	public static final String SERIF = "Serif";
 	public static final String MONOSPACE = "Monospace";
 
-	// public static final String THEME_DARK = "dark";
-	// public static final String THEME_BLACK = "black";
-	// public static final String THEME_LIGHT_ICS_AB = "light_ab";
 
 	public static final String WEEK_START_DEFAULT = "-1";
 	public static final String WEEK_START_SATURDAY = "7";

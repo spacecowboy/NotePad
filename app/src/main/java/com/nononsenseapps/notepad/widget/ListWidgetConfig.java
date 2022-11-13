@@ -216,8 +216,6 @@ public class ListWidgetConfig extends AppCompatActivity {
 							}
 
 							((TextView) view).setText(sTemp);
-							// ((TextView) view).setText(TitleNoteTextView
-							// .getStyledText(sTemp, 1.3f, 1, 1));
 						} else {
 							((TextView) view).setText(TitleNoteTextView
 									.getStyledText(c.getString(1), c.getString(2),
@@ -513,11 +511,9 @@ public class ListWidgetConfig extends AppCompatActivity {
 					@Override
 					public void onProgressChanged(SeekBar seekBar,
 												  int progress, boolean fromUser) {
-						// final int color =
-						// getHomescreenBackgroundColor(progress, 0xffffff);
-						final int color = getHomescreenBackgroundColor(
-								progress, widgetPrefs.getInt(KEY_SHADE_COLOR,
-										DEFAULT_SHADE));
+
+						final int color = getHomescreenBackgroundColor(progress,
+								widgetPrefs.getInt(KEY_SHADE_COLOR, DEFAULT_SHADE));
 
 						widgetPrefs.putInt(KEY_SHADE_COLOR, color);
 						updateBG(color);

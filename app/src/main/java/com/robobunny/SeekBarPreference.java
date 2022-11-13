@@ -43,8 +43,6 @@ public class SeekBarPreference extends Preference implements
 
 	// TODO useless, see app_pref_list.xml for instructions on how to remove this
 
-	//	private static final String ANDROIDNS = "http://schemas.android.com/apk/res/android";
-//	private static final String ROBOBUNNYNS = "http://robobunny.com";
 	private static final int DEFAULT_VALUE = 50;
 
 	private int mMaxValue = 100;
@@ -69,9 +67,7 @@ public class SeekBarPreference extends Preference implements
 
 	private void initPreference(Context context, AttributeSet attrs) {
 		setValuesFromXml(context, attrs);
-		//mSeekBar = new SeekBar(context, attrs);
-		//mSeekBar.setMax(mMaxValue - mMinValue);
-		//mSeekBar.setOnSeekBarChangeListener(this);	
+
 	}
 
 	private void setValuesFromXml(final Context context, final AttributeSet attrs) {
@@ -100,36 +96,11 @@ public class SeekBarPreference extends Preference implements
 			a.recycle();
 		}
 
-//		mMaxValue = attrs.getAttributeIntValue(ANDROIDNS, "max", 100);
-//		mMinValue = attrs.getAttributeIntValue(ROBOBUNNYNS, "min", 0);
-//
-//		mUnitsLeft = getAttributeStringValue(attrs, ROBOBUNNYNS, "unitsLeft",
-//				"");
-//		String units = getAttributeStringValue(attrs, ROBOBUNNYNS, "units", "");
-//		mUnitsRight = getAttributeStringValue(attrs, ROBOBUNNYNS, "unitsRight",
-//				units);
-//		
-//		mCurrentValue = attrs.getAttributeIntValue(ANDROIDNS, "summary", 100);
-//
-//		try {
-//			String newInterval = attrs.getAttributeValue(ROBOBUNNYNS,
-//					"interval");
-//			if (newInterval != null)
-//				mInterval = Integer.parseInt(newInterval);
-//		} catch (Exception e) {
-//			Log.e(TAG, "Invalid interval value", e);
-//		}
+
 
 	}
 
-//	private String getAttributeStringValue(AttributeSet attrs,
-//			String namespace, String name, String defaultValue) {
-//		String value = attrs.getAttributeValue(namespace, name);
-//		if (value == null)
-//			value = defaultValue;
-//
-//		return value;
-//	}
+
 
 	@Override
 	protected View onCreateView(ViewGroup parent) {

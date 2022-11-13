@@ -77,16 +77,7 @@ class FragmentSettings_USELESS extends PreferenceFragment implements SharedPrefe
 	}
 
 
-	private void setupPassword() {
-		Preference preference = findPreference(getString(R.string.const_preference_password_key));
-		if (preference != null) {
-			preference.setOnPreferenceClickListener(preference1 -> {
-				// DialogPasswordSettings.showDialog(((AppCompatActivity) getActivity())
-//							.getSupportFragmentManager());
-				return true;
-			});
-		}
-	}
+
 
 	private void setupLegacyBackup() {
 		Preference preference = findPreference(getString(R.string

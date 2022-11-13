@@ -36,8 +36,8 @@ import android.widget.LinearLayout;
 public class WeekDaysView extends LinearLayout implements
 		OnCheckedChangeListener {
 
-	public static interface onCheckedDaysChangeListener {
-		public void onChange(long checkedDays);
+	public interface onCheckedDaysChangeListener {
+		void onChange(long checkedDays);
 	}
 
 	public static final int mon = 0x1;

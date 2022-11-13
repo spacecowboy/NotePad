@@ -365,10 +365,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		if (note.repeats != 0) {
 			iDelete.setAction(ACTION_RESCHEDULE);
 		}
-		// Add extra so we don't delete all
-		// if (note.time != null) {
-		// iDelete.putExtra(ARG_MAX_TIME, note.time);
-		// }
+
 		iDelete.putExtra(ARG_TASKID, note.taskID);
 		// Delete it on clear
 		PendingIntent piDelete = PendingIntent.getBroadcast(context, 0,

@@ -87,9 +87,6 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		this.dropdownlayout = dropdownlayout;
 	}
 
-	/**
-	 *
-	 */
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
 		int i;
@@ -99,7 +96,8 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		}
 		// Fetch from database
 		for (i = 0; i < from.length; i++) {
-			String txt = cursor.getString(cursor.getColumnIndex(from[i]));
+			final int colIndex = cursor.getColumnIndex(from[i]);
+			String txt = cursor.getString(colIndex);
 			viewHolder.texts[i].setText(txt);
 		}
 	}

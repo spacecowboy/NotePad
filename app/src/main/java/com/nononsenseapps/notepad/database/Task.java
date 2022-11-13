@@ -64,9 +64,6 @@ public class Task extends DAO {
 	// Today should be from NOW...
 	public static final String TODAY_START = "strftime('%s','now', 'utc') * 1000";
 
-	// static final String TODAY_START =
-	// "strftime('%s','now','localtime','start of day', 'utc') * 1000";
-
 	public static String TODAY_PLUS(final int offset) {
 		return "strftime('%s','now','localtime','+" + offset
 				+ " days','start of day', 'utc') * 1000";
@@ -798,9 +795,6 @@ public class Task extends DAO {
 		if (note != null) values.put(Columns.NOTE, note);
 
 		if (dblist != null) values.put(Columns.DBLIST, dblist);
-		// Never write position values unless you are 110% sure that they are correct
-		//if (left != null) values.put(Columns.LEFT, left);
-		//if (right != null) values.put(Columns.RIGHT, right);
 
 		values.put(Columns.UPDATED, updated);
 		values.put(Columns.DUE, due);
@@ -973,8 +967,7 @@ public class Task extends DAO {
 
 	// Upgrades children and closes the gap made from the delete
 	private static final String BUMP_TO_LEFT = " UPDATE %1$s SET %2$s = %2$s - 2 WHERE %2$s > old.%3$s AND %4$s IS old.%4$s;";
-	// private static final String UPGRADE_CHILDREN =
-	// " UPDATE %1$s SET %2$s = %2$s - 1, %3$s = %3$s - 1 WHERE %4$s IS old.%4$s AND %2$s BETWEEN old.%2$s AND old.%3$s;";
+
 	public static final String TRIGGER_POST_DELETE = String.format(
 			"CREATE TRIGGER task_post_delete AFTER DELETE ON %s BEGIN ",
 			TABLE_NAME)
