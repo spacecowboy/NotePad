@@ -338,7 +338,7 @@ public class ActivityMain extends AppCompatActivity
 
 		if (syncing) {
 			// In case of connectivity problems, stop the progress bar
-			new AsyncTask<Void, Void, Void>() {
+			var at = new AsyncTask<Void, Void, Void>() {
 
 				@Override
 				protected Void doInBackground(Void... params) {
@@ -355,7 +355,8 @@ public class ActivityMain extends AppCompatActivity
 					// Notify that the refresh has finished
 					setRefreshOfAllSwipeLayoutsTo(false);
 				}
-			}.execute();
+			};
+			at.execute();
 		} else {
 			// explain to the user why the swipe-refresh was canceled
 			Toast.makeText(this, R.string.no_sync_method_chosen, Toast.LENGTH_SHORT).show();

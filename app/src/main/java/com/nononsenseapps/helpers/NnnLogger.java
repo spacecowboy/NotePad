@@ -45,9 +45,8 @@ public final class NnnLogger {
 	 * @param caller  the class who's calling this function. Its name is added to the message
 	 * @param message the additional message sent to logcat
 	 */
-	public static void error(@NonNull Class caller, @NonNull String message) {
-
-		Log.e("NNN", caller.getSimpleName() + ": " + message);
+	public static <T> void error(@NonNull T caller, @NonNull String message) {
+		Log.e("NNN", caller.getClass().getSimpleName() + ": " + message);
 	}
 
 	/**
@@ -57,7 +56,7 @@ public final class NnnLogger {
 	 * @param caller  the class who's calling this function. Its name is added to the message
 	 * @param message the additional message sent to logcat
 	 */
-	public static void debugOnly(@NonNull Class caller, @NonNull String message) {
-		if (Config.LOGGING) Log.d("NNN", caller.getSimpleName() + ": " + message);
+	public static <T> void debugOnly(@NonNull T caller, @NonNull String message) {
+		if (Config.LOGGING) Log.d("NNN", caller.getClass().getSimpleName() + ": " + message);
 	}
 }

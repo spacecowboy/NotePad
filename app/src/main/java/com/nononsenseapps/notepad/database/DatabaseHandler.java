@@ -17,7 +17,6 @@
 
 package com.nononsenseapps.notepad.database;
 
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.HashMap;
 

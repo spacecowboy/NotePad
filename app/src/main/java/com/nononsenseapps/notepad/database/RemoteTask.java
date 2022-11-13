@@ -20,8 +20,6 @@ package com.nononsenseapps.notepad.database;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import com.nononsenseapps.notepad.database.RemoteTaskList.Columns;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;

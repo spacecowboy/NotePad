@@ -949,6 +949,7 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 						val = cursor.getString(i);
 						break;
 					case Cursor.FIELD_TYPE_NULL:
+					// case Cursor.FIELD_TYPE_BLOB:
 					default:
 						val = null;
 				}

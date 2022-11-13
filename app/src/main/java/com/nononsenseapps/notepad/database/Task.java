@@ -33,7 +33,6 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.BaseColumns;
 import android.text.format.Time;
-import android.util.Log;
 
 /**
  * An object that represents the task information contained in the database.
@@ -68,8 +67,8 @@ public class Task extends DAO {
 	// static final String TODAY_START =
 	// "strftime('%s','now','localtime','start of day', 'utc') * 1000";
 
-	public static final String TODAY_PLUS(final int offset) {
-		return "strftime('%s','now','localtime','+" + Integer.toString(offset)
+	public static String TODAY_PLUS(final int offset) {
+		return "strftime('%s','now','localtime','+" + offset
 				+ " days','start of day', 'utc') * 1000";
 	}
 
@@ -373,7 +372,7 @@ public class Task extends DAO {
 	 *
 	 * if listId is null, will return for all lists
 	 */
-	public static final String CREATE_SECTIONED_DATE_VIEW(final String listId) {
+	public static String CREATE_SECTIONED_DATE_VIEW(final String listId) {
 		final String sListId = listId == null ? " NOT NULL " : "'" + listId
 				+ "'";
 		return "CREATE TEMP VIEW IF NOT EXISTS " +
@@ -940,7 +939,7 @@ public class Task extends DAO {
 	 * constraints after every row is updated an not after each statement like
 	 * it should. So have to do the check in a trigger instead.
 	 */
-	static final String countVals(final String col, final String ver) {
+	static String countVals(final String col, final String ver) {
 		return String.format("SELECT COUNT(DISTINCT %2$s)"
 						+ " AS ColCount FROM %1$s WHERE %3$s=%4$s.%3$s", TABLE_NAME,
 				col, Columns.DBLIST, ver);
@@ -948,7 +947,7 @@ public class Task extends DAO {
 
 	// verify that left are unique
 	// count number of id and compare to number of left and right
-	static final String posUniqueConstraint(final String ver, final String msg) {
+	static String posUniqueConstraint(final String ver, final String msg) {
 		return String.format(
 				" SELECT CASE WHEN ((%1$s) != (%2$s) OR (%1$s) != (%3$s)) THEN "
 						+ " RAISE (ABORT, '" + msg + "')" + " END;",

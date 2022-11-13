@@ -17,7 +17,6 @@
 package com.nononsenseapps.notepad.prefs;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogPasswordV11_;
 
 import android.app.Activity;
@@ -27,7 +26,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.ViewGroup;

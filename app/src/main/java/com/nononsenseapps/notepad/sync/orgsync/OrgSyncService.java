@@ -65,7 +65,7 @@ public class OrgSyncService extends Service {
 
 	private static final int DELAY_MSECS = 30000;
 
-	private boolean firstStart = true;
+	private final boolean firstStart = true;
 
 	private Looper serviceLooper;
 	private SyncHandler serviceHandler;

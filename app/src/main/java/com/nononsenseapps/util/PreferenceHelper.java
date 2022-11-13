@@ -25,8 +25,6 @@ import android.preference.Preference;
 import android.preference.RingtonePreference;
 import android.text.TextUtils;
 
-import androidx.annotation.NonNull;
-
 import com.nononsenseapps.notepad.R;
 
 /**

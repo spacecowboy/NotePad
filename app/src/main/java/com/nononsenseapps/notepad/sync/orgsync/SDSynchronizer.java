@@ -22,7 +22,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.FileObserver;
 import android.preference.PreferenceManager;
 
@@ -40,7 +39,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.HashSet;
 
@@ -263,7 +261,7 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 	public static class FileWatcher extends FileObserver implements Monitor {
 
 		public OrgSyncService.SyncHandler handler;
-		private int changeId = 0;
+		private final int changeId = 0;
 
 		public FileWatcher(String path) {
 			super(path, FileObserver.CREATE | FileObserver.DELETE

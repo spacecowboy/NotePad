@@ -29,8 +29,6 @@ import android.view.ViewGroup;
 
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.nononsenseapps.notepad.R;
-
 import java.util.ArrayList;
 
 /**

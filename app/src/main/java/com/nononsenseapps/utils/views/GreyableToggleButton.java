@@ -20,7 +20,6 @@ package com.nononsenseapps.utils.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.widget.ToggleButton;
 
 import com.nononsenseapps.notepad.R;
 

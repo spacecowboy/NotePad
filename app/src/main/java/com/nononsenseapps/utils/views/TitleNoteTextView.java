@@ -47,9 +47,9 @@ public class TitleNoteTextView extends androidx.appcompat.widget.AppCompatTextVi
 	Object titleFamilySpan;
 	Object bodyFamilySpan;
 
-	private int primaryColor;
-	private int secondaryColor;
-	private float mTitleRelativeSize;
+	private final int primaryColor;
+	private final int secondaryColor;
+	private final float mTitleRelativeSize;
 	private int mBodyFontFamily;
 	private int mTitleFontFamily;
 	private int mTitleFontStyle;

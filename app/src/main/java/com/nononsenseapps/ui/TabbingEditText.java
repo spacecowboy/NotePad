@@ -20,7 +20,6 @@ package com.nononsenseapps.ui;
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
-import android.widget.EditText;
 
 /**
  * And editText which catches TABs and inserts \t in the text

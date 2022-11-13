@@ -29,7 +29,6 @@ import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.nononsenseapps.helpers.NnnLogger;
-import com.nononsenseapps.notepad.R;
 
 /**
  * Implementation of {@link androidx.viewpager.widget.PagerAdapter} that

@@ -24,8 +24,6 @@ import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.nononsenseapps.notepad.R;
-
 /**
  * A base activity which sets the user's configured language and theme.
  */

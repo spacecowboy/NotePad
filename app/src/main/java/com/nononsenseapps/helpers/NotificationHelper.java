@@ -40,7 +40,6 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 
-import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 
@@ -163,14 +162,13 @@ public class NotificationHelper extends BroadcastReceiver {
 		idStrings = idStrings.substring(0, idStrings.length() - 1);
 		idStrings += ")";
 
-		final Cursor c = context
+		// automatically closes the cursor, like using(){} in C#
+		try (Cursor c = context
 				.getContentResolver()
 				.query(com.nononsenseapps.notepad.database.Notification.URI_WITH_TASK_PATH,
 						com.nononsenseapps.notepad.database.Notification.ColumnsWithTask.FIELDS,
 						com.nononsenseapps.notepad.database.Notification.Columns._ID
-								+ " IN " + idStrings, null, null);
-
-		try {
+								+ " IN " + idStrings, null, null)) {
 			while (c.moveToNext()) {
 				com.nononsenseapps.notepad.database.Notification not
 						= new com.nononsenseapps.notepad.database.Notification(c);
@@ -178,8 +176,6 @@ public class NotificationHelper extends BroadcastReceiver {
 					notificationManager.cancel(not.taskID.intValue());
 				}
 			}
-		} finally {
-			c.close();
 		}
 	}
 

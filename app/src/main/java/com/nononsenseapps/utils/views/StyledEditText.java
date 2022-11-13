@@ -33,7 +33,6 @@ import android.text.style.TypefaceSpan;
 import android.text.util.Linkify;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.nononsenseapps.notepad.R;
@@ -49,10 +48,10 @@ public class StyledEditText extends androidx.appcompat.widget.AppCompatEditText 
 	Object titleFamilySpan;
 	Object bodyFamilySpan;
 
-	private float mTitleRelativeSize;
-	private int mTitleFontFamily;
-	private int mBodyFontFamily;
-	private int mTitleFontStyle;
+	private final float mTitleRelativeSize;
+	private final int mTitleFontFamily;
+	private final int mBodyFontFamily;
+	private final int mTitleFontStyle;
 	private boolean mLinkify;
 	private boolean mTitleLarger = true;
 
