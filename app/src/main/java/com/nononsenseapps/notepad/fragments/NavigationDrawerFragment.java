@@ -532,7 +532,7 @@ class NavigationDrawerFragment_USELESS extends Fragment{
 		}
 	}
 
-	private class SeparatorFooterViewHolder extends RecyclerView.ViewHolder {
+	private static class SeparatorFooterViewHolder extends RecyclerView.ViewHolder {
 
 		public SeparatorFooterViewHolder(View itemView) {
 			super(itemView);

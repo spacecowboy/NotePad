@@ -189,19 +189,16 @@ public class GoogleTaskSync {
 				"mergeList starting with: " + remoteLists.size());
 
 		final HashMap<String, GoogleTaskList> localVersions = new HashMap<>();
-		final Cursor c = context.getContentResolver().query(
+		try (Cursor c = context.getContentResolver().query(
 				GoogleTaskList.URI,
 				GoogleTaskList.Columns.FIELDS,
 				GoogleTaskList.Columns.ACCOUNT + " IS ? AND "
 						+ GoogleTaskList.Columns.SERVICE + " IS ?",
-				new String[] { account, GoogleTaskList.SERVICENAME }, null);
-		try {
+				new String[] { account, GoogleTaskList.SERVICENAME }, null)) {
 			while (c != null && c.moveToNext()) {
 				GoogleTaskList list = new GoogleTaskList(c);
 				localVersions.put(list.remoteId, list);
 			}
-		} finally {
-			if (c != null) c.close();
 		}
 
 		for (final GoogleTaskList remotelist : remoteLists) {
@@ -233,21 +230,18 @@ public class GoogleTaskSync {
 											 final String account, final List<GoogleTask> remoteTasks,
 											 long listDbId) {
 		final HashMap<String, GoogleTask> localVersions = new HashMap<>();
-		final Cursor c = context.getContentResolver().query(
+		try (Cursor c = context.getContentResolver().query(
 				GoogleTask.URI,
 				GoogleTask.Columns.FIELDS,
 				GoogleTask.Columns.LISTDBID + " IS ? AND "
 						+ GoogleTask.Columns.ACCOUNT + " IS ? AND "
 						+ GoogleTask.Columns.SERVICE + " IS ?",
 				new String[] { Long.toString(listDbId), account,
-						GoogleTaskList.SERVICENAME }, null);
-		try {
+						GoogleTaskList.SERVICENAME }, null)) {
 			while (c != null && c.moveToNext()) {
 				GoogleTask task = new GoogleTask(c);
 				localVersions.put(task.remoteId, task);
 			}
-		} finally {
-			if (c != null) c.close();
 		}
 
 		for (final GoogleTask task : remoteTasks) {

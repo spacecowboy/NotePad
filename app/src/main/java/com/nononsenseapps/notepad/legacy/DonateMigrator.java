@@ -111,11 +111,10 @@ public class DonateMigrator extends IntentService {
 		final HashMap<Long, Long> taskIDMap = new HashMap<>();
 
 		// Work through, list by list
-		final Cursor listCursor = getContentResolver().query(
+		try (Cursor listCursor = getContentResolver().query(
 				Uri.withAppendedPath(BASEURI, PATH_LISTS), LISTPROJECTION,
 				NotePad.Lists.COLUMN_NAME_DELETED + " IS NOT 1", null,
-				NotePad.Lists.COLUMN_NAME_TITLE);
-		try {
+				NotePad.Lists.COLUMN_NAME_TITLE)) {
 			while (listCursor.moveToNext()) {
 				TaskList tl = new TaskList();
 				tl.title = listCursor.getString(1);
@@ -124,13 +123,12 @@ public class DonateMigrator extends IntentService {
 					mListsImportedCount += 1;
 				}
 				// Gtasklist
-				final Cursor gtasklistCursor = getContentResolver().query(
+				try (Cursor gtasklistCursor = getContentResolver().query(
 						Uri.withAppendedPath(BASEURI, PATH_GTASKLISTS),
 						GTASKLISTPROJECTION,
 						NotePad.GTaskLists.COLUMN_NAME_DB_ID + " IS ?",
 						new String[] { Long.toString(listCursor.getLong(0)) },
-						null);
-				try {
+						null)) {
 					if (gtasklistCursor.moveToFirst()) {
 						GoogleTaskList gl = new GoogleTaskList(tl,
 								gtasklistCursor.getString(2));
@@ -141,24 +139,19 @@ public class DonateMigrator extends IntentService {
 				} catch (Exception e) {
 					mError = e.getLocalizedMessage();
 					return;
-				} finally {
-					if (gtasklistCursor != null) gtasklistCursor.close();
 				}
 			}
 		} catch (Exception e) {
 			mError = e.getLocalizedMessage();
 			return;
-		} finally {
-			if (listCursor != null) listCursor.close();
 		}
 
-		final Cursor noteCursor = getContentResolver().query(
+		try (Cursor noteCursor = getContentResolver().query(
 				Uri.withAppendedPath(BASEURI, PATH_NOTES),
 				NOTEPROJECTION,
 				NotePad.Notes.COLUMN_NAME_DELETED + " IS NOT 1 AND "
 						+ NotePad.Notes.COLUMN_NAME_HIDDEN + " IS NOT 1", null,
-				NotePad.Notes.COLUMN_NAME_POSSUBSORT);
-		try {
+				NotePad.Notes.COLUMN_NAME_POSSUBSORT)) {
 			while (noteCursor.moveToNext()) {
 				Task t = new Task();
 				t.title = noteCursor.getString(1);
@@ -190,13 +183,12 @@ public class DonateMigrator extends IntentService {
 					mNotesImportedCount += 1;
 				}
 				// Gtask
-				final Cursor gtaskCursor = getContentResolver().query(
+				try (Cursor gtaskCursor = getContentResolver().query(
 						Uri.withAppendedPath(BASEURI, PATH_GTASKS),
 						GTASKPROJECTION,
 						NotePad.GTasks.COLUMN_NAME_DB_ID + " IS ?",
 						new String[] { Long.toString(noteCursor.getLong(0)) },
-						null);
-				try {
+						null)) {
 					if (gtaskCursor.moveToFirst()) {
 						GoogleTask gt = new GoogleTask(t,
 								gtaskCursor.getString(2));
@@ -207,14 +199,10 @@ public class DonateMigrator extends IntentService {
 				} catch (Exception e) {
 					mError = e.getLocalizedMessage();
 					return;
-				} finally {
-					if (gtaskCursor != null) gtaskCursor.close();
 				}
 			}
 		} catch (Exception e) {
 			mError = e.getLocalizedMessage();
-		} finally {
-			if (noteCursor != null) noteCursor.close();
 		}
 	}
 

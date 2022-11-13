@@ -144,7 +144,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 
 	private HashMap<Long, RemoteTask> getValidRemoteTasks(final TaskList list) {
 		final HashMap<Long, RemoteTask> map = new HashMap<>();
-		final Cursor c = resolver.query(
+		try (Cursor c = resolver.query(
 				RemoteTask.URI,
 				RemoteTask.Columns.FIELDS,
 				RemoteTask.Columns.SERVICE + " IS ? AND "
@@ -152,15 +152,11 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 						+ RemoteTask.Columns.LISTDBID + " IS ? AND "
 						+ RemoteTask.Columns.DBID + " > 0",
 				new String[] { getServiceName(), getAccountName(),
-						Long.toString(list._id) }, null);
-		try {
+						Long.toString(list._id) }, null)) {
 			while (c.moveToNext()) {
 				RemoteTask remote = new RemoteTask(c);
 				map.put(remote.dbid, remote);
 			}
-		} finally {
-			if (c != null)
-				c.close();
 		}
 
 		return map;
@@ -175,7 +171,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	 */
 	private List<RemoteTask> getInvalidRemoteTasks(final TaskList list) {
 		final ArrayList<RemoteTask> remoteList = new ArrayList<>();
-		final Cursor c = resolver.query(
+		try (Cursor c = resolver.query(
 				RemoteTask.URI,
 				RemoteTask.Columns.FIELDS,
 				RemoteTask.Columns.SERVICE + " IS ? AND "
@@ -183,15 +179,11 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 						+ RemoteTask.Columns.LISTDBID + " IS ? AND "
 						+ RemoteTask.Columns.DBID + " < 1",
 				new String[] { getServiceName(), getAccountName(),
-						Long.toString(list._id) }, null);
-		try {
+						Long.toString(list._id) }, null)) {
 			while (c.moveToNext()) {
 				RemoteTask remote = new RemoteTask(c);
 				remoteList.add(remote);
 			}
-		} finally {
-			if (c != null)
-				c.close();
 		}
 
 		return remoteList;
@@ -199,17 +191,13 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 
 	private HashMap<Long, Task> getTasks(final TaskList list) {
 		final HashMap<Long, Task> map = new HashMap<>();
-		final Cursor c = resolver.query(Task.URI, Task.Columns.FIELDS,
+		try (Cursor c = resolver.query(Task.URI, Task.Columns.FIELDS,
 				Task.Columns.DBLIST + " IS ?",
-				new String[] { Long.toString(list._id) }, null);
-		try {
+				new String[] { Long.toString(list._id) }, null)) {
 			while (c.moveToNext()) {
 				Task task = new Task(c);
 				map.put(task._id, task);
 			}
-		} finally {
-			if (c != null)
-				c.close();
 		}
 
 		return map;
@@ -315,19 +303,15 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	 */
 	private HashMap<Long, RemoteTaskList> getRemoteTaskLists() {
 		final HashMap<Long, RemoteTaskList> map = new HashMap<>();
-		final Cursor c = resolver.query(RemoteTaskList.URI,
+		try (Cursor c = resolver.query(RemoteTaskList.URI,
 				RemoteTaskList.Columns.FIELDS, RemoteTaskList.Columns.SERVICE
 						+ " IS ? AND " + RemoteTask.Columns.ACCOUNT + " IS ?",
-				new String[] { getServiceName(), getAccountName() }, null);
-		try {
+				new String[] { getServiceName(), getAccountName() }, null)) {
 			while (c.moveToNext()) {
 				RemoteTaskList remote = new RemoteTaskList(c);
 				Log.d(Synchronizer.TAG, "Get remote: " + remote.remoteId);
 				map.put(remote.dbid, remote);
 			}
-		} finally {
-			if (c != null)
-				c.close();
 		}
 
 		return map;
@@ -338,17 +322,13 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	 */
 	private HashMap<Long, TaskList> getLists() {
 		final HashMap<Long, TaskList> map = new HashMap<>();
-		final Cursor c = resolver.query(TaskList.URI, TaskList.Columns.FIELDS,
-				null, null, null);
-		try {
+		try (Cursor c = resolver.query(TaskList.URI, TaskList.Columns.FIELDS,
+				null, null, null)) {
 			while (c.moveToNext()) {
 				TaskList list = new TaskList(c);
 				Log.d(Synchronizer.TAG, "Get list: " + list.title);
 				map.put(list._id, list);
 			}
-		} finally {
-			if (c != null)
-				c.close();
 		}
 
 		return map;

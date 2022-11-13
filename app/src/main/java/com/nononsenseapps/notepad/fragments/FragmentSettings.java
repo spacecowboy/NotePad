@@ -80,13 +80,10 @@ class FragmentSettings_USELESS extends PreferenceFragment implements SharedPrefe
 	private void setupPassword() {
 		Preference preference = findPreference(getString(R.string.const_preference_password_key));
 		if (preference != null) {
-			preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-				@Override
-				public boolean onPreferenceClick(Preference preference) {
-					// DialogPasswordSettings.showDialog(((AppCompatActivity) getActivity())
+			preference.setOnPreferenceClickListener(preference1 -> {
+				// DialogPasswordSettings.showDialog(((AppCompatActivity) getActivity())
 //							.getSupportFragmentManager());
-					return true;
-				}
+				return true;
 			});
 		}
 	}
@@ -95,20 +92,11 @@ class FragmentSettings_USELESS extends PreferenceFragment implements SharedPrefe
 		Preference preference = findPreference(getString(R.string
 				.const_preference_legacybackup_key));
 		if (preference != null) {
-			preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-				@Override
-				public boolean onPreferenceClick(Preference preference) {
-					DialogRestoreBackup.showDialog(getFragmentManager(), new DialogConfirmBaseV11
-							.DialogConfirmedListener() {
-
-						@Override
-						public void onConfirm() {
-							// (JSON) Backup.importLegacyBackup(getActivity());
-						}
-
-					});
-					return true;
-				}
+			preference.setOnPreferenceClickListener(preference1 -> {
+				DialogRestoreBackup.showDialog(getFragmentManager(), () -> {
+					// (JSON) Backup.importLegacyBackup(getActivity());
+				});
+				return true;
 			});
 		}
 	}
