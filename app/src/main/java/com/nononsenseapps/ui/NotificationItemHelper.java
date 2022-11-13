@@ -52,15 +52,9 @@ public class NotificationItemHelper {
 				nv.findViewById(R.id.notificationDate),
 				nv.findViewById(R.id.notificationTypeTime),
 				nv.findViewById(R.id.weekdays));
-		hideViews(nv.findViewById(R.id.notificationTypeLocation),
-				nv.findViewById(R.id.notificationLocation),
-				nv.findViewById(R.id.repeatSwitch));
-	}
 
-	private static void hideViews(final View... views) {
-		for (View v : views) {
-			v.setVisibility(View.GONE);
-		}
+		// hide this view
+		nv.findViewById(R.id.repeatSwitch).setVisibility(View.GONE);
 	}
 
 	private static void showViews(final View... views) {

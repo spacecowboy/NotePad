@@ -30,8 +30,6 @@ import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CheckBox;
-import android.widget.CompoundButton;
-import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.SeekBar;
@@ -67,20 +65,20 @@ public class ListWidgetConfig extends AppCompatActivity {
 	public static final String KEY_LIST = "widget1_key_list";
 	public static final String KEY_LIST_TITLE = "widget1_key_list_title";
 	public static final String KEY_SORT_TYPE = "widget1_key_sort_type";
-	// public static final String KEY_SORT_ORDER = "widget1_key_sort_order";
+
 	public static final String KEY_THEME = "widget1_key_current_theme";
 	public static final String KEY_TEXTPRIMARY = "widget1_key_primary_text";
 	public static final String KEY_TEXTSECONDARY = "widget1_key_secondary_text";
-	// public static final String KEY_HIDDENAPPICON =
-	// "widget1_key_hiddenappicon";
-	// public static final String KEY_HIDDENNEW = "widget1_key_hiddennew";
+
 	public static final String KEY_HIDDENHEADER = "widget1_key_hiddenheader";
 	public static final String KEY_SHADE_COLOR = "widget1_key_shadecolor";
-	// public static final String KEY_HIDDENNOTE = "widget1_key_hiddennote";
+
 	public static final String KEY_HIDDENDATE = "widget1_key_hiddendate";
 	public static final String KEY_HIDDENCHECKBOX = "widget1_key_hiddencheckbox";
 	public static final String KEY_TITLEROWS = "widget1_key_titlerows";
-	// Used in widget service/provider
+	/**
+	 * Used in widget service/provider
+	 */
 	public static final String KEY_LOCKSCREEN = "widget1_key_lockscreen";
 
 	public final static int THEME_DARK = 0;
@@ -158,7 +156,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 					AppWidgetManager.INVALID_APPWIDGET_ID);
 		} else {
 			appWidgetId = AppWidgetManager.INVALID_APPWIDGET_ID;
-			NnnLogger.debugOnly(ListWidgetConfig.class, "Invalid ID given in the intent");
+			NnnLogger.debug(ListWidgetConfig.class, "Invalid ID given in the intent");
 			Intent resultValue = new Intent();
 			resultValue.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
 					appWidgetId);
@@ -218,15 +216,12 @@ public class ListWidgetConfig extends AppCompatActivity {
 							}
 
 							((TextView) view).setText(sTemp);
-							// ((TextView) view).setText(TitleNoteTextView
-							// .getStyledText(sTemp, 1.3f, 1, 1));
 						} else {
 							((TextView) view).setText(TitleNoteTextView
 									.getStyledText(c.getString(1), c.getString(2),
 											1.0f, 1, 1));
-							final int rows = widgetPrefs.getInt(KEY_TITLEROWS,
-									DEFAULT_ROWS);
-							((TextView) view).setMaxLines(rows < 1 ? 1 : rows);
+							final int rows = widgetPrefs.getInt(KEY_TITLEROWS, DEFAULT_ROWS);
+							((TextView) view).setMaxLines(Math.max(rows, 1));
 						}
 						// Set color
 						((TextView) view).setTextColor(widgetPrefs.getInt(
@@ -273,7 +268,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 
 		notesList.setAdapter(mNotesAdapter);
 
-		mCallback = new LoaderCallbacks<Cursor>() {
+		mCallback = new LoaderCallbacks<>() {
 
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
@@ -413,10 +408,10 @@ public class ListWidgetConfig extends AppCompatActivity {
 				R.array.widget_themevalues_preference);
 
 		if (themeValues == null) {
-			NnnLogger.debugOnly(ListWidgetConfig.class, "themevalues null");
+			NnnLogger.debug(ListWidgetConfig.class, "themevalues null");
 		} else {
 			for (String s : themeValues) {
-				NnnLogger.debugOnly(ListWidgetConfig.class, "themevalue: " + s);
+				NnnLogger.debug(ListWidgetConfig.class, "themevalue: " + s);
 			}
 		}
 
@@ -516,11 +511,9 @@ public class ListWidgetConfig extends AppCompatActivity {
 					@Override
 					public void onProgressChanged(SeekBar seekBar,
 												  int progress, boolean fromUser) {
-						// final int color =
-						// getHomescreenBackgroundColor(progress, 0xffffff);
-						final int color = getHomescreenBackgroundColor(
-								progress, widgetPrefs.getInt(KEY_SHADE_COLOR,
-										DEFAULT_SHADE));
+
+						final int color = getHomescreenBackgroundColor(progress,
+								widgetPrefs.getInt(KEY_SHADE_COLOR, DEFAULT_SHADE));
 
 						widgetPrefs.putInt(KEY_SHADE_COLOR, color);
 						updateBG(color);
@@ -566,49 +559,29 @@ public class ListWidgetConfig extends AppCompatActivity {
 				new int[] { R.string.show_from_all_lists },
 				android.R.layout.simple_spinner_dropdown_item);
 
-		// new SimpleCursorAdapter(this,
-		// android.R.layout.simple_spinner_dropdown_item, null,
-		// new String[] { TaskList.Columns.TITLE },
-		// new int[] { android.R.id.text1 }, 0);
 		listSpinner.setAdapter(mListAdapter);
 
 		transparentHeaderCheckBox
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-												 boolean isChecked) {
-						widgetHeader.setVisibility(isChecked ? View.GONE
-								: View.VISIBLE);
-						widgetPrefs.putBoolean(KEY_HIDDENHEADER, isChecked);
-					}
+				.setOnCheckedChangeListener((buttonView, isChecked) -> {
+					widgetHeader.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+					widgetPrefs.putBoolean(KEY_HIDDENHEADER, isChecked);
 				});
-		transparentHeaderCheckBox.setChecked(widgetPrefs.getBoolean(
-				KEY_HIDDENHEADER, false));
+		transparentHeaderCheckBox
+				.setChecked(widgetPrefs.getBoolean(KEY_HIDDENHEADER, false));
 
-		hideCheckBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-			@Override
-			public void onCheckedChanged(CompoundButton buttonView,
-										 boolean isChecked) {
-				widgetPrefs.putBoolean(KEY_HIDDENCHECKBOX, isChecked);
-				if (mNotesAdapter != null)
-					mNotesAdapter.notifyDataSetChanged();
-			}
+		hideCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+			widgetPrefs.putBoolean(KEY_HIDDENCHECKBOX, isChecked);
+			if (mNotesAdapter != null)
+				mNotesAdapter.notifyDataSetChanged();
 		});
-		hideCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX,
-				false));
+		hideCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENCHECKBOX, false));
 
-		hideDateCheckBox
-				.setOnCheckedChangeListener(new OnCheckedChangeListener() {
-					@Override
-					public void onCheckedChanged(CompoundButton buttonView,
-												 boolean isChecked) {
-						widgetPrefs.putBoolean(KEY_HIDDENDATE, isChecked);
-						if (mNotesAdapter != null)
-							mNotesAdapter.notifyDataSetChanged();
-					}
-				});
-		hideDateCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENDATE,
-				false));
+		hideDateCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+			widgetPrefs.putBoolean(KEY_HIDDENDATE, isChecked);
+			if (mNotesAdapter != null)
+				mNotesAdapter.notifyDataSetChanged();
+		});
+		hideDateCheckBox.setChecked(widgetPrefs.getBoolean(KEY_HIDDENDATE, false));
 	}
 
 	private int getListPositionOf(final Adapter adapter, final long id) {
@@ -679,16 +652,10 @@ public class ListWidgetConfig extends AppCompatActivity {
 
 	/**
 	 * Returns black, with the opacity specified
+	 *
+	 * @param opacity should be a number between 0 and 100
 	 */
 	public static int getHomescreenBackgroundColor(final int opacity) {
-		// int opacity = 50;
-		// try {
-		// opacity =
-		// Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context)
-		// .getString(PREF_HOMESCREEN_BACKGROUND_OPACITY, "50"));
-		// } catch (NumberFormatException ignored) {
-		// }
-
 		if (opacity >= 100) {
 			return 0xff000000;
 		} else if (opacity <= 0) {
@@ -702,8 +669,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 	 * Returns the specified color, with the opacity specified. The color will
 	 * have its alpha overwritten.
 	 */
-	public static int getHomescreenBackgroundColor(final int opacity,
-												   final int color) {
+	public static int getHomescreenBackgroundColor(final int opacity, final int color) {
 		// Get rid of possible alpha
 		int retColor = color & 0x00ffffff;
 
@@ -715,12 +681,14 @@ public class ListWidgetConfig extends AppCompatActivity {
 		final int mHeaderLayout;
 		final static int itemType = 0;
 		final static int headerType = 1;
+		final Context mContext;
 
 		public SimpleWidgetPreviewAdapter(Context context, int layout,
 										  int headerLayout, Cursor c, String[] from, int[] to, int flags) {
 			super(context, layout, c, from, to, flags);
 			mItemLayout = layout;
 			mHeaderLayout = headerLayout;
+			mContext = context;
 		}
 
 		int getViewLayout(final int position) {
@@ -750,9 +718,9 @@ public class ListWidgetConfig extends AppCompatActivity {
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
 			if (convertView == null) {
-				final LayoutInflater inflater = LayoutInflater.from(mContext);
-				convertView = inflater.inflate(getViewLayout(position), parent,
-						false);
+				final LayoutInflater inflater = LayoutInflater.from(this.mContext);
+				convertView = inflater
+						.inflate(getViewLayout(position), parent, false);
 			}
 			return super.getView(position, convertView, parent);
 		}

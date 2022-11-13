@@ -17,7 +17,6 @@
 
 package com.nononsenseapps.notepad.database;
 
-import java.text.ParseException;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -172,8 +171,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
 		db.beginTransaction();
 		try {
-			final HashMap<Long, Long> listIDMap = new HashMap<Long, Long>();
-			final HashMap<Long, Long> taskIDMap = new HashMap<Long, Long>();
+			final HashMap<Long, Long> listIDMap = new HashMap<>();
+			final HashMap<Long, Long> taskIDMap = new HashMap<>();
 			final LegacyDBHelper legacyDBHelper = new LegacyDBHelper(context, testPrefix);
 			final SQLiteDatabase legacyDB = legacyDBHelper.getReadableDatabase();
 
@@ -285,23 +284,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 		if (!c.isClosed() && c.getCount() > 0) {
 			// Done
 		} else {
-			// If preferences has sync enabled, don't create this list
-			// The backup agent has restored a reinstallation
-			if (PreferenceManager.getDefaultSharedPreferences(context).contains(
-					SyncPrefs.KEY_ACCOUNT)) {
-
+			var sPrefs = PreferenceManager.getDefaultSharedPreferences(context);
+			if (sPrefs.contains(SyncPrefs.KEY_ACCOUNT)) {
+				// If preferences has sync enabled, don't create this list
+				// The backup agent has restored a reinstallation
 			} else {
-
 				// Create a list
 				final TaskList tl = new TaskList();
 				tl.title = context.getString(R.string.tasks);
 				tl.insert(context, db);
-
-				// final Task t = new Task();
-				// t.dblist = tl._id;
-				// t.title = context.getString(R.string.default_notetitle);
-				// t.note = context.getString(R.string.default_notetext);
-				// t.insert(context, db);
 			}
 		}
 		c.close();

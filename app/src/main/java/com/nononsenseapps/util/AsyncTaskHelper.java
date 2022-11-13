@@ -31,7 +31,7 @@ public class AsyncTaskHelper {
 	 * This method must be called from the UI thread.
 	 */
 	public static void background(final @NonNull Job job) {
-		AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<Void, Void, Void>() {
+		AsyncTask<Void, Void, Void> asyncTask = new AsyncTask<>() {
 			@Override
 			protected Void doInBackground(Void... params) {
 				job.doInBackground();

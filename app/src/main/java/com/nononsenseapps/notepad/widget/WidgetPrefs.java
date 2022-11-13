@@ -57,7 +57,7 @@ public class WidgetPrefs {
 	}
 
 	public static String keyWrap(final String originalKey, final int widgetId) {
-		return originalKey + String.valueOf(widgetId);
+		return originalKey + widgetId;
 	}
 
 	public boolean isPresent() {

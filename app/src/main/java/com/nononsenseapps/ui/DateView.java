@@ -17,48 +17,39 @@
 
 package com.nononsenseapps.ui;
 
+import android.annotation.SuppressLint;
+import android.content.Context;
+import android.text.format.DateFormat;
+import android.text.format.Time;
+import android.util.AttributeSet;
+
+import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.R;
+
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
-import android.annotation.SuppressLint;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.preference.PreferenceManager;
-import android.text.format.DateFormat;
-import android.text.format.Time;
-import android.util.AttributeSet;
-import android.widget.TextView;
-
-import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.R;
-
 /**
  * A simple textview that can display time.
  */
-public class DateView extends TextView {
+public class DateView extends androidx.appcompat.widget.AppCompatTextView {
+
 	private static final int SECONDS_PER_DAY = 3600;
-	// private String day = "E, d MMM";
-	//public static final String day = "MMM d";
-	//public static final String time = "kk:mm";
-
-	private final Context mContext;
-
-	//private final Calendar mCalendar;
 
 	SimpleDateFormat mDateFormatter;
 
 	public DateView(Context context) {
 		super(context);
-		this.mContext = context;
+
 		mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
 	}
 
 	@SuppressLint("SimpleDateFormat")
 	public DateView(Context context, AttributeSet attrs) {
 		super(context, attrs);
-		this.mContext = context;
+
 		try {
 			mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
 		} catch (Exception e) {
@@ -69,7 +60,7 @@ public class DateView extends TextView {
 
 	public DateView(Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
-		this.mContext = context;
+
 		mDateFormatter = TimeFormatter.getLocalFormatterShortDateOnly(context);
 	}
 

@@ -25,10 +25,10 @@ import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.nononsenseapps.helpers.NnnLogger;
-import com.nononsenseapps.notepad.R;
 
 /**
  * Implementation of {@link androidx.viewpager.widget.PagerAdapter} that
@@ -94,13 +94,8 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 	 */
 	public abstract Fragment getItem(int position);
 
-//	@Override
-//	public void startUpdate(ViewGroup container) {
-//		
-//	}
-
 	@Override
-	public Object instantiateItem(ViewGroup container, int position) {
+	public Object instantiateItem(@NonNull ViewGroup container, int position) {
 		if (mCurTransaction == null) {
 			mCurTransaction = mFragmentManager.beginTransaction();
 		}
@@ -111,11 +106,11 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 		String name = makeFragmentName(container.getId(), itemId);
 		Fragment fragment = mFragmentManager.findFragmentByTag(name);
 		if (fragment != null) {
-			NnnLogger.debugOnly(FragmentPagerAdapter.class, "Attaching item #" + itemId + ": f=" + fragment);
+			NnnLogger.debug(FragmentPagerAdapter.class, "Attaching item #" + itemId + ": f=" + fragment);
 			mCurTransaction.attach(fragment);
 		} else {
 			fragment = getItem(position);
-			NnnLogger.debugOnly(FragmentPagerAdapter.class, "Adding item #" + itemId + ": f=" + fragment);
+			NnnLogger.debug(FragmentPagerAdapter.class, "Adding item #" + itemId + ": f=" + fragment);
 			mCurTransaction.add(container.getId(), fragment,
 					makeFragmentName(container.getId(), itemId));
 		}
@@ -132,7 +127,7 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 		if (mCurTransaction == null) {
 			mCurTransaction = mFragmentManager.beginTransaction();
 		}
-		NnnLogger.debugOnly(FragmentPagerAdapter.class,
+		NnnLogger.debug(FragmentPagerAdapter.class,
 				"Detaching item #" + getItemId(position) + ": f=" + object + " v=" + ((Fragment) object).getView());
 		mCurTransaction.detach((Fragment) object);
 	}

@@ -24,8 +24,6 @@ import android.preference.PreferenceManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.nononsenseapps.notepad.R;
-
 /**
  * A base activity which sets the user's configured language and theme.
  */
@@ -35,11 +33,7 @@ public final /* used to be abstract! */ class ActivityBase extends AppCompatActi
 
 	private boolean shouldRestart = false;
 	private final SharedPreferences.OnSharedPreferenceChangeListener mThemeLocaleChangeListener =
-			(sharedPreferences, key) -> {
-
-				onThemeOrLocaleChange();
-
-			};
+			(sharedPreferences, key) -> onThemeOrLocaleChange();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

@@ -52,8 +52,8 @@ public class DialogPassword extends DialogFragment {
 
 	PasswordConfirmedListener listener = null;
 
-	public static interface PasswordConfirmedListener {
-		public void onPasswordConfirmed();
+	public interface PasswordConfirmedListener {
+		void onPasswordConfirmed();
 	}
 
 	public void setListener(final PasswordConfirmedListener listener) {

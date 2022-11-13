@@ -38,7 +38,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView.MultiChoiceModeListener;
-import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -55,13 +54,11 @@ import com.mobeta.android.dslv.DragSortListView.DropListener;
 import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
-import com.nononsenseapps.helpers.SyncHelper;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.fragments.DialogConfirmBase.DialogConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
@@ -105,23 +102,14 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	LayoutInflater layoutInflater;
 
 	SimpleSectionsAdapter mAdapter;
-
 	private long mListId = -1;
-
 	private OnFragmentInteractionListener mListener;
-
 	private String mSortType = null;
-
 	private int mRowCount = 3;
 	private boolean mHideCheckbox = false;
-
 	private String mListType = null;
-
 	private LoaderCallbacks<Cursor> mCallback = null;
-
 	private ActionMode mMode;
-
-	private SwipeRefreshLayout mSwipeRefreshLayout;
 	private boolean mDeleteWasUndone = false;
 
 	public static TaskListFragment_ getInstance(final long listId) {
@@ -183,21 +171,16 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		 */
 
 		mAdapter.setViewBinder(new ViewBinder() {
-			SimpleDateFormat weekdayFormatter = TimeFormatter
+			final SimpleDateFormat weekdayFormatter = TimeFormatter
 					.getLocalFormatterWeekday(getActivity());
 			boolean isHeader = false;
 
 			final String manualsort = getString(R.string.const_possubsort);
 			final String notetype = getString(R.string.const_listtype_notes);
 			String sTemp = "";
-			final OnCheckedChangeListener checkBoxListener = new OnCheckedChangeListener() {
-				@Override
-				public void onCheckedChanged(CompoundButton buttonView,
-											 boolean isChecked) {
-					Task.setCompleted(getActivity(), isChecked,
-							((NoteCheckBox) buttonView).getNoteId());
-				}
-			};
+			final OnCheckedChangeListener checkBoxListener =
+					(buttonView, isChecked) -> Task.setCompleted(
+							getActivity(), isChecked, ((NoteCheckBox) buttonView).getNoteId());
 
 			@Override
 			public boolean setViewValue(View view, Cursor c, int colIndex) {
@@ -314,47 +297,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		});
 	}
 
-	/*
-	 * Called to have the fragment instantiate its user interface view.
-	 * This is optional, and non-graphical fragments can return null (which
-	 * is the default implementation).  This will be called between
-	 * {@link #onCreate(Bundle)} and {@link #onActivityCreated(Bundle)}.
-	 *
-	 * If you return a View from here, you will later be called in
-	 * {@link #onDestroyView} when the view is being released.
-	 *
-	 * @param inflater           The LayoutInflater object that can be used to inflate
-	 *                           any views in the fragment,
-	 * @param container          If non-null, this is the parent view that the fragment's
-	 *                           UI should be attached to.  The fragment should not add the view
-	 *                           itself,
-	 *                           but this can be used to generate the LayoutParams of the view.
-	 * @param savedInstanceState If non-null, this fragment is being re-constructed
-	 *                           from a previous saved state as given here.
-	 * @return Return the View for the fragment's UI, or null.
-	 */
-
-	/*@Nullable
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle
-			savedInstanceState) {
-		//return super.onCreateView(inflater, container, savedInstanceState);
-		View rootView = inflater.inflate(R.layout.fragment_task_list, container, false);
-
-		listView = (DragSortListView) rootView.findViewById(android.R.id.list);
-		loadList();
-		// ListView will only support scrolling ToolBar off-screen from Lollipop onwards.
-		// RecyclerView does not have this limitation
-		ViewCompat.setNestedScrollingEnabled(listView, true);
-
-		// setup swipe to refresh
-		mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swiperefresh);
-		setupSwipeToRefresh();
-
-		return rootView;
-	}
-	*/
-
 	@Override
 	public void onActivityCreated(final Bundle state) {
 		super.onActivityCreated(state);
@@ -367,12 +309,13 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		mRowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
 		mHideCheckbox = prefs.getBoolean(getString(R.string.pref_hidecheckboxes), false);
 
+		// TODO do we NEED this ?
 		// mSortType = prefs.getString(getString(R.string.pref_sorttype),
 		// getString(R.string.default_sorttype));
 		// mListType = prefs.getString(getString(R.string.pref_listtype),
 		// getString(R.string.default_listtype));
 
-		mCallback = new LoaderCallbacks<Cursor>() {
+		mCallback = new LoaderCallbacks<>() {
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
 				if (id == 0 /* LOADER_CURRENT_LIST */) {
@@ -537,7 +480,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		});
 
 		listView.setMultiChoiceModeListener(new MultiChoiceModeListener() {
-			final HashMap<Long, Task> tasks = new HashMap<Long, Task>();
+			final HashMap<Long, Task> tasks = new HashMap<>();
 
 			/**
 			 * Delete tasks and display a snackbar with an undo action
@@ -570,6 +513,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						}
 					}
 				};
+
 			}
 
 			// Undo callback
@@ -817,28 +761,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	public void onDestroy() {
 		super.onDestroy();
 		getLoaderManager().destroyLoader(0);
-	}
-
-	void setupSwipeToRefresh() {
-		// Set the offset so it comes out of the correct place
-		final int toolbarHeight = getResources().getDimensionPixelOffset(R.dimen.toolbar_height);
-		mSwipeRefreshLayout
-				.setProgressViewOffset(false, -toolbarHeight, Math.round(0.7f * toolbarHeight));
-
-		// The arrow will cycle between these colors (in order)
-		mSwipeRefreshLayout.setColorSchemeResources(
-				R.color.refresh_progress_1,
-				R.color.refresh_progress_2,
-				R.color.refresh_progress_3);
-
-		mSwipeRefreshLayout.setOnRefreshListener(() -> {
-			boolean syncing = SyncHelper.onManualSyncRequest(getActivity());
-
-			if (!syncing) {
-				// Do not show refresh view
-				mSwipeRefreshLayout.setRefreshing(false);
-			}
-		});
 	}
 
 	@Override

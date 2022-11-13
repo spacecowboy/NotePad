@@ -21,7 +21,6 @@ package com.nononsenseapps.scrolltricks;
 import androidx.fragment.app.Fragment;
 
 import android.view.View;
-import android.view.ViewTreeObserver;
 
 /**
  * A simple fragment that handles the quick return bindings. Just implement the
@@ -50,13 +49,10 @@ public abstract class QuickReturnFragment extends Fragment implements Observable
 		mPlaceholderView = getPlaceHolderView();
 
 		mObservableScrollView.getViewTreeObserver().addOnGlobalLayoutListener(
-				new ViewTreeObserver.OnGlobalLayoutListener() {
-					@Override
-					public void onGlobalLayout() {
-						onScrollChanged();
-						mCachedVerticalScrollRange = mObservableScrollView.computeVerticalScrollRange();
-						mQuickReturnHeight = mQuickReturnView.getHeight();
-					}
+				() -> {
+					onScrollChanged();
+					mCachedVerticalScrollRange = mObservableScrollView.computeVerticalScrollRange();
+					mQuickReturnHeight = mQuickReturnView.getHeight();
 				});
 	}
 

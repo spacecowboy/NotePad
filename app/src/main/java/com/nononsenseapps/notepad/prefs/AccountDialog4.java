@@ -26,7 +26,6 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.ContentResolver;
-import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -71,11 +70,9 @@ public class AccountDialog4 extends DialogFragment implements
 		}
 		// TODO
 		//  Could add a clear alternative here
-		builder.setItems(names, new DialogInterface.OnClickListener() {
-			public void onClick(DialogInterface dialog, int which) {
-				// Stuff to do when the account is selected by the user
-				accountSelected(accounts[which]);
-			}
+		builder.setItems(names, (dialog, which) -> {
+			// Stuff to do when the account is selected by the user
+			accountSelected(accounts[which]);
 		});
 		return builder.create();
 	}
@@ -87,7 +84,7 @@ public class AccountDialog4 extends DialogFragment implements
 	 */
 	public void accountSelected(final Account account) {
 		if (account != null) {
-			NnnLogger.debugOnly(AccountDialog4.class, "step one");
+			NnnLogger.debug(AccountDialog4.class, "step one");
 			this.account = account;
 			// Request user's permission
 			GoogleTasksClient.getAuthTokenAsync(activity, account, this);
@@ -102,7 +99,7 @@ public class AccountDialog4 extends DialogFragment implements
 	@Override
 	public void run(AccountManagerFuture<Bundle> future) {
 		try {
-			NnnLogger.debugOnly(AccountDialog4.class, "step two");
+			NnnLogger.debug(AccountDialog4.class, "step two");
 			// If the user has authorized
 			// your application to use the
 			// tasks API
@@ -110,10 +107,10 @@ public class AccountDialog4 extends DialogFragment implements
 			String token = future.getResult().getString(
 					AccountManager.KEY_AUTHTOKEN);
 			// Now we are authorized by the user.
-			NnnLogger.debugOnly(AccountDialog4.class, "step two-b: " + token);
+			NnnLogger.debug(AccountDialog4.class, "step two-b: " + token);
 
 			if (token != null && !token.equals("") && account != null) {
-				NnnLogger.debugOnly(AccountDialog4.class, "step three: " + account.name);
+				NnnLogger.debug(AccountDialog4.class, "step three: " + account.name);
 				SharedPreferences customSharedPreference = PreferenceManager
 						.getDefaultSharedPreferences(activity);
 				customSharedPreference.edit()

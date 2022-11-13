@@ -48,14 +48,8 @@ public class GoogleTask extends RemoteTask {
 	public String position = null;
 
 	public boolean remotelydeleted = false;
-	//public int hidden = 0;
-	//public boolean didRemoteInsert = false;
 
-	public String possort = "";
-	//public int indentLevel = 0;
-
-//	public JSONObject json = null;
-	//public boolean conflict = false;
+	public final String possort = "";
 
 	public GoogleTask(final String accountName) {
 		super();
@@ -192,11 +186,6 @@ public class GoogleTask extends RemoteTask {
 	public ContentValues toGTasksContentValues(String accountName) {
 		ContentValues values = new ContentValues();
 		values.put(NotePad.GTasks.COLUMN_NAME_DB_ID, dbid);
-//		if (title.contains("debug"))
-//			Log.d(TAG, title + " saving id: " + id);
-//		values.put(NotePad.GTasks.COLUMN_NAME_ETAG, etag);
-//		values.put(NotePad.GTasks.COLUMN_NAME_GOOGLE_ACCOUNT, accountName);
-//		values.put(NotePad.GTasks.COLUMN_NAME_GTASKS_ID, id);
 		values.put(NotePad.GTasks.COLUMN_NAME_UPDATED, updated);
 		return values;
 	}
@@ -213,7 +202,7 @@ public class GoogleTask extends RemoteTask {
 	@Override
 	public boolean equals(Object o) {
 		boolean equal = false;
-		if (GoogleTask.class.isInstance(o)) {
+		if (o instanceof GoogleTask) {
 			// It's a list!
 			GoogleTask task = (GoogleTask) o;
 			if (dbid != -1 && dbid == task.dbid) {

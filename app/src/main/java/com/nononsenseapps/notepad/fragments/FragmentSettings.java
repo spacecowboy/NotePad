@@ -17,18 +17,11 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import static com.nononsenseapps.util.PermissionsHelper.hasPermissions;
-import static com.nononsenseapps.util.PermissionsHelper.permissionsGranted;
 import static com.nononsenseapps.util.SharedPreferencesHelper.disableSdCardSync;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.DialogFragment;
-import android.app.Fragment;
-import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
@@ -36,18 +29,13 @@ import android.preference.PreferenceManager;
 import android.preference.SwitchPreference;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
 
-import com.nononsenseapps.build.Config;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
-import com.nononsenseapps.util.PermissionsHelper;
 import com.nononsenseapps.util.PreferenceHelper;
-import com.nononsenseapps.util.SharedPreferencesHelper;
 import com.nononsenseapps.util.SyncGtaskHelper;
 
 import java.io.File;
@@ -89,38 +77,17 @@ class FragmentSettings_USELESS extends PreferenceFragment implements SharedPrefe
 	}
 
 
-	private void setupPassword() {
-		Preference preference = findPreference(getString(R.string.const_preference_password_key));
-		if (preference != null) {
-			preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-				@Override
-				public boolean onPreferenceClick(Preference preference) {
-					DialogPasswordSettings.showDialog(((AppCompatActivity) getActivity())
-							.getSupportFragmentManager());
-					return true;
-				}
-			});
-		}
-	}
+
 
 	private void setupLegacyBackup() {
 		Preference preference = findPreference(getString(R.string
 				.const_preference_legacybackup_key));
 		if (preference != null) {
-			preference.setOnPreferenceClickListener(new Preference.OnPreferenceClickListener() {
-				@Override
-				public boolean onPreferenceClick(Preference preference) {
-					DialogRestoreBackup.showDialog(getFragmentManager(), new DialogConfirmBaseV11
-							.DialogConfirmedListener() {
-
-						@Override
-						public void onConfirm() {
-							// (JSON) Backup.importLegacyBackup(getActivity());
-						}
-
-					});
-					return true;
-				}
+			preference.setOnPreferenceClickListener(preference1 -> {
+				DialogRestoreBackup.showDialog(getFragmentManager(), () -> {
+					// (JSON) Backup.importLegacyBackup(getActivity());
+				});
+				return true;
 			});
 		}
 	}
@@ -181,30 +148,36 @@ class FragmentSettings_USELESS extends PreferenceFragment implements SharedPrefe
 				return;
 			}
 
-			if (key.equals(SyncPrefs.KEY_SYNC_ENABLE)) {
-				final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
-				if (enabled) {
-					//showAccountDialog();
-				} else {
-					SyncGtaskHelper.toggleSync(getActivity(), sharedPreferences);
-					// Synchronize view also
-					if (preferenceSyncGTasks.isChecked()) {
-						preferenceSyncGTasks.setChecked(false);
+			switch (key) {
+				case SyncPrefs.KEY_SYNC_ENABLE: {
+					final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
+					if (enabled) {
+						//showAccountDialog();
+					} else {
+						SyncGtaskHelper.toggleSync(getActivity(), sharedPreferences);
+						// Synchronize view also
+						if (preferenceSyncGTasks.isChecked()) {
+							preferenceSyncGTasks.setChecked(false);
+						}
 					}
+					break;
 				}
-			} else if (key.equals(SyncPrefs.KEY_ACCOUNT)) {
-				setAccountSummary(sharedPreferences);
-			} else if (key.equals(SyncPrefs.KEY_SD_ENABLE)) {
-				final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
-				if (enabled) {
+				case SyncPrefs.KEY_ACCOUNT:
+					setAccountSummary(sharedPreferences);
+					break;
+				case SyncPrefs.KEY_SD_ENABLE: {
+					final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
+					if (enabled) {
 //                     showFilePicker();
-				} else {
-					// Restart the service (started in activities)
-					OrgSyncService.stop(getActivity());
-					// Synchronize view also
-					if (preferenceSyncSdCard.isChecked()) {
-						preferenceSyncSdCard.setChecked(false);
+					} else {
+						// Restart the service (started in activities)
+						OrgSyncService.stop(getActivity());
+						// Synchronize view also
+						if (preferenceSyncSdCard.isChecked()) {
+							preferenceSyncSdCard.setChecked(false);
+						}
 					}
+					break;
 				}
 			}
 		} catch (IllegalStateException ignored) {

@@ -23,7 +23,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +33,6 @@ import org.json.JSONObject;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.os.Environment;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -80,7 +78,7 @@ public class JSONBackup {
 	}
 
 	private List<TaskList> getTaskLists() {
-		final ArrayList<TaskList> taskLists = new ArrayList<TaskList>();
+		final ArrayList<TaskList> taskLists = new ArrayList<>();
 
 		final Cursor c = context.getContentResolver().query(TaskList.URI,
 				TaskList.Columns.FIELDS, null, null, TaskList.Columns.TITLE);
@@ -96,7 +94,7 @@ public class JSONBackup {
 	}
 
 	private List<RemoteTaskList> getRemotesOf(final TaskList list) {
-		final ArrayList<RemoteTaskList> remotes = new ArrayList<RemoteTaskList>();
+		final ArrayList<RemoteTaskList> remotes = new ArrayList<>();
 
 		final Cursor c = context.getContentResolver().query(RemoteTaskList.URI,
 				RemoteTaskList.Columns.FIELDS,
@@ -115,7 +113,7 @@ public class JSONBackup {
 	}
 
 	private List<Task> getTasksIn(final TaskList list) {
-		final ArrayList<Task> tasks = new ArrayList<Task>();
+		final ArrayList<Task> tasks = new ArrayList<>();
 
 		// Reverse order because adding stuff is always done at the top
 		final Cursor c = context.getContentResolver().query(Task.URI,
@@ -134,7 +132,7 @@ public class JSONBackup {
 	}
 
 	private List<RemoteTask> getRemotesOf(final Task task) {
-		final ArrayList<RemoteTask> remotes = new ArrayList<RemoteTask>();
+		final ArrayList<RemoteTask> remotes = new ArrayList<>();
 
 		final Cursor c = context.getContentResolver().query(RemoteTask.URI,
 				RemoteTask.Columns.FIELDS, RemoteTask.Columns.DBID + " IS ?",
@@ -152,7 +150,7 @@ public class JSONBackup {
 	}
 
 	private List<Notification> getRemindersFor(final Task task) {
-		final ArrayList<Notification> reminders = new ArrayList<Notification>();
+		final ArrayList<Notification> reminders = new ArrayList<>();
 
 		final Cursor c = context.getContentResolver().query(Notification.URI,
 				Notification.Columns.FIELDS,
@@ -325,8 +323,7 @@ public class JSONBackup {
 
 	}
 
-	private JSONObject readBackup() throws JSONException, IOException,
-			FileNotFoundException {
+	private JSONObject readBackup() throws JSONException, IOException {
 		// Try to read the backup file
 		final File backupFile = new File(getBackupFilePath(this.context));
 		final StringBuilder sb = new StringBuilder();

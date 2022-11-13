@@ -33,19 +33,19 @@ public interface SynchronizerInterface {
 	 * @return A unique name for this service. Should be descriptive, like
 	 * SDOrg or SSHOrg.
 	 */
-	public String getServiceName();
+	String getServiceName();
 
 	/**
 	 * @return The username of the configured service. Likely an e-mail.
 	 */
-	public String getAccountName();
+	String getAccountName();
 
 	/**
 	 * Returns true if the synchronizer has been configured. This is called
 	 * before synchronization. It will be true if the user has selected an
 	 * account, folder etc...
 	 */
-	public boolean isConfigured();
+	boolean isConfigured();
 
 	/**
 	 * Returns an OrgFile object with a filename set that is guaranteed to
@@ -59,7 +59,7 @@ public interface SynchronizerInterface {
 	 * @throws IOException
 	 * @throws IllegalArgumentException
 	 */
-	public OrgFile getNewFile(final String desiredName) throws IOException,
+	OrgFile getNewFile(final String desiredName) throws IOException,
 			IllegalArgumentException;
 
 	/**
@@ -67,14 +67,14 @@ public interface SynchronizerInterface {
 	 *
 	 * @param orgFile The file to save. Uses the filename stored in the object.
 	 */
-	public void putRemoteFile(final OrgFile orgFile) throws IOException;
+	void putRemoteFile(final OrgFile orgFile) throws IOException;
 
 	/**
 	 * Delete the file on the remote end.
 	 *
 	 * @param orgFile The file to delete.
 	 */
-	public void deleteRemoteFile(final OrgFile orgFile) throws IOException;
+	void deleteRemoteFile(final OrgFile orgFile) throws IOException;
 
 	/**
 	 * Rename the file on the remote end.
@@ -82,32 +82,32 @@ public interface SynchronizerInterface {
 	 * @param oldName The name it is currently stored as on the remote end.
 	 * @param orgFile This contains the new name.
 	 */
-	public void renameRemoteFile(final String oldName, final OrgFile orgFile) throws IOException;
+	void renameRemoteFile(final String oldName, final OrgFile orgFile) throws IOException;
 
 	/**
 	 * Returns a BufferedReader to the remote file. Null if it doesn't exist.
 	 *
 	 * @param filename Name of the file, without path
 	 */
-	public BufferedReader getRemoteFile(final String filename) throws IOException;
+	BufferedReader getRemoteFile(final String filename) throws IOException;
 
 	/**
 	 * @return a set of all remote files.
 	 */
-	public HashSet<String> getRemoteFilenames() throws IOException;
+	HashSet<String> getRemoteFilenames() throws IOException;
 
 	/**
 	 * Do a full 2-way sync.
 	 */
-	public void fullSync() throws IOException, ParseException;
+	void fullSync() throws IOException, ParseException;
 
 	/**
 	 * Use this to disconnect from any services and cleanup.
 	 */
-	public void postSynchronize();
+	void postSynchronize();
 
 	/**
 	 * @return a Monitor for this source. May be null.
 	 */
-	public Monitor getMonitor();
+	Monitor getMonitor();
 }

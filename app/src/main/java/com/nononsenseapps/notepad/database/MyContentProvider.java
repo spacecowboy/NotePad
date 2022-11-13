@@ -27,8 +27,8 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteStatement;
 import android.net.Uri;
-import android.util.Log;
 
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.UpdateNotifier;
 
 import java.util.ArrayList;
@@ -163,7 +163,7 @@ public class MyContentProvider extends ContentProvider {
 		final Task t;
 		final SQLiteStatement stmt;
 		final String sql;
-		final ArrayList<Uri> updateUris = new ArrayList<Uri>();
+		final ArrayList<Uri> updateUris = new ArrayList<>();
 		db.beginTransaction();
 
 		try {
@@ -368,9 +368,6 @@ public class MyContentProvider extends ContentProvider {
 									 String selection, String[] selectionArgs, String sortOrder) {
 		Cursor result = null;
 		final long id;
-		// if (selection != null) Log.d("nononsenseapps", selection);
-		// if (selectionArgs != null)
-		// Log.d("nononsenseapps", DAO.arrayToCommaString(selectionArgs));
 		switch (sURIMatcher.match(uri)) {
 			case TaskList.BASEURICODE:
 				result = DatabaseHandler
@@ -378,8 +375,7 @@ public class MyContentProvider extends ContentProvider {
 						.getReadableDatabase()
 						.query(TaskList.TABLE_NAME, projection, selection,
 								selectionArgs, null, null, sortOrder);
-				result.setNotificationUri(getContext().getContentResolver(),
-						TaskList.URI);
+				result.setNotificationUri(getContext().getContentResolver(), TaskList.URI);
 				break;
 			case TaskList.BASEITEMCODE:
 				id = Long.parseLong(uri.getLastPathSegment());
@@ -413,20 +409,14 @@ public class MyContentProvider extends ContentProvider {
 						.getReadableDatabase()
 						.query(Task.DELETE_TABLE_NAME,
 								Task.Columns.DELETEFIELDS,
-								Task.Columns._ID
-										+ " IN (SELECT "
-										+ Task.Columns._ID
-										+ " FROM "
-										+ Task.FTS3_DELETE_TABLE_NAME
-										+ ((query[0].isEmpty() || query[0]
-										.equals("'*'")) ? ")"
-										: (" WHERE "
-										+ Task.FTS3_DELETE_TABLE_NAME + " MATCH ?)")),
-								(query[0].isEmpty() || query[0].equals("'*'")) ? null
-										: query, null, null, sortOrder);
+								Task.Columns._ID + " IN (SELECT " + Task.Columns._ID
+										+ " FROM " + Task.FTS3_DELETE_TABLE_NAME
+										+ ((query[0].isEmpty() || query[0].equals("'*'")) ? ")"
+										: (" WHERE " + Task.FTS3_DELETE_TABLE_NAME + " MATCH ?)")),
+								(query[0].isEmpty() || query[0].equals("'*'")) ? null : query,
+								null, null, sortOrder);
 
-				result.setNotificationUri(getContext().getContentResolver(),
-						Task.URI_DELETED_QUERY);
+				result.setNotificationUri(getContext().getContentResolver(), Task.URI_DELETED_QUERY);
 				break;
 			case Task.BASEURICODE:
 				result = DatabaseHandler
@@ -446,9 +436,8 @@ public class MyContentProvider extends ContentProvider {
 						.query(Task.TABLE_NAME,
 								projection,
 								Task.whereIdIs(selection),
-								Task.joinArrays(selectionArgs,
-										new String[] { String.valueOf(id) }), null,
-								null, sortOrder);
+								Task.joinArrays(selectionArgs, new String[] { String.valueOf(id) }),
+								null, null, sortOrder);
 				result.setNotificationUri(getContext().getContentResolver(), uri);
 				break;
 			case Task.SECTIONEDDATEQUERYCODE:
@@ -456,8 +445,7 @@ public class MyContentProvider extends ContentProvider {
 				final String listId;
 				if (selectionArgs == null || selectionArgs.length == 0) {
 					listId = null;
-					// throw new SQLException(
-					// "Need a listid as first arg at the moment for this view!");
+					// throw new SQLException("Need a listid as first arg at the moment for this view!");
 				} else {
 					listId = selectionArgs[0];
 				}
@@ -642,13 +630,9 @@ public class MyContentProvider extends ContentProvider {
 			case Task.LEGACYBASEITEMCODE:
 			case Task.LEGACYVISIBLEITEMCODE:
 			default:
-
-				Log.d("nononsenseapps db",
+				NnnLogger.debug(MyContentProvider.class,
 						"Faulty queryURI provided: " + uri.toString());
 				return null;
-
-			// throw new IllegalArgumentException("Faulty queryURI provided: "
-			// + uri.toString());
 		}
 
 		return result;

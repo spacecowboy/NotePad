@@ -17,8 +17,11 @@
 
 package com.nononsenseapps.utils.views;
 
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.text.Layout;
 import android.text.Selection;
 import android.text.Spannable;
@@ -28,11 +31,12 @@ import android.text.style.ClickableSpan;
 import android.text.style.RelativeSizeSpan;
 import android.text.style.StyleSpan;
 import android.text.style.TypefaceSpan;
+import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.TextView;
 
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 
 /**
@@ -40,16 +44,16 @@ import com.nononsenseapps.notepad.R;
  * is not selectable. This is intended to be used in a ListView where the text
  * on items is not intended to be selectable.
  */
-public class TitleNoteTextView extends TextView {
+public class TitleNoteTextView extends androidx.appcompat.widget.AppCompatTextView {
 
 	Object titleStyleSpan;
 	Object titleSizeSpan;
 	Object titleFamilySpan;
 	Object bodyFamilySpan;
 
-	private int primaryColor;
-	private int secondaryColor;
-	private float mTitleRelativeSize;
+	private final int primaryColor;
+	private final int secondaryColor;
+	private final float mTitleRelativeSize;
 	private int mBodyFontFamily;
 	private int mTitleFontFamily;
 	private int mTitleFontStyle;
@@ -301,9 +305,7 @@ public class TitleNoteTextView extends TextView {
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		TextView thisWidget = (TextView) this;
-
-		if (!(thisWidget.getText() instanceof Spanned)) {
+		if (!(this.getText() instanceof Spanned)) {
 			return false;
 		}
 
@@ -315,30 +317,35 @@ public class TitleNoteTextView extends TextView {
 		int x = (int) event.getX();
 		int y = (int) event.getY();
 
-		x -= thisWidget.getTotalPaddingLeft();
-		y -= thisWidget.getTotalPaddingTop();
+		x -= this.getTotalPaddingLeft();
+		y -= this.getTotalPaddingTop();
 
-		x += thisWidget.getScrollX();
-		y += thisWidget.getScrollY();
+		x += this.getScrollX();
+		y += this.getScrollY();
 
-		Layout layout = thisWidget.getLayout();
+		Layout layout = this.getLayout();
 		int line = layout.getLineForVertical(y);
 		int off = layout.getOffsetForHorizontal(line, x);
 
-		Spannable buffer = (Spannable) thisWidget.getText();
+		Spannable buffer = (Spannable) this.getText();
 		ClickableSpan[] link = buffer.getSpans(off, off, ClickableSpan.class);
 
 		// Cant click to the right of a span, if the line ends with the span!
 		if (x > layout.getLineRight(line)) {
 			// Don't call the span
 		} else if (link.length != 0) {
-			if (action == MotionEvent.ACTION_UP) {
-				// TODO here you should edit how the browser tabs are launched.
-				//  See the source code for URLSpan.onClick()
-				link[0].onClick(thisWidget);
-			} else if (action == MotionEvent.ACTION_DOWN) {
-				Selection.setSelection(buffer,
-						buffer.getSpanStart(link[0]), buffer.getSpanEnd(link[0]));
+			switch (action) {
+				case MotionEvent.ACTION_UP:
+					// the user touched a link => fire a custom onClick() method
+					onClickableSpanClicked(link[0]);
+					break;
+				case MotionEvent.ACTION_DOWN:
+					Selection.setSelection(buffer,
+							buffer.getSpanStart(link[0]), buffer.getSpanEnd(link[0]));
+					break;
+				default:
+					// 100% impossible to reach this.
+					break;
 			}
 
 			// ONLY in this case we can say that the event was handled
@@ -346,6 +353,37 @@ public class TitleNoteTextView extends TextView {
 		}
 
 		return false;
+	}
+
+
+	/**
+	 * When the user clicks on a link (in a {@link ClickableSpan}) this view will fire an intent
+	 * to open the browser, using this function
+	 *
+	 * @param cs the {@link ClickableSpan} that the user clicked
+	 */
+	private void onClickableSpanClicked(ClickableSpan cs) {
+		if (cs instanceof URLSpan) {
+			// it's 99% similar to the code on URLSpan.java in the Android SDK, but they set
+			// Browser.EXTRA_APPLICATION_ID, which tells the browser to open links always on
+			// the same tab. By NOT setting it, every clicked link will be opened in a new
+			// browser tab, which I prefer.
+			// TODO If anyone reading this dislikes this behavior, we can add a setting to the
+			//  preferences page, just open an issue on github and explain
+			Uri uri = Uri.parse(((URLSpan)cs).getURL());
+			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+
+			try {
+				this.getContext().startActivity(intent);
+			} catch (ActivityNotFoundException e) {
+				NnnLogger.warning(TitleNoteTextView.class,
+						"Could not find a browser to open the url: " + uri.toString());
+			}
+		} else {
+			NnnLogger.warning(TitleNoteTextView.class, "ClickableSpan was not an UrlSpan");
+			// it should not happen. Anyway, just call the old code from version 5.7.1
+			cs.onClick(this);
+		}
 	}
 
 	public String getTextRest() {

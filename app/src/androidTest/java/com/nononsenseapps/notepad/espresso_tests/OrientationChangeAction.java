@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.view.View;
 
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.test.espresso.UiController;
 import androidx.test.espresso.ViewAction;
 import androidx.test.runner.lifecycle.ActivityLifecycleMonitorRegistry;
@@ -18,19 +19,20 @@ import java.util.Collection;
 
 public class OrientationChangeAction implements ViewAction {
 
-
 	private final int orientation;
+	private final AppCompatActivity mActivity;
 
-	private OrientationChangeAction(int orientation) {
+	private OrientationChangeAction(int orientation, AppCompatActivity activity) {
 		this.orientation = orientation;
+		this.mActivity = activity;
 	}
 
-	public static ViewAction orientationLandscape() {
-		return new OrientationChangeAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+	public static ViewAction orientationLandscape(AppCompatActivity activity) {
+		return new OrientationChangeAction(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE, activity);
 	}
 
-	public static ViewAction orientationPortrait() {
-		return new OrientationChangeAction(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+	public static ViewAction orientationPortrait(AppCompatActivity activity) {
+		return new OrientationChangeAction(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT, activity);
 	}
 
 	@Override
@@ -46,8 +48,7 @@ public class OrientationChangeAction implements ViewAction {
 	@Override
 	public void perform(UiController uiController, View view) {
 		uiController.loopMainThreadUntilIdle();
-		final Activity activity = (Activity) view.findViewById(android.R.id.content).getContext();
-		activity.setRequestedOrientation(orientation);
+		mActivity.setRequestedOrientation(orientation);
 
 		Collection<Activity> resumedActivities = ActivityLifecycleMonitorRegistry
 				.getInstance()

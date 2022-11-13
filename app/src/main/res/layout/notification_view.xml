@@ -86,48 +86,11 @@
 		android:textAppearance="?android:attr/textAppearanceMedium"
 		android:textIsSelectable="false"/>
 
-	<ImageButton
-		android:id="@+id/notificationTypeLocation"
-		style="?android:attr/buttonBarButtonStyle"
-		android:layout_width="40dp"
-		android:layout_height="48dp"
-		android:layout_below="@id/notificationTypeTime"
-		android:layout_alignParentLeft="true"
-		android:background="?android:attr/selectableItemBackground"
-		android:contentDescription="Type of notification"
-		android:minWidth="8dp"
-		android:padding="0dp"
-		android:scaleType="center"
-		android:src="@drawable/ic_location_red"
-		android:visibility="gone"
-		tools:ignore="HardcodedText"/>
-
-	<TextView
-		android:id="@+id/notificationLocation"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignWithParentIfMissing="true"
-		android:layout_below="@id/notificationTypeTime"
-		android:layout_marginLeft="4dp"
-		android:layout_marginRight="4dp"
-		android:layout_toLeftOf="@id/notificationRemove"
-		android:layout_toRightOf="@id/notificationTypeLocation"
-		android:background="?android:attr/selectableItemBackground"
-		android:clickable="true"
-		android:fontFamily="sans-serif-light"
-		android:gravity="center_vertical"
-		android:hint="@string/location"
-		android:minHeight="48dp"
-		android:singleLine="true"
-		android:textAppearance="?android:attr/textAppearanceMedium"
-		android:textIsSelectable="false"
-		android:visibility="gone"/>
-
 	<com.nononsenseapps.ui.WeekDaysView
 		android:id="@+id/weekdays"
 		android:layout_width="match_parent"
 		android:layout_height="48dp"
-		android:layout_below="@id/notificationLocation"
+		android:layout_below="@id/notificationTypeTime"
 		android:layout_alignParentLeft="true"
 		android:paddingLeft="8dp"
 		android:paddingRight="16dp"/>

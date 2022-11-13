@@ -34,20 +34,16 @@ import com.nononsenseapps.notepad.database.TaskList;
 
 public class TasksExtension extends DashClockExtension {
 
-	// final static Uri VISIBLE_NOTES_URI = Uri
-	// .parse("content://com.nononsenseapps.NotePad/visiblenotes");
-	// final static Uri VISIBLE_LISTS_URI = Uri
-	// .parse("content://com.nononsenseapps.NotePad/visiblelists");
-	public static final String DUEDATE_SORT_TYPE = new StringBuilder(
-			"CASE WHEN ").append(Task.Columns.DUE).append(" IS NULL OR ")
-			.append(Task.Columns.DUE).append(" IS '' THEN 1 ELSE 0 END, ")
-			.append(Task.Columns.DUE).toString();
+	public static final String DUEDATE_SORT_TYPE = "CASE WHEN " +
+			Task.Columns.DUE + " IS NULL OR " +
+			Task.Columns.DUE + " IS '' THEN 1 ELSE 0 END, " +
+			Task.Columns.DUE;
 	private static final String WHERE_LIST_IS_AND = Task.Columns.DBLIST
 			+ " IS ? AND ";
-	private static final String WHERE_DATE_IS = new StringBuilder(
-			Task.Columns.COMPLETED).append(" IS NULL AND ")
-			.append(Task.Columns.DUE).append(" IS NOT NULL AND ")
-			.append(Task.Columns.DUE).append(" <= ? ").toString();
+	private static final String WHERE_DATE_IS = Task.Columns.COMPLETED +
+			" IS NULL AND " +
+			Task.Columns.DUE + " IS NOT NULL AND " +
+			Task.Columns.DUE + " <= ? ";
 	private static final String WHERE_ALL_NOTDONE = Task.Columns.COMPLETED
 			+ " IS NULL";
 
@@ -86,12 +82,8 @@ public class TasksExtension extends DashClockExtension {
 				.getString("list_spinner", "-1"));
 
 		final boolean showOverdue = prefs.getBoolean("show_overdue", true);
-
-		final String upperLimit = prefs.getString("list_due_upper_limit",
-				getString(R.string.dashclock_pref_today));
-
+		final String upperLimit = prefs.getString("list_due_upper_limit", getString(R.string.dashclock_pref_today));
 		final boolean showSingle = prefs.getBoolean("show_single_only", false);
-
 		final boolean showHeader = prefs.getBoolean("show_header", true);
 
 		final ArrayList<Task> notes = getNotesFromDB(listId, upperLimit);
@@ -127,15 +119,13 @@ public class TasksExtension extends DashClockExtension {
 			if (notes.size() > 1) {
 				noteIntent
 						.setAction(Intent.ACTION_VIEW)
-						.setData(
-								TaskList.getUri(notes.get(0).dblist.longValue()))
+						.setData(TaskList.getUri(notes.get(0).dblist))
 						.putExtra(Task.TABLE_NAME, notes.get(0)._id);
 			} else {
 				noteIntent
 						.setAction(Intent.ACTION_EDIT)
 						.setData(Task.getUri(notes.get(0)._id))
-						.putExtra(Task.Columns.DBLIST,
-								notes.get(0).dblist.longValue());
+						.putExtra(Task.Columns.DBLIST, notes.get(0).dblist.longValue());
 			}
 
 			// Publish the extension data update.
@@ -186,8 +176,7 @@ public class TasksExtension extends DashClockExtension {
 	/**
 	 * Return a list of notes respecting the constraints set in preferences.
 	 */
-	private ArrayList<Task> getNotesFromDB(final long list,
-										   final String upperLimit) {
+	private ArrayList<Task> getNotesFromDB(final long list, final String upperLimit) {
 		// WHERE_LIST_IS, toA(list)
 		String where = "";
 		String[] whereArgs = new String[0];
@@ -202,7 +191,7 @@ public class TasksExtension extends DashClockExtension {
 		final Cursor cursor = getContentResolver().query(Task.URI,
 				Task.Columns.FIELDS, where, whereArgs, DUEDATE_SORT_TYPE);
 
-		final ArrayList<Task> result = new ArrayList<Task>();
+		final ArrayList<Task> result = new ArrayList<>();
 		if (cursor != null) {
 			while (cursor.moveToNext()) {
 				result.add(new Task(cursor));
@@ -245,8 +234,7 @@ public class TasksExtension extends DashClockExtension {
 		return where;
 	}
 
-	private String[] getUpperQueryLimitWhereArgs(final String[] whereArgs,
-												 final String upperLimit) {
+	private String[] getUpperQueryLimitWhereArgs(final String[] whereArgs, final String upperLimit) {
 		final GregorianCalendar gc = new GregorianCalendar();
 		gc.set(GregorianCalendar.HOUR_OF_DAY, 23);
 		gc.set(GregorianCalendar.MINUTE, 59);

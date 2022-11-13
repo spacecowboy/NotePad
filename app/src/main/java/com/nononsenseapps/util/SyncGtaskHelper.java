@@ -30,7 +30,6 @@ import android.preference.PreferenceManager;
 import androidx.annotation.NonNull;
 
 import com.nononsenseapps.helpers.GTasksSyncDelay;
-import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 

@@ -78,21 +78,21 @@ public class RemoteTaskList extends DAO {
 	/**
 	 * Main table to store data
 	 */
-	public static final String CREATE_TABLE = new StringBuilder("CREATE TABLE ")
-			.append(TABLE_NAME)
-			.append("(").append(Columns._ID).append(" INTEGER PRIMARY KEY,")
-			.append(Columns.ACCOUNT).append(" TEXT NOT NULL,")
-			.append(Columns.SERVICE).append(" TEXT NOT NULL,")
-			.append(Columns.DBID).append(" INTEGER NOT NULL,")
-			.append(Columns.UPDATED).append(" INTEGER NOT NULL,")
-			.append(Columns.REMOTEID).append(" TEXT NOT NULL,")
-			.append(Columns.DELETED).append(" TEXT,")
-			.append(Columns.FIELD2).append(" TEXT,")
-			.append(Columns.FIELD3).append(" TEXT,")
-			.append(Columns.FIELD4).append(" TEXT,")
-			.append(Columns.FIELD5).append(" TEXT")
+	public static final String CREATE_TABLE = "CREATE TABLE " +
+			TABLE_NAME +
+			"(" + Columns._ID + " INTEGER PRIMARY KEY," +
+			Columns.ACCOUNT + " TEXT NOT NULL," +
+			Columns.SERVICE + " TEXT NOT NULL," +
+			Columns.DBID + " INTEGER NOT NULL," +
+			Columns.UPDATED + " INTEGER NOT NULL," +
+			Columns.REMOTEID + " TEXT NOT NULL," +
+			Columns.DELETED + " TEXT," +
+			Columns.FIELD2 + " TEXT," +
+			Columns.FIELD3 + " TEXT," +
+			Columns.FIELD4 + " TEXT," +
+			Columns.FIELD5 + " TEXT" +
 			// Cant delete on cascade, since then we cant remember to sync it!
-			.append(")").toString();
+			")";
 
 	// milliseconds since 1970-01-01 UTC
 	public Long updated = null;
@@ -257,12 +257,11 @@ public class RemoteTaskList extends DAO {
 	 * @return
 	 */
 	public String getTaskListWithRemoteClause() {
-		return new StringBuilder(BaseColumns._ID).append(" IN (SELECT ").
-				append(Columns.DBID).append(" FROM ").append(TABLE_NAME).append(" WHERE ")
-				.append(Columns.REMOTEID).append(" IS ? AND ")
-				.append(Columns.ACCOUNT).append(" IS ? AND ")
-				.append(Columns.SERVICE).append(" IS ?)")
-				.toString();
+		return BaseColumns._ID + " IN (SELECT " +
+				Columns.DBID + " FROM " + TABLE_NAME + " WHERE " +
+				Columns.REMOTEID + " IS ? AND " +
+				Columns.ACCOUNT + " IS ? AND " +
+				Columns.SERVICE + " IS ?)";
 	}
 
 	public String[] getTaskListWithRemoteArgs() {
@@ -276,10 +275,10 @@ public class RemoteTaskList extends DAO {
 	 * Combine with account, service
 	 */
 	public static String getTaskListWithoutRemoteClause() {
-		return new StringBuilder(BaseColumns._ID).append(" NOT IN (SELECT ").
-				append(Columns.DBID).append(" FROM ").append(TABLE_NAME).append(" WHERE ")
-				.append(Columns.ACCOUNT).append(" IS ? AND ")
-				.append(Columns.SERVICE).append(" IS ?)").toString();
+		return BaseColumns._ID + " NOT IN (SELECT " +
+				Columns.DBID + " FROM " + TABLE_NAME + " WHERE " +
+				Columns.ACCOUNT + " IS ? AND " +
+				Columns.SERVICE + " IS ?)";
 	}
 
 	public String[] getTaskListWithoutRemoteArgs() {
@@ -289,11 +288,10 @@ public class RemoteTaskList extends DAO {
 	/*
 	 * Trigger to delete items when their list is deleted
 	 */
-	public static final String TRIGGER_REALDELETE_MARK = new StringBuilder()
-			.append("CREATE TRIGGER trigger_real_deletemark_").append(TABLE_NAME)
-			.append(" AFTER DELETE ON ").append(TaskList.TABLE_NAME).append(" BEGIN ")
-			.append(" UPDATE ").append(TABLE_NAME).append(" SET ").append(Columns.DELETED).append(" = 'deleted' ")
-			.append(" WHERE ").append(Columns.DBID).append(" IS old.").append(TaskList.Columns._ID)
-			.append(";")
-			.append(" END;").toString();
+	public static final String TRIGGER_REALDELETE_MARK = "CREATE TRIGGER trigger_real_deletemark_" + TABLE_NAME +
+			" AFTER DELETE ON " + TaskList.TABLE_NAME + " BEGIN " +
+			" UPDATE " + TABLE_NAME + " SET " + Columns.DELETED + " = 'deleted' " +
+			" WHERE " + Columns.DBID + " IS old." + TaskList.Columns._ID +
+			";" +
+			" END;";
 }

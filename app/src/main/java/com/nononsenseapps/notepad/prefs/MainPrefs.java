@@ -30,16 +30,11 @@ import java.util.Locale;
 
 public class MainPrefs extends PreferenceFragment {
 	public static final String KEY_THEME = "key_current_theme";
-	// public static final String KEY_WEEK_START_DAY =
-	// "preferences_week_start_day";
 
 	public static final String SANS = "Sans";
 	public static final String SERIF = "Serif";
 	public static final String MONOSPACE = "Monospace";
 
-	// public static final String THEME_DARK = "dark";
-	// public static final String THEME_BLACK = "black";
-	// public static final String THEME_LIGHT_ICS_AB = "light_ab";
 
 	public static final String WEEK_START_DEFAULT = "-1";
 	public static final String WEEK_START_SATURDAY = "7";
@@ -62,14 +57,8 @@ public class MainPrefs extends PreferenceFragment {
 				(ListPreference) findPreference(getString(R.string.key_pref_dateformat_long)),
 				R.array.dateformat_long_values);
 
-		// Bind summaries
-		// PrefsActivity
-		// .bindPreferenceSummaryToValue(findPreference(KEY_FONT_TYPE_EDITOR));
-		// PrefsActivity
-		// .bindPreferenceSummaryToValue(findPreference(KEY_WEEK_START_DAY));
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_locale)));
-
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_dateformat_long)));
 		PrefsActivity
@@ -82,19 +71,21 @@ public class MainPrefs extends PreferenceFragment {
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_body_fontfamily)));
 		PrefsActivity
 				.bindPreferenceSummaryToValue(findPreference(getString(R.string.pref_editor_fontsize)));
-		PrefsActivity.bindPreferenceSummaryToValue(findPreference(KEY_THEME));
+		PrefsActivity
+				.bindPreferenceSummaryToValue(findPreference(KEY_THEME));
 	}
 
 	private void setDateEntries(ListPreference prefDate, int array) {
 		final String[] values = getResources().getStringArray(array);
 
-		final ArrayList<CharSequence> entries = new ArrayList<CharSequence>();
+		final ArrayList<CharSequence> entries = new ArrayList<>();
 
-		final GregorianCalendar cal = new GregorianCalendar(2099, 2, 27, 0, 59);
+		final GregorianCalendar cal = new GregorianCalendar(
+				2099, 2, 27, 0, 59);
 
 		for (final String val : values) {
-			entries.add(TimeFormatter.getLocalDateString(getActivity(), val,
-					cal.getTimeInMillis()));
+			entries.add(TimeFormatter
+					.getLocalDateString(getActivity(), val, cal.getTimeInMillis()));
 		}
 
 		prefDate.setEntries(entries.toArray(new CharSequence[entries.size()]));
@@ -102,8 +93,8 @@ public class MainPrefs extends PreferenceFragment {
 	}
 
 	private void setLangEntries(ListPreference prefLang) {
-		ArrayList<CharSequence> entries = new ArrayList<CharSequence>();
-		ArrayList<CharSequence> values = new ArrayList<CharSequence>();
+		ArrayList<CharSequence> entries = new ArrayList<>();
+		ArrayList<CharSequence> values = new ArrayList<>();
 
 		entries.add(getString(R.string.localedefault));
 		values.add("");

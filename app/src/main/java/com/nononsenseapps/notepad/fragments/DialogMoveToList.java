@@ -20,9 +20,7 @@ package com.nononsenseapps.notepad.fragments;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -67,7 +65,7 @@ public class DialogMoveToList extends DialogFragment {
 	public static DialogMoveToList getInstance(final Long... tasks) {
 		long[] taskIds = new long[tasks.length];
 		for (int i = 0; i < tasks.length; i++) {
-			taskIds[i] = tasks[i].longValue();
+			taskIds[i] = tasks[i];
 		}
 
 		return getInstance(taskIds);
@@ -139,32 +137,11 @@ public class DialogMoveToList extends DialogFragment {
 	@Background
 	void moveItems(final long toListId, final long[] taskIds) {
 
-		// for (long id: taskIds) {
-		// final Cursor c =
-		// getActivity().getContentResolver().query(Task.getUri(id),
-		// Task.Columns.FIELDS, null, null, null);
-		//
-		// if (c.moveToFirst()) {
-		// Task t = new Task(c);
-		// // Remove from old location
-		// t.delete(getActivity());
-		// // Reset, and set new list
-		// t.resetForInsertion();
-		// t.dblist = toListId;
-		// // And save anew
-		// t.save(getActivity());
-		// }
-		//
-		// c.close();
-		// }
-
 		final ContentValues val = new ContentValues();
 		val.put(Task.Columns.DBLIST, toListId);
 
 		// where _ID in (1, 2, 3)
-		final String whereId = new StringBuilder(Task.Columns._ID)
-				.append(" IN (").append(DAO.arrayToCommaString(taskIds))
-				.append(")").toString();
+		final String whereId = Task.Columns._ID + " IN (" + DAO.arrayToCommaString(taskIds) + ")";
 
 		getActivity().getContentResolver().update(Task.URI, val, whereId, null);
 	}
@@ -177,7 +154,7 @@ public class DialogMoveToList extends DialogFragment {
 	@Click(resName = "dialog_yes")
 	void okClicked() {
 		// move items
-		if (listView.getCheckedItemPosition() == listView.INVALID_POSITION) {
+		if (listView.getCheckedItemPosition() == AdapterView.INVALID_POSITION) {
 			return;
 		}
 

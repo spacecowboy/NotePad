@@ -2,15 +2,16 @@ package com.nononsenseapps.notepad.espresso_tests;
 
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
+import static androidx.test.espresso.action.ViewActions.closeSoftKeyboard;
 import static androidx.test.espresso.action.ViewActions.typeText;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.instanceOf;
-import static org.hamcrest.Matchers.is;
 
 import androidx.test.espresso.AmbiguousViewMatcherException;
+import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.platform.app.InstrumentationRegistry;
 
@@ -85,9 +86,9 @@ public class EspressoHelper {
 			// we are in tablet mode: press "+" to make a note appear in the list
 			onView(withId(R.id.menu_add)).perform(click());
 		} else {
-			// we are in phone mode: press the back button on the toolbar
-			var backButton = onView(withId(android.R.id.home));
-			backButton.perform(click());
+			// we are in phone mode: close the keyboard & press the back button
+			onView(isRoot()).perform(closeSoftKeyboard());
+			Espresso.pressBack();
 		}
 	}
 
@@ -113,24 +114,12 @@ public class EspressoHelper {
 	 * can then interact with the app.
 	 */
 	public static void hideShowCaseViewIfShown() {
-		if (EspressoHelper.isShowCaseOverlayVisible()) {
-			// if it is there, it's highlighting one of these views => click on them to dismiss it
-			try {
-				// if the "add list" button is displayed, click on it and you're done
-				onView(withId(R.id.drawer_menu_createlist))
-						.check(matches(isDisplayed()))
-						.perform(click());
-				return;
-			} catch (Exception ignored) {}
+		if (!EspressoHelper.isShowCaseOverlayVisible()) return;
 
-			try {
-				// if that did not work, try clicking on the home button of the toolbar
-				onView(withId(android.R.id.home))
-						.check(matches(isDisplayed()))
-						.perform(click());
-				return;
-			} catch (Exception ignored) {}
-
+		// if it is there, it's highlighting one of the views click somewhere to dismiss it
+		try {
+			onView(isRoot()).perform(click());
+		} catch (Exception ignored) {
 			Assert.fail("Could not dismiss the TapTargetView");
 		}
 	}

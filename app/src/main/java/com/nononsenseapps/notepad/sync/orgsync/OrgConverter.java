@@ -133,7 +133,7 @@ public class OrgConverter {
 		 * It's not possible to differentiate if the user added a trailing
 		 * newline or the sync logic did. I will assume that the sync logic did.
 		 */
-		if (task.note != null && !task.note.isEmpty() && task.note.endsWith("\n")) {
+		if (task.note != null && task.note.endsWith("\n")) {
 			task.note = task.note.substring(0, task.note.length() - 1);
 		}
 	}
@@ -253,8 +253,7 @@ public class OrgConverter {
 	 */
 	@SuppressLint("DefaultLocale")
 	private static void addIdToNode(final String id, final OrgNode node) {
-		node.setComments(new StringBuilder(TASKNODEID).append(id.toUpperCase())
-				.append("\n").toString());
+		node.setComments(TASKNODEID + id.toUpperCase() + "\n");
 	}
 
 	/**

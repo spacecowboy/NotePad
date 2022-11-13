@@ -20,7 +20,6 @@ package com.nononsenseapps.utils.views;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
-import android.widget.ToggleButton;
 
 import com.nononsenseapps.notepad.R;
 
@@ -30,16 +29,10 @@ import com.nononsenseapps.notepad.R;
  *
  * Default secondary color is grey.
  */
-public class GreyableToggleButton extends ToggleButton {
+public class GreyableToggleButton extends androidx.appcompat.widget.AppCompatToggleButton {
 
-	private int primaryColor;
-	private int secondaryColor;
-
-//	private float defTextSize = 16.0f;
-//	private int currentWidth = 0;
-
-	//Attributes
-	//private Paint mTestPaint;
+	private final int primaryColor;
+	private final int secondaryColor;
 
 	public GreyableToggleButton(Context context, AttributeSet attrs) {
 		super(context, attrs);
@@ -57,10 +50,7 @@ public class GreyableToggleButton extends ToggleButton {
 		} finally {
 			a.recycle();
 		}
-
-//		mTestPaint = new Paint();
-//        mTestPaint.set(this.getPaint());
-		//max size defaults to the initially specified text size unless it is too small
+		// max size defaults to the initially specified text size unless it is too small
 	}
 
 	@Override
@@ -77,84 +67,4 @@ public class GreyableToggleButton extends ToggleButton {
 		}
 	}
 
-//	@Override
-//	protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-//		super.onSizeChanged(w, h, oldw, oldh);
-//		
-//		if (w != 0) {
-//			currentWidth  = w;
-//			shrinkTextToFit();
-//		}
-//	}
-//
-//
-//	private void shrinkTextToFit() {
-//		if (currentWidth == 0)
-//			return;
-//
-//		final float densityMultiplier = getResources().getDisplayMetrics().density;
-//		final CharSequence text = getText();
-//		float textSize = defTextSize; //* densityMultiplier;
-//		setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-//
-//		final float minimumTextSize = 12;// * densityMultiplier;
-//		while (text != (TextUtils.ellipsize(text, getPaint(),
-//				currentWidth, TextUtils.TruncateAt.END))) {
-//			textSize -= 1;
-//			if (textSize < minimumTextSize) {
-//				break;
-//			}
-//			else {
-//				setTextSize(TypedValue.COMPLEX_UNIT_SP, textSize);
-//			}
-//		}
-//	}
-//	
-//	/* Re size the font so the specified text fits in the text box
-//     * assuming the text box is the specified width.
-//     */
-//    private void refitText(String text, int textWidth) 
-//    { 
-//        if (textWidth <= 0)
-//            return;
-//        int targetWidth = textWidth - this.getPaddingLeft() - this.getPaddingRight();
-//        float hi = 100;
-//        float lo = 2;
-//        final float threshold = 0.5f; // How close we have to be
-//
-//        mTestPaint.set(this.getPaint());
-//
-//        while((hi - lo) > threshold) {
-//            float size = (hi+lo)/2;
-//            mTestPaint.setTextSize(size);
-//            if(mTestPaint.measureText(text) >= targetWidth) 
-//                hi = size; // too big
-//            else
-//                lo = size; // too small
-//        }
-//        // Use lo so that we undershoot rather than overshoot
-//        this.setTextSize(TypedValue.COMPLEX_UNIT_PX, lo);
-//    }
-//
-//    @Override
-//    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-//    {
-//        super.onMeasure(widthMeasureSpec, heightMeasureSpec);
-//        int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
-//        int height = getMeasuredHeight();
-//        refitText(this.getText().toString(), parentWidth);
-//        this.setMeasuredDimension(parentWidth, height);
-//    }
-//
-//    @Override
-//    protected void onTextChanged(final CharSequence text, final int start, final int before, final int after) {
-//        refitText(text.toString(), this.getWidth());
-//    }
-//
-//    @Override
-//    protected void onSizeChanged (int w, int h, int oldw, int oldh) {
-//        if (w != oldw) {
-//            refitText(this.getText().toString(), w);
-//        }
-//    }
 }

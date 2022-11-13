@@ -167,7 +167,7 @@ public class TimeHelper {
 		time.hour = 0;
 		time.minute = 0;
 		time.second = 0;
-		NnnLogger.debugOnly(TimeHelper.class,
+		NnnLogger.debug(TimeHelper.class,
 				"Dragdate: " + i + " days ago: " + time.format3339(false));
 
 		return time.format3339(false);

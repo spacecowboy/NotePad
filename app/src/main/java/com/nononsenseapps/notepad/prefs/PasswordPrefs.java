@@ -17,7 +17,6 @@
 package com.nononsenseapps.notepad.prefs;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedListener;
 import com.nononsenseapps.notepad.fragments.DialogPasswordV11_;
 
 import android.app.Activity;
@@ -27,7 +26,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.View.OnClickListener;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.ViewGroup;
@@ -68,20 +66,8 @@ public class PasswordPrefs extends Fragment {
 		password1 = (EditText) layout.findViewById(R.id.tempPassword1);
 		password2 = (EditText) layout.findViewById(R.id.tempPassword2);
 
-		layout.findViewById(R.id.applyPassword).setOnClickListener(
-				new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						applyPassword();
-					}
-				});
-		layout.findViewById(R.id.clearPassword).setOnClickListener(
-				new OnClickListener() {
-					@Override
-					public void onClick(View v) {
-						clearPassword();
-					}
-				});
+		layout.findViewById(R.id.applyPassword).setOnClickListener(v -> applyPassword());
+		layout.findViewById(R.id.clearPassword).setOnClickListener(v -> clearPassword());
 
 		return layout;
 	}
@@ -141,19 +127,16 @@ public class PasswordPrefs extends Fragment {
 
 	private void showPasswordDialog(final String newPassword) {
 		final DialogPasswordV11_ pd = new DialogPasswordV11_();
-		pd.setListener(new PasswordConfirmedListener() {
-			@Override
-			public void onPasswordConfirmed() {
-				PreferenceManager
-						.getDefaultSharedPreferences(getActivity()).edit()
-						.putString(PasswordPrefs.KEY_PASSWORD, newPassword)
-						.commit();
-				Toast.makeText(
-						getActivity(),
-						("".equals(newPassword)) ? getText(R.string.password_cleared)
-								: getText(R.string.password_set),
-						Toast.LENGTH_SHORT).show();
-			}
+		pd.setListener(() -> {
+			PreferenceManager
+					.getDefaultSharedPreferences(getActivity()).edit()
+					.putString(PasswordPrefs.KEY_PASSWORD, newPassword)
+					.commit();
+			Toast.makeText(
+					getActivity(),
+					("".equals(newPassword)) ? getText(R.string.password_cleared)
+							: getText(R.string.password_set),
+					Toast.LENGTH_SHORT).show();
 		});
 		pd.show(getFragmentManager(), "pw-verify");
 	}

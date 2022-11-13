@@ -45,8 +45,6 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 
-import retrofit.RetrofitError;
-
 public class GoogleTaskSync {
 
 	public static final boolean NOTIFY_AUTH_FAILURE = true;
@@ -59,9 +57,9 @@ public class GoogleTaskSync {
 	public static boolean fullSync(final Context context,
 								   final Account account, final Bundle extras, final String authority,
 								   final ContentProviderClient provider, final SyncResult syncResult) {
-		NnnLogger.debugOnly(GoogleTaskSync.class, "fullSync");
+		NnnLogger.debug(GoogleTaskSync.class, "fullSync");
 		if (!PermissionsHelper.hasPermissions(context, PermissionsHelper.PERMISSIONS_GTASKS)) {
-			NnnLogger.debugOnly(GoogleTaskSync.class, "Missing permissions, disabling sync");
+			NnnLogger.debug(GoogleTaskSync.class, "Missing permissions, disabling sync");
 			SyncGtaskHelper.disableSync(context);
 			return false;
 		}
@@ -78,59 +76,68 @@ public class GoogleTaskSync {
 					(accountManager, account, NOTIFY_AUTH_FAILURE), Config
 					.getGtasksApiKey(context), account.name);
 
-			NnnLogger.debugOnly(GoogleTaskSync.class, "AuthToken acquired, we are connected...");
+			NnnLogger.debug(GoogleTaskSync.class, "AuthToken acquired, we are connected...");
 
 			// IF full sync, download since start of all time
 			// Temporary fix for delete all bug
 //					if (PreferenceManager.getDefaultSharedPreferences(context)
 //							.getBoolean(SyncPrefs.KEY_FULLSYNC, false)) {
-			PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(SyncPrefs
-					.KEY_FULLSYNC, false).putLong(PREFS_GTASK_LAST_SYNC_TIME, 0).commit();
+			PreferenceManager.getDefaultSharedPreferences(context)
+					.edit()
+					.putBoolean(SyncPrefs.KEY_FULLSYNC, false)
+					.putLong(PREFS_GTASK_LAST_SYNC_TIME, 0)
+					.commit();
 //					}
 
 			// Download lists from server
-			NnnLogger.debugOnly(GoogleTaskSync.class, "download lists");
+			NnnLogger.debug(GoogleTaskSync.class, "download lists");
 			final List<GoogleTaskList> remoteLists = downloadLists(client);
 
 			// merge with local complement
-			NnnLogger.debugOnly(GoogleTaskSync.class, "merge lists");
+			NnnLogger.debug(GoogleTaskSync.class, "merge lists");
 			mergeListsWithLocalDB(context, account.name, remoteLists);
 
 			// Synchronize lists locally
-			NnnLogger.debugOnly(GoogleTaskSync.class, "sync lists locally");
+			NnnLogger.debug(GoogleTaskSync.class, "sync lists locally");
 			final List<Pair<TaskList, GoogleTaskList>> listPairs = synchronizeListsLocally
 					(context, remoteLists);
 
 			// Synchronize lists remotely
-			NnnLogger.debugOnly(GoogleTaskSync.class, "sync lists remotely");
+			NnnLogger.debug(GoogleTaskSync.class, "sync lists remotely");
 			final List<Pair<TaskList, GoogleTaskList>> syncedPairs = synchronizeListsRemotely
 					(context, listPairs, client);
 
 			// For each list
 			for (Pair<TaskList, GoogleTaskList> syncedPair : syncedPairs) {
 				// Download tasks from server
-				NnnLogger.debugOnly(GoogleTaskSync.class, "download tasks");
+				NnnLogger.debug(GoogleTaskSync.class, "download tasks");
 				final List<GoogleTask> remoteTasks = downloadChangedTasks(context, client,
 						syncedPair.second);
 
 				// merge with local complement
-				NnnLogger.debugOnly(GoogleTaskSync.class, "merge tasks");
+				NnnLogger.debug(GoogleTaskSync.class, "merge tasks");
 				mergeTasksWithLocalDB(context, account.name, remoteTasks, syncedPair.first._id);
 
 				// Synchronize tasks locally
-				NnnLogger.debugOnly(GoogleTaskSync.class, "sync tasks locally");
+				NnnLogger.debug(GoogleTaskSync.class, "sync tasks locally");
 				final List<Pair<Task, GoogleTask>> taskPairs = synchronizeTasksLocally(context,
 						remoteTasks, syncedPair);
 				// Synchronize tasks remotely
-				NnnLogger.debugOnly(GoogleTaskSync.class, "sync tasks remotely");
+				NnnLogger.debug(GoogleTaskSync.class, "sync tasks remotely");
 				synchronizeTasksRemotely(context, taskPairs, syncedPair.second, client);
 			}
 
-			NnnLogger.debugOnly(GoogleTaskSync.class, "Sync Complete!");
+			NnnLogger.debug(GoogleTaskSync.class, "Sync Complete!");
 			success = true;
-			PreferenceManager.getDefaultSharedPreferences(context).edit().putLong
-					(PREFS_GTASK_LAST_SYNC_TIME, startTime).commit();
-		} catch (RetrofitError e) {
+			PreferenceManager.getDefaultSharedPreferences(context)
+					.edit()
+					.putLong(PREFS_GTASK_LAST_SYNC_TIME, startTime)
+					.commit();
+		}
+		/*
+		TODO re-enable this block once you understand how to handle errors in retrofit2.
+		 In the original retrofit (1.9.0), using RetrofitError was enough
+		catch (RetrofitError e) {
 			NnnLogger.debugOnly(GoogleTaskSync.class, "Retrofit: " + e);
 			final int status;
 			if (e.getResponse() != null) {
@@ -155,12 +162,13 @@ public class GoogleTaskSync {
 					syncResult.stats.numIoExceptions++;
 					break;
 			}
-		} catch (Exception e) {
+		}
+		*/ catch (Exception e) {
 			// Something went wrong, don't punish the user
 			NnnLogger.exception(e);
 			syncResult.stats.numIoExceptions++;
 		} finally {
-			NnnLogger.debugOnly(GoogleTaskSync.class, "SyncResult: " + syncResult.toDebugString());
+			NnnLogger.debug(GoogleTaskSync.class, "SyncResult: " + syncResult.toDebugString());
 		}
 
 		return success;
@@ -175,24 +183,22 @@ public class GoogleTaskSync {
 	 * Since all lists are expected to be downloaded, any non-existing entries
 	 * are assumed to be deleted and marked as such.
 	 */
-	public static void mergeListsWithLocalDB(final Context context,
-											 final String account, final List<GoogleTaskList> remoteLists) {
-		NnnLogger.debugOnly(GoogleTaskSync.class, "mergeList starting with: " + remoteLists.size());
+	public static void mergeListsWithLocalDB(final Context context, final String account,
+											 final List<GoogleTaskList> remoteLists) {
+		NnnLogger.debug(GoogleTaskSync.class,
+				"mergeList starting with: " + remoteLists.size());
 
-		final HashMap<String, GoogleTaskList> localVersions = new HashMap<String, GoogleTaskList>();
-		final Cursor c = context.getContentResolver().query(
+		final HashMap<String, GoogleTaskList> localVersions = new HashMap<>();
+		try (Cursor c = context.getContentResolver().query(
 				GoogleTaskList.URI,
 				GoogleTaskList.Columns.FIELDS,
 				GoogleTaskList.Columns.ACCOUNT + " IS ? AND "
 						+ GoogleTaskList.Columns.SERVICE + " IS ?",
-				new String[] { account, GoogleTaskList.SERVICENAME }, null);
-		try {
+				new String[] { account, GoogleTaskList.SERVICENAME }, null)) {
 			while (c != null && c.moveToNext()) {
 				GoogleTaskList list = new GoogleTaskList(c);
 				localVersions.put(list.remoteId, list);
 			}
-		} finally {
-			if (c != null) c.close();
 		}
 
 		for (final GoogleTaskList remotelist : remoteLists) {
@@ -211,7 +217,7 @@ public class GoogleTaskSync {
 			list.remotelyDeleted = true;
 			remoteLists.add(list);
 		}
-		NnnLogger.debugOnly(GoogleTaskSync.class, "mergeList finishing with: " + remoteLists.size());
+		NnnLogger.debug(GoogleTaskSync.class, "mergeList finishing with: " + remoteLists.size());
 	}
 
 	/**
@@ -223,22 +229,19 @@ public class GoogleTaskSync {
 	public static void mergeTasksWithLocalDB(final Context context,
 											 final String account, final List<GoogleTask> remoteTasks,
 											 long listDbId) {
-		final HashMap<String, GoogleTask> localVersions = new HashMap<String, GoogleTask>();
-		final Cursor c = context.getContentResolver().query(
+		final HashMap<String, GoogleTask> localVersions = new HashMap<>();
+		try (Cursor c = context.getContentResolver().query(
 				GoogleTask.URI,
 				GoogleTask.Columns.FIELDS,
 				GoogleTask.Columns.LISTDBID + " IS ? AND "
 						+ GoogleTask.Columns.ACCOUNT + " IS ? AND "
 						+ GoogleTask.Columns.SERVICE + " IS ?",
 				new String[] { Long.toString(listDbId), account,
-						GoogleTaskList.SERVICENAME }, null);
-		try {
+						GoogleTaskList.SERVICENAME }, null)) {
 			while (c != null && c.moveToNext()) {
 				GoogleTask task = new GoogleTask(c);
 				localVersions.put(task.remoteId, task);
 			}
-		} finally {
-			if (c != null) c.close();
 		}
 
 		for (final GoogleTask task : remoteTasks) {
@@ -249,7 +252,7 @@ public class GoogleTaskSync {
 				task.dbid = localVersions.get(task.remoteId).dbid;
 				task.setDeleted(localVersions.get(task.remoteId).isDeleted());
 				if (task.isDeleted()) {
-					NnnLogger.debugOnly(GoogleTaskSync.class, "merge1: deleting " + task.title);
+					NnnLogger.debug(GoogleTaskSync.class, "merge1: deleting " + task.title);
 				}
 				localVersions.remove(task.remoteId);
 			}
@@ -259,7 +262,7 @@ public class GoogleTaskSync {
 		for (final GoogleTask task : localVersions.values()) {
 			remoteTasks.add(task);
 			if (task.isDeleted()) {
-				NnnLogger.debugOnly(GoogleTaskSync.class, "merge2: was deleted " + task.title);
+				NnnLogger.debug(GoogleTaskSync.class, "merge2: was deleted " + task.title);
 			}
 		}
 	}
@@ -269,13 +272,11 @@ public class GoogleTaskSync {
 	 *
 	 * @param client
 	 * @throws IOException
-	 * @throws RetrofitError
 	 * @throws JSONException
 	 */
-	static List<GoogleTaskList> downloadLists(final GoogleTasksClient client)
-			throws IOException, RetrofitError {
+	static List<GoogleTaskList> downloadLists(final GoogleTasksClient client) {
 		// Do the actual download
-		final ArrayList<GoogleTaskList> remoteLists = new ArrayList<GoogleTaskList>();
+		final ArrayList<GoogleTaskList> remoteLists = new ArrayList<>();
 
 		client.listLists(remoteLists);
 
@@ -296,24 +297,24 @@ public class GoogleTaskSync {
 	 */
 	public static List<Pair<TaskList, GoogleTaskList>> synchronizeListsLocally(
 			final Context context, final List<GoogleTaskList> remoteLists) {
-		final ArrayList<Pair<TaskList, GoogleTaskList>> listPairs = new ArrayList<Pair<TaskList, GoogleTaskList>>();
+		final ArrayList<Pair<TaskList, GoogleTaskList>> listPairs = new ArrayList<>();
 		// For every list
 		for (final GoogleTaskList remoteList : remoteLists) {
 			// Compare with local
-			NnnLogger.debugOnly(GoogleTaskSync.class, "Loading remote lists from db");
+			NnnLogger.debug(GoogleTaskSync.class, "Loading remote lists from db");
 			TaskList localList = loadRemoteListFromDB(context, remoteList);
 
 			if (localList == null) {
 				if (remoteList.remotelyDeleted) {
-					NnnLogger.debugOnly(GoogleTaskSync.class, "List was remotely deleted1");
+					NnnLogger.debug(GoogleTaskSync.class, "List was remotely deleted1");
 					// Deleted locally AND on server
 					remoteList.delete(context);
 				} else if (remoteList.isDeleted()) {
-					NnnLogger.debugOnly(GoogleTaskSync.class, "List was locally deleted");
+					NnnLogger.debug(GoogleTaskSync.class, "List was locally deleted");
 					// Was deleted locally
 				} else {
 					// is a new list
-					NnnLogger.debugOnly(GoogleTaskSync.class, "Inserting new list: " + remoteList.title);
+					NnnLogger.debug(GoogleTaskSync.class, "Inserting new list: " + remoteList.title);
 					localList = new TaskList();
 					localList.title = remoteList.title;
 					localList.save(context, remoteList.updated);
@@ -324,43 +325,43 @@ public class GoogleTaskSync {
 			} else {
 				// If local is newer, update remote object
 				if (remoteList.remotelyDeleted) {
-					NnnLogger.debugOnly(GoogleTaskSync.class, "Remote list was deleted2: " + remoteList.title);
+					NnnLogger.debug(GoogleTaskSync.class, "Remote list was deleted2: " + remoteList.title);
 					localList.delete(context);
 					localList = null;
 					remoteList.delete(context);
 				} else if (localList.updated > remoteList.updated) {
-					NnnLogger.debugOnly(GoogleTaskSync.class, "Local list newer");
+					NnnLogger.debug(GoogleTaskSync.class, "Local list newer");
 					remoteList.title = localList.title;
 					// Updated is set by Google
 				} else if (localList.updated.equals(remoteList.updated)) {
 					// Nothing to do
 				} else {
-					NnnLogger.debugOnly(GoogleTaskSync.class, "Updating local list: " + remoteList.title);
+					NnnLogger.debug(GoogleTaskSync.class, "Updating local list: " + remoteList.title);
 					// If remote is newer, update local and save to db
 					localList.title = remoteList.title;
 					localList.save(context, remoteList.updated);
 				}
 			}
 			if (!remoteList.remotelyDeleted)
-				listPairs.add(new Pair<TaskList, GoogleTaskList>(localList,
+				listPairs.add(new Pair<>(localList,
 						remoteList));
 		}
 
 		// Add local lists without a remote version to pairs
 		for (final TaskList tl : loadNewListsFromDB(context, remoteLists.get(0))) {
-			NnnLogger.debugOnly(GoogleTaskSync.class, "loading new list db: " + tl.title);
-			listPairs.add(new Pair<TaskList, GoogleTaskList>(tl, null));
+			NnnLogger.debug(GoogleTaskSync.class, "loading new list db: " + tl.title);
+			listPairs.add(new Pair<>(tl, null));
 		}
 
 		// return pairs
 		return listPairs;
 	}
 
-	static List<Pair<TaskList, GoogleTaskList>> synchronizeListsRemotely(
-			final Context context,
-			final List<Pair<TaskList, GoogleTaskList>> listPairs,
-			final GoogleTasksClient client) throws IOException, RetrofitError {
-		final List<Pair<TaskList, GoogleTaskList>> syncedPairs = new ArrayList<Pair<TaskList, GoogleTaskList>>();
+	static List<Pair<TaskList, GoogleTaskList>> synchronizeListsRemotely(final Context context,
+																		 final List<Pair<TaskList, GoogleTaskList>> listPairs, final GoogleTasksClient client) {
+
+		final List<Pair<TaskList, GoogleTaskList>> syncedPairs = new ArrayList<>();
+
 		// For every list
 		for (final Pair<TaskList, GoogleTaskList> pair : listPairs) {
 			Pair<TaskList, GoogleTaskList> syncedPair = pair;
@@ -372,22 +373,28 @@ public class GoogleTaskSync {
 				// Save to db also
 				newList.save(context);
 				pair.first.save(context, newList.updated);
-				syncedPair = new Pair<TaskList, GoogleTaskList>(pair.first,
+				syncedPair = new Pair<>(pair.first,
 						newList);
 			} else if (pair.second.isDeleted()) {
-				NnnLogger.debugOnly(GoogleTaskSync.class, "remotesync: isDeletedLocally");
+				NnnLogger.debug(GoogleTaskSync.class, "remotesync: isDeletedLocally");
 				// Deleted locally, delete remotely also
 				pair.second.remotelyDeleted = true;
-				try {
+
+				// TODO understand how to handle errors in that .deleteList() call, and then
+				//  replace the catch{} block with something appropriate
+				// try {
 					client.deleteList(pair.second);
+				/*
 				} catch (RetrofitError e) {
 					if (e.getResponse() != null && e.getResponse().getStatus() == 400) {
 						// Deleted the default list. Ignore error
-						NnnLogger.debugOnly(GoogleTaskSync.class, "Error when deleting list. This is expected for the default list: " + e);
+						NnnLogger.debugOnly(GoogleTaskSync.class,
+								"Error when deleting list. This is expected for the default list: " + e);
 					} else {
 						throw e;
 					}
 				}
+				 */
 				// and delete from db if it exists there
 				pair.second.delete(context);
 				syncedPair = null;
@@ -409,22 +416,21 @@ public class GoogleTaskSync {
 
 	static void synchronizeTasksRemotely(final Context context,
 										 final List<Pair<Task, GoogleTask>> taskPairs,
-										 final GoogleTaskList gTaskList, final GoogleTasksClient client)
-			throws IOException, RetrofitError {
+										 final GoogleTaskList gTaskList,
+										 final GoogleTasksClient client) {
 		for (final Pair<Task, GoogleTask> pair : taskPairs) {
 
 			// if newly created locally
 			if (pair.second == null) {
-				NnnLogger.debugOnly(GoogleTaskSync.class, "Second was null");
-				final GoogleTask newTask = new GoogleTask(pair.first,
-						client.accountName);
+				NnnLogger.debug(GoogleTaskSync.class, "Second was null");
+				final GoogleTask newTask = new GoogleTask(pair.first, client.accountName);
 				client.insertTask(newTask, gTaskList);
 				newTask.save(context);
 				pair.first.save(context, newTask.updated);
 			}
 			// if deleted locally
 			else if (pair.second.isDeleted()) {
-				NnnLogger.debugOnly(GoogleTaskSync.class, "Second isDeleted");
+				NnnLogger.debug(GoogleTaskSync.class, "Second isDeleted");
 				// Delete remote also
 				pair.second.remotelydeleted = true;
 				client.deleteTask(pair.second, gTaskList);
@@ -434,7 +440,7 @@ public class GoogleTaskSync {
 			// if local updated is different from remote,
 			// should update remote
 			else if (pair.first.updated > pair.second.updated) {
-				NnnLogger.debugOnly(GoogleTaskSync.class, "First updated after second");
+				NnnLogger.debug(GoogleTaskSync.class, "First updated after second");
 				client.patchTask(pair.second, gTaskList);
 				// No need to save remote object here
 				pair.first.save(context, pair.second.updated);
@@ -467,7 +473,7 @@ public class GoogleTaskSync {
 				TaskList.Columns.FIELDS,
 				GoogleTaskList.getTaskListWithoutRemoteClause(),
 				remoteList.getTaskListWithoutRemoteArgs(), null);
-		final ArrayList<TaskList> lists = new ArrayList<TaskList>();
+		final ArrayList<TaskList> lists = new ArrayList<>();
 		try {
 			while (c != null && c.moveToNext()) {
 				lists.add(new TaskList(c));
@@ -487,7 +493,7 @@ public class GoogleTaskSync {
 				GoogleTask.getTaskWithoutRemoteClause(),
 				GoogleTask.getTaskWithoutRemoteArgs(listdbid, account,
 						GoogleTaskList.SERVICENAME), null);
-		final ArrayList<Task> tasks = new ArrayList<Task>();
+		final ArrayList<Task> tasks = new ArrayList<>();
 		try {
 			while (c != null && c.moveToNext()) {
 				tasks.add(new Task(c));
@@ -500,8 +506,8 @@ public class GoogleTaskSync {
 	}
 
 	static List<GoogleTask> downloadChangedTasks(final Context context,
-												 final GoogleTasksClient client, final GoogleTaskList remoteList)
-			throws IOException, RetrofitError {
+												 final GoogleTasksClient client,
+												 final GoogleTaskList remoteList) {
 //		final SharedPreferences settings = PreferenceManager
 //				.getDefaultSharedPreferences(context);
 //		RFC3339Date.asRFC3339(settings.getLong(
@@ -532,7 +538,7 @@ public class GoogleTaskSync {
 			final Pair<TaskList, GoogleTaskList> listPair) {
 		final SharedPreferences settings = PreferenceManager
 				.getDefaultSharedPreferences(context);
-		final ArrayList<Pair<Task, GoogleTask>> taskPairs = new ArrayList<Pair<Task, GoogleTask>>();
+		final ArrayList<Pair<Task, GoogleTask>> taskPairs = new ArrayList<>();
 		// For every list
 		for (final GoogleTask remoteTask : remoteTasks) {
 			// Compare with local
@@ -543,11 +549,11 @@ public class GoogleTaskSync {
 			// b) it was created on the server
 			if (localTask == null) {
 				if (remoteTask.remotelydeleted) {
-					NnnLogger.debugOnly(GoogleTaskSync.class, "slocal: task was remotely deleted1: " + remoteTask.title);
+					NnnLogger.debug(GoogleTaskSync.class, "slocal: task was remotely deleted1: " + remoteTask.title);
 					// Nothing to do
 					remoteTask.delete(context);
 				} else if (remoteTask.isDeleted()) {
-					NnnLogger.debugOnly(GoogleTaskSync.class, "slocal: task was locally deleted: " + remoteTask.remoteId);
+					NnnLogger.debug(GoogleTaskSync.class, "slocal: task was locally deleted: " + remoteTask.remoteId);
 					// upload change
 				} else {
 					//NnnLogger.debugOnly(GoogleTaskSync.class, "slocal: task was new: " + remoteTask.title);
@@ -583,7 +589,7 @@ public class GoogleTaskSync {
 				}
 				// Remote is newer
 				else if (remoteTask.remotelydeleted) {
-					NnnLogger.debugOnly(GoogleTaskSync.class, "slocal: task was remotely deleted2: " + remoteTask.title);
+					NnnLogger.debug(GoogleTaskSync.class, "slocal: task was remotely deleted2: " + remoteTask.title);
 					localTask.delete(context);
 					localTask = null;
 					remoteTask.delete(context);
@@ -622,18 +628,18 @@ public class GoogleTaskSync {
 			}
 			if (remoteTask.remotelydeleted) {
 				// Dont
-				NnnLogger.debugOnly(GoogleTaskSync.class, "skipping remotely deleted");
+				NnnLogger.debug(GoogleTaskSync.class, "skipping remotely deleted");
 			} else if (localTask != null && remoteTask != null
 					&& localTask.updated.equals(remoteTask.updated)) {
-				NnnLogger.debugOnly(GoogleTaskSync.class, "skipping equal update");
+				NnnLogger.debug(GoogleTaskSync.class, "skipping equal update");
 				// Dont
 			} else {
-//				if (localTask != null) {
-//					Log.d("nononsenseapps gtasksync", "going to upload: " + localTask.title + ", l." + localTask.updated + " r." + remoteTask.updated);
-//				}
-				NnnLogger.debugOnly(GoogleTaskSync.class, "add to sync list: " + remoteTask.title);
-				taskPairs
-						.add(new Pair<Task, GoogleTask>(localTask, remoteTask));
+				if (localTask != null) {
+					NnnLogger.debug(GoogleTaskSync.class,"going to upload: " +
+							localTask.title + ", l." + localTask.updated + " r." + remoteTask.updated);
+				}
+				NnnLogger.debug(GoogleTaskSync.class, "add to sync list: " + remoteTask.title);
+				taskPairs.add(new Pair<>(localTask, remoteTask));
 			}
 		}
 
@@ -641,7 +647,7 @@ public class GoogleTaskSync {
 		for (final Task t : loadNewTasksFromDB(context, listPair.first._id,
 				listPair.second.account)) {
 			//Log.d("nononsenseapps gtasksync", "adding local only: " + t.title);
-			taskPairs.add(new Pair<Task, GoogleTask>(t, null));
+			taskPairs.add(new Pair<>(t, null));
 		}
 
 		// return pairs

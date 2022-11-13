@@ -22,7 +22,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Environment;
 import android.os.FileObserver;
 import android.preference.PreferenceManager;
 
@@ -40,7 +39,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.HashSet;
 
@@ -234,13 +232,9 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 	@SuppressLint("DefaultLocale")
 	@Override
 	public HashSet<String> getRemoteFilenames() {
-		final HashSet<String> filenames = new HashSet<String>();
+		final HashSet<String> filenames = new HashSet<>();
 		final File dir = new File(ORG_DIR);
-		final File[] files = dir.listFiles(new FilenameFilter() {
-			public boolean accept(File dir, String name) {
-				return name.toLowerCase().endsWith(".org");
-			}
-		});
+		final File[] files = dir.listFiles((dir1, name) -> name.toLowerCase().endsWith(".org"));
 
 		if (files != null) {
 			for (File f : files) {
@@ -264,10 +258,10 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 		return new FileWatcher(ORG_DIR);
 	}
 
-	public class FileWatcher extends FileObserver implements Monitor {
+	public static class FileWatcher extends FileObserver implements Monitor {
 
 		public OrgSyncService.SyncHandler handler;
-		private int changeId = 0;
+
 
 		public FileWatcher(String path) {
 			super(path, FileObserver.CREATE | FileObserver.DELETE

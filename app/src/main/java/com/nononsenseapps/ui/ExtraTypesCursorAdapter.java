@@ -28,8 +28,8 @@ import android.database.Cursor;
 
 public class ExtraTypesCursorAdapter extends ExtrasCursorAdapter {
 
-	protected int[] extraTypes;
-	protected int[] extraLayouts;
+	protected final int[] extraTypes;
+	protected final int[] extraLayouts;
 	protected ArrayList<ArrayList<Object>> extraData = null;
 
 	private int typeCount = 1;
@@ -49,7 +49,7 @@ public class ExtraTypesCursorAdapter extends ExtrasCursorAdapter {
 	}
 
 	private int countTypes() {
-		HashSet<Integer> types = new HashSet<Integer>();
+		HashSet<Integer> types = new HashSet<>();
 		for (int type : extraTypes) {
 			types.add(type);
 		}

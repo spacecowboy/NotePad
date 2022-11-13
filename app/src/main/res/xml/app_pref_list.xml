@@ -17,6 +17,7 @@
   -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:robobunny="http://schemas.android.com/apk/res-auto"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:key="preference_screen_list">
 
 	<ListPreference
@@ -30,6 +31,15 @@
 		robobunny:max="50"
 		robobunny:min="1"
 		robobunny:unitsRight="@string/rows"/>
+
+	<!-- TODO ready to be replaced. but first we must migrate to androidx preferences
+	<SeekBarPreference
+		android:defaultValue="3"
+		android:max="50"
+		app:min="1"
+		android:summary="write something for the summary"
+		app:showSeekBarValue="true"
+		android:title="@string/item_max_height"/> -->
 
 	<ListPreference
 		android:defaultValue="@string/default_sorttype"

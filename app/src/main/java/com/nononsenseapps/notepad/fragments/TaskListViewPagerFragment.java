@@ -127,7 +127,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 	public void onActivityCreated(final Bundle state) {
 		super.onActivityCreated(state);
 
-		loaderCallbacks = new LoaderCallbacks<Cursor>() {
+		loaderCallbacks = new LoaderCallbacks<>() {
 
 			@Override
 			public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
@@ -208,9 +208,6 @@ public class TaskListViewPagerFragment extends Fragment implements
 			menu.findItem(R.id.menu_search).setVisible(visible);
 		if (menu.findItem(R.id.menu_sync) != null)
 			menu.findItem(R.id.menu_sync).setVisible(visible);
-		// if (menu.findItem(R.id.menu_createlist) != null)
-		// menu.findItem(R.id.menu_createlist).setVisible(visible);
-
 	}
 
 	@Override
@@ -393,17 +390,12 @@ public class TaskListViewPagerFragment extends Fragment implements
 			final SharedPreferences prefs = PreferenceManager
 					.getDefaultSharedPreferences(getActivity());
 
-			prefListener = new OnSharedPreferenceChangeListener() {
-
-				@Override
-				public void onSharedPreferenceChanged(
-						SharedPreferences sharedPreferences, String key) {
-					if (TaskListFragment.LIST_ALL_ID_PREF_KEY.equals(key)) {
-						all_id = prefs.getLong(
-								TaskListFragment.LIST_ALL_ID_PREF_KEY,
-								TaskListFragment.LIST_ID_WEEK);
-						notifyDataSetChanged();
-					}
+			prefListener = (sharedPreferences, key) -> {
+				if (TaskListFragment.LIST_ALL_ID_PREF_KEY.equals(key)) {
+					all_id = prefs.getLong(
+							TaskListFragment.LIST_ALL_ID_PREF_KEY,
+							TaskListFragment.LIST_ID_WEEK);
+					notifyDataSetChanged();
 				}
 			};
 			prefs.registerOnSharedPreferenceChangeListener(prefListener);

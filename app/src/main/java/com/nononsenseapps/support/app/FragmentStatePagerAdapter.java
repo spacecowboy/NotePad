@@ -29,8 +29,6 @@ import android.view.ViewGroup;
 
 import androidx.viewpager.widget.PagerAdapter;
 
-import com.nononsenseapps.notepad.R;
-
 import java.util.ArrayList;
 
 /**
@@ -76,8 +74,8 @@ public abstract class FragmentStatePagerAdapter extends PagerAdapter {
 	private final FragmentManager mFragmentManager;
 	private FragmentTransaction mCurTransaction = null;
 
-	private ArrayList<Fragment.SavedState> mSavedState = new ArrayList<Fragment.SavedState>();
-	private ArrayList<Fragment> mFragments = new ArrayList<Fragment>();
+	private final ArrayList<Fragment.SavedState> mSavedState = new ArrayList<>();
+	private final ArrayList<Fragment> mFragments = new ArrayList<>();
 	private Fragment mCurrentPrimaryItem = null;
 
 	private final Context context;
@@ -225,8 +223,8 @@ public abstract class FragmentStatePagerAdapter extends PagerAdapter {
 			mSavedState.clear();
 			mFragments.clear();
 			if (fss != null) {
-				for (int i = 0; i < fss.length; i++) {
-					mSavedState.add((Fragment.SavedState) fss[i]);
+				for (Parcelable parcelable : fss) {
+					mSavedState.add((Fragment.SavedState) parcelable);
 				}
 			}
 			Iterable<String> keys = bundle.keySet();

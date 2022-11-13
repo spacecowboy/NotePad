@@ -47,8 +47,8 @@ import java.util.List;
  */
 public abstract class DBSyncBase implements SynchronizerInterface {
 
-	protected Context context;
-	private ContentResolver resolver;
+	protected final Context context;
+	private final ContentResolver resolver;
 
 	public DBSyncBase(final Context context) {
 		this.context = context;
@@ -68,7 +68,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	 */
 	protected List<Pair<OrgNode, Pair<RemoteTask, Task>>> getNodesAndDBEntries(
 			OrgFile file, TaskList list) {
-		final List<Pair<OrgNode, Pair<RemoteTask, Task>>> result = new ArrayList<Pair<OrgNode, Pair<RemoteTask, Task>>>();
+		final List<Pair<OrgNode, Pair<RemoteTask, Task>>> result = new ArrayList<>();
 
 		final HashMap<Long, Task> tasks = getTasks(list);
 
@@ -87,35 +87,35 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 			if (remote != null) {
 				node = nodes.remove(remote.remoteId.toUpperCase());
 			}
-			result.add(new Pair<OrgNode, Pair<RemoteTask, Task>>(node,
-					new Pair<RemoteTask, Task>(remote, task)));
+			result.add(new Pair<>(node,
+					new Pair<>(remote, task)));
 		}
 		// Follow with remaining remotes where task is null
 		for (RemoteTask remote : remotes.values()) {
 			Task task = null;
 			OrgNode node = nodes.remove(remote.remoteId.toUpperCase());
-			result.add(new Pair<OrgNode, Pair<RemoteTask, Task>>(node,
-					new Pair<RemoteTask, Task>(remote, task)));
+			result.add(new Pair<>(node,
+					new Pair<>(remote, task)));
 		}
 		for (RemoteTask remote : remotesDeleted) {
 			Task task = null;
 			OrgNode node = nodes.remove(remote.remoteId.toUpperCase());
-			result.add(new Pair<OrgNode, Pair<RemoteTask, Task>>(node,
-					new Pair<RemoteTask, Task>(remote, task)));
+			result.add(new Pair<>(node,
+					new Pair<>(remote, task)));
 		}
 		// Last, nodes with no database connections
 		for (OrgNode node : nodes.values()) {
 			Task task = null;
 			RemoteTask remote = null;
-			result.add(new Pair<OrgNode, Pair<RemoteTask, Task>>(node,
-					new Pair<RemoteTask, Task>(remote, task)));
+			result.add(new Pair<>(node,
+					new Pair<>(remote, task)));
 		}
 
 		return result;
 	}
 
 	private HashMap<String, OrgNode> getNodes(final OrgFile file) {
-		final HashMap<String, OrgNode> map = new HashMap<String, OrgNode>();
+		final HashMap<String, OrgNode> map = new HashMap<>();
 
 		for (OrgNode node : file.getSubNodes()) {
 			addNodeToMap(node, map);
@@ -143,8 +143,8 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	}
 
 	private HashMap<Long, RemoteTask> getValidRemoteTasks(final TaskList list) {
-		final HashMap<Long, RemoteTask> map = new HashMap<Long, RemoteTask>();
-		final Cursor c = resolver.query(
+		final HashMap<Long, RemoteTask> map = new HashMap<>();
+		try (Cursor c = resolver.query(
 				RemoteTask.URI,
 				RemoteTask.Columns.FIELDS,
 				RemoteTask.Columns.SERVICE + " IS ? AND "
@@ -152,15 +152,11 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 						+ RemoteTask.Columns.LISTDBID + " IS ? AND "
 						+ RemoteTask.Columns.DBID + " > 0",
 				new String[] { getServiceName(), getAccountName(),
-						Long.toString(list._id) }, null);
-		try {
+						Long.toString(list._id) }, null)) {
 			while (c.moveToNext()) {
 				RemoteTask remote = new RemoteTask(c);
 				map.put(remote.dbid, remote);
 			}
-		} finally {
-			if (c != null)
-				c.close();
 		}
 
 		return map;
@@ -174,8 +170,8 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	 * @return
 	 */
 	private List<RemoteTask> getInvalidRemoteTasks(final TaskList list) {
-		final ArrayList<RemoteTask> remoteList = new ArrayList<RemoteTask>();
-		final Cursor c = resolver.query(
+		final ArrayList<RemoteTask> remoteList = new ArrayList<>();
+		try (Cursor c = resolver.query(
 				RemoteTask.URI,
 				RemoteTask.Columns.FIELDS,
 				RemoteTask.Columns.SERVICE + " IS ? AND "
@@ -183,33 +179,25 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 						+ RemoteTask.Columns.LISTDBID + " IS ? AND "
 						+ RemoteTask.Columns.DBID + " < 1",
 				new String[] { getServiceName(), getAccountName(),
-						Long.toString(list._id) }, null);
-		try {
+						Long.toString(list._id) }, null)) {
 			while (c.moveToNext()) {
 				RemoteTask remote = new RemoteTask(c);
 				remoteList.add(remote);
 			}
-		} finally {
-			if (c != null)
-				c.close();
 		}
 
 		return remoteList;
 	}
 
 	private HashMap<Long, Task> getTasks(final TaskList list) {
-		final HashMap<Long, Task> map = new HashMap<Long, Task>();
-		final Cursor c = resolver.query(Task.URI, Task.Columns.FIELDS,
+		final HashMap<Long, Task> map = new HashMap<>();
+		try (Cursor c = resolver.query(Task.URI, Task.Columns.FIELDS,
 				Task.Columns.DBLIST + " IS ?",
-				new String[] { Long.toString(list._id) }, null);
-		try {
+				new String[] { Long.toString(list._id) }, null)) {
 			while (c.moveToNext()) {
 				Task task = new Task(c);
 				map.put(task._id, task);
 			}
-		} finally {
-			if (c != null)
-				c.close();
 		}
 
 		return map;
@@ -224,7 +212,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	 */
 	protected List<Pair<OrgFile, Pair<RemoteTaskList, TaskList>>> getFilesAndDBEntries()
 			throws IOException, ParseException {
-		final List<Pair<OrgFile, Pair<RemoteTaskList, TaskList>>> result = new ArrayList<Pair<OrgFile, Pair<RemoteTaskList, TaskList>>>();
+		final List<Pair<OrgFile, Pair<RemoteTaskList, TaskList>>> result = new ArrayList<>();
 
 		// get all lists
 		final HashMap<Long, TaskList> lists = getLists();
@@ -258,8 +246,8 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 			if (file != null)
 				f = file.getFilename();
 			Log.d(Synchronizer.TAG, "Pair:" + l + ", " + r + ", " + f);
-			result.add(new Pair<OrgFile, Pair<RemoteTaskList, TaskList>>(file,
-					new Pair<RemoteTaskList, TaskList>(remote, list)));
+			result.add(new Pair<>(file,
+					new Pair<>(remote, list)));
 		}
 
 		// Add remotes that no longer have a list
@@ -281,8 +269,8 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 			if (file != null)
 				f = file.getFilename();
 			Log.d(Synchronizer.TAG, "Pair:" + l + ", " + r + ", " + f);
-			result.add(new Pair<OrgFile, Pair<RemoteTaskList, TaskList>>(file,
-					new Pair<RemoteTaskList, TaskList>(remote, list)));
+			result.add(new Pair<>(file,
+					new Pair<>(remote, list)));
 		}
 
 		// Add files that do not exist in database
@@ -302,8 +290,8 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 			if (file != null) {
 				f = file.getFilename();
 				Log.d(Synchronizer.TAG, "Pair:" + l + ", " + r + ", " + f);
-				result.add(new Pair<OrgFile, Pair<RemoteTaskList, TaskList>>(file,
-						new Pair<RemoteTaskList, TaskList>(remote, list)));
+				result.add(new Pair<>(file,
+						new Pair<>(remote, list)));
 			}
 		}
 
@@ -314,20 +302,16 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	 * @return a map from list-dbid to RemoteTaskList
 	 */
 	private HashMap<Long, RemoteTaskList> getRemoteTaskLists() {
-		final HashMap<Long, RemoteTaskList> map = new HashMap<Long, RemoteTaskList>();
-		final Cursor c = resolver.query(RemoteTaskList.URI,
+		final HashMap<Long, RemoteTaskList> map = new HashMap<>();
+		try (Cursor c = resolver.query(RemoteTaskList.URI,
 				RemoteTaskList.Columns.FIELDS, RemoteTaskList.Columns.SERVICE
 						+ " IS ? AND " + RemoteTask.Columns.ACCOUNT + " IS ?",
-				new String[] { getServiceName(), getAccountName() }, null);
-		try {
+				new String[] { getServiceName(), getAccountName() }, null)) {
 			while (c.moveToNext()) {
 				RemoteTaskList remote = new RemoteTaskList(c);
 				Log.d(Synchronizer.TAG, "Get remote: " + remote.remoteId);
 				map.put(remote.dbid, remote);
 			}
-		} finally {
-			if (c != null)
-				c.close();
 		}
 
 		return map;
@@ -337,18 +321,14 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	 * @return a map from list-dbid to TaskList
 	 */
 	private HashMap<Long, TaskList> getLists() {
-		final HashMap<Long, TaskList> map = new HashMap<Long, TaskList>();
-		final Cursor c = resolver.query(TaskList.URI, TaskList.Columns.FIELDS,
-				null, null, null);
-		try {
+		final HashMap<Long, TaskList> map = new HashMap<>();
+		try (Cursor c = resolver.query(TaskList.URI, TaskList.Columns.FIELDS,
+				null, null, null)) {
 			while (c.moveToNext()) {
 				TaskList list = new TaskList(c);
 				Log.d(Synchronizer.TAG, "Get list: " + list.title);
 				map.put(list._id, list);
 			}
-		} finally {
-			if (c != null)
-				c.close();
 		}
 
 		return map;

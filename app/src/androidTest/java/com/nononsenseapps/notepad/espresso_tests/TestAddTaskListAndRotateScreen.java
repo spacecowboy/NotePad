@@ -35,8 +35,8 @@ public class TestAddTaskListAndRotateScreen extends BaseTestClass {
 		EspressoHelper.openDrawer();
 
 		// rotate to landscape and back to portrait
-		onView(isRoot()).perform(orientationLandscape());
-		onView(isRoot()).perform(orientationPortrait());
+		onView(isRoot()).perform(orientationLandscape(myActivityRule.getActivity()));
+		onView(isRoot()).perform(orientationPortrait(myActivityRule.getActivity()));
 
 		// make sure the task list is still visible
 		RecyclerViewActions.scrollTo(hasDescendant(withText(taskListName)));

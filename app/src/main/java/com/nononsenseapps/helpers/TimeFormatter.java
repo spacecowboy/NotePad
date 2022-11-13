@@ -32,7 +32,7 @@ import java.util.Locale;
  */
 public class TimeFormatter {
 
-	public static String WEEKDAY_SHORTEST_FORMAT = "E";
+	public static final String WEEKDAY_SHORTEST_FORMAT = "E";
 
 	public static Locale getLocale(final String lang) {
 		final Locale locale;

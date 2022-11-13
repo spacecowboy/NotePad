@@ -85,7 +85,7 @@
 			android:autoLink="all"
 			android:fontFamily="sans-serif-light"
 			android:paddingTop="4dp"
-			android:text="TapTargetView (&#169;) KeepSafe"
+			android:text="TapTargetView (&#169;) Keepsafe Software Inc."
 			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
 		<TextView
@@ -95,6 +95,42 @@
 			android:fontFamily="sans-serif-light"
 			android:paddingTop="4dp"
 			android:text="TextDrawable (&#169;) Amulya Khare"
+			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:autoLink="all"
+			android:fontFamily="sans-serif-light"
+			android:paddingTop="4dp"
+			android:text="AndroidAnnotations (&#169;) the AndroidAnnotations project"
+			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:autoLink="all"
+			android:fontFamily="sans-serif-light"
+			android:paddingTop="4dp"
+			android:text="Retrofit (&#169;) Square, Inc."
+			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:autoLink="all"
+			android:fontFamily="sans-serif-light"
+			android:paddingTop="4dp"
+			android:text="orgparser (&#169;) Jonas Kalderstam"
+			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+
+		<TextView
+			android:layout_width="fill_parent"
+			android:layout_height="wrap_content"
+			android:autoLink="all"
+			android:fontFamily="sans-serif-light"
+			android:paddingTop="4dp"
+			android:text="joda-time (&#169;) Joda org."
 			android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
 
 		<TextView

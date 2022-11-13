@@ -92,42 +92,36 @@ public class TaskList extends DAO {
 
 		public static final String VIEW_COUNT = "count";
 
-		// public static final String GTASKACCOUNT = "gtaskaccount";
-		// public static final String GTASKID = "gtaskid";
-		//		
-
-		public static final String[] FIELDS = { _ID, TITLE, UPDATED, LISTTYPE,
-				SORTING };
+		public static final String[] FIELDS = { _ID, TITLE, UPDATED, LISTTYPE, SORTING };
 		// GTASKACCOUNT, GTASKID };
 		public static final String[] SHALLOWFIELDS = { _ID, TITLE, UPDATED };
 	}
 
-	public static final String CREATE_TABLE = new StringBuilder("CREATE TABLE ")
-			.append(TABLE_NAME).append("(").append(Columns._ID)
-			.append(" INTEGER PRIMARY KEY,").append(Columns.TITLE)
-			.append(" TEXT NOT NULL DEFAULT '',").append(Columns.UPDATED)
-			.append(" INTEGER,").append(Columns.LISTTYPE)
-			.append(" TEXT DEFAULT NULL,").append(Columns.SORTING)
-			.append(" TEXT DEFAULT NULL").append(")").toString();
+	public static final String CREATE_TABLE = "CREATE TABLE " +
+			TABLE_NAME + "(" + Columns._ID +
+			" INTEGER PRIMARY KEY," + Columns.TITLE +
+			" TEXT NOT NULL DEFAULT ''," + Columns.UPDATED +
+			" INTEGER," + Columns.LISTTYPE +
+			" TEXT DEFAULT NULL," + Columns.SORTING +
+			" TEXT DEFAULT NULL" + ")";
 
-	public static final String CREATE_COUNT_VIEW = new StringBuilder(
-			"CREATE TEMP VIEW IF NOT EXISTS ")
-			.append(VIEWCOUNT_NAME)
-			.append(" AS SELECT ")
-			.append(arrayToCommaString(Columns.FIELDS))
-			.append(",")
-			.append(Columns.VIEW_COUNT)
-			.append(" FROM ")
-			.append(TABLE_NAME)
-			.append(" LEFT JOIN ")
+	public static final String CREATE_COUNT_VIEW = "CREATE TEMP VIEW IF NOT EXISTS " +
+			VIEWCOUNT_NAME +
+			" AS SELECT " +
+			arrayToCommaString(Columns.FIELDS) +
+			"," +
+			Columns.VIEW_COUNT +
+			" FROM " +
+			TABLE_NAME +
+			" LEFT JOIN " +
 			// Select count statement
-			.append(" (SELECT COUNT(1) AS ").append(Columns.VIEW_COUNT)
-			.append(",").append(Task.Columns.DBLIST).append(" FROM ")
-			.append(Task.TABLE_NAME).append(" WHERE ")
-			.append(Task.Columns.COMPLETED).append(" IS NULL ")
-			.append(" GROUP BY ").append(Task.Columns.DBLIST).append(") ")
-			.append(" ON ").append(TABLE_NAME).append(".").append(Columns._ID)
-			.append(" = ").append(Task.Columns.DBLIST).append(";").toString();
+			" (SELECT COUNT(1) AS " + Columns.VIEW_COUNT +
+			"," + Task.Columns.DBLIST + " FROM " +
+			Task.TABLE_NAME + " WHERE " +
+			Task.Columns.COMPLETED + " IS NULL " +
+			" GROUP BY " + Task.Columns.DBLIST + ") " +
+			" ON " + TABLE_NAME + "." + Columns._ID +
+			" = " + Task.Columns.DBLIST + ";";
 
 	public String title = "";
 
@@ -138,10 +132,6 @@ public class TaskList extends DAO {
 	public String listtype = null;
 	public String sorting = null;
 
-	// Sync stuff
-	// public String gtaskaccount = null;
-	// public String gtaskid = null;	
-
 	public TaskList() {
 	}
 
@@ -151,9 +141,6 @@ public class TaskList extends DAO {
 		this.updated = c.getLong(2);
 		this.listtype = c.getString(3);
 		this.sorting = c.getString(4);
-		// sync stuff
-		// gtaskaccount = c.getString(3);
-		// gtaskid = c.getString(4);
 	}
 
 	public TaskList(final Uri uri, final ContentValues values) {
@@ -181,9 +168,6 @@ public class TaskList extends DAO {
 		updated = values.getAsLong(Columns.UPDATED);
 		listtype = values.getAsString(Columns.LISTTYPE);
 		sorting = values.getAsString(Columns.SORTING);
-
-		// gtaskaccount = values.getAsString(Columns.GTASKACCOUNT);
-		// gtaskid = values.getAsString(Columns.GTASKID);		
 	}
 
 	public ContentValues getContent() {
@@ -193,10 +177,6 @@ public class TaskList extends DAO {
 		values.put(Columns.UPDATED, updated);
 		values.put(Columns.LISTTYPE, listtype);
 		values.put(Columns.SORTING, sorting);
-
-		// values.put(Columns.GTASKACCOUNT, gtaskaccount);
-		// values.put(Columns.GTASKID, gtaskid);
-
 		return values;
 	}
 

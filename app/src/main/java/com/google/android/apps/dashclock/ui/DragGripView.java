@@ -37,12 +37,11 @@ public class DragGripView extends View {
 	private static final int HORIZ_RIDGES = 2;
 
 	private int mGravity = Gravity.END;
-	private int mColor = 0x33333333;
 
-	private Paint mRidgePaint;
+	private final Paint mRidgePaint;
 
-	private float mRidgeSize;
-	private float mRidgeGap;
+	private final float mRidgeSize;
+	private final float mRidgeGap;
 
 	private int mWidth;
 	private int mHeight;
@@ -60,7 +59,8 @@ public class DragGripView extends View {
 
 		final TypedArray a = context.obtainStyledAttributes(attrs, ATTRS);
 		mGravity = a.getInteger(0, mGravity);
-		mColor = a.getColor(1, mColor);
+
+		int mColor = a.getColor(1, /* default: */ 0x33333333);
 		a.recycle();
 
 		final Resources res = getResources();

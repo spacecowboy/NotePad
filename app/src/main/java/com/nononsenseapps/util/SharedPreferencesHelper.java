@@ -23,7 +23,6 @@ import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.StringRes;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;

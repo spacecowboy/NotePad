@@ -20,7 +20,6 @@ package com.nononsenseapps.notepad.fragments;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -54,7 +53,6 @@ import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
 import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
 import com.nononsenseapps.notepad.ActivityTaskHistory_;
@@ -68,6 +66,7 @@ import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.prefs.MainPrefs;
 import com.nononsenseapps.ui.NotificationItemHelper;
 import com.nononsenseapps.util.SharedPreferencesHelper;
+import com.nononsenseapps.utils.ShowcaseHelper;
 import com.nononsenseapps.utils.views.StyledEditText;
 
 import org.androidannotations.annotations.AfterViews;
@@ -88,11 +87,11 @@ import java.util.Calendar;
 @EFragment
 public class TaskDetailFragment extends Fragment {
 
-	public static int LOADER_EDITOR_TASK = 3001;
-	public static int LOADER_EDITOR_TASKLISTS = 3002;
-	public static int LOADER_EDITOR_NOTIFICATIONS = 3003;
+	public static final int LOADER_EDITOR_TASK = 3001;
+	public static final int LOADER_EDITOR_TASKLISTS = 3002;
+	public static final int LOADER_EDITOR_NOTIFICATIONS = 3003;
 
-	LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<>() {
+	final LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<>() {
 		@Override
 		@NonNull
 		public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
@@ -362,17 +361,7 @@ public class TaskDetailFragment extends Fragment {
 			return false;
 		}
 
-		ActivityMain.showTheShowCaseView(
-				this.getActivity(),
-				// it would be better to focus the showcaseview on the overflow menu
-				// (the 3 vertical dots) but TapTargetView needs a toolbar, which needs
-				// appcompatactivity, which need Theme.AppCompat, which needs ...
-				// Maybe this works ?
-				// (switch to appcompatactivity, then in onCreate() you run the following)
-				// Toolbar tb = (Toolbar) activity.getSupportActionBar().getCustomView();
-				// Toolbar tb = activity.findViewById(androidx.appcompat.R.id.action_bar);
-				// TapTarget.forToolbarOverflow(tb,...)
-				android.R.id.home,
+		ShowcaseHelper.showForOverflowMenu(this.getActivity(),
 				R.string.showcase_timemachine_title,
 				R.string.showcase_timemachine_msg);
 
@@ -453,7 +442,7 @@ public class TaskDetailFragment extends Fragment {
 		dpDiag.show();
 	}
 
-	// @Override
+	// @Override TODO is it needed somewhere ?
 	// public void onDialogTimeSet(int hourOfDay, int minute) {
 	// final Calendar localTime = Calendar.getInstance();
 	// if (mTask.due != null) {
@@ -484,12 +473,6 @@ public class TaskDetailFragment extends Fragment {
 		mTask.due = localTime.getTimeInMillis();
 		setDueText();
 	}
-
-	// @Override
-	// public void onDateTimeSet(final long time) {
-	// mTask.due = time;
-	// setDueText();
-	// }
 
 	/**
 	 * Returns a properly configured {@link DatePickerDialog} to let the user pick a

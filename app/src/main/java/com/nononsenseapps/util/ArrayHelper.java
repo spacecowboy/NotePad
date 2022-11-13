@@ -19,6 +19,7 @@ package com.nononsenseapps.util;
 
 public class ArrayHelper {
 
+	@SafeVarargs
 	public static <T> T[] toArray(T... items) {
 		return items;
 	}

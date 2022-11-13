@@ -64,7 +64,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 		Objects.requireNonNull(action);
 
 		if (action.equals(CLICK_ACTION)) {
-			NnnLogger.debugOnly(ListWidgetProvider.class, "CLICK ACTION RECEIVED");
+			NnnLogger.debug(ListWidgetProvider.class, "CLICK ACTION RECEIVED");
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
 			if (noteId > -1) {
 				Intent appIntent = new Intent()
@@ -78,7 +78,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			}
 		} else if (action.equals(COMPLETE_ACTION)) {
 			// Should send broadcast here
-			NnnLogger.debugOnly(ListWidgetProvider.class, "COMPLETE ACTION RECEIVED");
+			NnnLogger.debug(ListWidgetProvider.class, "COMPLETE ACTION RECEIVED");
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
 			// This will complete the note
 			if (noteId > -1) {
@@ -108,7 +108,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 	@Override
 	public void onDeleted(Context context, int[] appWidgetIds) {
 		super.onDeleted(context, appWidgetIds);
-		NnnLogger.debugOnly(ListWidgetProvider.class,
+		NnnLogger.debug(ListWidgetProvider.class,
 				"onDeleted, appWidgetIds.length = " + appWidgetIds.length);
 
 		for (int widgetId : appWidgetIds) {

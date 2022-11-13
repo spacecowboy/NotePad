@@ -19,10 +19,8 @@ package com.nononsenseapps.notepad.fragments;
 
 import android.app.FragmentManager;
 import android.os.Bundle;
-import android.widget.Toast;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.sync.files.JSONBackup;
 
 public class DialogExportBackup extends DialogConfirmBaseV11 {

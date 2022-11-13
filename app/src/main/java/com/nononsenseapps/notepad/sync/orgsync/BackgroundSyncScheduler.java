@@ -27,10 +27,8 @@ import android.os.SystemClock;
 public class BackgroundSyncScheduler extends BroadcastReceiver {
 	// Unique ID for schedule
 	private final static int scheduleCode = 2832;
-	private static final String TAG = "BackgroundSyncScheduler";
 
-	public BackgroundSyncScheduler() {
-	}
+	public BackgroundSyncScheduler() {}
 
 	@Override
 	public void onReceive(Context context, Intent intent) {

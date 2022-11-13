@@ -17,30 +17,17 @@
 
 package com.nononsenseapps.notepad.prefs;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.helpers.TimeFormatter;
-
-import android.app.Activity;
 import android.database.Cursor;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
-import android.text.format.DateFormat;
-import android.text.format.Time;
+
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.TaskList;
+
+import java.util.ArrayList;
 
 public class ListPrefs extends PreferenceFragment {
 	@Override
@@ -72,37 +59,32 @@ public class ListPrefs extends PreferenceFragment {
 
 		// Make the show checkbox dependant on the list type preference
 		final Preference hideCheckboxes = findPreference(getString(R.string.pref_hidecheckboxes));
-		Preference.OnPreferenceChangeListener listener = new Preference.OnPreferenceChangeListener() {
-			@Override
-			public boolean onPreferenceChange(Preference preference, Object value) {
-				String stringValue = value.toString();
+		Preference.OnPreferenceChangeListener listener = (preference, value) -> {
+			String stringValue = value.toString();
 
-				if (preference instanceof ListPreference) {
-					// For list preferences, look up the correct display value in
-					// the preference's 'entries' list.
-					ListPreference listPreference = (ListPreference) preference;
-					int index = listPreference.findIndexOfValue(stringValue);
+			if (preference instanceof ListPreference) {
+				// For list preferences, look up the correct display value in
+				// the preference's 'entries' list.
+				ListPreference listPreference = (ListPreference) preference;
+				int index = listPreference.findIndexOfValue(stringValue);
 
-					// Set the summary to reflect the new value.
-					preference
-							.setSummary(index >= 0 ? listPreference.getEntries()[index]
-									: null);
+				// Set the summary to reflect the new value.
+				preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
 
-				} else {
-					// For all other preferences, set the summary to the value's
-					// simple string representation.
-					preference.setSummary(stringValue);
-				}
-
-				if (stringValue.equals(getString(R.string.const_listtype_tasks))) {
-					hideCheckboxes.setEnabled(true);
-				} else {
-					hideCheckboxes.setEnabled(false);
-				}
-
-
-				return true;
+			} else {
+				// For all other preferences, set the summary to the value's
+				// simple string representation.
+				preference.setSummary(stringValue);
 			}
+
+			if (stringValue.equals(getString(R.string.const_listtype_tasks))) {
+				hideCheckboxes.setEnabled(true);
+			} else {
+				hideCheckboxes.setEnabled(false);
+			}
+
+
+			return true;
 		};
 		final Preference listtype = findPreference(getString(R.string.pref_listtype));
 		listtype.setOnPreferenceChangeListener(listener);
@@ -118,12 +100,11 @@ public class ListPrefs extends PreferenceFragment {
 	 */
 	private void setEntries(ListPreference listSpinner) {
 
-		ArrayList<CharSequence> entries = new ArrayList<CharSequence>();
-		ArrayList<CharSequence> values = new ArrayList<CharSequence>();
+		ArrayList<CharSequence> entries = new ArrayList<>();
+		ArrayList<CharSequence> values = new ArrayList<>();
 
 		// TODO fix from old version
-		// listSpinner.setDefaultValue(Long.toString(MainActivity.getAList(
-		// getActivity(), -1)));
+		// listSpinner.setDefaultValue(Long.toString(MainActivity.getAList(getActivity(), -1)));
 
 		Cursor cursor = getActivity().getContentResolver().query(TaskList.URI,
 				new String[] { TaskList.Columns._ID, TaskList.Columns.TITLE },

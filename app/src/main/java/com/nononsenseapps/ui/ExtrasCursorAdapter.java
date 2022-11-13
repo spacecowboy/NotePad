@@ -37,16 +37,16 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 	// private static final String TAG = "ExtrasCursorAdapter";
 
 	private Cursor cursor;
-	protected Context context;
+	protected final Context context;
 
-	protected int[] extraIds;
-	protected int[] extraLabels;
+	protected final int[] extraIds;
+	protected final int[] extraLabels;
 
-	protected String[] from;
-	protected int[] to;
+	protected final String[] from;
+	protected final int[] to;
 
-	protected int layout;
-	protected int dropdownlayout;
+	protected final int layout;
+	protected final int dropdownlayout;
 
 	/**
 	 * Same as a cursoradapter except two extra arrays are taken (and a layout).
@@ -87,9 +87,6 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		this.dropdownlayout = dropdownlayout;
 	}
 
-	/**
-	 *
-	 */
 	@Override
 	public void bindView(View view, Context context, Cursor cursor) {
 		int i;
@@ -99,7 +96,8 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		}
 		// Fetch from database
 		for (i = 0; i < from.length; i++) {
-			String txt = cursor.getString(cursor.getColumnIndex(from[i]));
+			final int colIndex = cursor.getColumnIndex(from[i]);
+			String txt = cursor.getString(colIndex);
 			viewHolder.texts[i].setText(txt);
 		}
 	}

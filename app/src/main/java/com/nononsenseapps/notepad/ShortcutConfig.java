@@ -1,6 +1,5 @@
 package com.nononsenseapps.notepad;
 
-import android.app.Activity;
 import android.app.LoaderManager.LoaderCallbacks;
 import android.content.CursorLoader;
 import android.content.Intent;
@@ -87,8 +86,6 @@ public class ShortcutConfig extends AppCompatActivity {
 				new String[] { TaskList.Columns.TITLE },
 				new int[] { android.R.id.text1 }, 0);
 
-		// mSpinnerAdapter
-		// .setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 		listSpinner.setAdapter(mSpinnerAdapter);
 
 		getLoaderManager().restartLoader(0, null,

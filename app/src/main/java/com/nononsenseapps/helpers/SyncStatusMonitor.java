@@ -66,7 +66,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 				listener.onSyncStartStop(false);
 			}
 		} catch (Exception e) {
-			NnnLogger.debugOnly(SyncStatusMonitor.class, e.getLocalizedMessage());
+			NnnLogger.debug(SyncStatusMonitor.class, e.getLocalizedMessage());
 		}
 	}
 
@@ -89,25 +89,19 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 	@Override
 	public void onReceive(final Context context, final Intent intent) {
 		if (intent.getAction().equals(SyncAdapter.SYNC_STARTED)) {
-			activity.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						listener.onSyncStartStop(true);
-					} catch (Exception e) {
-						NnnLogger.exception(e);
-					}
+			activity.runOnUiThread(() -> {
+				try {
+					listener.onSyncStartStop(true);
+				} catch (Exception e) {
+					NnnLogger.exception(e);
 				}
 			});
 		} else { //if (intent.getAction().equals(SyncAdapter.SYNC_FINISHED)) {
-			activity.runOnUiThread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						listener.onSyncStartStop(false);
-					} catch (Exception e) {
-						NnnLogger.exception(e);
-					}
+			activity.runOnUiThread(() -> {
+				try {
+					listener.onSyncStartStop(false);
+				} catch (Exception e) {
+					NnnLogger.exception(e);
 				}
 			});
 			Bundle b = intent.getExtras();
@@ -132,7 +126,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 				return;
 		}
 
-		NnnLogger.debugOnly(SyncStatusMonitor.class, "SYNC: " + result);
+		NnnLogger.debug(SyncStatusMonitor.class, "SYNC: " + result);
 		Toast toast = Toast.makeText(context, text, Toast.LENGTH_SHORT);
 		toast.show();
 	}

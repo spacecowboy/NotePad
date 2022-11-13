@@ -19,11 +19,8 @@ package com.nononsenseapps.notepad.dashclock;
 
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
-import android.util.DisplayMetrics;
-import android.util.TypedValue;
 import android.view.MenuItem;
 import android.view.Window;
-import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 

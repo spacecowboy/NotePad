@@ -44,7 +44,6 @@ import androidx.cursoradapter.widget.SimpleCursorAdapter.ViewBinder;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.AdapterView.OnItemClickListener;
