@@ -489,45 +489,6 @@ public class Notification extends DAO {
 	}
 
 	/**
-	 * Starts a background task that removes all notifications associated with
-	 * the specified list, occurring before the specified time
-	 */
-	// public static void removeWithListId(final Context context,
-	// final long listId, final long maxTime) {
-	// final AsyncTask<Long, Void, Void> task = new AsyncTask<Long, Void,
-	// Void>() {
-	// @Override
-	// protected Void doInBackground(final Long... ids) {
-	// // First get the list of tasks in that list
-	// final Cursor c = context
-	// .getContentResolver()
-	// .query(Task.URI,
-	// Task.Columns.FIELDS,
-	// Task.Columns.DBLIST
-	// + " IS ? AND "
-	// + com.nononsenseapps.notepad.database.Notification.Columns.RADIUS
-	// + " IS NULL",
-	// new String[] { Long.toString(listId) }, null);
-	//
-	// String idStrings = "(";
-	// while (c.moveToNext()) {
-	// idStrings += c.getLong(0) + ",";
-	// }
-	// c.close();
-	// idStrings = idStrings.substring(0, idStrings.length() - 1);
-	// idStrings += ")";
-	//
-	// context.getContentResolver().delete(
-	// URI,
-	// Columns.TIME + " <= " + maxTime + " AND "
-	// + Columns.TASKID + " IN " + idStrings, null);
-	// return null;
-	// }
-	// };
-	// task.execute(listId);
-	// }
-
-	/**
 	 * Returns list of notifications coupled to specified task, sorted by time
 	 */
 	public static List<Notification> getNotificationsOfTask(final Context context, final long taskId) {

@@ -640,12 +640,12 @@ public class GoogleTaskSync {
 				NnnLogger.debugOnly(GoogleTaskSync.class, "skipping equal update");
 				// Dont
 			} else {
-//				if (localTask != null) {
-//					Log.d("nononsenseapps gtasksync", "going to upload: " + localTask.title + ", l." + localTask.updated + " r." + remoteTask.updated);
-//				}
+				if (localTask != null) {
+					NnnLogger.debugOnly(GoogleTaskSync.class,"going to upload: " +
+							localTask.title + ", l." + localTask.updated + " r." + remoteTask.updated);
+				}
 				NnnLogger.debugOnly(GoogleTaskSync.class, "add to sync list: " + remoteTask.title);
-				taskPairs
-						.add(new Pair<>(localTask, remoteTask));
+				taskPairs.add(new Pair<>(localTask, remoteTask));
 			}
 		}
 

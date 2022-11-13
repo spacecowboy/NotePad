@@ -86,11 +86,11 @@ public abstract class DAO {
 	}
 
 	/**
-	 * Example: [] -> "" [a] -> "a" [a, b] -> "a,b"
+	 * Examples: <br/>
+	 * [] -> "" <br/>
+	 * [a] -> "a" <br/>
+	 * [a, b] -> "a,b" <br/>
 	 */
-	// public static String arrayToCommaString(final String[] array) {
-	// return arrayToCommaString("", array);
-	// }
 	public static String arrayToCommaString(final long... array) {
 		StringBuilder result = new StringBuilder();
 		for (final long val : array) {

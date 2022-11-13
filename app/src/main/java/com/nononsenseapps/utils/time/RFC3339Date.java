@@ -35,16 +35,13 @@ public class RFC3339Date {
 		// if there is no time zone, we don't need to do any special parsing.
 		if (datestring.endsWith("Z")) {
 			try {
-				SimpleDateFormat s = new SimpleDateFormat(
-						"yyyy-MM-dd'T'HH:mm:ss'Z'"); // spec for RFC3339
+				SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"); // spec for RFC3339
 				s.setCalendar(Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 				d = s.parse(datestring);
-			} catch (ParseException pe) {// try again with optional
+			} catch (ParseException pe) { // try again with optional
 				// decimals
-				SimpleDateFormat s = new SimpleDateFormat(
-						"yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");// spec for RFC3339
-				// (with fractional
-				// seconds)
+				SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");// spec for RFC3339
+				// (with fractional seconds)
 				s.setCalendar(Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 				s.setLenient(true);
 				try {
@@ -56,21 +53,13 @@ public class RFC3339Date {
 			return d;
 		}
 
-		// step one, split off the timezone.
-//		String firstpart = datestring.substring(0, datestring.lastIndexOf('-'));
-//		String secondpart = datestring.substring(datestring.lastIndexOf('-'));
-//
-//		// step two, remove the colon from the timezone offset
-//		secondpart = secondpart.substring(0, secondpart.indexOf(':'))
-//				+ secondpart.substring(secondpart.indexOf(':') + 1);
-//		datestring = firstpart + secondpart;
 		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
 		// spec for RFC3339
 		s.setCalendar(Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 
 		try {
 			d = s.parse(datestring);
-		} catch (java.text.ParseException pe) {// try again with optional decimals
+		} catch (java.text.ParseException pe) { // try again with optional decimals
 			s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ");
 			s.setCalendar(Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 			// spec for RFC3339(with fractional seconds)

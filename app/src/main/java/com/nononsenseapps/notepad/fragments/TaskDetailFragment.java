@@ -447,7 +447,7 @@ public class TaskDetailFragment extends Fragment {
 		dpDiag.show();
 	}
 
-	// @Override
+	// @Override TODO is it needed somewhere ?
 	// public void onDialogTimeSet(int hourOfDay, int minute) {
 	// final Calendar localTime = Calendar.getInstance();
 	// if (mTask.due != null) {
@@ -478,12 +478,6 @@ public class TaskDetailFragment extends Fragment {
 		mTask.due = localTime.getTimeInMillis();
 		setDueText();
 	}
-
-	// @Override
-	// public void onDateTimeSet(final long time) {
-	// mTask.due = time;
-	// setDueText();
-	// }
 
 	/**
 	 * Returns a properly configured {@link DatePickerDialog} to let the user pick a

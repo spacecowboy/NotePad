@@ -165,16 +165,13 @@ public class Task extends DAO {
 	private static final String DELETEDQUERY = "deletedquery";
 
 	// Special URI to look at backup table
-	public static final Uri URI_DELETED_QUERY = Uri.withAppendedPath(URI,
-			DELETEDQUERY);
+	public static final Uri URI_DELETED_QUERY = Uri.withAppendedPath(URI, DELETEDQUERY);
 
 	// Query the view with date section headers
-	public static final Uri URI_SECTIONED_BY_DATE = Uri.withAppendedPath(URI,
-			SECTIONED_DATE_VIEW);
+	public static final Uri URI_SECTIONED_BY_DATE = Uri.withAppendedPath(URI, SECTIONED_DATE_VIEW);
 
 	// Query for history of tasks
-	public static final Uri URI_TASK_HISTORY = Uri.withAppendedPath(URI,
-			HISTORY_TABLE_NAME);
+	public static final Uri URI_TASK_HISTORY = Uri.withAppendedPath(URI, HISTORY_TABLE_NAME);
 
 	// Search URI
 	public static final Uri URI_SEARCH = Uri.withAppendedPath(
@@ -182,41 +179,26 @@ public class Task extends DAO {
 			FTS3_TABLE_NAME);
 
 	// Special URI to use when a move is requested
-	// public static final Uri URI_WRITE_MOVESUBTREE = Uri.withAppendedPath(URI,
-	// MOVESUBTREE);
-	private static final Uri URI_WRITE_MOVEITEMLEFT = Uri.withAppendedPath(URI,
-			MOVEITEMLEFT);
-	private static final Uri URI_WRITE_MOVEITEMRIGHT = Uri.withAppendedPath(
-			URI, MOVEITEMRIGHT);
+	private static final Uri URI_WRITE_MOVEITEMLEFT = Uri.withAppendedPath(URI, MOVEITEMLEFT);
+	private static final Uri URI_WRITE_MOVEITEMRIGHT = Uri.withAppendedPath(URI, MOVEITEMRIGHT);
 
-	// public Uri getMoveSubTreeUri() {
-	// if (_id < 1) {
-	// throw new InvalidParameterException(
-	// "_ID of this object is not valid");
-	// }
-	// return Uri.withAppendedPath(URI_WRITE_MOVESUBTREE, Long.toString(_id));
-	// }
 	private Uri getMoveItemLeftUri() {
 		if (_id < 1) {
-			throw new InvalidParameterException(
-					"_ID of this object is not valid");
+			throw new InvalidParameterException("_ID of this object is not valid");
 		}
 		return Uri.withAppendedPath(URI_WRITE_MOVEITEMLEFT, Long.toString(_id));
 	}
 
 	private Uri getMoveItemRightUri() {
 		if (_id < 1) {
-			throw new InvalidParameterException(
-					"_ID of this object is not valid");
+			throw new InvalidParameterException("_ID of this object is not valid");
 		}
-		return Uri
-				.withAppendedPath(URI_WRITE_MOVEITEMRIGHT, Long.toString(_id));
+		return Uri.withAppendedPath(URI_WRITE_MOVEITEMRIGHT, Long.toString(_id));
 	}
 
 	public static class Columns implements BaseColumns {
 
-		private Columns() {
-		}
+		private Columns() {}
 
 		public static final String TITLE = "title";
 		public static final String NOTE = "note";
@@ -252,51 +234,30 @@ public class Task extends DAO {
 
 	}
 
-	public static final String CREATE_TABLE = "CREATE TABLE " +
-			TABLE_NAME +
-			"(" +
-			Columns._ID +
-			" INTEGER PRIMARY KEY," +
-			Columns.TITLE +
-			" TEXT NOT NULL DEFAULT ''," +
-			Columns.NOTE +
-			" TEXT NOT NULL DEFAULT ''," +
+	public static final String CREATE_TABLE = "CREATE TABLE " + TABLE_NAME + "(" + Columns._ID +
+			" INTEGER PRIMARY KEY," + Columns.TITLE + " TEXT NOT NULL DEFAULT ''," +
+			Columns.NOTE + " TEXT NOT NULL DEFAULT ''," +
 			// These are all msec times
-			Columns.COMPLETED +
-			" INTEGER DEFAULT NULL," +
-			Columns.UPDATED +
-			" INTEGER DEFAULT NULL," +
-			Columns.DUE +
-			" INTEGER DEFAULT NULL," +
+			Columns.COMPLETED + " INTEGER DEFAULT NULL," + Columns.UPDATED +
+			" INTEGER DEFAULT NULL," + Columns.DUE + " INTEGER DEFAULT NULL," +
 			// boolean, 1 for locked, unlocked otherwise
-			Columns.LOCKED +
-			" INTEGER NOT NULL DEFAULT 0," +
+			Columns.LOCKED + " INTEGER NOT NULL DEFAULT 0," +
 
 			// position stuff
-			Columns.LEFT +
-			" INTEGER NOT NULL DEFAULT 1," +
-			Columns.RIGHT +
-			" INTEGER NOT NULL DEFAULT 2," +
-			Columns.DBLIST +
-			" INTEGER NOT NULL," +
+			Columns.LEFT + " INTEGER NOT NULL DEFAULT 1," + Columns.RIGHT +
+			" INTEGER NOT NULL DEFAULT 2," + Columns.DBLIST + " INTEGER NOT NULL," +
 
 			// Positions must be positive and ordered!
-			" CHECK(" +
-			Columns.LEFT +
-			" > 0), " +
-			" CHECK(" +
-			Columns.RIGHT +
-			" > 1), " +
+			" CHECK(" + Columns.LEFT + " > 0), " + " CHECK(" + Columns.RIGHT + " > 1), " +
+
 			// Each side's value should be unique in it's list
 			// Handled in trigger
 			// ).append(" UNIQUE(").append(Columns.LEFT).append(", ").append(Columns.DBLIST).append(")"
 			// ).append(" UNIQUE(").append(Columns.RIGHT).append(", ").append(Columns.DBLIST).append(")"
 
 			// Foreign key for list
-			"FOREIGN KEY(" + Columns.DBLIST +
-			") REFERENCES " + TaskList.TABLE_NAME + "(" +
-			TaskList.Columns._ID + ") ON DELETE CASCADE" +
-			")";
+			"FOREIGN KEY(" + Columns.DBLIST + ") REFERENCES " + TaskList.TABLE_NAME + "(" +
+			TaskList.Columns._ID + ") ON DELETE CASCADE" + ")";
 
 	// Delete table has no constraints. In fact, list values and positions
 	// should not even be thought of as valid.
@@ -324,52 +285,34 @@ public class Task extends DAO {
 			" FOREIGN KEY(" + Columns.HIST_TASK_ID +
 			" ) REFERENCES " + TABLE_NAME + " ( " +
 			Columns._ID + ") ON DELETE CASCADE " + " ) ";
-	static final String HISTORY_TRIGGER_BODY = " INSERT INTO " +
-			HISTORY_TABLE_NAME +
-			" (" +
-			arrayToCommaString(Columns.HISTORY_COLUMNS) +
-			")" +
-			" VALUES (" +
-			arrayToCommaString("new.", new String[] { Columns._ID,
-					Columns.TITLE, Columns.NOTE }) +
+
+	static final String HISTORY_TRIGGER_BODY = " INSERT INTO " + HISTORY_TABLE_NAME + " (" +
+			arrayToCommaString(Columns.HISTORY_COLUMNS) + ")" + " VALUES (" +
+			arrayToCommaString("new.", new String[] { Columns._ID, Columns.TITLE, Columns.NOTE }) +
 			");";
+
 	public static final String HISTORY_UPDATE_TRIGGER_NAME = "trigger_update_" + HISTORY_TABLE_NAME;
 	public static final String CREATE_HISTORY_UPDATE_TRIGGER = "CREATE TRIGGER " +
-			HISTORY_UPDATE_TRIGGER_NAME +
-			" AFTER UPDATE OF " +
-			arrayToCommaString(Columns.TITLE, Columns.NOTE) +
-			" ON " +
-			TABLE_NAME +
-			" WHEN old." +
-			Columns.TITLE + " IS NOT new." +
-			Columns.TITLE + " OR old." +
-			Columns.NOTE + " IS NOT new." +
-			Columns.NOTE +
-			" BEGIN " + HISTORY_TRIGGER_BODY + " END;";
+			HISTORY_UPDATE_TRIGGER_NAME + " AFTER UPDATE OF " +
+			arrayToCommaString(Columns.TITLE, Columns.NOTE) + " ON " + TABLE_NAME + " WHEN old." +
+			Columns.TITLE + " IS NOT new." + Columns.TITLE + " OR old." + Columns.NOTE +
+			" IS NOT new." + Columns.NOTE + " BEGIN " + HISTORY_TRIGGER_BODY + " END;";
+
 	public static final String CREATE_HISTORY_INSERT_TRIGGER = "CREATE TRIGGER trigger_insert_" +
-			HISTORY_TABLE_NAME +
-			" AFTER INSERT ON " + TABLE_NAME + " BEGIN " +
+			HISTORY_TABLE_NAME + " AFTER INSERT ON " + TABLE_NAME + " BEGIN " +
 			HISTORY_TRIGGER_BODY + " END;";
 
 	// Delete search table
 	public static final String CREATE_FTS3_DELETE_TABLE = "CREATE VIRTUAL TABLE "
-			+ FTS3_DELETE_TABLE_NAME
-			+ " USING FTS3("
-			+ Columns._ID
-			+ ", "
+			+ FTS3_DELETE_TABLE_NAME + " USING FTS3(" + Columns._ID + ", "
 			+ Columns.TITLE + ", " + Columns.NOTE + ");";
-	public static final String CREATE_FTS3_DELETED_INSERT_TRIGGER = "CREATE TRIGGER deletedtask_fts3_insert AFTER INSERT ON " +
-			DELETE_TABLE_NAME +
-			" BEGIN " +
-			" INSERT INTO " +
-			FTS3_DELETE_TABLE_NAME +
-			" (" +
-			arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE) +
-			") VALUES (" +
-			arrayToCommaString("new.", new String[] { Columns._ID,
-					Columns.TITLE, Columns.NOTE }) +
-			");" +
-			" END;";
+
+	public static final String CREATE_FTS3_DELETED_INSERT_TRIGGER =
+			"CREATE TRIGGER deletedtask_fts3_insert AFTER INSERT ON " + DELETE_TABLE_NAME +
+			" BEGIN " + " INSERT INTO " + FTS3_DELETE_TABLE_NAME + " (" +
+			arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE) + ") VALUES (" +
+			arrayToCommaString("new.", new String[] { Columns._ID, Columns.TITLE, Columns.NOTE }) +
+			");" + " END;";
 
 	public static final String CREATE_FTS3_DELETED_UPDATE_TRIGGER = "CREATE TRIGGER deletedtask_fts3_update AFTER UPDATE OF " +
 			arrayToCommaString(Columns.TITLE, Columns.NOTE) +
@@ -1012,14 +955,6 @@ public class Task extends DAO {
 				countVals(Columns._ID, ver), countVals(Columns.LEFT, ver),
 				countVals(Columns.RIGHT, ver));
 	}
-
-	;
-
-	// public static final String TRIGGER_POST_UPDATE = String.format(
-	// "CREATE TRIGGER task_post_update AFTER UPDATE ON %1$s BEGIN "
-	// + posUniqueConstraint("new", "pos not unique post update")
-	// + posUniqueConstraint("old", "pos not unique post update")
-	// + " END;", TABLE_NAME);
 
 	// Makes a gap in the list where the task is being inserted
 	private static final String BUMP_TO_RIGHT = " UPDATE %1$s SET %2$s = %2$s + 2, %3$s = %3$s + 2 WHERE %3$s >= new.%3$s AND %4$s IS new.%4$s;";

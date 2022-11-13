@@ -47,7 +47,7 @@ public final class NnnLogger {
 	 */
 	public static void error(@NonNull Class caller, @NonNull String message) {
 
-		Log.e("NNN", message);
+		Log.e("NNN", caller.getSimpleName() + ": " + message);
 	}
 
 	/**

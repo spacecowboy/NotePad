@@ -139,25 +139,6 @@ public class DialogMoveToList extends DialogFragment {
 	@Background
 	void moveItems(final long toListId, final long[] taskIds) {
 
-		// for (long id: taskIds) {
-		// final Cursor c =
-		// getActivity().getContentResolver().query(Task.getUri(id),
-		// Task.Columns.FIELDS, null, null, null);
-		//
-		// if (c.moveToFirst()) {
-		// Task t = new Task(c);
-		// // Remove from old location
-		// t.delete(getActivity());
-		// // Reset, and set new list
-		// t.resetForInsertion();
-		// t.dblist = toListId;
-		// // And save anew
-		// t.save(getActivity());
-		// }
-		//
-		// c.close();
-		// }
-
 		final ContentValues val = new ContentValues();
 		val.put(Task.Columns.DBLIST, toListId);
 

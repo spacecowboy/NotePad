@@ -91,20 +91,8 @@ public class TextPreviewPreference extends Preference {
 	}
 
 	public void setTextType(String type) {
-		if (mText != null) {
-
-			mText.setTypeface(getTypeface(type));
-//			mText.post(new Runnable() {
-//
-//				@Override
-//				public void run() {
-//					if (FragmentLayout.UI_DEBUG_PRINTS) Log.d(TAG, "Runnabletype: getText: " + mText.getText().toString());
-//					mText.setTypeface(font);
-//					mText.setText("Font changed in runnable");
-//				}
-//				
-//			});
-		}
+		if (mText == null) return;
+		mText.setTypeface(getTypeface(type));
 	}
 
 	public void setTextSize(float size) {

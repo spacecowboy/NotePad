@@ -26,6 +26,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.net.Uri;
 import android.provider.BaseColumns;
+import android.util.Log;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.utils.time.RFC3339Date;
@@ -180,9 +181,8 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 						+ "noteid"
 						+ "   = " + "new." + BaseColumns._ID + ";" + " END");
 			} catch (SQLException e) {
-				// Log.d(TAG,
-				// "Creating trigger failed. It probably already existed:\n " +
-				// e.getLocalizedMessage());
+				Log.d("NNN","Creating trigger failed. It probably already existed:");
+				NnnLogger.exception(e);
 			}
 
 			try {
@@ -201,9 +201,7 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 						+ ";"
 						+ " END");
 			} catch (SQLException e) {
-				// Log.d(TAG,
-				// "Creating trigger failed. It probably already existed:\n " +
-				// e.getLocalizedMessage());
+				NnnLogger.exception(e);
 			}
 		}
 	}
@@ -299,18 +297,15 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			 */
 
 			/**
-			 * The MIME type of {@link #CONTENT_URI} providing a directory of
-			 * notes.
-			 */
-			// public static final String CONTENT_TYPE =
-			// "vnd.android.cursor.dir/vnd.nononsenseapps.note";
-
-			/**
 			 * The MIME type of a {@link #CONTENT_URI} sub-directory of a single
 			 * note.
 			 */
 			public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps.note";
 
+			/**
+			 * The MIME type of {@link #CONTENT_URI} providing a directory of
+			 * notes.
+			 */
 			public static final String CONTENT_TYPE = CONTENT_ITEM_TYPE;
 
 			/*
@@ -387,17 +382,10 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			public static final String COLUMN_NAME_POSSUBSORT = "possubsort";
 			public static final String COLUMN_NAME_LOCALHIDDEN = "localhidden";
 
-			/**
-			 * The default sort order for this table
-			 */
-			// public static final String DEFAULT_SORT_TYPE = COLUMN_NAME_TITLE
-			// +
-			// " COLLATE NOCASE";
+
 			public static final String ALPHABETIC_SORT_TYPE = COLUMN_NAME_TITLE
 					+ " COLLATE NOCASE";
-			// We want items with no due dates to be placed at the end, hence
-			// the
-			// sql magic
+			// We want items with no due dates to be placed at the end, hence the sql magic
 			// Coalesce returns the first non-null argument
 			public static final String MODIFICATION_SORT_TYPE = COLUMN_NAME_MODIFICATION_DATE;
 			public static final String DUEDATE_SORT_TYPE = "CASE WHEN "
@@ -410,10 +398,10 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			public static final String DESCENDING_SORT_ORDERING = "DESC";
 			public static final String ALPHABETIC_ASC_ORDER = COLUMN_NAME_TITLE
 					+ " COLLATE NOCASE ASC";
-			// public static final String POSITION_ASC_ORDER =
-			// COLUMN_NAME_POSITION+
-			// " ASC";
 
+			/**
+			 * The default sort order for this table
+			 */
 			public static final String DEFAULT_SORT_TYPE = POSSUBSORT_SORT_TYPE;
 			public static final String DEFAULT_SORT_ORDERING = ASCENDING_SORT_ORDERING;
 
@@ -504,17 +492,14 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			 */
 
 			/**
-			 * The MIME type of {@link #CONTENT_URI} providing a directory.
-			 */
-			// public static final String CONTENT_TYPE =
-			// "vnd.android.cursor.dir/vnd.nononsenseapps.list";
-
-			/**
 			 * The MIME type of a {@link #CONTENT_URI} sub-directory of a single
 			 * item.
 			 */
 			public static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd.nononsenseapps.list";
 
+			/**
+			 * The MIME type of {@link #CONTENT_URI} providing a directory.
+			 */
 			public static final String CONTENT_TYPE = CONTENT_ITEM_TYPE;
 
 			/*

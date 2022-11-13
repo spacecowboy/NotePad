@@ -867,11 +867,6 @@ public class ActivityMain extends AppCompatActivity
 		// Load count of tasks in each one
 		Log.d("nononsenseapps drawer", TaskList.CREATE_COUNT_VIEW);
 
-		// Adapter for list titles and ids
-		// final SimpleCursorAdapter adapter = new SimpleCursorAdapter(this,
-		// R.layout.simple_light_list_item_1, null,
-		// new String[] { TaskList.Columns.TITLE },
-		// new int[] { android.R.id.text1 }, 0);
 		leftDrawer.setAdapter(adapter);
 		// Set click handler
 		leftDrawer.setOnItemClickListener((arg0, v, pos, id) -> {
@@ -1156,9 +1151,6 @@ public class ActivityMain extends AppCompatActivity
 
 		if (!getSupportFragmentManager().popBackStackImmediate()) {
 			finish();
-			// Intent i = new Intent(this, ActivityMain_.class);
-			// i.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			// startActivity(i);
 		}
 	}
 

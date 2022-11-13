@@ -53,14 +53,11 @@ public class ListWidgetService extends RemoteViewsService {
 	static class ListRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
 		final private Context mContext;
-		// private HeaderCursor mCursor;
+
 		private Cursor mCursor;
 		final private int mAppWidgetId;
 		private SimpleDateFormat mDateFormatter = null;
 		private SimpleDateFormat weekdayFormatter;
-
-		// private static final String indent = "    ";
-		// private long listId = -1;
 
 		public ListRemoteViewsFactory(Context context, Intent intent) {
 			mContext = context;

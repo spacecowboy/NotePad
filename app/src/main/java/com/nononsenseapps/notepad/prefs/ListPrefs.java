@@ -104,8 +104,7 @@ public class ListPrefs extends PreferenceFragment {
 		ArrayList<CharSequence> values = new ArrayList<>();
 
 		// TODO fix from old version
-		// listSpinner.setDefaultValue(Long.toString(MainActivity.getAList(
-		// getActivity(), -1)));
+		// listSpinner.setDefaultValue(Long.toString(MainActivity.getAList(getActivity(), -1)));
 
 		Cursor cursor = getActivity().getContentResolver().query(TaskList.URI,
 				new String[] { TaskList.Columns._ID, TaskList.Columns.TITLE },

@@ -34,10 +34,6 @@ import com.nononsenseapps.notepad.database.TaskList;
 
 public class TasksExtension extends DashClockExtension {
 
-	// final static Uri VISIBLE_NOTES_URI = Uri
-	// .parse("content://com.nononsenseapps.NotePad/visiblenotes");
-	// final static Uri VISIBLE_LISTS_URI = Uri
-	// .parse("content://com.nononsenseapps.NotePad/visiblelists");
 	public static final String DUEDATE_SORT_TYPE = "CASE WHEN " +
 			Task.Columns.DUE + " IS NULL OR " +
 			Task.Columns.DUE + " IS '' THEN 1 ELSE 0 END, " +
@@ -86,12 +82,8 @@ public class TasksExtension extends DashClockExtension {
 				.getString("list_spinner", "-1"));
 
 		final boolean showOverdue = prefs.getBoolean("show_overdue", true);
-
-		final String upperLimit = prefs.getString("list_due_upper_limit",
-				getString(R.string.dashclock_pref_today));
-
+		final String upperLimit = prefs.getString("list_due_upper_limit", getString(R.string.dashclock_pref_today));
 		final boolean showSingle = prefs.getBoolean("show_single_only", false);
-
 		final boolean showHeader = prefs.getBoolean("show_header", true);
 
 		final ArrayList<Task> notes = getNotesFromDB(listId, upperLimit);
@@ -133,8 +125,7 @@ public class TasksExtension extends DashClockExtension {
 				noteIntent
 						.setAction(Intent.ACTION_EDIT)
 						.setData(Task.getUri(notes.get(0)._id))
-						.putExtra(Task.Columns.DBLIST,
-								notes.get(0).dblist.longValue());
+						.putExtra(Task.Columns.DBLIST, notes.get(0).dblist.longValue());
 			}
 
 			// Publish the extension data update.
@@ -185,8 +176,7 @@ public class TasksExtension extends DashClockExtension {
 	/**
 	 * Return a list of notes respecting the constraints set in preferences.
 	 */
-	private ArrayList<Task> getNotesFromDB(final long list,
-										   final String upperLimit) {
+	private ArrayList<Task> getNotesFromDB(final long list, final String upperLimit) {
 		// WHERE_LIST_IS, toA(list)
 		String where = "";
 		String[] whereArgs = new String[0];
@@ -244,8 +234,7 @@ public class TasksExtension extends DashClockExtension {
 		return where;
 	}
 
-	private String[] getUpperQueryLimitWhereArgs(final String[] whereArgs,
-												 final String upperLimit) {
+	private String[] getUpperQueryLimitWhereArgs(final String[] whereArgs, final String upperLimit) {
 		final GregorianCalendar gc = new GregorianCalendar();
 		gc.set(GregorianCalendar.HOUR_OF_DAY, 23);
 		gc.set(GregorianCalendar.MINUTE, 59);

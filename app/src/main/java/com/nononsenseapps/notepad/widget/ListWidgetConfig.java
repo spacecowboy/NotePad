@@ -67,20 +67,20 @@ public class ListWidgetConfig extends AppCompatActivity {
 	public static final String KEY_LIST = "widget1_key_list";
 	public static final String KEY_LIST_TITLE = "widget1_key_list_title";
 	public static final String KEY_SORT_TYPE = "widget1_key_sort_type";
-	// public static final String KEY_SORT_ORDER = "widget1_key_sort_order";
+
 	public static final String KEY_THEME = "widget1_key_current_theme";
 	public static final String KEY_TEXTPRIMARY = "widget1_key_primary_text";
 	public static final String KEY_TEXTSECONDARY = "widget1_key_secondary_text";
-	// public static final String KEY_HIDDENAPPICON =
-	// "widget1_key_hiddenappicon";
-	// public static final String KEY_HIDDENNEW = "widget1_key_hiddennew";
+
 	public static final String KEY_HIDDENHEADER = "widget1_key_hiddenheader";
 	public static final String KEY_SHADE_COLOR = "widget1_key_shadecolor";
-	// public static final String KEY_HIDDENNOTE = "widget1_key_hiddennote";
+
 	public static final String KEY_HIDDENDATE = "widget1_key_hiddendate";
 	public static final String KEY_HIDDENCHECKBOX = "widget1_key_hiddencheckbox";
 	public static final String KEY_TITLEROWS = "widget1_key_titlerows";
-	// Used in widget service/provider
+	/**
+	 * Used in widget service/provider
+	 */
 	public static final String KEY_LOCKSCREEN = "widget1_key_lockscreen";
 
 	public final static int THEME_DARK = 0;
@@ -565,10 +565,6 @@ public class ListWidgetConfig extends AppCompatActivity {
 				new int[] { R.string.show_from_all_lists },
 				android.R.layout.simple_spinner_dropdown_item);
 
-		// new SimpleCursorAdapter(this,
-		// android.R.layout.simple_spinner_dropdown_item, null,
-		// new String[] { TaskList.Columns.TITLE },
-		// new int[] { android.R.id.text1 }, 0);
 		listSpinner.setAdapter(mListAdapter);
 
 		transparentHeaderCheckBox
@@ -662,16 +658,10 @@ public class ListWidgetConfig extends AppCompatActivity {
 
 	/**
 	 * Returns black, with the opacity specified
+	 *
+	 * @param opacity should be a number between 0 and 100
 	 */
 	public static int getHomescreenBackgroundColor(final int opacity) {
-		// int opacity = 50;
-		// try {
-		// opacity =
-		// Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context)
-		// .getString(PREF_HOMESCREEN_BACKGROUND_OPACITY, "50"));
-		// } catch (NumberFormatException ignored) {
-		// }
-
 		if (opacity >= 100) {
 			return 0xff000000;
 		} else if (opacity <= 0) {
@@ -685,8 +675,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 	 * Returns the specified color, with the opacity specified. The color will
 	 * have its alpha overwritten.
 	 */
-	public static int getHomescreenBackgroundColor(final int opacity,
-												   final int color) {
+	public static int getHomescreenBackgroundColor(final int opacity, final int color) {
 		// Get rid of possible alpha
 		int retColor = color & 0x00ffffff;
 

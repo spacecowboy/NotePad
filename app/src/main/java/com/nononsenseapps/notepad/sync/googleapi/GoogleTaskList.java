@@ -28,20 +28,13 @@ import com.nononsenseapps.helpers.NnnLogger;
 public class GoogleTaskList extends RemoteTaskList {
 
 	public static final String SERVICENAME = "googletasks";
-	//public String id = null;
 	public String title = null;
 	public boolean remotelyDeleted = false;
-	//public boolean deleted = false;
-	// public String selfLink = null;
-	//public JSONObject json = null;
-	//public String updated = null;
 
-	//public boolean didRemoteInsert = false;
-	//public int modified = 0;
-	// Intended for when default list is deleted. When that fails, redownload it and its contents
+	/**
+	 * Intended for when default list is deleted. When that fails, redownload it and its contents
+	 */
 	public boolean redownload = false;
-
-	// private GoogleAPITalker api;
 
 	public GoogleTaskList(GoogleTasksAPI.TaskListResource taskListResource, String accountName) {
 		super();

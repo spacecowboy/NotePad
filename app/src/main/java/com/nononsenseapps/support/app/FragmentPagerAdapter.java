@@ -25,6 +25,7 @@ import android.os.Parcelable;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import com.nononsenseapps.helpers.NnnLogger;
@@ -94,13 +95,8 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 	 */
 	public abstract Fragment getItem(int position);
 
-//	@Override
-//	public void startUpdate(ViewGroup container) {
-//		
-//	}
-
 	@Override
-	public Object instantiateItem(ViewGroup container, int position) {
+	public Object instantiateItem(@NonNull ViewGroup container, int position) {
 		if (mCurTransaction == null) {
 			mCurTransaction = mFragmentManager.beginTransaction();
 		}
