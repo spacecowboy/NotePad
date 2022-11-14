@@ -34,7 +34,7 @@ public final class NnnLogger {
 	public static void exception(@NonNull Exception e) {
 		Log.e("NNN", e.getMessage());
 
-		String stackTrace = android.util.Log.getStackTraceString(e);
+		String stackTrace = Log.getStackTraceString(e);
 		Log.e("NNN", stackTrace);
 	}
 
@@ -46,7 +46,12 @@ public final class NnnLogger {
 	 * @param message the additional message sent to logcat
 	 */
 	public static <T> void error(@NonNull T caller, @NonNull String message) {
-		Log.e("NNN", caller.getClass().getSimpleName() + ": " + message);
+		try {
+			String tag2 = caller.getClass().getSimpleName();
+			Log.e("NNN", tag2 + ": " + message);
+		} catch (Exception ignored) {
+			Log.e("NNN", message);
+		}
 	}
 
 	/**
@@ -56,7 +61,12 @@ public final class NnnLogger {
 	 * @param message the additional message sent to logcat
 	 */
 	public static <T> void warning(@NonNull T caller, @NonNull String message) {
-		Log.w("NNN", caller.getClass().getSimpleName() + ": " + message);
+		try {
+			String tag2 = caller.getClass().getSimpleName();
+			Log.w("NNN", tag2 + ": " + message);
+		} catch (Exception ignored) {
+			Log.w("NNN", message);
+		}
 	}
 
 	/**
@@ -66,6 +76,11 @@ public final class NnnLogger {
 	 * @param message the additional message sent to logcat
 	 */
 	public static <T> void debug(@NonNull T caller, @NonNull String message) {
-		Log.d("NNN", caller.getClass().getSimpleName() + ": " + message);
+		try {
+			String tag2 = caller.getClass().getSimpleName();
+			Log.d("NNN", tag2 + ": " + message);
+		} catch (Exception ignored) {
+			Log.d("NNN", message);
+		}
 	}
 }
