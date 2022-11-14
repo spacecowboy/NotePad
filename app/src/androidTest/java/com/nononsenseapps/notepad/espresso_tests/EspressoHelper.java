@@ -10,6 +10,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.instanceOf;
 
+import android.app.UiAutomation;
+import android.os.SystemClock;
+
 import androidx.test.espresso.AmbiguousViewMatcherException;
 import androidx.test.espresso.Espresso;
 import androidx.test.espresso.contrib.DrawerActions;
@@ -122,6 +125,28 @@ public class EspressoHelper {
 		} catch (Exception ignored) {
 			Assert.fail("Could not dismiss the TapTargetView");
 		}
+	}
+
+	/**
+	 * Rotate the screen twice, waiting ~4 seconds for the animations to finish. It automatically
+	 * understands if the phone or tablet is "naturally" held in landscape or portrait mode,
+	 * so test should be done with the emulator's default settings: phones in portrait mode
+	 * and tablets in landscape mode
+	 */
+	public static void rotateScreen() {
+
+		var uiAuto = InstrumentationRegistry.getInstrumentation().getUiAutomation();
+
+		// rotate it
+		uiAuto.setRotation(UiAutomation.ROTATION_FREEZE_270);
+
+		// wait for the rotation to finish
+		// .waitForIdleSync(); does not work, use this instead:
+		SystemClock.sleep(1800);
+
+		// set it back to it's default rotation
+		uiAuto.setRotation(UiAutomation.ROTATION_FREEZE_0);
+		SystemClock.sleep(1800);
 	}
 
 }
