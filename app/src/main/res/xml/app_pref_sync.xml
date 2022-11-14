@@ -72,11 +72,13 @@
 		android:key="pref_sdcard_section_key"
 		android:persistent="false"
 		android:title="@string/sd_card">
+
 		<SwitchPreference
 			android:defaultValue="false"
 			android:key="pref_sync_sd_enabled"
 			android:summary="@string/sd_card_summary"
 			android:title="@string/sd_card_sync"/>
+
 		<Preference
 			android:dependency="pref_sync_sd_enabled"
 			android:key="pref_sync_sd_dir_uri"

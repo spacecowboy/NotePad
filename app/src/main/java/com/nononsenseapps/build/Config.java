@@ -37,7 +37,8 @@ public class Config {
 	private static final String propFile = "secretkeys.properties";
 	private static Properties props;
 
-	// TODO remove this, remove the secretkeys file, and let the user copypaste the API key into an edittext in the settings
+	// TODO remove this, remove the secretkeys file, and let the user copypaste the API key into
+	//  an edittext in the settings. USELESS: we dropped google tasks sync
 	public static Properties getProperties(final Context context) {
 		if (props == null) {
 			props = new Properties();
