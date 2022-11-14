@@ -41,7 +41,7 @@ public class TestPasswords extends BaseTestClass {
 		onView(withText(fullNoteText1)).perform(click());
 		openContextualActionModeOverflowMenu();
 
-		String MENU_TEXT = myActivityRule.getActivity().getString(R.string.lock_note);
+		String MENU_TEXT = getStringResource(R.string.lock_note);
 		onView(withText(MENU_TEXT)).perform(click());
 
 		onView(withId(R.id.passwordField)).perform(typeText(password));

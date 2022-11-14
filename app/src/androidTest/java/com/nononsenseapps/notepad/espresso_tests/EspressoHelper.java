@@ -19,16 +19,21 @@ import androidx.test.espresso.contrib.DrawerActions;
 import androidx.test.platform.app.InstrumentationRegistry;
 
 import com.getkeepsafe.taptargetview.TapTargetView;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 
 import org.junit.Assert;
 
-
 public class EspressoHelper {
 
+	// TODO useless ? the drawer is already closed when this is called
 	public static void closeDrawer() {
-		//use the Espresso helper DrawerActions
-		onView(withId(R.id.drawerLayout)).perform(DrawerActions.close());
+		// use the Espresso helper DrawerActions
+		try {
+			onView(withId(R.id.drawerLayout)).perform(DrawerActions.close());
+		} catch (Exception ignored) {
+			NnnLogger.error(EspressoHelper.class,"Can't close drawer");
+		}
 	}
 
 	/**

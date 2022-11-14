@@ -46,7 +46,7 @@ public class TestCompletedTasksAreCleared extends BaseTestClass {
 
 		//clear notes
 		openContextualActionModeOverflowMenu();
-		String CLEAR_COMPLETED = myActivityRule.getActivity().getString(R.string.menu_clearcompleted);
+		String CLEAR_COMPLETED = getStringResource(R.string.menu_clearcompleted);
 		onView(withText(CLEAR_COMPLETED)).perform(click());
 		onView(withId(android.R.id.button1)).perform(click());
 

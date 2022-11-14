@@ -86,6 +86,10 @@ import org.androidannotations.annotations.ViewById;
 import java.util.ArrayList;
 
 
+/**
+ * This is extended by {@link ActivityMain_}. It was renamed to ActivityList in release 6.0.0 beta,
+ * it has to do with getting rid of the annotations library that generates {@link ActivityMain_}
+ */
 @EActivity(resName = "activity_main")
 public class ActivityMain extends AppCompatActivity
 		implements OnFragmentInteractionListener, OnSyncStartStopListener,

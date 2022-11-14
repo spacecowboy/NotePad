@@ -29,8 +29,8 @@ public class TestAddTaskListsScrollNavigationDrawer extends BaseTestClass {
 
 	@Test
 	public void testAddTaskListsScrollNavigationDrawer() {
-		String SETTINGS_TEXT = myActivityRule.getActivity().getString(R.string.menu_preferences);
-		String SETTINGS_APPEARANCE_TEXT = myActivityRule.getActivity().getString(R.string.settings_cat_appearance);
+		String SETTINGS_TEXT = getStringResource(R.string.menu_preferences);
+		String SETTINGS_APPEARANCE_TEXT = getStringResource(R.string.settings_cat_appearance);
 
 		EspressoHelper.hideShowCaseViewIfShown();
 
