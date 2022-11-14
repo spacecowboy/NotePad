@@ -17,10 +17,19 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
 	android:key="app_preference_screen_sync">
 
+	<!--
+	everything google tasks was disabled. If you want to work on it:
+		* remove the   android:enabled="false"   line here below
+		* uncomment the lines AndroidManifest.xml related to the Gtasks permissions
+		* start testing & fixing bugs
+	 -->
+
 	<PreferenceCategory
 		android:key="pref_gtask_section_key"
 		android:persistent="false"
-		android:title="@string/gtasks">
+		android:enabled="false"
+		android:title="@string/gtasks_not_working">
+
 		<SwitchPreference
 			android:defaultValue="false"
 			android:key="syncEnablePref"
