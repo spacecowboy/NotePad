@@ -52,6 +52,7 @@ import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
 
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.ActivityTaskHistory;
@@ -489,8 +490,7 @@ public class TaskDetailFragment extends Fragment {
 			dueDateBox.setText("");
 		} else {
 			// Due date
-			dueDateBox.setText(TimeFormatter.getLocalDateOnlyStringLong(
-					getActivity(), mTask.due));
+			dueDateBox.setText(TimeFormatter.getLocalDateOnlyStringLong(getActivity(), mTask.due));
 		}
 	}
 
@@ -535,9 +535,11 @@ public class TaskDetailFragment extends Fragment {
 	 * task.locked & mLocked
 	 */
 	public boolean isLocked() {
-		// TODO check and use this
-		boolean hasPassword = SharedPreferencesHelper.isPasswordSet(getActivity());
-		// if (!hasPassword) return false; // TODO check
+		if (getActivity() != null) {
+			// it happened once during espresso tests
+			boolean hasPassword = SharedPreferencesHelper.isPasswordSet(getActivity());
+			// if (!hasPassword) return false; // TODO check and use these
+		}
 
 		if (mTask != null) {
 			return mTask.locked & mLocked;
@@ -547,6 +549,11 @@ public class TaskDetailFragment extends Fragment {
 
 	@UiThread(propagation = Propagation.ENQUEUE)
 	void fillUIFromTask() {
+		if (taskText == null || taskCompleted == null) {
+			// it gets triggered ONLY in espresso tests!
+			NnnLogger.error(TaskDetailFragment.class, "taskText or taskCompleted is null");
+			return;
+		}
 		Log.d("nononsenseapps editor", "fillUI, act: " + getActivity());
 		if (isLocked()) {
 			taskText.setText(mTask.title);
