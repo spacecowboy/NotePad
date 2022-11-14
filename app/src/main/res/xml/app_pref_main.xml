@@ -52,7 +52,7 @@
 			android:title="@string/short_date_format"/>
 	</PreferenceCategory>
 	<PreferenceCategory android:title="@string/editor">
-		<com.nononsenseapps.notepad.prefs.FixedSwitchPreference
+		<SwitchPreference
 			android:defaultValue="true"
 			android:key="@string/pref_editor_links"
 			android:summary=""
@@ -65,7 +65,7 @@
 			android:key="@string/pref_editor_fontsize"
 			android:summary="Selected option should be here"
 			android:title="@string/text_size"/>
-		<com.nononsenseapps.notepad.prefs.FixedSwitchPreference
+		<SwitchPreference
 			android:defaultValue="true"
 			android:key="@string/pref_editor_biggertitles"
 			android:summary="@string/bigger_titles_summary"

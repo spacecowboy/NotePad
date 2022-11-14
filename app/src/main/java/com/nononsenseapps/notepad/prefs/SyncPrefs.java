@@ -81,21 +81,18 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	private Preference prefAccount;
 	private Preference prefSdDir;
 
-
-	// private Preference prefSyncFreq;
-
-
 	public static void setSyncInterval(Context activity, SharedPreferences sharedPreferences) {
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
 		boolean backgroundSync = sharedPreferences.getBoolean(KEY_BACKGROUND_SYNC, false);
 
 		if (accountName != null && !accountName.isEmpty()) {
-			Account account = SyncGtaskHelper.getAccount(AccountManager.get(activity), accountName);
+			Account account = SyncGtaskHelper
+					.getAccount(AccountManager.get(activity), accountName);
 			if (account != null) {
 				if (!backgroundSync) {
 					// Disable periodic syncing
-					ContentResolver
-							.removePeriodicSync(account, MyContentProvider.AUTHORITY, new Bundle());
+					ContentResolver.removePeriodicSync(account,
+							MyContentProvider.AUTHORITY, new Bundle());
 				} else {
 					// Convert from minutes to seconds
 					long pollFrequency = 3600;
@@ -123,8 +120,6 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		addPreferencesFromResource(R.xml.app_pref_sync);
 
 		prefAccount = findPreference(KEY_ACCOUNT);
-		// prefSyncFreq = findPreference(KEY_SYNC_FREQ);
-
 
 		final SharedPreferences sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(activity);
