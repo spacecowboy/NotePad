@@ -91,9 +91,9 @@
 		<SwitchPreference
 			android:dependency="pref_sync_sd_enabled"
 			android:key="pref_sync_sd_in_doc_folder"
-			android:summaryOff="Save the org files in the app\'s dedicated folder (recommended)"
-			android:summaryOn="Save the org files for SD sync in you Documents folder"
-			android:title="Use external documents folder"/>
+			android:summaryOff="@string/save_files_in_android_data_folder"
+			android:summaryOn="@string/save_files_in_doc_folder"
+			android:title="@string/use_documents_folder"/>
 
 	</PreferenceCategory>
 
