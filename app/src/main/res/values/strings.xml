@@ -121,6 +121,7 @@
 	<string name="special_thanks">Special thanks</string>
 	<string name="no_sync_method_chosen">You did not choose a sync method</string>
 	<string name="gtasks_not_working">Google Tasks (NOT WORKING)</string>
+	<string name="file_picker_not_available">The file picker is not available</string>
 
 	<!--
 		Use few if language need it. In English is the same.

@@ -75,12 +75,12 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 		//  the user's choice and stick to the default directory, which can be used in File classes
 
 		ORG_DIR = getDefaultOrgDir(context);
-		final boolean permitted = PermissionsHelper.hasPermissions(context, PermissionsHelper.PERMISSIONS_SD);
+		final boolean permitted = PermissionsHelper
+				.hasPermissions(context, PermissionsHelper.PERMISSIONS_SD);
 		if (permitted) {
 			configured = SharedPreferencesHelper.isSdSyncEnabled(context);
 		} else {
 			configured = false;
-			// disable SD
 			SharedPreferencesHelper.disableSdCardSync(context);
 		}
 

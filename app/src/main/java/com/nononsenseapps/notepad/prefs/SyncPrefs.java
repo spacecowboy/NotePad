@@ -24,6 +24,7 @@ import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -48,6 +49,7 @@ import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
+import com.nononsenseapps.util.FileHelper;
 import com.nononsenseapps.util.PermissionsHelper;
 import com.nononsenseapps.util.SharedPreferencesHelper;
 import com.nononsenseapps.util.SyncGtaskHelper;
@@ -227,18 +229,24 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 
 			// specify a URI for the directory that should be opened in
 			// the system file picker when it loads.
-			var sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+			var sharPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
 
-			// get the previously selected Uri
-			String defaultDir = SDSynchronizer.getDefaultOrgDir(this.getContext());
-			String oldSetting = sharedPrefs.getString(KEY_SD_DIR_URI, defaultDir);
-			Uri uriToLoad = Uri.parse(oldSetting);
-
-			i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uriToLoad);
+			// get the previously selected Uri, if available
+			String oldSetting = sharPrefs.getString(KEY_SD_DIR_URI, null);
+			if (oldSetting != null) {
+				Uri uriToLoad = Uri.parse(oldSetting);
+				i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uriToLoad);
+			}
+			// else the filepicker will just open in its default state. whatever.
 		}
 
-		// Start the built-in filepicker
-		startActivityForResult(i, PICK_SD_DIR_CODE);
+		try {
+			// Start the built-in filepicker
+			startActivityForResult(i, PICK_SD_DIR_CODE);
+		} catch (ActivityNotFoundException e) {
+			Toast.makeText(this.getContext(),
+					R.string.file_picker_not_available, Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
@@ -249,8 +257,9 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	}
 
 	/**
-	 * Shows a system popup to choose the google account to use for synchronizing notes. If the
-	 * user has no google accounts on the device, a prompt will open, asking to add a new one
+	 * Shows a system popup to choose the google account to use for synchronizing notes.
+	 * If the user has no google accounts on the device, a prompt will open, asking to
+	 * add a new one
 	 */
 	private void showAccountDialog() {
 		// do we need to check for permissions ? (there's 3 in the manifest)
@@ -326,9 +335,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		// Use this instead of the "File" class
 		var docDir = DocumentFile.fromTreeUri(this.getContext(), uri);
 
-		boolean isOk = docDir != null && docDir.exists()
-				&& docDir.isDirectory() && docDir.canWrite();
-		if (isOk) {
+		if (FileHelper.documentIsWritableFolder(docDir)) {
 			// save it
 			PreferenceManager
 					.getDefaultSharedPreferences(getActivity())
@@ -366,9 +373,9 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	}
 
 	/**
-	 * Called when the user has selected a Google account when pressing the enable Gtask switch.
-	 * User wants to select an account to sync with. If we get an approval, activate sync
-	 * and set periodicity also.
+	 * Called when the user has selected a Google account when pressing the enable Gtask
+	 * switch. User wants to select an account to sync with. If we get an approval,
+	 * activate sync and set periodicity also.
 	 */
 	private void afterGettingAuthToken(AccountManagerFuture<Bundle> future, Account account) {
 		try {
