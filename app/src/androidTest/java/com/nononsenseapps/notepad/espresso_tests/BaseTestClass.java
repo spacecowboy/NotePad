@@ -5,6 +5,7 @@ import android.preference.PreferenceManager;
 
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
+import androidx.test.rule.ActivityTestRule;
 
 import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.database.DatabaseHandler;
@@ -22,23 +23,20 @@ public class BaseTestClass {
 	 * any of your setup code in the @Before method.
 	 *
 	 * This will create and launch of the activity for you and also expose
-	 * the activity under test. To get a reference to the activity you can use: <br/>
-	 *
-	 * {@code myActivityRule.getScenario().onActivity(a -> { ... }); }
+	 * the activity under test. To get a reference to the activity you can use:
+	 * {@link ActivityTestRule#getActivity()}
+	 * <br/>
+	 * NOTE: the alternative, {@link ActivityScenarioRule}, <b>DOES NOT WORK</b>
 	 */
+	@SuppressWarnings("deprecation")
 	@Rule
-	ActivityScenarioRule<ActivityMain_> myActivityRule
-			= new ActivityScenarioRule<>(ActivityMain_.class);
+	public ActivityTestRule<ActivityMain_> mActRule = new ActivityTestRule<>(ActivityMain_.class);
 
 	/**
 	 * @return a string with the content of the given resourceId
 	 */
 	public String getStringResource(int resourceId) {
-		final String[] val = new String[1];
-		myActivityRule.getScenario().onActivity(a -> {
-			val[0] = a.getString(resourceId);
-		});
-		return val[0];
+		return mActRule.getActivity().getString(resourceId);
 	}
 
 	@After
