@@ -78,6 +78,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	// SD sync
 	public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
 	public static final String KEY_SD_DIR_URI = "pref_sync_sd_dir_uri";
+	public static final String KEY_SD_USE_DOC_DIR = "pref_sync_sd_in_doc_folder";
 	private static final int PICK_SD_DIR_CODE = 1;
 
 
@@ -456,19 +457,21 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		prefAccount.setSummary(R.string.settings_account_summary);
 	}
 
+	/**
+	 * Writes the description in the preferences item that lets users open the filepicker.
+	 * It is currently disabled
+	 */
 	private void setSdDirSummary(final SharedPreferences sharedPreferences) {
-		final String defaultDir = SDSynchronizer.getDefaultOrgDir(this.getContext());
+		String actualDir = FileHelper.getUserSelectedOrgDir(getContext());
 		String valToSet = sharedPreferences.getString(KEY_SD_DIR_URI, null);
 		if (valToSet == null) {
-			// show the default directory in the setting's description
-			valToSet = defaultDir;
+			// The filepicker was never used => show the actual directory in the description
+			valToSet = actualDir;
 		} else {
-			// show the file path that the uri is pointing to
-			valToSet = "Selected uri:\n" + Uri.parse(valToSet).getPath();
-
-			// TODO instead of moving this to a string resource, fix the code! Maybe it would be
-			//  easier to just remove the option to set a custom folder?
-			valToSet += "\nwhile we fix this,\n" + defaultDir + "\nwill be used instead";
+			// show the file path that the uri from the filepicker is pointing to,
+			// and the one that will be actually used
+			valToSet = getContext().getString(R.string.filepicker_preference_description,
+					Uri.parse(valToSet).getPath(), actualDir);
 		}
 		prefSdDir.setSummary(valToSet);
 	}
