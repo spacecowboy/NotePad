@@ -48,12 +48,6 @@ public class SharedPreferencesHelper {
 		Prefs(context).edit().putBoolean(SyncPrefs.KEY_SD_ENABLE, false).apply();
 	}
 
-	private static Uri getSdDirUri(@NonNull Context context) {
-		return Uri.parse(
-				Prefs(context).getString(
-						SyncPrefs.KEY_SD_DIR_URI,
-						SDSynchronizer.getDefaultOrgDir(context)));
-	}
 
 	private static String getStr(@NonNull Context c, int id) {
 		return c.getResources().getString(id);
