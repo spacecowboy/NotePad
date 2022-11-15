@@ -47,6 +47,7 @@ public class DBProviderTest extends TestCase {
 			assertTrue("Uri did not return a result: " + uri.getEncodedPath(),
 					cursorCount > 0);
 		} else {
+			// I don't know, sometimes it happens...
 			assertEquals("Uri did not return expected number of results",
 					count, cursorCount);
 		}

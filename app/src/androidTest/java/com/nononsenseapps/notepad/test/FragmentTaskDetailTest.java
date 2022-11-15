@@ -38,5 +38,8 @@ public class FragmentTaskDetailTest extends BaseTestClass {
 				fragment.isAdded() && fragment.isVisible());
 
 		Helper.takeScreenshot("Editor_loaded");
+
+		// putting this here avoids crashes
+		mActRule.finishActivity();
 	}
 }
