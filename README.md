@@ -40,15 +40,6 @@ Note should have the due date I set earlier.
 
 If relevant, please say if you're using a phone or a tablet (UI-issues), or what you're sync settings are (odd stuff happening in general).
 
-## Getting sync to work
-
-You need to put your API keys in a file, like the sample here:
-https://github.com/spacecowboy/NotePad/blob/master/core/assets/secretkeys.properties.sample
-
-But first you will of course need to get yourself a key. 
-Follow the instructions on this page:
-https://developers.google.com/tasks/firstapp#register
-
 ## Build the project
 
 ```sh
@@ -57,7 +48,31 @@ cd NotePad
 ./gradlew installDebug
 ```
 
-if it does not work, open an [issue here](https://github.com/spacecowboy/NotePad/issues)
+if it does not work, open an issue [here](https://github.com/spacecowboy/NotePad/issues)
+
+## Getting Google Tasks sync to work
+
+The app was one able to synchronize with Google Tasks, then Google made some changes and
+now **that functionality is not available anymore**. Developers interested in maintaining this
+feature should open a new issue [here](https://github.com/spacecowboy/NotePad/issues) to
+get help on how to proceed.
+
+Once the code is fixed,
+You need to put your API keys in a file, like the sample here:
+https://github.com/spacecowboy/NotePad/blob/master/core/assets/secretkeys.properties.sample
+
+But first you will of course need to get yourself a key.
+Follow the instructions on this page:
+https://developers.google.com/tasks/firstapp#register
+
+## Where files are saved
+
+The app can save 2 kinds of files:
+* org files, which are used for SD card synchronization. You can choose to save them in a subdirectory of your `Documents` folder, where they will be visible to many apps, including your file manager
+* json files, for the backup-restore functionality
+
+Unless otherwise specified, files are saved in a subfolder of `Android/data/` accessible only
+to this app. It is still possible to view them by connecting the device to a computer.
 
 ## License
 
