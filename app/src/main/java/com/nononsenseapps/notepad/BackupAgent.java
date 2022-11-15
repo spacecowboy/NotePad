@@ -37,8 +37,7 @@ public class BackupAgent extends BackupAgentHelper {
 	public void onCreate() {
 		// Compute the default preferences filename.
 		String defaultPrefsFilename = getPackageName() + "_preferences";
-		addHelper(PREFS_BACKUP_KEY, new PrefBackupHelper(this,
-				defaultPrefsFilename));
+		addHelper(PREFS_BACKUP_KEY, new PrefBackupHelper(this, defaultPrefsFilename));
 	}
 
 	public static class PrefBackupHelper extends SharedPreferencesBackupHelper {

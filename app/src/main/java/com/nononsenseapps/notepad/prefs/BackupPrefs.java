@@ -40,59 +40,6 @@ public class BackupPrefs extends PreferenceFragment {
 	private JSONBackup backupMaker;
 	private RestoreBackupTask bgTask;
 
-	/**
-	 * Run the backup in the background. Locking the UI-thread for up to a few
-	 * seconds is not nice...
-	 */
-	private static class RestoreBackupTask extends AsyncTask<Void, Void, Integer> {
-		// TODO move this class into its own java file
-		private final JSONBackup backupMaker;
-		private final Context mContext;
-
-		/**
-		 * Creates a new asynchronous task. This constructor must be invoked on the UI thread.
-		 */
-		public RestoreBackupTask(@NonNull Context context, @NonNull JSONBackup backupMaker) {
-			super();
-			this.backupMaker = backupMaker;
-			mContext = context;
-		}
-
-		protected Integer doInBackground(Void... params) {
-			try {
-				backupMaker.restoreBackup();
-				return 0;
-			} catch (FileNotFoundException e) {
-				return 1;
-			} catch (Exception e) {
-				return 2;
-			}
-		}
-
-		// TODO instead of using the hardcoded path, let the user pick a file.
-		//  See https://stackoverflow.com/questions/58662166
-
-		protected void onPostExecute(final Integer result) {
-			if (mContext == null) {
-				return;
-			}
-			switch (result) {
-				case 0:
-					Toast.makeText(mContext, R.string.backup_import_success,
-							Toast.LENGTH_SHORT).show();
-					break;
-				case 1:
-					Toast.makeText(mContext, R.string.backup_file_not_found,
-							Toast.LENGTH_SHORT).show();
-					break;
-				case 2:
-					Toast.makeText(mContext, R.string.backup_import_failed,
-							Toast.LENGTH_SHORT).show();
-					break;
-			}
-		}
-	}
-
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -128,5 +75,55 @@ public class BackupPrefs extends PreferenceFragment {
 
 					return true;
 				});
+	}
+
+	/**
+	 * Run the backup in the background. Locking the UI-thread for up to a few
+	 * seconds is not nice...
+	 */
+	private static class RestoreBackupTask extends AsyncTask<Void, Void, Integer> {
+		// TODO move this class into its own java file
+		private final JSONBackup backupMaker;
+		private final Context mContext;
+
+		/**
+		 * Creates a new asynchronous task. This constructor must be invoked on the UI thread.
+		 */
+		public RestoreBackupTask(@NonNull Context context, @NonNull JSONBackup backupMaker) {
+			super();
+			this.backupMaker = backupMaker;
+			mContext = context;
+		}
+
+		protected Integer doInBackground(Void... params) {
+			try {
+				backupMaker.restoreBackup();
+				return 0;
+			} catch (FileNotFoundException e) {
+				return 1;
+			} catch (Exception e) {
+				return 2;
+			}
+		}
+
+		protected void onPostExecute(final Integer result) {
+			if (mContext == null) {
+				return;
+			}
+			switch (result) {
+				case 0:
+					Toast.makeText(mContext, R.string.backup_import_success,
+							Toast.LENGTH_SHORT).show();
+					break;
+				case 1:
+					Toast.makeText(mContext, R.string.backup_file_not_found,
+							Toast.LENGTH_SHORT).show();
+					break;
+				case 2:
+					Toast.makeText(mContext, R.string.backup_import_failed,
+							Toast.LENGTH_SHORT).show();
+					break;
+			}
+		}
 	}
 }

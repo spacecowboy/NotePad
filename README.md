@@ -53,9 +53,10 @@ if it does not work, open an issue [here](https://github.com/spacecowboy/NotePad
 ## Getting Google Tasks sync to work
 
 The app was one able to synchronize with Google Tasks, then Google made some changes and
-now **that functionality is not available anymore**. Developers interested in maintaining this
-feature should open a new issue [here](https://github.com/spacecowboy/NotePad/issues) to
-get help on how to proceed.
+now **that functionality is not available anymore**. Therefore, the related settings are disabled.
+Developers interested in maintaining this feature should open a new issue 
+[here](https://github.com/spacecowboy/NotePad/issues) to get help on how to proceed.
+See also issue #403
 
 Once the code is fixed,
 You need to put your API keys in a file, like the sample here:
