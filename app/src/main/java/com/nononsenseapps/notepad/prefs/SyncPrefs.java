@@ -156,6 +156,17 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		String API_KEY = Config.getGtasksApiKey(getActivity());
 		findPreference(KEY_SYNC_ENABLE).setEnabled(null != API_KEY && !API_KEY.contains(" "));
 
+		findPreference(KEY_SD_ENABLE).setOnPreferenceClickListener(p -> {
+			boolean ok = PermissionsHelper.hasPermissions(
+					this.getContext(), PermissionsHelper.PERMISSIONS_SD);
+			if (!ok) {
+				this.requestPermissions(PermissionsHelper.PERMISSIONS_SD,
+						PermissionsHelper.REQUEST_CODE_SD_PERMISSIONS);
+				// continues in onRequestPermissionsResult()
+			}
+			return true;
+		});
+
 		// folder for SD sync on the internal storage.
 		// this setting is DISABLED because the code can't use the URIs provided by the filepicker
 		prefSdDir = findPreference(KEY_SD_DIR_URI);
@@ -185,10 +196,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		boolean granted = PermissionsHelper.permissionsGranted(permissions, grantResults);
 		switch (reqCode) {
 			case PermissionsHelper.REQUEST_CODE_SD_PERMISSIONS:
-				if (granted) {
-					// we got the permission to read the file system: now, show the filepicker
-					showFolderPickerActivity();
-				} else {
+				if (!granted) {
 					// warn the user that the permission was denied
 					Toast.makeText(this.getContext(), R.string.permission_denied,
 							Toast.LENGTH_SHORT).show();
@@ -287,7 +295,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 				} else if (KEY_ACCOUNT.equals(key)) {
 					NnnLogger.debug(SyncPrefs.class, "account");
 					prefAccount.setTitle(prefs.getString(KEY_ACCOUNT, ""));
-				} else if (KEY_SD_ENABLE.equals(key)) {
+				} else if (KEY_SD_ENABLE.equals(key) || KEY_SD_USE_DOC_DIR.equals(key)) {
 					// Restart the sync service
 					OrgSyncService.stop(getActivity());
 				} else if (KEY_SD_DIR_URI.equals(key)) {
