@@ -25,9 +25,9 @@
 	 -->
 
 	<PreferenceCategory
+		android:enabled="false"
 		android:key="pref_gtask_section_key"
 		android:persistent="false"
-		android:enabled="false"
 		android:title="@string/gtasks_not_working">
 
 		<SwitchPreference
@@ -79,11 +79,21 @@
 			android:summary="@string/sd_card_summary"
 			android:title="@string/sd_card_sync"/>
 
+		<!-- The code uses File objects instead of URIs, so enabling this is just too
+		 much work. If anyone wants to help, remove android:enabled="false" and start testing -->
 		<Preference
 			android:dependency="pref_sync_sd_enabled"
 			android:key="pref_sync_sd_dir_uri"
+			android:enabled="false"
 			android:summary="@string/directory_summary"
 			android:title="@string/directory"/>
+
+		<SwitchPreference
+			android:dependency="pref_sync_sd_enabled"
+			android:key="pref_sync_sd_in_doc_folder"
+			android:summaryOff="Save the org files in the app\'s dedicated folder (recommended)"
+			android:summaryOn="Save the org files for SD sync in you Documents folder"
+			android:title="Use external documents folder"/>
 
 	</PreferenceCategory>
 

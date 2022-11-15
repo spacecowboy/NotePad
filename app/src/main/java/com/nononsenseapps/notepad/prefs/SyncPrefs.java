@@ -155,7 +155,8 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		String API_KEY = Config.getGtasksApiKey(getActivity());
 		findPreference(KEY_SYNC_ENABLE).setEnabled(null != API_KEY && !API_KEY.contains(" "));
 
-		// SD Card
+		// folder for SD sync on the internal storage.
+		// this setting is DISABLED because the code can't use the URIs provided by the filepicker
 		prefSdDir = findPreference(KEY_SD_DIR_URI);
 		setSdDirSummary(sharedPrefs);
 

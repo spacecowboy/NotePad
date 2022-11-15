@@ -26,6 +26,7 @@ import android.os.FileObserver;
 import android.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.util.FileHelper;
 import com.nononsenseapps.util.PermissionsHelper;
 import com.nononsenseapps.util.SharedPreferencesHelper;
 
