@@ -120,13 +120,18 @@ public class ListWidgetService extends RemoteViewsService {
 
 			RemoteViews rv = null;
 			if (mCursor.moveToPosition(position)) {
+				// column names:
+				// "_id" "title" "note" "completed" "due" "updated" "lft" "rgt" "dblist" "locked"
 				if (mCursor.getLong(0) < 1) {
+					// TODO this branch NEVER gets called ??
+
 					// Header
 					// if (mCursor.getViewType() == HeaderCursor.headerType) {
 					final int itemId = R.layout.widgetlist_header;
 					rv = new RemoteViews(mContext.getPackageName(), itemId);
 					rv.setTextColor(android.R.id.text1, primaryTextColor);
-					rv.setBoolean(itemId, "setClickable", false);
+					rv.setBoolean(R.id.relativeLayout_of_the_widgetlist_header,
+							"setClickable", false);
 
 					String sTemp = mCursor.getString(1);
 					if (Task.HEADER_KEY_OVERDUE.equals(sTemp)) {

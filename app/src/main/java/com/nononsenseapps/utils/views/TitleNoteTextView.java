@@ -304,6 +304,13 @@ public class TitleNoteTextView extends androidx.appcompat.widget.AppCompatTextVi
 	}
 
 	@Override
+	public boolean performClick() {
+		return super.performClick();
+	}
+
+	// TODO do i have to call performClick() when the function below would return true ??
+
+	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (!(this.getText() instanceof Spanned)) {
 			return false;

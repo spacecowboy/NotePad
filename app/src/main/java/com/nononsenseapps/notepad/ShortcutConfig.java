@@ -12,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.Switch;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -28,8 +29,8 @@ import org.androidannotations.annotations.ViewById;
 @EActivity(resName = "activity_shortcut_config")
 public class ShortcutConfig extends AppCompatActivity {
 
-	@ViewById(resName = "noteSwitch")
-	Switch noteSwitch;
+	@ViewById(resName = "createNoteSwitch")
+	SwitchCompat noteSwitch;
 	@ViewById(resName = "listSpinner")
 	Spinner listSpinner;
 

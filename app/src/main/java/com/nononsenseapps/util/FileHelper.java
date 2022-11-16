@@ -21,6 +21,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
+import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * Methods to help navigate through Google's mess regarding file access in android 10
@@ -36,28 +38,35 @@ public final class FileHelper {
 	}
 
 	/**
-	 * @return a {@link FileDescriptor} for the File at the given {@link Uri}, or NULL if it
-	 * could not find one
+	 * Get a {@link FileDescriptor} for the File at the given {@link Uri} and
+	 * run the code in the {@link Function}
+	 *
+	 * @return TRUE if it finished, FALSE if there was an error
 	 */
-	private static FileDescriptor getFileDescriptor(@NonNull Uri docUri,
-													@NonNull Context context) {
+	private static boolean doWithFileDescriptorFor(@NonNull Uri docUri, @NonNull Context context,
+												   Function<FileDescriptor, Void> function) {
+
 		// TODO this is here for the poor soul that will try to migrate from File to DocumentFile,
 		//  but as of now this code is useless
 		var docFile = DocumentFile.fromTreeUri(context, docUri);
-		if (docFile == null || docFile.isDirectory()) return null;
+		if (docFile == null || docFile.isDirectory()) return false;
 
 		try {
-			ParcelFileDescriptor parcelFileDescriptor = context
+			ParcelFileDescriptor pfd = context
 					.getContentResolver()
 					.openFileDescriptor(docUri, "r");
-			FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+			FileDescriptor fileDescriptor = pfd.getFileDescriptor();
 
 			boolean ok = fileDescriptor.valid();
+			if (!ok) return false;
 
-			return fileDescriptor;
+			function.apply(fileDescriptor);
+			pfd.close();
+			return true;
 
 		} catch (Exception ex) {
-			return null;
+			NnnLogger.exception(ex);
+			return false;
 		}
 	}
 

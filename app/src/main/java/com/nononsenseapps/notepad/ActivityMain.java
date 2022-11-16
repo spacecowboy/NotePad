@@ -353,7 +353,7 @@ public class ActivityMain extends AppCompatActivity
 					try {
 						Thread.sleep(30000);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						NnnLogger.exception(e);
 					}
 					return null;
 				}
@@ -367,7 +367,8 @@ public class ActivityMain extends AppCompatActivity
 			at.execute();
 		} else {
 			// explain to the user why the swipe-refresh was canceled
-			Toast.makeText(this, R.string.no_sync_method_chosen, Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.no_sync_method_chosen,
+					Toast.LENGTH_SHORT).show();
 			setRefreshOfAllSwipeLayoutsTo(false);
 		}
 	}
