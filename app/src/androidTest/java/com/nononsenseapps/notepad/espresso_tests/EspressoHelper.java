@@ -105,8 +105,7 @@ public class EspressoHelper {
 	 */
 	private static Boolean isShowCaseOverlayVisible() {
 		try {
-			onView(instanceOf(TapTargetView.class))
-					.check(matches(isDisplayed()));
+			onView(instanceOf(TapTargetView.class)).check(matches(isDisplayed()));
 			return true;
 		} catch (AmbiguousViewMatcherException ignored) {
 			// we have at least one, so it counts as visible
