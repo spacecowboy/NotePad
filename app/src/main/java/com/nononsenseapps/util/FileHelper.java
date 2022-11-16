@@ -89,46 +89,32 @@ public final class FileHelper {
 	// TODO see https://stackoverflow.com/a/59536115/6307322
 
 	/**
-	 * Returns the folder used by the app to save files with the normal {@link File} objects.
-	 * It is a subdirectory of {@link Environment#DIRECTORY_DOCUMENTS}
-	 */
-	public static File getAppExternalStorageFolder() {
-		// android 10 and newer don't allow us to make a folder in the "root" of the external
-		// storage. The workaround is to make the directory in the "Documents" folder
-		File baseDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-		File ourDir = new File(baseDir, "NoNonsenseNotes");
-
-		// must ensure that it exists
-		ourDir.mkdirs();
-		return ourDir;
-	}
-
-	/**
 	 * @return the path of the directory where ORG files are saved, or NULL if
-	 * it could get one. It can be one of these: <br/>
-	 * /storage/emulated/0/Android/data/packagename/files/orgfiles/ <br/>
-	 * /storage/emulated/0/Documents/NoNonsenseNotes/
+	 * it could not get one. The user can choose among a few selected folders, see
+	 * {@link FileHelper#getPathsOfPossibleFolders(Context)}
 	 */
 	public static String getUserSelectedOrgDir(@NonNull Context ctx) {
-		// see if the user requested the Documents directory
+		// see if the user requested a specific directory
 		var sharedPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-		boolean useDocDir = sharedPrefs.getBoolean(SyncPrefs.KEY_SD_USE_DOC_DIR, false);
+		String favDirPath = sharedPrefs.getString(SyncPrefs.KEY_SD_DIR, null);
 
 		// eventually you should use a DocumentFile from this:
-		// Uri dir = Uri.parse( sharedPrefs.getString(SyncPrefs.KEY_SD_DIR_URI,null));
+		// Uri dir = Uri.parse( sharedPrefs.getString(SyncPrefs.KEY_SD_DIR_URI, null));
 
 		File dir;
-		if (useDocDir) {
-			// the user requested the Documents directory => save org files in:
-			// /storage/emulated/0/Documents/NoNonsenseNotes/
-			dir = getAppExternalStorageFolder();
+		if (favDirPath != null) {
+			// the user requested a specific directory => save org files there
+			dir = new File(favDirPath);
 		} else {
-			// we are going to use the default directory:
+			// nothing was specified => we are going to use the default directory:
 			// /storage/emulated/0/Android/data/packagename/files/orgfiles/
 			dir = ctx.getExternalFilesDir("orgfiles");
 		}
 
-		boolean ok = dir != null && dir.exists() && dir.isDirectory() && dir.canWrite();
+		// must ensure that it exists
+		if (dir != null && !dir.exists()) dir.mkdirs();
+
+		boolean ok = dir.exists() && dir.isDirectory() && dir.canWrite();
 		if (ok) return dir.getAbsolutePath();
 		else return null;
 	}
@@ -156,6 +142,9 @@ public final class FileHelper {
 	}
 
 	/**
+	 * Android 10 and newer don't allow us to make a folder in the "root" of the external
+	 * storage. The workaround is to make the directory in the "Documents" folder, for example.
+	 *
 	 * @return an array of folder paths where files can be saved using the simple
 	 * {@link File} API, without bothering with filepickers and the Storage Access
 	 * Framework. The list consists of:<br/>
@@ -219,7 +208,6 @@ public final class FileHelper {
 	 * @return TRUE only if the given {@link File} is a folder that can be written to
 	 * using the {@link File} API, but only if the user gives the
 	 * {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE} permission.
-	 *
 	 * @implNote returns FALSE with folders that are unreachable for us, like /data/
 	 */
 	public static boolean folderNeedsAndroidWritePermission(@NonNull File folder) {

@@ -88,12 +88,12 @@
 			android:summary="@string/directory_summary"
 			android:title="@string/directory"/>
 
-		<SwitchPreference
+		<ListPreference
 			android:dependency="pref_sync_sd_enabled"
-			android:key="pref_sync_sd_in_doc_folder"
-			android:summaryOff="@string/save_files_in_android_data_folder"
-			android:summaryOn="@string/save_files_in_doc_folder"
-			android:title="@string/use_documents_folder"/>
+			android:key="pref_sync_sd_dir"
+			android:summary="SyncPrefs.java sets this"
+			android:title="@string/directory"
+			android:dialogIcon="@drawable/ic_folder_24dp_white"/>
 
 	</PreferenceCategory>
 
