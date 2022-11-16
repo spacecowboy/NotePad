@@ -18,11 +18,8 @@
 
 <resources>
 	<string name="changelog_7_0_0">
-\nThe app has been upgraded to support android 12
-\nGoogle Tasks synchronization is currently unavailable
-\nDue to limitations, org and json files are now located in
-(internal storage) -> Android -> data -> com.nononsenseapps.notepad
-\nFor more details, consult the app\'s page in your favorite app store.</string>
+\nThe app has been upgraded to support android 12 restrictions
+\nFor more details, consult the app\'s page in your app store.</string>
 	<string name="changelog_5_7_1">
 \nFix Google Tasks sync.
 \nFix bug which would delete all notes during Google Tasks sync.</string>
