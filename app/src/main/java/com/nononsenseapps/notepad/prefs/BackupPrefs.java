@@ -44,8 +44,9 @@ public class BackupPrefs extends PreferenceFragment {
 	private static final String KEY_EXPORT = "backup_export";
 	public static final String KEY_BACKUP_LOCATION = "key_backup_location";
 
-	private JSONBackup backupMaker;
-	private RestoreBackupTask bgTask;
+	private JSONBackup mTool;
+	private BackupTask mRestoreTaskHolder;
+	private BackupTask mCreateTaskHolder;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,33 +55,24 @@ public class BackupPrefs extends PreferenceFragment {
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.app_pref_backup);
 
-		backupMaker = new JSONBackup(getActivity());
+		mTool = new JSONBackup(getActivity());
 
 		// setup each preference entry
 		setupFolderListPreference(this.getContext(), this, KEY_BACKUP_LOCATION);
 
 		findPreference(KEY_IMPORT).setOnPreferenceClickListener(preference -> {
-			DialogRestoreBackup.showDialog(getFragmentManager(),
-					() -> {
-						bgTask = new RestoreBackupTask(super.getContext(), backupMaker);
-						bgTask.execute();
-					});
+			DialogRestoreBackup.showDialog(getFragmentManager(), () -> {
+				mRestoreTaskHolder = new BackupTask(super.getContext(), mTool, true);
+				mRestoreTaskHolder.execute();
+			});
 			return true;
 		});
 
 		findPreference(KEY_EXPORT).setOnPreferenceClickListener(preference -> {
 			DialogExportBackup.showDialog(getFragmentManager(), () -> {
-				try {
-					backupMaker.writeBackup();
-					Toast.makeText(getActivity(), R.string.backup_export_success,
-							Toast.LENGTH_SHORT).show();
-				} catch (Exception e) {
-					NnnLogger.exception(e);
-					Toast.makeText(getActivity(), R.string.backup_export_failed,
-							Toast.LENGTH_SHORT).show();
-				}
+				mCreateTaskHolder = new BackupTask(super.getContext(), mTool, false);
+				mCreateTaskHolder.execute();
 			});
-
 			return true;
 		});
 	}
@@ -129,26 +121,35 @@ public class BackupPrefs extends PreferenceFragment {
 	}
 
 	/**
-	 * Run the backup in the background. Locking the UI-thread for up to a few
+	 * Run the backup/restore in the background. Locking the UI-thread for up to a few
 	 * seconds is not nice...
 	 */
-	private static class RestoreBackupTask extends AsyncTask<Void, Void, Integer> {
+	private static class BackupTask extends AsyncTask<Void, Void, Integer> {
 		// TODO move this class into its own java file
 		private final JSONBackup backupMaker;
 		private final Context mContext;
+		private final boolean mIsRestoring;
 
 		/**
 		 * Creates a new asynchronous task. This constructor must be invoked on the UI thread.
+		 *
+		 * @param restore TRUE if this task should RESTORE a backup from a file,
+		 *                FALSE if it should CREATE a backup file
 		 */
-		public RestoreBackupTask(@NonNull Context context, @NonNull JSONBackup backupMaker) {
+		public BackupTask(@NonNull Context context, @NonNull JSONBackup backupMaker,
+						  boolean restore) {
 			super();
 			this.backupMaker = backupMaker;
 			mContext = context;
+			mIsRestoring = restore;
 		}
 
 		protected Integer doInBackground(Void... params) {
 			try {
-				backupMaker.restoreBackup();
+				if (mIsRestoring)
+					backupMaker.restoreBackup();
+				else
+					backupMaker.writeBackup();
 				return 0;
 			} catch (FileNotFoundException e) {
 				return 1;
@@ -156,6 +157,7 @@ public class BackupPrefs extends PreferenceFragment {
 				// can't read from that folder: missing permission ?
 				return 2;
 			} catch (Exception e) {
+				NnnLogger.exception(e);
 				return 3;
 			}
 		}
@@ -164,25 +166,30 @@ public class BackupPrefs extends PreferenceFragment {
 			if (mContext == null) {
 				return;
 			}
+			int msgId;
 			switch (result) {
 				case 0:
-					Toast.makeText(mContext, R.string.backup_import_success,
-							Toast.LENGTH_SHORT).show();
+					msgId = mIsRestoring
+							? R.string.backup_import_success
+							: R.string.backup_export_success;
 					break;
 				case 1:
-					Toast.makeText(mContext, R.string.backup_file_not_found,
-							Toast.LENGTH_SHORT).show();
+					msgId = R.string.backup_file_not_found;
 					break;
 				case 2:
-					// can't read from that folder: missing permission ?
-					Toast.makeText(mContext, R.string.permission_denied,
-							Toast.LENGTH_SHORT).show();
+					// can't read from / write to that folder: missing permission ?
+					msgId = R.string.permission_denied;
 					break;
 				case 3:
-					Toast.makeText(mContext, R.string.backup_import_failed,
-							Toast.LENGTH_SHORT).show();
+					msgId = mIsRestoring
+							? R.string.backup_import_failed
+							: R.string.backup_export_failed;
 					break;
+				default:
+					// won't happen, anyway
+					return;
 			}
+			Toast.makeText(mContext, msgId, Toast.LENGTH_SHORT).show();
 		}
 	}
 }
