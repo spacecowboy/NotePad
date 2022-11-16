@@ -5,6 +5,7 @@ import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
@@ -207,6 +208,10 @@ public final class FileHelper {
 		// let android know that the file was deleted, ELSE IT WILL CRASH!
 		MediaScannerConnection.scanFile(context, new String[] { toDelete.getAbsolutePath() },
 				null, null);
+
+		// wait a bit for the mediascanner to do its work
+		// 2 seconds should be enough
+		SystemClock.sleep(1900);
 
 		return true;
 	}

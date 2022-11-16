@@ -233,17 +233,24 @@ public class JSONBackup {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public void writeBackup() throws JSONException, IOException {
+	public void writeBackup() throws JSONException, IOException, SecurityException {
 		// Create JSON object
 		final JSONObject backup = getJSONBackup();
 
 		// Serialise the JSON object to a file
 		final File backupFile = FileHelper.getBackupJsonFile(this.context);
 
+		if (backupFile.exists() && !backupFile.canWrite()) {
+			// we don't have the permission to write on the backup file!
+			throw new SecurityException();
+		}
+
 		boolean ok = FileHelper.tryDeleteFile(backupFile, this.context);
 		if (!ok) throw new IOException("can't delete file: " + backupFile.getAbsolutePath());
 
 		backupFile.getParentFile().mkdirs();
+
+		// if you try to write to DCIM, here it crashes: that folder is not available anymore
 		backupFile.createNewFile();
 
 		final FileWriter writer = new FileWriter(backupFile);
@@ -302,9 +309,9 @@ public class JSONBackup {
 	private JSONObject readBackup() throws JSONException, IOException, SecurityException {
 		// Try to read the backup file
 		final File backupFile = FileHelper.getBackupJsonFile(this.context);
-		if (!backupFile.canRead()) {
+		if (backupFile.exists() && !backupFile.canRead()) {
 			// maybe we are missing the required android permission ?
-			throw new SecurityException("Can't read the backup file");
+			throw new SecurityException();
 		}
 		final StringBuilder sb = new StringBuilder();
 		String line;
