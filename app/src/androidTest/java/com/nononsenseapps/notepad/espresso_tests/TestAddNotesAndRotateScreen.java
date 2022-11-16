@@ -3,14 +3,13 @@ package com.nononsenseapps.notepad.espresso_tests;
 import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isRoot;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.nononsenseapps.notepad.espresso_tests.OrientationChangeAction.orientationLandscape;
-import static com.nononsenseapps.notepad.espresso_tests.OrientationChangeAction.orientationPortrait;
-
-import android.os.SystemClock;
+import static org.hamcrest.Matchers.allOf;
+import static org.hamcrest.Matchers.instanceOf;
 
 import androidx.test.filters.LargeTest;
+
+import com.nononsenseapps.utils.views.TitleNoteTextView;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -39,18 +38,17 @@ public class TestAddNotesAndRotateScreen extends BaseTestClass {
 		EspressoHelper.createNotes(noteNames);
 		EspressoHelper.navigateUp();
 
-		// rotate screen
-		onView(isRoot()).perform(orientationLandscape(myActivityRule.getActivity()));
-		onView(isRoot()).perform(orientationPortrait(myActivityRule.getActivity()));
+		EspressoHelper.rotateScreen();
 
-		// wait for it to finish the rotation(s)
-		SystemClock.sleep(1500);
-
-		//check that textviews still show up
-		onView(withText(noteNames[0])).check(matches(isDisplayed()));
-		onView(withText(noteNames[1])).check(matches(isDisplayed()));
-		onView(withText(noteNames[2])).check(matches(isDisplayed()));
-		onView(withText(noteNames[3])).check(matches(isDisplayed()));
+		// check that textviews still show up
+		onView(allOf(instanceOf(TitleNoteTextView.class), withText(noteNames[0])))
+				.check(matches(isDisplayed()));
+		onView(allOf(instanceOf(TitleNoteTextView.class), withText(noteNames[1])))
+				.check(matches(isDisplayed()));
+		onView(allOf(instanceOf(TitleNoteTextView.class), withText(noteNames[2])))
+				.check(matches(isDisplayed()));
+		onView(allOf(instanceOf(TitleNoteTextView.class), withText(noteNames[3])))
+				.check(matches(isDisplayed()));
 	}
 }
 

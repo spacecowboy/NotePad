@@ -29,9 +29,10 @@ import androidx.core.content.ContextCompat;
  */
 public class PermissionsHelper {
 
-	public static final String[] PERMISSIONS_GTASKS = new String[] { Manifest.permission.GET_ACCOUNTS,
-			Manifest.permission.WRITE_SYNC_SETTINGS, Manifest.permission.READ_SYNC_SETTINGS,
-			Manifest.permission.READ_SYNC_STATS, Manifest.permission.INTERNET };
+	public static final String[] PERMISSIONS_GTASKS = new String[] {
+			Manifest.permission.GET_ACCOUNTS, Manifest.permission.WRITE_SYNC_SETTINGS,
+			Manifest.permission.READ_SYNC_SETTINGS, Manifest.permission.READ_SYNC_STATS,
+			Manifest.permission.INTERNET };
 
 	public static final String[] PERMISSIONS_SD =
 			new String[] { Manifest.permission.WRITE_EXTERNAL_STORAGE };
@@ -39,17 +40,18 @@ public class PermissionsHelper {
 	public static final int REQUEST_CODE_SD_PERMISSIONS = 1;
 	public static final int REQUEST_CODE_GTASKS_PERMISSIONS = 2;
 
+	/**
+	 * @return TRUE if all the specified permissions are granted, FALSE otherwise
+	 */
 	public static boolean hasPermissions(@NonNull Context context, String... permissions) {
 		for (String permission : permissions) {
-			if (!hasPermission(context, permission)) {
+			boolean hasPermission = PackageManager.PERMISSION_GRANTED
+					== ContextCompat.checkSelfPermission(context, permission);
+			if (!hasPermission) {
 				return false;
 			}
 		}
 		return true;
-	}
-
-	private static boolean hasPermission(@NonNull Context context, @NonNull String permission) {
-		return PackageManager.PERMISSION_GRANTED == ContextCompat.checkSelfPermission(context, permission);
 	}
 
 	/**

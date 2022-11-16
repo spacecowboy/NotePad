@@ -17,25 +17,10 @@
 
 package com.nononsenseapps.notepad.sync.files;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.notepad.database.Notification;
@@ -43,6 +28,19 @@ import com.nononsenseapps.notepad.database.RemoteTask;
 import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.util.FileHelper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JSONBackup {
 
@@ -57,25 +55,6 @@ public class JSONBackup {
 		this.context = context;
 	}
 
-	/**
-	 * @return the absolute path of the JSON file for backups, located in:
-	 * /storage/emulated/0/Android/data/com.nononsenseapps.notepad/files/Backups/backup.json
-	 */
-	@NonNull
-	public static String getBackupFilePath(@NonNull Context ctx) {
-		var backupDir = ctx.getExternalFilesDir("Backups");
-		var backupFile = new File(backupDir, "backup.json");
-
-		// TODO the old code saved the backup JSON file in the external storage directory. It is
-		//  more convenient, but to do it we need the user's permission. Eventually we should
-		//  show a file picker to let the user choose where to save the file, and keep this path
-		//  as a default, fallback value. See:
-		//  https://developer.android.com/training/data-storage/app-specific
-		//  https://developer.android.com/training/data-storage/shared/documents-files#grant-access-directory
-		//  https://stackoverflow.com/questions/58662166
-		//  https://stackoverflow.com/questions/71725859/
-		return backupFile.getAbsolutePath();
-	}
 
 	private List<TaskList> getTaskLists() {
 		final ArrayList<TaskList> taskLists = new ArrayList<>();
@@ -254,17 +233,26 @@ public class JSONBackup {
 	 * @throws JSONException
 	 * @throws IOException
 	 */
-	public void writeBackup() throws JSONException, IOException {
+	public void writeBackup() throws JSONException, IOException, SecurityException {
 		// Create JSON object
 		final JSONObject backup = getJSONBackup();
 
 		// Serialise the JSON object to a file
-		final File backupFile = new File(getBackupFilePath(this.context));
-		if (backupFile.exists()) {
-			backupFile.delete();
+		final File backupFile = FileHelper.getBackupJsonFile(this.context);
+
+		if (backupFile.exists() && !backupFile.canWrite()) {
+			// we don't have the permission to write on the backup file!
+			throw new SecurityException();
 		}
+
+		boolean ok = FileHelper.tryDeleteFile(backupFile, this.context);
+		if (!ok) throw new IOException("can't delete file: " + backupFile.getAbsolutePath());
+
 		backupFile.getParentFile().mkdirs();
+
+		// if you try to write to DCIM, here it crashes: that folder is not available anymore
 		backupFile.createNewFile();
+
 		final FileWriter writer = new FileWriter(backupFile);
 		writer.write(backup.toString(2));
 		writer.flush();
@@ -274,13 +262,8 @@ public class JSONBackup {
 	/**
 	 * Clears the database and restores the backup. Throws exceptions on
 	 * failure.
-	 *
-	 * @throws JSONException
-	 * @throws IOException
-	 * @throws FileNotFoundException
 	 */
-	public void restoreBackup() throws FileNotFoundException, JSONException,
-			IOException {
+	public void restoreBackup() throws SecurityException, JSONException, IOException {
 		final JSONObject backup = readBackup();
 		// Only if backup exists will we clear the database
 		clearDatabase();
@@ -323,9 +306,13 @@ public class JSONBackup {
 
 	}
 
-	private JSONObject readBackup() throws JSONException, IOException {
+	private JSONObject readBackup() throws JSONException, IOException, SecurityException {
 		// Try to read the backup file
-		final File backupFile = new File(getBackupFilePath(this.context));
+		final File backupFile = FileHelper.getBackupJsonFile(this.context);
+		if (backupFile.exists() && !backupFile.canRead()) {
+			// maybe we are missing the required android permission ?
+			throw new SecurityException();
+		}
 		final StringBuilder sb = new StringBuilder();
 		String line;
 		BufferedReader reader = new BufferedReader(new FileReader(backupFile));

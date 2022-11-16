@@ -23,13 +23,15 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:installLocation="internalOnly">
 
-	<!-- For connection -->
+	<!-- For Google tasks synchronization: re-enable them if you want to test it -->
+	<!--
 	<uses-permission android:name="android.permission.INTERNET"/>
-
-	<!-- For syncing -->
 	<uses-permission android:name="android.permission.READ_SYNC_STATS"/>
 	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
 	<uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+	<uses-permission android:name="android.permission.USE_CREDENTIALS"/>
+	-->
 
 	<!-- Writing sync files to SD card -->
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
@@ -37,11 +39,6 @@
 	<!-- For notifications -->
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
 	<uses-permission android:name="android.permission.VIBRATE"/>
-
-	<!-- For getting Google account -->
-	<uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-	<!-- For getting Google account auth token -->
-	<uses-permission android:name="android.permission.USE_CREDENTIALS"/>
 
 	<!-- Define my permissions for the provider -->
 	<permission
@@ -65,7 +62,7 @@
 		android:restoreAnyVersion="true">
 
 		<!-- For the Android Backup Service -->
-
+		<!-- TODO useless ? -->
 		<meta-data
 			android:name="com.google.android.backup.api_key"
 			android:value="AEdPqrEAAAAIZgz47Vv0rpsuH5ziPBpQsecAPAlZtw2P5-mgYw"/>
@@ -116,9 +113,7 @@
 				<action android:name="android.intent.action.SEND"/>
 				<!-- Voice command "note to self" in google search -->
 				<action android:name="com.google.android.gm.action.AUTO_SEND"/>
-
 				<category android:name="android.intent.category.DEFAULT"/>
-
 				<data android:mimeType="text/*"/>
 				<!-- <data android:mimeType="text/*" android:path="*.txt" />  Would like to be able to open files in future -->
 			</intent-filter>

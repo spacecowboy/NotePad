@@ -55,27 +55,6 @@ class FragmentSettings_USELESS extends PreferenceFragment implements SharedPrefe
 	private SwitchPreference preferenceSyncGTasks;
 
 
-	private void setSdDirectorySummary(final SharedPreferences sharedPreferences) {
-		preferenceSyncSdCard.setSummary(sharedPreferences.getString(SyncPrefs.KEY_SD_DIR_URI,
-				SDSynchronizer.getDefaultOrgDir(getContext())));
-	}
-
-
-	@SuppressLint("CommitPrefEdits")
-	private void saveNewDirectoryPath(Intent data) {
-		File path = new File(data.getData().getPath());
-		if (path.exists() && path.isDirectory() && path.canWrite()) {
-			SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences
-					(getActivity());
-			sharedPreferences.edit().putString(SyncPrefs.KEY_SD_DIR_URI, path.toString()).commit();
-			setSdDirectorySummary(sharedPreferences);
-		} else {
-			Toast.makeText(getActivity(), R.string.cannot_write_to_directory, Toast.LENGTH_SHORT)
-					.show();
-			disableSdCardSync(getActivity());
-		}
-	}
-
 
 
 

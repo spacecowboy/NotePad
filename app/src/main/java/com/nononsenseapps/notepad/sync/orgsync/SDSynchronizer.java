@@ -26,6 +26,7 @@ import android.os.FileObserver;
 import android.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.util.FileHelper;
 import com.nononsenseapps.util.PermissionsHelper;
 import com.nononsenseapps.util.SharedPreferencesHelper;
 
@@ -58,41 +59,23 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 	/**
 	 * Filesystem path of the folder where files are kept. User changeable in preferences.
 	 */
-	protected String ORG_DIR;
+	protected String ORG_DIR; // TODO make it final and fix tests
 
 	public SDSynchronizer(Context context) {
 		super(context);
-		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
-		Uri favoriteOrgDir;
-		String favoriteUriStr = prefs.getString(SyncPrefs.KEY_SD_DIR_URI, null);
-		if (favoriteUriStr == null)
-			favoriteOrgDir = Uri.fromFile(new File(getDefaultOrgDir(context))); // TODO does it even work ??
-		else favoriteOrgDir = Uri.parse(favoriteUriStr);
+		// use the user-chosen folder to save ORG files
+		ORG_DIR = FileHelper.getUserSelectedOrgDir(context);
 
-		// TODO actually use the user-selected directory for ORG files in "favoriteOrgDir":
-		//  android's framework forces the use of URIs instead of file paths, so for now we ignore
-		//  the user's choice and stick to the default directory, which can be used in File classes
-
-		ORG_DIR = getDefaultOrgDir(context);
-		final boolean permitted = PermissionsHelper.hasPermissions(context, PermissionsHelper.PERMISSIONS_SD);
+		boolean permitted = PermissionsHelper
+				.hasPermissions(context, PermissionsHelper.PERMISSIONS_SD);
 		if (permitted) {
+			// we CAN save files in the external storage
 			configured = SharedPreferencesHelper.isSdSyncEnabled(context);
 		} else {
 			configured = false;
-			// disable SD
 			SharedPreferencesHelper.disableSdCardSync(context);
 		}
-
-	}
-
-	/**
-	 * @return the path of the default directory where ORG files are saved. It's something like
-	 * /storage/emulated/0/Android/data/packagename/files/orgfiles/
-	 */
-	public static String getDefaultOrgDir(Context ctx) {
-		File dir = ctx.getExternalFilesDir("orgfiles");
-		return dir.getAbsolutePath();
 	}
 
 	/**
@@ -186,7 +169,7 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 	public void deleteRemoteFile(OrgFile orgFile) {
 		if (orgFile != null && orgFile.getFilename() != null) {
 			final File file = new File(ORG_DIR, orgFile.getFilename());
-			file.delete();
+			FileHelper.tryDeleteFile(file, context);
 		}
 	}
 

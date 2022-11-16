@@ -24,6 +24,7 @@ import android.accounts.AccountManagerFuture;
 import android.accounts.AuthenticatorException;
 import android.accounts.OperationCanceledException;
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -48,6 +49,7 @@ import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
+import com.nononsenseapps.util.FileHelper;
 import com.nononsenseapps.util.PermissionsHelper;
 import com.nononsenseapps.util.SharedPreferencesHelper;
 import com.nononsenseapps.util.SyncGtaskHelper;
@@ -58,12 +60,15 @@ import java.io.IOException;
 
 public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
+	// TODO all of these are useles. Maybe we can reuse them if we find a newer sync service
+	//  to replace google tasks
 	public static final String KEY_SYNC_ENABLE = "syncEnablePref";
 	public static final String KEY_ACCOUNT = "accountPref";
 	public static final String KEY_FULLSYNC = "syncFull";
 	public static final String KEY_SYNC_ON_START = "syncOnStart";
 	public static final String KEY_SYNC_ON_CHANGE = "syncOnChange";
 	public static final String KEY_BACKGROUND_SYNC = "syncInBackground";
+
 	/**
 	 * Used for sync on start and on change
 	 */
@@ -73,29 +78,31 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	// SD sync
 	public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
 	public static final String KEY_SD_DIR_URI = "pref_sync_sd_dir_uri";
+	public static final String KEY_SD_USE_DOC_DIR = "pref_sync_sd_in_doc_folder";
 	private static final int PICK_SD_DIR_CODE = 1;
 
 
 	private Activity activity;
 
 	private Preference prefAccount;
+
+	/**
+	 * Where you click to choose the directory to save the org files
+	 */
 	private Preference prefSdDir;
-
-
-	// private Preference prefSyncFreq;
-
 
 	public static void setSyncInterval(Context activity, SharedPreferences sharedPreferences) {
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
 		boolean backgroundSync = sharedPreferences.getBoolean(KEY_BACKGROUND_SYNC, false);
 
 		if (accountName != null && !accountName.isEmpty()) {
-			Account account = SyncGtaskHelper.getAccount(AccountManager.get(activity), accountName);
+			Account account = SyncGtaskHelper
+					.getAccount(AccountManager.get(activity), accountName);
 			if (account != null) {
 				if (!backgroundSync) {
 					// Disable periodic syncing
-					ContentResolver
-							.removePeriodicSync(account, MyContentProvider.AUTHORITY, new Bundle());
+					ContentResolver.removePeriodicSync(account,
+							MyContentProvider.AUTHORITY, new Bundle());
 				} else {
 					// Convert from minutes to seconds
 					long pollFrequency = 3600;
@@ -122,19 +129,16 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.app_pref_sync);
 
-		prefAccount = findPreference(KEY_ACCOUNT);
-		// prefSyncFreq = findPreference(KEY_SYNC_FREQ);
-
-
 		final SharedPreferences sharedPrefs = PreferenceManager
 				.getDefaultSharedPreferences(activity);
 		// Set up a listener whenever a key changes
 		sharedPrefs.registerOnSharedPreferenceChangeListener(this);
 
-		// Set summaries
+		// this is useless, since all Google Tasks settings are disabled.
+		prefAccount = findPreference(KEY_ACCOUNT);
 		setAccountTitle(sharedPrefs);
-
 		prefAccount.setOnPreferenceClickListener(preference -> {
+			// ask for permissions needed to use google tasks
 			boolean granted = PermissionsHelper
 					.hasPermissions(this.getContext(), PermissionsHelper.PERMISSIONS_GTASKS);
 			if (granted) {
@@ -145,7 +149,6 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 						PermissionsHelper.PERMISSIONS_GTASKS,
 						PermissionsHelper.REQUEST_CODE_GTASKS_PERMISSIONS);
 			}
-
 			return true;
 		});
 
@@ -153,20 +156,36 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		String API_KEY = Config.getGtasksApiKey(getActivity());
 		findPreference(KEY_SYNC_ENABLE).setEnabled(null != API_KEY && !API_KEY.contains(" "));
 
-		// SD Card
+		findPreference(KEY_SD_ENABLE).setOnPreferenceClickListener(p -> {
+			boolean ok = PermissionsHelper.hasPermissions(
+					this.getContext(), PermissionsHelper.PERMISSIONS_SD);
+			if (!ok) {
+				this.requestPermissions(PermissionsHelper.PERMISSIONS_SD,
+						PermissionsHelper.REQUEST_CODE_SD_PERMISSIONS);
+				// continues in onRequestPermissionsResult()
+			}
+			return true;
+		});
+
+		// folder for SD sync on the internal storage.
+		// this setting is DISABLED because the code can't use the URIs provided by the filepicker
 		prefSdDir = findPreference(KEY_SD_DIR_URI);
 		setSdDirSummary(sharedPrefs);
+
+		// when the user clicks on the settings entry to choose the directory, do this
 		prefSdDir.setOnPreferenceClickListener(preference -> {
-			boolean ok = PermissionsHelper
-					.hasPermissions(this.getContext(), PermissionsHelper.PERMISSIONS_SD);
+			boolean ok = PermissionsHelper.hasPermissions(
+					this.getContext(), PermissionsHelper.PERMISSIONS_SD);
 			if (ok) {
-				// we can read the filesystem => show the filepicker
+				// we CAN read the filesystem => show the filepicker
 				showFolderPickerActivity();
 			} else {
 				this.requestPermissions(
 						PermissionsHelper.PERMISSIONS_SD,
 						PermissionsHelper.REQUEST_CODE_SD_PERMISSIONS);
+				// continues in onRequestPermissionsResult()
 			}
+			// tell android to update the preference value
 			return true;
 		});
 	}
@@ -177,14 +196,14 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		boolean granted = PermissionsHelper.permissionsGranted(permissions, grantResults);
 		switch (reqCode) {
 			case PermissionsHelper.REQUEST_CODE_SD_PERMISSIONS:
-				if (granted) {
-					// we got the permission to read the file system: now, show the filepicker
-					showFolderPickerActivity();
-				} else {
+				if (!granted) {
 					// warn the user that the permission was denied
 					Toast.makeText(this.getContext(), R.string.permission_denied,
 							Toast.LENGTH_SHORT).show();
 					SharedPreferencesHelper.disableSdCardSync(this.getContext());
+
+					// SD card synchronization was disabled, but the UI does not know: reload
+					onCreate(null);
 				}
 				break;
 			case PermissionsHelper.REQUEST_CODE_GTASKS_PERMISSIONS:
@@ -213,24 +232,31 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	private void showFolderPickerActivity() {
 		var i = new Intent(Intent.ACTION_OPEN_DOCUMENT_TREE);
 
-		var sharedPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
-
-		// get the previously selected Uri
-		String defaultDir = SDSynchronizer.getDefaultOrgDir(this.getContext());
-		String oldSetting = sharedPrefs.getString(KEY_SD_DIR_URI, defaultDir);
-		Uri uriToLoad = Uri.parse(oldSetting);
-
 		// don't add this: it stops working on some devices, like the emulator with API 25!
 		// i.setType(DocumentsContract.Document.MIME_TYPE_DIR);
 
-		// specify a URI for the directory that should be opened in
-		// the system file picker when it loads.
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-			i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uriToLoad);
+
+			// specify a URI for the directory that should be opened in
+			// the system file picker when it loads.
+			var sharPrefs = PreferenceManager.getDefaultSharedPreferences(activity);
+
+			// get the previously selected Uri, if available
+			String oldSetting = sharPrefs.getString(KEY_SD_DIR_URI, null);
+			if (oldSetting != null) {
+				Uri uriToLoad = Uri.parse(oldSetting);
+				i.putExtra(DocumentsContract.EXTRA_INITIAL_URI, uriToLoad);
+			}
+			// else the filepicker will just open in its default state. whatever.
 		}
 
-		// Start the filepicker
-		startActivityForResult(i, PICK_SD_DIR_CODE);
+		try {
+			// Start the built-in filepicker
+			startActivityForResult(i, PICK_SD_DIR_CODE);
+		} catch (ActivityNotFoundException e) {
+			Toast.makeText(this.getContext(),
+					R.string.file_picker_not_available, Toast.LENGTH_SHORT).show();
+		}
 	}
 
 	@Override
@@ -241,11 +267,12 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	}
 
 	/**
-	 * Shows a system popup to choose the google account to use for synchronizing notes. If the
-	 * user has no google accounts on the device, a prompt will open, asking to add a new one
+	 * Shows a system popup to choose the google account to use for synchronizing notes.
+	 * If the user has no google accounts on the device, a prompt will open, asking to
+	 * add a new one
 	 */
 	private void showAccountDialog() {
-		// TODO do we need to check for permissions ? (there's 3 in the manifest)
+		// do we need to check for permissions ? (there's 3 in the manifest)
 		String hint = this.getString(R.string.select_account);
 		var allowedAccountTypes = new String[] { "com.google" };
 		Intent i = AccountManager.newChooseAccountIntent(null, null,
@@ -268,7 +295,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 				} else if (KEY_ACCOUNT.equals(key)) {
 					NnnLogger.debug(SyncPrefs.class, "account");
 					prefAccount.setTitle(prefs.getString(KEY_ACCOUNT, ""));
-				} else if (KEY_SD_ENABLE.equals(key)) {
+				} else if (KEY_SD_ENABLE.equals(key) || KEY_SD_USE_DOC_DIR.equals(key)) {
 					// Restart the sync service
 					OrgSyncService.stop(getActivity());
 				} else if (KEY_SD_DIR_URI.equals(key)) {
@@ -304,13 +331,22 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		}
 
 		// "data" contains the URI for the user-selected directory, A.K.A. the "document tree"
-		Uri uri = data.getData();
+		onSdDirectoryPicked(data.getData());
+	}
 
-		// represents the directory that the user just picked. Use this instead of the "File" class
+	/**
+	 * Called when the user picks a "directory" with the system's filepicker
+	 *
+	 * @param uri points to the chosen "directory"
+	 */
+	private void onSdDirectoryPicked(Uri uri) {
+
+		// represents the directory that the user just picked
+		// Use this instead of the "File" class
 		var docDir = DocumentFile.fromTreeUri(this.getContext(), uri);
 
-		boolean isOk = docDir != null && docDir.exists() && docDir.isDirectory() && docDir.canWrite();
-		if (isOk) {
+		if (FileHelper.documentIsWritableFolder(docDir)) {
+			// save it
 			PreferenceManager
 					.getDefaultSharedPreferences(getActivity())
 					.edit()
@@ -347,9 +383,9 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	}
 
 	/**
-	 * Called when the user has selected a Google account when pressing the enable Gtask switch.
-	 * User wants to select an account to sync with. If we get an approval, activate sync
-	 * and set periodicity also.
+	 * Called when the user has selected a Google account when pressing the enable Gtask
+	 * switch. User wants to select an account to sync with. If we get an approval,
+	 * activate sync and set periodicity also.
 	 */
 	private void afterGettingAuthToken(AccountManagerFuture<Bundle> future, Account account) {
 		try {
@@ -429,19 +465,21 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		prefAccount.setSummary(R.string.settings_account_summary);
 	}
 
+	/**
+	 * Writes the description in the preferences item that lets users open the filepicker.
+	 * It is currently disabled
+	 */
 	private void setSdDirSummary(final SharedPreferences sharedPreferences) {
-		final String defaultDir = SDSynchronizer.getDefaultOrgDir(this.getContext());
+		String actualDir = FileHelper.getUserSelectedOrgDir(getContext());
 		String valToSet = sharedPreferences.getString(KEY_SD_DIR_URI, null);
 		if (valToSet == null) {
-			// show the default directory in the setting's description
-			valToSet = defaultDir;
+			// The filepicker was never used => show the actual directory in the description
+			valToSet = actualDir;
 		} else {
-			// show the file path that the uri is pointing to
-			valToSet = "Uri: " + Uri.parse(valToSet).getPath();
-
-			// TODO instead of moving this to a string resource, fix the code! Maybe it would be
-			//  easier to just remove the option to set a custom folder?
-			valToSet += "\nwhile we fix this, " + defaultDir + "\nwill be used instead";
+			// show the file path that the uri from the filepicker is pointing to,
+			// and the one that will be actually used
+			valToSet = getContext().getString(R.string.filepicker_preference_description,
+					Uri.parse(valToSet).getPath(), actualDir);
 		}
 		prefSdDir.setSummary(valToSet);
 	}

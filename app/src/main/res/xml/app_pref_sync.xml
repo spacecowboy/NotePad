@@ -17,11 +17,20 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
 	android:key="app_preference_screen_sync">
 
+	<!--
+	everything google tasks was disabled. If you want to work on it:
+		* remove the   android:enabled="false"   line here below
+		* uncomment the lines AndroidManifest.xml related to the Gtasks permissions
+		* start testing & fixing bugs
+	 -->
+
 	<PreferenceCategory
+		android:enabled="false"
 		android:key="pref_gtask_section_key"
 		android:persistent="false"
-		android:title="@string/gtasks">
-		<com.nononsenseapps.notepad.prefs.FixedSwitchPreference
+		android:title="@string/gtasks_not_working">
+
+		<SwitchPreference
 			android:defaultValue="false"
 			android:key="syncEnablePref"
 			android:summary="@string/gtasks_sync_info"
@@ -33,19 +42,19 @@
 			android:summary=""
 			android:title="@string/settings_account_title"/>
 
-		<com.nononsenseapps.notepad.prefs.FixedSwitchPreference
+		<SwitchPreference
 			android:defaultValue="true"
 			android:dependency="syncEnablePref"
 			android:key="syncInBackground"
 			android:summary="@string/background_sync_info"
 			android:title="@string/background_sync"/>
-		<com.nononsenseapps.notepad.prefs.FixedSwitchPreference
+		<SwitchPreference
 			android:defaultValue="true"
 			android:dependency="syncEnablePref"
 			android:key="syncOnStart"
 			android:summary="@string/sync_on_start_info"
 			android:title="@string/sync_on_start"/>
-		<com.nononsenseapps.notepad.prefs.FixedSwitchPreference
+		<SwitchPreference
 			android:defaultValue="true"
 			android:dependency="syncEnablePref"
 			android:key="syncOnChange"
@@ -63,16 +72,28 @@
 		android:key="pref_sdcard_section_key"
 		android:persistent="false"
 		android:title="@string/sd_card">
-		<com.nononsenseapps.notepad.prefs.FixedSwitchPreference
+
+		<SwitchPreference
 			android:defaultValue="false"
 			android:key="pref_sync_sd_enabled"
 			android:summary="@string/sd_card_summary"
 			android:title="@string/sd_card_sync"/>
+
+		<!-- The code uses File objects instead of URIs, so enabling this is just too
+		 much work. If anyone wants to help, remove android:enabled="false" and start testing -->
 		<Preference
 			android:dependency="pref_sync_sd_enabled"
 			android:key="pref_sync_sd_dir_uri"
+			android:enabled="false"
 			android:summary="@string/directory_summary"
 			android:title="@string/directory"/>
+
+		<SwitchPreference
+			android:dependency="pref_sync_sd_enabled"
+			android:key="pref_sync_sd_in_doc_folder"
+			android:summaryOff="@string/save_files_in_android_data_folder"
+			android:summaryOn="@string/save_files_in_doc_folder"
+			android:title="@string/use_documents_folder"/>
 
 	</PreferenceCategory>
 

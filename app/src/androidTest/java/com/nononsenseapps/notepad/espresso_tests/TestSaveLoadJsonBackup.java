@@ -38,13 +38,13 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 
 		// make a backup
 		openContextualActionModeOverflowMenu();
-		String SETTINGS_TEXT = myActivityRule.getActivity().getString(R.string.menu_preferences);
+		String SETTINGS_TEXT = getStringResource(R.string.menu_preferences);
 		onView(withText(SETTINGS_TEXT)).perform(click());
 
-		String SETTINGS_BACKUP_TEXT = myActivityRule.getActivity().getString(R.string.backup);
+		String SETTINGS_BACKUP_TEXT = getStringResource(R.string.backup);
 		onView(withText(SETTINGS_BACKUP_TEXT)).perform(click());
 
-		String EXPORT_BACKUP_TEXT = myActivityRule.getActivity().getString(R.string.backup_export);
+		String EXPORT_BACKUP_TEXT = getStringResource(R.string.backup_export);
 		onView(withText(EXPORT_BACKUP_TEXT)).perform(click());
 		onView(withId(android.R.id.button1)).perform(click());
 
@@ -58,7 +58,7 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 
 		// clear completed notes
 		openContextualActionModeOverflowMenu();
-		String CLEAR_COMPLETED = myActivityRule.getActivity().getString(R.string.menu_clearcompleted);
+		String CLEAR_COMPLETED = getStringResource(R.string.menu_clearcompleted);
 		onView(withText(CLEAR_COMPLETED)).perform(click());
 		onView(withId(android.R.id.button1)).perform(click());
 
@@ -67,7 +67,7 @@ public class TestSaveLoadJsonBackup extends BaseTestClass {
 		onView(withText(SETTINGS_TEXT)).perform(click());
 		onView(withText(SETTINGS_BACKUP_TEXT)).perform(click());
 
-		String IMPORT_BACKUP_TEXT = myActivityRule.getActivity().getString(R.string.backup_import);
+		String IMPORT_BACKUP_TEXT = getStringResource(R.string.backup_import);
 		onView(withText(IMPORT_BACKUP_TEXT)).perform(click());
 		onView(withId(android.R.id.button1)).perform(click());
 

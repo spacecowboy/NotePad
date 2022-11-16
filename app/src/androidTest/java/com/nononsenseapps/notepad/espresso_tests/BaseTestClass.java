@@ -4,6 +4,7 @@ import android.content.Context;
 import android.preference.PreferenceManager;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.ActivityTestRule;
 
 import com.nononsenseapps.notepad.ActivityMain_;
@@ -21,20 +22,22 @@ public class BaseTestClass {
 	 * Rules are interceptors which are executed for each test method and will run before
 	 * any of your setup code in the @Before method.
 	 *
-	 * {@link ActivityTestRule} will create and launch of the activity for you and also expose
-	 * the activity under test. To get a reference to the activity you can use
-	 * the {@link ActivityTestRule#getActivity()} method.
-	 *
+	 * This will create and launch of the activity for you and also expose
+	 * the activity under test. To get a reference to the activity you can use:
+	 * {@link ActivityTestRule#getActivity()}
 	 * <br/>
-	 * NOTE: the replacement, {@link androidx.test.ext.junit.rules.ActivityScenarioRule},
-	 * is used as in {@link com.nononsenseapps.notepad.test.FragmentTaskDetailTest}
-	 *
+	 * NOTE: the alternative, {@link ActivityScenarioRule}, <b>DOES NOT WORK</b>
 	 */
+	@SuppressWarnings("deprecation")
 	@Rule
-	// INFO: ActivityMain_ was renamed to ActivityList in release 6.0.0 beta,
-	// it has to do with getting rid of the annotations library
-	public ActivityTestRule<ActivityMain_> myActivityRule
-			= new ActivityTestRule<>(ActivityMain_.class);
+	public ActivityTestRule<ActivityMain_> mActRule = new ActivityTestRule<>(ActivityMain_.class);
+
+	/**
+	 * @return a string with the content of the given resourceId
+	 */
+	public String getStringResource(int resourceId) {
+		return mActRule.getActivity().getString(resourceId);
+	}
 
 	@After
 	public void tearDown() {

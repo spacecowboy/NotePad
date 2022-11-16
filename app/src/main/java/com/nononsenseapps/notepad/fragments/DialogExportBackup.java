@@ -22,6 +22,7 @@ import android.os.Bundle;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.sync.files.JSONBackup;
+import com.nononsenseapps.util.FileHelper;
 
 public class DialogExportBackup extends DialogConfirmBaseV11 {
 	static final String ID = "id";
@@ -42,7 +43,7 @@ public class DialogExportBackup extends DialogConfirmBaseV11 {
 
 	@Override
 	public CharSequence getMessage() {
-		String backupFilepath = JSONBackup.getBackupFilePath(this.getContext());
+		String backupFilepath = FileHelper.getBackupJsonFile(this.getContext()).getAbsolutePath();
 		return getString(R.string.backup_export_msg, backupFilepath);
 	}
 

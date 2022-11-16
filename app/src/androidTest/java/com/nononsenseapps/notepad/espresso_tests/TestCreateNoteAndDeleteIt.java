@@ -39,7 +39,7 @@ public class TestCreateNoteAndDeleteIt extends BaseTestClass {
 		onView(withId(android.R.id.button1)).perform(click());
 
 		// assert that we're back in the list
-		String buttonName = myActivityRule.getActivity().getString(R.string.app_name_short);
+		String buttonName = getStringResource(R.string.app_name_short);
 		onView(withText(buttonName)).check(matches(isDisplayed()));
 
 		//check that the view is not visible
