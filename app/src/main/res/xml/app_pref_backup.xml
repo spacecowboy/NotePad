@@ -17,8 +17,15 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
 	android:key="app_preference_backup">
 
+	<ListPreference
+		android:key="key_backup_location"
+		android:dialogIcon="@drawable/ic_folder_24dp_white"
+		android:summary="added in BackupPrefs.java, it shows the chosen folder"
+		android:title="@string/choose_backup_folder"/>
+
 	<Preference android:key="backup_import"
 		android:title="@string/backup_import"/>
+
 	<Preference android:key="backup_export"
 		android:title="@string/backup_export"/>
 

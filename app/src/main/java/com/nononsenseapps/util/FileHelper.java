@@ -10,12 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.documentfile.provider.DocumentFile;
 
 import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.notepad.prefs.BackupPrefs;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
 
 import java.io.File;
 import java.io.FileDescriptor;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.PrintStream;
+import java.util.Arrays;
 
 /**
  * Methods to help navigate through Google's mess regarding file access in android 10
@@ -62,7 +65,15 @@ public final class FileHelper {
 	 * @return TRUE if it worked, FALSE otherwise
 	 */
 	public static boolean writeStringToFile(String content, File target) {
-		if (content == null || target == null) return false;
+		if (content == null || target == null || target.isDirectory()) return false;
+		target.getParentFile().mkdirs();
+
+		try {
+			target.createNewFile();
+		} catch (IOException e) {
+			// you just can't write to that folder
+			return false;
+		}
 
 		try (PrintStream out = new PrintStream(new FileOutputStream(target.getAbsolutePath()))) {
 			out.print(content);
@@ -72,6 +83,8 @@ public final class FileHelper {
 			return false;
 		}
 	}
+
+	// TODO see https://stackoverflow.com/a/59536115/6307322
 
 	/**
 	 * Returns the folder used by the app to save files with the normal {@link File} objects.
@@ -97,7 +110,7 @@ public final class FileHelper {
 	public static String getUserSelectedOrgDir(@NonNull Context ctx) {
 		// see if the user requested the Documents directory
 		var sharedPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
-		boolean useDocDir = sharedPrefs.getBoolean(SyncPrefs.KEY_SD_USE_DOC_DIR,false);
+		boolean useDocDir = sharedPrefs.getBoolean(SyncPrefs.KEY_SD_USE_DOC_DIR, false);
 
 		// eventually you should use a DocumentFile from this:
 		// Uri dir = Uri.parse( sharedPrefs.getString(SyncPrefs.KEY_SD_DIR_URI,null));
@@ -118,7 +131,63 @@ public final class FileHelper {
 		else return null;
 	}
 
+	/**
+	 * @return a representation of the JSON file used for backups, located in the
+	 * folder chosen by the user in the Backup preferences page. NOT guaranteed
+	 * to be writable
+	 */
+	@NonNull
+	public static File getBackupJsonFile(@NonNull Context ctx) {
+		var sharedPrefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+		String chosenPath = sharedPrefs.getString(BackupPrefs.KEY_BACKUP_LOCATION, null);
+		if (chosenPath == null) {
+			// the user did not choose a path yet => use a safe fallback path
+			chosenPath = ctx.getExternalFilesDir(null).getAbsolutePath();
+		}
 
+		String fName = "NoNonsenseNotes_Backup.json";
+		File fJson = new File(chosenPath, fName);
+
+		// checks like .mkdirs() and .canWrite() are up to the caller.
+		// The code already took care of those, anyway
+		return fJson;
+	}
+
+	/**
+	 * @return an array of folder paths where files can be saved using the simple
+	 * {@link File} API, without bothering with filepickers and the Storage Access
+	 * Framework. The list consists of:<br/>
+	 * the app's folder in <i>/Android/data/</i> <br/>
+	 * the <i>Download</i> directory <br/>
+	 * the <i>Documents</i> directory <br/>
+	 * and subdirectories of those. <br/>
+	 * Every other folder is either dedicated to audio files, therefore useless for us, or
+	 * impossible to access in Android API >= 30 without using the DocumentFile API.
+	 * @implNote As of android 12, you can write files to all these folders without the
+	 * {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE} permission
+	 */
+	public static String[] getPathsOfPossibleFolders(@NonNull Context context) {
+		File dirDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+		// (don't use DCIM, you can't write to it anymore with the File API)
+		File dirDocs = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+		String subDirName = "No Nonsense Notes/";
+
+		var dirs = new File[] {
+				// the safest, recommended option
+				context.getExternalFilesDir(null),
+				// The directories themselves
+				dirDownload,
+				dirDocs,
+				// a subfolder that identifies the app
+				new File(dirDownload, subDirName),
+				new File(dirDocs, subDirName),
+		};
+
+		String[] paths = Arrays.stream(dirs)
+				.map(File::getAbsolutePath)
+				.toArray(String[]::new);
+		return paths;
+	}
 
 
 }

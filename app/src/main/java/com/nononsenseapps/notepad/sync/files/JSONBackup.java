@@ -258,13 +258,8 @@ public class JSONBackup {
 	/**
 	 * Clears the database and restores the backup. Throws exceptions on
 	 * failure.
-	 *
-	 * @throws JSONException
-	 * @throws IOException
-	 * @throws FileNotFoundException
 	 */
-	public void restoreBackup() throws FileNotFoundException, JSONException,
-			IOException {
+	public void restoreBackup() throws SecurityException, JSONException, IOException {
 		final JSONObject backup = readBackup();
 		// Only if backup exists will we clear the database
 		clearDatabase();
@@ -307,9 +302,13 @@ public class JSONBackup {
 
 	}
 
-	private JSONObject readBackup() throws JSONException, IOException {
+	private JSONObject readBackup() throws JSONException, IOException, SecurityException {
 		// Try to read the backup file
 		final File backupFile = FileHelper.getBackupJsonFile(this.context);
+		if (!backupFile.canRead()){
+			// maybe we are missing the required android permission ?
+			throw new SecurityException("Can't read the backup file");
+		}
 		final StringBuilder sb = new StringBuilder();
 		String line;
 		BufferedReader reader = new BufferedReader(new FileReader(backupFile));

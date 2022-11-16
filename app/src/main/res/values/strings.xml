@@ -126,6 +126,7 @@
 	<string name="use_documents_folder">Use the Documents folder</string>
 	<string name="save_files_in_doc_folder">Save the notes in the Documents folder. This allows easier access, but the synchronization may fail.\nNote that you will have to manually move your notes if you toggle this</string>
 	<string name="save_files_in_android_data_folder">Save the notes in the app\'s folder in Android/data/ (recommended). The files are harder to find, but it is a more stable solution.\nNote that you will have to manually move your notes if you toggle this</string>
+	<string name="choose_backup_folder">Choose a backup folder</string>
 
 	<!--
 		Use few if language need it. In English is the same.
