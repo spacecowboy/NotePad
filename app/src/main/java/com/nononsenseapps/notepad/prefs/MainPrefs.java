@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.notepad.prefs;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.PreferenceFragment;
@@ -49,7 +50,9 @@ public class MainPrefs extends PreferenceFragment {
 		addPreferencesFromResource(R.xml.app_pref_main);
 
 		// Fill listpreferences
-		setLangEntries((ListPreference) findPreference(getString(R.string.pref_locale)));
+		setLangEntries(
+				(ListPreference) findPreference(getString(R.string.pref_locale)),
+				getContext());
 		setDateEntries(
 				(ListPreference) findPreference(getString(R.string.key_pref_dateformat_short)),
 				R.array.dateformat_short_values);
@@ -92,15 +95,14 @@ public class MainPrefs extends PreferenceFragment {
 		prefDate.setEntryValues(values);
 	}
 
-	private void setLangEntries(ListPreference prefLang) {
+	private static void setLangEntries(ListPreference prefLang, Context context) {
 		ArrayList<CharSequence> entries = new ArrayList<>();
 		ArrayList<CharSequence> values = new ArrayList<>();
 
-		entries.add(getString(R.string.localedefault));
+		entries.add(context.getString(R.string.localedefault));
 		values.add("");
 
-		String[] langs = getResources()
-				.getStringArray(R.array.translated_langs);
+		String[] langs = context.getResources().getStringArray(R.array.translated_langs);
 
 		for (String lang : langs) {
 			Locale l;

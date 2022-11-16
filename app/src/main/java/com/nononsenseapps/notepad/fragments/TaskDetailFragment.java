@@ -20,6 +20,7 @@ package com.nononsenseapps.notepad.fragments;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -192,7 +193,6 @@ public class TaskDetailFragment extends Fragment {
 	@ViewById(resName = "editScrollView")
 	ScrollView editScrollView;
 
-	@SystemService
 	InputMethodManager inputManager;
 
 	// Id of task to open
@@ -273,9 +273,9 @@ public class TaskDetailFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		// TODO should we get it manually instead of using the annotation ?
-		// inputManager = (InputMethodManager) getContext()
-		// 		.getSystemService(Context.INPUT_METHOD_SERVICE);
+		// store a reference to the input method service
+		inputManager = (InputMethodManager) getContext()
+				.getSystemService(Context.INPUT_METHOD_SERVICE);
 	}
 
 	/**
@@ -443,19 +443,20 @@ public class TaskDetailFragment extends Fragment {
 		dpDiag.show();
 	}
 
-	// @Override TODO is it needed somewhere ?
-	// public void onDialogTimeSet(int hourOfDay, int minute) {
-	// final Calendar localTime = Calendar.getInstance();
-	// if (mTask.due != null) {
-	// localTime.setTimeInMillis(mTask.due);
-	// }
-	// localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
-	// localTime.set(Calendar.MINUTE, minute);
-	//
-	// mTask.due = localTime.getTimeInMillis();
-	// setDueText();
-	// }
-	//
+	/* TODO is it needed somewhere ?  check git history
+	@Override
+	 public void onDialogTimeSet(int hourOfDay, int minute) {
+	 final Calendar localTime = Calendar.getInstance();
+	 if (mTask.due != null) {
+	 localTime.setTimeInMillis(mTask.due);
+	 }
+	 localTime.set(Calendar.HOUR_OF_DAY, hourOfDay);
+	 localTime.set(Calendar.MINUTE, minute);
+
+	 mTask.due = localTime.getTimeInMillis();
+	 setDueText();
+	 }
+	*/
 
 	private void onDateSet(DatePicker dialog, int year, int monthOfYear, int dayOfMonth) {
 		final Calendar localTime = Calendar.getInstance();

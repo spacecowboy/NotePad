@@ -18,7 +18,7 @@
 <!-- Provides constants and default values -->
 <resources>
 
-	<string name="const_preference_legacybackup_key">preference_legacybackup_key</string>
+
 
 	<string name="const_all_default_sorting">@string/const_alphabetic</string>
 

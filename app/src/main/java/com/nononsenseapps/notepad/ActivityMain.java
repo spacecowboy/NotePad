@@ -318,14 +318,14 @@ public class ActivityMain extends AppCompatActivity
 	}
 
 	private void handleSyncRequest() {
-		/*
+		/* TODO check this
 		{
 			// in version 6.0.0, it does this:
 			SyncHelper.onManualSyncRequest(this);
 			return;
 		}
 
-		// or you have this:
+		or you can have this:
 		{
 			boolean syncing = SyncHelper.onManualSyncRequest(this);
 			if (!syncing) setRefreshOfAllSwipeLayoutsTo(false);

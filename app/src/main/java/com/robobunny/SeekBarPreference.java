@@ -147,10 +147,7 @@ public class SeekBarPreference extends Preference implements
 	protected void updateView(View layout) {
 
 		try {
-			//RelativeLayout layout = (RelativeLayout) view;
 
-
-			//mStatusText = (TextView) layout.findViewById(android.R.id.summary);
 			mStatusText.setText(String.valueOf(mCurrentValue));
 
 			mSeekBar.setProgress(mCurrentValue - mMinValue);
