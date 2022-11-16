@@ -165,8 +165,7 @@ public final class FileHelper {
 	 * and subdirectories of those. <br/>
 	 * Every other folder is either dedicated to audio files, therefore useless for us, or
 	 * impossible to access in Android API >= 30 without using the DocumentFile API.
-	 * @implNote As of android 12, you can write files to all these folders without the
-	 * {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE} permission
+	 * @implNote for some of these you have to ask for write permissions
 	 */
 	public static String[] getPathsOfPossibleFolders(@NonNull Context context) {
 		File dirDownload = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
@@ -214,6 +213,33 @@ public final class FileHelper {
 		SystemClock.sleep(1900);
 
 		return true;
+	}
+
+	/**
+	 * @return TRUE only if the given {@link File} is a folder that can be written to
+	 * using the {@link File} API, but only if the user gives the
+	 * {@link android.Manifest.permission#WRITE_EXTERNAL_STORAGE} permission.
+	 *
+	 * @implNote returns FALSE with folders that are unreachable for us, like /data/
+	 */
+	public static boolean folderNeedsAndroidWritePermission(@NonNull File folder) {
+		if (!folder.isDirectory()) return false;
+
+		// TODO test on API 23 to see if this is OK!
+
+		String dirDownload = Environment
+				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
+				.getAbsolutePath();
+		String dirDocs = Environment
+				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS)
+				.getAbsolutePath();
+
+		// these directories require the write permission
+		if (folder.getAbsolutePath().contains(dirDownload)) return true;
+		if (folder.getAbsolutePath().contains(dirDocs)) return true;
+
+		// anything else: it's either writable without permissions, or unreachable at all
+		return false;
 	}
 
 }

@@ -102,13 +102,10 @@ public class BackupPrefs extends PreferenceFragment {
 
 		lPref.setOnPreferenceChangeListener((preference, stringNewPath) -> {
 			// save and show the new value
-			lPref.setSummary(stringNewPath.toString());
+			var theDir = new File(stringNewPath.toString());
+			lPref.setSummary(theDir.getAbsolutePath());
 
-			// all folders should receive the write permission automatically
-			// TODO test on API 23 to see if this is true!
-			boolean canWriteToDir = true;
-
-			if (!canWriteToDir) {
+			if (FileHelper.folderNeedsAndroidWritePermission(theDir)) {
 				boolean granted = PermissionsHelper.hasPermissions(prefPage.getContext(),
 						PermissionsHelper.PERMISSIONS_SD);
 				if (!granted)
