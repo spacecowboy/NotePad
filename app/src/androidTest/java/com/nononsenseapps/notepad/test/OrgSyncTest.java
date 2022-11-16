@@ -14,6 +14,7 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.sync.orgsync.OrgConverter;
 import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
+import com.nononsenseapps.util.FileHelper;
 
 import org.cowboyprogrammer.org.OrgFile;
 import org.junit.After;
@@ -67,7 +68,7 @@ public class OrgSyncTest {
 		File d = new File(DIR);
 		assertNotNull("Can not get files in folder", d.listFiles());
 		for (File f : d.listFiles()) {
-			f.delete();
+			FileHelper.tryDeleteFile(f, getTheContext());
 		}
 	}
 

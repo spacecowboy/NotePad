@@ -169,7 +169,7 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 	public void deleteRemoteFile(OrgFile orgFile) {
 		if (orgFile != null && orgFile.getFilename() != null) {
 			final File file = new File(ORG_DIR, orgFile.getFilename());
-			file.delete();
+			FileHelper.tryDeleteFile(file, context);
 		}
 	}
 

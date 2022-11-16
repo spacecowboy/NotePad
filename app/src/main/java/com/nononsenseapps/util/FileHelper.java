@@ -1,6 +1,7 @@
 package com.nononsenseapps.util;
 
 import android.content.Context;
+import android.media.MediaScannerConnection;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.ParcelFileDescriptor;
@@ -189,5 +190,25 @@ public final class FileHelper {
 		return paths;
 	}
 
+	/**
+	 * When you delete a file in android, additional attention is required.
+	 * This function takes care of that
+	 */
+	public static boolean tryDeleteFile(@NonNull File toDelete, @NonNull Context context) {
+		if (toDelete.exists()) {
+			try {
+				if (!toDelete.delete()) return false;
+			} catch (SecurityException e) {
+				return false;
+			}
+		}
+
+		// once you successfully deleted it, you have to update the media scanner to
+		// let android know that the file was deleted, ELSE IT WILL CRASH!
+		MediaScannerConnection.scanFile(context, new String[] { toDelete.getAbsolutePath() },
+				null, null);
+
+		return true;
+	}
 
 }

@@ -17,26 +17,10 @@
 
 package com.nononsenseapps.notepad.sync.files;
 
-import java.io.BufferedReader;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
-
-import androidx.annotation.NonNull;
 
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.notepad.database.Notification;
@@ -45,6 +29,18 @@ import com.nononsenseapps.notepad.database.RemoteTaskList;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.util.FileHelper;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class JSONBackup {
 
@@ -58,7 +54,6 @@ public class JSONBackup {
 	public JSONBackup(final Context context) {
 		this.context = context;
 	}
-
 
 
 	private List<TaskList> getTaskLists() {
@@ -244,11 +239,13 @@ public class JSONBackup {
 
 		// Serialise the JSON object to a file
 		final File backupFile = FileHelper.getBackupJsonFile(this.context);
-		if (backupFile.exists()) {
-			backupFile.delete();
-		}
+
+		boolean ok = FileHelper.tryDeleteFile(backupFile, this.context);
+		if (!ok) throw new IOException("can't delete file: " + backupFile.getAbsolutePath());
+
 		backupFile.getParentFile().mkdirs();
 		backupFile.createNewFile();
+
 		final FileWriter writer = new FileWriter(backupFile);
 		writer.write(backup.toString(2));
 		writer.flush();
@@ -305,7 +302,7 @@ public class JSONBackup {
 	private JSONObject readBackup() throws JSONException, IOException, SecurityException {
 		// Try to read the backup file
 		final File backupFile = FileHelper.getBackupJsonFile(this.context);
-		if (!backupFile.canRead()){
+		if (!backupFile.canRead()) {
 			// maybe we are missing the required android permission ?
 			throw new SecurityException("Can't read the backup file");
 		}
