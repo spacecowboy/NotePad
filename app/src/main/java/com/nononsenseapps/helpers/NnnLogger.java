@@ -21,8 +21,6 @@ import android.util.Log;
 
 import androidx.annotation.NonNull;
 
-import com.nononsenseapps.build.Config;
-
 /**
  * Our own No Nonsense Notes Logger
  */

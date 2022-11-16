@@ -230,46 +230,42 @@ public class StyledEditText extends androidx.appcompat.widget.AppCompatEditText 
 
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
-		TextView widget = (TextView) this;
-		Object text = widget.getText();
-		if (text instanceof Spanned) {
-			Spannable buffer = (Spannable) text;
+		if (this.getText() == null) {
+			return super.onTouchEvent(event);
+		}
 
-			int action = event.getAction();
+		Spannable buffer = this.getText();
 
-			if (action == MotionEvent.ACTION_UP
-					|| action == MotionEvent.ACTION_DOWN) {
-				int x = (int) event.getX();
-				int y = (int) event.getY();
+		int action = event.getAction();
+		if (action == MotionEvent.ACTION_UP || action == MotionEvent.ACTION_DOWN) {
+			int x = (int) event.getX();
+			int y = (int) event.getY();
 
-				x -= widget.getTotalPaddingLeft();
-				y -= widget.getTotalPaddingTop();
+			x -= this.getTotalPaddingLeft();
+			y -= this.getTotalPaddingTop();
 
-				x += widget.getScrollX();
-				y += widget.getScrollY();
+			x += this.getScrollX();
+			y += this.getScrollY();
 
-				Layout layout = widget.getLayout();
-				int line = layout.getLineForVertical(y);
-				int off = layout.getOffsetForHorizontal(line, x);
+			Layout layout = this.getLayout();
+			int line = layout.getLineForVertical(y);
+			int off = layout.getOffsetForHorizontal(line, x);
 
-				ClickableSpan[] link = buffer.getSpans(off, off,
-						ClickableSpan.class);
+			ClickableSpan[] link = buffer.getSpans(off, off, ClickableSpan.class);
 
-				// Cant click to the right of a span, if the line ends with the span!
-				if (x > layout.getLineRight(line)) {
-					// Don't call the span
-				} else if (link.length != 0) {
-					if (action == MotionEvent.ACTION_UP) {
-						link[0].onClick(widget);
-					} else if (action == MotionEvent.ACTION_DOWN) {
-						Selection.setSelection(buffer,
-								buffer.getSpanStart(link[0]),
-								buffer.getSpanEnd(link[0]));
-					}
-					return true;
+			// Cant click to the right of a span, if the line ends with the span!
+			if (x > layout.getLineRight(line)) {
+				// Don't call the span
+			} else if (link.length != 0) {
+				if (action == MotionEvent.ACTION_UP) {
+					// TODO the same of TitleNoteTextview.java
+					link[0].onClick(this);
+				} else if (action == MotionEvent.ACTION_DOWN) {
+					Selection.setSelection(buffer,
+							buffer.getSpanStart(link[0]), buffer.getSpanEnd(link[0]));
 				}
+				return true;
 			}
-
 		}
 
 		return super.onTouchEvent(event);

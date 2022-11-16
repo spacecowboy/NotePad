@@ -215,7 +215,7 @@ public class ActivityMain extends AppCompatActivity
 		} else if (itemId == R.id.drawer_menu_createlist) {
 			// Show fragment
 			DialogEditList_ dialog = DialogEditList_.getInstance();
-			dialog.setListener(id -> openList(id));
+			dialog.setListener(this::openList);
 			dialog.show(getSupportFragmentManager(), "fragment_create_list");
 			return true;
 		} else if (itemId == R.id.menu_preferences) {
@@ -742,20 +742,14 @@ public class ActivityMain extends AppCompatActivity
 			return true;
 		}
 
-		if (intent.getData() != null &&
+		return intent.getData() != null &&
 				(Intent.ACTION_EDIT.equals(intent.getAction()) ||
 						Intent.ACTION_VIEW.equals(intent.getAction()) ||
 						Intent.ACTION_INSERT.equals(intent.getAction())) &&
-				(intent.getData().getPath().startsWith(
-						LegacyDBHelper.NotePad.Notes.PATH_VISIBLE_NOTES) ||
-						intent.getData().getPath()
-								.startsWith(LegacyDBHelper.NotePad.Notes.PATH_NOTES) ||
+				(intent.getData().getPath().startsWith(NotePad.Notes.PATH_VISIBLE_NOTES) ||
+						intent.getData().getPath().startsWith(NotePad.Notes.PATH_NOTES) ||
 						intent.getData().getPath().startsWith(Task.URI.getPath())) &&
-				!intent.getData().getPath().startsWith(TaskList.URI.getPath())) {
-			return true;
-		}
-
-		return false;
+				!intent.getData().getPath().startsWith(TaskList.URI.getPath());
 	}
 
 	void setHomeAsDrawer(final boolean value) {

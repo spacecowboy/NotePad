@@ -27,6 +27,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import com.nononsenseapps.helpers.NnnLogger;
+
 public abstract class DAO {
 
 	private static final String whereIdIs = "" + BaseColumns._ID + " IS ?";
@@ -202,16 +204,13 @@ public abstract class DAO {
 
 	public long _id = -1;
 
-	public synchronized boolean update(final Context context,
-									   final SQLiteDatabase db) {
+	public synchronized boolean update(final Context context, final SQLiteDatabase db) {
 		int result = 0;
 		db.beginTransaction();
 
 		try {
-
 			if (_id > 0) {
-				result += db.update(getTableName(), getContent(), whereIdIs,
-						whereIdArg());
+				result += db.update(getTableName(), getContent(), whereIdIs, whereIdArg());
 			}
 
 			if (result > 0) {
@@ -219,6 +218,7 @@ public abstract class DAO {
 			}
 
 		} catch (SQLException e) {
+			NnnLogger.exception(e);
 			throw e;
 		} finally {
 			db.endTransaction();
@@ -231,9 +231,8 @@ public abstract class DAO {
 		return result > 0;
 	}
 
-	public synchronized Uri insert(final Context context,
-								   final SQLiteDatabase db) {
-		Uri retval = null;
+	public synchronized Uri insert(final Context context, final SQLiteDatabase db) {
+		Uri retval;
 		db.beginTransaction();
 		try {
 			beforeInsert(context, db);
@@ -249,6 +248,7 @@ public abstract class DAO {
 				retval = getUri();
 			}
 		} catch (SQLException e) {
+			NnnLogger.exception(e);
 			throw e;
 		} finally {
 			db.endTransaction();

@@ -59,12 +59,8 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 		// Sync state might have changed, make sure we're spinning when
 		// we should
 		try {
-			if (account != null && ContentResolver.isSyncActive(account, MyContentProvider
-					.AUTHORITY)) {
-				listener.onSyncStartStop(true);
-			} else {
-				listener.onSyncStartStop(false);
-			}
+			listener.onSyncStartStop(account != null
+					&& ContentResolver.isSyncActive(account, MyContentProvider.AUTHORITY));
 		} catch (Exception e) {
 			NnnLogger.debug(SyncStatusMonitor.class, e.getLocalizedMessage());
 		}

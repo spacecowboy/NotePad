@@ -666,7 +666,7 @@ public class TaskDetailFragment extends Fragment {
 			if (mTask != null) {
 				if (mTask.locked) {
 					DialogPassword_ delpf = new DialogPassword_();
-					delpf.setListener(() -> deleteAndClose());
+					delpf.setListener(this::deleteAndClose);
 					delpf.show(getFragmentManager(), "delete_verify");
 				} else {
 					deleteAndClose();

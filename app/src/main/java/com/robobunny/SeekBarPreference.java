@@ -16,13 +16,7 @@
 
 package com.robobunny;
 
-/**
- * Found this on http://robobunny.com/wp/2011/08/13/android-seekbar-preference/
- *
- * A great thank you to Kirk Baucom for posting it online for others to use!
- *
- * It has been modified to handle attributes (strings etc) dynamically.
- */
+
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -38,6 +32,13 @@ import android.widget.TextView;
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 
+/**
+ * Found this on http://robobunny.com/wp/2011/08/13/android-seekbar-preference/
+ *
+ * A great thank you to Kirk Baucom for posting it online for others to use!
+ *
+ * It has been modified to handle attributes (strings etc) dynamically.
+ */
 public class SeekBarPreference extends Preference implements
 		OnSeekBarChangeListener {
 
@@ -129,11 +130,11 @@ public class SeekBarPreference extends Preference implements
 		super.onBindView(view);
 
 		// Set seekbar
-		mSeekBar = (SeekBar) view.findViewById(R.id.prefSeekBar);
+		mSeekBar = view.findViewById(R.id.prefSeekBar);
 		mSeekBar.setMax(mMaxValue - mMinValue);
 		mSeekBar.setOnSeekBarChangeListener(this);
 
-		mStatusText = (TextView) view.findViewById(R.id.seekbarPrefValue);
+		mStatusText = view.findViewById(R.id.seekbarPrefValue);
 
 		// Sets the text etc
 		updateView(view);
@@ -152,11 +153,11 @@ public class SeekBarPreference extends Preference implements
 
 			mSeekBar.setProgress(mCurrentValue - mMinValue);
 
-			TextView unitsRight = (TextView) layout
+			TextView unitsRight = layout
 					.findViewById(R.id.seekBarPrefUnitsRight);
 			unitsRight.setText(mUnitsRight);
 
-			TextView unitsLeft = (TextView) layout
+			TextView unitsLeft = layout
 					.findViewById(R.id.seekBarPrefUnitsLeft);
 			unitsLeft.setText(mUnitsLeft);
 
@@ -204,8 +205,7 @@ public class SeekBarPreference extends Preference implements
 	@Override
 	protected Object onGetDefaultValue(TypedArray ta, int index) {
 
-		int defaultValue = ta.getInt(index, DEFAULT_VALUE);
-		return defaultValue;
+		return ta.getInt(index, DEFAULT_VALUE);
 
 	}
 

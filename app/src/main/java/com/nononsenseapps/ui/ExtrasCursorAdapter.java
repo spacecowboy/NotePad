@@ -113,7 +113,7 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 		viewHolder.texts = new TextView[from.length];
 		int i;
 		for (i = 0; i < from.length; i++) {
-			viewHolder.texts[i] = (TextView) view.findViewById(to[i]);
+			viewHolder.texts[i] = view.findViewById(to[i]);
 		}
 		view.setTag(viewHolder);
 		return viewHolder;

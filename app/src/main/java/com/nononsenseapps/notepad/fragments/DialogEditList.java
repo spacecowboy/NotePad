@@ -176,7 +176,7 @@ public class DialogEditList extends DialogFragment {
 	@Click(resName = "deleteButton")
 	void deleteClicked() {
 		if (mTaskList._id > 0) {
-			DialogDeleteList.showDialog(getFragmentManager(), mTaskList._id, () -> dismiss());
+			DialogDeleteList.showDialog(getFragmentManager(), mTaskList._id, this::dismiss);
 		}
 	}
 

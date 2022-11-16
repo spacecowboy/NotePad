@@ -623,7 +623,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						delpf.show(getFragmentManager(), "multi_delete_verify");
 					} else {
 						DialogDeleteTask.showDialog(getFragmentManager(), -1,
-								() -> pListener.onPasswordConfirmed());
+								pListener::onPasswordConfirmed);
 					}
 				} else if (itemId == R.id.menu_switch_list) {
 					// show move to list dialog
