@@ -93,8 +93,16 @@
 	<string name="donate_to_unlock">Dona per sbloccare</string>
 	<string name="premiums_unlocked_and_thanks">Funzioni premium sbloccate. Grazie per il tuo supporto</string>
 	<string name="notification_channel_name">Promemoria delle note</string>
-	<string name="notification_channel_description">Mostra il contenuto della nota quando arriva l\'ora segnata nel promemoria</string>
+	<string name="notification_channel_description">Mostra il contenuto della nota quando arriva il momento segnato nel promemoria</string>
 	<string name="feature_is_WIP">Ci stiamo ancora lavorando...</string>
+	<string name="permission_denied">Annullato: non hai dato il permesso</string>
+	<string name="special_thanks">Menzioni speciali</string>
+	<string name="no_sync_method_chosen">Non hai attivato la sincronizzazione</string>
+	<string name="gtasks_not_working">Google Tasks (NON FUNZIONA)</string>
+	<string name="file_picker_not_available">Il file picker non è disponibile</string>
+	<string name="filepicker_preference_description">Uri selezionato:\n %1$s \nma invece useremo questo:\n %2$s</string>
+	<string name="choose_backup_folder">Scegli la cartella per i backup</string>
+	<string name="default_location">Posizione predefinita</string>
 	<string name="move">Sposta</string>
 	<string name="move_to">Sposta in</string>
 	<string name="moved_x_to_list">Spostato %1$d in %2$s</string>
