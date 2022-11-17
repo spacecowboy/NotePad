@@ -31,6 +31,7 @@
 		android:layout_marginBottom="20dp"
 		android:fontFamily="sans-serif"
 		android:hint="@string/editor_title_hint"
+		android:importantForAutofill="no"
 		android:inputType="textCapSentences"
 		android:singleLine="true"
 		android:textAppearance="@android:style/TextAppearance.Large"
@@ -60,27 +61,6 @@
 		android:layout_height="48dp"
 		android:spinnerMode="dropdown"
 		tools:listitem="@layout/spinner_item"/>
-
-	<LinearLayout
-		android:id="@+id/taskList"
-		android:layout_width="fill_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="4dp"
-		android:layout_marginBottom="0dp"
-		android:orientation="vertical"
-		android:visibility="gone">
-
-		<EditText
-			android:id="@+id/quickAddFirst"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:fontFamily="sans-serif"
-			android:hint="@string/add_item"
-			android:paddingLeft="16dp"
-			android:singleLine="true"
-			android:textAppearance="?android:attr/textAppearanceMedium"
-			android:textColor="?attr/textColorPrimary"/>
-	</LinearLayout>
 
 	<TextView
 		android:id="@+id/deleteButton"

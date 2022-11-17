@@ -125,7 +125,7 @@
 	<string name="date_header_future">Más tarde</string>
 	<string name="date_header_none">Sin fecha</string>
 	<string name="date_header_completed">Completadas</string>
-	<string name="next_5_days">Próximos 5 dias</string>
+	<string name="next_5_days">Próximos 5 días</string>
 	<string name="this_week">Esta semana</string>
 	<string name="please_select_note">Por favor, seleccione o cree una nota nueva</string>
 	<string name="please_create_note">Por favor, cree una nota nueva</string>
@@ -178,7 +178,7 @@
 	<string name="dashclock_title_activity_tasks_settings">Ajustes NoNonsense Notes</string>
 	<string name="dashclock_today">Hoy</string>
 	<string name="dashclock_tomorrow">Mañana</string>
-	<string name="dashclock_next7">Próximos 7 dias</string>
+	<string name="dashclock_next7">Próximos 7 días</string>
 	<string name="dashclock_anytime">Cualquier día</string>
 	<string name="dashclock_will_show_as_many_as_possible">Se mostrará tanto como sea posible</string>
 	<string name="dashclock_show_only_the_next_task">Mostrar solo la próxima tarea</string>
