@@ -77,12 +77,8 @@ public class ListPrefs extends PreferenceFragment {
 				preference.setSummary(stringValue);
 			}
 
-			if (stringValue.equals(getString(R.string.const_listtype_tasks))) {
-				hideCheckboxes.setEnabled(true);
-			} else {
-				hideCheckboxes.setEnabled(false);
-			}
-
+			hideCheckboxes.setEnabled(
+					stringValue.equals(getString(R.string.const_listtype_tasks)));
 
 			return true;
 		};

@@ -237,9 +237,9 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			 */
 			private static final String SCHEME = "content://";
 
-			/**
-			 * Path parts for the URIs
-			 */
+			// -----------------------
+			// Path parts for the URIs
+			// -----------------------
 
 			/**
 			 * Path part for the Notes URI
@@ -434,9 +434,9 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			 */
 			private static final String SCHEME = "content://";
 
-			/**
-			 * Path parts for the URIs
-			 */
+			// -----------------------
+			// Path parts for the URIs
+			// -----------------------
 
 			/**
 			 * Path part for the Lists URI
@@ -570,9 +570,9 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			 */
 			private static final String SCHEME = "content://";
 
-			/**
-			 * Path parts for the URIs
-			 */
+			// -----------------------
+			// Path parts for the URIs
+			// -----------------------
 
 			/**
 			 * Path part for the Lists URI
@@ -689,9 +689,9 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			 */
 			private static final String SCHEME = "content://";
 
-			/**
-			 * Path parts for the URIs
-			 */
+			// -----------------------
+			// Path parts for the URIs
+			// -----------------------
 
 			/**
 			 * Path part for the Lists URI
@@ -818,9 +818,9 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 			 */
 			private static final String SCHEME = "content://";
 
-			/**
-			 * Path parts for the URIs
-			 */
+			// -----------------------
+			// Path parts for the URIs
+			// -----------------------
 
 			/**
 			 * Path part for the Lists URI
@@ -949,7 +949,7 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 						val = cursor.getString(i);
 						break;
 					case Cursor.FIELD_TYPE_NULL:
-					// case Cursor.FIELD_TYPE_BLOB:
+					case Cursor.FIELD_TYPE_BLOB: // the legacy DB did not have BLOBs, anyway
 					default:
 						val = null;
 				}

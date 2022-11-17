@@ -215,7 +215,7 @@ public class ActivityMain extends AppCompatActivity
 		} else if (itemId == R.id.drawer_menu_createlist) {
 			// Show fragment
 			DialogEditList_ dialog = DialogEditList_.getInstance();
-			dialog.setListener(id -> openList(id));
+			dialog.setListener(this::openList);
 			dialog.show(getSupportFragmentManager(), "fragment_create_list");
 			return true;
 		} else if (itemId == R.id.menu_preferences) {
@@ -318,14 +318,14 @@ public class ActivityMain extends AppCompatActivity
 	}
 
 	private void handleSyncRequest() {
-		/*
+		/* TODO check this
 		{
 			// in version 6.0.0, it does this:
 			SyncHelper.onManualSyncRequest(this);
 			return;
 		}
 
-		// or you have this:
+		or you can have this:
 		{
 			boolean syncing = SyncHelper.onManualSyncRequest(this);
 			if (!syncing) setRefreshOfAllSwipeLayoutsTo(false);
@@ -353,7 +353,7 @@ public class ActivityMain extends AppCompatActivity
 					try {
 						Thread.sleep(30000);
 					} catch (InterruptedException e) {
-						e.printStackTrace();
+						NnnLogger.exception(e);
 					}
 					return null;
 				}
@@ -367,13 +367,14 @@ public class ActivityMain extends AppCompatActivity
 			at.execute();
 		} else {
 			// explain to the user why the swipe-refresh was canceled
-			Toast.makeText(this, R.string.no_sync_method_chosen, Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, R.string.no_sync_method_chosen,
+					Toast.LENGTH_SHORT).show();
 			setRefreshOfAllSwipeLayoutsTo(false);
 		}
 	}
 
 	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
+	public void onConfigurationChanged(@NonNull Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		if (mDrawerToggle != null) {
 			mDrawerToggle.onConfigurationChanged(newConfig);
@@ -741,20 +742,14 @@ public class ActivityMain extends AppCompatActivity
 			return true;
 		}
 
-		if (intent.getData() != null &&
+		return intent.getData() != null &&
 				(Intent.ACTION_EDIT.equals(intent.getAction()) ||
 						Intent.ACTION_VIEW.equals(intent.getAction()) ||
 						Intent.ACTION_INSERT.equals(intent.getAction())) &&
-				(intent.getData().getPath().startsWith(
-						LegacyDBHelper.NotePad.Notes.PATH_VISIBLE_NOTES) ||
-						intent.getData().getPath()
-								.startsWith(LegacyDBHelper.NotePad.Notes.PATH_NOTES) ||
+				(intent.getData().getPath().startsWith(NotePad.Notes.PATH_VISIBLE_NOTES) ||
+						intent.getData().getPath().startsWith(NotePad.Notes.PATH_NOTES) ||
 						intent.getData().getPath().startsWith(Task.URI.getPath())) &&
-				!intent.getData().getPath().startsWith(TaskList.URI.getPath())) {
-			return true;
-		}
-
-		return false;
+				!intent.getData().getPath().startsWith(TaskList.URI.getPath());
 	}
 
 	void setHomeAsDrawer(final boolean value) {

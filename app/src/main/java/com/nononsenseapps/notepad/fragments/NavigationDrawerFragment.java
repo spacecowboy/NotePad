@@ -42,9 +42,6 @@ import androidx.appcompat.widget.Toolbar;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -62,7 +59,7 @@ import java.util.ArrayList;
  * This fragment is the view which is displayed in the left drawer.
  * Any activity containing it must implement NavigationDrawerCallbacks.
  */
-class NavigationDrawerFragment_USELESS extends Fragment{
+abstract class NavigationDrawerFragment_USELESS extends Fragment{
 
 	// TODO useless ? you may want to delete this
 
@@ -277,11 +274,6 @@ class NavigationDrawerFragment_USELESS extends Fragment{
 			setHasStableIds(true);
 			this.headers = headers;
 			this.footers = footers;
-		}
-
-		public void setData(Cursor cursor) {
-			mCursor = cursor;
-			notifyDataSetChanged();
 		}
 
 		@NonNull

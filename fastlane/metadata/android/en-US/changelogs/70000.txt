@@ -1,8 +1,9 @@
 v7.0.0: NoNonsense Notes
 
 Highlights:
-- added compatibility to new android versions
-- Json backups and .org files are now saved in Android/data/.../ making the folder NoNonsenseNotes/ is useless
+- now compatible with android 12
+- drop Google Tasks synchronization
+- Org and Json files can now be saved in a few selected places. You can choose which
 
 Details:
 - raised target SDK to version 32

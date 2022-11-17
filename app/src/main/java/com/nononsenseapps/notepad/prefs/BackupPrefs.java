@@ -83,7 +83,7 @@ public class BackupPrefs extends PreferenceFragment {
 	 * <br/>
 	 * <code>setupFolderListPreference(this.getContext(),this,this.KEY_BACKUP_LOCATION);</code>
 	 */
-	private static void setupFolderListPreference(@NonNull Context context,
+	public static void setupFolderListPreference(@NonNull Context context,
 												  @NonNull PreferenceFragment prefPage,
 												  @NonNull String PREFERENCE_KEY) {
 		// list preference to choose the backup folder
@@ -91,7 +91,7 @@ public class BackupPrefs extends PreferenceFragment {
 
 		var sharPrefs = PreferenceManager.getDefaultSharedPreferences(context);
 		String chosen = sharPrefs.getString(PREFERENCE_KEY, null);
-		String summary = chosen == null ? "" : chosen;
+		String summary = chosen != null ? chosen : context.getString(R.string.default_location);
 
 		ListPreference lPref = (ListPreference) prefPage.findPreference(PREFERENCE_KEY);
 		lPref.setSummary(summary);

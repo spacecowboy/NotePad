@@ -3,6 +3,8 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	android:layout_width="match_parent"
 	android:layout_height="36dp"
+	xmlns:tools="http://schemas.android.com/tools"
+	tools:ignore="HardcodedText"
 	android:orientation="horizontal">
 
 	<com.nononsenseapps.utils.views.GreyableToggleButton

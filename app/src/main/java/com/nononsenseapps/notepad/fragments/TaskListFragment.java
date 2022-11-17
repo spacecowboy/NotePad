@@ -42,6 +42,7 @@ import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
@@ -309,13 +310,17 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		mRowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
 		mHideCheckbox = prefs.getBoolean(getString(R.string.pref_hidecheckboxes), false);
 
-		// TODO do we NEED this ?
-		// mSortType = prefs.getString(getString(R.string.pref_sorttype),
-		// getString(R.string.default_sorttype));
-		// mListType = prefs.getString(getString(R.string.pref_listtype),
-		// getString(R.string.default_listtype));
+		{
+			// TODO do we NEED this ?
+			// mSortType = prefs.getString(getString(R.string.pref_sorttype), getString(R.string.default_sorttype));
+			// mListType = prefs.getString(getString(R.string.pref_listtype), getString(R.string.default_listtype));
+		}
+
+
+
 
 		mCallback = new LoaderCallbacks<>() {
+			@NonNull
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
 				if (id == 0 /* LOADER_CURRENT_LIST */) {
@@ -618,7 +623,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						delpf.show(getFragmentManager(), "multi_delete_verify");
 					} else {
 						DialogDeleteTask.showDialog(getFragmentManager(), -1,
-								() -> pListener.onPasswordConfirmed());
+								pListener::onPasswordConfirmed);
 					}
 				} else if (itemId == R.id.menu_switch_list) {
 					// show move to list dialog

@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.utils.views;
 
+import android.annotation.SuppressLint;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
@@ -35,6 +36,7 @@ import android.text.style.URLSpan;
 import android.text.util.Linkify;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
@@ -303,6 +305,12 @@ public class TitleNoteTextView extends androidx.appcompat.widget.AppCompatTextVi
 		}
 	}
 
+	/**
+	 * either opens the note or opens a link in the browser. It does not call
+	 * {@link View#performClick()} because there's no need to, the default
+	 * behavior is fine.
+	 */
+	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (!(this.getText() instanceof Spanned)) {
@@ -340,6 +348,7 @@ public class TitleNoteTextView extends androidx.appcompat.widget.AppCompatTextVi
 					onClickableSpanClicked(link[0]);
 					break;
 				case MotionEvent.ACTION_DOWN:
+					// select text
 					Selection.setSelection(buffer,
 							buffer.getSpanStart(link[0]), buffer.getSpanEnd(link[0]));
 					break;
@@ -370,7 +379,7 @@ public class TitleNoteTextView extends androidx.appcompat.widget.AppCompatTextVi
 			// browser tab, which I prefer.
 			// TODO If anyone reading this dislikes this behavior, we can add a setting to the
 			//  preferences page, just open an issue on github and explain
-			Uri uri = Uri.parse(((URLSpan)cs).getURL());
+			Uri uri = Uri.parse(((URLSpan) cs).getURL());
 			Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 
 			try {

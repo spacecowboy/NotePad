@@ -19,7 +19,6 @@ package com.nononsenseapps.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;
@@ -27,7 +26,6 @@ import androidx.annotation.NonNull;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
 
 /**
  * Helper class to save common options to shared preferences.

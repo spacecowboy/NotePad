@@ -105,8 +105,7 @@ public class EspressoHelper {
 	 */
 	private static Boolean isShowCaseOverlayVisible() {
 		try {
-			onView(instanceOf(TapTargetView.class))
-					.check(matches(isDisplayed()));
+			onView(instanceOf(TapTargetView.class)).check(matches(isDisplayed()));
 			return true;
 		} catch (AmbiguousViewMatcherException ignored) {
 			// we have at least one, so it counts as visible
@@ -149,8 +148,12 @@ public class EspressoHelper {
 		// .waitForIdleSync(); does not work, use this instead:
 		SystemClock.sleep(1800);
 
-		// set it back to it's default rotation
+		// rotate it more
 		uiAuto.setRotation(UiAutomation.ROTATION_FREEZE_0);
+		SystemClock.sleep(1800);
+
+		// unfreeze it and let it go back to its default
+		uiAuto.setRotation(UiAutomation.ROTATION_UNFREEZE);
 		SystemClock.sleep(1800);
 	}
 

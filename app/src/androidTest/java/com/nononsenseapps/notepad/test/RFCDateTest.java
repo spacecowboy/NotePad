@@ -43,6 +43,11 @@ public class RFCDateTest extends TestCase {
 //		assertEquals("If UTC, difference should be two hours: " + atime + ", " + utctime, twohours, atime - utctime);
 //	}
 
+	public void test_asRFC3339ZuluDate() {
+		String result = RFC3339Date.asRFC3339ZuluDate(1402275911568L);
+		assertEquals("Dates should be equal", result, "2014-06-09T00:00:00Z");
+	}
+
 	public void testParseRFCDateBackAndForth() {
 		// Make sure conversion is consistent
 		// Calendar returns local time

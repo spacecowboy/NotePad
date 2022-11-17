@@ -36,6 +36,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 import android.provider.DocumentsContract;
 import android.widget.Toast;
 
@@ -48,7 +49,6 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.MyContentProvider;
 import com.nononsenseapps.notepad.sync.googleapi.GoogleTasksClient;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
-import com.nononsenseapps.notepad.sync.orgsync.SDSynchronizer;
 import com.nononsenseapps.util.FileHelper;
 import com.nononsenseapps.util.PermissionsHelper;
 import com.nononsenseapps.util.SharedPreferencesHelper;
@@ -60,7 +60,7 @@ import java.io.IOException;
 
 public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceChangeListener {
 
-	// TODO all of these are useles. Maybe we can reuse them if we find a newer sync service
+	// TODO these 6 are useles. Maybe we can reuse them if we find a newer sync service
 	//  to replace google tasks
 	public static final String KEY_SYNC_ENABLE = "syncEnablePref";
 	public static final String KEY_ACCOUNT = "accountPref";
@@ -78,7 +78,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	// SD sync
 	public static final String KEY_SD_ENABLE = "pref_sync_sd_enabled";
 	public static final String KEY_SD_DIR_URI = "pref_sync_sd_dir_uri";
-	public static final String KEY_SD_USE_DOC_DIR = "pref_sync_sd_in_doc_folder";
+	public static final String KEY_SD_DIR = "pref_sync_sd_dir";
 	private static final int PICK_SD_DIR_CODE = 1;
 
 
@@ -89,7 +89,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	/**
 	 * Where you click to choose the directory to save the org files
 	 */
-	private Preference prefSdDir;
+	private Preference prefSdDirURI;
 
 	public static void setSyncInterval(Context activity, SharedPreferences sharedPreferences) {
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
@@ -167,13 +167,13 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 			return true;
 		});
 
-		// folder for SD sync on the internal storage.
+		// folder URI for SD sync on the internal storage.
 		// this setting is DISABLED because the code can't use the URIs provided by the filepicker
-		prefSdDir = findPreference(KEY_SD_DIR_URI);
-		setSdDirSummary(sharedPrefs);
+		prefSdDirURI = findPreference(KEY_SD_DIR_URI);
+		setSummaryForSdDirURI(sharedPrefs);
 
 		// when the user clicks on the settings entry to choose the directory, do this
-		prefSdDir.setOnPreferenceClickListener(preference -> {
+		prefSdDirURI.setOnPreferenceClickListener(preference -> {
 			boolean ok = PermissionsHelper.hasPermissions(
 					this.getContext(), PermissionsHelper.PERMISSIONS_SD);
 			if (ok) {
@@ -188,12 +188,17 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 			// tell android to update the preference value
 			return true;
 		});
+
+		// for the preference that shows a popup to choose among a few possible folders
+		BackupPrefs.setupFolderListPreference(this.getContext(), this, KEY_SD_DIR);
 	}
 
 	@Override
 	public void onRequestPermissionsResult(int reqCode, @NonNull String[] permissions,
 										   @NonNull int[] grantResults) {
+		// if we got all permissions
 		boolean granted = PermissionsHelper.permissionsGranted(permissions, grantResults);
+
 		switch (reqCode) {
 			case PermissionsHelper.REQUEST_CODE_SD_PERMISSIONS:
 				if (!granted) {
@@ -204,6 +209,9 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 
 					// SD card synchronization was disabled, but the UI does not know: reload
 					onCreate(null);
+					// TODO delete the onCreate() call and try this instead:
+					//  var myPref = (SwitchPreference)findPreference(KEY_SD_ENABLE);
+					//  if (myPref.isChecked()) myPref.setChecked(false);
 				}
 				break;
 			case PermissionsHelper.REQUEST_CODE_GTASKS_PERMISSIONS:
@@ -281,33 +289,51 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		startActivityForResult(i, PICK_ACCOUNT_CODE);
 	}
 
+	/**
+	 * Called when a shared preference is changed, added, or removed. This
+	 * may be called even if a preference is set to its existing value.
+	 * <p/>
+	 * <p>This callback will be run on your main thread.
+	 *
+	 * @param prefs The {@link SharedPreferences} that received the change.
+	 * @param key   The key of the preference that was changed, added, or removed
+	 */
 	public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
 		try {
 			NnnLogger.debug(SyncPrefs.class, "onChanged");
 			if (activity.isFinishing()) {
 				// Setting the summary now would crash it with
 				// IllegalStateException since we are not attached to a view
-			} else {
-				if (KEY_SYNC_ENABLE.equals(key)) {
+				return;
+			}
+
+			// => now we can safely continue
+			switch (key) {
+				case KEY_SYNC_ENABLE:
 					toggleSync(prefs);
-				} else if (KEY_BACKGROUND_SYNC.equals(key)) {
+					break;
+				case KEY_BACKGROUND_SYNC:
 					setSyncInterval(activity, prefs);
-				} else if (KEY_ACCOUNT.equals(key)) {
+					break;
+				case KEY_ACCOUNT:
 					NnnLogger.debug(SyncPrefs.class, "account");
 					prefAccount.setTitle(prefs.getString(KEY_ACCOUNT, ""));
-				} else if (KEY_SD_ENABLE.equals(key) || KEY_SD_USE_DOC_DIR.equals(key)) {
+					// prefAccount.setSummary(getString(R.string.settings_account_summary));
+					break;
+				case KEY_SD_ENABLE:
+				case KEY_SD_DIR:
 					// Restart the sync service
 					OrgSyncService.stop(getActivity());
-				} else if (KEY_SD_DIR_URI.equals(key)) {
-					setSdDirSummary(prefs);
-				}
+					break;
+				case KEY_SD_DIR_URI:
+					setSummaryForSdDirURI(prefs);
+					break;
 			}
 		} catch (IllegalStateException e) {
 			// This is just in case the "isFinishing" wouldn't be enough
 			// The isFinishing will try to prevent us from doing something stupid
 			// This catch prevents the app from crashing if we do something stupid
 		}
-
 	}
 
 	@Override
@@ -331,7 +357,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		}
 
 		// "data" contains the URI for the user-selected directory, A.K.A. the "document tree"
-		onSdDirectoryPicked(data.getData());
+		onSdDirUriPicked(data.getData());
 	}
 
 	/**
@@ -339,7 +365,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	 *
 	 * @param uri points to the chosen "directory"
 	 */
-	private void onSdDirectoryPicked(Uri uri) {
+	private void onSdDirUriPicked(Uri uri) {
 
 		// represents the directory that the user just picked
 		// Use this instead of the "File" class
@@ -437,6 +463,9 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		}
 	}
 
+	/**
+	 * called when the preference with {@link SyncPrefs#KEY_SYNC_ENABLE} changes
+	 */
 	private void toggleSync(SharedPreferences sharedPreferences) {
 		boolean enabled = sharedPreferences.getBoolean(KEY_SYNC_ENABLE, false);
 		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
@@ -453,6 +482,13 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 				} else {
 					// set unsyncable
 					// ContentResolver.setIsSyncable(getAccount(AccountManager.get(activity), accountName), MyContentProvider.AUTHORITY, 0);
+
+					// useless ??
+					// SyncGtaskHelper.toggleSync(getActivity(), sharedPreferences);
+					// Synchronize view also
+					// if (preferenceSyncGTasks.isChecked()) {
+					//	preferenceSyncGTasks.setChecked(false);
+					// }
 				}
 			}
 		} else if (enabled) {
@@ -469,7 +505,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 	 * Writes the description in the preferences item that lets users open the filepicker.
 	 * It is currently disabled
 	 */
-	private void setSdDirSummary(final SharedPreferences sharedPreferences) {
+	private void setSummaryForSdDirURI(final SharedPreferences sharedPreferences) {
 		String actualDir = FileHelper.getUserSelectedOrgDir(getContext());
 		String valToSet = sharedPreferences.getString(KEY_SD_DIR_URI, null);
 		if (valToSet == null) {
@@ -481,7 +517,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 			valToSet = getContext().getString(R.string.filepicker_preference_description,
 					Uri.parse(valToSet).getPath(), actualDir);
 		}
-		prefSdDir.setSummary(valToSet);
+		prefSdDirURI.setSummary(valToSet);
 	}
 
 }

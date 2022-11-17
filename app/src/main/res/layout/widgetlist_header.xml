@@ -18,6 +18,7 @@
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
+	android:id="@+id/relativeLayout_of_the_widgetlist_header"
 	android:layout_height="wrap_content"
 	tools:ignore="HardcodedText">
 

@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class RFC3339Date {
@@ -30,17 +31,20 @@ public class RFC3339Date {
 			return null;
 		}
 
-		Date d = new Date();
+		Date d;
 
 		// if there is no time zone, we don't need to do any special parsing.
 		if (datestring.endsWith("Z")) {
 			try {
-				SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'"); // spec for RFC3339
+				SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'",
+						Locale.US); // spec for RFC3339
 				s.setCalendar(Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 				d = s.parse(datestring);
 			} catch (ParseException pe) { // try again with optional
 				// decimals
-				SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'");// spec for RFC3339
+				SimpleDateFormat s = new SimpleDateFormat(
+						"yyyy-MM-dd'T'HH:mm:ss.SSSSSS'Z'",
+						Locale.US); // spec for RFC3339
 				// (with fractional seconds)
 				s.setCalendar(Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 				s.setLenient(true);
@@ -53,14 +57,14 @@ public class RFC3339Date {
 			return d;
 		}
 
-		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ");
+		SimpleDateFormat s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US);
 		// spec for RFC3339
 		s.setCalendar(Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 
 		try {
 			d = s.parse(datestring);
 		} catch (java.text.ParseException pe) { // try again with optional decimals
-			s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ");
+			s = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSSSSZ", Locale.US);
 			s.setCalendar(Calendar.getInstance(TimeZone.getTimeZone("UTC")));
 			// spec for RFC3339(with fractional seconds)
 			s.setLenient(true);
@@ -134,17 +138,19 @@ public class RFC3339Date {
 		cal.setTimeInMillis(time);
 
 		// Extract the date
-		return String.format("%d", cal.get(Calendar.YEAR)) +
-				"-" + String.format("%02d", (1 + cal.get(Calendar.MONTH))) +
-				"-" + String.format("%02d", cal.get(Calendar.DAY_OF_MONTH)) +
+		return String.format(Locale.US, "%d", cal.get(Calendar.YEAR)) +
+				"-" +
+				String.format(Locale.US, "%02d", (1 + cal.get(Calendar.MONTH))) +
+				"-" +
+				String.format(Locale.US, "%02d", cal.get(Calendar.DAY_OF_MONTH)) +
 				"T00:00:00Z";
 	}
 
 	private static String asRFC3339(final java.util.Date date) {
-		if (date == null)
-			return null;
-		final SimpleDateFormat s = new SimpleDateFormat(
-				"yyyy-MM-dd'T'HH:mm:ssZ");// spec for RFC3339
+		if (date == null) return null;
+		// spec for RFC3339:
+		final SimpleDateFormat s =
+				new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ssZ", Locale.US);
 		return s.format(date);
 	}
 }

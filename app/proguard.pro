@@ -16,5 +16,3 @@
 -dontwarn com.google.appengine.api.urlfetch.**
 -dontwarn com.squareup.okhttp.**
 -dontwarn org.joda.convert.**
--dontwarn rx.Observable$OnSubscribe
--dontwarn rx.Observable

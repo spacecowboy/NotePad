@@ -23,6 +23,8 @@
 
 <!-- 	Modified to include units and current value / SciencyGuy -->
 
+<!-- TODO delete after robobunny seekbar preference -->
+
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"

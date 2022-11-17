@@ -78,30 +78,30 @@ public class WeekDaysView extends LinearLayout implements
 			final long base = gc.getTimeInMillis();
 			final long day = 24 * 60 * 60 * 1000;
 
-			monday = ((GreyableToggleButton) findViewById(R.id.day1));
+			monday = findViewById(R.id.day1);
 			initializeToggleButton(dayFormat.format(gc.getTime()), monday);
 
-			tuesday = ((GreyableToggleButton) findViewById(R.id.day2));
+			tuesday = findViewById(R.id.day2);
 			gc.setTimeInMillis(base + 1 * day);
 			initializeToggleButton(dayFormat.format(gc.getTime()), tuesday);
 
-			wednesday = ((GreyableToggleButton) findViewById(R.id.day3));
+			wednesday = findViewById(R.id.day3);
 			gc.setTimeInMillis(base + 2 * day);
 			initializeToggleButton(dayFormat.format(gc.getTime()), wednesday);
 
-			thursday = ((GreyableToggleButton) findViewById(R.id.day4));
+			thursday = findViewById(R.id.day4);
 			gc.setTimeInMillis(base + 3 * day);
 			initializeToggleButton(dayFormat.format(gc.getTime()), thursday);
 
-			friday = ((GreyableToggleButton) findViewById(R.id.day5));
+			friday = findViewById(R.id.day5);
 			gc.setTimeInMillis(base + 4 * day);
 			initializeToggleButton(dayFormat.format(gc.getTime()), friday);
 
-			saturday = ((GreyableToggleButton) findViewById(R.id.day6));
+			saturday = findViewById(R.id.day6);
 			gc.setTimeInMillis(base + 5 * day);
 			initializeToggleButton(dayFormat.format(gc.getTime()), saturday);
 
-			sunday = ((GreyableToggleButton) findViewById(R.id.day7));
+			sunday = findViewById(R.id.day7);
 			gc.setTimeInMillis(base + 6 * day);
 			initializeToggleButton(dayFormat.format(gc.getTime()), sunday);
 		} catch (Exception e) {

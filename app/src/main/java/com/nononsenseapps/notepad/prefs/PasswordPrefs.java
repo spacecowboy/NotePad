@@ -63,8 +63,8 @@ public class PasswordPrefs extends Fragment {
 				container, false);
 
 		// Set click listeners for the button here
-		password1 = (EditText) layout.findViewById(R.id.tempPassword1);
-		password2 = (EditText) layout.findViewById(R.id.tempPassword2);
+		password1 = layout.findViewById(R.id.tempPassword1);
+		password2 = layout.findViewById(R.id.tempPassword2);
 
 		layout.findViewById(R.id.applyPassword).setOnClickListener(v -> applyPassword());
 		layout.findViewById(R.id.clearPassword).setOnClickListener(v -> clearPassword());

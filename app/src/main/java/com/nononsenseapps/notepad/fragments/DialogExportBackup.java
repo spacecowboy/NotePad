@@ -21,7 +21,6 @@ import android.app.FragmentManager;
 import android.os.Bundle;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.sync.files.JSONBackup;
 import com.nononsenseapps.util.FileHelper;
 
 public class DialogExportBackup extends DialogConfirmBaseV11 {

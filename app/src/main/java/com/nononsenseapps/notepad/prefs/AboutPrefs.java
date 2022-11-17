@@ -27,11 +27,7 @@ import android.view.ViewGroup;
 
 public class AboutPrefs extends Fragment {
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-							 Bundle savedInstanceState) {
-		View layout = inflater.inflate(R.layout.app_pref_about_layout,
-				container, false);
-
-		return layout;
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savInstState) {
+		return inflater.inflate(R.layout.app_pref_about_layout, container, false);
 	}
 }

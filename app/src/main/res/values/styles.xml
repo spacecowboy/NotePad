@@ -71,7 +71,7 @@
 
 	<style name="FragmentHint">
 		<item name="android:enabled">false</item>
-		<item name="android:fontFamily" tools:targetApi="jelly_bean">sans-serif-light</item>
+		<item name="android:fontFamily">sans-serif-light</item>
 		<item name="android:paddingTop">4dip</item>
 		<item name="android:textColor">?android:attr/textColorSecondary</item>
 		<item name="android:textAppearance">?android:attr/textAppearanceLarge</item>

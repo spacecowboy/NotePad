@@ -397,11 +397,8 @@ public class ListWidgetConfig extends AppCompatActivity {
 
 	@AfterViews
 	void setupConfig() {
-
 		final WidgetPrefs widgetPrefs = new WidgetPrefs(this, appWidgetId);
 
-		// final String[] sortOrderValues = getResources().getStringArray(
-		// R.array.sorting_ordervalues_preference);
 		final String[] sortTypeValues = getResources().getStringArray(
 				R.array.sortingvalues_preference);
 		final String[] themeValues = getResources().getStringArray(
@@ -425,12 +422,11 @@ public class ListWidgetConfig extends AppCompatActivity {
 			}
 
 			@Override
-			public void onNothingSelected(AdapterView<?> parent) {
-			}
+			public void onNothingSelected(AdapterView<?> parent) {}
 		});
-		sortingSpinner.setSelection(getArrayPositionOf(sortTypeValues,
-				widgetPrefs.getString(KEY_SORT_TYPE,
-						getString(R.string.default_sorttype))));
+		sortingSpinner.setSelection(getArrayPositionOf(
+				sortTypeValues,
+				widgetPrefs.getString(KEY_SORT_TYPE, getString(R.string.default_sorttype))));
 
 		themeSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
@@ -440,19 +436,14 @@ public class ListWidgetConfig extends AppCompatActivity {
 				final int mTheme;
 				final int primaryTextColor;
 				final int secondaryTextColor;
-				if (theme
-						.equals(getString(R.string.settings_summary_theme_light))) {
+				if (theme.equals(getString(R.string.settings_summary_theme_light))) {
 					mTheme = THEME_LIGHT;
-					primaryTextColor = getResources().getColor(
-							android.R.color.primary_text_light);
-					secondaryTextColor = getResources().getColor(
-							android.R.color.secondary_text_light);
+					primaryTextColor = getResources().getColor(android.R.color.primary_text_light);
+					secondaryTextColor = getResources().getColor(android.R.color.secondary_text_light);
 				} else {
 					mTheme = THEME_DARK;
-					primaryTextColor = getResources().getColor(
-							android.R.color.primary_text_dark);
-					secondaryTextColor = getResources().getColor(
-							android.R.color.secondary_text_dark);
+					primaryTextColor = getResources().getColor(android.R.color.primary_text_dark);
+					secondaryTextColor = getResources().getColor(android.R.color.secondary_text_dark);
 				}
 				widgetPrefs.putInt(KEY_THEME, mTheme);
 				widgetPrefs.putInt(KEY_TEXTPRIMARY, primaryTextColor);
@@ -461,8 +452,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 			}
 
 			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
+			public void onNothingSelected(AdapterView<?> arg0) {}
 		});
 		final String currentThemeString;
 		if (widgetPrefs.getInt(KEY_THEME, DEFAULT_THEME) == THEME_LIGHT) {
@@ -473,52 +463,43 @@ public class ListWidgetConfig extends AppCompatActivity {
 		themeSpinner.setSelection(getSpinnerPositionOf(
 				themeSpinner.getAdapter(), currentThemeString));
 
-		itemRowsSeekBar
-				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+		itemRowsSeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
 
-					@Override
-					public void onStopTrackingTouch(SeekBar seekBar) {
-					}
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {}
 
-					@Override
-					public void onStartTrackingTouch(SeekBar seekBar) {
-					}
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {}
 
-					@Override
-					public void onProgressChanged(SeekBar seekBar,
-												  int progress, boolean fromUser) {
-						// Plus one since seekbars start at zero
-						widgetPrefs.putInt(KEY_TITLEROWS, progress + 1);
-						// Only need to reload existing loader
-						if (mNotesAdapter != null) {
-							mNotesAdapter.notifyDataSetChanged();
-						}
-					}
-				});
-		itemRowsSeekBar.setProgress(widgetPrefs.getInt(KEY_TITLEROWS,
-				DEFAULT_ROWS) - 1);
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+				// Plus one since seekbars start at zero
+				widgetPrefs.putInt(KEY_TITLEROWS, progress + 1);
+				// Only need to reload existing loader
+				if (mNotesAdapter != null) {
+					mNotesAdapter.notifyDataSetChanged();
+				}
+			}
+		});
+		itemRowsSeekBar.setProgress(widgetPrefs.getInt(KEY_TITLEROWS, DEFAULT_ROWS) - 1);
 
-		transparencySeekBar
-				.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
-					@Override
-					public void onStopTrackingTouch(SeekBar seekBar) {
-					}
+		transparencySeekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
+			@Override
+			public void onStopTrackingTouch(SeekBar seekBar) {}
 
-					@Override
-					public void onStartTrackingTouch(SeekBar seekBar) {
-					}
+			@Override
+			public void onStartTrackingTouch(SeekBar seekBar) {}
 
-					@Override
-					public void onProgressChanged(SeekBar seekBar,
-												  int progress, boolean fromUser) {
+			@Override
+			public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
 
-						final int color = getHomescreenBackgroundColor(progress,
-								widgetPrefs.getInt(KEY_SHADE_COLOR, DEFAULT_SHADE));
+				final int color = getHomescreenBackgroundColor(progress,
+						widgetPrefs.getInt(KEY_SHADE_COLOR, DEFAULT_SHADE));
 
-						widgetPrefs.putInt(KEY_SHADE_COLOR, color);
-						updateBG(color);
-					}
-				});
+				widgetPrefs.putInt(KEY_SHADE_COLOR, color);
+				updateBG(color);
+			}
+		});
 		// Set current item
 		int opacity = widgetPrefs.getInt(KEY_SHADE_COLOR, DEFAULT_SHADE);
 		// Isolate the alpha
@@ -530,8 +511,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 
 		listSpinner.setOnItemSelectedListener(new OnItemSelectedListener() {
 			@Override
-			public void onItemSelected(AdapterView<?> adapter, View arg1,
-									   int pos, long id) {
+			public void onItemSelected(AdapterView<?> adapter, View arg1, int pos, long id) {
 				widgetPrefs.putLong(KEY_LIST, id);
 				try {
 					widgetPrefs.putString(KEY_LIST_TITLE, ((Cursor) adapter
@@ -549,8 +529,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 			}
 
 			@Override
-			public void onNothingSelected(AdapterView<?> arg0) {
-			}
+			public void onNothingSelected(AdapterView<?> arg0) {}
 		});
 		mListAdapter = new ExtrasCursorAdapter(this,
 				android.R.layout.simple_spinner_dropdown_item, null,
@@ -561,11 +540,10 @@ public class ListWidgetConfig extends AppCompatActivity {
 
 		listSpinner.setAdapter(mListAdapter);
 
-		transparentHeaderCheckBox
-				.setOnCheckedChangeListener((buttonView, isChecked) -> {
-					widgetHeader.setVisibility(isChecked ? View.GONE : View.VISIBLE);
-					widgetPrefs.putBoolean(KEY_HIDDENHEADER, isChecked);
-				});
+		transparentHeaderCheckBox.setOnCheckedChangeListener((buttonView, isChecked) -> {
+			widgetHeader.setVisibility(isChecked ? View.GONE : View.VISIBLE);
+			widgetPrefs.putBoolean(KEY_HIDDENHEADER, isChecked);
+		});
 		transparentHeaderCheckBox
 				.setChecked(widgetPrefs.getBoolean(KEY_HIDDENHEADER, false));
 
@@ -596,7 +574,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 		return pos;
 	}
 
-	private int getSpinnerPositionOf(final Adapter adapter, final String entry) {
+	private static int getSpinnerPositionOf(final Adapter adapter, final String entry) {
 		if (adapter == null || adapter.getCount() == 0) return 0;
 		int pos = 0;
 		for (int i = 0; i < adapter.getCount(); i++) {
@@ -608,7 +586,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 		return pos;
 	}
 
-	private int getArrayPositionOf(final String[] array, final String entry) {
+	private static int getArrayPositionOf(final String[] array, final String entry) {
 		if (array == null || array.length == 0) return 0;
 		int pos = 0;
 		for (int i = 0; i < array.length; i++) {
@@ -683,8 +661,8 @@ public class ListWidgetConfig extends AppCompatActivity {
 		final static int headerType = 1;
 		final Context mContext;
 
-		public SimpleWidgetPreviewAdapter(Context context, int layout,
-										  int headerLayout, Cursor c, String[] from, int[] to, int flags) {
+		public SimpleWidgetPreviewAdapter(Context context, int layout, int headerLayout,
+										  Cursor c, String[] from, int[] to, int flags) {
 			super(context, layout, c, from, to, flags);
 			mItemLayout = layout;
 			mHeaderLayout = headerLayout;

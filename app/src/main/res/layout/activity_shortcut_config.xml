@@ -36,21 +36,8 @@
 		android:spinnerMode="dropdown"
 		tools:listitem="@android:layout/simple_spinner_dropdown_item"/>
 
-	<!--    <CheckBox
-		   android:id="@+id/createNoteCheckbox"
-		   android:layout_width="match_parent"
-		   android:layout_height="@dimen/list_item_min_size"
-		   android:layout_alignParentLeft="true"
-		   android:layout_below="@id/listSpinner"
-		   android:layout_marginLeft="16dp"
-		   android:layout_marginRight="16dp"
-		   android:checked="true"
-		   android:text="@string/title_create"
-		   android:textAppearance="@android:style/TextAppearance.Holo.Medium"
-		   android:textColor="?android:attr/textColorPrimary" /> -->
-
-	<Switch
-		android:id="@+id/noteSwitch"
+	<androidx.appcompat.widget.SwitchCompat
+		android:id="@+id/createNoteSwitch"
 		android:layout_width="match_parent"
 		android:layout_height="@dimen/list_item_min_size"
 		android:layout_below="@id/listSpinner"
@@ -67,7 +54,7 @@
 		android:id="@+id/textView2"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_below="@+id/noteSwitch"
+		android:layout_below="@+id/createNoteSwitch"
 		android:layout_marginLeft="16dp"
 		android:layout_marginTop="2dp"
 		android:layout_marginRight="16dp"

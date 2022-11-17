@@ -12,13 +12,18 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static junit.framework.Assert.assertTrue;
 import static org.hamcrest.Matchers.allOf;
 import static org.hamcrest.Matchers.anything;
+import static org.hamcrest.Matchers.instanceOf;
+import static org.hamcrest.Matchers.not;
 
 import android.view.View;
 import android.widget.ListView;
 
 import androidx.test.espresso.ViewAssertion;
+import androidx.test.espresso.matcher.CursorMatchers;
 import androidx.test.filters.LargeTest;
 
+import com.mobeta.android.dslv.DragSortListView;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 
 import org.hamcrest.Description;
@@ -40,31 +45,10 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 			"  ", "     "
 	};
 
-	private static int getNumberOfNotesInList() {
-		final int[] numberOfAdapterItems = new int[1];
-
-		var myMatcher = new TypeSafeMatcher<View>() {
-			@Override
-			public boolean matchesSafely(View view) {
-				ListView listView = (ListView) view;
-
-				//here we assume the adapter has been fully loaded already
-				numberOfAdapterItems[0] = listView.getAdapter().getCount();
-				return true;
-			}
-
-			@Override
-			public void describeTo(Description description) {}
-		};
-
-		onView(allOf(isDisplayed(), withId(android.R.id.list))).check(matches(myMatcher));
-		return numberOfAdapterItems[0];
-	}
-
 	/**
 	 * credit to Chemouna @ GitHub https://gist.github.com/chemouna/00b10369eb1d5b00401b
 	 */
-	private static ViewAssertion doesntHaveViewWithText(final String text) {
+	private static ViewAssertion doesNotHaveViewWithText(final String text) {
 		return (view, e) -> {
 			if (!(view instanceof ListView)) {
 				throw e;
@@ -87,19 +71,16 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 		EspressoHelper.closeDrawer();
 		EspressoHelper.hideShowCaseViewIfShown();
 
-		if (getNumberOfNotesInList() < noteNameList.length) {
-			EspressoHelper.createNotes(noteNameList);
-		}
+		EspressoHelper.createNotes(noteNameList);
 
 		// exit the note editing mode
 		EspressoHelper.navigateUp();
 
-		// a lower number makes it more likely for the test to succeed
-		int minChildCount = 3;
-
-		onData(anything())
-				.inAdapterView(allOf(hasMinimumChildCount(minChildCount), withId(android.R.id.list)))
-				.atPosition(getNumberOfNotesInList() - 1) // last note in list
+		// click on the bottom-most note
+		onData(CursorMatchers.withRowString("title", noteNameList[0]))
+				.inAdapterView(allOf(
+						hasMinimumChildCount(1),
+						instanceOf(DragSortListView.class)))
 				.perform(scrollTo())
 				.perform(click());
 
@@ -109,7 +90,7 @@ public class TestAddBigNumberOfNotesScrollDownAndDeleteOne extends BaseTestClass
 
 		// check that the 1° note added was deleted
 		onView(allOf(withId(android.R.id.list), isDisplayed()))
-				.check(doesntHaveViewWithText(noteNameList[0]));
+				.check(doesNotHaveViewWithText(noteNameList[0]));
 	}
 
 
