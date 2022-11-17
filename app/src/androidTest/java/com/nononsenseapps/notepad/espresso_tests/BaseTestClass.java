@@ -11,6 +11,7 @@ import com.nononsenseapps.notepad.ActivityMain_;
 import com.nononsenseapps.notepad.database.DatabaseHandler;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 
 public class BaseTestClass {
@@ -37,6 +38,15 @@ public class BaseTestClass {
 	 */
 	public String getStringResource(int resourceId) {
 		return mActRule.getActivity().getString(resourceId);
+	}
+
+	@Before
+	public void deletePreferences() {
+		PreferenceManager
+				.getDefaultSharedPreferences(mActRule.getActivity())
+				.edit()
+				.clear()
+				.commit();
 	}
 
 	@After

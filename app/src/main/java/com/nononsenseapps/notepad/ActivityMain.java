@@ -374,7 +374,7 @@ public class ActivityMain extends AppCompatActivity
 	}
 
 	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
+	public void onConfigurationChanged(@NonNull Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		if (mDrawerToggle != null) {
 			mDrawerToggle.onConfigurationChanged(newConfig);
