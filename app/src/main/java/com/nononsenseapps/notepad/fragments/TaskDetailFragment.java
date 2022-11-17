@@ -865,8 +865,8 @@ public class TaskDetailFragment extends Fragment {
 	@UiThread(propagation = Propagation.REUSE)
 	void addNotification(final Notification not) {
 		if (getActivity() != null) {
-			View nv = LayoutInflater.from(getActivity()).inflate(
-					R.layout.notification_view, null);
+			View nv = LayoutInflater.from(getActivity())
+					.inflate(R.layout.notification_view, null);
 
 			// So we can update the view later
 			not.view = nv;

@@ -126,6 +126,14 @@ android {
     } else {
         // println "No key store defined. Signed release not available..."
     }
+
+    // control which types of configuration APKs you want your app bundle to support
+    bundle {
+        language {
+            // download ALL languages, because we have a built-in language picker
+            enableSplit = false
+        }
+    }
 }
 
 dependencies {

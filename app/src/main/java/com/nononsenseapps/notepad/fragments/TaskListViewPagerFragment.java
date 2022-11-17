@@ -44,6 +44,7 @@ import android.preference.PreferenceManager;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.loader.app.LoaderManager;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
 import androidx.loader.content.Loader;
@@ -79,8 +80,6 @@ public class TaskListViewPagerFragment extends Fragment implements
 	// boolean firstLoad = true;
 
 	private long mListIdToSelect = -1;
-
-	private LoaderCallbacks<Cursor> loaderCallbacks;
 
 	public static TaskListViewPagerFragment getInstance() {
 		return getInstance(-1);
@@ -127,7 +126,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 	public void onActivityCreated(final Bundle state) {
 		super.onActivityCreated(state);
 
-		loaderCallbacks = new LoaderCallbacks<>() {
+		LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<>() {
 
 			@Override
 			public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {

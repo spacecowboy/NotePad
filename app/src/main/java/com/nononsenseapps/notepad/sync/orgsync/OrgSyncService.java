@@ -67,7 +67,6 @@ public class OrgSyncService extends Service {
 
 	private final boolean firstStart = true;
 
-	private Looper serviceLooper;
 	private SyncHandler serviceHandler;
 	// private FileWatcher fileWatcher;
 	private DBWatcher dbWatcher;
@@ -130,7 +129,7 @@ public class OrgSyncService extends Service {
 		thread.start();
 
 		// Get the HandlerThread's Looper and use it for our Handler
-		serviceLooper = thread.getLooper();
+		Looper serviceLooper = thread.getLooper();
 		serviceHandler = new SyncHandler(serviceLooper);
 	}
 

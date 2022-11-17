@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.utils.views;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.text.Editable;
@@ -33,7 +34,10 @@ import android.text.style.TypefaceSpan;
 import android.text.util.Linkify;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.widget.AppCompatEditText;
 
 import com.nononsenseapps.notepad.R;
 
@@ -41,7 +45,7 @@ import com.nononsenseapps.notepad.R;
  * An EditText field that highlights the first line and makes links clickable in
  * the text. The text is still selectable, movable etc.
  */
-public class StyledEditText extends androidx.appcompat.widget.AppCompatEditText {
+public class StyledEditText extends AppCompatEditText {
 
 	Object titleStyleSpan;
 	Object titleSizeSpan;
@@ -49,9 +53,6 @@ public class StyledEditText extends androidx.appcompat.widget.AppCompatEditText 
 	Object bodyFamilySpan;
 
 	private final float mTitleRelativeSize;
-	private final int mTitleFontFamily;
-	private final int mBodyFontFamily;
-	private final int mTitleFontStyle;
 	private boolean mLinkify;
 	private boolean mTitleLarger = true;
 
@@ -60,6 +61,9 @@ public class StyledEditText extends androidx.appcompat.widget.AppCompatEditText 
 		TypedArray a = context.getTheme().obtainStyledAttributes(attrs,
 				R.styleable.StyledTextView, 0, 0);
 
+		int mTitleFontFamily;
+		int mBodyFontFamily;
+		int mTitleFontStyle;
 		try {
 			mTitleRelativeSize = a.getFloat(
 					R.styleable.StyledTextView_titleRelativeSize, 1.0f);
@@ -75,25 +79,18 @@ public class StyledEditText extends androidx.appcompat.widget.AppCompatEditText 
 		}
 
 		setTitleRelativeLarger(mTitleLarger);
-
 		setTitleFontFamily(mTitleFontFamily);
-
 		setTitleFontStyle(mTitleFontStyle);
-
 		setBodyFontFamily(mBodyFontFamily);
 
 		// Style on change
 		addTextChangedListener(new TextWatcher() {
 
 			@Override
-			public void onTextChanged(CharSequence s, int start, int before,
-									  int count) {
-			}
+			public void onTextChanged(CharSequence s, int start, int before, int count) {}
 
 			@Override
-			public void beforeTextChanged(CharSequence s, int start, int count,
-										  int after) {
-			}
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
 			@Override
 			public void afterTextChanged(Editable s) {
@@ -228,6 +225,12 @@ public class StyledEditText extends androidx.appcompat.widget.AppCompatEditText 
 		}
 	}
 
+	/**
+	 * either opens the note or opens a link in the browser. It does not call
+	 * {@link View#performClick()} because there's no need to, the default
+	 * behavior is fine.
+	 */
+	@SuppressLint("ClickableViewAccessibility")
 	@Override
 	public boolean onTouchEvent(MotionEvent event) {
 		if (this.getText() == null) {

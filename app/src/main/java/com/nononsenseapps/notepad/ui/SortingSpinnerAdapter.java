@@ -33,7 +33,7 @@ import com.nononsenseapps.notepad.R;
 /**
  * Adapter which holds the sorting options.
  */
-public class SortingSpinnerAdapter implements ThemedSpinnerAdapter {
+class SortingSpinnerAdapter_USELESS implements ThemedSpinnerAdapter {
 	public static final int VIEWTYPE_COUNT = 1;
 	public static final int VIEWTYPE_SORT_OPTION = 1;
 	private final Helper mHelper;
@@ -44,7 +44,7 @@ public class SortingSpinnerAdapter implements ThemedSpinnerAdapter {
 
 	// TODO useless ? you may want to delete this
 
-	public SortingSpinnerAdapter(@NonNull Context context) {
+	public SortingSpinnerAdapter_USELESS(@NonNull Context context) {
 		this.mContext = context;
 		this.mHelper = new Helper(context);
 		this.mKeys = context.getResources().getStringArray(R.array.sorting_preference);
