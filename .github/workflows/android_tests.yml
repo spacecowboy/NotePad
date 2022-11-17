@@ -40,8 +40,8 @@ jobs:
       - name: perform HAXM installation
         run: brew install --cask intel-haxm
 
-      - name: perform ffmpeg installation
-        run: brew install ffmpeg
+#      - name: perform ffmpeg installation
+#        run: brew install ffmpeg
 
       - name: perform AVD caching
         uses: actions/cache@v3
@@ -94,6 +94,7 @@ jobs:
 
       - name: upload the screenshot n°1
         uses: actions/upload-artifact@v3
+        if: failure()
         with:
           name: screenshot1.jpg
           path: screenshot1.jpg
