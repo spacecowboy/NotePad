@@ -1,9 +1,12 @@
 package com.nononsenseapps.notepad.espresso_tests;
 
+import static org.junit.Assert.assertTrue;
+
 import android.content.Context;
 import android.preference.PreferenceManager;
 
 import androidx.test.core.app.ApplicationProvider;
+import androidx.test.espresso.Espresso;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.ActivityTestRule;
 
@@ -40,20 +43,12 @@ public class BaseTestClass {
 		return mActRule.getActivity().getString(resourceId);
 	}
 
-	@Before
-	public void deletePreferences() {
-		PreferenceManager
-				.getDefaultSharedPreferences(mActRule.getActivity())
-				.edit()
-				.clear()
-				.commit();
-	}
-
 	@After
-	public void tearDown() {
+	@Before
+	public void clearAppData() {
 		Context context = ApplicationProvider.getApplicationContext();
 
-		//clear the app's data as the test is finishing
+		//clear the app's data as the test is starting & finishing
 		PreferenceManager.getDefaultSharedPreferences(context).edit().clear().commit();
 		DatabaseHandler.resetDatabase(context);
 	}
