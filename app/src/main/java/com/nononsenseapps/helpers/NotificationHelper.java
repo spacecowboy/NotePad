@@ -422,43 +422,66 @@ public class NotificationHelper extends BroadcastReceiver {
 		// if not empty, schedule alarm wake up
 		if (!notifications.isEmpty()) {
 			// at first's time
-			// Create a new PendingIntent and add it to the AlarmManager
+			var thingToNotify = notifications.get(0);
+
+			// must be an explicit intent
 			Intent intent = new Intent(context, NotificationHelper.class)
-					.addFlags(Intent.FLAG_RECEIVER_FOREGROUND) // TODO <-- does it help ?
+					.addFlags(Intent.FLAG_RECEIVER_FOREGROUND) // useless flag => remove freely
 					.setAction(Intent.ACTION_RUN);
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent,
+			// Create a new PendingIntent and add it to the AlarmManager
+			var pendingIntent = PendingIntent.getBroadcast(context, 1, intent,
 					PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-			AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-			am.cancel(pendingIntent);
+			AlarmManager aMgr = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+			aMgr.cancel(pendingIntent);
 
-			// The user can request the use of explicit alarms
-			boolean shouldUseExact = SharedPreferencesHelper.shouldUseExactAlarms(context);
-
-			// the user may revoke the permission in android 12
-			boolean canUseExact;
-			if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-				canUseExact = am.canScheduleExactAlarms();
-			} else {
-				canUseExact = true;
-			}
-
-			if (canUseExact && shouldUseExact) {
+			if (useExactReminders(context, aMgr)) {
 				// an "exact" alarm is more reliable, but requires user permission in API 31
 				// TODO there is also .setAlarmClock(), but it didn't work when I tried.
 				//  It's supposed to have the highest priority, so we SHOULD use it.
 				//  var aci = new AlarmManager.AlarmClockInfo(...);
 				//  am.setAlarmClock(aci,pendingIntent);
-				am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
-						notifications.get(0).time, pendingIntent);
+				aMgr.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+						getTimeForAlarm(thingToNotify), pendingIntent);
 			} else {
 				// these kinds of alarms don't require permission, but they are more vague
-				am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
-						notifications.get(0).time, pendingIntent);
+				aMgr.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+						getTimeForAlarm(thingToNotify), pendingIntent);
 			}
-
 		}
-
 		monitorUri(context);
+	}
+
+	/**
+	 * @return TRUE if the Alarms (reminders) should be sent with the Exact method,
+	 * which is more reliable and precise but heavier on the battery. The user can choose this
+	 * in the preferences, and the OS may deny us the permission to do it
+	 */
+	private static boolean useExactReminders(Context context, AlarmManager aMgr) {
+		// The user can (must) request the use of Exact alarms
+		boolean shouldUseExact = SharedPreferencesHelper.shouldUseExactAlarms(context);
+		if (!shouldUseExact) return false;
+
+		// the user may revoke the permission in android 12
+		boolean canUseExact;
+		if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+			canUseExact = aMgr.canScheduleExactAlarms();
+		} else {
+			// in older androids, we can always use Exact reminders
+			canUseExact = true;
+		}
+		// it SHOULD and CAN do it
+		return canUseExact;
+	}
+
+	/**
+	 * @return the time to start the alarm, of the System.currentTimeMillis() type,
+	 * so a {@link long} representing a "wall clock time" in UTC
+	 */
+	private static long getTimeForAlarm(com.nononsenseapps.notepad.database.Notification input) {
+		// TODO since android takes some time to understand that it has to send the reminder,
+		//  here we could subtract 60~100 seconds so that, by the time it understands what to do,
+		//  we're not late with the reminder
+		return input.time;
 	}
 
 	/**
