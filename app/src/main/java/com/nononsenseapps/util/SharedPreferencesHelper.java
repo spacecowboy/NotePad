@@ -35,8 +35,8 @@ public class SharedPreferencesHelper {
 		return PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
-	public static boolean shouldUsePreciseAlarms(@NonNull Context context) {
-		String key = context.getString(R.string.key_pref_precise_alarms);
+	public static boolean shouldUseExactAlarms(@NonNull Context context) {
+		String key = context.getString(R.string.key_pref_should_use_exact_alarms);
 		return Prefs(context).getBoolean(key, false);
 	}
 
