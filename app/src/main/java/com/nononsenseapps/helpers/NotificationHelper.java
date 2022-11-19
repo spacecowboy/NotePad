@@ -90,28 +90,33 @@ public class NotificationHelper extends BroadcastReceiver {
 				// => always cancel
 				cancelNotification(context, intent.getData());
 
-				if (Intent.ACTION_DELETE.equals(action) || ACTION_RESCHEDULE.equals(action)) {
-					// Just a notification
-					com.nononsenseapps.notepad.database.Notification
-							.deleteOrReschedule(context, intent.getData());
-				} else if (ACTION_SNOOZE.equals(action)) {
-					// TODO snooze logic is hardcoded to 30' here.
-					//  Set a custom timer in the preferences and load the number here
-					final long minutes = 30;
-					// msec/sec * sec/min * (snooze minutes)
-					final long snoozeDelayInMillis = 1000 * 60 * minutes;
-					final Calendar now = Calendar.getInstance();
+				switch (action) {
+					case Intent.ACTION_DELETE:
+					case ACTION_RESCHEDULE:
+						// Just a notification
+						com.nononsenseapps.notepad.database.Notification
+								.deleteOrReschedule(context, intent.getData());
+						break;
+					case ACTION_SNOOZE:
+						// TODO snooze logic is hardcoded to 30' here.
+						//  Set a custom timer in the preferences and load the number here
+						final long minutes = 30;
+						// msec/sec * sec/min * (snooze minutes)
+						final long snoozeDelayInMillis = 1000 * 60 * minutes;
+						final Calendar now = Calendar.getInstance();
 
-					com.nononsenseapps.notepad.database.Notification
-							.setTime(context, intent.getData(),
-									snoozeDelayInMillis + now.getTimeInMillis());
-				} else if (ACTION_COMPLETE.equals(action)) {
-					final long taskId = intent.getLongExtra(ARG_TASKID, -1);
-					// Complete note
-					Task.setCompletedSynced(context, true, taskId);
-					// Delete notifications with the same task id
-					com.nononsenseapps.notepad.database.Notification
-							.removeWithTaskIdsSynced(context, taskId);
+						com.nononsenseapps.notepad.database.Notification
+								.setTime(context, intent.getData(),
+										snoozeDelayInMillis + now.getTimeInMillis());
+						break;
+					case ACTION_COMPLETE:
+						final long taskId = intent.getLongExtra(ARG_TASKID, -1);
+						// Complete note
+						Task.setCompletedSynced(context, true, taskId);
+						// Delete notifications with the same task id
+						com.nononsenseapps.notepad.database.Notification
+								.removeWithTaskIdsSynced(context, taskId);
+						break;
 				}
 			}
 		}
@@ -468,9 +473,6 @@ public class NotificationHelper extends BroadcastReceiver {
 	/**
 	 * Updates/Inserts notifications in the database. Immediately notifies and
 	 * schedules next wake up on finish.
-	 *
-	 * @param context
-	 * @param notification
 	 */
 	public static void updateNotification(final Context context,
 										  final com.nononsenseapps.notepad.database.Notification notification) {

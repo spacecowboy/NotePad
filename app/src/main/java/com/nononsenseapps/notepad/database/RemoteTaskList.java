@@ -115,13 +115,9 @@ public class RemoteTaskList extends DAO {
 
 	/**
 	 * None of the fields may be null!
-	 *
-	 * @param dbid
-	 * @param remoteId
-	 * @param updated
-	 * @param account
 	 */
-	public RemoteTaskList(final Long dbid, final String remoteId, final Long updated, final String account) {
+	public RemoteTaskList(final Long dbid, final String remoteId, final Long updated,
+						  final String account) {
 		this.dbid = dbid;
 		this.remoteId = remoteId;
 		this.updated = updated;

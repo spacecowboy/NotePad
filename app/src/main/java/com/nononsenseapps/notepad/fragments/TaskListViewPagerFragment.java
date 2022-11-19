@@ -17,20 +17,6 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.SystemService;
-import org.androidannotations.annotations.ViewById;
-
-import com.nononsenseapps.notepad.ActivityMain.ListOpener;
-import com.nononsenseapps.notepad.ActivitySearchDeleted_;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
-import com.nononsenseapps.notepad.interfaces.MenuStateController;
-
-import com.nononsenseapps.utils.ViewsHelper;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -40,23 +26,34 @@ import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.app.LoaderManager.LoaderCallbacks;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.viewpager.widget.ViewPager;
-import androidx.cursoradapter.widget.CursorAdapter;
-import androidx.cursoradapter.widget.SimpleCursorAdapter;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
+
+import androidx.cursoradapter.widget.CursorAdapter;
+import androidx.cursoradapter.widget.SimpleCursorAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.loader.app.LoaderManager.LoaderCallbacks;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.viewpager.widget.ViewPager;
+
+import com.nononsenseapps.notepad.ActivityMain.ListOpener;
+import com.nononsenseapps.notepad.ActivitySearchDeleted_;
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
+import com.nononsenseapps.notepad.interfaces.MenuStateController;
+import com.nononsenseapps.utils.ViewsHelper;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.SystemService;
+import org.androidannotations.annotations.ViewById;
 
 /**
  * Displays many listfragments across a viewpager. Supports selecting a certain

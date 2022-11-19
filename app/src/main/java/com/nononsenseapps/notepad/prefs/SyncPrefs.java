@@ -36,7 +36,6 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
-import android.preference.SwitchPreference;
 import android.provider.DocumentsContract;
 import android.widget.Toast;
 

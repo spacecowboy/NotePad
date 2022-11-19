@@ -91,8 +91,6 @@ public class ListPrefs extends PreferenceFragment {
 
 	/**
 	 * Reads the lists from database. Also adds "All lists" as the first item.
-	 *
-	 * @return
 	 */
 	private void setEntries(ListPreference listSpinner) {
 

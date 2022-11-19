@@ -161,11 +161,6 @@ public class RemoteTask extends DAO {
 
 	/**
 	 * None of the fields may be null!
-	 *
-	 * @param dbid
-	 * @param remoteId
-	 * @param updated
-	 * @param account
 	 */
 	public RemoteTask(final Long dbid, final Long listdbid,
 					  final String remoteId, final Long updated, final String account) {

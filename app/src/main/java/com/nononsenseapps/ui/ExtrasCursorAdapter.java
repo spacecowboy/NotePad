@@ -104,9 +104,6 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 
 	/**
 	 * Initializes the viewholder according to the specified from/to arrays.
-	 *
-	 * @param view
-	 * @return
 	 */
 	private ViewHolder setViewHolder(View view) {
 		ViewHolder viewHolder = new ViewHolder();

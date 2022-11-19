@@ -140,8 +140,6 @@ public class GoogleTask extends RemoteTask {
 	 * Returns a ContentValues hashmap suitable for database insertion in the
 	 * Lists table Includes modified flag and list id as specified in the
 	 * arguments
-	 *
-	 * @return
 	 */
 	public ContentValues toNotesContentValues(int modified, long listDbId) {
 		ContentValues values = new ContentValues();

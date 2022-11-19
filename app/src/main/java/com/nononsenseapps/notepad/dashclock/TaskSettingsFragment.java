@@ -87,16 +87,10 @@ public class TaskSettingsFragment extends PreferenceFragment {
 
 	/**
 	 * Use my own layout to override android's default margins
-	 *
-	 * @param inflater
-	 * @param container
-	 * @param savInstState
-	 * @return
 	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savInstState) {
-		return inflater
-				.inflate(R.layout.fragment_dialog_prefs, container, false);
+		return inflater.inflate(R.layout.fragment_dialog_prefs, container, false);
 	}
 
 	/**

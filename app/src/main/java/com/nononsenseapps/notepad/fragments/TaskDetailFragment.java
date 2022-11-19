@@ -76,7 +76,6 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.OnActivityResult;
-import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.UiThread.Propagation;
 import org.androidannotations.annotations.ViewById;
@@ -859,8 +858,6 @@ public class TaskDetailFragment extends Fragment {
 
 	/**
 	 * Inserts a notification item in the UI
-	 *
-	 * @param not
 	 */
 	@UiThread(propagation = Propagation.REUSE)
 	void addNotification(final Notification not) {

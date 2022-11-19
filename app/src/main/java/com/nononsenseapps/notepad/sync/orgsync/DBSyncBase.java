@@ -165,9 +165,6 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	/**
 	 * These remote tasks are no longer connected to a task. This typically happens when a task is
 	 * deleted or moved to another list.
-	 *
-	 * @param list
-	 * @return
 	 */
 	private List<RemoteTask> getInvalidRemoteTasks(final TaskList list) {
 		final ArrayList<RemoteTask> remoteList = new ArrayList<>();

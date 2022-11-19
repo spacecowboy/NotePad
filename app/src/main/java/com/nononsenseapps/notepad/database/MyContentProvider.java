@@ -646,7 +646,7 @@ public class MyContentProvider extends ContentProvider {
 			// for (String part : query.split("\\s")) {
 			if (result.length() > 0) result.append(" AND ");
 			// Wrap each word in quotes and add star to the end
-			result.append("'" + query + "*'");
+			result.append("'").append(query).append("*'");
 			// }
 		}
 

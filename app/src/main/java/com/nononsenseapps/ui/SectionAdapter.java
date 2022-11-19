@@ -62,8 +62,6 @@ public class SectionAdapter extends BaseAdapter {
 	 *
 	 * One exception is the "GetSubItemId" method which will return the
 	 * appropriate Id in both cases.
-	 *
-	 * @param context
 	 */
 	public SectionAdapter(Context context, SimpleCursorAdapter wrappedAdapter) {
 		/*

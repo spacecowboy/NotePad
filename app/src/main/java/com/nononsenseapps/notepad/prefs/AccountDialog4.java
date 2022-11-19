@@ -79,8 +79,6 @@ public class AccountDialog4 extends DialogFragment implements
 
 	/**
 	 * Called from the activity, since that one builds the dialog
-	 *
-	 * @param account
 	 */
 	public void accountSelected(final Account account) {
 		if (account != null) {

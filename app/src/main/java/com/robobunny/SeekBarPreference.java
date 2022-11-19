@@ -17,7 +17,6 @@
 package com.robobunny;
 
 
-
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.preference.Preference;
@@ -98,9 +97,7 @@ public class SeekBarPreference extends Preference implements
 		}
 
 
-
 	}
-
 
 
 	@Override
@@ -142,8 +139,6 @@ public class SeekBarPreference extends Preference implements
 
 	/**
 	 * Update a SeekBarPreference view with our current state
-	 *
-	 * @param layout
 	 */
 	protected void updateView(View layout) {
 

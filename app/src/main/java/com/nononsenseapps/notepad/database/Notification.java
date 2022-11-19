@@ -398,12 +398,8 @@ public class Notification extends DAO {
 	/**
 	 * Removes all notifications associated with the specified tasks. Runs in
 	 * the same thread as the caller.
-	 *
-	 * @param context
-	 * @param ids
 	 */
-	public static void removeWithTaskIdsSynced(final Context context,
-											   final Long... ids) {
+	public static void removeWithTaskIdsSynced(final Context context, final Long... ids) {
 		String idStrings = "(";
 		ArrayList<String> idsToClear = new ArrayList<>();
 		for (Long id : ids) {

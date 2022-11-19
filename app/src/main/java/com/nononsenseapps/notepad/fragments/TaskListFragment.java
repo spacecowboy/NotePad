@@ -317,8 +317,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		}
 
 
-
-
 		mCallback = new LoaderCallbacks<>() {
 			@NonNull
 			@Override
@@ -489,7 +487,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 
 			/**
 			 * Delete tasks and display a snackbar with an undo action
-			 * @param taskMap
+			 *
 			 */
 			private void deleteTasks(final Map<Long, Task> taskMap) {
 				final Task[] tasks = taskMap.values().toArray(new Task[taskMap.size()]);

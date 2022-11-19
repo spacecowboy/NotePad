@@ -305,10 +305,10 @@ public class Task extends DAO {
 
 	public static final String CREATE_FTS3_DELETED_INSERT_TRIGGER =
 			"CREATE TRIGGER deletedtask_fts3_insert AFTER INSERT ON " + DELETE_TABLE_NAME +
-			" BEGIN " + " INSERT INTO " + FTS3_DELETE_TABLE_NAME + " (" +
-			arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE) + ") VALUES (" +
-			arrayToCommaString("new.", new String[] { Columns._ID, Columns.TITLE, Columns.NOTE }) +
-			");" + " END;";
+					" BEGIN " + " INSERT INTO " + FTS3_DELETE_TABLE_NAME + " (" +
+					arrayToCommaString(Columns._ID, Columns.TITLE, Columns.NOTE) + ") VALUES (" +
+					arrayToCommaString("new.", new String[] { Columns._ID, Columns.TITLE, Columns.NOTE }) +
+					");" + " END;";
 
 	public static final String CREATE_FTS3_DELETED_UPDATE_TRIGGER = "CREATE TRIGGER deletedtask_fts3_update AFTER UPDATE OF " +
 			arrayToCommaString(Columns.TITLE, Columns.NOTE) +
@@ -668,8 +668,6 @@ public class Task extends DAO {
 
 	/**
 	 * Set first line as title, rest as note.
-	 *
-	 * @param text
 	 */
 	public void setText(final String text) {
 		int titleEnd = text.indexOf("\n");

@@ -18,6 +18,7 @@
 package com.nononsenseapps.notepad.database;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -79,9 +80,7 @@ public abstract class DAO {
 		final ArrayList<String> list = new ArrayList<>();
 		for (final String[] array : arrays) {
 			if (array != null) {
-				for (final String txt : array) {
-					list.add(txt);
-				}
+				list.addAll(Arrays.asList(array));
 			}
 		}
 		return list.toArray(new String[list.size()]);

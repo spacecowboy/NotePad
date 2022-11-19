@@ -163,9 +163,6 @@ public abstract class Synchronizer extends DBSyncBase implements
 	 * Merge the list and file. Fields considered are the listtype and
 	 * listsorting which are stored as comments in the file.
 	 *
-	 * @param list
-	 * @param dbEntry
-	 * @param file
 	 * @return an integer denoting which should be saved. 0 for none, 0x01 for
 	 * task, 0x10 for node. 0x11 for both.
 	 */
@@ -347,9 +344,6 @@ public abstract class Synchronizer extends DBSyncBase implements
 	 * Merges the task and node. The fields considered are title, body,
 	 * completed and deadline.
 	 *
-	 * @param task
-	 * @param remote
-	 * @param node
 	 * @return an integer denoting which should be saved. 0 for none, 0x01 for
 	 * task, 0x10 for node. 0x11 for both.
 	 */
