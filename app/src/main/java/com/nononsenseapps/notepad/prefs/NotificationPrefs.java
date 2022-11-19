@@ -21,12 +21,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.PowerManager;
+import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.provider.Settings;
 
 import com.nononsenseapps.notepad.R;
 
 public class NotificationPrefs extends PreferenceFragment {
+
+	private Preference disableBatteryOptimizationPref;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -35,22 +38,40 @@ public class NotificationPrefs extends PreferenceFragment {
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.app_pref_notifications);
 
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_prio)));
-		PrefsActivity
-				.bindPreferenceSummaryToValue(findPreference(getString(R.string.key_pref_ringtone)));
+		PrefsActivity.bindPreferenceSummaryToValue(
+				findPreference(getString(R.string.key_pref_prio)));
+		PrefsActivity.bindPreferenceSummaryToValue(
+				findPreference(getString(R.string.key_pref_ringtone)));
+
+		disableBatteryOptimizationPref
+				= findPreference(getString(R.string.key_pref_ignore_battery_optimizations));
 	}
 
-	// TODO add a settings button to carry the user to the right page in the device's settings app
-	public static void showRequestIgnoreBatteryOptimizations(Context context) {
-		PowerManager pm = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
+	@Override
+	public void onResume() {
+		super.onResume();
 
-		boolean ok = pm.isIgnoringBatteryOptimizations(context.getPackageName());
-		if (ok) return;
+		// check if battery optimizations are enabled and show it in the summary
+		PowerManager pm = (PowerManager) getContext().getSystemService(Context.POWER_SERVICE);
+		int summaryResId = pm.isIgnoringBatteryOptimizations(getContext().getPackageName())
+				? R.string.battery_optimizations_inactive
+				: R.string.battery_optimizations_active;
+		disableBatteryOptimizationPref.setSummary(summaryResId);
 
-		Intent i = new Intent();
-		i.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
-		context.startActivity(i);
+		// (if needed) add a listener to open the settings when clicked
+		if (disableBatteryOptimizationPref.getOnPreferenceClickListener() == null)
+			disableBatteryOptimizationPref.setOnPreferenceClickListener(y -> {
+				Intent i = new Intent()
+						.setAction(Settings.ACTION_IGNORE_BATTERY_OPTIMIZATION_SETTINGS);
+				startActivity(i);
+
+				// the value of this preference is never used,
+				// it's just something the user can click to open a settings page
+				return false;
+			});
 	}
+
+	// TODO test the app in doze mode: see
+	//  https://developer.android.com/training/monitoring-device-state/doze-standby#testing_doze
 
 }
