@@ -46,20 +46,18 @@ public class BackgroundSyncScheduler extends BroadcastReceiver {
 	 * Schedule a synchronization for later.
 	 */
 	public static void scheduleSync(final Context context) {
-		final AlarmManager alarmManager =
-				(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		final Intent action = new Intent(context, BackgroundSyncScheduler
-				.class);
+		final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		final Intent action = new Intent(context, BackgroundSyncScheduler.class);
 		action.setAction(Intent.ACTION_RUN);
-		final PendingIntent operation = PendingIntent
-				.getBroadcast(context, scheduleCode, action,
+		final PendingIntent operation = PendingIntent.getBroadcast(context, scheduleCode, action,
 						PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 		if (OrgSyncService.areAnyEnabled(context)) {
 			// Schedule syncs
 			// Repeat at inexact intervals and do NOT wake the device up.
 			alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
 					SystemClock.elapsedRealtime(),
-					AlarmManager.INTERVAL_HALF_HOUR, operation);
+					AlarmManager.INTERVAL_HALF_HOUR, // gets ignored anyway
+					operation);
 		} else {
 			// Remove schedule
 			alarmManager.cancel(operation);
