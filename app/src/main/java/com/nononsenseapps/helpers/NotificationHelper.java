@@ -41,6 +41,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;
+import com.nononsenseapps.util.SharedPreferencesHelper;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -77,36 +78,44 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * the indicated ID, and cancel it from any active notifications.
 	 */
 	@Override
-	public void onReceive(Context context, Intent intent) {
-		if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())
-				|| Intent.ACTION_RUN.equals(intent.getAction())) {
-			// Can't cancel anything. Just schedule and notify at end
-		} else {
-			// Always cancel
-			cancelNotification(context, intent.getData());
+	public void onReceive(Context context, @NonNull Intent intent) {
+		String action = intent.getAction();
+		if (action != null) {
+			// should we cancel something? we decide it here:
+			if (Intent.ACTION_BOOT_COMPLETED.equals(action) || Intent.ACTION_RUN.equals(action)) {
+				// => can't cancel anything. Just schedule and notify at end of the function.
+				// (Intent.ACTION_BOOT_COMPLETED is for when the phone is rebooted,
+				// Intent.ACTION_RUN is for notifications scheduled through the AlarmManager)
+			} else {
+				// => always cancel
+				cancelNotification(context, intent.getData());
 
-			if (Intent.ACTION_DELETE.equals(intent.getAction())
-					|| ACTION_RESCHEDULE.equals(intent.getAction())) {
-				// Just a notification
-				com.nononsenseapps.notepad.database.Notification
-						.deleteOrReschedule(context, intent.getData());
-			} else if (ACTION_SNOOZE.equals(intent.getAction())) {
-				// msec/sec * sec/min * 30
-				long delay30min = 1000 * 60 * 30;
-				final Calendar now = Calendar.getInstance();
+				if (Intent.ACTION_DELETE.equals(action) || ACTION_RESCHEDULE.equals(action)) {
+					// Just a notification
+					com.nononsenseapps.notepad.database.Notification
+							.deleteOrReschedule(context, intent.getData());
+				} else if (ACTION_SNOOZE.equals(action)) {
+					// TODO snooze logic is hardcoded to 30' here.
+					//  Set a custom timer in the preferences and load the number here
+					final long minutes = 30;
+					// msec/sec * sec/min * (snooze minutes)
+					final long snoozeDelayInMillis = 1000 * 60 * minutes;
+					final Calendar now = Calendar.getInstance();
 
-				com.nononsenseapps.notepad.database.Notification
-						.setTime(context, intent.getData(), delay30min + now.getTimeInMillis());
-			} else if (ACTION_COMPLETE.equals(intent.getAction())) {
-				// Complete note
-				Task.setCompletedSynced(context, true,
-						intent.getLongExtra(ARG_TASKID, -1));
-				// Delete notifications with the same task id
-				com.nononsenseapps.notepad.database.Notification
-						.removeWithTaskIdsSynced(context, intent.getLongExtra(ARG_TASKID, -1));
+					com.nononsenseapps.notepad.database.Notification
+							.setTime(context, intent.getData(),
+									snoozeDelayInMillis + now.getTimeInMillis());
+				} else if (ACTION_COMPLETE.equals(action)) {
+					final long taskId = intent.getLongExtra(ARG_TASKID, -1);
+					// Complete note
+					Task.setCompletedSynced(context, true, taskId);
+					// Delete notifications with the same task id
+					com.nononsenseapps.notepad.database.Notification
+							.removeWithTaskIdsSynced(context, taskId);
+				}
 			}
 		}
-
+		// run this in ANY case
 		notifyPast(context, true);
 		scheduleNext(context);
 	}
@@ -132,13 +141,14 @@ public class NotificationHelper extends BroadcastReceiver {
 	private static void monitorUri(final Context context) {
 		context.getContentResolver().unregisterContentObserver(getObserver(context));
 		context.getContentResolver().registerContentObserver(
-				com.nononsenseapps.notepad.database.Notification.URI, true,
+				com.nononsenseapps.notepad.database.Notification.URI,
+				true,
 				getObserver(context));
 	}
 
 
-	public static void clearNotification(@NonNull final Context context, @NonNull final Intent
-			intent) {
+	public static void clearNotification(@NonNull final Context context,
+										 @NonNull final Intent intent) {
 		if (intent.getLongExtra(NOTIFICATION_DELETE_ARG, -1) > 0) {
 			com.nononsenseapps.notepad.database.Notification.deleteOrReschedule(context,
 					com.nononsenseapps.notepad.database.Notification.getUri(
@@ -173,7 +183,8 @@ public class NotificationHelper extends BroadcastReceiver {
 			createNotificationChannel(context, notificationManager);
 		}
 
-		NnnLogger.debug(NotificationHelper.class, "Number of notifications: " + notifications.size());
+		NnnLogger.debug(NotificationHelper.class,
+				"Number of notifications: " + notifications.size());
 
 		// If empty, cancel
 		if (notifications.isEmpty()) {
@@ -193,53 +204,26 @@ public class NotificationHelper extends BroadcastReceiver {
 			if (prefs.getBoolean(context.getString(R.string.key_pref_vibrate),
 					false)) lightAndVibrate |= Notification.DEFAULT_VIBRATE;
 
-			// Need to get a new one because the action buttons will duplicate
-			// otherwise
+			// Need to get a new one because the action buttons will duplicate otherwise
 			NotificationCompat.Builder builder;
 
-			// if (false)
-			// //
-			// prefs.getBoolean(context.getString(R.string.key_pref_group_on_lists),
-			// // false))
-			// {
-			// // Group together notes contained in the same list.
-			// // Always use listid
-			// for (long listId : getRelatedLists(notifications)) {
-			// builder = getNotificationBuilder(context,
-			// Integer.parseInt(prefs.getString(
-			// context.getString(R.string.key_pref_prio),
-			// "0")), lightAndVibrate,
-			// Uri.parse(prefs.getString(context
-			// .getString(R.string.key_pref_ringtone),
-			// "DEFAULT_NOTIFICATION_URI")), alertOnce);
-			//
-			// List<com.nononsenseapps.notepad.database.Notification> subList =
-			// getSubList(
-			// listId, notifications);
-			// if (subList.size() == 1) {
-			// // Notify as single
-			// notifyBigText(context, notificationManager, builder,
-			// listId, subList.get(0));
-			// }
-			// else {
-			// notifyInboxStyle(context, notificationManager, builder,
-			// listId, subList);
-			// }
-			// }
-			// }
-			// else {
+			// (Here there was code to group notifications together by list.
+			// I removed it because it wasn't being used.
+			// Check git history if you're interested)
 
+			// get priority and ringtone. See NotificationPrefs.java
 			final int priority = Integer.parseInt(
 					prefs.getString(context.getString(R.string.key_pref_prio), "0"));
-			final Uri ringtone = Uri.parse(
-					prefs.getString(context.getString(R.string.key_pref_ringtone), "DEFAULT_NOTIFICATION_URI"));
+			final Uri ringtone = Uri.parse(prefs.getString(
+					context.getString(R.string.key_pref_ringtone),
+					"DEFAULT_NOTIFICATION_URI"));
 
 			// Notify for each individually
 			for (com.nononsenseapps.notepad.database.Notification note : notifications) {
-				builder = getNotificationBuilder(context, priority, lightAndVibrate, ringtone, alertOnce);
+				builder = getNotificationBuilder(
+						context, priority, lightAndVibrate, ringtone, alertOnce);
 				notifyBigText(context, notificationManager, builder, note);
 			}
-			// }
 		}
 	}
 
@@ -407,7 +391,9 @@ public class NotificationHelper extends BroadcastReceiver {
 	}
 
 	/**
-	 * Schedules to be woken up at the next notification time.
+	 * Schedules to be woken up at the next notification time. Uses {@link AlarmManager},
+	 * which can set alarms with different priorities. See
+	 * https://developer.android.com/training/scheduling/alarms#exact
 	 */
 	private static void scheduleNext(Context context) {
 		// Get first future notification
@@ -416,18 +402,46 @@ public class NotificationHelper extends BroadcastReceiver {
 				= com.nononsenseapps.notepad.database.Notification
 				.getNotificationsWithTime(context, now.getTimeInMillis(), false);
 
+		// TODO learn about the disasters Google made with alarms:
+		//  https://developer.android.com/reference/android/Manifest.permission#SCHEDULE_EXACT_ALARM
+		//  https://developer.android.com/reference/android/Manifest.permission#USE_EXACT_ALARM
+
 		// if not empty, schedule alarm wake up
 		if (!notifications.isEmpty()) {
 			// at first's time
 			// Create a new PendingIntent and add it to the AlarmManager
-			Intent intent = new Intent(Intent.ACTION_RUN);
-			PendingIntent pendingIntent = PendingIntent.getBroadcast(context,
-					1, intent, PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-			AlarmManager am = (AlarmManager) context
-					.getSystemService(Context.ALARM_SERVICE);
+			Intent intent = new Intent(context, NotificationHelper.class)
+					.setAction(Intent.ACTION_RUN);
+			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent,
+					PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+			AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 			am.cancel(pendingIntent);
-			am.set(AlarmManager.RTC_WAKEUP, notifications.get(0).time,
-					pendingIntent);
+
+			// The user can request the use of explicit alarms
+			boolean shouldUseExact = SharedPreferencesHelper.shouldUseExactAlarms(context);
+
+			// the user may revoke the permission in android 12
+			boolean canUseExact;
+			if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+				canUseExact = am.canScheduleExactAlarms();
+			} else {
+				canUseExact = true;
+			}
+
+			if (canUseExact && shouldUseExact) {
+				// an "exact" alarm is more reliable, but requires user permission in API 31
+				// TODO there is also .setAlarmClock(), but it didn't work when I tried.
+				//  It's supposed to have the highest priority, so we SHOULD use it.
+				//  var aci = new AlarmManager.AlarmClockInfo(...);
+				//  am.setAlarmClock(aci,pendingIntent);
+				am.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+						notifications.get(0).time, pendingIntent);
+			} else {
+				// these kinds of alarms don't require permission, but they are more vague
+				am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+						notifications.get(0).time, pendingIntent);
+			}
+
 		}
 
 		monitorUri(context);
@@ -477,9 +491,6 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * touch database)
 	 *
 	 * Called by notification.delete()
-	 *
-	 * @param context
-	 * @param not
 	 */
 	public static void cancelNotification(final Context context,
 										  final com.nononsenseapps.notepad.database.Notification not) {
