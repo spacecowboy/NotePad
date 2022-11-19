@@ -55,8 +55,7 @@ public class GTasksSyncDelay extends Service {
 	}
 
 	/**
-	 * Uses {@link AlarmManager} to schedule the synchronization.
-	 * Be careful about how you set the alarm.
+	 * Uses {@link AlarmManager} to schedule the synchronization. Be careful:
 	 * https://developer.android.com/training/scheduling/alarms#exact
 	 * describes the differences between {@link AlarmManager#set} all
 	 * the way up to {@link AlarmManager#setAlarmClock}
@@ -67,10 +66,11 @@ public class GTasksSyncDelay extends Service {
 		cal.add(Calendar.SECOND, delaySecs);
 		int id = 38475;
 
-		// Create a new PendingIntent and add it to the AlarmManager
-		Intent intent = new Intent(this, GTasksSyncDelay.class) // EXPLICIT intent!
+		// must use an EXPLICIT intent!
+		Intent intent = new Intent(this, GTasksSyncDelay.class)
 				.setAction(Intent.ACTION_RUN);
-		PendingIntent pendingIntent = PendingIntent.getService(this, id, intent,
+		// Create a new PendingIntent and add it to the AlarmManager
+		var pendingIntent = PendingIntent.getService(this, id, intent,
 				PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		am.cancel(pendingIntent);

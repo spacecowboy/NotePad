@@ -502,32 +502,28 @@ public class Notification extends DAO {
 	 * ascending
 	 */
 	public static List<Notification> getNotificationsWithTime(final Context context,
-															  final long time, final boolean before) {
+															  final long time,
+															  final boolean before) {
 		final String comparison = before ? " <= ?" : " > ?";
 		return getNotificationsWithTasks(
 				context,
-				Columns.TIME +
-						comparison +
-						" AND " +
-						Columns.RADIUS +
-						" IS NULL",
+				Columns.TIME + comparison + " AND " + Columns.RADIUS + " IS NULL",
 				new String[] { Long.toString(time) },
 				Columns.TIME);
 	}
 
 	public static List<Notification> getNotificationsWithTasks(final Context context,
-															   final String where, final String[] whereArgs,
+															   final String where,
+															   final String[] whereArgs,
 															   final String sortOrder) {
 		ArrayList<Notification> list = new ArrayList<>();
-
-		final Cursor c = context.getContentResolver().query(URI_WITH_TASK_PATH, null, where,
-				whereArgs, sortOrder);
-
+		final Cursor c = context
+				.getContentResolver()
+				.query(URI_WITH_TASK_PATH, null, where, whereArgs, sortOrder);
 		if (c != null) {
 			while (c.moveToNext()) {
 				list.add(new Notification(c));
 			}
-
 			c.close();
 		}
 		return list;
