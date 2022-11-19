@@ -23,6 +23,8 @@ import android.text.format.DateFormat;
 import android.text.format.Time;
 import android.util.AttributeSet;
 
+import androidx.appcompat.widget.AppCompatTextView;
+
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
 
@@ -34,7 +36,7 @@ import java.util.TimeZone;
 /**
  * A simple textview that can display time.
  */
-public class DateView extends androidx.appcompat.widget.AppCompatTextView {
+public class DateView extends AppCompatTextView {
 
 	private static final int SECONDS_PER_DAY = 3600;
 
