@@ -54,8 +54,9 @@
 	<string name="key_pref_ringtone">global_ringtone</string>
 	<string name="key_pref_vibrate">global_vibrate</string>
 	<string name="key_pref_prio">global_prio</string>
-	<string name="key_pref_precise_alarms">preciseAlarmsPref</string>
+	<string name="key_pref_should_use_exact_alarms">key_pref_should_use_exact_alarms</string>
 	<string name="key_pref_ignore_battery_optimizations">ignoreBatteryOptimizationPref</string>
+	<string name="key_pref_allow_exact_reminders">key_pref_allow_exact_reminders</string>
 	<string name="pref_locale">pref_key_locale</string>
 	<string name="key_pref_item_max_height">item_max_height</string>
 	<string name="key_pref_dateformat_long">dateformat_long</string>

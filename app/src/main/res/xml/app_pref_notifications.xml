@@ -40,15 +40,22 @@
 
 	<SwitchPreference
 		android:defaultValue="false"
-		android:key="@string/key_pref_precise_alarms"
-		android:summary="@string/precise_alarms_summary"
-		android:title="@string/use_precise_alarms"/>
+		android:key="@string/key_pref_should_use_exact_alarms"
+		android:summary="@string/exact_alarms_summary"
+		android:title="@string/use_exact_alarms"/>
 
 	<!-- The user clicks this to open a system page to disable battery optimizations -->
 	<Preference
-		android:dependency="@string/key_pref_precise_alarms"
+		android:dependency="@string/key_pref_should_use_exact_alarms"
 		android:key="@string/key_pref_ignore_battery_optimizations"
 		android:summary="filled in NotificationPrefs.java"
 		android:title="@string/disable_battery_optimizations"/>
+
+	<!-- The user clicks this to open a system page to allow exact reminders -->
+	<Preference
+		android:dependency="@string/key_pref_should_use_exact_alarms"
+		android:key="@string/key_pref_allow_exact_reminders"
+		android:summary="@string/allow_exact_reminders_summary"
+		android:title="@string/allow_exact_reminders"/>
 
 </PreferenceScreen>
