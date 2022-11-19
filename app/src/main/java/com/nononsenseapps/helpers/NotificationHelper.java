@@ -391,9 +391,11 @@ public class NotificationHelper extends BroadcastReceiver {
 	}
 
 	/**
-	 * Schedules to be woken up at the next notification time. Uses {@link AlarmManager},
-	 * which can set alarms with different priorities. See
-	 * https://developer.android.com/training/scheduling/alarms#exact
+	 * Schedules this {@link BroadcastReceiver} to be woken up at the next notification time.
+	 * Uses {@link AlarmManager}, which can set alarms with different priorities.
+	 * See https://developer.android.com/training/scheduling/alarms#exact
+	 * You can't expect android to be precise or reliable: reminders will appear within
+	 * a few minutes from the specified time, or may not appear at all until the app is restarted
 	 */
 	private static void scheduleNext(Context context) {
 		// Get first future notification
@@ -406,11 +408,18 @@ public class NotificationHelper extends BroadcastReceiver {
 		//  https://developer.android.com/reference/android/Manifest.permission#SCHEDULE_EXACT_ALARM
 		//  https://developer.android.com/reference/android/Manifest.permission#USE_EXACT_ALARM
 
+		// TODO if this function still does not work, try these
+		//  https://stackoverflow.com/a/60323379/6307322
+		//  https://stackoverflow.com/a/60477054/6307322
+		//  https://github.com/yuriykulikov/AlarmClock/blob/78fe0d2077260e2c68a5f0731c563bf57f8c0fa2/app/src/main/java/com/better/alarm/presenter/ScheduledReceiver.java
+		//  which should let notifications appear even if the app is removed from the "recents" list
+
 		// if not empty, schedule alarm wake up
 		if (!notifications.isEmpty()) {
 			// at first's time
 			// Create a new PendingIntent and add it to the AlarmManager
 			Intent intent = new Intent(context, NotificationHelper.class)
+					.addFlags(Intent.FLAG_RECEIVER_FOREGROUND) // TODO <-- does it help ?
 					.setAction(Intent.ACTION_RUN);
 			PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 1, intent,
 					PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
