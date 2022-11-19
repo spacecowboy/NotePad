@@ -68,7 +68,8 @@ public class GTasksSyncDelay extends Service {
 		int id = 38475;
 
 		// Create a new PendingIntent and add it to the AlarmManager
-		Intent intent = new Intent(Intent.ACTION_RUN);
+		Intent intent = new Intent(this, GTasksSyncDelay.class) // EXPLICIT intent!
+				.setAction(Intent.ACTION_RUN);
 		PendingIntent pendingIntent = PendingIntent.getService(this, id, intent,
 				PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
