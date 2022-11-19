@@ -54,6 +54,13 @@ public class GTasksSyncDelay extends Service {
 		return null;
 	}
 
+	/**
+	 * Uses {@link AlarmManager} to schedule the synchronization.
+	 * Be careful about how you set the alarm.
+	 * https://developer.android.com/training/scheduling/alarms#exact
+	 * describes the differences between {@link AlarmManager#set} all
+	 * the way up to {@link AlarmManager#setAlarmClock}
+	 */
 	private void scheduleSync() {
 		// Create an offset from the current time in which the alarm will go off.
 		Calendar cal = Calendar.getInstance();
@@ -66,8 +73,10 @@ public class GTasksSyncDelay extends Service {
 				PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		am.cancel(pendingIntent);
-		// Yes, use local time
-		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+		// TODO if we ever re-enable google tasks sync, check this: set() is vague,
+		//  so you may want to use setExactAndAllowWhileIdle(), but it needs a permission. See
+		//  https://developer.android.com/training/scheduling/alarms#exact
+		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent); // Yes, use local time
 		NnnLogger.debug(GTasksSyncDelay.class, "Scheduled sync");
 	}
 }
