@@ -43,9 +43,9 @@ public final class NnnLogger {
 	 * @param caller  the class who's calling this function. Its name is added to the message
 	 * @param message the additional message sent to logcat
 	 */
-	public static <T> void error(@NonNull T caller, @NonNull String message) {
+	public static <T> void error(@NonNull Class<T> caller, @NonNull String message) {
 		try {
-			String tag2 = caller.getClass().getSimpleName();
+			String tag2 = caller.getSimpleName();
 			Log.e("NNN", tag2 + ": " + message);
 		} catch (Exception ignored) {
 			Log.e("NNN", message);
@@ -58,9 +58,9 @@ public final class NnnLogger {
 	 * @param caller  the class who's calling this function. Its name is added to the message
 	 * @param message the additional message sent to logcat
 	 */
-	public static <T> void warning(@NonNull T caller, @NonNull String message) {
+	public static <T> void warning(@NonNull Class<T> caller, @NonNull String message) {
 		try {
-			String tag2 = caller.getClass().getSimpleName();
+			String tag2 = caller.getSimpleName();
 			Log.w("NNN", tag2 + ": " + message);
 		} catch (Exception ignored) {
 			Log.w("NNN", message);
@@ -73,9 +73,9 @@ public final class NnnLogger {
 	 * @param caller  the class who's calling this function. Its name is added to the message
 	 * @param message the additional message sent to logcat
 	 */
-	public static <T> void debug(@NonNull T caller, @NonNull String message) {
+	public static <T> void debug(@NonNull Class<T> caller, @NonNull String message) {
 		try {
-			String tag2 = caller.getClass().getSimpleName();
+			String tag2 = caller.getSimpleName();
 			Log.d("NNN", tag2 + ": " + message);
 		} catch (Exception ignored) {
 			Log.d("NNN", message);
