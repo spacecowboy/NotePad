@@ -1,6 +1,16 @@
 # NoNonsense Notes
 
-[![Crowdin](https://d322cqt584bo4o.cloudfront.net/nononsensenotes/localized.png)](https://crowdin.com/project/nononsensenotes)       [![Android build](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml)      [![Android tests](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml)
+[![Android build](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml)          [![Android tests](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml)      [![Crowdin](https://d322cqt584bo4o.cloudfront.net/nononsensenotes/localized.png)](https://crowdin.com/project/nononsensenotes)
+
+<img src="https://img.shields.io/f-droid/v/com.nononsenseapps.notepad.svg?logo=F-Droid"/>
+<img src="https://img.shields.io/github/release/spacecowboy/NotePad.svg?logo=github"/>
+
+<img src="https://img.shields.io/github/release-date/spacecowboy/NotePad"/>
+<img src="https://img.shields.io/github/downloads/spacecowboy/NotePad/latest/total"/>
+
+<img src="https://img.shields.io/github/last-commit/spacecowboy/NotePad"/>
+<img src="https://img.shields.io/github/search/spacecowboy/NotePad/TODO"/>
+<img src="https://img.shields.io/librariesio/github/spacecowboy/NotePad"/>
 
 A note taking app for android with reminders, since 2012.
 
@@ -13,9 +23,7 @@ The app is currently being updated, and old versions are still available on f-dr
 
 How it looks like:
 
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Phone UI" height="480" />
-
-<img src="fastlane/metadata/android/en-US/images/tenInchScreenshots/1.png" alt="Tablet UI" height="360" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Phone UI" height="480" /><img src="fastlane/metadata/android/en-US/images/tenInchScreenshots/1.png" alt="Tablet UI" height="360" />
 
 ## Reporting bugs
 
