@@ -64,20 +64,10 @@ abstract class NavigationDrawerFragment_USELESS extends Fragment {
 	// TODO useless ? you may want to delete this
 
 	static final int VIEWTYPE_ITEM = 0;
-	static final int VIEWTYPE_EXTRA_HEADER_ITEM = 1;
-	static final int VIEWTYPE_EXTRA_FOOTER_ITEM = 2;
-	static final int VIEWTYPE_SEPARATOR_HEADER = 3;
-	static final int VIEWTYPE_SEPARATOR_FOOTER = 4;
+
 	static final int VIEWTYPE_TOPLEVEL = 5;
-	static final String[] COUNTROWS = new String[] { "COUNT(1)" };
-	static final String NOTCOMPLETED = Task.Columns.COMPLETED + " IS NULL ";
-	private static final long EXTRA_ID_SETTINGS = -100;
-	private static final long EXTRA_ID_ABOUT = -101;
-	private static final long EXTRA_ID_CREATE_LIST = -102;
-	private static final long EXTRA_ID_CHANGELOG = -103;
-	private static final long EXTRA_ID_SEPARATOR_1 = -1001;
-	private static final long EXTRA_ID_SEPARATOR_2 = -1002;
-	private static final int LOADER_NAVDRAWER_LISTS = 0;
+
+
 
 	/**
 	 * Per the design guidelines, you should show the drawer on launch until the user manually
@@ -93,7 +83,7 @@ abstract class NavigationDrawerFragment_USELESS extends Fragment {
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
 	private Adapter mAdapter;
-	private NavigationDrawerCallbacks mCallbacks;
+
 	private boolean mIsThemeLight;
 
 
@@ -150,35 +140,8 @@ abstract class NavigationDrawerFragment_USELESS extends Fragment {
 		mDrawerLayout.setDrawerListener(mDrawerToggle);
 	}
 
-	@Override
-	public void onAttach(Context context) {
-		super.onAttach(context);
-		try {
-			mCallbacks = (NavigationDrawerCallbacks) getActivity();
-		} catch (ClassCastException e) {
-			throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
-		}
-	}
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
 
-		mIsThemeLight = true;//SharedPreferencesHelper.isCurrentThemeLight(getActivity());
-
-		// Read in the flag indicating whether or not the user has demonstrated awareness of the
-		// drawer. See PREF_USER_LEARNED_DRAWER for details.
-		SharedPreferences sp = PreferenceManager.getDefaultSharedPreferences(getActivity());
-		mUserLearnedDrawer = sp.getBoolean(PREF_USER_LEARNED_DRAWER, false);
-
-		if (savedInstanceState != null) {
-			//mCurrentSelectedPosition = savedInstanceState.getInt(STATE_SELECTED_POSITION);
-			mFromSavedInstanceState = true;
-		}
-
-		// To get call to handle home button
-		hasOptionsMenu();
-	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savInstState) {
@@ -223,19 +186,7 @@ abstract class NavigationDrawerFragment_USELESS extends Fragment {
 	}
 
 
-	public interface NavigationDrawerCallbacks {
-		void openList(long id);
 
-		void createList();
-
-		void editList(long id);
-
-		void openSettings();
-
-		void openAbout();
-
-		void openChangelog();
-	}
 
 	/**
 	 * The interface of the extra items in this adapter.

@@ -820,7 +820,7 @@ public class Task extends DAO {
 
 			result &= (title != null && title.equals(other.title));
 			result &= (note != null && note.equals(other.note));
-			result &= (due == other.due);
+			result &= (due.equals(other.due));
 			result &= ((completed != null) == (other.completed != null));
 
 		} else {

@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class Synchronizer extends DBSyncBase implements
 		SynchronizerInterface {
@@ -405,10 +406,10 @@ public abstract class Synchronizer extends DBSyncBase implements
 
 		final Long nodedue = OrgConverter.getDeadline(node);
 
-		if (task.due != basedue) {
+		if (!task.due.equals(basedue)) {
 			shouldSave = SAVEORG;
 			OrgConverter.setDeadline(node, task.due);
-		} else if (nodedue != basedue) {
+		} else if (!Objects.equals(nodedue, basedue)) {
 			shouldSave = SAVEDB;
 			task.due = nodedue;
 		} else {

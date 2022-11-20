@@ -108,7 +108,7 @@ public class DonateMigrator extends IntentService {
 	 */
 	void importNotes() {
 		final HashMap<Long, Long> listIDMap = new HashMap<>();
-		final HashMap<Long, Long> taskIDMap = new HashMap<>();
+		//final HashMap<Long, Long> taskIDMap = new HashMap<>();
 
 		// Work through, list by list
 		try (Cursor listCursor = getContentResolver().query(
@@ -179,7 +179,7 @@ public class DonateMigrator extends IntentService {
 
 				if (t.dblist != null) {
 					t.save(this, t.updated);
-					taskIDMap.put(noteCursor.getLong(0), t._id);
+					//taskIDMap.put(noteCursor.getLong(0), t._id);
 					mNotesImportedCount += 1;
 				}
 				// Gtask

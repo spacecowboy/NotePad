@@ -302,7 +302,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		final ArrayList<com.nononsenseapps.notepad.database.Notification> dups = new ArrayList<>();
 
 		for (com.nononsenseapps.notepad.database.Notification noti : notifications) {
-			if (noti.taskID == first.taskID && noti._id != first._id) {
+			if (noti.taskID.equals(first.taskID) && noti._id != first._id) {
 				dups.add(noti);
 			}
 		}

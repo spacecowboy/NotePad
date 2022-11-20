@@ -203,7 +203,7 @@ public class GoogleTask extends RemoteTask {
 		if (o instanceof GoogleTask) {
 			// It's a list!
 			GoogleTask task = (GoogleTask) o;
-			if (dbid != -1 && dbid == task.dbid) {
+			if (dbid != -1 && dbid.equals(task.dbid)) {
 				equal = true;
 			}
 			if (remoteId != null && remoteId.equals(task.remoteId)) {

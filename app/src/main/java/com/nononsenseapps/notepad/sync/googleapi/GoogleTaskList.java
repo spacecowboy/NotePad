@@ -104,7 +104,7 @@ public class GoogleTaskList extends RemoteTaskList {
 		if (o instanceof GoogleTaskList) {
 			// It's a list!
 			GoogleTaskList list = (GoogleTaskList) o;
-			if (dbid != -1 && dbid == list.dbid) {
+			if (dbid != -1 && dbid.equals(list.dbid)) {
 				equal = true;
 			}
 			if (remoteId != null && remoteId.equals(list.remoteId)) {
