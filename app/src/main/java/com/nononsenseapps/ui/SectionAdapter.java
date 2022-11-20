@@ -367,8 +367,6 @@ public class SectionAdapter extends BaseAdapter {
 
 	/**
 	 * Will also clear existing adapters etc
-	 *
-	 * @param state
 	 */
 	public void changeState(String state) {
 		if (headers == null) {
@@ -376,7 +374,7 @@ public class SectionAdapter extends BaseAdapter {
 		}
 		if (!getState().equals(state)) {
 			for (String header : sections.keySet().toArray(
-					new String[sections.size()])) {
+					new String[0])) {
 				removeSection(header, null);
 			}
 			this.state = state;

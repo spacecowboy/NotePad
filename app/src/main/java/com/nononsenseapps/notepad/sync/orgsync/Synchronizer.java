@@ -49,9 +49,6 @@ public abstract class Synchronizer extends DBSyncBase implements
 
 	/**
 	 * Performs a full 2-way sync between the DB and the remote source.
-	 *
-	 * @throws IOException
-	 * @throws ParseException
 	 */
 	public void fullSync() throws IOException, ParseException {
 		// For all pairs of files and db entries

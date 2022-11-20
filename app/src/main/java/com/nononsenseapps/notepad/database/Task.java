@@ -880,10 +880,6 @@ public class Task extends DAO {
 
 	/**
 	 * Convenience method to complete tasks. Runs on the thread that called it.
-	 *
-	 * @param context
-	 * @param completed
-	 * @param ids
 	 */
 	public static void setCompletedSynced(final Context context,
 										  final boolean completed, final Long... ids) {

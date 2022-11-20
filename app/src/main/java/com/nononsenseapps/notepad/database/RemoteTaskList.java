@@ -249,8 +249,6 @@ public class RemoteTaskList extends DAO {
 	 * Returns a where clause that can be used to fetch the tasklist that
 	 * is associated with this remote object.
 	 * As argument, use remoteid, account, service
-	 *
-	 * @return
 	 */
 	public String getTaskListWithRemoteClause() {
 		return BaseColumns._ID + " IN (SELECT " +

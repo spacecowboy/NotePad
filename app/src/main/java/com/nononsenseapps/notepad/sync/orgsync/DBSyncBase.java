@@ -204,8 +204,6 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	 * Reads the database and the remote source.
 	 *
 	 * @return The matching TaskList and OrgFiles.
-	 * @throws ParseException
-	 * @throws IOException
 	 */
 	protected List<Pair<OrgFile, Pair<RemoteTaskList, TaskList>>> getFilesAndDBEntries()
 			throws IOException, ParseException {

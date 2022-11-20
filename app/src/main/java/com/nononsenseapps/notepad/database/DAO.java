@@ -83,7 +83,7 @@ public abstract class DAO {
 				list.addAll(Arrays.asList(array));
 			}
 		}
-		return list.toArray(new String[list.size()]);
+		return list.toArray(new String[0]);
 	}
 
 	/**

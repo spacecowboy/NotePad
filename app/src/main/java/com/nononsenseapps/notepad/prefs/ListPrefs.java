@@ -116,10 +116,8 @@ public class ListPrefs extends PreferenceFragment {
 
 		// Set the values
 		if (listSpinner != null) {
-			listSpinner.setEntries(entries.toArray(new CharSequence[entries
-					.size()]));
-			listSpinner.setEntryValues(values.toArray(new CharSequence[values
-					.size()]));
+			listSpinner.setEntries(entries.toArray(new CharSequence[0]));
+			listSpinner.setEntryValues(values.toArray(new CharSequence[0]));
 
 			listSpinner.setSummary(listSpinner.getEntry());
 		}

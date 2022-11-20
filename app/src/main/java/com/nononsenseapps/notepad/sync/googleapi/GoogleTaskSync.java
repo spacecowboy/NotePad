@@ -37,9 +37,6 @@ import com.nononsenseapps.util.PermissionsHelper;
 import com.nononsenseapps.util.SyncGtaskHelper;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;

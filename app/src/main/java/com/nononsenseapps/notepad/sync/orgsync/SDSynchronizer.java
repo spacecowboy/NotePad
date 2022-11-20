@@ -172,7 +172,6 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 	 * Rename the file on the remote end.
 	 *
 	 * @param oldName The name it is currently stored as on the remote end.
-	 * @param orgFile
 	 */
 	@Override
 	public void renameRemoteFile(String oldName, OrgFile orgFile) {

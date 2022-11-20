@@ -490,7 +490,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			 *
 			 */
 			private void deleteTasks(final Map<Long, Task> taskMap) {
-				final Task[] tasks = taskMap.values().toArray(new Task[taskMap.size()]);
+				final Task[] tasks = taskMap.values().toArray(new Task[0]);
 
 				// If any are locked, ask for password first
 				final boolean locked = SharedPreferencesHelper.isPasswordSet(getActivity());
@@ -626,7 +626,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 				} else if (itemId == R.id.menu_switch_list) {
 					// show move to list dialog
 					DialogMoveToList.getInstance(
-									tasks.keySet().toArray(new Long[tasks.size()]))
+									tasks.keySet().toArray(new Long[0]))
 							.show(getFragmentManager(), "move_to_list_dialog");
 					finish = true;
 				} else if (itemId == R.id.menu_share) {

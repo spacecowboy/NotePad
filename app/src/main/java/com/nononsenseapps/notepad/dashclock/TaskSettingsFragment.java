@@ -119,8 +119,6 @@ public class TaskSettingsFragment extends PreferenceFragment {
 
 	/**
 	 * Reads the lists from database. Also adds "All lists" as the first item.
-	 *
-	 * @return
 	 */
 	private static void setEntries(Activity activity, ListPreference listSpinner) {
 
@@ -151,9 +149,9 @@ public class TaskSettingsFragment extends PreferenceFragment {
 		// Set the values
 		if (listSpinner != null) {
 			listSpinner.setEntries(
-					entries.toArray(new CharSequence[entries.size()]));
+					entries.toArray(new CharSequence[0]));
 			listSpinner.setEntryValues(
-					values.toArray(new CharSequence[values.size()]));
+					values.toArray(new CharSequence[0]));
 
 			listSpinner.setSummary(listSpinner.getEntry());
 		}

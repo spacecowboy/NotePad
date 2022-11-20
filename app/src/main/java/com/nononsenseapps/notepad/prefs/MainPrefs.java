@@ -91,7 +91,7 @@ public class MainPrefs extends PreferenceFragment {
 					.getLocalDateString(getActivity(), val, cal.getTimeInMillis()));
 		}
 
-		prefDate.setEntries(entries.toArray(new CharSequence[entries.size()]));
+		prefDate.setEntries(entries.toArray(new CharSequence[0]));
 		prefDate.setEntryValues(values);
 	}
 
@@ -115,8 +115,8 @@ public class MainPrefs extends PreferenceFragment {
 			entries.add(l.getDisplayName(l));
 			values.add(lang);
 		}
-		prefLang.setEntries(entries.toArray(new CharSequence[entries.size()]));
-		prefLang.setEntryValues(values.toArray(new CharSequence[values.size()]));
+		prefLang.setEntries(entries.toArray(new CharSequence[0]));
+		prefLang.setEntryValues(values.toArray(new CharSequence[0]));
 
 		// Set summary
 		prefLang.setSummary(prefLang.getEntry());
