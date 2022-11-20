@@ -26,19 +26,12 @@ public class WidgetPrefs {
 	public final static String WIDGET_PRESENT_KEY = "WidgetPresent";
 	public final static boolean WIDGET_PRESENT_DEFAULT = false;
 
-	// public static final String SHARED_PREFS_BASE = "prefs_widget_";
-	/*
-	 * public static String getSharedPrefsFile(int widgetId) { return
-	 * SHARED_PREFS_BASE + widgetId; }
-	 */
-
 	private final int widgetId;
-	private SharedPreferences prefs = null;
+	private final SharedPreferences prefs;
 	private SharedPreferences.Editor prefsEditor = null;
 
 	public static void delete(final Context context, final int widgetId) {
-		SharedPreferences prefs = context.getSharedPreferences(PREFS_KEY,
-				Context.MODE_PRIVATE);
+		SharedPreferences prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
 		if (prefs != null) {
 			SharedPreferences.Editor edit = prefs.edit();
 			if (edit != null) {
@@ -62,8 +55,7 @@ public class WidgetPrefs {
 
 	public boolean isPresent() {
 		if (prefs != null) {
-			return prefs.getBoolean(keyWrap(WIDGET_PRESENT_KEY),
-					WIDGET_PRESENT_DEFAULT);
+			return prefs.getBoolean(keyWrap(WIDGET_PRESENT_KEY), WIDGET_PRESENT_DEFAULT);
 		}
 		return false;
 	}
