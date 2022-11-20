@@ -203,7 +203,7 @@ public class ListWidgetProvider extends AppWidgetProvider {
 					.setData(data);
 
 			PendingIntent onClickPendingIntent =
-					getThePendingIntentForBroadcast(onClickIntent,context);
+					getThePendingIntentForBroadcast(onClickIntent, context);
 			rv.setPendingIntentTemplate(R.id.notesList, onClickPendingIntent);
 		}
 

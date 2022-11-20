@@ -49,19 +49,19 @@ public class NotificationPrefs extends PreferenceFragment {
 
 		findPreference(getString(R.string.key_pref_allow_exact_reminders))
 				.setOnPreferenceClickListener(p -> {
-			if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-				// open a settings page to enable exact reminders for this app.
-				// they're enabled by default in the Android 12 emulator
-				Intent i = new Intent()
-						.setAction(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
-						.setData(Uri.parse("package:"+getContext().getPackageName()));
-				startActivity(i);
-			} else {
-				// not needed before android S
-			}
-			// we don't care about the value
-			return false;
-		});
+					if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
+						// open a settings page to enable exact reminders for this app.
+						// they're enabled by default in the Android 12 emulator
+						Intent i = new Intent()
+								.setAction(Settings.ACTION_REQUEST_SCHEDULE_EXACT_ALARM)
+								.setData(Uri.parse("package:" + getContext().getPackageName()));
+						startActivity(i);
+					} else {
+						// not needed before android S
+					}
+					// we don't care about the value
+					return false;
+				});
 	}
 
 	@Override

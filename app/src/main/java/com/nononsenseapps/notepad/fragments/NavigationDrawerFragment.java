@@ -59,7 +59,7 @@ import java.util.ArrayList;
  * This fragment is the view which is displayed in the left drawer.
  * Any activity containing it must implement NavigationDrawerCallbacks.
  */
-abstract class NavigationDrawerFragment_USELESS extends Fragment{
+abstract class NavigationDrawerFragment_USELESS extends Fragment {
 
 	// TODO useless ? you may want to delete this
 
@@ -95,9 +95,6 @@ abstract class NavigationDrawerFragment_USELESS extends Fragment{
 	private Adapter mAdapter;
 	private NavigationDrawerCallbacks mCallbacks;
 	private boolean mIsThemeLight;
-
-
-
 
 
 	/**
@@ -236,9 +233,6 @@ abstract class NavigationDrawerFragment_USELESS extends Fragment{
 	private ActionBar getActionBar() {
 		return ((AppCompatActivity) getActivity()).getSupportActionBar();
 	}
-
-
-
 
 
 	public interface NavigationDrawerCallbacks {
@@ -579,7 +573,7 @@ abstract class NavigationDrawerFragment_USELESS extends Fragment{
 			TextDrawable drawable = TextDrawable.builder()
 					.buildRound(mItem.getTitle().toUpperCase().substring(0, 1),
 							ColorGenerator.Companion.getMATERIAL().getColor(
-							mItem.getTitle()));
+									mItem.getTitle()));
 
 			mAvatar.setImageDrawable(drawable);
 		}
@@ -609,7 +603,6 @@ abstract class NavigationDrawerFragment_USELESS extends Fragment{
 				TextDrawable drawable = TextDrawable.builder().buildRound(mItem.getTitle()
 								.toUpperCase().substring(0, 1),
 						ColorGenerator.Companion.getMATERIAL().getColor(mItem.getTitle()));
-
 
 
 				mAvatar.setImageDrawable(drawable);

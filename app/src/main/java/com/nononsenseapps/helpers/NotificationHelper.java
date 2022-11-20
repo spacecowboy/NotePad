@@ -85,7 +85,7 @@ public class NotificationHelper extends BroadcastReceiver {
 			if (Intent.ACTION_BOOT_COMPLETED.equals(action) || Intent.ACTION_RUN.equals(action)) {
 				// => can't cancel anything. Just schedule and notify at end of the function.
 				// (Intent.ACTION_BOOT_COMPLETED is for when the phone is rebooted,
-				// Intent.ACTION_RUN is for notifications scheduled through the AlarmManager)
+				// Intent.ACTION_RUN is for notifications scheduled through the Alarm Manager)
 			} else {
 				// => always cancel
 				cancelNotification(context, intent.getData());
@@ -120,8 +120,8 @@ public class NotificationHelper extends BroadcastReceiver {
 				}
 			}
 		}
-		// run this in ANY case
-		notifyPast(context, true);
+		// run these in ANY case
+		notifyPast(context);
 		scheduleNext(context);
 	}
 
@@ -166,11 +166,10 @@ public class NotificationHelper extends BroadcastReceiver {
 	}
 
 	/**
-	 * Displays notifications that have a time occurring in the past (and no
-	 * location). If no notifications like that exist, will make sure to cancel
-	 * any notifications showing.
+	 * Displays notifications that have a time occurring in the past. If no notifications
+	 * like that exist, it will make sure to cancel any notifications showing.
 	 */
-	private static void notifyPast(Context context, boolean alertOnce) {
+	private static void notifyPast(Context context) {
 		// Get list of past notifications
 		final Calendar now = Calendar.getInstance();
 
@@ -193,21 +192,20 @@ public class NotificationHelper extends BroadcastReceiver {
 
 		// If empty, cancel
 		if (notifications.isEmpty()) {
-			// cancelAll permanent notifications here if/when that is
-			// implemented. Don't touch others.
-			// Dont do this, it clears location
+			// cancelAll permanent notifications here if/when that is implemented.
+			// Don't touch others. Dont do this, it clears location
 			// notificationManager.cancelAll();
 		} else {
 			// else, notify
+
 			// Fetch sound and vibrate settings
-			final SharedPreferences prefs = PreferenceManager
-					.getDefaultSharedPreferences(context);
+			final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(context);
 
 			// Always use default lights
 			int lightAndVibrate = Notification.DEFAULT_LIGHTS;
 			// If vibrate on, use default vibration pattern also
-			if (prefs.getBoolean(context.getString(R.string.key_pref_vibrate),
-					false)) lightAndVibrate |= Notification.DEFAULT_VIBRATE;
+			if (prefs.getBoolean(context.getString(R.string.key_pref_vibrate), false))
+				lightAndVibrate |= Notification.DEFAULT_VIBRATE;
 
 			// Need to get a new one because the action buttons will duplicate otherwise
 			NotificationCompat.Builder builder;
@@ -225,8 +223,8 @@ public class NotificationHelper extends BroadcastReceiver {
 
 			// Notify for each individually
 			for (com.nononsenseapps.notepad.database.Notification note : notifications) {
-				builder = getNotificationBuilder(
-						context, priority, lightAndVibrate, ringtone, alertOnce);
+				// notifications.length is ~3 => optimization is not needed
+				builder = getNotificationBuilder(context, priority, lightAndVibrate, ringtone);
 				notifyBigText(context, notificationManager, builder, note);
 			}
 		}
@@ -235,10 +233,10 @@ public class NotificationHelper extends BroadcastReceiver {
 	/**
 	 * Returns a notification builder set with non-item specific properties.
 	 */
-	private static NotificationCompat.Builder getNotificationBuilder(
-			final Context context, final int priority,
-			final int lightAndVibrate, final Uri ringtone,
-			final boolean alertOnce) {
+	private static NotificationCompat.Builder getNotificationBuilder(final Context context,
+																	 final int priority,
+																	 final int lightAndVibrate,
+																	 final Uri ringtone) {
 		// useless ? the small icon should be enough
 		final Bitmap largeIcon = BitmapFactory
 				.decodeResource(context.getResources(), R.drawable.app_icon);
@@ -251,7 +249,7 @@ public class NotificationHelper extends BroadcastReceiver {
 				.setPriority(priority) // TODO always use NotificationCompat.PRIORITY_DEFAULT instead ?
 				.setDefaults(lightAndVibrate)
 				.setAutoCancel(true)
-				.setOnlyAlertOnce(alertOnce)
+				.setOnlyAlertOnce(true)
 				.setSound(ringtone);
 		return builder;
 	}
@@ -417,6 +415,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		//  https://stackoverflow.com/a/60323379/6307322
 		//  https://stackoverflow.com/a/60477054/6307322
 		//  https://github.com/yuriykulikov/AlarmClock/blob/78fe0d2077260e2c68a5f0731c563bf57f8c0fa2/app/src/main/java/com/better/alarm/presenter/ScheduledReceiver.java
+		//  https://stackoverflow.com/a/71464360/6307322
 		//  which should let notifications appear even if the app is removed from the "recents" list
 
 		// if not empty, schedule alarm wake up
@@ -489,7 +488,7 @@ public class NotificationHelper extends BroadcastReceiver {
 	 * notififies once for existing notifications.
 	 */
 	public static void schedule(final Context context) {
-		notifyPast(context, true);
+		notifyPast(context);
 		scheduleNext(context);
 	}
 
@@ -516,7 +515,7 @@ public class NotificationHelper extends BroadcastReceiver {
 			notification.save(context);
 		}
 
-		notifyPast(context, true);
+		notifyPast(context);
 		scheduleNext(context);
 	}
 
@@ -604,7 +603,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		@Override
 		public void onChange(boolean selfChange, Uri uri) {
 			// Handle change but don't spam
-			notifyPast(context, true);
+			notifyPast(context);
 		}
 	}
 }

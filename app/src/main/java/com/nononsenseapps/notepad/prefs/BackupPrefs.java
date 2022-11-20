@@ -84,8 +84,8 @@ public class BackupPrefs extends PreferenceFragment {
 	 * <code>setupFolderListPreference(this.getContext(),this,this.KEY_BACKUP_LOCATION);</code>
 	 */
 	public static void setupFolderListPreference(@NonNull Context context,
-												  @NonNull PreferenceFragment prefPage,
-												  @NonNull String PREFERENCE_KEY) {
+												 @NonNull PreferenceFragment prefPage,
+												 @NonNull String PREFERENCE_KEY) {
 		// list preference to choose the backup folder
 		String[] choices = FileHelper.getPathsOfPossibleFolders(context);
 
