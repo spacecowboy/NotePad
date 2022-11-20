@@ -82,7 +82,7 @@ abstract class NavigationDrawerFragment_USELESS extends Fragment {
 	private DrawerLayout mDrawerLayout;
 	private boolean mFromSavedInstanceState;
 	private boolean mUserLearnedDrawer;
-	private Adapter mAdapter;
+
 
 	private boolean mIsThemeLight;
 
@@ -98,12 +98,6 @@ abstract class NavigationDrawerFragment_USELESS extends Fragment {
 		// set a custom shadow that overlays the main content when the drawer opens
 		//mDrawerLayout.setDrawerShadow(R.drawable.drawer_shadow, GravityCompat.START);
 		// Fix the color of the status bar
-
-		final ActionBar ab = getActionBar();
-		if (ab != null) {
-			ab.setHomeAsUpIndicator(R.drawable.ic_menu_24dp_white);
-			ab.setDisplayHomeAsUpEnabled(true);
-		}
 
 		// ActionBarDrawerToggle ties together the the proper interactions
 		// between the navigation drawer and the action bar app icon.
@@ -150,18 +144,12 @@ abstract class NavigationDrawerFragment_USELESS extends Fragment {
 
 		// TODO add edit lists item?
 
-		list.setAdapter(mAdapter);
 		list.setHasFixedSize(true);
 
 		LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
 		list.setLayoutManager(layoutManager);
 
 		return rootView;
-	}
-
-	@Override
-	public void onSaveInstanceState(@NonNull Bundle outState) {
-		super.onSaveInstanceState(outState);
 	}
 
 	@Override
@@ -181,112 +169,11 @@ abstract class NavigationDrawerFragment_USELESS extends Fragment {
 		}
 	}
 
-	private ActionBar getActionBar() {
-		return ((AppCompatActivity) getActivity()).getSupportActionBar();
-	}
 
 
 
 
-	/**
-	 * The interface of the extra items in this adapter.
-	 */
-	interface ExtraItem {
-		long getItemId();
-
-		int getViewType();
-	}
-
-	private class Adapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-
-		private final ExtraItem[] headers;
-		private final ExtraItem[] footers;
-		Cursor mCursor = null;
-
-		public Adapter(@NonNull ExtraItem[] headers, @NonNull ExtraItem[] footers) {
-			setHasStableIds(true);
-			this.headers = headers;
-			this.footers = footers;
-		}
-
-		@NonNull
-		@Override
-		public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-			return null;
-		}
-
-		@Override
-		public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
-
-		}
-
-		@Override
-		public int getItemViewType(int position) {
-			if (isHeader(position)) {
-				return headers[position].getViewType();
-			} else if (isFooter(position)) {
-				return footers[actualPosition(position)].getViewType();
-			} else {
-				return VIEWTYPE_ITEM;
-			}
-		}
-
-		@Override
-		public long getItemId(int position) {
-			if (isHeader(position)) {
-				return headers[position].getItemId();
-			} else if (isFooter(position)) {
-				return footers[actualPosition(position)].getItemId();
-			} else {
-				mCursor.moveToPosition(actualPosition(position));
-				return mCursor.getLong(0);
-			}
-		}
-
-		@Override
-		public int getItemCount() {
-			int result = headers.length + footers.length;
-			if (mCursor != null) {
-				result += mCursor.getCount();
-			}
-			return result;
-		}
-
-		/**
-		 * @param position as seen from the outside
-		 * @return position as seen by internal data (header position if header, wrapped position
-		 * if..)
-		 */
-		public int actualPosition(int position) {
-			if (isHeader(position)) {
-				return position;
-			} else if (isFooter(position)) {
-				int cursorCount = mCursor == null ? 0 : mCursor.getCount();
-				return position - headers.length - cursorCount;
-			} else {
-				return position - headers.length;
-			}
-		}
-
-		/**
-		 * @param position as seen from the outside
-		 * @return true if position is on a footer, false otherwise
-		 */
-		public boolean isFooter(int position) {
-			return (getItemCount() - position) <= footers.length;
-		}
-
-		/**
-		 * @param position as seen from the outside
-		 * @return true if position is on a header, false otherwise
-		 */
-		public boolean isHeader(int position) {
-			return position < headers.length;
-		}
-	}
-
-
-	class TopLevelItem implements ExtraItem {
+	class TopLevelItem {
 
 		public String getAvatarName() {
 			// Try google account first
@@ -304,15 +191,7 @@ abstract class NavigationDrawerFragment_USELESS extends Fragment {
 			return result;
 		}
 
-		@Override
-		public long getItemId() {
-			return 0;
-		}
 
-		@Override
-		public int getViewType() {
-			return VIEWTYPE_TOPLEVEL;
-		}
 	}
 
 }

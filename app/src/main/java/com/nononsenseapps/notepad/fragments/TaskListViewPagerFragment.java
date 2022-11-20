@@ -253,18 +253,10 @@ public class TaskListViewPagerFragment extends Fragment implements
 	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
 		if (mTaskListsAdapter != null && pager != null) {
-			outState.putLong(START_LIST_ID,
-					mTaskListsAdapter.getItemId(pager.getCurrentItem()));
-			Log.d("nononsenseapps list",
-					"Save state: "
-							+ mTaskListsAdapter.getItemId(pager
-							.getCurrentItem()));
+			outState.putLong(START_LIST_ID, mTaskListsAdapter.getItemId(pager.getCurrentItem()));
+			Log.d("nononsenseapps list", "Save state: "
+					+ mTaskListsAdapter.getItemId(pager.getCurrentItem()));
 		}
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
 	}
 
 	@Override

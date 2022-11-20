@@ -72,11 +72,6 @@ public class PasswordPrefs extends Fragment {
 		return layout;
 	}
 
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-	}
-
 	private void applyPassword() {
 		if (password1.getText().toString()
 				.equals(password2.getText().toString())) {

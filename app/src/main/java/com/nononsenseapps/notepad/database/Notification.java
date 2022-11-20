@@ -582,11 +582,6 @@ public class Notification extends DAO {
 		task.execute(listId);
 	}
 
-	public static void completeTasksInList(final Context context, final long listId,
-										   final long maxTime) {
-
-	}
-
 	/**
 	 * Returns true if the notification repeats on the given day. Day of the
 	 * week as given by Calendar.getField(DayOfWeek)

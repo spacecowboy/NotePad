@@ -241,7 +241,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		final Bitmap largeIcon = BitmapFactory
 				.decodeResource(context.getResources(), R.drawable.app_icon);
 
-		final NotificationCompat.Builder builder = new NotificationCompat
+		return new NotificationCompat
 				.Builder(context, CHANNEL_ID) // let's use only 1 channel in this app
 				.setWhen(0)
 				.setSmallIcon(R.drawable.ic_stat_notification_edit)
@@ -251,7 +251,6 @@ public class NotificationHelper extends BroadcastReceiver {
 				.setAutoCancel(true)
 				.setOnlyAlertOnce(true)
 				.setSound(ringtone);
-		return builder;
 	}
 
 	/**

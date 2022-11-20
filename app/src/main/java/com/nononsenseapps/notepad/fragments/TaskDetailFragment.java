@@ -920,14 +920,13 @@ public class TaskDetailFragment extends Fragment {
 				: android.R.style.Theme_Material_Dialog;
 
 		boolean shouldShowIn24HourMode = DateFormat.is24HourFormat(getActivity());
-		final TimePickerDialog timePickDiag = new TimePickerDialog(
+		return new TimePickerDialog(
 				this.getActivity(),
 				themeResId,
 				listener, // set the callback for when the user chooses a time
 				localTime.get(Calendar.HOUR_OF_DAY), // set the initial hour & minute
 				localTime.get(Calendar.MINUTE),
 				shouldShowIn24HourMode);
-		return timePickDiag;
 	}
 
 }
