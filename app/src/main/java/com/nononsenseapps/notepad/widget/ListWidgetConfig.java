@@ -37,6 +37,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
@@ -270,6 +271,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 
 		mCallback = new LoaderCallbacks<>() {
 
+			@NonNull
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
 
@@ -326,7 +328,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 			}
 
 			@Override
-			public void onLoadFinished(Loader<Cursor> l, Cursor c) {
+			public void onLoadFinished(@NonNull Loader<Cursor> l, Cursor c) {
 				if (l.getId() == 1) {
 					mListAdapter.swapCursor(c);
 					final int pos = getListPositionOf(mListAdapter,
@@ -341,7 +343,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 			}
 
 			@Override
-			public void onLoaderReset(Loader<Cursor> l) {
+			public void onLoaderReset(@NonNull Loader<Cursor> l) {
 				if (l.getId() == 1) {
 					mListAdapter.swapCursor(null);
 				} else {

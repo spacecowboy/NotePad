@@ -70,6 +70,7 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 	 */
 	public abstract Fragment getItem(int position);
 
+	@NonNull
 	@Override
 	public Object instantiateItem(@NonNull ViewGroup container, int position) {
 		if (mCurTransaction == null) {
@@ -99,7 +100,7 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 	}
 
 	@Override
-	public void destroyItem(ViewGroup container, int position, Object object) {
+	public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
 		if (mCurTransaction == null) {
 			mCurTransaction = mFragmentManager.beginTransaction();
 		}
@@ -119,7 +120,7 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 	}
 
 	@Override
-	public void setPrimaryItem(ViewGroup container, int position, Object object) {
+	public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
 		Fragment fragment = (Fragment) object;
 		if (fragment != mCurrentPrimaryItem) {
 			if (mCurrentPrimaryItem != null) {
@@ -135,7 +136,7 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 	}
 
 	@Override
-	public void finishUpdate(ViewGroup container) {
+	public void finishUpdate(@NonNull ViewGroup container) {
 		if (mCurTransaction != null) {
 			mCurTransaction.commitAllowingStateLoss();
 			mCurTransaction = null;
@@ -144,7 +145,7 @@ public abstract class FragmentPagerAdapter extends PagerAdapter {
 	}
 
 	@Override
-	public boolean isViewFromObject(View view, Object object) {
+	public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
 		return ((Fragment) object).getView() == view;
 	}
 

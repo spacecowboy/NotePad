@@ -25,6 +25,7 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.fragment.app.DialogFragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
@@ -113,6 +114,7 @@ public class DialogMoveToList extends DialogFragment {
 		getLoaderManager().restartLoader(0, null,
 				new LoaderCallbacks<Cursor>() {
 
+					@NonNull
 					@Override
 					public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 						return new CursorLoader(getActivity(), TaskList.URI,
@@ -123,12 +125,12 @@ public class DialogMoveToList extends DialogFragment {
 					}
 
 					@Override
-					public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
+					public void onLoadFinished(@NonNull Loader<Cursor> arg0, Cursor c) {
 						adapter.swapCursor(c);
 					}
 
 					@Override
-					public void onLoaderReset(Loader<Cursor> arg0) {
+					public void onLoaderReset(@NonNull Loader<Cursor> arg0) {
 						adapter.swapCursor(null);
 					}
 				});

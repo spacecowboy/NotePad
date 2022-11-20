@@ -27,6 +27,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 
 import java.util.ArrayList;
@@ -62,11 +63,12 @@ public abstract class FragmentStatePagerAdapter extends PagerAdapter {
 	public abstract long getItemId(int position);
 
 	@Override
-	public void startUpdate(ViewGroup container) {
+	public void startUpdate(@NonNull ViewGroup container) {
 	}
 
+	@NonNull
 	@Override
-	public Object instantiateItem(ViewGroup container, int position) {
+	public Object instantiateItem(@NonNull ViewGroup container, int position) {
 		// If we already have this item instantiated, there is nothing
 		// to do.  This can happen when we are restoring the entire pager
 		// from its saved state, where the fragment manager has already
@@ -111,7 +113,7 @@ public abstract class FragmentStatePagerAdapter extends PagerAdapter {
 	}
 
 	@Override
-	public void destroyItem(ViewGroup container, int position, Object object) {
+	public void destroyItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
 		Fragment fragment = (Fragment) object;
 
 		if (mCurTransaction == null) {
@@ -129,7 +131,7 @@ public abstract class FragmentStatePagerAdapter extends PagerAdapter {
 	}
 
 	@Override
-	public void setPrimaryItem(ViewGroup container, int position, Object object) {
+	public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
 		Fragment fragment = (Fragment) object;
 		if (fragment != mCurrentPrimaryItem) {
 			if (mCurrentPrimaryItem != null) {
@@ -143,7 +145,7 @@ public abstract class FragmentStatePagerAdapter extends PagerAdapter {
 	}
 
 	@Override
-	public void finishUpdate(ViewGroup container) {
+	public void finishUpdate(@NonNull ViewGroup container) {
 		if (mCurTransaction != null) {
 			mCurTransaction.commitAllowingStateLoss();
 			mCurTransaction = null;
@@ -152,7 +154,7 @@ public abstract class FragmentStatePagerAdapter extends PagerAdapter {
 	}
 
 	@Override
-	public boolean isViewFromObject(View view, Object object) {
+	public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
 		return ((Fragment) object).getView() == view;
 	}
 

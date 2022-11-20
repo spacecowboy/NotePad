@@ -34,6 +34,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
 import androidx.loader.content.CursorLoader;
@@ -94,7 +95,7 @@ public class FragmentSearch extends Fragment {
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
 		super.onCreateOptionsMenu(menu, inflater);
 
 		// allow the user to search among the previously deleted notes
@@ -143,6 +144,7 @@ public class FragmentSearch extends Fragment {
 
 		// Start loading data
 		mCallback = new LoaderCallbacks<>() {
+			@NonNull
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
 				return new CursorLoader(getActivity(), getSearchUri(), getFields(),
@@ -150,12 +152,12 @@ public class FragmentSearch extends Fragment {
 			}
 
 			@Override
-			public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
+			public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor c) {
 				mAdapter.swapCursor(c);
 			}
 
 			@Override
-			public void onLoaderReset(Loader<Cursor> loader) {
+			public void onLoaderReset(@NonNull Loader<Cursor> loader) {
 				mAdapter.swapCursor(null);
 			}
 		};

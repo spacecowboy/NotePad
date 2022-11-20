@@ -160,12 +160,12 @@ abstract class NavigationDrawerFragment_USELESS extends Fragment {
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
 	}
 
 	@Override
-	public void onConfigurationChanged(Configuration newConfig) {
+	public void onConfigurationChanged(@NonNull Configuration newConfig) {
 		super.onConfigurationChanged(newConfig);
 		// Forward the new configuration the drawer toggle component.
 		mDrawerToggle.onConfigurationChanged(newConfig);

@@ -32,6 +32,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
 
+import androidx.annotation.NonNull;
 import androidx.cursoradapter.widget.CursorAdapter;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
 import androidx.fragment.app.Fragment;
@@ -125,6 +126,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 		LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<>() {
 
+			@NonNull
 			@Override
 			public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 				return new CursorLoader(getActivity(), TaskList.URI,
@@ -135,7 +137,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 			}
 
 			@Override
-			public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
+			public void onLoadFinished(@NonNull Loader<Cursor> arg0, Cursor c) {
 				mTaskListsAdapter.swapCursor(c);
 				final int pos;
 				if (mListIdToSelect != -1) {
@@ -151,7 +153,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 			}
 
 			@Override
-			public void onLoaderReset(Loader<Cursor> arg0) {
+			public void onLoaderReset(@NonNull Loader<Cursor> arg0) {
 				mTaskListsAdapter.swapCursor(null);
 			}
 		};
@@ -170,7 +172,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasklists_viewpager, menu);
 
 		if (menu.findItem(R.id.menu_search) == null) {
@@ -191,7 +193,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 	}
 
 	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
+	public void onPrepareOptionsMenu(@NonNull Menu menu) {
 		if (!(getActivity() instanceof MenuStateController)) {
 			return;
 		}
@@ -248,7 +250,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
 		if (mTaskListsAdapter != null && pager != null) {
 			outState.putLong(START_LIST_ID,
@@ -412,6 +414,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 			}
 		}
 
+		@NonNull
 		@Override
 		public Fragment getItem(int pos) {
 			long id = getItemId(pos);
@@ -481,7 +484,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 		 * Argument is the object previously returned by instantiateItem
 		 */
 		@Override
-		public int getItemPosition(Object object) {
+		public int getItemPosition(@NonNull Object object) {
 			Fragment f = (Fragment) object;
 			long listId = f.getArguments().getLong(TaskListFragment.LIST_ID);
 			return getItemPosition(listId);

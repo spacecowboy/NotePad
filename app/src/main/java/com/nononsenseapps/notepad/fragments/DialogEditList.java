@@ -135,7 +135,7 @@ public class DialogEditList extends DialogFragment {
 						}
 
 						@Override
-						public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
+						public void onLoadFinished(@NonNull Loader<Cursor> arg0, Cursor c) {
 							if (c.moveToFirst()) {
 								mTaskList = new TaskList(c);
 								fillViews();

@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.loader.app.LoaderManager.LoaderCallbacks;
@@ -116,6 +117,7 @@ public class ActivityTaskHistory extends AppCompatActivity {
 		getSupportLoaderManager().restartLoader(0, null,
 				new LoaderCallbacks<Cursor>() {
 
+					@NonNull
 					@Override
 					public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 						return new CursorLoader(ActivityTaskHistory.this,
@@ -125,7 +127,7 @@ public class ActivityTaskHistory extends AppCompatActivity {
 					}
 
 					@Override
-					public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
+					public void onLoadFinished(@NonNull Loader<Cursor> arg0, Cursor c) {
 						mCursor = c;
 						setSeekBarProperties();
 						if (!loaded) {
@@ -135,7 +137,7 @@ public class ActivityTaskHistory extends AppCompatActivity {
 					}
 
 					@Override
-					public void onLoaderReset(Loader<Cursor> arg0) {
+					public void onLoaderReset(@NonNull Loader<Cursor> arg0) {
 						mCursor = null;
 						setSeekBarProperties();
 					}

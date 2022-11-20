@@ -394,7 +394,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			}
 
 			@Override
-			public void onLoadFinished(Loader<Cursor> loader, Cursor c) {
+			public void onLoadFinished(@NonNull Loader<Cursor> loader, Cursor c) {
 				if (loader.getId() == 0) {
 					if (c != null && c.moveToFirst()) {
 						final TaskList list = new TaskList(c);
@@ -409,7 +409,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			}
 
 			@Override
-			public void onLoaderReset(Loader<Cursor> loader) {
+			public void onLoaderReset(@NonNull Loader<Cursor> loader) {
 				if (loader.getId() == 0) {
 					// Nothing to do
 				} else {
@@ -703,12 +703,12 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasklist, menu);
 	}
 
 	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
+	public void onPrepareOptionsMenu(@NonNull Menu menu) {
 		if (getActivity() instanceof MenuStateController) {
 			final boolean visible = ((MenuStateController) getActivity())
 					.childItemsVisible();
@@ -756,7 +756,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
 	}
 
@@ -767,7 +767,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 	}
 
 	@Override
-	public void onAttach(Activity activity) {
+	public void onAttach(@NonNull Activity activity) {
 		super.onAttach(activity);
 		try {
 			mListener = (OnFragmentInteractionListener) activity;

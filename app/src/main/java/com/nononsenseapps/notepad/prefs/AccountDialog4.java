@@ -30,6 +30,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.DialogFragment;
 
 import com.nononsenseapps.helpers.NnnLogger;
@@ -52,11 +53,12 @@ public class AccountDialog4 extends DialogFragment implements
 	private Account account;
 
 	@Override
-	public void onAttach(Activity activity) {
+	public void onAttach(@NonNull Activity activity) {
 		super.onAttach(activity);
 		this.activity = activity;
 	}
 
+	@NonNull
 	@Override
 	public Dialog onCreateDialog(Bundle args) {
 		AlertDialog.Builder builder = new AlertDialog.Builder(activity);
