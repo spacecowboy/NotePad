@@ -359,8 +359,8 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						sortSpec = Task.Columns.LEFT;
 					}
 
-					String where = null;
-					String[] whereArgs = null;
+					String where;
+					String[] whereArgs;
 
 					if (mListId > 0) {
 						where = Task.Columns.DBLIST + " IS ?";

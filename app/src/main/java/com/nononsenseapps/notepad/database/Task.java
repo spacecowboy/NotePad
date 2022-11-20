@@ -812,7 +812,7 @@ public class Task extends DAO {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		boolean result = false;
+		boolean result;
 
 		if (o instanceof Task) {
 			final Task other = (Task) o;

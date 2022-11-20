@@ -281,7 +281,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 			}
 			String l = null;
 			String r = null;
-			String f = null;
+			String f;
 			// An obvious precaution. If everything is null,
 			// there's nothing to add.
 			if (file != null) {

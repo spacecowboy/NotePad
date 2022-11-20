@@ -32,7 +32,7 @@ public class ExtraTypesCursorAdapter extends ExtrasCursorAdapter {
 	protected final int[] extraLayouts;
 	protected ArrayList<ArrayList<Object>> extraData = null;
 
-	private int typeCount = 1;
+	private int typeCount;
 
 	/**
 	 * Extra types should be numbered from 1-length-1. Use 0 if you want the standard layout.

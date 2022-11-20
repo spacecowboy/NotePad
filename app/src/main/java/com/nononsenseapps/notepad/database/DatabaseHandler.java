@@ -190,7 +190,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 				listIDMap.put(c.getLong(0), tl._id);
 
 				// handle gtask info
-				GoogleTaskList rl = null;
+				GoogleTaskList rl;
 				if (c.getString(2) != null && !c.getString(2).isEmpty() && c.getString(3) != null
 						&& !c.getString(3).isEmpty()) {
 					rl = new GoogleTaskList(tl._id, c.getString(2), tl.updated, c.getString(3));
@@ -238,7 +238,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					}
 
 					// gtask
-					GoogleTask gt = null;
+					GoogleTask gt;
 					if (!c.isNull(7) && !c.getString(7).isEmpty() && !c.isNull(8)
 							&& !c.getString(8).isEmpty()) {
 						gt = new GoogleTask(t, c.getString(8));

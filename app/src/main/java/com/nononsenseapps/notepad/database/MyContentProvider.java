@@ -366,7 +366,7 @@ public class MyContentProvider extends ContentProvider {
 	@Override
 	synchronized public Cursor query(Uri uri, String[] projection,
 									 String selection, String[] selectionArgs, String sortOrder) {
-		Cursor result = null;
+		Cursor result;
 		final long id;
 		switch (sURIMatcher.match(uri)) {
 			case TaskList.BASEURICODE:

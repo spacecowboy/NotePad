@@ -307,8 +307,8 @@ public class ListWidgetConfig extends AppCompatActivity {
 						sortSpec = getString(R.string.const_as_alphabetic, Task.Columns.TITLE);
 					}
 
-					String listWhere = null;
-					String[] listArg = null;
+					String listWhere;
+					String[] listArg;
 					if (listId > 0) {
 						listWhere = Task.Columns.DBLIST + " IS ? AND "
 								+ Task.Columns.COMPLETED + " IS NULL";
