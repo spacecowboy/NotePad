@@ -112,9 +112,8 @@ public class SyncGtaskHelper {
 	 * If the toggle is not successful in setting sync to on, removes account name from
 	 * sharedpreferences.
 	 *
-	 * @return the status of the sync after enabling/disabling it.
 	 */
-	public static boolean toggleSync(@NonNull Context context, @NonNull SharedPreferences
+	public static void toggleSync(@NonNull Context context, @NonNull SharedPreferences
 			sharedPreferences) {
 		final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_ACCOUNT, false);
 		String accountName = sharedPreferences.getString(SyncPrefs.KEY_ACCOUNT, "");
@@ -145,7 +144,7 @@ public class SyncGtaskHelper {
 			forgetAccountOnce(context, sharedPreferences);
 			disableSyncOnce(context, sharedPreferences);
 		}
-		return currentlyEnabled;
+		// return currentlyEnabled;
 	}
 
 	/**

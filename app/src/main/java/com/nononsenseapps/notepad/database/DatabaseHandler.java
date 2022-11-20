@@ -17,16 +17,6 @@
 
 package com.nononsenseapps.notepad.database;
 
-import java.util.Calendar;
-import java.util.HashMap;
-
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
-
-import com.nononsenseapps.utils.time.RFC3339Date;
-
 import android.content.Context;
 import android.database.Cursor;
 import android.database.SQLException;
@@ -35,6 +25,16 @@ import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.preference.PreferenceManager;
 import android.provider.BaseColumns;
+
+import com.nononsenseapps.helpers.NnnLogger;
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTask;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskList;
+import com.nononsenseapps.utils.time.RFC3339Date;
+
+import java.util.Calendar;
+import java.util.HashMap;
 
 public class DatabaseHandler extends SQLiteOpenHelper {
 
@@ -216,12 +216,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 					}
 
 					try {
-						t.due = RFC3339Date.parseRFC3339Date(c.getString(3)).getTime();
+						t.due = RFC3339Date
+								.parseRFC3339Date(c.getString(3))
+								.getTime();
 					} catch (Exception e) {
+						NnnLogger.warning(DatabaseHandler.class,"date error");
 					}
 
 					// completed must be converted
-					if (c.getString(4) != null && "completed".equals(c.getString(4))) {
+					if (c.getString(4) != null
+							&& "completed".equals(c.getString(4))) {
 						t.setAsCompleted();
 					}
 					t.dblist = listIDMap.get(c.getLong(5));

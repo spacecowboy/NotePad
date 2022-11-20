@@ -26,6 +26,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.MyContentProvider;
@@ -163,9 +164,11 @@ public class DonateMigrator extends IntentService {
 				}
 
 				try {
-					t.due = RFC3339Date.parseRFC3339Date(
-							noteCursor.getString(3)).getTime();
+					t.due = RFC3339Date
+							.parseRFC3339Date(noteCursor.getString(3))
+							.getTime();
 				} catch (Exception e) {
+					NnnLogger.warning(DonateMigrator.class,"date error");
 				}
 
 				// completed must be converted

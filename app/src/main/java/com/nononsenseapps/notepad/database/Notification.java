@@ -349,7 +349,7 @@ public class Notification extends DAO {
 	/**
 	 * If true, will also schedule/notify android notifications
 	 */
-	public int save(final Context context, final boolean schedule) {
+	public void save(final Context context, final boolean schedule) {
 		int result = save(context);
 		if (schedule) {
 			// First cancel any potentially old versions
@@ -357,7 +357,6 @@ public class Notification extends DAO {
 			// Then reschedule
 			NotificationHelper.schedule(context);
 		}
-		return result;
 	}
 
 	@Override

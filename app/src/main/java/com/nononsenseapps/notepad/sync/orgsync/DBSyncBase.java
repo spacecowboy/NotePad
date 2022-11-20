@@ -371,16 +371,13 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	 * Delete remote versions of tasks to current service.
 	 *
 	 * @param listdbid List they belong to.
-	 * @return Number of deletions made.
 	 */
-	private int deleteRemoteTasksIn(final long listdbid) {
-		return context.getContentResolver().delete(
+	private void deleteRemoteTasksIn(final long listdbid) {
+		context.getContentResolver().delete(
 				RemoteTask.URI,
-				RemoteTask.Columns.SERVICE + " IS ? AND " + RemoteTask.Columns
-						.ACCOUNT
-						+ " IS ? AND " + RemoteTask.Columns.LISTDBID + " IS ?",
-				new String[] { getServiceName(), getAccountName(),
-						Long.toString(listdbid) });
+				RemoteTask.Columns.SERVICE + " IS ? AND " + RemoteTask.Columns.ACCOUNT +
+						" IS ? AND " + RemoteTask.Columns.LISTDBID + " IS ?",
+				new String[] { getServiceName(), getAccountName(), Long.toString(listdbid) });
 	}
 
 	/**

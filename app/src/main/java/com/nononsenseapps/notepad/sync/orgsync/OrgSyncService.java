@@ -37,6 +37,7 @@ import android.util.Log;
 
 import androidx.core.app.NotificationCompat;
 
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
@@ -284,10 +285,9 @@ public class OrgSyncService extends Service {
 						break;
 				}
 
-			} catch (IOException ignored) {
-				Log.e(TAG, ignored.getMessage());
-			} catch (ParseException ignored) {
-			}
+			} catch (IOException e) {
+				NnnLogger.exception(e);
+			} catch (ParseException ignored) {}
 		}
 	}
 

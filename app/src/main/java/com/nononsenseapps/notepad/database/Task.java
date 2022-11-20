@@ -903,7 +903,7 @@ public class Task extends DAO {
 	}
 
 	public int moveTo(final ContentResolver resolver, final Task targetTask) {
-		if (targetTask.dblist == dblist) {
+		if (targetTask.dblist.equals(dblist)) {
 			if (targetTask.left < left) {
 				// moving left
 				return resolver.update(getMoveItemLeftUri(),

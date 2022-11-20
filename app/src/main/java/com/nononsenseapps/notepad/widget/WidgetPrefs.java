@@ -60,8 +60,8 @@ public class WidgetPrefs {
 		return false;
 	}
 
-	public boolean setPresent() {
-		return putBoolean(WIDGET_PRESENT_KEY, true);
+	public void setPresent() {
+		putBoolean(WIDGET_PRESENT_KEY, true);
 	}
 
 	public boolean putBoolean(String key, boolean value) {
@@ -86,15 +86,13 @@ public class WidgetPrefs {
 		return false;
 	}
 
-	public boolean putString(String key, String value) {
+	public void putString(String key, String value) {
 		if (prefs != null && prefsEditor == null) {
 			prefsEditor = prefs.edit();
 		}
 		if (prefsEditor != null) {
 			prefsEditor.putString(keyWrap(key), value).commit();
-			return true;
 		}
-		return false;
 	}
 
 	public String getString(String key, String defValue) {
@@ -119,26 +117,22 @@ public class WidgetPrefs {
 		return defValue;
 	}
 
-	public boolean putInt(String key, int value) {
+	public void putInt(String key, int value) {
 		if (prefs != null && prefsEditor == null) {
 			prefsEditor = prefs.edit();
 		}
 		if (prefsEditor != null) {
 			prefsEditor.putInt(keyWrap(key), value).commit();
-			return true;
 		}
-		return false;
 	}
 
-	public boolean putLong(String key, long value) {
+	public void putLong(String key, long value) {
 		if (prefs != null && prefsEditor == null) {
 			prefsEditor = prefs.edit();
 		}
 		if (prefsEditor != null) {
 			prefsEditor.putLong(keyWrap(key), value).commit();
-			return true;
 		}
-		return false;
 	}
 
 	public long getLong(String key, long defValue) {

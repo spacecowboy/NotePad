@@ -55,6 +55,7 @@ import com.mobeta.android.dslv.DragSortListView.DropListener;
 import com.mobeta.android.dslv.DragSortListView.RemoveListener;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter;
 import com.mobeta.android.dslv.SimpleDragSortCursorAdapter.ViewBinder;
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.ActivityMain;
 import com.nononsenseapps.notepad.R;
@@ -537,6 +538,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 						try {
 							t.delete(getActivity());
 						} catch (Exception e) {
+							NnnLogger.warning(TaskListFragment.class, "Can't delete task");
 						}
 					}
 
