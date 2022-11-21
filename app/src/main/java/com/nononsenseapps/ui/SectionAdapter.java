@@ -36,85 +36,24 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class SectionAdapter extends BaseAdapter {
+class SectionAdapter_USELESS extends BaseAdapter {
+
+	// TODO useless, delete
+
 	private final static String ERRORMSG = "This adapter is in the wrong state for that method to be used!";
 
 	public final Map<String, SimpleCursorAdapter> sections = new LinkedHashMap<>();
-	public final ArrayAdapter<String> headers;
+	public final ArrayAdapter<String> headers = null;
 	public final Map<String, Long> sectionIds = new HashMap<>();
-	private final SimpleCursorAdapter wrappedAdapter;
+	private final SimpleCursorAdapter wrappedAdapter = null;
 	public final static int TYPE_SECTION_HEADER = -39567;
 	public final static int TYPE_ITEM = -892746;
 	public final static int TYPE_COUNT = 2;
 
-	private final DataSetObserver subObserver;
+	private final DataSetObserver subObserver = null;
 
 	private String state = "";
 
-	/**
-	 * A section adapter works in two ways. First, like a normal adapter. In
-	 * that case you give the constructor a regular adapter and the
-	 * sectionadapter works merely as a wrapper. Second, like a section adapter.
-	 * In that case you must give it a null parameter during construction. If
-	 * you at any time try to access methods that are special to either case
-	 * while being in the other case, and exception will be thrown! This should
-	 * only be an issue with fetching CursorLoaders.
-	 *
-	 * One exception is the "GetSubItemId" method which will return the
-	 * appropriate Id in both cases.
-	 */
-	public SectionAdapter(Context context, SimpleCursorAdapter wrappedAdapter) {
-		/*
-		 * Same call in both cases since an invalid subadapter doesnt mean that
-		 * the entire sectionadapter is invalid.
-		 */
-		subObserver = new DataSetObserver() {
-			@Override
-			public void onChanged() {
-				notifyDataSetChanged();
-			}
-
-			@Override
-			public void onInvalidated() {
-				notifyDataSetChanged();
-			}
-		};
-
-		if (wrappedAdapter == null) {
-			headers = new ArrayAdapter<>(context, R.layout.list_header,
-					R.id.list_header_title);
-			headers.registerDataSetObserver(subObserver);
-			this.wrappedAdapter = null;
-		} else {
-			headers = null;
-			this.wrappedAdapter = wrappedAdapter;
-			this.wrappedAdapter.registerDataSetObserver(subObserver);
-		}
-	}
-
-	/**
-	 * @return True if this adapter is in a sectioned state, False otherwise
-	 */
-	public boolean isSectioned() {
-		return headers != null;
-	}
-
-	/**
-	 * Get the Id of the section
-	 */
-	public Long getSectionId(String section) {
-		if (headers == null) {
-			throw new InvalidParameterException(ERRORMSG);
-		}
-		return sectionIds.get(section);
-	}
-
-	/**
-	 * Get the Id of the section a position is contained in
-	 */
-	public Long getSectionIdOfPos(final int position) {
-		return getSectionId(getSection(position));
-	}
 
 	/**
 	 * Get the section a position is contained in.
@@ -171,7 +110,7 @@ public class SectionAdapter extends BaseAdapter {
 		this.headers.add(section);
 		SimpleCursorAdapter prev = this.sections.put(section, adapter);
 		if (prev != null) {
-			NnnLogger.debug(SectionAdapter.class, "killing previous adapter");
+			NnnLogger.debug(SectionAdapter_USELESS.class, "killing previous adapter");
 			prev.unregisterDataSetObserver(subObserver);
 			prev.swapCursor(null);
 		}
@@ -184,24 +123,7 @@ public class SectionAdapter extends BaseAdapter {
 		}
 	}
 
-	public void removeSection(String section, Comparator<String> comp) {
-		if (headers == null) {
-			throw new InvalidParameterException(ERRORMSG);
-		}
-		this.headers.remove(section);
-		SimpleCursorAdapter prev = this.sections.remove(section);
-		if (prev != null) {
-			NnnLogger.debug(SectionAdapter.class, "killing previous adapter");
-			prev.unregisterDataSetObserver(subObserver);
-			prev.swapCursor(null);
-		}
-		// Need to sort the headers each time it changes
-		if (comp != null) {
-			headers.sort(comp);
-		}
 
-		sectionIds.remove(section);
-	}
 
 	public void swapCursor(Cursor data) {
 		if (wrappedAdapter == null) {
@@ -365,20 +287,5 @@ public class SectionAdapter extends BaseAdapter {
 		return state;
 	}
 
-	/**
-	 * Will also clear existing adapters etc
-	 */
-	public void changeState(String state) {
-		if (headers == null) {
-			throw new InvalidParameterException(ERRORMSG);
-		}
-		if (!getState().equals(state)) {
-			for (String header : sections.keySet().toArray(
-					new String[0])) {
-				removeSection(header, null);
-			}
-			this.state = state;
-		}
-	}
 
 }
