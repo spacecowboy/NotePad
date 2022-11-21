@@ -37,8 +37,9 @@ jobs:
       - name: perform Gradle caching
         uses: gradle/gradle-build-action@v2
 
-      - name: perform HAXM installation
-        run: brew install --cask intel-haxm
+# it shows a popup when it finishes installation: this prevents the tests from starting!
+#      - name: perform HAXM installation
+#        run: brew install --cask intel-haxm
 
 #      - name: perform ffmpeg installation
 #        run: brew install ffmpeg
@@ -68,7 +69,11 @@ jobs:
 #        run: |
 #          ffmpeg -f avfoundation -i 0 -t 120 video.mov &
 
+      - name: perform the Gradle build
+        run: ./gradlew build
+
       - name: run the tests
+        # note that by now the app is already built
         uses: reactivecircus/android-emulator-runner@v2
         with:
           api-level: ${{ matrix.api-level }}
@@ -80,8 +85,8 @@ jobs:
           emulator-options: -no-snapshot-save -no-window -no-boot-anim -camera-back none
           script: |
             # take a screenshot of the VM to verify that the emulator started
-            screencapture screenshot1.jpg
-            # build and test
+            screencapture screenshot1.jpg            
+            # test
             ./gradlew connectedCheck --stacktrace
             # take a screenshot at the end
             screencapture screenshot2.jpg
