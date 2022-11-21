@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.notepad.widget;
 
+import android.annotation.SuppressLint;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -366,8 +367,8 @@ public class ListWidgetConfig extends AppCompatActivity {
 		LayoutInflater inflater = (LayoutInflater) getSupportActionBar()
 				.getThemedContext()
 				.getSystemService(LAYOUT_INFLATER_SERVICE);
-		final View customActionBarView = inflater.inflate(
-				R.layout.actionbar_custom_view_done, null);
+		@SuppressLint("InflateParams") final View customActionBarView = inflater
+				.inflate(R.layout.actionbar_custom_view_done, null);
 		customActionBarView.findViewById(R.id.actionbar_done)
 				.setOnClickListener(v -> {
 					// "Done"

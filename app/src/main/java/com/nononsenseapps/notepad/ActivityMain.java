@@ -131,7 +131,12 @@ public class ActivityMain extends AppCompatActivity
 	SyncStatusMonitor syncStatusReceiver = null;
 	// WIll only be the viewpager fragment
 	ListOpener listOpener = null;
+
+	/**
+	 * Helper component that ties the action bar to the navigation drawer.
+	 */
 	private ActionBarDrawerToggle mDrawerToggle;
+
 	// Only not if opening note directly
 	private boolean shouldAddToBackStack = true;
 	private Bundle state;
@@ -180,8 +185,7 @@ public class ActivityMain extends AppCompatActivity
 				// Only true in portrait mode
 				final View focusView = ActivityMain.this.getCurrentFocus();
 				if (inputManager != null && focusView != null) {
-					inputManager
-							.hideSoftInputFromWindow(focusView.getWindowToken(),
+					inputManager.hideSoftInputFromWindow(focusView.getWindowToken(),
 									InputMethodManager.HIDE_NOT_ALWAYS);
 				}
 
@@ -189,7 +193,8 @@ public class ActivityMain extends AppCompatActivity
 				// Try getting the list from the original intent
 				final long listId = getListId(getIntent());
 
-				final Intent intent = new Intent().setAction(Intent.ACTION_VIEW)
+				final Intent intent = new Intent()
+						.setAction(Intent.ACTION_VIEW)
 						.setClass(ActivityMain.this, ActivityMain_.class);
 				if (listId > 0) {
 					intent.setData(TaskList.getUri(listId));
@@ -205,12 +210,11 @@ public class ActivityMain extends AppCompatActivity
 				reverseAnimation = true;
 				Log.d("nononsenseapps fragment", "starting activity");
 
-				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP |
-						Intent.FLAG_ACTIVITY_NEW_TASK);
+				intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
 				startActivity(intent);
+			} else {
+				// Handled by the drawer
 			}
-			// else
-			// Handled by drawer
 			return true;
 		} else if (itemId == R.id.drawer_menu_createlist) {
 			// Show fragment
@@ -770,21 +774,22 @@ public class ActivityMain extends AppCompatActivity
 	}
 
 	/**
-	 * Load a list of lists in the left
+	 * Load a list of lists in the left drawer
 	 */
 	protected void loadLeftDrawer() {
 		// TODO handle being called repeatably better?
 		// Set a listener on drawer events
-		// TODO strings
 		if (mDrawerToggle == null) {
+			// ActionBarDrawerToggle ties together the the proper interactions
+			// between the navigation drawer and the action bar app icon.
 			mDrawerToggle = new ActionBarDrawerToggle(this, drawerLayout,
-					android.R.string.ok, R.string.about) {
+					R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
 
 				/**
 				 * Called when a drawer has settled in a completely closed
 				 * state.
 				 */
-				public void onDrawerClosed(View view) {
+				public void onDrawerClosed(View view) { // TODO needs @Override ?
 
 					getSupportActionBar().setTitle(R.string.app_name_short);
 					isDrawerClosed = true;
@@ -792,12 +797,16 @@ public class ActivityMain extends AppCompatActivity
 					// onPrepareOptionsMenu()
 				}
 
-				/** Called when a drawer has settled in a completely open state. */
+				/**
+				 * Called when a drawer has settled in a completely open state.
+				 */
+				@Override
 				public void onDrawerOpened(View drawerView) {
+					super.onDrawerOpened(drawerView);
 					showcaseDrawerPress();
 				}
 
-				public void onDrawerStateChanged(int newState) {
+				public void onDrawerStateChanged(int newState) { // TODO needs @Override ?
 					super.onDrawerStateChanged(newState);
 
 					// If it's not idle, it isn't closed

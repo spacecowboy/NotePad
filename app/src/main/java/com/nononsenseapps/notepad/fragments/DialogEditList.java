@@ -112,13 +112,15 @@ public class DialogEditList extends DialogFragment {
 			okButton.setEnabled(false);
 		}
 
-		modeSpinner.setAdapter(new ArrayAdapter<>(getActivity(),
-				R.layout.spinner_item, getActivity().getResources()
-				.getStringArray(R.array.show_list_as)));
+		modeSpinner.setAdapter(new ArrayAdapter<>(
+				getActivity(),
+				R.layout.spinner_item,
+				getActivity().getResources().getStringArray(R.array.show_list_as)));
 
-		sortSpinner.setAdapter(new ArrayAdapter<>(getActivity(),
-				R.layout.spinner_item, getActivity().getResources()
-				.getStringArray(R.array.sort_list_by)));
+		sortSpinner.setAdapter(new ArrayAdapter<>(
+				getActivity(),
+				R.layout.spinner_item,
+				getActivity().getResources().getStringArray(R.array.sort_list_by)));
 
 		if (getArguments().getLong(LIST_ID, -1) > 0) {
 			getDialog().setTitle(R.string.menu_managelists);

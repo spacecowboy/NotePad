@@ -83,7 +83,7 @@ public class ActivityTaskHistory extends AppCompatActivity {
 		LayoutInflater inflater = (LayoutInflater) getSupportActionBar()
 				.getThemedContext()
 				.getSystemService(LAYOUT_INFLATER_SERVICE);
-		final View customActionBarView = inflater
+		@SuppressLint("InflateParams") final View customActionBarView = inflater
 				.inflate(R.layout.actionbar_custom_view_done_discard, null);
 		customActionBarView
 				.findViewById(R.id.actionbar_done)

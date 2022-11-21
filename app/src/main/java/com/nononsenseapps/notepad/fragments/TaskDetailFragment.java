@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.notepad.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -862,7 +863,8 @@ public class TaskDetailFragment extends Fragment {
 	@UiThread(propagation = Propagation.REUSE)
 	void addNotification(final Notification not) {
 		if (getActivity() != null) {
-			View nv = LayoutInflater.from(getActivity())
+			@SuppressLint("InflateParams") View nv = LayoutInflater
+					.from(getActivity())
 					.inflate(R.layout.notification_view, null);
 
 			// So we can update the view later
