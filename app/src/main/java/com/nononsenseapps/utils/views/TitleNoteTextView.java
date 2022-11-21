@@ -55,7 +55,6 @@ public class TitleNoteTextView extends androidx.appcompat.widget.AppCompatTextVi
 
 	private final int primaryColor;
 	private final int secondaryColor;
-	private final float mTitleRelativeSize;
 	private int mBodyFontFamily;
 	private int mTitleFontFamily;
 	private int mTitleFontStyle;
@@ -72,6 +71,7 @@ public class TitleNoteTextView extends androidx.appcompat.widget.AppCompatTextVi
 				.getTheme()
 				.obtainStyledAttributes(attrs, R.styleable.StyledTextView, 0, 0);
 
+		float mTitleRelativeSize;
 		try {
 			mTitleRelativeSize = attributes
 					.getFloat(R.styleable.StyledTextView_titleRelativeSize, 1.0f);

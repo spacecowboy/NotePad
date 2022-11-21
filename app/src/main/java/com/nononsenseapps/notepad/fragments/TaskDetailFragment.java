@@ -869,8 +869,7 @@ public class TaskDetailFragment extends Fragment {
 			not.view = nv;
 
 			// Setup all the listeners etc
-			NotificationItemHelper
-					.setup(this, notificationList, nv, not, mTask);
+			NotificationItemHelper.setup(this, notificationList, nv, not, mTask);
 
 			notificationList.addView(nv);
 		}

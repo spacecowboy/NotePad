@@ -16,6 +16,7 @@
   limitations under the License.
 -->
 
+<!-- after switching to androidx fragments, use the suggested view -->
 <fragment
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"

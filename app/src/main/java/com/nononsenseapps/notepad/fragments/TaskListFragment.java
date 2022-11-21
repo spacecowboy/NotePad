@@ -311,13 +311,6 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 		mRowCount = prefs.getInt(getString(R.string.key_pref_item_max_height), 3);
 		mHideCheckbox = prefs.getBoolean(getString(R.string.pref_hidecheckboxes), false);
 
-		{
-			// TODO do we NEED this ?
-			// mSortType = prefs.getString(getString(R.string.pref_sorttype), getString(R.string.default_sorttype));
-			// mListType = prefs.getString(getString(R.string.pref_listtype), getString(R.string.default_listtype));
-		}
-
-
 		mCallback = new LoaderCallbacks<>() {
 			@NonNull
 			@Override
@@ -326,72 +319,74 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 					return new CursorLoader(getActivity(),
 							TaskList.getUri(mListId), TaskList.Columns.FIELDS,
 							null, null, null);
-				} else {
-					// What sorting to use
-					Uri targetUri;
-					String sortSpec;
-					if (mListType == null) {
-						mListType = prefs.getString(
-								getString(R.string.pref_listtype),
-								getString(R.string.default_listtype));
-					}
-
-					if (mSortType == null) {
-						mSortType = prefs.getString(
-								getString(R.string.pref_sorttype),
-								getString(R.string.default_sorttype));
-					}
-					if (mSortType.equals(getString(R.string.const_alphabetic))) {
-						targetUri = Task.URI;
-						sortSpec = getString(R.string.const_as_alphabetic,
-								Task.Columns.TITLE);
-					} else if (mSortType
-							.equals(getString(R.string.const_duedate))) {
-						targetUri = Task.URI_SECTIONED_BY_DATE;
-						sortSpec = null;
-					} else if (mSortType
-							.equals(getString(R.string.const_modified))) {
-						targetUri = Task.URI;
-						sortSpec = Task.Columns.UPDATED + " DESC";
-					}
-					// manual sorting
-					else {
-						targetUri = Task.URI;
-						sortSpec = Task.Columns.LEFT;
-					}
-
-					String where;
-					String[] whereArgs;
-
-					if (mListId > 0) {
-						where = Task.Columns.DBLIST + " IS ?";
-						whereArgs = new String[] { Long.toString(mListId) };
-					} else {
-						targetUri = Task.URI;
-						sortSpec = Task.Columns.DUE;
-						whereArgs = null;
-						where = Task.Columns.COMPLETED + " IS NULL";
-						switch ((int) mListId) {
-							case LIST_ID_OVERDUE:
-								where += andWhereOverdue();
-								break;
-							case LIST_ID_TODAY:
-								where += andWhereToday();
-								break;
-							case LIST_ID_WEEK:
-								where += andWhereWeek();
-								break;
-							case LIST_ID_ALL:
-							default:
-								// Show completed also in this case
-								where = null;
-								break;
-						}
-					}
-
-					return new CursorLoader(getActivity(), targetUri,
-							Task.Columns.FIELDS, where, whereArgs, sortSpec);
 				}
+
+				// id != 0 => load stuff
+
+				// What sorting to use
+				Uri targetUri;
+				String sortSpec;
+				if (mListType == null) {
+					mListType = prefs.getString(
+							getString(R.string.pref_listtype),
+							getString(R.string.default_listtype));
+				}
+
+				if (mSortType == null) {
+					mSortType = prefs.getString(
+							getString(R.string.pref_sorttype),
+							getString(R.string.default_sorttype));
+				}
+				if (mSortType.equals(getString(R.string.const_alphabetic))) {
+					targetUri = Task.URI;
+					sortSpec = getString(R.string.const_as_alphabetic,
+							Task.Columns.TITLE);
+				} else if (mSortType
+						.equals(getString(R.string.const_duedate))) {
+					targetUri = Task.URI_SECTIONED_BY_DATE;
+					sortSpec = null;
+				} else if (mSortType
+						.equals(getString(R.string.const_modified))) {
+					targetUri = Task.URI;
+					sortSpec = Task.Columns.UPDATED + " DESC";
+				}
+				// manual sorting
+				else {
+					targetUri = Task.URI;
+					sortSpec = Task.Columns.LEFT;
+				}
+
+				String where;
+				String[] whereArgs;
+
+				if (mListId > 0) {
+					where = Task.Columns.DBLIST + " IS ?";
+					whereArgs = new String[] { Long.toString(mListId) };
+				} else {
+					targetUri = Task.URI;
+					sortSpec = Task.Columns.DUE;
+					whereArgs = null;
+					where = Task.Columns.COMPLETED + " IS NULL";
+					switch ((int) mListId) {
+						case LIST_ID_OVERDUE:
+							where += andWhereOverdue();
+							break;
+						case LIST_ID_TODAY:
+							where += andWhereToday();
+							break;
+						case LIST_ID_WEEK:
+							where += andWhereWeek();
+							break;
+						case LIST_ID_ALL:
+						default:
+							// Show completed also in this case
+							where = null;
+							break;
+					}
+				}
+
+				return new CursorLoader(getActivity(), targetUri,
+						Task.Columns.FIELDS, where, whereArgs, sortSpec);
 			}
 
 			@Override
