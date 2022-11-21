@@ -36,6 +36,7 @@ import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceFragment;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 import android.provider.DocumentsContract;
 import android.widget.Toast;
 
@@ -83,6 +84,7 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 
 	private Activity activity;
 
+	private SwitchPreference prefSyncEnable;
 	private Preference prefAccount;
 
 	/**
@@ -106,10 +108,8 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 					// Convert from minutes to seconds
 					long pollFrequency = 3600;
 					// Set periodic syncing
-					ContentResolver.addPeriodicSync(
-							account,
-							MyContentProvider.AUTHORITY, new Bundle(),
-							pollFrequency);
+					ContentResolver.addPeriodicSync(account, MyContentProvider.AUTHORITY,
+							new Bundle(), pollFrequency);
 				}
 			}
 		}
@@ -151,9 +151,10 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 			return true;
 		});
 
+		prefSyncEnable = (SwitchPreference) findPreference(KEY_SYNC_ENABLE);
 		// Disable prefs if this is not correct build
 		String API_KEY = Config.getGtasksApiKey(getActivity());
-		findPreference(KEY_SYNC_ENABLE).setEnabled(null != API_KEY && !API_KEY.contains(" "));
+		prefSyncEnable.setEnabled(null != API_KEY && !API_KEY.contains(" "));
 
 		findPreference(KEY_SD_ENABLE).setOnPreferenceClickListener(p -> {
 			boolean ok = PermissionsHelper.hasPermissions(
@@ -462,36 +463,14 @@ public class SyncPrefs extends PreferenceFragment implements OnSharedPreferenceC
 		}
 	}
 
-	/**
-	 * called when the preference with {@link SyncPrefs#KEY_SYNC_ENABLE} changes
-	 */
+
 	private void toggleSync(SharedPreferences sharedPreferences) {
-		boolean enabled = sharedPreferences.getBoolean(KEY_SYNC_ENABLE, false);
-		String accountName = sharedPreferences.getString(KEY_ACCOUNT, "");
-
-		if (accountName != null && !accountName.isEmpty()) {
-			Account account = SyncGtaskHelper.getAccount(AccountManager.get(activity), accountName);
-			if (account != null) {
-				if (enabled) {
-					// set syncable
-					ContentResolver.setSyncAutomatically(account, MyContentProvider.AUTHORITY, true);
-					ContentResolver.setIsSyncable(account, MyContentProvider.AUTHORITY, 1);
-					// Also set sync frequency
-					setSyncInterval(activity, sharedPreferences);
-				} else {
-					// set unsyncable
-					// ContentResolver.setIsSyncable(getAccount(AccountManager.get(activity), accountName), MyContentProvider.AUTHORITY, 0);
-
-					// useless ??
-					// SyncGtaskHelper.toggleSync(getActivity(), sharedPreferences);
-					// Synchronize view also
-					// if (preferenceSyncGTasks.isChecked()) {
-					//	preferenceSyncGTasks.setChecked(false);
-					// }
-				}
-			}
-		} else if (enabled) {
+		boolean enabled = SyncGtaskHelper.toggleSync(getActivity(), sharedPreferences);
+		if (enabled) {
 			showAccountDialog();
+		} else {
+			// Synchronize view also
+			if (prefSyncEnable.isChecked()) prefSyncEnable.setChecked(false);
 		}
 	}
 
