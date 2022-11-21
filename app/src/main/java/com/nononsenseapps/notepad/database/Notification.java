@@ -439,51 +439,6 @@ public class Notification extends DAO {
 	}
 
 	/**
-	 * Starts a background task that removes all notifications associated with
-	 * the specified tasks up to the specified time.
-	 */
-//	public static void removeWithMaxTimeAndTaskIds(final Context context, final long maxTime,
-//												   final boolean reschedule, final Long... ids) {
-//		if (ids.length > 0) {
-//			final AsyncTask<Long, Void, Void> task = new AsyncTask<>() {
-//				@Override
-//				protected Void doInBackground(final Long... ids) {
-//					String idStrings = "(";
-//					for (Long id : ids) {
-//						idStrings += id + ",";
-//					}
-//					idStrings = idStrings.substring(0, idStrings.length() - 1);
-//					idStrings += ")";
-//
-//					final Cursor c = context.getContentResolver().query(
-//							URI,
-//							Columns.FIELDS,
-//							Columns.TASKID + " IN " + idStrings + " AND "
-//									+ Columns.TIME
-//									+ " <= "
-//									+ maxTime,
-//							null, null);
-//
-//					ArrayList<String> idsToClear = new ArrayList<>();
-//					while (c.moveToNext()) {
-//						Notification n = new Notification(c);
-//						idsToClear.add(Long.toString(n._id));
-//						if (reschedule) {
-//							n.deleteOrReschedule(context);
-//						} else {
-//							n.delete(context);
-//						}
-//					}
-//					c.close();
-//
-//					return null;
-//				}
-//			};
-//			task.execute(ids);
-//		}
-//	}
-
-	/**
 	 * Returns list of notifications coupled to specified task, sorted by time
 	 */
 	public static List<Notification> getNotificationsOfTask(final Context context, final long taskId) {
