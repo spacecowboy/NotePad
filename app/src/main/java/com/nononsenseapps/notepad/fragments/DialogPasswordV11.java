@@ -37,11 +37,16 @@ import com.nononsenseapps.notepad.fragments.DialogPassword.PasswordConfirmedList
 import com.nononsenseapps.notepad.prefs.PasswordPrefs;
 
 /**
- * Full copy of DialogPassword, but extending native fragment class instead.
- * It is called when the user changes the existing password. It asks to input the old password.
+ * Full copy of {@link DialogPassword}, but extending native fragment class
+ * {@link android.app.DialogFragment} instead.
+ * It is called when the user changes the existing password.
+ * It asks to input the old password.
  */
 @EFragment(resName = "fragment_dialog_password")
 public class DialogPasswordV11 extends DialogFragment {
+
+	// TODO DialogPassword.java is better. Try to put the functions of this dialog back into that file, then delete this file
+
 	@ViewById(resName = "passwordField")
 	EditText passwordField;
 
