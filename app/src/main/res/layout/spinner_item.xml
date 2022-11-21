@@ -16,6 +16,8 @@
   along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -->
 
+<!-- the style of items shown, for example, in the spinner of the popup
+ where you choose how to order notes in a list -->
 <TextView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
@@ -25,9 +27,9 @@
 	android:fontFamily="sans-serif"
 	android:gravity="center_vertical"
 	android:minHeight="48dp"
-	android:paddingLeft="16dp"
+	android:paddingHorizontal="16dp"
 	android:textAppearance="?android:attr/textAppearanceMedium"
 	android:textColor="?attr/textColorSecondary"
-	tools:ignore="SelectableText">
-
-</TextView>
+	tools:ignore="SelectableText"
+	android:singleLine="true"
+	android:ellipsize="marquee"/>

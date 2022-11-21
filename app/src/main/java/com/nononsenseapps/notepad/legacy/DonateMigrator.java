@@ -26,6 +26,7 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.LegacyDBHelper.NotePad;
 import com.nononsenseapps.notepad.database.MyContentProvider;
@@ -108,7 +109,7 @@ public class DonateMigrator extends IntentService {
 	 */
 	void importNotes() {
 		final HashMap<Long, Long> listIDMap = new HashMap<>();
-		final HashMap<Long, Long> taskIDMap = new HashMap<>();
+		//final HashMap<Long, Long> taskIDMap = new HashMap<>();
 
 		// Work through, list by list
 		try (Cursor listCursor = getContentResolver().query(
@@ -163,9 +164,11 @@ public class DonateMigrator extends IntentService {
 				}
 
 				try {
-					t.due = RFC3339Date.parseRFC3339Date(
-							noteCursor.getString(3)).getTime();
+					t.due = RFC3339Date
+							.parseRFC3339Date(noteCursor.getString(3))
+							.getTime();
 				} catch (Exception e) {
+					NnnLogger.warning(DonateMigrator.class,"date error");
 				}
 
 				// completed must be converted
@@ -179,7 +182,7 @@ public class DonateMigrator extends IntentService {
 
 				if (t.dblist != null) {
 					t.save(this, t.updated);
-					taskIDMap.put(noteCursor.getLong(0), t._id);
+					//taskIDMap.put(noteCursor.getLong(0), t._id);
 					mNotesImportedCount += 1;
 				}
 				// Gtask

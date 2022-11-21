@@ -26,19 +26,12 @@ public class WidgetPrefs {
 	public final static String WIDGET_PRESENT_KEY = "WidgetPresent";
 	public final static boolean WIDGET_PRESENT_DEFAULT = false;
 
-	// public static final String SHARED_PREFS_BASE = "prefs_widget_";
-	/*
-	 * public static String getSharedPrefsFile(int widgetId) { return
-	 * SHARED_PREFS_BASE + widgetId; }
-	 */
-
 	private final int widgetId;
-	private SharedPreferences prefs = null;
+	private final SharedPreferences prefs;
 	private SharedPreferences.Editor prefsEditor = null;
 
 	public static void delete(final Context context, final int widgetId) {
-		SharedPreferences prefs = context.getSharedPreferences(PREFS_KEY,
-				Context.MODE_PRIVATE);
+		SharedPreferences prefs = context.getSharedPreferences(PREFS_KEY, Context.MODE_PRIVATE);
 		if (prefs != null) {
 			SharedPreferences.Editor edit = prefs.edit();
 			if (edit != null) {
@@ -62,14 +55,13 @@ public class WidgetPrefs {
 
 	public boolean isPresent() {
 		if (prefs != null) {
-			return prefs.getBoolean(keyWrap(WIDGET_PRESENT_KEY),
-					WIDGET_PRESENT_DEFAULT);
+			return prefs.getBoolean(keyWrap(WIDGET_PRESENT_KEY), WIDGET_PRESENT_DEFAULT);
 		}
 		return false;
 	}
 
-	public boolean setPresent() {
-		return putBoolean(WIDGET_PRESENT_KEY, true);
+	public void setPresent() {
+		putBoolean(WIDGET_PRESENT_KEY, true);
 	}
 
 	public boolean putBoolean(String key, boolean value) {
@@ -94,15 +86,13 @@ public class WidgetPrefs {
 		return false;
 	}
 
-	public boolean putString(String key, String value) {
+	public void putString(String key, String value) {
 		if (prefs != null && prefsEditor == null) {
 			prefsEditor = prefs.edit();
 		}
 		if (prefsEditor != null) {
 			prefsEditor.putString(keyWrap(key), value).commit();
-			return true;
 		}
-		return false;
 	}
 
 	public String getString(String key, String defValue) {
@@ -127,26 +117,22 @@ public class WidgetPrefs {
 		return defValue;
 	}
 
-	public boolean putInt(String key, int value) {
+	public void putInt(String key, int value) {
 		if (prefs != null && prefsEditor == null) {
 			prefsEditor = prefs.edit();
 		}
 		if (prefsEditor != null) {
 			prefsEditor.putInt(keyWrap(key), value).commit();
-			return true;
 		}
-		return false;
 	}
 
-	public boolean putLong(String key, long value) {
+	public void putLong(String key, long value) {
 		if (prefs != null && prefsEditor == null) {
 			prefsEditor = prefs.edit();
 		}
 		if (prefsEditor != null) {
 			prefsEditor.putLong(keyWrap(key), value).commit();
-			return true;
 		}
-		return false;
 	}
 
 	public long getLong(String key, long defValue) {

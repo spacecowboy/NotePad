@@ -165,9 +165,6 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	/**
 	 * These remote tasks are no longer connected to a task. This typically happens when a task is
 	 * deleted or moved to another list.
-	 *
-	 * @param list
-	 * @return
 	 */
 	private List<RemoteTask> getInvalidRemoteTasks(final TaskList list) {
 		final ArrayList<RemoteTask> remoteList = new ArrayList<>();
@@ -207,8 +204,6 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	 * Reads the database and the remote source.
 	 *
 	 * @return The matching TaskList and OrgFiles.
-	 * @throws ParseException
-	 * @throws IOException
 	 */
 	protected List<Pair<OrgFile, Pair<RemoteTaskList, TaskList>>> getFilesAndDBEntries()
 			throws IOException, ParseException {
@@ -284,7 +279,7 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 			}
 			String l = null;
 			String r = null;
-			String f = null;
+			String f;
 			// An obvious precaution. If everything is null,
 			// there's nothing to add.
 			if (file != null) {
@@ -376,16 +371,13 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 	 * Delete remote versions of tasks to current service.
 	 *
 	 * @param listdbid List they belong to.
-	 * @return Number of deletions made.
 	 */
-	private int deleteRemoteTasksIn(final long listdbid) {
-		return context.getContentResolver().delete(
+	private void deleteRemoteTasksIn(final long listdbid) {
+		context.getContentResolver().delete(
 				RemoteTask.URI,
-				RemoteTask.Columns.SERVICE + " IS ? AND " + RemoteTask.Columns
-						.ACCOUNT
-						+ " IS ? AND " + RemoteTask.Columns.LISTDBID + " IS ?",
-				new String[] { getServiceName(), getAccountName(),
-						Long.toString(listdbid) });
+				RemoteTask.Columns.SERVICE + " IS ? AND " + RemoteTask.Columns.ACCOUNT +
+						" IS ? AND " + RemoteTask.Columns.LISTDBID + " IS ?",
+				new String[] { getServiceName(), getAccountName(), Long.toString(listdbid) });
 	}
 
 	/**

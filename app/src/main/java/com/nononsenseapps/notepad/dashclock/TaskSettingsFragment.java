@@ -87,16 +87,10 @@ public class TaskSettingsFragment extends PreferenceFragment {
 
 	/**
 	 * Use my own layout to override android's default margins
-	 *
-	 * @param inflater
-	 * @param container
-	 * @param savInstState
-	 * @return
 	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savInstState) {
-		return inflater
-				.inflate(R.layout.fragment_dialog_prefs, container, false);
+		return inflater.inflate(R.layout.fragment_dialog_prefs, container, false);
 	}
 
 	/**
@@ -125,8 +119,6 @@ public class TaskSettingsFragment extends PreferenceFragment {
 
 	/**
 	 * Reads the lists from database. Also adds "All lists" as the first item.
-	 *
-	 * @return
 	 */
 	private static void setEntries(Activity activity, ListPreference listSpinner) {
 
@@ -157,9 +149,9 @@ public class TaskSettingsFragment extends PreferenceFragment {
 		// Set the values
 		if (listSpinner != null) {
 			listSpinner.setEntries(
-					entries.toArray(new CharSequence[entries.size()]));
+					entries.toArray(new CharSequence[0]));
 			listSpinner.setEntryValues(
-					values.toArray(new CharSequence[values.size()]));
+					values.toArray(new CharSequence[0]));
 
 			listSpinner.setSummary(listSpinner.getEntry());
 		}

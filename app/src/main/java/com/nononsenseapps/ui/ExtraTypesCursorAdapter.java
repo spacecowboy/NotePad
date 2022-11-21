@@ -21,18 +21,21 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 
-import com.nononsenseapps.ui.ExtrasCursorAdapter.ViewHolder;
+import com.nononsenseapps.notepad.ActivityMain;
 
 import android.content.Context;
 import android.database.Cursor;
 
+/**
+ * It's for something in the drawer in {@link ActivityMain}
+ */
 public class ExtraTypesCursorAdapter extends ExtrasCursorAdapter {
 
 	protected final int[] extraTypes;
 	protected final int[] extraLayouts;
 	protected ArrayList<ArrayList<Object>> extraData = null;
 
-	private int typeCount = 1;
+	private final int typeCount;
 
 	/**
 	 * Extra types should be numbered from 1-length-1. Use 0 if you want the standard layout.

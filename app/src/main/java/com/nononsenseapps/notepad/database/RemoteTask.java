@@ -161,11 +161,6 @@ public class RemoteTask extends DAO {
 
 	/**
 	 * None of the fields may be null!
-	 *
-	 * @param dbid
-	 * @param remoteId
-	 * @param updated
-	 * @param account
 	 */
 	public RemoteTask(final Long dbid, final Long listdbid,
 					  final String remoteId, final Long updated, final String account) {
@@ -292,8 +287,6 @@ public class RemoteTask extends DAO {
 	/**
 	 * Returns a where clause that can be used to fetch the task that is
 	 * associated with this remote object. As argument, use remoteid, account
-	 *
-	 * @return
 	 */
 	public String getTaskWithRemoteClause() {
 		return Task.Columns.DBLIST + " IS ? AND " +

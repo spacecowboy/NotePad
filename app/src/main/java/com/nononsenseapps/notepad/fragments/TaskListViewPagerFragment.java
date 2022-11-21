@@ -17,20 +17,6 @@
 
 package com.nononsenseapps.notepad.fragments;
 
-import org.androidannotations.annotations.AfterViews;
-import org.androidannotations.annotations.EFragment;
-import org.androidannotations.annotations.SystemService;
-import org.androidannotations.annotations.ViewById;
-
-import com.nononsenseapps.notepad.ActivityMain.ListOpener;
-import com.nononsenseapps.notepad.ActivitySearchDeleted_;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.database.TaskList;
-import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
-import com.nononsenseapps.notepad.interfaces.MenuStateController;
-
-import com.nononsenseapps.utils.ViewsHelper;
-
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
@@ -40,23 +26,35 @@ import android.database.Cursor;
 import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentPagerAdapter;
-import androidx.loader.app.LoaderManager;
-import androidx.loader.app.LoaderManager.LoaderCallbacks;
-import androidx.loader.content.CursorLoader;
-import androidx.loader.content.Loader;
-import androidx.viewpager.widget.ViewPager;
-import androidx.cursoradapter.widget.CursorAdapter;
-import androidx.cursoradapter.widget.SimpleCursorAdapter;
-
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.SearchView;
+
+import androidx.annotation.NonNull;
+import androidx.cursoradapter.widget.CursorAdapter;
+import androidx.cursoradapter.widget.SimpleCursorAdapter;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentPagerAdapter;
+import androidx.loader.app.LoaderManager.LoaderCallbacks;
+import androidx.loader.content.CursorLoader;
+import androidx.loader.content.Loader;
+import androidx.viewpager.widget.ViewPager;
+
+import com.nononsenseapps.notepad.ActivityMain.ListOpener;
+import com.nononsenseapps.notepad.ActivitySearchDeleted_;
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.notepad.database.TaskList;
+import com.nononsenseapps.notepad.fragments.DialogEditList.EditListDialogListener;
+import com.nononsenseapps.notepad.interfaces.MenuStateController;
+import com.nononsenseapps.utils.ViewsHelper;
+
+import org.androidannotations.annotations.AfterViews;
+import org.androidannotations.annotations.EFragment;
+import org.androidannotations.annotations.SystemService;
+import org.androidannotations.annotations.ViewById;
 
 /**
  * Displays many listfragments across a viewpager. Supports selecting a certain
@@ -128,6 +126,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 
 		LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<>() {
 
+			@NonNull
 			@Override
 			public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 				return new CursorLoader(getActivity(), TaskList.URI,
@@ -138,7 +137,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 			}
 
 			@Override
-			public void onLoadFinished(Loader<Cursor> arg0, Cursor c) {
+			public void onLoadFinished(@NonNull Loader<Cursor> arg0, Cursor c) {
 				mTaskListsAdapter.swapCursor(c);
 				final int pos;
 				if (mListIdToSelect != -1) {
@@ -154,7 +153,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 			}
 
 			@Override
-			public void onLoaderReset(Loader<Cursor> arg0) {
+			public void onLoaderReset(@NonNull Loader<Cursor> arg0) {
 				mTaskListsAdapter.swapCursor(null);
 			}
 		};
@@ -173,7 +172,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 	}
 
 	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+	public void onCreateOptionsMenu(@NonNull Menu menu, MenuInflater inflater) {
 		inflater.inflate(R.menu.fragment_tasklists_viewpager, menu);
 
 		if (menu.findItem(R.id.menu_search) == null) {
@@ -194,7 +193,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 	}
 
 	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
+	public void onPrepareOptionsMenu(@NonNull Menu menu) {
 		if (!(getActivity() instanceof MenuStateController)) {
 			return;
 		}
@@ -251,21 +250,13 @@ public class TaskListViewPagerFragment extends Fragment implements
 	}
 
 	@Override
-	public void onSaveInstanceState(Bundle outState) {
+	public void onSaveInstanceState(@NonNull Bundle outState) {
 		super.onSaveInstanceState(outState);
 		if (mTaskListsAdapter != null && pager != null) {
-			outState.putLong(START_LIST_ID,
-					mTaskListsAdapter.getItemId(pager.getCurrentItem()));
-			Log.d("nononsenseapps list",
-					"Save state: "
-							+ mTaskListsAdapter.getItemId(pager
-							.getCurrentItem()));
+			outState.putLong(START_LIST_ID, mTaskListsAdapter.getItemId(pager.getCurrentItem()));
+			Log.d("nononsenseapps list", "Save state: "
+					+ mTaskListsAdapter.getItemId(pager.getCurrentItem()));
 		}
-	}
-
-	@Override
-	public void onResume() {
-		super.onResume();
 	}
 
 	@Override
@@ -415,6 +406,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 			}
 		}
 
+		@NonNull
 		@Override
 		public Fragment getItem(int pos) {
 			long id = getItemId(pos);
@@ -484,7 +476,7 @@ public class TaskListViewPagerFragment extends Fragment implements
 		 * Argument is the object previously returned by instantiateItem
 		 */
 		@Override
-		public int getItemPosition(Object object) {
+		public int getItemPosition(@NonNull Object object) {
 			Fragment f = (Fragment) object;
 			long listId = f.getArguments().getLong(TaskListFragment.LIST_ID);
 			return getItemPosition(listId);

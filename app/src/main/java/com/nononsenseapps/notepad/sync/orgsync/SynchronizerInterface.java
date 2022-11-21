@@ -56,11 +56,8 @@ public interface SynchronizerInterface {
 	 *                    it will be used as the base in desiredName1,
 	 *                    desiredName2, etc. Limited to 99.
 	 * @return an OrgFile guaranteed not to exist.
-	 * @throws IOException
-	 * @throws IllegalArgumentException
 	 */
-	OrgFile getNewFile(final String desiredName) throws IOException,
-			IllegalArgumentException;
+	OrgFile getNewFile(final String desiredName) throws IOException, IllegalArgumentException;
 
 	/**
 	 * Replaces the file on the remote end with the given content.

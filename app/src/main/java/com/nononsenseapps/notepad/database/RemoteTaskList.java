@@ -115,13 +115,9 @@ public class RemoteTaskList extends DAO {
 
 	/**
 	 * None of the fields may be null!
-	 *
-	 * @param dbid
-	 * @param remoteId
-	 * @param updated
-	 * @param account
 	 */
-	public RemoteTaskList(final Long dbid, final String remoteId, final Long updated, final String account) {
+	public RemoteTaskList(final Long dbid, final String remoteId, final Long updated,
+						  final String account) {
 		this.dbid = dbid;
 		this.remoteId = remoteId;
 		this.updated = updated;
@@ -253,8 +249,6 @@ public class RemoteTaskList extends DAO {
 	 * Returns a where clause that can be used to fetch the tasklist that
 	 * is associated with this remote object.
 	 * As argument, use remoteid, account, service
-	 *
-	 * @return
 	 */
 	public String getTaskListWithRemoteClause() {
 		return BaseColumns._ID + " IN (SELECT " +

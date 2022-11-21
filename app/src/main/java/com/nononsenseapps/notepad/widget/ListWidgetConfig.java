@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.notepad.widget;
 
+import android.annotation.SuppressLint;
 import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
@@ -37,6 +38,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cursoradapter.widget.SimpleCursorAdapter;
@@ -270,6 +272,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 
 		mCallback = new LoaderCallbacks<>() {
 
+			@NonNull
 			@Override
 			public Loader<Cursor> onCreateLoader(int id, Bundle arg1) {
 
@@ -307,8 +310,8 @@ public class ListWidgetConfig extends AppCompatActivity {
 						sortSpec = getString(R.string.const_as_alphabetic, Task.Columns.TITLE);
 					}
 
-					String listWhere = null;
-					String[] listArg = null;
+					String listWhere;
+					String[] listArg;
 					if (listId > 0) {
 						listWhere = Task.Columns.DBLIST + " IS ? AND "
 								+ Task.Columns.COMPLETED + " IS NULL";
@@ -326,7 +329,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 			}
 
 			@Override
-			public void onLoadFinished(Loader<Cursor> l, Cursor c) {
+			public void onLoadFinished(@NonNull Loader<Cursor> l, Cursor c) {
 				if (l.getId() == 1) {
 					mListAdapter.swapCursor(c);
 					final int pos = getListPositionOf(mListAdapter,
@@ -341,7 +344,7 @@ public class ListWidgetConfig extends AppCompatActivity {
 			}
 
 			@Override
-			public void onLoaderReset(Loader<Cursor> l) {
+			public void onLoaderReset(@NonNull Loader<Cursor> l) {
 				if (l.getId() == 1) {
 					mListAdapter.swapCursor(null);
 				} else {
@@ -364,8 +367,8 @@ public class ListWidgetConfig extends AppCompatActivity {
 		LayoutInflater inflater = (LayoutInflater) getSupportActionBar()
 				.getThemedContext()
 				.getSystemService(LAYOUT_INFLATER_SERVICE);
-		final View customActionBarView = inflater.inflate(
-				R.layout.actionbar_custom_view_done, null);
+		@SuppressLint("InflateParams") final View customActionBarView = inflater
+				.inflate(R.layout.actionbar_custom_view_done, null);
 		customActionBarView.findViewById(R.id.actionbar_done)
 				.setOnClickListener(v -> {
 					// "Done"

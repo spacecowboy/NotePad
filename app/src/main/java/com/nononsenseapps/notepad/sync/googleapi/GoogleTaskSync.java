@@ -37,9 +37,6 @@ import com.nononsenseapps.util.PermissionsHelper;
 import com.nononsenseapps.util.SyncGtaskHelper;
 import com.nononsenseapps.utils.time.RFC3339Date;
 
-import org.json.JSONException;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -269,10 +266,6 @@ public class GoogleTaskSync {
 
 	/**
 	 * Downloads all lists in GTasks and returns them
-	 *
-	 * @param client
-	 * @throws IOException
-	 * @throws JSONException
 	 */
 	static List<GoogleTaskList> downloadLists(final GoogleTasksClient client) {
 		// Do the actual download
@@ -383,7 +376,7 @@ public class GoogleTaskSync {
 				// TODO understand how to handle errors in that .deleteList() call, and then
 				//  replace the catch{} block with something appropriate
 				// try {
-					client.deleteList(pair.second);
+				client.deleteList(pair.second);
 				/*
 				} catch (RetrofitError e) {
 					if (e.getResponse() != null && e.getResponse().getStatus() == 400) {
@@ -635,7 +628,7 @@ public class GoogleTaskSync {
 				// Dont
 			} else {
 				if (localTask != null) {
-					NnnLogger.debug(GoogleTaskSync.class,"going to upload: " +
+					NnnLogger.debug(GoogleTaskSync.class, "going to upload: " +
 							localTask.title + ", l." + localTask.updated + " r." + remoteTask.updated);
 				}
 				NnnLogger.debug(GoogleTaskSync.class, "add to sync list: " + remoteTask.title);

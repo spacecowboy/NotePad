@@ -20,5 +20,5 @@ assignees: ''
 
 - Device: [e.g. Nexus 7 (2013)]
 - OS: [e.g. LineageOS 15.1]
-- OpenTracks version: [e.g. v3.2.4]
-- OpenTracks commit id (only for nightly builds): [e.g. 4b333bb]
+- app version: [e.g. v3.2.4]
+- app commit id (only for nightly builds): [e.g. 4b333bb]

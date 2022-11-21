@@ -104,9 +104,6 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 
 	/**
 	 * Initializes the viewholder according to the specified from/to arrays.
-	 *
-	 * @param view
-	 * @return
 	 */
 	private ViewHolder setViewHolder(View view) {
 		ViewHolder viewHolder = new ViewHolder();
@@ -208,9 +205,6 @@ public class ExtrasCursorAdapter extends ResourceCursorAdapter {
 
 	/**
 	 * Should be a number >= count of the wrapped cursor
-	 *
-	 * @param realPos
-	 * @return
 	 */
 	public CharSequence getExtraItem(int realPos) {
 		if (extraLabels.length == 0 || realPos < -1 || realPos > extraLabels.length)

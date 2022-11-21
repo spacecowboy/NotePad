@@ -140,8 +140,6 @@ public class GoogleTask extends RemoteTask {
 	 * Returns a ContentValues hashmap suitable for database insertion in the
 	 * Lists table Includes modified flag and list id as specified in the
 	 * arguments
-	 *
-	 * @return
 	 */
 	public ContentValues toNotesContentValues(int modified, long listDbId) {
 		ContentValues values = new ContentValues();
@@ -205,7 +203,7 @@ public class GoogleTask extends RemoteTask {
 		if (o instanceof GoogleTask) {
 			// It's a list!
 			GoogleTask task = (GoogleTask) o;
-			if (dbid != -1 && dbid == task.dbid) {
+			if (dbid != -1 && dbid.equals(task.dbid)) {
 				equal = true;
 			}
 			if (remoteId != null && remoteId.equals(task.remoteId)) {

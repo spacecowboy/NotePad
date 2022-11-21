@@ -109,7 +109,7 @@ public class SyncStatusMonitor extends BroadcastReceiver {
 	}
 
 	private void tellUser(Context context, int result) {
-		int text = R.string.sync_failed;
+		int text;
 		switch (result) {
 			case SyncAdapter.ERROR:
 				text = R.string.sync_failed;

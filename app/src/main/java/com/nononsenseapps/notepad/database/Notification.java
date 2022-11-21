@@ -349,7 +349,7 @@ public class Notification extends DAO {
 	/**
 	 * If true, will also schedule/notify android notifications
 	 */
-	public int save(final Context context, final boolean schedule) {
+	public void save(final Context context, final boolean schedule) {
 		int result = save(context);
 		if (schedule) {
 			// First cancel any potentially old versions
@@ -357,7 +357,6 @@ public class Notification extends DAO {
 			// Then reschedule
 			NotificationHelper.schedule(context);
 		}
-		return result;
 	}
 
 	@Override
@@ -398,12 +397,8 @@ public class Notification extends DAO {
 	/**
 	 * Removes all notifications associated with the specified tasks. Runs in
 	 * the same thread as the caller.
-	 *
-	 * @param context
-	 * @param ids
 	 */
-	public static void removeWithTaskIdsSynced(final Context context,
-											   final Long... ids) {
+	public static void removeWithTaskIdsSynced(final Context context, final Long... ids) {
 		String idStrings = "(";
 		ArrayList<String> idsToClear = new ArrayList<>();
 		for (Long id : ids) {
@@ -444,51 +439,6 @@ public class Notification extends DAO {
 	}
 
 	/**
-	 * Starts a background task that removes all notifications associated with
-	 * the specified tasks up to the specified time.
-	 */
-	public static void removeWithMaxTimeAndTaskIds(final Context context, final long maxTime,
-												   final boolean reschedule, final Long... ids) {
-		if (ids.length > 0) {
-			final AsyncTask<Long, Void, Void> task = new AsyncTask<>() {
-				@Override
-				protected Void doInBackground(final Long... ids) {
-					String idStrings = "(";
-					for (Long id : ids) {
-						idStrings += id + ",";
-					}
-					idStrings = idStrings.substring(0, idStrings.length() - 1);
-					idStrings += ")";
-
-					final Cursor c = context.getContentResolver().query(
-							URI,
-							Columns.FIELDS,
-							Columns.TASKID + " IN " + idStrings + " AND "
-									+ Columns.TIME
-									+ " <= "
-									+ maxTime,
-							null, null);
-
-					ArrayList<String> idsToClear = new ArrayList<>();
-					while (c.moveToNext()) {
-						Notification n = new Notification(c);
-						idsToClear.add(Long.toString(n._id));
-						if (reschedule) {
-							n.deleteOrReschedule(context);
-						} else {
-							n.delete(context);
-						}
-					}
-					c.close();
-
-					return null;
-				}
-			};
-			task.execute(ids);
-		}
-	}
-
-	/**
 	 * Returns list of notifications coupled to specified task, sorted by time
 	 */
 	public static List<Notification> getNotificationsOfTask(final Context context, final long taskId) {
@@ -506,32 +456,28 @@ public class Notification extends DAO {
 	 * ascending
 	 */
 	public static List<Notification> getNotificationsWithTime(final Context context,
-															  final long time, final boolean before) {
+															  final long time,
+															  final boolean before) {
 		final String comparison = before ? " <= ?" : " > ?";
 		return getNotificationsWithTasks(
 				context,
-				Columns.TIME +
-						comparison +
-						" AND " +
-						Columns.RADIUS +
-						" IS NULL",
+				Columns.TIME + comparison + " AND " + Columns.RADIUS + " IS NULL",
 				new String[] { Long.toString(time) },
 				Columns.TIME);
 	}
 
 	public static List<Notification> getNotificationsWithTasks(final Context context,
-															   final String where, final String[] whereArgs,
+															   final String where,
+															   final String[] whereArgs,
 															   final String sortOrder) {
 		ArrayList<Notification> list = new ArrayList<>();
-
-		final Cursor c = context.getContentResolver().query(URI_WITH_TASK_PATH, null, where,
-				whereArgs, sortOrder);
-
+		final Cursor c = context
+				.getContentResolver()
+				.query(URI_WITH_TASK_PATH, null, where, whereArgs, sortOrder);
 		if (c != null) {
 			while (c.moveToNext()) {
 				list.add(new Notification(c));
 			}
-
 			c.close();
 		}
 		return list;
@@ -589,11 +535,6 @@ public class Notification extends DAO {
 			}
 		};
 		task.execute(listId);
-	}
-
-	public static void completeTasksInList(final Context context, final long listId,
-										   final long maxTime) {
-
 	}
 
 	/**

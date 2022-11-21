@@ -91,8 +91,6 @@ public class ListPrefs extends PreferenceFragment {
 
 	/**
 	 * Reads the lists from database. Also adds "All lists" as the first item.
-	 *
-	 * @return
 	 */
 	private void setEntries(ListPreference listSpinner) {
 
@@ -118,10 +116,8 @@ public class ListPrefs extends PreferenceFragment {
 
 		// Set the values
 		if (listSpinner != null) {
-			listSpinner.setEntries(entries.toArray(new CharSequence[entries
-					.size()]));
-			listSpinner.setEntryValues(values.toArray(new CharSequence[values
-					.size()]));
+			listSpinner.setEntries(entries.toArray(new CharSequence[0]));
+			listSpinner.setEntryValues(values.toArray(new CharSequence[0]));
 
 			listSpinner.setSummary(listSpinner.getEntry());
 		}

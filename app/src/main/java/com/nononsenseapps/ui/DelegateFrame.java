@@ -68,7 +68,8 @@ public class DelegateFrame extends RelativeLayout implements OnClickListener {
 	}
 
 	private void setValuesFromXML(AttributeSet attrs) {
-		enlargedViewId = attrs.getAttributeResourceValue(NONONSENSEAPPSNS, ATTR_ENLARGEDVIEW, -1);
+		enlargedViewId = attrs
+				.getAttributeResourceValue(NONONSENSEAPPSNS, ATTR_ENLARGEDVIEW, -1);
 		NnnLogger.debug(DelegateFrame.class, "setting xml values! view: " + enlargedViewId);
 		setOnClickListener(this);
 	}

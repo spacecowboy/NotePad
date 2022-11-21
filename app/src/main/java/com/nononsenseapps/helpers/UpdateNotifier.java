@@ -57,8 +57,6 @@ public class UpdateNotifier {
 
 	/**
 	 * Will update all notes
-	 *
-	 * @param context
 	 */
 	public static void notifyChangeList(Context context) {
 		notifyChange(context, TaskList.URI);

@@ -366,7 +366,7 @@ public class MyContentProvider extends ContentProvider {
 	@Override
 	synchronized public Cursor query(Uri uri, String[] projection,
 									 String selection, String[] selectionArgs, String sortOrder) {
-		Cursor result = null;
+		Cursor result;
 		final long id;
 		switch (sURIMatcher.match(uri)) {
 			case TaskList.BASEURICODE:
@@ -646,7 +646,7 @@ public class MyContentProvider extends ContentProvider {
 			// for (String part : query.split("\\s")) {
 			if (result.length() > 0) result.append(" AND ");
 			// Wrap each word in quotes and add star to the end
-			result.append("'" + query + "*'");
+			result.append("'").append(query).append("*'");
 			// }
 		}
 

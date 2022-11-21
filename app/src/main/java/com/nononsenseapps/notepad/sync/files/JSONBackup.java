@@ -229,9 +229,6 @@ public class JSONBackup {
 	/**
 	 * Backs up the entire database to a JSON file. The location and name of the
 	 * file are hardcoded.
-	 *
-	 * @throws JSONException
-	 * @throws IOException
 	 */
 	public void writeBackup() throws JSONException, IOException, SecurityException {
 		// Create JSON object

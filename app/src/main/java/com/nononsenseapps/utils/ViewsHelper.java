@@ -23,11 +23,7 @@ import android.util.TypedValue;
 public class ViewsHelper {
 
 	/**
-	 * Convert DPs to Pixels for the current resolution
-	 *
-	 * @param context
-	 * @param dip
-	 * @return
+	 * Convert DPs to Pixels for the current screen density
 	 */
 	public static int convertDip2Pixels(Context context, int dip) {
 		return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP,

@@ -35,6 +35,11 @@ public class SharedPreferencesHelper {
 		return PreferenceManager.getDefaultSharedPreferences(context);
 	}
 
+	public static boolean shouldUseExactAlarms(@NonNull Context context) {
+		String key = context.getString(R.string.key_pref_should_use_exact_alarms);
+		return Prefs(context).getBoolean(key, false);
+	}
+
 	public static boolean isSdSyncEnabled(@NonNull Context context) {
 		return Prefs(context).getBoolean(SyncPrefs.KEY_SD_ENABLE, false);
 	}

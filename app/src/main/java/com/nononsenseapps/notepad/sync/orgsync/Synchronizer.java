@@ -33,6 +33,7 @@ import java.io.IOException;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 
 public abstract class Synchronizer extends DBSyncBase implements
 		SynchronizerInterface {
@@ -48,9 +49,6 @@ public abstract class Synchronizer extends DBSyncBase implements
 
 	/**
 	 * Performs a full 2-way sync between the DB and the remote source.
-	 *
-	 * @throws IOException
-	 * @throws ParseException
 	 */
 	public void fullSync() throws IOException, ParseException {
 		// For all pairs of files and db entries
@@ -163,9 +161,6 @@ public abstract class Synchronizer extends DBSyncBase implements
 	 * Merge the list and file. Fields considered are the listtype and
 	 * listsorting which are stored as comments in the file.
 	 *
-	 * @param list
-	 * @param dbEntry
-	 * @param file
 	 * @return an integer denoting which should be saved. 0 for none, 0x01 for
 	 * task, 0x10 for node. 0x11 for both.
 	 */
@@ -347,9 +342,6 @@ public abstract class Synchronizer extends DBSyncBase implements
 	 * Merges the task and node. The fields considered are title, body,
 	 * completed and deadline.
 	 *
-	 * @param task
-	 * @param remote
-	 * @param node
 	 * @return an integer denoting which should be saved. 0 for none, 0x01 for
 	 * task, 0x10 for node. 0x11 for both.
 	 */
@@ -411,10 +403,10 @@ public abstract class Synchronizer extends DBSyncBase implements
 
 		final Long nodedue = OrgConverter.getDeadline(node);
 
-		if (task.due != basedue) {
+		if (!task.due.equals(basedue)) {
 			shouldSave = SAVEORG;
 			OrgConverter.setDeadline(node, task.due);
-		} else if (nodedue != basedue) {
+		} else if (!Objects.equals(nodedue, basedue)) {
 			shouldSave = SAVEDB;
 			task.due = nodedue;
 		} else {

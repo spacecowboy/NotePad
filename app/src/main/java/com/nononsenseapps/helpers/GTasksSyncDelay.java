@@ -54,20 +54,36 @@ public class GTasksSyncDelay extends Service {
 		return null;
 	}
 
+	/**
+	 * Uses {@link AlarmManager} to schedule the synchronization. Be careful:
+	 * https://developer.android.com/training/scheduling/alarms#exact
+	 * describes the differences between {@link AlarmManager#set} all
+	 * the way up to {@link AlarmManager#setAlarmClock}
+	 */
 	private void scheduleSync() {
 		// Create an offset from the current time in which the alarm will go off.
 		Calendar cal = Calendar.getInstance();
 		cal.add(Calendar.SECOND, delaySecs);
 		int id = 38475;
 
+		// must use an EXPLICIT intent!
+		Intent intent = new Intent(this, GTasksSyncDelay.class)
+				.setAction(Intent.ACTION_RUN);
 		// Create a new PendingIntent and add it to the AlarmManager
-		Intent intent = new Intent(Intent.ACTION_RUN);
-		PendingIntent pendingIntent = PendingIntent.getService(this, id, intent,
+		var pendingIntent = PendingIntent.getService(this, id, intent,
 				PendingIntent.FLAG_CANCEL_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 		AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 		am.cancel(pendingIntent);
-		// Yes, use local time
-		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), pendingIntent);
+
+		// it used to be am.set(), which after API 19 became too vague.
+		// setExactAndAllowWhileIdle() would be ideal, but it requires a permission since API 32.
+		// setAndAllowWhileIdle() is better than set() because:
+		// * it fights doze mode a bit
+		// * it does not require a permission
+		// keep in mind that this code is for background sync, so delays are tolerable
+		am.setAndAllowWhileIdle(AlarmManager.RTC_WAKEUP,
+				cal.getTimeInMillis(), pendingIntent); // Yes, use local time
+
 		NnnLogger.debug(GTasksSyncDelay.class, "Scheduled sync");
 	}
 }

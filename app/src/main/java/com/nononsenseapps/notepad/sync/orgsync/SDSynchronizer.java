@@ -120,7 +120,6 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 	 *                       it will be used as the base in desiredName1,
 	 *                       desiredName2, etc. Limited to 99.
 	 * @return an OrgFile guaranteed not to exist.
-	 * @throws java.io.IOException
 	 */
 	@Override
 	public OrgFile getNewFile(final String orgdesiredName) throws
@@ -173,7 +172,6 @@ public class SDSynchronizer extends Synchronizer implements SynchronizerInterfac
 	 * Rename the file on the remote end.
 	 *
 	 * @param oldName The name it is currently stored as on the remote end.
-	 * @param orgFile
 	 */
 	@Override
 	public void renameRemoteFile(String oldName, OrgFile orgFile) {

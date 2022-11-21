@@ -24,6 +24,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.SystemClock;
 
+import androidx.annotation.NonNull;
+
+import com.nononsenseapps.helpers.NnnLogger;
+
 public class BackgroundSyncScheduler extends BroadcastReceiver {
 	// Unique ID for schedule
 	private final static int scheduleCode = 2832;
@@ -31,10 +35,12 @@ public class BackgroundSyncScheduler extends BroadcastReceiver {
 	public BackgroundSyncScheduler() {}
 
 	@Override
-	public void onReceive(Context context, Intent intent) {
+	public void onReceive(Context context, @NonNull Intent intent) {
+		NnnLogger.debug(BackgroundSyncScheduler.class,
+				"Received intent with action = " + intent.getAction());
+
 		final boolean enabled = OrgSyncService.areAnyEnabled(context);
-		if (enabled && intent != null && Intent.ACTION_RUN.equals(intent
-				.getAction())) {
+		if (enabled && Intent.ACTION_RUN.equals(intent.getAction())) {
 			// Run sync
 			OrgSyncService.start(context);
 		} else {
@@ -46,20 +52,18 @@ public class BackgroundSyncScheduler extends BroadcastReceiver {
 	 * Schedule a synchronization for later.
 	 */
 	public static void scheduleSync(final Context context) {
-		final AlarmManager alarmManager =
-				(AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-		final Intent action = new Intent(context, BackgroundSyncScheduler
-				.class);
-		action.setAction(Intent.ACTION_RUN);
-		final PendingIntent operation = PendingIntent
-				.getBroadcast(context, scheduleCode, action,
-						PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+		final AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+		final Intent action = new Intent(context, BackgroundSyncScheduler.class) // EXPLICIT intent!
+				.setAction(Intent.ACTION_RUN);
+		final PendingIntent operation = PendingIntent.getBroadcast(context, scheduleCode, action,
+				PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
 		if (OrgSyncService.areAnyEnabled(context)) {
 			// Schedule syncs
 			// Repeat at inexact intervals and do NOT wake the device up.
 			alarmManager.setInexactRepeating(AlarmManager.ELAPSED_REALTIME,
 					SystemClock.elapsedRealtime(),
-					AlarmManager.INTERVAL_HALF_HOUR, operation);
+					AlarmManager.INTERVAL_HALF_HOUR, // gets ignored anyway
+					operation);
 		} else {
 			// Remove schedule
 			alarmManager.cancel(operation);

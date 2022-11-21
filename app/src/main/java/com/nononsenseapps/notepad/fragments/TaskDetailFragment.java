@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.notepad.fragments;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
@@ -76,7 +77,6 @@ import org.androidannotations.annotations.Click;
 import org.androidannotations.annotations.EFragment;
 import org.androidannotations.annotations.InstanceState;
 import org.androidannotations.annotations.OnActivityResult;
-import org.androidannotations.annotations.SystemService;
 import org.androidannotations.annotations.UiThread;
 import org.androidannotations.annotations.UiThread.Propagation;
 import org.androidannotations.annotations.ViewById;
@@ -859,21 +859,19 @@ public class TaskDetailFragment extends Fragment {
 
 	/**
 	 * Inserts a notification item in the UI
-	 *
-	 * @param not
 	 */
 	@UiThread(propagation = Propagation.REUSE)
 	void addNotification(final Notification not) {
 		if (getActivity() != null) {
-			View nv = LayoutInflater.from(getActivity())
+			@SuppressLint("InflateParams") View nv = LayoutInflater
+					.from(getActivity())
 					.inflate(R.layout.notification_view, null);
 
 			// So we can update the view later
 			not.view = nv;
 
 			// Setup all the listeners etc
-			NotificationItemHelper
-					.setup(this, notificationList, nv, not, mTask);
+			NotificationItemHelper.setup(this, notificationList, nv, not, mTask);
 
 			notificationList.addView(nv);
 		}
@@ -923,14 +921,13 @@ public class TaskDetailFragment extends Fragment {
 				: android.R.style.Theme_Material_Dialog;
 
 		boolean shouldShowIn24HourMode = DateFormat.is24HourFormat(getActivity());
-		final TimePickerDialog timePickDiag = new TimePickerDialog(
+		return new TimePickerDialog(
 				this.getActivity(),
 				themeResId,
 				listener, // set the callback for when the user chooses a time
 				localTime.get(Calendar.HOUR_OF_DAY), // set the initial hour & minute
 				localTime.get(Calendar.MINUTE),
 				shouldShowIn24HourMode);
-		return timePickDiag;
 	}
 
 }

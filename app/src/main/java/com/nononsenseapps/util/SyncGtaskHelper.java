@@ -109,41 +109,40 @@ public class SyncGtaskHelper {
 	}
 
 	/**
+	 * Called when the preference with {@link SyncPrefs#KEY_SYNC_ENABLE} changes.
+	 *
 	 * If the toggle is not successful in setting sync to on, removes account name from
 	 * sharedpreferences.
 	 *
-	 * @return the status of the sync after enabling/disabling it.
+	 * @return the definitive state of the {@link SwitchPreference}: TRUE if it's enabled,
+	 * with a valid google account
 	 */
-	public static boolean toggleSync(@NonNull Context context, @NonNull SharedPreferences
-			sharedPreferences) {
-		final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_ACCOUNT, false);
+	public static boolean toggleSync(@NonNull Context context,
+									 @NonNull SharedPreferences sharedPreferences) {
+		final boolean enabled = sharedPreferences.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false);
 		String accountName = sharedPreferences.getString(SyncPrefs.KEY_ACCOUNT, "");
 
 		boolean currentlyEnabled = false;
 
 		if (!accountName.isEmpty()) {
-			Account account = getAccount(AccountManager.get(context), accountName);
+			Account account = SyncGtaskHelper.getAccount(AccountManager.get(context), accountName);
 			if (account != null) {
 				if (enabled) {
 					// set syncable
-					ContentResolver.setSyncAutomatically(account, MyContentProvider.AUTHORITY,
-							true);
+					ContentResolver.setSyncAutomatically(account, MyContentProvider.AUTHORITY, true);
 					ContentResolver.setIsSyncable(account, MyContentProvider.AUTHORITY, 1);
 					// Also set sync frequency
-					long pollFrequency = 3600;
-					// Set periodic syncing
-					ContentResolver.addPeriodicSync(account, MyContentProvider.AUTHORITY, Bundle
-							.EMPTY, pollFrequency);
+					SyncPrefs.setSyncInterval(context, sharedPreferences);
 					currentlyEnabled = true;
 				} else {
-					ContentResolver.setSyncAutomatically(account, MyContentProvider.AUTHORITY,
-							false);
+					ContentResolver.setSyncAutomatically(account, MyContentProvider.AUTHORITY, false);
+					ContentResolver.setIsSyncable(account, MyContentProvider.AUTHORITY, 0);
 				}
 			}
 		}
 		if (!currentlyEnabled) {
 			forgetAccountOnce(context, sharedPreferences);
-			disableSyncOnce(context, sharedPreferences);
+			disableSyncOnce(sharedPreferences);
 		}
 		return currentlyEnabled;
 	}
@@ -166,8 +165,7 @@ public class SyncGtaskHelper {
 	 * Disables gtask sync, but only if it's not already disabled (so
 	 * we don't call listeners on removal of already removed values)
 	 */
-	private static void disableSyncOnce(@NonNull Context context, @NonNull SharedPreferences
-			sharedPreferences) {
+	private static void disableSyncOnce(@NonNull SharedPreferences sharedPreferences) {
 		if (sharedPreferences.getBoolean(SyncPrefs.KEY_SYNC_ENABLE, false)) {
 			sharedPreferences.edit().putBoolean(SyncPrefs.KEY_SYNC_ENABLE, false).apply();
 		}

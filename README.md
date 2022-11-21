@@ -1,8 +1,19 @@
 # NoNonsense Notes
 
-[![Crowdin](https://d322cqt584bo4o.cloudfront.net/nononsensenotes/localized.png)](https://crowdin.com/project/nononsensenotes)       [![Android build](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml)      [![Android tests](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml)
+[![Android build](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml)          [![Android tests](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml)      [![Crowdin](https://d322cqt584bo4o.cloudfront.net/nononsensenotes/localized.png)](https://crowdin.com/project/nononsensenotes)
 
-a note taking app for android, with reminders.
+<img src="https://img.shields.io/f-droid/v/com.nononsenseapps.notepad.svg?logo=F-Droid"/>
+<img src="https://img.shields.io/github/release/spacecowboy/NotePad.svg?logo=github"/>
+
+<img src="https://img.shields.io/github/release-date/spacecowboy/NotePad"/>
+<img src="https://img.shields.io/github/downloads/spacecowboy/NotePad/latest/total"/>
+
+<img src="https://img.shields.io/github/last-commit/spacecowboy/NotePad"/>
+<img src="https://img.shields.io/github/search/spacecowboy/NotePad/TODO"/>
+<img src="https://img.shields.io/librariesio/github/spacecowboy/NotePad"/>
+
+A note taking app for android with reminders, since 2012.
+
 The app is currently being updated, and old versions are still available on f-droid:
 
 [<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
@@ -12,39 +23,19 @@ The app is currently being updated, and old versions are still available on f-dr
 
 How it looks like:
 
-<img src="fastlane/metadata/android/en-US/images/tenInchScreenshots/1.png" alt="Tablet UI" height="360" />
-
-<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Phone UI" height="480" />
+<img src="fastlane/metadata/android/en-US/images/phoneScreenshots/1.png" alt="Phone UI" height="480" /><img src="fastlane/metadata/android/en-US/images/tenInchScreenshots/1.png" alt="Tablet UI" height="360" />
 
 ## Reporting bugs
 
 Please report bugs by creating an [issue here](https://github.com/spacecowboy/NotePad/issues).
-I'd very much appreciate it if you could write clear steps to reproduce the bug. An example would be:
-
-```text
-Title: Wrong due date set for completed notes
-
-Steps to reproduce:
-1 - Press + to create a new note
-2 - Add some text
-3 - Set a due date for yesterday (2014-11-24)
-4 - Mark note as compeleted by ticking the checkbox
-5 - Press <- to save the note
-
-Result:
-Note is displayed with a due date of today (2014-11-25) in the list.
-
-Expected result:
-Note should have the due date I set earlier.
-```
-
-If relevant, please say if you're using a phone or a tablet (UI-issues), or what you're sync settings are (odd stuff happening in general).
+I'd very much appreciate it if you could write clear steps to reproduce the bug: use the provided template.
 
 ## Build the project
 
 ```sh
 git clone https://github.com/spacecowboy/NotePad
 cd NotePad
+./gradlew check
 ./gradlew installDebug
 ```
 
@@ -52,9 +43,9 @@ if it does not work, open an issue [here](https://github.com/spacecowboy/NotePad
 
 ## Getting Google Tasks sync to work
 
-The app was one able to synchronize with Google Tasks, then Google made some changes and
+The app was once able to synchronize with Google Tasks, then Google made some changes and
 now **that functionality is not available anymore**. Therefore, the related settings are disabled.
-Developers interested in maintaining this feature should open a new issue 
+Developers interested in maintaining this feature should open a new issue
 [here](https://github.com/spacecowboy/NotePad/issues) to get help on how to proceed.
 See also issue #403
 

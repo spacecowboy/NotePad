@@ -181,7 +181,7 @@ public class LegacyDBHelper extends SQLiteOpenHelper {
 						+ "noteid"
 						+ "   = " + "new." + BaseColumns._ID + ";" + " END");
 			} catch (SQLException e) {
-				Log.d("NNN","Creating trigger failed. It probably already existed:");
+				Log.d("NNN", "Creating trigger failed. It probably already existed:");
 				NnnLogger.exception(e);
 			}
 

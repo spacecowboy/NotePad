@@ -125,6 +125,13 @@
 	<string name="filepicker_preference_description">Selected uri:\n %1$s \nbut this will be used instead:\n %2$s</string>
 	<string name="choose_backup_folder">Choose a backup folder</string>
 	<string name="default_location">Default location</string>
+	<string name="use_exact_alarms">Use exact alarms</string>
+	<string name="exact_alarms_summary">Notifications for reminders will appear in a more reliable way, but the app will use more battery</string>
+	<string name="disable_battery_optimizations">Disable battery optimizations</string>
+	<string name="battery_optimizations_active">Battery optimizations are currently enabled</string>
+	<string name="battery_optimizations_inactive">Battery optimizations are not enabled</string>
+	<string name="allow_exact_reminders">Allow exact reminders</string>
+	<string name="allow_exact_reminders_summary">Open a page to allow this app to send reminders in a more precise and reliable way. Only needed since Android 12 "Snow Cone"</string>
 
 	<!--
 		Use few if language need it. In English is the same.
