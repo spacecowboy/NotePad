@@ -18,8 +18,10 @@
 package com.nononsenseapps.notepad.dashclock;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.stream.Stream;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -52,14 +54,7 @@ public class TasksExtension extends DashClockExtension {
 	}
 
 	private String[] appendTo(final String[] array, final String... items) {
-		final String[] result = new String[array.length + items.length];
-		for (int i = 0; i < array.length; i++) {
-			result[i] = array[i];
-		}
-		for (int i = 0; i < items.length; i++) {
-			result[array.length + i] = items[i];
-		}
-		return result;
+		return Stream.concat(Arrays.stream(array), Arrays.stream(items)).toArray(String[]::new);
 	}
 
 	final static String[] NOTEFIELDS = new String[] { "_id", "title", "note", "duedate" };

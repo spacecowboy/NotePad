@@ -19,6 +19,7 @@ package com.nononsenseapps.notepad.database;
 
 import java.security.InvalidParameterException;
 import java.util.Calendar;
+import java.util.Objects;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -820,7 +821,7 @@ public class Task extends DAO {
 
 			result &= (title != null && title.equals(other.title));
 			result &= (note != null && note.equals(other.note));
-			result &= (due.equals(other.due));
+			result &= (Objects.equals(due, other.due));
 			result &= ((completed != null) == (other.completed != null));
 
 		} else {
