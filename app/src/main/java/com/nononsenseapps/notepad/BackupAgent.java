@@ -24,13 +24,15 @@ import android.app.backup.BackupAgentHelper;
 import android.app.backup.BackupDataInputStream;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.content.Context;
-import android.preference.PreferenceManager;
+import androidx.preference.PreferenceManager;
 
 /**
  * Backs up the user's preferences
  */
 public class BackupAgent extends BackupAgentHelper {
 	private static final String PREFS_BACKUP_KEY = "prefs";
+
+	// TODO useless ? check
 
 	// Allocate a helper and add it to the backup agent
 	@Override
