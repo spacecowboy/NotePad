@@ -1,4 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!-- TODO i think this was an attempt to show tasks in a grid,
+      as an alternative to the list. It may be interesting to
+       try and implement it, like in google keep ? -->
+
+<!-- as of now, this file is useless -->
 <FrameLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
