@@ -17,6 +17,7 @@
 
 package com.nononsenseapps.notepad.sync.orgsync;
 
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
@@ -54,10 +55,8 @@ public class OrgSyncService extends Service {
 
 	private static final String TAG = "OrgSyncService";
 
-	public static final String ACTION_START = "com.nononsenseapps.notepad" +
-			".sync.START";
-	public static final String ACTION_PAUSE = "com.nononsenseapps.notepad" +
-			".sync.PAUSE";
+	public static final String ACTION_START = "com.nononsenseapps.notepad" + ".sync.START";
+	public static final String ACTION_PAUSE = "com.nononsenseapps.notepad" + ".sync.PAUSE";
 
 	// Msg arguments
 	public static final int TWO_WAY_SYNC = 1;
@@ -66,11 +65,9 @@ public class OrgSyncService extends Service {
 
 	private static final int DELAY_MSECS = 30000;
 
-	private final boolean firstStart = true;
-
 	private SyncHandler serviceHandler;
 	// private FileWatcher fileWatcher;
-	private DBWatcher dbWatcher;
+	// private DBWatcher dbWatcher;
 
 	private final ArrayList<Monitor> monitors;
 	private final ArrayList<SynchronizerInterface> synchronizers;
@@ -105,8 +102,7 @@ public class OrgSyncService extends Service {
 	 * @return configured Synchronizers
 	 */
 	public ArrayList<SynchronizerInterface> getSynchronizers() {
-		ArrayList<SynchronizerInterface> syncers = new
-				ArrayList<>();
+		ArrayList<SynchronizerInterface> syncers = new ArrayList<>();
 
 		// Try SD
 		SynchronizerInterface sd = new SDSynchronizer(this);
@@ -157,26 +153,25 @@ public class OrgSyncService extends Service {
 	}
 
 	private void notifyError() {
-		NotificationCompat.Builder notBuilder = new NotificationCompat.Builder(
-				this)
-				// TODO hardcoded
-				.setContentTitle("Could not access files")
-				.setContentText("Please change directory")
-				.setChannelId(NotificationHelper.CHANNEL_ID)
-				.setContentIntent(
-						PendingIntent.getActivity(this, 0,
-								new Intent(this, PrefsActivity.class),
-								PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
-
 		NotificationManager notificationManager = (NotificationManager)
 				getSystemService(Context.NOTIFICATION_SERVICE);
 
-		// probably this is not optimal, but this function seems useless anyway
+		// probably this is not optimal, but this notifyError() seems useless anyway
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 			NotificationHelper.createNotificationChannel(this, notificationManager);
 		}
 
-		notificationManager.notify(237388, notBuilder.build());
+		var pi = PendingIntent.getActivity(this, 0,
+				new Intent(this, PrefsActivity.class),
+				PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+
+		Notification notif = new NotificationCompat
+				.Builder(this, NotificationHelper.CHANNEL_ID)
+				.setContentTitle("Could not access files") // TODO hardcoded
+				.setContentText("Please change directory")
+				.setContentIntent(pi)
+				.build();
+		notificationManager.notify(237388, notif);
 	}
 
 	@Override
