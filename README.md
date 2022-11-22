@@ -2,24 +2,17 @@
 
 [![Android build](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_build.yml)          [![Android tests](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml/badge.svg)](https://github.com/spacecowboy/NotePad/actions/workflows/android_tests.yml)      [![Crowdin](https://d322cqt584bo4o.cloudfront.net/nononsensenotes/localized.png)](https://crowdin.com/project/nononsensenotes)
 
-<img src="https://img.shields.io/f-droid/v/com.nononsenseapps.notepad.svg?logo=F-Droid"/>
-<img src="https://img.shields.io/github/release/spacecowboy/NotePad.svg?logo=github"/>
+<img src="https://img.shields.io/f-droid/v/com.nononsenseapps.notepad.svg?logo=F-Droid"/> <img src="https://img.shields.io/github/release/spacecowboy/NotePad.svg?logo=github"/>
 
-<img src="https://img.shields.io/github/release-date/spacecowboy/NotePad"/>
-<img src="https://img.shields.io/github/downloads/spacecowboy/NotePad/latest/total"/>
+<img src="https://img.shields.io/github/release-date/spacecowboy/NotePad"/> <img src="https://img.shields.io/github/downloads/spacecowboy/NotePad/latest/total"/>
 
-<img src="https://img.shields.io/github/last-commit/spacecowboy/NotePad"/>
-<img src="https://img.shields.io/github/search/spacecowboy/NotePad/TODO"/>
-<img src="https://img.shields.io/librariesio/github/spacecowboy/NotePad"/>
+<img src="https://img.shields.io/github/last-commit/spacecowboy/NotePad"/> <img src="https://img.shields.io/github/search/spacecowboy/NotePad/TODO"/> <img src="https://img.shields.io/librariesio/github/spacecowboy/NotePad"/>
 
 A note taking app for android with reminders, since 2012.
 
 The app is currently being updated, and old versions are still available on f-droid:
 
-[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png"
-    alt="Get it on F-Droid"
-    height="80">
-](https://f-droid.org/repository/browse/?fdid=com.nononsenseapps.notepad)
+[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/repository/browse/?fdid=com.nononsenseapps.notepad)
 
 How it looks like:
 
