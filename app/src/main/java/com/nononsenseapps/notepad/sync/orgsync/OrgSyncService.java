@@ -66,8 +66,6 @@ public class OrgSyncService extends Service {
 	private static final int DELAY_MSECS = 30000;
 
 	private SyncHandler serviceHandler;
-	// private FileWatcher fileWatcher;
-	// private DBWatcher dbWatcher;
 
 	private final ArrayList<Monitor> monitors;
 	private final ArrayList<SynchronizerInterface> synchronizers;

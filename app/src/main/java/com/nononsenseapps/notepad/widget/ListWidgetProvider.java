@@ -82,10 +82,9 @@ public class ListWidgetProvider extends AppWidgetProvider {
 			long noteId = intent.getLongExtra(EXTRA_NOTE_ID, -1);
 			// This will complete the note
 			if (noteId > -1) {
-				Intent bintent = new Intent(context, NotePadBroadcastReceiver.class);
-				bintent.setAction(context
-						.getString(R.string.complete_note_broadcast_intent));
-				bintent.putExtra(Task.Columns._ID, noteId);
+				Intent bintent = new Intent(context, NotePadBroadcastReceiver.class)
+						.setAction(context.getString(R.string.complete_note_broadcast_intent))
+						.putExtra(Task.Columns._ID, noteId);
 				context.sendBroadcast(bintent);
 			}
 		}

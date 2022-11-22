@@ -26,6 +26,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.preference.SwitchPreference;
 
 import androidx.annotation.NonNull;
 
@@ -141,7 +142,7 @@ public class SyncGtaskHelper {
 			}
 		}
 		if (!currentlyEnabled) {
-			forgetAccountOnce(context, sharedPreferences);
+			forgetAccountOnce(sharedPreferences);
 			disableSyncOnce(sharedPreferences);
 		}
 		return currentlyEnabled;
@@ -175,8 +176,7 @@ public class SyncGtaskHelper {
 	 * Removes the account name from shared preferences, but only if we have an account name (so
 	 * we don't call listeners on removal of already removed values)
 	 */
-	private static void forgetAccountOnce(@NonNull Context context, @NonNull SharedPreferences
-			sharedPreferences) {
+	private static void forgetAccountOnce(@NonNull SharedPreferences sharedPreferences) {
 		if (sharedPreferences.contains(SyncPrefs.KEY_ACCOUNT)) {
 			sharedPreferences.edit().remove(SyncPrefs.KEY_ACCOUNT).apply();
 		}
