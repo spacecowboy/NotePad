@@ -32,7 +32,7 @@ public class EspressoHelper {
 		try {
 			onView(withId(R.id.drawerLayout)).perform(DrawerActions.close());
 		} catch (Exception ignored) {
-			NnnLogger.error(EspressoHelper.class,"Can't close drawer");
+			NnnLogger.error(EspressoHelper.class, "Can't close drawer");
 		}
 	}
 
@@ -132,27 +132,30 @@ public class EspressoHelper {
 	}
 
 	/**
-	 * Rotate the screen twice, waiting ~4 seconds for the animations to finish. It automatically
-	 * understands if the phone or tablet is "naturally" held in landscape or portrait mode,
-	 * so test should be done with the emulator's default settings: phones in portrait mode
-	 * and tablets in landscape mode
+	 * Rotate the screen twice, waiting ~5 seconds for the animations to finish.
+	 * It automatically understands if the phone or tablet is "naturally" held in
+	 * landscape or portrait mode, so test should be done with the emulator's default
+	 * settings: phones in portrait mode and tablets in landscape mode
 	 */
 	public static void rotateScreen() {
-
-		var uiAuto = InstrumentationRegistry.getInstrumentation().getUiAutomation();
-
+		var uiAuto = InstrumentationRegistry
+				.getInstrumentation()
+				.getUiAutomation();
 		// rotate it
 		uiAuto.setRotation(UiAutomation.ROTATION_FREEZE_270);
-
-		// wait for the rotation to finish
-		// .waitForIdleSync(); does not work, use this instead:
+		// wait for the rotation to finish (.waitForIdleSync(); does not work, use this instead):
 		SystemClock.sleep(1800);
+
+		// rotating the screen sometimes makes the taptargetview appear in the wrong place.
+		// I have no idea why. In any case, we have to close it now, or else the next
+		// screen rotation will make the app crash. Yes it's incomprehensible, but now it works
+		EspressoHelper.hideShowCaseViewIfShown();
 
 		// rotate it more
 		uiAuto.setRotation(UiAutomation.ROTATION_FREEZE_0);
 		SystemClock.sleep(1800);
 
-		// unfreeze it and let it go back to its default
+		// unfreeze it and let it go back to its default state
 		uiAuto.setRotation(UiAutomation.ROTATION_UNFREEZE);
 		SystemClock.sleep(1800);
 	}
