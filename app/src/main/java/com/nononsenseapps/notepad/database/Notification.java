@@ -408,12 +408,9 @@ public class Notification extends DAO {
 		idStrings = idStrings.substring(0, idStrings.length() - 1);
 		idStrings += ")";
 
-		final Cursor c = context.getContentResolver()
-				.query(URI,
-						Columns.FIELDS,
-						Columns.TASKID
-								+ " IN "
-								+ idStrings,
+		final Cursor c = context
+				.getContentResolver()
+				.query(URI, Columns.FIELDS, Columns.TASKID + " IN " + idStrings,
 						null, null);
 
 		while (c.moveToNext()) {

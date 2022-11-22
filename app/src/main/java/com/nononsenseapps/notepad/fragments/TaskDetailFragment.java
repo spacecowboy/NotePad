@@ -95,7 +95,6 @@ public class TaskDetailFragment extends Fragment {
 
 	final LoaderCallbacks<Cursor> loaderCallbacks = new LoaderCallbacks<>() {
 		@Override
-		@NonNull
 		public Loader<Cursor> onCreateLoader(final int id, final Bundle args) {
 			if (LOADER_EDITOR_NOTIFICATIONS == id) {
 				return new CursorLoader(getActivity(), Notification.URI,

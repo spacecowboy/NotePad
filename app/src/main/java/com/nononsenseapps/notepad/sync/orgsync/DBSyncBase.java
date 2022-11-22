@@ -227,7 +227,9 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 							new RegexParser(), remote.remoteId, br);
 				}
 			}
-			String l = list.title;
+			// list title, if available
+			String l = list == null ? null : list.title;
+
 			String r = null;
 			if (remote != null) r = remote.remoteId;
 			String f = null;
@@ -238,7 +240,6 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 
 		// Add remotes that no longer have a list
 		for (RemoteTaskList remote : remotes.values()) {
-			TaskList list = null;
 			OrgFile file = null;
 			// Can be null
 			if (remote != null && filenames.remove(remote.remoteId)) {
@@ -248,37 +249,30 @@ public abstract class DBSyncBase implements SynchronizerInterface {
 							new RegexParser(), remote.remoteId, br);
 				}
 			}
-			String l = null;
 			String r = null;
 			if (remote != null)
 				r = remote.remoteId;
 			String f = null;
 			if (file != null)
 				f = file.getFilename();
-			Log.d(Synchronizer.TAG, "Pair:" + l + ", " + r + ", " + f);
+			Log.d(Synchronizer.TAG, "Pair:" + "(null)" + ", " + r + ", " + f);
 			result.add(new Pair<>(file,
 					new Pair<>(remote, null)));
 		}
 
 		// Add files that do not exist in database
 		for (String filename : filenames) {
-			TaskList list = null;
-			RemoteTaskList remote = null;
 			OrgFile file = null;
 			final BufferedReader br = getRemoteFile(filename);
 			if (br != null) {
 				file = OrgFile.createFromBufferedReader(new RegexParser(), filename, br);
 			}
-			String l = null;
-			String r = null;
 			String f;
-			// An obvious precaution. If everything is null,
-			// there's nothing to add.
+			// An obvious precaution. If everything is null, there's nothing to add.
 			if (file != null) {
 				f = file.getFilename();
-				Log.d(Synchronizer.TAG, "Pair:" + l + ", " + r + ", " + f);
-				result.add(new Pair<>(file,
-						new Pair<>(remote, list)));
+				Log.d(Synchronizer.TAG, "Pair:" + "(null)" + ", " + "(null)" + ", " + f);
+				result.add(new Pair<>(file, new Pair<>(/*remote=*/null, /*list=*/null)));
 			}
 		}
 
