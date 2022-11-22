@@ -40,6 +40,7 @@ import androidx.core.app.NotificationCompat;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.helpers.NotificationHelper;
+import com.nononsenseapps.notepad.BuildConfig;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
@@ -55,8 +56,8 @@ public class OrgSyncService extends Service {
 
 	private static final String TAG = "OrgSyncService";
 
-	public static final String ACTION_START = "com.nononsenseapps.notepad" + ".sync.START";
-	public static final String ACTION_PAUSE = "com.nononsenseapps.notepad" + ".sync.PAUSE";
+	public static final String ACTION_START = BuildConfig.APPLICATION_ID + ".sync.START";
+	public static final String ACTION_PAUSE = BuildConfig.APPLICATION_ID + ".sync.PAUSE";
 
 	// Msg arguments
 	public static final int TWO_WAY_SYNC = 1;
