@@ -15,24 +15,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-buildscript {
-    repositories {
-        mavenCentral()
-        google()
-    }
-    dependencies {
-        classpath 'com.android.tools.build:gradle:7.3.1'
-    }
-}
-
 apply plugin: 'com.android.application'
 
-repositories {
-    mavenCentral()
-    google()
-}
-
-// Version number
+// App versionName definition
 def versionMajor = 7 // Major UI overhauls
 def versionMinor = 0 // Some new functionality
 def versionPatch = 0 // Bug fixes
@@ -54,7 +39,7 @@ def getVersionName = { ->
 android {
     compileSdkVersion 32
     buildToolsVersion "32.0.0"
-    namespace "com.nononsenseapps.notepad" // for R and BuildConfig
+    namespace "com.nononsenseapps.notepad" // for R.*
 
     // buildFeatures {
     //     viewBinding true // TODO use this to (partially) replace android annotations
@@ -72,7 +57,7 @@ android {
 
     packagingOptions {
         resources {
-            excludes += ['META-INF/LICENSE.txt', 'META-INF/NOTICE.txt']
+           // excludes += ['META-INF/LICENSE.txt', 'META-INF/NOTICE.txt']
         }
     }
 
@@ -118,7 +103,6 @@ android {
     }
 
     if (project.hasProperty('STORE_FILE')) {
-
         buildTypes {
             release {
             }
@@ -127,10 +111,12 @@ android {
         // println "No key store defined. Signed release not available..."
     }
 
-    // control which types of configuration APKs you want your app bundle to support
+    // control which types of configuration APKs you want your
+    // app bundle to support
     bundle {
         language {
-            // download ALL languages, because we have a built-in language picker
+            // download ALL languages, because we have
+            // a built-in language picker
             enableSplit = false
         }
     }
@@ -142,10 +128,10 @@ dependencies {
     implementation 'androidx.fragment:fragment:1.5.4'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation "androidx.preference:preference:1.2.0"
-    implementation "androidx.startup:startup-runtime:1.1.1" // it just fixes a build warning
+    implementation "androidx.startup:startup-runtime:1.1.1" // just to fix build warnings
     implementation 'androidx.swiperefreshlayout:swiperefreshlayout:1.1.0'
     implementation 'com.google.android.material:material:1.7.0'
-    // yes we need both. It solves a dependency problem with androidx.preference
+    // yes we need both. These solve a dependency problem with androidx.preference
     implementation "androidx.lifecycle:lifecycle-viewmodel:2.5.1"
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.5.1"
     // Time library, open source & up to date
