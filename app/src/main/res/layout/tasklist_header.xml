@@ -18,7 +18,6 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:custom="http://schemas.android.com/apk/res-auto"
-	android:id="@+id/taskItem"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:clickable="false"
@@ -42,7 +41,6 @@
 	<!-- Needed to support the same cursor as items . All hidden -->
 
 	<TextView
-		android:id="@+id/indent"
 		android:layout_width="0dp"
 		android:layout_height="0dp"
 		android:visibility="gone"/>
