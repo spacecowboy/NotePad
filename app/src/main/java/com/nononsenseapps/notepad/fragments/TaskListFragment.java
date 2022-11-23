@@ -730,8 +730,7 @@ public class TaskListFragment extends Fragment implements OnSharedPreferenceChan
 			return true;
 		} else if (itemId == R.id.menu_clearcompleted) {
 			if (mListId != -1) {
-				DialogDeleteCompletedTasks.showDialog(getFragmentManager(),
-						mListId, null);
+				DialogDeleteCompletedTasks.showDialog(getFragmentManager(), mListId, null);
 			}
 			return true;
 		} else if (itemId == R.id.menu_sort_title) {
