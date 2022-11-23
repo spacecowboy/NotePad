@@ -9,4 +9,7 @@
 	-->
 	<item name="activity_main" type="layout">@layout/activity_main_dual</item>
 
+	<!-- same thing, but for the settings activity -->
+	<item name="activity_settings" type="layout">@layout/activity_settings_dual</item>
+
 </resources>

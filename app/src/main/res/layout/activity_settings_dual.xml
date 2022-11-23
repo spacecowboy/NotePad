@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!-- Contains the "main menu" fragment for the settings activity.
+ 	 This version shows a dual pane, for tablets in landscape mode -->
+
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="horizontal"
+	android:showDividers="middle">
+
+	<!-- this holds the fragment of the "main menu" -->
+	<androidx.fragment.app.FragmentContainerView
+		android:id="@+id/fragment"
+		android:name="com.nononsenseapps.notepad.prefs.IndexPrefs"
+		android:layout_width="0dp"
+		android:layout_height="match_parent"
+		android:layout_marginRight="4dp"
+		android:layout_weight="@integer/leftFragmentWeight"/>
+
+	<!-- vertical separator -->
+	<View
+		android:layout_width="1dp"
+		android:layout_marginVertical="8dp"
+		android:layout_marginHorizontal="4dp"
+		android:layout_height="match_parent"
+		android:background="?android:attr/dividerHorizontal"/>
+
+	<!-- this holds the fragment with the selected preferences category -->
+	<androidx.fragment.app.FragmentContainerView
+		android:id="@+id/fragmentRightForTablets"
+		android:layout_width="0dp"
+		android:layout_height="match_parent"
+		android:layout_marginLeft="4dp"
+		android:layout_weight="@integer/rightFragmentWeight"/>
+
+</LinearLayout>

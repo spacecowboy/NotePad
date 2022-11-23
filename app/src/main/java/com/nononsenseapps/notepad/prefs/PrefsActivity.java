@@ -26,6 +26,7 @@ import android.view.MenuItem;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceFragmentCompat;
@@ -71,12 +72,28 @@ public class PrefsActivity extends AppCompatActivity implements
 				.instantiate(getClassLoader(), pref.getFragment());
 		fragment.setArguments(args);
 		fragment.setTargetFragment(caller, 0);
-		// Replace the existing Fragment with the new Fragment
-		getSupportFragmentManager()
-				.beginTransaction()
-				.replace(R.id.fragment, fragment)
-				.addToBackStack(null)
-				.commit();
+
+		// this exists only in the tablet-landscape layout file
+		FragmentContainerView fragmentSpot2 = this.findViewById(R.id.fragmentRightForTablets);
+
+		if (fragmentSpot2 == null) {
+			// for phones & tablets in portrait mode, there is only 1 fragment shown:
+			// Replace the existing "main menu" Fragment with the new "category" Fragment
+			getSupportFragmentManager()
+					.beginTransaction()
+					.replace(R.id.fragment, fragment)
+					.addToBackStack(null)
+					.commit();
+		} else {
+			// for tablets in landscape mode, 2 fragments are shown (=> 2 pane view):
+			// the "main menu" remains on the right, the preference page list opens on the left
+			getSupportFragmentManager()
+					.beginTransaction()
+					.replace(R.id.fragmentRightForTablets, fragment)
+					.addToBackStack(null)
+					.commit();
+		}
+
 		return true;
 	}
 
