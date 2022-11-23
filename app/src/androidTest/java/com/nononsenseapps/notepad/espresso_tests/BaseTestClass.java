@@ -1,12 +1,9 @@
 package com.nononsenseapps.notepad.espresso_tests;
 
-import static org.junit.Assert.assertTrue;
-
 import android.content.Context;
 import android.preference.PreferenceManager;
 
 import androidx.test.core.app.ApplicationProvider;
-import androidx.test.espresso.Espresso;
 import androidx.test.ext.junit.rules.ActivityScenarioRule;
 import androidx.test.rule.ActivityTestRule;
 

@@ -21,22 +21,25 @@ import android.app.backup.BackupManager;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
 import android.view.MenuItem;
 
-import androidx.core.app.NavUtils;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
+import androidx.preference.PreferenceFragmentCompat;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 
-import java.util.List;
 import java.util.Locale;
 
-public class PrefsActivity extends PreferenceActivity {
-
-	private boolean mIsRoot = false;
+/**
+ * The preferences page, holds a list of all preference categories
+ */
+public class PrefsActivity extends AppCompatActivity implements
+		PreferenceFragmentCompat.OnPreferenceStartFragmentCallback {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +47,37 @@ public class PrefsActivity extends PreferenceActivity {
 		setLanguage();
 
 		// Add the arrow to go back
-		if (getActionBar() != null) {
-			getActionBar().setDisplayHomeAsUpEnabled(true);
+		if (getSupportActionBar() != null) {
+			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}
-		// TODO we should migrate to androidx preferences, and then use getSupportActionbar() with an appcompat theme. see the xml manifest
+
+		// inflates a layout with a fragmentcontainerview, which will
+		// automatically start an instance of IndexPrefs
+		setContentView(R.layout.activity_settings);
+	}
+
+	/**
+	 * called when a settings category is clicked. It opens the appropriate
+	 * preference fragment. From:
+	 * https://developer.android.com/develop/ui/views/components/settings/organize-your-settings
+	 */
+	@Override
+	public boolean onPreferenceStartFragment(@NonNull PreferenceFragmentCompat caller,
+											 Preference pref) {
+		// Instantiate the new Fragment
+		final Bundle args = pref.getExtras();
+		final Fragment fragment = getSupportFragmentManager()
+				.getFragmentFactory()
+				.instantiate(getClassLoader(), pref.getFragment());
+		fragment.setArguments(args);
+		fragment.setTargetFragment(caller, 0);
+		// Replace the existing Fragment with the new Fragment
+		getSupportFragmentManager()
+				.beginTransaction()
+				.replace(R.id.fragment, fragment)
+				.addToBackStack(null)
+				.commit();
+		return true;
 	}
 
 	private void setLanguage() {
@@ -79,30 +109,13 @@ public class PrefsActivity extends PreferenceActivity {
 	}
 
 	@Override
-	protected boolean isValidFragment(String fragmentName) {
-		return true;
-	}
-
-	/**
-	 * Populate the activity with the top-level headers.
-	 */
-	@Override
-	public void onBuildHeaders(List<Header> target) {
-		loadHeadersFromResource(R.xml.app_pref_headers, target);
-		// When headers show, it is the root activity which should navigate up and not back.
-		mIsRoot = true; // TODO but nobody ever sets it to false ??
-	}
-
-	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		if (item.getItemId() == android.R.id.home) {
-			// This ID represents the Home or Up button. In the case of this
-			// activity, the Up button is shown. Use NavUtils to allow users
-			// to navigate up one level in the application structure.
-			if (mIsRoot)
-				NavUtils.navigateUpFromSameTask(this);
-			else
-				finish();
+			// This ID represents the Home or Up button. In this activity, the Up button is shown.
+			// To get a consistent behavior, both pressing "back" and clicking the Up arrow
+			// will navigate back, so if a preference category is shown, pressing the Up
+			// button won't close the settings, it will go back to the Index
+			super.onBackPressed();
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -125,7 +138,7 @@ public class PrefsActivity extends PreferenceActivity {
 			// Set the summary to reflect the new value, if possible
 			preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
 
-		}  else {
+		} else {
 			// For all other preferences, set the summary to the value's
 			// simple string representation.
 			preference.setSummary(stringValue);

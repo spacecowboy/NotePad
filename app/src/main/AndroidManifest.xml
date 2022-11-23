@@ -169,9 +169,8 @@
 			android:exported="true"
 			android:label="@string/menu_preferences"
 			android:parentActivityName="com.nononsenseapps.notepad.ActivityMain_"
-			android:theme="@android:style/Theme.DeviceDefault">
-			<!-- TODO migrate to androidx preferences, THEN you can use an appcompat
-			      theme in the settings activity. You can definitely use a day & night theme,
+			android:theme="@style/Theme.AppCompat">
+			<!-- TODO you can definitely use a day & night theme,
 			       but the icons should have ?attr/iconTint in the settings xml files -->
 			<meta-data
 				android:name="android.support.PARENT_ACTIVITY"
