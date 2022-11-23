@@ -35,11 +35,10 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Handler;
 
-import androidx.preference.PreferenceManager;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Task;

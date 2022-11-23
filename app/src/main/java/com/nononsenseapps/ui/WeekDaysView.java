@@ -17,21 +17,21 @@
 
 package com.nononsenseapps.ui;
 
-import java.text.SimpleDateFormat;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-
-import com.nononsenseapps.helpers.ActivityHelper;
-import com.nononsenseapps.helpers.TimeFormatter;
-import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.utils.views.GreyableToggleButton;
-
 import android.content.Context;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.widget.CompoundButton;
 import android.widget.CompoundButton.OnCheckedChangeListener;
 import android.widget.LinearLayout;
+
+import com.nononsenseapps.helpers.ActivityHelper;
+import com.nononsenseapps.helpers.TimeFormatter;
+import com.nononsenseapps.notepad.R;
+import com.nononsenseapps.utils.views.GreyableToggleButton;
+
+import java.text.SimpleDateFormat;
+import java.util.GregorianCalendar;
+import java.util.Locale;
 
 public class WeekDaysView extends LinearLayout implements
 		OnCheckedChangeListener {

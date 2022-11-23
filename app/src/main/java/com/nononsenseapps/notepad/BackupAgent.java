@@ -17,15 +17,15 @@
 
 package com.nononsenseapps.notepad;
 
-import com.nononsenseapps.notepad.prefs.SyncPrefs;
-import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
-
 import android.app.backup.BackupAgentHelper;
 import android.app.backup.BackupDataInputStream;
 import android.app.backup.SharedPreferencesBackupHelper;
 import android.content.Context;
 
 import androidx.preference.PreferenceManager;
+
+import com.nononsenseapps.notepad.prefs.SyncPrefs;
+import com.nononsenseapps.notepad.sync.googleapi.GoogleTaskSync;
 
 /**
  * Backs up the user's preferences

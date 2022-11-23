@@ -17,14 +17,14 @@
 
 package com.nononsenseapps.ui;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
+import android.content.Context;
+import android.database.Cursor;
 
 import com.nononsenseapps.notepad.ActivityMain;
 
-import android.content.Context;
-import android.database.Cursor;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * It's for something in the drawer in {@link ActivityMain}

@@ -26,10 +26,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.preference.PreferenceManager;
 import androidx.preference.SwitchPreference;
-
-import androidx.annotation.NonNull;
 
 import com.nononsenseapps.helpers.GTasksSyncDelay;
 import com.nononsenseapps.notepad.database.MyContentProvider;

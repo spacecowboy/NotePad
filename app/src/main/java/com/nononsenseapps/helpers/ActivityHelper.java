@@ -17,8 +17,6 @@
 
 package com.nononsenseapps.helpers;
 
-import java.util.Locale;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -29,6 +27,8 @@ import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.prefs.AppearancePrefs;
+
+import java.util.Locale;
 
 // TODO can be deleted, we moved it to a new activity helper (?)
 public class ActivityHelper {

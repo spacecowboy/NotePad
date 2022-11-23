@@ -18,9 +18,9 @@
 package com.nononsenseapps.scrolltricks;
 
 
-import androidx.fragment.app.Fragment;
-
 import android.view.View;
+
+import androidx.fragment.app.Fragment;
 
 /**
  * A simple fragment that handles the quick return bindings. Just implement the

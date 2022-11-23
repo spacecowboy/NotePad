@@ -17,9 +17,6 @@
 
 package com.nononsenseapps.notepad.database;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -29,6 +26,9 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 
 import com.nononsenseapps.helpers.NnnLogger;
+
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public abstract class DAO {
 
