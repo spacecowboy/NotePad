@@ -21,6 +21,7 @@ package com.nononsenseapps.util;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+
 import androidx.preference.PreferenceManager;
 
 import androidx.annotation.NonNull;

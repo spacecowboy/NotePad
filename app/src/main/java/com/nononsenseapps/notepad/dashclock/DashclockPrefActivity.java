@@ -37,7 +37,7 @@ public class DashclockPrefActivity extends AppCompatActivity {
 
 		setContentView(R.layout.activity_dashclock_settings);
 
-		if (getSupportActionBar() != null){
+		if (getSupportActionBar() != null) {
 			getSupportActionBar().setIcon(R.drawable.ic_stat_notification_edit);
 			getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 		}

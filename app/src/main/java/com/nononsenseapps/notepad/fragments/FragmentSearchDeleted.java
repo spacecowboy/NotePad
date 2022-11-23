@@ -21,7 +21,9 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+
 import androidx.preference.PreferenceManager;
+
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuInflater;

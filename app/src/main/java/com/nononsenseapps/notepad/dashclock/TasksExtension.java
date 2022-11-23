@@ -26,6 +26,7 @@ import java.util.stream.Stream;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+
 import androidx.preference.PreferenceManager;
 
 import com.google.android.apps.dashclock.api.DashClockExtension;

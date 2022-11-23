@@ -19,7 +19,9 @@ package com.nononsenseapps.notepad.fragments;
 
 import android.database.Cursor;
 import android.os.Bundle;
+
 import androidx.preference.PreferenceManager;
+
 import android.text.Editable;
 import android.view.View;
 import android.widget.ArrayAdapter;

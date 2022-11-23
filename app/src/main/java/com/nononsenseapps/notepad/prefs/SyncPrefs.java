@@ -206,7 +206,7 @@ public class SyncPrefs extends PreferenceFragmentCompat
 					SharedPreferencesHelper.disableSdCardSync(this.getContext());
 
 					// SD card synchronization was disabled, but the UI does not know: reload
-					var myPref = (SwitchPreference)findPreference(KEY_SD_ENABLE);
+					var myPref = (SwitchPreference) findPreference(KEY_SD_ENABLE);
 					if (myPref.isChecked()) myPref.setChecked(false);
 				}
 				break;
