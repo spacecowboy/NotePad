@@ -20,19 +20,14 @@ package com.nononsenseapps.notepad.prefs;
 import android.app.backup.BackupManager;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
-import android.media.Ringtone;
-import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.Preference;
 import android.preference.PreferenceActivity;
-import android.preference.PreferenceManager;
-import android.preference.RingtonePreference;
-import android.text.TextUtils;
 import android.view.MenuItem;
 
 import androidx.core.app.NavUtils;
+import androidx.preference.ListPreference;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
 
@@ -115,11 +110,11 @@ public class PrefsActivity extends PreferenceActivity {
 
 	/**
 	 * A preference value change listener that updates the preference's summary
-	 * to reflect its new value.
+	 * to reflect its new value. Handles the {@link ListPreference} specially.
 	 */
 	private static final Preference.OnPreferenceChangeListener
 			sBindPreferenceSummaryToValueListener = (preference, value) -> {
-		String stringValue = value.toString();
+		final String stringValue = value.toString();
 
 		if (preference instanceof ListPreference) {
 			// For list preferences, look up the correct display value in
@@ -127,34 +122,10 @@ public class PrefsActivity extends PreferenceActivity {
 			ListPreference listPreference = (ListPreference) preference;
 			int index = listPreference.findIndexOfValue(stringValue);
 
-			// Set the summary to reflect the new value.
-			preference
-					.setSummary(index >= 0 ? listPreference.getEntries()[index]
-							: null);
+			// Set the summary to reflect the new value, if possible
+			preference.setSummary(index >= 0 ? listPreference.getEntries()[index] : null);
 
-		} else if (preference instanceof RingtonePreference) {
-			// For ringtone preferences, look up the correct display value
-			// using RingtoneManager.
-			if (TextUtils.isEmpty(stringValue)) {
-				// Empty values correspond to 'silent' (no ringtone).
-				preference.setSummary(R.string.silent);
-			} else {
-				Ringtone ringtone = RingtoneManager.getRingtone(
-						preference.getContext(), Uri.parse(stringValue));
-
-				if (ringtone == null) {
-					// Clear the summary if there was a lookup error.
-					preference.setSummary(null);
-				} else {
-					// Set the summary to reflect the new ringtone display
-					// name.
-					String name = ringtone
-							.getTitle(preference.getContext());
-					preference.setSummary(name);
-				}
-			}
-
-		} else {
+		}  else {
 			// For all other preferences, set the summary to the value's
 			// simple string representation.
 			preference.setSummary(stringValue);
@@ -173,13 +144,10 @@ public class PrefsActivity extends PreferenceActivity {
 	 */
 	public static void bindPreferenceSummaryToValue(Preference preference) {
 		// Set the listener to watch for value changes.
-		preference
-				.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
+		preference.setOnPreferenceChangeListener(sBindPreferenceSummaryToValueListener);
 
-		// Trigger the listener immediately with the preference's
-		// current value.
-		sBindPreferenceSummaryToValueListener.onPreferenceChange(
-				preference,
+		// Trigger the listener immediately with the preference's current value.
+		sBindPreferenceSummaryToValueListener.onPreferenceChange(preference,
 				PreferenceManager
 						.getDefaultSharedPreferences(preference.getContext())
 						.getString(preference.getKey(), ""));
