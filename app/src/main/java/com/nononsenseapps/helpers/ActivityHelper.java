@@ -27,7 +27,7 @@ import android.content.res.Configuration;
 import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.notepad.R;
-import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 
 // TODO can be deleted, we moved it to a new activity helper (?)
 public class ActivityHelper {
@@ -37,7 +37,7 @@ public class ActivityHelper {
 		final SharedPreferences prefs = PreferenceManager
 				.getDefaultSharedPreferences(activity);
 
-		final String theme = prefs.getString(MainPrefs.KEY_THEME, activity.getString(R.string.const_theme_light_ab));
+		final String theme = prefs.getString(AppearancePrefs.KEY_THEME, activity.getString(R.string.const_theme_light_ab));
 		if (activity.getString(R.string.const_theme_light_ab).equals(theme)) {
 			activity.setTheme(R.style.ThemeHoloLightDarkActonBar);
 		} else if (activity.getString(R.string.const_theme_black).equals(theme)) {

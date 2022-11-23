@@ -66,7 +66,7 @@ import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.database.TaskList;
 import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
-import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 import com.nononsenseapps.ui.NotificationItemHelper;
 import com.nononsenseapps.util.SharedPreferencesHelper;
 import com.nononsenseapps.utils.ShowcaseHelper;
@@ -426,7 +426,7 @@ public class TaskDetailFragment extends Fragment {
 		// choose a dark or white theme depending on the settings
 		final String theme = PreferenceManager
 				.getDefaultSharedPreferences(this.getContext())
-				.getString(MainPrefs.KEY_THEME, this.getString(R.string.const_theme_light_ab));
+				.getString(AppearancePrefs.KEY_THEME, this.getString(R.string.const_theme_light_ab));
 		final int themeResId = theme.contains("light")
 				? android.R.style.Theme_Material_Light_Dialog
 				: android.R.style.Theme_Material_Dialog;
@@ -914,7 +914,7 @@ public class TaskDetailFragment extends Fragment {
 		// choose a dark or white theme depending on the settings
 		final String theme = PreferenceManager
 				.getDefaultSharedPreferences(getActivity())
-				.getString(MainPrefs.KEY_THEME, getString(R.string.const_theme_light_ab));
+				.getString(AppearancePrefs.KEY_THEME, getString(R.string.const_theme_light_ab));
 		final int themeResId = theme.contains("light")
 				? android.R.style.Theme_Material_Light_Dialog
 				: android.R.style.Theme_Material_Dialog;

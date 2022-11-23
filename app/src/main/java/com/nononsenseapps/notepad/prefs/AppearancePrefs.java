@@ -22,7 +22,7 @@ import android.os.Bundle;
 
 import androidx.annotation.Nullable;
 import androidx.preference.ListPreference;
-import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceFragmentCompat;
 
 import com.nononsenseapps.helpers.TimeFormatter;
 import com.nononsenseapps.notepad.R;
@@ -31,7 +31,10 @@ import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.Locale;
 
-public class MainPrefs extends PreferenceFragment {
+/**
+ * Settings about how notes will look like
+ */
+public class AppearancePrefs extends PreferenceFragmentCompat {
 
 	public static final String KEY_THEME = "key_current_theme";
 

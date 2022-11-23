@@ -23,7 +23,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
 	<Preference
-		android:fragment="com.nononsenseapps.notepad.prefs.MainPrefs"
+		android:fragment="com.nononsenseapps.notepad.prefs.AppearancePrefs"
 		android:icon="@drawable/ic_brightness_6_24dp_white"
 		android:summary=""
 		android:title="@string/settings_cat_appearance"/>

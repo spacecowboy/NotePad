@@ -32,7 +32,7 @@ import com.nononsenseapps.notepad.R;
 import com.nononsenseapps.notepad.database.Notification;
 import com.nononsenseapps.notepad.database.Task;
 import com.nononsenseapps.notepad.fragments.TaskDetailFragment;
-import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -145,7 +145,7 @@ public class NotificationItemHelper {
 			// choose a dark or white theme depending on the settings
 			final String theme = PreferenceManager
 					.getDefaultSharedPreferences(fragment.getContext())
-					.getString(MainPrefs.KEY_THEME, fragment.getString(R.string.const_theme_light_ab));
+					.getString(AppearancePrefs.KEY_THEME, fragment.getString(R.string.const_theme_light_ab));
 			final int themeResId = theme.contains("light")
 					? android.R.style.Theme_Material_Light_Dialog
 					: android.R.style.Theme_Material_Dialog;

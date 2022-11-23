@@ -68,7 +68,7 @@ import com.nononsenseapps.notepad.interfaces.MenuStateController;
 import com.nononsenseapps.notepad.interfaces.OnFragmentInteractionListener;
 import com.nononsenseapps.notepad.legacy.DonateMigrator;
 import com.nononsenseapps.notepad.legacy.DonateMigrator_;
-import com.nononsenseapps.notepad.prefs.MainPrefs;
+import com.nononsenseapps.notepad.prefs.AppearancePrefs;
 import com.nononsenseapps.notepad.prefs.PrefsActivity;
 import com.nononsenseapps.notepad.sync.orgsync.BackgroundSyncScheduler;
 import com.nononsenseapps.notepad.sync.orgsync.OrgSyncService;
@@ -1187,7 +1187,7 @@ public class ActivityMain extends AppCompatActivity
 			// it happens sometimes during Espresso tests
 			return;
 		}
-		if (key.equals(MainPrefs.KEY_THEME) || key.equals(getString(R.string.pref_locale))) {
+		if (key.equals(AppearancePrefs.KEY_THEME) || key.equals(getString(R.string.pref_locale))) {
 			shouldRestart = true;
 		} else if (key.startsWith("pref_restart")) {
 			shouldRestart = true;
