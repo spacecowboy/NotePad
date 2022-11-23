@@ -19,12 +19,13 @@ package com.nononsenseapps.notepad.prefs;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.ListPreference;
-import android.preference.PreferenceFragment;
-import android.preference.PreferenceManager;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.preference.ListPreference;
+import androidx.preference.PreferenceFragment;
+import androidx.preference.PreferenceManager;
 
 import com.nononsenseapps.helpers.NnnLogger;
 import com.nononsenseapps.notepad.R;
@@ -49,9 +50,7 @@ public class BackupPrefs extends PreferenceFragment {
 	private BackupTask mCreateTaskHolder;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
+	public void onCreatePreferences(@Nullable Bundle savInstState, String rootKey) {
 		// Load the preferences from an XML resource
 		addPreferencesFromResource(R.xml.app_pref_backup);
 
