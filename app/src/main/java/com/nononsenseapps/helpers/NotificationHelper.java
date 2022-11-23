@@ -502,7 +502,7 @@ public class NotificationHelper extends BroadcastReceiver {
 		// TODO since android takes some time to understand that it has to send the reminder,
 		//  here we could subtract 60~100 seconds so that, by the time it understands what to do,
 		//  we're not late with the reminder
-		return input.time;
+		return input.time; // - 60 * 1000
 	}
 
 	/**

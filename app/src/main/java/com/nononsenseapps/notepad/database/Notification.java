@@ -183,8 +183,11 @@ public class Notification extends DAO {
 			Task.Columns.DBLIST + " = l." +
 			TaskList.Columns._ID + ";";
 
-	// milliseconds since 1970-01-01 UTC
+	/**
+	 * milliseconds since 1970-01-01 UTC
+	 */
 	public Long time = null;
+
 	public boolean permanent = false;
 
 	public Long taskID = null;
