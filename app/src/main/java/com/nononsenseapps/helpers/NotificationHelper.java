@@ -153,11 +153,14 @@ public class NotificationHelper extends BroadcastReceiver {
 				.getString(context.getString(R.string.key_pref_ringtone), null);
 		Uri ringtone2 = ringtone1 == null ? null : Uri.parse(ringtone1);
 
-		// channel.setLockscreenVisibility(); // TODO choose a value for this
+		// TODO choose a value for this ? or just bring the user to the channel preference page ?
+		//  channel.setLockscreenVisibility();
 
-		// channel.enableVibration(true); // TODO we have to update the vibration and light settings HERE, or they won't work in newer android version
+		// TODO we have to update the vibration and light settings HERE, or they won't work
+		//  in newer android version. read values from the preferences, copy code from this file
+		//  channel.enableVibration(true);
 
-		channel.setSound(ringtone2, audioAttrib); // TODO does it work ?
+		channel.setSound(ringtone2, audioAttrib); // TODO does it even work ?
 		nm.createNotificationChannel(channel);
 	}
 

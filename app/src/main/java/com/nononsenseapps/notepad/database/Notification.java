@@ -39,6 +39,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.concurrent.Executors;
 
 public class Notification extends DAO {
 	// These match WeekDaysView's values
@@ -367,14 +368,8 @@ public class Notification extends DAO {
 	}
 
 	public void saveInBackground(final Context context, final boolean schedule) {
-		final AsyncTask<Void, Void, Void> task = new AsyncTask<>() {
-			@Override
-			protected Void doInBackground(Void... voids) {
-				save(context, schedule);
-				return null;
-			}
-		};
-		task.execute();
+		// TODO replace all uses of AsyncTask<> with this, which is recommended. See https://stackoverflow.com/a/64969640/6307322
+		Executors.newSingleThreadExecutor().execute(() -> save(context, schedule));
 	}
 
 	/**
